@@ -42,6 +42,9 @@ importers:
       vite:
         specifier: ^7.2.2
         version: 7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@22.19.0)(jiti@2.6.1)(jsdom@27.1.0)(tsx@4.20.6)
 
   data: {}
 

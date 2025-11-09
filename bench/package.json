@@ -10,14 +10,16 @@
     "@schema-benchmarks/data": "workspace:*",
     "ts-patch": "^3.3.0",
     "typescript": "~5.9.3",
-    "vite": "^7.2.2"
+    "vite": "^7.2.2",
+    "vitest": "^3.2.4"
   },
   "main": "index.ts",
   "name": "@schema-benchmarks/bench",
   "private": true,
   "scripts": {
-    "build": "vite build",
-    "prepare": "ts-patch install"
+    "bench": "vitest bench",
+    "prepare": "ts-patch install",
+    "test": "vitest run"
   },
   "types": "index.ts"
 }
