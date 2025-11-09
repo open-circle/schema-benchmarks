@@ -1,12 +1,28 @@
+:root {
+  --page-background: light-dark(#eceff1, #37474f);
+  --page-text: light-dark(#263238, #eceff1);
+  --sidebar-background: light-dark(#cfd8dc, #263238);
+
+  --red: light-dark(#f44336, #e57373);
+  --deep-orange: light-dark(#ff5722, #ff8a65);
+  --orange: light-dark(#ff9800, #ffb74d);
+  --yellow: light-dark(#ffeb3b, #fff176);
+  --green: light-dark(#4caf50, #81c784);
+  --teal: light-dark(#009688, #80cbc4);
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  color-scheme: light dark;
+  font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--page-background);
+  color: var(--page-text);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: "Google Sans Code", source-code-pro, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
 }
