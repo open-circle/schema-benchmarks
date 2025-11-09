@@ -8,7 +8,7 @@ export function getArkTypeSchema() {
 		title: "1<=string<=100",
 		type: "'jpg'|'png'",
 		size: "number",
-		url: /https?:\/\/.+/,
+		url: "string.url",
 	});
 	const rating = type({
 		id: "number",
