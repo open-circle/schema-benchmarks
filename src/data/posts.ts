@@ -1,4 +1,5 @@
 import { Collection } from "@msw/data";
+import { mutationOptions, queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
 
@@ -26,9 +27,13 @@ await posts.createMany(5, () => {
 	};
 });
 
-export const getPosts = createServerFn().handler((): Post[] => posts.all());
+export const getPostsFn = createServerFn().handler((): Post[] => posts.all());
+export const getPosts = queryOptions({
+	queryKey: ["posts"],
+	queryFn: getPostsFn,
+});
 
-export const createPost = createServerFn()
+export const createPostFn = createServerFn()
 	.inputValidator(v.omit(postSchema, ["id"]))
 	.handler(
 		({ data }): Promise<Post> =>
@@ -37,8 +42,16 @@ export const createPost = createServerFn()
 				...data,
 			}),
 	);
+export const createPost = mutationOptions({
+	mutationFn: createPostFn,
+	onSuccess: (_data, _variables, _onMutateResult, context) => {
+		context.client.invalidateQueries({
+			queryKey: ["posts"],
+		});
+	},
+});
 
-export const updatePost = createServerFn()
+export const updatePostFn = createServerFn()
 	.inputValidator(v.required(v.partial(postSchema), ["id"]))
 	.handler(
 		({ data: { id, ...patch } }): Promise<Post | undefined> =>
@@ -48,9 +61,25 @@ export const updatePost = createServerFn()
 				},
 			}),
 	);
+export const updatePost = mutationOptions({
+	mutationFn: updatePostFn,
+	onSuccess: (_data, _variables, _onMutateResult, context) => {
+		context.client.invalidateQueries({
+			queryKey: ["posts"],
+		});
+	},
+});
 
-export const deletePost = createServerFn()
+export const deletePostFn = createServerFn()
 	.inputValidator(v.pick(postSchema, ["id"]))
 	.handler(({ data: { id } }) => {
 		posts.delete((q) => q.where({ id }));
 	});
+export const deletePost = mutationOptions({
+	mutationFn: deletePostFn,
+	onSuccess: (_data, _variables, _onMutateResult, context) => {
+		context.client.invalidateQueries({
+			queryKey: ["posts"],
+		});
+	},
+});
