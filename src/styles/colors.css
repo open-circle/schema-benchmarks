@@ -6,6 +6,7 @@
   --accent: var(--md-deep-orange-300);
   --on-accent: black;
 
+  --pink: light-dark(var(--md-pink-500), var(--md-pink-300));
   --red: light-dark(var(--md-red-500), var(--md-red-300));
   --deep-orange: light-dark(
     var(--md-deep-orange-500),
