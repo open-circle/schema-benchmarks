@@ -1,48 +1,17 @@
 {
   "name": "schema-benchmarks",
   "private": true,
-  "type": "module",
+  "packageManager": "pnpm@10.20.0",
   "scripts": {
-    "dev": "vite dev --port 3000",
-    "build": "vite build",
-    "serve": "vite preview",
-    "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
-  },
-  "dependencies": {
-    "@msw/data": "^1.1.2",
-    "@tanstack/react-devtools": "^0.7.0",
-    "@tanstack/react-query": "^5.90.7",
-    "@tanstack/react-router": "^1.132.0",
-    "@tanstack/react-router-devtools": "^1.132.0",
-    "@tanstack/react-router-ssr-query": "^1.131.7",
-    "@tanstack/react-start": "^1.132.0",
-    "@tanstack/router-plugin": "^1.132.0",
-    "material-colors": "^1.2.6",
-    "normalize.css": "^8.0.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "valibot": "^1.1.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "check": "biome check",
+    "test": "pnpm run --filter '*' test",
+    "website:dev": "pnpm run --filter website dev",
+    "website:build": "pnpm run --filter website build",
+    "website:serve": "pnpm run --filter website serve"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
-    "@standard-schema/spec": "^1.0.0",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.2.0",
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "@vitejs/plugin-react": "^5.0.4",
-    "jiti": "^2.6.1",
-    "jsdom": "^27.0.0",
-    "postcss-extend-rule": "^4.0.0",
-    "postcss-load-config": "^6.0.1",
-    "typescript": "^5.7.2",
-    "vite": "^7.1.7",
-    "vitest": "^3.0.5",
-    "web-vitals": "^5.1.0"
+    "@biomejs/biome": "2.2.4"
   }
 }
