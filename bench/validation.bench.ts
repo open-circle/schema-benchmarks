@@ -8,32 +8,34 @@ import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
 import { getZodSchema } from "./schemas/zod";
 
-const arktypeSchema = getArkTypeSchema();
-
-const valibotSchema = getValibotSchema();
-
 describe.each([
 	["Success", successData],
 	["Error", errorData],
 ])("%s", (_, data) => {
-	bench("arktype", () => {
-		arktypeSchema(data);
-	});
-
-	bench("valibot", () => {
-		v.safeParse(valibotSchema, data);
-	});
-
-	for (const jitless of [false, true]) {
-		z.config({ jitless });
-		const zodSchema = getZodSchema();
-		bench(`zod${jitless ? " (jitless)" : ""}`, () => {
-			zodSchema.safeParse(data);
+	describe("runtime", () => {
+		const arktypeSchema = getArkTypeSchema();
+		bench("arktype", () => {
+			arktypeSchema(data);
 		});
-	}
-	z.config({ jitless: false });
 
-	bench("typia", () => {
-		typia.validate<TypiaSchema>(data);
+		const valibotSchema = getValibotSchema();
+		bench("valibot", () => {
+			v.safeParse(valibotSchema, data);
+		});
+
+		for (const jitless of [false, true]) {
+			z.config({ jitless });
+			const zodSchema = getZodSchema();
+			bench(`zod${jitless ? " (jitless)" : ""}`, () => {
+				zodSchema.safeParse(data);
+			});
+		}
+		z.config({ jitless: false });
+	});
+
+	describe("precompiled", () => {
+		bench("typia", () => {
+			typia.validate<TypiaSchema>(data);
+		});
 	});
 });
