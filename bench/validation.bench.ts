@@ -2,7 +2,6 @@ import { errorData, successData } from "@schema-benchmarks/data";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
-import z from "zod";
 import { getArkTypeSchema } from "./schemas/arktype";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
@@ -23,14 +22,12 @@ describe.each([
 			v.safeParse(valibotSchema, data);
 		});
 
+		const zodSchema = getZodSchema();
 		for (const jitless of [false, true]) {
-			z.config({ jitless });
-			const zodSchema = getZodSchema();
 			bench(`zod${jitless ? " (jitless)" : ""}`, () => {
-				zodSchema.safeParse(data);
+				zodSchema.safeParse(data, { jitless });
 			});
 		}
-		z.config({ jitless: false });
 	});
 
 	describe("precompiled", () => {
