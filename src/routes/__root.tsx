@@ -49,13 +49,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<header>
-					<div className="logo">
-						<img src="/logo.svg" alt="Logo" />
-						<h1>Schema Benchmarks</h1>
+				<div className="sidebar-container">
+					<aside>
+						<div className="logo">
+							<img src="/logo.svg" alt="Logo" />
+							<h1>Schema Benchmarks</h1>
+						</div>
+					</aside>
+					<div className="container">
+						<header>
+							<h2>Page name</h2>
+						</header>
+						{children}
 					</div>
-				</header>
-				{children}
+				</div>
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
