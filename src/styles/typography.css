@@ -1,0 +1,109 @@
+:root {
+  --font-family-headline: "Roboto Condensed", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-family-body: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  --font-family-code: "Google Sans Code", source-code-pro, Menlo, Monaco,
+    Consolas, "Courier New", monospace;
+
+  --headline1-family: var(--font-family-headline);
+  --headline1-size: 6.0625rem;
+  --headline2-family: var(--font-family-headline);
+  --headline2-size: 3.8125rem;
+  --headline3-family: var(--font-family-headline);
+  --headline3-size: 3rem;
+  --headline4-family: var(--font-family-headline);
+  --headline4-size: 2.125rem;
+  --headline5-family: var(--font-family-headline);
+  --headline5-size: 1.5rem;
+  --headline6-family: var(--font-family-headline);
+  --headline6-size: 1.25rem;
+  --body1-family: var(--font-family-body);
+  --body1-size: 1.0625rem;
+  --body2-family: var(--font-family-body);
+  --body2-size: 0.9375rem;
+  --subtitle1-family: var(--font-family-body);
+  --subtitle1-size: 1rem;
+  --subtitle2-family: var(--font-family-body);
+  --subtitle2-size: 0.875rem;
+  --button-family: var(--font-family-body);
+  --button-size: 0.9375rem;
+  --overline-family: var(--font-family-body);
+  --overline-size: 0.6875rem;
+  --caption-family: var(--font-family-body);
+  --caption-size: 0.8125rem;
+}
+
+h1,
+.headline1 {
+  font-family: var(--headline1-family);
+  font-size: var(--headline1-size);
+}
+
+h2,
+.headline2 {
+  font-family: var(--headline2-family);
+  font-size: var(--headline2-size);
+}
+
+h3,
+.headline3 {
+  font-family: var(--headline3-family);
+  font-size: var(--headline3-size);
+}
+
+h4,
+.headline4 {
+  font-family: var(--headline4-family);
+  font-size: var(--headline4-size);
+}
+
+h5,
+.headline5 {
+  font-family: var(--headline5-family);
+  font-size: var(--headline5-size);
+}
+
+h6,
+.headline6 {
+  font-family: var(--headline6-family);
+  font-size: var(--headline6-size);
+}
+
+button,
+.button {
+  font-family: var(--button-family);
+  font-size: var(--button-size);
+}
+
+.body1 {
+  font-family: var(--body1-family);
+  font-size: var(--body1-size);
+}
+
+.body2 {
+  font-family: var(--body2-family);
+  font-size: var(--body2-size);
+}
+
+.subtitle1 {
+  font-family: var(--subtitle1-family);
+  font-size: var(--subtitle1-size);
+}
+
+.subtitle2 {
+  font-family: var(--subtitle2-family);
+  font-size: var(--subtitle2-size);
+}
+
+.overline {
+  font-family: var(--overline-family);
+  font-size: var(--overline-size);
+}
+
+.caption {
+  font-family: var(--caption-family);
+  font-size: var(--caption-size);
+}

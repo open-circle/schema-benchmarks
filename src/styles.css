@@ -1,6 +1,11 @@
 @import "normalize.css/normalize.css";
 @import "material-colors/dist/colors.var.css";
 
+@import "styles/typography.css";
+
+@import "components/header/index.css";
+@import "components/sidebar/index.css";
+
 :root {
   --primary: light-dark(var(--md-teal-500), var(--md-teal-300));
   --on-primary: black;
@@ -35,10 +40,6 @@
     var(--page-background),
     var(--md-blue-grey-900)
   );
-  --header-background: light-dark(
-    var(--md-blue-grey-100),
-    var(--md-blue-grey-700)
-  );
 
   --divider: color(from var(--page-foreground) srgb r g b / 0.12);
 }
@@ -49,9 +50,7 @@
 
 body {
   color-scheme: light dark;
-  font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: var(--font-family-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--page-background);
@@ -59,33 +58,7 @@ body {
 }
 
 code {
-  font-family: "Google Sans Code", source-code-pro, Menlo, Monaco, Consolas,
-    "Courier New", monospace;
-}
-
-header {
-  background-color: var(--header-background);
-  display: flex;
-  align-items: center;
-  height: 4rem;
-  padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  height: 4rem;
-  border-bottom: 1px solid var(--divider);
-  padding: 0 1rem;
-  gap: 1rem;
-  img {
-    height: 2rem;
-  }
-  h1 {
-    margin: 0;
-    font-size: 1rem;
-  }
+  font-family: var(--font-family-code);
 }
 
 .sidebar-container {
@@ -99,12 +72,4 @@ header {
   flex-direction: column;
   gap: 1rem;
   flex: 1;
-}
-
-aside {
-  width: 16rem;
-  background-color: var(--sidebar-background);
-  border-right: 1px solid var(--divider);
-  display: flex;
-  flex-direction: column;
 }

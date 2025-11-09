@@ -1,7 +1,8 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-
+import { Header } from "../components/header";
+import { Sidebar } from "../components/sidebar";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -34,7 +35,7 @@ export const Route = createRootRoute({
 			},
 			{
 				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap",
+				href: "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap",
 			},
 		],
 	}),
@@ -50,16 +51,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<div className="sidebar-container">
-					<aside>
-						<div className="logo">
-							<img src="/logo.svg" alt="Logo" />
-							<h1>Schema Benchmarks</h1>
-						</div>
-					</aside>
+					<Sidebar />
 					<div className="container">
-						<header>
-							<h2>Page name</h2>
-						</header>
+						<Header />
 						{children}
 					</div>
 				</div>
