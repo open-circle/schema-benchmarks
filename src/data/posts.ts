@@ -17,9 +17,16 @@ const posts = new Collection({
 let id = 0;
 const nextId = () => id++;
 
-export const getPosts = createServerFn().handler((): Post[] =>
-	posts.findMany(),
-);
+await posts.createMany(5, () => {
+	const id = nextId();
+	return {
+		id,
+		title: `Post ${id}`,
+		body: `This is post ${id}`,
+	};
+});
+
+export const getPosts = createServerFn().handler((): Post[] => posts.all());
 
 export const createPost = createServerFn()
 	.inputValidator(v.omit(postSchema, ["id"]))
@@ -33,13 +40,14 @@ export const createPost = createServerFn()
 
 export const updatePost = createServerFn()
 	.inputValidator(v.required(v.partial(postSchema), ["id"]))
-	.handler(({ data: { id, ...patch } }) => {
-		posts.update((q) => q.where({ id }), {
-			data(draft) {
-				Object.assign(draft, patch);
-			},
-		});
-	});
+	.handler(
+		({ data: { id, ...patch } }): Promise<Post | undefined> =>
+			posts.update((q) => q.where({ id }), {
+				data(draft) {
+					Object.assign(draft, patch);
+				},
+			}),
+	);
 
 export const deletePost = createServerFn()
 	.inputValidator(v.pick(postSchema, ["id"]))
