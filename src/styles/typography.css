@@ -2,108 +2,181 @@
   --font-family-headline: "Roboto Condensed", -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
-  --font-family-body: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  --font-family-body: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif;
   --font-family-code: "Google Sans Code", source-code-pro, Menlo, Monaco,
     Consolas, "Courier New", monospace;
 
+  --weight-thin: 100;
+  --weight-extra-light: 200;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extra-bold: 800;
+  --weight-black: 900;
+
   --headline1-family: var(--font-family-headline);
   --headline1-size: 6.0625rem;
+  --headline1-weight: var(--weight-extra-light);
   --headline2-family: var(--font-family-headline);
   --headline2-size: 3.8125rem;
+  --headline2-weight: var(--weight-light);
   --headline3-family: var(--font-family-headline);
   --headline3-size: 3rem;
+  --headline3-weight: var(--weight-light);
   --headline4-family: var(--font-family-headline);
   --headline4-size: 2.125rem;
+  --headline4-weight: var(--weight-light);
   --headline5-family: var(--font-family-headline);
   --headline5-size: 1.5rem;
+  --headline5-weight: var(--weight-regular);
   --headline6-family: var(--font-family-headline);
   --headline6-size: 1.25rem;
+  --headline6-weight: var(--weight-regular);
   --body1-family: var(--font-family-body);
-  --body1-size: 1.0625rem;
+  --body1-size: 1rem;
+  --body1-weight: var(--weight-regular);
   --body2-family: var(--font-family-body);
-  --body2-size: 0.9375rem;
+  --body2-size: 0.875rem;
+  --body2-weight: var(--weight-regular);
   --subtitle1-family: var(--font-family-body);
   --subtitle1-size: 1rem;
+  --subtitle1-weight: var(--weight-regular);
   --subtitle2-family: var(--font-family-body);
   --subtitle2-size: 0.875rem;
+  --subtitle2-weight: var(--weight-regular);
   --button-family: var(--font-family-body);
-  --button-size: 0.9375rem;
+  --button-size: 0.875rem;
+  --button-weight: var(--weight-regular);
   --overline-family: var(--font-family-body);
-  --overline-size: 0.6875rem;
+  --overline-size: 0.625rem;
+  --overline-weight: var(--weight-regular);
   --caption-family: var(--font-family-body);
-  --caption-size: 0.8125rem;
+  --caption-size: 0.75rem;
+  --caption-weight: var(--weight-regular);
 }
 
-h1,
+@media (prefers-color-scheme: dark) {
+  /* Text looks thicker on dark backgrounds, so we use thinner weights to compensate */
+  :root {
+    --weight-thin: 50;
+    --weight-extra-light: 150;
+    --weight-light: 250;
+    --weight-regular: 350;
+    --weight-medium: 450;
+    --weight-semibold: 550;
+    --weight-bold: 650;
+    --weight-extra-bold: 750;
+    --weight-black: 850;
+  }
+}
+
 .headline1 {
   font-family: var(--headline1-family);
   font-size: var(--headline1-size);
+  font-weight: var(--headline1-weight);
 }
 
-h2,
 .headline2 {
   font-family: var(--headline2-family);
   font-size: var(--headline2-size);
+  font-weight: var(--headline2-weight);
 }
 
-h3,
 .headline3 {
   font-family: var(--headline3-family);
   font-size: var(--headline3-size);
+  font-weight: var(--headline3-weight);
 }
 
-h4,
 .headline4 {
   font-family: var(--headline4-family);
   font-size: var(--headline4-size);
+  font-weight: var(--headline4-weight);
 }
 
-h5,
 .headline5 {
   font-family: var(--headline5-family);
   font-size: var(--headline5-size);
+  font-weight: var(--headline5-weight);
 }
 
-h6,
 .headline6 {
   font-family: var(--headline6-family);
   font-size: var(--headline6-size);
+  font-weight: var(--headline6-weight);
 }
 
-button,
 .button {
   font-family: var(--button-family);
   font-size: var(--button-size);
+  font-weight: var(--button-weight);
 }
 
 .body1 {
   font-family: var(--body1-family);
   font-size: var(--body1-size);
+  font-weight: var(--body1-weight);
 }
 
 .body2 {
   font-family: var(--body2-family);
   font-size: var(--body2-size);
+  font-weight: var(--body2-weight);
 }
 
 .subtitle1 {
   font-family: var(--subtitle1-family);
   font-size: var(--subtitle1-size);
+  font-weight: var(--subtitle1-weight);
 }
 
 .subtitle2 {
   font-family: var(--subtitle2-family);
   font-size: var(--subtitle2-size);
+  font-weight: var(--subtitle2-weight);
 }
 
 .overline {
   font-family: var(--overline-family);
   font-size: var(--overline-size);
+  font-weight: var(--overline-weight);
+  text-transform: uppercase;
 }
 
 .caption {
   font-family: var(--caption-family);
   font-size: var(--caption-size);
+  font-weight: var(--caption-weight);
+}
+
+h1 {
+  @extend .headline3;
+}
+
+h2 {
+  @extend .headline4;
+}
+
+h3 {
+  @extend .headline5;
+}
+
+h4 {
+  @extend .headline6;
+}
+
+h5 {
+  @extend .subtitle1;
+}
+
+h6 {
+  @extend .subtitle2;
+}
+
+p {
+  margin: 0;
 }
