@@ -49,6 +49,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
+				<header>
+					<div className="logo">
+						<img src="/logo.svg" alt="Logo" />
+						<h1>Schema Benchmarks</h1>
+					</div>
+				</header>
 				{children}
 				<TanStackDevtools
 					config={{

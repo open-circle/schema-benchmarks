@@ -3,7 +3,8 @@
 :root {
   --page-background: light-dark(#eceff1, #37474f);
   --page-text: light-dark(#263238, #eceff1);
-  --sidebar-background: light-dark(#cfd8dc, #263238);
+  --sidebar-background: light-dark(#b0bec5, #263238);
+  --header-background: light-dark(#cfd8dc, #455a64);
 
   --red: light-dark(#f44336, #e57373);
   --deep-orange: light-dark(#ff5722, #ff8a65);
@@ -27,4 +28,21 @@ body {
 code {
   font-family: "Google Sans Code", source-code-pro, Menlo, Monaco, Consolas,
     "Courier New", monospace;
+}
+
+header {
+  background-color: var(--header-background);
+  padding: 1rem;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    img {
+      height: 3rem;
+    }
+    h1 {
+      margin: 0;
+    }
+  }
 }
