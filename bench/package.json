@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "arktype": "^2.1.25",
+    "typia": "^10.0.2",
+    "valibot": "^1.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@ryoppippi/unplugin-typia": "^2.6.5",
+    "@schema-benchmarks/data": "workspace:*",
+    "ts-patch": "^3.3.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.2"
+  },
+  "main": "index.ts",
+  "name": "@schema-benchmarks/bench",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "prepare": "ts-patch install"
+  },
+  "types": "index.ts"
+}

@@ -1,3 +1,4 @@
 packages:
   - data
   - website
+  - bench
