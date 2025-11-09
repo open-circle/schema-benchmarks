@@ -26,15 +26,20 @@ describe.each([
 		});
 
 		const zodSchema = getZodSchema();
+		bench("zod", () => {
+			zodSchema.safeParse(data);
+		});
+		bench("zod (jitless)", () => {
+			zodSchema.safeParse(data, { jitless: true });
+		});
+
 		const zodMiniSchema = getZodMiniSchema();
-		for (const jitless of [false, true]) {
-			bench(`zod${jitless ? " (jitless)" : ""}`, () => {
-				zodSchema.safeParse(data, { jitless });
-			});
-			bench(`zod-mini${jitless ? " (jitless)" : ""}`, () => {
-				zodMiniSchema.safeParse(data, { jitless });
-			});
-		}
+		bench("zod-mini", () => {
+			zodMiniSchema.safeParse(data);
+		});
+		bench("zod-mini (jitless)", () => {
+			zodMiniSchema.safeParse(data, { jitless: true });
+		});
 
 		const effectSchema = getEffectSchema();
 		bench("effect", () => {

@@ -18,19 +18,25 @@ describe("runtime", () => {
 		getValibotSchema();
 	});
 
-	for (const jitless of [false, true]) {
-		z.config({ jitless });
-		bench(`zod${jitless ? " (jitless)" : ""}`, () => {
-			getZodSchema();
-		});
-		z.config({ jitless: false });
+	bench("zod", () => {
+		getZodSchema();
+	});
 
-		zMini.config({ jitless });
-		bench(`zod-mini${jitless ? " (jitless)" : ""}`, () => {
-			getZodMiniSchema();
-		});
-		zMini.config({ jitless: false });
-	}
+	z.config({ jitless: true });
+	bench("zod (jitless)", () => {
+		getZodSchema();
+	});
+	z.config({ jitless: false });
+
+	bench("zod-mini", () => {
+		getZodMiniSchema();
+	});
+
+	zMini.config({ jitless: true });
+	bench("zod-mini (jitless)", () => {
+		getZodMiniSchema();
+	});
+	zMini.config({ jitless: false });
 
 	bench("effect", () => {
 		getEffectSchema();
