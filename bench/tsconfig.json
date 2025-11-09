@@ -1,11 +1,11 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "module": "nodenext",
-    "plugins": [
-      {
-        "transform": "typia/lib/transform"
-      }
-    ]
-  }
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"module": "nodenext",
+		"plugins": [
+			{
+				"transform": "typia/lib/transform"
+			}
+		]
+	}
 }

@@ -1,6 +1,6 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "module": "nodenext"
-  }
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"module": "nodenext"
+	}
 }

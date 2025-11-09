@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -11,6 +11,8 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"**/src/**/*",
+			"**/bench/**/*",
+			"**/data/**/*",
 			"**/.vscode/**/*",
 			"**/index.html",
 			"**/vite.config.ts",
@@ -30,7 +32,15 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"noUnknownAtRules": {
+					"level": "warn",
+					"options": {
+						"ignore": ["extend"]
+					}
+				}
+			}
 		}
 	},
 	"vcs": {

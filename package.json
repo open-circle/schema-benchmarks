@@ -12,6 +12,6 @@
     "website:serve": "pnpm run --filter website serve"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4"
+    "@biomejs/biome": "2.3.4"
   }
 }

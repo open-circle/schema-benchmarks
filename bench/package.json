@@ -1,24 +1,24 @@
 {
-  "dependencies": {
-    "arktype": "^2.1.25",
-    "typia": "^10.0.2",
-    "valibot": "^1.1.0",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@ryoppippi/unplugin-typia": "^2.6.5",
-    "@schema-benchmarks/data": "workspace:*",
-    "ts-patch": "^3.3.0",
-    "typescript": "~5.9.3",
-    "vite": "^7.2.2",
-    "vitest": "^3.2.4"
-  },
-  "name": "@schema-benchmarks/bench",
-  "private": true,
-  "scripts": {
-    "bench": "vitest bench",
-    "prepare": "ts-patch install",
-    "test": "vitest run"
-  },
-  "types": "index.ts"
+	"dependencies": {
+		"arktype": "^2.1.25",
+		"typia": "^10.0.2",
+		"valibot": "^1.1.0",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@ryoppippi/unplugin-typia": "^2.6.5",
+		"@schema-benchmarks/data": "workspace:*",
+		"ts-patch": "^3.3.0",
+		"typescript": "~5.9.3",
+		"vite": "^7.2.2",
+		"vitest": "^3.2.4"
+	},
+	"name": "@schema-benchmarks/bench",
+	"private": true,
+	"scripts": {
+		"bench": "vitest bench",
+		"prepare": "ts-patch install",
+		"test": "vitest run"
+	},
+	"types": "index.ts"
 }
