@@ -2,7 +2,7 @@ export interface ImageData {
 	id: number;
 	created: Date;
 	title: string;
-	type: string;
+	type: "jpg" | "png";
 	size: number;
 	url: string;
 }

@@ -3,6 +3,7 @@ import { bench, describe } from "vitest";
 import z from "zod";
 import * as zMini from "zod/mini";
 import { getArkTypeSchema } from "./schemas/arktype";
+import { getEffectSchema } from "./schemas/effect";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
 import { getZodSchema } from "./schemas/zod";
@@ -30,6 +31,10 @@ describe("runtime", () => {
 		});
 		zMini.config({ jitless: false });
 	}
+
+	bench("effect", () => {
+		getEffectSchema();
+	});
 });
 
 describe("precompiled", () => {

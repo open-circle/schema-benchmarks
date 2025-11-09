@@ -16,6 +16,10 @@ bench("zod-mini", async () => {
 	await import("./schemas/zod-mini.js");
 });
 
+bench("effect", async () => {
+	await import("./schemas/effect.js");
+});
+
 bench.skip("typia (skipped, types only)", async () => {
 	await import("./schemas/typia.js");
 });

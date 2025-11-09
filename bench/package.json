@@ -1,6 +1,7 @@
 {
 	"dependencies": {
 		"arktype": "^2.1.25",
+		"effect": "^3.19.3",
 		"typia": "^10.0.2",
 		"valibot": "^1.1.0",
 		"zod": "^4.1.12"
