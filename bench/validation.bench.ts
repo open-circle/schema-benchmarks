@@ -6,6 +6,7 @@ import { getArkTypeSchema } from "./schemas/arktype";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
 import { getZodSchema } from "./schemas/zod";
+import { getZodMiniSchema } from "./schemas/zod-mini";
 
 describe.each([
 	["Success", successData],
@@ -23,9 +24,13 @@ describe.each([
 		});
 
 		const zodSchema = getZodSchema();
+		const zodMiniSchema = getZodMiniSchema();
 		for (const jitless of [false, true]) {
 			bench(`zod${jitless ? " (jitless)" : ""}`, () => {
 				zodSchema.safeParse(data, { jitless });
+			});
+			bench(`zod-mini${jitless ? " (jitless)" : ""}`, () => {
+				zodMiniSchema.safeParse(data, { jitless });
 			});
 		}
 	});
