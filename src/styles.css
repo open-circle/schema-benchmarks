@@ -10,10 +10,13 @@
 
   --red: light-dark(#f44336, #e57373);
   --deep-orange: light-dark(#ff5722, #ff8a65);
-  --orange: light-dark(#ff9800, #ffb74d);
+  --orange: light-dark(#ff9800, #ffd54f);
+  --amber: light-dark(#ffc107, #ffd54f);
   --yellow: light-dark(#ffeb3b, #fff176);
+  --lime: light-dark(#cddc39, #dce775);
+  --light-green: light-dark(#8bc34a, #a5d6a7);
   --green: light-dark(#4caf50, #81c784);
-  --teal: light-dark(#009688, #80cbc4);
+  --teal: light-dark(#009688, #4db6ac);
 }
 
 * {
