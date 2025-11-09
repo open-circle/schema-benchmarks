@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiValidRouteImport } from './routes/api/valid'
+import { Route as ApiInvalidRouteImport } from './routes/api/invalid'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiValidRoute = ApiValidRouteImport.update({
+  id: '/api/valid',
+  path: '/api/valid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiInvalidRoute = ApiInvalidRouteImport.update({
+  id: '/api/invalid',
+  path: '/api/invalid',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/invalid': typeof ApiInvalidRoute
+  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/invalid': typeof ApiInvalidRoute
+  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/invalid': typeof ApiInvalidRoute
+  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/invalid' | '/api/valid'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/invalid' | '/api/valid'
+  id: '__root__' | '/' | '/api/invalid' | '/api/valid'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiInvalidRoute: typeof ApiInvalidRoute
+  ApiValidRoute: typeof ApiValidRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/valid': {
+      id: '/api/valid'
+      path: '/api/valid'
+      fullPath: '/api/valid'
+      preLoaderRoute: typeof ApiValidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/invalid': {
+      id: '/api/invalid'
+      path: '/api/invalid'
+      fullPath: '/api/invalid'
+      preLoaderRoute: typeof ApiInvalidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiInvalidRoute: ApiInvalidRoute,
+  ApiValidRoute: ApiValidRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
