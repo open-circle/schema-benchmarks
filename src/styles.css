@@ -1,3 +1,5 @@
+@import "normalize.css/normalize.css";
+
 :root {
   --page-background: light-dark(#eceff1, #37474f);
   --page-text: light-dark(#263238, #eceff1);
