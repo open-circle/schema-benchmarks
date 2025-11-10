@@ -69,7 +69,7 @@ describe.each([
 			joiSchema.validate(data, { abortEarly: false });
 		});
 
-		describe.skipIf(name === "success")("abort early", () => {
+		describe.runIf(name === "error")("abort early", () => {
 			bench("valibot", () => {
 				v.safeParse(valibotSchema, data, { abortEarly: true });
 			});
