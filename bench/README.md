@@ -48,24 +48,39 @@ bench("valizod", () => {
 
 If the schema library involves precompilation (i.e. during build time), add this benchmark to the `precompiled` describe block instead of the `runtime` block.
 
-### Add the library to the validation benchmark
+### Add the library to the validation and parsing benchmarks
 
-Import the `getSchema` function in `bench/validation.bench.ts` and add it, depending on the type of library. Make sure that the initialization of the schema is done outside the benchmark, but the validation is done inside the benchmark.
+Import the `getSchema` function in `bench/validation.bench.ts` and `bench/parsing.bench.ts` and add it, depending on the type of library. Make sure that the initialization of the schema is done outside the benchmark, but the validation is done inside the benchmark.
+
+`validation.bench.ts` benchmarks methods that only return a boolean, while `parsing.bench.ts` benchmarks methods that return a new value. If the library doesn't have a dedicated validation method, only add it to the `parsing.bench.ts` file (and vice versa).
 
 ```ts
+// parsing.bench.ts
 import { getValizodSchema } from "./schemas/valizod";
 
 // ...
 
 const valizodSchema = getValizodSchema();
 bench("valizod", () => {
-  valizodSchema.parse(data);
+  valizodSchema.safeParse(data);
+});
+```
+
+```ts
+// validation.bench.ts
+import { getValizodSchema } from "./schemas/valizod";
+
+// ...
+
+const valizodSchema = getValizodSchema();
+bench("valizod", () => {
+  valizodSchema.is(data);
 });
 ```
 
 #### Abort early
 
-Some libraries support aborting early, which means that the validation will stop as soon as an error is found. If the library supports configuration of this behaviour, add a benchmark to both the regular and the `abort early` describe block.
+Some libraries support aborting early, which means that the validation/parsing will stop as soon as an error is found. If the library supports configuration of this behaviour, add a benchmark to both the regular and the `abort early` describe block.
 
 ```ts
 import { getValizodSchema } from "./schemas/valizod";
@@ -74,12 +89,12 @@ import { getValizodSchema } from "./schemas/valizod";
 
 const valizodSchema = getValizodSchema();
 bench("valizod", () => {
-  valizodSchema.parse(data, { abortEarly: false });
+  valizodSchema.safeParse(data, { abortEarly: false });
 });
 
 describe("abort early", () => {
   bench("valizod", () => {
-    valizodSchema.parse(data, { abortEarly: true });
+    valizodSchema.safeParse(data, { abortEarly: true });
   });
 });
 ```
@@ -94,7 +109,9 @@ import { getValizodSchema } from "./schemas/valizod";
 describe("abort early", () => {
   const valizodSchema = getValizodSchema();
   bench("valizod", () => {
-    valizodSchema.parse(data);
+    valizodSchema.safeParse(data);
   });
 });
 ```
+
+`validation.bench.ts` does not make this distinction, as it is assumed that validation methods will always abort early (if this is not the case by default, feel free to configure the library so that it does).
