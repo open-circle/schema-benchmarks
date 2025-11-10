@@ -17,7 +17,7 @@ import { getZodMiniSchema } from "./schemas/zod-mini";
 describe.each([
 	["success", successData],
 	["error", errorData],
-])("%s", (_, data) => {
+])("%s", (name, data) => {
 	describe("runtime", () => {
 		const arktypeSchema = getArkTypeSchema();
 		bench("arktype", () => {
@@ -74,7 +74,8 @@ describe.each([
 				v.safeParse(valibotSchema, data, { abortEarly: true });
 			});
 
-			bench("valibot (abortPipeEarly only)", () => {
+			// with valid data, this benchmark is identical to the above one
+			bench.runIf(name === "error")("valibot (abortPipeEarly only)", () => {
 				v.safeParse(valibotSchema, data, { abortPipeEarly: true });
 			});
 
