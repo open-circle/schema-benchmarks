@@ -96,8 +96,12 @@ describe.each([
 	});
 
 	describe("precompiled", () => {
-		bench("typia", () => {
+		bench("typia (validate)", () => {
 			typia.validate<TypiaSchema>(data);
+		});
+		const typiaValidate = typia.createValidate<TypiaSchema>();
+		bench("typia (createValidate)", () => {
+			typiaValidate(data);
 		});
 	});
 });
