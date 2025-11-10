@@ -47,7 +47,7 @@ describe.each([
 
 		const effectSchema = getEffectSchema();
 		bench("effect", () => {
-			Schema.decodeUnknownEither(effectSchema)(data);
+			Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
 		});
 
 		const typeboxSchema = getTypeboxSchema();
@@ -75,6 +75,9 @@ describe.each([
 			});
 			bench("valibot (abortPipeEarly only)", () => {
 				v.safeParse(valibotSchema, data, { abortPipeEarly: true });
+			});
+			bench("effect", () => {
+				Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
 			});
 			bench("yup", () => {
 				try {
