@@ -20,6 +20,10 @@ bench("effect", async () => {
 	await import("./schemas/effect.js");
 });
 
+bench("typebox", async () => {
+	await import("./schemas/typebox.js");
+});
+
 bench.skip("typia (skipped, types only)", async () => {
 	await import("./schemas/typia.js");
 });

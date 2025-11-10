@@ -20,6 +20,9 @@ importers:
       effect:
         specifier: ^3.19.3
         version: 3.19.3
+      typebox:
+        specifier: ^1.0.51
+        version: 1.0.51
       typia:
         specifier: ^10.0.2
         version: 10.0.2(@types/node@22.19.0)(typescript@5.9.3)
@@ -2006,6 +2009,9 @@ packages:
   type-fest@4.41.0:
     resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
     engines: {node: '>=16'}
+
+  typebox@1.0.51:
+    resolution: {integrity: sha512-HbnSM17BFdKubGlk4jgAqIxLoDoB6eNg5anbi8Hqs5vFiisNxOmIpNi9s3hOoUIccIV+diQuQFvHyx4IQCtHdg==}
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -4147,6 +4153,8 @@ snapshots:
   type-fest@0.21.3: {}
 
   type-fest@4.41.0: {}
+
+  typebox@1.0.51: {}
 
   typescript@5.9.3: {}
 

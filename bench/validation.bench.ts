@@ -1,10 +1,12 @@
 import { errorData, successData } from "@schema-benchmarks/data";
 import * as Schema from "effect/Schema";
+import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
 import { getArkTypeSchema } from "./schemas/arktype";
 import { getEffectSchema } from "./schemas/effect";
+import { getTypeboxSchema } from "./schemas/typebox";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
 import { getZodSchema } from "./schemas/zod";
@@ -44,6 +46,13 @@ describe.each([
 		const effectSchema = getEffectSchema();
 		bench("effect", () => {
 			Schema.decodeUnknownEither(effectSchema)(data);
+		});
+
+		const typeboxSchema = getTypeboxSchema();
+		bench("typebox", () => {
+			try {
+				Value.Parse(typeboxSchema, data);
+			} catch {}
 		});
 	});
 
