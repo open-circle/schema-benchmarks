@@ -1,11 +1,8 @@
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
-import addKeywords from "ajv-keywords";
 import typia from "typia";
 import { bench, describe } from "vitest";
 import z from "zod";
 import * as zMini from "zod/mini";
-import { getAjvSchema } from "./schemas/ajv";
+import { getAjv, getAjvSchema } from "./schemas/ajv";
 import { getArkTypeSchema } from "./schemas/arktype";
 import { getEffectSchema } from "./schemas/effect";
 import { getJoiSchema } from "./schemas/joi";
@@ -61,12 +58,7 @@ describe("runtime", () => {
 		getJoiSchema();
 	});
 
-	bench("ajv", () => {
-		getAjvSchema();
-	});
-	const ajv = new Ajv();
-	addFormats(ajv);
-	addKeywords(ajv);
+	const ajv = getAjv();
 	bench("ajv (compile)", () => {
 		ajv.compile(getAjvSchema());
 	});

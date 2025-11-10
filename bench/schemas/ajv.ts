@@ -3,7 +3,16 @@ import type {
 	ProductData,
 	RatingData,
 } from "@schema-benchmarks/data";
-import type { JSONSchemaType } from "ajv";
+import { Ajv, type JSONSchemaType, type Options } from "ajv";
+import addFormats from "ajv-formats";
+import addKeywords from "ajv-keywords";
+
+export function getAjv(options?: Options) {
+	const ajv = new Ajv(options);
+	addFormats(ajv, { formats: ["url"] });
+	addKeywords(ajv, ["instanceof"]);
+	return ajv;
+}
 
 export function getAjvSchema() {
 	const dateSchema: JSONSchemaType<Date> = {

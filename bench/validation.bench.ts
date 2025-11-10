@@ -1,13 +1,10 @@
 import { errorData, successData } from "@schema-benchmarks/data";
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
-import addKeywords from "ajv-keywords";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
-import { getAjvSchema } from "./schemas/ajv";
+import { getAjv, getAjvSchema } from "./schemas/ajv";
 import { getArkTypeSchema } from "./schemas/arktype";
 import { getEffectSchema } from "./schemas/effect";
 import { getJoiSchema } from "./schemas/joi";
@@ -75,9 +72,7 @@ describe.each([
 
 		// possibly not a fair comparison, since ajv only runs a boolean check rather than constructing a new value
 		const ajvSchema = getAjvSchema();
-		const ajv = new Ajv({ allErrors: true });
-		addFormats(ajv);
-		addKeywords(ajv);
+		const ajv = getAjv({ allErrors: true });
 		bench("ajv (validate)", () => {
 			ajv.validate(ajvSchema, data);
 		});
@@ -111,9 +106,7 @@ describe.each([
 			});
 
 			// possibly not a fair comparison, since ajv only runs a boolean check rather than constructing a new value
-			const ajv = new Ajv({ allErrors: false });
-			addFormats(ajv);
-			addKeywords(ajv);
+			const ajv = getAjv({ allErrors: false });
 			bench("ajv (validate)", () => {
 				ajv.validate(ajvSchema, data);
 			});
