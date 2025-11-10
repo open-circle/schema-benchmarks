@@ -9,6 +9,7 @@ import { getEffectSchema } from "./schemas/effect";
 import { getTypeboxSchema } from "./schemas/typebox";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
+import { getYupSchema } from "./schemas/yup";
 import { getZodSchema } from "./schemas/zod";
 import { getZodMiniSchema } from "./schemas/zod-mini";
 
@@ -52,6 +53,13 @@ describe.each([
 		bench("typebox", () => {
 			try {
 				Value.Parse(typeboxSchema, data);
+			} catch {}
+		});
+
+		const yupSchema = getYupSchema();
+		bench("yup", () => {
+			try {
+				yupSchema.validateSync(data);
 			} catch {}
 		});
 	});

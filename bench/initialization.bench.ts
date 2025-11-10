@@ -7,6 +7,7 @@ import { getEffectSchema } from "./schemas/effect";
 import { getTypeboxSchema } from "./schemas/typebox";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
+import { getYupSchema } from "./schemas/yup";
 import { getZodSchema } from "./schemas/zod";
 import { getZodMiniSchema } from "./schemas/zod-mini";
 
@@ -45,6 +46,10 @@ describe("runtime", () => {
 
 	bench("typebox", () => {
 		getTypeboxSchema();
+	});
+
+	bench("yup", () => {
+		getYupSchema();
 	});
 });
 
