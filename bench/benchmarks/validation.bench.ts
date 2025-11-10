@@ -4,6 +4,7 @@ import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
+import { DataType, LibraryType } from "../bench-types";
 import { getAjv, getAjvSchema } from "../schemas/ajv";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
@@ -13,10 +14,10 @@ import { getValibotSchema } from "../schemas/valibot";
 import { getYupSchema } from "../schemas/yup";
 
 describe.each([
-	["success", successData],
-	["error", errorData],
+	[DataType.Success, successData],
+	[DataType.Error, errorData],
 ])("%s", (_, data) => {
-	describe("runtime", () => {
+	describe(LibraryType.Runtime, () => {
 		const arktypeSchema = getArkTypeSchema();
 		bench("arktype", () => {
 			arktypeSchema.allows(data);
@@ -57,7 +58,7 @@ describe.each([
 		});
 	});
 
-	describe("precompiled", () => {
+	describe(LibraryType.Precompiled, () => {
 		bench("typia (is)", () => {
 			typia.is<TypiaSchema>(data);
 		});

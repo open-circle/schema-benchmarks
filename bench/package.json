@@ -15,10 +15,11 @@
 	"devDependencies": {
 		"@ryoppippi/unplugin-typia": "^2.6.5",
 		"@schema-benchmarks/data": "workspace:*",
+		"@vitest/runner": "4.0.8",
 		"ts-patch": "^3.3.0",
 		"typescript": "~5.9.3",
 		"vite": "^7.2.2",
-		"vitest": "^3.2.4"
+		"vitest": "4.0.8"
 	},
 	"name": "@schema-benchmarks/bench",
 	"private": true,

@@ -2,6 +2,7 @@ import typia from "typia";
 import { bench, describe } from "vitest";
 import z from "zod";
 import * as zMini from "zod/mini";
+import { LibraryType } from "../bench-types";
 import { getAjv, getAjvSchema } from "../schemas/ajv";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
@@ -13,7 +14,7 @@ import { getYupSchema } from "../schemas/yup";
 import { getZodSchema } from "../schemas/zod";
 import { getZodMiniSchema } from "../schemas/zod-mini";
 
-describe("runtime", () => {
+describe(LibraryType.Runtime, () => {
 	bench("arktype", () => {
 		getArkTypeSchema();
 	});
@@ -64,7 +65,7 @@ describe("runtime", () => {
 	});
 });
 
-describe("precompiled", () => {
+describe(LibraryType.Precompiled, () => {
 	bench("typia", () => {
 		typia.createValidate<TypiaSchema>();
 	});
