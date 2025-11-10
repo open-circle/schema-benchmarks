@@ -16,8 +16,8 @@ import { makeBenchFactory } from "../utils/bench-factory";
 declare module "../utils/registry" {
 	export interface MetaRegistry {
 		initialization: {
-			bench: BaseBenchMeta;
-			case: BaseCaseMeta;
+			bench: unknown;
+			case: unknown;
 		};
 	}
 }

@@ -1,13 +1,9 @@
 import crypto from "node:crypto";
 import type { Bench } from "tinybench";
-import type { StripIndexSignature } from "./types";
+import type { Compute } from "./types";
 
-export interface MetaRegistry {
-	[type: string]: {
-		bench: BaseBenchMeta;
-		case: BaseCaseMeta;
-	};
-}
+// biome-ignore lint/suspicious/noEmptyInterface: will be augmented in other files
+export interface MetaRegistry {}
 
 export interface BaseBenchMeta {
 	libraryType: "runtime" | "precompiled";
@@ -18,20 +14,25 @@ export interface BaseCaseMeta {
 	note?: string;
 }
 
-export type MetaType = keyof StripIndexSignature<MetaRegistry>;
-export type CaseMetaForType<Type extends MetaType> = MetaRegistry[Type]["case"];
-export type BenchMetaForType<Type extends MetaType> =
-	MetaRegistry[Type]["bench"];
+export type MetaType = keyof MetaRegistry;
+export type CaseMetaForType<Type extends MetaType> = Compute<
+	{
+		type: Type;
+	} & BaseCaseMeta &
+		MetaRegistry[Type]["case"]
+>;
+export type BenchMetaForType<Type extends MetaType> = Compute<
+	{
+		type: Type;
+	} & BaseBenchMeta &
+		MetaRegistry[Type]["bench"]
+>;
 
 export type BenchMeta = {
-	[K in keyof StripIndexSignature<MetaRegistry>]: MetaRegistry[K]["bench"] & {
-		type: K;
-	};
+	[K in keyof MetaRegistry]: BenchMetaForType<K>;
 }[MetaType];
 export type CaseMeta = {
-	[K in keyof StripIndexSignature<MetaRegistry>]: MetaRegistry[K]["case"] & {
-		type: K;
-	};
+	[K in keyof MetaRegistry]: CaseMetaForType<K>;
 }[MetaType];
 
 class Registry {

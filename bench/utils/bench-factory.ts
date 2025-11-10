@@ -18,7 +18,7 @@ interface LibraryContext<Type extends MetaType> {
 	 */
 	add: (
 		fn: () => unknown,
-		...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName">>
+		...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName" | "type">>
 	) => void;
 }
 
@@ -30,7 +30,7 @@ interface BenchContext<Type extends MetaType> {
 	addLibrary: (
 		libraryName: string,
 		fn: () => unknown,
-		...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName">>
+		...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName" | "type">>
 	) => void;
 	/**
 	 * Register multiple cases for a library.
@@ -45,7 +45,7 @@ interface BenchContext<Type extends MetaType> {
  * Creates and registers a `Bench` instance.
  */
 type BenchFactory<Type extends MetaType> = (
-	benchMeta: BenchMetaForType<Type>,
+	benchMeta: Omit<BenchMetaForType<Type>, "type">,
 	registerCases: (ctx: BenchContext<Type>) => void,
 ) => void;
 
@@ -63,7 +63,7 @@ export const makeBenchFactory =
 			libraryName: string,
 			fn: () => unknown,
 			...[caseMeta = {}, fnOptions]: AddArgs<
-				Omit<CaseMetaForType<Type>, "libraryName">
+				Omit<CaseMetaForType<Type>, "libraryName" | "type">
 			>
 		) {
 			const id = registry.addCase({

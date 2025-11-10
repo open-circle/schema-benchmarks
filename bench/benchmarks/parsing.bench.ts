@@ -19,11 +19,11 @@ import { makeBenchFactory } from "../utils/bench-factory";
 declare module "../utils/registry" {
 	export interface MetaRegistry {
 		parse: {
-			bench: BaseBenchMeta & {
+			bench: {
 				dataType: "success" | "error";
 				abortEarly?: boolean;
 			};
-			case: BaseCaseMeta;
+			case: unknown;
 		};
 	}
 }

@@ -15,10 +15,10 @@ import { makeBenchFactory } from "../utils/bench-factory";
 declare module "../utils/registry" {
 	export interface MetaRegistry {
 		validation: {
-			bench: BaseBenchMeta & {
+			bench: {
 				dataType: "success" | "error";
 			};
-			case: BaseCaseMeta;
+			case: unknown;
 		};
 	}
 }
