@@ -6,6 +6,7 @@ import * as v from "valibot";
 import { bench, describe } from "vitest";
 import { getArkTypeSchema } from "./schemas/arktype";
 import { getEffectSchema } from "./schemas/effect";
+import { getJoiSchema } from "./schemas/joi";
 import { getTypeboxSchema } from "./schemas/typebox";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
@@ -14,9 +15,9 @@ import { getZodSchema } from "./schemas/zod";
 import { getZodMiniSchema } from "./schemas/zod-mini";
 
 describe.each([
-	["Success", successData],
-	["Error", errorData],
-])("%s", (_, data) => {
+	["success", successData],
+	["error", errorData],
+])("%s", (name, data) => {
 	describe("runtime", () => {
 		const arktypeSchema = getArkTypeSchema();
 		bench("arktype", () => {
@@ -61,6 +62,20 @@ describe.each([
 			try {
 				yupSchema.validateSync(data);
 			} catch {}
+		});
+
+		const joiSchema = getJoiSchema();
+		bench("joi", () => {
+			joiSchema.validate(data, { abortEarly: false });
+		});
+
+		describe.skipIf(name === "success")("abort early", () => {
+			bench("valibot", () => {
+				v.safeParse(valibotSchema, data, { abortEarly: true });
+			});
+			bench("joi", () => {
+				joiSchema.validate(data, { abortEarly: true });
+			});
 		});
 	});
 

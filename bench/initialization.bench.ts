@@ -4,6 +4,7 @@ import z from "zod";
 import * as zMini from "zod/mini";
 import { getArkTypeSchema } from "./schemas/arktype";
 import { getEffectSchema } from "./schemas/effect";
+import { getJoiSchema } from "./schemas/joi";
 import { getTypeboxSchema } from "./schemas/typebox";
 import type { TypiaSchema } from "./schemas/typia";
 import { getValibotSchema } from "./schemas/valibot";
@@ -50,6 +51,10 @@ describe("runtime", () => {
 
 	bench("yup", () => {
 		getYupSchema();
+	});
+
+	bench("joi", () => {
+		getJoiSchema();
 	});
 });
 
