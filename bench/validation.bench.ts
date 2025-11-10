@@ -60,7 +60,7 @@ describe.each([
 		const yupSchema = getYupSchema();
 		bench("yup", () => {
 			try {
-				yupSchema.validateSync(data);
+				yupSchema.validateSync(data, { abortEarly: false });
 			} catch {}
 		});
 
@@ -72,6 +72,11 @@ describe.each([
 		describe.runIf(name === "error")("abort early", () => {
 			bench("valibot", () => {
 				v.safeParse(valibotSchema, data, { abortEarly: true });
+			});
+			bench("yup", () => {
+				try {
+					yupSchema.validateSync(data, { abortEarly: true });
+				} catch {}
 			});
 			bench("joi", () => {
 				joiSchema.validate(data, { abortEarly: true });
