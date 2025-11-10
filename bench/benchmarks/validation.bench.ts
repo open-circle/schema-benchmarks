@@ -4,13 +4,13 @@ import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
-import { getAjv, getAjvSchema } from "./schemas/ajv";
-import { getArkTypeSchema } from "./schemas/arktype";
-import { getEffectSchema } from "./schemas/effect";
-import { getTypeboxSchema } from "./schemas/typebox";
-import type { TypiaSchema } from "./schemas/typia";
-import { getValibotSchema } from "./schemas/valibot";
-import { getYupSchema } from "./schemas/yup";
+import { getAjv, getAjvSchema } from "../schemas/ajv";
+import { getArkTypeSchema } from "../schemas/arktype";
+import { getEffectSchema } from "../schemas/effect";
+import { getTypeboxSchema } from "../schemas/typebox";
+import type { TypiaSchema } from "../schemas/typia";
+import { getValibotSchema } from "../schemas/valibot";
+import { getYupSchema } from "../schemas/yup";
 
 describe.each([
 	["success", successData],

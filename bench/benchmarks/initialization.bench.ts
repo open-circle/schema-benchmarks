@@ -2,16 +2,16 @@ import typia from "typia";
 import { bench, describe } from "vitest";
 import z from "zod";
 import * as zMini from "zod/mini";
-import { getAjv, getAjvSchema } from "./schemas/ajv";
-import { getArkTypeSchema } from "./schemas/arktype";
-import { getEffectSchema } from "./schemas/effect";
-import { getJoiSchema } from "./schemas/joi";
-import { getTypeboxSchema } from "./schemas/typebox";
-import type { TypiaSchema } from "./schemas/typia";
-import { getValibotSchema } from "./schemas/valibot";
-import { getYupSchema } from "./schemas/yup";
-import { getZodSchema } from "./schemas/zod";
-import { getZodMiniSchema } from "./schemas/zod-mini";
+import { getAjv, getAjvSchema } from "../schemas/ajv";
+import { getArkTypeSchema } from "../schemas/arktype";
+import { getEffectSchema } from "../schemas/effect";
+import { getJoiSchema } from "../schemas/joi";
+import { getTypeboxSchema } from "../schemas/typebox";
+import type { TypiaSchema } from "../schemas/typia";
+import { getValibotSchema } from "../schemas/valibot";
+import { getYupSchema } from "../schemas/yup";
+import { getZodSchema } from "../schemas/zod";
+import { getZodMiniSchema } from "../schemas/zod-mini";
 
 describe("runtime", () => {
 	bench("arktype", () => {

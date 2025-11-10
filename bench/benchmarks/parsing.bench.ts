@@ -4,15 +4,15 @@ import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { bench, describe } from "vitest";
-import { getArkTypeSchema } from "./schemas/arktype";
-import { getEffectSchema } from "./schemas/effect";
-import { getJoiSchema } from "./schemas/joi";
-import { getTypeboxSchema } from "./schemas/typebox";
-import type { TypiaSchema } from "./schemas/typia";
-import { getValibotSchema } from "./schemas/valibot";
-import { getYupSchema } from "./schemas/yup";
-import { getZodSchema } from "./schemas/zod";
-import { getZodMiniSchema } from "./schemas/zod-mini";
+import { getArkTypeSchema } from "../schemas/arktype";
+import { getEffectSchema } from "../schemas/effect";
+import { getJoiSchema } from "../schemas/joi";
+import { getTypeboxSchema } from "../schemas/typebox";
+import type { TypiaSchema } from "../schemas/typia";
+import { getValibotSchema } from "../schemas/valibot";
+import { getYupSchema } from "../schemas/yup";
+import { getZodSchema } from "../schemas/zod";
+import { getZodMiniSchema } from "../schemas/zod-mini";
 
 describe.each([
 	["success", successData],
