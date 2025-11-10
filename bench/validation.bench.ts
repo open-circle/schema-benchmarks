@@ -73,17 +73,21 @@ describe.each([
 			bench("valibot", () => {
 				v.safeParse(valibotSchema, data, { abortEarly: true });
 			});
+
 			bench("valibot (abortPipeEarly only)", () => {
 				v.safeParse(valibotSchema, data, { abortPipeEarly: true });
 			});
+
 			bench("effect", () => {
 				Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
 			});
+
 			bench("yup", () => {
 				try {
 					yupSchema.validateSync(data, { abortEarly: true });
 				} catch {}
 			});
+
 			bench("joi", () => {
 				joiSchema.validate(data, { abortEarly: true });
 			});
