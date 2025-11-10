@@ -1,8 +1,6 @@
 import typia from "typia";
-import { bench, describe } from "vitest";
 import z from "zod";
 import * as zMini from "zod/mini";
-import { LibraryType } from "../bench-types";
 import { getAjv, getAjvSchema } from "../schemas/ajv";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
@@ -13,60 +11,99 @@ import { getValibotSchema } from "../schemas/valibot";
 import { getYupSchema } from "../schemas/yup";
 import { getZodSchema } from "../schemas/zod";
 import { getZodMiniSchema } from "../schemas/zod-mini";
+import { makeBenchFactory } from "../utils/bench-factory";
 
-describe(LibraryType.Runtime, () => {
-	bench("arktype", () => {
+declare module "../utils/registry" {
+	export interface MetaRegistry {
+		initialization: {
+			bench: BaseBenchMeta;
+			case: BaseCaseMeta;
+		};
+	}
+}
+
+const bench = makeBenchFactory("initialization");
+
+bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
+	addLibrary("arktype", () => {
 		getArkTypeSchema();
 	});
 
-	bench("valibot", () => {
+	addLibrary("valibot", () => {
 		getValibotSchema();
 	});
 
-	bench("zod", () => {
-		getZodSchema();
+	library("zod", ({ add }) => {
+		add(() => {
+			getZodSchema();
+		});
+
+		add(
+			() => {
+				getZodSchema();
+			},
+			{ note: "jitless" },
+			{
+				beforeAll() {
+					z.config({ jitless: true });
+				},
+				afterAll() {
+					z.config({ jitless: false });
+				},
+			},
+		);
 	});
 
-	z.config({ jitless: true });
-	bench("zod (jitless)", () => {
-		getZodSchema();
-	});
-	z.config({ jitless: false });
+	library("zod-mini", ({ add }) => {
+		add(() => {
+			getZodMiniSchema();
+		});
 
-	bench("zod-mini", () => {
-		getZodMiniSchema();
+		add(
+			() => {
+				getZodMiniSchema();
+			},
+			{ note: "jitless" },
+			{
+				beforeAll() {
+					zMini.config({ jitless: true });
+				},
+				afterAll() {
+					zMini.config({ jitless: false });
+				},
+			},
+		);
 	});
 
-	zMini.config({ jitless: true });
-	bench("zod-mini (jitless)", () => {
-		getZodMiniSchema();
-	});
-	zMini.config({ jitless: false });
-
-	bench("effect", () => {
+	addLibrary("effect", () => {
 		getEffectSchema();
 	});
 
-	bench("typebox", () => {
+	addLibrary("typebox", () => {
 		getTypeboxSchema();
 	});
 
-	bench("yup", () => {
+	addLibrary("yup", () => {
 		getYupSchema();
 	});
 
-	bench("joi", () => {
+	addLibrary("joi", () => {
 		getJoiSchema();
 	});
 
-	const ajv = getAjv();
-	bench("ajv (compile)", () => {
-		ajv.compile(getAjvSchema());
+	library("ajv", ({ add }) => {
+		const ajv = getAjv();
+		add(
+			() => {
+				ajv.compile(getAjvSchema());
+			},
+			{ note: "compile" },
+		);
 	});
 });
 
-describe(LibraryType.Precompiled, () => {
-	bench("typia", () => {
+bench({ libraryType: "precompiled" }, ({ addLibrary }) => {
+	addLibrary("typia", () => {
 		typia.createValidate<TypiaSchema>();
 	});
 });

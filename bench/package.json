@@ -13,20 +13,18 @@
 		"zod": "^4.1.12"
 	},
 	"devDependencies": {
-		"@ryoppippi/unplugin-typia": "^2.6.5",
 		"@schema-benchmarks/data": "workspace:*",
-		"@vitest/runner": "4.0.8",
+		"@types/node": "^22.19.0",
+		"tinybench": "^5.1.0",
+		"ts-node": "^10.9.2",
 		"ts-patch": "^3.3.0",
-		"typescript": "~5.9.3",
-		"vite": "^7.2.2",
-		"vitest": "4.0.8"
+		"typescript": "~5.9.3"
 	},
 	"name": "@schema-benchmarks/bench",
 	"private": true,
 	"scripts": {
-		"bench": "vitest bench",
-		"prepare": "ts-patch install",
-		"test": "vitest run"
+		"bench": "ts-node index.ts",
+		"prepare": "ts-patch install"
 	},
 	"types": "index.ts"
 }

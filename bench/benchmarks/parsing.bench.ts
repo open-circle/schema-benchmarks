@@ -3,8 +3,8 @@ import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import { bench, describe } from "vitest";
-import { AbortType, DataType, LibraryType } from "../bench-types";
+import z from "zod";
+import * as zMini from "zod/mini";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
 import { getJoiSchema } from "../schemas/joi";
@@ -14,103 +14,178 @@ import { getValibotSchema } from "../schemas/valibot";
 import { getYupSchema } from "../schemas/yup";
 import { getZodSchema } from "../schemas/zod";
 import { getZodMiniSchema } from "../schemas/zod-mini";
+import { makeBenchFactory } from "../utils/bench-factory";
 
-describe.each([
-	[DataType.Success, successData],
-	[DataType.Error, errorData],
-])("%s", (type, data) => {
-	describe(LibraryType.Runtime, () => {
-		describe(AbortType.DoNot, () => {
-			const arktypeSchema = getArkTypeSchema();
-			bench("arktype", () => {
-				arktypeSchema(data);
-			});
+declare module "../utils/registry" {
+	export interface MetaRegistry {
+		parse: {
+			bench: BaseBenchMeta & {
+				dataType: "success" | "error";
+				abortEarly?: boolean;
+			};
+			case: BaseCaseMeta;
+		};
+	}
+}
 
-			const valibotSchema = getValibotSchema();
-			bench("valibot", () => {
-				v.safeParse(valibotSchema, data);
-			});
+const bench = makeBenchFactory("parse");
 
-			const zodSchema = getZodSchema();
-			bench("zod", () => {
-				zodSchema.safeParse(data);
-			});
-			bench("zod (jitless)", () => {
-				zodSchema.safeParse(data, { jitless: true });
-			});
-
-			const zodMiniSchema = getZodMiniSchema();
-			bench("zod-mini", () => {
-				zodMiniSchema.safeParse(data);
-			});
-			bench("zod-mini (jitless)", () => {
-				zodMiniSchema.safeParse(data, { jitless: true });
+for (const [dataType, data] of [
+	["success", successData],
+	["error", errorData],
+] as const) {
+	bench(
+		{ dataType, libraryType: "runtime", abortEarly: false },
+		({ library }) => {
+			library("arktype", ({ add }) => {
+				const arktypeSchema = getArkTypeSchema();
+				add(() => {
+					arktypeSchema(data);
+				});
 			});
 
-			const effectSchema = getEffectSchema();
-			bench("effect", () => {
-				Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
+			library("valibot", ({ add }) => {
+				const valibotSchema = getValibotSchema();
+				add(() => {
+					v.safeParse(valibotSchema, data);
+				});
 			});
 
-			const typeboxSchema = getTypeboxSchema();
-			bench("typebox", () => {
-				try {
-					Value.Parse(typeboxSchema, data);
-				} catch {}
+			library("zod", ({ add }) => {
+				const zodSchema = getZodSchema();
+				add(() => {
+					zodSchema.parse(data);
+				});
+
+				add(
+					() => {
+						zodSchema.parse(data);
+					},
+					{ note: "jitless" },
+					{
+						beforeAll() {
+							z.config({ jitless: true });
+						},
+						afterAll() {
+							z.config({ jitless: false });
+						},
+					},
+				);
 			});
 
-			const yupSchema = getYupSchema();
-			bench("yup", () => {
-				try {
-					yupSchema.validateSync(data, { abortEarly: false });
-				} catch {}
+			library("zod-mini", ({ add }) => {
+				const zodMiniSchema = getZodMiniSchema();
+				add(() => {
+					zodMiniSchema.parse(data);
+				});
+
+				add(
+					() => {
+						zodMiniSchema.parse(data);
+					},
+					{ note: "jitless" },
+					{
+						beforeAll() {
+							zMini.config({ jitless: true });
+						},
+						afterAll() {
+							zMini.config({ jitless: false });
+						},
+					},
+				);
 			});
 
-			const joiSchema = getJoiSchema();
-			bench("joi", () => {
-				joiSchema.validate(data, { abortEarly: false });
-			});
-		});
-
-		describe.runIf(type === DataType.Error)(AbortType.Do, () => {
-			const valibotSchema = getValibotSchema();
-			bench("valibot", () => {
-				v.safeParse(valibotSchema, data, { abortEarly: true });
+			library("effect", ({ add }) => {
+				const effectSchema = getEffectSchema();
+				add(() => {
+					Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
+				});
 			});
 
-			// with valid data, this benchmark is identical to the above one
-			bench("valibot (abortPipeEarly only)", () => {
-				v.safeParse(valibotSchema, data, { abortPipeEarly: true });
+			library("typebox", ({ add }) => {
+				const typeboxSchema = getTypeboxSchema();
+				add(() => {
+					try {
+						Value.Parse(typeboxSchema, data);
+					} catch {}
+				});
 			});
 
-			const effectSchema = getEffectSchema();
-			bench("effect", () => {
-				Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
+			library("yup", ({ add }) => {
+				const yupSchema = getYupSchema();
+				add(() => {
+					try {
+						yupSchema.validateSync(data, { abortEarly: false });
+					} catch {}
+				});
 			});
 
-			const yupSchema = getYupSchema();
-			bench("yup", () => {
-				try {
-					yupSchema.validateSync(data, { abortEarly: true });
-				} catch {}
+			library("joi", ({ add }) => {
+				const joiSchema = getJoiSchema();
+				add(() => {
+					joiSchema.validate(data, { abortEarly: false });
+				});
+			});
+		},
+	);
+
+	bench(
+		{ dataType, libraryType: "runtime", abortEarly: true },
+		({ library }) => {
+			library("valibot", ({ add }) => {
+				const valibotSchema = getValibotSchema();
+				add(() => {
+					v.safeParse(valibotSchema, data, { abortEarly: true });
+				});
+				add(
+					() => {
+						v.safeParse(valibotSchema, data, { abortPipeEarly: true });
+					},
+					{ note: "abortPipeEarly only" },
+				);
 			});
 
-			const joiSchema = getJoiSchema();
-			bench("joi", () => {
-				joiSchema.validate(data, { abortEarly: true });
+			library("effect", ({ add }) => {
+				const effectSchema = getEffectSchema();
+				add(() => {
+					Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
+				});
 			});
-		});
-	});
 
-	describe(LibraryType.Precompiled, () => {
-		describe(AbortType.DoNot, () => {
-			bench("typia (validate)", () => {
-				typia.validate<TypiaSchema>(data);
+			library("yup", ({ add }) => {
+				const yupSchema = getYupSchema();
+				add(() => {
+					try {
+						yupSchema.validateSync(data, { abortEarly: true });
+					} catch {}
+				});
 			});
+
+			library("joi", ({ add }) => {
+				const joiSchema = getJoiSchema();
+				add(() => {
+					joiSchema.validate(data, { abortEarly: true });
+				});
+			});
+		},
+	);
+
+	bench({ dataType, libraryType: "precompiled" }, ({ library }) => {
+		library("typia", ({ add }) => {
+			add(
+				() => {
+					typia.validate<TypiaSchema>(data);
+				},
+				{ note: "validate" },
+			);
+
 			const typiaValidate = typia.createValidate<TypiaSchema>();
-			bench("typia (createValidate)", () => {
-				typiaValidate(data);
-			});
+			add(
+				() => {
+					typiaValidate(data);
+				},
+				{ note: "createValidate" },
+			);
 		});
 	});
-});
+}
