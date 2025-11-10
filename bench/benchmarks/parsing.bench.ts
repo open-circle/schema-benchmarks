@@ -15,13 +15,14 @@ import { getYupSchema } from "../schemas/yup";
 import { getZodSchema } from "../schemas/zod";
 import { getZodMiniSchema } from "../schemas/zod-mini";
 import { makeBenchFactory } from "../utils/bench-factory";
+import type { DataType, ErrorType } from "../utils/process";
 
 declare module "../utils/registry" {
 	export interface MetaRegistry {
 		parse: {
 			bench: {
-				dataType: "success" | "error";
-				abortEarly?: boolean;
+				dataType: DataType;
+				abortType: ErrorType;
 			};
 			case: unknown;
 		};
@@ -35,7 +36,7 @@ for (const [dataType, data] of [
 	["error", errorData],
 ] as const) {
 	bench(
-		{ dataType, libraryType: "runtime", abortEarly: false },
+		{ dataType, libraryType: "runtime", abortType: "allErrors" },
 		({ library }) => {
 			library("arktype", ({ add }) => {
 				const arktypeSchema = getArkTypeSchema();
@@ -130,7 +131,7 @@ for (const [dataType, data] of [
 	);
 
 	bench(
-		{ dataType, libraryType: "runtime", abortEarly: true },
+		{ dataType, libraryType: "runtime", abortType: "abortEarly" },
 		({ library }) => {
 			library("valibot", ({ add }) => {
 				const valibotSchema = getValibotSchema();
@@ -170,22 +171,25 @@ for (const [dataType, data] of [
 		},
 	);
 
-	bench({ dataType, libraryType: "precompiled" }, ({ library }) => {
-		library("typia", ({ add }) => {
-			add(
-				() => {
-					typia.validate<TypiaSchema>(data);
-				},
-				{ note: "validate" },
-			);
+	bench(
+		{ dataType, libraryType: "precompiled", abortType: "unknown" },
+		({ library }) => {
+			library("typia", ({ add }) => {
+				add(
+					() => {
+						typia.validate<TypiaSchema>(data);
+					},
+					{ note: "validate" },
+				);
 
-			const typiaValidate = typia.createValidate<TypiaSchema>();
-			add(
-				() => {
-					typiaValidate(data);
-				},
-				{ note: "createValidate" },
-			);
-		});
-	});
+				const typiaValidate = typia.createValidate<TypiaSchema>();
+				add(
+					() => {
+						typiaValidate(data);
+					},
+					{ note: "createValidate" },
+				);
+			});
+		},
+	);
 }

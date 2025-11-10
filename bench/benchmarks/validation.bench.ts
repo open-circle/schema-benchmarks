@@ -11,12 +11,13 @@ import type { TypiaSchema } from "../schemas/typia";
 import { getValibotSchema } from "../schemas/valibot";
 import { getYupSchema } from "../schemas/yup";
 import { makeBenchFactory } from "../utils/bench-factory";
+import type { DataType } from "../utils/process";
 
 declare module "../utils/registry" {
 	export interface MetaRegistry {
 		validation: {
 			bench: {
-				dataType: "success" | "error";
+				dataType: DataType;
 			};
 			case: unknown;
 		};

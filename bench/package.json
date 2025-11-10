@@ -23,7 +23,7 @@
 	"name": "@schema-benchmarks/bench",
 	"private": true,
 	"scripts": {
-		"bench": "ts-node index.ts",
+		"bench": "ts-node bench.ts",
 		"prepare": "ts-patch install"
 	},
 	"types": "index.ts"
