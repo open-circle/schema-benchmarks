@@ -1,4 +1,5 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
+import { CodeBlock } from "../code";
 
 export interface ResultsTableProps {
 	results: ProcessedResult[];
@@ -20,7 +21,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 						<tr key={result.libraryName + (result.note ?? "")}>
 							<td>{result.rank}</td>
 							<td>
-								<code>{result.libraryName}</code>
+								<code className="language-text">{result.libraryName}</code>
 								{result.note ? (
 									<>
 										{" "}
@@ -29,9 +30,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 								) : null}
 							</td>
 							<td>
-								<pre>
-									<code>{result.snippet}</code>
-								</pre>
+								{result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
 							</td>
 						</tr>
 					))}

@@ -1,5 +1,8 @@
 @import "normalize.css/normalize.css";
 
+@import "styles/themes/material-light.css";
+@import "styles/themes/material-oceanic.css";
+
 @import "styles/animation.css";
 @import "styles/colors.css";
 @import "styles/elevation.css";
@@ -24,8 +27,20 @@ body {
   color: var(--page-foreground);
 }
 
-code {
+pre,
+code,
+pre[class*="language-"],
+code[class*="language-"] {
   font-family: var(--font-family-code);
+}
+
+pre[class*="language-"] {
+  border-radius: var(--shape-medium);
+}
+
+:not(pre) > code[class*="language-"] {
+  border-radius: var(--shape-small);
+  padding: 0.25rem;
 }
 
 .card {
@@ -55,6 +70,17 @@ tr {
 th,
 td {
   padding: 1rem;
+}
+
+td {
+  > pre[class*="language-"] {
+    margin: 0;
+    border-radius: 0;
+    padding: 1rem;
+  }
+  &:has(> pre[class*="language-"]) {
+    padding: 0;
+  }
 }
 
 .sidebar-container {
