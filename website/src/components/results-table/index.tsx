@@ -1,7 +1,8 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
-import { getBounds, getColor } from "@/data/scale";
+import { getBounds } from "@/data/scale";
 import { CodeBlock } from "../code";
+import { Scaler } from "../scaler";
 
 export interface ResultsTableProps {
 	results: ProcessedResult[];
@@ -36,13 +37,10 @@ export function ResultsTable({ results }: ResultsTableProps) {
 									</>
 								) : null}
 							</td>
-							<td
-								data-numeric
-								style={{
-									color: `var(--${getColor(result.period, periodBounds, true)})`,
-								}}
-							>
-								{result.period.toFixed(2)}
+							<td data-numeric>
+								<Scaler value={result.period} bounds={periodBounds} reverse>
+									{result.period.toFixed(2)}
+								</Scaler>
 							</td>
 							<td>
 								{result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}

@@ -1,6 +1,10 @@
+import clsx from "clsx";
+
 export interface MdSymbolProps {
 	children: string;
 	flipRtl?: boolean;
+	className?: string;
+	style?: React.CSSProperties;
 
 	// provided for convenience, but prefer using CSS vars where possible
 	fill?: boolean;
@@ -18,10 +22,12 @@ export function MdSymbol({
 	opticalSize,
 	size,
 	flipRtl,
+	className,
+	style,
 }: MdSymbolProps) {
 	return (
 		<span
-			className="md-symbol material-symbols-sharp"
+			className={clsx("md-symbol material-symbols-sharp", className)}
 			data-flip-rtl={flipRtl ? true : undefined}
 			style={
 				{
@@ -30,6 +36,7 @@ export function MdSymbol({
 					"--icon-grade": grade,
 					"--icon-optical-size": opticalSize,
 					"--icon-size": size,
+					...style,
 				} as React.CSSProperties
 			}
 		>

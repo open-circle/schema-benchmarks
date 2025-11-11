@@ -10,6 +10,7 @@
 @import "styles/typography.css";
 
 @import "components/header/index.css";
+@import "components/scaler/index.css";
 @import "components/sidebar/index.css";
 @import "components/symbol/index.css";
 
@@ -93,12 +94,11 @@ th {
 td {
   @extend .body2;
   &:has(> pre[class*="language-"]) {
-    padding: 0;
+    padding: 0.5rem;
   }
   > pre[class*="language-"] {
     margin: 0;
-    border-radius: 0;
-    padding: 1rem;
+    padding: 0.5rem;
   }
 }
 
