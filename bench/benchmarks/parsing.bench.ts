@@ -116,7 +116,7 @@ for (const [dataType, data] of [
 					},
 					{
 						snippet: ts`
-							const decode = Schema.decodeUnknownEither(schema, { errors: "all" });
+							// const decode = Schema.decodeUnknownEither(schema, { errors: "all" });
 							decode(data);
 						`,
 					},
@@ -200,7 +200,7 @@ for (const [dataType, data] of [
 					},
 					{
 						snippet: ts`
-							const decode = Schema.decodeUnknownEither(schema, { errors: "first" });
+							// const decode = Schema.decodeUnknownEither(schema, { errors: "first" });
 							decode(data);
 						`,
 					},
@@ -254,7 +254,7 @@ for (const [dataType, data] of [
 					{
 						note: "createValidate",
 						snippet: ts`
-							const validate = typia.createValidate<TypiaSchema>();
+							// const validate = typia.createValidate<TypiaSchema>();
 							validate(data);
 						`,
 					},

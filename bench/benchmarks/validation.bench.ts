@@ -65,7 +65,7 @@ for (const [dataType, data] of [
 				},
 				{
 					snippet: ts`
-						const is = Schema.is(schema); 
+						// const is = Schema.is(schema); 
 						is(data);
 					`,
 				},
@@ -114,7 +114,7 @@ for (const [dataType, data] of [
 				{
 					note: "compile",
 					snippet: ts`
-						const validate = ajv.compile(schema);
+						// const validate = ajv.compile(schema);
 						validate(data);
 					`,
 				},

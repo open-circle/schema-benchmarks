@@ -18,7 +18,7 @@ const meta = {
 				note: "compile",
 				rank: 2,
 				snippet: ts`
-					const validate = ajv.compile(schema);
+					// const validate = ajv.compile(schema);
 					validate(data);
 				`,
 			},
@@ -28,7 +28,7 @@ const meta = {
 				libraryName: "effect",
 				rank: 5,
 				snippet: ts`
-					const is = Schema.is(schema);
+					// const is = Schema.is(schema);
 					is(data);
 				`,
 			},
