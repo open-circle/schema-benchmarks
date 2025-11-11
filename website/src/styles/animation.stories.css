@@ -1,0 +1,23 @@
+@keyframes slide-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.animation-box {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slide-right 1s infinite;
+}
