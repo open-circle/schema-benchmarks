@@ -2,7 +2,7 @@ import { Link, type LinkOptions, linkOptions } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { MdSymbol } from "../symbol";
 
-export const sidebarLinks = [
+const sidebarLinks = [
 	{ ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
 	{
 		...linkOptions({ to: "/initialization" }),
@@ -33,6 +33,8 @@ export function Sidebar({ children }: { children?: ReactNode }) {
 	);
 }
 
+Sidebar.links = sidebarLinks;
+
 export function TanstackSidebar() {
 	return (
 		<Sidebar>
@@ -40,7 +42,7 @@ export function TanstackSidebar() {
 				<ul className="subtitle2">
 					{sidebarLinks.map(({ name, icon, ...link }) => (
 						<li key={link.to}>
-							<Link {...link}>
+							<Link {...link} activeOptions={{ includeSearch: false }}>
 								<MdSymbol>{icon}</MdSymbol>
 								{name}
 							</Link>

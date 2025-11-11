@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import clsx from "clsx";
 import { MdSymbol } from "../symbol";
-import { Sidebar, sidebarLinks } from ".";
+import { Sidebar } from ".";
 
 const meta = {
 	title: "Components/Sidebar",
@@ -14,7 +14,7 @@ const meta = {
 			<Sidebar>
 				<nav>
 					<ul className="subtitle2">
-						{sidebarLinks.map(({ name, icon, to }) => (
+						{Sidebar.links.map(({ name, icon, to }) => (
 							<li key={to}>
 								<a href={to} className={clsx({ active: to === "/" })}>
 									<MdSymbol>{icon}</MdSymbol>

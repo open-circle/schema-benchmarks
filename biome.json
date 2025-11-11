@@ -43,6 +43,18 @@
 			}
 		}
 	},
+	"overrides": [
+		{
+			"includes": ["**/components/**/*"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useComponentExportOnlyModules": "warn"
+					}
+				}
+			}
+		}
+	],
 	"vcs": {
 		"clientKind": "git",
 		"enabled": false,
