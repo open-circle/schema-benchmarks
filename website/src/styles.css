@@ -59,27 +59,41 @@ table {
 
 thead {
   border-bottom: 1px solid var(--divider);
+  tr {
+    min-height: 56px;
+  }
 }
 
 tr {
+  min-height: 52px;
   &:not(:last-child) {
     border-bottom: 1px solid var(--divider);
   }
 }
 
-th,
-td {
+td,
+th {
   padding: 1rem;
+  text-align: left;
+  &[data-numeric] {
+    text-align: right;
+  }
+}
+
+th {
+  @extend .subtitle2;
+  font-weight: var(--weight-bold);
 }
 
 td {
+  @extend .body2;
+  &:has(> pre[class*="language-"]) {
+    padding: 0;
+  }
   > pre[class*="language-"] {
     margin: 0;
     border-radius: 0;
     padding: 1rem;
-  }
-  &:has(> pre[class*="language-"]) {
-    padding: 0;
   }
 }
 

@@ -11,7 +11,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 			<table className="results-table">
 				<thead>
 					<tr>
-						<th>Rank</th>
+						<th data-numeric>Rank</th>
 						<th>Library</th>
 						<th>Code</th>
 					</tr>
@@ -19,7 +19,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 				<tbody>
 					{results.map((result) => (
 						<tr key={result.libraryName + (result.note ?? "")}>
-							<td>{result.rank}</td>
+							<td data-numeric>{result.rank}</td>
 							<td>
 								<code className="language-text">{result.libraryName}</code>
 								{result.note ? (
