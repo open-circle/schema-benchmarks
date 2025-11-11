@@ -11,7 +11,7 @@ export interface ResultsTableProps {
 
 export function ResultsTable({ results }: ResultsTableProps) {
 	const periodBounds = useMemo(
-		() => getBounds(results, (result) => result.period),
+		() => getBounds(results.map((result) => result.period)),
 		[results],
 	);
 	return (

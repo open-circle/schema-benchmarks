@@ -5,11 +5,8 @@ export interface Bounds {
 	lowest: number;
 }
 
-export function getBounds<T>(
-	results: T[],
-	getValue: (result: T) => number,
-): Bounds {
-	const values = results.map(getValue);
+export function getBounds(values: readonly number[]): Bounds {
+	if (!values.length) return { highest: 0, lowest: 0 };
 	return {
 		highest: Math.max(...values),
 		lowest: Math.min(...values),
