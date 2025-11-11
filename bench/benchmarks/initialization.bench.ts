@@ -54,7 +54,7 @@ bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
 		);
 	});
 
-	library("zod-mini", ({ add }) => {
+	library("zod/mini", ({ add }) => {
 		add(() => {
 			getZodMiniSchema();
 		});

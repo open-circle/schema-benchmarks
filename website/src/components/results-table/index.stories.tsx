@@ -11,8 +11,8 @@ const meta = {
 			{ libraryName: "valibot", note: undefined, rank: 3 },
 			{ libraryName: "zod", note: undefined, rank: 4 },
 			{ libraryName: "zod", note: "jitless", rank: 5 },
-			{ libraryName: "zod-mini", note: undefined, rank: 6 },
-			{ libraryName: "zod-mini", note: "jitless", rank: 7 },
+			{ libraryName: "zod/mini", note: undefined, rank: 6 },
+			{ libraryName: "zod/mini", note: "jitless", rank: 7 },
 		],
 	},
 } satisfies Meta<typeof ResultsTable>;

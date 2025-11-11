@@ -74,7 +74,7 @@ for (const [dataType, data] of [
 				);
 			});
 
-			library("zod-mini", ({ add }) => {
+			library("zod/mini", ({ add }) => {
 				const zodMiniSchema = getZodMiniSchema();
 				add(() => {
 					zodMiniSchema.safeParse(data);
