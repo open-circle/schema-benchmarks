@@ -11,7 +11,6 @@
 
 @import "components/header/index.css";
 @import "components/sidebar/index.css";
-@import "components/results-table/index.css";
 
 * {
   box-sizing: border-box;
@@ -45,6 +44,10 @@ pre[class*="language-"] {
 
 .card {
   background-color: var(--card-background);
+  background-color: --elevation-overlay(
+    var(--card-background),
+    var(--elevation-2-overlay-opacity)
+  );
   border-radius: var(--shape-medium);
   box-shadow: var(--card-elevation);
   overflow: hidden;

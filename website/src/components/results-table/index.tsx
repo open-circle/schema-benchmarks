@@ -8,7 +8,7 @@ export interface ResultsTableProps {
 export function ResultsTable({ results }: ResultsTableProps) {
 	return (
 		<div className="card">
-			<table className="results-table">
+			<table>
 				<thead>
 					<tr>
 						<th data-numeric>Rank</th>
