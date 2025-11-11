@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Sidebar } from ".";
 
 const meta = {
-	title: "Sidebar",
+	title: "Components/Sidebar",
 	component: Sidebar,
 	parameters: {
 		layout: "fullscreen",
