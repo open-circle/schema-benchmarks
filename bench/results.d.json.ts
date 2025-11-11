@@ -1,4 +1,4 @@
-import type { ProcessedResults } from "./utils/process";
+import type { ProcessedResults } from ".";
 
 declare const results: ProcessedResults;
 
