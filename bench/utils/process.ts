@@ -7,7 +7,7 @@ export type LibraryType = "runtime" | "precompiled";
 export type DataType = "success" | "error";
 export type ErrorType = "abortEarly" | "allErrors" | "unknown";
 
-interface ProcessedResult {
+export interface ProcessedResult {
 	libraryName: string;
 	note?: string;
 	rank: number;
