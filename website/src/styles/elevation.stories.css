@@ -10,15 +10,30 @@
   height: 100px;
   border-radius: var(--shape-medium);
   background-color: var(--card-background);
+  background-color: --elevation-overlay(
+    var(--card-background),
+    var(--elevation-overlay-opacity)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
+  &.bordered {
+    border: 1px solid var(--divider);
+  }
 }
 
 .elevation-transition {
   box-shadow: var(--elevation-2);
-  transition: var(--elevation-transition);
+  background-color: --elevation-overlay(
+    var(--card-background),
+    var(--elevation-2-overlay-opacity)
+  );
+  transition: var(--elevation-transition), var(--elevation-overlay-transition);
   &:hover {
     box-shadow: var(--elevation-6);
+    background-color: --elevation-overlay(
+      var(--card-background),
+      var(--elevation-6-overlay-opacity)
+    );
   }
 }

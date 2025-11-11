@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import clsx from "clsx";
 import "./elevation.stories.css";
 
 const meta = {
@@ -9,8 +10,13 @@ const meta = {
 				<div
 					// biome-ignore lint/suspicious/noArrayIndexKey: Not dynamic
 					key={i}
-					className="elevation-box"
-					style={{ boxShadow: `var(--elevation-${i})` } as React.CSSProperties}
+					className={clsx("elevation-box", i === 0 && "bordered")}
+					style={
+						{
+							boxShadow: `var(--elevation-${i})`,
+							"--elevation-overlay-opacity": `var(--elevation-${i}-overlay-opacity)`,
+						} as React.CSSProperties
+					}
 				>
 					{i}
 				</div>
