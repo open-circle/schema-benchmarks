@@ -9,7 +9,8 @@
     "test": "pnpm run --filter '*' test",
     "website:dev": "pnpm run --filter website dev",
     "website:build": "pnpm run --filter website build",
-    "website:serve": "pnpm run --filter website serve"
+    "website:serve": "pnpm run --filter website serve",
+    "bench": "pnpm run --filter '*/bench' bench"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.4"
