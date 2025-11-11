@@ -1,8 +1,10 @@
 .md-symbol {
   user-select: none;
   font-size: calc(var(--icon-size, 24) * 1px);
-  font-variation-settings: "FILL" var(--icon-fill, 0),
-    "wght" var(--icon-weight, 400), "GRAD" clamp(-25, var(--icon-grade, 0), 200),
+  font-variation-settings:
+    "FILL" var(--icon-fill, 0),
+    "wght" var(--icon-weight, 400),
+    "GRAD" clamp(-25, var(--icon-grade, 0), 200),
     "opsz" clamp(20, var(--icon-optical-size, var(--icon-size, 24)), 48);
   transition: font-variation-settings 250ms;
   height: 1em;

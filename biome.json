@@ -1,63 +1,66 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
-	"assist": {
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"**/src/**/*",
-			"**/bench/**/*",
-			"**/data/**/*",
-			"**/.vscode/**/*",
-			"**/index.html",
-			"**/vite.config.ts",
-			"**/postcss.config.ts",
-			"!**/src/routeTree.gen.ts"
-		]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab"
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
-		}
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noUnknownAtRules": {
-					"level": "warn",
-					"options": {
-						"ignore": ["extend"]
-					}
-				}
-			}
-		}
-	},
-	"overrides": [
-		{
-			"includes": ["**/components/**/*"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useComponentExportOnlyModules": "warn"
-					}
-				}
-			}
-		}
-	],
-	"vcs": {
-		"clientKind": "git",
-		"enabled": false,
-		"useIgnoreFile": false
-	}
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**/src/**/*",
+      "**/bench/**/*",
+      "**/data/**/*",
+      "**/.vscode/**/*",
+      "**/index.html",
+      "**/vite.config.ts",
+      "**/postcss.config.ts",
+      "!**/src/routeTree.gen.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noUnknownAtRules": {
+          "level": "warn",
+          "options": {
+            "ignore": ["extend"]
+          }
+        }
+      },
+      "style": {
+        "useConsistentArrayType": {
+          "level": "warn",
+          "options": {
+            "syntax": "generic"
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/components/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "warn"
+          }
+        }
+      }
+    }
+  ],
+  "vcs": {
+    "clientKind": "git",
+    "enabled": false,
+    "useIgnoreFile": false
+  }
 }

@@ -5,28 +5,28 @@ const curves = ["deceleration", "acceleration", "standard", "sharp"] as const;
 type Curve = (typeof curves)[number];
 
 const meta = {
-	title: "Theme/Animation",
-	render: ({ curve }) => (
-		<div className="animation-container">
-			<div
-				className="animation-box card"
-				style={{ animationTimingFunction: `var(--${curve}-curve)` }}
-			>
-				{curve}
-			</div>
-		</div>
-	),
-	argTypes: {
-		curve: {
-			control: {
-				type: "radio",
-			},
-			options: curves,
-		},
-	},
-	args: {
-		curve: "standard",
-	},
+  title: "Theme/Animation",
+  render: ({ curve }) => (
+    <div className="animation-container">
+      <div
+        className="animation-box card"
+        style={{ animationTimingFunction: `var(--${curve}-curve)` }}
+      >
+        {curve}
+      </div>
+    </div>
+  ),
+  argTypes: {
+    curve: {
+      control: {
+        type: "radio",
+      },
+      options: curves,
+    },
+  },
+  args: {
+    curve: "standard",
+  },
 } satisfies Meta<{ curve: Curve }>;
 
 export default meta;

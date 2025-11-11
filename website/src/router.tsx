@@ -6,19 +6,19 @@ import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
 export const getRouter = () => {
-	const queryClient = makeQueryClient();
-	const router = createRouter({
-		routeTree,
-		scrollRestoration: true,
-		defaultPreloadStaleTime: 0,
-		context: { queryClient },
-		defaultViewTransition: true,
-	});
+  const queryClient = makeQueryClient();
+  const router = createRouter({
+    routeTree,
+    scrollRestoration: true,
+    defaultPreloadStaleTime: 0,
+    context: { queryClient },
+    defaultViewTransition: true,
+  });
 
-	setupRouterSsrQueryIntegration({
-		router,
-		queryClient,
-	});
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  });
 
-	return router;
+  return router;
 };

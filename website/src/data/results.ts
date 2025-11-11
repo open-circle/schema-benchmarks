@@ -1,8 +1,8 @@
 import type {
-	DataType,
-	ErrorType,
-	LibraryType,
-	ProcessedResults,
+  DataType,
+  ErrorType,
+  LibraryType,
+  ProcessedResults,
 } from "@schema-benchmarks/bench";
 import results from "@schema-benchmarks/bench/results.json";
 import { queryOptions } from "@tanstack/react-query";
@@ -13,46 +13,46 @@ export const dataTypeSchema = v.picklist(["success", "error"]);
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "success");
 
 export const errorTypeSchema = v.picklist([
-	"abortEarly",
-	"allErrors",
-	"unknown",
+  "abortEarly",
+  "allErrors",
+  "unknown",
 ]);
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
 
 export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
 export const optionalLibraryTypeSchema = v.optional(
-	libraryTypeSchema,
-	"runtime",
+  libraryTypeSchema,
+  "runtime",
 );
 
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
-	if (process.env.NODE_ENV === "production") {
-		const response = await fetch(
-			"https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/results.json",
-			{ signal },
-		);
-		return (await response.json()) as ProcessedResults;
-	}
+  if (process.env.NODE_ENV === "production") {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/results.json",
+      { signal },
+    );
+    return (await response.json()) as ProcessedResults;
+  }
 
-	return results;
+  return results;
 });
 
 export const getResults = (signal?: AbortSignal) =>
-	queryOptions({
-		queryKey: ["results"],
-		queryFn: () => getResultsFn({ signal }),
-	});
+  queryOptions({
+    queryKey: ["results"],
+    queryFn: () => getResultsFn({ signal }),
+  });
 
 export const selectInitializationResults =
-	(libraryType: LibraryType) => (results: ProcessedResults) =>
-		results.initialization[libraryType];
+  (libraryType: LibraryType) => (results: ProcessedResults) =>
+    results.initialization[libraryType];
 
 export const selectValidationResults =
-	(libraryType: LibraryType, dataType: DataType) =>
-	(results: ProcessedResults) =>
-		results.validation[libraryType][dataType];
+  (libraryType: LibraryType, dataType: DataType) =>
+  (results: ProcessedResults) =>
+    results.validation[libraryType][dataType];
 
 export const selectParsingResults =
-	(libraryType: LibraryType, dataType: DataType, errorType: ErrorType) =>
-	(results: ProcessedResults) =>
-		results.parsing[libraryType][dataType][errorType];
+  (libraryType: LibraryType, dataType: DataType, errorType: ErrorType) =>
+  (results: ProcessedResults) =>
+    results.parsing[libraryType][dataType][errorType];
