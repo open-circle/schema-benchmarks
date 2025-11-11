@@ -53,26 +53,13 @@ class Registry {
 			throw new Error(`Meta type mismatch: ${bench.name}`);
 		return meta;
 	}
-	runBenches() {
-		return Promise.all(
-			Array.from(this.benches.keys()).map(async (bench) => {
-				const results = await bench.run();
-				console.group(JSON.stringify(this.getBenchMeta(bench)));
-				console.table(
-					bench.table().map(
-						(row) =>
-							row && {
-								...row,
-								"Task name": JSON.stringify(
-									this.getCaseMeta(row["Task name"] as string),
-								),
-							},
-					),
-				);
-				console.groupEnd();
-				return [bench, results] as const;
-			}),
-		);
+	async runBenches() {
+		const allResults = [];
+		for (const bench of this.benches.keys()) {
+			const results = await bench.run();
+			allResults.push([bench, results] as const);
+		}
+		return allResults;
 	}
 
 	cases = new Map<string, CaseMeta>();
