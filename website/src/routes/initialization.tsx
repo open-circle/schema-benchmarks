@@ -7,10 +7,11 @@ import { getResults, selectInitializationResults } from "@/data/results";
 export const Route = createFileRoute("/initialization")({
 	component: RouteComponent,
 	validateSearch: v.object({
-		libraryType: v.fallback(v.picklist(["runtime", "precompiled"]), "runtime"),
+		libraryType: v.optional(v.picklist(["runtime", "precompiled"]), "runtime"),
 	}),
 	async loader({ context: { queryClient }, abortController }) {
 		await queryClient.prefetchQuery(getResults(abortController.signal));
+		return { crumb: "Initialization" };
 	},
 });
 

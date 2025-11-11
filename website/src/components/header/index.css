@@ -18,3 +18,20 @@
   height: var(--page-header-height);
   padding: 1rem;
 }
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  a {
+    text-decoration: none;
+    color: var(--page-foreground);
+    transition: font-weight 250ms;
+    &:hover {
+      font-weight: var(--weight-bold);
+    }
+  }
+  span {
+    font-weight: var(--weight-bold);
+  }
+}

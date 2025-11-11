@@ -25,6 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--page-background);
   color: var(--page-foreground);
+  @extend .body1;
 }
 
 pre,

@@ -13,4 +13,10 @@ const preview: Preview = {
   },
 };
 
+document.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLAnchorElement) {
+    event.preventDefault();
+  }
+});
+
 export default preview;

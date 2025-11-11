@@ -7,8 +7,8 @@ import {
 	useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { Header } from "../components/header";
-import { Sidebar } from "../components/sidebar";
+import { TanstackHeader } from "../components/header";
+import { TanstackSidebar } from "../components/sidebar";
 import appCss from "../styles.css?url";
 
 interface RouterContext {
@@ -54,7 +54,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			},
 		],
 	}),
-
+	loader: () => ({ crumb: "Benchmarks" }),
 	shellComponent: RootDocument,
 });
 
@@ -68,15 +68,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				</head>
 				<body>
 					<div className="sidebar-container">
-						<Sidebar />
+						<TanstackSidebar />
 						<div className="container">
-							<Header />
+							<TanstackHeader />
 							<main>{children}</main>
 						</div>
 					</div>
 					<TanStackDevtools
 						config={{
-							position: "bottom-right",
+							position: "bottom-left",
 						}}
 						plugins={[
 							{

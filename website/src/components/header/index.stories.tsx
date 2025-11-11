@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { MdSymbol } from "../symbol";
 import { Header } from ".";
 
 const meta = {
@@ -8,7 +9,13 @@ const meta = {
 		layout: "fullscreen",
 	},
 	args: {
-		name: "Page name",
+		children: (
+			<nav className="breadcrumbs">
+				<a href="/">Home</a>
+				<MdSymbol>chevron_right</MdSymbol>
+				<span>Page name</span>
+			</nav>
+		),
 	},
 } satisfies Meta<typeof Header>;
 

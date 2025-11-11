@@ -1,7 +1,34 @@
-export function Header({ name = "Page name" }: { name?: string }) {
+import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { useCrumbs } from "@/hooks/use-crumbs";
+import { MdSymbol } from "../symbol";
+
+export function Header({ children }: { children: ReactNode }) {
+	return <header className="page-header">{children}</header>;
+}
+
+export function TanstackHeader() {
+	const allCrumbs = useCrumbs();
+	const crumbs = allCrumbs.slice(0, -1);
+	const currentCrumb = allCrumbs.at(-1);
 	return (
-		<header className="page-header">
-			<h1 className="headline5">{name}</h1>
-		</header>
+		<Header>
+			<nav className="breadcrumbs">
+				{crumbs.map((crumb) => (
+					<>
+						<Link
+							key={crumb.to}
+							to={crumb.to}
+							params={crumb.params}
+							className="headline6"
+						>
+							{crumb.name}
+						</Link>
+						<MdSymbol>chevron_right</MdSymbol>
+					</>
+				))}
+				{currentCrumb && <span className="headline6">{currentCrumb.name}</span>}
+			</nav>
+		</Header>
 	);
 }

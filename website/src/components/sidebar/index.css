@@ -1,7 +1,9 @@
 :root {
-  --sidebar-background: light-dark(
-    var(--page-background),
-    var(--md-blue-grey-900)
+  --sidebar-background: light-dark(white, var(--md-blue-grey-900));
+  --sidebar-foreground: var(--page-foreground);
+  --active-link-foreground: var(--primary);
+  --active-link-background: color(
+    from var(--active-link-foreground) srgb r g b / 0.1
   );
 }
 
@@ -27,5 +29,44 @@
   .sidebar__logo {
     height: var(--page-header-height);
     border-bottom: 1px solid var(--divider);
+  }
+
+  nav {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        height: 3rem;
+        a {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          padding: 0 1rem;
+          text-decoration: none;
+          color: var(--sidebar-foreground);
+          transition: color 250ms, font-weight 250ms;
+          .md-symbol {
+            margin-right: 0.5rem;
+          }
+          &:hover {
+            font-weight: var(--weight-bold);
+            .md-symbol {
+              --icon-weight: 600;
+            }
+          }
+          &.active {
+            background-color: var(--active-link-background);
+            color: var(--active-link-foreground);
+            font-weight: var(--weight-bold);
+            .md-symbol {
+              --icon-fill: 1;
+              --icon-weight: 600;
+            }
+          }
+        }
+      }
+    }
   }
 }
