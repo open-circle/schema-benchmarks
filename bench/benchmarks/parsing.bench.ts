@@ -55,12 +55,12 @@ for (const [dataType, data] of [
 			library("zod", ({ add }) => {
 				const zodSchema = getZodSchema();
 				add(() => {
-					zodSchema.parse(data);
+					zodSchema.safeParse(data);
 				});
 
 				add(
 					() => {
-						zodSchema.parse(data);
+						zodSchema.safeParse(data);
 					},
 					{ note: "jitless" },
 					{
@@ -77,12 +77,12 @@ for (const [dataType, data] of [
 			library("zod-mini", ({ add }) => {
 				const zodMiniSchema = getZodMiniSchema();
 				add(() => {
-					zodMiniSchema.parse(data);
+					zodMiniSchema.safeParse(data);
 				});
 
 				add(
 					() => {
-						zodMiniSchema.parse(data);
+						zodMiniSchema.safeParse(data);
 					},
 					{ note: "jitless" },
 					{
