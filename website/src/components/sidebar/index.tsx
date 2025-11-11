@@ -39,7 +39,7 @@ export function TanstackSidebar() {
 					</li>
 					<li>
 						<Link to="/parsing">
-							<MdSymbol>output</MdSymbol>
+							<MdSymbol>output_circle</MdSymbol>
 							Parsing
 						</Link>
 					</li>

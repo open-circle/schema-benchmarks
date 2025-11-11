@@ -8,8 +8,8 @@ export interface ResultsTableProps {
 }
 
 export function ResultsTable({ results }: ResultsTableProps) {
-	const meanBounds = useMemo(
-		() => getBounds(results, (result) => result.mean),
+	const periodBounds = useMemo(
+		() => getBounds(results, (result) => result.period),
 		[results],
 	);
 	return (
@@ -19,7 +19,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 					<tr>
 						<th data-numeric>Rank</th>
 						<th>Library</th>
-						<th data-numeric>Mean (ms)</th>
+						<th data-numeric>Period (ms)</th>
 						<th>Code</th>
 					</tr>
 				</thead>
@@ -39,10 +39,10 @@ export function ResultsTable({ results }: ResultsTableProps) {
 							<td
 								data-numeric
 								style={{
-									color: `var(--${getColor(result.mean, meanBounds, true)})`,
+									color: `var(--${getColor(result.period, periodBounds, true)})`,
 								}}
 							>
-								{result.mean.toFixed(2)}
+								{result.period.toFixed(2)}
 							</td>
 							<td>
 								{result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}

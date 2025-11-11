@@ -11,7 +11,7 @@ export const Route = createFileRoute("/parsing")({
 		dataType: v.optional(v.picklist(["success", "error"]), "success"),
 		errorType: v.optional(
 			v.picklist(["abortEarly", "allErrors", "unknown"]),
-			"abortEarly",
+			"allErrors",
 		),
 	}),
 	async loader({ context: { queryClient }, abortController }) {
