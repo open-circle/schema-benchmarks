@@ -1,6 +1,7 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
 import { getBounds } from "@/data/scale";
+import { msToNs, numFormatter } from "@/utils";
 import { CodeBlock } from "../code";
 import { Scaler } from "../scaler";
 
@@ -20,7 +21,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 					<tr>
 						<th data-numeric>Rank</th>
 						<th>Library</th>
-						<th data-numeric>Period (ms)</th>
+						<th data-numeric>Period (ns)</th>
 						<th>Code</th>
 					</tr>
 				</thead>
@@ -39,7 +40,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 							</td>
 							<td data-numeric>
 								<Scaler value={result.period} bounds={periodBounds} reverse>
-									{result.period.toFixed(2)}
+									{numFormatter.format(msToNs(result.period))}
 								</Scaler>
 							</td>
 							<td>

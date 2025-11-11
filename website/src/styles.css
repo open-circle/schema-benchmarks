@@ -83,6 +83,7 @@ th {
   text-align: left;
   &[data-numeric] {
     text-align: right;
+    font-feature-settings: "tnum" 1;
   }
 }
 
