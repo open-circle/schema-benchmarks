@@ -8,9 +8,13 @@
 
 .page-header {
   background-color: var(--page-header-background);
+  background-color: --elevation-overlay(
+    var(--page-header-background),
+    var(--elevation-4-overlay-opacity)
+  );
+  box-shadow: var(--elevation-4);
   display: flex;
   align-items: center;
   height: var(--page-header-height);
   padding: 1rem;
-  box-shadow: var(--elevation-4);
 }

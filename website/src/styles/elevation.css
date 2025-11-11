@@ -97,11 +97,12 @@
 }
 
 @function --elevation-overlay(--color, --elevation-opacity) {
-  @media (prefers-color-scheme: dark) {
-    result: color-mix(
+  result: light-dark(
+    var(--color),
+    color-mix(
       in srgb,
       var(--color),
       var(--elevation-overlay-color) calc(var(--elevation-opacity) * 100%)
-    );
-  }
+    )
+  );
 }
