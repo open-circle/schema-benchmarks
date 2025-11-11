@@ -13,6 +13,7 @@ export interface BaseBenchMeta {
 export interface BaseCaseMeta {
 	libraryName: string;
 	note?: string;
+	snippet?: string;
 }
 
 export type MetaType = keyof MetaRegistry;

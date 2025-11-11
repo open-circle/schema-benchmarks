@@ -1,4 +1,5 @@
 import { errorData, successData } from "@schema-benchmarks/data";
+import ts from "dedent";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
@@ -33,41 +34,62 @@ for (const [dataType, data] of [
 	bench({ dataType, libraryType: "runtime" }, ({ library }) => {
 		library("arktype", ({ add }) => {
 			const arktypeSchema = getArkTypeSchema();
-			add(() => {
-				arktypeSchema.allows(data);
-			});
+			add(
+				() => {
+					arktypeSchema.allows(data);
+				},
+				{
+					snippet: ts`schema.allows(data)`,
+				},
+			);
 		});
 
 		library("valibot", ({ add }) => {
 			const valibotSchema = getValibotSchema();
-			add(() => {
-				v.is(valibotSchema, data);
-			});
+			add(
+				() => {
+					v.is(valibotSchema, data);
+				},
+				{
+					snippet: ts`v.is(schema, data)`,
+				},
+			);
 		});
 
 		library("effect", ({ add }) => {
 			const effectSchema = getEffectSchema();
-			add(() => {
-				Schema.is(effectSchema)(data);
-			});
+			add(
+				() => {
+					Schema.is(effectSchema)(data);
+				},
+				{
+					snippet: ts`Schema.is(schema)(data)`,
+				},
+			);
 		});
 
 		library("typebox", ({ add }) => {
 			const typeboxSchema = getTypeboxSchema();
-			add(() => {
-				try {
-					Value.Check(typeboxSchema, data);
-				} catch {}
-			});
+			add(
+				() => {
+					try {
+						Value.Check(typeboxSchema, data);
+					} catch {}
+				},
+				{ snippet: ts`Value.Check(schema, data)` },
+			);
 		});
 
 		library("yup", ({ add }) => {
 			const yupSchema = getYupSchema();
-			add(() => {
-				try {
-					yupSchema.isValidSync(data);
-				} catch {}
-			});
+			add(
+				() => {
+					try {
+						yupSchema.isValidSync(data);
+					} catch {}
+				},
+				{ snippet: ts`schema.isValidSync(data)` },
+			);
 		});
 
 		library("ajv", ({ add }) => {
@@ -77,7 +99,7 @@ for (const [dataType, data] of [
 				() => {
 					ajv.validate(ajvSchema, data);
 				},
-				{ note: "validate" },
+				{ note: "validate", snippet: ts`ajv.validate(schema, data)` },
 			);
 
 			const ajvValidate = ajv.compile(ajvSchema);
@@ -85,14 +107,24 @@ for (const [dataType, data] of [
 				() => {
 					ajvValidate(data);
 				},
-				{ note: "compile" },
+				{
+					note: "compile",
+					snippet: ts`
+						const validate = ajv.compile(schema);
+						validate(data);
+					`,
+				},
 			);
 		});
 	});
 
 	bench({ dataType, libraryType: "precompiled" }, ({ addLibrary }) => {
-		addLibrary("typia", () => {
-			typia.is<TypiaSchema>(data);
-		});
+		addLibrary(
+			"typia",
+			() => {
+				typia.is<TypiaSchema>(data);
+			},
+			{ snippet: ts`typia.is<TypiaSchema>(data)` },
+		);
 	});
 }

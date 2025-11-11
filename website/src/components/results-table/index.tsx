@@ -12,6 +12,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
 					<tr>
 						<th>Rank</th>
 						<th>Library</th>
+						<th>Code</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -19,15 +20,18 @@ export function ResultsTable({ results }: ResultsTableProps) {
 						<tr key={result.libraryName + (result.note ?? "")}>
 							<td>{result.rank}</td>
 							<td>
-								<code>
-									{result.libraryName}
-									{result.note ? (
-										<>
-											{" "}
-											<span>({result.note})</span>
-										</>
-									) : null}
-								</code>
+								<code>{result.libraryName}</code>
+								{result.note ? (
+									<>
+										{" "}
+										<span>({result.note})</span>
+									</>
+								) : null}
+							</td>
+							<td>
+								<pre>
+									<code>{result.snippet}</code>
+								</pre>
 							</td>
 						</tr>
 					))}

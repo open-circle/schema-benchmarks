@@ -10,6 +10,7 @@ export type ErrorType = "abortEarly" | "allErrors" | "unknown";
 export interface ProcessedResult {
 	libraryName: string;
 	note?: string;
+	snippet?: string;
 	rank: number;
 }
 
@@ -112,6 +113,7 @@ function processResult(results: ProcessedResults, bench: Bench, tasks: Task[]) {
 		benchResults[index] = {
 			libraryName: caseMeta.libraryName,
 			note: caseMeta.note,
+			snippet: caseMeta.snippet,
 			rank: index + 1,
 		};
 	}

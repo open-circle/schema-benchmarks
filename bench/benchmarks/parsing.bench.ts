@@ -1,10 +1,9 @@
 import { errorData, successData } from "@schema-benchmarks/data";
+import ts from "dedent";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import z from "zod";
-import * as zMini from "zod/mini";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
 import { getJoiSchema } from "../schemas/joi";
@@ -40,92 +39,122 @@ for (const [dataType, data] of [
 		({ library }) => {
 			library("arktype", ({ add }) => {
 				const arktypeSchema = getArkTypeSchema();
-				add(() => {
-					arktypeSchema(data);
-				});
+				add(
+					() => {
+						arktypeSchema(data);
+					},
+					{
+						snippet: ts`schema(data)`,
+					},
+				);
 			});
 
 			library("valibot", ({ add }) => {
 				const valibotSchema = getValibotSchema();
-				add(() => {
-					v.safeParse(valibotSchema, data);
-				});
+				add(
+					() => {
+						v.safeParse(valibotSchema, data);
+					},
+					{
+						snippet: ts`v.safeParse(schema, data)`,
+					},
+				);
 			});
 
 			library("zod", ({ add }) => {
 				const zodSchema = getZodSchema();
-				add(() => {
-					zodSchema.safeParse(data);
-				});
-
 				add(
 					() => {
 						zodSchema.safeParse(data);
 					},
-					{ note: "jitless" },
 					{
-						beforeAll() {
-							z.config({ jitless: true });
-						},
-						afterAll() {
-							z.config({ jitless: false });
-						},
+						snippet: ts`schema.safeParse(data)`,
+					},
+				);
+
+				add(
+					() => {
+						zodSchema.safeParse(data, { jitless: true });
+					},
+					{
+						note: "jitless",
+						snippet: ts`schema.safeParse(data, { jitless: true })`,
 					},
 				);
 			});
 
 			library("zod/mini", ({ add }) => {
 				const zodMiniSchema = getZodMiniSchema();
-				add(() => {
-					zodMiniSchema.safeParse(data);
-				});
-
 				add(
 					() => {
 						zodMiniSchema.safeParse(data);
 					},
-					{ note: "jitless" },
 					{
-						beforeAll() {
-							zMini.config({ jitless: true });
-						},
-						afterAll() {
-							zMini.config({ jitless: false });
-						},
+						snippet: ts`schema.safeParse(data)`,
+					},
+				);
+
+				add(
+					() => {
+						zodMiniSchema.safeParse(data, { jitless: true });
+					},
+					{
+						note: "jitless",
+						snippet: ts`schema.safeParse(data, { jitless: true })`,
 					},
 				);
 			});
 
 			library("effect", ({ add }) => {
 				const effectSchema = getEffectSchema();
-				add(() => {
-					Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
-				});
+				add(
+					() => {
+						Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
+					},
+					{
+						snippet: ts`Schema.decodeUnknownEither(schema, { errors: "all" })(data)`,
+					},
+				);
 			});
 
 			library("typebox", ({ add }) => {
 				const typeboxSchema = getTypeboxSchema();
-				add(() => {
-					try {
-						Value.Parse(typeboxSchema, data);
-					} catch {}
-				});
+				add(
+					() => {
+						try {
+							Value.Parse(typeboxSchema, data);
+						} catch {}
+					},
+					{
+						snippet: ts`Value.Parse(schema, data)`,
+					},
+				);
 			});
 
 			library("yup", ({ add }) => {
 				const yupSchema = getYupSchema();
-				add(() => {
-					try {
-						yupSchema.validateSync(data, { abortEarly: false });
-					} catch {}
-				});
+				add(
+					() => {
+						try {
+							yupSchema.validateSync(data, { abortEarly: false });
+						} catch {}
+					},
+					{
+						snippet: ts`schema.validateSync(data, { abortEarly: false })`,
+					},
+				);
 			});
 
 			library("joi", ({ add }) => {
 				const joiSchema = getJoiSchema();
-				add(() => {
-					joiSchema.validate(data, { abortEarly: false });
-				});
+				add(
+					() => {
+						joiSchema.validate(data, { abortEarly: false });
+					},
+					{
+						snippet: ts`schema.validate(data, { abortEarly: false })`,
+					},
+				);
 			});
 		},
 	);
@@ -135,38 +164,61 @@ for (const [dataType, data] of [
 		({ library }) => {
 			library("valibot", ({ add }) => {
 				const valibotSchema = getValibotSchema();
-				add(() => {
-					v.safeParse(valibotSchema, data, { abortEarly: true });
-				});
+				add(
+					() => {
+						v.safeParse(valibotSchema, data, { abortEarly: true });
+					},
+					{
+						snippet: ts`v.safeParse(schema, data, { abortEarly: true })`,
+					},
+				);
 				add(
 					() => {
 						v.safeParse(valibotSchema, data, { abortPipeEarly: true });
 					},
-					{ note: "abortPipeEarly only" },
+					{
+						note: "abortPipeEarly only",
+						snippet: ts`v.safeParse(schema, data, { abortPipeEarly: true })`,
+					},
 				);
 			});
 
 			library("effect", ({ add }) => {
 				const effectSchema = getEffectSchema();
-				add(() => {
-					Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
-				});
+				add(
+					() => {
+						Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
+					},
+					{
+						snippet: ts`Schema.decodeUnknownEither(schema, { errors: "first" })(data)`,
+					},
+				);
 			});
 
 			library("yup", ({ add }) => {
 				const yupSchema = getYupSchema();
-				add(() => {
-					try {
-						yupSchema.validateSync(data, { abortEarly: true });
-					} catch {}
-				});
+				add(
+					() => {
+						try {
+							yupSchema.validateSync(data, { abortEarly: true });
+						} catch {}
+					},
+					{
+						snippet: ts`schema.validateSync(data, { abortEarly: true })`,
+					},
+				);
 			});
 
 			library("joi", ({ add }) => {
 				const joiSchema = getJoiSchema();
-				add(() => {
-					joiSchema.validate(data, { abortEarly: true });
-				});
+				add(
+					() => {
+						joiSchema.validate(data, { abortEarly: true });
+					},
+					{
+						snippet: ts`schema.validate(data, { abortEarly: true });`,
+					},
+				);
 			});
 		},
 	);
@@ -179,7 +231,7 @@ for (const [dataType, data] of [
 					() => {
 						typia.validate<TypiaSchema>(data);
 					},
-					{ note: "validate" },
+					{ note: "validate", snippet: ts`typia.validate<TypiaSchema>(data);` },
 				);
 
 				const typiaValidate = typia.createValidate<TypiaSchema>();
@@ -187,7 +239,13 @@ for (const [dataType, data] of [
 					() => {
 						typiaValidate(data);
 					},
-					{ note: "createValidate" },
+					{
+						note: "createValidate",
+						snippet: ts`
+							const validate = typia.createValidate<TypiaSchema>();
+							validate(data);
+						`,
+					},
 				);
 			});
 		},

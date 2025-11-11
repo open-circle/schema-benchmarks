@@ -1,11 +1,14 @@
 {
 	"dependencies": {
+		"@schema-benchmarks/data": "workspace:*",
 		"ajv": "^8.17.1",
 		"ajv-formats": "^3.0.1",
 		"ajv-keywords": "^5.1.0",
 		"arktype": "^2.1.25",
+		"dedent": "^1.7.0",
 		"effect": "^3.19.3",
 		"joi": "^18.0.1",
+		"tinybench": "^5.1.0",
 		"typebox": "^1.0.51",
 		"typia": "^10.0.2",
 		"valibot": "^1.1.0",
@@ -13,9 +16,7 @@
 		"zod": "^4.1.12"
 	},
 	"devDependencies": {
-		"@schema-benchmarks/data": "workspace:*",
 		"@types/node": "^22.19.0",
-		"tinybench": "^5.1.0",
 		"ts-node": "^10.9.2",
 		"ts-patch": "^3.3.0",
 		"typescript": "~5.9.3"
