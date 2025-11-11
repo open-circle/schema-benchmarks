@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  padding: 1rem;
 }
 
 .color-box {

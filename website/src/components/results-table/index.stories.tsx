@@ -3,7 +3,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResultsTable } from ".";
 
 const meta = {
-	title: "Components/ResultsTable",
+	title: "Components/Results Table",
+	parameters: {
+		layout: "centered",
+	},
 	component: ResultsTable,
 	args: {
 		results: results.validation.runtime.error,

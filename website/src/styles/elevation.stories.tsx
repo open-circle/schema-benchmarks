@@ -32,8 +32,6 @@ export const Default: Story = {};
 
 export const Transition: Story = {
 	render: () => (
-		<div className="elevation-container">
-			<div className="elevation-box elevation-transition">Hover me</div>
-		</div>
+		<div className="elevation-box elevation-transition">Hover me</div>
 	),
 };
