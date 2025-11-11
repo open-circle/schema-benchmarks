@@ -1,14 +1,21 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
 import * as v from "valibot";
 import { ResultsTable } from "@/components/results-table";
-import { getResults, selectInitializationResults } from "@/data/results";
+import {
+	getResults,
+	optionalLibraryTypeSchema,
+	selectInitializationResults,
+} from "@/data/results";
+
+const searchSchema = v.object({
+	libraryType: optionalLibraryTypeSchema,
+});
 
 export const Route = createFileRoute("/initialization")({
 	component: RouteComponent,
-	validateSearch: v.object({
-		libraryType: v.optional(v.picklist(["runtime", "precompiled"]), "runtime"),
-	}),
+	validateSearch: searchSchema,
+	search: { middlewares: [stripSearchParams(v.getDefaults(searchSchema))] },
 	async loader({ context: { queryClient }, abortController }) {
 		await queryClient.prefetchQuery(getResults(abortController.signal));
 		return { crumb: "Initialization" };

@@ -1,19 +1,25 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
 import * as v from "valibot";
 import { ResultsTable } from "@/components/results-table";
-import { getResults, selectParsingResults } from "@/data/results";
+import {
+	getResults,
+	optionalDataTypeSchema,
+	optionalErrorTypeSchema,
+	optionalLibraryTypeSchema,
+	selectParsingResults,
+} from "@/data/results";
+
+const searchSchema = v.object({
+	libraryType: optionalLibraryTypeSchema,
+	dataType: optionalDataTypeSchema,
+	errorType: optionalErrorTypeSchema,
+});
 
 export const Route = createFileRoute("/parsing")({
 	component: RouteComponent,
-	validateSearch: v.object({
-		libraryType: v.optional(v.picklist(["runtime", "precompiled"]), "runtime"),
-		dataType: v.optional(v.picklist(["success", "error"]), "success"),
-		errorType: v.optional(
-			v.picklist(["abortEarly", "allErrors", "unknown"]),
-			"allErrors",
-		),
-	}),
+	validateSearch: searchSchema,
+	search: { middlewares: [stripSearchParams(v.getDefaults(searchSchema))] },
 	async loader({ context: { queryClient }, abortController }) {
 		await queryClient.prefetchQuery(getResults(abortController.signal));
 		return { crumb: "Parsing" };

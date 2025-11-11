@@ -7,6 +7,23 @@ import type {
 import results from "@schema-benchmarks/bench/results.json";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import * as v from "valibot";
+
+export const dataTypeSchema = v.picklist(["success", "error"]);
+export const optionalDataTypeSchema = v.optional(dataTypeSchema, "success");
+
+export const errorTypeSchema = v.picklist([
+	"abortEarly",
+	"allErrors",
+	"unknown",
+]);
+export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
+
+export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
+export const optionalLibraryTypeSchema = v.optional(
+	libraryTypeSchema,
+	"runtime",
+);
 
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
 	if (process.env.NODE_ENV === "production") {
