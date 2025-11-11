@@ -1,11 +1,11 @@
-import { highlight, languages } from "prismjs";
+import prism from "prismjs";
 import { useMemo } from "react";
 
 function useHighlight(code: string, language: string) {
-	const grammar = languages[language];
+	const grammar = prism.languages[language];
 	if (!grammar) throw new Error(`Language not found: ${language}`);
 	return useMemo(
-		() => highlight(code, grammar, language),
+		() => prism.highlight(code, grammar, language),
 		[code, grammar, language],
 	);
 }

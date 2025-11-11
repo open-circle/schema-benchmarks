@@ -5,7 +5,13 @@ import "./benchmarks/parsing.bench";
 import { processResults } from "./utils/process";
 import { registry } from "./utils/registry";
 
-export type { ProcessedResult, ProcessedResults } from "./utils/process";
+export type {
+	DataType,
+	ErrorType,
+	LibraryType,
+	ProcessedResult,
+	ProcessedResults,
+} from "./utils/process";
 
 export async function runBenchmarks(): Promise<ProcessedResults> {
 	const benchResults = await registry.runBenches();

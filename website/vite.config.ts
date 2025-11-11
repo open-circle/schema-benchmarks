@@ -16,6 +16,11 @@ const config = defineConfig({
 			languages: ["typescript"],
 		}),
 	],
+	resolve: {
+		alias: {
+			"@": "/src",
+		},
+	},
 });
 
 export default config;

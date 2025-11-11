@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as InitializationRouteImport } from './routes/initialization'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiValidRouteImport } from './routes/api/valid'
 import { Route as ApiInvalidRouteImport } from './routes/api/invalid'
 
+const InitializationRoute = InitializationRouteImport.update({
+  id: '/initialization',
+  path: '/initialization',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +37,47 @@ const ApiInvalidRoute = ApiInvalidRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/initialization': typeof InitializationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/initialization': typeof InitializationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/initialization': typeof InitializationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/invalid' | '/api/valid'
+  fullPaths: '/' | '/initialization' | '/api/invalid' | '/api/valid'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/invalid' | '/api/valid'
-  id: '__root__' | '/' | '/api/invalid' | '/api/valid'
+  to: '/' | '/initialization' | '/api/invalid' | '/api/valid'
+  id: '__root__' | '/' | '/initialization' | '/api/invalid' | '/api/valid'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InitializationRoute: typeof InitializationRoute
   ApiInvalidRoute: typeof ApiInvalidRoute
   ApiValidRoute: typeof ApiValidRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/initialization': {
+      id: '/initialization'
+      path: '/initialization'
+      fullPath: '/initialization'
+      preLoaderRoute: typeof InitializationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InitializationRoute: InitializationRoute,
   ApiInvalidRoute: ApiInvalidRoute,
   ApiValidRoute: ApiValidRoute,
 }
