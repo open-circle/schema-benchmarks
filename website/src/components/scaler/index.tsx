@@ -6,7 +6,7 @@ export interface ScalerProps {
 	value: number;
 	bounds: Bounds;
 	reverse?: boolean;
-	children: ReactNode;
+	children?: ReactNode;
 }
 
 export function Scaler({ value, bounds, reverse, children }: ScalerProps) {
