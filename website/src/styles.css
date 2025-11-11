@@ -82,7 +82,7 @@ th {
 
 th {
   @extend .subtitle2;
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-medium);
 }
 
 td {
