@@ -1,6 +1,11 @@
 import prism from "prismjs";
 import { useMemo } from "react";
 
+export interface CodeProps {
+	children: string;
+	language?: string;
+}
+
 function useHighlight(code: string, language: string) {
 	const grammar = prism.languages[language];
 	if (!grammar) throw new Error(`Language not found: ${language}`);
@@ -10,13 +15,7 @@ function useHighlight(code: string, language: string) {
 	);
 }
 
-export function InlineCode({
-	children,
-	language = "typescript",
-}: {
-	children: string;
-	language?: string;
-}) {
+export function InlineCode({ children, language = "typescript" }: CodeProps) {
 	const highlighted = useHighlight(children, language);
 	return (
 		<code
@@ -28,13 +27,7 @@ export function InlineCode({
 	);
 }
 
-export function CodeBlock({
-	children,
-	language = "typescript",
-}: {
-	children: string;
-	language?: string;
-}) {
+export function CodeBlock({ children, language = "typescript" }: CodeProps) {
 	const highlighted = useHighlight(children, language);
 	return (
 		<pre className={`language-${language}`} suppressHydrationWarning>
