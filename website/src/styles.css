@@ -125,19 +125,10 @@ main {
   navigation: auto;
 }
 
-@keyframes slide-from-right {
-  0% {
-    transform: translateX(100%);
+@media (prefers-reduced-motion) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-::view-transition-old(container) {
-  animation: none;
-}
-
-::view-transition-new(container) {
-  animation: slide-from-right 0.3s ease-out;
 }
