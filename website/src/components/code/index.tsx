@@ -23,6 +23,7 @@ export function InlineCode({
 			className={`language-${language}`}
 			// biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
 			dangerouslySetInnerHTML={{ __html: highlighted }}
+			suppressHydrationWarning
 		/>
 	);
 }
@@ -36,11 +37,12 @@ export function CodeBlock({
 }) {
 	const highlighted = useHighlight(children, language);
 	return (
-		<pre className={`language-${language}`}>
+		<pre className={`language-${language}`} suppressHydrationWarning>
 			<code
 				className={`language-${language}`}
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
 				dangerouslySetInnerHTML={{ __html: highlighted }}
+				suppressHydrationWarning
 			/>
 		</pre>
 	);
