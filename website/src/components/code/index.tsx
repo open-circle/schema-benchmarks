@@ -1,9 +1,13 @@
 import { highlight, languages } from "prismjs";
+import { useMemo } from "react";
 
 function useHighlight(code: string, language: string) {
 	const grammar = languages[language];
 	if (!grammar) throw new Error(`Language not found: ${language}`);
-	return highlight(code, grammar, language);
+	return useMemo(
+		() => highlight(code, grammar, language),
+		[code, grammar, language],
+	);
 }
 
 export function InlineCode({
