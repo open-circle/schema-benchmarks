@@ -53,6 +53,13 @@ class Registry {
 			throw new Error(`Meta type mismatch: ${bench.name}`);
 		return meta;
 	}
+	runBenches() {
+		return Promise.all(
+			Array.from(this.benches.keys()).map(
+				async (bench) => [bench, await bench.run()] as const,
+			),
+		);
+	}
 
 	cases = new Map<string, CaseMeta>();
 	addCase(meta: CaseMeta) {
