@@ -55,9 +55,23 @@ class Registry {
 	}
 	runBenches() {
 		return Promise.all(
-			Array.from(this.benches.keys()).map(
-				async (bench) => [bench, await bench.run()] as const,
-			),
+			Array.from(this.benches.keys()).map(async (bench) => {
+				const results = await bench.run();
+				console.group(JSON.stringify(this.getBenchMeta(bench)));
+				console.table(
+					bench.table().map(
+						(row) =>
+							row && {
+								...row,
+								"Task name": JSON.stringify(
+									this.getCaseMeta(row["Task name"] as string),
+								),
+							},
+					),
+				);
+				console.groupEnd();
+				return [bench, results] as const;
+			}),
 		);
 	}
 

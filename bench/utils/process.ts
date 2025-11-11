@@ -1,4 +1,5 @@
-import type { Bench, Task, TaskResult } from "tinybench";
+import type { Bench, Task } from "tinybench";
+import { partition } from ".";
 import type { BenchMetaForType, MetaType } from "./registry";
 import { registry } from "./registry";
 
@@ -9,21 +10,14 @@ export type ErrorType = "abortEarly" | "allErrors" | "unknown";
 interface ProcessedResult {
 	libraryName: string;
 	note?: string;
-	result: Readonly<TaskResult>;
 	rank: number;
 }
-
-type LibraryResults = Record<string, ProcessedResult[]>;
-type BenchResult = {
-	results: LibraryResults;
-	rankedLibraries: { libraryName: string; note?: string }[];
-};
 
 const selector: {
 	[Type in MetaType]: (
 		results: ProcessedResults,
 		benchMeta: BenchMetaForType<Type>,
-	) => BenchResult;
+	) => ProcessedResult[];
 } = {
 	initialization(results, { libraryType }) {
 		return results.initialization[libraryType];
@@ -36,86 +30,89 @@ const selector: {
 	},
 };
 
-const getEmptyBenchResult = (): BenchResult => ({
-	results: {},
-	rankedLibraries: [],
-});
-
 export interface ProcessedResults {
-	initialization: Record<LibraryType, BenchResult>;
+	initialization: Record<LibraryType, ProcessedResult[]>;
 	parsing: Record<
 		LibraryType,
-		Record<DataType, Record<ErrorType, BenchResult>>
+		Record<DataType, Record<ErrorType, ProcessedResult[]>>
 	>;
-	validation: Record<LibraryType, Record<DataType, BenchResult>>;
+	validation: Record<LibraryType, Record<DataType, ProcessedResult[]>>;
 }
 
 const getEmptyResults = (): ProcessedResults => ({
 	initialization: {
-		runtime: getEmptyBenchResult(),
-		precompiled: getEmptyBenchResult(),
+		runtime: [],
+		precompiled: [],
 	},
 	parsing: {
 		runtime: {
 			success: {
-				abortEarly: getEmptyBenchResult(),
-				allErrors: getEmptyBenchResult(),
-				unknown: getEmptyBenchResult(),
+				abortEarly: [],
+				allErrors: [],
+				unknown: [],
 			},
 			error: {
-				abortEarly: getEmptyBenchResult(),
-				allErrors: getEmptyBenchResult(),
-				unknown: getEmptyBenchResult(),
+				abortEarly: [],
+				allErrors: [],
+				unknown: [],
 			},
 		},
 		precompiled: {
 			success: {
-				abortEarly: getEmptyBenchResult(),
-				allErrors: getEmptyBenchResult(),
-				unknown: getEmptyBenchResult(),
+				abortEarly: [],
+				allErrors: [],
+				unknown: [],
 			},
 			error: {
-				abortEarly: getEmptyBenchResult(),
-				allErrors: getEmptyBenchResult(),
-				unknown: getEmptyBenchResult(),
+				abortEarly: [],
+				allErrors: [],
+				unknown: [],
 			},
 		},
 	},
 	validation: {
 		runtime: {
-			success: getEmptyBenchResult(),
-			error: getEmptyBenchResult(),
+			success: [],
+			error: [],
 		},
 		precompiled: {
-			success: getEmptyBenchResult(),
-			error: getEmptyBenchResult(),
+			success: [],
+			error: [],
 		},
 	},
 });
 
 function processResult(results: ProcessedResults, bench: Bench, tasks: Task[]) {
 	const benchMeta = registry.getBenchMeta(bench);
-	tasks.sort((a, b) => {
+	const benchResults = selector[benchMeta.type](results, benchMeta as never);
+	const [successfulTasks, erroredTasks] = partition(
+		tasks,
+		(task) => !!task.result && !task.result.error,
+	);
+
+	if (erroredTasks.length) {
+		console.error(
+			"Errored tasks",
+			benchMeta,
+			erroredTasks.map((task) => registry.getCaseMeta(task.name)),
+		);
+	}
+
+	successfulTasks.sort((a, b) => {
 		if (!a.result) return 1;
 		if (!b.result) return -1;
 		return a.result.mean - b.result.mean;
 	});
 
-	for (let index = 0; index < tasks.length; index++) {
-		const task = tasks[index];
-		if (!task?.result) return;
+	for (let index = 0; index < successfulTasks.length; index++) {
+		const task = successfulTasks[index];
+		if (!task?.result) continue;
 		const caseMeta = registry.getCaseMeta(task.name);
-		const benchResult = selector[caseMeta.type](results, benchMeta as never);
-		// biome-ignore lint/suspicious/noAssignInExpressions: performance
-		(benchResult.results[caseMeta.libraryName] ??= []).push({
+
+		benchResults[index] = {
 			libraryName: caseMeta.libraryName,
 			note: caseMeta.note,
-			result: task.result,
 			rank: index + 1,
-		});
-		benchResult.rankedLibraries[index] = {
-			libraryName: caseMeta.libraryName,
-			note: caseMeta.note,
 		};
 	}
 }
