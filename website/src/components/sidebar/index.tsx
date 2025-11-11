@@ -1,6 +1,25 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkOptions, linkOptions } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { MdSymbol } from "../symbol";
+
+export const sidebarLinks = [
+	{ ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
+	{
+		...linkOptions({ to: "/initialization" }),
+		name: "Initialization",
+		icon: "timer",
+	},
+	{
+		...linkOptions({ to: "/validation" }),
+		name: "Validation",
+		icon: "check_circle",
+	},
+	{
+		...linkOptions({ to: "/parsing" }),
+		name: "Parsing",
+		icon: "output_circle",
+	},
+] satisfies Array<LinkOptions & { name: string; icon: string }>;
 
 export function Sidebar({ children }: { children?: ReactNode }) {
 	return (
@@ -19,30 +38,14 @@ export function TanstackSidebar() {
 		<Sidebar>
 			<nav>
 				<ul className="subtitle2">
-					<li>
-						<Link to="/">
-							<MdSymbol>home</MdSymbol>
-							Home
-						</Link>
-					</li>
-					<li>
-						<Link to="/initialization">
-							<MdSymbol>timer</MdSymbol>
-							Initialization
-						</Link>
-					</li>
-					<li>
-						<Link to="/validation">
-							<MdSymbol>check_circle</MdSymbol>
-							Validation
-						</Link>
-					</li>
-					<li>
-						<Link to="/parsing">
-							<MdSymbol>output_circle</MdSymbol>
-							Parsing
-						</Link>
-					</li>
+					{sidebarLinks.map(({ name, icon, ...link }) => (
+						<li key={link.to}>
+							<Link {...link}>
+								<MdSymbol>{icon}</MdSymbol>
+								{name}
+							</Link>
+						</li>
+					))}
 				</ul>
 			</nav>
 		</Sidebar>
