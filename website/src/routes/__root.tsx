@@ -66,7 +66,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						<Sidebar />
 						<div className="container">
 							<Header />
-							{children}
+							<main>{children}</main>
 						</div>
 					</div>
 					<TanStackDevtools

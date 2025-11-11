@@ -109,10 +109,33 @@ td {
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   flex: 1;
+}
+
+main {
+  padding: 1rem;
+  flex: 1;
+  view-transition-name: container;
+  background-color: var(--page-background);
 }
 
 @view-transition {
   navigation: auto;
+}
+
+@keyframes slide-from-right {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+::view-transition-old(container) {
+  animation: none;
+}
+
+::view-transition-new(container) {
+  animation: slide-from-right 0.3s ease-out;
 }
