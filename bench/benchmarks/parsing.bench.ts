@@ -107,12 +107,18 @@ for (const [dataType, data] of [
 
 			library("effect", ({ add }) => {
 				const effectSchema = getEffectSchema();
+				const decode = Schema.decodeUnknownEither(effectSchema, {
+					errors: "all",
+				});
 				add(
 					() => {
-						Schema.decodeUnknownEither(effectSchema, { errors: "all" })(data);
+						decode(data);
 					},
 					{
-						snippet: ts`Schema.decodeUnknownEither(schema, { errors: "all" })(data)`,
+						snippet: ts`
+							const decode = Schema.decodeUnknownEither(schema, { errors: "all" });
+							decode(data);
+						`,
 					},
 				);
 			});
@@ -185,12 +191,18 @@ for (const [dataType, data] of [
 
 			library("effect", ({ add }) => {
 				const effectSchema = getEffectSchema();
+				const decode = Schema.decodeUnknownEither(effectSchema, {
+					errors: "first",
+				});
 				add(
 					() => {
-						Schema.decodeUnknownEither(effectSchema, { errors: "first" })(data);
+						decode(data);
 					},
 					{
-						snippet: ts`Schema.decodeUnknownEither(schema, { errors: "first" })(data)`,
+						snippet: ts`
+							const decode = Schema.decodeUnknownEither(schema, { errors: "first" });
+							decode(data);
+						`,
 					},
 				);
 			});

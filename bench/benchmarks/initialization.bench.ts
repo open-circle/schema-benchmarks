@@ -1,3 +1,5 @@
+import ts from "dedent";
+import * as Schema from "effect/Schema";
 import typia from "typia";
 import z from "zod";
 import * as zMini from "zod/mini";
@@ -75,8 +77,19 @@ bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
 		);
 	});
 
-	addLibrary("effect", () => {
-		getEffectSchema();
+	library("effect", ({ add }) => {
+		add(() => {
+			getEffectSchema();
+		});
+		add(
+			() => {
+				Schema.decodeUnknownEither(getEffectSchema());
+			},
+			{
+				note: "decodeUnknownEither",
+				snippet: ts`Schema.decodeUnknownEither(schema)`,
+			},
+		);
 	});
 
 	addLibrary("typebox", () => {

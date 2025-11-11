@@ -58,12 +58,16 @@ for (const [dataType, data] of [
 
 		library("effect", ({ add }) => {
 			const effectSchema = getEffectSchema();
+			const is = Schema.is(effectSchema);
 			add(
 				() => {
-					Schema.is(effectSchema)(data);
+					is(data);
 				},
 				{
-					snippet: ts`Schema.is(schema)(data)`,
+					snippet: ts`
+						const is = Schema.is(schema); 
+						is(data);
+					`,
 				},
 			);
 		});

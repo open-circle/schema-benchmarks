@@ -25,11 +25,18 @@ const meta = {
 			{ libraryName: "valibot", rank: 3, snippet: ts`v.is(schema, data)` },
 			{ libraryName: "arktype", rank: 4, snippet: ts`schema.allows(data)` },
 			{
-				libraryName: "typebox",
+				libraryName: "effect",
 				rank: 5,
+				snippet: ts`
+					const is = Schema.is(schema);
+					is(data);
+				`,
+			},
+			{
+				libraryName: "typebox",
+				rank: 6,
 				snippet: ts`Value.Check(schema, data)`,
 			},
-			{ libraryName: "effect", rank: 6, snippet: ts`Schema.is(schema)(data)` },
 			{ libraryName: "yup", rank: 7, snippet: ts`schema.isValidSync(data)` },
 		],
 	},
