@@ -20,6 +20,11 @@
 		"ts-patch": "^3.3.0",
 		"typescript": "~5.9.3"
 	},
+	"exports": {
+		".": "./index.ts",
+		"./results.json": "./results.json"
+	},
+	"main": "index.ts",
 	"name": "@schema-benchmarks/bench",
 	"private": true,
 	"scripts": {
