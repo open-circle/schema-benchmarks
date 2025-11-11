@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { useCrumbs } from "@/hooks/use-crumbs";
 import { MdSymbol } from "../symbol";
 
@@ -15,17 +15,12 @@ export function TanstackHeader() {
 		<Header>
 			<nav className="breadcrumbs">
 				{crumbs.map((crumb) => (
-					<>
-						<Link
-							key={crumb.to}
-							to={crumb.to}
-							params={crumb.params}
-							className="headline6"
-						>
+					<Fragment key={crumb.to}>
+						<Link to={crumb.to} params={crumb.params} className="headline6">
 							{crumb.name}
 						</Link>
 						<MdSymbol>chevron_right</MdSymbol>
-					</>
+					</Fragment>
 				))}
 				{currentCrumb && <span className="headline6">{currentCrumb.name}</span>}
 			</nav>

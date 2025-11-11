@@ -31,6 +31,18 @@ export function TanstackSidebar() {
 							Initialization
 						</Link>
 					</li>
+					<li>
+						<Link to="/validation">
+							<MdSymbol>check_circle</MdSymbol>
+							Validation
+						</Link>
+					</li>
+					<li>
+						<Link to="/parsing">
+							<MdSymbol>output</MdSymbol>
+							Parsing
+						</Link>
+					</li>
 				</ul>
 			</nav>
 		</Sidebar>

@@ -9,11 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ValidationRouteImport } from './routes/validation'
+import { Route as ParsingRouteImport } from './routes/parsing'
 import { Route as InitializationRouteImport } from './routes/initialization'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiValidRouteImport } from './routes/api/valid'
 import { Route as ApiInvalidRouteImport } from './routes/api/invalid'
 
+const ValidationRoute = ValidationRouteImport.update({
+  id: '/validation',
+  path: '/validation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParsingRoute = ParsingRouteImport.update({
+  id: '/parsing',
+  path: '/parsing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InitializationRoute = InitializationRouteImport.update({
   id: '/initialization',
   path: '/initialization',
@@ -38,12 +50,16 @@ const ApiInvalidRoute = ApiInvalidRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/initialization': typeof InitializationRoute
+  '/parsing': typeof ParsingRoute
+  '/validation': typeof ValidationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/initialization': typeof InitializationRoute
+  '/parsing': typeof ParsingRoute
+  '/validation': typeof ValidationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
@@ -51,26 +67,63 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/initialization': typeof InitializationRoute
+  '/parsing': typeof ParsingRoute
+  '/validation': typeof ValidationRoute
   '/api/invalid': typeof ApiInvalidRoute
   '/api/valid': typeof ApiValidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/initialization' | '/api/invalid' | '/api/valid'
+  fullPaths:
+    | '/'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
+    | '/api/invalid'
+    | '/api/valid'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/initialization' | '/api/invalid' | '/api/valid'
-  id: '__root__' | '/' | '/initialization' | '/api/invalid' | '/api/valid'
+  to:
+    | '/'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
+    | '/api/invalid'
+    | '/api/valid'
+  id:
+    | '__root__'
+    | '/'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
+    | '/api/invalid'
+    | '/api/valid'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InitializationRoute: typeof InitializationRoute
+  ParsingRoute: typeof ParsingRoute
+  ValidationRoute: typeof ValidationRoute
   ApiInvalidRoute: typeof ApiInvalidRoute
   ApiValidRoute: typeof ApiValidRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/validation': {
+      id: '/validation'
+      path: '/validation'
+      fullPath: '/validation'
+      preLoaderRoute: typeof ValidationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parsing': {
+      id: '/parsing'
+      path: '/parsing'
+      fullPath: '/parsing'
+      preLoaderRoute: typeof ParsingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/initialization': {
       id: '/initialization'
       path: '/initialization'
@@ -105,6 +158,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InitializationRoute: InitializationRoute,
+  ParsingRoute: ParsingRoute,
+  ValidationRoute: ValidationRoute,
   ApiInvalidRoute: ApiInvalidRoute,
   ApiValidRoute: ApiValidRoute,
 }

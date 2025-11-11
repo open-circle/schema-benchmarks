@@ -10,8 +10,9 @@ export type ErrorType = "abortEarly" | "allErrors" | "unknown";
 export interface ProcessedResult {
 	libraryName: string;
 	note?: string;
-	snippet?: string;
+	snippet: string;
 	rank: number;
+	mean: number;
 }
 
 const selector: {
@@ -115,6 +116,7 @@ function processResult(results: ProcessedResults, bench: Bench, tasks: Task[]) {
 			note: caseMeta.note,
 			snippet: caseMeta.snippet,
 			rank: index + 1,
+			mean: task.result.mean,
 		};
 	}
 }

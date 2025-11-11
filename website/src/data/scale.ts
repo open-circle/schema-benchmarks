@@ -14,13 +14,38 @@ const colorScale = [
 ] as const;
 export type ScaleColor = (typeof colorScale)[number];
 
+interface Bounds {
+	highest: number;
+	lowest: number;
+}
+
+export function getBounds<T>(
+	results: T[],
+	getValue: (result: T) => number,
+): Bounds {
+	const values = results.map(getValue);
+	return {
+		highest: Math.max(...values),
+		lowest: Math.min(...values),
+	};
+}
+
 /**
  * Get the color for a given value on the scale
- * @param value Value from 0 to 100, inclusive
+ * @param value Value from bounds.lowest to bounds.highest, inclusive
+ * @param bounds Bounds of the scale (lowest and highest)
  * @returns Color name
  */
-export function getColor(value: number): ScaleColor {
-	const index = clamp(Math.floor(value / 10), 0, colorScale.length - 1);
+export function getColor(
+	value: number,
+	{ highest, lowest }: Bounds,
+	reverse = false,
+): ScaleColor {
+	// biome-ignore lint/style/noNonNullAssertion: will always be defined
+	if (highest === lowest) return reverse ? colorScale.at(-1)! : colorScale[0];
+	const scaleNumber = ((value - lowest) / (highest - lowest)) * 10;
+	let index = clamp(Math.floor(scaleNumber), 0, colorScale.length - 1);
+	if (reverse) index = colorScale.length - 1 - index;
 	// biome-ignore lint/style/noNonNullAssertion: We've clamped the index
 	return colorScale[index]!;
 }

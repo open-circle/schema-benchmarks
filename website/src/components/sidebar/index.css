@@ -21,11 +21,11 @@
 }
 
 .sidebar {
+  flex: 0 0 16rem;
   background-color: var(--sidebar-background);
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--divider);
-  width: 16rem;
   .sidebar__logo {
     height: var(--page-header-height);
     border-bottom: 1px solid var(--divider);
