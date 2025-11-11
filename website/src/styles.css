@@ -11,6 +11,7 @@
 
 @import "components/header/index.css";
 @import "components/sidebar/index.css";
+@import "components/symbol/index.css";
 
 * {
   box-sizing: border-box;

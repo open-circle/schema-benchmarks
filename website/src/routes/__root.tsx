@@ -47,6 +47,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				rel: "stylesheet",
 				href: "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
 			},
+			{
+				rel: "stylesheet",
+				// TODO: narrow to used icons and axes https://developers.google.com/fonts/docs/material_symbols#optimize_the_icon_font
+				href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+			},
 		],
 	}),
 
