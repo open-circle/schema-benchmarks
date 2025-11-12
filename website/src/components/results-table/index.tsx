@@ -118,8 +118,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         type="stat"
                         reverse
                       >
-                        {numFormatter.format(Math.abs(ratio))}x{" "}
-                        {ratio < 0 ? "faster" : "slower"}
+                        {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
                         {/* than selected */}
                       </Scaler>
                     ) : (

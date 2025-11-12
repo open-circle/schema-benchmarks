@@ -38,6 +38,11 @@
     &:hover {
       font-weight: var(--weight-bold);
     }
+    &:focus-visible {
+      outline: none;
+      font-weight: var(--weight-bold);
+      color: var(--primary);
+    }
   }
   span {
     font-weight: var(--weight-bold);
