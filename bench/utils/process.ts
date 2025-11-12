@@ -1,5 +1,5 @@
+import { partition } from "@schema-benchmarks/utils";
 import type { Bench, Task } from "tinybench";
-import { partition } from ".";
 import type { BenchMetaForType, MetaType } from "./registry";
 import { registry } from "./registry";
 

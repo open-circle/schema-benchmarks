@@ -1,7 +1,7 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
+import { msToNs, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { getBounds } from "@/data/scale";
-import { msToNs, numFormatter } from "@/utils";
 import { CodeBlock } from "../code";
 import { Radio } from "../radio";
 import { Scaler } from "../scaler";

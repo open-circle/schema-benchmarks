@@ -1,6 +1,6 @@
+import { clamp } from "@schema-benchmarks/utils";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useState } from "react";
-import { clamp } from "@/utils";
 
 const keys = {
   horizontal: {

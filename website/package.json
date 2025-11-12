@@ -3,6 +3,7 @@
     "@msw/data": "^1.1.2",
     "@schema-benchmarks/bench": "workspace:*",
     "@schema-benchmarks/data": "workspace:*",
+    "@schema-benchmarks/utils": "workspace:*",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-query": "^5.90.7",
     "@tanstack/react-router": "^1.132.0",
@@ -47,11 +48,11 @@
   "private": true,
   "scripts": {
     "build": "vite build",
+    "build-storybook": "storybook build",
     "dev": "vite dev --port 3000",
     "serve": "vite preview",
-    "test": "vitest run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test": "vitest run"
   },
   "type": "module"
 }

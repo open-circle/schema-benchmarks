@@ -1,3 +1,4 @@
+import { isEmpty } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -13,7 +14,6 @@ import {
   optionalLibraryTypeSchema,
 } from "@/data/results";
 import { useFocusGroup } from "@/hooks/use-focus-group";
-import { isEmpty } from "@/utils";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,

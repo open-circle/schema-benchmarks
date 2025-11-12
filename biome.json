@@ -13,6 +13,7 @@
       "**/src/**/*",
       "**/bench/**/*",
       "**/data/**/*",
+      "**/utils/**/*",
       "**/.vscode/**/*",
       "**/index.html",
       "**/vite.config.ts",

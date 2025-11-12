@@ -2,3 +2,4 @@ packages:
   - data
   - website
   - bench
+  - utils
