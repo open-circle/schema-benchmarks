@@ -1,10 +1,9 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
-  useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanstackHeader } from "../components/header";
@@ -59,35 +58,32 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   return (
-    <QueryClientProvider client={router.options.context.queryClient}>
-      <html lang="en">
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-          <div className="sidebar-container">
-            <TanstackSidebar />
-            <div className="container">
-              <TanstackHeader />
-              <main>{children}</main>
-            </div>
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        <div className="sidebar-container">
+          <TanstackSidebar />
+          <div className="container">
+            <TanstackHeader />
+            <main>{children}</main>
           </div>
-          <TanStackDevtools
-            config={{
-              position: "bottom-left",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-          <Scripts />
-        </body>
-      </html>
-    </QueryClientProvider>
+        </div>
+        <TanStackDevtools
+          config={{
+            position: "bottom-left",
+          }}
+          plugins={[
+            {
+              name: "Tanstack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <Scripts />
+      </body>
+    </html>
   );
 }
