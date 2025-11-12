@@ -4,7 +4,7 @@ import type { BenchMetaForType, MetaType } from "./registry";
 import { registry } from "./registry";
 
 export type LibraryType = "runtime" | "precompiled";
-export type DataType = "success" | "error";
+export type DataType = "valid" | "invalid";
 export type ErrorType = "abortEarly" | "allErrors";
 
 export interface ProcessedResult {
@@ -49,21 +49,21 @@ const getEmptyResults = (): ProcessedResults => ({
   },
   parsing: {
     runtime: {
-      success: {
+      valid: {
         abortEarly: [],
         allErrors: [],
       },
-      error: {
+      invalid: {
         abortEarly: [],
         allErrors: [],
       },
     },
     precompiled: {
-      success: {
+      valid: {
         abortEarly: [],
         allErrors: [],
       },
-      error: {
+      invalid: {
         abortEarly: [],
         allErrors: [],
       },
@@ -71,12 +71,12 @@ const getEmptyResults = (): ProcessedResults => ({
   },
   validation: {
     runtime: {
-      success: [],
-      error: [],
+      valid: [],
+      invalid: [],
     },
     precompiled: {
-      success: [],
-      error: [],
+      valid: [],
+      invalid: [],
     },
   },
 });

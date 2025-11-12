@@ -31,8 +31,8 @@ declare module "../utils/registry" {
 const bench = makeBenchFactory("parse");
 
 for (const [dataType, data] of [
-  ["success", successData],
-  ["error", errorData],
+  ["valid", successData],
+  ["invalid", errorData],
 ] as const) {
   bench(
     { dataType, libraryType: "runtime", abortType: "allErrors" },

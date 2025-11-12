@@ -10,14 +10,14 @@ import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
 
 export const dataTypeSchema = v.picklist([
-  "success",
-  "error",
+  "valid",
+  "invalid",
 ]) satisfies v.GenericSchema<DataType>;
-export const optionalDataTypeSchema = v.optional(dataTypeSchema, "success");
+export const optionalDataTypeSchema = v.optional(dataTypeSchema, "valid");
 export const dataTypeLabels: Record<DataType, { label: string; icon: string }> =
   {
-    success: { label: "Success", icon: "check_circle" },
-    error: { label: "Error", icon: "error" },
+    valid: { label: "Valid", icon: "check_circle" },
+    invalid: { label: "Invalid", icon: "error" },
   };
 
 export const errorTypeSchema = v.picklist([

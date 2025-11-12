@@ -9,7 +9,7 @@ const meta = {
   },
   component: ResultsTable,
   args: {
-    results: results.validation.runtime.error,
+    results: results.validation.runtime.invalid,
   },
 } satisfies Meta<typeof ResultsTable>;
 
