@@ -7,3 +7,5 @@ export function msToNs(ms: number) {
 }
 
 export const numFormatter = new Intl.NumberFormat(undefined);
+
+export const objectKeyCount = (obj: object) => Object.keys(obj).length;

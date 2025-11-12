@@ -1,0 +1,43 @@
+:root {
+  --chip-background: light-dark(
+    var(--md-blue-grey-100),
+    var(--md-blue-grey-700)
+  );
+  --chip-foreground: var(--page-foreground);
+  --selected-chip-background: color-mix(
+    in srgb,
+    var(--chip-background),
+    var(--primary) 10%
+  );
+  --selected-chip-foreground: var(--primary);
+}
+
+.chip {
+  text-decoration: none;
+  appearance: none;
+  border: none;
+  background-color: var(--chip-background);
+  color: var(--chip-foreground);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--shape-pill);
+  --icon-size: 18;
+  @extend .body2;
+  transition: background-color 250ms, color 250ms;
+  &.selected,
+  &.active {
+    background-color: var(--selected-chip-background);
+    color: var(--selected-chip-foreground);
+    --icon-fill: 1;
+    --icon-weight: 600;
+  }
+}
+
+.chip-collection {
+  display: flex;
+  padding: 0.5rem;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}

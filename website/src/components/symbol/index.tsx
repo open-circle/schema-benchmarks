@@ -27,6 +27,7 @@ export function MdSymbol({
 }: MdSymbolProps) {
   return (
     <span
+      aria-hidden
       className={clsx("md-symbol material-symbols-sharp", className)}
       data-flip-rtl={flipRtl ? true : undefined}
       style={

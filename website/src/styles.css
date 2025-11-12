@@ -9,6 +9,7 @@
 @import "styles/shape.css";
 @import "styles/typography.css";
 
+@import "components/chip/index.css";
 @import "components/header/index.css";
 @import "components/scaler/index.css";
 @import "components/sidebar/index.css";
