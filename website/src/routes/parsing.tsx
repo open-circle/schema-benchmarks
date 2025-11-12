@@ -45,7 +45,11 @@ function RouteComponent() {
               <Link
                 key={option}
                 to={Route.fullPath}
-                search={{ libraryType: option }}
+                search={({ dataType, errorType }) => ({
+                  libraryType: option,
+                  dataType,
+                  errorType,
+                })}
                 className="chip"
                 replace
               >
