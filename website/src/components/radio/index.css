@@ -2,7 +2,11 @@
   --radio-border-color: color(
     from var(--page-foreground) srgb r g b / var(--secondary-text)
   );
+  --radio-focus-color: color(from var(--page-foreground) srgb r g b / 0.4);
   --radio-checked-color: var(--secondary);
+  --radio-focus-checked-color: color(
+    from var(--radio-checked-color) srgb r g b / 0.4
+  );
 }
 
 .radio {
@@ -10,9 +14,35 @@
   align-items: center;
   padding: 0.25rem;
   input {
-    display: none;
+    /* visually hidden */
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    &:focus-visible ~ .radio__icon {
+      outline: none;
+      &::after {
+        transform: scale(1);
+      }
+    }
+    &:checked ~ .radio__icon {
+      border-color: var(--radio-checked-color);
+      &::before {
+        transform: scale(1);
+      }
+      &::after {
+        background-color: var(--radio-focus-checked-color);
+      }
+    }
   }
   .radio__icon {
+    position: relative;
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
@@ -29,13 +59,17 @@
       border-radius: 50%;
       background-color: var(--radio-checked-color);
       transform: scale(0);
-      transition: transform 250ms;
+      transition: transform 250ms var(--standard-curve);
     }
-  }
-  input:checked ~ .radio__icon {
-    border-color: var(--radio-checked-color);
-    &::before {
-      transform: scale(1);
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      corner-shape: bevel;
+      background-color: var(--radio-focus-color);
+      transform: scale(0);
+      transition: transform 250ms var(--standard-curve);
     }
   }
 }
