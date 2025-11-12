@@ -15,6 +15,13 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/initialization")({
+  head: () => ({
+    meta: [
+      {
+        title: "Initialization - Schema Benchmarks",
+      },
+    ],
+  }),
   component: RouteComponent,
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
