@@ -3,8 +3,7 @@
   --sidebar-foreground: var(--page-foreground);
   --active-link-foreground: var(--primary);
   --active-link-background: color(
-    from var(--active-link-foreground) srgb r g b /
-    0.1
+    from var(--active-link-foreground) srgb r g b / 0.1
   );
 }
 
@@ -22,6 +21,10 @@
 }
 
 .sidebar {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
   flex: 0 0 16rem;
   background-color: var(--sidebar-background);
   display: flex;
@@ -47,9 +50,7 @@
           padding: 0 1rem;
           text-decoration: none;
           color: var(--sidebar-foreground);
-          transition:
-            color 250ms,
-            font-weight 250ms;
+          transition: color 250ms, font-weight 250ms;
           .md-symbol {
             margin-right: 0.5rem;
           }

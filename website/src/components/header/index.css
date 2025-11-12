@@ -17,6 +17,9 @@
   align-items: center;
   height: var(--page-header-height);
   padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .breadcrumbs {
