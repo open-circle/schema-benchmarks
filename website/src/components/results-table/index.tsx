@@ -1,7 +1,7 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
 import { useEffect, useMemo, useState } from "react";
-import { getBounds } from "@/data/scale";
-import { msToNs, numFormatter, partition } from "@/utils";
+import { type Bounds, getBounds } from "@/data/scale";
+import { msToNs, numFormatter } from "@/utils";
 import { CodeBlock } from "../code";
 import { Radio } from "../radio";
 import { Scaler } from "../scaler";
@@ -11,11 +11,7 @@ export interface ResultsTableProps {
   results: Array<ProcessedResult>;
 }
 
-export function ResultsTable({ results }: ResultsTableProps) {
-  const meanBounds = useMemo(
-    () => getBounds(results.map((result) => result.mean)),
-    [results],
-  );
+function useComparison(results: Array<ProcessedResult>) {
   const [compareId, setCompareId] = useState(results[0]?.id);
   useEffect(() => {
     setCompareId(results[0]?.id);
@@ -24,9 +20,9 @@ export function ResultsTable({ results }: ResultsTableProps) {
     return Object.fromEntries(results.map((result) => [result.id, result]));
   }, [results]);
   const compareResult = compareId && resultsById[compareId];
-  const highestRatio = useMemo(() => {
+  const ratioBounds = useMemo((): Bounds | undefined => {
     if (!compareResult) return undefined;
-    return Math.max(
+    const highestRatio = Math.max(
       ...results.map((result) => {
         if (result.mean < compareResult.mean) {
           return -(compareResult.mean / result.mean);
@@ -34,7 +30,21 @@ export function ResultsTable({ results }: ResultsTableProps) {
         return result.mean / compareResult.mean;
       }),
     );
+    return {
+      highest: highestRatio,
+      lowest: -highestRatio,
+    };
   }, [results, compareResult]);
+  return { compareId, setCompareId, compareResult, ratioBounds };
+}
+
+export function ResultsTable({ results }: ResultsTableProps) {
+  const meanBounds = useMemo(
+    () => getBounds(results.map((result) => result.mean)),
+    [results],
+  );
+  const { compareId, setCompareId, compareResult, ratioBounds } =
+    useComparison(results);
   if (!results.length) {
     return (
       <div className="empty-state">
@@ -88,33 +98,29 @@ export function ResultsTable({ results }: ResultsTableProps) {
                 </td>
                 <td data-numeric>
                   {compareResult &&
-                    highestRatio != null &&
+                    ratioBounds &&
                     compareId !== result.id &&
                     (result.mean < compareResult.mean ? (
                       <Scaler
                         value={-(compareResult.mean / result.mean)}
-                        bounds={{
-                          highest: highestRatio,
-                          lowest: -highestRatio,
-                        }}
+                        bounds={ratioBounds}
                         type="stat"
                         reverse
                       >
                         Selected is{" "}
-                        {(compareResult.mean / result.mean).toFixed(2)}x slower
+                        {numFormatter.format(compareResult.mean / result.mean)}x
+                        slower
                       </Scaler>
                     ) : (
                       <Scaler
                         value={result.mean / compareResult.mean}
-                        bounds={{
-                          highest: highestRatio,
-                          lowest: -highestRatio,
-                        }}
+                        bounds={ratioBounds}
                         type="stat"
                         reverse
                       >
                         Selected is{" "}
-                        {(result.mean / compareResult.mean).toFixed(2)}x faster
+                        {numFormatter.format(result.mean / compareResult.mean)}x
+                        faster
                       </Scaler>
                     ))}
                 </td>

@@ -6,7 +6,9 @@ export function msToNs(ms: number) {
   return Math.round(ms * 10e6);
 }
 
-export const numFormatter = new Intl.NumberFormat(undefined);
+export const numFormatter = new Intl.NumberFormat(undefined, {
+  maximumFractionDigits: 2,
+});
 
 export const objectKeyCount = (obj: object) => Object.keys(obj).length;
 export const isEmpty = (obj: object) =>
