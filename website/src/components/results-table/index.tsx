@@ -1,6 +1,6 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
 import { useEffect, useMemo, useState } from "react";
-import { type Bounds, getBounds } from "@/data/scale";
+import { getBounds } from "@/data/scale";
 import { msToNs, numFormatter } from "@/utils";
 import { CodeBlock } from "../code";
 import { Radio } from "../radio";
@@ -11,6 +11,12 @@ export interface ResultsTableProps {
   results: Array<ProcessedResult>;
 }
 
+const getRatio = (a: number, b: number) => {
+  if (a === b) return 0;
+  if (a < b) return -(b / a);
+  return a / b;
+};
+
 function useComparison(results: Array<ProcessedResult>) {
   const [compareId, setCompareId] = useState(results[0]?.id);
   useEffect(() => {
@@ -20,20 +26,11 @@ function useComparison(results: Array<ProcessedResult>) {
     return Object.fromEntries(results.map((result) => [result.id, result]));
   }, [results]);
   const compareResult = compareId && resultsById[compareId];
-  const ratioBounds = useMemo((): Bounds | undefined => {
+  const ratioBounds = useMemo(() => {
     if (!compareResult) return undefined;
-    const highestRatio = Math.max(
-      ...results.map((result) => {
-        if (result.mean < compareResult.mean) {
-          return -(compareResult.mean / result.mean);
-        }
-        return result.mean / compareResult.mean;
-      }),
+    return getBounds(
+      results.map((result) => getRatio(result.mean, compareResult.mean)),
     );
-    return {
-      highest: highestRatio,
-      lowest: -highestRatio,
-    };
   }, [results, compareResult]);
   return { compareId, setCompareId, compareResult, ratioBounds };
 }
@@ -56,7 +53,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
   }
   return (
     <div className="card">
-      <table>
+      <table className="results-table">
         <thead>
           <tr>
             <th data-numeric>Rank</th>
@@ -69,6 +66,8 @@ export function ResultsTable({ results }: ResultsTableProps) {
         </thead>
         <tbody>
           {results.map((result) => {
+            const ratio =
+              compareResult && getRatio(result.mean, compareResult.mean);
             return (
               <tr key={result.id}>
                 <td data-numeric>{result.rank}</td>
@@ -100,27 +99,33 @@ export function ResultsTable({ results }: ResultsTableProps) {
                   {compareResult &&
                     ratioBounds &&
                     compareId !== result.id &&
-                    (result.mean < compareResult.mean ? (
+                    (ratio ? (
                       <Scaler
-                        value={-(compareResult.mean / result.mean)}
-                        bounds={ratioBounds}
+                        value={ratio}
+                        bounds={{
+                          highest: Math.max(
+                            ratioBounds.highest,
+                            -ratioBounds.lowest,
+                          ),
+                          lowest: Math.min(
+                            ratioBounds.lowest,
+                            -ratioBounds.highest,
+                          ),
+                        }}
                         type="stat"
                         reverse
                       >
-                        Selected is{" "}
-                        {numFormatter.format(compareResult.mean / result.mean)}x
-                        slower
+                        {numFormatter.format(Math.abs(ratio))}x{" "}
+                        {ratio < 0 ? "faster" : "slower"}
+                        {/* than selected */}
                       </Scaler>
                     ) : (
                       <Scaler
-                        value={result.mean / compareResult.mean}
-                        bounds={ratioBounds}
+                        value={0}
+                        bounds={{ highest: 0, lowest: 0 }}
                         type="stat"
-                        reverse
                       >
-                        Selected is{" "}
-                        {numFormatter.format(result.mean / compareResult.mean)}x
-                        faster
+                        1x
                       </Scaler>
                     ))}
                 </td>
