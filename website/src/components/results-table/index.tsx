@@ -1,8 +1,9 @@
 import type { ProcessedResult } from "@schema-benchmarks/bench";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getBounds } from "@/data/scale";
-import { msToNs, numFormatter } from "@/utils";
+import { msToNs, numFormatter, partition } from "@/utils";
 import { CodeBlock } from "../code";
+import { Radio } from "../radio";
 import { Scaler } from "../scaler";
 import { MdSymbol } from "../symbol";
 
@@ -11,11 +12,30 @@ export interface ResultsTableProps {
 }
 
 export function ResultsTable({ results }: ResultsTableProps) {
-  const periodBounds = useMemo(
-    () => getBounds(results.map((result) => result.period)),
+  const meanBounds = useMemo(
+    () => getBounds(results.map((result) => result.mean)),
     [results],
   );
-  if (!results.length)
+  const [compareId, setCompareId] = useState(results[0]?.id);
+  useEffect(() => {
+    setCompareId(results[0]?.id);
+  }, [results]);
+  const resultsById = useMemo(() => {
+    return Object.fromEntries(results.map((result) => [result.id, result]));
+  }, [results]);
+  const compareResult = compareId && resultsById[compareId];
+  const highestRatio = useMemo(() => {
+    if (!compareResult) return undefined;
+    return Math.max(
+      ...results.map((result) => {
+        if (result.mean < compareResult.mean) {
+          return -(compareResult.mean / result.mean);
+        }
+        return result.mean / compareResult.mean;
+      }),
+    );
+  }, [results, compareResult]);
+  if (!results.length) {
     return (
       <div className="empty-state">
         <MdSymbol>database_off</MdSymbol>
@@ -23,6 +43,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
         <p className="body2">Try a different combination of filters</p>
       </div>
     );
+  }
   return (
     <div className="card">
       <table>
@@ -30,33 +51,76 @@ export function ResultsTable({ results }: ResultsTableProps) {
           <tr>
             <th data-numeric>Rank</th>
             <th>Library</th>
-            <th data-numeric>Period (ns)</th>
+            <th data-numeric>Mean (ns)</th>
             <th>Code</th>
+            <th data-action>Compare</th>
+            <th data-numeric>Ratio</th>
           </tr>
         </thead>
         <tbody>
-          {results.map((result) => (
-            <tr key={result.id}>
-              <td data-numeric>{result.rank}</td>
-              <td>
-                <code className="language-text">{result.libraryName}</code>
-                {result.note ? (
-                  <>
-                    {" "}
-                    <span>({result.note})</span>
-                  </>
-                ) : null}
-              </td>
-              <td data-numeric>
-                <Scaler value={result.period} bounds={periodBounds} reverse>
-                  {numFormatter.format(msToNs(result.period))}
-                </Scaler>
-              </td>
-              <td>
-                {result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
-              </td>
-            </tr>
-          ))}
+          {results.map((result) => {
+            return (
+              <tr key={result.id}>
+                <td data-numeric>{result.rank}</td>
+                <td>
+                  <code className="language-text">{result.libraryName}</code>
+                  {result.note ? ` (${result.note})` : null}
+                </td>
+                <td data-numeric>
+                  <Scaler value={result.mean} bounds={meanBounds} reverse>
+                    {numFormatter.format(msToNs(result.mean))}
+                  </Scaler>
+                </td>
+                <td>
+                  {result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
+                </td>
+                <td data-action>
+                  <Radio
+                    name="compare"
+                    value={result.id}
+                    checked={compareId === result.id}
+                    onChange={(event) => {
+                      setCompareId(
+                        event.target.checked ? result.id : undefined,
+                      );
+                    }}
+                  />
+                </td>
+                <td data-numeric>
+                  {compareResult &&
+                    highestRatio != null &&
+                    compareId !== result.id &&
+                    (result.mean < compareResult.mean ? (
+                      <Scaler
+                        value={-(compareResult.mean / result.mean)}
+                        bounds={{
+                          highest: highestRatio,
+                          lowest: -highestRatio,
+                        }}
+                        type="stat"
+                        reverse
+                      >
+                        Selected is{" "}
+                        {(compareResult.mean / result.mean).toFixed(2)}x slower
+                      </Scaler>
+                    ) : (
+                      <Scaler
+                        value={result.mean / compareResult.mean}
+                        bounds={{
+                          highest: highestRatio,
+                          lowest: -highestRatio,
+                        }}
+                        type="stat"
+                        reverse
+                      >
+                        Selected is{" "}
+                        {(result.mean / compareResult.mean).toFixed(2)}x faster
+                      </Scaler>
+                    ))}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

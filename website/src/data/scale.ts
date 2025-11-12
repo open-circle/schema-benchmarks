@@ -60,3 +60,15 @@ const iconScale = [
 ] as const;
 
 export const getIcon = getScalerFunction(iconScale);
+
+const statScale = [
+  "stat_minus_3",
+  "stat_minus_2",
+  "stat_minus_1",
+  "stat_0",
+  "stat_1",
+  "stat_2",
+  "stat_3",
+] as const;
+
+export const getStatIcon = getScalerFunction(statScale);

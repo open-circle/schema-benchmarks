@@ -1,0 +1,41 @@
+:root {
+  --radio-border-color: color(
+    from var(--page-foreground) srgb r g b / var(--secondary-text)
+  );
+  --radio-checked-color: var(--secondary);
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem;
+  input {
+    display: none;
+  }
+  .radio__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: 2px solid var(--radio-border-color);
+    background-color: transparent;
+    transition: background-color 250ms, border-color 250ms;
+    &::before {
+      content: "";
+      corner-shape: bevel;
+      display: block;
+      margin: 4px;
+      width: calc(100% - 8px);
+      height: calc(100% - 8px);
+      border-radius: 50%;
+      background-color: var(--radio-checked-color);
+      transform: scale(0);
+      transition: transform 250ms;
+    }
+  }
+  input:checked ~ .radio__icon {
+    border-color: var(--radio-checked-color);
+    &::before {
+      transform: scale(1);
+    }
+  }
+}

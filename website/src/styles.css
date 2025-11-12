@@ -11,6 +11,8 @@
 
 @import "components/chip/index.css";
 @import "components/header/index.css";
+@import "components/results-table/index.css";
+@import "components/radio/index.css";
 @import "components/scaler/index.css";
 @import "components/sidebar/index.css";
 @import "components/symbol/index.css";
@@ -85,6 +87,13 @@ th {
   &[data-numeric] {
     text-align: right;
     font-feature-settings: "tnum" 1;
+  }
+  &[data-action] {
+    text-align: center;
+    .radio,
+    .checkbox {
+      margin: 0 auto;
+    }
   }
 }
 

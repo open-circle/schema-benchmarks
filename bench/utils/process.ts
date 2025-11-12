@@ -13,7 +13,7 @@ export interface ProcessedResult {
   note?: string;
   snippet: string;
   rank: number;
-  period: number;
+  mean: number;
 }
 
 const selector: {
@@ -118,7 +118,7 @@ function processResult(
       note: caseMeta.note,
       snippet: caseMeta.snippet,
       rank: index + 1,
-      period: task.result.period,
+      mean: task.result.mean,
     };
   }
 }

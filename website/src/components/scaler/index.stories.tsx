@@ -13,6 +13,12 @@ const meta = {
         max: 100,
       },
     },
+    type: {
+      control: {
+        type: "inline-radio",
+      },
+      options: ["sentiment", "stat"],
+    },
   },
   args: {
     value: 0,
@@ -20,6 +26,7 @@ const meta = {
       highest: 100,
       lowest: 0,
     },
+    type: "sentiment",
     reverse: false,
   },
 } satisfies Meta<typeof Scaler>;
