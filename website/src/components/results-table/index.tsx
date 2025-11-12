@@ -59,12 +59,12 @@ export function ResultsTable({ results }: ResultsTableProps) {
       <table className="results-table">
         <thead>
           <tr>
-            <th data-numeric>Rank</th>
+            <th className="fit-content numeric">Rank</th>
             <th>Library</th>
-            <th data-numeric>Mean (ns)</th>
-            <th>Code</th>
-            <th data-action>Compare</th>
-            <th data-numeric>Ratio</th>
+            <th className="numeric fit-content">Mean (ns)</th>
+            <th className="fit-content">Code</th>
+            <th className="fit-content action">Compare</th>
+            <th className="numeric fit-content">Ratio</th>
           </tr>
         </thead>
         <tbody>
@@ -73,20 +73,20 @@ export function ResultsTable({ results }: ResultsTableProps) {
               compareResult && getRatio(result.mean, compareResult.mean);
             return (
               <tr key={result.id}>
-                <td data-numeric>{result.rank}</td>
+                <td className="fit-content numeric">{result.rank}</td>
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
-                <td data-numeric>
+                <td className="numeric fit-content">
                   <Scaler value={result.mean} bounds={meanBounds} reverse>
                     {numFormatter.format(msToNs(result.mean))}
                   </Scaler>
                 </td>
-                <td>
+                <td className="fit-content">
                   {result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
                 </td>
-                <td data-action>
+                <td className="fit-content action">
                   <Radio
                     name="compare"
                     value={result.id}
@@ -98,7 +98,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     }}
                   />
                 </td>
-                <td data-numeric>
+                <td className="numeric fit-content">
                   {compareResult &&
                     ratioBounds &&
                     compareId !== result.id &&

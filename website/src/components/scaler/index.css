@@ -2,6 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
   @media (prefers-color-scheme: dark) {
     --icon-fill: 1;
   }

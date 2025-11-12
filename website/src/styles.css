@@ -92,16 +92,19 @@ td,
 th {
   padding: 1rem;
   text-align: left;
-  &[data-numeric] {
+  &.numeric {
     text-align: right;
     font-feature-settings: "tnum" 1;
   }
-  &[data-action] {
+  &.action {
     text-align: center;
     .radio,
     .checkbox {
       margin: 0 auto;
     }
+  }
+  &.fit-content {
+    width: 1px;
   }
 }
 
