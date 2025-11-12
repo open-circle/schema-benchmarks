@@ -3,8 +3,7 @@
   --sidebar-foreground: var(--page-foreground);
   --active-link-foreground: var(--primary);
   --active-link-background: color(
-    from var(--active-link-foreground) srgb r g b /
-    0.1
+    from var(--active-link-foreground) srgb r g b / 0.1
   );
 }
 
@@ -50,11 +49,14 @@
           align-items: center;
           padding: 0 1rem;
           text-decoration: none;
-          color: var(--sidebar-foreground);
-          transition:
-            color 250ms,
-            font-weight 250ms;
+          color: color(
+            from var(--sidebar-foreground) srgb r g b / var(--primary-text)
+          );
+          transition: color 250ms, font-weight 250ms;
           .md-symbol {
+            color: color(
+              from var(--sidebar-foreground) srgb r g b / var(--secondary-text)
+            );
             margin-right: 0.5rem;
           }
           &:hover {
@@ -70,6 +72,7 @@
             .md-symbol {
               --icon-fill: 1;
               --icon-weight: 600;
+              color: var(--active-link-foreground);
             }
           }
         }

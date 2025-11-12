@@ -29,7 +29,7 @@
   gap: 0.5rem;
   a {
     text-decoration: none;
-    color: var(--page-foreground);
+    color: color(from var(--page-foreground) srgb r g b / var(--primary-text));
     transition: font-weight 250ms;
     &:hover {
       font-weight: var(--weight-bold);

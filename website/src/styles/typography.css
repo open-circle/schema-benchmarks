@@ -57,6 +57,10 @@
   --caption-family: var(--font-family-body);
   --caption-size: 0.75rem;
   --caption-weight: var(--weight-regular);
+
+  --primary-text: 0.87;
+  --secondary-text: 0.6;
+  --disabled-text: 0.38;
 }
 
 @media (prefers-color-scheme: dark) {

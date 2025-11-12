@@ -17,7 +17,7 @@
   appearance: none;
   border: none;
   background-color: var(--chip-background);
-  color: var(--chip-foreground);
+  color: from(var(--chip-foreground) srgb r g b / var(--primary-text));
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -26,6 +26,9 @@
   --icon-size: 18;
   @extend .body2;
   transition: background-color 250ms, color 250ms;
+  .md-symbol {
+    color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));
+  }
   &.selected,
   &.active {
     background-color: var(--selected-chip-background);
@@ -35,7 +38,7 @@
   }
   &:disabled,
   &[aria-disabled] {
-    opacity: 0.6;
+    opacity: var(--disabled-text);
     pointer-events: none;
   }
 }
