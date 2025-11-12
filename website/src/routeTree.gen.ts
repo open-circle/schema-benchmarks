@@ -13,8 +13,6 @@ import { Route as ValidationRouteImport } from './routes/validation'
 import { Route as ParsingRouteImport } from './routes/parsing'
 import { Route as InitializationRouteImport } from './routes/initialization'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiValidRouteImport } from './routes/api/valid'
-import { Route as ApiInvalidRouteImport } from './routes/api/invalid'
 
 const ValidationRoute = ValidationRouteImport.update({
   id: '/validation',
@@ -36,32 +34,18 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiValidRoute = ApiValidRouteImport.update({
-  id: '/api/valid',
-  path: '/api/valid',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiInvalidRoute = ApiInvalidRouteImport.update({
-  id: '/api/invalid',
-  path: '/api/invalid',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/initialization': typeof InitializationRoute
   '/parsing': typeof ParsingRoute
   '/validation': typeof ValidationRoute
-  '/api/invalid': typeof ApiInvalidRoute
-  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/initialization': typeof InitializationRoute
   '/parsing': typeof ParsingRoute
   '/validation': typeof ValidationRoute
-  '/api/invalid': typeof ApiInvalidRoute
-  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,34 +53,13 @@ export interface FileRoutesById {
   '/initialization': typeof InitializationRoute
   '/parsing': typeof ParsingRoute
   '/validation': typeof ValidationRoute
-  '/api/invalid': typeof ApiInvalidRoute
-  '/api/valid': typeof ApiValidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/initialization'
-    | '/parsing'
-    | '/validation'
-    | '/api/invalid'
-    | '/api/valid'
+  fullPaths: '/' | '/initialization' | '/parsing' | '/validation'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/initialization'
-    | '/parsing'
-    | '/validation'
-    | '/api/invalid'
-    | '/api/valid'
-  id:
-    | '__root__'
-    | '/'
-    | '/initialization'
-    | '/parsing'
-    | '/validation'
-    | '/api/invalid'
-    | '/api/valid'
+  to: '/' | '/initialization' | '/parsing' | '/validation'
+  id: '__root__' | '/' | '/initialization' | '/parsing' | '/validation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,8 +67,6 @@ export interface RootRouteChildren {
   InitializationRoute: typeof InitializationRoute
   ParsingRoute: typeof ParsingRoute
   ValidationRoute: typeof ValidationRoute
-  ApiInvalidRoute: typeof ApiInvalidRoute
-  ApiValidRoute: typeof ApiValidRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,20 +99,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/valid': {
-      id: '/api/valid'
-      path: '/api/valid'
-      fullPath: '/api/valid'
-      preLoaderRoute: typeof ApiValidRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/invalid': {
-      id: '/api/invalid'
-      path: '/api/invalid'
-      fullPath: '/api/invalid'
-      preLoaderRoute: typeof ApiInvalidRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -160,8 +107,6 @@ const rootRouteChildren: RootRouteChildren = {
   InitializationRoute: InitializationRoute,
   ParsingRoute: ParsingRoute,
   ValidationRoute: ValidationRoute,
-  ApiInvalidRoute: ApiInvalidRoute,
-  ApiValidRoute: ApiValidRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
