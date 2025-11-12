@@ -21,18 +21,35 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: var(--shape-pill);
+  @supports (corner-shape: bevel) {
+    padding: 0.5rem 1rem;
+  }
   --icon-size: 18;
   @extend .body2;
-  transition: background-color 250ms, color 250ms;
+  transition: background-color 250ms, color 250ms, font-weight 250ms;
   .md-symbol {
     color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));
+    margin-left: -0.25rem;
+    &:dir(rtl) {
+      margin-right: -0.25rem;
+    }
+  }
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--chip-background),
+      var(--primary) 5%
+    );
+    font-weight: var(--weight-medium);
+    --icon-weight: 600;
   }
   &.selected,
   &.active {
     background-color: var(--selected-chip-background);
     color: var(--selected-chip-foreground);
+    font-weight: var(--weight-bold);
     --icon-fill: 1;
     --icon-weight: 600;
   }
