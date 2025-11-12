@@ -1,14 +1,18 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import * as v from "valibot";
 import { ResultsTable } from "@/components/results-table";
+import { MdSymbol } from "@/components/symbol";
 import {
+  dataTypeLabels,
+  errorTypeLabels,
   getResults,
+  libraryTypeLabels,
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
   optionalLibraryTypeSchema,
-  selectParsingResults,
 } from "@/data/results";
+import { isEmpty } from "@/utils";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
@@ -19,7 +23,6 @@ const searchSchema = v.object({
 export const Route = createFileRoute("/parsing")({
   component: RouteComponent,
   validateSearch: searchSchema,
-  search: { middlewares: [stripSearchParams(v.getDefaults(searchSchema))] },
   async loader({ context: { queryClient }, abortController }) {
     await queryClient.prefetchQuery(getResults(abortController.signal));
     return { crumb: "Parsing" };
@@ -30,7 +33,73 @@ function RouteComponent() {
   const { libraryType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getResults(),
-    select: selectParsingResults(libraryType, dataType, errorType),
+    select: (results) => results.parsing,
   });
-  return <ResultsTable results={data} />;
+  return (
+    <>
+      <div className="page-filters">
+        <div className="page-filter__group">
+          <h6 className="subtitle2">Library Type</h6>
+          <div className="chip-collection">
+            {optionalLibraryTypeSchema.wrapped.options.map((option) => (
+              <Link
+                key={option}
+                to={Route.fullPath}
+                search={{ libraryType: option }}
+                className="chip"
+                replace
+              >
+                <MdSymbol>{libraryTypeLabels[option].icon}</MdSymbol>
+                {libraryTypeLabels[option].label}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div className="page-filter__group">
+          <h6 className="subtitle2">Data Type</h6>
+          <div className="chip-collection">
+            {optionalDataTypeSchema.wrapped.options.map((option) => (
+              <Link
+                key={option}
+                to={Route.fullPath}
+                search={({ libraryType, errorType }) => ({
+                  libraryType,
+                  dataType: option,
+                  errorType,
+                })}
+                className="chip"
+                replace
+              >
+                <MdSymbol>{dataTypeLabels[option].icon}</MdSymbol>
+                {dataTypeLabels[option].label}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div className="page-filter__group">
+          <h6 className="subtitle2">Error Type</h6>
+          <div className="chip-collection">
+            {optionalErrorTypeSchema.wrapped.options.map((option) => (
+              <Link
+                key={option}
+                to={Route.fullPath}
+                search={({ libraryType, dataType }) => ({
+                  libraryType,
+                  dataType,
+                  errorType: option,
+                })}
+                className="chip"
+                replace
+                disabled={isEmpty(data[libraryType][dataType][option])}
+              >
+                <MdSymbol>{errorTypeLabels[option].icon}</MdSymbol>
+                {errorTypeLabels[option].label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+      <ResultsTable results={data[libraryType][dataType][errorType]} />
+    </>
+  );
 }

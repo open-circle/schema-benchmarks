@@ -4,6 +4,7 @@ import { getBounds } from "@/data/scale";
 import { msToNs, numFormatter } from "@/utils";
 import { CodeBlock } from "../code";
 import { Scaler } from "../scaler";
+import { MdSymbol } from "../symbol";
 
 export interface ResultsTableProps {
   results: Array<ProcessedResult>;
@@ -14,6 +15,14 @@ export function ResultsTable({ results }: ResultsTableProps) {
     () => getBounds(results.map((result) => result.period)),
     [results],
   );
+  if (!results.length)
+    return (
+      <div className="empty-state">
+        <MdSymbol>database_off</MdSymbol>
+        <p className="headline5">No results found</p>
+        <p className="body2">Try a different combination of filters</p>
+      </div>
+    );
   return (
     <div className="card">
       <table>

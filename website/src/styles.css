@@ -103,6 +103,17 @@ td {
     padding: 0.5rem;
   }
 }
+.empty-state {
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  --icon-size: 64;
+}
 
 .sidebar-container {
   display: flex;
@@ -131,5 +142,21 @@ main {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
+  }
+}
+
+.page-filters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  h6 {
+    margin: 0;
+  }
+  .page-filter__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }

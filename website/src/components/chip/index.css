@@ -33,11 +33,15 @@
     --icon-fill: 1;
     --icon-weight: 600;
   }
+  &:disabled,
+  &[aria-disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .chip-collection {
   display: flex;
-  padding: 0.5rem;
   gap: 0.25rem;
   flex-wrap: wrap;
 }

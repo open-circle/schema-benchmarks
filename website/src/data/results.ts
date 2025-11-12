@@ -9,21 +9,47 @@ import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
 
-export const dataTypeSchema = v.picklist(["success", "error"]);
+export const dataTypeSchema = v.picklist([
+  "success",
+  "error",
+]) satisfies v.GenericSchema<DataType>;
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "success");
+export const dataTypeLabels: Record<DataType, { label: string; icon: string }> =
+  {
+    success: { label: "Success", icon: "check_circle" },
+    error: { label: "Error", icon: "error" },
+  };
 
 export const errorTypeSchema = v.picklist([
   "abortEarly",
   "allErrors",
   "unknown",
-]);
+]) satisfies v.GenericSchema<ErrorType>;
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
+export const errorTypeLabels: Record<
+  ErrorType,
+  { label: string; icon: string }
+> = {
+  abortEarly: { label: "Abort Early", icon: "warning" },
+  allErrors: { label: "All Errors", icon: "error" },
+  unknown: { label: "Unknown", icon: "question_mark" },
+};
 
-export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
+export const libraryTypeSchema = v.picklist([
+  "runtime",
+  "precompiled",
+]) satisfies v.GenericSchema<LibraryType>;
 export const optionalLibraryTypeSchema = v.optional(
   libraryTypeSchema,
   "runtime",
 );
+export const libraryTypeLabels: Record<
+  LibraryType,
+  { label: string; icon: string }
+> = {
+  runtime: { label: "Runtime", icon: "deployed_code" },
+  precompiled: { label: "Precompiled", icon: "build" },
+};
 
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
   if (process.env.NODE_ENV === "production") {
@@ -42,17 +68,3 @@ export const getResults = (signal?: AbortSignal) =>
     queryKey: ["results"],
     queryFn: () => getResultsFn({ signal }),
   });
-
-export const selectInitializationResults =
-  (libraryType: LibraryType) => (results: ProcessedResults) =>
-    results.initialization[libraryType];
-
-export const selectValidationResults =
-  (libraryType: LibraryType, dataType: DataType) =>
-  (results: ProcessedResults) =>
-    results.validation[libraryType][dataType];
-
-export const selectParsingResults =
-  (libraryType: LibraryType, dataType: DataType, errorType: ErrorType) =>
-  (results: ProcessedResults) =>
-    results.parsing[libraryType][dataType][errorType];
