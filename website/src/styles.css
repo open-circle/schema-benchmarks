@@ -49,10 +49,14 @@ pre[class*="language-"] {
 }
 
 .card {
-  background-color: var(--card-background);
-  background-color: --elevation-overlay(
+  background-color: light-dark(
     var(--card-background),
-    var(--elevation-2-overlay-opacity)
+    color-mix(
+      in srgb,
+      var(--card-background),
+      var(--elevation-overlay-color)
+        calc(var(--elevation-2-overlay-opacity) * 100%)
+    )
   );
   border-radius: var(--shape-medium);
   box-shadow: var(--card-elevation);

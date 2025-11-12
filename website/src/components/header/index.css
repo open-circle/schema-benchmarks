@@ -8,10 +8,14 @@
 }
 
 .page-header {
-  background-color: var(--page-header-background);
-  background-color: --elevation-overlay(
+  background-color: light-dark(
     var(--page-header-background),
-    var(--elevation-4-overlay-opacity)
+    color-mix(
+      in srgb,
+      var(--page-header-background),
+      var(--elevation-overlay-color)
+        calc(var(--elevation-4-overlay-opacity) * 100%)
+    )
   );
   box-shadow: var(--elevation-4);
   display: flex;

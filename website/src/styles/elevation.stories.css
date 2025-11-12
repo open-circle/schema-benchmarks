@@ -8,10 +8,14 @@
   width: 100px;
   height: 100px;
   border-radius: var(--shape-medium);
-  background-color: var(--card-background);
-  background-color: --elevation-overlay(
+  background-color: light-dark(
     var(--card-background),
-    var(--elevation-overlay-opacity)
+    color-mix(
+      in srgb,
+      var(--card-background),
+      var(--elevation-overlay-color)
+        calc(var(--elevation-overlay-opacity) * 100%)
+    )
   );
   display: flex;
   align-items: center;
@@ -22,17 +26,26 @@
 }
 
 .elevation-transition {
-  box-shadow: var(--elevation-2);
-  background-color: --elevation-overlay(
+  background-color: light-dark(
     var(--card-background),
-    var(--elevation-2-overlay-opacity)
+    color-mix(
+      in srgb,
+      var(--card-background),
+      var(--elevation-overlay-color)
+        calc(var(--elevation-2-overlay-opacity) * 100%)
+    )
   );
   transition: var(--elevation-transition), var(--elevation-overlay-transition);
   &:hover {
     box-shadow: var(--elevation-6);
-    background-color: --elevation-overlay(
+    background-color: light-dark(
       var(--card-background),
-      var(--elevation-6-overlay-opacity)
+      color-mix(
+        in srgb,
+        var(--card-background),
+        var(--elevation-overlay-color)
+          calc(var(--elevation-6-overlay-opacity) * 100%)
+      )
     );
   }
 }
