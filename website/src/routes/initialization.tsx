@@ -8,6 +8,7 @@ import {
   libraryTypeLabels,
   optionalLibraryTypeSchema,
 } from "@/data/results";
+import { useFocusGroup } from "@/hooks/use-focus-group";
 import { isEmpty } from "@/utils";
 
 const searchSchema = v.object({
@@ -36,12 +37,13 @@ function RouteComponent() {
     ...getResults(),
     select: (results) => results.initialization,
   });
+  const libraryTypeGroupRef = useFocusGroup();
   return (
     <>
       <div className="page-filters">
         <div className="page-filter__group">
           <h6 className="subtitle2">Library Type</h6>
-          <div className="chip-collection">
+          <div className="chip-collection" ref={libraryTypeGroupRef}>
             {optionalLibraryTypeSchema.wrapped.options.map((option) => (
               <Link
                 key={option}

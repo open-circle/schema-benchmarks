@@ -12,6 +12,7 @@ import {
   optionalErrorTypeSchema,
   optionalLibraryTypeSchema,
 } from "@/data/results";
+import { useFocusGroup } from "@/hooks/use-focus-group";
 import { isEmpty } from "@/utils";
 
 const searchSchema = v.object({
@@ -42,12 +43,15 @@ function RouteComponent() {
     ...getResults(),
     select: (results) => results.parsing,
   });
+  const libraryTypeGroupRef = useFocusGroup();
+  const dataTypeGroupRef = useFocusGroup();
+  const errorTypeGroupRef = useFocusGroup();
   return (
     <>
       <div className="page-filters">
         <div className="page-filter__group">
           <h6 className="subtitle2">Library Type</h6>
-          <div className="chip-collection">
+          <div className="chip-collection" ref={libraryTypeGroupRef}>
             {optionalLibraryTypeSchema.wrapped.options.map((option) => (
               <Link
                 key={option}
@@ -68,7 +72,7 @@ function RouteComponent() {
         </div>
         <div className="page-filter__group">
           <h6 className="subtitle2">Data Type</h6>
-          <div className="chip-collection">
+          <div className="chip-collection" ref={dataTypeGroupRef}>
             {optionalDataTypeSchema.wrapped.options.map((option) => (
               <Link
                 key={option}
@@ -89,7 +93,7 @@ function RouteComponent() {
         </div>
         <div className="page-filter__group">
           <h6 className="subtitle2">Error Type</h6>
-          <div className="chip-collection">
+          <div className="chip-collection" ref={errorTypeGroupRef}>
             {optionalErrorTypeSchema.wrapped.options.map((option) => (
               <Link
                 key={option}

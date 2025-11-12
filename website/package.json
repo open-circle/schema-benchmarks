@@ -15,6 +15,7 @@
     "material-colors": "^1.2.6",
     "normalize.css": "^8.0.1",
     "prismjs": "^1.30.0",
+    "rad-event-listeners": "^1.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "valibot": "^1.1.0",
