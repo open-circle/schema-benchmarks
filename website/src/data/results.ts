@@ -51,11 +51,19 @@ export const libraryTypeLabels: Record<
 
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
   if (process.env.NODE_ENV === "production") {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/results.json",
-      { signal },
-    );
-    return (await response.json()) as ProcessedResults;
+    try {
+      const response = await fetch(
+        "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/results.json",
+        { signal },
+      );
+      if (!response.ok)
+        throw new Error("Failed to fetch results: ", {
+          cause: response.status,
+        });
+      return (await response.json()) as ProcessedResults;
+    } catch (error) {
+      console.error("Falling back to local results: ", error);
+    }
   }
 
   return results;
