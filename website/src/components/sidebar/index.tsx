@@ -39,7 +39,7 @@ export function TanstackSidebar() {
   return (
     <Sidebar>
       <nav>
-        <ul className="subtitle2">
+        <ul className="subtitle1">
           {sidebarLinks.map(({ name, icon, ...link }) => (
             <li key={link.to}>
               <Link {...link} activeOptions={{ includeSearch: false }}>
