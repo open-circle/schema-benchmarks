@@ -20,6 +20,15 @@ export function TanstackHeader() {
           name: match.loaderData.crumb,
         })),
   });
+  const actions = useMatches({
+    select: (matches) =>
+      matches.findLast(
+        (
+          match,
+        ): match is typeof match & { loaderData: { actions: ReactNode } } =>
+          !!(match.loaderData as { actions?: ReactNode })?.actions,
+      )?.loaderData.actions,
+  });
   const crumbs = allCrumbs.slice(0, -1);
   const currentCrumb = allCrumbs.at(-1);
   return (
@@ -35,6 +44,7 @@ export function TanstackHeader() {
         ))}
         {currentCrumb && <span className="headline6">{currentCrumb.name}</span>}
       </nav>
+      {actions && <div className="page-header__actions">{actions}</div>}
     </Header>
   );
 }
