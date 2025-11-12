@@ -36,7 +36,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
         </thead>
         <tbody>
           {results.map((result) => (
-            <tr key={result.libraryName + (result.note ?? "")}>
+            <tr key={result.id}>
               <td data-numeric>{result.rank}</td>
               <td>
                 <code className="language-text">{result.libraryName}</code>

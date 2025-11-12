@@ -8,6 +8,7 @@ export type DataType = "success" | "error";
 export type ErrorType = "abortEarly" | "allErrors";
 
 export interface ProcessedResult {
+  id: string;
   libraryName: string;
   note?: string;
   snippet: string;
@@ -112,6 +113,7 @@ function processResult(
     const caseMeta = registry.getCaseMeta(task.name);
 
     benchResults[index] = {
+      id: task.name,
       libraryName: caseMeta.libraryName,
       note: caseMeta.note,
       snippet: caseMeta.snippet,
