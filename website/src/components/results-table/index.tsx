@@ -30,6 +30,9 @@ function useComparison(results: Array<ProcessedResult>) {
     if (!compareResult) return undefined;
     return getBounds(
       results.map((result) => getRatio(result.mean, compareResult.mean)),
+      {
+        percentiles: { low: 5, high: 95 },
+      },
     );
   }, [results, compareResult]);
   return { compareId, setCompareId, compareResult, ratioBounds };
