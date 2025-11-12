@@ -5,7 +5,7 @@ import { registry } from "./registry";
 
 export type LibraryType = "runtime" | "precompiled";
 export type DataType = "success" | "error";
-export type ErrorType = "abortEarly" | "allErrors" | "unknown";
+export type ErrorType = "abortEarly" | "allErrors";
 
 export interface ProcessedResult {
   libraryName: string;
@@ -51,24 +51,20 @@ const getEmptyResults = (): ProcessedResults => ({
       success: {
         abortEarly: [],
         allErrors: [],
-        unknown: [],
       },
       error: {
         abortEarly: [],
         allErrors: [],
-        unknown: [],
       },
     },
     precompiled: {
       success: {
         abortEarly: [],
         allErrors: [],
-        unknown: [],
       },
       error: {
         abortEarly: [],
         allErrors: [],
-        unknown: [],
       },
     },
   },

@@ -10,7 +10,6 @@ import {
   optionalDataTypeSchema,
   optionalLibraryTypeSchema,
 } from "@/data/results";
-import { isEmpty } from "@/utils";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
@@ -75,7 +74,6 @@ function RouteComponent() {
                 })}
                 className="chip"
                 replace
-                disabled={isEmpty(data[libraryType][option])}
               >
                 <MdSymbol>{dataTypeLabels[option].icon}</MdSymbol>
                 {dataTypeLabels[option].label}

@@ -236,7 +236,7 @@ for (const [dataType, data] of [
   );
 
   bench(
-    { dataType, libraryType: "precompiled", abortType: "unknown" },
+    { dataType, libraryType: "precompiled", abortType: "allErrors" },
     ({ library }) => {
       library("typia", ({ add }) => {
         add(

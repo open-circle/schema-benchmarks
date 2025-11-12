@@ -21,18 +21,16 @@ export const dataTypeLabels: Record<DataType, { label: string; icon: string }> =
   };
 
 export const errorTypeSchema = v.picklist([
-  "abortEarly",
   "allErrors",
-  "unknown",
+  "abortEarly",
 ]) satisfies v.GenericSchema<ErrorType>;
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
 export const errorTypeLabels: Record<
   ErrorType,
   { label: string; icon: string }
 > = {
-  abortEarly: { label: "Abort Early", icon: "warning" },
   allErrors: { label: "All Errors", icon: "error" },
-  unknown: { label: "Unknown", icon: "question_mark" },
+  abortEarly: { label: "Abort Early", icon: "warning" },
 };
 
 export const libraryTypeSchema = v.picklist([
