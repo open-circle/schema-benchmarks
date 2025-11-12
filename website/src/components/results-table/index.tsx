@@ -54,6 +54,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
       </div>
     );
   }
+  const showComparisonColumns = results.length > 1;
   return (
     <div className="card">
       <table className="results-table">
@@ -63,8 +64,12 @@ export function ResultsTable({ results }: ResultsTableProps) {
             <th>Library</th>
             <th className="numeric fit-content">Mean (ns)</th>
             <th className="fit-content">Code</th>
-            <th className="fit-content action">Compare</th>
-            <th className="numeric fit-content">Ratio</th>
+            {showComparisonColumns && (
+              <>
+                <th className="fit-content action">Compare</th>
+                <th className="numeric fit-content">Ratio</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -86,51 +91,55 @@ export function ResultsTable({ results }: ResultsTableProps) {
                 <td className="fit-content">
                   {result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
                 </td>
-                <td className="fit-content action">
-                  <Radio
-                    name="compare"
-                    value={result.id}
-                    checked={compareId === result.id}
-                    onChange={(event) => {
-                      setCompareId(
-                        event.target.checked ? result.id : undefined,
-                      );
-                    }}
-                  />
-                </td>
-                <td className="numeric fit-content">
-                  {compareResult &&
-                    ratioBounds &&
-                    compareId !== result.id &&
-                    (ratio ? (
-                      <Scaler
-                        value={ratio}
-                        bounds={{
-                          highest: Math.max(
-                            ratioBounds.highest,
-                            -ratioBounds.lowest,
-                          ),
-                          lowest: Math.min(
-                            ratioBounds.lowest,
-                            -ratioBounds.highest,
-                          ),
+                {showComparisonColumns && (
+                  <>
+                    <td className="fit-content action">
+                      <Radio
+                        name="compare"
+                        value={result.id}
+                        checked={compareId === result.id}
+                        onChange={(event) => {
+                          setCompareId(
+                            event.target.checked ? result.id : undefined,
+                          );
                         }}
-                        type="stat"
-                        reverse
-                      >
-                        {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
-                        {/* than selected */}
-                      </Scaler>
-                    ) : (
-                      <Scaler
-                        value={0}
-                        bounds={{ highest: 0, lowest: 0 }}
-                        type="stat"
-                      >
-                        1x
-                      </Scaler>
-                    ))}
-                </td>
+                      />
+                    </td>
+                    <td className="numeric fit-content">
+                      {compareResult &&
+                        ratioBounds &&
+                        compareId !== result.id &&
+                        (ratio ? (
+                          <Scaler
+                            value={ratio}
+                            bounds={{
+                              highest: Math.max(
+                                ratioBounds.highest,
+                                -ratioBounds.lowest,
+                              ),
+                              lowest: Math.min(
+                                ratioBounds.lowest,
+                                -ratioBounds.highest,
+                              ),
+                            }}
+                            type="stat"
+                            reverse
+                          >
+                            {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
+                            {/* than selected */}
+                          </Scaler>
+                        ) : (
+                          <Scaler
+                            value={0}
+                            bounds={{ highest: 0, lowest: 0 }}
+                            type="stat"
+                          >
+                            1x
+                          </Scaler>
+                        ))}
+                    </td>
+                  </>
+                )}
               </tr>
             );
           })}
