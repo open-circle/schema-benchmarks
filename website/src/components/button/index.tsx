@@ -12,6 +12,6 @@ export interface ButtonProps {
 
 export const getButtonClasses = ({
   variant = "text",
-  color,
+  color = variant !== "toggle" ? "primary" : undefined,
 }: ButtonProps | ToggleButtonProps = {}) =>
   clsx("button", `button--${variant}`, color && `button--${color}`);
