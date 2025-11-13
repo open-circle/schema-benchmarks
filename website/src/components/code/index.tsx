@@ -1,3 +1,4 @@
+import { ClientOnly } from "@tanstack/react-router";
 import prism from "prismjs";
 import { useMemo } from "react";
 
@@ -18,26 +19,40 @@ function useHighlight(code: string, language: string) {
 export function InlineCode({ children, language = "typescript" }: CodeProps) {
   const highlighted = useHighlight(children, language);
   return (
-    <code
-      dir="ltr"
-      className={`language-${language}`}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
-      dangerouslySetInnerHTML={{ __html: highlighted }}
-      suppressHydrationWarning
-    />
+    <ClientOnly
+      fallback={
+        <code dir="ltr" className={`language-${language}`}>
+          {children}
+        </code>
+      }
+    >
+      <code
+        dir="ltr"
+        className={`language-${language}`}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
+        dangerouslySetInnerHTML={{ __html: highlighted }}
+      />
+    </ClientOnly>
   );
 }
 
 export function CodeBlock({ children, language = "typescript" }: CodeProps) {
   const highlighted = useHighlight(children, language);
   return (
-    <pre dir="ltr" className={`language-${language}`} suppressHydrationWarning>
-      <code
-        className={`language-${language}`}
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
-        dangerouslySetInnerHTML={{ __html: highlighted }}
-        suppressHydrationWarning
-      />
-    </pre>
+    <ClientOnly
+      fallback={
+        <pre dir="ltr" className={`language-${language}`}>
+          {children}
+        </pre>
+      }
+    >
+      <pre dir="ltr" className={`language-${language}`}>
+        <code
+          className={`language-${language}`}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
+          dangerouslySetInnerHTML={{ __html: highlighted }}
+        />
+      </pre>
+    </ClientOnly>
   );
 }

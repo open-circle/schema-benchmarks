@@ -37,12 +37,14 @@
       margin-left: 0;
       margin-right: -0.5rem;
     }
-    &.page-header__toggle--expanded {
-      margin-left: -3rem;
-      opacity: 0;
-      &:dir(rtl) {
-        margin-left: 0;
-        margin-right: -3rem;
+    @media (--laptop) or (--desktop) {
+      &.page-header__toggle--expanded {
+        margin-left: -3rem;
+        opacity: 0;
+        &:dir(rtl) {
+          margin-left: 0;
+          margin-right: -3rem;
+        }
       }
     }
   }

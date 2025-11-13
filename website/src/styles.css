@@ -105,11 +105,11 @@ main {
     margin: 1rem;
   }
 
-  @media (--tablet1) {
+  @media (--tablet-small) {
     margin: 2rem;
   }
 
-  @media (--tablet2) {
+  @media (--tablet-large) {
     max-width: 56.5rem; /* 840px + 4rem */
     margin: 0 auto;
     padding: 2rem;
@@ -137,7 +137,7 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1rem;
-  @media (--phone) or (--tablet1) or (--tablet2) {
+  @media (--phone) or (--tablet-small) or (--tablet-large) {
     margin: 0 1rem;
     margin-bottom: 1rem;
   }

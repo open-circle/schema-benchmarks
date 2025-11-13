@@ -1,4 +1,4 @@
-import { Link, useMatches } from "@tanstack/react-router";
+import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import clsx from "clsx";
 import { Fragment, type ReactNode, useContext } from "react";
 import { SidebarExpandedContext } from "../sidebar/context";
@@ -8,17 +8,29 @@ export function Header({ children }: { children: ReactNode }) {
   const { expanded, setExpanded } = useContext(SidebarExpandedContext);
   return (
     <header className="page-header">
-      <button
-        type="button"
-        className={clsx("button button--toggle page-header__toggle", {
-          "page-header__toggle--expanded": expanded,
-        })}
-        onClick={() => setExpanded(true)}
-        aria-label="Expand sidebar"
-        tabIndex={expanded ? -1 : 0}
+      <ClientOnly
+        fallback={
+          <button
+            type="button"
+            className="button button--toggle page-header__toggle"
+            aria-label="Expand sidebar"
+          >
+            <MdSymbol>menu</MdSymbol>
+          </button>
+        }
       >
-        <MdSymbol>menu</MdSymbol>
-      </button>
+        <button
+          type="button"
+          className={clsx("button button--toggle page-header__toggle", {
+            "page-header__toggle--expanded": expanded,
+          })}
+          onClick={() => setExpanded(true)}
+          aria-label="Expand sidebar"
+          tabIndex={expanded ? -1 : 0}
+        >
+          <MdSymbol>menu</MdSymbol>
+        </button>
+      </ClientOnly>
       {children}
     </header>
   );
