@@ -1,0 +1,53 @@
+table {
+  border-collapse: collapse;
+}
+
+thead {
+  border-bottom: 1px solid var(--divider);
+  tr {
+    min-height: 56px;
+  }
+}
+
+tr {
+  min-height: 52px;
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--divider);
+  }
+}
+
+td,
+th {
+  padding: 1rem;
+  text-align: left;
+  &.numeric {
+    text-align: right;
+    font-feature-settings: "tnum" 1;
+  }
+  &.action {
+    text-align: center;
+    .radio,
+    .checkbox {
+      margin: 0 auto;
+    }
+  }
+  &.fit-content {
+    width: 1px;
+  }
+}
+
+th {
+  @extend .typo-subtitle2;
+  font-weight: var(--weight-medium);
+}
+
+td {
+  @extend .typo-body2;
+  &:has(> pre[class*="language-"]) {
+    padding: 0.5rem;
+  }
+  > pre[class*="language-"] {
+    margin: 0;
+    padding: 0.5rem;
+  }
+}

@@ -3,9 +3,9 @@ import { msToNs, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { getBounds } from "@/data/scale";
 import { CodeBlock } from "../code";
+import { EmptyState } from "../empty-state";
 import { Radio } from "../radio";
 import { Scaler } from "../scaler";
-import { MdSymbol } from "../symbol";
 
 export interface ResultsTableProps {
   results: Array<ProcessedResult>;
@@ -47,11 +47,11 @@ export function ResultsTable({ results }: ResultsTableProps) {
     useComparison(results);
   if (!results.length) {
     return (
-      <div className="empty-state">
-        <MdSymbol>database_off</MdSymbol>
-        <p className="typo-headline5">No results found</p>
-        <p className="typo-body2">Try a different combination of filters</p>
-      </div>
+      <EmptyState
+        icon="database_off"
+        title="No results found"
+        subtitle="Try a different combination of filters"
+      />
     );
   }
   const showComparisonColumns = results.length > 1;

@@ -12,13 +12,16 @@
 
 @import "components/button/index.css";
 @import "components/chip/index.css";
+@import "components/empty-state/index.css";
 @import "components/header/index.css";
-@import "components/results-table/index.css";
+@import "components/table/index.css";
 @import "components/radio/index.css";
 @import "components/scaler/index.css";
 @import "components/sidebar/index.css";
 @import "components/snackbar/index.css";
 @import "components/symbol/index.css";
+
+@import "components/results-table/index.css";
 
 * {
   box-sizing: border-box;
@@ -69,81 +72,6 @@ pre[class*="language-"] {
   overflow: hidden;
   table {
     width: 100%;
-  }
-}
-
-table {
-  border-collapse: collapse;
-}
-
-thead {
-  border-bottom: 1px solid var(--divider);
-  tr {
-    min-height: 56px;
-  }
-}
-
-tr {
-  min-height: 52px;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--divider);
-  }
-}
-
-td,
-th {
-  padding: 1rem;
-  text-align: left;
-  &.numeric {
-    text-align: right;
-    font-feature-settings: "tnum" 1;
-  }
-  &.action {
-    text-align: center;
-    .radio,
-    .checkbox {
-      margin: 0 auto;
-    }
-  }
-  &.fit-content {
-    width: 1px;
-  }
-}
-
-th {
-  @extend .typo-subtitle2;
-  font-weight: var(--weight-medium);
-}
-
-td {
-  @extend .typo-body2;
-  &:has(> pre[class*="language-"]) {
-    padding: 0.5rem;
-  }
-  > pre[class*="language-"] {
-    margin: 0;
-    padding: 0.5rem;
-  }
-}
-.empty-state {
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  text-align: center;
-  --icon-size: 64;
-  .md-symbol {
-    color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
-    );
-  }
-  p:last-child {
-    color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
-    );
   }
 }
 
