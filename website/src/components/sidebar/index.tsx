@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
 import { MdSymbol } from "../symbol";
-import { SidebarExpandedContext } from "./context";
+import { SidebarOpenContext } from "./context";
 
 const sidebarLinks = [
   { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
@@ -31,23 +31,23 @@ const sidebarLinks = [
 
 function SidebarWithoutContext({
   children,
-  expanded,
-  setExpanded,
+  open,
+  setOpen,
 }: {
   children?: ReactNode;
-  expanded: boolean;
-  setExpanded: (newValue: boolean) => void;
+  open: boolean;
+  setOpen: (newValue: boolean) => void;
 }) {
   useEffect(
     () =>
       radEventListeners(document, {
         keydown(event) {
           if (event.key === "Escape") {
-            setExpanded(false);
+            setOpen(false);
           }
         },
       }),
-    [setExpanded],
+    [setOpen],
   );
 
   return (
@@ -57,20 +57,20 @@ function SidebarWithoutContext({
       <div
         className={clsx(
           "sidebar-backdrop",
-          expanded && "sidebar-backdrop--visible",
+          open && "sidebar-backdrop--visible",
         )}
-        onClick={() => setExpanded(false)}
+        onClick={() => setOpen(false)}
       />
-      <aside className={clsx("sidebar", expanded && "sidebar--expanded")}>
+      <aside className={clsx("sidebar", open && "sidebar--open")}>
         <div className="logo sidebar__logo">
           <img src="/logo.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
           <button
             type="button"
             className="button button--toggle sidebar__toggle"
-            onClick={() => setExpanded(false)}
+            onClick={() => setOpen(false)}
             aria-label="Collapse sidebar"
-            tabIndex={expanded ? 0 : -1}
+            tabIndex={open ? 0 : -1}
           >
             <MdSymbol flipRtl>chevron_left</MdSymbol>
           </button>
@@ -82,16 +82,16 @@ function SidebarWithoutContext({
 }
 
 export function Sidebar({ children }: { children?: ReactNode }) {
-  const { expanded, setExpanded } = useContext(SidebarExpandedContext);
+  const { open, setOpen } = useContext(SidebarOpenContext);
   return (
     <ClientOnly
       fallback={
-        <SidebarWithoutContext expanded={false} setExpanded={() => {}}>
+        <SidebarWithoutContext open={false} setOpen={() => {}}>
           {children}
         </SidebarWithoutContext>
       }
     >
-      <SidebarWithoutContext expanded={expanded} setExpanded={setExpanded}>
+      <SidebarWithoutContext open={open} setOpen={setOpen}>
         {children}
       </SidebarWithoutContext>
     </ClientOnly>

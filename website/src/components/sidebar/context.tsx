@@ -1,15 +1,15 @@
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { createContext, useState } from "react";
 
-interface SidebarExpandedContext {
-  expanded: boolean;
-  setExpanded: (newValue: boolean) => void;
+interface SidebarOpenContext {
+  open: boolean;
+  setOpen: (newValue: boolean) => void;
 }
 
-const storageKey = "benchmarks::sidebar-expanded";
+const storageKey = "benchmarks::sidebar-open";
 const breakpoint = 1240;
 
-const getInitialExpanded = createIsomorphicFn()
+const getInitialOpen = createIsomorphicFn()
   .server(() => false)
   .client(() => {
     const stored = localStorage.getItem(storageKey);
@@ -18,22 +18,22 @@ const getInitialExpanded = createIsomorphicFn()
   });
 
 // biome-ignore lint/style/useComponentExportOnlyModules: exporting context
-export const SidebarExpandedContext = createContext<SidebarExpandedContext>({
-  expanded: getInitialExpanded(),
-  setExpanded: () => {},
+export const SidebarOpenContext = createContext<SidebarOpenContext>({
+  open: getInitialOpen(),
+  setOpen: () => {},
 });
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  const [expanded, _setExpanded] = useState(getInitialExpanded);
-  function setExpanded(newValue: boolean) {
+  const [open, _setOpen] = useState(getInitialOpen);
+  function setOpen(newValue: boolean) {
     if (typeof window !== "undefined" && window.innerWidth >= breakpoint) {
       localStorage.setItem(storageKey, newValue.toString());
     }
-    _setExpanded(newValue);
+    _setOpen(newValue);
   }
   return (
-    <SidebarExpandedContext.Provider value={{ expanded, setExpanded }}>
+    <SidebarOpenContext.Provider value={{ open, setOpen }}>
       {children}
-    </SidebarExpandedContext.Provider>
+    </SidebarOpenContext.Provider>
   );
 }

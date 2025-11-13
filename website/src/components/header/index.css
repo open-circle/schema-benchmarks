@@ -40,7 +40,7 @@
       margin-right: -0.5rem;
     }
     @media (--laptop) or (--desktop) {
-      &.page-header__toggle--expanded {
+      &.page-header__toggle--open {
         margin-left: -3rem;
         opacity: 0;
         &:dir(rtl) {

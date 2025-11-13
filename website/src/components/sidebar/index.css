@@ -70,7 +70,7 @@
   max-width: var(--sidebar-collapsed-width);
   transition: max-width 250ms var(--standard-curve);
   &:has(a:focus-visible),
-  &.sidebar--expanded {
+  &.sidebar--open {
     max-width: var(--sidebar-width);
   }
   .sidebar__logo {
@@ -186,11 +186,11 @@
     }
 
     &,
-    &.sidebar--expanded {
+    &.sidebar--open {
       max-width: none;
     }
 
-    &.sidebar--expanded {
+    &.sidebar--open {
       transform: translateX(0);
       box-shadow: var(--elevation-16);
       transition:

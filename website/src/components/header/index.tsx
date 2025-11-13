@@ -1,11 +1,11 @@
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import clsx from "clsx";
 import { Fragment, type ReactNode, useContext } from "react";
-import { SidebarExpandedContext } from "../sidebar/context";
+import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 
 export function Header({ children }: { children: ReactNode }) {
-  const { expanded, setExpanded } = useContext(SidebarExpandedContext);
+  const { open, setOpen } = useContext(SidebarOpenContext);
   return (
     <header className="page-header">
       <ClientOnly
@@ -22,11 +22,11 @@ export function Header({ children }: { children: ReactNode }) {
         <button
           type="button"
           className={clsx("button button--toggle page-header__toggle", {
-            "page-header__toggle--expanded": expanded,
+            "page-header__toggle--open": open,
           })}
-          onClick={() => setExpanded(true)}
+          onClick={() => setOpen(true)}
           aria-label="Expand sidebar"
-          tabIndex={expanded ? -1 : 0}
+          tabIndex={open ? -1 : 0}
         >
           <MdSymbol>menu</MdSymbol>
         </button>

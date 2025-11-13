@@ -4,7 +4,7 @@ import type { ContextType } from "react";
 import { fn } from "storybook/test";
 import { MdSymbol } from "../symbol";
 import { Sidebar } from ".";
-import { SidebarExpandedContext } from "./context";
+import { SidebarOpenContext } from "./context";
 
 const meta = {
   title: "Components/Sidebar",
@@ -13,7 +13,7 @@ const meta = {
   },
   render: (args) => (
     <div className="sidebar-container">
-      <SidebarExpandedContext.Provider value={args}>
+      <SidebarOpenContext.Provider value={args}>
         <Sidebar>
           <nav>
             <ul className="typo-subtitle2">
@@ -28,14 +28,14 @@ const meta = {
             </ul>
           </nav>
         </Sidebar>
-      </SidebarExpandedContext.Provider>
+      </SidebarOpenContext.Provider>
     </div>
   ),
   args: {
-    expanded: true,
-    setExpanded: fn(),
+    open: true,
+    setOpen: fn(),
   },
-} satisfies Meta<ContextType<typeof SidebarExpandedContext>>;
+} satisfies Meta<ContextType<typeof SidebarOpenContext>>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
