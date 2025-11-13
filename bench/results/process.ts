@@ -1,20 +1,8 @@
 import { partition } from "@schema-benchmarks/utils";
 import type { Bench, Task } from "tinybench";
-import type { BenchMetaForType, MetaType } from "./registry";
-import { registry } from "./registry";
-
-export type LibraryType = "runtime" | "precompiled";
-export type DataType = "valid" | "invalid";
-export type ErrorType = "abortEarly" | "allErrors";
-
-export interface ProcessedResult {
-  id: string;
-  libraryName: string;
-  note?: string;
-  snippet: string;
-  rank: number;
-  mean: number;
-}
+import type { BenchMetaForType, MetaType } from "../utils/registry";
+import { registry } from "../utils/registry";
+import type { ProcessedResult, ProcessedResults } from "./types";
 
 const selector: {
   [Type in MetaType]: (
@@ -32,15 +20,6 @@ const selector: {
     return results.parsing[libraryType][dataType][abortType];
   },
 };
-
-export interface ProcessedResults {
-  initialization: Record<LibraryType, Array<ProcessedResult>>;
-  parsing: Record<
-    LibraryType,
-    Record<DataType, Record<ErrorType, Array<ProcessedResult>>>
-  >;
-  validation: Record<LibraryType, Record<DataType, Array<ProcessedResult>>>;
-}
 
 const getEmptyResults = (): ProcessedResults => ({
   initialization: {

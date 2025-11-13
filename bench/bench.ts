@@ -1,6 +1,16 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { runBenchmarks } from "./index";
+import { processResults } from "./results/process";
+import type { ProcessedResults } from "./results/types";
+import { registry } from "./utils/registry";
+import "./benchmarks/initialization.bench";
+import "./benchmarks/validation.bench";
+import "./benchmarks/parsing.bench";
+
+async function runBenchmarks(): Promise<ProcessedResults> {
+  const benchResults = await registry.runBenches();
+  return processResults(benchResults);
+}
 
 runBenchmarks().then(async (results) => {
   const outputPath = path.join(__dirname, "results.json");

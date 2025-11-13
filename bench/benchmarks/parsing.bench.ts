@@ -4,6 +4,7 @@ import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { errorData, successData } from "../data";
+import type { DataType, ErrorType } from "../results/types";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
 import { getJoiSchema } from "../schemas/joi";
@@ -14,7 +15,6 @@ import { getYupSchema } from "../schemas/yup";
 import { getZodSchema } from "../schemas/zod";
 import { getZodMiniSchema } from "../schemas/zod-mini";
 import { makeBenchFactory } from "../utils/bench-factory";
-import type { DataType, ErrorType } from "../utils/process";
 
 declare module "../utils/registry" {
   export interface MetaRegistry {

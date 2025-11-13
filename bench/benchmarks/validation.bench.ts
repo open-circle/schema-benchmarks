@@ -4,6 +4,7 @@ import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
 import { errorData, successData } from "../data";
+import type { DataType } from "../results/types";
 import { getAjv, getAjvSchema } from "../schemas/ajv";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
@@ -12,7 +13,6 @@ import type { TypiaSchema } from "../schemas/typia";
 import { getValibotSchema } from "../schemas/valibot";
 import { getYupSchema } from "../schemas/yup";
 import { makeBenchFactory } from "../utils/bench-factory";
-import type { DataType } from "../utils/process";
 
 declare module "../utils/registry" {
   export interface MetaRegistry {

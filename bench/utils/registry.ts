@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
+import type { Compute } from "@schema-benchmarks/utils";
 import type { Bench } from "tinybench";
-import type { LibraryType } from "./process";
-import type { Compute } from "./types";
+import type { LibraryType } from "../results/types";
 
 // biome-ignore lint/suspicious/noEmptyInterface: will be augmented in other files
 export interface MetaRegistry {}

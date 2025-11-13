@@ -1,3 +1,4 @@
+import type { HasRequiredProps } from "@schema-benchmarks/utils";
 import { Bench, type FnOptions } from "tinybench";
 import {
   type BenchMetaForType,
@@ -5,7 +6,6 @@ import {
   type MetaType,
   registry,
 } from "./registry";
-import type { HasRequiredProps } from "./types";
 
 type AddArgs<Meta> = [
   ...HasRequiredProps<Meta, [caseMeta: Meta], [caseMeta?: Meta]>,
