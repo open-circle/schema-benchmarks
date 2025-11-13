@@ -1,0 +1,58 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
+  "extends": "//",
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "./src/**/*",
+      "./vite.config.ts",
+      "./postcss.config.ts",
+      "!./src/routeTree.gen.ts"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "suspicious": {
+        "noUnknownAtRules": {
+          "level": "warn",
+          "options": {
+            "ignore": [
+              "extend",
+              "custom-media"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "./src/components/**/*"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "./src/**/*.stories.*"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useValidAnchor": "off"
+          },
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    }
+  ]
+}

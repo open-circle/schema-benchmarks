@@ -7,21 +7,6 @@
       }
     }
   },
-  "files": {
-    "ignoreUnknown": false,
-    "includes": [
-      "**/src/**/*",
-      "**/bench/**/*",
-      "**/data/**/*",
-      "**/utils/**/*",
-      "**/.vscode/**/*",
-      "**/index.html",
-      "**/vite.config.ts",
-      "**/postcss.config.ts",
-      "!**/src/routeTree.gen.ts",
-      "!**/bench/results.json"
-    ]
-  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -37,42 +22,9 @@
             "syntax": "generic"
           }
         }
-      },
-      "suspicious": {
-        "noUnknownAtRules": {
-          "level": "warn",
-          "options": {
-            "ignore": ["extend", "custom-media"]
-          }
-        }
       }
     }
   },
-  "overrides": [
-    {
-      "includes": ["**/components/**/*"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useComponentExportOnlyModules": "warn"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["**/src/**/*.stories.*"],
-      "linter": {
-        "rules": {
-          "a11y": {
-            "useValidAnchor": "off"
-          },
-          "style": {
-            "useComponentExportOnlyModules": "off"
-          }
-        }
-      }
-    }
-  ],
   "vcs": {
     "clientKind": "git",
     "enabled": false,

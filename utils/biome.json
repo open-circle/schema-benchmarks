@@ -1,0 +1,10 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
+  "extends": "//",
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "./**/*.ts"
+    ]
+  }
+}
