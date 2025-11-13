@@ -58,19 +58,16 @@
   }
   &:hover {
     background-color: var(--hovered-chip-background);
-    --icon-weight: 600;
   }
   &:focus-visible {
     outline: none;
     background-color: var(--focused-chip-background);
-    --icon-weight: 600;
   }
   &.selected,
   &.active {
     background-color: var(--selected-chip-background);
     color: var(--selected-chip-foreground);
     --icon-fill: 1;
-    --icon-weight: 600;
     &:hover {
       background-color: var(--hovered-selected-chip-background);
     }
