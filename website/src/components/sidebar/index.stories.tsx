@@ -1,33 +1,41 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import clsx from "clsx";
+import type { ContextType } from "react";
+import { fn } from "storybook/test";
 import { MdSymbol } from "../symbol";
 import { Sidebar } from ".";
+import { SidebarExpandedContext } from "./context";
 
 const meta = {
   title: "Components/Sidebar",
-  component: Sidebar,
   parameters: {
     layout: "fullscreen",
   },
-  render: () => (
+  render: (args) => (
     <div className="sidebar-container">
-      <Sidebar>
-        <nav>
-          <ul className="subtitle2">
-            {Sidebar.links.map(({ name, icon, to }) => (
-              <li key={to}>
-                <a href={to} className={clsx({ active: to === "/" })}>
-                  <MdSymbol>{icon}</MdSymbol>
-                  {name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </Sidebar>
+      <SidebarExpandedContext.Provider value={args}>
+        <Sidebar>
+          <nav>
+            <ul className="subtitle2">
+              {Sidebar.links.map(({ name, icon, to }) => (
+                <li key={to}>
+                  <a href={to} className={clsx({ active: to === "/" })}>
+                    <MdSymbol>{icon}</MdSymbol>
+                    {name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </Sidebar>
+      </SidebarExpandedContext.Provider>
     </div>
   ),
-} satisfies Meta<typeof Sidebar>;
+  args: {
+    expanded: true,
+    setExpanded: fn(),
+  },
+} satisfies Meta<ContextType<typeof SidebarExpandedContext>>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -36,7 +36,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
           onClick={() => setExpanded(false)}
           aria-label="Collapse sidebar"
         >
-          <MdSymbol>chevron_left</MdSymbol>
+          <MdSymbol flipRtl>chevron_left</MdSymbol>
         </button>
       </div>
       {children}

@@ -33,8 +33,10 @@
     }
   }
 
-  --button-base-color: var(--primary);
-  --on-button-base-color: var(--on-primary);
+  &.button--primary {
+    --button-base-color: var(--primary);
+    --on-button-base-color: var(--on-primary);
+  }
   &.button--secondary {
     --button-base-color: var(--secondary);
     --on-button-base-color: var(--on-secondary);
@@ -136,13 +138,19 @@
     }
   }
   &.button--toggle {
+    --button-background: transparent;
+    --button-foreground: color(
+      from var(--button-base-color) srgb r g b / var(--secondary-text)
+    );
     height: 3rem;
     width: 3rem;
     min-width: unset;
-    padding: 0;
+    padding: 0.75rem;
     border-radius: 50%;
+    transition: background-color 250ms, color 250ms, opacity 250ms;
     .md-symbol {
       --icon-size: 24;
+      margin: 0;
     }
     &:hover {
       background-color: color(
@@ -161,6 +169,9 @@
     }
     &:disabled {
       opacity: var(--disabled-opacity);
+    }
+    &.active {
+      --icon-fill: 1;
     }
   }
 }

@@ -29,6 +29,7 @@
     margin-left: auto;
   }
   .page-header__toggle {
+    --button-base-color: var(--page-header-foreground);
     margin-left: -0.5rem;
     transition: margin 250ms var(--standard-curve);
     &:dir(rtl) {

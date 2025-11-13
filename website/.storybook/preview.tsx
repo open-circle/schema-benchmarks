@@ -1,5 +1,10 @@
-import type { Preview } from '@storybook/react-vite'
+import type { Decorator, Preview } from '@storybook/react-vite'
 import '../src/styles.css';
+
+const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
+  document.dir = args.dir ?? "ltr";
+  return <Story />;
+};
 
 const preview: Preview = {
   parameters: {
@@ -17,6 +22,18 @@ const preview: Preview = {
       },
     },
   },
+  argTypes: {
+    dir: {
+      control: {
+        type: "inline-radio",
+      },
+      options: ["ltr", "rtl"],
+    },
+  },
+  args: {
+    dir: "ltr",
+  },
+  decorators: [dirDecorator],
 };
 
 document.addEventListener("click", (event) => {

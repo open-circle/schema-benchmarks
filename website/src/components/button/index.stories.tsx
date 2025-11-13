@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import clsx from "clsx";
+import { useState } from "react";
 import { MdSymbol } from "../symbol";
-import { type ButtonProps, getButtonClasses } from ".";
+import { type ButtonProps, getButtonClasses, type ToggleButtonProps } from ".";
 
 const meta = {
   title: "Components/Button",
@@ -19,7 +21,7 @@ const meta = {
       control: {
         type: "inline-radio",
       },
-      options: ["text", "outlined", "contained"],
+      options: ["text", "outlined", "contained", "toggle"],
     },
     color: {
       control: {
@@ -27,12 +29,17 @@ const meta = {
       },
       options: ["primary", "secondary", "danger"],
     },
+    disabled: {
+      control: {
+        type: "boolean",
+      },
+    },
   },
   args: {
     color: "primary",
     disabled: false,
   },
-} satisfies Meta<ButtonProps & { disabled: boolean }>;
+} satisfies Meta<(ButtonProps | ToggleButtonProps) & { disabled: boolean }>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -52,5 +59,42 @@ export const Outlined: Story = {
 export const Contained: Story = {
   args: {
     variant: "contained",
+  },
+};
+
+// biome-ignore lint/style/useComponentExportOnlyModules: demo component
+function ToggleButton({ disabled }: { disabled: boolean }) {
+  const [active, setActive] = useState(false);
+  return (
+    <button
+      type="button"
+      className={clsx(getButtonClasses({ variant: "toggle" }), {
+        active,
+      })}
+      onClick={() => setActive(!active)}
+      disabled={disabled}
+    >
+      <MdSymbol>favorite</MdSymbol>
+    </button>
+  );
+}
+
+export const Toggle: Story = {
+  render: ({ disabled }) => <ToggleButton disabled={disabled} />,
+  argTypes: {
+    variant: {
+      table: {
+        disable: true,
+      },
+    },
+    color: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  args: {
+    variant: "toggle",
+    color: undefined,
   },
 };
