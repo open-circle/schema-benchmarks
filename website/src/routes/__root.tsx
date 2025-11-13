@@ -78,6 +78,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
         <TanStackDevtools
           config={{
+            triggerHidden: true,
             position: "bottom-left",
           }}
           plugins={[
