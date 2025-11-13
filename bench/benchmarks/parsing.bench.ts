@@ -1,9 +1,9 @@
-import { errorData, successData } from "@schema-benchmarks/data";
 import ts from "dedent";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
+import { errorData, successData } from "../data";
 import { getArkTypeSchema } from "../schemas/arktype";
 import { getEffectSchema } from "../schemas/effect";
 import { getJoiSchema } from "../schemas/joi";

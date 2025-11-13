@@ -1,5 +1,0 @@
-{
-  "main": "index.ts",
-  "name": "@schema-benchmarks/data",
-  "types": "index.ts"
-}

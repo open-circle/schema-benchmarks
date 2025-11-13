@@ -5,6 +5,8 @@ import "./benchmarks/parsing.bench";
 import { processResults } from "./utils/process";
 import { registry } from "./utils/registry";
 
+export * from "./data";
+
 export type {
   DataType,
   ErrorType,
