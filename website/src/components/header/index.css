@@ -24,8 +24,24 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  overflow: hidden;
   .page-header__actions {
     margin-left: auto;
+  }
+  .page-header__toggle {
+    margin-left: -0.5rem;
+    transition: margin 250ms var(--standard-curve);
+    &:dir(rtl) {
+      margin-left: 0;
+      margin-right: -0.5rem;
+    }
+    &.page-header__toggle--expanded {
+      margin-left: -3rem;
+      &:dir(rtl) {
+        margin-left: 0;
+        margin-right: -3rem;
+      }
+    }
   }
 }
 
@@ -43,7 +59,6 @@
     &:focus-visible {
       outline: none;
       font-weight: var(--weight-bold);
-      color: var(--primary);
     }
   }
   span {

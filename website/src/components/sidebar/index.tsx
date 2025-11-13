@@ -1,6 +1,8 @@
 import { Link, type LinkOptions, linkOptions } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import clsx from "clsx";
+import { type ReactNode, useContext } from "react";
 import { MdSymbol } from "../symbol";
+import { SidebarExpandedContext } from "./context";
 
 const sidebarLinks = [
   { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
@@ -22,11 +24,20 @@ const sidebarLinks = [
 ] satisfies Array<LinkOptions & { name: string; icon: string }>;
 
 export function Sidebar({ children }: { children?: ReactNode }) {
+  const { expanded, setExpanded } = useContext(SidebarExpandedContext);
   return (
-    <aside className="sidebar">
+    <aside className={clsx("sidebar", expanded && "sidebar--expanded")}>
       <div className="logo sidebar__logo">
         <img src="/logo.svg" alt="Logo" />
-        <h2 className="subtitle1">Schema Benchmarks</h2>
+        <h2 className="subtitle1">Schema{"\n"}Benchmarks</h2>
+        <button
+          type="button"
+          className="button button--toggle sidebar__toggle"
+          onClick={() => setExpanded(false)}
+          aria-label="Collapse sidebar"
+        >
+          <MdSymbol>chevron_left</MdSymbol>
+        </button>
       </div>
       {children}
     </aside>

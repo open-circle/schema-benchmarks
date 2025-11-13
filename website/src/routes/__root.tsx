@@ -6,6 +6,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { SidebarProvider } from "@/components/sidebar/context";
 import { TanstackHeader } from "../components/header";
 import { TanstackSidebar } from "../components/sidebar";
 import { Snackbars } from "../components/snackbar";
@@ -66,12 +67,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <div className="sidebar-container">
-          <TanstackSidebar />
-          <div className="container">
-            <TanstackHeader />
-            <main>{children}</main>
-            <Snackbars />
-          </div>
+          <SidebarProvider>
+            <TanstackSidebar />
+            <div className="container">
+              <TanstackHeader />
+              <main>{children}</main>
+              <Snackbars />
+            </div>
+          </SidebarProvider>
         </div>
         <TanStackDevtools
           config={{

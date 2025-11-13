@@ -35,23 +35,23 @@
 
   --button-base-color: var(--primary);
   --on-button-base-color: var(--on-primary);
-  &.button__secondary {
+  &.button--secondary {
     --button-base-color: var(--secondary);
     --on-button-base-color: var(--on-secondary);
   }
-  &.button__danger {
+  &.button--danger {
     --button-base-color: var(--red);
     --on-button-base-color: var(--on-red);
   }
 
-  &.button__text {
+  &.button--text {
     padding: 0 0.5rem;
   }
-  &.button__outlined {
+  &.button--outlined {
     border: 1px solid var(--divider);
   }
-  &.button__text,
-  &.button__outlined {
+  &.button--text,
+  &.button--outlined {
     --button-background: transparent;
     --button-foreground: var(--button-base-color);
     &:hover {
@@ -81,7 +81,7 @@
       );
     }
   }
-  &.button__contained {
+  &.button--contained {
     --button-background: var(--button-base-color);
     --button-foreground: var(--on-button-base-color);
     &:not(:disabled) {
@@ -133,6 +133,34 @@
         from var(--button-foreground) srgb r g b / var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
+    }
+  }
+  &.button--toggle {
+    height: 3rem;
+    width: 3rem;
+    min-width: unset;
+    padding: 0;
+    border-radius: 50%;
+    .md-symbol {
+      --icon-size: 24;
+    }
+    &:hover {
+      background-color: color(
+        from currentColor srgb r g b / var(--hover-opacity)
+      );
+    }
+    &:focus-visible {
+      background-color: color(
+        from currentColor srgb r g b / var(--focus-opacity)
+      );
+    }
+    &:active {
+      background-color: color(
+        from currentColor srgb r g b / var(--pressed-opacity)
+      );
+    }
+    &:disabled {
+      opacity: var(--disabled-opacity);
     }
   }
 }

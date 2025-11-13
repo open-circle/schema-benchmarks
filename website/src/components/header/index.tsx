@@ -1,9 +1,26 @@
 import { Link, useMatches } from "@tanstack/react-router";
-import { Fragment, type ReactNode } from "react";
+import clsx from "clsx";
+import { Fragment, type ReactNode, useContext } from "react";
+import { SidebarExpandedContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 
 export function Header({ children }: { children: ReactNode }) {
-  return <header className="page-header">{children}</header>;
+  const { expanded, setExpanded } = useContext(SidebarExpandedContext);
+  return (
+    <header className="page-header">
+      <button
+        type="button"
+        className={clsx("button button--toggle page-header__toggle", {
+          "page-header__toggle--expanded": expanded,
+        })}
+        onClick={() => setExpanded(true)}
+        aria-label="Expand sidebar"
+      >
+        <MdSymbol>menu</MdSymbol>
+      </button>
+      {children}
+    </header>
+  );
 }
 
 export function TanstackHeader() {
