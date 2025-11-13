@@ -1,3 +1,4 @@
+import { bem } from "@schema-benchmarks/utils";
 import type { ReactNode } from "react";
 import { MdSymbol } from "../symbol";
 
@@ -8,6 +9,8 @@ export interface EmptyStateProps {
   children?: ReactNode;
 }
 
+const cls = bem("empty-state");
+
 export function EmptyState({
   icon,
   title,
@@ -15,11 +18,15 @@ export function EmptyState({
   children,
 }: EmptyStateProps) {
   return (
-    <div className="empty-state">
-      {icon && <MdSymbol className="empty-state__icon">{icon}</MdSymbol>}
-      <p className="typo-headline5 empty-state__title">{title}</p>
+    <div className={cls()}>
+      {icon && <MdSymbol className={cls("icon")}>{icon}</MdSymbol>}
+      <p className={cls({ element: "title", extra: "typo-headline5" })}>
+        {title}
+      </p>
       {subtitle && (
-        <p className="typo-body2 empty-state__subtitle">{subtitle}</p>
+        <p className={cls({ element: "subtitle", extra: "typo-body2" })}>
+          {subtitle}
+        </p>
       )}
       {children}
     </div>

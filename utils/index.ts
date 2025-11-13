@@ -1,5 +1,7 @@
 export type * from "./types";
 
+import bemHelper from "react-bem-helper";
+
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -34,3 +36,5 @@ export function partition<T>(
   }
   return results;
 }
+
+export const bem = bemHelper.withDefaults({ outputIsString: true });

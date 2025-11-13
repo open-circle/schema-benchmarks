@@ -1,6 +1,8 @@
-import clsx from "clsx";
+import { bem } from "@schema-benchmarks/utils";
 import { resolveValue, Toaster } from "react-hot-toast";
 import { MdSymbol } from "../symbol";
+
+const cls = bem("snackbar");
 
 export function Snackbars() {
   return (
@@ -22,16 +24,17 @@ export function Snackbars() {
     >
       {(t) => (
         <div
-          className={clsx(
-            "snackbar",
-            `snackbar--${t.type}`,
-            t.visible && "snackbar--visible",
-            t.className,
-          )}
+          className={cls({
+            modifiers: {
+              visible: t.visible,
+              [t.type]: true,
+            },
+            extra: t.className,
+          })}
           style={t.style}
           {...t.ariaProps}
         >
-          {t.icon && <MdSymbol className="snackbar__icon">{t.icon}</MdSymbol>}
+          {t.icon && <MdSymbol className={cls("icon")}>{t.icon}</MdSymbol>}
           {resolveValue(t.message, t)}
         </div>
       )}

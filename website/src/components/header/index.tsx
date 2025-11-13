@@ -1,18 +1,23 @@
+import { bem } from "@schema-benchmarks/utils";
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
-import clsx from "clsx";
 import { Fragment, type ReactNode, useContext } from "react";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 
+const cls = bem("page-header");
+
 export function Header({ children }: { children: ReactNode }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
   return (
-    <header className="page-header">
+    <header className={cls()}>
       <ClientOnly
         fallback={
           <button
             type="button"
-            className="button button--toggle page-header__toggle"
+            className={cls({
+              element: "toggle",
+              extra: "button button--toggle",
+            })}
             aria-label="Expand sidebar"
           >
             <MdSymbol>menu</MdSymbol>
@@ -21,8 +26,10 @@ export function Header({ children }: { children: ReactNode }) {
       >
         <button
           type="button"
-          className={clsx("button button--toggle page-header__toggle", {
-            "page-header__toggle--open": open,
+          className={cls({
+            element: "toggle",
+            modifiers: { open },
+            extra: "button button--toggle",
           })}
           onClick={() => setOpen(true)}
           aria-label="Expand sidebar"
@@ -80,7 +87,7 @@ export function TanstackHeader() {
           <span className="typo-headline6">{currentCrumb.name}</span>
         )}
       </nav>
-      {actions && <div className="page-header__actions">{actions}</div>}
+      {actions && <div className={cls("actions")}>{actions}</div>}
     </Header>
   );
 }

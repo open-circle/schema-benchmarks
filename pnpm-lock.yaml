@@ -14,9 +14,6 @@ importers:
 
   bench:
     dependencies:
-      '@schema-benchmarks/data':
-        specifier: workspace:*
-        version: link:../data
       '@schema-benchmarks/utils':
         specifier: workspace:*
         version: link:../utils
@@ -73,9 +70,11 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
-  data: {}
-
-  utils: {}
+  utils:
+    dependencies:
+      react-bem-helper:
+        specifier: ^1.4.1
+        version: 1.4.1
 
   website:
     dependencies:
@@ -85,9 +84,6 @@ importers:
       '@schema-benchmarks/bench':
         specifier: workspace:*
         version: link:../bench
-      '@schema-benchmarks/data':
-        specifier: workspace:*
-        version: link:../data
       '@schema-benchmarks/utils':
         specifier: workspace:*
         version: link:../utils
@@ -2204,6 +2200,10 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
+  object-assign@4.1.1:
+    resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
+    engines: {node: '>=0.10.0'}
+
   ofetch@2.0.0-alpha.3:
     resolution: {integrity: sha512-zpYTCs2byOuft65vI3z43Dd6iSdFbOZZLb9/d21aCpx2rGastVU9dOCv0lu4ykc1Ur1anAYjDi3SUvR0vq50JA==}
 
@@ -2352,6 +2352,9 @@ packages:
   randexp@0.5.3:
     resolution: {integrity: sha512-U+5l2KrcMNOUPYvazA3h5ekF80FHTUG+87SEAmHZmolh1M+i/WyTCxVzmi+tidIa1tM4BSe8g2Y/D3loWDjj+w==}
     engines: {node: '>=4'}
+
+  react-bem-helper@1.4.1:
+    resolution: {integrity: sha512-TQD6WfT5fPgr48v8GLmP8ldc7D5iT75VZ6B4nC05uTvPuaDf64m5FrCEHNY3R1u90wdCxtC2J5OvY8Z1hfwyJw==}
 
   react-docgen-typescript@2.4.0:
     resolution: {integrity: sha512-ZtAp5XTO5HRzQctjPU0ybY0RRCQO19X/8fxn3w7y2VVTUbGHDKULPTL4ky3vB05euSgG5NpALhEhDPvQ56wvXg==}
@@ -5003,6 +5006,8 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
+  object-assign@4.1.1: {}
+
   ofetch@2.0.0-alpha.3: {}
 
   ohash@2.0.11: {}
@@ -5165,6 +5170,10 @@ snapshots:
     dependencies:
       drange: 1.1.1
       ret: 0.2.2
+
+  react-bem-helper@1.4.1:
+    dependencies:
+      object-assign: 4.1.1
 
   react-docgen-typescript@2.4.0(typescript@5.9.3):
     dependencies:

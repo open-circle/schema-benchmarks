@@ -1,3 +1,4 @@
+import { bem } from "@schema-benchmarks/utils";
 import {
   ClientOnly,
   Link,
@@ -9,6 +10,8 @@ import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
+
+const cls = bem("sidebar");
 
 const sidebarLinks = [
   { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
@@ -61,13 +64,16 @@ function SidebarWithoutContext({
         )}
         onClick={() => setOpen(false)}
       />
-      <aside className={clsx("sidebar", open && "sidebar--open")}>
-        <div className="logo sidebar__logo">
+      <aside className={clsx(cls(), { open })}>
+        <div className={cls("logo")}>
           <img src="/logo.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
           <button
             type="button"
-            className="button button--toggle sidebar__toggle"
+            className={cls({
+              element: "toggle",
+              extra: "button button--toggle",
+            })}
             onClick={() => setOpen(false)}
             aria-label="Collapse sidebar"
             tabIndex={open ? 0 : -1}

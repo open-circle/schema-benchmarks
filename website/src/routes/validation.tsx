@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
+import { PageFilterGroup } from "@/components/page-filter";
 import { ResultsTable } from "@/components/results-table";
-import { MdSymbol } from "@/components/symbol";
 import {
   dataTypeLabels,
   getResults,
@@ -10,7 +10,6 @@ import {
   optionalDataTypeSchema,
   optionalLibraryTypeSchema,
 } from "@/data/results";
-import { useFocusGroup } from "@/hooks/use-focus-group";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
@@ -39,51 +38,30 @@ function RouteComponent() {
     ...getResults(),
     select: (results) => results.validation,
   });
-  const libraryTypeGroupRef = useFocusGroup();
-  const dataTypeGroupRef = useFocusGroup();
   return (
     <>
       <div className="page-filters">
-        <div className="page-filter__group">
-          <h6 className="typo-subtitle2">Library Type</h6>
-          <div className="chip-collection" ref={libraryTypeGroupRef}>
-            {optionalLibraryTypeSchema.wrapped.options.map((option) => (
-              <Link
-                key={option}
-                to={Route.fullPath}
-                search={({ dataType }) => ({
-                  libraryType: option,
-                  dataType,
-                })}
-                className="chip"
-                replace
-              >
-                <MdSymbol>{libraryTypeLabels[option].icon}</MdSymbol>
-                {libraryTypeLabels[option].label}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div className="page-filter__group">
-          <h6 className="typo-subtitle2">Data Type</h6>
-          <div className="chip-collection" ref={dataTypeGroupRef}>
-            {optionalDataTypeSchema.wrapped.options.map((option) => (
-              <Link
-                key={option}
-                to={Route.fullPath}
-                search={({ libraryType }) => ({
-                  libraryType,
-                  dataType: option,
-                })}
-                className="chip"
-                replace
-              >
-                <MdSymbol>{dataTypeLabels[option].icon}</MdSymbol>
-                {dataTypeLabels[option].label}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <PageFilterGroup
+          title="Library Type"
+          options={optionalLibraryTypeSchema.wrapped.options}
+          labels={libraryTypeLabels}
+          getLinkOptions={(option) => ({
+            to: Route.fullPath,
+            search: { libraryType: option },
+          })}
+        />
+        <PageFilterGroup
+          title="Data Type"
+          options={optionalDataTypeSchema.wrapped.options}
+          labels={dataTypeLabels}
+          getLinkOptions={(option) => ({
+            to: Route.fullPath,
+            search: ({ libraryType }) => ({
+              libraryType,
+              dataType: option,
+            }),
+          })}
+        />
       </div>
       <ResultsTable results={data[libraryType][dataType]} />
     </>

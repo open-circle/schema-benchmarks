@@ -1,15 +1,13 @@
-import { isEmpty } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
+import { PageFilterGroup } from "@/components/page-filter";
 import { ResultsTable } from "@/components/results-table";
-import { MdSymbol } from "@/components/symbol";
 import {
   getResults,
   libraryTypeLabels,
   optionalLibraryTypeSchema,
 } from "@/data/results";
-import { useFocusGroup } from "@/hooks/use-focus-group";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
@@ -37,28 +35,18 @@ function RouteComponent() {
     ...getResults(),
     select: (results) => results.initialization,
   });
-  const libraryTypeGroupRef = useFocusGroup();
   return (
     <>
       <div className="page-filters">
-        <div className="page-filter__group">
-          <h6 className="typo-subtitle2">Library Type</h6>
-          <div className="chip-collection" ref={libraryTypeGroupRef}>
-            {optionalLibraryTypeSchema.wrapped.options.map((option) => (
-              <Link
-                key={option}
-                to={Route.fullPath}
-                search={{ libraryType: option }}
-                className="chip"
-                replace
-                disabled={isEmpty(data[option])}
-              >
-                <MdSymbol>{libraryTypeLabels[option].icon}</MdSymbol>
-                {libraryTypeLabels[option].label}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <PageFilterGroup
+          title="Library Type"
+          options={optionalLibraryTypeSchema.wrapped.options}
+          labels={libraryTypeLabels}
+          getLinkOptions={(option) => ({
+            to: Route.fullPath,
+            search: { libraryType: option },
+          })}
+        />
       </div>
       <ResultsTable results={data[libraryType]} />
     </>
