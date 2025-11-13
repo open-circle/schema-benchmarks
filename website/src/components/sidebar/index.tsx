@@ -35,6 +35,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
           className="button button--toggle sidebar__toggle"
           onClick={() => setExpanded(false)}
           aria-label="Collapse sidebar"
+          tabIndex={expanded ? 0 : -1}
         >
           <MdSymbol flipRtl>chevron_left</MdSymbol>
         </button>

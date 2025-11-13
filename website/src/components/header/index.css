@@ -31,13 +31,15 @@
   .page-header__toggle {
     --button-base-color: var(--page-header-foreground);
     margin-left: -0.5rem;
-    transition: margin 250ms var(--standard-curve);
+    opacity: 1;
+    transition: margin 250ms var(--standard-curve), opacity 250ms;
     &:dir(rtl) {
       margin-left: 0;
       margin-right: -0.5rem;
     }
     &.page-header__toggle--expanded {
       margin-left: -3rem;
+      opacity: 0;
       &:dir(rtl) {
         margin-left: 0;
         margin-right: -3rem;

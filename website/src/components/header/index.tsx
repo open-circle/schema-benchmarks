@@ -15,6 +15,7 @@ export function Header({ children }: { children: ReactNode }) {
         })}
         onClick={() => setExpanded(true)}
         aria-label="Expand sidebar"
+        tabIndex={expanded ? -1 : 0}
       >
         <MdSymbol>menu</MdSymbol>
       </button>
