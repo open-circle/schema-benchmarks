@@ -48,7 +48,7 @@
     color: var(--green);
   }
   &.snackbar--loading .snackbar__icon {
-    color: var(--yellow);
+    color: var(--amber);
   }
   .snackbar__icon {
     color: color(

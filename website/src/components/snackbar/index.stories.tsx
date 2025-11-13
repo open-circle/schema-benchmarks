@@ -35,11 +35,19 @@ function SnackbarsDemo() {
       <button
         type="button"
         onClick={() =>
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: "Loading...",
-            success: "Success!",
-            error: "Error!",
-          })
+          toast.promise(
+            new Promise<void>((resolve, reject) =>
+              setTimeout(
+                () => (Math.random() > 0.5 ? resolve() : reject()),
+                1000,
+              ),
+            ),
+            {
+              loading: "Loading...",
+              success: "Success!",
+              error: "Error!",
+            },
+          )
         }
       >
         Loading
