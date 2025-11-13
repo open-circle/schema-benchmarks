@@ -5,3 +5,9 @@
   gap: 0.5rem;
   font-feature-settings: "tnum" 1;
 }
+
+@media (--phone) or (--tablet-small) or (--tablet-large) {
+  .results-table tr :nth-child(4) {
+    display: none;
+  }
+}
