@@ -42,7 +42,7 @@
         "noUnknownAtRules": {
           "level": "warn",
           "options": {
-            "ignore": ["extend"]
+            "ignore": ["extend", "custom-media"]
           }
         }
       }

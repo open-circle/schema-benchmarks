@@ -1,5 +1,5 @@
 import { createIsomorphicFn } from "@tanstack/react-start";
-import { createContext, useLayoutEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 interface SidebarExpandedContext {
   expanded: boolean;

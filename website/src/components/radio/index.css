@@ -1,13 +1,16 @@
 :root {
   --radio-border-color: color(
-    from var(--page-foreground) srgb r g b / var(--secondary-text)
+    from var(--page-foreground) srgb r g b /
+    var(--secondary-text)
   );
   --radio-focus-color: color(
-    from var(--page-foreground) srgb r g b / var(--focus-opacity)
+    from var(--page-foreground) srgb r g b /
+    var(--focus-opacity)
   );
   --radio-checked-color: var(--secondary);
   --radio-focus-checked-color: color(
-    from var(--radio-checked-color) srgb r g b / var(--focus-opacity)
+    from var(--radio-checked-color) srgb r g b /
+    var(--focus-opacity)
   );
 }
 
@@ -50,7 +53,9 @@
     border-radius: 50%;
     border: 2px solid var(--radio-border-color);
     background-color: transparent;
-    transition: background-color 250ms, border-color 250ms;
+    transition:
+      background-color 250ms,
+      border-color 250ms;
     &::before {
       content: "";
       corner-shape: bevel;

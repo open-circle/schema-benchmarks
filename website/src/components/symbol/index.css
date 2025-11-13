@@ -2,7 +2,8 @@
   --default-icon-grade: 0;
   user-select: none;
   font-size: calc(var(--icon-size, 24) * 1px);
-  font-variation-settings: "FILL" var(--icon-fill, 0),
+  font-variation-settings:
+    "FILL" var(--icon-fill, 0),
     "wght" var(--icon-weight, 400),
     "GRAD" clamp(-25, var(--icon-grade, var(--default-icon-grade)), 200),
     "opsz" clamp(20, var(--icon-optical-size, var(--icon-size, 24)), 48);

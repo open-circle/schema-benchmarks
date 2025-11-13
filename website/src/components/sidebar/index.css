@@ -15,7 +15,8 @@
   );
   --active-link-foreground: var(--primary);
   --active-link-background: color(
-    from var(--active-link-foreground) srgb r g b / var(--activated-opacity)
+    from var(--active-link-foreground) srgb r g b /
+    var(--activated-opacity)
   );
   --hovered-active-link-background: color-mix(
     in srgb,
@@ -102,12 +103,17 @@
           padding: 0 1rem;
           text-decoration: none;
           color: color(
-            from var(--sidebar-foreground) srgb r g b / var(--primary-text)
+            from var(--sidebar-foreground) srgb r g b /
+            var(--primary-text)
           );
-          transition: color 250ms, font-weight 250ms, background-color 250ms;
+          transition:
+            color 250ms,
+            font-weight 250ms,
+            background-color 250ms;
           .md-symbol {
             color: color(
-              from var(--sidebar-foreground) srgb r g b / var(--secondary-text)
+              from var(--sidebar-foreground) srgb r g b /
+              var(--secondary-text)
             );
             margin-right: 2rem;
             &:dir(rtl) {
@@ -169,7 +175,8 @@
     width: var(--sidebar-width);
     border-radius: 0 var(--shape-large) var(--shape-large) 0;
     transform: translateX(-100%);
-    transition: transform 250ms var(--exit-temporary-curve),
+    transition:
+      transform 250ms var(--exit-temporary-curve),
       var(--elevation-transition);
     &:dir(rtl) {
       left: auto;
@@ -186,7 +193,8 @@
     &.sidebar--expanded {
       transform: translateX(0);
       box-shadow: var(--elevation-16);
-      transition: transform 250ms var(--enter-curve),
+      transition:
+        transform 250ms var(--enter-curve),
         var(--elevation-transition);
     }
 
