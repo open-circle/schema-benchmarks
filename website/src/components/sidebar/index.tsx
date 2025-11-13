@@ -12,6 +12,7 @@ import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 
 const cls = bem("sidebar");
+const backdropCls = bem("sidebar-backdrop");
 
 const sidebarLinks = [
   { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
@@ -58,13 +59,10 @@ function SidebarWithoutContext({
       {/** biome-ignore lint/a11y/noStaticElementInteractions: we have an escape listener */}
       {/** biome-ignore lint/a11y/useKeyWithClickEvents: we have an escape listener */}
       <div
-        className={clsx(
-          "sidebar-backdrop",
-          open && "sidebar-backdrop--visible",
-        )}
+        className={backdropCls({ modifiers: { visible: open } })}
         onClick={() => setOpen(false)}
       />
-      <aside className={clsx(cls(), { open })}>
+      <aside className={cls({ modifiers: { open } })}>
         <div className={cls("logo")}>
           <img src="/logo.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
