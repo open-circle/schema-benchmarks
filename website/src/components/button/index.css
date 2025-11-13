@@ -15,7 +15,10 @@
   background-color: var(--button-background);
   color: var(--button-foreground);
 
-  transition: background-color 250ms, color 250ms, var(--elevation-transition),
+  transition:
+    background-color 250ms,
+    color 250ms,
+    var(--elevation-transition),
     var(--elevation-overlay-transition);
 
   &:focus-visible {
@@ -87,7 +90,8 @@
     &:disabled,
     &[aria-disabled="true"] {
       --button-foreground: color(
-        from var(--page-foreground) srgb r g b / var(--disabled-opacity)
+        from var(--page-foreground) srgb r g b /
+        var(--disabled-opacity)
       );
     }
   }
@@ -139,7 +143,8 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
-        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
+        from var(--button-foreground) srgb r g b /
+        var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
     }
@@ -147,31 +152,38 @@
   &.button--toggle {
     --button-background: transparent;
     --button-foreground: color(
-      from var(--button-base-color) srgb r g b / var(--secondary-text)
+      from var(--button-base-color) srgb r g b /
+      var(--secondary-text)
     );
     height: 3rem;
     width: 3rem;
     min-width: unset;
     padding: 0.75rem;
     border-radius: 50%;
-    transition: background-color 250ms, color 250ms, opacity 250ms;
+    transition:
+      background-color 250ms,
+      color 250ms,
+      opacity 250ms;
     .md-symbol {
       --icon-size: 24;
       margin: 0;
     }
     &:hover {
       background-color: color(
-        from currentColor srgb r g b / var(--hover-opacity)
+        from currentColor srgb r g b /
+        var(--hover-opacity)
       );
     }
     &:focus-visible {
       background-color: color(
-        from currentColor srgb r g b / var(--focus-opacity)
+        from currentColor srgb r g b /
+        var(--focus-opacity)
       );
     }
     &:active {
       background-color: color(
-        from currentColor srgb r g b / var(--pressed-opacity)
+        from currentColor srgb r g b /
+        var(--pressed-opacity)
       );
     }
     &:disabled,
