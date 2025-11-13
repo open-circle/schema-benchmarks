@@ -4,12 +4,12 @@
   --sidebar-background: light-dark(white, var(--md-blue-grey-900));
   --sidebar-foreground: var(--page-foreground);
   --hovered-link-background: color-mix(
-    in srgb,
+    in hsl,
     var(--sidebar-background),
     var(--sidebar-foreground) var(--hover-opacity)
   );
   --focused-link-background: color-mix(
-    in srgb,
+    in hsl,
     var(--sidebar-background),
     var(--sidebar-foreground) var(--focus-opacity)
   );
@@ -18,13 +18,13 @@
     from var(--active-link-foreground) srgb r g b / var(--activated-opacity)
   );
   --hovered-active-link-background: color-mix(
-    in srgb,
+    in hsl,
     var(--active-link-background),
     var(--active-link-foreground)
       calc(var(--hover-opacity) + var(--activated-opacity))
   );
   --focused-active-link-background: color-mix(
-    in srgb,
+    in hsl,
     var(--active-link-background),
     var(--active-link-foreground)
       calc(var(--focus-opacity) + var(--activated-opacity))
@@ -157,7 +157,7 @@
     background-color: light-dark(
       var(--sidebar-background),
       color-mix(
-        in srgb,
+        in hsl,
         var(--sidebar-background),
         var(--elevation-overlay-color) calc(var(--elevation-16-overlay-opacity))
       )

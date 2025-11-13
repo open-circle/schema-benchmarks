@@ -11,9 +11,9 @@
   background-color: light-dark(
     var(--card-background),
     color-mix(
-      in srgb,
+      in hsl,
       var(--card-background),
-      var(--elevation-overlay-color) calc(var(--elevation-overlay-opacity))
+      var(--elevation-overlay-color) var(--elevation-overlay-opacity)
     )
   );
   display: flex;
@@ -28,9 +28,9 @@
   background-color: light-dark(
     var(--card-background),
     color-mix(
-      in srgb,
+      in hsl,
       var(--card-background),
-      var(--elevation-overlay-color) calc(var(--elevation-2-overlay-opacity))
+      var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
     )
   );
   transition: var(--elevation-transition), var(--elevation-overlay-transition);
@@ -39,9 +39,9 @@
     background-color: light-dark(
       var(--card-background),
       color-mix(
-        in srgb,
+        in hsl,
         var(--card-background),
-        var(--elevation-overlay-color) calc(var(--elevation-6-overlay-opacity))
+        var(--elevation-overlay-color) var(--elevation-6-overlay-opacity)
       )
     );
   }

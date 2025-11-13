@@ -11,9 +11,9 @@
   background-color: light-dark(
     var(--page-header-background),
     color-mix(
-      in srgb,
+      in hsl,
       var(--page-header-background),
-      var(--elevation-overlay-color) calc(var(--elevation-4-overlay-opacity))
+      var(--elevation-overlay-color) var(--elevation-4-overlay-opacity)
     )
   );
   box-shadow: var(--elevation-4);
@@ -32,9 +32,7 @@
     --button-base-color: var(--page-header-foreground);
     margin-left: -0.5rem;
     opacity: 1;
-    transition:
-      margin 250ms var(--standard-curve),
-      opacity 250ms;
+    transition: margin 250ms var(--standard-curve), opacity 250ms;
     &:dir(rtl) {
       margin-left: 0;
       margin-right: -0.5rem;

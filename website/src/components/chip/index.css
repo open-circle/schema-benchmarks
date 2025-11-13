@@ -5,27 +5,27 @@
   );
   --chip-foreground: var(--page-foreground);
   --hovered-chip-background: color-mix(
-    in srgb,
+    in hsl,
     var(--chip-background),
     var(--chip-foreground) var(--hover-opacity)
   );
   --focused-chip-background: color-mix(
-    in srgb,
+    in hsl,
     var(--chip-background),
     var(--chip-foreground) var(--focus-opacity)
   );
   --selected-chip-background: color-mix(
-    in srgb,
+    in hsl,
     var(--chip-background),
     var(--primary) var(--selected-opacity)
   );
   --hovered-selected-chip-background: color-mix(
-    in srgb,
+    in hsl,
     var(--chip-background),
     var(--primary) calc(var(--hover-opacity) + var(--selected-opacity))
   );
   --focused-selected-chip-background: color-mix(
-    in srgb,
+    in hsl,
     var(--chip-background),
     var(--primary) calc(var(--focus-opacity) + var(--selected-opacity))
   );
@@ -48,10 +48,7 @@
   }
   --icon-size: 18;
   @extend .typo-body2;
-  transition:
-    background-color 250ms,
-    color 250ms,
-    font-weight 250ms;
+  transition: background-color 250ms, color 250ms, font-weight 250ms;
   .md-symbol {
     color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));
     margin-left: -0.25rem;

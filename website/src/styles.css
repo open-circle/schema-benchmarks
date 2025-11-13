@@ -68,9 +68,9 @@ pre[class*="language-"] {
   background-color: light-dark(
     var(--card-background),
     color-mix(
-      in srgb,
+      in hsl,
       var(--card-background),
-      var(--elevation-overlay-color) calc(var(--elevation-2-overlay-opacity))
+      var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
     )
   );
   border-radius: var(--shape-medium);
