@@ -16,7 +16,7 @@ const meta = {
       <SidebarExpandedContext.Provider value={args}>
         <Sidebar>
           <nav>
-            <ul className="subtitle2">
+            <ul className="typo-subtitle2">
               {Sidebar.links.map(({ name, icon, to }) => (
                 <li key={to}>
                   <a href={to} className={clsx({ active: to === "/" })}>

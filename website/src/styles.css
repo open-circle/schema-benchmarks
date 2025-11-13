@@ -32,7 +32,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--page-background);
   color: color(from var(--page-foreground) srgb r g b / var(--primary-text));
-  @extend .body1;
+  @extend .typo-body1;
 }
 
 pre,
@@ -111,12 +111,12 @@ th {
 }
 
 th {
-  @extend .subtitle2;
+  @extend .typo-subtitle2;
   font-weight: var(--weight-medium);
 }
 
 td {
-  @extend .body2;
+  @extend .typo-body2;
   &:has(> pre[class*="language-"]) {
     padding: 0.5rem;
   }

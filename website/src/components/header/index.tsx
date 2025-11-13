@@ -53,13 +53,19 @@ export function TanstackHeader() {
       <nav className="breadcrumbs">
         {crumbs.map((crumb) => (
           <Fragment key={crumb.to}>
-            <Link to={crumb.to} params={crumb.params} className="headline6">
+            <Link
+              to={crumb.to}
+              params={crumb.params}
+              className="typo-headline6"
+            >
               {crumb.name}
             </Link>
             <MdSymbol>chevron_right</MdSymbol>
           </Fragment>
         ))}
-        {currentCrumb && <span className="headline6">{currentCrumb.name}</span>}
+        {currentCrumb && (
+          <span className="typo-headline6">{currentCrumb.name}</span>
+        )}
       </nav>
       {actions && <div className="page-header__actions">{actions}</div>}
     </Header>

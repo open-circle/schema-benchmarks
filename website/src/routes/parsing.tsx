@@ -50,7 +50,7 @@ function RouteComponent() {
     <>
       <div className="page-filters">
         <div className="page-filter__group">
-          <h6 className="subtitle2">Library Type</h6>
+          <h6 className="typo-subtitle2">Library Type</h6>
           <div className="chip-collection" ref={libraryTypeGroupRef}>
             {optionalLibraryTypeSchema.wrapped.options.map((option) => (
               <Link
@@ -71,7 +71,7 @@ function RouteComponent() {
           </div>
         </div>
         <div className="page-filter__group">
-          <h6 className="subtitle2">Data Type</h6>
+          <h6 className="typo-subtitle2">Data Type</h6>
           <div className="chip-collection" ref={dataTypeGroupRef}>
             {optionalDataTypeSchema.wrapped.options.map((option) => (
               <Link
@@ -92,7 +92,7 @@ function RouteComponent() {
           </div>
         </div>
         <div className="page-filter__group">
-          <h6 className="subtitle2">Error Type</h6>
+          <h6 className="typo-subtitle2">Error Type</h6>
           <div className="chip-collection" ref={errorTypeGroupRef}>
             {optionalErrorTypeSchema.wrapped.options.map((option) => (
               <Link

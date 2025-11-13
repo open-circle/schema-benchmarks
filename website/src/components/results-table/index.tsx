@@ -49,8 +49,8 @@ export function ResultsTable({ results }: ResultsTableProps) {
     return (
       <div className="empty-state">
         <MdSymbol>database_off</MdSymbol>
-        <p className="headline5">No results found</p>
-        <p className="body2">Try a different combination of filters</p>
+        <p className="typo-headline5">No results found</p>
+        <p className="typo-body2">Try a different combination of filters</p>
       </div>
     );
   }

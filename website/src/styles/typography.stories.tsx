@@ -22,7 +22,7 @@ const meta = {
   render: () => (
     <div className="typography-container">
       {styles.map((style) => (
-        <p key={style} className={style}>
+        <p key={style} className={`typo-${style}`}>
           {style}
         </p>
       ))}

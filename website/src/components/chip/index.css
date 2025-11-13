@@ -47,7 +47,7 @@
     padding: 0.5rem 1rem;
   }
   --icon-size: 18;
-  @extend .body2;
+  @extend .typo-body2;
   transition: background-color 250ms, color 250ms, font-weight 250ms;
   .md-symbol {
     color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));

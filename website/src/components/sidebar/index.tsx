@@ -29,7 +29,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
     <aside className={clsx("sidebar", expanded && "sidebar--expanded")}>
       <div className="logo sidebar__logo">
         <img src="/logo.svg" alt="Logo" />
-        <h2 className="subtitle1">Schema{"\n"}Benchmarks</h2>
+        <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
         <button
           type="button"
           className="button button--toggle sidebar__toggle"
@@ -50,7 +50,7 @@ export function TanstackSidebar() {
   return (
     <Sidebar>
       <nav>
-        <ul className="subtitle1">
+        <ul className="typo-subtitle1">
           {sidebarLinks.map(({ name, icon, ...link }) => (
             <li key={link.to}>
               <Link {...link} activeOptions={{ includeSearch: false }}>

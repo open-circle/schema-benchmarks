@@ -78,109 +78,114 @@
   }
 }
 
-.headline1 {
+.typo-headline1 {
   font-family: var(--headline1-family);
   font-size: var(--headline1-size);
   font-weight: var(--headline1-weight);
 }
 
-.headline2 {
+.typo-headline2 {
   font-family: var(--headline2-family);
   font-size: var(--headline2-size);
   font-weight: var(--headline2-weight);
 }
 
-.headline3 {
+.typo-headline3 {
   font-family: var(--headline3-family);
   font-size: var(--headline3-size);
   font-weight: var(--headline3-weight);
 }
 
-.headline4 {
+.typo-headline4 {
   font-family: var(--headline4-family);
   font-size: var(--headline4-size);
   font-weight: var(--headline4-weight);
 }
 
-.headline5 {
+.typo-headline5 {
   font-family: var(--headline5-family);
   font-size: var(--headline5-size);
   font-weight: var(--headline5-weight);
 }
 
-.headline6 {
+.typo-headline6 {
   font-family: var(--headline6-family);
   font-size: var(--headline6-size);
   font-weight: var(--headline6-weight);
 }
 
-.button {
+.typo-button {
   font-family: var(--button-family);
   font-size: var(--button-size);
   font-weight: var(--button-weight);
 }
 
-.body1 {
+.typo-body1 {
   font-family: var(--body1-family);
   font-size: var(--body1-size);
   font-weight: var(--body1-weight);
 }
 
-.body2 {
+.typo-body2 {
   font-family: var(--body2-family);
   font-size: var(--body2-size);
   font-weight: var(--body2-weight);
 }
 
-.subtitle1 {
+.typo-subtitle1 {
   font-family: var(--subtitle1-family);
   font-size: var(--subtitle1-size);
   font-weight: var(--subtitle1-weight);
 }
 
-.subtitle2 {
+.typo-subtitle2 {
   font-family: var(--subtitle2-family);
   font-size: var(--subtitle2-size);
   font-weight: var(--subtitle2-weight);
 }
 
-.overline {
+.typo-overline {
   font-family: var(--overline-family);
   font-size: var(--overline-size);
   font-weight: var(--overline-weight);
   text-transform: uppercase;
 }
 
-.caption {
+.typo-caption {
   font-family: var(--caption-family);
   font-size: var(--caption-size);
   font-weight: var(--caption-weight);
 }
 
 h1 {
-  @extend .headline3;
+  @extend .typo-headline3;
 }
 
 h2 {
-  @extend .headline4;
+  @extend .typo-headline4;
 }
 
 h3 {
-  @extend .headline5;
+  @extend .typo-headline5;
 }
 
 h4 {
-  @extend .headline6;
+  @extend .typo-headline6;
 }
 
 h5 {
-  @extend .subtitle1;
+  @extend .typo-subtitle1;
 }
 
 h6 {
-  @extend .subtitle2;
+  @extend .typo-subtitle2;
 }
 
 p {
   margin: 0;
+}
+
+button,
+.button {
+  @extend .typo-button;
 }
