@@ -44,6 +44,11 @@ a {
   color: var(--primary);
 }
 
+::selection {
+  background: color(from var(--secondary) srgb r g b / 0.5);
+  color: var(--on-secondary);
+}
+
 pre,
 code,
 pre[class*="language-"],
