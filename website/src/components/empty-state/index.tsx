@@ -1,10 +1,11 @@
+import type { ReactNode } from "react";
 import { MdSymbol } from "../symbol";
 
 export interface EmptyStateProps {
-  icon?: string;
-  title: string;
-  subtitle?: string;
-  children?: React.ReactNode;
+  icon?: ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
+  children?: ReactNode;
 }
 
 export function EmptyState({

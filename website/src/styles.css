@@ -38,6 +38,14 @@ body {
   @extend .typo-body1;
 }
 
+a {
+  color: var(--primary);
+  transition: font-weight 250ms;
+  &:hover {
+    font-weight: var(--weight-medium);
+  }
+}
+
 pre,
 code,
 pre[class*="language-"],

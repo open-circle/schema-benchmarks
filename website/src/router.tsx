@@ -1,5 +1,6 @@
-import { createRouter } from "@tanstack/react-router";
+import { createRouter, Link } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
+import { EmptyState } from "./components/empty-state";
 import { makeQueryClient } from "./data/query";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -13,6 +14,17 @@ export const getRouter = () => {
     defaultPreloadStaleTime: 0,
     context: { queryClient },
     defaultViewTransition: true,
+    defaultNotFoundComponent: () => (
+      <EmptyState
+        icon="warning_amber"
+        title="Not found"
+        subtitle={
+          <>
+            Try heading back to the <Link to="/">home page</Link>.
+          </>
+        }
+      />
+    ),
   });
 
   setupRouterSsrQueryIntegration({
