@@ -13,8 +13,7 @@
     color-mix(
       in srgb,
       var(--page-header-background),
-      var(--elevation-overlay-color)
-        calc(var(--elevation-4-overlay-opacity) * 100%)
+      var(--elevation-overlay-color) calc(var(--elevation-4-overlay-opacity))
     )
   );
   box-shadow: var(--elevation-4);

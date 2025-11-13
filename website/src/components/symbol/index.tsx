@@ -1,7 +1,8 @@
 import clsx from "clsx";
+import type { ReactNode } from "react";
 
 export interface MdSymbolProps {
-  children: string;
+  children: ReactNode;
   flipRtl?: boolean;
   className?: string;
   style?: React.CSSProperties;

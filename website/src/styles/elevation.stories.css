@@ -13,8 +13,7 @@
     color-mix(
       in srgb,
       var(--card-background),
-      var(--elevation-overlay-color)
-        calc(var(--elevation-overlay-opacity) * 100%)
+      var(--elevation-overlay-color) calc(var(--elevation-overlay-opacity))
     )
   );
   display: flex;
@@ -31,8 +30,7 @@
     color-mix(
       in srgb,
       var(--card-background),
-      var(--elevation-overlay-color)
-        calc(var(--elevation-2-overlay-opacity) * 100%)
+      var(--elevation-overlay-color) calc(var(--elevation-2-overlay-opacity))
     )
   );
   transition: var(--elevation-transition), var(--elevation-overlay-transition);
@@ -43,8 +41,7 @@
       color-mix(
         in srgb,
         var(--card-background),
-        var(--elevation-overlay-color)
-          calc(var(--elevation-6-overlay-opacity) * 100%)
+        var(--elevation-overlay-color) calc(var(--elevation-6-overlay-opacity))
       )
     );
   }

@@ -10,12 +10,14 @@
 @import "styles/shape.css";
 @import "styles/typography.css";
 
+@import "components/button/index.css";
 @import "components/chip/index.css";
 @import "components/header/index.css";
 @import "components/results-table/index.css";
 @import "components/radio/index.css";
 @import "components/scaler/index.css";
 @import "components/sidebar/index.css";
+@import "components/snackbar/index.css";
 @import "components/symbol/index.css";
 
 * {
@@ -59,8 +61,7 @@ pre[class*="language-"] {
     color-mix(
       in srgb,
       var(--card-background),
-      var(--elevation-overlay-color)
-        calc(var(--elevation-2-overlay-opacity) * 100%)
+      var(--elevation-overlay-color) calc(var(--elevation-2-overlay-opacity))
     )
   );
   border-radius: var(--shape-medium);

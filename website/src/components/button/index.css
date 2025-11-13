@@ -1,0 +1,138 @@
+.button {
+  appearance: none;
+  border: none;
+  text-transform: uppercase;
+  border-radius: var(--shape-medium);
+  min-width: 4rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+
+  background-color: var(--button-background);
+  color: var(--button-foreground);
+
+  transition: background-color 250ms, color 250ms, var(--elevation-transition),
+    var(--elevation-overlay-transition);
+
+  &:focus-visible {
+    outline: none;
+  }
+  &:disabled {
+    pointer-events: none;
+  }
+
+  .md-symbol {
+    --icon-size: 18;
+    margin-left: -0.25rem;
+    &:dir(rtl) {
+      margin-left: 0;
+      margin-right: -0.25rem;
+    }
+  }
+
+  --button-base-color: var(--primary);
+  --on-button-base-color: var(--on-primary);
+  &.button__secondary {
+    --button-base-color: var(--secondary);
+    --on-button-base-color: var(--on-secondary);
+  }
+  &.button__danger {
+    --button-base-color: var(--red);
+    --on-button-base-color: var(--on-red);
+  }
+
+  &.button__text {
+    padding: 0 0.5rem;
+  }
+  &.button__outlined {
+    border: 1px solid var(--divider);
+  }
+  &.button__text,
+  &.button__outlined {
+    --button-background: transparent;
+    --button-foreground: var(--button-base-color);
+    &:hover {
+      --button-background: color-mix(
+        in srgb,
+        transparent,
+        var(--button-base-color) var(--hover-opacity)
+      );
+    }
+    &:focus-visible {
+      --button-background: color-mix(
+        in srgb,
+        transparent,
+        var(--button-base-color) var(--focus-opacity)
+      );
+    }
+    &:active {
+      --button-background: color-mix(
+        in srgb,
+        transparent,
+        var(--button-base-color) var(--pressed-opacity)
+      );
+    }
+    &:disabled {
+      --button-foreground: color(
+        from var(--page-foreground) srgb r g b / var(--disabled-opacity)
+      );
+    }
+  }
+  &.button__contained {
+    --button-background: var(--button-base-color);
+    --button-foreground: var(--on-button-base-color);
+    &:not(:disabled) {
+      background-color: light-dark(
+        var(--button-background),
+        color-mix(
+          in srgb,
+          var(--button-background),
+          var(--elevation-overlay-color)
+            calc(var(--elevation-2-overlay-opacity))
+        )
+      );
+      box-shadow: var(--elevation-2);
+      &:hover {
+        --button-background: color-mix(
+          in srgb,
+          var(--button-base-color),
+          var(--on-button-base-color) var(--hover-on-filled-opacity)
+        );
+      }
+      &:focus-visible {
+        --button-background: color-mix(
+          in srgb,
+          var(--button-base-color),
+          var(--on-button-base-color) var(--focus-on-filled-opacity)
+        );
+      }
+      &:active {
+        box-shadow: var(--elevation-8);
+        --button-background: color-mix(
+          in srgb,
+          var(--button-base-color),
+          var(--on-button-base-color) var(--pressed-on-filled-opacity)
+        );
+        background-color: light-dark(
+          var(--button-background),
+          color-mix(
+            in srgb,
+            var(--button-background),
+            var(--elevation-overlay-color)
+              calc(var(--elevation-8-overlay-opacity))
+          )
+        );
+      }
+    }
+    &:disabled {
+      opacity: var(--disabled-opacity);
+      --button-background: color(
+        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
+      );
+      --button-foreground: var(--page-foreground);
+    }
+  }
+}

@@ -8,6 +8,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanstackHeader } from "../components/header";
 import { TanstackSidebar } from "../components/sidebar";
+import { Snackbars } from "../components/snackbar";
 import appCss from "../styles.css?url";
 
 interface RouterContext {
@@ -69,6 +70,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <div className="container">
             <TanstackHeader />
             <main>{children}</main>
+            <Snackbars />
           </div>
         </div>
         <TanStackDevtools
