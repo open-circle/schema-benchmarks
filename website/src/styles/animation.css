@@ -1,6 +1,9 @@
 :root {
   --deceleration-curve: cubic-bezier(0, 0, 0.2, 1);
+  --enter-curve: var(--deceleration-curve);
   --acceleration-curve: cubic-bezier(0.4, 0, 1, 1);
+  --exit-permanent-curve: var(--acceleration-curve);
   --standard-curve: cubic-bezier(0.4, 0, 0.2, 1);
   --sharp-curve: cubic-bezier(0.4, 0, 0.6, 1);
+  --exit-temporary-curve: var(--sharp-curve);
 }

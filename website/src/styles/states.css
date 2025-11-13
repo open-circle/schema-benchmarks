@@ -1,0 +1,16 @@
+:root {
+  --hover-opacity: 4%;
+  --focus-opacity: 12%;
+  --selected-opacity: 8%;
+  --activated-opacity: 12%;
+  --pressed-opacity: 12%;
+  --dragged-opacity: 8%;
+  --disabled-opacity: 38%;
+
+  --hover-on-filled-opacity: 8%;
+  --focus-on-filled-opacity: 24%;
+  --selected-on-filled-opacity: 16%;
+  --activated-on-filled-opacity: 24%;
+  --pressed-on-filled-opacity: 32%;
+  --dragged-on-filled-opacity: 16%;
+}

@@ -1,19 +1,31 @@
 :root {
   --sidebar-background: light-dark(white, var(--md-blue-grey-900));
   --sidebar-foreground: var(--page-foreground);
+  --hovered-link-background: color-mix(
+    in srgb,
+    var(--sidebar-background),
+    var(--sidebar-foreground) var(--hover-opacity)
+  );
   --focused-link-background: color-mix(
     in srgb,
     var(--sidebar-background),
-    var(--sidebar-foreground) 20%
+    var(--sidebar-foreground) var(--focus-opacity)
   );
   --active-link-foreground: var(--primary);
   --active-link-background: color(
-    from var(--active-link-foreground) srgb r g b / 0.1
+    from var(--active-link-foreground) srgb r g b / var(--activated-opacity)
+  );
+  --hovered-active-link-background: color-mix(
+    in srgb,
+    var(--active-link-background),
+    var(--active-link-foreground)
+      calc(var(--hover-opacity) + var(--activated-opacity))
   );
   --focused-active-link-background: color-mix(
     in srgb,
     var(--active-link-background),
-    var(--active-link-foreground) 20%
+    var(--active-link-foreground)
+      calc(var(--focus-opacity) + var(--activated-opacity))
   );
 }
 
@@ -66,7 +78,7 @@
           color: color(
             from var(--sidebar-foreground) srgb r g b / var(--primary-text)
           );
-          transition: color 250ms, font-weight 250ms;
+          transition: color 250ms, font-weight 250ms, background-color 250ms;
           .md-symbol {
             color: color(
               from var(--sidebar-foreground) srgb r g b / var(--secondary-text)
@@ -78,6 +90,7 @@
             }
           }
           &:hover {
+            background-color: var(--hovered-link-background);
             font-weight: var(--weight-bold);
             .md-symbol {
               --icon-weight: 600;
@@ -97,6 +110,9 @@
             font-weight: var(--weight-bold);
             --icon-fill: 1;
             --icon-weight: 600;
+            &:hover {
+              background-color: var(--hovered-active-link-background);
+            }
             &:focus-visible {
               background-color: var(--focused-active-link-background);
             }
