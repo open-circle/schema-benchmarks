@@ -7,12 +7,12 @@ interface SidebarExpandedContext {
 
 // biome-ignore lint/style/useComponentExportOnlyModules: exporting context
 export const SidebarExpandedContext = createContext<SidebarExpandedContext>({
-  expanded: false,
+  expanded: true,
   setExpanded: () => {},
 });
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   return (
     <SidebarExpandedContext.Provider value={{ expanded, setExpanded }}>
       {children}
