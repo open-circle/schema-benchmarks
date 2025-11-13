@@ -21,7 +21,7 @@ const meta = {
       control: {
         type: "inline-radio",
       },
-      options: ["text", "outlined", "contained", "toggle"],
+      options: ["text", "outlined", "contained"],
     },
     color: {
       control: {
@@ -96,5 +96,17 @@ export const Toggle: Story = {
   args: {
     variant: "toggle",
     color: undefined,
+  },
+};
+
+export const LinkButton: Story = {
+  render: ({ disabled, ...props }) => (
+    <a href="/" className={getButtonClasses(props)} aria-disabled={disabled}>
+      <MdSymbol>edit</MdSymbol>
+      Edit
+    </a>
+  ),
+  args: {
+    variant: "contained",
   },
 };

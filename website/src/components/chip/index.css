@@ -79,7 +79,7 @@
     }
   }
   &:disabled,
-  &[aria-disabled] {
+  &[aria-disabled="true"] {
     opacity: var(--disabled-text);
     pointer-events: none;
   }

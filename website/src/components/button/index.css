@@ -1,4 +1,5 @@
 .button {
+  text-decoration: none;
   appearance: none;
   border: none;
   border-radius: var(--shape-medium);
@@ -19,7 +20,8 @@
   &:focus-visible {
     outline: none;
   }
-  &:disabled {
+  &:disabled,
+  &[aria-disabled="true"] {
     pointer-events: none;
   }
 
@@ -76,7 +78,8 @@
         var(--button-base-color) var(--pressed-opacity)
       );
     }
-    &:disabled {
+    &:disabled,
+    &[aria-disabled="true"] {
       --button-foreground: color(
         from var(--page-foreground) srgb r g b / var(--disabled-opacity)
       );
@@ -85,7 +88,7 @@
   &.button--contained {
     --button-background: var(--button-base-color);
     --button-foreground: var(--on-button-base-color);
-    &:not(:disabled) {
+    &:not(:disabled, [aria-disabled="true"]) {
       background-color: light-dark(
         var(--button-background),
         color-mix(
@@ -128,7 +131,8 @@
         );
       }
     }
-    &:disabled {
+    &:disabled,
+    &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
         from var(--button-foreground) srgb r g b / var(--disabled-opacity)
