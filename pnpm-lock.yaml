@@ -193,9 +193,6 @@ importers:
       vite:
         specifier: ^7.1.7
         version: 7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)
-      vite-plugin-prismjs:
-        specifier: ^0.0.11
-        version: 0.0.11(prismjs@1.30.0)
       vitest:
         specifier: ^3.0.5
         version: 3.2.4(@types/node@22.19.0)(jiti@2.6.1)(jsdom@27.1.0)(tsx@4.20.6)
@@ -1533,11 +1530,6 @@ packages:
   babel-dead-code-elimination@1.0.10:
     resolution: {integrity: sha512-DV5bdJZTzZ0zn0DC24v3jD7Mnidh6xhKa4GfKCbq3sfW8kaWhDdZjP3i81geA8T33tdYqWKw4D3fVv0CwEgKVA==}
 
-  babel-plugin-prismjs@2.1.0:
-    resolution: {integrity: sha512-ehzSKYfeAz4U78zi/sfwsjDPlq0LvDKxNefcZTJ/iKBu+plsHsLqZhUeGf1+82LAcA35UZGbU6ksEx2Utphc/g==}
-    peerDependencies:
-      prismjs: ^1.18.0
-
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -2826,10 +2818,6 @@ packages:
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
-
-  vite-plugin-prismjs@0.0.11:
-    resolution: {integrity: sha512-20NBQxg/zH+3FTrlU6BQTob720xkuXNYtrx7psAQ4E6pMcRDeLEK77QU9kXURU587+f2To7ASH1JVTGbXVV/vQ==}
-    engines: {node: '>=12.0.0'}
 
   vite-tsconfig-paths@5.1.4:
     resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
@@ -4353,10 +4341,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-prismjs@2.1.0(prismjs@1.30.0):
-    dependencies:
-      prismjs: 1.30.0
-
   balanced-match@1.0.2: {}
 
   base64-js@1.5.1: {}
@@ -5587,14 +5571,6 @@ snapshots:
       - terser
       - tsx
       - yaml
-
-  vite-plugin-prismjs@0.0.11(prismjs@1.30.0):
-    dependencies:
-      '@babel/core': 7.28.5
-      babel-plugin-prismjs: 2.1.0(prismjs@1.30.0)
-    transitivePeerDependencies:
-      - prismjs
-      - supports-color
 
   vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)):
     dependencies:

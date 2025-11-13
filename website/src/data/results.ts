@@ -5,14 +5,14 @@ import {
   errorTypeSchema,
   type LibraryType,
   libraryTypeSchema,
-  type ProcessedResult,
   type ProcessedResults,
   processedResultsSchema,
 } from "@schema-benchmarks/bench";
 import localResults from "@schema-benchmarks/bench/results.json";
+import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import prism from "prismjs";
+import Prism from "prismjs";
 import loadLanguages from "prismjs/components/";
 import * as v from "valibot";
 import type { OptionLabel } from "@/components/page-filter";
@@ -38,24 +38,23 @@ export const libraryTypeLabels: Record<LibraryType, OptionLabel> = {
   precompiled: { label: "Precompiled", icon: "build" },
 };
 
-function highlightSnippet(result: ProcessedResult) {
-  result.snippet = prism.highlight(
-    result.snippet,
-    // biome-ignore lint/style/noNonNullAssertion: we've loaded this
-    prism.languages.typescript!,
-    "typescript",
+const highlightCache = new Map<string, string>();
+const highlight = (code: string) =>
+  getOrInsertComputed(highlightCache, code, () =>
+    // biome-ignore lint/style/noNonNullAssertion: we've checked that the language is loaded
+    Prism.highlight(code, Prism.languages.typescript!, "typescript"),
   );
-}
+
 function highlightSnippets(results: ProcessedResults) {
   for (const libraryType of Object.values(results.initialization)) {
     for (const result of libraryType) {
-      highlightSnippet(result);
+      result.snippet = highlight(result.snippet);
     }
   }
   for (const libraryType of Object.values(results.validation)) {
     for (const dataType of Object.values(libraryType)) {
       for (const result of dataType) {
-        highlightSnippet(result);
+        result.snippet = highlight(result.snippet);
       }
     }
   }
@@ -63,19 +62,16 @@ function highlightSnippets(results: ProcessedResults) {
     for (const dataType of Object.values(libraryType)) {
       for (const errorType of Object.values(dataType)) {
         for (const result of errorType) {
-          highlightSnippet(result);
+          result.snippet = highlight(result.snippet);
         }
       }
     }
   }
 }
 
-let hasLoadedLanguages = false;
-
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
-  if (!hasLoadedLanguages) {
+  if (!Prism.languages.typescript) {
     loadLanguages(["typescript"]);
-    hasLoadedLanguages = true;
   }
 
   let results: ProcessedResults;
