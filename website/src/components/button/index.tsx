@@ -7,7 +7,7 @@ export interface ToggleButtonProps {
 
 export interface ButtonProps {
   variant?: "text" | "outlined" | "contained";
-  color?: "primary" | "secondary" | "danger";
+  color?: "primary" | "secondary" | "danger" | "success" | "error";
 }
 
 export const getButtonClasses = ({

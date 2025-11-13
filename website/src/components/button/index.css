@@ -43,7 +43,12 @@
     --button-base-color: var(--secondary);
     --on-button-base-color: var(--on-secondary);
   }
-  &.button--danger {
+  &.button--success {
+    --button-base-color: var(--green);
+    --on-button-base-color: var(--on-green);
+  }
+  &.button--danger,
+  &.button--error {
     --button-base-color: var(--red);
     --on-button-base-color: var(--on-red);
   }

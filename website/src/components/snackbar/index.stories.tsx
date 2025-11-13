@@ -7,14 +7,23 @@ function SnackbarsDemo() {
   return (
     <>
       <Snackbars />
-      <button type="button" onClick={() => toast("Hello World")}>
+      <button
+        type="button"
+        className={getButtonClasses()}
+        onClick={() => toast("Hello World")}
+      >
         Default
       </button>
-      <button type="button" onClick={() => toast.success("Success!")}>
+      <button
+        type="button"
+        className={getButtonClasses({ color: "success" })}
+        onClick={() => toast.success("Success!")}
+      >
         Success
       </button>
       <button
         type="button"
+        className={getButtonClasses({ color: "error" })}
         onClick={() =>
           toast.error((t) => (
             <>
@@ -34,6 +43,7 @@ function SnackbarsDemo() {
       </button>
       <button
         type="button"
+        className={getButtonClasses()}
         onClick={() =>
           toast.promise(
             new Promise<void>((resolve, reject) =>
