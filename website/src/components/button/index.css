@@ -1,7 +1,6 @@
 .button {
   appearance: none;
   border: none;
-  text-transform: uppercase;
   border-radius: var(--shape-medium);
   min-width: 4rem;
   height: 2.25rem;

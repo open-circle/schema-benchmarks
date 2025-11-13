@@ -118,6 +118,7 @@
   font-family: var(--button-family);
   font-size: var(--button-size);
   font-weight: var(--button-weight);
+  text-transform: uppercase;
 }
 
 .typo-body1 {
