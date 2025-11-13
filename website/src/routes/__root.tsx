@@ -69,7 +69,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <div className="sidebar-container">
           <SidebarProvider>
             <TanstackSidebar />
-            <div className="container">
+            <div className="header-container">
               <TanstackHeader />
               <main>{children}</main>
               <Snackbars />

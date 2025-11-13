@@ -6,6 +6,7 @@
 @import "styles/animation.css";
 @import "styles/colors.css";
 @import "styles/elevation.css";
+@import "styles/layout.css";
 @import "styles/states.css";
 @import "styles/shape.css";
 @import "styles/typography.css";
@@ -89,16 +90,34 @@ pre[class*="language-"] {
   min-height: 100vh;
 }
 
-.container {
+.header-container {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 main {
-  padding: 1rem;
+  padding: 1rem 0;
   flex: 1;
   background-color: var(--page-background);
+
+  @media (--phone) {
+    margin: 1rem;
+  }
+
+  @media (--tablet1) {
+    margin: 2rem;
+  }
+
+  @media (--tablet2) {
+    max-width: 56.5rem; /* 840px + 4rem */
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  @media (--laptop) or (--desktop) {
+    margin: 0 2rem;
+  }
 }
 
 @view-transition {
@@ -118,7 +137,20 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  @media (--phone) or (--tablet1) or (--tablet2) {
+    margin: 0 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (--laptop) {
+    margin: 0 12.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (--desktop) {
+    max-width: 1024px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+  }
+
   h6 {
     margin: 0;
   }

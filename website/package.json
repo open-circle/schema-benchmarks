@@ -35,6 +35,7 @@
     "jiti": "^2.6.1",
     "jsdom": "^27.0.0",
     "nitro": "3.0.1-alpha.1",
+    "postcss-custom-media": "^11.0.6",
     "postcss-extend-rule": "^4.0.0",
     "postcss-load-config": "^6.0.1",
     "storybook": "^10.0.7",
