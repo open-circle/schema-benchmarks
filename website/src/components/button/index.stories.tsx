@@ -62,7 +62,6 @@ export const Contained: Story = {
   },
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: demo component
 function ToggleButton({ disabled }: { disabled: boolean }) {
   const [active, setActive] = useState(false);
   return (
@@ -99,14 +98,41 @@ export const Toggle: Story = {
   },
 };
 
-export const LinkButton: Story = {
+export const Link: Story = {
   render: ({ disabled, ...props }) => (
-    <a href="/" className={getButtonClasses(props)} aria-disabled={disabled}>
+    <a className={getButtonClasses(props)} aria-disabled={disabled}>
       <MdSymbol>edit</MdSymbol>
       Edit
     </a>
   ),
   args: {
     variant: "contained",
+  },
+};
+
+export const LinkToggle: Story = {
+  render: ({ disabled }) => (
+    <a
+      className={getButtonClasses({ variant: "toggle" })}
+      aria-disabled={disabled}
+    >
+      <MdSymbol>favorite</MdSymbol>
+    </a>
+  ),
+  argTypes: {
+    variant: {
+      table: {
+        disable: true,
+      },
+    },
+    color: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  args: {
+    variant: "toggle",
+    color: undefined,
   },
 };

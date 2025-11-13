@@ -6,9 +6,8 @@ const meta = {
   title: "Components/Header",
   render: () => (
     <Header>
-      {" "}
       <nav className="breadcrumbs">
-        <a href="/">Home</a>
+        <a>Home</a>
         <MdSymbol>chevron_right</MdSymbol>
         <span>Page name</span>
       </nav>

@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { useState } from "react";
 import { MdSymbol } from "../symbol";
 
-// biome-ignore lint/style/useComponentExportOnlyModules: demo component
 function ChipDemo() {
   const [selected, setSelected] = useState("foo");
   return (

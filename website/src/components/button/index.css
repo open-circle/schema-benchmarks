@@ -170,7 +170,8 @@
         from currentColor srgb r g b / var(--pressed-opacity)
       );
     }
-    &:disabled {
+    &:disabled,
+    &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
     }
     &.active {

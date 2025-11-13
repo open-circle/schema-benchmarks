@@ -58,6 +58,19 @@
           }
         }
       }
+    },
+    {
+      "includes": ["**/src/**/*.stories.*"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useValidAnchor": "off"
+          },
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
     }
   ],
   "vcs": {

@@ -3,7 +3,6 @@ import { toast } from "react-hot-toast";
 import { getButtonClasses } from "../button";
 import { Snackbars } from ".";
 
-// biome-ignore lint/style/useComponentExportOnlyModules: demo component
 function SnackbarsDemo() {
   return (
     <>
