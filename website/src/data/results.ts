@@ -5,11 +5,15 @@ import {
   errorTypeSchema,
   type LibraryType,
   libraryTypeSchema,
+  type ProcessedResult,
+  type ProcessedResults,
   processedResultsSchema,
 } from "@schema-benchmarks/bench";
-import results from "@schema-benchmarks/bench/results.json";
+import localResults from "@schema-benchmarks/bench/results.json";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import prism from "prismjs";
+import loadLanguages from "prismjs/components/";
 import * as v from "valibot";
 import type { OptionLabel } from "@/components/page-filter";
 
@@ -34,7 +38,47 @@ export const libraryTypeLabels: Record<LibraryType, OptionLabel> = {
   precompiled: { label: "Precompiled", icon: "build" },
 };
 
+function highlightSnippet(result: ProcessedResult) {
+  result.snippet = prism.highlight(
+    result.snippet,
+    // biome-ignore lint/style/noNonNullAssertion: we've loaded this
+    prism.languages.typescript!,
+    "typescript",
+  );
+}
+function highlightSnippets(results: ProcessedResults) {
+  for (const libraryType of Object.values(results.initialization)) {
+    for (const result of libraryType) {
+      highlightSnippet(result);
+    }
+  }
+  for (const libraryType of Object.values(results.validation)) {
+    for (const dataType of Object.values(libraryType)) {
+      for (const result of dataType) {
+        highlightSnippet(result);
+      }
+    }
+  }
+  for (const libraryType of Object.values(results.parsing)) {
+    for (const dataType of Object.values(libraryType)) {
+      for (const errorType of Object.values(dataType)) {
+        for (const result of errorType) {
+          highlightSnippet(result);
+        }
+      }
+    }
+  }
+}
+
+let hasLoadedLanguages = false;
+
 export const getResultsFn = createServerFn().handler(async ({ signal }) => {
+  if (!hasLoadedLanguages) {
+    loadLanguages(["typescript"]);
+    hasLoadedLanguages = true;
+  }
+
+  let results: ProcessedResults;
   if (process.env.NODE_ENV === "production") {
     try {
       const response = await fetch(
@@ -45,11 +89,16 @@ export const getResultsFn = createServerFn().handler(async ({ signal }) => {
         throw new Error("Failed to fetch results: ", {
           cause: response.status,
         });
-      return v.parse(processedResultsSchema, await response.json());
+      results = v.parse(processedResultsSchema, await response.json());
     } catch (error) {
       console.error("Falling back to local results: ", error);
+      results = structuredClone(localResults);
     }
+  } else {
+    results = structuredClone(localResults);
   }
+
+  highlightSnippets(results);
 
   return results;
 });
