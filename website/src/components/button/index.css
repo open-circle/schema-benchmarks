@@ -1,4 +1,5 @@
 .button {
+  @extend .typo-button;
   text-decoration: none;
   appearance: none;
   border: none;

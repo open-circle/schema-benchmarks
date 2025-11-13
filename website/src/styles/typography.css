@@ -185,8 +185,3 @@ h6 {
 p {
   margin: 0;
 }
-
-button,
-.button {
-  @extend .typo-button;
-}
