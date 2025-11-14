@@ -115,8 +115,9 @@ for (const [dataType, data] of [
             decode(data);
           },
           {
+            // workaround: dedent does weird things with multiline comments
             snippet: ts`
-							// const decode = Schema.decodeUnknownEither(schema, { errors: "all" });
+							/*\nconst decode = Schema.decodeUnknownEither(\n  schema,\n  { errors: "all" }\n);\n*/
 							decode(data);
 						`,
           },
@@ -199,8 +200,9 @@ for (const [dataType, data] of [
             decode(data);
           },
           {
+            // workaround: dedent does weird things with multiline comments
             snippet: ts`
-							// const decode = Schema.decodeUnknownEither(schema, { errors: "first" });
+							/*\nconst decode = Schema.decodeUnknownEither(\n  schema,\n  { errors: "first" }\n);\n*/
 							decode(data);
 						`,
           },

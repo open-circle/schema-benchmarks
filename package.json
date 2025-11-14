@@ -12,7 +12,8 @@
     "website:serve": "pnpm run --filter website serve",
     "website:storybook": "pnpm run --filter website storybook",
     "bench:bench": "pnpm run --filter '*/bench' bench",
-    "bench:download": "pnpm run --filter '*/bench' download"
+    "bench:download": "pnpm run --filter '*/bench' download",
+    "bench:all": "pnpm bench:download && pnpm bench:bench"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.5"

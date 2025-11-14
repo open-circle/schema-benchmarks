@@ -116,7 +116,11 @@ bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
       },
       {
         note: "decodeUnknownEither",
-        snippet: ts`Schema.decodeUnknownEither(Schema.struct(...))`,
+        snippet: ts`
+        Schema.decodeUnknownEither(
+          Schema.struct(...)
+        )
+        `,
       },
     );
   });
