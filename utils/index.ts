@@ -74,3 +74,9 @@ export function getOrInsertComputed<K extends object, V>(
 
   return map.set(key, compute(key)).get(key) as V;
 }
+
+const byteUnits = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+export function formatBytes(bytes: number) {
+  const unit = Math.floor(Math.log2(bytes) / 10);
+  return `${numFormatter.format(bytes / 2 ** (10 * unit))}${byteUnits[unit]}`;
+}
