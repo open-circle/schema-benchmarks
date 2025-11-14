@@ -44,13 +44,13 @@ async function download() {
         ? fileName.match(/\((.*?)\)/)?.[1]
         : undefined;
 
-      const file = new File([code], `${libraryName}.js`);
+      const blob = new Blob([code]);
 
       // do we want to write the compiled file somewhere, for reference?
       results.push({
-        bytes: file.size,
         libraryName,
         note,
+        bytes: blob.size,
       });
     }
     results.sort((a, b) => a.bytes - b.bytes);
