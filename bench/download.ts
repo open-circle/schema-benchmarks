@@ -2,14 +2,18 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
 import { rolldown } from "rolldown";
-import type { DownloadResult, DownloadResults } from "./results/types";
+import {
+  type DownloadResult,
+  type DownloadResults,
+  minifyTypeSchema,
+} from "./results/types";
 
 async function download() {
   const allResults: DownloadResults = {
     minified: [],
     unminified: [],
   };
-  for (const minify of [false, true]) {
+  for (const minify of minifyTypeSchema.options) {
     const results: Array<Omit<DownloadResult, "rank">> = [];
     for await (const filePath of fs.glob(
       path.resolve(__dirname, "schemas/download/**/*.ts"),
@@ -24,7 +28,7 @@ async function download() {
       const output = await bundle.generate({
         format: "esm",
         dir: path.resolve(__dirname, "schemas/download_compiled"),
-        minify,
+        minify: minify === "minified",
       });
 
       const code = output.output
@@ -54,8 +58,8 @@ async function download() {
       });
     }
     results.sort((a, b) => a.bytes - b.bytes);
-    allResults[minify ? "minified" : "unminified"] = results.map(
-      (result, index) => Object.assign(result, { rank: index + 1 }),
+    allResults[minify] = results.map((result, index) =>
+      Object.assign(result, { rank: index + 1 }),
     );
   }
 
