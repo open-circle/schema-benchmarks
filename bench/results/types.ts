@@ -55,3 +55,20 @@ export const processedResultsSchema = v.object({
   ),
 });
 export type ProcessedResults = v.InferOutput<typeof processedResultsSchema>;
+
+export const minifyTypeSchema = v.picklist(["minified", "unminified"]);
+export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
+
+export const downloadResultSchema = v.object({
+  bytes: v.number(),
+  download20Mbps: v.number(),
+  libraryName: v.string(),
+  note: v.optional(v.string()),
+});
+export type DownloadResult = v.InferOutput<typeof downloadResultSchema>;
+
+export const downloadResultsSchema = v.object({
+  minified: v.array(downloadResultSchema),
+  unminified: v.array(downloadResultSchema),
+});
+export type DownloadResults = v.InferOutput<typeof downloadResultsSchema>;

@@ -13,6 +13,6 @@ async function runBenchmarks(): Promise<ProcessedResults> {
 }
 
 runBenchmarks().then(async (results) => {
-  const outputPath = path.join(__dirname, "results.json");
+  const outputPath = path.join(__dirname, "bench.json");
   await fs.writeFile(outputPath, JSON.stringify(results));
 });

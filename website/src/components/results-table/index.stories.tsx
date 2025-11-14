@@ -1,4 +1,4 @@
-import results from "@schema-benchmarks/bench/results.json";
+import results from "@schema-benchmarks/bench/bench.json";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResultsTable } from ".";
 

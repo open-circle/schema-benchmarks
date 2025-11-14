@@ -8,7 +8,7 @@ import {
   type ProcessedResults,
   processedResultsSchema,
 } from "@schema-benchmarks/bench";
-import localResults from "@schema-benchmarks/bench/results.json";
+import localResults from "@schema-benchmarks/bench/bench.json";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
@@ -78,7 +78,7 @@ export const getResultsFn = createServerFn().handler(async ({ signal }) => {
   if (process.env.NODE_ENV === "production") {
     try {
       const response = await fetch(
-        "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/results.json",
+        "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/bench.json",
         { signal },
       );
       if (!response.ok)
