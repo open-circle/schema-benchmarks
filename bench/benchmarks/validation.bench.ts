@@ -5,13 +5,13 @@ import typia from "typia";
 import * as v from "valibot";
 import { errorData, successData } from "../data";
 import type { DataType } from "../results/types";
-import { getAjv, getAjvSchema } from "../schemas/ajv";
-import { getArkTypeSchema } from "../schemas/arktype";
-import { getEffectSchema } from "../schemas/effect";
-import { getTypeboxSchema } from "../schemas/typebox";
-import type { TypiaSchema } from "../schemas/typia";
-import { getValibotSchema } from "../schemas/valibot";
-import { getYupSchema } from "../schemas/yup";
+import { getAjv, getAjvSchema } from "../schemas/benchmarks/ajv";
+import { getArkTypeSchema } from "../schemas/benchmarks/arktype";
+import { getEffectSchema } from "../schemas/benchmarks/effect";
+import { getTypeboxSchema } from "../schemas/benchmarks/typebox";
+import type { TypiaSchema } from "../schemas/benchmarks/typia";
+import { getValibotSchema } from "../schemas/benchmarks/valibot";
+import { getYupSchema } from "../schemas/benchmarks/yup";
 import { makeBenchFactory } from "../utils/bench-factory";
 
 declare module "../utils/registry" {

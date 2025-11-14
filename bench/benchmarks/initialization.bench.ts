@@ -3,16 +3,16 @@ import * as Schema from "effect/Schema";
 import typia from "typia";
 import z from "zod";
 import * as zMini from "zod/mini";
-import { getAjv, getAjvSchema } from "../schemas/ajv";
-import { getArkTypeSchema } from "../schemas/arktype";
-import { getEffectSchema } from "../schemas/effect";
-import { getJoiSchema } from "../schemas/joi";
-import { getTypeboxSchema } from "../schemas/typebox";
-import type { TypiaSchema } from "../schemas/typia";
-import { getValibotSchema } from "../schemas/valibot";
-import { getYupSchema } from "../schemas/yup";
-import { getZodSchema } from "../schemas/zod";
-import { getZodMiniSchema } from "../schemas/zod-mini";
+import { getAjv, getAjvSchema } from "../schemas/benchmarks/ajv";
+import { getArkTypeSchema } from "../schemas/benchmarks/arktype";
+import { getEffectSchema } from "../schemas/benchmarks/effect";
+import { getJoiSchema } from "../schemas/benchmarks/joi";
+import { getTypeboxSchema } from "../schemas/benchmarks/typebox";
+import type { TypiaSchema } from "../schemas/benchmarks/typia";
+import { getValibotSchema } from "../schemas/benchmarks/valibot";
+import { getYupSchema } from "../schemas/benchmarks/yup";
+import { getZodSchema } from "../schemas/benchmarks/zod";
+import { getZodMiniSchema } from "../schemas/benchmarks/zod-mini";
 import { makeBenchFactory } from "../utils/bench-factory";
 
 declare module "../utils/registry" {

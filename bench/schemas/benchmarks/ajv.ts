@@ -1,7 +1,7 @@
 import { Ajv, type JSONSchemaType, type Options } from "ajv";
 import addFormats from "ajv-formats";
 import addKeywords from "ajv-keywords";
-import type { ImageData, ProductData, RatingData } from "../data";
+import type { ImageData, ProductData, RatingData } from "../../data";
 
 export function getAjv(options?: Options) {
   const ajv = new Ajv(options);
