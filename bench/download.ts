@@ -2,14 +2,15 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
 import { rolldown } from "rolldown";
-import type { DownloadResults } from "./results/types";
+import type { DownloadResult, DownloadResults } from "./results/types";
 
 async function download() {
-  const results: DownloadResults = {
+  const allResults: DownloadResults = {
     minified: [],
     unminified: [],
   };
   for (const minify of [false, true]) {
+    const results: Array<Omit<DownloadResult, "rank">> = [];
     for await (const filePath of fs.glob(
       path.resolve(__dirname, "schemas/download/**/*.ts"),
     )) {
@@ -46,18 +47,20 @@ async function download() {
       const file = new File([code], `${libraryName}.js`);
 
       // do we want to write the compiled file somewhere, for reference?
-
-      // biome-ignore lint/suspicious/noAssignInExpressions: perf
-      (results[minify ? "minified" : "unminified"] ??= []).push({
+      results.push({
         bytes: file.size,
         libraryName,
         note,
       });
     }
+    results.sort((a, b) => a.bytes - b.bytes);
+    allResults[minify ? "minified" : "unminified"] = results.map(
+      (result, index) => Object.assign(result, { rank: index + 1 }),
+    );
   }
 
   const outputPath = path.join(__dirname, "download.json");
-  await fs.writeFile(outputPath, JSON.stringify(results));
+  await fs.writeFile(outputPath, JSON.stringify(allResults));
 }
 
 download();

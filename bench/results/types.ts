@@ -54,6 +54,7 @@ export const minifyTypeSchema = v.picklist(["minified", "unminified"]);
 export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
 
 export const downloadResultSchema = v.object({
+  rank: v.number(),
   bytes: v.number(),
   libraryName: v.string(),
   note: v.optional(v.string()),
