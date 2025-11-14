@@ -4,8 +4,6 @@ import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
 import { rolldown } from "rolldown";
 import type { DownloadResults } from "./results/types";
 
-const downloadMbps = 20;
-
 async function download() {
   const results: DownloadResults = {
     minified: [],
@@ -47,13 +45,11 @@ async function download() {
 
       const file = new File([code], `${libraryName}.js`);
 
-      // time to download file in ms
-      const downloadTime = (file.size / (downloadMbps * 1024 * 1024)) * 1000;
+      // do we want to write the compiled file somewhere, for reference?
 
       // biome-ignore lint/suspicious/noAssignInExpressions: perf
       (results[minify ? "minified" : "unminified"] ??= []).push({
         bytes: file.size,
-        download20Mbps: downloadTime,
         libraryName,
         note,
       });

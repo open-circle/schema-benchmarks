@@ -55,7 +55,6 @@ export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
 
 export const downloadResultSchema = v.object({
   bytes: v.number(),
-  download20Mbps: v.number(),
   libraryName: v.string(),
   note: v.optional(v.string()),
 });
