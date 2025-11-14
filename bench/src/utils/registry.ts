@@ -41,6 +41,28 @@ class Registry {
   benches = new Map<Bench, BenchMeta>();
   addBench(bench: Bench, meta: BenchMeta) {
     this.benches.set(bench, meta);
+    bench.addEventListener("start", () => {
+      console.log("Starting benchmark", meta);
+    });
+    bench.addEventListener("cycle", (evt) => {
+      if (!evt.task) return;
+      console.log("Running case", this.#getCaseName(evt.task.name));
+    });
+    bench.addEventListener("complete", () => {
+      console.table(
+        bench.table().map((row) => {
+          const taskName = row?.["Task name"];
+          if (!taskName) return row;
+          return {
+            ...row,
+            "Task name": this.#getCaseName(taskName as string),
+          };
+        }),
+      );
+    });
+    bench.addEventListener("error", (evt) => {
+      console.error("Error in benchmark", evt.error);
+    });
   }
   getBenchMeta(bench: Bench): BenchMeta;
   getBenchMeta<Type extends MetaType>(
@@ -80,6 +102,11 @@ class Registry {
     if (type && meta.type !== type)
       throw new Error(`Meta type mismatch: ${id}`);
     return meta;
+  }
+
+  #getCaseName(id: string) {
+    const meta = this.getCaseMeta(id);
+    return `${meta.libraryName}${meta.note ? ` (${meta.note})` : ""}`;
   }
 }
 
