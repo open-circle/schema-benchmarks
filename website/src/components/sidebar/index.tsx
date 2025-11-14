@@ -5,7 +5,6 @@ import {
   type LinkOptions,
   linkOptions,
 } from "@tanstack/react-router";
-import clsx from "clsx";
 import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
 import { MdSymbol } from "../symbol";
@@ -30,6 +29,11 @@ const sidebarLinks = [
     ...linkOptions({ to: "/parsing" }),
     name: "Parsing",
     icon: "output_circle",
+  },
+  {
+    ...linkOptions({ to: "/download" }),
+    name: "Download",
+    icon: "download_2",
   },
 ] satisfies Array<LinkOptions & { name: string; icon: string }>;
 

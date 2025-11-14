@@ -4,9 +4,9 @@ import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
 import { ResultsTable } from "@/components/results-table";
 import {
-  dataTypeLabels,
-  getResults,
-  libraryTypeLabels,
+  dataTypeProps,
+  getBenchResults,
+  libraryTypeProps,
   optionalDataTypeSchema,
   optionalLibraryTypeSchema,
 } from "@/data/results";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/validation")({
   component: RouteComponent,
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
-    await queryClient.prefetchQuery(getResults(abortController.signal));
+    await queryClient.prefetchQuery(getBenchResults(abortController.signal));
     return { crumb: "Validation" };
   },
 });
@@ -35,25 +35,21 @@ export const Route = createFileRoute("/validation")({
 function RouteComponent() {
   const { libraryType, dataType } = Route.useSearch();
   const { data } = useSuspenseQuery({
-    ...getResults(),
+    ...getBenchResults(),
     select: (results) => results.validation,
   });
   return (
     <>
       <div className="page-filters">
         <PageFilterGroup
-          title="Library Type"
-          options={optionalLibraryTypeSchema.wrapped.options}
-          labels={libraryTypeLabels}
+          {...libraryTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: { libraryType: option },
           })}
         />
         <PageFilterGroup
-          title="Data Type"
-          options={optionalDataTypeSchema.wrapped.options}
-          labels={dataTypeLabels}
+          {...dataTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: ({ libraryType }) => ({

@@ -1,4 +1,4 @@
-import type { ProcessedResult } from "@schema-benchmarks/bench";
+import type { BenchResult } from "@schema-benchmarks/bench";
 import { msToNs, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { getBounds } from "@/data/scale";
@@ -8,7 +8,7 @@ import { Radio } from "../radio";
 import { Scaler } from "../scaler";
 
 export interface ResultsTableProps {
-  results: Array<ProcessedResult>;
+  results: Array<BenchResult>;
 }
 
 const getRatio = (a: number, b: number) => {
@@ -17,7 +17,7 @@ const getRatio = (a: number, b: number) => {
   return a / b;
 };
 
-function useComparison(results: Array<ProcessedResult>) {
+function useComparison(results: Array<BenchResult>) {
   const [compareId, setCompareId] = useState(results[0]?.id);
   useEffect(() => {
     setCompareId(results[0]?.id);

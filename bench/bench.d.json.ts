@@ -1,5 +1,5 @@
-import type { ProcessedResults } from ".";
+import type { BenchResults } from ".";
 
-declare const results: ProcessedResults;
+declare const results: BenchResults;
 
 export default results;

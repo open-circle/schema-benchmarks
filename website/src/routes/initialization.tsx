@@ -4,8 +4,8 @@ import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
 import { ResultsTable } from "@/components/results-table";
 import {
-  getResults,
-  libraryTypeLabels,
+  getBenchResults,
+  libraryTypeProps,
   optionalLibraryTypeSchema,
 } from "@/data/results";
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/initialization")({
   component: RouteComponent,
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
-    await queryClient.prefetchQuery(getResults(abortController.signal));
+    await queryClient.prefetchQuery(getBenchResults(abortController.signal));
     return { crumb: "Initialization" };
   },
 });
@@ -32,16 +32,14 @@ export const Route = createFileRoute("/initialization")({
 function RouteComponent() {
   const { libraryType } = Route.useSearch();
   const { data } = useSuspenseQuery({
-    ...getResults(),
+    ...getBenchResults(),
     select: (results) => results.initialization,
   });
   return (
     <>
       <div className="page-filters">
         <PageFilterGroup
-          title="Library Type"
-          options={optionalLibraryTypeSchema.wrapped.options}
-          labels={libraryTypeLabels}
+          {...libraryTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: { libraryType: option },

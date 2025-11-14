@@ -2,13 +2,13 @@ import { partition } from "@schema-benchmarks/utils";
 import type { Bench, Task } from "tinybench";
 import type { BenchMetaForType, MetaType } from "../utils/registry";
 import { registry } from "../utils/registry";
-import type { ProcessedResult, ProcessedResults } from "./types";
+import type { BenchResult, BenchResults } from "./types";
 
 const selector: {
   [Type in MetaType]: (
-    results: ProcessedResults,
+    results: BenchResults,
     benchMeta: BenchMetaForType<Type>,
-  ) => Array<ProcessedResult>;
+  ) => Array<BenchResult>;
 } = {
   initialization(results, { libraryType }) {
     return results.initialization[libraryType];
@@ -21,7 +21,7 @@ const selector: {
   },
 };
 
-const getEmptyResults = (): ProcessedResults => ({
+const getEmptyResults = (): BenchResults => ({
   initialization: {
     runtime: [],
     precompiled: [],
@@ -61,7 +61,7 @@ const getEmptyResults = (): ProcessedResults => ({
 });
 
 function processResult(
-  results: ProcessedResults,
+  results: BenchResults,
   bench: Bench,
   tasks: Array<Task>,
 ) {

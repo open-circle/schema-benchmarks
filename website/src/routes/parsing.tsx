@@ -5,10 +5,10 @@ import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
 import { ResultsTable } from "@/components/results-table";
 import {
-  dataTypeLabels,
-  errorTypeLabels,
-  getResults,
-  libraryTypeLabels,
+  dataTypeProps,
+  errorTypeProps,
+  getBenchResults,
+  libraryTypeProps,
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
   optionalLibraryTypeSchema,
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/parsing")({
   component: RouteComponent,
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
-    await queryClient.prefetchQuery(getResults(abortController.signal));
+    await queryClient.prefetchQuery(getBenchResults(abortController.signal));
     return { crumb: "Parsing" };
   },
 });
@@ -39,25 +39,21 @@ export const Route = createFileRoute("/parsing")({
 function RouteComponent() {
   const { libraryType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
-    ...getResults(),
+    ...getBenchResults(),
     select: (results) => results.parsing,
   });
   return (
     <>
       <div className="page-filters">
         <PageFilterGroup
-          title="Library Type"
-          options={optionalLibraryTypeSchema.wrapped.options}
-          labels={libraryTypeLabels}
+          {...libraryTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: { libraryType: option },
           })}
         />
         <PageFilterGroup
-          title="Data Type"
-          options={optionalDataTypeSchema.wrapped.options}
-          labels={dataTypeLabels}
+          {...dataTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: ({ libraryType, errorType }) => ({
@@ -68,9 +64,7 @@ function RouteComponent() {
           })}
         />
         <PageFilterGroup
-          title="Error Type"
-          options={optionalErrorTypeSchema.wrapped.options}
-          labels={errorTypeLabels}
+          {...errorTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: ({ libraryType, dataType }) => ({

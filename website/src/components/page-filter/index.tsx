@@ -13,7 +13,10 @@ export interface OptionLabel {
   icon: ReactNode;
 }
 
-export interface PageFilterGroupProps<Options extends string, LinkOptions> {
+export interface PageFilterGroupProps<
+  Options extends string,
+  LinkOptions = unknown,
+> {
   title: ReactNode;
   options: ReadonlyArray<Options>;
   labels: Record<Options, OptionLabel>;
