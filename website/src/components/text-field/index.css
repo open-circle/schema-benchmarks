@@ -23,12 +23,10 @@
   align-items: center;
   gap: 0.5rem;
   border-radius: var(--shape-medium);
-  /* use box-shadow to avoid layout shift when border width changes */
   border: 2px transparent;
-  box-shadow: 0 0 0 var(--text-field-border-width)
-    var(--text-field-border-color);
+  outline: var(--text-field-border-width) solid var(--text-field-border-color);
   padding-right: var(--text-field-padding-end);
-  transition: box-shadow 150ms var(--standard-curve);
+  transition: outline 150ms var(--standard-curve);
   &:dir(rtl) {
     padding-right: var(--text-field-padding-start);
     padding-left: var(--text-field-padding-end);
