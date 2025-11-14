@@ -27,7 +27,6 @@ async function download() {
 
       const output = await bundle.generate({
         format: "esm",
-        dir: path.resolve(process.cwd(), "schemas/download_compiled"),
         minify: minify === "minified",
       });
 
@@ -40,6 +39,26 @@ async function download() {
       // should remove schemas/download/, note and index file names
       const fileName = filePath.split("schemas/download/")[1];
       if (!fileName) continue;
+
+      const compiledPath = path.resolve(
+        process.cwd(),
+        "schemas/download_compiled",
+        minify,
+        fileName.replace(".ts", ".js"),
+      );
+
+      const exists = await fs
+        .access(compiledPath)
+        .then(() => true)
+        .catch(() => false);
+
+      if (!exists) {
+        await fs.mkdir(path.dirname(compiledPath), { recursive: true });
+      }
+
+      // write to file
+      await fs.writeFile(compiledPath, code);
+
       const libraryName = fileName
         .replace(/\/index\s?/, "")
         .replace(/\.ts$/, "")
