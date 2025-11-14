@@ -1,5 +1,9 @@
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
-import { durationFormatter, formatBytes } from "@schema-benchmarks/utils";
+import {
+  durationFormatter,
+  formatBytes,
+  getDuration,
+} from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { getDownloadTime } from "@/data/results";
 import { getBounds } from "@/data/scale";
@@ -26,19 +30,25 @@ function SourceLinks({
     <div className="source-links" ref={groupRef}>
       <a
         href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download/${result.fileName}`}
-        className={getButtonClasses({ variant: "text" })}
+        className={getButtonClasses({
+          variant: "toggle",
+        })}
         target="_blank"
+        rel="noreferrer noopener"
+        aria-label="View source"
       >
         <MdSymbol>code</MdSymbol>
-        Source
       </a>
       <a
         href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download_compiled/${minify}/${result.fileName.replace(".ts", ".js")}`}
-        className={getButtonClasses({ variant: "text" })}
+        className={getButtonClasses({
+          variant: "toggle",
+        })}
         target="_blank"
+        rel="noreferrer noopener"
+        aria-label="View compiled source"
       >
         <MdSymbol>deployed_code</MdSymbol>
-        Compiled
       </a>
     </div>
   );
@@ -77,9 +87,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   </Scaler>
                 </td>
                 <td className="numeric">
-                  {durationFormatter.format({
-                    milliseconds: Math.round(time),
-                  })}
+                  {durationFormatter.format(getDuration(time))}
                 </td>
                 <td className="action fit-content">
                   <SourceLinks {...{ result, minify }} />

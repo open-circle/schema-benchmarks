@@ -83,3 +83,19 @@ export function formatBytes(bytes: number) {
 }
 
 export const durationFormatter = new Intl.DurationFormat();
+
+export const getDuration = (ms: number): Intl.DurationType => {
+  if (ms < 1) {
+    return { nanoseconds: Math.round(ms * 1000000) };
+  }
+  if (ms < 1_000) {
+    return { milliseconds: Math.round(ms) };
+  }
+  if (ms < 60_000) {
+    return { seconds: Math.round(ms / 1000) };
+  }
+  if (ms < 3_600_000) {
+    return { minutes: Math.round(ms / 60000) };
+  }
+  return { hours: Math.round(ms / 3600000) };
+};

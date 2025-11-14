@@ -4,16 +4,9 @@
   flex-wrap: wrap;
   gap: 1rem;
   @media (--phone) or (--tablet-small) or (--tablet-large) {
-    margin: 0 1rem;
     margin-bottom: 1rem;
   }
-  @media (--laptop) {
-    margin: 0 12.5rem;
-    margin-bottom: 2rem;
-  }
-  @media (--desktop) {
-    max-width: 1024px;
-    margin: 0 auto;
+  @media (--laptop) or (--desktop) {
     margin-bottom: 2rem;
   }
 

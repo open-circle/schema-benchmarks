@@ -119,8 +119,12 @@ main {
     padding: 2rem;
   }
 
-  @media (--laptop) or (--desktop) {
-    margin: 0 2rem;
+  @media (--laptop) {
+    margin: 0 12.5rem;
+  }
+  @media (--desktop) {
+    max-width: 1024px;
+    margin: 0 auto;
   }
 }
 
