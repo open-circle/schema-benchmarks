@@ -22,7 +22,7 @@
 @import "components/snackbar/index.css";
 @import "components/symbol/index.css";
 
-@import "components/results-table/index.css";
+@import "components/bench-table/index.css";
 @import "components/page-filter/index.css";
 
 * {

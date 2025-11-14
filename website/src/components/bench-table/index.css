@@ -7,7 +7,7 @@
 }
 
 @media (--phone) or (--tablet-small) or (--tablet-large) {
-  .results-table tr :nth-child(4) {
+  .bench-table tr :nth-child(4) {
     display: none;
   }
 }

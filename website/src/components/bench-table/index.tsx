@@ -2,12 +2,12 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import { msToNs, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { getBounds } from "@/data/scale";
-import { CodeBlock } from "../code";
-import { EmptyState } from "../empty-state";
-import { Radio } from "../radio";
-import { Scaler } from "../scaler";
+import { CodeBlock } from "../code/index.js";
+import { EmptyState } from "../empty-state/index.js";
+import { Radio } from "../radio/index.js";
+import { Scaler } from "../scaler/index.js";
 
-export interface ResultsTableProps {
+export interface BenchTableProps {
   results: Array<BenchResult>;
 }
 
@@ -38,7 +38,7 @@ function useComparison(results: Array<BenchResult>) {
   return { compareId, setCompareId, compareResult, ratioBounds };
 }
 
-export function ResultsTable({ results }: ResultsTableProps) {
+export function BenchTable({ results }: BenchTableProps) {
   const meanBounds = useMemo(
     () => getBounds(results.map((result) => result.mean)),
     [results],
@@ -57,7 +57,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
   const showComparisonColumns = results.length > 1;
   return (
     <div className="card">
-      <table className="results-table">
+      <table className="bench-table">
         <thead>
           <tr>
             <th className="fit-content numeric">Rank</th>
