@@ -13,7 +13,7 @@ import type { TypiaSchema } from "../schemas/benchmarks/typia";
 import { getValibotSchema } from "../schemas/benchmarks/valibot";
 import { getYupSchema } from "../schemas/benchmarks/yup";
 import { getZodSchema } from "../schemas/benchmarks/zod";
-import { getZodMiniSchema } from "../schemas/benchmarks/zod-mini";
+import { getZodMiniSchema } from "../schemas/benchmarks/zod/mini";
 import { makeBenchFactory } from "../utils/bench-factory";
 
 declare module "../utils/registry" {
