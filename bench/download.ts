@@ -31,7 +31,7 @@ async function download() {
       const code = output.output
         .filter((chunk) => chunk.type === "chunk")
         .map((chunk) => chunk.code)
-        .join("");
+        .join(minify ? "" : "\n");
 
       // fileName: libraryName (note)
       // should remove schemas/download/, note and index file names
