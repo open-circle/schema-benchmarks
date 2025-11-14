@@ -53,9 +53,6 @@ importers:
       typia:
         specifier: ^10.0.2
         version: 10.0.2(@types/node@22.19.0)(typescript@5.9.3)
-      unplugin-typia:
-        specifier: 0.1.0-beta.0
-        version: 0.1.0-beta.0(typescript@5.9.3)
       valibot:
         specifier: ^1.1.0
         version: 1.1.0(typescript@5.9.3)
@@ -84,6 +81,10 @@ importers:
       react-bem-helper:
         specifier: ^1.4.1
         version: 1.4.1
+    devDependencies:
+      valibot:
+        specifier: ^1.1.0
+        version: 1.1.0(typescript@5.9.3)
 
   website:
     dependencies:
@@ -99,6 +100,9 @@ importers:
       '@tanstack/react-devtools':
         specifier: ^0.7.0
         version: 0.7.11(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(csstype@3.1.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(solid-js@1.9.10)
+      '@tanstack/react-pacer':
+        specifier: ^0.17.2
+        version: 0.17.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@tanstack/react-query':
         specifier: ^5.90.7
         version: 5.90.7(react@19.2.0)
@@ -1259,6 +1263,10 @@ packages:
     resolution: {integrity: sha512-eq+PpuutUyubXu+ycC1GIiVwBs86NF/8yYJJAKSpPcJLWl6R/761F1H4F/9ziX6zKezltFUH1ah3Cz8Ah+KJrw==}
     engines: {node: '>=18'}
 
+  '@tanstack/devtools-event-client@0.3.5':
+    resolution: {integrity: sha512-RL1f5ZlfZMpghrCIdzl6mLOFLTuhqmPNblZgBaeKfdtk5rfbjykurv+VfYydOFXj0vxVIoA2d/zT7xfD7Ph8fw==}
+    engines: {node: '>=18'}
+
   '@tanstack/devtools-ui@0.4.4':
     resolution: {integrity: sha512-5xHXFyX3nom0UaNfiOM92o6ziaHjGo3mcSGe2HD5Xs8dWRZNpdZ0Smd0B9ddEhy0oB+gXyMzZgUJb9DmrZV0Mg==}
     engines: {node: '>=18'}
@@ -1281,6 +1289,10 @@ packages:
     resolution: {integrity: sha512-B7+x7eP2FFvi3fgd3rNH9o/Eixt+pp0zCIdGhnQbAJjFrlwIKGjGnwyJjhWJ5fMQlGks/E2LdDTqEV4W9Plx7g==}
     engines: {node: '>=12'}
 
+  '@tanstack/pacer@0.16.2':
+    resolution: {integrity: sha512-u7K87OPuoABu4QFOnxwsmR+/aU97JBSA5BpujD73r+A4Lhk0w2WUuY0NggECaOINrA/0nqLUHunO5gNV7EI5YA==}
+    engines: {node: '>=18'}
+
   '@tanstack/query-core@5.90.7':
     resolution: {integrity: sha512-6PN65csiuTNfBMXqQUxQhCNdtm1rV+9kC9YwWAIKcaxAauq3Wu7p18j3gQY3YIBJU70jT/wzCCZ2uqto/vQgiQ==}
 
@@ -1293,6 +1305,13 @@ packages:
     peerDependencies:
       '@types/react': '>=16.8'
       '@types/react-dom': '>=16.8'
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
+  '@tanstack/react-pacer@0.17.2':
+    resolution: {integrity: sha512-ei22GG2ypLjK/FnL8yV8pjlq/ps6l+pZDfH2sxQ8JfUBsYKI061iaZ0h0hwJgXhAvmxJ0J97Vz8KjVba+cVb/Q==}
+    engines: {node: '>=18'}
+    peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
 
@@ -2890,12 +2909,6 @@ packages:
   unenv@2.0.0-rc.24:
     resolution: {integrity: sha512-i7qRCmY42zmCwnYlh9H2SvLEypEFGye5iRmEMKjcGi7zk9UquigRjFtTLz0TYqr0ZGLZhaMHl/foy1bZR+Cwlw==}
 
-  unplugin-typia@0.1.0-beta.0:
-    resolution: {integrity: sha512-ZYgik4tFBJPjuhqJ9JpLdycNvb5GLcjbQnFoGftDh9PBaSFNlLt00M9sisdceNP3pez+JO2eTd8HeqasmJUKMA==}
-    deprecated: use @ryoppippi/unplugin-typia instead
-    peerDependencies:
-      typescript: ^5.0.0
-
   unplugin@2.3.10:
     resolution: {integrity: sha512-6NCPkv1ClwH+/BGE9QeoTIl09nuiAt0gS28nn1PvYXsGKRwM2TCbFA2QiilmehPDTXIe684k4rZI1yl3A1PCUw==}
     engines: {node: '>=18.12.0'}
@@ -4046,6 +4059,8 @@ snapshots:
 
   '@tanstack/devtools-event-client@0.3.4': {}
 
+  '@tanstack/devtools-event-client@0.3.5': {}
+
   '@tanstack/devtools-ui@0.4.4(csstype@3.1.3)(solid-js@1.9.10)':
     dependencies:
       clsx: 2.1.1
@@ -4086,6 +4101,11 @@ snapshots:
 
   '@tanstack/history@1.133.28': {}
 
+  '@tanstack/pacer@0.16.2':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.3.5
+      '@tanstack/store': 0.8.0
+
   '@tanstack/query-core@5.90.7': {}
 
   '@tanstack/query-devtools@5.90.1': {}
@@ -4102,6 +4122,13 @@ snapshots:
       - csstype
       - solid-js
       - utf-8-validate
+
+  '@tanstack/react-pacer@0.17.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@tanstack/pacer': 0.16.2
+      '@tanstack/react-store': 0.8.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
 
   '@tanstack/react-query-devtools@5.90.2(@tanstack/react-query@5.90.7(react@19.2.0))(react@19.2.0)':
     dependencies:
@@ -5850,10 +5877,6 @@ snapshots:
   unenv@2.0.0-rc.24:
     dependencies:
       pathe: 2.0.3
-
-  unplugin-typia@0.1.0-beta.0(typescript@5.9.3):
-    dependencies:
-      typescript: 5.9.3
 
   unplugin@2.3.10:
     dependencies:

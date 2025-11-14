@@ -1,7 +1,10 @@
+import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, linkOptions } from "@tanstack/react-router";
+import { type ChangeEvent, useCallback } from "react";
 import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
+import { PageFilterTextField } from "@/components/page-filter/text-field";
 import {
   getDownloadResults,
   minifyTypeProps,
@@ -10,6 +13,7 @@ import {
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,
+  mbps: v.optional(vUtils.coerceNumber, 20),
 });
 
 export const Route = createFileRoute("/download")({
@@ -29,8 +33,19 @@ export const Route = createFileRoute("/download")({
 });
 
 function RouteComponent() {
-  const { minifyType } = Route.useSearch();
+  const { minifyType, mbps } = Route.useSearch();
   const { data } = useSuspenseQuery(getDownloadResults());
+  const getMbpsOptions = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) =>
+      linkOptions({
+        to: Route.fullPath,
+        search: ({ minifyType }) => ({
+          minifyType,
+          mbps: event.target.valueAsNumber,
+        }),
+      }),
+    [],
+  );
   return (
     <div className="page-filters">
       <PageFilterGroup
@@ -39,6 +54,14 @@ function RouteComponent() {
           to: Route.fullPath,
           search: { minifyType: option },
         })}
+      />
+      <PageFilterTextField
+        title="Download speed"
+        defaultValue={mbps}
+        type="number"
+        startIcon="speed"
+        suffix="Mbps"
+        getLinkOptions={getMbpsOptions}
       />
     </div>
   );
