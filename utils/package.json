@@ -6,13 +6,13 @@
     "valibot": "^1.1.0"
   },
   "exports": {
-    ".": "./index.ts",
-    "./valibot": "./valibot.ts"
+    ".": "./src/index.ts",
+    "./valibot": "./src/valibot.ts"
   },
-  "main": "index.ts",
+  "main": "./src/index.ts",
   "name": "@schema-benchmarks/utils",
   "peerDependencies": {
     "valibot": "*"
   },
-  "types": "index.ts"
+  "types": "./src/index.ts"
 }

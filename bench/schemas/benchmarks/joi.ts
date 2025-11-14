@@ -1,5 +1,5 @@
 import * as Joi from "joi";
-import type { ProductData } from "../../data";
+import type { ProductData } from "../../src/data";
 
 export function getJoiSchema() {
   const imageSchema = Joi.object({

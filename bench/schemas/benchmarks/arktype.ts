@@ -1,5 +1,5 @@
 import { type Type, type } from "arktype";
-import type { ProductData } from "../../data";
+import type { ProductData } from "../../src/data";
 
 export function getArkTypeSchema() {
   const image = type({

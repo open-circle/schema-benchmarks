@@ -6,7 +6,7 @@ import {
   type DownloadResult,
   type DownloadResults,
   minifyTypeSchema,
-} from "./results/types";
+} from "../results/types";
 
 async function download() {
   const allResults: DownloadResults = {
@@ -16,7 +16,7 @@ async function download() {
   for (const minify of minifyTypeSchema.options) {
     const results: Array<Omit<DownloadResult, "rank">> = [];
     for await (const filePath of fs.glob(
-      path.resolve(__dirname, "schemas/download/**/*.ts"),
+      path.resolve(process.cwd(), "schemas/download/**/*.ts"),
     )) {
       const bundle = await rolldown({
         input: filePath,
@@ -27,7 +27,7 @@ async function download() {
 
       const output = await bundle.generate({
         format: "esm",
-        dir: path.resolve(__dirname, "schemas/download_compiled"),
+        dir: path.resolve(process.cwd(), "schemas/download_compiled"),
         minify: minify === "minified",
       });
 
@@ -39,19 +39,19 @@ async function download() {
       // fileName: libraryName (note)
       // should remove schemas/download/, note and index file names
       const fileName = filePath.split("schemas/download/")[1];
+      if (!fileName) continue;
       const libraryName = fileName
-        ?.replace(/\/index\s?/, "")
+        .replace(/\/index\s?/, "")
         .replace(/\.ts$/, "")
         .replace(/\(.*?\)/, "");
-      if (!libraryName) continue;
-      const note = fileName?.includes("(")
+      const note = fileName.includes("(")
         ? fileName.match(/\((.*?)\)/)?.[1]
         : undefined;
 
       const blob = new Blob([code]);
 
-      // do we want to write the compiled file somewhere, for reference?
       results.push({
+        fileName,
         libraryName,
         note,
         bytes: blob.size,
@@ -63,7 +63,7 @@ async function download() {
     );
   }
 
-  const outputPath = path.join(__dirname, "download.json");
+  const outputPath = path.join(process.cwd(), "download.json");
   await fs.writeFile(outputPath, JSON.stringify(allResults));
 }
 

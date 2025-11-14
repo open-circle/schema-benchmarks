@@ -1,5 +1,5 @@
 import { type Type, type } from "arktype";
-import type { ProductData } from "../../data";
+import type { ProductData } from "../../src/data";
 
 const image = type({
   id: "number",

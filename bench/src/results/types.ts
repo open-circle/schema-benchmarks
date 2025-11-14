@@ -55,9 +55,10 @@ export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
 
 export const downloadResultSchema = v.object({
   rank: v.number(),
-  bytes: v.number(),
+  fileName: v.string(),
   libraryName: v.string(),
   note: v.optional(v.string()),
+  bytes: v.number(),
 });
 export type DownloadResult = v.InferOutput<typeof downloadResultSchema>;
 

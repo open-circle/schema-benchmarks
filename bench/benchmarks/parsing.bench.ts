@@ -3,8 +3,6 @@ import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import { errorData, successData } from "../data";
-import type { DataType, ErrorType } from "../results/types";
 import { getArkTypeSchema } from "../schemas/benchmarks/arktype";
 import { getEffectSchema } from "../schemas/benchmarks/effect";
 import { getJoiSchema } from "../schemas/benchmarks/joi";
@@ -14,9 +12,11 @@ import { getValibotSchema } from "../schemas/benchmarks/valibot";
 import { getYupSchema } from "../schemas/benchmarks/yup";
 import { getZodSchema } from "../schemas/benchmarks/zod";
 import { getZodMiniSchema } from "../schemas/benchmarks/zod/mini";
-import { makeBenchFactory } from "../utils/bench-factory";
+import { errorData, successData } from "../src/data";
+import type { DataType, ErrorType } from "../src/results/types";
+import { makeBenchFactory } from "../src/utils/bench-factory";
 
-declare module "../utils/registry" {
+declare module "../src/utils/registry" {
   export interface MetaRegistry {
     parse: {
       bench: {

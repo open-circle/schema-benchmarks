@@ -24,17 +24,17 @@
     "typescript": "~5.9.3"
   },
   "exports": {
-    ".": "./index.ts",
+    ".": "./src/index.ts",
     "./bench.json": "./bench.json",
     "./download.json": "./download.json"
   },
-  "main": "index.ts",
+  "main": "./src/index.ts",
   "name": "@schema-benchmarks/bench",
   "private": true,
   "scripts": {
-    "bench": "ts-node bench.ts",
-    "download": "ts-node download.ts",
+    "bench": "ts-node ./src/scripts/bench.ts",
+    "download": "ts-node ./src/scripts/download.ts",
     "prepare": "ts-patch install"
   },
-  "types": "index.ts"
+  "types": "./src/index.ts"
 }

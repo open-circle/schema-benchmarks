@@ -13,9 +13,9 @@ import { getValibotSchema } from "../schemas/benchmarks/valibot";
 import { getYupSchema } from "../schemas/benchmarks/yup";
 import { getZodSchema } from "../schemas/benchmarks/zod";
 import { getZodMiniSchema } from "../schemas/benchmarks/zod/mini";
-import { makeBenchFactory } from "../utils/bench-factory";
+import { makeBenchFactory } from "../src/utils/bench-factory";
 
-declare module "../utils/registry" {
+declare module "../src/utils/registry" {
   export interface MetaRegistry {
     initialization: {
       bench: unknown;
