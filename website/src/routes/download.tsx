@@ -12,7 +12,7 @@ import {
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,
-  mbps: v.optional(vUtils.coerceNumber, 20),
+  mbps: v.optional(v.pipe(vUtils.coerceNumber, v.minValue(1)), 20),
 });
 
 export const Route = createFileRoute("/download")({
@@ -47,16 +47,20 @@ function RouteComponent() {
         title="Download speed"
         defaultValue={mbps}
         type="number"
+        min={1}
+        step={1}
+        required
         startIcon="speed"
         suffix="Mbps"
         getLinkOptions={(event) =>
           linkOptions({
             from: Route.fullPath,
             to: Route.fullPath,
-            search: ({ minifyType }) => ({
-              minifyType,
-              mbps: event.target.valueAsNumber,
-            }),
+            search: ({ minifyType }) => {
+              const mbps = event.target.valueAsNumber;
+              if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
+              return { minifyType, mbps };
+            },
           })
         }
       />
