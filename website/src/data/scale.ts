@@ -66,8 +66,8 @@ function getScaleNumber(value: number, bounds: Bounds) {
 // biome-ignore-start lint/style/noNonNullAssertion: scale is finite and index is clamped
 const getScalerFunction =
   <T>(ogScale: ReadonlyArray<T>) =>
-  (value: number, bounds: Bounds, reverse = false) => {
-    const scale = reverse ? [...ogScale].reverse() : ogScale;
+  (value: number, bounds: Bounds, lowerBetter = false) => {
+    const scale = lowerBetter ? [...ogScale].reverse() : ogScale;
     // if the bounds are the same, return the middle of the scale
     if (bounds.highest === bounds.lowest)
       return scale[Math.floor(scale.length / 2)]!;

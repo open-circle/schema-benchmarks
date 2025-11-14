@@ -84,7 +84,7 @@ export function BenchTable({ results }: BenchTableProps) {
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="numeric fit-content">
-                  <Scaler value={result.mean} bounds={meanBounds} reverse>
+                  <Scaler value={result.mean} bounds={meanBounds} lowerBetter>
                     {numFormatter.format(msToNs(result.mean))}
                   </Scaler>
                 </td>
@@ -123,7 +123,7 @@ export function BenchTable({ results }: BenchTableProps) {
                               ),
                             }}
                             type="stat"
-                            reverse
+                            lowerBetter
                           >
                             {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
                             {/* than selected */}

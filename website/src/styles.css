@@ -24,6 +24,7 @@
 @import "components/text-field/index.css";
 
 @import "components/bench-table/index.css";
+@import "components/download-table/index.css";
 @import "components/page-filter/index.css";
 
 * {

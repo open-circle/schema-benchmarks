@@ -27,7 +27,7 @@ const meta = {
       lowest: 0,
     },
     type: "sentiment",
-    reverse: false,
+    lowerBetter: false,
   },
 } satisfies Meta<typeof Scaler>;
 

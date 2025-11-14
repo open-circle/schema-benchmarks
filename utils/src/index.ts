@@ -1,3 +1,4 @@
+export type * from "./libs";
 export type * from "./types";
 
 import bemHelper from "react-bem-helper";
@@ -78,5 +79,7 @@ export function getOrInsertComputed<K extends object, V>(
 const byteUnits = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 export function formatBytes(bytes: number) {
   const unit = Math.floor(Math.log2(bytes) / 10);
-  return `${numFormatter.format(bytes / 2 ** (10 * unit))}${byteUnits[unit]}`;
+  return `${numFormatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
 }
+
+export const durationFormatter = new Intl.DurationFormat();

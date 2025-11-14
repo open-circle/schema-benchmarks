@@ -6,7 +6,7 @@ export interface ScalerProps {
   value: number;
   bounds: Bounds;
   type?: "sentiment" | "stat";
-  reverse?: boolean;
+  lowerBetter?: boolean;
   children?: ReactNode;
 }
 
@@ -14,7 +14,7 @@ export function Scaler({
   value,
   bounds,
   type = "sentiment",
-  reverse,
+  lowerBetter,
   children,
 }: ScalerProps) {
   return (
@@ -22,12 +22,12 @@ export function Scaler({
       {children}
       <MdSymbol
         style={{
-          color: `var(--${getColor(value, bounds, reverse)})`,
+          color: `var(--${getColor(value, bounds, lowerBetter)})`,
         }}
       >
         {type === "sentiment"
-          ? getIcon(value, bounds, reverse)
-          : getStatIcon(value, bounds, reverse)}
+          ? getIcon(value, bounds, lowerBetter)
+          : getStatIcon(value, bounds, lowerBetter)}
       </MdSymbol>
     </span>
   );

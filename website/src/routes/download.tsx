@@ -2,6 +2,7 @@ import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
+import { DownloadTable } from "@/components/download-table";
 import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
 import {
@@ -35,35 +36,42 @@ function RouteComponent() {
   const { minifyType, mbps } = Route.useSearch();
   const { data } = useSuspenseQuery(getDownloadResults());
   return (
-    <div className="page-filters">
-      <PageFilterGroup
-        {...minifyTypeProps}
-        getLinkOptions={(option) => ({
-          to: Route.fullPath,
-          search: { minifyType: option },
-        })}
-      />
-      <PageFilterTextField
-        title="Download speed"
-        defaultValue={mbps}
-        type="number"
-        min={1}
-        step={1}
-        required
-        startIcon="speed"
-        suffix="Mbps"
-        getLinkOptions={(event) =>
-          linkOptions({
-            from: Route.fullPath,
+    <>
+      <div className="page-filters">
+        <PageFilterGroup
+          {...minifyTypeProps}
+          getLinkOptions={(option) => ({
             to: Route.fullPath,
-            search: ({ minifyType }) => {
-              const mbps = event.target.valueAsNumber;
-              if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
-              return { minifyType, mbps };
-            },
-          })
-        }
+            search: { minifyType: option },
+          })}
+        />
+        <PageFilterTextField
+          title="Download speed"
+          defaultValue={mbps}
+          type="number"
+          min={1}
+          step={1}
+          required
+          startIcon="speed"
+          suffix="Mbps"
+          getLinkOptions={(event) =>
+            linkOptions({
+              from: Route.fullPath,
+              to: Route.fullPath,
+              search: ({ minifyType }) => {
+                const mbps = event.target.valueAsNumber;
+                if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
+                return { minifyType, mbps };
+              },
+            })
+          }
+        />
+      </div>
+      <DownloadTable
+        results={data[minifyType]}
+        mbps={mbps}
+        minify={minifyType}
       />
-    </div>
+    </>
   );
 }
