@@ -5,7 +5,7 @@ import {
   useNavigate,
   type ValidateLinkOptions,
 } from "@tanstack/react-router";
-import { type ChangeEvent, type ReactNode, useCallback } from "react";
+import type { ChangeEvent, ReactNode } from "react";
 import { TextField, type TextFieldProps } from "../text-field";
 
 export interface PageFilterTextFieldProps<LinkOptions = unknown>
@@ -13,8 +13,6 @@ export interface PageFilterTextFieldProps<LinkOptions = unknown>
   title: ReactNode;
   /**
    * Create the new link options based on the current event.
-   *
-   * *Should be a stable reference, as will be debounced.*
    */
   getLinkOptions: (
     event: ChangeEvent<HTMLInputElement>,
@@ -30,12 +28,9 @@ export function PageFilterTextField<LinkOptions>({
 }: PageFilterTextFieldProps<LinkOptions>) {
   const navigate = useNavigate();
   const debouncedOnChange = useDebouncedCallback(
-    useCallback(
-      (event: ChangeEvent<HTMLInputElement>) => {
-        navigate({ ...getLinkOptions(event), replace: true });
-      },
-      [getLinkOptions, navigate],
-    ),
+    (event) => {
+      navigate({ ...getLinkOptions(event), replace: true });
+    },
     { wait: 200 },
   );
   return (
