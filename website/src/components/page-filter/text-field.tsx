@@ -35,7 +35,7 @@ export function PageFilterTextField<LinkOptions>({
   );
   return (
     <div className={cls("group")}>
-      <h6 className="typo-subtitle2">{title}</h6>
+      <h6 className="typo-caption">{title}</h6>
       <TextField {...props} onChange={debouncedOnChange} />
     </div>
   );

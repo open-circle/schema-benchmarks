@@ -36,7 +36,7 @@ export function PageFilterGroup<Options extends string, LinkOptions>({
   const groupRef = useFocusGroup();
   return (
     <div className={cls("group")}>
-      <h6 className="typo-subtitle2">{title}</h6>
+      <h6 className="typo-caption">{title}</h6>
       <div className="chip-collection" ref={groupRef}>
         {options.map((option) => (
           <Link
