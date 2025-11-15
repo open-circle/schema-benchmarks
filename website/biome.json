@@ -30,7 +30,7 @@
   "overrides": [
     {
       "includes": [
-        "./src/components/**/*"
+        "./**/components/**/*"
       ],
       "linter": {
         "rules": {

@@ -5,12 +5,12 @@ import {
   getDuration,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
-import { getDownloadTime } from "@/data/results";
+import { getButtonClasses } from "@/components/button";
+import { Scaler } from "@/components/scaler";
+import { MdSymbol } from "@/components/symbol";
 import { getBounds } from "@/data/scale";
+import { getDownloadTime } from "@/features/download/lib";
 import { useFocusGroup } from "@/hooks/use-focus-group";
-import { getButtonClasses } from "../button";
-import { Scaler } from "../scaler";
-import { MdSymbol } from "../symbol";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;

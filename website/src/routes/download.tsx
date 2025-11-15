@@ -2,14 +2,14 @@ import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
-import { DownloadTable } from "@/components/download-table";
 import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
+import { DownloadTable } from "@/features/download/components/table";
 import {
   getDownloadResults,
   minifyTypeProps,
   optionalMinifyTypeSchema,
-} from "@/data/results";
+} from "@/features/download/query";
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,

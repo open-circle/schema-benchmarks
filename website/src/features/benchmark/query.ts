@@ -2,18 +2,13 @@ import {
   type BenchResults,
   benchResultsSchema,
   type DataType,
-  type DownloadResults,
   dataTypeSchema,
-  downloadResultsSchema,
   type ErrorType,
   errorTypeSchema,
   type LibraryType,
   libraryTypeSchema,
-  type MinifyType,
-  minifyTypeSchema,
 } from "@schema-benchmarks/bench";
 import benchResults from "@schema-benchmarks/bench/bench.json";
-import downloadResults from "@schema-benchmarks/bench/download.json";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
@@ -135,63 +130,3 @@ export const getBenchResults = (signalOpt?: AbortSignal) =>
         signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
       }),
   });
-
-export const optionalMinifyTypeSchema = v.optional(
-  minifyTypeSchema,
-  "minified",
-);
-export const minifyTypeProps: Pick<
-  PageFilterGroupProps<MinifyType>,
-  "title" | "labels" | "options"
-> = {
-  title: "Minify",
-  options: optionalMinifyTypeSchema.wrapped.options,
-  labels: {
-    minified: { label: "Minified", icon: "chips" },
-    unminified: { label: "Unminified", icon: "code_blocks" },
-  },
-};
-
-export const getDownloadResultsFn = createServerFn().handler(
-  async ({ signal }) => {
-    let results: DownloadResults;
-    if (process.env.NODE_ENV === "production") {
-      try {
-        const response = await fetch(
-          "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/download.json",
-          { signal },
-        );
-        if (!response.ok)
-          throw new Error("Failed to fetch results: ", {
-            cause: response.status,
-          });
-        results = v.parse(downloadResultsSchema, await response.json());
-      } catch (error) {
-        console.error("Falling back to local results: ", error);
-        results = structuredClone(downloadResults);
-      }
-    } else {
-      results = structuredClone(downloadResults);
-    }
-
-    return results;
-  },
-);
-
-export const getDownloadResults = (signalOpt?: AbortSignal) =>
-  queryOptions({
-    queryKey: ["download"],
-    queryFn: ({ signal }) =>
-      getDownloadResultsFn({
-        signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
-      }),
-  });
-
-/**
- * Calculate the time to download a file at a given speed.
- * @param bytes - Size in bytes
- * @param mbps - Speed in megabits per second
- * @returns Time in milliseconds
- */
-export const getDownloadTime = (bytes: number, mbps: number) =>
-  (bytes * 8) / (mbps * 1000);

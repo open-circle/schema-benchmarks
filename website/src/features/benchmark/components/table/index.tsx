@@ -1,11 +1,11 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
 import { msToNs, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
+import { CodeBlock } from "@/components/code";
+import { EmptyState } from "@/components/empty-state";
+import { Radio } from "@/components/radio";
+import { Scaler } from "@/components/scaler";
 import { getBounds } from "@/data/scale";
-import { CodeBlock } from "../code/index.js";
-import { EmptyState } from "../empty-state/index.js";
-import { Radio } from "../radio/index.js";
-import { Scaler } from "../scaler/index.js";
 
 export interface BenchTableProps {
   results: Array<BenchResult>;

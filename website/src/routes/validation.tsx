@@ -1,15 +1,15 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
-import { BenchTable } from "@/components/bench-table";
 import { PageFilterGroup } from "@/components/page-filter";
+import { BenchTable } from "@/features/benchmark/components/table";
 import {
   dataTypeProps,
   getBenchResults,
   libraryTypeProps,
   optionalDataTypeSchema,
   optionalLibraryTypeSchema,
-} from "@/data/results";
+} from "@/features/benchmark/query";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
