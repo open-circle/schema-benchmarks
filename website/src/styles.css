@@ -41,6 +41,9 @@ body {
   background-color: var(--page-background);
   color: color(from var(--page-foreground) srgb r g b / var(--primary-text));
   @extend .typo-body1;
+  &[data-modal-open] {
+    overflow: hidden;
+  }
 }
 
 a {

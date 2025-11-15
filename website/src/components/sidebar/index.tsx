@@ -7,6 +7,8 @@ import {
 } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
+import { useBreakpoints } from "@/hooks/use-breakpoints";
+import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 
@@ -91,6 +93,8 @@ function SidebarWithoutContext({
 
 export function Sidebar({ children }: { children?: ReactNode }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
+  const isModal = useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
+  useScrollLockEffect(isModal && open);
   return (
     <ClientOnly
       fallback={
