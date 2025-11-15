@@ -1,0 +1,21 @@
+.scroll-to-top {
+  position: fixed;
+  --edge-offset: 2rem;
+  bottom: var(--edge-offset);
+  right: var(--edge-offset);
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 150ms var(--standard-curve),
+    opacity 150ms var(--standard-curve);
+  &.scroll-to-top--scrolled {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &:dir(rtl) {
+    right: auto;
+    left: var(--edge-offset);
+  }
+  @media (--phone) or (--tablet-small) or (--tablet-large) {
+    --edge-offset: 1rem;
+  }
+}

@@ -26,6 +26,7 @@
 @import "components/bench-table/index.css";
 @import "components/download-table/index.css";
 @import "components/page-filter/index.css";
+@import "components/scroll-to-top/index.css";
 
 * {
   box-sizing: border-box;
@@ -98,6 +99,8 @@ pre[class*="language-"] {
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* make sure scroll-to-top doesn't overlap content */
+  padding-bottom: 5rem;
 }
 
 main {

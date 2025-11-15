@@ -2,7 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import clsx from "clsx";
 import { useState } from "react";
 import { MdSymbol } from "../symbol";
-import { type ButtonProps, getButtonClasses, type ToggleButtonProps } from ".";
+import {
+  type ButtonProps,
+  type FloatingActionButtonProps,
+  getButtonClasses,
+  type ToggleButtonProps,
+} from ".";
 
 const meta = {
   title: "Components/Button",
@@ -39,7 +44,11 @@ const meta = {
     color: "primary",
     disabled: false,
   },
-} satisfies Meta<(ButtonProps | ToggleButtonProps) & { disabled: boolean }>;
+} satisfies Meta<
+  (ButtonProps | ToggleButtonProps | FloatingActionButtonProps) & {
+    disabled: boolean;
+  }
+>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -134,5 +143,28 @@ export const LinkToggle: Story = {
   args: {
     variant: "toggle",
     color: undefined,
+  },
+};
+
+export const FloatingAction: Story = {
+  argTypes: {
+    color: {
+      table: {
+        disable: true,
+      },
+    },
+    variant: {
+      table: {
+        disable: true,
+      },
+    },
+    disabled: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  args: {
+    variant: "floating-action",
   },
 };
