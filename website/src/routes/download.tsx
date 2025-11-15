@@ -4,6 +4,7 @@ import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
+import { DownloadPlot } from "@/features/download/components/plot";
 import { DownloadTable } from "@/features/download/components/table";
 import {
   getDownloadResults,
@@ -34,7 +35,11 @@ export const Route = createFileRoute("/download")({
 
 function RouteComponent() {
   const { minifyType, mbps } = Route.useSearch();
-  const { data } = useSuspenseQuery(getDownloadResults());
+  const { data } = useSuspenseQuery({
+    ...getDownloadResults(),
+    select: (results) => results[minifyType],
+  });
+
   return (
     <>
       <div className="page-filters">
@@ -67,11 +72,8 @@ function RouteComponent() {
           }
         />
       </div>
-      <DownloadTable
-        results={data[minifyType]}
-        mbps={mbps}
-        minify={minifyType}
-      />
+      <DownloadPlot results={data} />
+      <DownloadTable results={data} mbps={mbps} minify={minifyType} />
     </>
   );
 }

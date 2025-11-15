@@ -2,13 +2,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 1rem;
-  @media (--phone) or (--tablet-small) or (--tablet-large) {
-    margin-bottom: 1rem;
-  }
-  @media (--laptop) or (--desktop) {
-    margin-bottom: 2rem;
-  }
+  gap: var(--margin);
 
   h6 {
     margin: 0;

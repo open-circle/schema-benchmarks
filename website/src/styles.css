@@ -15,6 +15,7 @@
 @import "components/chip/index.css";
 @import "components/empty-state/index.css";
 @import "components/header/index.css";
+@import "components/plot/index.css";
 @import "components/table/index.css";
 @import "components/radio/index.css";
 @import "components/scaler/index.css";
@@ -108,18 +109,22 @@ pre[class*="language-"] {
   padding-bottom: 5rem;
 }
 
+:root {
+  --margin: 2rem;
+  @media (--phone) {
+    --margin: 1rem;
+  }
+}
+
 main {
   padding: 1rem 0;
   flex: 1;
   background-color: var(--page-background);
+  margin: var(--margin);
 
-  @media (--phone) {
-    margin: 1rem;
-  }
-
-  @media (--tablet-small) {
-    margin: 2rem;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin);
 
   @media (--tablet-large) {
     max-width: 56.5rem; /* 840px + 4rem */
