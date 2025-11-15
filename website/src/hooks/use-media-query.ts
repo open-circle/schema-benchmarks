@@ -7,12 +7,8 @@ export function useMediaQuery(query: string, serverValue = false) {
   }, [query]);
   const matches = useSyncExternalStore(
     (onStoreChange) => {
-      function onChange(e: MediaQueryListEvent) {
-        console.log("Media query changed", e);
-        onStoreChange();
-      }
-      mediaQuery?.addEventListener("change", onChange);
-      return () => mediaQuery?.removeEventListener("change", onChange);
+      mediaQuery?.addEventListener("change", onStoreChange);
+      return () => mediaQuery?.removeEventListener("change", onStoreChange);
     },
     () => mediaQuery?.matches ?? serverValue,
     () => serverValue,
