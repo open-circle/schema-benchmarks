@@ -1,4 +1,5 @@
 import { bem } from "@schema-benchmarks/utils";
+import { isServer } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useState } from "react";
 import { getButtonClasses } from "../button";
@@ -21,10 +22,7 @@ function useScrolled() {
 }
 
 function prefersReducedMotion() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion)").matches
-  );
+  return !isServer && window.matchMedia("(prefers-reduced-motion)").matches;
 }
 
 export function ScrollToTop() {

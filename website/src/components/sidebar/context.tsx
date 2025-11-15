@@ -1,3 +1,4 @@
+import { isServer } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { createContext, useState } from "react";
 
@@ -26,7 +27,7 @@ export const SidebarOpenContext = createContext<SidebarOpenContext>({
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [open, _setOpen] = useState(getInitialOpen);
   function setOpen(newValue: boolean) {
-    if (typeof window !== "undefined" && window.innerWidth >= breakpoint) {
+    if (!isServer && window.innerWidth >= breakpoint) {
       localStorage.setItem(storageKey, newValue.toString());
     }
     _setOpen(newValue);

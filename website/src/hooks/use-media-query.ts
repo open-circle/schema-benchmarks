@@ -1,8 +1,9 @@
+import { isServer } from "@tanstack/react-query";
 import { useDebugValue, useMemo, useSyncExternalStore } from "react";
 
 export function useMediaQuery(query: string, serverValue = false) {
   const mediaQuery = useMemo(() => {
-    if (typeof window === "undefined") return null;
+    if (isServer) return null;
     return window.matchMedia(query);
   }, [query]);
   const matches = useSyncExternalStore(
