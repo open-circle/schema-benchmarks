@@ -11,6 +11,7 @@
 @import "styles/shape.css";
 @import "styles/typography.css";
 
+@import "components/banner/index.css";
 @import "components/button/index.css";
 @import "components/chip/index.css";
 @import "components/empty-state/index.css";

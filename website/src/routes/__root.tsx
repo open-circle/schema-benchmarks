@@ -7,6 +7,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { Banner } from "@/components/banner";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
 import { TanstackHeader } from "../components/header";
@@ -73,6 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <TanstackSidebar />
             <div className="header-container">
               <TanstackHeader />
+              <Banner />
               <main>{children}</main>
               <ScrollToTop />
               <Snackbars />
