@@ -42,6 +42,7 @@ export function ScrollToTop() {
           behavior: prefersReducedMotion() ? "auto" : "smooth",
         })
       }
+      tabIndex={scrolled ? 0 : -1}
     >
       <MdSymbol>arrow_upward</MdSymbol>
       Scroll to top
