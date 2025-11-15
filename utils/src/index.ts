@@ -77,9 +77,10 @@ export function getOrInsertComputed<K extends object, V>(
 }
 
 const byteUnits = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-export function formatBytes(bytes: number) {
+export function formatBytes(bytes: number, formatter = numFormatter) {
+  if (bytes < 1) return "0 B";
   const unit = Math.floor(Math.log2(bytes) / 10);
-  return `${numFormatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
+  return `${formatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
 }
 
 export const durationFormatter = new Intl.DurationFormat();

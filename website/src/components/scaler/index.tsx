@@ -22,7 +22,7 @@ export function Scaler({
       {children}
       <MdSymbol
         style={{
-          color: `var(--${getColor(value, bounds, lowerBetter)})`,
+          color: getColor(value, bounds, lowerBetter),
         }}
       >
         {type === "sentiment"

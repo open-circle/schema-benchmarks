@@ -78,17 +78,17 @@ const getScalerFunction =
   };
 // biome-ignore-end lint/style/noNonNullAssertion: scale is finite and index is clamped
 
-const colorScale = [
-  "pink",
-  "red",
-  "deep-orange",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "light-green",
-  "green",
-  "teal",
+export const colorScale = [
+  "var(--pink)",
+  "var(--red)",
+  "var(--deep-orange)",
+  "var(--orange)",
+  "var(--amber)",
+  "var(--yellow)",
+  "var(--lime)",
+  "var(--light-green)",
+  "var(--green)",
+  "var(--teal)",
 ] as const;
 export type ScaleColor = (typeof colorScale)[number];
 export const getColor = getScalerFunction(colorScale);
