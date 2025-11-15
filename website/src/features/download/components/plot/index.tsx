@@ -3,7 +3,7 @@ import type { DownloadResult } from "@schema-benchmarks/bench";
 import { formatBytes } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { PlotContainer } from "@/components/plot";
-import { colorScale } from "@/data/scale";
+import { color } from "@/data/scale";
 
 export interface DownloadPlotProps {
   results: Array<DownloadResult>;
@@ -30,7 +30,7 @@ export function DownloadPlot({ results }: DownloadPlotProps) {
         color: {
           type: "quantize",
           reverse: true,
-          range: colorScale,
+          range: color,
         },
         marks: [
           Plot.ruleY([0]),

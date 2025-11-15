@@ -3,7 +3,7 @@ import type { DownloadResult } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json";
 import { formatBytes } from "@schema-benchmarks/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { colorScale } from "@/data/scale";
+import { color } from "@/data/scale";
 import { PlotContainer } from ".";
 
 const meta = {
@@ -35,7 +35,7 @@ const meta = {
       color: {
         type: "quantize",
         reverse: true,
-        range: colorScale,
+        range: color,
       },
       marks: [
         Plot.ruleY([0]),

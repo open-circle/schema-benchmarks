@@ -4,8 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CodeBlock } from "@/components/code";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
-import { Scaler } from "@/components/scaler";
-import { getBounds } from "@/data/scale";
+import { getScaler, Scaler } from "@/components/scaler";
 
 export interface BenchTableProps {
   results: Array<BenchResult>;
@@ -26,24 +25,31 @@ function useComparison(results: Array<BenchResult>) {
     return Object.fromEntries(results.map((result) => [result.id, result]));
   }, [results]);
   const compareResult = compareId && resultsById[compareId];
-  const ratioBounds = useMemo(() => {
+  const ratioScaler = useMemo(() => {
     if (!compareResult) return undefined;
-    return getBounds(
-      results.map((result) => getRatio(result.mean, compareResult.mean)),
-      {
-        percentiles: { low: 5, high: 95 },
-      },
+    const ratios = results.map((result) =>
+      getRatio(result.mean, compareResult.mean),
     );
+    const max = Math.max(...ratios);
+    const min = Math.min(...ratios);
+    return getScaler([min, max, -min, -max], {
+      type: "stat",
+      lowerBetter: true,
+    });
   }, [results, compareResult]);
-  return { compareId, setCompareId, compareResult, ratioBounds };
+  return { compareId, setCompareId, compareResult, ratioScaler };
 }
 
 export function BenchTable({ results }: BenchTableProps) {
   const meanBounds = useMemo(
-    () => getBounds(results.map((result) => result.mean)),
+    () =>
+      getScaler(
+        results.map((result) => result.mean),
+        { lowerBetter: true },
+      ),
     [results],
   );
-  const { compareId, setCompareId, compareResult, ratioBounds } =
+  const { compareId, setCompareId, compareResult, ratioScaler } =
     useComparison(results);
   if (!results.length) {
     return (
@@ -84,7 +90,7 @@ export function BenchTable({ results }: BenchTableProps) {
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="numeric fit-content">
-                  <Scaler value={result.mean} bounds={meanBounds} lowerBetter>
+                  <Scaler {...meanBounds(result.mean)}>
                     {numFormatter.format(msToNs(result.mean))}
                   </Scaler>
                 </td>
@@ -107,33 +113,15 @@ export function BenchTable({ results }: BenchTableProps) {
                     </td>
                     <td className="numeric fit-content">
                       {compareResult &&
-                        ratioBounds &&
+                        ratioScaler &&
                         compareId !== result.id &&
                         (ratio ? (
-                          <Scaler
-                            value={ratio}
-                            bounds={{
-                              highest: Math.max(
-                                ratioBounds.highest,
-                                -ratioBounds.lowest,
-                              ),
-                              lowest: Math.min(
-                                ratioBounds.lowest,
-                                -ratioBounds.highest,
-                              ),
-                            }}
-                            type="stat"
-                            lowerBetter
-                          >
+                          <Scaler {...ratioScaler(ratio)}>
                             {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
                             {/* than selected */}
                           </Scaler>
                         ) : (
-                          <Scaler
-                            value={0}
-                            bounds={{ highest: 0, lowest: 0 }}
-                            type="stat"
-                          >
+                          <Scaler icon="stat_0" color="var(--yellow)">
                             1x
                           </Scaler>
                         ))}

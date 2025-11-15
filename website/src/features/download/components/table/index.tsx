@@ -6,9 +6,8 @@ import {
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { getButtonClasses } from "@/components/button";
-import { Scaler } from "@/components/scaler";
+import { getScaler, Scaler } from "@/components/scaler";
 import { MdSymbol } from "@/components/symbol";
-import { getBounds } from "@/data/scale";
 import { getDownloadTime } from "@/features/download/lib";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
@@ -55,8 +54,12 @@ function SourceLinks({
 }
 
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
-  const sizeBounds = useMemo(
-    () => getBounds(results.map((result) => result.bytes)),
+  const sizeScaler = useMemo(
+    () =>
+      getScaler(
+        results.map((result) => result.bytes),
+        { lowerBetter: true },
+      ),
     [results],
   );
   return (
@@ -82,7 +85,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="numeric">
-                  <Scaler value={result.bytes} bounds={sizeBounds} lowerBetter>
+                  <Scaler {...sizeScaler(result.bytes)}>
                     {formatBytes(result.bytes)}
                   </Scaler>
                 </td>
