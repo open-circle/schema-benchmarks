@@ -18,4 +18,11 @@
   @media (--phone) or (--tablet-small) or (--tablet-large) {
     --edge-offset: 1rem;
   }
+  [data-modal-open] & {
+    right: calc(var(--edge-offset) + var(--scrollbar-width));
+    &:dir(rtl) {
+      right: auto;
+      left: calc(var(--edge-offset) + var(--scrollbar-width));
+    }
+  }
 }

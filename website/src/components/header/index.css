@@ -23,7 +23,7 @@
   padding: 1rem;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 4;
   overflow: hidden;
   .page-header__actions {
     margin-left: auto;
@@ -32,9 +32,7 @@
     --button-base-color: var(--page-header-foreground);
     margin-left: -0.5rem;
     opacity: 1;
-    transition:
-      margin 250ms var(--standard-curve),
-      opacity 250ms;
+    transition: margin 250ms var(--standard-curve), opacity 250ms;
     &:dir(rtl) {
       margin-left: 0;
       margin-right: -0.5rem;

@@ -43,6 +43,7 @@ body {
   @extend .typo-body1;
   &[data-modal-open] {
     overflow: hidden;
+    padding-right: var(--scrollbar-width);
   }
 }
 
