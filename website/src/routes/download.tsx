@@ -1,19 +1,22 @@
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, linkOptions } from "@tanstack/react-router";
+import { createFileRoute, Link, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
+import { ButtonGroup, getButtonClasses } from "@/components/button";
 import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
+import { MdSymbol } from "@/components/symbol";
 import { DownloadTable } from "@/features/download/components/table";
 import {
   getDownloadResults,
   minifyTypeProps,
   optionalMinifyTypeSchema,
 } from "@/features/download/query";
+import { speedPresets } from "@/features/download/speed";
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,
-  mbps: v.optional(v.pipe(vUtils.coerceNumber, v.minValue(1)), 20),
+  mbps: v.optional(v.pipe(vUtils.coerceNumber, v.minValue(1)), 32),
 });
 
 export const Route = createFileRoute("/download")({
@@ -46,12 +49,12 @@ function RouteComponent() {
           {...minifyTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
-            search: { minifyType: option },
+            search: ({ mbps }) => ({ minifyType: option, mbps }),
           })}
         />
         <PageFilterTextField
           title="Download speed"
-          defaultValue={mbps}
+          value={mbps}
           type="number"
           min={1}
           step={1}
@@ -70,6 +73,22 @@ function RouteComponent() {
             })
           }
         />
+        <div className="page-filters__group">
+          <h6 className="typo-caption">Speed presets</h6>
+          <ButtonGroup variant="outlined">
+            {speedPresets.map((preset) => (
+              <Link
+                key={preset.name}
+                aria-label={preset.name}
+                className={getButtonClasses({ variant: "toggle" })}
+                to={Route.fullPath}
+                search={({ minifyType }) => ({ minifyType, mbps: preset.mbps })}
+              >
+                <MdSymbol>{preset.icon}</MdSymbol>
+              </Link>
+            ))}
+          </ButtonGroup>
+        </div>
       </div>
       <DownloadTable results={data} mbps={mbps} minify={minifyType} />
     </>

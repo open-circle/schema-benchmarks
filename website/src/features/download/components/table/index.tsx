@@ -5,52 +5,15 @@ import {
   getDuration,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
-import { getButtonClasses } from "@/components/button";
+import { ButtonGroup, getButtonClasses } from "@/components/button";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
-import { getDownloadTime } from "@/features/download/lib";
-import { useFocusGroup } from "@/hooks/use-focus-group";
+import { getDownloadTime } from "@/features/download/speed";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;
   mbps: number;
   minify: MinifyType;
-}
-
-function SourceLinks({
-  result,
-  minify,
-}: {
-  result: DownloadResult;
-  minify: MinifyType;
-}) {
-  const groupRef = useFocusGroup();
-  return (
-    <div className="source-links" ref={groupRef}>
-      <a
-        href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download/${result.fileName}`}
-        className={getButtonClasses({
-          variant: "toggle",
-        })}
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="View source"
-      >
-        <MdSymbol>code</MdSymbol>
-      </a>
-      <a
-        href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download_compiled/${minify}/${result.fileName.replace(".ts", ".js")}`}
-        className={getButtonClasses({
-          variant: "toggle",
-        })}
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="View compiled source"
-      >
-        <MdSymbol>deployed_code</MdSymbol>
-      </a>
-    </div>
-  );
 }
 
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
@@ -90,7 +53,30 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   {durationFormatter.format(getDuration(time))}
                 </td>
                 <td className="action fit-content">
-                  <SourceLinks {...{ result, minify }} />
+                  <ButtonGroup className="source-links">
+                    <a
+                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download/${result.fileName}`}
+                      className={getButtonClasses({
+                        variant: "toggle",
+                      })}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="View source"
+                    >
+                      <MdSymbol>code</MdSymbol>
+                    </a>
+                    <a
+                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download_compiled/${minify}/${result.fileName.replace(".ts", ".js")}`}
+                      className={getButtonClasses({
+                        variant: "toggle",
+                      })}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="View compiled source"
+                    >
+                      <MdSymbol>deployed_code</MdSymbol>
+                    </a>
+                  </ButtonGroup>
                 </td>
               </tr>
             );

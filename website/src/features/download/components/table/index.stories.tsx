@@ -7,7 +7,7 @@ const meta = {
   component: DownloadTable,
   args: {
     results: downloadResults.minified,
-    mbps: 20,
+    mbps: 32,
     minify: "minified",
   },
 } satisfies Meta<typeof DownloadTable>;

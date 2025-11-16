@@ -76,10 +76,10 @@ async function download() {
         bytes: blob.size,
       });
     }
-    results.sort((a, b) => a.bytes - b.bytes);
-    allResults[minify] = results.map((result, index) =>
-      Object.assign(result, { rank: index + 1 }),
-    );
+
+    allResults[minify] = results
+      .sort((a, b) => a.bytes - b.bytes)
+      .map((result, index) => Object.assign(result, { rank: index + 1 }));
   }
 
   const outputPath = path.join(process.cwd(), "download.json");

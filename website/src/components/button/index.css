@@ -12,6 +12,7 @@
   gap: 0.5rem;
   padding: 0 1rem;
 
+  --button-base-color: var(--page-foreground);
   background-color: var(--button-background);
   color: var(--button-foreground);
 
@@ -51,6 +52,19 @@
   &.button--error {
     --button-base-color: var(--red);
     --on-button-base-color: var(--on-red);
+  }
+  &.button--active-primary {
+    --button-active-color: var(--primary);
+  }
+  &.button--active-secondary {
+    --button-active-color: var(--secondary);
+  }
+  &.button--active-success {
+    --button-active-color: var(--green);
+  }
+  &.button--active-danger,
+  &.button--active-error {
+    --button-active-color: var(--red);
   }
 
   &.button--text {
@@ -180,6 +194,7 @@
     }
     &.active {
       --icon-fill: 1;
+      --button-foreground: var(--button-active-color);
     }
   }
   &.button--floating-action {
@@ -233,5 +248,15 @@
     .md-symbol {
       --icon-size: 24;
     }
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  border-radius: var(--shape-pill);
+  overflow: hidden;
+  &.button-group--outlined {
+    border: 1px solid var(--divider);
   }
 }
