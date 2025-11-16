@@ -16,7 +16,18 @@ import { speedPresets } from "@/features/download/speed";
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,
-  mbps: v.optional(v.pipe(vUtils.coerceNumber, v.minValue(1)), 32),
+  mbps: v.optional(
+    v.union([
+      v.pipe(vUtils.coerceNumber, v.minValue(1)),
+      ...speedPresets.map((preset) =>
+        v.pipe(
+          v.literal(preset.slug),
+          v.transform(() => preset.mbps),
+        ),
+      ),
+    ]),
+    32,
+  ),
 });
 
 export const Route = createFileRoute("/download")({
