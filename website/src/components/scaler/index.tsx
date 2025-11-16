@@ -15,6 +15,7 @@ interface Scale {
 
 export interface ScalerProps extends Scale {
   children?: ReactNode;
+  symbolLabel?: string;
 }
 
 function getScalerScale(
@@ -32,11 +33,13 @@ function getScalerScale(
   });
 }
 
-export function Scaler({ icon, color, children }: ScalerProps) {
+export function Scaler({ icon, color, children, symbolLabel }: ScalerProps) {
   return (
     <span className="scaler">
       {children}
-      <MdSymbol style={{ color }}>{icon}</MdSymbol>
+      <MdSymbol style={{ color }} aria-label={symbolLabel}>
+        {icon}
+      </MdSymbol>
     </span>
   );
 }

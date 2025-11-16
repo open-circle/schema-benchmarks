@@ -7,7 +7,8 @@ const meta = {
   args: {
     icon: "sentiment_very_dissatisfied",
     color: "var(--pink)",
-    children: "Bad",
+    children: "20",
+    symbolLabel: "Sad",
   },
 } satisfies Meta<typeof Scaler>;
 

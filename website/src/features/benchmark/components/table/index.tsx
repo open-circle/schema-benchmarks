@@ -120,11 +120,18 @@ export function BenchTable({ results }: BenchTableProps) {
                         ratioScaler &&
                         compareId !== result.id &&
                         (ratio ? (
-                          <Scaler {...ratioScaler(ratio)}>
+                          <Scaler
+                            {...ratioScaler(ratio)}
+                            symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
+                          >
                             {`${numFormatter.format(Math.abs(ratio))}x`}
                           </Scaler>
                         ) : (
-                          <Scaler icon="stat_0" color="var(--yellow)">
+                          <Scaler
+                            icon="stat_0"
+                            color="var(--yellow)"
+                            symbolLabel="Equal"
+                          >
                             1x
                           </Scaler>
                         ))}

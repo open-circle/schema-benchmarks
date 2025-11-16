@@ -6,6 +6,7 @@ export interface MdSymbolProps {
   flipRtl?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  "aria-label"?: string;
 
   // provided for convenience, but prefer using CSS vars where possible
   fill?: boolean;
@@ -25,10 +26,13 @@ export function MdSymbol({
   flipRtl,
   className,
   style,
+  "aria-label": ariaLabel,
 }: MdSymbolProps) {
   return (
+    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: aria-label works i promise
     <span
-      aria-hidden
+      aria-hidden={!ariaLabel}
+      aria-label={ariaLabel}
       className={clsx("md-symbol material-symbols-sharp", className)}
       data-flip-rtl={flipRtl ? true : undefined}
       style={
