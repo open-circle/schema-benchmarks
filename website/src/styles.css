@@ -29,8 +29,6 @@
 @import "components/page-filter/index.css";
 @import "components/scroll-to-top/index.css";
 
-@import "features/download/components/table/index.css";
-
 * {
   box-sizing: border-box;
   corner-shape: bevel;
