@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Banner } from "@/components/banner";
+import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
 import { TanstackHeader } from "../components/header";
@@ -76,6 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <TanstackHeader />
               <Banner />
               <main>{children}</main>
+              <Footer />
               <ScrollToTop />
               <Snackbars />
             </div>
