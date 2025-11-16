@@ -1,3 +1,4 @@
+import { unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, linkOptions } from "@tanstack/react-router";
@@ -19,14 +20,9 @@ const searchSchema = v.object({
   mbps: v.optional(
     v.union([
       v.pipe(vUtils.coerceNumber, v.minValue(1)),
-      ...speedPresets.map((preset) =>
-        v.pipe(
-          v.literal(preset.slug),
-          v.transform(() => preset.mbps),
-        ),
-      ),
+      ...unsafeKeys(speedPresets).map((slug) => v.literal(slug)),
     ]),
-    32,
+    "4g",
   ),
 });
 
@@ -48,6 +44,8 @@ export const Route = createFileRoute("/download")({
 
 function RouteComponent() {
   const { minifyType, mbps } = Route.useSearch();
+  const mbpsAsNumber =
+    typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
   const { data } = useSuspenseQuery({
     ...getDownloadResults(),
     select: (results) => results[minifyType],
@@ -65,7 +63,7 @@ function RouteComponent() {
         />
         <PageFilterTextField
           title="Download speed"
-          value={mbps}
+          value={mbpsAsNumber}
           type="number"
           min={1}
           step={1}
@@ -87,13 +85,13 @@ function RouteComponent() {
         <div className="page-filters__group">
           <h6 className="typo-caption">Speed presets</h6>
           <ButtonGroup variant="outlined">
-            {speedPresets.map((preset) => (
+            {unsafeEntries(speedPresets).map(([slug, preset]) => (
               <Link
                 key={preset.name}
                 aria-label={preset.name}
                 className={getButtonClasses({ variant: "toggle" })}
                 to={Route.fullPath}
-                search={({ minifyType }) => ({ minifyType, mbps: preset.mbps })}
+                search={({ minifyType }) => ({ minifyType, mbps: slug })}
               >
                 <MdSymbol>{preset.icon}</MdSymbol>
               </Link>
@@ -101,7 +99,7 @@ function RouteComponent() {
           </ButtonGroup>
         </div>
       </div>
-      <DownloadTable results={data} mbps={mbps} minify={minifyType} />
+      <DownloadTable results={data} mbps={mbpsAsNumber} minify={minifyType} />
     </>
   );
 }

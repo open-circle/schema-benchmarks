@@ -15,6 +15,19 @@ export const numFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 2,
 });
 
+export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> =
+  Object.keys;
+export const unsafeEntries: <T extends object>(
+  obj: T,
+) => Array<[keyof T, T[keyof T]]> = Object.entries;
+export const unsafeFromEntries: <
+  const TEntries extends ReadonlyArray<readonly [PropertyKey, unknown]>,
+>(
+  entries: TEntries,
+) => {
+  -readonly [TEntry in TEntries[number] as TEntry[0]]: TEntry[1];
+} = Object.fromEntries;
+
 export const objectKeyCount = (obj: object) => Object.keys(obj).length;
 export const isEmpty = (obj: object) =>
   Array.isArray(obj) ? obj.length === 0 : objectKeyCount(obj) === 0;

@@ -40,7 +40,7 @@ function RouteComponent() {
   const { libraryType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => results.parsing,
+    select: (results) => results.parsing[libraryType][dataType],
   });
   return (
     <>
@@ -72,11 +72,11 @@ function RouteComponent() {
               dataType,
               errorType: option,
             }),
-            disabled: isEmpty(data[libraryType][dataType][option]),
+            disabled: isEmpty(data[option]),
           })}
         />
       </div>
-      <BenchTable results={data[libraryType][dataType][errorType]} />
+      <BenchTable results={data[errorType]} />
     </>
   );
 }

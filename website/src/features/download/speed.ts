@@ -3,7 +3,6 @@ interface SpeedPreset {
   /** Mbps, not Mb/s */
   mbps: number;
   icon: string;
-  slug: string;
 }
 
 /*
@@ -16,11 +15,15 @@ regular 4g: 4Mb/s
 WiFi: 30 Mb/s
 */
 
-export const speedPresets = [
-  { name: "3G (750kb/s)", mbps: 750 / 125, icon: "3g_mobiledata", slug: "3g" },
-  { name: "4G (4Mb/s)", mbps: 4 * 8, icon: "4g_mobiledata", slug: "4g" },
-  { name: "WiFi (30Mb/s)", mbps: 30 * 8, icon: "wifi", slug: "wifi" },
-] as const satisfies Array<SpeedPreset>;
+export const speedPresets = {
+  "3g": {
+    name: "3G (750kb/s)",
+    mbps: 750 / 125,
+    icon: "3g_mobiledata",
+  },
+  "4g": { name: "4G (4Mb/s)", mbps: 4 * 8, icon: "4g_mobiledata" },
+  wifi: { name: "WiFi (30Mb/s)", mbps: 30 * 8, icon: "wifi" },
+} as const satisfies Record<string, SpeedPreset>;
 
 /**
  * Calculate the time to download a file at a given speed.

@@ -36,7 +36,7 @@ function RouteComponent() {
   const { libraryType, dataType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => results.validation,
+    select: (results) => results.validation[libraryType][dataType],
   });
   return (
     <>
@@ -59,7 +59,7 @@ function RouteComponent() {
           })}
         />
       </div>
-      <BenchTable results={data[libraryType][dataType]} />
+      <BenchTable results={data} />
     </>
   );
 }
