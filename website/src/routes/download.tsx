@@ -70,6 +70,7 @@ function RouteComponent() {
           required
           startIcon="speed"
           suffix="Mbps"
+          style={{ "--text-field-min-width": "10rem" }}
           getLinkOptions={(event) =>
             linkOptions({
               from: Route.fullPath,

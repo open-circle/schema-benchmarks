@@ -12,6 +12,12 @@ export interface TextFieldProps extends ComponentPropsWithRef<"input"> {
   errorMessage?: ReactNode;
 }
 
+declare module "react" {
+  interface CSSProperties {
+    "--text-field-min-width"?: string | number;
+  }
+}
+
 const cls = bem("text-field");
 
 export function TextField({
@@ -23,6 +29,7 @@ export function TextField({
   endIconIsButton,
   errorMessage,
   helpText,
+  style,
   ...props
 }: TextFieldProps) {
   return (
@@ -33,6 +40,7 @@ export function TextField({
         },
         extra: className,
       })}
+      style={style}
     >
       <div className={cls({ element: "container", extra: "typo-subtitle1" })}>
         {startIcon && (
