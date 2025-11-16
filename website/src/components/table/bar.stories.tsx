@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Bar, getBarScale } from "./bar";
+import { Bar } from "./bar";
 
-const scaler = getBarScale([0, 100]);
+const scale = Bar.getScale([0, 100]);
 
 const meta = {
   title: "Components/Table/Bar",
-  render: (args) => <Bar {...scaler(args.percentage)} />,
+  render: (args) => <Bar {...scale(args.percentage)} />,
   argTypes: {
     percentage: {
       control: {

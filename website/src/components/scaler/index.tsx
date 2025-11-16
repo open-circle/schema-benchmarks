@@ -17,7 +17,7 @@ export interface ScalerProps extends Scale {
   children?: ReactNode;
 }
 
-export function getScaler(
+function getScalerScale(
   values: ReadonlyArray<d3.NumberValue>,
   { type = "sentiment", lowerBetter = false }: ScaleOptions = {},
 ) {
@@ -40,3 +40,5 @@ export function Scaler({ icon, color, children }: ScalerProps) {
     </span>
   );
 }
+
+Scaler.getScale = getScalerScale;

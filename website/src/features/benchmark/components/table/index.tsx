@@ -7,8 +7,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
-import { getScaler, Scaler } from "@/components/scaler";
-import { Bar, getBarScale } from "@/components/table/bar";
+import { Scaler } from "@/components/scaler";
+import { Bar } from "@/components/table/bar";
 
 export interface BenchTableProps {
   results: Array<BenchResult>;
@@ -36,7 +36,7 @@ function useComparison(results: Array<BenchResult>) {
     );
     const max = Math.max(...ratios);
     const min = Math.min(...ratios);
-    return getScaler([min, max, -min, -max], {
+    return Scaler.getScale([min, max, -min, -max], {
       type: "stat",
       lowerBetter: true,
     });
@@ -47,7 +47,7 @@ function useComparison(results: Array<BenchResult>) {
 export function BenchTable({ results }: BenchTableProps) {
   const meanScaler = useMemo(
     () =>
-      getBarScale(
+      Bar.getScale(
         results.map((result) => result.mean),
         { lowerBetter: true },
       ),

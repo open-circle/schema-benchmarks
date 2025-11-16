@@ -7,7 +7,7 @@ export interface BarProps {
   percentage: number;
 }
 
-export function getBarScale(
+function getBarScale(
   values: ReadonlyArray<d3.NumberValue>,
   { lowerBetter = false }: { lowerBetter?: boolean } = {},
 ) {
@@ -40,3 +40,5 @@ export function Bar({ color, percentage }: BarProps) {
     </div>
   );
 }
+
+Bar.getScale = getBarScale;

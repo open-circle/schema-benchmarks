@@ -7,7 +7,7 @@ import {
 import { useMemo } from "react";
 import { getButtonClasses } from "@/components/button";
 import { MdSymbol } from "@/components/symbol";
-import { Bar, getBarScale } from "@/components/table/bar";
+import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/lib";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
@@ -56,7 +56,7 @@ function SourceLinks({
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
   const bytes = useMemo(() => results.map((result) => result.bytes), [results]);
   const sizeScaler = useMemo(
-    () => getBarScale(bytes, { lowerBetter: true }),
+    () => Bar.getScale(bytes, { lowerBetter: true }),
     [bytes],
   );
   return (
