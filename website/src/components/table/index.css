@@ -51,3 +51,23 @@ td {
     padding: 0.5rem;
   }
 }
+
+.bar {
+  height: 1rem;
+  width: 100%;
+  min-width: 4rem;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--divider);
+  .bar__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: width 150ms var(--standard-curve);
+    &:dir(rtl) {
+      left: auto;
+      right: 0;
+    }
+  }
+}

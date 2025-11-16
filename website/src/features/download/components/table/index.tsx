@@ -6,8 +6,8 @@ import {
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { getButtonClasses } from "@/components/button";
-import { getScaler, Scaler } from "@/components/scaler";
 import { MdSymbol } from "@/components/symbol";
+import { Bar, getBarScale } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/lib";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
@@ -54,13 +54,10 @@ function SourceLinks({
 }
 
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
+  const bytes = useMemo(() => results.map((result) => result.bytes), [results]);
   const sizeScaler = useMemo(
-    () =>
-      getScaler(
-        results.map((result) => result.bytes),
-        { lowerBetter: true },
-      ),
-    [results],
+    () => getBarScale(bytes, { lowerBetter: true }),
+    [bytes],
   );
   return (
     <div className="card">
@@ -70,6 +67,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
             <th className="fit-content numeric">Rank</th>
             <th>Library</th>
             <th className="numeric">Size</th>
+            <th></th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>
           </tr>
@@ -84,10 +82,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
-                <td className="numeric">
-                  <Scaler {...sizeScaler(result.bytes)}>
-                    {formatBytes(result.bytes)}
-                  </Scaler>
+                <td className="numeric">{formatBytes(result.bytes)}</td>
+                <td>
+                  <Bar {...sizeScaler(result.bytes)} />
                 </td>
                 <td className="numeric">
                   {durationFormatter.format(getDuration(time))}

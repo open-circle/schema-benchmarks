@@ -4,7 +4,6 @@ import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
-import { DownloadPlot } from "@/features/download/components/plot";
 import { DownloadTable } from "@/features/download/components/table";
 import {
   getDownloadResults,
@@ -72,7 +71,6 @@ function RouteComponent() {
           }
         />
       </div>
-      <DownloadPlot results={data} />
       <DownloadTable results={data} mbps={mbps} minify={minifyType} />
     </>
   );
