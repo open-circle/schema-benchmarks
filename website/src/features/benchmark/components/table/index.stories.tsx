@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BenchTable } from "./index.js";
 
 const meta = {
-  title: "Components/Bench Table",
+  title: "Features/Benchmark/Table",
   component: BenchTable,
   args: {
     results: benchResults.validation.runtime.invalid,

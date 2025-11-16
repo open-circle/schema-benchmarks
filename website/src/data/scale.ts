@@ -25,7 +25,7 @@ export const stat = [
   "stat_minus_3",
   "stat_minus_2",
   "stat_minus_1",
-  "stat_0",
+  //"stat_0",
   "stat_1",
   "stat_2",
   "stat_3",

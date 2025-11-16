@@ -67,7 +67,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
             <th className="fit-content numeric">Rank</th>
             <th>Library</th>
             <th className="numeric">Size</th>
-            <th></th>
+            <th className="bar-after"></th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>
           </tr>
@@ -83,7 +83,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="numeric">{formatBytes(result.bytes)}</td>
-                <td>
+                <td className="bar-after">
                   <Bar {...sizeScaler(result.bytes)} />
                 </td>
                 <td className="numeric">

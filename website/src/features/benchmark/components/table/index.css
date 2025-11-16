@@ -1,5 +1,0 @@
-@media (--phone) or (--tablet-small) or (--tablet-large) {
-  .bench-table tr :nth-child(4) {
-    display: none;
-  }
-}

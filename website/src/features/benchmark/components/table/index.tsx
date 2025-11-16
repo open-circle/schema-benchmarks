@@ -1,10 +1,14 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
-import { msToNs, numFormatter } from "@schema-benchmarks/utils";
+import {
+  durationFormatter,
+  getDuration,
+  numFormatter,
+} from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
-import { CodeBlock } from "@/components/code";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { getScaler, Scaler } from "@/components/scaler";
+import { Bar, getBarScale } from "@/components/table/bar";
 
 export interface BenchTableProps {
   results: Array<BenchResult>;
@@ -41,9 +45,9 @@ function useComparison(results: Array<BenchResult>) {
 }
 
 export function BenchTable({ results }: BenchTableProps) {
-  const meanBounds = useMemo(
+  const meanScaler = useMemo(
     () =>
-      getScaler(
+      getBarScale(
         results.map((result) => result.mean),
         { lowerBetter: true },
       ),
@@ -68,12 +72,12 @@ export function BenchTable({ results }: BenchTableProps) {
           <tr>
             <th className="fit-content numeric">Rank</th>
             <th>Library</th>
-            <th className="numeric fit-content">Mean (ns)</th>
-            <th className="fit-content">Code</th>
+            <th className="numeric">Mean</th>
             {showComparisonColumns && (
               <>
+                <th className="bar-after"></th>
                 <th className="fit-content action">Compare</th>
-                <th className="numeric fit-content">Ratio</th>
+                <th className="numeric"></th>
               </>
             )}
           </tr>
@@ -89,14 +93,14 @@ export function BenchTable({ results }: BenchTableProps) {
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
-                <td className="numeric fit-content">
-                  <Scaler {...meanBounds(result.mean)}>
-                    {numFormatter.format(msToNs(result.mean))}
-                  </Scaler>
+                <td className="numeric">
+                  {durationFormatter.format(getDuration(result.mean))}
                 </td>
-                <td className="fit-content">
-                  {result.snippet && <CodeBlock>{result.snippet}</CodeBlock>}
-                </td>
+                {showComparisonColumns && (
+                  <td className="bar-after">
+                    <Bar {...meanScaler(result.mean)} />
+                  </td>
+                )}
                 {showComparisonColumns && (
                   <>
                     <td className="fit-content action">
@@ -111,14 +115,13 @@ export function BenchTable({ results }: BenchTableProps) {
                         }}
                       />
                     </td>
-                    <td className="numeric fit-content">
+                    <td className="numeric">
                       {compareResult &&
                         ratioScaler &&
                         compareId !== result.id &&
                         (ratio ? (
                           <Scaler {...ratioScaler(ratio)}>
-                            {`${numFormatter.format(Math.abs(ratio))}x ${ratio < 0 ? "faster" : "slower"}`}
-                            {/* than selected */}
+                            {`${numFormatter.format(Math.abs(ratio))}x`}
                           </Scaler>
                         ) : (
                           <Scaler icon="stat_0" color="var(--yellow)">
