@@ -13,22 +13,37 @@ const meta = {
   },
   render: (args) => (
     <div className="sidebar-container">
-      <SidebarOpenContext.Provider value={args}>
+      <SidebarOpenContext value={args}>
         <Sidebar>
-          <nav>
-            <ul className="typo-subtitle2">
-              {Sidebar.links.map(({ name, icon, to }) => (
-                <li key={to}>
-                  <a href={to} className={clsx({ active: to === "/" })}>
-                    <MdSymbol>{icon}</MdSymbol>
-                    {name}
-                  </a>
-                </li>
+          <nav className="typo-subtitle1">
+            <ul className="sidebar__groups">
+              {Sidebar.groups.map((groups, index) => (
+                <div key={groups.key} className="sidebar__group">
+                  {groups.subheader && (
+                    <h3 className="sidebar__subheader typo-subtitle2">
+                      {groups.subheader}
+                    </h3>
+                  )}
+                  <ul>
+                    {groups.links.map(({ name, icon, ...link }) => (
+                      <li key={link.to}>
+                        <a
+                          href={link.to}
+                          className={clsx({ active: link.to === "/" })}
+                        >
+                          <MdSymbol>{icon}</MdSymbol>
+                          {name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  {index !== Sidebar.groups.length - 1 && <hr />}
+                </div>
               ))}
             </ul>
           </nav>
         </Sidebar>
-      </SidebarOpenContext.Provider>
+      </SidebarOpenContext>
     </div>
   ),
   args: {

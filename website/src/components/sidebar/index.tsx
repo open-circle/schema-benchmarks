@@ -6,7 +6,7 @@ import {
   linkOptions,
 } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
-import { type ReactNode, useContext, useEffect } from "react";
+import { type Key, type ReactNode, useContext, useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
 import { MdSymbol } from "../symbol";
@@ -15,29 +15,40 @@ import { SidebarOpenContext } from "./context";
 const cls = bem("sidebar");
 const backdropCls = bem("sidebar-backdrop");
 
-const sidebarLinks = [
-  { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
+interface SidebarGroup {
+  key: Key;
+  subheader?: string;
+  links: Array<LinkOptions & { name: string; icon: string }>;
+}
+
+const sidebarGroups: Array<SidebarGroup> = [
   {
-    ...linkOptions({ to: "/initialization" }),
-    name: "Initialization",
-    icon: "timer",
+    key: "core",
+    links: [
+      { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
+      {
+        ...linkOptions({ to: "/initialization" }),
+        name: "Initialization",
+        icon: "timer",
+      },
+      {
+        ...linkOptions({ to: "/validation" }),
+        name: "Validation",
+        icon: "check_circle",
+      },
+      {
+        ...linkOptions({ to: "/parsing" }),
+        name: "Parsing",
+        icon: "output_circle",
+      },
+      {
+        ...linkOptions({ to: "/download" }),
+        name: "Download",
+        icon: "download_2",
+      },
+    ],
   },
-  {
-    ...linkOptions({ to: "/validation" }),
-    name: "Validation",
-    icon: "check_circle",
-  },
-  {
-    ...linkOptions({ to: "/parsing" }),
-    name: "Parsing",
-    icon: "output_circle",
-  },
-  {
-    ...linkOptions({ to: "/download" }),
-    name: "Download",
-    icon: "download_2",
-  },
-] satisfies Array<LinkOptions & { name: string; icon: string }>;
+];
 
 function SidebarWithoutContext({
   children,
@@ -110,20 +121,37 @@ export function Sidebar({ children }: { children?: ReactNode }) {
   );
 }
 
-Sidebar.links = sidebarLinks;
+Sidebar.groups = sidebarGroups;
 
 export function TanstackSidebar() {
   return (
     <Sidebar>
-      <nav>
-        <ul className="typo-subtitle1">
-          {sidebarLinks.map(({ name, icon, ...link }) => (
-            <li key={link.to}>
-              <Link {...link} activeOptions={{ includeSearch: false }}>
-                <MdSymbol>{icon}</MdSymbol>
-                {name}
-              </Link>
-            </li>
+      <nav className="typo-subtitle1">
+        <ul className={cls("groups")}>
+          {sidebarGroups.map((groups, index) => (
+            <div key={groups.key} className={cls("group")}>
+              {groups.subheader && (
+                <h3
+                  className={cls({
+                    element: "subheader",
+                    extra: "typo-subtitle2",
+                  })}
+                >
+                  {groups.subheader}
+                </h3>
+              )}
+              <ul>
+                {groups.links.map(({ name, icon, ...link }) => (
+                  <li key={link.to}>
+                    <Link {...link} activeOptions={{ includeSearch: false }}>
+                      <MdSymbol>{icon}</MdSymbol>
+                      {name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {index !== sidebarGroups.length - 1 && <hr />}
+            </div>
           ))}
         </ul>
       </nav>

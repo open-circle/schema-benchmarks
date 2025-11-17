@@ -33,8 +33,8 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
     _setOpen(newValue);
   }
   return (
-    <SidebarOpenContext.Provider value={{ open, setOpen }}>
+    <SidebarOpenContext value={{ open, setOpen }}>
       {children}
-    </SidebarOpenContext.Provider>
+    </SidebarOpenContext>
   );
 }
