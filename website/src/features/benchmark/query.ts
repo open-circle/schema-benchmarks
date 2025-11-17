@@ -9,11 +9,8 @@ import {
   libraryTypeSchema,
 } from "@schema-benchmarks/bench";
 import benchResults from "@schema-benchmarks/bench/bench.json";
-import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import Prism from "prismjs";
-import loadLanguages from "prismjs/components/";
 import * as v from "valibot";
 import type { PageFilterGroupProps } from "@/components/page-filter";
 
@@ -59,43 +56,8 @@ export const libraryTypeProps: Pick<
   },
 };
 
-const highlightCache = new Map<string, string>();
-const highlight = (code: string) =>
-  getOrInsertComputed(highlightCache, code, () =>
-    // biome-ignore lint/style/noNonNullAssertion: we've checked that the language is loaded
-    Prism.highlight(code, Prism.languages.typescript!, "typescript"),
-  );
-
-function highlightSnippets(results: BenchResults) {
-  for (const libraryType of Object.values(results.initialization)) {
-    for (const result of libraryType) {
-      result.snippet = highlight(result.snippet);
-    }
-  }
-  for (const libraryType of Object.values(results.validation)) {
-    for (const dataType of Object.values(libraryType)) {
-      for (const result of dataType) {
-        result.snippet = highlight(result.snippet);
-      }
-    }
-  }
-  for (const libraryType of Object.values(results.parsing)) {
-    for (const dataType of Object.values(libraryType)) {
-      for (const errorType of Object.values(dataType)) {
-        for (const result of errorType) {
-          result.snippet = highlight(result.snippet);
-        }
-      }
-    }
-  }
-}
-
 export const getBenchResultsFn = createServerFn().handler(
   async ({ signal }) => {
-    if (!Prism.languages.typescript) {
-      loadLanguages(["typescript"]);
-    }
-
     let results: BenchResults;
     if (process.env.NODE_ENV === "production") {
       try {
@@ -115,8 +77,6 @@ export const getBenchResultsFn = createServerFn().handler(
     } else {
       results = structuredClone(benchResults);
     }
-
-    highlightSnippets(results);
 
     return results;
   },
