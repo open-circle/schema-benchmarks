@@ -1,5 +1,7 @@
+import type { Ref } from "react";
+
 export const mergeRefs = <T extends HTMLElement>(
-  ...refs: Array<React.Ref<T> | undefined>
+  ...refs: Array<Ref<T> | undefined>
 ) => {
   const filteredRefs = refs.filter(Boolean);
   if (!filteredRefs.length) return undefined;

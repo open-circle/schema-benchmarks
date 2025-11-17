@@ -986,7 +986,7 @@ function nullable(innerType) {
 }
 
 //#endregion
-//#region schemas/download/zod/mini.ts
+//#region schemas/download/zod/index (mini).ts
 const imageSchema = object({
 	id: number(),
 	created: date(),

@@ -71,14 +71,12 @@ bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
         },
       },
     );
-  });
 
-  library("zod/mini", ({ add }) => {
     add(
       () => {
         getZodMiniSchema();
       },
-      { snippet: ts`z.object(...)` },
+      { note: "mini", snippet: ts`z.object(...)` },
     );
 
     add(
@@ -86,7 +84,7 @@ bench({ libraryType: "runtime" }, ({ addLibrary, library }) => {
         getZodMiniSchema();
       },
       {
-        note: "jitless",
+        note: "mini, jitless",
         snippet: ts`
 					// z.config({ jitless: true });
 					z.object(...)

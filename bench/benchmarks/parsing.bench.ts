@@ -81,15 +81,14 @@ for (const [dataType, data] of [
             snippet: ts`schema.safeParse(data, { jitless: true })`,
           },
         );
-      });
 
-      library("zod/mini", ({ add }) => {
         const zodMiniSchema = getZodMiniSchema();
         add(
           () => {
             zodMiniSchema.safeParse(data);
           },
           {
+            note: "mini",
             snippet: ts`schema.safeParse(data)`,
           },
         );
@@ -99,7 +98,7 @@ for (const [dataType, data] of [
             zodMiniSchema.safeParse(data, { jitless: true });
           },
           {
-            note: "jitless",
+            note: "mini, jitless",
             snippet: ts`schema.safeParse(data, { jitless: true })`,
           },
         );
