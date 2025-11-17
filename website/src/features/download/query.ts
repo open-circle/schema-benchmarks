@@ -8,14 +8,14 @@ import downloadResults from "@schema-benchmarks/bench/download.json";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
-import type { PageFilterGroupProps } from "@/components/page-filter";
+import type { PageFilterChipsProps } from "@/components/page-filter/chips";
 
 export const optionalMinifyTypeSchema = v.optional(
   minifyTypeSchema,
   "minified",
 );
 export const minifyTypeProps: Pick<
-  PageFilterGroupProps<MinifyType>,
+  PageFilterChipsProps<MinifyType>,
   "title" | "labels" | "options"
 > = {
   title: "Minify",

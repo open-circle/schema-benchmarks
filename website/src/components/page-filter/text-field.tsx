@@ -1,16 +1,17 @@
-import { bem } from "@schema-benchmarks/utils";
 import { useDebouncedCallback } from "@tanstack/react-pacer";
 import {
   type RegisteredRouter,
   useNavigate,
   type ValidateLinkOptions,
 } from "@tanstack/react-router";
-import { type ChangeEvent, type ReactNode, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 import { TextField, type TextFieldProps } from "../text-field";
+import type { PageFilterProps } from ".";
+import { PageFilter } from ".";
 
 export interface PageFilterTextFieldProps<LinkOptions = unknown>
-  extends Omit<TextFieldProps, "title" | "defaultValue"> {
-  title: ReactNode;
+  extends Omit<TextFieldProps, "title" | "defaultValue">,
+    Omit<PageFilterProps, "children"> {
   /**
    * Create the new link options based on the current event.
    */
@@ -18,8 +19,6 @@ export interface PageFilterTextFieldProps<LinkOptions = unknown>
     event: ChangeEvent<HTMLInputElement>,
   ) => ValidateLinkOptions<RegisteredRouter, LinkOptions>;
 }
-
-const cls = bem("page-filters");
 
 export function PageFilterTextField<LinkOptions>({
   title,
@@ -39,8 +38,7 @@ export function PageFilterTextField<LinkOptions>({
     setValue(searchValue);
   }, [searchValue]);
   return (
-    <div className={cls("group")}>
-      <h6 className="typo-caption">{title}</h6>
+    <PageFilter title={title}>
       <TextField
         {...props}
         value={value}
@@ -49,6 +47,6 @@ export function PageFilterTextField<LinkOptions>({
           debouncedOnChange(event);
         }}
       />
-    </div>
+    </PageFilter>
   );
 }

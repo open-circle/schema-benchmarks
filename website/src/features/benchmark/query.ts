@@ -12,11 +12,11 @@ import benchResults from "@schema-benchmarks/bench/bench.json";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
-import type { PageFilterGroupProps } from "@/components/page-filter";
+import type { PageFilterChipsProps } from "@/components/page-filter/chips";
 
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "valid");
 export const dataTypeProps: Pick<
-  PageFilterGroupProps<DataType>,
+  PageFilterChipsProps<DataType>,
   "title" | "labels" | "options"
 > = {
   title: "Data",
@@ -29,7 +29,7 @@ export const dataTypeProps: Pick<
 
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
 export const errorTypeProps: Pick<
-  PageFilterGroupProps<ErrorType>,
+  PageFilterChipsProps<ErrorType>,
   "title" | "labels" | "options"
 > = {
   title: "Abort early",
@@ -45,7 +45,7 @@ export const optionalLibraryTypeSchema = v.optional(
   "runtime",
 );
 export const libraryTypeProps: Pick<
-  PageFilterGroupProps<LibraryType>,
+  PageFilterChipsProps<LibraryType>,
   "title" | "labels" | "options"
 > = {
   title: "Type",

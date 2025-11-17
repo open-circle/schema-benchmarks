@@ -1,7 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
-import { PageFilterGroup } from "@/components/page-filter";
+import { PageFilters } from "@/components/page-filter";
+import { PageFilterChips } from "@/components/page-filter/chips";
 import { getHighlightedCode } from "@/data/highlight";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
@@ -56,15 +57,15 @@ function RouteComponent() {
   });
   return (
     <>
-      <div className="page-filters">
-        <PageFilterGroup
+      <PageFilters>
+        <PageFilterChips
           {...libraryTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
             search: { libraryType: option },
           })}
         />
-        <PageFilterGroup
+        <PageFilterChips
           {...dataTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
@@ -74,7 +75,7 @@ function RouteComponent() {
             }),
           })}
         />
-      </div>
+      </PageFilters>
       <BenchTable results={data} />
     </>
   );

@@ -4,7 +4,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
 import { ButtonGroup, getButtonClasses } from "@/components/button";
-import { PageFilterGroup } from "@/components/page-filter";
+import { PageFilter, PageFilters } from "@/components/page-filter";
+import { PageFilterChips } from "@/components/page-filter/chips";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
 import { MdSymbol } from "@/components/symbol";
 import { DownloadTable } from "@/features/download/components/table";
@@ -53,8 +54,8 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="page-filters">
-        <PageFilterGroup
+      <PageFilters>
+        <PageFilterChips
           {...minifyTypeProps}
           getLinkOptions={(option) => ({
             to: Route.fullPath,
@@ -83,8 +84,7 @@ function RouteComponent() {
             })
           }
         />
-        <div className="page-filters__group">
-          <h6 className="typo-caption">Speed presets</h6>
+        <PageFilter title="Speed presets">
           <ButtonGroup variant="outlined">
             {unsafeEntries(speedPresets).map(([slug, preset]) => (
               <Link
@@ -98,8 +98,8 @@ function RouteComponent() {
               </Link>
             ))}
           </ButtonGroup>
-        </div>
-      </div>
+        </PageFilter>
+      </PageFilters>
       <DownloadTable results={data} mbps={mbpsAsNumber} minify={minifyType} />
     </>
   );
