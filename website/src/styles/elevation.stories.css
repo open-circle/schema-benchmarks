@@ -9,10 +9,10 @@
   height: 100px;
   border-radius: var(--shape-medium);
   background-color: light-dark(
-    var(--card-background),
+    var(--surface),
     color-mix(
       in hsl,
-      var(--card-background),
+      var(--surface),
       var(--elevation-overlay-color) var(--elevation-overlay-opacity)
     )
   );
@@ -26,10 +26,10 @@
 
 .elevation-transition {
   background-color: light-dark(
-    var(--card-background),
+    var(--surface),
     color-mix(
       in hsl,
-      var(--card-background),
+      var(--surface),
       var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
     )
   );
@@ -37,10 +37,10 @@
   &:hover {
     box-shadow: var(--elevation-6);
     background-color: light-dark(
-      var(--card-background),
+      var(--surface),
       color-mix(
         in hsl,
-        var(--card-background),
+        var(--surface),
         var(--elevation-overlay-color) var(--elevation-6-overlay-opacity)
       )
     );

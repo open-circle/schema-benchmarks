@@ -1,4 +1,5 @@
 export type * from "./libs";
+export * from "./react";
 export type * from "./types";
 
 import bemHelper from "react-bem-helper";

@@ -1,0 +1,66 @@
+:root {
+  --dialog-enter-time: 150ms;
+  --dialog-exit-time: 75ms;
+}
+
+.dialog {
+  appearance: none;
+  box-shadow: var(--elevation-24);
+  background-color: light-dark(
+    var(--surface),
+    color-mix(
+      in hsl,
+      var(--surface),
+      var(--elevation-overlay-color) var(--elevation-24-overlay-opacity)
+    )
+  );
+  border: none;
+  border-radius: var(--shape-medium);
+  transition: display var(--dialog-exit-time) allow-discrete,
+    overlay var(--dialog-exit-time) allow-discrete;
+  animation: dialog-fade-out var(--dialog-exit-time) linear;
+  &::backdrop {
+    background-color: color(from var(--page-foreground) srgb r g b / 0.32);
+    opacity: 0;
+    transition: opacity var(--dialog-exit-time) linear;
+  }
+  &[open] {
+    transition: display var(--dialog-enter-time) allow-discrete,
+      overlay var(--dialog-enter-time) allow-discrete;
+    animation: dialog-scale-in var(--dialog-enter-time) var(--enter-curve),
+      dialog-fade-in var(--dialog-exit-time) linear;
+    &::backdrop {
+      opacity: 1;
+    }
+  }
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+@keyframes dialog-scale-in {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

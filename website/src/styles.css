@@ -14,6 +14,7 @@
 @import "components/banner/index.css";
 @import "components/button/index.css";
 @import "components/chip/index.css";
+@import "components/dialog/index.css";
 @import "components/empty-state/index.css";
 @import "components/footer/index.css";
 @import "components/header/index.css";
@@ -79,10 +80,10 @@ pre[class*="language-"] {
 
 .card {
   background-color: light-dark(
-    var(--card-background),
+    var(--surface),
     color-mix(
       in hsl,
-      var(--card-background),
+      var(--surface),
       var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
     )
   );
