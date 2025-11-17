@@ -114,7 +114,7 @@ pre[class*="language-"] {
 }
 
 main {
-  padding: 1rem 0;
+  padding: var(--margin) 0;
   flex: 1;
   background-color: var(--page-background);
   margin: var(--margin);
