@@ -8,7 +8,6 @@ import { PageFilterGroup } from "@/components/page-filter";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
 import { MdSymbol } from "@/components/symbol";
 import { DownloadTable } from "@/features/download/components/table";
-import downloadTableCss from "@/features/download/components/table/index.css?url";
 import {
   getDownloadResults,
   minifyTypeProps,
@@ -32,12 +31,6 @@ export const Route = createFileRoute("/download")({
     meta: [
       {
         title: "Download - Schema Benchmarks",
-      },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: downloadTableCss,
       },
     ],
   }),

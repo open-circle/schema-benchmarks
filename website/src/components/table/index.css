@@ -57,6 +57,9 @@ td {
       padding-left: 0;
     }
   }
+  &:has(.button-group) {
+    padding: 0;
+  }
 }
 
 .bar {
