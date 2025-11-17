@@ -14,7 +14,7 @@ async function download() {
     unminified: [],
   };
   for (const minify of minifyTypeSchema.options) {
-    const results: Array<Omit<DownloadResult, "rank">> = [];
+    const results: Array<DownloadResult> = [];
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "schemas/download/**/*.ts"),
     )) {
@@ -77,9 +77,7 @@ async function download() {
       });
     }
 
-    allResults[minify] = results
-      .sort((a, b) => a.bytes - b.bytes)
-      .map((result, index) => Object.assign(result, { rank: index + 1 }));
+    allResults[minify] = results.sort((a, b) => a.bytes - b.bytes);
   }
 
   const outputPath = path.join(process.cwd(), "download.json");

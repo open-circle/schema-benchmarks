@@ -96,7 +96,6 @@ function processResult(
       libraryName: caseMeta.libraryName,
       note: caseMeta.note,
       snippet: caseMeta.snippet,
-      rank: index + 1,
       mean: task.result.mean,
     };
   }

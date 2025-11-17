@@ -27,7 +27,6 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
       <table className="download-table">
         <thead>
           <tr>
-            <th className="fit-content numeric">Rank</th>
             <th>Library</th>
             <th className="numeric">Size</th>
             <th className="bar-after"></th>
@@ -40,7 +39,6 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
             const time = getDownloadTime(result.bytes, mbps);
             return (
               <tr key={result.fileName}>
-                <td className="fit-content numeric">{result.rank}</td>
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}

@@ -14,7 +14,6 @@ export const benchResultSchema = v.object({
   libraryName: v.string(),
   note: v.optional(v.string()),
   snippet: v.string(),
-  rank: v.number(),
   mean: v.number(),
 });
 export type BenchResult = v.InferOutput<typeof benchResultSchema>;
@@ -54,7 +53,6 @@ export const minifyTypeSchema = v.picklist(["minified", "unminified"]);
 export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
 
 export const downloadResultSchema = v.object({
-  rank: v.number(),
   fileName: v.string(),
   libraryName: v.string(),
   note: v.optional(v.string()),

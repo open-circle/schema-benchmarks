@@ -70,7 +70,6 @@ export function BenchTable({ results }: BenchTableProps) {
       <table className="bench-table">
         <thead>
           <tr>
-            <th className="fit-content numeric">Rank</th>
             <th>Library</th>
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
@@ -88,7 +87,6 @@ export function BenchTable({ results }: BenchTableProps) {
               compareResult && getRatio(result.mean, compareResult.mean);
             return (
               <tr key={result.id}>
-                <td className="fit-content numeric">{result.rank}</td>
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
