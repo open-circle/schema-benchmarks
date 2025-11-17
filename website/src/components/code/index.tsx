@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getHighlightedCode } from "@/data/highlight";
+import { getHighlightedCode } from "@/lib/highlight";
 
 export interface CodeProps {
   children: string;

@@ -3,13 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 import { PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
-import { getHighlightedCode } from "@/data/highlight";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
   getBenchResults,
   libraryTypeProps,
   optionalLibraryTypeSchema,
 } from "@/features/benchmark/query";
+import { getHighlightedCode } from "@/lib/highlight";
 
 const searchSchema = v.object({
   libraryType: optionalLibraryTypeSchema,
