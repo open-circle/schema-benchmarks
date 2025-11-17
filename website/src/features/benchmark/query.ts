@@ -84,7 +84,7 @@ export const getBenchResultsFn = createServerFn().handler(
 
 export const getBenchResults = (signalOpt?: AbortSignal) =>
   queryOptions({
-    queryKey: ["results"],
+    queryKey: ["bench"],
     queryFn: ({ signal }) =>
       getBenchResultsFn({
         signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
