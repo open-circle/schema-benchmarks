@@ -9,7 +9,7 @@ import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 
 export interface DialogProps
   extends Omit<ComponentPropsWithRef<"dialog">, "children"> {
-  children: ValueOrFunction<ReactNode, () => void>;
+  children: ValueOrFunction<ReactNode, (returnValue?: string) => void>;
 }
 
 const cls = bem("dialog");
