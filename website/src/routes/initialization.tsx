@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 import { PageFilterGroup } from "@/components/page-filter";
+import { getHighlightedCode } from "@/data/highlight";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
   getBenchResults,
@@ -23,8 +24,21 @@ export const Route = createFileRoute("/initialization")({
   }),
   component: RouteComponent,
   validateSearch: searchSchema,
-  async loader({ context: { queryClient }, abortController }) {
-    await queryClient.prefetchQuery(getBenchResults(abortController.signal));
+  loaderDeps: ({ search: { libraryType } }) => ({ libraryType }),
+  async loader({
+    context: { queryClient },
+    deps: { libraryType },
+    abortController,
+  }) {
+    const benchResults = await queryClient.ensureQueryData(
+      getBenchResults(abortController.signal),
+    );
+    await Promise.all(
+      Object.values(benchResults.initialization[libraryType]).map(
+        ({ snippet }) =>
+          queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+      ),
+    );
     return { crumb: "Initialization" };
   },
 });

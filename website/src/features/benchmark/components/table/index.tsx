@@ -5,6 +5,7 @@ import {
   numFormatter,
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
+import { CodeBlock } from "@/components/code";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
@@ -71,6 +72,7 @@ export function BenchTable({ results }: BenchTableProps) {
         <thead>
           <tr>
             <th>Library</th>
+            <th className="fit-content">Code</th>
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
               <>
@@ -90,6 +92,9 @@ export function BenchTable({ results }: BenchTableProps) {
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
+                </td>
+                <td className="fit-content">
+                  <CodeBlock>{result.snippet}</CodeBlock>
                 </td>
                 <td className="numeric">
                   {durationFormatter.format(getDuration(result.mean))}
