@@ -28,6 +28,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
         <thead>
           <tr>
             <th>Library</th>
+            <th>Version</th>
             <th className="numeric">Size</th>
             <th className="bar-after"></th>
             <th className="numeric">Time</th>
@@ -42,6 +43,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
+                </td>
+                <td>
+                  <code className="language-text">{result.version}</code>
                 </td>
                 <td className="numeric">{formatBytes(result.bytes)}</td>
                 <td className="bar-after">

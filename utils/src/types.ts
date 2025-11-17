@@ -7,3 +7,6 @@ export type NonOptionalKeys<T> = {
 export type HasRequiredProps<T, True, False> = NonOptionalKeys<T> extends never
   ? False
   : True;
+export type DistributiveOmit<T, K extends keyof T> = T extends T
+  ? Omit<T, K>
+  : never;

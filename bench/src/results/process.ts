@@ -2,6 +2,7 @@ import { partition } from "@schema-benchmarks/utils";
 import type { Bench, Task } from "tinybench";
 import type { BenchMetaForType, MetaType } from "../utils/registry";
 import { registry } from "../utils/registry";
+import { getVersion } from "../utils/version";
 import type { BenchResult, BenchResults } from "./types";
 
 const selector: {
@@ -60,7 +61,7 @@ const getEmptyResults = (): BenchResults => ({
   },
 });
 
-function processResult(
+async function processResult(
   results: BenchResults,
   bench: Bench,
   tasks: Array<Task>,
@@ -94,6 +95,7 @@ function processResult(
     benchResults[index] = {
       id: task.name,
       libraryName: caseMeta.libraryName,
+      version: await getVersion(caseMeta.libraryName),
       note: caseMeta.note,
       snippet: caseMeta.snippet,
       mean: task.result.mean,
@@ -101,10 +103,12 @@ function processResult(
   }
 }
 
-export function processResults(results: Array<readonly [Bench, Array<Task>]>) {
+export async function processResults(
+  results: Array<readonly [Bench, Array<Task>]>,
+) {
   const processedResults = getEmptyResults();
   for (const [bench, tasks] of results) {
-    processResult(processedResults, bench, tasks);
+    await processResult(processedResults, bench, tasks);
   }
   return processedResults;
 }

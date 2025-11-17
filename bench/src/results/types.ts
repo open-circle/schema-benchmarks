@@ -12,6 +12,7 @@ export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 export const benchResultSchema = v.object({
   id: v.string(),
   libraryName: v.string(),
+  version: v.string(),
   note: v.optional(v.string()),
   snippet: v.string(),
   mean: v.number(),
@@ -55,6 +56,7 @@ export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
 export const downloadResultSchema = v.object({
   fileName: v.string(),
   libraryName: v.string(),
+  version: v.string(),
   note: v.optional(v.string()),
   bytes: v.number(),
 });

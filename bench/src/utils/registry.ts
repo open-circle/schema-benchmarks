@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import type { Compute } from "@schema-benchmarks/utils";
+import type { Compute, DistributiveOmit } from "@schema-benchmarks/utils";
 import type { Bench } from "tinybench";
 import type { LibraryType } from "../results/types";
 
@@ -12,6 +12,7 @@ export interface BaseBenchMeta {
 
 export interface BaseCaseMeta {
   libraryName: string;
+  version: string;
   snippet: string;
   note?: string;
 }
@@ -85,17 +86,17 @@ class Registry {
     return allResults;
   }
 
-  cases = new Map<string, CaseMeta>();
-  addCase(meta: CaseMeta) {
+  cases = new Map<string, DistributiveOmit<CaseMeta, "version">>();
+  addCase(meta: DistributiveOmit<CaseMeta, "version">) {
     const id = crypto.randomUUID();
     this.cases.set(id, meta);
     return id;
   }
-  getCaseMeta(id: string): CaseMeta;
+  getCaseMeta(id: string): DistributiveOmit<CaseMeta, "version">;
   getCaseMeta<Type extends MetaType>(
     id: string,
     type: Type,
-  ): CaseMetaForType<Type>;
+  ): DistributiveOmit<CaseMetaForType<Type>, "version">;
   getCaseMeta(id: string, type?: MetaType) {
     const meta = this.cases.get(id);
     if (!meta) throw new Error(`Meta not found: ${id}`);

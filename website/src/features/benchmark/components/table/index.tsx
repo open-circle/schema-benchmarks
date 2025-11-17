@@ -72,6 +72,7 @@ export function BenchTable({ results }: BenchTableProps) {
         <thead>
           <tr>
             <th>Library</th>
+            <th>Version</th>
             <th className="fit-content">Code</th>
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
@@ -92,6 +93,9 @@ export function BenchTable({ results }: BenchTableProps) {
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
+                </td>
+                <td>
+                  <code className="language-text">{result.version}</code>
                 </td>
                 <td className="fit-content">
                   <CodeBlock>{result.snippet}</CodeBlock>

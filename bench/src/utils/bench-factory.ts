@@ -1,4 +1,7 @@
-import type { HasRequiredProps } from "@schema-benchmarks/utils";
+import type {
+  DistributiveOmit,
+  HasRequiredProps,
+} from "@schema-benchmarks/utils";
 import { Bench, type FnOptions } from "tinybench";
 import {
   type BenchMetaForType,
@@ -18,7 +21,12 @@ interface LibraryContext<Type extends MetaType> {
    */
   add: (
     fn: () => unknown,
-    ...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName" | "type">>
+    ...args: AddArgs<
+      DistributiveOmit<
+        CaseMetaForType<Type>,
+        "libraryName" | "type" | "version"
+      >
+    >
   ) => void;
 }
 
@@ -30,7 +38,12 @@ interface BenchContext<Type extends MetaType> {
   addLibrary: (
     libraryName: string,
     fn: () => unknown,
-    ...args: AddArgs<Omit<CaseMetaForType<Type>, "libraryName" | "type">>
+    ...args: AddArgs<
+      DistributiveOmit<
+        CaseMetaForType<Type>,
+        "libraryName" | "type" | "version"
+      >
+    >
   ) => void;
   /**
    * Register multiple cases for a library.
@@ -45,7 +58,7 @@ interface BenchContext<Type extends MetaType> {
  * Creates and registers a `Bench` instance.
  */
 type BenchFactory<Type extends MetaType> = (
-  benchMeta: Omit<BenchMetaForType<Type>, "type">,
+  benchMeta: Omit<BenchMetaForType<Type>, "type" | "version">,
   registerCases: (ctx: BenchContext<Type>) => void,
 ) => void;
 
@@ -63,7 +76,10 @@ export const makeBenchFactory =
       libraryName: string,
       fn: () => unknown,
       ...[caseMeta = {}, fnOptions]: AddArgs<
-        Omit<CaseMetaForType<Type>, "libraryName" | "type">
+        DistributiveOmit<
+          CaseMetaForType<Type>,
+          "libraryName" | "type" | "version"
+        >
       >
     ) {
       const id = registry.addCase({

@@ -7,6 +7,7 @@ import {
   type DownloadResults,
   minifyTypeSchema,
 } from "../results/types";
+import { getVersion } from "../utils/version";
 
 async function download() {
   const allResults: DownloadResults = {
@@ -72,6 +73,7 @@ async function download() {
       results.push({
         fileName,
         libraryName,
+        version: await getVersion(libraryName),
         note,
         bytes: blob.size,
       });
