@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@ryoppippi/unplugin-typia": "^2.6.5",
+    "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",

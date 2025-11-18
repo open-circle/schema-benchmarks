@@ -1,15 +1,18 @@
+import {
+  getAjv,
+  getAjvSchema,
+} from "@schema-benchmarks/schemas/libraries/ajv/initialize";
+import { getArkTypeSchema } from "@schema-benchmarks/schemas/libraries/arktype/initialize";
+import { getEffectSchema } from "@schema-benchmarks/schemas/libraries/effect/initialize";
+import { getTypeboxSchema } from "@schema-benchmarks/schemas/libraries/typebox/initialize";
+import type { TypiaSchema } from "@schema-benchmarks/schemas/libraries/typia/initialize";
+import { getValibotSchema } from "@schema-benchmarks/schemas/libraries/valibot/initialize";
+import { getYupSchema } from "@schema-benchmarks/schemas/libraries/yup/initialize";
 import ts from "dedent";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import { getAjv, getAjvSchema } from "../schemas/benchmarks/ajv";
-import { getArkTypeSchema } from "../schemas/benchmarks/arktype";
-import { getEffectSchema } from "../schemas/benchmarks/effect";
-import { getTypeboxSchema } from "../schemas/benchmarks/typebox";
-import type { TypiaSchema } from "../schemas/benchmarks/typia";
-import { getValibotSchema } from "../schemas/benchmarks/valibot";
-import { getYupSchema } from "../schemas/benchmarks/yup";
 import { errorData, successData } from "../src/data";
 import type { DataType } from "../src/results/types";
 import { makeBenchFactory } from "../src/utils/bench-factory";

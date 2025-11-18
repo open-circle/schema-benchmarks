@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@schema-benchmarks/bench": "workspace:*",
+    "@schema-benchmarks/utils": "workspace:*",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "ajv-keywords": "^5.1.0",
+    "arktype": "^2.1.25",
+    "dedent": "^1.7.0",
+    "effect": "^3.19.3",
+    "joi": "^18.0.1",
+    "rolldown": "1.0.0-beta.50",
+    "tinybench": "^5.1.0",
+    "typebox": "^1.0.51",
+    "typia": "^10.0.2",
+    "valibot": "^1.1.0",
+    "yup": "^1.7.1",
+    "zod": "^4.1.12"
+  },
+  "exports": {
+    "./libraries/*": "./libraries/*.ts"
+  },
+  "name": "@schema-benchmarks/schemas",
+  "private": true,
+  "version": "1.0.0"
+}

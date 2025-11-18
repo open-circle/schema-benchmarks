@@ -10,6 +10,14 @@ import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";
 
+function getCompiledPath(result: DownloadResult, minify: MinifyType) {
+  return result.fileName
+    .replace("download.ts", `download_compiled/${minify}.js`)
+    .replace("download/index.ts", `download_compiled/${minify}.js`)
+    .replace("download/", `download_compiled/${minify}/`)
+    .replace(".ts", ".js");
+}
+
 export interface DownloadTableProps {
   results: Array<DownloadResult>;
   mbps: number;
@@ -57,7 +65,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 <td className="action fit-content">
                   <ButtonGroup className="source-links">
                     <a
-                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download/${result.fileName}`}
+                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${result.fileName}`}
                       className={getButtonClasses({
                         variant: "toggle",
                       })}
@@ -68,7 +76,10 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       <MdSymbol>code</MdSymbol>
                     </a>
                     <a
-                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/bench/schemas/download_compiled/${minify}/${result.fileName.replace(".ts", ".js")}`}
+                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${getCompiledPath(
+                        result,
+                        minify,
+                      )}`}
                       className={getButtonClasses({
                         variant: "toggle",
                       })}

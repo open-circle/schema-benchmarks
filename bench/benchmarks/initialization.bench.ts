@@ -1,18 +1,21 @@
+import {
+  getAjv,
+  getAjvSchema,
+} from "@schema-benchmarks/schemas/libraries/ajv/initialize";
+import { getArkTypeSchema } from "@schema-benchmarks/schemas/libraries/arktype/initialize";
+import { getEffectSchema } from "@schema-benchmarks/schemas/libraries/effect/initialize";
+import { getJoiSchema } from "@schema-benchmarks/schemas/libraries/joi/initialize";
+import { getTypeboxSchema } from "@schema-benchmarks/schemas/libraries/typebox/initialize";
+import type { TypiaSchema } from "@schema-benchmarks/schemas/libraries/typia/initialize";
+import { getValibotSchema } from "@schema-benchmarks/schemas/libraries/valibot/initialize";
+import { getYupSchema } from "@schema-benchmarks/schemas/libraries/yup/initialize";
+import { getZodSchema } from "@schema-benchmarks/schemas/libraries/zod/initialize/index";
+import { getZodMiniSchema } from "@schema-benchmarks/schemas/libraries/zod/initialize/mini";
 import ts from "dedent";
 import * as Schema from "effect/Schema";
 import typia from "typia";
 import z from "zod";
 import * as zMini from "zod/mini";
-import { getAjv, getAjvSchema } from "../schemas/benchmarks/ajv";
-import { getArkTypeSchema } from "../schemas/benchmarks/arktype";
-import { getEffectSchema } from "../schemas/benchmarks/effect";
-import { getJoiSchema } from "../schemas/benchmarks/joi";
-import { getTypeboxSchema } from "../schemas/benchmarks/typebox";
-import type { TypiaSchema } from "../schemas/benchmarks/typia";
-import { getValibotSchema } from "../schemas/benchmarks/valibot";
-import { getYupSchema } from "../schemas/benchmarks/yup";
-import { getZodSchema } from "../schemas/benchmarks/zod";
-import { getZodMiniSchema } from "../schemas/benchmarks/zod/mini";
 import { makeBenchFactory } from "../src/utils/bench-factory";
 
 declare module "../src/utils/registry" {

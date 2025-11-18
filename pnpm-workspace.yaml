@@ -1,5 +1,5 @@
 packages:
-  - data
   - website
   - bench
   - utils
+  - schemas

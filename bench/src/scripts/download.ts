@@ -5,9 +5,56 @@ import { rolldown } from "rolldown";
 import {
   type DownloadResult,
   type DownloadResults,
+  type MinifyType,
   minifyTypeSchema,
 } from "../results/types";
 import { getVersion } from "../utils/version";
+
+interface FileDescription {
+  path: string;
+  compiledPath: string;
+  libraryName: string;
+  note?: string;
+}
+
+async function measureFile(
+  file: FileDescription,
+  minify: MinifyType,
+): Promise<DownloadResult> {
+  const bundle = await rolldown({
+    input: file.path,
+    plugins: file.path.includes("typia") ? [UnpluginTypia({ log: false })] : [],
+  });
+  const output = await bundle.generate({
+    format: "esm",
+    minify: minify === "minified",
+  });
+  const code = output.output
+    .filter((chunk) => chunk.type === "chunk")
+    .map((chunk) => chunk.code)
+    .join(minify === "minified" ? "" : "\n");
+  const blob = new Blob([code]);
+
+  const exists = await fs
+    .access(file.compiledPath)
+    .then(() => true)
+    .catch(() => false);
+  if (!exists) {
+    await fs.mkdir(path.dirname(file.compiledPath), { recursive: true });
+  }
+  await fs.writeFile(file.compiledPath, code);
+
+  const fileName = file.path.split("schemas/libraries/")[1];
+  if (!fileName) throw new Error(`Invalid file path: ${file.path}`);
+
+  return {
+    fileName,
+    libraryName: file.libraryName,
+    version: await getVersion(file.libraryName),
+    note: file.note,
+    bytes: blob.size,
+  };
+}
 
 async function download() {
   const allResults: DownloadResults = {
@@ -17,66 +64,54 @@ async function download() {
   for (const minify of minifyTypeSchema.options) {
     const results: Array<DownloadResult> = [];
     for await (const filePath of fs.glob(
-      path.resolve(process.cwd(), "schemas/download/**/*.ts"),
+      path.resolve(process.cwd(), "../schemas/libraries/**/download.ts"),
     )) {
-      const bundle = await rolldown({
-        input: filePath,
-        plugins: filePath.includes("typia")
-          ? [UnpluginTypia({ log: false })]
-          : [],
-      });
-
-      const output = await bundle.generate({
-        format: "esm",
-        minify: minify === "minified",
-      });
-
-      const code = output.output
-        .filter((chunk) => chunk.type === "chunk")
-        .map((chunk) => chunk.code)
-        .join(minify ? "" : "\n");
-
-      // fileName: libraryName (note)
-      // should remove schemas/download/, note and index file names
-      const fileName = filePath.split("schemas/download/")[1];
-      if (!fileName) continue;
-
+      const libraryName = filePath
+        .split("schemas/libraries/")[1]
+        ?.split("/")[0];
+      if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
       const compiledPath = path.resolve(
-        process.cwd(),
-        "schemas/download_compiled",
-        minify,
-        fileName.replace(".ts", ".js"),
+        path.dirname(filePath),
+        `./download_compiled/${minify}.js`,
       );
-
-      const exists = await fs
-        .access(compiledPath)
-        .then(() => true)
-        .catch(() => false);
-
-      if (!exists) {
-        await fs.mkdir(path.dirname(compiledPath), { recursive: true });
-      }
-
-      // write to file
-      await fs.writeFile(compiledPath, code);
-
-      const libraryName = fileName
-        .replace(/\/index\s?/, "")
-        .replace(/\.ts$/, "")
-        .replace(/\(.*?\)/, "");
-      const note = fileName.includes("(")
-        ? fileName.match(/\((.*?)\)/)?.[1]
-        : undefined;
-
-      const blob = new Blob([code]);
-
-      results.push({
-        fileName,
-        libraryName,
-        version: await getVersion(libraryName),
-        note,
-        bytes: blob.size,
-      });
+      results.push(
+        await measureFile(
+          {
+            path: filePath,
+            compiledPath,
+            libraryName,
+          },
+          minify,
+        ),
+      );
+    }
+    for await (const filePath of fs.glob(
+      path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts"),
+    )) {
+      const libraryName = filePath
+        .split("schemas/libraries/")[1]
+        ?.split("/")[0];
+      if (!libraryName)
+        throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
+      const note = path
+        .basename(filePath)
+        .replace("index.ts", "")
+        .replace(".ts", "");
+      const compiledPath = path.resolve(
+        path.dirname(filePath),
+        `../download_compiled/${note}/${minify}.js`,
+      );
+      results.push(
+        await measureFile(
+          {
+            path: filePath,
+            compiledPath,
+            libraryName,
+            note: note || undefined,
+          },
+          minify,
+        ),
+      );
     }
 
     allResults[minify] = results.sort((a, b) => a.bytes - b.bytes);
