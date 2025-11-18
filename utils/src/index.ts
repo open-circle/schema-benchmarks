@@ -114,3 +114,14 @@ export const getDuration = (ms: number): Intl.DurationType => {
   }
   return { hours: Math.round(ms / 3600000) };
 };
+
+export const promiseAllKeyed = async <T extends Record<string, unknown>>(
+  keyed: T,
+): Promise<{
+  [K in keyof T]: Awaited<T[K]>;
+}> =>
+  Object.fromEntries(
+    await Promise.all(
+      unsafeEntries(keyed).map(async ([key, value]) => [key, await value]),
+    ),
+  );
