@@ -1,13 +1,13 @@
 import {
   getAjv,
   getAjvSchema,
-} from "@schema-benchmarks/schemas/libraries/ajv/initialize";
-import { getArkTypeSchema } from "@schema-benchmarks/schemas/libraries/arktype/initialize";
-import { getEffectSchema } from "@schema-benchmarks/schemas/libraries/effect/initialize";
-import { getTypeboxSchema } from "@schema-benchmarks/schemas/libraries/typebox/initialize";
-import type { TypiaSchema } from "@schema-benchmarks/schemas/libraries/typia/initialize";
-import { getValibotSchema } from "@schema-benchmarks/schemas/libraries/valibot/initialize";
-import { getYupSchema } from "@schema-benchmarks/schemas/libraries/yup/initialize";
+} from "@schema-benchmarks/schemas/libraries/ajv/index.ts";
+import { getArkTypeSchema } from "@schema-benchmarks/schemas/libraries/arktype/index.ts";
+import { getEffectSchema } from "@schema-benchmarks/schemas/libraries/effect/index.ts";
+import { getTypeboxSchema } from "@schema-benchmarks/schemas/libraries/typebox/index.ts";
+import type { TypiaSchema } from "@schema-benchmarks/schemas/libraries/typia/index.ts";
+import { getValibotSchema } from "@schema-benchmarks/schemas/libraries/valibot/index.ts";
+import { getYupSchema } from "@schema-benchmarks/schemas/libraries/yup/index.ts";
 import ts from "dedent";
 import * as Schema from "effect/Schema";
 import Value from "typebox/value";

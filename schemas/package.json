@@ -18,7 +18,7 @@
     "zod": "^4.1.12"
   },
   "exports": {
-    "./libraries/*": "./libraries/*.ts"
+    "./libraries/*": "./libraries/*"
   },
   "name": "@schema-benchmarks/schemas",
   "private": true,

@@ -1,4 +1,4 @@
 import typia from "typia";
-import type { TypiaSchema } from "./initialize";
+import type { TypiaSchema } from ".";
 
 typia.validate<TypiaSchema>({});
