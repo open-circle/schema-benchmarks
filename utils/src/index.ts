@@ -125,3 +125,45 @@ export const promiseAllKeyed = async <T extends Record<string, unknown>>(
       unsafeEntries(keyed).map(async ([key, value]) => [key, await value]),
     ),
   );
+
+/**
+ * Sets an interval that is automatically cleared when the signal is aborted.
+ * @param fn The function to call every `ms` milliseconds.
+ * @param delay The number of milliseconds to wait between each call.
+ * @param signal The abort signal to use.
+ * @returns The interval ID.
+ * @see {setInterval}
+ */
+export const setAbortableInterval = (
+  fn: () => void,
+  delay: number,
+  signal: AbortSignal,
+): ReturnType<typeof setInterval> => {
+  const interval = setInterval(fn, delay);
+  signal.addEventListener("abort", () => clearInterval(interval), {
+    once: true,
+    signal: AbortSignal.timeout(delay),
+  });
+  return interval;
+};
+
+/**
+ * Sets a timeout that is automatically cleared when the signal is aborted.
+ * @param fn The function to call after the timeout.
+ * @param delay The number of milliseconds to wait before calling the function.
+ * @param signal The abort signal to use.
+ * @returns The timeout ID.
+ * @see {setTimeout}
+ */
+export const setAbortableTimeout = (
+  fn: () => void,
+  delay: number,
+  signal: AbortSignal,
+): ReturnType<typeof setTimeout> => {
+  const timeout = setTimeout(fn, delay);
+  signal.addEventListener("abort", () => clearTimeout(timeout), {
+    once: true,
+    signal: AbortSignal.timeout(delay),
+  });
+  return timeout;
+};
