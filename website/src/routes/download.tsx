@@ -90,7 +90,10 @@ function RouteComponent() {
               <Link
                 key={preset.name}
                 aria-label={preset.name}
-                className={getButtonClasses({ variant: "toggle" })}
+                className={getButtonClasses({
+                  variant: "toggle",
+                  activeColor: "primary",
+                })}
                 to={Route.fullPath}
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
               >

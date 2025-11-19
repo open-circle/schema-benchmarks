@@ -28,9 +28,15 @@ const buttonCls = bem("button");
 export const getButtonClasses = ({
   variant = "text",
   color = variant !== "toggle" ? "primary" : undefined,
-  activeColor = "primary",
+  activeColor,
 }: ButtonProps | ToggleButtonProps | FloatingActionButtonProps = {}) =>
-  buttonCls({ modifiers: [variant, color ?? "", `active-${activeColor}`] });
+  buttonCls({
+    modifiers: [
+      variant,
+      color ?? "",
+      activeColor ? `active-${activeColor}` : "",
+    ],
+  });
 
 export const buttonProps = <
   T extends ButtonProps | ToggleButtonProps | FloatingActionButtonProps,
