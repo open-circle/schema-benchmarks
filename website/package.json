@@ -28,7 +28,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
-    "@storybook/react-vite": "^10.0.7",
+    "@storybook/react-vite": "^10.0.8",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/d3": "^7.4.3",
@@ -43,7 +43,7 @@
     "postcss-custom-media": "^11.0.6",
     "postcss-extend-rule": "^4.0.0",
     "postcss-load-config": "^6.0.1",
-    "storybook": "^10.0.7",
+    "storybook": "^10.0.8",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
