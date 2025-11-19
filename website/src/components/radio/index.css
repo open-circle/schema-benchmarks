@@ -55,10 +55,13 @@
     border-radius: 50%;
     border: 2px solid
       color(
-        from var(--radio-base-color) srgb r g b / var(--radio-border-opacity)
+        from var(--radio-base-color) srgb r g b /
+        var(--radio-border-opacity)
       );
     background-color: transparent;
-    transition: border-color 250ms, opacity 250ms;
+    transition:
+      border-color 250ms,
+      opacity 250ms;
     &::before {
       content: "";
       corner-shape: bevel;
@@ -69,7 +72,9 @@
       border-radius: 50%;
       background-color: var(--radio-selected-color);
       transform: scale(0);
-      transition: transform 250ms var(--standard-curve), background-color 250ms;
+      transition:
+        transform 250ms var(--standard-curve),
+        background-color 250ms;
     }
     &::after {
       content: "";
@@ -80,7 +85,9 @@
       background-color: var(--radio-base-color);
       transform: scale(var(--radio-focus-scale));
       opacity: var(--radio-focus-opacity);
-      transition: transform 250ms var(--standard-curve), opacity 250ms;
+      transition:
+        transform 250ms var(--standard-curve),
+        opacity 250ms;
     }
   }
 }

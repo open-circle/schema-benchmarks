@@ -63,7 +63,8 @@
     }
     &::placeholder {
       color: color(
-        from var(--page-foreground) srgb r g b / var(--secondary-text)
+        from var(--page-foreground) srgb r g b /
+        var(--secondary-text)
       );
     }
     &[type="number"] {
@@ -80,7 +81,8 @@
   .text-field__prefix,
   .text-field__suffix {
     color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
+      from var(--page-foreground) srgb r g b /
+      var(--secondary-text)
     );
   }
   .text-field__start-icon,

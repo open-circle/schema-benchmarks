@@ -5,7 +5,8 @@
   right: var(--edge-offset);
   transform: scale(0.8);
   opacity: 0;
-  transition: transform 150ms var(--standard-curve),
+  transition:
+    transform 150ms var(--standard-curve),
     opacity 150ms var(--standard-curve);
   &.scroll-to-top--scrolled {
     transform: scale(1);
