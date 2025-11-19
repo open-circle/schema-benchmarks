@@ -81,7 +81,7 @@ td {
     top: 0;
     left: 0;
     height: 100%;
-    transition: width 150ms var(--standard-curve);
+    transition: width 150ms var(--standard-curve), background-color 150ms linear;
     &:dir(rtl) {
       left: auto;
       right: 0;
