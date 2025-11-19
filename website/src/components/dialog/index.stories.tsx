@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { getButtonClasses } from "../button";
+import { Button } from "../button";
 import { Dialog } from ".";
 
 const meta = {
@@ -18,13 +18,7 @@ const meta = {
     children: (close) => (
       <div>
         <p>Hello World</p>
-        <button
-          type="button"
-          className={getButtonClasses()}
-          onClick={() => close()}
-        >
-          Close
-        </button>
+        <Button onClick={() => close()}>Close</Button>
       </div>
     ),
     closedby: "any",

@@ -9,6 +9,7 @@ import { radEventListeners } from "rad-event-listeners";
 import { type Key, type ReactNode, useContext, useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
+import { ToggleButton } from "../button";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 
@@ -83,18 +84,16 @@ function SidebarWithoutContext({
         <div className={cls("logo")}>
           <img src="/logo.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
-          <button
-            type="button"
+          <ToggleButton
             className={cls({
               element: "toggle",
-              extra: "button button--toggle",
             })}
             onClick={() => setOpen(false)}
             aria-label="Collapse sidebar"
             tabIndex={open ? 0 : -1}
           >
             <MdSymbol flipRtl>chevron_left</MdSymbol>
-          </button>
+          </ToggleButton>
         </div>
         {children}
       </aside>

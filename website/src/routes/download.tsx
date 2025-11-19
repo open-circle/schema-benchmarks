@@ -1,9 +1,9 @@
 import { unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, linkOptions } from "@tanstack/react-router";
+import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
-import { ButtonGroup, getButtonClasses } from "@/components/button";
+import { ButtonGroup, LinkToggleButton } from "@/components/button";
 import { PageFilter, PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
@@ -87,18 +87,15 @@ function RouteComponent() {
         <PageFilter title="Speed presets">
           <ButtonGroup variant="outlined">
             {unsafeEntries(speedPresets).map(([slug, preset]) => (
-              <Link
+              <LinkToggleButton
                 key={preset.name}
                 aria-label={preset.name}
-                className={getButtonClasses({
-                  variant: "toggle",
-                  activeColor: "primary",
-                })}
                 to={Route.fullPath}
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
+                activeColor="primary"
               >
                 <MdSymbol>{preset.icon}</MdSymbol>
-              </Link>
+              </LinkToggleButton>
             ))}
           </ButtonGroup>
         </PageFilter>

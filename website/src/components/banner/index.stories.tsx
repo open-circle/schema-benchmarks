@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { getButtonClasses } from "../button";
+import { Button } from "../button";
 import { Banner, type BannerProps, openBanner } from ".";
 import { closeBanner } from "./index";
 
@@ -7,13 +7,7 @@ function BannerDemo(bannerProps: BannerProps) {
   return (
     <>
       <Banner />
-      <button
-        type="button"
-        className={getButtonClasses()}
-        onClick={() => openBanner(bannerProps)}
-      >
-        Open Banner
-      </button>
+      <Button onClick={() => openBanner(bannerProps)}>Open Banner</Button>
     </>
   );
 }
@@ -35,15 +29,7 @@ const meta = {
   args: {
     icon: "warning",
     children: "Hello World",
-    actions: (
-      <button
-        type="button"
-        className={getButtonClasses()}
-        onClick={closeBanner}
-      >
-        Close
-      </button>
-    ),
+    actions: <Button onClick={closeBanner}>Close</Button>,
   },
 } satisfies Meta<typeof BannerDemo>;
 

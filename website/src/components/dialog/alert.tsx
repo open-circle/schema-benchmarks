@@ -1,12 +1,9 @@
 import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
-import { type ComponentPropsWithRef, type ReactNode, useId } from "react";
-import { type ButtonProps, buttonProps } from "../button";
+import { type ReactNode, useId } from "react";
+import { Button, type ButtonProps } from "../button";
 import { type CloseDialog, Dialog, DialogActions, type DialogProps } from ".";
 
-type ActionProps = DistributiveOmit<
-  ButtonProps & ComponentPropsWithRef<"button">,
-  "children" | "onClick"
->;
+type ActionProps = DistributiveOmit<ButtonProps, "children" | "onClick">;
 
 export interface AlertDialogProps
   extends DistributiveOmit<DialogProps, "children" | "title" | "onCancel"> {
@@ -60,33 +57,26 @@ export function AlertDialog({
             </p>
           </div>
           <DialogActions>
-            <button
-              type="button"
-              // biome-ignore lint/a11y/noAutofocus: we're inside a dialog
+            <Button
               autoFocus
-              {...buttonProps({
-                ...cancelProps,
-                className: cls("button", "cancel", cancelProps?.className),
-              })}
+              {...cancelProps}
+              className={cls("button", "cancel", cancelProps?.className)}
               onClick={() => {
                 onCancel?.(close);
                 if (closeOnCancel) close();
               }}
             >
               {cancelLabel}
-            </button>
-            <button
-              type="button"
-              {...buttonProps({
-                ...confirmProps,
-                className: cls("button", "confirm", confirmProps?.className),
-              })}
+            </Button>
+            <Button
+              {...confirmProps}
+              className={cls("button", "confirm", confirmProps?.className)}
               onClick={() => {
                 onConfirm(close);
               }}
             >
               {confirmLabel}
-            </button>
+            </Button>
           </DialogActions>
         </>
       )}

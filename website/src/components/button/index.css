@@ -195,7 +195,8 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
     }
-    &[data-status="active"] {
+    &[data-status="active"],
+    &[aria-pressed="true"] {
       --icon-fill: 1;
       --button-foreground: var(--button-active-color);
       --button-background: color(

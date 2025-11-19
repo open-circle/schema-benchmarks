@@ -1,58 +1,135 @@
-import { bem } from "@schema-benchmarks/utils";
-import clsx from "clsx";
+import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
+import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
-export interface ToggleButtonProps {
-  variant: "toggle";
-  color?: never;
-  activeColor?: ButtonColor;
-}
-
-export interface FloatingActionButtonProps {
-  variant: "floating-action";
-  color?: never;
-  activeColor?: never;
-}
-
 type ButtonColor = "primary" | "secondary" | "danger" | "success" | "error";
 
-export interface ButtonProps {
+interface BaseButtonProps {
   variant?: "text" | "outlined" | "contained";
   color?: ButtonColor;
-  activeColor?: never;
 }
+
+export interface ButtonProps
+  extends DistributiveOmit<ComponentPropsWithRef<"button">, "color">,
+    BaseButtonProps {}
 
 const buttonCls = bem("button");
 
-export const getButtonClasses = ({
-  variant = "text",
-  color = variant !== "toggle" ? "primary" : undefined,
-  activeColor,
-}: ButtonProps | ToggleButtonProps | FloatingActionButtonProps = {}) =>
-  buttonCls({
-    modifiers: [
-      variant,
-      color ?? "",
-      activeColor ? `active-${activeColor}` : "",
-    ],
-  });
-
-export const buttonProps = <
-  T extends ButtonProps | ToggleButtonProps | FloatingActionButtonProps,
->({
+export function Button({
   className,
-  variant,
+  variant = "text",
+  color,
+  ...props
+}: ButtonProps) {
+  return (
+    <button
+      type="button"
+      {...props}
+      className={buttonCls({
+        modifiers: [variant, color ?? ""],
+        extra: className,
+      })}
+    />
+  );
+}
+
+interface BaseLinkButtonProps
+  extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">,
+    BaseButtonProps {}
+
+export function BaseLinkButtonComponent({
+  className,
+  variant = "text",
+  color,
+  ...props
+}: BaseLinkButtonProps) {
+  return (
+    <a
+      {...props}
+      className={buttonCls({
+        modifiers: [variant, color ?? ""],
+        extra: className,
+      })}
+    />
+  );
+}
+
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const LinkButton = createLink(BaseLinkButtonComponent);
+
+interface BaseToggleButtonProps {
+  activeColor?: ButtonColor;
+}
+
+export interface ToggleButtonProps
+  extends BaseToggleButtonProps,
+    ComponentPropsWithRef<"button"> {
+  active?: boolean;
+}
+
+export function ToggleButton({
   color,
   activeColor,
+  className,
+  active,
   ...props
-}: T & ComponentPropsWithRef<"button">): ComponentPropsWithRef<"button"> => ({
-  ...props,
-  className: clsx(
-    getButtonClasses({ variant, color, activeColor } as never),
-    className,
-  ),
-});
+}: ToggleButtonProps) {
+  return (
+    <button
+      type="button"
+      {...props}
+      aria-pressed={active}
+      className={buttonCls({
+        modifiers: [
+          "toggle",
+          color ?? "",
+          activeColor ? `active-${activeColor}` : "",
+        ],
+        extra: className,
+      })}
+    />
+  );
+}
+
+interface BaseLinkToggleButtonProps
+  extends ComponentPropsWithRef<"a">,
+    BaseToggleButtonProps {}
+
+export function BaseLinkToggleButton({
+  activeColor,
+  className,
+  ...props
+}: BaseLinkToggleButtonProps) {
+  return (
+    <a
+      {...props}
+      className={buttonCls({
+        modifiers: ["toggle", activeColor ? `active-${activeColor}` : ""],
+        extra: className,
+      })}
+    />
+  );
+}
+
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const LinkToggleButton = createLink(BaseLinkToggleButton);
+
+export function FloatingActionButton({
+  className,
+  ...props
+}: ComponentPropsWithRef<"button">) {
+  return (
+    <button
+      type="button"
+      {...props}
+      className={buttonCls({
+        modifiers: ["floating-action"],
+        extra: className,
+      })}
+    />
+  );
+}
 
 const buttonGroupCls = bem("button-group");
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { getButtonClasses } from "../button";
+import { ToggleButton } from "../button";
 import { MdSymbol } from "../symbol";
 import { TextField } from ".";
 
@@ -53,9 +53,9 @@ export const EndIcon: Story = {
 export const EndButton: Story = {
   args: {
     endIcon: (
-      <button type="button" className={getButtonClasses({ variant: "toggle" })}>
+      <ToggleButton>
         <MdSymbol>cancel</MdSymbol>
-      </button>
+      </ToggleButton>
     ),
     endIconIsButton: true,
   },

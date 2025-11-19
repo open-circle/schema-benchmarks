@@ -2,7 +2,7 @@ import { bem } from "@schema-benchmarks/utils";
 import { isServer } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useState } from "react";
-import { getButtonClasses } from "../button";
+import { FloatingActionButton } from "../button";
 import { MdSymbol } from "../symbol";
 
 const cls = bem("scroll-to-top");
@@ -28,11 +28,9 @@ function prefersReducedMotion() {
 export function ScrollToTop() {
   const scrolled = useScrolled();
   return (
-    <button
-      type="button"
+    <FloatingActionButton
       className={cls({
         modifiers: { scrolled },
-        extra: getButtonClasses({ variant: "floating-action" }),
       })}
       onClick={() =>
         window.scrollTo({
@@ -44,6 +42,6 @@ export function ScrollToTop() {
     >
       <MdSymbol>arrow_upward</MdSymbol>
       Scroll to top
-    </button>
+    </FloatingActionButton>
   );
 }

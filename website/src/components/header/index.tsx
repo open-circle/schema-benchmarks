@@ -1,6 +1,7 @@
 import { bem } from "@schema-benchmarks/utils";
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import { Fragment, type ReactNode, useContext } from "react";
+import { ToggleButton } from "../button";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 
@@ -12,31 +13,27 @@ export function Header({ children }: { children: ReactNode }) {
     <header className={cls()}>
       <ClientOnly
         fallback={
-          <button
-            type="button"
+          <ToggleButton
             className={cls({
               element: "toggle",
-              extra: "button button--toggle",
             })}
             aria-label="Expand sidebar"
           >
             <MdSymbol>menu</MdSymbol>
-          </button>
+          </ToggleButton>
         }
       >
-        <button
-          type="button"
+        <ToggleButton
           className={cls({
             element: "toggle",
             modifiers: { open },
-            extra: "button button--toggle",
           })}
           onClick={() => setOpen(true)}
           aria-label="Expand sidebar"
           tabIndex={open ? -1 : 0}
         >
           <MdSymbol>menu</MdSymbol>
-        </button>
+        </ToggleButton>
       </ClientOnly>
       {children}
     </header>

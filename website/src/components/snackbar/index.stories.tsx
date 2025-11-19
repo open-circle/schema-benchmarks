@@ -1,49 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { toast } from "react-hot-toast";
-import { getButtonClasses } from "../button";
+import { Button } from "../button";
 import { Snackbars } from ".";
 
 function SnackbarsDemo() {
   return (
     <>
       <Snackbars />
-      <button
-        type="button"
-        className={getButtonClasses()}
-        onClick={() => toast("Hello World")}
-      >
-        Default
-      </button>
-      <button
-        type="button"
-        className={getButtonClasses({ color: "success" })}
-        onClick={() => toast.success("Success!")}
-      >
+      <Button onClick={() => toast("Hello World")}>Default</Button>
+      <Button color="success" onClick={() => toast.success("Success!")}>
         Success
-      </button>
-      <button
-        type="button"
-        className={getButtonClasses({ color: "error" })}
+      </Button>
+      <Button
+        color="error"
         onClick={() =>
           toast.error((t) => (
             <>
               <b>Error!</b>
-              <button
-                type="button"
-                className={getButtonClasses()}
-                onClick={() => toast.dismiss(t.id)}
-              >
-                Dismiss
-              </button>
+              <Button onClick={() => toast.dismiss(t.id)}>Dismiss</Button>
             </>
           ))
         }
       >
         Error
-      </button>
-      <button
-        type="button"
-        className={getButtonClasses()}
+      </Button>
+      <Button
         onClick={() =>
           toast.promise(
             new Promise<void>((resolve, reject) =>
@@ -61,7 +42,7 @@ function SnackbarsDemo() {
         }
       >
         Loading
-      </button>
+      </Button>
     </>
   );
 }

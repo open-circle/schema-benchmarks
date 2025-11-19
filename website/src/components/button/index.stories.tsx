@@ -1,25 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import clsx from "clsx";
-import { useState } from "react";
 import { MdSymbol } from "../symbol";
-import {
-  type ButtonProps,
-  type FloatingActionButtonProps,
-  getButtonClasses,
-  type ToggleButtonProps,
-} from ".";
+import { Button, type ButtonProps } from ".";
 
 const meta = {
   title: "Components/Button",
-  render: ({ disabled, ...props }) => (
-    <button
-      type="button"
-      className={getButtonClasses(props)}
-      disabled={disabled}
-    >
+  render: (props) => (
+    <Button {...props}>
       <MdSymbol>edit</MdSymbol>
       Edit
-    </button>
+    </Button>
   ),
   argTypes: {
     variant: {
@@ -44,11 +33,7 @@ const meta = {
     color: "primary",
     disabled: false,
   },
-} satisfies Meta<
-  (ButtonProps | ToggleButtonProps | FloatingActionButtonProps) & {
-    disabled: boolean;
-  }
->;
+} satisfies Meta<ButtonProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -68,103 +53,5 @@ export const Outlined: Story = {
 export const Contained: Story = {
   args: {
     variant: "contained",
-  },
-};
-
-function ToggleButton({ disabled }: { disabled: boolean }) {
-  const [active, setActive] = useState(false);
-  return (
-    <button
-      type="button"
-      className={clsx(getButtonClasses({ variant: "toggle" }), {
-        active,
-      })}
-      onClick={() => setActive(!active)}
-      disabled={disabled}
-    >
-      <MdSymbol>favorite</MdSymbol>
-    </button>
-  );
-}
-
-export const Toggle: Story = {
-  render: ({ disabled }) => <ToggleButton disabled={disabled} />,
-  argTypes: {
-    variant: {
-      table: {
-        disable: true,
-      },
-    },
-    color: {
-      table: {
-        disable: true,
-      },
-    },
-  },
-  args: {
-    variant: "toggle",
-    color: undefined,
-  },
-};
-
-export const Link: Story = {
-  render: ({ disabled, ...props }) => (
-    <a className={getButtonClasses(props)} aria-disabled={disabled}>
-      <MdSymbol>edit</MdSymbol>
-      Edit
-    </a>
-  ),
-  args: {
-    variant: "contained",
-  },
-};
-
-export const LinkToggle: Story = {
-  render: ({ disabled }) => (
-    <a
-      className={getButtonClasses({ variant: "toggle" })}
-      aria-disabled={disabled}
-    >
-      <MdSymbol>favorite</MdSymbol>
-    </a>
-  ),
-  argTypes: {
-    variant: {
-      table: {
-        disable: true,
-      },
-    },
-    color: {
-      table: {
-        disable: true,
-      },
-    },
-  },
-  args: {
-    variant: "toggle",
-    color: undefined,
-  },
-};
-
-export const FloatingAction: Story = {
-  argTypes: {
-    color: {
-      table: {
-        disable: true,
-      },
-    },
-    variant: {
-      table: {
-        disable: true,
-      },
-    },
-    disabled: {
-      table: {
-        disable: true,
-      },
-    },
-  },
-  args: {
-    variant: "floating-action",
   },
 };
