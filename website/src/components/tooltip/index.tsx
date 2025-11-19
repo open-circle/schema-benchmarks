@@ -38,6 +38,8 @@ export interface TooltipOpts {
   required?: boolean;
   /** Delay before showing the tooltip */
   delay?: number;
+  /** Delay before hiding the tooltip */
+  hideDelay?: number;
   /** Offset from the target */
   offset?: number;
 }
@@ -46,6 +48,9 @@ export interface TooltipProps {
   title?: string;
   id?: string;
 }
+
+/* there is a tooltip open in the page */
+let globalOpen = false;
 
 // https://tkdodo.eu/blog/tooltip-components-should-not-exist
 
@@ -61,7 +66,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
-  { delay = 250, offset: offsetOpt = 4 }: TooltipOpts = {},
+  { delay = 250, hideDelay = 75, offset: offsetOpt = 4 }: TooltipOpts = {},
 ) {
   return function WithTooltip({
     title,
@@ -96,22 +101,31 @@ export function withTooltip<TComp extends TooltipableComponent>(
         let timeout: ReturnType<typeof setTimeout> | undefined;
         const unsub = radEventListeners(targetRef, {
           mouseenter() {
-            timeout = setTimeout(() => {
-              popoverRef.current?.showPopover();
-            }, delay);
+            clearTimeout(timeout);
+            timeout = setTimeout(
+              () => {
+                popoverRef.current?.showPopover();
+                globalOpen ||= true;
+              },
+              globalOpen ? 0 : delay,
+            );
           },
           mouseleave() {
             clearTimeout(timeout);
-            popoverRef.current?.hidePopover();
+            timeout = setTimeout(() => {
+              popoverRef.current?.hidePopover();
+              globalOpen ||= false;
+            }, hideDelay);
           },
         });
         return () => {
           unsub();
           clearTimeout(timeout);
           popoverRef.current?.hidePopover();
+          globalOpen ||= false;
         };
       }
-    }, [targetRef, title, delay]);
+    }, [targetRef, title, delay, hideDelay]);
     return (
       <>
         <Component
