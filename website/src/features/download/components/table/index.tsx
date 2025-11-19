@@ -5,7 +5,8 @@ import {
   getDuration,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
-import { ButtonGroup, ExternalLinkToggleButton } from "@/components/button";
+import { ButtonGroup } from "@/components/button";
+import { ExternalLinkToggleButton } from "@/components/button/toggle";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";

@@ -1,7 +1,7 @@
 import { bem } from "@schema-benchmarks/utils";
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import { Fragment, type ReactNode, useContext } from "react";
-import { ToggleButton } from "../button";
+import { ToggleButton } from "../button/toggle";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 

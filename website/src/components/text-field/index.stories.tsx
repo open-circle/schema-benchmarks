@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ToggleButton } from "../button";
+import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
 import { TextField } from ".";
 

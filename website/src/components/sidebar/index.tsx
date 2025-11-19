@@ -9,7 +9,7 @@ import { radEventListeners } from "rad-event-listeners";
 import { type Key, type ReactNode, useContext, useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
-import { ToggleButton } from "../button";
+import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 
