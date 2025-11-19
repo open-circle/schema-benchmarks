@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { MdSymbol } from "../symbol";
-import { Button } from ".";
+import { Button, ButtonGroup } from ".";
 
 const meta = {
   title: "Components/Button",
@@ -35,6 +35,7 @@ const meta = {
     disabled: false,
     title: "Hello World",
     onClick: fn(),
+    variant: "text",
   },
 } satisfies Meta<typeof Button>;
 
@@ -56,5 +57,23 @@ export const Outlined: Story = {
 export const Contained: Story = {
   args: {
     variant: "contained",
+  },
+};
+
+export const Group: Story = {
+  argTypes: {
+    variant: {
+      options: ["text", "outlined"],
+    },
+  },
+  render: ({ variant, ...props }) => (
+    <ButtonGroup variant={variant === "contained" ? "outlined" : variant}>
+      <Button {...props}>One</Button>
+      <Button {...props}>Two</Button>
+      <Button {...props}>Three</Button>
+    </ButtonGroup>
+  ),
+  args: {
+    variant: "text",
   },
 };
