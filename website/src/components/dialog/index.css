@@ -4,6 +4,10 @@
 }
 
 .dialog {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.5rem;
+  min-width: 17.5rem;
   appearance: none;
   box-shadow: var(--elevation-24);
   background-color: light-dark(
@@ -16,8 +20,7 @@
   );
   border: none;
   border-radius: var(--shape-medium);
-  transition:
-    display var(--dialog-exit-time) allow-discrete,
+  transition: display var(--dialog-exit-time) allow-discrete,
     overlay var(--dialog-exit-time) allow-discrete;
   animation: dialog-fade-out var(--dialog-exit-time) linear;
   &::backdrop {
@@ -26,11 +29,9 @@
     transition: opacity var(--dialog-exit-time) linear;
   }
   &[open] {
-    transition:
-      display var(--dialog-enter-time) allow-discrete,
+    transition: display var(--dialog-enter-time) allow-discrete,
       overlay var(--dialog-enter-time) allow-discrete;
-    animation:
-      dialog-scale-in var(--dialog-enter-time) var(--enter-curve),
+    animation: dialog-scale-in var(--dialog-enter-time) var(--enter-curve),
       dialog-fade-in var(--dialog-exit-time) linear;
     &::backdrop {
       opacity: 1;
@@ -38,6 +39,37 @@
   }
   &:focus-visible {
     outline: none;
+  }
+  .dialog__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    overflow: auto;
+  }
+  .dialog__title {
+    @extend .typo-headline6;
+    margin: 0;
+    height: 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 1.25rem;
+  }
+  .dialog__message {
+    color: color(
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
+    );
+    @extend .typo-body1;
+    margin: 0;
+    margin-bottom: 1.75rem;
+  }
+  .dialog__actions {
+    display: flex;
+    justify-content: flex-end;
+    height: 3.25rem;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    margin: 0 -1.5rem;
+    margin-top: auto;
   }
 }
 
@@ -65,5 +97,12 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+.alert-dialog {
+  @media (--desktop) {
+    min-width: 35rem;
+    min-height: 11.375rem;
   }
 }

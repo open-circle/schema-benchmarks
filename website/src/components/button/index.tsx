@@ -1,4 +1,6 @@
 import { bem } from "@schema-benchmarks/utils";
+import clsx from "clsx";
+import type { ComponentPropsWithRef } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
 export interface ToggleButtonProps {
@@ -29,6 +31,22 @@ export const getButtonClasses = ({
   activeColor = "primary",
 }: ButtonProps | ToggleButtonProps | FloatingActionButtonProps = {}) =>
   buttonCls({ modifiers: [variant, color ?? "", `active-${activeColor}`] });
+
+export const buttonProps = <
+  T extends ButtonProps | ToggleButtonProps | FloatingActionButtonProps,
+>({
+  className,
+  variant,
+  color,
+  activeColor,
+  ...props
+}: T & ComponentPropsWithRef<"button">): ComponentPropsWithRef<"button"> => ({
+  ...props,
+  className: clsx(
+    getButtonClasses({ variant, color, activeColor } as never),
+    className,
+  ),
+});
 
 const buttonGroupCls = bem("button-group");
 
