@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Banner } from "@/components/banner";
+import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
@@ -80,6 +81,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <Footer />
               <ScrollToTop />
               <Snackbars />
+              <ConfirmDialog />
             </div>
           </SidebarProvider>
         </div>
