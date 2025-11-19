@@ -48,10 +48,7 @@
   }
   --icon-size: 18;
   @extend .typo-body2;
-  transition:
-    background-color 250ms,
-    color 250ms,
-    font-weight 250ms;
+  transition: background-color 250ms, color 250ms, font-weight 250ms;
   .md-symbol {
     color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));
     margin-left: -0.25rem;
@@ -67,7 +64,7 @@
     background-color: var(--focused-chip-background);
   }
   &.selected,
-  &.active {
+  &[data-status="active"] {
     background-color: var(--selected-chip-background);
     color: var(--selected-chip-foreground);
     --icon-fill: 1;

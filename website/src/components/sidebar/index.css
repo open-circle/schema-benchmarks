@@ -128,7 +128,7 @@
             --icon-weight: 600;
           }
         }
-        &.active {
+        &[data-status="active"] {
           background-color: var(--active-link-background);
           color: var(--active-link-foreground);
           font-weight: var(--weight-bold);

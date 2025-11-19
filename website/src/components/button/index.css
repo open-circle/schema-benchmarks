@@ -195,9 +195,24 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
     }
-    &.active {
+    &[data-status="active"] {
       --icon-fill: 1;
       --button-foreground: var(--button-active-color);
+      --button-background: color(
+        from var(--button-active-color) srgb r g b / var(--activated-opacity)
+      );
+      &:hover {
+        background-color: color(
+          from var(--button-active-color) srgb r g b /
+            calc(var(--hover-opacity) + var(--activated-opacity))
+        );
+      }
+      &:focus-visible {
+        background-color: color(
+          from var(--button-active-color) srgb r g b /
+            calc(var(--focus-opacity) + var(--activated-opacity))
+        );
+      }
     }
   }
   &.button--floating-action {
