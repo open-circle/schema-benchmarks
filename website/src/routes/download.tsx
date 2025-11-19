@@ -89,7 +89,7 @@ function RouteComponent() {
             {unsafeEntries(speedPresets).map(([slug, preset]) => (
               <InternalLinkToggleButton
                 key={preset.name}
-                aria-label={preset.name}
+                title={preset.name}
                 to={Route.fullPath}
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
                 activeColor="primary"

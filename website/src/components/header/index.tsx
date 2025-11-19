@@ -17,7 +17,7 @@ export function Header({ children }: { children: ReactNode }) {
             className={cls({
               element: "toggle",
             })}
-            aria-label="Expand sidebar"
+            title="Expand sidebar"
           >
             <MdSymbol>menu</MdSymbol>
           </ToggleButton>
@@ -29,7 +29,7 @@ export function Header({ children }: { children: ReactNode }) {
             modifiers: { open },
           })}
           onClick={() => setOpen(true)}
-          aria-label="Expand sidebar"
+          title="Expand sidebar"
           tabIndex={open ? -1 : 0}
         >
           <MdSymbol>menu</MdSymbol>

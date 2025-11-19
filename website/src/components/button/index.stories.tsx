@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 import { MdSymbol } from "../symbol";
-import { Button, type ButtonProps } from ".";
+import { Button } from ".";
 
 const meta = {
   title: "Components/Button",
@@ -32,8 +33,10 @@ const meta = {
   args: {
     color: "primary",
     disabled: false,
+    title: "Hello World",
+    onClick: fn(),
   },
-} satisfies Meta<ButtonProps>;
+} satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

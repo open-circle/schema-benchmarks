@@ -2,6 +2,7 @@ import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
+import { withTooltip } from "../tooltip";
 
 type ButtonColor = "primary" | "secondary" | "danger" | "success" | "error";
 
@@ -16,7 +17,8 @@ export interface ButtonProps
 
 const buttonCls = bem("button");
 
-export function Button({
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const Button = withTooltip(function Button({
   className,
   variant = "text",
   color = "primary",
@@ -32,13 +34,14 @@ export function Button({
       })}
     />
   );
-}
+});
 
 interface BaseLinkButtonProps
   extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">,
     BaseButtonProps {}
 
-export function ExternalLinkButton({
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   className,
   variant = "text",
   color = "primary",
@@ -53,7 +56,7 @@ export function ExternalLinkButton({
       })}
     />
   );
-}
+});
 
 // biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const InternalLinkButton = createLink(ExternalLinkButton);
@@ -68,49 +71,57 @@ export interface ToggleButtonProps
   active?: boolean;
 }
 
-export function ToggleButton({
-  color,
-  activeColor,
-  className,
-  active,
-  ...props
-}: ToggleButtonProps) {
-  return (
-    <button
-      type="button"
-      {...props}
-      aria-pressed={active}
-      className={buttonCls({
-        modifiers: [
-          "toggle",
-          color ?? "",
-          activeColor ? `active-${activeColor}` : "",
-        ],
-        extra: className,
-      })}
-    />
-  );
-}
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const ToggleButton = withTooltip(
+  function ToggleButton({
+    color,
+    activeColor,
+    className,
+    active,
+    ...props
+  }: ToggleButtonProps) {
+    return (
+      <button
+        type="button"
+        {...props}
+        aria-pressed={active}
+        className={buttonCls({
+          modifiers: [
+            "toggle",
+            color ?? "",
+            activeColor ? `active-${activeColor}` : "",
+          ],
+          extra: className,
+        })}
+      />
+    );
+  },
+  { required: true },
+);
 
 interface BaseLinkToggleButtonProps
   extends ComponentPropsWithRef<"a">,
     BaseToggleButtonProps {}
 
-export function ExternalLinkToggleButton({
-  activeColor,
-  className,
-  ...props
-}: BaseLinkToggleButtonProps) {
-  return (
-    <a
-      {...props}
-      className={buttonCls({
-        modifiers: ["toggle", activeColor ? `active-${activeColor}` : ""],
-        extra: className,
-      })}
-    />
-  );
-}
+// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
+export const ExternalLinkToggleButton = withTooltip(
+  function ExternalLinkToggleButton({
+    activeColor,
+    className,
+    ...props
+  }: BaseLinkToggleButtonProps) {
+    return (
+      <a
+        {...props}
+        className={buttonCls({
+          modifiers: ["toggle", activeColor ? `active-${activeColor}` : ""],
+          extra: className,
+        })}
+      />
+    );
+  },
+  { required: true },
+);
 
 // biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const InternalLinkToggleButton = createLink(ExternalLinkToggleButton);

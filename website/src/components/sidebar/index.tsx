@@ -89,7 +89,7 @@ function SidebarWithoutContext({
               element: "toggle",
             })}
             onClick={() => setOpen(false)}
-            aria-label="Collapse sidebar"
+            title="Collapse"
             tabIndex={open ? 0 : -1}
           >
             <MdSymbol flipRtl>chevron_left</MdSymbol>

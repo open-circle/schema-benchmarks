@@ -1,0 +1,32 @@
+:root {
+  --tooltip-background: var(--on-surface);
+  --tooltip-foreground: var(--surface);
+  --tooltip-enter-time: 75ms;
+  --tooltip-exit-time: 75ms;
+}
+
+.tooltip {
+  @extend .typo-caption;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  transition: display var(--tooltip-exit-time) allow-discrete,
+    overlay var(--tooltip-exit-time) allow-discrete;
+  &[popover]:popover-open {
+    transition: display var(--tooltip-enter-time) allow-discrete,
+      overlay var(--tooltip-enter-time) allow-discrete;
+  }
+  .tooltip__content {
+    background-color: var(--tooltip-background);
+    color: var(--tooltip-foreground);
+    border-radius: var(--shape-small);
+    height: 2rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    @media (--desktop) {
+      height: 1.5rem;
+      padding: 0 0.5rem;
+    }
+  }
+}

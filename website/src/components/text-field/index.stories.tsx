@@ -53,7 +53,7 @@ export const EndIcon: Story = {
 export const EndButton: Story = {
   args: {
     endIcon: (
-      <ToggleButton>
+      <ToggleButton title="Clear">
         <MdSymbol>cancel</MdSymbol>
       </ToggleButton>
     ),

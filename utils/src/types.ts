@@ -3,6 +3,10 @@ export type Satisfies<T extends U, U> = T;
 export type NonOptionalKeys<T> = {
   [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
+export type Override<T, U> = Compute<Omit<T, keyof U> & U>;
+export type WithRequired<T, K extends keyof T> = Compute<
+  Omit<T, K> & Required<Pick<T, K>>
+>;
 
 export namespace NonReducible {
   export type String = string & {};

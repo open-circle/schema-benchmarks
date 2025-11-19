@@ -68,7 +68,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${result.fileName}`}
                       target="_blank"
                       rel="noreferrer noopener"
-                      aria-label="View source"
+                      title="Open source"
                     >
                       <MdSymbol>code</MdSymbol>
                     </ExternalLinkToggleButton>
@@ -79,7 +79,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       )}`}
                       target="_blank"
                       rel="noreferrer noopener"
-                      aria-label="View compiled source"
+                      title="Open compiled"
                     >
                       <MdSymbol>deployed_code</MdSymbol>
                     </ExternalLinkToggleButton>
