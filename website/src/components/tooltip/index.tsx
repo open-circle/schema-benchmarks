@@ -38,8 +38,6 @@ export interface TooltipOpts {
   required?: boolean;
   /** Delay before showing the tooltip */
   delay?: number;
-  /** Delay before hiding the tooltip */
-  hideDelay?: number;
   /** Offset from the target */
   offset?: number;
 }
@@ -49,8 +47,7 @@ export interface TooltipProps {
   id?: string;
 }
 
-/* there is a tooltip open in the page */
-let globalOpen = false;
+let currentId = "";
 
 // https://tkdodo.eu/blog/tooltip-components-should-not-exist
 
@@ -66,7 +63,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
-  { delay = 250, hideDelay = 75, offset: offsetOpt = 4 }: TooltipOpts = {},
+  { delay = 1000, offset: offsetOpt = 4 }: TooltipOpts = {},
 ) {
   return function WithTooltip({
     title,
@@ -105,27 +102,31 @@ export function withTooltip<TComp extends TooltipableComponent>(
             timeout = setTimeout(
               () => {
                 popoverRef.current?.showPopover();
-                globalOpen ||= true;
+                currentId = resolvedId;
               },
-              globalOpen ? 0 : delay,
+              currentId ? 0 : delay,
             );
           },
           mouseleave() {
             clearTimeout(timeout);
+            popoverRef.current?.hidePopover();
             timeout = setTimeout(() => {
-              popoverRef.current?.hidePopover();
-              globalOpen ||= false;
-            }, hideDelay);
+              if (currentId === resolvedId) {
+                currentId = "";
+              }
+            }, 1000);
           },
         });
         return () => {
           unsub();
           clearTimeout(timeout);
           popoverRef.current?.hidePopover();
-          globalOpen ||= false;
+          if (currentId === resolvedId) {
+            currentId = "";
+          }
         };
       }
-    }, [targetRef, title, delay, hideDelay]);
+    }, [targetRef, title, delay, resolvedId]);
     return (
       <>
         <Component
