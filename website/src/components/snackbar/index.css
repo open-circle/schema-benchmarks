@@ -24,8 +24,7 @@
   box-shadow: var(--elevation-6);
   background-color: var(--snackbar-background);
   color: color(
-    from var(--snackbar-foreground) srgb r g b /
-    var(--primary-text)
+    from var(--snackbar-foreground) srgb r g b / var(--primary-text)
   );
   @media (max-width: 599px) {
     min-width: calc(100vw - 2rem);
@@ -33,13 +32,17 @@
 
   transform: scale(0.8);
   opacity: 0;
-  transition:
-    transform var(--snackbar-exit-duration) var(--exit-temporary-curve),
+  transition: transform var(--snackbar-exit-duration)
+      var(--exit-temporary-curve),
     opacity var(--snackbar-exit-duration) var(--exit-temporary-curve);
   &.snackbar--visible {
     transform: scale(1);
     opacity: 1;
-    animation: snackbar-enter var(--snackbar-enter-duration) var(--enter-curve);
+    animation: snackbar-enter var(--snackbar-enter-duration) var(--enter-curve),
+      snackbar-fade-in var(--snackbar-enter-duration) linear;
+    @media (prefers-reduced-motion) {
+      animation: snackbar-fade-in var(--snackbar-enter-duration) linear;
+    }
   }
 
   &.snackbar--error .snackbar__icon {
@@ -53,8 +56,7 @@
   }
   .snackbar__icon {
     color: color(
-      from var(--snackbar-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--snackbar-foreground) srgb r g b / var(--secondary-text)
     );
     margin-left: -0.5rem;
     &:dir(rtl) {
@@ -74,10 +76,17 @@
 @keyframes snackbar-enter {
   0% {
     transform: scale(0.8) translateY(100%);
-    opacity: 0;
   }
   100% {
     transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes snackbar-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
