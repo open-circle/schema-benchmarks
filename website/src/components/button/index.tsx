@@ -19,7 +19,7 @@ const buttonCls = bem("button");
 export function Button({
   className,
   variant = "text",
-  color,
+  color = "primary",
   ...props
 }: ButtonProps) {
   return (
@@ -27,7 +27,7 @@ export function Button({
       type="button"
       {...props}
       className={buttonCls({
-        modifiers: [variant, color ?? ""],
+        modifiers: [variant, color],
         extra: className,
       })}
     />
@@ -41,14 +41,14 @@ interface BaseLinkButtonProps
 export function ExternalLinkButton({
   className,
   variant = "text",
-  color,
+  color = "primary",
   ...props
 }: BaseLinkButtonProps) {
   return (
     <a
       {...props}
       className={buttonCls({
-        modifiers: [variant, color ?? ""],
+        modifiers: [variant, color],
         extra: className,
       })}
     />

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../button";
-import { Dialog } from ".";
+import { Dialog, DialogActions } from ".";
 
 const meta = {
   title: "Components/Dialog",
@@ -16,10 +16,15 @@ const meta = {
   args: {
     open: true,
     children: (close) => (
-      <div>
-        <p>Hello World</p>
-        <Button onClick={() => close()}>Close</Button>
-      </div>
+      <>
+        <div className="dialog__content">
+          <h2 className="dialog__title">Hello world</h2>
+          <p className="dialog__message">This is a dialog</p>
+        </div>
+        <DialogActions>
+          <Button onClick={() => close()}>Close</Button>
+        </DialogActions>
+      </>
     ),
     closedby: "any",
   },
