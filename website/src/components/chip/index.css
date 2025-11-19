@@ -63,8 +63,8 @@
     outline: none;
     background-color: var(--focused-chip-background);
   }
-  &.selected,
-  &[data-status="active"] {
+  &[data-status="active"],
+  &[aria-pressed="true"] {
     background-color: var(--selected-chip-background);
     color: var(--selected-chip-foreground);
     --icon-fill: 1;

@@ -1,29 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import clsx from "clsx";
 import { useState } from "react";
 import { MdSymbol } from "../symbol";
+import { Chip, ChipCollection } from ".";
 
 function ChipDemo() {
   const [selected, setSelected] = useState("foo");
   return (
-    <div className="chip-collection">
-      <button
-        type="button"
-        className={clsx("chip", selected === "foo" && "selected")}
-        onClick={() => setSelected("foo")}
-      >
+    <ChipCollection>
+      <Chip activated={selected === "foo"} onClick={() => setSelected("foo")}>
         <MdSymbol>edit</MdSymbol>
         Foo
-      </button>
-      <button
-        type="button"
-        className={clsx("chip", selected === "bar" && "selected")}
-        onClick={() => setSelected("bar")}
-      >
+      </Chip>
+      <Chip activated={selected === "bar"} onClick={() => setSelected("bar")}>
         <MdSymbol>edit</MdSymbol>
         Bar
-      </button>
-    </div>
+      </Chip>
+    </ChipCollection>
   );
 }
 
