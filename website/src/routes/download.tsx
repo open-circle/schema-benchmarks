@@ -3,7 +3,7 @@ import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
-import { ButtonGroup, LinkToggleButton } from "@/components/button";
+import { ButtonGroup, InternalLinkToggleButton } from "@/components/button";
 import { PageFilter, PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
@@ -87,7 +87,7 @@ function RouteComponent() {
         <PageFilter title="Speed presets">
           <ButtonGroup variant="outlined">
             {unsafeEntries(speedPresets).map(([slug, preset]) => (
-              <LinkToggleButton
+              <InternalLinkToggleButton
                 key={preset.name}
                 aria-label={preset.name}
                 to={Route.fullPath}
@@ -95,7 +95,7 @@ function RouteComponent() {
                 activeColor="primary"
               >
                 <MdSymbol>{preset.icon}</MdSymbol>
-              </LinkToggleButton>
+              </InternalLinkToggleButton>
             ))}
           </ButtonGroup>
         </PageFilter>

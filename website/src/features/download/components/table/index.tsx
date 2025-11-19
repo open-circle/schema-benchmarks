@@ -5,7 +5,7 @@ import {
   getDuration,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
-import { BaseLinkToggleButton, ButtonGroup } from "@/components/button";
+import { ButtonGroup, ExternalLinkToggleButton } from "@/components/button";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";
@@ -64,15 +64,15 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 </td>
                 <td className="action fit-content">
                   <ButtonGroup className="source-links">
-                    <BaseLinkToggleButton
+                    <ExternalLinkToggleButton
                       href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${result.fileName}`}
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label="View source"
                     >
                       <MdSymbol>code</MdSymbol>
-                    </BaseLinkToggleButton>
-                    <BaseLinkToggleButton
+                    </ExternalLinkToggleButton>
+                    <ExternalLinkToggleButton
                       href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${getCompiledPath(
                         result,
                         minify,
@@ -82,7 +82,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       aria-label="View compiled source"
                     >
                       <MdSymbol>deployed_code</MdSymbol>
-                    </BaseLinkToggleButton>
+                    </ExternalLinkToggleButton>
                   </ButtonGroup>
                 </td>
               </tr>

@@ -38,7 +38,7 @@ interface BaseLinkButtonProps
   extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">,
     BaseButtonProps {}
 
-export function BaseLinkButtonComponent({
+export function ExternalLinkButton({
   className,
   variant = "text",
   color,
@@ -56,7 +56,7 @@ export function BaseLinkButtonComponent({
 }
 
 // biome-ignore lint/style/useComponentExportOnlyModules: this is a component
-export const LinkButton = createLink(BaseLinkButtonComponent);
+export const InternalLinkButton = createLink(ExternalLinkButton);
 
 interface BaseToggleButtonProps {
   activeColor?: ButtonColor;
@@ -96,7 +96,7 @@ interface BaseLinkToggleButtonProps
   extends ComponentPropsWithRef<"a">,
     BaseToggleButtonProps {}
 
-export function BaseLinkToggleButton({
+export function ExternalLinkToggleButton({
   activeColor,
   className,
   ...props
@@ -113,7 +113,7 @@ export function BaseLinkToggleButton({
 }
 
 // biome-ignore lint/style/useComponentExportOnlyModules: this is a component
-export const LinkToggleButton = createLink(BaseLinkToggleButton);
+export const InternalLinkToggleButton = createLink(ExternalLinkToggleButton);
 
 export function FloatingActionButton({
   className,
