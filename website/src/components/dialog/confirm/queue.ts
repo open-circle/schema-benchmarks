@@ -1,3 +1,4 @@
+import { castDraft } from "mutative";
 import { ExternalStore } from "@/hooks/store";
 import type { ConfirmDialogProps } from ".";
 
@@ -44,33 +45,28 @@ class ConfirmQueue extends ExternalStore<Array<InternalDescription>> {
   }
   #close(id: string) {
     this.setState((queue) => {
-      const index = queue.findIndex((item) => item.id === id);
-      if (index === -1) return queue;
-      setTimeout(
-        () =>
-          this.setState((queue) => {
-            const index = queue.findIndex((item) => item.id === id);
-            if (index === -1) return queue;
-            return queue.toSpliced(index, 1);
-          }),
-        75,
-      );
-      // biome-ignore lint/style/noNonNullAssertion: we've checked that there is an item
-      return queue.toSpliced(index, 1, { ...queue[index]!, closing: true });
+      const item = queue.find((item) => item.id === id);
+      if (!item) return;
+      item.closing = true;
     });
+
+    setTimeout(
+      () =>
+        this.setState((queue) => {
+          const index = queue.findIndex((item) => item.id === id);
+          if (index === -1) return;
+          queue.splice(index, 1);
+        }),
+      75,
+    );
   }
   add(props: ConfirmDialogProps) {
     const resolvers = Promise.withResolvers<string | undefined>();
     const id = crypto.randomUUID();
 
-    this.setState((queue) => [
-      ...queue,
-      {
-        props: props,
-        id,
-        resolvers,
-      },
-    ]);
+    this.setState((queue) => {
+      queue.push({ props: castDraft(props), id, resolvers });
+    });
 
     return new ConfirmPromise(resolvers.promise);
   }

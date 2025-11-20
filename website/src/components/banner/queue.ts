@@ -1,3 +1,4 @@
+import { hasAtLeast } from "@schema-benchmarks/utils";
 import { ExternalStore } from "@/hooks/store";
 import type { BannerProps } from ".";
 
@@ -12,20 +13,19 @@ class BannerStore extends ExternalStore<Array<BannerWithId>> {
     super([]);
   }
   add(banner: BannerProps) {
-    this.setState((banners) => [
-      ...banners,
-      { ...banner, id: crypto.randomUUID() },
-    ]);
+    this.setState((banners) => {
+      banners.push({ ...banner, id: crypto.randomUUID() });
+    });
   }
   pop() {
-    if (!this.state.length) return;
-    this.setState(([first, ...rest]) => [
-      // biome-ignore lint/style/noNonNullAssertion: we've checked that there is a banner
-      { ...first!, closing: true },
-      ...rest,
-    ]);
+    this.setState((banners) => {
+      if (!hasAtLeast(banners, 1)) return;
+      banners[0].closing = true;
+    });
     setTimeout(() => {
-      this.setState(([, ...rest]) => rest);
+      this.setState((banners) => {
+        banners.shift();
+      });
     }, removeDelay);
   }
 }

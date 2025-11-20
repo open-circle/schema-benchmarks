@@ -172,3 +172,26 @@ export const setAbortableTimeout = <TArgs extends Array<any>>(
   });
   return timeout;
 };
+
+export type TupleOfLength<
+  T,
+  N extends number,
+  Acc extends Array<T> = [],
+> = Acc["length"] extends N ? Acc : TupleOfLength<T, N, [T, ...Acc]>;
+
+export function hasLength<T, N extends number>(
+  array: Array<T>,
+  length: N,
+): array is TupleOfLength<T, N> {
+  return array.length === length;
+}
+
+export type TupleOfAtLeast<T, N extends number> = TupleOfLength<T, N> &
+  Array<T>;
+
+export function hasAtLeast<T, N extends number>(
+  array: Array<T>,
+  length: N,
+): array is TupleOfAtLeast<T, N> {
+  return array.length >= length;
+}

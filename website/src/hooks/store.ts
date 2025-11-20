@@ -1,3 +1,4 @@
+import { create, type Draft } from "mutative";
 import { useSyncExternalStore } from "react";
 
 export type EqualityFn<T> = (a: T, b: T) => boolean;
@@ -16,8 +17,11 @@ export class ExternalStore<T> extends EventTarget {
   ) {
     super();
   }
-  protected setState(setter: T | ((state: T) => T)) {
-    const state = isFunction(setter) ? setter(this.state) : setter;
+  // biome-ignore lint/suspicious/noConfusingVoidType: void is valid for a return type
+  protected setState(setter: T | ((state: Draft<T>) => void | T)) {
+    const state = isFunction(setter)
+      ? (create(this.state, setter) as T)
+      : setter;
     if (!this.isEqual(this.state, state)) {
       this.state = state;
       this.dispatchEvent(new Event("change"));
