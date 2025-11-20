@@ -56,6 +56,31 @@
           }
         }
       }
+    },
+    {
+      "includes": [
+        "./src/**/*.browser.test.*"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "vitest": {
+                    "importNames": [
+                      "it",
+                      "test"
+                    ],
+                    "message": "Use `import { it } from \"@test/browser/fixtures\"` instead."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }
