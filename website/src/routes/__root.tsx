@@ -12,8 +12,8 @@ import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
-import { TanstackHeader } from "../components/header";
-import { TanstackSidebar } from "../components/sidebar";
+import { Header } from "../components/header";
+import { Sidebar } from "../components/sidebar";
 import { Snackbars } from "../components/snackbar";
 import appCss from "../styles.css?url";
 
@@ -73,9 +73,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <div className="sidebar-container">
           <SidebarProvider>
-            <TanstackSidebar />
+            <Sidebar />
             <div className="header-container">
-              <TanstackHeader />
+              <Header />
               <Banner />
               <main>{children}</main>
               <Footer />

@@ -51,7 +51,7 @@ const sidebarGroups: Array<SidebarGroup> = [
   },
 ];
 
-function SidebarWithoutContext({
+function BaseSidebar({
   children,
   open,
   setOpen,
@@ -101,30 +101,28 @@ function SidebarWithoutContext({
   );
 }
 
-export function Sidebar({ children }: { children?: ReactNode }) {
+function BreakpointSidebar({ children }: { children?: ReactNode }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
   const isModal = useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
   useScrollLockEffect(isModal && open);
   return (
     <ClientOnly
       fallback={
-        <SidebarWithoutContext open={false} setOpen={() => {}}>
+        <BaseSidebar open={false} setOpen={() => {}}>
           {children}
-        </SidebarWithoutContext>
+        </BaseSidebar>
       }
     >
-      <SidebarWithoutContext open={open} setOpen={setOpen}>
+      <BaseSidebar open={open} setOpen={setOpen}>
         {children}
-      </SidebarWithoutContext>
+      </BaseSidebar>
     </ClientOnly>
   );
 }
 
-Sidebar.groups = sidebarGroups;
-
-export function TanstackSidebar() {
+export function Sidebar() {
   return (
-    <Sidebar>
+    <BreakpointSidebar>
       <nav className="typo-subtitle1">
         <ul className={cls("groups")}>
           {sidebarGroups.map((groups, index) => (
@@ -154,6 +152,6 @@ export function TanstackSidebar() {
           ))}
         </ul>
       </nav>
-    </Sidebar>
+    </BreakpointSidebar>
   );
 }

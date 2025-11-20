@@ -7,8 +7,33 @@ import { MdSymbol } from "../symbol";
 
 const cls = bem("page-header");
 
-export function Header({ children }: { children: ReactNode }) {
+export function Header() {
   const { open, setOpen } = useContext(SidebarOpenContext);
+  const allCrumbs = useMatches({
+    select: (matches) =>
+      matches
+        .filter(
+          (match): match is typeof match & { loaderData: { crumb: string } } =>
+            !!match.loaderData?.crumb,
+        )
+        .map((match) => ({
+          to: match.pathname,
+          params: match.params,
+          search: match.search,
+          name: match.loaderData.crumb,
+        })),
+  });
+  const actions = useMatches({
+    select: (matches) =>
+      matches.findLast(
+        (
+          match,
+        ): match is typeof match & { loaderData: { actions: ReactNode } } =>
+          !!(match.loaderData as { actions?: ReactNode })?.actions,
+      )?.loaderData.actions,
+  });
+  const crumbs = allCrumbs.slice(0, -1);
+  const currentCrumb = allCrumbs.at(-1);
   return (
     <header className={cls()}>
       <ClientOnly
@@ -35,44 +60,13 @@ export function Header({ children }: { children: ReactNode }) {
           <MdSymbol>menu</MdSymbol>
         </ToggleButton>
       </ClientOnly>
-      {children}
-    </header>
-  );
-}
-
-export function TanstackHeader() {
-  const allCrumbs = useMatches({
-    select: (matches) =>
-      matches
-        .filter(
-          (match): match is typeof match & { loaderData: { crumb: string } } =>
-            !!match.loaderData?.crumb,
-        )
-        .map((match) => ({
-          to: match.pathname,
-          params: match.params,
-          name: match.loaderData.crumb,
-        })),
-  });
-  const actions = useMatches({
-    select: (matches) =>
-      matches.findLast(
-        (
-          match,
-        ): match is typeof match & { loaderData: { actions: ReactNode } } =>
-          !!(match.loaderData as { actions?: ReactNode })?.actions,
-      )?.loaderData.actions,
-  });
-  const crumbs = allCrumbs.slice(0, -1);
-  const currentCrumb = allCrumbs.at(-1);
-  return (
-    <Header>
       <nav className="breadcrumbs">
         {crumbs.map((crumb) => (
           <Fragment key={crumb.to}>
             <Link
               to={crumb.to}
               params={crumb.params}
+              search={crumb.search}
               className="typo-headline6"
             >
               {crumb.name}
@@ -85,6 +79,6 @@ export function TanstackHeader() {
         )}
       </nav>
       {actions && <div className={cls("actions")}>{actions}</div>}
-    </Header>
+    </header>
   );
 }

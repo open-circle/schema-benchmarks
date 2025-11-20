@@ -1,18 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MdSymbol } from "../symbol";
 import { Header } from ".";
 
 const meta = {
   title: "Components/Header",
-  render: () => (
-    <Header>
-      <nav className="breadcrumbs">
-        <a>Home</a>
-        <MdSymbol>chevron_right</MdSymbol>
-        <span>Page name</span>
-      </nav>
-    </Header>
-  ),
+  component: Header,
   parameters: {
     layout: "fullscreen",
   },
