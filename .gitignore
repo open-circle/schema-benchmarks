@@ -13,3 +13,4 @@ count.txt
 todos.json
 *storybook.log
 storybook-static
+.netlify
