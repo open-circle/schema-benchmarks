@@ -9,7 +9,7 @@
       "./vite.config.ts",
       "./postcss.config.ts",
       "./preview.ts",
-      "./.storybook/*.ts",
+      "./.storybook/**/*",
       "!**/routeTree.gen.ts"
     ]
   },

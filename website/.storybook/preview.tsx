@@ -1,5 +1,5 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
-import { RegisteredRouter, RouterContextProvider } from "@tanstack/react-router";
+import { type RegisteredRouter, type RouterHistory, createMemoryHistory, RouterContextProvider } from "@tanstack/react-router";
 import { getRouter } from "../src/router";
 import { type QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { makeQueryClient } from '../src/data/query';
@@ -12,13 +12,15 @@ const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
 
 declare module "@storybook/react-vite" {
   export interface Parameters {
+    history?: RouterHistory;
     router?: RegisteredRouter;
     queryClient?: QueryClient;
   }
 }
 
 const routerDecorator: Decorator = (Story, { parameters }) => {
-  const router = parameters.router ??= getRouter();
+  const history = parameters.history ??= createMemoryHistory();
+  const router = parameters.router ??= getRouter(history);
   return <RouterContextProvider router={router}><Story /></RouterContextProvider>;
 };
 

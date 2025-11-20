@@ -1,7 +1,9 @@
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  createMemoryHistory,
   type RegisteredRouter,
   RouterContextProvider,
+  type RouterHistory,
 } from "@tanstack/react-router";
 import { type RenderOptions, render } from "vitest-browser-react";
 import { makeQueryClient } from "@/data/query";
@@ -9,6 +11,7 @@ import { getRouter } from "@/router";
 
 export interface RenderWithProviderOptions extends RenderOptions {
   queryClient?: QueryClient;
+  history?: RouterHistory;
   router?: RegisteredRouter;
 }
 
@@ -16,7 +19,8 @@ export function renderWithProviders(
   ui: React.ReactElement,
   {
     queryClient = makeQueryClient(),
-    router = getRouter(),
+    history = createMemoryHistory(),
+    router = getRouter(history),
     wrapper: Wrapper,
     ...options
   }: RenderWithProviderOptions = {},
