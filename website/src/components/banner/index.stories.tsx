@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../button";
-import { Banner, type BannerProps, openBanner } from ".";
-import { closeBanner } from "./index";
+import { Banner, type BannerProps } from ".";
+import { closeBanner, openBanner } from "./queue";
 
 function BannerDemo(bannerProps: BannerProps) {
   return (
