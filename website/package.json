@@ -31,8 +31,6 @@
   "devDependencies": {
     "@netlify/vite-plugin-tanstack-start": "^1.2.1",
     "@storybook/react-vite": "^10.0.8",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.2.0",
     "@types/d3": "^7.4.3",
     "@types/node": "^22.10.2",
     "@types/prismjs": "^1.26.5",
