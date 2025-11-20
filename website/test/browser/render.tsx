@@ -11,6 +11,10 @@ import { getRouter } from "@/router";
 
 export interface RenderWithProviderOptions extends RenderOptions {
   queryClient?: QueryClient;
+  historyOpts?: {
+    initialEntries: Array<string>;
+    initialIndex?: number;
+  };
   history?: RouterHistory;
   router?: RegisteredRouter;
 }
@@ -19,7 +23,8 @@ export function renderWithProviders(
   ui: React.ReactElement,
   {
     queryClient = makeQueryClient(),
-    history = createMemoryHistory(),
+    historyOpts,
+    history = createMemoryHistory(historyOpts),
     router = getRouter(history),
     wrapper: Wrapper,
     ...options
@@ -27,6 +32,8 @@ export function renderWithProviders(
 ) {
   return {
     queryClient,
+    history,
+    router,
     ...render(ui, {
       ...options,
       wrapper({ children }) {
