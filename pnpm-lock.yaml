@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  seroval: 1.3.2
+
 importers:
 
   .:
@@ -4472,14 +4475,10 @@ packages:
     resolution: {integrity: sha512-16OL3NnUBw8JG1jBLUoZJsLnQq0n5Ua6aHalhJK4fMQkz1lqR7Osz1sA30trBtd9VUDc2NgkuRCn8+/pBwqZ+w==}
     engines: {node: '>=10'}
     peerDependencies:
-      seroval: ^1.0
+      seroval: 1.3.2
 
   seroval@1.3.2:
     resolution: {integrity: sha512-RbcPH1n5cfwKrru7v7+zrZvjLurgHhGyso3HTyGtRivGWgYjbOmGuivCQaORNELjNONoK35nj28EoWul9sb1zQ==}
-    engines: {node: '>=10'}
-
-  seroval@1.4.0:
-    resolution: {integrity: sha512-BdrNXdzlofomLTiRnwJTSEAaGKyHHZkbMXIywOh7zlzp4uZnXErEwl9XZ+N1hJSNpeTtNxWvVwN0wUzAIQ4Hpg==}
     engines: {node: '>=10'}
 
   sharp@0.34.5:
@@ -6981,8 +6980,8 @@ snapshots:
       '@tanstack/history': 1.133.28
       '@tanstack/store': 0.8.0
       cookie-es: 2.0.0
-      seroval: 1.4.0
-      seroval-plugins: 1.3.3(seroval@1.4.0)
+      seroval: 1.3.2
+      seroval-plugins: 1.3.3(seroval@1.3.2)
       tiny-invariant: 1.3.3
       tiny-warning: 1.0.3
 
@@ -7082,7 +7081,7 @@ snapshots:
     dependencies:
       '@tanstack/router-core': 1.134.18
       '@tanstack/start-storage-context': 1.134.18
-      seroval: 1.4.0
+      seroval: 1.3.2
       tiny-invariant: 1.3.3
       tiny-warning: 1.0.3
 
@@ -7125,7 +7124,7 @@ snapshots:
       '@tanstack/start-client-core': 1.134.18
       '@tanstack/start-storage-context': 1.134.18
       h3-v2: h3@2.0.0-beta.4(crossws@0.4.1(srvx@0.9.6))
-      seroval: 1.4.0
+      seroval: 1.3.2
       tiny-invariant: 1.3.3
     transitivePeerDependencies:
       - crossws
@@ -9711,13 +9710,7 @@ snapshots:
     dependencies:
       seroval: 1.3.2
 
-  seroval-plugins@1.3.3(seroval@1.4.0):
-    dependencies:
-      seroval: 1.4.0
-
   seroval@1.3.2: {}
-
-  seroval@1.4.0: {}
 
   sharp@0.34.5:
     dependencies:
