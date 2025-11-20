@@ -134,12 +134,15 @@ export const promiseAllKeyed = async <T extends Record<string, unknown>>(
  * @returns The interval ID.
  * @see {setInterval}
  */
-export const setAbortableInterval = (
-  fn: () => void,
+
+// biome-ignore lint/suspicious/noExplicitAny: contravariant
+export const setAbortableInterval = <TArgs extends Array<any>>(
+  fn: (...args: TArgs) => void,
   delay: number,
   signal: AbortSignal,
+  ...args: TArgs
 ): ReturnType<typeof setInterval> => {
-  const interval = setInterval(fn, delay);
+  const interval = setInterval(fn, delay, ...args);
   signal.addEventListener("abort", () => clearInterval(interval), {
     once: true,
     signal: AbortSignal.timeout(delay),
@@ -155,12 +158,14 @@ export const setAbortableInterval = (
  * @returns The timeout ID.
  * @see {setTimeout}
  */
-export const setAbortableTimeout = (
-  fn: () => void,
+// biome-ignore lint/suspicious/noExplicitAny: contravariant
+export const setAbortableTimeout = <TArgs extends Array<any>>(
+  fn: (...args: TArgs) => void,
   delay: number,
   signal: AbortSignal,
+  ...args: TArgs
 ): ReturnType<typeof setTimeout> => {
-  const timeout = setTimeout(fn, delay);
+  const timeout = setTimeout(fn, delay, ...args);
   signal.addEventListener("abort", () => clearTimeout(timeout), {
     once: true,
     signal: AbortSignal.timeout(delay),
