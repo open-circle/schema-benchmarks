@@ -1,6 +1,8 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
 import { RegisteredRouter, RouterContextProvider } from "@tanstack/react-router";
 import { getRouter } from "../src/router";
+import { type QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { makeQueryClient } from '../src/data/query';
 import '../src/styles.css';
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
@@ -11,12 +13,18 @@ const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
 declare module "@storybook/react-vite" {
   export interface Parameters {
     router?: RegisteredRouter;
+    queryClient?: QueryClient;
   }
 }
 
 const routerDecorator: Decorator = (Story, { parameters }) => {
   const router = parameters.router ??= getRouter();
   return <RouterContextProvider router={router}><Story /></RouterContextProvider>;
+};
+
+const queryClientDecorator: Decorator = (Story, { parameters }) => {
+  const queryClient = parameters.queryClient ??= makeQueryClient();
+  return <QueryClientProvider client={queryClient}><Story /></QueryClientProvider>;
 };
 
 const preview: Preview = {
@@ -46,7 +54,7 @@ const preview: Preview = {
   args: {
     dir: "ltr",
   },
-  decorators: [dirDecorator, routerDecorator],
+  decorators: [dirDecorator, routerDecorator, queryClientDecorator],
 };
 
 document.addEventListener("click", (event) => {
