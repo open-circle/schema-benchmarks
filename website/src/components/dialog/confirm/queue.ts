@@ -1,12 +1,5 @@
-import { type DistributiveOmit, mergeRefs } from "@schema-benchmarks/utils";
-import { useRef, useSyncExternalStore } from "react";
-import { AlertDialog, type AlertDialogProps } from "./alert";
-
-export interface ConfirmDialogProps
-  extends DistributiveOmit<
-    AlertDialogProps,
-    "onConfirm" | "onCancel" | "open"
-  > {}
+import { ExternalStore } from "@/hooks/store";
+import type { ConfirmDialogProps } from ".";
 
 interface InternalDescription {
   props: ConfirmDialogProps;
@@ -45,44 +38,32 @@ class ConfirmPromise<T> implements PromiseLike<T> {
   }
 }
 
-class ConfirmQueue extends EventTarget {
-  #queue: Array<InternalDescription> = [];
-  get current() {
-    return this.#queue[0];
-  }
-  #setQueue(
-    recipe: (queue: Array<InternalDescription>) => Array<InternalDescription>,
-  ) {
-    const nextQueue = recipe(this.#queue);
-    if (nextQueue !== this.#queue) {
-      this.#queue = nextQueue;
-      this.dispatchEvent(new Event("change"));
-    }
+class ConfirmQueue extends ExternalStore<Array<InternalDescription>> {
+  constructor() {
+    super([]);
   }
   #close(id: string) {
-    this.#setQueue((queue) => {
+    this.setState((queue) => {
       const index = queue.findIndex((item) => item.id === id);
       if (index === -1) return queue;
       setTimeout(
         () =>
-          this.#setQueue((queue) => {
+          this.setState((queue) => {
             const index = queue.findIndex((item) => item.id === id);
             if (index === -1) return queue;
             return queue.toSpliced(index, 1);
           }),
         75,
       );
+      // biome-ignore lint/style/noNonNullAssertion: we've checked that there is an item
       return queue.toSpliced(index, 1, { ...queue[index]!, closing: true });
     });
-  }
-  flush() {
-    this.#setQueue(() => []);
   }
   add(props: ConfirmDialogProps) {
     const resolvers = Promise.withResolvers<string | undefined>();
     const id = crypto.randomUUID();
 
-    this.#setQueue((queue) => [
+    this.setState((queue) => [
       ...queue,
       {
         props: props,
@@ -94,22 +75,18 @@ class ConfirmQueue extends EventTarget {
     return new ConfirmPromise(resolvers.promise);
   }
   resolve(id: string, returnValue?: string) {
-    const entry = this.#queue.find((item) => item.id === id);
+    const entry = this.state.find((item) => item.id === id);
 
     entry?.resolvers.resolve(returnValue);
 
     this.#close(id);
   }
   reject(id: string, reason?: unknown) {
-    const entry = this.#queue.find((item) => item.id === id);
+    const entry = this.state.find((item) => item.id === id);
 
     entry?.resolvers.reject(reason);
 
     this.#close(id);
-  }
-  subscribe(callback: () => void) {
-    this.addEventListener("change", callback);
-    return () => this.removeEventListener("change", callback);
   }
 }
 
@@ -117,30 +94,4 @@ export const confirmQueue = new ConfirmQueue();
 
 export function confirm(description: ConfirmDialogProps) {
   return confirmQueue.add(description);
-}
-
-export function ConfirmDialog() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const current = useSyncExternalStore(
-    (onStoreChange) => confirmQueue.subscribe(onStoreChange),
-    () => confirmQueue.current,
-    () => confirmQueue.current,
-  );
-
-  return (
-    current && (
-      <AlertDialog
-        {...current.props}
-        ref={mergeRefs(dialogRef, current.props.ref)}
-        open={!current.closing}
-        onConfirm={(close) => {
-          close();
-          confirmQueue.resolve(current.id, dialogRef.current?.returnValue);
-        }}
-        onCancel={() => {
-          confirmQueue.reject(current.id, dialogRef.current?.returnValue);
-        }}
-      />
-    )
-  );
 }

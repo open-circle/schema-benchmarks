@@ -1,5 +1,6 @@
 import { bem } from "@schema-benchmarks/utils";
-import { type ReactNode, useSyncExternalStore } from "react";
+import type { ReactNode } from "react";
+import { useExternalStore } from "@/hooks/store";
 import { MdSymbol } from "../symbol";
 import { bannerQueue } from "./queue";
 
@@ -16,11 +17,7 @@ export interface BannerProps {
 const cls = bem("banner");
 
 export function Banner() {
-  const banner = useSyncExternalStore(
-    (onStoreChange) => bannerQueue.subscribe(onStoreChange),
-    () => bannerQueue.current,
-    () => bannerQueue.current,
-  );
+  const banner = useExternalStore(bannerQueue, ([current]) => current);
   if (!banner) return null;
   const { color = "", closing = false, icon, children, actions } = banner;
   return (

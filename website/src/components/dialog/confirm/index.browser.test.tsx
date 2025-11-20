@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import { ConfirmDialog, confirm, confirmQueue } from "./confirm";
+import { ConfirmDialog } from ".";
+import { confirm, confirmQueue } from "./queue";
 
 describe("ConfirmDialog", () => {
   beforeEach(() => {
-    confirmQueue.flush();
+    confirmQueue.reset();
   });
   it("should show the dialog", async () => {
     await page.render(<ConfirmDialog />);

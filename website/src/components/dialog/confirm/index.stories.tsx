@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { Button } from "../button";
-import { ConfirmDialog, confirm } from "./confirm";
+import { Button } from "@/components/button/";
+import { ConfirmDialog } from ".";
+import { confirm } from "./queue";
 
 const meta = {
   title: "Components/Dialog/Alert/Confirm",

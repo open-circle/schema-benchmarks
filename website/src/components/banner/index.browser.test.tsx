@@ -7,7 +7,7 @@ import { bannerQueue, closeBanner, openBanner } from "./queue";
 
 describe("Banner", () => {
   beforeEach(() => {
-    bannerQueue.flush();
+    bannerQueue.reset();
   });
   it("should show the banner", async () => {
     await page.render(<Banner />);

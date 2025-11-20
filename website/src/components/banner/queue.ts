@@ -1,3 +1,4 @@
+import { ExternalStore } from "@/hooks/store";
 import type { BannerProps } from ".";
 
 interface BannerWithId extends BannerProps {
@@ -6,41 +7,26 @@ interface BannerWithId extends BannerProps {
 
 const removeDelay = 150;
 
-class BannerStore extends EventTarget {
-  #banners: Array<BannerWithId> = [];
-  #setBanners(recipe: (banners: Array<BannerWithId>) => Array<BannerWithId>) {
-    const nextBanners = recipe(this.#banners);
-    if (nextBanners !== this.#banners) {
-      this.#banners = nextBanners;
-      this.dispatchEvent(new Event("change"));
-    }
-  }
-  get current() {
-    return this.#banners[0];
-  }
-  flush() {
-    this.#setBanners(() => []);
+class BannerStore extends ExternalStore<Array<BannerWithId>> {
+  constructor() {
+    super([]);
   }
   add(banner: BannerProps) {
-    this.#setBanners((banners) => [
+    this.setState((banners) => [
       ...banners,
       { ...banner, id: crypto.randomUUID() },
     ]);
   }
   pop() {
-    if (!this.#banners.length) return;
-    this.#setBanners(([first, ...rest]) => [
+    if (!this.state.length) return;
+    this.setState(([first, ...rest]) => [
       // biome-ignore lint/style/noNonNullAssertion: we've checked that there is a banner
       { ...first!, closing: true },
       ...rest,
     ]);
     setTimeout(() => {
-      this.#setBanners(([, ...rest]) => rest);
+      this.setState(([, ...rest]) => rest);
     }, removeDelay);
-  }
-  subscribe(callback: () => void) {
-    this.addEventListener("change", callback);
-    return () => this.removeEventListener("change", callback);
   }
 }
 
