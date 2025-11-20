@@ -45,7 +45,6 @@
     "postcss-load-config": "^6.0.1",
     "srvx": "^0.9.6",
     "storybook": "^10.0.8",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
@@ -57,7 +56,7 @@
     "build": "vite build",
     "build-storybook": "storybook build",
     "dev": "vite dev --port 3000",
-    "serve": "ts-node preview.ts",
+    "serve": "node preview.ts",
     "storybook": "storybook dev -p 6006",
     "test": "vitest run"
   },
