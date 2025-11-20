@@ -5,6 +5,7 @@
     "ignoreUnknown": false,
     "includes": [
       "./src/**/*",
+      "./test/**/*",
       "./vite.config.ts",
       "./postcss.config.ts",
       "./preview.ts",

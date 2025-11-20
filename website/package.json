@@ -38,6 +38,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "@vitest/browser-playwright": "^4.0.12",
     "jiti": "^2.6.1",
     "jsdom": "^27.0.0",
     "postcss-custom-media": "^11.0.6",
@@ -47,7 +48,8 @@
     "storybook": "^10.0.8",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
-    "vitest": "^3.0.5",
+    "vitest": "^4.0.12",
+    "vitest-browser-react": "^2.0.2",
     "web-vitals": "^5.1.0"
   },
   "name": "@schema-benchmarks/website",
@@ -58,7 +60,7 @@
     "dev": "vite dev --port 3000",
     "serve": "node preview.ts",
     "storybook": "storybook dev -p 6006",
-    "test": "vitest run"
+    "test": "vitest"
   },
   "type": "module"
 }

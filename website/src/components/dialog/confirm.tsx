@@ -68,17 +68,15 @@ class ConfirmQueue extends EventTarget {
           this.#setQueue((queue) => {
             const index = queue.findIndex((item) => item.id === id);
             if (index === -1) return queue;
-            return queue.slice(0, index).concat(queue.slice(index + 1));
+            return queue.toSpliced(index, 1);
           }),
         75,
       );
-      return [
-        ...queue.slice(0, index),
-        // biome-ignore lint/style/noNonNullAssertion: we've checked that the item exists
-        { ...queue[index]!, closing: true },
-        ...queue.slice(index + 1),
-      ];
+      return queue.toSpliced(index, 1, { ...queue[index]!, closing: true });
     });
+  }
+  flush() {
+    this.#setQueue(() => []);
   }
   add(props: ConfirmDialogProps) {
     const resolvers = Promise.withResolvers<string | undefined>();
@@ -96,11 +94,17 @@ class ConfirmQueue extends EventTarget {
     return new ConfirmPromise(resolvers.promise);
   }
   resolve(id: string, returnValue?: string) {
-    this.#queue.find((item) => item.id === id)?.resolvers.resolve(returnValue);
+    const entry = this.#queue.find((item) => item.id === id);
+
+    entry?.resolvers.resolve(returnValue);
+
     this.#close(id);
   }
   reject(id: string, reason?: unknown) {
-    this.#queue.find((item) => item.id === id)?.resolvers.reject(reason);
+    const entry = this.#queue.find((item) => item.id === id);
+
+    entry?.resolvers.reject(reason);
+
     this.#close(id);
   }
   subscribe(callback: () => void) {
@@ -109,7 +113,7 @@ class ConfirmQueue extends EventTarget {
   }
 }
 
-const confirmQueue = new ConfirmQueue();
+export const confirmQueue = new ConfirmQueue();
 
 export function confirm(description: ConfirmDialogProps) {
   return confirmQueue.add(description);
