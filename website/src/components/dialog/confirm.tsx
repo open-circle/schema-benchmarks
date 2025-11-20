@@ -134,11 +134,11 @@ export function ConfirmDialog() {
         ref={mergeRefs(dialogRef, current.props.ref)}
         open={!current.closing}
         onConfirm={(close) => {
-          confirmQueue.resolve(current.id, dialogRef.current?.returnValue);
           close();
+          confirmQueue.resolve(current.id, dialogRef.current?.returnValue);
         }}
         onCancel={() => {
-          confirmQueue.reject(current.id);
+          confirmQueue.reject(current.id, dialogRef.current?.returnValue);
         }}
       />
     )

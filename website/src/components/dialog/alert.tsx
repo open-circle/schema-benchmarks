@@ -62,8 +62,14 @@ export function AlertDialog({
               {...cancelProps}
               className={cls("button", "cancel", cancelProps?.className)}
               onClick={() => {
-                onCancel?.(close);
-                if (closeOnCancel) close();
+                const returnValue =
+                  typeof cancelProps?.value === "string"
+                    ? cancelProps.value
+                    : undefined;
+                if (closeOnCancel) close(returnValue);
+                onCancel?.((newReturnValue) =>
+                  close(newReturnValue ?? returnValue),
+                );
               }}
             >
               {cancelLabel}
@@ -72,7 +78,14 @@ export function AlertDialog({
               {...confirmProps}
               className={cls("button", "confirm", confirmProps?.className)}
               onClick={() => {
-                onConfirm(close);
+                onConfirm((returnValue) => {
+                  close(
+                    returnValue ??
+                      (typeof confirmProps?.value === "string"
+                        ? confirmProps.value
+                        : undefined),
+                  );
+                });
               }}
             >
               {confirmLabel}

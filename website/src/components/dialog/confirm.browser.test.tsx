@@ -33,11 +33,14 @@ describe("ConfirmDialog", () => {
       title: "Discard draft?",
       message: "This cannot be undone.",
       confirmLabel: "Discard",
+      confirmProps: {
+        value: "discard",
+      },
     });
 
     await page.getByRole("button", { name: "Discard" }).click();
 
-    await expect(promise).resolves.toBe("");
+    await expect(promise).resolves.toBe("discard");
   });
   it("should reject the promise when cancelled", async () => {
     await page.render(<ConfirmDialog />);
@@ -46,10 +49,13 @@ describe("ConfirmDialog", () => {
       title: "Discard draft?",
       message: "This cannot be undone.",
       confirmLabel: "Discard",
+      cancelProps: {
+        value: "cancel",
+      },
     });
 
     await page.getByRole("button", { name: "Cancel" }).click();
 
-    await expect(promise).rejects.toBeUndefined();
+    await expect(promise).rejects.toBe("cancel");
   });
 });
