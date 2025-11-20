@@ -1,9 +1,22 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
+import { RegisteredRouter, RouterContextProvider } from "@tanstack/react-router";
+import { getRouter } from "../src/router";
 import '../src/styles.css';
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   document.dir = args.dir ?? "ltr";
   return <Story />;
+};
+
+declare module "@storybook/react-vite" {
+  export interface Parameters {
+    router?: RegisteredRouter;
+  }
+}
+
+const routerDecorator: Decorator = (Story, { parameters }) => {
+  const router = parameters.router ??= getRouter();
+  return <RouterContextProvider router={router}><Story /></RouterContextProvider>;
 };
 
 const preview: Preview = {
@@ -33,7 +46,7 @@ const preview: Preview = {
   args: {
     dir: "ltr",
   },
-  decorators: [dirDecorator],
+  decorators: [dirDecorator, routerDecorator],
 };
 
 document.addEventListener("click", (event) => {
