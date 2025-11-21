@@ -1,37 +1,19 @@
 import type {
+  BaseBenchmarkConfig,
   BenchmarksConfig,
   ErrorType,
   LibraryType,
 } from "@schema-benchmarks/schemas";
-import {
-  type Compute,
-  getOrInsertComputed,
-  type MaybeArray,
-  serialize,
-} from "@schema-benchmarks/utils";
+import { getOrInsertComputed, serialize } from "@schema-benchmarks/utils";
 import { Bench } from "tinybench";
 import type { DataType } from "../results/types.ts";
 
 export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library">;
 
-export type BenchmarkConfigEntry = Compute<
-  {
-    [Type in BenchmarkType]: Type extends "parsing"
-      ? {
-          [EType in ErrorType]?: NonNullable<
-            NonNullable<BenchmarksConfig[Type]>[EType]
-          > extends MaybeArray<infer T>
-            ? Compute<Omit<T, "run"> & { errorType: EType }>
-            : never;
-        }[ErrorType]
-      : NonNullable<BenchmarksConfig[Type]> extends MaybeArray<infer T>
-        ? Omit<T, "run">
-        : never;
-  }[BenchmarkType] & {
-    libraryName: string;
-    version: string;
-  }
->;
+export interface BenchmarkConfigEntry extends BaseBenchmarkConfig {
+  libraryName: string;
+  version: string;
+}
 
 export interface BenchInfo {
   type: BenchmarkType;
@@ -41,8 +23,11 @@ export interface BenchInfo {
 }
 
 export const allBenches = new Map<string, Bench>();
-export const benchesInfo = new Map<Bench, BenchInfo>();
-export const benchCases = new Map<Bench, Map<string, BenchmarkConfigEntry>>();
+export const benchesInfo = new WeakMap<Bench, BenchInfo>();
+export const benchCases = new WeakMap<
+  Bench,
+  Map<string, BenchmarkConfigEntry>
+>();
 
 export function getBench(benchInfo: BenchInfo) {
   return getOrInsertComputed(allBenches, serialize(benchInfo), () => {
@@ -59,7 +44,18 @@ export function getBench(benchInfo: BenchInfo) {
     });
     bench.addEventListener("complete", () => {
       console.log("Complete");
-      console.table(bench.table());
+      console.table(
+        bench.table().map((row) => {
+          if (!row) return row;
+          const entry = benchCases
+            .get(bench)
+            ?.get(row?.["Task name"] as string);
+          return {
+            ...row,
+            "Task name": `${entry?.libraryName ?? ""}${entry?.note ? ` (${entry.note})` : ""}`,
+          };
+        }),
+      );
     });
     return bench;
   });

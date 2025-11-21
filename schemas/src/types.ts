@@ -4,7 +4,7 @@ import * as v from "valibot";
 export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
 export type LibraryType = v.InferOutput<typeof libraryTypeSchema>;
 
-interface BaseBenchmarkConfig {
+export interface BaseBenchmarkConfig {
   snippet: string;
   note?: string;
 }
