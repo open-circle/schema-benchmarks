@@ -24,13 +24,17 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       run(data) {
-        schema.validateSync(data, { abortEarly: false });
+        try {
+          schema.validateSync(data, { abortEarly: false });
+        } catch {}
       },
       snippet: ts`schema.validateSync(data, { abortEarly: false })`,
     },
     abortEarly: {
       run(data) {
-        schema.validateSync(data, { abortEarly: true });
+        try {
+          schema.validateSync(data, { abortEarly: true });
+        } catch {}
       },
       snippet: ts`schema.validateSync(data, { abortEarly: true })`,
     },

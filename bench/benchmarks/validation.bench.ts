@@ -79,9 +79,7 @@ for (const [dataType, data] of [
       const typeboxSchema = getTypeboxSchema();
       add(
         () => {
-          try {
-            Value.Check(typeboxSchema, data);
-          } catch {}
+          Value.Check(typeboxSchema, data);
         },
         { snippet: ts`Value.Check(schema, data)` },
       );

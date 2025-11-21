@@ -25,7 +25,9 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       run(data) {
-        Value.Parse(schema, data);
+        try {
+          Value.Parse(schema, data);
+        } catch {}
       },
       snippet: ts`Value.Parse(schema, data)`,
     },
