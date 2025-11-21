@@ -1,5 +1,5 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
 import typia from "typia";
 import type { TypiaSchema } from ".";
 

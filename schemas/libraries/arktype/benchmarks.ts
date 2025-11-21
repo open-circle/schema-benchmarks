@@ -1,5 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
+import { getVersion } from "../../src/version" with { type: "macro" };
 import { getArkTypeSchema } from ".";
 
 const schema = getArkTypeSchema();
@@ -7,6 +8,7 @@ const schema = getArkTypeSchema();
 export default defineBenchmarks({
   libraryName: "arktype",
   libraryType: "runtime",
+  libraryVersion: await getVersion("arktype"),
   initialization: {
     run() {
       getArkTypeSchema();

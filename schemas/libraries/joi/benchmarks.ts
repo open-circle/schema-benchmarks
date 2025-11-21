@@ -1,5 +1,5 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
 import { getJoiSchema } from ".";
 
 const schema = getJoiSchema();

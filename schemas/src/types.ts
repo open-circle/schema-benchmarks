@@ -6,6 +6,7 @@ export type LibraryType = v.InferOutput<typeof libraryTypeSchema>;
 
 interface BaseBenchmarkConfig {
   snippet: string;
+  note?: string;
 }
 
 export interface InitializationBenchmarkConfig extends BaseBenchmarkConfig {
@@ -26,6 +27,7 @@ export interface ParsingBenchmarkConfig extends BaseBenchmarkConfig {
 export interface BenchmarkConfig {
   libraryName: string;
   libraryType: LibraryType;
+  libraryVersion: string;
   initialization: MaybeArray<InitializationBenchmarkConfig>;
   validation?: MaybeArray<ValidationBenchmarkConfig>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig>>>;

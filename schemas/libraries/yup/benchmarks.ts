@@ -1,5 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
+import { getVersion } from "../../src/version" with { type: "macro" };
 import { getYupSchema } from ".";
 
 const schema = getYupSchema();
@@ -7,6 +8,7 @@ const schema = getYupSchema();
 export default defineBenchmarks({
   libraryName: "yup",
   libraryType: "runtime",
+  libraryVersion: await getVersion("yup"),
   initialization: {
     run() {
       getYupSchema();

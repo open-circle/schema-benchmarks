@@ -1,5 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
+import { getVersion } from "../../src/version" with { type: "macro" };
 // import { getTemplateSchema } from ".";
 
 // const schema = getTemplateSchema();
@@ -7,6 +8,7 @@ import ts from "dedent";
 export default defineBenchmarks({
   libraryName: "__libraryName__",
   libraryType: "runtime",
+  libraryVersion: await getVersion("__libraryName__"),
   initialization: {
     run() {
       // getTemplateSchema();

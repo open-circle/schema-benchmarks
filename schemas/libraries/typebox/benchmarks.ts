@@ -1,5 +1,5 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import ts from "dedent";
+import ts from "dedent" with { type: "macro" };
 import Value from "typebox/value";
 import { getTypeboxSchema } from ".";
 
