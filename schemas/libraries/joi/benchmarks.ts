@@ -1,5 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
 import ts from "dedent" with { type: "macro" };
+import { getVersion } from "../../src/version" with { type: "macro" };
 import { getJoiSchema } from ".";
 
 const schema = getJoiSchema();
@@ -7,6 +8,7 @@ const schema = getJoiSchema();
 export default defineBenchmarks({
   libraryName: "joi",
   libraryType: "runtime",
+  libraryVersion: await getVersion("joi"),
   initialization: {
     run() {
       getJoiSchema();
