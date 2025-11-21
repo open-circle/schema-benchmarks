@@ -1,5 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
+  "include": ["./libraries/**/*"],
   "compilerOptions": {
     "moduleResolution": "bundler",
     "lib": ["ESNext", "DOM", "DOM.Iterable"]

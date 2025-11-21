@@ -1,5 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
+  "include": [".storybook/**/*", "./vite.config.ts", "./postcss.config.ts", "./preview.ts", "./src/**/*", "./test/**/*"],
   "compilerOptions": {
     "jsx": "react-jsx",
     "module": "ESNext",

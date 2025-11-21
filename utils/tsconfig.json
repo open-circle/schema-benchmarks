@@ -1,5 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
+  "include": ["./vitest.config.ts", "./src/**/*"],
   "compilerOptions": {
     "moduleResolution": "bundler",
     "lib": ["ESNext", "DOM", "DOM.Iterable"]
