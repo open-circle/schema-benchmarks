@@ -26,7 +26,7 @@ export default defineBenchmarks({
       run(data) {
         schema(data);
       },
-      snippet: ts`schema.parse(data)`,
+      snippet: ts`schema(data)`,
     },
   },
 });
