@@ -27,15 +27,16 @@ const config = defineConfig({
         extends: true,
         test: {
           name: "node",
-          include: ["**/*.node.test.ts(x)"],
+          include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
+          setupFiles: ["./test/common/setup.ts"],
         },
       },
       {
         extends: true,
         test: {
           name: "browser",
-          include: ["**/*.browser.test.ts(x)"],
-          setupFiles: ["./test/browser/setup.ts"],
+          include: ["**/*.browser.test.ts", "**/*.browser.test.tsx"],
+          setupFiles: ["./test/common/setup.ts", "./test/browser/setup.ts"],
           browser: {
             enabled: true,
             provider: playwright(),
