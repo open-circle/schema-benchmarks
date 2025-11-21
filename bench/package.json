@@ -33,7 +33,7 @@
   "name": "@schema-benchmarks/bench",
   "private": true,
   "scripts": {
-    "bench": "ts-node ./src/scripts/bench.ts",
+    "bench": "echo 'Not implemented'",
     "download": "ts-node ./src/scripts/download.ts",
     "prepare": "ts-patch install"
   },

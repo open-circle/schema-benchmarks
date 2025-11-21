@@ -1,6 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
-import { getVersion } from "../../src/version" with { type: "macro" };
 import { getAjv, getAjvSchema } from ".";
 
 const schema = getAjvSchema();
@@ -8,9 +8,11 @@ const ajv = getAjv();
 const validate = ajv.compile(schema);
 
 export default defineBenchmarks({
-  libraryName: "ajv",
-  libraryType: "runtime",
-  libraryVersion: await getVersion("ajv"),
+  library: {
+    name: "ajv",
+    type: "runtime",
+    version: await getVersion("ajv"),
+  },
   initialization: {
     run() {
       ajv.compile(getAjvSchema());

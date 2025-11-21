@@ -1,6 +1,6 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
-import { getVersion } from "../../src/version" with { type: "macro" };
 import { getZodSchema } from ".";
 import { getZodMiniSchema } from "./mini";
 
@@ -8,9 +8,11 @@ const schema = getZodSchema();
 const miniSchema = getZodMiniSchema();
 
 export default defineBenchmarks({
-  libraryName: "zod",
-  libraryType: "runtime",
-  libraryVersion: await getVersion("zod"),
+  library: {
+    name: "zod",
+    type: "runtime",
+    version: await getVersion("zod"),
+  },
   initialization: [
     {
       run() {

@@ -1,15 +1,17 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import * as v from "valibot";
-import { getVersion } from "../../src/version" with { type: "macro" };
 import { getValibotSchema } from ".";
 
 const schema = getValibotSchema();
 
 export default defineBenchmarks({
-  libraryName: "valibot",
-  libraryType: "runtime",
-  libraryVersion: await getVersion("valibot"),
+  library: {
+    name: "valibot",
+    type: "runtime",
+    version: await getVersion("valibot"),
+  },
   initialization: {
     run() {
       getValibotSchema();

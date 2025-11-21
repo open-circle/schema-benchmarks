@@ -1,6 +1,7 @@
 export type * from "./libs";
 export * from "./react";
 export type * from "./types";
+export * from "./version";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);

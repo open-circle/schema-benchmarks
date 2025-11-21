@@ -1,6 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
+import { getVersion } from "@schema-benchmarks/utils";
 import { rolldown } from "rolldown";
 import {
   type DownloadResult,
@@ -8,7 +9,6 @@ import {
   type MinifyType,
   minifyTypeSchema,
 } from "../results/types";
-import { getVersion } from "../utils/version";
 
 interface FileDescription {
   path: string;

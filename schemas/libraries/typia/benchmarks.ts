@@ -1,16 +1,18 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";
-import { getVersion } from "../../src/version" with { type: "macro" };
 import type { TypiaSchema } from ".";
 
 const validate = typia.createValidate<TypiaSchema>();
 const is = typia.createIs<TypiaSchema>();
 
 export default defineBenchmarks({
-  libraryName: "typia",
-  libraryType: "precompiled",
-  libraryVersion: await getVersion("typia"),
+  library: {
+    name: "typia",
+    type: "precompiled",
+    version: await getVersion("typia"),
+  },
   initialization: [
     {
       run() {

@@ -1,15 +1,17 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import Value from "typebox/value";
-import { getVersion } from "../../src/version" with { type: "macro" };
 import { getTypeboxSchema } from ".";
 
 const schema = getTypeboxSchema();
 
 export default defineBenchmarks({
-  libraryName: "typebox",
-  libraryType: "runtime",
-  libraryVersion: await getVersion("typebox"),
+  library: {
+    name: "typebox",
+    type: "runtime",
+    version: await getVersion("typebox"),
+  },
   initialization: {
     run() {
       getTypeboxSchema();

@@ -1,7 +1,7 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import * as Schema from "effect/Schema";
-import { getVersion } from "../../src/version" with { type: "macro" };
 import { getEffectSchema } from ".";
 
 const schema = getEffectSchema();
@@ -10,9 +10,11 @@ const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
 const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
 
 export default defineBenchmarks({
-  libraryName: "effect",
-  libraryType: "runtime",
-  libraryVersion: await getVersion("effect"),
+  library: {
+    name: "effect",
+    type: "runtime",
+    version: await getVersion("effect"),
+  },
   initialization: [
     {
       run() {

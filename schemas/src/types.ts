@@ -24,10 +24,14 @@ export interface ParsingBenchmarkConfig extends BaseBenchmarkConfig {
   run: (data: unknown) => unknown | Promise<unknown>;
 }
 
+export interface LibraryInfo {
+  name: string;
+  type: LibraryType;
+  version: string;
+}
+
 export interface BenchmarkConfig {
-  libraryName: string;
-  libraryType: LibraryType;
-  libraryVersion: string;
+  library: LibraryInfo;
   initialization: MaybeArray<InitializationBenchmarkConfig>;
   validation?: MaybeArray<ValidationBenchmarkConfig>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig>>>;
