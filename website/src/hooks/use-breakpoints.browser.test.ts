@@ -7,12 +7,10 @@ import { useBreakpoints } from "./use-breakpoints";
 describe("useBreakpoints", () => {
   it("should match phone breakpoint", async () => {
     await page.viewport(500, 1000);
-    const { result, act } = await renderHook(() => useBreakpoints(["phone"]));
+    const { result } = await renderHook(() => useBreakpoints(["phone"]));
     expect(result.current).toBe(true);
 
-    await act(async () => {
-      await page.viewport(600, 1000);
-    });
+    await page.viewport(600, 1000);
     await expect.ref(result).toBe(false);
   });
   it("should match tabletSmall breakpoint", async () => {
