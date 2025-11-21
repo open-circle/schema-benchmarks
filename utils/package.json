@@ -4,8 +4,10 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
+    "@vitest/browser-playwright": "^4.0.12",
     "react": "^19.2.0",
-    "valibot": "^1.1.0"
+    "valibot": "^1.1.0",
+    "vitest": "^4.0.12"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -15,6 +17,9 @@
   "name": "@schema-benchmarks/utils",
   "peerDependencies": {
     "valibot": "*"
+  },
+  "scripts": {
+    "test": "vitest"
   },
   "types": "./src/index.ts"
 }
