@@ -1,5 +1,6 @@
 import UnpluginTypia from "@ryoppippi/unplugin-typia/vite";
 import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
@@ -8,5 +9,5 @@ export default defineConfig({
       formats: ["es"],
     },
   },
-  plugins: [UnpluginTypia({ log: false })],
+  plugins: [UnpluginTypia({ log: false }), dts({ rollupTypes: true })],
 });

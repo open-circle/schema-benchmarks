@@ -18,11 +18,15 @@
   },
   "devDependencies": {
     "@ryoppippi/unplugin-typia": "^2.6.5",
-    "vite": "^7.2.2"
+    "vite": "^7.2.2",
+    "vite-plugin-dts": "^4.5.4"
   },
   "exports": {
     ".": "./index.ts",
-    "./libraries/*": "./libraries/*"
+    "./libraries": {
+      "module": "./dist/schemas.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "main": "./index.ts",
   "name": "@schema-benchmarks/schemas",
@@ -30,6 +34,6 @@
   "scripts": {
     "build": "vite build"
   },
-  "types": "./index.ts",
+  "type": "module",
   "version": "1.0.0"
 }
