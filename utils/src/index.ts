@@ -191,3 +191,28 @@ export function hasAtLeast<T, N extends number>(
 ): array is TupleOfAtLeast<T, N> {
   return array.length >= length;
 }
+export default function isPlainObject(obj: unknown): obj is object {
+  if (typeof obj !== "object" || obj === null) return false;
+
+  let proto = obj;
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return (
+    Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null
+  );
+}
+
+export function serialize(value: unknown): string {
+  return JSON.stringify(value, (_key, value) => {
+    if (typeof value === "bigint") return { $bigint: value.toString() };
+    // sort the object keys before serialization, so { a: 1, b: 2 } === { b: 2, a: 1 }
+    if (isPlainObject(value)) {
+      return Object.fromEntries(
+        Object.entries(value).sort(([a], [b]) => a.localeCompare(b)),
+      );
+    }
+    return value;
+  });
+}
