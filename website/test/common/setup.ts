@@ -4,7 +4,7 @@ import { toBePressed } from "./matchers/to-be-pressed";
 expect.extend({ toBePressed });
 
 expect.ref = (refObject, pollOptions) =>
-  expect.poll(() => refObject.current, pollOptions) as never;
+  expect.poll(() => refObject.current, pollOptions);
 
 declare module "vitest" {
   interface ExpectStatic {
@@ -16,6 +16,6 @@ declare module "vitest" {
     ref<T>(
       refObject: { current: T },
       pollOptions?: ExpectPollOptions,
-    ): Promisify<Assertion<Awaited<T>>>;
+    ): ReturnType<typeof expect.poll<T>>;
   }
 }
