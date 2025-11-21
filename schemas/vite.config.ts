@@ -9,6 +9,7 @@ export default defineConfig({
       entry: "libraries/index.ts",
       formats: ["es"],
     },
+    sourcemap: true,
   },
   plugins: [
     UnpluginTypia({ log: false }),
