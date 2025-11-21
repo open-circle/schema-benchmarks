@@ -1,4 +1,7 @@
-import { type Assertion, type ExpectPollOptions, expect } from "vitest";
+import { type ExpectPollOptions, expect } from "vitest";
+import { toBePressed } from "./matchers/to-be-pressed";
+
+expect.extend({ toBePressed });
 
 expect.ref = (refObject, pollOptions) =>
   expect.poll(() => refObject.current, pollOptions) as never;

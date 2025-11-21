@@ -1,0 +1,28 @@
+import { it } from "@test/browser/fixtures";
+import { describe, expect } from "vitest";
+import { page } from "vitest/browser";
+import { MdSymbol } from "../symbol";
+import { ToggleButton } from "./toggle";
+
+describe("ToggleButton", () => {
+  it("should be active", async () => {
+    await page.render(
+      <ToggleButton active title="Edit">
+        <MdSymbol>edit</MdSymbol>
+      </ToggleButton>,
+    );
+    await expect
+      .element(page.getByRole("button", { name: "Edit" }))
+      .toBePressed();
+  });
+  it("should not be active", async () => {
+    await page.render(
+      <ToggleButton title="Edit">
+        <MdSymbol>edit</MdSymbol>
+      </ToggleButton>,
+    );
+    await expect
+      .element(page.getByRole("button", { name: "Edit" }))
+      .not.toBePressed();
+  });
+});

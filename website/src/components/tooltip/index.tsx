@@ -29,7 +29,7 @@ const cls = bem("tooltip");
 type TooltipableComponent = ComponentType<
   { ref: RefCallback<HTMLElement> } & Pick<
     HTMLAttributes<HTMLElement>,
-    "id" | "popoverTarget"
+    "id" | "popoverTarget" | "aria-labelledby"
   >
 >;
 
@@ -133,10 +133,13 @@ export function withTooltip<TComp extends TooltipableComponent>(
           // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}
           ref={mergeRefs(ref, refs.setReference, setTargetRef)}
-          popoverTarget={resolvedId}
+          {...(title
+            ? { "aria-labelledby": resolvedId, popoverTarget: resolvedId }
+            : {})}
         />
         {title && (
           <div
+            // TODO: make this role="tooltip" compliant
             ref={mergeRefs(popoverRef, refs.setFloating)}
             popover="hint"
             id={resolvedId}
