@@ -41,6 +41,7 @@ describe("useBreakpoints", () => {
     await page.viewport(1440, 1000);
     const { result } = await renderHook(() => useBreakpoints(["desktop"]));
     expect(result.current).toBe(true);
+
     await page.viewport(1439, 1000);
     await expect.ref(result).toBe(false);
   });
@@ -50,8 +51,10 @@ describe("useBreakpoints", () => {
       useBreakpoints(["tabletSmall", "tabletLarge"]),
     );
     expect(result.current).toBe(false);
+
     await page.viewport(905, 1000);
     await expect.ref(result).toBe(true);
+
     await page.viewport(600, 1000);
     await expect.ref(result).toBe(true);
   });

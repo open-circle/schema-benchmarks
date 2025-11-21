@@ -10,10 +10,12 @@
   margin: 0;
   border: none;
   background-color: transparent;
-  transition: display var(--tooltip-exit-time) allow-discrete,
+  transition:
+    display var(--tooltip-exit-time) allow-discrete,
     overlay var(--tooltip-exit-time) allow-discrete;
   &[popover]:popover-open {
-    transition: display var(--tooltip-enter-time) allow-discrete,
+    transition:
+      display var(--tooltip-enter-time) allow-discrete,
       overlay var(--tooltip-enter-time) allow-discrete;
   }
   .tooltip__content {
