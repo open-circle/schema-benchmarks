@@ -3,6 +3,9 @@
   "extends": "//",
   "files": {
     "ignoreUnknown": false,
-    "includes": ["./**/*.ts"]
+    "includes": [
+      "./**/*.ts",
+      "!**/__template__/**/*"
+    ]
   }
 }

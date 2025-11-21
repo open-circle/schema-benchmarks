@@ -26,3 +26,5 @@ export type DistributiveOmit<
   T,
   K extends LooseAutocomplete<keyof T, NonReducible.PropertyKey>,
 > = T extends T ? Omit<T, K> : never;
+
+export type MaybeArray<T> = T | Array<T>;
