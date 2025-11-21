@@ -1,3 +1,4 @@
+import { errorData, successData } from "@schema-benchmarks/schemas";
 import {
   getAjv,
   getAjvSchema,
@@ -13,7 +14,6 @@ import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import { errorData, successData } from "../src/data";
 import type { DataType } from "../src/results/types";
 import { makeBenchFactory } from "../src/utils/bench-factory";
 

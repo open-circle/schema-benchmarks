@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
-  "include": ["./src/**/*", "./benchmarks/**/*", "./**/*.d.json.ts"],
+  "include": ["./src/**/*", "./benchmarks/**/*", "./**/*.d.json.ts", "../schemas/index.ts"],
   "compilerOptions": {
     "module": "nodenext",
     "allowImportingTsExtensions": true,

@@ -1,3 +1,4 @@
+import { errorData, successData } from "@schema-benchmarks/schemas";
 import { getArkTypeSchema } from "@schema-benchmarks/schemas/libraries/arktype/index.ts";
 import { getEffectSchema } from "@schema-benchmarks/schemas/libraries/effect/index.ts";
 import { getJoiSchema } from "@schema-benchmarks/schemas/libraries/joi/index.ts";
@@ -12,7 +13,6 @@ import * as Schema from "effect/Schema";
 import Value from "typebox/value";
 import typia from "typia";
 import * as v from "valibot";
-import { errorData, successData } from "../src/data";
 import type { DataType, ErrorType } from "../src/results/types";
 import { makeBenchFactory } from "../src/utils/bench-factory";
 

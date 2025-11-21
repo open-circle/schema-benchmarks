@@ -1,5 +1,5 @@
-import type { ProductData } from "@schema-benchmarks/bench";
 import type { Satisfies } from "@schema-benchmarks/utils";
+import type { ProductData } from "../../";
 
 type ImageSchema = {
   id: number;

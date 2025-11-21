@@ -84,9 +84,6 @@ importers:
 
   schemas:
     dependencies:
-      '@schema-benchmarks/bench':
-        specifier: workspace:*
-        version: link:../bench
       '@schema-benchmarks/utils':
         specifier: workspace:*
         version: link:../utils

@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@schema-benchmarks/bench": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
@@ -18,9 +17,12 @@
     "zod": "^4.1.12"
   },
   "exports": {
+    ".": "./index.ts",
     "./libraries/*": "./libraries/*"
   },
+  "main": "./index.ts",
   "name": "@schema-benchmarks/schemas",
   "private": true,
+  "types": "./index.ts",
   "version": "1.0.0"
 }

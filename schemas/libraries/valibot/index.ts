@@ -1,5 +1,5 @@
-import type { ProductData } from "@schema-benchmarks/bench";
 import * as v from "valibot";
+import type { ProductData } from "../../";
 
 export function getValibotSchema() {
   const imageSchema = v.object({

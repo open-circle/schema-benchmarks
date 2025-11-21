@@ -1,5 +1,5 @@
-import type { ProductData } from "@schema-benchmarks/bench";
 import * as yup from "yup";
+import type { ProductData } from "../../";
 
 const imageSchema = yup.object({
   id: yup.number().required(),

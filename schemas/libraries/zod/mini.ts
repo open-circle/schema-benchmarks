@@ -1,5 +1,5 @@
-import type { ProductData } from "@schema-benchmarks/bench";
 import * as z from "zod/mini";
+import type { ProductData } from "../../";
 
 export function getZodMiniSchema() {
   const imageSchema = z.object({
