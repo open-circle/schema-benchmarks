@@ -21,5 +21,6 @@
   "scripts": {
     "test": "vitest"
   },
+  "type": "module",
   "types": "./src/index.ts"
 }

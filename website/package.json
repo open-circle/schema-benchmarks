@@ -4,6 +4,7 @@
     "@msw/data": "^1.1.2",
     "@observablehq/plot": "^0.6.17",
     "@schema-benchmarks/bench": "workspace:*",
+    "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-pacer": "^0.17.2",

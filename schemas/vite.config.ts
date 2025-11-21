@@ -8,8 +8,13 @@ export default defineConfig({
     lib: {
       entry: "libraries/index.ts",
       formats: ["es"],
+      fileName: "index",
     },
+    target: ["node24", "esnext"],
     sourcemap: true,
+  },
+  define: {
+    self: "globalThis",
   },
   plugins: [
     UnpluginTypia({ log: false }),

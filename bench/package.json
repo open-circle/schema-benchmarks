@@ -3,25 +3,12 @@
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "ajv-keywords": "^5.1.0",
-    "arktype": "^2.1.25",
-    "dedent": "^1.7.0",
-    "effect": "^3.19.3",
-    "joi": "^18.0.1",
-    "rolldown": "1.0.0-beta.50",
+    "rolldown": "1.0.0-beta.51",
     "tinybench": "^5.1.0",
-    "typebox": "^1.0.51",
-    "typia": "^10.0.2",
-    "valibot": "^1.1.0",
-    "yup": "^1.7.1",
-    "zod": "^4.1.12"
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
-    "ts-node": "^10.9.2",
-    "ts-patch": "^3.3.0",
     "typescript": "~5.9.3"
   },
   "exports": {
@@ -33,9 +20,9 @@
   "name": "@schema-benchmarks/bench",
   "private": true,
   "scripts": {
-    "bench": "echo 'Not implemented'",
-    "download": "ts-node ./src/scripts/download.ts",
-    "prepare": "ts-patch install"
+    "bench": "node ./src/scripts/bench.ts",
+    "download": "node ./src/scripts/download.ts"
   },
+  "type": "module",
   "types": "./src/index.ts"
 }

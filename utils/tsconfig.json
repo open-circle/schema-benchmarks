@@ -2,7 +2,8 @@
   "extends": "../tsconfig.base.json",
   "include": ["./vitest.config.ts", "./src/**/*"],
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"]
   }
 }

@@ -1,7 +1,7 @@
-export type * from "./libs";
-export * from "./react";
-export type * from "./types";
-export * from "./version";
+export type * from "./libs.ts";
+export * from "./react.ts";
+export type * from "./types.ts";
+export * from "./version.ts";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -53,15 +53,19 @@ export function partition<T>(
 
 export function getOrInsert<K extends object, V>(
   map: WeakMap<K, V>,
-  key: K,
-  value: V,
-): V;
-export function getOrInsert<K, V>(map: Map<K, V>, key: K, value: V): V;
+  key: NoInfer<K>,
+  value: NoInfer<V>,
+): NoInfer<V>;
+export function getOrInsert<K, V>(
+  map: Map<K, V>,
+  key: NoInfer<K>,
+  value: NoInfer<V>,
+): NoInfer<V>;
 export function getOrInsert<K extends object, V>(
   map: Map<K, V> | WeakMap<K, V>,
-  key: K,
-  value: V,
-): V {
+  key: NoInfer<K>,
+  value: NoInfer<V>,
+): NoInfer<V> {
   if (map.has(key)) return map.get(key) as V;
 
   return map.set(key, value).get(key) as V;
@@ -69,19 +73,19 @@ export function getOrInsert<K extends object, V>(
 
 export function getOrInsertComputed<K extends object, V>(
   map: WeakMap<K, V>,
-  key: K,
-  compute: (key: K) => V,
-): V;
+  key: NoInfer<K>,
+  compute: (key: K) => NoInfer<V>,
+): NoInfer<V>;
 export function getOrInsertComputed<K, V>(
   map: Map<K, V>,
-  key: K,
-  compute: (key: K) => V,
-): V;
+  key: NoInfer<K>,
+  compute: (key: K) => NoInfer<V>,
+): NoInfer<V>;
 export function getOrInsertComputed<K extends object, V>(
   map: Map<K, V> | WeakMap<K, V>,
-  key: K,
-  compute: (key: K) => V,
-): V {
+  key: NoInfer<K>,
+  compute: (key: K) => NoInfer<V>,
+): NoInfer<V> {
   if (map.has(key)) return map.get(key) as V;
 
   return map.set(key, compute(key)).get(key) as V;
@@ -217,3 +221,8 @@ export function serialize(value: unknown): string {
     return value;
   });
 }
+
+export const ensureArray = <T>(value: T) =>
+  (Array.isArray(value) ? value : [value]) as T extends ReadonlyArray<unknown>
+    ? T
+    : Array<T>;

@@ -25,10 +25,7 @@
   },
   "exports": {
     ".": "./index.ts",
-    "./libraries": {
-      "module": "./dist/schemas.js",
-      "types": "./dist/index.d.ts"
-    }
+    "./libraries": "./dist/index.js"
   },
   "main": "./index.ts",
   "name": "@schema-benchmarks/schemas",

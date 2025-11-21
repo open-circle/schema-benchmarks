@@ -30,14 +30,19 @@ export interface LibraryInfo {
   version: string;
 }
 
-export interface BenchmarkConfig {
+export type BenchmarkConfig =
+  | InitializationBenchmarkConfig
+  | ValidationBenchmarkConfig
+  | ParsingBenchmarkConfig;
+
+export interface BenchmarksConfig {
   library: LibraryInfo;
   initialization: MaybeArray<InitializationBenchmarkConfig>;
   validation?: MaybeArray<ValidationBenchmarkConfig>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig>>>;
 }
 
-export function defineBenchmarks<const TConfig extends BenchmarkConfig>(
+export function defineBenchmarks<const TConfig extends BenchmarksConfig>(
   config: TConfig,
 ) {
   return config;

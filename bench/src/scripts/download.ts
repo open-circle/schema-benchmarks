@@ -8,7 +8,7 @@ import {
   type DownloadResults,
   type MinifyType,
   minifyTypeSchema,
-} from "../results/types";
+} from "../results/types.ts";
 
 interface FileDescription {
   path: string;

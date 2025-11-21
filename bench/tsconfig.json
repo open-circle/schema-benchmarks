@@ -3,11 +3,7 @@
   "include": ["./src/**/*", "./**/*.d.json.ts"],
   "compilerOptions": {
     "module": "nodenext",
+    "moduleResolution": "nodenext",
     "allowImportingTsExtensions": true,
-    "plugins": [
-      {
-        "transform": "typia/lib/transform"
-      }
-    ]
   }
 }

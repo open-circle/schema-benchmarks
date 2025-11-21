@@ -10,7 +10,7 @@ export function getAjv(options?: Options) {
   return ajv;
 }
 
-export function getAjvSchema() {
+export function getAjvSchema(): JSONSchemaType<ProductData> {
   const dateSchema: JSONSchemaType<Date> = {
     type: "object",
     instanceof: "Date",
@@ -75,5 +75,5 @@ export function getAjvSchema() {
       "images",
       "ratings",
     ],
-  } satisfies JSONSchemaType<ProductData>;
+  };
 }

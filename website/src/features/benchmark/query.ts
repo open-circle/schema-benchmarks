@@ -3,12 +3,14 @@ import {
   benchResultsSchema,
   type DataType,
   dataTypeSchema,
+} from "@schema-benchmarks/bench";
+import benchResults from "@schema-benchmarks/bench/bench.json";
+import {
   type ErrorType,
   errorTypeSchema,
   type LibraryType,
   libraryTypeSchema,
-} from "@schema-benchmarks/bench";
-import benchResults from "@schema-benchmarks/bench/bench.json";
+} from "@schema-benchmarks/schemas";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";

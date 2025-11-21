@@ -1,13 +1,8 @@
+import { errorTypeSchema, libraryTypeSchema } from "@schema-benchmarks/schemas";
 import * as v from "valibot";
-
-export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
-export type LibraryType = v.InferOutput<typeof libraryTypeSchema>;
 
 export const dataTypeSchema = v.picklist(["valid", "invalid"]);
 export type DataType = v.InferOutput<typeof dataTypeSchema>;
-
-export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
-export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
 export const benchResultSchema = v.object({
   id: v.string(),
