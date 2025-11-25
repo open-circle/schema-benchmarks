@@ -1,5 +1,7 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import { getVersion } from "@schema-benchmarks/utils" with { type: "macro" };
+import { getVersion } from "@schema-benchmarks/utils/node" with {
+  type: "macro",
+};
 import ts from "dedent" with { type: "macro" };
 import * as Schema from "effect/Schema";
 import { getEffectSchema } from ".";

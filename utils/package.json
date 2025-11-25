@@ -11,6 +11,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./node": "./src/node.ts",
     "./valibot": "./src/valibot.ts"
   },
   "main": "./src/index.ts",
