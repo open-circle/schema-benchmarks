@@ -41,8 +41,6 @@
     );
     --icon-fill: 1;
   }
-  .banner__message {
-  }
   .banner__actions {
     display: flex;
     align-items: center;
