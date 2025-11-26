@@ -21,7 +21,8 @@
   "private": true,
   "scripts": {
     "bench": "node ./src/scripts/bench.ts",
-    "download": "node ./src/scripts/download.ts"
+    "download": "node ./src/scripts/download.ts",
+    "typecheck": "tsc"
   },
   "type": "module",
   "types": "./src/index.ts"

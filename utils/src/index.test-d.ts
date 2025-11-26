@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from "vitest";
-import { hasAtLeast, hasLength, partition, promiseAllKeyed } from ".";
+import { hasAtLeast, hasLength, partition, promiseAllKeyed } from "./index.ts";
 
 describe("partition", () => {
   it("should narrow based on type predicate", () => {

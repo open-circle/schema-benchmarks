@@ -31,7 +31,8 @@
   "name": "@schema-benchmarks/schemas",
   "private": true,
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "typecheck": "tsc"
   },
   "type": "module",
   "version": "1.0.0"

@@ -20,7 +20,8 @@
     "valibot": "*"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc"
   },
   "type": "module",
   "types": "./src/index.ts"

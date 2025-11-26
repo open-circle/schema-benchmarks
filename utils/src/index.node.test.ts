@@ -6,7 +6,7 @@ import {
   serialize,
   setAbortableInterval,
   setAbortableTimeout,
-} from ".";
+} from "./index.ts";
 
 describe("formatBytes", () => {
   it("should format bytes", () => {

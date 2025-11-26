@@ -1,6 +1,6 @@
 import * as v from "valibot";
 import { describe, expect, it } from "vitest";
-import * as vUtils from "./valibot";
+import * as vUtils from "./valibot.ts";
 
 describe("coerceNumber", () => {
   it("should pass through a number", () => {

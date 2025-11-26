@@ -7,6 +7,7 @@
     "lint": "biome lint",
     "check": "biome check",
     "test": "pnpm run --filter '*' test",
+    "typecheck": "pnpm run --filter '*' typecheck",
     "schemas:build": "pnpm run --filter schemas build",
     "website:dev": "pnpm run --filter website dev",
     "website:build": "pnpm run --filter website build",
