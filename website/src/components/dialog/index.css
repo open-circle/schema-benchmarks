@@ -105,6 +105,7 @@
 }
 
 .alert-dialog {
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--desktop) {
     min-width: 35rem;
     min-height: 11.375rem;

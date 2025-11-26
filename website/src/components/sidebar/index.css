@@ -167,6 +167,7 @@
     }
   }
 
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) or (--tablet-small) or (--tablet-large) {
     position: fixed;
     top: 0;
@@ -220,6 +221,7 @@
       display: none;
     }
   }
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) {
     width: calc(100vw - 4rem);
   }
@@ -227,6 +229,7 @@
 
 .sidebar-backdrop {
   display: none;
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) or (--tablet-small) or (--tablet-large) {
     display: block;
     position: fixed;

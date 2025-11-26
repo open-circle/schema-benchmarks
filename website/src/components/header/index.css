@@ -39,6 +39,7 @@
       margin-left: 0;
       margin-right: -0.5rem;
     }
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--laptop) or (--desktop) {
       &.page-header__toggle--open {
         margin-left: -3rem;

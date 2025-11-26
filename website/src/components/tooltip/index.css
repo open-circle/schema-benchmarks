@@ -26,6 +26,7 @@
     padding: 0 1rem;
     display: flex;
     align-items: center;
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--desktop) {
       height: 1.5rem;
       padding: 0 0.5rem;

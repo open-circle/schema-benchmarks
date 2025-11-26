@@ -1,6 +1,7 @@
 :root {
   --banner-min-height: 3.25rem;
   --banner-margin: 1rem;
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--desktop) {
     --banner-margin: 1.5rem;
   }
@@ -52,6 +53,7 @@
       margin-left: -0.5rem;
       margin-right: auto;
     }
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--desktop) {
       margin-right: -1rem;
       &:dir(rtl) {
