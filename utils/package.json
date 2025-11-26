@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "react-bem-helper": "^1.4.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
+    "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "@vitest/browser-playwright": "^4.0.12",
     "react": "^19.2.0",
     "valibot": "^1.1.0",
