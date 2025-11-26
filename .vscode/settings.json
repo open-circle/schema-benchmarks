@@ -34,5 +34,6 @@
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit"
-  }
+  },
+  "typescript.experimental.useTsgo": true
 }

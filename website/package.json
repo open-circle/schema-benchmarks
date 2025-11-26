@@ -15,6 +15,7 @@
     "@tanstack/react-router-ssr-query": "^1.134.18",
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
+    "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "dedent": "^1.7.0",
@@ -64,7 +65,7 @@
     "serve": "node preview.ts",
     "storybook": "storybook dev -p 6006",
     "test": "vitest",
-    "typecheck": "tsc"
+    "typecheck": "tsgo"
   },
   "type": "module"
 }

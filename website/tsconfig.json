@@ -14,7 +14,6 @@
     "noEmit": true,
     "allowArbitraryExtensions": true,
     
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@test/*": ["./test/*"]

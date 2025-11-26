@@ -3,6 +3,7 @@
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
+    "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "rolldown": "1.0.0-beta.51",
     "tinybench": "^5.1.0",
     "valibot": "^1.1.0"
@@ -22,7 +23,7 @@
   "scripts": {
     "bench": "node ./src/scripts/bench.ts",
     "download": "node ./src/scripts/download.ts",
-    "typecheck": "tsc"
+    "typecheck": "tsgo"
   },
   "type": "module",
   "types": "./src/index.ts"
