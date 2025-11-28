@@ -55,22 +55,24 @@ function BaseSidebar({
   children,
   open,
   setOpen,
+  isModal,
 }: {
   children?: ReactNode;
   open: boolean;
   setOpen: (newValue: boolean) => void;
+  isModal?: boolean;
 }) {
-  useEffect(
-    () =>
-      radEventListeners(document, {
+  useEffect(() => {
+    if (isModal) {
+      return radEventListeners(document, {
         keydown(event) {
           if (event.key === "Escape") {
             setOpen(false);
           }
         },
-      }),
-    [setOpen],
-  );
+      });
+    }
+  }, [setOpen, isModal]);
 
   return (
     <>
@@ -113,7 +115,7 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
         </BaseSidebar>
       }
     >
-      <BaseSidebar open={open} setOpen={setOpen}>
+      <BaseSidebar open={open} setOpen={setOpen} isModal={isModal}>
         {children}
       </BaseSidebar>
     </ClientOnly>
