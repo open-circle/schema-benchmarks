@@ -115,6 +115,12 @@ export function withTooltip<TComp extends TooltipableComponent>(
               currentId ? 0 : delay,
             );
           },
+          focus(event) {
+            event.preventDefault();
+            clearTimeout(timeout);
+            popoverRef.current?.showPopover();
+            currentId = resolvedId;
+          },
           mouseleave() {
             clearTimeout(timeout);
             popoverRef.current?.hidePopover();
@@ -123,6 +129,13 @@ export function withTooltip<TComp extends TooltipableComponent>(
                 currentId = "";
               }
             }, 1000);
+          },
+          blur() {
+            clearTimeout(timeout);
+            popoverRef.current?.hidePopover();
+            if (currentId === resolvedId) {
+              currentId = "";
+            }
           },
         });
         return () => {
