@@ -31,6 +31,7 @@ export function Spinner({
   return (
     <MDSpinner
       {...props}
+      role="progressbar"
       className={cls({ extra: className })}
       color1={makeVar(color1)}
       color2={makeVar(color2)}
