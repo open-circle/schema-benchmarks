@@ -20,7 +20,9 @@ const versionCache = new Map<string, string>();
 export async function getVersion(libraryName: string) {
   // biome-ignore lint/style/noNonNullAssertion: .has means it's there
   if (versionCache.has(libraryName)) return versionCache.get(libraryName)!;
-  const { stdout, stderr } = await exec(`pnpm list ${libraryName} --json`);
+  const { stdout, stderr } = await exec(
+    `pnpm --filter schemas list ${libraryName} --json`,
+  );
   if (stderr) throw new Error(stderr);
   const json = JSON.parse(stdout);
   const data = v.parse(pnpmListSchema, json);
