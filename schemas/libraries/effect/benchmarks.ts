@@ -30,6 +30,7 @@ export default defineBenchmarks({
       run() {
         Schema.decodeUnknownEither(getEffectSchema());
       },
+      note: "decodeUnknownEither",
       snippet: ts`
         Schema.decodeUnknownEither(
           Schema.struct(...)

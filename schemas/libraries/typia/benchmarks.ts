@@ -24,12 +24,14 @@ export default defineBenchmarks({
       run() {
         typia.createValidate<TypiaSchema>();
       },
+      note: "createValidate",
       snippet: ts`typia.createValidate<TypiaSchema>()`,
     },
     {
       run() {
         typia.createIs<TypiaSchema>();
       },
+      note: "createIs",
       snippet: ts`typia.createIs<TypiaSchema>()`,
     },
   ],
@@ -38,12 +40,14 @@ export default defineBenchmarks({
       run(data) {
         typia.is<TypiaSchema>(data);
       },
+      note: "is",
       snippet: ts`typia.is<TypiaSchema>(data)`,
     },
     {
       run(data, { is }) {
         is(data);
       },
+      note: "createIs",
       snippet: ts`
         // const is = typia.createIs<TypiaSchema>();
         is(data);
@@ -56,12 +60,14 @@ export default defineBenchmarks({
         run(data) {
           typia.validate<TypiaSchema>(data);
         },
+        note: "validate",
         snippet: ts`typia.validate<TypiaSchema>(data)`,
       },
       {
         run(data, { validate }) {
           validate(data);
         },
+        note: "createValidate",
         snippet: ts`
           // const validate = typia.createValidate<TypiaSchema>();
           validate(data);
