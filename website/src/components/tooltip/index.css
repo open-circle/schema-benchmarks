@@ -9,6 +9,7 @@
 
 .tooltip {
   @extend .typo-caption;
+  overflow: visible;
   margin: 0;
   padding: 0.25rem;
   border: none;
@@ -61,6 +62,7 @@
     }
   }
   .tooltip__content {
+    overflow: hidden;
     background-color: var(--tooltip-background);
     color: var(--tooltip-foreground);
     border-radius: var(--shape-small);
