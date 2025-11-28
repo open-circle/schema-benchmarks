@@ -10,6 +10,7 @@
 .tooltip {
   @extend .typo-caption;
   margin: 0;
+  padding: 0.25rem;
   border: none;
   background-color: transparent;
   transition: display var(--tooltip-exit-time) allow-discrete,

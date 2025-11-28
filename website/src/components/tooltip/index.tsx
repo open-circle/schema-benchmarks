@@ -1,7 +1,6 @@
 import {
   autoUpdate,
   flip,
-  offset,
   useFloating,
   useTransitionStyles,
 } from "@floating-ui/react";
@@ -71,7 +70,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
-  { delay = 1000, offset: offsetOpt = 4 }: TooltipOpts = {},
+  { delay = 1000 }: TooltipOpts = {},
 ) {
   return function WithTooltip({
     tooltip,
@@ -85,7 +84,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     const { refs, floatingStyles, context } = useFloating({
       open,
       whileElementsMounted: autoUpdate,
-      middleware: [flip({ padding: 24 }), offset(offsetOpt)],
+      middleware: [flip({ padding: 24 })],
     });
     const { styles } = useTransitionStyles(context, {
       duration: 75,
