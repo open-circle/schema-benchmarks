@@ -186,9 +186,9 @@ export function withTooltip<TComp extends TooltipableComponent>(
               ) : (
                 <>
                   {tooltip.subhead && (
-                    <p className={cls("subhead")}>{tooltip.subhead}</p>
+                    <h6 className={cls({ element: "subhead", extra: "typo-caption" })}>{tooltip.subhead}</h6>
                   )}
-                  <p className={cls("supporting")}>{tooltip.supporting}</p>
+                  <div className={cls("supporting")}>{tooltip.supporting}</div>
                   {tooltip.actions && (
                     <ButtonGroup className={cls("actions")}>
                       {tooltip.actions}
