@@ -29,7 +29,7 @@ const cls = bem("tooltip");
 type TooltipableComponent = ComponentType<
   { ref: RefCallback<HTMLElement> } & Pick<
     HTMLAttributes<HTMLElement>,
-    "id" | "popoverTarget" | "aria-labelledby"
+    "id" | "popoverTarget" | "popoverTargetAction" | "aria-labelledby"
   >
 >;
 
@@ -158,16 +158,19 @@ export function withTooltip<TComp extends TooltipableComponent>(
     return (
       <>
         <Component
+          popoverTargetAction="show"
           // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}
           ref={mergeRefs(ref, refs.setReference, setTargetRef)}
           {...(tooltip
-            ? { "aria-labelledby": resolvedId, popoverTarget: resolvedId }
+            ? ({
+                "aria-labelledby": resolvedId,
+                popoverTarget: resolvedId,
+              } satisfies HTMLAttributes<HTMLElement>)
             : {})}
         />
         {tooltip && (
           <div
-            // TODO: make this role="tooltip" compliant
             role="tooltip"
             ref={mergeRefs(setPopoverRef, refs.setFloating)}
             popover="hint"
@@ -186,7 +189,14 @@ export function withTooltip<TComp extends TooltipableComponent>(
               ) : (
                 <>
                   {tooltip.subhead && (
-                    <h6 className={cls({ element: "subhead", extra: "typo-caption" })}>{tooltip.subhead}</h6>
+                    <h6
+                      className={cls({
+                        element: "subhead",
+                        extra: "typo-caption",
+                      })}
+                    >
+                      {tooltip.subhead}
+                    </h6>
                   )}
                   <div className={cls("supporting")}>{tooltip.supporting}</div>
                   {tooltip.actions && (
