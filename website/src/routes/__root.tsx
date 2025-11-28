@@ -7,6 +7,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { ssrBehavior } from "react-md-spinner";
 import { Banner } from "@/components/banner";
 import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
@@ -69,6 +70,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {ssrBehavior.getStylesheetComponent()}
       </head>
       <body>
         <div className="sidebar-container">

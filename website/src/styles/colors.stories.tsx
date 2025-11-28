@@ -1,20 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { colors } from "./colors";
 import "./colors.stories.css";
-
-const colors = [
-  "primary",
-  "secondary",
-  "pink",
-  "red",
-  "deep-orange",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "light-green",
-  "green",
-  "teal",
-];
 
 const meta = {
   title: "Theme/Colors",

@@ -19,6 +19,7 @@
 @import "components/footer/index.css";
 @import "components/header/index.css";
 @import "components/plot/index.css";
+@import "components/spinner/index.css";
 @import "components/table/index.css";
 @import "components/radio/index.css";
 @import "components/scaler/index.css";
