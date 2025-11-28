@@ -2,12 +2,12 @@ import { defineBenchmarks } from "@schema-benchmarks/schemas";
 import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
+// @ts-expect-error imported for type portability
+// biome-ignore lint/correctness/noUnusedImports: type portability issue
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";
 import type { TypiaSchema } from ".";
-
-const validate = typia.createValidate<TypiaSchema>();
-const is = typia.createIs<TypiaSchema>();
 
 export default defineBenchmarks({
   library: {
@@ -15,6 +15,10 @@ export default defineBenchmarks({
     type: "precompiled",
     version: await getVersion("typia"),
   },
+  createContext: () => ({
+    validate: typia.createValidate<TypiaSchema>(),
+    is: typia.createIs<TypiaSchema>(),
+  }),
   initialization: [
     {
       run() {
@@ -37,7 +41,7 @@ export default defineBenchmarks({
       snippet: ts`typia.is<TypiaSchema>(data)`,
     },
     {
-      run(data) {
+      run(data, { is }) {
         is(data);
       },
       snippet: ts`
@@ -55,7 +59,7 @@ export default defineBenchmarks({
         snippet: ts`typia.validate<TypiaSchema>(data)`,
       },
       {
-        run(data) {
+        run(data, { validate }) {
           validate(data);
         },
         snippet: ts`

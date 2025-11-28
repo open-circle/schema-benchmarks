@@ -5,32 +5,34 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 import ts from "dedent" with { type: "macro" };
 import { getAjv, getAjvSchema } from ".";
 
-const schema = getAjvSchema();
-const ajv = getAjv();
-const validate = ajv.compile(schema);
-
 export default defineBenchmarks({
   library: {
     name: "ajv",
     type: "runtime",
     version: await getVersion("ajv"),
   },
+  createContext: () => {
+    const ajv = getAjv();
+    const schema = getAjvSchema();
+    const validate = ajv.compile(schema);
+    return { ajv, schema, validate };
+  },
   initialization: {
-    run() {
+    run({ ajv }) {
       ajv.compile(getAjvSchema());
     },
     snippet: ts`ajv.compile({...})`,
   },
   validation: [
     {
-      run(data) {
+      run(data, { ajv, schema }) {
         ajv.validate(schema, data);
       },
       note: "validate",
       snippet: ts`ajv.validate(schema, data)`,
     },
     {
-      run(data) {
+      run(data, { validate }) {
         validate(data);
       },
       note: "compile",

@@ -5,14 +5,13 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 import ts from "dedent" with { type: "macro" };
 import { getJoiSchema } from ".";
 
-const schema = getJoiSchema();
-
 export default defineBenchmarks({
   library: {
     name: "joi",
     type: "runtime",
     version: await getVersion("joi"),
   },
+  createContext: () => ({ schema: getJoiSchema() }),
   initialization: {
     run() {
       getJoiSchema();
@@ -20,20 +19,20 @@ export default defineBenchmarks({
     snippet: ts`object(...)`,
   },
   validation: {
-    run(data) {
+    run(data, { schema }) {
       schema.validate(data);
     },
     snippet: ts`schema.validate(data)`,
   },
   parsing: {
     allErrors: {
-      run(data) {
+      run(data, { schema }) {
         schema.validate(data, { abortEarly: false });
       },
       snippet: ts`schema.validate(data, { abortEarly: false })`,
     },
     abortEarly: {
-      run(data) {
+      run(data, { schema }) {
         schema.validate(data, { abortEarly: true });
       },
       snippet: ts`schema.validate(data, { abortEarly: true })`,

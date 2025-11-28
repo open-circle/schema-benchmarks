@@ -6,15 +6,16 @@ import ts from "dedent" with { type: "macro" };
 import { getZodSchema } from ".";
 import { getZodMiniSchema } from "./mini";
 
-const schema = getZodSchema();
-const miniSchema = getZodMiniSchema();
-
 export default defineBenchmarks({
   library: {
     name: "zod",
     type: "runtime",
     version: await getVersion("zod"),
   },
+  createContext: () => ({
+    schema: getZodSchema(),
+    miniSchema: getZodMiniSchema(),
+  }),
   initialization: [
     {
       run() {
@@ -33,27 +34,27 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data) {
+        run(data, { schema }) {
           schema.safeParse(data);
         },
         snippet: ts`schema.safeParse(data)`,
       },
       {
-        run(data) {
+        run(data, { schema }) {
           schema.safeParse(data, { jitless: true });
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "jitless",
       },
       {
-        run(data) {
+        run(data, { miniSchema }) {
           miniSchema.safeParse(data);
         },
         snippet: ts`schema.safeParse(data)`,
         note: "mini",
       },
       {
-        run(data) {
+        run(data, { miniSchema }) {
           miniSchema.safeParse(data, { jitless: true });
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,

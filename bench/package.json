@@ -21,7 +21,7 @@
   "name": "@schema-benchmarks/bench",
   "private": true,
   "scripts": {
-    "bench": "node ./src/scripts/bench.ts",
+    "bench": "node --expose-gc --max-old-space-size=8192 ./src/scripts/bench.ts",
     "download": "node ./src/scripts/download.ts",
     "typecheck": "tsgo"
   },

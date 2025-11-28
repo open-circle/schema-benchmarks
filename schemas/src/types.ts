@@ -9,19 +9,21 @@ export interface BaseBenchmarkConfig {
   note?: string;
 }
 
-export interface InitializationBenchmarkConfig extends BaseBenchmarkConfig {
-  run: () => unknown | Promise<unknown>;
+export interface InitializationBenchmarkConfig<Context>
+  extends BaseBenchmarkConfig {
+  run: (context: Context) => unknown | Promise<unknown>;
 }
 
-export interface ValidationBenchmarkConfig extends BaseBenchmarkConfig {
-  run: (data: unknown) => unknown | Promise<unknown>;
+export interface ValidationBenchmarkConfig<Context>
+  extends BaseBenchmarkConfig {
+  run: (data: unknown, context: Context) => unknown | Promise<unknown>;
 }
 
 export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
-export interface ParsingBenchmarkConfig extends BaseBenchmarkConfig {
-  run: (data: unknown) => unknown | Promise<unknown>;
+export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
+  run: (data: unknown, context: Context) => unknown | Promise<unknown>;
 }
 
 export interface LibraryInfo {
@@ -30,20 +32,23 @@ export interface LibraryInfo {
   version: string;
 }
 
-export type BenchmarkConfig =
-  | InitializationBenchmarkConfig
-  | ValidationBenchmarkConfig
-  | ParsingBenchmarkConfig;
+export type BenchmarkConfig<Context> =
+  | InitializationBenchmarkConfig<Context>
+  | ValidationBenchmarkConfig<Context>
+  | ParsingBenchmarkConfig<Context>;
 
-export interface BenchmarksConfig {
+export interface BenchmarksConfig<Context> {
   library: LibraryInfo;
-  initialization: MaybeArray<InitializationBenchmarkConfig>;
-  validation?: MaybeArray<ValidationBenchmarkConfig>;
-  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig>>>;
+  createContext: () => Context;
+  initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
+  validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
+  parsing?: Partial<
+    Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
+  >;
 }
 
-export function defineBenchmarks<const TConfig extends BenchmarksConfig>(
-  config: TConfig,
+export function defineBenchmarks<const TContext>(
+  config: BenchmarksConfig<TContext>,
 ) {
   return config;
 }

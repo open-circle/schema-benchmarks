@@ -5,14 +5,13 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 import ts from "dedent" with { type: "macro" };
 import { getArkTypeSchema } from ".";
 
-const schema = getArkTypeSchema();
-
 export default defineBenchmarks({
   library: {
     name: "arktype",
     type: "runtime",
     version: await getVersion("arktype"),
   },
+  createContext: () => ({ schema: getArkTypeSchema() }),
   initialization: {
     run() {
       getArkTypeSchema();
@@ -20,14 +19,14 @@ export default defineBenchmarks({
     snippet: ts`type(...)`,
   },
   validation: {
-    run(data) {
+    run(data, { schema }) {
       schema.allows(data);
     },
     snippet: ts`schema.allows(data)`,
   },
   parsing: {
     allErrors: {
-      run(data) {
+      run(data, { schema }) {
         schema(data);
       },
       snippet: ts`schema(data)`,

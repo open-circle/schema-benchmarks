@@ -6,16 +6,18 @@ import ts from "dedent" with { type: "macro" };
 import * as Schema from "effect/Schema";
 import { getEffectSchema } from ".";
 
-const schema = getEffectSchema();
-const is = Schema.is(schema);
-const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
-const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
-
 export default defineBenchmarks({
   library: {
     name: "effect",
     type: "runtime",
     version: await getVersion("effect"),
+  },
+  createContext: () => {
+    const schema = getEffectSchema();
+    const is = Schema.is(schema);
+    const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
+    const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
+    return { schema, is, decodeAll, decodeFirst };
   },
   initialization: [
     {
@@ -36,7 +38,7 @@ export default defineBenchmarks({
     },
   ],
   validation: {
-    run(data) {
+    run(data, { is }) {
       is(data);
     },
     snippet: ts`
@@ -46,7 +48,7 @@ export default defineBenchmarks({
   },
   parsing: {
     allErrors: {
-      run(data) {
+      run(data, { decodeAll }) {
         decodeAll(data);
       },
       snippet: ts`
@@ -55,7 +57,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      run(data) {
+      run(data, { decodeFirst }) {
         decodeFirst(data);
       },
       snippet: ts`

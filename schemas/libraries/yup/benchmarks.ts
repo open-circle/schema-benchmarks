@@ -5,14 +5,13 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 import ts from "dedent" with { type: "macro" };
 import { getYupSchema } from ".";
 
-const schema = getYupSchema();
-
 export default defineBenchmarks({
   library: {
     name: "yup",
     type: "runtime",
     version: await getVersion("yup"),
   },
+  createContext: () => ({ schema: getYupSchema() }),
   initialization: {
     run() {
       getYupSchema();
@@ -20,14 +19,14 @@ export default defineBenchmarks({
     snippet: ts`object(...)`,
   },
   validation: {
-    run(data) {
+    run(data, { schema }) {
       schema.isValidSync(data);
     },
     snippet: ts`schema.isValidSync(data)`,
   },
   parsing: {
     allErrors: {
-      run(data) {
+      run(data, { schema }) {
         try {
           schema.validateSync(data, { abortEarly: false });
         } catch {}
@@ -35,7 +34,7 @@ export default defineBenchmarks({
       snippet: ts`schema.validateSync(data, { abortEarly: false })`,
     },
     abortEarly: {
-      run(data) {
+      run(data, { schema }) {
         try {
           schema.validateSync(data, { abortEarly: true });
         } catch {}
