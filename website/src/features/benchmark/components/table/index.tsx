@@ -5,6 +5,7 @@ import {
   numFormatter,
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
+import { ButtonGroup } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
@@ -95,7 +96,9 @@ export function BenchTable({ results }: BenchTableProps) {
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="action">
-                  <Snippet code={result.snippet} />
+                  <ButtonGroup>
+                    <Snippet code={result.snippet} />
+                  </ButtonGroup>
                 </td>
                 <td>
                   <code className="language-text">{result.version}</code>

@@ -52,7 +52,10 @@ export default defineBenchmarks({
         decodeAll(data);
       },
       snippet: ts`
-        // const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
+        // const decodeAll = Schema.decodeUnknownEither(
+        //  schema, 
+        //  { errors: "all" }
+        // );
         decodeAll(data)
       `,
     },
@@ -61,7 +64,10 @@ export default defineBenchmarks({
         decodeFirst(data);
       },
       snippet: ts`
-        // const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
+        // const decodeFirst = Schema.decodeUnknownEither(
+        //  schema, 
+        //  { errors: "first" }
+        // );
         decodeFirst(data)
       `,
     },
