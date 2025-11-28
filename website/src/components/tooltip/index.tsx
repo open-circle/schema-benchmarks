@@ -20,7 +20,6 @@ import {
   type RefCallback,
   useEffect,
   useId,
-  useRef,
   useState,
 } from "react";
 import { ButtonGroup } from "../button";
@@ -99,15 +98,15 @@ export function withTooltip<TComp extends TooltipableComponent>(
       },
     });
     const [targetRef, setTargetRef] = useState<HTMLElement | null>(null);
-    const popoverRef = useRef<HTMLElement>(null);
+    const [popoverRef, setPopoverRef] = useState<HTMLElement | null>(null);
     useEffect(() => {
-      if (targetRef && tooltip) {
+      if (targetRef && popoverRef && tooltip) {
         let timeout: ReturnType<typeof setTimeout> | undefined;
         function open(immediate = false) {
           clearTimeout(timeout);
           timeout = setTimeout(
             () => {
-              popoverRef.current?.showPopover();
+              popoverRef?.showPopover();
               currentId = resolvedId;
             },
             currentId || immediate ? 0 : delay,
@@ -115,33 +114,47 @@ export function withTooltip<TComp extends TooltipableComponent>(
         }
         function close() {
           clearTimeout(timeout);
-          popoverRef.current?.hidePopover();
+          popoverRef?.hidePopover();
           setTimeout(() => {
             if (currentId === resolvedId) {
               currentId = "";
             }
           }, 1000);
         }
-        const unsub = radEventListeners(targetRef, {
-          mouseenter() {
+        const unsubTarget = radEventListeners(targetRef, {
+          mouseenter(_event, signal) {
             open();
+            const unsubDoc = radEventListeners(
+              document,
+              {
+                mousemove(event) {
+                  if (
+                    !targetRef?.contains(event.target as Node) &&
+                    !popoverRef?.contains(event.target as Node)
+                  ) {
+                    unsubDoc();
+                    close();
+                  }
+                },
+              },
+              { signal },
+            );
           },
           focus(event) {
             event.preventDefault();
             open(true);
           },
-          mouseleave: close,
           blur: close,
           keydown(event) {
             if (event.key === "Escape") close();
           },
         });
         return () => {
-          unsub();
+          unsubTarget();
           close();
         };
       }
-    }, [targetRef, tooltip, delay, resolvedId]);
+    }, [targetRef, popoverRef, tooltip, delay, resolvedId]);
     return (
       <>
         <Component
@@ -155,7 +168,8 @@ export function withTooltip<TComp extends TooltipableComponent>(
         {tooltip && (
           <div
             // TODO: make this role="tooltip" compliant
-            ref={mergeRefs(popoverRef, refs.setFloating)}
+            role="tooltip"
+            ref={mergeRefs(setPopoverRef, refs.setFloating)}
             popover="hint"
             id={resolvedId}
             style={floatingStyles}

@@ -210,8 +210,8 @@ importers:
         specifier: ^1.30.0
         version: 1.30.0
       rad-event-listeners:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.1.0
+        version: 1.1.0
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -4508,8 +4508,8 @@ packages:
   quote-unquote@1.0.0:
     resolution: {integrity: sha512-twwRO/ilhlG/FIgYeKGFqyHhoEhqgnKVkcmqMKi2r524gz3ZbDTcyFt38E9xjJI2vT+KbRNHVbnJ/e0I25Azwg==}
 
-  rad-event-listeners@1.0.1:
-    resolution: {integrity: sha512-6qDGvwDHLCfBgtgexiUqpry9tz24na2RCHuoFBgDyRNw6E7tALbmUsR40mACoW8eiafS7avNWWAcrnneEQx2zw==}
+  rad-event-listeners@1.1.0:
+    resolution: {integrity: sha512-xtFgWOQLovaExWIvhfF2OiuXvKwwV3fL5/qp5fAJHvIX1/uxNFfvaRcvGI1WQjPx/p0NEqib5PDDXwyQve+SSA==}
 
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
@@ -10108,7 +10108,7 @@ snapshots:
 
   quote-unquote@1.0.0: {}
 
-  rad-event-listeners@1.0.1: {}
+  rad-event-listeners@1.1.0: {}
 
   radix3@1.1.2: {}
 
