@@ -6,6 +6,8 @@ import ts from "dedent" with { type: "macro" };
 import * as v from "valibot";
 import { getValibotSchema } from ".";
 
+// results are returned to avoid benchmark body being tree-shaken out
+
 export default defineBenchmarks({
   library: {
     name: "valibot",
@@ -15,33 +17,33 @@ export default defineBenchmarks({
   createContext: () => ({ schema: getValibotSchema() }),
   initialization: {
     run() {
-      getValibotSchema();
+      return getValibotSchema();
     },
     snippet: ts`v.object(...)`,
   },
   validation: {
     run(data, { schema }) {
-      v.is(schema, data);
+      return v.is(schema, data);
     },
     snippet: ts`v.is(schema, data)`,
   },
   parsing: {
     allErrors: {
       run(data, { schema }) {
-        v.safeParse(schema, data);
+        return v.safeParse(schema, data);
       },
       snippet: ts`v.safeParse(schema, data)`,
     },
     abortEarly: [
       {
         run(data, { schema }) {
-          v.safeParse(schema, data, { abortEarly: true });
+          return v.safeParse(schema, data, { abortEarly: true });
         },
         snippet: ts`v.safeParse(schema, data, { abortEarly: true })`,
       },
       {
         run(data, { schema }) {
-          v.safeParse(schema, data, { abortPipeEarly: true });
+          return v.safeParse(schema, data, { abortPipeEarly: true });
         },
         snippet: ts`v.safeParse(schema, data, { abortPipeEarly: true })`,
         note: "abortPipeEarly only",
