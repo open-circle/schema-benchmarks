@@ -1,3 +1,4 @@
+import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import Prism from "prismjs";
@@ -26,6 +27,6 @@ export const getHighlightedCode = (
     queryFn: ({ signal }) =>
       highlightFn({
         data: { code, language },
-        signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
+        signal: anyAbortSignal(signal, signalOpt),
       }),
   });

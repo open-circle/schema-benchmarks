@@ -11,6 +11,7 @@ import {
   type LibraryType,
   libraryTypeSchema,
 } from "@schema-benchmarks/schemas";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
@@ -89,6 +90,6 @@ export const getBenchResults = (signalOpt?: AbortSignal) =>
     queryKey: ["bench"],
     queryFn: ({ signal }) =>
       getBenchResultsFn({
-        signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
+        signal: anyAbortSignal(signal, signalOpt),
       }),
   });

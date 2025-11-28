@@ -5,6 +5,7 @@ import {
   minifyTypeSchema,
 } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
@@ -57,6 +58,6 @@ export const getDownloadResults = (signalOpt?: AbortSignal) =>
     queryKey: ["download"],
     queryFn: ({ signal }) =>
       getDownloadResultsFn({
-        signal: signalOpt ? AbortSignal.any([signal, signalOpt]) : signal,
+        signal: anyAbortSignal(signal, signalOpt),
       }),
   });

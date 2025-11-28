@@ -225,3 +225,6 @@ export const ensureArray = <T>(value: T) =>
   (Array.isArray(value) ? value : [value]) as T extends ReadonlyArray<unknown>
     ? T
     : Array<T>;
+
+export const anyAbortSignal = (...signals: Array<AbortSignal | undefined>) =>
+  AbortSignal.any(signals.filter((s) => !!s));
