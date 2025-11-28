@@ -1,5 +1,6 @@
 import { bem } from "@schema-benchmarks/utils";
 import { resolveValue, Toaster } from "react-hot-toast";
+import { Spinner } from "../spinner";
 import { MdSymbol } from "../symbol";
 
 const cls = bem("snackbar");
@@ -15,9 +16,6 @@ export function Snackbars() {
         },
         error: {
           icon: "error",
-        },
-        loading: {
-          icon: "hourglass_bottom",
         },
         removeDelay: 75,
       }}
@@ -35,6 +33,9 @@ export function Snackbars() {
           {...t.ariaProps}
         >
           {t.icon && <MdSymbol className={cls("icon")}>{t.icon}</MdSymbol>}
+          {t.type === "loading" && (
+            <Spinner className={cls("icon")} size={24} />
+          )}
           {resolveValue(t.message, t)}
         </div>
       )}

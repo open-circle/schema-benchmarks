@@ -30,7 +30,7 @@ function SnackbarsDemo() {
             new Promise<void>((resolve, reject) =>
               setTimeout(
                 () => (Math.random() > 0.5 ? resolve() : reject()),
-                1000,
+                2000,
               ),
             ),
             {
