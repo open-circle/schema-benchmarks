@@ -3,7 +3,6 @@ import { isServer } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useState } from "react";
 import { FloatingActionButton } from "../button/floating";
-import { MdSymbol } from "../symbol";
 
 const cls = bem("scroll-to-top");
 

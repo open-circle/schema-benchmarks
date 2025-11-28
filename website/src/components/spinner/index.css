@@ -1,6 +1,7 @@
 .spinner {
   flex-shrink: 0;
   * {
+    /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
     corner-shape: round;
   }
 }
