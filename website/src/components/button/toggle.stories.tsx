@@ -37,7 +37,7 @@ const meta = {
   args: {
     activeColor: undefined,
     children: <MdSymbol>favorite</MdSymbol>,
-    title: "Favorite",
+    tooltip: "Favorite",
     onClick: fn(),
   },
 } satisfies Meta<typeof ToggleButton>;
@@ -57,7 +57,7 @@ function ToggleButtonGroupDemo({
         activeColor={activeColor}
         active={active === 0}
         onClick={() => setActive(0)}
-        title="Happy"
+        tooltip="Happy"
       >
         <MdSymbol>sentiment_very_satisfied</MdSymbol>
       </ToggleButton>
@@ -65,7 +65,7 @@ function ToggleButtonGroupDemo({
         activeColor={activeColor}
         active={active === 1}
         onClick={() => setActive(1)}
-        title="Sad"
+        tooltip="Sad"
       >
         <MdSymbol>sentiment_very_dissatisfied</MdSymbol>
       </ToggleButton>
@@ -80,7 +80,7 @@ export const Group: Story = {
         disable: true,
       },
     },
-    title: {
+    tooltip: {
       table: {
         disable: true,
       },

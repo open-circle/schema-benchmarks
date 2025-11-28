@@ -1,6 +1,8 @@
 :root {
   --tooltip-background: var(--on-surface);
   --tooltip-foreground: var(--surface);
+  --rich-tooltip-background: var(--surface);
+  --rich-tooltip-foreground: var(--on-surface);
   --tooltip-enter-time: 75ms;
   --tooltip-exit-time: 75ms;
 }
@@ -10,13 +12,52 @@
   margin: 0;
   border: none;
   background-color: transparent;
-  transition:
-    display var(--tooltip-exit-time) allow-discrete,
+  transition: display var(--tooltip-exit-time) allow-discrete,
     overlay var(--tooltip-exit-time) allow-discrete;
   &[popover]:popover-open {
-    transition:
-      display var(--tooltip-enter-time) allow-discrete,
+    transition: display var(--tooltip-enter-time) allow-discrete,
       overlay var(--tooltip-enter-time) allow-discrete;
+  }
+  &.tooltip--rich {
+    --tooltip-enter-time: 150ms;
+    .tooltip__content {
+      height: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      border-radius: var(--shape-medium);
+      background-color: light-dark(
+        var(--rich-tooltip-background),
+        color-mix(
+          in hsl,
+          var(--rich-tooltip-background),
+          var(--elevation-overlay-color) var(--elevation-8-overlay-opacity)
+        )
+      );
+      color: var(--rich-tooltip-foreground);
+      box-shadow: var(--elevation-8);
+      padding: 0.75rem 1rem 0.5rem;
+      .tooltip__subhead {
+        margin: 0;
+        margin-bottom: 0.25rem;
+        color: color(
+          from var(--rich-tooltip-foreground) srgb r g b / var(--primary-text)
+        );
+      }
+      .tooltip__supporting {
+        margin: 0;
+        margin-bottom: 0.75rem;
+        color: color(
+          from var(--rich-tooltip-foreground) srgb r g b / var(--secondary-text)
+        );
+      }
+      .tooltip__actions {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
   }
   .tooltip__content {
     background-color: var(--tooltip-background);

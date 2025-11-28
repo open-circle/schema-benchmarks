@@ -33,7 +33,7 @@ const meta = {
   args: {
     color: "primary",
     disabled: false,
-    title: "Hello World",
+    tooltip: "Hello World",
     onClick: fn(),
     variant: "text",
   },
@@ -75,5 +75,15 @@ export const Group: Story = {
   ),
   args: {
     variant: "text",
+  },
+};
+
+export const RichTooltip = {
+  args: {
+    tooltip: {
+      subhead: "Hello World",
+      supporting: "This is a tooltip",
+      actions: <Button>OK</Button>,
+    },
   },
 };

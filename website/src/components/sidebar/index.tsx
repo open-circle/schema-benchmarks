@@ -89,7 +89,7 @@ function BaseSidebar({
               element: "toggle",
             })}
             onClick={() => setOpen(false)}
-            title="Collapse"
+            tooltip="Collapse"
             tabIndex={open ? 0 : -1}
           >
             <MdSymbol flipRtl>chevron_left</MdSymbol>

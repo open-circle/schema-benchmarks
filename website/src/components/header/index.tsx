@@ -42,7 +42,7 @@ export function Header() {
             className={cls({
               element: "toggle",
             })}
-            title="Expand sidebar"
+            tooltip="Expand sidebar"
           >
             <MdSymbol>menu</MdSymbol>
           </ToggleButton>
@@ -54,7 +54,7 @@ export function Header() {
             modifiers: { open },
           })}
           onClick={() => setOpen(true)}
-          title="Expand sidebar"
+          tooltip="Expand sidebar"
           tabIndex={open ? -1 : 0}
         >
           <MdSymbol>menu</MdSymbol>

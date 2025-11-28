@@ -11,6 +11,7 @@ import {
   optionalDataTypeSchema,
   optionalLibraryTypeSchema,
 } from "@/features/benchmark/query";
+import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getHighlightedCode } from "@/lib/highlight";
 
 const searchSchema = v.object({
@@ -23,6 +24,12 @@ export const Route = createFileRoute("/validation")({
     meta: [
       {
         title: "Validation - Schema Benchmarks",
+      },
+    ],
+    links: [
+      {
+        rel: "stylesheet",
+        href: benchmarkStyles,
       },
     ],
   }),

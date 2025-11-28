@@ -17,12 +17,14 @@ import {
   type ComponentType,
   type HTMLAttributes,
   type JSX,
+  type ReactNode,
   type RefCallback,
   useEffect,
   useId,
   useRef,
   useState,
 } from "react";
+import { ButtonGroup } from "../button";
 
 const cls = bem("tooltip");
 
@@ -42,8 +44,14 @@ export interface TooltipOpts {
   offset?: number;
 }
 
+export interface RichTooltipProps {
+  subhead?: string;
+  supporting: ReactNode;
+  actions?: ReactNode;
+}
+
 export interface TooltipProps {
-  title?: string;
+  tooltip?: string | RichTooltipProps;
   id?: string;
 }
 
@@ -55,7 +63,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
   opts: Override<TooltipOpts, { required: true }>,
 ): (
-  props: Override<ComponentProps<TComp>, WithRequired<TooltipProps, "title">>,
+  props: Override<ComponentProps<TComp>, WithRequired<TooltipProps, "tooltip">>,
 ) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
@@ -66,7 +74,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
   { delay = 1000, offset: offsetOpt = 4 }: TooltipOpts = {},
 ) {
   return function WithTooltip({
-    title,
+    tooltip,
     id,
     ref,
     ...props
@@ -94,7 +102,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     const [targetRef, setTargetRef] = useState<HTMLElement | null>(null);
     const popoverRef = useRef<HTMLElement>(null);
     useEffect(() => {
-      if (targetRef && title) {
+      if (targetRef && tooltip) {
         let timeout: ReturnType<typeof setTimeout> | undefined;
         const unsub = radEventListeners(targetRef, {
           mouseenter() {
@@ -126,31 +134,47 @@ export function withTooltip<TComp extends TooltipableComponent>(
           }
         };
       }
-    }, [targetRef, title, delay, resolvedId]);
+    }, [targetRef, tooltip, delay, resolvedId]);
     return (
       <>
         <Component
           // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}
           ref={mergeRefs(ref, refs.setReference, setTargetRef)}
-          {...(title
+          {...(tooltip
             ? { "aria-labelledby": resolvedId, popoverTarget: resolvedId }
             : {})}
         />
-        {title && (
+        {tooltip && (
           <div
             // TODO: make this role="tooltip" compliant
             ref={mergeRefs(popoverRef, refs.setFloating)}
             popover="hint"
             id={resolvedId}
             style={floatingStyles}
-            className={cls()}
+            className={cls({
+              modifiers: { rich: typeof tooltip === "object" },
+            })}
             onBeforeToggle={(e) => {
               setOpen(e.newState === "open");
             }}
           >
             <div className={cls("content")} style={styles}>
-              {title}
+              {typeof tooltip === "string" ? (
+                tooltip
+              ) : (
+                <>
+                  {tooltip.subhead && (
+                    <p className={cls("subhead")}>{tooltip.subhead}</p>
+                  )}
+                  <p className={cls("supporting")}>{tooltip.supporting}</p>
+                  {tooltip.actions && (
+                    <ButtonGroup className={cls("actions")}>
+                      {tooltip.actions}
+                    </ButtonGroup>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}

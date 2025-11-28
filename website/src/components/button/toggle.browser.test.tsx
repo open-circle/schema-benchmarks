@@ -7,7 +7,7 @@ import { ToggleButton } from "./toggle";
 describe("ToggleButton", () => {
   it("should be active", async () => {
     await page.render(
-      <ToggleButton active title="Edit">
+      <ToggleButton active tooltip="Edit">
         <MdSymbol>edit</MdSymbol>
       </ToggleButton>,
     );
@@ -17,7 +17,7 @@ describe("ToggleButton", () => {
   });
   it("should not be active", async () => {
     await page.render(
-      <ToggleButton title="Edit">
+      <ToggleButton tooltip="Edit">
         <MdSymbol>edit</MdSymbol>
       </ToggleButton>,
     );

@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
 import { Bar } from "@/components/table/bar";
+import { Snippet } from "./snippet";
 
 export interface BenchTableProps {
   results: Array<BenchResult>;
@@ -71,6 +72,7 @@ export function BenchTable({ results }: BenchTableProps) {
         <thead>
           <tr>
             <th>Library</th>
+            <th className="action"></th>
             <th>Version</th>
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
@@ -91,6 +93,9 @@ export function BenchTable({ results }: BenchTableProps) {
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
+                </td>
+                <td className="action">
+                  <Snippet code={result.snippet} />
                 </td>
                 <td>
                   <code className="language-text">{result.version}</code>
