@@ -17,8 +17,8 @@
   background-color: var(--button-background);
   color: var(--button-foreground);
 
-  transition: background-color 250ms, color 250ms, var(--elevation-transition),
-    var(--elevation-overlay-transition);
+  transition: background-color 250ms, color 250ms, opacity 250ms,
+    var(--elevation-transition), var(--elevation-overlay-transition);
 
   &:focus-visible {
     outline: none;
@@ -28,7 +28,8 @@
     pointer-events: none;
   }
 
-  .md-symbol {
+  .md-symbol,
+  .spinner {
     --icon-size: 18;
     margin-left: -0.25rem;
     &:dir(rtl) {
@@ -96,9 +97,8 @@
     }
     &:disabled,
     &[aria-disabled="true"] {
-      --button-foreground: color(
-        from var(--page-foreground) srgb r g b / var(--disabled-opacity)
-      );
+      --button-foreground: var(--page-foreground);
+      opacity: var(--disabled-opacity);
     }
   }
   &.button--contained {

@@ -39,8 +39,8 @@ export function ScrollToTop() {
         })
       }
       tabIndex={scrolled ? 0 : -1}
+      icon="arrow_upward"
     >
-      <MdSymbol>arrow_upward</MdSymbol>
       Scroll to top
     </FloatingActionButton>
   );

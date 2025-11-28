@@ -1,4 +1,5 @@
 .spinner {
+  flex-shrink: 0;
   * {
     corner-shape: round;
   }

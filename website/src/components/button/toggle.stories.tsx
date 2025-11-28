@@ -36,6 +36,8 @@ const meta = {
   },
   args: {
     activeColor: undefined,
+    loading: false,
+    disabled: false,
     children: <MdSymbol>favorite</MdSymbol>,
     tooltip: "Favorite",
     onClick: fn(),

@@ -1,16 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { MdSymbol } from "../symbol";
 import { Button, ButtonGroup } from ".";
 
 const meta = {
   title: "Components/Button",
-  render: (props) => (
-    <Button {...props}>
-      <MdSymbol>edit</MdSymbol>
-      Edit
-    </Button>
-  ),
+  component: Button,
   argTypes: {
     variant: {
       control: {
@@ -33,9 +27,12 @@ const meta = {
   args: {
     color: "primary",
     disabled: false,
+    loading: false,
     tooltip: "Hello World",
     onClick: fn(),
     variant: "text",
+    icon: "edit",
+    children: "Edit",
   },
 } satisfies Meta<typeof Button>;
 

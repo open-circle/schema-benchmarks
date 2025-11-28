@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { MdSymbol } from "../symbol";
 import { FloatingActionButton } from "./floating";
 
 const meta = {
@@ -8,12 +7,8 @@ const meta = {
   component: FloatingActionButton,
   args: {
     onClick: fn(),
-    children: (
-      <>
-        <MdSymbol>edit</MdSymbol>
-        Edit
-      </>
-    ),
+    icon: "edit",
+    children: "Edit",
   },
 } satisfies Meta<typeof FloatingActionButton>;
 

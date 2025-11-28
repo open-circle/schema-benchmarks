@@ -1,7 +1,9 @@
 import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
 import { createLink } from "@tanstack/react-router";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
+import { Spinner } from "../spinner";
+import { MdSymbol } from "../symbol";
 import { withTooltip } from "../tooltip";
 
 export type ButtonColor =
@@ -18,7 +20,10 @@ interface BaseButtonProps {
 
 export interface ButtonProps
   extends DistributiveOmit<ComponentPropsWithRef<"button">, "color">,
-    BaseButtonProps {}
+    BaseButtonProps {
+  icon?: ReactNode;
+  loading?: boolean;
+}
 
 const buttonCls = bem("button");
 
@@ -27,17 +32,29 @@ export const Button = withTooltip(function Button({
   className,
   variant = "text",
   color = "primary",
+  icon,
+  children,
+  loading,
+  disabled,
   ...props
 }: ButtonProps) {
   return (
     <button
       type="button"
       {...props}
+      disabled={disabled || loading}
       className={buttonCls({
         modifiers: [variant, color],
         extra: className,
       })}
-    />
+    >
+      {loading ? (
+        <Spinner singleColor="button-foreground" size={18} />
+      ) : (
+        icon && <MdSymbol className={buttonCls("icon")}>{icon}</MdSymbol>
+      )}
+      {children}
+    </button>
   );
 });
 

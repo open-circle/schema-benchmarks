@@ -11,5 +11,5 @@ export const colors = [
   "light-green",
   "green",
   "teal",
-];
+] as const;
 export type Color = (typeof colors)[number];
