@@ -6,7 +6,10 @@ import type {
 } from "@schema-benchmarks/schemas";
 import type { DataType } from "../results/types.ts";
 
-export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library">;
+export type BenchmarkType = Exclude<
+  keyof BenchmarksConfig<unknown>,
+  "library" | "createContext"
+>;
 
 export interface BenchInfo {
   type: BenchmarkType;
