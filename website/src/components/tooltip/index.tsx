@@ -104,47 +104,42 @@ export function withTooltip<TComp extends TooltipableComponent>(
     useEffect(() => {
       if (targetRef && tooltip) {
         let timeout: ReturnType<typeof setTimeout> | undefined;
-        const unsub = radEventListeners(targetRef, {
-          mouseenter() {
-            clearTimeout(timeout);
-            timeout = setTimeout(
-              () => {
-                popoverRef.current?.showPopover();
-                currentId = resolvedId;
-              },
-              currentId ? 0 : delay,
-            );
-          },
-          focus(event) {
-            event.preventDefault();
-            clearTimeout(timeout);
-            popoverRef.current?.showPopover();
-            currentId = resolvedId;
-          },
-          mouseleave() {
-            clearTimeout(timeout);
-            popoverRef.current?.hidePopover();
-            timeout = setTimeout(() => {
-              if (currentId === resolvedId) {
-                currentId = "";
-              }
-            }, 1000);
-          },
-          blur() {
-            clearTimeout(timeout);
-            popoverRef.current?.hidePopover();
+        function open(immediate = false) {
+          clearTimeout(timeout);
+          timeout = setTimeout(
+            () => {
+              popoverRef.current?.showPopover();
+              currentId = resolvedId;
+            },
+            currentId || immediate ? 0 : delay,
+          );
+        }
+        function close() {
+          clearTimeout(timeout);
+          popoverRef.current?.hidePopover();
+          setTimeout(() => {
             if (currentId === resolvedId) {
               currentId = "";
             }
+          }, 1000);
+        }
+        const unsub = radEventListeners(targetRef, {
+          mouseenter() {
+            open();
+          },
+          focus(event) {
+            event.preventDefault();
+            open(true);
+          },
+          mouseleave: close,
+          blur: close,
+          keydown(event) {
+            if (event.key === "Escape") close();
           },
         });
         return () => {
           unsub();
-          clearTimeout(timeout);
-          popoverRef.current?.hidePopover();
-          if (currentId === resolvedId) {
-            currentId = "";
-          }
+          close();
         };
       }
     }, [targetRef, tooltip, delay, resolvedId]);
