@@ -28,9 +28,9 @@ function getFocusables(element: HTMLElement) {
 }
 
 export function useFocusGroup({
-  direction = "horizontal",
+  orientation = "horizontal",
 }: {
-  direction?: "horizontal" | "vertical";
+  orientation?: "horizontal" | "vertical";
 } = {}) {
   const [groupRef, setGroupRef] = useState<HTMLElement | null>(null);
   useEffect(() => {
@@ -43,7 +43,7 @@ export function useFocusGroup({
           )
             return;
           const { prev, next } =
-            direction === "horizontal"
+            orientation === "horizontal"
               ? keys.horizontal[groupRef.matches(":dir(ltr)") ? "ltr" : "rtl"]
               : keys.vertical;
           if (event.key === prev || event.key === next) {
@@ -70,6 +70,6 @@ export function useFocusGroup({
         },
       });
     }
-  }, [groupRef, direction]);
+  }, [groupRef, orientation]);
   return setGroupRef;
 }

@@ -89,16 +89,29 @@ export function ButtonGroup({
   children,
   variant = "text",
   className,
+  orientation = "horizontal",
+  ariaLabel,
+  ariaLabelledBy,
 }: {
   children: React.ReactNode;
   variant?: "text" | "outlined";
   className?: string;
-}) {
-  const group = useFocusGroup();
+  orientation?: "horizontal" | "vertical";
+} & (
+  | { ariaLabel: string; ariaLabelledBy?: never }
+  | { ariaLabelledBy: string; ariaLabel?: never }
+)) {
+  const group = useFocusGroup({
+    orientation,
+  });
   return (
     <div
       className={buttonGroupCls({ modifiers: [variant], extra: className })}
       ref={group}
+      role="toolbar"
+      aria-orientation={orientation}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
     >
       {children}
     </div>

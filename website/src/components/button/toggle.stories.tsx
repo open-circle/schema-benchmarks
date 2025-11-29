@@ -51,10 +51,17 @@ export const Default: Story = {};
 
 function ToggleButtonGroupDemo({
   activeColor,
-}: Pick<ComponentProps<typeof ToggleButton>, "activeColor">) {
+  orientation,
+}: Pick<ComponentProps<typeof ToggleButton>, "activeColor"> & {
+  orientation?: "horizontal" | "vertical";
+}) {
   const [active, setActive] = useState(0);
   return (
-    <ButtonGroup variant="outlined">
+    <ButtonGroup
+      variant="outlined"
+      orientation={orientation}
+      ariaLabel="Emotion"
+    >
       <ToggleButton
         activeColor={activeColor}
         active={active === 0}
@@ -99,4 +106,9 @@ export const Group: Story = {
     },
   },
   render: () => <ToggleButtonGroupDemo />,
+};
+
+export const VerticalGroup: Story = {
+  ...Group,
+  render: () => <ToggleButtonGroupDemo orientation="vertical" />,
 };

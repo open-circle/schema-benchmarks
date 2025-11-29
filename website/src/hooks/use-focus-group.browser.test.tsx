@@ -8,7 +8,7 @@ function TestComponent({
 }: {
   direction: "horizontal" | "vertical";
 }) {
-  const group = useFocusGroup({ direction });
+  const group = useFocusGroup({ orientation: direction });
   return (
     <div
       ref={group}

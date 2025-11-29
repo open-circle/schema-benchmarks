@@ -64,7 +64,10 @@ export const Group: Story = {
     },
   },
   render: ({ variant, ...props }) => (
-    <ButtonGroup variant={variant === "contained" ? "outlined" : variant}>
+    <ButtonGroup
+      variant={variant === "contained" ? "outlined" : variant}
+      ariaLabel="Group"
+    >
       <Button {...props}>One</Button>
       <Button {...props}>Two</Button>
       <Button {...props}>Three</Button>
@@ -73,6 +76,21 @@ export const Group: Story = {
   args: {
     variant: "text",
   },
+};
+
+export const VerticalGroup: Story = {
+  ...Group,
+  render: ({ variant, ...props }) => (
+    <ButtonGroup
+      variant={variant === "contained" ? "outlined" : variant}
+      orientation="vertical"
+      ariaLabel="Group"
+    >
+      <Button {...props}>One</Button>
+      <Button {...props}>Two</Button>
+      <Button {...props}>Three</Button>
+    </ButtonGroup>
+  ),
 };
 
 export const RichTooltip = {
