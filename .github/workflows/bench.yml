@@ -5,6 +5,9 @@ permissions:
 on:
   pull_request:
     branches: ["main"]
+    paths:
+      - "bench/**"
+      - "schemas/**"
   workflow_dispatch: {}
 
 jobs:
