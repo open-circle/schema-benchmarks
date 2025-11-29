@@ -8,7 +8,7 @@ on:
     paths:
       - "bench/**"
       - "schemas/**"
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   bench:

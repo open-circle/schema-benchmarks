@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import "./animation.stories.css";
 
-const curves = ["deceleration", "acceleration", "standard", "sharp"] as const;
+const curves = [
+  "enter",
+  "exit-permanent",
+  "standard",
+  "exit-temporary",
+] as const;
 type Curve = (typeof curves)[number];
 
 const meta = {
