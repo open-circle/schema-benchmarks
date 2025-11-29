@@ -4,7 +4,9 @@ import {
   type MinifyType,
   minifyTypeSchema,
 } from "@schema-benchmarks/bench";
-import downloadResults from "@schema-benchmarks/bench/download.json";
+import downloadResults from "@schema-benchmarks/bench/download.json" with {
+  type: "json",
+};
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";

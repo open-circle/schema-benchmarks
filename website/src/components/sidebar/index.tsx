@@ -1,55 +1,16 @@
 import { bem } from "@schema-benchmarks/utils";
-import {
-  ClientOnly,
-  Link,
-  type LinkOptions,
-  linkOptions,
-} from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
-import { type Key, type ReactNode, useContext, useEffect } from "react";
+import { type ReactNode, useContext, useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
 import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
+import { sidebarGroups } from "./groups";
 
 const cls = bem("sidebar");
 const backdropCls = bem("sidebar-backdrop");
-
-interface SidebarGroup {
-  key: Key;
-  subheader?: string;
-  links: Array<LinkOptions & { name: string; icon: string }>;
-}
-
-const sidebarGroups: Array<SidebarGroup> = [
-  {
-    key: "core",
-    links: [
-      { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
-      {
-        ...linkOptions({ to: "/initialization" }),
-        name: "Initialization",
-        icon: "timer",
-      },
-      {
-        ...linkOptions({ to: "/validation" }),
-        name: "Validation",
-        icon: "check_circle",
-      },
-      {
-        ...linkOptions({ to: "/parsing" }),
-        name: "Parsing",
-        icon: "output_circle",
-      },
-      {
-        ...linkOptions({ to: "/download" }),
-        name: "Download",
-        icon: "download_2",
-      },
-    ],
-  },
-];
 
 function BaseSidebar({
   children,
@@ -157,3 +118,5 @@ export function Sidebar() {
     </BreakpointSidebar>
   );
 }
+
+Sidebar.groups = sidebarGroups;
