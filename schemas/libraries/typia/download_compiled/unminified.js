@@ -9,12 +9,16 @@ var __commonJS = (cb, mod) => function() {
 	return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __copyProps = (to, from, except, desc) => {
-	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
-		key = keys[i];
-		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
-			get: ((k) => from[k]).bind(null, key),
-			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-		});
+	if (from && typeof from === "object" || typeof from === "function") {
+		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+			key = keys[i];
+			if (!__hasOwnProp.call(to, key) && key !== except) {
+				__defProp(to, key, {
+					get: ((k) => from[k]).bind(null, key),
+					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+				});
+			}
+		}
 	}
 	return to;
 };
@@ -24,8 +28,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 
 //#endregion
-//#region ../node_modules/.pnpm/typia@10.0.2_@types+node@22.19.0_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
-var require__validateReport = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/typia@10.0.2_@types+node@22.19.0_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js": ((exports) => {
+//#region ../node_modules/.pnpm/typia@10.0.2_@types+node@24.10.1_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
+var require__validateReport = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/typia@10.0.2_@types+node@24.10.1_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js": ((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._validateReport = void 0;
 	const _validateReport = (array) => {
@@ -52,7 +56,7 @@ var require__validateReport = /* @__PURE__ */ __commonJS({ "../node_modules/.pnp
 
 //#endregion
 //#region ../schemas/libraries/typia/download.ts
-var import__validateReport = /* @__PURE__ */ __toESM(require__validateReport());
+var import__validateReport = /* @__PURE__ */ __toESM(require__validateReport(), 1);
 (() => {
 	const _io0 = (input) => "number" === typeof input.id && input.created instanceof Date && "string" === typeof input.title && 1 <= input.title.length && input.title.length <= 100 && "string" === typeof input.brand && 1 <= input.brand.length && input.brand.length <= 30 && "string" === typeof input.description && 1 <= input.description.length && input.description.length <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 1 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && 1 <= input.tags.length && input.tags.length <= 30 && input.tags.every((elem) => "string" === typeof elem) && Array.isArray(input.images) && input.images.every((elem) => "object" === typeof elem && null !== elem && _io1(elem)) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
 	const _io1 = (input) => "number" === typeof input.id && input.created instanceof Date && "string" === typeof input.title && 1 <= input.title.length && input.title.length <= 100 && ("jpg" === input.type || "png" === input.type) && "number" === typeof input.size && "string" === typeof input.url && /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)(?:\.(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu.test(input.url);

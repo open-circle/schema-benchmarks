@@ -9,12 +9,16 @@ var __commonJS = (cb, mod) => function() {
 	return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __copyProps = (to, from, except, desc) => {
-	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
-		key = keys[i];
-		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
-			get: ((k) => from[k]).bind(null, key),
-			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-		});
+	if (from && typeof from === "object" || typeof from === "function") {
+		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+			key = keys[i];
+			if (!__hasOwnProp.call(to, key) && key !== except) {
+				__defProp(to, key, {
+					get: ((k) => from[k]).bind(null, key),
+					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+				});
+			}
+		}
 	}
 	return to;
 };
@@ -7207,8 +7211,8 @@ var require_dist = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/ajv-keywo
 //#endregion
 //#region ../schemas/libraries/ajv/download/validate.ts
 var import_ajv = require_ajv();
-var import_dist = /* @__PURE__ */ __toESM(require_dist$1());
-var import_dist$1 = /* @__PURE__ */ __toESM(require_dist());
+var import_dist = /* @__PURE__ */ __toESM(require_dist$1(), 1);
+var import_dist$1 = /* @__PURE__ */ __toESM(require_dist(), 1);
 const ajv = new import_ajv.Ajv();
 (0, import_dist.default)(ajv, { formats: ["url"] });
 (0, import_dist$1.default)(ajv, ["instanceof"]);
