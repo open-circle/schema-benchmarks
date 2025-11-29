@@ -4,7 +4,9 @@ import {
   type DataType,
   dataTypeSchema,
 } from "@schema-benchmarks/bench";
-import benchResults from "@schema-benchmarks/bench/bench.json";
+import benchResults from "@schema-benchmarks/bench/bench.json" with {
+  type: "json",
+};
 import {
   type ErrorType,
   errorTypeSchema,

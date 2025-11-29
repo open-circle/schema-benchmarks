@@ -11,7 +11,7 @@ import { PageFilter } from ".";
 
 export interface OptionLabel {
   label: ReactNode;
-  icon: ReactNode;
+  icon: string;
 }
 
 export interface PageFilterChipsProps<
