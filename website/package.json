@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@netlify/vite-plugin-tanstack-start": "^1.2.1",
-    "@storybook/react-vite": "^10.1.1",
+    "@storybook/react-vite": "^10.1.2",
     "@types/d3": "^7.4.3",
     "@types/node": "^22.10.2",
     "@types/prismjs": "^1.26.5",
@@ -50,7 +50,7 @@
     "postcss-load-config": "^6.0.1",
     "redent": "^4.0.0",
     "srvx": "^0.9.6",
-    "storybook": "^10.1.1",
+    "storybook": "^10.1.2",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^4.0.12",
