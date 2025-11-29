@@ -6,6 +6,7 @@
     "includes": [
       "./src/**/*",
       "./test/**/*",
+      "./vite/**/*",
       "./vite.config.ts",
       "./postcss.config.ts",
       "./preview.ts",

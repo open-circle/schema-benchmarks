@@ -4,6 +4,14 @@ import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
+import { sidebarGroups } from "./src/components/sidebar/groups";
+import {
+  dataTypeProps,
+  errorTypeProps,
+  libraryTypeProps,
+} from "./src/features/benchmark/query";
+import { minifyTypeProps } from "./src/features/download/query";
+import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
   plugins: [
@@ -14,6 +22,21 @@ const config = defineConfig({
     tanstackStart(),
     netlify(),
     viteReact(),
+    materialSymbols({
+      knownSymbols: [
+        ...sidebarGroups.flatMap((group) =>
+          group.links.map((link) => link.icon),
+        ),
+        ...[
+          errorTypeProps,
+          libraryTypeProps,
+          minifyTypeProps,
+          dataTypeProps,
+        ].flatMap((props) =>
+          Object.values(props.labels).map((label) => label.icon),
+        ),
+      ],
+    }),
   ],
   resolve: {
     alias: {
