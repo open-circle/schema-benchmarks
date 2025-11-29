@@ -1,6 +1,6 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem, mergeRefs } from "@schema-benchmarks/utils";
 import { createLink } from "@tanstack/react-router";
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
 const collectionCls = bem("chip-collection");
@@ -8,13 +8,16 @@ const collectionCls = bem("chip-collection");
 export function ChipCollection({
   children,
   className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+  ref,
+  ...props
+}: ComponentPropsWithRef<"div">) {
   const group = useFocusGroup();
   return (
-    <div className={collectionCls({ extra: className })} ref={group}>
+    <div
+      {...props}
+      className={collectionCls({ extra: className })}
+      ref={mergeRefs(ref, group)}
+    >
       {children}
     </div>
   );

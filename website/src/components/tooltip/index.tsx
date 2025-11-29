@@ -19,9 +19,9 @@ import {
   type ReactNode,
   type RefCallback,
   useEffect,
-  useId,
   useState,
 } from "react";
+import { useIdDefault } from "@/hooks/use-id-default";
 import { ButtonGroup } from "../button";
 
 const cls = bem("tooltip");
@@ -74,12 +74,11 @@ export function withTooltip<TComp extends TooltipableComponent>(
 ) {
   return function WithTooltip({
     tooltip,
-    id,
+    id: idProp,
     ref,
     ...props
   }: Override<ComponentProps<TComp>, TooltipProps>) {
-    const autoId = useId();
-    const resolvedId = id ?? autoId;
+    const id = useIdDefault(idProp);
     const [open, setOpen] = useState(false);
     const { refs, floatingStyles, context } = useFloating({
       open,
@@ -108,7 +107,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
           timeout = setTimeout(
             () => {
               popoverRef?.showPopover();
-              currentId = resolvedId;
+              currentId = id;
             },
             currentId || immediate ? 0 : delay,
           );
@@ -117,7 +116,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
           clearTimeout(timeout);
           popoverRef?.hidePopover();
           setTimeout(() => {
-            if (currentId === resolvedId) {
+            if (currentId === id) {
               currentId = "";
             }
           }, 1000);
@@ -155,7 +154,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
           close();
         };
       }
-    }, [targetRef, popoverRef, tooltip, delay, resolvedId]);
+    }, [targetRef, popoverRef, tooltip, delay, id]);
     return (
       <>
         <Component
@@ -165,8 +164,8 @@ export function withTooltip<TComp extends TooltipableComponent>(
           ref={mergeRefs(ref, refs.setReference, setTargetRef)}
           {...(tooltip
             ? ({
-                "aria-labelledby": resolvedId,
-                popoverTarget: resolvedId,
+                "aria-labelledby": id,
+                popoverTarget: id,
               } satisfies HTMLAttributes<HTMLElement>)
             : {})}
         />
@@ -175,7 +174,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
             role="tooltip"
             ref={mergeRefs(setPopoverRef, refs.setFloating)}
             popover="hint"
-            id={resolvedId}
+            id={id}
             style={floatingStyles}
             className={cls({
               modifiers: { rich: typeof tooltip === "object" },

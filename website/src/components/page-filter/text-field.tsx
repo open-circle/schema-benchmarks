@@ -5,6 +5,7 @@ import {
   type ValidateLinkOptions,
 } from "@tanstack/react-router";
 import { type ChangeEvent, useEffect, useState } from "react";
+import { useIdDefault } from "@/hooks/use-id-default";
 import { TextField, type TextFieldProps } from "../text-field";
 import type { PageFilterProps } from ".";
 import { PageFilter } from ".";
@@ -22,10 +23,12 @@ export interface PageFilterTextFieldProps<LinkOptions = unknown>
 
 export function PageFilterTextField<LinkOptions>({
   title,
+  titleId: titleIdProp,
   getLinkOptions,
   value: searchValue,
   ...props
 }: PageFilterTextFieldProps<LinkOptions>) {
+  const titleId = useIdDefault(titleIdProp);
   const navigate = useNavigate();
   const debouncedOnChange = useDebouncedCallback(
     (event) => {
@@ -38,9 +41,10 @@ export function PageFilterTextField<LinkOptions>({
     setValue(searchValue);
   }, [searchValue]);
   return (
-    <PageFilter title={title}>
+    <PageFilter title={title} titleId={titleId}>
       <TextField
         {...props}
+        aria-labelledby={titleId}
         value={value}
         onChange={(event) => {
           setValue(event.target.valueAsNumber);

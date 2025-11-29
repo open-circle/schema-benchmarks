@@ -1,5 +1,6 @@
 import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
-import { type ReactNode, useId } from "react";
+import type { ReactNode } from "react";
+import { useIdDefault } from "@/hooks/use-id-default";
 import { Button, type ButtonProps } from "../button";
 import { type CloseDialog, Dialog, DialogActions, type DialogProps } from ".";
 
@@ -8,7 +9,9 @@ type ActionProps = DistributiveOmit<ButtonProps, "children" | "onClick">;
 export interface AlertDialogProps
   extends DistributiveOmit<DialogProps, "children" | "title" | "onCancel"> {
   title?: ReactNode;
+  titleId?: string;
   message: ReactNode;
+  messageId?: string;
   cancelLabel?: string;
   confirmLabel: string;
   onConfirm: (close: CloseDialog) => void;
@@ -23,7 +26,9 @@ const cls = bem("alert-dialog");
 
 export function AlertDialog({
   title,
+  titleId: titleIdProp,
   message,
+  messageId: messageIdProp,
   cancelLabel = "Cancel",
   confirmLabel,
   cancelProps,
@@ -34,8 +39,8 @@ export function AlertDialog({
   closeOnCancel = true,
   ...props
 }: AlertDialogProps) {
-  const titleId = useId();
-  const messageId = useId();
+  const titleId = useIdDefault(titleIdProp);
+  const messageId = useIdDefault(messageIdProp);
   return (
     <Dialog
       {...props}

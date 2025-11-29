@@ -3,6 +3,7 @@ import type {
   ValidateLinkOptions,
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { useIdDefault } from "@/hooks/use-id-default";
 import { ChipCollection, LinkChip } from "../chip";
 import { MdSymbol } from "../symbol";
 import type { PageFilterProps } from ".";
@@ -26,13 +27,15 @@ export interface PageFilterChipsProps<
 
 export function PageFilterChips<Options extends string, LinkOptions>({
   title,
+  titleId: titleIdProp,
   options,
   labels,
   getLinkOptions,
 }: PageFilterChipsProps<Options, LinkOptions>) {
+  const titleId = useIdDefault(titleIdProp);
   return (
-    <PageFilter title={title}>
-      <ChipCollection>
+    <PageFilter title={title} titleId={titleId}>
+      <ChipCollection aria-labelledby={titleId}>
         {options.map((option) => (
           <LinkChip
             key={option}
