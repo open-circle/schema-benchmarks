@@ -16,9 +16,12 @@ jobs:
         with:
           node-version: 24
       - uses: pnpm/action-setup@v2
-      - run: pnpm install
-      - run: pnpm schemas:build
-      - run: pnpm bench:all
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build schemas
+        run: pnpm schemas:build
+      - name: Run benchmarks
+        run: pnpm bench:all
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
