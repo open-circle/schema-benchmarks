@@ -57,7 +57,7 @@ td {
       padding-left: 0;
     }
   }
-  &:has(.button-group) {
+  &:has(.button--toggle) {
     padding: 0;
   }
   &:has(> pre[class*="language-"]) {
@@ -81,9 +81,7 @@ td {
     top: 0;
     left: 0;
     height: 100%;
-    transition:
-      width 150ms var(--standard-curve),
-      background-color 150ms linear;
+    transition: width 150ms var(--standard-curve), background-color 150ms linear;
     &:dir(rtl) {
       left: auto;
       right: 0;

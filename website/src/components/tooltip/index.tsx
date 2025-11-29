@@ -46,6 +46,7 @@ export interface RichTooltipProps {
   subhead?: string;
   supporting: ReactNode;
   actions?: ReactNode;
+  actionsLabel?: string;
 }
 
 export interface TooltipProps {
@@ -200,7 +201,10 @@ export function withTooltip<TComp extends TooltipableComponent>(
                   )}
                   <div className={cls("supporting")}>{tooltip.supporting}</div>
                   {tooltip.actions && (
-                    <ButtonGroup className={cls("actions")}>
+                    <ButtonGroup
+                      className={cls("actions")}
+                      ariaLabel={tooltip.actionsLabel ?? "Actions"}
+                    >
                       {tooltip.actions}
                     </ButtonGroup>
                   )}

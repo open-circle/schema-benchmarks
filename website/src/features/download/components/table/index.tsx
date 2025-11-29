@@ -64,7 +64,10 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   {durationFormatter.format(getDuration(time))}
                 </td>
                 <td className="action fit-content">
-                  <ButtonGroup className="source-links">
+                  <ButtonGroup
+                    className="source-links"
+                    ariaLabel="Links to files used"
+                  >
                     <ExternalLinkToggleButton
                       href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${result.fileName}`}
                       target="_blank"

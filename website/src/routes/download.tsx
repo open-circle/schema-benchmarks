@@ -85,8 +85,8 @@ function RouteComponent() {
             })
           }
         />
-        <PageFilter title="Speed presets">
-          <ButtonGroup variant="outlined">
+        <PageFilter title="Speed presets" titleId="speed-presets-title">
+          <ButtonGroup variant="outlined" ariaLabelledBy="speed-presets-title">
             {unsafeEntries(speedPresets).map(([slug, preset]) => (
               <InternalLinkToggleButton
                 key={preset.name}
