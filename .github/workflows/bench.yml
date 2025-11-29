@@ -1,4 +1,6 @@
 name: Run benchmark and commit results
+permissions:
+  contents: write
 
 on:
   pull_request:
