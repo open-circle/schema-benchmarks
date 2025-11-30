@@ -14,7 +14,9 @@ export function Snippet({ code }: SnippetProps) {
         supporting: (
           <div className="snippet">
             <CodeBlock>{code}</CodeBlock>
-            <p>(Commented code is not benchmarked)</p>
+            {(code.startsWith("//") || code.startsWith("/*")) && (
+              <p>(Commented code is not benchmarked)</p>
+            )}
           </div>
         ),
       }}
