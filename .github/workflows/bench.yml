@@ -29,5 +29,5 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: ${{ github.event.pull_request.head.ref || github.ref }}
           message: "Update bench results"
