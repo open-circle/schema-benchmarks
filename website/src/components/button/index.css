@@ -32,6 +32,10 @@
     pointer-events: none;
   }
 
+  .button__icon {
+    display: contents;
+  }
+
   .md-symbol,
   .spinner {
     --icon-size: 18;

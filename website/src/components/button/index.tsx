@@ -51,7 +51,7 @@ export const Button = withTooltip(function Button({
       {loading ? (
         <Spinner singleColor="button-foreground" size={18} />
       ) : (
-        icon && <MdSymbol className={buttonCls("icon")}>{icon}</MdSymbol>
+        icon && <div className={buttonCls("icon")}>{icon}</div>
       )}
       {children}
     </button>
