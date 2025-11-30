@@ -3,6 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
 import ts from "dedent" with { type: "macro" };
+import { Compile } from "typebox/compile";
 import Value from "typebox/value";
 import { getTypeboxSchema } from ".";
 
@@ -12,27 +13,66 @@ export default defineBenchmarks({
     type: "runtime",
     version: await getVersion("typebox"),
   },
-  createContext: () => ({ schema: getTypeboxSchema() }),
-  initialization: {
-    run() {
-      getTypeboxSchema();
-    },
-    snippet: ts`Type.Object(...)`,
+  createContext: () => {
+    const schema = getTypeboxSchema();
+    const compiled = Compile(schema);
+    return { schema, compiled };
   },
-  validation: {
-    run(data, { schema }) {
-      Value.Check(schema, data);
-    },
-    snippet: ts`Value.Check(schema, data)`,
-  },
-  parsing: {
-    allErrors: {
-      run(data, { schema }) {
-        try {
-          Value.Parse(schema, data);
-        } catch {}
+  initialization: [
+    {
+      run() {
+        getTypeboxSchema();
       },
-      snippet: ts`Value.Parse(schema, data)`,
+      snippet: ts`Type.Object(...)`,
     },
+    {
+      run() {
+        Compile(getTypeboxSchema());
+      },
+      snippet: ts`Compile(Type.Object(...))`,
+      note: "compile",
+    },
+  ],
+  validation: [
+    {
+      run(data, { schema }) {
+        Value.Check(schema, data);
+      },
+      snippet: ts`Value.Check(schema, data)`,
+    },
+    {
+      run(data, { compiled }) {
+        compiled.Check(data);
+      },
+      snippet: ts`
+        // const compiled = Compile(schema);
+        compiled(data);
+      `,
+      note: "compile",
+    },
+  ],
+  parsing: {
+    allErrors: [
+      {
+        run(data, { schema }) {
+          try {
+            Value.Parse(schema, data);
+          } catch {}
+        },
+        snippet: ts`Value.Parse(schema, data)`,
+      },
+      {
+        run(data, { compiled }) {
+          try {
+            compiled.Parse(data);
+          } catch {}
+        },
+        snippet: ts`
+          // const compiled = Compile(schema);
+          compiled.Parse(data);
+        `,
+        note: "compile",
+      },
+    ],
   },
 });
