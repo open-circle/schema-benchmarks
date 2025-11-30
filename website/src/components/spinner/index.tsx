@@ -4,8 +4,13 @@ import {
   type LooseAutocomplete,
 } from "@schema-benchmarks/utils";
 import type { ComponentPropsWithoutRef } from "react";
-import MDSpinner from "react-md-spinner";
+import _MDSpinner from "react-md-spinner";
 import type { Color } from "@/styles/colors";
+
+// nasty - CJS build doesn't seem to work properly
+const MDSpinner = (
+  "default" in _MDSpinner ? _MDSpinner.default : _MDSpinner
+) as typeof _MDSpinner;
 
 export interface SpinnerProps
   extends DistributiveOmit<

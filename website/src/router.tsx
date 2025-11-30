@@ -1,6 +1,7 @@
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { Button } from "@/components/button";
+import { Spinner } from "@/components/spinner";
 import { MdSymbol } from "@/components/symbol";
 import { EmptyState } from "./components/empty-state";
 import { makeQueryClient } from "./data/query";
@@ -17,6 +18,7 @@ export const getRouter = (history?: RouterHistory) => {
     defaultPreloadStaleTime: 0,
     context: { queryClient },
     defaultViewTransition: true,
+    defaultPendingComponent: () => <Spinner size={64} />,
     defaultErrorComponent: ({ error, reset }) => (
       <EmptyState
         icon={<MdSymbol>error</MdSymbol>}
