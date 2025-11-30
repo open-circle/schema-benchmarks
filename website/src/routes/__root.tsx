@@ -1,4 +1,3 @@
-import usedSymbols from "virtual:used-symbols";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -57,8 +56,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
       {
         rel: "stylesheet",
-        // TODO: narrow to used icons and axes https://developers.google.com/fonts/docs/material_symbols#optimize_the_icon_font
-        href: `https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200${/*import.meta.env.DEV ? "" : */ `&icon_names=${usedSymbols.join(",")}`}`,
+        href: "$__VITE_SYMBOLS_URL__",
       },
     ],
   }),
