@@ -15,6 +15,12 @@ export interface MdSymbolProps {
   size?: number;
 }
 
+/**
+ * A Material Symbols component.
+ *
+ * **Important**: this component is inspected by the compiler to determine which symbols are used, to reduce the size of the font request.
+ * If you use a symbol in a dynamic way (e.g. `<MdSymbol>{icon}</MdSymbol>`), you will need to manually add it to the list of known symbols in `vite.config.ts`.
+ */
 export function MdSymbol({
   children,
   fill,
