@@ -15,8 +15,8 @@ function getCompiledPath(result: DownloadResult, minify: MinifyType) {
   return result.fileName
     .replace("download.ts", `download_compiled/${minify}.js`)
     .replace("download/index.ts", `download_compiled/${minify}.js`)
-    .replace("download/", `download_compiled/${minify}/`)
-    .replace(".ts", ".js");
+    .replace("download/", `download_compiled/`)
+    .replace(".ts", `/${minify}.js`);
 }
 
 export interface DownloadTableProps {
