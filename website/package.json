@@ -56,7 +56,6 @@
     "storybook": "^10.1.2",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
-    "vite-plugin-inspect": "^11.3.3",
     "vitest": "^4.0.12",
     "vitest-browser-react": "^2.0.2",
     "web-vitals": "^5.1.0"
