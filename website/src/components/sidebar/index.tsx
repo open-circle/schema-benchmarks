@@ -118,5 +118,3 @@ export function Sidebar() {
     </BreakpointSidebar>
   );
 }
-
-Sidebar.groups = sidebarGroups;
