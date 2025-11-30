@@ -1,4 +1,4 @@
-import { isEmpty } from "@schema-benchmarks/utils";
+import { isEmpty, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -74,30 +74,25 @@ function RouteComponent() {
         <PageFilterChips
           {...libraryTypeProps}
           getLinkOptions={(option) => ({
+            from: Route.fullPath,
             to: Route.fullPath,
-            search: { libraryType: option },
+            search: toggleFilter("libraryType", option),
           })}
         />
         <PageFilterChips
           {...dataTypeProps}
           getLinkOptions={(option) => ({
+            from: Route.fullPath,
             to: Route.fullPath,
-            search: ({ libraryType, errorType }) => ({
-              libraryType,
-              dataType: option,
-              errorType,
-            }),
+            search: toggleFilter("dataType", option),
           })}
         />
         <PageFilterChips
           {...errorTypeProps}
           getLinkOptions={(option) => ({
+            from: Route.fullPath,
             to: Route.fullPath,
-            search: ({ libraryType, dataType }) => ({
-              libraryType,
-              dataType,
-              errorType: option,
-            }),
+            search: toggleFilter("errorType", option),
             disabled: isEmpty(data[option]),
           })}
         />
