@@ -41,6 +41,7 @@
       var(--primary-text)
     );
     --icon-fill: 1;
+    display: contents;
   }
   .banner__actions {
     display: flex;

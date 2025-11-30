@@ -14,6 +14,7 @@
       from var(--page-foreground) srgb r g b /
       var(--secondary-text)
     );
+    display: contents;
   }
   .empty-state__subtitle {
     color: color(
