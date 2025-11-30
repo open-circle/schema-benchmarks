@@ -43,9 +43,7 @@ export function TextField({
       style={style}
     >
       <div className={cls({ element: "container", extra: "typo-subtitle1" })}>
-        {startIcon && (
-          <MdSymbol className={cls("start-icon")}>{startIcon}</MdSymbol>
-        )}
+        {startIcon && <div className={cls("start-icon")}>{startIcon}</div>}
         {prefix && <span className={cls("prefix")}>{prefix}</span>}
         <input {...props} className={cls("input")} />
         {suffix && <span className={cls("suffix")}>{suffix}</span>}
@@ -53,7 +51,7 @@ export function TextField({
           (endIconIsButton ? (
             <div className={cls("end-button")}>{endIcon}</div>
           ) : (
-            <MdSymbol className={cls("end-icon")}>{endIcon}</MdSymbol>
+            <div className={cls("end-icon")}>{endIcon}</div>
           ))}
       </div>
       {errorMessage || helpText ? (

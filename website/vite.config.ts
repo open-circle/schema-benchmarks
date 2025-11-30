@@ -6,12 +6,14 @@ import Inspect from "vite-plugin-inspect";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import { sidebarGroups } from "./src/components/sidebar/groups";
+import * as scales from "./src/data/scale";
 import {
   dataTypeProps,
   errorTypeProps,
   libraryTypeProps,
 } from "./src/features/benchmark/query";
 import { minifyTypeProps } from "./src/features/download/query";
+import { speedPresets } from "./src/features/download/speed";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -40,6 +42,9 @@ const config = defineConfig({
         ].flatMap((props) =>
           Object.values(props.labels).map((label) => label.icon),
         ),
+        ...Object.values(speedPresets).map((preset) => preset.icon),
+        ...scales.sentiment,
+        ...scales.stat,
       ],
     }),
   ],

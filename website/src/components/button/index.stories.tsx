@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+import { MdSymbol } from "../symbol";
 import { Button, ButtonGroup } from ".";
 
 const meta = {
@@ -31,7 +32,7 @@ const meta = {
     tooltip: "Hello World",
     onClick: fn(),
     variant: "text",
-    icon: "edit",
+    icon: <MdSymbol>edit</MdSymbol>,
     children: "Edit",
   },
 } satisfies Meta<typeof Button>;

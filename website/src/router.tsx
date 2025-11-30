@@ -1,6 +1,7 @@
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { Button } from "@/components/button";
+import { MdSymbol } from "@/components/symbol";
 import { EmptyState } from "./components/empty-state";
 import { makeQueryClient } from "./data/query";
 // Import the generated route tree
@@ -18,7 +19,7 @@ export const getRouter = (history?: RouterHistory) => {
     defaultViewTransition: true,
     defaultErrorComponent: ({ error, reset }) => (
       <EmptyState
-        icon="error"
+        icon={<MdSymbol>error</MdSymbol>}
         title="Error"
         subtitle={error.message || "An error occurred."}
       >
@@ -27,7 +28,7 @@ export const getRouter = (history?: RouterHistory) => {
     ),
     defaultNotFoundComponent: () => (
       <EmptyState
-        icon="warning"
+        icon={<MdSymbol>warning</MdSymbol>}
         title="Not found"
         subtitle={
           <>

@@ -70,7 +70,7 @@ function RouteComponent() {
           min={1}
           step={1}
           required
-          startIcon="speed"
+          startIcon={<MdSymbol>speed</MdSymbol>}
           suffix="Mbps"
           style={{ "--text-field-min-width": "10rem" }}
           getLinkOptions={(event) =>

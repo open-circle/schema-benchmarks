@@ -1,6 +1,5 @@
 import { bem } from "@schema-benchmarks/utils";
 import type { ComponentPropsWithRef, ReactNode } from "react";
-import { MdSymbol } from "../symbol";
 
 export interface FloatingActionButtonProps
   extends ComponentPropsWithRef<"button"> {
@@ -24,7 +23,7 @@ export function FloatingActionButton({
         extra: className,
       })}
     >
-      {icon && <MdSymbol className={cls("icon")}>{icon}</MdSymbol>}
+      {icon && <div className={cls("icon")}>{icon}</div>}
       {children}
     </button>
   );
