@@ -9,10 +9,8 @@
     word-break: normal;
     word-wrap: normal;
     color: #c3cee3;
-    background: #263238;
-    font-family:
-      Roboto Mono,
-      monospace;
+    background: var(--md-blue-grey-900);
+    font-family: var(--font-family-code);
     font-size: 1em;
     line-height: 1.5em;
 
@@ -88,11 +86,11 @@
   }
 
   .token.cdata {
-    color: #80cbc4;
+    color: var(--md-teal-200);
   }
 
   .token.char {
-    color: #80cbc4;
+    color: var(--md-teal-200);
   }
 
   .token.class {
@@ -108,7 +106,7 @@
   }
 
   .token.comment {
-    color: #546e7a;
+    color: var(--md-blue-grey-600);
   }
 
   .token.constant {
@@ -120,7 +118,7 @@
   }
 
   .token.doctype {
-    color: #546e7a;
+    color: var(--md-blue-grey-600);
   }
 
   .token.entity {
@@ -146,7 +144,7 @@
   }
 
   .token.inserted {
-    color: #80cbc4;
+    color: var(--md-teal-200);
   }
 
   .token.keyword {
@@ -163,11 +161,11 @@
   }
 
   .token.prolog {
-    color: #546e7a;
+    color: var(--md-blue-grey-600);
   }
 
   .token.property {
-    color: #80cbc4;
+    color: var(--md-teal-200);
   }
 
   .token.pseudo-class {

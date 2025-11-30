@@ -8,11 +8,9 @@
     word-spacing: normal;
     word-break: normal;
     word-wrap: normal;
-    color: #90a4ae;
-    background: #fafafa;
-    font-family:
-      Roboto Mono,
-      monospace;
+    color: var(--md-blue-grey-300);
+    background: var(--md-grey-50);
+    font-family: var(--font-family-code);
     font-size: 1em;
     line-height: 1.5em;
 
@@ -31,7 +29,7 @@
   code[class*="language-"] ::-moz-selection,
   pre[class*="language-"] ::-moz-selection {
     background: #cceae7;
-    color: #263238;
+    color: var(--md-blue-grey-900);
   }
 
   code[class*="language-"]::selection,
@@ -39,7 +37,7 @@
   code[class*="language-"] ::selection,
   pre[class*="language-"] ::selection {
     background: #cceae7;
-    color: #263238;
+    color: var(--md-blue-grey-900);
   }
 
   :not(pre) > code[class*="language-"] {
@@ -66,7 +64,7 @@
   }
 
   .token.atrule {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.attr-name {
@@ -82,7 +80,7 @@
   }
 
   .token.boolean {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.builtin {
@@ -110,11 +108,11 @@
   }
 
   .token.constant {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.deleted {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 
   .token.doctype {
@@ -122,11 +120,11 @@
   }
 
   .token.entity {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 
   .token.function {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.hexcode {
@@ -134,12 +132,12 @@
   }
 
   .token.id {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
     font-weight: bold;
   }
 
   .token.important {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
     font-weight: bold;
   }
 
@@ -148,7 +146,7 @@
   }
 
   .token.keyword {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.number {
@@ -184,7 +182,7 @@
   }
 
   .token.selector {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 
   .token.string {
@@ -192,11 +190,11 @@
   }
 
   .token.symbol {
-    color: #7c4dff;
+    color: var(--md-purple-a200);
   }
 
   .token.tag {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 
   .token.unit {
@@ -204,10 +202,10 @@
   }
 
   .token.url {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 
   .token.variable {
-    color: #e53935;
+    color: var(--md-red-600);
   }
 }
