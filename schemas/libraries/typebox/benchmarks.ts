@@ -46,7 +46,7 @@ export default defineBenchmarks({
       },
       snippet: ts`
         // const compiled = Compile(schema);
-        compiled(data);
+        compiled.Check(data);
       `,
       note: "compile",
     },
