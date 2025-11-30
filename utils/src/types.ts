@@ -7,6 +7,9 @@ export type Override<T, U> = Compute<Omit<T, keyof U> & U>;
 export type WithRequired<T, K extends keyof T> = Compute<
   Omit<T, K> & Required<Pick<T, K>>
 >;
+export type WithPartial<T, K extends keyof T> = Compute<
+  Omit<T, K> & Partial<Pick<T, K>>
+>;
 
 export namespace LooseAutocomplete {
   /**

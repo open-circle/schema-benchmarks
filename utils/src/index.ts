@@ -2,6 +2,8 @@ export type * from "./libs.ts";
 export * from "./react.ts";
 export type * from "./types.ts";
 
+import type { WithPartial } from "./types.ts";
+
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -228,3 +230,16 @@ export const ensureArray = <T>(value: T) =>
 
 export const anyAbortSignal = (...signals: Array<AbortSignal | undefined>) =>
   AbortSignal.any(signals.filter((s) => !!s));
+
+export function toggleFilter<K extends string, V>(
+  key: K,
+  newValue: V,
+): <T extends Record<K, V>>(filter: T) => WithPartial<T, K> {
+  return (filter) => {
+    if (filter[key] === newValue) {
+      const { [key]: _, ...rest } = filter;
+      return rest as never;
+    }
+    return { ...filter, [key]: newValue };
+  };
+}

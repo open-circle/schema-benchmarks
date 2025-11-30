@@ -1,4 +1,8 @@
-import { unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
+import {
+  toggleFilter,
+  unsafeEntries,
+  unsafeKeys,
+} from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
@@ -59,8 +63,9 @@ function RouteComponent() {
         <PageFilterChips
           {...minifyTypeProps}
           getLinkOptions={(option) => ({
+            from: Route.fullPath,
             to: Route.fullPath,
-            search: ({ mbps }) => ({ minifyType: option, mbps }),
+            search: toggleFilter("minifyType", option),
           })}
         />
         <PageFilterTextField

@@ -1,3 +1,4 @@
+import { toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -63,8 +64,9 @@ function RouteComponent() {
         <PageFilterChips
           {...libraryTypeProps}
           getLinkOptions={(option) => ({
+            from: Route.fullPath,
             to: Route.fullPath,
-            search: { libraryType: option },
+            search: toggleFilter("libraryType", option),
           })}
         />
       </PageFilters>
