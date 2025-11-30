@@ -5,8 +5,7 @@ import type { Plugin } from "vite";
 
 const component = "MdSymbol";
 
-const hint = `$__VITE_SYMBOLS_URL__`;
-const baseUrl =
+export const symbolsUrl =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 // based on https://github.com/RobinTail/vite-plugin-material-symbols
@@ -59,16 +58,18 @@ export default function materialSymbols({
       enforce: "post",
       apply: "build",
       generateBundle(_opts, bundle) {
-        const finalUrl = usedSymbols.size
-          ? `${baseUrl}&icon_names=${[...usedSymbols.values()].sort().join(",")}`
-          : baseUrl;
+        if (!usedSymbols.size) return;
+        const finalUrl = `${symbolsUrl}&icon_names=${[...usedSymbols.values()].sort().join(",")}`;
         for (const assetOrChunk of Object.values(bundle)) {
           if (
             assetOrChunk.type === "asset" ||
-            !assetOrChunk.code.includes(hint)
+            !assetOrChunk.code.includes(symbolsUrl)
           )
             continue;
-          assetOrChunk.code = assetOrChunk.code.replaceAll(hint, finalUrl);
+          assetOrChunk.code = assetOrChunk.code.replaceAll(
+            symbolsUrl,
+            finalUrl,
+          );
         }
       },
     },
