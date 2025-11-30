@@ -38,14 +38,10 @@ function useComparison(results: Array<BenchResult>) {
     );
     const max = Math.max(...ratios);
     const min = Math.min(...ratios);
-    const scale = Scaler.getScale([min, max, -min, -max], {
+    return Scaler.getScale([min, max, -min, -max], {
       type: "stat",
       lowerBetter: true,
     });
-    return (ratio: number) => {
-      const { icon, ...rest } = scale(ratio);
-      return { icon: <MdSymbol>{icon}</MdSymbol>, ...rest };
-    };
   }, [results, compareResult]);
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
