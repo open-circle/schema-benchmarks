@@ -1,5 +1,3 @@
-import * as v from "valibot";
-
 export type Compute<T> = { [K in keyof T]: T[K] } & unknown;
 export type Satisfies<T extends U, U> = T;
 export type NonOptionalKeys<T> = {
