@@ -17,8 +17,12 @@
   background-color: var(--button-background);
   color: var(--button-foreground);
 
-  transition: background-color 250ms, color 250ms, opacity 250ms,
-    var(--elevation-transition), var(--elevation-overlay-transition);
+  transition:
+    background-color 250ms,
+    color 250ms,
+    opacity 250ms,
+    var(--elevation-transition),
+    var(--elevation-overlay-transition);
 
   &:focus-visible {
     outline: none;
@@ -150,7 +154,8 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
-        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
+        from var(--button-foreground) srgb r g b /
+        var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
     }
@@ -158,10 +163,12 @@
   &.button--toggle {
     --button-background: transparent;
     --button-foreground: color(
-      from var(--button-base-color) srgb r g b / var(--secondary-text)
+      from var(--button-base-color) srgb r g b /
+      var(--secondary-text)
     );
     --button-active-color: color(
-      from var(--button-base-color) srgb r g b / var(--primary-text)
+      from var(--button-base-color) srgb r g b /
+      var(--primary-text)
     );
     &.button--active-primary {
       --button-active-color: var(--primary);
@@ -181,25 +188,31 @@
     min-width: unset;
     padding: 0.75rem;
     border-radius: 50%;
-    transition: background-color 250ms, color 250ms, opacity 250ms;
+    transition:
+      background-color 250ms,
+      color 250ms,
+      opacity 250ms;
     .md-symbol {
       --icon-size: 24;
       margin: 0;
     }
     &:hover {
       background-color: color(
-        from currentColor srgb r g b / var(--hover-opacity)
+        from currentColor srgb r g b /
+        var(--hover-opacity)
       );
     }
     &:focus-visible {
       background-color: color(
-        from currentColor srgb r g b / var(--focus-opacity)
+        from currentColor srgb r g b /
+        var(--focus-opacity)
       );
     }
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
       background-color: color(
-        from currentColor srgb r g b / var(--pressed-opacity)
+        from currentColor srgb r g b /
+        var(--pressed-opacity)
       );
     }
     &:disabled,
@@ -211,18 +224,19 @@
       --icon-fill: 1;
       --button-foreground: var(--button-active-color);
       --button-background: color(
-        from var(--button-active-color) srgb r g b / var(--activated-opacity)
+        from var(--button-active-color) srgb r g b /
+        var(--activated-opacity)
       );
       &:hover {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-            calc(var(--hover-opacity) + var(--activated-opacity))
+          calc(var(--hover-opacity) + var(--activated-opacity))
         );
       }
       &:focus-visible {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-            calc(var(--focus-opacity) + var(--activated-opacity))
+          calc(var(--focus-opacity) + var(--activated-opacity))
         );
       }
     }

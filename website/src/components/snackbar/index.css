@@ -61,9 +61,12 @@
       from var(--snackbar-foreground) srgb r g b /
       var(--secondary-text)
     );
-    margin-left: -0.5rem;
-    &:dir(rtl) {
-      margin-right: -0.5rem;
+    display: contents;
+    > * {
+      margin-left: -0.5rem;
+      &:dir(rtl) {
+        margin-right: -0.5rem;
+      }
     }
   }
   button {
