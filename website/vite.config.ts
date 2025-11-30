@@ -2,7 +2,6 @@ import netlify from "@netlify/vite-plugin-tanstack-start";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import Inspect from "vite-plugin-inspect";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import { sidebarGroups } from "./src/components/sidebar/groups";
@@ -18,10 +17,6 @@ import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
   plugins: [
-    Inspect({
-      build: true,
-      outputDir: ".vite-inspect",
-    }),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
