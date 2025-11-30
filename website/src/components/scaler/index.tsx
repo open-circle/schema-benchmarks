@@ -1,8 +1,8 @@
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import * as d3 from "d3";
 import type { ReactNode } from "react";
 import * as scales from "@/data/scale";
 import { combineScales, reverseIf } from "@/lib/d3";
-import { MdSymbol } from "../symbol";
 
 interface ScaleOptions {
   type?: "sentiment" | "stat";
@@ -10,11 +10,12 @@ interface ScaleOptions {
 }
 
 interface ScalerScale {
-  icon: ReactNode;
+  icon: string;
   color: string;
 }
 
-export interface ScalerProps extends ScalerScale {
+export interface ScalerProps extends DistributiveOmit<ScalerScale, "icon"> {
+  icon: ReactNode;
   children?: ReactNode;
   symbolLabel?: string;
 }
@@ -41,9 +42,10 @@ export function Scaler({ icon, color, children, symbolLabel }: ScalerProps) {
   return (
     <span className="scaler">
       {children}
-      <MdSymbol style={{ color }} aria-label={symbolLabel}>
+      {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: wat */}
+      <div style={{ color }} aria-label={symbolLabel}>
         {icon}
-      </MdSymbol>
+      </div>
     </span>
   );
 }

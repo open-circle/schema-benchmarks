@@ -1,7 +1,6 @@
 import { bem } from "@schema-benchmarks/utils";
 import type { ReactNode } from "react";
 import { useExternalStore } from "@/hooks/store";
-import { MdSymbol } from "../symbol";
 import { bannerQueue } from "./queue";
 
 export type BannerColor = "success" | "error" | "warning";
@@ -23,7 +22,7 @@ export function Banner() {
   return (
     <div className={cls({ modifiers: { closing, [color]: !!color } })}>
       <div className={cls("container")}>
-        {icon && <MdSymbol className={cls("icon")}>{icon}</MdSymbol>}
+        {icon && <div className={cls("icon")}>{icon}</div>}
         <p className={cls({ element: "message", extra: "typo-body2" })}>
           {children}
         </p>

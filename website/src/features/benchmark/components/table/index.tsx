@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
+import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { Snippet } from "./snippet";
 
@@ -37,10 +38,14 @@ function useComparison(results: Array<BenchResult>) {
     );
     const max = Math.max(...ratios);
     const min = Math.min(...ratios);
-    return Scaler.getScale([min, max, -min, -max], {
+    const scale = Scaler.getScale([min, max, -min, -max], {
       type: "stat",
       lowerBetter: true,
     });
+    return (ratio: number) => {
+      const { icon, ...rest } = scale(ratio);
+      return { icon: <MdSymbol>{icon}</MdSymbol>, ...rest };
+    };
   }, [results, compareResult]);
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
@@ -59,7 +64,7 @@ export function BenchTable({ results }: BenchTableProps) {
   if (!results.length) {
     return (
       <EmptyState
-        icon="database_off"
+        icon={<MdSymbol>database_off</MdSymbol>}
         title="No results found"
         subtitle="Try a different combination of filters"
       />
@@ -135,7 +140,7 @@ export function BenchTable({ results }: BenchTableProps) {
                           </Scaler>
                         ) : (
                           <Scaler
-                            icon="stat_0"
+                            icon={<MdSymbol>stat_0</MdSymbol>}
                             color="var(--yellow)"
                             symbolLabel="Equal"
                           >

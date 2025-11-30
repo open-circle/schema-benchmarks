@@ -40,13 +40,13 @@ export const Disabled: Story = {
 
 export const StartIcon: Story = {
   args: {
-    startIcon: "speed",
+    startIcon: <MdSymbol>speed</MdSymbol>,
   },
 };
 
 export const EndIcon: Story = {
   args: {
-    endIcon: "speed",
+    endIcon: <MdSymbol>speed</MdSymbol>,
   },
 };
 

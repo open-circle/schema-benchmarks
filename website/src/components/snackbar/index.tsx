@@ -12,10 +12,10 @@ export function Snackbars() {
       containerClassName="snackbar-queue"
       toastOptions={{
         success: {
-          icon: "check_circle",
+          icon: <MdSymbol>check_circle</MdSymbol>,
         },
         error: {
-          icon: "error",
+          icon: <MdSymbol>error</MdSymbol>,
         },
         removeDelay: 75,
       }}
@@ -32,7 +32,7 @@ export function Snackbars() {
           style={t.style}
           {...t.ariaProps}
         >
-          {t.icon && <MdSymbol className={cls("icon")}>{t.icon}</MdSymbol>}
+          {t.icon && <div className={cls("icon")}>{t.icon}</div>}
           {t.type === "loading" && (
             <Spinner className={cls("icon")} size={24} />
           )}

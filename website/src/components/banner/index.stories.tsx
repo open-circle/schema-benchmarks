@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../button";
+import { MdSymbol } from "../symbol";
 import { Banner, type BannerProps } from ".";
 import { closeBanner, openBanner } from "./queue";
 
@@ -27,7 +28,7 @@ const meta = {
     },
   },
   args: {
-    icon: "warning",
+    icon: <MdSymbol>warning</MdSymbol>,
     children: "Hello World",
     actions: <Button onClick={closeBanner}>Close</Button>,
   },
