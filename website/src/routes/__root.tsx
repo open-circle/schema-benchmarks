@@ -13,6 +13,7 @@ import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
+import { symbolsUrl } from "../../vite/symbols";
 import { Header } from "../components/header";
 import { Sidebar } from "../components/sidebar";
 import { Snackbars } from "../components/snackbar";
@@ -56,7 +57,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
       {
         rel: "stylesheet",
-        href: "$__VITE_SYMBOLS_URL__",
+        href: symbolsUrl,
       },
     ],
   }),
