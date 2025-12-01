@@ -26,10 +26,21 @@ export interface DownloadTableProps {
 }
 
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
-  const bytes = useMemo(() => results.map((result) => result.bytes), [results]);
   const sizeScaler = useMemo(
-    () => Bar.getScale(bytes, { lowerBetter: true }),
-    [bytes],
+    () =>
+      Bar.getScale(
+        results.map((result) => result.bytes),
+        { lowerBetter: true },
+      ),
+    [results],
+  );
+  const gzipScaler = useMemo(
+    () =>
+      Bar.getScale(
+        results.map((result) => result.gzipBytes),
+        { lowerBetter: true },
+      ),
+    [results],
   );
   return (
     <div className="card">
@@ -38,15 +49,19 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
           <tr>
             <th>Library</th>
             <th>Version</th>
-            <th className="numeric">Size</th>
-            <th className="bar-after"></th>
+            <th className="numeric" colSpan={2}>
+              Uncompressed
+            </th>
+            <th className="numeric" colSpan={2}>
+              Gzipped
+            </th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>
           </tr>
         </thead>
         <tbody>
           {results.map((result) => {
-            const time = getDownloadTime(result.bytes, mbps);
+            const gzipTime = getDownloadTime(result.gzipBytes, mbps);
             return (
               <tr key={result.fileName}>
                 <td>
@@ -60,8 +75,12 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 <td className="bar-after">
                   <Bar {...sizeScaler(result.bytes)} />
                 </td>
+                <td className="numeric">{formatBytes(result.gzipBytes)}</td>
+                <td className="bar-after">
+                  <Bar {...gzipScaler(result.gzipBytes)} />
+                </td>
                 <td className="numeric">
-                  {durationFormatter.format(getDuration(time))}
+                  {durationFormatter.format(getDuration(gzipTime))}
                 </td>
                 <td className="action fit-content">
                   <ButtonGroup
