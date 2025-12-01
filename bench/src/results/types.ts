@@ -54,6 +54,7 @@ export const downloadResultSchema = v.object({
   version: v.string(),
   note: v.optional(v.string()),
   bytes: v.number(),
+  gzipBytes: v.number(),
 });
 export type DownloadResult = v.InferOutput<typeof downloadResultSchema>;
 

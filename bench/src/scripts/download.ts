@@ -2,6 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
 import { getVersion } from "@schema-benchmarks/utils/node";
+import { gzipSize } from "gzip-size";
 import { rolldown } from "rolldown";
 import {
   type DownloadResult,
@@ -53,6 +54,7 @@ async function measureFile(
     version: await getVersion(file.libraryName),
     note: file.note,
     bytes: blob.size,
+    gzipBytes: await gzipSize(code),
   };
 }
 
