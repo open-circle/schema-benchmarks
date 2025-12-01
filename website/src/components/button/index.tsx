@@ -3,7 +3,6 @@ import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 import { Spinner } from "../spinner";
-import { MdSymbol } from "../symbol";
 import { withTooltip } from "../tooltip";
 
 export type ButtonColor =
