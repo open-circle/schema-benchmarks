@@ -32,9 +32,10 @@ export function Snackbars() {
           style={t.style}
           {...t.ariaProps}
         >
-          {t.icon && <div className={cls("icon")}>{t.icon}</div>}
-          {t.type === "loading" && (
-            <Spinner className={cls("icon")} size={24} />
+          {(t.icon || t.type === "loading") && (
+            <div className={cls("icon")}>
+              {t.icon ?? (t.type === "loading" && <Spinner size={24} />)}
+            </div>
           )}
           {resolveValue(t.message, t)}
         </div>
