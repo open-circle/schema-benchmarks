@@ -57,6 +57,7 @@
     color: from(var(--chip-foreground) srgb r g b / var(--secondary-text));
     margin-left: -0.25rem;
     &:dir(rtl) {
+      margin-left: 0;
       margin-right: -0.25rem;
     }
   }
