@@ -1,6 +1,5 @@
 import { bem } from "@schema-benchmarks/utils";
 import type { ComponentPropsWithRef, ReactNode } from "react";
-import { MdSymbol } from "../symbol";
 
 export interface TextFieldProps extends ComponentPropsWithRef<"input"> {
   startIcon?: ReactNode;
