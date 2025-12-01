@@ -49,9 +49,15 @@ export const Route = createFileRoute("/validation")({
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      benchResults.validation[libraryType][dataType].map(({ snippet }) =>
-        queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
-      ),
+      benchResults.validation
+        .filter(
+          (result) =>
+            (!libraryType || result.libraryType === libraryType) &&
+            (!dataType || result.dataType === dataType),
+        )
+        .map(({ snippet }) =>
+          queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+        ),
     );
     return { crumb: "Validation" };
   },
@@ -61,7 +67,12 @@ function RouteComponent() {
   const { libraryType, dataType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => results.validation[libraryType][dataType],
+    select: (results) =>
+      results.validation.filter(
+        (result) =>
+          (!libraryType || result.libraryType === libraryType) &&
+          (!dataType || result.dataType === dataType),
+      ),
   });
   return (
     <>

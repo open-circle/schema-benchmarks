@@ -1,4 +1,4 @@
-import { isEmpty, toggleFilter } from "@schema-benchmarks/utils";
+import { toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -53,10 +53,16 @@ export const Route = createFileRoute("/parsing")({
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      benchResults.parsing[libraryType][dataType][errorType].map(
-        ({ snippet }) =>
+      benchResults.parsing
+        .filter(
+          (result) =>
+            (!libraryType || result.libraryType === libraryType) &&
+            (!dataType || result.dataType === dataType) &&
+            (!errorType || result.errorType === errorType),
+        )
+        .map(({ snippet }) =>
           queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
-      ),
+        ),
     );
     return { crumb: "Parsing" };
   },
@@ -66,7 +72,13 @@ function RouteComponent() {
   const { libraryType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => results.parsing[libraryType][dataType],
+    select: (results) =>
+      results.parsing.filter(
+        (result) =>
+          (!libraryType || result.libraryType === libraryType) &&
+          (!dataType || result.dataType === dataType) &&
+          (!errorType || result.errorType === errorType),
+      ),
   });
   return (
     <>
@@ -93,11 +105,10 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("errorType", option),
-            disabled: isEmpty(data[option]),
           })}
         />
       </PageFilters>
-      <BenchTable results={data[errorType]} />
+      <BenchTable results={data} />
     </>
   );
 }

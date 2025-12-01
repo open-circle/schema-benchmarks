@@ -9,45 +9,12 @@ import {
 } from "@schema-benchmarks/utils";
 import { Bench, type Task } from "tinybench";
 import { CaseRegistry } from "../bench/registry.ts";
-import type { BenchResult, BenchResults } from "../results/types.ts";
+import type { BenchResults } from "../results/types.ts";
 
 const results: BenchResults = {
-  initialization: {
-    runtime: [],
-    precompiled: [],
-  },
-  validation: {
-    runtime: {
-      valid: [],
-      invalid: [],
-    },
-    precompiled: {
-      valid: [],
-      invalid: [],
-    },
-  },
-  parsing: {
-    runtime: {
-      valid: {
-        allErrors: [],
-        abortEarly: [],
-      },
-      invalid: {
-        allErrors: [],
-        abortEarly: [],
-      },
-    },
-    precompiled: {
-      valid: {
-        allErrors: [],
-        abortEarly: [],
-      },
-      invalid: {
-        allErrors: [],
-        abortEarly: [],
-      },
-    },
-  },
+  initialization: [],
+  validation: [],
+  parsing: [],
 };
 
 const caseRegistry = new CaseRegistry();
@@ -70,13 +37,15 @@ function processResults(tasks: Array<Task>) {
     const { libraryName, note, version, snippet } = entry;
     switch (entry.type) {
       case "initialization": {
-        results.initialization[entry.libraryType].push({
+        results.initialization.push({
+          type: "initialization",
           id: task.name,
           libraryName,
           version,
           snippet,
           note,
           mean: task.result.mean,
+          libraryType: entry.libraryType,
         });
         break;
       }
@@ -85,13 +54,16 @@ function processResults(tasks: Array<Task>) {
           console.error("Missing data type for validation bench:", entry);
           continue;
         }
-        results.validation[entry.libraryType][entry.dataType].push({
+        results.validation.push({
+          type: "validation",
           id: task.name,
           libraryName,
           version,
           snippet,
           note,
           mean: task.result.mean,
+          libraryType: entry.libraryType,
+          dataType: entry.dataType,
         });
         break;
       }
@@ -104,15 +76,17 @@ function processResults(tasks: Array<Task>) {
           console.error("Missing error type for parsing bench:", entry);
           continue;
         }
-        results.parsing[entry.libraryType][entry.dataType][
-          entry.errorType
-        ].push({
+        results.parsing.push({
+          type: "parsing",
           id: task.name,
           libraryName,
           version,
           snippet,
           note,
           mean: task.result.mean,
+          libraryType: entry.libraryType,
+          dataType: entry.dataType,
+          errorType: entry.errorType,
         });
         break;
       }
@@ -215,13 +189,11 @@ for (const getConfig of Object.values(libraries)) {
   global.gc?.();
 }
 
-for (const array of ([] as Array<Array<BenchResult>>).concat(
-  Object.values(results.initialization),
-  Object.values(results.validation).flatMap((v) => Object.values(v)),
-  Object.values(results.parsing)
-    .flatMap((v) => Object.values(v))
-    .flatMap((v) => Object.values(v)),
-)) {
+for (const array of [
+  results.initialization,
+  results.validation,
+  results.parsing,
+]) {
   array.sort((a, b) => a.mean - b.mean);
 }
 

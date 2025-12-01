@@ -29,10 +29,6 @@ export const unsafeFromEntries: <
   -readonly [TEntry in TEntries[number] as TEntry[0]]: TEntry[1];
 } = Object.fromEntries;
 
-export const objectKeyCount = (obj: object) => Object.keys(obj).length;
-export const isEmpty = (obj: object) =>
-  Array.isArray(obj) ? obj.length === 0 : objectKeyCount(obj) === 0;
-
 export function partition<T, U extends T>(
   array: ReadonlyArray<T>,
   predicate: (value: T) => value is U,
@@ -231,15 +227,23 @@ export const ensureArray = <T>(value: T) =>
 export const anyAbortSignal = (...signals: Array<AbortSignal | undefined>) =>
   AbortSignal.any(signals.filter((s) => !!s));
 
-export function toggleFilter<K extends string, V>(
+export function toggleFilter<K extends string, const V extends string>(
   key: K,
   newValue: V,
-): <T extends Record<K, V>>(filter: T) => WithPartial<T, K> {
-  return (filter) => {
-    if (filter[key] === newValue) {
-      const { [key]: _, ...rest } = filter;
-      return rest as never;
-    }
-    return { ...filter, [key]: newValue };
-  };
+  defaultValue: V,
+): <T extends Record<K, V>>(filter: T) => T;
+export function toggleFilter<K extends string, const V extends string>(
+  key: K,
+  newValue: V,
+  defaultValue?: V,
+): <T extends Record<K, V>>(filter: T) => WithPartial<T, K>;
+export function toggleFilter(
+  key: string,
+  newValue: unknown,
+  defaultValue?: unknown,
+) {
+  return (filter: Record<string, unknown>) => ({
+    ...filter,
+    [key]: filter[key] === newValue ? defaultValue : newValue,
+  });
 }
