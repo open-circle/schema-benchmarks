@@ -16,6 +16,7 @@
       var(--elevation-overlay-color) var(--elevation-4-overlay-opacity)
     )
   );
+  color: var(--page-header-foreground);
   box-shadow: var(--elevation-4);
   display: flex;
   align-items: center;
@@ -32,9 +33,7 @@
     --button-base-color: var(--page-header-foreground);
     margin-left: -0.5rem;
     opacity: 1;
-    transition:
-      margin 250ms var(--standard-curve),
-      opacity 250ms;
+    transition: margin 250ms var(--standard-curve), opacity 250ms;
     &:dir(rtl) {
       margin-left: 0;
       margin-right: -0.5rem;
@@ -60,7 +59,9 @@
   gap: 0.5rem;
   a {
     text-decoration: none;
-    color: color(from var(--page-foreground) srgb r g b / var(--primary-text));
+    color: color(
+      from var(--page-header-foreground) srgb r g b / var(--primary-text)
+    );
     transition: font-weight 250ms;
     &:hover {
       font-weight: var(--weight-bold);
