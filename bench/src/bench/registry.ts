@@ -2,8 +2,9 @@ import type {
   BaseBenchmarkConfig,
   BenchmarksConfig,
   ErrorType,
-  LibraryType,
+  OptimizeType,
 } from "@schema-benchmarks/schemas";
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import type { DataType } from "../results/types.ts";
 
 export type BenchmarkType = Exclude<
@@ -13,12 +14,14 @@ export type BenchmarkType = Exclude<
 
 export interface BenchInfo {
   type: BenchmarkType;
-  libraryType: LibraryType;
+  optimizeType: OptimizeType;
   errorType?: ErrorType;
   dataType?: DataType;
 }
 
-export interface BenchmarkConfigEntry extends BaseBenchmarkConfig, BenchInfo {
+export interface BenchmarkConfigEntry
+  extends DistributiveOmit<BaseBenchmarkConfig, "optimizeType">,
+    BenchInfo {
   libraryName: string;
   version: string;
 }

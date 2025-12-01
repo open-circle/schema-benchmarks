@@ -1,10 +1,11 @@
 import type { MaybeArray } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-export const libraryTypeSchema = v.picklist(["runtime", "precompiled"]);
-export type LibraryType = v.InferOutput<typeof libraryTypeSchema>;
+export const optimizeTypeSchema = v.picklist(["runtime", "jit", "precompiled"]);
+export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
+  optimizeType?: OptimizeType;
   snippet: string;
   note?: string;
 }
@@ -28,7 +29,7 @@ export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
 
 export interface LibraryInfo {
   name: string;
-  type: LibraryType;
+  optimizeType: OptimizeType;
   version: string;
 }
 

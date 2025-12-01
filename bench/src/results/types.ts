@@ -1,4 +1,7 @@
-import { errorTypeSchema, libraryTypeSchema } from "@schema-benchmarks/schemas";
+import {
+  errorTypeSchema,
+  optimizeTypeSchema,
+} from "@schema-benchmarks/schemas";
 import * as v from "valibot";
 
 export const dataTypeSchema = v.picklist(["valid", "invalid"]);
@@ -17,7 +20,7 @@ export type BaseBenchResult = v.InferOutput<typeof baseBenchResultSchema>;
 export const initializationResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("initialization"),
-  libraryType: libraryTypeSchema,
+  optimizeType: optimizeTypeSchema,
 });
 export type InitializationResult = v.InferOutput<
   typeof initializationResultSchema
@@ -26,7 +29,7 @@ export type InitializationResult = v.InferOutput<
 export const validationResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("validation"),
-  libraryType: libraryTypeSchema,
+  optimizeType: optimizeTypeSchema,
   dataType: dataTypeSchema,
 });
 export type ValidationResult = v.InferOutput<typeof validationResultSchema>;
@@ -34,7 +37,7 @@ export type ValidationResult = v.InferOutput<typeof validationResultSchema>;
 export const parsingResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("parsing"),
-  libraryType: libraryTypeSchema,
+  optimizeType: optimizeTypeSchema,
   dataType: dataTypeSchema,
   errorType: errorTypeSchema,
 });

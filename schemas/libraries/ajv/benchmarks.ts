@@ -8,7 +8,7 @@ import { getAjv, getAjvSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "ajv",
-    type: "runtime",
+    optimizeType: "jit",
     version: await getVersion("ajv"),
   },
   createContext: () => {

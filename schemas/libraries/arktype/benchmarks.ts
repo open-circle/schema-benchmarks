@@ -8,7 +8,7 @@ import { getArkTypeSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "arktype",
-    type: "runtime",
+    optimizeType: "runtime",
     version: await getVersion("arktype"),
   },
   createContext: () => ({ schema: getArkTypeSchema() }),

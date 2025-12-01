@@ -7,14 +7,14 @@ import { PageFilterChips } from "@/components/page-filter/chips";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
   getBenchResults,
-  libraryTypeProps,
-  optionalLibraryTypeSchema,
+  optimizeTypeProps,
+  optionalOptimizeTypeSchema,
 } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getHighlightedCode } from "@/lib/highlight";
 
 const searchSchema = v.object({
-  libraryType: optionalLibraryTypeSchema,
+  optimizeType: optionalOptimizeTypeSchema,
 });
 
 export const Route = createFileRoute("/initialization")({
@@ -33,10 +33,10 @@ export const Route = createFileRoute("/initialization")({
   }),
   component: RouteComponent,
   validateSearch: searchSchema,
-  loaderDeps: ({ search: { libraryType } }) => ({ libraryType }),
+  loaderDeps: ({ search: { optimizeType } }) => ({ optimizeType }),
   async loader({
     context: { queryClient },
-    deps: { libraryType },
+    deps: { optimizeType },
     abortController,
   }) {
     const benchResults = await queryClient.ensureQueryData(
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/initialization")({
     await Promise.all(
       Object.values(
         benchResults.initialization.filter(
-          (result) => !libraryType || result.libraryType === libraryType,
+          (result) => !optimizeType || result.optimizeType === optimizeType,
         ),
       ).map(({ snippet }) =>
         queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
@@ -56,23 +56,23 @@ export const Route = createFileRoute("/initialization")({
 });
 
 function RouteComponent() {
-  const { libraryType } = Route.useSearch();
+  const { optimizeType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
       results.initialization.filter(
-        (result) => !libraryType || result.libraryType === libraryType,
+        (result) => !optimizeType || result.optimizeType === optimizeType,
       ),
   });
   return (
     <>
       <PageFilters>
         <PageFilterChips
-          {...libraryTypeProps}
+          {...optimizeTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
-            search: toggleFilter("libraryType", option),
+            search: toggleFilter("optimizeType", option),
           })}
         />
       </PageFilters>

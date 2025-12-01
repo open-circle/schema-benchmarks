@@ -11,7 +11,7 @@ import { getValibotSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "valibot",
-    type: "runtime",
+    optimizeType: "runtime",
     version: await getVersion("valibot"),
   },
   createContext: () => ({ schema: getValibotSchema() }),

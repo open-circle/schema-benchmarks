@@ -9,7 +9,7 @@ import * as scales from "./src/data/scale";
 import {
   dataTypeProps,
   errorTypeProps,
-  libraryTypeProps,
+  optimizeTypeProps,
 } from "./src/features/benchmark/query";
 import { minifyTypeProps } from "./src/features/download/query";
 import { speedPresets } from "./src/features/download/speed";
@@ -31,7 +31,7 @@ const config = defineConfig({
         ),
         ...[
           errorTypeProps,
-          libraryTypeProps,
+          optimizeTypeProps,
           minifyTypeProps,
           dataTypeProps,
         ].flatMap((props) =>

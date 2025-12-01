@@ -9,7 +9,7 @@ import { getZodMiniSchema } from "./mini";
 export default defineBenchmarks({
   library: {
     name: "zod",
-    type: "runtime",
+    optimizeType: "jit",
     version: await getVersion("zod"),
   },
   createContext: () => ({
@@ -45,6 +45,7 @@ export default defineBenchmarks({
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "jitless",
+        optimizeType: "runtime",
       },
       {
         run(data, { miniSchema }) {
@@ -59,6 +60,7 @@ export default defineBenchmarks({
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "mini, jitless",
+        optimizeType: "runtime",
       },
     ],
   },
