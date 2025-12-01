@@ -43,9 +43,12 @@ export const Route = createFileRoute("/initialization")({
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      Object.values(benchResults.initialization[libraryType]).map(
-        ({ snippet }) =>
-          queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+      Object.values(
+        benchResults.initialization.filter(
+          (result) => !libraryType || result.libraryType === libraryType,
+        ),
+      ).map(({ snippet }) =>
+        queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
       ),
     );
     return { crumb: "Initialization" };
@@ -56,7 +59,10 @@ function RouteComponent() {
   const { libraryType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => results.initialization[libraryType],
+    select: (results) =>
+      results.initialization.filter(
+        (result) => !libraryType || result.libraryType === libraryType,
+      ),
   });
   return (
     <>
