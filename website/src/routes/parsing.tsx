@@ -9,16 +9,16 @@ import {
   dataTypeProps,
   errorTypeProps,
   getBenchResults,
-  libraryTypeProps,
+  optimizeTypeProps,
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
-  optionalLibraryTypeSchema,
+  optionalOptimizeTypeSchema,
 } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getHighlightedCode } from "@/lib/highlight";
 
 const searchSchema = v.object({
-  libraryType: optionalLibraryTypeSchema,
+  optimizeType: optionalOptimizeTypeSchema,
   dataType: optionalDataTypeSchema,
   errorType: optionalErrorTypeSchema,
 });
@@ -39,14 +39,14 @@ export const Route = createFileRoute("/parsing")({
   }),
   component: RouteComponent,
   validateSearch: searchSchema,
-  loaderDeps: ({ search: { libraryType, dataType, errorType } }) => ({
-    libraryType,
+  loaderDeps: ({ search: { optimizeType, dataType, errorType } }) => ({
+    optimizeType,
     dataType,
     errorType,
   }),
   async loader({
     context: { queryClient },
-    deps: { libraryType, dataType, errorType },
+    deps: { optimizeType, dataType, errorType },
     abortController,
   }) {
     const benchResults = await queryClient.ensureQueryData(
@@ -56,7 +56,7 @@ export const Route = createFileRoute("/parsing")({
       benchResults.parsing
         .filter(
           (result) =>
-            (!libraryType || result.libraryType === libraryType) &&
+            (!optimizeType || result.optimizeType === optimizeType) &&
             (!dataType || result.dataType === dataType) &&
             (!errorType || result.errorType === errorType),
         )
@@ -69,13 +69,13 @@ export const Route = createFileRoute("/parsing")({
 });
 
 function RouteComponent() {
-  const { libraryType, dataType, errorType } = Route.useSearch();
+  const { optimizeType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
       results.parsing.filter(
         (result) =>
-          (!libraryType || result.libraryType === libraryType) &&
+          (!optimizeType || result.optimizeType === optimizeType) &&
           (!dataType || result.dataType === dataType) &&
           (!errorType || result.errorType === errorType),
       ),
@@ -84,11 +84,11 @@ function RouteComponent() {
     <>
       <PageFilters>
         <PageFilterChips
-          {...libraryTypeProps}
+          {...optimizeTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
-            search: toggleFilter("libraryType", option),
+            search: toggleFilter("optimizeType", option),
           })}
         />
         <PageFilterChips

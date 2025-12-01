@@ -45,7 +45,7 @@ function processResults(tasks: Array<Task>) {
           snippet,
           note,
           mean: task.result.mean,
-          libraryType: entry.libraryType,
+          optimizeType: entry.optimizeType,
         });
         break;
       }
@@ -62,7 +62,7 @@ function processResults(tasks: Array<Task>) {
           snippet,
           note,
           mean: task.result.mean,
-          libraryType: entry.libraryType,
+          optimizeType: entry.optimizeType,
           dataType: entry.dataType,
         });
         break;
@@ -84,7 +84,7 @@ function processResults(tasks: Array<Task>) {
           snippet,
           note,
           mean: task.result.mean,
-          libraryType: entry.libraryType,
+          optimizeType: entry.optimizeType,
           dataType: entry.dataType,
           errorType: entry.errorType,
         });
@@ -98,7 +98,11 @@ function processResults(tasks: Array<Task>) {
 for (const getConfig of Object.values(libraries)) {
   const { library, createContext, initialization, validation, parsing } =
     await getConfig();
-  const { name: libraryName, type: libraryType, version } = library;
+  const {
+    name: libraryName,
+    optimizeType: libraryOptimizeType,
+    version,
+  } = library;
 
   console.log(`\nBenchmarking: ${libraryName}`);
 
@@ -117,11 +121,16 @@ for (const getConfig of Object.values(libraries)) {
   const context = createContext();
 
   for (const benchConfig of ensureArray(initialization)) {
-    const { run, snippet, note } = benchConfig;
+    const {
+      run,
+      snippet,
+      note,
+      optimizeType = libraryOptimizeType,
+    } = benchConfig;
     bench.add(
       caseRegistry.add({
         type: "initialization",
-        libraryType,
+        optimizeType,
         libraryName,
         version,
         snippet,
@@ -136,11 +145,16 @@ for (const getConfig of Object.values(libraries)) {
       ["invalid", errorData],
     ] as const) {
       for (const benchConfig of ensureArray(validation)) {
-        const { run, snippet, note } = benchConfig;
+        const {
+          run,
+          snippet,
+          note,
+          optimizeType = libraryOptimizeType,
+        } = benchConfig;
         bench.add(
           caseRegistry.add({
             type: "validation",
-            libraryType,
+            optimizeType,
             dataType,
             libraryName,
             version,
@@ -160,11 +174,16 @@ for (const getConfig of Object.values(libraries)) {
       for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
         if (!benchConfigs) continue;
         for (const benchConfig of ensureArray(benchConfigs)) {
-          const { run, snippet, note } = benchConfig;
+          const {
+            run,
+            snippet,
+            note,
+            optimizeType = libraryOptimizeType,
+          } = benchConfig;
           bench.add(
             caseRegistry.add({
               type: "parsing",
-              libraryType,
+              optimizeType,
               dataType,
               errorType,
               libraryName,

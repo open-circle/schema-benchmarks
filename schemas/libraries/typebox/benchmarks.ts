@@ -10,7 +10,7 @@ import { getTypeboxSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "typebox",
-    type: "runtime",
+    optimizeType: "runtime",
     version: await getVersion("typebox"),
   },
   createContext: () => {
@@ -31,6 +31,7 @@ export default defineBenchmarks({
       },
       snippet: ts`Compile(Type.Object(...))`,
       note: "compile",
+      optimizeType: "jit",
     },
   ],
   validation: [
@@ -49,6 +50,7 @@ export default defineBenchmarks({
         compiled.Check(data);
       `,
       note: "compile",
+      optimizeType: "jit",
     },
   ],
   parsing: {
@@ -72,6 +74,7 @@ export default defineBenchmarks({
           compiled.Parse(data);
         `,
         note: "compile",
+        optimizeType: "jit",
       },
     ],
   },

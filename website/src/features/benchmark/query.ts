@@ -10,8 +10,8 @@ import benchResults from "@schema-benchmarks/bench/bench.json" with {
 import {
   type ErrorType,
   errorTypeSchema,
-  type LibraryType,
-  libraryTypeSchema,
+  type OptimizeType,
+  optimizeTypeSchema,
 } from "@schema-benchmarks/schemas";
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
@@ -45,18 +45,19 @@ export const errorTypeProps: Pick<
   },
 };
 
-export const optionalLibraryTypeSchema = v.optional(
-  libraryTypeSchema,
+export const optionalOptimizeTypeSchema = v.optional(
+  optimizeTypeSchema,
   "runtime",
 );
-export const libraryTypeProps: Pick<
-  PageFilterChipsProps<LibraryType>,
+export const optimizeTypeProps: Pick<
+  PageFilterChipsProps<OptimizeType>,
   "title" | "labels" | "options"
 > = {
-  title: "Type",
-  options: optionalLibraryTypeSchema.wrapped.options,
+  title: "Optimizations",
+  options: optionalOptimizeTypeSchema.wrapped.options,
   labels: {
     runtime: { label: "Runtime", icon: "deployed_code" },
+    jit: { label: "JIT", icon: "speed" },
     precompiled: { label: "Precompiled", icon: "build" },
   },
 };

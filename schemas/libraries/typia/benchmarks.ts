@@ -12,7 +12,7 @@ import type { TypiaSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "typia",
-    type: "precompiled",
+    optimizeType: "precompiled",
     version: await getVersion("typia"),
   },
   createContext: () => ({
