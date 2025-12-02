@@ -10,10 +10,14 @@ import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
+import { errorTypeProps, optimizeTypeProps } from "../../query";
 import { Snippet } from "./snippet";
 
+// DistributiveArray<string | number> = Array<string> | Array<number>
+type DistributiveArray<T> = T extends T ? Array<T> : never;
+
 export interface BenchTableProps {
-  results: Array<BenchResult>;
+  results: DistributiveArray<BenchResult>;
 }
 
 const getRatio = (a: number, b: number) => {
@@ -75,6 +79,8 @@ export function BenchTable({ results }: BenchTableProps) {
             <th>Library</th>
             <th className="action"></th>
             <th>Version</th>
+            <th>Optimizations</th>
+            {results[0]?.type === "parsing" && <th>Error type</th>}
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
               <>
@@ -101,6 +107,10 @@ export function BenchTable({ results }: BenchTableProps) {
                 <td>
                   <code className="language-text">{result.version}</code>
                 </td>
+                <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
+                {result.type === "parsing" && (
+                  <td>{errorTypeProps.labels[result.errorType].label}</td>
+                )}
                 <td className="numeric">
                   {durationFormatter.format(getDuration(result.mean))}
                 </td>

@@ -236,7 +236,7 @@ export function toggleFilter<K extends string, const V extends string>(
   key: K,
   newValue: V,
   defaultValue?: V,
-): <T extends Record<K, V>>(filter: T) => WithPartial<T, K>;
+): <T extends Partial<Record<K, V>>>(filter: T) => WithPartial<T, K>;
 export function toggleFilter(
   key: string,
   newValue: unknown,
