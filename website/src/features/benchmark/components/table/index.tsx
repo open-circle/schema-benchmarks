@@ -71,8 +71,10 @@ export function BenchTable({ results }: BenchTableProps) {
     );
   }
   const showComparisonColumns = results.length > 1;
+  // biome-ignore lint/style/noNonNullAssertion: We know there's at least one result
+  const benchType = results[0]!.type;
   return (
-    <div className="card">
+    <div className="card" style={{ viewTransitionName: "bench-table" }}>
       <table className="bench-table">
         <thead>
           <tr>
@@ -80,7 +82,7 @@ export function BenchTable({ results }: BenchTableProps) {
             <th className="action"></th>
             <th>Version</th>
             <th>Optimizations</th>
-            {results[0]?.type === "parsing" && <th>Error type</th>}
+            {benchType === "parsing" && <th>Error type</th>}
             <th className="numeric">Mean</th>
             {showComparisonColumns && (
               <>
@@ -100,7 +102,6 @@ export function BenchTable({ results }: BenchTableProps) {
                 key={result.id}
                 style={{
                   viewTransitionName: `bench-table-row-${result.id}`,
-                  backgroundColor: "var(--card-surface)",
                 }}
               >
                 <td>
