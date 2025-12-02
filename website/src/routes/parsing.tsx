@@ -91,6 +91,7 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("optimizeType", option),
+            replace: true,
           })}
         />
         <PageFilterChips
@@ -99,6 +100,7 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("errorType", option),
+            replace: true,
           })}
         />
       </PageFilters>
