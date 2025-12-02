@@ -247,3 +247,28 @@ export function toggleFilter(
     [key]: filter[key] === newValue ? defaultValue : newValue,
   });
 }
+
+/**
+ * Filter an array of objects by a set of key-value pairs.
+ * @param filter The key-value pairs to filter by.
+ * @returns A function that takes an object and returns true if it matches the filter.
+ * @example
+ * const array = [{ a: 1, b: 2 }, { a: 1, b: 3 }, { a: 2, b: 2 }];
+ * const result = array.filter(shallowFilter({ a: [1, 2], b: 2 }));
+ * // [{ a: 1, b: 2 }, { a: 2, b: 2 }]
+ */
+export function shallowFilter<T>(
+  filter: {
+    [K in keyof T]?: T[K] | Array<T[K]>;
+  },
+): (item: T) => boolean {
+  return (item) => {
+    for (const [key, value] of unsafeEntries(filter)) {
+      if (value === undefined) continue;
+      if (Array.isArray(value)) {
+        if (!value.includes(item[key])) return false;
+      } else if (item[key] !== value) return false;
+    }
+    return true;
+  };
+}

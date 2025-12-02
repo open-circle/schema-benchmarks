@@ -6,6 +6,7 @@ import {
   serialize,
   setAbortableInterval,
   setAbortableTimeout,
+  shallowFilter,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -115,5 +116,19 @@ describe("serialize", () => {
   });
   it("should not sort array keys", () => {
     expect(serialize([{ b: 2 }, { a: 1 }])).toBe('[{"b":2},{"a":1}]');
+  });
+});
+
+describe("shallowFilter", () => {
+  it("should filter by a single value", () => {
+    const filter = shallowFilter<{ a: number; b: number }>({ a: 1 });
+    expect(filter({ a: 1, b: 2 })).toBe(true);
+    expect(filter({ a: 2, b: 2 })).toBe(false);
+  });
+  it("should filter by multiple values", () => {
+    const filter = shallowFilter<{ a: number; b: number }>({ a: [1, 2] });
+    expect(filter({ a: 1, b: 2 })).toBe(true);
+    expect(filter({ a: 2, b: 2 })).toBe(true);
+    expect(filter({ a: 3, b: 2 })).toBe(false);
   });
 });

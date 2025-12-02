@@ -1,4 +1,4 @@
-import { toggleFilter } from "@schema-benchmarks/utils";
+import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -44,9 +44,7 @@ export const Route = createFileRoute("/initialization")({
     );
     await Promise.all(
       Object.values(
-        benchResults.initialization.filter(
-          (result) => !optimizeType || result.optimizeType === optimizeType,
-        ),
+        benchResults.initialization.filter(shallowFilter({ optimizeType })),
       ).map(({ snippet }) =>
         queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
       ),
@@ -60,9 +58,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.initialization.filter(
-        (result) => !optimizeType || result.optimizeType === optimizeType,
-      ),
+      results.initialization.filter(shallowFilter({ optimizeType })),
   });
   return (
     <>
