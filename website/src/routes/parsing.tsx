@@ -56,7 +56,9 @@ export const Route = createFileRoute("/parsing")({
       benchResults.parsing[dataType]
         .filter(shallowFilter({ optimizeType, errorType }))
         .map(({ snippet }) =>
-          queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+          queryClient.ensureQueryData(
+            getHighlightedCode({ code: snippet }, abortController.signal),
+          ),
         ),
     );
     return { crumb: "Parsing" };
