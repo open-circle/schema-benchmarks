@@ -84,6 +84,7 @@ function RouteComponent() {
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
+            replace: true,
             search: toggleFilter("optimizeType", option),
           })}
         />
