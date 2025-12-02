@@ -259,14 +259,18 @@ export function toggleFilter(
  */
 export function shallowFilter<T>(
   filter: {
-    [K in keyof T]?: T[K] | Array<T[K]>;
+    [K in keyof T]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
   },
 ): (item: T) => boolean {
+  const entries = unsafeEntries(filter).map(
+    ([key, value]) =>
+      [key, Array.isArray(value) ? new Set(value) : value] as const,
+  );
   return (item) => {
-    for (const [key, value] of unsafeEntries(filter)) {
+    for (const [key, value] of entries) {
       if (value === undefined) continue;
-      if (Array.isArray(value)) {
-        if (!value.includes(item[key])) return false;
+      if (value instanceof Set) {
+        if (!value.has(item[key])) return false;
       } else if (item[key] !== value) return false;
     }
     return true;
