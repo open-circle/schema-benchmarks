@@ -1,4 +1,4 @@
-import { toggleFilter } from "@schema-benchmarks/utils";
+import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -54,12 +54,7 @@ export const Route = createFileRoute("/parsing")({
     );
     await Promise.all(
       benchResults.parsing
-        .filter(
-          (result) =>
-            (!optimizeType || result.optimizeType === optimizeType) &&
-            (!dataType || result.dataType === dataType) &&
-            (!errorType || result.errorType === errorType),
-        )
+        .filter(shallowFilter({ optimizeType, dataType, errorType }))
         .map(({ snippet }) =>
           queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
         ),
