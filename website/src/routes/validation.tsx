@@ -52,7 +52,9 @@ export const Route = createFileRoute("/validation")({
       benchResults.validation[dataType]
         .filter(shallowFilter({ optimizeType }))
         .map(({ snippet }) =>
-          queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+          queryClient.ensureQueryData(
+            getHighlightedCode({ code: snippet }, abortController.signal),
+          ),
         ),
     );
     return { crumb: "Validation" };
@@ -70,19 +72,19 @@ function RouteComponent() {
     <>
       <PageFilters>
         <PageFilterChips
-          {...optimizeTypeProps}
-          getLinkOptions={(option) => ({
-            from: Route.fullPath,
-            to: Route.fullPath,
-            search: toggleFilter("optimizeType", option),
-          })}
-        />
-        <PageFilterChips
           {...dataTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("dataType", option),
+          })}
+        />
+        <PageFilterChips
+          {...optimizeTypeProps}
+          getLinkOptions={(option) => ({
+            from: Route.fullPath,
+            to: Route.fullPath,
+            search: toggleFilter("optimizeType", option),
           })}
         />
       </PageFilters>

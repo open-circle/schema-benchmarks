@@ -46,7 +46,9 @@ export const Route = createFileRoute("/initialization")({
       Object.values(
         benchResults.initialization.filter(shallowFilter({ optimizeType })),
       ).map(({ snippet }) =>
-        queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
+        queryClient.ensureQueryData(
+          getHighlightedCode({ code: snippet }, abortController.signal),
+        ),
       ),
     );
     return { crumb: "Initialization" };
