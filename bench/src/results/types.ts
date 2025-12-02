@@ -30,7 +30,6 @@ export const validationResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("validation"),
   optimizeType: optimizeTypeSchema,
-  dataType: dataTypeSchema,
 });
 export type ValidationResult = v.InferOutput<typeof validationResultSchema>;
 
@@ -38,7 +37,6 @@ export const parsingResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("parsing"),
   optimizeType: optimizeTypeSchema,
-  dataType: dataTypeSchema,
   errorType: errorTypeSchema,
 });
 export type ParsingResult = v.InferOutput<typeof parsingResultSchema>;
@@ -50,8 +48,12 @@ export type BenchResult =
 
 export const benchResultsSchema = v.object({
   initialization: v.array(initializationResultSchema),
-  parsing: v.array(parsingResultSchema),
-  validation: v.array(validationResultSchema),
+  parsing: v.object(
+    v.entriesFromList(dataTypeSchema.options, v.array(parsingResultSchema)),
+  ),
+  validation: v.object(
+    v.entriesFromList(dataTypeSchema.options, v.array(validationResultSchema)),
+  ),
 });
 export type BenchResults = v.InferOutput<typeof benchResultsSchema>;
 

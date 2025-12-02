@@ -13,8 +13,8 @@ import type { BenchResults } from "../results/types.ts";
 
 const results: BenchResults = {
   initialization: [],
-  validation: [],
-  parsing: [],
+  validation: { valid: [], invalid: [] },
+  parsing: { valid: [], invalid: [] },
 };
 
 const caseRegistry = new CaseRegistry();
@@ -54,7 +54,7 @@ function processResults(tasks: Array<Task>) {
           console.error("Missing data type for validation bench:", entry);
           continue;
         }
-        results.validation.push({
+        results.validation[entry.dataType].push({
           type: "validation",
           id: task.name,
           libraryName,
@@ -63,7 +63,6 @@ function processResults(tasks: Array<Task>) {
           note,
           mean: task.result.mean,
           optimizeType: entry.optimizeType,
-          dataType: entry.dataType,
         });
         break;
       }
@@ -76,7 +75,7 @@ function processResults(tasks: Array<Task>) {
           console.error("Missing error type for parsing bench:", entry);
           continue;
         }
-        results.parsing.push({
+        results.parsing[entry.dataType].push({
           type: "parsing",
           id: task.name,
           libraryName,
@@ -85,7 +84,6 @@ function processResults(tasks: Array<Task>) {
           note,
           mean: task.result.mean,
           optimizeType: entry.optimizeType,
-          dataType: entry.dataType,
           errorType: entry.errorType,
         });
         break;
@@ -210,8 +208,8 @@ for (const getConfig of Object.values(libraries)) {
 
 for (const array of [
   results.initialization,
-  results.validation,
-  results.parsing,
+  ...Object.values(results.validation),
+  ...Object.values(results.parsing),
 ]) {
   array.sort((a, b) => a.mean - b.mean);
 }

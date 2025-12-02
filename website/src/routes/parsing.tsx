@@ -53,8 +53,8 @@ export const Route = createFileRoute("/parsing")({
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      benchResults.parsing
-        .filter(shallowFilter({ optimizeType, dataType, errorType }))
+      benchResults.parsing[dataType]
+        .filter(shallowFilter({ optimizeType, errorType }))
         .map(({ snippet }) =>
           queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
         ),
@@ -68,30 +68,27 @@ function RouteComponent() {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.parsing.filter(
-        (result) =>
-          (!optimizeType || result.optimizeType === optimizeType) &&
-          (!dataType || result.dataType === dataType) &&
-          (!errorType || result.errorType === errorType),
+      results.parsing[dataType].filter(
+        shallowFilter({ optimizeType, errorType }),
       ),
   });
   return (
     <>
       <PageFilters>
         <PageFilterChips
-          {...optimizeTypeProps}
-          getLinkOptions={(option) => ({
-            from: Route.fullPath,
-            to: Route.fullPath,
-            search: toggleFilter("optimizeType", option),
-          })}
-        />
-        <PageFilterChips
           {...dataTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("dataType", option),
+          })}
+        />
+        <PageFilterChips
+          {...optimizeTypeProps}
+          getLinkOptions={(option) => ({
+            from: Route.fullPath,
+            to: Route.fullPath,
+            search: toggleFilter("optimizeType", option),
           })}
         />
         <PageFilterChips
