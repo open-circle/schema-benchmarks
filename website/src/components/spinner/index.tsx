@@ -1,7 +1,7 @@
 import {
+  type Autocomplete,
   bem,
   type DistributiveOmit,
-  type LooseAutocomplete,
 } from "@schema-benchmarks/utils";
 import type { ComponentPropsWithoutRef } from "react";
 import _MDSpinner from "react-md-spinner";
@@ -17,11 +17,11 @@ export interface SpinnerProps
     ComponentPropsWithoutRef<typeof MDSpinner>,
     "color1" | "color2" | "color3" | "color4" | "singleColor"
   > {
-  color1?: LooseAutocomplete<Color>;
-  color2?: LooseAutocomplete<Color>;
-  color3?: LooseAutocomplete<Color>;
-  color4?: LooseAutocomplete<Color>;
-  singleColor?: LooseAutocomplete<Color>;
+  color1?: Autocomplete.String<Color>;
+  color2?: Autocomplete.String<Color>;
+  color3?: Autocomplete.String<Color>;
+  color4?: Autocomplete.String<Color>;
+  singleColor?: Autocomplete.String<Color>;
 }
 
 const makeVar = (color: string) => `var(--${color})`;

@@ -11,18 +11,18 @@ export type WithPartial<T, K extends keyof T> = Compute<
   Omit<T, K> & Partial<Pick<T, K>>
 >;
 
-export namespace LooseAutocomplete {
+export namespace Autocomplete {
   /**
    * Accept anything assigable to `string`, but *suggest* using one of the KnownValues.
    * @example
-   * function parseString<TSchema extends v.GenericSchema<string>>(schema: TSchema, input: LooseAutocomplete.String<v.InferInput<TSchema>>) {}
+   * function parseString<TSchema extends v.GenericSchema<string>>(schema: TSchema, input: Autocomplete.String<v.InferInput<TSchema>>) {}
    * parseString(v.picklist(["foo", "bar"]), "") // accepts any value without type errors, but suggests "foo" or "bar"
    */
   export type String<KnownValues extends string> = KnownValues | (string & {});
   /**
    * Accept anything assigable to `unknown`, but *suggest* using one of the KnownValues.
    * @example
-   * function parse<TSchema extends v.GenericSchema>(schema: TSchema, input: LooseAutocomplete.Unknown<v.InferInput<TSchema>>) {}
+   * function parse<TSchema extends v.GenericSchema>(schema: TSchema, input: Autocomplete.Unknown<v.InferInput<TSchema>>) {}
    * parse(v.picklist(["foo", "bar"]), "") // accepts any value without type errors, but suggests "foo" or "bar"
    */
   export type Unknown<KnownValues> =
@@ -34,7 +34,7 @@ export namespace LooseAutocomplete {
   /**
    * Accept anything assigable to `PropertyKey`, but *suggest* using one of the KnownValues.
    * @example
-   * function hasKey<T extends object>(obj: T, key: LooseAutocomplete.PropertyKey<keyof T>) {}
+   * function hasKey<T extends object>(obj: T, key: Autocomplete.PropertyKey<keyof T>) {}
    * hasKey({ foo: 1, bar: 2 }, "foo") // accepts any value without type errors, but suggests "foo" or "bar"
    */
   export type PropertyKey<KnownValues extends string | number | symbol> =
@@ -49,7 +49,7 @@ export type HasRequiredProps<T, True, False> = NonOptionalKeys<T> extends never
   : True;
 export type DistributiveOmit<
   T,
-  K extends LooseAutocomplete.PropertyKey<keyof T>,
+  K extends Autocomplete.PropertyKey<keyof T>,
 > = T extends T ? Omit<T, K> : never;
 
 export type MaybeArray<T> = T | Array<T>;
