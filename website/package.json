@@ -31,11 +31,13 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
+    "@mdx-js/rollup": "^3.1.1",
     "@netlify/vite-plugin-tanstack-start": "^1.2.1",
     "@storybook/react-vite": "^10.1.2",
     "@types/d3": "^7.4.3",
     "@types/esquery": "^1.5.4",
     "@types/estree": "^1.0.8",
+    "@types/mdx": "^2.0.13",
     "@types/node": "^22.10.2",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^19.2.0",
@@ -52,6 +54,7 @@
     "postcss-extend-rule": "^4.0.0",
     "postcss-load-config": "^6.0.1",
     "redent": "^4.0.0",
+    "rehype-prism-plus": "^2.0.1",
     "srvx": "^0.9.6",
     "storybook": "^10.1.2",
     "typescript": "^5.7.2",

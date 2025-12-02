@@ -1,7 +1,9 @@
+import mdx from "@mdx-js/rollup";
 import netlify from "@netlify/vite-plugin-tanstack-start";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
+import rehypePrism from "rehype-prism-plus";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import { sidebarGroups } from "./src/components/sidebar/groups";
@@ -22,6 +24,9 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tanstackStart(),
+    mdx({
+      rehypePlugins: [rehypePrism],
+    }),
     netlify(),
     viteReact(),
     materialSymbols({
