@@ -49,8 +49,8 @@ export const Route = createFileRoute("/validation")({
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      benchResults.validation
-        .filter(shallowFilter({ optimizeType, dataType }))
+      benchResults.validation[dataType]
+        .filter(shallowFilter({ optimizeType }))
         .map(({ snippet }) =>
           queryClient.ensureQueryData(getHighlightedCode({ code: snippet })),
         ),
@@ -64,7 +64,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.validation.filter(shallowFilter({ optimizeType, dataType })),
+      results.validation[dataType].filter(shallowFilter({ optimizeType })),
   });
   return (
     <>
