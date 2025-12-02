@@ -7,24 +7,28 @@ import { PageFilterChips } from "@/components/page-filter/chips";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
   dataTypeProps,
+  errorTypeProps,
   getBenchResults,
   optimizeTypeProps,
   optionalDataTypeSchema,
+  optionalErrorTypeSchema,
   optionalOptimizeTypeSchema,
 } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getHighlightedCode } from "@/lib/highlight";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
   dataType: optionalDataTypeSchema,
+  errorType: optionalErrorTypeSchema,
 });
 
-export const Route = createFileRoute("/validation")({
+export const Route = createFileRoute("/parsing/")({
   head: () => ({
     meta: [
       {
-        title: "Validation - Schema Benchmarks",
+        title: "Parsing - Schema Benchmarks",
       },
     ],
     links: [
@@ -36,40 +40,44 @@ export const Route = createFileRoute("/validation")({
   }),
   component: RouteComponent,
   validateSearch: searchSchema,
-  loaderDeps: ({ search: { optimizeType, dataType } }) => ({
+  loaderDeps: ({ search: { optimizeType, dataType, errorType } }) => ({
     optimizeType,
     dataType,
+    errorType,
   }),
   async loader({
     context: { queryClient },
-    deps: { optimizeType, dataType },
+    deps: { optimizeType, dataType, errorType },
     abortController,
   }) {
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
     await Promise.all(
-      benchResults.validation[dataType]
-        .filter(shallowFilter({ optimizeType }))
+      benchResults.parsing[dataType]
+        .filter(shallowFilter({ optimizeType, errorType }))
         .map(({ snippet }) =>
           queryClient.ensureQueryData(
             getHighlightedCode({ code: snippet }, abortController.signal),
           ),
         ),
     );
-    return { crumb: "Validation" };
+    return { crumb: "Parsing" };
   },
 });
 
 function RouteComponent() {
-  const { optimizeType, dataType } = Route.useSearch();
+  const { optimizeType, dataType, errorType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.validation[dataType].filter(shallowFilter({ optimizeType })),
+      results.parsing[dataType].filter(
+        shallowFilter({ optimizeType, errorType }),
+      ),
   });
   return (
     <>
+      <Content />
       <PageFilters>
         <PageFilterChips
           {...dataTypeProps}
@@ -84,8 +92,17 @@ function RouteComponent() {
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: Route.fullPath,
-            replace: true,
             search: toggleFilter("optimizeType", option),
+            replace: true,
+          })}
+        />
+        <PageFilterChips
+          {...errorTypeProps}
+          getLinkOptions={(option) => ({
+            from: Route.fullPath,
+            to: Route.fullPath,
+            search: toggleFilter("errorType", option),
+            replace: true,
           })}
         />
       </PageFilters>

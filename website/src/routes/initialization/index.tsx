@@ -12,12 +12,13 @@ import {
 } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getHighlightedCode } from "@/lib/highlight";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
 });
 
-export const Route = createFileRoute("/initialization")({
+export const Route = createFileRoute("/initialization/")({
   head: () => ({
     meta: [
       {
@@ -64,6 +65,7 @@ function RouteComponent() {
   });
   return (
     <>
+      <Content />
       <PageFilters>
         <PageFilterChips
           {...optimizeTypeProps}

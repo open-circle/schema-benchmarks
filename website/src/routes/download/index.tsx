@@ -20,6 +20,7 @@ import {
   optionalMinifyTypeSchema,
 } from "@/features/download/query";
 import { speedPresets } from "@/features/download/speed";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   minifyType: optionalMinifyTypeSchema,
@@ -32,7 +33,7 @@ const searchSchema = v.object({
   ),
 });
 
-export const Route = createFileRoute("/download")({
+export const Route = createFileRoute("/download/")({
   head: () => ({
     meta: [
       {
@@ -59,6 +60,7 @@ function RouteComponent() {
 
   return (
     <>
+      <Content />
       <PageFilters>
         <PageFilterChips
           {...minifyTypeProps}

@@ -9,59 +9,59 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ValidationRouteImport } from './routes/validation'
-import { Route as ParsingRouteImport } from './routes/parsing'
-import { Route as InitializationRouteImport } from './routes/initialization'
-import { Route as DownloadRouteImport } from './routes/download'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ValidationIndexRouteImport } from './routes/validation/index'
+import { Route as ParsingIndexRouteImport } from './routes/parsing/index'
+import { Route as InitializationIndexRouteImport } from './routes/initialization/index'
+import { Route as DownloadIndexRouteImport } from './routes/download/index'
+import { Route as HomeIndexRouteImport } from './routes/_home/index'
 
-const ValidationRoute = ValidationRouteImport.update({
-  id: '/validation',
-  path: '/validation',
+const ValidationIndexRoute = ValidationIndexRouteImport.update({
+  id: '/validation/',
+  path: '/validation/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ParsingRoute = ParsingRouteImport.update({
-  id: '/parsing',
-  path: '/parsing',
+const ParsingIndexRoute = ParsingIndexRouteImport.update({
+  id: '/parsing/',
+  path: '/parsing/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InitializationRoute = InitializationRouteImport.update({
-  id: '/initialization',
-  path: '/initialization',
+const InitializationIndexRoute = InitializationIndexRouteImport.update({
+  id: '/initialization/',
+  path: '/initialization/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DownloadRoute = DownloadRouteImport.update({
-  id: '/download',
-  path: '/download',
+const DownloadIndexRoute = DownloadIndexRouteImport.update({
+  id: '/download/',
+  path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const HomeIndexRoute = HomeIndexRouteImport.update({
+  id: '/_home/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/download': typeof DownloadRoute
-  '/initialization': typeof InitializationRoute
-  '/parsing': typeof ParsingRoute
-  '/validation': typeof ValidationRoute
+  '/': typeof HomeIndexRoute
+  '/download': typeof DownloadIndexRoute
+  '/initialization': typeof InitializationIndexRoute
+  '/parsing': typeof ParsingIndexRoute
+  '/validation': typeof ValidationIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/download': typeof DownloadRoute
-  '/initialization': typeof InitializationRoute
-  '/parsing': typeof ParsingRoute
-  '/validation': typeof ValidationRoute
+  '/': typeof HomeIndexRoute
+  '/download': typeof DownloadIndexRoute
+  '/initialization': typeof InitializationIndexRoute
+  '/parsing': typeof ParsingIndexRoute
+  '/validation': typeof ValidationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/download': typeof DownloadRoute
-  '/initialization': typeof InitializationRoute
-  '/parsing': typeof ParsingRoute
-  '/validation': typeof ValidationRoute
+  '/_home/': typeof HomeIndexRoute
+  '/download/': typeof DownloadIndexRoute
+  '/initialization/': typeof InitializationIndexRoute
+  '/parsing/': typeof ParsingIndexRoute
+  '/validation/': typeof ValidationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -70,67 +70,67 @@ export interface FileRouteTypes {
   to: '/' | '/download' | '/initialization' | '/parsing' | '/validation'
   id:
     | '__root__'
-    | '/'
-    | '/download'
-    | '/initialization'
-    | '/parsing'
-    | '/validation'
+    | '/_home/'
+    | '/download/'
+    | '/initialization/'
+    | '/parsing/'
+    | '/validation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DownloadRoute: typeof DownloadRoute
-  InitializationRoute: typeof InitializationRoute
-  ParsingRoute: typeof ParsingRoute
-  ValidationRoute: typeof ValidationRoute
+  HomeIndexRoute: typeof HomeIndexRoute
+  DownloadIndexRoute: typeof DownloadIndexRoute
+  InitializationIndexRoute: typeof InitializationIndexRoute
+  ParsingIndexRoute: typeof ParsingIndexRoute
+  ValidationIndexRoute: typeof ValidationIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/validation': {
-      id: '/validation'
+    '/validation/': {
+      id: '/validation/'
       path: '/validation'
       fullPath: '/validation'
-      preLoaderRoute: typeof ValidationRouteImport
+      preLoaderRoute: typeof ValidationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/parsing': {
-      id: '/parsing'
+    '/parsing/': {
+      id: '/parsing/'
       path: '/parsing'
       fullPath: '/parsing'
-      preLoaderRoute: typeof ParsingRouteImport
+      preLoaderRoute: typeof ParsingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/initialization': {
-      id: '/initialization'
+    '/initialization/': {
+      id: '/initialization/'
       path: '/initialization'
       fullPath: '/initialization'
-      preLoaderRoute: typeof InitializationRouteImport
+      preLoaderRoute: typeof InitializationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/download': {
-      id: '/download'
+    '/download/': {
+      id: '/download/'
       path: '/download'
       fullPath: '/download'
-      preLoaderRoute: typeof DownloadRouteImport
+      preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_home/': {
+      id: '/_home/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  DownloadRoute: DownloadRoute,
-  InitializationRoute: InitializationRoute,
-  ParsingRoute: ParsingRoute,
-  ValidationRoute: ValidationRoute,
+  HomeIndexRoute: HomeIndexRoute,
+  DownloadIndexRoute: DownloadIndexRoute,
+  InitializationIndexRoute: InitializationIndexRoute,
+  ParsingIndexRoute: ParsingIndexRoute,
+  ValidationIndexRoute: ValidationIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
