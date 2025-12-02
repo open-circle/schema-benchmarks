@@ -88,7 +88,7 @@ pre[class*="language-"] {
 }
 
 .card {
-  background-color: light-dark(
+  --card-surface: light-dark(
     var(--surface),
     color-mix(
       in hsl,
@@ -96,6 +96,7 @@ pre[class*="language-"] {
       var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
     )
   );
+  background-color: var(--card-surface);
   border-radius: var(--shape-medium);
   box-shadow: var(--card-elevation);
   overflow: hidden;

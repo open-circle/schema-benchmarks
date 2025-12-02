@@ -96,7 +96,13 @@ export function BenchTable({ results }: BenchTableProps) {
             const ratio =
               compareResult && getRatio(result.mean, compareResult.mean);
             return (
-              <tr key={result.id}>
+              <tr
+                key={result.id}
+                style={{
+                  viewTransitionName: `bench-table-row-${result.id}`,
+                  backgroundColor: "var(--card-surface)",
+                }}
+              >
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
