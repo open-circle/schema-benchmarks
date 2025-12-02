@@ -1,5 +1,6 @@
 import {
   autoUpdate,
+  type ComputePositionConfig,
   flip,
   useFloating,
   useTransitionStyles,
@@ -33,13 +34,11 @@ type TooltipableComponent = ComponentType<
   >
 >;
 
-export interface TooltipOpts {
+export interface TooltipOpts extends ComputePositionConfig {
   /** Require a tooltip prop to be set */
   required?: boolean;
   /** Delay before showing the tooltip */
   delay?: number;
-  /** Offset from the target */
-  offset?: number;
 }
 
 export interface RichTooltipProps {
@@ -51,6 +50,7 @@ export interface RichTooltipProps {
 
 export interface TooltipProps {
   tooltip?: string | RichTooltipProps;
+  tooltipOpts?: ComputePositionConfig;
   id?: string;
 }
 
@@ -70,10 +70,11 @@ export function withTooltip<TComp extends TooltipableComponent>(
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
-  { delay = 1000 }: TooltipOpts = {},
+  { delay = 1000, ...opts }: TooltipOpts = {},
 ) {
   return function WithTooltip({
     tooltip,
+    tooltipOpts,
     id: idProp,
     ref,
     ...props
@@ -84,6 +85,8 @@ export function withTooltip<TComp extends TooltipableComponent>(
       open,
       whileElementsMounted: autoUpdate,
       middleware: [flip({ padding: 24 })],
+      ...opts,
+      ...tooltipOpts,
     });
     const { styles } = useTransitionStyles(context, {
       duration: 75,

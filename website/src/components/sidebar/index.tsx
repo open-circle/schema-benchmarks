@@ -1,16 +1,22 @@
 import { bem } from "@schema-benchmarks/utils";
-import { ClientOnly, Link } from "@tanstack/react-router";
+import { ClientOnly, createLink } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
+import type { ComponentProps } from "react";
 import { type ReactNode, useContext, useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
 import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
+import { withTooltip } from "../tooltip";
 import { SidebarOpenContext } from "./context";
 import { sidebarGroups } from "./groups";
 
 const cls = bem("sidebar");
 const backdropCls = bem("sidebar-backdrop");
+
+const useIsModal = () =>
+  useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
 
 function BaseSidebar({
   children,
@@ -66,7 +72,7 @@ function BaseSidebar({
 
 function BreakpointSidebar({ children }: { children?: ReactNode }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
-  const isModal = useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
+  const isModal = useIsModal();
   useScrollLockEffect(isModal && open);
   return (
     <ClientOnly
@@ -83,30 +89,34 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
   );
 }
 
+const LinkWithTooltip = createLink(
+  withTooltip((props: ComponentProps<"a">) => <a {...props} />),
+);
+
 export function Sidebar() {
+  const { open } = useContext(SidebarOpenContext);
+  const isModal = useIsModal();
+  const isLtr = useMediaQuery("(dir: ltr)");
   return (
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
         <ul className={cls("groups")}>
           {sidebarGroups.map((groups, index) => (
             <div key={groups.key} className={cls("group")}>
-              {groups.subheader && (
-                <h3
-                  className={cls({
-                    element: "subheader",
-                    extra: "typo-subtitle2",
-                  })}
-                >
-                  {groups.subheader}
-                </h3>
-              )}
               <ul>
                 {groups.links.map(({ name, icon, ...link }) => (
                   <li key={link.to}>
-                    <Link {...link} activeOptions={{ includeSearch: false }}>
+                    <LinkWithTooltip
+                      {...link}
+                      tooltip={!isModal && !open ? name : undefined}
+                      tooltipOpts={{
+                        placement: isLtr ? "right" : "left",
+                      }}
+                      activeOptions={{ includeSearch: false }}
+                    >
                       <MdSymbol>{icon}</MdSymbol>
                       {name}
-                    </Link>
+                    </LinkWithTooltip>
                   </li>
                 ))}
               </ul>

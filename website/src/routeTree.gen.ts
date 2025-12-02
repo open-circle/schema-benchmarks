@@ -9,27 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ValidationIndexRouteImport } from './routes/validation/index'
-import { Route as ParsingIndexRouteImport } from './routes/parsing/index'
-import { Route as InitializationIndexRouteImport } from './routes/initialization/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchmarks/validation/index'
+import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
+import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
 
-const ValidationIndexRoute = ValidationIndexRouteImport.update({
-  id: '/validation/',
-  path: '/validation/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ParsingIndexRoute = ParsingIndexRouteImport.update({
-  id: '/parsing/',
-  path: '/parsing/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InitializationIndexRoute = InitializationIndexRouteImport.update({
-  id: '/initialization/',
-  path: '/initialization/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DownloadIndexRoute = DownloadIndexRouteImport.update({
   id: '/download/',
   path: '/download/',
@@ -40,28 +25,45 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarksValidationIndexRoute =
+  BenchmarksValidationIndexRouteImport.update({
+    id: '/_benchmarks/validation/',
+    path: '/validation/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BenchmarksParsingIndexRoute = BenchmarksParsingIndexRouteImport.update({
+  id: '/_benchmarks/parsing/',
+  path: '/parsing/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BenchmarksInitializationIndexRoute =
+  BenchmarksInitializationIndexRouteImport.update({
+    id: '/_benchmarks/initialization/',
+    path: '/initialization/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
-  '/initialization': typeof InitializationIndexRoute
-  '/parsing': typeof ParsingIndexRoute
-  '/validation': typeof ValidationIndexRoute
+  '/initialization': typeof BenchmarksInitializationIndexRoute
+  '/parsing': typeof BenchmarksParsingIndexRoute
+  '/validation': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
-  '/initialization': typeof InitializationIndexRoute
-  '/parsing': typeof ParsingIndexRoute
-  '/validation': typeof ValidationIndexRoute
+  '/initialization': typeof BenchmarksInitializationIndexRoute
+  '/parsing': typeof BenchmarksParsingIndexRoute
+  '/validation': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_home/': typeof HomeIndexRoute
   '/download/': typeof DownloadIndexRoute
-  '/initialization/': typeof InitializationIndexRoute
-  '/parsing/': typeof ParsingIndexRoute
-  '/validation/': typeof ValidationIndexRoute
+  '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
+  '/_benchmarks/parsing/': typeof BenchmarksParsingIndexRoute
+  '/_benchmarks/validation/': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -72,42 +74,21 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_home/'
     | '/download/'
-    | '/initialization/'
-    | '/parsing/'
-    | '/validation/'
+    | '/_benchmarks/initialization/'
+    | '/_benchmarks/parsing/'
+    | '/_benchmarks/validation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
-  InitializationIndexRoute: typeof InitializationIndexRoute
-  ParsingIndexRoute: typeof ParsingIndexRoute
-  ValidationIndexRoute: typeof ValidationIndexRoute
+  BenchmarksInitializationIndexRoute: typeof BenchmarksInitializationIndexRoute
+  BenchmarksParsingIndexRoute: typeof BenchmarksParsingIndexRoute
+  BenchmarksValidationIndexRoute: typeof BenchmarksValidationIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/validation/': {
-      id: '/validation/'
-      path: '/validation'
-      fullPath: '/validation'
-      preLoaderRoute: typeof ValidationIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/parsing/': {
-      id: '/parsing/'
-      path: '/parsing'
-      fullPath: '/parsing'
-      preLoaderRoute: typeof ParsingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/initialization/': {
-      id: '/initialization/'
-      path: '/initialization'
-      fullPath: '/initialization'
-      preLoaderRoute: typeof InitializationIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/download/': {
       id: '/download/'
       path: '/download'
@@ -122,15 +103,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_benchmarks/validation/': {
+      id: '/_benchmarks/validation/'
+      path: '/validation'
+      fullPath: '/validation'
+      preLoaderRoute: typeof BenchmarksValidationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/parsing/': {
+      id: '/_benchmarks/parsing/'
+      path: '/parsing'
+      fullPath: '/parsing'
+      preLoaderRoute: typeof BenchmarksParsingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/initialization/': {
+      id: '/_benchmarks/initialization/'
+      path: '/initialization'
+      fullPath: '/initialization'
+      preLoaderRoute: typeof BenchmarksInitializationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
-  InitializationIndexRoute: InitializationIndexRoute,
-  ParsingIndexRoute: ParsingIndexRoute,
-  ValidationIndexRoute: ValidationIndexRoute,
+  BenchmarksInitializationIndexRoute: BenchmarksInitializationIndexRoute,
+  BenchmarksParsingIndexRoute: BenchmarksParsingIndexRoute,
+  BenchmarksValidationIndexRoute: BenchmarksValidationIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

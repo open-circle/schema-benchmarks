@@ -3,15 +3,17 @@ import type { Key } from "react";
 
 interface SidebarGroup {
   key: Key;
-  subheader?: string;
   links: Array<LinkOptions & { name: string; icon: string }>;
 }
 
 export const sidebarGroups: Array<SidebarGroup> = [
   {
-    key: "core",
+    key: "home",
+    links: [{ ...linkOptions({ to: "/" }), name: "Home", icon: "home" }],
+  },
+  {
+    key: "benchmarks",
     links: [
-      { ...linkOptions({ to: "/" }), name: "Home", icon: "home" },
       {
         ...linkOptions({ to: "/initialization" }),
         name: "Initialization",
@@ -27,6 +29,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "Parsing",
         icon: "output_circle",
       },
+    ],
+  },
+  {
+    key: "download",
+    links: [
       {
         ...linkOptions({ to: "/download" }),
         name: "Download",
