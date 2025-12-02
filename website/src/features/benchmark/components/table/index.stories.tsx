@@ -6,7 +6,7 @@ const meta = {
   title: "Features/Benchmark/Table",
   component: BenchTable,
   args: {
-    results: benchResults.validation.runtime.invalid,
+    results: benchResults.validation.invalid,
   },
 } satisfies Meta<typeof BenchTable>;
 

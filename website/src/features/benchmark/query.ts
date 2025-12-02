@@ -32,7 +32,7 @@ export const dataTypeProps: Pick<
   },
 };
 
-export const optionalErrorTypeSchema = v.optional(errorTypeSchema, "allErrors");
+export const optionalErrorTypeSchema = v.optional(errorTypeSchema);
 export const errorTypeProps: Pick<
   PageFilterChipsProps<ErrorType>,
   "title" | "labels" | "options"
@@ -45,10 +45,7 @@ export const errorTypeProps: Pick<
   },
 };
 
-export const optionalOptimizeTypeSchema = v.optional(
-  optimizeTypeSchema,
-  "runtime",
-);
+export const optionalOptimizeTypeSchema = v.optional(optimizeTypeSchema);
 export const optimizeTypeProps: Pick<
   PageFilterChipsProps<OptimizeType>,
   "title" | "labels" | "options"
