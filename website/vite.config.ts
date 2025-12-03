@@ -28,6 +28,7 @@ const config = defineConfig({
     tanstackStart(),
     mdx({
       rehypePlugins: [rehypePrism, rehypeSlug, rehypeCodeProps],
+      providerImportSource: "@mdx-js/react",
     }),
     netlify(),
     viteReact(),

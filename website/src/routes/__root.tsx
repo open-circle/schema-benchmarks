@@ -1,3 +1,4 @@
+import { MDXProvider } from "@mdx-js/react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -11,6 +12,7 @@ import { ssrBehavior } from "react-md-spinner";
 import { Banner } from "@/components/banner";
 import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
+import mdxComponents from "@/components/mdx";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
 import { symbolsUrl } from "../../vite/symbols";
@@ -73,20 +75,22 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         {ssrBehavior.getStylesheetComponent()}
       </head>
       <body>
-        <div className="sidebar-container">
-          <SidebarProvider>
-            <Sidebar />
-            <div className="header-container">
-              <Header />
-              <Banner />
-              <main>{children}</main>
-              <Footer />
-              <ScrollToTop />
-              <Snackbars />
-              <ConfirmDialog />
-            </div>
-          </SidebarProvider>
-        </div>
+        <MDXProvider components={mdxComponents}>
+          <div className="sidebar-container">
+            <SidebarProvider>
+              <Sidebar />
+              <div className="header-container">
+                <Header />
+                <Banner />
+                <main>{children}</main>
+                <Footer />
+                <ScrollToTop />
+                <Snackbars />
+                <ConfirmDialog />
+              </div>
+            </SidebarProvider>
+          </div>
+        </MDXProvider>
         <TanStackDevtools
           config={{
             triggerHidden: true,

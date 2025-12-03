@@ -95,12 +95,11 @@ code[class*="language-"] {
     outline: none;
     box-shadow: 0 0 0 2px var(--primary);
   }
-  &[data-title]::before {
-    content: attr(data-title);
-    display: block;
+  .code-block__title {
     padding: 0.5rem 1rem;
     margin: -1rem -1rem 1rem;
     border-bottom: 1px solid var(--divider);
+    font: inherit;
   }
 }
 
