@@ -2,6 +2,7 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import {
   durationFormatter,
   getDuration,
+  getTransitionName,
   numFormatter,
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
@@ -101,7 +102,12 @@ export function BenchTable({ results }: BenchTableProps) {
               <tr
                 key={result.id}
                 style={{
-                  viewTransitionName: `bench-table-row-${result.id}`,
+                  viewTransitionName: `bench-table-row-${getTransitionName({
+                    libraryName: result.libraryName,
+                    note: result.note,
+                    errorType:
+                      result.type === "parsing" ? result.errorType : undefined,
+                  })}`,
                 }}
               >
                 <td>

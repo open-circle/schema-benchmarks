@@ -3,6 +3,7 @@ import {
   durationFormatter,
   formatBytes,
   getDuration,
+  getTransitionName,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { ButtonGroup } from "@/components/button";
@@ -66,10 +67,10 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
               <tr
                 key={result.fileName}
                 style={{
-                  viewTransitionName: `download-table-row-${result.fileName.replace(
-                    /[./]/g,
-                    "--",
-                  )}`,
+                  viewTransitionName: `download-table-row-${getTransitionName({
+                    libraryName: result.libraryName,
+                    note: result.note,
+                  })}`,
                 }}
               >
                 <td>
