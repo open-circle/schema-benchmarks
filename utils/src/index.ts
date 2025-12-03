@@ -277,10 +277,13 @@ export function shallowFilter<T>(
   };
 }
 
-export function getTransitionName(values: Record<string, unknown>) {
-  let name = "";
+export function getTransitionName(
+  prefix: string,
+  values: Record<string, unknown>,
+) {
+  let name = prefix;
   for (const [key, value] of Object.entries(values)) {
-    name += `${key}-${value ?? ""}-`;
+    name += `-${key}-${value ?? ""}`;
   }
-  return name.slice(0, -1).replace(/[^a-zA-Z0-9]/g, "-");
+  return name.replace(/[^a-zA-Z0-9]/g, "-");
 }

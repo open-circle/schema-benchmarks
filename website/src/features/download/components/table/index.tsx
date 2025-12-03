@@ -67,10 +67,10 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
               <tr
                 key={result.fileName}
                 style={{
-                  viewTransitionName: `download-table-row-${getTransitionName({
+                  viewTransitionName: getTransitionName("download-table-row", {
                     libraryName: result.libraryName,
                     note: result.note,
-                  })}`,
+                  }),
                 }}
               >
                 <td>

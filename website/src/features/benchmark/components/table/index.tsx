@@ -102,12 +102,12 @@ export function BenchTable({ results }: BenchTableProps) {
               <tr
                 key={result.id}
                 style={{
-                  viewTransitionName: `bench-table-row-${getTransitionName({
+                  viewTransitionName: getTransitionName("bench-table-row", {
                     libraryName: result.libraryName,
                     note: result.note,
                     errorType:
                       result.type === "parsing" ? result.errorType : undefined,
-                  })}`,
+                  }),
                 }}
               >
                 <td>
