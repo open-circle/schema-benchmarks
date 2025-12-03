@@ -1,1 +1,12 @@
-You're on the validation page!
+import { Link } from "@tanstack/react-router";
+
+Checking if a given value matches the schema. This is different to <Link to="/parsing">parsing</Link> because it doesn't return a new value.
+
+```ts
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+if (v.is(personSchema, data)) {
+  // data is narrowed to Person
+}
+```

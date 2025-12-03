@@ -77,7 +77,7 @@ function RouteComponent() {
   });
   return (
     <>
-      <Content />
+      <Content components={{ wrapper: "div" }} />
       <PageFilters>
         <PageFilterChips
           {...dataTypeProps}

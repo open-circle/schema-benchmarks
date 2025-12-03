@@ -1,1 +1,11 @@
-You're on the parsing page!
+import { Link } from "@tanstack/react-router";
+
+Parsing a value to match the schema. This is different to <Link to="/validation">validation</Link> because it returns a new value.
+
+```ts
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+const person = v.parse(personSchema, data);
+// person is of type Person
+```

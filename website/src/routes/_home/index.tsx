@@ -4,9 +4,5 @@ import Content from "./content.mdx";
 export const Route = createFileRoute("/_home/")({ component: App });
 
 function App() {
-  return (
-    <div>
-      <Content />
-    </div>
-  );
+  return <Content components={{ wrapper: "div" }} />;
 }
