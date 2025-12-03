@@ -8,7 +8,7 @@ import { getJoiSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "joi",
-    optimizeType: "runtime",
+    optimizeType: "none",
     version: await getVersion("joi"),
   },
   createContext: () => ({ schema: getJoiSchema() }),

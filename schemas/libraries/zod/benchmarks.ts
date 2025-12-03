@@ -45,7 +45,7 @@ export default defineBenchmarks({
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "jitless",
-        optimizeType: "runtime",
+        optimizeType: "none",
       },
       {
         run(data, { miniSchema }) {
@@ -60,7 +60,7 @@ export default defineBenchmarks({
         },
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "mini, jitless",
-        optimizeType: "runtime",
+        optimizeType: "none",
       },
     ],
   },

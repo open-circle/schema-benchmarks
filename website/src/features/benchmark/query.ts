@@ -53,8 +53,8 @@ export const optimizeTypeProps: Pick<
   title: "Optimizations",
   options: optionalOptimizeTypeSchema.wrapped.options,
   labels: {
-    runtime: { label: "Runtime", icon: "deployed_code" },
-    jit: { label: "JIT", icon: "speed" },
+    none: { label: "None", icon: "flash_off" },
+    jit: { label: "JIT", icon: "code" },
     precompiled: { label: "Precompiled", icon: "build" },
   },
 };

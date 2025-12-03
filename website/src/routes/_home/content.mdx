@@ -48,6 +48,22 @@ const person = v.parse(personSchema, data);
 // person is of type Person
 ```
 
+### Tags
+
+#### Optimizations
+
+Some libraries utilise specific optimizations to improve performance. We specifically track:
+
+- **JIT**: Libraries that use Just-In-Time compilation (usually via `new Function`) to generate optimized code at runtime, e.g. `arktype`
+- **Precompiled**: Libraries that generate optimized code at build time, e.g. `typia`
+
+#### Error handling
+
+Some libraries support different error handling strategies. We specifically track:
+
+- **All errors**: Parse the entire value before returning/throwing an error.
+- **Abort early**: Return/throw an error as soon as an issue is found.
+
 ## <Link to="/download">Download</Link>
 
 As well as running runtime tests, we test the bundle size of each library. This is important for browser usage, where this will affect download time.

@@ -9,7 +9,7 @@ import { getEffectSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "effect",
-    optimizeType: "runtime",
+    optimizeType: "none",
     version: await getVersion("effect"),
   },
   createContext: () => {

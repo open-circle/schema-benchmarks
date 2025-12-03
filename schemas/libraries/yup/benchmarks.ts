@@ -8,7 +8,7 @@ import { getYupSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "yup",
-    optimizeType: "runtime",
+    optimizeType: "none",
     version: await getVersion("yup"),
   },
   createContext: () => ({ schema: getYupSchema() }),

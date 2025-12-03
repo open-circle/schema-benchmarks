@@ -10,7 +10,7 @@ import { getTypeboxSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "typebox",
-    optimizeType: "runtime",
+    optimizeType: "none",
     version: await getVersion("typebox"),
   },
   createContext: () => {

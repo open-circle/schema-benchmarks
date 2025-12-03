@@ -1,7 +1,7 @@
 import type { MaybeArray } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-export const optimizeTypeSchema = v.picklist(["runtime", "jit", "precompiled"]);
+export const optimizeTypeSchema = v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
