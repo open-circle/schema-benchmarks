@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { ToggleButton } from "@/components/button/toggle";
 import { CodeBlock } from "@/components/code";
+import { Spinner } from "@/components/spinner";
 import { MdSymbol } from "@/components/symbol";
 
 export interface SnippetProps {
@@ -12,12 +14,14 @@ export function Snippet({ code }: SnippetProps) {
       tooltip={{
         subhead: "Code snippet",
         supporting: (
-          <div className="snippet">
-            <CodeBlock>{code}</CodeBlock>
-            {(code.startsWith("//") || code.startsWith("/*")) && (
-              <p>(Commented code is not benchmarked)</p>
-            )}
-          </div>
+          <Suspense fallback={<Spinner />}>
+            <div className="snippet">
+              <CodeBlock>{code}</CodeBlock>
+              {(code.startsWith("//") || code.startsWith("/*")) && (
+                <p>(Commented code is not benchmarked)</p>
+              )}
+            </div>
+          </Suspense>
         ),
       }}
     >
