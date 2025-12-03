@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithRef } from "react";
 
@@ -14,6 +15,25 @@ function pre({ title, children, ...props }: PreProps) {
   );
 }
 
+function code({
+  children,
+  className,
+  ...props
+}: ComponentPropsWithRef<"code">) {
+  return (
+    <code
+      {...props}
+      className={clsx(
+        className?.includes("language-") ? "" : "language-text",
+        className,
+      )}
+    >
+      {children}
+    </code>
+  );
+}
+
 export default {
   pre,
+  code,
 } satisfies MDXComponents;
