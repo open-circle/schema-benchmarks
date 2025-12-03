@@ -6,9 +6,15 @@ interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;
 }
 
-function pre({ title, children, ...props }: PreProps) {
+function pre({ title, children, className, ...props }: PreProps) {
   return (
-    <pre {...props}>
+    <pre
+      {...props}
+      className={clsx(
+        className?.includes("language-") ? "" : "language-text",
+        className,
+      )}
+    >
       {title && <h6 className="code-block__title">{title}</h6>}
       {children}
     </pre>
