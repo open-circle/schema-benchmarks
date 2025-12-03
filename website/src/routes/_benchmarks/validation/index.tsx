@@ -79,6 +79,8 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("dataType", option),
+            replace: true,
+            resetScroll: false,
           })}
         />
         <PageFilterChips
@@ -88,6 +90,7 @@ function RouteComponent() {
             to: Route.fullPath,
             replace: true,
             search: toggleFilter("optimizeType", option),
+            resetScroll: false,
           })}
         />
       </PageFilters>

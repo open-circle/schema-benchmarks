@@ -68,6 +68,8 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("minifyType", option),
+            replace: true,
+            resetScroll: false,
           })}
         />
         <PageFilterTextField
@@ -89,6 +91,8 @@ function RouteComponent() {
                 if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
                 return { minifyType, mbps };
               },
+              replace: true,
+              resetScroll: false,
             })
           }
         />
@@ -100,6 +104,8 @@ function RouteComponent() {
                 tooltip={preset.name}
                 to={Route.fullPath}
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
+                replace
+                resetScroll={false}
                 activeColor="primary"
               >
                 <MdSymbol>{preset.icon}</MdSymbol>

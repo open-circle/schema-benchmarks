@@ -43,7 +43,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
     [results],
   );
   return (
-    <div className="card">
+    <div className="card" style={{ viewTransitionName: "download-table" }}>
       <table className="download-table">
         <thead>
           <tr>
@@ -63,7 +63,15 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
           {results.map((result) => {
             const gzipTime = getDownloadTime(result.gzipBytes, mbps);
             return (
-              <tr key={result.fileName}>
+              <tr
+                key={result.fileName}
+                style={{
+                  viewTransitionName: `download-table-row-${result.fileName.replace(
+                    /[./]/g,
+                    "--",
+                  )}`,
+                }}
+              >
                 <td>
                   <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}

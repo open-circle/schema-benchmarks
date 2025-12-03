@@ -73,6 +73,7 @@ function RouteComponent() {
             from: Route.fullPath,
             to: Route.fullPath,
             search: toggleFilter("optimizeType", option),
+            resetScroll: false,
           })}
         />
       </PageFilters>
