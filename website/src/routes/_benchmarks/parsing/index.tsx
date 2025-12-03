@@ -53,15 +53,15 @@ export const Route = createFileRoute("/_benchmarks/parsing/")({
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
-    await Promise.all(
-      benchResults.parsing[dataType]
-        .filter(shallowFilter({ optimizeType, errorType }))
-        .map(({ snippet }) =>
-          queryClient.ensureQueryData(
-            getHighlightedCode({ code: snippet }, abortController.signal),
-          ),
-        ),
-    );
+    for (const { snippet } of Object.values(
+      benchResults.parsing[dataType].filter(
+        shallowFilter({ optimizeType, errorType }),
+      ),
+    )) {
+      queryClient.prefetchQuery(
+        getHighlightedCode({ code: snippet }, abortController.signal),
+      );
+    }
     return { crumb: "Parsing" };
   },
 });

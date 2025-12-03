@@ -49,15 +49,13 @@ export const Route = createFileRoute("/_benchmarks/validation/")({
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
-    await Promise.all(
-      benchResults.validation[dataType]
-        .filter(shallowFilter({ optimizeType }))
-        .map(({ snippet }) =>
-          queryClient.ensureQueryData(
-            getHighlightedCode({ code: snippet }, abortController.signal),
-          ),
-        ),
-    );
+    for (const { snippet } of Object.values(
+      benchResults.validation[dataType].filter(shallowFilter({ optimizeType })),
+    )) {
+      queryClient.prefetchQuery(
+        getHighlightedCode({ code: snippet }, abortController.signal),
+      );
+    }
     return { crumb: "Validation" };
   },
 });

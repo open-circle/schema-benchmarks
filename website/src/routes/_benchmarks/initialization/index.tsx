@@ -43,15 +43,13 @@ export const Route = createFileRoute("/_benchmarks/initialization/")({
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
-    await Promise.all(
-      Object.values(
-        benchResults.initialization.filter(shallowFilter({ optimizeType })),
-      ).map(({ snippet }) =>
-        queryClient.ensureQueryData(
-          getHighlightedCode({ code: snippet }, abortController.signal),
-        ),
-      ),
-    );
+    for (const { snippet } of Object.values(
+      benchResults.initialization.filter(shallowFilter({ optimizeType })),
+    )) {
+      queryClient.prefetchQuery(
+        getHighlightedCode({ code: snippet }, abortController.signal),
+      );
+    }
     return { crumb: "Initialization" };
   },
 });
