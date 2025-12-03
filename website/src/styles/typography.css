@@ -184,7 +184,3 @@ h5 {
 h6 {
   @extend .typo-subtitle2;
 }
-
-p {
-  margin: 0;
-}

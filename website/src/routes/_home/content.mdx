@@ -1,1 +1,53 @@
-You're on the homepage!
+import { Link } from "@tanstack/react-router";
+
+Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
+
+## Benchmarks
+
+Steps benchmarked include:
+
+### <Link to="/initialization">Initialization</Link>
+
+Creating the schema itself. This is usually a one time cost.
+
+```ts data-title="schemas.ts"
+import * as v from "valibot";
+
+export const personSchema = v.object({
+  name: v.string(),
+  age: v.number(),
+});
+export type Person = v.InferOutput<typeof personSchema>;
+```
+
+### <Link to="/validation">Validation</Link>
+
+Checking if a given value matches the schema. Crucially, this is different to <Link to="#parsing">parsing</Link> because it doesn't return a new value.
+
+```ts
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+if (v.is(personSchema, data)) {
+  // data is narrowed to Person
+}
+```
+
+> Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`).
+> In these cases, we categorise them accordingly.
+
+### <Link to="/parsing">Parsing</Link>
+
+Checking if a given value matches the schema, **and** returning a new value. This will include any transformations.
+
+```ts
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+const person = v.parse(personSchema, data);
+// person is of type Person
+```
+
+## <Link to="/download">Download</Link>
+
+As well as running runtime tests, we test the bundle size of each library. This is important for browser usage, where this will affect download time.
