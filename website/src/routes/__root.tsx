@@ -12,7 +12,7 @@ import { ssrBehavior } from "react-md-spinner";
 import { Banner } from "@/components/banner";
 import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
-import mdxComponents from "@/components/mdx";
+import * as mdxComponents from "@/components/mdx";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SidebarProvider } from "@/components/sidebar/context";
 import { symbolsUrl } from "../../vite/symbols";

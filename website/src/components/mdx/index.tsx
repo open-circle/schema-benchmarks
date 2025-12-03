@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithRef } from "react";
 
 interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;
 }
 
-function pre({ title, children, className, ...props }: PreProps) {
+export function pre({ title, children, className, ...props }: PreProps) {
   return (
     <pre
       {...props}
@@ -21,7 +20,7 @@ function pre({ title, children, className, ...props }: PreProps) {
   );
 }
 
-function code({
+export function code({
   children,
   className,
   ...props
@@ -38,8 +37,3 @@ function code({
     </code>
   );
 }
-
-export default {
-  pre,
-  code,
-} satisfies MDXComponents;
