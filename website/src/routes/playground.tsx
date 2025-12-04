@@ -10,6 +10,14 @@ const allLibraries = Object.keys(libraries).map((key) =>
 );
 
 export const Route = createFileRoute("/playground")({
+  head: () => ({
+    meta: [
+      {
+        title: "Playground - Schema Benchmarks",
+      },
+    ],
+  }),
+  loader: () => ({ crumb: "Playground" }),
   component: RouteComponent,
 });
 

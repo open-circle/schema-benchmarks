@@ -15,9 +15,7 @@ export const Route = createFileRoute("/playground/$library")({
     ],
   }),
   loader({ params: { library } }) {
-    if (!libraries[`./${library}/benchmarks.ts`]) {
-      throw notFound();
-    }
+    if (!libraries[`./${library}/benchmarks.ts`]) throw notFound();
   },
   component: RouteComponent,
   notFoundComponent: () => (
