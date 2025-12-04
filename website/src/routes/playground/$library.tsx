@@ -1,5 +1,8 @@
+import type { BenchmarksConfig } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
+import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { use } from "react";
 import { EmptyState } from "@/components/empty-state";
 import { MdSymbol } from "@/components/symbol";
 
@@ -26,7 +29,21 @@ export const Route = createFileRoute("/playground/$library")({
   ),
 });
 
+const cache = new WeakMap<
+  () => Promise<BenchmarksConfig<unknown>>,
+  Promise<BenchmarksConfig<unknown>>
+>();
+function getConfig(library: string) {
+  return getOrInsertComputed(
+    cache,
+    // biome-ignore lint/style/noNonNullAssertion: we check for it in the loader
+    libraries[`./${library}/benchmarks.ts`]!,
+    (fn) => fn(),
+  );
+}
+
 function RouteComponent() {
   const { library } = Route.useParams();
-  return library;
+  const config = use(getConfig(library));
+  return config.library.name;
 }

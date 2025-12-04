@@ -67,7 +67,7 @@ export function getOrInsert<K extends object, V>(
   return map.set(key, value).get(key) as V;
 }
 
-export function getOrInsertComputed<K extends object, V>(
+export function getOrInsertComputed<K extends WeakKey, V>(
   map: WeakMap<K, V>,
   key: NoInfer<K>,
   compute: (key: K) => NoInfer<V>,
@@ -77,7 +77,7 @@ export function getOrInsertComputed<K, V>(
   key: NoInfer<K>,
   compute: (key: K) => NoInfer<V>,
 ): NoInfer<V>;
-export function getOrInsertComputed<K extends object, V>(
+export function getOrInsertComputed<K extends WeakKey, V>(
   map: Map<K, V> | WeakMap<K, V>,
   key: NoInfer<K>,
   compute: (key: K) => NoInfer<V>,
