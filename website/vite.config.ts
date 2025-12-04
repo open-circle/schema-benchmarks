@@ -1,3 +1,4 @@
+import { serviceWorkerPlugin } from "@gautemo/vite-plugin-service-worker";
 import mdx from "@mdx-js/rollup";
 import netlify from "@netlify/vite-plugin-tanstack-start";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -49,6 +50,9 @@ const config = defineConfig({
         ...scales.sentiment,
         ...scales.stat,
       ],
+    }),
+    serviceWorkerPlugin({
+      filename: "service-worker.ts",
     }),
   ],
   resolve: {

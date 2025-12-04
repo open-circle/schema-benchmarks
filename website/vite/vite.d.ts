@@ -7,3 +7,6 @@ declare module "*.mdx" {
   const Component: FC<MDXProps>;
   export default Component;
 }
+declare module "virtual:vite-plugin-service-worker" {
+  export const serviceWorkerFile: string;
+}

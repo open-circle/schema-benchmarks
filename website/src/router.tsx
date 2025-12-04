@@ -1,3 +1,4 @@
+import { serviceWorkerFile } from "virtual:vite-plugin-service-worker";
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { Button } from "@/components/button";
@@ -16,7 +17,10 @@ export const getRouter = (history?: RouterHistory) => {
     history,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
-    context: { queryClient },
+    context: {
+      queryClient,
+      broadcastChannel: new BroadcastChannel("benchmarks"),
+    },
     defaultViewTransition: true,
     defaultPendingComponent: () => <Spinner size={64} />,
     defaultErrorComponent: ({ error, reset }) => (
@@ -45,6 +49,21 @@ export const getRouter = (history?: RouterHistory) => {
     router,
     queryClient,
   });
+
+  if (!router.isServer) {
+    navigator.serviceWorker.register(serviceWorkerFile, {
+      type: "module",
+    });
+    router.options.context.broadcastChannel.postMessage(
+      "Hello from the client!",
+    );
+    router.options.context.broadcastChannel.addEventListener(
+      "message",
+      (event) => {
+        console.log("Received message:", event.data);
+      },
+    );
+  }
 
   return router;
 };

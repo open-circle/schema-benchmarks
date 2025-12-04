@@ -245,6 +245,9 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.9.3)(vite@7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
     devDependencies:
+      '@gautemo/vite-plugin-service-worker':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@mdx-js/rollup':
         specifier: ^3.1.1
         version: 3.1.1(rollup@4.53.1)
@@ -984,6 +987,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@gautemo/vite-plugin-service-worker@0.1.0':
+    resolution: {integrity: sha512-l1KdXMt88y811Nl5Oq7OZeKmbjqzHUwMxmYdf8ofok2hf5FSFKc8qr21kHe3Sb+ILjJDFlbg024ul3DGF9bdNQ==}
 
   '@hapi/address@5.1.1':
     resolution: {integrity: sha512-A+po2d/dVoY7cYajycYI43ZbYMXukuopIsqCjh5QzsBCipDtdofHntljDlpccMjIfTy6UOkg+5KPriwYch2bXA==}
@@ -6488,6 +6494,8 @@ snapshots:
       tabbable: 6.3.0
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@gautemo/vite-plugin-service-worker@0.1.0': {}
 
   '@hapi/address@5.1.1':
     dependencies:

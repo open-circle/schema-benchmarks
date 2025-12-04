@@ -36,6 +36,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
+    "@gautemo/vite-plugin-service-worker": "^0.1.0",
     "@mdx-js/rollup": "^3.1.1",
     "@netlify/vite-plugin-tanstack-start": "^1.2.1",
     "@storybook/react-vite": "^10.1.2",
