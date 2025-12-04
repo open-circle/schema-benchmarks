@@ -1,4 +1,4 @@
-import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
+import { partialMatch, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { create } from "mutative";
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/_benchmarks/parsing/")({
     );
     for (const { snippet } of Object.values(
       benchResults.parsing[dataType].filter(
-        shallowFilter({ optimizeType, errorType }),
+        partialMatch({ optimizeType, errorType }),
       ),
     )) {
       queryClient.prefetchQuery(
@@ -68,7 +68,7 @@ function RouteComponent() {
     ...getBenchResults(),
     select: (results) =>
       results.parsing[dataType].filter(
-        shallowFilter({ optimizeType, errorType }),
+        partialMatch({ optimizeType, errorType }),
       ),
   });
   return (

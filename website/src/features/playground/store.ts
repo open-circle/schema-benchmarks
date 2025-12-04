@@ -40,40 +40,9 @@ interface PlaygroundState<Context> {
   >;
 }
 
-export const selectById = <Context>(
-  state: PlaygroundState<Context>,
-  id: string,
-) => {
-  const type = state.typesById[id];
-  if (!type) return undefined;
-  return state[type][id];
-};
-
 export class PlaygroundStore<Context> extends ExternalStore<
   PlaygroundState<Context>
 > {
-  createBench() {
-    const bench = new Bench();
-    bench.addEventListener("cycle", (event) => {
-      this.setState((state) => {
-        state.currentTask = event.task?.name ?? null;
-      });
-    });
-    bench.addEventListener("complete", () => {
-      this.setState((state) => {
-        state.running = false;
-        state.currentTask = null;
-        for (const task of bench.tasks) {
-          const entry = selectById(this.state, task.name);
-          if (!entry) continue;
-          entry.result = task.result;
-        }
-      });
-    });
-
-    return bench;
-  }
-
   constructor(public config: BenchmarksConfig<Context>) {
     const initialState: PlaygroundState<Context> = {
       running: false,
@@ -124,13 +93,41 @@ export class PlaygroundStore<Context> extends ExternalStore<
     }
     super(initialState);
   }
+  selectById(state: PlaygroundState<Context>, id: string) {
+    const type = state.typesById[id];
+    return type && state[type][id];
+  }
+
   setEnabled(id: string, enabled: boolean) {
     this.setState((state) => {
-      const entry = selectById(state, id);
+      const entry = this.selectById(state, id);
       if (!entry) return;
       entry.enabled = enabled;
     });
   }
+
+  createBench() {
+    const bench = new Bench();
+    bench.addEventListener("cycle", (event) => {
+      this.setState((state) => {
+        state.currentTask = event.task?.name ?? null;
+      });
+    });
+    bench.addEventListener("complete", () => {
+      this.setState((state) => {
+        state.running = false;
+        state.currentTask = null;
+        for (const task of bench.tasks) {
+          const entry = this.selectById(this.state, task.name);
+          if (!entry) continue;
+          entry.result = task.result;
+        }
+      });
+    });
+
+    return bench;
+  }
+
   async run() {
     if (this.state.running) return;
     const data = this.state.dataType === "valid" ? successData : errorData;

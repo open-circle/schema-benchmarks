@@ -267,17 +267,17 @@ export function toggleFilter(
 }
 
 /**
- * Filter an array of objects by a set of key-value pairs.
- * @param filter The key-value pairs to filter by.
- * @returns A function that takes an object and returns true if it matches the filter.
+ * Create a predicate function that checks if an object partially matches the given filter.
+ * @param filter The filter to match against.
+ * @returns A predicate function that takes an object and returns true if it matches the filter.
  * @example
  * const array = [{ a: 1, b: 2 }, { a: 1, b: 3 }, { a: 2, b: 2 }];
- * const result = array.filter(shallowFilter({ a: [1, 2], b: 2 }));
+ * const result = array.filter(partialMatch({ a: [1, 2], b: 2 }));
  * // [{ a: 1, b: 2 }, { a: 2, b: 2 }]
  */
-export function shallowFilter<T>(
+export function partialMatch<T>(
   filter: {
-    [K in keyof T]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
+    [K in keyof NoInfer<T>]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
   },
 ): (item: T) => boolean {
   const entries = unsafeEntries(filter).map(

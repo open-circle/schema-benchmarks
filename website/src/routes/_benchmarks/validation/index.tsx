@@ -1,4 +1,4 @@
-import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
+import { partialMatch, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { create } from "mutative";
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/_benchmarks/validation/")({
       getBenchResults(abortController.signal),
     );
     for (const { snippet } of Object.values(
-      benchResults.validation[dataType].filter(shallowFilter({ optimizeType })),
+      benchResults.validation[dataType].filter(partialMatch({ optimizeType })),
     )) {
       queryClient.prefetchQuery(
         getHighlightedCode({ code: snippet }, abortController.signal),
@@ -61,7 +61,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.validation[dataType].filter(shallowFilter({ optimizeType })),
+      results.validation[dataType].filter(partialMatch({ optimizeType })),
   });
   return (
     <>

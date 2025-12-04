@@ -1,13 +1,13 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import {
   formatBytes,
+  partialMatch,
   partition,
   promiseAllKeyed,
   promiseAllSettledKeyed,
   serialize,
   setAbortableInterval,
   setAbortableTimeout,
-  shallowFilter,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -135,14 +135,14 @@ describe("serialize", () => {
   });
 });
 
-describe("shallowFilter", () => {
+describe("partialMatch", () => {
   it("should filter by a single value", () => {
-    const filter = shallowFilter<{ a: number; b: number }>({ a: 1 });
+    const filter = partialMatch<{ a: number; b: number }>({ a: 1 });
     expect(filter({ a: 1, b: 2 })).toBe(true);
     expect(filter({ a: 2, b: 2 })).toBe(false);
   });
   it("should filter by multiple values", () => {
-    const filter = shallowFilter<{ a: number; b: number }>({ a: [1, 2] });
+    const filter = partialMatch<{ a: number; b: number }>({ a: [1, 2] });
     expect(filter({ a: 1, b: 2 })).toBe(true);
     expect(filter({ a: 2, b: 2 })).toBe(true);
     expect(filter({ a: 3, b: 2 })).toBe(false);

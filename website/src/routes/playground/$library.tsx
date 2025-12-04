@@ -6,12 +6,14 @@ import { use, useMemo } from "react";
 import { Button } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { MdSymbol } from "@/components/symbol";
+import { getBenchResults } from "@/features/benchmark/query";
 import {
   PlaygroundStore,
   PlaygroundStoreProvider,
 } from "@/features/playground/store";
 import { PlaygroundTable } from "@/features/playground/table";
 import { useExternalStore } from "@/hooks/store";
+import { getHighlightedCode } from "@/lib/highlight";
 
 export const Route = createFileRoute("/playground/$library")({
   head: () => ({
@@ -21,8 +23,27 @@ export const Route = createFileRoute("/playground/$library")({
       },
     ],
   }),
-  loader({ params: { library } }) {
+  async loader({
+    params: { library },
+    context: { queryClient },
+    abortController,
+  }) {
     if (!libraries[`./${library}/benchmarks.ts`]) throw notFound();
+    const benchResults = await queryClient.ensureQueryData(getBenchResults());
+    for (const { snippet, libraryName } of [
+      ...Object.values(benchResults.initialization),
+      ...Object.values(benchResults.validation).flatMap((results) =>
+        Object.values(results),
+      ),
+      ...Object.values(benchResults.parsing).flatMap((results) =>
+        Object.values(results),
+      ),
+    ]) {
+      if (libraryName !== library) continue;
+      queryClient.prefetchQuery(
+        getHighlightedCode({ code: snippet }, abortController.signal),
+      );
+    }
   },
   component: RouteComponent,
   notFoundComponent: () => (
