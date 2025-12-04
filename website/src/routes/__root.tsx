@@ -25,7 +25,6 @@ import appCss from "../styles.css?url";
 
 interface RouterContext {
   queryClient: QueryClient;
-  broadcastChannel: BroadcastChannel;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
