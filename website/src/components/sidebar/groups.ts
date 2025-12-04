@@ -41,4 +41,14 @@ export const sidebarGroups: Array<SidebarGroup> = [
       },
     ],
   },
+  {
+    key: "playground",
+    links: [
+      {
+        ...linkOptions({ to: "/playground" }),
+        name: "Playground",
+        icon: "code",
+      },
+    ],
+  },
 ];

@@ -9,12 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlaygroundRouteImport } from './routes/playground'
+import { Route as PlaygroundIndexRouteImport } from './routes/playground/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as PlaygroundLibraryRouteImport } from './routes/playground/$library'
 import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchmarks/validation/index'
 import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
 import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
 
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaygroundIndexRoute = PlaygroundIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlaygroundRoute,
+} as any)
 const DownloadIndexRoute = DownloadIndexRouteImport.update({
   id: '/download/',
   path: '/download/',
@@ -24,6 +37,11 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/_home/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PlaygroundLibraryRoute = PlaygroundLibraryRouteImport.update({
+  id: '/$library',
+  path: '/$library',
+  getParentRoute: () => PlaygroundRoute,
 } as any)
 const BenchmarksValidationIndexRoute =
   BenchmarksValidationIndexRouteImport.update({
@@ -44,42 +62,69 @@ const BenchmarksInitializationIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/playground': typeof PlaygroundRouteWithChildren
+  '/playground/$library': typeof PlaygroundLibraryRoute
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
+  '/playground/': typeof PlaygroundIndexRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
   '/parsing': typeof BenchmarksParsingIndexRoute
   '/validation': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRoutesByTo {
+  '/playground/$library': typeof PlaygroundLibraryRoute
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
+  '/playground': typeof PlaygroundIndexRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
   '/parsing': typeof BenchmarksParsingIndexRoute
   '/validation': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/playground': typeof PlaygroundRouteWithChildren
+  '/playground/$library': typeof PlaygroundLibraryRoute
   '/_home/': typeof HomeIndexRoute
   '/download/': typeof DownloadIndexRoute
+  '/playground/': typeof PlaygroundIndexRoute
   '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
   '/_benchmarks/parsing/': typeof BenchmarksParsingIndexRoute
   '/_benchmarks/validation/': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/download' | '/initialization' | '/parsing' | '/validation'
+  fullPaths:
+    | '/playground'
+    | '/playground/$library'
+    | '/'
+    | '/download'
+    | '/playground/'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/download' | '/initialization' | '/parsing' | '/validation'
+  to:
+    | '/playground/$library'
+    | '/'
+    | '/download'
+    | '/playground'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
   id:
     | '__root__'
+    | '/playground'
+    | '/playground/$library'
     | '/_home/'
     | '/download/'
+    | '/playground/'
     | '/_benchmarks/initialization/'
     | '/_benchmarks/parsing/'
     | '/_benchmarks/validation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  PlaygroundRoute: typeof PlaygroundRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
   BenchmarksInitializationIndexRoute: typeof BenchmarksInitializationIndexRoute
@@ -89,6 +134,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playground/': {
+      id: '/playground/'
+      path: '/'
+      fullPath: '/playground/'
+      preLoaderRoute: typeof PlaygroundIndexRouteImport
+      parentRoute: typeof PlaygroundRoute
+    }
     '/download/': {
       id: '/download/'
       path: '/download'
@@ -102,6 +161,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/playground/$library': {
+      id: '/playground/$library'
+      path: '/$library'
+      fullPath: '/playground/$library'
+      preLoaderRoute: typeof PlaygroundLibraryRouteImport
+      parentRoute: typeof PlaygroundRoute
     }
     '/_benchmarks/validation/': {
       id: '/_benchmarks/validation/'
@@ -127,7 +193,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PlaygroundRouteChildren {
+  PlaygroundLibraryRoute: typeof PlaygroundLibraryRoute
+  PlaygroundIndexRoute: typeof PlaygroundIndexRoute
+}
+
+const PlaygroundRouteChildren: PlaygroundRouteChildren = {
+  PlaygroundLibraryRoute: PlaygroundLibraryRoute,
+  PlaygroundIndexRoute: PlaygroundIndexRoute,
+}
+
+const PlaygroundRouteWithChildren = PlaygroundRoute._addFileChildren(
+  PlaygroundRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
+  PlaygroundRoute: PlaygroundRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
   BenchmarksInitializationIndexRoute: BenchmarksInitializationIndexRoute,
