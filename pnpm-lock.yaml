@@ -229,9 +229,15 @@ importers:
       react-md-spinner:
         specifier: ^1.0.0
         version: 1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      required-react-context:
+        specifier: ^1.4.1
+        version: 1.4.1(react@19.2.0)
       tanstack-meta:
         specifier: ^0.5.1
         version: 0.5.1
+      tinybench:
+        specifier: ^5.1.0
+        version: 5.1.0
       valibot:
         specifier: ^1.2.0
         version: 1.2.0(typescript@5.9.3)
@@ -5004,6 +5010,11 @@ packages:
 
   require-package-name@2.0.1:
     resolution: {integrity: sha512-uuoJ1hU/k6M0779t3VMVIYpb2VMJk05cehCaABFhXaibcbvfgR8wKiozLjVFSzJPmQMRqIcO0HMyTFqfV09V6Q==}
+
+  required-react-context@1.4.1:
+    resolution: {integrity: sha512-u721N45Nyc+QB4HSkHa1NL6a41G6a+yx8fXthOHo0fiI63bKEszvFa3fd25CMdd5oUfXeQbO7f+LGvobpkXNsg==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   resolve-from@5.0.0:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
@@ -11428,6 +11439,10 @@ snapshots:
       - supports-color
 
   require-package-name@2.0.1: {}
+
+  required-react-context@1.4.1(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   resolve-from@5.0.0: {}
 

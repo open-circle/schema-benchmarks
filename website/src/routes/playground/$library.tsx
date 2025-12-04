@@ -2,9 +2,15 @@ import type { BenchmarksConfig } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { use } from "react";
+import { use, useMemo } from "react";
+import { Button } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { MdSymbol } from "@/components/symbol";
+import {
+  PlaygroundStore,
+  PlaygroundStoreProvider,
+} from "@/features/playground/store";
+import { useExternalStore } from "@/hooks/store";
 
 export const Route = createFileRoute("/playground/$library")({
   head: () => ({
@@ -43,5 +49,20 @@ function getConfig(library: string) {
 function RouteComponent() {
   const { library } = Route.useParams();
   const config = use(getConfig(library));
-  return config.library.name;
+  const store = useMemo(() => new PlaygroundStore(config), [config]);
+  const running = useExternalStore(store, (state) => state.running);
+  return (
+    <PlaygroundStoreProvider playgroundStore={store}>
+      <Button
+        onClick={() => store.run().then(() => console.log(store.state))}
+        loading={running}
+        disabled={running}
+      >
+        Run
+      </Button>
+      <p className="typo-caption">
+        While running, your browser may be unresponsive.
+      </p>
+    </PlaygroundStoreProvider>
+  );
 }
