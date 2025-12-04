@@ -40,6 +40,15 @@ interface PlaygroundState<Context> {
   >;
 }
 
+export const selectById = <Context>(
+  state: PlaygroundState<Context>,
+  id: string,
+) => {
+  const type = state.typesById[id];
+  if (!type) return undefined;
+  return state[type][id];
+};
+
 export class PlaygroundStore<Context> extends ExternalStore<
   PlaygroundState<Context>
 > {
@@ -55,9 +64,7 @@ export class PlaygroundStore<Context> extends ExternalStore<
         state.running = false;
         state.currentTask = null;
         for (const task of bench.tasks) {
-          const taskType = state.typesById[task.name];
-          if (!taskType) continue;
-          const entry = state[taskType][task.name];
+          const entry = selectById(this.state, task.name);
           if (!entry) continue;
           entry.result = task.result;
         }
@@ -117,13 +124,9 @@ export class PlaygroundStore<Context> extends ExternalStore<
     }
     super(initialState);
   }
-  setEnabled(
-    type: "initialization" | "validation" | "parsing",
-    id: string,
-    enabled: boolean,
-  ) {
+  setEnabled(id: string, enabled: boolean) {
     this.setState((state) => {
-      const entry = state[type][id];
+      const entry = selectById(state, id);
       if (!entry) return;
       entry.enabled = enabled;
     });
@@ -159,4 +162,4 @@ export const { usePlaygroundStore, PlaygroundStoreProvider } =
 
 export const usePlaygroundSelector = <TSelected>(
   selector: (state: PlaygroundState<unknown>) => TSelected,
-) => useExternalStore(usePlaygroundStore(), selector);
+): TSelected => useExternalStore(usePlaygroundStore(), selector);

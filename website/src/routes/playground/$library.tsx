@@ -10,6 +10,7 @@ import {
   PlaygroundStore,
   PlaygroundStoreProvider,
 } from "@/features/playground/store";
+import { PlaygroundTable } from "@/features/playground/table";
 import { useExternalStore } from "@/hooks/store";
 
 export const Route = createFileRoute("/playground/$library")({
@@ -56,13 +57,13 @@ function RouteComponent() {
       <Button
         onClick={() => store.run().then(() => console.log(store.state))}
         loading={running}
-        disabled={running}
       >
         Run
       </Button>
       <p className="typo-caption">
         While running, your browser may be unresponsive.
       </p>
+      <PlaygroundTable />
     </PlaygroundStoreProvider>
   );
 }
