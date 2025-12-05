@@ -1,3 +1,4 @@
+import { getOrInsert, getOrInsertComputed } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
 const events = {
@@ -37,14 +38,26 @@ class TypedBroadcastChannel<
       payload,
     });
   }
+  listenerMap = new Map<
+    keyof TReceiveEvents,
+    WeakMap<
+      (payload: v.InferOutput<TReceiveEvents[keyof TReceiveEvents]>) => void,
+      (event: MessageEvent) => void
+    >
+  >();
   addEventListener<Ev extends keyof TReceiveEvents>(
     type: Ev & string,
     listener: (payload: v.InferOutput<TReceiveEvents[Ev]>) => void,
     options?: AddEventListenerOptions,
   ) {
+    const listenerMap = getOrInsertComputed(
+      this.listenerMap,
+      type,
+      () => new WeakMap(),
+    );
     this.channel.addEventListener(
       "message",
-      (event) => {
+      getOrInsert(listenerMap, listener, (event) => {
         const data = event.data;
         const parsed = v.safeParse(messageSchema, data);
         if (!parsed.success || parsed.output.from === this.iam) return;
@@ -53,9 +66,18 @@ class TypedBroadcastChannel<
         const payload = v.safeParse(this.receive[type]!, parsed.output.payload);
         if (!payload.success) return;
         listener(payload.output);
-      },
+      }),
       options,
     );
+  }
+  removeEventListener<Ev extends keyof TReceiveEvents>(
+    type: Ev & string,
+    listener: (payload: v.InferOutput<TReceiveEvents[Ev]>) => void,
+    options?: EventListenerOptions,
+  ) {
+    const wrapped = this.listenerMap.get(type)?.get(listener);
+    if (!wrapped) return;
+    this.channel.removeEventListener("message", wrapped, options);
   }
 }
 
