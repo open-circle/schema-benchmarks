@@ -73,8 +73,12 @@ class TypedBroadcastChannel<
       "message",
       getOrInsert(listenerMap, listener, (event) => {
         const parsed = v.safeParse(messageSchema, event.data);
-        if (!parsed.success || parsed.output.from === this.iam) return;
-        if (parsed.output.type !== type) return;
+        if (
+          !parsed.success ||
+          parsed.output.from === this.iam ||
+          parsed.output.type !== type
+        )
+          return;
         const payload = v.safeParse(schema, parsed.output.payload);
         if (!payload.success) return;
         listener(payload.output, event);
@@ -97,15 +101,17 @@ class TypedBroadcastChannel<
   ): Observable<v.InferOutput<TReceiveEvents[Ev]>> {
     const schema = this.receive[type];
     if (!schema) throw new Error(`No schema for event ${type}`);
-    return this.channel
-      .when("message", options)
-      .filter(
-        (event): event is MessageEvent<v.InferOutput<typeof messageSchema>> =>
-          v.is(messageSchema, event.data) &&
-          event.data.from !== this.iam &&
-          event.data.type === type,
+    return this.channel.when("message", options).flatMap((event) => {
+      const parsed = v.safeParse(messageSchema, event.data);
+      if (
+        !parsed.success ||
+        parsed.output.from === this.iam ||
+        parsed.output.type !== type
       )
-      .map((event) => v.parse(schema, event.data.payload));
+        return [];
+      const payload = v.safeParse(schema, parsed.output.payload);
+      return payload.success ? [payload.output] : [];
+    });
   }
 }
 
