@@ -50,6 +50,8 @@ class TypedBroadcastChannel<
     listener: (payload: v.InferOutput<TReceiveEvents[Ev]>) => void,
     options?: AddEventListenerOptions,
   ) {
+    const schema = this.receive[type];
+    if (!schema) throw new Error(`No schema for event ${type}`);
     const listenerMap = getOrInsertComputed(
       this.listenerMap,
       type,
@@ -62,8 +64,7 @@ class TypedBroadcastChannel<
         const parsed = v.safeParse(messageSchema, data);
         if (!parsed.success || parsed.output.from === this.iam) return;
         if (parsed.output.type !== type) return;
-        // biome-ignore lint/style/noNonNullAssertion: type === parsed.output.type
-        const payload = v.safeParse(this.receive[type]!, parsed.output.payload);
+        const payload = v.safeParse(schema, parsed.output.payload);
         if (!payload.success) return;
         listener(payload.output);
       }),
