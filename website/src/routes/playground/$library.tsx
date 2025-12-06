@@ -81,9 +81,6 @@ function RouteComponent() {
       >
         Run
       </Button>
-      <p className="typo-caption">
-        While running, your browser may be unresponsive.
-      </p>
       <PlaygroundTable />
     </PlaygroundStoreProvider>
   );

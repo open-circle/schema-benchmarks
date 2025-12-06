@@ -6,9 +6,8 @@ import dts from "vite-plugin-dts";
 export default defineConfig({
   build: {
     lib: {
-      entry: "libraries/index.ts",
+      entry: ["libraries/eager.ts", "libraries/index.ts"],
       formats: ["es"],
-      fileName: "index",
     },
     target: ["node24", "esnext"],
     sourcemap: true,

@@ -27,7 +27,8 @@
   },
   "exports": {
     ".": "./index.ts",
-    "./libraries": "./dist/index.js"
+    "./libraries": "./dist/index.js",
+    "./libraries/eager": "./dist/eager.js"
   },
   "main": "./index.ts",
   "name": "@schema-benchmarks/schemas",

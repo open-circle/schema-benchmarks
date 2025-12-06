@@ -6,7 +6,6 @@ import { Spinner } from "@/components/spinner";
 import { MdSymbol } from "@/components/symbol";
 import { EmptyState } from "./components/empty-state";
 import { makeQueryClient } from "./data/query";
-import * as broadcast from "./features/broadcast/channel";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
@@ -54,10 +53,6 @@ export const getRouter = (history?: RouterHistory) => {
     navigator.serviceWorker.register(serviceWorkerFile, {
       type: "module",
     });
-    broadcast.client.when("response").subscribe((payload) => {
-      console.log("Received response:", payload);
-    });
-    broadcast.client.postMessage("greeting", "Hello from the client!");
   }
 
   return router;

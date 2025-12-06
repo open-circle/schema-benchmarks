@@ -6,15 +6,14 @@ import type {
   ParsingBenchmarkConfig,
   ValidationBenchmarkConfig,
 } from "@schema-benchmarks/schemas";
-import { errorData, successData } from "@schema-benchmarks/schemas";
 import { ensureArray, type Override } from "@schema-benchmarks/utils";
 import { createRequiredContext } from "required-react-context";
-import { Bench, type TaskResult } from "tinybench";
+import * as broadcast from "@/features/broadcast/channel";
 import { ExternalStore, useExternalStore } from "@/hooks/store";
 
 interface PlaygroundEntryFields {
   id: string;
-  result?: TaskResult;
+  result?: { mean: number; error?: never } | { error: string; mean?: never };
 }
 
 interface PlaygroundState<Context> {
@@ -93,46 +92,63 @@ export class PlaygroundStore<Context> extends ExternalStore<
     return type && state[type][id];
   }
 
-  createBench() {
-    const bench = new Bench();
-    bench.addEventListener("cycle", (event) => {
-      this.setState((state) => {
-        state.currentTask = event.task?.name ?? null;
-      });
-    });
-    bench.addEventListener("complete", () => {
-      this.setState((state) => {
-        state.running = false;
-        state.currentTask = null;
-        for (const task of bench.tasks) {
-          const entry = this.selectById(this.state, task.name);
-          if (!entry) continue;
-          entry.result = task.result;
-        }
-      });
-    });
-
-    return bench;
-  }
-
   async run() {
     if (this.state.running) return;
-    const data = this.state.dataType === "valid" ? successData : errorData;
-    const bench = this.createBench();
+    broadcast.client.postMessage("benchmark", {
+      library: this.config.library.name,
+      dataType: this.state.dataType,
+      initialization: Object.fromEntries(
+        Object.entries(this.state.initialization).map(([id, entry]) => [
+          broadcast.getTaskSlug(this.config.library.name, entry),
+          id,
+        ]),
+      ),
+      validation: Object.fromEntries(
+        Object.entries(this.state.validation).map(([id, entry]) => [
+          broadcast.getTaskSlug(this.config.library.name, entry),
+          id,
+        ]),
+      ),
+      parsing: Object.fromEntries(
+        Object.entries(this.state.parsing).map(([id, entry]) => [
+          broadcast.getTaskSlug(this.config.library.name, entry),
+          id,
+        ]),
+      ),
+    });
+
     this.setState((state) => {
       state.running = true;
     });
-    const context = this.config.createContext();
-    for (const entry of Object.values(this.state.initialization)) {
-      bench.add(entry.id, () => entry.run(context));
-    }
-    for (const entry of Object.values(this.state.validation)) {
-      bench.add(entry.id, () => entry.run(data, context));
-    }
-    for (const entry of Object.values(this.state.parsing)) {
-      bench.add(entry.id, () => entry.run(data, context));
-    }
-    return bench.run();
+    const $results = broadcast.client.when("complete").map((payload) => {
+      if (payload.type === "fail") throw payload.error;
+      return payload.payload;
+    });
+    broadcast.client
+      .when("cycle")
+      .takeUntil($results)
+      .subscribe((event) => {
+        this.setState((state) => {
+          state.currentTask = event.task;
+        });
+      });
+    await $results
+      .first()
+      .then((results) => {
+        this.setState((state) => {
+          for (const [id, result] of Object.entries(results)) {
+            const entry = this.selectById(state, id);
+            if (!entry) continue;
+            entry.result = result;
+          }
+        });
+      })
+      .finally(() => {
+        this.setState((state) => {
+          state.running = false;
+          state.currentTask = null;
+        });
+      });
   }
 }
 

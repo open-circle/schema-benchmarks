@@ -1,23 +1,46 @@
-import {
-  getOrInsert,
-  getOrInsertComputed,
-  unsafeKeys,
-} from "@schema-benchmarks/utils";
+import { dataTypeSchema } from "@schema-benchmarks/bench";
+import { getOrInsert, getOrInsertComputed } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
 export type EventMap = Record<string, v.GenericSchema>;
 
+export function getTaskSlug(
+  libraryName: string,
+  { note, snippet }: { note: string; snippet: string },
+) {
+  return JSON.stringify({ libraryName, note, snippet });
+}
+
 const events = {
   client: {
-    greeting: v.string(),
+    benchmark: v.object({
+      library: v.string(),
+      dataType: dataTypeSchema,
+      // getTaskSlug -> id
+      initialization: v.record(v.string(), v.string()),
+      validation: v.record(v.string(), v.string()),
+      parsing: v.record(v.string(), v.string()),
+    }),
   },
   worker: {
-    response: v.string(),
+    cycle: v.object({ task: v.string() }),
+    complete: v.variant("type", [
+      v.object({
+        type: v.literal("results"),
+        payload: v.record(
+          v.string(),
+          v.union([
+            v.object({ mean: v.number() }),
+            v.object({ error: v.string() }),
+          ]),
+        ),
+      }),
+      v.object({ type: v.literal("fail"), error: v.instance(Error) }),
+    ]),
   },
 } satisfies Record<string, EventMap>;
 
 const messageSchema = v.object({
-  from: v.picklist(unsafeKeys(events)),
   type: v.string(),
   payload: v.unknown(),
 });
@@ -29,7 +52,6 @@ class TypedBroadcastChannel<
   TReceiveEvents extends EventMap,
 > {
   constructor(
-    private iam: "client" | "worker",
     _send: TSendEvents,
     private receive: TReceiveEvents,
     private channel: BroadcastChannel,
@@ -39,10 +61,9 @@ class TypedBroadcastChannel<
     payload: v.InferInput<TSendEvents[Ev]>,
   ) {
     this.channel.postMessage({
-      from: this.iam,
       type,
       payload,
-    });
+    } satisfies v.InferInput<typeof messageSchema>);
   }
   listenerMap = new Map<
     keyof TReceiveEvents,
@@ -73,12 +94,7 @@ class TypedBroadcastChannel<
       "message",
       getOrInsert(listenerMap, listener, (event) => {
         const parsed = v.safeParse(messageSchema, event.data);
-        if (
-          !parsed.success ||
-          parsed.output.from === this.iam ||
-          parsed.output.type !== type
-        )
-          return;
+        if (!parsed.success || parsed.output.type !== type) return;
         const payload = v.safeParse(schema, parsed.output.payload);
         if (!payload.success) return;
         listener(payload.output, event);
@@ -103,12 +119,7 @@ class TypedBroadcastChannel<
     if (!schema) throw new Error(`No schema for event ${type}`);
     return this.channel.when("message", options).flatMap((event) => {
       const parsed = v.safeParse(messageSchema, event.data);
-      if (
-        !parsed.success ||
-        parsed.output.from === this.iam ||
-        parsed.output.type !== type
-      )
-        return [];
+      if (!parsed.success || parsed.output.type !== type) return [];
       const payload = v.safeParse(schema, parsed.output.payload);
       return payload.success ? [payload.output] : [];
     });
@@ -116,13 +127,11 @@ class TypedBroadcastChannel<
 }
 
 export const client = new TypedBroadcastChannel(
-  "client",
   events.client,
   events.worker,
   broadcastChannel,
 );
 export const worker = new TypedBroadcastChannel(
-  "worker",
   events.worker,
   events.client,
   broadcastChannel,
