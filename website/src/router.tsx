@@ -54,7 +54,7 @@ export const getRouter = (history?: RouterHistory) => {
     navigator.serviceWorker.register(serviceWorkerFile, {
       type: "module",
     });
-    broadcast.client.addEventListener("response", (payload) => {
+    broadcast.client.when("response").subscribe((payload) => {
       console.log("Received response:", payload);
     });
     broadcast.client.postMessage("greeting", "Hello from the client!");

@@ -208,6 +208,9 @@ importers:
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
+      observable-polyfill:
+        specifier: ^0.0.29
+        version: 0.0.29
       prismjs:
         specifier: ^1.30.0
         version: 1.30.0
@@ -4583,6 +4586,9 @@ packages:
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
+
+  observable-polyfill@0.0.29:
+    resolution: {integrity: sha512-/sOoCFLPOgxkabgJ6uppEbQzMa22wStqDoSDaklyt/QwSqhJmG11PwZvVq+pquzvkXKYWbRED9oL/XnHV3R6sw==}
 
   obug@2.1.0:
     resolution: {integrity: sha512-uu/tgLPoa75CFA7UDkmqspKbefvZh1WMPwkU3bNr0PY746a/+xwXVgbw5co5C3GvJj3h5u8g/pbxXzI0gd1QFg==}
@@ -10926,6 +10932,8 @@ snapshots:
       boolbase: 1.0.0
 
   object-assign@4.1.1: {}
+
+  observable-polyfill@0.0.29: {}
 
   obug@2.1.0: {}
 

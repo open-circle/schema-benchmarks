@@ -22,6 +22,7 @@
     "material-colors": "^1.2.6",
     "mutative": "^1.3.0",
     "normalize.css": "^8.0.1",
+    "observable-polyfill": "^0.0.29",
     "prismjs": "^1.30.0",
     "rad-event-listeners": "^1.1.0",
     "react": "^19.2.0",

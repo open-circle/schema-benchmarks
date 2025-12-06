@@ -1,5 +1,11 @@
-import { getOrInsert, getOrInsertComputed } from "@schema-benchmarks/utils";
+import {
+  getOrInsert,
+  getOrInsertComputed,
+  unsafeKeys,
+} from "@schema-benchmarks/utils";
 import * as v from "valibot";
+
+export type EventMap = Record<string, v.GenericSchema>;
 
 const events = {
   client: {
@@ -8,10 +14,10 @@ const events = {
   worker: {
     response: v.string(),
   },
-} satisfies Record<"client" | "worker", Record<string, v.GenericSchema>>;
+} satisfies Record<string, EventMap>;
 
 const messageSchema = v.object({
-  from: v.picklist(["client", "worker"]),
+  from: v.picklist(unsafeKeys(events)),
   type: v.string(),
   payload: v.unknown(),
 });
@@ -19,8 +25,8 @@ const messageSchema = v.object({
 const broadcastChannel = new BroadcastChannel("benchmarks");
 
 class TypedBroadcastChannel<
-  TSendEvents extends Record<string, v.GenericSchema>,
-  TReceiveEvents extends Record<string, v.GenericSchema>,
+  TSendEvents extends EventMap,
+  TReceiveEvents extends EventMap,
 > {
   constructor(
     private iam: "client" | "worker",
@@ -41,13 +47,19 @@ class TypedBroadcastChannel<
   listenerMap = new Map<
     keyof TReceiveEvents,
     WeakMap<
-      (payload: v.InferOutput<TReceiveEvents[keyof TReceiveEvents]>) => void,
+      (
+        payload: v.InferOutput<TReceiveEvents[keyof TReceiveEvents]>,
+        event: MessageEvent,
+      ) => void,
       (event: MessageEvent) => void
     >
   >();
   addEventListener<Ev extends keyof TReceiveEvents>(
     type: Ev & string,
-    listener: (payload: v.InferOutput<TReceiveEvents[Ev]>) => void,
+    listener: (
+      payload: v.InferOutput<TReceiveEvents[Ev]>,
+      event: MessageEvent,
+    ) => void,
     options?: AddEventListenerOptions,
   ) {
     const schema = this.receive[type];
@@ -60,13 +72,12 @@ class TypedBroadcastChannel<
     this.channel.addEventListener(
       "message",
       getOrInsert(listenerMap, listener, (event) => {
-        const data = event.data;
-        const parsed = v.safeParse(messageSchema, data);
+        const parsed = v.safeParse(messageSchema, event.data);
         if (!parsed.success || parsed.output.from === this.iam) return;
         if (parsed.output.type !== type) return;
         const payload = v.safeParse(schema, parsed.output.payload);
         if (!payload.success) return;
-        listener(payload.output);
+        listener(payload.output, event);
       }),
       options,
     );
@@ -79,6 +90,22 @@ class TypedBroadcastChannel<
     const wrapped = this.listenerMap.get(type)?.get(listener);
     if (!wrapped) return;
     this.channel.removeEventListener("message", wrapped, options);
+  }
+  when<Ev extends keyof TReceiveEvents>(
+    type: Ev & string,
+    options?: ObservableEventListenerOptions,
+  ): Observable<v.InferOutput<TReceiveEvents[Ev]>> {
+    const schema = this.receive[type];
+    if (!schema) throw new Error(`No schema for event ${type}`);
+    return this.channel
+      .when("message", options)
+      .filter(
+        (event): event is MessageEvent<v.InferOutput<typeof messageSchema>> =>
+          v.is(messageSchema, event.data) &&
+          event.data.from !== this.iam &&
+          event.data.type === type,
+      )
+      .map((event) => v.parse(schema, event.data.payload));
   }
 }
 

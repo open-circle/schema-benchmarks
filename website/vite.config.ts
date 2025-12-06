@@ -52,7 +52,7 @@ const config = defineConfig({
       ],
     }),
     serviceWorkerPlugin({
-      filename: "service-worker.ts",
+      filename: "./src/service-worker.ts",
     }),
   ],
   resolve: {

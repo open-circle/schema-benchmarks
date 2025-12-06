@@ -22,6 +22,7 @@ import { Header } from "../components/header";
 import { Sidebar } from "../components/sidebar";
 import { Snackbars } from "../components/snackbar";
 import appCss from "../styles.css?url";
+import "observable-polyfill";
 
 interface RouterContext {
   queryClient: QueryClient;
