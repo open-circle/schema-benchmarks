@@ -20,7 +20,6 @@ export function PlaygroundTable() {
       <table className="playground-table">
         <thead>
           <tr>
-            <th className="action fit-content"></th>
             <th>Note</th>
             <th>Type</th>
             <th className="numeric">Mean (GitHub)</th>
@@ -30,13 +29,6 @@ export function PlaygroundTable() {
         <tbody>
           {Object.values(initialization).map((entry) => (
             <tr key={entry.id}>
-              <td className="action fit-content">
-                <input
-                  type="checkbox"
-                  checked={entry.enabled}
-                  onChange={(e) => store.setEnabled(entry.id, e.target.checked)}
-                />
-              </td>
               <td>{entry.note}</td>
               <td>Initialization</td>
               <td className="numeric">
@@ -63,13 +55,6 @@ export function PlaygroundTable() {
           ))}
           {Object.values(validation).map((entry) => (
             <tr key={entry.id}>
-              <td className="action fit-content">
-                <input
-                  type="checkbox"
-                  checked={entry.enabled}
-                  onChange={(e) => store.setEnabled(entry.id, e.target.checked)}
-                />
-              </td>
               <td>{entry.note}</td>
               <td>Validation</td>
               <td className="numeric">
@@ -96,13 +81,6 @@ export function PlaygroundTable() {
           ))}
           {Object.values(parsing).map((entry) => (
             <tr key={entry.id}>
-              <td className="action fit-content">
-                <input
-                  type="checkbox"
-                  checked={entry.enabled}
-                  onChange={(e) => store.setEnabled(entry.id, e.target.checked)}
-                />
-              </td>
               <td>
                 {entry.errorType} {entry.note && `(${entry.note})`}
               </td>

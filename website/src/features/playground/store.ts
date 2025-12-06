@@ -14,7 +14,6 @@ import { ExternalStore, useExternalStore } from "@/hooks/store";
 
 interface PlaygroundEntryFields {
   id: string;
-  enabled?: boolean;
   result?: TaskResult;
 }
 
@@ -58,7 +57,6 @@ export class PlaygroundStore<Context> extends ExternalStore<
       initialState.initialization[id] = {
         ...entry,
         id,
-        enabled: true,
       };
       initialState.typesById[id] = "initialization";
     }
@@ -67,7 +65,6 @@ export class PlaygroundStore<Context> extends ExternalStore<
       initialState.validation[id] = {
         ...entry,
         id,
-        enabled: true,
       };
       initialState.typesById[id] = "validation";
     }
@@ -76,7 +73,6 @@ export class PlaygroundStore<Context> extends ExternalStore<
       initialState.parsing[id] = {
         ...entry,
         id,
-        enabled: true,
         errorType: "allErrors",
       };
       initialState.typesById[id] = "parsing";
@@ -86,7 +82,6 @@ export class PlaygroundStore<Context> extends ExternalStore<
       initialState.parsing[id] = {
         ...entry,
         id,
-        enabled: true,
         errorType: "abortEarly",
       };
       initialState.typesById[id] = "parsing";
@@ -96,14 +91,6 @@ export class PlaygroundStore<Context> extends ExternalStore<
   selectById(state: PlaygroundState<Context>, id: string) {
     const type = state.typesById[id];
     return type && state[type][id];
-  }
-
-  setEnabled(id: string, enabled: boolean) {
-    this.setState((state) => {
-      const entry = this.selectById(state, id);
-      if (!entry) return;
-      entry.enabled = enabled;
-    });
   }
 
   createBench() {
@@ -137,15 +124,12 @@ export class PlaygroundStore<Context> extends ExternalStore<
     });
     const context = this.config.createContext();
     for (const entry of Object.values(this.state.initialization)) {
-      if (!entry.enabled) continue;
       bench.add(entry.id, () => entry.run(context));
     }
     for (const entry of Object.values(this.state.validation)) {
-      if (!entry.enabled) continue;
       bench.add(entry.id, () => entry.run(data, context));
     }
     for (const entry of Object.values(this.state.parsing)) {
-      if (!entry.enabled) continue;
       bench.add(entry.id, () => entry.run(data, context));
     }
     return bench.run();
