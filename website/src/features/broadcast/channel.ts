@@ -6,7 +6,7 @@ export type EventMap = Record<string, v.GenericSchema>;
 
 export function getTaskSlug(
   libraryName: string,
-  { note, snippet }: { note: string; snippet: string },
+  { note, snippet }: { note?: string; snippet: string },
 ) {
   return JSON.stringify({ libraryName, note, snippet });
 }
