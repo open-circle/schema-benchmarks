@@ -27,14 +27,6 @@ export interface DownloadTableProps {
 }
 
 export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
-  const sizeScaler = useMemo(
-    () =>
-      Bar.getScale(
-        results.map((result) => result.bytes),
-        { lowerBetter: true },
-      ),
-    [results],
-  );
   const gzipScaler = useMemo(
     () =>
       Bar.getScale(
@@ -50,12 +42,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
           <tr>
             <th>Library</th>
             <th>Version</th>
-            <th className="numeric" colSpan={2}>
-              Uncompressed
-            </th>
-            <th className="numeric" colSpan={2}>
-              Gzipped
-            </th>
+            <th className="numeric">Uncompressed</th>
+            <th className="numeric">Gzipped</th>
+            <th className="bar-after"></th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>
           </tr>
@@ -81,9 +70,6 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   <code className="language-text">{result.version}</code>
                 </td>
                 <td className="numeric">{formatBytes(result.bytes)}</td>
-                <td className="bar-after">
-                  <Bar {...sizeScaler(result.bytes)} />
-                </td>
                 <td className="numeric">{formatBytes(result.gzipBytes)}</td>
                 <td className="bar-after">
                   <Bar {...gzipScaler(result.gzipBytes)} />
