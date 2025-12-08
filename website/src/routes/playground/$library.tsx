@@ -2,8 +2,8 @@ import type { BenchmarksConfig } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { use, useMemo } from "react";
-import { Button } from "@/components/button";
+import { use } from "react";
+import { Button, ButtonGroup } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { MdSymbol } from "@/components/symbol";
 import { getBenchResults } from "@/features/benchmark/query";
@@ -13,6 +13,7 @@ import {
 } from "@/features/playground/store";
 import { PlaygroundTable } from "@/features/playground/table";
 import { useExternalStore } from "@/hooks/store";
+import { useDisposable } from "@/hooks/use-disposable";
 import { getHighlightedCode } from "@/lib/highlight";
 
 export const Route = createFileRoute("/playground/$library")({
@@ -71,14 +72,11 @@ function getConfig(library: string) {
 function RouteComponent() {
   const { library } = Route.useParams();
   const config = use(getConfig(library));
-  const store = useMemo(() => new PlaygroundStore(config), [config]);
+  const store = useDisposable(() => new PlaygroundStore(config), [config]);
   const running = useExternalStore(store, (state) => state.running);
   return (
     <PlaygroundStoreProvider playgroundStore={store}>
-      <Button
-        onClick={() => store.run().then(() => console.log(store.state))}
-        loading={running}
-      >
+      <Button onClick={() => store.run()} loading={running}>
         Run
       </Button>
       <PlaygroundTable />

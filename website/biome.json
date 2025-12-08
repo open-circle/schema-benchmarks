@@ -17,6 +17,20 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": {
+          "level": "warn",
+          "options": {
+            "hooks": [
+              {
+                "closureIndex": 0,
+                "dependenciesIndex": 1,
+                "name": "useDisposable"
+              }
+            ]
+          }
+        }
+      },
       "suspicious": {
         "noUnknownAtRules": {
           "level": "warn",

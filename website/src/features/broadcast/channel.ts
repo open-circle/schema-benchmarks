@@ -21,6 +21,7 @@ const events = {
       validation: v.record(v.string(), v.string()),
       parsing: v.record(v.string(), v.string()),
     }),
+    cancel: v.undefined(),
   },
   worker: {
     cycle: v.object({ task: v.string() }),
@@ -37,6 +38,7 @@ const events = {
       }),
       v.object({ type: v.literal("fail"), error: v.instance(Error) }),
     ]),
+    cancelled: v.undefined(),
   },
 } satisfies Record<string, EventMap>;
 
@@ -58,7 +60,9 @@ class TypedBroadcastChannel<
   ) {}
   postMessage<Ev extends keyof TSendEvents>(
     type: Ev & string,
-    payload: v.InferInput<TSendEvents[Ev]>,
+    ...[payload]: [undefined] extends [v.InferInput<TSendEvents[Ev]>]
+      ? [v.InferInput<TSendEvents[Ev]>?]
+      : [v.InferInput<TSendEvents[Ev]>]
   ) {
     this.channel.postMessage({
       type,

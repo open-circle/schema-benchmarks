@@ -38,9 +38,11 @@ interface PlaygroundState<Context> {
   >;
 }
 
-export class PlaygroundStore<Context> extends ExternalStore<
-  PlaygroundState<Context>
-> {
+export class PlaygroundStore<Context>
+  extends ExternalStore<PlaygroundState<Context>>
+  implements Disposable
+{
+  private ac = new AbortController();
   constructor(public config: BenchmarksConfig<Context>) {
     const initialState: PlaygroundState<Context> = {
       running: false,
@@ -86,6 +88,17 @@ export class PlaygroundStore<Context> extends ExternalStore<
       initialState.typesById[id] = "parsing";
     }
     super(initialState);
+    broadcast.client.addEventListener(
+      "cancelled",
+      () => {
+        this.setState((state) => {
+          state.running = false;
+          state.currentTask = null;
+        });
+        this.ac.abort();
+      },
+      { signal: this.ac.signal },
+    );
   }
   selectById(state: PlaygroundState<Context>, id: string) {
     const type = state.typesById[id];
@@ -149,6 +162,9 @@ export class PlaygroundStore<Context> extends ExternalStore<
           state.currentTask = null;
         });
       });
+  }
+  [Symbol.dispose]() {
+    broadcast.client.postMessage("cancel");
   }
 }
 

@@ -5,11 +5,15 @@ import { ensureArray } from "@schema-benchmarks/utils";
 import { Bench } from "tinybench";
 import * as broadcast from "./src/features/broadcast/channel";
 
+let ac: AbortController | undefined;
+
 broadcast.worker.addEventListener("benchmark", async (benchmarks) => {
   try {
+    ac?.abort();
+    ac = new AbortController();
     const config = libraries[`./${benchmarks.library}/benchmarks.ts`];
-    if (!config) return;
-    const bench = new Bench();
+    if (!config || ac.signal.aborted) return;
+    const bench = new Bench({ signal: ac.signal });
     bench.addEventListener("start", () => {
       console.log("Starting bench...");
     });
@@ -63,4 +67,12 @@ broadcast.worker.addEventListener("benchmark", async (benchmarks) => {
       error: error instanceof Error ? error : new Error("Unknown error"),
     });
   }
+});
+
+broadcast.worker.addEventListener("cancel", () => {
+  if (!ac) return;
+  ac.abort();
+  ac = undefined;
+  console.log("Cancelled");
+  broadcast.worker.postMessage("cancelled");
 });
