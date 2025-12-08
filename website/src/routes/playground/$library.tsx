@@ -3,7 +3,7 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { use } from "react";
-import { Button, ButtonGroup } from "@/components/button";
+import { Button } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { MdSymbol } from "@/components/symbol";
 import { getBenchResults } from "@/features/benchmark/query";

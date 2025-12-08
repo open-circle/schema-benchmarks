@@ -11,6 +11,8 @@ export function getTaskSlug(
   return JSON.stringify({ libraryName, note, snippet });
 }
 
+// schema input must be compatible with structuredClone (used by postMessage)
+// output can be anything - parsing is done by receiver
 const events = {
   client: {
     benchmark: v.object({
