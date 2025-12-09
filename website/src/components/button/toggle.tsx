@@ -1,4 +1,5 @@
-import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import { Spinner } from "../spinner";

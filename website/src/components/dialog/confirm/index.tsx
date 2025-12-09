@@ -1,4 +1,5 @@
-import { type DistributiveOmit, mergeRefs } from "@schema-benchmarks/utils";
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { useRef } from "react";
 import { useExternalStore } from "@/hooks/store.ts";
 import { AlertDialog, type AlertDialogProps } from "../alert.tsx";

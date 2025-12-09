@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import { isServer } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useState } from "react";

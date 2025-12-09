@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import { resolveValue, Toaster } from "react-hot-toast";
 import { Spinner } from "../spinner";
 import { MdSymbol } from "../symbol";

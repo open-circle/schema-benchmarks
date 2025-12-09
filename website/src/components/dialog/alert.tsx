@@ -1,4 +1,5 @@
-import { bem, type DistributiveOmit } from "@schema-benchmarks/utils";
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
 import { useIdDefault } from "@/hooks/use-id-default";
 import { Button, type ButtonProps } from "../button";

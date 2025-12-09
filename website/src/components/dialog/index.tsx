@@ -1,4 +1,4 @@
-import { bem, mergeRefs } from "@schema-benchmarks/utils";
+import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
 import {
   type ComponentPropsWithRef,
   type ReactNode,

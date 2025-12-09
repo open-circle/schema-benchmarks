@@ -1,8 +1,5 @@
-import {
-  type Autocomplete,
-  bem,
-  type DistributiveOmit,
-} from "@schema-benchmarks/utils";
+import type { Autocomplete, DistributiveOmit } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import type { ComponentPropsWithoutRef } from "react";
 import _MDSpinner from "react-md-spinner";
 import type { Color } from "@/styles/colors";

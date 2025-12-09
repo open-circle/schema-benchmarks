@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
 import { useExternalStore } from "@/hooks/store";
 import { bannerQueue } from "./queue";

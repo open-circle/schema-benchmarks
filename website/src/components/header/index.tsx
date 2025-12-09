@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import { Fragment, type ReactNode, useContext } from "react";
 import { ToggleButton } from "../button/toggle";

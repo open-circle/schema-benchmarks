@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { mergeRefs } from "./react.ts";
+import { mergeRefs } from "./index.ts";
 
 describe("mergeRefs", () => {
   it("should call all refs", () => {

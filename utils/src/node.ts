@@ -4,15 +4,19 @@ import * as v from "valibot";
 
 const exec = promisify(ogExec);
 
-const pnpmListSchema = v.array(
-  v.object({
-    dependencies: v.record(
-      v.string(),
-      v.object({
-        version: v.string(),
-      }),
-    ),
-  }),
+const pnpmListSchema = v.pipe(
+  v.string(),
+  v.parseJson(),
+  v.array(
+    v.object({
+      dependencies: v.record(
+        v.string(),
+        v.object({
+          version: v.string(),
+        }),
+      ),
+    }),
+  ),
 );
 
 const versionCache = new Map<string, string>();
@@ -24,8 +28,7 @@ export async function getVersion(libraryName: string) {
     `pnpm --filter schemas list ${libraryName} --json`,
   );
   if (stderr) throw new Error(stderr);
-  const json = JSON.parse(stdout);
-  const data = v.parse(pnpmListSchema, json);
+  const data = v.parse(pnpmListSchema, stdout);
   const dep = data[0]?.dependencies[libraryName];
   if (!dep) throw new Error(`No version found for ${libraryName}`);
   versionCache.set(libraryName, dep.version);

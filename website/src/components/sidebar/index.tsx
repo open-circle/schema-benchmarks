@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import { ClientOnly, createLink } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
 import type { ComponentProps } from "react";

@@ -1,5 +1,4 @@
 export type * from "./libs.ts";
-export * from "./react.ts";
 export type * from "./types.ts";
 
 import type { WithPartial } from "./types.ts";

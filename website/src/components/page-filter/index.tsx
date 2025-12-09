@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
 
 const cls = bem("page-filters");

@@ -13,6 +13,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./node": "./src/node.ts",
+    "./react": "./src/react/index.ts",
     "./valibot": "./src/valibot.ts"
   },
   "main": "./src/index.ts",

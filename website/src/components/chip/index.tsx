@@ -1,4 +1,4 @@
-import { bem, mergeRefs } from "@schema-benchmarks/utils";
+import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import { useFocusGroup } from "@/hooks/use-focus-group";

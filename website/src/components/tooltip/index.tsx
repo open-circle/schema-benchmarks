@@ -5,12 +5,8 @@ import {
   useFloating,
   useTransitionStyles,
 } from "@floating-ui/react";
-import {
-  bem,
-  mergeRefs,
-  type Override,
-  type WithRequired,
-} from "@schema-benchmarks/utils";
+import type { Override, WithRequired } from "@schema-benchmarks/utils";
+import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
 import { radEventListeners } from "rad-event-listeners";
 import {
   type ComponentProps,

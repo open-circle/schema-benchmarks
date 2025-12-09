@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils";
+import { bem } from "@schema-benchmarks/utils/react";
 import * as d3 from "d3";
 import * as scales from "@/data/scale";
 import { combineScales, reverseIf } from "@/lib/d3";
