@@ -8,6 +8,7 @@
 }
 
 .page-header {
+  view-transition-name: page-header;
   max-width: 100vw;
   background-color: light-dark(
     var(--page-header-background),
