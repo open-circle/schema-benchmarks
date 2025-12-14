@@ -230,6 +230,9 @@ importers:
       react-md-spinner:
         specifier: ^1.0.0
         version: 1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      tanstack-meta:
+        specifier: ^0.5.1
+        version: 0.5.1
       valibot:
         specifier: ^1.1.0
         version: 1.1.0(typescript@5.9.3)
@@ -5306,6 +5309,9 @@ packages:
 
   tabbable@6.3.0:
     resolution: {integrity: sha512-EIHvdY5bPLuWForiR/AN2Bxngzpuwn1is4asboytXtpTgsArc+WmSJKVLlhdh71u7jFcryDqB2A8lQvj78MkyQ==}
+
+  tanstack-meta@0.5.1:
+    resolution: {integrity: sha512-/+gKGB0yexV8ah7TiIBZ62nnxHdKouE1x0WNf5wJCtS6G9shbDZaMcbI6cCxz8NrNWv6C9OB7XZdsYmWIwND+w==}
 
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
@@ -11780,6 +11786,8 @@ snapshots:
   system-architecture@0.1.0: {}
 
   tabbable@6.3.0: {}
+
+  tanstack-meta@0.5.1: {}
 
   tar-stream@3.1.7:
     dependencies:

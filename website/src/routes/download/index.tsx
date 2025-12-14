@@ -13,6 +13,7 @@ import { PageFilter, PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
 import { MdSymbol } from "@/components/symbol";
+import { generateMetadata } from "@/data/meta";
 import { DownloadTable } from "@/features/download/components/table";
 import {
   getDownloadResults,
@@ -34,13 +35,7 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/download/")({
-  head: () => ({
-    meta: [
-      {
-        title: "Download - Schema Benchmarks",
-      },
-    ],
-  }),
+  head: () => generateMetadata({ title: "Download" }),
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
     await queryClient.prefetchQuery(getDownloadResults(abortController.signal));

@@ -1,9 +1,11 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { create } from "mutative";
 import * as v from "valibot";
 import { PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
+import { generateMetadata } from "@/data/meta";
 import { BenchTable } from "@/features/benchmark/components/table";
 import {
   dataTypeProps,
@@ -25,19 +27,13 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/_benchmarks/parsing/")({
-  head: () => ({
-    meta: [
-      {
-        title: "Parsing - Schema Benchmarks",
-      },
-    ],
-    links: [
-      {
+  head: () =>
+    create(generateMetadata({ title: "Parsing" }), ({ links }) => {
+      links.push({
         rel: "stylesheet",
         href: benchmarkStyles,
-      },
-    ],
-  }),
+      });
+    }),
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType, dataType, errorType } }) => ({
