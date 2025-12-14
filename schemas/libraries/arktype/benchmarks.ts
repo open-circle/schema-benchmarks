@@ -8,6 +8,7 @@ import { getArkTypeSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "arktype",
+    git: "arktypeio/arktype",
     optimizeType: "none",
     version: await getVersion("arktype"),
   },

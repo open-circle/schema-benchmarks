@@ -8,6 +8,7 @@ import { getAjv, getAjvSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "ajv",
+    git: "ajv-validator/ajv",
     optimizeType: "jit",
     version: await getVersion("ajv"),
   },

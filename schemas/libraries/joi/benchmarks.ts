@@ -8,6 +8,7 @@ import { getJoiSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "joi",
+    git: "hapijs/joi",
     optimizeType: "none",
     version: await getVersion("joi"),
   },

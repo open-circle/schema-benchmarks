@@ -10,6 +10,7 @@ import { getTypeboxSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "typebox",
+    git: "sinclairzx81/typebox",
     optimizeType: "none",
     version: await getVersion("typebox"),
   },

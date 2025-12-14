@@ -9,6 +9,7 @@ import { getZodMiniSchema } from "./mini";
 export default defineBenchmarks({
   library: {
     name: "zod",
+    git: "colinhacks/zod",
     optimizeType: "jit",
     version: await getVersion("zod"),
   },

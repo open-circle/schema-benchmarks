@@ -29,6 +29,7 @@ export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
 
 export interface LibraryInfo {
   name: string;
+  git: string;
   optimizeType: OptimizeType;
   version: string;
 }

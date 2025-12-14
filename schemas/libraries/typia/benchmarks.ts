@@ -12,6 +12,7 @@ import type { TypiaSchema } from ".";
 export default defineBenchmarks({
   library: {
     name: "typia",
+    git: "samchon/typia",
     optimizeType: "precompiled",
     version: await getVersion("typia"),
   },
