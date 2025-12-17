@@ -17,6 +17,7 @@ import {
   optionalOptimizeTypeSchema,
 } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
+import { getAllWeeklyDownloads } from "@/features/popularity/query";
 import { getHighlightedCode } from "@/lib/highlight";
 import Content from "./content.mdx";
 
@@ -49,15 +50,24 @@ export const Route = createFileRoute("/_benchmarks/parsing/")({
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
-    for (const { snippet } of Object.values(
+    const downloadPromises = [];
+    for (const { snippet, libraryName } of Object.values(
       benchResults.parsing[dataType].filter(
         shallowFilter({ optimizeType, errorType }),
       ),
     )) {
+      // wait for these
+      downloadPromises.push(
+        queryClient.ensureQueryData(
+          getAllWeeklyDownloads(libraryName, abortController.signal),
+        ),
+      );
+      // don't wait for these, not visible immediately
       queryClient.prefetchQuery(
         getHighlightedCode({ code: snippet }, abortController.signal),
       );
     }
+    await Promise.all(downloadPromises);
   },
   staticData: { crumb: "Parsing" },
 });

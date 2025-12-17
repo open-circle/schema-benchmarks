@@ -11,6 +11,7 @@ import { ExternalLinkToggleButton } from "@/components/button/toggle";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";
+import { DownloadCount } from "@/features/popularity/components/count";
 
 function getCompiledPath(result: DownloadResult, minify: MinifyType) {
   return result.fileName
@@ -42,6 +43,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
           <tr>
             <th>Library</th>
             <th>Version</th>
+            <th className="numeric">Downloads (weekly)</th>
             <th className="numeric">Uncompressed</th>
             <th className="numeric">Gzipped</th>
             <th className="bar-after"></th>
@@ -68,6 +70,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 </td>
                 <td>
                   <code className="language-text">{result.version}</code>
+                </td>
+                <td className="numeric">
+                  <DownloadCount libraryName={result.libraryName} />
                 </td>
                 <td className="numeric">{formatBytes(result.bytes)}</td>
                 <td className="numeric">{formatBytes(result.gzipBytes)}</td>
