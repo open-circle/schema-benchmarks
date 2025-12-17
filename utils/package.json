@@ -1,7 +1,4 @@
 {
-  "dependencies": {
-    "react-bem-helper": "^1.4.1"
-  },
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@typescript/native-preview": "7.0.0-dev.20251126.1",

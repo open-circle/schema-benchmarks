@@ -120,10 +120,6 @@ importers:
         version: 4.5.4(@types/node@24.10.1)(rollup@4.53.1)(typescript@5.9.3)(vite@7.2.2(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
 
   utils:
-    dependencies:
-      react-bem-helper:
-        specifier: ^1.4.1
-        version: 1.4.1
     devDependencies:
       '@types/react':
         specifier: ^19.2.0
