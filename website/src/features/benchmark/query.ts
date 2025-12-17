@@ -25,7 +25,7 @@ export const dataTypeProps: Pick<
   "title" | "labels" | "options"
 > = {
   title: "Data",
-  options: optionalDataTypeSchema.wrapped.options,
+  options: dataTypeSchema.options,
   labels: {
     valid: { label: "Valid", icon: "check_circle" },
     invalid: { label: "Invalid", icon: "error" },
@@ -38,7 +38,7 @@ export const errorTypeProps: Pick<
   "title" | "labels" | "options"
 > = {
   title: "Abort early",
-  options: optionalErrorTypeSchema.wrapped.options,
+  options: errorTypeSchema.options,
   labels: {
     allErrors: { label: "All errors", icon: "error" },
     abortEarly: { label: "Abort early", icon: "warning" },
@@ -51,7 +51,7 @@ export const optimizeTypeProps: Pick<
   "title" | "labels" | "options"
 > = {
   title: "Optimizations",
-  options: optionalOptimizeTypeSchema.wrapped.options,
+  options: optimizeTypeSchema.options,
   labels: {
     none: { label: "None", icon: "flash_off" },
     jit: { label: "JIT", icon: "code" },
@@ -61,7 +61,7 @@ export const optimizeTypeProps: Pick<
 
 export const getBenchResultsFn = createServerFn().handler(
   async ({ signal }) => {
-    let results: BenchResults;
+    let results: BenchResults | undefined;
     if (process.env.NODE_ENV === "production") {
       try {
         const response = await fetch(
@@ -75,13 +75,10 @@ export const getBenchResultsFn = createServerFn().handler(
         results = v.parse(benchResultsSchema, await response.json());
       } catch (error) {
         console.error("Falling back to local results: ", error);
-        results = structuredClone(benchResults);
       }
-    } else {
-      results = structuredClone(benchResults);
     }
 
-    return results;
+    return results ?? benchResults;
   },
 );
 

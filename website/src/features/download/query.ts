@@ -22,7 +22,7 @@ export const minifyTypeProps: Pick<
   "title" | "labels" | "options"
 > = {
   title: "Minify",
-  options: optionalMinifyTypeSchema.wrapped.options,
+  options: minifyTypeSchema.options,
   labels: {
     minified: { label: "Minified", icon: "chips" },
     unminified: { label: "Unminified", icon: "code_blocks" },
@@ -31,7 +31,7 @@ export const minifyTypeProps: Pick<
 
 export const getDownloadResultsFn = createServerFn().handler(
   async ({ signal }) => {
-    let results: DownloadResults;
+    let results: DownloadResults | undefined;
     if (process.env.NODE_ENV === "production") {
       try {
         const response = await fetch(
@@ -45,13 +45,10 @@ export const getDownloadResultsFn = createServerFn().handler(
         results = v.parse(downloadResultsSchema, await response.json());
       } catch (error) {
         console.error("Falling back to local results: ", error);
-        results = structuredClone(downloadResults);
       }
-    } else {
-      results = structuredClone(downloadResults);
     }
 
-    return results;
+    return results ?? downloadResults;
   },
 );
 
