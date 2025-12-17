@@ -97,19 +97,22 @@ export function formatBytes(bytes: number, formatter = numFormatter) {
 export const durationFormatter = new Intl.DurationFormat();
 
 export const getDuration = (ms: number): Intl.DurationType => {
+  if (ms < 0.001) {
+    return { nanoseconds: Math.round(ms * 1_000_000) };
+  }
   if (ms < 1) {
-    return { nanoseconds: Math.round(ms * 1000000) };
+    return { microseconds: Math.round(ms * 1_000) };
   }
   if (ms < 1_000) {
     return { milliseconds: Math.round(ms) };
   }
   if (ms < 60_000) {
-    return { seconds: Math.round(ms / 1000) };
+    return { seconds: Math.round(ms / 1_000) };
   }
   if (ms < 3_600_000) {
-    return { minutes: Math.round(ms / 60000) };
+    return { minutes: Math.round(ms / 6_0000) };
   }
-  return { hours: Math.round(ms / 3600000) };
+  return { hours: Math.round(ms / 3_600_000) };
 };
 
 export const promiseAllKeyed = async <T extends Record<string, unknown>>(
