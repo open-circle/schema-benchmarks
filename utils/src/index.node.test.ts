@@ -3,6 +3,7 @@ import {
   formatBytes,
   partition,
   promiseAllKeyed,
+  promiseAllSettledKeyed,
   serialize,
   setAbortableInterval,
   setAbortableTimeout,
@@ -48,6 +49,21 @@ describe("promiseAllKeyed", () => {
         c: Promise.resolve(3),
       }),
     ).rejects.toBe(2);
+  });
+});
+
+describe("promiseAllSettledKeyed", () => {
+  it("should create a new object with the same keys as the input", async () => {
+    const result = await promiseAllSettledKeyed({
+      a: Promise.resolve(1),
+      b: Promise.reject(2),
+      c: Promise.resolve(3),
+    });
+    expect(result).toEqual({
+      a: { status: "fulfilled", value: 1 },
+      b: { status: "rejected", reason: 2 },
+      c: { status: "fulfilled", value: 3 },
+    });
   });
 });
 

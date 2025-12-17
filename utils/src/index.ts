@@ -117,11 +117,24 @@ export const promiseAllKeyed = async <T extends Record<string, unknown>>(
 ): Promise<{
   [K in keyof T]: Awaited<T[K]>;
 }> =>
-  Object.fromEntries(
+  unsafeFromEntries(
     await Promise.all(
       unsafeEntries(keyed).map(async ([key, value]) => [key, await value]),
     ),
-  );
+  ) as never;
+
+export const promiseAllSettledKeyed = async <T extends Record<string, unknown>>(
+  keyed: T,
+): Promise<{
+  [K in keyof T]: PromiseSettledResult<Awaited<T[K]>>;
+}> => {
+  const entries = unsafeEntries(keyed);
+  const results = await Promise.allSettled(entries.map(([, value]) => value));
+  return unsafeFromEntries(
+    // biome-ignore lint/style/noNonNullAssertion: we know the entries are there
+    results.map((result, i) => [entries[i]![0], result]),
+  ) as never;
+};
 
 /**
  * Sets an interval that is automatically cleared when the signal is aborted.

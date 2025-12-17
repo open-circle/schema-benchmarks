@@ -1,5 +1,11 @@
 import { describe, expectTypeOf, it } from "vitest";
-import { hasAtLeast, hasLength, partition, promiseAllKeyed } from "./index.ts";
+import {
+  hasAtLeast,
+  hasLength,
+  partition,
+  promiseAllKeyed,
+  promiseAllSettledKeyed,
+} from "./index.ts";
 
 describe("partition", () => {
   it("should narrow based on type predicate", () => {
@@ -50,6 +56,21 @@ describe("promiseAllKeyed", () => {
       a: number;
       b: number;
       c: number;
+    }>();
+  });
+});
+
+describe("promiseAllSettledKeyed", () => {
+  it("should resolve to an object with the same keys as the input", async () => {
+    const result = await promiseAllSettledKeyed({
+      a: Promise.resolve(1),
+      b: Promise.resolve(2),
+      c: Promise.resolve(3),
+    });
+    expectTypeOf(result).toEqualTypeOf<{
+      a: PromiseSettledResult<number>;
+      b: PromiseSettledResult<number>;
+      c: PromiseSettledResult<number>;
     }>();
   });
 });
