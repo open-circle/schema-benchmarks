@@ -142,7 +142,6 @@ export const setAbortableInterval = <TArgs extends Array<any>>(
   const interval = setInterval(fn, delay, ...args);
   signal.addEventListener("abort", () => clearInterval(interval), {
     once: true,
-    signal: AbortSignal.timeout(delay),
   });
   return interval;
 };
