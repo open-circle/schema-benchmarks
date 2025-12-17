@@ -96,46 +96,50 @@ export function formatBytes(bytes: number, formatter = numFormatter) {
 
 export const durationFormatter = new Intl.DurationFormat();
 
+const units: Array<[threshold: number, Intl.DurationTimeFormatUnit]> = [
+  [3_600_000, "hours"],
+  [60_000, "minutes"],
+  [1_000, "seconds"],
+  [1, "milliseconds"],
+  [0.001, "microseconds"],
+  // fallback to nanoseconds
+];
+
 export const getDuration = (ms: number): Intl.DurationType => {
-  if (ms < 0.001) {
-    return { nanoseconds: Math.round(ms * 1_000_000) };
+  for (const [threshold, unit] of units) {
+    if (ms >= threshold) return { [unit]: Math.round(ms / threshold) };
   }
-  if (ms < 1) {
-    return { microseconds: Math.round(ms * 1_000) };
-  }
-  if (ms < 1_000) {
-    return { milliseconds: Math.round(ms) };
-  }
-  if (ms < 60_000) {
-    return { seconds: Math.round(ms / 1_000) };
-  }
-  if (ms < 3_600_000) {
-    return { minutes: Math.round(ms / 6_0000) };
-  }
-  return { hours: Math.round(ms / 3_600_000) };
+  return { nanoseconds: Math.round(ms * 1_000_000) };
 };
 
-export const promiseAllKeyed = async <T extends Record<string, unknown>>(
+const enumerableKeys = <T extends object>(obj: T) =>
+  Reflect.ownKeys(obj).filter(
+    (key) => Object.getOwnPropertyDescriptor(obj, key)?.enumerable,
+  );
+
+export const promiseAllKeyed = async <T extends Record<PropertyKey, unknown>>(
   keyed: T,
 ): Promise<{
   [K in keyof T]: Awaited<T[K]>;
 }> =>
   unsafeFromEntries(
     await Promise.all(
-      unsafeEntries(keyed).map(async ([key, value]) => [key, await value]),
+      enumerableKeys(keyed).map(async (key) => [key, await keyed[key]]),
     ),
   ) as never;
 
-export const promiseAllSettledKeyed = async <T extends Record<string, unknown>>(
+export const promiseAllSettledKeyed = async <
+  T extends Record<PropertyKey, unknown>,
+>(
   keyed: T,
 ): Promise<{
   [K in keyof T]: PromiseSettledResult<Awaited<T[K]>>;
 }> => {
-  const entries = unsafeEntries(keyed);
-  const results = await Promise.allSettled(entries.map(([, value]) => value));
+  const keys = enumerableKeys(keyed);
+  const results = await Promise.allSettled(keys.map((key) => keyed[key]));
   return unsafeFromEntries(
-    // biome-ignore lint/style/noNonNullAssertion: we know the entries are there
-    results.map((result, i) => [entries[i]![0], result]),
+    // biome-ignore lint/style/noNonNullAssertion: we know the keys are there
+    results.map((result, i) => [keys[i]!, result]),
   ) as never;
 };
 
