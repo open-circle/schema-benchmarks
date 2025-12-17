@@ -18,6 +18,7 @@
   "peerDependencies": {
     "valibot": "*"
   },
+  "private": true,
   "scripts": {
     "test": "vitest",
     "typecheck": "tsgo"
