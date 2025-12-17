@@ -1,10 +1,11 @@
-import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import {
   type ComponentPropsWithRef,
   type ReactNode,
   useEffect,
   useRef,
 } from "react";
+import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
@@ -35,7 +36,7 @@ export function Dialog({
   return (
     <dialog
       {...props}
-      className={cls({ extra: className })}
+      {...cls({ extra: className })}
       ref={mergeRefs(ref, dialogRef)}
     >
       {resolveValue(children, (returnValue) =>
@@ -54,7 +55,7 @@ export function DialogActions({
 }) {
   const group = useFocusGroup();
   return (
-    <div ref={group} className={cls({ element: "actions", extra: className })}>
+    <div ref={group} {...cls({ element: "actions", extra: className })}>
       {children}
     </div>
   );

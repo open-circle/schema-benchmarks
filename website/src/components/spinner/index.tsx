@@ -1,6 +1,6 @@
 import type { Autocomplete, DistributiveOmit } from "@schema-benchmarks/utils";
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ComponentPropsWithoutRef } from "react";
+import bem from "react-bem-helper";
 import _MDSpinner from "react-md-spinner";
 import type { Color } from "@/styles/colors";
 
@@ -38,7 +38,7 @@ export function Spinner({
     <MDSpinner
       {...props}
       role="progressbar"
-      className={cls({ extra: className })}
+      {...cls({ extra: className })}
       color1={makeVar(color1)}
       color2={makeVar(color2)}
       color3={makeVar(color3)}

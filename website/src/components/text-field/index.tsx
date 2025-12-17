@@ -1,5 +1,5 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ComponentPropsWithRef, ReactNode } from "react";
+import bem from "react-bem-helper";
 
 export interface TextFieldProps extends ComponentPropsWithRef<"input"> {
   startIcon?: ReactNode;
@@ -33,7 +33,7 @@ export function TextField({
 }: TextFieldProps) {
   return (
     <label
-      className={cls({
+      {...cls({
         modifiers: {
           error: !!errorMessage,
         },
@@ -41,22 +41,22 @@ export function TextField({
       })}
       style={style}
     >
-      <div className={cls({ element: "container", extra: "typo-subtitle1" })}>
-        {startIcon && <div className={cls("start-icon")}>{startIcon}</div>}
-        {prefix && <span className={cls("prefix")}>{prefix}</span>}
-        <input {...props} className={cls("input")} />
-        {suffix && <span className={cls("suffix")}>{suffix}</span>}
+      <div {...cls({ element: "container", extra: "typo-subtitle1" })}>
+        {startIcon && <div {...cls("start-icon")}>{startIcon}</div>}
+        {prefix && <span {...cls("prefix")}>{prefix}</span>}
+        <input {...props} {...cls("input")} />
+        {suffix && <span {...cls("suffix")}>{suffix}</span>}
         {endIcon &&
           (endIconIsButton ? (
-            <div className={cls("end-button")}>{endIcon}</div>
+            <div {...cls("end-button")}>{endIcon}</div>
           ) : (
-            <div className={cls("end-icon")}>{endIcon}</div>
+            <div {...cls("end-icon")}>{endIcon}</div>
           ))}
       </div>
       {errorMessage || helpText ? (
-        <div className={cls("message-container")}>
+        <div {...cls("message-container")}>
           <p
-            className={cls({
+            {...cls({
               element: "message",
               extra: "typo-caption",
             })}

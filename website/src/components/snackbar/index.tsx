@@ -1,4 +1,4 @@
-import { bem } from "@schema-benchmarks/utils/react";
+import bem from "react-bem-helper";
 import { resolveValue, Toaster } from "react-hot-toast";
 import { Spinner } from "../spinner";
 import { MdSymbol } from "../symbol";
@@ -22,7 +22,7 @@ export function Snackbars() {
     >
       {(t) => (
         <div
-          className={cls({
+          {...cls({
             modifiers: {
               visible: t.visible,
               [t.type]: true,
@@ -33,7 +33,7 @@ export function Snackbars() {
           {...t.ariaProps}
         >
           {(t.icon || t.type === "loading") && (
-            <div className={cls("icon")}>
+            <div {...cls("icon")}>
               {t.icon ?? (t.type === "loading" && <Spinner size={24} />)}
             </div>
           )}

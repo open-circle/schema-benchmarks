@@ -1,5 +1,5 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ComponentPropsWithRef, ReactNode } from "react";
+import bem from "react-bem-helper";
 
 export interface FloatingActionButtonProps
   extends ComponentPropsWithRef<"button"> {
@@ -18,12 +18,12 @@ export function FloatingActionButton({
     <button
       type="button"
       {...props}
-      className={cls({
+      {...cls({
         modifiers: ["floating-action"],
         extra: className,
       })}
     >
-      {icon && <div className={cls("icon")}>{icon}</div>}
+      {icon && <div {...cls("icon")}>{icon}</div>}
       {children}
     </button>
   );

@@ -1,7 +1,7 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
-import { bem } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
+import bem from "react-bem-helper";
 import { Spinner } from "../spinner";
 import { withTooltip } from "../tooltip";
 import type { ButtonColor } from ".";
@@ -37,7 +37,7 @@ export const ToggleButton = withTooltip(
         {...props}
         disabled={disabled || loading}
         aria-pressed={active}
-        className={cls({
+        {...cls({
           modifiers: [
             "toggle",
             color ?? "",
@@ -67,7 +67,7 @@ export const ExternalLinkToggleButton = withTooltip(
     return (
       <a
         {...props}
-        className={cls({
+        {...cls({
           modifiers: [
             "toggle",
             color ?? "",

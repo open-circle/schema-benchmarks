@@ -1,5 +1,5 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
+import bem from "react-bem-helper";
 import { useExternalStore } from "@/hooks/store";
 import { bannerQueue } from "./queue";
 
@@ -20,14 +20,12 @@ export function Banner() {
   if (!banner) return null;
   const { color = "", closing = false, icon, children, actions } = banner;
   return (
-    <div className={cls({ modifiers: { closing, [color]: !!color } })}>
-      <div className={cls("container")}>
-        {icon && <div className={cls("icon")}>{icon}</div>}
-        <p className={cls({ element: "message", extra: "typo-body2" })}>
-          {children}
-        </p>
+    <div {...cls({ modifiers: { closing, [color]: !!color } })}>
+      <div {...cls("container")}>
+        {icon && <div {...cls("icon")}>{icon}</div>}
+        <p {...cls({ element: "message", extra: "typo-body2" })}>{children}</p>
       </div>
-      {actions && <div className={cls("actions")}>{actions}</div>}
+      {actions && <div {...cls("actions")}>{actions}</div>}
     </div>
   );
 }

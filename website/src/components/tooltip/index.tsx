@@ -6,7 +6,7 @@ import {
   useTransitionStyles,
 } from "@floating-ui/react";
 import type { Override, WithRequired } from "@schema-benchmarks/utils";
-import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { radEventListeners } from "rad-event-listeners";
 import {
   type ComponentProps,
@@ -18,6 +18,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import bem from "react-bem-helper";
 import { useIdDefault } from "@/hooks/use-id-default";
 import { ButtonGroup } from "../button";
 
@@ -175,21 +176,21 @@ export function withTooltip<TComp extends TooltipableComponent>(
             popover="hint"
             id={id}
             style={floatingStyles}
-            className={cls({
+            {...cls({
               modifiers: { rich: typeof tooltip === "object" },
             })}
             onBeforeToggle={(e) => {
               setOpen(e.newState === "open");
             }}
           >
-            <div className={cls("content")} style={styles}>
+            <div {...cls("content")} style={styles}>
               {typeof tooltip === "string" ? (
                 tooltip
               ) : (
                 <>
                   {tooltip.subhead && (
                     <h6
-                      className={cls({
+                      {...cls({
                         element: "subhead",
                         extra: "typo-caption",
                       })}
@@ -197,10 +198,10 @@ export function withTooltip<TComp extends TooltipableComponent>(
                       {tooltip.subhead}
                     </h6>
                   )}
-                  <div className={cls("supporting")}>{tooltip.supporting}</div>
+                  <div {...cls("supporting")}>{tooltip.supporting}</div>
                   {tooltip.actions && (
                     <ButtonGroup
-                      className={cls("actions")}
+                      {...cls("actions")}
                       ariaLabel={tooltip.actionsLabel ?? "Actions"}
                     >
                       {tooltip.actions}

@@ -1,6 +1,7 @@
-import { bem, mergeRefs } from "@schema-benchmarks/utils/react";
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
+import bem from "react-bem-helper";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 
 const collectionCls = bem("chip-collection");
@@ -15,7 +16,7 @@ export function ChipCollection({
   return (
     <div
       {...props}
-      className={collectionCls({ extra: className })}
+      {...collectionCls({ extra: className })}
       ref={mergeRefs(ref, group)}
     >
       {children}
@@ -35,7 +36,7 @@ export function Chip({ children, className, activated, ...props }: ChipProps) {
       type="button"
       {...props}
       aria-pressed={activated}
-      className={cls({ extra: className })}
+      {...cls({ extra: className })}
     >
       {children}
     </button>
@@ -48,7 +49,7 @@ function BaseLinkChip({
   ...props
 }: ComponentPropsWithRef<"a">) {
   return (
-    <a {...props} className={cls({ extra: className })}>
+    <a {...props} {...cls({ extra: className })}>
       {children}
     </a>
   );

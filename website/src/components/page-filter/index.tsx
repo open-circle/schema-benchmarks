@@ -1,10 +1,10 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
+import bem from "react-bem-helper";
 
 const cls = bem("page-filters");
 
 export function PageFilters({ children }: { children: ReactNode }) {
-  return <div className={cls()}>{children}</div>;
+  return <div {...cls()}>{children}</div>;
 }
 
 export interface PageFilterProps {
@@ -15,7 +15,7 @@ export interface PageFilterProps {
 
 export function PageFilter({ title, titleId, children }: PageFilterProps) {
   return (
-    <div className={cls("group")}>
+    <div {...cls("group")}>
       <h6 className="typo-caption" id={titleId}>
         {title}
       </h6>

@@ -1,5 +1,5 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
+import bem from "react-bem-helper";
 
 export interface EmptyStateProps {
   icon?: ReactNode;
@@ -17,15 +17,11 @@ export function EmptyState({
   children,
 }: EmptyStateProps) {
   return (
-    <div className={cls()}>
-      {icon && <div className={cls("icon")}>{icon}</div>}
-      <p className={cls({ element: "title", extra: "typo-headline5" })}>
-        {title}
-      </p>
+    <div {...cls()}>
+      {icon && <div {...cls("icon")}>{icon}</div>}
+      <p {...cls({ element: "title", extra: "typo-headline5" })}>{title}</p>
       {subtitle && (
-        <p className={cls({ element: "subtitle", extra: "typo-body2" })}>
-          {subtitle}
-        </p>
+        <p {...cls({ element: "subtitle", extra: "typo-body2" })}>{subtitle}</p>
       )}
       {children}
     </div>

@@ -1,7 +1,7 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
-import { bem } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
+import bem from "react-bem-helper";
 import { useFocusGroup } from "@/hooks/use-focus-group";
 import { Spinner } from "../spinner";
 import { withTooltip } from "../tooltip";
@@ -43,7 +43,7 @@ export const Button = withTooltip(function Button({
       type="button"
       {...props}
       disabled={disabled || loading}
-      className={buttonCls({
+      {...buttonCls({
         modifiers: [variant, color],
         extra: className,
       })}
@@ -51,7 +51,7 @@ export const Button = withTooltip(function Button({
       {loading ? (
         <Spinner singleColor="button-foreground" size={18} />
       ) : (
-        icon && <div className={buttonCls("icon")}>{icon}</div>
+        icon && <div {...buttonCls("icon")}>{icon}</div>
       )}
       {children}
     </button>
@@ -72,7 +72,7 @@ export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   return (
     <a
       {...props}
-      className={buttonCls({
+      {...buttonCls({
         modifiers: [variant, color],
         extra: className,
       })}
@@ -106,7 +106,7 @@ export function ButtonGroup({
   });
   return (
     <div
-      className={buttonGroupCls({ modifiers: [variant], extra: className })}
+      {...buttonGroupCls({ modifiers: [variant], extra: className })}
       ref={group}
       role="toolbar"
       aria-orientation={orientation}

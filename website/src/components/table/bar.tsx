@@ -1,5 +1,5 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import * as d3 from "d3";
+import bem from "react-bem-helper";
 import * as scales from "@/data/scale";
 import { combineScales, reverseIf } from "@/lib/d3";
 
@@ -24,9 +24,9 @@ const cls = bem("bar");
 
 export function Bar({ color, percentage }: BarProps) {
   return (
-    <div className={cls()}>
+    <div {...cls()}>
       <div
-        className={cls("fill")}
+        {...cls("fill")}
         style={{
           backgroundColor: color,
           width: `${percentage}%`,

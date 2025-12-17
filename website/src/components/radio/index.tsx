@@ -1,13 +1,13 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ComponentPropsWithRef } from "react";
+import bem from "react-bem-helper";
 
 const cls = bem("radio");
 
 export function Radio({ className, ...props }: ComponentPropsWithRef<"input">) {
   return (
-    <label className={cls({ extra: className })}>
+    <label {...cls({ extra: className })}>
       <input type="radio" {...props} />
-      <span className={cls("icon")} />
+      <span {...cls("icon")} />
     </label>
   );
 }

@@ -221,6 +221,9 @@ importers:
       react:
         specifier: ^19.2.0
         version: 19.2.0
+      react-bem-helper:
+        specifier: ^1.4.1
+        version: 1.4.1
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)

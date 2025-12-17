@@ -1,6 +1,6 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
 import { Fragment, type ReactNode, useContext } from "react";
+import bem from "react-bem-helper";
 import { ToggleButton } from "../button/toggle";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
@@ -35,11 +35,11 @@ export function Header() {
   const crumbs = allCrumbs.slice(0, -1);
   const currentCrumb = allCrumbs.at(-1);
   return (
-    <header className={cls()}>
+    <header {...cls()}>
       <ClientOnly
         fallback={
           <ToggleButton
-            className={cls({
+            {...cls({
               element: "toggle",
             })}
             tooltip="Expand sidebar"
@@ -49,7 +49,7 @@ export function Header() {
         }
       >
         <ToggleButton
-          className={cls({
+          {...cls({
             element: "toggle",
             modifiers: { open },
           })}
@@ -78,7 +78,7 @@ export function Header() {
           <span className="typo-headline6">{currentCrumb.name}</span>
         )}
       </nav>
-      {actions && <div className={cls("actions")}>{actions}</div>}
+      {actions && <div {...cls("actions")}>{actions}</div>}
     </header>
   );
 }

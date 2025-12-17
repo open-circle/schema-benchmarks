@@ -1,8 +1,8 @@
-import { bem } from "@schema-benchmarks/utils/react";
 import { ClientOnly, createLink } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
 import type { ComponentProps } from "react";
 import { type ReactNode, useContext, useEffect } from "react";
+import bem from "react-bem-helper";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
@@ -46,15 +46,15 @@ function BaseSidebar({
       {/** biome-ignore lint/a11y/noStaticElementInteractions: we have an escape listener */}
       {/** biome-ignore lint/a11y/useKeyWithClickEvents: we have an escape listener */}
       <div
-        className={backdropCls({ modifiers: { visible: open } })}
+        {...backdropCls({ modifiers: { visible: open } })}
         onClick={() => setOpen(false)}
       />
-      <aside className={cls({ modifiers: { open } })}>
-        <div className={cls("logo")}>
+      <aside {...cls({ modifiers: { open } })}>
+        <div {...cls("logo")}>
           <img src="/logo.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
           <ToggleButton
-            className={cls({
+            {...cls({
               element: "toggle",
             })}
             onClick={() => setOpen(false)}
@@ -100,9 +100,9 @@ export function Sidebar() {
   return (
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
-        <ul className={cls("groups")}>
+        <ul {...cls("groups")}>
           {sidebarGroups.map((groups, index) => (
-            <div key={groups.key} className={cls("group")}>
+            <div key={groups.key} {...cls("group")}>
               <ul>
                 {groups.links.map(({ name, icon, ...link }) => (
                   <li key={link.to}>

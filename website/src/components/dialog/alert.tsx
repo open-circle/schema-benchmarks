@@ -1,6 +1,6 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
-import { bem } from "@schema-benchmarks/utils/react";
 import type { ReactNode } from "react";
+import bem from "react-bem-helper";
 import { useIdDefault } from "@/hooks/use-id-default";
 import { Button, type ButtonProps } from "../button";
 import { type CloseDialog, Dialog, DialogActions, type DialogProps } from ".";
@@ -48,7 +48,7 @@ export function AlertDialog({
       role="alertdialog"
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={messageId}
-      className={cls({ extra: className })}
+      {...cls({ extra: className })}
     >
       {(close) => (
         <>
@@ -66,7 +66,7 @@ export function AlertDialog({
             <Button
               autoFocus
               {...cancelProps}
-              className={cls("button", "cancel", cancelProps?.className)}
+              {...cls("button", "cancel", cancelProps?.className)}
               onClick={() => {
                 const returnValue =
                   typeof cancelProps?.value === "string"
@@ -82,7 +82,7 @@ export function AlertDialog({
             </Button>
             <Button
               {...confirmProps}
-              className={cls("button", "confirm", confirmProps?.className)}
+              {...cls("button", "confirm", confirmProps?.className)}
               onClick={() => {
                 onConfirm((returnValue) => {
                   close(
