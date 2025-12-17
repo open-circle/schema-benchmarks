@@ -20,6 +20,10 @@ export const numFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 2,
 });
 
+export const shortNumFormatter = new Intl.NumberFormat(undefined, {
+  notation: "compact",
+});
+
 export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> =
   Object.keys;
 export const unsafeEntries: <T extends object>(

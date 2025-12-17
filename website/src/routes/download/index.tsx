@@ -21,6 +21,7 @@ import {
   optionalMinifyTypeSchema,
 } from "@/features/download/query";
 import { speedPresets } from "@/features/download/speed";
+import { getAllWeeklyDownloads } from "@/features/popularity/query";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({
@@ -44,8 +45,24 @@ export const Route = createFileRoute("/download/")({
       },
     }),
   validateSearch: searchSchema,
-  async loader({ context: { queryClient }, abortController }) {
-    await queryClient.prefetchQuery(getDownloadResults(abortController.signal));
+  loaderDeps: ({ search: { minifyType } }) => ({ minifyType }),
+  async loader({
+    context: { queryClient },
+    deps: { minifyType },
+    abortController,
+  }) {
+    const results = await queryClient.ensureQueryData(
+      getDownloadResults(abortController.signal),
+    );
+    const downloadPromises = [];
+    for (const { libraryName } of results[minifyType]) {
+      downloadPromises.push(
+        queryClient.ensureQueryData(
+          getAllWeeklyDownloads(libraryName, abortController.signal),
+        ),
+      );
+    }
+    await Promise.all(downloadPromises);
   },
   staticData: { crumb: "Download" },
   component: RouteComponent,

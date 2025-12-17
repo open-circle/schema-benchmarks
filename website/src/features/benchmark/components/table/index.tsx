@@ -11,6 +11,7 @@ import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
+import { DownloadCount } from "@/features/popularity/components/count";
 import { errorTypeProps, optimizeTypeProps } from "../../query";
 import { Snippet } from "./snippet";
 
@@ -82,6 +83,7 @@ export function BenchTable({ results }: BenchTableProps) {
             <th>Library</th>
             <th className="action"></th>
             <th>Version</th>
+            <th className="numeric">Downloads (weekly)</th>
             <th>Optimizations</th>
             {benchType === "parsing" && <th>Error type</th>}
             <th className="numeric">Mean</th>
@@ -119,6 +121,9 @@ export function BenchTable({ results }: BenchTableProps) {
                 </td>
                 <td>
                   <code className="language-text">{result.version}</code>
+                </td>
+                <td className="numeric">
+                  <DownloadCount libraryName={result.libraryName} />
                 </td>
                 <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
                 {result.type === "parsing" && (
