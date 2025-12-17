@@ -47,12 +47,12 @@ describe("hasAtLeast", () => {
 
 describe("promiseAllKeyed", () => {
   it("should resolve to an object with the same keys as the input", async () => {
-    const result = await promiseAllKeyed({
+    const result = promiseAllKeyed({
       a: Promise.resolve(1),
       b: Promise.resolve(2),
       c: Promise.resolve(3),
     });
-    expectTypeOf(result).toEqualTypeOf<{
+    expectTypeOf(result).resolves.toEqualTypeOf<{
       a: number;
       b: number;
       c: number;
@@ -62,12 +62,12 @@ describe("promiseAllKeyed", () => {
 
 describe("promiseAllSettledKeyed", () => {
   it("should resolve to an object with the same keys as the input", async () => {
-    const result = await promiseAllSettledKeyed({
+    const result = promiseAllSettledKeyed({
       a: Promise.resolve(1),
       b: Promise.resolve(2),
       c: Promise.resolve(3),
     });
-    expectTypeOf(result).toEqualTypeOf<{
+    expectTypeOf(result).resolves.toEqualTypeOf<{
       a: PromiseSettledResult<number>;
       b: PromiseSettledResult<number>;
       c: PromiseSettledResult<number>;

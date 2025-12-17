@@ -30,12 +30,12 @@ describe("partition", () => {
 
 describe("promiseAllKeyed", () => {
   it("should create a new object with the same keys as the input", async () => {
-    const result = await promiseAllKeyed({
+    const result = promiseAllKeyed({
       a: Promise.resolve(1),
       b: Promise.resolve(2),
       c: Promise.resolve(3),
     });
-    expect(result).toEqual({
+    await expect(result).resolves.toEqual({
       a: 1,
       b: 2,
       c: 3,
@@ -54,12 +54,12 @@ describe("promiseAllKeyed", () => {
 
 describe("promiseAllSettledKeyed", () => {
   it("should create a new object with the same keys as the input", async () => {
-    const result = await promiseAllSettledKeyed({
+    const result = promiseAllSettledKeyed({
       a: Promise.resolve(1),
       b: Promise.reject(2),
       c: Promise.resolve(3),
     });
-    expect(result).toEqual({
+    await expect(result).resolves.toEqual({
       a: { status: "fulfilled", value: 1 },
       b: { status: "rejected", reason: 2 },
       c: { status: "fulfilled", value: 3 },
