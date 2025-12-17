@@ -1,29 +1,67 @@
-//#region ../node_modules/.pnpm/valibot@1.1.0_typescript@5.9.3/node_modules/valibot/dist/index.js
-var store;
+//#region ../node_modules/.pnpm/valibot@1.2.0_typescript@5.9.3/node_modules/valibot/dist/index.mjs
+let store$4;
+/**
+* Returns the global configuration.
+*
+* @param config The config to merge.
+*
+* @returns The configuration.
+*/
 /* @__NO_SIDE_EFFECTS__ */
-function getGlobalConfig(config2) {
+function getGlobalConfig(config$1) {
 	return {
-		lang: config2?.lang ?? store?.lang,
-		message: config2?.message,
-		abortEarly: config2?.abortEarly ?? store?.abortEarly,
-		abortPipeEarly: config2?.abortPipeEarly ?? store?.abortPipeEarly
+		lang: config$1?.lang ?? store$4?.lang,
+		message: config$1?.message,
+		abortEarly: config$1?.abortEarly ?? store$4?.abortEarly,
+		abortPipeEarly: config$1?.abortPipeEarly ?? store$4?.abortPipeEarly
 	};
 }
-var store2;
+let store$3;
+/**
+* Returns a global error message.
+*
+* @param lang The language of the message.
+*
+* @returns The error message.
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function getGlobalMessage(lang) {
-	return store2?.get(lang);
+	return store$3?.get(lang);
 }
-var store3;
+let store$2;
+/**
+* Returns a schema error message.
+*
+* @param lang The language of the message.
+*
+* @returns The error message.
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function getSchemaMessage(lang) {
-	return store3?.get(lang);
+	return store$2?.get(lang);
 }
-var store4;
+let store$1;
+/**
+* Returns a specific error message.
+*
+* @param reference The identifier reference.
+* @param lang The language of the message.
+*
+* @returns The error message.
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function getSpecificMessage(reference, lang) {
-	return store4?.get(reference)?.get(lang);
+	return store$1?.get(reference)?.get(lang);
 }
+/**
+* Stringifies an unknown input to a literal or type string.
+*
+* @param input The unknown input.
+*
+* @returns A literal or type string.
+*
+* @internal
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function _stringify(input) {
 	const type = typeof input;
@@ -32,7 +70,18 @@ function _stringify(input) {
 	if (type === "object" || type === "function") return (input && Object.getPrototypeOf(input)?.constructor?.name) ?? "null";
 	return type;
 }
-function _addIssue(context, label, dataset, config2, other) {
+/**
+* Adds an issue to the dataset.
+*
+* @param context The issue context.
+* @param label The issue label.
+* @param dataset The input dataset.
+* @param config The configuration.
+* @param other The optional props.
+*
+* @internal
+*/
+function _addIssue(context, label, dataset, config$1, other) {
 	const input = other && "input" in other ? other.input : dataset.value;
 	const expected = other?.expected ?? context.expects ?? null;
 	const received = other?.received ?? /* @__PURE__ */ _stringify(input);
@@ -46,33 +95,53 @@ function _addIssue(context, label, dataset, config2, other) {
 		requirement: context.requirement,
 		path: other?.path,
 		issues: other?.issues,
-		lang: config2.lang,
-		abortEarly: config2.abortEarly,
-		abortPipeEarly: config2.abortPipeEarly
+		lang: config$1.lang,
+		abortEarly: config$1.abortEarly,
+		abortPipeEarly: config$1.abortPipeEarly
 	};
 	const isSchema = context.kind === "schema";
-	const message2 = other?.message ?? context.message ?? /* @__PURE__ */ getSpecificMessage(context.reference, issue.lang) ?? (isSchema ? /* @__PURE__ */ getSchemaMessage(issue.lang) : null) ?? config2.message ?? /* @__PURE__ */ getGlobalMessage(issue.lang);
-	if (message2 !== void 0) issue.message = typeof message2 === "function" ? message2(issue) : message2;
+	const message$1 = other?.message ?? context.message ?? /* @__PURE__ */ getSpecificMessage(context.reference, issue.lang) ?? (isSchema ? /* @__PURE__ */ getSchemaMessage(issue.lang) : null) ?? config$1.message ?? /* @__PURE__ */ getGlobalMessage(issue.lang);
+	if (message$1 !== void 0) issue.message = typeof message$1 === "function" ? message$1(issue) : message$1;
 	if (isSchema) dataset.typed = false;
 	if (dataset.issues) dataset.issues.push(issue);
 	else dataset.issues = [issue];
 }
+/**
+* Returns the Standard Schema properties.
+*
+* @param context The schema context.
+*
+* @returns The Standard Schema properties.
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function _getStandardProps(context) {
 	return {
 		version: 1,
 		vendor: "valibot",
-		validate(value2) {
-			return context["~run"]({ value: value2 }, /* @__PURE__ */ getGlobalConfig());
+		validate(value$1) {
+			return context["~run"]({ value: value$1 }, /* @__PURE__ */ getGlobalConfig());
 		}
 	};
 }
+/**
+* Joins multiple `expects` values with the given separator.
+*
+* @param values The `expects` values.
+* @param separator The separator.
+*
+* @returns The joined `expects` property.
+*
+* @internal
+*/
 /* @__NO_SIDE_EFFECTS__ */
-function _joinExpects(values2, separator) {
-	const list = [...new Set(values2)];
+function _joinExpects(values$1, separator) {
+	const list = [...new Set(values$1)];
 	if (list.length > 1) return `(${list.join(` ${separator} `)})`;
 	return list[0] ?? "never";
 }
+/**
+* A Valibot error with useful information.
+*/
 var ValiError = class extends Error {
 	/**
 	* Creates a Valibot error with useful information.
@@ -86,7 +155,7 @@ var ValiError = class extends Error {
 	}
 };
 /* @__NO_SIDE_EFFECTS__ */
-function maxLength(requirement, message2) {
+function maxLength(requirement, message$1) {
 	return {
 		kind: "validation",
 		type: "max_length",
@@ -94,15 +163,15 @@ function maxLength(requirement, message2) {
 		async: false,
 		expects: `<=${requirement}`,
 		requirement,
-		message: message2,
-		"~run"(dataset, config2) {
-			if (dataset.typed && dataset.value.length > this.requirement) _addIssue(this, "length", dataset, config2, { received: `${dataset.value.length}` });
+		message: message$1,
+		"~run"(dataset, config$1) {
+			if (dataset.typed && dataset.value.length > this.requirement) _addIssue(this, "length", dataset, config$1, { received: `${dataset.value.length}` });
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function maxValue(requirement, message2) {
+function maxValue(requirement, message$1) {
 	return {
 		kind: "validation",
 		type: "max_value",
@@ -110,15 +179,15 @@ function maxValue(requirement, message2) {
 		async: false,
 		expects: `<=${requirement instanceof Date ? requirement.toJSON() : /* @__PURE__ */ _stringify(requirement)}`,
 		requirement,
-		message: message2,
-		"~run"(dataset, config2) {
-			if (dataset.typed && !(dataset.value <= this.requirement)) _addIssue(this, "value", dataset, config2, { received: dataset.value instanceof Date ? dataset.value.toJSON() : /* @__PURE__ */ _stringify(dataset.value) });
+		message: message$1,
+		"~run"(dataset, config$1) {
+			if (dataset.typed && !(dataset.value <= this.requirement)) _addIssue(this, "value", dataset, config$1, { received: dataset.value instanceof Date ? dataset.value.toJSON() : /* @__PURE__ */ _stringify(dataset.value) });
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function minLength(requirement, message2) {
+function minLength(requirement, message$1) {
 	return {
 		kind: "validation",
 		type: "min_length",
@@ -126,15 +195,15 @@ function minLength(requirement, message2) {
 		async: false,
 		expects: `>=${requirement}`,
 		requirement,
-		message: message2,
-		"~run"(dataset, config2) {
-			if (dataset.typed && dataset.value.length < this.requirement) _addIssue(this, "length", dataset, config2, { received: `${dataset.value.length}` });
+		message: message$1,
+		"~run"(dataset, config$1) {
+			if (dataset.typed && dataset.value.length < this.requirement) _addIssue(this, "length", dataset, config$1, { received: `${dataset.value.length}` });
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function minValue(requirement, message2) {
+function minValue(requirement, message$1) {
 	return {
 		kind: "validation",
 		type: "min_value",
@@ -142,15 +211,15 @@ function minValue(requirement, message2) {
 		async: false,
 		expects: `>=${requirement instanceof Date ? requirement.toJSON() : /* @__PURE__ */ _stringify(requirement)}`,
 		requirement,
-		message: message2,
-		"~run"(dataset, config2) {
-			if (dataset.typed && !(dataset.value >= this.requirement)) _addIssue(this, "value", dataset, config2, { received: dataset.value instanceof Date ? dataset.value.toJSON() : /* @__PURE__ */ _stringify(dataset.value) });
+		message: message$1,
+		"~run"(dataset, config$1) {
+			if (dataset.typed && !(dataset.value >= this.requirement)) _addIssue(this, "value", dataset, config$1, { received: dataset.value instanceof Date ? dataset.value.toJSON() : /* @__PURE__ */ _stringify(dataset.value) });
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function url(message2) {
+function url(message$1) {
 	return {
 		kind: "validation",
 		type: "url",
@@ -165,23 +234,41 @@ function url(message2) {
 				return false;
 			}
 		},
-		message: message2,
-		"~run"(dataset, config2) {
-			if (dataset.typed && !this.requirement(dataset.value)) _addIssue(this, "URL", dataset, config2);
+		message: message$1,
+		"~run"(dataset, config$1) {
+			if (dataset.typed && !this.requirement(dataset.value)) _addIssue(this, "URL", dataset, config$1);
 			return dataset;
 		}
 	};
 }
+/**
+* Returns the fallback value of the schema.
+*
+* @param schema The schema to get it from.
+* @param dataset The output dataset if available.
+* @param config The config if available.
+*
+* @returns The fallback value.
+*/
 /* @__NO_SIDE_EFFECTS__ */
-function getFallback(schema, dataset, config2) {
-	return typeof schema.fallback === "function" ? schema.fallback(dataset, config2) : schema.fallback;
+function getFallback(schema, dataset, config$1) {
+	return typeof schema.fallback === "function" ? schema.fallback(dataset, config$1) : schema.fallback;
+}
+/**
+* Returns the default value of the schema.
+*
+* @param schema The schema to get it from.
+* @param dataset The input dataset if available.
+* @param config The config if available.
+*
+* @returns The default value.
+*/
+/* @__NO_SIDE_EFFECTS__ */
+function getDefault(schema, dataset, config$1) {
+	return typeof schema.default === "function" ? schema.default(dataset, config$1) : schema.default;
 }
 /* @__NO_SIDE_EFFECTS__ */
-function getDefault(schema, dataset, config2) {
-	return typeof schema.default === "function" ? schema.default(dataset, config2) : schema.default;
-}
-/* @__NO_SIDE_EFFECTS__ */
-function array(item, message2) {
+function array(item, message$1) {
 	return {
 		kind: "schema",
 		type: "array",
@@ -189,25 +276,25 @@ function array(item, message2) {
 		expects: "Array",
 		async: false,
 		item,
-		message: message2,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			const input = dataset.value;
 			if (Array.isArray(input)) {
 				dataset.typed = true;
 				dataset.value = [];
 				for (let key = 0; key < input.length; key++) {
-					const value2 = input[key];
-					const itemDataset = this.item["~run"]({ value: value2 }, config2);
+					const value$1 = input[key];
+					const itemDataset = this.item["~run"]({ value: value$1 }, config$1);
 					if (itemDataset.issues) {
 						const pathItem = {
 							type: "array",
 							origin: "value",
 							input,
 							key,
-							value: value2
+							value: value$1
 						};
 						for (const issue of itemDataset.issues) {
 							if (issue.path) issue.path.unshift(pathItem);
@@ -215,7 +302,7 @@ function array(item, message2) {
 							dataset.issues?.push(issue);
 						}
 						if (!dataset.issues) dataset.issues = itemDataset.issues;
-						if (config2.abortEarly) {
+						if (config$1.abortEarly) {
 							dataset.typed = false;
 							break;
 						}
@@ -223,27 +310,27 @@ function array(item, message2) {
 					if (!itemDataset.typed) dataset.typed = false;
 					dataset.value.push(itemDataset.value);
 				}
-			} else _addIssue(this, "type", dataset, config2);
+			} else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function date(message2) {
+function date(message$1) {
 	return {
 		kind: "schema",
 		type: "date",
 		reference: date,
 		expects: "Date",
 		async: false,
-		message: message2,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			if (dataset.value instanceof Date) if (!isNaN(dataset.value)) dataset.typed = true;
-			else _addIssue(this, "type", dataset, config2, { received: "\"Invalid Date\"" });
-			else _addIssue(this, "type", dataset, config2);
+			else _addIssue(this, "type", dataset, config$1, { received: "\"Invalid Date\"" });
+			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
@@ -261,51 +348,51 @@ function nullable(wrapped, default_) {
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			if (dataset.value === null) {
-				if (this.default !== void 0) dataset.value = /* @__PURE__ */ getDefault(this, dataset, config2);
+				if (this.default !== void 0) dataset.value = /* @__PURE__ */ getDefault(this, dataset, config$1);
 				if (dataset.value === null) {
 					dataset.typed = true;
 					return dataset;
 				}
 			}
-			return this.wrapped["~run"](dataset, config2);
+			return this.wrapped["~run"](dataset, config$1);
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function number(message2) {
+function number(message$1) {
 	return {
 		kind: "schema",
 		type: "number",
 		reference: number,
 		expects: "number",
 		async: false,
-		message: message2,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			if (typeof dataset.value === "number" && !isNaN(dataset.value)) dataset.typed = true;
-			else _addIssue(this, "type", dataset, config2);
+			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function object(entries2, message2) {
+function object(entries$1, message$1) {
 	return {
 		kind: "schema",
 		type: "object",
 		reference: object,
 		expects: "Object",
 		async: false,
-		entries: entries2,
-		message: message2,
+		entries: entries$1,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			const input = dataset.value;
 			if (input && typeof input === "object") {
 				dataset.typed = true;
@@ -313,15 +400,15 @@ function object(entries2, message2) {
 				for (const key in this.entries) {
 					const valueSchema = this.entries[key];
 					if (key in input || (valueSchema.type === "exact_optional" || valueSchema.type === "optional" || valueSchema.type === "nullish") && valueSchema.default !== void 0) {
-						const value2 = key in input ? input[key] : /* @__PURE__ */ getDefault(valueSchema);
-						const valueDataset = valueSchema["~run"]({ value: value2 }, config2);
+						const value$1 = key in input ? input[key] : /* @__PURE__ */ getDefault(valueSchema);
+						const valueDataset = valueSchema["~run"]({ value: value$1 }, config$1);
 						if (valueDataset.issues) {
 							const pathItem = {
 								type: "object",
 								origin: "value",
 								input,
 								key,
-								value: value2
+								value: value$1
 							};
 							for (const issue of valueDataset.issues) {
 								if (issue.path) issue.path.unshift(pathItem);
@@ -329,7 +416,7 @@ function object(entries2, message2) {
 								dataset.issues?.push(issue);
 							}
 							if (!dataset.issues) dataset.issues = valueDataset.issues;
-							if (config2.abortEarly) {
+							if (config$1.abortEarly) {
 								dataset.typed = false;
 								break;
 							}
@@ -338,7 +425,7 @@ function object(entries2, message2) {
 						dataset.value[key] = valueDataset.value;
 					} else if (valueSchema.fallback !== void 0) dataset.value[key] = /* @__PURE__ */ getFallback(valueSchema);
 					else if (valueSchema.type !== "exact_optional" && valueSchema.type !== "optional" && valueSchema.type !== "nullish") {
-						_addIssue(this, "key", dataset, config2, {
+						_addIssue(this, "key", dataset, config$1, {
 							input: void 0,
 							expected: `"${key}"`,
 							path: [{
@@ -349,16 +436,16 @@ function object(entries2, message2) {
 								value: input[key]
 							}]
 						});
-						if (config2.abortEarly) break;
+						if (config$1.abortEarly) break;
 					}
 				}
-			} else _addIssue(this, "type", dataset, config2);
+			} else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function picklist(options, message2) {
+function picklist(options, message$1) {
 	return {
 		kind: "schema",
 		type: "picklist",
@@ -366,56 +453,65 @@ function picklist(options, message2) {
 		expects: /* @__PURE__ */ _joinExpects(options.map(_stringify), "|"),
 		async: false,
 		options,
-		message: message2,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			if (this.options.includes(dataset.value)) dataset.typed = true;
-			else _addIssue(this, "type", dataset, config2);
+			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
 }
 /* @__NO_SIDE_EFFECTS__ */
-function string(message2) {
+function string(message$1) {
 	return {
 		kind: "schema",
 		type: "string",
 		reference: string,
 		expects: "string",
 		async: false,
-		message: message2,
+		message: message$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
+		"~run"(dataset, config$1) {
 			if (typeof dataset.value === "string") dataset.typed = true;
-			else _addIssue(this, "type", dataset, config2);
+			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
 	};
 }
-function parse(schema, input, config2) {
-	const dataset = schema["~run"]({ value: input }, /* @__PURE__ */ getGlobalConfig(config2));
+/**
+* Parses an unknown input based on a schema.
+*
+* @param schema The schema to be used.
+* @param input The input to be parsed.
+* @param config The parse configuration.
+*
+* @returns The parsed input.
+*/
+function parse(schema, input, config$1) {
+	const dataset = schema["~run"]({ value: input }, /* @__PURE__ */ getGlobalConfig(config$1));
 	if (dataset.issues) throw new ValiError(dataset.issues);
 	return dataset.value;
 }
 /* @__NO_SIDE_EFFECTS__ */
-function pipe(...pipe2) {
+function pipe(...pipe$1) {
 	return {
-		...pipe2[0],
-		pipe: pipe2,
+		...pipe$1[0],
+		pipe: pipe$1,
 		get "~standard"() {
 			return /* @__PURE__ */ _getStandardProps(this);
 		},
-		"~run"(dataset, config2) {
-			for (const item of pipe2) if (item.kind !== "metadata") {
+		"~run"(dataset, config$1) {
+			for (const item of pipe$1) if (item.kind !== "metadata") {
 				if (dataset.issues && (item.kind === "schema" || item.kind === "transformation")) {
 					dataset.typed = false;
 					break;
 				}
-				if (!dataset.issues || !config2.abortEarly && !config2.abortPipeEarly) dataset = item["~run"](dataset, config2);
+				if (!dataset.issues || !config$1.abortEarly && !config$1.abortPipeEarly) dataset = item["~run"](dataset, config$1);
 			}
 			return dataset;
 		}
