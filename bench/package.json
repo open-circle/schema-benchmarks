@@ -6,7 +6,7 @@
     "gzip-size": "^7.0.0",
     "rolldown": "1.0.0-beta.51",
     "tinybench": "^5.1.0",
-    "valibot": "^1.1.0"
+    "valibot": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",

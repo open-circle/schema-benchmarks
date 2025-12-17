@@ -30,7 +30,7 @@
     "react-hot-toast": "^2.6.0",
     "react-md-spinner": "^1.0.0",
     "tanstack-meta": "^0.5.1",
-    "valibot": "^1.1.0",
+    "valibot": "^1.2.0",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
