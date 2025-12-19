@@ -106,7 +106,7 @@
         );
         transition:
           color 250ms,
-          font-weight 250ms,
+          font-variation-settings 250ms,
           background-color 250ms;
         .md-symbol {
           color: color(
@@ -121,14 +121,14 @@
         }
         &:hover {
           background-color: var(--hovered-link-background);
-          font-weight: var(--weight-bold);
+          --font-slant: -10;
           .md-symbol {
             --icon-weight: 600;
           }
         }
         &:focus-visible {
           outline: none;
-          font-weight: var(--weight-bold);
+          --font-slant: -10;
           background-color: var(--focused-link-background);
           .md-symbol {
             --icon-weight: 600;
@@ -137,7 +137,7 @@
         &[data-status="active"] {
           background-color: var(--active-link-background);
           color: var(--active-link-foreground);
-          font-weight: var(--weight-bold);
+          --font-slant: -10;
           --icon-fill: 1;
           --icon-weight: 600;
           &:hover {

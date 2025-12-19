@@ -1,11 +1,11 @@
 :root {
   --font-family-headline:
-    "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Google Sans Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   --font-family-body:
-    "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Google Sans Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   --font-family-code:
     "Google Sans Code", source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -21,44 +21,62 @@
   --weight-extra-bold: 800;
   --weight-black: 900;
 
+  --width-narrow-thin: 50;
+  --width-narrow-extra-light: 60;
+  --width-narrow-light: 70;
+  --width-narrow-regular: 80;
+  --width-narrow-medium: 90;
+  --width-narrow-semibold: 100;
+  --width-narrow-bold: 100;
+  --width-narrow-extra-bold: 100;
+  --width-narrow-black: 100;
+
   --headline1-family: var(--font-family-headline);
-  --headline1-size: 6.0625rem;
+  --headline1-size: 6.3125rem;
   --headline1-weight: var(--weight-extra-light);
+  --headline1-width: var(--width-narrow-extra-light);
   --headline2-family: var(--font-family-headline);
-  --headline2-size: 3.8125rem;
+  --headline2-size: 3.9375rem;
   --headline2-weight: var(--weight-light);
+  --headline2-width: var(--width-narrow-light);
   --headline3-family: var(--font-family-headline);
-  --headline3-size: 3rem;
+  --headline3-size: 3.125rem;
+  --headline3-width: var(--width-narrow-light);
   --headline3-weight: var(--weight-light);
   --headline4-family: var(--font-family-headline);
-  --headline4-size: 2.125rem;
+  --headline4-size: 2.25rem;
   --headline4-weight: var(--weight-light);
+  --headline4-width: var(--width-narrow-light);
   --headline5-family: var(--font-family-headline);
-  --headline5-size: 1.5rem;
+  --headline5-size: 1.5625rem;
   --headline5-weight: var(--weight-regular);
+  --headline5-width: var(--width-narrow-regular);
   --headline6-family: var(--font-family-headline);
-  --headline6-size: 1.25rem;
+  --headline6-size: 1.3125rem;
   --headline6-weight: var(--weight-regular);
+  --headline6-width: var(--width-narrow-regular);
   --body1-family: var(--font-family-body);
-  --body1-size: 1rem;
+  --body1-size: 1.0625rem;
   --body1-weight: var(--weight-regular);
   --body2-family: var(--font-family-body);
-  --body2-size: 0.875rem;
+  --body2-size: 0.9375rem;
   --body2-weight: var(--weight-regular);
   --subtitle1-family: var(--font-family-body);
-  --subtitle1-size: 1rem;
+  --subtitle1-size: 1.0625rem;
   --subtitle1-weight: var(--weight-regular);
+  --subtitle1-width: var(--width-narrow-regular);
   --subtitle2-family: var(--font-family-body);
-  --subtitle2-size: 0.875rem;
+  --subtitle2-size: 0.9375rem;
   --subtitle2-weight: var(--weight-regular);
+  --subtitle2-width: var(--width-narrow-regular);
   --button-family: var(--font-family-body);
-  --button-size: 0.875rem;
+  --button-size: 0.9375rem;
   --button-weight: var(--weight-medium);
   --overline-family: var(--font-family-body);
   --overline-size: 0.625rem;
   --overline-weight: var(--weight-regular);
   --caption-family: var(--font-family-body);
-  --caption-size: 0.75rem;
+  --caption-size: 0.8125rem;
   --caption-weight: var(--weight-regular);
 
   --primary-text: 0.87;
@@ -85,36 +103,42 @@
   font-family: var(--headline1-family);
   font-size: var(--headline1-size);
   font-weight: var(--headline1-weight);
+  --font-width: var(--headline1-width);
 }
 
 .typo-headline2 {
   font-family: var(--headline2-family);
   font-size: var(--headline2-size);
   font-weight: var(--headline2-weight);
+  --font-width: var(--headline2-width);
 }
 
 .typo-headline3 {
   font-family: var(--headline3-family);
   font-size: var(--headline3-size);
   font-weight: var(--headline3-weight);
+  --font-width: var(--headline3-width);
 }
 
 .typo-headline4 {
   font-family: var(--headline4-family);
   font-size: var(--headline4-size);
   font-weight: var(--headline4-weight);
+  --font-width: var(--headline4-width);
 }
 
 .typo-headline5 {
   font-family: var(--headline5-family);
   font-size: var(--headline5-size);
   font-weight: var(--headline5-weight);
+  --font-width: var(--headline5-width);
 }
 
 .typo-headline6 {
   font-family: var(--headline6-family);
   font-size: var(--headline6-size);
   font-weight: var(--headline6-weight);
+  --font-width: var(--headline6-width);
 }
 
 .typo-button {
@@ -140,12 +164,14 @@
   font-family: var(--subtitle1-family);
   font-size: var(--subtitle1-size);
   font-weight: var(--subtitle1-weight);
+  --font-width: var(--subtitle1-width);
 }
 
 .typo-subtitle2 {
   font-family: var(--subtitle2-family);
   font-size: var(--subtitle2-size);
   font-weight: var(--subtitle2-weight);
+  --font-width: var(--subtitle2-width);
 }
 
 .typo-overline {
@@ -183,4 +209,12 @@ h5 {
 
 h6 {
   @extend .typo-subtitle2;
+}
+
+*:not(.material-symbols-sharp) {
+  font-variation-settings:
+    "GRAD" var(--font-grade, 0), /* 0-100 */
+    "ROND" var(--font-roundness, 0), /* 0-100 */
+    "slnt" var(--font-slant, 0), /* -10-0 */
+    "wdth" var(--font-width, 100); /* 25-151 */
 }
