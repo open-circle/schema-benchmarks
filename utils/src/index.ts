@@ -1,6 +1,12 @@
 export type * from "./libs.ts";
 export type * from "./types.ts";
 
+
+// Polyfill because Netlify is using Node v22
+import '@formatjs/intl-durationformat/polyfill.js'
+import '@formatjs/intl-numberformat/polyfill.js'
+import '@formatjs/intl-numberformat/locale-data/en.js'
+
 import type { WithPartial } from "./types.ts";
 
 export function clamp(value: number, min: number, max: number) {

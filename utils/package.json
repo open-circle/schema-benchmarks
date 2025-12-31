@@ -7,6 +7,10 @@
     "valibot": "^1.2.0",
     "vitest": "^4.0.12"
   },
+  "dependencies": {
+    "@formatjs/intl-durationformat": "^0.9.0",
+    "@formatjs/intl-numberformat": "^9.1.0"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./node": "./src/node.ts",
