@@ -8,6 +8,7 @@
 }
 
 .banner {
+  view-transition-name: banner;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -37,8 +38,7 @@
   }
   .banner__icon {
     color: color(
-      from var(--banner-base-color) srgb r g b /
-      var(--primary-text)
+      from var(--banner-base-color) srgb r g b / var(--primary-text)
     );
     --icon-fill: 1;
     display: contents;
