@@ -1,3 +1,3 @@
 [build]
   command = "pnpm install && cd ./website && pnpm build"
-  publish = "dist/client"
+  publish = "website/dist/client"
