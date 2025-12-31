@@ -9,7 +9,7 @@ export default defineBenchmarks({
   library: {
     name: "arktype",
     git: "arktypeio/arktype",
-    optimizeType: "none",
+    optimizeType: "jit",
     version: await getVersion("arktype"),
   },
   createContext: () => ({ schema: getArkTypeSchema() }),
