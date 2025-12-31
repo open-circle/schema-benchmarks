@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
+import { Button } from "../button";
 import { MdSymbol } from "../symbol";
 import { closeBanner, openBanner } from "./queue";
 
@@ -7,11 +8,12 @@ export function useSmallScreenBanner() {
   const isSmall = useBreakpoints(["phone", "tabletSmall"]);
   useEffect(() => {
     if (isSmall) {
-      openBanner({
+      const id = openBanner({
         icon: <MdSymbol fill={false}>mobile_alert</MdSymbol>,
         children: "This site is not currently optimized for small screens.",
+        actions: <Button onClick={() => closeBanner(id)}>Dismiss</Button>,
       });
-      return () => closeBanner();
+      return () => closeBanner(id);
     }
   }, [isSmall]);
 }
