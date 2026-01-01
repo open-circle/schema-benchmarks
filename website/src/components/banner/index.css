@@ -39,7 +39,8 @@
   }
   .banner__icon {
     color: color(
-      from var(--banner-base-color) srgb r g b / var(--primary-text)
+      from var(--banner-base-color) srgb r g b /
+      var(--primary-text)
     );
     --icon-fill: 1;
     display: contents;
