@@ -53,7 +53,7 @@
     "jiti": "^2.6.1",
     "jsdom": "^27.0.0",
     "msw": "^2.12.2",
-    "playwright": "^1.57.0",
+    "playwright": "catalog:",
     "postcss-custom-media": "^11.0.6",
     "postcss-extend-rule": "^4.0.0",
     "postcss-load-config": "^6.0.1",
