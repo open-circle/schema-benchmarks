@@ -38,5 +38,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup environment
         uses: ./.github/actions/environments
+
+      - name: Install Playwright browsers
+        run: pnpm dlx playwright install --with-deps
       - name: Test
         run: pnpm test
