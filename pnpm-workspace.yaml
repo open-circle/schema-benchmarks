@@ -3,3 +3,5 @@ packages:
   - bench
   - utils
   - schemas
+catalog:
+  playwright: ^1.57.0
