@@ -4,6 +4,8 @@ Welcome to the Schema Benchmarks project. This aims to compare the performance o
 
 ## Benchmarks
 
+Runtime benchmarks are run in sequence, on a GitHub runner.
+
 Steps benchmarked include:
 
 ### <Link to="/initialization">Initialization</Link>
@@ -67,3 +69,5 @@ Some libraries support different error handling strategies. We specifically trac
 ## <Link to="/download">Download</Link>
 
 As well as running runtime tests, we test the bundle size of each library. This is important for browser usage, where this will affect download time.
+
+We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
