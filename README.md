@@ -1,5 +1,7 @@
 # [Schema Benchmarks](https://schemabenchmarks.dev)
 
+![Schema Benchmarks Logo](/website/public/logo.svg)
+
 A project aiming to consolidate and standardise comparisons of schema validation libraries.
 
 ## Methodologies
