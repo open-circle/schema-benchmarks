@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Content from "./content.mdx";
 
-export const Route = createFileRoute("/_home/")({ component: App });
+export const Route = createFileRoute("/_home/")({
+  component: App,
+  staticData: { crumb: undefined },
+});
 
 function App() {
   return <Content components={{ wrapper: "div" }} />;
