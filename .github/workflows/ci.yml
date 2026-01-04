@@ -40,6 +40,6 @@ jobs:
         uses: ./.github/actions/environments
 
       - name: Install Playwright browsers
-        run: pnpm dlx playwright install --with-deps
+        run: pnpm dlx playwright install --with-deps chromium
       - name: Test
         run: pnpm test
