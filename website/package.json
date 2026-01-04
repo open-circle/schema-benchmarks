@@ -47,7 +47,7 @@
     "@types/react-dom": "^19.2.0",
     "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "@vitejs/plugin-react": "^5.0.4",
-    "@vitest/browser-playwright": "^4.0.12",
+    "@vitest/browser-playwright": "^4.0.16",
     "@vitest/expect": "^4.0.12",
     "esquery": "^1.6.0",
     "jiti": "^2.6.1",
