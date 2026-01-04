@@ -23,7 +23,7 @@ describe("Banner", () => {
 
     openBanner({
       children: "Hello World",
-      actions: <Button onClick={closeBanner}>Close</Button>,
+      actions: <Button onClick={() => closeBanner()}>Close</Button>,
     });
 
     await expect.element(page.getByText("Hello World")).toBeInTheDocument();
