@@ -64,7 +64,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         );
       },
     ),
-  loader: () => ({ crumb: "Benchmarks" }),
+  staticData: { crumb: "Benchmarks" },
   shellComponent: RootDocument,
 });
 

@@ -52,8 +52,8 @@ export const Route = createFileRoute("/_benchmarks/validation/")({
         getHighlightedCode({ code: snippet }, abortController.signal),
       );
     }
-    return { crumb: "Validation" };
   },
+  staticData: { crumb: "Validation" },
 });
 
 function RouteComponent() {

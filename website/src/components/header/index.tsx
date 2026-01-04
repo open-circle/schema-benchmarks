@@ -1,5 +1,5 @@
 import { ClientOnly, Link, useMatches } from "@tanstack/react-router";
-import { Fragment, type ReactNode, useContext } from "react";
+import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import { ToggleButton } from "../button/toggle";
 import { SidebarOpenContext } from "../sidebar/context";
@@ -7,30 +7,22 @@ import { MdSymbol } from "../symbol";
 
 const cls = bem("page-header");
 
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteOption {
+    crumb: string;
+  }
+}
+
 export function Header() {
   const { open, setOpen } = useContext(SidebarOpenContext);
   const allCrumbs = useMatches({
     select: (matches) =>
-      matches
-        .filter(
-          (match): match is typeof match & { loaderData: { crumb: string } } =>
-            !!match.loaderData?.crumb,
-        )
-        .map((match) => ({
-          to: match.pathname,
-          params: match.params,
-          search: match.search,
-          name: match.loaderData.crumb,
-        })),
-  });
-  const actions = useMatches({
-    select: (matches) =>
-      matches.findLast(
-        (
-          match,
-        ): match is typeof match & { loaderData: { actions: ReactNode } } =>
-          !!(match.loaderData as { actions?: ReactNode })?.actions,
-      )?.loaderData.actions,
+      matches.map((match) => ({
+        to: match.pathname,
+        params: match.params,
+        search: match.search,
+        name: match.staticData.crumb,
+      })),
   });
   const crumbs = allCrumbs.slice(0, -1);
   const currentCrumb = allCrumbs.at(-1);
@@ -78,7 +70,6 @@ export function Header() {
           <span className="typo-headline6">{currentCrumb.name}</span>
         )}
       </nav>
-      {actions && <div {...cls("actions")}>{actions}</div>}
     </header>
   );
 }

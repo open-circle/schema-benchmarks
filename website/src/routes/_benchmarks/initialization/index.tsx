@@ -46,8 +46,8 @@ export const Route = createFileRoute("/_benchmarks/initialization/")({
         getHighlightedCode({ code: snippet }, abortController.signal),
       );
     }
-    return { crumb: "Initialization" };
   },
+  staticData: { crumb: "Initialization" },
 });
 
 function RouteComponent() {

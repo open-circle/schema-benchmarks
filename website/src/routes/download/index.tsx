@@ -39,8 +39,8 @@ export const Route = createFileRoute("/download/")({
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
     await queryClient.prefetchQuery(getDownloadResults(abortController.signal));
-    return { crumb: "Download" };
   },
+  staticData: { crumb: "Download" },
   component: RouteComponent,
 });
 

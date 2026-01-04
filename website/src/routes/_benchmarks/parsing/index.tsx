@@ -58,8 +58,8 @@ export const Route = createFileRoute("/_benchmarks/parsing/")({
         getHighlightedCode({ code: snippet }, abortController.signal),
       );
     }
-    return { crumb: "Parsing" };
   },
+  staticData: { crumb: "Parsing" },
 });
 
 function RouteComponent() {
