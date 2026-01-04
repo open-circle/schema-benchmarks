@@ -3,9 +3,10 @@
     "@types/react": "^19.2.0",
     "@typescript/native-preview": "7.0.0-dev.20251126.1",
     "@vitest/browser-playwright": "^4.0.16",
+    "playwright": "^1.57.0",
     "react": "^19.2.0",
     "valibot": "^1.2.0",
-    "vitest": "^4.0.12"
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@formatjs/intl-durationformat": "^0.9.0",
