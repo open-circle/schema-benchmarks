@@ -5,7 +5,8 @@
     "ignoreUnknown": false,
     "includes": [
       "./**/*.ts",
-      "!**/__template__/**/*"
+      "!**/__template__/**/*",
+      "!./dist/**/*"
     ]
   }
 }
