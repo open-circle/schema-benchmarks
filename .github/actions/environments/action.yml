@@ -22,7 +22,7 @@ runs:
 
     - name: Install Playwright browsers
       shell: bash
-      run: pnpm exec playwright install --with-deps
+      run: pnpm dlx playwright install --with-deps
 
     - name: Build schemas
       shell: bash
