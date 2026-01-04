@@ -30,7 +30,7 @@ const meta = {
   args: {
     icon: <MdSymbol>warning</MdSymbol>,
     children: "Hello World",
-    actions: <Button onClick={closeBanner}>Close</Button>,
+    actions: <Button onClick={() => closeBanner()}>Close</Button>,
   },
 } satisfies Meta<typeof BannerDemo>;
 

@@ -161,7 +161,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
           popoverTargetAction="show"
           // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}
-          ref={mergeRefs(ref, refs.setReference, setTargetRef)}
+          ref={mergeRefs<HTMLElement>(ref, refs.setReference, setTargetRef)}
           {...(tooltip
             ? ({
                 "aria-labelledby": id,
