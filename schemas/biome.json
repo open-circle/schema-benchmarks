@@ -4,9 +4,10 @@
   "files": {
     "ignoreUnknown": false,
     "includes": [
-      "./**/*.ts",
-      "!**/__template__/**/*",
-      "!./dist/**/*"
+      "./libraries/**/*.ts",
+      "./src/**/*.ts",
+      "./index.ts",
+      "!./libraries/__template__/**/*"
     ]
   }
 }
