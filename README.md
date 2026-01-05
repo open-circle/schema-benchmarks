@@ -39,3 +39,7 @@ Node scripts to consume and run the benchmarks, and the results.
 ### `utils`
 
 Simple utilities that might be useful in multiple places, that aren't worth depending on a specific library for.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.MD).
