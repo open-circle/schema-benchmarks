@@ -9,7 +9,6 @@
     "dedent": "^1.7.0",
     "effect": "^3.19.3",
     "joi": "^18.0.1",
-    "rolldown": "1.0.0-beta.50",
     "sury": "11.0.0-alpha.4",
     "tinybench": "^5.1.0",
     "typebox": "^1.0.51",
