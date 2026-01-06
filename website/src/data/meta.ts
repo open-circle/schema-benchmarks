@@ -19,7 +19,7 @@ const _generateMetadata = createMetadataGenerator({
 export const generateMetadata = ({
   title,
   description,
-  image = { url: "/logo.svg", alt: baseTitle },
+  image = { url: "/logo512.png", alt: baseTitle },
   links,
   ...meta
 }: PickNonNullable<GeneratorInputMetadata, "description"> & {
