@@ -5,9 +5,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function() {
-	return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __copyProps = (to, from, except, desc) => {
 	if (from && typeof from === "object" || typeof from === "function") {
 		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
@@ -29,7 +27,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 
 //#endregion
 //#region ../node_modules/.pnpm/typia@10.0.2_@types+node@24.10.1_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
-var require__validateReport = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/typia@10.0.2_@types+node@24.10.1_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js": ((exports) => {
+var require__validateReport = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._validateReport = void 0;
 	const _validateReport = (array) => {
@@ -52,7 +50,7 @@ var require__validateReport = /* @__PURE__ */ __commonJS({ "../node_modules/.pnp
 		};
 	};
 	exports._validateReport = _validateReport;
-}) });
+}));
 
 //#endregion
 //#region ../schemas/libraries/typia/download.ts

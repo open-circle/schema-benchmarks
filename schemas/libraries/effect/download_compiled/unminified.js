@@ -852,14 +852,14 @@ var GenKindImpl = class {
 	* @since 2.0.0
 	*/
 	[Symbol.iterator]() {
-		return new SingleShotGen(this);
+		return new SingleShotGen$1(this);
 	}
 };
 /**
 * @category constructors
 * @since 2.0.0
 */
-var SingleShotGen = class SingleShotGen {
+var SingleShotGen$1 = class SingleShotGen$1 {
 	self;
 	called = false;
 	constructor(self) {
@@ -896,7 +896,7 @@ var SingleShotGen = class SingleShotGen {
 	* @since 2.0.0
 	*/
 	[Symbol.iterator]() {
-		return new SingleShotGen(this.self);
+		return new SingleShotGen$1(this.self);
 	}
 };
 const defaultIncHi = 335903614;
@@ -1219,7 +1219,7 @@ const cached$2 = function() {
 * @category symbols
 */
 const symbol = /* @__PURE__ */ Symbol.for("effect/Equal");
-function equals() {
+function equals$1() {
 	if (arguments.length === 1) return (self) => compareBoth(self, arguments[0]);
 	return compareBoth(arguments[0], arguments[1]);
 }
@@ -1258,7 +1258,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 * @since 2.0.0
 * @category instances
 */
-const equivalence = () => equals;
+const equivalence = () => equals$1;
 
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Inspectable.js
@@ -1353,7 +1353,7 @@ function formatUnknown(input, options) {
 /**
 * @since 2.0.0
 */
-const format = (x) => JSON.stringify(x, null, 2);
+const format$2 = (x) => JSON.stringify(x, null, 2);
 /**
 * @since 2.0.0
 */
@@ -1365,7 +1365,7 @@ const BaseProto = {
 		return this.toJSON();
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 };
 /**
@@ -1382,7 +1382,7 @@ var Class$4 = class {
 	* @since 2.0.0
 	*/
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 };
 /**
@@ -1550,7 +1550,7 @@ const EffectPrototype$1 = {
 		return cached$2(this, random$2(this));
 	},
 	[Symbol.iterator]() {
-		return new SingleShotGen(new YieldWrap(this));
+		return new SingleShotGen$1(new YieldWrap(this));
 	},
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -1565,7 +1565,7 @@ const StructuralPrototype = {
 		const selfKeys = Object.keys(this);
 		const thatKeys = Object.keys(that);
 		if (selfKeys.length !== thatKeys.length) return false;
-		for (const key of selfKeys) if (!(key in that && equals(this[key], that[key]))) return false;
+		for (const key of selfKeys) if (!(key in that && equals$1(this[key], that[key]))) return false;
 		return true;
 	}
 };
@@ -1605,14 +1605,14 @@ const CommonProto$1 = {
 		return this.toJSON();
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 };
 const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto$1), {
 	_tag: "Some",
 	_op: "Some",
 	[symbol](that) {
-		return isOption$1(that) && isSome$1(that) && equals(this.value, that.value);
+		return isOption$1(that) && isSome$1(that) && equals$1(this.value, that.value);
 	},
 	[symbol$1]() {
 		return cached$2(this, combine$11(hash(this._tag))(hash(this.value)));
@@ -1673,14 +1673,14 @@ const CommonProto = {
 		return this.toJSON();
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 };
 const RightProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto), {
 	_tag: "Right",
 	_op: "Right",
 	[symbol](that) {
-		return isEither$2(that) && isRight$1(that) && equals(this.right, that.right);
+		return isEither$2(that) && isRight$1(that) && equals$1(this.right, that.right);
 	},
 	[symbol$1]() {
 		return combine$11(hash(this._tag))(hash(this.right));
@@ -1697,7 +1697,7 @@ const LeftProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 	_tag: "Left",
 	_op: "Left",
 	[symbol](that) {
-		return isEither$2(that) && isLeft$1(that) && equals(this.left, that.left);
+		return isEither$2(that) && isLeft$1(that) && equals$1(this.left, that.left);
 	},
 	[symbol$1]() {
 		return combine$11(hash(this._tag))(hash(this.left));
@@ -3936,11 +3936,11 @@ const emptyArray = [];
 * @since 2.0.0
 */
 const getEquivalence$2 = (isEquivalent) => make$44((self, that) => self.length === that.length && toReadonlyArray(self).every((value, i) => isEquivalent(value, unsafeGet$4(that, i))));
-const _equivalence$1 = /* @__PURE__ */ getEquivalence$2(equals);
+const _equivalence$1 = /* @__PURE__ */ getEquivalence$2(equals$1);
 const ChunkProto = {
 	[TypeId$14]: { _A: (_) => _ },
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -4539,7 +4539,7 @@ var LeafNode = class LeafNode {
 		this.value = value;
 	}
 	modify(edit, shift$1, f, hash$1, key, size$11) {
-		if (equals(key, this.key)) {
+		if (equals$1(key, this.key)) {
 			const v$1 = f(this.value);
 			if (v$1 === this.value) return this;
 			else if (isNone$2(v$1)) {
@@ -4585,7 +4585,7 @@ var CollisionNode = class CollisionNode {
 		const len = list.length;
 		for (let i = 0; i < len; ++i) {
 			const child = list[i];
-			if ("key" in child && equals(key, child.key)) {
+			if ("key" in child && equals$1(key, child.key)) {
 				const value = child.value;
 				const newValue$1 = f(value);
 				if (newValue$1 === value) return list;
@@ -4755,14 +4755,14 @@ const HashMapProto = {
 			for (const item of this) {
 				const elem = pipe(that, getHash$1(item[0], hash(item[0])));
 				if (isNone$2(elem)) return false;
-				else if (!equals(item[1], elem.value)) return false;
+				else if (!equals$1(item[1], elem.value)) return false;
 			}
 			return true;
 		}
 		return false;
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -4863,13 +4863,13 @@ const getHash$1 = /* @__PURE__ */ dual(3, (self, key, hash$1) => {
 	let node = self._root;
 	let shift$1 = 0;
 	while (true) switch (node._tag) {
-		case "LeafNode": return equals(key, node.key) ? node.value : none$7();
+		case "LeafNode": return equals$1(key, node.key) ? node.value : none$7();
 		case "CollisionNode":
 			if (hash$1 === node.hash) {
 				const children$2 = node.children;
 				for (let i = 0, len = children$2.length; i < len; ++i) {
 					const child = children$2[i];
-					if ("key" in child && equals(key, child.key)) return child.value;
+					if ("key" in child && equals$1(key, child.key)) return child.value;
 				}
 			}
 			return none$7();
@@ -5029,11 +5029,11 @@ const HashSetProto = {
 		return cached$2(this, combine$11(hash(this._keyMap))(hash(HashSetSymbolKey)));
 	},
 	[symbol](that) {
-		if (isHashSet$1(that)) return size$10(this._keyMap) === size$10(that._keyMap) && equals(this._keyMap, that._keyMap);
+		if (isHashSet$1(that)) return size$10(this._keyMap) === size$10(that._keyMap) && equals$1(this._keyMap, that._keyMap);
 		return false;
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -6666,7 +6666,7 @@ const causeEquals = (left$2, right$2) => {
 			const [par$1, seq$1] = evaluateCause(cause$2);
 			return some$4([pipe(parallel$4, union$5(par$1)), pipe(sequential$4, appendAll$1(seq$1))]);
 		}));
-		if (!equals(leftParallel, rightParallel)) return false;
+		if (!equals$1(leftParallel, rightParallel)) return false;
 		leftStack = leftSequential;
 		rightStack = rightSequential;
 	}
@@ -7044,7 +7044,7 @@ const TagProto = {
 		_Identifier: (_) => _
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -7117,7 +7117,7 @@ const ContextProto = {
 	[symbol](that) {
 		if (isContext$1(that)) {
 			if (this.unsafeMap.size === that.unsafeMap.size) {
-				for (const k of this.unsafeMap.keys()) if (!that.unsafeMap.has(k) || !equals(this.unsafeMap.get(k), that.unsafeMap.get(k))) return false;
+				for (const k of this.unsafeMap.keys()) if (!that.unsafeMap.has(k) || !equals$1(this.unsafeMap.get(k), that.unsafeMap.get(k))) return false;
 				return true;
 			}
 		}
@@ -7130,7 +7130,7 @@ const ContextProto = {
 		return pipeArguments(this, arguments);
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -7663,10 +7663,10 @@ const DurationProto = {
 		return cached$2(this, structure(this.value));
 	},
 	[symbol](that) {
-		return isDuration(that) && equals$1(this, that);
+		return isDuration(that) && equals(this, that);
 	},
 	toString() {
-		return `Duration(${format$2(this)})`;
+		return `Duration(${format$1(this)})`;
 	},
 	toJSON() {
 		switch (this.value._tag) {
@@ -7869,7 +7869,7 @@ const greaterThanOrEqualTo$1 = /* @__PURE__ */ dual(2, (self, that) => matchWith
 * @since 2.0.0
 * @category predicates
 */
-const equals$1 = /* @__PURE__ */ dual(2, (self, that) => Equivalence$1(decode$3(self), decode$3(that)));
+const equals = /* @__PURE__ */ dual(2, (self, that) => Equivalence$1(decode$3(self), decode$3(that)));
 /**
 * Converts a `Duration` to its parts.
 *
@@ -7914,7 +7914,7 @@ const parts = (self) => {
 * Duration.format(Duration.millis(1001)) // "1s 1ms"
 * ```
 */
-const format$2 = (self) => {
+const format$1 = (self) => {
 	const duration = decode$3(self);
 	if (duration.value._tag === "Infinity") return "Infinity";
 	if (isZero(duration)) return "0";
@@ -7938,7 +7938,7 @@ const TypeId$11 = /* @__PURE__ */ Symbol.for("effect/MutableRef");
 const MutableRefProto = {
 	[TypeId$11]: TypeId$11,
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -7967,7 +7967,7 @@ const make$33 = (value) => {
 * @category general
 */
 const compareAndSet = /* @__PURE__ */ dual(3, (self, oldValue, newValue) => {
-	if (equals(oldValue, self.current)) {
+	if (equals$1(oldValue, self.current)) {
 		self.current = newValue;
 		return true;
 	}
@@ -8013,7 +8013,7 @@ var None$2 = class {
 		return isFiberId$1(that) && that._tag === OP_NONE;
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	toJSON() {
 		return {
@@ -8042,7 +8042,7 @@ var Runtime = class {
 		return isFiberId$1(that) && that._tag === OP_RUNTIME && this.id === that.id && this.startTimeMillis === that.startTimeMillis;
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	toJSON() {
 		return {
@@ -8071,10 +8071,10 @@ var Composite$1 = class {
 		return pipe(string(`${FiberIdSymbolKey}-${this._tag}`), combine$11(hash(this.left)), combine$11(hash(this.right)), cached$2(this));
 	}
 	[symbol](that) {
-		return isFiberId$1(that) && that._tag === OP_COMPOSITE && equals(this.left, that.left) && equals(this.right, that.right);
+		return isFiberId$1(that) && that._tag === OP_COMPOSITE && equals$1(this.left, that.left) && equals$1(this.right, that.right);
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	toJSON() {
 		return {
@@ -8089,7 +8089,7 @@ var Composite$1 = class {
 	}
 };
 /** @internal */
-const none$1 = /* @__PURE__ */ new None$2();
+const none$6 = /* @__PURE__ */ new None$2();
 /** @internal */
 const runtime$3 = (id$2, startTimeMillis) => {
 	return new Runtime(id$2, startTimeMillis);
@@ -8120,7 +8120,7 @@ const combine$10 = /* @__PURE__ */ dual(2, (self, that) => {
 });
 /** @internal */
 const combineAll$1 = (fiberIds) => {
-	return pipe(fiberIds, reduce$8(none$1, (a, b) => combine$10(b)(a)));
+	return pipe(fiberIds, reduce$8(none$6, (a, b) => combine$10(b)(a)));
 };
 /** @internal */
 const getOrElse$2 = /* @__PURE__ */ dual(2, (self, that) => isNone$1(self) ? that : self);
@@ -8179,7 +8179,7 @@ const FiberIdTypeId = FiberIdTypeId$1;
 * @since 2.0.0
 * @category constructors
 */
-const none$6 = none$1;
+const none$5 = none$6;
 /**
 * @since 2.0.0
 * @category constructors
@@ -8630,12 +8630,12 @@ const toArray = (self) => fromIterable$10(self);
 * @since 2.0.0
 */
 const getEquivalence$1 = (isEquivalent) => mapInput$1(getEquivalence$3(isEquivalent), toArray);
-const _equivalence = /* @__PURE__ */ getEquivalence$1(equals);
+const _equivalence = /* @__PURE__ */ getEquivalence$1(equals$1);
 const ConsProto = {
 	[TypeId$10]: TypeId$10,
 	_tag: "Cons",
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -8694,7 +8694,7 @@ const NilProto = {
 	[TypeId$10]: TypeId$10,
 	_tag: "Nil",
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -8875,7 +8875,7 @@ const ArrayProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(A
 		return cached$2(this, array$1(this));
 	},
 	[symbol](that) {
-		if (Array.isArray(that) && this.length === that.length) return this.every((v, i) => equals(v, that[i]));
+		if (Array.isArray(that) && this.length === that.length) return this.every((v, i) => equals$1(v, that[i]));
 		else return false;
 	}
 });
@@ -8945,7 +8945,7 @@ const diff$9 = (options) => {
 		const oldElement = unsafeGet$4(i)(options.oldValue);
 		const newElement = unsafeGet$4(i)(options.newValue);
 		const valuePatch = options.differ.diff(oldElement, newElement);
-		if (!equals(valuePatch, options.differ.empty)) patch$11 = pipe(patch$11, combine$8(makeUpdate$2(i, valuePatch)));
+		if (!equals$1(valuePatch, options.differ.empty)) patch$11 = pipe(patch$11, combine$8(makeUpdate$2(i, valuePatch)));
 		i = i + 1;
 	}
 	if (i < options.oldValue.length) patch$11 = pipe(patch$11, combine$8(makeSlice$1(0, i)));
@@ -9046,7 +9046,7 @@ const diff$8 = (oldValue, newValue) => {
 	for (const [tag, newService] of newValue.unsafeMap.entries()) if (missingServices.has(tag)) {
 		const old = missingServices.get(tag);
 		missingServices.delete(tag);
-		if (!equals(old, newService)) patch$11 = combine$7(makeUpdateService(tag, () => newService))(patch$11);
+		if (!equals$1(old, newService)) patch$11 = combine$7(makeUpdateService(tag, () => newService))(patch$11);
 	} else {
 		missingServices.delete(tag);
 		patch$11 = combine$7(makeAddService(tag, newService))(patch$11);
@@ -9151,7 +9151,7 @@ const diff$7 = (options) => {
 		switch (option$2._tag) {
 			case "Some": {
 				const valuePatch = options.differ.diff(option$2.value, newValue);
-				if (equals(valuePatch, options.differ.empty)) return [remove$3(key)(map$18), patch$12];
+				if (equals$1(valuePatch, options.differ.empty)) return [remove$3(key)(map$18), patch$12];
 				return [remove$3(key)(map$18), combine$6(makeUpdate$1(key, valuePatch))(patch$12)];
 			}
 			case "None": return [map$18, combine$6(makeAdd$1(key, newValue))(patch$12)];
@@ -9336,7 +9336,7 @@ const diff$5 = (options) => {
 		case "Left": switch (options.newValue._tag) {
 			case "Left": {
 				const valuePatch = options.left.diff(options.oldValue.left, options.newValue.left);
-				if (equals(valuePatch, options.left.empty)) return empty$19();
+				if (equals$1(valuePatch, options.left.empty)) return empty$19();
 				return makeUpdateLeft(valuePatch);
 			}
 			case "Right": return makeSetRight(options.newValue.right);
@@ -9345,7 +9345,7 @@ const diff$5 = (options) => {
 			case "Left": return makeSetLeft(options.newValue.left);
 			case "Right": {
 				const valuePatch = options.right.diff(options.oldValue.right, options.newValue.right);
-				if (equals(valuePatch, options.right.empty)) return empty$19();
+				if (equals$1(valuePatch, options.right.empty)) return empty$19();
 				return makeUpdateRight(valuePatch);
 			}
 		}
@@ -9444,7 +9444,7 @@ const diff$4 = (options) => {
 		const oldElement = options.oldValue[i];
 		const newElement = options.newValue[i];
 		const valuePatch = options.differ.diff(oldElement, newElement);
-		if (!equals(valuePatch, options.differ.empty)) patch$11 = combine$3(patch$11, makeUpdate(i, valuePatch));
+		if (!equals$1(valuePatch, options.differ.empty)) patch$11 = combine$3(patch$11, makeUpdate(i, valuePatch));
 		i = i + 1;
 	}
 	if (i < options.oldValue.length) patch$11 = combine$3(patch$11, makeSlice(0, i));
@@ -9590,7 +9590,7 @@ const updateWith$1 = (f) => make$29({
 		return (a) => second(first$2(a));
 	},
 	diff: (oldValue, newValue) => {
-		if (equals(oldValue, newValue)) return identity;
+		if (equals$1(oldValue, newValue)) return identity;
 		return constant(newValue);
 	},
 	patch: (patch$11, oldValue) => f(oldValue, patch$11(oldValue))
@@ -9690,7 +9690,7 @@ const isEnabled$1 = /* @__PURE__ */ dual(2, (self, flag) => (self & flag) !== 0)
 /** @internal */
 const make$27 = (...flags) => flags.reduce((a, b) => a | b, 0);
 /** @internal */
-const none$5 = /* @__PURE__ */ make$27(None$1);
+const none$4 = /* @__PURE__ */ make$27(None$1);
 /** @internal */
 const runtimeMetrics = (self) => isEnabled$1(self, RuntimeMetrics);
 /** @internal */
@@ -9974,7 +9974,7 @@ const merge$2 = (sequential$4, parallel$4) => {
 	if (parallelCollectionIsEmpty(parallel$4)) return sequential$4;
 	const seqHeadKeys = sequentialCollectionKeys(sequential$4.head);
 	const parKeys = parallelCollectionKeys(parallel$4);
-	if (seqHeadKeys.length === 1 && parKeys.length === 1 && equals(seqHeadKeys[0], parKeys[0])) return cons(sequentialCollectionCombine(sequential$4.head, parallelCollectionToSequentialCollection(parallel$4)), sequential$4.tail);
+	if (seqHeadKeys.length === 1 && parKeys.length === 1 && equals$1(seqHeadKeys[0], parKeys[0])) return cons(sequentialCollectionCombine(sequential$4.head, parallelCollectionToSequentialCollection(parallel$4)), sequential$4.tail);
 	return cons(parallelCollectionToSequentialCollection(parallel$4), sequential$4);
 };
 /** @internal */
@@ -10083,7 +10083,7 @@ const done$7 = (effect) => {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/singleShotGen.js
 /** @internal */
-var SingleShotGen$1 = class SingleShotGen$1 {
+var SingleShotGen = class SingleShotGen {
 	self;
 	called = false;
 	constructor(self) {
@@ -10108,7 +10108,7 @@ var SingleShotGen$1 = class SingleShotGen$1 {
 		throw e;
 	}
 	[Symbol.iterator]() {
-		return new SingleShotGen$1(this.self);
+		return new SingleShotGen(this.self);
 	}
 };
 
@@ -10172,13 +10172,13 @@ var EffectPrimitive = class {
 		};
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	[NodeInspectSymbol]() {
 		return this.toJSON();
 	}
 	[Symbol.iterator]() {
-		return new SingleShotGen$1(new YieldWrap(this));
+		return new SingleShotGen(new YieldWrap(this));
 	}
 };
 /** @internal */
@@ -10194,7 +10194,7 @@ var EffectPrimitiveFailure = class {
 		this._tag = _op;
 	}
 	[symbol](that) {
-		return exitIsExit(that) && that._op === "Failure" && equals(this.effect_instruction_i0, that.effect_instruction_i0);
+		return exitIsExit(that) && that._op === "Failure" && equals$1(this.effect_instruction_i0, that.effect_instruction_i0);
 	}
 	[symbol$1]() {
 		return pipe(string(this._tag), combine$11(hash(this.effect_instruction_i0)), cached$2(this));
@@ -10213,13 +10213,13 @@ var EffectPrimitiveFailure = class {
 		};
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	[NodeInspectSymbol]() {
 		return this.toJSON();
 	}
 	[Symbol.iterator]() {
-		return new SingleShotGen$1(new YieldWrap(this));
+		return new SingleShotGen(new YieldWrap(this));
 	}
 };
 /** @internal */
@@ -10235,7 +10235,7 @@ var EffectPrimitiveSuccess = class {
 		this._tag = _op;
 	}
 	[symbol](that) {
-		return exitIsExit(that) && that._op === "Success" && equals(this.effect_instruction_i0, that.effect_instruction_i0);
+		return exitIsExit(that) && that._op === "Success" && equals$1(this.effect_instruction_i0, that.effect_instruction_i0);
 	}
 	[symbol$1]() {
 		return pipe(string(this._tag), combine$11(hash(this.effect_instruction_i0)), cached$2(this));
@@ -10254,13 +10254,13 @@ var EffectPrimitiveSuccess = class {
 		};
 	}
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	}
 	[NodeInspectSymbol]() {
 		return this.toJSON();
 	}
 	[Symbol.iterator]() {
-		return new SingleShotGen$1(new YieldWrap(this));
+		return new SingleShotGen(new YieldWrap(this));
 	}
 };
 /** @internal */
@@ -10305,7 +10305,7 @@ const custom$1 = function() {
 	}
 	return wrapper;
 };
-const unsafeAsync = (register, blockingOn = none$6) => {
+const unsafeAsync = (register, blockingOn = none$5) => {
 	const effect = new EffectPrimitive(OP_ASYNC);
 	let cancelerRef = void 0;
 	effect.effect_instruction_i0 = (resume$1) => {
@@ -10314,8 +10314,8 @@ const unsafeAsync = (register, blockingOn = none$6) => {
 	effect.effect_instruction_i1 = blockingOn;
 	return onInterrupt$1(effect, (_) => isEffect$1(cancelerRef) ? cancelerRef : void_$4);
 };
-const asyncInterrupt = (register, blockingOn = none$6) => suspend$2(() => unsafeAsync(register, blockingOn));
-const async_ = (resume$1, blockingOn = none$6) => {
+const asyncInterrupt = (register, blockingOn = none$5) => suspend$2(() => unsafeAsync(register, blockingOn));
+const async_ = (resume$1, blockingOn = none$5) => {
 	return custom$1(resume$1, function() {
 		let backingResume = void 0;
 		let pendingEffect = void 0;
@@ -10764,7 +10764,7 @@ var RequestResolverImpl = class RequestResolverImpl {
 		return cached$2(this, this.target ? hash(this.target) : random$2(this));
 	}
 	[symbol](that) {
-		return this.target ? isRequestResolver(that) && equals(this.target, that.target) : this === that;
+		return this.target ? isRequestResolver(that) && equals$1(this.target, that.target) : this === that;
 	}
 	identified(...ids$2) {
 		return new RequestResolverImpl(this.runAll, fromIterable$9(ids$2));
@@ -10971,7 +10971,7 @@ const TimeoutExceptionTypeId$1 = /* @__PURE__ */ Symbol.for("effect/Cause/errors
 /** @internal */
 const TimeoutException$1 = /* @__PURE__ */ makeException({ [TimeoutExceptionTypeId$1]: TimeoutExceptionTypeId$1 }, "TimeoutException");
 /** @internal */
-const timeoutExceptionFromDuration = (duration) => new TimeoutException$1(`Operation timed out after '${format$2(duration)}'`);
+const timeoutExceptionFromDuration = (duration) => new TimeoutException$1(`Operation timed out after '${format$1(duration)}'`);
 /** @internal */
 const isTimeoutException$1 = (u) => hasProperty(u, TimeoutExceptionTypeId$1);
 /** @internal */
@@ -13552,7 +13552,7 @@ const joinAs$1 = /* @__PURE__ */ dual(3, (self, fiberId$2, that) => {
 		const childValue = childStack[0][1];
 		if (!childStack[0][0][symbol](fiberId$2)) {
 			if (!parentFiberRefs.has(fiberRef)) {
-				if (equals(childValue, fiberRef.initial)) return;
+				if (equals$1(childValue, fiberRef.initial)) return;
 				parentFiberRefs.set(fiberRef, [[fiberId$2, fiberRef.join(fiberRef.initial, childValue)]]);
 				return;
 			}
@@ -13562,7 +13562,7 @@ const joinAs$1 = /* @__PURE__ */ dual(3, (self, fiberId$2, that) => {
 				const patch$11 = fiberRef.diff(ancestor, childValue);
 				const oldValue = parentStack[0][1];
 				const newValue = fiberRef.join(oldValue, fiberRef.patch(patch$11)(oldValue));
-				if (!equals(oldValue, newValue)) {
+				if (!equals$1(oldValue, newValue)) {
 					let newStack;
 					const parentFiberId = parentStack[0][0];
 					if (parentFiberId[symbol](fiberId$2)) newStack = [[parentFiberId, newValue], ...parentStack.slice(1)];
@@ -13584,7 +13584,7 @@ const unsafeForkAs = (self, map$18, fiberId$2) => {
 	self.locals.forEach((stack, fiberRef) => {
 		const oldValue = stack[0][1];
 		const newValue = fiberRef.patch(fiberRef.fork)(oldValue);
-		if (equals(oldValue, newValue)) map$18.set(fiberRef, stack);
+		if (equals$1(oldValue, newValue)) map$18.set(fiberRef, stack);
 		else map$18.set(fiberRef, [[fiberId$2, newValue], ...stack]);
 	});
 };
@@ -13617,7 +13617,7 @@ const unsafeUpdateAs = (locals, fiberId$2, fiberRef, value) => {
 	let newStack;
 	if (isNonEmptyReadonlyArray(oldStack)) {
 		const [currentId, currentValue] = headNonEmpty$1(oldStack);
-		if (currentId[symbol](fiberId$2)) if (equals(currentValue, value)) return;
+		if (currentId[symbol](fiberId$2)) if (equals$1(currentValue, value)) return;
 		else newStack = [[fiberId$2, value], ...oldStack.slice(1)];
 		else newStack = [[fiberId$2, value], ...oldStack];
 	} else newStack = [[fiberId$2, value]];
@@ -13745,7 +13745,7 @@ const diff$2 = (oldValue, newValue) => {
 		const old = missingLocals.get(fiberRef);
 		if (old !== void 0) {
 			const oldValue$1 = headNonEmpty$1(old)[1];
-			if (!equals(oldValue$1, newValue$1)) patch$11 = combine$2({
+			if (!equals$1(oldValue$1, newValue$1)) patch$11 = combine$2({
 				_tag: OP_UPDATE,
 				fiberRef,
 				patch: fiberRef.diff(oldValue$1, newValue$1)
@@ -13895,7 +13895,7 @@ var Suspended = class {
 		return pipe(hash(FiberStatusSymbolKey), combine$11(hash(this._tag)), combine$11(hash(this.runtimeFlags)), combine$11(hash(this.blockingOn)), cached$2(this));
 	}
 	[symbol](that) {
-		return isFiberStatus$1(that) && that._tag === OP_SUSPENDED && this.runtimeFlags === that.runtimeFlags && equals(this.blockingOn, that.blockingOn);
+		return isFiberStatus$1(that) && that._tag === OP_SUSPENDED && this.runtimeFlags === that.runtimeFlags && equals$1(this.blockingOn, that.blockingOn);
 	}
 };
 /** @internal */
@@ -14288,7 +14288,7 @@ const MicroProto = {
 		return pipeArguments(this, arguments);
 	},
 	[Symbol.iterator]() {
-		return new SingleShotGen(new YieldWrap(this));
+		return new SingleShotGen$1(new YieldWrap(this));
 	},
 	toJSON() {
 		return {
@@ -14298,10 +14298,10 @@ const MicroProto = {
 		};
 	},
 	toString() {
-		return format(this);
+		return format$2(this);
 	},
 	[NodeInspectSymbol]() {
-		return format(this);
+		return format$2(this);
 	}
 };
 function defaultEvaluate(_fiber) {
@@ -14339,7 +14339,7 @@ const makeExit = (options) => {
 			};
 		},
 		[symbol](that) {
-			return isMicroExit(that) && that._tag === options.op && equals(this[args], that[args]);
+			return isMicroExit(that) && that._tag === options.op && equals$1(this[args], that[args]);
 		},
 		[symbol$1]() {
 			return cached$2(this, combine$11(string(options.op))(hash(this[args])));
@@ -15719,7 +15719,7 @@ const merge$1 = (self) => matchEffect$2(self, {
 	onSuccess: succeed$9
 });
 const negate$1 = (self) => map$9(self, (b) => !b);
-const none$4 = (self) => flatMap$5(self, (option$2) => {
+const none$3 = (self) => flatMap$5(self, (option$2) => {
 	switch (option$2._tag) {
 		case "None": return void_$4;
 		case "Some": return fail$9(new NoSuchElementException$1());
@@ -16326,7 +16326,7 @@ const FiberScopeTypeId = /* @__PURE__ */ Symbol.for(FiberScopeSymbolKey);
 /** @internal */
 var Global = class {
 	[FiberScopeTypeId] = FiberScopeTypeId;
-	fiberId = none$6;
+	fiberId = none$5;
 	roots = /* @__PURE__ */ new Set();
 	add(_runtimeFlags, child) {
 		this.roots.add(child);
@@ -16400,7 +16400,7 @@ const done$4 = (exit$3) => {
 			return join$1(this);
 		},
 		...fiberProto,
-		id: () => none$6,
+		id: () => none$5,
 		await: succeed$9(exit$3),
 		children: succeed$9([]),
 		inheritAll: void_$4,
@@ -16487,7 +16487,7 @@ const _never = {
 		return join$1(this);
 	},
 	...fiberProto,
-	id: () => none$6,
+	id: () => none$5,
 	await: never$3,
 	children: /* @__PURE__ */ succeed$9([]),
 	inheritAll: never$3,
@@ -16584,7 +16584,7 @@ const makeLogger = (log$2) => ({
 /** @internal */
 const map$4 = /* @__PURE__ */ dual(2, (self, f) => makeLogger((options) => f(self.log(options))));
 /** @internal */
-const none$3 = {
+const none$2 = {
 	[LoggerTypeId]: loggerVariance,
 	log: constVoid,
 	pipe() {
@@ -16604,7 +16604,7 @@ const textOnly = /^[^\s"=]*$/;
 *
 * @internal
 */
-const format$1 = (quoteValue, whitespace) => ({ annotations: annotations$1, cause: cause$2, date, fiberId: fiberId$2, logLevel, message, spans }) => {
+const format = (quoteValue, whitespace) => ({ annotations: annotations$1, cause: cause$2, date, fiberId: fiberId$2, logLevel, message, spans }) => {
 	const formatValue = (value) => value.match(textOnly) ? value : quoteValue(value);
 	const format$3 = (label, value) => `${formatLabel(label)}=${formatValue(value)}`;
 	const append$3 = (label, value) => " " + format$3(label, value);
@@ -16621,7 +16621,7 @@ const format$1 = (quoteValue, whitespace) => ({ annotations: annotations$1, caus
 /** @internal */
 const escapeDoubleQuotes = (s) => `"${s.replace(/\\([\s\S])|(")/g, "\\$1$2")}"`;
 /** @internal */
-const stringLogger = /* @__PURE__ */ makeLogger(/* @__PURE__ */ format$1(escapeDoubleQuotes));
+const stringLogger = /* @__PURE__ */ makeLogger(/* @__PURE__ */ format(escapeDoubleQuotes));
 /** @internal */
 const structuredLogger = /* @__PURE__ */ makeLogger(({ annotations: annotations$1, cause: cause$2, date, fiberId: fiberId$2, logLevel, message, spans }) => {
 	const now = date.getTime();
@@ -16696,7 +16696,7 @@ var MetricBoundariesImpl = class {
 		return this._hash;
 	}
 	[symbol](u) {
-		return isMetricBoundaries(u) && equals(this.values, u.values);
+		return isMetricBoundaries(u) && equals$1(this.values, u.values);
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -16815,7 +16815,7 @@ var HistogramKeyType = class {
 		return this._hash;
 	}
 	[symbol](that) {
-		return isHistogramKey(that) && equals(this.boundaries, that.boundaries);
+		return isHistogramKey(that) && equals$1(this.boundaries, that.boundaries);
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -16841,7 +16841,7 @@ var SummaryKeyType = class {
 		return this._hash;
 	}
 	[symbol](that) {
-		return isSummaryKey(that) && equals(this.maxAge, that.maxAge) && this.maxSize === that.maxSize && this.error === that.error && equals(this.quantiles, that.quantiles);
+		return isSummaryKey(that) && equals$1(this.maxAge, that.maxAge) && this.maxSize === that.maxSize && this.error === that.error && equals$1(this.quantiles, that.quantiles);
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -16871,7 +16871,7 @@ const MetricKeySymbolKey = "effect/MetricKey";
 /** @internal */
 const MetricKeyTypeId = /* @__PURE__ */ Symbol.for(MetricKeySymbolKey);
 const metricKeyVariance = { _Type: (_) => _ };
-const arrayEquivilence = /* @__PURE__ */ getEquivalence$3(equals);
+const arrayEquivilence = /* @__PURE__ */ getEquivalence$3(equals$1);
 /** @internal */
 var MetricKeyImpl = class {
 	name;
@@ -16891,7 +16891,7 @@ var MetricKeyImpl = class {
 		return this._hash;
 	}
 	[symbol](u) {
-		return isMetricKey(u) && this.name === u.name && equals(this.keyType, u.keyType) && equals(this.description, u.description) && arrayEquivilence(this.tags, u.tags);
+		return isMetricKey(u) && this.name === u.name && equals$1(this.keyType, u.keyType) && equals$1(this.description, u.description) && arrayEquivilence(this.tags, u.tags);
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -16915,7 +16915,7 @@ const MutableHashMapProto = {
 		return new MutableHashMapIterator(this);
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -17104,7 +17104,7 @@ var CounterState = class {
 		return pipeArguments(this, arguments);
 	}
 };
-const arrayEquals = /* @__PURE__ */ getEquivalence$3(equals);
+const arrayEquals = /* @__PURE__ */ getEquivalence$3(equals$1);
 /** @internal */
 var FrequencyState = class {
 	occurrences;
@@ -17162,7 +17162,7 @@ var HistogramState = class {
 		return pipe(hash(HistogramStateSymbolKey), combine$11(hash(this.buckets)), combine$11(hash(this.count)), combine$11(hash(this.min)), combine$11(hash(this.max)), combine$11(hash(this.sum)), cached$2(this));
 	}
 	[symbol](that) {
-		return isHistogramState(that) && equals(this.buckets, that.buckets) && this.count === that.count && this.min === that.min && this.max === that.max && this.sum === that.sum;
+		return isHistogramState(that) && equals$1(this.buckets, that.buckets) && this.count === that.count && this.min === that.min && this.max === that.max && this.sum === that.sum;
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -17190,7 +17190,7 @@ var SummaryState = class {
 		return pipe(hash(SummaryStateSymbolKey), combine$11(hash(this.error)), combine$11(hash(this.quantiles)), combine$11(hash(this.count)), combine$11(hash(this.min)), combine$11(hash(this.max)), combine$11(hash(this.sum)), cached$2(this));
 	}
 	[symbol](that) {
-		return isSummaryState(that) && this.error === that.error && equals(this.quantiles, that.quantiles) && this.count === that.count && this.min === that.min && this.max === that.max && this.sum === that.sum;
+		return isSummaryState(that) && this.error === that.error && equals$1(this.quantiles, that.quantiles) && this.count === that.count && this.min === that.min && this.max === that.max && this.sum === that.sum;
 	}
 	pipe() {
 		return pipeArguments(this, arguments);
@@ -17950,7 +17950,7 @@ const RedBlackTreeProto = {
 			const entries$2 = Array.from(that);
 			return Array.from(this).every((itemSelf, i) => {
 				const itemThat = entries$2[i];
-				return equals(itemSelf[0], itemThat[0]) && equals(itemSelf[1], itemThat[1]);
+				return equals$1(itemSelf[0], itemThat[0]) && equals$1(itemSelf[1], itemThat[1]);
 			});
 		}
 		return false;
@@ -17965,7 +17965,7 @@ const RedBlackTreeProto = {
 		return new RedBlackTreeIterator(this, stack, Direction$1.Forward);
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -18038,7 +18038,7 @@ const findAll$1 = /* @__PURE__ */ dual(2, (self, key) => {
 		node = node.left;
 	} else {
 		const current = stack.pop();
-		if (equals(key, current.key)) result = prepend$1(current.value)(result);
+		if (equals$1(key, current.key)) result = prepend$1(current.value)(result);
 		node = current.right;
 	}
 	return result;
@@ -18049,7 +18049,7 @@ const findFirst$2 = /* @__PURE__ */ dual(2, (self, key) => {
 	let node = self._root;
 	while (node !== void 0) {
 		const d = cmp(key, node.key);
-		if (equals(key, node.key)) return some$4(node.value);
+		if (equals$1(key, node.key)) return some$4(node.value);
 		if (d <= 0) node = node.left;
 		else node = node.right;
 	}
@@ -18425,7 +18425,7 @@ const removeFirst$1 = /* @__PURE__ */ dual(2, (self, key) => {
 	while (node !== void 0) {
 		const d = cmp(key, node.key);
 		stack.push(node);
-		if (equals(key, node.key)) node = void 0;
+		if (equals$1(key, node.key)) node = void 0;
 		else if (d <= 0) node = node.left;
 		else node = node.right;
 	}
@@ -19038,13 +19038,13 @@ const SortedSetProto = {
 		return pipe(hash(this.keyTree), combine$11(hash(TypeId$5)), cached$2(this));
 	},
 	[symbol](that) {
-		return isSortedSet(that) && equals(this.keyTree, that.keyTree);
+		return isSortedSet(that) && equals$1(this.keyTree, that.keyTree);
 	},
 	[Symbol.iterator]() {
 		return keys(this.keyTree);
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -19254,7 +19254,7 @@ const fromEffect$1 = (effect) => {
 	return new Const(effect);
 };
 /** @internal */
-const none$2 = /* @__PURE__ */ globalValue("effect/Supervisor/none", () => fromEffect$1(void_$4));
+const none$1 = /* @__PURE__ */ globalValue("effect/Supervisor/none", () => fromEffect$1(void_$4));
 
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Differ.js
@@ -19415,19 +19415,19 @@ const patchLoop = (_supervisor, _patches) => {
 };
 /** @internal */
 const removeSupervisor = (self, that) => {
-	if (equals(self, that)) return none$2;
+	if (equals$1(self, that)) return none$1;
 	else if (isZip(self)) return removeSupervisor(self.left, that).zip(removeSupervisor(self.right, that));
 	else return self;
 };
 /** @internal */
 const toSet = (self) => {
-	if (equals(self, none$2)) return empty$29();
+	if (equals$1(self, none$1)) return empty$29();
 	else if (isZip(self)) return pipe(toSet(self.left), union$5(toSet(self.right)));
 	else return make$37(self);
 };
 /** @internal */
 const diff = (oldValue, newValue) => {
-	if (equals(oldValue, newValue)) return empty$5;
+	if (equals$1(oldValue, newValue)) return empty$5;
 	const oldSupervisors = toSet(oldValue);
 	const newSupervisors = toSet(newValue);
 	return combine(pipe(newSupervisors, difference(oldSupervisors), reduce$8(empty$5, (patch$11, supervisor) => combine(patch$11, {
@@ -20189,7 +20189,7 @@ var FiberRuntime = class extends Class$2 {
 			fiber.addObserver((exit$3) => {
 				if (exit$3._tag === "Success") return resume$1(exitSucceed$1(exit$3.value));
 				switch (exit$3.cause._tag) {
-					case "Interrupt": return resume$1(exitFailCause$1(interrupt$6(none$6)));
+					case "Interrupt": return resume$1(exitFailCause$1(interrupt$6(none$5)));
 					case "Fail": return resume$1(fail$9(exit$3.cause.error));
 					case "Die": return resume$1(die$4(exit$3.cause.defect));
 				}
@@ -20369,7 +20369,7 @@ var FiberRuntime = class extends Class$2 {
 				}
 			} catch (e) {
 				if (cur !== YieldedOp && !hasProperty(cur, "_op") || !(cur._op in this)) cur = dieMessage$1(`Not a valid effect: ${toStringUnknown(cur)}`);
-				else if (isInterruptedException$1(e)) cur = exitFailCause$1(sequential$3(die$5(e), interrupt$6(none$6)));
+				else if (isInterruptedException$1(e)) cur = exitFailCause$1(sequential$3(die$5(e), interrupt$6(none$5)));
 				else cur = die$4(e);
 			}
 		}
@@ -20893,9 +20893,9 @@ const fiberRefUnsafeMakeSupervisor = (initial) => fiberRefUnsafeMakePatch(initia
 const fiberRefLocallyScoped = /* @__PURE__ */ dual(2, (self, value) => asVoid$3(acquireRelease$1(flatMap$5(fiberRefGet(self), (oldValue) => as$4(fiberRefSet(self, value), oldValue)), (oldValue) => fiberRefSet(self, oldValue))));
 const fiberRefLocallyScopedWith = /* @__PURE__ */ dual(2, (self, f) => fiberRefGetWith(self, (a) => fiberRefLocallyScoped(self, f(a))));
 /** @internal */
-const currentRuntimeFlags = /* @__PURE__ */ fiberRefUnsafeMakeRuntimeFlags(none$5);
+const currentRuntimeFlags = /* @__PURE__ */ fiberRefUnsafeMakeRuntimeFlags(none$4);
 /** @internal */
-const currentSupervisor = /* @__PURE__ */ fiberRefUnsafeMakeSupervisor(none$2);
+const currentSupervisor = /* @__PURE__ */ fiberRefUnsafeMakeSupervisor(none$1);
 const fiberAwaitAll = (fibers) => forEach$1(fibers, _await$2);
 /** @internal */
 const fiberAll = (fibers) => {
@@ -20905,7 +20905,7 @@ const fiberAll = (fibers) => {
 			return join$1(this);
 		},
 		[FiberTypeId$1]: fiberVariance,
-		id: () => fromIterable$10(fibers).reduce((id$2, fiber) => combine$9(id$2, fiber.id()), none$6),
+		id: () => fromIterable$10(fibers).reduce((id$2, fiber) => combine$9(id$2, fiber.id()), none$5),
 		await: exit$2(forEachParUnbounded(fibers, (fiber) => flatten$4(fiber.await), false)),
 		children: map$9(forEachParUnbounded(fibers, (fiber) => fiber.children, false), flatten$7),
 		inheritAll: forEachSequentialDiscard(fibers, (fiber) => fiber.inheritAll),
@@ -21703,7 +21703,7 @@ const forkIn$1 = /* @__PURE__ */ dual(2, (self, scope$2) => withFiberRuntime$1((
 	const scopeImpl = scope$2;
 	const fiber = unsafeFork$1(self, parent, parentStatus.runtimeFlags, globalScope);
 	if (scopeImpl.state._tag === "Open") {
-		const finalizer = () => fiberIdWith$1((fiberId$2) => equals(fiberId$2, fiber.id()) ? void_$4 : asVoid$3(interruptFiber(fiber)));
+		const finalizer = () => fiberIdWith$1((fiberId$2) => equals$1(fiberId$2, fiber.id()) ? void_$4 : asVoid$3(interruptFiber(fiber)));
 		const key = {};
 		scopeImpl.state.finalizers.set(key, finalizer);
 		fiber.addObserver(() => {
@@ -21730,7 +21730,7 @@ var Key = class {
 	}
 	[symbol](that) {
 		if (hasProperty(that, memoKeySymbol)) if (this.eq) return this.eq(this.a, that.a);
-		else return equals(this.a, that.a);
+		else return equals$1(this.a, that.a);
 		return false;
 	}
 	[symbol$1]() {
@@ -22222,9 +22222,9 @@ const unsafeFork = /* @__PURE__ */ makeDual((runtime$4, self, options) => {
 	if (options?.updateRefs) fiberRefs$3 = options.updateRefs(fiberRefs$3, fiberId$2);
 	const fiberRuntime = new FiberRuntime(fiberId$2, fiberRefs$3, runtime$4.runtimeFlags);
 	let effect = self;
-	if (options?.scope) effect = flatMap$5(fork$1(options.scope, sequential$1), (closeableScope) => zipRight$3(scopeAddFinalizer(closeableScope, fiberIdWith$1((id$2) => equals(id$2, fiberRuntime.id()) ? void_$4 : interruptAsFiber(fiberRuntime, id$2))), onExit$2(self, (exit$3) => close(closeableScope, exit$3))));
+	if (options?.scope) effect = flatMap$5(fork$1(options.scope, sequential$1), (closeableScope) => zipRight$3(scopeAddFinalizer(closeableScope, fiberIdWith$1((id$2) => equals$1(id$2, fiberRuntime.id()) ? void_$4 : interruptAsFiber(fiberRuntime, id$2))), onExit$2(self, (exit$3) => close(closeableScope, exit$3))));
 	const supervisor = fiberRuntime.currentSupervisor;
-	if (supervisor !== none$2) {
+	if (supervisor !== none$1) {
 		supervisor.onStart(runtime$4.context, effect, none$7(), fiberRuntime);
 		fiberRuntime.addObserver((exit$3) => supervisor.onEnd(exit$3, fiberRuntime));
 	}
@@ -22239,7 +22239,7 @@ const unsafeRunCallback = /* @__PURE__ */ makeDual((runtime$4, effect, options =
 	if (options.onExit) fiberRuntime.addObserver((exit$3) => {
 		options.onExit(exit$3);
 	});
-	return (id$2, cancelOptions) => unsafeRunCallback(runtime$4)(pipe(fiberRuntime, interruptAs(id$2 ?? none$6)), {
+	return (id$2, cancelOptions) => unsafeRunCallback(runtime$4)(pipe(fiberRuntime, interruptAs(id$2 ?? none$5)), {
 		...cancelOptions,
 		onExit: cancelOptions?.onExit ? (exit$3) => cancelOptions.onExit(flatten$2(exit$3)) : void 0
 	});
@@ -23086,7 +23086,7 @@ const MutableListProto = {
 		};
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -23198,7 +23198,7 @@ const MutableQueueProto = {
 		return Array.from(this.queue)[Symbol.iterator]();
 	},
 	toString() {
-		return format(this.toJSON());
+		return format$2(this.toJSON());
 	},
 	toJSON() {
 		return {
@@ -23291,7 +23291,7 @@ var MapKeyImpl = class {
 	}
 	[symbol](that) {
 		if (this === that) return true;
-		return isMapKey(that) && equals(this.current, that.current) && equals(this.previous, that.previous) && equals(this.next, that.next);
+		return isMapKey(that) && equals$1(this.current, that.current) && equals$1(this.previous, that.previous) && equals$1(this.next, that.next);
 	}
 };
 /** @internal */
@@ -23505,12 +23505,12 @@ var CacheImpl = class {
 				case "Complete":
 					if (this.hasExpired(clock$2, value.timeToLiveMillis)) {
 						const found = getOrUndefined(get(this.cacheState.map, k));
-						if (equals(found, value)) remove$2(this.cacheState.map, k);
+						if (equals$1(found, value)) remove$2(this.cacheState.map, k);
 						return asVoid$3(this.get(key));
 					}
 					return pipe(this.lookupValueOf(key, deferred), when$1(() => {
 						const current = getOrUndefined(get(this.cacheState.map, k));
-						if (equals(current, value)) {
+						if (equals$1(current, value)) {
 							const mapValue = refreshing(deferred, value);
 							set(this.cacheState.map, k, mapValue);
 							return true;
@@ -23633,7 +23633,7 @@ var CacheImpl = class {
 	}
 };
 /** @internal */
-const unsafeMakeWith = (capacity, lookup, timeToLive) => new CacheImpl(capacity, empty$26(), none$1, lookup, (exit$3) => decode$3(timeToLive(exit$3)));
+const unsafeMakeWith = (capacity, lookup, timeToLive) => new CacheImpl(capacity, empty$26(), none$6, lookup, (exit$3) => decode$3(timeToLive(exit$3)));
 
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/query.js
@@ -25830,7 +25830,7 @@ const never = never$3;
 *
 * @since 2.0.0
 */
-const none = none$4;
+const none = none$3;
 /**
 * Creates an `Effect` that represents an asynchronous computation guaranteed to
 * succeed.
@@ -37963,7 +37963,7 @@ var Uint8ArrayFromSelf = class extends declare(isUint8Array, {
 	identifier: "Uint8ArrayFromSelf",
 	pretty: () => (u8arr) => `new Uint8Array(${JSON.stringify(Array.from(u8arr))})`,
 	arbitrary: () => (fc) => fc.uint8Array(),
-	equivalence: () => getEquivalence$3(equals)
+	equivalence: () => getEquivalence$3(equals$1)
 }) {};
 const makeUint8ArrayTransformation = (id$2, decode$4, encode$3) => transformOrFail(String$.annotations({ description: "a string to be decoded into a Uint8Array" }), Uint8ArrayFromSelf, {
 	strict: true,

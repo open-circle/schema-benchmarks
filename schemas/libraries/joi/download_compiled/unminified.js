@@ -5,9 +5,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function() {
-	return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __copyProps = (to, from, except, desc) => {
 	if (from && typeof from === "object" || typeof from === "function") {
 		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
@@ -29,7 +27,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 
 //#endregion
 //#region ../node_modules/.pnpm/joi@18.0.1/node_modules/joi/dist/joi-browser.min.js
-var require_joi_browser_min = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/joi@18.0.1/node_modules/joi/dist/joi-browser.min.js": ((exports, module) => {
+var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "object" == typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports ? exports.joi = t() : e.joi = t();
 	})(self, () => (() => {
@@ -7686,7 +7684,7 @@ var require_joi_browser_min = /* @__PURE__ */ __commonJS({ "../node_modules/.pnp
 			"undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e$1, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e$1, "__esModule", { value: !0 });
 		}, r(1100);
 	})());
-}) });
+}));
 
 //#endregion
 //#region ../schemas/libraries/joi/download.ts
