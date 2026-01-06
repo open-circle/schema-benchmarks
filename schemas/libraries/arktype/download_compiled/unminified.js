@@ -2686,7 +2686,8 @@ const createNode = ({ id, kind, inner, meta, $, ignoreCache }) => {
 	let innerJson = {};
 	for (const [k, v] of innerEntries) {
 		const keyImpl = impl.keys[k];
-		innerJson[k] = (keyImpl.serialize ?? (keyImpl.child ? serializeListableChild : defaultValueSerializer))(v);
+		const serialize = keyImpl.serialize ?? (keyImpl.child ? serializeListableChild : defaultValueSerializer);
+		innerJson[k] = serialize(v);
 		if (keyImpl.child === true) {
 			const listableNode = v;
 			if (isArray(listableNode)) children.push(...listableNode);

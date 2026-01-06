@@ -1,6 +1,6 @@
 //#region rolldown:runtime
 var __defProp = Object.defineProperty;
-var __export = (all, symbols) => {
+var __exportAll = (all, symbols) => {
 	let target = {};
 	for (var name in all) {
 		__defProp(target, name, {
@@ -41,20 +41,20 @@ function Assign(left, right) {
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/guard/guard.mjs
-var guard_exports = /* @__PURE__ */ __export({
+var guard_exports = /* @__PURE__ */ __exportAll({
 	Entries: () => Entries$2,
 	EntriesRegExp: () => EntriesRegExp,
 	Every: () => Every$1,
 	EveryAll: () => EveryAll,
 	HasPropertyKey: () => HasPropertyKey$1,
-	IsArray: () => IsArray$1,
+	IsArray: () => IsArray$2,
 	IsAsyncIterator: () => IsAsyncIterator$2,
 	IsBigInt: () => IsBigInt$2,
 	IsBoolean: () => IsBoolean$3,
 	IsClassInstance: () => IsClassInstance,
 	IsConstructor: () => IsConstructor$2,
 	IsDeepEqual: () => IsDeepEqual$1,
-	IsEqual: () => IsEqual,
+	IsEqual: () => IsEqual$1,
 	IsFunction: () => IsFunction$2,
 	IsGreaterEqualThan: () => IsGreaterEqualThan$1,
 	IsGreaterThan: () => IsGreaterThan$1,
@@ -67,7 +67,7 @@ var guard_exports = /* @__PURE__ */ __export({
 	IsNumber: () => IsNumber$3,
 	IsObject: () => IsObject$2,
 	IsObjectNotArray: () => IsObjectNotArray$1,
-	IsString: () => IsString$1,
+	IsString: () => IsString$3,
 	IsSymbol: () => IsSymbol$2,
 	IsUndefined: () => IsUndefined$2,
 	IsValueLike: () => IsValueLike,
@@ -77,7 +77,7 @@ var guard_exports = /* @__PURE__ */ __export({
 	Values: () => Values
 });
 /** Returns true if this value is an array */
-function IsArray$1(value) {
+function IsArray$2(value) {
 	return Array.isArray(value);
 }
 /** Returns true if this value is an async iterator */
@@ -86,11 +86,11 @@ function IsAsyncIterator$2(value) {
 }
 /** Returns true if this value is bigint */
 function IsBigInt$2(value) {
-	return IsEqual(typeof value, "bigint");
+	return IsEqual$1(typeof value, "bigint");
 }
 /** Returns true if this value is a boolean */
 function IsBoolean$3(value) {
-	return IsEqual(typeof value, "boolean");
+	return IsEqual$1(typeof value, "boolean");
 }
 /** Returns true if this value is a constructor */
 function IsConstructor$2(value) {
@@ -102,7 +102,7 @@ function IsConstructor$2(value) {
 }
 /** Returns true if this value is a function */
 function IsFunction$2(value) {
-	return IsEqual(typeof value, "function");
+	return IsEqual$1(typeof value, "function");
 }
 /** Returns true if this value is integer */
 function IsInteger$2(value) {
@@ -114,7 +114,7 @@ function IsIterator$2(value) {
 }
 /** Returns true if this value is null */
 function IsNull$2(value) {
-	return IsEqual(value, null);
+	return IsEqual$1(value, null);
 }
 /** Returns true if this value is number */
 function IsNumber$3(value) {
@@ -122,25 +122,25 @@ function IsNumber$3(value) {
 }
 /** Returns true if this value is an object but not an array */
 function IsObjectNotArray$1(value) {
-	return IsObject$2(value) && !IsArray$1(value);
+	return IsObject$2(value) && !IsArray$2(value);
 }
 /** Returns true if this value is an object */
 function IsObject$2(value) {
-	return IsEqual(typeof value, "object") && !IsNull$2(value);
+	return IsEqual$1(typeof value, "object") && !IsNull$2(value);
 }
 /** Returns true if this value is string */
-function IsString$1(value) {
-	return IsEqual(typeof value, "string");
+function IsString$3(value) {
+	return IsEqual$1(typeof value, "string");
 }
 /** Returns true if this value is symbol */
 function IsSymbol$2(value) {
-	return IsEqual(typeof value, "symbol");
+	return IsEqual$1(typeof value, "symbol");
 }
 /** Returns true if this value is undefined */
 function IsUndefined$2(value) {
-	return IsEqual(value, void 0);
+	return IsEqual$1(value, void 0);
 }
-function IsEqual(left, right) {
+function IsEqual$1(left, right) {
 	return left === right;
 }
 function IsGreaterThan$1(left, right) {
@@ -168,10 +168,10 @@ function IsClassInstance(value) {
 	if (!IsObject$2(value)) return false;
 	const proto = globalThis.Object.getPrototypeOf(value);
 	if (IsNull$2(proto)) return false;
-	return IsEqual(typeof proto.constructor, "function") && !(IsEqual(proto.constructor, globalThis.Object) || IsEqual(proto.constructor.name, "Object"));
+	return IsEqual$1(typeof proto.constructor, "function") && !(IsEqual$1(proto.constructor, globalThis.Object) || IsEqual$1(proto.constructor.name, "Object"));
 }
 function IsValueLike(value) {
-	return IsBigInt$2(value) || IsBoolean$3(value) || IsNull$2(value) || IsNumber$3(value) || IsString$1(value) || IsUndefined$2(value);
+	return IsBigInt$2(value) || IsBoolean$3(value) || IsNull$2(value) || IsNumber$3(value) || IsString$3(value) || IsUndefined$2(value);
 }
 /** Returns the number of Unicode Grapheme Clusters */
 function StringGraphemeCount$1(value) {
@@ -213,14 +213,14 @@ function Values(value) {
 function DeepEqualObject(left, right) {
 	if (!IsObject$2(right)) return false;
 	const keys = Keys$1(left);
-	return IsEqual(keys.length, Keys$1(right).length) && keys.every((key) => IsDeepEqual$1(left[key], right[key]));
+	return IsEqual$1(keys.length, Keys$1(right).length) && keys.every((key) => IsDeepEqual$1(left[key], right[key]));
 }
 function DeepEqualArray(left, right) {
-	return IsArray$1(right) && IsEqual(left.length, right.length) && left.every((_, index$1) => IsDeepEqual$1(left[index$1], right[index$1]));
+	return IsArray$2(right) && IsEqual$1(left.length, right.length) && left.every((_, index$1) => IsDeepEqual$1(left[index$1], right[index$1]));
 }
 /** Tests values for deep equality */
 function IsDeepEqual$1(left, right) {
-	return IsArray$1(left) ? DeepEqualArray(left, right) : IsObject$2(left) ? DeepEqualObject(left, right) : IsEqual(left, right);
+	return IsArray$2(left) ? DeepEqualArray(left, right) : IsObject$2(left) ? DeepEqualObject(left, right) : IsEqual$1(left, right);
 }
 
 //#endregion
@@ -240,7 +240,7 @@ function Not(expr) {
 	return `!(${expr})`;
 }
 /** Returns true if this value is an array */
-function IsArray$2(value) {
+function IsArray$1(value) {
 	return `Array.isArray(${value})`;
 }
 /** Returns true if this value is an async iterator */
@@ -273,14 +273,14 @@ function IsNumber$2(value) {
 }
 /** Returns true if this value is an object but not an array */
 function IsObjectNotArray(value) {
-	return And(IsObject$1(value), Not(IsArray$2(value)));
+	return And(IsObject$1(value), Not(IsArray$1(value)));
 }
 /** Returns true if this value is an object */
 function IsObject$1(value) {
 	return `typeof ${value} === "object" && ${value} !== null`;
 }
 /** Returns true if this value is string */
-function IsString$3(value) {
+function IsString$2(value) {
 	return `typeof ${value} === "string"`;
 }
 /** Returns true if this value is symbol */
@@ -297,7 +297,7 @@ function IsFunction$1(value) {
 function IsConstructor$1(value) {
 	return `Guard.IsConstructor(${value})`;
 }
-function IsEqual$1(left, right) {
+function IsEqual(left, right) {
 	return `${left} === ${right}`;
 }
 function IsGreaterThan(left, right) {
@@ -316,7 +316,7 @@ function StringGraphemeCount(value) {
 	return `Guard.StringGraphemeCount(${value})`;
 }
 function Every(value, offset, params, expression) {
-	return IsEqual(offset, "0") ? `${value}.every((${params[0]}, ${params[1]}) => ${expression})` : `((value, callback) => { for(let index = ${offset}; index < value.length; index++) if (!callback(value[index], index)) return false; return true })(${value}, (${params[0]}, ${params[1]}) => ${expression})`;
+	return IsEqual$1(offset, "0") ? `${value}.every((${params[0]}, ${params[1]}) => ${expression})` : `((value, callback) => { for(let index = ${offset}; index < value.length; index++) if (!callback(value[index], index)) return false; return true })(${value}, (${params[0]}, ${params[1]}) => ${expression})`;
 }
 function Entries$1(value) {
 	return `Object.entries(${value})`;
@@ -325,7 +325,7 @@ function Keys(value) {
 	return `Object.getOwnPropertyNames(${value})`;
 }
 function HasPropertyKey(value, key) {
-	return IsEqual(key, "\"__proto__\"") || IsEqual(key, "\"toString\"") || IsEqual(key, "\"constructor\"") ? `Object.prototype.hasOwnProperty.call(${value}, ${key})` : `${key} in ${value}`;
+	return IsEqual$1(key, "\"__proto__\"") || IsEqual$1(key, "\"toString\"") || IsEqual$1(key, "\"constructor\"") ? `Object.prototype.hasOwnProperty.call(${value}, ${key})` : `${key} in ${value}`;
 }
 function IsDeepEqual(left, right) {
 	return `Guard.IsDeepEqual(${left}, ${right})`;
@@ -346,7 +346,7 @@ function Member(left, right) {
 	return `${left}${IsIdentifier(right) ? `.${right}` : `[${Constant(right)}]`}`;
 }
 function Constant(value) {
-	return IsString$1(value) ? JSON.stringify(value) : `${value}`;
+	return IsString$3(value) ? JSON.stringify(value) : `${value}`;
 }
 function Ternary(condition, true_, false_) {
 	return `(${condition} ? ${true_} : ${false_})`;
@@ -364,10 +364,10 @@ function Return(expression) {
 	return `return ${expression}`;
 }
 function ReduceAnd(operands) {
-	return IsEqual(operands.length, 0) ? "true" : operands.reduce((left, right) => And(left, right));
+	return IsEqual$1(operands.length, 0) ? "true" : operands.reduce((left, right) => And(left, right));
 }
 function ReduceOr(operands) {
-	return IsEqual(operands.length, 0) ? "false" : operands.reduce((left, right) => Or(left, right));
+	return IsEqual$1(operands.length, 0) ? "false" : operands.reduce((left, right) => Or(left, right));
 }
 function PrefixIncrement(expression) {
 	return `++${expression}`;
@@ -384,7 +384,7 @@ function IsBoolean$1(value) {
 function IsNumber$1(value) {
 	return value instanceof Number;
 }
-function IsString$2(value) {
+function IsString$1(value) {
 	return value instanceof String;
 }
 function IsTypeArray(value) {
@@ -437,7 +437,7 @@ function FromUnknown(value) {
 	return value;
 }
 function FromValue$3(value) {
-	return value instanceof RegExp ? FromRegExp$1(value) : IsGuard$1(value) ? FromGuard(value) : IsArray$1(value) ? FromArray$12(value) : IsObject$2(value) ? FromObject$15(value) : FromUnknown(value);
+	return value instanceof RegExp ? FromRegExp$1(value) : IsGuard$1(value) ? FromGuard(value) : IsArray$2(value) ? FromArray$12(value) : IsObject$2(value) ? FromObject$15(value) : FromUnknown(value);
 }
 /**
 * Clones a value using the TypeBox type cloning strategy. This function preserves non-enumerable
@@ -533,9 +533,9 @@ function Update$1(current, hidden, enumerable) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/types/schema.mjs
 function IsKind(value, kind) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && IsEqual(value["~kind"], kind);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && IsEqual$1(value["~kind"], kind);
 }
-function IsSchema(value) {
+function IsSchema$1(value) {
 	return IsObject$2(value);
 }
 
@@ -543,22 +543,22 @@ function IsSchema(value) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/action/_optional.mjs
 /** Returns true if this value is a OptionalAddAction. */
 function IsOptionalAddAction(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual(value["~kind"], "OptionalAddAction") && IsSchema(value.type);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual$1(value["~kind"], "OptionalAddAction") && IsSchema$1(value.type);
 }
 /** Returns true if this value is a OptionalRemoveAction. */
 function IsOptionalRemoveAction(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual(value["~kind"], "OptionalRemoveAction") && IsSchema(value.type);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual$1(value["~kind"], "OptionalRemoveAction") && IsSchema$1(value.type);
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/action/_readonly.mjs
 /** Returns true if this value is a ReadonlyAddAction. */
 function IsReadonlyAddAction(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual(value["~kind"], "ReadonlyAddAction") && IsSchema(value.type);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual$1(value["~kind"], "ReadonlyAddAction") && IsSchema$1(value.type);
 }
 /** Returns true if this value is a ReadonlyRemoveAction. */
 function IsReadonlyRemoveAction(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual(value["~kind"], "ReadonlyRemoveAction") && IsSchema(value.type);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "type") && IsEqual$1(value["~kind"], "ReadonlyRemoveAction") && IsSchema$1(value.type);
 }
 
 //#endregion
@@ -588,7 +588,7 @@ function Immutable(type) {
 }
 /** Returns true if the given value is a TImmutable */
 function IsImmutable(value) {
-	return IsSchema(value) && HasPropertyKey$1(value, "~immutable");
+	return IsSchema$1(value) && HasPropertyKey$1(value, "~immutable");
 }
 
 //#endregion
@@ -607,7 +607,7 @@ function Optional(type) {
 }
 /** Returns true if the given value is TOptional */
 function IsOptional(value) {
-	return IsSchema(value) && HasPropertyKey$1(value, "~optional");
+	return IsSchema$1(value) && HasPropertyKey$1(value, "~optional");
 }
 
 //#endregion
@@ -626,7 +626,7 @@ function Readonly(type) {
 }
 /** Returns true if the given value is a TReadonly */
 function IsReadonly(value) {
-	return IsSchema(value) && HasPropertyKey$1(value, "~readonly");
+	return IsSchema$1(value) && HasPropertyKey$1(value, "~readonly");
 }
 
 //#endregion
@@ -777,11 +777,11 @@ function FunctionOptions(type) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/types/ref.mjs
 /** Creates a Ref type. */
-function Ref(ref, options) {
+function Ref$1(ref, options) {
 	return Create$1({ ["~kind"]: "Ref" }, { $ref: ref }, options);
 }
 /** Returns true if the given value is TRef. */
-function IsRef(value) {
+function IsRef$1(value) {
 	return IsKind(value, "Ref");
 }
 
@@ -827,7 +827,7 @@ function FromRef$9(context, ref, arguments_) {
 	return ref in context ? FromType$18(context, ref, context[ref], arguments_) : FromNotResolvable();
 }
 function FromType$18(context, name, target, arguments_) {
-	return IsGeneric(target) ? FromGeneric(name, target.parameters, target.expression) : IsRef(target) ? FromRef$9(context, target.$ref, arguments_) : FromNotGeneric();
+	return IsGeneric(target) ? FromGeneric(name, target.parameters, target.expression) : IsRef$1(target) ? FromRef$9(context, target.$ref, arguments_) : FromNotGeneric();
 }
 /** Resolves a named generic target from the context, or returns TNever if it cannot be resolved or is not generic. */
 function ResolveTarget(context, target, arguments_) {
@@ -957,7 +957,7 @@ function CanEvaluate() {
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/system/hashing/hash.mjs
-var hash_exports = /* @__PURE__ */ __export({
+var hash_exports = /* @__PURE__ */ __exportAll({
 	Hash: () => Hash,
 	HashCode: () => HashCode
 });
@@ -1062,7 +1062,7 @@ function FromUndefined$8(_value) {
 	return FNV1A64_OP(ByteMarker.Undefined);
 }
 function FromValue$2(value) {
-	return IsTypeArray(value) ? FromTypeArray(value) : IsDate$1(value) ? FromDate(value) : IsRegExp(value) ? FromRegExp(value) : IsBoolean$1(value) ? FromBoolean$8(value.valueOf()) : IsString$2(value) ? FromString$8(value.valueOf()) : IsNumber$1(value) ? FromNumber$8(value.valueOf()) : IsIEEE754(value) ? FromNumber$8(value) : IsArray$1(value) ? FromArray$11(value) : IsBoolean$3(value) ? FromBoolean$8(value) : IsBigInt$2(value) ? FromBigInt$8(value) : IsConstructor$2(value) ? FromConstructor$1(value) : IsNull$2(value) ? FromNull$8(value) : IsObject$2(value) ? FromObject$14(value) : IsString$1(value) ? FromString$8(value) : IsSymbol$2(value) ? FromSymbol$1(value) : IsUndefined$2(value) ? FromUndefined$8(value) : IsFunction$2(value) ? FromFunction$1(value) : Unreachable();
+	return IsTypeArray(value) ? FromTypeArray(value) : IsDate$1(value) ? FromDate(value) : IsRegExp(value) ? FromRegExp(value) : IsBoolean$1(value) ? FromBoolean$8(value.valueOf()) : IsString$1(value) ? FromString$8(value.valueOf()) : IsNumber$1(value) ? FromNumber$8(value.valueOf()) : IsIEEE754(value) ? FromNumber$8(value) : IsArray$2(value) ? FromArray$11(value) : IsBoolean$3(value) ? FromBoolean$8(value) : IsBigInt$2(value) ? FromBigInt$8(value) : IsConstructor$2(value) ? FromConstructor$1(value) : IsNull$2(value) ? FromNull$8(value) : IsObject$2(value) ? FromObject$14(value) : IsString$3(value) ? FromString$8(value) : IsSymbol$2(value) ? FromSymbol$1(value) : IsUndefined$2(value) ? FromUndefined$8(value) : IsFunction$2(value) ? FromFunction$1(value) : Unreachable();
 }
 /** Generates a FNV1A-64 non cryptographic hash of the given value */
 function HashCode(value) {
@@ -1120,7 +1120,7 @@ function en_US(error) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/system/locale/_config.mjs
 let locale = en_US;
 /** Gets the locale */
-function Get() {
+function Get$2() {
 	return locale;
 }
 
@@ -1153,7 +1153,7 @@ function Codec(type) {
 	return new DecodeBuilder(type);
 }
 function IsCodec(value) {
-	return IsSchema(value) && HasPropertyKey$1(value, "~codec") && IsObject$2(value["~codec"]) && HasPropertyKey$1(value["~codec"], "encode") && HasPropertyKey$1(value["~codec"], "decode");
+	return IsSchema$1(value) && HasPropertyKey$1(value, "~codec") && IsObject$2(value["~codec"]) && HasPropertyKey$1(value["~codec"], "encode") && HasPropertyKey$1(value["~codec"], "decode");
 }
 
 //#endregion
@@ -1223,7 +1223,7 @@ var InvalidLiteralValue = class extends Error {
 	}
 };
 function LiteralTypeName(value) {
-	return IsBigInt$2(value) ? "bigint" : IsBoolean$3(value) ? "boolean" : IsNumber$3(value) ? "number" : IsString$1(value) ? "string" : (() => {
+	return IsBigInt$2(value) ? "bigint" : IsBoolean$3(value) ? "boolean" : IsNumber$3(value) ? "number" : IsString$3(value) ? "string" : (() => {
 		throw new InvalidLiteralValue(value);
 	})();
 }
@@ -1236,7 +1236,7 @@ function Literal(value, options) {
 }
 /** Returns true if the given value is a TLiteralValue. */
 function IsLiteralValue(value) {
-	return IsBigInt$2(value) || IsBoolean$3(value) || IsNumber$3(value) || IsString$1(value);
+	return IsBigInt$2(value) || IsBoolean$3(value) || IsNumber$3(value) || IsString$3(value);
 }
 /** Returns true if the given value is TLiteral<bigint>. */
 function IsLiteralBigInt(value) {
@@ -1252,7 +1252,7 @@ function IsLiteralNumber(value) {
 }
 /** Returns true if the given value is TLiteral<string>. */
 function IsLiteralString(value) {
-	return IsLiteral(value) && IsString$1(value.const);
+	return IsLiteral(value) && IsString$3(value.const);
 }
 /** Returns true if the given value is TLiteral. */
 function IsLiteral(value) {
@@ -1408,7 +1408,7 @@ function RecordPattern(type) {
 /** Returns the Record key as a TypeBox type  */
 function RecordKey(type) {
 	const pattern = RecordPattern(type);
-	return IsEqual(pattern, IntegerKey) ? Integer() : IsEqual(pattern, NumberKey) ? Number$1() : String$1();
+	return IsEqual$1(pattern, IntegerKey) ? Integer() : IsEqual$1(pattern, NumberKey) ? Number$1() : String$1();
 }
 function RecordValue(type) {
 	return type.patternProperties[RecordPattern(type)];
@@ -1538,20 +1538,20 @@ function PatternMapping(input) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/script/token/internal/result.mjs
 /** Checks the value is a Tuple-2 [string, string] result */
 function IsResult(value) {
-	return IsArray$1(value) && IsEqual(value.length, 2);
+	return IsArray$2(value) && IsEqual$1(value.length, 2);
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/script/token/internal/take.mjs
 function TakeVariant(variant, input) {
-	return IsEqual(input.indexOf(variant), 0) ? [variant, input.slice(variant.length)] : [];
+	return IsEqual$1(input.indexOf(variant), 0) ? [variant, input.slice(variant.length)] : [];
 }
 /** Takes one of the given variants or fail */
 function Take(variants, input) {
 	const [left, ...right] = variants;
-	return IsString$1(left) ? (() => {
+	return IsString$3(left) ? (() => {
 		const result = TakeVariant(left, input);
-		return IsEqual(result.length, 2) ? result : Take(right, input);
+		return IsEqual$1(result.length, 2) ? result : Take(right, input);
 	})() : [];
 }
 
@@ -1576,11 +1576,11 @@ const OpenComment = "/*";
 const CloseComment = "*/";
 function DiscardMultilineComment(input) {
 	const index$1 = input.indexOf(CloseComment);
-	return IsEqual(index$1, -1) ? "" : input.slice(index$1 + 2);
+	return IsEqual$1(index$1, -1) ? "" : input.slice(index$1 + 2);
 }
 function DiscardLineComment(input) {
 	const index$1 = input.indexOf(NewLine);
-	return IsEqual(index$1, -1) ? "" : input.slice(index$1);
+	return IsEqual$1(index$1, -1) ? "" : input.slice(index$1);
 }
 function TrimStartUntilNewline(input) {
 	return input.replace(/^[ \t\r\f\v]+/, "");
@@ -1605,7 +1605,7 @@ function TakeConst(const_, input) {
 }
 /** Matches if next is the given Const value */
 function Const(const_, input) {
-	return IsEqual(const_, "") ? ["", input] : const_.startsWith(NewLine) ? TakeConst(const_, TrimWhitespace(input)) : const_.startsWith(WhiteSpace) ? TakeConst(const_, input) : TakeConst(const_, Trim(input));
+	return IsEqual$1(const_, "") ? ["", input] : const_.startsWith(NewLine) ? TakeConst(const_, TrimWhitespace(input)) : const_.startsWith(WhiteSpace) ? TakeConst(const_, input) : TakeConst(const_, Trim(input));
 }
 
 //#endregion
@@ -1625,11 +1625,11 @@ const AllowedDigits = [...Digit, UnderScore];
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/script/token/until.mjs
 function IsEnd(end, input) {
 	const [left, ...right] = end;
-	return IsString$1(left) ? input.startsWith(left) ? true : IsEnd(right, input) : false;
+	return IsString$3(left) ? input.startsWith(left) ? true : IsEnd(right, input) : false;
 }
 /** Match Input until but not including End. No match if End not found. */
 function Until(end, input, result = "") {
-	return IsEqual(input, "") ? [] : IsEnd(end, input) ? [result, input] : (() => {
+	return IsEqual$1(input, "") ? [] : IsEnd(end, input) ? [result, input] : (() => {
 		const [left, right] = [input.slice(0, 1), input.slice(1)];
 		return Until(end, right, `${result}${left}`);
 	})();
@@ -1640,7 +1640,7 @@ function Until(end, input, result = "") {
 /** Match Input until but not including End. No match if End not found or match is zero-length. */
 function Until_1(end, input) {
 	const until = Until(end, input);
-	return IsResult(until) ? IsEqual(until[0], "") ? [] : until : [];
+	return IsResult(until) ? IsEqual$1(until[0], "") ? [] : until : [];
 }
 
 //#endregion
@@ -1698,19 +1698,19 @@ function ExtendsUnion$1(inferred) {
 	return Create$1({ ["~kind"]: "ExtendsUnion" }, { inferred });
 }
 function IsExtendsUnion(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "inferred") && IsEqual(value["~kind"], "ExtendsUnion") && IsObject$2(value.inferred);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "inferred") && IsEqual$1(value["~kind"], "ExtendsUnion") && IsObject$2(value.inferred);
 }
 function ExtendsTrue(inferred) {
 	return Create$1({ ["~kind"]: "ExtendsTrue" }, { inferred });
 }
 function IsExtendsTrue(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "inferred") && IsEqual(value["~kind"], "ExtendsTrue") && IsObject$2(value.inferred);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "inferred") && IsEqual$1(value["~kind"], "ExtendsTrue") && IsObject$2(value.inferred);
 }
 function ExtendsFalse() {
 	return Create$1({ ["~kind"]: "ExtendsFalse" }, {});
 }
 function IsExtendsFalse(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && IsEqual(value["~kind"], "ExtendsFalse");
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && IsEqual$1(value["~kind"], "ExtendsFalse");
 }
 function IsExtendsTrueLike(value) {
 	return IsExtendsUnion(value) || IsExtendsTrue(value);
@@ -1721,7 +1721,7 @@ function IsExtendsTrueLike(value) {
 /** Parses a Pattern into a sequence of TemplateLiteral types */
 function ParsePatternIntoTypes(pattern) {
 	const parsed = Pattern(pattern);
-	return IsEqual(parsed.length, 2) ? parsed[0] : Unreachable();
+	return IsEqual$1(parsed.length, 2) ? parsed[0] : Unreachable();
 }
 
 //#endregion
@@ -1731,10 +1731,10 @@ function FromLiteral$5(value) {
 }
 function FromTypesReduce(types) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? FromType$17(left) ? FromTypesReduce(right) : false : true;
+	return IsSchema$1(left) ? FromType$17(left) ? FromTypesReduce(right) : false : true;
 }
 function FromTypes$3(types) {
-	return IsEqual(types.length, 0) ? false : FromTypesReduce(types);
+	return IsEqual$1(types.length, 0) ? false : FromTypesReduce(types);
 }
 function FromType$17(type) {
 	return IsUnion(type) ? FromTypes$3(type.anyOf) : IsLiteral(type) ? FromLiteral$5(type.const) : false;
@@ -1748,21 +1748,21 @@ function TemplateLiteralFinite(types) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/template-literal/decode.mjs
 function FromLiteralPush(variants, value, result = []) {
 	const [left, ...right] = variants;
-	return IsString$1(left) ? FromLiteralPush(right, value, [...result, `${left}${value}`]) : result;
+	return IsString$3(left) ? FromLiteralPush(right, value, [...result, `${left}${value}`]) : result;
 }
 function FromLiteral$4(variants, value) {
-	return IsEqual(variants.length, 0) ? [`${value}`] : FromLiteralPush(variants, value);
+	return IsEqual$1(variants.length, 0) ? [`${value}`] : FromLiteralPush(variants, value);
 }
 function FromUnion$13(variants, types, result = []) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? FromUnion$13(variants, right, [...result, ...FromType$16(variants, left)]) : result;
+	return IsSchema$1(left) ? FromUnion$13(variants, right, [...result, ...FromType$16(variants, left)]) : result;
 }
 function FromType$16(variants, type) {
 	return IsUnion(type) ? FromUnion$13(variants, type.anyOf) : IsLiteral(type) ? FromLiteral$4(variants, type.const) : Unreachable();
 }
 function DecodeFromSpan(variants, types) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? DecodeFromSpan(FromType$16(variants, left), right) : variants;
+	return IsSchema$1(left) ? DecodeFromSpan(FromType$16(variants, left), right) : variants;
 }
 function VariantsToLiterals(variants) {
 	return variants.map((variant) => Literal(variant));
@@ -1771,7 +1771,7 @@ function DecodeTypesAsUnion(types) {
 	return Union(VariantsToLiterals(DecodeFromSpan([], types)));
 }
 function DecodeTypes(types) {
-	return IsEqual(types.length, 0) ? Unreachable() : IsEqual(types.length, 1) && IsLiteral(types[0]) ? types[0] : DecodeTypesAsUnion(types);
+	return IsEqual$1(types.length, 0) ? Unreachable() : IsEqual$1(types.length, 1) && IsLiteral(types[0]) ? types[0] : DecodeTypesAsUnion(types);
 }
 /** Decodes a TemplateLiteral into a Type. If the TemplateLiteral yields a non-finite set, the return value is TString */
 function TemplateLiteralDecode(pattern) {
@@ -1782,7 +1782,7 @@ function TemplateLiteralDecode(pattern) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/enum/enum-to-union.mjs
 function FromEnumValue(value) {
-	return IsString$1(value) || IsNumber$3(value) ? Literal(value) : IsNull$2(value) ? Null() : Never();
+	return IsString$3(value) || IsNumber$3(value) ? Literal(value) : IsNull$2(value) ? Null() : Never();
 }
 function EnumValuesToVariants(values) {
 	return values.map((value) => FromEnumValue(value));
@@ -1808,7 +1808,7 @@ function ExtendsRightEnum(inferred, left, right) {
 }
 function ExtendsRightIntersect(inferred, left, right) {
 	const [head, ...tail] = right;
-	return IsSchema(head) ? (() => {
+	return IsSchema$1(head) ? (() => {
 		const check = ExtendsLeft(inferred, left, head);
 		return IsExtendsTrueLike(check) ? ExtendsRightIntersect(check.inferred, left, tail) : ExtendsFalse();
 	})() : ExtendsTrue(inferred);
@@ -1818,7 +1818,7 @@ function ExtendsRightTemplateLiteral(inferred, left, right) {
 }
 function ExtendsRightUnion(inferred, left, right) {
 	const [head, ...tail] = right;
-	return IsSchema(head) ? (() => {
+	return IsSchema$1(head) ? (() => {
 		const check = ExtendsLeft(inferred, left, head);
 		return IsExtendsTrueLike(check) ? ExtendsTrue(check.inferred) : ExtendsRightUnion(inferred, left, tail);
 	})() : ExtendsFalse();
@@ -1874,11 +1874,11 @@ function ParameterCompare(inferred, left, leftRest, right, rightRest) {
 }
 function ParameterRight(inferred, left, leftRest, rightRest) {
 	const [head, ...tail] = rightRest;
-	return IsSchema(head) ? ParameterCompare(inferred, left, leftRest, head, tail) : IsOptional(left) ? ExtendsTrue(inferred) : ExtendsFalse();
+	return IsSchema$1(head) ? ParameterCompare(inferred, left, leftRest, head, tail) : IsOptional(left) ? ExtendsTrue(inferred) : ExtendsFalse();
 }
 function ParametersLeft(inferred, left, rightRest) {
 	const [head, ...tail] = left;
-	return IsSchema(head) ? ParameterRight(inferred, head, tail, rightRest) : ExtendsTrue(inferred);
+	return IsSchema$1(head) ? ParameterRight(inferred, head, tail, rightRest) : ExtendsTrue(inferred);
 }
 function ExtendsParameters(inferred, left, right) {
 	return ParametersLeft(inferred, left, right);
@@ -1993,7 +1993,7 @@ function Composite(left, right) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/evaluate/narrow.mjs
 function Narrow(left, right) {
 	const result = Compare(left, right);
-	return IsEqual(result, ResultLeftInside) ? left : IsEqual(result, ResultRightInside) ? right : IsEqual(result, ResultEqual) ? right : Never();
+	return IsEqual$1(result, ResultLeftInside) ? left : IsEqual$1(result, ResultRightInside) ? right : IsEqual$1(result, ResultEqual) ? right : Never();
 }
 
 //#endregion
@@ -2017,11 +2017,11 @@ function DistributeType(type, types, result = []) {
 }
 function DistributeUnion(types, distribution, result = []) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? DistributeUnion(right, distribution, [...result, ...Distribute([left], distribution)]) : result;
+	return IsSchema$1(left) ? DistributeUnion(right, distribution, [...result, ...Distribute([left], distribution)]) : result;
 }
 function Distribute(types, result = []) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? IsUnion(left) ? Distribute(right, DistributeUnion(left.anyOf, result)) : Distribute(right, DistributeType(left, result)) : result;
+	return IsSchema$1(left) ? IsUnion(left) ? Distribute(right, DistributeUnion(left.anyOf, result)) : Distribute(right, DistributeType(left, result)) : result;
 }
 
 //#endregion
@@ -2046,9 +2046,9 @@ function BroadFilter(type, types) {
 function IsBroadestType(type, types) {
 	const result = types.some((left) => {
 		const result$1 = Compare(type, left);
-		return IsEqual(result$1, ResultLeftInside) || IsEqual(result$1, ResultEqual);
+		return IsEqual$1(result$1, ResultLeftInside) || IsEqual$1(result$1, ResultEqual);
 	});
-	return IsEqual(result, false);
+	return IsEqual$1(result, false);
 }
 function BroadenType(type, types) {
 	const evaluated = EvaluateType(type);
@@ -2056,7 +2056,7 @@ function BroadenType(type, types) {
 }
 function BroadenTypes(types, result = []) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? IsObject(left) ? BroadenTypes(right, [...result, left]) : BroadenTypes(right, BroadenType(left, result)) : result;
+	return IsSchema$1(left) ? IsObject(left) ? BroadenTypes(right, [...result, left]) : BroadenTypes(right, BroadenType(left, result)) : result;
 }
 /** Broadens a set of types and returns either the most broad type, or union or disjoint types. */
 function Broaden(types) {
@@ -2104,7 +2104,7 @@ function ExtendsLiteralString(inferred, left, right) {
 	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsString(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal(left), right);
 }
 function ExtendsLiteral(inferred, left, right) {
-	return IsBigInt$2(left.const) ? ExtendsLiteralBigInt(inferred, left.const, right) : IsBoolean$3(left.const) ? ExtendsLiteralBoolean(inferred, left.const, right) : IsNumber$3(left.const) ? ExtendsLiteralNumber(inferred, left.const, right) : IsString$1(left.const) ? ExtendsLiteralString(inferred, left.const, right) : Unreachable();
+	return IsBigInt$2(left.const) ? ExtendsLiteralBigInt(inferred, left.const, right) : IsBoolean$3(left.const) ? ExtendsLiteralBoolean(inferred, left.const, right) : IsNumber$3(left.const) ? ExtendsLiteralNumber(inferred, left.const, right) : IsString$3(left.const) ? ExtendsLiteralString(inferred, left.const, right) : Unreachable();
 }
 
 //#endregion
@@ -2195,7 +2195,7 @@ function Inferrable(name, type) {
 	}, {});
 }
 function IsInferable(value) {
-	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "name") && HasPropertyKey$1(value, "type") && IsEqual(value["~kind"], "Inferrable") && IsString$1(value.name) && IsObject$2(value.type);
+	return IsObject$2(value) && HasPropertyKey$1(value, "~kind") && HasPropertyKey$1(value, "name") && HasPropertyKey$1(value, "type") && IsEqual$1(value["~kind"], "Inferrable") && IsString$3(value.name) && IsObject$2(value.type);
 }
 function TryRestInferable(type) {
 	return IsRest(type) ? IsInfer(type.items) ? IsArray(type.items.extends) ? Inferrable(type.items.name, type.items.extends.items) : IsUnknown(type.items.extends) ? Inferrable(type.items.name, type.items.extends) : void 0 : Unreachable() : void 0;
@@ -2205,18 +2205,18 @@ function TryInferable(type) {
 }
 function TryInferResults(rest, right, result = []) {
 	const [head, ...tail] = rest;
-	return IsSchema(head) ? (() => {
+	return IsSchema$1(head) ? (() => {
 		const check = ExtendsLeft({}, head, right);
 		return IsExtendsTrueLike(check) ? TryInferResults(tail, right, [...result, head]) : void 0;
 	})() : result;
 }
 function InferTupleResult(inferred, name, left, right) {
 	const results = TryInferResults(left, right);
-	return IsArray$1(results) ? ExtendsTrue(Assign(inferred, { [name]: Tuple(results) })) : ExtendsFalse();
+	return IsArray$2(results) ? ExtendsTrue(Assign(inferred, { [name]: Tuple(results) })) : ExtendsFalse();
 }
 function InferUnionResult(inferred, name, left, right) {
 	const results = TryInferResults(left, right);
-	return IsArray$1(results) ? ExtendsTrue(Assign(inferred, { [name]: Union(results) })) : ExtendsFalse();
+	return IsArray$2(results) ? ExtendsTrue(Assign(inferred, { [name]: Union(results) })) : ExtendsFalse();
 }
 
 //#endregion
@@ -2229,7 +2229,7 @@ function ApplyReverse(types, reversed) {
 }
 function Reversed(types) {
 	const first = types.length > 0 ? types[0] : void 0;
-	return IsSchema(IsSchema(first) ? TryRestInferable(first) : void 0);
+	return IsSchema$1(IsSchema$1(first) ? TryRestInferable(first) : void 0);
 }
 function ElementsCompare(inferred, reversed, left, leftRest, right, rightRest) {
 	const check = ExtendsLeft(inferred, left, right);
@@ -2239,12 +2239,12 @@ function ElementsLeft(inferred, reversed, leftRest, right, rightRest) {
 	const inferable = TryRestInferable(right);
 	return IsInferable(inferable) ? InferTupleResult(inferred, inferable.name, ApplyReverse(leftRest, reversed), inferable.type) : (() => {
 		const [head, ...tail] = leftRest;
-		return IsSchema(head) ? ElementsCompare(inferred, reversed, head, tail, right, rightRest) : ExtendsFalse();
+		return IsSchema$1(head) ? ElementsCompare(inferred, reversed, head, tail, right, rightRest) : ExtendsFalse();
 	})();
 }
 function ElementsRight(inferred, reversed, leftRest, rightRest) {
 	const [head, ...tail] = rightRest;
-	return IsSchema(head) ? ElementsLeft(inferred, reversed, leftRest, head, tail) : IsEqual(leftRest.length, 0) ? ExtendsTrue(inferred) : ExtendsFalse();
+	return IsSchema$1(head) ? ElementsLeft(inferred, reversed, leftRest, head, tail) : IsEqual$1(leftRest.length, 0) ? ExtendsTrue(inferred) : ExtendsFalse();
 }
 function Elements(inferred, reversed, leftRest, rightRest) {
 	return ElementsRight(inferred, reversed, leftRest, rightRest);
@@ -2258,7 +2258,7 @@ function ExtendsTupleToArray(inferred, left, right) {
 	const inferrable = TryInferable(right);
 	return IsInferable(inferrable) ? InferUnionResult(inferred, inferrable.name, left, inferrable.type) : (() => {
 		const [head, ...tail] = left;
-		return IsSchema(head) ? (() => {
+		return IsSchema$1(head) ? (() => {
 			const check = ExtendsLeft(inferred, head, right);
 			return IsExtendsTrueLike(check) ? ExtendsTupleToArray(check.inferred, tail, right) : ExtendsFalse();
 		})() : ExtendsTrue(inferred);
@@ -2279,14 +2279,14 @@ function ExtendsUndefined(inferred, left, right) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/extends/union.mjs
 function ExtendsUnionSome(inferred, type, unionTypes) {
 	const [head, ...tail] = unionTypes;
-	return IsSchema(head) ? (() => {
+	return IsSchema$1(head) ? (() => {
 		const check = ExtendsLeft(inferred, type, head);
 		return IsExtendsTrueLike(check) ? ExtendsTrue(check.inferred) : ExtendsUnionSome(inferred, type, tail);
 	})() : ExtendsFalse();
 }
 function ExtendsUnionLeft(inferred, left, right) {
 	const [head, ...tail] = left;
-	return IsSchema(head) ? (() => {
+	return IsSchema$1(head) ? (() => {
 		const check = ExtendsUnionSome(inferred, head, right);
 		return IsExtendsTrueLike(check) ? ExtendsUnionLeft(check.inferred, tail, right) : ExtendsFalse();
 	})() : ExtendsTrue(inferred);
@@ -2322,7 +2322,7 @@ function InterfaceDeferred(heritage, properties, options = {}) {
 }
 /** Returns true if this value is a deferred Interface action. */
 function IsInterfaceDeferred(value) {
-	return IsSchema(value) && HasPropertyKey$1(value, "action") && IsEqual(value.action, "Interface");
+	return IsSchema$1(value) && HasPropertyKey$1(value, "action") && IsEqual$1(value.action, "Interface");
 }
 
 //#endregion
@@ -2335,10 +2335,10 @@ function FromProperties$3(stack, context, properties) {
 }
 function FromTypes$2(stack, context, types) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? FromType$15(stack, context, left) ? true : FromTypes$2(stack, context, right) : false;
+	return IsSchema$1(left) ? FromType$15(stack, context, left) ? true : FromTypes$2(stack, context, right) : false;
 }
 function FromType$15(stack, context, type) {
-	return IsRef(type) ? FromRef$8(stack, context, type.$ref) : IsArray(type) ? FromType$15(stack, context, type.items) : IsAsyncIterator(type) ? FromType$15(stack, context, type.iteratorItems) : IsConstructor(type) ? FromTypes$2(stack, context, [...type.parameters, type.instanceType]) : IsFunction(type) ? FromTypes$2(stack, context, [...type.parameters, type.returnType]) : IsInterfaceDeferred(type) ? FromProperties$3(stack, context, type.parameters[1]) : IsIntersect(type) ? FromTypes$2(stack, context, type.allOf) : IsIterator(type) ? FromType$15(stack, context, type.iteratorItems) : IsObject(type) ? FromProperties$3(stack, context, type.properties) : IsPromise(type) ? FromType$15(stack, context, type.item) : IsUnion(type) ? FromTypes$2(stack, context, type.anyOf) : IsTuple(type) ? FromTypes$2(stack, context, type.items) : IsRecord(type) ? FromType$15(stack, context, RecordValue(type)) : false;
+	return IsRef$1(type) ? FromRef$8(stack, context, type.$ref) : IsArray(type) ? FromType$15(stack, context, type.items) : IsAsyncIterator(type) ? FromType$15(stack, context, type.iteratorItems) : IsConstructor(type) ? FromTypes$2(stack, context, [...type.parameters, type.instanceType]) : IsFunction(type) ? FromTypes$2(stack, context, [...type.parameters, type.returnType]) : IsInterfaceDeferred(type) ? FromProperties$3(stack, context, type.parameters[1]) : IsIntersect(type) ? FromTypes$2(stack, context, type.allOf) : IsIterator(type) ? FromType$15(stack, context, type.iteratorItems) : IsObject(type) ? FromProperties$3(stack, context, type.properties) : IsPromise(type) ? FromType$15(stack, context, type.item) : IsUnion(type) ? FromTypes$2(stack, context, type.anyOf) : IsTuple(type) ? FromTypes$2(stack, context, type.items) : IsRecord(type) ? FromType$15(stack, context, RecordValue(type)) : false;
 }
 /** Performs a cyclic check on the given type. Initial key stack can be empty, but faster if specified */
 function CyclicCheck(stack, context, type) {
@@ -2371,7 +2371,7 @@ function FromTypes$1(context, types, result) {
 	}, result);
 }
 function FromType$14(context, type, result) {
-	return IsRef(type) ? FromRef$7(context, type.$ref, result) : IsArray(type) ? FromType$14(context, type.items, result) : IsAsyncIterator(type) ? FromType$14(context, type.iteratorItems, result) : IsConstructor(type) ? FromTypes$1(context, [...type.parameters, type.instanceType], result) : IsFunction(type) ? FromTypes$1(context, [...type.parameters, type.returnType], result) : IsInterfaceDeferred(type) ? FromProperties$2(context, type.parameters[1], result) : IsIntersect(type) ? FromTypes$1(context, type.allOf, result) : IsIterator(type) ? FromType$14(context, type.iteratorItems, result) : IsObject(type) ? FromProperties$2(context, type.properties, result) : IsPromise(type) ? FromType$14(context, type.item, result) : IsUnion(type) ? FromTypes$1(context, type.anyOf, result) : IsTuple(type) ? FromTypes$1(context, type.items, result) : IsRecord(type) ? FromType$14(context, RecordValue(type), result) : result;
+	return IsRef$1(type) ? FromRef$7(context, type.$ref, result) : IsArray(type) ? FromType$14(context, type.items, result) : IsAsyncIterator(type) ? FromType$14(context, type.iteratorItems, result) : IsConstructor(type) ? FromTypes$1(context, [...type.parameters, type.instanceType], result) : IsFunction(type) ? FromTypes$1(context, [...type.parameters, type.returnType], result) : IsInterfaceDeferred(type) ? FromProperties$2(context, type.parameters[1], result) : IsIntersect(type) ? FromTypes$1(context, type.allOf, result) : IsIterator(type) ? FromType$14(context, type.iteratorItems, result) : IsObject(type) ? FromProperties$2(context, type.properties, result) : IsPromise(type) ? FromType$14(context, type.item, result) : IsUnion(type) ? FromTypes$1(context, type.anyOf, result) : IsTuple(type) ? FromTypes$1(context, type.items, result) : IsRecord(type) ? FromType$14(context, RecordValue(type), result) : result;
 }
 /** Returns dependent cyclic keys for the given type. This function is used to dead-type-eliminate (DTE) for initializing TCyclic types. */
 function CyclicDependencies(context, key, type) {
@@ -2397,7 +2397,7 @@ function FromTypes(types) {
 	}, []);
 }
 function FromType$13(type) {
-	return IsRef(type) ? FromRef$6(type.$ref) : IsArray(type) ? Array$1(FromType$13(type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(FromType$13(type.iteratorItems)) : IsConstructor(type) ? Constructor(FromTypes(type.parameters), FromType$13(type.instanceType)) : IsFunction(type) ? Function$1(FromTypes(type.parameters), FromType$13(type.returnType)) : IsIntersect(type) ? Intersect(FromTypes(type.allOf)) : IsIterator(type) ? Iterator(FromType$13(type.iteratorItems)) : IsObject(type) ? Object$1(FromProperties$1(type.properties)) : IsPromise(type) ? Promise$1(FromType$13(type.item)) : IsRecord(type) ? Record(RecordKey(type), FromType$13(RecordValue(type))) : IsUnion(type) ? Union(FromTypes(type.anyOf)) : IsTuple(type) ? Tuple(FromTypes(type.items)) : type;
+	return IsRef$1(type) ? FromRef$6(type.$ref) : IsArray(type) ? Array$1(FromType$13(type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(FromType$13(type.iteratorItems)) : IsConstructor(type) ? Constructor(FromTypes(type.parameters), FromType$13(type.instanceType)) : IsFunction(type) ? Function$1(FromTypes(type.parameters), FromType$13(type.returnType)) : IsIntersect(type) ? Intersect(FromTypes(type.allOf)) : IsIterator(type) ? Iterator(FromType$13(type.iteratorItems)) : IsObject(type) ? Object$1(FromProperties$1(type.properties)) : IsPromise(type) ? Promise$1(FromType$13(type.item)) : IsRecord(type) ? Record(RecordKey(type), FromType$13(RecordValue(type))) : IsUnion(type) ? Union(FromTypes(type.anyOf)) : IsTuple(type) ? Tuple(FromTypes(type.items)) : type;
 }
 function CyclicAnyFromParameters(defs, ref) {
 	return ref in defs ? FromType$13(defs[ref]) : Unknown();
@@ -2431,7 +2431,7 @@ function InstantiateCyclic(context, ref, type) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/cyclic/target.mjs
 function Resolve(defs, ref) {
-	return ref in defs ? IsRef(defs[ref]) ? Resolve(defs, defs[ref].$ref) : defs[ref] : Never();
+	return ref in defs ? IsRef$1(defs[ref]) ? Resolve(defs, defs[ref].$ref) : defs[ref] : Never();
 }
 /** Returns the target Type from the Defs or Never if target is non-resolvable */
 function CyclicTarget(defs, ref) {
@@ -2468,11 +2468,11 @@ function BindArguments(context, state$1, parameterLeft, parameterRight, argument
 	const instantiatedExtends = InstantiateType(context, state$1, parameterLeft.extends);
 	const instantiatedEquals = InstantiateType(context, state$1, parameterLeft.equals);
 	const [left, ...right] = arguments_;
-	return IsSchema(left) ? BindParameters(BindArgument(context, state$1, parameterLeft["name"], instantiatedExtends, left), state$1, parameterRight, right) : BindParameters(BindArgument(context, state$1, parameterLeft["name"], instantiatedExtends, instantiatedEquals), state$1, parameterRight, []);
+	return IsSchema$1(left) ? BindParameters(BindArgument(context, state$1, parameterLeft["name"], instantiatedExtends, left), state$1, parameterRight, right) : BindParameters(BindArgument(context, state$1, parameterLeft["name"], instantiatedExtends, instantiatedEquals), state$1, parameterRight, []);
 }
 function BindParameters(context, state$1, parameters, arguments_) {
 	const [left, ...right] = parameters;
-	return IsSchema(left) ? BindArguments(context, state$1, left, right, arguments_) : context;
+	return IsSchema$1(left) ? BindArguments(context, state$1, left, right, arguments_) : context;
 }
 function ResolveArgumentsContext(context, state$1, parameters, arguments_) {
 	return BindParameters(context, state$1, parameters, arguments_);
@@ -2487,14 +2487,14 @@ function DeferredCall(context, state$1, target, arguments_) {
 	return CallConstruct(target, InstantiateTypes(context, state$1, arguments_));
 }
 function TailCall(context, state$1, name, arguments_) {
-	return DeferredCall(context, state$1, Ref(name), arguments_);
+	return DeferredCall(context, state$1, Ref$1(name), arguments_);
 }
 function HeadCall(context, state$1, name, parameters, expression, arguments_) {
 	return InstantiateType(context, state$1, InstantiateType(ResolveArgumentsContext(context, state$1, parameters, InstantiateTypes(context, state$1, arguments_)), { callstack: [...state$1.callstack, name] }, expression));
 }
 function CallInstantiate(context, state$1, target, arguments_) {
 	const [name, type] = ResolveTarget(context, target, arguments_);
-	return IsGeneric(type) ? IsEqual(Peek(state$1.callstack), name) ? TailCall(context, state$1, name, arguments_) : HeadCall(context, state$1, name, type.parameters, type.expression, arguments_) : DeferredCall(context, state$1, target, arguments_);
+	return IsGeneric(type) ? IsEqual$1(Peek(state$1.callstack), name) ? TailCall(context, state$1, name, arguments_) : HeadCall(context, state$1, name, type.parameters, type.expression, arguments_) : DeferredCall(context, state$1, target, arguments_);
 }
 
 //#endregion
@@ -2532,7 +2532,7 @@ function ApplyMapping(mapping, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/intrinsics/from-literal.mjs
 function FromLiteral$3(mapping, value) {
-	return IsString$1(value) ? Literal(ApplyMapping(mapping, value)) : Literal(value);
+	return IsString$3(value) ? Literal(ApplyMapping(mapping, value)) : Literal(value);
 }
 
 //#endregion
@@ -2808,7 +2808,7 @@ function SelectProperties(properties, indexer) {
 		return [...result, ...SelectProperty(properties, left)];
 	}, []);
 }
-function FromObject$12(properties, indexer) {
+function FromObject$13(properties, indexer) {
 	return EvaluateUnion(SelectProperties(properties, ToIndexableKeys(indexer)));
 }
 
@@ -2839,7 +2839,7 @@ function FromTupleWithIndexer(types, indexer) {
 function FromTupleWithoutIndexer(types) {
 	return EvaluateUnion(types);
 }
-function FromTuple$8(types, indexer) {
+function FromTuple$9(types, indexer) {
 	return IsNumber(indexer) || IsInteger(indexer) ? FromTupleWithoutIndexer(types) : FromTupleWithIndexer(types, indexer);
 }
 
@@ -2885,13 +2885,13 @@ function FromIntersect$9(types) {
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/object/from-object.mjs
-function FromObject$13(properties) {
+function FromObject$12(properties) {
 	return properties;
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/object/from-tuple.mjs
-function FromTuple$9(types) {
+function FromTuple$8(types) {
 	return FromType$10(TupleToObject(Tuple(types)));
 }
 
@@ -2907,17 +2907,17 @@ function CollapseUnionProperties(left, right) {
 }
 function ReduceVariants(types, result) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? ReduceVariants(right, CollapseUnionProperties(result, FromType$10(left))) : result;
+	return IsSchema$1(left) ? ReduceVariants(right, CollapseUnionProperties(result, FromType$10(left))) : result;
 }
 function FromUnion$10(types) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? ReduceVariants(right, FromType$10(left)) : Unreachable();
+	return IsSchema$1(left) ? ReduceVariants(right, FromType$10(left)) : Unreachable();
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/object/from-type.mjs
 function FromType$10(type) {
-	return IsCyclic(type) ? FromCyclic$9(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$9(type.allOf) : IsUnion(type) ? FromUnion$10(type.anyOf) : IsTuple(type) ? FromTuple$9(type.items) : IsObject(type) ? FromObject$13(type.properties) : {};
+	return IsCyclic(type) ? FromCyclic$9(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$9(type.allOf) : IsUnion(type) ? FromUnion$10(type.anyOf) : IsTuple(type) ? FromTuple$8(type.items) : IsObject(type) ? FromObject$12(type.properties) : {};
 }
 
 //#endregion
@@ -2939,7 +2939,7 @@ function NormalizeType$1(type) {
 }
 function IndexAction(type, indexer) {
 	const normal = NormalizeType$1(type);
-	return IsArray(normal) ? FromArray$10(normal.items, indexer) : IsObject(normal) ? FromObject$12(normal.properties, indexer) : IsTuple(normal) ? FromTuple$8(normal.items, indexer) : Never();
+	return IsArray(normal) ? FromArray$10(normal.items, indexer) : IsObject(normal) ? FromObject$13(normal.properties, indexer) : IsTuple(normal) ? FromTuple$9(normal.items, indexer) : Never();
 }
 function IndexImmediate(context, state$1, type, indexer, options) {
 	const instantiatedType = InstantiateType(context, state$1, type);
@@ -3417,7 +3417,7 @@ function FromIntersectKey(types, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/record/from-key-literal.mjs
 function FromLiteralKey(key, value) {
-	return IsString$1(key) || IsNumber$3(key) ? Object$1({ [key]: value }) : IsEqual(key, false) ? Object$1({ false: value }) : IsEqual(key, true) ? Object$1({ true: value }) : Object$1({});
+	return IsString$3(key) || IsNumber$3(key) ? Object$1({ [key]: value }) : IsEqual$1(key, false) ? Object$1({ false: value }) : IsEqual$1(key, true) ? Object$1({ true: value }) : Object$1({});
 }
 
 //#endregion
@@ -3429,7 +3429,7 @@ function FromNumberKey(key, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/record/from-key-string.mjs
 function FromStringKey(key, value) {
-	return HasPropertyKey$1(key, "pattern") && (IsString$1(key.pattern) || key.pattern instanceof RegExp) ? CreateRecord(key.pattern.toString(), value) : CreateRecord(StringKey, value);
+	return HasPropertyKey$1(key, "pattern") && (IsString$3(key.pattern) || key.pattern instanceof RegExp) ? CreateRecord(key.pattern.toString(), value) : CreateRecord(StringKey, value);
 }
 
 //#endregion
@@ -3444,11 +3444,11 @@ function StringOrNumberCheck(types) {
 	return types.some((type) => IsString(type) || IsNumber(type) || IsInteger(type));
 }
 function TryBuildRecord(types, value) {
-	return IsEqual(StringOrNumberCheck(types), true) ? CreateRecord(StringKey, value) : void 0;
+	return IsEqual$1(StringOrNumberCheck(types), true) ? CreateRecord(StringKey, value) : void 0;
 }
 function CreateProperties(types, value) {
 	return types.reduce((result, left) => {
-		return IsLiteral(left) && (IsString$1(left.const) || IsNumber$3(left.const)) ? {
+		return IsLiteral(left) && (IsString$3(left.const) || IsNumber$3(left.const)) ? {
 			...result,
 			[left.const]: value
 		} : result;
@@ -3460,7 +3460,7 @@ function CreateObject(types, value) {
 function FromUnionKey(types, value) {
 	const flattened = Flatten(types);
 	const record = TryBuildRecord(flattened, value);
-	return IsSchema(record) ? record : CreateObject(flattened, value);
+	return IsSchema$1(record) ? record : CreateObject(flattened, value);
 }
 
 //#endregion
@@ -3483,7 +3483,7 @@ function RecordInstantiate(context, state$1, key, value, options) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/ref/instantiate.mjs
 function RefInstantiate(context, state$1, ref) {
-	return ref in context ? CyclicCheck([ref], context, context[ref]) ? Ref(ref) : InstantiateType(context, state$1, context[ref]) : Ref(ref);
+	return ref in context ? CyclicCheck([ref], context, context[ref]) ? Ref$1(ref) : InstantiateType(context, state$1, context[ref]) : Ref$1(ref);
 }
 
 //#endregion
@@ -3602,14 +3602,14 @@ function EncodeEnum(types, right, pattern, result = []) {
 }
 function EncodeUnion(types, right, pattern, result = []) {
 	const [head, ...tail] = types;
-	return IsSchema(head) ? EncodeUnion(tail, right, pattern, [...result, EncodeType(head, [], "")]) : EncodeTypes(right, `${pattern}(${JoinString(result)})`);
+	return IsSchema$1(head) ? EncodeUnion(tail, right, pattern, [...result, EncodeType(head, [], "")]) : EncodeTypes(right, `${pattern}(${JoinString(result)})`);
 }
 function EncodeType(type, right, pattern) {
 	return IsEnum$1(type) ? EncodeEnum(type.enum, right, pattern) : IsInteger(type) ? EncodeInteger(right, pattern) : IsLiteral(type) ? EncodeLiteral(type.const, right, pattern) : IsBigInt(type) ? EncodeBigInt(right, pattern) : IsBoolean(type) ? EncodeBoolean(right, pattern) : IsNumber(type) ? EncodeNumber(right, pattern) : IsString(type) ? EncodeString(right, pattern) : IsTemplateLiteral(type) ? EncodeTemplateLiteral(type.pattern, right, pattern) : IsUnion(type) ? EncodeUnion(type.anyOf, right, pattern) : NeverPattern;
 }
 function EncodeTypes(types, pattern) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? EncodeType(left, right, pattern) : pattern;
+	return IsSchema$1(left) ? EncodeType(left, right, pattern) : pattern;
 }
 function EncodePattern(types) {
 	return `^${EncodeTypes(types, "")}$`;
@@ -3632,7 +3632,7 @@ function TemplateLiteralInstantiate(context, state$1, types, options) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/type/engine/rest/spread.mjs
 function SpreadElement(type) {
-	return IsRest(type) ? IsTuple(type.items) ? RestSpread(type.items.items) : IsInfer(type.items) ? [type] : IsRef(type.items) ? [type] : [Never()] : [type];
+	return IsRest(type) ? IsTuple(type.items) ? RestSpread(type.items.items) : IsInfer(type.items) ? [type] : IsRef$1(type.items) ? [type] : [Never()] : [type];
 }
 function RestSpread(types) {
 	return types.reduce((result, left) => {
@@ -3646,11 +3646,11 @@ function CanInstantiateRef(context, ref) {
 	return ref in context;
 }
 function CanInstantiateType(context, type) {
-	return IsIntersect(type) ? CanInstantiate(context, type.allOf) : IsUnion(type) ? CanInstantiate(context, type.anyOf) : IsRef(type) ? CanInstantiateRef(context, type.$ref) : true;
+	return IsIntersect(type) ? CanInstantiate(context, type.allOf) : IsUnion(type) ? CanInstantiate(context, type.anyOf) : IsRef$1(type) ? CanInstantiateRef(context, type.$ref) : true;
 }
 function CanInstantiate(context, types) {
 	const [left, ...right] = types;
-	return IsSchema(left) ? CanInstantiateType(context, left) ? CanInstantiate(context, right) : false : true;
+	return IsSchema$1(left) ? CanInstantiateType(context, left) ? CanInstantiate(context, right) : false : true;
 }
 function ModifierActions(type, readonly, optional) {
 	return IsReadonlyRemoveAction(type) ? ModifierActions(type.type, "remove", optional) : IsOptionalRemoveAction(type) ? ModifierActions(type.type, readonly, "remove") : IsReadonlyAddAction(type) ? ModifierActions(type.type, "add", optional) : IsOptionalAddAction(type) ? ModifierActions(type.type, readonly, "add") : [
@@ -3660,10 +3660,10 @@ function ModifierActions(type, readonly, optional) {
 	];
 }
 function ApplyReadonly(action, type) {
-	return IsEqual(action, "remove") ? ReadonlyRemove(type) : IsEqual(action, "add") ? ReadonlyAdd(type) : type;
+	return IsEqual$1(action, "remove") ? ReadonlyRemove(type) : IsEqual$1(action, "add") ? ReadonlyAdd(type) : type;
 }
 function ApplyOptional(action, type) {
-	return IsEqual(action, "remove") ? OptionalRemove(type) : IsEqual(action, "add") ? OptionalAdd(type) : type;
+	return IsEqual$1(action, "remove") ? OptionalRemove(type) : IsEqual$1(action, "add") ? OptionalAdd(type) : type;
 }
 function InstantiateProperties(context, state$1, properties) {
 	return Keys$1(properties).reduce((result, key) => {
@@ -3680,14 +3680,14 @@ function InstantiateTypes(context, state$1, types) {
 	return types.map((type) => InstantiateType(context, state$1, type));
 }
 function InstantiateDeferred(context, state$1, action, parameters, options) {
-	return IsEqual(action, "Awaited") ? AwaitedInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Capitalize") ? CapitalizeInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Conditional") ? ConditionalInstantiate(context, state$1, parameters[0], parameters[1], parameters[2], parameters[3], options) : IsEqual(action, "ConstructorParameters") ? ConstructorParametersInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Evaluate") ? EvaluateInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Exclude") ? ExcludeInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "Extract") ? ExtractInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "Index") ? IndexInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "InstanceType") ? InstanceTypeInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Interface") ? InterfaceInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "KeyOf") ? KeyOfInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Lowercase") ? LowercaseInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Mapped") ? MappedInstantiate(context, state$1, parameters[0], parameters[1], parameters[2], parameters[3], options) : IsEqual(action, "Module") ? ModuleInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "NonNullable") ? NonNullableInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Pick") ? PickInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "Options") ? OptionsInstantiate(context, state$1, parameters[0], parameters[1]) : IsEqual(action, "Parameters") ? ParametersInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Partial") ? PartialInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Omit") ? OmitInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "ReadonlyType") ? ReadonlyTypeInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Record") ? RecordInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual(action, "Required") ? RequiredInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "ReturnType") ? ReturnTypeInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "TemplateLiteral") ? TemplateLiteralInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Uncapitalize") ? UncapitalizeInstantiate(context, state$1, parameters[0], options) : IsEqual(action, "Uppercase") ? UppercaseInstantiate(context, state$1, parameters[0], options) : Deferred(action, parameters, options);
+	return IsEqual$1(action, "Awaited") ? AwaitedInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Capitalize") ? CapitalizeInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Conditional") ? ConditionalInstantiate(context, state$1, parameters[0], parameters[1], parameters[2], parameters[3], options) : IsEqual$1(action, "ConstructorParameters") ? ConstructorParametersInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Evaluate") ? EvaluateInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Exclude") ? ExcludeInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "Extract") ? ExtractInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "Index") ? IndexInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "InstanceType") ? InstanceTypeInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Interface") ? InterfaceInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "KeyOf") ? KeyOfInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Lowercase") ? LowercaseInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Mapped") ? MappedInstantiate(context, state$1, parameters[0], parameters[1], parameters[2], parameters[3], options) : IsEqual$1(action, "Module") ? ModuleInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "NonNullable") ? NonNullableInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Pick") ? PickInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "Options") ? OptionsInstantiate(context, state$1, parameters[0], parameters[1]) : IsEqual$1(action, "Parameters") ? ParametersInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Partial") ? PartialInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Omit") ? OmitInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "ReadonlyType") ? ReadonlyTypeInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Record") ? RecordInstantiate(context, state$1, parameters[0], parameters[1], options) : IsEqual$1(action, "Required") ? RequiredInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "ReturnType") ? ReturnTypeInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "TemplateLiteral") ? TemplateLiteralInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Uncapitalize") ? UncapitalizeInstantiate(context, state$1, parameters[0], options) : IsEqual$1(action, "Uppercase") ? UppercaseInstantiate(context, state$1, parameters[0], options) : Deferred(action, parameters, options);
 }
 function InstantiateType(context, state$1, input) {
 	const cloned = IsBase(input) ? input.Clone() : input;
 	const immutable = IsImmutable(cloned);
 	const modifiers = ModifierActions(cloned, IsReadonly(cloned) ? "add" : "none", IsOptional(cloned) ? "add" : "none");
 	const type = modifiers[0];
-	const instantiated = IsRef(type) ? RefInstantiate(context, state$1, type.$ref) : IsArray(type) ? Array$1(InstantiateType(context, state$1, type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(InstantiateType(context, state$1, type.iteratorItems), AsyncIteratorOptions(type)) : IsCall(type) ? CallInstantiate(context, state$1, type.target, type.arguments) : IsConstructor(type) ? Constructor(InstantiateTypes(context, state$1, type.parameters), InstantiateType(context, state$1, type.instanceType), ConstructorOptions(type)) : IsDeferred(type) ? InstantiateDeferred(context, state$1, type.action, type.parameters, type.options) : IsFunction(type) ? Function$1(InstantiateTypes(context, state$1, type.parameters), InstantiateType(context, state$1, type.returnType), FunctionOptions(type)) : IsIntersect(type) ? Intersect(InstantiateTypes(context, state$1, type.allOf), IntersectOptions(type)) : IsIterator(type) ? Iterator(InstantiateType(context, state$1, type.iteratorItems), IteratorOptions(type)) : IsObject(type) ? Object$1(InstantiateProperties(context, state$1, type.properties), ObjectOptions(type)) : IsPromise(type) ? Promise$1(InstantiateType(context, state$1, type.item), PromiseOptions(type)) : IsRecord(type) ? RecordFromPattern(RecordPattern(type), InstantiateType(context, state$1, RecordValue(type))) : IsRest(type) ? Rest(InstantiateType(context, state$1, type.items)) : IsTuple(type) ? Tuple(InstantiateElements(context, state$1, type.items), TupleOptions(type)) : IsUnion(type) ? Union(InstantiateTypes(context, state$1, type.anyOf), UnionOptions(type)) : type;
+	const instantiated = IsRef$1(type) ? RefInstantiate(context, state$1, type.$ref) : IsArray(type) ? Array$1(InstantiateType(context, state$1, type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(InstantiateType(context, state$1, type.iteratorItems), AsyncIteratorOptions(type)) : IsCall(type) ? CallInstantiate(context, state$1, type.target, type.arguments) : IsConstructor(type) ? Constructor(InstantiateTypes(context, state$1, type.parameters), InstantiateType(context, state$1, type.instanceType), ConstructorOptions(type)) : IsDeferred(type) ? InstantiateDeferred(context, state$1, type.action, type.parameters, type.options) : IsFunction(type) ? Function$1(InstantiateTypes(context, state$1, type.parameters), InstantiateType(context, state$1, type.returnType), FunctionOptions(type)) : IsIntersect(type) ? Intersect(InstantiateTypes(context, state$1, type.allOf), IntersectOptions(type)) : IsIterator(type) ? Iterator(InstantiateType(context, state$1, type.iteratorItems), IteratorOptions(type)) : IsObject(type) ? Object$1(InstantiateProperties(context, state$1, type.properties), ObjectOptions(type)) : IsPromise(type) ? Promise$1(InstantiateType(context, state$1, type.item), PromiseOptions(type)) : IsRecord(type) ? RecordFromPattern(RecordPattern(type), InstantiateType(context, state$1, RecordValue(type))) : IsRest(type) ? Rest(InstantiateType(context, state$1, type.items)) : IsTuple(type) ? Tuple(InstantiateElements(context, state$1, type.items), TupleOptions(type)) : IsUnion(type) ? Union(InstantiateTypes(context, state$1, type.anyOf), UnionOptions(type)) : type;
 	const withImmutable = immutable ? Immutable(instantiated) : instantiated;
 	return ApplyReadonly(modifiers[1], ApplyOptional(modifiers[2], withImmutable));
 }
@@ -3730,21 +3730,21 @@ function IsGuard(value) {
 * @specification None
 */
 function IsRefine(value) {
-	return HasPropertyKey$1(value, "~refine") && IsArray$1(value["~refine"]) && Every$1(value["~refine"], 0, (value$1) => IsObject$2(value$1) && HasPropertyKey$1(value$1, "refine") && HasPropertyKey$1(value$1, "message") && IsFunction$2(value$1.refine) && IsString$1(value$1.message));
+	return HasPropertyKey$1(value, "~refine") && IsArray$2(value["~refine"]) && Every$1(value["~refine"], 0, (value$1) => IsObject$2(value$1) && HasPropertyKey$1(value$1, "refine") && HasPropertyKey$1(value$1, "message") && IsFunction$2(value$1.refine) && IsString$3(value$1.message));
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/types/schema.mjs
 /** Returns true if this value is object like */
 function IsSchemaObject(value) {
-	return IsObject$2(value) && !IsArray$1(value);
+	return IsObject$2(value) && !IsArray$2(value);
 }
 /** Returns true if this value is a boolean */
 function IsBooleanSchema(value) {
 	return IsBoolean$3(value);
 }
 /** Returns true if this value is schema like */
-function IsSchema$1(value) {
+function IsSchema(value) {
 	return IsSchemaObject(value) || IsBooleanSchema(value);
 }
 
@@ -3755,7 +3755,7 @@ function IsSchema$1(value) {
 * @specification Json Schema 7
 */
 function IsAdditionalItems(schema) {
-	return HasPropertyKey$1(schema, "additionalItems") && IsSchema$1(schema.additionalItems);
+	return HasPropertyKey$1(schema, "additionalItems") && IsSchema(schema.additionalItems);
 }
 
 //#endregion
@@ -3765,7 +3765,7 @@ function IsAdditionalItems(schema) {
 * @specification Json Schema 7
 */
 function IsAdditionalProperties(schema) {
-	return HasPropertyKey$1(schema, "additionalProperties") && IsSchema$1(schema.additionalProperties);
+	return HasPropertyKey$1(schema, "additionalProperties") && IsSchema(schema.additionalProperties);
 }
 
 //#endregion
@@ -3775,7 +3775,7 @@ function IsAdditionalProperties(schema) {
 * @specification Json Schema 7
 */
 function IsAllOf(schema) {
-	return HasPropertyKey$1(schema, "allOf") && IsArray$1(schema.allOf) && schema.allOf.every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "allOf") && IsArray$2(schema.allOf) && schema.allOf.every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -3784,7 +3784,7 @@ function IsAllOf(schema) {
 * Returns true if the schema contains a valid $anchor property
 */
 function IsAnchor(schema) {
-	return HasPropertyKey$1(schema, "$anchor") && IsString$1(schema.$anchor);
+	return HasPropertyKey$1(schema, "$anchor") && IsString$3(schema.$anchor);
 }
 
 //#endregion
@@ -3794,7 +3794,7 @@ function IsAnchor(schema) {
 * @specification Json Schema 7
 */
 function IsAnyOf(schema) {
-	return HasPropertyKey$1(schema, "anyOf") && IsArray$1(schema.anyOf) && schema.anyOf.every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "anyOf") && IsArray$2(schema.anyOf) && schema.anyOf.every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -3814,7 +3814,7 @@ function IsConst(value) {
 * @specification Json Schema 7
 */
 function IsContains(schema) {
-	return HasPropertyKey$1(schema, "contains") && IsSchema$1(schema.contains);
+	return HasPropertyKey$1(schema, "contains") && IsSchema(schema.contains);
 }
 
 //#endregion
@@ -3834,7 +3834,7 @@ function IsDefault(schema) {
 * @specification Json Schema 7
 */
 function IsDependencies(schema) {
-	return HasPropertyKey$1(schema, "dependencies") && IsObject$2(schema.dependencies) && Object.values(schema.dependencies).every((value) => IsSchema$1(value) || IsArray$1(value) && value.every((value$1) => IsString$1(value$1)));
+	return HasPropertyKey$1(schema, "dependencies") && IsObject$2(schema.dependencies) && Object.values(schema.dependencies).every((value) => IsSchema(value) || IsArray$2(value) && value.every((value$1) => IsString$3(value$1)));
 }
 
 //#endregion
@@ -3844,7 +3844,7 @@ function IsDependencies(schema) {
 * @specification Json Schema 2019-09
 */
 function IsDependentRequired(schema) {
-	return HasPropertyKey$1(schema, "dependentRequired") && IsObject$2(schema.dependentRequired) && Object.values(schema.dependentRequired).every((value) => IsArray$1(value) && value.every((value$1) => IsString$1(value$1)));
+	return HasPropertyKey$1(schema, "dependentRequired") && IsObject$2(schema.dependentRequired) && Object.values(schema.dependentRequired).every((value) => IsArray$2(value) && value.every((value$1) => IsString$3(value$1)));
 }
 
 //#endregion
@@ -3854,7 +3854,7 @@ function IsDependentRequired(schema) {
 * @specification Json Schema 2019-09
 */
 function IsDependentSchemas(schema) {
-	return HasPropertyKey$1(schema, "dependentSchemas") && IsObject$2(schema.dependentSchemas) && Object.values(schema.dependentSchemas).every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "dependentSchemas") && IsObject$2(schema.dependentSchemas) && Object.values(schema.dependentSchemas).every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -3863,7 +3863,7 @@ function IsDependentSchemas(schema) {
 * Returns true if the schema contains a valid $dynamicAnchor property
 */
 function IsDynamicAnchor(schema) {
-	return HasPropertyKey$1(schema, "$dynamicAnchor") && IsString$1(schema.$dynamicAnchor);
+	return HasPropertyKey$1(schema, "$dynamicAnchor") && IsString$3(schema.$dynamicAnchor);
 }
 
 //#endregion
@@ -3873,7 +3873,7 @@ function IsDynamicAnchor(schema) {
 * @specification Json Schema 7
 */
 function IsElse(schema) {
-	return HasPropertyKey$1(schema, "else") && IsSchema$1(schema.else);
+	return HasPropertyKey$1(schema, "else") && IsSchema(schema.else);
 }
 
 //#endregion
@@ -3883,7 +3883,7 @@ function IsElse(schema) {
 * @specification Json Schema 7
 */
 function IsEnum(schema) {
-	return HasPropertyKey$1(schema, "enum") && IsArray$1(schema.enum);
+	return HasPropertyKey$1(schema, "enum") && IsArray$2(schema.enum);
 }
 
 //#endregion
@@ -3913,7 +3913,7 @@ function IsExclusiveMinimum(schema) {
 * @specification Json Schema 7
 */
 function IsFormat(schema) {
-	return HasPropertyKey$1(schema, "format") && IsString$1(schema.format);
+	return HasPropertyKey$1(schema, "format") && IsString$3(schema.format);
 }
 
 //#endregion
@@ -3923,7 +3923,7 @@ function IsFormat(schema) {
 * @specification Json Schema 7
 */
 function IsId(schema) {
-	return HasPropertyKey$1(schema, "$id") && IsString$1(schema.$id);
+	return HasPropertyKey$1(schema, "$id") && IsString$3(schema.$id);
 }
 
 //#endregion
@@ -3933,7 +3933,7 @@ function IsId(schema) {
 * @specification Json Schema 7
 */
 function IsIf(schema) {
-	return HasPropertyKey$1(schema, "if") && IsSchema$1(schema.if);
+	return HasPropertyKey$1(schema, "if") && IsSchema(schema.if);
 }
 
 //#endregion
@@ -3943,13 +3943,13 @@ function IsIf(schema) {
 * @specification Json Schema 7
 */
 function IsItems(schema) {
-	return HasPropertyKey$1(schema, "items") && (IsSchema$1(schema.items) || IsArray$1(schema.items) && schema.items.every((value) => {
-		return IsSchema$1(value);
+	return HasPropertyKey$1(schema, "items") && (IsSchema(schema.items) || IsArray$2(schema.items) && schema.items.every((value) => {
+		return IsSchema(value);
 	}));
 }
 /** Returns true if this schema is a sized items variant */
 function IsItemsSized(schema) {
-	return IsItems(schema) && IsArray$1(schema.items);
+	return IsItems(schema) && IsArray$2(schema.items);
 }
 
 //#endregion
@@ -4069,7 +4069,7 @@ function IsMultipleOf(schema) {
 * @specification Json Schema 7
 */
 function IsNot(schema) {
-	return HasPropertyKey$1(schema, "not") && IsSchema$1(schema.not);
+	return HasPropertyKey$1(schema, "not") && IsSchema(schema.not);
 }
 
 //#endregion
@@ -4079,7 +4079,7 @@ function IsNot(schema) {
 * @specification Json Schema 7
 */
 function IsOneOf(schema) {
-	return HasPropertyKey$1(schema, "oneOf") && IsArray$1(schema.oneOf) && schema.oneOf.every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "oneOf") && IsArray$2(schema.oneOf) && schema.oneOf.every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -4089,7 +4089,7 @@ function IsOneOf(schema) {
 * @specification Json Schema 7
 */
 function IsPattern(schema) {
-	return HasPropertyKey$1(schema, "pattern") && (IsString$1(schema.pattern) || schema.pattern instanceof RegExp);
+	return HasPropertyKey$1(schema, "pattern") && (IsString$3(schema.pattern) || schema.pattern instanceof RegExp);
 }
 
 //#endregion
@@ -4099,7 +4099,7 @@ function IsPattern(schema) {
 * @specification Json Schema 7
 */
 function IsPatternProperties(schema) {
-	return HasPropertyKey$1(schema, "patternProperties") && IsObject$2(schema.patternProperties) && Object.values(schema.patternProperties).every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "patternProperties") && IsObject$2(schema.patternProperties) && Object.values(schema.patternProperties).every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -4108,7 +4108,7 @@ function IsPatternProperties(schema) {
 * Returns true if the schema contains a valid prefixItems property
 */
 function IsPrefixItems(schema) {
-	return HasPropertyKey$1(schema, "prefixItems") && IsArray$1(schema.prefixItems) && schema.prefixItems.every((schema$1) => IsSchema$1(schema$1));
+	return HasPropertyKey$1(schema, "prefixItems") && IsArray$2(schema.prefixItems) && schema.prefixItems.every((schema$1) => IsSchema(schema$1));
 }
 
 //#endregion
@@ -4118,7 +4118,7 @@ function IsPrefixItems(schema) {
 * @specification Json Schema 7
 */
 function IsProperties(schema) {
-	return HasPropertyKey$1(schema, "properties") && IsObject$2(schema.properties) && Object.values(schema.properties).every((value) => IsSchema$1(value));
+	return HasPropertyKey$1(schema, "properties") && IsObject$2(schema.properties) && Object.values(schema.properties).every((value) => IsSchema(value));
 }
 
 //#endregion
@@ -4128,7 +4128,7 @@ function IsProperties(schema) {
 * @specification Json Schema 7
 */
 function IsPropertyNames(schema) {
-	return HasPropertyKey$1(schema, "propertyNames") && (IsObject$2(schema.propertyNames) || IsSchema$1(schema.propertyNames));
+	return HasPropertyKey$1(schema, "propertyNames") && (IsObject$2(schema.propertyNames) || IsSchema(schema.propertyNames));
 }
 
 //#endregion
@@ -4143,7 +4143,7 @@ function IsRecursiveAnchor(schema) {
 * Returns true if the schema contains a valid $recursiveAnchor property that is true
 */
 function IsRecursiveAnchorTrue(schema) {
-	return IsRecursiveAnchor(schema) && IsEqual(schema.$recursiveAnchor, true);
+	return IsRecursiveAnchor(schema) && IsEqual$1(schema.$recursiveAnchor, true);
 }
 
 //#endregion
@@ -4152,7 +4152,7 @@ function IsRecursiveAnchorTrue(schema) {
 * Returns true if the schema contains a valid $recursiveRef property
 */
 function IsRecursiveRef(schema) {
-	return HasPropertyKey$1(schema, "$recursiveRef") && IsString$1(schema.$recursiveRef);
+	return HasPropertyKey$1(schema, "$recursiveRef") && IsString$3(schema.$recursiveRef);
 }
 
 //#endregion
@@ -4161,8 +4161,8 @@ function IsRecursiveRef(schema) {
 * Returns true if the schema contains a valid $ref property
 * @specification Json Schema 7
 */
-function IsRef$1(schema) {
-	return HasPropertyKey$1(schema, "$ref") && IsString$1(schema.$ref);
+function IsRef(schema) {
+	return HasPropertyKey$1(schema, "$ref") && IsString$3(schema.$ref);
 }
 
 //#endregion
@@ -4172,7 +4172,7 @@ function IsRef$1(schema) {
 * @specification Json Schema 7
 */
 function IsRequired(schema) {
-	return HasPropertyKey$1(schema, "required") && IsArray$1(schema.required) && schema.required.every((value) => IsString$1(value));
+	return HasPropertyKey$1(schema, "required") && IsArray$2(schema.required) && schema.required.every((value) => IsString$3(value));
 }
 
 //#endregion
@@ -4182,7 +4182,7 @@ function IsRequired(schema) {
 * @specification Json Schema 7
 */
 function IsThen(schema) {
-	return HasPropertyKey$1(schema, "then") && IsSchema$1(schema.then);
+	return HasPropertyKey$1(schema, "then") && IsSchema(schema.then);
 }
 
 //#endregion
@@ -4192,7 +4192,7 @@ function IsThen(schema) {
 * @specification Json Schema 7
 */
 function IsType(schema) {
-	return HasPropertyKey$1(schema, "type") && (IsString$1(schema.type) || IsArray$1(schema.type) && schema.type.every((value) => IsString$1(value)));
+	return HasPropertyKey$1(schema, "type") && (IsString$3(schema.type) || IsArray$2(schema.type) && schema.type.every((value) => IsString$3(value)));
 }
 
 //#endregion
@@ -4212,7 +4212,7 @@ function IsUniqueItems(schema) {
 * @specification Json Schema 2019-09
 */
 function IsUnevaluatedItems(schema) {
-	return HasPropertyKey$1(schema, "unevaluatedItems") && IsSchema$1(schema.unevaluatedItems);
+	return HasPropertyKey$1(schema, "unevaluatedItems") && IsSchema(schema.unevaluatedItems);
 }
 
 //#endregion
@@ -4222,7 +4222,7 @@ function IsUnevaluatedItems(schema) {
 * @specification Json Schema 2019-09
 */
 function IsUnevaluatedProperties(schema) {
-	return HasPropertyKey$1(schema, "unevaluatedProperties") && IsSchema$1(schema.unevaluatedProperties);
+	return HasPropertyKey$1(schema, "unevaluatedProperties") && IsSchema(schema.unevaluatedProperties);
 }
 
 //#endregion
@@ -4234,7 +4234,7 @@ function HasUnevaluatedFromArray(value) {
 	return value.some((value$1) => HasUnevaluatedFromUnknown(value$1));
 }
 function HasUnevaluatedFromUnknown(value) {
-	return IsArray$1(value) ? HasUnevaluatedFromArray(value) : IsObject$2(value) ? HasUnevaluatedFromObject(value) : false;
+	return IsArray$2(value) ? HasUnevaluatedFromArray(value) : IsObject$2(value) ? HasUnevaluatedFromObject(value) : false;
 }
 function HasUnevaluated(context, schema) {
 	return HasUnevaluatedFromUnknown(schema) || Keys$1(context).some((key) => HasUnevaluatedFromUnknown(context[key]));
@@ -4380,7 +4380,7 @@ function Unique() {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/additionalItems.mjs
 function IsValid$4(schema) {
-	return IsItems(schema) && IsArray$1(schema.items);
+	return IsItems(schema) && IsArray$2(schema.items);
 }
 function BuildAdditionalItems(stack, context, schema, value) {
 	if (!IsValid$4(schema)) return Constant(true);
@@ -4415,13 +4415,13 @@ function GetPropertiesPattern(schema) {
 	const patterns = [];
 	if (IsPatternProperties(schema)) patterns.push(...Keys$1(schema.patternProperties));
 	if (IsProperties(schema)) patterns.push(...Keys$1(schema.properties).map(GetPropertyKeyAsPattern));
-	return IsEqual(patterns.length, 0) ? "(?!)" : `(${patterns.join("|")})`;
+	return IsEqual$1(patterns.length, 0) ? "(?!)" : `(${patterns.join("|")})`;
 }
 function CanAdditionalPropertiesFast(context, schema, value) {
-	return IsRequired(schema) && IsProperties(schema) && !IsPatternProperties(schema) && IsEqual(schema.additionalProperties, false) && IsEqual(Keys$1(schema.properties).length, schema.required.length);
+	return IsRequired(schema) && IsProperties(schema) && !IsPatternProperties(schema) && IsEqual$1(schema.additionalProperties, false) && IsEqual$1(Keys$1(schema.properties).length, schema.required.length);
 }
 function BuildAdditionalPropertiesFast(context, schema, value) {
-	return IsEqual$1(Member(Call(Member("Object", "getOwnPropertyNames"), [value]), "length"), Constant(schema.required.length));
+	return IsEqual(Member(Call(Member("Object", "getOwnPropertyNames"), [value]), "length"), Constant(schema.required.length));
 }
 function BuildAdditionalPropertiesStandard(stack, context, schema, value) {
 	const [key, _index] = [Unique(), Unique()];
@@ -4479,7 +4479,7 @@ function Reducer(stack, context, schemas, value, check) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/allOf.mjs
 function BuildAllOfStandard(stack, context, schema, value) {
-	return Reducer(stack, context, schema.allOf, value, IsEqual$1(Member("results", "length"), Constant(schema.allOf.length)));
+	return Reducer(stack, context, schema.allOf, value, IsEqual(Member("results", "length"), Constant(schema.allOf.length)));
 }
 function BuildAllOfFast(stack, context, schema, value) {
 	return ReduceAnd(schema.allOf.map((schema$1) => BuildSchema(stack, context, schema$1, value)));
@@ -4492,7 +4492,7 @@ function CheckAllOf(stack, context, schema, value) {
 		const nextContext = new CheckContext();
 		return CheckSchema(stack, nextContext, schema$1, value) ? [...result, nextContext] : result;
 	}, []);
-	return IsEqual(results.length, schema.allOf.length) && context.Merge(results);
+	return IsEqual$1(results.length, schema.allOf.length) && context.Merge(results);
 }
 function ErrorAllOf(stack, context, schemaPath, instancePath, schema, value) {
 	const failedContexts = [];
@@ -4503,7 +4503,7 @@ function ErrorAllOf(stack, context, schemaPath, instancePath, schema, value) {
 		if (!isSchema) failedContexts.push(nextContext);
 		return isSchema ? [...result, nextContext] : result;
 	}, []);
-	const isAllOf = IsEqual(results.length, schema.allOf.length) && context.Merge(results);
+	const isAllOf = IsEqual$1(results.length, schema.allOf.length) && context.Merge(results);
 	if (!isAllOf) failedContexts.forEach((failed) => failed.GetErrors().forEach((error) => context.AddError(error)));
 	return isAllOf;
 }
@@ -4564,10 +4564,10 @@ function ErrorBooleanSchema(stack, context, schemaPath, instancePath, schema, va
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/const.mjs
 function BuildConst(stack, context, schema, value) {
-	return IsValueLike(schema.const) ? IsEqual$1(value, Constant(schema.const)) : IsDeepEqual(value, CreateVariable(schema.const));
+	return IsValueLike(schema.const) ? IsEqual(value, Constant(schema.const)) : IsDeepEqual(value, CreateVariable(schema.const));
 }
 function CheckConst(stack, context, schema, value) {
-	return IsValueLike(schema.const) ? IsEqual(value, schema.const) : IsDeepEqual$1(value, schema.const);
+	return IsValueLike(schema.const) ? IsEqual$1(value, schema.const) : IsDeepEqual$1(value, schema.const);
 }
 function ErrorConst(stack, context, schemaPath, instancePath, schema, value) {
 	return CheckConst(stack, context, schema, value) || context.AddError({
@@ -4581,18 +4581,18 @@ function ErrorConst(stack, context, schemaPath, instancePath, schema, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/contains.mjs
 function IsValid$3(schema) {
-	return !(IsMinContains(schema) && IsEqual(schema.minContains, 0));
+	return !(IsMinContains(schema) && IsEqual$1(schema.minContains, 0));
 }
 function BuildContains(stack, context, schema, value) {
 	if (!IsValid$3(schema)) return Constant(true);
 	const item = Unique();
-	const isLength = Not(IsEqual$1(Member(value, "length"), Constant(0)));
+	const isLength = Not(IsEqual(Member(value, "length"), Constant(0)));
 	const isSome = Call(Member(value, "some"), [ArrowFunction([item], BuildSchema(stack, context, schema.contains, item))]);
 	return And(isLength, isSome);
 }
 function CheckContains(stack, context, schema, value) {
 	if (!IsValid$3(schema)) return true;
-	return !IsEqual(value.length, 0) && value.some((item) => CheckSchema(stack, context, schema.contains, item));
+	return !IsEqual$1(value.length, 0) && value.some((item) => CheckSchema(stack, context, schema.contains, item));
 }
 function ErrorContains(stack, context, schemaPath, instancePath, schema, value) {
 	return CheckContains(stack, context, schema, value) || context.AddError({
@@ -4606,27 +4606,27 @@ function ErrorContains(stack, context, schemaPath, instancePath, schema, value) 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/dependencies.mjs
 function BuildDependencies(stack, context, schema, value) {
-	const isLength = IsEqual$1(Member(Keys(value), "length"), Constant(0));
+	const isLength = IsEqual(Member(Keys(value), "length"), Constant(0));
 	const isEveryDependency = ReduceAnd(Entries$2(schema.dependencies).map(([key, schema$1]) => {
 		const notKey = Not(HasPropertyKey(value, Constant(key)));
 		const isSchema = BuildSchema(stack, context, schema$1, value);
 		const isEveryKey = (schema$2) => ReduceAnd(schema$2.map((key$1) => HasPropertyKey(value, Constant(key$1))));
-		return Or(notKey, IsArray$1(schema$1) ? isEveryKey(schema$1) : isSchema);
+		return Or(notKey, IsArray$2(schema$1) ? isEveryKey(schema$1) : isSchema);
 	}));
 	return Or(isLength, isEveryDependency);
 }
 function CheckDependencies(stack, context, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEvery = Every$1(Entries$2(schema.dependencies), 0, ([key, schema$1]) => {
-		return !HasPropertyKey$1(value, key) || (IsArray$1(schema$1) ? schema$1.every((key$1) => HasPropertyKey$1(value, key$1)) : CheckSchema(stack, context, schema$1, value));
+		return !HasPropertyKey$1(value, key) || (IsArray$2(schema$1) ? schema$1.every((key$1) => HasPropertyKey$1(value, key$1)) : CheckSchema(stack, context, schema$1, value));
 	});
 	return isLength || isEvery;
 }
 function ErrorDependencies(stack, context, schemaPath, instancePath, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEvery = EveryAll(Entries$2(schema.dependencies), 0, ([key, schema$1]) => {
 		const nextSchemaPath = `${schemaPath}/dependencies/${key}`;
-		return !HasPropertyKey$1(value, key) || (IsArray$1(schema$1) ? schema$1.every((dependency) => HasPropertyKey$1(value, dependency) || context.AddError({
+		return !HasPropertyKey$1(value, key) || (IsArray$2(schema$1) ? schema$1.every((dependency) => HasPropertyKey$1(value, dependency) || context.AddError({
 			keyword: "dependencies",
 			schemaPath,
 			instancePath,
@@ -4642,7 +4642,7 @@ function ErrorDependencies(stack, context, schemaPath, instancePath, schema, val
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/dependentRequired.mjs
 function BuildDependentRequired(stack, context, schema, value) {
-	const isLength = IsEqual$1(Member(Keys(value), "length"), Constant(0));
+	const isLength = IsEqual(Member(Keys(value), "length"), Constant(0));
 	const isEvery = ReduceAnd(Entries$2(schema.dependentRequired).map(([key, keys]) => {
 		const notKey = Not(HasPropertyKey(value, Constant(key)));
 		const everyKey = ReduceAnd(keys.map((key$1) => HasPropertyKey(value, Constant(key$1))));
@@ -4651,14 +4651,14 @@ function BuildDependentRequired(stack, context, schema, value) {
 	return Or(isLength, isEvery);
 }
 function CheckDependentRequired(stack, context, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEvery = Every$1(Entries$2(schema.dependentRequired), 0, ([key, keys]) => {
 		return !HasPropertyKey$1(value, key) || keys.every((key$1) => HasPropertyKey$1(value, key$1));
 	});
 	return isLength || isEvery;
 }
 function ErrorDependentRequired(stack, context, schemaPath, instancePath, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEveryEntry = EveryAll(Entries$2(schema.dependentRequired), 0, ([key, keys]) => {
 		return !HasPropertyKey$1(value, key) || EveryAll(keys, 0, (dependency) => HasPropertyKey$1(value, dependency) || context.AddError({
 			keyword: "dependentRequired",
@@ -4676,7 +4676,7 @@ function ErrorDependentRequired(stack, context, schemaPath, instancePath, schema
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/dependentSchemas.mjs
 function BuildDependentSchemas(stack, context, schema, value) {
-	const isLength = IsEqual$1(Member(Keys(value), "length"), Constant(0));
+	const isLength = IsEqual(Member(Keys(value), "length"), Constant(0));
 	const isEvery = ReduceAnd(Entries$2(schema.dependentSchemas).map(([key, schema$1]) => {
 		const notKey = Not(HasPropertyKey(value, Constant(key)));
 		const isSchema = BuildSchema(stack, context, schema$1, value);
@@ -4685,14 +4685,14 @@ function BuildDependentSchemas(stack, context, schema, value) {
 	return Or(isLength, isEvery);
 }
 function CheckDependentSchemas(stack, context, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEvery = Every$1(Entries$2(schema.dependentSchemas), 0, ([key, schema$1]) => {
 		return !HasPropertyKey$1(value, key) || CheckSchema(stack, context, schema$1, value);
 	});
 	return isLength || isEvery;
 }
 function ErrorDependentSchemas(stack, context, schemaPath, instancePath, schema, value) {
-	const isLength = IsEqual(Keys$1(value).length, 0);
+	const isLength = IsEqual$1(Keys$1(value).length, 0);
 	const isEvery = EveryAll(Entries$2(schema.dependentSchemas), 0, ([key, schema$1]) => {
 		const nextSchemaPath = `${schemaPath}/dependentSchemas/${key}`;
 		return !HasPropertyKey$1(value, key) || ErrorSchema(stack, context, nextSchemaPath, instancePath, schema$1, value);
@@ -4704,13 +4704,13 @@ function ErrorDependentSchemas(stack, context, schemaPath, instancePath, schema,
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/enum.mjs
 function BuildEnum(stack, context, schema, value) {
 	return ReduceOr(schema.enum.map((option) => {
-		if (IsValueLike(option)) return IsEqual$1(value, Constant(option));
+		if (IsValueLike(option)) return IsEqual(value, Constant(option));
 		const variable = CreateVariable(option);
 		return IsDeepEqual(value, variable);
 	}));
 }
 function CheckEnum(stack, context, schema, value) {
-	return schema.enum.some((option) => IsValueLike(option) ? IsEqual(value, option) : IsDeepEqual$1(value, option));
+	return schema.enum.some((option) => IsValueLike(option) ? IsEqual$1(value, option) : IsDeepEqual$1(value, option));
 }
 function ErrorEnum(stack, context, schemaPath, instancePath, schema, value) {
 	return CheckEnum(stack, context, schema, value) || context.AddError({
@@ -5142,7 +5142,7 @@ function Has(format) {
 	return formats.has(format);
 }
 /** Gets a format or undefined if not exists */
-function Get$2(format) {
+function Get$1(format) {
 	return formats.get(format);
 }
 /** Tests a value against a format, if the format is not registered, true */
@@ -5178,10 +5178,10 @@ Reset();
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/format/format.mjs
-var format_exports = /* @__PURE__ */ __export({
+var format_exports = /* @__PURE__ */ __exportAll({
 	Clear: () => Clear,
 	Entries: () => Entries,
-	Get: () => Get$2,
+	Get: () => Get$1,
 	Has: () => Has,
 	IsDate: () => IsDate,
 	IsDateTime: () => IsDateTime,
@@ -5525,7 +5525,7 @@ function ErrorMultipleOf(stack, context, schemaPath, instancePath, schema, value
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/not.mjs
 function BuildNotUnevaluated(stack, context, schema, value) {
-	return Reducer(stack, context, [schema.not], value, Not(IsEqual$1(Member("results", "length"), Constant(1))));
+	return Reducer(stack, context, [schema.not], value, Not(IsEqual(Member("results", "length"), Constant(1))));
 }
 function BuildNotFast(stack, context, schema, value) {
 	return Not(BuildSchema(stack, context, schema.not, value));
@@ -5549,12 +5549,12 @@ function ErrorNot(stack, context, schemaPath, instancePath, schema, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/oneOf.mjs
 function BuildOneOfUnevaluated(stack, context, schema, value) {
-	return Reducer(stack, context, schema.oneOf, value, IsEqual$1(Member("results", "length"), Constant(1)));
+	return Reducer(stack, context, schema.oneOf, value, IsEqual(Member("results", "length"), Constant(1)));
 }
 function BuildOneOfFast(stack, context, schema, value) {
 	const results = ArrayLiteral(schema.oneOf.map((schema$1) => BuildSchema(stack, context, schema$1, value)));
-	const count = Call(Member(results, "reduce"), [ArrowFunction(["count", "result"], Ternary(IsEqual$1("result", Constant(true)), PrefixIncrement("count"), "count")), Constant(0)]);
-	return IsEqual$1(count, Constant(1));
+	const count = Call(Member(results, "reduce"), [ArrowFunction(["count", "result"], Ternary(IsEqual("result", Constant(true)), PrefixIncrement("count"), "count")), Constant(0)]);
+	return IsEqual(count, Constant(1));
 }
 function BuildOneOf(stack, context, schema, value) {
 	return context.UseUnevaluated() ? BuildOneOfUnevaluated(stack, context, schema, value) : BuildOneOfFast(stack, context, schema, value);
@@ -5564,7 +5564,7 @@ function CheckOneOf(stack, context, schema, value) {
 		const nextContext = new CheckContext();
 		return CheckSchema(stack, nextContext, schema$1, value) ? [...result, nextContext] : result;
 	}, []);
-	return IsEqual(passedContexts.length, 1) && context.Merge(passedContexts);
+	return IsEqual$1(passedContexts.length, 1) && context.Merge(passedContexts);
 }
 function ErrorOneOf(stack, context, schemaPath, instancePath, schema, value) {
 	const failedContexts = [];
@@ -5576,8 +5576,8 @@ function ErrorOneOf(stack, context, schemaPath, instancePath, schema, value) {
 		if (!isSchema) failedContexts.push(nextContext);
 		return isSchema ? [...result, nextContext] : result;
 	}, []);
-	const isOneOf = IsEqual(passedContexts.length, 1) && context.Merge(passedContexts);
-	if (!isOneOf && IsEqual(passingSchemas.length, 0)) failedContexts.forEach((failed) => failed.GetErrors().forEach((error) => context.AddError(error)));
+	const isOneOf = IsEqual$1(passedContexts.length, 1) && context.Merge(passedContexts);
+	if (!isOneOf && IsEqual$1(passingSchemas.length, 0)) failedContexts.forEach((failed) => failed.GetErrors().forEach((error) => context.AddError(error)));
 	return isOneOf || context.AddError({
 		keyword: "oneOf",
 		schemaPath,
@@ -5589,11 +5589,11 @@ function ErrorOneOf(stack, context, schemaPath, instancePath, schema, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/pattern.mjs
 function BuildPattern(stack, context, schema, value) {
-	const regexp = CreateVariable(IsString$1(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern);
+	const regexp = CreateVariable(IsString$3(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern);
 	return Call(Member(regexp, "test"), [value]);
 }
 function CheckPattern(stack, context, schema, value) {
-	return (IsString$1(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern).test(value);
+	return (IsString$3(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern).test(value);
 }
 function ErrorPattern(stack, context, schemaPath, instancePath, schema, value) {
 	return CheckPattern(stack, context, schema, value) || context.AddError({
@@ -5648,12 +5648,12 @@ function BuildPrefixItems(stack, context, schema, value) {
 	}));
 }
 function CheckPrefixItems(stack, context, schema, value) {
-	return IsEqual(value.length, 0) || Every$1(schema.prefixItems, 0, (schema$1, index$1) => {
+	return IsEqual$1(value.length, 0) || Every$1(schema.prefixItems, 0, (schema$1, index$1) => {
 		return IsLessEqualThan$1(value.length, index$1) || CheckSchema(stack, context, schema$1, value[index$1]) && context.AddIndex(index$1);
 	});
 }
 function ErrorPrefixItems(stack, context, schemaPath, instancePath, schema, value) {
-	return IsEqual(value.length, 0) || EveryAll(schema.prefixItems, 0, (schema$1, index$1) => {
+	return IsEqual$1(value.length, 0) || EveryAll(schema.prefixItems, 0, (schema$1, index$1) => {
 		const nextSchemaPath = `${schemaPath}/prefixItems/${index$1}`;
 		const nextInstancePath = `${instancePath}/${index$1}`;
 		return IsLessEqualThan$1(value.length, index$1) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema$1, value[index$1]) && context.AddIndex(index$1);
@@ -5736,11 +5736,11 @@ function BuildRecursiveRef(stack, context, schema, value) {
 }
 function CheckRecursiveRef(stack, context, schema, value) {
 	const target = stack.RecursiveRef(schema.$recursiveRef) ?? false;
-	return IsSchema$1(target) && CheckSchema(stack, context, target, value);
+	return IsSchema(target) && CheckSchema(stack, context, target, value);
 }
 function ErrorRecursiveRef(stack, context, schemaPath, instancePath, schema, value) {
 	const target = stack.RecursiveRef(schema.$recursiveRef) ?? false;
-	return IsSchema$1(target) && ErrorSchema(stack, context, "#", instancePath, target, value);
+	return IsSchema(target) && ErrorSchema(stack, context, "#", instancePath, target, value);
 }
 
 //#endregion
@@ -5765,14 +5765,14 @@ function BuildRef(stack, context, schema, value) {
 function CheckRef(stack, context, schema, value) {
 	const target = stack.Ref(schema.$ref) ?? false;
 	const nextContext = new CheckContext();
-	const result = IsSchema$1(target) && CheckSchema(stack, nextContext, target, value);
+	const result = IsSchema(target) && CheckSchema(stack, nextContext, target, value);
 	if (result) context.Merge([nextContext]);
 	return result;
 }
 function ErrorRef(stack, context, schemaPath, instancePath, schema, value) {
 	const target = stack.Ref(schema.$ref) ?? false;
 	const nextContext = new AccumulatedErrorContext();
-	const result = IsSchema$1(target) && ErrorSchema(stack, nextContext, "#", instancePath, target, value);
+	const result = IsSchema(target) && ErrorSchema(stack, nextContext, "#", instancePath, target, value);
 	if (result) context.Merge([nextContext]);
 	if (!result) nextContext.GetErrors().forEach((error) => context.AddError(error));
 	return result;
@@ -5803,10 +5803,10 @@ function ErrorRequired(stack, context, schemaPath, instancePath, schema, value) 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/type.mjs
 function BuildTypeName(stack, context, type, value) {
-	return IsEqual(type, "object") ? IsObjectNotArray(value) : IsEqual(type, "array") ? IsArray$2(value) : IsEqual(type, "boolean") ? IsBoolean$2(value) : IsEqual(type, "integer") ? IsInteger$1(value) : IsEqual(type, "number") ? IsNumber$2(value) : IsEqual(type, "null") ? IsNull$1(value) : IsEqual(type, "string") ? IsString$3(value) : IsEqual(type, "asyncIterator") ? IsAsyncIterator$1(value) : IsEqual(type, "bigint") ? IsBigInt$1(value) : IsEqual(type, "constructor") ? IsConstructor$1(value) : IsEqual(type, "function") ? IsFunction$1(value) : IsEqual(type, "iterator") ? IsIterator$1(value) : IsEqual(type, "symbol") ? IsSymbol$1(value) : IsEqual(type, "undefined") ? IsUndefined$1(value) : IsEqual(type, "void") ? IsUndefined$1(value) : Constant(true);
+	return IsEqual$1(type, "object") ? IsObjectNotArray(value) : IsEqual$1(type, "array") ? IsArray$1(value) : IsEqual$1(type, "boolean") ? IsBoolean$2(value) : IsEqual$1(type, "integer") ? IsInteger$1(value) : IsEqual$1(type, "number") ? IsNumber$2(value) : IsEqual$1(type, "null") ? IsNull$1(value) : IsEqual$1(type, "string") ? IsString$2(value) : IsEqual$1(type, "asyncIterator") ? IsAsyncIterator$1(value) : IsEqual$1(type, "bigint") ? IsBigInt$1(value) : IsEqual$1(type, "constructor") ? IsConstructor$1(value) : IsEqual$1(type, "function") ? IsFunction$1(value) : IsEqual$1(type, "iterator") ? IsIterator$1(value) : IsEqual$1(type, "symbol") ? IsSymbol$1(value) : IsEqual$1(type, "undefined") ? IsUndefined$1(value) : IsEqual$1(type, "void") ? IsUndefined$1(value) : Constant(true);
 }
 function CheckTypeName(stack, context, type, schema, value) {
-	return IsEqual(type, "object") ? IsObjectNotArray$1(value) : IsEqual(type, "array") ? IsArray$1(value) : IsEqual(type, "boolean") ? IsBoolean$3(value) : IsEqual(type, "integer") ? IsInteger$2(value) : IsEqual(type, "number") ? IsNumber$3(value) : IsEqual(type, "null") ? IsNull$2(value) : IsEqual(type, "string") ? IsString$1(value) : IsEqual(type, "asyncIterator") ? IsAsyncIterator$2(value) : IsEqual(type, "bigint") ? IsBigInt$2(value) : IsEqual(type, "constructor") ? IsConstructor$2(value) : IsEqual(type, "function") ? IsFunction$2(value) : IsEqual(type, "iterator") ? IsIterator$2(value) : IsEqual(type, "symbol") ? IsSymbol$2(value) : IsEqual(type, "undefined") ? IsUndefined$2(value) : IsEqual(type, "void") ? IsUndefined$2(value) : true;
+	return IsEqual$1(type, "object") ? IsObjectNotArray$1(value) : IsEqual$1(type, "array") ? IsArray$2(value) : IsEqual$1(type, "boolean") ? IsBoolean$3(value) : IsEqual$1(type, "integer") ? IsInteger$2(value) : IsEqual$1(type, "number") ? IsNumber$3(value) : IsEqual$1(type, "null") ? IsNull$2(value) : IsEqual$1(type, "string") ? IsString$3(value) : IsEqual$1(type, "asyncIterator") ? IsAsyncIterator$2(value) : IsEqual$1(type, "bigint") ? IsBigInt$2(value) : IsEqual$1(type, "constructor") ? IsConstructor$2(value) : IsEqual$1(type, "function") ? IsFunction$2(value) : IsEqual$1(type, "iterator") ? IsIterator$2(value) : IsEqual$1(type, "symbol") ? IsSymbol$2(value) : IsEqual$1(type, "undefined") ? IsUndefined$2(value) : IsEqual$1(type, "void") ? IsUndefined$2(value) : true;
 }
 function BuildTypeNames(stack, context, typenames, value) {
 	return ReduceOr(typenames.map((type) => BuildTypeName(stack, context, type, value)));
@@ -5815,13 +5815,13 @@ function CheckTypeNames(stack, context, types, schema, value) {
 	return types.some((type) => CheckTypeName(stack, context, type, schema, value));
 }
 function BuildType(stack, context, schema, value) {
-	return IsArray$1(schema.type) ? BuildTypeNames(stack, context, schema.type, value) : BuildTypeName(stack, context, schema.type, value);
+	return IsArray$2(schema.type) ? BuildTypeNames(stack, context, schema.type, value) : BuildTypeName(stack, context, schema.type, value);
 }
 function CheckType(stack, context, schema, value) {
-	return IsArray$1(schema.type) ? CheckTypeNames(stack, context, schema.type, schema, value) : CheckTypeName(stack, context, schema.type, schema, value);
+	return IsArray$2(schema.type) ? CheckTypeNames(stack, context, schema.type, schema, value) : CheckTypeName(stack, context, schema.type, schema, value);
 }
 function ErrorType(stack, context, schemaPath, instancePath, schema, value) {
-	return (IsArray$1(schema.type) ? CheckTypeNames(stack, context, schema.type, schema, value) : CheckTypeName(stack, context, schema.type, schema, value)) || context.AddError({
+	return (IsArray$2(schema.type) ? CheckTypeNames(stack, context, schema.type, schema, value) : CheckTypeName(stack, context, schema.type, schema, value)) || context.AddError({
 		keyword: "type",
 		schemaPath,
 		instancePath,
@@ -5898,19 +5898,19 @@ function ErrorUnevaluatedProperties(stack, context, schemaPath, instancePath, sc
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/uniqueItems.mjs
 function IsValid(schema) {
-	return !IsEqual(schema.uniqueItems, false);
+	return !IsEqual$1(schema.uniqueItems, false);
 }
 function BuildUniqueItems(stack, context, schema, value) {
 	if (!IsValid(schema)) return Constant(true);
 	const set = Member(New("Set", [Call(Member(value, "map"), [Member("Hashing", "Hash")])]), "size");
 	const isLength = Member(value, "length");
-	return IsEqual$1(set, isLength);
+	return IsEqual(set, isLength);
 }
 function CheckUniqueItems(stack, context, schema, value) {
 	if (!IsValid(schema)) return true;
 	const set = new Set(value.map(Hash)).size;
 	const isLength = value.length;
-	return IsEqual(set, isLength);
+	return IsEqual$1(set, isLength);
 }
 function ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, value) {
 	if (!IsValid(schema)) return true;
@@ -5921,7 +5921,7 @@ function ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, valu
 		set.add(hash);
 		return result;
 	}, []);
-	return IsEqual(duplicateItems.length, 0) || context.AddError({
+	return IsEqual$1(duplicateItems.length, 0) || context.AddError({
 		keyword: "uniqueItems",
 		schemaPath,
 		instancePath,
@@ -5932,7 +5932,7 @@ function ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, valu
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/schema/engine/schema.mjs
 function HasTypeName(schema, typename) {
-	return IsType(schema) && (IsArray$1(schema.type) && schema.type.includes(typename) || IsEqual(schema.type, typename));
+	return IsType(schema) && (IsArray$2(schema.type) && schema.type.includes(typename) || IsEqual$1(schema.type, typename));
 }
 function HasObjectType(schema) {
 	return HasTypeName(schema, "object");
@@ -5991,7 +5991,7 @@ function BuildSchema(stack, context, schema, value) {
 		if (IsPrefixItems(schema)) constraints.push(BuildPrefixItems(stack, context, schema, value));
 		if (IsUniqueItems(schema)) constraints.push(BuildUniqueItems(stack, context, schema, value));
 		const reduced = ReduceAnd(constraints);
-		const guarded = Or(Not(IsArray$2(value)), reduced);
+		const guarded = Or(Not(IsArray$1(value)), reduced);
 		conditions.push(HasArrayType(schema) ? reduced : guarded);
 	}
 	if (HasStringKeywords(schema)) {
@@ -6001,7 +6001,7 @@ function BuildSchema(stack, context, schema, value) {
 		if (IsMinLength(schema)) constraints.push(BuildMinLength(stack, context, schema, value));
 		if (IsPattern(schema)) constraints.push(BuildPattern(stack, context, schema, value));
 		const reduced = ReduceAnd(constraints);
-		const guarded = Or(Not(IsString$3(value)), reduced);
+		const guarded = Or(Not(IsString$2(value)), reduced);
 		conditions.push(HasStringType(schema) ? reduced : guarded);
 	}
 	if (HasNumberKeywords(schema)) {
@@ -6016,7 +6016,7 @@ function BuildSchema(stack, context, schema, value) {
 		conditions.push(HasNumberType(schema) ? reduced : guarded);
 	}
 	if (IsRecursiveRef(schema)) conditions.push(BuildRecursiveRef(stack, context, schema, value));
-	if (IsRef$1(schema)) conditions.push(BuildRef(stack, context, schema, value));
+	if (IsRef(schema)) conditions.push(BuildRef(stack, context, schema, value));
 	if (IsGuard(schema)) conditions.push(BuildGuard(stack, context, schema, value));
 	if (IsConst(schema)) conditions.push(BuildConst(stack, context, schema, value));
 	if (IsEnum(schema)) conditions.push(BuildEnum(stack, context, schema, value));
@@ -6025,7 +6025,7 @@ function BuildSchema(stack, context, schema, value) {
 	if (IsAllOf(schema)) conditions.push(BuildAllOf(stack, context, schema, value));
 	if (IsAnyOf(schema)) conditions.push(BuildAnyOf(stack, context, schema, value));
 	if (IsOneOf(schema)) conditions.push(BuildOneOf(stack, context, schema, value));
-	if (IsUnevaluatedItems(schema)) conditions.push(Or(Not(IsArray$2(value)), BuildUnevaluatedItems(stack, context, schema, value)));
+	if (IsUnevaluatedItems(schema)) conditions.push(Or(Not(IsArray$1(value)), BuildUnevaluatedItems(stack, context, schema, value)));
 	if (IsUnevaluatedProperties(schema)) conditions.push(Or(Not(IsObject$1(value)), BuildUnevaluatedProperties(stack, context, schema, value)));
 	if (IsRefine(schema)) conditions.push(BuildRefine(stack, context, schema, value));
 	const result = ReduceAnd(conditions);
@@ -6034,13 +6034,13 @@ function BuildSchema(stack, context, schema, value) {
 }
 function CheckSchema(stack, context, schema, value) {
 	stack.Push(schema);
-	const result = IsBooleanSchema(schema) ? CheckBooleanSchema(stack, context, schema, value) : (!IsType(schema) || CheckType(stack, context, schema, value)) && (!(IsObject$2(value) && !IsArray$1(value)) || (!IsRequired(schema) || CheckRequired(stack, context, schema, value)) && (!IsAdditionalProperties(schema) || CheckAdditionalProperties(stack, context, schema, value)) && (!IsDependencies(schema) || CheckDependencies(stack, context, schema, value)) && (!IsDependentRequired(schema) || CheckDependentRequired(stack, context, schema, value)) && (!IsDependentSchemas(schema) || CheckDependentSchemas(stack, context, schema, value)) && (!IsPatternProperties(schema) || CheckPatternProperties(stack, context, schema, value)) && (!IsProperties(schema) || CheckProperties(stack, context, schema, value)) && (!IsPropertyNames(schema) || CheckPropertyNames(stack, context, schema, value)) && (!IsMinProperties(schema) || CheckMinProperties(stack, context, schema, value)) && (!IsMaxProperties(schema) || CheckMaxProperties(stack, context, schema, value))) && (!IsArray$1(value) || (!IsAdditionalItems(schema) || CheckAdditionalItems(stack, context, schema, value)) && (!IsContains(schema) || CheckContains(stack, context, schema, value)) && (!IsItems(schema) || CheckItems(stack, context, schema, value)) && (!IsMaxContains(schema) || CheckMaxContains(stack, context, schema, value)) && (!IsMaxItems(schema) || CheckMaxItems(stack, context, schema, value)) && (!IsMinContains(schema) || CheckMinContains(stack, context, schema, value)) && (!IsMinItems(schema) || CheckMinItems(stack, context, schema, value)) && (!IsPrefixItems(schema) || CheckPrefixItems(stack, context, schema, value)) && (!IsUniqueItems(schema) || CheckUniqueItems(stack, context, schema, value))) && (!IsString$1(value) || (!IsFormat(schema) || CheckFormat(stack, context, schema, value)) && (!IsMaxLength(schema) || CheckMaxLength(stack, context, schema, value)) && (!IsMinLength(schema) || CheckMinLength(stack, context, schema, value)) && (!IsPattern(schema) || CheckPattern(stack, context, schema, value))) && (!(IsNumber$3(value) || IsBigInt$2(value)) || (!IsExclusiveMaximum(schema) || CheckExclusiveMaximum(stack, context, schema, value)) && (!IsExclusiveMinimum(schema) || CheckExclusiveMinimum(stack, context, schema, value)) && (!IsMaximum(schema) || CheckMaximum(stack, context, schema, value)) && (!IsMinimum(schema) || CheckMinimum(stack, context, schema, value)) && (!IsMultipleOf(schema) || CheckMultipleOf(stack, context, schema, value))) && (!IsRecursiveRef(schema) || CheckRecursiveRef(stack, context, schema, value)) && (!IsRef$1(schema) || CheckRef(stack, context, schema, value)) && (!IsGuard(schema) || CheckGuard(stack, context, schema, value)) && (!IsConst(schema) || CheckConst(stack, context, schema, value)) && (!IsEnum(schema) || CheckEnum(stack, context, schema, value)) && (!IsIf(schema) || CheckIf(stack, context, schema, value)) && (!IsNot(schema) || CheckNot(stack, context, schema, value)) && (!IsAllOf(schema) || CheckAllOf(stack, context, schema, value)) && (!IsAnyOf(schema) || CheckAnyOf(stack, context, schema, value)) && (!IsOneOf(schema) || CheckOneOf(stack, context, schema, value)) && (!IsUnevaluatedItems(schema) || !IsArray$1(value) || CheckUnevaluatedItems(stack, context, schema, value)) && (!IsUnevaluatedProperties(schema) || !IsObject$2(value) || CheckUnevaluatedProperties(stack, context, schema, value)) && (!IsRefine(schema) || CheckRefine(stack, context, schema, value));
+	const result = IsBooleanSchema(schema) ? CheckBooleanSchema(stack, context, schema, value) : (!IsType(schema) || CheckType(stack, context, schema, value)) && (!(IsObject$2(value) && !IsArray$2(value)) || (!IsRequired(schema) || CheckRequired(stack, context, schema, value)) && (!IsAdditionalProperties(schema) || CheckAdditionalProperties(stack, context, schema, value)) && (!IsDependencies(schema) || CheckDependencies(stack, context, schema, value)) && (!IsDependentRequired(schema) || CheckDependentRequired(stack, context, schema, value)) && (!IsDependentSchemas(schema) || CheckDependentSchemas(stack, context, schema, value)) && (!IsPatternProperties(schema) || CheckPatternProperties(stack, context, schema, value)) && (!IsProperties(schema) || CheckProperties(stack, context, schema, value)) && (!IsPropertyNames(schema) || CheckPropertyNames(stack, context, schema, value)) && (!IsMinProperties(schema) || CheckMinProperties(stack, context, schema, value)) && (!IsMaxProperties(schema) || CheckMaxProperties(stack, context, schema, value))) && (!IsArray$2(value) || (!IsAdditionalItems(schema) || CheckAdditionalItems(stack, context, schema, value)) && (!IsContains(schema) || CheckContains(stack, context, schema, value)) && (!IsItems(schema) || CheckItems(stack, context, schema, value)) && (!IsMaxContains(schema) || CheckMaxContains(stack, context, schema, value)) && (!IsMaxItems(schema) || CheckMaxItems(stack, context, schema, value)) && (!IsMinContains(schema) || CheckMinContains(stack, context, schema, value)) && (!IsMinItems(schema) || CheckMinItems(stack, context, schema, value)) && (!IsPrefixItems(schema) || CheckPrefixItems(stack, context, schema, value)) && (!IsUniqueItems(schema) || CheckUniqueItems(stack, context, schema, value))) && (!IsString$3(value) || (!IsFormat(schema) || CheckFormat(stack, context, schema, value)) && (!IsMaxLength(schema) || CheckMaxLength(stack, context, schema, value)) && (!IsMinLength(schema) || CheckMinLength(stack, context, schema, value)) && (!IsPattern(schema) || CheckPattern(stack, context, schema, value))) && (!(IsNumber$3(value) || IsBigInt$2(value)) || (!IsExclusiveMaximum(schema) || CheckExclusiveMaximum(stack, context, schema, value)) && (!IsExclusiveMinimum(schema) || CheckExclusiveMinimum(stack, context, schema, value)) && (!IsMaximum(schema) || CheckMaximum(stack, context, schema, value)) && (!IsMinimum(schema) || CheckMinimum(stack, context, schema, value)) && (!IsMultipleOf(schema) || CheckMultipleOf(stack, context, schema, value))) && (!IsRecursiveRef(schema) || CheckRecursiveRef(stack, context, schema, value)) && (!IsRef(schema) || CheckRef(stack, context, schema, value)) && (!IsGuard(schema) || CheckGuard(stack, context, schema, value)) && (!IsConst(schema) || CheckConst(stack, context, schema, value)) && (!IsEnum(schema) || CheckEnum(stack, context, schema, value)) && (!IsIf(schema) || CheckIf(stack, context, schema, value)) && (!IsNot(schema) || CheckNot(stack, context, schema, value)) && (!IsAllOf(schema) || CheckAllOf(stack, context, schema, value)) && (!IsAnyOf(schema) || CheckAnyOf(stack, context, schema, value)) && (!IsOneOf(schema) || CheckOneOf(stack, context, schema, value)) && (!IsUnevaluatedItems(schema) || !IsArray$2(value) || CheckUnevaluatedItems(stack, context, schema, value)) && (!IsUnevaluatedProperties(schema) || !IsObject$2(value) || CheckUnevaluatedProperties(stack, context, schema, value)) && (!IsRefine(schema) || CheckRefine(stack, context, schema, value));
 	stack.Pop(schema);
 	return result;
 }
 function ErrorSchema(stack, context, schemaPath, instancePath, schema, value) {
 	stack.Push(schema);
-	const result = IsBooleanSchema(schema) ? ErrorBooleanSchema(stack, context, schemaPath, instancePath, schema, value) : !!(+(!IsType(schema) || ErrorType(stack, context, schemaPath, instancePath, schema, value)) & +(!(IsObject$2(value) && !IsArray$1(value)) || !!(+(!IsRequired(schema) || ErrorRequired(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAdditionalProperties(schema) || ErrorAdditionalProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependencies(schema) || ErrorDependencies(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependentRequired(schema) || ErrorDependentRequired(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependentSchemas(schema) || ErrorDependentSchemas(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPatternProperties(schema) || ErrorPatternProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsProperties(schema) || ErrorProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPropertyNames(schema) || ErrorPropertyNames(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinProperties(schema) || ErrorMinProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxProperties(schema) || ErrorMaxProperties(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsArray$1(value) || !!(+(!IsAdditionalItems(schema) || ErrorAdditionalItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsContains(schema) || ErrorContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsItems(schema) || ErrorItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxContains(schema) || ErrorMaxContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxItems(schema) || ErrorMaxItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinContains(schema) || ErrorMinContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinItems(schema) || ErrorMinItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPrefixItems(schema) || ErrorPrefixItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUniqueItems(schema) || ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsString$1(value) || !!(+(!IsFormat(schema) || ErrorFormat(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxLength(schema) || ErrorMaxLength(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinLength(schema) || ErrorMinLength(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPattern(schema) || ErrorPattern(stack, context, schemaPath, instancePath, schema, value)))) & +(!(IsNumber$3(value) || IsBigInt$2(value)) || !!(+(!IsExclusiveMaximum(schema) || ErrorExclusiveMaximum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsExclusiveMinimum(schema) || ErrorExclusiveMinimum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaximum(schema) || ErrorMaximum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinimum(schema) || ErrorMinimum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMultipleOf(schema) || ErrorMultipleOf(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsRecursiveRef(schema) || ErrorRecursiveRef(stack, context, schemaPath, instancePath, schema, value)) & +(!IsRef$1(schema) || ErrorRef(stack, context, schemaPath, instancePath, schema, value)) & +(!IsGuard(schema) || ErrorGuard(stack, context, schemaPath, instancePath, schema, value)) & +(!IsConst(schema) || ErrorConst(stack, context, schemaPath, instancePath, schema, value)) & +(!IsEnum(schema) || ErrorEnum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsIf(schema) || ErrorIf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsNot(schema) || ErrorNot(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAllOf(schema) || ErrorAllOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAnyOf(schema) || ErrorAnyOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsOneOf(schema) || ErrorOneOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUnevaluatedItems(schema) || !IsArray$1(value) || ErrorUnevaluatedItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUnevaluatedProperties(schema) || !IsObject$2(value) || ErrorUnevaluatedProperties(stack, context, schemaPath, instancePath, schema, value))) && (!IsRefine(schema) || ErrorRefine(stack, context, schemaPath, instancePath, schema, value));
+	const result = IsBooleanSchema(schema) ? ErrorBooleanSchema(stack, context, schemaPath, instancePath, schema, value) : !!(+(!IsType(schema) || ErrorType(stack, context, schemaPath, instancePath, schema, value)) & +(!(IsObject$2(value) && !IsArray$2(value)) || !!(+(!IsRequired(schema) || ErrorRequired(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAdditionalProperties(schema) || ErrorAdditionalProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependencies(schema) || ErrorDependencies(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependentRequired(schema) || ErrorDependentRequired(stack, context, schemaPath, instancePath, schema, value)) & +(!IsDependentSchemas(schema) || ErrorDependentSchemas(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPatternProperties(schema) || ErrorPatternProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsProperties(schema) || ErrorProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPropertyNames(schema) || ErrorPropertyNames(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinProperties(schema) || ErrorMinProperties(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxProperties(schema) || ErrorMaxProperties(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsArray$2(value) || !!(+(!IsAdditionalItems(schema) || ErrorAdditionalItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsContains(schema) || ErrorContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsItems(schema) || ErrorItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxContains(schema) || ErrorMaxContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxItems(schema) || ErrorMaxItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinContains(schema) || ErrorMinContains(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinItems(schema) || ErrorMinItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPrefixItems(schema) || ErrorPrefixItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUniqueItems(schema) || ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsString$3(value) || !!(+(!IsFormat(schema) || ErrorFormat(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaxLength(schema) || ErrorMaxLength(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinLength(schema) || ErrorMinLength(stack, context, schemaPath, instancePath, schema, value)) & +(!IsPattern(schema) || ErrorPattern(stack, context, schemaPath, instancePath, schema, value)))) & +(!(IsNumber$3(value) || IsBigInt$2(value)) || !!(+(!IsExclusiveMaximum(schema) || ErrorExclusiveMaximum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsExclusiveMinimum(schema) || ErrorExclusiveMinimum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMaximum(schema) || ErrorMaximum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMinimum(schema) || ErrorMinimum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsMultipleOf(schema) || ErrorMultipleOf(stack, context, schemaPath, instancePath, schema, value)))) & +(!IsRecursiveRef(schema) || ErrorRecursiveRef(stack, context, schemaPath, instancePath, schema, value)) & +(!IsRef(schema) || ErrorRef(stack, context, schemaPath, instancePath, schema, value)) & +(!IsGuard(schema) || ErrorGuard(stack, context, schemaPath, instancePath, schema, value)) & +(!IsConst(schema) || ErrorConst(stack, context, schemaPath, instancePath, schema, value)) & +(!IsEnum(schema) || ErrorEnum(stack, context, schemaPath, instancePath, schema, value)) & +(!IsIf(schema) || ErrorIf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsNot(schema) || ErrorNot(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAllOf(schema) || ErrorAllOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsAnyOf(schema) || ErrorAnyOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsOneOf(schema) || ErrorOneOf(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUnevaluatedItems(schema) || !IsArray$2(value) || ErrorUnevaluatedItems(stack, context, schemaPath, instancePath, schema, value)) & +(!IsUnevaluatedProperties(schema) || !IsObject$2(value) || ErrorUnevaluatedProperties(stack, context, schemaPath, instancePath, schema, value))) && (!IsRefine(schema) || ErrorRefine(stack, context, schemaPath, instancePath, schema, value));
 	stack.Pop(schema);
 	return result;
 }
@@ -6083,12 +6083,12 @@ function GetIndices(indices, value) {
 }
 /** Returns an array of path indices for the given pointer */
 function Indices(pointer) {
-	if (IsEqual(pointer.length, 0)) return [];
+	if (IsEqual$1(pointer.length, 0)) return [];
 	const indices = pointer.split("/").map((index$1) => index$1.replace(/~1/g, "/").replace(/~0/g, "~"));
 	return indices.length > 0 && indices[0] === "" ? indices.slice(1) : indices;
 }
 /** Gets a value at the pointer, or undefined if not exists */
-function Get$1(value, pointer) {
+function Get(value, pointer) {
 	return GetIndices(Indices(pointer), value);
 }
 
@@ -6098,16 +6098,16 @@ function MatchId(schema, base, ref) {
 	if (schema.$id === ref.hash) return schema;
 	const absoluteId = new URL(schema.$id, base.href);
 	const absoluteRef = new URL(ref.href, base.href);
-	if (IsEqual(absoluteId.pathname, absoluteRef.pathname)) return ref.hash.startsWith("#") ? MatchHash(schema, base, ref) : schema;
+	if (IsEqual$1(absoluteId.pathname, absoluteRef.pathname)) return ref.hash.startsWith("#") ? MatchHash(schema, base, ref) : schema;
 }
 function MatchAnchor(schema, base, ref) {
 	const absoluteAnchor = new URL(`#${schema.$anchor}`, base.href);
 	const absoluteRef = new URL(ref.href, base.href);
-	if (IsEqual(absoluteAnchor.href, absoluteRef.href)) return schema;
+	if (IsEqual$1(absoluteAnchor.href, absoluteRef.href)) return schema;
 }
 function MatchHash(schema, base, ref) {
 	if (ref.href.endsWith("#")) return schema;
-	return ref.hash.startsWith("#") ? Get$1(schema, decodeURIComponent(ref.hash.slice(1))) : void 0;
+	return ref.hash.startsWith("#") ? Get(schema, decodeURIComponent(ref.hash.slice(1))) : void 0;
 }
 function Match(schema, base, ref) {
 	if (IsId(schema)) {
@@ -6138,10 +6138,10 @@ function FromValue$1(schema, base, ref) {
 		const result = Match(schema, base, ref);
 		if (!IsUndefined$2(result)) return result;
 	}
-	if (IsArray$1(schema)) return FromArray$7(schema, base, ref);
+	if (IsArray$2(schema)) return FromArray$7(schema, base, ref);
 	if (IsObject$2(schema)) return FromObject$7(schema, base, ref);
 }
-function Ref$1(schema, ref) {
+function Ref(schema, ref) {
 	const defaultBase = new URL("memory://root");
 	const initialBase = IsId(schema) ? new URL(schema.$id, defaultBase.href) : defaultBase;
 	return FromValue$1(schema, initialBase, new URL(ref, initialBase.href));
@@ -6182,14 +6182,14 @@ var Stack = class {
 		return HasPropertyKey$1(this.context, ref) ? this.context[ref] : void 0;
 	}
 	FromRef(ref) {
-		return !ref.startsWith("#") ? Ref$1(this.schema, ref) : Ref$1(this.Base(), ref);
+		return !ref.startsWith("#") ? Ref(this.schema, ref) : Ref(this.Base(), ref);
 	}
 	Ref(ref) {
 		return this.FromContext(ref) ?? this.FromRef(ref);
 	}
 	RecursiveRef(recursiveRef) {
-		if (IsRecursiveAnchorTrue(this.Base())) return Ref$1(this.recursiveAnchors[0], recursiveRef);
-		return Ref$1(this.Base(), recursiveRef);
+		if (IsRecursiveAnchorTrue(this.Base())) return Ref(this.recursiveAnchors[0], recursiveRef);
+		return Ref(this.Base(), recursiveRef);
 	}
 };
 
@@ -6306,7 +6306,7 @@ function Errors$1(...args) {
 		]
 	});
 	const settings$1 = Get$3();
-	const locale$1 = Get();
+	const locale$1 = Get$2();
 	const errors = [];
 	const stack = new Stack(context, schema);
 	const errorContext = new ErrorContext((error) => {
@@ -6383,8 +6383,8 @@ var AssertError = class extends Error {
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/clean/from-array.mjs
-function FromArray$5(context, type, value) {
-	if (!IsArray$1(value)) return value;
+function FromArray$6(context, type, value) {
+	if (!IsArray$2(value)) return value;
 	return value.map((value$1) => FromType$5(context, type.items, value$1));
 }
 
@@ -6400,7 +6400,7 @@ function FromCyclic$5(context, type, value) {
 	return FromType$5({
 		...context,
 		...type.$defs
-	}, Ref(type.$ref), value);
+	}, Ref$1(type.$ref), value);
 }
 
 //#endregion
@@ -6422,15 +6422,15 @@ function GetAdditionalProperties(type) {
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/clean/from-object.mjs
-function FromObject$5(context, type, value) {
-	if (!IsObject$2(value) || IsArray$1(value)) return value;
+function FromObject$6(context, type, value) {
+	if (!IsObject$2(value) || IsArray$2(value)) return value;
 	const additionalProperties = GetAdditionalProperties(type);
 	for (const key of Keys$1(value)) {
 		if (HasPropertyKey$1(type.properties, key)) {
 			value[key] = FromType$5(context, type.properties[key], value[key]);
 			continue;
 		}
-		if (IsBoolean$3(additionalProperties) && IsEqual(additionalProperties, true) || IsSchema(additionalProperties) && Check(context, additionalProperties, value[key])) {
+		if (IsBoolean$3(additionalProperties) && IsEqual$1(additionalProperties, true) || IsSchema$1(additionalProperties) && Check(context, additionalProperties, value[key])) {
 			value[key] = FromType$5(context, additionalProperties, value[key]);
 			continue;
 		}
@@ -6450,7 +6450,7 @@ function FromRecord$5(context, type, value) {
 			value[key] = FromType$5(context, recordValue, value[key]);
 			continue;
 		}
-		if (IsBoolean$3(additionalProperties) && IsEqual(additionalProperties, true) || IsSchema(additionalProperties) && Check(context, additionalProperties, value[key])) {
+		if (IsBoolean$3(additionalProperties) && IsEqual$1(additionalProperties, true) || IsSchema$1(additionalProperties) && Check(context, additionalProperties, value[key])) {
 			value[key] = FromType$5(context, additionalProperties, value[key]);
 			continue;
 		}
@@ -6468,7 +6468,7 @@ function FromRef$5(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/clean/from-tuple.mjs
 function FromTuple$5(context, schema, value) {
-	if (!IsArray$1(value)) return value;
+	if (!IsArray$2(value)) return value;
 	const length = Math.min(value.length, schema.items.length);
 	for (let index$1 = 0; index$1 < length; index$1++) value[index$1] = FromType$5(context, schema.items[index$1], value[index$1]);
 	return IsGreaterThan$1(value.length, length) ? value.slice(0, length) : value;
@@ -6485,10 +6485,10 @@ function FromObjectInstance(value) {
 	for (const key of Object.getOwnPropertySymbols(value)) result[key] = Clone(value[key]);
 	return result;
 }
-function FromObject$6(value) {
+function FromObject$5(value) {
 	return IsClassInstance(value) ? FromClassInstance(value) : FromObjectInstance(value);
 }
-function FromArray$6(value) {
+function FromArray$5(value) {
 	return value.map((element) => Clone(element));
 }
 function FromTypedArray(value) {
@@ -6508,7 +6508,7 @@ function FromValue(value) {
 * but also supports deep cloning instances of Map, Set and TypeArray.
 */
 function Clone(value) {
-	return IsTypeArray(value) ? FromTypedArray(value) : IsMap(value) ? FromMap(value) : IsSet(value) ? FromSet(value) : IsArray$1(value) ? FromArray$6(value) : IsObject$2(value) ? FromObject$6(value) : FromValue(value);
+	return IsTypeArray(value) ? FromTypedArray(value) : IsMap(value) ? FromMap(value) : IsSet(value) ? FromSet(value) : IsArray$2(value) ? FromArray$5(value) : IsObject$2(value) ? FromObject$5(value) : FromValue(value);
 }
 
 //#endregion
@@ -6524,7 +6524,7 @@ function FromUnion$5(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/clean/from-type.mjs
 function FromType$5(context, type, value) {
-	return IsArray(type) ? FromArray$5(context, type, value) : IsBase(type) ? FromBase$3(context, type, value) : IsCyclic(type) ? FromCyclic$5(context, type, value) : IsIntersect(type) ? FromIntersect$5(context, type, value) : IsObject(type) ? FromObject$5(context, type, value) : IsRecord(type) ? FromRecord$5(context, type, value) : IsRef(type) ? FromRef$5(context, type, value) : IsTuple(type) ? FromTuple$5(context, type, value) : IsUnion(type) ? FromUnion$5(context, type, value) : value;
+	return IsArray(type) ? FromArray$6(context, type, value) : IsBase(type) ? FromBase$3(context, type, value) : IsCyclic(type) ? FromCyclic$5(context, type, value) : IsIntersect(type) ? FromIntersect$5(context, type, value) : IsObject(type) ? FromObject$6(context, type, value) : IsRecord(type) ? FromRecord$5(context, type, value) : IsRef$1(type) ? FromRef$5(context, type, value) : IsTuple(type) ? FromTuple$5(context, type, value) : IsUnion(type) ? FromUnion$5(context, type, value) : value;
 }
 
 //#endregion
@@ -6554,7 +6554,7 @@ function Clean(...args) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/from-array.mjs
 function FromArray$4(context, type, value) {
-	return IsArray$1(value) ? value.map((value$1) => FromType$4(context, type.items, value$1)) : value;
+	return IsArray$2(value) ? value.map((value$1) => FromType$4(context, type.items, value$1)) : value;
 }
 
 //#endregion
@@ -6579,7 +6579,7 @@ function FromBigInt$7(value) {
 	return Ok(value);
 }
 function FromBoolean$7(value) {
-	return IsEqual(value, true) ? Ok(BigInt(1)) : Ok(BigInt(0));
+	return IsEqual$1(value, true) ? Ok(BigInt(1)) : Ok(BigInt(0));
 }
 function FromNumber$7(value) {
 	return Ok(BigInt(Math.trunc(value)));
@@ -6601,62 +6601,62 @@ function IsStringIntegerLike(value) {
 }
 function FromString$7(value) {
 	const lowercase = value.toLowerCase();
-	return IsStringBigIntLike(value) ? Ok(BigInt(value.slice(0, value.length - 1))) : IsStringDecimalLike(value) ? Ok(BigInt(value.split(".")[0])) : IsStringIntegerLike(value) ? Ok(BigInt(value)) : IsEqual(lowercase, "false") ? Ok(BigInt(0)) : IsEqual(lowercase, "true") ? Ok(BigInt(1)) : /* @__PURE__ */ Fail();
+	return IsStringBigIntLike(value) ? Ok(BigInt(value.slice(0, value.length - 1))) : IsStringDecimalLike(value) ? Ok(BigInt(value.split(".")[0])) : IsStringIntegerLike(value) ? Ok(BigInt(value)) : IsEqual$1(lowercase, "false") ? Ok(BigInt(0)) : IsEqual$1(lowercase, "true") ? Ok(BigInt(1)) : /* @__PURE__ */ Fail();
 }
 function FromUndefined$7(value) {
 	return Ok(BigInt(0));
 }
 function TryBigInt(value) {
-	return IsBigInt$2(value) ? FromBigInt$7(value) : IsBoolean$3(value) ? FromBoolean$7(value) : IsNumber$3(value) ? FromNumber$7(value) : IsNull$2(value) ? FromNull$7(value) : IsString$1(value) ? FromString$7(value) : IsUndefined$2(value) ? FromUndefined$7(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$7(value) : IsBoolean$3(value) ? FromBoolean$7(value) : IsNumber$3(value) ? FromNumber$7(value) : IsNull$2(value) ? FromNull$7(value) : IsString$3(value) ? FromString$7(value) : IsUndefined$2(value) ? FromUndefined$7(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/try/try-boolean.mjs
 function FromBigInt$6(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(false) : IsEqual(value, BigInt(1)) ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, BigInt(0)) ? Ok(false) : IsEqual$1(value, BigInt(1)) ? Ok(true) : /* @__PURE__ */ Fail();
 }
 function FromBoolean$6(value) {
 	return Ok(value);
 }
 function FromNumber$6(value) {
-	return IsEqual(value, 0) ? Ok(false) : IsEqual(value, 1) ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, 0) ? Ok(false) : IsEqual$1(value, 1) ? Ok(true) : /* @__PURE__ */ Fail();
 }
 function FromNull$6(value) {
 	return Ok(false);
 }
 function FromString$6(value) {
-	return IsEqual(value.toLowerCase(), "false") ? Ok(false) : IsEqual(value.toLowerCase(), "true") ? Ok(true) : IsEqual(value, "0") ? Ok(false) : IsEqual(value, "1") ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value.toLowerCase(), "false") ? Ok(false) : IsEqual$1(value.toLowerCase(), "true") ? Ok(true) : IsEqual$1(value, "0") ? Ok(false) : IsEqual$1(value, "1") ? Ok(true) : /* @__PURE__ */ Fail();
 }
 function FromUndefined$6(value) {
 	return Ok(false);
 }
 function TryBoolean(value) {
-	return IsBigInt$2(value) ? FromBigInt$6(value) : IsBoolean$3(value) ? FromBoolean$6(value) : IsNumber$3(value) ? FromNumber$6(value) : IsNull$2(value) ? FromNull$6(value) : IsString$1(value) ? FromString$6(value) : IsUndefined$2(value) ? FromUndefined$6(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$6(value) : IsBoolean$3(value) ? FromBoolean$6(value) : IsNumber$3(value) ? FromNumber$6(value) : IsNull$2(value) ? FromNull$6(value) : IsString$3(value) ? FromString$6(value) : IsUndefined$2(value) ? FromUndefined$6(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/try/try-null.mjs
 function FromBigInt$5(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, BigInt(0)) ? Ok(null) : /* @__PURE__ */ Fail();
 }
 function FromBoolean$5(value) {
-	return IsEqual(value, false) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, false) ? Ok(null) : /* @__PURE__ */ Fail();
 }
 function FromNumber$5(value) {
-	return IsEqual(value, 0) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, 0) ? Ok(null) : /* @__PURE__ */ Fail();
 }
 function FromNull$5(value) {
 	return Ok(null);
 }
 function FromString$5(value) {
 	const lowercase = value.toLowerCase();
-	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual$1(lowercase, "undefined") || IsEqual$1(lowercase, "null") || IsEqual$1(value, "") || IsEqual$1(value, "0") ? Ok(null) : /* @__PURE__ */ Fail();
 }
 function FromUndefined$5(value) {
 	return Ok(null);
 }
 function TryNull(value) {
-	return IsBigInt$2(value) ? FromBigInt$5(value) : IsBoolean$3(value) ? FromBoolean$5(value) : IsNumber$3(value) ? FromNumber$5(value) : IsNull$2(value) ? FromNull$5(value) : IsString$1(value) ? FromString$5(value) : IsUndefined$2(value) ? FromUndefined$5(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$5(value) : IsBoolean$3(value) ? FromBoolean$5(value) : IsNumber$3(value) ? FromNumber$5(value) : IsNull$2(value) ? FromNull$5(value) : IsString$3(value) ? FromString$5(value) : IsUndefined$2(value) ? FromUndefined$5(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
@@ -6682,8 +6682,8 @@ function FromString$4(value) {
 	const coerced = +value;
 	if (IsNumber$3(coerced)) return Ok(coerced);
 	const lowercase = value.toLowerCase();
-	if (IsEqual(lowercase, "false")) return Ok(0);
-	if (IsEqual(lowercase, "true")) return Ok(1);
+	if (IsEqual$1(lowercase, "false")) return Ok(0);
+	if (IsEqual$1(lowercase, "true")) return Ok(1);
 	const result = TryBigInt(value);
 	if (IsOk(result)) return FromBigInt$4(result.value);
 	return /* @__PURE__ */ Fail();
@@ -6692,7 +6692,7 @@ function FromUndefined$4(value) {
 	return Ok(0);
 }
 function TryNumber(value) {
-	return IsBigInt$2(value) ? FromBigInt$4(value) : IsBoolean$3(value) ? FromBoolean$4(value) : IsNumber$3(value) ? FromNumber$4(value) : IsNull$2(value) ? FromNull$4(value) : IsString$1(value) ? FromString$4(value) : IsUndefined$2(value) ? FromUndefined$4(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$4(value) : IsBoolean$3(value) ? FromBoolean$4(value) : IsNumber$3(value) ? FromNumber$4(value) : IsNull$2(value) ? FromNull$4(value) : IsString$3(value) ? FromString$4(value) : IsUndefined$2(value) ? FromUndefined$4(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
@@ -6716,32 +6716,32 @@ function FromUndefined$3(value) {
 	return Ok("");
 }
 function TryString(value) {
-	return IsBigInt$2(value) ? FromBigInt$3(value) : IsBoolean$3(value) ? FromBoolean$3(value) : IsNumber$3(value) ? FromNumber$3(value) : IsNull$2(value) ? FromNull$3(value) : IsString$1(value) ? FromString$3(value) : IsUndefined$2(value) ? FromUndefined$3(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$3(value) : IsBoolean$3(value) ? FromBoolean$3(value) : IsNumber$3(value) ? FromNumber$3(value) : IsNull$2(value) ? FromNull$3(value) : IsString$3(value) ? FromString$3(value) : IsUndefined$2(value) ? FromUndefined$3(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/try/try-undefined.mjs
 function FromBigInt$2(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, BigInt(0)) ? Ok(void 0) : /* @__PURE__ */ Fail();
 }
 function FromBoolean$2(value) {
-	return IsEqual(value, false) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, false) ? Ok(void 0) : /* @__PURE__ */ Fail();
 }
 function FromNumber$2(value) {
-	return IsEqual(value, 0) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual$1(value, 0) ? Ok(void 0) : /* @__PURE__ */ Fail();
 }
 function FromNull$2(value) {
 	return Ok(void 0);
 }
 function FromString$2(value) {
 	const lowercase = value.toLowerCase();
-	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual$1(lowercase, "undefined") || IsEqual$1(lowercase, "null") || IsEqual$1(value, "") || IsEqual$1(value, "0") ? Ok(void 0) : /* @__PURE__ */ Fail();
 }
 function FromUndefined$2(value) {
 	return Ok(void 0);
 }
 function TryUndefined(value) {
-	return IsBigInt$2(value) ? FromBigInt$2(value) : IsBoolean$3(value) ? FromBoolean$2(value) : IsNumber$3(value) ? FromNumber$2(value) : IsNull$2(value) ? FromNull$2(value) : IsString$1(value) ? FromString$2(value) : IsUndefined$2(value) ? FromUndefined$2(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$2(value) ? FromBigInt$2(value) : IsBoolean$3(value) ? FromBoolean$2(value) : IsNumber$3(value) ? FromNumber$2(value) : IsNull$2(value) ? FromNull$2(value) : IsString$3(value) ? FromString$2(value) : IsUndefined$2(value) ? FromUndefined$2(value) : /* @__PURE__ */ Fail();
 }
 
 //#endregion
@@ -6766,7 +6766,7 @@ function FromCyclic$4(context, type, value) {
 	return FromType$4({
 		...context,
 		...type.$defs
-	}, Ref(type.$ref), value);
+	}, Ref$1(type.$ref), value);
 }
 
 //#endregion
@@ -6801,22 +6801,22 @@ function FromIntersect$4(context, type, value) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/from-literal.mjs
 function FromLiteralBigInt(context, type, value) {
 	const result = TryBigInt(value);
-	return IsOk(result) && IsEqual(type.const, result.value) ? result.value : value;
+	return IsOk(result) && IsEqual$1(type.const, result.value) ? result.value : value;
 }
 function FromLiteralBoolean(context, type, value) {
 	const result = TryBoolean(value);
-	return IsOk(result) && IsEqual(type.const, result.value) ? result.value : value;
+	return IsOk(result) && IsEqual$1(type.const, result.value) ? result.value : value;
 }
 function FromLiteralNumber(context, type, value) {
 	const result = TryNumber(value);
-	return IsOk(result) && IsEqual(type.const, result.value) ? result.value : value;
+	return IsOk(result) && IsEqual$1(type.const, result.value) ? result.value : value;
 }
 function FromLiteralString(context, type, value) {
 	const result = TryString(value);
-	return IsOk(result) && IsEqual(type.const, result.value) ? result.value : value;
+	return IsOk(result) && IsEqual$1(type.const, result.value) ? result.value : value;
 }
 function FromLiteral$1(context, type, value) {
-	if (IsEqual(type.const, value)) return value;
+	if (IsEqual$1(type.const, value)) return value;
 	return IsLiteralBigInt(type) ? FromLiteralBigInt(context, type, value) : IsLiteralBoolean(type) ? FromLiteralBoolean(context, type, value) : IsLiteralNumber(type) ? FromLiteralNumber(context, type, value) : IsLiteralString(type) ? FromLiteralString(context, type, value) : Unreachable();
 }
 
@@ -6890,7 +6890,7 @@ function FromRef$4(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/from-string.mjs
 function FromString$1(context, type, value) {
-	if (IsString$1(value)) return value;
+	if (IsString$3(value)) return value;
 	const result = TryString(value);
 	return IsOk(result) ? result.value : value;
 }
@@ -6904,7 +6904,7 @@ function FromTemplateLiteral$1(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/from-tuple.mjs
 function FromTuple$4(context, type, value) {
-	if (!IsArray$1(value)) return value;
+	if (!IsArray$2(value)) return value;
 	for (let index$1 = 0; index$1 < Math.min(type.items.length, value.length); index$1++) value[index$1] = FromType$4(context, type.items[index$1], value[index$1]);
 	return value;
 }
@@ -6928,7 +6928,7 @@ function FromVoid$1(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/convert/from-type.mjs
 function FromType$4(context, type, value) {
-	return IsArray(type) ? FromArray$4(context, type, value) : IsBase(type) ? FromBase$2(context, type, value) : IsBigInt(type) ? FromBigInt$1(context, type, value) : IsBoolean(type) ? FromBoolean$1(context, type, value) : IsCyclic(type) ? FromCyclic$4(context, type, value) : IsEnum$1(type) ? FromEnum$1(context, type, value) : IsInteger(type) ? FromInteger$1(context, type, value) : IsIntersect(type) ? FromIntersect$4(context, type, value) : IsLiteral(type) ? FromLiteral$1(context, type, value) : IsNull(type) ? FromNull$1(context, type, value) : IsNumber(type) ? FromNumber$1(context, type, value) : IsObject(type) ? FromObject$4(context, type, value) : IsRecord(type) ? FromRecord$4(context, type, value) : IsRef(type) ? FromRef$4(context, type, value) : IsString(type) ? FromString$1(context, type, value) : IsTemplateLiteral(type) ? FromTemplateLiteral$1(context, type, value) : IsTuple(type) ? FromTuple$4(context, type, value) : IsUndefined(type) ? FromUndefined$1(context, type, value) : IsUnion(type) ? FromUnion$4(context, type, value) : IsVoid(type) ? FromVoid$1(context, type, value) : value;
+	return IsArray(type) ? FromArray$4(context, type, value) : IsBase(type) ? FromBase$2(context, type, value) : IsBigInt(type) ? FromBigInt$1(context, type, value) : IsBoolean(type) ? FromBoolean$1(context, type, value) : IsCyclic(type) ? FromCyclic$4(context, type, value) : IsEnum$1(type) ? FromEnum$1(context, type, value) : IsInteger(type) ? FromInteger$1(context, type, value) : IsIntersect(type) ? FromIntersect$4(context, type, value) : IsLiteral(type) ? FromLiteral$1(context, type, value) : IsNull(type) ? FromNull$1(context, type, value) : IsNumber(type) ? FromNumber$1(context, type, value) : IsObject(type) ? FromObject$4(context, type, value) : IsRecord(type) ? FromRecord$4(context, type, value) : IsRef$1(type) ? FromRef$4(context, type, value) : IsString(type) ? FromString$1(context, type, value) : IsTemplateLiteral(type) ? FromTemplateLiteral$1(context, type, value) : IsTuple(type) ? FromTuple$4(context, type, value) : IsUndefined(type) ? FromUndefined$1(context, type, value) : IsUnion(type) ? FromUnion$4(context, type, value) : IsVoid(type) ? FromVoid$1(context, type, value) : value;
 }
 
 //#endregion
@@ -6957,7 +6957,7 @@ function Convert(...args) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/default/from-array.mjs
 function FromArray$3(context, type, value) {
-	if (!IsArray$1(value)) return value;
+	if (!IsArray$2(value)) return value;
 	for (let i = 0; i < value.length; i++) value[i] = FromType$3(context, type.items, value[i]);
 	return value;
 }
@@ -6974,7 +6974,7 @@ function FromCyclic$3(context, type, value) {
 	return FromType$3({
 		...context,
 		...type.$defs
-	}, Ref(type.$ref), value);
+	}, Ref$1(type.$ref), value);
 }
 
 //#endregion
@@ -7034,7 +7034,7 @@ function FromRef$3(context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/default/from-tuple.mjs
 function FromTuple$3(context, schema, value) {
-	if (!IsArray$1(value)) return value;
+	if (!IsArray$2(value)) return value;
 	const [items, max] = [schema.items, Math.max(schema.items.length, value.length)];
 	for (let i = 0; i < max; i++) if (i < items.length) value[i] = FromType$3(context, items[i], value[i]);
 	return value;
@@ -7054,7 +7054,7 @@ function FromUnion$3(context, schema, value) {
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/default/from-type.mjs
 function FromType$3(context, type, value) {
 	const defaulted = IsDefault(type) ? FromDefault$1(type, value) : value;
-	return IsArray(type) ? FromArray$3(context, type, defaulted) : IsBase(type) ? FromBase$1(context, type, defaulted) : IsCyclic(type) ? FromCyclic$3(context, type, defaulted) : IsIntersect(type) ? FromIntersect$3(context, type, defaulted) : IsObject(type) ? FromObject$3(context, type, defaulted) : IsRecord(type) ? FromRecord$3(context, type, defaulted) : IsRef(type) ? FromRef$3(context, type, defaulted) : IsTuple(type) ? FromTuple$3(context, type, defaulted) : IsUnion(type) ? FromUnion$3(context, type, defaulted) : defaulted;
+	return IsArray(type) ? FromArray$3(context, type, defaulted) : IsBase(type) ? FromBase$1(context, type, defaulted) : IsCyclic(type) ? FromCyclic$3(context, type, defaulted) : IsIntersect(type) ? FromIntersect$3(context, type, defaulted) : IsObject(type) ? FromObject$3(context, type, defaulted) : IsRecord(type) ? FromRecord$3(context, type, defaulted) : IsRef$1(type) ? FromRef$3(context, type, defaulted) : IsTuple(type) ? FromTuple$3(context, type, defaulted) : IsUnion(type) ? FromUnion$3(context, type, defaulted) : defaulted;
 }
 
 //#endregion
@@ -7111,24 +7111,24 @@ function Encode$7(context, type, value) {
 }
 function Callback(direction, context, type, value) {
 	if (!IsCodec(type)) return value;
-	return IsEqual(direction, "Decode") ? Decode$7(context, type, value) : Encode$7(context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$7(context, type, value) : Encode$7(context, type, value);
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/codec/from-array.mjs
 function Decode$6(direction, context, type, value) {
-	if (!IsArray$1(value)) return Unreachable();
+	if (!IsArray$2(value)) return Unreachable();
 	for (let i = 0; i < value.length; i++) value[i] = FromType$2(direction, context, type.items, value[i]);
 	return Callback(direction, context, type, value);
 }
 function Encode$6(direction, context, type, value) {
 	const exterior = Callback(direction, context, type, value);
-	if (!IsArray$1(exterior)) return exterior;
+	if (!IsArray$2(exterior)) return exterior;
 	for (let i = 0; i < exterior.length; i++) exterior[i] = FromType$2(direction, context, type.items, exterior[i]);
 	return exterior;
 }
 function FromArray$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$6(direction, context, type, value) : Encode$6(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$6(direction, context, type, value) : Encode$6(direction, context, type, value);
 }
 
 //#endregion
@@ -7137,7 +7137,7 @@ function FromCyclic$2(direction, context, type, value) {
 	value = FromType$2(direction, {
 		...context,
 		...type.$defs
-	}, Ref(type.$ref), value);
+	}, Ref$1(type.$ref), value);
 	return Callback(direction, context, type, value);
 }
 
@@ -7153,7 +7153,7 @@ function Encode$5(direction, context, type, value) {
 	return exterior;
 }
 function FromIntersect$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$5(direction, context, type, value) : Encode$5(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$5(direction, context, type, value) : Encode$5(direction, context, type, value);
 }
 
 //#endregion
@@ -7176,7 +7176,7 @@ function Encode$4(direction, context, type, value) {
 	return exterior;
 }
 function FromObject$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$4(direction, context, type, value) : Encode$4(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$4(direction, context, type, value) : Encode$4(direction, context, type, value);
 }
 
 //#endregion
@@ -7201,7 +7201,7 @@ function Encode$3(direction, context, type, value) {
 	return exterior;
 }
 function FromRecord$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$3(direction, context, type, value) : Encode$3(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$3(direction, context, type, value) : Encode$3(direction, context, type, value);
 }
 
 //#endregion
@@ -7214,18 +7214,18 @@ function FromRef$2(direction, context, type, value) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/codec/from-tuple.mjs
 function Decode$2(direction, context, type, value) {
-	if (!IsArray$1(value)) return Unreachable();
+	if (!IsArray$2(value)) return Unreachable();
 	for (let i = 0; i < Math.min(type.items.length, value.length); i++) value[i] = FromType$2(direction, context, type.items[i], value[i]);
 	return Callback(direction, context, type, value);
 }
 function Encode$2(direction, context, type, value) {
 	const exterior = Callback(direction, context, type, value);
-	if (!IsArray$1(exterior)) return value;
+	if (!IsArray$2(exterior)) return value;
 	for (let i = 0; i < Math.min(type.items.length, exterior.length); i++) exterior[i] = FromType$2(direction, context, type.items[i], exterior[i]);
 	return exterior;
 }
 function FromTuple$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$2(direction, context, type, value) : Encode$2(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$2(direction, context, type, value) : Encode$2(direction, context, type, value);
 }
 
 //#endregion
@@ -7247,13 +7247,13 @@ function Encode$1(direction, context, type, value) {
 	return exterior;
 }
 function FromUnion$2(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$1(direction, context, type, value) : Encode$1(direction, context, type, value);
+	return IsEqual$1(direction, "Decode") ? Decode$1(direction, context, type, value) : Encode$1(direction, context, type, value);
 }
 
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/codec/from-type.mjs
 function FromType$2(direction, context, type, value) {
-	return IsArray(type) ? FromArray$2(direction, context, type, value) : IsCyclic(type) ? FromCyclic$2(direction, context, type, value) : IsIntersect(type) ? FromIntersect$2(direction, context, type, value) : IsObject(type) ? FromObject$2(direction, context, type, value) : IsRecord(type) ? FromRecord$2(direction, context, type, value) : IsRef(type) ? FromRef$2(direction, context, type, value) : IsTuple(type) ? FromTuple$2(direction, context, type, value) : IsUnion(type) ? FromUnion$2(direction, context, type, value) : Callback(direction, context, type, value);
+	return IsArray(type) ? FromArray$2(direction, context, type, value) : IsCyclic(type) ? FromCyclic$2(direction, context, type, value) : IsIntersect(type) ? FromIntersect$2(direction, context, type, value) : IsObject(type) ? FromObject$2(direction, context, type, value) : IsRecord(type) ? FromRecord$2(direction, context, type, value) : IsRef$1(type) ? FromRef$2(direction, context, type, value) : IsTuple(type) ? FromTuple$2(direction, context, type, value) : IsUnion(type) ? FromUnion$2(direction, context, type, value) : Callback(direction, context, type, value);
 }
 
 //#endregion
@@ -7350,7 +7350,7 @@ function FromCyclic$1(context, type) {
 	return IsCodec(type) || FromRef$1({
 		...context,
 		...type.$defs
-	}, Ref(type.$ref));
+	}, Ref$1(type.$ref));
 }
 function FromIntersect$1(context, type) {
 	return IsCodec(type) || type.allOf.some((type$1) => FromType$1(context, type$1));
@@ -7375,7 +7375,7 @@ function FromUnion$1(context, type) {
 	return IsCodec(type) || type.anyOf.some((type$1) => FromType$1(context, type$1));
 }
 function FromType$1(context, type) {
-	return IsArray(type) ? FromArray$1(context, type) : IsCyclic(type) ? FromCyclic$1(context, type) : IsIntersect(type) ? FromIntersect$1(context, type) : IsObject(type) ? FromObject$1(context, type) : IsRecord(type) ? FromRecord$1(context, type) : IsRef(type) ? FromRef$1(context, type) : IsTuple(type) ? FromTuple$1(context, type) : IsUnion(type) ? FromUnion$1(context, type) : IsCodec(type);
+	return IsArray(type) ? FromArray$1(context, type) : IsCyclic(type) ? FromCyclic$1(context, type) : IsIntersect(type) ? FromIntersect$1(context, type) : IsObject(type) ? FromObject$1(context, type) : IsRecord(type) ? FromRecord$1(context, type) : IsRef$1(type) ? FromRef$1(context, type) : IsTuple(type) ? FromTuple$1(context, type) : IsUnion(type) ? FromUnion$1(context, type) : IsCodec(type);
 }
 const visited = /* @__PURE__ */ new Set();
 /** Returns true if this type contains a Codec */
@@ -7453,7 +7453,7 @@ function FromCyclic(context, type) {
 	return FromType({
 		...context,
 		...type.$defs
-	}, Ref(type.$ref));
+	}, Ref$1(type.$ref));
 }
 
 //#endregion
@@ -7579,7 +7579,7 @@ function FromUndefined(context, type) {}
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/create/from-union.mjs
 function FromUnion(context, type) {
-	if (IsEqual(type.anyOf.length, 0)) throw Error("Unable to create Union with no variants");
+	if (IsEqual$1(type.anyOf.length, 0)) throw Error("Unable to create Union with no variants");
 	return FromType(context, type.anyOf[0]);
 }
 
@@ -7590,7 +7590,7 @@ function FromVoid(context, type) {}
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.0.51/node_modules/typebox/build/value/create/from-type.mjs
 function FromType(context, type) {
-	return IsDefault(type) ? FromDefault(context, type) : IsArray(type) ? FromArray(context, type) : IsAsyncIterator(type) ? FromAsyncIterator(context, type) : IsBase(type) ? FromBase(context, type) : IsBigInt(type) ? FromBigInt(context, type) : IsBoolean(type) ? FromBoolean(context, type) : IsConstructor(type) ? FromConstructor(context, type) : IsCyclic(type) ? FromCyclic(context, type) : IsEnum$1(type) ? FromEnum(context, type) : IsFunction(type) ? FromFunction(context, type) : IsInteger(type) ? FromInteger(context, type) : IsIntersect(type) ? FromIntersect(context, type) : IsIterator(type) ? FromIterator(context, type) : IsLiteral(type) ? FromLiteral(context, type) : IsNever(type) ? FromNever(context, type) : IsNull(type) ? FromNull(context, type) : IsNumber(type) ? FromNumber(context, type) : IsObject(type) ? FromObject(context, type) : IsPromise(type) ? FromPromise(context, type) : IsRecord(type) ? FromRecord(context, type) : IsRef(type) ? FromRef(context, type) : IsString(type) ? FromString(context, type) : IsSymbol(type) ? FromSymbol(context, type) : IsTemplateLiteral(type) ? FromTemplateLiteral(context, type) : IsTuple(type) ? FromTuple(context, type) : IsUndefined(type) ? /* @__PURE__ */ FromUndefined(context, type) : IsUnion(type) ? FromUnion(context, type) : IsVoid(type) ? /* @__PURE__ */ FromVoid(context, type) : void 0;
+	return IsDefault(type) ? FromDefault(context, type) : IsArray(type) ? FromArray(context, type) : IsAsyncIterator(type) ? FromAsyncIterator(context, type) : IsBase(type) ? FromBase(context, type) : IsBigInt(type) ? FromBigInt(context, type) : IsBoolean(type) ? FromBoolean(context, type) : IsConstructor(type) ? FromConstructor(context, type) : IsCyclic(type) ? FromCyclic(context, type) : IsEnum$1(type) ? FromEnum(context, type) : IsFunction(type) ? FromFunction(context, type) : IsInteger(type) ? FromInteger(context, type) : IsIntersect(type) ? FromIntersect(context, type) : IsIterator(type) ? FromIterator(context, type) : IsLiteral(type) ? FromLiteral(context, type) : IsNever(type) ? FromNever(context, type) : IsNull(type) ? FromNull(context, type) : IsNumber(type) ? FromNumber(context, type) : IsObject(type) ? FromObject(context, type) : IsPromise(type) ? FromPromise(context, type) : IsRecord(type) ? FromRecord(context, type) : IsRef$1(type) ? FromRef(context, type) : IsString(type) ? FromString(context, type) : IsSymbol(type) ? FromSymbol(context, type) : IsTemplateLiteral(type) ? FromTemplateLiteral(context, type) : IsTuple(type) ? FromTuple(context, type) : IsUndefined(type) ? /* @__PURE__ */ FromUndefined(context, type) : IsUnion(type) ? FromUnion(context, type) : IsVoid(type) ? /* @__PURE__ */ FromVoid(context, type) : void 0;
 }
 
 //#endregion
