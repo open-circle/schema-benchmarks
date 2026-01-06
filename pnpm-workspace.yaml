@@ -4,4 +4,15 @@ packages:
   - utils
   - schemas
 catalog:
+  "@types/react": ^19.2.0
+  "@types/react-dom": ^19.2.0
+  "@types/node": ^24.10.1
+  "@typescript/native-preview": 7.0.0-dev.20260106.1
+  "@vitest/browser-playwright": ^4.0.16
+  "@vitest/expect": ^4.0.16
   playwright: ^1.57.0
+  react: ^19.2.0
+  react-dom: ^19.2.0
+  valibot: ^1.2.0
+  vite: ^7.2.2
+  vitest: ^4.0.16
