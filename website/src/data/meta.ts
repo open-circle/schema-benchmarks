@@ -16,6 +16,17 @@ const _generateMetadata = createMetadataGenerator({
   baseUrl: "https://schemabenchmarks.dev",
 });
 
+type OGImage = Extract<
+  NonNullable<NonNullable<GeneratorInputMetadata["openGraph"]>["images"]>,
+  { url: string | URL }
+>;
+type TwitterImage = Extract<
+  NonNullable<NonNullable<GeneratorInputMetadata["twitter"]>["images"]>,
+  { url: string | URL }
+>;
+
+type Image = OGImage & TwitterImage;
+
 export const generateMetadata = ({
   title,
   description,
@@ -23,12 +34,7 @@ export const generateMetadata = ({
   links,
   ...meta
 }: PickNonNullable<GeneratorInputMetadata, "description"> & {
-  image?:
-    | {
-        url: string;
-        alt?: string;
-      }
-    | string;
+  image?: Image | Array<Image> | string;
   /** Extra links to add, e.g. stylesheets */
   links?: NonNullable<AnyRouteMatch["links"]>;
 }) => {
