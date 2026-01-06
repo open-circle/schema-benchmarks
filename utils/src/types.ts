@@ -4,11 +4,14 @@ export type NonOptionalKeys<T> = {
   [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
 export type Override<T, U> = Compute<Omit<T, keyof U> & U>;
-export type WithRequired<T, K extends keyof T> = Compute<
+export type PickRequired<T, K extends keyof T> = Compute<
   Omit<T, K> & Required<Pick<T, K>>
 >;
-export type WithPartial<T, K extends keyof T> = Compute<
+export type PickPartial<T, K extends keyof T> = Compute<
   Omit<T, K> & Partial<Pick<T, K>>
+>;
+export type PickNonNullable<T, K extends keyof T> = Compute<
+  Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
 >;
 
 export namespace Autocomplete {

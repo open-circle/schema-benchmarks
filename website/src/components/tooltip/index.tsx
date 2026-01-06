@@ -5,7 +5,7 @@ import {
   useFloating,
   useTransitionStyles,
 } from "@floating-ui/react";
-import type { Override, WithRequired } from "@schema-benchmarks/utils";
+import type { Override, PickRequired } from "@schema-benchmarks/utils";
 import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { radEventListeners } from "rad-event-listeners";
 import {
@@ -59,7 +59,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
   opts: Override<TooltipOpts, { required: true }>,
 ): (
-  props: Override<ComponentProps<TComp>, WithRequired<TooltipProps, "tooltip">>,
+  props: Override<ComponentProps<TComp>, PickRequired<TooltipProps, "tooltip">>,
 ) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,

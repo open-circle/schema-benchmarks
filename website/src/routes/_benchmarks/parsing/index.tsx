@@ -28,12 +28,21 @@ const searchSchema = v.object({
 
 export const Route = createFileRoute("/_benchmarks/parsing/")({
   head: () =>
-    create(generateMetadata({ title: "Parsing" }), ({ links }) => {
-      links.push({
-        rel: "stylesheet",
-        href: benchmarkStyles,
-      });
-    }),
+    create(
+      generateMetadata({
+        title: "Parsing",
+        description: "Benchmark results for parsing data.",
+        openGraph: {
+          url: "/parsing/",
+        },
+      }),
+      ({ links }) => {
+        links.push({
+          rel: "stylesheet",
+          href: benchmarkStyles,
+        });
+      },
+    ),
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType, dataType, errorType } }) => ({

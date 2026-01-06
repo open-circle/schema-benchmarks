@@ -6,7 +6,7 @@ import "@formatjs/intl-durationformat/polyfill.js";
 import "@formatjs/intl-numberformat/polyfill.js";
 import "@formatjs/intl-numberformat/locale-data/en.js";
 
-import type { WithPartial } from "./types.ts";
+import type { PickPartial } from "./types.ts";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -258,7 +258,7 @@ export function toggleFilter<K extends string, const V extends string>(
   key: K,
   newValue: V,
   defaultValue?: V,
-): <T extends Partial<Record<K, V>>>(filter: T) => WithPartial<T, K>;
+): <T extends Partial<Record<K, V>>>(filter: T) => PickPartial<T, K>;
 export function toggleFilter(
   key: string,
   newValue: unknown,

@@ -35,7 +35,14 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/download/")({
-  head: () => generateMetadata({ title: "Download" }),
+  head: () =>
+    generateMetadata({
+      title: "Download",
+      description: "Comparison of library download sizes.",
+      openGraph: {
+        url: "/download/",
+      },
+    }),
   validateSearch: searchSchema,
   async loader({ context: { queryClient }, abortController }) {
     await queryClient.prefetchQuery(getDownloadResults(abortController.signal));
