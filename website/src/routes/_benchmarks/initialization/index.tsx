@@ -1,7 +1,6 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { create } from "mutative";
 import * as v from "valibot";
 import { PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
@@ -22,21 +21,19 @@ const searchSchema = v.object({
 
 export const Route = createFileRoute("/_benchmarks/initialization/")({
   head: () =>
-    create(
-      generateMetadata({
-        title: "Initialization",
-        description: "Benchmark results for creating a schema.",
-        openGraph: {
-          url: "/initialization/",
-        },
-      }),
-      ({ links }) => {
-        links.push({
+    generateMetadata({
+      title: "Initialization",
+      description: "Benchmark results for creating a schema.",
+      openGraph: {
+        url: "/initialization/",
+      },
+      links: [
+        {
           rel: "stylesheet",
           href: benchmarkStyles,
-        });
-      },
-    ),
+        },
+      ],
+    }),
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType } }) => ({ optimizeType }),

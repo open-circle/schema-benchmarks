@@ -1,5 +1,6 @@
 import type { PickNonNullable } from "@schema-benchmarks/utils";
-import { create } from "mutative";
+import type { AnyRouteMatch } from "@tanstack/react-router";
+import { castDraft, create } from "mutative";
 import {
   createMetadataGenerator,
   type GeneratorInputMetadata,
@@ -15,21 +16,22 @@ const _generateMetadata = createMetadataGenerator({
   baseUrl: "https://schemabenchmarks.dev",
 });
 
-export const generateMetadata = (
-  meta: PickNonNullable<GeneratorInputMetadata, "description"> & {
-    image?:
-      | {
-          url: string;
-          alt?: string;
-        }
-      | string;
-  },
-) => {
-  const {
-    title,
-    description,
-    image = { url: "/logo.svg", alt: baseTitle },
-  } = meta;
+export const generateMetadata = ({
+  title,
+  description,
+  image = { url: "/logo.svg", alt: baseTitle },
+  links,
+  ...meta
+}: PickNonNullable<GeneratorInputMetadata, "description"> & {
+  image?:
+    | {
+        url: string;
+        alt?: string;
+      }
+    | string;
+  /** Extra links to add, e.g. stylesheets */
+  links?: NonNullable<AnyRouteMatch["links"]>;
+}) => {
   let resolvedTitle = baseTitle;
   if (title) {
     resolvedTitle =
@@ -45,6 +47,7 @@ export const generateMetadata = (
     _generateMetadata({
       ...meta,
       title: { absolute: resolvedTitle },
+      description,
       twitter: {
         site: "@eskimojo",
         creator: "@eskimojo",
@@ -67,6 +70,7 @@ export const generateMetadata = (
         name: "twitter:url",
         content: head.meta.find((m) => m?.property === "og:url")?.content ?? "",
       });
+      if (links) head.links.push(...castDraft(links));
     },
   );
 };

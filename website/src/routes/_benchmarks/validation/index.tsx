@@ -1,7 +1,6 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { create } from "mutative";
 import * as v from "valibot";
 import { PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
@@ -25,21 +24,19 @@ const searchSchema = v.object({
 
 export const Route = createFileRoute("/_benchmarks/validation/")({
   head: () =>
-    create(
-      generateMetadata({
-        title: "Validation",
-        description: "Benchmark results for validating data.",
-        openGraph: {
-          url: "/validation/",
-        },
-      }),
-      ({ links }) => {
-        links.push({
+    generateMetadata({
+      title: "Validation",
+      description: "Benchmark results for validating data.",
+      openGraph: {
+        url: "/validation/",
+      },
+      links: [
+        {
           rel: "stylesheet",
           href: benchmarkStyles,
-        });
-      },
-    ),
+        },
+      ],
+    }),
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType, dataType } }) => ({
