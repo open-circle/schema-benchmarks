@@ -42,4 +42,4 @@ Simple utilities that might be useful in multiple places, that aren't worth depe
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.MD).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
