@@ -124,9 +124,6 @@ describe("setAbortableTimeout", () => {
 });
 
 describe("serialize", () => {
-  it("should serialize bigints", () => {
-    expect(serialize(BigInt(1))).toBe('{"$bigint":"1"}');
-  });
   it("should sort object keys", () => {
     expect(serialize({ b: 2, a: 1 })).toBe('{"a":1,"b":2}');
   });

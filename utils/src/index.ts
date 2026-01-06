@@ -231,7 +231,6 @@ export default function isPlainObject(obj: unknown): obj is object {
 
 export function serialize(value: unknown): string {
   return JSON.stringify(value, (_key, value) => {
-    if (typeof value === "bigint") return { $bigint: value.toString() };
     // sort the object keys before serialization, so { a: 1, b: 2 } === { b: 2, a: 1 }
     if (isPlainObject(value)) {
       return Object.fromEntries(
