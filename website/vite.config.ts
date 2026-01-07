@@ -20,6 +20,9 @@ import { speedPresets } from "./src/features/download/speed";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
+  build: {
+    sourcemap: true,
+  },
   plugins: [
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
