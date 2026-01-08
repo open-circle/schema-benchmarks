@@ -6,7 +6,11 @@ import {
   type RouterHistory,
 } from "@tanstack/react-router";
 import { Fragment } from "react";
-import { type RenderOptions, render } from "vitest-browser-react";
+import {
+  type RenderOptions,
+  type RenderResult,
+  render,
+} from "vitest-browser-react";
 import { makeQueryClient } from "@/data/query";
 import { getRouter } from "@/router";
 
@@ -20,7 +24,13 @@ export interface RenderWithProviderOptions extends RenderOptions {
   router?: RegisteredRouter;
 }
 
-export function renderWithProviders(
+interface RenderWithProvidersResult extends RenderResult {
+  queryClient: QueryClient;
+  history: RouterHistory;
+  router: RegisteredRouter;
+}
+
+export async function renderWithProviders(
   ui: React.ReactElement,
   {
     queryClient = makeQueryClient(),
@@ -30,12 +40,12 @@ export function renderWithProviders(
     wrapper: Wrapper = Fragment,
     ...options
   }: RenderWithProviderOptions = {},
-) {
+): Promise<RenderWithProvidersResult> {
   return {
     queryClient,
     history,
     router,
-    ...render(ui, {
+    ...(await render(ui, {
       ...options,
       wrapper({ children }) {
         return (
@@ -46,6 +56,6 @@ export function renderWithProviders(
           </RouterContextProvider>
         );
       },
-    }),
+    })),
   };
 }
