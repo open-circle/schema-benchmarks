@@ -7,7 +7,7 @@ import {
   partition,
   unsafeEntries,
 } from "@schema-benchmarks/utils";
-import { Bench, type Task } from "tinybench";
+import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 import { CaseRegistry } from "../bench/registry.ts";
 import type { BenchResults } from "../results/types.ts";
 
@@ -22,13 +22,15 @@ const caseRegistry = new CaseRegistry();
 function processResults(tasks: Array<Task>) {
   const [successTasks, errorTasks] = partition(
     tasks,
-    (task): task is typeof task & { result: NonNullable<typeof task.result> } =>
-      !!task.result && !task.result.error,
+    (task): task is Task & { result: TaskResultCompleted } =>
+      task.result.state === "completed",
   );
   if (errorTasks.length) {
     console.error(
       "Errors:",
-      errorTasks.map((task) => task.result?.error),
+      errorTasks.map((task) =>
+        task.result.state === "errored" ? task.result.error : task.result,
+      ),
     );
   }
   for (const task of successTasks) {
@@ -44,7 +46,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
-          mean: task.result.mean,
+          mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
         });
         break;
@@ -61,7 +63,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
-          mean: task.result.mean,
+          mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
         });
         break;
@@ -82,7 +84,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
-          mean: task.result.mean,
+          mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
           errorType: entry.errorType,
         });
