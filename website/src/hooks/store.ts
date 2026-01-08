@@ -18,7 +18,7 @@ export class ExternalStore<T> extends EventTarget {
     super();
   }
   // biome-ignore lint/suspicious/noConfusingVoidType: void is valid for a return type
-  protected setState(setter: T | ((state: Draft<T>) => void | T)) {
+  setState(setter: T | ((state: Draft<T>) => void | T)) {
     const state = isFunction(setter)
       ? (create(this.state, setter) as T)
       : setter;
