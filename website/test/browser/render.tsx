@@ -5,6 +5,7 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
+import { Fragment } from "react";
 import { type RenderOptions, render } from "vitest-browser-react";
 import { makeQueryClient } from "@/data/query";
 import { getRouter } from "@/router";
@@ -26,7 +27,7 @@ export function renderWithProviders(
     historyOpts,
     history = createMemoryHistory(historyOpts),
     router = getRouter(history),
-    wrapper: Wrapper,
+    wrapper: Wrapper = Fragment,
     ...options
   }: RenderWithProviderOptions = {},
 ) {
@@ -40,7 +41,7 @@ export function renderWithProviders(
         return (
           <RouterContextProvider router={router}>
             <QueryClientProvider client={queryClient}>
-              {Wrapper ? <Wrapper>{children}</Wrapper> : children}
+              <Wrapper>{children}</Wrapper>
             </QueryClientProvider>
           </RouterContextProvider>
         );
