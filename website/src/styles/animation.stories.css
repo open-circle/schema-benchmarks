@@ -20,4 +20,5 @@
   align-items: center;
   justify-content: center;
   animation: slide-right 1s infinite;
+  text-align: center;
 }

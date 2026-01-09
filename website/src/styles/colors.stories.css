@@ -11,4 +11,5 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--shape-medium);
+  text-align: center;
 }

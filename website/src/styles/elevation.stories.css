@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   &.bordered {
     border: 1px solid var(--divider);
   }
