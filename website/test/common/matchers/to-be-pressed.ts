@@ -55,6 +55,7 @@ export function toBePressed(
 }
 
 declare module "vitest" {
+  // biome-ignore lint/correctness/noUnusedVariables: needs to be same
   interface Assertion<T> {
     /**
      * @description
@@ -65,6 +66,6 @@ declare module "vitest" {
      *
      * await expect.element(page.getByRole("button", { name: "Pressed" })).toBePressed();
      */
-    toBePressed(): T;
+    toBePressed: () => void;
   }
 }

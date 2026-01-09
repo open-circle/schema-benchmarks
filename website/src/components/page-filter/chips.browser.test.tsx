@@ -18,9 +18,9 @@ const getLinkOptions = (opt: (typeof options)[number]) => ({
 });
 
 const locators = unsafeFromEntries(
-  unsafeEntries(labels).map(([option, label]) => [
+  unsafeEntries(labels).map(([option, { label }]) => [
     option,
-    page.getByRole("link", { name: label.label }),
+    page.getByRole("link", { name: label }),
   ]),
 );
 

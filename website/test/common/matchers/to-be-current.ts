@@ -75,26 +75,29 @@ function getAttributeComment(
 }
 
 declare module "vitest" {
+  // biome-ignore lint/correctness/noUnusedVariables: needs to be same
   interface Assertion<T> {
-    /**
-     * @description
-     * Asserts that the element has the `aria-current` attribute.
-     *
-     * @example
-     * <a href="/about" aria-current="page">About</a>
-     *
-     * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent();
-     */
-    toBeCurrent(): T;
-    /**
-     * @description
-     * Asserts that the element has the `aria-current` attribute with the given value.
-     *
-     * @example
-     * <a href="/about" aria-current="page">About</a>
-     *
-     * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent("page");
-     */
-    toBeCurrent(value: CurrentValue): T;
+    toBeCurrent: {
+      /**
+       * @description
+       * Asserts that the element has the `aria-current` attribute.
+       *
+       * @example
+       * <a href="/about" aria-current="page">About</a>
+       *
+       * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent();
+       */
+      (): void;
+      /**
+       * @description
+       * Asserts that the element has the `aria-current` attribute with the given value.
+       *
+       * @example
+       * <a href="/about" aria-current="page">About</a>
+       *
+       * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent("page");
+       */
+      (value: CurrentValue): void;
+    };
   }
 }
