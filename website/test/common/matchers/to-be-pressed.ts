@@ -1,40 +1,39 @@
 import type { ExpectationResult, MatcherState } from "@vitest/expect";
-import { getMessage } from "./utils";
+import type { Locator } from "vitest/browser";
+import { getElementFromUserInput, getMessage } from "./utils";
 
 export function toBePressed(
   this: MatcherState,
-  element: unknown,
+  actual: Element | Locator,
 ): ExpectationResult {
-  if (!(element instanceof HTMLElement))
-    throw new Error("Expected an HTML element");
+  const htmlElement = getElementFromUserInput(actual, toBePressed, this);
 
-  const roles = (element.getAttribute("role") ?? "")
+  const roles = (htmlElement.getAttribute("role") ?? "")
     .split(" ")
     .map((role) => role.trim());
 
-  const isButton =
-    element.tagName.toLowerCase() === "button" ||
-    (element.tagName.toLowerCase() === "input" &&
-      (element as HTMLInputElement).type === "button") ||
+  const canBePressed =
+    htmlElement.tagName.toLowerCase() === "button" ||
+    (htmlElement.tagName.toLowerCase() === "input" &&
+      (htmlElement as HTMLInputElement).type === "button") ||
     roles.includes("button");
 
-  const pressedAttribute = element.getAttribute("aria-pressed");
+  const hasPressedAttribute = htmlElement.hasAttribute("aria-pressed");
+  const pressedAttribute = htmlElement.getAttribute("aria-pressed");
 
-  const isValidAriaElement =
+  const isValidAriaPressed =
     pressedAttribute === "true" || pressedAttribute === "false";
 
-  if (!isButton || !isValidAriaElement) {
-    return {
-      pass: false,
-      message: () =>
-        `Only button or input with type="button" or element with role="button" and a valid aria-pressed attribute can be used with .toBePressed()`,
-    };
+  if (!canBePressed || (hasPressedAttribute && !isValidAriaPressed)) {
+    throw new Error(
+      "Element is not a button or does not have a valid aria-pressed attribute",
+    );
   }
 
   const isPressed = pressedAttribute === "true";
 
   return {
-    pass: isButton && isPressed,
+    pass: canBePressed && isPressed,
 
     message: () => {
       const matcher = this.utils.matcherHint(

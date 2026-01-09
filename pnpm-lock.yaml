@@ -24,6 +24,9 @@ catalogs:
     '@vitest/expect':
       specifier: ^4.0.16
       version: 4.0.16
+    '@vitest/pretty-format':
+      specifier: ^4.0.16
+      version: 4.0.16
     playwright:
       specifier: ^1.57.0
       version: 1.57.0
@@ -327,6 +330,15 @@ importers:
       '@vitest/expect':
         specifier: 'catalog:'
         version: 4.0.16
+      '@vitest/pretty-format':
+        specifier: 'catalog:'
+        version: 4.0.16
+      ansi-regex:
+        specifier: ^6.2.2
+        version: 6.2.2
+      ansi-styles:
+        specifier: ^6.2.3
+        version: 6.2.3
       esquery:
         specifier: ^1.6.0
         version: 1.6.0
