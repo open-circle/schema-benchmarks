@@ -2,17 +2,14 @@ import { unsafeEntries, unsafeFromEntries } from "@schema-benchmarks/utils";
 import { it } from "@test/browser/fixtures";
 import { describe, expect } from "vitest";
 import { page } from "vitest/browser";
-import { PageFilterChips } from "./chips";
+import { type OptionLabel, PageFilterChips } from "./chips";
 
 const options = ["foo", "bar", "baz"] as const;
-const labels: Record<
-  (typeof options)[number],
-  { label: string; icon: string }
-> = {
+const labels = {
   foo: { label: "Foo", icon: "home" },
   bar: { label: "Bar", icon: "home" },
   baz: { label: "Baz", icon: "home" },
-};
+} satisfies Record<(typeof options)[number], OptionLabel>;
 const getLinkOptions = (opt: (typeof options)[number]) => ({
   to: `/${opt}`,
 });
