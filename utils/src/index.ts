@@ -309,3 +309,16 @@ export function getTransitionName(
   }
   return name.replace(/[^a-zA-Z0-9]/g, "-");
 }
+
+export function uniqueBy<T>(
+  values: ReadonlyArray<T>,
+  getKey: (value: T) => unknown,
+) {
+  const keys = new Set();
+  return values.filter((value) => {
+    const key = getKey(value);
+    if (keys.has(key)) return false;
+    keys.add(key);
+    return true;
+  });
+}
