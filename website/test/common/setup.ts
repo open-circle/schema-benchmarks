@@ -1,7 +1,8 @@
 import { type ExpectPollOptions, expect } from "vitest";
+import { toBeCurrent } from "./matchers/to-be-current";
 import { toBePressed } from "./matchers/to-be-pressed";
 
-expect.extend({ toBePressed });
+expect.extend({ toBePressed, toBeCurrent });
 
 expect.ref = (refObject, pollOptions) =>
   expect.poll(() => refObject.current, pollOptions);

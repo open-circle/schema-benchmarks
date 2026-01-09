@@ -62,17 +62,15 @@ export function getMessage(
   context: MatcherState,
   matcher: string,
   expectedLabel: string,
-  expectedValue: string,
+  expectedValue: unknown,
   receivedLabel: string,
-  receivedValue: string,
+  receivedValue: unknown,
 ) {
   return [
     `${matcher}\n`,
-    // eslint-disable-next-line new-cap
     `${expectedLabel}:\n${context.utils.EXPECTED_COLOR(
       redent(display(context, expectedValue), 2),
     )}`,
-    // eslint-disable-next-line new-cap
     `${receivedLabel}:\n${context.utils.RECEIVED_COLOR(
       redent(display(context, receivedValue), 2),
     )}`,
@@ -83,6 +81,7 @@ class GenericTypeError extends Error {
   constructor(
     expectedString: string,
     received: unknown,
+    // biome-ignore lint/suspicious/noExplicitAny: contravariant
     matcherFn: (...args: any) => any,
     context: MatcherState,
   ) {
@@ -124,6 +123,7 @@ function isLocator(value: Locator | Element | null): value is Locator {
 
 export function getElementFromUserInput(
   elementOrLocator: Element | Locator | null,
+  // biome-ignore lint/suspicious/noExplicitAny: contravariant
   matcherFn: (...args: any) => any,
   context: MatcherState,
 ): HTMLElement | SVGElement {

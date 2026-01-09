@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`toBeCurrent (with element) > should fail for element with wrong aria-current value 1`] = `
+<d>expect(</b><r>element</g><d>).toHaveAttribute(</b><g><g>"aria-current"<g></g><d>, </b><g><g>"page"<g></g><d>) // element.getAttribute("aria-current") === "page"</b>
+
+Expected the element to have attribute:
+<g>  aria-current="page"</g>
+Received:
+<r>  aria-current="step"</g>
+`;
+
+exports[`toBeCurrent (with element) > should fail for element without aria-current 1`] = `
+<d>expect(</b><r>element</g><d>).toHaveAttribute(</b><g><g>"aria-current"<g></g><d>) // element.hasAttribute("aria-current")</b>
+
+Expected the element to have attribute:
+<g>  aria-current</g>
+Received:
+<r>  null</g>
+`;
+
+exports[`toBeCurrent (with locator) > should fail for element with wrong aria-current value 1`] = `
+<d>expect(</b><r>element</g><d>).toHaveAttribute(</b><g><g>"aria-current"<g></g><d>, </b><g><g>"page"<g></g><d>) // element.getAttribute("aria-current") === "page"</b>
+
+Expected the element to have attribute:
+<g>  aria-current="page"</g>
+Received:
+<r>  aria-current="step"</g>
+`;
+
+exports[`toBeCurrent (with locator) > should fail for element without aria-current 1`] = `
+<d>expect(</b><r>element</g><d>).toHaveAttribute(</b><g><g>"aria-current"<g></g><d>) // element.hasAttribute("aria-current")</b>
+
+Expected the element to have attribute:
+<g>  aria-current</g>
+Received:
+<r>  null</g>
+`;

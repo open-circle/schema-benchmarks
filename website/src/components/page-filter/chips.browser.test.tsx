@@ -52,13 +52,13 @@ describe("PageFilterChips", () => {
         },
       },
     );
-    await expect.element(locators.foo).toHaveAttribute("aria-current", "page");
+    await expect.element(locators.foo).toBeCurrent("page");
     expect(history.location.pathname).toBe("/foo");
     await locators.bar.click();
-    await expect.element(locators.bar).toHaveAttribute("aria-current", "page");
+    await expect.element(locators.bar).toBeCurrent("page");
     expect(history.location.pathname).toBe("/bar");
     await locators.baz.click();
-    await expect.element(locators.baz).toHaveAttribute("aria-current", "page");
+    await expect.element(locators.baz).toBeCurrent("page");
     expect(history.location.pathname).toBe("/baz");
   });
 });
