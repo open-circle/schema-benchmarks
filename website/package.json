@@ -36,6 +36,7 @@
     "@mdx-js/rollup": "^3.1.1",
     "@netlify/vite-plugin-tanstack-start": "^1.2.1",
     "@storybook/react-vite": "^10.1.2",
+    "@tanstack/devtools-vite": "^0.4.1",
     "@types/d3": "^7.4.3",
     "@types/esquery": "^1.5.4",
     "@types/estree": "^1.0.8",

@@ -1,5 +1,6 @@
 import mdx from "@mdx-js/rollup";
 import netlify from "@netlify/vite-plugin-tanstack-start";
+import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
@@ -24,6 +25,7 @@ const config = defineConfig({
     sourcemap: true,
   },
   plugins: [
+    devtools(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
