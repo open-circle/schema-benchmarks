@@ -6,10 +6,10 @@ import {
   uniqueBy,
 } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ClientOnly } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { PlotContainer } from "@/components/plot";
 import { color } from "@/data/scale";
+import { useElementSize } from "@/hooks/use-content-box-size";
 import { getBenchResults } from "../../query";
 
 export type BenchPlotProps =
@@ -34,10 +34,15 @@ export function BenchPlot({ type, dataType }: BenchPlotProps) {
       type === "initialization" ? results[type] : results[type][dataType],
   });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
+  const [domRect, setTargetRef] = useElementSize();
   const plot = useMemo(
     () =>
       Plot.plot({
         marginLeft: 48,
+        width: domRect?.width,
+        x: {
+          tickSpacing: 150,
+        },
         y: {
           grid: true,
           label: "Time",
@@ -51,18 +56,15 @@ export function BenchPlot({ type, dataType }: BenchPlotProps) {
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: getLibraryName,
+            x: (d: BenchResult) =>
+              d.libraryName + (d.note ? ` (${d.note})` : ""),
             y: "mean",
             fill: "mean",
             sort: { x: "y" },
           }),
         ],
       }),
-    [values],
+    [values, domRect?.width],
   );
-  return (
-    <ClientOnly>
-      <PlotContainer plot={plot} />
-    </ClientOnly>
-  );
+  return <PlotContainer plot={plot} ref={setTargetRef} />;
 }

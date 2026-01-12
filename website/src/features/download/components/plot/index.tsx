@@ -2,10 +2,10 @@ import * as Plot from "@observablehq/plot";
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ClientOnly } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { PlotContainer } from "@/components/plot";
 import { color } from "@/data/scale";
+import { useElementSize } from "@/hooks/use-content-box-size";
 import { getDownloadResults } from "../../query";
 
 const getLibraryName = (d: DownloadResult) => {
@@ -23,10 +23,12 @@ export function DownloadPlot({ minify }: { minify: MinifyType }) {
     select: (results) => results[minify],
   });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
+  const [domRect, setTargetRef] = useElementSize();
   const plot = useMemo(
     () =>
       Plot.plot({
         marginLeft: 48,
+        width: domRect?.width,
         y: {
           grid: true,
           label: "Size",
@@ -40,18 +42,15 @@ export function DownloadPlot({ minify }: { minify: MinifyType }) {
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: getLibraryName,
+            x: (d: DownloadResult) =>
+              d.libraryName + (d.note ? ` (${d.note})` : ""),
             y: "bytes",
             fill: "bytes",
             sort: { x: "y" },
           }),
         ],
       }),
-    [values],
+    [values, domRect?.width],
   );
-  return (
-    <ClientOnly>
-      <PlotContainer plot={plot} />
-    </ClientOnly>
-  );
+  return <PlotContainer plot={plot} ref={setTargetRef} />;
 }

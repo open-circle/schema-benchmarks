@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { BenchPlot } from "@/features/benchmark/components/plot";
 import { DownloadPlot } from "@/features/download/components/plot";
+import { ClientOnly } from "@tanstack/react-router";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -24,7 +25,9 @@ export const personSchema = v.object({
 export type Person = v.InferOutput<typeof personSchema>;
 ```
 
-<BenchPlot type="initialization" />
+<ClientOnly>
+  <BenchPlot type="initialization" />
+</ClientOnly>
 
 ### <Link to="/validation">Validation</Link>
 
@@ -39,6 +42,7 @@ if (v.is(personSchema, data)) {
 }
 ```
 
+<ClientOnly>
 Parsing valid data:
 
 <BenchPlot type="validation" dataType="valid" />
@@ -46,6 +50,7 @@ Parsing valid data:
 Parsing invalid data:
 
 <BenchPlot type="validation" dataType="invalid" />
+</ClientOnly>
 
 > Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`).
 > In these cases, we categorise them accordingly.
@@ -62,6 +67,7 @@ const person = v.parse(personSchema, data);
 // person is of type Person
 ```
 
+<ClientOnly>
 Parsing valid data:
 
 <BenchPlot type="parsing" dataType="valid" />
@@ -69,6 +75,7 @@ Parsing valid data:
 Parsing invalid data (aborting early if possible):
 
 <BenchPlot type="parsing" dataType="invalid" />
+</ClientOnly>
 
 ### Tags
 
@@ -92,6 +99,7 @@ As well as running runtime tests, we test the bundle size of each library. This 
 
 We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
 
+<ClientOnly>
 With minification:
 
 <DownloadPlot minify="minified" />
@@ -99,3 +107,4 @@ With minification:
 Without minification:
 
 <DownloadPlot minify="unminified" />
+</ClientOnly>
