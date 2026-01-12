@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { BenchPlot } from "@/features/benchmark/components/plot";
 import { DownloadPlot } from "@/features/download/components/plot";
 import { ClientOnly } from "@tanstack/react-router";
+import { Suspense } from "react";
+import { Spinner } from "@/components/spinner";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -25,9 +27,14 @@ export const personSchema = v.object({
 export type Person = v.InferOutput<typeof personSchema>;
 ```
 
-<ClientOnly>
-  <BenchPlot type="initialization" />
-</ClientOnly>
+<Suspense fallback={<Spinner />}>
+  <ClientOnly>
+    <BenchPlot type="initialization" />
+
+    <p class="typo-caption">For graphs on this page, the best result for each library is shown.</p>
+
+  </ClientOnly>
+</Suspense>
 
 ### <Link to="/validation">Validation</Link>
 
@@ -42,15 +49,19 @@ if (v.is(personSchema, data)) {
 }
 ```
 
+<Suspense fallback={<Spinner />}>
 <ClientOnly>
-Parsing valid data:
+
+Validating valid data:
 
 <BenchPlot type="validation" dataType="valid" />
 
-Parsing invalid data:
+Validating invalid data:
 
 <BenchPlot type="validation" dataType="invalid" />
+
 </ClientOnly>
+</Suspense>
 
 > Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`).
 > In these cases, we categorise them accordingly.
@@ -67,7 +78,9 @@ const person = v.parse(personSchema, data);
 // person is of type Person
 ```
 
+<Suspense fallback={<Spinner />}>
 <ClientOnly>
+
 Parsing valid data:
 
 <BenchPlot type="parsing" dataType="valid" />
@@ -75,7 +88,9 @@ Parsing valid data:
 Parsing invalid data (aborting early if possible):
 
 <BenchPlot type="parsing" dataType="invalid" />
+
 </ClientOnly>
+</Suspense>
 
 ### Tags
 
@@ -99,7 +114,9 @@ As well as running runtime tests, we test the bundle size of each library. This 
 
 We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
 
+<Suspense fallback={<Spinner />}>
 <ClientOnly>
+
 With minification:
 
 <DownloadPlot minify="minified" />
@@ -107,4 +124,6 @@ With minification:
 Without minification:
 
 <DownloadPlot minify="unminified" />
+
 </ClientOnly>
+</Suspense>
