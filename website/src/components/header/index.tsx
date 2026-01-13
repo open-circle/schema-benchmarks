@@ -13,20 +13,33 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const hasCrumb = (data: unknown): data is { crumb: string } =>
+  typeof data === "object" &&
+  data !== null &&
+  "crumb" in data &&
+  typeof data.crumb === "string";
+
 export function Header() {
   const { open, setOpen } = useContext(SidebarOpenContext);
   const [crumbs, currentCrumb] = useMatches({
     select: (matches) => {
       const allCrumbs = matches
         .filter(
-          (match): match is typeof match & { staticData: { crumb: string } } =>
-            !!match.staticData.crumb,
+          (
+            match,
+          ): match is typeof match &
+            (
+              | { staticData: { crumb: string } }
+              | { loaderData: { crumb: string } }
+            ) => hasCrumb(match.loaderData) || hasCrumb(match.staticData),
         )
         .map((match) => ({
           to: match.pathname,
           params: match.params,
           search: match.search,
-          name: match.staticData.crumb,
+          name: hasCrumb(match.loaderData)
+            ? match.loaderData.crumb
+            : match.staticData.crumb,
         }));
       const currentCrumb = allCrumbs.pop();
       return [allCrumbs, currentCrumb] as const;
