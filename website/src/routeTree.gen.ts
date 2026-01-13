@@ -14,6 +14,7 @@ import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchmarks/validation/index'
 import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
 import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
+import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 
 const DownloadIndexRoute = DownloadIndexRouteImport.update({
   id: '/download/',
@@ -42,10 +43,16 @@ const BenchmarksInitializationIndexRoute =
     path: '/initialization/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
+  id: '/repo/raw/$',
+  path: '/repo/raw/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
+  '/repo/raw/$': typeof RepoRawSplatRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
   '/parsing': typeof BenchmarksParsingIndexRoute
   '/validation': typeof BenchmarksValidationIndexRoute
@@ -53,6 +60,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/download': typeof DownloadIndexRoute
+  '/repo/raw/$': typeof RepoRawSplatRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
   '/parsing': typeof BenchmarksParsingIndexRoute
   '/validation': typeof BenchmarksValidationIndexRoute
@@ -61,19 +69,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_home/': typeof HomeIndexRoute
   '/download/': typeof DownloadIndexRoute
+  '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
   '/_benchmarks/parsing/': typeof BenchmarksParsingIndexRoute
   '/_benchmarks/validation/': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/download' | '/initialization' | '/parsing' | '/validation'
+  fullPaths:
+    | '/'
+    | '/download'
+    | '/repo/raw/$'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/download' | '/initialization' | '/parsing' | '/validation'
+  to:
+    | '/'
+    | '/download'
+    | '/repo/raw/$'
+    | '/initialization'
+    | '/parsing'
+    | '/validation'
   id:
     | '__root__'
     | '/_home/'
     | '/download/'
+    | '/repo/raw/$'
     | '/_benchmarks/initialization/'
     | '/_benchmarks/parsing/'
     | '/_benchmarks/validation/'
@@ -82,6 +104,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
+  RepoRawSplatRoute: typeof RepoRawSplatRoute
   BenchmarksInitializationIndexRoute: typeof BenchmarksInitializationIndexRoute
   BenchmarksParsingIndexRoute: typeof BenchmarksParsingIndexRoute
   BenchmarksValidationIndexRoute: typeof BenchmarksValidationIndexRoute
@@ -124,12 +147,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksInitializationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/repo/raw/$': {
+      id: '/repo/raw/$'
+      path: '/repo/raw/$'
+      fullPath: '/repo/raw/$'
+      preLoaderRoute: typeof RepoRawSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
+  RepoRawSplatRoute: RepoRawSplatRoute,
   BenchmarksInitializationIndexRoute: BenchmarksInitializationIndexRoute,
   BenchmarksParsingIndexRoute: BenchmarksParsingIndexRoute,
   BenchmarksValidationIndexRoute: BenchmarksValidationIndexRoute,

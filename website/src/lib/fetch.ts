@@ -6,12 +6,17 @@ export class HTTPError extends Error {
   }
 }
 
+export async function baseFetch(input: RequestInfo | URL, init?: RequestInit) {
+  const response = await fetch(input, init);
+  if (!response.ok) throw new HTTPError(response);
+  return response;
+}
+
 export async function fetchJson<TSchema extends v.GenericSchema>(
   schema: TSchema,
   input: RequestInfo | URL,
   init?: RequestInit,
 ) {
-  const response = await fetch(input, init);
-  if (!response.ok) throw new HTTPError(response);
+  const response = await baseFetch(input, init);
   return v.parse(schema, await response.json());
 }

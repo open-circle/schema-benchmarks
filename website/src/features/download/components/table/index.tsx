@@ -7,7 +7,7 @@ import {
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { ButtonGroup } from "@/components/button";
-import { ExternalLinkToggleButton } from "@/components/button/toggle";
+import { InternalLinkToggleButton } from "@/components/button/toggle";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";
@@ -87,25 +87,31 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                     className="source-links"
                     ariaLabel="Links to files used"
                   >
-                    <ExternalLinkToggleButton
-                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${result.fileName}`}
+                    <InternalLinkToggleButton
+                      to="/repo/raw/$"
+                      params={{
+                        _splat: `schemas/libraries/${result.fileName}`,
+                      }}
                       target="_blank"
                       rel="noreferrer noopener"
                       tooltip="Open source"
                     >
                       <MdSymbol>code</MdSymbol>
-                    </ExternalLinkToggleButton>
-                    <ExternalLinkToggleButton
-                      href={`https://github.com/open-circle/schema-benchmarks/blob/main/schemas/libraries/${getCompiledPath(
-                        result,
-                        minify,
-                      )}`}
+                    </InternalLinkToggleButton>
+                    <InternalLinkToggleButton
+                      to="/repo/raw/$"
+                      params={{
+                        _splat: `schemas/libraries/${getCompiledPath(
+                          result,
+                          minify,
+                        )}`,
+                      }}
                       target="_blank"
                       rel="noreferrer noopener"
                       tooltip="Open compiled"
                     >
                       <MdSymbol>deployed_code</MdSymbol>
-                    </ExternalLinkToggleButton>
+                    </InternalLinkToggleButton>
                   </ButtonGroup>
                 </td>
               </tr>
