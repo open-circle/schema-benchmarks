@@ -1,26 +1,26 @@
 {
   "dependencies": {
     "@schema-benchmarks/utils": "workspace:*",
-    "@standard-schema/spec": "^1.0.0",
+    "@standard-schema/spec": "^1.1.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
-    "arktype": "^2.1.25",
-    "dedent": "^1.7.0",
-    "effect": "^3.19.3",
-    "joi": "^18.0.1",
+    "arktype": "^2.1.29",
+    "dedent": "^1.7.1",
+    "effect": "^3.19.14",
+    "joi": "^18.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.0.51",
+    "typebox": "^1.0.78",
     "typia": "^11.0.0",
-    "valibot": "^1.2.0",
+    "valibot": "catalog:",
     "yup": "^1.7.1",
-    "zod": "^4.1.12"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "unplugin-macros": "^0.18.3",
+    "unplugin-macros": "^0.18.6",
     "vite": "catalog:",
     "vite-plugin-dts": "^4.5.4"
   },
