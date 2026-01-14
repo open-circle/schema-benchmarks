@@ -37,7 +37,7 @@ let immutableEmpty$1 = [];
 function capitalize(string$2) {
 	return string$2.slice(0, 1).toUpperCase() + string$2.slice(1);
 }
-let copy = ((d$1) => ({ ...d$1 }));
+let copy = ((d) => ({ ...d }));
 function fromString(string$2) {
 	let _idx = 0;
 	while (true) {
@@ -110,8 +110,8 @@ function stringify(unknown$2) {
 	let string$1$1 = "{ ";
 	for (let i$1 = 0, i_finish$1 = keys.length; i$1 < i_finish$1; ++i$1) {
 		let key = keys[i$1];
-		let value$1 = unknown$2[key];
-		string$1$1 = string$1$1 + key + ": " + stringify(value$1) + "; ";
+		let value = unknown$2[key];
+		string$1$1 = string$1$1 + key + ": " + stringify(value) + "; ";
 	}
 	return string$1$1 + "}";
 }
@@ -232,8 +232,8 @@ let shakenTraps = { get: (target, prop) => {
 	if (l === void 0) return target[prop];
 	if (prop === shakenRef) return target[prop];
 	let l$1 = valFromOption(l);
-	let message$1 = "Schema S." + l$1 + " is not enabled. To start using it, add S.enable" + capitalize(l$1) + "() at the project root.";
-	throw new Error("[Sury] " + message$1);
+	let message = "Schema S." + l$1 + " is not enabled. To start using it, add S.enable" + capitalize(l$1) + "() at the project root.";
+	throw new Error("[Sury] " + message);
 } };
 function shaken(apiName) {
 	let mut = new Schema("never");
@@ -277,10 +277,10 @@ let ErrorClass = {
 	value,
 	constructor
 };
-function embed(b, value$1) {
+function embed(b, value) {
 	let e = b.g.e;
 	let l = e.length;
-	e[l] = value$1;
+	e[l] = value;
 	return "e[" + l + "]";
 }
 function inlineConst(b, schema$1) {
@@ -338,17 +338,17 @@ function _var(_b) {
 	return this.i;
 }
 function _notVar(b) {
-	let val$1 = this;
+	let val = this;
 	let v = varWithoutAllocation(b.g);
-	let i = val$1.i;
-	if (i === "") val$1.b.a(v);
+	let i = val.i;
+	if (i === "") val.b.a(v);
 	else if (b.a !== void 0) b.a(v + "=" + i);
 	else {
 		b.c = b.c + (v + "=" + i + ";");
 		b.g.a(v);
 	}
-	val$1.v = _var;
-	val$1.i = v;
+	val.v = _var;
+	val.i = v;
 	return v;
 }
 function allocateVal(b, schema$1) {
@@ -390,11 +390,11 @@ function asyncVal(b, initial) {
 		type: "unknown"
 	};
 }
-function objectJoin(inlinedLocation, value$1) {
-	return inlinedLocation + ":" + value$1 + ",";
+function objectJoin(inlinedLocation, value) {
+	return inlinedLocation + ":" + value + ",";
 }
-function arrayJoin(_inlinedLocation, value$1) {
-	return value$1 + ",";
+function arrayJoin(_inlinedLocation, value) {
+	return value + ",";
 }
 function make(b, isArray) {
 	return {
@@ -410,13 +410,13 @@ function make(b, isArray) {
 		r: ""
 	};
 }
-function add(objectVal, location, val$1) {
+function add(objectVal, location, val) {
 	let inlinedLocation = inlineLocation(objectVal.b, location);
-	objectVal.properties[location] = val$1;
-	if (val$1.f & 2) {
-		objectVal.r = objectVal.r + val$1.i + ",";
+	objectVal.properties[location] = val;
+	if (val.f & 2) {
+		objectVal.r = objectVal.r + val.i + ",";
 		objectVal.i = objectVal.i + objectVal.j(inlinedLocation, "a[" + objectVal.c++ + "]");
-	} else objectVal.i = objectVal.i + objectVal.j(inlinedLocation, val$1.i);
+	} else objectVal.i = objectVal.i + objectVal.j(inlinedLocation, val.i);
 }
 function merge$1(target, subObjectVal) {
 	let locations = Object.keys(subObjectVal.properties);
@@ -434,41 +434,41 @@ function complete(objectVal, isArray) {
 	objectVal.additionalItems = "strict";
 	return objectVal;
 }
-function addKey(b, input, key, val$1) {
-	return input.v(b) + "[" + key + "]=" + val$1.i;
+function addKey(b, input, key, val) {
+	return input.v(b) + "[" + key + "]=" + val.i;
 }
-function set(b, input, val$1) {
-	if (input === val$1) return "";
+function set(b, input, val) {
+	if (input === val) return "";
 	let inputVar = input.v(b);
 	let match = input.f & 2;
-	let match$1 = val$1.f & 2;
+	let match$1 = val.f & 2;
 	if (match) {
-		if (!match$1) return inputVar + "=Promise.resolve(" + val$1.i + ")";
+		if (!match$1) return inputVar + "=Promise.resolve(" + val.i + ")";
 	} else if (match$1) {
 		input.f = input.f | 2;
-		return inputVar + "=" + val$1.i;
+		return inputVar + "=" + val.i;
 	}
-	return inputVar + "=" + val$1.i;
+	return inputVar + "=" + val.i;
 }
 function get(b, targetVal, location) {
 	let properties = targetVal.properties;
-	let val$1 = properties[location];
-	if (val$1 !== void 0) return val$1;
+	let val = properties[location];
+	if (val !== void 0) return val;
 	let schema$1 = targetVal.additionalItems;
 	let schema$1$1;
 	if (schema$1 === "strip" || schema$1 === "strict") {
 		if (schema$1 === "strip") throw new Error("[Sury] The schema doesn't have additional items");
 		throw new Error("[Sury] The schema doesn't have additional items");
 	} else schema$1$1 = schema$1;
-	let val$1$1 = {
+	let val$1 = {
 		b,
 		v: _notVar,
 		i: targetVal.v(b) + ("[" + fromString(location) + "]"),
 		f: 0,
 		type: schema$1$1.type
 	};
-	properties[location] = val$1$1;
-	return val$1$1;
+	properties[location] = val$1;
+	return val$1;
 }
 function setInlined(b, input, inlined) {
 	return input.v(b) + "=" + inlined;
@@ -492,19 +492,19 @@ function embedSyncOperation(b, input, fn) {
 function failWithArg(b, path, fn, arg) {
 	return embed(b, (arg$1) => $$throw(b, fn(arg$1), path)) + "(" + arg + ")";
 }
-function fail(b, message$1, path) {
+function fail(b, message, path) {
 	return embed(b, () => $$throw(b, {
 		TAG: "OperationFailed",
-		_0: message$1
+		_0: message
 	}, path)) + "()";
 }
 function effectCtx(b, selfSchema, path) {
 	return {
 		schema: selfSchema,
-		fail: (message$1, customPathOpt) => {
+		fail: (message, customPathOpt) => {
 			return $$throw(b, {
 				TAG: "OperationFailed",
-				_0: message$1
+				_0: message
 			}, path + (customPathOpt !== void 0 ? customPathOpt : ""));
 		}
 	};
@@ -676,8 +676,8 @@ function unsupportedTransform(b, from, target, path) {
 function noopOperation(i) {
 	return i;
 }
-function setHas(has$1, tag) {
-	has$1[tag === "union" || tag === "ref" ? "unknown" : tag] = true;
+function setHas(has, tag) {
+	has[tag === "union" || tag === "ref" ? "unknown" : tag] = true;
 }
 let jsonName = "JSON";
 let jsonString$1 = shaken("jsonString");
@@ -805,16 +805,16 @@ function parse(prevB, schema$1, inputArg, path) {
 		else isUnsupported = true;
 	}
 	if (isUnsupported) unsupportedTransform(b, input, schema$1, path);
-	let compiler$1 = schema$1.compiler;
-	if (compiler$1 !== void 0) input = compiler$1(b, input, schema$1, path);
+	let compiler = schema$1.compiler;
+	if (compiler !== void 0) input = compiler(b, input, schema$1, path);
 	if (input.t !== true) {
 		let refiner = schema$1.refiner;
 		if (refiner !== void 0) b.c = b.c + refiner(b, input.v(b), schema$1, path);
 	}
 	let to$2 = schema$1.to;
 	if (to$2 !== void 0) {
-		let parser$1 = schema$1.parser;
-		if (parser$1 !== void 0) input = parser$1(b, input, schema$1, path);
+		let parser = schema$1.parser;
+		if (parser !== void 0) input = parser(b, input, schema$1, path);
 		if (input.t !== true) input = parse(b, to$2, input, path);
 	}
 	prevB.c = prevB.c + allocateScope(b);
@@ -836,19 +836,19 @@ function jsonableValidation(output, parent, path, flag) {
 		_0: parent
 	}, flag, path);
 	if (tagFlag & 256) {
-		output.anyOf.forEach((s$1) => jsonableValidation(s$1, parent, path, flag));
+		output.anyOf.forEach((s) => jsonableValidation(s, parent, path, flag));
 		return;
 	}
 	if (!(tagFlag & 192)) return;
 	let additionalItems = output.additionalItems;
 	if (additionalItems === "strip" || additionalItems === "strict");
 	else jsonableValidation(additionalItems, parent, path, flag);
-	let p$1 = output.properties;
-	if (p$1 !== void 0) {
-		let keys = Object.keys(p$1);
+	let p = output.properties;
+	if (p !== void 0) {
+		let keys = Object.keys(p);
 		for (let idx = 0, idx_finish = keys.length; idx < idx_finish; ++idx) {
 			let key = keys[idx];
-			jsonableValidation(p$1[key], parent, path, flag);
+			jsonableValidation(p[key], parent, path, flag);
 		}
 		return;
 	}
@@ -863,11 +863,11 @@ function reverse$1(schema$1) {
 		let to$2 = reversedHead;
 		if (to$2 !== void 0) mut.to = to$2;
 		else delete mut.to;
-		let parser$1 = mut.parser;
+		let parser = mut.parser;
 		let serializer = mut.serializer;
 		if (serializer !== void 0) mut.parser = serializer;
 		else delete mut.parser;
-		if (parser$1 !== void 0) mut.serializer = parser$1;
+		if (parser !== void 0) mut.serializer = parser;
 		else delete mut.serializer;
 		let fromDefault = mut.fromDefault;
 		let $$default = mut.default;
@@ -896,15 +896,15 @@ function reverse$1(schema$1) {
 		if (typeof mut.additionalItems === "object") mut.additionalItems = reverse$1(mut.additionalItems);
 		let anyOf = mut.anyOf;
 		if (anyOf !== void 0) {
-			let has$1 = {};
+			let has = {};
 			let newAnyOf = [];
 			for (let idx$1 = 0, idx_finish$1 = anyOf.length; idx$1 < idx_finish$1; ++idx$1) {
-				let s$1 = anyOf[idx$1];
-				let reversed$1 = reverse$1(s$1);
+				let s = anyOf[idx$1];
+				let reversed$1 = reverse$1(s);
 				newAnyOf.push(reversed$1);
-				setHas(has$1, reversed$1.type);
+				setHas(has, reversed$1.type);
 			}
-			mut.has = has$1;
+			mut.has = has;
 			mut.anyOf = newAnyOf;
 		}
 		let defs = mut.$defs;
@@ -970,10 +970,10 @@ function isAsyncInternal(schema$1, defs) {
 		return false;
 	}
 }
-function operationFn(s$1, o) {
-	if (o in s$1) return s$1[o];
-	let f = internalCompile(o & 32 ? reverse$1(s$1) : s$1, o, 0);
-	s$1[o] = f;
+function operationFn(s, o) {
+	if (o in s) return s[o];
+	let f = internalCompile(o & 32 ? reverse$1(s) : s, o, 0);
+	s[o] = f;
 	return f;
 }
 d(sp, "~standard", { get: function() {
@@ -1058,31 +1058,31 @@ function convertToJsonOrThrow$1(any$1, schema$1) {
 function convertToJsonStringOrThrow$1(input, schema$1) {
 	return operationFn(schema$1, 24)(input);
 }
-function reverseConvertOrThrow$1(value$1, schema$1) {
-	return operationFn(schema$1, 32)(value$1);
+function reverseConvertOrThrow$1(value, schema$1) {
+	return operationFn(schema$1, 32)(value);
 }
-function reverseConvertToJsonOrThrow$1(value$1, schema$1) {
-	return operationFn(schema$1, 40)(value$1);
+function reverseConvertToJsonOrThrow$1(value, schema$1) {
+	return operationFn(schema$1, 40)(value);
 }
-function reverseConvertToJsonStringOrThrow$1(value$1, schema$1, spaceOpt) {
+function reverseConvertToJsonStringOrThrow$1(value, schema$1, spaceOpt) {
 	let space = spaceOpt !== void 0 ? spaceOpt : 0;
-	return JSON.stringify(reverseConvertToJsonOrThrow$1(value$1, schema$1), null, space);
+	return JSON.stringify(reverseConvertToJsonOrThrow$1(value, schema$1), null, space);
 }
 function assertOrThrow$1(any$1, schema$1) {
 	return operationFn(schema$1, 5)(any$1);
 }
 let $$null = new Schema("null");
 $$null.const = null;
-function parse$1(value$1) {
-	if (value$1 === null) return $$null;
-	let $$typeof = typeof value$1;
+function parse$1(value) {
+	if (value === null) return $$null;
+	let $$typeof = typeof value;
 	let schema$1;
 	if ($$typeof === "object") {
 		let i = new Schema("instance");
-		i.class = value$1.constructor;
+		i.class = value.constructor;
 		schema$1 = i;
-	} else schema$1 = $$typeof === "undefined" ? unit : $$typeof === "number" ? Number.isNaN(value$1) ? new Schema("nan") : new Schema($$typeof) : new Schema($$typeof);
-	schema$1.const = value$1;
+	} else schema$1 = $$typeof === "undefined" ? unit : $$typeof === "number" ? Number.isNaN(value) ? new Schema("nan") : new Schema($$typeof) : new Schema($$typeof);
+	schema$1.const = value;
 	return schema$1;
 }
 function wrapExnToFailure(exn) {
@@ -1104,9 +1104,9 @@ function js_safe(fn) {
 }
 function js_safeAsync(fn) {
 	try {
-		return fn().then((value$1) => ({
+		return fn().then((value) => ({
 			success: true,
-			value: value$1
+			value
 		}), wrapExnToFailure);
 	} catch (exn) {
 		return Promise.resolve(wrapExnToFailure(exn));
@@ -1137,9 +1137,9 @@ function recursive$1(name, fn) {
 	globalConfig.d = void 0;
 	return schema$1;
 }
-function noValidation$1(schema$1, value$1) {
+function noValidation$1(schema$1, value) {
 	let mut = copyWithoutCache(schema$1);
-	mut.noValidation = value$1;
+	mut.noValidation = value;
 	return mut;
 }
 function appendRefiner(maybeExistingRefiner, refiner) {
@@ -1154,23 +1154,23 @@ function internalRefine(schema$1, refiner) {
 function refine$1(schema$1, refiner) {
 	return internalRefine(schema$1, (b, inputVar, selfSchema, path) => embed(b, refiner(effectCtx(b, selfSchema, path))) + "(" + inputVar + ");");
 }
-function addRefinement(schema$1, metadataId$4, refinement$1, refiner) {
-	let refinements$4 = schema$1[metadataId$4];
-	return internalRefine(set$1(schema$1, metadataId$4, refinements$4 !== void 0 ? refinements$4.concat(refinement$1) : [refinement$1]), refiner);
+function addRefinement(schema$1, metadataId, refinement, refiner) {
+	let refinements = schema$1[metadataId];
+	return internalRefine(set$1(schema$1, metadataId, refinements !== void 0 ? refinements.concat(refinement) : [refinement]), refiner);
 }
 function transform$1(schema$1, transformer) {
 	return updateOutput(schema$1, (mut) => {
 		mut.parser = (b, input, selfSchema, path) => {
 			let match = transformer(effectCtx(b, selfSchema, path));
-			let parser$1 = match.p;
-			if (parser$1 !== void 0) if (match.a !== void 0) return invalidOperation(b, path, "The S.transform doesn't allow parser and asyncParser at the same time. Remove parser in favor of asyncParser");
-			else return embedSyncOperation(b, input, parser$1);
+			let parser = match.p;
+			if (parser !== void 0) if (match.a !== void 0) return invalidOperation(b, path, "The S.transform doesn't allow parser and asyncParser at the same time. Remove parser in favor of asyncParser");
+			else return embedSyncOperation(b, input, parser);
 			let asyncParser = match.a;
 			if (asyncParser !== void 0) {
 				if (!(b.g.o & 2)) $$throw(b, "UnexpectedAsync", "");
-				let val$1 = embedSyncOperation(b, input, asyncParser);
-				val$1.f = val$1.f | 2;
-				return val$1;
+				let val = embedSyncOperation(b, input, asyncParser);
+				val.f = val.f | 2;
+				return val;
 			} else if (match.s !== void 0) return invalidOperation(b, path, "The S.transform parser is missing");
 			else return input;
 		};
@@ -1240,7 +1240,7 @@ function compiler(b, input, selfSchema, path) {
 	let inputAnyOf = input.anyOf;
 	if (inputAnyOf !== void 0) if (isWiderUnionSchema(schemas, inputAnyOf)) return input;
 	else return unsupportedTransform(b, input, selfSchema, path);
-	let fail$1 = (caught$1) => embed(b, function() {
+	let fail = (caught$1) => embed(b, function() {
 		let args = arguments;
 		return $$throw(b, {
 			TAG: "InvalidType",
@@ -1302,7 +1302,7 @@ function compiler(b, input, selfSchema, path) {
 	}
 	if (!exit) {
 		let nextElse = false;
-		let noop$1 = "";
+		let noop = "";
 		for (let idx$2 = 0, idx_finish = keys$1.length; idx$2 < idx_finish; ++idx$2) {
 			let schemas$1 = byKey$1[keys$1[idx$2]];
 			let isMultiple = schemas$1.length > 1;
@@ -1344,7 +1344,7 @@ function compiler(b, input, selfSchema, path) {
 									itemStart = itemStart + ("try{" + code$1 + "}catch(" + errorVar$1 + "){");
 									caught$2 = caught$2 + "," + errorVar$1;
 								}
-								itemStart = itemStart + fail$1(caught$2) + "}".repeat(code.length) + "}";
+								itemStart = itemStart + fail(caught$2) + "}".repeat(code.length) + "}";
 							}
 							itemNextElse = true;
 						}
@@ -1373,13 +1373,13 @@ function compiler(b, input, selfSchema, path) {
 					parser: 0
 				}, false);
 				if (itemNoop.contents) if (itemStart) {
-					if (typeValidation) itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){" + fail$1(caught$1) + "}");
+					if (typeValidation) itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){" + fail(caught$1) + "}");
 				} else {
 					let condBefore = cond;
 					cond = (inputVar$1) => condBefore(inputVar$1) + ("&&(" + itemNoop.contents + ")");
 				}
 				else if (typeValidation && itemStart) {
-					let errorCode = fail$1(caught$1);
+					let errorCode = fail(caught$1);
 					itemStart = itemStart + (itemNextElse ? "else{" + errorCode + "}" : errorCode);
 				}
 				body = itemStart + itemEnd;
@@ -1392,13 +1392,13 @@ function compiler(b, input, selfSchema, path) {
 				nextElse = true;
 			} else if (typeValidation) {
 				let cond$1 = cond(input.v(b));
-				noop$1 = noop$1 ? noop$1 + "||" + cond$1 : cond$1;
+				noop = noop ? noop + "||" + cond$1 : cond$1;
 			}
 		}
 		if (typeValidation || deoptIdx$1 === lastIdx) {
-			let errorCode$1 = fail$1(caught);
+			let errorCode$1 = fail(caught);
 			let tmp;
-			if (noop$1) tmp = (nextElse ? "else if" : "if") + ("(!(" + noop$1 + ")){" + errorCode$1 + "}");
+			if (noop) tmp = (nextElse ? "else if" : "if") + ("(!(" + noop + ")){" + errorCode$1 + "}");
 			else tmp = nextElse ? "else{" + errorCode$1 + "}" : errorCode$1;
 			start = start + tmp;
 		}
@@ -1414,7 +1414,7 @@ function factory(schemas) {
 	let len = schemas.length;
 	if (len === 1) return schemas[0];
 	if (len !== 0) {
-		let has$1 = {};
+		let has = {};
 		let anyOf = /* @__PURE__ */ new Set();
 		for (let idx = 0, idx_finish = schemas.length; idx < idx_finish; ++idx) {
 			let schema$1 = schemas[idx];
@@ -1422,16 +1422,16 @@ function factory(schemas) {
 				schema$1.anyOf.forEach((item) => {
 					anyOf.add(item);
 				});
-				Object.assign(has$1, schema$1.has);
+				Object.assign(has, schema$1.has);
 			} else {
 				anyOf.add(schema$1);
-				setHas(has$1, schema$1.type);
+				setHas(has, schema$1.type);
 			}
 		}
 		let mut = new Schema("union");
 		mut.anyOf = Array.from(anyOf);
 		mut.compiler = compiler;
-		mut.has = has$1;
+		mut.has = has;
 		return mut;
 	}
 	throw new Error("[Sury] S.union requires at least one item");
@@ -1467,10 +1467,10 @@ function factory$1(item, unitOpt) {
 	switch (match.type) {
 		case "undefined": return factory([unit$1, nestedOption(item)]);
 		case "union":
-			let has$1 = match.has;
+			let has = match.has;
 			let anyOf = match.anyOf;
 			return updateOutput(item, (mut) => {
-				let mutHas = copy(has$1);
+				let mutHas = copy(has);
 				let newAnyOf = [];
 				for (let idx = 0, idx_finish = anyOf.length; idx < idx_finish; ++idx) {
 					let schema$1 = anyOf[idx];
@@ -1525,16 +1525,16 @@ function getWithDefault(schema$1, $$default) {
 				let outputSchema = getOutputSchema(schema$2);
 				if (outputSchema.type !== "undefined") {
 					if (item !== void 0) {
-						let message$1 = "Can't set default for " + toExpression$1(mut);
-						throw new Error("[Sury] " + message$1);
+						let message = "Can't set default for " + toExpression$1(mut);
+						throw new Error("[Sury] " + message);
 					}
 					item = schema$2;
 					itemOutputSchema = outputSchema;
 				}
 			}
-			let s$1 = item;
+			let s = item;
 			let item$1;
-			if (s$1 !== void 0) item$1 = s$1;
+			if (s !== void 0) item$1 = s;
 			else {
 				let message$1 = "Can't set default for " + toExpression$1(mut);
 				throw new Error("[Sury] " + message$1);
@@ -1566,9 +1566,9 @@ function getWithDefault(schema$1, $$default) {
 				return asyncVal(input.b, input.i + ".then(" + operationInput.v(b) + "=>{" + operationCode + "return " + operationOutputVal.i + "})");
 			};
 			let to$2 = copyWithoutCache(itemOutputSchema);
-			let compiler$1 = to$2.compiler;
-			if (compiler$1 !== void 0) {
-				to$2.serializer = compiler$1;
+			let compiler = to$2.compiler;
+			if (compiler !== void 0) {
+				to$2.serializer = compiler;
 				delete to$2.compiler;
 			} else to$2.serializer = (_b, input, param, param$1) => input;
 			mut.to = to$2;
@@ -1897,8 +1897,8 @@ function proxify(item) {
 			maybeField = i !== void 0 ? i.schema : void 0;
 		} else maybeField = void 0;
 		if (maybeField === void 0) {
-			let message$1 = "Cannot read property " + inlinedLocation + " of " + toExpression$1(targetReversed);
-			throw new Error("[Sury] " + message$1);
+			let message = "Cannot read property " + inlinedLocation + " of " + toExpression$1(targetReversed);
+			throw new Error("[Sury] " + message);
 		}
 		return proxify({
 			k: 1,
@@ -1976,8 +1976,8 @@ function nested(fieldName) {
 			let to$2 = schema$2.to;
 			let flattenedItems = schema$2.items;
 			if (to$2) {
-				let message$2 = "Unsupported nested flatten for transformed object schema " + toExpression$1(schema$2);
-				throw new Error("[Sury] " + message$2);
+				let message = "Unsupported nested flatten for transformed object schema " + toExpression$1(schema$2);
+				throw new Error("[Sury] " + message);
 			}
 			let result = {};
 			for (let idx = 0, idx_finish = flattenedItems.length; idx < idx_finish; ++idx) {
@@ -2251,8 +2251,8 @@ function object$1(definer) {
 			f.push(item$1);
 			return proxify(item$1);
 		}
-		let message$1 = "The '" + toExpression$1(schema$1) + "' schema can't be flattened";
-		throw new Error("[Sury] " + message$1);
+		let message = "The '" + toExpression$1(schema$1) + "' schema can't be flattened";
+		throw new Error("[Sury] " + message);
 	};
 	let field = (fieldName, schema$1) => {
 		if (fieldName in properties) throw new Error("[Sury] " + ("The field \"" + fieldName + "\" defined twice with incompatible schemas"));
@@ -2426,27 +2426,27 @@ function option(item) {
 	return factory$1(item, unit);
 }
 function intMin(schema$1, minValue, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
 	return addRefinement(schema$1, metadataId$2, {
 		kind: {
 			TAG: "Min",
 			value: minValue
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + "<" + embed(b, minValue) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + "<" + embed(b, minValue) + "){" + fail(b, message, path) + "}");
 }
 function intMax(schema$1, maxValue, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
 	return addRefinement(schema$1, metadataId$2, {
 		kind: {
 			TAG: "Max",
 			value: maxValue
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ">" + embed(b, maxValue) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ">" + embed(b, maxValue) + "){" + fail(b, message, path) + "}");
 }
-function port$1(schema$1, message$1) {
-	let mutStandard = internalRefine(schema$1, (b, inputVar, selfSchema, path) => inputVar + ">0&&" + inputVar + "<65536&&" + inputVar + "%1===0||" + (message$1 !== void 0 ? fail(b, message$1, path) : failWithArg(b, path, (input) => ({
+function port$1(schema$1, message) {
+	let mutStandard = internalRefine(schema$1, (b, inputVar, selfSchema, path) => inputVar + ">0&&" + inputVar + "<65536&&" + inputVar + "%1===0||" + (message !== void 0 ? fail(b, message, path) : failWithArg(b, path, (input) => ({
 		TAG: "InvalidType",
 		expected: selfSchema,
 		received: input
@@ -2456,113 +2456,113 @@ function port$1(schema$1, message$1) {
 	return mutStandard;
 }
 function floatMin(schema$1, minValue, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
 	return addRefinement(schema$1, metadataId$3, {
 		kind: {
 			TAG: "Min",
 			value: minValue
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + "<" + embed(b, minValue) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + "<" + embed(b, minValue) + "){" + fail(b, message, path) + "}");
 }
 function floatMax(schema$1, maxValue, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
 	return addRefinement(schema$1, metadataId$3, {
 		kind: {
 			TAG: "Max",
 			value: maxValue
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ">" + embed(b, maxValue) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ">" + embed(b, maxValue) + "){" + fail(b, message, path) + "}");
 }
 function arrayMinLength(schema$1, length$2, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length$2 + " or more items long";
+	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length$2 + " or more items long";
 	return addRefinement(schema$1, metadataId, {
 		kind: {
 			TAG: "Min",
 			length: length$2
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ".length<" + embed(b, length$2) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ".length<" + embed(b, length$2) + "){" + fail(b, message, path) + "}");
 }
 function arrayMaxLength(schema$1, length$2, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length$2 + " or fewer items long";
+	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length$2 + " or fewer items long";
 	return addRefinement(schema$1, metadataId, {
 		kind: {
 			TAG: "Max",
 			length: length$2
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ".length>" + embed(b, length$2) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ".length>" + embed(b, length$2) + "){" + fail(b, message, path) + "}");
 }
 function stringMinLength(schema$1, length$2, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "String must be " + length$2 + " or more characters long";
+	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length$2 + " or more characters long";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: {
 			TAG: "Min",
 			length: length$2
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ".length<" + embed(b, length$2) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ".length<" + embed(b, length$2) + "){" + fail(b, message, path) + "}");
 }
 function stringMaxLength(schema$1, length$2, maybeMessage) {
-	let message$1 = maybeMessage !== void 0 ? maybeMessage : "String must be " + length$2 + " or fewer characters long";
+	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length$2 + " or fewer characters long";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: {
 			TAG: "Max",
 			length: length$2
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => "if(" + inputVar + ".length>" + embed(b, length$2) + "){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(" + inputVar + ".length>" + embed(b, length$2) + "){" + fail(b, message, path) + "}");
 }
 function email$1(schema$1, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid email address";
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid email address";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: "Email",
-		message: message$1
-	}, (b, inputVar, param, path) => "if(!" + embed(b, emailRegex) + ".test(" + inputVar + ")){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(!" + embed(b, emailRegex) + ".test(" + inputVar + ")){" + fail(b, message, path) + "}");
 }
 function uuid$1(schema$1, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid UUID";
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid UUID";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: "Uuid",
-		message: message$1
-	}, (b, inputVar, param, path) => "if(!" + embed(b, uuidRegex) + ".test(" + inputVar + ")){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(!" + embed(b, uuidRegex) + ".test(" + inputVar + ")){" + fail(b, message, path) + "}");
 }
 function cuid$1(schema$1, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid CUID";
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid CUID";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: "Cuid",
-		message: message$1
-	}, (b, inputVar, param, path) => "if(!" + embed(b, cuidRegex) + ".test(" + inputVar + ")){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "if(!" + embed(b, cuidRegex) + ".test(" + inputVar + ")){" + fail(b, message, path) + "}");
 }
 function url$1(schema$1, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid url";
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid url";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: "Url",
-		message: message$1
-	}, (b, inputVar, param, path) => "try{new URL(" + inputVar + ")}catch(_){" + fail(b, message$1, path) + "}");
+		message
+	}, (b, inputVar, param, path) => "try{new URL(" + inputVar + ")}catch(_){" + fail(b, message, path) + "}");
 }
 function pattern$1(schema$1, re, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid";
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid";
 	return addRefinement(schema$1, metadataId$1, {
 		kind: {
 			TAG: "Pattern",
 			re
 		},
-		message: message$1
-	}, (b, inputVar, param, path) => (re.global ? embed(b, re) + ".lastIndex=0;" : "") + ("if(!" + embed(b, re) + ".test(" + inputVar + ")){" + fail(b, message$1, path) + "}"));
+		message
+	}, (b, inputVar, param, path) => (re.global ? embed(b, re) + ".lastIndex=0;" : "") + ("if(!" + embed(b, re) + ".test(" + inputVar + ")){" + fail(b, message, path) + "}"));
 }
 function datetime$1(schema$1, messageOpt) {
-	let message$1 = messageOpt !== void 0 ? messageOpt : "Invalid datetime string! Expected UTC";
-	let refinement$1 = {
+	let message = messageOpt !== void 0 ? messageOpt : "Invalid datetime string! Expected UTC";
+	let refinement = {
 		kind: "Datetime",
-		message: message$1
+		message
 	};
-	let refinements$4 = schema$1[metadataId$1];
-	return transform$1(set$1(schema$1, metadataId$1, refinements$4 !== void 0 ? refinements$4.concat(refinement$1) : [refinement$1]), (s$1) => ({
+	let refinements = schema$1[metadataId$1];
+	return transform$1(set$1(schema$1, metadataId$1, refinements !== void 0 ? refinements.concat(refinement) : [refinement]), (s) => ({
 		p: (string$2) => {
-			if (!datetimeRe.test(string$2)) s$1.fail(message$1, void 0);
+			if (!datetimeRe.test(string$2)) s.fail(message, void 0);
 			return new Date(string$2);
 		},
 		s: (date) => date.toISOString()
@@ -2586,20 +2586,20 @@ function js_union(values) {
 	return factory(values.map(definitionToSchema));
 }
 function js_transform(schema$1, maybeParser, maybeSerializer) {
-	return transform$1(schema$1, (s$1) => ({
-		p: maybeParser !== void 0 ? (v) => maybeParser(v, s$1) : void 0,
-		s: maybeSerializer !== void 0 ? (v) => maybeSerializer(v, s$1) : void 0
+	return transform$1(schema$1, (s) => ({
+		p: maybeParser !== void 0 ? (v) => maybeParser(v, s) : void 0,
+		s: maybeSerializer !== void 0 ? (v) => maybeSerializer(v, s) : void 0
 	}));
 }
 function js_refine(schema$1, refiner) {
-	return refine$1(schema$1, (s$1) => ((v) => refiner(v, s$1)));
+	return refine$1(schema$1, (s) => ((v) => refiner(v, s)));
 }
 function noop(a) {
 	return a;
 }
 function js_asyncParserRefine(schema$1, refine$2) {
-	return transform$1(schema$1, (s$1) => ({
-		a: (v) => refine$2(v, s$1).then(() => v),
+	return transform$1(schema$1, (s) => ({
+		a: (v) => refine$2(v, s).then(() => v),
 		s: noop
 	}));
 }
@@ -2630,7 +2630,7 @@ function js_nullable(schema$1, maybeOr) {
 	});
 }
 function js_merge(s1, s2) {
-	let s$1;
+	let s;
 	if (s1.type === "object" && s2.type === "object") {
 		let additionalItems1 = s1.additionalItems;
 		if (typeof additionalItems1 === "string" && typeof s2.additionalItems === "string" && !s1.to && !s2.to) {
@@ -2661,10 +2661,10 @@ function js_merge(s1, s2) {
 			mut.properties = properties;
 			mut.additionalItems = additionalItems1;
 			mut.compiler = schemaCompiler;
-			s$1 = mut;
-		} else s$1 = void 0;
-	} else s$1 = void 0;
-	if (s$1 !== void 0) return s$1;
+			s = mut;
+		} else s = void 0;
+	} else s = void 0;
+	if (s !== void 0) return s;
 	throw new Error("[Sury] The merge supports only structured object schemas without transformations");
 }
 function global$1(override) {
@@ -2686,8 +2686,8 @@ function internalToJSONSchema(schema$1, defs) {
 		case "string":
 			let $$const = schema$1.const;
 			jsonSchema.type = "string";
-			refinements$1(schema$1).forEach((refinement$1) => {
-				let match = refinement$1.kind;
+			refinements$1(schema$1).forEach((refinement) => {
+				let match = refinement.kind;
 				if (typeof match !== "object") switch (match) {
 					case "Email":
 						jsonSchema.format = "email";
@@ -2727,8 +2727,8 @@ function internalToJSONSchema(schema$1, defs) {
 			let $$const$1 = schema$1.const;
 			if (format !== void 0) if (format === "int32") {
 				jsonSchema.type = "integer";
-				refinements$2(schema$1).forEach((refinement$1) => {
-					let match = refinement$1.kind;
+				refinements$2(schema$1).forEach((refinement) => {
+					let match = refinement.kind;
 					if (match.TAG === "Min") jsonSchema.minimum = match.value;
 					else jsonSchema.maximum = match.value;
 				});
@@ -2739,8 +2739,8 @@ function internalToJSONSchema(schema$1, defs) {
 			}
 			else {
 				jsonSchema.type = "number";
-				refinements$3(schema$1).forEach((refinement$1) => {
-					let match = refinement$1.kind;
+				refinements$3(schema$1).forEach((refinement) => {
+					let match = refinement.kind;
 					if (match.TAG === "Min") jsonSchema.minimum = match.value;
 					else jsonSchema.maximum = match.value;
 				});
@@ -2762,8 +2762,8 @@ function internalToJSONSchema(schema$1, defs) {
 			else {
 				jsonSchema.items = internalToJSONSchema(additionalItems, defs);
 				jsonSchema.type = "array";
-				refinements(schema$1).forEach((refinement$1) => {
-					let match = refinement$1.kind;
+				refinements(schema$1).forEach((refinement) => {
+					let match = refinement.kind;
 					switch (match.TAG) {
 						case "Min":
 							jsonSchema.minItems = match.length;
@@ -2904,7 +2904,7 @@ function fromJSONSchema$1(jsonSchema) {
 		if (type_$1 === "object") {
 			let properties = jsonSchema.properties;
 			if (properties !== void 0) {
-				let schema$1$1 = object$1((s$1) => {
+				let schema$1$1 = object$1((s) => {
 					let obj = {};
 					Object.keys(properties).forEach((key) => {
 						let property = properties[key];
@@ -2922,7 +2922,7 @@ function fromJSONSchema$1(jsonSchema) {
 							});
 							else propertySchema$1 = option(propertySchema);
 						}
-						obj[key] = s$1.f(key, propertySchema$1);
+						obj[key] = s.f(key, propertySchema$1);
 					});
 					return obj;
 				});
@@ -2939,7 +2939,7 @@ function fromJSONSchema$1(jsonSchema) {
 				if (single.TAG === "Single") schema$2 = factory$2(definitionToSchema$1(single._0));
 				else {
 					let array$2 = single._0;
-					schema$2 = tuple$1((s$1) => array$2.map((d$1, idx) => s$1.item(idx, definitionToSchema$1(d$1))));
+					schema$2 = tuple$1((s) => array$2.map((d, idx) => s.item(idx, definitionToSchema$1(d))));
 				}
 			} else schema$2 = factory$2(json$1);
 			let min$2 = jsonSchema.minItems;
@@ -2957,12 +2957,12 @@ function fromJSONSchema$1(jsonSchema) {
 			schema$1 = len !== 1 ? len !== 0 ? factory(definitions$1.map(definitionToSchema$1)) : json$1 : definitionToSchema$1(definitions$1[0]);
 		} else if (definitions !== void 0) {
 			let len$1 = definitions.length;
-			schema$1 = len$1 !== 1 ? len$1 !== 0 ? refine$1(json$1, (s$1) => ((data) => {
-				definitions.forEach((d$1) => {
+			schema$1 = len$1 !== 1 ? len$1 !== 0 ? refine$1(json$1, (s) => ((data) => {
+				definitions.forEach((d) => {
 					try {
-						return assertOrThrow$1(data, definitionToSchema$1(d$1));
+						return assertOrThrow$1(data, definitionToSchema$1(d));
 					} catch (exn) {
-						return s$1.fail("Should pass for all schemas of the allOf property.", void 0);
+						return s.fail("Should pass for all schemas of the allOf property.", void 0);
 					}
 				});
 			})) : json$1 : definitionToSchema$1(definitions[0]);
@@ -2970,27 +2970,27 @@ function fromJSONSchema$1(jsonSchema) {
 			let definitions$2 = jsonSchema.oneOf;
 			if (definitions$2 !== void 0) {
 				let len$2 = definitions$2.length;
-				schema$1 = len$2 !== 1 ? len$2 !== 0 ? refine$1(json$1, (s$1) => ((data) => {
+				schema$1 = len$2 !== 1 ? len$2 !== 0 ? refine$1(json$1, (s) => ((data) => {
 					let hasOneValidRef = { contents: false };
-					definitions$2.forEach((d$1) => {
+					definitions$2.forEach((d) => {
 						let passed;
 						try {
-							assertOrThrow$1(data, definitionToSchema$1(d$1));
+							assertOrThrow$1(data, definitionToSchema$1(d));
 							passed = true;
 						} catch (exn) {
 							passed = false;
 						}
 						if (passed) {
-							if (hasOneValidRef.contents) s$1.fail("Should pass single schema according to the oneOf property.", void 0);
+							if (hasOneValidRef.contents) s.fail("Should pass single schema according to the oneOf property.", void 0);
 							hasOneValidRef.contents = true;
 							return;
 						}
 					});
-					if (!hasOneValidRef.contents) return s$1.fail("Should pass at least one schema according to the oneOf property.", void 0);
+					if (!hasOneValidRef.contents) return s.fail("Should pass at least one schema according to the oneOf property.", void 0);
 				})) : json$1 : definitionToSchema$1(definitions$2[0]);
 			} else {
 				let not = jsonSchema.not;
-				if (not !== void 0) schema$1 = refine$1(json$1, (s$1) => ((data) => {
+				if (not !== void 0) schema$1 = refine$1(json$1, (s) => ((data) => {
 					let passed;
 					try {
 						assertOrThrow$1(data, definitionToSchema$1(not));
@@ -2998,7 +2998,7 @@ function fromJSONSchema$1(jsonSchema) {
 					} catch (exn) {
 						passed = false;
 					}
-					if (passed) return s$1.fail("Should NOT be valid against schema in the not property.", void 0);
+					if (passed) return s.fail("Should NOT be valid against schema in the not property.", void 0);
 				}));
 				else if (primitives !== void 0) {
 					let len$3 = primitives.length;
@@ -3012,8 +3012,8 @@ function fromJSONSchema$1(jsonSchema) {
 						let exit$3 = 0;
 						if (Array.isArray(type_$2)) schema$1 = factory(type_$2.map((type_$1) => fromJSONSchema$1(Object.assign({}, jsonSchema, { type: some(type_$1) }))));
 						else if (type_$2 === "string") {
-							let p$1 = jsonSchema.pattern;
-							let schema$4 = p$1 !== void 0 ? pattern$1(string$1, new RegExp(p$1), void 0) : string$1;
+							let p = jsonSchema.pattern;
+							let schema$4 = p !== void 0 ? pattern$1(string$1, new RegExp(p), void 0) : string$1;
 							let minLength = jsonSchema.minLength;
 							let schema$5 = minLength !== void 0 ? stringMinLength(schema$4, minLength, void 0) : schema$4;
 							let maxLength = jsonSchema.maxLength;
@@ -3099,8 +3099,8 @@ function min$1(schema$1, minValue, maybeMessage) {
 		else return floatMin(schema$1, minValue, maybeMessage);
 		case "array": return arrayMinLength(schema$1, minValue, maybeMessage);
 		default:
-			let message$1 = "S.min is not supported for " + toExpression$1(schema$1) + " schema. Coerce the schema to string, number or array using S.to first.";
-			throw new Error("[Sury] " + message$1);
+			let message = "S.min is not supported for " + toExpression$1(schema$1) + " schema. Coerce the schema to string, number or array using S.to first.";
+			throw new Error("[Sury] " + message);
 	}
 }
 function max$1(schema$1, maxValue, maybeMessage) {
@@ -3110,30 +3110,30 @@ function max$1(schema$1, maxValue, maybeMessage) {
 		else return floatMax(schema$1, maxValue, maybeMessage);
 		case "array": return arrayMaxLength(schema$1, maxValue, maybeMessage);
 		default:
-			let message$1 = "S.max is not supported for " + toExpression$1(schema$1) + " schema. Coerce the schema to string, number or array using S.to first.";
-			throw new Error("[Sury] " + message$1);
+			let message = "S.max is not supported for " + toExpression$1(schema$1) + " schema. Coerce the schema to string, number or array using S.to first.";
+			throw new Error("[Sury] " + message);
 	}
 }
 function length$1(schema$1, length$1$1, maybeMessage) {
 	switch (schema$1.type) {
 		case "string":
-			let message$1 = maybeMessage !== void 0 ? maybeMessage : "String must be exactly " + length$1$1 + " characters long";
+			let message = maybeMessage !== void 0 ? maybeMessage : "String must be exactly " + length$1$1 + " characters long";
 			return addRefinement(schema$1, metadataId$1, {
+				kind: {
+					TAG: "Length",
+					length: length$1$1
+				},
+				message
+			}, (b, inputVar, param, path) => "if(" + inputVar + ".length!==" + embed(b, length$1$1) + "){" + fail(b, message, path) + "}");
+		case "array":
+			let message$1 = maybeMessage !== void 0 ? maybeMessage : "Array must be exactly " + length$1$1 + " items long";
+			return addRefinement(schema$1, metadataId, {
 				kind: {
 					TAG: "Length",
 					length: length$1$1
 				},
 				message: message$1
 			}, (b, inputVar, param, path) => "if(" + inputVar + ".length!==" + embed(b, length$1$1) + "){" + fail(b, message$1, path) + "}");
-		case "array":
-			let message$1$1 = maybeMessage !== void 0 ? maybeMessage : "Array must be exactly " + length$1$1 + " items long";
-			return addRefinement(schema$1, metadataId, {
-				kind: {
-					TAG: "Length",
-					length: length$1$1
-				},
-				message: message$1$1
-			}, (b, inputVar, param, path) => "if(" + inputVar + ".length!==" + embed(b, length$1$1) + "){" + fail(b, message$1$1, path) + "}");
 		default:
 			let message$2 = "S.length is not supported for " + toExpression$1(schema$1) + " schema. Coerce the schema to string or array using S.to first.";
 			throw new Error("[Sury] " + message$2);

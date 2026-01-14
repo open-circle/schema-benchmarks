@@ -26,7 +26,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 
 //#endregion
-//#region ../node_modules/.pnpm/joi@18.0.1/node_modules/joi/dist/joi-browser.min.js
+//#region ../node_modules/.pnpm/joi@18.0.2/node_modules/joi/dist/joi-browser.min.js
 var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "object" == typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports ? exports.joi = t() : e.joi = t();
@@ -6208,8 +6208,8 @@ var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) =
 					coerce(e$2, { schema: t$2 }) {
 						if ("boolean" != typeof e$2) {
 							if ("string" == typeof e$2) {
-								const r$2 = t$2._flags.sensitive ? e$2 : e$2.toLowerCase();
-								e$2 = "true" === r$2 || "false" !== r$2 && e$2;
+								const r$2 = e$2.trim(), s$1 = t$2._flags.sensitive ? r$2 : r$2.toLowerCase();
+								e$2 = "true" === s$1 || "false" !== s$1 && e$2;
 							}
 							return "boolean" != typeof e$2 && (e$2 = t$2.$_terms.truthy && t$2.$_terms.truthy.has(e$2, null, null, !t$2._flags.sensitive) || (!t$2.$_terms.falsy || !t$2.$_terms.falsy.has(e$2, null, null, !t$2._flags.sensitive)) && e$2), { value: e$2 };
 						}
@@ -6350,7 +6350,7 @@ var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) =
 			},
 			6913: (e$1) => {
 				"use strict";
-				e$1.exports = { version: "18.0.1" };
+				e$1.exports = { version: "18.0.2" };
 			},
 			6984: () => {},
 			7125: (e$1, t$1, r$1) => {

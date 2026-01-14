@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/arrays.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/arrays.js
 const liftArray = (data) => Array.isArray(data) ? data : [data];
 /**
 * Splits an array into two arrays based on the result of a predicate
@@ -67,7 +67,7 @@ const groupBy = (array, discriminant) => array.reduce((result, item) => {
 const arrayEquals = (l, r, opts) => l.length === r.length && l.every(opts?.isEqual ? (lItem, i) => opts.isEqual(lItem, r[i]) : (lItem, i) => lItem === r[i]);
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/domain.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/domain.js
 const hasDomain = (data, kind) => domainOf(data) === kind;
 const domainOf = (data) => {
 	const builtinType = typeof data;
@@ -90,7 +90,7 @@ const jsTypeOfDescriptions = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/errors.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/errors.js
 var InternalArktypeError = class extends Error {};
 const throwInternalError = (message) => throwError(message, InternalArktypeError);
 const throwError = (message, ctor = Error) => {
@@ -109,7 +109,7 @@ const noSuggest = (s) => ` ${s}`;
 const ZeroWidthSpace = "​";
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/flatMorph.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/flatMorph.js
 const flatMorph = (o, flatMapEntry) => {
 	const result = {};
 	const inputIsArray = Array.isArray(o);
@@ -125,7 +125,7 @@ const flatMorph = (o, flatMapEntry) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/records.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/records.js
 /**
 * Object.entries wrapper providing narrowed types for objects with known sets
 * of keys, e.g. those defined internally as configs
@@ -168,7 +168,7 @@ const enumValues = (tsEnum) => Object.values(tsEnum).filter((v) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/objectKinds.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/objectKinds.js
 const ecmascriptConstructors = {
 	Array,
 	Boolean,
@@ -300,7 +300,7 @@ const constructorExtends = (ctor, base) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/clone.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/clone.js
 /** Deeply copy the properties of the a non-subclassed Object, Array or Date.*/
 const deepClone = (input) => _clone(input, /* @__PURE__ */ new Map());
 const _clone = (input, seen) => {
@@ -324,7 +324,7 @@ const _clone = (input, seen) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/functions.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/functions.js
 const cached = (thunk) => {
 	let result = unset;
 	return () => result === unset ? result = thunk() : result;
@@ -333,14 +333,14 @@ const isThunk = (value$1) => typeof value$1 === "function" && value$1.length ===
 const DynamicFunction = class extends Function {
 	constructor(...args) {
 		const params = args.slice(0, -1);
-		const body = args.at(-1);
+		const body = args[args.length - 1];
 		try {
 			super(...params, body);
 		} catch (e) {
 			return throwInternalError(`Encountered an unexpected error while compiling your definition:
                 Message: ${e} 
                 Source: (${args.slice(0, -1)}) => {
-                    ${args.at(-1)}
+                    ${args[args.length - 1]}
                 }`);
 		}
 	}
@@ -368,20 +368,20 @@ const envHasCsp = cached(() => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/generics.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/generics.js
 const brand = noSuggest("brand");
 /** primitive key used to represent an inferred type at compile-time */
 const inferred = noSuggest("arkInferred");
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/hkt.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/hkt.js
 noSuggest("args");
 var Hkt = class {
 	constructor() {}
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/isomorphic.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/isomorphic.js
 /** get a CJS/ESM compatible string representing the current file */
 const fileName = () => {
 	try {
@@ -397,8 +397,9 @@ const isomorphic = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/strings.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/strings.js
 const capitalize$1 = (s) => s[0].toUpperCase() + s.slice(1);
+const uncapitalize = (s) => s[0].toLowerCase() + s.slice(1);
 const anchoredRegex = (regex$2) => new RegExp(anchoredSource(regex$2), typeof regex$2 === "string" ? "" : regex$2.flags);
 const anchoredSource = (regex$2) => {
 	return `^(?:${typeof regex$2 === "string" ? regex$2 : regex$2.source})$`;
@@ -415,7 +416,7 @@ const whitespaceChars = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/numbers.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/numbers.js
 const anchoredNegativeZeroPattern = /^-0\.?0*$/.source;
 const positiveIntegerPattern = /[1-9]\d*/.source;
 const looseDecimalPattern = /\.\d+/.source;
@@ -494,8 +495,8 @@ const tryParseWellFormedBigint = (def) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/registry.js
-const arkUtilVersion = "0.53.0";
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/registry.js
+const arkUtilVersion = "0.56.0";
 const initialRegistryContents = {
 	version: arkUtilVersion,
 	filename: isomorphic.fileName(),
@@ -529,11 +530,11 @@ const baseNameFor = (value$1) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/primitive.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/primitive.js
 const serializePrimitive = (value$1) => typeof value$1 === "string" ? JSON.stringify(value$1) : typeof value$1 === "bigint" ? `${value$1}n` : `${value$1}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/serialize.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/serialize.js
 const snapshot = (data, opts = {}) => _serialize(data, {
 	onUndefined: `$ark.undefined`,
 	onBigInt: (n) => `$ark.bigint-${n}`,
@@ -543,7 +544,7 @@ const printable = (data, opts) => {
 	switch (domainOf(data)) {
 		case "object":
 			const o = data;
-			const ctorName = o.constructor.name;
+			const ctorName = o.constructor?.name ?? "Object";
 			return ctorName === "Object" || ctorName === "Array" ? opts?.quoteKeys === false ? stringifyUnquoted(o, opts?.indent ?? 0, "") : JSON.stringify(_serialize(o, printableOpts, []), null, opts?.indent) : stringifyUnquoted(o, opts?.indent ?? 0, "");
 		case "symbol": return printableOpts.onSymbol(data);
 		default: return serializePrimitive(data);
@@ -558,7 +559,7 @@ const stringifyUnquoted = (value$1, indent$1, currentIndent) => {
 		const items = value$1.map((item) => stringifyUnquoted(item, indent$1, nextIndent)).join(",\n" + nextIndent);
 		return indent$1 ? `[\n${nextIndent}${items}\n${currentIndent}]` : `[${items}]`;
 	}
-	const ctorName = value$1.constructor.name;
+	const ctorName = value$1.constructor?.name ?? "Object";
 	if (ctorName === "Object") {
 		const keyValues = stringAndSymbolicEntriesOf(value$1).map(([key, val]) => {
 			return `${nextIndent}${typeof key === "symbol" ? printableOpts.onSymbol(key) : isDotAccessible(key) ? key : JSON.stringify(key)}: ${stringifyUnquoted(val, indent$1, nextIndent)}`;
@@ -593,7 +594,7 @@ const _serialize = (data, opts, seen) => {
 		case "symbol": return printableOpts.onSymbol(data);
 		case "bigint": return opts.onBigInt?.(data) ?? `${data}n`;
 		case "undefined": return opts.onUndefined ?? "undefined";
-		case "string": return data.replaceAll("\\", "\\\\");
+		case "string": return data.replace(/\\/g, "\\\\");
 		default: return data;
 	}
 };
@@ -636,7 +637,7 @@ const timeWithUnnecessarySeconds = /:\d\d:00$/;
 const pad = (value$1, length) => String(value$1).padStart(length, "0");
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/path.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/path.js
 const appendStringifiedKey = (path, prop, ...[opts]) => {
 	const stringifySymbol = opts?.stringifySymbol ?? printable;
 	let propAccessChain = path;
@@ -685,7 +686,7 @@ var ReadonlyPath = class extends ReadonlyArray {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/scanner.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/scanner.js
 var Scanner = class {
 	chars;
 	i;
@@ -760,7 +761,7 @@ const writeUnmatchedGroupCloseMessage = (char, unscanned) => `Unmatched ${char}$
 const writeUnclosedGroupMessage = (missingChar) => `Missing ${missingChar}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+util@0.53.0/node_modules/@ark/util/out/traits.js
+//#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/traits.js
 const implementedTraits = noSuggest("implementedTraits");
 const hasTrait = (traitClass) => (o) => {
 	if (!hasDomain(o, "object")) return false;
@@ -778,7 +779,7 @@ var Trait = class extends NoopBase {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/registry.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/registry.js
 let _registryName = "$ark";
 let suffix = 2;
 while (_registryName in globalThis) _registryName = `$ark${suffix++}`;
@@ -789,7 +790,7 @@ const reference = (name) => `${registryName}.${name}`;
 const registeredReference = (value$1) => reference(register(value$1));
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/compile.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/compile.js
 var CompiledFunction = class extends CastableBase {
 	argNames;
 	body = "";
@@ -915,14 +916,14 @@ var NodeCompiler = class extends CompiledFunction {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/utils.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/utils.js
 const makeRootAndArrayPropertiesMutable = (o) => flatMorph(o, (k, v) => [k, isArray(v) ? [...v] : v]);
 const arkKind = noSuggest("arkKind");
 const hasArkKind = (value$1, kind) => value$1?.[arkKind] === kind;
 const isNode = (value$1) => hasArkKind(value$1, "root") || hasArkKind(value$1, "constraint");
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/implement.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/implement.js
 const basisKinds = [
 	"unit",
 	"proto",
@@ -1001,7 +1002,7 @@ const implementNode = (_) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/toJsonSchema.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/toJsonSchema.js
 var ToJsonSchemaError = class extends Error {
 	name = "ToJsonSchemaError";
 	code;
@@ -1019,6 +1020,7 @@ var ToJsonSchemaError = class extends Error {
 	}
 };
 const defaultConfig = {
+	target: "draft-2020-12",
 	dialect: "https://json-schema.org/draft/2020-12/schema",
 	useRefs: false,
 	fallback: {
@@ -1045,7 +1047,7 @@ const ToJsonSchema = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/config.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/config.js
 $ark.config ??= {};
 const mergeConfigs = (base, merged) => {
 	if (!merged) return base;
@@ -1069,15 +1071,27 @@ const mergeConfigs = (base, merged) => {
 	}
 	return result;
 };
+const jsonSchemaTargetToDialect = {
+	"draft-2020-12": "https://json-schema.org/draft/2020-12/schema",
+	"draft-07": "http://json-schema.org/draft-07/schema#"
+};
 const mergeToJsonSchemaConfigs = ((baseConfig, mergedConfig) => {
-	if (!baseConfig) return mergedConfig ?? {};
+	if (!baseConfig) return resolveTargetToDialect(mergedConfig ?? {}, void 0);
 	if (!mergedConfig) return baseConfig;
 	const result = { ...baseConfig };
 	let k;
 	for (k in mergedConfig) if (k === "fallback") result.fallback = mergeFallbacks(baseConfig.fallback, mergedConfig.fallback);
 	else result[k] = mergedConfig[k];
-	return result;
+	return resolveTargetToDialect(result, mergedConfig);
 });
+const resolveTargetToDialect = (opts, userOpts) => {
+	if (userOpts?.dialect !== void 0) return opts;
+	if (userOpts?.target !== void 0) return {
+		...opts,
+		dialect: jsonSchemaTargetToDialect[userOpts.target]
+	};
+	return opts;
+};
 const mergeFallbacks = (base, merged) => {
 	base = normalizeFallback(base);
 	merged = normalizeFallback(merged);
@@ -1089,7 +1103,7 @@ const mergeFallbacks = (base, merged) => {
 const normalizeFallback = (fallback) => typeof fallback === "function" ? { default: fallback } : fallback ?? {};
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/errors.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/errors.js
 var ArkError = class ArkError extends CastableBase {
 	[arkKind] = "error";
 	path;
@@ -1305,7 +1319,7 @@ var TraversalError = class extends Error {
 const indent = (error) => error.toString().split("\n").join("\n  ");
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/traversal.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/traversal.js
 var Traversal = class {
 	/**
 	* #### the path being validated or morphed
@@ -1394,7 +1408,7 @@ var Traversal = class {
 		return this.currentErrorCount !== 0;
 	}
 	get currentBranch() {
-		return this.branches.at(-1);
+		return this.branches[this.branches.length - 1];
 	}
 	queueMorphs(morphs) {
 		const input = {
@@ -1456,7 +1470,7 @@ var Traversal = class {
 		}
 	}
 	applyMorphsAtPath(path, morphs) {
-		const key = path.at(-1);
+		const key = path[path.length - 1];
 		let parent;
 		if (key !== void 0) {
 			parent = this.root;
@@ -1467,7 +1481,7 @@ var Traversal = class {
 			const morphIsNode = isNode(morph);
 			const result = morph(parent === void 0 ? this.root : parent[key], this);
 			if (result instanceof ArkError) {
-				this.errors.add(result);
+				if (!this.errors.includes(result)) this.errors.add(result);
 				break;
 			}
 			if (result instanceof ArkErrors) {
@@ -1490,7 +1504,7 @@ const traverseKey = (key, fn$1, ctx) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/node.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/node.js
 var BaseNode = class extends Callable {
 	attachments;
 	$;
@@ -1815,7 +1829,7 @@ const NodeSelector = {
 const writeSelectAssertionMessage = (from, selector) => `${from} had no references matching ${printable(selector)}.`;
 const typePathToPropString = (path) => stringifyPath(path, { stringifyNonKey: (node$1) => node$1.expression });
 const referenceMatcher = /"(\$ark\.[^"]+)"/g;
-const compileMeta = (metaJson) => JSON.stringify(metaJson).replaceAll(referenceMatcher, "$1");
+const compileMeta = (metaJson) => JSON.stringify(metaJson).replace(referenceMatcher, "$1");
 const flatRef = (path, node$1) => ({
 	path,
 	node: node$1,
@@ -1826,7 +1840,7 @@ const appendUniqueFlatRefs = (existing, refs) => appendUnique(existing, refs, { 
 const appendUniqueNodes = (existing, refs) => appendUnique(existing, refs, { isEqual: (l, r) => l.equals(r) });
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/disjoint.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/disjoint.js
 var Disjoint = class Disjoint extends Array {
 	static init(kind, l, r, ctx) {
 		return new Disjoint({
@@ -1886,7 +1900,7 @@ const describeReason = (value$1) => isNode(value$1) ? value$1.expression : isArr
 const writeUnsatisfiableExpressionError = (expression) => `${expression} results in an unsatisfiable type`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/shared/intersections.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/intersections.js
 const intersectionCache = {};
 const intersectNodesRoot = (l, r, $) => intersectOrPipeNodes(l, r, {
 	$,
@@ -1972,7 +1986,7 @@ const _pipeMorphed = (from, to, ctx) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/constraint.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/constraint.js
 var BaseConstraint = class extends BaseNode {
 	constructor(attachments, $) {
 		super(attachments, $);
@@ -2066,7 +2080,7 @@ const writeInvalidOperandMessage = (kind, expected, actual) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/generic.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/generic.js
 const parseGeneric = (paramDefs, bodyDef, $) => new GenericRoot(paramDefs, bodyDef, $, $, null);
 var LazyGenericBody = class extends Callable {};
 var GenericRoot = class extends Callable {
@@ -2134,7 +2148,7 @@ var GenericRoot = class extends Callable {
 const writeUnsatisfiedParameterConstraintMessage = (name, constraint, arg) => `${name} must be assignable to ${constraint} (was ${arg})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/predicate.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/predicate.js
 const implementation$21 = implementNode({
 	kind: "predicate",
 	hasAssociatedError: true,
@@ -2159,14 +2173,16 @@ var PredicateNode = class extends BaseConstraint {
 	};
 	compiledErrorContext = compileObjectLiteral(this.errorContext);
 	traverseApply = (data, ctx) => {
-		if (!this.predicate(data, ctx.external) && !ctx.hasError()) ctx.errorFromNodeContext(this.errorContext);
+		const errorCount = ctx.currentErrorCount;
+		if (!this.predicate(data, ctx.external) && ctx.currentErrorCount === errorCount) ctx.errorFromNodeContext(this.errorContext);
 	};
 	compile(js) {
 		if (js.traversalKind === "Allows") {
 			js.return(this.compiledCondition);
 			return;
 		}
-		js.if(`${this.compiledNegation} && !ctx.hasError()`, () => js.line(`ctx.errorFromNodeContext(${this.compiledErrorContext})`));
+		js.initializeErrorCount();
+		js.if(`${this.compiledNegation} && ctx.currentErrorCount === errorCount`, () => js.line(`ctx.errorFromNodeContext(${this.compiledErrorContext})`));
 	}
 	reduceJsonSchema(base, ctx) {
 		return ctx.fallback.predicate({
@@ -2182,7 +2198,7 @@ const Predicate = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/divisor.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/divisor.js
 const implementation$20 = implementNode({
 	kind: "divisor",
 	collapsibleKey: "rule",
@@ -2213,18 +2229,18 @@ const Divisor = {
 const writeNonIntegerDivisorMessage = (divisor) => `divisor must be an integer (was ${divisor})`;
 const greatestCommonDivisor = (l, r) => {
 	let previous;
-	let greatestCommonDivisor$1 = l;
+	let greatestCommonDivisor = l;
 	let current = r;
 	while (current !== 0) {
 		previous = current;
-		current = greatestCommonDivisor$1 % current;
-		greatestCommonDivisor$1 = previous;
+		current = greatestCommonDivisor % current;
+		greatestCommonDivisor = previous;
 	}
-	return greatestCommonDivisor$1;
+	return greatestCommonDivisor;
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/range.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/range.js
 var BaseRange = class extends InternalPrimitiveConstraint {
 	boundOperandKind = operandKindsByBoundKind[this.kind];
 	compiledActual = this.boundOperandKind === "value" ? `data` : this.boundOperandKind === "length" ? `data.length` : `data.valueOf()`;
@@ -2296,7 +2312,7 @@ const dateLimitToString = (limit) => typeof limit === "string" ? limit : new Dat
 const writeUnboundableMessage = (root) => `Bounded expression ${root} must be exactly one of number, string, Array, or Date`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/after.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/after.js
 const implementation$19 = implementNode({
 	kind: "after",
 	collapsibleKey: "rule",
@@ -2330,7 +2346,7 @@ const After = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/before.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/before.js
 const implementation$18 = implementNode({
 	kind: "before",
 	collapsibleKey: "rule",
@@ -2367,7 +2383,7 @@ const Before = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/exactLength.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/exactLength.js
 const implementation$17 = implementNode({
 	kind: "exactLength",
 	collapsibleKey: "rule",
@@ -2410,7 +2426,7 @@ const ExactLength = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/max.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/max.js
 const implementation$16 = implementNode({
 	kind: "max",
 	collapsibleKey: "rule",
@@ -2445,7 +2461,7 @@ const Max = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/maxLength.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/maxLength.js
 const implementation$15 = implementNode({
 	kind: "maxLength",
 	collapsibleKey: "rule",
@@ -2483,7 +2499,7 @@ const MaxLength = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/min.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/min.js
 const implementation$14 = implementNode({
 	kind: "min",
 	collapsibleKey: "rule",
@@ -2515,7 +2531,7 @@ const Min = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/minLength.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/minLength.js
 const implementation$13 = implementNode({
 	kind: "minLength",
 	collapsibleKey: "rule",
@@ -2550,7 +2566,7 @@ const MinLength = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/kinds.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/kinds.js
 const boundImplementationsByKind = {
 	min: Min.implementation,
 	max: Max.implementation,
@@ -2571,7 +2587,7 @@ const boundClassesByKind = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/refinements/pattern.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/refinements/pattern.js
 const implementation$12 = implementNode({
 	kind: "pattern",
 	collapsibleKey: "rule",
@@ -2613,7 +2629,7 @@ const Pattern = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/parse.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/parse.js
 const schemaKindOf = (schema$1, allowedKinds) => {
 	const kind = discriminateRootKind(schema$1);
 	if (allowedKinds && !allowedKinds.includes(kind)) return throwParseError(`Root of kind ${kind} should be one of ${allowedKinds}`);
@@ -2767,7 +2783,7 @@ const possiblyCollapse = (json$2, toKey, allowPrimitive) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/prop.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/prop.js
 const intersectProps = (l, r, ctx) => {
 	if (l.key !== r.key) return null;
 	const key = l.key;
@@ -2819,7 +2835,7 @@ var BaseProp = class extends BaseConstraint {
 const writeDefaultIntersectionMessage = (lValue, rValue) => `Invalid intersection of default values ${printable(lValue)} & ${printable(rValue)}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/optional.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/optional.js
 const implementation$11 = implementNode({
 	kind: "optional",
 	hasAssociatedError: false,
@@ -2908,7 +2924,7 @@ const writeNonPrimitiveNonFunctionDefaultValueMessage = (key) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/root.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/root.js
 var BaseRoot = class extends BaseNode {
 	constructor(attachments, $) {
 		super(attachments, $);
@@ -2935,10 +2951,15 @@ var BaseRoot = class extends BaseNode {
 				if (out instanceof ArkErrors) return out;
 				return { value: out };
 			},
-			toJSONSchema: (opts) => {
-				if (opts.target && opts.target !== "draft-2020-12") return throwParseError(`JSONSchema target '${opts.target}' is not supported (must be "draft-2020-12")`);
-				if (opts.io === "input") return this.rawIn.toJsonSchema();
-				return this.rawOut.toJsonSchema();
+			jsonSchema: {
+				input: (opts) => this.rawIn.toJsonSchema({
+					target: validateStandardJsonSchemaTarget(opts.target),
+					...opts.libraryOptions
+				}),
+				output: (opts) => this.rawOut.toJsonSchema({
+					target: validateStandardJsonSchemaTarget(opts.target),
+					...opts.libraryOptions
+				})
 			}
 		};
 	}
@@ -2965,11 +2986,15 @@ var BaseRoot = class extends BaseNode {
 		ctx.useRefs ||= this.isCyclic;
 		const schema$1 = typeof ctx.dialect === "string" ? { $schema: ctx.dialect } : {};
 		Object.assign(schema$1, this.toJsonSchemaRecurse(ctx));
-		if (ctx.useRefs) schema$1.$defs = flatMorph(this.references, (i, ref) => ref.isRoot() && !ref.alwaysExpandJsonSchema ? [ref.id, ref.toResolvedJsonSchema(ctx)] : []);
+		if (ctx.useRefs) {
+			const defs = flatMorph(this.references, (i, ref) => ref.isRoot() && !ref.alwaysExpandJsonSchema ? [ref.id, ref.toResolvedJsonSchema(ctx)] : []);
+			if (ctx.target === "draft-07") Object.assign(schema$1, { definitions: defs });
+			else schema$1.$defs = defs;
+		}
 		return schema$1;
 	}
 	toJsonSchemaRecurse(ctx) {
-		if (ctx.useRefs && !this.alwaysExpandJsonSchema) return { $ref: `#/$defs/${this.id}` };
+		if (ctx.useRefs && !this.alwaysExpandJsonSchema) return { $ref: `#/${ctx.target === "draft-07" ? "definitions" : "$defs"}/${this.id}` };
 		return this.toResolvedJsonSchema(ctx);
 	}
 	get alwaysExpandJsonSchema() {
@@ -3233,6 +3258,12 @@ var BaseRoot = class extends BaseNode {
 	}
 };
 const emptyBrandNameMessage = `Expected a non-empty brand name after #`;
+const supportedJsonSchemaTargets = ["draft-2020-12", "draft-07"];
+const writeInvalidJsonSchemaTargetMessage = (target) => `JSONSchema target '${target}' is not supported (must be ${supportedJsonSchemaTargets.map((t) => `"${t}"`).join(" or ")})`;
+const validateStandardJsonSchemaTarget = (target) => {
+	if (!includes(supportedJsonSchemaTargets, target)) throwParseError(writeInvalidJsonSchemaTargetMessage(target));
+	return target;
+};
 const exclusivizeRangeSchema = (schema$1) => typeof schema$1 === "object" && !(schema$1 instanceof Date) ? {
 	...schema$1,
 	exclusive: true
@@ -3252,11 +3283,11 @@ ${expression}`;
 const writeNonStructuralOperandMessage = (operation, operand) => `${operation} operand must be an object (was ${operand})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/utils.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/utils.js
 const defineRightwardIntersections = (kind, implementation$22) => flatMorph(schemaKindsRightOf(kind), (i, kind$1) => [kind$1, implementation$22]);
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/alias.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/alias.js
 const normalizeAliasSchema = (schema$1) => typeof schema$1 === "string" ? { reference: schema$1 } : schema$1;
 const neverIfDisjoint = (result) => result instanceof Disjoint ? $ark.intrinsic.never.internal : result;
 const implementation$10 = implementNode({
@@ -3343,7 +3374,7 @@ const Alias = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/basis.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/basis.js
 var InternalBasis = class extends BaseRoot {
 	traverseApply = (data, ctx) => {
 		if (!this.traverseAllows(data, ctx)) ctx.errorFromNodeContext(this.errorContext);
@@ -3366,7 +3397,7 @@ var InternalBasis = class extends BaseRoot {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/domain.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/domain.js
 const implementation$9 = implementNode({
 	kind: "domain",
 	hasAssociatedError: true,
@@ -3414,7 +3445,7 @@ const Domain = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/intersection.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/intersection.js
 const implementation$8 = implementNode({
 	kind: "intersection",
 	hasAssociatedError: true,
@@ -3514,7 +3545,7 @@ const implementation$8 = implementNode({
 			const childDescriptions = [];
 			if (node$1.basis && !node$1.prestructurals.some((r) => r.impl.obviatesBasisDescription)) childDescriptions.push(node$1.basis.description);
 			if (node$1.prestructurals.length) {
-				const sortedRefinementDescriptions = node$1.prestructurals.toSorted((l, r) => l.kind === "min" && r.kind === "max" ? -1 : 0).map((r) => r.description);
+				const sortedRefinementDescriptions = node$1.prestructurals.slice().sort((l, r) => l.kind === "min" && r.kind === "max" ? -1 : 0).map((r) => r.description);
 				childDescriptions.push(...sortedRefinementDescriptions);
 			}
 			if (node$1.inner.predicate) childDescriptions.push(...node$1.inner.predicate.map((p) => p.description));
@@ -3568,7 +3599,7 @@ var IntersectionNode = class extends BaseRoot {
 				this.prestructurals[i].traverseApply(data, ctx);
 				if (ctx.failFast && ctx.currentErrorCount > errorCount) return;
 			}
-			this.prestructurals.at(-1).traverseApply(data, ctx);
+			this.prestructurals[this.prestructurals.length - 1].traverseApply(data, ctx);
 			if (ctx.currentErrorCount > errorCount) return;
 		}
 		if (this.structure) {
@@ -3580,7 +3611,7 @@ var IntersectionNode = class extends BaseRoot {
 				this.inner.predicate[i].traverseApply(data, ctx);
 				if (ctx.failFast && ctx.currentErrorCount > errorCount) return;
 			}
-			this.inner.predicate.at(-1).traverseApply(data, ctx);
+			this.inner.predicate[this.inner.predicate.length - 1].traverseApply(data, ctx);
 		}
 	};
 	compile(js) {
@@ -3599,7 +3630,7 @@ var IntersectionNode = class extends BaseRoot {
 				js.check(this.prestructurals[i]);
 				js.returnIfFailFast();
 			}
-			js.check(this.prestructurals.at(-1));
+			js.check(this.prestructurals[this.prestructurals.length - 1]);
 			if (this.structure || this.inner.predicate) js.returnIfFail();
 		}
 		if (this.structure) {
@@ -3611,7 +3642,7 @@ var IntersectionNode = class extends BaseRoot {
 				js.check(this.inner.predicate[i]);
 				js.returnIfFail();
 			}
-			js.check(this.inner.predicate.at(-1));
+			js.check(this.inner.predicate[this.inner.predicate.length - 1]);
 		}
 	}
 };
@@ -3645,7 +3676,7 @@ const intersectIntersections = (l, r, ctx) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/morph.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/morph.js
 const implementation$7 = implementNode({
 	kind: "morph",
 	hasAssociatedError: false,
@@ -3702,7 +3733,7 @@ const implementation$7 = implementNode({
 var MorphNode = class extends BaseRoot {
 	serializedMorphs = this.morphs.map(registeredReference);
 	compiledMorphs = `[${this.serializedMorphs}]`;
-	lastMorph = this.inner.morphs.at(-1);
+	lastMorph = this.inner.morphs[this.inner.morphs.length - 1];
 	lastMorphIfNode = hasArkKind(this.lastMorph, "root") ? this.lastMorph : void 0;
 	introspectableIn = this.inner.in;
 	introspectableOut = this.lastMorphIfNode ? Object.assign(this.referencesById, this.lastMorphIfNode.referencesById) && this.lastMorphIfNode.rawOut : void 0;
@@ -3766,7 +3797,7 @@ Left: ${lDescription}
 Right: ${rDescription}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/proto.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/proto.js
 const implementation$6 = implementNode({
 	kind: "proto",
 	hasAssociatedError: true,
@@ -3842,7 +3873,7 @@ const Proto = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/union.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/union.js
 const implementation$5 = implementNode({
 	kind: "union",
 	hasAssociatedError: true,
@@ -4311,7 +4342,7 @@ Left: ${lDescription}
 Right: ${rDescription}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/roots/unit.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/unit.js
 const implementation$4 = implementNode({
 	kind: "unit",
 	hasAssociatedError: true,
@@ -4373,7 +4404,7 @@ const compileEqualityCheck = (unit, serializedValue, negated) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/index.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/index.js
 const implementation$3 = implementNode({
 	kind: "index",
 	hasAssociatedError: false,
@@ -4437,7 +4468,7 @@ const writeEnumerableIndexBranches = (keys) => `Index keys ${keys.join(", ")} sh
 const writeInvalidPropertyKeyMessage = (indexSchema) => `Indexed key definition '${indexSchema}' must be a string or symbol`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/required.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/required.js
 const implementation$2 = implementNode({
 	kind: "required",
 	hasAssociatedError: true,
@@ -4476,7 +4507,7 @@ const Required$1 = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/sequence.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/sequence.js
 const implementation$1 = implementNode({
 	kind: "sequence",
 	hasAssociatedError: false,
@@ -4547,8 +4578,8 @@ const implementation$1 = implementNode({
 		const optionals = raw.optionals?.slice() ?? [];
 		const postfix = raw.postfix?.slice() ?? [];
 		if (raw.variadic) {
-			while (optionals.at(-1)?.equals(raw.variadic)) optionals.pop();
-			if (optionals.length === 0 && defaultables.length === 0) while (prefix.at(-1)?.equals(raw.variadic)) {
+			while (optionals[optionals.length - 1]?.equals(raw.variadic)) optionals.pop();
+			if (optionals.length === 0 && defaultables.length === 0) while (prefix[prefix.length - 1]?.equals(raw.variadic)) {
 				prefix.pop();
 				minVariadicLength++;
 			}
@@ -4665,32 +4696,40 @@ var SequenceNode = class extends BaseConstraint {
 	}
 	expression = this.description;
 	reduceJsonSchema(schema$1, ctx) {
-		if (this.prevariadic.length) schema$1.prefixItems = this.prevariadic.map((el) => {
-			const valueSchema = el.node.toJsonSchemaRecurse(ctx);
-			if (el.kind === "defaultables") {
-				const value$1 = typeof el.default === "function" ? el.default() : el.default;
-				valueSchema.default = $ark.intrinsic.jsonData.allows(value$1) ? value$1 : ctx.fallback.defaultValue({
-					code: "defaultValue",
-					base: valueSchema,
-					value: value$1
-				});
-			}
-			return valueSchema;
-		});
+		const isDraft07 = ctx.target === "draft-07";
+		if (this.prevariadic.length) {
+			const prefixSchemas = this.prevariadic.map((el) => {
+				const valueSchema = el.node.toJsonSchemaRecurse(ctx);
+				if (el.kind === "defaultables") {
+					const value$1 = typeof el.default === "function" ? el.default() : el.default;
+					valueSchema.default = $ark.intrinsic.jsonData.allows(value$1) ? value$1 : ctx.fallback.defaultValue({
+						code: "defaultValue",
+						base: valueSchema,
+						value: value$1
+					});
+				}
+				return valueSchema;
+			});
+			if (isDraft07) schema$1.items = prefixSchemas;
+			else schema$1.prefixItems = prefixSchemas;
+		}
 		if (this.minLength) schema$1.minItems = this.minLength;
 		if (this.variadic) {
-			const variadicSchema = Object.assign(schema$1, { items: this.variadic.toJsonSchemaRecurse(ctx) });
-			if (this.maxLength) variadicSchema.maxItems = this.maxLength;
+			const variadicItemSchema = this.variadic.toJsonSchemaRecurse(ctx);
+			if (isDraft07 && this.prevariadic.length) schema$1.additionalItems = variadicItemSchema;
+			else schema$1.items = variadicItemSchema;
+			if (this.maxLength) schema$1.maxItems = this.maxLength;
 			if (this.postfix) {
 				const elements = this.postfix.map((el) => el.toJsonSchemaRecurse(ctx));
 				schema$1 = ctx.fallback.arrayPostfix({
 					code: "arrayPostfix",
-					base: variadicSchema,
+					base: schema$1,
 					elements
 				});
 			}
 		} else {
-			schema$1.items = false;
+			if (isDraft07) schema$1.additionalItems = false;
+			else schema$1.items = false;
 			delete schema$1.maxItems;
 		}
 		return schema$1;
@@ -4751,8 +4790,8 @@ const _intersectSequences = (s) => {
 	const [lHead, ...lTail] = s.l;
 	const [rHead, ...rTail] = s.r;
 	if (!lHead || !rHead) return s;
-	const lHasPostfix = lTail.at(-1)?.kind === "postfix";
-	const rHasPostfix = rTail.at(-1)?.kind === "postfix";
+	const lHasPostfix = lTail[lTail.length - 1]?.kind === "postfix";
+	const rHasPostfix = rTail[rTail.length - 1]?.kind === "postfix";
 	const kind = lHead.kind === "prefix" || rHead.kind === "prefix" ? "prefix" : lHead.kind === "postfix" || rHead.kind === "postfix" ? "postfix" : lHead.kind === "variadic" && rHead.kind === "variadic" ? "variadic" : lHasPostfix || rHasPostfix ? "prefix" : lHead.kind === "defaultables" || rHead.kind === "defaultables" ? "defaultables" : "optionals";
 	if (lHead.kind === "prefix" && rHead.kind === "variadic" && rHasPostfix) {
 		const postfixBranchResult = _intersectSequences({
@@ -4815,7 +4854,7 @@ const _intersectSequences = (s) => {
 const elementIsRequired = (el) => el.kind === "prefix" || el.kind === "postfix";
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/structure.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/structure.js
 const createStructuralWriter = (childStringProp) => (node$1) => {
 	if (node$1.props.length || node$1.index) {
 		const parts = node$1.index?.map((index) => index[childStringProp]) ?? [];
@@ -5337,7 +5376,7 @@ const writeInvalidKeysMessage = (o, keys) => `Key${keys.length === 1 ? "" : "s"}
 const writeDuplicateKeyMessage = (key) => `Duplicate key ${compileSerializedValue(key)}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/kinds.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/kinds.js
 const nodeImplementationsByKind = {
 	...boundImplementationsByKind,
 	alias: Alias.implementation,
@@ -5388,7 +5427,7 @@ const nodeClassesByKind = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/module.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/module.js
 var RootModule = class extends DynamicBase {
 	get [arkKind]() {
 		return "module";
@@ -5397,7 +5436,7 @@ var RootModule = class extends DynamicBase {
 const bindModule = (module, $) => new RootModule(flatMorph(module, (alias, value$1) => [alias, hasArkKind(value$1, "module") ? bindModule(value$1, $) : $.bindReference(value$1)]));
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/scope.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/scope.js
 const schemaBranchesOf = (schema$1) => isArray(schema$1) ? schema$1 : "branches" in schema$1 && isArray(schema$1.branches) ? schema$1.branches : void 0;
 const throwMismatchedNodeRootError = (expected, actual) => throwParseError(`Node of kind ${actual} is not valid as a ${expected} definition`);
 const writeDuplicateAliasError = (alias) => `#${alias} duplicates public alias ${alias}`;
@@ -5409,29 +5448,29 @@ const precompile = (references) => bindPrecompilation(references, precompileRefe
 const bindPrecompilation = (references, precompiler) => {
 	const precompilation = precompiler.write(rootScopeFnName, 4);
 	const compiledTraversals = precompiler.compile()();
-	for (const node$1 of references) {
-		if (node$1.precompilation) continue;
-		node$1.traverseAllows = compiledTraversals[`${node$1.id}Allows`].bind(compiledTraversals);
-		if (node$1.isRoot() && !node$1.allowsRequiresContext) node$1.allows = node$1.traverseAllows;
-		node$1.traverseApply = compiledTraversals[`${node$1.id}Apply`].bind(compiledTraversals);
-		if (compiledTraversals[`${node$1.id}Optimistic`]) node$1.traverseOptimistic = compiledTraversals[`${node$1.id}Optimistic`].bind(compiledTraversals);
-		node$1.precompilation = precompilation;
+	for (const node of references) {
+		if (node.precompilation) continue;
+		node.traverseAllows = compiledTraversals[`${node.id}Allows`].bind(compiledTraversals);
+		if (node.isRoot() && !node.allowsRequiresContext) node.allows = node.traverseAllows;
+		node.traverseApply = compiledTraversals[`${node.id}Apply`].bind(compiledTraversals);
+		if (compiledTraversals[`${node.id}Optimistic`]) node.traverseOptimistic = compiledTraversals[`${node.id}Optimistic`].bind(compiledTraversals);
+		node.precompilation = precompilation;
 	}
 };
-const precompileReferences = (references) => new CompiledFunction().return(references.reduce((js, node$1) => {
+const precompileReferences = (references) => new CompiledFunction().return(references.reduce((js, node) => {
 	const allowsCompiler = new NodeCompiler({ kind: "Allows" }).indent();
-	node$1.compile(allowsCompiler);
-	const allowsJs = allowsCompiler.write(`${node$1.id}Allows`);
+	node.compile(allowsCompiler);
+	const allowsJs = allowsCompiler.write(`${node.id}Allows`);
 	const applyCompiler = new NodeCompiler({ kind: "Apply" }).indent();
-	node$1.compile(applyCompiler);
-	const result = `${js}${allowsJs},\n${applyCompiler.write(`${node$1.id}Apply`)},\n`;
-	if (!node$1.hasKind("union")) return result;
+	node.compile(applyCompiler);
+	const result = `${js}${allowsJs},\n${applyCompiler.write(`${node.id}Apply`)},\n`;
+	if (!node.hasKind("union")) return result;
 	const optimisticCompiler = new NodeCompiler({
 		kind: "Allows",
 		optimistic: true
 	}).indent();
-	node$1.compile(optimisticCompiler);
-	return `${result}${optimisticCompiler.write(`${node$1.id}Optimistic`)},\n`;
+	node.compile(optimisticCompiler);
+	return `${result}${optimisticCompiler.write(`${node.id}Optimistic`)},\n`;
 }, "{\n") + "}");
 var BaseScope = class {
 	config;
@@ -5515,12 +5554,12 @@ var BaseScope = class {
 	};
 	lazyResolutions = [];
 	lazilyResolve(resolve, syntheticAlias) {
-		const node$1 = this.node("alias", {
+		const node = this.node("alias", {
 			reference: syntheticAlias ?? "synthetic",
 			resolve
 		}, { prereduced: true });
-		if (!this.resolved) this.lazyResolutions.push(node$1);
-		return node$1;
+		if (!this.resolved) this.lazyResolutions.push(node);
+		return node;
 	}
 	schema = (schema$1, opts) => this.finalize(this.parseSchema(schema$1, opts));
 	parseSchema = (schema$1, opts) => this.node(schemaKindOf(schema$1), schema$1, opts);
@@ -5584,11 +5623,11 @@ var BaseScope = class {
 				if (v.phase === "resolving") return this.node("alias", { reference: `$${name}` }, { prereduced: true });
 				if (v.phase === "resolved") return throwInternalError(`Unexpected resolved context for was uncached by its scope: ${printable(v)}`);
 				v.phase = "resolving";
-				const node$1 = this.bindReference(this.parseOwnDefinitionFormat(v.def, v));
+				const node = this.bindReference(this.parseOwnDefinitionFormat(v.def, v));
 				v.phase = "resolved";
-				nodesByRegisteredId[node$1.id] = node$1;
-				nodesByRegisteredId[v.id] = node$1;
-				return this.resolutions[name] = node$1;
+				nodesByRegisteredId[node.id] = node;
+				nodesByRegisteredId[v.id] = node;
+				return this.resolutions[name] = node;
 			}
 			return throwInternalError(`Unexpected nodesById entry for ${cached$1}: ${printable(v)}`);
 		}
@@ -5627,7 +5666,7 @@ var BaseScope = class {
 				const def = this.aliases[name];
 				this._exports[name] = hasArkKind(def, "module") ? bindModule(def, this) : bootstrapAliasReferences(this.maybeResolve(name));
 			}
-			for (const node$1 of this.lazyResolutions) node$1.resolution;
+			for (const node of this.lazyResolutions) node.resolution;
 			this._exportedResolutions = resolutionsOfModule(this, this._exports);
 			this._json = resolutionsToJson(this._exportedResolutions);
 			Object.assign(this.resolutions, this._exportedResolutions);
@@ -5648,8 +5687,8 @@ var BaseScope = class {
 		const ctxOrNode = this.preparseNode(kinds, nodeSchema, opts);
 		if (isNode(ctxOrNode)) return this.bindReference(ctxOrNode);
 		const ctx = this.createParseContext(ctxOrNode);
-		const node$1 = parseNode(ctx);
-		const bound = this.bindReference(node$1);
+		const node = parseNode(ctx);
+		const bound = this.bindReference(node);
 		return nodesByRegisteredId[ctx.id] = bound;
 	};
 	parse = (def, opts = {}) => this.finalize(this.parseDefinition(def, opts));
@@ -5659,15 +5698,15 @@ var BaseScope = class {
 		if (hasArkKind(ctxInputOrNode, "root")) return this.bindReference(ctxInputOrNode);
 		const ctx = this.createParseContext(ctxInputOrNode);
 		nodesByRegisteredId[ctx.id] = ctx;
-		let node$1 = this.bindReference(this.parseOwnDefinitionFormat(def, ctx));
-		if (node$1.isCyclic) node$1 = withId(node$1, ctx.id);
-		nodesByRegisteredId[ctx.id] = node$1;
-		return node$1;
+		let node = this.bindReference(this.parseOwnDefinitionFormat(def, ctx));
+		if (node.isCyclic) node = withId(node, ctx.id);
+		nodesByRegisteredId[ctx.id] = node;
+		return node;
 	}
-	finalize(node$1) {
-		bootstrapAliasReferences(node$1);
-		if (!node$1.precompilation && !this.resolvedConfig.jitless) precompile(node$1.references);
-		return node$1;
+	finalize(node) {
+		bootstrapAliasReferences(node);
+		if (!node.precompilation && !this.resolvedConfig.jitless) precompile(node.references);
+		return node;
 	}
 };
 var SchemaScope = class extends BaseScope {
@@ -5685,7 +5724,7 @@ var SchemaScope = class extends BaseScope {
 	}
 };
 const bootstrapAliasReferences = (resolution) => {
-	const aliases = resolution.references.filter((node$1) => node$1.hasKind("alias"));
+	const aliases = resolution.references.filter((node) => node.hasKind("alias"));
 	for (const aliasNode of aliases) {
 		Object.assign(aliasNode.referencesById, aliasNode.resolution.referencesById);
 		for (const ref of resolution.references) if (aliasNode.id in ref.referencesById) Object.assign(ref.referencesById, aliasNode.referencesById);
@@ -5731,13 +5770,13 @@ const defineSchema = rootSchemaScope.defineSchema;
 const genericNode = rootSchemaScope.generic;
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/structure/shared.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/shared.js
 const arrayIndexSource = `^(?:0|[1-9]\\d*)$`;
 const arrayIndexMatcher = new RegExp(arrayIndexSource);
 const arrayIndexMatcherReference = registeredReference(arrayIndexMatcher);
 
 //#endregion
-//#region ../node_modules/.pnpm/@ark+schema@0.53.0/node_modules/@ark/schema/out/intrinsic.js
+//#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/intrinsic.js
 const intrinsicBases = schemaScope({
 	bigint: "bigint",
 	boolean: [{ unit: false }, { unit: true }],
@@ -5794,13 +5833,13 @@ const intrinsic = {
 $ark.intrinsic = { ...intrinsic };
 
 //#endregion
-//#region ../node_modules/.pnpm/arkregex@0.0.2/node_modules/arkregex/out/regex.js
+//#region ../node_modules/.pnpm/arkregex@0.0.5/node_modules/arkregex/out/regex.js
 const regex$1 = ((src, flags) => new RegExp(src, flags));
 Object.assign(regex$1, { as: regex$1 });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operand/date.js
-const isDateLiteral = (value$1) => typeof value$1 === "string" && value$1[0] === "d" && (value$1[1] === "'" || value$1[1] === "\"") && value$1.at(-1) === value$1[1];
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/date.js
+const isDateLiteral = (value$1) => typeof value$1 === "string" && value$1[0] === "d" && (value$1[1] === "'" || value$1[1] === "\"") && value$1[value$1.length - 1] === value$1[1];
 const isValidDate = (d) => d.toString() !== "Invalid Date";
 const extractDateLiteralSource = (literal) => literal.slice(2, -1);
 const writeInvalidDateMessage = (source) => `'${source}' could not be parsed by the Date constructor`;
@@ -5817,14 +5856,23 @@ const maybeParseDate = (source, errorOnFail) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operand/enclosed.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/enclosed.js
+const regexExecArray = rootSchema({
+	proto: "Array",
+	sequence: "string",
+	required: {
+		key: "groups",
+		value: ["object", { unit: void 0 }]
+	}
+});
 const parseEnclosed = (s, enclosing) => {
 	const enclosed = s.scanner.shiftUntilEscapable(untilLookaheadIsClosing[enclosingTokens[enclosing]]);
 	if (s.scanner.lookahead === "") return s.error(writeUnterminatedEnclosedMessage(enclosed, enclosing));
 	s.scanner.shift();
-	if (enclosing === "/") {
+	if (enclosing in enclosingRegexTokens) {
+		let regex$2;
 		try {
-			new RegExp(enclosed);
+			regex$2 = new RegExp(enclosed);
 		} catch (e) {
 			throwParseError(String(e));
 		}
@@ -5832,6 +5880,11 @@ const parseEnclosed = (s, enclosing) => {
 			domain: "string",
 			pattern: enclosed
 		}, { prereduced: true });
+		if (enclosing === "x/") s.root = s.ctx.$.node("morph", {
+			in: s.root,
+			morphs: (s$1) => regex$2.exec(s$1),
+			declaredOut: regexExecArray
+		});
 	} else if (isKeyOf(enclosing, enclosingQuote)) s.root = s.ctx.$.node("unit", { unit: enclosed });
 	else {
 		const date = tryParseDate(enclosed, writeInvalidDateMessage(enclosed));
@@ -5856,9 +5909,13 @@ const enclosingLiteralTokens = {
 	"'": "'",
 	"\"": "\""
 };
+const enclosingRegexTokens = {
+	"/": "/",
+	"x/": "/"
+};
 const enclosingTokens = {
 	...enclosingLiteralTokens,
-	"/": "/"
+	...enclosingRegexTokens
 };
 const untilLookaheadIsClosing = {
 	"'": (scanner) => scanner.lookahead === `'`,
@@ -5873,13 +5930,13 @@ const enclosingCharDescriptions = {
 const writeUnterminatedEnclosedMessage = (fragment, enclosingStart) => `${enclosingStart}${fragment} requires a closing ${enclosingCharDescriptions[enclosingTokens[enclosingStart]]}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/ast/validate.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/ast/validate.js
 const writePrefixedPrivateReferenceMessage = (name) => `Private type references should not include '#'. Use '${name}' instead.`;
 const shallowOptionalMessage = "Optional definitions like 'string?' are only valid as properties in an object or tuple";
 const shallowDefaultableMessage = "Defaultable definitions like 'number = 0' are only valid as properties in an object or tuple";
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/tokens.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/tokens.js
 const terminatingChars = {
 	"<": 1,
 	">": 1,
@@ -5898,7 +5955,7 @@ const terminatingChars = {
 const lookaheadIsFinalizing = (lookahead, unscanned) => lookahead === ">" ? unscanned[0] === "=" ? unscanned[1] === "=" : unscanned.trimStart() === "" || isKeyOf(unscanned.trimStart()[0], terminatingChars) : lookahead === "=" ? unscanned[0] !== "=" : lookahead === "," || lookahead === "?";
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operand/genericArgs.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/genericArgs.js
 const parseGenericArgs = (name, g, s) => _parseGenericArgs(name, g, s, []);
 const _parseGenericArgs = (name, g, s, argNodes) => {
 	const argState = s.parseUntilFinalizer();
@@ -5913,7 +5970,7 @@ const _parseGenericArgs = (name, g, s, argNodes) => {
 const writeInvalidGenericArgCountMessage = (name, params, argDefs) => `${name}<${params.join(", ")}> requires exactly ${params.length} args (got ${argDefs.length}${argDefs.length === 0 ? "" : `: ${argDefs.join(", ")}`})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operand/unenclosed.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/unenclosed.js
 const parseUnenclosed = (s) => {
 	const token = s.scanner.shiftUntilLookahead(terminatingChars);
 	if (token === "keyof") s.addPrefix("keyof");
@@ -5924,7 +5981,7 @@ const parseGenericInstantiation = (name, g, s) => {
 	if (s.scanner.shift() !== "<") return s.error(writeInvalidGenericArgCountMessage(name, g.names, []));
 	return g(...parseGenericArgs(name, g, s));
 };
-const unenclosedToNode = (s, token) => maybeParseReference(s, token) ?? maybeParseUnenclosedLiteral(s, token) ?? s.error(token === "" ? s.scanner.lookahead === "#" ? writePrefixedPrivateReferenceMessage(s.shiftedByOne().scanner.shiftUntilLookahead(terminatingChars)) : writeMissingOperandMessage(s) : writeUnresolvableMessage(token));
+const unenclosedToNode = (s, token) => maybeParseReference(s, token) ?? maybeParseUnenclosedLiteral(s, token) ?? s.error(token === "" ? s.scanner.lookahead === "#" ? writePrefixedPrivateReferenceMessage(s.shiftedBy(1).scanner.shiftUntilLookahead(terminatingChars)) : writeMissingOperandMessage(s) : writeUnresolvableMessage(token));
 const maybeParseReference = (s, token) => {
 	if (s.ctx.args?.[token]) {
 		const arg = s.ctx.args[token];
@@ -5951,11 +6008,11 @@ const writeMissingRightOperandMessage = (token, unscanned = "") => `Token '${tok
 const writeExpressionExpectedMessage = (unscanned) => `Expected an expression${unscanned ? ` before '${unscanned}'` : ""}`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operand/operand.js
-const parseOperand = (s) => s.scanner.lookahead === "" ? s.error(writeMissingOperandMessage(s)) : s.scanner.lookahead === "(" ? s.shiftedByOne().reduceGroupOpen() : s.scanner.lookaheadIsIn(enclosingChar) ? parseEnclosed(s, s.scanner.shift()) : s.scanner.lookaheadIsIn(whitespaceChars) ? parseOperand(s.shiftedByOne()) : s.scanner.lookahead === "d" ? s.scanner.nextLookahead in enclosingQuote ? parseEnclosed(s, `${s.scanner.shift()}${s.scanner.shift()}`) : parseUnenclosed(s) : parseUnenclosed(s);
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/operand.js
+const parseOperand = (s) => s.scanner.lookahead === "" ? s.error(writeMissingOperandMessage(s)) : s.scanner.lookahead === "(" ? s.shiftedBy(1).reduceGroupOpen() : s.scanner.lookaheadIsIn(enclosingChar) ? parseEnclosed(s, s.scanner.shift()) : s.scanner.lookaheadIsIn(whitespaceChars) ? parseOperand(s.shiftedBy(1)) : s.scanner.lookahead === "d" ? s.scanner.nextLookahead in enclosingQuote ? parseEnclosed(s, `${s.scanner.shift()}${s.scanner.shift()}`) : parseUnenclosed(s) : s.scanner.lookahead === "x" ? s.scanner.nextLookahead === "/" ? s.shiftedBy(2) && parseEnclosed(s, "x/") : parseUnenclosed(s) : parseUnenclosed(s);
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/reduce/shared.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/reduce/shared.js
 const minComparators = {
 	">": true,
 	">=": true
@@ -5976,7 +6033,7 @@ const writeUnpairableComparatorMessage = (comparator) => `Left-bounded expressio
 const writeMultipleLeftBoundsMessage = (openLimit, openComparator, limit, comparator) => `An expression may have at most one left bound (parsed ${openLimit}${invertedComparators[openComparator]}, ${limit}${invertedComparators[comparator]})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operator/bounds.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operator/bounds.js
 const parseBound = (s, start) => {
 	const comparator = shiftComparator(s, start);
 	if (s.root.hasKind("unit")) {
@@ -6040,7 +6097,7 @@ const parseRightBound = (s, comparator) => {
 const writeInvalidLimitMessage = (comparator, limit, boundKind) => `Comparator ${boundKind === "left" ? invertedComparators[comparator] : comparator} must be ${boundKind === "left" ? "preceded" : "followed"} by a corresponding literal (was ${limit})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operator/brand.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operator/brand.js
 const parseBrand = (s) => {
 	s.scanner.shiftUntilNonWhitespace();
 	const brandName = s.scanner.shiftUntilLookahead(terminatingChars);
@@ -6048,7 +6105,7 @@ const parseBrand = (s) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operator/divisor.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operator/divisor.js
 const parseDivisor = (s) => {
 	s.scanner.shiftUntilNonWhitespace();
 	const divisorToken = s.scanner.shiftUntilLookahead(terminatingChars);
@@ -6059,16 +6116,16 @@ const parseDivisor = (s) => {
 const writeInvalidDivisorMessage = (divisor) => `% operator must be followed by a non-zero integer literal (was ${divisor})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operator/operator.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operator/operator.js
 const parseOperator = (s) => {
 	const lookahead = s.scanner.shift();
-	return lookahead === "" ? s.finalize("") : lookahead === "[" ? s.scanner.shift() === "]" ? s.setRoot(s.root.array()) : s.error(incompleteArrayTokenMessage) : lookahead === "|" ? s.scanner.lookahead === ">" ? s.shiftedByOne().pushRootToBranch("|>") : s.pushRootToBranch(lookahead) : lookahead === "&" ? s.pushRootToBranch(lookahead) : lookahead === ")" ? s.finalizeGroup() : lookaheadIsFinalizing(lookahead, s.scanner.unscanned) ? s.finalize(lookahead) : isKeyOf(lookahead, comparatorStartChars) ? parseBound(s, lookahead) : lookahead === "%" ? parseDivisor(s) : lookahead === "#" ? parseBrand(s) : lookahead in whitespaceChars ? parseOperator(s) : s.error(writeUnexpectedCharacterMessage(lookahead));
+	return lookahead === "" ? s.finalize("") : lookahead === "[" ? s.scanner.shift() === "]" ? s.setRoot(s.root.array()) : s.error(incompleteArrayTokenMessage) : lookahead === "|" ? s.scanner.lookahead === ">" ? s.shiftedBy(1).pushRootToBranch("|>") : s.pushRootToBranch(lookahead) : lookahead === "&" ? s.pushRootToBranch(lookahead) : lookahead === ")" ? s.finalizeGroup() : lookaheadIsFinalizing(lookahead, s.scanner.unscanned) ? s.finalize(lookahead) : isKeyOf(lookahead, comparatorStartChars) ? parseBound(s, lookahead) : lookahead === "%" ? parseDivisor(s) : lookahead === "#" ? parseBrand(s) : lookahead in whitespaceChars ? parseOperator(s) : s.error(writeUnexpectedCharacterMessage(lookahead));
 };
 const writeUnexpectedCharacterMessage = (char, shouldBe = "") => `'${char}' is not allowed here${shouldBe && ` (should be ${shouldBe})`}`;
 const incompleteArrayTokenMessage = `Missing expected ']'`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/shift/operator/default.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operator/default.js
 const parseDefault = (s) => {
 	const baseNode = s.unsetRoot();
 	s.parseOperand();
@@ -6083,7 +6140,7 @@ const parseDefault = (s) => {
 const writeNonLiteralDefaultMessage = (defaultDef) => `Default value '${defaultDef}' must be a literal value`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/string.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/string.js
 const parseString = (def, ctx) => {
 	const aliasResolution = ctx.$.maybeResolveRoot(def);
 	if (aliasResolution) return aliasResolution;
@@ -6113,7 +6170,7 @@ const parseUntilFinalizer = (s) => {
 const next = (s) => s.hasRoot() ? s.parseOperator() : s.parseOperand();
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/reduce/dynamic.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/reduce/dynamic.js
 var RuntimeState = class RuntimeState {
 	root;
 	branches = {
@@ -6232,16 +6289,16 @@ var RuntimeState = class RuntimeState {
 		};
 	}
 	previousOperator() {
-		return this.branches.leftBound?.comparator ?? this.branches.prefixes.at(-1) ?? (this.branches.intersection ? "&" : this.branches.union ? "|" : this.branches.pipe ? "|>" : void 0);
+		return this.branches.leftBound?.comparator ?? this.branches.prefixes[this.branches.prefixes.length - 1] ?? (this.branches.intersection ? "&" : this.branches.union ? "|" : this.branches.pipe ? "|>" : void 0);
 	}
-	shiftedByOne() {
-		this.scanner.shift();
+	shiftedBy(count) {
+		this.scanner.jumpForward(count);
 		return this;
 	}
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/generic.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/generic.js
 const emptyGenericParameterMessage = "An empty string is not a valid generic parameter name";
 const parseGenericParamName = (scanner, result, ctx) => {
 	scanner.shiftUntilNonWhitespace();
@@ -6268,7 +6325,7 @@ const _parseOptionalConstraint = (scanner, name, result, ctx) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/fn.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/fn.js
 var InternalFnParser = class extends Callable {
 	constructor($) {
 		const attach = {
@@ -6305,7 +6362,7 @@ var InternalTypedFn = class extends Callable {
 		this.params = params;
 		this.returns = returns;
 		let argsExpression = params.expression;
-		if (argsExpression[0] === "[" && argsExpression.at(-1) === "]") argsExpression = argsExpression.slice(1, -1);
+		if (argsExpression[0] === "[" && argsExpression[argsExpression.length - 1] === "]") argsExpression = argsExpression.slice(1, -1);
 		else if (argsExpression.endsWith("[]")) argsExpression = `...${argsExpression}`;
 		this.expression = `(${argsExpression}) => ${returns?.expression ?? "unknown"}`;
 	}
@@ -6314,7 +6371,7 @@ const badFnReturnTypeMessage = `":" must be followed by exactly one return type 
 fn("string", ":", "number")(s => s.length)`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/match.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/match.js
 var InternalMatchParser = class extends Callable {
 	$;
 	constructor($) {
@@ -6392,7 +6449,7 @@ const chainedAtMessage = `A key matcher must be specified before the first case 
 const doubleAtMessage = `At most one key matcher may be specified per expression`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/property.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/property.js
 const parseProperty = (def, ctx) => {
 	if (isArray(def)) {
 		if (def[1] === "=") return [
@@ -6408,7 +6465,7 @@ const invalidOptionalKeyKindMessage = `Only required keys may make their values 
 const invalidDefaultableKeyKindMessage = `Only required keys may specify default values, e.g. { value: 'number = 0' }`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/objectLiteral.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/objectLiteral.js
 const parseObjectLiteral = (def, ctx) => {
 	let spread;
 	const structure = {};
@@ -6474,16 +6531,16 @@ const nonLeadingSpreadError = "Spread operator may only be used as the first key
 const preparseKey = (key) => typeof key === "symbol" ? {
 	kind: "required",
 	normalized: key
-} : key.at(-1) === "?" ? key.at(-2) === Backslash ? {
+} : key[key.length - 1] === "?" ? key[key.length - 2] === Backslash ? {
 	kind: "required",
 	normalized: `${key.slice(0, -2)}?`
 } : {
 	kind: "optional",
 	normalized: key.slice(0, -1)
-} : key[0] === "[" && key.at(-1) === "]" ? {
+} : key[0] === "[" && key[key.length - 1] === "]" ? {
 	kind: "index",
 	normalized: key.slice(1, -1)
-} : key[0] === Backslash && key[1] === "[" && key.at(-1) === "]" ? {
+} : key[0] === Backslash && key[1] === "[" && key[key.length - 1] === "]" ? {
 	kind: "required",
 	normalized: key.slice(1)
 } : key === "..." ? { kind: "spread" } : key === "+" ? { kind: "undeclared" } : {
@@ -6493,7 +6550,7 @@ const preparseKey = (key) => typeof key === "symbol" ? {
 const writeInvalidSpreadTypeMessage = (def) => `Spread operand must resolve to an object literal type (was ${def})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/tupleExpressions.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/tupleExpressions.js
 const maybeParseTupleExpression = (def, ctx) => isIndexZeroExpression(def) ? indexZeroParsers[def[0]](def, ctx) : isIndexOneExpression(def) ? indexOneParsers[def[1]](def, ctx) : null;
 const parseKeyOfTuple = (def, ctx) => ctx.$.parseOwnDefinitionFormat(def[1], ctx).keyof();
 const parseBranchTuple = (def, ctx) => {
@@ -6549,7 +6606,7 @@ const isIndexZeroExpression = (def) => indexZeroParsers[def[0]] !== void 0;
 const writeInvalidConstructorMessage = (actual) => `Expected a constructor following 'instanceof' operator (was ${actual})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/tupleLiteral.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/tupleLiteral.js
 const parseTupleLiteral = (def, ctx) => {
 	let sequences = [{}];
 	let i = 0;
@@ -6622,7 +6679,7 @@ const optionalOrDefaultableAfterVariadicMessage = "An optional element may not f
 const defaultablePostOptionalMessage = "A defaultable element may not follow an optional element without a default";
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/parser/definition.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/definition.js
 const parseCache = {};
 const parseInnerDefinition = (def, ctx) => {
 	if (typeof def === "string") {
@@ -6637,6 +6694,7 @@ const parseObject = (def, ctx) => {
 	switch (objectKind) {
 		case void 0:
 			if (hasArkKind(def, "root")) return def;
+			if ("~standard" in def) return parseStandardSchema(def, ctx);
 			return parseObjectLiteral(def, ctx);
 		case "Array": return parseTuple(def, ctx);
 		case "RegExp": return ctx.$.node("intersection", {
@@ -6651,11 +6709,21 @@ const parseObject = (def, ctx) => {
 		default: return throwParseError(writeBadDefinitionTypeMessage(objectKind ?? printable(def)));
 	}
 };
+const parseStandardSchema = (def, ctx) => ctx.$.intrinsic.unknown.pipe((v, ctx$1) => {
+	const result = def["~standard"].validate(v);
+	if (!result.issues) return result.value;
+	for (const { message, path } of result.issues) if (path) if (path.length) ctx$1.error({
+		problem: uncapitalize(message),
+		relativePath: path.map((k) => typeof k === "object" ? k.key : k)
+	});
+	else ctx$1.error({ message });
+	else ctx$1.error({ message });
+});
 const parseTuple = (def, ctx) => maybeParseTupleExpression(def, ctx) ?? parseTupleLiteral(def, ctx);
 const writeBadDefinitionTypeMessage = (actual) => `Type definitions must be strings or objects (was ${actual})`;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/type.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/type.js
 var InternalTypeParser = class extends Callable {
 	constructor($) {
 		const attach = Object.assign({
@@ -6683,7 +6751,7 @@ var InternalTypeParser = class extends Callable {
 		}, $.ambientAttachments);
 		super((...args) => {
 			if (args.length === 1) return $.parse(args[0]);
-			if (args.length === 2 && typeof args[0] === "string" && args[0][0] === "<" && args[0].at(-1) === ">") {
+			if (args.length === 2 && typeof args[0] === "string" && args[0][0] === "<" && args[0][args[0].length - 1] === ">") {
 				const paramString = args[0].slice(1, -1);
 				return new GenericRoot($.parseGenericParams(paramString, {}), args[1], $, $, null);
 			}
@@ -6693,7 +6761,7 @@ var InternalTypeParser = class extends Callable {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/scope.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/scope.js
 const $arkTypeRegistry = $ark;
 var InternalScope = class InternalScope extends BaseScope {
 	get ambientAttachments() {
@@ -6713,7 +6781,7 @@ var InternalScope = class InternalScope extends BaseScope {
 			];
 			return [alias, def];
 		}
-		if (alias.at(-1) !== ">") throwParseError(`'>' must be the last character of a generic declaration in a scope`);
+		if (alias[alias.length - 1] !== ">") throwParseError(`'>' must be the last character of a generic declaration in a scope`);
 		const name = alias.slice(0, firstParamIndex);
 		const paramString = alias.slice(firstParamIndex + 1, -1);
 		return [name, () => {
@@ -6769,7 +6837,7 @@ const scope = Object.assign(InternalScope.scope, { define: (def) => def });
 const Scope = InternalScope;
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/builtins.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/builtins.js
 var MergeHkt = class extends Hkt {
 	description = "merge an object's properties onto another like `Merge(User, { isAdmin: \"true\" })`";
 };
@@ -6780,7 +6848,7 @@ const arkBuiltins = Scope.module({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/Array.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/Array.js
 var liftFromHkt = class extends Hkt {};
 const liftFrom = genericNode("element")((args) => {
 	const nonArrayElement = args.element.exclude(intrinsic.Array);
@@ -6795,7 +6863,7 @@ const arkArray = Scope.module({
 }, { name: "Array" });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/FormData.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/FormData.js
 const value = rootSchema(["string", registry.FileConstructor]);
 const parsed = rootSchema({
 	meta: "an object representing parsed form data",
@@ -6825,7 +6893,7 @@ const arkFormData = Scope.module({
 }, { name: "FormData" });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/TypedArray.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/TypedArray.js
 const TypedArray = Scope.module({
 	Int8: ["instanceof", Int8Array],
 	Uint8: ["instanceof", Uint8Array],
@@ -6841,7 +6909,7 @@ const TypedArray = Scope.module({
 }, { name: "TypedArray" });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/constructors.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/constructors.js
 const omittedPrototypes = {
 	Boolean: 1,
 	Number: 1,
@@ -6858,7 +6926,7 @@ const arkPrototypes = Scope.module({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/number.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/number.js
 /**
 * As per the ECMA-262 specification:
 * A time value supports a slightly smaller range of -8,640,000,000,000,000 to 8,640,000,000,000,000 milliseconds.
@@ -6906,13 +6974,13 @@ const number = Scope.module({
 }, { name: "number" });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/string.js
-const regexStringNode = (regex$2, description, jsonSchemaFormat) => {
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/string.js
+const regexStringNode = (regex, description, jsonSchemaFormat) => {
 	const schema$1 = {
 		domain: "string",
 		pattern: {
-			rule: regex$2.source,
-			flags: regex$2.flags,
+			rule: regex.source,
+			flags: regex.flags,
 			meta: description
 		}
 	};
@@ -6946,7 +7014,7 @@ const capitalize = Scope.module({
 	preformatted: preformattedCapitalize
 }, { name: "string.capitalize" });
 const isLuhnValid = (creditCardInput) => {
-	const sanitized = creditCardInput.replaceAll(/[ -]+/g, "");
+	const sanitized = creditCardInput.replace(/[ -]+/g, "");
 	let sum = 0;
 	let digit;
 	let tmpNum;
@@ -7255,7 +7323,7 @@ const string = Scope.module({
 }, { name: "string" });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/ts.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/ts.js
 const arkTsKeywords = Scope.module({
 	bigint: intrinsic.bigint,
 	boolean: intrinsic.boolean,
@@ -7331,7 +7399,7 @@ const arkTsGenerics = Scope.module({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.1.25/node_modules/arktype/out/keywords/keywords.js
+//#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/keywords.js
 const ark = scope({
 	...arkTsKeywords,
 	...arkTsGenerics,
