@@ -1277,9 +1277,9 @@ create$7.prototype = BooleanSchema.prototype;
 * Released under MIT license.
 */
 const isoReg = /^(\d{4}|[+-]\d{6})(?:-?(\d{2})(?:-?(\d{2}))?)?(?:[ T]?(\d{2}):?(\d{2})(?::?(\d{2})(?:[,.](\d{1,}))?)?(?:(Z)|([+-])(\d{2})(?::?(\d{2}))?)?)?$/;
-function parseIsoDate(date$1) {
-	const struct = parseDateStruct(date$1);
-	if (!struct) return Date.parse ? Date.parse(date$1) : NaN;
+function parseIsoDate(date) {
+	const struct = parseDateStruct(date);
+	if (!struct) return Date.parse ? Date.parse(date) : NaN;
 	if (struct.z === void 0 && struct.plusMinus === void 0) return new Date(struct.year, struct.month, struct.day, struct.hour, struct.minute, struct.second, struct.millisecond).valueOf();
 	let totalMinutesOffset = 0;
 	if (struct.z !== "Z" && struct.plusMinus !== void 0) {
@@ -1288,9 +1288,9 @@ function parseIsoDate(date$1) {
 	}
 	return Date.UTC(struct.year, struct.month, struct.day, struct.hour, struct.minute + totalMinutesOffset, struct.second, struct.millisecond);
 }
-function parseDateStruct(date$1) {
+function parseDateStruct(date) {
 	var _regexResult$7$length, _regexResult$;
-	const regexResult = isoReg.exec(date$1);
+	const regexResult = isoReg.exec(date);
 	if (!regexResult) return null;
 	return {
 		year: toNumber(regexResult[1]),

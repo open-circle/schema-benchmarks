@@ -1,28 +1,34 @@
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/core.js
 /** A special constant with type `never` */
 const NEVER = Object.freeze({ status: "aborted" });
 function $constructor(name, initializer$1, params) {
 	function init(inst, def) {
-		var _a;
-		Object.defineProperty(inst, "_zod", {
-			value: inst._zod ?? {},
+		if (!inst._zod) Object.defineProperty(inst, "_zod", {
+			value: {
+				def,
+				constr: _,
+				traits: /* @__PURE__ */ new Set()
+			},
 			enumerable: false
 		});
-		(_a = inst._zod).traits ?? (_a.traits = /* @__PURE__ */ new Set());
+		if (inst._zod.traits.has(name)) return;
 		inst._zod.traits.add(name);
 		initializer$1(inst, def);
-		for (const k in _.prototype) if (!(k in inst)) Object.defineProperty(inst, k, { value: _.prototype[k].bind(inst) });
-		inst._zod.constr = _;
-		inst._zod.def = def;
+		const proto = _.prototype;
+		const keys = Object.keys(proto);
+		for (let i = 0; i < keys.length; i++) {
+			const k = keys[i];
+			if (!(k in inst)) inst[k] = proto[k].bind(inst);
+		}
 	}
 	const Parent = params?.Parent ?? Object;
 	class Definition extends Parent {}
 	Object.defineProperty(Definition, "name", { value: name });
 	function _(def) {
-		var _a;
+		var _a$1;
 		const inst = params?.Parent ? new Definition() : this;
 		init(inst, def);
-		(_a = inst._zod).deferred ?? (_a.deferred = []);
+		(_a$1 = inst._zod).deferred ?? (_a$1.deferred = []);
 		for (const fn of inst._zod.deferred) fn();
 		return inst;
 	}
@@ -46,7 +52,7 @@ function config(newConfig) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -151,8 +157,8 @@ function aborted(x, startIndex = 0) {
 }
 function prefixIssues(path, issues) {
 	return issues.map((iss) => {
-		var _a;
-		(_a = iss).path ?? (_a.path = []);
+		var _a$1;
+		(_a$1 = iss).path ?? (_a$1.path = []);
 		iss.path.unshift(path);
 		return iss;
 	});
@@ -178,7 +184,7 @@ function getLengthableOrigin(input) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/errors.js
 const initializer = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -199,7 +205,7 @@ const $ZodError = $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, { Parent: Error });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
 	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
 	const result = schema._zod.run({
@@ -303,23 +309,22 @@ const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 const safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync($ZodRealError);
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/regexes.js
-const hostname = /^(?=.{1,253}\.?$)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?)*\.?$/;
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/regexes.js
 const dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
 const date$1 = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
 const string$1 = (params) => {
 	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
 	return /* @__PURE__ */ new RegExp(`^${regex}$`);
 };
-const number$1 = /^-?\d+(?:\.\d+)?/;
+const number$1 = /^-?\d+(?:\.\d+)?$/;
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
-	var _a;
+	var _a$1;
 	inst._zod ?? (inst._zod = {});
 	inst._zod.def = def;
-	(_a = inst._zod).onattach ?? (_a.onattach = []);
+	(_a$1 = inst._zod).onattach ?? (_a$1.onattach = []);
 });
 const numericOriginMap = {
 	number: "number",
@@ -340,7 +345,7 @@ const $ZodCheckLessThan = /* @__PURE__ */ $constructor("$ZodCheckLessThan", (ins
 		payload.issues.push({
 			origin,
 			code: "too_big",
-			maximum: def.value,
+			maximum: typeof def.value === "object" ? def.value.getTime() : def.value,
 			input: payload.value,
 			inclusive: def.inclusive,
 			inst,
@@ -362,7 +367,7 @@ const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan"
 		payload.issues.push({
 			origin,
 			code: "too_small",
-			minimum: def.value,
+			minimum: typeof def.value === "object" ? def.value.getTime() : def.value,
 			input: payload.value,
 			inclusive: def.inclusive,
 			inst,
@@ -371,9 +376,9 @@ const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan"
 	};
 });
 const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
-	var _a;
+	var _a$1;
 	$ZodCheck.init(inst, def);
-	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
+	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
 		const val = payload.value;
 		return !nullish(val) && val.length !== void 0;
 	});
@@ -397,9 +402,9 @@ const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (i
 	};
 });
 const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
-	var _a;
+	var _a$1;
 	$ZodCheck.init(inst, def);
-	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
+	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
 		const val = payload.value;
 		return !nullish(val) && val.length !== void 0;
 	});
@@ -423,7 +428,7 @@ const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (i
 	};
 });
 const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
-	var _a, _b;
+	var _a$1, _b;
 	$ZodCheck.init(inst, def);
 	inst._zod.onattach.push((inst$1) => {
 		const bag = inst$1._zod.bag;
@@ -433,7 +438,7 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 			bag.patterns.add(def.pattern);
 		}
 	});
-	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
+	if (def.pattern) (_a$1 = inst._zod).check ?? (_a$1.check = (payload) => {
 		def.pattern.lastIndex = 0;
 		if (def.pattern.test(payload.value)) return;
 		payload.issues.push({
@@ -450,17 +455,17 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
-	minor: 1,
-	patch: 12
+	minor: 3,
+	patch: 5
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
-	var _a;
+	var _a$1;
 	inst ?? (inst = {});
 	inst._zod.def = def;
 	inst._zod.bag = inst._zod.bag || {};
@@ -469,7 +474,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	if (inst._zod.traits.has("$ZodCheck")) checks.unshift(inst);
 	for (const ch of checks) for (const fn of ch._zod.onattach) fn(inst);
 	if (checks.length === 0) {
-		(_a = inst._zod).deferred ?? (_a.deferred = []);
+		(_a$1 = inst._zod).deferred ?? (_a$1.deferred = []);
 		inst._zod.deferred?.push(() => {
 			inst._zod.run = inst._zod.parse;
 		});
@@ -534,7 +539,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 			return runChecks(result, checks, ctx);
 		};
 	}
-	inst["~standard"] = {
+	defineLazy(inst, "~standard", () => ({
 		validate: (value) => {
 			try {
 				const r = safeParse(inst, value);
@@ -545,7 +550,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 		},
 		vendor: "zod",
 		version: 1
-	};
+	}));
 });
 const $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
 	$ZodType.init(inst, def);
@@ -580,7 +585,7 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 					code: "invalid_format",
 					format: "url",
 					note: "Invalid hostname",
-					pattern: hostname.source,
+					pattern: def.hostname.source,
 					input: payload.value,
 					inst,
 					continue: !def.abort
@@ -683,8 +688,11 @@ const $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
 		return payload;
 	};
 });
-function handlePropertyResult(result, final, key, input) {
-	if (result.issues.length) final.issues.push(...prefixIssues(key, result.issues));
+function handlePropertyResult(result, final, key, input, isOptionalOut) {
+	if (result.issues.length) {
+		if (isOptionalOut && !(key in input)) return;
+		final.issues.push(...prefixIssues(key, result.issues));
+	}
 	if (result.value === void 0) {
 		if (key in input) final.value[key] = void 0;
 	} else final.value[key] = result.value;
@@ -706,7 +714,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 	const keySet = def.keySet;
 	const _catchall = def.catchall._zod;
 	const t = _catchall.def.type;
-	for (const key of Object.keys(input)) {
+	const isOptionalOut = _catchall.optout === "optional";
+	for (const key in input) {
 		if (keySet.has(key)) continue;
 		if (t === "never") {
 			unrecognized.push(key);
@@ -716,8 +725,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 			value: input[key],
 			issues: []
 		}, ctx);
-		if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input)));
-		else handlePropertyResult(r, payload, key, input);
+		if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input, isOptionalOut)));
+		else handlePropertyResult(r, payload, key, input, isOptionalOut);
 	}
 	if (unrecognized.length) payload.issues.push({
 		code: "unrecognized_keys",
@@ -772,12 +781,14 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		const proms = [];
 		const shape = value.shape;
 		for (const key of value.keys) {
-			const r = shape[key]._zod.run({
+			const el = shape[key];
+			const isOptionalOut = el._zod.optout === "optional";
+			const r = el._zod.run({
 				value: input[key],
 				issues: []
 			}, ctx);
-			if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input)));
-			else handlePropertyResult(r, payload, key, input);
+			if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input, isOptionalOut)));
+			else handlePropertyResult(r, payload, key, input, isOptionalOut);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
 		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
@@ -819,13 +830,63 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/registries.js
+var _a;
+var $ZodRegistry = class {
+	constructor() {
+		this._map = /* @__PURE__ */ new WeakMap();
+		this._idmap = /* @__PURE__ */ new Map();
+	}
+	add(schema, ..._meta) {
+		const meta$2 = _meta[0];
+		this._map.set(schema, meta$2);
+		if (meta$2 && typeof meta$2 === "object" && "id" in meta$2) this._idmap.set(meta$2.id, schema);
+		return this;
+	}
+	clear() {
+		this._map = /* @__PURE__ */ new WeakMap();
+		this._idmap = /* @__PURE__ */ new Map();
+		return this;
+	}
+	remove(schema) {
+		const meta$2 = this._map.get(schema);
+		if (meta$2 && typeof meta$2 === "object" && "id" in meta$2) this._idmap.delete(meta$2.id);
+		this._map.delete(schema);
+		return this;
+	}
+	get(schema) {
+		const p = schema._zod.parent;
+		if (p) {
+			const pm = { ...this.get(p) ?? {} };
+			delete pm.id;
+			const f = {
+				...pm,
+				...this._map.get(schema)
+			};
+			return Object.keys(f).length ? f : void 0;
+		}
+		return this._map.get(schema);
+	}
+	has(schema) {
+		return this._map.has(schema);
+	}
+};
+function registry() {
+	return new $ZodRegistry();
+}
+(_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
+const globalRegistry = globalThis.__zod_globalRegistry;
+
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/api.js
+/* @__NO_SIDE_EFFECTS__ */
 function _string(Class, params) {
 	return new Class({
 		type: "string",
 		...normalizeParams(params)
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _url(Class, params) {
 	return new Class({
 		type: "string",
@@ -835,6 +896,7 @@ function _url(Class, params) {
 		...normalizeParams(params)
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _number(Class, params) {
 	return new Class({
 		type: "number",
@@ -842,12 +904,14 @@ function _number(Class, params) {
 		...normalizeParams(params)
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _date(Class, params) {
 	return new Class({
 		type: "date",
 		...normalizeParams(params)
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _lte(value, params) {
 	return new $ZodCheckLessThan({
 		check: "less_than",
@@ -856,6 +920,7 @@ function _lte(value, params) {
 		inclusive: true
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _gte(value, params) {
 	return new $ZodCheckGreaterThan({
 		check: "greater_than",
@@ -864,6 +929,7 @@ function _gte(value, params) {
 		inclusive: true
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _maxLength(maximum, params) {
 	return new $ZodCheckMaxLength({
 		check: "max_length",
@@ -871,6 +937,7 @@ function _maxLength(maximum, params) {
 		maximum
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function _minLength(minimum, params) {
 	return new $ZodCheckMinLength({
 		check: "min_length",
@@ -878,9 +945,35 @@ function _minLength(minimum, params) {
 		minimum
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
+function describe$1(description) {
+	const ch = new $ZodCheck({ check: "describe" });
+	ch._zod.onattach = [(inst) => {
+		const existing = globalRegistry.get(inst) ?? {};
+		globalRegistry.add(inst, {
+			...existing,
+			description
+		});
+	}];
+	ch._zod.check = () => {};
+	return ch;
+}
+/* @__NO_SIDE_EFFECTS__ */
+function meta$1(metadata) {
+	const ch = new $ZodCheck({ check: "meta" });
+	ch._zod.onattach = [(inst) => {
+		const existing = globalRegistry.get(inst) ?? {};
+		globalRegistry.add(inst, {
+			...existing,
+			...metadata
+		});
+	}];
+	ch._zod.check = () => {};
+	return ch;
+}
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/mini/schemas.js
+//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /* @__PURE__ */ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
@@ -898,19 +991,22 @@ const ZodMiniType = /* @__PURE__ */ $constructor("ZodMiniType", (inst, def) => {
 				def: { check: "custom" },
 				onattach: []
 			} } : ch)]
-		});
+		}, { parent: true });
 	};
+	inst.with = inst.check;
 	inst.clone = (_def, params) => clone(inst, _def, params);
 	inst.brand = () => inst;
 	inst.register = ((reg, meta) => {
 		reg.add(inst, meta);
 		return inst;
 	});
+	inst.apply = (fn) => fn(inst);
 });
 const ZodMiniString = /* @__PURE__ */ $constructor("ZodMiniString", (inst, def) => {
 	$ZodString.init(inst, def);
 	ZodMiniType.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function string(params) {
 	return _string(ZodMiniString, params);
 }
@@ -922,6 +1018,7 @@ const ZodMiniURL = /* @__PURE__ */ $constructor("ZodMiniURL", (inst, def) => {
 	$ZodURL.init(inst, def);
 	ZodMiniStringFormat.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function url(params) {
 	return _url(ZodMiniURL, params);
 }
@@ -929,6 +1026,7 @@ const ZodMiniNumber = /* @__PURE__ */ $constructor("ZodMiniNumber", (inst, def) 
 	$ZodNumber.init(inst, def);
 	ZodMiniType.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function number(params) {
 	return _number(ZodMiniNumber, params);
 }
@@ -936,6 +1034,7 @@ const ZodMiniDate = /* @__PURE__ */ $constructor("ZodMiniDate", (inst, def) => {
 	$ZodDate.init(inst, def);
 	ZodMiniType.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function date(params) {
 	return _date(ZodMiniDate, params);
 }
@@ -943,6 +1042,7 @@ const ZodMiniArray = /* @__PURE__ */ $constructor("ZodMiniArray", (inst, def) =>
 	$ZodArray.init(inst, def);
 	ZodMiniType.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function array(element, params) {
 	return new ZodMiniArray({
 		type: "array",
@@ -955,6 +1055,7 @@ const ZodMiniObject = /* @__PURE__ */ $constructor("ZodMiniObject", (inst, def) 
 	ZodMiniType.init(inst, def);
 	defineLazy(inst, "shape", () => def.shape);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function object(shape, params) {
 	return new ZodMiniObject({
 		type: "object",
@@ -967,6 +1068,7 @@ const ZodMiniEnum = /* @__PURE__ */ $constructor("ZodMiniEnum", (inst, def) => {
 	ZodMiniType.init(inst, def);
 	inst.options = Object.values(def.entries);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function _enum(values, params) {
 	return new ZodMiniEnum({
 		type: "enum",
@@ -978,12 +1080,15 @@ const ZodMiniNullable = /* @__PURE__ */ $constructor("ZodMiniNullable", (inst, d
 	$ZodNullable.init(inst, def);
 	ZodMiniType.init(inst, def);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function nullable(innerType) {
 	return new ZodMiniNullable({
 		type: "nullable",
 		innerType
 	});
 }
+const describe = describe$1;
+const meta = meta$1;
 
 //#endregion
 //#region ../schemas/libraries/zod/download/mini.ts

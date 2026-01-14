@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Function.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Function.js
 /**
 * Tests if a value is a `function`.
 *
@@ -230,7 +230,7 @@ function pipe(a, ab, bc, cd, de, ef, fg, gh, hi) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Equivalence.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Equivalence.js
 /**
 * This module provides an implementation of the `Equivalence` type class, which defines a binary relation
 * that is reflexive, symmetric, and transitive. In other words, it defines a notion of equivalence between values of a certain type.
@@ -323,7 +323,7 @@ const struct$3 = (fields) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/doNotation.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/doNotation.js
 /** @internal */
 const let_$2 = (map$18) => dual(3, (self, name, f) => map$18(self, (a) => ({
 	...a,
@@ -338,7 +338,7 @@ const bind$2 = (map$18, flatMap$13) => dual(3, (self, name, f) => flatMap$13(sel
 }))));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/GlobalValue.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/GlobalValue.js
 /**
 * The `GlobalValue` module ensures that a single instance of a value is created globally,
 * even when modules are imported multiple times (e.g., due to mixing CommonJS and ESM builds)
@@ -388,7 +388,7 @@ const globalValue = (id$2, compute) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Predicate.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Predicate.js
 /**
 * This module provides a collection of functions for working with predicates and refinements.
 *
@@ -794,7 +794,7 @@ const isPromiseLike = (input) => hasProperty(input, "then") && isFunction(input.
 const isRegExp$1 = (input) => input instanceof RegExp;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/errors.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/errors.js
 /**
 * @since 2.0.0
 */
@@ -802,7 +802,7 @@ const isRegExp$1 = (input) => input instanceof RegExp;
 const getBugErrorMessage = (message) => `BUG: ${message} - please report an issue at https://github.com/Effect-TS/effect/issues`;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Utils.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Utils.js
 /**
 * @since 2.0.0
 */
@@ -1085,7 +1085,7 @@ const internalCall = isNotOptimizedAway ? standard.effect_internal_function : fo
 const genConstructor = function* () {}.constructor;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Hash.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Hash.js
 /**
 * @since 2.0.0
 */
@@ -1111,8 +1111,10 @@ const hash = (self) => {
 		case "undefined": return string("undefined");
 		case "function":
 		case "object": if (self === null) return string("null");
-		else if (self instanceof Date) return hash(self.toISOString());
-		else if (self instanceof URL) return hash(self.href);
+		else if (self instanceof Date) {
+			if (Number.isNaN(self.getTime())) return string("Invalid Date");
+			return hash(self.toISOString());
+		} else if (self instanceof URL) return hash(self.href);
 		else if (isHash(self)) return self[symbol$1]();
 		else return random$2(self);
 		default: throw new Error(`BUG: unhandled typeof ${typeof self} - please report an issue at https://github.com/Effect-TS/effect/issues`);
@@ -1191,29 +1193,29 @@ const array$1 = (arr) => {
 const cached$2 = function() {
 	if (arguments.length === 1) {
 		const self$1 = arguments[0];
-		return function(hash$2) {
+		return function(hash$1) {
 			Object.defineProperty(self$1, symbol$1, {
 				value() {
-					return hash$2;
+					return hash$1;
 				},
 				enumerable: false
 			});
-			return hash$2;
+			return hash$1;
 		};
 	}
 	const self = arguments[0];
-	const hash$1 = arguments[1];
+	const hash = arguments[1];
 	Object.defineProperty(self, symbol$1, {
 		value() {
-			return hash$1;
+			return hash;
 		},
 		enumerable: false
 	});
-	return hash$1;
+	return hash;
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Equal.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Equal.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -1231,8 +1233,11 @@ function compareBoth(self, that) {
 		if (self !== null && that !== null) {
 			if (isEqual(self) && isEqual(that)) if (hash(self) === hash(that) && self[symbol](that)) return true;
 			else return structuralRegionState.enabled && structuralRegionState.tester ? structuralRegionState.tester(self, that) : false;
-			else if (self instanceof Date && that instanceof Date) return self.toISOString() === that.toISOString();
-			else if (self instanceof URL && that instanceof URL) return self.href === that.href;
+			else if (self instanceof Date && that instanceof Date) {
+				const t1 = self.getTime();
+				const t2 = that.getTime();
+				return t1 === t2 || Number.isNaN(t1) && Number.isNaN(t2);
+			} else if (self instanceof URL && that instanceof URL) return self.href === that.href;
 		}
 		if (structuralRegionState.enabled) {
 			if (Array.isArray(self) && Array.isArray(that)) return self.length === that.length && self.every((v, i) => compareBoth(v, that[i]));
@@ -1261,7 +1266,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 const equivalence = () => equals$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Inspectable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Inspectable.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -1439,7 +1444,7 @@ const redact = (u) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Pipeable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -1467,7 +1472,7 @@ const pipeArguments = (self, args$1) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/effect.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/effect.js
 /** @internal */
 const OP_ASYNC = "Async";
 /** @internal */
@@ -1500,12 +1505,12 @@ const OP_YIELD = "Yield";
 const OP_REVERT_FLAGS = "RevertFlags";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/version.js
-let moduleVersion = "3.19.3";
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/version.js
+let moduleVersion = "3.19.14";
 const getCurrentVersion = () => moduleVersion;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/effectable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/effectable.js
 /** @internal */
 const EffectTypeId$3 = /* @__PURE__ */ Symbol.for("effect/Effect");
 /** @internal */
@@ -1593,7 +1598,7 @@ const StructuralBase$1 = /* @__PURE__ */ function() {
 }();
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/option.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -1658,7 +1663,7 @@ const some$5 = (value) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/either.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/either.js
 /**
 * @since 2.0.0
 */
@@ -1736,7 +1741,7 @@ const getRight$2 = (self) => isLeft$1(self) ? none$8 : some$5(self.right);
 const fromOption$4 = /* @__PURE__ */ dual(2, (self, onNone) => isNone$3(self) ? left$1(onNone()) : right$1(self.value));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Either.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Either.js
 /**
 * @category symbols
 * @since 2.0.0
@@ -1957,7 +1962,7 @@ const getOrThrowWith$1 = /* @__PURE__ */ dual(2, (self, onLeft) => {
 const getOrThrow$1 = /* @__PURE__ */ getOrThrowWith$1(() => /* @__PURE__ */ new Error("getOrThrow called on a Left"));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/array.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/array.js
 /**
 * @since 2.0.0
 */
@@ -1965,7 +1970,7 @@ const getOrThrow$1 = /* @__PURE__ */ getOrThrowWith$1(() => /* @__PURE__ */ new 
 const isNonEmptyArray$1 = (self) => self.length > 0;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Order.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Order.js
 /**
 * This module provides an implementation of the `Order` type class which is used to define a total ordering on some type `A`.
 * An order is defined by a relation `<=`, which obeys the following laws:
@@ -2081,7 +2086,7 @@ const struct$2 = (fields) => {
 const greaterThan$3 = (O) => dual(2, (self, that) => O(self, that) === 1);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Option.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Option.js
 /**
 * Represents the absence of a value by creating an empty `Option`.
 *
@@ -2830,7 +2835,7 @@ const mergeWith = (f) => (o1, o2) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Tuple.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Tuple.js
 /**
 * This module provides utility functions for working with tuples in TypeScript.
 *
@@ -2871,7 +2876,7 @@ const getEquivalence$4 = tuple$1;
 const getOrder$4 = tuple;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Iterable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Iterable.js
 /**
 * Returns the first element that satisfies the specified
 * predicate, or `None` if no such element exists.
@@ -2892,7 +2897,7 @@ const findFirst$8 = /* @__PURE__ */ dual(2, (self, f) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Record.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Record.js
 /**
 * Transforms the values of a record into an `Array` with a custom mapping function.
 *
@@ -2937,7 +2942,7 @@ const toEntries = /* @__PURE__ */ collect((key, value) => [key, value]);
 const keys$4 = (self) => Object.keys(self);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Array.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Array.js
 /**
 * This module provides utility functions for working with arrays in TypeScript.
 *
@@ -3867,7 +3872,7 @@ const dedupe = (self) => dedupeWith(self, equivalence());
 const join$3 = /* @__PURE__ */ dual(2, (self, sep) => fromIterable$10(self).join(sep));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Boolean.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Boolean.js
 /**
 * This module provides utility functions and type class instances for working with the `boolean` type in TypeScript.
 * It includes functions for basic boolean operations, as well as type class instances for
@@ -3919,7 +3924,7 @@ const Order$4 = boolean;
 const not = (self) => !self;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Chunk.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Chunk.js
 /**
 * @since 2.0.0
 */
@@ -4406,7 +4411,7 @@ const reduce$11 = reduce$12;
 const reduceRight$2 = reduceRight$3;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap/config.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap/config.js
 /** @internal */
 const SIZE = 5;
 /** @internal */
@@ -4419,7 +4424,7 @@ const MAX_INDEX_NODE = BUCKET_SIZE / 2;
 const MIN_ARRAY_NODE = BUCKET_SIZE / 4;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap/bitwise.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap/bitwise.js
 /**
 * Hamming weight.
 *
@@ -4449,14 +4454,14 @@ function fromBitmap(bitmap, bit) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/stack.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/stack.js
 const make$40 = (value, previous) => ({
 	value,
 	previous
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap/array.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap/array.js
 /** @internal */
 function arrayUpdate(mutate$4, at$2, v, arr) {
 	let out = arr;
@@ -4502,7 +4507,7 @@ function arraySpliceIn(mutate$4, at$2, v, arr) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap/node.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap/node.js
 /** @internal */
 var EmptyNode = class EmptyNode {
 	_tag = "EmptyNode";
@@ -4735,7 +4740,7 @@ function mergeLeaves(edit, shift$1, h1, n1, h2, n2) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap.js
 const HashMapSymbolKey = "effect/HashMap";
 /** @internal */
 const HashMapTypeId = /* @__PURE__ */ Symbol.for(HashMapSymbolKey);
@@ -5016,7 +5021,7 @@ const some$3 = /* @__PURE__ */ dual(2, (self, predicate) => {
 const every$5 = /* @__PURE__ */ dual(2, (self, predicate) => !some$3(self, (a, k) => !predicate(a, k)));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashSet.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashSet.js
 const HashSetSymbolKey = "effect/HashSet";
 /** @internal */
 const HashSetTypeId = /* @__PURE__ */ Symbol.for(HashSetSymbolKey);
@@ -5165,7 +5170,7 @@ const partition$3 = /* @__PURE__ */ dual(2, (self, predicate) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/HashSet.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/HashSet.js
 /**
 * # HashSet
 *
@@ -6393,7 +6398,7 @@ const filter$6 = filter$7;
 const partition$2 = partition$3;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/cause.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/cause.js
 /** @internal */
 const OP_DIE = "Die";
 /** @internal */
@@ -6408,7 +6413,7 @@ const OP_PARALLEL$1 = "Parallel";
 const OP_SEQUENTIAL$1 = "Sequential";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/cause.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/cause.js
 /** @internal */
 const CauseSymbolKey = "effect/Cause";
 /** @internal */
@@ -7025,7 +7030,7 @@ const prettyErrors$1 = (cause$2) => reduceWithContext$1(cause$2, void 0, {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/context.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/context.js
 /** @internal */
 const TagTypeId$1 = /* @__PURE__ */ Symbol.for("effect/Context/Tag");
 /** @internal */
@@ -7241,7 +7246,7 @@ const omit$2 = (...tags) => (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Context.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Context.js
 /**
 * @since 2.0.0
 * @category symbol
@@ -7602,7 +7607,7 @@ const Tag = Tag$1;
 const Reference = Reference$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Duration.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Duration.js
 /**
 * @since 2.0.0
 */
@@ -7742,49 +7747,49 @@ const infinity = /* @__PURE__ */ make$34(Infinity);
 * @since 2.0.0
 * @category constructors
 */
-const nanos = (nanos$1) => make$34(nanos$1);
+const nanos = (nanos) => make$34(nanos);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const micros = (micros$1) => make$34(micros$1 * bigint1e3);
+const micros = (micros) => make$34(micros * bigint1e3);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const millis = (millis$1) => make$34(millis$1);
+const millis = (millis) => make$34(millis);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const seconds = (seconds$1) => make$34(seconds$1 * 1e3);
+const seconds = (seconds) => make$34(seconds * 1e3);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const minutes = (minutes$1) => make$34(minutes$1 * 6e4);
+const minutes = (minutes) => make$34(minutes * 6e4);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const hours = (hours$1) => make$34(hours$1 * 36e5);
+const hours = (hours) => make$34(hours * 36e5);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const days = (days$1) => make$34(days$1 * 864e5);
+const days = (days) => make$34(days * 864e5);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const weeks = (weeks$1) => make$34(weeks$1 * 6048e5);
+const weeks = (weeks) => make$34(weeks * 6048e5);
 /**
 * @since 2.0.0
 * @category getters
 */
 const toMillis = (self) => match$9(self, {
-	onMillis: (millis$1) => millis$1,
-	onNanos: (nanos$1) => Number(nanos$1) / 1e6
+	onMillis: (millis) => millis,
+	onNanos: (nanos) => Number(nanos) / 1e6
 });
 /**
 * Get the duration in nanoseconds as a bigint.
@@ -7886,19 +7891,19 @@ const parts = (self) => {
 		millis: Infinity,
 		nanos: Infinity
 	};
-	const nanos$1 = unsafeToNanos(duration);
-	const ms = nanos$1 / bigint1e6;
+	const nanos = unsafeToNanos(duration);
+	const ms = nanos / bigint1e6;
 	const sec = ms / bigint1e3;
 	const min$2 = sec / bigint60;
 	const hr = min$2 / bigint60;
-	const days$1 = hr / bigint24;
+	const days = hr / bigint24;
 	return {
-		days: Number(days$1),
+		days: Number(days),
 		hours: Number(hr % bigint24),
 		minutes: Number(min$2 % bigint60),
 		seconds: Number(sec % bigint60),
 		millis: Number(ms % bigint1e3),
-		nanos: Number(nanos$1 % bigint1e6)
+		nanos: Number(nanos % bigint1e6)
 	};
 };
 /**
@@ -7930,7 +7935,7 @@ const format$1 = (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/MutableRef.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/MutableRef.js
 /**
 * @since 2.0.0
 */
@@ -7988,7 +7993,7 @@ const set$4 = /* @__PURE__ */ dual(2, (self, value) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberId.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberId.js
 /** @internal */
 const FiberIdSymbolKey = "effect/FiberId";
 /** @internal */
@@ -8169,7 +8174,7 @@ const unsafeMake$8 = () => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/FiberId.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/FiberId.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -8285,14 +8290,14 @@ const toSet$2 = toSet$3;
 const unsafeMake$7 = unsafeMake$8;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/hashMap/keySet.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/hashMap/keySet.js
 /** @internal */
 function keySet$1(self) {
 	return makeImpl$1(self);
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/HashMap.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/HashMap.js
 /**
 * @since 2.0.0
 */
@@ -8590,7 +8595,7 @@ const some = some$3;
 const every$2 = every$5;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/List.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/List.js
 /**
 * A data type for immutable linked lists representing ordered collections of elements of type `A`.
 *
@@ -8684,10 +8689,10 @@ const ConsProto = {
 	}
 };
 const makeCons = (head$4, tail) => {
-	const cons$1 = Object.create(ConsProto);
-	cons$1.head = head$4;
-	cons$1.tail = tail;
-	return cons$1;
+	const cons = Object.create(ConsProto);
+	cons.head = head$4;
+	cons.tail = tail;
+	return cons;
 };
 const NilHash = /* @__PURE__ */ string("Nil");
 const NilProto = {
@@ -8868,7 +8873,7 @@ const reverse = (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/data.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/data.js
 /** @internal */
 const ArrayProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Array.prototype), {
 	[symbol$1]() {
@@ -8891,7 +8896,7 @@ const Structural$1 = /* @__PURE__ */ function() {
 const struct$1 = (as$6) => Object.assign(Object.create(StructuralPrototype), as$6);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/chunkPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/chunkPatch.js
 /** @internal */
 const ChunkPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferChunkPatch");
 function variance$6(a) {
@@ -8992,7 +8997,7 @@ const patch$10 = /* @__PURE__ */ dual(3, (self, oldValue, differ$2) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/contextPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/contextPatch.js
 /** @internal */
 const ContextPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferContextPatch");
 function variance$5(a) {
@@ -9098,7 +9103,7 @@ const patch$9 = /* @__PURE__ */ dual(2, (self, context$2) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/hashMapPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/hashMapPatch.js
 /** @internal */
 const HashMapPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferHashMapPatch");
 function variance$4(a) {
@@ -9196,7 +9201,7 @@ const patch$8 = /* @__PURE__ */ dual(3, (self, oldValue, differ$2) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/hashSetPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/hashSetPatch.js
 /** @internal */
 const HashSetPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferHashSetPatch");
 function variance$3(a) {
@@ -9275,7 +9280,7 @@ const patch$7 = /* @__PURE__ */ dual(2, (self, oldValue) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/orPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/orPatch.js
 /** @internal */
 const OrPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferOrPatch");
 function variance$2(a) {
@@ -9390,7 +9395,7 @@ const patch$6 = /* @__PURE__ */ dual(2, (self, { left: left$2, oldValue, right: 
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ/readonlyArrayPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ/readonlyArrayPatch.js
 /** @internal */
 const ReadonlyArrayPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferReadonlyArrayPatch");
 function variance$1(a) {
@@ -9487,7 +9492,7 @@ const patch$5 = /* @__PURE__ */ dual(3, (self, oldValue, differ$2) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/differ.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/differ.js
 /** @internal */
 const DifferTypeId = /* @__PURE__ */ Symbol.for("effect/Differ");
 /** @internal */
@@ -9604,7 +9609,7 @@ const zip$5 = /* @__PURE__ */ dual(2, (self, that) => make$29({
 }));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/runtimeFlagsPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/runtimeFlagsPatch.js
 /** @internal */
 const BIT_MASK = 255;
 /** @internal */
@@ -9614,7 +9619,7 @@ const active = (patch$11) => patch$11 & BIT_MASK;
 /** @internal */
 const enabled = (patch$11) => patch$11 >> BIT_SHIFT & BIT_MASK;
 /** @internal */
-const make$28 = (active$1, enabled$1) => (active$1 & BIT_MASK) + ((enabled$1 & active$1 & BIT_MASK) << BIT_SHIFT);
+const make$28 = (active, enabled) => (active & BIT_MASK) + ((enabled & active & BIT_MASK) << BIT_SHIFT);
 /** @internal */
 const empty$17 = /* @__PURE__ */ make$28(0, 0);
 /** @internal */
@@ -9643,7 +9648,7 @@ const inverse$1 = (patch$11) => make$28(enabled(patch$11), invert(active(patch$1
 const invert = (n) => ~n >>> 0 & BIT_MASK;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/runtimeFlags.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/runtimeFlags.js
 /** @internal */
 const None$1 = 0;
 /** @internal */
@@ -9717,7 +9722,7 @@ const differ$1 = /* @__PURE__ */ make$29({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/RuntimeFlagsPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/RuntimeFlagsPatch.js
 /**
 * @since 2.0.0
 */
@@ -9851,7 +9856,7 @@ const disabledSet = disabledSet$1;
 const render$2 = renderPatch;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/blockedRequests.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/blockedRequests.js
 /** @internal */
 const empty$15 = { _tag: "Empty" };
 /**
@@ -9898,8 +9903,8 @@ const flatten$5 = (self) => {
 	let updated = empty$24();
 	while (1) {
 		const [parallel$4, sequential$4] = reduce$5(current, [parallelCollectionEmpty(), empty$24()], ([parallel$5, sequential$5], blockedRequest) => {
-			const [par$1, seq$1] = step$2(blockedRequest);
-			return [parallelCollectionCombine(parallel$5, par$1), appendAll(sequential$5, seq$1)];
+			const [par, seq] = step$2(blockedRequest);
+			return [parallelCollectionCombine(parallel$5, par), appendAll(sequential$5, seq)];
 		});
 		updated = merge$2(updated, parallel$4);
 		if (isNil(sequential$4)) return reverse(updated);
@@ -10048,14 +10053,14 @@ const sequentialCollectionKeys = (self) => Array.from(keys$2(self.map));
 const sequentialCollectionToChunk = (self) => Array.from(self.map);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/deferred.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/deferred.js
 /** @internal */
 const OP_STATE_PENDING = "Pending";
 /** @internal */
 const OP_STATE_DONE = "Done";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/deferred.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/deferred.js
 /** @internal */
 const DeferredSymbolKey = "effect/Deferred";
 /** @internal */
@@ -10081,7 +10086,7 @@ const done$7 = (effect) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/singleShotGen.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/singleShotGen.js
 /** @internal */
 var SingleShotGen = class SingleShotGen {
 	self;
@@ -10113,7 +10118,7 @@ var SingleShotGen = class SingleShotGen {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/core.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/core.js
 /**
 * @internal
 */
@@ -11298,7 +11303,7 @@ const NoopSpanProto = {
 const noopSpan = (options) => Object.assign(Object.create(NoopSpanProto), options);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Cause.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Cause.js
 /**
 * A unique symbol identifying the `Cause` type.
 *
@@ -12301,7 +12306,7 @@ const prettyErrors = prettyErrors$1;
 const originalError = originalInstance;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/configError.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/configError.js
 /** @internal */
 const OP_AND = "And";
 /** @internal */
@@ -12316,7 +12321,7 @@ const OP_SOURCE_UNAVAILABLE = "SourceUnavailable";
 const OP_UNSUPPORTED = "Unsupported";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/configError.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/configError.js
 /** @internal */
 const ConfigErrorSymbolKey = "effect/ConfigError";
 /** @internal */
@@ -12436,7 +12441,7 @@ const prefixed = /* @__PURE__ */ dual(2, (self, prefix) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/clock.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/clock.js
 /** @internal */
 const ClockSymbolKey = "effect/Clock";
 /** @internal */
@@ -12461,7 +12466,7 @@ const globalClockScheduler = { unsafeSchedule(task, duration) {
 } };
 const performanceNowNanos = /* @__PURE__ */ function() {
 	const bigint1e6$1 = /* @__PURE__ */ BigInt(1e6);
-	if (typeof performance === "undefined") return () => BigInt(Date.now()) * bigint1e6$1;
+	if (typeof performance === "undefined" || typeof performance.now !== "function") return () => BigInt(Date.now()) * bigint1e6$1;
 	let origin;
 	return () => {
 		if (origin === void 0) origin = BigInt(Date.now()) * bigint1e6$1 - BigInt(Math.round(performance.now() * 1e6));
@@ -12499,7 +12504,7 @@ var ClockImpl = class {
 const make$25 = () => new ClockImpl();
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Number.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Number.js
 /**
 * # Number
 *
@@ -12664,7 +12669,7 @@ const Equivalence = number$2;
 const Order$3 = number;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/RegExp.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/RegExp.js
 /**
 * This module provides utility functions for working with RegExp in TypeScript.
 *
@@ -12702,7 +12707,7 @@ const isRegExp = isRegExp$1;
 const escape = (string$1) => string$1.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/configProvider/pathPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/configProvider/pathPatch.js
 /** @internal */
 const empty$13 = { _tag: "Empty" };
 /** @internal */
@@ -12738,7 +12743,7 @@ const patch$3 = /* @__PURE__ */ dual(2, (path, patch$11) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/config.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/config.js
 /** @internal */
 const OP_CONSTANT = "Constant";
 /** @internal */
@@ -12763,7 +12768,7 @@ const OP_HASHMAP = "HashMap";
 const OP_ZIP_WITH = "ZipWith";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/configProvider.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/configProvider.js
 const concat = (l, r) => [...l, ...r];
 /** @internal */
 const ConfigProviderSymbolKey = "effect/ConfigProvider";
@@ -12927,7 +12932,7 @@ const parseInteger = (str) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/defaultServices/console.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/defaultServices/console.js
 /** @internal */
 const TypeId$9 = /* @__PURE__ */ Symbol.for("effect/Console");
 /** @internal */
@@ -13019,7 +13024,7 @@ const defaultConsole = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/random.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/random.js
 /** @internal */
 const RandomSymbolKey = "effect/Random";
 /** @internal */
@@ -13119,7 +13124,7 @@ var FixedRandomImpl = class {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/tracer.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/tracer.js
 /**
 * @since 2.0.0
 */
@@ -13235,7 +13240,7 @@ const addSpanStackTrace = (options) => {
 const DisablePropagation$1 = /* @__PURE__ */ Reference()("effect/Tracer/DisablePropagation", { defaultValue: constFalse });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/defaultServices.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/defaultServices.js
 /** @internal */
 const liveServices = /* @__PURE__ */ pipe(/* @__PURE__ */ empty$26(), /* @__PURE__ */ add$1(clockTag, /* @__PURE__ */ make$25()), /* @__PURE__ */ add$1(consoleTag, defaultConsole), /* @__PURE__ */ add$1(randomTag, /* @__PURE__ */ make$23(/* @__PURE__ */ Math.random())), /* @__PURE__ */ add$1(configProviderTag, /* @__PURE__ */ fromEnv()), /* @__PURE__ */ add$1(tracerTag, nativeTracer));
 /**
@@ -13274,7 +13279,7 @@ const tracerWith$3 = (f) => defaultServicesWith((services) => f(services.unsafeM
 const withTracer$1 = /* @__PURE__ */ dual(2, (effect, value) => fiberRefLocallyWith(currentServices, add$1(tracerTag, value))(effect));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Data.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Data.js
 /**
 * @example
 * ```ts
@@ -13365,7 +13370,7 @@ const TaggedError = (tag) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Effectable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Effectable.js
 /**
 * @since 2.0.0
 * @category type ids
@@ -13410,7 +13415,7 @@ const StructuralBase = StructuralBase$1;
 var Class$2 = class extends Base {};
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/executionStrategy.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/executionStrategy.js
 /** @internal */
 const OP_SEQUENTIAL = "Sequential";
 /** @internal */
@@ -13442,7 +13447,7 @@ const match$7 = /* @__PURE__ */ dual(2, (self, options) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/ExecutionStrategy.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/ExecutionStrategy.js
 /**
 * Execute effects sequentially.
 *
@@ -13498,7 +13503,7 @@ const isParallelN = isParallelN$1;
 const match$6 = match$7;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberRefs.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberRefs.js
 /** @internal */
 function unsafeMake$6(fiberRefLocals) {
 	return new FiberRefsImpl(fiberRefLocals);
@@ -13638,7 +13643,7 @@ const updateManyAs$1 = /* @__PURE__ */ dual(2, (self, { entries: entries$2, fork
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/FiberRefs.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/FiberRefs.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -13723,7 +13728,7 @@ const unsafeMake$5 = unsafeMake$6;
 const empty$11 = empty$12;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberRefs/patch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberRefs/patch.js
 /** @internal */
 const OP_EMPTY$1 = "Empty";
 /** @internal */
@@ -13811,7 +13816,7 @@ const patch$2 = /* @__PURE__ */ dual(3, (self, fiberId$2, oldValue) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/FiberRefsPatch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/FiberRefsPatch.js
 /**
 * @since 2.0.0
 * @category constructors
@@ -13844,7 +13849,7 @@ const combine$1 = combine$2;
 const patch$1 = patch$2;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberStatus.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberStatus.js
 const FiberStatusSymbolKey = "effect/FiberStatus";
 /** @internal */
 const FiberStatusTypeId$1 = /* @__PURE__ */ Symbol.for(FiberStatusSymbolKey);
@@ -13914,7 +13919,7 @@ const isRunning$1 = (self) => self._tag === OP_RUNNING;
 const isSuspended$1 = (self) => self._tag === OP_SUSPENDED;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/FiberStatus.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/FiberStatus.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -13967,7 +13972,7 @@ const isRunning = isRunning$1;
 const isSuspended = isSuspended$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/LogLevel.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/LogLevel.js
 /**
 * @since 2.0.0
 * @category constructors
@@ -14041,7 +14046,7 @@ const fromLiteral = (literal) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Micro.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Micro.js
 /**
 * A lightweight alternative to the `Effect` data type, with a subset of the functionality.
 *
@@ -14990,7 +14995,7 @@ const runFork$1 = (effect, options) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Readable.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Readable.js
 /**
 * @since 2.0.0
 * @category type ids
@@ -15004,7 +15009,7 @@ const Proto = {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/ref.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/ref.js
 /** @internal */
 const RefTypeId$1 = /* @__PURE__ */ Symbol.for("effect/Ref");
 /** @internal */
@@ -15085,7 +15090,7 @@ const updateSomeAndGet$1 = /* @__PURE__ */ dual(2, (self, pf) => self.modify((va
 }));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Ref.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Ref.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -15163,7 +15168,7 @@ const updateSomeAndGet = updateSomeAndGet$1;
 const unsafeMake$3 = unsafeMake$4;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Scheduler.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Scheduler.js
 /**
 * @since 2.0.0
 */
@@ -15290,12 +15295,12 @@ const currentScheduler = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for(
 const withScheduler$1 = /* @__PURE__ */ dual(2, (self, scheduler) => fiberRefLocally(self, currentScheduler, scheduler));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/completedRequestMap.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/completedRequestMap.js
 /** @internal */
 const currentRequestMap = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentRequestMap"), () => fiberRefUnsafeMake(/* @__PURE__ */ new Map()));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/concurrency.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/concurrency.js
 /** @internal */
 const match$5 = (concurrency, sequential$4, unbounded$1, bounded) => {
 	switch (concurrency) {
@@ -15316,7 +15321,7 @@ const matchSimple = (concurrency, sequential$4, concurrent) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Clock.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Clock.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -15354,7 +15359,7 @@ const clockWith$2 = clockWith$3;
 const Clock = clockTag;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/logSpan.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/logSpan.js
 /** @internal */
 const make$18 = (label, startTime) => ({
 	label,
@@ -15372,7 +15377,7 @@ const render$1 = (now) => (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/LogSpan.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/LogSpan.js
 /**
 * @since 2.0.0
 */
@@ -15388,7 +15393,7 @@ const make$17 = make$18;
 const render = render$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Tracer.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Tracer.js
 /**
 * @since 2.0.0
 */
@@ -15425,7 +15430,7 @@ const tracerWith$2 = tracerWith$3;
 const DisablePropagation = DisablePropagation$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/label.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/label.js
 /** @internal */
 const MetricLabelSymbolKey = "effect/MetricLabel";
 /** @internal */
@@ -15459,7 +15464,7 @@ const make$15 = (key, value) => {
 const isMetricLabel = (u) => hasProperty(u, MetricLabelTypeId);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/core-effect.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/core-effect.js
 const annotateLogs$1 = /* @__PURE__ */ dual((args$1) => isEffect$1(args$1[0]), function() {
 	const args$1 = arguments;
 	return fiberRefLocallyWith(args$1[0], currentLogAnnotations, typeof args$1[1] === "string" ? set$3(args$1[1], args$1[2]) : (annotations$1) => Object.entries(args$1[1]).reduce((acc, [key, value]) => set$3(acc, key, value), annotations$1));
@@ -15739,7 +15744,7 @@ const parallelErrors$1 = (self) => matchCauseEffect$2(self, {
 	},
 	onSuccess: succeed$9
 });
-const patchFiberRefs$1 = (patch$11) => updateFiberRefs$1((fiberId$2, fiberRefs$3) => pipe(patch$11, patch$2(fiberId$2, fiberRefs$3)));
+const patchFiberRefs$1 = (patch$11) => updateFiberRefs$1((fiberId$2, fiberRefs) => pipe(patch$11, patch$2(fiberId$2, fiberRefs)));
 const promise$1 = (evaluate$1) => evaluate$1.length >= 1 ? async_((resolve, signal) => {
 	try {
 		evaluate$1(signal).then((a) => resolve(succeed$9(a)), (e) => resolve(die$4(e)));
@@ -15770,7 +15775,7 @@ const sandbox$1 = (self) => matchCauseEffect$2(self, {
 	onFailure: fail$9,
 	onSuccess: succeed$9
 });
-const setFiberRefs$1 = (fiberRefs$3) => suspend$2(() => setAll(fiberRefs$3));
+const setFiberRefs$1 = (fiberRefs) => suspend$2(() => setAll(fiberRefs));
 const sleep$1 = sleep$2;
 const succeedNone$1 = /* @__PURE__ */ succeed$9(/* @__PURE__ */ none$7());
 const succeedSome$1 = (value) => succeed$9(some$4(value));
@@ -15964,9 +15969,9 @@ const unsafeMakeSpan = (fiber, name, options) => {
 		const tracer$2 = get$7(services, tracerTag);
 		const clock$2 = get$7(services, Clock);
 		const timingEnabled = fiber.getFiberRef(currentTracerTimingEnabled);
-		const fiberRefs$3 = fiber.getFiberRefs();
-		const annotationsFromEnv = get$3(fiberRefs$3, currentTracerSpanAnnotations);
-		const linksFromEnv = get$3(fiberRefs$3, currentTracerSpanLinks);
+		const fiberRefs = fiber.getFiberRefs();
+		const annotationsFromEnv = get$3(fiberRefs, currentTracerSpanAnnotations);
+		const linksFromEnv = get$3(fiberRefs, currentTracerSpanLinks);
 		const links = linksFromEnv._tag === "Some" ? options.links !== void 0 ? [...toReadonlyArray(linksFromEnv.value), ...options.links ?? []] : toReadonlyArray(linksFromEnv.value) : options.links ?? empty$33();
 		span$1 = tracer$2.span(name, parent, options.context ?? empty$26(), links, timingEnabled ? clock$2.unsafeCurrentTimeNanos() : bigint0$1, options.kind ?? "internal", options);
 		if (annotationsFromEnv._tag === "Some") forEach$5(annotationsFromEnv.value, (value, key) => span$1.attribute(key, value));
@@ -16040,7 +16045,7 @@ const fromNullable$1 = (value) => value == null ? fail$9(new NoSuchElementExcept
 const optionFromOptional$1 = (self) => catchAll$1(map$9(self, some$4), (error) => isNoSuchElementException$1(error) ? succeedNone$1 : fail$9(error));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Exit.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Exit.js
 /**
 * Returns `true` if the specified value is an `Exit`, `false` otherwise.
 *
@@ -16290,7 +16295,7 @@ const zipParRight = exitZipParRight;
 const zipWith$2 = exitZipWith;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberMessage.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberMessage.js
 /** @internal */
 const OP_INTERRUPT_SIGNAL = "InterruptSignal";
 /** @internal */
@@ -16318,7 +16323,7 @@ const resume = (effect) => ({
 const yieldNow$1 = () => ({ _tag: OP_YIELD_NOW });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberScope.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberScope.js
 /** @internal */
 const FiberScopeSymbolKey = "effect/FiberScope";
 /** @internal */
@@ -16361,7 +16366,7 @@ const unsafeMake$2 = (fiber) => {
 const globalScope = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberScope/Global"), () => new Global());
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiber.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiber.js
 /** @internal */
 const FiberSymbolKey = "effect/Fiber";
 /** @internal */
@@ -16564,7 +16569,7 @@ const currentFiberURI = "effect/FiberCurrent";
 const getCurrentFiber$1 = () => fromNullable$2(globalThis[currentFiberURI]);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/logger.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/logger.js
 /** @internal */
 const LoggerSymbolKey = "effect/Logger";
 /** @internal */
@@ -16606,9 +16611,9 @@ const textOnly = /^[^\s"=]*$/;
 */
 const format = (quoteValue, whitespace) => ({ annotations: annotations$1, cause: cause$2, date, fiberId: fiberId$2, logLevel, message, spans }) => {
 	const formatValue = (value) => value.match(textOnly) ? value : quoteValue(value);
-	const format$3 = (label, value) => `${formatLabel(label)}=${formatValue(value)}`;
-	const append$3 = (label, value) => " " + format$3(label, value);
-	let out = format$3("timestamp", date.toISOString());
+	const format = (label, value) => `${formatLabel(label)}=${formatValue(value)}`;
+	const append$3 = (label, value) => " " + format(label, value);
+	let out = format("timestamp", date.toISOString());
 	out += append$3("level", logLevel.label);
 	out += append$3("fiber", threadName$1(fiberId$2));
 	const messages = ensure(message);
@@ -16678,7 +16683,7 @@ const processStdoutIsTTY = hasProcessStdout && process.stdout.isTTY === true;
 const hasProcessStdoutOrDeno = hasProcessStdout || "Deno" in globalThis;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/boundaries.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/boundaries.js
 /** @internal */
 const MetricBoundariesSymbolKey = "effect/MetricBoundaries";
 /** @internal */
@@ -16712,7 +16717,7 @@ const fromIterable$4 = (iterable) => {
 const exponential = (options) => pipe(makeBy(options.count - 1, (i) => options.start * Math.pow(options.factor, i)), unsafeFromArray, fromIterable$4);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/keyType.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/keyType.js
 /** @internal */
 const MetricKeyTypeSymbolKey = "effect/MetricKeyType";
 /** @internal */
@@ -16865,7 +16870,7 @@ const isHistogramKey = (u) => hasProperty(u, HistogramKeyTypeTypeId);
 const isSummaryKey = (u) => hasProperty(u, SummaryKeyTypeTypeId);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/key.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/key.js
 /** @internal */
 const MetricKeySymbolKey = "effect/MetricKey";
 /** @internal */
@@ -16907,7 +16912,7 @@ const histogram$3 = (name, boundaries, description) => new MetricKeyImpl(name, h
 const taggedWithLabels$1 = /* @__PURE__ */ dual(2, (self, extraTags) => extraTags.length === 0 ? self : new MetricKeyImpl(self.name, self.keyType, self.description, union$8(self.tags, extraTags)));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/MutableHashMap.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/MutableHashMap.js
 const TypeId$6 = /* @__PURE__ */ Symbol.for("effect/MutableHashMap");
 const MutableHashMapProto = {
 	[TypeId$6]: TypeId$6,
@@ -17060,7 +17065,7 @@ const size$4 = (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/state.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/state.js
 /** @internal */
 const MetricStateSymbolKey = "effect/MetricState";
 /** @internal */
@@ -17232,7 +17237,7 @@ const isHistogramState = (u) => hasProperty(u, HistogramStateTypeId);
 const isSummaryState = (u) => hasProperty(u, SummaryStateTypeId);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/hook.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/hook.js
 /** @internal */
 const MetricHookSymbolKey = "effect/MetricHook";
 /** @internal */
@@ -17503,7 +17508,7 @@ const resolveQuantile = (error, sampleCount, current, consumed, quantile, rest) 
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/pair.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/pair.js
 /** @internal */
 const MetricPairSymbolKey = "effect/MetricPair";
 /** @internal */
@@ -17522,7 +17527,7 @@ const unsafeMake$1 = (metricKey, metricState) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric/registry.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric/registry.js
 /** @internal */
 const MetricRegistrySymbolKey = "effect/MetricRegistry";
 /** @internal */
@@ -17599,7 +17604,7 @@ const make$13 = () => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/metric.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/metric.js
 /** @internal */
 const MetricSymbolKey = "effect/Metric";
 /** @internal */
@@ -17660,7 +17665,7 @@ const taggedWithLabels = /* @__PURE__ */ dual(2, (self, extraTags) => {
 const update$1 = /* @__PURE__ */ dual(2, (self, input) => fiberRefGetWith(currentMetricLabels, (tags) => sync$3(() => self.unsafeUpdate(input, tags))));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/request.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/request.js
 /** @internal */
 const RequestSymbolKey = "effect/Request";
 /** @internal */
@@ -17740,7 +17745,7 @@ var Listeners = class {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/redBlackTree/iterator.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/redBlackTree/iterator.js
 /** @internal */
 const Direction$1 = {
 	Forward: 0,
@@ -17890,7 +17895,7 @@ var RedBlackTreeIterator = class RedBlackTreeIterator {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/redBlackTree/node.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/redBlackTree/node.js
 /** @internal */
 const Color = {
 	Red: 0,
@@ -17929,7 +17934,7 @@ const recount = (node) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/redBlackTree.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/redBlackTree.js
 const RedBlackTreeSymbolKey = "effect/RedBlackTree";
 /** @internal */
 const RedBlackTreeTypeId = /* @__PURE__ */ Symbol.for(RedBlackTreeSymbolKey);
@@ -18768,7 +18773,7 @@ const fixDoubleBlack = (stack) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/RedBlackTree.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/RedBlackTree.js
 RedBlackTreeTypeId;
 /**
 * @since 2.0.0
@@ -19027,7 +19032,7 @@ const values = valuesForward;
 const valuesReversed = valuesBackward;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/SortedSet.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/SortedSet.js
 /**
 * @since 2.0.0
 */
@@ -19081,7 +19086,7 @@ const add = /* @__PURE__ */ dual(2, (self, value) => has(self.keyTree, value) ? 
 const remove$1 = /* @__PURE__ */ dual(2, (self, value) => fromTree(removeFirst(self.keyTree, value)));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/supervisor.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/supervisor.js
 /** @internal */
 const SupervisorSymbolKey = "effect/Supervisor";
 /** @internal */
@@ -19257,7 +19262,7 @@ const fromEffect$1 = (effect) => {
 const none$1 = /* @__PURE__ */ globalValue("effect/Supervisor/none", () => fromEffect$1(void_$4));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Differ.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Differ.js
 /**
 * @since 2.0.0
 * @category symbol
@@ -19352,7 +19357,7 @@ const updateWith = updateWith$1;
 const zip$2 = zip$5;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/supervisor/patch.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/supervisor/patch.js
 /** @internal */
 const OP_EMPTY = "Empty";
 /** @internal */
@@ -19430,10 +19435,10 @@ const diff = (oldValue, newValue) => {
 	if (equals$1(oldValue, newValue)) return empty$5;
 	const oldSupervisors = toSet(oldValue);
 	const newSupervisors = toSet(newValue);
-	return combine(pipe(newSupervisors, difference(oldSupervisors), reduce$8(empty$5, (patch$11, supervisor) => combine(patch$11, {
+	return combine(pipe(newSupervisors, difference(oldSupervisors), reduce$8(empty$5, (patch, supervisor) => combine(patch, {
 		_tag: OP_ADD_SUPERVISOR,
 		supervisor
-	}))), pipe(oldSupervisors, difference(newSupervisors), reduce$8(empty$5, (patch$11, supervisor) => combine(patch$11, {
+	}))), pipe(oldSupervisors, difference(newSupervisors), reduce$8(empty$5, (patch, supervisor) => combine(patch, {
 		_tag: OP_REMOVE_SUPERVISOR,
 		supervisor
 	}))));
@@ -19447,7 +19452,7 @@ const differ = /* @__PURE__ */ make$9({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/fiberRuntime.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/fiberRuntime.js
 /** @internal */
 const fiberStarted = /* @__PURE__ */ counter("effect_fiber_started", { incremental: true });
 /** @internal */
@@ -19500,10 +19505,16 @@ const contOpSuccess = {
 		} else return void_$4;
 	},
 	[OP_ITERATOR]: (self, cont, value) => {
-		const state = internalCall(() => cont.effect_instruction_i0.next(value));
-		if (state.done) return exitSucceed$1(state.value);
-		self.pushStack(cont);
-		return yieldWrapGet(state.value);
+		while (true) {
+			const state = internalCall(() => cont.effect_instruction_i0.next(value));
+			if (state.done) return exitSucceed$1(state.value);
+			const primitive = yieldWrapGet(state.value);
+			if (!exitIsExit(primitive)) {
+				self.pushStack(cont);
+				return primitive;
+			} else if (primitive._tag === "Failure") return primitive;
+			value = primitive.value;
+		}
 	}
 };
 const drainQueueWhileRunningTable = {
@@ -21047,7 +21058,7 @@ const withSpanScoped$1 = function() {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schedule/interval.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schedule/interval.js
 /** @internal */
 const IntervalSymbolKey = "effect/ScheduleInterval";
 /** @internal */
@@ -21112,7 +21123,7 @@ const before$1 = (endMilliseconds) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/ScheduleInterval.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/ScheduleInterval.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -21213,7 +21224,7 @@ const after = after$1;
 const before = before$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schedule/intervals.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schedule/intervals.js
 /** @internal */
 const IntervalsSymbolKey = "effect/ScheduleIntervals";
 /** @internal */
@@ -21315,7 +21326,7 @@ const isNonEmpty$2 = (self) => {
 const max$1 = /* @__PURE__ */ dual(2, (self, that) => lessThan$1(self, that) ? that : self);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/ScheduleIntervals.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/ScheduleIntervals.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -21394,7 +21405,7 @@ const isNonEmpty$1 = isNonEmpty$2;
 const max = max$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schedule/decision.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schedule/decision.js
 /** @internal */
 const OP_CONTINUE = "Continue";
 /** @internal */
@@ -21425,7 +21436,7 @@ const isDone$2 = (self) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/ScheduleDecision.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/ScheduleDecision.js
 /**
 * @since 2.0.0
 */
@@ -21452,7 +21463,7 @@ const isContinue = isContinue$1;
 const isDone$1 = isDone$2;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Scope.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Scope.js
 /**
 * @since 2.0.0
 */
@@ -21546,7 +21557,7 @@ const use = scopeUse;
 const make$4 = scopeMake;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/effect/circular.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/effect/circular.js
 /** @internal */
 var Semaphore = class {
 	permits;
@@ -21859,19 +21870,19 @@ const zipWithFiber = /* @__PURE__ */ dual(3, (self, that, f) => ({
 const bindAll$1 = /* @__PURE__ */ dual((args$1) => isEffect$1(args$1[0]), (self, f, options) => flatMap$5(self, (a) => all$2(f(a), options).pipe(map$9((record$1) => Object.assign({}, a, record$1)))));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/managedRuntime/circular.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/managedRuntime/circular.js
 /** @internal */
 const TypeId$3 = /* @__PURE__ */ Symbol.for("effect/ManagedRuntime");
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/opCodes/layer.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/opCodes/layer.js
 /** @internal */
 const OP_FRESH = "Fresh";
 /** @internal */
 const OP_MERGE_ALL = "MergeAll";
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Fiber.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Fiber.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -22202,7 +22213,7 @@ const zipRight$1 = zipRightFiber;
 const zipWith$1 = zipWithFiber;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/runtime.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/runtime.js
 const makeDual = (f) => function() {
 	if (arguments.length === 1) {
 		const runtime$4 = arguments[0];
@@ -22311,7 +22322,7 @@ const fastPath = (effect) => {
 		case "Left": return exitFail(op.left);
 		case "Right": return exitSucceed$1(op.right);
 		case "Some": return exitSucceed$1(op.value);
-		case "None": return exitFail(NoSuchElementException$1());
+		case "None": return exitFail(new NoSuchElementException$1());
 	}
 };
 /** @internal */
@@ -22396,12 +22407,12 @@ const asyncEffect$1 = (register) => suspend$2(() => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/synchronizedRef.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/synchronizedRef.js
 /** @internal */
 const modifyEffect = /* @__PURE__ */ dual(2, (self, f) => self.modifyEffect(f));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/layer.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/layer.js
 /** @internal */
 const LayerSymbolKey = "effect/Layer";
 /** @internal */
@@ -22549,7 +22560,7 @@ const effect_provide = /* @__PURE__ */ dual(2, (self, source) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/console.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/console.js
 /** @internal */
 const console$2 = /* @__PURE__ */ map$9(/* @__PURE__ */ fiberRefGet(currentServices), /* @__PURE__ */ get$7(consoleTag));
 /** @internal */
@@ -22557,10 +22568,10 @@ const consoleWith$1 = (f) => fiberRefGetWith(currentServices, (services) => f(ge
 /** @internal */
 const withConsole$1 = /* @__PURE__ */ dual(2, (effect, value) => fiberRefLocallyWith(effect, currentServices, add$1(consoleTag, value)));
 /** @internal */
-const withConsoleScoped$1 = (console$3) => fiberRefLocallyScopedWith(currentServices, add$1(consoleTag, console$3));
+const withConsoleScoped$1 = (console) => fiberRefLocallyScopedWith(currentServices, add$1(consoleTag, console));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schedule.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schedule.js
 /** @internal */
 const ScheduleSymbolKey = "effect/Schedule";
 /** @internal */
@@ -22785,16 +22796,16 @@ const repeat_combined = /* @__PURE__ */ dual(2, (self, options) => {
 	return scheduleDefectRefail(repeat_Effect(self, options.times ? intersect(withUntil, recurs(options.times)).pipe(map$2((intersectionPair) => intersectionPair[0])) : withUntil));
 });
 /** @internal */
-const repeatOrElse_Effect = /* @__PURE__ */ dual(3, (self, schedule$1, orElse$6) => flatMap$5(driver(schedule$1), (driver$1) => matchEffect$2(self, {
+const repeatOrElse_Effect = /* @__PURE__ */ dual(3, (self, schedule$1, orElse$6) => flatMap$5(driver(schedule$1), (driver) => matchEffect$2(self, {
 	onFailure: (error) => orElse$6(error, none$7()),
-	onSuccess: (value) => repeatOrElseEffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver$1.iterationMeta)), driver$1, (error, option$2) => provideServiceEffect$1(orElse$6(error, option$2), CurrentIterationMetadata, get$2(driver$1.iterationMeta)), value)
+	onSuccess: (value) => repeatOrElseEffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver.iterationMeta)), driver, (error, option$2) => provideServiceEffect$1(orElse$6(error, option$2), CurrentIterationMetadata, get$2(driver.iterationMeta)), value)
 })));
 /** @internal */
-const repeatOrElseEffectLoop = (self, driver$1, orElse$6, value) => matchEffect$2(driver$1.next(value), {
-	onFailure: () => orDie$1(driver$1.last),
+const repeatOrElseEffectLoop = (self, driver, orElse$6, value) => matchEffect$2(driver.next(value), {
+	onFailure: () => orDie$1(driver.last),
 	onSuccess: (b) => matchEffect$2(self, {
 		onFailure: (error) => orElse$6(error, some$4(b)),
-		onSuccess: (value$1) => repeatOrElseEffectLoop(self, driver$1, orElse$6, value$1)
+		onSuccess: (value$1) => repeatOrElseEffectLoop(self, driver, orElse$6, value$1)
 	})
 });
 /** @internal */
@@ -22817,25 +22828,25 @@ const fromRetryOptions = (options) => {
 		if (typeof applied === "boolean") return succeed$9(applied);
 		return scheduleDefectWrap(applied);
 	}) : withWhile;
-	return options.times ? intersect(withUntil, recurs(options.times)) : withUntil;
+	return options.times !== void 0 ? intersect(withUntil, recurs(options.times)) : withUntil;
 };
 /** @internal */
-const retryOrElse_Effect = /* @__PURE__ */ dual(3, (self, policy, orElse$6) => flatMap$5(driver(policy), (driver$1) => retryOrElse_EffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver$1.iterationMeta)), driver$1, (e, out) => provideServiceEffect$1(orElse$6(e, out), CurrentIterationMetadata, get$2(driver$1.iterationMeta)))));
+const retryOrElse_Effect = /* @__PURE__ */ dual(3, (self, policy, orElse$6) => flatMap$5(driver(policy), (driver) => retryOrElse_EffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver.iterationMeta)), driver, (e, out) => provideServiceEffect$1(orElse$6(e, out), CurrentIterationMetadata, get$2(driver.iterationMeta)))));
 /** @internal */
-const retryOrElse_EffectLoop = (self, driver$1, orElse$6) => {
-	return catchAll$1(self, (e) => matchEffect$2(driver$1.next(e), {
-		onFailure: () => pipe(driver$1.last, orDie$1, flatMap$5((out) => orElse$6(e, out))),
-		onSuccess: () => retryOrElse_EffectLoop(self, driver$1, orElse$6)
+const retryOrElse_EffectLoop = (self, driver, orElse$6) => {
+	return catchAll$1(self, (e) => matchEffect$2(driver.next(e), {
+		onFailure: () => pipe(driver.last, orDie$1, flatMap$5((out) => orElse$6(e, out))),
+		onSuccess: () => retryOrElse_EffectLoop(self, driver, orElse$6)
 	}));
 };
 /** @internal */
 const schedule_Effect = /* @__PURE__ */ dual(2, (self, schedule$1) => scheduleFrom_Effect(self, void 0, schedule$1));
 /** @internal */
-const scheduleFrom_Effect = /* @__PURE__ */ dual(3, (self, initial, schedule$1) => flatMap$5(driver(schedule$1), (driver$1) => scheduleFrom_EffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver$1.iterationMeta)), initial, driver$1)));
+const scheduleFrom_Effect = /* @__PURE__ */ dual(3, (self, initial, schedule$1) => flatMap$5(driver(schedule$1), (driver) => scheduleFrom_EffectLoop(provideServiceEffect$1(self, CurrentIterationMetadata, get$2(driver.iterationMeta)), initial, driver)));
 /** @internal */
-const scheduleFrom_EffectLoop = (self, initial, driver$1) => matchEffect$2(driver$1.next(initial), {
-	onFailure: () => orDie$1(driver$1.last),
-	onSuccess: () => flatMap$5(self, (a) => scheduleFrom_EffectLoop(self, a, driver$1))
+const scheduleFrom_EffectLoop = (self, initial, driver) => matchEffect$2(driver.next(initial), {
+	onFailure: () => orDie$1(driver.last),
+	onSuccess: () => flatMap$5(self, (a) => scheduleFrom_EffectLoop(self, a, driver))
 });
 /** @internal */
 const forever$1 = /* @__PURE__ */ unfold(0, (n) => n + 1);
@@ -22845,7 +22856,7 @@ const once$1 = /* @__PURE__ */ asVoid$1(/* @__PURE__ */ recurs(1));
 const scheduleForked$1 = /* @__PURE__ */ dual(2, (self, schedule$1) => forkScoped$1(schedule_Effect(self, schedule$1)));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/executionPlan.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/executionPlan.js
 /** @internal */
 const withExecutionPlan$1 = /* @__PURE__ */ dual(2, (effect, plan) => suspend$2(() => {
 	let i = 0;
@@ -22892,7 +22903,7 @@ const scheduleFromStep = (step$3, first$2) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Deferred.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Deferred.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -23052,7 +23063,7 @@ const unsafeMake = deferredUnsafeMake;
 const unsafeDone = deferredUnsafeDone;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/MutableList.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/MutableList.js
 /**
 * @since 2.0.0
 */
@@ -23185,7 +23196,7 @@ const remove = (self, node) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/MutableQueue.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/MutableQueue.js
 const TypeId$1 = /* @__PURE__ */ Symbol.for("effect/MutableQueue");
 /**
 * @since 2.0.0
@@ -23255,7 +23266,7 @@ const poll = /* @__PURE__ */ dual(2, (self, def) => {
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/cache.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/cache.js
 /** @internal */
 const complete$1 = (key, exit$3, entryStats, timeToLiveMillis) => struct$1({
 	_tag: "Complete",
@@ -23636,7 +23647,7 @@ var CacheImpl = class {
 const unsafeMakeWith = (capacity, lookup, timeToLive) => new CacheImpl(capacity, empty$26(), none$6, lookup, (exit$3) => decode$3(timeToLive(exit$3)));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/query.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/query.js
 /** @internal */
 const currentCache = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentCache"), () => fiberRefUnsafeMake(unsafeMakeWith(65536, () => map$9(deferredMake(), (handle) => ({
 	listeners: new Listeners(),
@@ -23703,7 +23714,7 @@ const withRequestCaching$1 = /* @__PURE__ */ dual(2, (self, strategy) => fiberRe
 const withRequestCache$1 = /* @__PURE__ */ dual(2, (self, cache) => fiberRefLocally(self, currentCache, cache));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Request.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Request.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -23824,7 +23835,7 @@ const isEntry = isEntry$1;
 const makeEntry = makeEntry$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Effect.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Effect.js
 /**
 * @since 2.0.0
 * @category Symbols
@@ -33857,7 +33868,7 @@ const optionFromOptional = optionFromOptional$1;
 const fnUntraced = fnUntraced$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/encoding/common.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/encoding/common.js
 /** @internal */
 const DecodeExceptionTypeId$1 = /* @__PURE__ */ Symbol.for("effect/Encoding/errors/Decode");
 /** @internal */
@@ -33892,7 +33903,7 @@ const encoder = /* @__PURE__ */ new TextEncoder();
 const decoder = /* @__PURE__ */ new TextDecoder();
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/encoding/base64.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/encoding/base64.js
 /** @internal */
 const encode$2 = (bytes) => {
 	const length$1 = bytes.length;
@@ -34142,7 +34153,7 @@ const base64codes = [
 ];
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/encoding/base64Url.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/encoding/base64Url.js
 /** @internal */
 const encode$1 = (data) => encode$2(data).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 /** @internal */
@@ -34157,7 +34168,7 @@ const decode$1 = (str) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/encoding/hex.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/encoding/hex.js
 /** @internal */
 const encode = (bytes) => {
 	let result = "";
@@ -34449,7 +34460,7 @@ const fromHexChar = (byte) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Encoding.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Encoding.js
 /**
 * This module provides encoding & decoding functionality for:
 *
@@ -34562,7 +34573,7 @@ const EncodeException = EncodeException$1;
 const isEncodeException = isEncodeException$1;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schema/util.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schema/util.js
 /** @internal */
 const getKeysForIndexSignature = (input, parameter) => {
 	switch (parameter._tag) {
@@ -34593,7 +34604,7 @@ const formatPathKey = (key) => `[${formatPropertyKey$1(key)}]`;
 const formatPath = (path) => isNonEmpty(path) ? path.map(formatPathKey).join("") : formatPathKey(path);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schema/errors.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schema/errors.js
 const getErrorMessage = (reason, details, path, ast) => {
 	let out = reason;
 	if (path && isNonEmptyReadonlyArray(path)) out += `\nat path: ${formatPath(path)}`;
@@ -34617,7 +34628,7 @@ const getASTDuplicatePropertySignatureTransformationErrorMessage = (key) => getE
 const getASTDuplicatePropertySignatureErrorMessage = (key) => getErrorMessage("Duplicate property signature", `Duplicate key ${formatUnknown(key)}`);
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/internal/schema/schemaId.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/internal/schema/schemaId.js
 /** @internal */
 const DateFromSelfSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/DateFromSelf");
 /** @internal */
@@ -34662,10 +34673,16 @@ const MaxItemsSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/MaxItems"
 const ItemsCountSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/ItemsCount");
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/SchemaAST.js
 /**
 * @since 3.10.0
 */
+/**
+* @category annotations
+* @since 3.19.0
+* @experimental
+*/
+const TypeConstructorAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/TypeConstructor");
 /**
 * @category annotations
 * @since 3.10.0
@@ -34868,11 +34885,11 @@ var Declaration = class {
 	* @since 3.10.0
 	*/
 	_tag = "Declaration";
-	constructor(typeParameters, decodeUnknown, encodeUnknown, annotations$1 = {}) {
+	constructor(typeParameters, decodeUnknown, encodeUnknown, annotations = {}) {
 		this.typeParameters = typeParameters;
 		this.decodeUnknown = decodeUnknown;
 		this.encodeUnknown = encodeUnknown;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -34903,9 +34920,9 @@ var Literal$1 = class {
 	* @since 3.10.0
 	*/
 	_tag = "Literal";
-	constructor(literal, annotations$1 = {}) {
+	constructor(literal, annotations = {}) {
 		this.literal = literal;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -34941,9 +34958,9 @@ var UniqueSymbol = class {
 	* @since 3.10.0
 	*/
 	_tag = "UniqueSymbol";
-	constructor(symbol$2, annotations$1 = {}) {
+	constructor(symbol$2, annotations = {}) {
 		this.symbol = symbol$2;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -34972,8 +34989,8 @@ var UndefinedKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "UndefinedKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35006,8 +35023,8 @@ var VoidKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "VoidKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35040,8 +35057,8 @@ var NeverKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "NeverKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35074,8 +35091,8 @@ var UnknownKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "UnknownKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35108,8 +35125,8 @@ var AnyKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "AnyKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35142,8 +35159,8 @@ var StringKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "StringKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35184,8 +35201,8 @@ var NumberKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "NumberKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35221,8 +35238,8 @@ var BooleanKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "BooleanKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35258,8 +35275,8 @@ var BigIntKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "BigIntKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35295,8 +35312,8 @@ var SymbolKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "SymbolKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35337,8 +35354,8 @@ var ObjectKeyword = class {
 	* @since 3.10.0
 	*/
 	_tag = "ObjectKeyword";
-	constructor(annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(annotations = {}) {
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35371,9 +35388,9 @@ const objectKeyword = /* @__PURE__ */ new ObjectKeyword({
 var Type$1 = class {
 	type;
 	annotations;
-	constructor(type, annotations$1 = {}) {
+	constructor(type, annotations = {}) {
 		this.type = type;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35397,8 +35414,8 @@ var Type$1 = class {
 */
 var OptionalType = class extends Type$1 {
 	isOptional;
-	constructor(type, isOptional, annotations$1 = {}) {
-		super(type, annotations$1);
+	constructor(type, isOptional, annotations = {}) {
+		super(type, annotations);
 		this.isOptional = isOptional;
 	}
 	/**
@@ -35432,11 +35449,11 @@ var TupleType = class {
 	* @since 3.10.0
 	*/
 	_tag = "TupleType";
-	constructor(elements, rest, isReadonly, annotations$1 = {}) {
+	constructor(elements, rest, isReadonly, annotations = {}) {
 		this.elements = elements;
 		this.rest = rest;
 		this.isReadonly = isReadonly;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 		let hasOptionalElement = false;
 		let hasIllegalRequiredElement = false;
 		for (const e of elements) if (e.isOptional) hasOptionalElement = true;
@@ -35488,8 +35505,8 @@ const formatTuple = (ast) => {
 var PropertySignature = class extends OptionalType {
 	name;
 	isReadonly;
-	constructor(name, type, isOptional, isReadonly, annotations$1) {
-		super(type, isOptional, annotations$1);
+	constructor(name, type, isOptional, isReadonly, annotations) {
+		super(type, isOptional, annotations);
 		this.name = name;
 		this.isReadonly = isReadonly;
 	}
@@ -35576,8 +35593,8 @@ var TypeLiteral = class {
 	* @since 3.10.0
 	*/
 	indexSignatures;
-	constructor(propertySignatures, indexSignatures, annotations$1 = {}) {
-		this.annotations = annotations$1;
+	constructor(propertySignatures, indexSignatures, annotations = {}) {
+		this.annotations = annotations;
 		const keys$5 = {};
 		for (let i = 0; i < propertySignatures.length; i++) {
 			const name = propertySignatures[i].name;
@@ -35721,20 +35738,20 @@ const unify = (candidates) => {
 var Union$1 = class Union$1 {
 	types;
 	annotations;
-	static make = (types, annotations$1) => {
-		return isMembers(types) ? new Union$1(types, annotations$1) : types.length === 1 ? types[0] : neverKeyword;
+	static make = (types, annotations) => {
+		return isMembers(types) ? new Union$1(types, annotations) : types.length === 1 ? types[0] : neverKeyword;
 	};
 	/** @internal */
-	static unify = (candidates, annotations$1) => {
-		return Union$1.make(unify(flatten(candidates)), annotations$1);
+	static unify = (candidates, annotations) => {
+		return Union$1.make(unify(flatten(candidates)), annotations);
 	};
 	/**
 	* @since 3.10.0
 	*/
 	_tag = "Union";
-	constructor(types, annotations$1 = {}) {
+	constructor(types, annotations = {}) {
 		this.types = types;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35774,9 +35791,9 @@ var Suspend = class {
 	* @since 3.10.0
 	*/
 	_tag = "Suspend";
-	constructor(f, annotations$1 = {}) {
+	constructor(f, annotations = {}) {
 		this.f = f;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 		this.f = memoizeThunk(f);
 	}
 	/**
@@ -35814,10 +35831,10 @@ var Refinement$1 = class {
 	* @since 3.10.0
 	*/
 	_tag = "Refinement";
-	constructor(from, filter$9, annotations$1 = {}) {
+	constructor(from, filter$9, annotations = {}) {
 		this.from = from;
 		this.filter = filter$9;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -35861,11 +35878,11 @@ var Transformation$1 = class {
 	* @since 3.10.0
 	*/
 	_tag = "Transformation";
-	constructor(from, to, transformation, annotations$1 = {}) {
+	constructor(from, to, transformation, annotations = {}) {
 		this.from = from;
 		this.to = to;
 		this.transformation = transformation;
-		this.annotations = annotations$1;
+		this.annotations = annotations;
 	}
 	/**
 	* @since 3.10.0
@@ -36224,9 +36241,9 @@ const encodedAST_ = (ast, isBound) => {
 * @since 3.10.0
 */
 const encodedAST = (ast) => encodedAST_(ast, false);
-const toJSONAnnotations = (annotations$1) => {
+const toJSONAnnotations = (annotations) => {
 	const out = {};
-	for (const k of Object.getOwnPropertySymbols(annotations$1)) out[String(k)] = annotations$1[k];
+	for (const k of Object.getOwnPropertySymbols(annotations)) out[String(k)] = annotations[k];
 	return out;
 };
 /** @internal */
@@ -36249,7 +36266,7 @@ const getOrElseExpected = (ast) => getTitleAnnotation(ast).pipe(orElse$5(() => g
 const getExpected = (ast) => orElse$5(getIdentifierAnnotation(ast), () => getOrElseExpected(ast));
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/ParseResult.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/ParseResult.js
 /**
 * @since 3.10.0
 */
@@ -36912,8 +36929,8 @@ const go = (ast, isDecoding) => {
 			const ownKeys = Reflect.ownKeys(searchTree.keys);
 			const ownKeysLen = ownKeys.length;
 			const astTypesLen = ast.types.length;
-			const map$18 = /* @__PURE__ */ new Map();
-			for (let i = 0; i < astTypesLen; i++) map$18.set(ast.types[i], goMemo(ast.types[i], isDecoding));
+			const map = /* @__PURE__ */ new Map();
+			for (let i = 0; i < astTypesLen; i++) map.set(ast.types[i], goMemo(ast.types[i], isDecoding));
 			const concurrency = getConcurrency(ast) ?? 1;
 			const batching = getBatching(ast);
 			return (input, options) => {
@@ -36947,7 +36964,7 @@ const go = (ast, isDecoding) => {
 				let queue = void 0;
 				for (let i = 0; i < candidates.length; i++) {
 					const candidate = candidates[i];
-					const pr = map$18.get(candidate)(input, options);
+					const pr = map.get(candidate)(input, options);
 					if (isEither(pr) && (!queue || queue.length === 0)) if (isRight(pr)) return pr;
 					else es.push([stepKey++, pr.left]);
 					else {
@@ -37243,7 +37260,7 @@ const formatTree = (issue) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Struct.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Struct.js
 /**
 * This module provides utility functions for working with structs in TypeScript.
 *
@@ -37329,7 +37346,7 @@ const getEquivalence = struct$3;
 const getOrder = struct$2;
 
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.19.3/node_modules/effect/dist/esm/Schema.js
+//#region ../node_modules/.pnpm/effect@3.19.14/node_modules/effect/dist/esm/Schema.js
 /**
 * @since 3.10.0
 */
@@ -37367,6 +37384,7 @@ const variance = {
 	_R: (_) => _
 };
 const builtInAnnotations = {
+	typeConstructor: TypeConstructorAnnotationId,
 	schemaId: SchemaIdAnnotationId,
 	message: MessageAnnotationId,
 	missingMessage: MissingMessageAnnotationId,
@@ -37402,8 +37420,8 @@ const mergeSchemaAnnotations = (ast, annotations$1) => annotations(ast, toASTAnn
 * @since 3.10.0
 */
 const decodeUnknownEither = (schema, options) => {
-	const decodeUnknownEither$2 = decodeUnknownEither$1(schema, options);
-	return (u, overrideOptions) => mapLeft(decodeUnknownEither$2(u, overrideOptions), parseError);
+	const decodeUnknownEither = decodeUnknownEither$1(schema, options);
+	return (u, overrideOptions) => mapLeft(decodeUnknownEither(u, overrideOptions), parseError);
 };
 /**
 * Tests if a value is a `Schema`.
@@ -37766,14 +37784,14 @@ const preserveRefinementAnnotations = /* @__PURE__ */ omitAnnotations([Identifie
 * @category symbol
 */
 const RefineSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Refine");
-function makeRefineClass(from, filter$9, ast) {
+function makeRefineClass(from, filter, ast) {
 	return class RefineClass extends make(ast) {
 		static annotations(annotations$1) {
 			return makeRefineClass(this.from, this.filter, mergeSchemaAnnotations(this.ast, annotations$1));
 		}
 		static [RefineSchemaId] = from;
 		static from = from;
-		static filter = filter$9;
+		static filter = filter;
 		static make = (a, options) => {
 			return getDisableValidationMakeOption(options) ? a : validateSync(this)(a);
 		};
@@ -37799,10 +37817,10 @@ const toFilterParseIssue = (out, ast, input) => {
 };
 function filter(predicate, annotations$1) {
 	return (self) => {
-		function filter$9(input, options, ast) {
+		function filter(input, options, ast) {
 			return toFilterParseIssue(predicate(input, options, ast), ast, input);
 		}
-		return makeRefineClass(self, filter$9, new Refinement$1(self.ast, filter$9, toASTAnnotations(annotations$1)));
+		return makeRefineClass(self, filter, new Refinement$1(self.ast, filter, toASTAnnotations(annotations$1)));
 	};
 }
 function makeTransformationClass(from, to, ast) {
@@ -37831,11 +37849,11 @@ const MaxLengthSchemaId = MaxLengthSchemaId$1;
 * @category string filters
 * @since 3.10.0
 */
-const maxLength = (maxLength$1, annotations$1) => (self) => self.pipe(filter((a) => a.length <= maxLength$1, {
+const maxLength = (maxLength, annotations$1) => (self) => self.pipe(filter((a) => a.length <= maxLength, {
 	schemaId: MaxLengthSchemaId,
-	title: `maxLength(${maxLength$1})`,
-	description: `a string at most ${maxLength$1} character(s) long`,
-	jsonSchema: { maxLength: maxLength$1 },
+	title: `maxLength(${maxLength})`,
+	description: `a string at most ${maxLength} character(s) long`,
+	jsonSchema: { maxLength },
 	...annotations$1
 }));
 /**
@@ -37847,11 +37865,11 @@ const MinLengthSchemaId = MinLengthSchemaId$1;
 * @category string filters
 * @since 3.10.0
 */
-const minLength = (minLength$1, annotations$1) => (self) => self.pipe(filter((a) => a.length >= minLength$1, {
+const minLength = (minLength, annotations$1) => (self) => self.pipe(filter((a) => a.length >= minLength, {
 	schemaId: MinLengthSchemaId,
-	title: `minLength(${minLength$1})`,
-	description: `a string at least ${minLength$1} character(s) long`,
-	jsonSchema: { minLength: minLength$1 },
+	title: `minLength(${minLength})`,
+	description: `a string at least ${minLength} character(s) long`,
+	jsonSchema: { minLength },
 	...annotations$1
 }));
 /**
@@ -37960,6 +37978,7 @@ const BetweenBigIntSchemaId = BetweenBigintSchemaId;
 * @since 3.10.0
 */
 var Uint8ArrayFromSelf = class extends declare(isUint8Array, {
+	typeConstructor: { _tag: "Uint8Array" },
 	identifier: "Uint8ArrayFromSelf",
 	pretty: () => (u8arr) => `new Uint8Array(${JSON.stringify(Array.from(u8arr))})`,
 	arbitrary: () => (fc) => fc.uint8Array(),
