@@ -13,7 +13,7 @@ const highlightInput = v.object({
 export const highlightFn = createServerFn()
   .inputValidator(highlightInput)
   .handler(({ data: { code, language = "typescript" } }) => {
-    if (!Prism.languages[language]) loadLanguages([language]);
+    if (!Prism.languages[language]) loadLanguages(language);
     // biome-ignore lint/style/noNonNullAssertion: we've loaded it above
     return Prism.highlight(code, Prism.languages[language]!, language);
   });

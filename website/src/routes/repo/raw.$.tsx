@@ -5,20 +5,12 @@ import { getRaw } from "@/features/repo/query";
 import { HTTPError } from "@/lib/fetch";
 import { getHighlightedCode } from "@/lib/highlight";
 
+const knownLanguages = new Set(["ts", "tsx", "js", "jsx", "json"]);
+
 function getLanguage(fileName: string) {
-  const extension = fileName.split(".").pop();
-  switch (extension) {
-    case "ts":
-    case "tsx":
-      return "typescript";
-    case "js":
-    case "jsx":
-      return "javascript";
-    case "json":
-      return "json";
-    default:
-      return "text";
-  }
+  const extension = fileName.split(".").pop()?.toLowerCase();
+  if (!extension || !knownLanguages.has(extension)) return "text";
+  return extension;
 }
 
 export const Route = createFileRoute("/repo/raw/$")({
