@@ -36,7 +36,7 @@ function processResults(tasks: Array<Task>) {
   for (const task of successTasks) {
     const entry = caseRegistry.get(task.name);
     if (!entry) continue;
-    const { libraryName, note, version, snippet } = entry;
+    const { libraryName, note, version, snippet, throws } = entry;
     switch (entry.type) {
       case "initialization": {
         results.initialization.push({
@@ -46,6 +46,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
+          throws,
           mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
         });
@@ -63,6 +64,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
+          throws,
           mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
         });
@@ -84,6 +86,7 @@ function processResults(tasks: Array<Task>) {
           version,
           snippet,
           note,
+          throws,
           mean: task.result.latency.mean,
           optimizeType: entry.optimizeType,
           errorType: entry.errorType,
@@ -126,6 +129,7 @@ for (const getConfig of Object.values(libraries)) {
       snippet,
       note,
       optimizeType = libraryOptimizeType,
+      throws,
     } = benchConfig;
     bench.add(
       caseRegistry.add({
@@ -135,6 +139,7 @@ for (const getConfig of Object.values(libraries)) {
         version,
         snippet,
         note,
+        throws,
       }),
       () => run(context),
     );
@@ -150,6 +155,7 @@ for (const getConfig of Object.values(libraries)) {
           snippet,
           note,
           optimizeType = libraryOptimizeType,
+          throws,
         } = benchConfig;
         bench.add(
           caseRegistry.add({
@@ -160,6 +166,7 @@ for (const getConfig of Object.values(libraries)) {
             version,
             snippet,
             note,
+            throws,
           }),
           () => run(data, context),
         );
@@ -179,6 +186,7 @@ for (const getConfig of Object.values(libraries)) {
             snippet,
             note,
             optimizeType = libraryOptimizeType,
+            throws,
           } = benchConfig;
           bench.add(
             caseRegistry.add({
@@ -190,6 +198,7 @@ for (const getConfig of Object.values(libraries)) {
               version,
               snippet,
               note,
+              throws,
             }),
             () => run(data, context),
           );

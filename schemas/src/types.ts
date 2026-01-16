@@ -8,6 +8,7 @@ export interface BaseBenchmarkConfig {
   optimizeType?: OptimizeType;
   snippet: string;
   note?: string;
+  throws?: boolean;
 }
 
 export interface InitializationBenchmarkConfig<Context>

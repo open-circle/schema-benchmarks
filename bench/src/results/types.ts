@@ -13,6 +13,7 @@ export const baseBenchResultSchema = v.object({
   version: v.string(),
   note: v.optional(v.string()),
   snippet: v.string(),
+  throws: v.undefinedable(v.boolean()),
   mean: v.number(),
 });
 export type BaseBenchResult = v.InferOutput<typeof baseBenchResultSchema>;
