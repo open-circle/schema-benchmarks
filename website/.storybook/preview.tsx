@@ -29,7 +29,7 @@ declare module "@storybook/react-vite" {
 
 const routerDecorator: Decorator = (Story, { parameters }) => {
   parameters.history ??= createMemoryHistory(parameters.historyOpts);
-  parameters.router ??= getRouter(parameters.history);
+  parameters.router ??= getRouter(parameters.history, parameters.queryClient);
   return (
     <RouterContextProvider router={parameters.router}>
       <Story />
@@ -73,7 +73,7 @@ const preview: Preview = {
   args: {
     dir: "ltr",
   },
-  decorators: [dirDecorator, routerDecorator, queryClientDecorator],
+  decorators: [dirDecorator, queryClientDecorator, routerDecorator],
 };
 
 document.addEventListener("click", (event) => {
