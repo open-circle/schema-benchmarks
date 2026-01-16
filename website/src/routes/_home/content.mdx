@@ -81,6 +81,11 @@ const person = v.parse(personSchema, data);
 <Suspense fallback={<Spinner />}>
 <ClientOnly>
 
+<p className="typo-caption">
+  Libraries with an asterisk (\*) throw an error when parsing invalid data (and
+  have no non-throwing equivalent), so the benchmark includes a try/catch.
+</p>
+
 Parsing valid data:
 
 <BenchPlot type="parsing" dataType="valid" />

@@ -6,6 +6,7 @@ import {
   numFormatter,
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
+import { ToggleButton } from "@/components/button/toggle";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
 import { Scaler } from "@/components/scaler";
@@ -82,6 +83,7 @@ export function BenchTable({ results }: BenchTableProps) {
           <tr>
             <th>Library</th>
             <th className="action"></th>
+            <th className="action"></th>
             <th>Version</th>
             <th className="numeric">Downloads (weekly)</th>
             <th>Optimizations</th>
@@ -118,6 +120,24 @@ export function BenchTable({ results }: BenchTableProps) {
                 </td>
                 <td className="action">
                   <Snippet code={result.snippet} />
+                </td>
+                <td className="action">
+                  {result.throws && (
+                    <ToggleButton
+                      tooltip={{
+                        subhead: "Throws on invalid data",
+                        supporting: (
+                          <div style={{ maxWidth: "16rem" }}>
+                            This library throws an error when parsing invalid
+                            data (and has no non-throwing equivalent), so the
+                            benchmark includes a try/catch.
+                          </div>
+                        ),
+                      }}
+                    >
+                      <MdSymbol>error</MdSymbol>
+                    </ToggleButton>
+                  )}
                 </td>
                 <td>
                   <code className="language-text">{result.version}</code>

@@ -57,7 +57,9 @@ export function BenchPlot({ type, dataType }: BenchPlotProps) {
           Plot.ruleY([0]),
           Plot.barY(values, {
             x: (d: BenchResult) =>
-              d.libraryName + (d.note ? ` (${d.note})` : ""),
+              d.libraryName +
+              (d.note ? ` (${d.note})` : "") +
+              (d.throws ? "*" : ""),
             y: "mean",
             fill: "mean",
             sort: { x: "y" },
