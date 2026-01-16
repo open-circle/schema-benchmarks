@@ -9,8 +9,10 @@ import { makeQueryClient } from "./data/query";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-export const getRouter = (history?: RouterHistory) => {
-  const queryClient = makeQueryClient();
+export const getRouter = (
+  history?: RouterHistory,
+  queryClient = makeQueryClient(),
+) => {
   const router = createRouter({
     routeTree,
     history,
