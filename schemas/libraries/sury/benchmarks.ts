@@ -13,21 +13,49 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("sury"),
   },
-  createContext: () => ({ schema: getSurySchema() }),
-  initialization: {
-    run() {
-      getSurySchema();
-    },
-    snippet: ts`S.schema(...)`,
-  },
-  parsing: {
-    allErrors: {
-      run(data, { schema }) {
-        try {
-          S.parseOrThrow(data, schema);
-        } catch {}
+  createContext: () => ({
+    schema: getSurySchema(),
+    compile: S.compile(getSurySchema(), "Any", "Output", "Sync"),
+  }),
+  initialization: [
+    {
+      run() {
+        getSurySchema();
       },
-      snippet: ts`S.parseOrThrow(data, schema)`,
+      snippet: ts`S.schema(...)`,
     },
+    {
+      run() {
+        S.compile(getSurySchema(), "Any", "Output", "Sync");
+      },
+      snippet: ts`S.compile(S.schema(...))`,
+      note: "compile",
+      optimizeType: "jit",
+    },
+  ],
+  parsing: {
+    allErrors: [
+      {
+        run(data, { schema }) {
+          try {
+            S.parseOrThrow(data, schema);
+          } catch {}
+        },
+        snippet: ts`S.parseOrThrow(data, schema)`,
+      },
+      {
+        run(data, { compile }) {
+          try {
+            compile(data);
+          } catch {}
+        },
+        snippet: ts`
+        // const compile = S.compile(S.schema(...));
+        compile(data);
+      `,
+        note: "compile",
+        optimizeType: "jit",
+      },
+    ],
   },
 });
