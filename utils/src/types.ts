@@ -47,9 +47,8 @@ export namespace Autocomplete {
     | symbol;
 }
 
-export type HasRequiredProps<T, True, False> = NonOptionalKeys<T> extends never
-  ? False
-  : True;
+export type HasRequiredProps<T, True, False> =
+  NonOptionalKeys<T> extends never ? False : True;
 export type DistributiveOmit<
   T,
   K extends Autocomplete.PropertyKey<keyof T>,
