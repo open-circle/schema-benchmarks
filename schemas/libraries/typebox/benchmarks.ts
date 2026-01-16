@@ -63,6 +63,7 @@ export default defineBenchmarks({
           } catch {}
         },
         snippet: ts`Value.Parse(schema, data)`,
+        throws: true,
       },
       {
         run(data, { compiled }) {
@@ -76,6 +77,7 @@ export default defineBenchmarks({
         `,
         note: "compile",
         optimizeType: "jit",
+        throws: true,
       },
     ],
   },

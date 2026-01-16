@@ -42,6 +42,7 @@ export default defineBenchmarks({
           } catch {}
         },
         snippet: ts`S.parseOrThrow(data, schema)`,
+        throws: true,
       },
       {
         run(data, { compile }) {
@@ -54,6 +55,25 @@ export default defineBenchmarks({
         compile(data);
       `,
         note: "compile",
+        optimizeType: "jit",
+        throws: true,
+      },
+      {
+        run(data, { schema }) {
+          return S.safe(() => S.parseOrThrow(data, schema));
+        },
+        snippet: ts`S.safe(() => S.parseOrThrow(data, schema))`,
+        note: "safe",
+      },
+      {
+        run(data, { compile }) {
+          return S.safe(() => compile(data));
+        },
+        snippet: ts`
+        // const compile = S.compile(S.schema(...));
+        S.safe(() => compile(data));
+      `,
+        note: "compile + safe",
         optimizeType: "jit",
       },
     ],

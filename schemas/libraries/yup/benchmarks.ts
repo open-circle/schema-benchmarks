@@ -33,6 +33,7 @@ export default defineBenchmarks({
         } catch {}
       },
       snippet: ts`schema.validateSync(data, { abortEarly: false })`,
+      throws: true,
     },
     abortEarly: {
       run(data, { schema }) {
@@ -41,6 +42,7 @@ export default defineBenchmarks({
         } catch {}
       },
       snippet: ts`schema.validateSync(data, { abortEarly: true })`,
+      throws: true,
     },
   },
 });
