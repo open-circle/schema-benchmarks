@@ -7,7 +7,7 @@ import {
 } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { PlotContainer } from "@/components/plot";
+import { createPlotComponent } from "@/components/plot";
 import { color } from "@/data/scale";
 import { useElementSize } from "@/hooks/use-content-box-size";
 import { getBenchResults } from "../../query";
@@ -27,14 +27,17 @@ const getLibraryName = (d: BenchResult) => {
   return libraryName;
 };
 
-export function BenchPlot({ type, dataType }: BenchPlotProps) {
+export const BenchPlot = createPlotComponent(function useBenchPlot({
+  type,
+  dataType,
+}: BenchPlotProps) {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
       type === "initialization" ? results[type] : results[type][dataType],
   });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
-  const [domRect, setTargetRef] = useElementSize();
+  const [domRect, ref] = useElementSize();
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -68,5 +71,7 @@ export function BenchPlot({ type, dataType }: BenchPlotProps) {
       }),
     [values, domRect?.width],
   );
-  return <PlotContainer plot={plot} ref={setTargetRef} />;
-}
+  return { plot, ref };
+});
+
+BenchPlot.displayName = "BenchPlot";

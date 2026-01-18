@@ -3,7 +3,7 @@ import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { PlotContainer } from "@/components/plot";
+import { createPlotComponent } from "@/components/plot";
 import { color } from "@/data/scale";
 import { useElementSize } from "@/hooks/use-content-box-size";
 import { getDownloadResults } from "../../query";
@@ -17,13 +17,17 @@ const intFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
 });
 
-export function DownloadPlot({ minify }: { minify: MinifyType }) {
+export const DownloadPlot = createPlotComponent(function useDownloadPlot({
+  minify,
+}: {
+  minify: MinifyType;
+}) {
   const { data } = useSuspenseQuery({
     ...getDownloadResults(),
     select: (results) => results[minify],
   });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
-  const [domRect, setTargetRef] = useElementSize();
+  const [domRect, ref] = useElementSize();
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -52,5 +56,7 @@ export function DownloadPlot({ minify }: { minify: MinifyType }) {
       }),
     [values, domRect?.width],
   );
-  return <PlotContainer plot={plot} ref={setTargetRef} />;
-}
+  return { plot, ref };
+});
+
+DownloadPlot.displayName = "DownloadPlot";
