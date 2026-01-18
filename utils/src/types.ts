@@ -55,3 +55,9 @@ export type DistributiveOmit<
 > = T extends T ? Omit<T, K> : never;
 
 export type MaybeArray<T> = T | Array<T>;
+
+export type KeyofUnion<T> = T extends T ? keyof T : never;
+
+export type OneOf<T, K extends keyof T = KeyofUnion<T>> = T extends T
+  ? T & { [P in Exclude<K, keyof T>]?: never }
+  : never;

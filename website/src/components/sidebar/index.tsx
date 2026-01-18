@@ -1,14 +1,13 @@
-import { ClientOnly, createLink } from "@tanstack/react-router";
+import { ClientOnly } from "@tanstack/react-router";
 import { radEventListeners } from "rad-event-listeners";
-import type { ComponentProps } from "react";
 import { type ReactNode, useContext, useEffect } from "react";
 import bem from "react-bem-helper";
 import { useBreakpoints } from "@/hooks/use-breakpoints";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useScrollLockEffect } from "@/hooks/use-scroll-lock";
 import { ToggleButton } from "../button/toggle";
+import { List, ListItem, ListItemContent, ListItemInternalLink } from "../list";
 import { MdSymbol } from "../symbol";
-import { withTooltip } from "../tooltip";
 import { SidebarOpenContext } from "./context";
 import { sidebarGroups } from "./groups";
 
@@ -89,10 +88,6 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
   );
 }
 
-const LinkWithTooltip = createLink(
-  withTooltip((props: ComponentProps<"a">) => <a {...props} />),
-);
-
 export function Sidebar() {
   const { open } = useContext(SidebarOpenContext);
   const isModal = useIsModal();
@@ -103,10 +98,10 @@ export function Sidebar() {
         <ul {...cls("groups")}>
           {sidebarGroups.map((groups, index) => (
             <div key={groups.key} {...cls("group")}>
-              <ul>
+              <List>
                 {groups.links.map(({ name, icon, ...link }) => (
-                  <li key={link.to}>
-                    <LinkWithTooltip
+                  <ListItem key={link.to}>
+                    <ListItemInternalLink
                       {...link}
                       tooltip={!isModal && !open ? name : undefined}
                       tooltipOpts={{
@@ -114,12 +109,13 @@ export function Sidebar() {
                       }}
                       activeOptions={{ includeSearch: false }}
                     >
-                      <MdSymbol>{icon}</MdSymbol>
-                      {name}
-                    </LinkWithTooltip>
-                  </li>
+                      <ListItemContent leading={<MdSymbol>{icon}</MdSymbol>}>
+                        {name}
+                      </ListItemContent>
+                    </ListItemInternalLink>
+                  </ListItem>
                 ))}
-              </ul>
+              </List>
               {index !== sidebarGroups.length - 1 && <hr />}
             </div>
           ))}

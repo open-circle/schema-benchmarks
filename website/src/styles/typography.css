@@ -104,6 +104,7 @@
   font-size: var(--headline1-size);
   font-weight: var(--headline1-weight);
   --font-width: var(--headline1-width);
+  text-transform: none;
 }
 
 .typo-headline2 {
@@ -111,6 +112,7 @@
   font-size: var(--headline2-size);
   font-weight: var(--headline2-weight);
   --font-width: var(--headline2-width);
+  text-transform: none;
 }
 
 .typo-headline3 {
@@ -118,6 +120,7 @@
   font-size: var(--headline3-size);
   font-weight: var(--headline3-weight);
   --font-width: var(--headline3-width);
+  text-transform: none;
 }
 
 .typo-headline4 {
@@ -125,6 +128,7 @@
   font-size: var(--headline4-size);
   font-weight: var(--headline4-weight);
   --font-width: var(--headline4-width);
+  text-transform: none;
 }
 
 .typo-headline5 {
@@ -132,6 +136,7 @@
   font-size: var(--headline5-size);
   font-weight: var(--headline5-weight);
   --font-width: var(--headline5-width);
+  text-transform: none;
 }
 
 .typo-headline6 {
@@ -139,6 +144,7 @@
   font-size: var(--headline6-size);
   font-weight: var(--headline6-weight);
   --font-width: var(--headline6-width);
+  text-transform: none;
 }
 
 .typo-button {
@@ -152,12 +158,14 @@
   font-family: var(--body1-family);
   font-size: var(--body1-size);
   font-weight: var(--body1-weight);
+  text-transform: none;
 }
 
 .typo-body2 {
   font-family: var(--body2-family);
   font-size: var(--body2-size);
   font-weight: var(--body2-weight);
+  text-transform: none;
 }
 
 .typo-subtitle1 {
@@ -165,6 +173,7 @@
   font-size: var(--subtitle1-size);
   font-weight: var(--subtitle1-weight);
   --font-width: var(--subtitle1-width);
+  text-transform: none;
 }
 
 .typo-subtitle2 {
@@ -172,6 +181,7 @@
   font-size: var(--subtitle2-size);
   font-weight: var(--subtitle2-weight);
   --font-width: var(--subtitle2-width);
+  text-transform: none;
 }
 
 .typo-overline {
@@ -185,6 +195,7 @@
   font-family: var(--caption-family);
   font-size: var(--caption-size);
   font-weight: var(--caption-weight);
+  text-transform: none;
 }
 
 h1 {
@@ -213,8 +224,8 @@ h6 {
 
 *:not(.material-symbols-sharp) {
   font-variation-settings:
-    "GRAD" var(--font-grade, 0), /* 0-100 */
-    "ROND" var(--font-roundness, 0), /* 0-100 */
-    "slnt" var(--font-slant, 0), /* -10-0 */
-    "wdth" var(--font-width, 100); /* 25-151 */
+    "GRAD" var(--font-grade, 0),
+    /* 0-100 */ "ROND" var(--font-roundness, 0),
+    /* 0-100 */ "slnt" var(--font-slant, 0),
+    /* -10-0 */ "wdth" var(--font-width, 100); /* 25-151 */
 }

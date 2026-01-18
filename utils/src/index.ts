@@ -326,3 +326,14 @@ export function uniqueBy<T>(
     return true;
   });
 }
+
+export function assert(
+  condition: unknown,
+  message?: string,
+): asserts condition {
+  if (!condition) throw new Error(message);
+}
+
+export function assertNever(_value: never, message: string): never {
+  throw new Error(message);
+}
