@@ -1,3 +1,4 @@
+import type { QueryClient } from "@tanstack/react-query";
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { Button } from "@/components/button";
@@ -9,10 +10,13 @@ import { makeQueryClient } from "./data/query";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-export const getRouter = (
-  history?: RouterHistory,
+export const getRouter = ({
+  history,
   queryClient = makeQueryClient(),
-) => {
+}: {
+  history?: RouterHistory;
+  queryClient?: QueryClient;
+}) => {
   const router = createRouter({
     routeTree,
     history,

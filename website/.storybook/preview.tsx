@@ -29,7 +29,7 @@ declare module "@storybook/react-vite" {
 
 const routerDecorator: Decorator = (Story, { parameters }) => {
   parameters.history ??= createMemoryHistory(parameters.historyOpts);
-  parameters.router ??= getRouter(parameters.history, parameters.queryClient);
+  parameters.router ??= getRouter(parameters);
   return (
     <RouterContextProvider router={parameters.router}>
       <Story />

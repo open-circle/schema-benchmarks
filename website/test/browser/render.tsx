@@ -36,7 +36,7 @@ export async function renderWithProviders(
     queryClient = makeQueryClient(),
     historyOpts,
     history = createMemoryHistory(historyOpts),
-    router = getRouter(history, queryClient),
+    router = getRouter({ history, queryClient }),
     wrapper: Wrapper = Fragment,
     ...options
   }: RenderWithProviderOptions = {},
