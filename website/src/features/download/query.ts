@@ -13,6 +13,14 @@ import { createServerFn } from "@tanstack/react-start";
 import * as v from "valibot";
 import type { PageFilterChipsProps } from "@/components/page-filter/chips";
 
+export function getCompiledPath(fileName: string, minify: MinifyType) {
+  return fileName
+    .replace("download.ts", `download_compiled/${minify}.js`)
+    .replace("download/index.ts", `download_compiled/${minify}.js`)
+    .replace("download/", `download_compiled/`)
+    .replace(".ts", `/${minify}.js`);
+}
+
 export const optionalMinifyTypeSchema = v.optional(
   minifyTypeSchema,
   "minified",

@@ -1,0 +1,7 @@
+@import "./components/card/index.css";
+
+.download-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+  gap: 1rem;
+}

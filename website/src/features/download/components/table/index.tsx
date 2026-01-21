@@ -6,20 +6,14 @@ import {
   getTransitionName,
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { ButtonGroup } from "@/components/button";
 import { InternalLinkToggleButton } from "@/components/button/toggle";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { getDownloadTime } from "@/features/download/speed";
 import { DownloadCount } from "@/features/popularity/components/count";
-
-function getCompiledPath(result: DownloadResult, minify: MinifyType) {
-  return result.fileName
-    .replace("download.ts", `download_compiled/${minify}.js`)
-    .replace("download/index.ts", `download_compiled/${minify}.js`)
-    .replace("download/", `download_compiled/`)
-    .replace(".ts", `/${minify}.js`);
-}
+import { getCompiledPath } from "../../query";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;
@@ -72,7 +66,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                   <code className="language-text">{result.version}</code>
                 </td>
                 <td className="numeric">
-                  <DownloadCount libraryName={result.libraryName} />
+                  <ErrorBoundary fallback={null}>
+                    <DownloadCount libraryName={result.libraryName} />
+                  </ErrorBoundary>
                 </td>
                 <td className="numeric">{formatBytes(result.bytes)}</td>
                 <td className="numeric">{formatBytes(result.gzipBytes)}</td>
@@ -102,7 +98,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       to="/repo/raw/$"
                       params={{
                         _splat: `schemas/libraries/${getCompiledPath(
-                          result,
+                          result.fileName,
                           minify,
                         )}`,
                       }}
