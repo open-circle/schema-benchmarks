@@ -43,11 +43,8 @@ function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
   const { data } = useSuspenseQuery(getRaw({ fileName }));
   return (
-    <>
-      <h6 style={{ margin: 0 }}>
-        <code className="language-text">{fileName}</code>
-      </h6>
-      <CodeBlock language={getLanguage(fileName)}>{data}</CodeBlock>
-    </>
+    <CodeBlock title={fileName} lineNumbers language={getLanguage(fileName)}>
+      {data}
+    </CodeBlock>
   );
 }
