@@ -16,7 +16,7 @@ export const getRouter = ({
 }: {
   history?: RouterHistory;
   queryClient?: QueryClient;
-}) => {
+} = {}) => {
   const router = createRouter({
     routeTree,
     history,
