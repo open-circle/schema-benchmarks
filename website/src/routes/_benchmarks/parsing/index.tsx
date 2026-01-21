@@ -5,7 +5,7 @@ import * as v from "valibot";
 import { PageFilters } from "@/components/page-filter";
 import { PageFilterChips } from "@/components/page-filter/chips";
 import { generateMetadata } from "@/data/meta";
-import { BenchTable } from "@/features/benchmark/components/table";
+import { BenchResults } from "@/features/benchmark/components/results";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -122,7 +122,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <BenchTable results={data} />
+      <BenchResults results={data} />
     </>
   );
 }

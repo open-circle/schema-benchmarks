@@ -85,6 +85,11 @@
     opacity: var(--disabled-text);
     pointer-events: none;
   }
+  &.chip--display {
+    border: 1px solid var(--divider);
+    background-color: transparent;
+    color: var(--page-foreground);
+  }
 }
 
 .chip-collection {

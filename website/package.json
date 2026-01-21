@@ -26,6 +26,7 @@
     "react": "catalog:",
     "react-bem-helper": "^1.4.1",
     "react-dom": "catalog:",
+    "react-error-boundary": "^6.1.0",
     "react-hot-toast": "^2.6.0",
     "react-md-spinner": "^1.0.0",
     "tanstack-meta": "^0.6.1",
