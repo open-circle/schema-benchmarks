@@ -1,11 +1,10 @@
-import { type DownloadResult, MinifyType } from "@schema-benchmarks/bench";
+import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import {
   durationFormatter,
   formatBytes,
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
-import { useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ButtonGroup } from "@/components/button";
 import { InternalLinkToggleButton } from "@/components/button/toggle";
