@@ -12,7 +12,6 @@ import { create } from "mutative";
 import { ssrBehavior } from "react-md-spinner";
 import { generateMetadata } from "tanstack-meta";
 import { Banner } from "@/components/banner";
-import { useSmallScreenBanner } from "@/components/banner/small-screen";
 import { ConfirmDialog } from "@/components/dialog/confirm";
 import { Footer } from "@/components/footer";
 import * as mdxComponents from "@/components/mdx";
@@ -69,7 +68,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  useSmallScreenBanner();
   return (
     <html lang="en">
       <head>
