@@ -36,7 +36,10 @@ export function CodeBlock({
     getHighlightedCode({ code: children, lineNumbers, language }),
   );
   return (
-    <pre dir="ltr" className={`language-${language} line-numbers`}>
+    <pre
+      dir="ltr"
+      className={`language-${language} ${lineNumbers ? "line-numbers" : ""}`}
+    >
       {title && <h6 className="code-block__title">{title}</h6>}
       <code
         className={`language-${language}`}
