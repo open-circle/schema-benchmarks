@@ -46,10 +46,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
           </div>
         </ErrorBoundary>
       </div>
-      {/* <CodeBlock>{result.snippet}</CodeBlock> */}
-      <pre dir="ltr" className="language-ts">
-        <code className="language-ts">{result.snippet}</code>
-      </pre>
+      <CodeBlock>{result.snippet}</CodeBlock>
       <div className="bench-card__time">
         <h6 className="typo-caption">Mean</h6>
         <p className="typo-body2">
