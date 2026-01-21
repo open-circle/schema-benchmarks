@@ -47,6 +47,7 @@ export const SingleLine: Story = {
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             leading={renderSupporting(leading)}
@@ -64,6 +65,7 @@ export const TwoLine: Story = {
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             lines={2}
@@ -82,6 +84,7 @@ export const ThreeLine: Story = {
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             lines={3}

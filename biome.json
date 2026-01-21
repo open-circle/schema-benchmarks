@@ -25,6 +25,16 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["**/*.test.ts", "**/*.test.tsx"],
+      "linter": {
+        "domains": {
+          "test": "recommended"
+        }
+      }
+    }
+  ],
   "vcs": {
     "clientKind": "git",
     "enabled": false,

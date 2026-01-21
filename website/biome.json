@@ -16,6 +16,9 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "react": "recommended"
+    },
     "rules": {
       "suspicious": {
         "noUnknownAtRules": {
