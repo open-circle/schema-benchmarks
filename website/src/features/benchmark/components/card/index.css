@@ -6,8 +6,7 @@
   min-width: 256px;
   .bench-card__version {
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
     margin: 0;
   }
@@ -25,8 +24,7 @@
     }
     .bench-card__note {
       color: color(
-        from var(--page-foreground) srgb r g b /
-        var(--secondary-text)
+        from var(--page-foreground) srgb r g b / var(--secondary-text)
       );
       margin: 0;
     }
@@ -36,18 +34,25 @@
     align-items: center;
     gap: 0.5rem;
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
   }
-  .bench-card__time {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    font-feature-settings: "tnum" 1;
-    h6,
-    p {
-      margin: 0;
+  table {
+    th:first-child,
+    td:first-child {
+      padding-left: 0;
+      &:dir(rtl) {
+        padding-left: 1rem;
+        padding-right: 0;
+      }
+    }
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+      &:dir(rtl) {
+        padding-right: 1rem;
+        padding-left: 0;
+      }
     }
   }
 }

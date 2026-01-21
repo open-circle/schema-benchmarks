@@ -90,3 +90,16 @@ td {
     }
   }
 }
+
+table.minimal {
+  tr {
+    vertical-align: baseline;
+    border: none;
+  }
+  th {
+    @extend .typo-caption;
+    color: color(
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
+    );
+  }
+}

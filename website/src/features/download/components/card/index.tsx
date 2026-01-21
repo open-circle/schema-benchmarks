@@ -54,24 +54,24 @@ export function DownloadCard({
           </div>
         </ErrorBoundary>
       </div>
-      <ul className="download-card__size">
-        <li className="download-card__size-item">
-          <h6 className="typo-caption">Uncompressed</h6>
-          <p className="typo-body2">{formatBytes(result.bytes)}</p>
-        </li>
-        <li className="download-card__size-item">
-          <h6 className="typo-caption">Gzipped</h6>
-          <p className="typo-body2">{formatBytes(result.gzipBytes)}</p>
-        </li>
-        <li className="download-card__size-item">
-          <h6 className="typo-caption">Time</h6>
-          <p className="typo-body2">
+      <table className="minimal">
+        <tr>
+          <th>Uncompressed</th>
+          <td className="numeric">{formatBytes(result.bytes)}</td>
+        </tr>
+        <tr>
+          <th>Gzipped</th>
+          <td className="numeric">{formatBytes(result.gzipBytes)}</td>
+        </tr>
+        <tr>
+          <th>Time</th>
+          <td className="numeric">
             {durationFormatter.format(
               getDuration(getDownloadTime(result.gzipBytes, mbps)),
             )}
-          </p>
-        </li>
-      </ul>
+          </td>
+        </tr>
+      </table>
       <div className="download-card__bar">
         <Bar {...gzipScaler(result.gzipBytes)} />
       </div>

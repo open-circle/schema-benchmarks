@@ -6,8 +6,7 @@
   min-width: 256px;
   .download-card__version {
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
     margin: 0;
   }
@@ -25,8 +24,7 @@
     }
     .download-card__note {
       color: color(
-        from var(--page-foreground) srgb r g b /
-        var(--secondary-text)
+        from var(--page-foreground) srgb r g b / var(--secondary-text)
       );
       margin: 0;
     }
@@ -36,33 +34,29 @@
     align-items: center;
     gap: 0.5rem;
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
   }
-  .download-card__size {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .download-card__size-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5rem;
-    h6,
-    p {
-      margin: 0;
+  table {
+    th:first-child,
+    td:first-child {
+      padding-left: 0;
+      &:dir(rtl) {
+        padding-left: 1rem;
+        padding-right: 0;
+      }
+    }
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+      &:dir(rtl) {
+        padding-right: 1rem;
+        padding-left: 0;
+      }
     }
   }
-  .download-card__bar {
-    margin-top: 1rem;
-  }
   .download-card__actions {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
