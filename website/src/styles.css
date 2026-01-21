@@ -100,9 +100,27 @@ code[class*="language-"] {
   }
   .code-block__title {
     padding: 0.5rem 1rem;
-    margin: -1rem -1rem 1rem;
+    margin: -1em -1em 1rem;
     border-bottom: 1px solid var(--divider);
     font: inherit;
+  }
+  &.line-numbers {
+    .code-block__title {
+      margin: -1em;
+      margin-bottom: 0;
+      margin-left: -3.8em;
+      &:dir(rtl) {
+        margin-left: -1em;
+        margin-right: -3.8em;
+      }
+    }
+    .line-numbers-rows {
+      border-right: 1px solid var(--divider);
+      &:dir(rtl) {
+        border-right: none;
+        border-left: 1px solid var(--divider);
+      }
+    }
   }
 }
 
