@@ -54,6 +54,9 @@ export type DistributiveOmit<
   K extends Autocomplete.PropertyKey<keyof T>,
 > = T extends T ? Omit<T, K> : never;
 
+// DistributiveArray<string | number> = Array<string> | Array<number>
+export type DistributiveArray<T> = T extends T ? Array<T> : never;
+
 export type MaybeArray<T> = T | Array<T>;
 
 export type KeyofUnion<T> = T extends T ? keyof T : never;

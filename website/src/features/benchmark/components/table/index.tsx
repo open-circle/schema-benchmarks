@@ -1,11 +1,13 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
 import {
+  type DistributiveArray,
   durationFormatter,
   getDuration,
   getTransitionName,
   numFormatter,
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { ToggleButton } from "@/components/button/toggle";
 import { EmptyState } from "@/components/empty-state";
 import { Radio } from "@/components/radio";
@@ -15,9 +17,6 @@ import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
 import { errorTypeProps, optimizeTypeProps } from "../../query";
 import { Snippet } from "./snippet";
-
-// DistributiveArray<string | number> = Array<string> | Array<number>
-type DistributiveArray<T> = T extends T ? Array<T> : never;
 
 export interface BenchTableProps {
   results: DistributiveArray<BenchResult>;
@@ -143,7 +142,9 @@ export function BenchTable({ results }: BenchTableProps) {
                   <code className="language-text">{result.version}</code>
                 </td>
                 <td className="numeric">
-                  <DownloadCount libraryName={result.libraryName} />
+                  <ErrorBoundary fallback={null}>
+                    <DownloadCount libraryName={result.libraryName} />
+                  </ErrorBoundary>
                 </td>
                 <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
                 {result.type === "parsing" && (
