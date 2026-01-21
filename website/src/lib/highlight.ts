@@ -8,25 +8,46 @@ import * as v from "valibot";
 const highlightInput = v.object({
   code: v.string(),
   language: v.optional(v.string()),
+  lineNumbers: v.optional(v.boolean()),
 });
+
+const NEW_LINE_EXP = /\n(?!$)/g;
 
 export const highlightFn = createServerFn()
   .inputValidator(highlightInput)
-  .handler(({ data: { code, language = "typescript" } }) => {
+  .handler(({ data: { code, lineNumbers, language = "typescript" } }) => {
+    let lineNumbersWrapper = "";
+    Prism.hooks.add("before-tokenize", (env) => {
+      const match = env.code.match(NEW_LINE_EXP);
+      const linesNum = match ? match.length + 1 : 1;
+      const lines = new Array(linesNum + 1).join("<span></span>");
+
+      lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
+    });
+
     if (!Prism.languages[language]) loadLanguages(language);
-    // biome-ignore lint/style/noNonNullAssertion: we've loaded it above
-    return Prism.highlight(code, Prism.languages[language]!, language);
+    const formatted = Prism.highlight(
+      code,
+      // biome-ignore lint/style/noNonNullAssertion: we've loaded it above
+      Prism.languages[language]!,
+      language,
+    );
+    return lineNumbers ? formatted + lineNumbersWrapper : formatted;
   });
 
 export const getHighlightedCode = (
-  { code, language = "typescript" }: v.InferInput<typeof highlightInput>,
+  {
+    code,
+    lineNumbers,
+    language = "typescript",
+  }: v.InferInput<typeof highlightInput>,
   signalOpt?: AbortSignal,
 ) =>
   queryOptions({
-    queryKey: ["highlight", language, code],
+    queryKey: ["highlight", language, code, lineNumbers],
     queryFn: ({ signal }) =>
       highlightFn({
-        data: { code, language },
+        data: { code, language, lineNumbers },
         signal: anyAbortSignal(signal, signalOpt),
       }),
   });
