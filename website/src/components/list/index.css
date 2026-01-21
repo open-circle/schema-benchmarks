@@ -81,7 +81,7 @@
   .list-item__supporting-text {
     color: color(
       from var(--list-item-foreground, var(--page-foreground)) srgb r g b /
-        var(--secondary-text)
+      var(--secondary-text)
     );
   }
 }

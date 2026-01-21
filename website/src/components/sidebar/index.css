@@ -71,7 +71,8 @@
       display: flex;
       align-items: center;
       color: color(
-        from var(--sidebar-foreground) srgb r g b / var(--secondary-text)
+        from var(--sidebar-foreground) srgb r g b /
+        var(--secondary-text)
       );
     }
     .list-item__button {
