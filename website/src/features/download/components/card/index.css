@@ -1,35 +1,35 @@
-.bench-card {
+.download-card {
   display: flex;
   flex-direction: column;
   padding: 1rem;
   gap: 0.5rem;
   min-width: 256px;
-  .bench-card__version {
+  .download-card__version {
     color: color(
       from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
     margin: 0;
   }
-  .bench-card__header-row {
+  .download-card__header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .bench-card__library-name {
+  .download-card__library-name {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
     h4 {
       margin: 0;
     }
-    .bench-card__note {
+    .download-card__note {
       color: color(
         from var(--page-foreground) srgb r g b / var(--secondary-text)
       );
       margin: 0;
     }
   }
-  .bench-card__downloads {
+  .download-card__downloads {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -37,14 +37,31 @@
       from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
   }
-  .bench-card__time {
+  .download-card__size {
     display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .download-card__size-item {
+    display: flex;
+    justify-content: space-between;
     align-items: baseline;
     gap: 0.5rem;
-    font-feature-settings: "tnum" 1;
     h6,
     p {
       margin: 0;
     }
+  }
+  .download-card__bar {
+    margin-top: 1rem;
+  }
+  .download-card__actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 }

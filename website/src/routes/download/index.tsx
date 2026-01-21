@@ -14,13 +14,14 @@ import { PageFilterChips } from "@/components/page-filter/chips";
 import { PageFilterTextField } from "@/components/page-filter/text-field";
 import { MdSymbol } from "@/components/symbol";
 import { generateMetadata } from "@/data/meta";
-import { DownloadTable } from "@/features/download/components/table";
+import { DownloadResults } from "@/features/download/components/results";
 import {
   getDownloadResults,
   minifyTypeProps,
   optionalMinifyTypeSchema,
 } from "@/features/download/query";
 import { speedPresets } from "@/features/download/speed";
+import downloadStyles from "@/features/download/styles.css?url";
 import { getAllWeeklyDownloads } from "@/features/popularity/query";
 import Content from "./content.mdx";
 
@@ -43,6 +44,12 @@ export const Route = createFileRoute("/download/")({
       openGraph: {
         url: "/download/",
       },
+      links: [
+        {
+          rel: "stylesheet",
+          href: downloadStyles,
+        },
+      ],
     }),
   validateSearch: searchSchema,
   loaderDeps: ({ search: { minifyType } }) => ({ minifyType }),
@@ -133,7 +140,7 @@ function RouteComponent() {
           </ButtonGroup>
         </PageFilter>
       </PageFilters>
-      <DownloadTable results={data} mbps={mbpsAsNumber} minify={minifyType} />
+      <DownloadResults results={data} mbps={mbpsAsNumber} minify={minifyType} />
     </>
   );
 }
