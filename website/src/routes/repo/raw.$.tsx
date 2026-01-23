@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
 import { CodeBlock } from "@/components/code";
+import { generateMetadata } from "@/data/meta";
 import { getRaw } from "@/features/repo/query";
 import { getHighlightedCode } from "@/lib/highlight";
 
@@ -37,6 +38,14 @@ export const Route = createFileRoute("/repo/raw/$")({
       throw e;
     }
   },
+  head: ({ params: { _splat: fileName } }) =>
+    generateMetadata({
+      title: `Raw (${fileName?.split("/").pop() ?? "Unknown"})`,
+      description: "View the raw contents of a file in the repository.",
+      openGraph: {
+        url: `/repo/raw/${fileName}`,
+      },
+    }),
 });
 
 function RouteComponent() {
