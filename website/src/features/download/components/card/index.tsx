@@ -55,22 +55,24 @@ export function DownloadCard({
         </ErrorBoundary>
       </div>
       <table className="minimal">
-        <tr>
-          <th>Uncompressed</th>
-          <td className="numeric">{formatBytes(result.bytes)}</td>
-        </tr>
-        <tr>
-          <th>Gzipped</th>
-          <td className="numeric">{formatBytes(result.gzipBytes)}</td>
-        </tr>
-        <tr>
-          <th>Time</th>
-          <td className="numeric">
-            {durationFormatter.format(
-              getDuration(getDownloadTime(result.gzipBytes, mbps)),
-            )}
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <th>Uncompressed</th>
+            <td className="numeric">{formatBytes(result.bytes)}</td>
+          </tr>
+          <tr>
+            <th>Gzipped</th>
+            <td className="numeric">{formatBytes(result.gzipBytes)}</td>
+          </tr>
+          <tr>
+            <th>Time</th>
+            <td className="numeric">
+              {durationFormatter.format(
+                getDuration(getDownloadTime(result.gzipBytes, mbps)),
+              )}
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div className="download-card__bar">
         <Bar {...gzipScaler(result.gzipBytes)} />

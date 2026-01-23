@@ -48,10 +48,14 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
       </div>
       <CodeBlock>{result.snippet}</CodeBlock>
       <table className="minimal">
-        <th>Mean</th>
-        <td className="numeric">
-          {durationFormatter.format(getDuration(result.mean))}
-        </td>
+        <tbody>
+          <tr>
+            <th>Mean</th>
+            <td className="numeric">
+              {durationFormatter.format(getDuration(result.mean))}
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div className="bench-card__bar">
         <Bar {...barScale(result.mean)} />
