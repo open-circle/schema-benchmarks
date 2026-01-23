@@ -10,7 +10,7 @@ import { CodeBlock } from "@/components/code";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
-import { errorTypeProps, optimizeTypeProps } from "../../query";
+import { errorTypeProps, optimizeTypeProps } from "../../constants";
 
 interface BenchCardProps {
   barScale: ReturnType<typeof Bar.getScale>;

@@ -2,7 +2,6 @@ import {
   type DownloadResults,
   downloadResultsSchema,
   type MinifyType,
-  minifyTypeSchema,
 } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json" with {
   type: "json",
@@ -10,8 +9,7 @@ import downloadResults from "@schema-benchmarks/bench/download.json" with {
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import * as v from "valibot";
-import type { PageFilterChipsProps } from "@/components/page-filter/chips";
+import { upfetch } from "@/lib/fetch";
 
 export function getCompiledPath(fileName: string, minify: MinifyType) {
   return fileName
@@ -21,36 +19,15 @@ export function getCompiledPath(fileName: string, minify: MinifyType) {
     .replace(".ts", `/${minify}.js`);
 }
 
-export const optionalMinifyTypeSchema = v.optional(
-  minifyTypeSchema,
-  "minified",
-);
-export const minifyTypeProps: Pick<
-  PageFilterChipsProps<MinifyType>,
-  "title" | "labels" | "options"
-> = {
-  title: "Minify",
-  options: minifyTypeSchema.options,
-  labels: {
-    minified: { label: "Minified", icon: "chips" },
-    unminified: { label: "Unminified", icon: "code_blocks" },
-  },
-};
-
 export const getDownloadResultsFn = createServerFn().handler(
   async ({ signal }) => {
     let results: DownloadResults | undefined;
     if (process.env.NODE_ENV === "production") {
       try {
-        const response = await fetch(
+        results = await upfetch(
           "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/download.json",
-          { signal },
+          { signal, schema: downloadResultsSchema },
         );
-        if (!response.ok)
-          throw new Error("Failed to fetch results: ", {
-            cause: response.status,
-          });
-        results = v.parse(downloadResultsSchema, await response.json());
       } catch (error) {
         console.error("Falling back to local results: ", error);
       }

@@ -1,22 +1,3 @@
-import * as v from "valibot";
+import { up } from "up-fetch";
 
-export class HTTPError extends Error {
-  constructor(public response: Response) {
-    super(`Failed to fetch: ${response.status} ${response.statusText}`);
-  }
-}
-
-export async function baseFetch(input: RequestInfo | URL, init?: RequestInit) {
-  const response = await fetch(input, init);
-  if (!response.ok) throw new HTTPError(response);
-  return response;
-}
-
-export async function fetchJson<TSchema extends v.GenericSchema>(
-  schema: TSchema,
-  input: RequestInfo | URL,
-  init?: RequestInit,
-) {
-  const response = await baseFetch(input, init);
-  return v.parse(schema, await response.json());
-}
+export const upfetch = up(fetch);

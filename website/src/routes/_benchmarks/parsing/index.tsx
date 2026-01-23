@@ -9,12 +9,12 @@ import { BenchResults } from "@/features/benchmark/components/results";
 import {
   dataTypeProps,
   errorTypeProps,
-  getBenchResults,
   optimizeTypeProps,
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
   optionalOptimizeTypeSchema,
-} from "@/features/benchmark/query";
+} from "@/features/benchmark/constants";
+import { getBenchResults } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getAllWeeklyDownloads } from "@/features/popularity/query";
 import { getHighlightedCode } from "@/lib/highlight";

@@ -1,6 +1,6 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { baseFetch } from "@/lib/fetch";
+import { upfetch } from "@/lib/fetch";
 
 interface RawSpecifier {
   repo?: string;
@@ -22,7 +22,8 @@ export const getRaw = (
   queryOptions({
     queryKey: ["raw", repo, branch, fileName],
     queryFn: ({ signal }) =>
-      baseFetch(getRawPath({ repo, branch, fileName }), {
+      upfetch(getRawPath({ repo, branch, fileName }), {
         signal: anyAbortSignal(signal, signalOpt),
-      }).then((response) => response.text()),
+        parseResponse: (response) => response.text(),
+      }),
   });

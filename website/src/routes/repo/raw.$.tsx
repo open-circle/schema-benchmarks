@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { isResponseError } from "up-fetch";
 import { CodeBlock } from "@/components/code";
 import { getRaw } from "@/features/repo/query";
-import { HTTPError } from "@/lib/fetch";
 import { getHighlightedCode } from "@/lib/highlight";
 
 const knownLanguages = new Set(["ts", "tsx", "js", "jsx", "json"]);
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/repo/raw/$")({
         ),
       );
     } catch (e) {
-      if (e instanceof HTTPError && e.response.status === 404) throw notFound();
+      if (isResponseError(e) && e.status === 404) throw notFound();
       throw e;
     }
   },

@@ -30,6 +30,7 @@
     "react-hot-toast": "^2.6.0",
     "react-md-spinner": "^1.0.0",
     "tanstack-meta": "^0.6.1",
+    "up-fetch": "^2.5.1",
     "valibot": "catalog:",
     "vite-tsconfig-paths": "^6.0.4"
   },

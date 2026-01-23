@@ -281,6 +281,9 @@ importers:
       tanstack-meta:
         specifier: ^0.6.1
         version: 0.6.1
+      up-fetch:
+        specifier: ^2.5.1
+        version: 2.5.1
       valibot:
         specifier: 'catalog:'
         version: 1.2.0(typescript@5.9.3)
@@ -5469,6 +5472,10 @@ packages:
   untun@0.1.3:
     resolution: {integrity: sha512-4luGP9LMYszMRZwsvyUd9MrxgEGZdZuZgpVQHEEX0lCYFESasVRvZd0EYpCkOIbJKHMuv0LskpXc/8Un+MJzEQ==}
     hasBin: true
+
+  up-fetch@2.5.1:
+    resolution: {integrity: sha512-/qKHjEMJ9tjWdEmV7OWBQLM8XqEltTQxy9k4Q83ySw+aMm97MtO+hK+5dhWxn8v9Z4qfkJ7DyYrKWkfglJioEA==}
+    engines: {node: '>=18'}
 
   update-browserslist-db@1.2.3:
     resolution: {integrity: sha512-Js0m9cx+qOgDxo0eMiFGEueWztz+d4+M3rGlmKPT+T4IS/jP4ylw3Nwpu6cpTTP8R1MAC1kF4VbdLt3ARf209w==}
@@ -11687,6 +11694,8 @@ snapshots:
       citty: 0.1.6
       consola: 3.4.2
       pathe: 1.1.2
+
+  up-fetch@2.5.1: {}
 
   update-browserslist-db@1.2.3(browserslist@4.28.1):
     dependencies:

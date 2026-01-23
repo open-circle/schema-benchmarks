@@ -8,11 +8,11 @@ import { generateMetadata } from "@/data/meta";
 import { BenchResults } from "@/features/benchmark/components/results";
 import {
   dataTypeProps,
-  getBenchResults,
   optimizeTypeProps,
   optionalDataTypeSchema,
   optionalOptimizeTypeSchema,
-} from "@/features/benchmark/query";
+} from "@/features/benchmark/constants";
+import { getBenchResults } from "@/features/benchmark/query";
 import benchmarkStyles from "@/features/benchmark/styles.css?url";
 import { getAllWeeklyDownloads } from "@/features/popularity/query";
 import { getHighlightedCode } from "@/lib/highlight";

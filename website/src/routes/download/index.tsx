@@ -16,10 +16,10 @@ import { MdSymbol } from "@/components/symbol";
 import { generateMetadata } from "@/data/meta";
 import { DownloadResults } from "@/features/download/components/results";
 import {
-  getDownloadResults,
   minifyTypeProps,
   optionalMinifyTypeSchema,
-} from "@/features/download/query";
+} from "@/features/download/constants";
+import { getDownloadResults } from "@/features/download/query";
 import { speedPresets } from "@/features/download/speed";
 import downloadStyles from "@/features/download/styles.css?url";
 import { getAllWeeklyDownloads } from "@/features/popularity/query";

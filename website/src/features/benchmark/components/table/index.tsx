@@ -15,7 +15,7 @@ import { Scaler } from "@/components/scaler";
 import { MdSymbol } from "@/components/symbol";
 import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
-import { errorTypeProps, optimizeTypeProps } from "../../query";
+import { errorTypeProps, optimizeTypeProps } from "../../constants";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {

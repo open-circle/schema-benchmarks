@@ -15,8 +15,8 @@ import {
   dataTypeProps,
   errorTypeProps,
   optimizeTypeProps,
-} from "./src/features/benchmark/query";
-import { minifyTypeProps } from "./src/features/download/query";
+} from "./src/features/benchmark/constants";
+import { minifyTypeProps } from "./src/features/download/constants";
 import { speedPresets } from "./src/features/download/speed";
 import materialSymbols from "./vite/symbols";
 

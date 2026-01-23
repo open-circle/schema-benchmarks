@@ -1,78 +1,24 @@
 import {
   type BenchResults,
   benchResultsSchema,
-  type DataType,
-  dataTypeSchema,
 } from "@schema-benchmarks/bench";
 import benchResults from "@schema-benchmarks/bench/bench.json" with {
   type: "json",
 };
-import {
-  type ErrorType,
-  errorTypeSchema,
-  type OptimizeType,
-  optimizeTypeSchema,
-} from "@schema-benchmarks/schemas";
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import * as v from "valibot";
-import type { PageFilterChipsProps } from "@/components/page-filter/chips";
-
-export const optionalDataTypeSchema = v.optional(dataTypeSchema, "valid");
-export const dataTypeProps: Pick<
-  PageFilterChipsProps<DataType>,
-  "title" | "labels" | "options"
-> = {
-  title: "Data",
-  options: dataTypeSchema.options,
-  labels: {
-    valid: { label: "Valid", icon: "check_circle" },
-    invalid: { label: "Invalid", icon: "error" },
-  },
-};
-
-export const optionalErrorTypeSchema = v.optional(errorTypeSchema);
-export const errorTypeProps: Pick<
-  PageFilterChipsProps<ErrorType>,
-  "title" | "labels" | "options"
-> = {
-  title: "Abort early",
-  options: errorTypeSchema.options,
-  labels: {
-    allErrors: { label: "All errors", icon: "error" },
-    abortEarly: { label: "Abort early", icon: "warning" },
-  },
-};
-
-export const optionalOptimizeTypeSchema = v.optional(optimizeTypeSchema);
-export const optimizeTypeProps: Pick<
-  PageFilterChipsProps<OptimizeType>,
-  "title" | "labels" | "options"
-> = {
-  title: "Optimizations",
-  options: optimizeTypeSchema.options,
-  labels: {
-    none: { label: "None", icon: "flash_off" },
-    jit: { label: "JIT", icon: "code" },
-    precompiled: { label: "Precompiled", icon: "build" },
-  },
-};
+import { upfetch } from "@/lib/fetch";
 
 export const getBenchResultsFn = createServerFn().handler(
   async ({ signal }) => {
     let results: BenchResults | undefined;
     if (process.env.NODE_ENV === "production") {
       try {
-        const response = await fetch(
+        results = await upfetch(
           "https://raw.githubusercontent.com/open-circle/schema-benchmarks/refs/heads/main/bench/bench.json",
-          { signal },
+          { signal, schema: benchResultsSchema },
         );
-        if (!response.ok)
-          throw new Error("Failed to fetch results: ", {
-            cause: response.status,
-          });
-        results = v.parse(benchResultsSchema, await response.json());
       } catch (error) {
         console.error("Falling back to local results: ", error);
       }
