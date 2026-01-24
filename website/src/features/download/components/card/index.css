@@ -6,7 +6,8 @@
   min-width: 256px;
   .download-card__version {
     color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
+      from var(--page-foreground) srgb r g b /
+      var(--secondary-text)
     );
     margin: 0;
   }
@@ -24,7 +25,8 @@
     }
     .download-card__note {
       color: color(
-        from var(--page-foreground) srgb r g b / var(--secondary-text)
+        from var(--page-foreground) srgb r g b /
+        var(--secondary-text)
       );
       margin: 0;
     }
@@ -34,7 +36,8 @@
     align-items: center;
     gap: 0.5rem;
     color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
+      from var(--page-foreground) srgb r g b /
+      var(--secondary-text)
     );
   }
   table {

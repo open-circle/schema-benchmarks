@@ -55,7 +55,6 @@ export function toBePressed(
 }
 
 declare module "vitest" {
-  // biome-ignore lint/correctness/noUnusedVariables: needs to be same
   interface Assertion<T> {
     /**
      * @description

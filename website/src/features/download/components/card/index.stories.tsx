@@ -14,6 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    // biome-ignore lint/style/noNonNullAssertion: demo data
     result: downloadResults.minified[0]!,
     mbps: 32,
     minify: "minified",

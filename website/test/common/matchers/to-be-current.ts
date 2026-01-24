@@ -75,7 +75,6 @@ function getAttributeComment(
 }
 
 declare module "vitest" {
-  // biome-ignore lint/correctness/noUnusedVariables: needs to be same
   interface Assertion<T> {
     toBeCurrent: {
       /**
