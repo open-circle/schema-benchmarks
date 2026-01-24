@@ -30,12 +30,12 @@ const range = (length, offset = 0) => [...new Array(length)].map((_, i) => i + o
 /**
 * Adds a value or array to an array, returning the concatenated result
 */
-const append = (to, value$1, opts) => {
-	if (to === void 0) return value$1 === void 0 ? [] : Array.isArray(value$1) ? value$1 : [value$1];
-	if (opts?.prepend) if (Array.isArray(value$1)) to.unshift(...value$1);
-	else to.unshift(value$1);
-	else if (Array.isArray(value$1)) to.push(...value$1);
-	else to.push(value$1);
+const append = (to, value, opts) => {
+	if (to === void 0) return value === void 0 ? [] : Array.isArray(value) ? value : [value];
+	if (opts?.prepend) if (Array.isArray(value)) to.unshift(...value);
+	else to.unshift(value);
+	else if (Array.isArray(value)) to.push(...value);
+	else to.push(value);
 	return to;
 };
 /**
@@ -53,10 +53,10 @@ const conflatenateAll = (...elementsOrLists) => elementsOrLists.reduce(conflaten
 /**
 * Appends a value or concatenates an array to an array if it is not already included, returning the array
 */
-const appendUnique = (to, value$1, opts) => {
-	if (to === void 0) return Array.isArray(value$1) ? value$1 : [value$1];
+const appendUnique = (to, value, opts) => {
+	if (to === void 0) return Array.isArray(value) ? value : [value];
 	const isEqual = opts?.isEqual ?? ((l, r) => l === r);
-	for (const v of liftArray(value$1)) if (!to.some((existing) => isEqual(existing, v))) to.push(v);
+	for (const v of liftArray(value)) if (!to.some((existing) => isEqual(existing, v))) to.push(v);
 	return to;
 };
 const groupBy = (array, discriminant) => array.reduce((result, item) => {
@@ -329,7 +329,7 @@ const cached = (thunk) => {
 	let result = unset;
 	return () => result === unset ? result = thunk() : result;
 };
-const isThunk = (value$1) => typeof value$1 === "function" && value$1.length === 0;
+const isThunk = (value) => typeof value === "function" && value.length === 0;
 const DynamicFunction = class extends Function {
 	constructor(...args) {
 		const params = args.slice(0, -1);
@@ -346,8 +346,8 @@ const DynamicFunction = class extends Function {
 	}
 };
 var Callable = class {
-	constructor(fn$1, ...[opts]) {
-		return Object.assign(Object.setPrototypeOf(fn$1.bind(opts?.bind ?? this), this.constructor.prototype), opts?.attach);
+	constructor(fn, ...[opts]) {
+		return Object.assign(Object.setPrototypeOf(fn.bind(opts?.bind ?? this), this.constructor.prototype), opts?.attach);
 	}
 };
 /**
@@ -400,9 +400,9 @@ const isomorphic = {
 //#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/strings.js
 const capitalize$1 = (s) => s[0].toUpperCase() + s.slice(1);
 const uncapitalize = (s) => s[0].toLowerCase() + s.slice(1);
-const anchoredRegex = (regex$2) => new RegExp(anchoredSource(regex$2), typeof regex$2 === "string" ? "" : regex$2.flags);
-const anchoredSource = (regex$2) => {
-	return `^(?:${typeof regex$2 === "string" ? regex$2 : regex$2.source})$`;
+const anchoredRegex = (regex) => new RegExp(anchoredSource(regex), typeof regex === "string" ? "" : regex.flags);
+const anchoredSource = (regex) => {
+	return `^(?:${typeof regex === "string" ? regex : regex.source})$`;
 };
 const RegexPatterns = {
 	negativeLookahead: (pattern) => `(?!${pattern})`,
@@ -472,11 +472,11 @@ const tryParseWellFormedNumber = (token, options) => parseNumeric(token, "number
 });
 const tryParseInteger = (token, options) => parseNumeric(token, "integer", options);
 const parseNumeric = (token, kind, options) => {
-	const value$1 = parseKind(token, kind);
-	if (!Number.isNaN(value$1)) {
+	const value = parseKind(token, kind);
+	if (!Number.isNaN(value)) {
 		if (isKindLike(token, kind)) {
-			if (options?.strict) return isWellFormed(token, kind) ? value$1 : throwParseError(writeMalformedNumericLiteralMessage(token, kind));
-			return value$1;
+			if (options?.strict) return isWellFormed(token, kind) ? value : throwParseError(writeMalformedNumericLiteralMessage(token, kind));
+			return value;
 		}
 	}
 	return options?.errorOnFail ? throwParseError(options?.errorOnFail === true ? `Failed to parse ${numericLiteralDescriptions[kind]} from '${token}'` : options?.errorOnFail) : void 0;
@@ -484,13 +484,13 @@ const parseNumeric = (token, kind, options) => {
 const tryParseWellFormedBigint = (def) => {
 	if (def[def.length - 1] !== "n") return;
 	const maybeIntegerLiteral = def.slice(0, -1);
-	let value$1;
+	let value;
 	try {
-		value$1 = BigInt(maybeIntegerLiteral);
+		value = BigInt(maybeIntegerLiteral);
 	} catch {
 		return;
 	}
-	if (wellFormedIntegerMatcher.test(maybeIntegerLiteral)) return value$1;
+	if (wellFormedIntegerMatcher.test(maybeIntegerLiteral)) return value;
 	if (integerLikeMatcher.test(maybeIntegerLiteral)) return throwParseError(writeMalformedNumericLiteralMessage(def, "bigint"));
 };
 
@@ -505,33 +505,33 @@ const initialRegistryContents = {
 const registry = initialRegistryContents;
 const namesByResolution = /* @__PURE__ */ new Map();
 const nameCounts = Object.create(null);
-const register = (value$1) => {
-	const existingName = namesByResolution.get(value$1);
+const register = (value) => {
+	const existingName = namesByResolution.get(value);
 	if (existingName) return existingName;
-	let name = baseNameFor(value$1);
+	let name = baseNameFor(value);
 	if (nameCounts[name]) name = `${name}${nameCounts[name]++}`;
 	else nameCounts[name] = 1;
-	registry[name] = value$1;
-	namesByResolution.set(value$1, name);
+	registry[name] = value;
+	namesByResolution.set(value, name);
 	return name;
 };
 const isDotAccessible = (keyName) => /^[$A-Z_a-z][\w$]*$/.test(keyName);
-const baseNameFor = (value$1) => {
-	switch (typeof value$1) {
+const baseNameFor = (value) => {
+	switch (typeof value) {
 		case "object": {
-			if (value$1 === null) break;
-			const prefix = objectKindOf(value$1) ?? "object";
+			if (value === null) break;
+			const prefix = objectKindOf(value) ?? "object";
 			return prefix[0].toLowerCase() + prefix.slice(1);
 		}
-		case "function": return isDotAccessible(value$1.name) ? value$1.name : "fn";
-		case "symbol": return value$1.description && isDotAccessible(value$1.description) ? value$1.description : "symbol";
+		case "function": return isDotAccessible(value.name) ? value.name : "fn";
+		case "symbol": return value.description && isDotAccessible(value.description) ? value.description : "symbol";
 	}
-	return throwInternalError(`Unexpected attempt to register serializable value of type ${domainOf(value$1)}`);
+	return throwInternalError(`Unexpected attempt to register serializable value of type ${domainOf(value)}`);
 };
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/primitive.js
-const serializePrimitive = (value$1) => typeof value$1 === "string" ? JSON.stringify(value$1) : typeof value$1 === "bigint" ? `${value$1}n` : `${value$1}`;
+const serializePrimitive = (value) => typeof value === "string" ? JSON.stringify(value) : typeof value === "bigint" ? `${value}n` : `${value}`;
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/serialize.js
@@ -550,25 +550,25 @@ const printable = (data, opts) => {
 		default: return serializePrimitive(data);
 	}
 };
-const stringifyUnquoted = (value$1, indent$1, currentIndent) => {
-	if (typeof value$1 === "function") return printableOpts.onFunction(value$1);
-	if (typeof value$1 !== "object" || value$1 === null) return serializePrimitive(value$1);
-	const nextIndent = currentIndent + " ".repeat(indent$1);
-	if (Array.isArray(value$1)) {
-		if (value$1.length === 0) return "[]";
-		const items = value$1.map((item) => stringifyUnquoted(item, indent$1, nextIndent)).join(",\n" + nextIndent);
-		return indent$1 ? `[\n${nextIndent}${items}\n${currentIndent}]` : `[${items}]`;
+const stringifyUnquoted = (value, indent, currentIndent) => {
+	if (typeof value === "function") return printableOpts.onFunction(value);
+	if (typeof value !== "object" || value === null) return serializePrimitive(value);
+	const nextIndent = currentIndent + " ".repeat(indent);
+	if (Array.isArray(value)) {
+		if (value.length === 0) return "[]";
+		const items = value.map((item) => stringifyUnquoted(item, indent, nextIndent)).join(",\n" + nextIndent);
+		return indent ? `[\n${nextIndent}${items}\n${currentIndent}]` : `[${items}]`;
 	}
-	const ctorName = value$1.constructor?.name ?? "Object";
+	const ctorName = value.constructor?.name ?? "Object";
 	if (ctorName === "Object") {
-		const keyValues = stringAndSymbolicEntriesOf(value$1).map(([key, val]) => {
-			return `${nextIndent}${typeof key === "symbol" ? printableOpts.onSymbol(key) : isDotAccessible(key) ? key : JSON.stringify(key)}: ${stringifyUnquoted(val, indent$1, nextIndent)}`;
+		const keyValues = stringAndSymbolicEntriesOf(value).map(([key, val]) => {
+			return `${nextIndent}${typeof key === "symbol" ? printableOpts.onSymbol(key) : isDotAccessible(key) ? key : JSON.stringify(key)}: ${stringifyUnquoted(val, indent, nextIndent)}`;
 		});
 		if (keyValues.length === 0) return "{}";
-		return indent$1 ? `{\n${keyValues.join(",\n")}\n${currentIndent}}` : `{${keyValues.join(", ")}}`;
+		return indent ? `{\n${keyValues.join(",\n")}\n${currentIndent}}` : `{${keyValues.join(", ")}}`;
 	}
-	if (value$1 instanceof Date) return describeCollapsibleDate(value$1);
-	if ("expression" in value$1 && typeof value$1.expression === "string") return value$1.expression;
+	if (value instanceof Date) return describeCollapsibleDate(value);
+	if ("expression" in value && typeof value.expression === "string") return value.expression;
 	return ctorName;
 };
 const printableOpts = {
@@ -613,11 +613,11 @@ const describeCollapsibleDate = (date) => {
 	const datePortion = `${months[month]} ${dayOfMonth}, ${year}`;
 	if (hours === 0 && minutes === 0 && seconds === 0 && milliseconds === 0) return datePortion;
 	let timePortion = date.toLocaleTimeString();
-	const suffix$1 = timePortion.endsWith(" AM") || timePortion.endsWith(" PM") ? timePortion.slice(-3) : "";
-	if (suffix$1) timePortion = timePortion.slice(0, -suffix$1.length);
+	const suffix = timePortion.endsWith(" AM") || timePortion.endsWith(" PM") ? timePortion.slice(-3) : "";
+	if (suffix) timePortion = timePortion.slice(0, -suffix.length);
 	if (milliseconds) timePortion += `.${pad(milliseconds, 3)}`;
 	else if (timeWithUnnecessarySeconds.test(timePortion)) timePortion = timePortion.slice(0, -3);
-	return `${timePortion + suffix$1}, ${datePortion}`;
+	return `${timePortion + suffix}, ${datePortion}`;
 };
 const months = [
 	"January",
@@ -634,7 +634,7 @@ const months = [
 	"December"
 ];
 const timeWithUnnecessarySeconds = /:\d\d:00$/;
-const pad = (value$1, length) => String(value$1).padStart(length, "0");
+const pad = (value, length) => String(value).padStart(length, "0");
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+util@0.56.0/node_modules/@ark/util/out/path.js
@@ -787,7 +787,7 @@ const registryName = _registryName;
 globalThis[registryName] = registry;
 const $ark = registry;
 const reference = (name) => `${registryName}.${name}`;
-const registeredReference = (value$1) => reference(register(value$1));
+const registeredReference = (value) => reference(register(value));
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/compile.js
@@ -845,27 +845,27 @@ var CompiledFunction = class extends CastableBase {
 		return this.block(`for (let i = ${initialValue}; ${until}; i++)`, body);
 	}
 	/** Current key is "k" */
-	forIn(object$1, body) {
-		return this.block(`for (const k in ${object$1})`, body);
+	forIn(object, body) {
+		return this.block(`for (const k in ${object})`, body);
 	}
-	block(prefix, contents, suffix$1 = "") {
+	block(prefix, contents, suffix = "") {
 		this.line(`${prefix} {`);
 		this.indent();
 		contents(this);
 		this.dedent();
-		return this.line(`}${suffix$1}`);
+		return this.line(`}${suffix}`);
 	}
 	return(expression = "") {
 		return this.line(`return ${expression}`);
 	}
-	write(name = "anonymous", indent$1 = 0) {
-		return `${name}(${this.argNames.join(", ")}) { ${indent$1 ? this.body.split("\n").map((l) => " ".repeat(indent$1) + `${l}`).join("\n") : this.body} }`;
+	write(name = "anonymous", indent = 0) {
+		return `${name}(${this.argNames.join(", ")}) { ${indent ? this.body.split("\n").map((l) => " ".repeat(indent) + `${l}`).join("\n") : this.body} }`;
 	}
 	compile() {
 		return new DynamicFunction(...this.argNames, this.body);
 	}
 };
-const compileSerializedValue = (value$1) => hasDomain(value$1, "object") || typeof value$1 === "symbol" ? registeredReference(value$1) : serializePrimitive(value$1);
+const compileSerializedValue = (value) => hasDomain(value, "object") || typeof value === "symbol" ? registeredReference(value) : serializePrimitive(value);
 const compileLiteralPropAccess = (key, optional = false) => {
 	if (typeof key === "string" && isDotAccessible(key)) return `${optional ? "?" : ""}.${key}`;
 	return indexPropAccess(serializeLiteralKey(key), optional);
@@ -880,10 +880,10 @@ var NodeCompiler = class extends CompiledFunction {
 		this.traversalKind = ctx.kind;
 		this.optimistic = ctx.optimistic === true;
 	}
-	invoke(node$1, opts) {
+	invoke(node, opts) {
 		const arg = opts?.arg ?? this.data;
-		const requiresContext = typeof node$1 === "string" ? true : this.requiresContextFor(node$1);
-		const id = typeof node$1 === "string" ? node$1 : node$1.id;
+		const requiresContext = typeof node === "string" ? true : this.requiresContextFor(node);
+		const id = typeof node === "string" ? node : node.id;
 		if (requiresContext) return `${this.referenceToId(id, opts)}(${arg}, ${this.ctx})`;
 		return `${this.referenceToId(id, opts)}(${arg})`;
 	}
@@ -891,8 +891,8 @@ var NodeCompiler = class extends CompiledFunction {
 		const base = `this.${id}${opts?.kind ?? this.traversalKind}`;
 		return opts?.bind ? `${base}.bind(${opts?.bind})` : base;
 	}
-	requiresContextFor(node$1) {
-		return this.traversalKind === "Apply" || node$1.allowsRequiresContext;
+	requiresContextFor(node) {
+		return this.traversalKind === "Apply" || node.allowsRequiresContext;
 	}
 	initializeErrorCount() {
 		return this.const("errorCount", "ctx.currentErrorCount");
@@ -903,15 +903,15 @@ var NodeCompiler = class extends CompiledFunction {
 	returnIfFailFast() {
 		return this.if("ctx.failFast && ctx.currentErrorCount > errorCount", () => this.return());
 	}
-	traverseKey(keyExpression, accessExpression, node$1) {
-		const requiresContext = this.requiresContextFor(node$1);
+	traverseKey(keyExpression, accessExpression, node) {
+		const requiresContext = this.requiresContextFor(node);
 		if (requiresContext) this.line(`${this.ctx}.path.push(${keyExpression})`);
-		this.check(node$1, { arg: accessExpression });
+		this.check(node, { arg: accessExpression });
 		if (requiresContext) this.line(`${this.ctx}.path.pop()`);
 		return this;
 	}
-	check(node$1, opts) {
-		return this.traversalKind === "Allows" ? this.if(`!${this.invoke(node$1, opts)}`, () => this.return(false)) : this.line(this.invoke(node$1, opts));
+	check(node, opts) {
+		return this.traversalKind === "Allows" ? this.if(`!${this.invoke(node, opts)}`, () => this.return(false)) : this.line(this.invoke(node, opts));
 	}
 };
 
@@ -919,8 +919,8 @@ var NodeCompiler = class extends CompiledFunction {
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/utils.js
 const makeRootAndArrayPropertiesMutable = (o) => flatMorph(o, (k, v) => [k, isArray(v) ? [...v] : v]);
 const arkKind = noSuggest("arkKind");
-const hasArkKind = (value$1, kind) => value$1?.[arkKind] === kind;
-const isNode = (value$1) => hasArkKind(value$1, "root") || hasArkKind(value$1, "constraint");
+const hasArkKind = (value, kind) => value?.[arkKind] === kind;
+const isNode = (value) => hasArkKind(value, "root") || hasArkKind(value, "constraint");
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/implement.js
@@ -965,7 +965,7 @@ const nodeKinds = [...rootKinds, ...constraintKinds];
 const constraintKeys = flatMorph(constraintKinds, (i, kind) => [kind, 1]);
 const structureKeys = flatMorph([...structuralKinds, "undeclared"], (i, k) => [k, 1]);
 const precedenceByKind = flatMorph(nodeKinds, (i, kind) => [kind, i]);
-const isNodeKind = (value$1) => typeof value$1 === "string" && value$1 in precedenceByKind;
+const isNodeKind = (value) => typeof value === "string" && value in precedenceByKind;
 const precedenceOfKind = (kind) => precedenceByKind[kind];
 const schemaKindsRightOf = (kind) => rootKinds.slice(precedenceOfKind(kind) + 1);
 const unionChildKinds = [...schemaKindsRightOf("union"), "alias"];
@@ -986,19 +986,19 @@ const compileObjectLiteral = (ctx) => {
 	return result + " }";
 };
 const implementNode = (_) => {
-	const implementation$22 = _;
-	if (implementation$22.hasAssociatedError) {
-		implementation$22.defaults.expected ??= (ctx) => "description" in ctx ? ctx.description : implementation$22.defaults.description(ctx);
-		implementation$22.defaults.actual ??= (data) => printable(data);
-		implementation$22.defaults.problem ??= (ctx) => `must be ${ctx.expected}${ctx.actual ? ` (was ${ctx.actual})` : ""}`;
-		implementation$22.defaults.message ??= (ctx) => {
+	const implementation = _;
+	if (implementation.hasAssociatedError) {
+		implementation.defaults.expected ??= (ctx) => "description" in ctx ? ctx.description : implementation.defaults.description(ctx);
+		implementation.defaults.actual ??= (data) => printable(data);
+		implementation.defaults.problem ??= (ctx) => `must be ${ctx.expected}${ctx.actual ? ` (was ${ctx.actual})` : ""}`;
+		implementation.defaults.message ??= (ctx) => {
 			if (ctx.path.length === 0) return ctx.problem;
 			const problemWithLocation = `${ctx.propString} ${ctx.problem}`;
 			if (problemWithLocation[0] === "[") return `value at ${problemWithLocation}`;
 			return problemWithLocation;
 		};
 	}
-	return implementation$22;
+	return implementation;
 };
 
 //#endregion
@@ -1042,7 +1042,7 @@ const ToJsonSchema = {
 	throw: (...args) => {
 		throw new ToJsonSchema.Error(...args);
 	},
-	throwInternalOperandError: (kind, schema$1) => throwInternalError(`Unexpected JSON Schema input for ${kind}: ${printable(schema$1)}`),
+	throwInternalOperandError: (kind, schema) => throwInternalError(`Unexpected JSON Schema input for ${kind}: ${printable(schema)}`),
 	defaultConfig
 };
 
@@ -1054,14 +1054,14 @@ const mergeConfigs = (base, merged) => {
 	const result = { ...base };
 	let k;
 	for (k in merged) {
-		const keywords$1 = { ...base.keywords };
+		const keywords = { ...base.keywords };
 		if (k === "keywords") {
 			for (const flatAlias in merged[k]) {
 				const v = merged.keywords[flatAlias];
 				if (v === void 0) continue;
-				keywords$1[flatAlias] = typeof v === "string" ? { description: v } : v;
+				keywords[flatAlias] = typeof v === "string" ? { description: v } : v;
 			}
-			result.keywords = keywords$1;
+			result.keywords = keywords;
 		} else if (k === "toJsonSchema") result[k] = mergeToJsonSchemaConfigs(base.toJsonSchema, merged.toJsonSchema);
 		else if (isNodeKind(k)) result[k] = {
 			...base[k],
@@ -1120,9 +1120,9 @@ var ArkError = class ArkError extends CastableBase {
 		if (input.code === "union") input.errors = input.errors.flatMap((innerError) => {
 			const flat = innerError.hasCode("union") ? innerError.errors : [innerError];
 			if (!prefixPath && !relativePath) return flat;
-			return flat.map((e) => e.transform((e$1) => ({
-				...e$1,
-				path: conflatenateAll(prefixPath, e$1.path, relativePath)
+			return flat.map((e) => e.transform((e) => ({
+				...e,
+				path: conflatenateAll(prefixPath, e.path, relativePath)
 			})));
 		});
 		this.nodeConfig = ctx.config[this.code];
@@ -1495,10 +1495,10 @@ var Traversal = class {
 		}
 	}
 };
-const traverseKey = (key, fn$1, ctx) => {
-	if (!ctx) return fn$1();
+const traverseKey = (key, fn, ctx) => {
+	if (!ctx) return fn();
 	ctx.path.push(key);
-	const result = fn$1();
+	const result = fn();
 	ctx.path.pop();
 	return result;
 };
@@ -1598,9 +1598,9 @@ var BaseNode = class extends Callable {
 		}
 	}
 	compiledMeta = compileMeta(this.metaJson);
-	cacheGetter(name, value$1) {
-		Object.defineProperty(this, name, { value: value$1 });
-		return value$1;
+	cacheGetter(name, value) {
+		Object.defineProperty(this, name, { value });
+		return value;
 	}
 	get description() {
 		return this.cacheGetter("description", this.meta?.description ?? this.$.resolvedConfig[this.kind].description(this));
@@ -1689,8 +1689,8 @@ var BaseNode = class extends Callable {
 	isNever() {
 		return this.hasKind("union") && this.children.length === 0;
 	}
-	hasUnit(value$1) {
-		return this.hasKind("unit") && this.allows(value$1);
+	hasUnit(value) {
+		return this.hasKind("unit") && this.allows(value);
 	}
 	hasOpenIntersection() {
 		return this.impl.intersectionIsOpen;
@@ -1736,8 +1736,8 @@ var BaseNode = class extends Callable {
 			if (!this.impl.keys[k].child) return [k, v];
 			const children = v;
 			if (!isArray(children)) {
-				const transformed$1 = children._transform(mapper, ctx);
-				return transformed$1 ? [k, transformed$1] : [];
+				const transformed = children._transform(mapper, ctx);
+				return transformed ? [k, transformed] : [];
 			}
 			if (children.length === 0) return [k, v];
 			const transformed = children.flatMap((n) => {
@@ -1783,7 +1783,7 @@ var BaseNode = class extends Callable {
 		}));
 		const rawSelected = this._select(normalized);
 		const selected = rawSelected && liftArray(rawSelected);
-		const shouldTransform = normalized.boundary === "child" ? (node$1, ctx) => ctx.root.children.includes(node$1) : normalized.boundary === "shallow" ? (node$1) => node$1.kind !== "structure" : () => true;
+		const shouldTransform = normalized.boundary === "child" ? (node, ctx) => ctx.root.children.includes(node) : normalized.boundary === "shallow" ? (node) => node.kind !== "structure" : () => true;
 		return this.$.finalize(this.transform(mapper, {
 			shouldTransform,
 			selected
@@ -1792,10 +1792,10 @@ var BaseNode = class extends Callable {
 };
 const NodeSelector = {
 	applyBoundary: {
-		self: (node$1) => [node$1],
-		child: (node$1) => [...node$1.children],
-		shallow: (node$1) => [...node$1.shallowReferences],
-		references: (node$1) => [...node$1.references]
+		self: (node) => [node],
+		child: (node) => [...node.children],
+		shallow: (node) => [...node.shallowReferences],
+		references: (node) => [...node.references]
 	},
 	applyMethod: {
 		filter: (nodes) => nodes,
@@ -1827,12 +1827,12 @@ const NodeSelector = {
 	}
 };
 const writeSelectAssertionMessage = (from, selector) => `${from} had no references matching ${printable(selector)}.`;
-const typePathToPropString = (path) => stringifyPath(path, { stringifyNonKey: (node$1) => node$1.expression });
+const typePathToPropString = (path) => stringifyPath(path, { stringifyNonKey: (node) => node.expression });
 const referenceMatcher = /"(\$ark\.[^"]+)"/g;
 const compileMeta = (metaJson) => JSON.stringify(metaJson).replace(referenceMatcher, "$1");
-const flatRef = (path, node$1) => ({
+const flatRef = (path, node) => ({
 	path,
-	node: node$1,
+	node,
 	propString: typePathToPropString(path)
 });
 const flatRefsAreEqual = (l, r) => l.propString === r.propString && l.node.equals(r.node);
@@ -1896,7 +1896,7 @@ var Disjoint = class Disjoint extends Array {
 	}
 };
 const describeReasons = (l, r) => `${describeReason(l)} and ${describeReason(r)}`;
-const describeReason = (value$1) => isNode(value$1) ? value$1.expression : isArray(value$1) ? value$1.map(describeReason).join(" | ") || "never" : String(value$1);
+const describeReason = (value) => isNode(value) ? value.expression : isArray(value) ? value.map(describeReason).join(" | ") || "never" : String(value);
 const writeUnsatisfiableExpressionError = (expression) => `${expression} results in an unsatisfiable type`;
 
 //#endregion
@@ -1937,11 +1937,11 @@ const intersectOrPipeNodes = ((l, r, ctx) => {
 });
 const _intersectNodes = (l, r, ctx) => {
 	const leftmostKind = l.precedence < r.precedence ? l.kind : r.kind;
-	const implementation$22 = l.impl.intersections[r.kind] ?? r.impl.intersections[l.kind];
-	if (implementation$22 === void 0) return null;
-	else if (leftmostKind === l.kind) return implementation$22(l, r, ctx);
+	const implementation = l.impl.intersections[r.kind] ?? r.impl.intersections[l.kind];
+	if (implementation === void 0) return null;
+	else if (leftmostKind === l.kind) return implementation(l, r, ctx);
 	else {
-		let result = implementation$22(r, l, {
+		let result = implementation(r, l, {
 			...ctx,
 			invert: !ctx.invert
 		});
@@ -1955,8 +1955,8 @@ const pipeMorphed = (from, to, ctx) => from.distribute((fromBranch) => _pipeMorp
 	if (viableBranches.length === 0) return Disjoint.init("union", from.branches, to.branches);
 	if (viableBranches.length < from.branches.length || !from.branches.every((branch, i) => branch.rawIn.equals(viableBranches[i].rawIn))) return ctx.$.parseSchema(viableBranches);
 	if (viableBranches.length === 1) return viableBranches[0];
-	const schema$1 = { branches: viableBranches };
-	return ctx.$.parseSchema(schema$1);
+	const schema = { branches: viableBranches };
+	return ctx.$.parseSchema(schema);
 });
 const _pipeMorphed = (from, to, ctx) => {
 	if (from.hasKind("morph")) {
@@ -2020,14 +2020,14 @@ var InternalPrimitiveConstraint = class extends BaseConstraint {
 		return compileObjectLiteral(this.errorContext);
 	}
 };
-const constraintKeyParser = (kind) => (schema$1, ctx) => {
-	if (isArray(schema$1)) {
-		if (schema$1.length === 0) return;
-		const nodes = schema$1.map((schema$2) => ctx.$.node(kind, schema$2));
+const constraintKeyParser = (kind) => (schema, ctx) => {
+	if (isArray(schema)) {
+		if (schema.length === 0) return;
+		const nodes = schema.map((schema) => ctx.$.node(kind, schema));
 		if (kind === "predicate") return nodes;
 		return nodes.sort((l, r) => l.hash < r.hash ? -1 : 1);
 	}
-	const child = ctx.$.node(kind, schema$1);
+	const child = ctx.$.node(kind, schema);
 	return child.hasOpenIntersection() ? [child] : child;
 };
 const intersectConstraints = (s) => {
@@ -2057,7 +2057,7 @@ const intersectConstraints = (s) => {
 	}
 	if (!matched) s.l.push(head);
 	if (s.kind === "intersection") {
-		if (head.impliedSiblings) for (const node$1 of head.impliedSiblings) appendUnique(s.r, node$1);
+		if (head.impliedSiblings) for (const node of head.impliedSiblings) appendUnique(s.r, node);
 	}
 	return intersectConstraints(s);
 };
@@ -2116,9 +2116,9 @@ var GenericRoot = class extends Callable {
 	defIsLazy() {
 		return this.bodyDef instanceof LazyGenericBody;
 	}
-	cacheGetter(name, value$1) {
-		Object.defineProperty(this, name, { value: value$1 });
-		return value$1;
+	cacheGetter(name, value) {
+		Object.defineProperty(this, name, { value });
+		return value;
 	}
 	get json() {
 		return this.cacheGetter("json", {
@@ -2154,8 +2154,8 @@ const implementation$21 = implementNode({
 	hasAssociatedError: true,
 	collapsibleKey: "predicate",
 	keys: { predicate: {} },
-	normalize: (schema$1) => typeof schema$1 === "function" ? { predicate: schema$1 } : schema$1,
-	defaults: { description: (node$1) => `valid according to ${node$1.predicate.name || "an anonymous predicate"}` },
+	normalize: (schema) => typeof schema === "function" ? { predicate: schema } : schema,
+	defaults: { description: (node) => `valid according to ${node.predicate.name || "an anonymous predicate"}` },
 	intersectionIsOpen: true,
 	intersections: { predicate: () => null }
 });
@@ -2203,9 +2203,9 @@ const implementation$20 = implementNode({
 	kind: "divisor",
 	collapsibleKey: "rule",
 	keys: { rule: { parse: (divisor) => Number.isInteger(divisor) ? divisor : throwParseError(writeNonIntegerDivisorMessage(divisor)) } },
-	normalize: (schema$1) => typeof schema$1 === "number" ? { rule: schema$1 } : schema$1,
+	normalize: (schema) => typeof schema === "number" ? { rule: schema } : schema,
 	hasAssociatedError: true,
-	defaults: { description: (node$1) => node$1.rule === 1 ? "an integer" : node$1.rule === 2 ? "even" : `a multiple of ${node$1.rule}` },
+	defaults: { description: (node) => node.rule === 1 ? "an integer" : node.rule === 2 ? "even" : `a multiple of ${node.rule}` },
 	intersections: { divisor: (l, r, ctx) => ctx.$.node("divisor", { rule: Math.abs(l.rule * r.rule / greatestCommonDivisor(l.rule, r.rule)) }) },
 	obviatesBasisDescription: true
 });
@@ -2215,11 +2215,11 @@ var DivisorNode = class extends InternalPrimitiveConstraint {
 	compiledNegation = `data % ${this.rule} !== 0`;
 	impliedBasis = $ark.intrinsic.number.internal;
 	expression = `% ${this.rule}`;
-	reduceJsonSchema(schema$1) {
-		schema$1.type = "integer";
-		if (this.rule === 1) return schema$1;
-		schema$1.multipleOf = this.rule;
-		return schema$1;
+	reduceJsonSchema(schema) {
+		schema.type = "integer";
+		if (this.rule === 1) return schema;
+		schema.multipleOf = this.rule;
+		return schema;
 	}
 };
 const Divisor = {
@@ -2275,17 +2275,17 @@ const boundKindPairsByLower = {
 	after: "before"
 };
 const parseExclusiveKey = { parse: (flag) => flag || void 0 };
-const createLengthSchemaNormalizer = (kind) => (schema$1) => {
-	if (typeof schema$1 === "number") return { rule: schema$1 };
-	const { exclusive, ...normalized } = schema$1;
+const createLengthSchemaNormalizer = (kind) => (schema) => {
+	if (typeof schema === "number") return { rule: schema };
+	const { exclusive, ...normalized } = schema;
 	return exclusive ? {
 		...normalized,
 		rule: kind === "minLength" ? normalized.rule + 1 : normalized.rule - 1
 	} : normalized;
 };
-const createDateSchemaNormalizer = (kind) => (schema$1) => {
-	if (typeof schema$1 === "number" || typeof schema$1 === "string" || schema$1 instanceof Date) return { rule: schema$1 };
-	const { exclusive, ...normalized } = schema$1;
+const createDateSchemaNormalizer = (kind) => (schema) => {
+	if (typeof schema === "number" || typeof schema === "string" || schema instanceof Date) return { rule: schema };
+	const { exclusive, ...normalized } = schema;
 	if (!exclusive) return normalized;
 	const numericLimit = typeof normalized.rule === "number" ? normalized.rule : typeof normalized.rule === "string" ? new Date(normalized.rule).valueOf() : normalized.rule.valueOf();
 	return exclusive ? {
@@ -2319,11 +2319,11 @@ const implementation$19 = implementNode({
 	hasAssociatedError: true,
 	keys: { rule: {
 		parse: parseDateLimit,
-		serialize: (schema$1) => schema$1.toISOString()
+		serialize: (schema) => schema.toISOString()
 	} },
 	normalize: createDateSchemaNormalizer("after"),
 	defaults: {
-		description: (node$1) => `${node$1.collapsibleLimitString} or later`,
+		description: (node) => `${node.collapsibleLimitString} or later`,
 		actual: describeCollapsibleDate
 	},
 	intersections: { after: (l, r) => l.isStricterThan(r) ? l : r }
@@ -2353,11 +2353,11 @@ const implementation$18 = implementNode({
 	hasAssociatedError: true,
 	keys: { rule: {
 		parse: parseDateLimit,
-		serialize: (schema$1) => schema$1.toISOString()
+		serialize: (schema) => schema.toISOString()
 	} },
 	normalize: createDateSchemaNormalizer("before"),
 	defaults: {
-		description: (node$1) => `${node$1.collapsibleLimitString} or earlier`,
+		description: (node) => `${node.collapsibleLimitString} or earlier`,
 		actual: describeCollapsibleDate
 	},
 	intersections: {
@@ -2388,10 +2388,10 @@ const implementation$17 = implementNode({
 	kind: "exactLength",
 	collapsibleKey: "rule",
 	keys: { rule: { parse: createLengthRuleParser("exactLength") } },
-	normalize: (schema$1) => typeof schema$1 === "number" ? { rule: schema$1 } : schema$1,
+	normalize: (schema) => typeof schema === "number" ? { rule: schema } : schema,
 	hasAssociatedError: true,
 	defaults: {
-		description: (node$1) => `exactly length ${node$1.rule}`,
+		description: (node) => `exactly length ${node.rule}`,
 		actual: (data) => `${data.length}`
 	},
 	intersections: {
@@ -2406,17 +2406,17 @@ var ExactLengthNode = class extends InternalPrimitiveConstraint {
 	compiledNegation = `data.length !== ${this.rule}`;
 	impliedBasis = $ark.intrinsic.lengthBoundable.internal;
 	expression = `== ${this.rule}`;
-	reduceJsonSchema(schema$1) {
-		switch (schema$1.type) {
+	reduceJsonSchema(schema) {
+		switch (schema.type) {
 			case "string":
-				schema$1.minLength = this.rule;
-				schema$1.maxLength = this.rule;
-				return schema$1;
+				schema.minLength = this.rule;
+				schema.maxLength = this.rule;
+				return schema;
 			case "array":
-				schema$1.minItems = this.rule;
-				schema$1.maxItems = this.rule;
-				return schema$1;
-			default: return ToJsonSchema.throwInternalOperandError("exactLength", schema$1);
+				schema.minItems = this.rule;
+				schema.maxItems = this.rule;
+				return schema;
+			default: return ToJsonSchema.throwInternalOperandError("exactLength", schema);
 		}
 	}
 };
@@ -2435,10 +2435,10 @@ const implementation$16 = implementNode({
 		rule: {},
 		exclusive: parseExclusiveKey
 	},
-	normalize: (schema$1) => typeof schema$1 === "number" ? { rule: schema$1 } : schema$1,
-	defaults: { description: (node$1) => {
-		if (node$1.rule === 0) return node$1.exclusive ? "negative" : "non-positive";
-		return `${node$1.exclusive ? "less than" : "at most"} ${node$1.rule}`;
+	normalize: (schema) => typeof schema === "number" ? { rule: schema } : schema,
+	defaults: { description: (node) => {
+		if (node.rule === 0) return node.exclusive ? "negative" : "non-positive";
+		return `${node.exclusive ? "less than" : "at most"} ${node.rule}`;
 	} },
 	intersections: {
 		max: (l, r) => l.isStricterThan(r) ? l : r,
@@ -2449,10 +2449,10 @@ const implementation$16 = implementNode({
 var MaxNode = class extends BaseRange {
 	impliedBasis = $ark.intrinsic.number.internal;
 	traverseAllows = this.exclusive ? (data) => data < this.rule : (data) => data <= this.rule;
-	reduceJsonSchema(schema$1) {
-		if (this.exclusive) schema$1.exclusiveMaximum = this.rule;
-		else schema$1.maximum = this.rule;
-		return schema$1;
+	reduceJsonSchema(schema) {
+		if (this.exclusive) schema.exclusiveMaximum = this.rule;
+		else schema.maximum = this.rule;
+		return schema;
 	}
 };
 const Max = {
@@ -2470,7 +2470,7 @@ const implementation$15 = implementNode({
 	reduce: (inner, $) => inner.rule === 0 ? $.node("exactLength", inner) : void 0,
 	normalize: createLengthSchemaNormalizer("maxLength"),
 	defaults: {
-		description: (node$1) => `at most length ${node$1.rule}`,
+		description: (node) => `at most length ${node.rule}`,
 		actual: (data) => `${data.length}`
 	},
 	intersections: {
@@ -2481,15 +2481,15 @@ const implementation$15 = implementNode({
 var MaxLengthNode = class extends BaseRange {
 	impliedBasis = $ark.intrinsic.lengthBoundable.internal;
 	traverseAllows = (data) => data.length <= this.rule;
-	reduceJsonSchema(schema$1) {
-		switch (schema$1.type) {
+	reduceJsonSchema(schema) {
+		switch (schema.type) {
 			case "string":
-				schema$1.maxLength = this.rule;
-				return schema$1;
+				schema.maxLength = this.rule;
+				return schema;
 			case "array":
-				schema$1.maxItems = this.rule;
-				return schema$1;
-			default: return ToJsonSchema.throwInternalOperandError("maxLength", schema$1);
+				schema.maxItems = this.rule;
+				return schema;
+			default: return ToJsonSchema.throwInternalOperandError("maxLength", schema);
 		}
 	}
 };
@@ -2508,10 +2508,10 @@ const implementation$14 = implementNode({
 		rule: {},
 		exclusive: parseExclusiveKey
 	},
-	normalize: (schema$1) => typeof schema$1 === "number" ? { rule: schema$1 } : schema$1,
-	defaults: { description: (node$1) => {
-		if (node$1.rule === 0) return node$1.exclusive ? "positive" : "non-negative";
-		return `${node$1.exclusive ? "more than" : "at least"} ${node$1.rule}`;
+	normalize: (schema) => typeof schema === "number" ? { rule: schema } : schema,
+	defaults: { description: (node) => {
+		if (node.rule === 0) return node.exclusive ? "positive" : "non-negative";
+		return `${node.exclusive ? "more than" : "at least"} ${node.rule}`;
 	} },
 	intersections: { min: (l, r) => l.isStricterThan(r) ? l : r },
 	obviatesBasisDescription: true
@@ -2519,10 +2519,10 @@ const implementation$14 = implementNode({
 var MinNode = class extends BaseRange {
 	impliedBasis = $ark.intrinsic.number.internal;
 	traverseAllows = this.exclusive ? (data) => data > this.rule : (data) => data >= this.rule;
-	reduceJsonSchema(schema$1) {
-		if (this.exclusive) schema$1.exclusiveMinimum = this.rule;
-		else schema$1.minimum = this.rule;
-		return schema$1;
+	reduceJsonSchema(schema) {
+		if (this.exclusive) schema.exclusiveMinimum = this.rule;
+		else schema.minimum = this.rule;
+		return schema;
 	}
 };
 const Min = {
@@ -2540,7 +2540,7 @@ const implementation$13 = implementNode({
 	reduce: (inner) => inner.rule === 0 ? $ark.intrinsic.unknown : void 0,
 	normalize: createLengthSchemaNormalizer("minLength"),
 	defaults: {
-		description: (node$1) => node$1.rule === 1 ? "non-empty" : `at least length ${node$1.rule}`,
+		description: (node) => node.rule === 1 ? "non-empty" : `at least length ${node.rule}`,
 		actual: (data) => data.length === 0 ? "" : `${data.length}`
 	},
 	intersections: { minLength: (l, r) => l.isStricterThan(r) ? l : r }
@@ -2548,15 +2548,15 @@ const implementation$13 = implementNode({
 var MinLengthNode = class extends BaseRange {
 	impliedBasis = $ark.intrinsic.lengthBoundable.internal;
 	traverseAllows = (data) => data.length >= this.rule;
-	reduceJsonSchema(schema$1) {
-		switch (schema$1.type) {
+	reduceJsonSchema(schema) {
+		switch (schema.type) {
 			case "string":
-				schema$1.minLength = this.rule;
-				return schema$1;
+				schema.minLength = this.rule;
+				return schema;
 			case "array":
-				schema$1.minItems = this.rule;
-				return schema$1;
-			default: return ToJsonSchema.throwInternalOperandError("minLength", schema$1);
+				schema.minItems = this.rule;
+				return schema;
+			default: return ToJsonSchema.throwInternalOperandError("minLength", schema);
 		}
 	}
 };
@@ -2595,15 +2595,15 @@ const implementation$12 = implementNode({
 		rule: {},
 		flags: {}
 	},
-	normalize: (schema$1) => typeof schema$1 === "string" ? { rule: schema$1 } : schema$1 instanceof RegExp ? schema$1.flags ? {
-		rule: schema$1.source,
-		flags: schema$1.flags
-	} : { rule: schema$1.source } : schema$1,
+	normalize: (schema) => typeof schema === "string" ? { rule: schema } : schema instanceof RegExp ? schema.flags ? {
+		rule: schema.source,
+		flags: schema.flags
+	} : { rule: schema.source } : schema,
 	obviatesBasisDescription: true,
 	obviatesBasisExpression: true,
 	hasAssociatedError: true,
 	intersectionIsOpen: true,
-	defaults: { description: (node$1) => `matched by ${node$1.rule}` },
+	defaults: { description: (node) => `matched by ${node.rule}` },
 	intersections: { pattern: () => null }
 });
 var PatternNode = class extends InternalPrimitiveConstraint {
@@ -2630,29 +2630,29 @@ const Pattern = {
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/parse.js
-const schemaKindOf = (schema$1, allowedKinds) => {
-	const kind = discriminateRootKind(schema$1);
+const schemaKindOf = (schema, allowedKinds) => {
+	const kind = discriminateRootKind(schema);
 	if (allowedKinds && !allowedKinds.includes(kind)) return throwParseError(`Root of kind ${kind} should be one of ${allowedKinds}`);
 	return kind;
 };
-const discriminateRootKind = (schema$1) => {
-	if (hasArkKind(schema$1, "root")) return schema$1.kind;
-	if (typeof schema$1 === "string") return schema$1[0] === "$" ? "alias" : schema$1 in domainDescriptions ? "domain" : "proto";
-	if (typeof schema$1 === "function") return "proto";
-	if (typeof schema$1 !== "object" || schema$1 === null) return throwParseError(writeInvalidSchemaMessage(schema$1));
-	if ("morphs" in schema$1) return "morph";
-	if ("branches" in schema$1 || isArray(schema$1)) return "union";
-	if ("unit" in schema$1) return "unit";
-	if ("reference" in schema$1) return "alias";
-	const schemaKeys = Object.keys(schema$1);
+const discriminateRootKind = (schema) => {
+	if (hasArkKind(schema, "root")) return schema.kind;
+	if (typeof schema === "string") return schema[0] === "$" ? "alias" : schema in domainDescriptions ? "domain" : "proto";
+	if (typeof schema === "function") return "proto";
+	if (typeof schema !== "object" || schema === null) return throwParseError(writeInvalidSchemaMessage(schema));
+	if ("morphs" in schema) return "morph";
+	if ("branches" in schema || isArray(schema)) return "union";
+	if ("unit" in schema) return "unit";
+	if ("reference" in schema) return "alias";
+	const schemaKeys = Object.keys(schema);
 	if (schemaKeys.length === 0 || schemaKeys.some((k) => k in constraintKeys)) return "intersection";
-	if ("proto" in schema$1) return "proto";
-	if ("domain" in schema$1) return "domain";
-	return throwParseError(writeInvalidSchemaMessage(schema$1));
+	if ("proto" in schema) return "proto";
+	if ("domain" in schema) return "domain";
+	return throwParseError(writeInvalidSchemaMessage(schema));
 };
-const writeInvalidSchemaMessage = (schema$1) => `${printable(schema$1)} is not a valid type schema`;
+const writeInvalidSchemaMessage = (schema) => `${printable(schema)} is not a valid type schema`;
 const nodeCountsByPrefix = {};
-const serializeListableChild = (listableNode) => isArray(listableNode) ? listableNode.map((node$1) => node$1.collapsibleJson) : listableNode.collapsibleJson;
+const serializeListableChild = (listableNode) => isArray(listableNode) ? listableNode.map((node) => node.collapsibleJson) : listableNode.collapsibleJson;
 const nodesByRegisteredId = {};
 $ark.nodesByRegisteredId = nodesByRegisteredId;
 const registerNodeId = (prefix) => {
@@ -2711,22 +2711,22 @@ const createNode = ({ id, kind, inner, meta, $, ignoreCache }) => {
 		} else if (typeof keyImpl.child === "function") children.push(...keyImpl.child(v));
 	}
 	if (impl.finalizeInnerJson) innerJson = impl.finalizeInnerJson(innerJson);
-	let json$2 = { ...innerJson };
+	let json = { ...innerJson };
 	let metaJson = {};
 	if (!isEmptyObject(meta)) {
 		metaJson = flatMorph(meta, (k, v) => [k, k === "examples" ? v : defaultValueSerializer(v)]);
-		json$2.meta = possiblyCollapse(metaJson, "description", true);
+		json.meta = possiblyCollapse(metaJson, "description", true);
 	}
 	innerJson = possiblyCollapse(innerJson, impl.collapsibleKey, false);
 	const innerHash = JSON.stringify({
 		kind,
 		...innerJson
 	});
-	json$2 = possiblyCollapse(json$2, impl.collapsibleKey, false);
-	const collapsibleJson = possiblyCollapse(json$2, impl.collapsibleKey, true);
+	json = possiblyCollapse(json, impl.collapsibleKey, false);
+	const collapsibleJson = possiblyCollapse(json, impl.collapsibleKey, true);
 	const hash = JSON.stringify({
 		kind,
-		...json$2
+		...json
 	});
 	if ($.nodesByHash[hash] && !ignoreCache) return $.nodesByHash[hash];
 	const attachments = {
@@ -2739,7 +2739,7 @@ const createNode = ({ id, kind, inner, meta, $, ignoreCache }) => {
 		innerHash,
 		meta,
 		metaJson,
-		json: json$2,
+		json,
 		hash,
 		collapsibleJson,
 		children
@@ -2747,39 +2747,39 @@ const createNode = ({ id, kind, inner, meta, $, ignoreCache }) => {
 	if (kind !== "intersection") {
 		for (const k in inner) if (k !== "in" && k !== "out") attachments[k] = inner[k];
 	}
-	const node$1 = new nodeClassesByKind[kind](attachments, $);
-	return $.nodesByHash[hash] = node$1;
+	const node = new nodeClassesByKind[kind](attachments, $);
+	return $.nodesByHash[hash] = node;
 };
-const withId = (node$1, id) => {
-	if (node$1.id === id) return node$1;
+const withId = (node, id) => {
+	if (node.id === id) return node;
 	if (isNode(nodesByRegisteredId[id])) throwInternalError(`Unexpected attempt to overwrite node id ${id}`);
 	return createNode({
 		id,
-		kind: node$1.kind,
-		inner: node$1.inner,
-		meta: node$1.meta,
-		$: node$1.$,
+		kind: node.kind,
+		inner: node.inner,
+		meta: node.meta,
+		$: node.$,
 		ignoreCache: true
 	});
 };
-const withMeta = (node$1, meta, id) => {
+const withMeta = (node, meta, id) => {
 	if (id && isNode(nodesByRegisteredId[id])) throwInternalError(`Unexpected attempt to overwrite node id ${id}`);
 	return createNode({
-		id: id ?? registerNodeId(meta.alias ?? node$1.kind),
-		kind: node$1.kind,
-		inner: node$1.inner,
+		id: id ?? registerNodeId(meta.alias ?? node.kind),
+		kind: node.kind,
+		inner: node.inner,
 		meta,
-		$: node$1.$
+		$: node.$
 	});
 };
-const possiblyCollapse = (json$2, toKey, allowPrimitive) => {
-	const collapsibleKeys = Object.keys(json$2);
+const possiblyCollapse = (json, toKey, allowPrimitive) => {
+	const collapsibleKeys = Object.keys(json);
 	if (collapsibleKeys.length === 1 && collapsibleKeys[0] === toKey) {
-		const collapsed = json$2[toKey];
+		const collapsed = json[toKey];
 		if (allowPrimitive) return collapsed;
 		if (hasDomain(collapsed, "object") && (Object.keys(collapsed).length === 1 || Array.isArray(collapsed))) return collapsed;
 	}
-	return json$2;
+	return json;
 };
 
 //#endregion
@@ -2787,18 +2787,18 @@ const possiblyCollapse = (json$2, toKey, allowPrimitive) => {
 const intersectProps = (l, r, ctx) => {
 	if (l.key !== r.key) return null;
 	const key = l.key;
-	let value$1 = intersectOrPipeNodes(l.value, r.value, ctx);
+	let value = intersectOrPipeNodes(l.value, r.value, ctx);
 	const kind = l.required || r.required ? "required" : "optional";
-	if (value$1 instanceof Disjoint) if (kind === "optional") value$1 = $ark.intrinsic.never.internal;
-	else return value$1.withPrefixKey(l.key, l.required && r.required ? "required" : "optional");
+	if (value instanceof Disjoint) if (kind === "optional") value = $ark.intrinsic.never.internal;
+	else return value.withPrefixKey(l.key, l.required && r.required ? "required" : "optional");
 	if (kind === "required") return ctx.$.node("required", {
 		key,
-		value: value$1
+		value
 	});
 	const defaultIntersection = l.hasDefault() ? r.hasDefault() ? l.default === r.default ? l.default : throwParseError(writeDefaultIntersectionMessage(l.default, r.default)) : l.default : r.hasDefault() ? r.default : unset;
 	return ctx.$.node("optional", {
 		key,
-		value: value$1,
+		value,
 		default: defaultIntersection
 	});
 };
@@ -2844,11 +2844,11 @@ const implementation$11 = implementNode({
 		key: {},
 		value: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.parseSchema(schema$1)
+			parse: (schema, ctx) => ctx.$.parseSchema(schema)
 		},
 		default: { preserveUndefined: true }
 	},
-	normalize: (schema$1) => schema$1,
+	normalize: (schema) => schema,
 	reduce: (inner, $) => {
 		if ($.resolvedConfig.exactOptionalPropertyTypes === false) {
 			if (!inner.value.allows(void 0)) return $.node("optional", {
@@ -2857,7 +2857,7 @@ const implementation$11 = implementNode({
 			}, { prereduced: true });
 		}
 	},
-	defaults: { description: (node$1) => `${node$1.compiledKey}?: ${node$1.value.description}` },
+	defaults: { description: (node) => `${node.compiledKey}?: ${node.value.description}` },
 	intersections: { optional: intersectProps }
 });
 var OptionalNode = class extends BaseProp {
@@ -2884,32 +2884,32 @@ const Optional = {
 	Node: OptionalNode
 };
 const defaultableMorphCache = {};
-const getDefaultableMorph = (node$1) => {
-	if (!node$1.hasDefault()) return;
-	const cacheKey = `{${node$1.compiledKey}: ${node$1.value.id} = ${defaultValueSerializer(node$1.default)}}`;
-	return defaultableMorphCache[cacheKey] ??= computeDefaultValueMorph(node$1.key, node$1.value, node$1.default);
+const getDefaultableMorph = (node) => {
+	if (!node.hasDefault()) return;
+	const cacheKey = `{${node.compiledKey}: ${node.value.id} = ${defaultValueSerializer(node.default)}}`;
+	return defaultableMorphCache[cacheKey] ??= computeDefaultValueMorph(node.key, node.value, node.default);
 };
-const computeDefaultValueMorph = (key, value$1, defaultInput) => {
-	if (typeof defaultInput === "function") return value$1.includesTransform ? (data, ctx) => {
-		traverseKey(key, () => value$1(data[key] = defaultInput(), ctx), ctx);
+const computeDefaultValueMorph = (key, value, defaultInput) => {
+	if (typeof defaultInput === "function") return value.includesTransform ? (data, ctx) => {
+		traverseKey(key, () => value(data[key] = defaultInput(), ctx), ctx);
 		return data;
 	} : (data) => {
 		data[key] = defaultInput();
 		return data;
 	};
-	const precomputedMorphedDefault = value$1.includesTransform ? value$1.assert(defaultInput) : defaultInput;
+	const precomputedMorphedDefault = value.includesTransform ? value.assert(defaultInput) : defaultInput;
 	return hasDomain(precomputedMorphedDefault, "object") ? (data, ctx) => {
-		traverseKey(key, () => value$1(data[key] = defaultInput, ctx), ctx);
+		traverseKey(key, () => value(data[key] = defaultInput, ctx), ctx);
 		return data;
 	} : (data) => {
 		data[key] = precomputedMorphedDefault;
 		return data;
 	};
 };
-const assertDefaultValueAssignability = (node$1, value$1, key) => {
-	const wrapped = isThunk(value$1);
-	if (hasDomain(value$1, "object") && !wrapped) throwParseError(writeNonPrimitiveNonFunctionDefaultValueMessage(key));
-	const out = node$1.in(wrapped ? value$1() : value$1);
+const assertDefaultValueAssignability = (node, value, key) => {
+	const wrapped = isThunk(value);
+	if (hasDomain(value, "object") && !wrapped) throwParseError(writeNonPrimitiveNonFunctionDefaultValueMessage(key));
+	const out = node.in(wrapped ? value() : value);
 	if (out instanceof ArkErrors) {
 		if (key === null) throwParseError(`Default ${out.summary}`);
 		throwParseError(`Default for ${out.transform((e) => e.transform((input) => ({
@@ -2917,7 +2917,7 @@ const assertDefaultValueAssignability = (node$1, value$1, key) => {
 			prefixPath: [key]
 		}))).summary}`);
 	}
-	return value$1;
+	return value;
 };
 const writeNonPrimitiveNonFunctionDefaultValueMessage = (key) => {
 	return `Non-primitive default ${key === null ? "" : typeof key === "number" ? `for value at [${key}] ` : `for ${compileSerializedValue(key)} `}must be specified as a function like () => ({my: 'object'})`;
@@ -2984,14 +2984,14 @@ var BaseRoot = class extends BaseNode {
 	toJsonSchema(opts = {}) {
 		const ctx = mergeToJsonSchemaConfigs(this.$.resolvedConfig.toJsonSchema, opts);
 		ctx.useRefs ||= this.isCyclic;
-		const schema$1 = typeof ctx.dialect === "string" ? { $schema: ctx.dialect } : {};
-		Object.assign(schema$1, this.toJsonSchemaRecurse(ctx));
+		const schema = typeof ctx.dialect === "string" ? { $schema: ctx.dialect } : {};
+		Object.assign(schema, this.toJsonSchemaRecurse(ctx));
 		if (ctx.useRefs) {
 			const defs = flatMorph(this.references, (i, ref) => ref.isRoot() && !ref.alwaysExpandJsonSchema ? [ref.id, ref.toResolvedJsonSchema(ctx)] : []);
-			if (ctx.target === "draft-07") Object.assign(schema$1, { definitions: defs });
-			else schema$1.$defs = defs;
+			if (ctx.target === "draft-07") Object.assign(schema, { definitions: defs });
+			else schema.$defs = defs;
 		}
-		return schema$1;
+		return schema;
 	}
 	toJsonSchemaRecurse(ctx) {
 		if (ctx.useRefs && !this.alwaysExpandJsonSchema) return { $ref: `#/${ctx.target === "draft-07" ? "definitions" : "$defs"}/${this.id}` };
@@ -3050,7 +3050,7 @@ var BaseRoot = class extends BaseNode {
 	_keyof;
 	keyof() {
 		if (this._keyof) return this._keyof;
-		const result = this.applyStructuralOperation("keyof", []).reduce((result$1, branch) => result$1.intersect(branch).toNeverIfDisjoint(), $ark.intrinsic.unknown.internal);
+		const result = this.applyStructuralOperation("keyof", []).reduce((result, branch) => result.intersect(branch).toNeverIfDisjoint(), $ark.intrinsic.unknown.internal);
 		if (result.branches.length === 0) throwParseError(writeUnsatisfiableExpressionError(`keyof ${this.expression}`));
 		return this._keyof = this.$.finalize(result);
 	}
@@ -3169,17 +3169,17 @@ var BaseRoot = class extends BaseNode {
 	narrow(predicate) {
 		return this.constrainOut("predicate", predicate);
 	}
-	constrain(kind, schema$1) {
-		return this._constrain("root", kind, schema$1);
+	constrain(kind, schema) {
+		return this._constrain("root", kind, schema);
 	}
-	constrainIn(kind, schema$1) {
-		return this._constrain("in", kind, schema$1);
+	constrainIn(kind, schema) {
+		return this._constrain("in", kind, schema);
 	}
-	constrainOut(kind, schema$1) {
-		return this._constrain("out", kind, schema$1);
+	constrainOut(kind, schema) {
+		return this._constrain("out", kind, schema);
 	}
-	_constrain(io, kind, schema$1) {
-		const constraint = this.$.node(kind, schema$1);
+	_constrain(io, kind, schema) {
+		const constraint = this.$.node(kind, schema);
 		if (constraint.isRoot()) return constraint.isUnknown() ? this : throwInternalError(`Unexpected constraint node ${constraint}`);
 		const operand = io === "root" ? this : io === "in" ? this.rawIn : this.rawOut;
 		if (operand.hasKind("morph") || constraint.impliedBasis && !operand.extends(constraint.impliedBasis)) return throwInvalidOperandError(kind, constraint.impliedBasis, this);
@@ -3194,12 +3194,12 @@ var BaseRoot = class extends BaseNode {
 		return this.$.finalize(this.transform((kind, inner) => kind === "structure" ? rule === "ignore" ? omit(inner, { undeclared: 1 }) : {
 			...inner,
 			undeclared: rule
-		} : inner, deep ? void 0 : { shouldTransform: (node$1) => !includes(structuralKinds, node$1.kind) }));
+		} : inner, deep ? void 0 : { shouldTransform: (node) => !includes(structuralKinds, node.kind) }));
 	}
 	hasEqualMorphs(r) {
 		if (!this.includesTransform && !r.includesTransform) return true;
 		if (!arrayEquals(this.shallowMorphs, r.shallowMorphs)) return false;
-		if (!arrayEquals(this.flatMorphs, r.flatMorphs, { isEqual: (l, r$1) => l.propString === r$1.propString && (l.node.hasKind("morph") && r$1.node.hasKind("morph") ? l.node.hasEqualMorphs(r$1.node) : l.node.hasKind("intersection") && r$1.node.hasKind("intersection") ? l.node.structure?.structuralMorphRef === r$1.node.structure?.structuralMorphRef : false) })) return false;
+		if (!arrayEquals(this.flatMorphs, r.flatMorphs, { isEqual: (l, r) => l.propString === r.propString && (l.node.hasKind("morph") && r.node.hasKind("morph") ? l.node.hasEqualMorphs(r.node) : l.node.hasKind("intersection") && r.node.hasKind("intersection") ? l.node.structure?.structuralMorphRef === r.node.structure?.structuralMorphRef : false) })) return false;
 		return true;
 	}
 	onDeepUndeclaredKey(behavior) {
@@ -3211,50 +3211,50 @@ var BaseRoot = class extends BaseNode {
 	filter(predicate) {
 		return this.constrainIn("predicate", predicate);
 	}
-	divisibleBy(schema$1) {
-		return this.constrain("divisor", schema$1);
+	divisibleBy(schema) {
+		return this.constrain("divisor", schema);
 	}
-	matching(schema$1) {
-		return this.constrain("pattern", schema$1);
+	matching(schema) {
+		return this.constrain("pattern", schema);
 	}
-	atLeast(schema$1) {
-		return this.constrain("min", schema$1);
+	atLeast(schema) {
+		return this.constrain("min", schema);
 	}
-	atMost(schema$1) {
-		return this.constrain("max", schema$1);
+	atMost(schema) {
+		return this.constrain("max", schema);
 	}
-	moreThan(schema$1) {
-		return this.constrain("min", exclusivizeRangeSchema(schema$1));
+	moreThan(schema) {
+		return this.constrain("min", exclusivizeRangeSchema(schema));
 	}
-	lessThan(schema$1) {
-		return this.constrain("max", exclusivizeRangeSchema(schema$1));
+	lessThan(schema) {
+		return this.constrain("max", exclusivizeRangeSchema(schema));
 	}
-	atLeastLength(schema$1) {
-		return this.constrain("minLength", schema$1);
+	atLeastLength(schema) {
+		return this.constrain("minLength", schema);
 	}
-	atMostLength(schema$1) {
-		return this.constrain("maxLength", schema$1);
+	atMostLength(schema) {
+		return this.constrain("maxLength", schema);
 	}
-	moreThanLength(schema$1) {
-		return this.constrain("minLength", exclusivizeRangeSchema(schema$1));
+	moreThanLength(schema) {
+		return this.constrain("minLength", exclusivizeRangeSchema(schema));
 	}
-	lessThanLength(schema$1) {
-		return this.constrain("maxLength", exclusivizeRangeSchema(schema$1));
+	lessThanLength(schema) {
+		return this.constrain("maxLength", exclusivizeRangeSchema(schema));
 	}
-	exactlyLength(schema$1) {
-		return this.constrain("exactLength", schema$1);
+	exactlyLength(schema) {
+		return this.constrain("exactLength", schema);
 	}
-	atOrAfter(schema$1) {
-		return this.constrain("after", schema$1);
+	atOrAfter(schema) {
+		return this.constrain("after", schema);
 	}
-	atOrBefore(schema$1) {
-		return this.constrain("before", schema$1);
+	atOrBefore(schema) {
+		return this.constrain("before", schema);
 	}
-	laterThan(schema$1) {
-		return this.constrain("after", exclusivizeRangeSchema(schema$1));
+	laterThan(schema) {
+		return this.constrain("after", exclusivizeRangeSchema(schema));
 	}
-	earlierThan(schema$1) {
-		return this.constrain("before", exclusivizeRangeSchema(schema$1));
+	earlierThan(schema) {
+		return this.constrain("before", exclusivizeRangeSchema(schema));
 	}
 };
 const emptyBrandNameMessage = `Expected a non-empty brand name after #`;
@@ -3264,11 +3264,11 @@ const validateStandardJsonSchemaTarget = (target) => {
 	if (!includes(supportedJsonSchemaTargets, target)) throwParseError(writeInvalidJsonSchemaTargetMessage(target));
 	return target;
 };
-const exclusivizeRangeSchema = (schema$1) => typeof schema$1 === "object" && !(schema$1 instanceof Date) ? {
-	...schema$1,
+const exclusivizeRangeSchema = (schema) => typeof schema === "object" && !(schema instanceof Date) ? {
+	...schema,
 	exclusive: true
 } : {
-	rule: schema$1,
+	rule: schema,
 	exclusive: true
 };
 const typeOrTermExtends = (t, base) => hasArkKind(base, "root") ? hasArkKind(t, "root") ? t.extends(base) : base.allows(t) : hasArkKind(t, "root") ? t.hasUnit(base) : base === t;
@@ -3284,11 +3284,11 @@ const writeNonStructuralOperandMessage = (operation, operand) => `${operation} o
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/utils.js
-const defineRightwardIntersections = (kind, implementation$22) => flatMorph(schemaKindsRightOf(kind), (i, kind$1) => [kind$1, implementation$22]);
+const defineRightwardIntersections = (kind, implementation) => flatMorph(schemaKindsRightOf(kind), (i, kind) => [kind, implementation]);
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/roots/alias.js
-const normalizeAliasSchema = (schema$1) => typeof schema$1 === "string" ? { reference: schema$1 } : schema$1;
+const normalizeAliasSchema = (schema) => typeof schema === "string" ? { reference: schema } : schema;
 const neverIfDisjoint = (result) => result instanceof Disjoint ? $ark.intrinsic.never.internal : result;
 const implementation$10 = implementNode({
 	kind: "alias",
@@ -3299,7 +3299,7 @@ const implementation$10 = implementNode({
 		resolve: {}
 	},
 	normalize: normalizeAliasSchema,
-	defaults: { description: (node$1) => node$1.reference },
+	defaults: { description: (node) => node.reference },
 	intersections: {
 		alias: (l, r, ctx) => ctx.$.lazilyResolve(() => neverIfDisjoint(intersectOrPipeNodes(l.resolution, r.resolution, ctx)), `${l.reference}${ctx.pipe ? "=>" : "&"}${r.reference}`),
 		...defineRightwardIntersections("alias", (l, r, ctx) => {
@@ -3406,13 +3406,13 @@ const implementation$9 = implementNode({
 		domain: {},
 		numberAllowsNaN: {}
 	},
-	normalize: (schema$1) => typeof schema$1 === "string" ? { domain: schema$1 } : hasKey(schema$1, "numberAllowsNaN") && schema$1.domain !== "number" ? throwParseError(Domain.writeBadAllowNanMessage(schema$1.domain)) : schema$1,
-	applyConfig: (schema$1, config) => schema$1.numberAllowsNaN === void 0 && schema$1.domain === "number" && config.numberAllowsNaN ? {
-		...schema$1,
+	normalize: (schema) => typeof schema === "string" ? { domain: schema } : hasKey(schema, "numberAllowsNaN") && schema.domain !== "number" ? throwParseError(Domain.writeBadAllowNanMessage(schema.domain)) : schema,
+	applyConfig: (schema, config) => schema.numberAllowsNaN === void 0 && schema.domain === "number" && config.numberAllowsNaN ? {
+		...schema,
 		numberAllowsNaN: true
-	} : schema$1,
+	} : schema,
 	defaults: {
-		description: (node$1) => domainDescriptions[node$1.domain],
+		description: (node) => domainDescriptions[node.domain],
 		actual: (data) => Number.isNaN(data) ? "NaN" : domainDescriptions[domainOf(data)]
 	},
 	intersections: { domain: (l, r) => l.domain === "number" && r.domain === "number" ? l.numberAllowsNaN ? r : l : Disjoint.init("domain", l, r) }
@@ -3451,10 +3451,10 @@ const implementation$8 = implementNode({
 	hasAssociatedError: true,
 	normalize: (rawSchema) => {
 		if (isNode(rawSchema)) return rawSchema;
-		const { structure, ...schema$1 } = rawSchema;
+		const { structure, ...schema } = rawSchema;
 		const hasRootStructureKey = !!structure;
 		const normalizedStructure = structure ?? {};
-		const normalized = flatMorph(schema$1, (k, v) => {
+		const normalized = flatMorph(schema, (k, v) => {
 			if (isKeyOf(k, structureKeys)) {
 				if (hasRootStructureKey) throwParseError(`Flattened structure key ${k} cannot be specified alongside a root 'structure' key.`);
 				normalizedStructure[k] = v;
@@ -3472,18 +3472,18 @@ const implementation$8 = implementNode({
 	keys: {
 		domain: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.node("domain", schema$1)
+			parse: (schema, ctx) => ctx.$.node("domain", schema)
 		},
 		proto: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.node("proto", schema$1)
+			parse: (schema, ctx) => ctx.$.node("proto", schema)
 		},
 		structure: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.node("structure", schema$1),
-			serialize: (node$1) => {
-				if (!node$1.sequence?.minLength) return node$1.collapsibleJson;
-				const { sequence, ...structureJson } = node$1.collapsibleJson;
+			parse: (schema, ctx) => ctx.$.node("structure", schema),
+			serialize: (node) => {
+				if (!node.sequence?.minLength) return node.collapsibleJson;
+				const { sequence, ...structureJson } = node.collapsibleJson;
 				const { minVariadicLength, ...sequenceJson } = sequence;
 				const collapsibleSequenceJson = sequenceJson.variadic && Object.keys(sequenceJson).length === 1 ? sequenceJson.variadic : sequenceJson;
 				return {
@@ -3539,16 +3539,16 @@ const implementation$8 = implementNode({
 		pipe: false
 	}),
 	defaults: {
-		description: (node$1) => {
-			if (node$1.children.length === 0) return "unknown";
-			if (node$1.structure) return node$1.structure.description;
+		description: (node) => {
+			if (node.children.length === 0) return "unknown";
+			if (node.structure) return node.structure.description;
 			const childDescriptions = [];
-			if (node$1.basis && !node$1.prestructurals.some((r) => r.impl.obviatesBasisDescription)) childDescriptions.push(node$1.basis.description);
-			if (node$1.prestructurals.length) {
-				const sortedRefinementDescriptions = node$1.prestructurals.slice().sort((l, r) => l.kind === "min" && r.kind === "max" ? -1 : 0).map((r) => r.description);
+			if (node.basis && !node.prestructurals.some((r) => r.impl.obviatesBasisDescription)) childDescriptions.push(node.basis.description);
+			if (node.prestructurals.length) {
+				const sortedRefinementDescriptions = node.prestructurals.slice().sort((l, r) => l.kind === "min" && r.kind === "max" ? -1 : 0).map((r) => r.description);
 				childDescriptions.push(...sortedRefinementDescriptions);
 			}
-			if (node$1.inner.predicate) childDescriptions.push(...node$1.inner.predicate.map((p) => p.description));
+			if (node.inner.predicate) childDescriptions.push(...node.inner.predicate.map((p) => p.description));
 			return childDescriptions.join(" and ");
 		},
 		expected: (source) => `  ◦ ${source.errors.map((e) => e.expected).join("\n  ◦ ")}`,
@@ -3571,9 +3571,9 @@ const implementation$8 = implementNode({
 var IntersectionNode = class extends BaseRoot {
 	basis = this.inner.domain ?? this.inner.proto ?? null;
 	prestructurals = [];
-	refinements = this.children.filter((node$1) => {
-		if (!node$1.isRefinement()) return false;
-		if (includes(prestructuralKinds, node$1.kind)) this.prestructurals.push(node$1);
+	refinements = this.children.filter((node) => {
+		if (!node.isRefinement()) return false;
+		if (includes(prestructuralKinds, node.kind)) this.prestructurals.push(node);
 		return true;
 	});
 	structure = this.inner.structure;
@@ -3585,7 +3585,7 @@ var IntersectionNode = class extends BaseRoot {
 		return this.basis?.defaultShortDescription ?? "present";
 	}
 	innerToJsonSchema(ctx) {
-		return this.children.reduce((schema$1, child) => child.isBasis() ? child.toJsonSchemaRecurse(ctx) : child.reduceJsonSchema(schema$1, ctx), {});
+		return this.children.reduce((schema, child) => child.isBasis() ? child.toJsonSchemaRecurse(ctx) : child.reduceJsonSchema(schema, ctx), {});
 	}
 	traverseAllows = (data, ctx) => this.children.every((child) => child.traverseAllows(data, ctx));
 	traverseApply = (data, ctx) => {
@@ -3650,10 +3650,10 @@ const Intersection = {
 	implementation: implementation$8,
 	Node: IntersectionNode
 };
-const writeIntersectionExpression = (node$1) => {
-	if (node$1.structure?.expression) return node$1.structure.expression;
-	const basisExpression = node$1.basis && !node$1.prestructurals.some((n) => n.impl.obviatesBasisExpression) ? node$1.basis.nestableExpression : "";
-	const refinementsExpression = node$1.prestructurals.map((n) => n.expression).join(" & ");
+const writeIntersectionExpression = (node) => {
+	if (node.structure?.expression) return node.structure.expression;
+	const basisExpression = node.basis && !node.prestructurals.some((n) => n.impl.obviatesBasisExpression) ? node.basis.nestableExpression : "";
+	const refinementsExpression = node.prestructurals.map((n) => n.expression).join(" & ");
 	const fullExpression = `${basisExpression}${basisExpression ? " " : ""}${refinementsExpression}`;
 	if (fullExpression === "Array == 0") return "[]";
 	return fullExpression || "unknown";
@@ -3683,7 +3683,7 @@ const implementation$7 = implementNode({
 	keys: {
 		in: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.parseSchema(schema$1)
+			parse: (schema, ctx) => ctx.$.parseSchema(schema)
 		},
 		morphs: {
 			parse: liftArray,
@@ -3691,15 +3691,15 @@ const implementation$7 = implementNode({
 		},
 		declaredIn: {
 			child: false,
-			serialize: (node$1) => node$1.json
+			serialize: (node) => node.json
 		},
 		declaredOut: {
 			child: false,
-			serialize: (node$1) => node$1.json
+			serialize: (node) => node.json
 		}
 	},
-	normalize: (schema$1) => schema$1,
-	defaults: { description: (node$1) => `a morph from ${node$1.rawIn.description} to ${node$1.rawOut?.description ?? "unknown"}` },
+	normalize: (schema) => schema,
+	defaults: { description: (node) => `a morph from ${node.rawIn.description} to ${node.rawOut?.description ?? "unknown"}` },
 	intersections: {
 		morph: (l, r, ctx) => {
 			if (!l.hasEqualMorphs(r)) return throwParseError(writeMorphIntersectionMessage(l.expression, r.expression));
@@ -3806,24 +3806,24 @@ const implementation$6 = implementNode({
 		proto: { serialize: (ctor) => getBuiltinNameOfConstructor(ctor) ?? defaultValueSerializer(ctor) },
 		dateAllowsInvalid: {}
 	},
-	normalize: (schema$1) => {
-		const normalized = typeof schema$1 === "string" ? { proto: builtinConstructors[schema$1] } : typeof schema$1 === "function" ? isNode(schema$1) ? schema$1 : { proto: schema$1 } : typeof schema$1.proto === "string" ? {
-			...schema$1,
-			proto: builtinConstructors[schema$1.proto]
-		} : schema$1;
+	normalize: (schema) => {
+		const normalized = typeof schema === "string" ? { proto: builtinConstructors[schema] } : typeof schema === "function" ? isNode(schema) ? schema : { proto: schema } : typeof schema.proto === "string" ? {
+			...schema,
+			proto: builtinConstructors[schema.proto]
+		} : schema;
 		if (typeof normalized.proto !== "function") throwParseError(Proto.writeInvalidSchemaMessage(normalized.proto));
 		if (hasKey(normalized, "dateAllowsInvalid") && normalized.proto !== Date) throwParseError(Proto.writeBadInvalidDateMessage(normalized.proto));
 		return normalized;
 	},
-	applyConfig: (schema$1, config) => {
-		if (schema$1.dateAllowsInvalid === void 0 && schema$1.proto === Date && config.dateAllowsInvalid) return {
-			...schema$1,
+	applyConfig: (schema, config) => {
+		if (schema.dateAllowsInvalid === void 0 && schema.proto === Date && config.dateAllowsInvalid) return {
+			...schema,
 			dateAllowsInvalid: true
 		};
-		return schema$1;
+		return schema;
 	},
 	defaults: {
-		description: (node$1) => node$1.builtinName ? objectKindDescriptions[node$1.builtinName] : `an instance of ${node$1.proto.name}`,
+		description: (node) => node.builtinName ? objectKindDescriptions[node.builtinName] : `an instance of ${node.proto.name}`,
 		actual: (data) => data instanceof Date && data.toString() === "Invalid Date" ? "an invalid Date" : objectKindOrDomainOf(data)
 	},
 	intersections: {
@@ -3882,28 +3882,28 @@ const implementation$5 = implementNode({
 		ordered: {},
 		branches: {
 			child: true,
-			parse: (schema$1, ctx) => {
+			parse: (schema, ctx) => {
 				const branches = [];
-				for (const branchSchema of schema$1) {
+				for (const branchSchema of schema) {
 					const branchNodes = hasArkKind(branchSchema, "root") ? branchSchema.branches : ctx.$.parseSchema(branchSchema).branches;
-					for (const node$1 of branchNodes) if (node$1.hasKind("morph")) {
-						const matchingMorphIndex = branches.findIndex((matching) => matching.hasKind("morph") && matching.hasEqualMorphs(node$1));
-						if (matchingMorphIndex === -1) branches.push(node$1);
+					for (const node of branchNodes) if (node.hasKind("morph")) {
+						const matchingMorphIndex = branches.findIndex((matching) => matching.hasKind("morph") && matching.hasEqualMorphs(node));
+						if (matchingMorphIndex === -1) branches.push(node);
 						else {
 							const matchingMorph = branches[matchingMorphIndex];
 							branches[matchingMorphIndex] = ctx.$.node("morph", {
 								...matchingMorph.inner,
-								in: matchingMorph.rawIn.rawOr(node$1.rawIn)
+								in: matchingMorph.rawIn.rawOr(node.rawIn)
 							});
 						}
-					} else branches.push(node$1);
+					} else branches.push(node);
 				}
 				if (!ctx.def.ordered) branches.sort((l, r) => l.hash < r.hash ? -1 : 1);
 				return branches;
 			}
 		}
 	},
-	normalize: (schema$1) => isArray(schema$1) ? { branches: schema$1 } : schema$1,
+	normalize: (schema) => isArray(schema) ? { branches: schema } : schema,
 	reduce: (inner, $) => {
 		const reducedBranches = reduceBranches(inner);
 		if (reducedBranches.length === 1) return reducedBranches[0];
@@ -3914,7 +3914,7 @@ const implementation$5 = implementNode({
 		}, { prereduced: true });
 	},
 	defaults: {
-		description: (node$1) => node$1.distribute((branch) => branch.description, describeBranches),
+		description: (node) => node.distribute((branch) => branch.description, describeBranches),
 		expected: (ctx) => {
 			const byPath = groupBy(ctx.errors, "propString");
 			return describeBranches(Object.entries(byPath).map(([path, errors]) => {
@@ -4172,7 +4172,7 @@ var UnionNode = class extends BaseRoot {
 		return Object.assign(ctx.location, { cases });
 	}
 };
-const createCaseResolutionContext = (viableCandidates, node$1) => {
+const createCaseResolutionContext = (viableCandidates, node) => {
 	const best = viableCandidates.sort((l, r) => l.path.length === r.path.length ? Object.keys(r.cases).length - Object.keys(l.cases).length : l.path.length - r.path.length)[0];
 	return {
 		best,
@@ -4181,11 +4181,11 @@ const createCaseResolutionContext = (viableCandidates, node$1) => {
 			path: best.path,
 			optionallyChainedPropString: optionallyChainPropString(best.path)
 		},
-		defaultEntries: node$1.branches.map((branch, originalIndex) => ({
+		defaultEntries: node.branches.map((branch, originalIndex) => ({
 			originalIndex,
 			branch
 		})),
-		node: node$1
+		node
 	};
 };
 const resolveCase = (ctx, key) => {
@@ -4233,21 +4233,21 @@ const viableOrderedCandidates = (candidates, originalBranches) => {
 	});
 };
 const discriminantCaseToNode = (caseDiscriminant, path, $) => {
-	let node$1 = caseDiscriminant === "undefined" ? $.node("unit", { unit: void 0 }) : caseDiscriminant === "null" ? $.node("unit", { unit: null }) : caseDiscriminant === "boolean" ? $.units([true, false]) : caseDiscriminant;
+	let node = caseDiscriminant === "undefined" ? $.node("unit", { unit: void 0 }) : caseDiscriminant === "null" ? $.node("unit", { unit: null }) : caseDiscriminant === "boolean" ? $.units([true, false]) : caseDiscriminant;
 	for (let i = path.length - 1; i >= 0; i--) {
 		const key = path[i];
-		node$1 = $.node("intersection", typeof key === "number" ? {
+		node = $.node("intersection", typeof key === "number" ? {
 			proto: "Array",
-			sequence: [...range(key).map((_) => ({})), node$1]
+			sequence: [...range(key).map((_) => ({})), node]
 		} : {
 			domain: "object",
 			required: [{
 				key,
-				value: node$1
+				value: node
 			}]
 		});
 	}
-	return node$1;
+	return node;
 };
 const optionallyChainPropString = (path) => path.reduce((acc, k) => acc + compileLiteralPropAccess(k, true), "data");
 const serializedTypeOfDescriptions = registeredReference(jsTypeOfDescriptions);
@@ -4259,7 +4259,7 @@ const Union = {
 const discriminantToJson = (discriminant) => ({
 	kind: discriminant.kind,
 	path: discriminant.path.map((k) => typeof k === "string" ? k : compileSerializedValue(k)),
-	cases: flatMorph(discriminant.cases, (k, node$1) => [k, node$1 === true ? node$1 : node$1.hasKind("union") && node$1.discriminantJson ? node$1.discriminantJson : node$1.json])
+	cases: flatMorph(discriminant.cases, (k, node) => [k, node === true ? node : node.hasKind("union") && node.discriminantJson ? node.discriminantJson : node.json])
 });
 const describeExpressionOptions = {
 	delimiter: " | ",
@@ -4322,17 +4322,17 @@ const reduceBranches = ({ branches, ordered }) => {
 const assertDeterminateOverlap = (l, r) => {
 	if (!l.includesTransform && !r.includesTransform) return;
 	if (!arrayEquals(l.shallowMorphs, r.shallowMorphs)) throwParseError(writeIndiscriminableMorphMessage(l.expression, r.expression));
-	if (!arrayEquals(l.flatMorphs, r.flatMorphs, { isEqual: (l$1, r$1) => l$1.propString === r$1.propString && (l$1.node.hasKind("morph") && r$1.node.hasKind("morph") ? l$1.node.hasEqualMorphs(r$1.node) : l$1.node.hasKind("intersection") && r$1.node.hasKind("intersection") ? l$1.node.structure?.structuralMorphRef === r$1.node.structure?.structuralMorphRef : false) })) throwParseError(writeIndiscriminableMorphMessage(l.expression, r.expression));
+	if (!arrayEquals(l.flatMorphs, r.flatMorphs, { isEqual: (l, r) => l.propString === r.propString && (l.node.hasKind("morph") && r.node.hasKind("morph") ? l.node.hasEqualMorphs(r.node) : l.node.hasKind("intersection") && r.node.hasKind("intersection") ? l.node.structure?.structuralMorphRef === r.node.structure?.structuralMorphRef : false) })) throwParseError(writeIndiscriminableMorphMessage(l.expression, r.expression));
 };
 const pruneDiscriminant = (discriminantBranch, discriminantCtx) => discriminantBranch.transform((nodeKind, inner) => {
 	if (nodeKind === "domain" || nodeKind === "unit") return null;
 	return inner;
-}, { shouldTransform: (node$1, ctx) => {
+}, { shouldTransform: (node, ctx) => {
 	const propString = optionallyChainPropString(ctx.path);
 	if (!discriminantCtx.optionallyChainedPropString.startsWith(propString)) return false;
-	if (node$1.hasKind("domain") && node$1.domain === "object") return true;
-	if ((node$1.hasKind("domain") || discriminantCtx.kind === "unit") && propString === discriminantCtx.optionallyChainedPropString) return true;
-	return node$1.children.length !== 0 && node$1.kind !== "index";
+	if (node.hasKind("domain") && node.domain === "object") return true;
+	if ((node.hasKind("domain") || discriminantCtx.kind === "unit") && propString === discriminantCtx.optionallyChainedPropString) return true;
+	return node.children.length !== 0 && node.kind !== "index";
 } });
 const writeIndiscriminableMorphMessage = (lDescription, rDescription) => `An unordered union of a type including a morph and a type with overlapping input is indeterminate:
 Left: ${lDescription}
@@ -4348,11 +4348,11 @@ const implementation$4 = implementNode({
 	hasAssociatedError: true,
 	keys: { unit: {
 		preserveUndefined: true,
-		serialize: (schema$1) => schema$1 instanceof Date ? schema$1.toISOString() : defaultValueSerializer(schema$1)
+		serialize: (schema) => schema instanceof Date ? schema.toISOString() : defaultValueSerializer(schema)
 	} },
-	normalize: (schema$1) => schema$1,
+	normalize: (schema) => schema,
 	defaults: {
-		description: (node$1) => printable(node$1.unit),
+		description: (node) => printable(node.unit),
 		problem: ({ expected, actual }) => `${expected === actual ? `must be reference equal to ${expected} (serialized to the same value)` : `must be ${expected} (was ${actual})`}`
 	},
 	intersections: {
@@ -4412,8 +4412,8 @@ const implementation$3 = implementNode({
 	keys: {
 		signature: {
 			child: true,
-			parse: (schema$1, ctx) => {
-				const key = ctx.$.parseSchema(schema$1);
+			parse: (schema, ctx) => {
+				const key = ctx.$.parseSchema(schema);
 				if (!key.extends($ark.intrinsic.key)) return throwParseError(writeInvalidPropertyKeyMessage(key.expression));
 				const enumerableBranches = key.branches.filter((b) => b.hasKind("unit"));
 				if (enumerableBranches.length) return throwParseError(writeEnumerableIndexBranches(enumerableBranches.map((b) => printable(b.unit))));
@@ -4422,18 +4422,18 @@ const implementation$3 = implementNode({
 		},
 		value: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.parseSchema(schema$1)
+			parse: (schema, ctx) => ctx.$.parseSchema(schema)
 		}
 	},
-	normalize: (schema$1) => schema$1,
-	defaults: { description: (node$1) => `[${node$1.signature.expression}]: ${node$1.value.description}` },
+	normalize: (schema) => schema,
+	defaults: { description: (node) => `[${node.signature.expression}]: ${node.value.description}` },
 	intersections: { index: (l, r, ctx) => {
 		if (l.signature.equals(r.signature)) {
 			const valueIntersection = intersectOrPipeNodes(l.value, r.value, ctx);
-			const value$1 = valueIntersection instanceof Disjoint ? $ark.intrinsic.never.internal : valueIntersection;
+			const value = valueIntersection instanceof Disjoint ? $ark.intrinsic.never.internal : valueIntersection;
 			return ctx.$.node("index", {
 				signature: l.signature,
-				value: value$1
+				value
 			});
 		}
 		if (l.signature.extends(r.signature) && l.value.subsumes(r.value)) return r;
@@ -4477,12 +4477,12 @@ const implementation$2 = implementNode({
 		key: {},
 		value: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.parseSchema(schema$1)
+			parse: (schema, ctx) => ctx.$.parseSchema(schema)
 		}
 	},
-	normalize: (schema$1) => schema$1,
+	normalize: (schema) => schema,
 	defaults: {
-		description: (node$1) => `${node$1.compiledKey}: ${node$1.value.description}`,
+		description: (node) => `${node.compiledKey}: ${node.value.description}`,
 		expected: (ctx) => ctx.missingValueDescription,
 		actual: () => "missing"
 	},
@@ -4515,16 +4515,16 @@ const implementation$1 = implementNode({
 	keys: {
 		prefix: {
 			child: true,
-			parse: (schema$1, ctx) => {
-				if (schema$1.length === 0) return void 0;
-				return schema$1.map((element) => ctx.$.parseSchema(element));
+			parse: (schema, ctx) => {
+				if (schema.length === 0) return void 0;
+				return schema.map((element) => ctx.$.parseSchema(element));
 			}
 		},
 		optionals: {
 			child: true,
-			parse: (schema$1, ctx) => {
-				if (schema$1.length === 0) return void 0;
-				return schema$1.map((element) => ctx.$.parseSchema(element));
+			parse: (schema, ctx) => {
+				if (schema.length === 0) return void 0;
+				return schema.map((element) => ctx.$.parseSchema(element));
 			}
 		},
 		defaultables: {
@@ -4532,9 +4532,9 @@ const implementation$1 = implementNode({
 			parse: (defaultables, ctx) => {
 				if (defaultables.length === 0) return void 0;
 				return defaultables.map((element) => {
-					const node$1 = ctx.$.parseSchema(element[0]);
-					assertDefaultValueAssignability(node$1, element[1], null);
-					return [node$1, element[1]];
+					const node = ctx.$.parseSchema(element[0]);
+					assertDefaultValueAssignability(node, element[1], null);
+					return [node, element[1]];
 				});
 			},
 			serialize: (defaults) => defaults.map((element) => [element[0].collapsibleJson, defaultValueSerializer(element[1])]),
@@ -4548,28 +4548,28 @@ const implementation$1 = implementNode({
 		},
 		variadic: {
 			child: true,
-			parse: (schema$1, ctx) => ctx.$.parseSchema(schema$1, ctx)
+			parse: (schema, ctx) => ctx.$.parseSchema(schema, ctx)
 		},
 		minVariadicLength: { parse: (min) => min === 0 ? void 0 : min },
 		postfix: {
 			child: true,
-			parse: (schema$1, ctx) => {
-				if (schema$1.length === 0) return void 0;
-				return schema$1.map((element) => ctx.$.parseSchema(element));
+			parse: (schema, ctx) => {
+				if (schema.length === 0) return void 0;
+				return schema.map((element) => ctx.$.parseSchema(element));
 			}
 		}
 	},
-	normalize: (schema$1) => {
-		if (typeof schema$1 === "string") return { variadic: schema$1 };
-		if ("variadic" in schema$1 || "prefix" in schema$1 || "defaultables" in schema$1 || "optionals" in schema$1 || "postfix" in schema$1 || "minVariadicLength" in schema$1) {
-			if (schema$1.postfix?.length) {
-				if (!schema$1.variadic) return throwParseError(postfixWithoutVariadicMessage);
-				if (schema$1.optionals?.length || schema$1.defaultables?.length) return throwParseError(postfixAfterOptionalOrDefaultableMessage);
+	normalize: (schema) => {
+		if (typeof schema === "string") return { variadic: schema };
+		if ("variadic" in schema || "prefix" in schema || "defaultables" in schema || "optionals" in schema || "postfix" in schema || "minVariadicLength" in schema) {
+			if (schema.postfix?.length) {
+				if (!schema.variadic) return throwParseError(postfixWithoutVariadicMessage);
+				if (schema.optionals?.length || schema.defaultables?.length) return throwParseError(postfixAfterOptionalOrDefaultableMessage);
 			}
-			if (schema$1.minVariadicLength && !schema$1.variadic) return throwParseError("minVariadicLength may not be specified without a variadic element");
-			return schema$1;
+			if (schema.minVariadicLength && !schema.variadic) return throwParseError("minVariadicLength may not be specified without a variadic element");
+			return schema;
 		}
-		return { variadic: schema$1 };
+		return { variadic: schema };
 	},
 	reduce: (raw, $) => {
 		let minVariadicLength = raw.minVariadicLength ?? 0;
@@ -4597,9 +4597,9 @@ const implementation$1 = implementNode({
 			minVariadicLength
 		}, { prereduced: true });
 	},
-	defaults: { description: (node$1) => {
-		if (node$1.isVariadicOnly) return `${node$1.variadic.nestableExpression}[]`;
-		return `[${node$1.tuple.map((element) => element.kind === "defaultables" ? `${element.node.nestableExpression} = ${printable(element.default)}` : element.kind === "optionals" ? `${element.node.nestableExpression}?` : element.kind === "variadic" ? `...${element.node.nestableExpression}[]` : element.node.expression).join(", ")}]`;
+	defaults: { description: (node) => {
+		if (node.isVariadicOnly) return `${node.variadic.nestableExpression}[]`;
+		return `[${node.tuple.map((element) => element.kind === "defaultables" ? `${element.node.nestableExpression} = ${printable(element.default)}` : element.kind === "optionals" ? `${element.node.nestableExpression}?` : element.kind === "variadic" ? `...${element.node.nestableExpression}[]` : element.node.expression).join(", ")}]`;
 	} },
 	intersections: { sequence: (l, r, ctx) => {
 		const rootState = _intersectSequences({
@@ -4672,18 +4672,18 @@ var SequenceNode = class extends BaseConstraint {
 		return this.cacheGetter("element", this.$.node("union", this.children));
 	}
 	compile(js) {
-		if (this.prefix) for (const [i, node$1] of this.prefix.entries()) js.traverseKey(`${i}`, `data[${i}]`, node$1);
-		for (const [i, node$1] of this.defaultablesAndOptionals.entries()) {
+		if (this.prefix) for (const [i, node] of this.prefix.entries()) js.traverseKey(`${i}`, `data[${i}]`, node);
+		for (const [i, node] of this.defaultablesAndOptionals.entries()) {
 			const dataIndex = `${i + this.prefixLength}`;
 			js.if(`${dataIndex} >= data.length`, () => js.traversalKind === "Allows" ? js.return(true) : js.return());
-			js.traverseKey(dataIndex, `data[${dataIndex}]`, node$1);
+			js.traverseKey(dataIndex, `data[${dataIndex}]`, node);
 		}
 		if (this.variadic) {
 			if (this.postfix) js.const("firstPostfixIndex", `data.length${this.postfix ? `- ${this.postfix.length}` : ""}`);
 			js.for(`i < ${this.postfix ? "firstPostfixIndex" : "data.length"}`, () => js.traverseKey("i", "data[i]", this.variadic), this.prevariadic.length);
-			if (this.postfix) for (const [i, node$1] of this.postfix.entries()) {
+			if (this.postfix) for (const [i, node] of this.postfix.entries()) {
 				const keyExpression = `firstPostfixIndex + ${i}`;
-				js.traverseKey(keyExpression, `data[${keyExpression}]`, node$1);
+				js.traverseKey(keyExpression, `data[${keyExpression}]`, node);
 			}
 		}
 		if (js.traversalKind === "Allows") js.return(true);
@@ -4695,54 +4695,54 @@ var SequenceNode = class extends BaseConstraint {
 		return result;
 	}
 	expression = this.description;
-	reduceJsonSchema(schema$1, ctx) {
+	reduceJsonSchema(schema, ctx) {
 		const isDraft07 = ctx.target === "draft-07";
 		if (this.prevariadic.length) {
 			const prefixSchemas = this.prevariadic.map((el) => {
 				const valueSchema = el.node.toJsonSchemaRecurse(ctx);
 				if (el.kind === "defaultables") {
-					const value$1 = typeof el.default === "function" ? el.default() : el.default;
-					valueSchema.default = $ark.intrinsic.jsonData.allows(value$1) ? value$1 : ctx.fallback.defaultValue({
+					const value = typeof el.default === "function" ? el.default() : el.default;
+					valueSchema.default = $ark.intrinsic.jsonData.allows(value) ? value : ctx.fallback.defaultValue({
 						code: "defaultValue",
 						base: valueSchema,
-						value: value$1
+						value
 					});
 				}
 				return valueSchema;
 			});
-			if (isDraft07) schema$1.items = prefixSchemas;
-			else schema$1.prefixItems = prefixSchemas;
+			if (isDraft07) schema.items = prefixSchemas;
+			else schema.prefixItems = prefixSchemas;
 		}
-		if (this.minLength) schema$1.minItems = this.minLength;
+		if (this.minLength) schema.minItems = this.minLength;
 		if (this.variadic) {
 			const variadicItemSchema = this.variadic.toJsonSchemaRecurse(ctx);
-			if (isDraft07 && this.prevariadic.length) schema$1.additionalItems = variadicItemSchema;
-			else schema$1.items = variadicItemSchema;
-			if (this.maxLength) schema$1.maxItems = this.maxLength;
+			if (isDraft07 && this.prevariadic.length) schema.additionalItems = variadicItemSchema;
+			else schema.items = variadicItemSchema;
+			if (this.maxLength) schema.maxItems = this.maxLength;
 			if (this.postfix) {
 				const elements = this.postfix.map((el) => el.toJsonSchemaRecurse(ctx));
-				schema$1 = ctx.fallback.arrayPostfix({
+				schema = ctx.fallback.arrayPostfix({
 					code: "arrayPostfix",
-					base: schema$1,
+					base: schema,
 					elements
 				});
 			}
 		} else {
-			if (isDraft07) schema$1.additionalItems = false;
-			else schema$1.items = false;
-			delete schema$1.maxItems;
+			if (isDraft07) schema.additionalItems = false;
+			else schema.items = false;
+			delete schema.maxItems;
 		}
-		return schema$1;
+		return schema;
 	}
 };
 const defaultableMorphsCache$1 = {};
-const getDefaultableMorphs = (node$1) => {
-	if (!node$1.defaultables) return [];
+const getDefaultableMorphs = (node) => {
+	if (!node.defaultables) return [];
 	const morphs = [];
 	let cacheKey = "[";
-	const lastDefaultableIndex = node$1.prefixLength + node$1.defaultablesLength - 1;
-	for (let i = node$1.prefixLength; i <= lastDefaultableIndex; i++) {
-		const [elementNode, defaultValue] = node$1.defaultables[i - node$1.prefixLength];
+	const lastDefaultableIndex = node.prefixLength + node.defaultablesLength - 1;
+	for (let i = node.prefixLength; i <= lastDefaultableIndex; i++) {
+		const [elementNode, defaultValue] = node.defaultables[i - node.prefixLength];
 		morphs.push(computeDefaultValueMorph(i, elementNode, defaultValue));
 		cacheKey += `${i}: ${elementNode.id} = ${defaultValueSerializer(defaultValue)}, `;
 	}
@@ -4755,26 +4755,26 @@ const Sequence = {
 };
 const sequenceInnerToTuple = (inner) => {
 	const tuple = [];
-	if (inner.prefix) for (const node$1 of inner.prefix) tuple.push({
+	if (inner.prefix) for (const node of inner.prefix) tuple.push({
 		kind: "prefix",
-		node: node$1
+		node
 	});
-	if (inner.defaultables) for (const [node$1, defaultValue] of inner.defaultables) tuple.push({
+	if (inner.defaultables) for (const [node, defaultValue] of inner.defaultables) tuple.push({
 		kind: "defaultables",
-		node: node$1,
+		node,
 		default: defaultValue
 	});
-	if (inner.optionals) for (const node$1 of inner.optionals) tuple.push({
+	if (inner.optionals) for (const node of inner.optionals) tuple.push({
 		kind: "optionals",
-		node: node$1
+		node
 	});
 	if (inner.variadic) tuple.push({
 		kind: "variadic",
 		node: inner.variadic
 	});
-	if (inner.postfix) for (const node$1 of inner.postfix) tuple.push({
+	if (inner.postfix) for (const node of inner.postfix) tuple.push({
 		kind: "postfix",
-		node: node$1
+		node
 	});
 	return tuple;
 };
@@ -4855,45 +4855,45 @@ const elementIsRequired = (el) => el.kind === "prefix" || el.kind === "postfix";
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/structure/structure.js
-const createStructuralWriter = (childStringProp) => (node$1) => {
-	if (node$1.props.length || node$1.index) {
-		const parts = node$1.index?.map((index) => index[childStringProp]) ?? [];
-		for (const prop of node$1.props) parts.push(prop[childStringProp]);
-		if (node$1.undeclared) parts.push(`+ (undeclared): ${node$1.undeclared}`);
+const createStructuralWriter = (childStringProp) => (node) => {
+	if (node.props.length || node.index) {
+		const parts = node.index?.map((index) => index[childStringProp]) ?? [];
+		for (const prop of node.props) parts.push(prop[childStringProp]);
+		if (node.undeclared) parts.push(`+ (undeclared): ${node.undeclared}`);
 		const objectLiteralDescription = `{ ${parts.join(", ")} }`;
-		return node$1.sequence ? `${objectLiteralDescription} & ${node$1.sequence.description}` : objectLiteralDescription;
+		return node.sequence ? `${objectLiteralDescription} & ${node.sequence.description}` : objectLiteralDescription;
 	}
-	return node$1.sequence?.description ?? "{}";
+	return node.sequence?.description ?? "{}";
 };
 const structuralDescription = createStructuralWriter("description");
 const structuralExpression = createStructuralWriter("expression");
 const intersectPropsAndIndex = (l, r, $) => {
 	const kind = l.required ? "required" : "optional";
 	if (!r.signature.allows(l.key)) return null;
-	const value$1 = intersectNodesRoot(l.value, r.value, $);
-	if (value$1 instanceof Disjoint) return kind === "optional" ? $.node("optional", {
+	const value = intersectNodesRoot(l.value, r.value, $);
+	if (value instanceof Disjoint) return kind === "optional" ? $.node("optional", {
 		key: l.key,
 		value: $ark.intrinsic.never.internal
-	}) : value$1.withPrefixKey(l.key, l.kind);
+	}) : value.withPrefixKey(l.key, l.kind);
 	return null;
 };
 const implementation = implementNode({
 	kind: "structure",
 	hasAssociatedError: false,
-	normalize: (schema$1) => schema$1,
-	applyConfig: (schema$1, config) => {
-		if (!schema$1.undeclared && config.onUndeclaredKey !== "ignore") return {
-			...schema$1,
+	normalize: (schema) => schema,
+	applyConfig: (schema, config) => {
+		if (!schema.undeclared && config.onUndeclaredKey !== "ignore") return {
+			...schema,
 			undeclared: config.onUndeclaredKey
 		};
-		return schema$1;
+		return schema;
 	},
 	keys: {
 		required: {
 			child: true,
 			parse: constraintKeyParser("required"),
 			reduceIo: (ioKind, inner, nodes) => {
-				inner.required = append(inner.required, nodes.map((node$1) => ioKind === "in" ? node$1.rawIn : node$1.rawOut));
+				inner.required = append(inner.required, nodes.map((node) => ioKind === "in" ? node.rawIn : node.rawOut));
 			}
 		},
 		optional: {
@@ -4901,10 +4901,10 @@ const implementation = implementNode({
 			parse: constraintKeyParser("optional"),
 			reduceIo: (ioKind, inner, nodes) => {
 				if (ioKind === "in") {
-					inner.optional = nodes.map((node$1) => node$1.rawIn);
+					inner.optional = nodes.map((node) => node.rawIn);
 					return;
 				}
-				for (const node$1 of nodes) inner[node$1.outProp.kind] = append(inner[node$1.outProp.kind], node$1.outProp.rawOut);
+				for (const node of nodes) inner[node.outProp.kind] = append(inner[node.outProp.kind], node.outProp.rawOut);
 			}
 		},
 		index: {
@@ -4917,8 +4917,8 @@ const implementation = implementNode({
 		},
 		undeclared: {
 			parse: (behavior) => behavior === "ignore" ? void 0 : behavior,
-			reduceIo: (ioKind, inner, value$1) => {
-				if (value$1 === "reject") {
+			reduceIo: (ioKind, inner, value) => {
+				if (value === "reject") {
 					inner.undeclared = "reject";
 					return;
 				}
@@ -5011,11 +5011,11 @@ var StructureNode = class extends BaseConstraint {
 	impliedBasis = $ark.intrinsic.object.internal;
 	impliedSiblings = this.children.flatMap((n) => n.impliedSiblings ?? []);
 	props = conflatenate(this.required, this.optional);
-	propsByKey = flatMorph(this.props, (i, node$1) => [node$1.key, node$1]);
+	propsByKey = flatMorph(this.props, (i, node) => [node.key, node]);
 	propsByKeyReference = registeredReference(this.propsByKey);
 	expression = structuralExpression(this);
-	requiredKeys = this.required?.map((node$1) => node$1.key) ?? [];
-	optionalKeys = this.optional?.map((node$1) => node$1.key) ?? [];
+	requiredKeys = this.required?.map((node) => node.key) ?? [];
+	optionalKeys = this.optional?.map((node) => node.key) ?? [];
 	literalKeys = [...this.requiredKeys, ...this.optionalKeys];
 	_keyof;
 	keyof() {
@@ -5043,34 +5043,34 @@ var StructureNode = class extends BaseConstraint {
 		if (invalidKeys.length) return throwParseError(writeInvalidKeysMessage(this.expression, invalidKeys));
 	}
 	get(indexer, ...path) {
-		let value$1;
+		let value;
 		let required = false;
 		const key = indexerToKey(indexer);
 		if ((typeof key === "string" || typeof key === "symbol") && this.propsByKey[key]) {
-			value$1 = this.propsByKey[key].value;
+			value = this.propsByKey[key].value;
 			required = this.propsByKey[key].required;
 		}
 		if (this.index) {
-			for (const n of this.index) if (typeOrTermExtends(key, n.signature)) value$1 = value$1?.and(n.value) ?? n.value;
+			for (const n of this.index) if (typeOrTermExtends(key, n.signature)) value = value?.and(n.value) ?? n.value;
 		}
 		if (this.sequence && typeOrTermExtends(key, $ark.intrinsic.nonNegativeIntegerString)) if (hasArkKind(key, "root")) {
-			if (this.sequence.variadic) value$1 = value$1?.and(this.sequence.element) ?? this.sequence.element;
+			if (this.sequence.variadic) value = value?.and(this.sequence.element) ?? this.sequence.element;
 		} else {
 			const index = Number.parseInt(key);
 			if (index < this.sequence.prevariadic.length) {
 				const fixedElement = this.sequence.prevariadic[index].node;
-				value$1 = value$1?.and(fixedElement) ?? fixedElement;
+				value = value?.and(fixedElement) ?? fixedElement;
 				required ||= index < this.sequence.prefixLength;
 			} else if (this.sequence.variadic) {
 				const nonFixedElement = this.$.node("union", this.sequence.variadicOrPostfix);
-				value$1 = value$1?.and(nonFixedElement) ?? nonFixedElement;
+				value = value?.and(nonFixedElement) ?? nonFixedElement;
 			}
 		}
-		if (!value$1) {
+		if (!value) {
 			if (this.sequence?.variadic && hasArkKind(key, "root") && key.extends($ark.intrinsic.number)) return throwParseError(writeNumberIndexMessage(key.expression, this.sequence.expression));
 			return throwParseError(writeInvalidKeysMessage(this.expression, [key]));
 		}
-		const result = value$1.get(...path);
+		const result = value.get(...path);
 		return required ? result : result.or($ark.intrinsic.undefined);
 	}
 	pick(...keys) {
@@ -5141,10 +5141,10 @@ var StructureNode = class extends BaseConstraint {
 			for (let i = 0; i < keys.length; i++) {
 				const k = keys[i];
 				if (this.index) {
-					for (const node$1 of this.index) if (node$1.signature.traverseAllows(k, ctx)) if (traversalKind === "Allows") {
-						if (!traverseKey(k, () => node$1.value.traverseAllows(data[k], ctx), ctx)) return false;
+					for (const node of this.index) if (node.signature.traverseAllows(k, ctx)) if (traversalKind === "Allows") {
+						if (!traverseKey(k, () => node.value.traverseAllows(data[k], ctx), ctx)) return false;
 					} else {
-						traverseKey(k, () => node$1.value.traverseApply(data[k], ctx), ctx);
+						traverseKey(k, () => node.value.traverseApply(data[k], ctx), ctx);
 						if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
 					}
 				}
@@ -5206,39 +5206,39 @@ var StructureNode = class extends BaseConstraint {
 	}
 	compileExhaustiveEntry(js) {
 		js.const("k", "keys[i]");
-		if (this.index) for (const node$1 of this.index) js.if(`${js.invoke(node$1.signature, {
+		if (this.index) for (const node of this.index) js.if(`${js.invoke(node.signature, {
 			arg: "k",
 			kind: "Allows"
-		})}`, () => js.traverseKey("k", "data[k]", node$1.value));
+		})}`, () => js.traverseKey("k", "data[k]", node.value));
 		if (this.undeclared === "reject") js.if(`!(${this._compileDeclaresKey(js)})`, () => {
 			if (js.traversalKind === "Allows") return js.return(false);
 			return js.line(`ctx.errorFromNodeContext({ code: "predicate", expected: "removed", actual: "", relativePath: [k], meta: ${this.compiledMeta} })`).if("ctx.failFast", () => js.return());
 		});
 		return js;
 	}
-	reduceJsonSchema(schema$1, ctx) {
-		switch (schema$1.type) {
-			case "object": return this.reduceObjectJsonSchema(schema$1, ctx);
+	reduceJsonSchema(schema, ctx) {
+		switch (schema.type) {
+			case "object": return this.reduceObjectJsonSchema(schema, ctx);
 			case "array":
-				const arraySchema = this.sequence?.reduceJsonSchema(schema$1, ctx) ?? schema$1;
+				const arraySchema = this.sequence?.reduceJsonSchema(schema, ctx) ?? schema;
 				if (this.props.length || this.index) return ctx.fallback.arrayObject({
 					code: "arrayObject",
 					base: arraySchema,
 					object: this.reduceObjectJsonSchema({ type: "object" }, ctx)
 				});
 				return arraySchema;
-			default: return ToJsonSchema.throwInternalOperandError("structure", schema$1);
+			default: return ToJsonSchema.throwInternalOperandError("structure", schema);
 		}
 	}
-	reduceObjectJsonSchema(schema$1, ctx) {
+	reduceObjectJsonSchema(schema, ctx) {
 		if (this.props.length) {
-			schema$1.properties = {};
+			schema.properties = {};
 			for (const prop of this.props) {
 				const valueSchema = prop.value.toJsonSchemaRecurse(ctx);
 				if (typeof prop.key === "symbol") {
 					ctx.fallback.symbolKey({
 						code: "symbolKey",
-						base: schema$1,
+						base: schema,
 						key: prop.key,
 						value: valueSchema,
 						optional: prop.optional
@@ -5246,28 +5246,28 @@ var StructureNode = class extends BaseConstraint {
 					continue;
 				}
 				if (prop.hasDefault()) {
-					const value$1 = typeof prop.default === "function" ? prop.default() : prop.default;
-					valueSchema.default = $ark.intrinsic.jsonData.allows(value$1) ? value$1 : ctx.fallback.defaultValue({
+					const value = typeof prop.default === "function" ? prop.default() : prop.default;
+					valueSchema.default = $ark.intrinsic.jsonData.allows(value) ? value : ctx.fallback.defaultValue({
 						code: "defaultValue",
 						base: valueSchema,
-						value: value$1
+						value
 					});
 				}
-				schema$1.properties[prop.key] = valueSchema;
+				schema.properties[prop.key] = valueSchema;
 			}
-			if (this.requiredKeys.length && schema$1.properties) schema$1.required = this.requiredKeys.filter((k) => typeof k === "string" && k in schema$1.properties);
+			if (this.requiredKeys.length && schema.properties) schema.required = this.requiredKeys.filter((k) => typeof k === "string" && k in schema.properties);
 		}
 		if (this.index) for (const index of this.index) {
 			const valueJsonSchema = index.value.toJsonSchemaRecurse(ctx);
 			if (index.signature.equals($ark.intrinsic.string)) {
-				schema$1.additionalProperties = valueJsonSchema;
+				schema.additionalProperties = valueJsonSchema;
 				continue;
 			}
 			for (const keyBranch of index.signature.branches) {
 				if (!keyBranch.extends($ark.intrinsic.string)) {
-					schema$1 = ctx.fallback.symbolKey({
+					schema = ctx.fallback.symbolKey({
 						code: "symbolKey",
-						base: schema$1,
+						base: schema,
 						key: null,
 						value: valueJsonSchema,
 						optional: false
@@ -5289,55 +5289,55 @@ var StructureNode = class extends BaseConstraint {
 						base: keySchemaWithPattern,
 						pattern: pattern[i].rule
 					});
-					schema$1.patternProperties ??= {};
-					schema$1.patternProperties[keySchemaWithPattern.pattern] = valueJsonSchema;
+					schema.patternProperties ??= {};
+					schema.patternProperties[keySchemaWithPattern.pattern] = valueJsonSchema;
 				}
 			}
 		}
-		if (this.undeclared && !schema$1.additionalProperties) schema$1.additionalProperties = false;
-		return schema$1;
+		if (this.undeclared && !schema.additionalProperties) schema.additionalProperties = false;
+		return schema;
 	}
 };
 const defaultableMorphsCache = {};
-const constructStructuralMorphCacheKey = (node$1) => {
+const constructStructuralMorphCacheKey = (node) => {
 	let cacheKey = "";
-	for (let i = 0; i < node$1.defaultable.length; i++) cacheKey += node$1.defaultable[i].defaultValueMorphRef;
-	if (node$1.sequence?.defaultValueMorphsReference) cacheKey += node$1.sequence?.defaultValueMorphsReference;
-	if (node$1.undeclared === "delete") {
+	for (let i = 0; i < node.defaultable.length; i++) cacheKey += node.defaultable[i].defaultValueMorphRef;
+	if (node.sequence?.defaultValueMorphsReference) cacheKey += node.sequence?.defaultValueMorphsReference;
+	if (node.undeclared === "delete") {
 		cacheKey += "delete !(";
-		if (node$1.required) for (const n of node$1.required) cacheKey += n.compiledKey + " | ";
-		if (node$1.optional) for (const n of node$1.optional) cacheKey += n.compiledKey + " | ";
-		if (node$1.index) for (const index of node$1.index) cacheKey += index.signature.id + " | ";
-		if (node$1.sequence) if (node$1.sequence.maxLength === null) cacheKey += intrinsic.nonNegativeIntegerString.id;
-		else for (let i = 0; i < node$1.sequence.tuple.length; i++) cacheKey += i + " | ";
+		if (node.required) for (const n of node.required) cacheKey += n.compiledKey + " | ";
+		if (node.optional) for (const n of node.optional) cacheKey += n.compiledKey + " | ";
+		if (node.index) for (const index of node.index) cacheKey += index.signature.id + " | ";
+		if (node.sequence) if (node.sequence.maxLength === null) cacheKey += intrinsic.nonNegativeIntegerString.id;
+		else for (let i = 0; i < node.sequence.tuple.length; i++) cacheKey += i + " | ";
 		cacheKey += ")";
 	}
 	return cacheKey;
 };
-const getPossibleMorph = (node$1) => {
-	const cacheKey = constructStructuralMorphCacheKey(node$1);
+const getPossibleMorph = (node) => {
+	const cacheKey = constructStructuralMorphCacheKey(node);
 	if (!cacheKey) return void 0;
 	if (defaultableMorphsCache[cacheKey]) return defaultableMorphsCache[cacheKey];
 	const $arkStructuralMorph = (data, ctx) => {
-		for (let i = 0; i < node$1.defaultable.length; i++) if (!(node$1.defaultable[i].key in data)) node$1.defaultable[i].defaultValueMorph(data, ctx);
-		if (node$1.sequence?.defaultables) for (let i = data.length - node$1.sequence.prefixLength; i < node$1.sequence.defaultables.length; i++) node$1.sequence.defaultValueMorphs[i](data, ctx);
-		if (node$1.undeclared === "delete") {
-			for (const k in data) if (!node$1.declaresKey(k)) delete data[k];
+		for (let i = 0; i < node.defaultable.length; i++) if (!(node.defaultable[i].key in data)) node.defaultable[i].defaultValueMorph(data, ctx);
+		if (node.sequence?.defaultables) for (let i = data.length - node.sequence.prefixLength; i < node.sequence.defaultables.length; i++) node.sequence.defaultValueMorphs[i](data, ctx);
+		if (node.undeclared === "delete") {
+			for (const k in data) if (!node.declaresKey(k)) delete data[k];
 		}
 		return data;
 	};
 	return defaultableMorphsCache[cacheKey] = $arkStructuralMorph;
 };
-const precompileMorphs = (js, node$1) => {
-	const args = `(data${node$1.defaultable.some((node$2) => node$2.defaultValueMorph.length === 2) || node$1.sequence?.defaultValueMorphs.some((morph) => morph.length === 2) ? ", ctx" : ""})`;
-	return js.block(`${args} => `, (js$1) => {
-		for (let i = 0; i < node$1.defaultable.length; i++) {
-			const { serializedKey, defaultValueMorphRef } = node$1.defaultable[i];
-			js$1.if(`!(${serializedKey} in data)`, (js$2) => js$2.line(`${defaultValueMorphRef}${args}`));
+const precompileMorphs = (js, node) => {
+	const args = `(data${node.defaultable.some((node) => node.defaultValueMorph.length === 2) || node.sequence?.defaultValueMorphs.some((morph) => morph.length === 2) ? ", ctx" : ""})`;
+	return js.block(`${args} => `, (js) => {
+		for (let i = 0; i < node.defaultable.length; i++) {
+			const { serializedKey, defaultValueMorphRef } = node.defaultable[i];
+			js.if(`!(${serializedKey} in data)`, (js) => js.line(`${defaultValueMorphRef}${args}`));
 		}
-		if (node$1.sequence?.defaultables) js$1.for(`i < ${node$1.sequence.defaultables.length}`, (js$2) => js$2.set(`data[i]`, 5), `data.length - ${node$1.sequence.prefixLength}`);
-		if (node$1.undeclared === "delete") js$1.forIn("data", (js$2) => js$2.if(`!(${node$1._compileDeclaresKey(js$2)})`, (js$3) => js$3.line(`delete data[k]`)));
-		return js$1.return("data");
+		if (node.sequence?.defaultables) js.for(`i < ${node.sequence.defaultables.length}`, (js) => js.set(`data[i]`, 5), `data.length - ${node.sequence.prefixLength}`);
+		if (node.undeclared === "delete") js.forIn("data", (js) => js.if(`!(${node._compileDeclaresKey(js)})`, (js) => js.line(`delete data[k]`)));
+		return js.return("data");
 	});
 };
 const Structure = {
@@ -5351,23 +5351,23 @@ const indexerToKey = (indexable) => {
 };
 const writeNumberIndexMessage = (indexExpression, sequenceExpression) => `${indexExpression} is not allowed as an array index on ${sequenceExpression}. Use the 'nonNegativeIntegerString' keyword instead.`;
 /** extract enumerable named props from an index signature */
-const normalizeIndex = (signature, value$1, $) => {
+const normalizeIndex = (signature, value, $) => {
 	const [enumerableBranches, nonEnumerableBranches] = spliterate(signature.branches, (k) => k.hasKind("unit"));
 	if (!enumerableBranches.length) return { index: $.node("index", {
 		signature,
-		value: value$1
+		value
 	}) };
 	const normalized = {};
 	for (const n of enumerableBranches) {
 		const prop = $.node("required", {
 			key: n.unit,
-			value: value$1
+			value
 		});
 		normalized[prop.kind] = append(normalized[prop.kind], prop);
 	}
 	if (nonEnumerableBranches.length) normalized.index = $.node("index", {
 		signature: nonEnumerableBranches,
-		value: value$1
+		value
 	});
 	return normalized;
 };
@@ -5395,7 +5395,7 @@ const nodeImplementationsByKind = {
 	sequence: Sequence.implementation,
 	structure: Structure.implementation
 };
-$ark.defaultConfig = withAlphabetizedKeys(Object.assign(flatMorph(nodeImplementationsByKind, (kind, implementation$22) => [kind, implementation$22.defaults]), {
+$ark.defaultConfig = withAlphabetizedKeys(Object.assign(flatMorph(nodeImplementationsByKind, (kind, implementation) => [kind, implementation.defaults]), {
 	jitless: envHasCsp(),
 	clone: deepClone,
 	onUndeclaredKey: "ignore",
@@ -5433,11 +5433,11 @@ var RootModule = class extends DynamicBase {
 		return "module";
 	}
 };
-const bindModule = (module, $) => new RootModule(flatMorph(module, (alias, value$1) => [alias, hasArkKind(value$1, "module") ? bindModule(value$1, $) : $.bindReference(value$1)]));
+const bindModule = (module, $) => new RootModule(flatMorph(module, (alias, value) => [alias, hasArkKind(value, "module") ? bindModule(value, $) : $.bindReference(value)]));
 
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/scope.js
-const schemaBranchesOf = (schema$1) => isArray(schema$1) ? schema$1 : "branches" in schema$1 && isArray(schema$1.branches) ? schema$1.branches : void 0;
+const schemaBranchesOf = (schema) => isArray(schema) ? schema : "branches" in schema && isArray(schema.branches) ? schema.branches : void 0;
 const throwMismatchedNodeRootError = (expected, actual) => throwParseError(`Node of kind ${actual} is not valid as a ${expected} definition`);
 const writeDuplicateAliasError = (alias) => `#${alias} duplicates public alias ${alias}`;
 const scopesByName = {};
@@ -5524,9 +5524,9 @@ var BaseScope = class {
 		this.nodesByHash[rawUnknownUnion.hash] = this.node("intersection", {}, { prereduced: true });
 		this.intrinsic = $ark.intrinsic ? flatMorph($ark.intrinsic, (k, v) => k.startsWith("json") ? [] : [k, this.bindReference(v)]) : {};
 	}
-	cacheGetter(name, value$1) {
-		Object.defineProperty(this, name, { value: value$1 });
-		return value$1;
+	cacheGetter(name, value) {
+		Object.defineProperty(this, name, { value });
+		return value;
 	}
 	get internal() {
 		return this;
@@ -5545,7 +5545,7 @@ var BaseScope = class {
 	};
 	units = (values, opts) => {
 		const uniqueValues = [];
-		for (const value$1 of values) if (!uniqueValues.includes(value$1)) uniqueValues.push(value$1);
+		for (const value of values) if (!uniqueValues.includes(value)) uniqueValues.push(value);
 		const branches = uniqueValues.map((unit) => this.node("unit", { unit }, opts));
 		return this.node("union", branches, {
 			...opts,
@@ -5561,27 +5561,27 @@ var BaseScope = class {
 		if (!this.resolved) this.lazyResolutions.push(node);
 		return node;
 	}
-	schema = (schema$1, opts) => this.finalize(this.parseSchema(schema$1, opts));
-	parseSchema = (schema$1, opts) => this.node(schemaKindOf(schema$1), schema$1, opts);
-	preparseNode(kinds, schema$1, opts) {
-		let kind = typeof kinds === "string" ? kinds : schemaKindOf(schema$1, kinds);
-		if (isNode(schema$1) && schema$1.kind === kind) return schema$1;
+	schema = (schema, opts) => this.finalize(this.parseSchema(schema, opts));
+	parseSchema = (schema, opts) => this.node(schemaKindOf(schema), schema, opts);
+	preparseNode(kinds, schema, opts) {
+		let kind = typeof kinds === "string" ? kinds : schemaKindOf(schema, kinds);
+		if (isNode(schema) && schema.kind === kind) return schema;
 		if (kind === "alias" && !opts?.prereduced) {
-			const { reference: reference$1 } = Alias.implementation.normalize(schema$1, this);
-			if (reference$1.startsWith("$")) {
-				const resolution = this.resolveRoot(reference$1.slice(1));
-				schema$1 = resolution;
+			const { reference } = Alias.implementation.normalize(schema, this);
+			if (reference.startsWith("$")) {
+				const resolution = this.resolveRoot(reference.slice(1));
+				schema = resolution;
 				kind = resolution.kind;
 			}
-		} else if (kind === "union" && hasDomain(schema$1, "object")) {
-			const branches = schemaBranchesOf(schema$1);
+		} else if (kind === "union" && hasDomain(schema, "object")) {
+			const branches = schemaBranchesOf(schema);
 			if (branches?.length === 1) {
-				schema$1 = branches[0];
-				kind = schemaKindOf(schema$1);
+				schema = branches[0];
+				kind = schemaKindOf(schema);
 			}
 		}
-		if (isNode(schema$1) && schema$1.kind === kind) return schema$1;
-		const normalizedSchema = nodeImplementationsByKind[kind].normalize?.(schema$1, this) ?? schema$1;
+		if (isNode(schema) && schema.kind === kind) return schema;
+		const normalizedSchema = nodeImplementationsByKind[kind].normalize?.(schema, this) ?? schema;
 		if (isNode(normalizedSchema)) return normalizedSchema.kind === kind ? normalizedSchema : throwMismatchedNodeRootError(kind, normalizedSchema.kind);
 		return {
 			...opts,
@@ -5591,10 +5591,10 @@ var BaseScope = class {
 			prefix: opts.alias ?? kind
 		};
 	}
-	bindReference(reference$1) {
+	bindReference(reference) {
 		let bound;
-		if (isNode(reference$1)) bound = reference$1.$ === this ? reference$1 : new reference$1.constructor(reference$1.attachments, this);
-		else bound = reference$1.$ === this ? reference$1 : new GenericRoot(reference$1.params, reference$1.bodyDef, reference$1.$, this, reference$1.hkt);
+		if (isNode(reference)) bound = reference.$ === this ? reference : new reference.constructor(reference.attachments, this);
+		else bound = reference.$ === this ? reference : new GenericRoot(reference.params, reference.bodyDef, reference.$, this, reference.hkt);
 		if (!this.resolved) Object.assign(this.referencesById, bound.referencesById);
 		return bound;
 	}
@@ -5614,10 +5614,10 @@ var BaseScope = class {
 		return $ark.ambient;
 	}
 	maybeResolve(name) {
-		const cached$1 = this.resolutions[name];
-		if (cached$1) {
-			if (typeof cached$1 !== "string") return this.bindReference(cached$1);
-			const v = nodesByRegisteredId[cached$1];
+		const cached = this.resolutions[name];
+		if (cached) {
+			if (typeof cached !== "string") return this.bindReference(cached);
+			const v = nodesByRegisteredId[cached];
 			if (hasArkKind(v, "root")) return this.resolutions[name] = v;
 			if (hasArkKind(v, "context")) {
 				if (v.phase === "resolving") return this.node("alias", { reference: `$${name}` }, { prereduced: true });
@@ -5629,7 +5629,7 @@ var BaseScope = class {
 				nodesByRegisteredId[v.id] = node;
 				return this.resolutions[name] = node;
 			}
-			return throwInternalError(`Unexpected nodesById entry for ${cached$1}: ${printable(v)}`);
+			return throwInternalError(`Unexpected nodesById entry for ${cached}: ${printable(v)}`);
 		}
 		let def = this.aliases[name] ?? this.ambient?.[name];
 		if (!def) return this.maybeResolveSubalias(name);
@@ -5654,7 +5654,7 @@ var BaseScope = class {
 		return new Traversal(root, this.resolvedConfig);
 	}
 	import(...names) {
-		return new RootModule(flatMorph(this.export(...names), (alias, value$1) => [`#${alias}`, value$1]));
+		return new RootModule(flatMorph(this.export(...names), (alias, value) => [`#${alias}`, value]));
 	}
 	precompilation;
 	_exportedResolutions;
@@ -5713,8 +5713,8 @@ var SchemaScope = class extends BaseScope {
 	parseOwnDefinitionFormat(def, ctx) {
 		return parseNode(ctx);
 	}
-	preparseOwnDefinitionFormat(schema$1, opts) {
-		return this.preparseNode(schemaKindOf(schema$1), schema$1, opts);
+	preparseOwnDefinitionFormat(schema, opts) {
+		return this.preparseNode(schemaKindOf(schema), schema, opts);
 	}
 	preparseOwnAliasEntry(k, v) {
 		return [k, v];
@@ -5839,7 +5839,7 @@ Object.assign(regex$1, { as: regex$1 });
 
 //#endregion
 //#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/parser/shift/operand/date.js
-const isDateLiteral = (value$1) => typeof value$1 === "string" && value$1[0] === "d" && (value$1[1] === "'" || value$1[1] === "\"") && value$1[value$1.length - 1] === value$1[1];
+const isDateLiteral = (value) => typeof value === "string" && value[0] === "d" && (value[1] === "'" || value[1] === "\"") && value[value.length - 1] === value[1];
 const isValidDate = (d) => d.toString() !== "Invalid Date";
 const extractDateLiteralSource = (literal) => literal.slice(2, -1);
 const writeInvalidDateMessage = (source) => `'${source}' could not be parsed by the Date constructor`;
@@ -5870,9 +5870,9 @@ const parseEnclosed = (s, enclosing) => {
 	if (s.scanner.lookahead === "") return s.error(writeUnterminatedEnclosedMessage(enclosed, enclosing));
 	s.scanner.shift();
 	if (enclosing in enclosingRegexTokens) {
-		let regex$2;
+		let regex;
 		try {
-			regex$2 = new RegExp(enclosed);
+			regex = new RegExp(enclosed);
 		} catch (e) {
 			throwParseError(String(e));
 		}
@@ -5882,7 +5882,7 @@ const parseEnclosed = (s, enclosing) => {
 		}, { prereduced: true });
 		if (enclosing === "x/") s.root = s.ctx.$.node("morph", {
 			in: s.root,
-			morphs: (s$1) => regex$2.exec(s$1),
+			morphs: (s) => regex.exec(s),
 			declaredOut: regexExecArray
 		});
 	} else if (isKeyOf(enclosing, enclosingQuote)) s.root = s.ctx.$.node("unit", { unit: enclosed });
@@ -6149,9 +6149,9 @@ const parseString = (def, ctx) => {
 		if (possibleElementResolution) return possibleElementResolution.array();
 	}
 	const s = new RuntimeState(new Scanner(def), ctx);
-	const node$1 = fullStringParse(s);
+	const node = fullStringParse(s);
 	if (s.finalizer === ">") throwParseError(writeUnexpectedCharacterMessage(">"));
-	return node$1;
+	return node;
 };
 const fullStringParse = (s) => {
 	s.parseOperand();
@@ -6198,9 +6198,9 @@ var RuntimeState = class RuntimeState {
 		this.root = root;
 	}
 	unsetRoot() {
-		const value$1 = this.root;
+		const value = this.root;
 		this.root = void 0;
-		return value$1;
+		return value;
 	}
 	constrainRoot(...args) {
 		this.root = this.root.constrain(args[0], args[1]);
@@ -6407,8 +6407,8 @@ var InternalChainedMatchParser = class extends Callable {
 	case(def, resolver) {
 		return this.caseEntry(this.$.parse(def), resolver);
 	}
-	caseEntry(node$1, resolver) {
-		const branch = (this.key ? this.$.parse({ [this.key]: node$1 }) : node$1).pipe(resolver);
+	caseEntry(node, resolver) {
+		const branch = (this.key ? this.$.parse({ [this.key]: node }) : node).pipe(resolver);
 		this.branches.push(branch);
 		return this;
 	}
@@ -6432,12 +6432,12 @@ var InternalChainedMatchParser = class extends Callable {
 	}
 	default(defaultCase) {
 		if (typeof defaultCase === "function") this.case(intrinsic.unknown, defaultCase);
-		const schema$1 = {
+		const schema = {
 			branches: this.branches,
 			ordered: true
 		};
-		if (defaultCase === "never" || defaultCase === "assert") schema$1.meta = { onFail: throwOnDefault };
-		const cases = this.$.node("union", schema$1);
+		if (defaultCase === "never" || defaultCase === "assert") schema.meta = { onFail: throwOnDefault };
+		const cases = this.$.node("union", schema);
 		if (!this.in) return this.$.finalize(cases);
 		let inputValidatedCases = this.in.pipe(cases);
 		if (defaultCase === "never" || defaultCase === "assert") inputValidatedCases = inputValidatedCases.configureReferences({ onFail: throwOnDefault }, "self");
@@ -6567,7 +6567,7 @@ const parseMorphTuple = (def, ctx) => {
 	if (typeof def[2] !== "function") return throwParseError(writeMalformedFunctionalExpressionMessage("=>", def[2]));
 	return ctx.$.parseOwnDefinitionFormat(def[0], ctx).pipe(def[2]);
 };
-const writeMalformedFunctionalExpressionMessage = (operator, value$1) => `${operator === ":" ? "Narrow" : "Morph"} expression requires a function following '${operator}' (was ${typeof value$1})`;
+const writeMalformedFunctionalExpressionMessage = (operator, value) => `${operator === ":" ? "Narrow" : "Morph"} expression requires a function following '${operator}' (was ${typeof value})`;
 const parseNarrowTuple = (def, ctx) => {
 	if (typeof def[2] !== "function") return throwParseError(writeMalformedFunctionalExpressionMessage(":", def[2]));
 	return ctx.$.parseOwnDefinitionFormat(def[0], ctx).constrain("predicate", def[2]);
@@ -6647,10 +6647,10 @@ const appendOptionalElement = (base, element) => {
 	base.optionals = append(base.optionals, element);
 	return base;
 };
-const appendDefaultableElement = (base, element, value$1) => {
+const appendDefaultableElement = (base, element, value) => {
 	if (base.variadic) return throwParseError(optionalOrDefaultableAfterVariadicMessage);
 	if (base.optionals) return throwParseError(defaultablePostOptionalMessage);
-	base.defaultables = append(base.defaultables, [[element, value$1]]);
+	base.defaultables = append(base.defaultables, [[element, value]]);
 	return base;
 };
 const appendVariadicElement = (base, element) => {
@@ -6666,10 +6666,10 @@ const appendSpreadBranch = (base, branch) => {
 		kind: "sequence"
 	});
 	if (!spread) return appendVariadicElement(base, $ark.intrinsic.unknown);
-	if (spread.prefix) for (const node$1 of spread.prefix) appendRequiredElement(base, node$1);
-	if (spread.optionals) for (const node$1 of spread.optionals) appendOptionalElement(base, node$1);
+	if (spread.prefix) for (const node of spread.prefix) appendRequiredElement(base, node);
+	if (spread.optionals) for (const node of spread.optionals) appendOptionalElement(base, node);
 	if (spread.variadic) appendVariadicElement(base, spread.variadic);
-	if (spread.postfix) for (const node$1 of spread.postfix) appendRequiredElement(base, node$1);
+	if (spread.postfix) for (const node of spread.postfix) appendRequiredElement(base, node);
 	return base;
 };
 const writeNonArraySpreadMessage = (operand) => `Spread element must be an array (was ${operand})`;
@@ -6709,15 +6709,15 @@ const parseObject = (def, ctx) => {
 		default: return throwParseError(writeBadDefinitionTypeMessage(objectKind ?? printable(def)));
 	}
 };
-const parseStandardSchema = (def, ctx) => ctx.$.intrinsic.unknown.pipe((v, ctx$1) => {
+const parseStandardSchema = (def, ctx) => ctx.$.intrinsic.unknown.pipe((v, ctx) => {
 	const result = def["~standard"].validate(v);
 	if (!result.issues) return result.value;
-	for (const { message, path } of result.issues) if (path) if (path.length) ctx$1.error({
+	for (const { message, path } of result.issues) if (path) if (path.length) ctx.error({
 		problem: uncapitalize(message),
 		relativePath: path.map((k) => typeof k === "object" ? k.key : k)
 	});
-	else ctx$1.error({ message });
-	else ctx$1.error({ message });
+	else ctx.error({ message });
+	else ctx.error({ message });
 });
 const parseTuple = (def, ctx) => maybeParseTupleExpression(def, ctx) ?? parseTupleLiteral(def, ctx);
 const writeBadDefinitionTypeMessage = (actual) => `Type definitions must be strings or objects (was ${actual})`;
@@ -6815,13 +6815,13 @@ var InternalScope = class InternalScope extends BaseScope {
 		}
 		return result;
 	}
-	unit = (value$1) => this.units([value$1]);
+	unit = (value) => this.units([value]);
 	valueOf = (tsEnum) => this.units(enumValues(tsEnum));
 	enumerated = (...values) => this.units(values);
 	instanceOf = (ctor) => this.node("proto", { proto: ctor }, { prereduced: true });
 	or = (...defs) => this.schema(defs.map((def) => this.parse(def)));
-	and = (...defs) => defs.reduce((node$1, def) => node$1.and(this.parse(def)), this.intrinsic.unknown);
-	merge = (...defs) => defs.reduce((node$1, def) => node$1.merge(this.parse(def)), this.intrinsic.object);
+	and = (...defs) => defs.reduce((node, def) => node.and(this.parse(def)), this.intrinsic.unknown);
+	merge = (...defs) => defs.reduce((node, def) => node.merge(this.parse(def)), this.intrinsic.object);
 	pipe = (...morphs) => this.intrinsic.unknown.pipe(...morphs);
 	fn = new InternalFnParser(this);
 	match = new InternalMatchParser(this);
@@ -6976,7 +6976,7 @@ const number = Scope.module({
 //#endregion
 //#region ../node_modules/.pnpm/arktype@2.1.29/node_modules/arktype/out/keywords/string.js
 const regexStringNode = (regex, description, jsonSchemaFormat) => {
-	const schema$1 = {
+	const schema = {
 		domain: "string",
 		pattern: {
 			rule: regex.source,
@@ -6984,8 +6984,8 @@ const regexStringNode = (regex, description, jsonSchemaFormat) => {
 			meta: description
 		}
 	};
-	if (jsonSchemaFormat) schema$1.meta = { format: jsonSchemaFormat };
-	return node("intersection", schema$1);
+	if (jsonSchemaFormat) schema.meta = { format: jsonSchemaFormat };
+	return node("intersection", schema);
 };
 const stringIntegerRoot = regexStringNode(wellFormedIntegerMatcher, "a well-formed integer string");
 const stringInteger = Scope.module({
@@ -6993,8 +6993,8 @@ const stringInteger = Scope.module({
 	parse: rootSchema({
 		in: stringIntegerRoot,
 		morphs: (s, ctx) => {
-			const parsed$1 = Number.parseInt(s);
-			return Number.isSafeInteger(parsed$1) ? parsed$1 : ctx.error("an integer in the range Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER");
+			const parsed = Number.parseInt(s);
+			return Number.isSafeInteger(parsed) ? parsed : ctx.error("an integer in the range Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER");
 		},
 		declaredOut: intrinsic.integer
 	})
@@ -7095,9 +7095,9 @@ const stringDate = Scope.module({
 const email = regexStringNode(/^[\w%+.-]+@[\d.A-Za-z-]+\.[A-Za-z]{2,}$/, "an email address", "email");
 const ipv4Segment = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
 const ipv4Address = `(${ipv4Segment}[.]){3}${ipv4Segment}`;
-const ipv4Matcher = /* @__PURE__ */ new RegExp(`^${ipv4Address}$`);
+const ipv4Matcher = new RegExp(`^${ipv4Address}$`);
 const ipv6Segment = "(?:[0-9a-fA-F]{1,4})";
-const ipv6Matcher = /* @__PURE__ */ new RegExp(`^((?:${ipv6Segment}:){7}(?:${ipv6Segment}|:)|(?:${ipv6Segment}:){6}(?:${ipv4Address}|:${ipv6Segment}|:)|(?:${ipv6Segment}:){5}(?::${ipv4Address}|(:${ipv6Segment}){1,2}|:)|(?:${ipv6Segment}:){4}(?:(:${ipv6Segment}){0,1}:${ipv4Address}|(:${ipv6Segment}){1,3}|:)|(?:${ipv6Segment}:){3}(?:(:${ipv6Segment}){0,2}:${ipv4Address}|(:${ipv6Segment}){1,4}|:)|(?:${ipv6Segment}:){2}(?:(:${ipv6Segment}){0,3}:${ipv4Address}|(:${ipv6Segment}){1,5}|:)|(?:${ipv6Segment}:){1}(?:(:${ipv6Segment}){0,4}:${ipv4Address}|(:${ipv6Segment}){1,6}|:)|(?::((?::${ipv6Segment}){0,5}:${ipv4Address}|(?::${ipv6Segment}){1,7}|:)))(%[0-9a-zA-Z.]{1,})?\$`);
+const ipv6Matcher = new RegExp(`^((?:${ipv6Segment}:){7}(?:${ipv6Segment}|:)|(?:${ipv6Segment}:){6}(?:${ipv4Address}|:${ipv6Segment}|:)|(?:${ipv6Segment}:){5}(?::${ipv4Address}|(:${ipv6Segment}){1,2}|:)|(?:${ipv6Segment}:){4}(?:(:${ipv6Segment}){0,1}:${ipv4Address}|(:${ipv6Segment}){1,3}|:)|(?:${ipv6Segment}:){3}(?:(:${ipv6Segment}){0,2}:${ipv4Address}|(:${ipv6Segment}){1,4}|:)|(?:${ipv6Segment}:){2}(?:(:${ipv6Segment}){0,3}:${ipv4Address}|(:${ipv6Segment}){1,5}|:)|(?:${ipv6Segment}:){1}(?:(:${ipv6Segment}){0,4}:${ipv4Address}|(:${ipv6Segment}){1,6}|:)|(?::((?::${ipv6Segment}){0,5}:${ipv4Address}|(?::${ipv6Segment}){1,7}|:)))(%[0-9a-zA-Z.]{1,})?\$`);
 const ip = Scope.module({
 	root: [
 		"v4 | v6",

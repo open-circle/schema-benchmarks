@@ -26,7 +26,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 
 //#endregion
-//#region ../node_modules/.pnpm/typia@11.0.0_@types+node@24.10.8_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
+//#region ../node_modules/.pnpm/typia@11.0.2_@types+node@25.0.10_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
 var require__validateReport = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._validateReport = void 0;
@@ -318,14 +318,14 @@ var import__validateReport = /* @__PURE__ */ __toESM(require__validateReport(), 
 		if (false === __is(input)) {
 			errors = [];
 			_report = import__validateReport._validateReport(errors);
-			((input$1, _path, _exceptionable = true) => ("object" === typeof input$1 && null !== input$1 || _report(true, {
+			((input, _path, _exceptionable = true) => ("object" === typeof input && null !== input || _report(true, {
 				path: _path + "",
 				expected: "__type",
-				value: input$1
-			})) && _vo0(input$1, _path + "", true) || _report(true, {
+				value: input
+			})) && _vo0(input, _path + "", true) || _report(true, {
 				path: _path + "",
 				expected: "__type",
-				value: input$1
+				value: input
 			}))(input, "$input", true);
 			const success = 0 === errors.length;
 			return success ? {
