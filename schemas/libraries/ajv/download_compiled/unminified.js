@@ -1735,8 +1735,8 @@ var require_keyword = /* @__PURE__ */ __commonJSMin(((exports) => {
 			gen.assign(valid, (0, codegen_1._)`${_await}${(0, code_1.callValidateCode)(cxt, validateRef, passCxt, passSchema)}`, def.modifying);
 		}
 		function reportErrs(errors) {
-			var _a$1;
-			gen.if((0, codegen_1.not)((_a$1 = def.valid) !== null && _a$1 !== void 0 ? _a$1 : valid), errors);
+			var _a;
+			gen.if((0, codegen_1.not)((_a = def.valid) !== null && _a !== void 0 ? _a : valid), errors);
 		}
 	}
 	exports.funcKeywordCode = funcKeywordCode;
@@ -6149,9 +6149,9 @@ var require_limit = /* @__PURE__ */ __commonJSMin(((exports) => {
 		},
 		dependencies: ["format"]
 	};
-	const formatLimitPlugin = (ajv$1) => {
-		ajv$1.addKeyword(exports.formatLimitDefinition);
-		return ajv$1;
+	const formatLimitPlugin = (ajv) => {
+		ajv.addKeyword(exports.formatLimitDefinition);
+		return ajv;
 	};
 	exports.default = formatLimitPlugin;
 }));
@@ -6165,26 +6165,26 @@ var require_dist$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const codegen_1 = require_codegen();
 	const fullName = new codegen_1.Name("fullFormats");
 	const fastName = new codegen_1.Name("fastFormats");
-	const formatsPlugin = (ajv$1, opts = { keywords: true }) => {
+	const formatsPlugin = (ajv, opts = { keywords: true }) => {
 		if (Array.isArray(opts)) {
-			addFormats(ajv$1, opts, formats_1.fullFormats, fullName);
-			return ajv$1;
+			addFormats(ajv, opts, formats_1.fullFormats, fullName);
+			return ajv;
 		}
 		const [formats, exportName] = opts.mode === "fast" ? [formats_1.fastFormats, fastName] : [formats_1.fullFormats, fullName];
-		addFormats(ajv$1, opts.formats || formats_1.formatNames, formats, exportName);
-		if (opts.keywords) (0, limit_1.default)(ajv$1);
-		return ajv$1;
+		addFormats(ajv, opts.formats || formats_1.formatNames, formats, exportName);
+		if (opts.keywords) (0, limit_1.default)(ajv);
+		return ajv;
 	};
 	formatsPlugin.get = (name, mode = "full") => {
 		const f = (mode === "fast" ? formats_1.fastFormats : formats_1.fullFormats)[name];
 		if (!f) throw new Error(`Unknown format "${name}"`);
 		return f;
 	};
-	function addFormats(ajv$1, list, fs, exportName) {
+	function addFormats(ajv, list, fs, exportName) {
 		var _a;
 		var _b;
-		(_a = (_b = ajv$1.opts.code).formats) !== null && _a !== void 0 || (_b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`);
-		for (const f of list) ajv$1.addFormat(f, fs[f]);
+		(_a = (_b = ajv.opts.code).formats) !== null && _a !== void 0 || (_b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`);
+		for (const f of list) ajv.addFormat(f, fs[f]);
 	}
 	module.exports = exports = formatsPlugin;
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -6237,7 +6237,7 @@ var require_typeof = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const typeof_1 = __importDefault(require_typeof$1());
-	const typeofPlugin = (ajv$1) => ajv$1.addKeyword((0, typeof_1.default)());
+	const typeofPlugin = (ajv) => ajv.addKeyword((0, typeof_1.default)());
 	exports.default = typeofPlugin;
 	module.exports = typeofPlugin;
 }));
@@ -6302,7 +6302,7 @@ var require_instanceof = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const instanceof_1 = __importDefault(require_instanceof$1());
-	const instanceofPlugin = (ajv$1) => ajv$1.addKeyword((0, instanceof_1.default)());
+	const instanceofPlugin = (ajv) => ajv.addKeyword((0, instanceof_1.default)());
 	exports.default = instanceofPlugin;
 	module.exports = instanceofPlugin;
 }));
@@ -6360,7 +6360,7 @@ var require_range = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const range_1 = __importDefault(require_range$1());
-	const range = (ajv$1) => ajv$1.addKeyword((0, range_1.default)());
+	const range = (ajv) => ajv.addKeyword((0, range_1.default)());
 	exports.default = range;
 	module.exports = range;
 }));
@@ -6385,7 +6385,7 @@ var require_exclusiveRange = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const exclusiveRange_1 = __importDefault(require_exclusiveRange$1());
-	const exclusiveRange = (ajv$1) => ajv$1.addKeyword((0, exclusiveRange_1.default)());
+	const exclusiveRange = (ajv) => ajv.addKeyword((0, exclusiveRange_1.default)());
 	exports.default = exclusiveRange;
 	module.exports = exclusiveRange;
 }));
@@ -6462,7 +6462,7 @@ var require_regexp = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const regexp_1 = __importDefault(require_regexp$1());
-	const regexp = (ajv$1) => ajv$1.addKeyword((0, regexp_1.default)());
+	const regexp = (ajv) => ajv.addKeyword((0, regexp_1.default)());
 	exports.default = regexp;
 	module.exports = regexp;
 }));
@@ -6552,7 +6552,7 @@ var require_transform = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const transform_1 = __importDefault(require_transform$1());
-	const transform = (ajv$1) => ajv$1.addKeyword((0, transform_1.default)());
+	const transform = (ajv) => ajv.addKeyword((0, transform_1.default)());
 	exports.default = transform;
 	module.exports = transform;
 }));
@@ -6627,7 +6627,7 @@ var require_uniqueItemProperties = /* @__PURE__ */ __commonJSMin(((exports, modu
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const uniqueItemProperties_1 = __importDefault(require_uniqueItemProperties$1());
-	const uniqueItemProperties = (ajv$1) => ajv$1.addKeyword((0, uniqueItemProperties_1.default)());
+	const uniqueItemProperties = (ajv) => ajv.addKeyword((0, uniqueItemProperties_1.default)());
 	exports.default = uniqueItemProperties;
 	module.exports = uniqueItemProperties;
 }));
@@ -6662,7 +6662,7 @@ var require_allRequired = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const allRequired_1 = __importDefault(require_allRequired$1());
-	const allRequired = (ajv$1) => ajv$1.addKeyword((0, allRequired_1.default)());
+	const allRequired = (ajv) => ajv.addKeyword((0, allRequired_1.default)());
 	exports.default = allRequired;
 	module.exports = allRequired;
 }));
@@ -6710,7 +6710,7 @@ var require_anyRequired = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const anyRequired_1 = __importDefault(require_anyRequired$1());
-	const anyRequired = (ajv$1) => ajv$1.addKeyword((0, anyRequired_1.default)());
+	const anyRequired = (ajv) => ajv.addKeyword((0, anyRequired_1.default)());
 	exports.default = anyRequired;
 	module.exports = anyRequired;
 }));
@@ -6735,7 +6735,7 @@ var require_oneRequired = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const oneRequired_1 = __importDefault(require_oneRequired$1());
-	const oneRequired = (ajv$1) => ajv$1.addKeyword((0, oneRequired_1.default)());
+	const oneRequired = (ajv) => ajv.addKeyword((0, oneRequired_1.default)());
 	exports.default = oneRequired;
 	module.exports = oneRequired;
 }));
@@ -6794,7 +6794,7 @@ var require_patternRequired = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const patternRequired_1 = __importDefault(require_patternRequired$1());
-	const patternRequired = (ajv$1) => ajv$1.addKeyword((0, patternRequired_1.default)());
+	const patternRequired = (ajv) => ajv.addKeyword((0, patternRequired_1.default)());
 	exports.default = patternRequired;
 	module.exports = patternRequired;
 }));
@@ -6831,7 +6831,7 @@ var require_prohibited = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const prohibited_1 = __importDefault(require_prohibited$1());
-	const prohibited = (ajv$1) => ajv$1.addKeyword((0, prohibited_1.default)());
+	const prohibited = (ajv) => ajv.addKeyword((0, prohibited_1.default)());
 	exports.default = prohibited;
 	module.exports = prohibited;
 }));
@@ -6898,7 +6898,7 @@ var require_deepProperties = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const deepProperties_1 = __importDefault(require_deepProperties$1());
-	const deepProperties = (ajv$1, opts) => ajv$1.addKeyword((0, deepProperties_1.default)(opts));
+	const deepProperties = (ajv, opts) => ajv.addKeyword((0, deepProperties_1.default)(opts));
 	exports.default = deepProperties;
 	module.exports = deepProperties;
 }));
@@ -6949,7 +6949,7 @@ var require_deepRequired = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const deepRequired_1 = __importDefault(require_deepRequired$1());
-	const deepRequired = (ajv$1) => ajv$1.addKeyword((0, deepRequired_1.default)());
+	const deepRequired = (ajv) => ajv.addKeyword((0, deepRequired_1.default)());
 	exports.default = deepRequired;
 	module.exports = deepRequired;
 }));
@@ -7037,7 +7037,7 @@ var require_dynamicDefaults = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const dynamicDefaults_1 = __importDefault(require_dynamicDefaults$1());
-	const dynamicDefaults = (ajv$1) => ajv$1.addKeyword((0, dynamicDefaults_1.default)());
+	const dynamicDefaults = (ajv) => ajv.addKeyword((0, dynamicDefaults_1.default)());
 	exports.default = dynamicDefaults;
 	module.exports = dynamicDefaults;
 }));
@@ -7122,9 +7122,9 @@ var require_select = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const select_1 = __importDefault(require_select$1());
-	const select = (ajv$1, opts) => {
-		(0, select_1.default)(opts).forEach((d) => ajv$1.addKeyword(d));
-		return ajv$1;
+	const select = (ajv, opts) => {
+		(0, select_1.default)(opts).forEach((d) => ajv.addKeyword(d));
+		return ajv;
 	};
 	exports.default = select;
 	module.exports = select;
@@ -7183,17 +7183,17 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const keywords_1 = __importDefault(require_keywords());
-	const ajvKeywords = (ajv$1, keyword) => {
+	const ajvKeywords = (ajv, keyword) => {
 		if (Array.isArray(keyword)) {
-			for (const k of keyword) get(k)(ajv$1);
-			return ajv$1;
+			for (const k of keyword) get(k)(ajv);
+			return ajv;
 		}
 		if (keyword) {
-			get(keyword)(ajv$1);
-			return ajv$1;
+			get(keyword)(ajv);
+			return ajv;
 		}
-		for (keyword in keywords_1.default) get(keyword)(ajv$1);
-		return ajv$1;
+		for (keyword in keywords_1.default) get(keyword)(ajv);
+		return ajv;
 	};
 	ajvKeywords.get = get;
 	function get(keyword) {

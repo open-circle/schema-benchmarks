@@ -15,10 +15,10 @@ var __exportAll = (all, symbols) => {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/core.js
 /** A special constant with type `never` */
 const NEVER = Object.freeze({ status: "aborted" });
-function $constructor(name, initializer$2, params) {
+function $constructor(name, initializer, params) {
 	function init(inst, def) {
 		if (!inst._zod) Object.defineProperty(inst, "_zod", {
 			value: {
@@ -30,7 +30,7 @@ function $constructor(name, initializer$2, params) {
 		});
 		if (inst._zod.traits.has(name)) return;
 		inst._zod.traits.add(name);
-		initializer$2(inst, def);
+		initializer(inst, def);
 		const proto = _.prototype;
 		const keys = Object.keys(proto);
 		for (let i = 0; i < keys.length; i++) {
@@ -42,10 +42,10 @@ function $constructor(name, initializer$2, params) {
 	class Definition extends Parent {}
 	Object.defineProperty(Definition, "name", { value: name });
 	function _(def) {
-		var _a$1;
+		var _a;
 		const inst = params?.Parent ? new Definition() : this;
 		init(inst, def);
-		(_a$1 = inst._zod).deferred ?? (_a$1.deferred = []);
+		(_a = inst._zod).deferred ?? (_a.deferred = []);
 		for (const fn of inst._zod.deferred) fn();
 		return inst;
 	}
@@ -76,7 +76,7 @@ function config(newConfig) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
 var util_exports = /* @__PURE__ */ __exportAll({
 	BIGINT_FORMAT_RANGES: () => BIGINT_FORMAT_RANGES,
 	Class: () => Class,
@@ -156,8 +156,8 @@ function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
 }
-function joinValues(array$1, separator = "|") {
-	return array$1.map((val) => stringifyPrimitive(val)).join(separator);
+function joinValues(array, separator = "|") {
+	return array.map((val) => stringifyPrimitive(val)).join(separator);
 }
 function jsonStringifyReplacer(_, value) {
 	if (typeof value === "bigint") return value.toString();
@@ -193,9 +193,9 @@ function floatSafeRemainder(val, step) {
 	return Number.parseInt(val.toFixed(decCount).replace(".", "")) % Number.parseInt(step.toFixed(decCount).replace(".", "")) / 10 ** decCount;
 }
 const EVALUATING = Symbol("evaluating");
-function defineLazy(object$1, key, getter) {
+function defineLazy(object, key, getter) {
 	let value = void 0;
-	Object.defineProperty(object$1, key, {
+	Object.defineProperty(object, key, {
 		get() {
 			if (value === EVALUATING) return;
 			if (value === void 0) {
@@ -205,7 +205,7 @@ function defineLazy(object$1, key, getter) {
 			return value;
 		},
 		set(v) {
-			Object.defineProperty(object$1, key, { value: v });
+			Object.defineProperty(object, key, { value: v });
 		},
 		configurable: true
 	});
@@ -533,8 +533,8 @@ function aborted(x, startIndex = 0) {
 }
 function prefixIssues(path, issues) {
 	return issues.map((iss) => {
-		var _a$1;
-		(_a$1 = iss).path ?? (_a$1.path = []);
+		var _a;
+		(_a = iss).path ?? (_a.path = []);
 		iss.path.unshift(path);
 		return iss;
 	});
@@ -542,12 +542,12 @@ function prefixIssues(path, issues) {
 function unwrapMessage(message) {
 	return typeof message === "string" ? message : message?.message;
 }
-function finalizeIssue(iss, ctx, config$1) {
+function finalizeIssue(iss, ctx, config) {
 	const full = {
 		...iss,
 		path: iss.path ?? []
 	};
-	if (!iss.message) full.message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config$1.customError?.(iss)) ?? unwrapMessage(config$1.localeError?.(iss)) ?? "Invalid input";
+	if (!iss.message) full.message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
 	delete full.inst;
 	delete full.continue;
 	if (!ctx?.reportInput) delete full.input;
@@ -592,8 +592,8 @@ function cleanEnum(obj) {
 		return Number.isNaN(Number.parseInt(k, 10));
 	}).map((el) => el[1]);
 }
-function base64ToUint8Array(base64$2) {
-	const binaryString = atob(base64$2);
+function base64ToUint8Array(base64) {
+	const binaryString = atob(base64);
 	const bytes = new Uint8Array(binaryString.length);
 	for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
 	return bytes;
@@ -603,15 +603,15 @@ function uint8ArrayToBase64(bytes) {
 	for (let i = 0; i < bytes.length; i++) binaryString += String.fromCharCode(bytes[i]);
 	return btoa(binaryString);
 }
-function base64urlToUint8Array(base64url$2) {
-	const base64$2 = base64url$2.replace(/-/g, "+").replace(/_/g, "/");
-	return base64ToUint8Array(base64$2 + "=".repeat((4 - base64$2.length % 4) % 4));
+function base64urlToUint8Array(base64url) {
+	const base64 = base64url.replace(/-/g, "+").replace(/_/g, "/");
+	return base64ToUint8Array(base64 + "=".repeat((4 - base64.length % 4) % 4));
 }
 function uint8ArrayToBase64url(bytes) {
 	return uint8ArrayToBase64(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
-function hexToUint8Array(hex$2) {
-	const cleanHex = hex$2.replace(/^0x/, "");
+function hexToUint8Array(hex) {
+	const cleanHex = hex.replace(/^0x/, "");
 	if (cleanHex.length % 2 !== 0) throw new Error("Invalid hex string length");
 	const bytes = new Uint8Array(cleanHex.length / 2);
 	for (let i = 0; i < cleanHex.length; i += 2) bytes[i / 2] = Number.parseInt(cleanHex.slice(i, i + 2), 16);
@@ -625,7 +625,7 @@ var Class = class {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
 const initializer$1 = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -644,10 +644,10 @@ const initializer$1 = (inst, def) => {
 };
 const $ZodError = $constructor("$ZodError", initializer$1);
 const $ZodRealError = $constructor("$ZodError", initializer$1, { Parent: Error });
-function flattenError(error$47, mapper = (issue$1) => issue$1.message) {
+function flattenError(error, mapper = (issue) => issue.message) {
 	const fieldErrors = {};
 	const formErrors = [];
-	for (const sub of error$47.issues) if (sub.path.length > 0) {
+	for (const sub of error.issues) if (sub.path.length > 0) {
 		fieldErrors[sub.path[0]] = fieldErrors[sub.path[0]] || [];
 		fieldErrors[sub.path[0]].push(mapper(sub));
 	} else formErrors.push(mapper(sub));
@@ -656,42 +656,42 @@ function flattenError(error$47, mapper = (issue$1) => issue$1.message) {
 		fieldErrors
 	};
 }
-function formatError(error$47, mapper = (issue$1) => issue$1.message) {
+function formatError(error, mapper = (issue) => issue.message) {
 	const fieldErrors = { _errors: [] };
-	const processError = (error$48) => {
-		for (const issue$1 of error$48.issues) if (issue$1.code === "invalid_union" && issue$1.errors.length) issue$1.errors.map((issues) => processError({ issues }));
-		else if (issue$1.code === "invalid_key") processError({ issues: issue$1.issues });
-		else if (issue$1.code === "invalid_element") processError({ issues: issue$1.issues });
-		else if (issue$1.path.length === 0) fieldErrors._errors.push(mapper(issue$1));
+	const processError = (error) => {
+		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }));
+		else if (issue.code === "invalid_key") processError({ issues: issue.issues });
+		else if (issue.code === "invalid_element") processError({ issues: issue.issues });
+		else if (issue.path.length === 0) fieldErrors._errors.push(mapper(issue));
 		else {
 			let curr = fieldErrors;
 			let i = 0;
-			while (i < issue$1.path.length) {
-				const el = issue$1.path[i];
-				if (!(i === issue$1.path.length - 1)) curr[el] = curr[el] || { _errors: [] };
+			while (i < issue.path.length) {
+				const el = issue.path[i];
+				if (!(i === issue.path.length - 1)) curr[el] = curr[el] || { _errors: [] };
 				else {
 					curr[el] = curr[el] || { _errors: [] };
-					curr[el]._errors.push(mapper(issue$1));
+					curr[el]._errors.push(mapper(issue));
 				}
 				curr = curr[el];
 				i++;
 			}
 		}
 	};
-	processError(error$47);
+	processError(error);
 	return fieldErrors;
 }
-function treeifyError(error$47, mapper = (issue$1) => issue$1.message) {
+function treeifyError(error, mapper = (issue) => issue.message) {
 	const result = { errors: [] };
-	const processError = (error$48, path = []) => {
-		var _a$1, _b;
-		for (const issue$1 of error$48.issues) if (issue$1.code === "invalid_union" && issue$1.errors.length) issue$1.errors.map((issues) => processError({ issues }, issue$1.path));
-		else if (issue$1.code === "invalid_key") processError({ issues: issue$1.issues }, issue$1.path);
-		else if (issue$1.code === "invalid_element") processError({ issues: issue$1.issues }, issue$1.path);
+	const processError = (error, path = []) => {
+		var _a, _b;
+		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }, issue.path));
+		else if (issue.code === "invalid_key") processError({ issues: issue.issues }, issue.path);
+		else if (issue.code === "invalid_element") processError({ issues: issue.issues }, issue.path);
 		else {
-			const fullpath = [...path, ...issue$1.path];
+			const fullpath = [...path, ...issue.path];
 			if (fullpath.length === 0) {
-				result.errors.push(mapper(issue$1));
+				result.errors.push(mapper(issue));
 				continue;
 			}
 			let curr = result;
@@ -701,19 +701,19 @@ function treeifyError(error$47, mapper = (issue$1) => issue$1.message) {
 				const terminal = i === fullpath.length - 1;
 				if (typeof el === "string") {
 					curr.properties ?? (curr.properties = {});
-					(_a$1 = curr.properties)[el] ?? (_a$1[el] = { errors: [] });
+					(_a = curr.properties)[el] ?? (_a[el] = { errors: [] });
 					curr = curr.properties[el];
 				} else {
 					curr.items ?? (curr.items = []);
 					(_b = curr.items)[el] ?? (_b[el] = { errors: [] });
 					curr = curr.items[el];
 				}
-				if (terminal) curr.errors.push(mapper(issue$1));
+				if (terminal) curr.errors.push(mapper(issue));
 				i++;
 			}
 		}
 	};
-	processError(error$47);
+	processError(error);
 	return result;
 }
 /** Format a ZodError as a human-readable string in the following form.
@@ -760,18 +760,18 @@ function toDotPath(_path) {
 	}
 	return segs.join("");
 }
-function prettifyError(error$47) {
+function prettifyError(error) {
 	const lines = [];
-	const issues = [...error$47.issues].sort((a, b) => (a.path ?? []).length - (b.path ?? []).length);
-	for (const issue$1 of issues) {
-		lines.push(`✖ ${issue$1.message}`);
-		if (issue$1.path?.length) lines.push(`  → at ${toDotPath(issue$1.path)}`);
+	const issues = [...error.issues].sort((a, b) => (a.path ?? []).length - (b.path ?? []).length);
+	for (const issue of issues) {
+		lines.push(`✖ ${issue.message}`);
+		if (issue.path?.length) lines.push(`  → at ${toDotPath(issue.path)}`);
 	}
 	return lines.join("\n");
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
 	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
 	const result = schema._zod.run({
@@ -875,7 +875,7 @@ const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 const safeDecodeAsync$1 = /* @__PURE__ */ _safeDecodeAsync($ZodRealError);
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/regexes.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/regexes.js
 var regexes_exports = /* @__PURE__ */ __exportAll({
 	base64: () => base64$1,
 	base64url: () => base64url$1,
@@ -951,9 +951,9 @@ const guid$1 = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0
 /** Returns a regex for validating an RFC 9562/4122 UUID.
 *
 * @param version Optionally specify a version 1-8. If no version is specified, all versions are supported. */
-const uuid$1 = (version$1) => {
-	if (!version$1) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
-	return /* @__PURE__ */ new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version$1}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
+const uuid$1 = (version) => {
+	if (!version) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
+	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
 };
 const uuid4 = /* @__PURE__ */ uuid$1(4);
 const uuid6 = /* @__PURE__ */ uuid$1(6);
@@ -976,7 +976,7 @@ const ipv4$1 = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?
 const ipv6$1 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
 const mac$1 = (delimiter) => {
 	const escapedDelim = escapeRegex(delimiter ?? ":");
-	return /* @__PURE__ */ new RegExp(`^(?:[0-9A-F]{2}${escapedDelim}){5}[0-9A-F]{2}$|^(?:[0-9a-f]{2}${escapedDelim}){5}[0-9a-f]{2}$`);
+	return new RegExp(`^(?:[0-9A-F]{2}${escapedDelim}){5}[0-9A-F]{2}$|^(?:[0-9a-f]{2}${escapedDelim}){5}[0-9a-f]{2}$`);
 };
 const cidrv4$1 = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
 const cidrv6$1 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|::|([0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}:?){0,6})\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
@@ -992,19 +992,19 @@ function timeSource(args) {
 	return typeof args.precision === "number" ? args.precision === -1 ? `${hhmm}` : args.precision === 0 ? `${hhmm}:[0-5]\\d` : `${hhmm}:[0-5]\\d\\.\\d{${args.precision}}` : `${hhmm}(?::[0-5]\\d(?:\\.\\d+)?)?`;
 }
 function time$1(args) {
-	return /* @__PURE__ */ new RegExp(`^${timeSource(args)}$`);
+	return new RegExp(`^${timeSource(args)}$`);
 }
 function datetime$1(args) {
-	const time$2 = timeSource({ precision: args.precision });
+	const time = timeSource({ precision: args.precision });
 	const opts = ["Z"];
 	if (args.local) opts.push("");
 	if (args.offset) opts.push(`([+-](?:[01]\\d|2[0-3]):[0-5]\\d)`);
-	const timeRegex = `${time$2}(?:${opts.join("|")})`;
-	return /* @__PURE__ */ new RegExp(`^${dateSource}T(?:${timeRegex})$`);
+	const timeRegex = `${time}(?:${opts.join("|")})`;
+	return new RegExp(`^${dateSource}T(?:${timeRegex})$`);
 }
 const string$2 = (params) => {
 	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
-	return /* @__PURE__ */ new RegExp(`^${regex}$`);
+	return new RegExp(`^${regex}$`);
 };
 const bigint$2 = /^-?\d+n?$/;
 const integer = /^-?\d+$/;
@@ -1016,10 +1016,10 @@ const lowercase = /^[^A-Z]*$/;
 const uppercase = /^[^a-z]*$/;
 const hex$1 = /^[0-9a-fA-F]*$/;
 function fixedBase64(bodyLength, padding) {
-	return /* @__PURE__ */ new RegExp(`^[A-Za-z0-9+/]{${bodyLength}}${padding}$`);
+	return new RegExp(`^[A-Za-z0-9+/]{${bodyLength}}${padding}$`);
 }
 function fixedBase64url(length) {
-	return /* @__PURE__ */ new RegExp(`^[A-Za-z0-9_-]{${length}}$`);
+	return new RegExp(`^[A-Za-z0-9_-]{${length}}$`);
 }
 const md5_hex = /^[0-9a-fA-F]{32}$/;
 const md5_base64 = /* @__PURE__ */ fixedBase64(22, "==");
@@ -1038,12 +1038,12 @@ const sha512_base64 = /* @__PURE__ */ fixedBase64(86, "==");
 const sha512_base64url = /* @__PURE__ */ fixedBase64url(86);
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
-	var _a$1;
+	var _a;
 	inst._zod ?? (inst._zod = {});
 	inst._zod.def = def;
-	(_a$1 = inst._zod).onattach ?? (_a$1.onattach = []);
+	(_a = inst._zod).onattach ?? (_a.onattach = []);
 });
 const numericOriginMap = {
 	number: "number",
@@ -1053,8 +1053,8 @@ const numericOriginMap = {
 const $ZodCheckLessThan = /* @__PURE__ */ $constructor("$ZodCheckLessThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
 		if (def.value < curr) if (def.inclusive) bag.maximum = def.value;
 		else bag.exclusiveMaximum = def.value;
@@ -1075,8 +1075,8 @@ const $ZodCheckLessThan = /* @__PURE__ */ $constructor("$ZodCheckLessThan", (ins
 const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
 		if (def.value > curr) if (def.inclusive) bag.minimum = def.value;
 		else bag.exclusiveMinimum = def.value;
@@ -1096,9 +1096,9 @@ const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan"
 });
 const $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", (inst, def) => {
 	$ZodCheck.init(inst, def);
-	inst._zod.onattach.push((inst$1) => {
-		var _a$1;
-		(_a$1 = inst$1._zod.bag).multipleOf ?? (_a$1.multipleOf = def.value);
+	inst._zod.onattach.push((inst) => {
+		var _a;
+		(_a = inst._zod.bag).multipleOf ?? (_a.multipleOf = def.value);
 	});
 	inst._zod.check = (payload) => {
 		if (typeof payload.value !== typeof def.value) throw new Error("Cannot mix number and bigint in multiple_of check.");
@@ -1119,8 +1119,8 @@ const $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberForma
 	const isInt = def.format?.includes("int");
 	const origin = isInt ? "int" : "number";
 	const [minimum, maximum] = NUMBER_FORMAT_RANGES[def.format];
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.format = def.format;
 		bag.minimum = minimum;
 		bag.maximum = maximum;
@@ -1187,8 +1187,8 @@ const $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberForma
 const $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntFormat", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const [minimum, maximum] = BIGINT_FORMAT_RANGES[def.format];
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.format = def.format;
 		bag.minimum = minimum;
 		bag.maximum = maximum;
@@ -1216,15 +1216,15 @@ const $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntForma
 	};
 });
 const $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.size !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const curr = inst$1._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
-		if (def.maximum < curr) inst$1._zod.bag.maximum = def.maximum;
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
+		if (def.maximum < curr) inst._zod.bag.maximum = def.maximum;
 	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
@@ -1241,15 +1241,15 @@ const $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst,
 	};
 });
 const $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.size !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const curr = inst$1._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
-		if (def.minimum > curr) inst$1._zod.bag.minimum = def.minimum;
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
+		if (def.minimum > curr) inst._zod.bag.minimum = def.minimum;
 	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
@@ -1266,14 +1266,14 @@ const $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst,
 	};
 });
 const $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.size !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.minimum = def.size;
 		bag.maximum = def.size;
 		bag.size = def.size;
@@ -1301,15 +1301,15 @@ const $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", 
 	};
 });
 const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.length !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const curr = inst$1._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
-		if (def.maximum < curr) inst$1._zod.bag.maximum = def.maximum;
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
+		if (def.maximum < curr) inst._zod.bag.maximum = def.maximum;
 	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
@@ -1327,15 +1327,15 @@ const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (i
 	};
 });
 const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.length !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const curr = inst$1._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
-		if (def.minimum > curr) inst$1._zod.bag.minimum = def.minimum;
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
+		if (def.minimum > curr) inst._zod.bag.minimum = def.minimum;
 	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
@@ -1353,14 +1353,14 @@ const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (i
 	};
 });
 const $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
-	var _a$1;
+	var _a;
 	$ZodCheck.init(inst, def);
-	(_a$1 = inst._zod.def).when ?? (_a$1.when = (payload) => {
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
 		const val = payload.value;
 		return !nullish$1(val) && val.length !== void 0;
 	});
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.minimum = def.length;
 		bag.maximum = def.length;
 		bag.length = def.length;
@@ -1389,17 +1389,17 @@ const $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEqual
 	};
 });
 const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
-	var _a$1, _b;
+	var _a, _b;
 	$ZodCheck.init(inst, def);
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.format = def.format;
 		if (def.pattern) {
 			bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
 			bag.patterns.add(def.pattern);
 		}
 	});
-	if (def.pattern) (_a$1 = inst._zod).check ?? (_a$1.check = (payload) => {
+	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
 		def.pattern.lastIndex = 0;
 		if (def.pattern.test(payload.value)) return;
 		payload.issues.push({
@@ -1443,8 +1443,8 @@ const $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (ins
 	const escapedRegex = escapeRegex(def.includes);
 	const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position}}${escapedRegex}` : escapedRegex);
 	def.pattern = pattern;
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
 		bag.patterns.add(pattern);
 	});
@@ -1463,10 +1463,10 @@ const $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (ins
 });
 const $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", (inst, def) => {
 	$ZodCheck.init(inst, def);
-	const pattern = /* @__PURE__ */ new RegExp(`^${escapeRegex(def.prefix)}.*`);
+	const pattern = new RegExp(`^${escapeRegex(def.prefix)}.*`);
 	def.pattern ?? (def.pattern = pattern);
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
 		bag.patterns.add(pattern);
 	});
@@ -1485,10 +1485,10 @@ const $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", 
 });
 const $ZodCheckEndsWith = /* @__PURE__ */ $constructor("$ZodCheckEndsWith", (inst, def) => {
 	$ZodCheck.init(inst, def);
-	const pattern = /* @__PURE__ */ new RegExp(`.*${escapeRegex(def.suffix)}$`);
+	const pattern = new RegExp(`.*${escapeRegex(def.suffix)}$`);
 	def.pattern ?? (def.pattern = pattern);
-	inst._zod.onattach.push((inst$1) => {
-		const bag = inst$1._zod.bag;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
 		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
 		bag.patterns.add(pattern);
 	});
@@ -1515,15 +1515,15 @@ const $ZodCheckProperty = /* @__PURE__ */ $constructor("$ZodCheckProperty", (ins
 			value: payload.value[def.property],
 			issues: []
 		}, {});
-		if (result instanceof Promise) return result.then((result$1) => handleCheckPropertyResult(result$1, payload, def.property));
+		if (result instanceof Promise) return result.then((result) => handleCheckPropertyResult(result, payload, def.property));
 		handleCheckPropertyResult(result, payload, def.property);
 	};
 });
 const $ZodCheckMimeType = /* @__PURE__ */ $constructor("$ZodCheckMimeType", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const mimeSet = new Set(def.mime);
-	inst._zod.onattach.push((inst$1) => {
-		inst$1._zod.bag.mime = def.mime;
+	inst._zod.onattach.push((inst) => {
+		inst._zod.bag.mime = def.mime;
 	});
 	inst._zod.check = (payload) => {
 		if (mimeSet.has(payload.value.type)) return;
@@ -1544,7 +1544,7 @@ const $ZodCheckOverwrite = /* @__PURE__ */ $constructor("$ZodCheckOverwrite", (i
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/doc.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = []) {
 		this.content = [];
@@ -1576,17 +1576,17 @@ var Doc = class {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 3,
-	patch: 5
+	patch: 6
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
-	var _a$1;
+	var _a;
 	inst ?? (inst = {});
 	inst._zod.def = def;
 	inst._zod.bag = inst._zod.bag || {};
@@ -1595,15 +1595,15 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	if (inst._zod.traits.has("$ZodCheck")) checks.unshift(inst);
 	for (const ch of checks) for (const fn of ch._zod.onattach) fn(inst);
 	if (checks.length === 0) {
-		(_a$1 = inst._zod).deferred ?? (_a$1.deferred = []);
+		(_a = inst._zod).deferred ?? (_a.deferred = []);
 		inst._zod.deferred?.push(() => {
 			inst._zod.run = inst._zod.parse;
 		});
 	} else {
-		const runChecks = (payload, checks$1, ctx) => {
+		const runChecks = (payload, checks, ctx) => {
 			let isAborted = aborted(payload);
 			let asyncResult;
-			for (const ch of checks$1) {
+			for (const ch of checks) {
 				if (ch._zod.def.when) {
 					if (!ch._zod.def.when(payload)) continue;
 				} else if (isAborted) continue;
@@ -1633,7 +1633,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 			const checkResult = runChecks(payload, checks, ctx);
 			if (checkResult instanceof Promise) {
 				if (ctx.async === false) throw new $ZodAsyncError();
-				return checkResult.then((checkResult$1) => inst._zod.parse(checkResult$1, ctx));
+				return checkResult.then((checkResult) => inst._zod.parse(checkResult, ctx));
 			}
 			return inst._zod.parse(checkResult, ctx);
 		};
@@ -1647,15 +1647,15 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 					...ctx,
 					skipChecks: true
 				});
-				if (canary instanceof Promise) return canary.then((canary$1) => {
-					return handleCanaryResult(canary$1, payload, ctx);
+				if (canary instanceof Promise) return canary.then((canary) => {
+					return handleCanaryResult(canary, payload, ctx);
 				});
 				return handleCanaryResult(canary, payload, ctx);
 			}
 			const result = inst._zod.parse(payload, ctx);
 			if (result instanceof Promise) {
 				if (ctx.async === false) throw new $ZodAsyncError();
-				return result.then((result$1) => runChecks(result$1, checks, ctx));
+				return result.then((result) => runChecks(result, checks, ctx));
 			}
 			return runChecks(result, checks, ctx);
 		};
@@ -1679,7 +1679,7 @@ const $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
 	inst._zod.parse = (payload, _) => {
 		if (def.coerce) try {
 			payload.value = String(payload.value);
-		} catch (_$1) {}
+		} catch (_) {}
 		if (typeof payload.value === "string") return payload;
 		payload.issues.push({
 			expected: "string",
@@ -1724,10 +1724,10 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 	inst._zod.check = (payload) => {
 		try {
 			const trimmed = payload.value.trim();
-			const url$1 = new URL(trimmed);
+			const url = new URL(trimmed);
 			if (def.hostname) {
 				def.hostname.lastIndex = 0;
-				if (!def.hostname.test(url$1.hostname)) payload.issues.push({
+				if (!def.hostname.test(url.hostname)) payload.issues.push({
 					code: "invalid_format",
 					format: "url",
 					note: "Invalid hostname",
@@ -1739,7 +1739,7 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 			}
 			if (def.protocol) {
 				def.protocol.lastIndex = 0;
-				if (!def.protocol.test(url$1.protocol.endsWith(":") ? url$1.protocol.slice(0, -1) : url$1.protocol)) payload.issues.push({
+				if (!def.protocol.test(url.protocol.endsWith(":") ? url.protocol.slice(0, -1) : url.protocol)) payload.issues.push({
 					code: "invalid_format",
 					format: "url",
 					note: "Invalid protocol",
@@ -1749,7 +1749,7 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 					continue: !def.abort
 				});
 			}
-			if (def.normalize) payload.value = url$1.href;
+			if (def.normalize) payload.value = url.href;
 			else payload.value = trimmed;
 			return;
 		} catch (_) {
@@ -1890,8 +1890,8 @@ const $ZodBase64 = /* @__PURE__ */ $constructor("$ZodBase64", (inst, def) => {
 });
 function isValidBase64URL(data) {
 	if (!base64url$1.test(data)) return false;
-	const base64$2 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
-	return isValidBase64(base64$2.padEnd(Math.ceil(base64$2.length / 4) * 4, "="));
+	const base64 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
+	return isValidBase64(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
 }
 const $ZodBase64URL = /* @__PURE__ */ $constructor("$ZodBase64URL", (inst, def) => {
 	def.pattern ?? (def.pattern = base64url$1);
@@ -2142,7 +2142,7 @@ const $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
 				value: item,
 				issues: []
 			}, ctx);
-			if (result instanceof Promise) proms.push(result.then((result$1) => handleArrayResult(result$1, payload, i)));
+			if (result instanceof Promise) proms.push(result.then((result) => handleArrayResult(result, payload, i)));
 			else handleArrayResult(result, payload, i);
 		}
 		if (proms.length) return Promise.all(proms).then(() => payload);
@@ -2186,7 +2186,7 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 			value: input[key],
 			issues: []
 		}, ctx);
-		if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input, isOptionalOut)));
+		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
 		else handlePropertyResult(r, payload, key, input, isOptionalOut);
 	}
 	if (unrecognized.length) payload.issues.push({
@@ -2223,13 +2223,13 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		}
 		return propValues;
 	});
-	const isObject$1 = isObject;
+	const isObject$2 = isObject;
 	const catchall = def.catchall;
 	let value;
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$1(input)) {
+		if (!isObject$2(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -2248,7 +2248,7 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 				value: input[key],
 				issues: []
 			}, ctx);
-			if (r instanceof Promise) proms.push(r.then((r$1) => handlePropertyResult(r$1, payload, key, input, isOptionalOut)));
+			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
 			else handlePropertyResult(r, payload, key, input, isOptionalOut);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
@@ -2378,7 +2378,7 @@ const $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
 	defineLazy(inst._zod, "pattern", () => {
 		if (def.options.every((o) => o._zod.pattern)) {
 			const patterns = def.options.map((o) => o._zod.pattern);
-			return /* @__PURE__ */ new RegExp(`^(${patterns.map((p) => cleanRegex(p.source)).join("|")})$`);
+			return new RegExp(`^(${patterns.map((p) => cleanRegex(p.source)).join("|")})$`);
 		}
 	});
 	const single = def.options.length === 1;
@@ -2401,8 +2401,8 @@ const $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
 			}
 		}
 		if (!async) return handleUnionResults(results, payload, inst, ctx);
-		return Promise.all(results).then((results$1) => {
-			return handleUnionResults(results$1, payload, inst, ctx);
+		return Promise.all(results).then((results) => {
+			return handleUnionResults(results, payload, inst, ctx);
 		});
 	};
 });
@@ -2447,8 +2447,8 @@ const $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
 			} else results.push(result);
 		}
 		if (!async) return handleExclusiveUnionResults(results, payload, inst, ctx);
-		return Promise.all(results).then((results$1) => {
-			return handleExclusiveUnionResults(results$1, payload, inst, ctx);
+		return Promise.all(results).then((results) => {
+			return handleExclusiveUnionResults(results, payload, inst, ctx);
 		});
 	};
 });
@@ -2470,16 +2470,16 @@ const $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUn
 	});
 	const disc = cached(() => {
 		const opts = def.options;
-		const map$1 = /* @__PURE__ */ new Map();
+		const map = /* @__PURE__ */ new Map();
 		for (const o of opts) {
 			const values = o._zod.propValues?.[def.discriminator];
 			if (!values || values.size === 0) throw new Error(`Invalid discriminated union option at index "${def.options.indexOf(o)}"`);
 			for (const v of values) {
-				if (map$1.has(v)) throw new Error(`Duplicate discriminator value "${String(v)}"`);
-				map$1.set(v, o);
+				if (map.has(v)) throw new Error(`Duplicate discriminator value "${String(v)}"`);
+				map.set(v, o);
 			}
 		}
-		return map$1;
+		return map;
 	});
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2519,8 +2519,8 @@ const $ZodIntersection = /* @__PURE__ */ $constructor("$ZodIntersection", (inst,
 			value: input,
 			issues: []
 		}, ctx);
-		if (left instanceof Promise || right instanceof Promise) return Promise.all([left, right]).then(([left$1, right$1]) => {
-			return handleIntersectionResults(payload, left$1, right$1);
+		if (left instanceof Promise || right instanceof Promise) return Promise.all([left, right]).then(([left, right]) => {
+			return handleIntersectionResults(payload, left, right);
 		});
 		return handleIntersectionResults(payload, left, right);
 	};
@@ -2654,7 +2654,7 @@ const $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
 				value: input[i],
 				issues: []
 			}, ctx);
-			if (result instanceof Promise) proms.push(result.then((result$1) => handleTupleResult(result$1, payload, i)));
+			if (result instanceof Promise) proms.push(result.then((result) => handleTupleResult(result, payload, i)));
 			else handleTupleResult(result, payload, i);
 		}
 		if (def.rest) {
@@ -2665,7 +2665,7 @@ const $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
 					value: el,
 					issues: []
 				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result$1) => handleTupleResult(result$1, payload, i)));
+				if (result instanceof Promise) proms.push(result.then((result) => handleTupleResult(result, payload, i)));
 				else handleTupleResult(result, payload, i);
 			}
 		}
@@ -2701,9 +2701,9 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 					value: input[key],
 					issues: []
 				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result$1) => {
-					if (result$1.issues.length) payload.issues.push(...prefixIssues(key, result$1.issues));
-					payload.value[key] = result$1.value;
+				if (result instanceof Promise) proms.push(result.then((result) => {
+					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
+					payload.value[key] = result.value;
 				}));
 				else {
 					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
@@ -2730,7 +2730,7 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 					issues: []
 				}, ctx);
 				if (keyResult instanceof Promise) throw new Error("Async schemas not supported in object keys currently");
-				if (typeof key === "string" && number$2.test(key) && keyResult.issues.length && keyResult.issues.some((iss) => iss.code === "invalid_type" && iss.expected === "number")) {
+				if (typeof key === "string" && number$2.test(key) && keyResult.issues.length) {
 					const retryResult = def.keyType._zod.run({
 						value: Number(key),
 						issues: []
@@ -2754,9 +2754,9 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 					value: input[key],
 					issues: []
 				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result$1) => {
-					if (result$1.issues.length) payload.issues.push(...prefixIssues(key, result$1.issues));
-					payload.value[keyResult.value] = result$1.value;
+				if (result instanceof Promise) proms.push(result.then((result) => {
+					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
+					payload.value[keyResult.value] = result.value;
 				}));
 				else {
 					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
@@ -2792,8 +2792,8 @@ const $ZodMap = /* @__PURE__ */ $constructor("$ZodMap", (inst, def) => {
 				value,
 				issues: []
 			}, ctx);
-			if (keyResult instanceof Promise || valueResult instanceof Promise) proms.push(Promise.all([keyResult, valueResult]).then(([keyResult$1, valueResult$1]) => {
-				handleMapResult(keyResult$1, valueResult$1, payload, key, input, inst, ctx);
+			if (keyResult instanceof Promise || valueResult instanceof Promise) proms.push(Promise.all([keyResult, valueResult]).then(([keyResult, valueResult]) => {
+				handleMapResult(keyResult, valueResult, payload, key, input, inst, ctx);
 			}));
 			else handleMapResult(keyResult, valueResult, payload, key, input, inst, ctx);
 		}
@@ -2841,7 +2841,7 @@ const $ZodSet = /* @__PURE__ */ $constructor("$ZodSet", (inst, def) => {
 				value: item,
 				issues: []
 			}, ctx);
-			if (result instanceof Promise) proms.push(result.then((result$1) => handleSetResult(result$1, payload)));
+			if (result instanceof Promise) proms.push(result.then((result) => handleSetResult(result, payload)));
 			else handleSetResult(result, payload);
 		}
 		if (proms.length) return Promise.all(proms).then(() => payload);
@@ -2857,7 +2857,7 @@ const $ZodEnum = /* @__PURE__ */ $constructor("$ZodEnum", (inst, def) => {
 	const values = getEnumValues(def.entries);
 	const valuesSet = new Set(values);
 	inst._zod.values = valuesSet;
-	inst._zod.pattern = /* @__PURE__ */ new RegExp(`^(${values.filter((k) => propertyKeyTypes.has(typeof k)).map((o) => typeof o === "string" ? escapeRegex(o) : o.toString()).join("|")})$`);
+	inst._zod.pattern = new RegExp(`^(${values.filter((k) => propertyKeyTypes.has(typeof k)).map((o) => typeof o === "string" ? escapeRegex(o) : o.toString()).join("|")})$`);
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (valuesSet.has(input)) return payload;
@@ -2875,7 +2875,7 @@ const $ZodLiteral = /* @__PURE__ */ $constructor("$ZodLiteral", (inst, def) => {
 	if (def.values.length === 0) throw new Error("Cannot create literal schema with no valid values");
 	const values = new Set(def.values);
 	inst._zod.values = values;
-	inst._zod.pattern = /* @__PURE__ */ new RegExp(`^(${def.values.map((o) => typeof o === "string" ? escapeRegex(o) : o ? escapeRegex(o.toString()) : String(o)).join("|")})$`);
+	inst._zod.pattern = new RegExp(`^(${def.values.map((o) => typeof o === "string" ? escapeRegex(o) : o ? escapeRegex(o.toString()) : String(o)).join("|")})$`);
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (values.has(input)) return payload;
@@ -2932,7 +2932,7 @@ const $ZodOptional = /* @__PURE__ */ $constructor("$ZodOptional", (inst, def) =>
 	});
 	defineLazy(inst._zod, "pattern", () => {
 		const pattern = def.innerType._zod.pattern;
-		return pattern ? /* @__PURE__ */ new RegExp(`^(${cleanRegex(pattern.source)})?$`) : void 0;
+		return pattern ? new RegExp(`^(${cleanRegex(pattern.source)})?$`) : void 0;
 	});
 	inst._zod.parse = (payload, ctx) => {
 		if (def.innerType._zod.optin === "optional") {
@@ -2958,7 +2958,7 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 	defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
 	defineLazy(inst._zod, "pattern", () => {
 		const pattern = def.innerType._zod.pattern;
-		return pattern ? /* @__PURE__ */ new RegExp(`^(${cleanRegex(pattern.source)}|null)$`) : void 0;
+		return pattern ? new RegExp(`^(${cleanRegex(pattern.source)}|null)$`) : void 0;
 	});
 	defineLazy(inst._zod, "values", () => {
 		return def.innerType._zod.values ? new Set([...def.innerType._zod.values, null]) : void 0;
@@ -2982,7 +2982,7 @@ const $ZodDefault = /* @__PURE__ */ $constructor("$ZodDefault", (inst, def) => {
 			return payload;
 		}
 		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result$1) => handleDefaultResult(result$1, def));
+		if (result instanceof Promise) return result.then((result) => handleDefaultResult(result, def));
 		return handleDefaultResult(result, def);
 	};
 });
@@ -3008,7 +3008,7 @@ const $ZodNonOptional = /* @__PURE__ */ $constructor("$ZodNonOptional", (inst, d
 	});
 	inst._zod.parse = (payload, ctx) => {
 		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result$1) => handleNonOptionalResult(result$1, inst));
+		if (result instanceof Promise) return result.then((result) => handleNonOptionalResult(result, inst));
 		return handleNonOptionalResult(result, inst);
 	};
 });
@@ -3026,8 +3026,8 @@ const $ZodSuccess = /* @__PURE__ */ $constructor("$ZodSuccess", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		if (ctx.direction === "backward") throw new $ZodEncodeError("ZodSuccess");
 		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result$1) => {
-			payload.value = result$1.issues.length === 0;
+		if (result instanceof Promise) return result.then((result) => {
+			payload.value = result.issues.length === 0;
 			return payload;
 		});
 		payload.value = result.issues.length === 0;
@@ -3042,12 +3042,12 @@ const $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
 		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result$1) => {
-			payload.value = result$1.value;
-			if (result$1.issues.length) {
+		if (result instanceof Promise) return result.then((result) => {
+			payload.value = result.value;
+			if (result.issues.length) {
 				payload.value = def.catchValue({
 					...payload,
-					error: { issues: result$1.issues.map((iss) => finalizeIssue(iss, ctx, config())) },
+					error: { issues: result.issues.map((iss) => finalizeIssue(iss, ctx, config())) },
 					input: payload.value
 				});
 				payload.issues = [];
@@ -3090,11 +3090,11 @@ const $ZodPipe = /* @__PURE__ */ $constructor("$ZodPipe", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		if (ctx.direction === "backward") {
 			const right = def.out._zod.run(payload, ctx);
-			if (right instanceof Promise) return right.then((right$1) => handlePipeResult(right$1, def.in, ctx));
+			if (right instanceof Promise) return right.then((right) => handlePipeResult(right, def.in, ctx));
 			return handlePipeResult(right, def.in, ctx);
 		}
 		const left = def.in._zod.run(payload, ctx);
-		if (left instanceof Promise) return left.then((left$1) => handlePipeResult(left$1, def.out, ctx));
+		if (left instanceof Promise) return left.then((left) => handlePipeResult(left, def.out, ctx));
 		return handlePipeResult(left, def.out, ctx);
 	};
 });
@@ -3117,11 +3117,11 @@ const $ZodCodec = /* @__PURE__ */ $constructor("$ZodCodec", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		if ((ctx.direction || "forward") === "forward") {
 			const left = def.in._zod.run(payload, ctx);
-			if (left instanceof Promise) return left.then((left$1) => handleCodecAResult(left$1, def, ctx));
+			if (left instanceof Promise) return left.then((left) => handleCodecAResult(left, def, ctx));
 			return handleCodecAResult(left, def, ctx);
 		} else {
 			const right = def.out._zod.run(payload, ctx);
-			if (right instanceof Promise) return right.then((right$1) => handleCodecAResult(right$1, def, ctx));
+			if (right instanceof Promise) return right.then((right) => handleCodecAResult(right, def, ctx));
 			return handleCodecAResult(right, def, ctx);
 		}
 	};
@@ -3180,7 +3180,7 @@ const $ZodTemplateLiteral = /* @__PURE__ */ $constructor("$ZodTemplateLiteral", 
 		regexParts.push(source.slice(start, end));
 	} else if (part === null || primitiveTypes.has(typeof part)) regexParts.push(escapeRegex(`${part}`));
 	else throw new Error(`Invalid template literal part: ${part}`);
-	inst._zod.pattern = /* @__PURE__ */ new RegExp(`^${regexParts.join("")}$`);
+	inst._zod.pattern = new RegExp(`^${regexParts.join("")}$`);
 	inst._zod.parse = (payload, _ctx) => {
 		if (typeof payload.value !== "string") {
 			payload.issues.push({
@@ -3297,7 +3297,7 @@ const $ZodCustom = /* @__PURE__ */ $constructor("$ZodCustom", (inst, def) => {
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const r = def.fn(input);
-		if (r instanceof Promise) return r.then((r$1) => handleRefineResult(r$1, payload, input, inst));
+		if (r instanceof Promise) return r.then((r) => handleRefineResult(r, payload, input, inst));
 		handleRefineResult(r, payload, input, inst);
 	};
 });
@@ -3316,7 +3316,7 @@ function handleRefineResult(result, payload, input, inst) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ar.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ar.js
 const error$46 = () => {
 	const Sizable = {
 		string: {
@@ -3370,43 +3370,43 @@ const error$46 = () => {
 		template_literal: "مدخل"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `مدخلات غير مقبولة: يفترض إدخال instanceof ${issue$1.expected}، ولكن تم إدخال ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `مدخلات غير مقبولة: يفترض إدخال instanceof ${issue.expected}، ولكن تم إدخال ${received}`;
 				return `مدخلات غير مقبولة: يفترض إدخال ${expected}، ولكن تم إدخال ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `مدخلات غير مقبولة: يفترض إدخال ${stringifyPrimitive(issue$1.values[0])}`;
-				return `اختيار غير مقبول: يتوقع انتقاء أحد هذه الخيارات: ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `مدخلات غير مقبولة: يفترض إدخال ${stringifyPrimitive(issue.values[0])}`;
+				return `اختيار غير مقبول: يتوقع انتقاء أحد هذه الخيارات: ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return ` أكبر من اللازم: يفترض أن تكون ${issue$1.origin ?? "القيمة"} ${adj} ${issue$1.maximum.toString()} ${sizing.unit ?? "عنصر"}`;
-				return `أكبر من اللازم: يفترض أن تكون ${issue$1.origin ?? "القيمة"} ${adj} ${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return ` أكبر من اللازم: يفترض أن تكون ${issue.origin ?? "القيمة"} ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "عنصر"}`;
+				return `أكبر من اللازم: يفترض أن تكون ${issue.origin ?? "القيمة"} ${adj} ${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `أصغر من اللازم: يفترض لـ ${issue$1.origin} أن يكون ${adj} ${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `أصغر من اللازم: يفترض لـ ${issue$1.origin} أن يكون ${adj} ${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `أصغر من اللازم: يفترض لـ ${issue.origin} أن يكون ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+				return `أصغر من اللازم: يفترض لـ ${issue.origin} أن يكون ${adj} ${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
-				if (_issue.format === "starts_with") return `نَص غير مقبول: يجب أن يبدأ بـ "${issue$1.prefix}"`;
+				const _issue = issue;
+				if (_issue.format === "starts_with") return `نَص غير مقبول: يجب أن يبدأ بـ "${issue.prefix}"`;
 				if (_issue.format === "ends_with") return `نَص غير مقبول: يجب أن ينتهي بـ "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `نَص غير مقبول: يجب أن يتضمَّن "${_issue.includes}"`;
 				if (_issue.format === "regex") return `نَص غير مقبول: يجب أن يطابق النمط ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} غير مقبول`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} غير مقبول`;
 			}
-			case "not_multiple_of": return `رقم غير مقبول: يجب أن يكون من مضاعفات ${issue$1.divisor}`;
-			case "unrecognized_keys": return `معرف${issue$1.keys.length > 1 ? "ات" : ""} غريب${issue$1.keys.length > 1 ? "ة" : ""}: ${joinValues(issue$1.keys, "، ")}`;
-			case "invalid_key": return `معرف غير مقبول في ${issue$1.origin}`;
+			case "not_multiple_of": return `رقم غير مقبول: يجب أن يكون من مضاعفات ${issue.divisor}`;
+			case "unrecognized_keys": return `معرف${issue.keys.length > 1 ? "ات" : ""} غريب${issue.keys.length > 1 ? "ة" : ""}: ${joinValues(issue.keys, "، ")}`;
+			case "invalid_key": return `معرف غير مقبول في ${issue.origin}`;
 			case "invalid_union": return "مدخل غير مقبول";
-			case "invalid_element": return `مدخل غير مقبول في ${issue$1.origin}`;
+			case "invalid_element": return `مدخل غير مقبول في ${issue.origin}`;
 			default: return "مدخل غير مقبول";
 		}
 	};
@@ -3416,7 +3416,7 @@ function ar_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/az.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/az.js
 const error$45 = () => {
 	const Sizable = {
 		string: {
@@ -3470,43 +3470,43 @@ const error$45 = () => {
 		template_literal: "input"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Yanlış dəyər: gözlənilən instanceof ${issue$1.expected}, daxil olan ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Yanlış dəyər: gözlənilən instanceof ${issue.expected}, daxil olan ${received}`;
 				return `Yanlış dəyər: gözlənilən ${expected}, daxil olan ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Yanlış dəyər: gözlənilən ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Yanlış seçim: aşağıdakılardan biri olmalıdır: ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Yanlış dəyər: gözlənilən ${stringifyPrimitive(issue.values[0])}`;
+				return `Yanlış seçim: aşağıdakılardan biri olmalıdır: ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Çox böyük: gözlənilən ${issue$1.origin ?? "dəyər"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "element"}`;
-				return `Çox böyük: gözlənilən ${issue$1.origin ?? "dəyər"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Çox böyük: gözlənilən ${issue.origin ?? "dəyər"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "element"}`;
+				return `Çox böyük: gözlənilən ${issue.origin ?? "dəyər"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Çox kiçik: gözlənilən ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Çox kiçik: gözlənilən ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Çox kiçik: gözlənilən ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Çox kiçik: gözlənilən ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Yanlış mətn: "${_issue.prefix}" ilə başlamalıdır`;
 				if (_issue.format === "ends_with") return `Yanlış mətn: "${_issue.suffix}" ilə bitməlidir`;
 				if (_issue.format === "includes") return `Yanlış mətn: "${_issue.includes}" daxil olmalıdır`;
 				if (_issue.format === "regex") return `Yanlış mətn: ${_issue.pattern} şablonuna uyğun olmalıdır`;
-				return `Yanlış ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Yanlış ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Yanlış ədəd: ${issue$1.divisor} ilə bölünə bilən olmalıdır`;
-			case "unrecognized_keys": return `Tanınmayan açar${issue$1.keys.length > 1 ? "lar" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} daxilində yanlış açar`;
+			case "not_multiple_of": return `Yanlış ədəd: ${issue.divisor} ilə bölünə bilən olmalıdır`;
+			case "unrecognized_keys": return `Tanınmayan açar${issue.keys.length > 1 ? "lar" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} daxilində yanlış açar`;
 			case "invalid_union": return "Yanlış dəyər";
-			case "invalid_element": return `${issue$1.origin} daxilində yanlış dəyər`;
+			case "invalid_element": return `${issue.origin} daxilində yanlış dəyər`;
 			default: return `Yanlış dəyər`;
 		}
 	};
@@ -3516,7 +3516,7 @@ function az_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/be.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/be.js
 function getBelarusianPlural(count, one, few, many) {
 	const absCount = Math.abs(count);
 	const lastDigit = absCount % 10;
@@ -3599,49 +3599,49 @@ const error$44 = () => {
 		number: "лік",
 		array: "масіў"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Няправільны ўвод: чакаўся instanceof ${issue$1.expected}, атрымана ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Няправільны ўвод: чакаўся instanceof ${issue.expected}, атрымана ${received}`;
 				return `Няправільны ўвод: чакаўся ${expected}, атрымана ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Няправільны ўвод: чакалася ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Няправільны варыянт: чакаўся адзін з ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Няправільны ўвод: чакалася ${stringifyPrimitive(issue.values[0])}`;
+				return `Няправільны варыянт: чакаўся адзін з ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getBelarusianPlural(Number(issue$1.maximum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
-					return `Занадта вялікі: чакалася, што ${issue$1.origin ?? "значэнне"} павінна ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${unit}`;
+					const unit = getBelarusianPlural(Number(issue.maximum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
+					return `Занадта вялікі: чакалася, што ${issue.origin ?? "значэнне"} павінна ${sizing.verb} ${adj}${issue.maximum.toString()} ${unit}`;
 				}
-				return `Занадта вялікі: чакалася, што ${issue$1.origin ?? "значэнне"} павінна быць ${adj}${issue$1.maximum.toString()}`;
+				return `Занадта вялікі: чакалася, што ${issue.origin ?? "значэнне"} павінна быць ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getBelarusianPlural(Number(issue$1.minimum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
-					return `Занадта малы: чакалася, што ${issue$1.origin} павінна ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${unit}`;
+					const unit = getBelarusianPlural(Number(issue.minimum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
+					return `Занадта малы: чакалася, што ${issue.origin} павінна ${sizing.verb} ${adj}${issue.minimum.toString()} ${unit}`;
 				}
-				return `Занадта малы: чакалася, што ${issue$1.origin} павінна быць ${adj}${issue$1.minimum.toString()}`;
+				return `Занадта малы: чакалася, што ${issue.origin} павінна быць ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Няправільны радок: павінен пачынацца з "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Няправільны радок: павінен заканчвацца на "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Няправільны радок: павінен змяшчаць "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Няправільны радок: павінен адпавядаць шаблону ${_issue.pattern}`;
-				return `Няправільны ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Няправільны ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Няправільны лік: павінен быць кратным ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Нераспазнаны ${issue$1.keys.length > 1 ? "ключы" : "ключ"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Няправільны ключ у ${issue$1.origin}`;
+			case "not_multiple_of": return `Няправільны лік: павінен быць кратным ${issue.divisor}`;
+			case "unrecognized_keys": return `Нераспазнаны ${issue.keys.length > 1 ? "ключы" : "ключ"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Няправільны ключ у ${issue.origin}`;
 			case "invalid_union": return "Няправільны ўвод";
-			case "invalid_element": return `Няправільнае значэнне ў ${issue$1.origin}`;
+			case "invalid_element": return `Няправільнае значэнне ў ${issue.origin}`;
 			default: return `Няправільны ўвод`;
 		}
 	};
@@ -3651,7 +3651,7 @@ function be_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/bg.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/bg.js
 const error$43 = () => {
 	const Sizable = {
 		string: {
@@ -3709,32 +3709,32 @@ const error$43 = () => {
 		number: "число",
 		array: "масив"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Невалиден вход: очакван instanceof ${issue$1.expected}, получен ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Невалиден вход: очакван instanceof ${issue.expected}, получен ${received}`;
 				return `Невалиден вход: очакван ${expected}, получен ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Невалиден вход: очакван ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Невалидна опция: очаквано едно от ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Невалиден вход: очакван ${stringifyPrimitive(issue.values[0])}`;
+				return `Невалидна опция: очаквано едно от ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Твърде голямо: очаква се ${issue$1.origin ?? "стойност"} да съдържа ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "елемента"}`;
-				return `Твърде голямо: очаква се ${issue$1.origin ?? "стойност"} да бъде ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Твърде голямо: очаква се ${issue.origin ?? "стойност"} да съдържа ${adj}${issue.maximum.toString()} ${sizing.unit ?? "елемента"}`;
+				return `Твърде голямо: очаква се ${issue.origin ?? "стойност"} да бъде ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Твърде малко: очаква се ${issue$1.origin} да съдържа ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Твърде малко: очаква се ${issue$1.origin} да бъде ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Твърде малко: очаква се ${issue.origin} да съдържа ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Твърде малко: очаква се ${issue.origin} да бъде ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Невалиден низ: трябва да започва с "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Невалиден низ: трябва да завършва с "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Невалиден низ: трябва да включва "${_issue.includes}"`;
@@ -3745,13 +3745,13 @@ const error$43 = () => {
 				if (_issue.format === "date") invalid_adj = "Невалидна";
 				if (_issue.format === "time") invalid_adj = "Невалидно";
 				if (_issue.format === "duration") invalid_adj = "Невалидна";
-				return `${invalid_adj} ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `${invalid_adj} ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Невалидно число: трябва да бъде кратно на ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Неразпознат${issue$1.keys.length > 1 ? "и" : ""} ключ${issue$1.keys.length > 1 ? "ове" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Невалиден ключ в ${issue$1.origin}`;
+			case "not_multiple_of": return `Невалидно число: трябва да бъде кратно на ${issue.divisor}`;
+			case "unrecognized_keys": return `Неразпознат${issue.keys.length > 1 ? "и" : ""} ключ${issue.keys.length > 1 ? "ове" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Невалиден ключ в ${issue.origin}`;
 			case "invalid_union": return "Невалиден вход";
-			case "invalid_element": return `Невалидна стойност в ${issue$1.origin}`;
+			case "invalid_element": return `Невалидна стойност в ${issue.origin}`;
 			default: return `Невалиден вход`;
 		}
 	};
@@ -3761,7 +3761,7 @@ function bg_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ca.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ca.js
 const error$42 = () => {
 	const Sizable = {
 		string: {
@@ -3815,43 +3815,43 @@ const error$42 = () => {
 		template_literal: "entrada"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Tipus invàlid: s'esperava instanceof ${issue$1.expected}, s'ha rebut ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Tipus invàlid: s'esperava instanceof ${issue.expected}, s'ha rebut ${received}`;
 				return `Tipus invàlid: s'esperava ${expected}, s'ha rebut ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Valor invàlid: s'esperava ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Opció invàlida: s'esperava una de ${joinValues(issue$1.values, " o ")}`;
+				if (issue.values.length === 1) return `Valor invàlid: s'esperava ${stringifyPrimitive(issue.values[0])}`;
+				return `Opció invàlida: s'esperava una de ${joinValues(issue.values, " o ")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "com a màxim" : "menys de";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Massa gran: s'esperava que ${issue$1.origin ?? "el valor"} contingués ${adj} ${issue$1.maximum.toString()} ${sizing.unit ?? "elements"}`;
-				return `Massa gran: s'esperava que ${issue$1.origin ?? "el valor"} fos ${adj} ${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "com a màxim" : "menys de";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Massa gran: s'esperava que ${issue.origin ?? "el valor"} contingués ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
+				return `Massa gran: s'esperava que ${issue.origin ?? "el valor"} fos ${adj} ${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? "com a mínim" : "més de";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Massa petit: s'esperava que ${issue$1.origin} contingués ${adj} ${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Massa petit: s'esperava que ${issue$1.origin} fos ${adj} ${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? "com a mínim" : "més de";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Massa petit: s'esperava que ${issue.origin} contingués ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+				return `Massa petit: s'esperava que ${issue.origin} fos ${adj} ${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Format invàlid: ha de començar amb "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Format invàlid: ha d'acabar amb "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Format invàlid: ha d'incloure "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Format invàlid: ha de coincidir amb el patró ${_issue.pattern}`;
-				return `Format invàlid per a ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Format invàlid per a ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Número invàlid: ha de ser múltiple de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Clau${issue$1.keys.length > 1 ? "s" : ""} no reconeguda${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Clau invàlida a ${issue$1.origin}`;
+			case "not_multiple_of": return `Número invàlid: ha de ser múltiple de ${issue.divisor}`;
+			case "unrecognized_keys": return `Clau${issue.keys.length > 1 ? "s" : ""} no reconeguda${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Clau invàlida a ${issue.origin}`;
 			case "invalid_union": return "Entrada invàlida";
-			case "invalid_element": return `Element invàlid a ${issue$1.origin}`;
+			case "invalid_element": return `Element invàlid a ${issue.origin}`;
 			default: return `Entrada invàlida`;
 		}
 	};
@@ -3861,7 +3861,7 @@ function ca_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/cs.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/cs.js
 const error$41 = () => {
 	const Sizable = {
 		string: {
@@ -3921,43 +3921,43 @@ const error$41 = () => {
 		function: "funkce",
 		array: "pole"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Neplatný vstup: očekáváno instanceof ${issue$1.expected}, obdrženo ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Neplatný vstup: očekáváno instanceof ${issue.expected}, obdrženo ${received}`;
 				return `Neplatný vstup: očekáváno ${expected}, obdrženo ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Neplatný vstup: očekáváno ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Neplatná možnost: očekávána jedna z hodnot ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Neplatný vstup: očekáváno ${stringifyPrimitive(issue.values[0])}`;
+				return `Neplatná možnost: očekávána jedna z hodnot ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Hodnota je příliš velká: ${issue$1.origin ?? "hodnota"} musí mít ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "prvků"}`;
-				return `Hodnota je příliš velká: ${issue$1.origin ?? "hodnota"} musí být ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Hodnota je příliš velká: ${issue.origin ?? "hodnota"} musí mít ${adj}${issue.maximum.toString()} ${sizing.unit ?? "prvků"}`;
+				return `Hodnota je příliš velká: ${issue.origin ?? "hodnota"} musí být ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Hodnota je příliš malá: ${issue$1.origin ?? "hodnota"} musí mít ${adj}${issue$1.minimum.toString()} ${sizing.unit ?? "prvků"}`;
-				return `Hodnota je příliš malá: ${issue$1.origin ?? "hodnota"} musí být ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Hodnota je příliš malá: ${issue.origin ?? "hodnota"} musí mít ${adj}${issue.minimum.toString()} ${sizing.unit ?? "prvků"}`;
+				return `Hodnota je příliš malá: ${issue.origin ?? "hodnota"} musí být ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Neplatný řetězec: musí začínat na "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Neplatný řetězec: musí končit na "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Neplatný řetězec: musí obsahovat "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Neplatný řetězec: musí odpovídat vzoru ${_issue.pattern}`;
-				return `Neplatný formát ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Neplatný formát ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Neplatné číslo: musí být násobkem ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Neznámé klíče: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Neplatný klíč v ${issue$1.origin}`;
+			case "not_multiple_of": return `Neplatné číslo: musí být násobkem ${issue.divisor}`;
+			case "unrecognized_keys": return `Neznámé klíče: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Neplatný klíč v ${issue.origin}`;
 			case "invalid_union": return "Neplatný vstup";
-			case "invalid_element": return `Neplatná hodnota v ${issue$1.origin}`;
+			case "invalid_element": return `Neplatná hodnota v ${issue.origin}`;
 			default: return `Neplatný vstup`;
 		}
 	};
@@ -3967,7 +3967,7 @@ function cs_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/da.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/da.js
 const error$40 = () => {
 	const Sizable = {
 		string: {
@@ -4030,45 +4030,45 @@ const error$40 = () => {
 		set: "sæt",
 		file: "fil"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ugyldigt input: forventede instanceof ${issue$1.expected}, fik ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ugyldigt input: forventede instanceof ${issue.expected}, fik ${received}`;
 				return `Ugyldigt input: forventede ${expected}, fik ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ugyldig værdi: forventede ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ugyldigt valg: forventede en af følgende ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ugyldig værdi: forventede ${stringifyPrimitive(issue.values[0])}`;
+				return `Ugyldigt valg: forventede en af følgende ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				if (sizing) return `For stor: forventede ${origin ?? "value"} ${sizing.verb} ${adj} ${issue$1.maximum.toString()} ${sizing.unit ?? "elementer"}`;
-				return `For stor: forventede ${origin ?? "value"} havde ${adj} ${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `For stor: forventede ${origin ?? "value"} ${sizing.verb} ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "elementer"}`;
+				return `For stor: forventede ${origin ?? "value"} havde ${adj} ${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				if (sizing) return `For lille: forventede ${origin} ${sizing.verb} ${adj} ${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `For lille: forventede ${origin} havde ${adj} ${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `For lille: forventede ${origin} ${sizing.verb} ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+				return `For lille: forventede ${origin} havde ${adj} ${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ugyldig streng: skal starte med "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Ugyldig streng: skal ende med "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Ugyldig streng: skal indeholde "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Ugyldig streng: skal matche mønsteret ${_issue.pattern}`;
-				return `Ugyldig ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Ugyldig ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Ugyldigt tal: skal være deleligt med ${issue$1.divisor}`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Ukendte nøgler" : "Ukendt nøgle"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Ugyldig nøgle i ${issue$1.origin}`;
+			case "not_multiple_of": return `Ugyldigt tal: skal være deleligt med ${issue.divisor}`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Ukendte nøgler" : "Ukendt nøgle"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Ugyldig nøgle i ${issue.origin}`;
 			case "invalid_union": return "Ugyldigt input: matcher ingen af de tilladte typer";
-			case "invalid_element": return `Ugyldig værdi i ${issue$1.origin}`;
+			case "invalid_element": return `Ugyldig værdi i ${issue.origin}`;
 			default: return `Ugyldigt input`;
 		}
 	};
@@ -4078,7 +4078,7 @@ function da_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/de.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/de.js
 const error$39 = () => {
 	const Sizable = {
 		string: {
@@ -4136,43 +4136,43 @@ const error$39 = () => {
 		number: "Zahl",
 		array: "Array"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ungültige Eingabe: erwartet instanceof ${issue$1.expected}, erhalten ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ungültige Eingabe: erwartet instanceof ${issue.expected}, erhalten ${received}`;
 				return `Ungültige Eingabe: erwartet ${expected}, erhalten ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ungültige Eingabe: erwartet ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ungültige Option: erwartet eine von ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ungültige Eingabe: erwartet ${stringifyPrimitive(issue.values[0])}`;
+				return `Ungültige Option: erwartet eine von ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Zu groß: erwartet, dass ${issue$1.origin ?? "Wert"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "Elemente"} hat`;
-				return `Zu groß: erwartet, dass ${issue$1.origin ?? "Wert"} ${adj}${issue$1.maximum.toString()} ist`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Zu groß: erwartet, dass ${issue.origin ?? "Wert"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "Elemente"} hat`;
+				return `Zu groß: erwartet, dass ${issue.origin ?? "Wert"} ${adj}${issue.maximum.toString()} ist`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Zu klein: erwartet, dass ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit} hat`;
-				return `Zu klein: erwartet, dass ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ist`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Zu klein: erwartet, dass ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} hat`;
+				return `Zu klein: erwartet, dass ${issue.origin} ${adj}${issue.minimum.toString()} ist`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ungültiger String: muss mit "${_issue.prefix}" beginnen`;
 				if (_issue.format === "ends_with") return `Ungültiger String: muss mit "${_issue.suffix}" enden`;
 				if (_issue.format === "includes") return `Ungültiger String: muss "${_issue.includes}" enthalten`;
 				if (_issue.format === "regex") return `Ungültiger String: muss dem Muster ${_issue.pattern} entsprechen`;
-				return `Ungültig: ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Ungültig: ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Ungültige Zahl: muss ein Vielfaches von ${issue$1.divisor} sein`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Unbekannte Schlüssel" : "Unbekannter Schlüssel"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Ungültiger Schlüssel in ${issue$1.origin}`;
+			case "not_multiple_of": return `Ungültige Zahl: muss ein Vielfaches von ${issue.divisor} sein`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Unbekannte Schlüssel" : "Unbekannter Schlüssel"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Ungültiger Schlüssel in ${issue.origin}`;
 			case "invalid_union": return "Ungültige Eingabe";
-			case "invalid_element": return `Ungültiger Wert in ${issue$1.origin}`;
+			case "invalid_element": return `Ungültiger Wert in ${issue.origin}`;
 			default: return `Ungültige Eingabe`;
 		}
 	};
@@ -4182,7 +4182,7 @@ function de_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/en.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/en.js
 const error$38 = () => {
 	const Sizable = {
 		string: {
@@ -4241,41 +4241,41 @@ const error$38 = () => {
 		template_literal: "input"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				return `Invalid input: expected ${expected}, received ${TypeDictionary[receivedType] ?? receivedType}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Invalid input: expected ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Invalid option: expected one of ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Invalid input: expected ${stringifyPrimitive(issue.values[0])}`;
+				return `Invalid option: expected one of ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Too big: expected ${issue$1.origin ?? "value"} to have ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elements"}`;
-				return `Too big: expected ${issue$1.origin ?? "value"} to be ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Too big: expected ${issue.origin ?? "value"} to have ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
+				return `Too big: expected ${issue.origin ?? "value"} to be ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Too small: expected ${issue$1.origin} to have ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Too small: expected ${issue$1.origin} to be ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Too small: expected ${issue.origin} to have ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Too small: expected ${issue.origin} to be ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Invalid string: must start with "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Invalid string: must end with "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Invalid string: must include "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Invalid string: must match pattern ${_issue.pattern}`;
-				return `Invalid ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Invalid ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Invalid number: must be a multiple of ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Unrecognized key${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Invalid key in ${issue$1.origin}`;
+			case "not_multiple_of": return `Invalid number: must be a multiple of ${issue.divisor}`;
+			case "unrecognized_keys": return `Unrecognized key${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Invalid key in ${issue.origin}`;
 			case "invalid_union": return "Invalid input";
-			case "invalid_element": return `Invalid value in ${issue$1.origin}`;
+			case "invalid_element": return `Invalid value in ${issue.origin}`;
 			default: return `Invalid input`;
 		}
 	};
@@ -4285,7 +4285,7 @@ function en_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/eo.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/eo.js
 const error$37 = () => {
 	const Sizable = {
 		string: {
@@ -4344,43 +4344,43 @@ const error$37 = () => {
 		array: "tabelo",
 		null: "senvalora"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Nevalida enigo: atendiĝis instanceof ${issue$1.expected}, riceviĝis ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Nevalida enigo: atendiĝis instanceof ${issue.expected}, riceviĝis ${received}`;
 				return `Nevalida enigo: atendiĝis ${expected}, riceviĝis ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Nevalida enigo: atendiĝis ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Nevalida opcio: atendiĝis unu el ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Nevalida enigo: atendiĝis ${stringifyPrimitive(issue.values[0])}`;
+				return `Nevalida opcio: atendiĝis unu el ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Tro granda: atendiĝis ke ${issue$1.origin ?? "valoro"} havu ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementojn"}`;
-				return `Tro granda: atendiĝis ke ${issue$1.origin ?? "valoro"} havu ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Tro granda: atendiĝis ke ${issue.origin ?? "valoro"} havu ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementojn"}`;
+				return `Tro granda: atendiĝis ke ${issue.origin ?? "valoro"} havu ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Tro malgranda: atendiĝis ke ${issue$1.origin} havu ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Tro malgranda: atendiĝis ke ${issue$1.origin} estu ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Tro malgranda: atendiĝis ke ${issue.origin} havu ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Tro malgranda: atendiĝis ke ${issue.origin} estu ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Nevalida karaktraro: devas komenciĝi per "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Nevalida karaktraro: devas finiĝi per "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Nevalida karaktraro: devas inkluzivi "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Nevalida karaktraro: devas kongrui kun la modelo ${_issue.pattern}`;
-				return `Nevalida ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Nevalida ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Nevalida nombro: devas esti oblo de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Nekonata${issue$1.keys.length > 1 ? "j" : ""} ŝlosilo${issue$1.keys.length > 1 ? "j" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Nevalida ŝlosilo en ${issue$1.origin}`;
+			case "not_multiple_of": return `Nevalida nombro: devas esti oblo de ${issue.divisor}`;
+			case "unrecognized_keys": return `Nekonata${issue.keys.length > 1 ? "j" : ""} ŝlosilo${issue.keys.length > 1 ? "j" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Nevalida ŝlosilo en ${issue.origin}`;
 			case "invalid_union": return "Nevalida enigo";
-			case "invalid_element": return `Nevalida valoro en ${issue$1.origin}`;
+			case "invalid_element": return `Nevalida valoro en ${issue.origin}`;
 			default: return `Nevalida enigo`;
 		}
 	};
@@ -4390,7 +4390,7 @@ function eo_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/es.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/es.js
 const error$36 = () => {
 	const Sizable = {
 		string: {
@@ -4470,45 +4470,45 @@ const error$36 = () => {
 		unknown: "desconocido",
 		any: "cualquiera"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Entrada inválida: se esperaba instanceof ${issue$1.expected}, recibido ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Entrada inválida: se esperaba instanceof ${issue.expected}, recibido ${received}`;
 				return `Entrada inválida: se esperaba ${expected}, recibido ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Entrada inválida: se esperaba ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Opción inválida: se esperaba una de ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Entrada inválida: se esperaba ${stringifyPrimitive(issue.values[0])}`;
+				return `Opción inválida: se esperaba una de ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				if (sizing) return `Demasiado grande: se esperaba que ${origin ?? "valor"} tuviera ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementos"}`;
-				return `Demasiado grande: se esperaba que ${origin ?? "valor"} fuera ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `Demasiado grande: se esperaba que ${origin ?? "valor"} tuviera ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+				return `Demasiado grande: se esperaba que ${origin ?? "valor"} fuera ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				if (sizing) return `Demasiado pequeño: se esperaba que ${origin} tuviera ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Demasiado pequeño: se esperaba que ${origin} fuera ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `Demasiado pequeño: se esperaba que ${origin} tuviera ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Demasiado pequeño: se esperaba que ${origin} fuera ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Cadena inválida: debe comenzar con "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Cadena inválida: debe terminar en "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Cadena inválida: debe incluir "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Cadena inválida: debe coincidir con el patrón ${_issue.pattern}`;
-				return `Inválido ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Inválido ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Número inválido: debe ser múltiplo de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Llave${issue$1.keys.length > 1 ? "s" : ""} desconocida${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Llave inválida en ${TypeDictionary[issue$1.origin] ?? issue$1.origin}`;
+			case "not_multiple_of": return `Número inválido: debe ser múltiplo de ${issue.divisor}`;
+			case "unrecognized_keys": return `Llave${issue.keys.length > 1 ? "s" : ""} desconocida${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Llave inválida en ${TypeDictionary[issue.origin] ?? issue.origin}`;
 			case "invalid_union": return "Entrada inválida";
-			case "invalid_element": return `Valor inválido en ${TypeDictionary[issue$1.origin] ?? issue$1.origin}`;
+			case "invalid_element": return `Valor inválido en ${TypeDictionary[issue.origin] ?? issue.origin}`;
 			default: return `Entrada inválida`;
 		}
 	};
@@ -4518,7 +4518,7 @@ function es_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/fa.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fa.js
 const error$35 = () => {
 	const Sizable = {
 		string: {
@@ -4576,43 +4576,43 @@ const error$35 = () => {
 		number: "عدد",
 		array: "آرایه"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `ورودی نامعتبر: می‌بایست instanceof ${issue$1.expected} می‌بود، ${received} دریافت شد`;
+				if (/^[A-Z]/.test(issue.expected)) return `ورودی نامعتبر: می‌بایست instanceof ${issue.expected} می‌بود، ${received} دریافت شد`;
 				return `ورودی نامعتبر: می‌بایست ${expected} می‌بود، ${received} دریافت شد`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `ورودی نامعتبر: می‌بایست ${stringifyPrimitive(issue$1.values[0])} می‌بود`;
-				return `گزینه نامعتبر: می‌بایست یکی از ${joinValues(issue$1.values, "|")} می‌بود`;
+				if (issue.values.length === 1) return `ورودی نامعتبر: می‌بایست ${stringifyPrimitive(issue.values[0])} می‌بود`;
+				return `گزینه نامعتبر: می‌بایست یکی از ${joinValues(issue.values, "|")} می‌بود`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `خیلی بزرگ: ${issue$1.origin ?? "مقدار"} باید ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "عنصر"} باشد`;
-				return `خیلی بزرگ: ${issue$1.origin ?? "مقدار"} باید ${adj}${issue$1.maximum.toString()} باشد`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `خیلی بزرگ: ${issue.origin ?? "مقدار"} باید ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عنصر"} باشد`;
+				return `خیلی بزرگ: ${issue.origin ?? "مقدار"} باید ${adj}${issue.maximum.toString()} باشد`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `خیلی کوچک: ${issue$1.origin} باید ${adj}${issue$1.minimum.toString()} ${sizing.unit} باشد`;
-				return `خیلی کوچک: ${issue$1.origin} باید ${adj}${issue$1.minimum.toString()} باشد`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `خیلی کوچک: ${issue.origin} باید ${adj}${issue.minimum.toString()} ${sizing.unit} باشد`;
+				return `خیلی کوچک: ${issue.origin} باید ${adj}${issue.minimum.toString()} باشد`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `رشته نامعتبر: باید با "${_issue.prefix}" شروع شود`;
 				if (_issue.format === "ends_with") return `رشته نامعتبر: باید با "${_issue.suffix}" تمام شود`;
 				if (_issue.format === "includes") return `رشته نامعتبر: باید شامل "${_issue.includes}" باشد`;
 				if (_issue.format === "regex") return `رشته نامعتبر: باید با الگوی ${_issue.pattern} مطابقت داشته باشد`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} نامعتبر`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} نامعتبر`;
 			}
-			case "not_multiple_of": return `عدد نامعتبر: باید مضرب ${issue$1.divisor} باشد`;
-			case "unrecognized_keys": return `کلید${issue$1.keys.length > 1 ? "های" : ""} ناشناس: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `کلید ناشناس در ${issue$1.origin}`;
+			case "not_multiple_of": return `عدد نامعتبر: باید مضرب ${issue.divisor} باشد`;
+			case "unrecognized_keys": return `کلید${issue.keys.length > 1 ? "های" : ""} ناشناس: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `کلید ناشناس در ${issue.origin}`;
 			case "invalid_union": return `ورودی نامعتبر`;
-			case "invalid_element": return `مقدار نامعتبر در ${issue$1.origin}`;
+			case "invalid_element": return `مقدار نامعتبر در ${issue.origin}`;
 			default: return `ورودی نامعتبر`;
 		}
 	};
@@ -4622,7 +4622,7 @@ function fa_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/fi.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fi.js
 const error$34 = () => {
 	const Sizable = {
 		string: {
@@ -4692,40 +4692,40 @@ const error$34 = () => {
 		template_literal: "templaattimerkkijono"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Virheellinen tyyppi: odotettiin instanceof ${issue$1.expected}, oli ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Virheellinen tyyppi: odotettiin instanceof ${issue.expected}, oli ${received}`;
 				return `Virheellinen tyyppi: odotettiin ${expected}, oli ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Virheellinen syöte: täytyy olla ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Virheellinen valinta: täytyy olla yksi seuraavista: ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Virheellinen syöte: täytyy olla ${stringifyPrimitive(issue.values[0])}`;
+				return `Virheellinen valinta: täytyy olla yksi seuraavista: ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Liian suuri: ${sizing.subject} täytyy olla ${adj}${issue$1.maximum.toString()} ${sizing.unit}`.trim();
-				return `Liian suuri: arvon täytyy olla ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Liian suuri: ${sizing.subject} täytyy olla ${adj}${issue.maximum.toString()} ${sizing.unit}`.trim();
+				return `Liian suuri: arvon täytyy olla ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Liian pieni: ${sizing.subject} täytyy olla ${adj}${issue$1.minimum.toString()} ${sizing.unit}`.trim();
-				return `Liian pieni: arvon täytyy olla ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Liian pieni: ${sizing.subject} täytyy olla ${adj}${issue.minimum.toString()} ${sizing.unit}`.trim();
+				return `Liian pieni: arvon täytyy olla ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Virheellinen syöte: täytyy alkaa "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Virheellinen syöte: täytyy loppua "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Virheellinen syöte: täytyy sisältää "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Virheellinen syöte: täytyy vastata säännöllistä lauseketta ${_issue.pattern}`;
-				return `Virheellinen ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Virheellinen ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Virheellinen luku: täytyy olla luvun ${issue$1.divisor} monikerta`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Tuntemattomat avaimet" : "Tuntematon avain"}: ${joinValues(issue$1.keys, ", ")}`;
+			case "not_multiple_of": return `Virheellinen luku: täytyy olla luvun ${issue.divisor} monikerta`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Tuntemattomat avaimet" : "Tuntematon avain"}: ${joinValues(issue.keys, ", ")}`;
 			case "invalid_key": return "Virheellinen avain tietueessa";
 			case "invalid_union": return "Virheellinen unioni";
 			case "invalid_element": return "Virheellinen arvo joukossa";
@@ -4738,7 +4738,7 @@ function fi_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/fr.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fr.js
 const error$33 = () => {
 	const Sizable = {
 		string: {
@@ -4796,43 +4796,43 @@ const error$33 = () => {
 		number: "nombre",
 		array: "tableau"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Entrée invalide : instanceof ${issue$1.expected} attendu, ${received} reçu`;
+				if (/^[A-Z]/.test(issue.expected)) return `Entrée invalide : instanceof ${issue.expected} attendu, ${received} reçu`;
 				return `Entrée invalide : ${expected} attendu, ${received} reçu`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Entrée invalide : ${stringifyPrimitive(issue$1.values[0])} attendu`;
-				return `Option invalide : une valeur parmi ${joinValues(issue$1.values, "|")} attendue`;
+				if (issue.values.length === 1) return `Entrée invalide : ${stringifyPrimitive(issue.values[0])} attendu`;
+				return `Option invalide : une valeur parmi ${joinValues(issue.values, "|")} attendue`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Trop grand : ${issue$1.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "élément(s)"}`;
-				return `Trop grand : ${issue$1.origin ?? "valeur"} doit être ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Trop grand : ${issue.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "élément(s)"}`;
+				return `Trop grand : ${issue.origin ?? "valeur"} doit être ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Trop petit : ${issue$1.origin} doit ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Trop petit : ${issue$1.origin} doit être ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Trop petit : ${issue.origin} doit ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Trop petit : ${issue.origin} doit être ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Chaîne invalide : doit commencer par "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Chaîne invalide : doit se terminer par "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Chaîne invalide : doit inclure "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Chaîne invalide : doit correspondre au modèle ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} invalide`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} invalide`;
 			}
-			case "not_multiple_of": return `Nombre invalide : doit être un multiple de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Clé${issue$1.keys.length > 1 ? "s" : ""} non reconnue${issue$1.keys.length > 1 ? "s" : ""} : ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Clé invalide dans ${issue$1.origin}`;
+			case "not_multiple_of": return `Nombre invalide : doit être un multiple de ${issue.divisor}`;
+			case "unrecognized_keys": return `Clé${issue.keys.length > 1 ? "s" : ""} non reconnue${issue.keys.length > 1 ? "s" : ""} : ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Clé invalide dans ${issue.origin}`;
 			case "invalid_union": return "Entrée invalide";
-			case "invalid_element": return `Valeur invalide dans ${issue$1.origin}`;
+			case "invalid_element": return `Valeur invalide dans ${issue.origin}`;
 			default: return `Entrée invalide`;
 		}
 	};
@@ -4842,7 +4842,7 @@ function fr_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/fr-CA.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fr-CA.js
 const error$32 = () => {
 	const Sizable = {
 		string: {
@@ -4896,43 +4896,43 @@ const error$32 = () => {
 		template_literal: "entrée"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Entrée invalide : attendu instanceof ${issue$1.expected}, reçu ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Entrée invalide : attendu instanceof ${issue.expected}, reçu ${received}`;
 				return `Entrée invalide : attendu ${expected}, reçu ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Entrée invalide : attendu ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Option invalide : attendu l'une des valeurs suivantes ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Entrée invalide : attendu ${stringifyPrimitive(issue.values[0])}`;
+				return `Option invalide : attendu l'une des valeurs suivantes ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "≤" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Trop grand : attendu que ${issue$1.origin ?? "la valeur"} ait ${adj}${issue$1.maximum.toString()} ${sizing.unit}`;
-				return `Trop grand : attendu que ${issue$1.origin ?? "la valeur"} soit ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "≤" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Trop grand : attendu que ${issue.origin ?? "la valeur"} ait ${adj}${issue.maximum.toString()} ${sizing.unit}`;
+				return `Trop grand : attendu que ${issue.origin ?? "la valeur"} soit ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? "≥" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Trop petit : attendu que ${issue$1.origin} ait ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Trop petit : attendu que ${issue$1.origin} soit ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? "≥" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Trop petit : attendu que ${issue.origin} ait ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Trop petit : attendu que ${issue.origin} soit ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Chaîne invalide : doit commencer par "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Chaîne invalide : doit se terminer par "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Chaîne invalide : doit inclure "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Chaîne invalide : doit correspondre au motif ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} invalide`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} invalide`;
 			}
-			case "not_multiple_of": return `Nombre invalide : doit être un multiple de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Clé${issue$1.keys.length > 1 ? "s" : ""} non reconnue${issue$1.keys.length > 1 ? "s" : ""} : ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Clé invalide dans ${issue$1.origin}`;
+			case "not_multiple_of": return `Nombre invalide : doit être un multiple de ${issue.divisor}`;
+			case "unrecognized_keys": return `Clé${issue.keys.length > 1 ? "s" : ""} non reconnue${issue.keys.length > 1 ? "s" : ""} : ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Clé invalide dans ${issue.origin}`;
 			case "invalid_union": return "Entrée invalide";
-			case "invalid_element": return `Valeur invalide dans ${issue$1.origin}`;
+			case "invalid_element": return `Valeur invalide dans ${issue.origin}`;
 			default: return `Entrée invalide`;
 		}
 	};
@@ -4942,7 +4942,7 @@ function fr_CA_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/he.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/he.js
 const error$31 = () => {
 	const TypeNames = {
 		string: {
@@ -5182,51 +5182,51 @@ const error$31 = () => {
 		}
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expectedKey = issue$1.expected;
+				const expectedKey = issue.expected;
 				const expected = TypeDictionary[expectedKey ?? ""] ?? typeLabel(expectedKey);
-				const receivedType = parsedType(issue$1.input);
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? TypeNames[receivedType]?.label ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `קלט לא תקין: צריך להיות instanceof ${issue$1.expected}, התקבל ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `קלט לא תקין: צריך להיות instanceof ${issue.expected}, התקבל ${received}`;
 				return `קלט לא תקין: צריך להיות ${expected}, התקבל ${received}`;
 			}
 			case "invalid_value": {
-				if (issue$1.values.length === 1) return `ערך לא תקין: הערך חייב להיות ${stringifyPrimitive(issue$1.values[0])}`;
-				const stringified = issue$1.values.map((v) => stringifyPrimitive(v));
-				if (issue$1.values.length === 2) return `ערך לא תקין: האפשרויות המתאימות הן ${stringified[0]} או ${stringified[1]}`;
+				if (issue.values.length === 1) return `ערך לא תקין: הערך חייב להיות ${stringifyPrimitive(issue.values[0])}`;
+				const stringified = issue.values.map((v) => stringifyPrimitive(v));
+				if (issue.values.length === 2) return `ערך לא תקין: האפשרויות המתאימות הן ${stringified[0]} או ${stringified[1]}`;
 				const lastValue = stringified[stringified.length - 1];
 				return `ערך לא תקין: האפשרויות המתאימות הן ${stringified.slice(0, -1).join(", ")} או ${lastValue}`;
 			}
 			case "too_big": {
-				const sizing = getSizing(issue$1.origin);
-				const subject = withDefinite(issue$1.origin ?? "value");
-				if (issue$1.origin === "string") return `${sizing?.longLabel ?? "ארוך"} מדי: ${subject} צריכה להכיל ${issue$1.maximum.toString()} ${sizing?.unit ?? ""} ${issue$1.inclusive ? "או פחות" : "לכל היותר"}`.trim();
-				if (issue$1.origin === "number") return `גדול מדי: ${subject} צריך להיות ${issue$1.inclusive ? `קטן או שווה ל-${issue$1.maximum}` : `קטן מ-${issue$1.maximum}`}`;
-				if (issue$1.origin === "array" || issue$1.origin === "set") return `גדול מדי: ${subject} ${issue$1.origin === "set" ? "צריכה" : "צריך"} להכיל ${issue$1.inclusive ? `${issue$1.maximum} ${sizing?.unit ?? ""} או פחות` : `פחות מ-${issue$1.maximum} ${sizing?.unit ?? ""}`}`.trim();
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const be = verbFor(issue$1.origin ?? "value");
-				if (sizing?.unit) return `${sizing.longLabel} מדי: ${subject} ${be} ${adj}${issue$1.maximum.toString()} ${sizing.unit}`;
-				return `${sizing?.longLabel ?? "גדול"} מדי: ${subject} ${be} ${adj}${issue$1.maximum.toString()}`;
+				const sizing = getSizing(issue.origin);
+				const subject = withDefinite(issue.origin ?? "value");
+				if (issue.origin === "string") return `${sizing?.longLabel ?? "ארוך"} מדי: ${subject} צריכה להכיל ${issue.maximum.toString()} ${sizing?.unit ?? ""} ${issue.inclusive ? "או פחות" : "לכל היותר"}`.trim();
+				if (issue.origin === "number") return `גדול מדי: ${subject} צריך להיות ${issue.inclusive ? `קטן או שווה ל-${issue.maximum}` : `קטן מ-${issue.maximum}`}`;
+				if (issue.origin === "array" || issue.origin === "set") return `גדול מדי: ${subject} ${issue.origin === "set" ? "צריכה" : "צריך"} להכיל ${issue.inclusive ? `${issue.maximum} ${sizing?.unit ?? ""} או פחות` : `פחות מ-${issue.maximum} ${sizing?.unit ?? ""}`}`.trim();
+				const adj = issue.inclusive ? "<=" : "<";
+				const be = verbFor(issue.origin ?? "value");
+				if (sizing?.unit) return `${sizing.longLabel} מדי: ${subject} ${be} ${adj}${issue.maximum.toString()} ${sizing.unit}`;
+				return `${sizing?.longLabel ?? "גדול"} מדי: ${subject} ${be} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const sizing = getSizing(issue$1.origin);
-				const subject = withDefinite(issue$1.origin ?? "value");
-				if (issue$1.origin === "string") return `${sizing?.shortLabel ?? "קצר"} מדי: ${subject} צריכה להכיל ${issue$1.minimum.toString()} ${sizing?.unit ?? ""} ${issue$1.inclusive ? "או יותר" : "לפחות"}`.trim();
-				if (issue$1.origin === "number") return `קטן מדי: ${subject} צריך להיות ${issue$1.inclusive ? `גדול או שווה ל-${issue$1.minimum}` : `גדול מ-${issue$1.minimum}`}`;
-				if (issue$1.origin === "array" || issue$1.origin === "set") {
-					const verb = issue$1.origin === "set" ? "צריכה" : "צריך";
-					if (issue$1.minimum === 1 && issue$1.inclusive) return `קטן מדי: ${subject} ${verb} להכיל ${issue$1.origin === "set" ? "לפחות פריט אחד" : "לפחות פריט אחד"}`;
-					return `קטן מדי: ${subject} ${verb} להכיל ${issue$1.inclusive ? `${issue$1.minimum} ${sizing?.unit ?? ""} או יותר` : `יותר מ-${issue$1.minimum} ${sizing?.unit ?? ""}`}`.trim();
+				const sizing = getSizing(issue.origin);
+				const subject = withDefinite(issue.origin ?? "value");
+				if (issue.origin === "string") return `${sizing?.shortLabel ?? "קצר"} מדי: ${subject} צריכה להכיל ${issue.minimum.toString()} ${sizing?.unit ?? ""} ${issue.inclusive ? "או יותר" : "לפחות"}`.trim();
+				if (issue.origin === "number") return `קטן מדי: ${subject} צריך להיות ${issue.inclusive ? `גדול או שווה ל-${issue.minimum}` : `גדול מ-${issue.minimum}`}`;
+				if (issue.origin === "array" || issue.origin === "set") {
+					const verb = issue.origin === "set" ? "צריכה" : "צריך";
+					if (issue.minimum === 1 && issue.inclusive) return `קטן מדי: ${subject} ${verb} להכיל ${issue.origin === "set" ? "לפחות פריט אחד" : "לפחות פריט אחד"}`;
+					return `קטן מדי: ${subject} ${verb} להכיל ${issue.inclusive ? `${issue.minimum} ${sizing?.unit ?? ""} או יותר` : `יותר מ-${issue.minimum} ${sizing?.unit ?? ""}`}`.trim();
 				}
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const be = verbFor(issue$1.origin ?? "value");
-				if (sizing?.unit) return `${sizing.shortLabel} מדי: ${subject} ${be} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `${sizing?.shortLabel ?? "קטן"} מדי: ${subject} ${be} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const be = verbFor(issue.origin ?? "value");
+				if (sizing?.unit) return `${sizing.shortLabel} מדי: ${subject} ${be} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `${sizing?.shortLabel ?? "קטן"} מדי: ${subject} ${be} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `המחרוזת חייבת להתחיל ב "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `המחרוזת חייבת להסתיים ב "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `המחרוזת חייבת לכלול "${_issue.includes}"`;
@@ -5234,11 +5234,11 @@ const error$31 = () => {
 				const nounEntry = FormatDictionary[_issue.format];
 				return `${nounEntry?.label ?? _issue.format} לא ${(nounEntry?.gender ?? "m") === "f" ? "תקינה" : "תקין"}`;
 			}
-			case "not_multiple_of": return `מספר לא תקין: חייב להיות מכפלה של ${issue$1.divisor}`;
-			case "unrecognized_keys": return `מפתח${issue$1.keys.length > 1 ? "ות" : ""} לא מזוה${issue$1.keys.length > 1 ? "ים" : "ה"}: ${joinValues(issue$1.keys, ", ")}`;
+			case "not_multiple_of": return `מספר לא תקין: חייב להיות מכפלה של ${issue.divisor}`;
+			case "unrecognized_keys": return `מפתח${issue.keys.length > 1 ? "ות" : ""} לא מזוה${issue.keys.length > 1 ? "ים" : "ה"}: ${joinValues(issue.keys, ", ")}`;
 			case "invalid_key": return `שדה לא תקין באובייקט`;
 			case "invalid_union": return "קלט לא תקין";
-			case "invalid_element": return `ערך לא תקין ב${withDefinite(issue$1.origin ?? "array")}`;
+			case "invalid_element": return `ערך לא תקין ב${withDefinite(issue.origin ?? "array")}`;
 			default: return `קלט לא תקין`;
 		}
 	};
@@ -5248,7 +5248,7 @@ function he_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/hu.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/hu.js
 const error$30 = () => {
 	const Sizable = {
 		string: {
@@ -5306,43 +5306,43 @@ const error$30 = () => {
 		number: "szám",
 		array: "tömb"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Érvénytelen bemenet: a várt érték instanceof ${issue$1.expected}, a kapott érték ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Érvénytelen bemenet: a várt érték instanceof ${issue.expected}, a kapott érték ${received}`;
 				return `Érvénytelen bemenet: a várt érték ${expected}, a kapott érték ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Érvénytelen bemenet: a várt érték ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Érvénytelen opció: valamelyik érték várt ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Érvénytelen bemenet: a várt érték ${stringifyPrimitive(issue.values[0])}`;
+				return `Érvénytelen opció: valamelyik érték várt ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Túl nagy: ${issue$1.origin ?? "érték"} mérete túl nagy ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elem"}`;
-				return `Túl nagy: a bemeneti érték ${issue$1.origin ?? "érték"} túl nagy: ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Túl nagy: ${issue.origin ?? "érték"} mérete túl nagy ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elem"}`;
+				return `Túl nagy: a bemeneti érték ${issue.origin ?? "érték"} túl nagy: ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Túl kicsi: a bemeneti érték ${issue$1.origin} mérete túl kicsi ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Túl kicsi: a bemeneti érték ${issue$1.origin} túl kicsi ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Túl kicsi: a bemeneti érték ${issue.origin} mérete túl kicsi ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Túl kicsi: a bemeneti érték ${issue.origin} túl kicsi ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Érvénytelen string: "${_issue.prefix}" értékkel kell kezdődnie`;
 				if (_issue.format === "ends_with") return `Érvénytelen string: "${_issue.suffix}" értékkel kell végződnie`;
 				if (_issue.format === "includes") return `Érvénytelen string: "${_issue.includes}" értéket kell tartalmaznia`;
 				if (_issue.format === "regex") return `Érvénytelen string: ${_issue.pattern} mintának kell megfelelnie`;
-				return `Érvénytelen ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Érvénytelen ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Érvénytelen szám: ${issue$1.divisor} többszörösének kell lennie`;
-			case "unrecognized_keys": return `Ismeretlen kulcs${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Érvénytelen kulcs ${issue$1.origin}`;
+			case "not_multiple_of": return `Érvénytelen szám: ${issue.divisor} többszörösének kell lennie`;
+			case "unrecognized_keys": return `Ismeretlen kulcs${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Érvénytelen kulcs ${issue.origin}`;
 			case "invalid_union": return "Érvénytelen bemenet";
-			case "invalid_element": return `Érvénytelen érték: ${issue$1.origin}`;
+			case "invalid_element": return `Érvénytelen érték: ${issue.origin}`;
 			default: return `Érvénytelen bemenet`;
 		}
 	};
@@ -5352,7 +5352,7 @@ function hu_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/hy.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/hy.js
 function getArmenianPlural(count, one, many) {
 	return Math.abs(count) === 1 ? one : many;
 }
@@ -5439,49 +5439,49 @@ const error$29 = () => {
 		number: "թիվ",
 		array: "զանգված"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Սխալ մուտքագրում․ սպասվում էր instanceof ${issue$1.expected}, ստացվել է ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Սխալ մուտքագրում․ սպասվում էր instanceof ${issue.expected}, ստացվել է ${received}`;
 				return `Սխալ մուտքագրում․ սպասվում էր ${expected}, ստացվել է ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Սխալ մուտքագրում․ սպասվում էր ${stringifyPrimitive(issue$1.values[1])}`;
-				return `Սխալ տարբերակ․ սպասվում էր հետևյալներից մեկը՝ ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Սխալ մուտքագրում․ սպասվում էր ${stringifyPrimitive(issue.values[1])}`;
+				return `Սխալ տարբերակ․ սպասվում էր հետևյալներից մեկը՝ ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getArmenianPlural(Number(issue$1.maximum), sizing.unit.one, sizing.unit.many);
-					return `Չափազանց մեծ արժեք․ սպասվում է, որ ${withDefiniteArticle(issue$1.origin ?? "արժեք")} կունենա ${adj}${issue$1.maximum.toString()} ${unit}`;
+					const unit = getArmenianPlural(Number(issue.maximum), sizing.unit.one, sizing.unit.many);
+					return `Չափազանց մեծ արժեք․ սպասվում է, որ ${withDefiniteArticle(issue.origin ?? "արժեք")} կունենա ${adj}${issue.maximum.toString()} ${unit}`;
 				}
-				return `Չափազանց մեծ արժեք․ սպասվում է, որ ${withDefiniteArticle(issue$1.origin ?? "արժեք")} լինի ${adj}${issue$1.maximum.toString()}`;
+				return `Չափազանց մեծ արժեք․ սպասվում է, որ ${withDefiniteArticle(issue.origin ?? "արժեք")} լինի ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getArmenianPlural(Number(issue$1.minimum), sizing.unit.one, sizing.unit.many);
-					return `Չափազանց փոքր արժեք․ սպասվում է, որ ${withDefiniteArticle(issue$1.origin)} կունենա ${adj}${issue$1.minimum.toString()} ${unit}`;
+					const unit = getArmenianPlural(Number(issue.minimum), sizing.unit.one, sizing.unit.many);
+					return `Չափազանց փոքր արժեք․ սպասվում է, որ ${withDefiniteArticle(issue.origin)} կունենա ${adj}${issue.minimum.toString()} ${unit}`;
 				}
-				return `Չափազանց փոքր արժեք․ սպասվում է, որ ${withDefiniteArticle(issue$1.origin)} լինի ${adj}${issue$1.minimum.toString()}`;
+				return `Չափազանց փոքր արժեք․ սպասվում է, որ ${withDefiniteArticle(issue.origin)} լինի ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Սխալ տող․ պետք է սկսվի "${_issue.prefix}"-ով`;
 				if (_issue.format === "ends_with") return `Սխալ տող․ պետք է ավարտվի "${_issue.suffix}"-ով`;
 				if (_issue.format === "includes") return `Սխալ տող․ պետք է պարունակի "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Սխալ տող․ պետք է համապատասխանի ${_issue.pattern} ձևաչափին`;
-				return `Սխալ ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Սխալ ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Սխալ թիվ․ պետք է բազմապատիկ լինի ${issue$1.divisor}-ի`;
-			case "unrecognized_keys": return `Չճանաչված բանալի${issue$1.keys.length > 1 ? "ներ" : ""}. ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Սխալ բանալի ${withDefiniteArticle(issue$1.origin)}-ում`;
+			case "not_multiple_of": return `Սխալ թիվ․ պետք է բազմապատիկ լինի ${issue.divisor}-ի`;
+			case "unrecognized_keys": return `Չճանաչված բանալի${issue.keys.length > 1 ? "ներ" : ""}. ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Սխալ բանալի ${withDefiniteArticle(issue.origin)}-ում`;
 			case "invalid_union": return "Սխալ մուտքագրում";
-			case "invalid_element": return `Սխալ արժեք ${withDefiniteArticle(issue$1.origin)}-ում`;
+			case "invalid_element": return `Սխալ արժեք ${withDefiniteArticle(issue.origin)}-ում`;
 			default: return `Սխալ մուտքագրում`;
 		}
 	};
@@ -5491,7 +5491,7 @@ function hy_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/id.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/id.js
 const error$28 = () => {
 	const Sizable = {
 		string: {
@@ -5545,43 +5545,43 @@ const error$28 = () => {
 		template_literal: "input"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Input tidak valid: diharapkan instanceof ${issue$1.expected}, diterima ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Input tidak valid: diharapkan instanceof ${issue.expected}, diterima ${received}`;
 				return `Input tidak valid: diharapkan ${expected}, diterima ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Input tidak valid: diharapkan ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Pilihan tidak valid: diharapkan salah satu dari ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Input tidak valid: diharapkan ${stringifyPrimitive(issue.values[0])}`;
+				return `Pilihan tidak valid: diharapkan salah satu dari ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Terlalu besar: diharapkan ${issue$1.origin ?? "value"} memiliki ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elemen"}`;
-				return `Terlalu besar: diharapkan ${issue$1.origin ?? "value"} menjadi ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Terlalu besar: diharapkan ${issue.origin ?? "value"} memiliki ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+				return `Terlalu besar: diharapkan ${issue.origin ?? "value"} menjadi ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Terlalu kecil: diharapkan ${issue$1.origin} memiliki ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Terlalu kecil: diharapkan ${issue$1.origin} menjadi ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Terlalu kecil: diharapkan ${issue.origin} memiliki ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Terlalu kecil: diharapkan ${issue.origin} menjadi ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `String tidak valid: harus dimulai dengan "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `String tidak valid: harus berakhir dengan "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `String tidak valid: harus menyertakan "${_issue.includes}"`;
 				if (_issue.format === "regex") return `String tidak valid: harus sesuai pola ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} tidak valid`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} tidak valid`;
 			}
-			case "not_multiple_of": return `Angka tidak valid: harus kelipatan dari ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Kunci tidak dikenali ${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Kunci tidak valid di ${issue$1.origin}`;
+			case "not_multiple_of": return `Angka tidak valid: harus kelipatan dari ${issue.divisor}`;
+			case "unrecognized_keys": return `Kunci tidak dikenali ${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Kunci tidak valid di ${issue.origin}`;
 			case "invalid_union": return "Input tidak valid";
-			case "invalid_element": return `Nilai tidak valid di ${issue$1.origin}`;
+			case "invalid_element": return `Nilai tidak valid di ${issue.origin}`;
 			default: return `Input tidak valid`;
 		}
 	};
@@ -5591,7 +5591,7 @@ function id_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/is.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/is.js
 const error$27 = () => {
 	const Sizable = {
 		string: {
@@ -5649,43 +5649,43 @@ const error$27 = () => {
 		number: "númer",
 		array: "fylki"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Rangt gildi: Þú slóst inn ${received} þar sem á að vera instanceof ${issue$1.expected}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Rangt gildi: Þú slóst inn ${received} þar sem á að vera instanceof ${issue.expected}`;
 				return `Rangt gildi: Þú slóst inn ${received} þar sem á að vera ${expected}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Rangt gildi: gert ráð fyrir ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ógilt val: má vera eitt af eftirfarandi ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Rangt gildi: gert ráð fyrir ${stringifyPrimitive(issue.values[0])}`;
+				return `Ógilt val: má vera eitt af eftirfarandi ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Of stórt: gert er ráð fyrir að ${issue$1.origin ?? "gildi"} hafi ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "hluti"}`;
-				return `Of stórt: gert er ráð fyrir að ${issue$1.origin ?? "gildi"} sé ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Of stórt: gert er ráð fyrir að ${issue.origin ?? "gildi"} hafi ${adj}${issue.maximum.toString()} ${sizing.unit ?? "hluti"}`;
+				return `Of stórt: gert er ráð fyrir að ${issue.origin ?? "gildi"} sé ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Of lítið: gert er ráð fyrir að ${issue$1.origin} hafi ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Of lítið: gert er ráð fyrir að ${issue$1.origin} sé ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Of lítið: gert er ráð fyrir að ${issue.origin} hafi ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Of lítið: gert er ráð fyrir að ${issue.origin} sé ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ógildur strengur: verður að byrja á "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Ógildur strengur: verður að enda á "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Ógildur strengur: verður að innihalda "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Ógildur strengur: verður að fylgja mynstri ${_issue.pattern}`;
-				return `Rangt ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Rangt ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Röng tala: verður að vera margfeldi af ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Óþekkt ${issue$1.keys.length > 1 ? "ir lyklar" : "ur lykill"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Rangur lykill í ${issue$1.origin}`;
+			case "not_multiple_of": return `Röng tala: verður að vera margfeldi af ${issue.divisor}`;
+			case "unrecognized_keys": return `Óþekkt ${issue.keys.length > 1 ? "ir lyklar" : "ur lykill"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Rangur lykill í ${issue.origin}`;
 			case "invalid_union": return "Rangt gildi";
-			case "invalid_element": return `Rangt gildi í ${issue$1.origin}`;
+			case "invalid_element": return `Rangt gildi í ${issue.origin}`;
 			default: return `Rangt gildi`;
 		}
 	};
@@ -5695,7 +5695,7 @@ function is_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/it.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/it.js
 const error$26 = () => {
 	const Sizable = {
 		string: {
@@ -5753,43 +5753,43 @@ const error$26 = () => {
 		number: "numero",
 		array: "vettore"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Input non valido: atteso instanceof ${issue$1.expected}, ricevuto ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Input non valido: atteso instanceof ${issue.expected}, ricevuto ${received}`;
 				return `Input non valido: atteso ${expected}, ricevuto ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Input non valido: atteso ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Opzione non valida: atteso uno tra ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Input non valido: atteso ${stringifyPrimitive(issue.values[0])}`;
+				return `Opzione non valida: atteso uno tra ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Troppo grande: ${issue$1.origin ?? "valore"} deve avere ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementi"}`;
-				return `Troppo grande: ${issue$1.origin ?? "valore"} deve essere ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Troppo grande: ${issue.origin ?? "valore"} deve avere ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementi"}`;
+				return `Troppo grande: ${issue.origin ?? "valore"} deve essere ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Troppo piccolo: ${issue$1.origin} deve avere ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Troppo piccolo: ${issue$1.origin} deve essere ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Troppo piccolo: ${issue.origin} deve avere ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Troppo piccolo: ${issue.origin} deve essere ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Stringa non valida: deve iniziare con "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Stringa non valida: deve terminare con "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Stringa non valida: deve includere "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Stringa non valida: deve corrispondere al pattern ${_issue.pattern}`;
-				return `Invalid ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Invalid ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Numero non valido: deve essere un multiplo di ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Chiav${issue$1.keys.length > 1 ? "i" : "e"} non riconosciut${issue$1.keys.length > 1 ? "e" : "a"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Chiave non valida in ${issue$1.origin}`;
+			case "not_multiple_of": return `Numero non valido: deve essere un multiplo di ${issue.divisor}`;
+			case "unrecognized_keys": return `Chiav${issue.keys.length > 1 ? "i" : "e"} non riconosciut${issue.keys.length > 1 ? "e" : "a"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Chiave non valida in ${issue.origin}`;
 			case "invalid_union": return "Input non valido";
-			case "invalid_element": return `Valore non valido in ${issue$1.origin}`;
+			case "invalid_element": return `Valore non valido in ${issue.origin}`;
 			default: return `Input non valido`;
 		}
 	};
@@ -5799,7 +5799,7 @@ function it_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ja.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ja.js
 const error$25 = () => {
 	const Sizable = {
 		string: {
@@ -5857,43 +5857,43 @@ const error$25 = () => {
 		number: "数値",
 		array: "配列"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `無効な入力: instanceof ${issue$1.expected}が期待されましたが、${received}が入力されました`;
+				if (/^[A-Z]/.test(issue.expected)) return `無効な入力: instanceof ${issue.expected}が期待されましたが、${received}が入力されました`;
 				return `無効な入力: ${expected}が期待されましたが、${received}が入力されました`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `無効な入力: ${stringifyPrimitive(issue$1.values[0])}が期待されました`;
-				return `無効な選択: ${joinValues(issue$1.values, "、")}のいずれかである必要があります`;
+				if (issue.values.length === 1) return `無効な入力: ${stringifyPrimitive(issue.values[0])}が期待されました`;
+				return `無効な選択: ${joinValues(issue.values, "、")}のいずれかである必要があります`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "以下である" : "より小さい";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `大きすぎる値: ${issue$1.origin ?? "値"}は${issue$1.maximum.toString()}${sizing.unit ?? "要素"}${adj}必要があります`;
-				return `大きすぎる値: ${issue$1.origin ?? "値"}は${issue$1.maximum.toString()}${adj}必要があります`;
+				const adj = issue.inclusive ? "以下である" : "より小さい";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `大きすぎる値: ${issue.origin ?? "値"}は${issue.maximum.toString()}${sizing.unit ?? "要素"}${adj}必要があります`;
+				return `大きすぎる値: ${issue.origin ?? "値"}は${issue.maximum.toString()}${adj}必要があります`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? "以上である" : "より大きい";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `小さすぎる値: ${issue$1.origin}は${issue$1.minimum.toString()}${sizing.unit}${adj}必要があります`;
-				return `小さすぎる値: ${issue$1.origin}は${issue$1.minimum.toString()}${adj}必要があります`;
+				const adj = issue.inclusive ? "以上である" : "より大きい";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `小さすぎる値: ${issue.origin}は${issue.minimum.toString()}${sizing.unit}${adj}必要があります`;
+				return `小さすぎる値: ${issue.origin}は${issue.minimum.toString()}${adj}必要があります`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `無効な文字列: "${_issue.prefix}"で始まる必要があります`;
 				if (_issue.format === "ends_with") return `無効な文字列: "${_issue.suffix}"で終わる必要があります`;
 				if (_issue.format === "includes") return `無効な文字列: "${_issue.includes}"を含む必要があります`;
 				if (_issue.format === "regex") return `無効な文字列: パターン${_issue.pattern}に一致する必要があります`;
-				return `無効な${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `無効な${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `無効な数値: ${issue$1.divisor}の倍数である必要があります`;
-			case "unrecognized_keys": return `認識されていないキー${issue$1.keys.length > 1 ? "群" : ""}: ${joinValues(issue$1.keys, "、")}`;
-			case "invalid_key": return `${issue$1.origin}内の無効なキー`;
+			case "not_multiple_of": return `無効な数値: ${issue.divisor}の倍数である必要があります`;
+			case "unrecognized_keys": return `認識されていないキー${issue.keys.length > 1 ? "群" : ""}: ${joinValues(issue.keys, "、")}`;
+			case "invalid_key": return `${issue.origin}内の無効なキー`;
 			case "invalid_union": return "無効な入力";
-			case "invalid_element": return `${issue$1.origin}内の無効な値`;
+			case "invalid_element": return `${issue.origin}内の無効な値`;
 			default: return `無効な入力`;
 		}
 	};
@@ -5903,7 +5903,7 @@ function ja_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ka.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ka.js
 const error$24 = () => {
 	const Sizable = {
 		string: {
@@ -5964,43 +5964,43 @@ const error$24 = () => {
 		function: "ფუნქცია",
 		array: "მასივი"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `არასწორი შეყვანა: მოსალოდნელი instanceof ${issue$1.expected}, მიღებული ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `არასწორი შეყვანა: მოსალოდნელი instanceof ${issue.expected}, მიღებული ${received}`;
 				return `არასწორი შეყვანა: მოსალოდნელი ${expected}, მიღებული ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `არასწორი შეყვანა: მოსალოდნელი ${stringifyPrimitive(issue$1.values[0])}`;
-				return `არასწორი ვარიანტი: მოსალოდნელია ერთ-ერთი ${joinValues(issue$1.values, "|")}-დან`;
+				if (issue.values.length === 1) return `არასწორი შეყვანა: მოსალოდნელი ${stringifyPrimitive(issue.values[0])}`;
+				return `არასწორი ვარიანტი: მოსალოდნელია ერთ-ერთი ${joinValues(issue.values, "|")}-დან`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `ზედმეტად დიდი: მოსალოდნელი ${issue$1.origin ?? "მნიშვნელობა"} ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${sizing.unit}`;
-				return `ზედმეტად დიდი: მოსალოდნელი ${issue$1.origin ?? "მნიშვნელობა"} იყოს ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `ზედმეტად დიდი: მოსალოდნელი ${issue.origin ?? "მნიშვნელობა"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit}`;
+				return `ზედმეტად დიდი: მოსალოდნელი ${issue.origin ?? "მნიშვნელობა"} იყოს ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `ზედმეტად პატარა: მოსალოდნელი ${issue$1.origin} ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `ზედმეტად პატარა: მოსალოდნელი ${issue$1.origin} იყოს ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `ზედმეტად პატარა: მოსალოდნელი ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `ზედმეტად პატარა: მოსალოდნელი ${issue.origin} იყოს ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `არასწორი სტრინგი: უნდა იწყებოდეს "${_issue.prefix}"-ით`;
 				if (_issue.format === "ends_with") return `არასწორი სტრინგი: უნდა მთავრდებოდეს "${_issue.suffix}"-ით`;
 				if (_issue.format === "includes") return `არასწორი სტრინგი: უნდა შეიცავდეს "${_issue.includes}"-ს`;
 				if (_issue.format === "regex") return `არასწორი სტრინგი: უნდა შეესაბამებოდეს შაბლონს ${_issue.pattern}`;
-				return `არასწორი ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `არასწორი ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `არასწორი რიცხვი: უნდა იყოს ${issue$1.divisor}-ის ჯერადი`;
-			case "unrecognized_keys": return `უცნობი გასაღებ${issue$1.keys.length > 1 ? "ები" : "ი"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `არასწორი გასაღები ${issue$1.origin}-ში`;
+			case "not_multiple_of": return `არასწორი რიცხვი: უნდა იყოს ${issue.divisor}-ის ჯერადი`;
+			case "unrecognized_keys": return `უცნობი გასაღებ${issue.keys.length > 1 ? "ები" : "ი"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `არასწორი გასაღები ${issue.origin}-ში`;
 			case "invalid_union": return "არასწორი შეყვანა";
-			case "invalid_element": return `არასწორი მნიშვნელობა ${issue$1.origin}-ში`;
+			case "invalid_element": return `არასწორი მნიშვნელობა ${issue.origin}-ში`;
 			default: return `არასწორი შეყვანა`;
 		}
 	};
@@ -6010,7 +6010,7 @@ function ka_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/km.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/km.js
 const error$23 = () => {
 	const Sizable = {
 		string: {
@@ -6069,43 +6069,43 @@ const error$23 = () => {
 		array: "អារេ (Array)",
 		null: "គ្មានតម្លៃ (null)"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ instanceof ${issue$1.expected} ប៉ុន្តែទទួលបាន ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ instanceof ${issue.expected} ប៉ុន្តែទទួលបាន ${received}`;
 				return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ ${expected} ប៉ុន្តែទទួលបាន ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ ${stringifyPrimitive(issue$1.values[0])}`;
-				return `ជម្រើសមិនត្រឹមត្រូវ៖ ត្រូវជាមួយក្នុងចំណោម ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ ${stringifyPrimitive(issue.values[0])}`;
+				return `ជម្រើសមិនត្រឹមត្រូវ៖ ត្រូវជាមួយក្នុងចំណោម ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `ធំពេក៖ ត្រូវការ ${issue$1.origin ?? "តម្លៃ"} ${adj} ${issue$1.maximum.toString()} ${sizing.unit ?? "ធាតុ"}`;
-				return `ធំពេក៖ ត្រូវការ ${issue$1.origin ?? "តម្លៃ"} ${adj} ${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `ធំពេក៖ ត្រូវការ ${issue.origin ?? "តម្លៃ"} ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "ធាតុ"}`;
+				return `ធំពេក៖ ត្រូវការ ${issue.origin ?? "តម្លៃ"} ${adj} ${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `តូចពេក៖ ត្រូវការ ${issue$1.origin} ${adj} ${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `តូចពេក៖ ត្រូវការ ${issue$1.origin} ${adj} ${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `តូចពេក៖ ត្រូវការ ${issue.origin} ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+				return `តូចពេក៖ ត្រូវការ ${issue.origin} ${adj} ${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវចាប់ផ្តើមដោយ "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវបញ្ចប់ដោយ "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវមាន "${_issue.includes}"`;
 				if (_issue.format === "regex") return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវតែផ្គូផ្គងនឹងទម្រង់ដែលបានកំណត់ ${_issue.pattern}`;
-				return `មិនត្រឹមត្រូវ៖ ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `មិនត្រឹមត្រូវ៖ ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `លេខមិនត្រឹមត្រូវ៖ ត្រូវតែជាពហុគុណនៃ ${issue$1.divisor}`;
-			case "unrecognized_keys": return `រកឃើញសោមិនស្គាល់៖ ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `សោមិនត្រឹមត្រូវនៅក្នុង ${issue$1.origin}`;
+			case "not_multiple_of": return `លេខមិនត្រឹមត្រូវ៖ ត្រូវតែជាពហុគុណនៃ ${issue.divisor}`;
+			case "unrecognized_keys": return `រកឃើញសោមិនស្គាល់៖ ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `សោមិនត្រឹមត្រូវនៅក្នុង ${issue.origin}`;
 			case "invalid_union": return `ទិន្នន័យមិនត្រឹមត្រូវ`;
-			case "invalid_element": return `ទិន្នន័យមិនត្រឹមត្រូវនៅក្នុង ${issue$1.origin}`;
+			case "invalid_element": return `ទិន្នន័យមិនត្រឹមត្រូវនៅក្នុង ${issue.origin}`;
 			default: return `ទិន្នន័យមិនត្រឹមត្រូវ`;
 		}
 	};
@@ -6115,14 +6115,14 @@ function km_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/kh.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/kh.js
 /** @deprecated Use `km` instead. */
 function kh_default() {
 	return km_default();
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ko.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ko.js
 const error$22 = () => {
 	const Sizable = {
 		string: {
@@ -6176,47 +6176,47 @@ const error$22 = () => {
 		template_literal: "입력"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `잘못된 입력: 예상 타입은 instanceof ${issue$1.expected}, 받은 타입은 ${received}입니다`;
+				if (/^[A-Z]/.test(issue.expected)) return `잘못된 입력: 예상 타입은 instanceof ${issue.expected}, 받은 타입은 ${received}입니다`;
 				return `잘못된 입력: 예상 타입은 ${expected}, 받은 타입은 ${received}입니다`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `잘못된 입력: 값은 ${stringifyPrimitive(issue$1.values[0])} 이어야 합니다`;
-				return `잘못된 옵션: ${joinValues(issue$1.values, "또는 ")} 중 하나여야 합니다`;
+				if (issue.values.length === 1) return `잘못된 입력: 값은 ${stringifyPrimitive(issue.values[0])} 이어야 합니다`;
+				return `잘못된 옵션: ${joinValues(issue.values, "또는 ")} 중 하나여야 합니다`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "이하" : "미만";
+				const adj = issue.inclusive ? "이하" : "미만";
 				const suffix = adj === "미만" ? "이어야 합니다" : "여야 합니다";
-				const sizing = getSizing(issue$1.origin);
+				const sizing = getSizing(issue.origin);
 				const unit = sizing?.unit ?? "요소";
-				if (sizing) return `${issue$1.origin ?? "값"}이 너무 큽니다: ${issue$1.maximum.toString()}${unit} ${adj}${suffix}`;
-				return `${issue$1.origin ?? "값"}이 너무 큽니다: ${issue$1.maximum.toString()} ${adj}${suffix}`;
+				if (sizing) return `${issue.origin ?? "값"}이 너무 큽니다: ${issue.maximum.toString()}${unit} ${adj}${suffix}`;
+				return `${issue.origin ?? "값"}이 너무 큽니다: ${issue.maximum.toString()} ${adj}${suffix}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? "이상" : "초과";
+				const adj = issue.inclusive ? "이상" : "초과";
 				const suffix = adj === "이상" ? "이어야 합니다" : "여야 합니다";
-				const sizing = getSizing(issue$1.origin);
+				const sizing = getSizing(issue.origin);
 				const unit = sizing?.unit ?? "요소";
-				if (sizing) return `${issue$1.origin ?? "값"}이 너무 작습니다: ${issue$1.minimum.toString()}${unit} ${adj}${suffix}`;
-				return `${issue$1.origin ?? "값"}이 너무 작습니다: ${issue$1.minimum.toString()} ${adj}${suffix}`;
+				if (sizing) return `${issue.origin ?? "값"}이 너무 작습니다: ${issue.minimum.toString()}${unit} ${adj}${suffix}`;
+				return `${issue.origin ?? "값"}이 너무 작습니다: ${issue.minimum.toString()} ${adj}${suffix}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `잘못된 문자열: "${_issue.prefix}"(으)로 시작해야 합니다`;
 				if (_issue.format === "ends_with") return `잘못된 문자열: "${_issue.suffix}"(으)로 끝나야 합니다`;
 				if (_issue.format === "includes") return `잘못된 문자열: "${_issue.includes}"을(를) 포함해야 합니다`;
 				if (_issue.format === "regex") return `잘못된 문자열: 정규식 ${_issue.pattern} 패턴과 일치해야 합니다`;
-				return `잘못된 ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `잘못된 ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `잘못된 숫자: ${issue$1.divisor}의 배수여야 합니다`;
-			case "unrecognized_keys": return `인식할 수 없는 키: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `잘못된 키: ${issue$1.origin}`;
+			case "not_multiple_of": return `잘못된 숫자: ${issue.divisor}의 배수여야 합니다`;
+			case "unrecognized_keys": return `인식할 수 없는 키: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `잘못된 키: ${issue.origin}`;
 			case "invalid_union": return `잘못된 입력`;
-			case "invalid_element": return `잘못된 값: ${issue$1.origin}`;
+			case "invalid_element": return `잘못된 값: ${issue.origin}`;
 			default: return `잘못된 입력`;
 		}
 	};
@@ -6226,12 +6226,12 @@ function ko_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/lt.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/lt.js
 const capitalizeFirstCharacter = (text) => {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 };
-function getUnitTypeFromNumber(number$3) {
-	const abs = Math.abs(number$3);
+function getUnitTypeFromNumber(number) {
+	const abs = Math.abs(number);
 	const last = abs % 10;
 	const last2 = abs % 100;
 	if (last2 >= 11 && last2 <= 19 || last === 0) return "many";
@@ -6360,45 +6360,45 @@ const error$21 = () => {
 		object: "objektas",
 		null: "nulinė reikšmė"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Gautas tipas ${received}, o tikėtasi - instanceof ${issue$1.expected}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Gautas tipas ${received}, o tikėtasi - instanceof ${issue.expected}`;
 				return `Gautas tipas ${received}, o tikėtasi - ${expected}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Privalo būti ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Privalo būti vienas iš ${joinValues(issue$1.values, "|")} pasirinkimų`;
+				if (issue.values.length === 1) return `Privalo būti ${stringifyPrimitive(issue.values[0])}`;
+				return `Privalo būti vienas iš ${joinValues(issue.values, "|")} pasirinkimų`;
 			case "too_big": {
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				const sizing = getSizing(issue$1.origin, getUnitTypeFromNumber(Number(issue$1.maximum)), issue$1.inclusive ?? false, "smaller");
-				if (sizing?.verb) return `${capitalizeFirstCharacter(origin ?? issue$1.origin ?? "reikšmė")} ${sizing.verb} ${issue$1.maximum.toString()} ${sizing.unit ?? "elementų"}`;
-				const adj = issue$1.inclusive ? "ne didesnis kaip" : "mažesnis kaip";
-				return `${capitalizeFirstCharacter(origin ?? issue$1.origin ?? "reikšmė")} turi būti ${adj} ${issue$1.maximum.toString()} ${sizing?.unit}`;
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				const sizing = getSizing(issue.origin, getUnitTypeFromNumber(Number(issue.maximum)), issue.inclusive ?? false, "smaller");
+				if (sizing?.verb) return `${capitalizeFirstCharacter(origin ?? issue.origin ?? "reikšmė")} ${sizing.verb} ${issue.maximum.toString()} ${sizing.unit ?? "elementų"}`;
+				const adj = issue.inclusive ? "ne didesnis kaip" : "mažesnis kaip";
+				return `${capitalizeFirstCharacter(origin ?? issue.origin ?? "reikšmė")} turi būti ${adj} ${issue.maximum.toString()} ${sizing?.unit}`;
 			}
 			case "too_small": {
-				const origin = TypeDictionary[issue$1.origin] ?? issue$1.origin;
-				const sizing = getSizing(issue$1.origin, getUnitTypeFromNumber(Number(issue$1.minimum)), issue$1.inclusive ?? false, "bigger");
-				if (sizing?.verb) return `${capitalizeFirstCharacter(origin ?? issue$1.origin ?? "reikšmė")} ${sizing.verb} ${issue$1.minimum.toString()} ${sizing.unit ?? "elementų"}`;
-				const adj = issue$1.inclusive ? "ne mažesnis kaip" : "didesnis kaip";
-				return `${capitalizeFirstCharacter(origin ?? issue$1.origin ?? "reikšmė")} turi būti ${adj} ${issue$1.minimum.toString()} ${sizing?.unit}`;
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				const sizing = getSizing(issue.origin, getUnitTypeFromNumber(Number(issue.minimum)), issue.inclusive ?? false, "bigger");
+				if (sizing?.verb) return `${capitalizeFirstCharacter(origin ?? issue.origin ?? "reikšmė")} ${sizing.verb} ${issue.minimum.toString()} ${sizing.unit ?? "elementų"}`;
+				const adj = issue.inclusive ? "ne mažesnis kaip" : "didesnis kaip";
+				return `${capitalizeFirstCharacter(origin ?? issue.origin ?? "reikšmė")} turi būti ${adj} ${issue.minimum.toString()} ${sizing?.unit}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Eilutė privalo prasidėti "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Eilutė privalo pasibaigti "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Eilutė privalo įtraukti "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Eilutė privalo atitikti ${_issue.pattern}`;
-				return `Neteisingas ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Neteisingas ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Skaičius privalo būti ${issue$1.divisor} kartotinis.`;
-			case "unrecognized_keys": return `Neatpažint${issue$1.keys.length > 1 ? "i" : "as"} rakt${issue$1.keys.length > 1 ? "ai" : "as"}: ${joinValues(issue$1.keys, ", ")}`;
+			case "not_multiple_of": return `Skaičius privalo būti ${issue.divisor} kartotinis.`;
+			case "unrecognized_keys": return `Neatpažint${issue.keys.length > 1 ? "i" : "as"} rakt${issue.keys.length > 1 ? "ai" : "as"}: ${joinValues(issue.keys, ", ")}`;
 			case "invalid_key": return "Rastas klaidingas raktas";
 			case "invalid_union": return "Klaidinga įvestis";
-			case "invalid_element": return `${capitalizeFirstCharacter(TypeDictionary[issue$1.origin] ?? issue$1.origin ?? issue$1.origin ?? "reikšmė")} turi klaidingą įvestį`;
+			case "invalid_element": return `${capitalizeFirstCharacter(TypeDictionary[issue.origin] ?? issue.origin ?? issue.origin ?? "reikšmė")} turi klaidingą įvestį`;
 			default: return "Klaidinga įvestis";
 		}
 	};
@@ -6408,7 +6408,7 @@ function lt_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/mk.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/mk.js
 const error$20 = () => {
 	const Sizable = {
 		string: {
@@ -6466,43 +6466,43 @@ const error$20 = () => {
 		number: "број",
 		array: "низа"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Грешен внес: се очекува instanceof ${issue$1.expected}, примено ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Грешен внес: се очекува instanceof ${issue.expected}, примено ${received}`;
 				return `Грешен внес: се очекува ${expected}, примено ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Invalid input: expected ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Грешана опција: се очекува една ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Invalid input: expected ${stringifyPrimitive(issue.values[0])}`;
+				return `Грешана опција: се очекува една ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Премногу голем: се очекува ${issue$1.origin ?? "вредноста"} да има ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "елементи"}`;
-				return `Премногу голем: се очекува ${issue$1.origin ?? "вредноста"} да биде ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Премногу голем: се очекува ${issue.origin ?? "вредноста"} да има ${adj}${issue.maximum.toString()} ${sizing.unit ?? "елементи"}`;
+				return `Премногу голем: се очекува ${issue.origin ?? "вредноста"} да биде ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Премногу мал: се очекува ${issue$1.origin} да има ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Премногу мал: се очекува ${issue$1.origin} да биде ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Премногу мал: се очекува ${issue.origin} да има ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Премногу мал: се очекува ${issue.origin} да биде ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Неважечка низа: мора да започнува со "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Неважечка низа: мора да завршува со "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Неважечка низа: мора да вклучува "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Неважечка низа: мора да одгоара на патернот ${_issue.pattern}`;
-				return `Invalid ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Invalid ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Грешен број: мора да биде делив со ${issue$1.divisor}`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Непрепознаени клучеви" : "Непрепознаен клуч"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Грешен клуч во ${issue$1.origin}`;
+			case "not_multiple_of": return `Грешен број: мора да биде делив со ${issue.divisor}`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Непрепознаени клучеви" : "Непрепознаен клуч"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Грешен клуч во ${issue.origin}`;
 			case "invalid_union": return "Грешен внес";
-			case "invalid_element": return `Грешна вредност во ${issue$1.origin}`;
+			case "invalid_element": return `Грешна вредност во ${issue.origin}`;
 			default: return `Грешен внес`;
 		}
 	};
@@ -6512,7 +6512,7 @@ function mk_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ms.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ms.js
 const error$19 = () => {
 	const Sizable = {
 		string: {
@@ -6569,43 +6569,43 @@ const error$19 = () => {
 		nan: "NaN",
 		number: "nombor"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Input tidak sah: dijangka instanceof ${issue$1.expected}, diterima ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Input tidak sah: dijangka instanceof ${issue.expected}, diterima ${received}`;
 				return `Input tidak sah: dijangka ${expected}, diterima ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Input tidak sah: dijangka ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Pilihan tidak sah: dijangka salah satu daripada ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Input tidak sah: dijangka ${stringifyPrimitive(issue.values[0])}`;
+				return `Pilihan tidak sah: dijangka salah satu daripada ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Terlalu besar: dijangka ${issue$1.origin ?? "nilai"} ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elemen"}`;
-				return `Terlalu besar: dijangka ${issue$1.origin ?? "nilai"} adalah ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Terlalu besar: dijangka ${issue.origin ?? "nilai"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+				return `Terlalu besar: dijangka ${issue.origin ?? "nilai"} adalah ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Terlalu kecil: dijangka ${issue$1.origin} ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Terlalu kecil: dijangka ${issue$1.origin} adalah ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Terlalu kecil: dijangka ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Terlalu kecil: dijangka ${issue.origin} adalah ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `String tidak sah: mesti bermula dengan "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `String tidak sah: mesti berakhir dengan "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `String tidak sah: mesti mengandungi "${_issue.includes}"`;
 				if (_issue.format === "regex") return `String tidak sah: mesti sepadan dengan corak ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} tidak sah`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} tidak sah`;
 			}
-			case "not_multiple_of": return `Nombor tidak sah: perlu gandaan ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Kunci tidak dikenali: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Kunci tidak sah dalam ${issue$1.origin}`;
+			case "not_multiple_of": return `Nombor tidak sah: perlu gandaan ${issue.divisor}`;
+			case "unrecognized_keys": return `Kunci tidak dikenali: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Kunci tidak sah dalam ${issue.origin}`;
 			case "invalid_union": return "Input tidak sah";
-			case "invalid_element": return `Nilai tidak sah dalam ${issue$1.origin}`;
+			case "invalid_element": return `Nilai tidak sah dalam ${issue.origin}`;
 			default: return `Input tidak sah`;
 		}
 	};
@@ -6615,7 +6615,7 @@ function ms_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/nl.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/nl.js
 const error$18 = () => {
 	const Sizable = {
 		string: {
@@ -6672,45 +6672,45 @@ const error$18 = () => {
 		nan: "NaN",
 		number: "getal"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ongeldige invoer: verwacht instanceof ${issue$1.expected}, ontving ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ongeldige invoer: verwacht instanceof ${issue.expected}, ontving ${received}`;
 				return `Ongeldige invoer: verwacht ${expected}, ontving ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ongeldige invoer: verwacht ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ongeldige optie: verwacht één van ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ongeldige invoer: verwacht ${stringifyPrimitive(issue.values[0])}`;
+				return `Ongeldige optie: verwacht één van ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				const longName = issue$1.origin === "date" ? "laat" : issue$1.origin === "string" ? "lang" : "groot";
-				if (sizing) return `Te ${longName}: verwacht dat ${issue$1.origin ?? "waarde"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementen"} ${sizing.verb}`;
-				return `Te ${longName}: verwacht dat ${issue$1.origin ?? "waarde"} ${adj}${issue$1.maximum.toString()} is`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				const longName = issue.origin === "date" ? "laat" : issue.origin === "string" ? "lang" : "groot";
+				if (sizing) return `Te ${longName}: verwacht dat ${issue.origin ?? "waarde"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementen"} ${sizing.verb}`;
+				return `Te ${longName}: verwacht dat ${issue.origin ?? "waarde"} ${adj}${issue.maximum.toString()} is`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				const shortName = issue$1.origin === "date" ? "vroeg" : issue$1.origin === "string" ? "kort" : "klein";
-				if (sizing) return `Te ${shortName}: verwacht dat ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit} ${sizing.verb}`;
-				return `Te ${shortName}: verwacht dat ${issue$1.origin} ${adj}${issue$1.minimum.toString()} is`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				const shortName = issue.origin === "date" ? "vroeg" : issue.origin === "string" ? "kort" : "klein";
+				if (sizing) return `Te ${shortName}: verwacht dat ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} ${sizing.verb}`;
+				return `Te ${shortName}: verwacht dat ${issue.origin} ${adj}${issue.minimum.toString()} is`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ongeldige tekst: moet met "${_issue.prefix}" beginnen`;
 				if (_issue.format === "ends_with") return `Ongeldige tekst: moet op "${_issue.suffix}" eindigen`;
 				if (_issue.format === "includes") return `Ongeldige tekst: moet "${_issue.includes}" bevatten`;
 				if (_issue.format === "regex") return `Ongeldige tekst: moet overeenkomen met patroon ${_issue.pattern}`;
-				return `Ongeldig: ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Ongeldig: ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Ongeldig getal: moet een veelvoud van ${issue$1.divisor} zijn`;
-			case "unrecognized_keys": return `Onbekende key${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Ongeldige key in ${issue$1.origin}`;
+			case "not_multiple_of": return `Ongeldig getal: moet een veelvoud van ${issue.divisor} zijn`;
+			case "unrecognized_keys": return `Onbekende key${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Ongeldige key in ${issue.origin}`;
 			case "invalid_union": return "Ongeldige invoer";
-			case "invalid_element": return `Ongeldige waarde in ${issue$1.origin}`;
+			case "invalid_element": return `Ongeldige waarde in ${issue.origin}`;
 			default: return `Ongeldige invoer`;
 		}
 	};
@@ -6720,7 +6720,7 @@ function nl_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/no.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/no.js
 const error$17 = () => {
 	const Sizable = {
 		string: {
@@ -6778,43 +6778,43 @@ const error$17 = () => {
 		number: "tall",
 		array: "liste"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ugyldig input: forventet instanceof ${issue$1.expected}, fikk ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ugyldig input: forventet instanceof ${issue.expected}, fikk ${received}`;
 				return `Ugyldig input: forventet ${expected}, fikk ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ugyldig verdi: forventet ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ugyldig valg: forventet en av ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ugyldig verdi: forventet ${stringifyPrimitive(issue.values[0])}`;
+				return `Ugyldig valg: forventet en av ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `For stor(t): forventet ${issue$1.origin ?? "value"} til å ha ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementer"}`;
-				return `For stor(t): forventet ${issue$1.origin ?? "value"} til å ha ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `For stor(t): forventet ${issue.origin ?? "value"} til å ha ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementer"}`;
+				return `For stor(t): forventet ${issue.origin ?? "value"} til å ha ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `For lite(n): forventet ${issue$1.origin} til å ha ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `For lite(n): forventet ${issue$1.origin} til å ha ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `For lite(n): forventet ${issue.origin} til å ha ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `For lite(n): forventet ${issue.origin} til å ha ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ugyldig streng: må starte med "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Ugyldig streng: må ende med "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Ugyldig streng: må inneholde "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Ugyldig streng: må matche mønsteret ${_issue.pattern}`;
-				return `Ugyldig ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Ugyldig ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Ugyldig tall: må være et multiplum av ${issue$1.divisor}`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Ukjente nøkler" : "Ukjent nøkkel"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Ugyldig nøkkel i ${issue$1.origin}`;
+			case "not_multiple_of": return `Ugyldig tall: må være et multiplum av ${issue.divisor}`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Ukjente nøkler" : "Ukjent nøkkel"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Ugyldig nøkkel i ${issue.origin}`;
 			case "invalid_union": return "Ugyldig input";
-			case "invalid_element": return `Ugyldig verdi i ${issue$1.origin}`;
+			case "invalid_element": return `Ugyldig verdi i ${issue.origin}`;
 			default: return `Ugyldig input`;
 		}
 	};
@@ -6824,7 +6824,7 @@ function no_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ota.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ota.js
 const error$16 = () => {
 	const Sizable = {
 		string: {
@@ -6883,43 +6883,43 @@ const error$16 = () => {
 		array: "saf",
 		null: "gayb"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Fâsit giren: umulan instanceof ${issue$1.expected}, alınan ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Fâsit giren: umulan instanceof ${issue.expected}, alınan ${received}`;
 				return `Fâsit giren: umulan ${expected}, alınan ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Fâsit giren: umulan ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Fâsit tercih: mûteberler ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Fâsit giren: umulan ${stringifyPrimitive(issue.values[0])}`;
+				return `Fâsit tercih: mûteberler ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Fazla büyük: ${issue$1.origin ?? "value"}, ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elements"} sahip olmalıydı.`;
-				return `Fazla büyük: ${issue$1.origin ?? "value"}, ${adj}${issue$1.maximum.toString()} olmalıydı.`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Fazla büyük: ${issue.origin ?? "value"}, ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"} sahip olmalıydı.`;
+				return `Fazla büyük: ${issue.origin ?? "value"}, ${adj}${issue.maximum.toString()} olmalıydı.`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Fazla küçük: ${issue$1.origin}, ${adj}${issue$1.minimum.toString()} ${sizing.unit} sahip olmalıydı.`;
-				return `Fazla küçük: ${issue$1.origin}, ${adj}${issue$1.minimum.toString()} olmalıydı.`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Fazla küçük: ${issue.origin}, ${adj}${issue.minimum.toString()} ${sizing.unit} sahip olmalıydı.`;
+				return `Fazla küçük: ${issue.origin}, ${adj}${issue.minimum.toString()} olmalıydı.`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Fâsit metin: "${_issue.prefix}" ile başlamalı.`;
 				if (_issue.format === "ends_with") return `Fâsit metin: "${_issue.suffix}" ile bitmeli.`;
 				if (_issue.format === "includes") return `Fâsit metin: "${_issue.includes}" ihtivâ etmeli.`;
 				if (_issue.format === "regex") return `Fâsit metin: ${_issue.pattern} nakşına uymalı.`;
-				return `Fâsit ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Fâsit ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Fâsit sayı: ${issue$1.divisor} katı olmalıydı.`;
-			case "unrecognized_keys": return `Tanınmayan anahtar ${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} için tanınmayan anahtar var.`;
+			case "not_multiple_of": return `Fâsit sayı: ${issue.divisor} katı olmalıydı.`;
+			case "unrecognized_keys": return `Tanınmayan anahtar ${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} için tanınmayan anahtar var.`;
 			case "invalid_union": return "Giren tanınamadı.";
-			case "invalid_element": return `${issue$1.origin} için tanınmayan kıymet var.`;
+			case "invalid_element": return `${issue.origin} için tanınmayan kıymet var.`;
 			default: return `Kıymet tanınamadı.`;
 		}
 	};
@@ -6929,7 +6929,7 @@ function ota_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ps.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ps.js
 const error$15 = () => {
 	const Sizable = {
 		string: {
@@ -6987,43 +6987,43 @@ const error$15 = () => {
 		number: "عدد",
 		array: "ارې"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `ناسم ورودي: باید instanceof ${issue$1.expected} وای, مګر ${received} ترلاسه شو`;
+				if (/^[A-Z]/.test(issue.expected)) return `ناسم ورودي: باید instanceof ${issue.expected} وای, مګر ${received} ترلاسه شو`;
 				return `ناسم ورودي: باید ${expected} وای, مګر ${received} ترلاسه شو`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `ناسم ورودي: باید ${stringifyPrimitive(issue$1.values[0])} وای`;
-				return `ناسم انتخاب: باید یو له ${joinValues(issue$1.values, "|")} څخه وای`;
+				if (issue.values.length === 1) return `ناسم ورودي: باید ${stringifyPrimitive(issue.values[0])} وای`;
+				return `ناسم انتخاب: باید یو له ${joinValues(issue.values, "|")} څخه وای`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `ډیر لوی: ${issue$1.origin ?? "ارزښت"} باید ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "عنصرونه"} ولري`;
-				return `ډیر لوی: ${issue$1.origin ?? "ارزښت"} باید ${adj}${issue$1.maximum.toString()} وي`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `ډیر لوی: ${issue.origin ?? "ارزښت"} باید ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عنصرونه"} ولري`;
+				return `ډیر لوی: ${issue.origin ?? "ارزښت"} باید ${adj}${issue.maximum.toString()} وي`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `ډیر کوچنی: ${issue$1.origin} باید ${adj}${issue$1.minimum.toString()} ${sizing.unit} ولري`;
-				return `ډیر کوچنی: ${issue$1.origin} باید ${adj}${issue$1.minimum.toString()} وي`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `ډیر کوچنی: ${issue.origin} باید ${adj}${issue.minimum.toString()} ${sizing.unit} ولري`;
+				return `ډیر کوچنی: ${issue.origin} باید ${adj}${issue.minimum.toString()} وي`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `ناسم متن: باید د "${_issue.prefix}" سره پیل شي`;
 				if (_issue.format === "ends_with") return `ناسم متن: باید د "${_issue.suffix}" سره پای ته ورسيږي`;
 				if (_issue.format === "includes") return `ناسم متن: باید "${_issue.includes}" ولري`;
 				if (_issue.format === "regex") return `ناسم متن: باید د ${_issue.pattern} سره مطابقت ولري`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} ناسم دی`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} ناسم دی`;
 			}
-			case "not_multiple_of": return `ناسم عدد: باید د ${issue$1.divisor} مضرب وي`;
-			case "unrecognized_keys": return `ناسم ${issue$1.keys.length > 1 ? "کلیډونه" : "کلیډ"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `ناسم کلیډ په ${issue$1.origin} کې`;
+			case "not_multiple_of": return `ناسم عدد: باید د ${issue.divisor} مضرب وي`;
+			case "unrecognized_keys": return `ناسم ${issue.keys.length > 1 ? "کلیډونه" : "کلیډ"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `ناسم کلیډ په ${issue.origin} کې`;
 			case "invalid_union": return `ناسمه ورودي`;
-			case "invalid_element": return `ناسم عنصر په ${issue$1.origin} کې`;
+			case "invalid_element": return `ناسم عنصر په ${issue.origin} کې`;
 			default: return `ناسمه ورودي`;
 		}
 	};
@@ -7033,7 +7033,7 @@ function ps_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/pl.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/pl.js
 const error$14 = () => {
 	const Sizable = {
 		string: {
@@ -7091,43 +7091,43 @@ const error$14 = () => {
 		number: "liczba",
 		array: "tablica"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Nieprawidłowe dane wejściowe: oczekiwano instanceof ${issue$1.expected}, otrzymano ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Nieprawidłowe dane wejściowe: oczekiwano instanceof ${issue.expected}, otrzymano ${received}`;
 				return `Nieprawidłowe dane wejściowe: oczekiwano ${expected}, otrzymano ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Nieprawidłowe dane wejściowe: oczekiwano ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Nieprawidłowa opcja: oczekiwano jednej z wartości ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Nieprawidłowe dane wejściowe: oczekiwano ${stringifyPrimitive(issue.values[0])}`;
+				return `Nieprawidłowa opcja: oczekiwano jednej z wartości ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Za duża wartość: oczekiwano, że ${issue$1.origin ?? "wartość"} będzie mieć ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementów"}`;
-				return `Zbyt duż(y/a/e): oczekiwano, że ${issue$1.origin ?? "wartość"} będzie wynosić ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Za duża wartość: oczekiwano, że ${issue.origin ?? "wartość"} będzie mieć ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementów"}`;
+				return `Zbyt duż(y/a/e): oczekiwano, że ${issue.origin ?? "wartość"} będzie wynosić ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Za mała wartość: oczekiwano, że ${issue$1.origin ?? "wartość"} będzie mieć ${adj}${issue$1.minimum.toString()} ${sizing.unit ?? "elementów"}`;
-				return `Zbyt mał(y/a/e): oczekiwano, że ${issue$1.origin ?? "wartość"} będzie wynosić ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Za mała wartość: oczekiwano, że ${issue.origin ?? "wartość"} będzie mieć ${adj}${issue.minimum.toString()} ${sizing.unit ?? "elementów"}`;
+				return `Zbyt mał(y/a/e): oczekiwano, że ${issue.origin ?? "wartość"} będzie wynosić ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Nieprawidłowy ciąg znaków: musi zaczynać się od "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Nieprawidłowy ciąg znaków: musi kończyć się na "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Nieprawidłowy ciąg znaków: musi zawierać "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Nieprawidłowy ciąg znaków: musi odpowiadać wzorcowi ${_issue.pattern}`;
-				return `Nieprawidłow(y/a/e) ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Nieprawidłow(y/a/e) ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Nieprawidłowa liczba: musi być wielokrotnością ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Nierozpoznane klucze${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Nieprawidłowy klucz w ${issue$1.origin}`;
+			case "not_multiple_of": return `Nieprawidłowa liczba: musi być wielokrotnością ${issue.divisor}`;
+			case "unrecognized_keys": return `Nierozpoznane klucze${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Nieprawidłowy klucz w ${issue.origin}`;
 			case "invalid_union": return "Nieprawidłowe dane wejściowe";
-			case "invalid_element": return `Nieprawidłowa wartość w ${issue$1.origin}`;
+			case "invalid_element": return `Nieprawidłowa wartość w ${issue.origin}`;
 			default: return `Nieprawidłowe dane wejściowe`;
 		}
 	};
@@ -7137,7 +7137,7 @@ function pl_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/pt.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/pt.js
 const error$13 = () => {
 	const Sizable = {
 		string: {
@@ -7195,43 +7195,43 @@ const error$13 = () => {
 		number: "número",
 		null: "nulo"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Tipo inválido: esperado instanceof ${issue$1.expected}, recebido ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Tipo inválido: esperado instanceof ${issue.expected}, recebido ${received}`;
 				return `Tipo inválido: esperado ${expected}, recebido ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Entrada inválida: esperado ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Opção inválida: esperada uma das ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Entrada inválida: esperado ${stringifyPrimitive(issue.values[0])}`;
+				return `Opção inválida: esperada uma das ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Muito grande: esperado que ${issue$1.origin ?? "valor"} tivesse ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementos"}`;
-				return `Muito grande: esperado que ${issue$1.origin ?? "valor"} fosse ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Muito grande: esperado que ${issue.origin ?? "valor"} tivesse ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+				return `Muito grande: esperado que ${issue.origin ?? "valor"} fosse ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Muito pequeno: esperado que ${issue$1.origin} tivesse ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Muito pequeno: esperado que ${issue$1.origin} fosse ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Muito pequeno: esperado que ${issue.origin} tivesse ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Muito pequeno: esperado que ${issue.origin} fosse ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Texto inválido: deve começar com "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Texto inválido: deve terminar com "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Texto inválido: deve incluir "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Texto inválido: deve corresponder ao padrão ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} inválido`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} inválido`;
 			}
-			case "not_multiple_of": return `Número inválido: deve ser múltiplo de ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Chave${issue$1.keys.length > 1 ? "s" : ""} desconhecida${issue$1.keys.length > 1 ? "s" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Chave inválida em ${issue$1.origin}`;
+			case "not_multiple_of": return `Número inválido: deve ser múltiplo de ${issue.divisor}`;
+			case "unrecognized_keys": return `Chave${issue.keys.length > 1 ? "s" : ""} desconhecida${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Chave inválida em ${issue.origin}`;
 			case "invalid_union": return "Entrada inválida";
-			case "invalid_element": return `Valor inválido em ${issue$1.origin}`;
+			case "invalid_element": return `Valor inválido em ${issue.origin}`;
 			default: return `Campo inválido`;
 		}
 	};
@@ -7241,7 +7241,7 @@ function pt_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ru.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ru.js
 function getRussianPlural(count, one, few, many) {
 	const absCount = Math.abs(count);
 	const lastDigit = absCount % 10;
@@ -7324,49 +7324,49 @@ const error$12 = () => {
 		number: "число",
 		array: "массив"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Неверный ввод: ожидалось instanceof ${issue$1.expected}, получено ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Неверный ввод: ожидалось instanceof ${issue.expected}, получено ${received}`;
 				return `Неверный ввод: ожидалось ${expected}, получено ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Неверный ввод: ожидалось ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Неверный вариант: ожидалось одно из ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Неверный ввод: ожидалось ${stringifyPrimitive(issue.values[0])}`;
+				return `Неверный вариант: ожидалось одно из ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getRussianPlural(Number(issue$1.maximum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
-					return `Слишком большое значение: ожидалось, что ${issue$1.origin ?? "значение"} будет иметь ${adj}${issue$1.maximum.toString()} ${unit}`;
+					const unit = getRussianPlural(Number(issue.maximum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
+					return `Слишком большое значение: ожидалось, что ${issue.origin ?? "значение"} будет иметь ${adj}${issue.maximum.toString()} ${unit}`;
 				}
-				return `Слишком большое значение: ожидалось, что ${issue$1.origin ?? "значение"} будет ${adj}${issue$1.maximum.toString()}`;
+				return `Слишком большое значение: ожидалось, что ${issue.origin ?? "значение"} будет ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
 				if (sizing) {
-					const unit = getRussianPlural(Number(issue$1.minimum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
-					return `Слишком маленькое значение: ожидалось, что ${issue$1.origin} будет иметь ${adj}${issue$1.minimum.toString()} ${unit}`;
+					const unit = getRussianPlural(Number(issue.minimum), sizing.unit.one, sizing.unit.few, sizing.unit.many);
+					return `Слишком маленькое значение: ожидалось, что ${issue.origin} будет иметь ${adj}${issue.minimum.toString()} ${unit}`;
 				}
-				return `Слишком маленькое значение: ожидалось, что ${issue$1.origin} будет ${adj}${issue$1.minimum.toString()}`;
+				return `Слишком маленькое значение: ожидалось, что ${issue.origin} будет ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Неверная строка: должна начинаться с "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Неверная строка: должна заканчиваться на "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Неверная строка: должна содержать "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Неверная строка: должна соответствовать шаблону ${_issue.pattern}`;
-				return `Неверный ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Неверный ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Неверное число: должно быть кратным ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Нераспознанн${issue$1.keys.length > 1 ? "ые" : "ый"} ключ${issue$1.keys.length > 1 ? "и" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Неверный ключ в ${issue$1.origin}`;
+			case "not_multiple_of": return `Неверное число: должно быть кратным ${issue.divisor}`;
+			case "unrecognized_keys": return `Нераспознанн${issue.keys.length > 1 ? "ые" : "ый"} ключ${issue.keys.length > 1 ? "и" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Неверный ключ в ${issue.origin}`;
 			case "invalid_union": return "Неверные входные данные";
-			case "invalid_element": return `Неверное значение в ${issue$1.origin}`;
+			case "invalid_element": return `Неверное значение в ${issue.origin}`;
 			default: return `Неверные входные данные`;
 		}
 	};
@@ -7376,7 +7376,7 @@ function ru_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/sl.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/sl.js
 const error$11 = () => {
 	const Sizable = {
 		string: {
@@ -7434,43 +7434,43 @@ const error$11 = () => {
 		number: "število",
 		array: "tabela"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Neveljaven vnos: pričakovano instanceof ${issue$1.expected}, prejeto ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Neveljaven vnos: pričakovano instanceof ${issue.expected}, prejeto ${received}`;
 				return `Neveljaven vnos: pričakovano ${expected}, prejeto ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Neveljaven vnos: pričakovano ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Neveljavna možnost: pričakovano eno izmed ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Neveljaven vnos: pričakovano ${stringifyPrimitive(issue.values[0])}`;
+				return `Neveljavna možnost: pričakovano eno izmed ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Preveliko: pričakovano, da bo ${issue$1.origin ?? "vrednost"} imelo ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "elementov"}`;
-				return `Preveliko: pričakovano, da bo ${issue$1.origin ?? "vrednost"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Preveliko: pričakovano, da bo ${issue.origin ?? "vrednost"} imelo ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementov"}`;
+				return `Preveliko: pričakovano, da bo ${issue.origin ?? "vrednost"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Premajhno: pričakovano, da bo ${issue$1.origin} imelo ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Premajhno: pričakovano, da bo ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Premajhno: pričakovano, da bo ${issue.origin} imelo ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Premajhno: pričakovano, da bo ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Neveljaven niz: mora se začeti z "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Neveljaven niz: mora se končati z "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Neveljaven niz: mora vsebovati "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Neveljaven niz: mora ustrezati vzorcu ${_issue.pattern}`;
-				return `Neveljaven ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Neveljaven ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Neveljavno število: mora biti večkratnik ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Neprepoznan${issue$1.keys.length > 1 ? "i ključi" : " ključ"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Neveljaven ključ v ${issue$1.origin}`;
+			case "not_multiple_of": return `Neveljavno število: mora biti večkratnik ${issue.divisor}`;
+			case "unrecognized_keys": return `Neprepoznan${issue.keys.length > 1 ? "i ključi" : " ključ"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Neveljaven ključ v ${issue.origin}`;
 			case "invalid_union": return "Neveljaven vnos";
-			case "invalid_element": return `Neveljavna vrednost v ${issue$1.origin}`;
+			case "invalid_element": return `Neveljavna vrednost v ${issue.origin}`;
 			default: return "Neveljaven vnos";
 		}
 	};
@@ -7480,7 +7480,7 @@ function sl_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/sv.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/sv.js
 const error$10 = () => {
 	const Sizable = {
 		string: {
@@ -7538,43 +7538,43 @@ const error$10 = () => {
 		number: "antal",
 		array: "lista"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ogiltig inmatning: förväntat instanceof ${issue$1.expected}, fick ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ogiltig inmatning: förväntat instanceof ${issue.expected}, fick ${received}`;
 				return `Ogiltig inmatning: förväntat ${expected}, fick ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ogiltig inmatning: förväntat ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Ogiltigt val: förväntade en av ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ogiltig inmatning: förväntat ${stringifyPrimitive(issue.values[0])}`;
+				return `Ogiltigt val: förväntade en av ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `För stor(t): förväntade ${issue$1.origin ?? "värdet"} att ha ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "element"}`;
-				return `För stor(t): förväntat ${issue$1.origin ?? "värdet"} att ha ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `För stor(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.maximum.toString()} ${sizing.unit ?? "element"}`;
+				return `För stor(t): förväntat ${issue.origin ?? "värdet"} att ha ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `För lite(t): förväntade ${issue$1.origin ?? "värdet"} att ha ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `För lite(t): förväntade ${issue$1.origin ?? "värdet"} att ha ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `För lite(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `För lite(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ogiltig sträng: måste börja med "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Ogiltig sträng: måste sluta med "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Ogiltig sträng: måste innehålla "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Ogiltig sträng: måste matcha mönstret "${_issue.pattern}"`;
-				return `Ogiltig(t) ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Ogiltig(t) ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Ogiltigt tal: måste vara en multipel av ${issue$1.divisor}`;
-			case "unrecognized_keys": return `${issue$1.keys.length > 1 ? "Okända nycklar" : "Okänd nyckel"}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Ogiltig nyckel i ${issue$1.origin ?? "värdet"}`;
+			case "not_multiple_of": return `Ogiltigt tal: måste vara en multipel av ${issue.divisor}`;
+			case "unrecognized_keys": return `${issue.keys.length > 1 ? "Okända nycklar" : "Okänd nyckel"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Ogiltig nyckel i ${issue.origin ?? "värdet"}`;
 			case "invalid_union": return "Ogiltig input";
-			case "invalid_element": return `Ogiltigt värde i ${issue$1.origin ?? "värdet"}`;
+			case "invalid_element": return `Ogiltigt värde i ${issue.origin ?? "värdet"}`;
 			default: return `Ogiltig input`;
 		}
 	};
@@ -7584,7 +7584,7 @@ function sv_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ta.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ta.js
 const error$9 = () => {
 	const Sizable = {
 		string: {
@@ -7643,43 +7643,43 @@ const error$9 = () => {
 		array: "அணி",
 		null: "வெறுமை"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது instanceof ${issue$1.expected}, பெறப்பட்டது ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது instanceof ${issue.expected}, பெறப்பட்டது ${received}`;
 				return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது ${expected}, பெறப்பட்டது ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது ${stringifyPrimitive(issue$1.values[0])}`;
-				return `தவறான விருப்பம்: எதிர்பார்க்கப்பட்டது ${joinValues(issue$1.values, "|")} இல் ஒன்று`;
+				if (issue.values.length === 1) return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது ${stringifyPrimitive(issue.values[0])}`;
+				return `தவறான விருப்பம்: எதிர்பார்க்கப்பட்டது ${joinValues(issue.values, "|")} இல் ஒன்று`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue$1.origin ?? "மதிப்பு"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "உறுப்புகள்"} ஆக இருக்க வேண்டும்`;
-				return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue$1.origin ?? "மதிப்பு"} ${adj}${issue$1.maximum.toString()} ஆக இருக்க வேண்டும்`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue.origin ?? "மதிப்பு"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "உறுப்புகள்"} ஆக இருக்க வேண்டும்`;
+				return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue.origin ?? "மதிப்பு"} ${adj}${issue.maximum.toString()} ஆக இருக்க வேண்டும்`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit} ஆக இருக்க வேண்டும்`;
-				return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ஆக இருக்க வேண்டும்`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} ஆக இருக்க வேண்டும்`;
+				return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue.origin} ${adj}${issue.minimum.toString()} ஆக இருக்க வேண்டும்`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `தவறான சரம்: "${_issue.prefix}" இல் தொடங்க வேண்டும்`;
 				if (_issue.format === "ends_with") return `தவறான சரம்: "${_issue.suffix}" இல் முடிவடைய வேண்டும்`;
 				if (_issue.format === "includes") return `தவறான சரம்: "${_issue.includes}" ஐ உள்ளடக்க வேண்டும்`;
 				if (_issue.format === "regex") return `தவறான சரம்: ${_issue.pattern} முறைபாட்டுடன் பொருந்த வேண்டும்`;
-				return `தவறான ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `தவறான ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `தவறான எண்: ${issue$1.divisor} இன் பலமாக இருக்க வேண்டும்`;
-			case "unrecognized_keys": return `அடையாளம் தெரியாத விசை${issue$1.keys.length > 1 ? "கள்" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} இல் தவறான விசை`;
+			case "not_multiple_of": return `தவறான எண்: ${issue.divisor} இன் பலமாக இருக்க வேண்டும்`;
+			case "unrecognized_keys": return `அடையாளம் தெரியாத விசை${issue.keys.length > 1 ? "கள்" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} இல் தவறான விசை`;
 			case "invalid_union": return "தவறான உள்ளீடு";
-			case "invalid_element": return `${issue$1.origin} இல் தவறான மதிப்பு`;
+			case "invalid_element": return `${issue.origin} இல் தவறான மதிப்பு`;
 			default: return `தவறான உள்ளீடு`;
 		}
 	};
@@ -7689,7 +7689,7 @@ function ta_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/th.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/th.js
 const error$8 = () => {
 	const Sizable = {
 		string: {
@@ -7748,43 +7748,43 @@ const error$8 = () => {
 		array: "อาร์เรย์ (Array)",
 		null: "ไม่มีค่า (null)"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `ประเภทข้อมูลไม่ถูกต้อง: ควรเป็น instanceof ${issue$1.expected} แต่ได้รับ ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `ประเภทข้อมูลไม่ถูกต้อง: ควรเป็น instanceof ${issue.expected} แต่ได้รับ ${received}`;
 				return `ประเภทข้อมูลไม่ถูกต้อง: ควรเป็น ${expected} แต่ได้รับ ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `ค่าไม่ถูกต้อง: ควรเป็น ${stringifyPrimitive(issue$1.values[0])}`;
-				return `ตัวเลือกไม่ถูกต้อง: ควรเป็นหนึ่งใน ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `ค่าไม่ถูกต้อง: ควรเป็น ${stringifyPrimitive(issue.values[0])}`;
+				return `ตัวเลือกไม่ถูกต้อง: ควรเป็นหนึ่งใน ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "ไม่เกิน" : "น้อยกว่า";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `เกินกำหนด: ${issue$1.origin ?? "ค่า"} ควรมี${adj} ${issue$1.maximum.toString()} ${sizing.unit ?? "รายการ"}`;
-				return `เกินกำหนด: ${issue$1.origin ?? "ค่า"} ควรมี${adj} ${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "ไม่เกิน" : "น้อยกว่า";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `เกินกำหนด: ${issue.origin ?? "ค่า"} ควรมี${adj} ${issue.maximum.toString()} ${sizing.unit ?? "รายการ"}`;
+				return `เกินกำหนด: ${issue.origin ?? "ค่า"} ควรมี${adj} ${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? "อย่างน้อย" : "มากกว่า";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `น้อยกว่ากำหนด: ${issue$1.origin} ควรมี${adj} ${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `น้อยกว่ากำหนด: ${issue$1.origin} ควรมี${adj} ${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? "อย่างน้อย" : "มากกว่า";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `น้อยกว่ากำหนด: ${issue.origin} ควรมี${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+				return `น้อยกว่ากำหนด: ${issue.origin} ควรมี${adj} ${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `รูปแบบไม่ถูกต้อง: ข้อความต้องขึ้นต้นด้วย "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `รูปแบบไม่ถูกต้อง: ข้อความต้องลงท้ายด้วย "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `รูปแบบไม่ถูกต้อง: ข้อความต้องมี "${_issue.includes}" อยู่ในข้อความ`;
 				if (_issue.format === "regex") return `รูปแบบไม่ถูกต้อง: ต้องตรงกับรูปแบบที่กำหนด ${_issue.pattern}`;
-				return `รูปแบบไม่ถูกต้อง: ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `รูปแบบไม่ถูกต้อง: ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `ตัวเลขไม่ถูกต้อง: ต้องเป็นจำนวนที่หารด้วย ${issue$1.divisor} ได้ลงตัว`;
-			case "unrecognized_keys": return `พบคีย์ที่ไม่รู้จัก: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `คีย์ไม่ถูกต้องใน ${issue$1.origin}`;
+			case "not_multiple_of": return `ตัวเลขไม่ถูกต้อง: ต้องเป็นจำนวนที่หารด้วย ${issue.divisor} ได้ลงตัว`;
+			case "unrecognized_keys": return `พบคีย์ที่ไม่รู้จัก: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `คีย์ไม่ถูกต้องใน ${issue.origin}`;
 			case "invalid_union": return "ข้อมูลไม่ถูกต้อง: ไม่ตรงกับรูปแบบยูเนียนที่กำหนดไว้";
-			case "invalid_element": return `ข้อมูลไม่ถูกต้องใน ${issue$1.origin}`;
+			case "invalid_element": return `ข้อมูลไม่ถูกต้องใน ${issue.origin}`;
 			default: return `ข้อมูลไม่ถูกต้อง`;
 		}
 	};
@@ -7794,7 +7794,7 @@ function th_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/tr.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/tr.js
 const error$7 = () => {
 	const Sizable = {
 		string: {
@@ -7848,43 +7848,43 @@ const error$7 = () => {
 		template_literal: "Şablon dizesi"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Geçersiz değer: beklenen instanceof ${issue$1.expected}, alınan ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Geçersiz değer: beklenen instanceof ${issue.expected}, alınan ${received}`;
 				return `Geçersiz değer: beklenen ${expected}, alınan ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Geçersiz değer: beklenen ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Geçersiz seçenek: aşağıdakilerden biri olmalı: ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Geçersiz değer: beklenen ${stringifyPrimitive(issue.values[0])}`;
+				return `Geçersiz seçenek: aşağıdakilerden biri olmalı: ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Çok büyük: beklenen ${issue$1.origin ?? "değer"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "öğe"}`;
-				return `Çok büyük: beklenen ${issue$1.origin ?? "değer"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Çok büyük: beklenen ${issue.origin ?? "değer"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "öğe"}`;
+				return `Çok büyük: beklenen ${issue.origin ?? "değer"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Çok küçük: beklenen ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Çok küçük: beklenen ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Çok küçük: beklenen ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Çok küçük: beklenen ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Geçersiz metin: "${_issue.prefix}" ile başlamalı`;
 				if (_issue.format === "ends_with") return `Geçersiz metin: "${_issue.suffix}" ile bitmeli`;
 				if (_issue.format === "includes") return `Geçersiz metin: "${_issue.includes}" içermeli`;
 				if (_issue.format === "regex") return `Geçersiz metin: ${_issue.pattern} desenine uymalı`;
-				return `Geçersiz ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Geçersiz ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Geçersiz sayı: ${issue$1.divisor} ile tam bölünebilmeli`;
-			case "unrecognized_keys": return `Tanınmayan anahtar${issue$1.keys.length > 1 ? "lar" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} içinde geçersiz anahtar`;
+			case "not_multiple_of": return `Geçersiz sayı: ${issue.divisor} ile tam bölünebilmeli`;
+			case "unrecognized_keys": return `Tanınmayan anahtar${issue.keys.length > 1 ? "lar" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} içinde geçersiz anahtar`;
 			case "invalid_union": return "Geçersiz değer";
-			case "invalid_element": return `${issue$1.origin} içinde geçersiz değer`;
+			case "invalid_element": return `${issue.origin} içinde geçersiz değer`;
 			default: return `Geçersiz değer`;
 		}
 	};
@@ -7894,7 +7894,7 @@ function tr_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/uk.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/uk.js
 const error$6 = () => {
 	const Sizable = {
 		string: {
@@ -7952,43 +7952,43 @@ const error$6 = () => {
 		number: "число",
 		array: "масив"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Неправильні вхідні дані: очікується instanceof ${issue$1.expected}, отримано ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Неправильні вхідні дані: очікується instanceof ${issue.expected}, отримано ${received}`;
 				return `Неправильні вхідні дані: очікується ${expected}, отримано ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Неправильні вхідні дані: очікується ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Неправильна опція: очікується одне з ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Неправильні вхідні дані: очікується ${stringifyPrimitive(issue.values[0])}`;
+				return `Неправильна опція: очікується одне з ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Занадто велике: очікується, що ${issue$1.origin ?? "значення"} ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "елементів"}`;
-				return `Занадто велике: очікується, що ${issue$1.origin ?? "значення"} буде ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Занадто велике: очікується, що ${issue.origin ?? "значення"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "елементів"}`;
+				return `Занадто велике: очікується, що ${issue.origin ?? "значення"} буде ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Занадто мале: очікується, що ${issue$1.origin} ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Занадто мале: очікується, що ${issue$1.origin} буде ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Занадто мале: очікується, що ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Занадто мале: очікується, що ${issue.origin} буде ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Неправильний рядок: повинен починатися з "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Неправильний рядок: повинен закінчуватися на "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Неправильний рядок: повинен містити "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Неправильний рядок: повинен відповідати шаблону ${_issue.pattern}`;
-				return `Неправильний ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Неправильний ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Неправильне число: повинно бути кратним ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Нерозпізнаний ключ${issue$1.keys.length > 1 ? "і" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Неправильний ключ у ${issue$1.origin}`;
+			case "not_multiple_of": return `Неправильне число: повинно бути кратним ${issue.divisor}`;
+			case "unrecognized_keys": return `Нерозпізнаний ключ${issue.keys.length > 1 ? "і" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Неправильний ключ у ${issue.origin}`;
 			case "invalid_union": return "Неправильні вхідні дані";
-			case "invalid_element": return `Неправильне значення у ${issue$1.origin}`;
+			case "invalid_element": return `Неправильне значення у ${issue.origin}`;
 			default: return `Неправильні вхідні дані`;
 		}
 	};
@@ -7998,14 +7998,14 @@ function uk_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ua.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ua.js
 /** @deprecated Use `uk` instead. */
 function ua_default() {
 	return uk_default();
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/ur.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ur.js
 const error$5 = () => {
 	const Sizable = {
 		string: {
@@ -8064,43 +8064,43 @@ const error$5 = () => {
 		array: "آرے",
 		null: "نل"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `غلط ان پٹ: instanceof ${issue$1.expected} متوقع تھا، ${received} موصول ہوا`;
+				if (/^[A-Z]/.test(issue.expected)) return `غلط ان پٹ: instanceof ${issue.expected} متوقع تھا، ${received} موصول ہوا`;
 				return `غلط ان پٹ: ${expected} متوقع تھا، ${received} موصول ہوا`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `غلط ان پٹ: ${stringifyPrimitive(issue$1.values[0])} متوقع تھا`;
-				return `غلط آپشن: ${joinValues(issue$1.values, "|")} میں سے ایک متوقع تھا`;
+				if (issue.values.length === 1) return `غلط ان پٹ: ${stringifyPrimitive(issue.values[0])} متوقع تھا`;
+				return `غلط آپشن: ${joinValues(issue.values, "|")} میں سے ایک متوقع تھا`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `بہت بڑا: ${issue$1.origin ?? "ویلیو"} کے ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "عناصر"} ہونے متوقع تھے`;
-				return `بہت بڑا: ${issue$1.origin ?? "ویلیو"} کا ${adj}${issue$1.maximum.toString()} ہونا متوقع تھا`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `بہت بڑا: ${issue.origin ?? "ویلیو"} کے ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عناصر"} ہونے متوقع تھے`;
+				return `بہت بڑا: ${issue.origin ?? "ویلیو"} کا ${adj}${issue.maximum.toString()} ہونا متوقع تھا`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `بہت چھوٹا: ${issue$1.origin} کے ${adj}${issue$1.minimum.toString()} ${sizing.unit} ہونے متوقع تھے`;
-				return `بہت چھوٹا: ${issue$1.origin} کا ${adj}${issue$1.minimum.toString()} ہونا متوقع تھا`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `بہت چھوٹا: ${issue.origin} کے ${adj}${issue.minimum.toString()} ${sizing.unit} ہونے متوقع تھے`;
+				return `بہت چھوٹا: ${issue.origin} کا ${adj}${issue.minimum.toString()} ہونا متوقع تھا`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `غلط سٹرنگ: "${_issue.prefix}" سے شروع ہونا چاہیے`;
 				if (_issue.format === "ends_with") return `غلط سٹرنگ: "${_issue.suffix}" پر ختم ہونا چاہیے`;
 				if (_issue.format === "includes") return `غلط سٹرنگ: "${_issue.includes}" شامل ہونا چاہیے`;
 				if (_issue.format === "regex") return `غلط سٹرنگ: پیٹرن ${_issue.pattern} سے میچ ہونا چاہیے`;
-				return `غلط ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `غلط ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `غلط نمبر: ${issue$1.divisor} کا مضاعف ہونا چاہیے`;
-			case "unrecognized_keys": return `غیر تسلیم شدہ کی${issue$1.keys.length > 1 ? "ز" : ""}: ${joinValues(issue$1.keys, "، ")}`;
-			case "invalid_key": return `${issue$1.origin} میں غلط کی`;
+			case "not_multiple_of": return `غلط نمبر: ${issue.divisor} کا مضاعف ہونا چاہیے`;
+			case "unrecognized_keys": return `غیر تسلیم شدہ کی${issue.keys.length > 1 ? "ز" : ""}: ${joinValues(issue.keys, "، ")}`;
+			case "invalid_key": return `${issue.origin} میں غلط کی`;
 			case "invalid_union": return "غلط ان پٹ";
-			case "invalid_element": return `${issue$1.origin} میں غلط ویلیو`;
+			case "invalid_element": return `${issue.origin} میں غلط ویلیو`;
 			default: return `غلط ان پٹ`;
 		}
 	};
@@ -8110,7 +8110,7 @@ function ur_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/uz.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/uz.js
 const error$4 = () => {
 	const Sizable = {
 		string: {
@@ -8169,43 +8169,43 @@ const error$4 = () => {
 		number: "raqam",
 		array: "massiv"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Noto‘g‘ri kirish: kutilgan instanceof ${issue$1.expected}, qabul qilingan ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Noto‘g‘ri kirish: kutilgan instanceof ${issue.expected}, qabul qilingan ${received}`;
 				return `Noto‘g‘ri kirish: kutilgan ${expected}, qabul qilingan ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Noto‘g‘ri kirish: kutilgan ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Noto‘g‘ri variant: quyidagilardan biri kutilgan ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Noto‘g‘ri kirish: kutilgan ${stringifyPrimitive(issue.values[0])}`;
+				return `Noto‘g‘ri variant: quyidagilardan biri kutilgan ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Juda katta: kutilgan ${issue$1.origin ?? "qiymat"} ${adj}${issue$1.maximum.toString()} ${sizing.unit} ${sizing.verb}`;
-				return `Juda katta: kutilgan ${issue$1.origin ?? "qiymat"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Juda katta: kutilgan ${issue.origin ?? "qiymat"} ${adj}${issue.maximum.toString()} ${sizing.unit} ${sizing.verb}`;
+				return `Juda katta: kutilgan ${issue.origin ?? "qiymat"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Juda kichik: kutilgan ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit} ${sizing.verb}`;
-				return `Juda kichik: kutilgan ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Juda kichik: kutilgan ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} ${sizing.verb}`;
+				return `Juda kichik: kutilgan ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Noto‘g‘ri satr: "${_issue.prefix}" bilan boshlanishi kerak`;
 				if (_issue.format === "ends_with") return `Noto‘g‘ri satr: "${_issue.suffix}" bilan tugashi kerak`;
 				if (_issue.format === "includes") return `Noto‘g‘ri satr: "${_issue.includes}" ni o‘z ichiga olishi kerak`;
 				if (_issue.format === "regex") return `Noto‘g‘ri satr: ${_issue.pattern} shabloniga mos kelishi kerak`;
-				return `Noto‘g‘ri ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Noto‘g‘ri ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Noto‘g‘ri raqam: ${issue$1.divisor} ning karralisi bo‘lishi kerak`;
-			case "unrecognized_keys": return `Noma’lum kalit${issue$1.keys.length > 1 ? "lar" : ""}: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} dagi kalit noto‘g‘ri`;
+			case "not_multiple_of": return `Noto‘g‘ri raqam: ${issue.divisor} ning karralisi bo‘lishi kerak`;
+			case "unrecognized_keys": return `Noma’lum kalit${issue.keys.length > 1 ? "lar" : ""}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} dagi kalit noto‘g‘ri`;
 			case "invalid_union": return "Noto‘g‘ri kirish";
-			case "invalid_element": return `${issue$1.origin} da noto‘g‘ri qiymat`;
+			case "invalid_element": return `${issue.origin} da noto‘g‘ri qiymat`;
 			default: return `Noto‘g‘ri kirish`;
 		}
 	};
@@ -8215,7 +8215,7 @@ function uz_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/vi.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/vi.js
 const error$3 = () => {
 	const Sizable = {
 		string: {
@@ -8273,43 +8273,43 @@ const error$3 = () => {
 		number: "số",
 		array: "mảng"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Đầu vào không hợp lệ: mong đợi instanceof ${issue$1.expected}, nhận được ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Đầu vào không hợp lệ: mong đợi instanceof ${issue.expected}, nhận được ${received}`;
 				return `Đầu vào không hợp lệ: mong đợi ${expected}, nhận được ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Đầu vào không hợp lệ: mong đợi ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Tùy chọn không hợp lệ: mong đợi một trong các giá trị ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Đầu vào không hợp lệ: mong đợi ${stringifyPrimitive(issue.values[0])}`;
+				return `Tùy chọn không hợp lệ: mong đợi một trong các giá trị ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Quá lớn: mong đợi ${issue$1.origin ?? "giá trị"} ${sizing.verb} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "phần tử"}`;
-				return `Quá lớn: mong đợi ${issue$1.origin ?? "giá trị"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Quá lớn: mong đợi ${issue.origin ?? "giá trị"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "phần tử"}`;
+				return `Quá lớn: mong đợi ${issue.origin ?? "giá trị"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Quá nhỏ: mong đợi ${issue$1.origin} ${sizing.verb} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `Quá nhỏ: mong đợi ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Quá nhỏ: mong đợi ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Quá nhỏ: mong đợi ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Chuỗi không hợp lệ: phải bắt đầu bằng "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Chuỗi không hợp lệ: phải kết thúc bằng "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Chuỗi không hợp lệ: phải bao gồm "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Chuỗi không hợp lệ: phải khớp với mẫu ${_issue.pattern}`;
-				return `${FormatDictionary[_issue.format] ?? issue$1.format} không hợp lệ`;
+				return `${FormatDictionary[_issue.format] ?? issue.format} không hợp lệ`;
 			}
-			case "not_multiple_of": return `Số không hợp lệ: phải là bội số của ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Khóa không được nhận dạng: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Khóa không hợp lệ trong ${issue$1.origin}`;
+			case "not_multiple_of": return `Số không hợp lệ: phải là bội số của ${issue.divisor}`;
+			case "unrecognized_keys": return `Khóa không được nhận dạng: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Khóa không hợp lệ trong ${issue.origin}`;
 			case "invalid_union": return "Đầu vào không hợp lệ";
-			case "invalid_element": return `Giá trị không hợp lệ trong ${issue$1.origin}`;
+			case "invalid_element": return `Giá trị không hợp lệ trong ${issue.origin}`;
 			default: return `Đầu vào không hợp lệ`;
 		}
 	};
@@ -8319,7 +8319,7 @@ function vi_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/zh-CN.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/zh-CN.js
 const error$2 = () => {
 	const Sizable = {
 		string: {
@@ -8378,43 +8378,43 @@ const error$2 = () => {
 		array: "数组",
 		null: "空值(null)"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `无效输入：期望 instanceof ${issue$1.expected}，实际接收 ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `无效输入：期望 instanceof ${issue.expected}，实际接收 ${received}`;
 				return `无效输入：期望 ${expected}，实际接收 ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `无效输入：期望 ${stringifyPrimitive(issue$1.values[0])}`;
-				return `无效选项：期望以下之一 ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `无效输入：期望 ${stringifyPrimitive(issue.values[0])}`;
+				return `无效选项：期望以下之一 ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `数值过大：期望 ${issue$1.origin ?? "值"} ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "个元素"}`;
-				return `数值过大：期望 ${issue$1.origin ?? "值"} ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `数值过大：期望 ${issue.origin ?? "值"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "个元素"}`;
+				return `数值过大：期望 ${issue.origin ?? "值"} ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `数值过小：期望 ${issue$1.origin} ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `数值过小：期望 ${issue$1.origin} ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `数值过小：期望 ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `数值过小：期望 ${issue.origin} ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `无效字符串：必须以 "${_issue.prefix}" 开头`;
 				if (_issue.format === "ends_with") return `无效字符串：必须以 "${_issue.suffix}" 结尾`;
 				if (_issue.format === "includes") return `无效字符串：必须包含 "${_issue.includes}"`;
 				if (_issue.format === "regex") return `无效字符串：必须满足正则表达式 ${_issue.pattern}`;
-				return `无效${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `无效${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `无效数字：必须是 ${issue$1.divisor} 的倍数`;
-			case "unrecognized_keys": return `出现未知的键(key): ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `${issue$1.origin} 中的键(key)无效`;
+			case "not_multiple_of": return `无效数字：必须是 ${issue.divisor} 的倍数`;
+			case "unrecognized_keys": return `出现未知的键(key): ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `${issue.origin} 中的键(key)无效`;
 			case "invalid_union": return "无效输入";
-			case "invalid_element": return `${issue$1.origin} 中包含无效值(value)`;
+			case "invalid_element": return `${issue.origin} 中包含无效值(value)`;
 			default: return `无效输入`;
 		}
 	};
@@ -8424,7 +8424,7 @@ function zh_CN_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/zh-TW.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/zh-TW.js
 const error$1 = () => {
 	const Sizable = {
 		string: {
@@ -8478,43 +8478,43 @@ const error$1 = () => {
 		template_literal: "輸入"
 	};
 	const TypeDictionary = { nan: "NaN" };
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `無效的輸入值：預期為 instanceof ${issue$1.expected}，但收到 ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `無效的輸入值：預期為 instanceof ${issue.expected}，但收到 ${received}`;
 				return `無效的輸入值：預期為 ${expected}，但收到 ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `無效的輸入值：預期為 ${stringifyPrimitive(issue$1.values[0])}`;
-				return `無效的選項：預期為以下其中之一 ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `無效的輸入值：預期為 ${stringifyPrimitive(issue.values[0])}`;
+				return `無效的選項：預期為以下其中之一 ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `數值過大：預期 ${issue$1.origin ?? "值"} 應為 ${adj}${issue$1.maximum.toString()} ${sizing.unit ?? "個元素"}`;
-				return `數值過大：預期 ${issue$1.origin ?? "值"} 應為 ${adj}${issue$1.maximum.toString()}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `數值過大：預期 ${issue.origin ?? "值"} 應為 ${adj}${issue.maximum.toString()} ${sizing.unit ?? "個元素"}`;
+				return `數值過大：預期 ${issue.origin ?? "值"} 應為 ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `數值過小：預期 ${issue$1.origin} 應為 ${adj}${issue$1.minimum.toString()} ${sizing.unit}`;
-				return `數值過小：預期 ${issue$1.origin} 應為 ${adj}${issue$1.minimum.toString()}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `數值過小：預期 ${issue.origin} 應為 ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `數值過小：預期 ${issue.origin} 應為 ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `無效的字串：必須以 "${_issue.prefix}" 開頭`;
 				if (_issue.format === "ends_with") return `無效的字串：必須以 "${_issue.suffix}" 結尾`;
 				if (_issue.format === "includes") return `無效的字串：必須包含 "${_issue.includes}"`;
 				if (_issue.format === "regex") return `無效的字串：必須符合格式 ${_issue.pattern}`;
-				return `無效的 ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `無效的 ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `無效的數字：必須為 ${issue$1.divisor} 的倍數`;
-			case "unrecognized_keys": return `無法識別的鍵值${issue$1.keys.length > 1 ? "們" : ""}：${joinValues(issue$1.keys, "、")}`;
-			case "invalid_key": return `${issue$1.origin} 中有無效的鍵值`;
+			case "not_multiple_of": return `無效的數字：必須為 ${issue.divisor} 的倍數`;
+			case "unrecognized_keys": return `無法識別的鍵值${issue.keys.length > 1 ? "們" : ""}：${joinValues(issue.keys, "、")}`;
+			case "invalid_key": return `${issue.origin} 中有無效的鍵值`;
 			case "invalid_union": return "無效的輸入值";
-			case "invalid_element": return `${issue$1.origin} 中有無效的值`;
+			case "invalid_element": return `${issue.origin} 中有無效的值`;
 			default: return `無效的輸入值`;
 		}
 	};
@@ -8524,7 +8524,7 @@ function zh_TW_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/yo.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/yo.js
 const error = () => {
 	const Sizable = {
 		string: {
@@ -8582,43 +8582,43 @@ const error = () => {
 		number: "nọ́mbà",
 		array: "akopọ"
 	};
-	return (issue$1) => {
-		switch (issue$1.code) {
+	return (issue) => {
+		switch (issue.code) {
 			case "invalid_type": {
-				const expected = TypeDictionary[issue$1.expected] ?? issue$1.expected;
-				const receivedType = parsedType(issue$1.input);
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
 				const received = TypeDictionary[receivedType] ?? receivedType;
-				if (/^[A-Z]/.test(issue$1.expected)) return `Ìbáwọlé aṣìṣe: a ní láti fi instanceof ${issue$1.expected}, àmọ̀ a rí ${received}`;
+				if (/^[A-Z]/.test(issue.expected)) return `Ìbáwọlé aṣìṣe: a ní láti fi instanceof ${issue.expected}, àmọ̀ a rí ${received}`;
 				return `Ìbáwọlé aṣìṣe: a ní láti fi ${expected}, àmọ̀ a rí ${received}`;
 			}
 			case "invalid_value":
-				if (issue$1.values.length === 1) return `Ìbáwọlé aṣìṣe: a ní láti fi ${stringifyPrimitive(issue$1.values[0])}`;
-				return `Àṣàyàn aṣìṣe: yan ọ̀kan lára ${joinValues(issue$1.values, "|")}`;
+				if (issue.values.length === 1) return `Ìbáwọlé aṣìṣe: a ní láti fi ${stringifyPrimitive(issue.values[0])}`;
+				return `Àṣàyàn aṣìṣe: yan ọ̀kan lára ${joinValues(issue.values, "|")}`;
 			case "too_big": {
-				const adj = issue$1.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Tó pọ̀ jù: a ní láti jẹ́ pé ${issue$1.origin ?? "iye"} ${sizing.verb} ${adj}${issue$1.maximum} ${sizing.unit}`;
-				return `Tó pọ̀ jù: a ní láti jẹ́ ${adj}${issue$1.maximum}`;
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Tó pọ̀ jù: a ní láti jẹ́ pé ${issue.origin ?? "iye"} ${sizing.verb} ${adj}${issue.maximum} ${sizing.unit}`;
+				return `Tó pọ̀ jù: a ní láti jẹ́ ${adj}${issue.maximum}`;
 			}
 			case "too_small": {
-				const adj = issue$1.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue$1.origin);
-				if (sizing) return `Kéré ju: a ní láti jẹ́ pé ${issue$1.origin} ${sizing.verb} ${adj}${issue$1.minimum} ${sizing.unit}`;
-				return `Kéré ju: a ní láti jẹ́ ${adj}${issue$1.minimum}`;
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Kéré ju: a ní láti jẹ́ pé ${issue.origin} ${sizing.verb} ${adj}${issue.minimum} ${sizing.unit}`;
+				return `Kéré ju: a ní láti jẹ́ ${adj}${issue.minimum}`;
 			}
 			case "invalid_format": {
-				const _issue = issue$1;
+				const _issue = issue;
 				if (_issue.format === "starts_with") return `Ọ̀rọ̀ aṣìṣe: gbọ́dọ̀ bẹ̀rẹ̀ pẹ̀lú "${_issue.prefix}"`;
 				if (_issue.format === "ends_with") return `Ọ̀rọ̀ aṣìṣe: gbọ́dọ̀ parí pẹ̀lú "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Ọ̀rọ̀ aṣìṣe: gbọ́dọ̀ ní "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Ọ̀rọ̀ aṣìṣe: gbọ́dọ̀ bá àpẹẹrẹ mu ${_issue.pattern}`;
-				return `Aṣìṣe: ${FormatDictionary[_issue.format] ?? issue$1.format}`;
+				return `Aṣìṣe: ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
-			case "not_multiple_of": return `Nọ́mbà aṣìṣe: gbọ́dọ̀ jẹ́ èyà pípín ti ${issue$1.divisor}`;
-			case "unrecognized_keys": return `Bọtìnì àìmọ̀: ${joinValues(issue$1.keys, ", ")}`;
-			case "invalid_key": return `Bọtìnì aṣìṣe nínú ${issue$1.origin}`;
+			case "not_multiple_of": return `Nọ́mbà aṣìṣe: gbọ́dọ̀ jẹ́ èyà pípín ti ${issue.divisor}`;
+			case "unrecognized_keys": return `Bọtìnì àìmọ̀: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Bọtìnì aṣìṣe nínú ${issue.origin}`;
 			case "invalid_union": return "Ìbáwọlé aṣìṣe";
-			case "invalid_element": return `Iye aṣìṣe nínú ${issue$1.origin}`;
+			case "invalid_element": return `Iye aṣìṣe nínú ${issue.origin}`;
 			default: return "Ìbáwọlé aṣìṣe";
 		}
 	};
@@ -8628,7 +8628,7 @@ function yo_default() {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/locales/index.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/index.js
 var locales_exports = /* @__PURE__ */ __exportAll({
 	ar: () => ar_default,
 	az: () => az_default,
@@ -8682,7 +8682,7 @@ var locales_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/registries.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/registries.js
 var _a;
 const $output = Symbol("ZodOutput");
 const $input = Symbol("ZodInput");
@@ -8692,9 +8692,9 @@ var $ZodRegistry = class {
 		this._idmap = /* @__PURE__ */ new Map();
 	}
 	add(schema, ..._meta) {
-		const meta$2 = _meta[0];
-		this._map.set(schema, meta$2);
-		if (meta$2 && typeof meta$2 === "object" && "id" in meta$2) this._idmap.set(meta$2.id, schema);
+		const meta = _meta[0];
+		this._map.set(schema, meta);
+		if (meta && typeof meta === "object" && "id" in meta) this._idmap.set(meta.id, schema);
 		return this;
 	}
 	clear() {
@@ -8703,8 +8703,8 @@ var $ZodRegistry = class {
 		return this;
 	}
 	remove(schema) {
-		const meta$2 = this._map.get(schema);
-		if (meta$2 && typeof meta$2 === "object" && "id" in meta$2) this._idmap.delete(meta$2.id);
+		const meta = this._map.get(schema);
+		if (meta && typeof meta === "object" && "id" in meta) this._idmap.delete(meta.id);
 		this._map.delete(schema);
 		return this;
 	}
@@ -8732,25 +8732,25 @@ function registry() {
 const globalRegistry = globalThis.__zod_globalRegistry;
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
 /* @__NO_SIDE_EFFECTS__ */
-function _string(Class$1, params) {
-	return new Class$1({
+function _string(Class, params) {
+	return new Class({
 		type: "string",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _coercedString(Class$1, params) {
-	return new Class$1({
+function _coercedString(Class, params) {
+	return new Class({
 		type: "string",
 		coerce: true,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _email(Class$1, params) {
-	return new Class$1({
+function _email(Class, params) {
+	return new Class({
 		type: "string",
 		format: "email",
 		check: "string_format",
@@ -8759,8 +8759,8 @@ function _email(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _guid(Class$1, params) {
-	return new Class$1({
+function _guid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "guid",
 		check: "string_format",
@@ -8769,8 +8769,8 @@ function _guid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uuid(Class$1, params) {
-	return new Class$1({
+function _uuid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "uuid",
 		check: "string_format",
@@ -8779,8 +8779,8 @@ function _uuid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uuidv4(Class$1, params) {
-	return new Class$1({
+function _uuidv4(Class, params) {
+	return new Class({
 		type: "string",
 		format: "uuid",
 		check: "string_format",
@@ -8790,8 +8790,8 @@ function _uuidv4(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uuidv6(Class$1, params) {
-	return new Class$1({
+function _uuidv6(Class, params) {
+	return new Class({
 		type: "string",
 		format: "uuid",
 		check: "string_format",
@@ -8801,8 +8801,8 @@ function _uuidv6(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uuidv7(Class$1, params) {
-	return new Class$1({
+function _uuidv7(Class, params) {
+	return new Class({
 		type: "string",
 		format: "uuid",
 		check: "string_format",
@@ -8812,8 +8812,8 @@ function _uuidv7(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _url(Class$1, params) {
-	return new Class$1({
+function _url(Class, params) {
+	return new Class({
 		type: "string",
 		format: "url",
 		check: "string_format",
@@ -8822,8 +8822,8 @@ function _url(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _emoji(Class$1, params) {
-	return new Class$1({
+function _emoji(Class, params) {
+	return new Class({
 		type: "string",
 		format: "emoji",
 		check: "string_format",
@@ -8832,8 +8832,8 @@ function _emoji(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _nanoid(Class$1, params) {
-	return new Class$1({
+function _nanoid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "nanoid",
 		check: "string_format",
@@ -8842,8 +8842,8 @@ function _nanoid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _cuid(Class$1, params) {
-	return new Class$1({
+function _cuid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "cuid",
 		check: "string_format",
@@ -8852,8 +8852,8 @@ function _cuid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _cuid2(Class$1, params) {
-	return new Class$1({
+function _cuid2(Class, params) {
+	return new Class({
 		type: "string",
 		format: "cuid2",
 		check: "string_format",
@@ -8862,8 +8862,8 @@ function _cuid2(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _ulid(Class$1, params) {
-	return new Class$1({
+function _ulid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "ulid",
 		check: "string_format",
@@ -8872,8 +8872,8 @@ function _ulid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _xid(Class$1, params) {
-	return new Class$1({
+function _xid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "xid",
 		check: "string_format",
@@ -8882,8 +8882,8 @@ function _xid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _ksuid(Class$1, params) {
-	return new Class$1({
+function _ksuid(Class, params) {
+	return new Class({
 		type: "string",
 		format: "ksuid",
 		check: "string_format",
@@ -8892,8 +8892,8 @@ function _ksuid(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _ipv4(Class$1, params) {
-	return new Class$1({
+function _ipv4(Class, params) {
+	return new Class({
 		type: "string",
 		format: "ipv4",
 		check: "string_format",
@@ -8902,8 +8902,8 @@ function _ipv4(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _ipv6(Class$1, params) {
-	return new Class$1({
+function _ipv6(Class, params) {
+	return new Class({
 		type: "string",
 		format: "ipv6",
 		check: "string_format",
@@ -8912,8 +8912,8 @@ function _ipv6(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _mac(Class$1, params) {
-	return new Class$1({
+function _mac(Class, params) {
+	return new Class({
 		type: "string",
 		format: "mac",
 		check: "string_format",
@@ -8922,8 +8922,8 @@ function _mac(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _cidrv4(Class$1, params) {
-	return new Class$1({
+function _cidrv4(Class, params) {
+	return new Class({
 		type: "string",
 		format: "cidrv4",
 		check: "string_format",
@@ -8932,8 +8932,8 @@ function _cidrv4(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _cidrv6(Class$1, params) {
-	return new Class$1({
+function _cidrv6(Class, params) {
+	return new Class({
 		type: "string",
 		format: "cidrv6",
 		check: "string_format",
@@ -8942,8 +8942,8 @@ function _cidrv6(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _base64(Class$1, params) {
-	return new Class$1({
+function _base64(Class, params) {
+	return new Class({
 		type: "string",
 		format: "base64",
 		check: "string_format",
@@ -8952,8 +8952,8 @@ function _base64(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _base64url(Class$1, params) {
-	return new Class$1({
+function _base64url(Class, params) {
+	return new Class({
 		type: "string",
 		format: "base64url",
 		check: "string_format",
@@ -8962,8 +8962,8 @@ function _base64url(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _e164(Class$1, params) {
-	return new Class$1({
+function _e164(Class, params) {
+	return new Class({
 		type: "string",
 		format: "e164",
 		check: "string_format",
@@ -8972,8 +8972,8 @@ function _e164(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _jwt(Class$1, params) {
-	return new Class$1({
+function _jwt(Class, params) {
+	return new Class({
 		type: "string",
 		format: "jwt",
 		check: "string_format",
@@ -8989,8 +8989,8 @@ const TimePrecision = {
 	Microsecond: 6
 };
 /* @__NO_SIDE_EFFECTS__ */
-function _isoDateTime(Class$1, params) {
-	return new Class$1({
+function _isoDateTime(Class, params) {
+	return new Class({
 		type: "string",
 		format: "datetime",
 		check: "string_format",
@@ -9001,8 +9001,8 @@ function _isoDateTime(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _isoDate(Class$1, params) {
-	return new Class$1({
+function _isoDate(Class, params) {
+	return new Class({
 		type: "string",
 		format: "date",
 		check: "string_format",
@@ -9010,8 +9010,8 @@ function _isoDate(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _isoTime(Class$1, params) {
-	return new Class$1({
+function _isoTime(Class, params) {
+	return new Class({
 		type: "string",
 		format: "time",
 		check: "string_format",
@@ -9020,8 +9020,8 @@ function _isoTime(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _isoDuration(Class$1, params) {
-	return new Class$1({
+function _isoDuration(Class, params) {
+	return new Class({
 		type: "string",
 		format: "duration",
 		check: "string_format",
@@ -9029,16 +9029,16 @@ function _isoDuration(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _number(Class$1, params) {
-	return new Class$1({
+function _number(Class, params) {
+	return new Class({
 		type: "number",
 		checks: [],
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _coercedNumber(Class$1, params) {
-	return new Class$1({
+function _coercedNumber(Class, params) {
+	return new Class({
 		type: "number",
 		coerce: true,
 		checks: [],
@@ -9046,8 +9046,8 @@ function _coercedNumber(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _int(Class$1, params) {
-	return new Class$1({
+function _int(Class, params) {
+	return new Class({
 		type: "number",
 		check: "number_format",
 		abort: false,
@@ -9056,8 +9056,8 @@ function _int(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _float32(Class$1, params) {
-	return new Class$1({
+function _float32(Class, params) {
+	return new Class({
 		type: "number",
 		check: "number_format",
 		abort: false,
@@ -9066,8 +9066,8 @@ function _float32(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _float64(Class$1, params) {
-	return new Class$1({
+function _float64(Class, params) {
+	return new Class({
 		type: "number",
 		check: "number_format",
 		abort: false,
@@ -9076,8 +9076,8 @@ function _float64(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _int32(Class$1, params) {
-	return new Class$1({
+function _int32(Class, params) {
+	return new Class({
 		type: "number",
 		check: "number_format",
 		abort: false,
@@ -9086,8 +9086,8 @@ function _int32(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uint32(Class$1, params) {
-	return new Class$1({
+function _uint32(Class, params) {
+	return new Class({
 		type: "number",
 		check: "number_format",
 		abort: false,
@@ -9096,38 +9096,38 @@ function _uint32(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _boolean(Class$1, params) {
-	return new Class$1({
+function _boolean(Class, params) {
+	return new Class({
 		type: "boolean",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _coercedBoolean(Class$1, params) {
-	return new Class$1({
+function _coercedBoolean(Class, params) {
+	return new Class({
 		type: "boolean",
 		coerce: true,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _bigint(Class$1, params) {
-	return new Class$1({
+function _bigint(Class, params) {
+	return new Class({
 		type: "bigint",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _coercedBigint(Class$1, params) {
-	return new Class$1({
+function _coercedBigint(Class, params) {
+	return new Class({
 		type: "bigint",
 		coerce: true,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _int64(Class$1, params) {
-	return new Class$1({
+function _int64(Class, params) {
+	return new Class({
 		type: "bigint",
 		check: "bigint_format",
 		abort: false,
@@ -9136,8 +9136,8 @@ function _int64(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _uint64(Class$1, params) {
-	return new Class$1({
+function _uint64(Class, params) {
+	return new Class({
 		type: "bigint",
 		check: "bigint_format",
 		abort: false,
@@ -9146,66 +9146,66 @@ function _uint64(Class$1, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _symbol(Class$1, params) {
-	return new Class$1({
+function _symbol(Class, params) {
+	return new Class({
 		type: "symbol",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _undefined$1(Class$1, params) {
-	return new Class$1({
+function _undefined$1(Class, params) {
+	return new Class({
 		type: "undefined",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _null$1(Class$1, params) {
-	return new Class$1({
+function _null$1(Class, params) {
+	return new Class({
 		type: "null",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _any(Class$1) {
-	return new Class$1({ type: "any" });
+function _any(Class) {
+	return new Class({ type: "any" });
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _unknown(Class$1) {
-	return new Class$1({ type: "unknown" });
+function _unknown(Class) {
+	return new Class({ type: "unknown" });
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _never(Class$1, params) {
-	return new Class$1({
+function _never(Class, params) {
+	return new Class({
 		type: "never",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _void$1(Class$1, params) {
-	return new Class$1({
+function _void$1(Class, params) {
+	return new Class({
 		type: "void",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _date(Class$1, params) {
-	return new Class$1({
+function _date(Class, params) {
+	return new Class({
 		type: "date",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _coercedDate(Class$1, params) {
-	return new Class$1({
+function _coercedDate(Class, params) {
+	return new Class({
 		type: "date",
 		coerce: true,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _nan(Class$1, params) {
-	return new Class$1({
+function _nan(Class, params) {
+	return new Class({
 		type: "nan",
 		...normalizeParams(params)
 	});
@@ -9415,23 +9415,23 @@ function _slugify() {
 	return /* @__PURE__ */ _overwrite((input) => slugify(input));
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _array(Class$1, element, params) {
-	return new Class$1({
+function _array(Class, element, params) {
+	return new Class({
 		type: "array",
 		element,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _union(Class$1, options, params) {
-	return new Class$1({
+function _union(Class, options, params) {
+	return new Class({
 		type: "union",
 		options,
 		...normalizeParams(params)
 	});
 }
-function _xor(Class$1, options, params) {
-	return new Class$1({
+function _xor(Class, options, params) {
+	return new Class({
 		type: "union",
 		options,
 		inclusive: false,
@@ -9439,8 +9439,8 @@ function _xor(Class$1, options, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _discriminatedUnion(Class$1, discriminator, options, params) {
-	return new Class$1({
+function _discriminatedUnion(Class, discriminator, options, params) {
+	return new Class({
 		type: "union",
 		options,
 		discriminator,
@@ -9448,18 +9448,18 @@ function _discriminatedUnion(Class$1, discriminator, options, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _intersection(Class$1, left, right) {
-	return new Class$1({
+function _intersection(Class, left, right) {
+	return new Class({
 		type: "intersection",
 		left,
 		right
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _tuple(Class$1, items, _paramsOrRest, _params) {
+function _tuple(Class, items, _paramsOrRest, _params) {
 	const hasRest = _paramsOrRest instanceof $ZodType;
 	const params = hasRest ? _params : _paramsOrRest;
-	return new Class$1({
+	return new Class({
 		type: "tuple",
 		items,
 		rest: hasRest ? _paramsOrRest : null,
@@ -9467,8 +9467,8 @@ function _tuple(Class$1, items, _paramsOrRest, _params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _record(Class$1, keyType, valueType, params) {
-	return new Class$1({
+function _record(Class, keyType, valueType, params) {
+	return new Class({
 		type: "record",
 		keyType,
 		valueType,
@@ -9476,8 +9476,8 @@ function _record(Class$1, keyType, valueType, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _map(Class$1, keyType, valueType, params) {
-	return new Class$1({
+function _map(Class, keyType, valueType, params) {
+	return new Class({
 		type: "map",
 		keyType,
 		valueType,
@@ -9485,16 +9485,16 @@ function _map(Class$1, keyType, valueType, params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _set(Class$1, valueType, params) {
-	return new Class$1({
+function _set(Class, valueType, params) {
+	return new Class({
 		type: "set",
 		valueType,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _enum$1(Class$1, values, params) {
-	return new Class$1({
+function _enum$1(Class, values, params) {
+	return new Class({
 		type: "enum",
 		entries: Array.isArray(values) ? Object.fromEntries(values.map((v) => [v, v])) : values,
 		...normalizeParams(params)
@@ -9508,52 +9508,52 @@ function _enum$1(Class$1, values, params) {
 * ```
 */
 /* @__NO_SIDE_EFFECTS__ */
-function _nativeEnum(Class$1, entries, params) {
-	return new Class$1({
+function _nativeEnum(Class, entries, params) {
+	return new Class({
 		type: "enum",
 		entries,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _literal(Class$1, value, params) {
-	return new Class$1({
+function _literal(Class, value, params) {
+	return new Class({
 		type: "literal",
 		values: Array.isArray(value) ? value : [value],
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _file(Class$1, params) {
-	return new Class$1({
+function _file(Class, params) {
+	return new Class({
 		type: "file",
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _transform(Class$1, fn) {
-	return new Class$1({
+function _transform(Class, fn) {
+	return new Class({
 		type: "transform",
 		transform: fn
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _optional(Class$1, innerType) {
-	return new Class$1({
+function _optional(Class, innerType) {
+	return new Class({
 		type: "optional",
 		innerType
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _nullable(Class$1, innerType) {
-	return new Class$1({
+function _nullable(Class, innerType) {
+	return new Class({
 		type: "nullable",
 		innerType
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _default$1(Class$1, innerType, defaultValue) {
-	return new Class$1({
+function _default$1(Class, innerType, defaultValue) {
+	return new Class({
 		type: "default",
 		innerType,
 		get defaultValue() {
@@ -9562,70 +9562,70 @@ function _default$1(Class$1, innerType, defaultValue) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _nonoptional(Class$1, innerType, params) {
-	return new Class$1({
+function _nonoptional(Class, innerType, params) {
+	return new Class({
 		type: "nonoptional",
 		innerType,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _success(Class$1, innerType) {
-	return new Class$1({
+function _success(Class, innerType) {
+	return new Class({
 		type: "success",
 		innerType
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _catch$1(Class$1, innerType, catchValue) {
-	return new Class$1({
+function _catch$1(Class, innerType, catchValue) {
+	return new Class({
 		type: "catch",
 		innerType,
 		catchValue: typeof catchValue === "function" ? catchValue : () => catchValue
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _pipe(Class$1, in_, out) {
-	return new Class$1({
+function _pipe(Class, in_, out) {
+	return new Class({
 		type: "pipe",
 		in: in_,
 		out
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _readonly(Class$1, innerType) {
-	return new Class$1({
+function _readonly(Class, innerType) {
+	return new Class({
 		type: "readonly",
 		innerType
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _templateLiteral(Class$1, parts, params) {
-	return new Class$1({
+function _templateLiteral(Class, parts, params) {
+	return new Class({
 		type: "template_literal",
 		parts,
 		...normalizeParams(params)
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _lazy(Class$1, getter) {
-	return new Class$1({
+function _lazy(Class, getter) {
+	return new Class({
 		type: "lazy",
 		getter
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _promise(Class$1, innerType) {
-	return new Class$1({
+function _promise(Class, innerType) {
+	return new Class({
 		type: "promise",
 		innerType
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _custom(Class$1, fn, _params) {
+function _custom(Class, fn, _params) {
 	const norm = normalizeParams(_params);
 	norm.abort ?? (norm.abort = true);
-	return new Class$1({
+	return new Class({
 		type: "custom",
 		check: "custom",
 		fn,
@@ -9633,8 +9633,8 @@ function _custom(Class$1, fn, _params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _refine(Class$1, fn, _params) {
-	return new Class$1({
+function _refine(Class, fn, _params) {
+	return new Class({
 		type: "custom",
 		check: "custom",
 		fn,
@@ -9644,10 +9644,10 @@ function _refine(Class$1, fn, _params) {
 /* @__NO_SIDE_EFFECTS__ */
 function _superRefine(fn) {
 	const ch = /* @__PURE__ */ _check((payload) => {
-		payload.addIssue = (issue$1) => {
-			if (typeof issue$1 === "string") payload.issues.push(issue(issue$1, payload.value, ch._zod.def));
+		payload.addIssue = (issue$2) => {
+			if (typeof issue$2 === "string") payload.issues.push(issue(issue$2, payload.value, ch._zod.def));
 			else {
-				const _issue = issue$1;
+				const _issue = issue$2;
 				if (_issue.fatal) _issue.continue = false;
 				_issue.code ?? (_issue.code = "custom");
 				_issue.input ?? (_issue.input = payload.value);
@@ -9722,7 +9722,7 @@ function _stringbool(Classes, _params) {
 	const falsySet = new Set(falsyArray);
 	const _Codec = Classes.Codec ?? $ZodCodec;
 	const _Boolean = Classes.Boolean ?? $ZodBoolean;
-	const codec$1 = new _Codec({
+	const codec = new _Codec({
 		type: "pipe",
 		in: new (Classes.String ?? $ZodString)({
 			type: "string",
@@ -9743,7 +9743,7 @@ function _stringbool(Classes, _params) {
 					expected: "stringbool",
 					values: [...truthySet, ...falsySet],
 					input: payload.value,
-					inst: codec$1,
+					inst: codec,
 					continue: false
 				});
 				return {};
@@ -9755,10 +9755,10 @@ function _stringbool(Classes, _params) {
 		}),
 		error: params.error
 	});
-	return codec$1;
+	return codec;
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _stringFormat(Class$1, format, fnOrRegex, _params = {}) {
+function _stringFormat(Class, format, fnOrRegex, _params = {}) {
 	const params = normalizeParams(_params);
 	const def = {
 		...normalizeParams(_params),
@@ -9769,11 +9769,11 @@ function _stringFormat(Class$1, format, fnOrRegex, _params = {}) {
 		...params
 	};
 	if (fnOrRegex instanceof RegExp) def.pattern = fnOrRegex;
-	return new Class$1(def);
+	return new Class(def);
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/to-json-schema.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/to-json-schema.js
 function initializeContext(params) {
 	let target = params?.target ?? "draft-2020-12";
 	if (target === "draft-4") target = "draft-04";
@@ -9796,7 +9796,7 @@ function process(schema, ctx, _params = {
 	path: [],
 	schemaPath: []
 }) {
-	var _a$1;
+	var _a;
 	const def = schema._zod.def;
 	const seen = ctx.seen.get(schema);
 	if (seen) {
@@ -9833,13 +9833,13 @@ function process(schema, ctx, _params = {
 			ctx.seen.get(parent).isParent = true;
 		}
 	}
-	const meta$2 = ctx.metadataRegistry.get(schema);
-	if (meta$2) Object.assign(result.schema, meta$2);
+	const meta = ctx.metadataRegistry.get(schema);
+	if (meta) Object.assign(result.schema, meta);
 	if (ctx.io === "input" && isTransforming(schema)) {
 		delete result.schema.examples;
 		delete result.schema.default;
 	}
-	if (ctx.io === "input" && result.schema._prefault) (_a$1 = result.schema).default ?? (_a$1.default = result.schema._prefault);
+	if (ctx.io === "input" && result.schema._prefault) (_a = result.schema).default ?? (_a.default = result.schema._prefault);
 	delete result.schema._prefault;
 	return ctx.seen.get(schema).schema;
 }
@@ -9859,7 +9859,7 @@ function extractDefs(ctx, schema) {
 		const defsSegment = ctx.target === "draft-2020-12" ? "$defs" : "definitions";
 		if (ctx.external) {
 			const externalId = ctx.external.registry.get(entry[0])?.id;
-			const uriGenerator = ctx.external.uri ?? ((id$1) => id$1);
+			const uriGenerator = ctx.external.uri ?? ((id) => id);
 			if (externalId) return { ref: uriGenerator(externalId) };
 			const id = entry[1].defId ?? entry[1].schema.id ?? `schema${ctx.counter++}`;
 			entry[1].defId = id;
@@ -9882,9 +9882,9 @@ function extractDefs(ctx, schema) {
 		const { ref, defId } = makeURI(entry);
 		seen.def = { ...seen.schema };
 		if (defId) seen.defId = defId;
-		const schema$1 = seen.schema;
-		for (const key in schema$1) delete schema$1[key];
-		schema$1.$ref = ref;
+		const schema = seen.schema;
+		for (const key in schema) delete schema[key];
+		schema.$ref = ref;
 	};
 	if (ctx.cycles === "throw") for (const entry of ctx.seen.entries()) {
 		const seen = entry[1];
@@ -9927,8 +9927,8 @@ function finalize(ctx, schema) {
 	const flattenRef = (zodSchema) => {
 		const seen = ctx.seen.get(zodSchema);
 		if (seen.ref === null) return;
-		const schema$1 = seen.def ?? seen.schema;
-		const _cached = { ...schema$1 };
+		const schema = seen.def ?? seen.schema;
+		const _cached = { ...schema };
 		const ref = seen.ref;
 		seen.ref = null;
 		if (ref) {
@@ -9936,17 +9936,17 @@ function finalize(ctx, schema) {
 			const refSeen = ctx.seen.get(ref);
 			const refSchema = refSeen.schema;
 			if (refSchema.$ref && (ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0")) {
-				schema$1.allOf = schema$1.allOf ?? [];
-				schema$1.allOf.push(refSchema);
-			} else Object.assign(schema$1, refSchema);
-			Object.assign(schema$1, _cached);
-			if (zodSchema._zod.parent === ref) for (const key in schema$1) {
+				schema.allOf = schema.allOf ?? [];
+				schema.allOf.push(refSchema);
+			} else Object.assign(schema, refSchema);
+			Object.assign(schema, _cached);
+			if (zodSchema._zod.parent === ref) for (const key in schema) {
 				if (key === "$ref" || key === "allOf") continue;
-				if (!(key in _cached)) delete schema$1[key];
+				if (!(key in _cached)) delete schema[key];
 			}
-			if (refSchema.$ref) for (const key in schema$1) {
+			if (refSchema.$ref && refSeen.def) for (const key in schema) {
 				if (key === "$ref" || key === "allOf") continue;
-				if (key in refSeen.def && JSON.stringify(schema$1[key]) === JSON.stringify(refSeen.def[key])) delete schema$1[key];
+				if (key in refSeen.def && JSON.stringify(schema[key]) === JSON.stringify(refSeen.def[key])) delete schema[key];
 			}
 		}
 		const parent = zodSchema._zod.parent;
@@ -9954,16 +9954,16 @@ function finalize(ctx, schema) {
 			flattenRef(parent);
 			const parentSeen = ctx.seen.get(parent);
 			if (parentSeen?.schema.$ref) {
-				schema$1.$ref = parentSeen.schema.$ref;
-				if (parentSeen.def) for (const key in schema$1) {
+				schema.$ref = parentSeen.schema.$ref;
+				if (parentSeen.def) for (const key in schema) {
 					if (key === "$ref" || key === "allOf") continue;
-					if (key in parentSeen.def && JSON.stringify(schema$1[key]) === JSON.stringify(parentSeen.def[key])) delete schema$1[key];
+					if (key in parentSeen.def && JSON.stringify(schema[key]) === JSON.stringify(parentSeen.def[key])) delete schema[key];
 				}
 			}
 		}
 		ctx.override({
 			zodSchema,
-			jsonSchema: schema$1,
+			jsonSchema: schema,
 			path: seen.path ?? []
 		});
 	};
@@ -10059,7 +10059,7 @@ const createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params)
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/json-schema-processors.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema-processors.js
 const formatMap = {
 	guid: "uuid",
 	url: "uri",
@@ -10068,53 +10068,53 @@ const formatMap = {
 	regex: ""
 };
 const stringProcessor = (schema, ctx, _json, _params) => {
-	const json$1 = _json;
-	json$1.type = "string";
+	const json = _json;
+	json.type = "string";
 	const { minimum, maximum, format, patterns, contentEncoding } = schema._zod.bag;
-	if (typeof minimum === "number") json$1.minLength = minimum;
-	if (typeof maximum === "number") json$1.maxLength = maximum;
+	if (typeof minimum === "number") json.minLength = minimum;
+	if (typeof maximum === "number") json.maxLength = maximum;
 	if (format) {
-		json$1.format = formatMap[format] ?? format;
-		if (json$1.format === "") delete json$1.format;
-		if (format === "time") delete json$1.format;
+		json.format = formatMap[format] ?? format;
+		if (json.format === "") delete json.format;
+		if (format === "time") delete json.format;
 	}
-	if (contentEncoding) json$1.contentEncoding = contentEncoding;
+	if (contentEncoding) json.contentEncoding = contentEncoding;
 	if (patterns && patterns.size > 0) {
 		const regexes = [...patterns];
-		if (regexes.length === 1) json$1.pattern = regexes[0].source;
-		else if (regexes.length > 1) json$1.allOf = [...regexes.map((regex) => ({
+		if (regexes.length === 1) json.pattern = regexes[0].source;
+		else if (regexes.length > 1) json.allOf = [...regexes.map((regex) => ({
 			...ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0" ? { type: "string" } : {},
 			pattern: regex.source
 		}))];
 	}
 };
 const numberProcessor = (schema, ctx, _json, _params) => {
-	const json$1 = _json;
+	const json = _json;
 	const { minimum, maximum, format, multipleOf, exclusiveMaximum, exclusiveMinimum } = schema._zod.bag;
-	if (typeof format === "string" && format.includes("int")) json$1.type = "integer";
-	else json$1.type = "number";
+	if (typeof format === "string" && format.includes("int")) json.type = "integer";
+	else json.type = "number";
 	if (typeof exclusiveMinimum === "number") if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
-		json$1.minimum = exclusiveMinimum;
-		json$1.exclusiveMinimum = true;
-	} else json$1.exclusiveMinimum = exclusiveMinimum;
+		json.minimum = exclusiveMinimum;
+		json.exclusiveMinimum = true;
+	} else json.exclusiveMinimum = exclusiveMinimum;
 	if (typeof minimum === "number") {
-		json$1.minimum = minimum;
-		if (typeof exclusiveMinimum === "number" && ctx.target !== "draft-04") if (exclusiveMinimum >= minimum) delete json$1.minimum;
-		else delete json$1.exclusiveMinimum;
+		json.minimum = minimum;
+		if (typeof exclusiveMinimum === "number" && ctx.target !== "draft-04") if (exclusiveMinimum >= minimum) delete json.minimum;
+		else delete json.exclusiveMinimum;
 	}
 	if (typeof exclusiveMaximum === "number") if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
-		json$1.maximum = exclusiveMaximum;
-		json$1.exclusiveMaximum = true;
-	} else json$1.exclusiveMaximum = exclusiveMaximum;
+		json.maximum = exclusiveMaximum;
+		json.exclusiveMaximum = true;
+	} else json.exclusiveMaximum = exclusiveMaximum;
 	if (typeof maximum === "number") {
-		json$1.maximum = maximum;
-		if (typeof exclusiveMaximum === "number" && ctx.target !== "draft-04") if (exclusiveMaximum <= maximum) delete json$1.maximum;
-		else delete json$1.exclusiveMaximum;
+		json.maximum = maximum;
+		if (typeof exclusiveMaximum === "number" && ctx.target !== "draft-04") if (exclusiveMaximum <= maximum) delete json.maximum;
+		else delete json.exclusiveMaximum;
 	}
-	if (typeof multipleOf === "number") json$1.multipleOf = multipleOf;
+	if (typeof multipleOf === "number") json.multipleOf = multipleOf;
 };
-const booleanProcessor = (_schema, _ctx, json$1, _params) => {
-	json$1.type = "boolean";
+const booleanProcessor = (_schema, _ctx, json, _params) => {
+	json.type = "boolean";
 };
 const bigintProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("BigInt cannot be represented in JSON Schema");
@@ -10122,12 +10122,12 @@ const bigintProcessor = (_schema, ctx, _json, _params) => {
 const symbolProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Symbols cannot be represented in JSON Schema");
 };
-const nullProcessor = (_schema, ctx, json$1, _params) => {
+const nullProcessor = (_schema, ctx, json, _params) => {
 	if (ctx.target === "openapi-3.0") {
-		json$1.type = "string";
-		json$1.nullable = true;
-		json$1.enum = [null];
-	} else json$1.type = "null";
+		json.type = "string";
+		json.nullable = true;
+		json.enum = [null];
+	} else json.type = "null";
 };
 const undefinedProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Undefined cannot be represented in JSON Schema");
@@ -10135,22 +10135,22 @@ const undefinedProcessor = (_schema, ctx, _json, _params) => {
 const voidProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Void cannot be represented in JSON Schema");
 };
-const neverProcessor = (_schema, _ctx, json$1, _params) => {
-	json$1.not = {};
+const neverProcessor = (_schema, _ctx, json, _params) => {
+	json.not = {};
 };
 const anyProcessor = (_schema, _ctx, _json, _params) => {};
 const unknownProcessor = (_schema, _ctx, _json, _params) => {};
 const dateProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Date cannot be represented in JSON Schema");
 };
-const enumProcessor = (schema, _ctx, json$1, _params) => {
+const enumProcessor = (schema, _ctx, json, _params) => {
 	const def = schema._zod.def;
 	const values = getEnumValues(def.entries);
-	if (values.every((v) => typeof v === "number")) json$1.type = "number";
-	if (values.every((v) => typeof v === "string")) json$1.type = "string";
-	json$1.enum = values;
+	if (values.every((v) => typeof v === "number")) json.type = "number";
+	if (values.every((v) => typeof v === "string")) json.type = "string";
+	json.enum = values;
 };
-const literalProcessor = (schema, ctx, json$1, _params) => {
+const literalProcessor = (schema, ctx, json, _params) => {
 	const def = schema._zod.def;
 	const vals = [];
 	for (const val of def.values) if (val === void 0) {
@@ -10160,48 +10160,48 @@ const literalProcessor = (schema, ctx, json$1, _params) => {
 	else vals.push(val);
 	if (vals.length === 0) {} else if (vals.length === 1) {
 		const val = vals[0];
-		json$1.type = val === null ? "null" : typeof val;
-		if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") json$1.enum = [val];
-		else json$1.const = val;
+		json.type = val === null ? "null" : typeof val;
+		if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") json.enum = [val];
+		else json.const = val;
 	} else {
-		if (vals.every((v) => typeof v === "number")) json$1.type = "number";
-		if (vals.every((v) => typeof v === "string")) json$1.type = "string";
-		if (vals.every((v) => typeof v === "boolean")) json$1.type = "boolean";
-		if (vals.every((v) => v === null)) json$1.type = "null";
-		json$1.enum = vals;
+		if (vals.every((v) => typeof v === "number")) json.type = "number";
+		if (vals.every((v) => typeof v === "string")) json.type = "string";
+		if (vals.every((v) => typeof v === "boolean")) json.type = "boolean";
+		if (vals.every((v) => v === null)) json.type = "null";
+		json.enum = vals;
 	}
 };
 const nanProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("NaN cannot be represented in JSON Schema");
 };
-const templateLiteralProcessor = (schema, _ctx, json$1, _params) => {
-	const _json = json$1;
+const templateLiteralProcessor = (schema, _ctx, json, _params) => {
+	const _json = json;
 	const pattern = schema._zod.pattern;
 	if (!pattern) throw new Error("Pattern not found in template literal");
 	_json.type = "string";
 	_json.pattern = pattern.source;
 };
-const fileProcessor = (schema, _ctx, json$1, _params) => {
-	const _json = json$1;
-	const file$1 = {
+const fileProcessor = (schema, _ctx, json, _params) => {
+	const _json = json;
+	const file = {
 		type: "string",
 		format: "binary",
 		contentEncoding: "binary"
 	};
 	const { minimum, maximum, mime } = schema._zod.bag;
-	if (minimum !== void 0) file$1.minLength = minimum;
-	if (maximum !== void 0) file$1.maxLength = maximum;
+	if (minimum !== void 0) file.minLength = minimum;
+	if (maximum !== void 0) file.maxLength = maximum;
 	if (mime) if (mime.length === 1) {
-		file$1.contentMediaType = mime[0];
-		Object.assign(_json, file$1);
+		file.contentMediaType = mime[0];
+		Object.assign(_json, file);
 	} else {
-		Object.assign(_json, file$1);
+		Object.assign(_json, file);
 		_json.anyOf = mime.map((m) => ({ contentMediaType: m }));
 	}
-	else Object.assign(_json, file$1);
+	else Object.assign(_json, file);
 };
-const successProcessor = (_schema, _ctx, json$1, _params) => {
-	json$1.type = "boolean";
+const successProcessor = (_schema, _ctx, json, _params) => {
+	json.type = "boolean";
 };
 const customProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Custom types cannot be represented in JSON Schema");
@@ -10219,24 +10219,24 @@ const setProcessor = (_schema, ctx, _json, _params) => {
 	if (ctx.unrepresentable === "throw") throw new Error("Set cannot be represented in JSON Schema");
 };
 const arrayProcessor = (schema, ctx, _json, params) => {
-	const json$1 = _json;
+	const json = _json;
 	const def = schema._zod.def;
 	const { minimum, maximum } = schema._zod.bag;
-	if (typeof minimum === "number") json$1.minItems = minimum;
-	if (typeof maximum === "number") json$1.maxItems = maximum;
-	json$1.type = "array";
-	json$1.items = process(def.element, ctx, {
+	if (typeof minimum === "number") json.minItems = minimum;
+	if (typeof maximum === "number") json.maxItems = maximum;
+	json.type = "array";
+	json.items = process(def.element, ctx, {
 		...params,
 		path: [...params.path, "items"]
 	});
 };
 const objectProcessor = (schema, ctx, _json, params) => {
-	const json$1 = _json;
+	const json = _json;
 	const def = schema._zod.def;
-	json$1.type = "object";
-	json$1.properties = {};
+	json.type = "object";
+	json.properties = {};
 	const shape = def.shape;
-	for (const key in shape) json$1.properties[key] = process(shape[key], ctx, {
+	for (const key in shape) json.properties[key] = process(shape[key], ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -10250,16 +10250,16 @@ const objectProcessor = (schema, ctx, _json, params) => {
 		if (ctx.io === "input") return v.optin === void 0;
 		else return v.optout === void 0;
 	}));
-	if (requiredKeys.size > 0) json$1.required = Array.from(requiredKeys);
-	if (def.catchall?._zod.def.type === "never") json$1.additionalProperties = false;
+	if (requiredKeys.size > 0) json.required = Array.from(requiredKeys);
+	if (def.catchall?._zod.def.type === "never") json.additionalProperties = false;
 	else if (!def.catchall) {
-		if (ctx.io === "output") json$1.additionalProperties = false;
-	} else if (def.catchall) json$1.additionalProperties = process(def.catchall, ctx, {
+		if (ctx.io === "output") json.additionalProperties = false;
+	} else if (def.catchall) json.additionalProperties = process(def.catchall, ctx, {
 		...params,
 		path: [...params.path, "additionalProperties"]
 	});
 };
-const unionProcessor = (schema, ctx, json$1, params) => {
+const unionProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	const isExclusive = def.inclusive === false;
 	const options = def.options.map((x, i) => process(x, ctx, {
@@ -10270,10 +10270,10 @@ const unionProcessor = (schema, ctx, json$1, params) => {
 			i
 		]
 	}));
-	if (isExclusive) json$1.oneOf = options;
-	else json$1.anyOf = options;
+	if (isExclusive) json.oneOf = options;
+	else json.anyOf = options;
 };
-const intersectionProcessor = (schema, ctx, json$1, params) => {
+const intersectionProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	const a = process(def.left, ctx, {
 		...params,
@@ -10292,12 +10292,12 @@ const intersectionProcessor = (schema, ctx, json$1, params) => {
 		]
 	});
 	const isSimpleIntersection = (val) => "allOf" in val && Object.keys(val).length === 1;
-	json$1.allOf = [...isSimpleIntersection(a) ? a.allOf : [a], ...isSimpleIntersection(b) ? b.allOf : [b]];
+	json.allOf = [...isSimpleIntersection(a) ? a.allOf : [a], ...isSimpleIntersection(b) ? b.allOf : [b]];
 };
 const tupleProcessor = (schema, ctx, _json, params) => {
-	const json$1 = _json;
+	const json = _json;
 	const def = schema._zod.def;
-	json$1.type = "array";
+	json.type = "array";
 	const prefixPath = ctx.target === "draft-2020-12" ? "prefixItems" : "items";
 	const restPath = ctx.target === "draft-2020-12" ? "items" : ctx.target === "openapi-3.0" ? "items" : "additionalItems";
 	const prefixItems = def.items.map((x, i) => process(x, ctx, {
@@ -10317,25 +10317,25 @@ const tupleProcessor = (schema, ctx, _json, params) => {
 		]
 	}) : null;
 	if (ctx.target === "draft-2020-12") {
-		json$1.prefixItems = prefixItems;
-		if (rest) json$1.items = rest;
+		json.prefixItems = prefixItems;
+		if (rest) json.items = rest;
 	} else if (ctx.target === "openapi-3.0") {
-		json$1.items = { anyOf: prefixItems };
-		if (rest) json$1.items.anyOf.push(rest);
-		json$1.minItems = prefixItems.length;
-		if (!rest) json$1.maxItems = prefixItems.length;
+		json.items = { anyOf: prefixItems };
+		if (rest) json.items.anyOf.push(rest);
+		json.minItems = prefixItems.length;
+		if (!rest) json.maxItems = prefixItems.length;
 	} else {
-		json$1.items = prefixItems;
-		if (rest) json$1.additionalItems = rest;
+		json.items = prefixItems;
+		if (rest) json.additionalItems = rest;
 	}
 	const { minimum, maximum } = schema._zod.bag;
-	if (typeof minimum === "number") json$1.minItems = minimum;
-	if (typeof maximum === "number") json$1.maxItems = maximum;
+	if (typeof minimum === "number") json.minItems = minimum;
+	if (typeof maximum === "number") json.maxItems = maximum;
 };
 const recordProcessor = (schema, ctx, _json, params) => {
-	const json$1 = _json;
+	const json = _json;
 	const def = schema._zod.def;
-	json$1.type = "object";
+	json.type = "object";
 	const keyType = def.keyType;
 	const patterns = keyType._zod.bag?.patterns;
 	if (def.mode === "loose" && patterns && patterns.size > 0) {
@@ -10347,14 +10347,14 @@ const recordProcessor = (schema, ctx, _json, params) => {
 				"*"
 			]
 		});
-		json$1.patternProperties = {};
-		for (const pattern of patterns) json$1.patternProperties[pattern.source] = valueSchema;
+		json.patternProperties = {};
+		for (const pattern of patterns) json.patternProperties[pattern.source] = valueSchema;
 	} else {
-		if (ctx.target === "draft-07" || ctx.target === "draft-2020-12") json$1.propertyNames = process(def.keyType, ctx, {
+		if (ctx.target === "draft-07" || ctx.target === "draft-2020-12") json.propertyNames = process(def.keyType, ctx, {
 			...params,
 			path: [...params.path, "propertyNames"]
 		});
-		json$1.additionalProperties = process(def.valueType, ctx, {
+		json.additionalProperties = process(def.valueType, ctx, {
 			...params,
 			path: [...params.path, "additionalProperties"]
 		});
@@ -10362,17 +10362,17 @@ const recordProcessor = (schema, ctx, _json, params) => {
 	const keyValues = keyType._zod.values;
 	if (keyValues) {
 		const validKeyValues = [...keyValues].filter((v) => typeof v === "string" || typeof v === "number");
-		if (validKeyValues.length > 0) json$1.required = validKeyValues;
+		if (validKeyValues.length > 0) json.required = validKeyValues;
 	}
 };
-const nullableProcessor = (schema, ctx, json$1, params) => {
+const nullableProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	const inner = process(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	if (ctx.target === "openapi-3.0") {
 		seen.ref = def.innerType;
-		json$1.nullable = true;
-	} else json$1.anyOf = [inner, { type: "null" }];
+		json.nullable = true;
+	} else json.anyOf = [inner, { type: "null" }];
 };
 const nonoptionalProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
@@ -10380,21 +10380,21 @@ const nonoptionalProcessor = (schema, ctx, _json, params) => {
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 };
-const defaultProcessor = (schema, ctx, json$1, params) => {
+const defaultProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	process(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
-	json$1.default = JSON.parse(JSON.stringify(def.defaultValue));
+	json.default = JSON.parse(JSON.stringify(def.defaultValue));
 };
-const prefaultProcessor = (schema, ctx, json$1, params) => {
+const prefaultProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	process(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
-	if (ctx.io === "input") json$1._prefault = JSON.parse(JSON.stringify(def.defaultValue));
+	if (ctx.io === "input") json._prefault = JSON.parse(JSON.stringify(def.defaultValue));
 };
-const catchProcessor = (schema, ctx, json$1, params) => {
+const catchProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	process(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
@@ -10405,7 +10405,7 @@ const catchProcessor = (schema, ctx, json$1, params) => {
 	} catch {
 		throw new Error("Dynamic catch values are not supported in JSON Schema");
 	}
-	json$1.default = catchValue;
+	json.default = catchValue;
 };
 const pipeProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
@@ -10414,12 +10414,12 @@ const pipeProcessor = (schema, ctx, _json, params) => {
 	const seen = ctx.seen.get(schema);
 	seen.ref = innerType;
 };
-const readonlyProcessor = (schema, ctx, json$1, params) => {
+const readonlyProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	process(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
-	json$1.readOnly = true;
+	json.readOnly = true;
 };
 const promiseProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
@@ -10482,28 +10482,28 @@ const allProcessors = {
 };
 function toJSONSchema(input, params) {
 	if ("_idmap" in input) {
-		const registry$1 = input;
-		const ctx$1 = initializeContext({
+		const registry = input;
+		const ctx = initializeContext({
 			...params,
 			processors: allProcessors
 		});
 		const defs = {};
-		for (const entry of registry$1._idmap.entries()) {
+		for (const entry of registry._idmap.entries()) {
 			const [_, schema] = entry;
-			process(schema, ctx$1);
+			process(schema, ctx);
 		}
 		const schemas = {};
-		ctx$1.external = {
-			registry: registry$1,
+		ctx.external = {
+			registry,
 			uri: params?.uri,
 			defs
 		};
-		for (const entry of registry$1._idmap.entries()) {
+		for (const entry of registry._idmap.entries()) {
 			const [key, schema] = entry;
-			extractDefs(ctx$1, schema);
-			schemas[key] = finalize(ctx$1, schema);
+			extractDefs(ctx, schema);
+			schemas[key] = finalize(ctx, schema);
 		}
-		if (Object.keys(defs).length > 0) schemas.__shared = { [ctx$1.target === "draft-2020-12" ? "$defs" : "definitions"]: defs };
+		if (Object.keys(defs).length > 0) schemas.__shared = { [ctx.target === "draft-2020-12" ? "$defs" : "definitions"]: defs };
 		return { schemas };
 	}
 	const ctx = initializeContext({
@@ -10516,7 +10516,7 @@ function toJSONSchema(input, params) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/json-schema-generator.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema-generator.js
 /**
 * Legacy class-based interface for JSON Schema generation.
 * This class wraps the new functional implementation to provide backward compatibility.
@@ -10606,11 +10606,11 @@ var JSONSchemaGenerator = class {
 };
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/json-schema.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema.js
 var json_schema_exports = {};
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/core/index.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/index.js
 var core_exports = /* @__PURE__ */ __exportAll({
 	$ZodAny: () => $ZodAny,
 	$ZodArray: () => $ZodArray,
@@ -10888,7 +10888,7 @@ var core_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/checks.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/checks.js
 var checks_exports = /* @__PURE__ */ __exportAll({
 	endsWith: () => _endsWith,
 	gt: () => _gt,
@@ -10922,7 +10922,7 @@ var checks_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/iso.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/iso.js
 var iso_exports = /* @__PURE__ */ __exportAll({
 	ZodISODate: () => ZodISODate,
 	ZodISODateTime: () => ZodISODateTime,
@@ -10963,19 +10963,19 @@ function duration(params) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/errors.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/errors.js
 const initializer = (inst, issues) => {
 	$ZodError.init(inst, issues);
 	inst.name = "ZodError";
 	Object.defineProperties(inst, {
 		format: { value: (mapper) => formatError(inst, mapper) },
 		flatten: { value: (mapper) => flattenError(inst, mapper) },
-		addIssue: { value: (issue$1) => {
-			inst.issues.push(issue$1);
+		addIssue: { value: (issue) => {
+			inst.issues.push(issue);
 			inst.message = JSON.stringify(inst.issues, jsonStringifyReplacer, 2);
 		} },
-		addIssues: { value: (issues$1) => {
-			inst.issues.push(...issues$1);
+		addIssues: { value: (issues) => {
+			inst.issues.push(...issues);
 			inst.message = JSON.stringify(inst.issues, jsonStringifyReplacer, 2);
 		} },
 		isEmpty: { get() {
@@ -10987,7 +10987,7 @@ const ZodError = $constructor("ZodError", initializer);
 const ZodRealError = $constructor("ZodError", initializer, { Parent: Error });
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/parse.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/parse.js
 const parse = /* @__PURE__ */ _parse(ZodRealError);
 const parseAsync = /* @__PURE__ */ _parseAsync(ZodRealError);
 const safeParse = /* @__PURE__ */ _safeParse(ZodRealError);
@@ -11002,7 +11002,7 @@ const safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 const safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/schemas.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/schemas.js
 var schemas_exports = /* @__PURE__ */ __exportAll({
 	ZodAny: () => ZodAny,
 	ZodArray: () => ZodArray,
@@ -11187,7 +11187,7 @@ const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 		} } : ch)] }), { parent: true });
 	};
 	inst.with = inst.check;
-	inst.clone = (def$1, params) => clone(inst, def$1, params);
+	inst.clone = (def, params) => clone(inst, def, params);
 	inst.brand = () => inst;
 	inst.register = ((reg, meta) => {
 		reg.add(inst, meta);
@@ -11218,8 +11218,8 @@ const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 	inst.or = (arg) => union([inst, arg]);
 	inst.and = (arg) => intersection(inst, arg);
 	inst.transform = (tx) => pipe(inst, transform(tx));
-	inst.default = (def$1) => _default(inst, def$1);
-	inst.prefault = (def$1) => prefault(inst, def$1);
+	inst.default = (def) => _default(inst, def);
+	inst.prefault = (def) => prefault(inst, def);
 	inst.catch = (params) => _catch(inst, params);
 	inst.pipe = (target) => pipe(inst, target);
 	inst.readonly = () => readonly(inst);
@@ -11963,8 +11963,8 @@ const ZodTransform = /* @__PURE__ */ $constructor("ZodTransform", (inst, def) =>
 			}
 		};
 		const output = def.transform(payload.value, payload);
-		if (output instanceof Promise) return output.then((output$1) => {
-			payload.value = output$1;
+		if (output instanceof Promise) return output.then((output) => {
+			payload.value = output;
 			return payload;
 		});
 		payload.value = output;
@@ -12245,7 +12245,7 @@ function preprocess(fn, schema) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/compat.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/compat.js
 /** @deprecated Use the raw string literal codes instead, e.g. "invalid_type". */
 const ZodIssueCode = {
 	invalid_type: "invalid_type",
@@ -12261,8 +12261,8 @@ const ZodIssueCode = {
 	custom: "custom"
 };
 /** @deprecated Use `z.config(params)` instead. */
-function setErrorMap(map$1) {
-	config({ customError: map$1 });
+function setErrorMap(map) {
+	config({ customError: map });
 }
 /** @deprecated Use `z.config()` instead. */
 function getErrorMap() {
@@ -12273,7 +12273,7 @@ var ZodFirstPartyTypeKind;
 (function(ZodFirstPartyTypeKind) {})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/from-json-schema.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/from-json-schema.js
 const z = {
 	...schemas_exports,
 	...checks_exports,
@@ -12374,10 +12374,10 @@ function convertBaseSchema(schema, ctx) {
 			return ctx.refs.get(refPath);
 		});
 		ctx.processing.add(refPath);
-		const zodSchema$1 = convertSchema(resolveRef(refPath, ctx), ctx);
-		ctx.refs.set(refPath, zodSchema$1);
+		const zodSchema = convertSchema(resolveRef(refPath, ctx), ctx);
+		ctx.refs.set(refPath, zodSchema);
 		ctx.processing.delete(refPath);
-		return zodSchema$1;
+		return zodSchema;
 	}
 	if (schema.enum !== void 0) {
 		const enumValues = schema.enum;
@@ -12477,9 +12477,9 @@ function convertBaseSchema(schema, ctx) {
 					zodSchema = z.record(keySchema, valueSchema);
 					break;
 				}
-				const objectSchema$1 = z.object(shape).passthrough();
+				const objectSchema = z.object(shape).passthrough();
 				const recordSchema = z.looseRecord(keySchema, valueSchema);
-				zodSchema = z.intersection(objectSchema$1, recordSchema);
+				zodSchema = z.intersection(objectSchema, recordSchema);
 				break;
 			}
 			if (schema.patternProperties) {
@@ -12598,7 +12598,7 @@ function fromJSONSchema(schema, params) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/coerce.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/coerce.js
 var coerce_exports = /* @__PURE__ */ __exportAll({
 	bigint: () => bigint,
 	boolean: () => boolean,
@@ -12623,7 +12623,7 @@ function date(params) {
 }
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/v4/classic/external.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/external.js
 var external_exports = /* @__PURE__ */ __exportAll({
 	$brand: () => $brand,
 	$input: () => $input,
@@ -12865,7 +12865,7 @@ var external_exports = /* @__PURE__ */ __exportAll({
 config(en_default());
 
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.5/node_modules/zod/index.js
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/index.js
 var zod_default = external_exports;
 
 //#endregion
