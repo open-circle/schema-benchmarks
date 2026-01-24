@@ -7,20 +7,20 @@
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.1.29",
     "dedent": "^1.7.1",
-    "effect": "^3.19.14",
+    "effect": "^3.19.15",
     "joi": "^18.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.0.78",
-    "typia": "^11.0.0",
+    "typebox": "^1.0.79",
+    "typia": "^11.0.2",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "unplugin-macros": "^0.18.6",
+    "unplugin-macros": "^0.18.7",
     "vite": "catalog:",
     "vite-plugin-dts": "^4.5.4"
   },
