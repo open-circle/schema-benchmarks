@@ -45,7 +45,7 @@ function RouteComponent() {
                 suppressHydrationWarning
                 {...getTransitionStyle("date")}
               >
-                {longDateFormatter.format(blog.date)}
+                {longDateFormatter.format(blog.published)}
               </p>
               <Link to="/blog/$slug" params={{ slug: blog.slug }}>
                 <h2 className="typo-headline5" {...getTransitionStyle("title")}>
@@ -53,10 +53,10 @@ function RouteComponent() {
                 </h2>
               </Link>
               <p className="typo-caption" {...getTransitionStyle("author")}>
-                {blog.author}
+                {blog.authors.join(", ")}
               </p>
             </header>
-            <p>{blog.summary}</p>
+            <p>{blog.description}</p>
           </li>
         );
       })}
