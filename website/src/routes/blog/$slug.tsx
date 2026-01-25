@@ -1,5 +1,6 @@
 import { MDXContent } from "@content-collections/mdx/react";
 import { useMDXComponents } from "@mdx-js/react";
+import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateMetadata } from "@/data/meta";
@@ -34,12 +35,27 @@ function RouteComponent() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(getBlog(slug));
   const components = useMDXComponents({ wrapper: "div" });
+  const getTransitionStyle = (element: string) => ({
+    style: {
+      viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
+    },
+  });
   return (
     <>
-      <header>
-        <p className="typo-overline">{data.date.toLocaleDateString()}</p>
-        <h1>{data.title}</h1>
-        <p className="typo-caption">{data.author}</p>
+      <header className="blog-header">
+        <p
+          className="typo-overline"
+          suppressHydrationWarning
+          {...getTransitionStyle("date")}
+        >
+          {longDateFormatter.format(data.date)}
+        </p>
+        <h1 className="typo-headline4" {...getTransitionStyle("title")}>
+          {data.title}
+        </h1>
+        <p className="typo-caption" {...getTransitionStyle("author")}>
+          {data.author}
+        </p>
       </header>
       <MDXContent code={data.mdx} components={components} />
     </>
