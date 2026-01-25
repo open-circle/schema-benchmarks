@@ -10,9 +10,9 @@ const blog = defineCollection({
   include: "*.mdx",
   schema: v.object({
     title: v.string(),
-    summary: v.string(),
-    date: vUtils.coerceDate,
-    author: v.string(),
+    description: v.string(),
+    published: vUtils.coerceDate,
+    authors: v.array(v.string()),
     content: v.string(),
   }),
   transform: async (document, context) => {

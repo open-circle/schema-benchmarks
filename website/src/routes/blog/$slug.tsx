@@ -22,7 +22,7 @@ export const Route = createFileRoute("/blog/$slug")({
     loaderData
       ? generateMetadata({
           title: loaderData.title,
-          description: loaderData.summary,
+          description: loaderData.description,
           openGraph: {
             url: `/blog/${params.slug}`,
           },
@@ -48,13 +48,13 @@ function RouteComponent() {
           suppressHydrationWarning
           {...getTransitionStyle("date")}
         >
-          {longDateFormatter.format(data.date)}
+          {longDateFormatter.format(data.published)}
         </p>
         <h1 className="typo-headline4" {...getTransitionStyle("title")}>
           {data.title}
         </h1>
         <p className="typo-caption" {...getTransitionStyle("author")}>
-          {data.author}
+          {data.authors.join(", ")}
         </p>
       </header>
       <MDXContent code={data.mdx} components={components} />
