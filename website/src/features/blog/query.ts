@@ -1,0 +1,35 @@
+import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { queryOptions } from "@tanstack/react-query";
+import { notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { allBlogs } from "content-collections";
+import * as v from "valibot";
+
+export const getBlogsFn = createServerFn().handler(() => allBlogs);
+
+export const getBlogs = (signalOpt?: AbortSignal) =>
+  queryOptions({
+    queryKey: ["blog"],
+    queryFn: ({ signal }) =>
+      getBlogsFn({
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });
+
+export const getBlogFn = createServerFn()
+  .inputValidator(v.object({ slug: v.string() }))
+  .handler(({ data: { slug } }) => {
+    const blog = allBlogs.find((blog) => blog.slug === slug);
+    if (!blog) throw notFound();
+    return blog;
+  });
+
+export const getBlog = (slug: string, signalOpt?: AbortSignal) =>
+  queryOptions({
+    queryKey: ["blog", slug],
+    queryFn: ({ signal }) =>
+      getBlogFn({
+        data: { slug },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });

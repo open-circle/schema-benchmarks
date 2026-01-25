@@ -1,12 +1,10 @@
+import contentCollections from "@content-collections/vite";
 import mdx from "@mdx-js/rollup";
 import netlify from "@netlify/vite-plugin-tanstack-start";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import rehypeCodeProps from "rehype-mdx-code-props";
-import rehypePrism from "rehype-prism-plus";
-import rehypeSlug from "rehype-slug";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import { sidebarGroups } from "./src/components/sidebar/groups";
@@ -18,6 +16,7 @@ import {
 } from "./src/features/benchmark/constants";
 import { minifyTypeProps } from "./src/features/download/constants";
 import { speedPresets } from "./src/features/download/speed";
+import { rehypePlugins } from "./vite/mdx";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -32,7 +31,7 @@ const config = defineConfig({
     }),
     tanstackStart(),
     mdx({
-      rehypePlugins: [rehypePrism, rehypeSlug, rehypeCodeProps],
+      rehypePlugins,
       providerImportSource: "@mdx-js/react",
     }),
     netlify(),
@@ -55,6 +54,7 @@ const config = defineConfig({
         ...scales.stat,
       ],
     }),
+    contentCollections(),
   ],
   resolve: {
     alias: {

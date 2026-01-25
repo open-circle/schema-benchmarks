@@ -16,7 +16,8 @@
     
     "paths": {
       "@/*": ["./src/*"],
-      "@test/*": ["./test/*"]
+      "@test/*": ["./test/*"],
+      "content-collections": ["./.content-collections/generated"]
     }
   }
 }

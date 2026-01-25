@@ -9,22 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchmarks/validation/index'
 import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
 import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DownloadIndexRoute = DownloadIndexRouteImport.update({
   id: '/download/',
   path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/_home/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const BenchmarksValidationIndexRoute =
   BenchmarksValidationIndexRouteImport.update({
@@ -50,15 +68,20 @@ const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/blog': typeof BlogRouteWithChildren
+  '/blog/$slug': typeof BlogSlugRoute
   '/': typeof HomeIndexRoute
-  '/download': typeof DownloadIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/download/': typeof DownloadIndexRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
-  '/initialization': typeof BenchmarksInitializationIndexRoute
-  '/parsing': typeof BenchmarksParsingIndexRoute
-  '/validation': typeof BenchmarksValidationIndexRoute
+  '/initialization/': typeof BenchmarksInitializationIndexRoute
+  '/parsing/': typeof BenchmarksParsingIndexRoute
+  '/validation/': typeof BenchmarksValidationIndexRoute
 }
 export interface FileRoutesByTo {
+  '/blog/$slug': typeof BlogSlugRoute
   '/': typeof HomeIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/download': typeof DownloadIndexRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
@@ -67,7 +90,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/blog': typeof BlogRouteWithChildren
+  '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/download/': typeof DownloadIndexRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
@@ -77,15 +103,20 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/blog'
+    | '/blog/$slug'
     | '/'
-    | '/download'
+    | '/blog/'
+    | '/download/'
     | '/repo/raw/$'
-    | '/initialization'
-    | '/parsing'
-    | '/validation'
+    | '/initialization/'
+    | '/parsing/'
+    | '/validation/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/blog/$slug'
     | '/'
+    | '/blog'
     | '/download'
     | '/repo/raw/$'
     | '/initialization'
@@ -93,7 +124,10 @@ export interface FileRouteTypes {
     | '/validation'
   id:
     | '__root__'
+    | '/blog'
+    | '/blog/$slug'
     | '/_home/'
+    | '/blog/'
     | '/download/'
     | '/repo/raw/$'
     | '/_benchmarks/initialization/'
@@ -102,6 +136,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  BlogRoute: typeof BlogRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
@@ -112,12 +147,26 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/download/': {
       id: '/download/'
       path: '/download'
-      fullPath: '/download'
+      fullPath: '/download/'
       preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_home/': {
       id: '/_home/'
@@ -126,24 +175,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/_benchmarks/validation/': {
       id: '/_benchmarks/validation/'
       path: '/validation'
-      fullPath: '/validation'
+      fullPath: '/validation/'
       preLoaderRoute: typeof BenchmarksValidationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_benchmarks/parsing/': {
       id: '/_benchmarks/parsing/'
       path: '/parsing'
-      fullPath: '/parsing'
+      fullPath: '/parsing/'
       preLoaderRoute: typeof BenchmarksParsingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_benchmarks/initialization/': {
       id: '/_benchmarks/initialization/'
       path: '/initialization'
-      fullPath: '/initialization'
+      fullPath: '/initialization/'
       preLoaderRoute: typeof BenchmarksInitializationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -157,7 +213,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
+  BlogRoute: BlogRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,

@@ -41,4 +41,14 @@ export const sidebarGroups: Array<SidebarGroup> = [
       },
     ],
   },
+  {
+    key: "blog",
+    links: [
+      {
+        ...linkOptions({ to: "/blog" }),
+        name: "Blog",
+        icon: "article",
+      },
+    ],
+  },
 ];
