@@ -1,0 +1,49 @@
+.avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--avatar-background, var(--secondary));
+  color: var(--avatar-color, var(--on-secondary));
+  border: 4px solid var(--avatar-border, var(--page-background));
+  user-select: none;
+  &.avatar--sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: var(--overline-size);
+    border-width: 2px;
+  }
+  &.avatar--md {
+    width: 2rem;
+    height: 2rem;
+    font-size: var(--body2-size);
+  }
+  &.avatar--lg {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: var(--headline6-size);
+    border-width: 6px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.avatar-list {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  .avatar {
+    z-index: 1;
+    margin-left: -0.75em;
+    &:dir(rtl) {
+      margin-left: 0;
+      margin-right: -0.75em;
+    }
+  }
+}

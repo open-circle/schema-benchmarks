@@ -10,7 +10,7 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { radEventListeners } from "rad-event-listeners";
 import {
   type ComponentProps,
-  type ComponentType,
+  type ElementType,
   type HTMLAttributes,
   type JSX,
   type ReactNode,
@@ -24,7 +24,7 @@ import { ButtonGroup } from "../button";
 
 const cls = bem("tooltip");
 
-type TooltipableComponent = ComponentType<
+type TooltipableComponent = ElementType<
   { ref: RefCallback<HTMLElement> } & Pick<
     HTMLAttributes<HTMLElement>,
     "id" | "popoverTarget" | "popoverTargetAction" | "aria-labelledby"
@@ -158,6 +158,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     return (
       <>
         <Component
+          // @ts-expect-error union nastiness
           popoverTargetAction="show"
           // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}

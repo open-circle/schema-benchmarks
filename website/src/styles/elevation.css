@@ -118,8 +118,11 @@
   --elevation-23-overlay-opacity: 16%;
   --elevation-24-overlay-opacity: 16%;
 
-  --elevation-transition: box-shadow 280ms var(--standard-curve);
-  --elevation-overlay-transition: background-color 280ms var(--standard-curve);
+  --elevation-transition-duration: 280ms;
+  --elevation-transition: box-shadow var(--elevation-transition-duration)
+    var(--standard-curve);
+  --elevation-overlay-transition: background-color
+    var(--elevation-transition-duration) var(--standard-curve);
 
   --card-elevation: var(--elevation-2);
 }
