@@ -18,7 +18,6 @@
   color: var(--button-foreground);
 
   transition:
-    background-color 250ms,
     color 250ms,
     opacity 250ms,
     var(--elevation-transition),

@@ -6,9 +6,17 @@ import { rehypePlugins } from "./vite/mdx";
 
 const blog = defineCollection({
   name: "blog",
-  directory: "src/content/blog",
+  directory: "src/features/blog/content",
   include: "*.mdx",
   schema: v.object({
+    cover: v.union([
+      v.string(),
+      v.object({
+        src: v.string(),
+        alt: v.string(),
+        fit: v.optional(v.picklist(["cover", "contain"])),
+      }),
+    ]),
     title: v.string(),
     description: v.string(),
     published: vUtils.coerceDate,
