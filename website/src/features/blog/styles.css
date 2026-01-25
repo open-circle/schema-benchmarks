@@ -1,0 +1,25 @@
+.blog-header {
+  display: flex;
+  flex-direction: column;
+  min-width: min(100vw, 32rem);
+  gap: 0.5rem;
+  p,
+  h1,
+  h2 {
+    margin: 0;
+  }
+}
+
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--divider);
+    }
+  }
+}

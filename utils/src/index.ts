@@ -103,6 +103,10 @@ export function formatBytes(bytes: number, formatter = numFormatter) {
   return `${formatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
 }
 
+export const longDateFormatter = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "long",
+});
+
 export const durationFormatter = new Intl.DurationFormat();
 
 const units: Array<[threshold: number, Intl.DurationTimeFormatUnit]> = [
