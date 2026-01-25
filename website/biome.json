@@ -10,6 +10,7 @@
       "./vite.config.ts",
       "./postcss.config.ts",
       "./preview.ts",
+      "./content-collections.ts",
       "./.storybook/**/*",
       "!**/routeTree.gen.ts"
     ]
