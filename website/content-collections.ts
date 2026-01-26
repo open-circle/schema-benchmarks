@@ -1,8 +1,6 @@
 import { defineCollection, defineConfig } from "@content-collections/core";
-import { compileMDX } from "@content-collections/mdx";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import * as v from "valibot";
-import { rehypePlugins } from "./vite/mdx";
 
 const blog = defineCollection({
   name: "blog",
@@ -24,11 +22,9 @@ const blog = defineCollection({
     authors: v.array(v.string()),
     content: v.string(),
   }),
-  transform: async (document, context) => {
-    const mdx = await compileMDX(context, document, { rehypePlugins });
+  transform: async (document) => {
     return {
       ...document,
-      mdx,
       slug: document._meta.path,
     };
   },

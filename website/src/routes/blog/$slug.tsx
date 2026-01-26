@@ -1,11 +1,26 @@
-import { MDXContent } from "@content-collections/mdx/react";
-import { useMDXComponents } from "@mdx-js/react";
-import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
+import {
+  getOrInsertComputed,
+  getTransitionName,
+  longDateFormatter,
+} from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import type { MDXModule } from "mdx/types";
+import { use } from "react";
 import { AvatarList } from "@/components/avatar";
 import { generateMetadata } from "@/data/meta";
 import { getAvatarUrl, getBlog, preloadAvatars } from "@/features/blog/query";
+
+const modCache = new Map<string, Promise<MDXModule>>();
+const importMdx = (filePath: string) =>
+  getOrInsertComputed(
+    modCache,
+    filePath,
+    () =>
+      import(
+        `../../features/blog/content/${filePath.replace(/\.mdx$/, "")}.mdx`
+      ),
+  );
 
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
@@ -17,7 +32,10 @@ export const Route = createFileRoute("/blog/$slug")({
     const data = await queryClient.ensureQueryData(
       getBlog(slug, abortController.signal),
     );
-    await preloadAvatars(data.authors);
+    await Promise.all([
+      preloadAvatars(data.authors),
+      importMdx(data._meta.filePath),
+    ]);
     return { crumb: data.title, ...data };
   },
   head: ({ loaderData, params }) =>
@@ -36,7 +54,7 @@ export const Route = createFileRoute("/blog/$slug")({
 function RouteComponent() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(getBlog(slug));
-  const components = useMDXComponents({ wrapper: "div" });
+  const { default: MDXContent } = use(importMdx(data._meta.filePath));
   const getTransitionStyle = (element: string) => ({
     style: {
       viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
@@ -76,7 +94,7 @@ function RouteComponent() {
           />
         )}
       </div>
-      <MDXContent code={data.mdx} components={components} />
+      <MDXContent components={{ wrapper: "div" }} />
     </>
   );
 }
