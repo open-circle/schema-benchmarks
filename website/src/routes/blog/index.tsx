@@ -1,10 +1,8 @@
-import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { AvatarList } from "@/components/avatar";
+import { createFileRoute } from "@tanstack/react-router";
 import { generateMetadata } from "@/data/meta";
+import { BlogCard } from "@/features/blog/components/card";
 import { getBlog, getBlogs } from "@/features/blog/query";
-import { preloadImage } from "@/lib/fetch";
 
 export const Route = createFileRoute("/blog/")({
   component: RouteComponent,
@@ -15,15 +13,9 @@ export const Route = createFileRoute("/blog/")({
     const authors = new Set<string>();
     for (const blog of blogs) {
       queryClient.setQueryData(getBlog(blog.slug).queryKey, blog);
-      for (const author of blog.authors) {
-        authors.add(author);
-      }
+      for (const author of blog.authors) authors.add(author);
     }
-    await Promise.all(
-      Array.from(authors).map((author) =>
-        preloadImage(`https://github.com/${author}.png`),
-      ),
-    );
+    await BlogCard.preloadAvatars(Array.from(authors));
   },
   head: () =>
     generateMetadata({
@@ -40,58 +32,9 @@ function RouteComponent() {
   const { data } = useSuspenseQuery(getBlogs());
   return (
     <ul className="blog-list">
-      {data.map((blog) => {
-        const getTransitionStyle = (element: string) => ({
-          style: {
-            viewTransitionName: `${getTransitionName("blog-header", {
-              slug: blog.slug,
-            })}-${element}`,
-          },
-        });
-        return (
-          <li key={blog.slug} className="blog-card">
-            <Link to="/blog/$slug" params={{ slug: blog.slug }}>
-              <div className="blog-dateline typo-overline">
-                <AvatarList
-                  {...getTransitionStyle("author")}
-                  items={blog.authors.map((author) => ({
-                    label: author,
-                    src: `https://github.com/${author}.png`,
-                  }))}
-                  size="sm"
-                />
-                <p suppressHydrationWarning {...getTransitionStyle("date")}>
-                  {longDateFormatter.format(blog.published)}
-                </p>
-              </div>
-              <h2 className="typo-headline5" {...getTransitionStyle("title")}>
-                {blog.title}
-              </h2>
-              <div
-                role="img"
-                className="blog-cover"
-                {...getTransitionStyle("cover")}
-              >
-                {typeof blog.cover === "string" ? (
-                  <p
-                    className="typo-headline2"
-                    {...getTransitionStyle("cover-text")}
-                  >
-                    {blog.cover}
-                  </p>
-                ) : (
-                  <img
-                    src={blog.cover.src}
-                    alt={blog.cover.alt}
-                    style={{ objectFit: blog.cover.fit ?? "cover" }}
-                  />
-                )}
-              </div>
-              <p>{blog.description}</p>
-            </Link>
-          </li>
-        );
-      })}
+      {data.map((blog) => (
+        <BlogCard key={blog.slug} blog={blog} />
+      ))}
     </ul>
   );
 }
