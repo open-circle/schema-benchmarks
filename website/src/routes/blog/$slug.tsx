@@ -5,8 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { AvatarList } from "@/components/avatar";
 import { generateMetadata } from "@/data/meta";
-import { getBlog } from "@/features/blog/query";
-import { preloadImage } from "@/lib/fetch";
+import { getAvatarUrl, getBlog, preloadAvatars } from "@/features/blog/query";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
@@ -18,11 +17,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const data = await queryClient.ensureQueryData(
       getBlog(slug, abortController.signal),
     );
-    await Promise.all(
-      data.authors.map((author) =>
-        preloadImage(`https://github.com/${author}.png`),
-      ),
-    );
+    await preloadAvatars(data.authors);
     return { crumb: data.title, ...data };
   },
   head: ({ loaderData, params }) =>
@@ -60,7 +55,7 @@ function RouteComponent() {
           {...getTransitionStyle("author")}
           items={data.authors.map((author) => ({
             label: author,
-            src: `https://github.com/${author}.png`,
+            src: getAvatarUrl(author),
           }))}
           size="lg"
         />
