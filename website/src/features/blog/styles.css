@@ -1,4 +1,4 @@
-@import "@/styles/layout";
+@import "@/shared/styles/layout";
 
 @import "./components/card/index.css";
 

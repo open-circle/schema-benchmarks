@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { getRouter } from "../src/router";
 import { makeQueryClient } from "../src/shared/data/query";
-import "../src/styles.css";
+import "../src/shared/styles.css";
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   document.dir = args.dir ?? "ltr";

@@ -1,5 +1,5 @@
 import "vitest-browser-react";
-import "../../src/styles.css";
+import "../../src/shared/styles.css";
 import { page } from "vitest/browser";
 import { renderWithProviders } from "./render";
 
