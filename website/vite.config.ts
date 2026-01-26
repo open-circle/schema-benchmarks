@@ -35,7 +35,7 @@ const config = defineConfig({
     }),
     tanstackStart(),
     mdx({
-      rehypePlugins: [rehypeCodeProps, rehypePrism, rehypeSlug],
+      rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
       providerImportSource: "@mdx-js/react",
     }),
