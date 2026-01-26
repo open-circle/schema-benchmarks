@@ -5,6 +5,11 @@ import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
+import rehypeCodeProps from "rehype-mdx-code-props";
+import rehypePrism from "rehype-prism-plus";
+import rehypeSlug from "rehype-slug";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import { sidebarGroups } from "./src/components/sidebar/groups";
@@ -16,7 +21,6 @@ import {
 } from "./src/features/benchmark/constants";
 import { minifyTypeProps } from "./src/features/download/constants";
 import { speedPresets } from "./src/features/download/speed";
-import { rehypePlugins } from "./vite/mdx";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -31,7 +35,8 @@ const config = defineConfig({
     }),
     tanstackStart(),
     mdx({
-      rehypePlugins,
+      rehypePlugins: [rehypeCodeProps, rehypePrism, rehypeSlug],
+      remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
       providerImportSource: "@mdx-js/react",
     }),
     netlify(),
