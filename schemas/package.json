@@ -10,7 +10,7 @@
     "effect": "^3.19.15",
     "joi": "^18.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.0.79",
+    "typebox": "^1.0.80",
     "typia": "^11.0.2",
     "valibot": "catalog:",
     "yup": "^1.7.1",
