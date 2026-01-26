@@ -1,5 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { EmptyState } from "@/components/empty-state";
+import { MdSymbol } from "@/components/symbol";
 import { generateMetadata } from "@/data/meta";
 import { BlogCard } from "@/features/blog/components/card";
 import { getBlog, getBlogs, preloadAvatars } from "@/features/blog/query";
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/blog/")({
   head: () =>
     generateMetadata({
       title: "Blog",
-      description: "Blog for Schema Benchmarks.",
+      description: "Blog posts for Schema Benchmarks.",
       openGraph: {
         url: "/blog/",
       },
@@ -30,6 +32,14 @@ export const Route = createFileRoute("/blog/")({
 
 function RouteComponent() {
   const { data } = useSuspenseQuery(getBlogs());
+  if (!data.length)
+    return (
+      <EmptyState
+        icon={<MdSymbol>article</MdSymbol>}
+        title="No blog posts found"
+        subtitle="Content coming soon!"
+      />
+    );
   return (
     <ul className="blog-list">
       {data.map((blog) => (
