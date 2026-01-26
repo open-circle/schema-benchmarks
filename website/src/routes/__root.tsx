@@ -21,7 +21,7 @@ import { symbolsUrl } from "../../vite/symbols";
 import { Header } from "../shared/components/header";
 import { Sidebar } from "../shared/components/sidebar";
 import { Snackbars } from "../shared/components/snackbar";
-import appCss from "../styles.css?url";
+import appCss from "../shared/styles/index.css?url";
 
 interface RouterContext {
   queryClient: QueryClient;
