@@ -95,7 +95,7 @@ function RouteComponent() {
           {...dataTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/parsing",
             search: toggleFilter("dataType", option),
             replace: true,
             resetScroll: false,
@@ -105,7 +105,7 @@ function RouteComponent() {
           {...optimizeTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/parsing",
             search: toggleFilter("optimizeType", option),
             replace: true,
             resetScroll: false,
@@ -115,7 +115,7 @@ function RouteComponent() {
           {...errorTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/parsing",
             search: toggleFilter("errorType", option),
             replace: true,
             resetScroll: false,
