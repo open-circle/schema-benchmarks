@@ -22,7 +22,7 @@ export function BlogCard({ blog }: BlogCardProps) {
   });
   return (
     <li className="blog-card">
-      <Link to="/blog/$slug" params={{ slug: blog.slug }}>
+      <Link to="/blog/$slug" params={{ slug: blog.slug }} preload="intent">
         <div className="blog-dateline typo-overline">
           <AvatarList
             {...getTransitionStyle("author")}

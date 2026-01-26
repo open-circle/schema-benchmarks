@@ -1,26 +1,19 @@
-import {
-  getOrInsertComputed,
-  getTransitionName,
-  longDateFormatter,
-} from "@schema-benchmarks/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
-import { use } from "react";
 import { AvatarList } from "@/components/avatar";
 import { generateMetadata } from "@/data/meta";
 import { getAvatarUrl, getBlog, preloadAvatars } from "@/features/blog/query";
 
-const modCache = new Map<string, Promise<MDXModule>>();
 const importMdx = (filePath: string) =>
-  getOrInsertComputed(
-    modCache,
-    filePath,
-    () =>
+  queryOptions({
+    queryKey: ["mdx", filePath],
+    queryFn: (): Promise<MDXModule> =>
       import(
         `../../features/blog/content/${filePath.replace(/\.mdx$/, "")}.mdx`
       ),
-  );
+  });
 
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
@@ -34,7 +27,7 @@ export const Route = createFileRoute("/blog/$slug")({
     );
     await Promise.all([
       preloadAvatars(data.authors),
-      importMdx(data._meta.filePath),
+      queryClient.prefetchQuery(importMdx(data._meta.filePath)),
     ]);
     return { crumb: data.title, ...data };
   },
@@ -54,7 +47,9 @@ export const Route = createFileRoute("/blog/$slug")({
 function RouteComponent() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(getBlog(slug));
-  const { default: MDXContent } = use(importMdx(data._meta.filePath));
+  const {
+    data: { default: MDXContent },
+  } = useSuspenseQuery(importMdx(data._meta.filePath));
   const getTransitionStyle = (element: string) => ({
     style: {
       viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
