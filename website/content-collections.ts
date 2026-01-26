@@ -22,12 +22,10 @@ const blog = defineCollection({
     authors: v.array(v.string()),
     content: v.string(),
   }),
-  transform: async (document) => {
-    return {
-      ...document,
-      slug: document._meta.path,
-    };
-  },
+  transform: (document) => ({
+    ...document,
+    slug: document._meta.path,
+  }),
 });
 
 export default defineConfig({
