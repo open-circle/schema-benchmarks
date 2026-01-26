@@ -20,6 +20,7 @@ const blog = defineCollection({
     title: v.string(),
     description: v.string(),
     published: vUtils.coerceDate,
+    /** GitHub usernames */
     authors: v.array(v.string()),
     content: v.string(),
   }),
