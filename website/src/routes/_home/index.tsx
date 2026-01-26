@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { generateMetadata } from "@/data/meta";
+import { generateMetadata } from "@/shared/data/meta";
 import Content from "./content.mdx";
 
 export const Route = createFileRoute("/_home/")({

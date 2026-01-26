@@ -7,13 +7,6 @@ import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
-import { ButtonGroup } from "@/components/button";
-import { InternalLinkToggleButton } from "@/components/button/toggle";
-import { PageFilter, PageFilters } from "@/components/page-filter";
-import { PageFilterChips } from "@/components/page-filter/chips";
-import { PageFilterTextField } from "@/components/page-filter/text-field";
-import { MdSymbol } from "@/components/symbol";
-import { generateMetadata } from "@/data/meta";
 import { DownloadResults } from "@/features/download/components/results";
 import {
   minifyTypeProps,
@@ -23,6 +16,13 @@ import { getDownloadResults } from "@/features/download/query";
 import { speedPresets } from "@/features/download/speed";
 import downloadStyles from "@/features/download/styles.css?url";
 import { getAllWeeklyDownloads } from "@/features/popularity/query";
+import { ButtonGroup } from "@/shared/components/button";
+import { InternalLinkToggleButton } from "@/shared/components/button/toggle";
+import { PageFilter, PageFilters } from "@/shared/components/page-filter";
+import { PageFilterChips } from "@/shared/components/page-filter/chips";
+import { PageFilterTextField } from "@/shared/components/page-filter/text-field";
+import { MdSymbol } from "@/shared/components/symbol";
+import { generateMetadata } from "@/shared/data/meta";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({

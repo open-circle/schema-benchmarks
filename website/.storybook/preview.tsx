@@ -6,8 +6,8 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
-import { makeQueryClient } from "../src/data/query";
 import { getRouter } from "../src/router";
+import { makeQueryClient } from "../src/shared/data/query";
 import "../src/styles.css";
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {

@@ -5,11 +5,11 @@ import {
   getTransitionName,
 } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
-import { ChipCollection, DisplayChip } from "@/components/chip";
-import { CodeBlock } from "@/components/code";
-import { MdSymbol } from "@/components/symbol";
-import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
+import { ChipCollection, DisplayChip } from "@/shared/components/chip";
+import { CodeBlock } from "@/shared/components/code";
+import { MdSymbol } from "@/shared/components/symbol";
+import { Bar } from "@/shared/components/table/bar";
 import { errorTypeProps, optimizeTypeProps } from "../../constants";
 
 interface BenchCardProps {

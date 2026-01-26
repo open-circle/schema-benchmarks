@@ -12,8 +12,6 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
-import { sidebarGroups } from "./src/components/sidebar/groups";
-import * as scales from "./src/data/scale";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -21,6 +19,8 @@ import {
 } from "./src/features/benchmark/constants";
 import { minifyTypeProps } from "./src/features/download/constants";
 import { speedPresets } from "./src/features/download/speed";
+import { sidebarGroups } from "./src/shared/components/sidebar/groups";
+import * as scales from "./src/shared/data/scale";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -35,7 +35,7 @@ const config = defineConfig({
     }),
     tanstackStart(),
     mdx({
-      rehypePlugins: [rehypeCodeProps, rehypePrism, rehypeSlug],
+      rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
       providerImportSource: "@mdx-js/react",
     }),

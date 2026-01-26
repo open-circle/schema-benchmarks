@@ -1,6 +1,6 @@
 import downloadResults from "@schema-benchmarks/bench/download.json";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Bar } from "@/components/table/bar";
+import { Bar } from "@/shared/components/table/bar";
 import { DownloadCard } from ".";
 import "./index.css";
 

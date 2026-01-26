@@ -6,11 +6,11 @@ import {
   getTransitionName,
 } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
-import { ButtonGroup } from "@/components/button";
-import { InternalLinkToggleButton } from "@/components/button/toggle";
-import { MdSymbol } from "@/components/symbol";
-import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
+import { ButtonGroup } from "@/shared/components/button";
+import { InternalLinkToggleButton } from "@/shared/components/button/toggle";
+import { MdSymbol } from "@/shared/components/symbol";
+import { Bar } from "@/shared/components/table/bar";
 import { getCompiledPath } from "../../query";
 import { getDownloadTime } from "../../speed";
 

@@ -4,7 +4,7 @@ import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { allBlogs } from "content-collections";
 import * as v from "valibot";
-import { preloadImage } from "@/lib/fetch";
+import { preloadImage } from "@/shared/lib/fetch";
 
 export const getBlogsFn = createServerFn().handler(() =>
   allBlogs

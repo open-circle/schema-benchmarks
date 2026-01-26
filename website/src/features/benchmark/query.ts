@@ -8,7 +8,7 @@ import benchResults from "@schema-benchmarks/bench/bench.json" with {
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { upfetch } from "@/lib/fetch";
+import { upfetch } from "@/shared/lib/fetch";
 
 export const getBenchResultsFn = createServerFn().handler(
   async ({ signal }) => {
