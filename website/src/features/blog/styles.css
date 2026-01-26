@@ -17,7 +17,7 @@
   background-color: var(--sidebar-background);
   margin: 0 auto;
   border: 1px solid var(--divider);
-  min-width: 32rem;
+  min-width: min(32rem, calc(100vw - var(--margin) * 2));
   aspect-ratio: 16 / 9;
   border-radius: var(--shape-medium);
   overflow: hidden;
