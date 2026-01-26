@@ -89,6 +89,7 @@ export function DownloadCard({
               _splat: `schemas/libraries/${result.fileName}`,
             }}
             target="_blank"
+            preload={false}
             rel="noreferrer noopener"
             tooltip="Open source"
           >
@@ -102,6 +103,7 @@ export function DownloadCard({
                 minify,
               )}`,
             }}
+            preload={false}
             target="_blank"
             rel="noreferrer noopener"
             tooltip="Open compiled"

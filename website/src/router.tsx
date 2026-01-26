@@ -22,6 +22,7 @@ export const getRouter = ({
     history,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
+    defaultPreload: "intent",
     context: { queryClient },
     defaultViewTransition: true,
     defaultPendingComponent: () => <Spinner size={64} />,
