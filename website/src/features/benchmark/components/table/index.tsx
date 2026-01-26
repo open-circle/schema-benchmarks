@@ -8,13 +8,13 @@ import {
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { ToggleButton } from "@/components/button/toggle";
-import { EmptyState } from "@/components/empty-state";
-import { Radio } from "@/components/radio";
-import { Scaler } from "@/components/scaler";
-import { MdSymbol } from "@/components/symbol";
-import { Bar } from "@/components/table/bar";
 import { DownloadCount } from "@/features/popularity/components/count";
+import { ToggleButton } from "@/shared/components/button/toggle";
+import { EmptyState } from "@/shared/components/empty-state";
+import { Radio } from "@/shared/components/radio";
+import { Scaler } from "@/shared/components/scaler";
+import { MdSymbol } from "@/shared/components/symbol";
+import { Bar } from "@/shared/components/table/bar";
 import { errorTypeProps, optimizeTypeProps } from "../../constants";
 import { Snippet } from "./snippet";
 

@@ -2,7 +2,7 @@ import benchResults from "@schema-benchmarks/bench/bench.json";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BenchCard } from ".";
 import "./index.css";
-import { Bar } from "@/components/table/bar";
+import { Bar } from "@/shared/components/table/bar";
 
 const meta = {
   title: "Features/Benchmark/Card",

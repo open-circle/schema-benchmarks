@@ -9,7 +9,7 @@ import downloadResults from "@schema-benchmarks/bench/download.json" with {
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { upfetch } from "@/lib/fetch";
+import { upfetch } from "@/shared/lib/fetch";
 
 export function getCompiledPath(fileName: string, minify: MinifyType) {
   return fileName

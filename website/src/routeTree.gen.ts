@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as BlogRouteImport } from './routes/blog'
+import { Route as BlogRouteRouteImport } from './routes/blog/route'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
@@ -19,7 +19,7 @@ import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks
 import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 
-const BlogRoute = BlogRouteImport.update({
+const BlogRouteRoute = BlogRouteRouteImport.update({
   id: '/blog',
   path: '/blog',
   getParentRoute: () => rootRouteImport,
@@ -32,7 +32,7 @@ const DownloadIndexRoute = DownloadIndexRouteImport.update({
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => BlogRoute,
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/_home/',
@@ -42,7 +42,7 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BenchmarksValidationIndexRoute =
   BenchmarksValidationIndexRouteImport.update({
@@ -68,7 +68,7 @@ const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -90,7 +90,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -136,7 +136,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  BlogRoute: typeof BlogRouteWithChildren
+  BlogRouteRoute: typeof BlogRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
@@ -151,7 +151,7 @@ declare module '@tanstack/react-router' {
       id: '/blog'
       path: '/blog'
       fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
+      preLoaderRoute: typeof BlogRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/download/': {
@@ -166,7 +166,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof BlogRouteRoute
     }
     '/_home/': {
       id: '/_home/'
@@ -180,7 +180,7 @@ declare module '@tanstack/react-router' {
       path: '/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof BlogRouteRoute
     }
     '/_benchmarks/validation/': {
       id: '/_benchmarks/validation/'
@@ -213,20 +213,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface BlogRouteChildren {
+interface BlogRouteRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
 
-const BlogRouteChildren: BlogRouteChildren = {
+const BlogRouteRouteChildren: BlogRouteRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
 }
 
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
+  BlogRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
-  BlogRoute: BlogRouteWithChildren,
+  BlogRouteRoute: BlogRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,

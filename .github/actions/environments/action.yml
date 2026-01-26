@@ -23,3 +23,7 @@ runs:
     - name: Build schemas
       shell: bash
       run: pnpm schemas:build
+
+    - name: Build website
+      shell: bash
+      run: pnpm website:build

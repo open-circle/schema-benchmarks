@@ -11,17 +11,17 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { create } from "mutative";
 import { ssrBehavior } from "react-md-spinner";
 import { generateMetadata } from "tanstack-meta";
-import { Banner } from "@/components/banner";
-import { ConfirmDialog } from "@/components/dialog/confirm";
-import { Footer } from "@/components/footer";
-import * as mdxComponents from "@/components/mdx";
-import { ScrollToTop } from "@/components/scroll-to-top";
-import { SidebarProvider } from "@/components/sidebar/context";
+import { Banner } from "@/shared/components/banner";
+import { ConfirmDialog } from "@/shared/components/dialog/confirm";
+import { Footer } from "@/shared/components/footer";
+import * as mdxComponents from "@/shared/components/mdx";
+import { ScrollToTop } from "@/shared/components/scroll-to-top";
+import { SidebarProvider } from "@/shared/components/sidebar/context";
 import { symbolsUrl } from "../../vite/symbols";
-import { Header } from "../components/header";
-import { Sidebar } from "../components/sidebar";
-import { Snackbars } from "../components/snackbar";
-import appCss from "../styles.css?url";
+import { Header } from "../shared/components/header";
+import { Sidebar } from "../shared/components/sidebar";
+import { Snackbars } from "../shared/components/snackbar";
+import appCss from "../shared/styles/index.css?url";
 
 interface RouterContext {
   queryClient: QueryClient;
