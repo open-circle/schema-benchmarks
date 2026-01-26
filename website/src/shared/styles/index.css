@@ -1,16 +1,16 @@
 @import "normalize.css/normalize.css";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
-@import "shared/styles/themes/material-light.css";
-@import "shared/styles/themes/material-oceanic.css";
+@import "./themes/material-light.css";
+@import "./themes/material-oceanic.css";
 
-@import "shared/styles/animation.css";
-@import "shared/styles/colors.css";
-@import "shared/styles/elevation.css";
-@import "shared/styles/layout.css";
-@import "shared/styles/states.css";
-@import "shared/styles/shape.css";
-@import "shared/styles/typography.css";
+@import "./animation.css";
+@import "./colors.css";
+@import "./elevation.css";
+@import "./layout.css";
+@import "./states.css";
+@import "./shape.css";
+@import "./typography.css";
 
 @import "shared/components/avatar/index.css";
 @import "shared/components/banner/index.css";
