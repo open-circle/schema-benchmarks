@@ -81,7 +81,7 @@ function RouteComponent() {
           {...optimizeTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/initialization",
             search: toggleFilter("optimizeType", option),
             resetScroll: false,
           })}

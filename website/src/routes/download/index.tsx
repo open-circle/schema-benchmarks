@@ -92,7 +92,7 @@ function RouteComponent() {
           {...minifyTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/download",
             search: toggleFilter("minifyType", option),
             replace: true,
             resetScroll: false,
@@ -111,7 +111,7 @@ function RouteComponent() {
           getLinkOptions={(event) =>
             linkOptions({
               from: Route.fullPath,
-              to: Route.fullPath,
+              to: "/download",
               search: ({ minifyType }) => {
                 const mbps = event.target.valueAsNumber;
                 if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
@@ -128,7 +128,7 @@ function RouteComponent() {
               <InternalLinkToggleButton
                 key={preset.name}
                 tooltip={preset.name}
-                to={Route.fullPath}
+                to="/download"
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
                 replace
                 resetScroll={false}

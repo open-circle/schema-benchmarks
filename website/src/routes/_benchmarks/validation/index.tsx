@@ -87,7 +87,7 @@ function RouteComponent() {
           {...dataTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/validation",
             search: toggleFilter("dataType", option),
             replace: true,
             resetScroll: false,
@@ -97,7 +97,7 @@ function RouteComponent() {
           {...optimizeTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
-            to: Route.fullPath,
+            to: "/validation",
             replace: true,
             search: toggleFilter("optimizeType", option),
             resetScroll: false,
