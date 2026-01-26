@@ -59,7 +59,7 @@ const config = defineConfig({
         ...scales.stat,
       ],
     }),
-    contentCollections(),
+    !process.env.VITEST && contentCollections(),
   ],
   resolve: {
     alias: {
