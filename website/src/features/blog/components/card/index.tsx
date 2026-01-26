@@ -2,7 +2,7 @@ import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
 import { AvatarList } from "@/components/avatar";
-import { preloadImage } from "@/lib/fetch";
+import { getAvatarUrl } from "@/features/blog/query";
 
 export interface BlogCardProps {
   blog: Pick<
@@ -28,7 +28,7 @@ export function BlogCard({ blog }: BlogCardProps) {
             {...getTransitionStyle("author")}
             items={blog.authors.map((author) => ({
               label: author,
-              src: `https://github.com/${author}.png`,
+              src: getAvatarUrl(author),
             }))}
             size="sm"
           />
@@ -57,8 +57,3 @@ export function BlogCard({ blog }: BlogCardProps) {
     </li>
   );
 }
-
-BlogCard.preloadAvatars = (authors: Array<string>) =>
-  Promise.all(
-    authors.map((author) => preloadImage(`https://github.com/${author}.png`)),
-  );

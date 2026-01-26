@@ -4,6 +4,7 @@ import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { allBlogs } from "content-collections";
 import * as v from "valibot";
+import { preloadImage } from "@/lib/fetch";
 
 export const getBlogsFn = createServerFn().handler(() =>
   allBlogs
@@ -41,3 +42,9 @@ export const getBlog = (slug: string, signalOpt?: AbortSignal) =>
         signal: anyAbortSignal(signal, signalOpt),
       }),
   });
+
+export const getAvatarUrl = (author: string) =>
+  `https://github.com/${author}.png`;
+
+export const preloadAvatars = (authors: Array<string>) =>
+  Promise.all(authors.map((author) => preloadImage(getAvatarUrl(author))));

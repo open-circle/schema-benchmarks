@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateMetadata } from "@/data/meta";
 import { BlogCard } from "@/features/blog/components/card";
-import { getBlog, getBlogs } from "@/features/blog/query";
+import { getBlog, getBlogs, preloadAvatars } from "@/features/blog/query";
 
 export const Route = createFileRoute("/blog/")({
   component: RouteComponent,
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/blog/")({
       queryClient.setQueryData(getBlog(blog.slug).queryKey, blog);
       for (const author of blog.authors) authors.add(author);
     }
-    await BlogCard.preloadAvatars(Array.from(authors));
+    await preloadAvatars(Array.from(authors));
   },
   head: () =>
     generateMetadata({
