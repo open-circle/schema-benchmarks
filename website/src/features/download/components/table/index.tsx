@@ -88,6 +88,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                       params={{
                         _splat: `schemas/libraries/${result.fileName}`,
                       }}
+                      preload={false}
                       target="_blank"
                       rel="noreferrer noopener"
                       tooltip="Open source"
@@ -102,6 +103,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                           minify,
                         )}`,
                       }}
+                      preload={false}
                       target="_blank"
                       rel="noreferrer noopener"
                       tooltip="Open compiled"
