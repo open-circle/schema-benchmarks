@@ -22,7 +22,11 @@
   }
 }
 
-/* I suspect some branding guidelines would be unhappy if we used bevels in tweets */
-.react-tweet-theme * {
-  corner-shape: unset;
+.react-tweet-theme {
+  &.react-tweet-theme {
+    --tweet-container-margin: 1.5rem auto;
+  }
+  * {
+    corner-shape: unset;
+  }
 }
