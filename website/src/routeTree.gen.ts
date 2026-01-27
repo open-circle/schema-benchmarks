@@ -18,6 +18,7 @@ import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchma
 import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
 import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
+import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
 
 const BlogRouteRoute = BlogRouteRouteImport.update({
   id: '/blog',
@@ -66,6 +67,11 @@ const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
   path: '/repo/raw/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTweetIdRoute = ApiTweetIdRouteImport.update({
+  id: '/api/tweet/$id',
+  path: '/api/tweet/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteRouteWithChildren
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/download/': typeof DownloadIndexRoute
+  '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/initialization/': typeof BenchmarksInitializationIndexRoute
   '/parsing/': typeof BenchmarksParsingIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/blog': typeof BlogIndexRoute
   '/download': typeof DownloadIndexRoute
+  '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/initialization': typeof BenchmarksInitializationIndexRoute
   '/parsing': typeof BenchmarksParsingIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/download/': typeof DownloadIndexRoute
+  '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
   '/_benchmarks/parsing/': typeof BenchmarksParsingIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog/'
     | '/download/'
+    | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/initialization/'
     | '/parsing/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/download'
+    | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/initialization'
     | '/parsing'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/_home/'
     | '/blog/'
     | '/download/'
+    | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/initialization/'
     | '/_benchmarks/parsing/'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   BlogRouteRoute: typeof BlogRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
+  ApiTweetIdRoute: typeof ApiTweetIdRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
   BenchmarksInitializationIndexRoute: typeof BenchmarksInitializationIndexRoute
   BenchmarksParsingIndexRoute: typeof BenchmarksParsingIndexRoute
@@ -210,6 +223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RepoRawSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/tweet/$id': {
+      id: '/api/tweet/$id'
+      path: '/api/tweet/$id'
+      fullPath: '/api/tweet/$id'
+      preLoaderRoute: typeof ApiTweetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -231,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRouteRoute: BlogRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
+  ApiTweetIdRoute: ApiTweetIdRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,
   BenchmarksInitializationIndexRoute: BenchmarksInitializationIndexRoute,
   BenchmarksParsingIndexRoute: BenchmarksParsingIndexRoute,
