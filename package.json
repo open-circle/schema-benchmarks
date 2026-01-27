@@ -24,6 +24,9 @@
   "pnpm": {
     "overrides": {
       "seroval": "1.3.2"
+    },
+    "patchedDependencies": {
+      "rod-js": "patches/rod-js.patch"
     }
   }
 }
