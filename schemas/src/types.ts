@@ -42,7 +42,7 @@ export type BenchmarkConfig<Context> =
 
 export interface BenchmarksConfig<Context> {
   library: LibraryInfo;
-  createContext: () => Context;
+  createContext: () => Context | Promise<Context>;
   initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
   validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
   parsing?: Partial<

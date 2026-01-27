@@ -9,6 +9,7 @@
     "dedent": "catalog:",
     "effect": "^3.19.16",
     "joi": "^18.0.2",
+    "rod-js": "^0.2.0",
     "sury": "11.0.0-alpha.4",
     "typebox": "^1.0.81",
     "typia": "^11.0.3",

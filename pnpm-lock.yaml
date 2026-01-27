@@ -55,6 +55,11 @@ catalogs:
 overrides:
   seroval: 1.3.2
 
+patchedDependencies:
+  rod-js:
+    hash: 28687135b95ccb46f97efab1381b80e43f60e31941890d2b1fa6f8d5a4033502
+    path: patches/rod-js.patch
+
 importers:
 
   .:
@@ -126,6 +131,9 @@ importers:
       joi:
         specifier: ^18.0.2
         version: 18.0.2
+      rod-js:
+        specifier: ^0.2.0
+        version: 0.2.0(patch_hash=28687135b95ccb46f97efab1381b80e43f60e31941890d2b1fa6f8d5a4033502)
       sury:
         specifier: 11.0.0-alpha.4
         version: 11.0.0-alpha.4
@@ -5484,6 +5492,9 @@ packages:
 
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
+
+  rod-js@0.2.0:
+    resolution: {integrity: sha512-AwFwGc4YL09KQ8aYjRP5WlAmJUyLtG7C58/8iPcJ30tz9/Fla4eEV1cKCse6VYsfLM/DshcaptpwOkYwji1ylw==}
 
   rolldown-string@0.2.1:
     resolution: {integrity: sha512-7H8oH5A8+L96pbBTPCt/rZrwayEhZY5/ejhdk9nRODH32H1v7+bfkaCr+kS15DcGQ7VC1HcWdQVNABFYgrMOzg==}
@@ -12227,6 +12238,8 @@ snapshots:
   reusify@1.1.0: {}
 
   robust-predicates@3.0.2: {}
+
+  rod-js@0.2.0(patch_hash=28687135b95ccb46f97efab1381b80e43f60e31941890d2b1fa6f8d5a4033502): {}
 
   rolldown-string@0.2.1:
     dependencies:
