@@ -2,12 +2,12 @@ import type { QueryClient } from "@tanstack/react-query";
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { Button } from "@/shared/components/button";
+import { EmptyState } from "@/shared/components/empty-state";
 import { Spinner } from "@/shared/components/spinner";
 import { MdSymbol } from "@/shared/components/symbol";
+import { makeQueryClient } from "@/shared/data/query";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { EmptyState } from "./shared/components/empty-state";
-import { makeQueryClient } from "./shared/data/query";
 
 // Create a new router instance
 export const getRouter = ({
