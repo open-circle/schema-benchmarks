@@ -1,0 +1,71 @@
+diff --git a/dist/factory.d.ts b/dist/factory.d.ts
+index 3f979ad1f4bf98768d8a0d3343e4547dc174a0f5..1832608ba6f508d0d5a92f785d95cadb563800c2 100644
+--- a/dist/factory.d.ts
++++ b/dist/factory.d.ts
+@@ -1,12 +1,21 @@
+ import { Bridge } from "./bridge-types";
+-import { RodString, RodNumber, RodBoolean, RodArray, RodObject, RodType, RodAny, RodNever } from "./builders";
++import { RodString, RodNumber, RodBoolean, RodDate, RodLiteral, RodEnum, RodArray, RodObject, RodTuple, RodRecord, RodMap, RodSet, RodUnion, RodDiscriminatedUnion, RodType, RodAny, RodNever } from "./builders";
+ export declare function createRod(bridge: Bridge): {
+     init: () => Promise<void>;
+     string: () => RodString;
+     number: () => RodNumber;
+     boolean: () => RodBoolean;
++    date: () => RodDate;
++    literal: (value: unknown) => RodLiteral;
++    enum: (values: string[]) => RodEnum<T>;
+     array: (schema: RodType) => RodArray;
+     object: (shape: Record<string, RodType>) => RodObject;
++    tuple: (items: RodType[]) => RodTuple;
++    record: (keySchema: ZodType, valueSchema: RodType) => RodRecord;
++    map: (keySchema: ZodType, valueSchema: RodType) => RodMap;
++    set: (valueSchema: RodType) => RodSet;
++    union: (options: RodType[]) => RodUnion;
++    discriminatedUnion: (discriminant: string, options: Record<string, RodType>) => RodDiscriminatedUnion;
+     any: () => RodAny;
+     never: () => RodNever;
+ };
+diff --git a/dist/factory.js b/dist/factory.js
+index d822180fcde72f9dce7385b46ac23dd10caf3631..55c6ad8938328a46bd569012a60accf220a40c72 100644
+--- a/dist/factory.js
++++ b/dist/factory.js
+@@ -8,8 +8,17 @@ function createRod(bridge) {
+         string: () => new builders_1.RodString(bridge),
+         number: () => new builders_1.RodNumber(bridge),
+         boolean: () => new builders_1.RodBoolean(bridge),
++        date: () => new builders_1.RodDate(bridge),
++        literal: (value) => new builders_1.RodLiteral(value, bridge),
++        enum: (values) => new builders_1.RodEnum(values, bridge),
+         array: (schema) => new builders_1.RodArray(schema, bridge), // RodArray needs ctor update
+         object: (shape) => new builders_1.RodObject(shape, bridge), // RodObject needs ctor update
++        tuple: (items) => new builders_1.RodTuple(items, bridge),
++        record: (keySchema, valueSchema) => new builders_1.RodRecord(keySchema, valueSchema, bridge),
++        map: (keySchema, valueSchema) => new builders_1.RodMap(keySchema, valueSchema, bridge),
++        set: (valueSchema) => new builders_1.RodSet(valueSchema, bridge),
++        union: (options) => new builders_1.RodUnion(options, bridge),
++        discriminatedUnion: (discriminator, options) => new builders_1.RodDiscriminatedUnion(discriminator, options, bridge),
+         any: () => new builders_1.RodAny(bridge),
+         never: () => new builders_1.RodNever(bridge),
+     };
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 8d4403eb873c06cfe9ba57e42431aa2736219add..c0a74cedd7a4a09d2a7e9b390ef5f639d40eab05 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -3,8 +3,17 @@ export declare const rod: {
+     string: () => import("./builders").RodString;
+     number: () => import("./builders").RodNumber;
+     boolean: () => import("./builders").RodBoolean;
++    date: () => import("./builders").RodDate;
++    literal: (value: unknown) => import("./builders").RodLiteral;
++    enum: (values: string[]) => import("./builders").RodEnum;
+     array: (schema: import("./builders").RodType) => import("./builders").RodArray;
+     object: (shape: Record<string, import("./builders").RodType>) => import("./builders").RodObject;
++    tuple: (items: import("./builders").RodType[]) => import("./builders").RodTuple;
++    record: (keySchema: import("./builders").RodType, valueSchema: import("./builders").RodType) => import("./builders").RodRecord;
++    map: (keySchema: import("./builders").RodType, valueSchema: import("./builders").RodType) => import("./builders").RodMap;
++    set: (valueSchema: import("./builders").RodType) => import("./builders").RodSet;
++    union: (options: import("./builders").RodType[]) => import("./builders").RodUnion;
++    discriminatedUnion: (discriminant: string, options: Record<string, import("./builders").RodType>) => import("./builders").RodDiscriminatedUnion;
+     any: () => import("./builders").RodAny;
+     never: () => import("./builders").RodNever;
+ };
