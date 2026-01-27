@@ -29,6 +29,7 @@
     "react-error-boundary": "^6.1.0",
     "react-hot-toast": "^2.6.0",
     "react-md-spinner": "^1.0.0",
+    "react-tweet": "^3.3.0",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "tanstack-meta": "^0.6.1",

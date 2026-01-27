@@ -21,3 +21,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* I suspect some branding guidelines would be unhappy if we used bevels in tweets */
+.react-tweet-theme * {
+  corner-shape: unset;
+}
