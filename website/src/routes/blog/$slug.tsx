@@ -72,9 +72,13 @@ function RouteComponent() {
           }))}
           size="lg"
         />
-        <p suppressHydrationWarning {...getTransitionStyle("date")}>
+        <time
+          dateTime={data.published.toISOString().split("T")[0]}
+          suppressHydrationWarning
+          {...getTransitionStyle("date")}
+        >
           {longDateFormatter.format(data.published)}
-        </p>
+        </time>
       </div>
       <div role="img" className="blog-cover" {...getTransitionStyle("cover")}>
         {typeof data.cover === "string" ? (

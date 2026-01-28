@@ -32,9 +32,13 @@ export function BlogCard({ blog }: BlogCardProps) {
             }))}
             size="sm"
           />
-          <p suppressHydrationWarning {...getTransitionStyle("date")}>
+          <time
+            dateTime={blog.published.toISOString().split("T")[0]}
+            suppressHydrationWarning
+            {...getTransitionStyle("date")}
+          >
             {longDateFormatter.format(blog.published)}
-          </p>
+          </time>
         </div>
         <h2 className="typo-headline5" {...getTransitionStyle("title")}>
           {blog.title}
