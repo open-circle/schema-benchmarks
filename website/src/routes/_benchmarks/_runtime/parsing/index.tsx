@@ -57,7 +57,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/parsing/")({
     )) {
       // wait for these
       downloadPromises.push(
-        queryClient.ensureQueryData(
+        queryClient.prefetchQuery(
           getAllWeeklyDownloads(libraryName, abortController.signal),
         ),
       );

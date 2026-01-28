@@ -61,7 +61,7 @@ export const Route = createFileRoute("/_benchmarks/download/")({
     const downloadPromises = [];
     for (const { libraryName } of results[minifyType]) {
       downloadPromises.push(
-        queryClient.ensureQueryData(
+        queryClient.prefetchQuery(
           getAllWeeklyDownloads(libraryName, abortController.signal),
         ),
       );
