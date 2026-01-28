@@ -41,12 +41,14 @@ export default defineBenchmarks({
         run(data, { schema }) {
           schema.safeParse(data, { mode: "lazy" });
         },
+        note: "lazy",
         snippet: ts`schema.safeParse(data, { mode: "lazy" })`,
       },
       {
         run(data, { schema }) {
           schema.safeParse(data, { mode: "eager" });
         },
+        note: "eager",
         snippet: ts`schema.safeParse(data, { mode: "eager" })`,
       },
     ],
