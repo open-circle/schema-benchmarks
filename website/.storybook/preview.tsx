@@ -51,7 +51,7 @@ const preview: Preview = {
     layout: "centered",
     options: {
       storySort: {
-        order: ["Theme", "Components"],
+        order: ["Theme", "Components", "Features"],
         method: "alphabetical",
       },
     },
