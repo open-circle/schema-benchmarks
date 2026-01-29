@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+import preview from "../../../../.storybook/preview";
 import { MdSymbol } from "../symbol";
 import { Button, ButtonGroup } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Button",
   component: Button,
   argTypes: {
@@ -35,30 +35,27 @@ const meta = {
     icon: <MdSymbol>edit</MdSymbol>,
     children: "Edit",
   },
-} satisfies Meta<typeof Button>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Text: Story = {
+export const Text = meta.story({
   args: {
     variant: "text",
   },
-};
+});
 
-export const Outlined: Story = {
+export const Outlined = meta.story({
   args: {
     variant: "outlined",
   },
-};
+});
 
-export const Contained: Story = {
+export const Contained = meta.story({
   args: {
     variant: "contained",
   },
-};
+});
 
-export const Group: Story = {
+export const Group = meta.story({
   argTypes: {
     variant: {
       options: ["text", "outlined"],
@@ -77,10 +74,10 @@ export const Group: Story = {
   args: {
     variant: "text",
   },
-};
+});
 
-export const VerticalGroup: Story = {
-  ...Group,
+export const VerticalGroup = meta.story({
+  ...Group.input,
   render: ({ variant, ...props }) => (
     <ButtonGroup
       variant={variant === "contained" ? "outlined" : variant}
@@ -92,9 +89,9 @@ export const VerticalGroup: Story = {
       <Button {...props}>Three</Button>
     </ButtonGroup>
   ),
-};
+});
 
-export const RichTooltip = {
+export const RichTooltip = meta.story({
   args: {
     tooltip: {
       subhead: "Hello World",
@@ -102,4 +99,4 @@ export const RichTooltip = {
       actions: <Button>OK</Button>,
     },
   },
-};
+});

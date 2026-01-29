@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../.storybook/preview";
 import "./typography.stories.css";
 
 const styles = [
@@ -17,7 +17,7 @@ const styles = [
   "caption",
 ];
 
-const meta = {
+const meta = preview.meta({
   title: "Theme/Typography",
   render: () => (
     <div className="typography-container">
@@ -28,9 +28,6 @@ const meta = {
       ))}
     </div>
   ),
-} satisfies Meta;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

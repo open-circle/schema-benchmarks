@@ -1,13 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { Avatar, AvatarList } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Avatar",
   component: Avatar,
-  args: {
-    label: "EskiMojo14",
-    size: "md",
-  },
   argTypes: {
     size: {
       control: {
@@ -16,20 +12,21 @@ const meta = {
       options: ["sm", "md", "lg"],
     },
   },
-} satisfies Meta<typeof Avatar>;
+  args: {
+    label: "EskiMojo14",
+    size: "md",
+  } as const,
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const Image: Story = {
+export const Image = meta.story({
   args: {
     src: "https://github.com/EskiMojo14.png",
   },
-};
+});
 
-export const List: Story = {
+export const List = meta.story({
   render: ({ size }) => (
     <AvatarList
       items={[
@@ -40,4 +37,4 @@ export const List: Story = {
       size={size}
     />
   ),
-};
+});

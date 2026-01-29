@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../.storybook/preview";
 import "./animation.stories.css";
 
 const curves = [
@@ -9,7 +9,7 @@ const curves = [
 ] as const;
 type Curve = (typeof curves)[number];
 
-const meta = {
+const meta = preview.type<{ args: { curve: Curve } }>().meta({
   title: "Theme/Animation",
   render: ({ curve }) => (
     <div className="animation-container">
@@ -32,9 +32,6 @@ const meta = {
   args: {
     curve: "standard",
   },
-} satisfies Meta<{ curve: Curve }>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

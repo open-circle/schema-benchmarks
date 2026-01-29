@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { Button } from "../button";
 import { MdSymbol } from "../symbol";
 import { Banner, type BannerProps } from ".";
@@ -13,7 +13,7 @@ function BannerDemo(bannerProps: BannerProps) {
   );
 }
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Banner",
   parameters: {
     layout: "fullscreen",
@@ -32,9 +32,6 @@ const meta = {
     children: "Hello World",
     actions: <Button onClick={() => closeBanner()}>Close</Button>,
   },
-} satisfies Meta<typeof BannerDemo>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

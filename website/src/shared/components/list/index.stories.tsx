@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { MdSymbol } from "../symbol";
 import {
   List,
@@ -17,33 +17,32 @@ function renderSupporting(supporting: Supporting, isTrailing = false) {
   return undefined;
 }
 
-const meta = {
-  title: "Components/List",
-  argTypes: {
-    leading: {
-      control: {
-        type: "inline-radio",
+const meta = preview
+  .type<{ args: { leading: Supporting; trailing: Supporting } }>()
+  .meta({
+    title: "Components/List",
+    argTypes: {
+      leading: {
+        control: {
+          type: "inline-radio",
+        },
+        options: ["icon", "text", "none"],
       },
-      options: ["icon", "text", "none"],
-    },
-    trailing: {
-      control: {
-        type: "inline-radio",
+      trailing: {
+        control: {
+          type: "inline-radio",
+        },
+        options: ["icon", "text", "none"],
       },
-      options: ["icon", "text", "none"],
     },
-  },
-  args: {
-    leading: "icon",
-    trailing: "none",
-  },
-  render: (_props) => <></>,
-} satisfies Meta<{ leading: Supporting; trailing: Supporting }>;
+    args: {
+      leading: "icon",
+      trailing: "none",
+    },
+    render: (_props) => <></>,
+  });
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const SingleLine: Story = {
+export const SingleLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
@@ -59,9 +58,9 @@ export const SingleLine: Story = {
       ))}
     </List>
   ),
-};
+});
 
-export const TwoLine: Story = {
+export const TwoLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
@@ -78,9 +77,9 @@ export const TwoLine: Story = {
       ))}
     </List>
   ),
-};
+});
 
-export const ThreeLine: Story = {
+export const ThreeLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
@@ -97,9 +96,9 @@ export const ThreeLine: Story = {
       ))}
     </List>
   ),
-};
+});
 
-export const Button: Story = {
+export const Button = meta.story({
   render: () => (
     <List className="demo-list">
       <ListItem>
@@ -119,9 +118,9 @@ export const Button: Story = {
       </ListItem>
     </List>
   ),
-};
+});
 
-export const Link: Story = {
+export const Link = meta.story({
   render: () => (
     <List className="demo-list">
       <ListItem>
@@ -140,4 +139,4 @@ export const Link: Story = {
       </ListItem>
     </List>
   ),
-};
+});

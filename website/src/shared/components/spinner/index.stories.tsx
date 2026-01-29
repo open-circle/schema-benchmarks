@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { colors } from "@/shared/styles/colors";
+import preview from "../../../../.storybook/preview";
 import { Spinner } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Spinner",
   component: Spinner,
   argTypes: {
@@ -23,15 +23,12 @@ const meta = {
       ]),
     ),
   },
-} satisfies Meta<typeof Spinner>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const SingleColor: Story = {
+export const SingleColor = meta.story({
   args: {
     singleColor: "primary",
   },
-};
+});

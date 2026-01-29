@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { Button } from "../button";
-import { Dialog, DialogActions } from ".";
+import { type CloseDialog, Dialog, DialogActions } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Dialog",
   component: Dialog,
   argTypes: {
@@ -15,7 +15,7 @@ const meta = {
   },
   args: {
     open: true,
-    children: (close) => (
+    children: (close: CloseDialog) => (
       <>
         <div className="dialog__content">
           <h2 className="dialog__title">Hello world</h2>
@@ -27,10 +27,7 @@ const meta = {
       </>
     ),
     closedby: "any",
-  },
-} satisfies Meta<typeof Dialog>;
+  } as const,
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

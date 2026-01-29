@@ -2,9 +2,9 @@ import * as Plot from "@observablehq/plot";
 import type { DownloadResult } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json";
 import { formatBytes } from "@schema-benchmarks/utils";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMemo } from "react";
 import { color } from "@/shared/data/scale";
+import preview from "../../../../.storybook/preview";
 import { createPlotComponent } from ".";
 
 const PlotComponent = createPlotComponent(function usePlotContainer() {
@@ -49,7 +49,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
   };
 });
 
-const meta = {
+const meta = preview.meta({
   title: "Components/createPlotComponent",
   component: PlotComponent,
   render: () => (
@@ -57,9 +57,6 @@ const meta = {
       <PlotComponent />
     </div>
   ),
-} satisfies Meta<typeof PlotComponent>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

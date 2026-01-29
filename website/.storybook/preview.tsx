@@ -1,4 +1,5 @@
-import type { Decorator, Preview } from "@storybook/react-vite";
+import { definePreview } from "@storybook/react-vite";
+import type { Decorator } from "@storybook/react-vite";
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createMemoryHistory,
@@ -46,7 +47,13 @@ const queryClientDecorator: Decorator = (Story, { parameters }) => {
   );
 };
 
-const preview: Preview = {
+document.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLAnchorElement) {
+    event.preventDefault();
+  }
+});
+
+export default definePreview({
   parameters: {
     layout: "centered",
     options: {
@@ -62,6 +69,7 @@ const preview: Preview = {
       },
     },
   },
+
   argTypes: {
     dir: {
       control: {
@@ -70,16 +78,11 @@ const preview: Preview = {
       options: ["ltr", "rtl"],
     },
   },
+
   args: {
     dir: "ltr",
   },
+
   decorators: [dirDecorator, queryClientDecorator, routerDecorator],
-};
-
-document.addEventListener("click", (event) => {
-  if (event.target instanceof HTMLAnchorElement) {
-    event.preventDefault();
-  }
+  addons: [],
 });
-
-export default preview;

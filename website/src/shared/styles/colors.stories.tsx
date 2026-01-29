@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../.storybook/preview";
 import { colors } from "./colors";
 import "./colors.stories.css";
 
-const meta = {
+const meta = preview.meta({
   title: "Theme/Colors",
   render: () => (
     <div className="colors-container">
@@ -20,9 +20,6 @@ const meta = {
       ))}
     </div>
   ),
-} satisfies Meta;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

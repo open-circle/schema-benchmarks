@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Table/Minimal",
   render: () => (
     <table className="minimal">
@@ -18,9 +18,6 @@ const meta = {
       </tr>
     </table>
   ),
-} satisfies Meta;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

@@ -1,11 +1,9 @@
 import clsx from "clsx";
+import type { ComponentPropsWithRef } from "react";
 
-export interface MdSymbolProps {
+export interface MdSymbolProps extends ComponentPropsWithRef<"span"> {
   children: string;
   flipRtl?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-  "aria-label"?: string;
 
   // provided for convenience, but prefer using CSS vars where possible
   fill?: boolean;
@@ -32,10 +30,12 @@ export function MdSymbol({
   className,
   style,
   "aria-label": ariaLabel,
+  ...props
 }: MdSymbolProps) {
   return (
     // biome-ignore lint/a11y/useAriaPropsSupportedByRole: aria-label works i promise
     <span
+      {...props}
       aria-hidden={!ariaLabel}
       aria-label={ariaLabel}
       className={clsx("md-symbol material-symbols-sharp", className)}
