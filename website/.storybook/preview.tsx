@@ -1,5 +1,5 @@
-import { definePreview } from "@storybook/react-vite";
 import type { Decorator } from "@storybook/react-vite";
+import { definePreview } from "@storybook/react-vite";
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createMemoryHistory,
