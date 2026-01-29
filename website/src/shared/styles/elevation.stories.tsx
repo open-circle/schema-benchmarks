@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../.storybook/preview";
 import clsx from "clsx";
 import "./elevation.stories.css";
 
-const meta = {
+const meta = preview.meta({
   title: "Theme/Elevation",
   render: () => (
     <div className="elevation-container">
@@ -23,15 +23,12 @@ const meta = {
       ))}
     </div>
   ),
-} satisfies Meta;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const Transition: Story = {
+export const Transition = meta.story({
   render: () => (
     <div className="elevation-box elevation-transition">Hover me</div>
   ),
-};
+});

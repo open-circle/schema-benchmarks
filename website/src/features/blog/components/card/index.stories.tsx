@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../../.storybook/preview";
 import { BlogCard, type BlogCardProps } from ".";
 import "./index.css";
 
@@ -15,22 +15,19 @@ const blog: BlogCardProps["blog"] = {
   },
 };
 
-const meta = {
+const meta = preview.meta({
   title: "Features/Blog/Card",
   component: BlogCard,
   args: { blog },
-} satisfies Meta<typeof BlogCard>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const TextCover: Story = {
+export const TextCover = meta.story({
   args: {
     blog: {
       ...blog,
       cover: "Schema Benchmarks",
     },
   },
-};
+});

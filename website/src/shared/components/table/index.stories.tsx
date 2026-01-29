@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { Button } from "../button";
 import { Radio } from "../radio";
 import { MdSymbol } from "../symbol";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Table",
   render({ inCard }) {
     const baseTable = (
@@ -45,9 +45,6 @@ const meta = {
   args: {
     inCard: false,
   },
-} satisfies Meta<{ inCard: boolean }>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

@@ -1,18 +1,15 @@
 import benchResults from "@schema-benchmarks/bench/bench.json";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../../.storybook/preview";
 import { BenchCard } from ".";
 import "./index.css";
 import { Bar } from "@/shared/components/table/bar";
 
-const meta = {
+const meta = preview.meta({
   title: "Features/Benchmark/Card",
   component: BenchCard,
-} satisfies Meta<typeof BenchCard>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Initialization: Story = {
+export const Initialization = meta.story({
   args: {
     // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.initialization[0]!,
@@ -21,9 +18,9 @@ export const Initialization: Story = {
       { lowerBetter: true },
     ),
   },
-};
+});
 
-export const Validation: Story = {
+export const Validation = meta.story({
   args: {
     // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.validation.valid[0]!,
@@ -32,9 +29,9 @@ export const Validation: Story = {
       { lowerBetter: true },
     ),
   },
-};
+});
 
-export const Parsing: Story = {
+export const Parsing = meta.story({
   args: {
     // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.parsing.valid[0]!,
@@ -43,4 +40,4 @@ export const Parsing: Story = {
       { lowerBetter: true },
     ),
   },
-};
+});

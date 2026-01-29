@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
 import { TextField } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Text Field",
   component: TextField,
   argTypes: {
@@ -19,38 +19,35 @@ const meta = {
     placeholder: "Placeholder",
     helpText: "Some help text",
   },
-} satisfies Meta<typeof TextField>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const Errored: Story = {
+export const Errored = meta.story({
   args: {
     errorMessage: "Field is required",
   },
-};
+});
 
-export const Disabled: Story = {
+export const Disabled = meta.story({
   args: {
     disabled: true,
   },
-};
+});
 
-export const StartIcon: Story = {
+export const StartIcon = meta.story({
   args: {
     startIcon: <MdSymbol>speed</MdSymbol>,
   },
-};
+});
 
-export const EndIcon: Story = {
+export const EndIcon = meta.story({
   args: {
     endIcon: <MdSymbol>speed</MdSymbol>,
   },
-};
+});
 
-export const EndButton: Story = {
+export const EndButton = meta.story({
   args: {
     endIcon: (
       <ToggleButton tooltip="Clear">
@@ -59,18 +56,18 @@ export const EndButton: Story = {
     ),
     endIconIsButton: true,
   },
-};
+});
 
-export const Prefix: Story = {
+export const Prefix = meta.story({
   args: {
     type: "number",
     prefix: "$",
   },
-};
+});
 
-export const Suffix: Story = {
+export const Suffix = meta.story({
   args: {
     type: "number",
     suffix: "/ 100",
   },
-};
+});

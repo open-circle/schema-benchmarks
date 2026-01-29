@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { MdSymbol } from "../symbol";
 import { Scaler } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Scaler",
   component: Scaler,
   args: {
@@ -11,9 +11,6 @@ const meta = {
     children: "20",
     symbolLabel: "Sad",
   },
-} satisfies Meta<typeof Scaler>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

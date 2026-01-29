@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import preview from "../../../../.storybook/preview";
 import { Radio } from ".";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Radio",
   render: (args) => (
     <>
@@ -13,9 +13,6 @@ const meta = {
   args: {
     disabled: false,
   },
-} satisfies Meta<typeof Radio>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

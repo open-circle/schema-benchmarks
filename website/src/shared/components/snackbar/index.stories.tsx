@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { toast } from "react-hot-toast";
+import preview from "../../../../.storybook/preview";
 import { Button } from "../button";
 import { Snackbars } from ".";
 
@@ -47,12 +47,9 @@ function SnackbarsDemo() {
   );
 }
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Snackbar",
   component: SnackbarsDemo,
-} satisfies Meta<typeof Snackbars>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();

@@ -1,7 +1,7 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
 import { fn } from "storybook/test";
+import preview from "../../../../.storybook/preview";
 import { MdSymbol } from "../symbol";
 import { ButtonGroup } from ".";
 import { ToggleButton } from "./toggle";
@@ -22,7 +22,7 @@ function ToggleButtonDemo(
   );
 }
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Button/Toggle",
   component: ToggleButton,
   render: (args) => <ToggleButtonDemo {...args} />,
@@ -42,12 +42,9 @@ const meta = {
     tooltip: "Favorite",
     onClick: fn(),
   },
-} satisfies Meta<typeof ToggleButton>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();
 
 function ToggleButtonGroupDemo({
   activeColor,
@@ -82,7 +79,7 @@ function ToggleButtonGroupDemo({
   );
 }
 
-export const Group: Story = {
+export const Group = meta.story({
   argTypes: {
     children: {
       table: {
@@ -106,9 +103,9 @@ export const Group: Story = {
     },
   },
   render: () => <ToggleButtonGroupDemo />,
-};
+});
 
-export const VerticalGroup: Story = {
-  ...Group,
+export const VerticalGroup = meta.story({
+  ...Group.input,
   render: () => <ToggleButtonGroupDemo orientation="vertical" />,
-};
+});

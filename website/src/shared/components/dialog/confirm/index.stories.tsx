@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { Button } from "@/shared/components/button";
+import preview from "../../../../../.storybook/preview";
 import { ConfirmDialog } from ".";
 import { confirm } from "./queue";
 
-const meta = {
+const meta = preview.meta({
   title: "Components/Dialog/Alert/Confirm",
   render: ({ onConfirm, onCancel, onFinally }) => (
     <>
@@ -30,13 +30,6 @@ const meta = {
     onCancel: fn(),
     onFinally: fn(),
   },
-} satisfies Meta<{
-  onConfirm: () => void;
-  onCancel: () => void;
-  onFinally: () => void;
-}>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+export const Default = meta.story();
