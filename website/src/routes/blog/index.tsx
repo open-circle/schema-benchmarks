@@ -3,8 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { EmptyState } from "#/shared/components/empty-state";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
+import { preloadImages } from "#/shared/lib/fetch";
 import { BlogCard } from "./-components/card";
-import { getBlog, getBlogs, preloadAvatars } from "./-query";
+import { getAvatarUrl, getBlog, getBlogs } from "./-query";
 
 export const Route = createFileRoute("/blog/")({
   component: RouteComponent,
@@ -12,12 +13,13 @@ export const Route = createFileRoute("/blog/")({
     const blogs = await queryClient.ensureQueryData(
       getBlogs(abortController.signal),
     );
-    const authors = new Set<string>();
+    const images = new Set<string>();
     for (const blog of blogs) {
       queryClient.setQueryData(getBlog(blog.slug).queryKey, blog);
-      for (const author of blog.authors) authors.add(author);
+      for (const author of blog.authors) images.add(getAvatarUrl(author));
+      if (typeof blog.cover !== "string") images.add(blog.cover.src);
     }
-    await preloadAvatars(Array.from(authors));
+    await preloadImages(images);
   },
   head: () =>
     generateMetadata({

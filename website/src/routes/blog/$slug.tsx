@@ -4,7 +4,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
 import { AvatarList } from "#/shared/components/avatar";
 import { generateMetadata } from "#/shared/data/meta";
-import { getAvatarUrl, getBlog, preloadAvatars } from "./-query";
+import { preloadImages } from "#/shared/lib/fetch";
+import { getAvatarUrl, getBlog } from "./-query";
 
 const importMdx = (filePath: string) =>
   queryOptions({
@@ -23,8 +24,10 @@ export const Route = createFileRoute("/blog/$slug")({
     const data = await queryClient.ensureQueryData(
       getBlog(slug, abortController.signal),
     );
+    const images = data.authors.map(getAvatarUrl);
+    if (typeof data.cover !== "string") images.push(data.cover.src);
     await Promise.all([
-      preloadAvatars(data.authors),
+      preloadImages(images),
       queryClient.prefetchQuery(importMdx(data._meta.filePath)),
     ]);
     return { crumb: data.title, ...data };
