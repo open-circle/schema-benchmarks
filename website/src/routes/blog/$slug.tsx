@@ -10,9 +10,7 @@ const importMdx = (filePath: string) =>
   queryOptions({
     queryKey: ["mdx", filePath],
     queryFn: (): Promise<MDXModule> =>
-      import(
-        `../../features/blog/content/${filePath.replace(/\.mdx$/, "")}.mdx`
-      ),
+      import(`./-content/${filePath.replace(/\.mdx$/, "")}.mdx`),
   });
 
 export const Route = createFileRoute("/blog/$slug")({

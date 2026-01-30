@@ -4,7 +4,7 @@ import * as v from "valibot";
 
 const blog = defineCollection({
   name: "blog",
-  directory: "src/features/blog/content",
+  directory: "src/routes/blog/-content",
   include: "*.mdx",
   schema: v.object({
     cover: v.union([
