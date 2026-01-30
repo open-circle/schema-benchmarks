@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { BlogCard } from "#/features/blog/components/card";
-import { getBlog, getBlogs, preloadAvatars } from "#/features/blog/query";
 import { EmptyState } from "#/shared/components/empty-state";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
+import { BlogCard } from "./-components/card";
+import { getBlog, getBlogs, preloadAvatars } from "./-query";
 
 export const Route = createFileRoute("/blog/")({
   component: RouteComponent,

@@ -16,9 +16,9 @@ import {
   dataTypeProps,
   errorTypeProps,
   optimizeTypeProps,
-} from "./src/features/benchmark/constants";
-import { minifyTypeProps } from "./src/features/download/constants";
-import { speedPresets } from "./src/features/download/speed";
+} from "./src/routes/_benchmarks/_runtime/-constants";
+import { minifyTypeProps } from "./src/routes/_benchmarks/download/-constants";
+import { speedPresets } from "./src/routes/_benchmarks/download/-speed";
 import { sidebarGroups } from "./src/shared/components/sidebar/groups";
 import * as scales from "./src/shared/data/scale";
 import materialSymbols from "./vite/symbols";

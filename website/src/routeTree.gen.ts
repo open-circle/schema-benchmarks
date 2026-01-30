@@ -10,24 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BlogRouteRouteImport } from './routes/blog/route'
-import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
-import { Route as BenchmarksValidationIndexRouteImport } from './routes/_benchmarks/validation/index'
-import { Route as BenchmarksParsingIndexRouteImport } from './routes/_benchmarks/parsing/index'
-import { Route as BenchmarksInitializationIndexRouteImport } from './routes/_benchmarks/initialization/index'
+import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
+import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
+import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_benchmarks/_runtime/parsing/index'
+import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
 
 const BlogRouteRoute = BlogRouteRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DownloadIndexRoute = DownloadIndexRouteImport.update({
-  id: '/download/',
-  path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -45,23 +40,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRouteRoute,
 } as any)
-const BenchmarksValidationIndexRoute =
-  BenchmarksValidationIndexRouteImport.update({
-    id: '/_benchmarks/validation/',
-    path: '/validation/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const BenchmarksParsingIndexRoute = BenchmarksParsingIndexRouteImport.update({
-  id: '/_benchmarks/parsing/',
-  path: '/parsing/',
+const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
+  id: '/_benchmarks/download/',
+  path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BenchmarksInitializationIndexRoute =
-  BenchmarksInitializationIndexRouteImport.update({
-    id: '/_benchmarks/initialization/',
-    path: '/initialization/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
   id: '/repo/raw/$',
   path: '/repo/raw/$',
@@ -72,29 +55,47 @@ const ApiTweetIdRoute = ApiTweetIdRouteImport.update({
   path: '/api/tweet/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarksRuntimeValidationIndexRoute =
+  BenchmarksRuntimeValidationIndexRouteImport.update({
+    id: '/_benchmarks/_runtime/validation/',
+    path: '/validation/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BenchmarksRuntimeParsingIndexRoute =
+  BenchmarksRuntimeParsingIndexRouteImport.update({
+    id: '/_benchmarks/_runtime/parsing/',
+    path: '/parsing/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BenchmarksRuntimeInitializationIndexRoute =
+  BenchmarksRuntimeInitializationIndexRouteImport.update({
+    id: '/_benchmarks/_runtime/initialization/',
+    path: '/initialization/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/download/': typeof DownloadIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
-  '/initialization/': typeof BenchmarksInitializationIndexRoute
-  '/parsing/': typeof BenchmarksParsingIndexRoute
-  '/validation/': typeof BenchmarksValidationIndexRoute
+  '/download/': typeof BenchmarksDownloadIndexRoute
+  '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
+  '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
+  '/validation/': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/': typeof HomeIndexRoute
   '/blog': typeof BlogIndexRoute
-  '/download': typeof DownloadIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
-  '/initialization': typeof BenchmarksInitializationIndexRoute
-  '/parsing': typeof BenchmarksParsingIndexRoute
-  '/validation': typeof BenchmarksValidationIndexRoute
+  '/download': typeof BenchmarksDownloadIndexRoute
+  '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
+  '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
+  '/validation': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,12 +103,12 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/download/': typeof DownloadIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
-  '/_benchmarks/initialization/': typeof BenchmarksInitializationIndexRoute
-  '/_benchmarks/parsing/': typeof BenchmarksParsingIndexRoute
-  '/_benchmarks/validation/': typeof BenchmarksValidationIndexRoute
+  '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
+  '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
+  '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
+  '/_benchmarks/_runtime/validation/': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,9 +117,9 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/'
     | '/blog/'
-    | '/download/'
     | '/api/tweet/$id'
     | '/repo/raw/$'
+    | '/download/'
     | '/initialization/'
     | '/parsing/'
     | '/validation/'
@@ -127,9 +128,9 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/'
     | '/blog'
-    | '/download'
     | '/api/tweet/$id'
     | '/repo/raw/$'
+    | '/download'
     | '/initialization'
     | '/parsing'
     | '/validation'
@@ -139,23 +140,23 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/_home/'
     | '/blog/'
-    | '/download/'
     | '/api/tweet/$id'
     | '/repo/raw/$'
-    | '/_benchmarks/initialization/'
-    | '/_benchmarks/parsing/'
-    | '/_benchmarks/validation/'
+    | '/_benchmarks/download/'
+    | '/_benchmarks/_runtime/initialization/'
+    | '/_benchmarks/_runtime/parsing/'
+    | '/_benchmarks/_runtime/validation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   BlogRouteRoute: typeof BlogRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
-  DownloadIndexRoute: typeof DownloadIndexRoute
   ApiTweetIdRoute: typeof ApiTweetIdRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
-  BenchmarksInitializationIndexRoute: typeof BenchmarksInitializationIndexRoute
-  BenchmarksParsingIndexRoute: typeof BenchmarksParsingIndexRoute
-  BenchmarksValidationIndexRoute: typeof BenchmarksValidationIndexRoute
+  BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
+  BenchmarksRuntimeInitializationIndexRoute: typeof BenchmarksRuntimeInitializationIndexRoute
+  BenchmarksRuntimeParsingIndexRoute: typeof BenchmarksRuntimeParsingIndexRoute
+  BenchmarksRuntimeValidationIndexRoute: typeof BenchmarksRuntimeValidationIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,13 +166,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/download/': {
-      id: '/download/'
-      path: '/download'
-      fullPath: '/download/'
-      preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -195,25 +189,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRouteRoute
     }
-    '/_benchmarks/validation/': {
-      id: '/_benchmarks/validation/'
-      path: '/validation'
-      fullPath: '/validation/'
-      preLoaderRoute: typeof BenchmarksValidationIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_benchmarks/parsing/': {
-      id: '/_benchmarks/parsing/'
-      path: '/parsing'
-      fullPath: '/parsing/'
-      preLoaderRoute: typeof BenchmarksParsingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_benchmarks/initialization/': {
-      id: '/_benchmarks/initialization/'
-      path: '/initialization'
-      fullPath: '/initialization/'
-      preLoaderRoute: typeof BenchmarksInitializationIndexRouteImport
+    '/_benchmarks/download/': {
+      id: '/_benchmarks/download/'
+      path: '/download'
+      fullPath: '/download/'
+      preLoaderRoute: typeof BenchmarksDownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/repo/raw/$': {
@@ -228,6 +208,27 @@ declare module '@tanstack/react-router' {
       path: '/api/tweet/$id'
       fullPath: '/api/tweet/$id'
       preLoaderRoute: typeof ApiTweetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/_runtime/validation/': {
+      id: '/_benchmarks/_runtime/validation/'
+      path: '/validation'
+      fullPath: '/validation/'
+      preLoaderRoute: typeof BenchmarksRuntimeValidationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/_runtime/parsing/': {
+      id: '/_benchmarks/_runtime/parsing/'
+      path: '/parsing'
+      fullPath: '/parsing/'
+      preLoaderRoute: typeof BenchmarksRuntimeParsingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/_runtime/initialization/': {
+      id: '/_benchmarks/_runtime/initialization/'
+      path: '/initialization'
+      fullPath: '/initialization/'
+      preLoaderRoute: typeof BenchmarksRuntimeInitializationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -250,12 +251,13 @@ const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   BlogRouteRoute: BlogRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
-  DownloadIndexRoute: DownloadIndexRoute,
   ApiTweetIdRoute: ApiTweetIdRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,
-  BenchmarksInitializationIndexRoute: BenchmarksInitializationIndexRoute,
-  BenchmarksParsingIndexRoute: BenchmarksParsingIndexRoute,
-  BenchmarksValidationIndexRoute: BenchmarksValidationIndexRoute,
+  BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
+  BenchmarksRuntimeInitializationIndexRoute:
+    BenchmarksRuntimeInitializationIndexRoute,
+  BenchmarksRuntimeParsingIndexRoute: BenchmarksRuntimeParsingIndexRoute,
+  BenchmarksRuntimeValidationIndexRoute: BenchmarksRuntimeValidationIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
