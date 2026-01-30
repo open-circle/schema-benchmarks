@@ -1,5 +1,5 @@
 import { useState } from "react";
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { MdSymbol } from "../symbol";
 import { Chip, ChipCollection } from ".";
 

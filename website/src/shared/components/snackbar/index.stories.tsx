@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { Button } from "../button";
 import { Snackbars } from ".";
 
