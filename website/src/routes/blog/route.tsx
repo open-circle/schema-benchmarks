@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import blogStyles from "@/features/blog/styles.css?url";
+import blogStyles from "#/features/blog/styles.css?url";
 
 export const Route = createFileRoute("/blog")({
   component: RouteComponent,

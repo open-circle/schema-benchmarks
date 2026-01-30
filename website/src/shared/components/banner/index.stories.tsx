@@ -1,4 +1,4 @@
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { Button } from "../button";
 import { MdSymbol } from "../symbol";
 import { Banner, type BannerProps } from ".";

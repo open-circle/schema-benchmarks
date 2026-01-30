@@ -78,7 +78,7 @@
                       "it",
                       "test"
                     ],
-                    "message": "Use `import { it } from \"@test/browser/fixtures\"` instead."
+                    "message": "Use `import { it } from \"#test/browser/fixtures\"` instead."
                   }
                 }
               }

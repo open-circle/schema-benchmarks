@@ -1,7 +1,7 @@
 import { unsafeEntries, unsafeFromEntries } from "@schema-benchmarks/utils";
-import { it } from "@test/browser/fixtures";
 import { describe, expect } from "vitest";
 import { page } from "vitest/browser";
+import { it } from "#test/browser/fixtures";
 import { type OptionLabel, PageFilterChips } from "./chips";
 
 const options = ["foo", "bar", "baz"] as const;

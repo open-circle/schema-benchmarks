@@ -1,4 +1,4 @@
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 
 const meta = preview.meta({
   title: "Components/Table/Minimal",

@@ -1,8 +1,8 @@
 import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
-import { getAvatarUrl } from "@/features/blog/query";
-import { AvatarList } from "@/shared/components/avatar";
+import { getAvatarUrl } from "#/features/blog/query";
+import { AvatarList } from "#/shared/components/avatar";
 
 export interface BlogCardProps {
   blog: Pick<

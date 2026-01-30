@@ -1,4 +1,4 @@
-import preview from "../../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { BlogCard, type BlogCardProps } from ".";
 import "./index.css";
 

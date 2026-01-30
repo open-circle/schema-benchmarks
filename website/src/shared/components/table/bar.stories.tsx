@@ -1,5 +1,5 @@
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { Bar } from "./bar";
 
 const barScale = new Map<boolean, ReturnType<typeof Bar.getScale>>();

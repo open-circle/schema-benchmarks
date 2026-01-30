@@ -1,6 +1,6 @@
-import { it } from "@test/browser/fixtures";
 import { beforeEach, describe, expect } from "vitest";
 import { page } from "vitest/browser";
+import { it } from "#test/browser/fixtures";
 import { ConfirmDialog } from ".";
 import { confirm, confirmQueue } from "./queue";
 

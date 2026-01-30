@@ -15,8 +15,9 @@
     "allowArbitraryExtensions": true,
     
     "paths": {
-      "@/*": ["./src/*"],
-      "@test/*": ["./test/*"],
+      "#/*": ["./src/*"],
+      "#test/*": ["./test/*"],
+      "#storybook/*": ["./.storybook/*"],
       "content-collections": ["./.content-collections/generated"]
     }
   }

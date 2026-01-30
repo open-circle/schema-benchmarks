@@ -1,5 +1,5 @@
 import { castDraft } from "mutative";
-import { ExternalStore } from "@/shared/hooks/store";
+import { ExternalStore } from "#/shared/hooks/store";
 import type { ConfirmDialogProps } from ".";
 
 interface InternalDescription {

@@ -7,7 +7,7 @@ import {
 } from "react";
 import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
-import { useFocusGroup } from "@/shared/hooks/use-focus-group";
+import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
 export type CloseDialog = (returnValue?: string) => void;
 
