@@ -1,5 +1,5 @@
-import preview from "../../../.storybook/preview";
 import clsx from "clsx";
+import preview from "#storybook/preview";
 import "./elevation.stories.css";
 
 const meta = preview.meta({

@@ -1,4 +1,4 @@
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { MdSymbol, type MdSymbolProps } from ".";
 
 const meta = preview.type<{ args: MdSymbolProps }>().meta({

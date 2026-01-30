@@ -1,4 +1,4 @@
-import preview from "../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { colors } from "./colors";
 import "./colors.stories.css";
 

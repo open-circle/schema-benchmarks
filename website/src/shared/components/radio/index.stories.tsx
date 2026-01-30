@@ -1,4 +1,4 @@
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { Radio } from ".";
 
 const meta = preview.meta({
