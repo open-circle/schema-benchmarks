@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
-import { getRaw } from "@/features/repo/query";
-import { CodeBlock } from "@/shared/components/code";
-import { generateMetadata } from "@/shared/data/meta";
-import { getHighlightedCode } from "@/shared/lib/highlight";
+import { getRaw } from "#/features/repo/query";
+import { CodeBlock } from "#/shared/components/code";
+import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 
 const knownLanguages = new Set(["ts", "tsx", "js", "jsx", "json"]);
 

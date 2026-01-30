@@ -1,7 +1,7 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import { type ComponentProps, useState } from "react";
 import { fn } from "storybook/test";
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { MdSymbol } from "../symbol";
 import { ButtonGroup } from ".";
 import { ToggleButton } from "./toggle";

@@ -1,6 +1,6 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { upfetch } from "@/shared/lib/fetch";
+import { upfetch } from "#/shared/lib/fetch";
 
 interface RawSpecifier {
   repo?: string;

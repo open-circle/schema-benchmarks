@@ -2,7 +2,7 @@ import type { Autocomplete, DistributiveOmit } from "@schema-benchmarks/utils";
 import type { ComponentPropsWithoutRef } from "react";
 import bem from "react-bem-helper";
 import _MDSpinner from "react-md-spinner";
-import type { Color } from "@/shared/styles/colors";
+import type { Color } from "#/shared/styles/colors";
 
 // nasty - CJS build doesn't seem to work properly
 const MDSpinner = (

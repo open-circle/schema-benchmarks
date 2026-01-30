@@ -1,5 +1,5 @@
 import { hasAtLeast } from "@schema-benchmarks/utils";
-import { ExternalStore } from "@/shared/hooks/store";
+import { ExternalStore } from "#/shared/hooks/store";
 import type { BannerProps } from ".";
 
 interface BannerWithId extends BannerProps {

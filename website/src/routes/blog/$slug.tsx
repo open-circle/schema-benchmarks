@@ -2,9 +2,9 @@ import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
-import { getAvatarUrl, getBlog, preloadAvatars } from "@/features/blog/query";
-import { AvatarList } from "@/shared/components/avatar";
-import { generateMetadata } from "@/shared/data/meta";
+import { getAvatarUrl, getBlog, preloadAvatars } from "#/features/blog/query";
+import { AvatarList } from "#/shared/components/avatar";
+import { generateMetadata } from "#/shared/data/meta";
 
 const importMdx = (filePath: string) =>
   queryOptions({

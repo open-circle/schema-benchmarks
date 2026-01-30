@@ -19,7 +19,7 @@ import {
   useState,
 } from "react";
 import bem from "react-bem-helper";
-import { useIdDefault } from "@/shared/hooks/use-id-default";
+import { useIdDefault } from "#/shared/hooks/use-id-default";
 import { ButtonGroup } from "../button";
 
 const cls = bem("tooltip");

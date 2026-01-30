@@ -2,7 +2,7 @@ import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
-import { BenchResults } from "@/features/benchmark/components/results";
+import { BenchResults } from "#/features/benchmark/components/results";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -10,14 +10,14 @@ import {
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
   optionalOptimizeTypeSchema,
-} from "@/features/benchmark/constants";
-import { getBenchResults } from "@/features/benchmark/query";
-import benchmarkStyles from "@/features/benchmark/styles.css?url";
-import { getAllWeeklyDownloads } from "@/features/popularity/query";
-import { PageFilters } from "@/shared/components/page-filter";
-import { PageFilterChips } from "@/shared/components/page-filter/chips";
-import { generateMetadata } from "@/shared/data/meta";
-import { getHighlightedCode } from "@/shared/lib/highlight";
+} from "#/features/benchmark/constants";
+import { getBenchResults } from "#/features/benchmark/query";
+import benchmarkStyles from "#/features/benchmark/styles.css?url";
+import { getAllWeeklyDownloads } from "#/features/popularity/query";
+import { PageFilters } from "#/shared/components/page-filter";
+import { PageFilterChips } from "#/shared/components/page-filter/chips";
+import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({

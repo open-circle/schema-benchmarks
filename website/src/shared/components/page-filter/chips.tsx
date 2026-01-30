@@ -3,7 +3,7 @@ import type {
   ValidateLinkOptions,
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useIdDefault } from "@/shared/hooks/use-id-default";
+import { useIdDefault } from "#/shared/hooks/use-id-default";
 import { ChipCollection, LinkChip } from "../chip";
 import { MdSymbol } from "../symbol";
 import type { PageFilterProps } from ".";

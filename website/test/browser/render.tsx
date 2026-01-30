@@ -11,8 +11,8 @@ import {
   type RenderResult,
   render,
 } from "vitest-browser-react";
-import { getRouter } from "@/router";
-import { makeQueryClient } from "@/shared/data/query";
+import { getRouter } from "#/router";
+import { makeQueryClient } from "#/shared/data/query";
 
 export interface RenderWithProviderOptions extends RenderOptions {
   queryClient?: QueryClient;

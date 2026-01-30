@@ -63,8 +63,9 @@ const config = defineConfig({
   ],
   resolve: {
     alias: {
-      "@test": "/test",
-      "@": "/src",
+      "#test/": "/test/",
+      "#storybook/": "/.storybook/",
+      "#/": "/src/",
     },
   },
   test: {

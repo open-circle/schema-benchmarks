@@ -1,4 +1,4 @@
-import { colors } from "@/shared/styles/colors";
+import { colors } from "#/shared/styles/colors";
 import preview from "../../../../.storybook/preview";
 import { Spinner } from ".";
 

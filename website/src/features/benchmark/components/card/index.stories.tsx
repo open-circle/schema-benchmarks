@@ -1,8 +1,8 @@
 import benchResults from "@schema-benchmarks/bench/bench.json";
-import preview from "../../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { BenchCard } from ".";
 import "./index.css";
-import { Bar } from "@/shared/components/table/bar";
+import { Bar } from "#/shared/components/table/bar";
 
 const meta = preview.meta({
   title: "Features/Benchmark/Card",

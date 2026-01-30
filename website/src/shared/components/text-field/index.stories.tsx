@@ -1,4 +1,4 @@
-import preview from "../../../../.storybook/preview";
+import preview from "#storybook/preview";
 import { ToggleButton } from "../button/toggle";
 import { MdSymbol } from "../symbol";
 import { TextField } from ".";

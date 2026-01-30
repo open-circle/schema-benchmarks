@@ -1,6 +1,6 @@
-import { it } from "@test/browser/fixtures";
 import { describe, expect } from "vitest";
 import { page, userEvent } from "vitest/browser";
+import { it } from "#test/browser/fixtures";
 import { useFocusGroup } from "./use-focus-group";
 
 function TestComponent({

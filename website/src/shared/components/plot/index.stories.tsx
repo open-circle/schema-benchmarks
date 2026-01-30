@@ -3,8 +3,8 @@ import type { DownloadResult } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json";
 import { formatBytes } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
-import { color } from "@/shared/data/scale";
-import preview from "../../../../.storybook/preview";
+import { color } from "#/shared/data/scale";
+import preview from "#storybook/preview";
 import { createPlotComponent } from ".";
 
 const PlotComponent = createPlotComponent(function usePlotContainer() {
