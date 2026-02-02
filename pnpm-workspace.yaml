@@ -5,16 +5,16 @@ packages:
   - schemas
 
 catalog:
-  '@types/node': ^25.0.10
-  '@types/react': ^19.2.9
+  '@types/node': ^25.2.0
+  '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
   '@typescript/native-preview': 7.0.0-dev.20260126.1
   '@vitest/browser-playwright': ^4.0.18
   '@vitest/expect': ^4.0.18
   '@vitest/pretty-format': ^4.0.18
-  playwright: ^1.58.0
-  react: ^19.2.3
-  react-dom: ^19.2.3
+  playwright: ^1.58.1
+  react: ^19.2.4
+  react-dom: ^19.2.4
   valibot: ^1.2.0
   vite: ^7.3.1
   vitest: ^4.0.18

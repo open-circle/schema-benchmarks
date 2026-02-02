@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@formatjs/intl-durationformat": "^0.10.0",
-    "@formatjs/intl-numberformat": "^9.2.1"
+    "@formatjs/intl-durationformat": "^0.10.1",
+    "@formatjs/intl-numberformat": "^9.2.2"
   },
   "devDependencies": {
     "@types/react": "catalog:",
