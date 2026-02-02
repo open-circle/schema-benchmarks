@@ -1,4 +1,4 @@
-//#region rolldown:runtime
+//#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -26,7 +26,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 
 //#endregion
-//#region ../node_modules/.pnpm/typia@11.0.3_@types+node@25.2.0_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
+//#region ../node_modules/.pnpm/typia@11.0.3_@types+node@24.10.9_typescript@5.9.3/node_modules/typia/lib/internal/_validateReport.js
 var require__validateReport = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._validateReport = void 0;

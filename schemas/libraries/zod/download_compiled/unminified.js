@@ -1,6 +1,6 @@
-//#region rolldown:runtime
+//#region \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
-var __exportAll = (all, symbols) => {
+var __exportAll = (all, no_symbols) => {
 	let target = {};
 	for (var name in all) {
 		__defProp(target, name, {
@@ -8,7 +8,7 @@ var __exportAll = (all, symbols) => {
 			enumerable: true
 		});
 	}
-	if (symbols) {
+	if (!no_symbols) {
 		__defProp(target, Symbol.toStringTag, { value: "Module" });
 	}
 	return target;
@@ -10607,7 +10607,7 @@ var JSONSchemaGenerator = class {
 
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema.js
-var json_schema_exports = {};
+var json_schema_exports = /* @__PURE__ */ __exportAll({});
 
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/index.js
