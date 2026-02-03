@@ -50,7 +50,8 @@ function BaseSidebar({
       />
       <aside {...cls({ modifiers: { open } })}>
         <div {...cls("logo")}>
-          <img src="/logo.svg" alt="Logo" />
+          <img {...cls("logo-dark")} src="/logo_dark.svg" alt="Logo" />
+          <img {...cls("logo-light")} src="/logo_light.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
           <ToggleButton
             {...cls({

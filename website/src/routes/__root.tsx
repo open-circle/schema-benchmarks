@@ -35,6 +35,32 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         viewport: {
           width: "device-width",
           initialScale: 1,
+          themeColor: [
+            { color: "#eff1f3", media: "(prefers-color-scheme: light)" },
+            { color: "#21222c", media: "(prefers-color-scheme: dark)" },
+          ],
+        },
+        icons: {
+          icon: [
+            {
+              url: "/favicon_dark.ico",
+              media: "(prefers-color-scheme: dark)",
+            },
+            {
+              url: "/favicon_light.ico",
+              media: "(prefers-color-scheme: light)",
+            },
+            {
+              url: "/icon_dark.svg",
+              media: "(prefers-color-scheme: dark)",
+              type: "image/svg+xml",
+            },
+            {
+              url: "/icon_light.svg",
+              media: "(prefers-color-scheme: light)",
+              type: "image/svg+xml",
+            },
+          ],
         },
       }),
       ({ links }) => {

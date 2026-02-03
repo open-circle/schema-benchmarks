@@ -30,7 +30,7 @@ type Image = OGImage & TwitterImage;
 export const generateMetadata = ({
   title,
   description,
-  image = { url: "/logo512.png", alt: baseTitle },
+  image = { url: "/logo512_dark.png", alt: baseTitle },
   links,
   ...meta
 }: PickNonNullable<GeneratorInputMetadata, "description"> & {
