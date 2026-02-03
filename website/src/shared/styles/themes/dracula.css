@@ -20,46 +20,44 @@ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascr
 
 /* Scrollbars */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --black: #21222c;
-    --black-secondary: #414558;
-    --black-ternary: #a7abbe;
-    --grey: #414558;
-    --grey-secondary: #626784;
-    --white: #f8f8f2;
-    --white-secondary: #ffffff;
+%darkTheme {
+  --black: #21222c;
+  --black-secondary: #414558;
+  --black-ternary: #a7abbe;
+  --grey: #414558;
+  --grey-secondary: #626784;
+  --white: #f8f8f2;
+  --white-secondary: #ffffff;
 
-    --cyan: #80ffea;
-    --cyan-secondary: #ccfff6;
-    --cyan-ternary: #8be9fd;
-    --green: #8aff80;
-    --green-secondary: #d0ffcc;
-    --green-ternary: #50fa7b;
-    --orange: #ffca80;
-    --orange-secondary: #ffeacc;
-    --orange-ternary: #ffb86c;
-    --pink: #ff80bf;
-    --pink-secondary: #ffcce6;
-    --pink-ternary: #ff79c6;
-    --purple: #9580ff;
-    --purple-secondary: #d4ccff;
-    --purple-ternary: #bd93f9;
-    --red: #ff9580;
-    --red-secondary: #ffd4cc;
-    --red-ternary: #ff5555;
-    --yellow: #ffff80;
-    --yellow-secondary: #ffffcc;
-    --yellow-ternary: #f1fa8c;
+  --cyan: #80ffea;
+  --cyan-secondary: #ccfff6;
+  --cyan-ternary: #8be9fd;
+  --green: #8aff80;
+  --green-secondary: #d0ffcc;
+  --green-ternary: #50fa7b;
+  --orange: #ffca80;
+  --orange-secondary: #ffeacc;
+  --orange-ternary: #ffb86c;
+  --pink: #ff80bf;
+  --pink-secondary: #ffcce6;
+  --pink-ternary: #ff79c6;
+  --purple: #9580ff;
+  --purple-secondary: #d4ccff;
+  --purple-ternary: #bd93f9;
+  --red: #ff9580;
+  --red-secondary: #ffd4cc;
+  --red-ternary: #ff5555;
+  --yellow: #ffff80;
+  --yellow-secondary: #ffffcc;
+  --yellow-ternary: #f1fa8c;
 
-    --background: #282a36;
-    --comment: #6272a4;
-    --foreground: var(--white);
-    --selection: #44475a;
-    --disabled: #6c7393;
+  --background: #282a36;
+  --comment: #6272a4;
+  --foreground: var(--white);
+  --selection: #44475a;
+  --disabled: #6c7393;
 
-    --line-num: #999;
-  }
+  --line-num: #999;
 
   /* Transparency */
 

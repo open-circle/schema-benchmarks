@@ -48,8 +48,16 @@
   color: var(--foreground);
 }
 
-html {
+[data-theme="system"] {
   color-scheme: light dark;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {

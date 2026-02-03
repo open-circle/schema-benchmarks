@@ -19,6 +19,8 @@ import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
+import { ThemeProvider } from "#/shared/components/theme/provider";
+import { getThemeFn } from "#/shared/lib/theme";
 import appCss from "#/shared/styles/index.css?url";
 import { symbolsUrl } from "../../vite/symbols";
 
@@ -89,32 +91,36 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
     ),
   staticData: { crumb: "Benchmarks" },
+  loader: async () => ({ theme: await getThemeFn() }),
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { theme } = Route.useLoaderData();
   return (
-    <html lang="en">
+    <html lang="en" data-theme={theme} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <MDXProvider components={mdxComponents}>
-          <div className="sidebar-container">
-            <SidebarProvider>
-              <Sidebar />
-              <div className="header-container">
-                <Header />
-                <Banner />
-                <main>{children}</main>
-                <Footer />
-                <ScrollToTop />
-                <Snackbars />
-                <ConfirmDialog />
-              </div>
-            </SidebarProvider>
-          </div>
-        </MDXProvider>
+        <ThemeProvider theme={theme}>
+          <MDXProvider components={mdxComponents}>
+            <div className="sidebar-container">
+              <SidebarProvider>
+                <Sidebar />
+                <div className="header-container">
+                  <Header />
+                  <Banner />
+                  <main>{children}</main>
+                  <Footer />
+                  <ScrollToTop />
+                  <Snackbars />
+                  <ConfirmDialog />
+                </div>
+              </SidebarProvider>
+            </div>
+          </MDXProvider>
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             triggerHidden: true,

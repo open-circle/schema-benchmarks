@@ -15,7 +15,13 @@
       transform: scaleX(-1);
     }
   }
-  @media (prefers-color-scheme: dark) {
+
+  [data-theme="dark"] & {
     --default-icon-grade: -25;
+  }
+  @media (prefers-color-scheme: dark) {
+    [data-theme="system"] & {
+      --default-icon-grade: -25;
+    }
   }
 }
