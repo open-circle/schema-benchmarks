@@ -31,14 +31,16 @@
         margin: 0;
         margin-bottom: 0.25rem;
         color: color(
-          from var(--tooltip-foreground) srgb r g b / var(--primary-text)
+          from var(--tooltip-foreground) srgb r g b /
+          var(--primary-text)
         );
       }
       .tooltip__supporting {
         margin: 0;
         margin-bottom: 0.75rem;
         color: color(
-          from var(--tooltip-foreground) srgb r g b / var(--secondary-text)
+          from var(--tooltip-foreground) srgb r g b /
+          var(--secondary-text)
         );
       }
       .tooltip__actions {

@@ -55,7 +55,8 @@
     border-radius: 50%;
     border: 2px solid
       color(
-        from var(--radio-base-color) srgb r g b / var(--radio-border-opacity)
+        from var(--radio-base-color) srgb r g b /
+        var(--radio-border-opacity)
       );
     background-color: transparent;
     transition:
