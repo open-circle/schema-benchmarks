@@ -44,7 +44,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
                 (d) => d.libraryName,
               ),
               {
-                x: "libraryName",
+                x: (d) => d.libraryName,
                 y: "bytes",
                 fill: "bytes",
                 sort: { x: "y" },
