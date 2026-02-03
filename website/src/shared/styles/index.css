@@ -78,7 +78,6 @@ body {
 
 a:not(.button):not(.chip):not(.react-tweet-theme a) {
   color: var(--link);
-  text-decoration: none;
   transition: color 250ms;
   &:hover {
     color: var(--link-hover);
