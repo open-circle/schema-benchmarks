@@ -139,7 +139,8 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
-        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
+        from var(--button-foreground) srgb r g b /
+        var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
     }
@@ -154,7 +155,8 @@
     &[data-status="active"],
     &[aria-pressed="true"] {
       --button-background: color(
-        from var(--button-base-color) srgb r g b / var(--activated-opacity)
+        from var(--button-base-color) srgb r g b /
+        var(--activated-opacity)
       );
       --button-foreground: var(--button-selected);
       --icon-fill: 1;
@@ -163,13 +165,13 @@
       &:hover {
         background-color: color(
           from var(--button-base-color) srgb r g b /
-            calc(var(--hover-opacity) + var(--activated-opacity))
+          calc(var(--hover-opacity) + var(--activated-opacity))
         );
       }
       &:focus-visible {
         background-color: color(
           from var(--button-base-color) srgb r g b /
-            calc(var(--focus-opacity) + var(--activated-opacity))
+          calc(var(--focus-opacity) + var(--activated-opacity))
         );
       }
     }
@@ -177,10 +179,12 @@
   &.button--toggle {
     --button-background: transparent;
     --button-foreground: color(
-      from var(--button-base-color) srgb r g b / var(--secondary-text)
+      from var(--button-base-color) srgb r g b /
+      var(--secondary-text)
     );
     --button-active-color: color(
-      from var(--button-selected) srgb r g b / var(--primary-text)
+      from var(--button-selected) srgb r g b /
+      var(--primary-text)
     );
     &.button--active-success {
       --button-active-color: var(--green);
@@ -204,18 +208,21 @@
     }
     &:hover {
       background-color: color(
-        from currentColor srgb r g b / var(--hover-opacity)
+        from currentColor srgb r g b /
+        var(--hover-opacity)
       );
     }
     &:focus-visible {
       background-color: color(
-        from currentColor srgb r g b / var(--focus-opacity)
+        from currentColor srgb r g b /
+        var(--focus-opacity)
       );
     }
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
       background-color: color(
-        from currentColor srgb r g b / var(--pressed-opacity)
+        from currentColor srgb r g b /
+        var(--pressed-opacity)
       );
     }
     &:disabled,
@@ -227,18 +234,19 @@
       --icon-fill: 1;
       --button-foreground: var(--button-active-color);
       --button-background: color(
-        from var(--button-active-color) srgb r g b / var(--activated-opacity)
+        from var(--button-active-color) srgb r g b /
+        var(--activated-opacity)
       );
       &:hover {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-            calc(var(--hover-opacity) + var(--activated-opacity))
+          calc(var(--hover-opacity) + var(--activated-opacity))
         );
       }
       &:focus-visible {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-            calc(var(--focus-opacity) + var(--activated-opacity))
+          calc(var(--focus-opacity) + var(--activated-opacity))
         );
       }
     }

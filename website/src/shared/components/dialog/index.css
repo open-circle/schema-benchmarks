@@ -51,7 +51,8 @@
   }
   .dialog__message {
     color: color(
-      from var(--page-foreground) srgb r g b / var(--secondary-text)
+      from var(--page-foreground) srgb r g b /
+      var(--secondary-text)
     );
     @extend .typo-body1;
     margin: 0;
