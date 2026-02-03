@@ -50,7 +50,7 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: "libraryName",
+            x: (d: DownloadResult) => d.libraryName,
             y: "bytes",
             fill: "bytes",
             sort: { x: "y" },
