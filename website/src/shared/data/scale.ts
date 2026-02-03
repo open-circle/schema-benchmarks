@@ -1,14 +1,9 @@
 export const color = [
-  "var(--pink)",
-  "var(--red)",
-  "var(--deep-orange)",
-  "var(--orange)",
-  "var(--amber)",
-  "var(--yellow)",
-  "var(--lime)",
-  "var(--light-green)",
-  "var(--green)",
-  "var(--teal)",
+  "var(--scale1)",
+  "var(--scale2)",
+  "var(--scale3)",
+  "var(--scale4)",
+  "var(--scale5)",
 ] as const;
 export type Color = (typeof color)[number];
 

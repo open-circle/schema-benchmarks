@@ -41,12 +41,12 @@
     transition:
       font-weight 250ms,
       font-variation-settings 250ms;
-    &:hover {
+    &:hover,
+    &:focus-visible {
       --font-slant: -11;
     }
     &:focus-visible {
       outline: none;
-      --font-slant: -11;
     }
   }
   span {

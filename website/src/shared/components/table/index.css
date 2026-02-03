@@ -75,7 +75,9 @@ td {
   min-width: 4rem;
   overflow: hidden;
   position: relative;
-  background-color: var(--divider);
+  background-color: color(
+    from var(--page-foreground) srgb r g b / var(--disabled-opacity)
+  );
   .bar__fill {
     position: absolute;
     top: 0;
@@ -99,8 +101,7 @@ table.minimal {
   th {
     @extend .typo-caption;
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
   }
 }
