@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { create } from "mutative";
-import { ssrBehavior } from "react-md-spinner";
 import { generateMetadata } from "tanstack-meta";
 import { Banner } from "#/shared/components/banner";
 import { ConfirmDialog } from "#/shared/components/dialog/confirm";
@@ -98,7 +97,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
-        {ssrBehavior.getStylesheetComponent()}
       </head>
       <body>
         <MDXProvider components={mdxComponents}>
