@@ -11,6 +11,8 @@ const blog = defineCollection({
       v.string(),
       v.object({
         src: v.string(),
+        src_light: v.optional(v.string()),
+        src_dark: v.optional(v.string()),
         alt: v.string(),
         fit: v.optional(v.picklist(["cover", "contain"])),
       }),

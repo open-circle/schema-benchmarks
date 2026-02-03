@@ -9,7 +9,7 @@ const blog: BlogCardProps["blog"] = {
   published: new Date(),
   authors: ["EskiMojo14", "fabian-hiller"],
   cover: {
-    src: "/logo.svg",
+    src: "/logo_dark.svg",
     alt: "Schema Benchmarks Logo",
     fit: "contain",
   },

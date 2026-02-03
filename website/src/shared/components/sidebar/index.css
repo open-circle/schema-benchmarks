@@ -71,8 +71,7 @@
       display: flex;
       align-items: center;
       color: color(
-        from var(--sidebar-foreground) srgb r g b /
-        var(--secondary-text)
+        from var(--sidebar-foreground) srgb r g b / var(--secondary-text)
       );
     }
     .list-item__button {
@@ -175,5 +174,19 @@
       z-index: 15;
       pointer-events: all;
     }
+  }
+}
+
+.sidebar__logo-dark {
+  display: none;
+  @media (prefers-color-scheme: dark) {
+    display: block;
+  }
+}
+
+.sidebar__logo-light {
+  display: none;
+  @media (prefers-color-scheme: light) {
+    display: block;
   }
 }

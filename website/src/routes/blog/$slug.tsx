@@ -87,11 +87,25 @@ function RouteComponent() {
             {data.cover}
           </p>
         ) : (
-          <img
-            src={data.cover.src}
-            alt={data.cover.alt}
-            style={{ objectFit: data.cover.fit ?? "cover" }}
-          />
+          <picture>
+            {data.cover.src_light && (
+              <source
+                media="(prefers-color-scheme: light)"
+                srcSet={data.cover.src_light}
+              />
+            )}
+            {data.cover.src_dark && (
+              <source
+                media="(prefers-color-scheme: dark)"
+                srcSet={data.cover.src_dark}
+              />
+            )}
+            <img
+              src={data.cover.src}
+              alt={data.cover.alt}
+              style={{ objectFit: data.cover.fit ?? "cover" }}
+            />
+          </picture>
         )}
       </div>
       <MDXContent components={{ wrapper: "div" }} />

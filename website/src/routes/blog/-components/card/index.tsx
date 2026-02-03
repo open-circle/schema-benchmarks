@@ -49,11 +49,19 @@ export function BlogCard({ blog }: BlogCardProps) {
               {blog.cover}
             </p>
           ) : (
-            <img
-              src={blog.cover.src}
-              alt={blog.cover.alt}
-              style={{ objectFit: blog.cover.fit ?? "cover" }}
-            />
+            <picture>
+              {blog.cover.src_light && (
+                <source
+                  media="(prefers-color-scheme: light)"
+                  srcSet={blog.cover.src_light}
+                />
+              )}
+              <img
+                src={blog.cover.src}
+                alt={blog.cover.alt}
+                style={{ objectFit: blog.cover.fit ?? "cover" }}
+              />
+            </picture>
           )}
         </div>
         <p>{blog.description}</p>
