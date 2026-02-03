@@ -16,6 +16,8 @@
 .animation-box {
   width: 100px;
   height: 100px;
+  border-radius: var(--shape-medium);
+  border: 1px solid var(--divider);
   display: flex;
   align-items: center;
   justify-content: center;

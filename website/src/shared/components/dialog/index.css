@@ -7,15 +7,7 @@
   padding: 0 1.5rem;
   min-width: 17.5rem;
   appearance: none;
-  box-shadow: var(--elevation-24);
-  background-color: light-dark(
-    var(--surface),
-    color-mix(
-      in hsl,
-      var(--surface),
-      var(--elevation-overlay-color) var(--elevation-24-overlay-opacity)
-    )
-  );
+  background-color: var(--page-background);
   border: none;
   border-radius: var(--shape-medium);
   transition:
@@ -59,8 +51,7 @@
   }
   .dialog__message {
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
     @extend .typo-body1;
     margin: 0;

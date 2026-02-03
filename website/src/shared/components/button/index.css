@@ -13,15 +13,15 @@
   padding: 0 1rem;
   position: relative;
 
-  --button-base-color: var(--page-foreground);
+  --button-base-color: var(--button);
+  --on-button-base-color: var(--on-button);
   background-color: var(--button-background);
   color: var(--button-foreground);
 
   transition:
     color 250ms,
-    opacity 250ms,
-    var(--elevation-transition),
-    var(--elevation-overlay-transition);
+    background-color 250ms,
+    opacity 250ms;
 
   &:focus-visible {
     outline: none;
@@ -52,22 +52,22 @@
     background-color: trnsparent;
   }
 
-  &.button--primary {
-    --button-base-color: var(--primary);
-    --on-button-base-color: var(--on-primary);
-  }
-  &.button--secondary {
-    --button-base-color: var(--secondary);
-    --on-button-base-color: var(--on-secondary);
-  }
   &.button--success {
-    --button-base-color: var(--green);
-    --on-button-base-color: var(--on-green);
+    --button-base-color: var(--success);
+    --on-button-base-color: var(--on-success);
   }
   &.button--danger,
   &.button--error {
-    --button-base-color: var(--red);
-    --on-button-base-color: var(--on-red);
+    --button-base-color: var(--error);
+    --on-button-base-color: var(--on-error);
+  }
+  &.button--warning {
+    --button-base-color: var(--warning);
+    --on-button-base-color: var(--on-warning);
+  }
+  &.button--info {
+    --button-base-color: var(--info);
+    --on-button-base-color: var(--on-info);
   }
 
   &.button--text {
@@ -112,15 +112,6 @@
     --button-background: var(--button-base-color);
     --button-foreground: var(--on-button-base-color);
     &:not(:disabled, [aria-disabled="true"]) {
-      background-color: light-dark(
-        var(--button-background),
-        color-mix(
-          in hsl,
-          var(--button-background),
-          var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
-        )
-      );
-      box-shadow: var(--elevation-2);
       &:hover {
         --button-background: color-mix(
           in hsl,
@@ -137,19 +128,10 @@
       }
       &:active,
       &:has(+ .tooltip[popover]:popover-open) {
-        box-shadow: var(--elevation-8);
         --button-background: color-mix(
           in hsl,
           var(--button-base-color),
           var(--on-button-base-color) var(--pressed-on-filled-opacity)
-        );
-        background-color: light-dark(
-          var(--button-background),
-          color-mix(
-            in hsl,
-            var(--button-background),
-            var(--elevation-overlay-color) var(--elevation-8-overlay-opacity)
-          )
         );
       }
     }
@@ -157,8 +139,7 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
-        from var(--button-foreground) srgb r g b /
-        var(--disabled-opacity)
+        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
     }
@@ -173,23 +154,22 @@
     &[data-status="active"],
     &[aria-pressed="true"] {
       --button-background: color(
-        from var(--button-base-color) srgb r g b /
-        var(--activated-opacity)
+        from var(--button-base-color) srgb r g b / var(--activated-opacity)
       );
-      --button-foreground: var(--on-button-base-color);
+      --button-foreground: var(--button-selected);
       --icon-fill: 1;
       --icon-weight: 600;
       font-weight: var(--weight-bold);
       &:hover {
         background-color: color(
           from var(--button-base-color) srgb r g b /
-          calc(var(--hover-opacity) + var(--activated-opacity))
+            calc(var(--hover-opacity) + var(--activated-opacity))
         );
       }
       &:focus-visible {
         background-color: color(
           from var(--button-base-color) srgb r g b /
-          calc(var(--focus-opacity) + var(--activated-opacity))
+            calc(var(--focus-opacity) + var(--activated-opacity))
         );
       }
     }
@@ -197,19 +177,11 @@
   &.button--toggle {
     --button-background: transparent;
     --button-foreground: color(
-      from var(--button-base-color) srgb r g b /
-      var(--secondary-text)
+      from var(--button-base-color) srgb r g b / var(--secondary-text)
     );
     --button-active-color: color(
-      from var(--button-base-color) srgb r g b /
-      var(--primary-text)
+      from var(--button-selected) srgb r g b / var(--primary-text)
     );
-    &.button--active-primary {
-      --button-active-color: var(--primary);
-    }
-    &.button--active-secondary {
-      --button-active-color: var(--secondary);
-    }
     &.button--active-success {
       --button-active-color: var(--green);
     }
@@ -232,21 +204,18 @@
     }
     &:hover {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--hover-opacity)
+        from currentColor srgb r g b / var(--hover-opacity)
       );
     }
     &:focus-visible {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--focus-opacity)
+        from currentColor srgb r g b / var(--focus-opacity)
       );
     }
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--pressed-opacity)
+        from currentColor srgb r g b / var(--pressed-opacity)
       );
     }
     &:disabled,
@@ -258,37 +227,28 @@
       --icon-fill: 1;
       --button-foreground: var(--button-active-color);
       --button-background: color(
-        from var(--button-active-color) srgb r g b /
-        var(--activated-opacity)
+        from var(--button-active-color) srgb r g b / var(--activated-opacity)
       );
       &:hover {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-          calc(var(--hover-opacity) + var(--activated-opacity))
+            calc(var(--hover-opacity) + var(--activated-opacity))
         );
       }
       &:focus-visible {
         background-color: color(
           from var(--button-active-color) srgb r g b /
-          calc(var(--focus-opacity) + var(--activated-opacity))
+            calc(var(--focus-opacity) + var(--activated-opacity))
         );
       }
     }
   }
   &.button--floating-action {
     display: flex;
-    --button-base-color: light-dark(
-      var(--secondary),
-      color-mix(
-        in hsl,
-        var(--secondary),
-        var(--elevation-overlay-color) var(--elevation-6-overlay-opacity)
-      )
-    );
+    --button-base-color: var(--button);
     --button-background: var(--button-base-color);
-    --button-foreground: var(--on-secondary);
+    --button-foreground: var(--on-button-base-color);
     border-radius: var(--shape-pill);
-    box-shadow: var(--elevation-6);
     z-index: 6;
     height: 3rem;
     padding: 1.25rem;
@@ -297,30 +257,21 @@
       --button-background: color-mix(
         in hsl,
         var(--button-base-color),
-        var(--on-secondary) var(--hover-opacity)
+        var(--button-foreground) var(--hover-opacity)
       );
     }
     &:focus-visible {
       --button-background: color-mix(
         in hsl,
         var(--button-base-color),
-        var(--on-secondary) var(--focus-opacity)
+        var(--button-foreground) var(--focus-opacity)
       );
     }
     &:active {
-      box-shadow: var(--elevation-12);
-      --button-base-color: light-dark(
-        var(--secondary),
-        color-mix(
-          in hsl,
-          var(--secondary),
-          var(--elevation-overlay-color) var(--elevation-12-overlay-opacity)
-        )
-      );
       --button-background: color-mix(
         in hsl,
         var(--button-base-color),
-        var(--on-secondary) var(--pressed-opacity)
+        var(--button-foreground) var(--pressed-opacity)
       );
     }
     .md-symbol {

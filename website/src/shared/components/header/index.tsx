@@ -47,30 +47,17 @@ export function Header() {
   });
   return (
     <header {...cls()}>
-      <ClientOnly
-        fallback={
-          <ToggleButton
-            {...cls({
-              element: "toggle",
-            })}
-            tooltip="Expand sidebar"
-          >
-            <MdSymbol>menu</MdSymbol>
-          </ToggleButton>
-        }
+      <ToggleButton
+        {...cls({
+          element: "toggle",
+          modifiers: { open },
+        })}
+        onClick={() => setOpen(true)}
+        tooltip="Expand sidebar"
+        tabIndex={open ? -1 : 0}
       >
-        <ToggleButton
-          {...cls({
-            element: "toggle",
-            modifiers: { open },
-          })}
-          onClick={() => setOpen(true)}
-          tooltip="Expand sidebar"
-          tabIndex={open ? -1 : 0}
-        >
-          <MdSymbol>menu</MdSymbol>
-        </ToggleButton>
-      </ClientOnly>
+        <MdSymbol>menu</MdSymbol>
+      </ToggleButton>
       <nav className="breadcrumbs">
         {crumbs.map((crumb) => (
           <Fragment key={crumb.to}>
@@ -82,7 +69,7 @@ export function Header() {
             >
               {crumb.name}
             </Link>
-            <MdSymbol>chevron_right</MdSymbol>
+            <span>/</span>
           </Fragment>
         ))}
         {currentCrumb && (

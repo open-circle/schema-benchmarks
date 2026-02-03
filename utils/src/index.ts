@@ -341,3 +341,5 @@ export function assert(
 export function assertNever(_value: never, message: string): never {
   throw new Error(message);
 }
+
+export const nonNullish = <T>(value: T) => value != null;

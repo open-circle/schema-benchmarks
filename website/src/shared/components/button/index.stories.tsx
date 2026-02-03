@@ -17,7 +17,7 @@ const meta = preview.meta({
       control: {
         type: "inline-radio",
       },
-      options: ["primary", "secondary", "danger"],
+      options: ["success", "error", "warning", "info", undefined],
     },
     disabled: {
       control: {
@@ -26,7 +26,7 @@ const meta = preview.meta({
     },
   },
   args: {
-    color: "primary",
+    color: undefined,
     disabled: false,
     loading: false,
     tooltip: "Hello World",

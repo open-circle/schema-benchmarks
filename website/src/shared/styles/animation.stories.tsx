@@ -14,7 +14,7 @@ const meta = preview.type<{ args: { curve: Curve } }>().meta({
   render: ({ curve }) => (
     <div className="animation-container">
       <div
-        className="animation-box card"
+        className="animation-box"
         style={{ animationTimingFunction: `var(--${curve}-curve)` }}
       >
         {curve}

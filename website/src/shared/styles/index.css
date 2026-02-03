@@ -1,12 +1,11 @@
 @import "normalize.css/normalize.css";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
-@import "./themes/material-light.css";
-@import "./themes/material-oceanic.css";
+@import "./themes/dracula.css";
+@import "./themes/github-light.css";
 
 @import "./animation.css";
 @import "./colors.css";
-@import "./elevation.css";
 @import "./layout.css";
 @import "./states.css";
 @import "./shape.css";
@@ -37,18 +36,31 @@
 
 * {
   box-sizing: border-box;
-
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+  scrollbar-width: thin;
   /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
   corner-shape: bevel;
 }
 
-body {
+::selection {
+  text-shadow: none;
+  background-color: var(--selection);
+  color: var(--foreground);
+}
+
+html {
   color-scheme: light dark;
+}
+
+body {
   font-family: var(--font-family-body);
+  font-feature-settings:
+    "calt" 1,
+    "liga" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--page-background);
-  color: color(from var(--page-foreground) srgb r g b / var(--primary-text));
+  background-color: var(--background);
+  color: color(from var(--foreground) srgb r g b / var(--primary-text));
   @extend .typo-body1;
   &[data-modal-open] {
     overflow: hidden;
@@ -56,13 +68,20 @@ body {
   }
 }
 
-a {
-  color: var(--primary);
-}
-
-::selection {
-  background: color(from var(--secondary) srgb r g b / 0.5);
-  color: var(--on-secondary);
+a:not(.button):not(.chip):not(.react-tweet-theme a) {
+  color: var(--link);
+  text-decoration: none;
+  transition: color 250ms;
+  &:hover {
+    color: var(--link-hover);
+  }
+  &:focus-visible {
+    outline: none;
+    color: var(--link-focus);
+  }
+  &[data-status="active"] {
+    color: var(--link-current);
+  }
 }
 
 hr {
@@ -97,7 +116,7 @@ code[class*="language-"] {
   font-size: var(--body2-size);
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--primary);
+    box-shadow: 0 0 0 2px var(--focus-background);
   }
   .code-block__title {
     padding: 0.5rem 1rem;
@@ -134,24 +153,6 @@ pre[class*="language-"] {
   padding: 0.25rem;
 }
 
-.card {
-  --card-surface: light-dark(
-    var(--surface),
-    color-mix(
-      in hsl,
-      var(--surface),
-      var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
-    )
-  );
-  background-color: var(--card-surface);
-  border-radius: var(--shape-medium);
-  box-shadow: var(--card-elevation);
-  overflow: hidden;
-  table {
-    width: 100%;
-  }
-}
-
 .sidebar-container {
   display: flex;
   flex-direction: row;
@@ -175,7 +176,7 @@ pre[class*="language-"] {
 main {
   padding: var(--margin) 0;
   flex: 1;
-  background-color: var(--page-background);
+  background-color: var(--background);
   margin: 0 var(--margin);
 
   display: flex;

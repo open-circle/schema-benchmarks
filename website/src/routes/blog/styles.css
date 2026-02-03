@@ -25,6 +25,7 @@
 .react-tweet-theme {
   &.react-tweet-theme {
     --tweet-container-margin: 1.5rem auto;
+    text-transform: none;
   }
   * {
     /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */

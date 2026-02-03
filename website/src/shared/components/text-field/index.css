@@ -1,7 +1,7 @@
 :root {
   --text-field-height: 3rem;
   --text-field-min-width: 17.5rem;
-  --text-field-base-color: var(--primary);
+  --text-field-base-color: var(--button);
   --text-field-error-color: var(--red);
   --text-field-padding-start: 1rem;
   --text-field-padding-end: 0.75rem;
@@ -63,8 +63,7 @@
     }
     &::placeholder {
       color: color(
-        from var(--page-foreground) srgb r g b /
-        var(--secondary-text)
+        from var(--page-foreground) srgb r g b / var(--secondary-text)
       );
     }
     &[type="number"] {
@@ -81,8 +80,7 @@
   .text-field__prefix,
   .text-field__suffix {
     color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
+      from var(--page-foreground) srgb r g b / var(--secondary-text)
     );
   }
   .text-field__start-icon,

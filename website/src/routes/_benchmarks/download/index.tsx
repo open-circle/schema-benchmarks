@@ -129,7 +129,6 @@ function RouteComponent() {
                 search={({ minifyType }) => ({ minifyType, mbps: slug })}
                 replace
                 resetScroll={false}
-                activeColor="primary"
               >
                 <MdSymbol>{preset.icon}</MdSymbol>
               </InternalLinkToggleButton>
