@@ -114,6 +114,7 @@ pre[class*="language-"],
 code[class*="language-"] {
   font-family: var(--font-family-code);
   font-size: var(--body2-size);
+  background-color: var(--code-background);
   &:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px var(--focus-background);
