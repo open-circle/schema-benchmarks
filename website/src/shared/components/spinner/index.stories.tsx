@@ -10,16 +10,31 @@ const meta = preview.meta({
         disable: true,
       },
     },
-    singleColor: {
-      control: "text",
+    size: {
+      control: {
+        type: "range",
+        min: 16,
+        max: 64,
+      },
     },
+    segmentCount: {
+      control: {
+        type: "range",
+        min: 1,
+        max: 5,
+      },
+    },
+    inheritColor: {
+      control: {
+        type: "boolean",
+      },
+    },
+  },
+  args: {
+    size: 24,
+    segmentCount: 5,
+    inheritColor: false,
   },
 });
 
 export const Default = meta.story();
-
-export const SingleColor = meta.story({
-  args: {
-    singleColor: "spinner1",
-  },
-});
