@@ -262,7 +262,7 @@ h6 {
   font-variation-settings: "slnt" var(--font-slant, 0);
 }
 
-a:not(> .react-tweet-theme) {
+a:not(.react-tweet-theme *) {
   font-family: var(--font-family-button);
 }
 
