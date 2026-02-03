@@ -44,7 +44,7 @@ export const Button = withTooltip(function Button({
       })}
     >
       {loading ? (
-        <Spinner singleColor="button-foreground" size={18} />
+        <Spinner size={18} segmentCount={1} inheritColor />
       ) : (
         icon && <div {...buttonCls("icon")}>{icon}</div>
       )}

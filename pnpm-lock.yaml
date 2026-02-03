@@ -245,9 +245,6 @@ importers:
       dedent:
         specifier: ^1.7.1
         version: 1.7.1
-      material-colors:
-        specifier: ^1.2.6
-        version: 1.2.6
       mutative:
         specifier: ^1.3.0
         version: 1.3.0
@@ -275,9 +272,6 @@ importers:
       react-hot-toast:
         specifier: ^2.6.0
         version: 2.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      react-md-spinner:
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-tweet:
         specifier: ^3.3.0
         version: 3.3.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -4334,9 +4328,6 @@ packages:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
     engines: {node: '>=16'}
 
-  material-colors@1.2.6:
-    resolution: {integrity: sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==}
-
   mdast-util-from-markdown@2.0.2:
     resolution: {integrity: sha512-uZhTV/8NBuw0WHkPTrCqDOl0zVe1BIng5ZtHoDk49ME1qqcjYmmLmOf0gELgcRMxN4w2iuIeVso5/6QymSrgmA==}
 
@@ -4997,12 +4988,6 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-md-spinner@1.0.0:
-    resolution: {integrity: sha512-W3akCl5v/qBKhsrRsIxMl+hNQojj+SiN0+wdMAsXDfoYhQhtyg9LAdsC7P/1r3bYAJsjDmi4f5qz0N5lh26FiQ==}
-    peerDependencies:
-      react: '>=16.3.0'
-      react-dom: '>=16.3.0'
-
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
@@ -5424,9 +5409,6 @@ packages:
 
   style-to-object@1.0.14:
     resolution: {integrity: sha512-LIN7rULI0jBscWQYaSswptyderlarFkjQ+t79nzty8tcIAceVomEVlLzH5VP4Cmsv6MtKhs7qaAiwlcp+Mgaxw==}
-
-  stylis@3.5.4:
-    resolution: {integrity: sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==}
 
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -10551,8 +10533,6 @@ snapshots:
 
   markdown-extensions@2.0.0: {}
 
-  material-colors@1.2.6: {}
-
   mdast-util-from-markdown@2.0.2:
     dependencies:
       '@types/mdast': 4.0.4
@@ -11436,12 +11416,6 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-md-spinner@1.0.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
-    dependencies:
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-      stylis: 3.5.4
-
   react-refresh@0.18.0: {}
 
   react-tweet@3.3.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
@@ -12001,8 +11975,6 @@ snapshots:
   style-to-object@1.0.14:
     dependencies:
       inline-style-parser: 0.2.7
-
-  stylis@3.5.4: {}
 
   supports-color@7.2.0:
     dependencies:

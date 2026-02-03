@@ -46,7 +46,7 @@ export const ToggleButton = withTooltip(
           extra: className,
         })}
       >
-        {loading ? <Spinner singleColor="button-foreground" /> : children}
+        {loading ? <Spinner segmentCount={1} inheritColor /> : children}
       </button>
     );
   },

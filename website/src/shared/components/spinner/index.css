@@ -1,7 +1,83 @@
 .spinner {
-  flex-shrink: 0;
-  * {
-    /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
-    corner-shape: round;
+  font-family: var(--font-family-code);
+  display: flex;
+  gap: 0.25em;
+  .spinner__segment {
+    &::before {
+      content: "";
+      display: inline-block;
+      animation: block-spin 1s linear infinite;
+      height: 1em;
+      width: 1em;
+      font-size: 1em;
+      line-height: 1;
+    }
+    &:first-child::before {
+      animation-delay: 0s;
+      color: var(--scale1);
+    }
+    &:nth-child(2)::before {
+      animation-delay: 0.1s;
+      color: var(--scale2);
+    }
+    &:nth-child(3)::before {
+      animation-delay: 0.2s;
+      color: var(--scale3);
+    }
+    &:nth-child(4)::before {
+      animation-delay: 0.3s;
+      color: var(--scale4);
+    }
+    &:nth-child(5)::before {
+      animation-delay: 0.4s;
+      color: var(--scale5);
+    }
+  }
+  &.spinner--inherit-color .spinner__segment::before {
+    color: inherit;
+  }
+}
+
+/* '▁','▃','▄','▅','▆','▇','█','▇','▆','▅','▄','▃'  */
+
+@keyframes block-spin {
+  0% {
+    content: "▁";
+  }
+  8.33333333% {
+    content: "▃";
+  }
+  16.66666667% {
+    content: "▄";
+  }
+  25% {
+    content: "▅";
+  }
+  33.33333333% {
+    content: "▆";
+  }
+  41.66666667% {
+    content: "▇";
+  }
+  50% {
+    content: "█";
+  }
+  58.33333333% {
+    content: "▇";
+  }
+  66.66666667% {
+    content: "▆";
+  }
+  75% {
+    content: "▅";
+  }
+  83.33333333% {
+    content: "▄";
+  }
+  91.66666667% {
+    content: "▃";
+  }
+  100% {
+    content: "▁";
   }
 }
