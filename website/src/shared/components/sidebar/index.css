@@ -65,6 +65,9 @@
       &[data-status="active"] {
         --font-slant: -11;
       }
+      .list-item__text {
+        transition: font-variation-settings 250ms;
+      }
       &[data-status="active"] {
         --list-item-foreground: var(--link-current);
         background-color: var(--link-current-background);

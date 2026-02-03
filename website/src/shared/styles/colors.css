@@ -13,7 +13,11 @@
   --on-info: light-dark(var(--black), var(--black));
 
   --link: light-dark(var(--blue, blue), var(--cyan, cyan));
-  --link-visited: light-dark(var(--purple, purple), var(--green, green));
+  --link-visited: light-dark(
+    var(--blue-secondary, blue),
+    var(--cyan-secondary, cyan)
+  );
+  --link-focus: light-dark(var(--purple, purple), var(--green, green));
   --link-current: var(--foreground);
   --link-current-background: var(--selection);
 
@@ -36,7 +40,13 @@
   --tooltip-foreground: light-dark(var(--black), var(--white));
 
   --spinner1: light-dark(var(--pink5, pink), var(--cyan, cyan));
-  --spinner2: light-dark(var(--deep-orange5, orange), var(--green, green));
+  --spinner2: light-dark(var(--orange5, orange), var(--green, green));
   --spinner3: light-dark(var(--yellow5, yellow), var(--orange, orange));
   --spinner4: light-dark(var(--teal5, teal), var(--purple, purple));
+
+  --scale1: light-dark(var(--red4, red), var(--pink, pink));
+  --scale2: light-dark(var(--coral4, coral), var(--red, red));
+  --scale3: light-dark(var(--orange4, orange), var(--orange, orange));
+  --scale4: light-dark(var(--yellow4, yellow), var(--yellow, yellow));
+  --scale5: light-dark(var(--green4, green), var(--green, green));
 }
