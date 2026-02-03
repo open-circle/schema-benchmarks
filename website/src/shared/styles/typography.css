@@ -1,83 +1,127 @@
+@font-face {
+  font-family: "Mona Sans";
+  src: url("/fonts/Mona-Sans.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monaspace Argon";
+  src: url("/fonts/MonaspaceArgonVarVF.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monaspace Krypton";
+  src: url("/fonts/MonaspaceKryptonVarVF.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monaspace Neon";
+  src: url("/fonts/MonaspaceNeonVarVF.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monaspace Radon";
+  src: url("/fonts/MonaspaceRadonVarVF.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monaspace Xenon";
+  src: url("/fonts/MonaspaceXenonVarVF.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
 :root {
-  --font-family-headline:
-    "Google Sans Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
-  --font-family-body:
-    "Google Sans Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
-  --font-family-code:
-    "Google Sans Code", source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  --font-family-heading: "Monaspace Xenon", monospace;
+  --font-family-body: "Monaspace Neon", monospace;
+  --font-family-code: "Monaspace Argon", monospace;
+  --font-family-button: "Monaspace Krypton", monospace;
+  --font-family-comment: "Monaspace Radon", monospace;
+  --font-family-doc-comment: "Monaspace Xenon", monospace;
 
   --weight-thin: 100;
-  --weight-extra-light: 200;
+  --weight-extralight: 200;
   --weight-light: 300;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
-  --weight-extra-bold: 800;
+  --weight-extrabold: 800;
   --weight-black: 900;
 
-  --width-narrow-thin: 50;
-  --width-narrow-extra-light: 60;
-  --width-narrow-light: 70;
-  --width-narrow-regular: 80;
-  --width-narrow-medium: 90;
-  --width-narrow-semibold: 100;
-  --width-narrow-bold: 100;
-  --width-narrow-extra-bold: 100;
-  --width-narrow-black: 100;
+  --headline1-family: var(--font-family-heading);
+  --headline1-size: 6.0625rem;
+  --headline1-weight: var(--weight-extralight);
+  --headline1-transform: lowercase;
 
-  --headline1-family: var(--font-family-headline);
-  --headline1-size: 6.3125rem;
-  --headline1-weight: var(--weight-extra-light);
-  --headline1-width: var(--width-narrow-extra-light);
-  --headline2-family: var(--font-family-headline);
-  --headline2-size: 3.9375rem;
+  --headline2-family: var(--font-family-heading);
+  --headline2-size: 3.8125rem;
   --headline2-weight: var(--weight-light);
-  --headline2-width: var(--width-narrow-light);
-  --headline3-family: var(--font-family-headline);
-  --headline3-size: 3.125rem;
-  --headline3-width: var(--width-narrow-light);
+  --headline2-transform: lowercase;
+
+  --headline3-family: var(--font-family-heading);
+  --headline3-size: 3rem;
   --headline3-weight: var(--weight-light);
-  --headline4-family: var(--font-family-headline);
-  --headline4-size: 2.25rem;
+  --headline3-transform: lowercase;
+
+  --headline4-family: var(--font-family-heading);
+  --headline4-size: 2.125rem;
   --headline4-weight: var(--weight-light);
-  --headline4-width: var(--width-narrow-light);
-  --headline5-family: var(--font-family-headline);
-  --headline5-size: 1.5625rem;
+  --headline4-transform: lowercase;
+
+  --headline5-family: var(--font-family-heading);
+  --headline5-size: 1.5rem;
   --headline5-weight: var(--weight-regular);
-  --headline5-width: var(--width-narrow-regular);
-  --headline6-family: var(--font-family-headline);
-  --headline6-size: 1.3125rem;
+  --headline5-transform: lowercase;
+
+  --headline6-family: var(--font-family-heading);
+  --headline6-size: 1.25rem;
   --headline6-weight: var(--weight-regular);
-  --headline6-width: var(--width-narrow-regular);
+  --headline6-transform: lowercase;
+
   --body1-family: var(--font-family-body);
-  --body1-size: 1.0625rem;
+  --body1-size: 1rem;
   --body1-weight: var(--weight-regular);
+  --body1-transform: lowercase;
+
   --body2-family: var(--font-family-body);
-  --body2-size: 0.9375rem;
+  --body2-size: 0.875rem;
   --body2-weight: var(--weight-regular);
+  --body2-transform: lowercase;
+
   --subtitle1-family: var(--font-family-body);
-  --subtitle1-size: 1.0625rem;
+  --subtitle1-size: 1rem;
   --subtitle1-weight: var(--weight-regular);
-  --subtitle1-width: var(--width-narrow-regular);
+  --subtitle1-transform: lowercase;
+
   --subtitle2-family: var(--font-family-body);
-  --subtitle2-size: 0.9375rem;
+  --subtitle2-size: 0.875rem;
   --subtitle2-weight: var(--weight-regular);
-  --subtitle2-width: var(--width-narrow-regular);
-  --button-family: var(--font-family-body);
-  --button-size: 0.9375rem;
+  --subtitle2-transform: lowercase;
+
+  --button-family: var(--font-family-button);
+  --button-size: 0.875rem;
   --button-weight: var(--weight-medium);
+  --button-transform: lowercase;
+
   --overline-family: var(--font-family-body);
   --overline-size: 0.625rem;
-  --overline-weight: var(--weight-regular);
+  --overline-weight: var(--weight-medium);
+  --overline-transform: lowercase;
+
   --caption-family: var(--font-family-body);
-  --caption-size: 0.8125rem;
+  --caption-size: 0.75rem;
   --caption-weight: var(--weight-regular);
+  --caption-transform: lowercase;
 
   --primary-text: 0.87;
   --secondary-text: 0.6;
@@ -87,14 +131,14 @@
 @media (prefers-color-scheme: dark) {
   /* Text looks thicker on dark backgrounds, so we use thinner weights to compensate */
   :root {
-    --weight-thin: 50;
-    --weight-extra-light: 150;
+    --weight-thin: 100;
+    --weight-extralight: 150;
     --weight-light: 250;
     --weight-regular: 350;
     --weight-medium: 450;
     --weight-semibold: 550;
     --weight-bold: 650;
-    --weight-extra-bold: 750;
+    --weight-extrabold: 750;
     --weight-black: 850;
   }
 }
@@ -103,99 +147,91 @@
   font-family: var(--headline1-family);
   font-size: var(--headline1-size);
   font-weight: var(--headline1-weight);
-  --font-width: var(--headline1-width);
-  text-transform: none;
+  text-transform: var(--headline1-transform);
 }
 
 .typo-headline2 {
   font-family: var(--headline2-family);
   font-size: var(--headline2-size);
   font-weight: var(--headline2-weight);
-  --font-width: var(--headline2-width);
-  text-transform: none;
+  text-transform: var(--headline2-transform);
 }
 
 .typo-headline3 {
   font-family: var(--headline3-family);
   font-size: var(--headline3-size);
   font-weight: var(--headline3-weight);
-  --font-width: var(--headline3-width);
-  text-transform: none;
+  text-transform: var(--headline3-transform);
 }
 
 .typo-headline4 {
   font-family: var(--headline4-family);
   font-size: var(--headline4-size);
   font-weight: var(--headline4-weight);
-  --font-width: var(--headline4-width);
-  text-transform: none;
+  text-transform: var(--headline4-transform);
 }
 
 .typo-headline5 {
   font-family: var(--headline5-family);
   font-size: var(--headline5-size);
   font-weight: var(--headline5-weight);
-  --font-width: var(--headline5-width);
-  text-transform: none;
+  text-transform: var(--headline5-transform);
 }
 
 .typo-headline6 {
   font-family: var(--headline6-family);
   font-size: var(--headline6-size);
   font-weight: var(--headline6-weight);
-  --font-width: var(--headline6-width);
-  text-transform: none;
+  text-transform: var(--headline6-transform);
 }
 
 .typo-button {
   font-family: var(--button-family);
   font-size: var(--button-size);
   font-weight: var(--button-weight);
-  text-transform: uppercase;
+  text-transform: var(--button-transform);
 }
 
 .typo-body1 {
   font-family: var(--body1-family);
   font-size: var(--body1-size);
   font-weight: var(--body1-weight);
-  text-transform: none;
+  text-transform: var(--body1-transform);
 }
 
 .typo-body2 {
   font-family: var(--body2-family);
   font-size: var(--body2-size);
   font-weight: var(--body2-weight);
-  text-transform: none;
+  text-transform: var(--body2-transform);
 }
 
 .typo-subtitle1 {
   font-family: var(--subtitle1-family);
   font-size: var(--subtitle1-size);
   font-weight: var(--subtitle1-weight);
-  --font-width: var(--subtitle1-width);
-  text-transform: none;
+  text-transform: var(--subtitle1-transform);
 }
 
 .typo-subtitle2 {
   font-family: var(--subtitle2-family);
   font-size: var(--subtitle2-size);
   font-weight: var(--subtitle2-weight);
-  --font-width: var(--subtitle2-width);
-  text-transform: none;
+  text-transform: var(--subtitle2-transform);
 }
 
 .typo-overline {
   font-family: var(--overline-family);
   font-size: var(--overline-size);
   font-weight: var(--overline-weight);
-  text-transform: uppercase;
+  text-transform: var(--overline-transform);
 }
 
 .typo-caption {
   font-family: var(--caption-family);
   font-size: var(--caption-size);
   font-weight: var(--caption-weight);
-  text-transform: none;
+  text-transform: var(--caption-transform);
 }
 
 h1 {
@@ -223,9 +259,54 @@ h6 {
 }
 
 *:not(.material-symbols-sharp) {
-  font-variation-settings:
-    "GRAD" var(--font-grade, 0),
-    /* 0-100 */ "ROND" var(--font-roundness, 0),
-    /* 0-100 */ "slnt" var(--font-slant, 0),
-    /* -10-0 */ "wdth" var(--font-width, 100); /* 25-151 */
+  font-variation-settings: "slnt" var(--font-slant, 0);
+}
+
+a {
+  font-family: var(--font-family-button);
+}
+
+pre,
+code {
+  text-transform: none;
+
+  .token.comment {
+    font-family: var(--font-family-comment);
+    &.doc-comment {
+      font-family: var(--font-family-doc-comment);
+    }
+  }
+}
+
+[data-style="normal"] {
+  --font-family-body: "Mona Sans", sans-serif;
+  --font-family-heading: "Mona Sans", sans-serif;
+  --font-family-button: "Mona Sans", sans-serif;
+
+  --headline1-size: 6rem;
+  --headline1-transform: none;
+  --headline2-size: 3.75rem;
+  --headline2-transform: none;
+  --headline3-size: 3rem;
+  --headline3-transform: none;
+  --headline4-size: 2.125rem;
+  --headline4-transform: none;
+  --headline5-size: 1.5rem;
+  --headline5-transform: none;
+  --headline6-size: 1.25rem;
+  --headline6-transform: none;
+  --body1-size: 1rem;
+  --body1-transform: none;
+  --body2-size: 0.875rem;
+  --body2-transform: none;
+  --subtitle1-size: 1rem;
+  --subtitle1-transform: none;
+  --subtitle2-size: 0.875rem;
+  --subtitle2-transform: none;
+  --button-size: 0.875rem;
+  --button-transform: none;
+  --overline-size: 0.625rem;
+  --overline-transform: none;
+  --caption-size: 0.75rem;
+  --caption-transform: none;
 }

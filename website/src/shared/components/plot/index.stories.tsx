@@ -12,6 +12,10 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
     plot: useMemo(
       () =>
         Plot.plot({
+          style: {
+            fontFamily: "Mona Sans, sans-serif",
+            textTransform: "none",
+          },
           marginLeft: 48,
           marginBottom: 64,
           x: {
@@ -36,8 +40,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
           marks: [
             Plot.ruleY([0]),
             Plot.barY(downloadResults.minified, {
-              x: (d: DownloadResult) =>
-                `${d.libraryName}${d.note ? ` (${d.note})` : ""}`,
+              x: "libraryName",
               y: "bytes",
               fill: "bytes",
               sort: { x: "y" },

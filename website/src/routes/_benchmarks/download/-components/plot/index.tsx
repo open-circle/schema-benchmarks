@@ -31,6 +31,10 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
   const plot = useMemo(
     () =>
       Plot.plot({
+        style: {
+          fontFamily: "Mona Sans, sans-serif",
+          textTransform: "none",
+        },
         marginLeft: 48,
         width: domRect?.width,
         y: {
@@ -46,8 +50,7 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: (d: DownloadResult) =>
-              d.libraryName + (d.note ? ` (${d.note})` : ""),
+            x: "libraryName",
             y: "bytes",
             fill: "bytes",
             sort: { x: "y" },
