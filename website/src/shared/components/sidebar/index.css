@@ -67,9 +67,10 @@
       }
       .list-item__text {
         transition:
+          font-weight 250ms,
           font-variation-settings 250ms,
           color 250ms;
-        font-family: var(--font-family-button);
+        font-family: inherit;
       }
       &[data-status="active"] {
         --list-item-foreground: var(--link-current);

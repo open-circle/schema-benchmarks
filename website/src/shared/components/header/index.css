@@ -52,9 +52,11 @@
   a {
     text-decoration: none;
     color: color(
-      from var(--page-header-foreground) srgb r g b / var(--primary-text)
+      from var(--page-header-foreground) srgb r g b /
+      var(--primary-text)
     );
     transition:
+      color 250ms,
       font-weight 250ms,
       font-variation-settings 250ms;
     &:hover,
