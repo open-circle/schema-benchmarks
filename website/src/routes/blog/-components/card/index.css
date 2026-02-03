@@ -53,9 +53,6 @@
       outline: none;
     }
   }
-  &:hover,
-  &:has(a:focus-visible) {
-  }
   h2 {
     margin: 0;
   }
