@@ -41,6 +41,10 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
   const plot = useMemo(
     () =>
       Plot.plot({
+        style: {
+          fontFamily: "Mona Sans, sans-serif",
+          textTransform: "none",
+        },
         marginLeft: 48,
         width: domRect?.width,
         x: {
@@ -59,10 +63,7 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: (d: BenchResult) =>
-              d.libraryName +
-              (d.note ? ` (${d.note})` : "") +
-              (d.throws ? "*" : ""),
+            x: (d: BenchResult) => d.libraryName + (d.throws ? "*" : ""),
             y: "mean",
             fill: "mean",
             sort: { x: "y" },

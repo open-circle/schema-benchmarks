@@ -66,18 +66,17 @@
   a {
     text-decoration: none;
     color: color(
-      from var(--page-header-foreground) srgb r g b /
-      var(--primary-text)
+      from var(--page-header-foreground) srgb r g b / var(--primary-text)
     );
     transition:
       font-weight 250ms,
       font-variation-settings 250ms;
     &:hover {
-      --font-slant: -10;
+      --font-slant: -11;
     }
     &:focus-visible {
       outline: none;
-      --font-slant: -10;
+      --font-slant: -11;
     }
   }
   span {

@@ -49,6 +49,7 @@
   }
   --icon-size: 18;
   @extend .typo-body2;
+  font-family: var(--font-family-button);
   transition:
     background-color 250ms,
     color 250ms,

@@ -78,7 +78,7 @@
       &:hover,
       &:focus-visible,
       &[data-status="active"] {
-        --font-slant: -10;
+        --font-slant: -11;
       }
       .list-item__leading {
         margin: 0 0.25rem;
