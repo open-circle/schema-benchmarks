@@ -128,7 +128,7 @@
   --disabled-text: 0.38;
 }
 
-@media (prefers-color-scheme: dark) {
+%darkTheme {
   /* Text looks thicker on dark backgrounds, so we use thinner weights to compensate */
   :root {
     --weight-thin: 100;
@@ -141,6 +141,16 @@
     --weight-extrabold: 750;
     --weight-black: 850;
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    @extend %darkTheme;
+  }
+}
+
+[data-theme="dark"] {
+  @extend %darkTheme;
 }
 
 .typo-headline1 {

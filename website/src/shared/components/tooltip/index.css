@@ -31,16 +31,14 @@
         margin: 0;
         margin-bottom: 0.25rem;
         color: color(
-          from var(--tooltip-foreground) srgb r g b /
-          var(--primary-text)
+          from var(--tooltip-foreground) srgb r g b / var(--primary-text)
         );
       }
       .tooltip__supporting {
         margin: 0;
         margin-bottom: 0.75rem;
         color: color(
-          from var(--tooltip-foreground) srgb r g b /
-          var(--secondary-text)
+          from var(--tooltip-foreground) srgb r g b / var(--secondary-text)
         );
       }
       .tooltip__actions {
@@ -64,6 +62,22 @@
     @media (--desktop) {
       height: 1.5rem;
       padding: 0 0.5rem;
+    }
+  }
+
+  /* simple tooltips use the inverse colour scheme to stand out */
+  [data-theme="dark"] &:not(.tooltip--rich) {
+    color-scheme: light;
+  }
+  [data-theme="light"] &:not(.tooltip--rich) {
+    color-scheme: dark;
+  }
+  [data-theme="system"] &:not(.tooltip--rich) {
+    @media (prefers-color-scheme: dark) {
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: light) {
+      color-scheme: dark;
     }
   }
 }

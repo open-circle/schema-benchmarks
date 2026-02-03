@@ -154,16 +154,39 @@
   }
 }
 
-.sidebar__logo-dark {
-  display: none;
-  @media (prefers-color-scheme: dark) {
+%darkTheme {
+  .sidebar__logo-light {
+    display: none;
+  }
+  .sidebar__logo-dark {
+    display: block;
+  }
+}
+%lightTheme {
+  .sidebar__logo-dark {
+    display: none;
+  }
+  .sidebar__logo-light {
     display: block;
   }
 }
 
-.sidebar__logo-light {
-  display: none;
-  @media (prefers-color-scheme: light) {
-    display: block;
+@media (prefers-color-scheme: light) {
+  [data-theme="system"] {
+    @extend %lightTheme;
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    @extend %darkTheme;
+  }
+}
+
+[data-theme="dark"] {
+  @extend %darkTheme;
+}
+
+[data-theme="light"] {
+  @extend %lightTheme;
 }

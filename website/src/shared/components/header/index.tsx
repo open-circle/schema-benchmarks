@@ -1,9 +1,11 @@
 import { Link, useMatches } from "@tanstack/react-router";
 import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
+import { ButtonGroup } from "../button";
 import { ToggleButton } from "../button/toggle";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
+import { useTheme } from "../theme/context";
 
 const cls = bem("page-header");
 
@@ -45,6 +47,7 @@ export function Header() {
       return [allCrumbs, currentCrumb] as const;
     },
   });
+  const { theme, setTheme } = useTheme();
   return (
     <header {...cls()}>
       <ToggleButton
@@ -76,6 +79,31 @@ export function Header() {
           <span className="typo-headline6">{currentCrumb.name}</span>
         )}
       </nav>
+      <div {...cls("actions")}>
+        <ButtonGroup ariaLabel="Theme" className="theme-switcher">
+          <ToggleButton
+            active={theme === "light"}
+            onClick={() => setTheme("light")}
+            tooltip="Light"
+          >
+            <MdSymbol>light_mode</MdSymbol>
+          </ToggleButton>
+          <ToggleButton
+            active={theme === "dark"}
+            onClick={() => setTheme("dark")}
+            tooltip="Dark"
+          >
+            <MdSymbol>dark_mode</MdSymbol>
+          </ToggleButton>
+          <ToggleButton
+            active={theme === "system"}
+            onClick={() => setTheme("system")}
+            tooltip="System"
+          >
+            <MdSymbol>routine</MdSymbol>
+          </ToggleButton>
+        </ButtonGroup>
+      </div>
     </header>
   );
 }
