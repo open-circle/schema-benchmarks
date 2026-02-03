@@ -1,7 +1,7 @@
 import {
   autoUpdate,
   type ComputePositionConfig,
-  flip,
+  shift,
   useFloating,
   useTransitionStyles,
 } from "@floating-ui/react";
@@ -81,7 +81,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     const { refs, floatingStyles, context } = useFloating({
       open,
       whileElementsMounted: autoUpdate,
-      middleware: [flip({ padding: 24 })],
+      middleware: [shift()],
       ...opts,
       ...tooltipOpts,
     });
