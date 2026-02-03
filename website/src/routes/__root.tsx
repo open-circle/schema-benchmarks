@@ -1,4 +1,5 @@
 import { MDXProvider } from "@mdx-js/react";
+import { promiseAllKeyed } from "@schema-benchmarks/utils";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -15,12 +16,15 @@ import { ConfirmDialog } from "#/shared/components/dialog/confirm";
 import { Footer } from "#/shared/components/footer";
 import { Header } from "#/shared/components/header";
 import * as mdxComponents from "#/shared/components/mdx";
+import {
+  StyleProvider,
+  ThemeProvider,
+} from "#/shared/components/prefs/provider";
 import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
-import { ThemeProvider } from "#/shared/components/theme/provider";
-import { getThemeFn } from "#/shared/lib/theme";
+import { getStyleFn, getThemeFn } from "#/shared/lib/prefs";
 import appCss from "#/shared/styles/index.css?url";
 import { symbolsUrl } from "../../vite/symbols";
 
@@ -91,35 +95,44 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
     ),
   staticData: { crumb: "Benchmarks" },
-  loader: async () => ({ theme: await getThemeFn() }),
+
+  loader: async () =>
+    promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { theme } = Route.useLoaderData();
+  const { theme, style } = Route.useLoaderData();
   return (
-    <html lang="en" data-theme={theme} suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme={theme}
+      data-style={style}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>
       <body>
         <ThemeProvider theme={theme}>
-          <MDXProvider components={mdxComponents}>
-            <div className="sidebar-container">
-              <SidebarProvider>
-                <Sidebar />
-                <div className="header-container">
-                  <Header />
-                  <Banner />
-                  <main>{children}</main>
-                  <Footer />
-                  <ScrollToTop />
-                  <Snackbars />
-                  <ConfirmDialog />
-                </div>
-              </SidebarProvider>
-            </div>
-          </MDXProvider>
+          <StyleProvider style={style}>
+            <MDXProvider components={mdxComponents}>
+              <div className="sidebar-container">
+                <SidebarProvider>
+                  <Sidebar />
+                  <div className="header-container">
+                    <Header />
+                    <Banner />
+                    <main>{children}</main>
+                    <Footer />
+                    <ScrollToTop />
+                    <Snackbars />
+                    <ConfirmDialog />
+                  </div>
+                </SidebarProvider>
+              </div>
+            </MDXProvider>
+          </StyleProvider>
         </ThemeProvider>
         <TanStackDevtools
           config={{

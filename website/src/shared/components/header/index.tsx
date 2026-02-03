@@ -3,9 +3,9 @@ import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import { ButtonGroup } from "../button";
 import { ToggleButton } from "../button/toggle";
+import { useStyle, useTheme } from "../prefs/context";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
-import { useTheme } from "../theme/context";
 
 const cls = bem("page-header");
 
@@ -48,6 +48,7 @@ export function Header() {
     },
   });
   const { theme, setTheme } = useTheme();
+  const { style, setStyle } = useStyle();
   return (
     <header {...cls()}>
       <ToggleButton
@@ -80,25 +81,41 @@ export function Header() {
         )}
       </nav>
       <div {...cls("actions")}>
-        <ButtonGroup ariaLabel="Theme" className="theme-switcher">
+        <ButtonGroup ariaLabel="Style" className="pref-switcher">
+          <ToggleButton
+            active={style === "code"}
+            onClick={() => setStyle("code")}
+            tooltip="Code style"
+          >
+            <MdSymbol>code</MdSymbol>
+          </ToggleButton>
+          <ToggleButton
+            active={style === "normal"}
+            onClick={() => setStyle("normal")}
+            tooltip="Normal style"
+          >
+            <MdSymbol>text_format</MdSymbol>
+          </ToggleButton>
+        </ButtonGroup>
+        <ButtonGroup ariaLabel="Theme" className="pref-switcher">
           <ToggleButton
             active={theme === "light"}
             onClick={() => setTheme("light")}
-            tooltip="Light"
+            tooltip="Light theme"
           >
             <MdSymbol>light_mode</MdSymbol>
           </ToggleButton>
           <ToggleButton
             active={theme === "dark"}
             onClick={() => setTheme("dark")}
-            tooltip="Dark"
+            tooltip="Dark theme"
           >
             <MdSymbol>dark_mode</MdSymbol>
           </ToggleButton>
           <ToggleButton
             active={theme === "system"}
             onClick={() => setTheme("system")}
-            tooltip="System"
+            tooltip="System theme"
           >
             <MdSymbol>routine</MdSymbol>
           </ToggleButton>
