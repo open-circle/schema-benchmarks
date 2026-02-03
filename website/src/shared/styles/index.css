@@ -78,15 +78,18 @@ body {
 
 a:not(.button):not(.chip):not(.react-tweet-theme a) {
   color: var(--link);
-  transition: color 250ms;
-  &:hover {
-    color: var(--link-hover);
+  transition:
+    color 250ms,
+    font-variation-settings 250ms;
+  &:hover,
+  &:focus-visible {
+    --font-slant: -11;
   }
   &:focus-visible {
     outline: none;
     color: var(--link-focus);
   }
-  &[data-status="active"] {
+  &[data-status="active"]&:not(.breadcrumbs *) {
     color: var(--link-current);
   }
 }
