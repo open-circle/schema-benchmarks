@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
 import { AvatarList } from "#/shared/components/avatar";
 import { generateMetadata } from "#/shared/data/meta";
+import { useDateFormatter } from "#/shared/hooks/format/use-date-formatter";
 import { preloadImages } from "#/shared/lib/fetch";
 import { getAvatarUrl, getBlog } from "./-query";
 
@@ -56,6 +57,7 @@ function RouteComponent() {
       viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
     },
   });
+  const formatDate = useDateFormatter(longDateFormatter);
   return (
     <>
       <h1
@@ -73,12 +75,14 @@ function RouteComponent() {
           }))}
           size="lg"
         />
+        {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
         <time
           dateTime={data.published.toISOString().split("T")[0]}
           suppressHydrationWarning
           {...getTransitionStyle("date")}
+          aria-label={longDateFormatter.format(data.published)}
         >
-          {longDateFormatter.format(data.published)}
+          {formatDate(data.published)}
         </time>
       </div>
       <div role="img" className="blog-cover" {...getTransitionStyle("cover")}>

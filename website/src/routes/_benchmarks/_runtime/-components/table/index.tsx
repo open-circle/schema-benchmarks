@@ -14,6 +14,7 @@ import { Radio } from "#/shared/components/radio";
 import { Scaler } from "#/shared/components/scaler";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
+import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { DownloadCount } from "../../../-components/count";
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";
 import { Snippet } from "./snippet";
@@ -63,6 +64,7 @@ export function BenchTable({ results }: BenchTableProps) {
   );
   const { compareId, setCompareId, compareResult, ratioScaler } =
     useComparison(results);
+  const formatNumber = useNumberFormatter(numFormatter);
   if (!results.length) {
     return (
       <EmptyState
@@ -181,7 +183,12 @@ export function BenchTable({ results }: BenchTableProps) {
                             {...ratioScaler(ratio)}
                             symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
                           >
-                            {`${numFormatter.format(Math.abs(ratio))}x`}
+                            {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
+                            <span
+                              aria-label={`${numFormatter.format(Math.abs(ratio))}x`}
+                            >
+                              {`${formatNumber(Math.abs(ratio))}x`}
+                            </span>
                           </Scaler>
                         ) : (
                           <Scaler

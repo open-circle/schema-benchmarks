@@ -2,6 +2,7 @@ import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
 import { AvatarList } from "#/shared/components/avatar";
+import { useDateFormatter } from "#/shared/hooks/format/use-date-formatter";
 import { getAvatarUrl } from "../../-query";
 
 export interface BlogCardProps {
@@ -20,6 +21,7 @@ export function BlogCard({ blog }: BlogCardProps) {
       })}-${element}`,
     },
   });
+  const formatDate = useDateFormatter(longDateFormatter);
   return (
     <li className="blog-card">
       <Link to="/blog/$slug" params={{ slug: blog.slug }}>
@@ -32,12 +34,14 @@ export function BlogCard({ blog }: BlogCardProps) {
             }))}
             size="sm"
           />
+          {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
           <time
             dateTime={blog.published.toISOString().split("T")[0]}
             suppressHydrationWarning
             {...getTransitionStyle("date")}
+            aria-label={longDateFormatter.format(blog.published)}
           >
-            {longDateFormatter.format(blog.published)}
+            {formatDate(blog.published)}
           </time>
         </div>
         <h2 className="typo-headline5" {...getTransitionStyle("title")}>
