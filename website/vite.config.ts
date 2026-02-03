@@ -21,6 +21,7 @@ import { minifyTypeProps } from "./src/routes/_benchmarks/download/-constants";
 import { speedPresets } from "./src/routes/_benchmarks/download/-speed";
 import { sidebarGroups } from "./src/shared/components/sidebar/groups";
 import * as scales from "./src/shared/data/scale";
+import { styleLabels, themeLabels } from "./src/shared/lib/prefs/constants";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -57,6 +58,9 @@ const config = defineConfig({
         ...Object.values(speedPresets).map((preset) => preset.icon),
         ...scales.sentiment,
         ...scales.stat,
+        ...[themeLabels, styleLabels].flatMap((labels) =>
+          Object.values(labels).map((label) => label.icon),
+        ),
       ],
     }),
     !process.env.VITEST && contentCollections(),
