@@ -1,6 +1,12 @@
 import { Link, useMatches } from "@tanstack/react-router";
 import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
+import {
+  styleLabels,
+  styleSchema,
+  themeLabels,
+  themeSchema,
+} from "#/shared/lib/prefs/constants";
 import { ButtonGroup } from "../button";
 import { ToggleButton } from "../button/toggle";
 import { useStyle, useTheme } from "../prefs/context";
@@ -82,43 +88,28 @@ export function Header() {
       </nav>
       <div {...cls("actions")}>
         <ButtonGroup ariaLabel="Style" className="pref-switcher">
-          <ToggleButton
-            active={style === "code"}
-            onClick={() => setStyle("code")}
-            tooltip="Code style"
-          >
-            <MdSymbol>code</MdSymbol>
-          </ToggleButton>
-          <ToggleButton
-            active={style === "normal"}
-            onClick={() => setStyle("normal")}
-            tooltip="Normal style"
-          >
-            <MdSymbol>text_format</MdSymbol>
-          </ToggleButton>
+          {styleSchema.options.map((option) => (
+            <ToggleButton
+              key={option}
+              active={style === option}
+              onClick={() => setStyle(option)}
+              tooltip={styleLabels[option].label}
+            >
+              <MdSymbol>{styleLabels[option].icon}</MdSymbol>
+            </ToggleButton>
+          ))}
         </ButtonGroup>
         <ButtonGroup ariaLabel="Theme" className="pref-switcher">
-          <ToggleButton
-            active={theme === "light"}
-            onClick={() => setTheme("light")}
-            tooltip="Light theme"
-          >
-            <MdSymbol>light_mode</MdSymbol>
-          </ToggleButton>
-          <ToggleButton
-            active={theme === "dark"}
-            onClick={() => setTheme("dark")}
-            tooltip="Dark theme"
-          >
-            <MdSymbol>dark_mode</MdSymbol>
-          </ToggleButton>
-          <ToggleButton
-            active={theme === "system"}
-            onClick={() => setTheme("system")}
-            tooltip="System theme"
-          >
-            <MdSymbol>routine</MdSymbol>
-          </ToggleButton>
+          {themeSchema.options.map((option) => (
+            <ToggleButton
+              key={option}
+              active={theme === option}
+              onClick={() => setTheme(option)}
+              tooltip={themeLabels[option].label}
+            >
+              <MdSymbol>{themeLabels[option].icon}</MdSymbol>
+            </ToggleButton>
+          ))}
         </ButtonGroup>
       </div>
     </header>

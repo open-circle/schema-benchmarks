@@ -1,12 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import * as v from "valibot";
-
-export const themeSchema = v.fallback(
-  v.picklist(["light", "dark", "system"]),
-  "system",
-);
-export type Theme = v.InferOutput<typeof themeSchema>;
+import { styleSchema, themeSchema } from "./constants";
 
 const themeKey = "benchmarks::theme";
 
@@ -17,9 +12,6 @@ export const getThemeFn = createServerFn().handler(() =>
 export const setThemeFn = createServerFn()
   .inputValidator(themeSchema)
   .handler(({ data: theme }) => setCookie(themeKey, theme));
-
-export const styleSchema = v.fallback(v.picklist(["code", "normal"]), "code");
-export type Style = v.InferOutput<typeof styleSchema>;
 
 const styleKey = "benchmarks::style";
 

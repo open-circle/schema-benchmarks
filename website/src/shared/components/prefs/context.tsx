@@ -1,5 +1,5 @@
 import { createRequiredContext } from "required-react-context";
-import type { Style, Theme } from "#/shared/lib/prefs";
+import type { Style, Theme } from "#/shared/lib/prefs/constants";
 
 export const { ThemeContext, useTheme } = createRequiredContext<{
   theme: Theme;
