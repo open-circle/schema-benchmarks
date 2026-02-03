@@ -1,7 +1,6 @@
 import * as Plot from "@observablehq/plot";
-import type { DownloadResult } from "@schema-benchmarks/bench";
 import downloadResults from "@schema-benchmarks/bench/download.json";
-import { formatBytes } from "@schema-benchmarks/utils";
+import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { color } from "#/shared/data/scale";
 import preview from "#storybook/preview";
@@ -39,12 +38,18 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
           },
           marks: [
             Plot.ruleY([0]),
-            Plot.barY(downloadResults.minified, {
-              x: "libraryName",
-              y: "bytes",
-              fill: "bytes",
-              sort: { x: "y" },
-            }),
+            Plot.barY(
+              uniqueBy(
+                downloadResults.minified.toSorted((a, b) => a.bytes - b.bytes),
+                (d) => d.libraryName,
+              ),
+              {
+                x: "libraryName",
+                y: "bytes",
+                fill: "bytes",
+                sort: { x: "y" },
+              },
+            ),
           ],
         }),
       [],

@@ -1,32 +1,23 @@
 :root {
-  --snackbar-background: light-dark(
-    var(--md-blue-grey-50),
-    var(--md-blue-grey-900)
-  );
-  --snackbar-foreground: light-dark(
-    var(--md-blue-grey-900),
-    var(--md-blue-grey-50)
-  );
-
   --snackbar-enter-duration: 150ms;
   --snackbar-exit-duration: 75ms;
 }
 
 .snackbar {
   @extend .typo-body2;
+  position: relative;
   min-height: 3rem;
   min-width: 21.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0 1rem;
+  overflow: hidden;
   border-radius: var(--shape-medium);
-  box-shadow: var(--elevation-6);
   background-color: var(--snackbar-background);
-  color: color(
-    from var(--snackbar-foreground) srgb r g b /
-    var(--primary-text)
-  );
+  border: 1px solid var(--divider);
+  color: color(from var(--foreground) srgb r g b / var(--primary-text));
+  --snackbar-accent: var(--button);
   @media (max-width: 599px) {
     min-width: calc(100vw - 2rem);
   }
@@ -47,20 +38,32 @@
     }
   }
 
-  &.snackbar--error .snackbar__icon {
-    color: var(--red);
+  &.snackbar--error {
+    --snackbar-accent: var(--error);
   }
-  &.snackbar--success .snackbar__icon {
-    color: var(--green);
+  &.snackbar--success {
+    --snackbar-accent: var(--success);
   }
-  &.snackbar--loading .snackbar__icon {
-    color: var(--amber);
+  &.snackbar--loading {
+    --snackbar-accent: var(--info);
   }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--shape-medium);
+    height: 100%;
+    background-color: var(--snackbar-accent);
+    &:dir(rtl) {
+      left: auto;
+      right: 0;
+    }
+  }
+
   .snackbar__icon {
-    color: color(
-      from var(--snackbar-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: var(--snackbar-accent);
     display: contents;
     > * {
       margin-left: -0.5rem;
@@ -94,18 +97,5 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-/* the snackbar uses the opposite color scheme to the page, so it stands out */
-@media (prefers-color-scheme: dark) {
-  .snackbar {
-    color-scheme: light;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .snackbar {
-    color-scheme: dark;
   }
 }

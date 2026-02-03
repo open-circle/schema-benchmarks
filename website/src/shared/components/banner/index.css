@@ -16,18 +16,18 @@
   min-height: var(--banner-min-height);
   border-bottom: 1px solid var(--divider);
   padding: 0.5rem var(--banner-margin);
-  --banner-base-color: var(--primary);
+  --banner-base-color: var(--info);
   margin-top: 0;
   transition: margin-top 150ms var(--exit-temporary-curve);
   animation: banner-enter 150ms var(--standard-curve);
   &.banner--success {
-    --banner-base-color: var(--green);
+    --banner-base-color: var(--success);
   }
   &.banner--error {
-    --banner-base-color: var(--red);
+    --banner-base-color: var(--error);
   }
   &.banner--warning {
-    --banner-base-color: var(--amber);
+    --banner-base-color: var(--warning);
   }
   &.banner--closing {
     margin-top: -100%;
@@ -39,8 +39,7 @@
   }
   .banner__icon {
     color: color(
-      from var(--banner-base-color) srgb r g b /
-      var(--primary-text)
+      from var(--banner-base-color) srgb r g b / var(--primary-text)
     );
     --icon-fill: 1;
     display: contents;

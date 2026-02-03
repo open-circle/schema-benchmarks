@@ -3,9 +3,7 @@ import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
 import bem from "react-bem-helper";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
-import { useMediaQuery } from "#/shared/hooks/use-media-query";
 import { useScrollLockEffect } from "#/shared/hooks/use-scroll-lock";
-import { ToggleButton } from "../button/toggle";
 import { List, ListItem, ListItemContent, ListItemInternalLink } from "../list";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
@@ -53,16 +51,6 @@ function BaseSidebar({
           <img {...cls("logo-dark")} src="/logo_dark.svg" alt="Logo" />
           <img {...cls("logo-light")} src="/logo_light.svg" alt="Logo" />
           <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
-          <ToggleButton
-            {...cls({
-              element: "toggle",
-            })}
-            onClick={() => setOpen(false)}
-            tooltip="Collapse"
-            tabIndex={open ? 0 : -1}
-          >
-            <MdSymbol flipRtl>chevron_left</MdSymbol>
-          </ToggleButton>
         </div>
         {children}
       </aside>
@@ -90,9 +78,6 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
 }
 
 export function Sidebar() {
-  const { open } = useContext(SidebarOpenContext);
-  const isModal = useIsModal();
-  const isLtr = useMediaQuery("(dir: ltr)");
   return (
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
@@ -104,10 +89,6 @@ export function Sidebar() {
                   <ListItem key={link.to}>
                     <ListItemInternalLink
                       {...link}
-                      tooltip={!isModal && !open ? name : undefined}
-                      tooltipOpts={{
-                        placement: isLtr ? "right" : "left",
-                      }}
                       activeOptions={{ includeSearch: false }}
                     >
                       <ListItemContent leading={<MdSymbol>{icon}</MdSymbol>}>

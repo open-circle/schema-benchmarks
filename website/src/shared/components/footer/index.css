@@ -1,4 +1,5 @@
 .footer {
+  background-color: var(--sidebar-background);
   border-top: 1px solid var(--divider);
   padding: var(--margin);
   min-height: calc(var(--margin) + 5rem);

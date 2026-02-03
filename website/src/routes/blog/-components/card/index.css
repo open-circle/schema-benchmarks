@@ -14,7 +14,6 @@
 .blog-cover {
   background-color: var(--sidebar-background);
   margin: 0 auto;
-  border: 1px solid var(--divider);
   min-width: min(32rem, calc(100vw - var(--margin) * 2));
   aspect-ratio: 16 / 9;
   border-radius: var(--shape-medium);
@@ -41,14 +40,6 @@
   flex-direction: column;
   border-radius: var(--shape-medium);
   border: 1px solid var(--divider);
-  transition:
-    border-color var(--elevation-transition-duration) var(--standard-curve),
-    var(--elevation-transition),
-    var(--elevation-overlay-transition);
-  .avatar {
-    transition: border-color var(--elevation-transition-duration)
-      var(--standard-curve);
-  }
   a {
     text-decoration: none;
     color: inherit;
@@ -64,18 +55,6 @@
   }
   &:hover,
   &:has(a:focus-visible) {
-    border-color: transparent;
-    box-shadow: var(--elevation-2);
-    --elevated-background: light-dark(
-      var(--surface),
-      color-mix(
-        in hsl,
-        var(--surface),
-        var(--elevation-overlay-color) var(--elevation-2-overlay-opacity)
-      )
-    );
-    background-color: var(--elevated-background);
-    --avatar-border: var(--elevated-background);
   }
   h2 {
     margin: 0;

@@ -1,4 +1,4 @@
-import type { DistributiveOmit } from "@schema-benchmarks/utils";
+import { type DistributiveOmit, nonNullish } from "@schema-benchmarks/utils";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
@@ -6,12 +6,7 @@ import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 import { Spinner } from "../spinner";
 import { withTooltip } from "../tooltip";
 
-export type ButtonColor =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "success"
-  | "error";
+export type ButtonColor = "success" | "error" | "warning" | "info";
 
 interface BaseButtonProps {
   variant?: "text" | "outlined" | "contained";
@@ -31,7 +26,7 @@ const buttonCls = bem("button");
 export const Button = withTooltip(function Button({
   className,
   variant = "text",
-  color = "primary",
+  color,
   icon,
   children,
   loading,
@@ -44,7 +39,7 @@ export const Button = withTooltip(function Button({
       {...props}
       disabled={disabled || loading}
       {...buttonCls({
-        modifiers: [variant, color],
+        modifiers: [variant, color].filter(nonNullish),
         extra: className,
       })}
     >
@@ -66,14 +61,14 @@ interface BaseLinkButtonProps
 export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   className,
   variant = "text",
-  color = "primary",
+  color,
   ...props
 }: BaseLinkButtonProps) {
   return (
     <a
       {...props}
       {...buttonCls({
-        modifiers: [variant, color],
+        modifiers: [variant, color].filter(nonNullish),
         extra: className,
       })}
     />

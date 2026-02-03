@@ -1,49 +1,42 @@
-@import "material-colors/dist/colors.var.css";
-
 :root {
-  --primary: light-dark(var(--md-teal-500), var(--md-teal-300));
-  --on-primary: black;
-  --secondary: var(--md-deep-orange-300);
-  --on-secondary: black;
+  --page-background: var(--background);
+  --page-foreground: var(--foreground);
+  --focus-background: light-dark(var(--light-blue, lightblue), var(--comment));
 
-  --pink: light-dark(var(--md-pink-500), var(--md-pink-300));
-  --on-pink: black;
-  --red: light-dark(var(--md-red-500), var(--md-red-300));
-  --on-red: black;
-  --deep-orange: light-dark(
-    var(--md-deep-orange-500),
-    var(--md-deep-orange-300)
-  );
-  --on-deep-orange: black;
-  --orange: light-dark(var(--md-orange-500), var(--md-orange-300));
-  --on-orange: black;
-  --amber: light-dark(var(--md-amber-500), var(--md-amber-300));
-  --on-amber: black;
-  --yellow: light-dark(var(--md-yellow-500), var(--md-yellow-300));
-  --on-yellow: black;
-  --lime: light-dark(var(--md-lime-500), var(--md-lime-300));
-  --on-lime: black;
-  --light-green: light-dark(
-    var(--md-light-green-500),
-    var(--md-light-green-300)
-  );
-  --on-light-green: black;
-  --green: light-dark(var(--md-green-500), var(--md-green-300));
-  --on-green: black;
-  --teal: light-dark(var(--md-teal-500), var(--md-teal-300));
-  --on-teal: black;
+  --success: light-dark(var(--green5, green), var(--green, green));
+  --on-success: light-dark(var(--black), var(--black));
+  --warning: light-dark(var(--yellow5, yellow), var(--yellow, yellow));
+  --on-warning: light-dark(var(--black), var(--black));
+  --error: light-dark(var(--red5, red), var(--red, red));
+  --on-error: light-dark(var(--black), var(--black));
+  --info: light-dark(var(--blue, blue), var(--cyan, cyan));
+  --on-info: light-dark(var(--black), var(--black));
 
-  --page-background: light-dark(
-    var(--md-blue-grey-50),
-    var(--md-blue-grey-800)
-  );
-  --page-foreground: light-dark(
-    var(--md-blue-grey-900),
-    var(--md-blue-grey-50)
-  );
+  --link: light-dark(var(--blue, blue), var(--cyan, cyan));
+  --link-visited: light-dark(var(--purple, purple), var(--green, green));
+  --link-current: var(--foreground);
+  --link-current-background: var(--selection);
 
-  --surface: light-dark(white, var(--md-blue-grey-700));
-  --on-surface: light-dark(var(--md-blue-grey-900), var(--md-blue-grey-50));
+  --button: light-dark(var(--pink5, pink), var(--pink, pink));
+  --on-button: light-dark(var(--white), var(--black));
+  --button-selected: var(--foreground);
 
-  --divider: color(from var(--page-foreground) srgb r g b / 0.12);
+  --sidebar-background: light-dark(var(--white-secondary, white), var(--black));
+
+  --code-background: light-dark(var(--white-secondary, white), var(--black));
+
+  --divider: light-dark(var(--grey), var(--disabled, grey));
+
+  --scroll-track: light-dark(var(--white-secondary, white), var(--black));
+  --scroll-thumb: var(--purple);
+
+  --snackbar-background: light-dark(var(--white), var(--black));
+
+  --tooltip-background: light-dark(var(--white), var(--black));
+  --tooltip-foreground: light-dark(var(--black), var(--white));
+
+  --spinner1: light-dark(var(--pink5, pink), var(--cyan, cyan));
+  --spinner2: light-dark(var(--deep-orange5, orange), var(--green, green));
+  --spinner3: light-dark(var(--yellow5, yellow), var(--orange, orange));
+  --spinner4: light-dark(var(--teal5, teal), var(--purple, purple));
 }

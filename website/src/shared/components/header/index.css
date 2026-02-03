@@ -1,60 +1,30 @@
 :root {
-  --page-header-background: light-dark(var(--primary), var(--md-blue-grey-700));
-  --page-header-foreground: light-dark(
-    var(--on-primary),
-    var(--page-foreground)
-  );
   --page-header-height: 4rem;
 }
 
 .page-header {
   view-transition-name: page-header;
   max-width: 100vw;
-  background-color: light-dark(
-    var(--page-header-background),
-    color-mix(
-      in hsl,
-      var(--page-header-background),
-      var(--elevation-overlay-color) var(--elevation-4-overlay-opacity)
-    )
-  );
-  color: var(--page-header-foreground);
-  box-shadow: var(--elevation-4);
   display: flex;
   align-items: center;
-  height: var(--page-header-height);
-  padding: 1rem;
+  border-bottom: 1px solid var(--divider);
   position: sticky;
+  top: 0;
   left: 0;
   right: 0;
-  top: 0;
   z-index: 4;
-  overflow: hidden;
-  .page-header__actions {
-    margin-left: auto;
-  }
+  background-color: var(--page-background);
+  height: var(--page-header-height);
+  padding: 1rem;
   .page-header__toggle {
-    --button-base-color: var(--page-header-foreground);
-    margin-left: -0.5rem;
-    opacity: 1;
-    transition:
-      margin 250ms var(--standard-curve),
-      opacity 250ms;
+    display: none;
+    margin-left: -1rem;
     &:dir(rtl) {
       margin-left: 0;
-      margin-right: -0.5rem;
+      margin-right: -1rem;
     }
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-    @media (--laptop) or (--desktop) {
-      &.page-header__toggle--open {
-        margin-left: -3rem;
-        opacity: 0;
-        pointer-events: none;
-        &:dir(rtl) {
-          margin-left: 0;
-          margin-right: -3rem;
-        }
-      }
+    @media (--phone) or (--tablet-small) or (--tablet-large) {
+      display: block;
     }
   }
 }

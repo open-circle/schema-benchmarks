@@ -31,7 +31,7 @@ const meta = preview.meta({
       control: {
         type: "inline-radio",
       },
-      options: ["primary", "secondary", "danger", undefined],
+      options: ["success", "error", "warning", "info", undefined],
     },
   },
   args: {
