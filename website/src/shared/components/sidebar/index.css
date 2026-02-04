@@ -155,7 +155,7 @@
   }
 }
 
-%darkTheme {
+%darkSidebar {
   .sidebar__logo-light {
     display: none;
   }
@@ -163,7 +163,7 @@
     display: block;
   }
 }
-%lightTheme {
+%lightSidebar {
   .sidebar__logo-dark {
     display: none;
   }
@@ -174,20 +174,20 @@
 
 @media (prefers-color-scheme: light) {
   [data-theme="system"] {
-    @extend %lightTheme;
+    @extend %lightSidebar;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   [data-theme="system"] {
-    @extend %darkTheme;
+    @extend %darkSidebar;
   }
 }
 
 [data-theme="dark"] {
-  @extend %darkTheme;
+  @extend %darkSidebar;
 }
 
 [data-theme="light"] {
-  @extend %lightTheme;
+  @extend %lightSidebar;
 }

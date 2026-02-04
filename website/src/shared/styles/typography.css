@@ -128,7 +128,7 @@
   --disabled-text: 0.38;
 }
 
-%darkTheme {
+%darkTypography {
   /* Text looks thicker on dark backgrounds, so we use thinner weights to compensate */
   :root {
     --weight-thin: 100;
@@ -145,12 +145,12 @@
 
 @media (prefers-color-scheme: dark) {
   [data-theme="system"] {
-    @extend %darkTheme;
+    @extend %darkTypography;
   }
 }
 
 [data-theme="dark"] {
-  @extend %darkTheme;
+  @extend %darkTypography;
 }
 
 .typo-headline1 {
