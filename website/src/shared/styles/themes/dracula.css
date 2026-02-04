@@ -515,3 +515,13 @@ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascr
     background-color: var(--red-30);
   }
 }
+
+[data-theme="dark"] {
+  @extend %darkTheme;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    @extend %darkTheme;
+  }
+}
