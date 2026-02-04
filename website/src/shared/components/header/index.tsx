@@ -1,6 +1,13 @@
+import {
+  AtLeastOneKey,
+  type MaybeArray,
+  nonNullish,
+  partition,
+} from "@schema-benchmarks/utils";
 import { Link, useMatches } from "@tanstack/react-router";
 import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
+import * as v from "valibot";
 import {
   styleLabels,
   styleSchema,
@@ -17,40 +24,47 @@ const cls = bem("page-header");
 
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
-    crumb: string | undefined;
+    crumb: MaybeArray<string> | undefined;
   }
 }
 
-const hasCrumb = (data: unknown): data is { crumb: string } =>
-  typeof data === "object" &&
-  data !== null &&
-  "crumb" in data &&
-  typeof data.crumb === "string";
+const crumbSchema = v.object({
+  crumb: v.union([v.string(), v.array(v.string())]),
+});
 
 export function Header() {
   const { open, setOpen } = useContext(SidebarOpenContext);
-  const [crumbs, currentCrumb] = useMatches({
+  const [crumbs, currentCrumbs] = useMatches({
     select: (matches) => {
       const allCrumbs = matches
         .filter(
           (
             match,
           ): match is typeof match &
-            (
-              | { staticData: { crumb: string } }
-              | { loaderData: { crumb: string } }
-            ) => hasCrumb(match.loaderData) || hasCrumb(match.staticData),
+            AtLeastOneKey<
+              Partial<
+                Record<
+                  "loaderData" | "staticData",
+                  v.InferInput<typeof crumbSchema>
+                >
+              >
+            > =>
+            v.is(crumbSchema, match.loaderData) ||
+            v.is(crumbSchema, match.staticData),
         )
-        .map((match) => ({
-          to: match.pathname,
-          params: match.params,
-          search: match.search,
-          name: hasCrumb(match.loaderData)
-            ? match.loaderData.crumb
-            : match.staticData.crumb,
-        }));
-      const currentCrumb = allCrumbs.pop();
-      return [allCrumbs, currentCrumb] as const;
+        .flatMap((match) =>
+          [match.staticData.crumb, match.loaderData?.crumb]
+            .filter(nonNullish)
+            .flat()
+            .map((crumb) => ({
+              to: match.pathname,
+              params: match.params,
+              search: match.search,
+              name: crumb,
+            })),
+        );
+      const currentPathname = allCrumbs.at(-1)?.to;
+      return partition(allCrumbs, (crumb) => crumb.to !== currentPathname);
     },
   });
   const { theme, setTheme } = useTheme();
@@ -70,7 +84,7 @@ export function Header() {
       </ToggleButton>
       <nav className="breadcrumbs">
         {crumbs.map((crumb) => (
-          <Fragment key={crumb.to}>
+          <Fragment key={crumb.to + crumb.name}>
             <Link
               to={crumb.to}
               params={crumb.params}
@@ -82,9 +96,12 @@ export function Header() {
             <span>/</span>
           </Fragment>
         ))}
-        {currentCrumb && (
-          <span className="typo-headline6">{currentCrumb.name}</span>
-        )}
+        {currentCrumbs.map((crumb, index) => (
+          <Fragment key={crumb.to + crumb.name}>
+            <span className="typo-headline6">{crumb.name}</span>
+            {index !== currentCrumbs.length - 1 && <span>/</span>}
+          </Fragment>
+        ))}
       </nav>
       <div {...cls("actions")}>
         <ButtonGroup ariaLabel="Style" className="pref-switcher">
