@@ -136,6 +136,11 @@ code[class*="language-"] {
     font: inherit;
   }
   &.line-numbers {
+    padding-left: 3.8em;
+    > code {
+      display: block;
+      padding-top: 1em;
+    }
     .code-block__title {
       margin: -1em;
       margin-bottom: 0;
@@ -146,6 +151,7 @@ code[class*="language-"] {
       }
     }
     .line-numbers-rows {
+      padding: 1em 0;
       border-right: 1px solid var(--divider);
       &:dir(rtl) {
         border-right: none;
