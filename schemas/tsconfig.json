@@ -1,14 +1,13 @@
 {
   "extends": "../tsconfig.base.json",
-  "include": ["./libraries/**/*", "./src/**/*", "./index.ts"],
+  "include": ["libraries/**/*", "src/**/*"],
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
-      "#src": ["./index.ts"],
-      "#src/*": ["./src/*"]
+      "#src": ["./src/index.ts"]
     }
   }
 }

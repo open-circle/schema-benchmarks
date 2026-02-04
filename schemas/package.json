@@ -25,10 +25,10 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "exports": {
-    ".": "./index.ts",
+    ".": "./src/index.ts",
     "./libraries": "./dist/index.js"
   },
-  "main": "./index.ts",
+  "main": "./src/index.ts",
   "name": "@schema-benchmarks/schemas",
   "private": true,
   "scripts": {

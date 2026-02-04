@@ -1,4 +1,3 @@
-import { defineBenchmarks } from "@schema-benchmarks/schemas";
 import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
@@ -7,6 +6,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";
+import { defineBenchmarks } from "#src";
 import type { TypiaSchema } from ".";
 
 export default defineBenchmarks({

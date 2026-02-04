@@ -1,5 +1,5 @@
 import * as S from "sury";
-import type { ProductData } from "../../..";
+import type { ProductData } from "#src";
 
 const imageSchema = S.schema({
   id: S.number,
