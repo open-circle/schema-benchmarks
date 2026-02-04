@@ -24,6 +24,11 @@ export const highlightFn = createServerFn()
 
       lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
     });
+    Prism.hooks.add("wrap", (env) => {
+      if (env.type === "comment" && env.content.startsWith("/**")) {
+        env.classes.push("doc-comment");
+      }
+    });
 
     if (!Prism.languages[language]) loadLanguages(language);
     const formatted = Prism.highlight(
