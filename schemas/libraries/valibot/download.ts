@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 const imageSchema = v.object({
   id: v.number(),

@@ -1,5 +1,5 @@
 import * as Schema from "effect/Schema";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 const Image = Schema.Struct({
   id: Schema.Number,

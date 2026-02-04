@@ -13,6 +13,12 @@ export default defineConfig({
     target: ["node24", "esnext"],
     sourcemap: true,
   },
+  resolve: {
+    alias: {
+      "#src": "./index.ts",
+      "#src/*": "./src/*",
+    },
+  },
   define: {
     self: "globalThis",
   },

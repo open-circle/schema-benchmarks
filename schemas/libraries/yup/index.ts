@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 export function getYupSchema() {
   const imageSchema = yup.object({

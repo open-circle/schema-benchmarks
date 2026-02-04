@@ -1,5 +1,5 @@
 import z from "zod";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 export function getZodSchema() {
   const imageSchema = z.object({

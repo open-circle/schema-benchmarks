@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 const imageSchema = yup.object({
   id: yup.number().required(),

@@ -1,5 +1,5 @@
 import * as Schema from "effect/Schema";
-import type { ProductData } from "../../";
+import type { ProductData } from "#src";
 
 export function getEffectSchema() {
   const Image = Schema.Struct({
