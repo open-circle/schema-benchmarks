@@ -16,6 +16,29 @@ function getLanguage(fileName: string) {
 
 const libraryNameRegex = /^schemas\/libraries\/([^/]+)\//;
 
+const fileNameMap: Record<string, string> = {
+  "benchmarks.ts": "Benchmarks",
+  "download.ts": "Source",
+  "minified.js": "Compiled (minified)",
+  "unminified.js": "Compiled (unminified)",
+};
+// schemas/libraries/<libraryName>/download.ts -> <libraryName> / Source
+// schemas/libraries/<libraryName>/download/[<note>].ts -> <libraryName> (<note>) / Source
+// schemas/libraries/<libraryName>/download_compiled/[<note>/]<minify>.js -> <libraryName> / Compiled ([minify])
+const noteRegex = /download\/([^/]+).ts|download_compiled\/([^/]+)\//;
+function getLibraryCrumbs(fileName: string) {
+  // biome-ignore lint/style/noNonNullAssertion: this function is only called if the regex matches
+  const libraryName = fileName.match(libraryNameRegex)![1];
+  const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
+  const noteMatch = fileName.match(noteRegex);
+  const note = noteMatch?.[1] ?? noteMatch?.[2];
+  const fileNameMapped =
+    fileNamePart === `${note}.ts`
+      ? fileNameMap["download.ts"]
+      : (fileNameMap[fileNamePart] ?? fileNamePart);
+  return [`${libraryName}${note ? ` (${note})` : ""}`, fileNameMapped];
+}
+
 export const Route = createFileRoute("/repo/raw/$")({
   component: RouteComponent,
   staticData: { crumb: undefined },
@@ -39,13 +62,18 @@ export const Route = createFileRoute("/repo/raw/$")({
       if (isResponseError(e) && e.status === 404) throw notFound();
       throw e;
     }
-    const libraryName = fileName.match(libraryNameRegex)?.[1];
     const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
-    return { crumb: libraryName ? [libraryName, fileNamePart] : fileNamePart };
+    return {
+      crumb: libraryNameRegex.test(fileName)
+        ? getLibraryCrumbs(fileName)
+        : [fileNamePart],
+    };
   },
-  head: ({ params: { _splat: fileName } }) =>
+  head: ({ params: { _splat: fileName }, loaderData }) =>
     generateMetadata({
-      title: `Raw (${fileName?.split("/").pop() ?? "Unknown"})`,
+      title: loaderData?.crumb
+        ? [...loaderData.crumb].reverse().join(" | ")
+        : "Unknown",
       description: "View the raw contents of a file in the repository.",
       openGraph: {
         url: `/repo/raw/${fileName}`,
