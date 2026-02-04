@@ -50,10 +50,12 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             {
               url: "/favicon_dark.ico",
               media: "(prefers-color-scheme: dark)",
+              sizes: "any",
             },
             {
               url: "/favicon_light.ico",
               media: "(prefers-color-scheme: light)",
+              sizes: "any",
             },
             {
               url: "/icon_dark.svg",
