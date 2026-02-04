@@ -1,5 +1,5 @@
 import {
-  AtLeastOneKey,
+  type AtLeastOneKey,
   type MaybeArray,
   nonNullish,
   partition,
