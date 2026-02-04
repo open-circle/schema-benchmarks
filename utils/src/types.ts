@@ -64,3 +64,5 @@ export type KeyofUnion<T> = T extends T ? keyof T : never;
 export type OneOf<T, K extends keyof T = KeyofUnion<T>> = T extends T
   ? T & { [P in Exclude<K, keyof T>]?: never }
   : never;
+
+export type AtLeastOneKey<T> = { [K in keyof T]: PickRequired<T, K> }[keyof T];

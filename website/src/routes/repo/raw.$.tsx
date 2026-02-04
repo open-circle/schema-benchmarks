@@ -14,9 +14,11 @@ function getLanguage(fileName: string) {
   return extension;
 }
 
+const libraryNameRegex = /^schemas\/libraries\/([^/]+)\//;
+
 export const Route = createFileRoute("/repo/raw/$")({
   component: RouteComponent,
-  staticData: { crumb: "Raw" },
+  staticData: { crumb: undefined },
   async loader({
     context: { queryClient },
     params: { _splat: fileName },
@@ -37,6 +39,9 @@ export const Route = createFileRoute("/repo/raw/$")({
       if (isResponseError(e) && e.status === 404) throw notFound();
       throw e;
     }
+    const libraryName = fileName.match(libraryNameRegex)?.[1];
+    const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
+    return { crumb: libraryName ? [libraryName, fileNamePart] : fileNamePart };
   },
   head: ({ params: { _splat: fileName } }) =>
     generateMetadata({
