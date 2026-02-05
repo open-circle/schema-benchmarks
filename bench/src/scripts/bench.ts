@@ -121,7 +121,7 @@ for (const getConfig of Object.values(libraries)) {
     console.log("Bench complete");
   });
 
-  const context = createContext();
+  const context = await createContext();
 
   for (const benchConfig of ensureArray(initialization)) {
     const {
