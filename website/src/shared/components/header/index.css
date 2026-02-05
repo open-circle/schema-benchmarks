@@ -23,6 +23,7 @@
       margin-left: 0;
       margin-right: -1rem;
     }
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--phone) or (--tablet-small) or (--tablet-large) {
       display: block;
     }
@@ -46,6 +47,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) or (--tablet-small) {
     display: none;
   }

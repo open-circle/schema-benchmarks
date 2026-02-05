@@ -89,7 +89,7 @@ a:not(.button):not(.chip):not(.react-tweet-theme a) {
     outline: none;
     color: var(--link-focus);
   }
-  &[data-status="active"]&:not(.breadcrumbs *) {
+  &[data-status="active"]:not(.breadcrumbs *) {
     color: var(--link-current);
   }
 }

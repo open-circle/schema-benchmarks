@@ -12,7 +12,12 @@
       "./preview.ts",
       "./content-collections.ts",
       "./.storybook/**/*",
-      "!**/routeTree.gen.ts"
+      "!**/routeTree.gen.ts",
+      // biome can't parse placeholder classes (%)
+      "!**/src/shared/styles/themes/github-light.css",
+      "!**/src/shared/styles/themes/dracula.css",
+      "!**/src/shared/styles/typography.css",
+      "!**/src/shared/components/sidebar/index.css"
     ]
   },
   "linter": {
