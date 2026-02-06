@@ -1,6 +1,7 @@
 import {
   autoUpdate,
   type ComputePositionConfig,
+  flip,
   shift,
   useFloating,
   useTransitionStyles,
@@ -81,7 +82,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     const { refs, floatingStyles, context } = useFloating({
       open,
       whileElementsMounted: autoUpdate,
-      middleware: [shift()],
+      middleware: [shift(), flip()],
       ...opts,
       ...tooltipOpts,
     });

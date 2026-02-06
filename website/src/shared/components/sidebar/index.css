@@ -7,14 +7,13 @@
   top: 0;
   bottom: 0;
   height: 100vh;
-  flex: 0 0 var(--sidebar-width);
+  flex: 0 0 auto;
   background-color: var(--sidebar-background);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
-  max-width: var(--sidebar-width);
-  transition: max-width 250ms var(--standard-curve);
+  min-width: var(--sidebar-width);
   .sidebar__logo {
     display: flex;
     align-items: center;
@@ -24,7 +23,6 @@
     height: var(--page-header-height);
     border-bottom: 1px solid var(--divider);
     position: relative;
-    width: var(--sidebar-width);
     img {
       height: 2rem;
       margin-left: -0.25rem;
@@ -35,7 +33,7 @@
     }
     h2 {
       margin: 0;
-      white-space: pre;
+      font-family: var(--font-family-code);
     }
   }
   nav {
@@ -85,14 +83,29 @@
     }
   }
 
+  .pref-switchers {
+    margin-top: auto;
+    padding: 1rem;
+    border-top: 1px solid var(--divider);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    .pref-switcher {
+      background-color: var(--page-background);
+    }
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
+    @media not (--modal-sidebar) {
+      display: none;
+    }
+  }
+
   /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-  @media (--phone) or (--tablet-small) or (--tablet-large) {
+  @media (--modal-sidebar) {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 16;
-    width: var(--sidebar-width);
     border-radius: 0 var(--shape-large) var(--shape-large) 0;
     transform: translateX(-100%);
     transition: transform 250ms var(--exit-temporary-curve);
@@ -104,11 +117,6 @@
     }
     @media (prefers-reduced-motion) {
       transition: none;
-    }
-
-    &,
-    &.sidebar--open {
-      max-width: none;
     }
 
     &.sidebar--open {
@@ -138,7 +146,7 @@
 .sidebar-backdrop {
   display: none;
   /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-  @media (--phone) or (--tablet-small) or (--tablet-large) {
+  @media (--modal-sidebar) {
     display: block;
     position: fixed;
     top: 0;

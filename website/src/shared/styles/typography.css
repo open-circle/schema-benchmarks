@@ -316,7 +316,7 @@ code {
   --button-size: 0.875rem;
   --button-transform: none;
   --overline-size: 0.625rem;
-  --overline-transform: none;
+  --overline-transform: uppercase;
   --caption-size: 0.75rem;
   --caption-transform: none;
 }

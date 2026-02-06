@@ -4,16 +4,22 @@ import { type ReactNode, useContext, useEffect } from "react";
 import bem from "react-bem-helper";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
 import { useScrollLockEffect } from "#/shared/hooks/use-scroll-lock";
+import {
+  styleLabels,
+  styleSchema,
+  themeLabels,
+  themeSchema,
+} from "#/shared/lib/prefs/constants";
+import { ButtonGroup } from "../button";
+import { ToggleButton } from "../button/toggle";
 import { List, ListItem, ListItemContent, ListItemInternalLink } from "../list";
+import { useStyle, useTheme } from "../prefs/context";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 import { sidebarGroups } from "./groups";
 
 const cls = bem("sidebar");
 const backdropCls = bem("sidebar-backdrop");
-
-const useIsModal = () =>
-  useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
 
 function BaseSidebar({
   children,
@@ -60,7 +66,7 @@ function BaseSidebar({
 
 function BreakpointSidebar({ children }: { children?: ReactNode }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
-  const isModal = useIsModal();
+  const isModal = useBreakpoints(["phone", "tabletSmall", "tabletLarge"], true);
   useScrollLockEffect(isModal && open);
   return (
     <ClientOnly
@@ -78,6 +84,8 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
 }
 
 export function Sidebar() {
+  const { theme, setTheme } = useTheme();
+  const { style, setStyle } = useStyle();
   return (
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
@@ -103,6 +111,32 @@ export function Sidebar() {
           ))}
         </ul>
       </nav>
+      <div className="pref-switchers">
+        <ButtonGroup ariaLabel="Style" className="pref-switcher">
+          {styleSchema.options.map((option) => (
+            <ToggleButton
+              key={option}
+              active={style === option}
+              onClick={() => setStyle(option)}
+              tooltip={styleLabels[option].label}
+            >
+              <MdSymbol>{styleLabels[option].icon}</MdSymbol>
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+        <ButtonGroup ariaLabel="Theme" className="pref-switcher">
+          {themeSchema.options.map((option) => (
+            <ToggleButton
+              key={option}
+              active={theme === option}
+              onClick={() => setTheme(option)}
+              tooltip={themeLabels[option].label}
+            >
+              <MdSymbol>{themeLabels[option].icon}</MdSymbol>
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+      </div>
     </BreakpointSidebar>
   );
 }

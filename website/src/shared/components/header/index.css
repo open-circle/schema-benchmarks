@@ -24,7 +24,7 @@
       margin-right: -1rem;
     }
     /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-    @media (--phone) or (--tablet-small) or (--tablet-large) {
+    @media (--modal-sidebar) {
       display: block;
     }
   }
@@ -39,6 +39,9 @@
     }
     .pref-switcher {
       background-color: var(--sidebar-background);
+      @media (--modal-sidebar) {
+        display: none;
+      }
     }
   }
 }
@@ -48,14 +51,13 @@
   align-items: center;
   gap: 0.5rem;
   /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-  @media (--phone) or (--tablet-small) {
+  @media (--phone) {
     display: none;
   }
   a {
     text-decoration: none;
     color: color(
-      from var(--page-header-foreground) srgb r g b /
-      var(--primary-text)
+      from var(--page-header-foreground) srgb r g b / var(--primary-text)
     );
     transition:
       color 250ms,

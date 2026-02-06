@@ -11,3 +11,5 @@ large (desktop): 1440px and above
 @custom-media --tablet-large (min-width: 905px) and (max-width: 1239px);
 @custom-media --laptop (min-width: 1240px) and (max-width: 1439px);
 @custom-media --desktop (min-width: 1440px);
+
+@custom-media --modal-sidebar (--phone) or (--tablet-small) or (--tablet-large);

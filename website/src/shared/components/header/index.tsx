@@ -15,10 +15,11 @@ import {
   themeSchema,
 } from "#/shared/lib/prefs/constants";
 import { ButtonGroup } from "../button";
-import { ToggleButton } from "../button/toggle";
+import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
 import { useStyle, useTheme } from "../prefs/context";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
+import GithubIcon from "./github.svg?react";
 
 const cls = bem("page-header");
 
@@ -128,6 +129,14 @@ export function Header() {
             </ToggleButton>
           ))}
         </ButtonGroup>
+        <ExternalLinkToggleButton
+          href="https://github.com/open-circle/schema-benchmarks"
+          target="_blank"
+          rel="noreferrer noopener"
+          tooltip="GitHub"
+        >
+          <GithubIcon />
+        </ExternalLinkToggleButton>
       </div>
     </header>
   );

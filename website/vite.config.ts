@@ -10,6 +10,7 @@ import rehypePrism from "rehype-prism-plus";
 import rehypeSlug from "rehype-slug";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import svgr from "vite-plugin-svgr";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import {
@@ -63,6 +64,7 @@ const config = defineConfig({
         ),
       ],
     }),
+    svgr(),
     !process.env.VITEST && contentCollections(),
   ],
   resolve: {
