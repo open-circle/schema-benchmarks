@@ -15,7 +15,6 @@ import {
   optionalOptimizeTypeSchema,
 } from "../-constants";
 import { getBenchResults } from "../-query";
-import benchmarkStyles from "../styles.css?url";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({
@@ -31,12 +30,6 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
       openGraph: {
         url: "/validation/",
       },
-      links: [
-        {
-          rel: "stylesheet",
-          href: benchmarkStyles,
-        },
-      ],
     }),
   component: RouteComponent,
   validateSearch: searchSchema,

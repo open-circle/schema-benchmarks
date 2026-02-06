@@ -10,7 +10,6 @@ import { getAllWeeklyDownloads } from "../../-query";
 import { BenchResults } from "../-components/results";
 import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
 import { getBenchResults } from "../-query";
-import benchmarkStyles from "../styles.css?url";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({
@@ -25,12 +24,6 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
       openGraph: {
         url: "/initialization/",
       },
-      links: [
-        {
-          rel: "stylesheet",
-          href: benchmarkStyles,
-        },
-      ],
     }),
   component: RouteComponent,
   validateSearch: searchSchema,
