@@ -1,4 +1,5 @@
 .plot-container {
   padding: 1rem;
   font-feature-settings: "tnum" 1;
+  max-width: 100%;
 }
