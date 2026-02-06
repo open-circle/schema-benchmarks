@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_home/")({
         url: "/",
       },
     }),
-  staticData: { crumb: undefined },
+  staticData: { crumb: "Home" },
 });
 
 function App() {

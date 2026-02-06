@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         );
       },
     ),
-  staticData: { crumb: "Benchmarks" },
+  staticData: { crumb: undefined },
 
   loader: async () =>
     promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),

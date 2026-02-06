@@ -29,11 +29,6 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "Parsing",
         icon: "output_circle",
       },
-    ],
-  },
-  {
-    key: "download",
-    links: [
       {
         ...linkOptions({ to: "/download" }),
         name: "Download",
