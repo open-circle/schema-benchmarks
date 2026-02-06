@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import blogStyles from "./styles.css?url";
 
 export const Route = createFileRoute("/blog")({
-  component: RouteComponent,
+  component: Outlet,
   head: () => ({
     links: [
       {
@@ -13,7 +13,3 @@ export const Route = createFileRoute("/blog")({
   }),
   staticData: { crumb: "Blog" },
 });
-
-function RouteComponent() {
-  return <Outlet />;
-}
