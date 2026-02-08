@@ -16,6 +16,14 @@ const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   return <Story />;
 };
 
+const themeDecorator: Decorator<{ theme?: "light" | "dark" | "system" }> = (
+  Story,
+  { args },
+) => {
+  document.documentElement.dataset.theme = args.theme ?? "system";
+  return <Story />;
+};
+
 declare module "@storybook/react-vite" {
   export interface Parameters {
     historyOpts?: {
@@ -77,12 +85,24 @@ export default definePreview({
       },
       options: ["ltr", "rtl"],
     },
+    theme: {
+      control: {
+        type: "inline-radio",
+      },
+      options: ["light", "dark", "system"],
+    },
   },
 
   args: {
     dir: "ltr",
+    theme: "system",
   },
 
-  decorators: [dirDecorator, queryClientDecorator, routerDecorator],
+  decorators: [
+    dirDecorator,
+    themeDecorator,
+    queryClientDecorator,
+    routerDecorator,
+  ],
   addons: [],
 });
