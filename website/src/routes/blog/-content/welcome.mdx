@@ -32,13 +32,13 @@ I'm [`@eskimojo`](https://github.com/EskiMojo14), the main developer of this pro
 
 ## Why Schema Benchmarks?
 
-Fabian, in his role as the creator of [`valibot`](https://valibot.dev), was well known for his passion for comparing schema validation libraries. However, this was largely confined to his social media posts, and Valibot's website.
+Fabian, in his role as the creator of [`valibot`](https://valibot.dev), is well known for his passion for comparing schema validation libraries. However, this was largely confined to his social media posts, and Valibot's website.
 
 <Tweet apiUrl="/api/tweet/2007911897551565137" />
 
 Other schema validation libraries have their own comparisons listed on their websites too - but there was no central resource for them.
 
-In early November, Fabian approached me with his idea for a dedicated schema benchmarking project, one that measures all of the different aspects of what can make a schema fast/slow. I was immediately interested, and began work (including creating the logo) the next day.
+In early November, Fabian approached me with his idea for a dedicated schema benchmarking project, one that measures all of the different aspects of what can make a schema fast or slow.
 
 For our benchmarks, we separate out each step of a schema's process. This includes:
 
@@ -47,9 +47,9 @@ For our benchmarks, we separate out each step of a schema's process. This includ
 - [Initialization](#initialization) - How long it takes to create
   a schema.
 - [Validation](#validation) - How long it takes to check if a
-  value matches a schema.
+  value matches a schema (and return a boolean)
 - [Parsing](#parsing) - How long it takes to check if a value
-  matches a schema, and return a new value.
+  matches a schema, and return a new (typed, and maybe transformed) value.
 
 We also track optimizations used by these libraries (for example, whether it hooks into the build process like [`typia`](https://typia.io), or if it generates JIT code at runtime like [`arktype`](https://arktype.io)), and whether they return the first issue found or all of them.
 
@@ -84,6 +84,15 @@ On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the
 
 ### <Link to="/initialization">Initialization</Link>
 
+```ts title="schemas.ts"
+import * as v from "valibot";
+
+export const personSchema = v.object({
+  name: v.string(),
+  age: v.number(),
+});
+```
+
 Creating a schema can be a one time cost, but it depends on usage. Servers that are long lasting probably don't care, but short lived processes like CLI tools or browser extensions would want to avoid doing too much work at startup.
 
 For each library, we create a <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/index.ts" }} target="\_blank" rel="noreferrer noopener">`getSchema`</Link> function that returns a schema (with the same validations as the other libraries, to keep the comparison fair). We then benchmark how long it takes to call this function.
@@ -99,6 +108,15 @@ Here are the current results:
 A clear outlier here is [`ajv`](https://ajv.js.org), taking 4ms to initialize (roughly 90x slower than [`valibot`](https://valibot.dev), for example).
 
 ### <Link to="/validation">Validation</Link>
+
+```ts title="schemas.ts"
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+if (v.is(personSchema, data)) {
+  // data is narrowed to Person
+}
+```
 
 Checking if a given value matches the schema. This is different to [parsing](#parsing) because it doesn't return a new value.
 
@@ -123,6 +141,14 @@ As to be expected, the libraries that use optimizations like precompilation ([`t
 [`effect`](https://effect.website/docs/schema/introduction/), [`arktype`](https://arktype.io), and [`valibot`](https://valibot.dev) are not too far behind, with [`yup`](https://github.com/jquense/yup) significantly slower than the rest.
 
 ### <Link to="/parsing">Parsing</Link>
+
+```ts title="schemas.ts"
+import * as v from "valibot";
+import { personSchema } from "./schemas";
+
+const person = v.parse(personSchema, data);
+// person is of type Person
+```
 
 Parsing a value to match the schema. This is different to [validation](#validation) because it returns a new value, instead of a boolean.
 
