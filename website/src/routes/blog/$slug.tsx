@@ -27,10 +27,12 @@ export const Route = createFileRoute("/blog/$slug")({
     );
     const images = data.authors.map(getAvatarUrl);
     if (typeof data.cover !== "string") images.push(data.cover.src);
-    await Promise.all([
+    const [mdxModule] = await Promise.all([
+      queryClient.ensureQueryData(importMdx(data._meta.filePath)),
       preloadImages(images),
-      queryClient.prefetchQuery(importMdx(data._meta.filePath)),
     ]);
+    if (typeof mdxModule.prefetch === "function")
+      await mdxModule.prefetch({ queryClient });
     return { crumb: data.title, ...data };
   },
   head: ({ loaderData, params }) =>

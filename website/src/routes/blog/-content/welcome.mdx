@@ -11,11 +11,20 @@ authors:
   - "EskiMojo14"
 ---
 
-Welcome to Schema Benchmarks, an open source project aiming to consolidate and standardise comparisons of schema validation libraries!
-
-Created by [`@eskimojo`](https://github.com/EskiMojo14), suggested by [`@fabian-hiller`](https://github.com/fabian-hiller), as part of [Open Circle](https://github.com/open-circle).
-
 import { Tweet } from "react-tweet";
+import { getBenchResults } from "#/routes/_benchmarks/_runtime/-query";
+import { getDownloadResults } from "#/routes/_benchmarks/download/-query";
+
+export async function prefetch({ queryClient }) {
+  await queryClient.prefetchQuery(getBenchResults());
+  await queryClient.prefetchQuery(getDownloadResults());
+}
+
+Welcome to Schema Benchmarks, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
+
+You can explore the results through the sidebar (and the [homepage](/)), and view the source code over on [GitHub](https://github.com/open-circle/schema-benchmarks).
+
+I'm [`@eskimojo`](https://github.com/EskiMojo14), the main developer of this project, working with [`@fabian-hiller`](https://github.com/fabian-hiller), as part of [Open Circle](https://github.com/open-circle).
 
 <Tweet apiUrl="/api/tweet/2007886795619643738" />
 
