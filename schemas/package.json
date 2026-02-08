@@ -6,7 +6,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.1.29",
-    "dedent": "^1.7.1",
+    "dedent": "catalog:",
     "effect": "^3.19.16",
     "joi": "^18.0.2",
     "sury": "11.0.0-alpha.4",
@@ -17,7 +17,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@ryoppippi/unplugin-typia": "^2.6.5",
+    "@ryoppippi/unplugin-typia": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "unplugin-macros": "^0.18.7",

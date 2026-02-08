@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@ryoppippi/unplugin-typia':
+      specifier: ^2.6.5
+      version: 2.6.5
     '@types/node':
       specifier: ^24
       version: 24.10.11
@@ -27,6 +30,9 @@ catalogs:
     '@vitest/pretty-format':
       specifier: ^4.0.18
       version: 4.0.18
+    dedent:
+      specifier: ^1.7.1
+      version: 1.7.1
     playwright:
       specifier: ^1.58.1
       version: 1.58.1
@@ -63,7 +69,7 @@ importers:
   bench:
     dependencies:
       '@ryoppippi/unplugin-typia':
-        specifier: ^2.6.5
+        specifier: 'catalog:'
         version: 2.6.5(rollup@4.57.1)(typescript@5.9.3)(typia@11.0.3(@types/node@24.10.11)(typescript@5.9.3))(vite@7.3.1(@types/node@24.10.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
       '@schema-benchmarks/schemas':
         specifier: workspace:*
@@ -112,7 +118,7 @@ importers:
         specifier: ^2.1.29
         version: 2.1.29
       dedent:
-        specifier: ^1.7.1
+        specifier: 'catalog:'
         version: 1.7.1
       effect:
         specifier: ^3.19.16
@@ -140,7 +146,7 @@ importers:
         version: 4.3.6
     devDependencies:
       '@ryoppippi/unplugin-typia':
-        specifier: ^2.6.5
+        specifier: 'catalog:'
         version: 2.6.5(rollup@4.57.1)(typescript@5.9.3)(typia@11.0.3(@types/node@24.10.11)(typescript@5.9.3))(vite@7.3.1(@types/node@24.10.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
       '@types/node':
         specifier: 'catalog:'
@@ -243,7 +249,7 @@ importers:
         specifier: ^7.9.0
         version: 7.9.0
       dedent:
-        specifier: ^1.7.1
+        specifier: 'catalog:'
         version: 1.7.1
       mutative:
         specifier: ^1.3.0

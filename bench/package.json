@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@ryoppippi/unplugin-typia": "^2.6.5",
+    "@ryoppippi/unplugin-typia": "catalog:",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "gzip-size": "^7.0.0",
