@@ -1,9 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
-import { ClientOnly } from "@tanstack/react-router";
-import { Suspense } from "react";
-import { Spinner } from "#/shared/components/spinner";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -13,9 +10,6 @@ We first test the bundle size of each library. This is important for browser usa
 
 We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
 
-<Suspense fallback={<Spinner />}>
-<ClientOnly>
-
 With minification:
 
 <DownloadPlot minify="minified" />
@@ -23,9 +17,6 @@ With minification:
 Without minification:
 
 <DownloadPlot minify="unminified" />
-
-</ClientOnly>
-</Suspense>
 
 ## Benchmarks
 
@@ -47,14 +38,9 @@ export const personSchema = v.object({
 export type Person = v.InferOutput<typeof personSchema>;
 ```
 
-<Suspense fallback={<Spinner />}>
-  <ClientOnly>
     <BenchPlot type="initialization" />
 
     <p className="typo-caption">For graphs on this page, the best result for each library is shown.</p>
-
-  </ClientOnly>
-</Suspense>
 
 ### <Link to="/validation">Validation</Link>
 
@@ -69,9 +55,6 @@ if (v.is(personSchema, data)) {
 }
 ```
 
-<Suspense fallback={<Spinner />}>
-<ClientOnly>
-
 Validating valid data:
 
 <BenchPlot type="validation" dataType="valid" />
@@ -79,9 +62,6 @@ Validating valid data:
 Validating invalid data:
 
 <BenchPlot type="validation" dataType="invalid" />
-
-</ClientOnly>
-</Suspense>
 
 > Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`).
 > In these cases, we categorise them accordingly.
@@ -97,9 +77,6 @@ import { personSchema } from "./schemas";
 const person = v.parse(personSchema, data);
 // person is of type Person
 ```
-
-<Suspense fallback={<Spinner />}>
-<ClientOnly>
 
 <div className="typo-caption">
   Libraries with an asterisk (\*) throw an error when parsing invalid data (and
@@ -117,9 +94,6 @@ Parsing valid data:
 Parsing invalid data:
 
 <BenchPlot type="parsing" dataType="invalid" />
-
-</ClientOnly>
-</Suspense>
 
 ### Tags
 

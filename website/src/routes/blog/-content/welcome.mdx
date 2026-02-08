@@ -69,9 +69,7 @@ In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "s
 
 Here are the current results for minified and gzipped bundle size:
 
-<ClientOnly fallback={<Spinner />}>
-  <DownloadPlot minify="minified" />
-</ClientOnly>
+<DownloadPlot minify="minified" />
 
 At time of writing, two clear leaders emerge:
 
@@ -99,9 +97,7 @@ For each library, we create a <Link to="/repo/raw/$" params={{ _splat: "schemas/
 
 Here are the current results:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="initialization" />
-</ClientOnly>
+<BenchPlot type="initialization" />
 
 [`typia`](https://typia.io) is notably faster to initialize - which is to be expected, as it generates optimised plain functions at build time. [`sury`](https://github.com/DZakh/sury) and [`typebox`](https://github.com/sinclairzx81/typebox) are also very fast, followed by [`valibot`](https://valibot.dev).
 
@@ -126,15 +122,11 @@ Not every library supports validation - for example, [`zod`](https://zod.dev) on
 
 Validating valid data:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="validation" dataType="valid" />
-</ClientOnly>
+<BenchPlot type="validation" dataType="valid" />
 
 Validating invalid data:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="validation" dataType="invalid" />
-</ClientOnly>
+<BenchPlot type="validation" dataType="invalid" />
 
 As to be expected, the libraries that use optimizations like precompilation ([`typia`](https://typia.io)) or JIT ([`typebox`](https://github.com/sinclairzx81/typebox), [`ajv`](https://ajv.js.org)) are among the fastest.
 
@@ -158,23 +150,17 @@ Libraries that throw an error (instead of returning one) have to be wrapped in a
 
 Parsing valid data:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="parsing" dataType="valid" />
-</ClientOnly>
+<BenchPlot type="parsing" dataType="valid" />
 
 Parsing invalid data:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="parsing" dataType="invalid" />
-</ClientOnly>
+<BenchPlot type="parsing" dataType="invalid" />
 
 Unsurprisingly, aborting early when possible assists with speed of parsing invalid data. For example, [`zod`](https://zod.dev) and [`arktype`](https://arktype.io) suffer in this comparison, as they don't provide an option to abort early.
 
 When filtering out all results that abort early, the playing field levels out a bit:
 
-<ClientOnly fallback={<Spinner />}>
-  <BenchPlot type="parsing" dataType="valid" errorType="allErrors" />
-</ClientOnly>
+<BenchPlot type="parsing" dataType="valid" errorType="allErrors" />
 
 Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`yup`](https://github.com/jquense/yup) - though both of these involve a `try`/`catch` wrapper, which may be slowing them down.
 

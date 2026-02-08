@@ -2,4 +2,7 @@
   padding: 1rem;
   font-feature-settings: "tnum" 1;
   max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
