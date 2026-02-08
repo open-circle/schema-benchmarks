@@ -150,7 +150,7 @@ When filtering out all results that abort early, the playing field levels out a 
   <BenchPlot type="parsing" dataType="valid" errorType="allErrors" />
 </ClientOnly>
 
-Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`yup`](https://github.com/jquense/yup).
+Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`yup`](https://github.com/jquense/yup) - though both of these involve a `try`/`catch` wrapper, which may be slowing them down.
 
 ## Contributing
 
