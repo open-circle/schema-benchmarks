@@ -15,6 +15,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
     key: "benchmarks",
     links: [
       {
+        ...linkOptions({ to: "/download" }),
+        name: "Download",
+        icon: "download_2",
+      },
+      {
         ...linkOptions({ to: "/initialization" }),
         name: "Initialization",
         icon: "timer",
@@ -28,11 +33,6 @@ export const sidebarGroups: Array<SidebarGroup> = [
         ...linkOptions({ to: "/parsing" }),
         name: "Parsing",
         icon: "output_circle",
-      },
-      {
-        ...linkOptions({ to: "/download" }),
-        name: "Download",
-        icon: "download_2",
       },
     ],
   },

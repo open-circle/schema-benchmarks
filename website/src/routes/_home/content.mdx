@@ -7,6 +7,26 @@ import { Spinner } from "#/shared/components/spinner";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
+## <Link to="/download">Download</Link>
+
+We first test the bundle size of each library. This is important for browser usage, where this will affect download time.
+
+We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
+
+<Suspense fallback={<Spinner />}>
+<ClientOnly>
+
+With minification:
+
+<DownloadPlot minify="minified" />
+
+Without minification:
+
+<DownloadPlot minify="unminified" />
+
+</ClientOnly>
+</Suspense>
+
 ## Benchmarks
 
 Runtime benchmarks are run in sequence, on a GitHub runner.
@@ -86,11 +106,15 @@ const person = v.parse(personSchema, data);
   have no non-throwing equivalent), so the benchmark includes a try/catch.
 </div>
 
+<div className="typo-caption">
+  Results with a dagger (†) abort early when parsing invalid data.
+</div>
+
 Parsing valid data:
 
 <BenchPlot type="parsing" dataType="valid" />
 
-Parsing invalid data (aborting early if possible):
+Parsing invalid data:
 
 <BenchPlot type="parsing" dataType="invalid" />
 
@@ -112,23 +136,3 @@ Some libraries support different error handling strategies. We specifically trac
 
 - **All errors**: Parse the entire value before returning/throwing an error.
 - **Abort early**: Return/throw an error as soon as an issue is found.
-
-## <Link to="/download">Download</Link>
-
-As well as running runtime tests, we test the bundle size of each library. This is important for browser usage, where this will affect download time.
-
-We do this by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
-
-<Suspense fallback={<Spinner />}>
-<ClientOnly>
-
-With minification:
-
-<DownloadPlot minify="minified" />
-
-Without minification:
-
-<DownloadPlot minify="unminified" />
-
-</ClientOnly>
-</Suspense>

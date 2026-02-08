@@ -39,7 +39,7 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
         width: domRect?.width,
         y: {
           grid: true,
-          label: "Size",
+          label: "Size (gzipped)",
           tickFormat: (bytes: number) => formatBytes(bytes, intFormatter),
         },
         color: {
@@ -51,8 +51,8 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
           Plot.ruleY([0]),
           Plot.barY(values, {
             x: (d: DownloadResult) => d.libraryName,
-            y: "bytes",
-            fill: "bytes",
+            y: "gzipBytes",
+            fill: "gzipBytes",
             sort: { x: "y" },
           }),
         ],

@@ -1,5 +1,6 @@
 import * as Plot from "@observablehq/plot";
 import type { BenchResult, DataType } from "@schema-benchmarks/bench";
+import { ErrorType } from "@schema-benchmarks/schemas";
 import {
   durationFormatter,
   getDuration,
@@ -16,10 +17,17 @@ export type BenchPlotProps =
   | {
       type: "initialization";
       dataType?: never;
+      errorType?: never;
     }
   | {
-      type: "validation" | "parsing";
+      type: "validation";
       dataType: DataType;
+      errorType?: never;
+    }
+  | {
+      type: "parsing";
+      dataType: DataType;
+      errorType?: ErrorType;
     };
 
 const getLibraryName = (d: BenchResult) => {
@@ -30,13 +38,25 @@ const getLibraryName = (d: BenchResult) => {
 export const BenchPlot = createPlotComponent(function useBenchPlot({
   type,
   dataType,
+  errorType,
 }: BenchPlotProps) {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
       type === "initialization" ? results[type] : results[type][dataType],
   });
-  const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
+  const values = useMemo(
+    () =>
+      uniqueBy(
+        errorType
+          ? data.filter(
+              (d) => d.type === "parsing" && d.errorType === errorType,
+            )
+          : data,
+        getLibraryName,
+      ),
+    [data, errorType],
+  );
   const [domRect, ref] = useElementSize();
   const plot = useMemo(
     () =>
@@ -63,7 +83,10 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: (d: BenchResult) => d.libraryName + (d.throws ? "*" : ""),
+            x: (d: BenchResult) =>
+              d.libraryName +
+              (d.throws ? "*" : "") +
+              (d.type === "parsing" && d.errorType === "abortEarly" ? "†" : ""),
             y: "mean",
             fill: "mean",
             sort: { x: "y" },

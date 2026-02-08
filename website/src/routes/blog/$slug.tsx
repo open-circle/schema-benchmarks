@@ -63,7 +63,7 @@ function RouteComponent() {
   return (
     <>
       <h1
-        className="blog-title typo-headline4"
+        className="blog-title typo-headline2"
         {...getTransitionStyle("title")}
       >
         {data.title}

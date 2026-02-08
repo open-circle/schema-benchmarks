@@ -70,6 +70,7 @@ body {
   background-color: var(--background);
   color: color(from var(--foreground) srgb r g b / var(--primary-text));
   @extend .typo-body1;
+  scroll-padding-top: calc(var(--page-header-height) + var(--margin));
   &[data-modal-open] {
     overflow: hidden;
     padding-right: var(--scrollbar-width);

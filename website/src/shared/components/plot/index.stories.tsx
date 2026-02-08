@@ -22,7 +22,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
           },
           y: {
             grid: true,
-            label: "Size",
+            label: "Size (gzipped)",
             tickFormat: (bytes: number) =>
               formatBytes(
                 bytes,
@@ -40,13 +40,15 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
             Plot.ruleY([0]),
             Plot.barY(
               uniqueBy(
-                downloadResults.minified.toSorted((a, b) => a.bytes - b.bytes),
+                downloadResults.minified.toSorted(
+                  (a, b) => a.gzipBytes - b.gzipBytes,
+                ),
                 (d) => d.libraryName,
               ),
               {
                 x: (d) => d.libraryName,
-                y: "bytes",
-                fill: "bytes",
+                y: "gzipBytes",
+                fill: "gzipBytes",
                 sort: { x: "y" },
               },
             ),

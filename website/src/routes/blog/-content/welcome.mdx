@@ -11,21 +11,149 @@ authors:
   - "EskiMojo14"
 ---
 
+import { Link, ClientOnly } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
 import { getBenchResults } from "#/routes/_benchmarks/_runtime/-query";
 import { getDownloadResults } from "#/routes/_benchmarks/download/-query";
+import { BenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
+import { DownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
+import { Spinner } from "#/shared/components/spinner";
 
 export async function prefetch({ queryClient }) {
   await queryClient.prefetchQuery(getBenchResults());
   await queryClient.prefetchQuery(getDownloadResults());
 }
 
-Welcome to Schema Benchmarks, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
+Welcome to **Schema Benchmarks**, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
 
-You can explore the results through the sidebar (and the [homepage](/)), and view the source code over on [GitHub](https://github.com/open-circle/schema-benchmarks).
+You can explore the results through the sidebar (and the <Link to="/">homepage</Link>), and view the full codebase over on [GitHub](https://github.com/open-circle/schema-benchmarks).
 
 I'm [`@eskimojo`](https://github.com/EskiMojo14), the main developer of this project, working with [`@fabian-hiller`](https://github.com/fabian-hiller), as part of [Open Circle](https://github.com/open-circle).
 
-<Tweet apiUrl="/api/tweet/2007886795619643738" />
+## Why Schema Benchmarks?
+
+Fabian, in his role as the creator of [`valibot`](https://valibot.dev), was well known for his passion for comparing schema validation libraries. However, this was largely confined to his social media posts, and Valibot's website.
 
 <Tweet apiUrl="/api/tweet/2007911897551565137" />
+
+Other schema validation libraries have their own comparisons listed on their websites too - but there was no central resource for them.
+
+In early November, Fabian approached me with his idea for a dedicated schema benchmarking project, one that measures all of the different aspects of what can make a schema fast/slow. I was immediately interested, and began work (including creating the logo) the next day.
+
+For our benchmarks, we separate out each step of a schema's process. This includes:
+
+- [Download](#download) - How much a schema adds to your app's
+  bundle size, and thus how much download time it can add.
+- [Initialization](#initialization) - How long it takes to create
+  a schema.
+- [Validation](#validation) - How long it takes to check if a
+  value matches a schema.
+- [Parsing](#parsing) - How long it takes to check if a value
+  matches a schema, and return a new value.
+
+We also track optimizations used by these libraries (for example, whether it hooks into the build process like [`typia`](https://typia.io), or if it generates JIT code at runtime like [`arktype`](https://arktype.io)), and whether they return the first issue found or all of them.
+
+We run these benchmarks in a GitHub action, using [`rolldown`](https://rolldown.rs/) and [`tinybench`](https://github.com/tinylibs/tinybench).
+
+<Tweet apiUrl="/api/tweet/2007886795619643738" />
+
+## Current Findings
+
+<p className="typo-caption">Graphs show best result per library</p>
+
+### <Link to="/download">Download</Link>
+
+For schema libraries used on the client, bundle size can matter a lot, as it has an effect on how long it takes for your website to load. On the server, it may matter less.
+
+In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download.ts" }} target="\_blank" rel="noreferrer noopener">example usage files</Link> for each library, and measure the size of the compiled output (both <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/minified.js" }} target="\_blank" rel="noreferrer noopener">minified</Link> and <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/unminified.js" }} target="\_blank" rel="noreferrer noopener">unminified</Link>).
+
+Here are the current results for minified and gzipped bundle size:
+
+<ClientOnly fallback={<Spinner />}>
+  <DownloadPlot minify="minified" />
+</ClientOnly>
+
+At time of writing, two clear leaders emerge:
+
+- [`typia`](https://typia.io) - A transformer library that hooks into the build process, turning Typescript types into runtime functions.
+- [`valibot`](https://valibot.dev) - A schema library with a focus on bundle size.
+
+Zod's new [`zod/mini`](https://zod.dev/packages/mini) variant follows behind, ending up at around 5KB (vs the 1.9KB achieved by both aforementioned libraries).
+
+On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the largest size of 58KB, with [`joi`](https://joi.dev) not far behind at 53KB, and [`effect/Schema`](https://effect.website/docs/schema/introduction/) at 50KB.
+
+### <Link to="/initialization">Initialization</Link>
+
+Creating a schema can be a one time cost, but it depends on usage. Servers that are long lasting probably don't care, but short lived processes like CLI tools or browser extensions would want to avoid doing too much work at startup.
+
+For each library, we create a <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/index.ts" }} target="\_blank" rel="noreferrer noopener">`getSchema`</Link> function that returns a schema (with the same validations as the other libraries, to keep the comparison fair). We then benchmark how long it takes to call this function.
+
+Here are the current results:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="initialization" />
+</ClientOnly>
+
+[`typia`](https://typia.io) is notably faster to initialize - which is to be expected, as it generates optimised plain functions at build time. [`sury`](https://github.com/DZakh/sury) and [`typebox`](https://github.com/sinclairzx81/typebox) are also very fast, followed by [`valibot`](https://valibot.dev).
+
+A clear outlier here is [`ajv`](https://ajv.js.org), taking 4ms to initialize (roughly 90x slower than [`valibot`](https://valibot.dev), for example).
+
+### <Link to="/validation">Validation</Link>
+
+Checking if a given value matches the schema. This is different to [parsing](#parsing) because it doesn't return a new value.
+
+We test validation against both valid and invalid data. As validation methods are expected to return a boolean, it's not tracked whether they abort early or not (as it is assumed they would if possible).
+
+Not every library supports validation - for example, [`zod`](https://zod.dev) only supports parsing. In these cases, we categorise them accordingly.
+
+Validating valid data:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="validation" dataType="valid" />
+</ClientOnly>
+
+Validating invalid data:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="validation" dataType="invalid" />
+</ClientOnly>
+
+As to be expected, the libraries that use optimizations like precompilation ([`typia`](https://typia.io)) or JIT ([`typebox`](https://github.com/sinclairzx81/typebox), [`ajv`](https://ajv.js.org)) are among the fastest.
+
+[`effect`](https://effect.website/docs/schema/introduction/), [`arktype`](https://arktype.io), and [`valibot`](https://valibot.dev) are not too far behind, with [`yup`](https://github.com/jquense/yup) significantly slower than the rest.
+
+### <Link to="/parsing">Parsing</Link>
+
+Parsing a value to match the schema. This is different to [validation](#validation) because it returns a new value, instead of a boolean.
+
+We test parsing against both valid and invalid data. We also track whether the library returns the first issue found, or all of them (or both if configurable). This is noted in the graph below with a dagger (†).
+
+Libraries that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
+
+Parsing valid data:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="parsing" dataType="valid" />
+</ClientOnly>
+
+Parsing invalid data:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="parsing" dataType="invalid" />
+</ClientOnly>
+
+Unsurprisingly, aborting early when possible assists with speed of parsing invalid data. For example, [`zod`](https://zod.dev) and [`arktype`](https://arktype.io) suffer in this comparison, as they don't provide an option to abort early.
+
+When filtering out all results that abort early, the playing field levels out a bit:
+
+<ClientOnly fallback={<Spinner />}>
+  <BenchPlot type="parsing" dataType="valid" errorType="allErrors" />
+</ClientOnly>
+
+Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`yup`](https://github.com/jquense/yup).
+
+## Contributing
+
+This project is far from over, and we'd love to hear your ideas!
+
+Check out our <a target="_blank" rel="noreferrer noopener" href="https://github.com/open-circle/schema-benchmarks/blob/main/CONTRIBUTING.md">contributing guide</a> for more information.
