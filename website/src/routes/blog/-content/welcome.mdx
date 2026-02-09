@@ -144,7 +144,7 @@ const person = v.parse(personSchema, data);
 
 Parsing a value to match the schema. This is different to [validation](#validation) because it returns a new value, instead of a boolean.
 
-We test parsing against both valid and invalid data. We also track whether the library returns the first issue found, or all of them (or both if configurable). This is noted in the graph below with a dagger (†).
+We test parsing against both valid and invalid data. We also track whether the library returns the first issue found, or all of them (or both if configurable). Benchmarks that abort early are noted in the graph below with a dagger (†).
 
 Libraries that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
 

@@ -85,8 +85,10 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
           Plot.barY(values, {
             x: (d: BenchResult) =>
               d.libraryName +
-              (d.throws ? "*" : "") +
-              (d.type === "parsing" && d.errorType === "abortEarly" ? "†" : ""),
+              (d.throws ? " *" : "") +
+              (d.type === "parsing" && d.errorType === "abortEarly"
+                ? " †"
+                : ""),
             y: "mean",
             fill: "mean",
             sort: { x: "y" },
