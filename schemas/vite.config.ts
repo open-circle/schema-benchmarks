@@ -12,6 +12,9 @@ export default defineConfig({
     },
     target: ["node24", "esnext"],
     sourcemap: true,
+    rollupOptions: {
+      external: [/^node:/],
+    }
   },
   resolve: {
     alias: {
