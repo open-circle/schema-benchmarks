@@ -10,18 +10,46 @@ import {
 import { getRouter } from "../src/router";
 import { makeQueryClient } from "../src/shared/data/query";
 import "../src/shared/styles/index.css";
+import { useArgs } from "storybook/preview-api";
+import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
+import {
+  type Style,
+  styleSchema,
+  type Theme,
+  themeSchema,
+} from "#/shared/lib/prefs/constants";
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   document.dir = args.dir ?? "ltr";
   return <Story />;
 };
 
-const themeDecorator: Decorator<{ theme?: "light" | "dark" | "system" }> = (
-  Story,
-  { args },
-) => {
-  document.documentElement.dataset.theme = args.theme ?? "system";
-  return <Story />;
+const themeDecorator: Decorator<{ theme?: Theme }> = (Story) => {
+  const [{ theme = "system" }, setArgs] = useArgs<{
+    theme?: Theme;
+  }>();
+  document.documentElement.dataset.theme = theme;
+  return (
+    <ThemeContext
+      value={{ theme, setTheme: (newTheme) => setArgs({ theme: newTheme }) }}
+    >
+      <Story />
+    </ThemeContext>
+  );
+};
+
+const styleDecorator: Decorator<{ style?: Style }> = (Story) => {
+  const [{ style = "code" }, setArgs] = useArgs<{
+    style?: Style;
+  }>();
+  document.documentElement.dataset.style = style;
+  return (
+    <StyleContext
+      value={{ style, setStyle: (newStyle) => setArgs({ style: newStyle }) }}
+    >
+      <Story />
+    </StyleContext>
+  );
 };
 
 declare module "@storybook/react-vite" {
@@ -89,18 +117,26 @@ export default definePreview({
       control: {
         type: "inline-radio",
       },
-      options: ["light", "dark", "system"],
+      options: themeSchema.options,
+    },
+    style: {
+      control: {
+        type: "inline-radio",
+      },
+      options: styleSchema.options,
     },
   },
 
   args: {
     dir: "ltr",
     theme: "system",
+    style: "code",
   },
 
   decorators: [
     dirDecorator,
     themeDecorator,
+    styleDecorator,
     queryClientDecorator,
     routerDecorator,
   ],
