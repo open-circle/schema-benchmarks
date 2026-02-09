@@ -38,6 +38,7 @@
     }
     .pref-switcher {
       background-color: var(--sidebar-background);
+      /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
       @media (--modal-sidebar) {
         display: none;
       }
@@ -56,7 +57,8 @@
   a {
     text-decoration: none;
     color: color(
-      from var(--page-header-foreground) srgb r g b / var(--primary-text)
+      from var(--page-header-foreground) srgb r g b /
+      var(--primary-text)
     );
     transition:
       color 250ms,
