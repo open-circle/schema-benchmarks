@@ -4,7 +4,7 @@ import {
 } from "@schema-benchmarks/schemas";
 import * as v from "valibot";
 
-export const dataTypeSchema = v.picklist(["valid", "invalid"]);
+export const dataTypeSchema = v.picklist(["invalid", "valid"]);
 export type DataType = v.InferOutput<typeof dataTypeSchema>;
 
 export const baseBenchResultSchema = v.object({
