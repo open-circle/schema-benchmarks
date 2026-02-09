@@ -38,14 +38,17 @@ const themeDecorator: Decorator<{ theme?: Theme }> = (Story) => {
   );
 };
 
-const styleDecorator: Decorator<{ style?: Style }> = (Story) => {
-  const [{ style = "code" }, setArgs] = useArgs<{
-    style?: Style;
+const styleDecorator: Decorator<{ pageStyle?: Style }> = (Story) => {
+  const [{ pageStyle = "code" }, setArgs] = useArgs<{
+    pageStyle?: Style;
   }>();
-  document.documentElement.dataset.style = style;
+  document.documentElement.dataset.style = pageStyle;
   return (
     <StyleContext
-      value={{ style, setStyle: (newStyle) => setArgs({ style: newStyle }) }}
+      value={{
+        style: pageStyle,
+        setStyle: (newStyle) => setArgs({ pageStyle: newStyle }),
+      }}
     >
       <Story />
     </StyleContext>
@@ -119,7 +122,7 @@ export default definePreview({
       },
       options: themeSchema.options,
     },
-    style: {
+    pageStyle: {
       control: {
         type: "inline-radio",
       },
@@ -130,7 +133,7 @@ export default definePreview({
   args: {
     dir: "ltr",
     theme: "system",
-    style: "code",
+    pageStyle: "code",
   },
 
   decorators: [
