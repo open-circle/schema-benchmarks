@@ -101,12 +101,6 @@ export default definePreview({
         method: "alphabetical",
       },
     },
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
   },
 
   argTypes: {
