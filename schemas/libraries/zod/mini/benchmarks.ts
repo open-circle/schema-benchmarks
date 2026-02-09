@@ -3,24 +3,26 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 };
 import ts from "dedent" with { type: "macro" };
 import { defineBenchmarks } from "#src";
-import { getZodSchema } from ".";
+import { getZodMiniSchema } from ".";
 
 export default defineBenchmarks({
   library: {
-    name: "zod",
+    name: "zod/mini",
     git: "colinhacks/zod",
     optimizeType: "jit",
     version: await getVersion("zod"),
   },
   createContext: () => ({
-    schema: getZodSchema(),
+    schema: getZodMiniSchema(),
   }),
-  initialization: {
-    run() {
-      getZodSchema();
+  initialization: [
+    {
+      run() {
+        getZodMiniSchema();
+      },
+      snippet: ts`z.object(...)`,
     },
-    snippet: ts`z.object(...)`,
-  },
+  ],
   parsing: {
     allErrors: [
       {

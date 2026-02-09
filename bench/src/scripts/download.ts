@@ -18,6 +18,13 @@ interface FileDescription {
   note?: string;
 }
 
+function getPackageName(libraryName: string) {
+  if (libraryName.includes("/") && !libraryName.startsWith("@")) {
+    return libraryName.split("/")[0] ?? libraryName;
+  }
+  return libraryName;
+}
+
 async function measureFile(
   file: FileDescription,
   minify: MinifyType,
@@ -51,7 +58,7 @@ async function measureFile(
   return {
     fileName,
     libraryName: file.libraryName,
-    version: await getVersion(file.libraryName),
+    version: await getVersion(getPackageName(file.libraryName)),
     note: file.note,
     bytes: blob.size,
     gzipBytes: await gzipSize(code),
