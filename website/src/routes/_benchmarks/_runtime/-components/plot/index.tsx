@@ -1,6 +1,6 @@
 import * as Plot from "@observablehq/plot";
 import type { BenchResult, DataType } from "@schema-benchmarks/bench";
-import { ErrorType } from "@schema-benchmarks/schemas";
+import type { ErrorType } from "@schema-benchmarks/schemas";
 import {
   durationFormatter,
   getDuration,
