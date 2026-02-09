@@ -125,7 +125,7 @@ export const getDuration = (ms: number): Intl.DurationType => {
   return { nanoseconds: Math.round(ms * 1_000_000) };
 };
 
-const enumerableKeys = <T extends object>(obj: T) =>
+const enumerableKeys = (obj: object) =>
   Reflect.ownKeys(obj).filter(
     (key) => Object.getOwnPropertyDescriptor(obj, key)?.enumerable,
   );
