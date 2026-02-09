@@ -62,7 +62,7 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
     () =>
       Plot.plot({
         style: {
-          fontFamily: "Mona Sans, sans-serif",
+          fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
         marginLeft: 48,

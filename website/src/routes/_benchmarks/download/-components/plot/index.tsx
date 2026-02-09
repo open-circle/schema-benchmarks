@@ -32,7 +32,7 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
     () =>
       Plot.plot({
         style: {
-          fontFamily: "Mona Sans, sans-serif",
+          fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
         marginLeft: 48,
