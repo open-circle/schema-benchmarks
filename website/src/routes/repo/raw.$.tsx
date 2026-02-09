@@ -14,7 +14,7 @@ function getLanguage(fileName: string) {
   return extension;
 }
 
-const libraryNameRegex = /^schemas\/libraries\/([^/]+)\//;
+const libraryNameRegex = /^schemas\/libraries\/(.*)\/(download|benchmarks)/;
 
 const fileNameMap: Record<string, string> = {
   "benchmarks.ts": "Benchmarks",
