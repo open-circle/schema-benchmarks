@@ -70,7 +70,7 @@ async function download() {
     )) {
       const libraryName = filePath
         .split("schemas/libraries/")[1]
-        ?.split("/")[0];
+        ?.split("/download.ts")[0];
       if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
       const compiledPath = path.resolve(
         path.dirname(filePath),
@@ -92,7 +92,7 @@ async function download() {
     )) {
       const libraryName = filePath
         .split("schemas/libraries/")[1]
-        ?.split("/")[0];
+        ?.split("/download/")[0];
       if (!libraryName)
         throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
       const note = path
