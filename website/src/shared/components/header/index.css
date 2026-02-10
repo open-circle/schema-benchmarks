@@ -50,15 +50,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
-  @media (--phone) {
-    display: none;
-  }
   a {
     text-decoration: none;
     color: color(
-      from var(--page-header-foreground) srgb r g b /
-      var(--primary-text)
+      from var(--page-header-foreground) srgb r g b / var(--primary-text)
     );
     transition:
       color 250ms,
@@ -71,8 +66,19 @@
     &:focus-visible {
       outline: none;
     }
+
+    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
+    @media (--phone) {
+      display: none;
+    }
   }
   span {
     font-weight: var(--weight-bold);
+    &:not(:last-child) {
+      /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
+      @media (--phone) {
+        display: none;
+      }
+    }
   }
 }

@@ -174,11 +174,11 @@ pre[class*="language-"] {
 .sidebar-container {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  min-height: 100lvh;
 }
 
 .header-container {
-  max-height: 100vh;
+  max-height: 100lvh;
   display: flex;
   flex-direction: column;
   flex: 1;
