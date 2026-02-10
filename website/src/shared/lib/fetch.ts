@@ -1,6 +1,12 @@
+import type { QueryClient } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { radEventListeners } from "rad-event-listeners";
 import { up } from "up-fetch";
+
+export interface PrefetchContext {
+  queryClient: QueryClient;
+  signal?: AbortSignal;
+}
 
 export const upfetch = up(fetch);
 
