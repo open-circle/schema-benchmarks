@@ -33,6 +33,7 @@ export default defineBenchmarks({
         rod.init();
         rod.object(...)
       `,
+      note: "init",
     },
   ],
   parsing: {
