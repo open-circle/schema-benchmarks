@@ -15,10 +15,12 @@
     "website:storybook": "pnpm run --filter website storybook",
     "bench:bench": "pnpm run --filter '*/bench' bench",
     "bench:download": "pnpm run --filter '*/bench' download",
-    "bench:all": "pnpm bench:download && pnpm bench:bench"
+    "bench:all": "pnpm bench:download && pnpm bench:bench",
+    "postinstall": "lefthook install"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.14",
+    "lefthook": "^2.1.0",
     "playwright": "catalog:"
   },
   "pnpm": {
