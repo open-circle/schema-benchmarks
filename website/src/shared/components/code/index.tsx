@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import type { PrefetchContext } from "#/shared/lib/fetch";
 import { getHighlightedCode } from "#/shared/lib/highlight";
 
 export interface CodeProps {
@@ -8,6 +9,22 @@ export interface CodeProps {
   lineNumbers?: boolean;
   title?: string;
 }
+
+const prefetchCode = (
+  {
+    code,
+    lineNumbers,
+    language,
+  }: {
+    code: string;
+    lineNumbers?: boolean;
+    language?: string;
+  },
+  { queryClient, signal }: PrefetchContext,
+) =>
+  queryClient.prefetchQuery(
+    getHighlightedCode({ code, lineNumbers, language }, signal),
+  );
 
 export function InlineCode({
   children,
@@ -25,6 +42,8 @@ export function InlineCode({
     />
   );
 }
+
+InlineCode.prefetch = prefetchCode;
 
 export function CodeBlock({
   children,
@@ -49,3 +68,5 @@ export function CodeBlock({
     </pre>
   );
 }
+
+CodeBlock.prefetch = prefetchCode;

@@ -2,12 +2,11 @@ import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
+import { CodeBlock } from "#/shared/components/code";
 import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
-import { getPackageName } from "../../-components/count";
-import { getAllWeeklyDownloads } from "../../-query";
+import { DownloadCount } from "../../-components/count";
 import { BenchResults } from "../-components/results";
 import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
 import { getBenchResults } from "../-query";
@@ -37,25 +36,20 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
     const benchResults = await queryClient.ensureQueryData(
       getBenchResults(abortController.signal),
     );
-    const downloadPromises = [];
-    for (const { snippet, libraryName } of Object.values(
-      benchResults.initialization.filter(shallowFilter({ optimizeType })),
-    )) {
-      // wait for these
-      downloadPromises.push(
-        queryClient.prefetchQuery(
-          getAllWeeklyDownloads(
-            getPackageName(libraryName),
-            abortController.signal,
-          ),
+    await Promise.all(
+      Object.values(
+        benchResults.initialization.filter(shallowFilter({ optimizeType })),
+      ).flatMap(({ snippet, libraryName }) => [
+        DownloadCount.prefetch(libraryName, {
+          queryClient,
+          signal: abortController.signal,
+        }),
+        CodeBlock.prefetch(
+          { code: snippet },
+          { queryClient, signal: abortController.signal },
         ),
-      );
-      // don't wait for these, not visible immediately
-      queryClient.prefetchQuery(
-        getHighlightedCode({ code: snippet }, abortController.signal),
-      );
-    }
-    await Promise.all(downloadPromises);
+      ]),
+    );
   },
   staticData: { crumb: "Initialization" },
 });

@@ -3,7 +3,6 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
 import { CodeBlock } from "#/shared/components/code";
 import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
 import { getRaw } from "./-query";
 
 const knownLanguages = new Set(["ts", "tsx", "js", "jsx", "json"]);
@@ -52,11 +51,9 @@ export const Route = createFileRoute("/repo/raw/$")({
       const code = await queryClient.ensureQueryData(
         getRaw({ fileName }, abortController.signal),
       );
-      await queryClient.prefetchQuery(
-        getHighlightedCode(
-          { code, language: getLanguage(fileName) },
-          abortController.signal,
-        ),
+      await CodeBlock.prefetch(
+        { code, language: getLanguage(fileName) },
+        { queryClient, signal: abortController.signal },
       );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();
