@@ -35,6 +35,11 @@ const getLibraryName = (d: BenchResult) => {
   return libraryName;
 };
 
+const getLabel = (d: BenchResult) =>
+  d.libraryName +
+  (d.throws ? " *" : "") +
+  (d.type === "parsing" && d.errorType === "abortEarly" ? " †" : "");
+
 export const BenchPlot = createPlotComponent(function useBenchPlot({
   type,
   dataType,
@@ -58,6 +63,12 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
     [data, errorType],
   );
   const [domRect, ref] = useElementSize();
+  const minWidth = useMemo(() => {
+    const longestLabel = values.reduce((a, b) =>
+      getLabel(a).length > getLabel(b).length ? a : b,
+    );
+    return values.length * (getLabel(longestLabel).length * 6) + 48;
+  }, [values]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -66,10 +77,7 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
           textTransform: "none",
         },
         marginLeft: 48,
-        width: domRect?.width,
-        x: {
-          tickSpacing: 150,
-        },
+        width: Math.max(domRect?.width ?? 0, minWidth),
         y: {
           grid: true,
           label: "Time",
@@ -83,21 +91,16 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: (d: BenchResult) =>
-              d.libraryName +
-              (d.throws ? " *" : "") +
-              (d.type === "parsing" && d.errorType === "abortEarly"
-                ? " †"
-                : ""),
+            x: getLabel,
             y: "mean",
             fill: "mean",
             sort: { x: "y" },
           }),
         ],
       }),
-    [values, domRect?.width],
+    [values, minWidth, domRect?.width],
   );
-  return { plot, ref };
+  return { plot, ref, minWidth };
 });
 
 BenchPlot.displayName = "BenchPlot";

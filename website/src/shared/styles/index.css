@@ -178,9 +178,13 @@ pre[class*="language-"] {
 }
 
 .header-container {
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
 }
 
 :root {

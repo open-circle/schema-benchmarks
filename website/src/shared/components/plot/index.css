@@ -1,8 +1,11 @@
 .plot-container {
-  padding: 1rem;
   font-feature-settings: "tnum" 1;
-  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.plot-scroll-container {
+  max-width: calc(100vw - var(--margin) * 2);
+  overflow-x: auto;
 }

@@ -13,6 +13,8 @@ const getLibraryName = (d: DownloadResult) => {
   return libraryName;
 };
 
+const getLabel = (d: DownloadResult) => d.libraryName;
+
 const intFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
 });
@@ -28,6 +30,12 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
   });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
   const [domRect, ref] = useElementSize();
+  const minWidth = useMemo(() => {
+    const longestLabel = values.reduce((a, b) =>
+      getLabel(a).length > getLabel(b).length ? a : b,
+    );
+    return values.length * (getLabel(longestLabel).length * 6) + 48;
+  }, [values]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -36,7 +44,7 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
           textTransform: "none",
         },
         marginLeft: 48,
-        width: domRect?.width,
+        width: Math.max(domRect?.width ?? 0, minWidth),
         y: {
           grid: true,
           label: "Size (gzipped)",
@@ -50,16 +58,16 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
         marks: [
           Plot.ruleY([0]),
           Plot.barY(values, {
-            x: (d: DownloadResult) => d.libraryName,
+            x: getLabel,
             y: "gzipBytes",
             fill: "gzipBytes",
             sort: { x: "y" },
           }),
         ],
       }),
-    [values, domRect?.width],
+    [values, domRect?.width, minWidth],
   );
-  return { plot, ref };
+  return { plot, ref, minWidth };
 });
 
 DownloadPlot.displayName = "DownloadPlot";
