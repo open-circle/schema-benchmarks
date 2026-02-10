@@ -14,6 +14,7 @@ import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { PageFilterTextField } from "#/shared/components/page-filter/text-field";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
+import { getPackageName } from "../-components/count";
 import { getAllWeeklyDownloads } from "../-query";
 import { DownloadResults } from "./-components/results";
 import { minifyTypeProps, optionalMinifyTypeSchema } from "./-constants";
@@ -62,7 +63,10 @@ export const Route = createFileRoute("/_benchmarks/download/")({
     for (const { libraryName } of results[minifyType]) {
       downloadPromises.push(
         queryClient.prefetchQuery(
-          getAllWeeklyDownloads(libraryName, abortController.signal),
+          getAllWeeklyDownloads(
+            getPackageName(libraryName),
+            abortController.signal,
+          ),
         ),
       );
     }

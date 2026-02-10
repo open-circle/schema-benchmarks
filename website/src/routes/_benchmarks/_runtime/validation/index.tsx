@@ -6,6 +6,7 @@ import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
 import { getHighlightedCode } from "#/shared/lib/highlight";
+import { getPackageName } from "../../-components/count";
 import { getAllWeeklyDownloads } from "../../-query";
 import { BenchResults } from "../-components/results";
 import {
@@ -52,7 +53,10 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
       // wait for these
       downloadPromises.push(
         queryClient.prefetchQuery(
-          getAllWeeklyDownloads(libraryName, abortController.signal),
+          getAllWeeklyDownloads(
+            getPackageName(libraryName),
+            abortController.signal,
+          ),
         ),
       );
       // don't wait for these, not visible immediately

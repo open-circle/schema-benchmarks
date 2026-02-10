@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { getAllWeeklyDownloads } from "../-query";
 
-function getPackageName(libraryName: string) {
+export function getPackageName(libraryName: string) {
   if (libraryName.includes("/") && !libraryName.startsWith("@")) {
     return libraryName.split("/")[0] ?? libraryName;
   }
