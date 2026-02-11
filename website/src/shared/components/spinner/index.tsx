@@ -16,6 +16,7 @@ export function Spinner({
   className,
   segmentCount = maxSegments,
   inheritColor = false,
+  style,
   ...props
 }: SpinnerProps) {
   return (
@@ -26,7 +27,7 @@ export function Spinner({
         modifiers: { "inherit-color": inheritColor },
         extra: className,
       })}
-      style={{ fontSize: size ? `${size}px` : undefined }}
+      style={{ fontSize: size ? `${size}px` : undefined, ...style }}
     >
       {Array.from({ length: Math.min(segmentCount, maxSegments) }, (_, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: stable
