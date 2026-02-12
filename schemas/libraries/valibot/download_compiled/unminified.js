@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/valibot@1.2.0_typescript@5.9.3/node_modules/valibot/dist/index.mjs
+//#region ../node_modules/.pnpm/valibot@1.2.0_typescript@6.0.0-beta/node_modules/valibot/dist/index.mjs
 let store$4;
 /**
 * Returns the global configuration.

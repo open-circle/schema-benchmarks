@@ -7689,33 +7689,33 @@ var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) =
 //#endregion
 //#region ../schemas/libraries/joi/download.ts
 var import_joi_browser_min = /* @__PURE__ */ __toESM(require_joi_browser_min(), 1);
-const imageSchema = import_joi_browser_min.object({
-	id: import_joi_browser_min.number().required(),
-	created: import_joi_browser_min.date().required(),
-	title: import_joi_browser_min.string().min(1).max(100).required(),
-	type: import_joi_browser_min.string().valid("jpg", "png").required(),
-	size: import_joi_browser_min.number().required(),
-	url: import_joi_browser_min.string().uri().required()
+const imageSchema = import_joi_browser_min.default.object({
+	id: import_joi_browser_min.default.number().required(),
+	created: import_joi_browser_min.default.date().required(),
+	title: import_joi_browser_min.default.string().min(1).max(100).required(),
+	type: import_joi_browser_min.default.string().valid("jpg", "png").required(),
+	size: import_joi_browser_min.default.number().required(),
+	url: import_joi_browser_min.default.string().uri().required()
 });
-const ratingSchema = import_joi_browser_min.object({
-	id: import_joi_browser_min.number().required(),
-	stars: import_joi_browser_min.number().min(0).max(5).required(),
-	title: import_joi_browser_min.string().min(1).max(100).required(),
-	text: import_joi_browser_min.string().min(1).max(1e3).required(),
-	images: import_joi_browser_min.array().items(imageSchema).required()
+const ratingSchema = import_joi_browser_min.default.object({
+	id: import_joi_browser_min.default.number().required(),
+	stars: import_joi_browser_min.default.number().min(0).max(5).required(),
+	title: import_joi_browser_min.default.string().min(1).max(100).required(),
+	text: import_joi_browser_min.default.string().min(1).max(1e3).required(),
+	images: import_joi_browser_min.default.array().items(imageSchema).required()
 });
-import_joi_browser_min.object({
-	id: import_joi_browser_min.number().required(),
-	created: import_joi_browser_min.date().required(),
-	title: import_joi_browser_min.string().min(1).max(100).required(),
-	brand: import_joi_browser_min.string().min(1).max(30).required(),
-	description: import_joi_browser_min.string().min(1).max(500).required(),
-	price: import_joi_browser_min.number().min(1).max(1e4).required(),
-	discount: import_joi_browser_min.number().min(1).max(100).allow(null).required(),
-	quantity: import_joi_browser_min.number().min(0).max(10).required(),
-	tags: import_joi_browser_min.array().items(import_joi_browser_min.string().min(1).max(30)).required(),
-	images: import_joi_browser_min.array().items(imageSchema).required(),
-	ratings: import_joi_browser_min.array().items(ratingSchema).required()
+import_joi_browser_min.default.object({
+	id: import_joi_browser_min.default.number().required(),
+	created: import_joi_browser_min.default.date().required(),
+	title: import_joi_browser_min.default.string().min(1).max(100).required(),
+	brand: import_joi_browser_min.default.string().min(1).max(30).required(),
+	description: import_joi_browser_min.default.string().min(1).max(500).required(),
+	price: import_joi_browser_min.default.number().min(1).max(1e4).required(),
+	discount: import_joi_browser_min.default.number().min(1).max(100).allow(null).required(),
+	quantity: import_joi_browser_min.default.number().min(0).max(10).required(),
+	tags: import_joi_browser_min.default.array().items(import_joi_browser_min.default.string().min(1).max(30)).required(),
+	images: import_joi_browser_min.default.array().items(imageSchema).required(),
+	ratings: import_joi_browser_min.default.array().items(ratingSchema).required()
 }).validate({});
 
 //#endregion
