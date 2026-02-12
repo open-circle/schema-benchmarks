@@ -9,6 +9,7 @@
     "@vitest/browser-playwright": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
+    "typescript": "catalog:",
     "valibot": "catalog:",
     "vitest": "catalog:"
   },

@@ -22,6 +22,7 @@
     "@ryoppippi/unplugin-typia": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
+    "typescript": "catalog:",
     "unplugin-macros": "^0.18.7",
     "vite": "catalog:",
     "vite-plugin-dts": "^4.5.4"
