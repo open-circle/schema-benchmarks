@@ -1,4 +1,3 @@
-export type * from "./libs.ts";
 export type * from "./types.ts";
 
 // Polyfill because Netlify is using Node v22
@@ -109,7 +108,7 @@ export const longDateFormatter = new Intl.DateTimeFormat(undefined, {
 
 export const durationFormatter = new Intl.DurationFormat();
 
-const units: Array<[threshold: number, Intl.DurationTimeFormatUnit]> = [
+const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [
   [3_600_000, "hours"],
   [60_000, "minutes"],
   [1_000, "seconds"],
@@ -118,7 +117,9 @@ const units: Array<[threshold: number, Intl.DurationTimeFormatUnit]> = [
   // fallback to nanoseconds
 ];
 
-export const getDuration = (ms: number): Intl.DurationType => {
+export const getDuration = (
+  ms: number,
+): Partial<Record<Intl.DurationFormatUnit, number>> => {
   for (const [threshold, unit] of units) {
     if (ms >= threshold) return { [unit]: Math.round(ms / threshold) };
   }
