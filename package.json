@@ -16,7 +16,7 @@
     "bench:bench": "pnpm run --filter '*/bench' bench",
     "bench:stack": "pnpm run --filter '*/bench' stack",
     "bench:download": "pnpm run --filter '*/bench' download",
-    "bench:all": "pnpm bench:download && pnpm bench:bench",
+    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack",
     "postinstall": "lefthook install"
   },
   "devDependencies": {
