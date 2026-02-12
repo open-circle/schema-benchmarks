@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 };
 import vine from "@vinejs/vine";
 import ts from "dedent" with { type: "macro" };
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getVineSchema } from ".";
 
 export default defineBenchmarks({
@@ -36,5 +36,9 @@ export default defineBenchmarks({
       },
       snippet: ts`vine.tryValidate({ schema: schema.bail(false), data })`,
     },
+  },
+  throw: async ({ schema }, data) => {
+    await vine.validate({ schema, data });
+    assertNotReached();
   },
 });

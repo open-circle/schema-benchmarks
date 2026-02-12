@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
 import ts from "dedent" with { type: "macro" };
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getZodSchema } from ".";
 
 export default defineBenchmarks({
@@ -38,5 +38,9 @@ export default defineBenchmarks({
         optimizeType: "none",
       },
     ],
+  },
+  throw: ({ schema }, data) => {
+    schema.parse(data);
+    assertNotReached();
   },
 });

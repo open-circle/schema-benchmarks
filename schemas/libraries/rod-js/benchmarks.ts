@@ -1,4 +1,4 @@
-import { defineBenchmarks } from "@schema-benchmarks/schemas";
+import { assertNotReached, defineBenchmarks } from "@schema-benchmarks/schemas";
 import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
@@ -53,5 +53,9 @@ export default defineBenchmarks({
         snippet: ts`schema.safeParse(data, { mode: "eager" })`,
       },
     ],
+  },
+  throw: ({ schema }, data) => {
+    schema.parse(data);
+    assertNotReached();
   },
 });

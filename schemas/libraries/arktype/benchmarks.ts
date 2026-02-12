@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
 import ts from "dedent" with { type: "macro" };
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getArkTypeSchema } from ".";
 
 export default defineBenchmarks({
@@ -32,5 +32,9 @@ export default defineBenchmarks({
       },
       snippet: ts`schema(data)`,
     },
+  },
+  throw: ({ schema }, data) => {
+    schema.assert(data);
+    assertNotReached();
   },
 });

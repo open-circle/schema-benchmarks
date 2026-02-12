@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
 import ts from "dedent" with { type: "macro" };
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getYupSchema } from ".";
 
 export default defineBenchmarks({
@@ -44,5 +44,9 @@ export default defineBenchmarks({
       snippet: ts`schema.validateSync(data, { abortEarly: true })`,
       throws: true,
     },
+  },
+  throw: ({ schema }, data) => {
+    schema.validateSync(data);
+    assertNotReached();
   },
 });

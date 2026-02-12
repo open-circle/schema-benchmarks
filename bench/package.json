@@ -23,6 +23,7 @@
   "private": true,
   "scripts": {
     "bench": "node --expose-gc --max-old-space-size=8192 ./src/scripts/bench.ts",
+    "stack": "node --expose-gc --max-old-space-size=8192 ./src/scripts/stack.ts",
     "download": "node ./src/scripts/download.ts",
     "typecheck": "tsgo"
   },
