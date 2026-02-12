@@ -1,7 +1,11 @@
 import type { MaybeArray } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-export const optimizeTypeSchema = v.picklist(["none", "jit", "precompiled"]);
+export const optimizeTypeSchema = /* @__PURE__ */ v.picklist([
+  "none",
+  "jit",
+  "precompiled",
+]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
@@ -21,7 +25,10 @@ export interface ValidationBenchmarkConfig<Context>
   run: (data: unknown, context: Context) => unknown | Promise<unknown>;
 }
 
-export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
+export const errorTypeSchema = /* @__PURE__ */ v.picklist([
+  "allErrors",
+  "abortEarly",
+]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
 export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
@@ -50,6 +57,7 @@ export interface BenchmarksConfig<Context> {
   >;
 }
 
+/* @__PURE__ */
 export function defineBenchmarks<const TContext>(
   config: BenchmarksConfig<TContext>,
 ) {
