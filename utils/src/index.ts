@@ -169,11 +169,11 @@ export const promiseAllSettledKeyed = async <
 export const setAbortableInterval = <TArgs extends Array<any>>(
   fn: (...args: TArgs) => void,
   delay: number,
-  signal: AbortSignal,
+  signal?: AbortSignal,
   ...args: TArgs
 ): ReturnType<typeof setInterval> => {
   const interval = setInterval(fn, delay, ...args);
-  signal.addEventListener("abort", () => clearInterval(interval), {
+  signal?.addEventListener("abort", () => clearInterval(interval), {
     once: true,
   });
   return interval;
@@ -191,11 +191,11 @@ export const setAbortableInterval = <TArgs extends Array<any>>(
 export const setAbortableTimeout = <TArgs extends Array<any>>(
   fn: (...args: TArgs) => void,
   delay: number,
-  signal: AbortSignal,
+  signal?: AbortSignal,
   ...args: TArgs
 ): ReturnType<typeof setTimeout> => {
   const timeout = setTimeout(fn, delay, ...args);
-  signal.addEventListener("abort", () => clearTimeout(timeout), {
+  signal?.addEventListener("abort", () => clearTimeout(timeout), {
     once: true,
     signal: AbortSignal.timeout(delay),
   });

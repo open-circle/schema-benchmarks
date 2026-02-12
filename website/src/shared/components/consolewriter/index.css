@@ -1,0 +1,47 @@
+.console-writer {
+  .console-writer__cursor {
+    &::before {
+      content: attr(data-char);
+      color: transparent;
+    }
+  }
+  &.console-writer--initial {
+    .console-writer__cursor {
+      border: 2px solid currentColor;
+    }
+  }
+  &.console-writer--typing {
+    .console-writer__cursor {
+      background-color: currentColor;
+    }
+  }
+  &.console-writer--done {
+    .console-writer__cursor {
+      display: none;
+    }
+  }
+  .console-writer__hidden {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .console-writer {
+    &.console-writer--initial {
+      .console-writer__cursor::before {
+        content: "";
+      }
+    }
+    .console-writer__cursor.console-writer__cursor {
+      display: inline;
+      background-color: transparent;
+      border: none;
+      &::before {
+        color: inherit;
+      }
+    }
+    .console-writer__hidden {
+      visibility: visible;
+    }
+  }
+}

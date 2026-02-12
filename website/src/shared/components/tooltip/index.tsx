@@ -22,6 +22,7 @@ import {
 import bem from "react-bem-helper";
 import { useIdDefault } from "#/shared/hooks/use-id-default";
 import { ButtonGroup } from "../button";
+import { ConsoleWriter } from "../consolewriter";
 
 const cls = bem("tooltip");
 
@@ -187,7 +188,10 @@ export function withTooltip<TComp extends TooltipableComponent>(
           >
             <div {...cls("content")} style={styles}>
               {typeof tooltip === "string" ? (
-                tooltip
+                // we want tooltips to be visible quickly, so the typing should be fast
+                <ConsoleWriter hidden={!open} delay={0} interval={35}>
+                  {tooltip}
+                </ConsoleWriter>
               ) : (
                 <>
                   {tooltip.subhead && (

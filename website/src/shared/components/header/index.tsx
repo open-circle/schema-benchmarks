@@ -16,6 +16,7 @@ import {
 } from "#/shared/lib/prefs/constants";
 import { ButtonGroup } from "../button";
 import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
+import { ConsoleWriter } from "../consolewriter";
 import { useStyle, useTheme } from "../prefs/context";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
@@ -99,7 +100,13 @@ export function Header() {
         ))}
         {currentCrumbs.map((crumb, index) => (
           <Fragment key={crumb.to + crumb.name}>
-            <span className="typo-headline6">{crumb.name}</span>
+            <span className="typo-headline6">
+              {index === currentCrumbs.length - 1 ? (
+                <ConsoleWriter>{crumb.name}</ConsoleWriter>
+              ) : (
+                crumb.name
+              )}
+            </span>
             {index !== currentCrumbs.length - 1 && <span>/</span>}
           </Fragment>
         ))}
