@@ -1,3 +1,5 @@
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 import { pathToFileURL } from "node:url";
 import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
@@ -8,21 +10,43 @@ const benchmarkRegex = new RegExp(
   `\\s*at throw \\(file:\\/\\/\\/.*\\/schemas\\/dist.*\\n\\s*at ${RegExp.escape(scriptUrl)}.*`,
 );
 
-interface SuccessfulStackResult {
+interface BaseStackResult {
   libraryName: string;
-  line: number;
-  frameCount: number;
 }
 
-interface UnsuccessfulStackResult {
-  libraryName: string;
-  line:
-    | "no throw"
-    | "not an error"
-    | "no stack"
-    | "no external stack"
-    | "not found";
+interface SuccessfulStackResult extends BaseStackResult {
+  line: number;
+  frameCount: number;
+  error: Error;
 }
+
+function serializeError(e: Error, customStack?: string): Error {
+  return {
+    message: e.message,
+    name: e.name,
+    stack: customStack ?? "",
+    // cause?
+  };
+}
+
+type ErrorTypes = {
+  "no throw": unknown;
+  "not an error": unknown;
+  "no stack": {
+    error: Error;
+  };
+  "no external stack": {
+    error: Error;
+  };
+  "not found": unknown;
+};
+
+type UnsuccessfulStackResult = BaseStackResult &
+  {
+    [K in keyof ErrorTypes]: {
+      line: K;
+    } & ErrorTypes[K];
+  }[keyof ErrorTypes];
 
 type StackResult = SuccessfulStackResult | UnsuccessfulStackResult;
 
@@ -57,18 +81,29 @@ for (const getConfig of Object.values(libraries)) {
           });
           continue;
         }
-        const cleanedStack = e.stack?.slice(e.stack.indexOf("    at "));
-        const withoutSelf = cleanedStack?.replace(benchmarkRegex, "");
+        const hasFrames = e.stack?.includes("    at ");
+        if (!hasFrames) {
+          results.push({
+            libraryName: library.name,
+            line: "no stack",
+            error: serializeError(e),
+          });
+          continue;
+        }
+        const frames = e.stack?.slice(e.stack.indexOf("    at "));
+        const withoutSelf = frames?.replace(benchmarkRegex, "");
         if (withoutSelf) {
           results.push({
             libraryName: library.name,
-            line: getScriptLineNumber(cleanedStack),
+            line: getScriptLineNumber(frames),
             frameCount: withoutSelf.split("\n").length,
+            error: serializeError(e, withoutSelf),
           });
         } else {
           results.push({
             libraryName: library.name,
             line: "no external stack",
+            error: serializeError(e),
           });
         }
       } else {
@@ -82,10 +117,7 @@ for (const getConfig of Object.values(libraries)) {
   global.gc?.();
 }
 
-console.table(
-  results.sort((a, b) => {
-    if (typeof a.line !== "number") return 1;
-    if (typeof b.line !== "number") return -1;
-    return a.line - b.line;
-  }),
+await fs.writeFile(
+  path.join(process.cwd(), "stack.json"),
+  JSON.stringify(results, null, 2),
 );
