@@ -86,6 +86,8 @@ export type SerializedError = v.InferOutput<typeof serializedErrorSchema>;
 
 const baseStackResultSchema = v.object({
   libraryName: v.string(),
+  version: v.string(),
+  snippet: v.string(),
 });
 
 const successfulStackResultSchema = v.object({

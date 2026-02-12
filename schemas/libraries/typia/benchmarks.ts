@@ -77,8 +77,14 @@ export default defineBenchmarks({
       },
     ],
   },
-  throw: ({ assert }, data) => {
-    assert(data);
-    assertNotReached();
+  stack: {
+    throw: ({ assert }, data) => {
+      assert(data);
+      assertNotReached();
+    },
+    snippet: ts`
+      // const assert = typia.createAssert<TypiaSchema>();
+      assert(data);
+    `,
   },
 });

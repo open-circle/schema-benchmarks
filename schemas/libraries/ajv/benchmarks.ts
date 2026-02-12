@@ -44,8 +44,15 @@ export default defineBenchmarks({
       `,
     },
   ],
-  throw({ validate }, data) {
-    validate(data);
-    throw new ValidationError(validate.errors ?? []);
+  stack: {
+    throw({ validate }, data) {
+      validate(data);
+      throw new ValidationError(validate.errors ?? []);
+    },
+    snippet: ts`
+      // const validate = ajv.compile(schema);
+      validate(data);
+      throw new ValidationError(validate.errors ?? []);
+    `,
   },
 });

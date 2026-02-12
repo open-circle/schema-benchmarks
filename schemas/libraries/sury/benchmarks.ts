@@ -78,8 +78,11 @@ export default defineBenchmarks({
       },
     ],
   },
-  throw: ({ schema }, data) => {
-    S.parseOrThrow(data, schema);
-    assertNotReached();
+  stack: {
+    throw: ({ schema }, data) => {
+      S.parseOrThrow(data, schema);
+      assertNotReached();
+    },
+    snippet: ts`S.parseOrThrow(data, schema)`,
   },
 });

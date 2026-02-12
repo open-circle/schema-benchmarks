@@ -51,8 +51,11 @@ export default defineBenchmarks({
       },
     ],
   },
-  throw: ({ schema }, data) => {
-    v.parse(schema, data);
-    assertNotReached();
+  stack: {
+    throw: ({ schema }, data) => {
+      v.parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`v.parse(schema, data)`,
   },
 });

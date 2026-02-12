@@ -39,7 +39,10 @@ export default defineBenchmarks({
       snippet: ts`schema.validate(data, { abortEarly: true })`,
     },
   },
-  throw: ({ schema }, data) => {
-    throw schema.validate(data).error;
+  stack: {
+    throw: ({ schema }, data) => {
+      throw schema.validate(data).error;
+    },
+    snippet: ts`throw schema.validate(data).error`,
   },
 });

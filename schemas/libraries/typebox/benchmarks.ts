@@ -81,8 +81,11 @@ export default defineBenchmarks({
       },
     ],
   },
-  throw: ({ schema }, data) => {
-    Value.Parse(schema, data);
-    assertNotReached();
+  stack: {
+    throw: ({ schema }, data) => {
+      Value.Parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`Value.Parse(schema, data)`,
   },
 });
