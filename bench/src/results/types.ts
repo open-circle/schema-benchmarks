@@ -76,3 +76,38 @@ export const downloadResultsSchema = v.object({
   unminified: v.array(downloadResultSchema),
 });
 export type DownloadResults = v.InferOutput<typeof downloadResultsSchema>;
+
+const serializedErrorSchema = v.object({
+  message: v.string(),
+  name: v.string(),
+  stack: v.string(),
+});
+export type SerializedError = v.InferOutput<typeof serializedErrorSchema>;
+
+const baseStackResultSchema = v.object({
+  libraryName: v.string(),
+});
+
+const successfulStackResultSchema = v.object({
+  ...baseStackResultSchema.entries,
+  line: v.number(),
+  frameCount: v.number(),
+  error: serializedErrorSchema,
+});
+export const stackResultSchema = v.variant("line", [
+  successfulStackResultSchema,
+  ...(["no throw", "not an error", "not found"] as const).map((error) =>
+    v.object({
+      ...baseStackResultSchema.entries,
+      line: v.literal(error),
+    }),
+  ),
+  ...(["no stack", "no external stack"] as const).map((error) =>
+    v.object({
+      ...baseStackResultSchema.entries,
+      line: v.literal(error),
+      error: serializedErrorSchema,
+    }),
+  ),
+]);
+export type StackResult = v.InferOutput<typeof stackResultSchema>;

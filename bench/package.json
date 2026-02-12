@@ -16,7 +16,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./bench.json": "./bench.json",
-    "./download.json": "./download.json"
+    "./download.json": "./download.json",
+    "./stack.json": "./stack.json"
   },
   "main": "./src/index.ts",
   "name": "@schema-benchmarks/bench",
