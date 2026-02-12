@@ -55,7 +55,7 @@ export interface BenchmarksConfig<Context> {
   parsing?: Partial<
     Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
   >;
-  throw?: (context: Context, data: unknown) => never | Promise<never>;
+  throw: (context: Context, data: unknown) => never | Promise<never>;
 }
 
 /* @__PURE__ */
