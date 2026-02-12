@@ -56,7 +56,7 @@ function BaseSidebar({
         <div {...cls("logo")}>
           <img {...cls("logo-dark")} src="/logo_dark.svg" alt="Logo" />
           <img {...cls("logo-light")} src="/logo_light.svg" alt="Logo" />
-          <h2 className="typo-subtitle1">Schema{"\n"}Benchmarks</h2>
+          <h2 className="typo-subtitle1">Schema Benchmarks</h2>
         </div>
         {children}
       </aside>
