@@ -1,16 +1,27 @@
-import { createRequiredContext } from "required-react-context";
-import type { Style, Theme } from "#/shared/lib/prefs/constants";
+import { createOptionalContext } from "required-react-context";
+import {
+  type Style,
+  styleSchema,
+  type Theme,
+  themeSchema,
+} from "#/shared/lib/prefs/constants";
 
-export const { ThemeContext, useTheme } = createRequiredContext<{
+export const { ThemeContext, useTheme } = createOptionalContext<{
   theme: Theme;
   setTheme: (theme: Theme) => void;
-}>().with({
+}>({
+  theme: themeSchema.fallback,
+  setTheme: () => {},
+}).with({
   name: "theme",
 });
 
-export const { StyleContext, useStyle } = createRequiredContext<{
+export const { StyleContext, useStyle } = createOptionalContext<{
   style: Style;
   setStyle: (style: Style) => void;
-}>().with({
+}>({
+  style: styleSchema.fallback,
+  setStyle: () => {},
+}).with({
   name: "style",
 });
