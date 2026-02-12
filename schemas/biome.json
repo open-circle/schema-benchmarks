@@ -6,7 +6,7 @@
     "includes": [
       "./libraries/**/*.ts",
       "./src/**/*.ts",
-      "./index.ts",
+      "./vite.config.ts",
       "!./libraries/__template__/**/*"
     ]
   }
