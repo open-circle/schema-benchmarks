@@ -55,6 +55,7 @@ export interface BenchmarksConfig<Context> {
   parsing?: Partial<
     Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
   >;
+  throw?: (context: Context, data: unknown) => never | Promise<never>;
 }
 
 /* @__PURE__ */
@@ -62,4 +63,15 @@ export function defineBenchmarks<const TContext>(
   config: BenchmarksConfig<TContext>,
 ) {
   return config;
+}
+
+export class ShouldHaveThrownError extends Error {
+  constructor() {
+    super("Expected an error to be thrown, but none was thrown");
+    this.name = "ShouldHaveThrownError";
+  }
+}
+
+export function assertNotReached(): never {
+  throw new ShouldHaveThrownError();
 }
