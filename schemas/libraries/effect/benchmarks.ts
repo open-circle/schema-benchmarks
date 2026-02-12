@@ -75,8 +75,17 @@ export default defineBenchmarks({
       `,
     },
   },
-  throw: ({ decodeAll }, data) => {
-    Effect.runSync(decodeAll(data));
-    assertNotReached();
+  stack: {
+    throw: ({ decodeAll }, data) => {
+      Effect.runSync(decodeAll(data));
+      assertNotReached();
+    },
+    snippet: ts`
+      // const decodeAll = Schema.decodeUnknownEither(
+      //  schema, 
+      //  { errors: "all" }
+      // );
+      Effect.runSync(decodeAll(data));
+    `,
   },
 });

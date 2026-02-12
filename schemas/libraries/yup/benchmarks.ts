@@ -45,8 +45,11 @@ export default defineBenchmarks({
       throws: true,
     },
   },
-  throw: ({ schema }, data) => {
-    schema.validateSync(data);
-    assertNotReached();
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.validateSync(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.validateSync(data)`,
   },
 });

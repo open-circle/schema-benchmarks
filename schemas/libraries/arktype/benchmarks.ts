@@ -33,8 +33,11 @@ export default defineBenchmarks({
       snippet: ts`schema(data)`,
     },
   },
-  throw: ({ schema }, data) => {
-    schema.assert(data);
-    assertNotReached();
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.assert(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.assert(data)`,
   },
 });

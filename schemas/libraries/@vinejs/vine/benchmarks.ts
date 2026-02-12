@@ -37,8 +37,11 @@ export default defineBenchmarks({
       snippet: ts`vine.tryValidate({ schema: schema.bail(false), data })`,
     },
   },
-  throw: async ({ schema }, data) => {
-    await vine.validate({ schema, data });
-    assertNotReached();
+  stack: {
+    throw: async ({ schema }, data) => {
+      await vine.validate({ schema, data });
+      assertNotReached();
+    },
+    snippet: ts`await vine.validate({ schema, data })`,
   },
 });

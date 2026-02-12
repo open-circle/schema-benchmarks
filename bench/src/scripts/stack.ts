@@ -36,17 +36,24 @@ function getScriptLineNumber(stack?: string) {
 }
 
 for (const getConfig of Object.values(libraries)) {
-  const { library, createContext, throw: throwFn } = await getConfig();
-  if (throwFn) {
+  const {
+    library: { name: libraryName, version },
+    createContext,
+    stack,
+  } = await getConfig();
+  if (stack) {
+    const { snippet } = stack;
     try {
       const context = await createContext();
-      await throwFn(context, errorData);
+      await stack.throw(context, errorData);
       assertNotReached();
     } catch (e) {
       if (Error.isError(e)) {
         if (e.name === "ShouldHaveThrownError") {
           results.push({
-            libraryName: library.name,
+            libraryName,
+            version,
+            snippet,
             line: "no throw",
           });
           continue;
@@ -54,31 +61,41 @@ for (const getConfig of Object.values(libraries)) {
         const hasFrames = e.stack?.includes("    at ");
         if (!hasFrames) {
           results.push({
-            libraryName: library.name,
+            libraryName,
+            version,
+            snippet,
             line: "no stack",
             error: serializeError(e),
           });
           continue;
         }
-        const frames = e.stack?.slice(e.stack.indexOf("    at "));
+        const frames = e.stack
+          ?.slice(e.stack.indexOf("    at "))
+          .replace(/\(.*\/schema-benchmarks\/(?:\/schema-benchmarks\/)?/g, "(");
         const withoutSelf = frames?.replace(benchmarkRegex, "");
         if (withoutSelf) {
           results.push({
-            libraryName: library.name,
+            libraryName,
+            version,
+            snippet,
             line: getScriptLineNumber(frames),
             frameCount: withoutSelf.split("\n").length,
             error: serializeError(e, withoutSelf),
           });
         } else {
           results.push({
-            libraryName: library.name,
+            libraryName,
+            version,
+            snippet,
             line: "no external stack",
             error: serializeError(e),
           });
         }
       } else {
         results.push({
-          libraryName: library.name,
+          libraryName,
+          version,
+          snippet,
           line: "not an error",
         });
       }
@@ -89,5 +106,5 @@ for (const getConfig of Object.values(libraries)) {
 
 await fs.writeFile(
   path.join(process.cwd(), "stack.json"),
-  JSON.stringify(results, null, 2),
+  JSON.stringify(results),
 );

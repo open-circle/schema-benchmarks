@@ -47,6 +47,11 @@ export type BenchmarkConfig<Context> =
   | ValidationBenchmarkConfig<Context>
   | ParsingBenchmarkConfig<Context>;
 
+export interface StackBenchmarkConfig<Context> {
+  throw: (context: Context, data: unknown) => never | Promise<never>;
+  snippet: string;
+}
+
 export interface BenchmarksConfig<Context> {
   library: LibraryInfo;
   createContext: () => Context | Promise<Context>;
@@ -55,7 +60,7 @@ export interface BenchmarksConfig<Context> {
   parsing?: Partial<
     Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
   >;
-  throw: (context: Context, data: unknown) => never | Promise<never>;
+  stack?: StackBenchmarkConfig<Context>;
 }
 
 /* @__PURE__ */
