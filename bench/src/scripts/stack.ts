@@ -3,6 +3,7 @@ import * as path from "node:path";
 import { pathToFileURL } from "node:url";
 import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
+import type { SerializedError, StackResult } from "../results/types.ts";
 
 const scriptUrl = pathToFileURL(import.meta.filename).href;
 
@@ -10,17 +11,7 @@ const benchmarkRegex = new RegExp(
   `\\s*at throw \\(file:\\/\\/\\/.*\\/schemas\\/dist.*\\n\\s*at ${RegExp.escape(scriptUrl)}.*`,
 );
 
-interface BaseStackResult {
-  libraryName: string;
-}
-
-interface SuccessfulStackResult extends BaseStackResult {
-  line: number;
-  frameCount: number;
-  error: Error;
-}
-
-function serializeError(e: Error, customStack?: string): Error {
+function serializeError(e: Error, customStack?: string): SerializedError {
   return {
     message: e.message,
     name: e.name,
@@ -28,27 +19,6 @@ function serializeError(e: Error, customStack?: string): Error {
     // cause?
   };
 }
-
-type ErrorTypes = {
-  "no throw": unknown;
-  "not an error": unknown;
-  "no stack": {
-    error: Error;
-  };
-  "no external stack": {
-    error: Error;
-  };
-  "not found": unknown;
-};
-
-type UnsuccessfulStackResult = BaseStackResult &
-  {
-    [K in keyof ErrorTypes]: {
-      line: K;
-    } & ErrorTypes[K];
-  }[keyof ErrorTypes];
-
-type StackResult = SuccessfulStackResult | UnsuccessfulStackResult;
 
 const results: Array<StackResult> = [];
 

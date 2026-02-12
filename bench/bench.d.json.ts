@@ -1,4 +1,4 @@
-import type { BenchResults } from ".";
+import type { BenchResults } from "./src/index.ts";
 
 declare const results: BenchResults;
 
