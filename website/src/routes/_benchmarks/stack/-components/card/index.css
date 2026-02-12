@@ -1,0 +1,7 @@
+.stack-card {
+  .stack-card__error {
+    max-width: 48rem;
+    max-height: 16rem;
+    overflow: auto;
+  }
+}
