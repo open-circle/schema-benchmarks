@@ -2,8 +2,9 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
   type: "macro",
 };
 import ts from "dedent" with { type: "macro" };
+import { Effect } from "effect";
 import * as Schema from "effect/Schema";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getEffectSchema } from ".";
 
 export default defineBenchmarks({
@@ -73,5 +74,18 @@ export default defineBenchmarks({
         decodeFirst(data)
       `,
     },
+  },
+  stack: {
+    throw: ({ decodeAll }, data) => {
+      Effect.runSync(decodeAll(data));
+      assertNotReached();
+    },
+    snippet: ts`
+      // const decodeAll = Schema.decodeUnknownEither(
+      //  schema, 
+      //  { errors: "all" }
+      // );
+      Effect.runSync(decodeAll(data));
+    `,
   },
 });

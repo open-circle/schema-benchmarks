@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
 import type { PrefetchContext } from "#/shared/lib/fetch";
 import { getHighlightedCode } from "#/shared/lib/highlight";
 
@@ -26,10 +27,9 @@ const prefetchCode = (
     getHighlightedCode({ code, lineNumbers, language }, signal),
   );
 
-export function InlineCode({
-  children,
-  language = "typescript",
-}: Pick<CodeProps, "children" | "language">) {
+type InlineCodeProps = Pick<CodeProps, "children" | "language">;
+
+function InlineCodeInner({ children, language }: InlineCodeProps) {
   const { data } = useSuspenseQuery(
     getHighlightedCode({ code: children, language }),
   );
@@ -43,13 +43,33 @@ export function InlineCode({
   );
 }
 
+export function InlineCode({
+  children,
+  language = "typescript",
+  ...props
+}: InlineCodeProps) {
+  return (
+    <ErrorBoundary
+      fallback={
+        <code dir="ltr" className={`language-${language}`}>
+          {children}
+        </code>
+      }
+    >
+      <InlineCodeInner {...props} language={language}>
+        {children}
+      </InlineCodeInner>
+    </ErrorBoundary>
+  );
+}
+
 InlineCode.prefetch = prefetchCode;
 
-export function CodeBlock({
+function CodeBlockInner({
   children,
   title,
+  language,
   lineNumbers = false,
-  language = "typescript",
 }: CodeProps) {
   const { data } = useSuspenseQuery(
     getHighlightedCode({ code: children, lineNumbers, language }),
@@ -66,6 +86,26 @@ export function CodeBlock({
         dangerouslySetInnerHTML={{ __html: data }}
       />
     </pre>
+  );
+}
+
+export function CodeBlock({
+  language = "typescript",
+  children,
+  ...props
+}: CodeProps) {
+  return (
+    <ErrorBoundary
+      fallback={
+        <pre dir="ltr" className={`language-${language}`}>
+          <code className={`language-${language}`}>{children}</code>
+        </pre>
+      }
+    >
+      <CodeBlockInner {...props} language={language}>
+        {children}
+      </CodeBlockInner>
+    </ErrorBoundary>
   );
 }
 

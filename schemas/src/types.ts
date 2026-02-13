@@ -47,6 +47,11 @@ export type BenchmarkConfig<Context> =
   | ValidationBenchmarkConfig<Context>
   | ParsingBenchmarkConfig<Context>;
 
+export interface StackBenchmarkConfig<Context> {
+  throw: (context: Context, data: unknown) => never | Promise<never>;
+  snippet: string;
+}
+
 export interface BenchmarksConfig<Context> {
   library: LibraryInfo;
   createContext: () => Context | Promise<Context>;
@@ -55,6 +60,7 @@ export interface BenchmarksConfig<Context> {
   parsing?: Partial<
     Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
   >;
+  stack?: StackBenchmarkConfig<Context>;
 }
 
 /* @__PURE__ */
@@ -62,4 +68,15 @@ export function defineBenchmarks<const TContext>(
   config: BenchmarksConfig<TContext>,
 ) {
   return config;
+}
+
+export class ShouldHaveThrownError extends Error {
+  constructor() {
+    super("Expected an error to be thrown, but none was thrown");
+    this.name = "ShouldHaveThrownError";
+  }
+}
+
+export function assertNotReached(): never {
+  throw new ShouldHaveThrownError();
 }

@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with {
 };
 import ts from "dedent" with { type: "macro" };
 import * as S from "sury";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 import { getSurySchema } from ".";
 
 export default defineBenchmarks({
@@ -77,5 +77,12 @@ export default defineBenchmarks({
         optimizeType: "jit",
       },
     ],
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      S.parseOrThrow(data, schema);
+      assertNotReached();
+    },
+    snippet: ts`S.parseOrThrow(data, schema)`,
   },
 });
