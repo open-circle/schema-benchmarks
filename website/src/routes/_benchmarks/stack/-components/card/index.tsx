@@ -3,6 +3,7 @@ import { getTransitionName, pluralize } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
+import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 
@@ -41,7 +42,7 @@ export function StackCard({ result, barScale }: StackCardProps) {
           </div>
         </ErrorBoundary>
       </div>
-      {/* TODO: snippet */}
+      <CodeBlock>{result.snippet}</CodeBlock>
       <table className="minimal">
         <tbody>
           <tr>
