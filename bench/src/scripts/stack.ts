@@ -1,21 +1,33 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { pathToFileURL } from "node:url";
+import * as process from "node:process";
+import * as url from "node:url";
 import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import type { SerializedError, StackResult } from "../results/types.ts";
 
-const scriptUrl = pathToFileURL(import.meta.filename).href;
+// this is probably quite fragile, worth keeping an eye on when we update node
 
-const benchmarkRegex = new RegExp(
-  `\\s*at throw \\(file:\\/\\/\\/.*\\/schemas\\/dist.*\\n\\s*at ${RegExp.escape(scriptUrl)}.*`,
+const libDist = import.meta
+  .resolve("@schema-benchmarks/schemas/libraries")
+  .replace("/index.js", "");
+
+const search = `    at Object.throw (${libDist}/`;
+
+const cwdRegex = new RegExp(
+  RegExp.escape(
+    url
+      .pathToFileURL(path.resolve(process.cwd(), ".."))
+      .href.replace(/^file:\/\//, ""),
+  ),
+  "g",
 );
 
 function serializeError(e: Error, customStack?: string): SerializedError {
   return {
     message: e.message,
     name: e.name,
-    stack: customStack ?? "",
+    stack: customStack,
     // cause?
   };
 }
@@ -27,9 +39,7 @@ function getScriptLineNumber(stack?: string) {
   const lines = stack.split("\n");
   let i = 0;
   while (i < lines.length) {
-    if (lines[i]?.includes(scriptUrl)) {
-      return lines[i - 1]?.includes("at throw ") ? i - 1 : i;
-    }
+    if (lines[i]?.startsWith(search)) return i + 1;
     i++;
   }
   return "not found";
@@ -69,18 +79,15 @@ for (const getConfig of Object.values(libraries)) {
           });
           continue;
         }
-        const frames = e.stack
-          ?.slice(e.stack.indexOf("    at "))
-          .replace(/\(.*\/schema-benchmarks\/(?:\/schema-benchmarks\/)?/g, "(");
-        const withoutSelf = frames?.replace(benchmarkRegex, "");
-        if (withoutSelf) {
+        const frames = e.stack?.slice(e.stack.indexOf("    at "));
+        const line = getScriptLineNumber(frames);
+        if (frames && typeof line === "number" && line !== 1) {
           results.push({
             libraryName,
             version,
             snippet,
-            line: getScriptLineNumber(frames),
-            frameCount: withoutSelf.split("\n").length,
-            error: serializeError(e, withoutSelf),
+            line,
+            error: serializeError(e, frames.replace(cwdRegex, "")),
           });
         } else {
           results.push({
@@ -106,5 +113,14 @@ for (const getConfig of Object.values(libraries)) {
 
 await fs.writeFile(
   path.join(process.cwd(), "stack.json"),
-  JSON.stringify(results),
+  JSON.stringify(
+    results.sort((a, b) => {
+      if (typeof a.line === "number" && typeof b.line === "number") {
+        return a.line - b.line;
+      }
+      if (typeof a.line === "number") return -1;
+      if (typeof b.line === "number") return 1;
+      return 0;
+    }),
+  ),
 );

@@ -5,6 +5,7 @@ import {
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
+import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
@@ -21,6 +22,8 @@ interface DownloadCardProps {
   gzipScaler: ReturnType<typeof Bar.getScale>;
 }
 
+const cls = bem("download-card");
+
 export function DownloadCard({
   result,
   mbps,
@@ -29,7 +32,7 @@ export function DownloadCard({
 }: DownloadCardProps) {
   return (
     <div
-      className="card download-card"
+      {...cls()}
       style={{
         viewTransitionName: getTransitionName("download-card", {
           libraryName: result.libraryName,
@@ -37,18 +40,22 @@ export function DownloadCard({
         }),
       }}
     >
-      <h5 className="typo-overline download-card__version">{result.version}</h5>
-      <div className="download-card__header-row">
-        <header className="download-card__library-name">
+      <h5 {...cls({ element: "version", extra: "typo-overline" })}>
+        {result.version}
+      </h5>
+      <div {...cls({ element: "header-row" })}>
+        <header {...cls({ element: "library-name" })}>
           <h4 className="typo-headline5">
             <code className="language-text">{result.libraryName}</code>
           </h4>
           {result.note && (
-            <p className="typo-caption download-card__note">({result.note})</p>
+            <p {...cls({ element: "note", extra: "typo-caption" })}>
+              ({result.note})
+            </p>
           )}
         </header>
         <ErrorBoundary fallback={null}>
-          <div className="typo-body2 download-card__downloads">
+          <div {...cls({ element: "downloads", extra: "typo-body2" })}>
             <MdSymbol>download</MdSymbol>
             <DownloadCount libraryName={result.libraryName} />
           </div>
@@ -74,10 +81,10 @@ export function DownloadCard({
           </tr>
         </tbody>
       </table>
-      <div className="download-card__bar">
+      <div {...cls({ element: "bar" })}>
         <Bar {...gzipScaler(result.gzipBytes)} />
       </div>
-      <div className="download-card__actions">
+      <div {...cls({ element: "actions" })}>
         <ButtonGroup
           variant="outlined"
           className="source-links"
