@@ -47,10 +47,16 @@ export function StackCard({ result, barScale }: StackCardProps) {
           <tr>
             <th>Message length</th>
             <td className="numeric" style={{ whiteSpace: "pre" }}>
-              {pluralize`${result.error.message.length} ${[result.error.message.length, "chr"]}\n${messageLineCount} ${[
+              {pluralize`${result.error.message.length} ${[result.error.message.length, "char"]}\n${messageLineCount} ${[
                 messageLineCount,
-                "ln",
+                "line",
               ]}`}
+            </td>
+          </tr>
+          <tr>
+            <th>Stack length</th>
+            <td className="numeric">
+              {pluralize`${stackLineCount} ${[stackLineCount, "frame"]}`}
             </td>
           </tr>
           <tr>
