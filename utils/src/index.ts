@@ -344,3 +344,26 @@ export function assertNever(_value: never, message: string): never {
 }
 
 export const nonNullish = <T>(value: T) => value != null;
+
+type PluralTuple = [count: number, singular: string, plural?: string];
+const isPluralTuple = (value: unknown): value is PluralTuple =>
+  Array.isArray(value) && value.length >= 2 && value.length <= 3;
+
+export function pluralize(
+  strings: TemplateStringsArray,
+  ...values: Array<unknown>
+) {
+  let result = "";
+  for (let i = 0; i < strings.length; i++) {
+    result += strings[i];
+    if (i < values.length) {
+      const value = values[i];
+      if (isPluralTuple(value)) {
+        result += value[0] === 1 ? value[1] : (value[2] ?? `${value[1]}s`);
+      } else {
+        result += value;
+      }
+    }
+  }
+  return result;
+}
