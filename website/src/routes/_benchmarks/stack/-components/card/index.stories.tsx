@@ -12,7 +12,7 @@ const meta = preview.meta({
 export const Default = meta.story({
   args: {
     // biome-ignore lint/style/noNonNullAssertion: demo data
-    result: stackResults.at(0)!,
+    result: stackResults.at(3)!,
     barScale: Bar.getScale(
       stackResults.filter((r) => typeof r.line === "number").map((r) => r.line),
       { lowerBetter: true },
