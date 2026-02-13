@@ -1,5 +1,5 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
-import { isServer, queryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/";
@@ -7,21 +7,22 @@ import * as v from "valibot";
 
 export const highlightInput = v.object({
   code: v.string(),
-  language: v.optional(v.string()),
+  language: v.optional(v.string(), "typescript"),
   lineNumbers: v.optional(v.boolean()),
 });
 
 const NEW_LINE_EXP = /\n(?!$)/g;
 
-if (isServer) {
-  loadLanguages();
-}
-
-export function highlightCode({
-  code,
-  language = "typescript",
-  lineNumbers = false,
-}: v.InferInput<typeof highlightInput>) {
+export const highlightCode = (
+  // we want to be able to call this from the client (storybook) without Prism getting included in our client bundle
+  // passing it as a parameter means it gets treeshaken properly
+  Prism: typeof import("prismjs"),
+  {
+    code,
+    language = "typescript",
+    lineNumbers = false,
+  }: v.InferInput<typeof highlightInput>,
+) => {
   let lineNumbersWrapper = "";
   Prism.hooks.add("before-tokenize", (env) => {
     const match = env.code.match(NEW_LINE_EXP);
@@ -37,16 +38,21 @@ export function highlightCode({
   });
   const formatted = Prism.highlight(
     code,
-    // biome-ignore lint/style/noNonNullAssertion: we've loaded it above
+    // biome-ignore lint/style/noNonNullAssertion: should be loaded - either by serverFn or vite plugin
     Prism.languages[language]!,
     language,
   );
   return lineNumbers ? formatted + lineNumbersWrapper : formatted;
-}
+};
 
 export const highlightFn = createServerFn()
   .inputValidator(highlightInput)
-  .handler(({ data }) => highlightCode(data));
+  .handler(({ data }) => {
+    if (!Prism.languages[data.language]) {
+      loadLanguages([data.language]);
+    }
+    return highlightCode(Prism, data);
+  });
 
 export const getHighlightedCode = (
   {

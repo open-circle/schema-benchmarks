@@ -12,6 +12,7 @@ import { makeQueryClient } from "../src/shared/data/query";
 import "../src/shared/styles/index.css";
 import { HttpResponse, http } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
+import Prism from "prismjs";
 import { fromJSON, toCrossJSONAsync } from "seroval";
 import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
@@ -34,7 +35,7 @@ export function mockGetServerFn<Input, Output>(
     (input: { data: Input }): Promise<Output>;
     url: string;
   },
-  handler: (input: Input) => Output,
+  handler: (input: NoInfer<Input>) => NoInfer<Output>,
 ) {
   return http.get(
     new URL(serverFn.url, window.location.href).href,
@@ -82,7 +83,7 @@ initialize(
   {
     onUnhandledRequest: "bypass",
   },
-  [mockGetServerFn(highlightFn, highlightCode)],
+  [mockGetServerFn(highlightFn, (data) => highlightCode(Prism, data))],
 );
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
