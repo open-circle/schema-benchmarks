@@ -73,7 +73,7 @@ export function StackCard({ result, barScale }: StackCardProps) {
         dir="ltr"
         {...cls({ element: "error", extra: "language-text line-numbers" })}
       >
-        <code className="language-text line-numbers">
+        <code className="language-text">
           <span className="token">{result.error.name}</span>:{" "}
           {result.error.message}
           {result.error.stack && (
