@@ -50,10 +50,7 @@
     margin-bottom: 1.25rem;
   }
   .dialog__message {
-    color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
     @extend .typo-body1;
     margin: 0;
     margin-bottom: 1.75rem;
@@ -97,7 +94,6 @@
 }
 
 .alert-dialog {
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--desktop) {
     min-width: 35rem;
     min-height: 11.375rem;

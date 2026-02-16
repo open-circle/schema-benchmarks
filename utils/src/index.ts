@@ -23,11 +23,9 @@ export const shortNumFormatter = new Intl.NumberFormat(undefined, {
   notation: "compact",
 });
 
-export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> =
-  Object.keys;
-export const unsafeEntries: <T extends object>(
-  obj: T,
-) => Array<[keyof T, T[keyof T]]> = Object.entries;
+export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> = Object.keys;
+export const unsafeEntries: <T extends object>(obj: T) => Array<[keyof T, T[keyof T]]> =
+  Object.entries;
 export const unsafeFromEntries: <
   const TEntries extends ReadonlyArray<readonly [PropertyKey, unknown]>,
 >(
@@ -44,10 +42,7 @@ export function partition<T>(
   array: ReadonlyArray<T>,
   predicate: (value: T) => boolean,
 ): [truthy: Array<T>, falsy: Array<T>];
-export function partition<T>(
-  array: ReadonlyArray<T>,
-  predicate: (value: T) => boolean,
-) {
+export function partition<T>(array: ReadonlyArray<T>, predicate: (value: T) => boolean) {
   const results: [truthy: Array<T>, falsy: Array<T>] = [[], []];
   for (const value of array) {
     results[predicate(value) ? 0 : 1].push(value);
@@ -60,11 +55,7 @@ export function getOrInsert<K extends object, V>(
   key: NoInfer<K>,
   value: NoInfer<V>,
 ): NoInfer<V>;
-export function getOrInsert<K, V>(
-  map: Map<K, V>,
-  key: NoInfer<K>,
-  value: NoInfer<V>,
-): NoInfer<V>;
+export function getOrInsert<K, V>(map: Map<K, V>, key: NoInfer<K>, value: NoInfer<V>): NoInfer<V>;
 export function getOrInsert<K extends object, V>(
   map: Map<K, V> | WeakMap<K, V>,
   key: NoInfer<K>,
@@ -117,9 +108,7 @@ const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [
   // fallback to nanoseconds
 ];
 
-export const getDuration = (
-  ms: number,
-): Partial<Record<Intl.DurationFormatUnit, number>> => {
+export const getDuration = (ms: number): Partial<Record<Intl.DurationFormatUnit, number>> => {
   for (const [threshold, unit] of units) {
     if (ms >= threshold) return { [unit]: Math.round(ms / threshold) };
   }
@@ -127,9 +116,7 @@ export const getDuration = (
 };
 
 const enumerableKeys = (obj: object) =>
-  Reflect.ownKeys(obj).filter(
-    (key) => Object.getOwnPropertyDescriptor(obj, key)?.enumerable,
-  );
+  Reflect.ownKeys(obj).filter((key) => Object.getOwnPropertyDescriptor(obj, key)?.enumerable);
 
 export const promiseAllKeyed = async <T extends Record<PropertyKey, unknown>>(
   keyed: T,
@@ -137,24 +124,17 @@ export const promiseAllKeyed = async <T extends Record<PropertyKey, unknown>>(
   [K in keyof T]: Awaited<T[K]>;
 }> =>
   unsafeFromEntries(
-    await Promise.all(
-      enumerableKeys(keyed).map(async (key) => [key, await keyed[key]]),
-    ),
+    await Promise.all(enumerableKeys(keyed).map(async (key) => [key, await keyed[key]])),
   ) as never;
 
-export const promiseAllSettledKeyed = async <
-  T extends Record<PropertyKey, unknown>,
->(
+export const promiseAllSettledKeyed = async <T extends Record<PropertyKey, unknown>>(
   keyed: T,
 ): Promise<{
   [K in keyof T]: PromiseSettledResult<Awaited<T[K]>>;
 }> => {
   const keys = enumerableKeys(keyed);
   const results = await Promise.allSettled(keys.map((key) => keyed[key]));
-  return unsafeFromEntries(
-    // biome-ignore lint/style/noNonNullAssertion: we know the keys are there
-    results.map((result, i) => [keys[i]!, result]),
-  ) as never;
+  return unsafeFromEntries(results.map((result, i) => [keys[i]!, result])) as never;
 };
 
 /**
@@ -166,7 +146,6 @@ export const promiseAllSettledKeyed = async <
  * @see {setInterval}
  */
 
-// biome-ignore lint/suspicious/noExplicitAny: contravariant
 export const setAbortableInterval = <TArgs extends Array<any>>(
   fn: (...args: TArgs) => void,
   delay: number,
@@ -188,7 +167,6 @@ export const setAbortableInterval = <TArgs extends Array<any>>(
  * @returns The timeout ID.
  * @see {setTimeout}
  */
-// biome-ignore lint/suspicious/noExplicitAny: contravariant
 export const setAbortableTimeout = <TArgs extends Array<any>>(
   fn: (...args: TArgs) => void,
   delay: number,
@@ -203,11 +181,9 @@ export const setAbortableTimeout = <TArgs extends Array<any>>(
   return timeout;
 };
 
-export type TupleOfLength<
-  T,
-  N extends number,
-  Acc extends Array<T> = [],
-> = Acc["length"] extends N ? Acc : TupleOfLength<T, N, [T, ...Acc]>;
+export type TupleOfLength<T, N extends number, Acc extends Array<T> = []> = Acc["length"] extends N
+  ? Acc
+  : TupleOfLength<T, N, [T, ...Acc]>;
 
 export function hasLength<T, N extends number>(
   array: Array<T>,
@@ -216,8 +192,7 @@ export function hasLength<T, N extends number>(
   return array.length === length;
 }
 
-export type TupleOfAtLeast<T, N extends number> = TupleOfLength<T, N> &
-  Array<T>;
+export type TupleOfAtLeast<T, N extends number> = TupleOfLength<T, N> & Array<T>;
 
 export function hasAtLeast<T, N extends number>(
   array: Array<T>,
@@ -233,27 +208,21 @@ export default function isPlainObject(obj: unknown): obj is object {
     proto = Object.getPrototypeOf(proto);
   }
 
-  return (
-    Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null
-  );
+  return Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null;
 }
 
 export function serialize(value: unknown): string {
   return JSON.stringify(value, (_key, value) => {
     // sort the object keys before serialization, so { a: 1, b: 2 } === { b: 2, a: 1 }
     if (isPlainObject(value)) {
-      return Object.fromEntries(
-        Object.entries(value).sort(([a], [b]) => a.localeCompare(b)),
-      );
+      return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)));
     }
     return value;
   });
 }
 
 export const ensureArray = <T>(value: T) =>
-  (Array.isArray(value) ? value : [value]) as T extends ReadonlyArray<unknown>
-    ? T
-    : Array<T>;
+  (Array.isArray(value) ? value : [value]) as T extends ReadonlyArray<unknown> ? T : Array<T>;
 
 export const anyAbortSignal = (...signals: Array<AbortSignal | undefined>) =>
   AbortSignal.any(signals.filter((s) => !!s));
@@ -268,11 +237,7 @@ export function toggleFilter<K extends string, const V extends string>(
   newValue: V,
   defaultValue?: V,
 ): <T extends Partial<Record<K, V>>>(filter: T) => PickPartial<T, K>;
-export function toggleFilter(
-  key: string,
-  newValue: unknown,
-  defaultValue?: unknown,
-) {
+export function toggleFilter(key: string, newValue: unknown, defaultValue?: unknown) {
   return (filter: Record<string, unknown>) => ({
     ...filter,
     [key]: filter[key] === newValue ? defaultValue : newValue,
@@ -288,14 +253,11 @@ export function toggleFilter(
  * const result = array.filter(shallowFilter({ a: [1, 2], b: 2 }));
  * // [{ a: 1, b: 2 }, { a: 2, b: 2 }]
  */
-export function shallowFilter<T>(
-  filter: {
-    [K in keyof T]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
-  },
-): (item: T) => boolean {
+export function shallowFilter<T>(filter: {
+  [K in keyof T]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
+}): (item: T) => boolean {
   const entries = unsafeEntries(filter).map(
-    ([key, value]) =>
-      [key, Array.isArray(value) ? new Set(value) : value] as const,
+    ([key, value]) => [key, Array.isArray(value) ? new Set(value) : value] as const,
   );
   return (item) => {
     for (const [key, value] of entries) {
@@ -308,10 +270,7 @@ export function shallowFilter<T>(
   };
 }
 
-export function getTransitionName(
-  prefix: string,
-  values: Record<string, unknown>,
-) {
+export function getTransitionName(prefix: string, values: Record<string, unknown>) {
   let name = prefix;
   for (const [key, value] of Object.entries(values)) {
     name += `-${key}-${value ?? ""}`;
@@ -319,10 +278,7 @@ export function getTransitionName(
   return name.replace(/[^a-zA-Z0-9]/g, "-");
 }
 
-export function uniqueBy<T>(
-  values: ReadonlyArray<T>,
-  getKey: (value: T) => unknown,
-) {
+export function uniqueBy<T>(values: ReadonlyArray<T>, getKey: (value: T) => unknown) {
   const keys = new Set();
   return values.filter((value) => {
     const key = getKey(value);
@@ -332,10 +288,7 @@ export function uniqueBy<T>(
   });
 }
 
-export function assert(
-  condition: unknown,
-  message?: string,
-): asserts condition {
+export function assert(condition: unknown, message?: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 

@@ -33,7 +33,6 @@ export function MdSymbol({
   ...props
 }: MdSymbolProps) {
   return (
-    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: aria-label works i promise
     <span
       {...props}
       aria-hidden={!ariaLabel}

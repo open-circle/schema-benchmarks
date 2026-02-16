@@ -5,9 +5,7 @@ export type EqualityFn<T> = (a: T, b: T) => boolean;
 
 const strictEquality: EqualityFn<unknown> = (a, b) => a === b;
 
-// biome-ignore lint/complexity/noBannedTypes: necessary
-const isFunction = (value: unknown): value is Function =>
-  typeof value === "function";
+const isFunction = (value: unknown): value is Function => typeof value === "function";
 
 export class ExternalStore<T> extends EventTarget {
   constructor(
@@ -17,11 +15,8 @@ export class ExternalStore<T> extends EventTarget {
   ) {
     super();
   }
-  // biome-ignore lint/suspicious/noConfusingVoidType: void is valid for a return type
   setState(setter: T | ((state: Draft<T>) => void | T)) {
-    const state = isFunction(setter)
-      ? (create(this.state, setter) as T)
-      : setter;
+    const state = isFunction(setter) ? (create(this.state, setter) as T) : setter;
     if (!this.isEqual(this.state, state)) {
       this.state = state;
       this.dispatchEvent(new Event("change"));

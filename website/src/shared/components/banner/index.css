@@ -1,7 +1,6 @@
 :root {
   --banner-min-height: 3.25rem;
   --banner-margin: 1rem;
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--desktop) {
     --banner-margin: 1.5rem;
   }
@@ -38,10 +37,7 @@
     gap: var(--banner-margin);
   }
   .banner__icon {
-    color: color(
-      from var(--banner-base-color) srgb r g b /
-      var(--primary-text)
-    );
+    color: color(from var(--banner-base-color) srgb r g b / var(--primary-text));
     --icon-fill: 1;
     display: contents;
   }
@@ -56,7 +52,6 @@
       margin-left: -0.5rem;
       margin-right: auto;
     }
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--desktop) {
       margin-right: -1rem;
       &:dir(rtl) {

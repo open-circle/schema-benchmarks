@@ -22,7 +22,6 @@
       margin-left: 0;
       margin-right: -1rem;
     }
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--modal-sidebar) {
       display: block;
     }
@@ -38,7 +37,6 @@
     }
     .pref-switcher {
       background-color: var(--sidebar-background);
-      /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
       @media (--modal-sidebar) {
         display: none;
       }
@@ -52,10 +50,7 @@
   gap: 0.5rem;
   a {
     text-decoration: none;
-    color: color(
-      from var(--page-header-foreground) srgb r g b /
-      var(--primary-text)
-    );
+    color: color(from var(--page-header-foreground) srgb r g b / var(--primary-text));
     transition:
       color 250ms,
       font-weight 250ms,
@@ -68,7 +63,6 @@
       outline: none;
     }
 
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--phone) {
       display: none;
     }
@@ -76,7 +70,6 @@
   span {
     font-weight: var(--weight-bold);
     &:not(:last-child) {
-      /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
       @media (--phone) {
         display: none;
       }

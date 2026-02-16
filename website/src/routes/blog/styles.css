@@ -15,7 +15,6 @@
   }
 }
 
-/* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
 @media (--desktop) {
   .blog-list {
     grid-template-columns: repeat(2, 1fr);
@@ -28,7 +27,6 @@
     text-transform: none;
   }
   * {
-    /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
     corner-shape: unset;
   }
 }

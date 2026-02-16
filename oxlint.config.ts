@@ -8,6 +8,11 @@ export default defineConfig({
   rules: {
     "typescript/array-type": ["error", { default: "generic" }],
   },
+  settings: {
+    vitest: {
+      typecheck: true,
+    },
+  },
   env: {
     builtin: true,
   },
@@ -15,11 +20,6 @@ export default defineConfig({
     {
       files: ["**/*.test.ts", "**/*.test.tsx"],
       plugins: ["vitest"],
-      settings: {
-        vitest: {
-          typecheck: true,
-        },
-      },
     },
   ],
 });

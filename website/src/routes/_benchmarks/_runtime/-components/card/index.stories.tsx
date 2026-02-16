@@ -11,7 +11,6 @@ const meta = preview.meta({
 
 export const Initialization = meta.story({
   args: {
-    // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.initialization[0]!,
     barScale: Bar.getScale(
       benchResults.initialization.map((r) => r.mean),
@@ -22,7 +21,6 @@ export const Initialization = meta.story({
 
 export const Validation = meta.story({
   args: {
-    // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.validation.valid[0]!,
     barScale: Bar.getScale(
       benchResults.validation.valid.map((r) => r.mean),
@@ -33,7 +31,6 @@ export const Validation = meta.story({
 
 export const Parsing = meta.story({
   args: {
-    // biome-ignore lint/style/noNonNullAssertion: demo data
     result: benchResults.parsing.valid[0]!,
     barScale: Bar.getScale(
       benchResults.parsing.valid.map((r) => r.mean),

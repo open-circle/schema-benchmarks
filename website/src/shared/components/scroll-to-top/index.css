@@ -16,7 +16,6 @@
     right: auto;
     left: var(--edge-offset);
   }
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) or (--tablet-small) or (--tablet-large) {
     --edge-offset: 1rem;
   }

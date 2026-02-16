@@ -1,8 +1,5 @@
-import { getVersion } from "@schema-benchmarks/utils/node" with {
-  type: "macro",
-};
+import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 // @ts-expect-error imported for type portability
-// biome-ignore lint/correctness/noUnusedImports: type portability issue
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";

@@ -14,11 +14,7 @@ export function ChipCollection({
 }: ComponentPropsWithRef<"div">) {
   const group = useFocusGroup();
   return (
-    <div
-      {...props}
-      {...collectionCls({ extra: className })}
-      ref={mergeRefs(ref, group)}
-    >
+    <div {...props} {...collectionCls({ extra: className })} ref={mergeRefs(ref, group)}>
       {children}
     </div>
   );
@@ -42,22 +38,13 @@ export interface ChipProps extends ComponentPropsWithRef<"button"> {
 
 export function Chip({ children, className, activated, ...props }: ChipProps) {
   return (
-    <button
-      type="button"
-      {...props}
-      aria-pressed={activated}
-      {...cls({ extra: className })}
-    >
+    <button type="button" {...props} aria-pressed={activated} {...cls({ extra: className })}>
       {children}
     </button>
   );
 }
 
-function BaseLinkChip({
-  children,
-  className,
-  ...props
-}: ComponentPropsWithRef<"a">) {
+function BaseLinkChip({ children, className, ...props }: ComponentPropsWithRef<"a">) {
   return (
     <a {...props} {...cls({ extra: className })}>
       {children}
@@ -65,5 +52,4 @@ function BaseLinkChip({
   );
 }
 
-// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const LinkChip = createLink(BaseLinkChip);

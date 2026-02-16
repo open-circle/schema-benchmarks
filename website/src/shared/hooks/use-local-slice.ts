@@ -11,7 +11,6 @@ export type PayloadAction<T> = {
 
 type IfMaybeUndefined<P, True, False> = [undefined] extends [P] ? True : False;
 
-// biome-ignore lint/suspicious/noConfusingVoidType: void is valid here
 export type PayloadActionDispatch<P = void> = void extends P
   ? () => void
   : IfMaybeUndefined<P, (payload?: P) => void, (payload: P) => void>;
@@ -21,7 +20,6 @@ export type ReducerWithoutPayload<S> = (state: S) => S;
 export type PayloadActionReducer<S, P = void> = (
   state: Draft<S>,
   action: PayloadAction<P>,
-  // biome-ignore lint/suspicious/noConfusingVoidType: void is a valid return type
 ) => void | S | Draft<S>;
 
 export type ReducerMap<State> = {
@@ -36,10 +34,7 @@ export type DispatcherMap<Reducers extends ReducerMap<any>> = {
       : never;
 };
 
-export interface UseLocalSliceOptions<
-  State,
-  Reducers extends ReducerMap<State>,
-> {
+export interface UseLocalSliceOptions<State, Reducers extends ReducerMap<State>> {
   initialState: State;
   reducers: Reducers;
   slice?: string;
@@ -60,11 +55,9 @@ export function useLocalSlice<State, Reducers extends ReducerMap<State>>({
 
   const actionTypes = Object.keys(reducers);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: we only recalc if the action types change
   const dispatchAction = useMemo(() => {
     const map: Record<string, PayloadActionDispatch<NonNullable<unknown>>> = {};
-    for (const type of actionTypes)
-      map[type] = (payload) => dispatch({ type, payload });
+    for (const type of actionTypes) map[type] = (payload) => dispatch({ type, payload });
     return map as DispatcherMap<Reducers>;
   }, [dispatch, JSON.stringify(actionTypes)]);
 

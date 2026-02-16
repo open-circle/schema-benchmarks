@@ -14,15 +14,13 @@ interface BaseButtonProps {
 }
 
 export interface ButtonProps
-  extends DistributiveOmit<ComponentPropsWithRef<"button">, "color">,
-    BaseButtonProps {
+  extends DistributiveOmit<ComponentPropsWithRef<"button">, "color">, BaseButtonProps {
   icon?: ReactNode;
   loading?: boolean;
 }
 
 const buttonCls = bem("button");
 
-// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const Button = withTooltip(function Button({
   className,
   variant = "text",
@@ -54,10 +52,8 @@ export const Button = withTooltip(function Button({
 });
 
 interface BaseLinkButtonProps
-  extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">,
-    BaseButtonProps {}
+  extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">, BaseButtonProps {}
 
-// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   className,
   variant = "text",
@@ -75,7 +71,6 @@ export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   );
 });
 
-// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const InternalLinkButton = createLink(ExternalLinkButton);
 
 const buttonGroupCls = bem("button-group");

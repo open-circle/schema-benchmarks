@@ -53,18 +53,13 @@
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
-    border: 2px solid
-      color(
-        from var(--radio-base-color) srgb r g b /
-        var(--radio-border-opacity)
-      );
+    border: 2px solid color(from var(--radio-base-color) srgb r g b / var(--radio-border-opacity));
     background-color: transparent;
     transition:
       border-color 250ms,
       opacity 250ms;
     &::before {
       content: "";
-      /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
       corner-shape: bevel;
       display: block;
       margin: 4px;
@@ -82,7 +77,6 @@
       position: absolute;
       inset: -8px;
       border-radius: 50%;
-      /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
       corner-shape: bevel;
       background-color: var(--radio-base-color);
       transform: scale(var(--radio-focus-scale));

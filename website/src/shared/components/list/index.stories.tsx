@@ -1,52 +1,42 @@
 import preview from "#storybook/preview";
 import { MdSymbol } from "../symbol";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemContent,
-  ListItemExternalLink,
-} from ".";
+import { List, ListItem, ListItemButton, ListItemContent, ListItemExternalLink } from ".";
 import "./index.stories.css";
 
 type Supporting = "icon" | "text" | "none";
 function renderSupporting(supporting: Supporting, isTrailing = false) {
-  if (supporting === "icon")
-    return <MdSymbol>{isTrailing ? "more_vert" : "favorite"}</MdSymbol>;
+  if (supporting === "icon") return <MdSymbol>{isTrailing ? "more_vert" : "favorite"}</MdSymbol>;
   if (supporting === "text") return <span className="typo-caption">meta</span>;
   return undefined;
 }
 
-const meta = preview
-  .type<{ args: { leading: Supporting; trailing: Supporting } }>()
-  .meta({
-    title: "Components/List",
-    argTypes: {
-      leading: {
-        control: {
-          type: "inline-radio",
-        },
-        options: ["icon", "text", "none"],
+const meta = preview.type<{ args: { leading: Supporting; trailing: Supporting } }>().meta({
+  title: "Components/List",
+  argTypes: {
+    leading: {
+      control: {
+        type: "inline-radio",
       },
-      trailing: {
-        control: {
-          type: "inline-radio",
-        },
-        options: ["icon", "text", "none"],
+      options: ["icon", "text", "none"],
+    },
+    trailing: {
+      control: {
+        type: "inline-radio",
       },
+      options: ["icon", "text", "none"],
     },
-    args: {
-      leading: "icon",
-      trailing: "none",
-    },
-    render: (_props) => <></>,
-  });
+  },
+  args: {
+    leading: "icon",
+    trailing: "none",
+  },
+  render: (_props) => <></>,
+});
 
 export const SingleLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             leading={renderSupporting(leading)}
@@ -64,7 +54,6 @@ export const TwoLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             lines={2}
@@ -83,7 +72,6 @@ export const ThreeLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
       {Array.from({ length: 3 }, (_, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <ListItem key={idx}>
           <ListItemContent
             lines={3}
@@ -103,17 +91,13 @@ export const Button = meta.story({
     <List className="demo-list">
       <ListItem>
         <ListItemButton aria-pressed="true">
-          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>
-            Button
-          </ListItemContent>
+          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>Button</ListItemContent>
         </ListItemButton>
       </ListItem>
 
       <ListItem>
         <ListItemButton>
-          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>
-            Button
-          </ListItemContent>
+          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>Button</ListItemContent>
         </ListItemButton>
       </ListItem>
     </List>
@@ -125,16 +109,12 @@ export const Link = meta.story({
     <List className="demo-list">
       <ListItem>
         <ListItemExternalLink data-status="active" href="https://example.com">
-          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>
-            Link
-          </ListItemContent>
+          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>Link</ListItemContent>
         </ListItemExternalLink>
       </ListItem>
       <ListItem>
         <ListItemExternalLink href="https://example.com">
-          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>
-            Link
-          </ListItemContent>
+          <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>Link</ListItemContent>
         </ListItemExternalLink>
       </ListItem>
     </List>

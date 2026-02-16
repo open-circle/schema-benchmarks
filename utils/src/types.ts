@@ -4,12 +4,8 @@ export type NonOptionalKeys<T> = {
   [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
 export type Override<T, U> = Compute<Omit<T, keyof U> & U>;
-export type PickRequired<T, K extends keyof T> = Compute<
-  Omit<T, K> & Required<Pick<T, K>>
->;
-export type PickPartial<T, K extends keyof T> = Compute<
-  Omit<T, K> & Partial<Pick<T, K>>
->;
+export type PickRequired<T, K extends keyof T> = Compute<Omit<T, K> & Required<Pick<T, K>>>;
+export type PickPartial<T, K extends keyof T> = Compute<Omit<T, K> & Partial<Pick<T, K>>>;
 export type PickNonNullable<T, K extends keyof T> = Compute<
   Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
 >;
@@ -28,12 +24,7 @@ export namespace Autocomplete {
    * function parse<TSchema extends v.GenericSchema>(schema: TSchema, input: Autocomplete.Unknown<v.InferInput<TSchema>>) {}
    * parse(v.picklist(["foo", "bar"]), "") // accepts any value without type errors, but suggests "foo" or "bar"
    */
-  export type Unknown<KnownValues> =
-    | KnownValues
-    // biome-ignore lint/complexity/noBannedTypes: Necessary for autocomplete
-    | {}
-    | null
-    | undefined;
+  export type Unknown<KnownValues> = KnownValues | {} | null | undefined;
   /**
    * Accept anything assigable to `PropertyKey`, but *suggest* using one of the KnownValues.
    * @example
@@ -47,12 +38,10 @@ export namespace Autocomplete {
     | symbol;
 }
 
-export type HasRequiredProps<T, True, False> =
-  NonOptionalKeys<T> extends never ? False : True;
-export type DistributiveOmit<
-  T,
-  K extends Autocomplete.PropertyKey<keyof T>,
-> = T extends T ? Omit<T, K> : never;
+export type HasRequiredProps<T, True, False> = NonOptionalKeys<T> extends never ? False : True;
+export type DistributiveOmit<T, K extends Autocomplete.PropertyKey<keyof T>> = T extends T
+  ? Omit<T, K>
+  : never;
 
 // DistributiveArray<string | number> = Array<string> | Array<number>
 export type DistributiveArray<T> = T extends T ? Array<T> : never;

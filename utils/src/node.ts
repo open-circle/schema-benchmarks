@@ -22,11 +22,8 @@ const pnpmListSchema = v.pipe(
 const versionCache = new Map<string, string>();
 
 export async function getVersion(libraryName: string) {
-  // biome-ignore lint/style/noNonNullAssertion: .has means it's there
   if (versionCache.has(libraryName)) return versionCache.get(libraryName)!;
-  const { stdout, stderr } = await exec(
-    `pnpm --filter schemas list ${libraryName} --json`,
-  );
+  const { stdout, stderr } = await exec(`pnpm --filter schemas list ${libraryName} --json`);
   if (stderr) throw new Error(stderr);
   const data = v.parse(pnpmListSchema, stdout);
   const dep = data[0]?.dependencies[libraryName];

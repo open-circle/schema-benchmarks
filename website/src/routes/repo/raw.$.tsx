@@ -26,7 +26,6 @@ const fileNameMap: Record<string, string> = {
 // schemas/libraries/<libraryName>/download_compiled/[<note>/]<minify>.js -> <libraryName> / Compiled ([minify])
 const noteRegex = /download\/([^/]+).ts|download_compiled\/([^/]+)\//;
 function getLibraryCrumbs(fileName: string) {
-  // biome-ignore lint/style/noNonNullAssertion: this function is only called if the regex matches
   const libraryName = fileName.match(libraryNameRegex)![1];
   const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
   const noteMatch = fileName.match(noteRegex);
@@ -41,16 +40,10 @@ function getLibraryCrumbs(fileName: string) {
 export const Route = createFileRoute("/repo/raw/$")({
   component: RouteComponent,
   staticData: { crumb: undefined },
-  async loader({
-    context: { queryClient },
-    params: { _splat: fileName },
-    abortController,
-  }) {
+  async loader({ context: { queryClient }, params: { _splat: fileName }, abortController }) {
     if (!fileName) throw notFound();
     try {
-      const code = await queryClient.ensureQueryData(
-        getRaw({ fileName }, abortController.signal),
-      );
+      const code = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
       await CodeBlock.prefetch(
         { code, language: getLanguage(fileName) },
         { queryClient, signal: abortController.signal },
@@ -61,16 +54,12 @@ export const Route = createFileRoute("/repo/raw/$")({
     }
     const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
     return {
-      crumb: libraryNameRegex.test(fileName)
-        ? getLibraryCrumbs(fileName)
-        : [fileNamePart],
+      crumb: libraryNameRegex.test(fileName) ? getLibraryCrumbs(fileName) : [fileNamePart],
     };
   },
   head: ({ params: { _splat: fileName }, loaderData }) =>
     generateMetadata({
-      title: loaderData?.crumb
-        ? [...loaderData.crumb].reverse().join(" | ")
-        : "Unknown",
+      title: loaderData?.crumb ? [...loaderData.crumb].reverse().join(" | ") : "Unknown",
       description: "View the raw contents of a file in the repository.",
       openGraph: {
         url: `/repo/raw/${fileName}`,
