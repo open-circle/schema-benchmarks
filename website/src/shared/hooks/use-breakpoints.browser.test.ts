@@ -1,7 +1,9 @@
 import { describe, expect } from "vitest";
-import { page } from "vitest/browser";
 import { renderHook } from "vitest-browser-react";
+import { page } from "vitest/browser";
+
 import { it } from "#test/browser/fixtures";
+
 import { useBreakpoints } from "./use-breakpoints";
 
 describe("useBreakpoints", () => {

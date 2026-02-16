@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import * as v from "valibot";
+
 import { styleSchema, themeSchema } from "./constants";
 
 const themeKey = "benchmarks::theme";

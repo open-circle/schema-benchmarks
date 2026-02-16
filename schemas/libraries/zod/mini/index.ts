@@ -1,4 +1,5 @@
 import * as z from "zod/mini";
+
 import type { ProductData } from "#src";
 
 export function getZodMiniSchema() {

@@ -1,6 +1,8 @@
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
+
 import { useLoadImage } from "#/shared/hooks/use-load-image";
+
 import { withTooltip } from "../tooltip";
 
 export type AvatarSize = "sm" | "md" | "lg";

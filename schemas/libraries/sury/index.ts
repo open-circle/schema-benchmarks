@@ -1,4 +1,5 @@
 import * as S from "sury";
+
 import type { ProductData } from "#src";
 
 export function getSurySchema() {

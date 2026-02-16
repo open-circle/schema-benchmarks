@@ -8,6 +8,7 @@ import {
 } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+
 import { ToggleButton } from "#/shared/components/button/toggle";
 import { EmptyState } from "#/shared/components/empty-state";
 import { Radio } from "#/shared/components/radio";
@@ -15,8 +16,9 @@ import { Scaler } from "#/shared/components/scaler";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
-import { DownloadCount } from "../../../-components/count";
+
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";
+import { DownloadCount } from "../../../-components/count";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {

@@ -1,4 +1,5 @@
 import Joi from "joi";
+
 import type { ProductData } from "#src";
 
 export function getJoiSchema() {

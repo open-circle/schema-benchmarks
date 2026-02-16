@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
+
 import { useExternalStore } from "#/shared/hooks/store";
+
 import { bannerQueue } from "./queue";
 
 export type BannerColor = "success" | "error" | "warning";

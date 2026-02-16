@@ -1,6 +1,7 @@
 import preview from "#storybook/preview";
-import { MdSymbol } from "../symbol";
+
 import { Scaler } from ".";
+import { MdSymbol } from "../symbol";
 
 const meta = preview.meta({
   title: "Components/Scaler",

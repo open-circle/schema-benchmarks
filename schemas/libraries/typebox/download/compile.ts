@@ -1,6 +1,7 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
 import { type StaticDecode, Type } from "typebox";
 import { Compile } from "typebox/compile";
+
 import type { ProductData } from "#src";
 
 const Timestamp = Type.Codec(Type.Number())

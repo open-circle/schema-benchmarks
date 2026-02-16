@@ -2,6 +2,7 @@ import UnpluginTypia from "@ryoppippi/unplugin-typia/vite";
 import macros from "unplugin-macros/vite";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+
 import { dependencies } from "./package.json";
 
 export default defineConfig({

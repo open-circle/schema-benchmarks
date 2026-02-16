@@ -2,8 +2,8 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 declare module "*.mdx" {
-  import type { FC } from "react";
   import type { MDXComponents } from "mdx/types";
+  import type { FC } from "react";
   export interface MDXProps {
     components?: MDXComponents;
   }

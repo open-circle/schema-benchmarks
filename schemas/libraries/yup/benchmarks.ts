@@ -1,6 +1,8 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+
 import { defineBenchmarks } from "#src";
+
 import { getYupSchema } from ".";
 
 export default defineBenchmarks({

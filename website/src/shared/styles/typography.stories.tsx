@@ -1,4 +1,5 @@
 import preview from "#storybook/preview";
+
 import "./typography.stories.css";
 
 const styles = [

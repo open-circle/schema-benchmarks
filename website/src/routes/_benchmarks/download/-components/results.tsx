@@ -1,7 +1,9 @@
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
+
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
+
 import { DownloadCard } from "./card";
 import { DownloadTable } from "./table";
 

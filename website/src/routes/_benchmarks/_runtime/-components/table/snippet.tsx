@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import { ToggleButton } from "#/shared/components/button/toggle";
 import { CodeBlock } from "#/shared/components/code";
 import { Spinner } from "#/shared/components/spinner";

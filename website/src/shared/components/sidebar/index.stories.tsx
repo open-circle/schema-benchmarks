@@ -1,6 +1,8 @@
 import type { ContextType } from "react";
 import { fn } from "storybook/test";
+
 import preview from "#storybook/preview";
+
 import { Sidebar } from ".";
 import { SidebarOpenContext } from "./context";
 

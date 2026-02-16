@@ -1,4 +1,5 @@
 import preview from "#storybook/preview";
+
 import { Spinner } from ".";
 
 const meta = preview.meta({

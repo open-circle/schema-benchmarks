@@ -1,7 +1,8 @@
 import preview from "#storybook/preview";
+
+import { Banner, type BannerProps } from ".";
 import { Button } from "../button";
 import { MdSymbol } from "../symbol";
-import { Banner, type BannerProps } from ".";
 import { closeBanner, openBanner } from "./queue";
 
 function BannerDemo(bannerProps: BannerProps) {

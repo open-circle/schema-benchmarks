@@ -1,4 +1,5 @@
 import { type ExpectPollOptions, expect } from "vitest";
+
 import { toBeCurrent } from "./matchers/to-be-current";
 import { toBePressed } from "./matchers/to-be-pressed";
 

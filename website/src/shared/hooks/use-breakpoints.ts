@@ -1,4 +1,5 @@
 import { useDebugValue } from "react";
+
 import { useMediaQuery } from "./use-media-query";
 
 const queries = {

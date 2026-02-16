@@ -13,6 +13,7 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import svgr from "vite-plugin-svgr";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
+
 import {
   dataTypeProps,
   errorTypeProps,

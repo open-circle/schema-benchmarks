@@ -7,13 +7,15 @@ import {
 } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+
 import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
-import { DownloadCount } from "../../../-components/count";
+
 import { getCompiledPath } from "../../-query";
 import { getDownloadTime } from "../../-speed";
+import { DownloadCount } from "../../../-components/count";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;

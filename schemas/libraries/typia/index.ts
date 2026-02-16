@@ -1,4 +1,5 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
+
 import type { ProductData } from "#src";
 
 type ImageSchema = {

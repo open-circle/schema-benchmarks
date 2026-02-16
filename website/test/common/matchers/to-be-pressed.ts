@@ -1,5 +1,6 @@
 import type { ExpectationResult, MatcherState } from "@vitest/expect";
 import type { Locator } from "vitest/browser";
+
 import { getElementFromUserInput, getMessage } from "./utils";
 
 export function toBePressed(this: MatcherState, actual: Element | Locator): ExpectationResult {

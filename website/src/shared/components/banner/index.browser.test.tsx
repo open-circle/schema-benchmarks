@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect } from "vitest";
 import { page } from "vitest/browser";
+
 import { it } from "#test/browser/fixtures";
-import { Button } from "../button";
+
 import { Banner } from ".";
+import { Button } from "../button";
 import { bannerQueue, closeBanner, openBanner } from "./queue";
 
 describe("Banner", () => {

@@ -1,12 +1,14 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
+
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
-import { DownloadCount } from "../../../-components/count";
+
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";
+import { DownloadCount } from "../../../-components/count";
 
 interface BenchCardProps {
   barScale: ReturnType<typeof Bar.getScale>;

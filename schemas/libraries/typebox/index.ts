@@ -1,5 +1,6 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
 import { type StaticDecode, Type } from "typebox";
+
 import type { ProductData } from "#src";
 
 export function getTypeboxSchema() {

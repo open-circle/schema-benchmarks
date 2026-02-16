@@ -3,9 +3,11 @@ import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
+
 import { getDownloadResults } from "../../-query";
 
 const getLibraryName = (d: DownloadResult) => {

@@ -1,5 +1,7 @@
 import downloadResults from "@schema-benchmarks/bench/download.json";
+
 import preview from "#storybook/preview";
+
 import { DownloadTable } from "./index.js";
 
 const meta = preview.meta({

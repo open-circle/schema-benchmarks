@@ -3,6 +3,7 @@ import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import * as v from "valibot";
+
 import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { PageFilter, PageFilters } from "#/shared/components/page-filter";
@@ -10,12 +11,14 @@ import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { PageFilterTextField } from "#/shared/components/page-filter/text-field";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
+
 import { DownloadCount } from "../-components/count";
 import { DownloadResults } from "./-components/results";
 import { minifyTypeProps, optionalMinifyTypeSchema } from "./-constants";
 import { getDownloadResults } from "./-query";
 import { speedPresets } from "./-speed";
 import Content from "./content.mdx";
+
 import downloadStyles from "./styles.css?url";
 
 const searchSchema = v.object({

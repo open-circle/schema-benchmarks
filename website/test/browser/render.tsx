@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { type RenderOptions, type RenderResult, render } from "vitest-browser-react";
+
 import { getRouter } from "#/router";
 import { makeQueryClient } from "#/shared/data/query";
 

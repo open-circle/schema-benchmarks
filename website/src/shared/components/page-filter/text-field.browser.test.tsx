@@ -1,6 +1,8 @@
 import { describe, expect } from "vitest";
 import { page } from "vitest/browser";
+
 import { it } from "#test/browser/fixtures";
+
 import { PageFilterTextField } from "./text-field";
 
 describe("PageFilterTextField", () => {

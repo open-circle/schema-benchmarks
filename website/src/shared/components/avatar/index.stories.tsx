@@ -1,4 +1,5 @@
 import preview from "#storybook/preview";
+
 import { Avatar, AvatarList } from ".";
 
 const meta = preview.meta({

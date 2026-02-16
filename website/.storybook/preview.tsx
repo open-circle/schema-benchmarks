@@ -7,12 +7,15 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
-import { getRouter } from "../src/router";
-import { makeQueryClient } from "../src/shared/data/query";
-import "../src/shared/styles/index.css";
 import { useArgs } from "storybook/preview-api";
+
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
+
+import { getRouter } from "../src/router";
+import { makeQueryClient } from "../src/shared/data/query";
+
+import "../src/shared/styles/index.css";
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   document.dir = args.dir ?? "ltr";

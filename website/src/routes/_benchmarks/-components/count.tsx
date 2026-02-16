@@ -1,7 +1,9 @@
 import { shortNumFormatter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import type { PrefetchContext } from "#/shared/lib/fetch";
+
 import { getAllWeeklyDownloads } from "../-query";
 
 function getPackageName(libraryName: string) {

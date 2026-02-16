@@ -1,6 +1,7 @@
 import preview from "#storybook/preview";
-import { Button } from "../button";
+
 import { type CloseDialog, Dialog, DialogActions } from ".";
+import { Button } from "../button";
 
 const meta = preview.meta({
   title: "Components/Dialog",

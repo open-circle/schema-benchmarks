@@ -2,6 +2,7 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
+
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
 const collectionCls = bem("chip-collection");

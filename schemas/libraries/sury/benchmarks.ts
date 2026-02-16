@@ -1,7 +1,9 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import * as S from "sury";
+
 import { defineBenchmarks } from "#src";
+
 import { getSurySchema } from ".";
 
 export default defineBenchmarks({

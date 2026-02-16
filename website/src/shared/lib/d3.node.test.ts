@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { combineScales, reverseIf } from "./d3";
 
 describe("combineScales", () => {
