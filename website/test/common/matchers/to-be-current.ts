@@ -5,9 +5,7 @@ import { getElementFromUserInput, getMessage } from "./utils";
 
 type CurrentValue =
   | boolean
-  | Autocomplete.String<
-      "true" | "false" | "page" | "step" | "location" | "date" | "time"
-    >;
+  | Autocomplete.String<"true" | "false" | "page" | "step" | "location" | "date" | "time">;
 const attribute = "aria-current";
 
 export function toBeCurrent(
@@ -21,8 +19,7 @@ export function toBeCurrent(
   const receivedValue = htmlElement.getAttribute(attribute);
   return {
     pass: isExpectedValuePresent
-      ? hasAttribute &&
-        this.equals(receivedValue, expectedValue, this.customTesters)
+      ? hasAttribute && this.equals(receivedValue, expectedValue, this.customTesters)
       : hasAttribute,
     message: () => {
       const to = this.isNot ? "not to" : "to";
@@ -37,11 +34,7 @@ export function toBeCurrent(
           secondArgument: isExpectedValuePresent
             ? this.utils.printExpected(expectedValue)
             : undefined,
-          comment: getAttributeComment(
-            this.utils.stringify,
-            attribute,
-            expectedValue,
-          ),
+          comment: getAttributeComment(this.utils.stringify, attribute, expectedValue),
         },
       );
       return getMessage(
@@ -56,19 +49,11 @@ export function toBeCurrent(
   };
 }
 
-function printAttribute(
-  stringify: (obj: unknown) => string,
-  name: string,
-  value: unknown,
-) {
+function printAttribute(stringify: (obj: unknown) => string, name: string, value: unknown) {
   return value === undefined ? name : `${name}=${stringify(value)}`;
 }
 
-function getAttributeComment(
-  stringify: (obj: unknown) => string,
-  name: string,
-  value: unknown,
-) {
+function getAttributeComment(stringify: (obj: unknown) => string, name: string, value: unknown) {
   return value === undefined
     ? `element.hasAttribute(${stringify(name)})`
     : `element.getAttribute(${stringify(name)}) === ${stringify(value)}`;

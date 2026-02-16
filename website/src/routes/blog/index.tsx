@@ -10,9 +10,7 @@ import { getAvatarUrl, getBlog, getBlogs } from "./-query";
 export const Route = createFileRoute("/blog/")({
   component: RouteComponent,
   async loader({ context: { queryClient }, abortController }) {
-    const blogs = await queryClient.ensureQueryData(
-      getBlogs(abortController.signal),
-    );
+    const blogs = await queryClient.ensureQueryData(getBlogs(abortController.signal));
     const images = new Set<string>();
     for (const blog of blogs) {
       queryClient.setQueryData(getBlog(blog.slug).queryKey, blog);

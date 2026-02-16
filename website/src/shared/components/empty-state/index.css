@@ -10,16 +10,10 @@
   text-align: center;
   .empty-state__icon {
     --icon-size: 64;
-    color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
     display: contents;
   }
   .empty-state__subtitle {
-    color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
 }

@@ -11,11 +11,7 @@ export interface DownloadResultsProps {
   minify: MinifyType;
 }
 
-export function DownloadResults({
-  results,
-  mbps,
-  minify,
-}: DownloadResultsProps) {
+export function DownloadResults({ results, mbps, minify }: DownloadResultsProps) {
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
   const gzipScaler = useMemo(
     () =>
@@ -32,10 +28,7 @@ export function DownloadResults({
       ) : (
         <div className="download-cards">
           {results.map((result) => (
-            <DownloadCard
-              key={result.fileName}
-              {...{ result, mbps, minify, gzipScaler }}
-            />
+            <DownloadCard key={result.fileName} {...{ result, mbps, minify, gzipScaler }} />
           ))}
         </div>
       )}

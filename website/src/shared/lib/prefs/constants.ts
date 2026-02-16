@@ -1,9 +1,6 @@
 import * as v from "valibot";
 
-export const themeSchema = v.fallback(
-  v.picklist(["system", "light", "dark"]),
-  "system",
-);
+export const themeSchema = v.fallback(v.picklist(["system", "light", "dark"]), "system");
 export type Theme = v.InferOutput<typeof themeSchema>;
 export const themeLabels: Record<Theme, { label: string; icon: string }> = {
   light: { label: "Light theme", icon: "light_mode" },

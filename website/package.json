@@ -1,4 +1,16 @@
 {
+  "name": "@schema-benchmarks/website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "build-storybook": "storybook build",
+    "dev": "vite dev --port 3000",
+    "serve": "node preview.ts",
+    "storybook": "storybook dev -p 6006",
+    "test": "vitest",
+    "typecheck": "tsgo"
+  },
   "dependencies": {
     "@floating-ui/react": "^0.27.17",
     "@mdx-js/react": "^3.1.1",
@@ -78,17 +90,5 @@
     "vitest": "catalog:",
     "vitest-browser-react": "^2.0.5",
     "web-vitals": "^5.1.0"
-  },
-  "name": "@schema-benchmarks/website",
-  "private": true,
-  "scripts": {
-    "build": "vite build",
-    "build-storybook": "storybook build",
-    "dev": "vite dev --port 3000",
-    "serve": "node preview.ts",
-    "storybook": "storybook dev -p 6006",
-    "test": "vitest",
-    "typecheck": "tsgo"
-  },
-  "type": "module"
+  }
 }

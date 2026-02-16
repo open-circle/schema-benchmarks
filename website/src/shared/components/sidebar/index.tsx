@@ -4,12 +4,7 @@ import { type ReactNode, useContext, useEffect } from "react";
 import bem from "react-bem-helper";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
 import { useScrollLockEffect } from "#/shared/hooks/use-scroll-lock";
-import {
-  styleLabels,
-  styleSchema,
-  themeLabels,
-  themeSchema,
-} from "#/shared/lib/prefs/constants";
+import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 import { ButtonGroup } from "../button";
 import { ToggleButton } from "../button/toggle";
 import { List, ListItem, ListItemContent, ListItemInternalLink } from "../list";
@@ -48,10 +43,7 @@ function BaseSidebar({
     <>
       {/** biome-ignore lint/a11y/noStaticElementInteractions: we have an escape listener */}
       {/** biome-ignore lint/a11y/useKeyWithClickEvents: we have an escape listener */}
-      <div
-        {...backdropCls({ modifiers: { visible: open } })}
-        onClick={() => setOpen(false)}
-      />
+      <div {...backdropCls({ modifiers: { visible: open } })} onClick={() => setOpen(false)} />
       <aside {...cls({ modifiers: { open } })}>
         <div {...cls("logo")}>
           <img {...cls("logo-dark")} src="/logo_dark.svg" alt="Logo" />
@@ -95,10 +87,7 @@ export function Sidebar() {
               <List>
                 {groups.links.map(({ name, icon, ...link }) => (
                   <ListItem key={link.to}>
-                    <ListItemInternalLink
-                      {...link}
-                      activeOptions={{ includeSearch: false }}
-                    >
+                    <ListItemInternalLink {...link} activeOptions={{ includeSearch: false }}>
                       <ListItemContent leading={<MdSymbol>{icon}</MdSymbol>}>
                         {name}
                       </ListItemContent>

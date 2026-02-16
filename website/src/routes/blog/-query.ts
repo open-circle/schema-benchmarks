@@ -8,11 +8,7 @@ import * as v from "valibot";
 export const getBlogsFn = createServerFn().handler(() =>
   allBlogs
     .slice()
-    .sort(
-      (a, b) =>
-        b.published.getTime() - a.published.getTime() ||
-        a.slug.localeCompare(b.slug),
-    ),
+    .sort((a, b) => b.published.getTime() - a.published.getTime() || a.slug.localeCompare(b.slug)),
 );
 
 export const getBlogs = (signalOpt?: AbortSignal) =>
@@ -42,5 +38,4 @@ export const getBlog = (slug: string, signalOpt?: AbortSignal) =>
       }),
   });
 
-export const getAvatarUrl = (author: string) =>
-  `https://github.com/${author}.png`;
+export const getAvatarUrl = (author: string) => `https://github.com/${author}.png`;

@@ -1,4 +1,19 @@
 {
+  "name": "@schema-benchmarks/bench",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bench.json": "./bench.json",
+    "./download.json": "./download.json"
+  },
+  "scripts": {
+    "bench": "node --expose-gc --max-old-space-size=8192 ./src/scripts/bench.ts",
+    "download": "node ./src/scripts/download.ts",
+    "typecheck": "tsgo"
+  },
   "dependencies": {
     "@ryoppippi/unplugin-typia": "catalog:",
     "@schema-benchmarks/schemas": "workspace:*",
@@ -12,20 +27,5 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./bench.json": "./bench.json",
-    "./download.json": "./download.json"
-  },
-  "main": "./src/index.ts",
-  "name": "@schema-benchmarks/bench",
-  "private": true,
-  "scripts": {
-    "bench": "node --expose-gc --max-old-space-size=8192 ./src/scripts/bench.ts",
-    "download": "node ./src/scripts/download.ts",
-    "typecheck": "tsgo"
-  },
-  "type": "module",
-  "types": "./src/index.ts"
+  }
 }

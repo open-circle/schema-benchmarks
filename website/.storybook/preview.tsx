@@ -12,12 +12,7 @@ import { makeQueryClient } from "../src/shared/data/query";
 import "../src/shared/styles/index.css";
 import { useArgs } from "storybook/preview-api";
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import {
-  type Style,
-  styleSchema,
-  type Theme,
-  themeSchema,
-} from "#/shared/lib/prefs/constants";
+import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
   document.dir = args.dir ?? "ltr";
@@ -30,9 +25,7 @@ const themeDecorator: Decorator<{ theme?: Theme }> = (Story) => {
   }>();
   document.documentElement.dataset.theme = theme;
   return (
-    <ThemeContext
-      value={{ theme, setTheme: (newTheme) => setArgs({ theme: newTheme }) }}
-    >
+    <ThemeContext value={{ theme, setTheme: (newTheme) => setArgs({ theme: newTheme }) }}>
       <Story />
     </ThemeContext>
   );
@@ -130,12 +123,6 @@ export default definePreview({
     pageStyle: "code",
   },
 
-  decorators: [
-    dirDecorator,
-    themeDecorator,
-    styleDecorator,
-    queryClientDecorator,
-    routerDecorator,
-  ],
+  decorators: [dirDecorator, themeDecorator, styleDecorator, queryClientDecorator, routerDecorator],
   addons: [],
 });

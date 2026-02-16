@@ -16,10 +16,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         /^node:/,
-        ...Object.keys(dependencies).flatMap((dep) => [
-          dep,
-          new RegExp(`^${dep}/`),
-        ]),
+        ...Object.keys(dependencies).flatMap((dep) => [dep, new RegExp(`^${dep}/`)]),
       ],
     },
   },
@@ -31,9 +28,5 @@ export default defineConfig({
   define: {
     self: "globalThis",
   },
-  plugins: [
-    UnpluginTypia({ log: false }),
-    macros(),
-    dts({ rollupTypes: true }),
-  ],
+  plugins: [UnpluginTypia({ log: false }), macros(), dts({ rollupTypes: true })],
 });

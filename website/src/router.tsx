@@ -25,9 +25,7 @@ export const getRouter = ({
     defaultPreload: "intent",
     context: { queryClient },
     defaultViewTransition: true,
-    defaultPendingComponent: () => (
-      <Spinner size={64} style={{ margin: "auto" }} />
-    ),
+    defaultPendingComponent: () => <Spinner size={64} style={{ margin: "auto" }} />,
     defaultErrorComponent: ({ error, reset }) => (
       <EmptyState
         icon={<MdSymbol>error</MdSymbol>}

@@ -1,8 +1,4 @@
-import {
-  toggleFilter,
-  unsafeEntries,
-  unsafeKeys,
-} from "@schema-benchmarks/utils";
+import { toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
@@ -50,14 +46,8 @@ export const Route = createFileRoute("/_benchmarks/download/")({
     }),
   validateSearch: searchSchema,
   loaderDeps: ({ search: { minifyType } }) => ({ minifyType }),
-  async loader({
-    context: { queryClient },
-    deps: { minifyType },
-    abortController,
-  }) {
-    const results = await queryClient.ensureQueryData(
-      getDownloadResults(abortController.signal),
-    );
+  async loader({ context: { queryClient }, deps: { minifyType }, abortController }) {
+    const results = await queryClient.ensureQueryData(getDownloadResults(abortController.signal));
     const downloadPromises = [];
     for (const { libraryName } of results[minifyType]) {
       downloadPromises.push(
@@ -75,8 +65,7 @@ export const Route = createFileRoute("/_benchmarks/download/")({
 
 function RouteComponent() {
   const { minifyType, mbps } = Route.useSearch();
-  const mbpsAsNumber =
-    typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
+  const mbpsAsNumber = typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
   const { data } = useSuspenseQuery({
     ...getDownloadResults(),
     select: (results) => results[minifyType],

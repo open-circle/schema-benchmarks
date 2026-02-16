@@ -62,10 +62,7 @@ export const Group = meta.story({
     },
   },
   render: ({ variant, ...props }) => (
-    <ButtonGroup
-      variant={variant === "contained" ? "outlined" : variant}
-      ariaLabel="Group"
-    >
+    <ButtonGroup variant={variant === "contained" ? "outlined" : variant} ariaLabel="Group">
       <Button {...props}>One</Button>
       <Button {...props}>Two</Button>
       <Button {...props}>Three</Button>

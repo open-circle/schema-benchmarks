@@ -11,8 +11,7 @@ import type { PageFilterProps } from ".";
 import { PageFilter } from ".";
 
 export interface PageFilterTextFieldProps<LinkOptions = unknown>
-  extends Omit<TextFieldProps, "title" | "defaultValue">,
-    Omit<PageFilterProps, "children"> {
+  extends Omit<TextFieldProps, "title" | "defaultValue">, Omit<PageFilterProps, "children"> {
   /**
    * Create the new link options based on the current event.
    */

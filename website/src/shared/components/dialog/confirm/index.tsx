@@ -5,11 +5,10 @@ import { useExternalStore } from "#/shared/hooks/store.ts";
 import { AlertDialog, type AlertDialogProps } from "../alert.tsx";
 import { confirmQueue } from "./queue.ts";
 
-export interface ConfirmDialogProps
-  extends DistributiveOmit<
-    AlertDialogProps,
-    "onConfirm" | "onCancel" | "open"
-  > {}
+export interface ConfirmDialogProps extends DistributiveOmit<
+  AlertDialogProps,
+  "onConfirm" | "onCancel" | "open"
+> {}
 
 export function ConfirmDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);

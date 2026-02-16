@@ -21,12 +21,7 @@ interface DownloadCardProps {
   gzipScaler: ReturnType<typeof Bar.getScale>;
 }
 
-export function DownloadCard({
-  result,
-  mbps,
-  minify,
-  gzipScaler,
-}: DownloadCardProps) {
+export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardProps) {
   return (
     <div
       className="card download-card"
@@ -43,9 +38,7 @@ export function DownloadCard({
           <h4 className="typo-headline5">
             <code className="language-text">{result.libraryName}</code>
           </h4>
-          {result.note && (
-            <p className="typo-caption download-card__note">({result.note})</p>
-          )}
+          {result.note && <p className="typo-caption download-card__note">({result.note})</p>}
         </header>
         <ErrorBoundary fallback={null}>
           <div className="typo-body2 download-card__downloads">
@@ -67,9 +60,7 @@ export function DownloadCard({
           <tr>
             <th>Time</th>
             <td className="numeric">
-              {durationFormatter.format(
-                getDuration(getDownloadTime(result.gzipBytes, mbps)),
-              )}
+              {durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}
             </td>
           </tr>
         </tbody>
@@ -78,11 +69,7 @@ export function DownloadCard({
         <Bar {...gzipScaler(result.gzipBytes)} />
       </div>
       <div className="download-card__actions">
-        <ButtonGroup
-          variant="outlined"
-          className="source-links"
-          ariaLabel="Links to files used"
-        >
+        <ButtonGroup variant="outlined" className="source-links" ariaLabel="Links to files used">
           <InternalLinkToggleButton
             to="/repo/raw/$"
             params={{
@@ -98,10 +85,7 @@ export function DownloadCard({
           <InternalLinkToggleButton
             to="/repo/raw/$"
             params={{
-              _splat: `schemas/libraries/${getCompiledPath(
-                result.fileName,
-                minify,
-              )}`,
+              _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
             }}
             preload={false}
             target="_blank"

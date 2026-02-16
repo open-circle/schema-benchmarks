@@ -75,14 +75,9 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                 <td className="bar-after">
                   <Bar {...gzipScaler(result.gzipBytes)} />
                 </td>
-                <td className="numeric">
-                  {durationFormatter.format(getDuration(gzipTime))}
-                </td>
+                <td className="numeric">{durationFormatter.format(getDuration(gzipTime))}</td>
                 <td className="action fit-content">
-                  <ButtonGroup
-                    className="source-links"
-                    ariaLabel="Links to files used"
-                  >
+                  <ButtonGroup className="source-links" ariaLabel="Links to files used">
                     <InternalLinkToggleButton
                       to="/repo/raw/$"
                       params={{
@@ -98,10 +93,7 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
                     <InternalLinkToggleButton
                       to="/repo/raw/$"
                       params={{
-                        _splat: `schemas/libraries/${getCompiledPath(
-                          result.fileName,
-                          minify,
-                        )}`,
+                        _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
                       }}
                       preload={false}
                       target="_blank"

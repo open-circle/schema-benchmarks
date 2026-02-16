@@ -17,16 +17,10 @@ describe("ConfirmDialog", () => {
     });
 
     await expect.element(page.getByText("Discard draft?")).toBeInTheDocument();
-    await expect
-      .element(page.getByText("This cannot be undone."))
-      .toBeInTheDocument();
+    await expect.element(page.getByText("This cannot be undone.")).toBeInTheDocument();
 
-    await expect
-      .element(page.getByRole("button", { name: "Cancel" }))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByRole("button", { name: "Discard" }))
-      .toBeInTheDocument();
+    await expect.element(page.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    await expect.element(page.getByRole("button", { name: "Discard" })).toBeInTheDocument();
   });
   it("should resolve the promise when confirmed", async () => {
     await page.render(<ConfirmDialog />);

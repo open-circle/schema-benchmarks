@@ -46,24 +46,17 @@ export const Route = createFileRoute("/_benchmarks/_runtime/parsing/")({
     deps: { optimizeType, dataType, errorType },
     abortController,
   }) {
-    const benchResults = await queryClient.ensureQueryData(
-      getBenchResults(abortController.signal),
-    );
+    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
 
     await Promise.all(
       Object.values(
-        benchResults.parsing[dataType].filter(
-          shallowFilter({ optimizeType, errorType }),
-        ),
+        benchResults.parsing[dataType].filter(shallowFilter({ optimizeType, errorType })),
       ).flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, {
           queryClient,
           signal: abortController.signal,
         }),
-        CodeBlock.prefetch(
-          { code: snippet },
-          { queryClient, signal: abortController.signal },
-        ),
+        CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
       ]),
     );
   },
@@ -75,9 +68,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
-      results.parsing[dataType].filter(
-        shallowFilter({ optimizeType, errorType }),
-      ),
+      results.parsing[dataType].filter(shallowFilter({ optimizeType, errorType })),
   });
   return (
     <>

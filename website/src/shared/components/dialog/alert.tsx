@@ -7,8 +7,10 @@ import { type CloseDialog, Dialog, DialogActions, type DialogProps } from ".";
 
 type ActionProps = DistributiveOmit<ButtonProps, "children" | "onClick">;
 
-export interface AlertDialogProps
-  extends DistributiveOmit<DialogProps, "children" | "title" | "onCancel"> {
+export interface AlertDialogProps extends DistributiveOmit<
+  DialogProps,
+  "children" | "title" | "onCancel"
+> {
   title?: ReactNode;
   titleId?: string;
   message: ReactNode;
@@ -69,13 +71,9 @@ export function AlertDialog({
               {...cls("button", "cancel", cancelProps?.className)}
               onClick={() => {
                 const returnValue =
-                  typeof cancelProps?.value === "string"
-                    ? cancelProps.value
-                    : undefined;
+                  typeof cancelProps?.value === "string" ? cancelProps.value : undefined;
                 if (closeOnCancel) close(returnValue);
-                onCancel?.((newReturnValue) =>
-                  close(newReturnValue ?? returnValue),
-                );
+                onCancel?.((newReturnValue) => close(newReturnValue ?? returnValue));
               }}
             >
               {cancelLabel}
@@ -87,9 +85,7 @@ export function AlertDialog({
                 onConfirm((returnValue) => {
                   close(
                     returnValue ??
-                      (typeof confirmProps?.value === "string"
-                        ? confirmProps.value
-                        : undefined),
+                      (typeof confirmProps?.value === "string" ? confirmProps.value : undefined),
                   );
                 });
               }}

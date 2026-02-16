@@ -1,4 +1,19 @@
 {
+  "name": "@schema-benchmarks/utils",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts",
+    "./react": "./src/react/index.ts",
+    "./valibot": "./src/valibot.ts"
+  },
+  "scripts": {
+    "test": "vitest",
+    "typecheck": "tsgo"
+  },
   "dependencies": {
     "@formatjs/intl-durationformat": "^0.10.1",
     "@formatjs/intl-numberformat": "^9.2.2"
@@ -13,22 +28,7 @@
     "valibot": "catalog:",
     "vitest": "catalog:"
   },
-  "exports": {
-    ".": "./src/index.ts",
-    "./node": "./src/node.ts",
-    "./react": "./src/react/index.ts",
-    "./valibot": "./src/valibot.ts"
-  },
-  "main": "./src/index.ts",
-  "name": "@schema-benchmarks/utils",
   "peerDependencies": {
     "valibot": "*"
-  },
-  "private": true,
-  "scripts": {
-    "test": "vitest",
-    "typecheck": "tsgo"
-  },
-  "type": "module",
-  "types": "./src/index.ts"
+  }
 }

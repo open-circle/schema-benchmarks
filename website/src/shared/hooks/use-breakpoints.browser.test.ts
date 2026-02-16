@@ -47,9 +47,7 @@ describe("useBreakpoints", () => {
   });
   it("should match multiple breakpoints", async () => {
     await page.viewport(1440, 1000);
-    const { result } = await renderHook(() =>
-      useBreakpoints(["tabletSmall", "tabletLarge"]),
-    );
+    const { result } = await renderHook(() => useBreakpoints(["tabletSmall", "tabletLarge"]));
     expect(result.current).toBe(false);
 
     await page.viewport(905, 1000);

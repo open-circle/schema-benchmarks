@@ -1,11 +1,7 @@
 import * as Plot from "@observablehq/plot";
 import type { BenchResult, DataType } from "@schema-benchmarks/bench";
 import type { ErrorType } from "@schema-benchmarks/schemas";
-import {
-  durationFormatter,
-  getDuration,
-  uniqueBy,
-} from "@schema-benchmarks/utils";
+import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { createPlotComponent } from "#/shared/components/plot";
@@ -47,26 +43,19 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
 }: BenchPlotProps) {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) =>
-      type === "initialization" ? results[type] : results[type][dataType],
+    select: (results) => (type === "initialization" ? results[type] : results[type][dataType]),
   });
   const values = useMemo(
     () =>
       uniqueBy(
-        errorType
-          ? data.filter(
-              (d) => d.type === "parsing" && d.errorType === errorType,
-            )
-          : data,
+        errorType ? data.filter((d) => d.type === "parsing" && d.errorType === errorType) : data,
         getLibraryName,
       ),
     [data, errorType],
   );
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
-    const longestLabel = values.reduce((a, b) =>
-      getLabel(a).length > getLabel(b).length ? a : b,
-    );
+    const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
     return values.length * (getLabel(longestLabel).length * 6) + 48;
   }, [values]);
   const plot = useMemo(

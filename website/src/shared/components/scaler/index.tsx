@@ -25,17 +25,11 @@ const getScalerScale = (
 ) => {
   const iconScale = d3.scaleQuantile(
     d3.extent(values),
-    reverseIf(
-      lowerBetter,
-      type === "sentiment" ? scales.sentiment : scales.stat,
-    ),
+    reverseIf(lowerBetter, type === "sentiment" ? scales.sentiment : scales.stat),
   );
   return combineScales<ScalerScale>({
     icon: (number) => <MdSymbol>{iconScale(number)}</MdSymbol>,
-    color: d3.scaleQuantile(
-      d3.extent(values),
-      reverseIf(lowerBetter, scales.color),
-    ),
+    color: d3.scaleQuantile(d3.extent(values), reverseIf(lowerBetter, scales.color)),
   });
 };
 

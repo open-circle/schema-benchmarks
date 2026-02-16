@@ -4,8 +4,7 @@ import { toBePressed } from "./matchers/to-be-pressed";
 
 expect.extend({ toBePressed, toBeCurrent });
 
-expect.ref = (refObject, pollOptions) =>
-  expect.poll(() => refObject.current, pollOptions);
+expect.ref = (refObject, pollOptions) => expect.poll(() => refObject.current, pollOptions);
 
 declare module "vitest" {
   interface ExpectStatic {

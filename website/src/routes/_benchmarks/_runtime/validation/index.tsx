@@ -37,28 +37,17 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
     optimizeType,
     dataType,
   }),
-  async loader({
-    context: { queryClient },
-    deps: { optimizeType, dataType },
-    abortController,
-  }) {
-    const benchResults = await queryClient.ensureQueryData(
-      getBenchResults(abortController.signal),
-    );
+  async loader({ context: { queryClient }, deps: { optimizeType, dataType }, abortController }) {
+    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
     await Promise.all(
       Object.values(
-        benchResults.validation[dataType].filter(
-          shallowFilter({ optimizeType }),
-        ),
+        benchResults.validation[dataType].filter(shallowFilter({ optimizeType })),
       ).flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, {
           queryClient,
           signal: abortController.signal,
         }),
-        CodeBlock.prefetch(
-          { code: snippet },
-          { queryClient, signal: abortController.signal },
-        ),
+        CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
       ]),
     );
   },
@@ -69,8 +58,7 @@ function RouteComponent() {
   const { optimizeType, dataType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) =>
-      results.validation[dataType].filter(shallowFilter({ optimizeType })),
+    select: (results) => results.validation[dataType].filter(shallowFilter({ optimizeType })),
   });
   return (
     <>

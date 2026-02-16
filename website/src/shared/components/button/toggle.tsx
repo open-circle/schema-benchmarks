@@ -13,8 +13,7 @@ interface BaseToggleButtonProps {
 }
 
 export interface ToggleButtonProps
-  extends BaseToggleButtonProps,
-    DistributiveOmit<ComponentPropsWithRef<"button">, "color"> {
+  extends BaseToggleButtonProps, DistributiveOmit<ComponentPropsWithRef<"button">, "color"> {
   active?: boolean;
   loading?: boolean;
 }
@@ -36,10 +35,7 @@ export const ToggleButton = withTooltip(
         disabled={disabled || loading}
         aria-pressed={active}
         {...cls({
-          modifiers: [
-            "toggle",
-            color ?? "",
-          ],
+          modifiers: ["toggle", color ?? ""],
           extra: className,
         })}
       >
@@ -51,23 +47,15 @@ export const ToggleButton = withTooltip(
 );
 
 interface BaseLinkToggleButtonProps
-  extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">,
-    BaseToggleButtonProps {}
+  extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">, BaseToggleButtonProps {}
 
 export const ExternalLinkToggleButton = withTooltip(
-  function ExternalLinkToggleButton({
-    color,
-    className,
-    ...props
-  }: BaseLinkToggleButtonProps) {
+  function ExternalLinkToggleButton({ color, className, ...props }: BaseLinkToggleButtonProps) {
     return (
       <a
         {...props}
         {...cls({
-          modifiers: [
-            "toggle",
-            color ?? "",
-          ],
+          modifiers: ["toggle", color ?? ""],
           extra: className,
         })}
       />

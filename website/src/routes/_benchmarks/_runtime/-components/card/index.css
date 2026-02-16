@@ -7,10 +7,7 @@
   border-radius: var(--shape-medium);
   border: 1px solid var(--divider);
   .bench-card__version {
-    color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
     margin: 0;
   }
   .bench-card__header-row {
@@ -26,10 +23,7 @@
       margin: 0;
     }
     .bench-card__note {
-      color: color(
-        from var(--page-foreground) srgb r g b /
-        var(--secondary-text)
-      );
+      color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
       margin: 0;
     }
   }
@@ -37,10 +31,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: color(
-      from var(--page-foreground) srgb r g b /
-      var(--secondary-text)
-    );
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
   table {
     th:first-child,

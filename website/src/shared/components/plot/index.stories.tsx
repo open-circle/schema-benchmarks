@@ -40,9 +40,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
             Plot.ruleY([0]),
             Plot.barY(
               uniqueBy(
-                downloadResults.minified.toSorted(
-                  (a, b) => a.gzipBytes - b.gzipBytes,
-                ),
+                downloadResults.minified.toSorted((a, b) => a.gzipBytes - b.gzipBytes),
                 (d) => d.libraryName,
               ),
               {

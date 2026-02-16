@@ -8,10 +8,7 @@ export function useScrollLock(): {
     lockScroll() {
       const scrollbarWidth = window.innerWidth - document.body.offsetWidth;
       document.body.dataset.modalOpen = "true";
-      document.body.style.setProperty(
-        "--scrollbar-width",
-        `${scrollbarWidth}px`,
-      );
+      document.body.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
     },
     unlockScroll() {
       delete document.body.dataset.modalOpen;

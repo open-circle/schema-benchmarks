@@ -2,15 +2,10 @@ import type { ExpectationResult, MatcherState } from "@vitest/expect";
 import type { Locator } from "vitest/browser";
 import { getElementFromUserInput, getMessage } from "./utils";
 
-export function toBePressed(
-  this: MatcherState,
-  actual: Element | Locator,
-): ExpectationResult {
+export function toBePressed(this: MatcherState, actual: Element | Locator): ExpectationResult {
   const htmlElement = getElementFromUserInput(actual, toBePressed, this);
 
-  const roles = (htmlElement.getAttribute("role") ?? "")
-    .split(" ")
-    .map((role) => role.trim());
+  const roles = (htmlElement.getAttribute("role") ?? "").split(" ").map((role) => role.trim());
 
   const canBePressed =
     htmlElement.tagName.toLowerCase() === "button" ||
@@ -21,13 +16,10 @@ export function toBePressed(
   const hasPressedAttribute = htmlElement.hasAttribute("aria-pressed");
   const pressedAttribute = htmlElement.getAttribute("aria-pressed");
 
-  const isValidAriaPressed =
-    pressedAttribute === "true" || pressedAttribute === "false";
+  const isValidAriaPressed = pressedAttribute === "true" || pressedAttribute === "false";
 
   if (!canBePressed || (hasPressedAttribute && !isValidAriaPressed)) {
-    throw new Error(
-      "Element is not a button or does not have a valid aria-pressed attribute",
-    );
+    throw new Error("Element is not a button or does not have a valid aria-pressed attribute");
   }
 
   const isPressed = pressedAttribute === "true";

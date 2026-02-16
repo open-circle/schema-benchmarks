@@ -11,10 +11,7 @@ const queries = {
 
 export type Breakpoint = keyof typeof queries;
 
-export function useBreakpoints(
-  breakpoints: Array<Breakpoint>,
-  serverValue = false,
-) {
+export function useBreakpoints(breakpoints: Array<Breakpoint>, serverValue = false) {
   const matches = useMediaQuery(
     breakpoints.map((breakpoint) => `(${queries[breakpoint]})`).join(" or "),
     serverValue,
