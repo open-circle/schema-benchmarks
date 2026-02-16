@@ -4,9 +4,11 @@ import type { ErrorType } from "@schema-benchmarks/schemas";
 import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
+
 import { getBenchResults } from "../../-query";
 
 export type BenchPlotProps =

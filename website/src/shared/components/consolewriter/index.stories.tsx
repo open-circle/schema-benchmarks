@@ -1,4 +1,5 @@
 import preview from "#storybook/preview";
+
 import { ConsoleWriter } from ".";
 
 const meta = preview.meta({

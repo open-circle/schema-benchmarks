@@ -1,5 +1,6 @@
 import { serve } from "srvx";
 import { serveStatic } from "srvx/static";
+
 // @ts-expect-error untyped
 import tanstackHandler from "./dist/server/server.js";
 

@@ -1,7 +1,9 @@
 import { rootRouteId, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+
 import { setStyleFn, setThemeFn } from "#/shared/lib/prefs";
 import type { Style, Theme } from "#/shared/lib/prefs/constants";
+
 import { StyleContext, ThemeContext } from "./context";
 
 export function ThemeProvider({ children, theme }: { children: ReactNode; theme: Theme }) {

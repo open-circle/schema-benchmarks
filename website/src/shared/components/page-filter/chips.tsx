@@ -1,10 +1,12 @@
 import type { RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+
 import { useIdDefault } from "#/shared/hooks/use-id-default";
-import { ChipCollection, LinkChip } from "../chip";
-import { MdSymbol } from "../symbol";
+
 import type { PageFilterProps } from ".";
 import { PageFilter } from ".";
+import { ChipCollection, LinkChip } from "../chip";
+import { MdSymbol } from "../symbol";
 
 export interface OptionLabel {
   label: ReactNode;

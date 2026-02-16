@@ -1,4 +1,5 @@
 import { createOptionalContext } from "required-react-context";
+
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 export const { ThemeContext, useTheme } = createOptionalContext<{

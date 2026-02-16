@@ -7,6 +7,7 @@ import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/reac
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { create } from "mutative";
 import { generateMetadata } from "tanstack-meta";
+
 import { Banner } from "#/shared/components/banner";
 import { ConfirmDialog } from "#/shared/components/dialog/confirm";
 import { Footer } from "#/shared/components/footer";
@@ -18,8 +19,10 @@ import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
 import { getStyleFn, getThemeFn } from "#/shared/lib/prefs";
-import appCss from "#/shared/styles/index.css?url";
+
 import { symbolsUrl } from "../../vite/symbols";
+
+import appCss from "#/shared/styles/index.css?url";
 
 interface RouterContext {
   queryClient: QueryClient;

@@ -1,6 +1,8 @@
 import { describe, expect } from "vitest";
 import { renderHook } from "vitest-browser-react";
+
 import { it } from "#test/browser/fixtures";
+
 import { ExternalStore, useExternalStore } from "./store";
 
 describe("ExternalStore", () => {

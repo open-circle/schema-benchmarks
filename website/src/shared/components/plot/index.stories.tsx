@@ -2,8 +2,10 @@ import * as Plot from "@observablehq/plot";
 import downloadResults from "@schema-benchmarks/bench/download.json";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
+
 import { color } from "#/shared/data/scale";
 import preview from "#storybook/preview";
+
 import { createPlotComponent } from ".";
 
 const PlotComponent = createPlotComponent(function usePlotContainer() {

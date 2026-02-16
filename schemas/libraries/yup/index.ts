@@ -1,4 +1,5 @@
 import * as yup from "yup";
+
 import type { ProductData } from "#src";
 
 export function getYupSchema() {

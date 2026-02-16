@@ -1,8 +1,10 @@
 import benchResults from "@schema-benchmarks/bench/bench.json";
-import preview from "#storybook/preview";
-import { BenchCard } from ".";
-import "./index.css";
+
 import { Bar } from "#/shared/components/table/bar";
+import preview from "#storybook/preview";
+
+import "./index.css";
+import { BenchCard } from ".";
 
 const meta = preview.meta({
   title: "Features/Benchmark/Runtime/Card",

@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+
 import type { PrefetchContext } from "#/shared/lib/fetch";
 import { getHighlightedCode } from "#/shared/lib/highlight";
 

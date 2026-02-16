@@ -2,7 +2,9 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent" with { type: "macro" };
 import { Compile } from "typebox/compile";
 import Value from "typebox/value";
+
 import { defineBenchmarks } from "#src";
+
 import { getTypeboxSchema } from ".";
 
 export default defineBenchmarks({

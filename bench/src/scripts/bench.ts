@@ -1,9 +1,11 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+
 import { errorData, successData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
+
 import { CaseRegistry } from "../bench/registry.ts";
 import type { BenchResults } from "../results/types.ts";
 

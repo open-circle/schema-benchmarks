@@ -1,4 +1,5 @@
 import { test as testBase } from "vitest";
+
 import { worker } from "./mocks";
 
 export const test = testBase.extend<{ worker: typeof worker }>({

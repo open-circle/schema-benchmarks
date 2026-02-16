@@ -1,9 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+
 import { EmptyState } from "#/shared/components/empty-state";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
 import { preloadImages } from "#/shared/lib/fetch";
+
 import { BlogCard } from "./-components/card";
 import { getAvatarUrl, getBlog, getBlogs } from "./-query";
 

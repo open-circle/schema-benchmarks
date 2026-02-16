@@ -1,8 +1,10 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
 import type { DistributiveArray } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
+
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
+
 import { BenchCard } from "./card";
 import { BenchTable } from "./table";
 

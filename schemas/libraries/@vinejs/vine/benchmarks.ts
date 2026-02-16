@@ -1,7 +1,9 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import vine from "@vinejs/vine";
 import ts from "dedent" with { type: "macro" };
+
 import { defineBenchmarks } from "#src";
+
 import { getVineSchema } from ".";
 
 export default defineBenchmarks({

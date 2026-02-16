@@ -4,6 +4,7 @@ import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
+
 import { upfetch } from "#/shared/lib/fetch";
 
 export const getBenchResultsFn = createServerFn().handler(async () => {

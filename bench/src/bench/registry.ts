@@ -5,6 +5,7 @@ import type {
   OptimizeType,
 } from "@schema-benchmarks/schemas";
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
+
 import type { DataType } from "../results/types.ts";
 
 export type BenchmarkType = Exclude<keyof BenchmarksConfig<unknown>, "library" | "createContext">;

@@ -1,7 +1,9 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import * as v from "valibot";
+
 import { defineBenchmarks } from "#src";
+
 import { getValibotSchema } from ".";
 
 // results are returned to avoid benchmark body being tree-shaken out

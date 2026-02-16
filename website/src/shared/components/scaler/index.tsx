@@ -1,7 +1,9 @@
 import * as d3 from "d3";
 import type { ReactNode } from "react";
+
 import * as scales from "#/shared/data/scale";
 import { combineScales, reverseIf } from "#/shared/lib/d3";
+
 import { MdSymbol } from "../symbol";
 
 interface ScaleOptions {

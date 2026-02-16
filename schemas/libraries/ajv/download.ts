@@ -1,6 +1,7 @@
 import { Ajv, type JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
 import addKeywords from "ajv-keywords";
+
 import type { ImageData, ProductData, RatingData } from "#src";
 
 const ajv = new Ajv();

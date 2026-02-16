@@ -1,5 +1,7 @@
 import preview from "#storybook/preview";
+
 import { BlogCard, type BlogCardProps } from ".";
+
 import "./index.css";
 
 const blog: BlogCardProps["blog"] = {

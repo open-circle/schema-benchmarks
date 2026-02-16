@@ -1,6 +1,7 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
 import vine from "@vinejs/vine";
 import type { Infer } from "@vinejs/vine/types";
+
 import type { ProductData } from "#src";
 
 export function getVineSchema() {

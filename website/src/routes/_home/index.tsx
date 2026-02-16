@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+
 import { generateMetadata } from "#/shared/data/meta";
+
 import { getBenchResults } from "../_benchmarks/_runtime/-query";
 import { getDownloadResults } from "../_benchmarks/download/-query";
 import Content from "./content.mdx";

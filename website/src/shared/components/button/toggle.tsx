@@ -2,9 +2,10 @@ import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
+
+import type { ButtonColor } from ".";
 import { Spinner } from "../spinner";
 import { withTooltip } from "../tooltip";
-import type { ButtonColor } from ".";
 
 const cls = bem("button");
 

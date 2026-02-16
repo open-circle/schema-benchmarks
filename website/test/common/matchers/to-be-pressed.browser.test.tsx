@@ -1,6 +1,8 @@
 import { describe, expect } from "vitest";
 import { type Locator, page } from "vitest/browser";
+
 import { it } from "#test/browser/fixtures";
+
 import { alignedAnsiStyleSerializer } from "./utils";
 
 expect.addSnapshotSerializer(alignedAnsiStyleSerializer);

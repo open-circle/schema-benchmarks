@@ -1,9 +1,11 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
 import { getVersion } from "@schema-benchmarks/utils/node";
 import { gzipSize } from "gzip-size";
 import { rolldown } from "rolldown";
+
 import {
   type DownloadResult,
   type DownloadResults,

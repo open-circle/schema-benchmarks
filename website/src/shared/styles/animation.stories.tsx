@@ -1,4 +1,5 @@
 import preview from "#storybook/preview";
+
 import "./animation.stories.css";
 
 const curves = ["enter", "exit-permanent", "standard", "exit-temporary"] as const;

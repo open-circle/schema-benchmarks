@@ -7,4 +7,5 @@
     "schemas/libraries/**/download_compiled/**",
     "website/**/routeTree.gen.ts",
   ],
+  "experimentalSortImports": {},
 }
