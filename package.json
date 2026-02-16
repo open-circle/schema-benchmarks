@@ -5,7 +5,7 @@
   "scripts": {
     "format": "oxfmt",
     "lint": "oxlint --type-aware",
-    "check": "oxfmt --check && oxlint --check --type-aware",
+    "check": "oxfmt --check && oxlint --type-aware",
     "test": "pnpm run --filter '*' test",
     "typecheck": "pnpm run --filter '*' typecheck",
     "schemas:build": "pnpm run --filter schemas build",
@@ -19,7 +19,6 @@
     "postinstall": "lefthook install"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.15",
     "lefthook": "^2.1.1",
     "oxfmt": "^0.33.0",
     "oxlint": "^1.48.0",

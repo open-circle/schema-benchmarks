@@ -27,7 +27,7 @@ Firstly, thank you for wanting to contribute! Ideas for improvements are always 
 
 Please open an issue for any bugs you find, or features you would like to see. Opening a PR without confirmation it's desired means it may not be merged.
 
-Make sure any changes meet our coding standards. We lint and format using [Biome](https://biomejs.dev/), type check using [TypeScript](https://www.typescriptlang.org/) (specifically TS Go) and test using [Vitest](https://vitest.dev/).
+Make sure any changes meet our coding standards. We lint with [oxlint](https://oxc.rs/docs/guide/usage/linter.html) and format with [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html), type check using [TypeScript](https://www.typescriptlang.org/) (specifically TS Go) and test using [Vitest](https://vitest.dev/).
 
 Prefer browser tests (`*.browser.test.ts(x)`) for anything needing DOM specific features (e.g. React components), and Node tests (`*.node.test.ts`) for everything else. Include type tests (`*.test-d.ts`) for anything with complex typing.
 
