@@ -1,6 +1,6 @@
 {
   "addOnOptions": {},
-  "chosenAddOns": ["biome", "start"],
+  "chosenAddOns": ["start"],
   "framework": "react-cra",
   "git": true,
   "mode": "file-router",
