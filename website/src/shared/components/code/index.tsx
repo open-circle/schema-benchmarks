@@ -21,25 +21,15 @@ const prefetchCode = (
     language?: string;
   },
   { queryClient, signal }: PrefetchContext,
-) =>
-  queryClient.prefetchQuery(
-    getHighlightedCode({ code, lineNumbers, language }, signal),
-  );
+) => queryClient.prefetchQuery(getHighlightedCode({ code, lineNumbers, language }, signal));
 
 export function InlineCode({
   children,
   language = "typescript",
 }: Pick<CodeProps, "children" | "language">) {
-  const { data } = useSuspenseQuery(
-    getHighlightedCode({ code: children, language }),
-  );
+  const { data } = useSuspenseQuery(getHighlightedCode({ code: children, language }));
   return (
-    <code
-      dir="ltr"
-      className={`language-${language}`}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
-      dangerouslySetInnerHTML={{ __html: data }}
-    />
+    <code dir="ltr" className={`language-${language}`} dangerouslySetInnerHTML={{ __html: data }} />
   );
 }
 
@@ -51,20 +41,11 @@ export function CodeBlock({
   lineNumbers = false,
   language = "typescript",
 }: CodeProps) {
-  const { data } = useSuspenseQuery(
-    getHighlightedCode({ code: children, lineNumbers, language }),
-  );
+  const { data } = useSuspenseQuery(getHighlightedCode({ code: children, lineNumbers, language }));
   return (
-    <pre
-      dir="ltr"
-      className={`language-${language} ${lineNumbers ? "line-numbers" : ""}`}
-    >
+    <pre dir="ltr" className={`language-${language} ${lineNumbers ? "line-numbers" : ""}`}>
       {title && <h6 className="code-block__title">{title}</h6>}
-      <code
-        className={`language-${language}`}
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the code we're highlighting
-        dangerouslySetInnerHTML={{ __html: data }}
-      />
+      <code className={`language-${language}`} dangerouslySetInnerHTML={{ __html: data }} />
     </pre>
   );
 }

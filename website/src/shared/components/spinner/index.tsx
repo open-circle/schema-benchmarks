@@ -30,7 +30,6 @@ export function Spinner({
       style={{ fontSize: size ? `${size}px` : undefined, ...style }}
     >
       {Array.from({ length: Math.min(segmentCount, maxSegments) }, (_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: stable
         <div key={i} {...cls("segment")} />
       ))}
     </div>

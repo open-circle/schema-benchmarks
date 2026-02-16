@@ -19,13 +19,7 @@ export type ListProps = UnorderedListProps | OrderedListProps;
 
 export function List({ ordered, className, ref, ...props }: ListProps) {
   const Component = ordered ? "ol" : "ul";
-  return (
-    <Component
-      {...props}
-      {...listCls({ extra: className })}
-      ref={ref as never}
-    />
-  );
+  return <Component {...props} {...listCls({ extra: className })} ref={ref as never} />;
 }
 
 const itemCls = bem("list-item");
@@ -36,31 +30,20 @@ export function ListItem({ className, ...props }: ListItemProps) {
   return <li {...props} {...itemCls({ extra: className })} />;
 }
 
-export interface ListItemButtonProps
-  extends ComponentPropsWithRef<typeof Button> {}
+export interface ListItemButtonProps extends ComponentPropsWithRef<typeof Button> {}
 
 export function ListItemButton({ className, ...props }: ListItemButtonProps) {
-  return (
-    <Button {...props} {...itemCls({ element: "button", extra: className })} />
-  );
+  return <Button {...props} {...itemCls({ element: "button", extra: className })} />;
 }
 
-export interface ListItemExternalLinkProps
-  extends ComponentPropsWithRef<typeof ExternalLinkButton> {}
+export interface ListItemExternalLinkProps extends ComponentPropsWithRef<
+  typeof ExternalLinkButton
+> {}
 
-export function ListItemExternalLink({
-  className,
-  ...props
-}: ListItemExternalLinkProps) {
-  return (
-    <ExternalLinkButton
-      {...props}
-      {...itemCls({ element: "button", extra: className })}
-    />
-  );
+export function ListItemExternalLink({ className, ...props }: ListItemExternalLinkProps) {
+  return <ExternalLinkButton {...props} {...itemCls({ element: "button", extra: className })} />;
 }
 
-// biome-ignore lint/style/useComponentExportOnlyModules: this is a component
 export const ListItemInternalLink = createLink(ListItemExternalLink);
 
 export namespace ListItemContentProps {
@@ -89,9 +72,7 @@ export namespace ListItemContentProps {
 }
 
 export type ListItemContentProps = OneOf<
-  | ListItemContentProps.SingleLine
-  | ListItemContentProps.TwoLine
-  | ListItemContentProps.ThreeLine
+  ListItemContentProps.SingleLine | ListItemContentProps.TwoLine | ListItemContentProps.ThreeLine
 >;
 
 const num = ["single", "two", "three"] as const;

@@ -5,7 +5,6 @@ interface SidebarOpenContext {
   setOpen: (newValue: boolean) => void;
 }
 
-// biome-ignore lint/style/useComponentExportOnlyModules: exporting context
 export const SidebarOpenContext = createContext<SidebarOpenContext>({
   open: false,
   setOpen: () => {},
@@ -13,9 +12,5 @@ export const SidebarOpenContext = createContext<SidebarOpenContext>({
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
-  return (
-    <SidebarOpenContext value={{ open, setOpen }}>
-      {children}
-    </SidebarOpenContext>
-  );
+  return <SidebarOpenContext value={{ open, setOpen }}>{children}</SidebarOpenContext>;
 }

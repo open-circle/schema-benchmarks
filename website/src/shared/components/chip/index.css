@@ -40,7 +40,6 @@
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   border-radius: var(--shape-pill);
-  /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
   @supports (corner-shape: bevel) {
     padding: 0.5rem 1rem;
   }

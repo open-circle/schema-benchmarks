@@ -93,13 +93,11 @@
     .pref-switcher {
       background-color: var(--page-background);
     }
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--modal-sidebar) {
       display: flex;
     }
   }
 
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--modal-sidebar) {
     position: fixed;
     top: 0;
@@ -129,11 +127,9 @@
       width: 100%;
     }
   }
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) {
     width: calc(100vw - 4rem);
   }
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--laptop) or (--desktop) {
     &:not(.sidebar--open) {
       .sidebar__group li a {
@@ -145,7 +141,6 @@
 
 .sidebar-backdrop {
   display: none;
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--modal-sidebar) {
     display: block;
     position: fixed;

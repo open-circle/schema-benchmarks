@@ -31,21 +31,12 @@ export const highlightFn = createServerFn()
     });
 
     if (!Prism.languages[language]) loadLanguages(language);
-    const formatted = Prism.highlight(
-      code,
-      // biome-ignore lint/style/noNonNullAssertion: we've loaded it above
-      Prism.languages[language]!,
-      language,
-    );
+    const formatted = Prism.highlight(code, Prism.languages[language]!, language);
     return lineNumbers ? formatted + lineNumbersWrapper : formatted;
   });
 
 export const getHighlightedCode = (
-  {
-    code,
-    lineNumbers,
-    language = "typescript",
-  }: v.InferInput<typeof highlightInput>,
+  { code, lineNumbers, language = "typescript" }: v.InferInput<typeof highlightInput>,
   signalOpt?: AbortSignal,
 ) =>
   queryOptions({

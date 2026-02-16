@@ -11,7 +11,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   args: {
-    // biome-ignore lint/style/noNonNullAssertion: demo data
     result: downloadResults.minified[0]!,
     mbps: 32,
     minify: "minified",

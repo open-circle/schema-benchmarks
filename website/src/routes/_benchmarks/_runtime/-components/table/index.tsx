@@ -40,9 +40,7 @@ function useComparison(results: Array<BenchResult>) {
   const compareResult = compareId && resultsById[compareId];
   const ratioScaler = useMemo(() => {
     if (!compareResult) return undefined;
-    const ratios = results.map((result) =>
-      getRatio(result.mean, compareResult.mean),
-    );
+    const ratios = results.map((result) => getRatio(result.mean, compareResult.mean));
     const max = Math.max(...ratios);
     const min = Math.min(...ratios);
     return Scaler.getScale([min, max, -min, -max], {
@@ -62,8 +60,7 @@ export function BenchTable({ results }: BenchTableProps) {
       ),
     [results],
   );
-  const { compareId, setCompareId, compareResult, ratioScaler } =
-    useComparison(results);
+  const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
   if (!results.length) {
     return (
@@ -75,7 +72,6 @@ export function BenchTable({ results }: BenchTableProps) {
     );
   }
   const showComparisonColumns = results.length > 1;
-  // biome-ignore lint/style/noNonNullAssertion: We know there's at least one result
   const benchType = results[0]!.type;
   return (
     <div className="card" style={{ viewTransitionName: "bench-table" }}>
@@ -101,8 +97,7 @@ export function BenchTable({ results }: BenchTableProps) {
         </thead>
         <tbody>
           {results.map((result) => {
-            const ratio =
-              compareResult && getRatio(result.mean, compareResult.mean);
+            const ratio = compareResult && getRatio(result.mean, compareResult.mean);
             return (
               <tr
                 key={result.id}
@@ -110,8 +105,7 @@ export function BenchTable({ results }: BenchTableProps) {
                   viewTransitionName: getTransitionName("bench-table-row", {
                     libraryName: result.libraryName,
                     note: result.note,
-                    errorType:
-                      result.type === "parsing" ? result.errorType : undefined,
+                    errorType: result.type === "parsing" ? result.errorType : undefined,
                   }),
                 }}
               >
@@ -129,9 +123,8 @@ export function BenchTable({ results }: BenchTableProps) {
                         subhead: "Throws on invalid data",
                         supporting: (
                           <div style={{ maxWidth: "16rem" }}>
-                            This library throws an error when parsing invalid
-                            data (and has no non-throwing equivalent), so the
-                            benchmark includes a try/catch.
+                            This library throws an error when parsing invalid data (and has no
+                            non-throwing equivalent), so the benchmark includes a try/catch.
                           </div>
                         ),
                       }}
@@ -152,9 +145,7 @@ export function BenchTable({ results }: BenchTableProps) {
                 {result.type === "parsing" && (
                   <td>{errorTypeProps.labels[result.errorType].label}</td>
                 )}
-                <td className="numeric">
-                  {durationFormatter.format(getDuration(result.mean))}
-                </td>
+                <td className="numeric">{durationFormatter.format(getDuration(result.mean))}</td>
                 {showComparisonColumns && (
                   <td className="bar-after">
                     <Bar {...meanScaler(result.mean)} />
@@ -168,9 +159,7 @@ export function BenchTable({ results }: BenchTableProps) {
                         value={result.id}
                         checked={compareId === result.id}
                         onChange={(event) => {
-                          setCompareId(
-                            event.target.checked ? result.id : undefined,
-                          );
+                          setCompareId(event.target.checked ? result.id : undefined);
                         }}
                       />
                     </td>
@@ -184,9 +173,7 @@ export function BenchTable({ results }: BenchTableProps) {
                             symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
                           >
                             {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
-                            <span
-                              aria-label={`${numFormatter.format(Math.abs(ratio))}x`}
-                            >
+                            <span aria-label={`${numFormatter.format(Math.abs(ratio))}x`}>
                               {`${formatNumber(Math.abs(ratio))}x`}
                             </span>
                           </Scaler>

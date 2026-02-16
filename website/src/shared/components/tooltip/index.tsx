@@ -60,9 +60,7 @@ let currentId = "";
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
   opts: Override<TooltipOpts, { required: true }>,
-): (
-  props: Override<ComponentProps<TComp>, PickRequired<TooltipProps, "tooltip">>,
-) => JSX.Element;
+): (props: Override<ComponentProps<TComp>, PickRequired<TooltipProps, "tooltip">>) => JSX.Element;
 export function withTooltip<TComp extends TooltipableComponent>(
   Component: TComp,
   opts?: TooltipOpts,
@@ -162,7 +160,6 @@ export function withTooltip<TComp extends TooltipableComponent>(
         <Component
           // @ts-expect-error union nastiness
           popoverTargetAction="show"
-          // biome-ignore lint/suspicious/noExplicitAny: nastiness
           {...(props as any)}
           ref={mergeRefs<HTMLElement>(ref, refs.setReference, setTargetRef)}
           {...(tooltip
@@ -206,10 +203,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
                   )}
                   <div {...cls("supporting")}>{tooltip.supporting}</div>
                   {tooltip.actions && (
-                    <ButtonGroup
-                      {...cls("actions")}
-                      ariaLabel={tooltip.actionsLabel ?? "Actions"}
-                    >
+                    <ButtonGroup {...cls("actions")} ariaLabel={tooltip.actionsLabel ?? "Actions"}>
                       {tooltip.actions}
                     </ButtonGroup>
                   )}

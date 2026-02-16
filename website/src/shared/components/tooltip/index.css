@@ -30,18 +30,12 @@
       .tooltip__subhead {
         margin: 0;
         margin-bottom: 0.25rem;
-        color: color(
-          from var(--tooltip-foreground) srgb r g b /
-          var(--primary-text)
-        );
+        color: color(from var(--tooltip-foreground) srgb r g b / var(--primary-text));
       }
       .tooltip__supporting {
         margin: 0;
         margin-bottom: 0.75rem;
-        color: color(
-          from var(--tooltip-foreground) srgb r g b /
-          var(--secondary-text)
-        );
+        color: color(from var(--tooltip-foreground) srgb r g b / var(--secondary-text));
       }
       .tooltip__actions {
         margin: 0;
@@ -60,7 +54,6 @@
     padding: 0 1rem;
     display: flex;
     align-items: center;
-    /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
     @media (--desktop) {
       height: 1.5rem;
       padding: 0 0.5rem;

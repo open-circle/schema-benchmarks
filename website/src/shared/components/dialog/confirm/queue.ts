@@ -17,20 +17,14 @@ class ConfirmPromise<T> implements PromiseLike<T> {
 
     this.#basePromise = basePromise;
   }
-  // biome-ignore lint/suspicious/noThenProperty: custom thenable
   then<TResult1 = T, TResult2 = never>(
-    onconfirm?:
-      | ((value: T) => TResult1 | PromiseLike<TResult1>)
-      | undefined
-      | null,
-    ondeny?: // biome-ignore lint/suspicious/noExplicitAny: matching Promise types
-    ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    onconfirm?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+    ondeny?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
   ): ConfirmPromise<TResult1 | TResult2> {
     return new ConfirmPromise(this.#basePromise.then(onconfirm, ondeny));
   }
   otherwise<TResult>(
-    ondeny?: // biome-ignore lint/suspicious/noExplicitAny: matching Promise types
-    ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ondeny?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
   ): ConfirmPromise<T | TResult> {
     return new ConfirmPromise(this.#basePromise.catch(ondeny));
   }

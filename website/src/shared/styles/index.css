@@ -39,7 +39,6 @@
   box-sizing: border-box;
   scrollbar-color: var(--scroll-thumb) var(--scroll-track);
   scrollbar-width: thin;
-  /* biome-ignore lint/correctness/noUnknownProperty: corner-shape is supported by chromium, and degrades gracefully */
   corner-shape: bevel;
 }
 
@@ -190,7 +189,6 @@ pre[class*="language-"] {
 
 :root {
   --margin: 2rem;
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--phone) {
     --margin: 1rem;
   }
@@ -206,17 +204,14 @@ main {
   flex-direction: column;
   gap: var(--margin);
 
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--tablet-large) {
     max-width: 56.5rem; /* 840px + 4rem */
     margin: 0 auto;
     padding: 2rem;
   }
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--laptop) {
     margin: 0 12.5rem;
   }
-  /* biome-ignore lint/correctness/noUnknownMediaFeatureName: PostCSS compiles this */
   @media (--desktop) {
     max-width: 1024px;
     margin: 0 auto;
@@ -231,7 +226,6 @@ main {
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {
-    /* biome-ignore lint/complexity/noImportantStyles: necessary */
     animation: none !important;
   }
 }
