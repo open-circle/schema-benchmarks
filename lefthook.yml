@@ -1,5 +1,8 @@
 pre-commit:
   commands:
-    check:
-      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+    lint:
+      run: pnpm run lint --fix {staged_files}
+      stage_fixed: true
+    format:
+      run: pnpm run format --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
