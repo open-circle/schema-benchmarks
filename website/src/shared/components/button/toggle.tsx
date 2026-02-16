@@ -10,7 +10,6 @@ const cls = bem("button");
 
 interface BaseToggleButtonProps {
   color?: ButtonColor;
-  activeColor?: ButtonColor;
 }
 
 export interface ToggleButtonProps
@@ -23,7 +22,6 @@ export interface ToggleButtonProps
 export const ToggleButton = withTooltip(
   function ToggleButton({
     color,
-    activeColor,
     className,
     active,
     loading,
@@ -41,7 +39,6 @@ export const ToggleButton = withTooltip(
           modifiers: [
             "toggle",
             color ?? "",
-            activeColor ? `active-${activeColor}` : "",
           ],
           extra: className,
         })}
@@ -60,7 +57,6 @@ interface BaseLinkToggleButtonProps
 export const ExternalLinkToggleButton = withTooltip(
   function ExternalLinkToggleButton({
     color,
-    activeColor,
     className,
     ...props
   }: BaseLinkToggleButtonProps) {
@@ -71,7 +67,6 @@ export const ExternalLinkToggleButton = withTooltip(
           modifiers: [
             "toggle",
             color ?? "",
-            activeColor ? `active-${activeColor}` : "",
           ],
           extra: className,
         })}

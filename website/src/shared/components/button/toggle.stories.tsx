@@ -26,16 +26,7 @@ const meta = preview.meta({
   title: "Components/Button/Toggle",
   component: ToggleButton,
   render: (args) => <ToggleButtonDemo {...args} />,
-  argTypes: {
-    activeColor: {
-      control: {
-        type: "inline-radio",
-      },
-      options: ["success", "error", "warning", "info", undefined],
-    },
-  },
   args: {
-    activeColor: undefined,
     loading: false,
     disabled: false,
     children: <MdSymbol>favorite</MdSymbol>,
@@ -47,9 +38,8 @@ const meta = preview.meta({
 export const Default = meta.story();
 
 function ToggleButtonGroupDemo({
-  activeColor,
   orientation,
-}: Pick<ComponentProps<typeof ToggleButton>, "activeColor"> & {
+}: {
   orientation?: "horizontal" | "vertical";
 }) {
   const [active, setActive] = useState(0);
@@ -60,7 +50,6 @@ function ToggleButtonGroupDemo({
       ariaLabel="Emotion"
     >
       <ToggleButton
-        activeColor={activeColor}
         active={active === 0}
         onClick={() => setActive(0)}
         tooltip="Happy"
@@ -68,7 +57,6 @@ function ToggleButtonGroupDemo({
         <MdSymbol>sentiment_very_satisfied</MdSymbol>
       </ToggleButton>
       <ToggleButton
-        activeColor={activeColor}
         active={active === 1}
         onClick={() => setActive(1)}
         tooltip="Sad"

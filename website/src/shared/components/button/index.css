@@ -82,14 +82,14 @@
     --button-foreground: var(--button-base-color);
     &:hover {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         transparent,
         var(--button-base-color) var(--hover-opacity)
       );
     }
     &:focus-visible {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         transparent,
         var(--button-base-color) var(--focus-opacity)
       );
@@ -97,7 +97,7 @@
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         transparent,
         var(--button-base-color) var(--pressed-opacity)
       );
@@ -107,6 +107,30 @@
       --button-foreground: var(--page-foreground);
       opacity: var(--disabled-opacity);
     }
+
+    &[data-status="active"],
+    &[aria-pressed="true"] {
+      --button-background: color(
+        from var(--button-selected-background) srgb r g b /
+          var(--activated-opacity)
+      );
+      --button-foreground: var(--button-selected);
+      --icon-fill: 1;
+      --icon-weight: 600;
+      font-weight: var(--weight-bold);
+      &:hover {
+        background-color: color(
+          from var(--button-selected-background) srgb r g b /
+            calc(var(--hover-opacity) + var(--activated-opacity))
+        );
+      }
+      &:focus-visible {
+        background-color: color(
+          from var(--button-selected-background) srgb r g b /
+            calc(var(--focus-opacity) + var(--activated-opacity))
+        );
+      }
+    }
   }
   &.button--contained {
     --button-background: var(--button-base-color);
@@ -114,14 +138,14 @@
     &:not(:disabled, [aria-disabled="true"]) {
       &:hover {
         --button-background: color-mix(
-          in hsl,
+          in srgb,
           var(--button-base-color),
           var(--on-button-base-color) var(--hover-on-filled-opacity)
         );
       }
       &:focus-visible {
         --button-background: color-mix(
-          in hsl,
+          in srgb,
           var(--button-base-color),
           var(--on-button-base-color) var(--focus-on-filled-opacity)
         );
@@ -129,7 +153,7 @@
       &:active,
       &:has(+ .tooltip[popover]:popover-open) {
         --button-background: color-mix(
-          in hsl,
+          in srgb,
           var(--button-base-color),
           var(--on-button-base-color) var(--pressed-on-filled-opacity)
         );
@@ -139,8 +163,7 @@
     &[aria-disabled="true"] {
       opacity: var(--disabled-opacity);
       --button-background: color(
-        from var(--button-foreground) srgb r g b /
-        var(--disabled-opacity)
+        from var(--button-foreground) srgb r g b / var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
     }
@@ -154,45 +177,16 @@
     }
     &[data-status="active"],
     &[aria-pressed="true"] {
-      --button-background: color(
-        from var(--button-base-color) srgb r g b /
-        var(--activated-opacity)
-      );
-      --button-foreground: var(--button-selected);
       --icon-fill: 1;
       --icon-weight: 600;
       font-weight: var(--weight-bold);
-      &:hover {
-        background-color: color(
-          from var(--button-base-color) srgb r g b /
-          calc(var(--hover-opacity) + var(--activated-opacity))
-        );
-      }
-      &:focus-visible {
-        background-color: color(
-          from var(--button-base-color) srgb r g b /
-          calc(var(--focus-opacity) + var(--activated-opacity))
-        );
-      }
     }
   }
   &.button--toggle {
     --button-background: transparent;
     --button-foreground: color(
-      from var(--button-base-color) srgb r g b /
-      var(--secondary-text)
+      from var(--button-base-color) srgb r g b / var(--secondary-text)
     );
-    --button-active-color: color(
-      from var(--button-selected) srgb r g b /
-      var(--primary-text)
-    );
-    &.button--active-success {
-      --button-active-color: var(--green);
-    }
-    &.button--active-danger,
-    &.button--active-error {
-      --button-active-color: var(--red);
-    }
     height: 3rem;
     width: 3rem;
     min-width: unset;
@@ -208,21 +202,18 @@
     }
     &:hover {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--hover-opacity)
+        from var(--button-base-color) srgb r g b / var(--hover-opacity)
       );
     }
     &:focus-visible {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--focus-opacity)
+        from var(--button-base-color) srgb r g b / var(--focus-opacity)
       );
     }
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
       background-color: color(
-        from currentColor srgb r g b /
-        var(--pressed-opacity)
+        from var(--button-base-color) srgb r g b / var(--pressed-opacity)
       );
     }
     &:disabled,
@@ -232,21 +223,28 @@
     &[data-status="active"],
     &[aria-pressed="true"] {
       --icon-fill: 1;
-      --button-foreground: var(--button-active-color);
-      --button-background: color(
-        from var(--button-active-color) srgb r g b /
-        var(--activated-opacity)
-      );
+      --button-foreground: var(--button-selected);
+      --button-background: var(--button-selected-background);
       &:hover {
-        background-color: color(
-          from var(--button-active-color) srgb r g b /
-          calc(var(--hover-opacity) + var(--activated-opacity))
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--hover-opacity)
         );
       }
       &:focus-visible {
-        background-color: color(
-          from var(--button-active-color) srgb r g b /
-          calc(var(--focus-opacity) + var(--activated-opacity))
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--focus-opacity)
+        );
+      }
+      &:active,
+      &:has(+ .tooltip[popover]:popover-open) {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--pressed-opacity)
         );
       }
     }
@@ -263,21 +261,21 @@
     gap: 0.75rem;
     &:hover {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         var(--button-base-color),
         var(--button-foreground) var(--hover-opacity)
       );
     }
     &:focus-visible {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         var(--button-base-color),
         var(--button-foreground) var(--focus-opacity)
       );
     }
     &:active {
       --button-background: color-mix(
-        in hsl,
+        in srgb,
         var(--button-base-color),
         var(--button-foreground) var(--pressed-opacity)
       );

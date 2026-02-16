@@ -24,6 +24,7 @@
   --button: light-dark(var(--pink5, pink), var(--pink, pink));
   --on-button: light-dark(var(--white), var(--black));
   --button-selected: var(--foreground);
+  --button-selected-background: var(--selection);
 
   --sidebar-background: light-dark(var(--white-secondary, white), var(--black));
 
