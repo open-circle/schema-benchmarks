@@ -14,8 +14,7 @@ export const Route = createFileRoute("/_home/")({
   },
   head: () =>
     generateMetadata({
-      description:
-        "Compare the performance of different schema validation libraries.",
+      description: "Compare the performance of different schema validation libraries.",
       openGraph: {
         url: "/",
       },

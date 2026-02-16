@@ -4,13 +4,7 @@ import { setStyleFn, setThemeFn } from "#/shared/lib/prefs";
 import type { Style, Theme } from "#/shared/lib/prefs/constants";
 import { StyleContext, ThemeContext } from "./context";
 
-export function ThemeProvider({
-  children,
-  theme,
-}: {
-  children: ReactNode;
-  theme: Theme;
-}) {
+export function ThemeProvider({ children, theme }: { children: ReactNode; theme: Theme }) {
   const router = useRouter();
 
   function setTheme(val: Theme) {
@@ -24,13 +18,7 @@ export function ThemeProvider({
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
 }
 
-export function StyleProvider({
-  children,
-  style,
-}: {
-  children: ReactNode;
-  style: Style;
-}) {
+export function StyleProvider({ children, style }: { children: ReactNode; style: Style }) {
   const router = useRouter();
 
   function setStyle(val: Style) {

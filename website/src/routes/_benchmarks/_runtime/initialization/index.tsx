@@ -28,27 +28,18 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType } }) => ({ optimizeType }),
-  async loader({
-    context: { queryClient },
-    deps: { optimizeType },
-    abortController,
-  }) {
-    const benchResults = await queryClient.ensureQueryData(
-      getBenchResults(abortController.signal),
-    );
+  async loader({ context: { queryClient }, deps: { optimizeType }, abortController }) {
+    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
     await Promise.all(
-      Object.values(
-        benchResults.initialization.filter(shallowFilter({ optimizeType })),
-      ).flatMap(({ snippet, libraryName }) => [
-        DownloadCount.prefetch(libraryName, {
-          queryClient,
-          signal: abortController.signal,
-        }),
-        CodeBlock.prefetch(
-          { code: snippet },
-          { queryClient, signal: abortController.signal },
-        ),
-      ]),
+      Object.values(benchResults.initialization.filter(shallowFilter({ optimizeType }))).flatMap(
+        ({ snippet, libraryName }) => [
+          DownloadCount.prefetch(libraryName, {
+            queryClient,
+            signal: abortController.signal,
+          }),
+          CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
+        ],
+      ),
     );
   },
   staticData: { crumb: "Initialization" },
@@ -58,8 +49,7 @@ function RouteComponent() {
   const { optimizeType } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) =>
-      results.initialization.filter(shallowFilter({ optimizeType })),
+    select: (results) => results.initialization.filter(shallowFilter({ optimizeType })),
   });
   return (
     <>

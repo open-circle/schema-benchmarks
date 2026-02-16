@@ -1,9 +1,5 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
-import {
-  durationFormatter,
-  getDuration,
-  getTransitionName,
-} from "@schema-benchmarks/utils";
+import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
@@ -35,9 +31,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
           <h4 className="typo-headline5">
             <code className="language-text">{result.libraryName}</code>
           </h4>
-          {result.note && (
-            <p className="typo-caption bench-card__note">({result.note})</p>
-          )}
+          {result.note && <p className="typo-caption bench-card__note">({result.note})</p>}
         </header>
         <ErrorBoundary fallback={null}>
           <div className="typo-body2 bench-card__downloads">
@@ -51,9 +45,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
         <tbody>
           <tr>
             <th>Mean</th>
-            <td className="numeric">
-              {durationFormatter.format(getDuration(result.mean))}
-            </td>
+            <td className="numeric">{durationFormatter.format(getDuration(result.mean))}</td>
           </tr>
         </tbody>
       </table>
@@ -62,9 +54,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
       </div>
       <ChipCollection>
         <DisplayChip>
-          <MdSymbol>
-            {optimizeTypeProps.labels[result.optimizeType].icon}
-          </MdSymbol>
+          <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
           {optimizeTypeProps.labels[result.optimizeType].label}
         </DisplayChip>
         {result.type === "parsing" && (

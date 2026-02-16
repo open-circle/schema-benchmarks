@@ -34,7 +34,4 @@ export function getVineSchema() {
   });
 }
 
-export type SatisfiesTest = Satisfies<
-  Infer<ReturnType<typeof getVineSchema>>,
-  ProductData
->;
+export type SatisfiesTest = Satisfies<Infer<ReturnType<typeof getVineSchema>>, ProductData>;

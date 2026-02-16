@@ -1,22 +1,14 @@
 import preview from "#storybook/preview";
 import "./animation.stories.css";
 
-const curves = [
-  "enter",
-  "exit-permanent",
-  "standard",
-  "exit-temporary",
-] as const;
+const curves = ["enter", "exit-permanent", "standard", "exit-temporary"] as const;
 type Curve = (typeof curves)[number];
 
 const meta = preview.type<{ args: { curve: Curve } }>().meta({
   title: "Theme/Animation",
   render: ({ curve }) => (
     <div className="animation-container">
-      <div
-        className="animation-box"
-        style={{ animationTimingFunction: `var(--${curve}-curve)` }}
-      >
+      <div className="animation-box" style={{ animationTimingFunction: `var(--${curve}-curve)` }}>
         {curve}
       </div>
     </div>

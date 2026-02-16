@@ -17,12 +17,7 @@ const cls = bem("avatar");
 const TooltipDiv = withTooltip("div");
 const TooltipLi = withTooltip("li");
 
-export function Avatar({
-  src,
-  label,
-  size = "md",
-  "~as": asProp,
-}: AvatarProps) {
+export function Avatar({ src, label, size = "md", "~as": asProp }: AvatarProps) {
   const loadState = useLoadImage(src);
   const Component = asProp === "li" ? TooltipLi : TooltipDiv;
   return (

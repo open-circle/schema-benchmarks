@@ -10,19 +10,12 @@ export interface EmptyStateProps {
 
 const cls = bem("empty-state");
 
-export function EmptyState({
-  icon,
-  title,
-  subtitle,
-  children,
-}: EmptyStateProps) {
+export function EmptyState({ icon, title, subtitle, children }: EmptyStateProps) {
   return (
     <div {...cls()}>
       {icon && <div {...cls("icon")}>{icon}</div>}
       <p {...cls({ element: "title", extra: "typo-headline5" })}>{title}</p>
-      {subtitle && (
-        <p {...cls({ element: "subtitle", extra: "typo-body2" })}>{subtitle}</p>
-      )}
+      {subtitle && <p {...cls({ element: "subtitle", extra: "typo-body2" })}>{subtitle}</p>}
       {children}
     </div>
   );

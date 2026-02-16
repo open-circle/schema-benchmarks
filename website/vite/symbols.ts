@@ -16,9 +16,7 @@ interface Options {
   knownSymbols?: Array<string>;
 }
 
-export default function materialSymbols({
-  knownSymbols = [],
-}: Options = {}): Array<Plugin> {
+export default function materialSymbols({ knownSymbols = [] }: Options = {}): Array<Plugin> {
   const usedSymbols = new Set<string>();
   let addedKnown = false;
   return [
@@ -61,15 +59,8 @@ export default function materialSymbols({
         if (!usedSymbols.size) return;
         const finalUrl = `${symbolsUrl}&icon_names=${[...usedSymbols.values()].sort().join(",")}`;
         for (const assetOrChunk of Object.values(bundle)) {
-          if (
-            assetOrChunk.type === "asset" ||
-            !assetOrChunk.code.includes(symbolsUrl)
-          )
-            continue;
-          assetOrChunk.code = assetOrChunk.code.replaceAll(
-            symbolsUrl,
-            finalUrl,
-          );
+          if (assetOrChunk.type === "asset" || !assetOrChunk.code.includes(symbolsUrl)) continue;
+          assetOrChunk.code = assetOrChunk.code.replaceAll(symbolsUrl, finalUrl);
         }
       },
     },

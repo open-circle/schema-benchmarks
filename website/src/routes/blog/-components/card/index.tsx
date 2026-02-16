@@ -55,10 +55,7 @@ export function BlogCard({ blog }: BlogCardProps) {
           ) : (
             <picture>
               {blog.cover.src_light && (
-                <source
-                  media="(prefers-color-scheme: light)"
-                  srcSet={blog.cover.src_light}
-                />
+                <source media="(prefers-color-scheme: light)" srcSet={blog.cover.src_light} />
               )}
               <img
                 src={blog.cover.src}

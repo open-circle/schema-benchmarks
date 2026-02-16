@@ -10,10 +10,7 @@ import type { PageFilterChipsProps } from "#/shared/components/page-filter/chips
 
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "invalid");
 
-export const dataTypeProps: Pick<
-  PageFilterChipsProps<DataType>,
-  "title" | "labels" | "options"
-> = {
+export const dataTypeProps: Pick<PageFilterChipsProps<DataType>, "title" | "labels" | "options"> = {
   title: "Data",
   options: dataTypeSchema.options,
   labels: {

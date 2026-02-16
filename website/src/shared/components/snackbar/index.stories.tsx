@@ -28,10 +28,7 @@ function SnackbarsDemo() {
         onClick={() =>
           toast.promise(
             new Promise<void>((resolve, reject) =>
-              setTimeout(
-                () => (Math.random() > 0.5 ? resolve() : reject()),
-                2000,
-              ),
+              setTimeout(() => (Math.random() > 0.5 ? resolve() : reject()), 2000),
             ),
             {
               loading: "Loading...",

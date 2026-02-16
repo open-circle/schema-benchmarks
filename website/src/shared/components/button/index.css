@@ -111,8 +111,7 @@
     &[data-status="active"],
     &[aria-pressed="true"] {
       --button-background: color(
-        from var(--button-selected-background) srgb r g b /
-          var(--activated-opacity)
+        from var(--button-selected-background) srgb r g b / var(--activated-opacity)
       );
       --button-foreground: var(--button-selected);
       --icon-fill: 1;
@@ -184,9 +183,7 @@
   }
   &.button--toggle {
     --button-background: transparent;
-    --button-foreground: color(
-      from var(--button-base-color) srgb r g b / var(--secondary-text)
-    );
+    --button-foreground: color(from var(--button-base-color) srgb r g b / var(--secondary-text));
     height: 3rem;
     width: 3rem;
     min-width: unset;
@@ -201,20 +198,14 @@
       margin: 0;
     }
     &:hover {
-      background-color: color(
-        from var(--button-base-color) srgb r g b / var(--hover-opacity)
-      );
+      background-color: color(from var(--button-base-color) srgb r g b / var(--hover-opacity));
     }
     &:focus-visible {
-      background-color: color(
-        from var(--button-base-color) srgb r g b / var(--focus-opacity)
-      );
+      background-color: color(from var(--button-base-color) srgb r g b / var(--focus-opacity));
     }
     &:active,
     &:has(+ .tooltip[popover]:popover-open) {
-      background-color: color(
-        from var(--button-base-color) srgb r g b / var(--pressed-opacity)
-      );
+      background-color: color(from var(--button-base-color) srgb r g b / var(--pressed-opacity));
     }
     &:disabled,
     &[aria-disabled="true"] {

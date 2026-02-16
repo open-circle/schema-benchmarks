@@ -1,10 +1,7 @@
 import type { PickNonNullable } from "@schema-benchmarks/utils";
 import type { AnyRouteMatch } from "@tanstack/react-router";
 import { castDraft, create } from "mutative";
-import {
-  createMetadataGenerator,
-  type GeneratorInputMetadata,
-} from "tanstack-meta";
+import { createMetadataGenerator, type GeneratorInputMetadata } from "tanstack-meta";
 
 const baseTitle = "Schema Benchmarks";
 
@@ -40,8 +37,7 @@ export const generateMetadata = ({
 }) => {
   let resolvedTitle = baseTitle;
   if (title) {
-    resolvedTitle =
-      typeof title === "string" ? `${title} | ${baseTitle}` : title.absolute;
+    resolvedTitle = typeof title === "string" ? `${title} | ${baseTitle}` : title.absolute;
   }
   if (resolvedTitle.length > 70) {
     console.error(`Title is too long: ${resolvedTitle}`);

@@ -11,28 +11,20 @@ import { getAvatarUrl, getBlog } from "./-query";
 const importMdx = (filePath: string) =>
   queryOptions({
     queryKey: ["mdx", filePath],
-    queryFn: (): Promise<MDXModule> =>
-      import(`./-content/${filePath.replace(/\.mdx$/, "")}.mdx`),
+    queryFn: (): Promise<MDXModule> => import(`./-content/${filePath.replace(/\.mdx$/, "")}.mdx`),
   });
 
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
-  async loader({
-    context: { queryClient },
-    params: { slug },
-    abortController,
-  }) {
-    const data = await queryClient.ensureQueryData(
-      getBlog(slug, abortController.signal),
-    );
+  async loader({ context: { queryClient }, params: { slug }, abortController }) {
+    const data = await queryClient.ensureQueryData(getBlog(slug, abortController.signal));
     const images = data.authors.map(getAvatarUrl);
     if (typeof data.cover !== "string") images.push(data.cover.src);
     const [mdxModule] = await Promise.all([
       queryClient.ensureQueryData(importMdx(data._meta.filePath)),
       preloadImages(images),
     ]);
-    if (typeof mdxModule.prefetch === "function")
-      await mdxModule.prefetch({ queryClient });
+    if (typeof mdxModule.prefetch === "function") await mdxModule.prefetch({ queryClient });
     return { crumb: data.title, ...data };
   },
   head: ({ loaderData, params }) =>
@@ -62,10 +54,7 @@ function RouteComponent() {
   const formatDate = useDateFormatter(longDateFormatter);
   return (
     <>
-      <h1
-        className="blog-title typo-headline2"
-        {...getTransitionStyle("title")}
-      >
+      <h1 className="blog-title typo-headline2" {...getTransitionStyle("title")}>
         {data.title}
       </h1>
       <div className="blog-dateline typo-subtitle2">
@@ -95,16 +84,10 @@ function RouteComponent() {
         ) : (
           <picture>
             {data.cover.src_light && (
-              <source
-                media="(prefers-color-scheme: light)"
-                srcSet={data.cover.src_light}
-              />
+              <source media="(prefers-color-scheme: light)" srcSet={data.cover.src_light} />
             )}
             {data.cover.src_dark && (
-              <source
-                media="(prefers-color-scheme: dark)"
-                srcSet={data.cover.src_dark}
-              />
+              <source media="(prefers-color-scheme: dark)" srcSet={data.cover.src_dark} />
             )}
             <img
               src={data.cover.src}

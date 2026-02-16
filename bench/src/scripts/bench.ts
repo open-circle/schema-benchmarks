@@ -2,11 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { errorData, successData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
-import {
-  ensureArray,
-  partition,
-  unsafeEntries,
-} from "@schema-benchmarks/utils";
+import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 import { CaseRegistry } from "../bench/registry.ts";
 import type { BenchResults } from "../results/types.ts";
@@ -22,15 +18,12 @@ const caseRegistry = new CaseRegistry();
 function processResults(tasks: Array<Task>) {
   const [successTasks, errorTasks] = partition(
     tasks,
-    (task): task is Task & { result: TaskResultCompleted } =>
-      task.result.state === "completed",
+    (task): task is Task & { result: TaskResultCompleted } => task.result.state === "completed",
   );
   if (errorTasks.length) {
     console.error(
       "Errors:",
-      errorTasks.map((task) =>
-        task.result.state === "errored" ? task.result.error : task.result,
-      ),
+      errorTasks.map((task) => (task.result.state === "errored" ? task.result.error : task.result)),
     );
   }
   for (const task of successTasks) {
@@ -99,13 +92,8 @@ function processResults(tasks: Array<Task>) {
 
 // Run each library in its own Bench instance to allow GC between libraries
 for (const getConfig of Object.values(libraries)) {
-  const { library, createContext, initialization, validation, parsing } =
-    await getConfig();
-  const {
-    name: libraryName,
-    optimizeType: libraryOptimizeType,
-    version,
-  } = library;
+  const { library, createContext, initialization, validation, parsing } = await getConfig();
+  const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
   console.log(`\nBenchmarking: ${libraryName}`);
 
@@ -124,13 +112,7 @@ for (const getConfig of Object.values(libraries)) {
   const context = await createContext();
 
   for (const benchConfig of ensureArray(initialization)) {
-    const {
-      run,
-      snippet,
-      note,
-      optimizeType = libraryOptimizeType,
-      throws,
-    } = benchConfig;
+    const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
     bench.add(
       caseRegistry.add({
         type: "initialization",
@@ -150,13 +132,7 @@ for (const getConfig of Object.values(libraries)) {
       ["invalid", errorData],
     ] as const) {
       for (const benchConfig of ensureArray(validation)) {
-        const {
-          run,
-          snippet,
-          note,
-          optimizeType = libraryOptimizeType,
-          throws,
-        } = benchConfig;
+        const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
         bench.add(
           caseRegistry.add({
             type: "validation",
@@ -181,13 +157,7 @@ for (const getConfig of Object.values(libraries)) {
       for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
         if (!benchConfigs) continue;
         for (const benchConfig of ensureArray(benchConfigs)) {
-          const {
-            run,
-            snippet,
-            note,
-            optimizeType = libraryOptimizeType,
-            throws,
-          } = benchConfig;
+          const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
           bench.add(
             caseRegistry.add({
               type: "parsing",

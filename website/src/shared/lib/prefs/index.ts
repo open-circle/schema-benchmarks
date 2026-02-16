@@ -5,9 +5,7 @@ import { styleSchema, themeSchema } from "./constants";
 
 const themeKey = "benchmarks::theme";
 
-export const getThemeFn = createServerFn().handler(() =>
-  v.parse(themeSchema, getCookie(themeKey)),
-);
+export const getThemeFn = createServerFn().handler(() => v.parse(themeSchema, getCookie(themeKey)));
 
 export const setThemeFn = createServerFn()
   .inputValidator(themeSchema)
@@ -15,9 +13,7 @@ export const setThemeFn = createServerFn()
 
 const styleKey = "benchmarks::style";
 
-export const getStyleFn = createServerFn().handler(() =>
-  v.parse(styleSchema, getCookie(styleKey)),
-);
+export const getStyleFn = createServerFn().handler(() => v.parse(styleSchema, getCookie(styleKey)));
 
 export const setStyleFn = createServerFn()
   .inputValidator(styleSchema)

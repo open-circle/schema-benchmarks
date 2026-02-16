@@ -8,12 +8,7 @@ import { Link, useMatches } from "@tanstack/react-router";
 import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import * as v from "valibot";
-import {
-  styleLabels,
-  styleSchema,
-  themeLabels,
-  themeSchema,
-} from "#/shared/lib/prefs/constants";
+import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 import { ButtonGroup } from "../button";
 import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
 import { ConsoleWriter } from "../consolewriter";
@@ -44,15 +39,8 @@ export function Header() {
             match,
           ): match is typeof match &
             AtLeastOneKey<
-              Partial<
-                Record<
-                  "loaderData" | "staticData",
-                  v.InferInput<typeof crumbSchema>
-                >
-              >
-            > =>
-            v.is(crumbSchema, match.loaderData) ||
-            v.is(crumbSchema, match.staticData),
+              Partial<Record<"loaderData" | "staticData", v.InferInput<typeof crumbSchema>>>
+            > => v.is(crumbSchema, match.loaderData) || v.is(crumbSchema, match.staticData),
         )
         .flatMap((match) =>
           [match.staticData.crumb, match.loaderData?.crumb]

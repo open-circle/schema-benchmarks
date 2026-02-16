@@ -1,7 +1,4 @@
-import type {
-  RegisteredRouter,
-  ValidateLinkOptions,
-} from "@tanstack/react-router";
+import type { RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useIdDefault } from "#/shared/hooks/use-id-default";
 import { ChipCollection, LinkChip } from "../chip";
@@ -14,15 +11,13 @@ export interface OptionLabel {
   icon: string;
 }
 
-export interface PageFilterChipsProps<
-  Options extends string,
-  LinkOptions = unknown,
-> extends Omit<PageFilterProps, "children"> {
+export interface PageFilterChipsProps<Options extends string, LinkOptions = unknown> extends Omit<
+  PageFilterProps,
+  "children"
+> {
   options: ReadonlyArray<Options>;
   labels: Record<Options, OptionLabel>;
-  getLinkOptions: (
-    option: Options,
-  ) => ValidateLinkOptions<RegisteredRouter, LinkOptions>;
+  getLinkOptions: (option: Options) => ValidateLinkOptions<RegisteredRouter, LinkOptions>;
 }
 
 export function PageFilterChips<Options extends string, LinkOptions>({
@@ -37,11 +32,7 @@ export function PageFilterChips<Options extends string, LinkOptions>({
     <PageFilter title={title} titleId={titleId}>
       <ChipCollection aria-labelledby={titleId}>
         {options.map((option) => (
-          <LinkChip
-            key={option}
-            {...(getLinkOptions(option) as ValidateLinkOptions)}
-            replace
-          >
+          <LinkChip key={option} {...(getLinkOptions(option) as ValidateLinkOptions)} replace>
             <MdSymbol>{labels[option].icon}</MdSymbol>
             {labels[option].label}
           </LinkChip>

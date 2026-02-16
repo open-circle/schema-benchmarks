@@ -21,12 +21,7 @@ export function createPlotComponent<TProps extends object>(
     }, [plot]);
     return (
       <div className="plot-scroll-container" ref={ref}>
-        <div
-          dir="ltr"
-          className="plot-container"
-          ref={innerRef}
-          style={{ minWidth }}
-        />
+        <div dir="ltr" className="plot-container" ref={innerRef} style={{ minWidth }} />
       </div>
     );
   }

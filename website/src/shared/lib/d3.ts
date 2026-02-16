@@ -14,17 +14,12 @@ type Scale<Return> = (number: d3.NumberValue) => Return;
  * const result = scales(0.5); // { color: "var(--pink)", icon: "sentiment_very_dissatisfied" }
  */
 export const combineScales =
-  <T>(
-    scales: {
-      [K in keyof T]: Scale<T[K]>;
-    },
-  ): Scale<T> =>
+  <T>(scales: {
+    [K in keyof T]: Scale<T[K]>;
+  }): Scale<T> =>
   (number) =>
     Object.fromEntries(
-      Object.entries<Scale<unknown>>(scales).map(([key, scale]) => [
-        key,
-        scale(number),
-      ]),
+      Object.entries<Scale<unknown>>(scales).map(([key, scale]) => [key, scale(number)]),
     ) as T;
 
 export const reverseIf = <T>(reverse: boolean, array: ReadonlyArray<T>) =>

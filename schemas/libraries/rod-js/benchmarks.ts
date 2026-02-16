@@ -1,7 +1,5 @@
 import { defineBenchmarks } from "@schema-benchmarks/schemas";
-import { getVersion } from "@schema-benchmarks/utils/node" with {
-  type: "macro",
-};
+import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import { rod } from "rod-js";
 import { getRodSchema } from ".";

@@ -10,10 +10,7 @@ import {
 describe("partition", () => {
   it("should narrow based on type predicate", () => {
     const array = [1, "foo", 2, "bar", 3, "baz"];
-    const [numbers, strings] = partition(
-      array,
-      (value) => typeof value === "number",
-    );
+    const [numbers, strings] = partition(array, (value) => typeof value === "number");
     expectTypeOf(numbers).toEqualTypeOf<Array<number>>();
     expectTypeOf(strings).toEqualTypeOf<Array<string>>();
   });
@@ -38,9 +35,7 @@ describe("hasAtLeast", () => {
   it("should narrow to tuple of at least length", () => {
     const array = [1, 2, 3, 4, 5];
     if (hasAtLeast(array, 3)) {
-      expectTypeOf(array).toEqualTypeOf<
-        [number, number, number] & Array<number>
-      >();
+      expectTypeOf(array).toEqualTypeOf<[number, number, number] & Array<number>>();
     }
   });
 });

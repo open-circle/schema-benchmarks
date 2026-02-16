@@ -45,15 +45,8 @@ const config = defineConfig({
     viteReact(),
     materialSymbols({
       knownSymbols: [
-        ...sidebarGroups.flatMap((group) =>
-          group.links.map((link) => link.icon),
-        ),
-        ...[
-          errorTypeProps,
-          optimizeTypeProps,
-          minifyTypeProps,
-          dataTypeProps,
-        ].flatMap((props) =>
+        ...sidebarGroups.flatMap((group) => group.links.map((link) => link.icon)),
+        ...[errorTypeProps, optimizeTypeProps, minifyTypeProps, dataTypeProps].flatMap((props) =>
           Object.values(props.labels).map((label) => label.icon),
         ),
         ...Object.values(speedPresets).map((preset) => preset.icon),

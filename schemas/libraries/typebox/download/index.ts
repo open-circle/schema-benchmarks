@@ -28,19 +28,13 @@ const Product = Type.Object({
   brand: Type.String({ minLength: 1, maxLength: 30 }),
   description: Type.String({ minLength: 1, maxLength: 500 }),
   price: Type.Number({ minimum: 1, maximum: 10000 }),
-  discount: Type.Union([
-    Type.Number({ minimum: 1, maximum: 100 }),
-    Type.Null(),
-  ]),
+  discount: Type.Union([Type.Number({ minimum: 1, maximum: 100 }), Type.Null()]),
   quantity: Type.Number({ minimum: 1, maximum: 10 }),
   tags: Type.Array(Type.String({ minLength: 1, maxLength: 30 })),
   images: Type.Array(Image),
   ratings: Type.Array(Rating),
 });
 
-export type SatisfiesTest = Satisfies<
-  StaticDecode<typeof Product>,
-  ProductData
->;
+export type SatisfiesTest = Satisfies<StaticDecode<typeof Product>, ProductData>;
 
 Value.Parse(Product, {});

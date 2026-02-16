@@ -21,7 +21,13 @@ const blog = defineCollection({
     description: v.string(),
     published: vUtils.coerceDate,
     /** GitHub usernames */
-    authors: v.union([v.array(v.string()), v.pipe(v.string(),v.transform((s) => [s]))]),
+    authors: v.union([
+      v.array(v.string()),
+      v.pipe(
+        v.string(),
+        v.transform((s) => [s]),
+      ),
+    ]),
     content: v.string(),
   }),
   transform: (document) => ({

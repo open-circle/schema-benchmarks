@@ -7,10 +7,7 @@ export const Route = createFileRoute("/api/tweet/$id")({
       GET: async ({ params: { id } }) => {
         try {
           const tweet = await getTweet(id);
-          return Response.json(
-            { data: tweet ?? null },
-            { status: tweet ? 200 : 404 },
-          );
+          return Response.json({ data: tweet ?? null }, { status: tweet ? 200 : 404 });
         } catch (error) {
           console.error("Failed to fetch tweet:", error);
           return Response.json(

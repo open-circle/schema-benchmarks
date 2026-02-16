@@ -25,10 +25,7 @@ function getPackageName(libraryName: string) {
   return libraryName;
 }
 
-async function measureFile(
-  file: FileDescription,
-  minify: MinifyType,
-): Promise<DownloadResult> {
+async function measureFile(file: FileDescription, minify: MinifyType): Promise<DownloadResult> {
   const bundle = await rolldown({
     input: file.path,
     plugins: file.path.includes("typia") ? [UnpluginTypia({ log: false })] : [],
@@ -75,14 +72,9 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download.ts"),
     )) {
-      const libraryName = filePath
-        .split("schemas/libraries/")[1]
-        ?.split("/download.ts")[0];
+      const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download.ts")[0];
       if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
-      const compiledPath = path.resolve(
-        path.dirname(filePath),
-        `./download_compiled/${minify}.js`,
-      );
+      const compiledPath = path.resolve(path.dirname(filePath), `./download_compiled/${minify}.js`);
       results.push(
         await measureFile(
           {
@@ -97,15 +89,9 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts"),
     )) {
-      const libraryName = filePath
-        .split("schemas/libraries/")[1]
-        ?.split("/download/")[0];
-      if (!libraryName)
-        throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
-      const note = path
-        .basename(filePath)
-        .replace("index.ts", "")
-        .replace(".ts", "");
+      const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download/")[0];
+      if (!libraryName) throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
+      const note = path.basename(filePath).replace("index.ts", "").replace(".ts", "");
       const compiledPath = path.resolve(
         path.dirname(filePath),
         `../download_compiled/${note}/${minify}.js`,

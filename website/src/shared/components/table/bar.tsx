@@ -13,10 +13,7 @@ const getBarScale = (
   { lowerBetter = false }: { lowerBetter?: boolean } = {},
 ) =>
   combineScales<BarProps>({
-    color: d3.scaleQuantile(
-      d3.extent(values),
-      reverseIf(lowerBetter, scales.color),
-    ),
+    color: d3.scaleQuantile(d3.extent(values), reverseIf(lowerBetter, scales.color)),
     percentage: d3.scaleLinear([0, d3.max(values) ?? 0], [0, 100]),
   });
 

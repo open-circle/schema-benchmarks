@@ -3,11 +3,7 @@ import { promiseAllKeyed } from "@schema-benchmarks/utils";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
-import {
-  createRootRouteWithContext,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { create } from "mutative";
 import { generateMetadata } from "tanstack-meta";
@@ -16,10 +12,7 @@ import { ConfirmDialog } from "#/shared/components/dialog/confirm";
 import { Footer } from "#/shared/components/footer";
 import { Header } from "#/shared/components/header";
 import * as mdxComponents from "#/shared/components/mdx";
-import {
-  StyleProvider,
-  ThemeProvider,
-} from "#/shared/components/prefs/provider";
+import { StyleProvider, ThemeProvider } from "#/shared/components/prefs/provider";
 import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
@@ -98,20 +91,14 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     ),
   staticData: { crumb: undefined },
 
-  loader: async () =>
-    promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
+  loader: async () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { theme, style } = Route.useLoaderData();
   return (
-    <html
-      lang="en"
-      data-theme={theme}
-      data-style={style}
-      suppressHydrationWarning
-    >
+    <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

@@ -1,30 +1,18 @@
 import { mergeRefs } from "@schema-benchmarks/utils/react";
-import {
-  type ComponentPropsWithRef,
-  type ReactNode,
-  useEffect,
-  useRef,
-} from "react";
+import { type ComponentPropsWithRef, type ReactNode, useEffect, useRef } from "react";
 import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
 export type CloseDialog = (returnValue?: string) => void;
 
-export interface DialogProps
-  extends Omit<ComponentPropsWithRef<"dialog">, "children"> {
+export interface DialogProps extends Omit<ComponentPropsWithRef<"dialog">, "children"> {
   children: ValueOrFunction<ReactNode, CloseDialog>;
 }
 
 const cls = bem("dialog");
 
-export function Dialog({
-  open,
-  children,
-  ref,
-  className,
-  ...props
-}: DialogProps) {
+export function Dialog({ open, children, ref, className, ...props }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (open) {
@@ -34,14 +22,8 @@ export function Dialog({
     }
   }, [open]);
   return (
-    <dialog
-      {...props}
-      {...cls({ extra: className })}
-      ref={mergeRefs(ref, dialogRef)}
-    >
-      {resolveValue(children, (returnValue) =>
-        dialogRef.current?.close(returnValue),
-      )}
+    <dialog {...props} {...cls({ extra: className })} ref={mergeRefs(ref, dialogRef)}>
+      {resolveValue(children, (returnValue) => dialogRef.current?.close(returnValue))}
     </dialog>
   );
 }

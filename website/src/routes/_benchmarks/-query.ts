@@ -10,10 +10,7 @@ const downloadsResponseSchema = v.pipe(
   v.transform(({ downloads }) => downloads),
 );
 
-export const getAllWeeklyDownloads = (
-  packageName: string,
-  signalOpt?: AbortSignal,
-) =>
+export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["npm", "downloads", "week", packageName],
     queryFn: ({ signal }) =>
@@ -33,20 +30,14 @@ const versionResponseSchema = v.pipe(
   v.transform(({ downloads }) => downloads),
 );
 
-export const getWeeklyDownloadsByVersion = (
-  packageName: string,
-  signalOpt?: AbortSignal,
-) =>
+export const getWeeklyDownloadsByVersion = (packageName: string, signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["npm", "downloads-by-version", "week", packageName],
     queryFn: ({ signal }) =>
-      upfetch(
-        `https://api.npmjs.org/versions/${encodeURIComponent(packageName)}/last-week`,
-        {
-          signal: anyAbortSignal(signal, signalOpt),
-          schema: versionResponseSchema,
-        },
-      ),
+      upfetch(`https://api.npmjs.org/versions/${encodeURIComponent(packageName)}/last-week`, {
+        signal: anyAbortSignal(signal, signalOpt),
+        schema: versionResponseSchema,
+      }),
   });
 
 const githubRepoSchema = v.object({

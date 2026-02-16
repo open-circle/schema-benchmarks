@@ -80,8 +80,7 @@
   .list-item__trailing,
   .list-item__supporting-text {
     color: color(
-      from var(--list-item-foreground, var(--page-foreground)) srgb r g b /
-      var(--secondary-text)
+      from var(--list-item-foreground, var(--page-foreground)) srgb r g b / var(--secondary-text)
     );
   }
 }

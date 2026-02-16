@@ -1,11 +1,7 @@
 import type { MaybeArray } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-export const optimizeTypeSchema = /* @__PURE__ */ v.picklist([
-  "none",
-  "jit",
-  "precompiled",
-]);
+export const optimizeTypeSchema = /* @__PURE__ */ v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
@@ -15,20 +11,15 @@ export interface BaseBenchmarkConfig {
   throws?: boolean;
 }
 
-export interface InitializationBenchmarkConfig<Context>
-  extends BaseBenchmarkConfig {
+export interface InitializationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
   run: (context: Context) => unknown | Promise<unknown>;
 }
 
-export interface ValidationBenchmarkConfig<Context>
-  extends BaseBenchmarkConfig {
+export interface ValidationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
   run: (data: unknown, context: Context) => unknown | Promise<unknown>;
 }
 
-export const errorTypeSchema = /* @__PURE__ */ v.picklist([
-  "allErrors",
-  "abortEarly",
-]);
+export const errorTypeSchema = /* @__PURE__ */ v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
 export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
@@ -52,14 +43,10 @@ export interface BenchmarksConfig<Context> {
   createContext: () => Context | Promise<Context>;
   initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
   validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
-  parsing?: Partial<
-    Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>
-  >;
+  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>>;
 }
 
 /* @__PURE__ */
-export function defineBenchmarks<const TContext>(
-  config: BenchmarksConfig<TContext>,
-) {
+export function defineBenchmarks<const TContext>(config: BenchmarksConfig<TContext>) {
   return config;
 }

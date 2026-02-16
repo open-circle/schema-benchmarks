@@ -1,8 +1,7 @@
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
 
-export interface FloatingActionButtonProps
-  extends ComponentPropsWithRef<"button"> {
+export interface FloatingActionButtonProps extends ComponentPropsWithRef<"button"> {
   icon?: ReactNode;
 }
 

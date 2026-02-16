@@ -12,13 +12,9 @@ const getRawPath = ({
   repo = "open-circle/schema-benchmarks",
   branch = "main",
   fileName,
-}: RawSpecifier) =>
-  `https://raw.githubusercontent.com/${repo}/${branch}/${fileName}`;
+}: RawSpecifier) => `https://raw.githubusercontent.com/${repo}/${branch}/${fileName}`;
 
-export const getRaw = (
-  { repo, branch, fileName }: RawSpecifier,
-  signalOpt?: AbortSignal,
-) =>
+export const getRaw = ({ repo, branch, fileName }: RawSpecifier, signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["raw", repo, branch, fileName],
     queryFn: ({ signal }) =>

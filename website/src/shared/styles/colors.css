@@ -13,10 +13,7 @@
   --on-info: light-dark(var(--black), var(--black));
 
   --link: light-dark(var(--blue, blue), var(--cyan, cyan));
-  --link-visited: light-dark(
-    var(--blue-secondary, blue),
-    var(--cyan-secondary, cyan)
-  );
+  --link-visited: light-dark(var(--blue-secondary, blue), var(--cyan-secondary, cyan));
   --link-focus: light-dark(var(--purple, purple), var(--green, green));
   --link-current: var(--foreground);
   --link-current-background: var(--selection);

@@ -1,7 +1,4 @@
-import {
-  setAbortableInterval,
-  setAbortableTimeout,
-} from "@schema-benchmarks/utils";
+import { setAbortableInterval, setAbortableTimeout } from "@schema-benchmarks/utils";
 import { useEffect, useRef } from "react";
 import bem from "react-bem-helper";
 import { useLocalSlice } from "#/shared/hooks/use-local-slice";
@@ -71,9 +68,7 @@ export function ConsoleWriter(props: ConsoleWriterProps) {
       <span aria-hidden>
         {children.slice(0, index)}
         <span {...cls("cursor")} data-char={children[index]}></span>
-        <span {...cls("hidden")}>
-          {children.slice(index + (state === "typing" ? 1 : 0))}
-        </span>
+        <span {...cls("hidden")}>{children.slice(index + (state === "typing" ? 1 : 0))}</span>
       </span>
     </span>
   );

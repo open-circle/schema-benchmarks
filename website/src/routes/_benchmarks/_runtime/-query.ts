@@ -1,10 +1,5 @@
-import {
-  type BenchResults,
-  benchResultsSchema,
-} from "@schema-benchmarks/bench";
-import benchResults from "@schema-benchmarks/bench/bench.json" with {
-  type: "json",
-};
+import { type BenchResults, benchResultsSchema } from "@schema-benchmarks/bench";
+import benchResults from "@schema-benchmarks/bench/bench.json" with { type: "json" };
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
