@@ -1,11 +1,10 @@
 {
   "name": "schema-benchmarks",
   "private": true,
-  "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
   "scripts": {
-    "format": "biome format",
-    "lint": "biome lint",
-    "check": "biome check",
+    "format": "oxfmt",
+    "lint": "oxlint --type-aware",
+    "check": "oxfmt --check && oxlint --check --type-aware",
     "test": "pnpm run --filter '*' test",
     "typecheck": "pnpm run --filter '*' typecheck",
     "schemas:build": "pnpm run --filter schemas build",
@@ -21,7 +20,11 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.15",
     "lefthook": "^2.1.1",
+    "oxfmt": "^0.33.0",
+    "oxlint": "^1.48.0",
+    "oxlint-tsgolint": "^0.14.0",
     "playwright": "catalog:",
     "typescript": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc"
 }
