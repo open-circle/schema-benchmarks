@@ -172,7 +172,6 @@ export function BenchTable({ results }: BenchTableProps) {
                             {...ratioScaler(ratio)}
                             symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
                           >
-                            {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
                             <span aria-label={`${numFormatter.format(Math.abs(ratio))}x`}>
                               {`${formatNumber(Math.abs(ratio))}x`}
                             </span>

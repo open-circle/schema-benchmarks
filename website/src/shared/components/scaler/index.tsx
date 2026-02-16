@@ -37,7 +37,6 @@ export function Scaler({ icon, color, children, symbolLabel }: ScalerProps) {
   return (
     <span className="scaler">
       {children}
-      {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: wat */}
       <div style={{ color }} aria-label={symbolLabel}>
         {icon}
       </div>

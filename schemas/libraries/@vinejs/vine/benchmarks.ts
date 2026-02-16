@@ -24,13 +24,13 @@ export default defineBenchmarks({
   parsing: {
     abortEarly: {
       run(data, { schema }) {
-        vine.tryValidate({ schema, data });
+        void vine.tryValidate({ schema, data });
       },
       snippet: ts`vine.tryValidate({ schema, data })`,
     },
     allErrors: {
       run(data, { noBailSchema }) {
-        vine.tryValidate({ schema: noBailSchema, data });
+        void vine.tryValidate({ schema: noBailSchema, data });
       },
       snippet: ts`vine.tryValidate({ schema: schema.bail(false), data })`,
     },

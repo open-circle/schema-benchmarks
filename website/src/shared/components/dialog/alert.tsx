@@ -66,7 +66,6 @@ export function AlertDialog({
           </div>
           <DialogActions>
             <Button
-              autoFocus
               {...cancelProps}
               {...cls("button", "cancel", cancelProps?.className)}
               onClick={() => {

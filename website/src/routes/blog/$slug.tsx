@@ -66,7 +66,6 @@ function RouteComponent() {
           }))}
           size="lg"
         />
-        {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
         <time
           dateTime={data.published.toISOString().split("T")[0]}
           suppressHydrationWarning

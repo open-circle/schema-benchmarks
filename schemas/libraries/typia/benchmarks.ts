@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 // @ts-expect-error imported for type portability
+// oxlint-disable-next-line no-unused-vars
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";

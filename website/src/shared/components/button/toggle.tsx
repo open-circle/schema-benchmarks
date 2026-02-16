@@ -50,7 +50,12 @@ interface BaseLinkToggleButtonProps
   extends DistributiveOmit<ComponentPropsWithRef<"a">, "color">, BaseToggleButtonProps {}
 
 export const ExternalLinkToggleButton = withTooltip(
-  function ExternalLinkToggleButton({ color, className, ...props }: BaseLinkToggleButtonProps) {
+  function ExternalLinkToggleButton({
+    color,
+    className,
+    children,
+    ...props
+  }: BaseLinkToggleButtonProps) {
     return (
       <a
         {...props}
@@ -58,7 +63,9 @@ export const ExternalLinkToggleButton = withTooltip(
           modifiers: ["toggle", color ?? ""],
           extra: className,
         })}
-      />
+      >
+        {children}
+      </a>
     );
   },
   { required: true },

@@ -60,6 +60,7 @@ function getAttributeComment(stringify: (obj: unknown) => string, name: string, 
 }
 
 declare module "vitest" {
+  // oxlint-disable-next-line no-unused-vars
   interface Assertion<T> {
     toBeCurrent: {
       /**

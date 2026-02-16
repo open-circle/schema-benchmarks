@@ -23,8 +23,8 @@ export default defineBenchmarks({
       snippet: ts`rod.object(...)`,
     },
     {
-      run() {
-        rod.init();
+      async run() {
+        await rod.init();
         getRodSchema();
       },
       snippet: ts`

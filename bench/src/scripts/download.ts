@@ -109,11 +109,13 @@ async function download() {
       );
     }
 
-    allResults[minify] = results.sort((a, b) => a.bytes - b.bytes);
+    results.sort((a, b) => a.bytes - b.bytes);
+
+    allResults[minify] = results;
   }
 
   const outputPath = path.join(process.cwd(), "download.json");
   await fs.writeFile(outputPath, JSON.stringify(allResults));
 }
 
-download();
+void download();

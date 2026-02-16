@@ -1,5 +1,4 @@
 // based on use-local-slice (which uses immer, whereas we use mutative)
-/** biome-ignore-all lint/suspicious/noExplicitAny: we only use any as a constraint */
 
 import { create, type Draft } from "mutative";
 import { useDebugValue, useMemo, useReducer } from "react";
@@ -59,6 +58,7 @@ export function useLocalSlice<State, Reducers extends ReducerMap<State>>({
     const map: Record<string, PayloadActionDispatch<NonNullable<unknown>>> = {};
     for (const type of actionTypes) map[type] = (payload) => dispatch({ type, payload });
     return map as DispatcherMap<Reducers>;
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [dispatch, JSON.stringify(actionTypes)]);
 
   return [state, dispatchAction];

@@ -11,6 +11,7 @@ export function getEffectSchema() {
     url: Schema.String.pipe(
       Schema.filter((value) => {
         try {
+          // oxlint-disable-next-line no-new
           new URL(value);
           return true;
         } catch {
