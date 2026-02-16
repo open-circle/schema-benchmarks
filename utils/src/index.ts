@@ -212,12 +212,15 @@ export default function isPlainObject(obj: unknown): obj is object {
 }
 
 export function serialize(value: unknown): string {
-  return JSON.stringify(value, (_key, value) => {
+  return JSON.stringify(value, (_key, innerValue) => {
     // sort the object keys before serialization, so { a: 1, b: 2 } === { b: 2, a: 1 }
-    if (isPlainObject(value)) {
-      return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)));
+    if (isPlainObject(innerValue)) {
+      return Object.fromEntries(
+        // oxlint-disable-next-line unicorn/no-array-sort
+        Object.entries(innerValue).sort(([a], [b]) => a.localeCompare(b)),
+      );
     }
-    return value;
+    return innerValue;
   });
 }
 
@@ -273,7 +276,7 @@ export function shallowFilter<T>(filter: {
 export function getTransitionName(prefix: string, values: Record<string, unknown>) {
   let name = prefix;
   for (const [key, value] of Object.entries(values)) {
-    name += `-${key}-${value ?? ""}`;
+    name += `-${key}-${String(value)}`;
   }
   return name.replace(/[^a-zA-Z0-9]/g, "-");
 }

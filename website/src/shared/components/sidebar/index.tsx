@@ -41,8 +41,7 @@ function BaseSidebar({
 
   return (
     <>
-      {/** biome-ignore lint/a11y/noStaticElementInteractions: we have an escape listener */}
-      {/** biome-ignore lint/a11y/useKeyWithClickEvents: we have an escape listener */}
+      {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions */}
       <div {...backdropCls({ modifiers: { visible: open } })} onClick={() => setOpen(false)} />
       <aside {...cls({ modifiers: { open } })}>
         <div {...cls("logo")}>

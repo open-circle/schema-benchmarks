@@ -20,11 +20,9 @@ export default defineConfig({
   settings: {
     "jsx-a11y": {
       components: {
-        ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
+        // ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
         ...Object.fromEntries(buttonComponents.map((component) => [component, "button"])),
-      },
-      attributes: {
-        href: ["to", "href"],
+        TextField: "input",
       },
     },
     react: {

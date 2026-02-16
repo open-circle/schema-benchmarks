@@ -1,6 +1,7 @@
 {
   "name": "schema-benchmarks",
   "private": true,
+  "type": "module",
   "scripts": {
     "format": "oxfmt",
     "lint": "oxlint --type-aware",

@@ -3,6 +3,7 @@ import { worker } from "./mocks";
 
 export const test = testBase.extend<{ worker: typeof worker }>({
   worker: [
+    // oxlint-disable-next-line no-empty-pattern
     async ({}, use) => {
       // Start the worker before the test.
       await worker.start();

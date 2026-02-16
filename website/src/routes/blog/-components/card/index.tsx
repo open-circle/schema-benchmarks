@@ -34,7 +34,6 @@ export function BlogCard({ blog }: BlogCardProps) {
             }))}
             size="sm"
           />
-          {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: label is needed */}
           <time
             dateTime={blog.published.toISOString().split("T")[0]}
             suppressHydrationWarning

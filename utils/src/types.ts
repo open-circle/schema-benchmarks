@@ -1,3 +1,4 @@
+// oxlint-disable-next-line typescript/no-redundant-type-constituents
 export type Compute<T> = { [K in keyof T]: T[K] } & unknown;
 export type Satisfies<T extends U, U> = T;
 export type NonOptionalKeys<T> = {
@@ -47,6 +48,8 @@ export type DistributiveOmit<T, K extends Autocomplete.PropertyKey<keyof T>> = T
 export type DistributiveArray<T> = T extends T ? Array<T> : never;
 
 export type MaybeArray<T> = T | Array<T>;
+
+export type MaybePromise<T> = T | Promise<T>;
 
 export type KeyofUnion<T> = T extends T ? keyof T : never;
 

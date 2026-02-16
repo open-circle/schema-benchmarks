@@ -1,12 +1,14 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  plugins: ["import", "promise"],
   categories: {
-    style: "error",
+    suspicious: "warn",
   },
   rules: {
+    "eslint/no-shadow": "off",
     "typescript/array-type": ["error", { default: "generic" }],
+    "react/react-in-jsx-scope": "off",
+    "typescript/no-unsafe-type-assertion": "off",
   },
   settings: {
     vitest: {

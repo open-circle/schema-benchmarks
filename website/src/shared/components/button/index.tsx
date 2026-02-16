@@ -58,6 +58,7 @@ export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
   className,
   variant = "text",
   color,
+  children,
   ...props
 }: BaseLinkButtonProps) {
   return (
@@ -67,7 +68,9 @@ export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
         modifiers: [variant, color].filter(nonNullish),
         extra: className,
       })}
-    />
+    >
+      {children}
+    </a>
   );
 });
 
