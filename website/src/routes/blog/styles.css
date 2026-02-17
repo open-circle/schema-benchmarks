@@ -31,7 +31,3 @@
     corner-shape: unset;
   }
 }
-
-a > code.language-text.language-text {
-  color: inherit;
-}

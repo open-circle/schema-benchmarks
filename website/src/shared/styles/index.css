@@ -245,3 +245,7 @@ main {
   white-space: nowrap;
   border: 0;
 }
+
+a > code.language-text.language-text {
+  color: inherit;
+}

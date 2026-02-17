@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BlogRouteRouteImport } from './routes/blog/route'
 import { Route as BenchmarksRouteRouteImport } from './routes/_benchmarks/route'
+import { Route as ContributingIndexRouteImport } from './routes/contributing/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
@@ -29,6 +30,11 @@ const BlogRouteRoute = BlogRouteRouteImport.update({
 } as any)
 const BenchmarksRouteRoute = BenchmarksRouteRouteImport.update({
   id: '/_benchmarks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContributingIndexRoute = ContributingIndexRouteImport.update({
+  id: '/contributing/',
+  path: '/contributing/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/contributing/': typeof ContributingIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/contributing': typeof ContributingIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/contributing/': typeof ContributingIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/blog/$slug'
     | '/blog/'
+    | '/contributing/'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download/'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog/$slug'
     | '/blog'
+    | '/contributing'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/_home/'
     | '/blog/'
+    | '/contributing/'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
@@ -166,6 +178,7 @@ export interface RootRouteChildren {
   BenchmarksRouteRoute: typeof BenchmarksRouteRouteWithChildren
   BlogRouteRoute: typeof BlogRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
+  ContributingIndexRoute: typeof ContributingIndexRoute
   ApiTweetIdRoute: typeof ApiTweetIdRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
 }
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BenchmarksRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contributing/': {
+      id: '/contributing/'
+      path: '/contributing'
+      fullPath: '/contributing/'
+      preLoaderRoute: typeof ContributingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -311,6 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   BenchmarksRouteRoute: BenchmarksRouteRouteWithChildren,
   BlogRouteRoute: BlogRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
+  ContributingIndexRoute: ContributingIndexRoute,
   ApiTweetIdRoute: ApiTweetIdRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,
 }
