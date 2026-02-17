@@ -1,7 +1,18 @@
-import { toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
+import {
+  collator,
+  toggleFilter,
+  uniqueBy,
+  unsafeEntries,
+  unsafeKeys,
+} from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useSuspenseQueries,
+  useSuspenseQuery,
+  UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
+import { useCallback, useMemo } from "react";
 import * as v from "valibot";
 
 import { ButtonGroup } from "#/shared/components/button";
@@ -11,10 +22,12 @@ import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { PageFilterTextField } from "#/shared/components/page-filter/text-field";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
+import { sortParams } from "#/shared/lib/sort";
 
 import { DownloadCount } from "../-components/count";
+import { getAllWeeklyDownloads } from "../-query";
 import { DownloadResults } from "./-components/results";
-import { minifyTypeProps, optionalMinifyTypeSchema } from "./-constants";
+import { minifyTypeProps, optionalMinifyTypeSchema, sortableKeys } from "./-constants";
 import { getDownloadResults } from "./-query";
 import { speedPresets } from "./-speed";
 import Content from "./content.mdx";
@@ -30,6 +43,7 @@ const searchSchema = v.object({
     ]),
     "4g",
   ),
+  ...sortParams(v.optional(v.picklist(sortableKeys), "gzipBytes")),
 });
 
 export const Route = createFileRoute("/_benchmarks/download/")({
@@ -67,12 +81,50 @@ export const Route = createFileRoute("/_benchmarks/download/")({
 });
 
 function RouteComponent() {
-  const { minifyType, mbps } = Route.useSearch();
+  const { minifyType, mbps, sortBy, sortDir } = Route.useSearch();
   const mbpsAsNumber = typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
   const { data } = useSuspenseQuery({
     ...getDownloadResults(),
     select: (results) => results[minifyType],
   });
+  const pkgNames = useMemo(
+    () =>
+      uniqueBy(data, (d) => DownloadCount.getPackageName(d.libraryName)).map((d) =>
+        DownloadCount.getPackageName(d.libraryName),
+      ),
+    [data],
+  );
+  const downloadsByPkgName = useSuspenseQueries({
+    queries: useMemo(
+      () => pkgNames.map((libraryName) => getAllWeeklyDownloads(libraryName)),
+      [pkgNames],
+    ),
+    combine: useCallback(
+      (results: Array<UseSuspenseQueryResult<number>>) =>
+        Object.fromEntries(results.map((result, idx) => [pkgNames[idx], result.data])),
+      [pkgNames],
+    ),
+  });
+  const sortedData = useMemo(
+    () =>
+      data.toSorted((a, b) => {
+        let c = 0;
+        switch (sortBy) {
+          case "downloads":
+            c =
+              (downloadsByPkgName[DownloadCount.getPackageName(a.libraryName)] ?? 0) -
+              (downloadsByPkgName[DownloadCount.getPackageName(b.libraryName)] ?? 0);
+            break;
+          case "libraryName":
+            c = collator.compare(a[sortBy], b[sortBy]);
+            break;
+          default:
+            c = a[sortBy] - b[sortBy];
+        }
+        return sortDir === "ascending" ? c : -c;
+      }),
+    [data, downloadsByPkgName, sortBy, sortDir],
+  );
 
   return (
     <>
@@ -102,10 +154,13 @@ function RouteComponent() {
             linkOptions({
               from: Route.fullPath,
               to: "/download",
-              search: ({ minifyType }) => {
+              search: ({ minifyType, ...rest }) => {
                 const mbps = event.target.valueAsNumber;
-                if (Number.isNaN(mbps) || mbps <= 0) return { minifyType };
-                return { minifyType, mbps };
+                return {
+                  ...rest,
+                  minifyType,
+                  mbps: Number.isNaN(mbps) || mbps <= 0 ? undefined : mbps,
+                };
               },
               replace: true,
               resetScroll: false,
@@ -118,8 +173,8 @@ function RouteComponent() {
               <InternalLinkToggleButton
                 key={preset.name}
                 tooltip={preset.name}
-                to="/download"
-                search={({ minifyType }) => ({ minifyType, mbps: slug })}
+                to={"/download"}
+                search={({ minifyType, ...rest }) => ({ ...rest, minifyType, mbps: slug })}
                 replace
                 resetScroll={false}
               >
@@ -129,7 +184,12 @@ function RouteComponent() {
           </ButtonGroup>
         </PageFilter>
       </PageFilters>
-      <DownloadResults results={data} mbps={mbpsAsNumber} minify={minifyType} />
+      <DownloadResults
+        results={sortedData}
+        mbps={mbpsAsNumber}
+        minify={minifyType}
+        {...{ sortBy, sortDir }}
+      />
     </>
   );
 }

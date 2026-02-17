@@ -2,11 +2,11 @@ import { fn } from "storybook/test";
 
 import preview from "#storybook/preview";
 
-import { SortableHeaderCell } from "./sort";
+import { SortableHeaderButton } from "./sort";
 
 const meta = preview.meta({
   title: "Components/Table/Sort",
-  component: SortableHeaderCell,
+  component: SortableHeaderButton,
   argTypes: {
     "aria-sort": {
       control: {

@@ -300,3 +300,8 @@ export function assertNever(_value: never, message: string): never {
 }
 
 export const nonNullish = <T>(value: T) => value != null;
+
+export const collator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base",
+});

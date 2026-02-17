@@ -16,3 +16,6 @@ export const minifyTypeProps: Pick<
     unminified: { label: "Unminified", icon: "code_blocks" },
   },
 };
+
+export const sortableKeys = ["libraryName", "downloads", "bytes", "gzipBytes"] as const;
+export type SortableKey = (typeof sortableKeys)[number];

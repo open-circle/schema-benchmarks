@@ -145,6 +145,7 @@ table.minimal {
   }
 
   .sort-cell__label {
+    text-decoration: none;
     appearance: none;
     border: none;
     font: inherit;

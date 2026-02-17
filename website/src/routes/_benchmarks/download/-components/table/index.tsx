@@ -5,44 +5,70 @@ import {
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
-import { useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderCell } from "#/shared/components/table/sort";
+import { SortableHeaderLink } from "#/shared/components/table/sort";
+import { SortDirection } from "#/shared/lib/sort";
 
+import { SortableKey } from "../../-constants";
 import { getCompiledPath } from "../../-query";
 import { getDownloadTime } from "../../-speed";
 import { DownloadCount } from "../../../-components/count";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;
+  gzipScaler: ReturnType<typeof Bar.getScale>;
   mbps: number;
   minify: MinifyType;
+  sortBy: SortableKey;
+  sortDir: SortDirection;
 }
 
-export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
-  const gzipScaler = useMemo(
-    () =>
-      Bar.getScale(
-        results.map((result) => result.gzipBytes),
-        { lowerBetter: true },
-      ),
-    [results],
-  );
+export function DownloadTable({
+  results,
+  gzipScaler,
+  mbps,
+  minify,
+  ...sortState
+}: DownloadTableProps) {
   return (
     <div className="card" style={{ viewTransitionName: "download-table" }}>
       <table className="download-table">
         <thead>
           <tr>
-            <SortableHeaderCell>Library</SortableHeaderCell>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("libraryName", sortState, { to: "/download" })}
+            >
+              Library
+            </SortableHeaderLink>
             <th>Version</th>
-            <SortableHeaderCell className="numeric">Downloads (weekly)</SortableHeaderCell>
-            <SortableHeaderCell className="numeric">Uncompressed</SortableHeaderCell>
-            <SortableHeaderCell className="numeric">Gzipped</SortableHeaderCell>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps(
+                "downloads",
+                sortState,
+                { to: "/download" },
+                "descending",
+              )}
+              className="numeric"
+            >
+              Downloads (weekly)
+            </SortableHeaderLink>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("bytes", sortState, { to: "/download" })}
+              className="numeric"
+            >
+              Uncompressed
+            </SortableHeaderLink>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("gzipBytes", sortState, { to: "/download" })}
+              className="numeric"
+            >
+              Gzipped
+            </SortableHeaderLink>
             <th className="bar-after"></th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>

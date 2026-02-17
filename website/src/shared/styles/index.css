@@ -78,7 +78,7 @@ body {
   }
 }
 
-a:not(.button):not(.chip):not(.react-tweet-theme a) {
+a:not(.button):not(.chip):not(.react-tweet-theme a):not(.sort-cell__label) {
   color: var(--link);
   transition:
     color 250ms,
