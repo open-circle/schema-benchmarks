@@ -28,3 +28,27 @@ export const toggleSort =
           : "ascending"
         : initialDirection,
   });
+
+type Comparator<T> = (a: T, b: T) => number;
+
+export const applySort =
+  <T>(
+    comparator: Comparator<T>,
+    { sortDir, fallbacks = [] }: { sortDir?: SortDirection; fallbacks?: Array<Comparator<T>> },
+  ): Comparator<T> =>
+  (a, b) => {
+    let c = comparator(a, b);
+
+    // flip the sort direction if needed
+    if (sortDir === "descending") c = -c;
+
+    if (!c) {
+      // go through our fallbacks until we find a non-zero value, or we run out of fallbacks
+      for (const fallback of fallbacks) {
+        c = fallback(a, b);
+        if (c) break;
+      }
+    }
+
+    return c;
+  };
