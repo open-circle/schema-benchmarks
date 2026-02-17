@@ -15,7 +15,7 @@ import { Radio } from "#/shared/components/radio";
 import { Scaler } from "#/shared/components/scaler";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderCell } from "#/shared/components/table/sort";
+import { SortableHeaderButton } from "#/shared/components/table/sort";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";
@@ -81,14 +81,14 @@ export function BenchTable({ results }: BenchTableProps) {
       <table className="bench-table">
         <thead>
           <tr>
-            <SortableHeaderCell>Library</SortableHeaderCell>
+            <SortableHeaderButton>Library</SortableHeaderButton>
             <th className="action"></th>
             <th className="action"></th>
             <th>Version</th>
-            <SortableHeaderCell className="numeric">Downloads (weekly)</SortableHeaderCell>
+            <SortableHeaderButton className="numeric">Downloads (weekly)</SortableHeaderButton>
             <th>Optimizations</th>
             {benchType === "parsing" && <th>Error type</th>}
-            <SortableHeaderCell className="numeric">Mean</SortableHeaderCell>
+            <SortableHeaderButton className="numeric">Mean</SortableHeaderButton>
             {showComparisonColumns && (
               <>
                 <th className="bar-after"></th>

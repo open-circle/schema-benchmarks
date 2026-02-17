@@ -3,7 +3,9 @@ import { useMemo } from "react";
 
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
+import { SortDirection } from "#/shared/lib/sort";
 
+import { SortableKey } from "../-constants";
 import { DownloadCard } from "./card";
 import { DownloadTable } from "./table";
 
@@ -11,9 +13,11 @@ export interface DownloadResultsProps {
   results: Array<DownloadResult>;
   mbps: number;
   minify: MinifyType;
+  sortBy: SortableKey;
+  sortDir: SortDirection;
 }
 
-export function DownloadResults({ results, mbps, minify }: DownloadResultsProps) {
+export function DownloadResults({ results, mbps, minify, sortBy, sortDir }: DownloadResultsProps) {
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
   const gzipScaler = useMemo(
     () =>
@@ -26,7 +30,7 @@ export function DownloadResults({ results, mbps, minify }: DownloadResultsProps)
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <DownloadTable results={results} mbps={mbps} minify={minify} />
+        <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
       ) : (
         <div className="download-cards">
           {results.map((result) => (
