@@ -101,3 +101,73 @@ table.minimal {
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
 }
+
+.sort-cell {
+  color: var(--button);
+  transition: color 250ms;
+  .sort-cell__icon.md-symbol {
+    flex-shrink: 0;
+    transform: rotate(0);
+    transition:
+      transform 150ms var(--standard-curve),
+      color 250ms,
+      font-variation-settings 250ms;
+  }
+  &[aria-sort="descending"] .sort-cell__icon {
+    transform: rotate(180deg);
+  }
+  &[aria-sort]:not([aria-sort="none"]) {
+    color: var(--button-selected);
+    .sort-cell__label {
+      background-color: var(--button-selected-background);
+      &:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--hover-opacity)
+        );
+      }
+      &:active {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--pressed-opacity)
+        );
+      }
+      &:focus-visible {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--focus-opacity)
+        );
+      }
+    }
+  }
+
+  .sort-cell__label {
+    appearance: none;
+    border: none;
+    font: inherit;
+    text-transform: inherit;
+    text-align: inherit;
+    color: inherit;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--shape-medium);
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    transition: background-color 250ms;
+    &:hover {
+      background-color: color(from var(--button) srgb r g b / var(--hover-opacity));
+    }
+    &:active {
+      background-color: color(from var(--button) srgb r g b / var(--pressed-opacity));
+    }
+    &:focus-visible {
+      outline: none;
+      background-color: color(from var(--button) srgb r g b / var(--focus-opacity));
+    }
+  }
+}
