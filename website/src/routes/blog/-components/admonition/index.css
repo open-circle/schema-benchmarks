@@ -27,43 +27,51 @@
     --admonition-accent: var(--success);
   }
 
-  &.admonition--string .admonition__content > p:first-child:before {
-    content: "// ";
+  &:before {
+    content: "/**";
   }
-  &:not(.admonition--string) {
-    &:before {
-      content: "/*";
-    }
-    &:after {
-      content: "*/";
-    }
+  &:after {
+    content: "*/";
   }
 
   [data-style="normal"] & {
     &:before,
     &:after,
-    &.admonition--string .admonition__content > p:first-child:before {
+    .admonition__title-row:before,
+    .admonition__icon:before {
       display: none;
+    }
+    .admonition__icon:after {
+      content: " ";
     }
   }
 
   .admonition__title-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    white-space: pre;
     margin: 0;
     margin-bottom: 0.5rem;
+    font-family: inherit;
+    &:before {
+      content: "@title ";
+      color: var(--admonition-accent);
+    }
   }
   .admonition__title {
-    margin: 0;
     color: var(--page-foreground);
-    font-family: inherit;
   }
   .admonition__icon {
     display: contents;
     color: var(--admonition-accent);
     --icon-fill: 1;
     --icon-size: 18;
+    &:before {
+      content: "{";
+    }
+    &:after {
+      content: "} ";
+    }
   }
   .admonition__content {
     display: flex;

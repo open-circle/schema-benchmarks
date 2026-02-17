@@ -47,7 +47,7 @@
   --font-family-button: "Monaspace Krypton", monospace;
   --font-family-comment: "Monaspace Radon", monospace;
   --font-family-doc-comment: "Monaspace Xenon", monospace;
-  --font-family-admonition: var(--font-family-comment);
+  --font-family-admonition: var(--font-family-doc-comment);
 
   --weight-thin: 100;
   --weight-extralight: 200;
