@@ -24,17 +24,18 @@ export default function materialSymbols({ knownSymbols = [] }: Options = {}): Ar
       name: "used-symbols:pre",
       enforce: "pre",
       apply: "build",
-      moduleParsed({ id, code, ast }) {
-        if (!ast || !code?.includes(component)) return;
+      moduleParsed({ id, code }) {
+        if (!code?.includes(component)) return;
         if (!addedKnown) {
           for (const symbol of knownSymbols) {
             usedSymbols.add(symbol);
           }
           addedKnown = true;
         }
+        const ast = this.parse(code);
         const nodes = esquery.query(
-          ast,
-          `CallExpression[callee.name='jsx'][arguments.0.name='${component}'] > .arguments:nth-child(2) > Property[key.name='children'] > .value`,
+          ast as any,
+          `CallExpression[callee.name='_jsx'][arguments.0.name='${component}'] > .arguments:nth-child(2) > Property[key.name='children'] > .value`,
         );
         const [stringLiteralNodes, otherNodes] = partition(
           nodes,

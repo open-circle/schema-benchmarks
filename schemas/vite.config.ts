@@ -1,3 +1,5 @@
+import * as path from "node:path";
+
 import UnpluginTypia from "@ryoppippi/unplugin-typia/vite";
 import macros from "unplugin-macros/vite";
 import { defineConfig } from "vite";
@@ -23,7 +25,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "#src": "./src/index.ts",
+      "#src": path.resolve(process.cwd(), "./src/index.ts"),
     },
   },
   define: {
