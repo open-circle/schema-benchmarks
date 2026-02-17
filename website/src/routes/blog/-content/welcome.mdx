@@ -17,6 +17,7 @@ import { getDownloadResults } from "#/routes/_benchmarks/download/-query";
 import { BenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
 import { Spinner } from "#/shared/components/spinner";
+import { Admonition } from "../-components/admonition";
 
 export async function prefetch({ queryClient }) {
   await queryClient.prefetchQuery(getBenchResults());
@@ -136,7 +137,7 @@ if (v.is(personSchema, data)) {
 
 Checking if a given value matches the schema. This is different to [parsing](#parsing) because it doesn't return a new value.
 
-We test validation against both valid and invalid data. As validation methods are expected to return a boolean, it's not tracked whether they abort early or not (as it is assumed they would if possible).
+As validation methods are expected to return a boolean, it's not tracked whether they abort early or not (as it is assumed they would if possible).
 
 Not every library supports validation - for example, [`zod`](https://zod.dev) only supports parsing. In these cases, we categorise them accordingly.
 
@@ -164,9 +165,13 @@ const person = v.parse(personSchema, data);
 
 Parsing a value to match the schema. This is different to [validation](#validation) because it returns a new value, instead of a boolean.
 
-We test parsing against both valid and invalid data. We also track whether the library returns the first issue found, or all of them (or both if configurable). Benchmarks that abort early are noted in the graph below with a dagger (†).
+<Admonition type="info">
 
 Libraries that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
+
+Benchmarks that abort early (i.e. return the first error found) are noted in the graph below with a dagger (†) - this is relevant when parsing invalid data, as it will (usually) be faster than libraries that return all errors.
+
+</Admonition>
 
 Parsing valid data:
 

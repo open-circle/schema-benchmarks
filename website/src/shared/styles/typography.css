@@ -47,6 +47,7 @@
   --font-family-button: "Monaspace Krypton", monospace;
   --font-family-comment: "Monaspace Radon", monospace;
   --font-family-doc-comment: "Monaspace Xenon", monospace;
+  --font-family-admonition: var(--font-family-comment);
 
   --weight-thin: 100;
   --weight-extralight: 200;
@@ -292,6 +293,7 @@ code {
   --font-family-body: "Mona Sans", sans-serif;
   --font-family-heading: "Mona Sans", sans-serif;
   --font-family-button: "Mona Sans", sans-serif;
+  --font-family-admonition: "Mona Sans", sans-serif;
 
   --headline1-size: 6rem;
   --headline1-transform: none;
