@@ -121,7 +121,11 @@ function RouteComponent() {
           default:
             c = a[sortBy] - b[sortBy];
         }
-        return sortDir === "ascending" ? c : -c;
+        // flip the sort direction if needed
+        if (sortDir === "descending") c = -c;
+        // sort by library name as a tiebreaker
+        c ||= collator.compare(a.libraryName, b.libraryName);
+        return c;
       }),
     [data, downloadsByPkgName, sortBy, sortDir],
   );
