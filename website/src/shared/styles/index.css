@@ -39,6 +39,7 @@
   box-sizing: border-box;
   scrollbar-color: var(--scroll-thumb) var(--scroll-track);
   scrollbar-width: thin;
+  scroll-behavior: smooth;
   corner-shape: bevel;
 }
 
@@ -223,6 +224,9 @@ main {
 }
 
 @media (prefers-reduced-motion) {
+  * {
+    scroll-behavior: auto;
+  }
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {
