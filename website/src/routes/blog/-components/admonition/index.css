@@ -44,6 +44,11 @@
     .admonition__icon:after {
       content: " ";
     }
+    .admonition__title {
+      font-size: var(--overline-size);
+      font-weight: var(--overline-weight);
+      text-transform: var(--overline-transform);
+    }
   }
 
   .admonition__title-row {
