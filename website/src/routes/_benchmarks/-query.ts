@@ -11,6 +11,13 @@ const downloadsResponseSchema = v.pipe(
   v.transform(({ downloads }) => downloads),
 );
 
+export function getPackageName(libraryName: string) {
+  if (libraryName.includes("/") && !libraryName.startsWith("@")) {
+    return libraryName.split("/")[0] ?? libraryName;
+  }
+  return libraryName;
+}
+
 export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["npm", "downloads", "week", packageName],

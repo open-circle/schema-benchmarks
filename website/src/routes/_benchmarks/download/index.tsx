@@ -1,18 +1,8 @@
-import {
-  collator,
-  toggleFilter,
-  uniqueBy,
-  unsafeEntries,
-  unsafeKeys,
-} from "@schema-benchmarks/utils";
+import { collator, toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
-import {
-  useSuspenseQueries,
-  useSuspenseQuery,
-  UseSuspenseQueryResult,
-} from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import * as v from "valibot";
 
 import { ButtonGroup } from "#/shared/components/button";
@@ -25,7 +15,8 @@ import { generateMetadata } from "#/shared/data/meta";
 import { sortParams, applySort } from "#/shared/lib/sort";
 
 import { DownloadCount } from "../-components/count";
-import { getAllWeeklyDownloads } from "../-query";
+import { useDownloadsByPkgName } from "../-hooks";
+import { getPackageName } from "../-query";
 import { DownloadResults } from "./-components/results";
 import { minifyTypeProps, optionalMinifyTypeSchema, sortableKeys } from "./-constants";
 import { getDownloadResults } from "./-query";
@@ -87,24 +78,7 @@ function RouteComponent() {
     ...getDownloadResults(),
     select: (results) => results[minifyType],
   });
-  const pkgNames = useMemo(
-    () =>
-      uniqueBy(data, (d) => DownloadCount.getPackageName(d.libraryName)).map((d) =>
-        DownloadCount.getPackageName(d.libraryName),
-      ),
-    [data],
-  );
-  const downloadsByPkgName = useSuspenseQueries({
-    queries: useMemo(
-      () => pkgNames.map((libraryName) => getAllWeeklyDownloads(libraryName)),
-      [pkgNames],
-    ),
-    combine: useCallback(
-      (results: Array<UseSuspenseQueryResult<number>>) =>
-        Object.fromEntries(results.map((result, idx) => [pkgNames[idx], result.data])),
-      [pkgNames],
-    ),
-  });
+  const downloadsByPkgName = useDownloadsByPkgName(data);
   const sortedData = useMemo(
     () =>
       data.toSorted(
@@ -113,8 +87,8 @@ function RouteComponent() {
             switch (sortBy) {
               case "downloads":
                 return (
-                  (downloadsByPkgName[DownloadCount.getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkgName[DownloadCount.getPackageName(b.libraryName)] ?? 0)
+                  (downloadsByPkgName[getPackageName(a.libraryName)] ?? 0) -
+                  (downloadsByPkgName[getPackageName(b.libraryName)] ?? 0)
                 );
               case "libraryName":
                 return collator.compare(a[sortBy], b[sortBy]);

@@ -85,7 +85,7 @@ export function BenchTable({ results }: BenchTableProps) {
             <th className="action"></th>
             <th className="action"></th>
             <th>Version</th>
-            <SortableHeaderButton className="numeric">Downloads (weekly)</SortableHeaderButton>
+            <SortableHeaderButton className="numeric">Downloads (/wk)</SortableHeaderButton>
             <th>Optimizations</th>
             {benchType === "parsing" && <th>Error type</th>}
             <SortableHeaderButton className="numeric">Mean</SortableHeaderButton>
