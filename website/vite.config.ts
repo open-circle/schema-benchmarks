@@ -14,6 +14,8 @@ import svgr from "vite-plugin-svgr";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
+import { admonitionDefaults } from "#/routes/blog/-components/admonition/constants";
+
 import {
   dataTypeProps,
   errorTypeProps,
@@ -50,7 +52,9 @@ const config = defineConfig({
         ...[errorTypeProps, optimizeTypeProps, minifyTypeProps, dataTypeProps].flatMap((props) =>
           Object.values(props.labels).map((label) => label.icon),
         ),
-        ...Object.values(speedPresets).map((preset) => preset.icon),
+        ...[speedPresets, admonitionDefaults].flatMap((map) =>
+          Object.values(map).map((value) => value.icon),
+        ),
         ...scales.sentiment,
         ...scales.stat,
         ...[themeLabels, styleLabels].flatMap((labels) =>
