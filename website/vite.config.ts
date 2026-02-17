@@ -52,14 +52,11 @@ const config = defineConfig({
         ...[errorTypeProps, optimizeTypeProps, minifyTypeProps, dataTypeProps].flatMap((props) =>
           Object.values(props.labels).map((label) => label.icon),
         ),
-        ...[speedPresets, admonitionDefaults].flatMap((map) =>
+        ...[speedPresets, admonitionDefaults, themeLabels, styleLabels].flatMap((map) =>
           Object.values(map).map((value) => value.icon),
         ),
         ...scales.sentiment,
         ...scales.stat,
-        ...[themeLabels, styleLabels].flatMap((labels) =>
-          Object.values(labels).map((label) => label.icon),
-        ),
       ],
     }),
     svgr(),
