@@ -56,10 +56,11 @@
     width: var(--shape-medium);
     height: 100%;
     background-color: var(--snackbar-accent);
-    &:dir(rtl) {
-      left: auto;
-      right: 0;
-    }
+  }
+
+  &:dir(rtl)::before {
+    left: auto;
+    right: 0;
   }
 
   .snackbar__icon {
