@@ -22,7 +22,7 @@ import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { PageFilterTextField } from "#/shared/components/page-filter/text-field";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
-import { sortParams } from "#/shared/lib/sort";
+import { sortParams, applySort } from "#/shared/lib/sort";
 
 import { DownloadCount } from "../-components/count";
 import { getAllWeeklyDownloads } from "../-query";
@@ -107,26 +107,24 @@ function RouteComponent() {
   });
   const sortedData = useMemo(
     () =>
-      data.toSorted((a, b) => {
-        let c = 0;
-        switch (sortBy) {
-          case "downloads":
-            c =
-              (downloadsByPkgName[DownloadCount.getPackageName(a.libraryName)] ?? 0) -
-              (downloadsByPkgName[DownloadCount.getPackageName(b.libraryName)] ?? 0);
-            break;
-          case "libraryName":
-            c = collator.compare(a[sortBy], b[sortBy]);
-            break;
-          default:
-            c = a[sortBy] - b[sortBy];
-        }
-        // flip the sort direction if needed
-        if (sortDir === "descending") c = -c;
-        // sort by library name as a tiebreaker
-        c ||= collator.compare(a.libraryName, b.libraryName);
-        return c;
-      }),
+      data.toSorted(
+        applySort(
+          (a, b) => {
+            switch (sortBy) {
+              case "downloads":
+                return (
+                  (downloadsByPkgName[DownloadCount.getPackageName(a.libraryName)] ?? 0) -
+                  (downloadsByPkgName[DownloadCount.getPackageName(b.libraryName)] ?? 0)
+                );
+              case "libraryName":
+                return collator.compare(a[sortBy], b[sortBy]);
+              default:
+                return a[sortBy] - b[sortBy];
+            }
+          },
+          { sortDir, fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName)] },
+        ),
+      ),
     [data, downloadsByPkgName, sortBy, sortDir],
   );
 
