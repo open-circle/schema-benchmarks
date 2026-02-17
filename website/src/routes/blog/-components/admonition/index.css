@@ -1,0 +1,55 @@
+.admonition {
+  border-radius: var(--shape-medium);
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--sidebar-background);
+  color: var(--comment);
+  font-family: var(--font-family-admonition);
+  --admonition-accent: var(--page-foreground);
+  border-left: var(--shape-medium) solid var(--admonition-accent);
+  &:dir(rtl) {
+    border-left: none;
+    border-right: var(--shape-medium) solid var(--admonition-accent);
+  }
+
+  &.admonition--info {
+    --admonition-accent: var(--info);
+  }
+  &.admonition--warning {
+    --admonition-accent: var(--warning);
+  }
+  &.admonition--danger {
+    --admonition-accent: var(--error);
+  }
+  &.admonition--note {
+    --admonition-accent: var(--success);
+  }
+
+  .admonition__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+  }
+  .admonition__icon {
+    display: contents;
+    color: var(--admonition-accent);
+    --icon-fill: 1;
+    --icon-size: 18;
+  }
+  > p {
+    margin: 0;
+  }
+  pre[class*="language-"],
+  :not(pre) > code[class*="language-"] {
+    border: 1px solid var(--divider);
+  }
+
+  :not(pre) > code[class*="language-"] {
+    margin: 0 0.25em;
+  }
+}
