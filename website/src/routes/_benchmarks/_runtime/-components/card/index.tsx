@@ -39,6 +39,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
           <div className="typo-body2 bench-card__downloads">
             <MdSymbol>download</MdSymbol>
             <DownloadCount libraryName={result.libraryName} />
+            {" / wk"}
           </div>
         </ErrorBoundary>
       </div>

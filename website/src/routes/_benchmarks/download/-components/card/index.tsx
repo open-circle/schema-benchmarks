@@ -46,6 +46,7 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
           <div className="typo-body2 download-card__downloads">
             <MdSymbol>download</MdSymbol>
             <DownloadCount libraryName={result.libraryName} />
+            {" / wk"}
           </div>
         </ErrorBoundary>
       </div>

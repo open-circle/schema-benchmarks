@@ -55,7 +55,7 @@ export function DownloadTable({
               )}
               className="numeric"
             >
-              Downloads (weekly)
+              Downloads (/wk)
             </SortableHeaderLink>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("bytes", sortState, { to: "/download" })}
