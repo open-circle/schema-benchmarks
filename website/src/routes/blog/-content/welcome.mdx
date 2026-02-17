@@ -29,6 +29,27 @@ You can explore the results through the sidebar (and the <Link to="/">homepage</
 
 I'm [`@eskimojo`](https://github.com/EskiMojo14), the main developer of this project, working with [`@fabian-hiller`](https://github.com/fabian-hiller), as part of [Open Circle](https://github.com/open-circle).
 
+## TL;DR
+
+**Schema Benchmarks** provides comprehensive, transparent comparisons of TypeScript schema validation libraries across four key metrics:
+
+- [**Bundle Size**](#download): Typia (~1.9KB) and Valibot (~1.9KB) are the smallest; Zod classic (58KB) is the largest
+- [**Initialization**](#initialization): Typia leads comfortably but all libraries except AJV are fairly fast; AJV is notably slow (~4ms, 90x slower than Valibot)
+- [**Validation**](#validation): Libraries with certain optimizations (Typia, TypeBox, AJV) are fastest; but all perform reasonably well except Yup
+- [**Parsing**](#parsing): Libraries that abort early have an advantage on invalid data; TypeBox, VineJS, and Yup are consistently slowest
+
+[Jump to detailed findings](#current-findings)
+
+## Caveats
+
+We aim to provide a benchmark that will match realistic usage of these libraries, however there are some inherent differences, as our benchmarks are run in series in a Node.js environment, and each test case is looped to get an average.
+
+It's also worth noting that different use cases will benefit from different advantages (for example, bundle size matters a lot more on the client than the server).
+
+There are also some aspects that might be important to you that we cannot measure, such as DX and ecosystem size.
+
+We do provide minimal code snippets for each library to give a loose idea of DX, along with links to the source code used for the bundle size tests.
+
 ## Why Schema Benchmarks?
 
 Fabian, in his role as the creator of [`valibot`](https://valibot.dev), is well known for his passion for comparing schema validation libraries. However, this was largely confined to his social media posts, and Valibot's website.
@@ -161,7 +182,7 @@ When filtering out all results that abort early, the playing field levels out a 
 
 <BenchPlot type="parsing" dataType="valid" errorType="allErrors" />
 
-Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`yup`](https://github.com/jquense/yup) - though both of these involve a `try`/`catch` wrapper, which may be slowing them down.
+Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`vinejs`](https://vinejs.dev), then [`yup`](https://github.com/jquense/yup) - though two of these involve a `try`/`catch` wrapper, which may be slowing them down.
 
 ## Contributing
 
