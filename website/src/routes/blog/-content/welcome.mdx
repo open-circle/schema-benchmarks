@@ -41,7 +41,7 @@ I'm [`@eskimojo`](https://github.com/EskiMojo14), the main developer of this pro
 
 [Jump to detailed findings](#current-findings)
 
-## Caveats
+<Admonition type="warning" title="Caveats">
 
 We aim to provide a benchmark that will match realistic usage of these libraries, however there are some inherent differences, as our benchmarks are run in series in a Node.js environment, and each test case is looped to get an average.
 
@@ -50,6 +50,8 @@ It's also worth noting that different use cases will benefit from different adva
 There are also some aspects that might be important to you that we cannot measure, such as DX and ecosystem size.
 
 We do provide minimal code snippets for each library to give a loose idea of DX, along with links to the source code used for the bundle size tests.
+
+</Admonition>
 
 ## Why Schema Benchmarks?
 
@@ -80,7 +82,7 @@ We run these benchmarks in a GitHub action, using [`rolldown`](https://rolldown.
 
 ## Current Findings
 
-<p className="typo-caption">Graphs show best result per library</p>
+<Admonition type="info">Graphs show best result per library.</Admonition>
 
 ### <Link to="/download">Download</Link>
 
@@ -139,7 +141,11 @@ Checking if a given value matches the schema. This is different to [parsing](#pa
 
 As validation methods are expected to return a boolean, it's not tracked whether they abort early or not (as it is assumed they would if possible).
 
+<Admonition type="note">
+
 Not every library supports validation - for example, [`zod`](https://zod.dev) only supports parsing. In these cases, we categorise them accordingly.
+
+</Admonition>
 
 Validating valid data:
 
@@ -165,7 +171,7 @@ const person = v.parse(personSchema, data);
 
 Parsing a value to match the schema. This is different to [validation](#validation) because it returns a new value, instead of a boolean.
 
-<Admonition type="info">
+<Admonition type="note">
 
 Libraries that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
 

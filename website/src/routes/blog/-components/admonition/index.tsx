@@ -15,13 +15,14 @@ export interface AdmonitionProps {
 const cls = bem("admonition");
 
 export function Admonition({ type = "info", icon, title, children }: AdmonitionProps) {
+  const isString = typeof children === "string";
   return (
-    <section {...cls({ modifiers: type })}>
-      <h6 {...cls({ element: "title", extra: "typo-caption" })}>
+    <section {...cls({ modifiers: { [type]: true, string: isString } })}>
+      <div {...cls("title-row")}>
         <span {...cls("icon")}>{icon ?? <MdSymbol>{admonitionDefaults[type].icon}</MdSymbol>}</span>
-        {title ?? admonitionDefaults[type].title}
-      </h6>
-      {children}
+        <h6 {...cls("title")}>{title ?? admonitionDefaults[type].title}</h6>
+      </div>
+      <div {...cls("content")}>{isString ? <p>{children}</p> : children}</div>
     </section>
   );
 }
