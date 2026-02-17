@@ -12,6 +12,7 @@ import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
+import { SortableHeaderCell } from "#/shared/components/table/sort";
 
 import { getCompiledPath } from "../../-query";
 import { getDownloadTime } from "../../-speed";
@@ -37,11 +38,11 @@ export function DownloadTable({ results, mbps, minify }: DownloadTableProps) {
       <table className="download-table">
         <thead>
           <tr>
-            <th>Library</th>
+            <SortableHeaderCell>Library</SortableHeaderCell>
             <th>Version</th>
-            <th className="numeric">Downloads (weekly)</th>
-            <th className="numeric">Uncompressed</th>
-            <th className="numeric">Gzipped</th>
+            <SortableHeaderCell className="numeric">Downloads (weekly)</SortableHeaderCell>
+            <SortableHeaderCell className="numeric">Uncompressed</SortableHeaderCell>
+            <SortableHeaderCell className="numeric">Gzipped</SortableHeaderCell>
             <th className="bar-after"></th>
             <th className="numeric">Time</th>
             <th className="fit-content action"></th>
