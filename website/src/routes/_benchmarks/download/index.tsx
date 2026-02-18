@@ -1,3 +1,4 @@
+import { DownloadResult } from "@schema-benchmarks/bench";
 import { collator, toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -71,6 +72,10 @@ export const Route = createFileRoute("/_benchmarks/download/")({
   component: RouteComponent,
 });
 
+function getLibraryLabel({ libraryName, note }: DownloadResult) {
+  return `${libraryName}${note ? ` (${note})` : ""}`;
+}
+
 function RouteComponent() {
   const { minifyType, mbps, sortBy, sortDir } = Route.useSearch();
   const mbpsAsNumber = typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
@@ -91,12 +96,18 @@ function RouteComponent() {
                   (downloadsByPkgName[getPackageName(b.libraryName)] ?? 0)
                 );
               case "libraryName":
-                return collator.compare(a[sortBy], b[sortBy]);
+                return collator.compare(getLibraryLabel(a), getLibraryLabel(b));
               default:
                 return a[sortBy] - b[sortBy];
             }
           },
-          { sortDir, fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName)] },
+          {
+            sortDir,
+            fallbacks: [
+              (a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b)),
+              (a, b) => a.gzipBytes - b.gzipBytes,
+            ],
+          },
         ),
       ),
     [data, downloadsByPkgName, sortBy, sortDir],

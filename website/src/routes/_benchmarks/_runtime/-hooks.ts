@@ -38,7 +38,10 @@ export function useSortedResults<T extends BenchResult>(
           },
           {
             sortDir,
-            fallbacks: [(a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b))],
+            fallbacks: [
+              (a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b)),
+              (a, b) => a.mean - b.mean,
+            ],
           },
         ),
       ),
