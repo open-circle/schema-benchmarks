@@ -11,11 +11,11 @@ import { errorTypeProps, optimizeTypeProps } from "../../-constants";
 import { DownloadCount } from "../../../-components/count";
 
 interface BenchCardProps {
-  barScale: ReturnType<typeof Bar.getScale>;
+  meanScaler: ReturnType<typeof Bar.getScale>;
   result: BenchResult;
 }
 
-export function BenchCard({ result, barScale }: BenchCardProps) {
+export function BenchCard({ result, meanScaler }: BenchCardProps) {
   return (
     <div
       className="card bench-card"
@@ -53,7 +53,7 @@ export function BenchCard({ result, barScale }: BenchCardProps) {
         </tbody>
       </table>
       <div className="bench-card__bar">
-        <Bar {...barScale(result.mean)} />
+        <Bar {...meanScaler(result.mean)} />
       </div>
       <ChipCollection>
         <DisplayChip>

@@ -14,7 +14,9 @@ import {
   optimizeTypeProps,
   optionalDataTypeSchema,
   optionalOptimizeTypeSchema,
+  sortParamsEntries,
 } from "../-constants";
+import { useSortedResults } from "../-hooks";
 import { getBenchResults } from "../-query";
 import { DownloadCount } from "../../-components/count";
 import Content from "./content.mdx";
@@ -22,6 +24,7 @@ import Content from "./content.mdx";
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
   dataType: optionalDataTypeSchema,
+  ...sortParamsEntries,
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
@@ -57,11 +60,12 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
 });
 
 function RouteComponent() {
-  const { optimizeType, dataType } = Route.useSearch();
+  const { optimizeType, dataType, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) => results.validation[dataType].filter(shallowFilter({ optimizeType })),
   });
+  const sortedData = useSortedResults(data, sortBy, sortDir);
   return (
     <>
       <Content components={{ wrapper: "div" }} />
@@ -87,7 +91,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <BenchResults results={data} />
+      <BenchResults results={sortedData} to="/validation" {...{ sortBy, sortDir }} />
     </>
   );
 }

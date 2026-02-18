@@ -9,13 +9,15 @@ import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
 
 import { BenchResults } from "../-components/results";
-import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
+import { optimizeTypeProps, optionalOptimizeTypeSchema, sortParamsEntries } from "../-constants";
+import { useSortedResults } from "../-hooks";
 import { getBenchResults } from "../-query";
 import { DownloadCount } from "../../-components/count";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
+  ...sortParamsEntries,
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
@@ -48,11 +50,12 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
 });
 
 function RouteComponent() {
-  const { optimizeType } = Route.useSearch();
+  const { optimizeType, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) => results.initialization.filter(shallowFilter({ optimizeType })),
   });
+  const sortedData = useSortedResults(data, sortBy, sortDir);
   return (
     <>
       <Content components={{ wrapper: "div" }} />
@@ -67,7 +70,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <BenchResults results={data} />
+      <BenchResults results={sortedData} to="/initialization" {...{ sortBy, sortDir }} />
     </>
   );
 }
