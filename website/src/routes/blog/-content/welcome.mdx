@@ -10,21 +10,13 @@ published: 2025-02-18
 authors: "EskiMojo14"
 ---
 
-import { Link, ClientOnly } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
-import { getBenchResults } from "#/routes/_benchmarks/_runtime/-query";
-import { getDownloadResults } from "#/routes/_benchmarks/download/-query";
 import { BaseBenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { BaseDownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
-import { Spinner } from "#/shared/components/spinner";
 import { Admonition } from "../-components/admonition";
 import benchResults from "./assets/welcome/bench.json";
 import downloadResults from "./assets/welcome/download.json";
-
-export async function prefetch({ queryClient }) {
-  await queryClient.prefetchQuery(getBenchResults());
-  await queryClient.prefetchQuery(getDownloadResults());
-}
 
 Welcome to **Schema Benchmarks**, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
 
