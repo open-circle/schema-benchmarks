@@ -1,4 +1,4 @@
-import type { BenchResults } from ".";
+import type { BenchResults } from "@schema-benchmarks/bench";
 // snapshot taken 2025-02-18
 
 declare const results: BenchResults;
