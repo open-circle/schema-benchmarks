@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as yup from "yup";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getYupSchema } from ".";
 
@@ -76,5 +76,12 @@ export default defineBenchmarks({
     email: createStringBenchmark("email"),
     url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.validateSync(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.validateSync(data)`,
   },
 });

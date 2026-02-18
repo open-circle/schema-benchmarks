@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import type Ajv from "ajv";
+import { ValidationError } from "ajv";
 import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
 import ts from "dedent";
@@ -65,5 +66,16 @@ export default defineBenchmarks({
     uuid: createStringBenchmark("uuid"),
     ipv4: createStringBenchmark("ipv4"),
     ipv6: createStringBenchmark("ipv6"),
+  },
+  stack: {
+    throw: ({ validate }, data) => {
+      validate(data);
+      throw new ValidationError(validate.errors || []);
+    },
+    snippet: ts`
+      // const validate = ajv.compile(schema);
+      validate(data);
+      throw new ValidationError(validate.errors || []);
+    `,
   },
 });
