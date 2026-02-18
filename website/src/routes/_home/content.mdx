@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { BenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
+import { Admonition } from "#/routes/blog/-components/admonition";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -38,9 +39,11 @@ export const personSchema = v.object({
 export type Person = v.InferOutput<typeof personSchema>;
 ```
 
-    <BenchPlot type="initialization" />
+<BenchPlot type="initialization" />
 
-    <p className="typo-caption">For graphs on this page, the best result for each library is shown.</p>
+<Admonition type="note">
+  For graphs on this page, the best result for each library is shown.
+</Admonition>
 
 ### <Link to="/validation">Validation</Link>
 
@@ -63,8 +66,10 @@ Validating invalid data:
 
 <BenchPlot type="validation" dataType="invalid" />
 
-> Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`).
-> In these cases, we categorise them accordingly.
+<Admonition type="note">
+  Some libraries only support validation (e.g. `ajv`) _or_ parsing (e.g. `zod`). In these cases, we
+  categorise them accordingly.
+</Admonition>
 
 ### <Link to="/parsing">Parsing</Link>
 
@@ -78,12 +83,13 @@ const person = v.parse(personSchema, data);
 // person is of type Person
 ```
 
-<div className="typo-caption">
+<Admonition type="info">
   Libraries with an asterisk (\*) throw an error when parsing invalid data (and have no non-throwing
-  equivalent), so the benchmark includes a try/catch.
-</div>
+  equivalent), so the benchmark includes a try/catch - which may have an unknown performance impact.
 
-<div className="typo-caption">Results with a dagger (†) abort early when parsing invalid data.</div>
+Results with a dagger (†) abort early when parsing invalid data, so will tend to be faster.
+
+</Admonition>
 
 Parsing valid data:
 

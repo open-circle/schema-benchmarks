@@ -6,6 +6,8 @@ import { getBenchResults } from "../_benchmarks/_runtime/-query";
 import { getDownloadResults } from "../_benchmarks/download/-query";
 import Content from "./content.mdx";
 
+import admonitionCss from "../blog/-components/admonition/index.css?url";
+
 export const Route = createFileRoute("/_home/")({
   component: App,
   loader: async ({ context: { queryClient }, abortController }) => {
@@ -20,6 +22,12 @@ export const Route = createFileRoute("/_home/")({
       openGraph: {
         url: "/",
       },
+      links: [
+        {
+          rel: "stylesheet",
+          href: admonitionCss,
+        },
+      ],
     }),
   staticData: { crumb: "Home" },
 });
