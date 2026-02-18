@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as v from "valibot";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getValibotSchema } from ".";
 
@@ -80,5 +80,12 @@ export default defineBenchmarks({
     uuid: createStringBenchmark(v.uuid, ts`v.uuid()`),
     ipv4: createStringBenchmark(v.ipv4, ts`v.ipv4()`),
     ipv6: createStringBenchmark(v.ipv6, ts`v.ipv6()`),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      v.parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`v.parse(schema, data)`,
   },
 });
