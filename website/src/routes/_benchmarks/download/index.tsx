@@ -133,9 +133,9 @@ function RouteComponent() {
               search: ({ minifyType, ...rest }) => {
                 const mbps = event.target.valueAsNumber;
                 return {
-                  ...rest,
+                  ...(rest as {}),
                   minifyType,
-                  mbps: Number.isNaN(mbps) || mbps <= 0 ? undefined : mbps,
+                  mbps: Number.isNaN(mbps) || mbps <= 0 ? ("4g" as const) : mbps,
                 };
               },
               replace: true,
@@ -150,7 +150,7 @@ function RouteComponent() {
                 key={preset.name}
                 tooltip={preset.name}
                 to={"/download"}
-                search={({ minifyType, ...rest }) => ({ ...rest, minifyType, mbps: slug })}
+                search={({ minifyType, ...rest }) => ({ ...(rest as {}), minifyType, mbps: slug })}
                 replace
                 resetScroll={false}
               >
