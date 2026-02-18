@@ -1,7 +1,8 @@
-import { defineBenchmarks } from "@schema-benchmarks/schemas";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 import { rod } from "rod-js";
+
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getRodSchema } from ".";
 
@@ -52,5 +53,12 @@ export default defineBenchmarks({
         snippet: ts`schema.safeParse(data, { mode: "eager" })`,
       },
     ],
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.parse(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.parse(data)`,
   },
 });

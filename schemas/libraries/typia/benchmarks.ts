@@ -5,7 +5,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
 import typia from "typia";
 
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import type { TypiaSchema } from ".";
 
@@ -19,6 +19,7 @@ export default defineBenchmarks({
   createContext: () => ({
     validate: typia.createValidate<TypiaSchema>(),
     is: typia.createIs<TypiaSchema>(),
+    assert: typia.createAssert<TypiaSchema>(),
   }),
   initialization: [
     {
@@ -75,5 +76,15 @@ export default defineBenchmarks({
         `,
       },
     ],
+  },
+  stack: {
+    throw: ({ assert }, data) => {
+      assert(data);
+      assertNotReached();
+    },
+    snippet: ts`
+      // const assert = typia.createAssert<TypiaSchema>();
+      assert(data);
+    `,
   },
 });

@@ -3,7 +3,7 @@ import ts from "dedent" with { type: "macro" };
 import { Compile } from "typebox/compile";
 import Value from "typebox/value";
 
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getTypeboxSchema } from ".";
 
@@ -80,5 +80,12 @@ export default defineBenchmarks({
         throws: true,
       },
     ],
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      Value.Parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`Value.Parse(schema, data)`,
   },
 });

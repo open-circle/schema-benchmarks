@@ -1,7 +1,7 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodMiniSchema } from ".";
 
@@ -40,5 +40,12 @@ export default defineBenchmarks({
         optimizeType: "none",
       },
     ],
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.parse(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.parse(data)`,
   },
 });
