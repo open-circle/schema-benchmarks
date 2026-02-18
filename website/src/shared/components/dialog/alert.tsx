@@ -28,6 +28,7 @@ export interface AlertDialogProps extends DistributiveOmit<
 }
 
 const cls = bem("alert-dialog");
+const dialogCls = bem("dialog");
 
 export function AlertDialog({
   title,
@@ -56,13 +57,13 @@ export function AlertDialog({
     >
       {(close) => (
         <>
-          <div className="dialog__content">
+          <div {...dialogCls("content")}>
             {title && (
-              <h2 id={titleId} className="dialog__title">
+              <h2 id={titleId} {...dialogCls("title")}>
                 {title}
               </h2>
             )}
-            <p id={messageId} className="dialog__message">
+            <p id={messageId} {...dialogCls("message")}>
               {message}
             </p>
           </div>

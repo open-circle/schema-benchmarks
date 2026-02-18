@@ -1,5 +1,6 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
+import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
@@ -15,10 +16,12 @@ interface BenchCardProps {
   result: BenchResult;
 }
 
+const cls = bem("bench-card");
+
 export function BenchCard({ result, meanScaler }: BenchCardProps) {
   return (
     <div
-      className="card bench-card"
+      {...cls()}
       style={{
         viewTransitionName: getTransitionName("bench-card", {
           libraryName: result.libraryName,
@@ -27,16 +30,18 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         }),
       }}
     >
-      <h5 className="typo-overline bench-card__version">{result.version}</h5>
-      <div className="bench-card__header-row">
-        <header className="bench-card__library-name">
+      <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
+      <div {...cls("header-row")}>
+        <header {...cls("library-name")}>
           <h4 className="typo-headline5">
             <code className="language-text">{result.libraryName}</code>
           </h4>
-          {result.note && <p className="typo-caption bench-card__note">({result.note})</p>}
+          {result.note && (
+            <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
+          )}
         </header>
         <ErrorBoundary fallback={null}>
-          <div className="typo-body2 bench-card__downloads">
+          <div {...cls({ element: "downloads", extra: "typo-body2" })}>
             <MdSymbol>download</MdSymbol>
             <DownloadCount libraryName={result.libraryName} />
             {" / wk"}
@@ -52,7 +57,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
           </tr>
         </tbody>
       </table>
-      <div className="bench-card__bar">
+      <div {...cls("bar")}>
         <Bar {...meanScaler(result.mean)} />
       </div>
       <ChipCollection>
