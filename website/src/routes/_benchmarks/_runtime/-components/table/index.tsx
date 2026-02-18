@@ -102,8 +102,9 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
             {showComparisonColumns && (
               <>
                 <th className="bar-after"></th>
-                <th className="fit-content action">Compare</th>
-                <th className="numeric"></th>
+                <th className="fit-content action" colSpan={2}>
+                  Compare
+                </th>
               </>
             )}
           </tr>
@@ -176,7 +177,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                         }}
                       />
                     </td>
-                    <td className="numeric">
+                    <td className="numeric bar-after">
                       {compareResult &&
                         ratioScaler &&
                         compareId !== result.id &&
