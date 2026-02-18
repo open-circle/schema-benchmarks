@@ -9,6 +9,10 @@ import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";
 import type { SortableKey } from "./-constants";
 
+function getLibraryLabel({ libraryName, note }: BenchResult) {
+  return `${libraryName}${note ? ` (${note})` : ""}`;
+}
+
 export function useSortedResults<T extends BenchResult>(
   results: Array<T>,
   sortBy: SortableKey,
@@ -27,14 +31,14 @@ export function useSortedResults<T extends BenchResult>(
                   downloadsByPkgName[getPackageName(b.libraryName)]
                 );
               case "libraryName":
-                return collator.compare(a.libraryName, b.libraryName);
+                return collator.compare(getLibraryLabel(a), getLibraryLabel(b));
               default:
                 return a[sortBy] - b[sortBy];
             }
           },
           {
             sortDir,
-            fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName)],
+            fallbacks: [(a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b))],
           },
         ),
       ),
