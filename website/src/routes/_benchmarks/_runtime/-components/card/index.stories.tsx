@@ -14,7 +14,7 @@ const meta = preview.meta({
 export const Initialization = meta.story({
   args: {
     result: benchResults.initialization[0]!,
-    barScale: Bar.getScale(
+    meanScaler: Bar.getScale(
       benchResults.initialization.map((r) => r.mean),
       { lowerBetter: true },
     ),
@@ -24,7 +24,7 @@ export const Initialization = meta.story({
 export const Validation = meta.story({
   args: {
     result: benchResults.validation.valid[0]!,
-    barScale: Bar.getScale(
+    meanScaler: Bar.getScale(
       benchResults.validation.valid.map((r) => r.mean),
       { lowerBetter: true },
     ),
@@ -34,7 +34,7 @@ export const Validation = meta.story({
 export const Parsing = meta.story({
   args: {
     result: benchResults.parsing.valid[0]!,
-    barScale: Bar.getScale(
+    meanScaler: Bar.getScale(
       benchResults.parsing.valid.map((r) => r.mean),
       { lowerBetter: true },
     ),

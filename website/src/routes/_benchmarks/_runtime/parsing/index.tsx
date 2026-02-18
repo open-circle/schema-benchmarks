@@ -16,7 +16,9 @@ import {
   optionalDataTypeSchema,
   optionalErrorTypeSchema,
   optionalOptimizeTypeSchema,
+  sortParamsEntries,
 } from "../-constants";
+import { useSortedResults } from "../-hooks";
 import { getBenchResults } from "../-query";
 import { DownloadCount } from "../../-components/count";
 import Content from "./content.mdx";
@@ -25,6 +27,7 @@ const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
   dataType: optionalDataTypeSchema,
   errorType: optionalErrorTypeSchema,
+  ...sortParamsEntries,
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/parsing/")({
@@ -66,12 +69,13 @@ export const Route = createFileRoute("/_benchmarks/_runtime/parsing/")({
 });
 
 function RouteComponent() {
-  const { optimizeType, dataType, errorType } = Route.useSearch();
+  const { optimizeType, dataType, errorType, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
     select: (results) =>
       results.parsing[dataType].filter(shallowFilter({ optimizeType, errorType })),
   });
+  const sortedData = useSortedResults(data, sortBy, sortDir);
   return (
     <>
       <Content components={{ wrapper: "div" }} />
@@ -107,7 +111,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <BenchResults results={data} />
+      <BenchResults results={sortedData} to="/parsing" {...{ sortBy, sortDir }} />
     </>
   );
 }

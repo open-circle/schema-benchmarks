@@ -9,6 +9,8 @@ import * as v from "valibot";
 
 import type { PageFilterChipsProps } from "#/shared/components/page-filter/chips";
 
+import { sortParams } from "../../../shared/lib/sort";
+
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "invalid");
 
 export const dataTypeProps: Pick<PageFilterChipsProps<DataType>, "title" | "labels" | "options"> = {
@@ -48,3 +50,8 @@ export const optimizeTypeProps: Pick<
     precompiled: { label: "Precompiled", icon: "build" },
   },
 };
+
+export const sortableKeys = ["libraryName", "downloads", "mean"] as const;
+export type SortableKey = (typeof sortableKeys)[number];
+
+export const sortParamsEntries = sortParams(v.optional(v.picklist(sortableKeys), "mean"));

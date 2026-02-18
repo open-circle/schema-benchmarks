@@ -15,15 +15,21 @@ import { Radio } from "#/shared/components/radio";
 import { Scaler } from "#/shared/components/scaler";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderButton } from "#/shared/components/table/sort";
+import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
+import { SortDirection } from "#/shared/lib/sort";
 
-import { errorTypeProps, optimizeTypeProps } from "../../-constants";
+import { errorTypeProps, optimizeTypeProps, SortableKey } from "../../-constants";
 import { DownloadCount } from "../../../-components/count";
+import { BenchTo } from "../results";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {
   results: DistributiveArray<BenchResult>;
+  meanScaler: ReturnType<typeof Bar.getScale>;
+  to: BenchTo;
+  sortBy: SortableKey;
+  sortDir: SortDirection;
 }
 
 const getRatio = (a: number, b: number) => {
@@ -54,15 +60,7 @@ function useComparison(results: Array<BenchResult>) {
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
 
-export function BenchTable({ results }: BenchTableProps) {
-  const meanScaler = useMemo(
-    () =>
-      Bar.getScale(
-        results.map((result) => result.mean),
-        { lowerBetter: true },
-      ),
-    [results],
-  );
+export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTableProps) {
   const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
   if (!results.length) {
@@ -81,14 +79,26 @@ export function BenchTable({ results }: BenchTableProps) {
       <table className="bench-table">
         <thead>
           <tr>
-            <SortableHeaderButton>Library</SortableHeaderButton>
+            <SortableHeaderLink {...SortableHeaderLink.getProps("libraryName", sortState, { to })}>
+              Library
+            </SortableHeaderLink>
             <th className="action"></th>
             <th className="action"></th>
             <th>Version</th>
-            <SortableHeaderButton className="numeric">Downloads (/wk)</SortableHeaderButton>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
+              className="numeric"
+            >
+              Downloads (/wk)
+            </SortableHeaderLink>
             <th>Optimizations</th>
             {benchType === "parsing" && <th>Error type</th>}
-            <SortableHeaderButton className="numeric">Mean</SortableHeaderButton>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("mean", sortState, { to })}
+              className="numeric"
+            >
+              Mean
+            </SortableHeaderLink>
             {showComparisonColumns && (
               <>
                 <th className="bar-after"></th>
