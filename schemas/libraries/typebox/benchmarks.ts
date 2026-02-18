@@ -6,7 +6,7 @@ import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getTypeboxSchema } from ".";
 
@@ -163,5 +163,12 @@ export default defineBenchmarks({
     uuid: createStringBenchmark("uuid"),
     ipv4: createStringBenchmark("ipv4"),
     ipv6: createStringBenchmark("ipv6"),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      Value.Parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`Value.Parse(schema, data)`,
   },
 });

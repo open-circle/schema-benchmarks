@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as S from "sury";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getSurySchema } from ".";
 
@@ -110,5 +110,12 @@ export default defineBenchmarks({
     email: createStringBenchmark(S.email, ts`S.email(S.string)`),
     url: createStringBenchmark(S.url, ts`S.url(S.string)`),
     uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      S.parseOrThrow(data, schema);
+      assertNotReached();
+    },
+    snippet: ts`S.parseOrThrow(data, schema)`,
   },
 });

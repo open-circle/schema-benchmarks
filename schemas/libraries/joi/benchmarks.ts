@@ -67,4 +67,10 @@ export default defineBenchmarks({
     ipv4: createStringBenchmark("ip", ts`ip({ version: "ipv4" })`, { version: "ipv4" }),
     ipv6: createStringBenchmark("ip", ts`ip({ version: "ipv6" })`, { version: "ipv6" }),
   },
+  stack: {
+    throw: ({ schema }, data) => {
+      throw schema.validate(data).error;
+    },
+    snippet: ts`throw schema.validate(data).error`,
+  },
 });
