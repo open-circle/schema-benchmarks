@@ -21,7 +21,7 @@
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.1.29",
     "dedent": "catalog:",
-    "effect": "^3.19.17",
+    "effect": "^3.19.18",
     "joi": "^18.0.2",
     "rod-js": "^0.2.1",
     "sury": "11.0.0-alpha.4",
