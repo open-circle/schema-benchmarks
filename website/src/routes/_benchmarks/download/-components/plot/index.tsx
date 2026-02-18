@@ -21,15 +21,11 @@ const intFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
 });
 
-export const DownloadPlot = createPlotComponent(function useDownloadPlot({
-  minify,
+export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
+  data,
 }: {
-  minify: MinifyType;
+  data: Array<DownloadResult>;
 }) {
-  const { data } = useSuspenseQuery({
-    ...getDownloadResults(),
-    select: (results) => results[minify],
-  });
   const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
@@ -70,4 +66,12 @@ export const DownloadPlot = createPlotComponent(function useDownloadPlot({
   return { plot, ref, minWidth };
 });
 
-DownloadPlot.displayName = "DownloadPlot";
+BaseDownloadPlot.displayName = "BaseDownloadPlot";
+
+export function DownloadPlot({ minify }: { minify: MinifyType }) {
+  const { data } = useSuspenseQuery({
+    ...getDownloadResults(),
+    select: (results) => results[minify],
+  });
+  return <BaseDownloadPlot data={data} />;
+}

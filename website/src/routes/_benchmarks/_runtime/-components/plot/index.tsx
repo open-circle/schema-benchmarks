@@ -38,23 +38,12 @@ const getLabel = (d: BenchResult) =>
   (d.throws ? " *" : "") +
   (d.type === "parsing" && d.errorType === "abortEarly" ? " †" : "");
 
-export const BenchPlot = createPlotComponent(function useBenchPlot({
-  type,
-  dataType,
-  errorType,
-}: BenchPlotProps) {
-  const { data } = useSuspenseQuery({
-    ...getBenchResults(),
-    select: (results) => (type === "initialization" ? results[type] : results[type][dataType]),
-  });
-  const values = useMemo(
-    () =>
-      uniqueBy(
-        errorType ? data.filter((d) => d.type === "parsing" && d.errorType === errorType) : data,
-        getLibraryName,
-      ),
-    [data, errorType],
-  );
+export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
+  data,
+}: {
+  data: Array<BenchResult>;
+}) {
+  const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
@@ -94,4 +83,18 @@ export const BenchPlot = createPlotComponent(function useBenchPlot({
   return { plot, ref, minWidth };
 });
 
-BenchPlot.displayName = "BenchPlot";
+BaseBenchPlot.displayName = "BaseBenchPlot";
+
+export function BenchPlot({ type, dataType, errorType }: BenchPlotProps) {
+  const { data } = useSuspenseQuery({
+    ...getBenchResults(),
+    select: (results) => (type === "initialization" ? results[type] : results[type][dataType]),
+  });
+  const filteredData = useMemo(() => {
+    if (errorType) {
+      return data.filter((d) => d.type === "parsing" && d.errorType === errorType);
+    }
+    return data;
+  }, [data, errorType]);
+  return <BaseBenchPlot data={filteredData} />;
+}
