@@ -4,9 +4,7 @@ import * as Value from "typebox/value";
 
 import type { ProductData } from "#src";
 
-const Timestamp = Type.Codec(Type.Number())
-  .Decode((value): Date => new Date(value))
-  .Encode((value) => value.getTime());
+const Timestamp = Type.Refine(Type.Unsafe<Date>({}), (value) => value instanceof Date);
 const Image = Type.Object({
   id: Type.Number(),
   created: Timestamp,
