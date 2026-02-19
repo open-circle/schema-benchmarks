@@ -51,6 +51,13 @@
       "gzipBytes": 13081
     },
     {
+      "fileName": "effect___beta/download.ts",
+      "libraryName": "effect___beta",
+      "version": "4.0.0-beta.5",
+      "bytes": 60508,
+      "gzipBytes": 19530
+    },
+    {
       "fileName": "typebox/download/index.ts",
       "libraryName": "typebox",
       "version": "1.0.81",
@@ -208,6 +215,13 @@
       "version": "4.3.6",
       "bytes": 437879,
       "gzipBytes": 74529
+    },
+    {
+      "fileName": "effect___beta/download.ts",
+      "libraryName": "effect___beta",
+      "version": "4.0.0-beta.5",
+      "bytes": 770283,
+      "gzipBytes": 161153
     },
     {
       "fileName": "effect/download.ts",
