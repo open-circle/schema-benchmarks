@@ -827,34 +827,24 @@ let locale = en_US;
 function Get$1() {
 	return locale;
 }
-var EncodeBuilder = class {
-	constructor(type, decode) {
-		this.type = type;
-		this.decode = decode;
-	}
-	Encode(callback) {
-		const type = this.type;
-		const codec = {
-			decode: IsCodec(type) ? (value) => this.decode(type["~codec"].decode(value)) : this.decode,
-			encode: IsCodec(type) ? (value) => type["~codec"].encode(callback(value)) : callback
-		};
-		return Update$1(this.type, { "~codec": codec }, {});
-	}
-};
-var DecodeBuilder = class {
-	constructor(type) {
-		this.type = type;
-	}
-	Decode(callback) {
-		return new EncodeBuilder(this.type, callback);
-	}
-};
-/** Creates a bi-directional Codec. Codec functions are called on Value.Decode and Value.Encode. */
-function Codec(type) {
-	return new DecodeBuilder(type);
-}
 function IsCodec(value) {
 	return IsSchema$1(value) && HasPropertyKey(value, "~codec") && IsObject$1(value["~codec"]) && HasPropertyKey(value["~codec"], "encode") && HasPropertyKey(value["~codec"], "decode");
+}
+/** Applies a Refine check to the given type. */
+function RefineAdd(type, refinement) {
+	const refinements = IsRefine$1(type) ? [...type["~refine"], refinement] : [refinement];
+	return Update$1(type, { "~refine": refinements }, {});
+}
+/** Applies a Refine check to the given type. */
+function Refine(type, refine, message = "error") {
+	return RefineAdd(type, {
+		refine,
+		message
+	});
+}
+/** Returns true if the given value is a TRefine. */
+function IsRefine$1(value) {
+	return IsSchema$1(value) && HasPropertyKey(value, "~refine");
 }
 const BigIntPattern = "-?(?:0|[1-9][0-9]*)n";
 /** Creates a BigInt type. */
@@ -1201,6 +1191,10 @@ function Undefined(options) {
 /** Returns true if the given value is TUndefined. */
 function IsUndefined(value) {
 	return IsKind(value, "Undefined");
+}
+/** Creates a Unsafe type. */
+function Unsafe(schema) {
+	return Create({ ["~kind"]: "Unsafe" }, {}, schema);
 }
 /** Returns true if the given value is TVoid. */
 function IsVoid(value) {
@@ -5216,7 +5210,7 @@ Union([
 		path: String$1()
 	})
 ]);
-const Timestamp = Codec(Number$1()).Decode((value) => new Date(value)).Encode((value) => value.getTime());
+const Timestamp = Refine(Unsafe({}), (value) => value instanceof Date);
 const Image = _Object_({
 	id: Number$1(),
 	created: Timestamp,
