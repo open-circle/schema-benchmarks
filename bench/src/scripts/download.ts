@@ -21,8 +21,18 @@ interface FileDescription {
 }
 
 function getPackageName(libraryName: string) {
-  if (libraryName.includes("/") && !libraryName.startsWith("@")) {
-    return libraryName.split("/")[0] ?? libraryName;
+  // effect/Schema -> effect
+  // @vinejs/vine -> @vinejs/vine
+  // @foo/bar/baz -> @foo/bar
+  if (libraryName.includes("/")) {
+    libraryName = libraryName
+      .split("/")
+      .slice(0, libraryName.includes("@") ? 2 : 1)
+      .join("/");
+  }
+  // effect___beta -> effect
+  if (libraryName.includes("___")) {
+    libraryName = libraryName.split("___")[0]!;
   }
   return libraryName;
 }
