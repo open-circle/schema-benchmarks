@@ -1,6 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/core.js
-/** A special constant with type `never` */
-const NEVER = Object.freeze({ status: "aborted" });
+Object.freeze({ status: "aborted" });
 function $constructor(name, initializer, params) {
 	function init(inst, def) {
 		if (!inst._zod) Object.defineProperty(inst, "_zod", {
@@ -50,9 +48,6 @@ function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -101,7 +96,7 @@ const captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace
 function isObject(data) {
 	return typeof data === "object" && data !== null && !Array.isArray(data);
 }
-const allowsEval = cached(() => {
+cached(() => {
 	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
 	try {
 		new Function("");
@@ -143,13 +138,7 @@ function optionalKeys(shape) {
 		return shape[k]._zod.optin === "optional" && shape[k]._zod.optout === "optional";
 	});
 }
-const NUMBER_FORMAT_RANGES = {
-	safeint: [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
-	int32: [-2147483648, 2147483647],
-	uint32: [0, 4294967295],
-	float32: [-34028234663852886e22, 34028234663852886e22],
-	float64: [-Number.MAX_VALUE, Number.MAX_VALUE]
-};
+Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, -Number.MAX_VALUE, Number.MAX_VALUE;
 function aborted(x, startIndex = 0) {
 	if (x.aborted === true) return true;
 	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue !== true) return true;
@@ -182,9 +171,6 @@ function getLengthableOrigin(input) {
 	if (typeof input === "string") return "string";
 	return "unknown";
 }
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
 const initializer = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -203,9 +189,6 @@ const initializer = (inst, def) => {
 };
 const $ZodError = $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, { Parent: Error });
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
 	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
 	const result = schema._zod.run({
@@ -271,55 +254,11 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	};
 };
 const safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
-const _encode = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
-	return _parse(_Err)(schema, value, ctx);
-};
-const encode = /* @__PURE__ */ _encode($ZodRealError);
-const _decode = (_Err) => (schema, value, _ctx) => {
-	return _parse(_Err)(schema, value, _ctx);
-};
-const decode = /* @__PURE__ */ _decode($ZodRealError);
-const _encodeAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
-	return _parseAsync(_Err)(schema, value, ctx);
-};
-const encodeAsync = /* @__PURE__ */ _encodeAsync($ZodRealError);
-const _decodeAsync = (_Err) => async (schema, value, _ctx) => {
-	return _parseAsync(_Err)(schema, value, _ctx);
-};
-const decodeAsync = /* @__PURE__ */ _decodeAsync($ZodRealError);
-const _safeEncode = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
-	return _safeParse(_Err)(schema, value, ctx);
-};
-const safeEncode = /* @__PURE__ */ _safeEncode($ZodRealError);
-const _safeDecode = (_Err) => (schema, value, _ctx) => {
-	return _safeParse(_Err)(schema, value, _ctx);
-};
-const safeDecode = /* @__PURE__ */ _safeDecode($ZodRealError);
-const _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
-	return _safeParseAsync(_Err)(schema, value, ctx);
-};
-const safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync($ZodRealError);
-const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
-	return _safeParseAsync(_Err)(schema, value, _ctx);
-};
-const safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync($ZodRealError);
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/regexes.js
-const dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
-const date$1 = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
 const string$1 = (params) => {
 	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
 	return new RegExp(`^${regex}$`);
 };
 const number$1 = /^-?\d+(?:\.\d+)?$/;
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -453,17 +392,11 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 	});
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 3,
 	patch: 6
 };
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -828,9 +761,6 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/registries.js
 var _a;
 var $ZodRegistry = class {
 	constructor() {
@@ -875,10 +805,7 @@ function registry() {
 	return new $ZodRegistry();
 }
 (_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
-const globalRegistry = globalThis.__zod_globalRegistry;
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
+globalThis.__zod_globalRegistry;
 /* @__NO_SIDE_EFFECTS__ */
 function _string(Class, params) {
 	return new Class({
@@ -945,35 +872,6 @@ function _minLength(minimum, params) {
 		minimum
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
-function describe$1(description) {
-	const ch = new $ZodCheck({ check: "describe" });
-	ch._zod.onattach = [(inst) => {
-		const existing = globalRegistry.get(inst) ?? {};
-		globalRegistry.add(inst, {
-			...existing,
-			description
-		});
-	}];
-	ch._zod.check = () => {};
-	return ch;
-}
-/* @__NO_SIDE_EFFECTS__ */
-function meta$1(metadata) {
-	const ch = new $ZodCheck({ check: "meta" });
-	ch._zod.onattach = [(inst) => {
-		const existing = globalRegistry.get(inst) ?? {};
-		globalRegistry.add(inst, {
-			...existing,
-			...metadata
-		});
-	}];
-	ch._zod.check = () => {};
-	return ch;
-}
-
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /* @__PURE__ */ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
@@ -1008,7 +906,7 @@ const ZodMiniString = /* @__PURE__ */ $constructor("ZodMiniString", (inst, def) 
 });
 /* @__NO_SIDE_EFFECTS__ */
 function string(params) {
-	return _string(ZodMiniString, params);
+	return /* @__PURE__ */ _string(ZodMiniString, params);
 }
 const ZodMiniStringFormat = /* @__PURE__ */ $constructor("ZodMiniStringFormat", (inst, def) => {
 	$ZodStringFormat.init(inst, def);
@@ -1020,7 +918,7 @@ const ZodMiniURL = /* @__PURE__ */ $constructor("ZodMiniURL", (inst, def) => {
 });
 /* @__NO_SIDE_EFFECTS__ */
 function url(params) {
-	return _url(ZodMiniURL, params);
+	return /* @__PURE__ */ _url(ZodMiniURL, params);
 }
 const ZodMiniNumber = /* @__PURE__ */ $constructor("ZodMiniNumber", (inst, def) => {
 	$ZodNumber.init(inst, def);
@@ -1028,7 +926,7 @@ const ZodMiniNumber = /* @__PURE__ */ $constructor("ZodMiniNumber", (inst, def) 
 });
 /* @__NO_SIDE_EFFECTS__ */
 function number(params) {
-	return _number(ZodMiniNumber, params);
+	return /* @__PURE__ */ _number(ZodMiniNumber, params);
 }
 const ZodMiniDate = /* @__PURE__ */ $constructor("ZodMiniDate", (inst, def) => {
 	$ZodDate.init(inst, def);
@@ -1036,7 +934,7 @@ const ZodMiniDate = /* @__PURE__ */ $constructor("ZodMiniDate", (inst, def) => {
 });
 /* @__NO_SIDE_EFFECTS__ */
 function date(params) {
-	return _date(ZodMiniDate, params);
+	return /* @__PURE__ */ _date(ZodMiniDate, params);
 }
 const ZodMiniArray = /* @__PURE__ */ $constructor("ZodMiniArray", (inst, def) => {
 	$ZodArray.init(inst, def);
@@ -1087,38 +985,31 @@ function nullable(innerType) {
 		innerType
 	});
 }
-const describe = describe$1;
-const meta = meta$1;
-
-//#endregion
-//#region ../schemas/libraries/zod/mini/download.ts
-const imageSchema = object({
-	id: number(),
-	created: date(),
-	title: string().check(_minLength(1), _maxLength(100)),
-	type: _enum(["jpg", "png"]),
-	size: number(),
-	url: url()
+const imageSchema = /* @__PURE__ */ object({
+	id: /* @__PURE__ */ number(),
+	created: /* @__PURE__ */ date(),
+	title: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(100)),
+	type: /* @__PURE__ */ _enum(["jpg", "png"]),
+	size: /* @__PURE__ */ number(),
+	url: /* @__PURE__ */ url()
 });
-const ratingSchema = object({
-	id: number(),
-	stars: number().check(_gte(0), _lte(5)),
-	title: string().check(_minLength(1), _maxLength(100)),
-	text: string().check(_minLength(1), _maxLength(1e3)),
-	images: array(imageSchema)
+const ratingSchema = /* @__PURE__ */ object({
+	id: /* @__PURE__ */ number(),
+	stars: (/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(0), /* @__PURE__ */ _lte(5)),
+	title: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(100)),
+	text: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(1e3)),
+	images: /* @__PURE__ */ array(imageSchema)
 });
-object({
-	id: number(),
-	created: date(),
-	title: string().check(_minLength(1), _maxLength(100)),
-	brand: string().check(_minLength(1), _maxLength(30)),
-	description: string().check(_minLength(1), _maxLength(500)),
-	price: number().check(_gte(1), _lte(1e4)),
-	discount: nullable(number().check(_gte(1), _lte(100))),
-	quantity: number().check(_gte(0), _lte(10)),
-	tags: array(string().check(_minLength(1), _maxLength(30))),
-	images: array(imageSchema),
-	ratings: array(ratingSchema)
-}).parse({});
-
-//#endregion
+(/* @__PURE__ */ object({
+	id: /* @__PURE__ */ number(),
+	created: /* @__PURE__ */ date(),
+	title: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(100)),
+	brand: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(30)),
+	description: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(500)),
+	price: (/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(1), /* @__PURE__ */ _lte(1e4)),
+	discount: /* @__PURE__ */ nullable((/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(1), /* @__PURE__ */ _lte(100))),
+	quantity: (/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(0), /* @__PURE__ */ _lte(10)),
+	tags: /* @__PURE__ */ array((/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(30))),
+	images: /* @__PURE__ */ array(imageSchema),
+	ratings: /* @__PURE__ */ array(ratingSchema)
+})).parse({});

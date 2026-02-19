@@ -1,4 +1,3 @@
-//#region \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -7,35 +6,24 @@ var __esmMin = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __exportAll = (all, no_symbols) => {
 	let target = {};
-	for (var name in all) {
-		__defProp(target, name, {
-			get: all[name],
-			enumerable: true
-		});
-	}
-	if (!no_symbols) {
-		__defProp(target, Symbol.toStringTag, { value: "Module" });
-	}
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
 	return target;
 };
 var __copyProps = (to, from, except, desc) => {
-	if (from && typeof from === "object" || typeof from === "function") {
-		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
-			key = keys[i];
-			if (!__hasOwnProp.call(to, key) && key !== except) {
-				__defProp(to, key, {
-					get: ((k) => from[k]).bind(null, key),
-					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-				});
-			}
-		}
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
 	}
 	return to;
 };
 var __toCommonJS = (mod) => __hasOwnProp.call(mod, "module.exports") ? mod["module.exports"] : __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-//#endregion
-//#region ../node_modules/.pnpm/rod-js@0.2.1/node_modules/rod-js/wasm/web/rod_wasm.js
 var rod_wasm_exports = /* @__PURE__ */ __exportAll({
 	RodSchema: () => RodSchema,
 	default: () => __wbg_init,
@@ -553,9 +541,6 @@ var init_rod_wasm = __esmMin((() => {
 	};
 	WASM_VECTOR_LEN = 0;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/rod-js@0.2.1/node_modules/rod-js/dist/bridge-browser.js
 var require_bridge_browser = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
 		if (k2 === void 0) k2 = k;
@@ -620,9 +605,6 @@ var require_bridge_browser = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/rod-js@0.2.1/node_modules/rod-js/dist/builders.js
 var require_builders = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.RodNever = exports.RodAny = exports.RodDiscriminatedUnion = exports.RodUnion = exports.RodSet = exports.RodMap = exports.RodRecord = exports.RodTuple = exports.RodObject = exports.RodArray = exports.RodEnum = exports.RodLiteral = exports.RodDate = exports.RodBoolean = exports.RodNumber = exports.RodString = exports.RodDynamic = exports.RodType = void 0;
@@ -890,9 +872,6 @@ var require_builders = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.RodNever = RodNever;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/rod-js@0.2.1/node_modules/rod-js/dist/factory.js
 var require_factory = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
 		if (k2 === void 0) k2 = k;
@@ -963,10 +942,7 @@ var require_factory = /* @__PURE__ */ __commonJSMin(((exports) => {
 		};
 	}
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/rod-js@0.2.1/node_modules/rod-js/dist/index.js
-var require_dist = /* @__PURE__ */ __commonJSMin(((exports) => {
+var import_dist = (/* @__PURE__ */ __commonJSMin(((exports) => {
 	var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
 		if (k2 === void 0) k2 = k;
 		var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -987,14 +963,9 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.rod = void 0;
 	const bridge_browser_1 = require_bridge_browser();
-	const factory_1 = require_factory();
-	exports.rod = (0, factory_1.createRod)(bridge_browser_1.browserBridge);
+	exports.rod = (0, require_factory().createRod)(bridge_browser_1.browserBridge);
 	__exportStar(require_builders(), exports);
-}));
-
-//#endregion
-//#region ../schemas/libraries/rod-js/download.ts
-var import_dist = require_dist();
+})))();
 await import_dist.rod.init();
 const imageSchema = import_dist.rod.object({
 	id: import_dist.rod.number(),
@@ -1024,5 +995,3 @@ import_dist.rod.object({
 	images: import_dist.rod.array(imageSchema),
 	ratings: import_dist.rod.array(ratingSchema)
 }).parse({});
-
-//#endregion
