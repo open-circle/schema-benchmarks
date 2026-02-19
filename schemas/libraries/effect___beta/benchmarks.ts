@@ -16,7 +16,7 @@ export default defineBenchmarks({
   createContext: () => {
     const schema = getEffectSchema();
     const is = Schema.is(schema);
-    const decode = Schema.decodeUnknownSync(schema);
+    const decode = Schema.decodeUnknownOption(schema);
     return { schema, is, decode };
   },
   initialization: [
@@ -28,11 +28,11 @@ export default defineBenchmarks({
     },
     {
       run() {
-        Schema.decodeUnknownSync(getEffectSchema());
+        Schema.decodeUnknownOption(getEffectSchema());
       },
-      note: "decodeUnknownSync",
+      note: "decodeUnknownOption",
       snippet: ts`
-        Schema.decodeUnknownSync(
+        Schema.decodeUnknownOption(
           Schema.struct(...)
         )
       `,
@@ -53,7 +53,7 @@ export default defineBenchmarks({
         decode(data, { errors: "all" });
       },
       snippet: ts`
-        // const decode = Schema.decodeUnknownSync(schema);
+        // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "all" })
       `,
     },
@@ -62,7 +62,7 @@ export default defineBenchmarks({
         decode(data, { errors: "first" });
       },
       snippet: ts`
-        // const decode = Schema.decodeUnknownSync(schema);
+        // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "first" })
       `,
     },
