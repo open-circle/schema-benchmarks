@@ -8,17 +8,7 @@ const Image = Schema.Struct({
   title: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(100)),
   type: Schema.Literals(["jpg", "png"]),
   size: Schema.Number,
-  url: Schema.String.check(
-    Schema.makeFilter((value) => {
-      try {
-        // oxlint-disable-next-line no-new
-        new URL(value);
-        return true;
-      } catch {
-        return false;
-      }
-    }),
-  ),
+  url: Schema.String.check(Schema.makeFilter((value) => URL.canParse(value))),
 });
 
 const Rating = Schema.Struct({
