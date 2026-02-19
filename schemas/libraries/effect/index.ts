@@ -9,17 +9,7 @@ export function getEffectSchema() {
     title: Schema.String.pipe(Schema.minLength(1), Schema.maxLength(100)),
     type: Schema.Literal("jpg", "png"),
     size: Schema.Number,
-    url: Schema.String.pipe(
-      Schema.filter((value) => {
-        try {
-          // oxlint-disable-next-line no-new
-          new URL(value);
-          return true;
-        } catch {
-          return false;
-        }
-      }),
-    ),
+    url: Schema.String.pipe(Schema.filter((value) => URL.canParse(value))),
   });
   const Rating = Schema.Struct({
     id: Schema.Number,
