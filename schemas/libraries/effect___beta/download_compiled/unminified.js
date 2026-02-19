@@ -8494,14 +8494,7 @@ const Image = Struct({
 	title: String$1.check(isMinLength(1), isMaxLength(100)),
 	type: Literals(["jpg", "png"]),
 	size: Number$1,
-	url: String$1.check(makeFilter((value) => {
-		try {
-			new URL(value);
-			return true;
-		} catch {
-			return false;
-		}
-	}))
+	url: String$1.check(makeFilter((value) => URL.canParse(value)))
 });
 const Rating = Struct({
 	id: Number$1,

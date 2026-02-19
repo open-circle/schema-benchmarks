@@ -16392,14 +16392,7 @@ const Image = Struct({
 	title: String$.pipe(minLength(1), maxLength(100)),
 	type: Literal("jpg", "png"),
 	size: Number$,
-	url: String$.pipe(filter((value) => {
-		try {
-			new URL(value);
-			return true;
-		} catch {
-			return false;
-		}
-	}))
+	url: String$.pipe(filter((value) => URL.canParse(value)))
 });
 const Rating = Struct({
 	id: Number$,
