@@ -40,7 +40,7 @@ async function measureFile(file: FileDescription, minify: MinifyType): Promise<D
   });
   const output = await bundle.generate({
     format: "esm",
-    minify: minify === "minified",
+    minify: minify === "minified" ? true : "dce-only",
   });
   const code = output.output
     .filter((chunk) => chunk.type === "chunk")
