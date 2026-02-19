@@ -3,31 +3,28 @@ import * as td from "io-ts-types";
 
 import type { ProductData } from "#src";
 
-// Helper to create string with length constraints
 const stringWithLength = (min: number, max: number) =>
   t.refinement(
     t.string,
-    (s): s is string => s.length >= min && s.length <= max,
+    (s) => s.length >= min && s.length <= max,
     `string with length between ${min} and ${max}`,
   );
 
-// Helper to create number with range constraints
 const numberInRange = (min: number, max: number) =>
-  t.refinement(
-    t.number,
-    (n): n is number => n >= min && n <= max,
-    `number between ${min} and ${max}`,
-  );
+  t.refinement(t.number, (n) => n >= min && n <= max, `number between ${min} and ${max}`);
 
 // URL validation (basic)
-const urlString = t.refinement(t.string, (s): s is string => URL.parse(s) !== null, "url");
+const urlString = t.refinement(t.string, (s) => URL.canParse(s), "url");
+
+const literals = <T extends string>([l1, l2, ...literals]: [T, T, ...T[]]) =>
+  t.union([t.literal(l1), t.literal(l2), ...literals.map((l) => t.literal(l))]);
 
 export function getIotsSchema() {
   const ImageData = t.type({
     id: t.number,
     created: td.date,
     title: stringWithLength(1, 100),
-    type: t.keyof({ jpg: null, png: null }),
+    type: literals(["jpg", "png"]),
     size: t.number,
     url: urlString,
   });
