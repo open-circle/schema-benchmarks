@@ -26763,7 +26763,7 @@ const DateTimeUtcFromMillis = /* @__PURE__ */ Number$1.pipe(/* @__PURE__ */ deco
 const unknownToUndefined = /* @__PURE__ */ new Link(undefined_, /* @__PURE__ */ new Transformation(/* @__PURE__ */ passthrough$1(), /* @__PURE__ */ transform$1(() => void 0)));
 
 //#endregion
-//#region ../schemas/libraries/effect/download.ts
+//#region ../schemas/libraries/effect___beta/download.ts
 const Image = Struct({
 	id: Number$1,
 	created: instanceOf(Date),
