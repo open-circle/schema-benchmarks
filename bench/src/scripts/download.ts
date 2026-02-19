@@ -30,10 +30,6 @@ function getPackageName(libraryName: string) {
       .slice(0, libraryName.includes("@") ? 2 : 1)
       .join("/");
   }
-  // effect___beta -> effect
-  if (libraryName.includes("___")) {
-    libraryName = libraryName.split("___")[0]!;
-  }
   return libraryName;
 }
 

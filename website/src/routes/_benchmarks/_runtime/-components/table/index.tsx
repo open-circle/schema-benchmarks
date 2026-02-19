@@ -9,6 +9,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { ToggleButton } from "#/shared/components/button/toggle";
 import { EmptyState } from "#/shared/components/empty-state";
 import { Radio } from "#/shared/components/radio";
@@ -124,7 +125,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                 }}
               >
                 <td>
-                  <code className="language-text">{result.libraryName}</code>
+                  <code className="language-text">{formatLibraryName(result.libraryName)}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="action">
@@ -184,7 +185,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                         (ratio ? (
                           <Scaler
                             {...ratioScaler(ratio)}
-                            symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
+                            symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${formatLibraryName(compareResult.libraryName)}${compareResult.note ? ` (${compareResult.note})` : ""}`}
                           >
                             <span aria-label={`${numFormatter.format(Math.abs(ratio))}x`}>
                               {`${formatNumber(Math.abs(ratio))}x`}

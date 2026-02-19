@@ -3,6 +3,7 @@ import { durationFormatter, getDuration, getTransitionName } from "@schema-bench
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
@@ -34,7 +35,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
       <div {...cls("header-row")}>
         <header {...cls("library-name")}>
           <h4 className="typo-headline5">
-            <code className="language-text">{result.libraryName}</code>
+            <code className="language-text">{formatLibraryName(result.libraryName)}</code>
           </h4>
           {result.note && (
             <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
