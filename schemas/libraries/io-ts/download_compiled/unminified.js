@@ -1137,34 +1137,44 @@ var isDate = function(u) {
 * @since 0.5.0
 */
 var date = fromRefinement("Date", isDate);
+const stringWithLength = (min, max) => refinement(string, (s) => s.length >= min && s.length <= max, `string with length between ${min} and ${max}`);
+const numberInRange = (min, max) => refinement(number, (n) => n >= min && n <= max, `number between ${min} and ${max}`);
+const urlString = refinement(string, (s) => {
+	try {
+		new URL(s);
+		return true;
+	} catch {
+		return false;
+	}
+}, "url");
 const ImageData = type({
 	id: number,
 	created: date,
-	title: string,
+	title: stringWithLength(1, 100),
 	type: keyof({
 		jpg: null,
 		png: null
 	}),
 	size: number,
-	url: string
+	url: urlString
 });
 const RatingData = type({
 	id: number,
-	stars: number,
-	title: string,
-	text: string,
+	stars: numberInRange(0, 5),
+	title: stringWithLength(1, 100),
+	text: stringWithLength(1, 1e3),
 	images: array(ImageData)
 });
 type({
 	id: number,
 	created: date,
-	title: string,
-	brand: string,
-	description: string,
-	price: number,
-	discount: union([number, nullType]),
-	quantity: number,
-	tags: array(string),
+	title: stringWithLength(1, 100),
+	brand: stringWithLength(1, 30),
+	description: stringWithLength(1, 500),
+	price: numberInRange(1, 1e4),
+	discount: union([numberInRange(1, 100), nullType]),
+	quantity: numberInRange(0, 10),
+	tags: array(stringWithLength(1, 30)),
 	images: array(ImageData),
 	ratings: array(RatingData)
 }, "ProductData").decode({});
