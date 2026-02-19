@@ -12,6 +12,12 @@ Firstly, thank you for wanting to contribute! Ideas for improvements are always 
 6. Build the schemas with `pnpm schemas:build`
 7. Run the website with `pnpm website:dev`
 
+## Git Etiquette
+
+Please avoid creating merge commits, instead rebase your changes on top of main and force push. This allows the history to remain linear, and changes to be traceable to a single commit (with `git bisect`, for example).
+
+Keeping commit history simple is appreciated, but not necessarily required. For example, you can include many small commits during your workflow, and interactively rebase them into a few logical chunks before submitting for review.
+
 ## Adding a new library
 
 1. Add the library to the dependencies of the `schemas` package. (`pnpm --filter schemas add <library>`)
