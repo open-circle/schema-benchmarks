@@ -16,9 +16,8 @@ export default defineBenchmarks({
   createContext: () => {
     const schema = getEffectSchema();
     const is = Schema.is(schema);
-    const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
-    const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
-    return { schema, is, decodeAll, decodeFirst };
+    const decode = Schema.decodeUnknownSync(schema);
+    return { schema, is, decode };
   },
   initialization: [
     {
@@ -29,11 +28,11 @@ export default defineBenchmarks({
     },
     {
       run() {
-        Schema.decodeUnknownEither(getEffectSchema());
+        Schema.decodeUnknownSync(getEffectSchema());
       },
-      note: "decodeUnknownEither",
+      note: "decodeUnknownSync",
       snippet: ts`
-        Schema.decodeUnknownEither(
+        Schema.decodeUnknownSync(
           Schema.struct(...)
         )
       `,
@@ -50,27 +49,21 @@ export default defineBenchmarks({
   },
   parsing: {
     allErrors: {
-      run(data, { decodeAll }) {
-        decodeAll(data);
+      run(data, { decode }) {
+        decode(data, { errors: "all" });
       },
       snippet: ts`
-        // const decodeAll = Schema.decodeUnknownEither(
-        //  schema, 
-        //  { errors: "all" }
-        // );
-        decodeAll(data)
+        // const decode = Schema.decodeUnknownSync(schema);
+        decode(data, { errors: "all" })
       `,
     },
     abortEarly: {
-      run(data, { decodeFirst }) {
-        decodeFirst(data);
+      run(data, { decode }) {
+        decode(data, { errors: "first" });
       },
       snippet: ts`
-        // const decodeFirst = Schema.decodeUnknownEither(
-        //  schema, 
-        //  { errors: "first" }
-        // );
-        decodeFirst(data)
+        // const decode = Schema.decodeUnknownSync(schema);
+        decode(data, { errors: "first" })
       `,
     },
   },
