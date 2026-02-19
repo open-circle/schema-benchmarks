@@ -5,6 +5,7 @@ import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/uti
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
@@ -28,13 +29,8 @@ export type BenchPlotProps =
       errorType?: ErrorType;
     };
 
-const getLibraryName = (d: BenchResult) => {
-  const [libraryName] = d.libraryName.split(" (");
-  return libraryName;
-};
-
 const getLabel = (d: BenchResult) =>
-  d.libraryName +
+  formatLibraryName(d.libraryName) +
   (d.throws ? " *" : "") +
   (d.type === "parsing" && d.errorType === "abortEarly" ? " †" : "");
 
@@ -43,7 +39,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
 }: {
   data: Array<BenchResult>;
 }) {
-  const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
+  const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));

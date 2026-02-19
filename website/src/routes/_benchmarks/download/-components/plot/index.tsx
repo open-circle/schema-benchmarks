@@ -4,18 +4,14 @@ import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getDownloadResults } from "../../-query";
 
-const getLibraryName = (d: DownloadResult) => {
-  const [libraryName] = d.libraryName.split(" (");
-  return libraryName;
-};
-
-const getLabel = (d: DownloadResult) => d.libraryName;
+const getLabel = (d: DownloadResult) => formatLibraryName(d.libraryName);
 
 const intFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
@@ -26,7 +22,7 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
 }: {
   data: Array<DownloadResult>;
 }) {
-  const values = useMemo(() => uniqueBy(data, getLibraryName), [data]);
+  const values = useMemo(() => uniqueBy(data, getLabel), [data]);
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
