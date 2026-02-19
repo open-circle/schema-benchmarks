@@ -1,6 +1,4 @@
 import "node:module";
-
-//#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -9,16 +7,12 @@ var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __copyProps = (to, from, except, desc) => {
-	if (from && typeof from === "object" || typeof from === "function") {
-		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
-			key = keys[i];
-			if (!__hasOwnProp.call(to, key) && key !== except) {
-				__defProp(to, key, {
-					get: ((k) => from[k]).bind(null, key),
-					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-				});
-			}
-		}
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
 	}
 	return to;
 };
@@ -26,9 +20,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-
-//#endregion
-//#region ../node_modules/.pnpm/dlv@1.1.3/node_modules/dlv/dist/dlv.umd.js
 var require_dlv_umd = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(t, n) {
 		"object" == typeof exports && "undefined" != typeof module ? module.exports = function(t, n, e, i, o) {
@@ -45,9 +36,6 @@ var require_dlv_umd = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 	})(exports);
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/dayjs@1.11.19/node_modules/dayjs/dayjs.min.js
 var require_dayjs_min = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(t, e) {
 		"object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
@@ -344,9 +332,6 @@ var require_dayjs_min = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}, O.en = D[g], O.Ls = D, O.p = {}, O;
 	}));
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/assertString.js
 var require_assertString = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = assertString;
@@ -357,9 +342,6 @@ var require_assertString = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isIP.js
 var require_isIP = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isIP;
@@ -421,9 +403,6 @@ var require_isIP = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/merge.js
 var require_merge = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = merge;
@@ -436,9 +415,6 @@ var require_merge = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isBase64.js
 var require_isBase64 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isBase64;
@@ -468,9 +444,6 @@ var require_isBase64 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isJWT.js
 var require_isJWT = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isJWT;
@@ -490,9 +463,6 @@ var require_isJWT = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/checkHost.js
 var require_checkHost = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = checkHost;
@@ -509,22 +479,15 @@ var require_checkHost = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/includesString.js
 var require_includesString = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = void 0;
-	var includes = function includes(str, val) {
+	exports.default = function includes(str, val) {
 		return str.indexOf(val) !== -1;
 	};
-	exports.default = includes;
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isFQDN.js
 var require_isFQDN = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isFQDN;
@@ -566,9 +529,6 @@ var require_isFQDN = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isURL.js
 var require_isURL = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isURL;
@@ -735,9 +695,6 @@ var require_isURL = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isSlug.js
 var require_isSlug = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isSlug;
@@ -753,24 +710,17 @@ var require_isSlug = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/includesArray.js
 var require_includesArray = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = void 0;
-	var includes = function includes(arr, val) {
+	exports.default = function includes(arr, val) {
 		return arr.some(function(arrVal) {
 			return val === arrVal;
 		});
 	};
-	exports.default = includes;
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isIBAN.js
 var require_isIBAN = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isIBAN;
@@ -933,9 +883,6 @@ var require_isIBAN = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.locales = Object.keys(ibanRegexThroughCountryCode);
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isUUID.js
 var require_isUUID = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isUUID;
@@ -965,9 +912,6 @@ var require_isUUID = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isAscii.js
 var require_isAscii = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isAscii;
@@ -983,9 +927,6 @@ var require_isAscii = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isByteLength.js
 var require_isByteLength = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isByteLength;
@@ -1018,9 +959,6 @@ var require_isByteLength = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isEmail.js
 var require_isEmail = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isEmail;
@@ -1121,9 +1059,6 @@ var require_isEmail = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/alpha.js
 var require_alpha = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.farsiLocales = exports.englishLocales = exports.dotDecimal = exports.decimal = exports.commaDecimal = exports.bengaliLocales = exports.arabicLocales = exports.alphanumeric = exports.alpha = void 0;
@@ -1335,9 +1270,6 @@ var require_alpha = /* @__PURE__ */ __commonJSMin(((exports) => {
 	decimal["pl-Pl"] = decimal["pl-PL"];
 	alpha["fa-AF"] = alpha.fa;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isAlpha.js
 var require_isAlpha = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isAlpha;
@@ -1361,9 +1293,6 @@ var require_isAlpha = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.locales = Object.keys(_alpha.alpha);
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isLatLong.js
 var require_isLatLong = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isLatLong;
@@ -1390,9 +1319,6 @@ var require_isLatLong = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isDecimal.js
 var require_isDecimal = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isDecimal;
@@ -1425,9 +1351,6 @@ var require_isDecimal = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isHexColor.js
 var require_isHexColor = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isHexColor;
@@ -1447,9 +1370,6 @@ var require_isHexColor = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isLuhnNumber.js
 var require_isLuhnNumber = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isLuhnNumber;
@@ -1479,9 +1399,6 @@ var require_isLuhnNumber = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isCreditCard.js
 var require_isCreditCard = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isCreditCard;
@@ -1522,9 +1439,6 @@ var require_isCreditCard = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/dayjs@1.11.19/node_modules/dayjs/plugin/isSameOrAfter.js
 var require_isSameOrAfter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : (e = "undefined" != typeof globalThis ? globalThis : e || self).dayjs_plugin_isSameOrAfter = t();
@@ -1537,9 +1451,6 @@ var require_isSameOrAfter = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		};
 	}));
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/dayjs@1.11.19/node_modules/dayjs/plugin/isSameOrBefore.js
 var require_isSameOrBefore = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, i) {
 		"object" == typeof exports && "undefined" != typeof module ? module.exports = i() : "function" == typeof define && define.amd ? define(i) : (e = "undefined" != typeof globalThis ? globalThis : e || self).dayjs_plugin_isSameOrBefore = i();
@@ -1552,9 +1463,6 @@ var require_isSameOrBefore = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		};
 	}));
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isAlphanumeric.js
 var require_isAlphanumeric = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isAlphanumeric;
@@ -1578,9 +1486,6 @@ var require_isAlphanumeric = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.locales = Object.keys(_alpha.alphanumeric);
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isPassportNumber.js
 var require_isPassportNumber = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isPassportNumber;
@@ -1673,9 +1578,6 @@ var require_isPassportNumber = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return countryCode.toUpperCase() in passportRegexByCountryCode && passportRegexByCountryCode[countryCode].test(normalizedStr);
 	}
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/util/algorithms.js
 var require_algorithms = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.iso7064Check = iso7064Check;
@@ -1941,9 +1843,6 @@ var require_algorithms = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return checksum === 0;
 	}
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isVAT.js
 var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 	function _typeof(o) {
 		"@babel/helpers - typeof";
@@ -1978,57 +1877,6 @@ var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 	function _interopRequireDefault(e) {
 		return e && e.__esModule ? e : { default: e };
 	}
-	var AU = function AU(str) {
-		if (!str.match(/^(AU)?(\d{11})$/)) return false;
-		var weights = [
-			10,
-			1,
-			3,
-			5,
-			7,
-			9,
-			11,
-			13,
-			15,
-			17,
-			19
-		];
-		str = str.replace(/^AU/, "");
-		var ABN = (parseInt(str.slice(0, 1), 10) - 1).toString() + str.slice(1);
-		var total = 0;
-		for (var i = 0; i < 11; i++) total += weights[i] * ABN.charAt(i);
-		return total !== 0 && total % 89 === 0;
-	};
-	var CH = function CH(str) {
-		return /^(CHE[- ]?)?(\d{9}|(\d{3}\.\d{3}\.\d{3})|(\d{3} \d{3} \d{3})) ?(TVA|MWST|IVA)?$/.test(str) && function hasValidCheckNumber(digits) {
-			var lastDigit = digits.pop();
-			var weights = [
-				5,
-				4,
-				3,
-				2,
-				7,
-				6,
-				5,
-				4
-			];
-			return lastDigit === (11 - digits.reduce(function(acc, el, idx) {
-				return acc + el * weights[idx];
-			}, 0) % 11) % 11;
-		}(str.match(/\d/g).map(function(el) {
-			return +el;
-		}));
-	};
-	var PT = function PT(str) {
-		var match = str.match(/^(PT)?(\d{9})$/);
-		if (!match) return false;
-		var tin = match[2];
-		var checksum = 11 - algorithms.reverseMultiplyAndSum(tin.split("").slice(0, 8).map(function(a) {
-			return parseInt(a, 10);
-		}), 9) % 11;
-		if (checksum > 9) return parseInt(tin[8], 10) === 0;
-		return checksum === parseInt(tin[8], 10);
-	};
 	var vatMatchers = exports.vatMatchers = {
 		AT: function AT(str) {
 			return /^(AT)?U\d{8}$/.test(str);
@@ -2093,7 +1941,16 @@ var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 		PL: function PL(str) {
 			return /^(PL)?(\d{10}|(\d{3}-\d{3}-\d{2}-\d{2})|(\d{3}-\d{2}-\d{2}-\d{3}))$/.test(str);
 		},
-		PT,
+		PT: function PT(str) {
+			var match = str.match(/^(PT)?(\d{9})$/);
+			if (!match) return false;
+			var tin = match[2];
+			var checksum = 11 - algorithms.reverseMultiplyAndSum(tin.split("").slice(0, 8).map(function(a) {
+				return parseInt(a, 10);
+			}), 9) % 11;
+			if (checksum > 9) return parseInt(tin[8], 10) === 0;
+			return checksum === parseInt(tin[8], 10);
+		},
 		RO: function RO(str) {
 			return /^(RO)?\d{2,10}$/.test(str);
 		},
@@ -2115,7 +1972,27 @@ var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 		MK: function MK(str) {
 			return /^(MK)?\d{13}$/.test(str);
 		},
-		AU,
+		AU: function AU(str) {
+			if (!str.match(/^(AU)?(\d{11})$/)) return false;
+			var weights = [
+				10,
+				1,
+				3,
+				5,
+				7,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19
+			];
+			str = str.replace(/^AU/, "");
+			var ABN = (parseInt(str.slice(0, 1), 10) - 1).toString() + str.slice(1);
+			var total = 0;
+			for (var i = 0; i < 11; i++) total += weights[i] * ABN.charAt(i);
+			return total !== 0 && total % 89 === 0;
+		},
 		BY: function BY(str) {
 			return /^(УНП )?\d{9}$/.test(str);
 		},
@@ -2161,7 +2038,26 @@ var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 		RS: function RS(str) {
 			return /^(RS)?\d{9}$/.test(str);
 		},
-		CH,
+		CH: function CH(str) {
+			return /^(CHE[- ]?)?(\d{9}|(\d{3}\.\d{3}\.\d{3})|(\d{3} \d{3} \d{3})) ?(TVA|MWST|IVA)?$/.test(str) && function hasValidCheckNumber(digits) {
+				var lastDigit = digits.pop();
+				var weights = [
+					5,
+					4,
+					3,
+					2,
+					7,
+					6,
+					5,
+					4
+				];
+				return lastDigit === (11 - digits.reduce(function(acc, el, idx) {
+					return acc + el * weights[idx];
+				}, 0) % 11) % 11;
+			}(str.match(/\d/g).map(function(el) {
+				return +el;
+			}));
+		},
 		TR: function TR(str) {
 			return /^(TR)?\d{10}$/.test(str);
 		},
@@ -2236,9 +2132,6 @@ var require_isVAT = /* @__PURE__ */ __commonJSMin(((exports) => {
 		throw new Error("Invalid country code: '".concat(countryCode, "'"));
 	}
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/dayjs@1.11.19/node_modules/dayjs/plugin/customParseFormat.js
 var require_customParseFormat = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : (e = "undefined" != typeof globalThis ? globalThis : e || self).dayjs_plugin_customParseFormat = t();
@@ -2400,9 +2293,6 @@ var require_customParseFormat = /* @__PURE__ */ __commonJSMin(((exports, module)
 		};
 	}));
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isPostalCode.js
 var require_isPostalCode = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isPostalCode;
@@ -2501,9 +2391,6 @@ var require_isPostalCode = /* @__PURE__ */ __commonJSMin(((exports) => {
 		throw new Error("Invalid locale '".concat(locale, "'"));
 	}
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/isMobilePhone.js
 var require_isMobilePhone = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = isMobilePhone;
@@ -2705,9 +2592,6 @@ var require_isMobilePhone = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.locales = Object.keys(phones);
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/@vinejs+vine@4.3.0/node_modules/@vinejs/vine/build/simple_error_reporter-DjITOpes.js
 var import_dlv_umd = /* @__PURE__ */ __toESM(require_dlv_umd(), 1);
 var import_dayjs_min = /* @__PURE__ */ __toESM(require_dayjs_min(), 1);
 var import_isIP = /* @__PURE__ */ __toESM(require_isIP(), 1);
@@ -3028,9 +2912,6 @@ var SimpleErrorReporter = class {
 		return new E_VALIDATION_ERROR(this.errors);
 	}
 };
-
-//#endregion
-//#region ../node_modules/.pnpm/@vinejs+vine@4.3.0/node_modules/@vinejs/vine/build/src/defaults.js
 const messages = {
 	"required": "The {{ field }} field must be defined",
 	"string": "The {{ field }} field must be a string",
@@ -3114,9 +2995,6 @@ const messages = {
 };
 const fields = { "": "data" };
 const globalTransforms = {};
-
-//#endregion
-//#region ../node_modules/.pnpm/@poppinss+macroable@1.1.0/node_modules/@poppinss/macroable/build/index.js
 var Macroable = class {
 	/**
 	* Set of instance properties that will be added to each instance during construction.
@@ -3237,9 +3115,6 @@ var Macroable = class {
 		});
 	}
 };
-
-//#endregion
-//#region ../node_modules/.pnpm/camelcase@9.0.0/node_modules/camelcase/index.js
 const UPPERCASE = /[\p{Lu}]/u;
 const LOWERCASE = /[\p{Ll}]/u;
 const LEADING_CAPITAL = /^[\p{Lu}](?![\p{Lu}])/u;
@@ -3355,9 +3230,6 @@ function camelCase(input, options) {
 	if (options.pascalCase && input.length > 0) input = toUpperCase(input[0]) + input.slice(1);
 	return leadingPrefix + postProcess(input, toUpperCase, options);
 }
-
-//#endregion
-//#region ../node_modules/.pnpm/normalize-url@8.1.1/node_modules/normalize-url/index.js
 const DATA_URL_DEFAULT_MIME_TYPE = "text/plain";
 const DATA_URL_DEFAULT_CHARSET = "us-ascii";
 const testParameter = (name, filters) => filters.some((filter) => filter instanceof RegExp ? filter.test(name) : filter === name);
@@ -3500,9 +3372,6 @@ function normalizeUrl(urlString, options) {
 	if (options.stripProtocol) urlString = urlString.replace(/^(?:https?:)?\/\//, "");
 	return urlString;
 }
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/escape.js
 var require_escape = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = escape;
@@ -3517,10 +3386,7 @@ var require_escape = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = exports.default;
 	module.exports.default = exports.default;
 }));
-
-//#endregion
-//#region ../node_modules/.pnpm/validator@13.15.26/node_modules/validator/lib/normalizeEmail.js
-var require_normalizeEmail = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+var import_normalizeEmail = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = normalizeEmail;
 	var _merge = _interopRequireDefault(require_merge());
@@ -3685,11 +3551,7 @@ var require_normalizeEmail = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	}
 	module.exports = exports.default;
 	module.exports.default = exports.default;
-}));
-
-//#endregion
-//#region ../node_modules/.pnpm/@vinejs+compiler@4.1.3/node_modules/@vinejs/compiler/build/index.js
-var import_normalizeEmail = /* @__PURE__ */ __toESM(require_normalizeEmail(), 1);
+})))(), 1);
 var import_escape = /* @__PURE__ */ __toESM(require_escape(), 1);
 var CompilerBuffer = class CompilerBuffer {
 	#content = "";
@@ -4531,9 +4393,6 @@ function refsBuilder() {
 		}
 	};
 }
-
-//#endregion
-//#region ../node_modules/.pnpm/@vinejs+vine@4.3.0/node_modules/@vinejs/vine/build/index.js
 function createRule(validator, metaData) {
 	const rule = {
 		validator,
@@ -4552,9 +4411,6 @@ function createRule(validator, metaData) {
 const UNIQUE_NAME = Symbol.for("schema_name");
 const IS_OF_TYPE = Symbol.for("is_of_type");
 const PARSE = Symbol.for("parse");
-const ITYPE = Symbol.for("opaque_input_type");
-const OTYPE = Symbol.for("opaque_type");
-const COTYPE = Symbol.for("camelcase_opaque_type");
 const VALIDATION = Symbol.for("to_validation");
 const SUBTYPE = Symbol.for("subtype");
 const requiredWhen = createRule(function requiredWhen(_, checker, field) {
@@ -6879,9 +6735,6 @@ var Vine = class extends SchemaBuilder {
 	}
 };
 const vine = new Vine();
-
-//#endregion
-//#region ../schemas/libraries/@vinejs/vine/download.ts
 const imageSchema = vine.object({
 	id: vine.number(),
 	created: vine.date(),
@@ -6914,5 +6767,3 @@ vine.tryValidate({
 	schema: productSchema,
 	data: {}
 });
-
-//#endregion

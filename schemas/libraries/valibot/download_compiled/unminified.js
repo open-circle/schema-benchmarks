@@ -1,4 +1,3 @@
-//#region ../node_modules/.pnpm/valibot@1.2.0_typescript@6.0.0-beta/node_modules/valibot/dist/index.mjs
 let store$4;
 /**
 * Returns the global configuration.
@@ -517,37 +516,30 @@ function pipe(...pipe$1) {
 		}
 	};
 }
-
-//#endregion
-//#region ../schemas/libraries/valibot/download.ts
-const imageSchema = object({
-	id: number(),
-	created: date(),
-	title: pipe(string(), minLength(1), maxLength(100)),
-	type: picklist(["jpg", "png"]),
-	size: number(),
-	url: pipe(string(), url())
+const imageSchema = /* @__PURE__ */ object({
+	id: /* @__PURE__ */ number(),
+	created: /* @__PURE__ */ date(),
+	title: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(100)),
+	type: /* @__PURE__ */ picklist(["jpg", "png"]),
+	size: /* @__PURE__ */ number(),
+	url: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ url())
 });
-const ratingSchema = object({
-	id: number(),
-	stars: pipe(number(), minValue(1), maxValue(5)),
-	title: pipe(string(), minLength(1), maxLength(100)),
-	text: pipe(string(), minLength(1), maxLength(1e3)),
-	images: array(imageSchema)
-});
-const productSchema = object({
-	id: number(),
-	created: date(),
-	title: pipe(string(), minLength(1), maxLength(100)),
-	brand: pipe(string(), minLength(1), maxLength(30)),
-	description: pipe(string(), minLength(1), maxLength(500)),
-	price: pipe(number(), minValue(1), maxValue(1e4)),
-	discount: nullable(pipe(number(), minValue(1), maxValue(100))),
-	quantity: pipe(number(), minValue(1), maxValue(10)),
-	tags: array(pipe(string(), minLength(1), maxLength(30))),
-	images: array(imageSchema),
-	ratings: array(ratingSchema)
-});
-parse(productSchema, {});
-
-//#endregion
+parse(/* @__PURE__ */ object({
+	id: /* @__PURE__ */ number(),
+	created: /* @__PURE__ */ date(),
+	title: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(100)),
+	brand: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(30)),
+	description: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(500)),
+	price: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(1e4)),
+	discount: /* @__PURE__ */ nullable(/* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(100))),
+	quantity: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(10)),
+	tags: /* @__PURE__ */ array(/* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(30))),
+	images: /* @__PURE__ */ array(imageSchema),
+	ratings: /* @__PURE__ */ array(/* @__PURE__ */ object({
+		id: /* @__PURE__ */ number(),
+		stars: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(5)),
+		title: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(100)),
+		text: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(1e3)),
+		images: /* @__PURE__ */ array(imageSchema)
+	}))
+}), {});

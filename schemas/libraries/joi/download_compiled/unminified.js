@@ -1,4 +1,3 @@
-//#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -7,16 +6,12 @@ var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __copyProps = (to, from, except, desc) => {
-	if (from && typeof from === "object" || typeof from === "function") {
-		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
-			key = keys[i];
-			if (!__hasOwnProp.call(to, key) && key !== except) {
-				__defProp(to, key, {
-					get: ((k) => from[k]).bind(null, key),
-					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-				});
-			}
-		}
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
 	}
 	return to;
 };
@@ -24,10 +19,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-
-//#endregion
-//#region ../node_modules/.pnpm/joi@18.0.2/node_modules/joi/dist/joi-browser.min.js
-var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "object" == typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports ? exports.joi = t() : e.joi = t();
 	})(self, () => (() => {
@@ -7684,11 +7676,7 @@ var require_joi_browser_min = /* @__PURE__ */ __commonJSMin(((exports, module) =
 			"undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 });
 		}, r(1100);
 	})());
-}));
-
-//#endregion
-//#region ../schemas/libraries/joi/download.ts
-var import_joi_browser_min = /* @__PURE__ */ __toESM(require_joi_browser_min(), 1);
+})))(), 1);
 const imageSchema = import_joi_browser_min.default.object({
 	id: import_joi_browser_min.default.number().required(),
 	created: import_joi_browser_min.default.date().required(),
@@ -7717,5 +7705,3 @@ import_joi_browser_min.default.object({
 	images: import_joi_browser_min.default.array().items(imageSchema).required(),
 	ratings: import_joi_browser_min.default.array().items(ratingSchema).required()
 }).validate({});
-
-//#endregion
