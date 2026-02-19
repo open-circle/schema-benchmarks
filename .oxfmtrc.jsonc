@@ -6,6 +6,7 @@
     "bench/stack.json",
     "schemas/libraries/**/download_compiled/**",
     "website/**/routeTree.gen.ts",
+    "website/src/routes/blog/-content/assets/**/*.json",
   ],
   "experimentalSortImports": {},
 }
