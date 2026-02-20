@@ -26,7 +26,7 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 4. Add a `benchmarks.ts` file with the benchmark definitions. Use other benchmarks as a reference.
 5. Create download benchmarks (usually just a single `download.ts` file, but can be a `download/` folder with multiple files). This should match how the library would typically be used, matching the specified data type.
 6. Build the schema package with `pnpm schemas:build`
-7. Run the benchmarks with `pnpm bench:all` to check all is working, but do not commit the changed results (GitHub will push them after you open a PR)
+7. Run the benchmarks with `pnpm bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
 8. Open a PR with your changes.
 
 ## Bug reports/feature requests
