@@ -16,6 +16,7 @@ import { BaseBenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { BaseDownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
 import { Admonition } from "../-components/admonition";
 import benchResults from "./assets/welcome/bench.json";
+import updatedBenchResults from "./assets/welcome/bench-update.json";
 import downloadResults from "./assets/welcome/download.json";
 
 Welcome to **Schema Benchmarks**, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
@@ -194,7 +195,30 @@ When filtering out all results that abort early, the playing field levels out a 
 
 <BaseBenchPlot data={benchResults.parsing.valid.filter((d) => d.errorType === "allErrors")} />
 
-Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox), followed by [`vinejs`](https://vinejs.dev), then [`yup`](https://github.com/jquense/yup) - though two of these involve a `try`/`catch` wrapper, which may be slowing them down.
+Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox) _(see below for an update)_, followed by [`vinejs`](https://vinejs.dev), then [`yup`](https://github.com/jquense/yup) - though
+two of these involve a `try`/`catch` wrapper, which may be slowing them down.
+
+#### Update (2025-02-20)
+
+`typebox`'s slow performance was due to a behavioural change introduced in 1.0, where the schema would actively try to coerce an invalid value into a valid one.
+
+In version 1.1, this was [changed](https://github.com/sinclairzx81/typebox/pull/1532) to be an opt-in feature.
+
+```ts
+// 1.0
+const A = Value.Parse(Type.Number(), "12345"); // A = 12345
+
+// 1.1
+const A = Value.Parse(Type.Number(), "12345"); // throw! - Expected Number
+```
+
+Having updated our dependencies (and accepting a [contribution](https://github.com/open-circle/schema-benchmarks/pull/54) of `io-ts` benchmarks while we were at it), `typebox` now performs much better:
+
+<BaseBenchPlot
+  data={updatedBenchResults.parsing.valid.filter((d) => d.errorType === "allErrors")}
+/>
+
+We'd also like to thank `typebox`'s creator, [`@sinclairzx81`](https://github.com/sinclairzx81), for his assistance [correcting our benchmark](https://github.com/open-circle/schema-benchmarks/issues/55)!
 
 ## Future Plans
 
