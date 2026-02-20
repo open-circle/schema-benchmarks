@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/environment
+        uses: ./.github/actions/environments
       - name: Run benchmarks
         run: pnpm bench:all
       - name: Commit & Push changes
