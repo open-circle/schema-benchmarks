@@ -21,6 +21,12 @@ export default defineBenchmarks({
     },
     snippet: ts`t.type(...)`,
   },
+  validation: {
+    run(data, { schema }) {
+      schema.is(data);
+    },
+    snippet: ts`schema.is(data)`,
+  },
   parsing: {
     allErrors: {
       run(data, { schema }) {
