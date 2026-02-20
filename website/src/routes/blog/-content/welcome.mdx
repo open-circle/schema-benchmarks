@@ -12,6 +12,7 @@ authors: "EskiMojo14"
 
 import { Link } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
+import { DateDisplay } from "#/shared/components/date";
 import { BaseBenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { BaseDownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
 import { Admonition } from "../-components/admonition";
@@ -198,7 +199,7 @@ When filtering out all results that abort early, the playing field levels out a 
 Consistently slowest in these tests appears to be [`typebox`](https://github.com/sinclairzx81/typebox) _(see below for an update)_, followed by [`vinejs`](https://vinejs.dev), then [`yup`](https://github.com/jquense/yup) - though
 two of these involve a `try`/`catch` wrapper, which may be slowing them down.
 
-#### Update (2025-02-20)
+#### Update (<DateDisplay date="2025-02-20Z" />)
 
 `typebox`'s slow performance was due to a behavioural change introduced in 1.0, where the schema would actively try to coerce an invalid value into a valid one.
 
