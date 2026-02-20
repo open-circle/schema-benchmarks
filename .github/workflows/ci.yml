@@ -12,14 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/website.yml
   lint:
     runs-on: ubuntu-latest
     needs: install
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/website.yml
       - name: Lint
         run: pnpm check
   typecheck:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/website.yml
       - name: Typecheck
         run: pnpm typecheck
   test:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/website.yml
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium

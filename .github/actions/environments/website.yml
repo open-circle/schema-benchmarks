@@ -1,0 +1,12 @@
+name: Setup environment
+description: Base environment, plus building website (necessary for content-collections)
+
+runs:
+  using: composite
+  steps:
+    - name: Setup base environment
+      uses: ./.github/actions/environments/action-base.yml
+
+    - name: Build website
+      shell: bash
+      run: pnpm website:build

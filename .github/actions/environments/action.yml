@@ -1,5 +1,5 @@
 name: Setup environment
-description: Setup environment with Node.js, playwright and pnpm
+description: Setup environment with Node.js and pnpm, plus building schemas
 
 runs:
   using: composite
@@ -23,7 +23,3 @@ runs:
     - name: Build schemas
       shell: bash
       run: pnpm schemas:build
-
-    - name: Build website
-      shell: bash
-      run: pnpm website:build
