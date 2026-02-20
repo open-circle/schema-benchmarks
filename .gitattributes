@@ -1,1 +1,2 @@
-schemas/libraries/*/download_compiled/** linguist-vendored
+schemas/libraries/**/download_compiled/** linguist-vendored
+website/public/mockServiceWorker.js linguist-vendored
