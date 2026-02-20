@@ -1,0 +1,43 @@
+name: PR Benchmark Preview
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "bench/**"
+      - "schemas/**"
+
+jobs:
+  bench-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.head_ref }}
+
+      - name: Setup environment
+        uses: ./.github/actions/environments
+
+      - name: Run benchmarks
+        run: pnpm bench:all
+
+      - name: Commit & Push changes (internal PRs only)
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+          message: "Update bench results"
+
+      - name: Upload benchmark results (fork PRs)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            bench/bench.json
+            bench/download.json

@@ -3,7 +3,7 @@ permissions:
   contents: write
 
 on:
-  pull_request:
+  push:
     branches: ["main"]
     paths:
       - "bench/**"
@@ -15,9 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.head_ref || github.ref }}
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run benchmarks
@@ -26,6 +23,5 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.head_ref || github.ref }}
+          branch: main
           message: "Update bench results"
-          rebase: true
