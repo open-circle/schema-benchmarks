@@ -15,22 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - uses: pnpm/action-setup@v2
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build schemas
-        run: pnpm schemas:build
+      - name: Setup environment
+        uses: ./.github/actions/environment/action.yml
       - name: Run benchmarks
         run: pnpm bench:all
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.event.pull_request.head.ref || github.ref }}
           message: "Update bench results"
           rebase: true
