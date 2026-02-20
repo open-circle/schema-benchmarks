@@ -636,7 +636,10 @@ var UnknownRecord = new (function(_super) {
 	}
 	return AnyDictionaryType;
 }(Type))();
-(function(_super) {
+/**
+* @since 1.0.0
+*/
+var LiteralType = function(_super) {
 	__extends(LiteralType, _super);
 	function LiteralType(name, is, validate, encode, value) {
 		var _this = _super.call(this, name, is, validate, encode) || this;
@@ -648,11 +651,21 @@ var UnknownRecord = new (function(_super) {
 		return _this;
 	}
 	return LiteralType;
-})(Type);
+}(Type);
 /**
+* @category constructors
 * @since 1.0.0
 */
-var KeyofType = function(_super) {
+function literal(value, name) {
+	if (name === void 0) name = JSON.stringify(value);
+	var is = function(u) {
+		return u === value;
+	};
+	return new LiteralType(name, is, function(u, c) {
+		return is(u) ? success(value) : failure(u, c);
+	}, identity, value);
+}
+(function(_super) {
 	__extends(KeyofType, _super);
 	function KeyofType(name, is, validate, encode, keys) {
 		var _this = _super.call(this, name, is, validate, encode) || this;
@@ -664,22 +677,7 @@ var KeyofType = function(_super) {
 		return _this;
 	}
 	return KeyofType;
-}(Type);
-/**
-* @category constructors
-* @since 1.0.0
-*/
-function keyof(keys, name) {
-	if (name === void 0) name = Object.keys(keys).map(function(k) {
-		return JSON.stringify(k);
-	}).join(" | ");
-	var is = function(u) {
-		return string.is(u) && hasOwnProperty.call(keys, u);
-	};
-	return new KeyofType(name, is, function(u, c) {
-		return is(u) ? success(u) : failure(u, c);
-	}, identity, keys);
-}
+})(Type);
 /**
 * @since 1.0.0
 */
@@ -1139,22 +1137,17 @@ var isDate = function(u) {
 var date = fromRefinement("Date", isDate);
 const stringWithLength = (min, max) => refinement(string, (s) => s.length >= min && s.length <= max, `string with length between ${min} and ${max}`);
 const numberInRange = (min, max) => refinement(number, (n) => n >= min && n <= max, `number between ${min} and ${max}`);
-const urlString = refinement(string, (s) => {
-	try {
-		new URL(s);
-		return true;
-	} catch {
-		return false;
-	}
-}, "url");
+const urlString = refinement(string, (s) => URL.canParse(s), "url");
+const literals = ([l1, l2, ...literals]) => union([
+	literal(l1),
+	literal(l2),
+	...literals.map((l) => literal(l))
+]);
 const ImageData = type({
 	id: number,
 	created: date,
 	title: stringWithLength(1, 100),
-	type: keyof({
-		jpg: null,
-		png: null
-	}),
+	type: literals(["jpg", "png"]),
 	size: number,
 	url: urlString
 });
