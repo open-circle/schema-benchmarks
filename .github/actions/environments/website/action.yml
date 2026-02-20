@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Setup base environment
-      uses: ./.github/actions/environments/action-base.yml
+      uses: ./.github/actions/environments
 
     - name: Build website
       shell: bash
