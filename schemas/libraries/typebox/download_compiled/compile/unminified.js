@@ -535,7 +535,8 @@ const settings = {
 	maxErrors: 8,
 	useEval: true,
 	exactOptionalPropertyTypes: false,
-	enumerableKind: false
+	enumerableKind: false,
+	correctiveParse: false
 };
 /** Gets current system settings */
 function Get$3() {
@@ -6332,7 +6333,9 @@ var Validator = class Validator extends Base {
 	}
 	/** Parses a value */
 	Parse(value) {
-		return this.Check(value) ? value : Parser(this.context, this.type, value);
+		if (this.Check(value)) return value;
+		if (Get$3().correctiveParse) return Parser(this.context, this.type, value);
+		throw new ParseError(value, this.Errors(value));
 	}
 	/** Decodes a value */
 	Decode(value) {

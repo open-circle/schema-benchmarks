@@ -317,7 +317,8 @@ const settings = {
 	maxErrors: 8,
 	useEval: true,
 	exactOptionalPropertyTypes: false,
-	enumerableKind: false
+	enumerableKind: false,
+	correctiveParse: false
 };
 /** Gets current system settings */
 function Get$2() {
@@ -5173,12 +5174,7 @@ const Parser = Pipeline([
 	(context, type, value) => Clean(context, type, value),
 	(context, type, value) => Assert(context, type, value)
 ]);
-/**
-* Parses a value with the given type. The function will Check the value and return
-* early if it matches the provided type. If the value does not match, it is processed
-* through a sequence of Clone, Default, Convert, and Clean operations and checked again.
-* A `ParseError` is thrown if the value fails to match after the processing sequence.
-*/
+/**  Parses a value with the given type. */
 function Parse(...args) {
 	const [context, type, value] = Match$1(args, {
 		3: (context, type, value) => [
@@ -5192,7 +5188,9 @@ function Parse(...args) {
 			value
 		]
 	});
-	return Check(context, type, value) ? value : Parser(context, type, value);
+	if (Check(context, type, value)) return value;
+	if (Get$2().correctiveParse) return Parser(context, type, value);
+	throw new ParseError(value, Errors(context, type, value));
 }
 Union([
 	_Object_({
