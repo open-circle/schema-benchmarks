@@ -92,8 +92,23 @@ function processResults(tasks: Array<Task>) {
   }
 }
 
+function shuffle<T>(array: Array<T>) {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex]!, array[currentIndex]!];
+  }
+  return array;
+}
+
 // Run each library in its own Bench instance to allow GC between libraries
-for (const getConfig of Object.values(libraries)) {
+for (const getConfig of shuffle(Object.values(libraries))) {
   const { library, createContext, initialization, validation, parsing } = await getConfig();
   const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
