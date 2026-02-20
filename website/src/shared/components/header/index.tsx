@@ -17,6 +17,7 @@ import { ConsoleWriter } from "../consolewriter";
 import { useStyle, useTheme } from "../prefs/context";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
+import DiscordIcon from "./discord.svg?react";
 import GithubIcon from "./github.svg?react";
 
 const cls = bem("page-header");
@@ -133,6 +134,14 @@ export function Header() {
           tooltip="GitHub"
         >
           <GithubIcon />
+        </ExternalLinkToggleButton>
+        <ExternalLinkToggleButton
+          href="https://discord.gg/tkMjQACf2P"
+          target="_blank"
+          rel="noreferrer noopener"
+          tooltip="Discord"
+        >
+          <DiscordIcon height={24} width={24} style={{ padding: 2 }} />
         </ExternalLinkToggleButton>
       </div>
     </header>
