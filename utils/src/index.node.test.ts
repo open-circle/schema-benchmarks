@@ -9,6 +9,7 @@ import {
   setAbortableInterval,
   setAbortableTimeout,
   shallowFilter,
+  pluralize,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -144,5 +145,18 @@ describe("shallowFilter", () => {
     expect(filter({ a: 1, b: 2 })).toBe(true);
     expect(filter({ a: 2, b: 2 })).toBe(true);
     expect(filter({ a: 3, b: 2 })).toBe(false);
+  });
+});
+
+describe("pluralize", () => {
+  it("should pluralize the word based on the count", () => {
+    expect(pluralize`I have 0 ${[0, "apple"]}.`).toBe("I have 0 apples.");
+    expect(pluralize`I have 1 ${[1, "apple"]}.`).toBe("I have 1 apple.");
+    expect(pluralize`I have 2 ${[2, "apple"]}.`).toBe("I have 2 apples.");
+  });
+  it("should support custom plural form", () => {
+    expect(pluralize`I have 0 ${[0, "goose", "geese"]}.`).toBe("I have 0 geese.");
+    expect(pluralize`I have 1 ${[1, "goose", "geese"]}.`).toBe("I have 1 goose.");
+    expect(pluralize`I have 2 ${[2, "goose", "geese"]}.`).toBe("I have 2 geese.");
   });
 });

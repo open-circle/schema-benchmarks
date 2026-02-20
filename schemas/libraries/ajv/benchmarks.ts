@@ -1,4 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import { ValidationError } from "ajv";
 import ts from "dedent" with { type: "macro" };
 
 import { defineBenchmarks } from "#src";
@@ -43,4 +44,15 @@ export default defineBenchmarks({
       `,
     },
   ],
+  stack: {
+    throw: ({ validate }, data) => {
+      validate(data);
+      throw new ValidationError(validate.errors || []);
+    },
+    snippet: ts`
+      // const validate = ajv.compile(schema);
+      validate(data);
+      throw new ValidationError(validate.errors || []);
+    `,
+  },
 });

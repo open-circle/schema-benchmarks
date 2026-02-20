@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent" with { type: "macro" };
 import * as v from "valibot";
 
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getValibotSchema } from ".";
 
@@ -50,5 +50,12 @@ export default defineBenchmarks({
         note: "abortPipeEarly only",
       },
     ],
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      v.parse(schema, data);
+      assertNotReached();
+    },
+    snippet: ts`v.parse(schema, data)`,
   },
 });
