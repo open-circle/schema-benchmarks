@@ -93,7 +93,7 @@ function processResults(tasks: Array<Task>) {
 }
 
 // Run each library in its own Bench instance to allow GC between libraries
-for (const getConfig of Object.values(libraries)) {
+for (const getConfig of Object.values(libraries).toReversed()) {
   const { library, createContext, initialization, validation, parsing } = await getConfig();
   const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
