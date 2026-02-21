@@ -9,6 +9,7 @@ import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import * as v from "valibot";
 
+import { trackedLinkProps } from "#/shared/lib/analytics";
 import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { ButtonGroup } from "../button";
@@ -128,7 +129,7 @@ export function Header() {
           ))}
         </ButtonGroup>
         <ExternalLinkToggleButton
-          href="https://github.com/open-circle/schema-benchmarks"
+          {...trackedLinkProps("https://github.com/open-circle/schema-benchmarks")}
           target="_blank"
           rel="noreferrer noopener"
           tooltip="GitHub"
@@ -136,7 +137,7 @@ export function Header() {
           <GithubIcon />
         </ExternalLinkToggleButton>
         <ExternalLinkToggleButton
-          href="https://discord.gg/tkMjQACf2P"
+          {...trackedLinkProps("https://discord.gg/tkMjQACf2P")}
           target="_blank"
           rel="noreferrer noopener"
           tooltip="Discord"
