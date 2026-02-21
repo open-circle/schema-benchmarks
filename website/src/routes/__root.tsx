@@ -5,7 +5,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { create } from "mutative";
 import { generateMetadata } from "tanstack-meta";
 
 import { Banner } from "#/shared/components/banner";
@@ -29,68 +28,79 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  head: () =>
-    create(
-      generateMetadata({
-        charSet: "utf-8",
-        viewport: {
-          width: "device-width",
-          initialScale: 1,
-          themeColor: [
-            { color: "#eff1f3", media: "(prefers-color-scheme: light)" },
-            { color: "#21222c", media: "(prefers-color-scheme: dark)" },
-          ],
-        },
-        icons: {
-          icon: [
-            {
-              url: "/favicon_dark.ico",
-              media: "(prefers-color-scheme: dark)",
-              sizes: "any",
-            },
-            {
-              url: "/favicon_light.ico",
-              media: "(prefers-color-scheme: light)",
-              sizes: "any",
-            },
-            {
-              url: "/icon_dark.svg",
-              media: "(prefers-color-scheme: dark)",
-              type: "image/svg+xml",
-            },
-            {
-              url: "/icon_light.svg",
-              media: "(prefers-color-scheme: light)",
-              type: "image/svg+xml",
-            },
-          ],
-        },
-      }),
-      ({ links }) => {
-        links.push(
-          {
-            rel: "stylesheet",
-            href: appCss,
-          },
-          {
-            rel: "preconnect",
-            href: "https://fonts.googleapis.com",
-          },
-          {
-            rel: "preconnect",
-            href: "https://fonts.gstatic.com",
-            crossOrigin: "anonymous",
-          },
-          {
-            rel: "stylesheet",
-            href: symbolsUrl,
-          },
-        );
+  head: () => {
+    const { meta, links } = generateMetadata({
+      charSet: "utf-8",
+      viewport: {
+        width: "device-width",
+        initialScale: 1,
+        themeColor: [
+          { color: "#eff1f3", media: "(prefers-color-scheme: light)" },
+          { color: "#21222c", media: "(prefers-color-scheme: dark)" },
+        ],
       },
-    ),
+      icons: {
+        icon: [
+          {
+            url: "/favicon_dark.ico",
+            media: "(prefers-color-scheme: dark)",
+            sizes: "any",
+          },
+          {
+            url: "/favicon_light.ico",
+            media: "(prefers-color-scheme: light)",
+            sizes: "any",
+          },
+          {
+            url: "/icon_dark.svg",
+            media: "(prefers-color-scheme: dark)",
+            type: "image/svg+xml",
+          },
+          {
+            url: "/icon_light.svg",
+            media: "(prefers-color-scheme: light)",
+            type: "image/svg+xml",
+          },
+        ],
+      },
+    });
+    return {
+      meta,
+      links: [
+        ...links,
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: symbolsUrl,
+        },
+      ],
+      scripts: [
+        // umami tracking script
+        {
+          async: true,
+          src: "https://umami.valibot.dev/script.js",
+          "data-website-id": "dac94c70-edd1-411e-9eb4-cbc36e228435",
+          "data-domains": "schemabenchmarks.dev",
+          "data-strip-search": "true",
+        },
+      ],
+    };
+  },
   staticData: { crumb: undefined },
 
-  loader: async () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
+  loader: () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
   shellComponent: RootDocument,
 });
 
