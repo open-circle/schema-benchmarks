@@ -2,6 +2,7 @@ import { shortNumFormatter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
+import { trackedLinkProps } from "#/shared/lib/analytics";
 import type { PrefetchContext } from "#/shared/lib/fetch";
 
 import { formatLibraryName } from "../-lib";
@@ -13,7 +14,7 @@ export function DownloadCount({ libraryName }: { libraryName: string }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   return (
     <a
-      href={`https://www.npmjs.com/package/${packageName}`}
+      {...trackedLinkProps(`https://www.npmjs.com/package/${packageName}`)}
       aria-label={`Download count for ${formatLibraryName(libraryName)}: ${shortNumFormatter.format(data)}`}
     >
       {formatNumber(data)}
