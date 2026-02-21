@@ -83,10 +83,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           },
           {
             rel: "stylesheet",
-            href: "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans+Flex:opsz,slnt,wdth,wght,GRAD,ROND@6..144,-10..0,25..151,1..1000,0..100,0..100&display=swap",
-          },
-          {
-            rel: "stylesheet",
             href: symbolsUrl,
           },
         );
