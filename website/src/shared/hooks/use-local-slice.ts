@@ -1,5 +1,6 @@
 // based on use-local-slice (which uses immer, whereas we use mutative)
 
+import { IfMaybeUndefined } from "@schema-benchmarks/utils";
 import { create, type Draft } from "mutative";
 import { useDebugValue, useMemo, useReducer } from "react";
 
@@ -7,8 +8,6 @@ export type PayloadAction<T> = {
   type: string;
   payload: T;
 };
-
-type IfMaybeUndefined<P, True, False> = [undefined] extends [P] ? True : False;
 
 export type PayloadActionDispatch<P = void> = void extends P
   ? () => void
