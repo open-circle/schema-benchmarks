@@ -9,7 +9,7 @@ interface AnalyticEvents {
 }
 
 type AnalyticEventArgs = {
-  [T in keyof RemoveIndexSignature<AnalyticEvents>]: IfMaybeUndefined<
+  [T in keyof RemoveIndexSignature<AnalyticEvents>]-?: IfMaybeUndefined<
     AnalyticEvents[T],
     [name: T, data?: AnalyticEvents[T]],
     [name: T, data: AnalyticEvents[T]]
@@ -19,7 +19,7 @@ type AnalyticEventArgs = {
 declare global {
   interface Window {
     umami?: {
-      track: (...args: AnalyticEventArgs) => void;
+      track: (...args: AnalyticEventArgs | []) => void;
     };
   }
 }
