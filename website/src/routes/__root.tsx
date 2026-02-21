@@ -90,7 +90,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         // umami tracking script
         {
           async: true,
-          src: "https://umami.valibot.dev/script.js",
+          src: "https://umami.schemabenchmarks.dev/script.js",
           "data-website-id": "dac94c70-edd1-411e-9eb4-cbc36e228435",
           "data-domains": "schemabenchmarks.dev",
           "data-strip-search": "true",
