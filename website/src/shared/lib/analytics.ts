@@ -28,13 +28,12 @@ declare global {
 export function trackEventProps(
   ...[name, data]: Extract<AnalyticEventArgs, [string, Record<string, string>]>
 ) {
-  const props: Record<`data-umami-event${string}`, string> = {
+  return {
     "data-umami-event": name,
+    ...Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [`data-umami-event-${key}`, String(value)]),
+    ),
   };
-  for (const [key, value] of Object.entries(data)) {
-    props[`data-umami-event-${key}`] = String(value);
-  }
-  return props;
 }
 
 export function trackedLinkProps(href: string) {
