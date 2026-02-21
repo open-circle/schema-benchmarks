@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       scripts: [
         // umami tracking script
         {
-          defer: true,
+          async: true,
           src: "https://umami.schemabenchmarks.dev/script.js",
           "data-website-id": "dac94c70-edd1-411e-9eb4-cbc36e228435",
           "data-domains": "schemabenchmarks.dev",
