@@ -26,12 +26,12 @@ declare global {
 }
 
 export function trackEventProps(
-  ...[name, data]: Extract<AnalyticEventArgs, [string, Record<string, string>]>
+  ...[name, data]: Extract<AnalyticEventArgs, [string, Record<string, string>?]>
 ) {
   return {
     "data-umami-event": name,
     ...Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [`data-umami-event-${key}`, String(value)]),
+      Object.entries(data ?? {}).map(([key, value]) => [`data-umami-event-${key}`, String(value)]),
     ),
   };
 }
