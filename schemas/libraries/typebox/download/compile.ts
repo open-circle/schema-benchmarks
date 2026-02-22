@@ -1,6 +1,6 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
-import { type StaticDecode, Type } from "typebox";
-import { Compile } from "typebox/compile";
+import Type, { type StaticDecode } from "typebox";
+import Compile from "typebox/compile";
 
 import type { ProductData } from "#src";
 
