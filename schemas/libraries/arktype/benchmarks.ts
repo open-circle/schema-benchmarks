@@ -33,4 +33,9 @@ export default defineBenchmarks({
       snippet: ts`schema(data)`,
     },
   },
+  standard: {
+    allErrors: {
+      getSchema: ({ schema }) => schema,
+    },
+  },
 });

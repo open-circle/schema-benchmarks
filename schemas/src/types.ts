@@ -1,5 +1,8 @@
 import type { MaybeArray, MaybePromise } from "@schema-benchmarks/utils";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import * as v from "valibot";
+
+import { ProductData } from "./data";
 
 export const optimizeTypeSchema = /* @__PURE__ */ v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
@@ -26,6 +29,19 @@ export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
   run: (data: unknown, context: Context) => MaybePromise<unknown>;
 }
 
+export interface StandardSchemaBenchmarkConfig<Context> extends Omit<
+  BaseBenchmarkConfig,
+  "throws" | "snippet"
+> {
+  getSchema: (context: Context) => MaybePromise<StandardSchemaV1<any, ProductData>>;
+  /**
+   * Provide if the schema needs an adapter to become a standard schema.
+   * @example
+   * "upfetch(url, { schema })"
+   */
+  snippet?: string;
+}
+
 export interface LibraryInfo {
   name: string;
   git: string;
@@ -44,6 +60,7 @@ export interface BenchmarksConfig<Context> {
   initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
   validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>>;
+  standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig<Context>>>>;
 }
 
 /* @__PURE__ */

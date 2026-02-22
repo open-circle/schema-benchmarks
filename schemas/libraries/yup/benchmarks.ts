@@ -45,4 +45,9 @@ export default defineBenchmarks({
       throws: true,
     },
   },
+  standard: {
+    allErrors: {
+      getSchema: ({ schema }) => schema,
+    },
+  },
 });

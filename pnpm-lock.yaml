@@ -123,6 +123,9 @@ importers:
       '@schema-benchmarks/utils':
         specifier: workspace:*
         version: link:../utils
+      '@sinclair/typemap':
+        specifier: ^0.10.1
+        version: 0.10.1(@sinclair/typebox@0.34.48)(valibot@1.2.0(typescript@6.0.0-beta))(zod@4.3.6)
       '@standard-schema/spec':
         specifier: 'catalog:'
         version: 1.1.0
@@ -2545,6 +2548,16 @@ packages:
 
   '@samchon/openapi@6.0.1':
     resolution: {integrity: sha512-+nkznmCf/6YavoVkvWg60YoC0UbXY/oK9uMZReyrFcIcXecf+YoWmOLUg+TlgHi+h+6DPgRy6zRkZfiRd3uRnA==}
+
+  '@sinclair/typebox@0.34.48':
+    resolution: {integrity: sha512-kKJTNuK3AQOrgjjotVxMrCn1sUJwM76wMszfq1kdU4uYVJjvEWuFQ6HgvLt4Xz3fSmZlTOxJ/Ie13KnIcWQXFA==}
+
+  '@sinclair/typemap@0.10.1':
+    resolution: {integrity: sha512-UXR0fhu/n3c9B6lB+SLI5t1eVpt9i9CdDrp2TajRe3LbKiUhCTZN2kSfJhjPnpc3I59jMRIhgew7+0HlMi08mg==}
+    peerDependencies:
+      '@sinclair/typebox': ^0.34.30
+      valibot: ^1.0.0
+      zod: ^3.24.1
 
   '@so-ric/colorspace@1.1.6':
     resolution: {integrity: sha512-/KiKkpHNOBgkFJwu9sh48LkHSMYGyuTcSFK/qMBdnOAlrRJzRSXAOFB5qwzaVQuDl8wAvHVMkaASQDReTahxuw==}
@@ -9368,6 +9381,14 @@ snapshots:
       - rollup
 
   '@samchon/openapi@6.0.1': {}
+
+  '@sinclair/typebox@0.34.48': {}
+
+  '@sinclair/typemap@0.10.1(@sinclair/typebox@0.34.48)(valibot@1.2.0(typescript@6.0.0-beta))(zod@4.3.6)':
+    dependencies:
+      '@sinclair/typebox': 0.34.48
+      valibot: 1.2.0(typescript@6.0.0-beta)
+      zod: 4.3.6
 
   '@so-ric/colorspace@1.1.6':
     dependencies:
