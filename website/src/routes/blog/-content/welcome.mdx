@@ -19,6 +19,7 @@ import { Admonition } from "../-components/admonition";
 import benchResults from "./assets/welcome/bench.json";
 import updatedBenchResults from "./assets/welcome/bench-update.json";
 import downloadResults from "./assets/welcome/download.json";
+import updatedDownloadResults from "./assets/welcome/download-update.json";
 
 Welcome to **Schema Benchmarks**, an open source project aiming to provide detailed and transparent comparisons of schema validation libraries.
 
@@ -102,7 +103,22 @@ Two clear leaders emerge:
 
 Zod's new [`zod/mini`](https://zod.dev/packages/mini) variant follows behind, ending up at around 5KB (vs the 1.9KB achieved by both aforementioned libraries).
 
-On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the largest size of 58KB, with [`joi`](https://joi.dev) not far behind at 53KB, and [`effect/Schema`](https://effect.website/docs/schema/introduction/) at 50KB (though notably, [`effect`'s beta](https://effect.website/blog/releases/effect/40-beta/) has managed to reduce this significantly, to 19KB).
+On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the largest size of 58KB (_see below for an update_), with [`joi`](https://joi.dev) not far behind at 53KB, and [`effect/Schema`](https://effect.website/docs/schema/introduction/) at 50KB (though notably, [`effect`'s beta](https://effect.website/blog/releases/effect/40-beta/) has managed to reduce this significantly, to 19KB).
+
+#### Update (<DateDisplay date="2025-02-22Z" />)
+
+After a closer review, we noticed a discrepancy between our example file for `zod` and its [docs](https://zod.dev), namely that our benchmark was using a _default_ export, and the docs show a _namespace_ export.
+
+```ts
+// before
+import z from "zod";
+// after
+import * as z from "zod";
+```
+
+With this simple change, `zod`'s bundle size plummets to a much more reasonable 16KB.
+
+<BaseDownloadPlot data={updatedDownloadResults.minified} />
 
 ### <Link to="/initialization">Initialization</Link>
 
