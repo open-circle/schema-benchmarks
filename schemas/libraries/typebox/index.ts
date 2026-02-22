@@ -1,5 +1,5 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
-import { type StaticDecode, Type } from "typebox";
+import * as Type from "typebox";
 
 import type { ProductData } from "#src";
 
@@ -36,6 +36,6 @@ export function getTypeboxSchema() {
 }
 
 export type SatisfiesTest = Satisfies<
-  StaticDecode<ReturnType<typeof getTypeboxSchema>>,
+  Type.Static<ReturnType<typeof getTypeboxSchema>>,
   ProductData
 >;

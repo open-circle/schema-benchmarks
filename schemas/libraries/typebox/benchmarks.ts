@@ -1,7 +1,8 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
-import { Compile } from "typebox/compile";
-import Value from "typebox/value";
+import Compile from "typebox/compile";
+import * as Schema from "typebox/schema";
+import * as Value from "typebox/value";
 
 import { defineBenchmarks } from "#src";
 
@@ -11,13 +12,14 @@ export default defineBenchmarks({
   library: {
     name: "typebox",
     git: "sinclairzx81/typebox",
-    optimizeType: "none",
+    optimizeType: "jit",
     version: await getVersion("typebox"),
   },
   createContext: () => {
     const schema = getTypeboxSchema();
     const compiled = Compile(schema);
-    return { schema, compiled };
+    const compiledSchema = Schema.Compile(schema);
+    return { schema, compiled, compiledSchema };
   },
   initialization: [
     {
@@ -32,7 +34,13 @@ export default defineBenchmarks({
       },
       snippet: ts`Compile(Type.Object(...))`,
       note: "compile",
-      optimizeType: "jit",
+    },
+    {
+      run() {
+        Schema.Compile(getTypeboxSchema());
+      },
+      snippet: ts`Schema.Compile(Type.Object(...))`,
+      note: "schema compile",
     },
   ],
   validation: [
@@ -51,7 +59,23 @@ export default defineBenchmarks({
         compiled.Check(data);
       `,
       note: "compile",
-      optimizeType: "jit",
+    },
+    {
+      run(data, { schema }) {
+        Schema.Check(schema, data);
+      },
+      snippet: ts`Schema.Check(schema, data)`,
+      note: "schema",
+    },
+    {
+      run(data, { compiledSchema }) {
+        compiledSchema.Check(data);
+      },
+      snippet: ts`
+        // const compiledSchema = Schema.Compile(schema);
+        compiledSchema.Check(data);
+      `,
+      note: "schema compile",
     },
   ],
   parsing: {
@@ -76,7 +100,29 @@ export default defineBenchmarks({
           compiled.Parse(data);
         `,
         note: "compile",
-        optimizeType: "jit",
+        throws: true,
+      },
+      {
+        run(data, { schema }) {
+          try {
+            Schema.Parse(schema, data);
+          } catch {}
+        },
+        snippet: ts`Schema.Parse(schema, data)`,
+        note: "schema",
+        throws: true,
+      },
+      {
+        run(data, { compiledSchema }) {
+          try {
+            compiledSchema.Parse(data);
+          } catch {}
+        },
+        snippet: ts`
+          // const compiledSchema = Schema.Compile(schema);
+          compiledSchema.Parse(data);
+        `,
+        note: "schema compile",
         throws: true,
       },
     ],
