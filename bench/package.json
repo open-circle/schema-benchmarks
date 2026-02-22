@@ -18,6 +18,7 @@
     "@ryoppippi/unplugin-typia": "catalog:",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
+    "@standard-schema/spec": "catalog:",
     "gzip-size": "^7.0.0",
     "rolldown": "1.0.0-rc.5",
     "tinybench": "^6.0.0",
