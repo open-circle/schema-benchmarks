@@ -1,0 +1,15 @@
+import { Link } from "@tanstack/react-router";
+import { Admonition } from "#/routes/blog/-components/admonition";
+
+Using the [Standard Schema](https://standardschema.dev) interface, intended to be a common denominator for schema validation libraries.
+
+```ts
+import { personSchema } from "./schemas";
+
+const person = await upfetch(url, { schema: personSchema });
+```
+
+<Admonition type="info">
+  Some libraries require an adapter before they can be used as a standard schema. The time to
+  convert the schema is not measured, only the time to parse using it.
+</Admonition>

@@ -99,18 +99,43 @@ Parsing invalid data:
 
 <BenchPlot type="parsing" dataType="invalid" />
 
-### Tags
+#### Tags
 
-#### Optimizations
+##### Optimizations
 
 Some libraries utilise specific optimizations to improve performance. We specifically track:
 
 - **JIT**: Libraries that use Just-In-Time compilation (usually via `new Function`) to generate optimized code at runtime, e.g. `arktype`
 - **Precompiled**: Libraries that generate optimized code at build time, e.g. `typia`
 
-#### Error handling
+##### Error handling
 
 Some libraries support different error handling strategies. We specifically track:
 
 - **All errors**: Parse the entire value before returning/throwing an error.
 - **Abort early**: Return/throw an error as soon as an issue is found.
+
+### <Link to="/standard">Standard Schema</Link>
+
+Many libraries implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+
+```ts
+import { personSchema } from "./schemas";
+
+const person = await upfetch(url, { schema: personSchema });
+```
+
+We benchmark the time taken to parse using a standard schema.
+
+<Admonition type="info">
+  Some libraries require an adapter before they can be used as a standard schema. The time to
+  convert the schema is not measured, only the time to parse using it.
+</Admonition>
+
+Parsing valid data:
+
+<BenchPlot type="standard" dataType="valid" />
+
+Parsing invalid data:
+
+<BenchPlot type="standard" dataType="invalid" />

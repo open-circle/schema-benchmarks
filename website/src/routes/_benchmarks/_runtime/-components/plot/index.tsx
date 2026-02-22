@@ -24,7 +24,7 @@ export type BenchPlotProps =
       errorType?: never;
     }
   | {
-      type: "parsing";
+      type: "parsing" | "standard";
       dataType: DataType;
       errorType?: ErrorType;
     };
@@ -32,7 +32,7 @@ export type BenchPlotProps =
 const getLabel = (d: BenchResult) =>
   formatLibraryName(d.libraryName) +
   (d.throws ? " *" : "") +
-  (d.type === "parsing" && d.errorType === "abortEarly" ? " †" : "");
+  ((d.type === "parsing" || d.type === "standard") && d.errorType === "abortEarly" ? " †" : "");
 
 export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
   data,
@@ -88,7 +88,9 @@ export function BenchPlot({ type, dataType, errorType }: BenchPlotProps) {
   });
   const filteredData = useMemo(() => {
     if (errorType) {
-      return data.filter((d) => d.type === "parsing" && d.errorType === errorType);
+      return data.filter(
+        (d) => (d.type === "parsing" || d.type === "standard") && d.errorType === errorType,
+      );
     }
     return data;
   }, [data, errorType]);
