@@ -45,11 +45,11 @@ export default defineBenchmarks({
       },
       {
         run(data, { validator }) {
-          void validator.validate(data);
+          void validator.tryValidate(data);
         },
         snippet: ts`
         // const validator = vine.create(schema);
-        validator.validate(data);
+        validator.tryValidate(data);
       `,
         note: "create",
       },
@@ -63,11 +63,11 @@ export default defineBenchmarks({
       },
       {
         run(data, { noBailValidator }) {
-          void noBailValidator.validate(data);
+          void noBailValidator.tryValidate(data);
         },
         snippet: ts`
         // const noBailValidator = vine.create(schema.bail(false));
-        noBailValidator.validate(data);
+        noBailValidator.tryValidate(data);
       `,
         note: "create",
       },
