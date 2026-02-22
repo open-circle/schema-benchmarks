@@ -9,6 +9,11 @@ import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 import { CaseRegistry } from "../bench/registry.ts";
 import type { BenchResults } from "../results/types.ts";
 
+const sigintAc = new AbortController();
+process.on("SIGINT", (signal) => {
+  sigintAc.abort(signal);
+});
+
 const results: BenchResults = {
   initialization: [],
   validation: { valid: [], invalid: [] },
@@ -94,13 +99,15 @@ function processResults(tasks: Array<Task>) {
 
 // Run each library in its own Bench instance to allow GC between libraries
 for (const getConfig of Object.values(libraries)) {
+  sigintAc.signal.throwIfAborted();
+
   const { library, createContext, initialization, validation, parsing } = await getConfig();
   const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
   console.log(`\nBenchmarking: ${libraryName}`);
 
   // Create a fresh Bench for this library
-  const bench = new Bench();
+  const bench = new Bench({ signal: sigintAc.signal });
   bench.addEventListener("start", () => {
     console.log("Starting bench...");
   });

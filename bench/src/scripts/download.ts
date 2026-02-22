@@ -13,6 +13,11 @@ import {
   minifyTypeSchema,
 } from "../results/types.ts";
 
+const sigintAc = new AbortController();
+process.on("SIGINT", (signal) => {
+  sigintAc.abort(signal);
+});
+
 interface FileDescription {
   path: string;
   compiledPath: string;
@@ -81,6 +86,7 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download.ts"),
     )) {
+      sigintAc.signal.throwIfAborted();
       const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download.ts")[0];
       if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
       const compiledPath = path.resolve(path.dirname(filePath), `./download_compiled/${minify}.js`);
@@ -98,6 +104,7 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts"),
     )) {
+      sigintAc.signal.throwIfAborted();
       const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download/")[0];
       if (!libraryName) throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
       const note = path.basename(filePath).replace("index.ts", "").replace(".ts", "");
