@@ -160,8 +160,8 @@ importers:
         specifier: 11.0.0-alpha.4
         version: 11.0.0-alpha.4
       typebox:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       typia:
         specifier: ^11.0.3
         version: 11.0.3(@types/node@24.10.13)(typescript@6.0.0-beta)
@@ -6939,8 +6939,8 @@ packages:
     resolution: {integrity: sha512-JnTrzGu+zPV3aXIUhnyWJj4z/wigMsdYajGLIYakqyOW1nPllzXEJee0QQbHj+CTIQtXGlAjuK0UY+2xTyjVAw==}
     engines: {node: '>=20'}
 
-  typebox@1.1.0:
-    resolution: {integrity: sha512-towL214nlIjQ9dlLFxOsI5XLd18oWAti+uuuWp45NLgWDFBkgS45S+pRKu7Ai9LCisrHAojEl7k6kYStI/xZpQ==}
+  typebox@1.1.1:
+    resolution: {integrity: sha512-LyVGXXUEiG7mGWQmu/aNILf4FqQPbsE528j7LatYH5hErt0OQcZPN84cyzXDSfBltP2BjkdqKAR7fxfC+fW0Eg==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -14697,7 +14697,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typebox@1.1.0: {}
+  typebox@1.1.1: {}
 
   typed-array-buffer@1.0.3:
     dependencies:

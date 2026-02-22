@@ -28,7 +28,7 @@
     "joi": "^18.0.2",
     "rod-js": "^0.2.1",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.1.0",
+    "typebox": "^1.1.1",
     "typia": "^11.0.3",
     "valibot": "catalog:",
     "yup": "^1.7.1",
