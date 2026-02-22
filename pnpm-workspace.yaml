@@ -6,6 +6,7 @@ packages:
 
 catalog:
   "@ryoppippi/unplugin-typia": ^2.6.5
+  "@standard-schema/spec": ^1.1.0
   "@types/node": ^24
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
