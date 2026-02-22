@@ -2,7 +2,7 @@ import type { MaybeArray, MaybePromise } from "@schema-benchmarks/utils";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import * as v from "valibot";
 
-import { ProductData } from "./data";
+import type { ProductData } from "./data.ts";
 
 export const optimizeTypeSchema = /* @__PURE__ */ v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
