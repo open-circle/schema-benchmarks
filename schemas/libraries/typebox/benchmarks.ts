@@ -1,4 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import { Compile as TypemapCompile } from "@sinclair/typemap";
 import ts from "dedent" with { type: "macro" };
 import Compile from "typebox/compile";
 import * as Schema from "typebox/schema";
@@ -126,5 +127,15 @@ export default defineBenchmarks({
         throws: true,
       },
     ],
+  },
+  standard: {
+    allErrors: {
+      getSchema: ({ schema }) => TypemapCompile(schema),
+      snippet: ts`
+      // import { Compile } from "@sinclair/typemap";
+      // const validator = Compile(schema);
+      upfetch(url, { schema: validator })
+    `,
+    },
   },
 });

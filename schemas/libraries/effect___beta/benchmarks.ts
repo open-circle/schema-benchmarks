@@ -67,4 +67,28 @@ export default defineBenchmarks({
       `,
     },
   },
+  standard: {
+    allErrors: {
+      getSchema: ({ schema }) =>
+        Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
+      snippet: ts`
+        upfetch(url, {
+          schema: Schema.toStandardSchemaV1(schema, {
+            parseOptions: { errors: "all" },
+          }),
+        });
+      `,
+    },
+    abortEarly: {
+      getSchema: ({ schema }) =>
+        Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
+      snippet: ts`
+        upfetch(url, {
+          schema: Schema.toStandardSchemaV1(schema, {
+            parseOptions: { errors: "first" },
+          }),
+        });
+      `,
+    },
+  },
 });
