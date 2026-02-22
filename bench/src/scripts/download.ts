@@ -37,6 +37,7 @@ async function measureFile(file: FileDescription, minify: MinifyType): Promise<D
   const bundle = await rolldown({
     input: file.path,
     plugins: file.path.includes("typia") ? [UnpluginTypia({ log: false })] : [],
+    external: [/node:/],
   });
   const output = await bundle.generate({
     format: "esm",
