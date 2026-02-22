@@ -1,13 +1,3 @@
-var __defProp = Object.defineProperty;
-var __exportAll = (all, no_symbols) => {
-	let target = {};
-	for (var name in all) __defProp(target, name, {
-		get: all[name],
-		enumerable: true
-	});
-	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
-	return target;
-};
 /** TypeBox instantiation metrics */
 const Metrics = {
 	assign: 0,
@@ -401,33 +391,17 @@ function IsKind(value, kind) {
 function IsSchema$1(value) {
 	return IsObject$1(value);
 }
-/** Creates an OptionalAddAction. */
-function OptionalAddAction(type) {
-	return Create({ ["~kind"]: "OptionalAddAction" }, { type }, {});
-}
 /** Returns true if this value is a OptionalAddAction. */
 function IsOptionalAddAction(value) {
 	return IsObject$1(value) && HasPropertyKey(value, "~kind") && HasPropertyKey(value, "type") && IsEqual(value["~kind"], "OptionalAddAction") && IsSchema$1(value.type);
-}
-/** Creates a OptionalRemoveAction. */
-function OptionalRemoveAction(type) {
-	return Create({ ["~kind"]: "OptionalRemoveAction" }, { type }, {});
 }
 /** Returns true if this value is a OptionalRemoveAction. */
 function IsOptionalRemoveAction(value) {
 	return IsObject$1(value) && HasPropertyKey(value, "~kind") && HasPropertyKey(value, "type") && IsEqual(value["~kind"], "OptionalRemoveAction") && IsSchema$1(value.type);
 }
-/** Creates a ReadonlyAddAction. */
-function ReadonlyAddAction(type) {
-	return Create({ ["~kind"]: "ReadonlyAddAction" }, { type }, {});
-}
 /** Returns true if this value is a ReadonlyAddAction. */
 function IsReadonlyAddAction(value) {
 	return IsObject$1(value) && HasPropertyKey(value, "~kind") && HasPropertyKey(value, "type") && IsEqual(value["~kind"], "ReadonlyAddAction") && IsSchema$1(value.type);
-}
-/** Creates a ReadonlyRemoveAction. */
-function ReadonlyRemoveAction(type) {
-	return Create({ ["~kind"]: "ReadonlyRemoveAction" }, { type }, {});
 }
 /** Returns true if this value is a ReadonlyRemoveAction. */
 function IsReadonlyRemoveAction(value) {
@@ -466,7 +440,7 @@ function OptionalAdd(type) {
 	return Update$1(type, { "~optional": true }, {});
 }
 /** Applies an Optional modifier to the given type. */
-function Optional$2(type) {
+function Optional(type) {
 	return OptionalAdd(type);
 }
 /** Returns true if the given value is TOptional */
@@ -482,7 +456,7 @@ function ReadonlyAdd(type) {
 	return Update$1(type, { "~readonly": true }, {});
 }
 /** Applies an Readonly property modifier to the given type. */
-function Readonly$1(type) {
+function Readonly(type) {
 	return ReadonlyAdd(type);
 }
 /** Returns true if the given value is a TReadonly */
@@ -527,58 +501,12 @@ function AsyncIteratorOptions(type) {
 		"iteratorItems"
 	]);
 }
-function BaseProperty(value) {
-	return {
-		enumerable: Get$2().enumerableKind,
-		writable: false,
-		configurable: false,
-		value
-	};
-}
-/** Base class for creating extension types. */
-var Base$1 = class {
-	constructor() {
-		globalThis.Object.defineProperty(this, "~kind", BaseProperty("Base"));
-		globalThis.Object.defineProperty(this, "~guard", BaseProperty({
-			check: (value) => this.Check(value),
-			errors: (value) => this.Errors(value)
-		}));
-	}
-	/** Checks a value or returns false if invalid */
-	Check(value) {
-		return true;
-	}
-	/** Returns errors for a value. Return an empty array if valid.  */
-	Errors(value) {
-		return [];
-	}
-	/** Converts a value into this type */
-	Convert(value) {
-		return value;
-	}
-	/** Cleans a value according to this type */
-	Clean(value) {
-		return value;
-	}
-	/** Returns a default value for this type */
-	Default(value) {
-		return value;
-	}
-	/** Creates a new instance of this type */
-	Create() {
-		throw new Error("Create not implemented");
-	}
-	/** Clones this type  */
-	Clone() {
-		throw Error("Clone not implemented");
-	}
-};
 /** Returns true if the given value is a Base type. */
 function IsBase(value) {
 	return IsKind(value, "Base");
 }
 /** Creates a Constructor type. */
-function Constructor$1(parameters, instanceType, options = {}) {
+function Constructor(parameters, instanceType, options = {}) {
 	return Create({ "~kind": "Constructor" }, {
 		type: "constructor",
 		parameters,
@@ -599,7 +527,7 @@ function ConstructorOptions(type) {
 	]);
 }
 /** Creates a Function type. */
-function _Function_$1(parameters, returnType, options = {}) {
+function _Function_(parameters, returnType, options = {}) {
 	return Create({ ["~kind"]: "Function" }, {
 		type: "function",
 		parameters,
@@ -701,26 +629,6 @@ function Unknown(options) {
 function IsUnknown(value) {
 	return IsKind(value, "Unknown");
 }
-/** Creates an Infer instruction. */
-function Infer(...args) {
-	const [name, extends_] = Match$1(args, {
-		2: (name, extends_) => [
-			name,
-			extends_,
-			extends_
-		],
-		1: (name) => [
-			name,
-			Unknown(),
-			Unknown()
-		]
-	});
-	return Create({ ["~kind"]: "Infer" }, {
-		type: "infer",
-		name,
-		extends: extends_
-	}, {});
-}
 /** Returns true if the given value is TInfer. */
 function IsInfer(value) {
 	return IsKind(value, "Infer");
@@ -761,7 +669,7 @@ function IntersectOptions(type) {
 	return Discard(type, ["~kind", "allOf"]);
 }
 /** Used for unreachable logic */
-function Unreachable$1() {
+function Unreachable() {
 	throw new Error("Unreachable");
 }
 function InstanceKeys(value) {
@@ -865,7 +773,7 @@ function FromUndefined$7(_value) {
 	return FNV1A64_OP(ByteMarker.Undefined);
 }
 function FromValue$2(value) {
-	return IsTypeArray(value) ? FromTypeArray(value) : IsDate$1(value) ? FromDate(value) : IsRegExp(value) ? FromRegExp(value) : IsBoolean$1(value) ? FromBoolean$7(value.valueOf()) : IsString$1(value) ? FromString$7(value.valueOf()) : IsNumber$1(value) ? FromNumber$7(value.valueOf()) : IsIEEE754(value) ? FromNumber$7(value) : IsArray$1(value) ? FromArray$9(value) : IsBoolean$2(value) ? FromBoolean$7(value) : IsBigInt$1(value) ? FromBigInt$7(value) : IsConstructor$1(value) ? FromConstructor(value) : IsNull$1(value) ? FromNull$7(value) : IsObject$1(value) ? FromObject$12(value) : IsString$2(value) ? FromString$7(value) : IsSymbol$1(value) ? FromSymbol(value) : IsUndefined$1(value) ? FromUndefined$7(value) : IsFunction$1(value) ? FromFunction(value) : Unreachable$1();
+	return IsTypeArray(value) ? FromTypeArray(value) : IsDate$1(value) ? FromDate(value) : IsRegExp(value) ? FromRegExp(value) : IsBoolean$1(value) ? FromBoolean$7(value.valueOf()) : IsString$1(value) ? FromString$7(value.valueOf()) : IsNumber$1(value) ? FromNumber$7(value.valueOf()) : IsIEEE754(value) ? FromNumber$7(value) : IsArray$1(value) ? FromArray$9(value) : IsBoolean$2(value) ? FromBoolean$7(value) : IsBigInt$1(value) ? FromBigInt$7(value) : IsConstructor$1(value) ? FromConstructor(value) : IsNull$1(value) ? FromNull$7(value) : IsObject$1(value) ? FromObject$12(value) : IsString$2(value) ? FromString$7(value) : IsSymbol$1(value) ? FromSymbol(value) : IsUndefined$1(value) ? FromUndefined$7(value) : IsFunction$1(value) ? FromFunction(value) : Unreachable();
 }
 /** Generates a FNV1A-64 non cryptographic hash of the given value */
 function HashCode(value) {
@@ -920,44 +828,6 @@ let locale = en_US;
 function Get$1() {
 	return locale;
 }
-var EncodeBuilder = class {
-	constructor(type, decode) {
-		this.type = type;
-		this.decode = decode;
-	}
-	Encode(callback) {
-		const type = this.type;
-		const codec = {
-			decode: IsCodec(type) ? (value) => this.decode(type["~codec"].decode(value)) : this.decode,
-			encode: IsCodec(type) ? (value) => type["~codec"].encode(callback(value)) : callback
-		};
-		return Update$1(this.type, { "~codec": codec }, {});
-	}
-};
-var DecodeBuilder = class {
-	constructor(type) {
-		this.type = type;
-	}
-	Decode(callback) {
-		return new EncodeBuilder(this.type, callback);
-	}
-};
-/** Creates a bi-directional Codec. Codec functions are called on Value.Decode and Value.Encode. */
-function Codec(type) {
-	return new DecodeBuilder(type);
-}
-/** Createsa  uni-directional Codec with Decode only. The Decode function is called on Value.Decode */
-function Decode$7(type, callback) {
-	return Codec(type).Decode(callback).Encode(() => {
-		throw Error("Encode not implemented");
-	});
-}
-/** Creates a uni-directional Codec with Encode only. The Encode function is called on Value.Encode */
-function Encode$7(type, callback) {
-	return Codec(type).Decode(() => {
-		throw Error("Decode not implemented");
-	}).Encode(callback);
-}
 function IsCodec(value) {
 	return IsSchema$1(value) && HasPropertyKey(value, "~codec") && IsObject$1(value["~codec"]) && HasPropertyKey(value["~codec"], "encode") && HasPropertyKey(value["~codec"], "decode");
 }
@@ -979,32 +849,20 @@ function IsRefine$1(value) {
 }
 const BigIntPattern = "-?(?:0|[1-9][0-9]*)n";
 /** Creates a BigInt type. */
-function BigInt$2(options) {
+function BigInt$1(options) {
 	return Create({ "~kind": "BigInt" }, { type: "bigint" }, options);
 }
 /** Returns true if the given value is a TBigInt. */
 function IsBigInt(value) {
 	return IsKind(value, "BigInt");
 }
-/** Creates a Boolean type. */
-function Boolean$1(options) {
-	return Create({ "~kind": "Boolean" }, { type: "boolean" }, options);
-}
 /** Returns true if the given value is a TBoolean. */
 function IsBoolean(value) {
 	return IsKind(value, "Boolean");
 }
-/** Creates an Identifier. */
-function Identifier(name) {
-	return Create({ "~kind": "Identifier" }, { name });
-}
-/** Returns true if the given value is a TIdentifier. */
-function IsIdentifier(value) {
-	return IsKind(value, "Identifier");
-}
 const IntegerPattern = "-?(?:0|[1-9][0-9]*)";
 /** Creates a Integer type. */
-function Integer$1(options) {
+function Integer(options) {
 	return Create({ "~kind": "Integer" }, { type: "integer" }, options);
 }
 /** Returns true if the given value is TInteger. */
@@ -1047,7 +905,7 @@ function LiteralTypeName(value) {
 	})();
 }
 /** Creates a Literal type. */
-function Literal$1(value, options) {
+function Literal(value, options) {
 	return Create({ "~kind": "Literal" }, {
 		type: LiteralTypeName(value),
 		const: value
@@ -1087,7 +945,7 @@ function IsNull(value) {
 }
 const NumberPattern = "-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?";
 /** Creates a Number type. */
-function Number$2(options) {
+function Number$1(options) {
 	return Create({ "~kind": "Number" }, { type: "number" }, options);
 }
 /** Returns true if the given value is a TNumber. */
@@ -1115,7 +973,7 @@ function PropertyValues(properties) {
 	return Values(properties);
 }
 /** Creates an Object type. */
-function _Object_$1(properties, options = {}) {
+function _Object_(properties, options = {}) {
 	const requiredKeys = RequiredArray(properties);
 	const required = requiredKeys.length > 0 ? { required: requiredKeys } : {};
 	return Create({ "~kind": "Object" }, {
@@ -1136,35 +994,6 @@ function ObjectOptions(type) {
 		"properties",
 		"required"
 	]);
-}
-/** Creates a Parameter type. */
-function Parameter$1(...args) {
-	const [name, extends_, equals] = Match$1(args, {
-		3: (name, extends_, equals) => [
-			name,
-			extends_,
-			equals
-		],
-		2: (name, extends_) => [
-			name,
-			extends_,
-			extends_
-		],
-		1: (name) => [
-			name,
-			Unknown(),
-			Unknown()
-		]
-	});
-	return Create({ "~kind": "Parameter" }, {
-		name,
-		extends: extends_,
-		equals
-	}, {});
-}
-/** Returns true if the given value is TParameter. */
-function IsParameter(value) {
-	return IsKind(value, "Parameter");
 }
 /** Creates a Promise type. */
 function Promise$1(item, options) {
@@ -1187,7 +1016,7 @@ function PromiseOptions(type) {
 }
 const StringPattern = ".*";
 /** Creates a String type. */
-function String$2(options) {
+function String$1(options) {
 	return Create({ "~kind": "String" }, { type: "string" }, options);
 }
 /** Returns true if the given value is TString. */
@@ -1246,20 +1075,20 @@ function FromUnion$11(variants, types, result = []) {
 	return IsSchema$1(left) ? FromUnion$11(variants, right, [...result, ...FromType$14(variants, left)]) : result;
 }
 function FromType$14(variants, type) {
-	return IsUnion(type) ? FromUnion$11(variants, type.anyOf) : IsLiteral(type) ? FromLiteral$3(variants, type.const) : Unreachable$1();
+	return IsUnion(type) ? FromUnion$11(variants, type.anyOf) : IsLiteral(type) ? FromLiteral$3(variants, type.const) : Unreachable();
 }
 function DecodeFromSpan(variants, types) {
 	const [left, ...right] = types;
 	return IsSchema$1(left) ? DecodeFromSpan(FromType$14(variants, left), right) : variants;
 }
 function VariantsToLiterals(variants) {
-	return variants.map((variant) => Literal$1(variant));
+	return variants.map((variant) => Literal(variant));
 }
 function DecodeTypesAsUnion(types) {
 	return Union(VariantsToLiterals(DecodeFromSpan([], types)));
 }
 function DecodeTypes(types) {
-	return IsEqual(types.length, 0) ? Unreachable$1() : IsEqual(types.length, 1) && IsLiteral(types[0]) ? types[0] : DecodeTypesAsUnion(types);
+	return IsEqual(types.length, 0) ? Unreachable() : IsEqual(types.length, 1) && IsLiteral(types[0]) ? types[0] : DecodeTypesAsUnion(types);
 }
 /**
 * (Internal) Decodes a TemplateLiteral pattern into a Type. This function is unsafe. Decoding a non-finite
@@ -1269,12 +1098,12 @@ function DecodeTypes(types) {
 */
 function TemplateLiteralDecodeUnsafe(pattern) {
 	const types = ParsePatternIntoTypes(pattern);
-	return IsEqual(types.length, 0) ? String$2() : IsTemplateLiteralFinite(types) ? DecodeTypes(types) : TemplateLiteralCreate(pattern);
+	return IsEqual(types.length, 0) ? String$1() : IsTemplateLiteralFinite(types) ? DecodeTypes(types) : TemplateLiteralCreate(pattern);
 }
 /** Decodes a TemplateLiteral pattern but returns TString if the pattern in non-finite. */
 function TemplateLiteralDecode(pattern) {
 	const decoded = TemplateLiteralDecodeUnsafe(pattern);
-	return IsTemplateLiteral(decoded) ? String$2() : decoded;
+	return IsTemplateLiteral(decoded) ? String$1() : decoded;
 }
 function CreateRecord(key, value) {
 	const type = "object";
@@ -1309,7 +1138,7 @@ function RecordPattern(type) {
 /** Returns the Record key as a TypeBox type  */
 function RecordKey(type) {
 	const pattern = RecordPattern(type);
-	return IsEqual(pattern, StringKey) ? String$2() : IsEqual(pattern, IntegerKey) ? Integer$1() : IsEqual(pattern, NumberKey) ? Number$2() : TemplateLiteralDecodeUnsafe(pattern);
+	return IsEqual(pattern, StringKey) ? String$1() : IsEqual(pattern, IntegerKey) ? Integer() : IsEqual(pattern, NumberKey) ? Number$1() : TemplateLiteralDecodeUnsafe(pattern);
 }
 function RecordValue(type) {
 	return type.patternProperties[RecordPattern(type)];
@@ -1328,16 +1157,8 @@ function Rest(type) {
 function IsRest(value) {
 	return IsKind(value, "Rest");
 }
-/** Creates a This type. */
-function This(options) {
-	return Create({ ["~kind"]: "This" }, { $ref: "#" }, options);
-}
-/** Returns true if the given value is TThis. */
-function IsThis(value) {
-	return IsKind(value, "This");
-}
 /** Creates a Tuple type. */
-function Tuple$1(types, options = {}) {
+function Tuple(types, options = {}) {
 	const [items, minItems, additionalItems] = [
 		types,
 		types.length,
@@ -1376,384 +1197,27 @@ function IsUndefined(value) {
 function Unsafe(schema) {
 	return Create({ ["~kind"]: "Unsafe" }, {}, schema);
 }
-/** Returns true if the given value is TUnsafe. */
-function IsUnsafe(value) {
-	return IsKind(value, "Unsafe");
-}
-/** Creates a Void type. */
-function Void(options) {
-	return Create({ "~kind": "Void" }, { type: "void" }, options);
-}
 /** Returns true if the given value is TVoid. */
 function IsVoid(value) {
 	return IsKind(value, "Void");
 }
-function IntrinsicOrCall(ref, parameters) {
-	return IsEqual(ref, "Array") ? Array$1(parameters[0]) : IsEqual(ref, "AsyncIterator") ? AsyncIterator(parameters[0]) : IsEqual(ref, "Iterator") ? Iterator(parameters[0]) : IsEqual(ref, "Promise") ? Promise$1(parameters[0]) : IsEqual(ref, "Awaited") ? AwaitedDeferred(parameters[0]) : IsEqual(ref, "Capitalize") ? CapitalizeDeferred(parameters[0]) : IsEqual(ref, "ConstructorParameters") ? ConstructorParametersDeferred(parameters[0]) : IsEqual(ref, "Evaluate") ? EvaluateDeferred(parameters[0]) : IsEqual(ref, "Exclude") ? ExcludeDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Extract") ? ExtractDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Index") ? IndexDeferred(parameters[0], parameters[1]) : IsEqual(ref, "InstanceType") ? InstanceTypeDeferred(parameters[0]) : IsEqual(ref, "Lowercase") ? LowercaseDeferred(parameters[0]) : IsEqual(ref, "NonNullable") ? NonNullableDeferred(parameters[0]) : IsEqual(ref, "Omit") ? OmitDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Options") ? OptionsDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Parameters") ? ParametersDeferred(parameters[0]) : IsEqual(ref, "Partial") ? PartialDeferred(parameters[0]) : IsEqual(ref, "Pick") ? PickDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Readonly") ? ReadonlyTypeDeferred(parameters[0]) : IsEqual(ref, "KeyOf") ? KeyOfDeferred(parameters[0]) : IsEqual(ref, "Record") ? RecordDeferred(parameters[0], parameters[1]) : IsEqual(ref, "Required") ? RequiredDeferred(parameters[0]) : IsEqual(ref, "ReturnType") ? ReturnTypeDeferred(parameters[0]) : IsEqual(ref, "Uncapitalize") ? UncapitalizeDeferred(parameters[0]) : IsEqual(ref, "Uppercase") ? UppercaseDeferred(parameters[0]) : CallConstruct(Ref$1(ref), parameters);
-}
-function Unreachable() {
-	throw Error("Unreachable");
-}
-const DelimitedDecode = (input, result = []) => {
-	return input.reduce((result, left) => {
-		return IsArray$1(left) && IsEqual(left.length, 2) ? [...result, left[0]] : [...result, left];
-	}, []);
-};
-const Delimited = (input) => {
-	const [left, right] = input;
-	return DelimitedDecode([...left, ...right]);
-};
-function GenericParameterExtendsEqualsMapping(input) {
-	return Parameter$1(input[0], input[2], input[4]);
-}
-function GenericParameterExtendsMapping(input) {
-	return Parameter$1(input[0], input[2], input[2]);
-}
-function GenericParameterEqualsMapping(input) {
-	return Parameter$1(input[0], Unknown(), input[2]);
-}
-function GenericParameterIdentifierMapping(input) {
-	return Parameter$1(input, Unknown(), Unknown());
-}
-function GenericParameterMapping(input) {
-	return input;
-}
-function GenericParameterListMapping(input) {
-	return Delimited(input);
-}
-function GenericParametersMapping(input) {
-	return input[1];
-}
-function GenericCallArgumentListMapping(input) {
-	return Delimited(input);
-}
-function GenericCallArgumentsMapping(input) {
-	return input[1];
-}
-function GenericCallMapping(input) {
-	return IntrinsicOrCall(input[0], input[1]);
-}
-function OptionalSemiColonMapping(input) {
-	return null;
-}
-function KeywordStringMapping(input) {
-	return String$2();
-}
-function KeywordNumberMapping(input) {
-	return Number$2();
-}
-function KeywordBooleanMapping(input) {
-	return Boolean$1();
-}
-function KeywordUndefinedMapping(input) {
-	return Undefined();
-}
-function KeywordNullMapping(input) {
-	return Null();
-}
-function KeywordIntegerMapping(input) {
-	return Integer$1();
-}
-function KeywordBigIntMapping(input) {
-	return BigInt$2();
-}
-function KeywordUnknownMapping(input) {
-	return Unknown();
-}
-function KeywordAnyMapping(input) {
-	return Any();
-}
-function KeywordObjectMapping(input) {
-	return _Object_$1({});
-}
-function KeywordNeverMapping(input) {
-	return Never();
-}
-function KeywordSymbolMapping(input) {
-	return Symbol$1();
-}
-function KeywordVoidMapping(input) {
-	return Void();
-}
-function KeywordThisMapping(input) {
-	return This();
-}
-function KeywordMapping(input) {
-	return input;
-}
-function TemplateInterpolateMapping(input) {
-	return input[1];
-}
-function TemplateSpanMapping(input) {
-	return Literal$1(input);
-}
-function TemplateBodyMapping(input) {
-	return IsEqual(input.length, 3) ? [
-		input[0],
-		input[1],
-		...input[2]
-	] : [input[0]];
-}
-function TemplateLiteralTypesMapping(input) {
-	return input[1];
-}
-function TemplateLiteralMapping(input) {
-	return TemplateLiteralDeferred(input);
-}
-function LiteralBigIntMapping(input) {
-	return Literal$1(BigInt(input));
-}
-function LiteralBooleanMapping(input) {
-	return Literal$1(IsEqual(input, "true"));
-}
-function LiteralNumberMapping(input) {
-	return Literal$1(parseFloat(input));
-}
-function LiteralStringMapping(input) {
-	return Literal$1(input);
-}
-function LiteralMapping(input) {
-	return input;
-}
-function KeyOfMapping(input) {
-	return input.length > 0;
-}
-function IndexArrayMapping(input) {
-	return input.reduce((result, current) => {
-		return IsEqual(current.length, 3) ? [...result, [current[1]]] : [...result, []];
-	}, []);
-}
-function ExtendsMapping(input) {
-	return IsEqual(input.length, 6) ? [
-		input[1],
-		input[3],
-		input[5]
-	] : [];
-}
-function BaseMapping(input) {
-	return IsArray$1(input) && IsEqual(input.length, 3) ? input[1] : input;
-}
-const FactorIndexArray = (Type, indexArray) => {
-	return indexArray.reduceRight((result, right) => {
-		const _right = right;
-		return IsEqual(_right.length, 1) ? IndexDeferred(result, _right[0]) : IsEqual(_right.length, 0) ? Array$1(result) : Unreachable();
-	}, Type);
-};
-const FactorExtends = (type, extend) => {
-	return IsEqual(extend.length, 3) ? ConditionalDeferred(type, extend[0], extend[1], extend[2]) : type;
-};
-function FactorMapping(input) {
-	const [keyOf, type, indexArray, extend] = input;
-	return keyOf ? FactorExtends(KeyOfDeferred(FactorIndexArray(type, indexArray)), extend) : FactorExtends(FactorIndexArray(type, indexArray), extend);
-}
-function ExprBinaryMapping(left, rest) {
-	return IsEqual(rest.length, 3) ? (() => {
-		const [operator, right, next] = rest;
-		const Schema = ExprBinaryMapping(right, next);
-		if (IsEqual(operator, "&")) return IsIntersect(Schema) ? Intersect([left, ...Schema.allOf]) : Intersect([left, Schema]);
-		if (IsEqual(operator, "|")) return IsUnion(Schema) ? Union([left, ...Schema.anyOf]) : Union([left, Schema]);
-		Unreachable();
-	})() : left;
-}
-function ExprTermTailMapping(input) {
-	return input;
-}
-function ExprTermMapping(input) {
-	const [left, rest] = input;
-	return ExprBinaryMapping(left, rest);
-}
-function ExprTailMapping(input) {
-	return input;
-}
-function ExprMapping(input) {
-	const [left, rest] = input;
-	return ExprBinaryMapping(left, rest);
-}
-function ExprReadonlyMapping(input) {
-	return ImmutableAdd(input[1]);
-}
-function ExprPipeMapping(input) {
-	return input[1];
-}
-function GenericTypeMapping(input) {
-	return Generic(input[0], input[2]);
-}
-function InferTypeMapping(input) {
-	return IsEqual(input.length, 4) ? Infer(input[1], input[3]) : IsEqual(input.length, 2) ? Infer(input[1], Unknown()) : Unreachable();
-}
-function TypeMapping(input) {
-	return input;
-}
-function PropertyKeyNumberMapping(input) {
-	return `${input}`;
-}
-function PropertyKeyIdentMapping(input) {
-	return input;
-}
-function PropertyKeyQuotedMapping(input) {
-	return input;
-}
-function PropertyKeyIndexMapping(input) {
-	return IsInteger(input[3]) ? IntegerKey : IsNumber(input[3]) ? NumberKey : IsSymbol(input[3]) ? StringKey : IsString(input[3]) ? StringKey : Unreachable();
-}
-function PropertyKeyMapping(input) {
-	return input;
-}
-function ReadonlyMapping(input) {
-	return input.length > 0;
-}
-function OptionalMapping(input) {
-	return input.length > 0;
-}
-function PropertyMapping(input) {
-	const [isReadonly, key, isOptional, _colon, type] = input;
-	return { [key]: isReadonly && isOptional ? ReadonlyAdd(OptionalAdd(type)) : isReadonly && !isOptional ? ReadonlyAdd(type) : !isReadonly && isOptional ? OptionalAdd(type) : type };
-}
-function PropertyDelimiterMapping(input) {
-	return input;
-}
-function PropertyListMapping(input) {
-	return Delimited(input);
-}
-function PropertiesReduce(propertyList) {
-	return propertyList.reduce((result, left) => {
-		return HasPropertyKey(left, IntegerKey) || HasPropertyKey(left, NumberKey) || HasPropertyKey(left, StringKey) ? [result[0], Assign(result[1], left)] : [Assign(result[0], left), result[1]];
-	}, [{}, {}]);
-}
-function PropertiesMapping(input) {
-	return PropertiesReduce(input[1]);
-}
-function _Object_Mapping(input) {
-	const [properties, patternProperties] = input;
-	return _Object_$1(properties, IsEqual(Keys(patternProperties).length, 0) ? {} : { patternProperties });
-}
-function ElementNamedMapping(input) {
-	return IsEqual(input.length, 5) ? ReadonlyAdd(OptionalAdd(input[4])) : IsEqual(input.length, 3) ? input[2] : IsEqual(input.length, 4) ? IsEqual(input[2], "readonly") ? ReadonlyAdd(input[3]) : OptionalAdd(input[3]) : Unreachable();
-}
-function ElementReadonlyOptionalMapping(input) {
-	return ReadonlyAdd(OptionalAdd(input[1]));
-}
-function ElementReadonlyMapping(input) {
-	return ReadonlyAdd(input[1]);
-}
-function ElementOptionalMapping(input) {
-	return OptionalAdd(input[0]);
-}
-function ElementBaseMapping(input) {
-	return input;
-}
-function ElementMapping(input) {
-	return IsEqual(input.length, 2) ? Rest(input[1]) : IsEqual(input.length, 1) ? input[0] : Unreachable();
-}
-function ElementListMapping(input) {
-	return Delimited(input);
-}
-function TupleMapping(input) {
-	return Tuple$1(input[1]);
-}
-function ParameterReadonlyOptionalMapping(input) {
-	return ReadonlyAdd(OptionalAdd(input[4]));
-}
-function ParameterReadonlyMapping(input) {
-	return ReadonlyAdd(input[3]);
-}
-function ParameterOptionalMapping(input) {
-	return OptionalAdd(input[3]);
-}
-function ParameterTypeMapping(input) {
-	return input[2];
-}
-function ParameterBaseMapping(input) {
-	return input;
-}
-function ParameterMapping(input) {
-	return IsEqual(input.length, 2) ? Rest(input[1]) : IsEqual(input.length, 1) ? input[0] : Unreachable();
-}
-function ParameterListMapping(input) {
-	return Delimited(input);
-}
-function _Function_Mapping(input) {
-	return _Function_$1(input[1], input[4]);
-}
-function ConstructorMapping(input) {
-	return Constructor$1(input[2], input[5]);
-}
-function ApplyReadonly$1(state, type) {
-	return IsEqual(state, "remove") ? ReadonlyRemoveAction(type) : IsEqual(state, "add") ? ReadonlyAddAction(type) : type;
-}
-function MappedReadonlyMapping(input) {
-	return IsEqual(input.length, 2) && IsEqual(input[0], "-") ? "remove" : IsEqual(input.length, 2) && IsEqual(input[0], "+") ? "add" : IsEqual(input.length, 1) ? "add" : "none";
-}
-function ApplyOptional$1(state, type) {
-	return IsEqual(state, "remove") ? OptionalRemoveAction(type) : IsEqual(state, "add") ? OptionalAddAction(type) : type;
-}
-function MappedOptionalMapping(input) {
-	return IsEqual(input.length, 2) && IsEqual(input[0], "-") ? "remove" : IsEqual(input.length, 2) && IsEqual(input[0], "+") ? "add" : IsEqual(input.length, 1) ? "add" : "none";
-}
-function MappedAsMapping(input) {
-	return IsEqual(input.length, 2) ? [input[1]] : [];
-}
-function MappedMapping(input) {
-	return IsArray$1(input[6]) && IsEqual(input[6].length, 1) ? MappedDeferred(Identifier(input[3]), input[5], input[6][0], ApplyReadonly$1(input[1], ApplyOptional$1(input[8], input[10]))) : MappedDeferred(Identifier(input[3]), input[5], Ref$1(input[3]), ApplyReadonly$1(input[1], ApplyOptional$1(input[8], input[10])));
-}
-function ReferenceMapping(input) {
-	return Ref$1(input);
-}
-function OptionsMapping(input) {
-	return OptionsDeferred(input[2], input[4]);
-}
-function JsonNumberMapping(input) {
-	return parseFloat(input);
-}
-function JsonBooleanMapping(input) {
-	return IsEqual(input, "true");
-}
-function JsonStringMapping(input) {
-	return input;
-}
-function JsonNullMapping(input) {
-	return null;
-}
-function JsonPropertyMapping(input) {
-	return { [input[0]]: input[2] };
-}
-function JsonPropertyListMapping(input) {
-	return Delimited(input);
-}
-function JsonObjectMappingReduce(propertyList) {
-	return propertyList.reduce((result, left) => {
-		return Assign(result, left);
-	}, {});
-}
-function JsonObjectMapping(input) {
-	return JsonObjectMappingReduce(input[1]);
-}
-function JsonElementListMapping(input) {
-	return Delimited(input);
-}
-function JsonArrayMapping(input) {
-	return input[1];
-}
-function JsonMapping(input) {
-	return input;
-}
 function PatternBigIntMapping(input) {
-	return BigInt$2();
+	return BigInt$1();
 }
 function PatternStringMapping(input) {
-	return String$2();
+	return String$1();
 }
 function PatternNumberMapping(input) {
-	return Number$2();
+	return Number$1();
 }
 function PatternIntegerMapping(input) {
-	return Integer$1();
+	return Integer();
 }
 function PatternNeverMapping(input) {
 	return Never();
 }
 function PatternTextMapping(input) {
-	return Literal$1(input);
+	return Literal(input);
 }
 function PatternBaseMapping(input) {
 	return input;
@@ -1772,51 +1236,6 @@ function PatternBodyMapping(input) {
 }
 function PatternMapping(input) {
 	return input[1];
-}
-function InterfaceDeclarationHeritageListMapping(input) {
-	return Delimited(input);
-}
-function InterfaceDeclarationHeritageMapping(input) {
-	return IsEqual(input.length, 2) ? input[1] : [];
-}
-function InterfaceDeclarationGenericMapping(input) {
-	const parameters = input[2];
-	const heritage = input[3];
-	const [properties, patternProperties] = input[4];
-	const options = IsEqual(Keys(patternProperties).length, 0) ? {} : { patternProperties };
-	return { [input[1]]: Generic(parameters, InterfaceDeferred(heritage, properties, options)) };
-}
-function InterfaceDeclarationMapping(input) {
-	const heritage = input[2];
-	const [properties, patternProperties] = input[3];
-	const options = IsEqual(Keys(patternProperties).length, 0) ? {} : { patternProperties };
-	return { [input[1]]: InterfaceDeferred(heritage, properties, options) };
-}
-function TypeAliasDeclarationGenericMapping(input) {
-	return { [input[1]]: Generic(input[2], input[4]) };
-}
-function TypeAliasDeclarationMapping(input) {
-	return { [input[1]]: input[3] };
-}
-function ExportKeywordMapping(input) {
-	return null;
-}
-function ModuleDeclarationDelimiterMapping(input) {
-	return input;
-}
-function ModuleDeclarationListMapping(input) {
-	return PropertiesReduce(Delimited(input));
-}
-function ModuleDeclarationMapping(input) {
-	return input[1];
-}
-function ModuleMapping(input) {
-	const moduleDeclaration = input[0];
-	const moduleDeclarationList = input[1];
-	return ModuleDeferred(Assign(moduleDeclaration, moduleDeclarationList[0]));
-}
-function ScriptMapping(input) {
-	return input;
 }
 /** Checks the value is a Tuple-2 [string, string] result */
 function IsResult(value) {
@@ -1837,15 +1256,11 @@ function Range(start, end) {
 	return Array.from({ length: end - start + 1 }, (_, i) => String.fromCharCode(start + i));
 }
 const Alpha = [...Range(97, 122), ...Range(65, 90)];
-const Zero = "0";
-const NonZero = Range(49, 57);
-const Digit = [Zero, ...NonZero];
+const Digit = ["0", ...Range(49, 57)];
 const WhiteSpace = " ";
 const NewLine = "\n";
 const UnderScore = "_";
-const Dot = ".";
 const DollarSign = "$";
-const Hyphen = "-";
 const LineComment = "//";
 const OpenComment = "/*";
 const CloseComment = "*/";
@@ -1868,57 +1283,7 @@ function Trim(input) {
 	const trimmed = input.trimStart();
 	return trimmed.startsWith(OpenComment) ? Trim(DiscardMultilineComment(trimmed.slice(2))) : trimmed.startsWith(LineComment) ? Trim(DiscardLineComment(trimmed.slice(2))) : trimmed;
 }
-function IsDiscard(discard, input) {
-	return discard.includes(input);
-}
-/** Takes characters from the Input until no-match. The Discard set is used to omit characters from the match */
-function Many(allowed, discard, input, result = "") {
-	const takeResult = Take(allowed, input);
-	return IsResult(takeResult) ? IsDiscard(discard, takeResult[0]) ? Many(allowed, discard, takeResult[1], result) : Many(allowed, discard, takeResult[1], `${result}${takeResult[0]}`) : [result, input];
-}
-/** Matches the given Value or empty string if no match. This function never fails */
-function Optional$1(value, input) {
-	const result = Take([value], input);
-	return IsResult(result) ? result : ["", input];
-}
-function TakeSign$1(input) {
-	return Optional$1(Hyphen, input);
-}
-function TakeNonZero(input) {
-	return Take(NonZero, input);
-}
-const AllowedDigits$1 = [...Digit, UnderScore];
-function TakeDigits(input) {
-	return Many(AllowedDigits$1, [UnderScore], input);
-}
-function TakeInteger(input) {
-	const sign = TakeSign$1(input);
-	return IsResult(sign) ? (() => {
-		const zero = Take([Zero], sign[1]);
-		return IsResult(zero) ? [`${sign[0]}${zero[0]}`, zero[1]] : (() => {
-			const nonZero = TakeNonZero(sign[1]);
-			return IsResult(nonZero) ? (() => {
-				const digits = TakeDigits(nonZero[1]);
-				return IsResult(digits) ? [`${sign[0]}${nonZero[0]}${digits[0]}`, digits[1]] : [];
-			})() : [];
-		})();
-	})() : [];
-}
-/** Matches if next is a Integer */
-function Integer(input) {
-	return TakeInteger(Trim(input));
-}
-function TakeBigInt(input) {
-	const integer = Integer(input);
-	return IsResult(integer) ? (() => {
-		const n = Take(["n"], integer[1]);
-		return IsResult(n) ? [`${integer[0]}`, n[1]] : [];
-	})() : [];
-}
-/** Matches if next is a Integer literal with trailing 'n'. Trailing 'n' is omitted in result. */
-function BigInt$1(input) {
-	return TakeBigInt(input);
-}
+[...Digit];
 function TakeConst(const_, input) {
 	return Take([const_], input);
 }
@@ -1926,66 +1291,12 @@ function TakeConst(const_, input) {
 function Const(const_, input) {
 	return IsEqual(const_, "") ? ["", input] : const_.startsWith(NewLine) ? TakeConst(const_, TrimWhitespace(input)) : const_.startsWith(WhiteSpace) ? TakeConst(const_, input) : TakeConst(const_, Trim(input));
 }
-const Initial = [
+[...[
 	...Alpha,
 	UnderScore,
 	DollarSign
-];
-function TakeInitial$1(input) {
-	return Take(Initial, input);
-}
-const Remaining = [...Initial, ...Digit];
-function TakeRemaining(input, result = "") {
-	const remaining = Take(Remaining, input);
-	return IsResult(remaining) ? TakeRemaining(remaining[1], `${result}${remaining[0]}`) : [result, input];
-}
-function TakeIdent(input) {
-	const initial = TakeInitial$1(input);
-	return IsResult(initial) ? (() => {
-		const remaining = TakeRemaining(initial[1]);
-		return IsResult(remaining) ? [`${initial[0]}${remaining[0]}`, remaining[1]] : [];
-	})() : [];
-}
-/** Matches if next is an Ident */
-function Ident(input) {
-	return TakeIdent(Trim(input));
-}
-const AllowedDigits = [...Digit, UnderScore];
-function TakeSign(input) {
-	return Optional$1(Hyphen, input);
-}
-function IsLeadingDot(input) {
-	return IsResult(Take([Dot], input));
-}
-function TakeFractional(input) {
-	const digits = Many(AllowedDigits, [UnderScore], input);
-	return IsResult(digits) ? IsEqual(digits[0], "") ? [] : [digits[0], digits[1]] : [];
-}
-function LeadingDot(sign, input) {
-	const dot = Take([Dot], input);
-	return IsResult(dot) ? (() => {
-		const fractional = TakeFractional(dot[1]);
-		return IsResult(fractional) ? [`${sign}0${dot[0]}${fractional[0]}`, fractional[1]] : [];
-	})() : [];
-}
-function LeadingInteger(sign, input) {
-	const integer = Integer(input);
-	return IsResult(integer) ? (() => {
-		const dot = Take([Dot], integer[1]);
-		return IsResult(dot) ? (() => {
-			const fractional = TakeFractional(dot[1]);
-			return IsResult(fractional) ? [`${sign}${integer[0]}${dot[0]}${fractional[0]}`, fractional[1]] : [`${sign}${integer[0]}`, dot[1]];
-		})() : [`${sign}${integer[0]}`, integer[1]];
-	})() : [];
-}
-function TakeNumber(input) {
-	const sign = TakeSign(input);
-	return IsResult(sign) ? IsLeadingDot(sign[1]) ? LeadingDot(sign[0], sign[1]) : LeadingInteger(sign[0], sign[1]) : [];
-}
-/** Matches if next is a literal Number */
-function Number$1(input) {
-	return TakeNumber(Trim(input));
-}
+], ...Digit];
+[...Digit];
 function IsEnd(end, input) {
 	const [left, ...right] = end;
 	return IsString$2(left) ? input.startsWith(left) ? true : IsEnd(right, input) : false;
@@ -1997,326 +1308,12 @@ function Until(end, input, result = "") {
 		return Until(end, right, `${result}${left}`);
 	})();
 }
-function MultiLine(start, end, input) {
-	return input.startsWith(start) ? (() => {
-		const until = Until([end], input.slice(start.length));
-		return IsResult(until) ? until[1].startsWith(end) ? [`${until[0]}`, until[1].slice(end.length)] : [] : [];
-	})() : [];
-}
-function SingleLine(start, end, input) {
-	return input.startsWith(start) ? (() => {
-		const until = Until([NewLine, end], input.slice(start.length));
-		return IsResult(until) ? until[1].startsWith(end) ? [`${until[0]}`, until[1].slice(end.length)] : [] : [];
-	})() : [];
-}
-/** Matches from Start and End capturing everything in-between. Start and End are consumed. */
-function Span(start, end, multiLine, input) {
-	return multiLine ? MultiLine(start, end, Trim(input)) : SingleLine(start, end, Trim(input));
-}
-function TakeInitial(quotes, input) {
-	return Take(quotes, input);
-}
-function TakeSpan(quote, input) {
-	return Span(quote, quote, false, input);
-}
-function TakeString(quotes, input) {
-	const initial = TakeInitial(quotes, input);
-	return IsResult(initial) ? TakeSpan(initial[0], `${initial[0]}${initial[1]}`) : [];
-}
-/** Matches a literal String with the given quotes */
-function String$1(quotes, input) {
-	return TakeString(quotes, Trim(input));
-}
 /** Match Input until but not including End. No match if End not found or match is zero-length. */
 function Until_1(end, input) {
 	const until = Until(end, input);
 	return IsResult(until) ? IsEqual(until[0], "") ? [] : until : [];
 }
 const If = (result, left, right = () => []) => result.length === 2 ? left(result) : right();
-const GenericParameterExtendsEquals = (input) => If(If(Ident(input), ([_0, input]) => If(Const("extends", input), ([_1, input]) => If(Type(input), ([_2, input]) => If(Const("=", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [GenericParameterExtendsEqualsMapping(_0), input]);
-const GenericParameterExtends = (input) => If(If(Ident(input), ([_0, input]) => If(Const("extends", input), ([_1, input]) => If(Type(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [GenericParameterExtendsMapping(_0), input]);
-const GenericParameterEquals = (input) => If(If(Ident(input), ([_0, input]) => If(Const("=", input), ([_1, input]) => If(Type(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [GenericParameterEqualsMapping(_0), input]);
-const GenericParameterIdentifier = (input) => If(Ident(input), ([_0, input]) => [GenericParameterIdentifierMapping(_0), input]);
-const GenericParameter = (input) => If(If(GenericParameterExtendsEquals(input), ([_0, input]) => [_0, input], () => If(GenericParameterExtends(input), ([_0, input]) => [_0, input], () => If(GenericParameterEquals(input), ([_0, input]) => [_0, input], () => If(GenericParameterIdentifier(input), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [GenericParameterMapping(_0), input]);
-const GenericParameterList_0 = (input, result = []) => If(If(GenericParameter(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => GenericParameterList_0(input, [...result, _0]), () => [result, input]);
-const GenericParameterList = (input) => If(If(GenericParameterList_0(input), ([_0, input]) => If(If(If(GenericParameter(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [GenericParameterListMapping(_0), input]);
-const GenericParameters = (input) => If(If(Const("<", input), ([_0, input]) => If(GenericParameterList(input), ([_1, input]) => If(Const(">", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [GenericParametersMapping(_0), input]);
-const GenericCallArgumentList_0 = (input, result = []) => If(If(Type(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => GenericCallArgumentList_0(input, [...result, _0]), () => [result, input]);
-const GenericCallArgumentList = (input) => If(If(GenericCallArgumentList_0(input), ([_0, input]) => If(If(If(Type(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [GenericCallArgumentListMapping(_0), input]);
-const GenericCallArguments = (input) => If(If(Const("<", input), ([_0, input]) => If(GenericCallArgumentList(input), ([_1, input]) => If(Const(">", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [GenericCallArgumentsMapping(_0), input]);
-const GenericCall = (input) => If(If(Ident(input), ([_0, input]) => If(GenericCallArguments(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [GenericCallMapping(_0), input]);
-const OptionalSemiColon = (input) => If(If(If(Const(";", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [OptionalSemiColonMapping(_0), input]);
-const KeywordString = (input) => If(Const("string", input), ([_0, input]) => [KeywordStringMapping(_0), input]);
-const KeywordNumber = (input) => If(Const("number", input), ([_0, input]) => [KeywordNumberMapping(_0), input]);
-const KeywordBoolean = (input) => If(Const("boolean", input), ([_0, input]) => [KeywordBooleanMapping(_0), input]);
-const KeywordUndefined = (input) => If(Const("undefined", input), ([_0, input]) => [KeywordUndefinedMapping(_0), input]);
-const KeywordNull = (input) => If(Const("null", input), ([_0, input]) => [KeywordNullMapping(_0), input]);
-const KeywordInteger = (input) => If(Const("integer", input), ([_0, input]) => [KeywordIntegerMapping(_0), input]);
-const KeywordBigInt = (input) => If(Const("bigint", input), ([_0, input]) => [KeywordBigIntMapping(_0), input]);
-const KeywordUnknown = (input) => If(Const("unknown", input), ([_0, input]) => [KeywordUnknownMapping(_0), input]);
-const KeywordAny = (input) => If(Const("any", input), ([_0, input]) => [KeywordAnyMapping(_0), input]);
-const KeywordObject = (input) => If(Const("object", input), ([_0, input]) => [KeywordObjectMapping(_0), input]);
-const KeywordNever = (input) => If(Const("never", input), ([_0, input]) => [KeywordNeverMapping(_0), input]);
-const KeywordSymbol = (input) => If(Const("symbol", input), ([_0, input]) => [KeywordSymbolMapping(_0), input]);
-const KeywordVoid = (input) => If(Const("void", input), ([_0, input]) => [KeywordVoidMapping(_0), input]);
-const KeywordThis = (input) => If(Const("this", input), ([_0, input]) => [KeywordThisMapping(_0), input]);
-const Keyword = (input) => If(If(KeywordString(input), ([_0, input]) => [_0, input], () => If(KeywordNumber(input), ([_0, input]) => [_0, input], () => If(KeywordBoolean(input), ([_0, input]) => [_0, input], () => If(KeywordUndefined(input), ([_0, input]) => [_0, input], () => If(KeywordNull(input), ([_0, input]) => [_0, input], () => If(KeywordInteger(input), ([_0, input]) => [_0, input], () => If(KeywordBigInt(input), ([_0, input]) => [_0, input], () => If(KeywordUnknown(input), ([_0, input]) => [_0, input], () => If(KeywordAny(input), ([_0, input]) => [_0, input], () => If(KeywordObject(input), ([_0, input]) => [_0, input], () => If(KeywordNever(input), ([_0, input]) => [_0, input], () => If(KeywordSymbol(input), ([_0, input]) => [_0, input], () => If(KeywordVoid(input), ([_0, input]) => [_0, input], () => If(KeywordThis(input), ([_0, input]) => [_0, input], () => [])))))))))))))), ([_0, input]) => [KeywordMapping(_0), input]);
-const TemplateInterpolate = (input) => If(If(Const("${", input), ([_0, input]) => If(Type(input), ([_1, input]) => If(Const("}", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [TemplateInterpolateMapping(_0), input]);
-const TemplateSpan = (input) => If(Until(["${", "`"], input), ([_0, input]) => [TemplateSpanMapping(_0), input]);
-const TemplateBody = (input) => If(If(If(TemplateSpan(input), ([_0, input]) => If(TemplateInterpolate(input), ([_1, input]) => If(TemplateBody(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => If(If(TemplateSpan(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If(If(TemplateSpan(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => []))), ([_0, input]) => [TemplateBodyMapping(_0), input]);
-const TemplateLiteralTypes = (input) => If(If(Const("`", input), ([_0, input]) => If(TemplateBody(input), ([_1, input]) => If(Const("`", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [TemplateLiteralTypesMapping(_0), input]);
-const TemplateLiteral$1 = (input) => If(TemplateLiteralTypes(input), ([_0, input]) => [TemplateLiteralMapping(_0), input]);
-const LiteralBigInt = (input) => If(BigInt$1(input), ([_0, input]) => [LiteralBigIntMapping(_0), input]);
-const LiteralBoolean = (input) => If(If(Const("true", input), ([_0, input]) => [_0, input], () => If(Const("false", input), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [LiteralBooleanMapping(_0), input]);
-const LiteralNumber = (input) => If(Number$1(input), ([_0, input]) => [LiteralNumberMapping(_0), input]);
-const LiteralString = (input) => If(String$1(["'", "\""], input), ([_0, input]) => [LiteralStringMapping(_0), input]);
-const Literal = (input) => If(If(LiteralBigInt(input), ([_0, input]) => [_0, input], () => If(LiteralBoolean(input), ([_0, input]) => [_0, input], () => If(LiteralNumber(input), ([_0, input]) => [_0, input], () => If(LiteralString(input), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [LiteralMapping(_0), input]);
-const KeyOf$1 = (input) => If(If(If(Const("keyof", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [KeyOfMapping(_0), input]);
-const IndexArray_0 = (input, result = []) => If(If(If(Const("[", input), ([_0, input]) => If(Type(input), ([_1, input]) => If(Const("]", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => If(If(Const("[", input), ([_0, input]) => If(Const("]", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => IndexArray_0(input, [...result, _0]), () => [result, input]);
-const IndexArray = (input) => If(IndexArray_0(input), ([_0, input]) => [IndexArrayMapping(_0), input]);
-const Extends$1 = (input) => If(If(If(Const("extends", input), ([_0, input]) => If(Type(input), ([_1, input]) => If(Const("?", input), ([_2, input]) => If(Type(input), ([_3, input]) => If(Const(":", input), ([_4, input]) => If(Type(input), ([_5, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4,
-	_5
-], input])))))), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ExtendsMapping(_0), input]);
-const Base = (input) => If(If(If(Const("(", input), ([_0, input]) => If(Type(input), ([_1, input]) => If(Const(")", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => If(Keyword(input), ([_0, input]) => [_0, input], () => If(_Object_(input), ([_0, input]) => [_0, input], () => If(Tuple(input), ([_0, input]) => [_0, input], () => If(TemplateLiteral$1(input), ([_0, input]) => [_0, input], () => If(Literal(input), ([_0, input]) => [_0, input], () => If(Constructor(input), ([_0, input]) => [_0, input], () => If(_Function_(input), ([_0, input]) => [_0, input], () => If(Mapped$1(input), ([_0, input]) => [_0, input], () => If(Options$1(input), ([_0, input]) => [_0, input], () => If(GenericCall(input), ([_0, input]) => [_0, input], () => If(Reference(input), ([_0, input]) => [_0, input], () => [])))))))))))), ([_0, input]) => [BaseMapping(_0), input]);
-const Factor = (input) => If(If(KeyOf$1(input), ([_0, input]) => If(Base(input), ([_1, input]) => If(IndexArray(input), ([_2, input]) => If(Extends$1(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [FactorMapping(_0), input]);
-const ExprTermTail = (input) => If(If(If(Const("&", input), ([_0, input]) => If(Factor(input), ([_1, input]) => If(ExprTermTail(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ExprTermTailMapping(_0), input]);
-const ExprTerm = (input) => If(If(Factor(input), ([_0, input]) => If(ExprTermTail(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ExprTermMapping(_0), input]);
-const ExprTail = (input) => If(If(If(Const("|", input), ([_0, input]) => If(ExprTerm(input), ([_1, input]) => If(ExprTail(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ExprTailMapping(_0), input]);
-const Expr = (input) => If(If(ExprTerm(input), ([_0, input]) => If(ExprTail(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ExprMapping(_0), input]);
-const ExprReadonly = (input) => If(If(Const("readonly", input), ([_0, input]) => If(Expr(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ExprReadonlyMapping(_0), input]);
-const ExprPipe = (input) => If(If(Const("|", input), ([_0, input]) => If(Expr(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ExprPipeMapping(_0), input]);
-const GenericType = (input) => If(If(GenericParameters(input), ([_0, input]) => If(Const("=", input), ([_1, input]) => If(Type(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [GenericTypeMapping(_0), input]);
-const InferType = (input) => If(If(If(Const("infer", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(Const("extends", input), ([_2, input]) => If(Expr(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [_0, input], () => If(If(Const("infer", input), ([_0, input]) => If(Ident(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [InferTypeMapping(_0), input]);
-const Type = (input) => If(If(InferType(input), ([_0, input]) => [_0, input], () => If(ExprPipe(input), ([_0, input]) => [_0, input], () => If(ExprReadonly(input), ([_0, input]) => [_0, input], () => If(Expr(input), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [TypeMapping(_0), input]);
-const PropertyKeyNumber = (input) => If(Number$1(input), ([_0, input]) => [PropertyKeyNumberMapping(_0), input]);
-const PropertyKeyIdent = (input) => If(Ident(input), ([_0, input]) => [PropertyKeyIdentMapping(_0), input]);
-const PropertyKeyQuoted = (input) => If(String$1(["'", "\""], input), ([_0, input]) => [PropertyKeyQuotedMapping(_0), input]);
-const PropertyKeyIndex = (input) => If(If(Const("[", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(Const(":", input), ([_2, input]) => If(If(KeywordInteger(input), ([_0, input]) => [_0, input], () => If(KeywordNumber(input), ([_0, input]) => [_0, input], () => If(KeywordString(input), ([_0, input]) => [_0, input], () => If(KeywordSymbol(input), ([_0, input]) => [_0, input], () => [])))), ([_3, input]) => If(Const("]", input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [PropertyKeyIndexMapping(_0), input]);
-const PropertyKey = (input) => If(If(PropertyKeyNumber(input), ([_0, input]) => [_0, input], () => If(PropertyKeyIdent(input), ([_0, input]) => [_0, input], () => If(PropertyKeyQuoted(input), ([_0, input]) => [_0, input], () => If(PropertyKeyIndex(input), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [PropertyKeyMapping(_0), input]);
-const Readonly = (input) => If(If(If(Const("readonly", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ReadonlyMapping(_0), input]);
-const Optional = (input) => If(If(If(Const("?", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [OptionalMapping(_0), input]);
-const Property = (input) => If(If(Readonly(input), ([_0, input]) => If(PropertyKey(input), ([_1, input]) => If(Optional(input), ([_2, input]) => If(Const(":", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [PropertyMapping(_0), input]);
-const PropertyDelimiter = (input) => If(If(If(Const(",", input), ([_0, input]) => If(Const("\n", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const(";", input), ([_0, input]) => If(Const("\n", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const(",", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If(If(Const(";", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If(If(Const("\n", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => []))))), ([_0, input]) => [PropertyDelimiterMapping(_0), input]);
-const PropertyList_0 = (input, result = []) => If(If(Property(input), ([_0, input]) => If(PropertyDelimiter(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => PropertyList_0(input, [...result, _0]), () => [result, input]);
-const PropertyList = (input) => If(If(PropertyList_0(input), ([_0, input]) => If(If(If(Property(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [PropertyListMapping(_0), input]);
-const Properties = (input) => If(If(Const("{", input), ([_0, input]) => If(PropertyList(input), ([_1, input]) => If(Const("}", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [PropertiesMapping(_0), input]);
-const _Object_ = (input) => If(Properties(input), ([_0, input]) => [_Object_Mapping(_0), input]);
-const ElementNamed = (input) => If(If(If(Ident(input), ([_0, input]) => If(Const("?", input), ([_1, input]) => If(Const(":", input), ([_2, input]) => If(Const("readonly", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [_0, input], () => If(If(Ident(input), ([_0, input]) => If(Const(":", input), ([_1, input]) => If(Const("readonly", input), ([_2, input]) => If(Type(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [_0, input], () => If(If(Ident(input), ([_0, input]) => If(Const("?", input), ([_1, input]) => If(Const(":", input), ([_2, input]) => If(Type(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [_0, input], () => If(If(Ident(input), ([_0, input]) => If(Const(":", input), ([_1, input]) => If(Type(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [ElementNamedMapping(_0), input]);
-const ElementReadonlyOptional = (input) => If(If(Const("readonly", input), ([_0, input]) => If(Type(input), ([_1, input]) => If(Const("?", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [ElementReadonlyOptionalMapping(_0), input]);
-const ElementReadonly = (input) => If(If(Const("readonly", input), ([_0, input]) => If(Type(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ElementReadonlyMapping(_0), input]);
-const ElementOptional = (input) => If(If(Type(input), ([_0, input]) => If(Const("?", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ElementOptionalMapping(_0), input]);
-const ElementBase = (input) => If(If(ElementNamed(input), ([_0, input]) => [_0, input], () => If(ElementReadonlyOptional(input), ([_0, input]) => [_0, input], () => If(ElementReadonly(input), ([_0, input]) => [_0, input], () => If(ElementOptional(input), ([_0, input]) => [_0, input], () => If(Type(input), ([_0, input]) => [_0, input], () => []))))), ([_0, input]) => [ElementBaseMapping(_0), input]);
-const Element = (input) => If(If(If(Const("...", input), ([_0, input]) => If(ElementBase(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(ElementBase(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ElementMapping(_0), input]);
-const ElementList_0 = (input, result = []) => If(If(Element(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => ElementList_0(input, [...result, _0]), () => [result, input]);
-const ElementList = (input) => If(If(ElementList_0(input), ([_0, input]) => If(If(If(Element(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ElementListMapping(_0), input]);
-const Tuple = (input) => If(If(Const("[", input), ([_0, input]) => If(ElementList(input), ([_1, input]) => If(Const("]", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [TupleMapping(_0), input]);
-const ParameterReadonlyOptional = (input) => If(If(Ident(input), ([_0, input]) => If(Const("?", input), ([_1, input]) => If(Const(":", input), ([_2, input]) => If(Const("readonly", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [ParameterReadonlyOptionalMapping(_0), input]);
-const ParameterReadonly = (input) => If(If(Ident(input), ([_0, input]) => If(Const(":", input), ([_1, input]) => If(Const("readonly", input), ([_2, input]) => If(Type(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [ParameterReadonlyMapping(_0), input]);
-const ParameterOptional = (input) => If(If(Ident(input), ([_0, input]) => If(Const("?", input), ([_1, input]) => If(Const(":", input), ([_2, input]) => If(Type(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [ParameterOptionalMapping(_0), input]);
-const ParameterType = (input) => If(If(Ident(input), ([_0, input]) => If(Const(":", input), ([_1, input]) => If(Type(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [ParameterTypeMapping(_0), input]);
-const ParameterBase = (input) => If(If(ParameterReadonlyOptional(input), ([_0, input]) => [_0, input], () => If(ParameterReadonly(input), ([_0, input]) => [_0, input], () => If(ParameterOptional(input), ([_0, input]) => [_0, input], () => If(ParameterType(input), ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [ParameterBaseMapping(_0), input]);
-const Parameter = (input) => If(If(If(Const("...", input), ([_0, input]) => If(ParameterBase(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(ParameterBase(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ParameterMapping(_0), input]);
-const ParameterList_0 = (input, result = []) => If(If(Parameter(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => ParameterList_0(input, [...result, _0]), () => [result, input]);
-const ParameterList = (input) => If(If(ParameterList_0(input), ([_0, input]) => If(If(If(Parameter(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ParameterListMapping(_0), input]);
-const _Function_ = (input) => If(If(Const("(", input), ([_0, input]) => If(ParameterList(input), ([_1, input]) => If(Const(")", input), ([_2, input]) => If(Const("=>", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [_Function_Mapping(_0), input]);
-const Constructor = (input) => If(If(Const("new", input), ([_0, input]) => If(Const("(", input), ([_1, input]) => If(ParameterList(input), ([_2, input]) => If(Const(")", input), ([_3, input]) => If(Const("=>", input), ([_4, input]) => If(Type(input), ([_5, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4,
-	_5
-], input])))))), ([_0, input]) => [ConstructorMapping(_0), input]);
-const MappedReadonly = (input) => If(If(If(Const("+", input), ([_0, input]) => If(Const("readonly", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const("-", input), ([_0, input]) => If(Const("readonly", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const("readonly", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [MappedReadonlyMapping(_0), input]);
-const MappedOptional = (input) => If(If(If(Const("+", input), ([_0, input]) => If(Const("?", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const("-", input), ([_0, input]) => If(Const("?", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const("?", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])))), ([_0, input]) => [MappedOptionalMapping(_0), input]);
-const MappedAs = (input) => If(If(If(Const("as", input), ([_0, input]) => If(Type(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [MappedAsMapping(_0), input]);
-const Mapped$1 = (input) => If(If(Const("{", input), ([_0, input]) => If(MappedReadonly(input), ([_1, input]) => If(Const("[", input), ([_2, input]) => If(Ident(input), ([_3, input]) => If(Const("in", input), ([_4, input]) => If(Type(input), ([_5, input]) => If(MappedAs(input), ([_6, input]) => If(Const("]", input), ([_7, input]) => If(MappedOptional(input), ([_8, input]) => If(Const(":", input), ([_9, input]) => If(Type(input), ([_10, input]) => If(OptionalSemiColon(input), ([_11, input]) => If(Const("}", input), ([_12, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4,
-	_5,
-	_6,
-	_7,
-	_8,
-	_9,
-	_10,
-	_11,
-	_12
-], input]))))))))))))), ([_0, input]) => [MappedMapping(_0), input]);
-const Reference = (input) => If(Ident(input), ([_0, input]) => [ReferenceMapping(_0), input]);
-const Options$1 = (input) => If(If(Const("Options", input), ([_0, input]) => If(Const("<", input), ([_1, input]) => If(Type(input), ([_2, input]) => If(Const(",", input), ([_3, input]) => If(JsonObject(input), ([_4, input]) => If(Const(">", input), ([_5, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4,
-	_5
-], input])))))), ([_0, input]) => [OptionsMapping(_0), input]);
-const JsonNumber = (input) => If(Number$1(input), ([_0, input]) => [JsonNumberMapping(_0), input]);
-const JsonBoolean = (input) => If(If(Const("true", input), ([_0, input]) => [_0, input], () => If(Const("false", input), ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [JsonBooleanMapping(_0), input]);
-const JsonString = (input) => If(String$1(["\"", "'"], input), ([_0, input]) => [JsonStringMapping(_0), input]);
-const JsonNull = (input) => If(Const("null", input), ([_0, input]) => [JsonNullMapping(_0), input]);
-const JsonProperty = (input) => If(If(PropertyKey(input), ([_0, input]) => If(Const(":", input), ([_1, input]) => If(Json(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [JsonPropertyMapping(_0), input]);
-const JsonPropertyList_0 = (input, result = []) => If(If(JsonProperty(input), ([_0, input]) => If(PropertyDelimiter(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => JsonPropertyList_0(input, [...result, _0]), () => [result, input]);
-const JsonPropertyList = (input) => If(If(JsonPropertyList_0(input), ([_0, input]) => If(If(If(JsonProperty(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [JsonPropertyListMapping(_0), input]);
-const JsonObject = (input) => If(If(Const("{", input), ([_0, input]) => If(JsonPropertyList(input), ([_1, input]) => If(Const("}", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [JsonObjectMapping(_0), input]);
-const JsonElementList_0 = (input, result = []) => If(If(Json(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => JsonElementList_0(input, [...result, _0]), () => [result, input]);
-const JsonElementList = (input) => If(If(JsonElementList_0(input), ([_0, input]) => If(If(If(Json(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [JsonElementListMapping(_0), input]);
-const JsonArray = (input) => If(If(Const("[", input), ([_0, input]) => If(JsonElementList(input), ([_1, input]) => If(Const("]", input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [JsonArrayMapping(_0), input]);
-const Json = (input) => If(If(JsonNumber(input), ([_0, input]) => [_0, input], () => If(JsonBoolean(input), ([_0, input]) => [_0, input], () => If(JsonString(input), ([_0, input]) => [_0, input], () => If(JsonNull(input), ([_0, input]) => [_0, input], () => If(JsonObject(input), ([_0, input]) => [_0, input], () => If(JsonArray(input), ([_0, input]) => [_0, input], () => [])))))), ([_0, input]) => [JsonMapping(_0), input]);
 const PatternBigInt = (input) => If(Const("-?(?:0|[1-9][0-9]*)n", input), ([_0, input]) => [PatternBigIntMapping(_0), input]);
 const PatternString = (input) => If(Const(".*", input), ([_0, input]) => [PatternStringMapping(_0), input]);
 const PatternNumber = (input) => If(Const("-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?", input), ([_0, input]) => [PatternNumberMapping(_0), input]);
@@ -2351,78 +1348,14 @@ const Pattern = (input) => If(If(Const("^", input), ([_0, input]) => If(PatternB
 	_1,
 	_2
 ], input]))), ([_0, input]) => [PatternMapping(_0), input]);
-const InterfaceDeclarationHeritageList_0 = (input, result = []) => If(If(Type(input), ([_0, input]) => If(Const(",", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => InterfaceDeclarationHeritageList_0(input, [...result, _0]), () => [result, input]);
-const InterfaceDeclarationHeritageList = (input) => If(If(InterfaceDeclarationHeritageList_0(input), ([_0, input]) => If(If(If(Type(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [InterfaceDeclarationHeritageListMapping(_0), input]);
-const InterfaceDeclarationHeritage = (input) => If(If(If(Const("extends", input), ([_0, input]) => If(InterfaceDeclarationHeritageList(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [InterfaceDeclarationHeritageMapping(_0), input]);
-const InterfaceDeclarationGeneric = (input) => If(If(Const("interface", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(GenericParameters(input), ([_2, input]) => If(InterfaceDeclarationHeritage(input), ([_3, input]) => If(Properties(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [InterfaceDeclarationGenericMapping(_0), input]);
-const InterfaceDeclaration = (input) => If(If(Const("interface", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(InterfaceDeclarationHeritage(input), ([_2, input]) => If(Properties(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [InterfaceDeclarationMapping(_0), input]);
-const TypeAliasDeclarationGeneric = (input) => If(If(Const("type", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(GenericParameters(input), ([_2, input]) => If(Const("=", input), ([_3, input]) => If(Type(input), ([_4, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3,
-	_4
-], input]))))), ([_0, input]) => [TypeAliasDeclarationGenericMapping(_0), input]);
-const TypeAliasDeclaration = (input) => If(If(Const("type", input), ([_0, input]) => If(Ident(input), ([_1, input]) => If(Const("=", input), ([_2, input]) => If(Type(input), ([_3, input]) => [[
-	_0,
-	_1,
-	_2,
-	_3
-], input])))), ([_0, input]) => [TypeAliasDeclarationMapping(_0), input]);
-const ExportKeyword = (input) => If(If(If(Const("export", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_0, input]) => [ExportKeywordMapping(_0), input]);
-const ModuleDeclarationDelimiter = (input) => If(If(If(Const(";", input), ([_0, input]) => If(Const("\n", input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [_0, input], () => If(If(Const(";", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If(If(Const("\n", input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => []))), ([_0, input]) => [ModuleDeclarationDelimiterMapping(_0), input]);
-const ModuleDeclarationList_0 = (input, result = []) => If(If(ModuleDeclaration(input), ([_0, input]) => If(ModuleDeclarationDelimiter(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => ModuleDeclarationList_0(input, [...result, _0]), () => [result, input]);
-const ModuleDeclarationList = (input) => If(If(ModuleDeclarationList_0(input), ([_0, input]) => If(If(If(ModuleDeclaration(input), ([_0, input]) => [[_0], input]), ([_0, input]) => [_0, input], () => If([[], input], ([_0, input]) => [_0, input], () => [])), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ModuleDeclarationListMapping(_0), input]);
-const ModuleDeclaration = (input) => If(If(ExportKeyword(input), ([_0, input]) => If(If(InterfaceDeclarationGeneric(input), ([_0, input]) => [_0, input], () => If(InterfaceDeclaration(input), ([_0, input]) => [_0, input], () => If(TypeAliasDeclarationGeneric(input), ([_0, input]) => [_0, input], () => If(TypeAliasDeclaration(input), ([_0, input]) => [_0, input], () => [])))), ([_1, input]) => If(OptionalSemiColon(input), ([_2, input]) => [[
-	_0,
-	_1,
-	_2
-], input]))), ([_0, input]) => [ModuleDeclarationMapping(_0), input]);
-const Module$1 = (input) => If(If(ModuleDeclaration(input), ([_0, input]) => If(ModuleDeclarationList(input), ([_1, input]) => [[_0, _1], input])), ([_0, input]) => [ModuleMapping(_0), input]);
-const Script$1 = (input) => If(If(Module$1(input), ([_0, input]) => [_0, input], () => If(GenericType(input), ([_0, input]) => [_0, input], () => If(Type(input), ([_0, input]) => [_0, input], () => []))), ([_0, input]) => [ScriptMapping(_0), input]);
-/** Parses a Template into a TemplateLiteral types */
-function ParseTemplateIntoTypes(template) {
-	const parsed = TemplateLiteralTypes(`\`${template}\``);
-	return IsEqual(parsed.length, 2) ? parsed[0] : Unreachable$1();
-}
 /** Creates a deferred TemplateLiteral action. */
 function TemplateLiteralDeferred(types, options = {}) {
 	return Deferred("TemplateLiteral", [types], options);
-}
-function TemplateLiteralFromTypes(types) {
-	return Instantiate({}, TemplateLiteralDeferred(types, {}));
-}
-function TemplateLiteralFromString(template) {
-	return TemplateLiteralFromTypes(ParseTemplateIntoTypes(template));
-}
-/** Creates a TemplateLiteral type. */
-function TemplateLiteral(input, options = {}) {
-	return Update$1(IsString$2(input) ? TemplateLiteralFromString(input) : TemplateLiteralFromTypes(input), {}, options);
 }
 /** Returns true if the given value is TTemplateLiteral. */
 function IsTemplateLiteral(value) {
 	return IsKind(value, "TemplateLiteral");
 }
-var result_exports = /* @__PURE__ */ __exportAll({
-	ExtendsFalse: () => ExtendsFalse,
-	ExtendsTrue: () => ExtendsTrue,
-	ExtendsUnion: () => ExtendsUnion$1,
-	IsExtendsFalse: () => IsExtendsFalse,
-	IsExtendsTrue: () => IsExtendsTrue,
-	IsExtendsTrueLike: () => IsExtendsTrueLike,
-	IsExtendsUnion: () => IsExtendsUnion
-});
 function ExtendsUnion$1(inferred) {
 	return Create({ ["~kind"]: "ExtendsUnion" }, { inferred });
 }
@@ -2445,7 +1378,7 @@ function IsExtendsTrueLike(value) {
 	return IsExtendsUnion(value) || IsExtendsTrue(value);
 }
 function FromEnumValue(value) {
-	return IsString$2(value) || IsNumber$2(value) ? Literal$1(value) : IsNull$1(value) ? Null() : Never();
+	return IsString$2(value) || IsNumber$2(value) ? Literal(value) : IsNull$1(value) ? Null() : Never();
 }
 function EnumValuesToVariants(values) {
 	return values.map((value) => FromEnumValue(value));
@@ -2572,7 +1505,7 @@ function TupleElementsToProperties(types) {
 	}, {});
 }
 function TupleToObject(type) {
-	return _Object_$1(TupleElementsToProperties(type.items));
+	return _Object_(TupleElementsToProperties(type.items));
 }
 function IsReadonlyProperty(left, right) {
 	return IsReadonly(left) ? IsReadonly(right) ? true : false : false;
@@ -2598,10 +1531,10 @@ function CompositeProperties(left, right) {
 	}, {});
 }
 function GetProperties(type) {
-	return IsObject(type) ? type.properties : IsTuple(type) ? TupleElementsToProperties(type.items) : Unreachable$1();
+	return IsObject(type) ? type.properties : IsTuple(type) ? TupleElementsToProperties(type.items) : Unreachable();
 }
 function Composite(left, right) {
-	return _Object_$1(CompositeProperties(GetProperties(left), GetProperties(right)));
+	return _Object_(CompositeProperties(GetProperties(left), GetProperties(right)));
 }
 function Narrow(left, right) {
 	const result = Compare(left, right);
@@ -2687,19 +1620,19 @@ function ExtendsLiteralValue(inferred, left, right) {
 	return left === right ? ExtendsTrue(inferred) : ExtendsFalse();
 }
 function ExtendsLiteralBigInt(inferred, left, right) {
-	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsBigInt(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal$1(left), right);
+	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsBigInt(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal(left), right);
 }
 function ExtendsLiteralBoolean(inferred, left, right) {
-	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsBoolean(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal$1(left), right);
+	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsBoolean(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal(left), right);
 }
 function ExtendsLiteralNumber(inferred, left, right) {
-	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsNumber(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal$1(left), right);
+	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsNumber(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal(left), right);
 }
 function ExtendsLiteralString(inferred, left, right) {
-	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsString(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal$1(left), right);
+	return IsLiteral(right) ? ExtendsLiteralValue(inferred, left, right.const) : IsString(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, Literal(left), right);
 }
 function ExtendsLiteral(inferred, left, right) {
-	return IsBigInt$1(left.const) ? ExtendsLiteralBigInt(inferred, left.const, right) : IsBoolean$2(left.const) ? ExtendsLiteralBoolean(inferred, left.const, right) : IsNumber$2(left.const) ? ExtendsLiteralNumber(inferred, left.const, right) : IsString$2(left.const) ? ExtendsLiteralString(inferred, left.const, right) : Unreachable$1();
+	return IsBigInt$1(left.const) ? ExtendsLiteralBigInt(inferred, left.const, right) : IsBoolean$2(left.const) ? ExtendsLiteralBoolean(inferred, left.const, right) : IsNumber$2(left.const) ? ExtendsLiteralNumber(inferred, left.const, right) : IsString$2(left.const) ? ExtendsLiteralString(inferred, left.const, right) : Unreachable();
 }
 function ExtendsNever(inferred, left, right) {
 	return IsInfer(right) ? ExtendsRight(inferred, left, right) : ExtendsTrue(inferred);
@@ -2724,7 +1657,7 @@ function ExtractInferredProperties(keys, properties) {
 		return key in properties ? IsExtendsTrueLike(properties[key]) ? {
 			...result,
 			...properties[key].inferred
-		} : Unreachable$1() : Unreachable$1();
+		} : Unreachable() : Unreachable();
 	}, {});
 }
 function ExtendsPropertiesComparer(inferred, left, right) {
@@ -2742,7 +1675,7 @@ function ExtendsObjectToObject(inferred, left, right) {
 	return ExtendsProperties(inferred, left, right);
 }
 function ExtendsObject(inferred, left, right) {
-	return IsObject(right) ? ExtendsObjectToObject(inferred, left, right.properties) : ExtendsRight(inferred, _Object_$1(left), right);
+	return IsObject(right) ? ExtendsObjectToObject(inferred, left, right.properties) : ExtendsRight(inferred, _Object_(left), right);
 }
 function ExtendsPromise(inferred, left, right) {
 	return IsPromise(right) ? ExtendsLeft(inferred, left, right.item) : ExtendsRight(inferred, Promise$1(left), right);
@@ -2766,7 +1699,7 @@ function IsInferable(value) {
 	return IsObject$1(value) && HasPropertyKey(value, "~kind") && HasPropertyKey(value, "name") && HasPropertyKey(value, "type") && IsEqual(value["~kind"], "Inferrable") && IsString$2(value.name) && IsObject$1(value.type);
 }
 function TryRestInferable(type) {
-	return IsRest(type) ? IsInfer(type.items) ? IsArray(type.items.extends) ? Inferrable(type.items.name, type.items.extends.items) : IsUnknown(type.items.extends) ? Inferrable(type.items.name, type.items.extends) : void 0 : Unreachable$1() : void 0;
+	return IsRest(type) ? IsInfer(type.items) ? IsArray(type.items.extends) ? Inferrable(type.items.name, type.items.extends.items) : IsUnknown(type.items.extends) ? Inferrable(type.items.name, type.items.extends) : void 0 : Unreachable() : void 0;
 }
 function TryInferable(type) {
 	return IsInfer(type) ? Inferrable(type.name, type.extends) : void 0;
@@ -2777,7 +1710,7 @@ function TryInferResults(rest, right, result = []) {
 }
 function InferTupleResult(inferred, name, left, right) {
 	const results = TryInferResults(left, right);
-	return IsArray$1(results) ? ExtendsTrue(Assign(inferred, { [name]: Tuple$1(results) })) : ExtendsFalse();
+	return IsArray$1(results) ? ExtendsTrue(Assign(inferred, { [name]: Tuple(results) })) : ExtendsFalse();
 }
 function InferUnionResult(inferred, name, left, right) {
 	const results = TryInferResults(left, right);
@@ -2828,7 +1761,7 @@ function ExtendsTupleToArray(inferred, left, right) {
 }
 function ExtendsTuple(inferred, left, right) {
 	const instantiatedLeft = InstantiateElements(inferred, { callstack: [] }, left);
-	return IsTuple(right) ? ExtendsTupleToTuple(inferred, instantiatedLeft, right.items) : IsArray(right) ? ExtendsTupleToArray(inferred, instantiatedLeft, right.items) : ExtendsRight(inferred, Tuple$1(instantiatedLeft), right);
+	return IsTuple(right) ? ExtendsTupleToTuple(inferred, instantiatedLeft, right.items) : IsArray(right) ? ExtendsTupleToArray(inferred, instantiatedLeft, right.items) : ExtendsRight(inferred, Tuple(instantiatedLeft), right);
 }
 function ExtendsUndefined(inferred, left, right) {
 	return IsVoid(right) ? ExtendsTrue(inferred) : IsUndefined(right) ? ExtendsTrue(inferred) : ExtendsRight(inferred, left, right);
@@ -2868,10 +1801,6 @@ function InterfaceDeferred(heritage, properties, options = {}) {
 function IsInterfaceDeferred(value) {
 	return IsSchema$1(value) && HasPropertyKey(value, "action") && IsEqual(value.action, "Interface");
 }
-/** Creates an Interface using the given heritage and properties. */
-function Interface(heritage, properties, options = {}) {
-	return Instantiate({}, InterfaceDeferred(heritage, properties, options));
-}
 function FromRef$6(stack, context, ref) {
 	return stack.includes(ref) ? true : FromType$13([...stack, ref], context, context[ref]);
 }
@@ -2891,7 +1820,7 @@ function CyclicCheck(stack, context, type) {
 }
 function ResolveCandidateKeys(context, keys) {
 	return keys.reduce((result, left) => {
-		return left in context ? CyclicCheck([left], context, context[left]) ? [...result, left] : result : Unreachable$1();
+		return left in context ? CyclicCheck([left], context, context[left]) ? [...result, left] : result : Unreachable();
 	}, []);
 }
 /** Returns keys for context types that need to be transformed to TCyclic. */
@@ -2899,7 +1828,7 @@ function CyclicCandidates(context) {
 	return ResolveCandidateKeys(context, PropertyKeys(context));
 }
 function FromRef$5(context, ref, result) {
-	return result.includes(ref) ? result : ref in context ? FromType$12(context, context[ref], [...result, ref]) : Unreachable$1();
+	return result.includes(ref) ? result : ref in context ? FromType$12(context, context[ref], [...result, ref]) : Unreachable();
 }
 function FromProperties$2(context, properties, result) {
 	return FromTypes$1(context, PropertyValues(properties), result);
@@ -2933,7 +1862,7 @@ function FromTypes(types) {
 	}, []);
 }
 function FromType$11(type) {
-	return IsRef$1(type) ? FromRef$4(type.$ref) : IsArray(type) ? Array$1(FromType$11(type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(FromType$11(type.iteratorItems)) : IsConstructor(type) ? Constructor$1(FromTypes(type.parameters), FromType$11(type.instanceType)) : IsFunction(type) ? _Function_$1(FromTypes(type.parameters), FromType$11(type.returnType)) : IsIntersect(type) ? Intersect(FromTypes(type.allOf)) : IsIterator(type) ? Iterator(FromType$11(type.iteratorItems)) : IsObject(type) ? _Object_$1(FromProperties$1(type.properties)) : IsPromise(type) ? Promise$1(FromType$11(type.item)) : IsRecord(type) ? Record(RecordKey(type), FromType$11(RecordValue(type))) : IsUnion(type) ? Union(FromTypes(type.anyOf)) : IsTuple(type) ? Tuple$1(FromTypes(type.items)) : type;
+	return IsRef$1(type) ? FromRef$4(type.$ref) : IsArray(type) ? Array$1(FromType$11(type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(FromType$11(type.iteratorItems)) : IsConstructor(type) ? Constructor(FromTypes(type.parameters), FromType$11(type.instanceType)) : IsFunction(type) ? _Function_(FromTypes(type.parameters), FromType$11(type.returnType)) : IsIntersect(type) ? Intersect(FromTypes(type.allOf)) : IsIterator(type) ? Iterator(FromType$11(type.iteratorItems)) : IsObject(type) ? _Object_(FromProperties$1(type.properties)) : IsPromise(type) ? Promise$1(FromType$11(type.item)) : IsRecord(type) ? Record(RecordKey(type), FromType$11(RecordValue(type))) : IsUnion(type) ? Union(FromTypes(type.anyOf)) : IsTuple(type) ? Tuple(FromTypes(type.items)) : type;
 }
 function CyclicAnyFromParameters(defs, ref) {
 	return ref in defs ? FromType$11(defs[ref]) : Unknown();
@@ -2945,7 +1874,7 @@ function CyclicExtends(type) {
 function CyclicInterface(context, heritage, properties) {
 	const instantiatedHeritage = InstantiateTypes(context, { callstack: [] }, heritage);
 	const instantiatedProperties = InstantiateProperties({}, { callstack: [] }, properties);
-	return EvaluateIntersect([...instantiatedHeritage, _Object_$1(instantiatedProperties)]);
+	return EvaluateIntersect([...instantiatedHeritage, _Object_(instantiatedProperties)]);
 }
 function CyclicDefinitions(context, dependencies) {
 	return Keys(context).filter((key) => dependencies.includes(key)).reduce((result, key) => {
@@ -3023,10 +1952,6 @@ function CallConstruct(target, arguments_) {
 		arguments: arguments_
 	}, {});
 }
-/** Creates a Call type. */
-function Call(target, arguments_) {
-	return CallInstantiate({}, { callstack: [] }, target, arguments_);
-}
 /** Returns true if the given type is a TCall. */
 function IsCall(value) {
 	return IsKind(value, "Call");
@@ -3044,7 +1969,7 @@ function ApplyMapping(mapping, value) {
 	return mapping(value);
 }
 function FromLiteral$2(mapping, value) {
-	return IsString$2(value) ? Literal$1(ApplyMapping(mapping, value)) : Literal$1(value);
+	return IsString$2(value) ? Literal(ApplyMapping(mapping, value)) : Literal(value);
 }
 function FromTemplateLiteral$3(mapping, pattern) {
 	return FromType$10(mapping, TemplateLiteralDecode(pattern));
@@ -3059,33 +1984,17 @@ function FromType$10(mapping, type) {
 function CapitalizeDeferred(type, options = {}) {
 	return Deferred("Capitalize", [type], options);
 }
-/** Applies a Capitalize action to the given type. */
-function Capitalize(type, options = {}) {
-	return Instantiate({}, CapitalizeDeferred(type, options));
-}
 /** Creates a deferred Lowercase action. */
 function LowercaseDeferred(type, options = {}) {
 	return Deferred("Lowercase", [type], options);
-}
-/** Applies a Lowercase action to the given type. */
-function Lowercase(type, options = {}) {
-	return Instantiate({}, LowercaseDeferred(type, options));
 }
 /** Creates a deferred Uncapitalize action. */
 function UncapitalizeDeferred(type, options = {}) {
 	return Deferred("Uncapitalize", [type], options);
 }
-/** Applies a Uncapitalize action to the given type. */
-function Uncapitalize(type, options = {}) {
-	return Instantiate({}, UncapitalizeDeferred(type, options));
-}
 /** Creates a deferred Uppercase action. */
 function UppercaseDeferred(type, options = {}) {
 	return Deferred("Uppercase", [type], options);
-}
-/** Applies a Uppercase action to the given type. */
-function Uppercase(type, options = {}) {
-	return Instantiate({}, UppercaseDeferred(type, options));
 }
 const CapitalizeMapping = (input) => input[0].toUpperCase() + input.slice(1);
 const LowercaseMapping = (input) => input.toLowerCase();
@@ -3124,10 +2033,6 @@ function ConditionalDeferred(left, right, true_, false_, options = {}) {
 		false_
 	], options);
 }
-/** Applies a Conditional action to the given types. */
-function Conditional(left, right, true_, false_, options = {}) {
-	return Instantiate({}, ConditionalDeferred(left, right, true_, false_, options));
-}
 function ConditionalImmediate(context, state, left, right, true_, false_, options) {
 	const extendsResult = Extends(context, InstantiateType(context, state, left), InstantiateType(context, state, right));
 	return Update$1(IsExtendsUnion(extendsResult) ? Union([InstantiateType(extendsResult.inferred, state, true_), InstantiateType(context, state, false_)]) : IsExtendsTrue(extendsResult) ? InstantiateType(extendsResult.inferred, state, true_) : InstantiateType(context, state, false_), {}, options);
@@ -3139,12 +2044,8 @@ function ConditionalInstantiate(context, state, left, right, true_, false_, opti
 function ConstructorParametersDeferred(type, options = {}) {
 	return Deferred("ConstructorParameters", [type], options);
 }
-/** Applies a ConstructorParameters action to a type. */
-function ConstructorParameters(type, options = {}) {
-	return Instantiate({}, ConstructorParametersDeferred(type, options));
-}
 function ConstructorParametersAction(type) {
-	return IsConstructor(type) ? InstantiateType({}, { callstack: [] }, Tuple$1(type.parameters)) : Never();
+	return IsConstructor(type) ? InstantiateType({}, { callstack: [] }, Tuple(type.parameters)) : Never();
 }
 function ConstructorParametersImmediate(context, state, type, options) {
 	return Update$1(ConstructorParametersAction(InstantiateType(context, state, type)), {}, options);
@@ -3155,10 +2056,6 @@ function ConstructorParametersInstantiate(context, state, type, options) {
 /** Creates a deferred Exclude action. */
 function ExcludeDeferred(left, right, options = {}) {
 	return Deferred("Exclude", [left, right], options);
-}
-/** Applies a Exclude action using the given types */
-function Exclude(left, right, options = {}) {
-	return Instantiate({}, ExcludeDeferred(left, right, options));
 }
 function ExcludeUnion(types, right) {
 	return types.reduce((result, head) => {
@@ -3180,10 +2077,6 @@ function ExcludeInstantiate(context, state, left, right, options) {
 /** Creates a deferred Extract action. */
 function ExtractDeferred(left, right, options = {}) {
 	return Deferred("Extract", [left, right], options);
-}
-/** Applies an Extract action using the given types. */
-function Extract(left, right, options = {}) {
-	return Instantiate({}, ExtractDeferred(left, right, options));
 }
 function ExtractUnion(types, right) {
 	return types.reduce((result, head) => {
@@ -3208,7 +2101,7 @@ function ConvertToIntegerKey(value) {
 	return integerKeyPattern.test(normal) ? parseInt(normal) : value;
 }
 function NormalizeLiteral(value) {
-	return Literal$1(ConvertToIntegerKey(value));
+	return Literal(ConvertToIntegerKey(value));
 }
 function NormalizeIndexerTypes(types) {
 	return types.map((type) => NormalizeIndexer(type));
@@ -3217,7 +2110,7 @@ function NormalizeIndexer(type) {
 	return IsIntersect(type) ? Intersect(NormalizeIndexerTypes(type.allOf)) : IsUnion(type) ? Union(NormalizeIndexerTypes(type.anyOf)) : IsLiteral(type) ? NormalizeLiteral(type.const) : type;
 }
 function FromArray$8(type, indexer) {
-	return IsExtendsTrueLike(Extends({}, NormalizeIndexer(indexer), Number$2())) ? type : Never();
+	return IsExtendsTrueLike(Extends({}, NormalizeIndexer(indexer), Number$1())) ? type : Never();
 }
 function FromCyclic$8(defs, ref) {
 	return FromType$9(CyclicTarget(defs, ref));
@@ -3263,7 +2156,7 @@ function FromObject$11(properties, indexer) {
 	return EvaluateUnion(SelectProperties(properties, ToIndexableKeys(indexer)));
 }
 function ConvertLiteral(value) {
-	return Literal$1(ConvertToIntegerKey(value));
+	return Literal(ConvertToIntegerKey(value));
 }
 function ArrayIndexerTypes(types) {
 	return types.map((type) => FormatArrayIndexer(type));
@@ -3274,7 +2167,7 @@ function FormatArrayIndexer(type) {
 }
 function IndexElementsWithIndexer(types, indexer) {
 	return types.reduceRight((result, right, index) => {
-		return IsExtendsTrueLike(Extends({}, Literal$1(index), indexer)) ? [right, ...result] : result;
+		return IsExtendsTrueLike(Extends({}, Literal(index), indexer)) ? [right, ...result] : result;
 	}, []);
 }
 function FromTupleWithIndexer(types, indexer) {
@@ -3286,21 +2179,9 @@ function FromTupleWithoutIndexer(types) {
 function FromTuple$7(types, indexer) {
 	return IsNumber(indexer) || IsInteger(indexer) ? FromTupleWithoutIndexer(types) : FromTupleWithIndexer(types, indexer);
 }
-function KeysToLiterals(keys) {
-	return keys.reduce((result, left) => {
-		return IsLiteralValue(left) ? [...result, Literal$1(left)] : result;
-	}, []);
-}
-function KeysToIndexer(keys) {
-	return Union(KeysToLiterals(keys));
-}
 /** Creates a deferred Index action. */
 function IndexDeferred(type, indexer, options = {}) {
 	return Deferred("Index", [type, indexer], options);
-}
-/** Applies a Index action using the given types. */
-function Index(type, indexer_or_keys, options = {}) {
-	return Instantiate({}, IndexDeferred(type, IsArray$1(indexer_or_keys) ? KeysToIndexer(indexer_or_keys) : indexer_or_keys, options));
 }
 function FromCyclic$7(defs, ref) {
 	return FromType$8(CyclicTarget(defs, ref));
@@ -3332,7 +2213,7 @@ function FromObject$10(properties) {
 	return properties;
 }
 function FromTuple$6(types) {
-	return FromType$8(TupleToObject(Tuple$1(types)));
+	return FromType$8(TupleToObject(Tuple(types)));
 }
 function CollapseUnionProperties(left, right) {
 	return Keys(left).filter((key) => key in right).reduce((result, key) => {
@@ -3348,7 +2229,7 @@ function ReduceVariants(types, result) {
 }
 function FromUnion$8(types) {
 	const [left, ...right] = types;
-	return IsSchema$1(left) ? ReduceVariants(right, FromType$8(left)) : Unreachable$1();
+	return IsSchema$1(left) ? ReduceVariants(right, FromType$8(left)) : Unreachable();
 }
 function FromType$8(type) {
 	return IsCyclic(type) ? FromCyclic$7(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$7(type.allOf) : IsUnion(type) ? FromUnion$8(type.anyOf) : IsTuple(type) ? FromTuple$6(type.items) : IsObject(type) ? FromObject$10(type.properties) : {};
@@ -3360,7 +2241,7 @@ function FromType$8(type) {
 * is required. If the type cannot be collapsed, an empty object schema is returned.
 */
 function CollapseToObject(type) {
-	return _Object_$1(FromType$8(type));
+	return _Object_(FromType$8(type));
 }
 function NormalizeType$1(type) {
 	return IsCyclic(type) || IsIntersect(type) || IsUnion(type) ? CollapseToObject(type) : type;
@@ -3379,10 +2260,6 @@ function IndexInstantiate(context, state, type, indexer, options) {
 function InstanceTypeDeferred(type, options = {}) {
 	return Deferred("InstanceType", [type], options);
 }
-/** Applies a InstanceType action to the given type. */
-function InstanceType(type, options = {}) {
-	return Instantiate({}, InstanceTypeDeferred(type, options));
-}
 function InstanceTypeAction(type) {
 	return IsConstructor(type) ? type.instanceType : Never();
 }
@@ -3395,7 +2272,7 @@ function InstanceTypeInstantiate(context, state, type, options = {}) {
 function InterfaceImmediate(context, state, heritage, properties, options) {
 	const instantiatedHeritage = InstantiateTypes(context, { callstack: [] }, heritage);
 	const instantiatedProperties = InstantiateProperties(context, { callstack: [] }, properties);
-	return Update$1(EvaluateIntersect([...instantiatedHeritage, _Object_$1(instantiatedProperties)]), {}, options);
+	return Update$1(EvaluateIntersect([...instantiatedHeritage, _Object_(instantiatedProperties)]), {}, options);
 }
 function InterfaceInstantiate(context, state, heritage, properties, options) {
 	return CanInstantiate(context, heritage) ? InterfaceImmediate(context, state, heritage, properties, options) : InterfaceDeferred(heritage, properties, options);
@@ -3404,23 +2281,19 @@ function InterfaceInstantiate(context, state, heritage, properties, options) {
 function KeyOfDeferred(type, options = {}) {
 	return Deferred("KeyOf", [type], options);
 }
-/** Applies a KeyOf action to the given type. */
-function KeyOf(type, options = {}) {
-	return Instantiate({}, KeyOfDeferred(type, options));
-}
 function FromAny() {
 	return Union([
-		Number$2(),
-		String$2(),
+		Number$1(),
+		String$1(),
 		Symbol$1()
 	]);
 }
 function FromArray$7(_type) {
-	return Number$2();
+	return Number$1();
 }
 function FromPropertyKeys(keys) {
 	return keys.reduce((result, left) => {
-		return IsLiteralValue(left) ? [...result, Literal$1(ConvertToIntegerKey(left))] : Unreachable$1();
+		return IsLiteralValue(left) ? [...result, Literal(ConvertToIntegerKey(left))] : Unreachable();
 	}, []);
 }
 function FromObject$9(properties) {
@@ -3430,7 +2303,7 @@ function FromRecord$4(type) {
 	return RecordKey(type);
 }
 function FromTuple$5(types) {
-	return EvaluateUnionFast(types.map((_, index) => Literal$1(index)));
+	return EvaluateUnionFast(types.map((_, index) => Literal(index)));
 }
 function NormalizeType(type) {
 	return IsCyclic(type) || IsIntersect(type) || IsUnion(type) ? CollapseToObject(type) : type;
@@ -3468,10 +2341,6 @@ function MappedDeferred(identifier, key, as, property, options = {}) {
 		property
 	], options);
 }
-/** Applies a Mapped action using the given types. */
-function Mapped(identifier, key, as, property, options = {}) {
-	return Instantiate({}, MappedDeferred(identifier, key, as, property, options));
-}
 function InstantiateKeyAs(context, state, identifier, key, as) {
 	const instantiatedKeyAs = InstantiateType(Assign(context, { [identifier["name"]]: key }), state, as);
 	return IsTemplateLiteral(instantiatedKeyAs) ? TemplateLiteralDecode(instantiatedKeyAs.pattern) : instantiatedKeyAs;
@@ -3493,7 +2362,7 @@ function MappedProperties(context, state, identifier, keys, as, type) {
 	}, {});
 }
 function MappedAction(context, state, identifier, key, as, type) {
-	return _Object_$1(MappedProperties(context, state, identifier, MappedKeys(key), as, type));
+	return _Object_(MappedProperties(context, state, identifier, MappedKeys(key), as, type));
 }
 function MappedImmediate(context, state, identifier, key, as, property, options) {
 	return Update$1(MappedAction(context, state, identifier, InstantiateType(context, state, key), as, property), {}, options);
@@ -3533,10 +2402,6 @@ function ModuleInstantiate(context, _state, properties, options) {
 function NonNullableDeferred(type, options = {}) {
 	return Deferred("NonNullable", [type], options);
 }
-/** Applies a NonNullable action to the given type. */
-function NonNullable(type, options = {}) {
-	return Instantiate({}, NonNullableDeferred(type, options));
-}
 function NonNullableAction(type) {
 	return ExcludeInstantiate({}, { callstack: [] }, type, Union([Null(), Undefined()]), {});
 }
@@ -3549,15 +2414,11 @@ function NonNullableInstantiate(context, state, type, options) {
 /** Transforms a type into a TProperties used for indexing operations */
 function ToIndexable(type) {
 	const collapsed = CollapseToObject(type);
-	return IsObject(collapsed) ? collapsed.properties : Unreachable$1();
+	return IsObject(collapsed) ? collapsed.properties : Unreachable();
 }
 /** Creates a deferred Omit action. */
 function OmitDeferred(type, indexer, options = {}) {
 	return Deferred("Omit", [type, indexer], options);
-}
-/** Applies a Omit action using the given types. */
-function Omit(type, indexer_or_keys, options = {}) {
-	return Instantiate({}, OmitDeferred(type, IsArray$1(indexer_or_keys) ? KeysToIndexer(indexer_or_keys) : indexer_or_keys, options));
 }
 function FromKeys$1(properties, keys) {
 	return Keys(properties).reduce((result, key) => {
@@ -3568,7 +2429,7 @@ function FromKeys$1(properties, keys) {
 	}, {});
 }
 function OmitAction(type, indexer) {
-	return _Object_$1(FromKeys$1(ToIndexable(type), ToIndexableKeys(indexer)));
+	return _Object_(FromKeys$1(ToIndexable(type), ToIndexableKeys(indexer)));
 }
 function OmitImmediate(context, state, type, indexer, options) {
 	return Update$1(OmitAction(InstantiateType(context, state, type), InstantiateType(context, state, indexer)), {}, options);
@@ -3594,12 +2455,8 @@ function OptionsInstantiate(context, state, type, options) {
 function ParametersDeferred(type, options = {}) {
 	return Deferred("Parameters", [type], options);
 }
-/** Applies a Parameters action to the given type. */
-function Parameters(type, options = {}) {
-	return Instantiate({}, ParametersDeferred(type, options));
-}
 function ParametersAction(type) {
-	return IsFunction(type) ? InstantiateType({}, { callstack: [] }, Tuple$1(type.parameters)) : Never();
+	return IsFunction(type) ? InstantiateType({}, { callstack: [] }, Tuple(type.parameters)) : Never();
 }
 function ParametersImmediate(context, state, type, options) {
 	return Update$1(ParametersAction(InstantiateType(context, state, type)), {}, options);
@@ -3610,10 +2467,6 @@ function ParametersInstantiate(context, state, type, options) {
 /** Creates a deferred Partial action. */
 function PartialDeferred(type, options = {}) {
 	return Deferred("Partial", [type], options);
-}
-/** Applies a Partial action to the given type. */
-function Partial(type, options = {}) {
-	return Instantiate({}, PartialDeferred(type, options));
 }
 function FromCyclic$6(defs, ref) {
 	const partial = FromType$6(CyclicTarget(defs, ref));
@@ -3626,15 +2479,15 @@ function FromUnion$6(types) {
 	return Union(types.map((type) => FromType$6(type)));
 }
 function FromObject$8(properties) {
-	return _Object_$1(Keys(properties).reduce((result, left) => {
+	return _Object_(Keys(properties).reduce((result, left) => {
 		return {
 			...result,
-			[left]: Optional$2(properties[left])
+			[left]: Optional(properties[left])
 		};
 	}, {}));
 }
 function FromType$6(type) {
-	return IsCyclic(type) ? FromCyclic$6(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$6(type.allOf) : IsUnion(type) ? FromUnion$6(type.anyOf) : IsObject(type) ? FromObject$8(type.properties) : _Object_$1({});
+	return IsCyclic(type) ? FromCyclic$6(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$6(type.allOf) : IsUnion(type) ? FromUnion$6(type.anyOf) : IsObject(type) ? FromObject$8(type.properties) : _Object_({});
 }
 function PartialImmediate(context, state, type, options) {
 	return Update$1(FromType$6(InstantiateType(context, state, type)), {}, options);
@@ -3646,17 +2499,13 @@ function PartialInstantiate(context, state, type, options) {
 function PickDeferred(type, indexer, options = {}) {
 	return Deferred("Pick", [type, indexer], options);
 }
-/** Applies a Pick action using the given types. */
-function Pick(type, indexer_or_keys, options = {}) {
-	return Instantiate({}, PickDeferred(type, IsArray$1(indexer_or_keys) ? KeysToIndexer(indexer_or_keys) : indexer_or_keys, options));
-}
 function FromKeys(properties, keys) {
 	return Keys(properties).reduce((result, key) => {
 		return keys.includes(key) ? Assign(result, { [key]: properties[key] }) : result;
 	}, {});
 }
 function PickAction(type, indexer) {
-	return _Object_$1(FromKeys(ToIndexable(type), ToIndexableKeys(indexer)));
+	return _Object_(FromKeys(ToIndexable(type), ToIndexableKeys(indexer)));
 }
 function PickImmediate(context, state, type, indexer, options) {
 	return Update$1(PickAction(InstantiateType(context, state, type), InstantiateType(context, state, indexer)), {}, options);
@@ -3667,10 +2516,6 @@ function PickInstantiate(context, state, type, indexer, options) {
 /** Creates a deferred ReadonlyType action. */
 function ReadonlyTypeDeferred(type, options = {}) {
 	return Deferred("ReadonlyType", [type], options);
-}
-/** This type is an alias for the TypeScript `Readonly<T>` utility type. */
-function ReadonlyType(type, options = {}) {
-	return Instantiate({}, ReadonlyTypeDeferred(type, options));
 }
 function FromArray$6(type) {
 	return Immutable(Array$1(type));
@@ -3683,15 +2528,15 @@ function FromIntersect$5(types) {
 	return EvaluateIntersect(types.map((type) => FromType$5(type)));
 }
 function FromObject$7(properties) {
-	return _Object_$1(Keys(properties).reduce((result, left) => {
+	return _Object_(Keys(properties).reduce((result, left) => {
 		return {
 			...result,
-			[left]: Readonly$1(properties[left])
+			[left]: Readonly(properties[left])
 		};
 	}, {}));
 }
 function FromTuple$4(types) {
-	return Immutable(Tuple$1(types));
+	return Immutable(Tuple(types));
 }
 function FromUnion$5(types) {
 	return Union(types.map((type) => FromType$5(type)));
@@ -3709,7 +2554,7 @@ function FromAnyKey(value) {
 	return CreateRecord(StringKey, value);
 }
 function FromBooleanKey(value) {
-	return _Object_$1({
+	return _Object_({
 		true: value,
 		false: value
 	});
@@ -3724,7 +2569,7 @@ function FromIntersectKey(types, value) {
 	return FromKey(EvaluateIntersect(types), value);
 }
 function FromLiteralKey(key, value) {
-	return IsString$2(key) || IsNumber$2(key) ? _Object_$1({ [key]: value }) : IsEqual(key, false) ? _Object_$1({ false: value }) : IsEqual(key, true) ? _Object_$1({ true: value }) : _Object_$1({});
+	return IsString$2(key) || IsNumber$2(key) ? _Object_({ [key]: value }) : IsEqual(key, false) ? _Object_({ false: value }) : IsEqual(key, true) ? _Object_({ true: value }) : _Object_({});
 }
 function FromNumberKey(key, value) {
 	return CreateRecord(NumberKey, value);
@@ -3750,7 +2595,7 @@ function CreateProperties(types, value) {
 	}, {});
 }
 function CreateObject(types, value) {
-	return _Object_$1(CreateProperties(types, value));
+	return _Object_(CreateProperties(types, value));
 }
 function FromUnionKey(types, value) {
 	const flattened = Flatten(types);
@@ -3758,7 +2603,7 @@ function FromUnionKey(types, value) {
 	return IsSchema$1(record) ? record : CreateObject(flattened, value);
 }
 function FromKey(key, value) {
-	return IsAny(key) ? FromAnyKey(value) : IsBoolean(key) ? FromBooleanKey(value) : IsEnum$1(key) ? FromEnumKey(key.enum, value) : IsInteger(key) ? FromIntegerKey(key, value) : IsIntersect(key) ? FromIntersectKey(key.allOf, value) : IsLiteral(key) ? FromLiteralKey(key.const, value) : IsNumber(key) ? FromNumberKey(key, value) : IsUnion(key) ? FromUnionKey(key.anyOf, value) : IsString(key) ? FromStringKey(key, value) : IsTemplateLiteral(key) ? FromTemplateKey(key.pattern, value) : _Object_$1({});
+	return IsAny(key) ? FromAnyKey(value) : IsBoolean(key) ? FromBooleanKey(value) : IsEnum$1(key) ? FromEnumKey(key.enum, value) : IsInteger(key) ? FromIntegerKey(key, value) : IsIntersect(key) ? FromIntersectKey(key.allOf, value) : IsLiteral(key) ? FromLiteralKey(key.const, value) : IsNumber(key) ? FromNumberKey(key, value) : IsUnion(key) ? FromUnionKey(key.anyOf, value) : IsString(key) ? FromStringKey(key, value) : IsTemplateLiteral(key) ? FromTemplateKey(key.pattern, value) : _Object_({});
 }
 function RecordImmediate(context, state, key, value, options) {
 	return Update$1(FromKey(InstantiateType(context, state, key), InstantiateType(context, state, value)), {}, options);
@@ -3780,7 +2625,7 @@ function FromUnion$4(types) {
 	return Union(types.map((type) => FromType$4(type)));
 }
 function FromObject$6(properties) {
-	return _Object_$1(Keys(properties).reduce((result, left) => {
+	return _Object_(Keys(properties).reduce((result, left) => {
 		return {
 			...result,
 			[left]: OptionalRemove(properties[left])
@@ -3788,15 +2633,11 @@ function FromObject$6(properties) {
 	}, {}));
 }
 function FromType$4(type) {
-	return IsCyclic(type) ? FromCyclic$4(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$4(type.allOf) : IsUnion(type) ? FromUnion$4(type.anyOf) : IsObject(type) ? FromObject$6(type.properties) : _Object_$1({});
+	return IsCyclic(type) ? FromCyclic$4(type.$defs, type.$ref) : IsIntersect(type) ? FromIntersect$4(type.allOf) : IsUnion(type) ? FromUnion$4(type.anyOf) : IsObject(type) ? FromObject$6(type.properties) : _Object_({});
 }
 /** Creates a deferred Required action. */
 function RequiredDeferred(type, options = {}) {
 	return Deferred("Required", [type], options);
-}
-/** Applies a Required action to the given type. */
-function Required(type, options = {}) {
-	return Instantiate({}, RequiredDeferred(type, options));
 }
 function RequiredImmediate(context, state, type, options) {
 	return Update$1(FromType$4(InstantiateType(context, state, type)), {}, options);
@@ -3807,10 +2648,6 @@ function RequiredInstantiate(context, state, type, options) {
 /** Creates a deferred ReturnType action. */
 function ReturnTypeDeferred(type, options = {}) {
 	return Deferred("ReturnType", [type], options);
-}
-/** Applies a ReturnType action to the given type. */
-function ReturnType(type, options = {}) {
-	return Instantiate({}, ReturnTypeDeferred(type, options));
 }
 function ReturnTypeAction(type) {
 	return IsFunction(type) ? type.returnType : Never();
@@ -3840,7 +2677,7 @@ function EncodeNumber(right, pattern) {
 	return EncodeTypes(right, `${pattern}${NumberPattern}`);
 }
 function EncodeBoolean(right, pattern) {
-	return EncodeType(Union([Literal$1("false"), Literal$1("true")]), right, pattern);
+	return EncodeType(Union([Literal("false"), Literal("true")]), right, pattern);
 }
 function EncodeString(right, pattern) {
 	return EncodeTypes(right, `${pattern}${StringPattern}`);
@@ -3927,7 +2764,7 @@ function InstantiateType(context, state, input) {
 	const immutable = IsImmutable(input);
 	const modifiers = ModifierActions(input, IsReadonly(input) ? "add" : "none", IsOptional(input) ? "add" : "none");
 	const type = IsBase(modifiers[0]) ? modifiers[0].Clone() : modifiers[0];
-	const instantiated = IsRef$1(type) ? RefInstantiate(context, state, type, type.$ref) : IsArray(type) ? Array$1(InstantiateType(context, state, type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(InstantiateType(context, state, type.iteratorItems), AsyncIteratorOptions(type)) : IsCall(type) ? CallInstantiate(context, state, type.target, type.arguments) : IsConstructor(type) ? Constructor$1(InstantiateTypes(context, state, type.parameters), InstantiateType(context, state, type.instanceType), ConstructorOptions(type)) : IsDeferred(type) ? InstantiateDeferred(context, state, type.action, type.parameters, type.options) : IsFunction(type) ? _Function_$1(InstantiateTypes(context, state, type.parameters), InstantiateType(context, state, type.returnType), FunctionOptions(type)) : IsIntersect(type) ? Intersect(InstantiateTypes(context, state, type.allOf), IntersectOptions(type)) : IsIterator(type) ? Iterator(InstantiateType(context, state, type.iteratorItems), IteratorOptions(type)) : IsObject(type) ? _Object_$1(InstantiateProperties(context, state, type.properties), ObjectOptions(type)) : IsPromise(type) ? Promise$1(InstantiateType(context, state, type.item), PromiseOptions(type)) : IsRecord(type) ? RecordFromPattern(RecordPattern(type), InstantiateType(context, state, RecordValue(type))) : IsRest(type) ? Rest(InstantiateType(context, state, type.items)) : IsTuple(type) ? Tuple$1(InstantiateElements(context, state, type.items), TupleOptions(type)) : IsUnion(type) ? Union(InstantiateTypes(context, state, type.anyOf), UnionOptions(type)) : type;
+	const instantiated = IsRef$1(type) ? RefInstantiate(context, state, type, type.$ref) : IsArray(type) ? Array$1(InstantiateType(context, state, type.items), ArrayOptions(type)) : IsAsyncIterator(type) ? AsyncIterator(InstantiateType(context, state, type.iteratorItems), AsyncIteratorOptions(type)) : IsCall(type) ? CallInstantiate(context, state, type.target, type.arguments) : IsConstructor(type) ? Constructor(InstantiateTypes(context, state, type.parameters), InstantiateType(context, state, type.instanceType), ConstructorOptions(type)) : IsDeferred(type) ? InstantiateDeferred(context, state, type.action, type.parameters, type.options) : IsFunction(type) ? _Function_(InstantiateTypes(context, state, type.parameters), InstantiateType(context, state, type.returnType), FunctionOptions(type)) : IsIntersect(type) ? Intersect(InstantiateTypes(context, state, type.allOf), IntersectOptions(type)) : IsIterator(type) ? Iterator(InstantiateType(context, state, type.iteratorItems), IteratorOptions(type)) : IsObject(type) ? _Object_(InstantiateProperties(context, state, type.properties), ObjectOptions(type)) : IsPromise(type) ? Promise$1(InstantiateType(context, state, type.item), PromiseOptions(type)) : IsRecord(type) ? RecordFromPattern(RecordPattern(type), InstantiateType(context, state, RecordValue(type))) : IsRest(type) ? Rest(InstantiateType(context, state, type.items)) : IsTuple(type) ? Tuple(InstantiateElements(context, state, type.items), TupleOptions(type)) : IsUnion(type) ? Union(InstantiateTypes(context, state, type.anyOf), UnionOptions(type)) : type;
 	const withImmutable = immutable ? Immutable(instantiated) : instantiated;
 	return ApplyReadonly(modifiers[1], ApplyOptional(modifiers[2], withImmutable));
 }
@@ -3939,10 +2776,6 @@ function Instantiate(context, type) {
 function AwaitedDeferred(type, options = {}) {
 	return Deferred("Awaited", [type], options);
 }
-/** Applies an Awaited action to a type. */
-function Awaited(type, options = {}) {
-	return Instantiate({}, AwaitedDeferred(type, options));
-}
 /** Creates a deferred Evaluate action. */
 function EvaluateDeferred(type, options = {}) {
 	return Deferred("Evaluate", [type], options);
@@ -3951,164 +2784,6 @@ function EvaluateDeferred(type, options = {}) {
 function Evaluate(type, options = {}) {
 	return Instantiate({}, EvaluateDeferred(type, options));
 }
-/** Creates a deferred Module action. */
-function ModuleDeferred(context, options = {}) {
-	return Deferred("Module", [context], options);
-}
-/** Applies a Module transformation action to the embedded property types. */
-function Module(context, options = {}) {
-	return Instantiate({}, ModuleDeferred(context, options));
-}
-/** Parses a type from a TypeScript type expression */
-function Script(...args) {
-	const [context, input, options] = Match$1(args, {
-		2: (script, options) => IsString$2(script) ? [
-			{},
-			script,
-			options
-		] : [
-			script,
-			options,
-			{}
-		],
-		3: (context, script, options) => [
-			context,
-			script,
-			options
-		],
-		1: (script) => [
-			{},
-			script,
-			{}
-		]
-	});
-	const result = Script$1(input);
-	return Update$1(IsArray$1(result) && IsEqual(result.length, 2) ? InstantiateType(context, { callstack: [] }, result[0]) : Never(), {}, options);
-}
-var build_default = /* @__PURE__ */ __exportAll({
-	Any: () => Any,
-	Array: () => Array$1,
-	AsyncIterator: () => AsyncIterator,
-	Awaited: () => Awaited,
-	Base: () => Base$1,
-	BigInt: () => BigInt$2,
-	Boolean: () => Boolean$1,
-	Call: () => Call,
-	Capitalize: () => Capitalize,
-	Codec: () => Codec,
-	Conditional: () => Conditional,
-	Constructor: () => Constructor$1,
-	ConstructorParameters: () => ConstructorParameters,
-	Cyclic: () => Cyclic,
-	Decode: () => Decode$7,
-	DecodeBuilder: () => DecodeBuilder,
-	Encode: () => Encode$7,
-	EncodeBuilder: () => EncodeBuilder,
-	Enum: () => Enum,
-	Evaluate: () => Evaluate,
-	Exclude: () => Exclude,
-	Extends: () => Extends,
-	ExtendsResult: () => result_exports,
-	Extract: () => Extract,
-	Function: () => _Function_$1,
-	Generic: () => Generic,
-	Identifier: () => Identifier,
-	Immutable: () => Immutable,
-	Index: () => Index,
-	Infer: () => Infer,
-	InstanceType: () => InstanceType,
-	Instantiate: () => Instantiate,
-	Integer: () => Integer$1,
-	Interface: () => Interface,
-	Intersect: () => Intersect,
-	IsAny: () => IsAny,
-	IsArray: () => IsArray,
-	IsAsyncIterator: () => IsAsyncIterator,
-	IsBase: () => IsBase,
-	IsBigInt: () => IsBigInt,
-	IsBoolean: () => IsBoolean,
-	IsCall: () => IsCall,
-	IsCodec: () => IsCodec,
-	IsConstructor: () => IsConstructor,
-	IsCyclic: () => IsCyclic,
-	IsEnum: () => IsEnum$1,
-	IsFunction: () => IsFunction,
-	IsGeneric: () => IsGeneric,
-	IsIdentifier: () => IsIdentifier,
-	IsImmutable: () => IsImmutable,
-	IsInfer: () => IsInfer,
-	IsInteger: () => IsInteger,
-	IsIntersect: () => IsIntersect,
-	IsIterator: () => IsIterator,
-	IsKind: () => IsKind,
-	IsLiteral: () => IsLiteral,
-	IsNever: () => IsNever,
-	IsNull: () => IsNull,
-	IsNumber: () => IsNumber,
-	IsObject: () => IsObject,
-	IsOptional: () => IsOptional,
-	IsParameter: () => IsParameter,
-	IsPromise: () => IsPromise,
-	IsReadonly: () => IsReadonly,
-	IsRecord: () => IsRecord,
-	IsRef: () => IsRef$1,
-	IsRefine: () => IsRefine$1,
-	IsRest: () => IsRest,
-	IsSchema: () => IsSchema$1,
-	IsString: () => IsString,
-	IsSymbol: () => IsSymbol,
-	IsTemplateLiteral: () => IsTemplateLiteral,
-	IsThis: () => IsThis,
-	IsTuple: () => IsTuple,
-	IsUndefined: () => IsUndefined,
-	IsUnion: () => IsUnion,
-	IsUnknown: () => IsUnknown,
-	IsUnsafe: () => IsUnsafe,
-	IsVoid: () => IsVoid,
-	Iterator: () => Iterator,
-	KeyOf: () => KeyOf,
-	Literal: () => Literal$1,
-	Lowercase: () => Lowercase,
-	Mapped: () => Mapped,
-	Module: () => Module,
-	Never: () => Never,
-	NonNullable: () => NonNullable,
-	Null: () => Null,
-	Number: () => Number$2,
-	Object: () => _Object_$1,
-	Omit: () => Omit,
-	Optional: () => Optional$2,
-	Options: () => Options,
-	Parameter: () => Parameter$1,
-	Parameters: () => Parameters,
-	Partial: () => Partial,
-	Pick: () => Pick,
-	Promise: () => Promise$1,
-	Readonly: () => Readonly$1,
-	ReadonlyType: () => ReadonlyType,
-	Record: () => Record,
-	RecordKey: () => RecordKey,
-	RecordKeyAsPattern: () => RecordPattern,
-	RecordValue: () => RecordValue,
-	Ref: () => Ref$1,
-	Refine: () => Refine,
-	Required: () => Required,
-	Rest: () => Rest,
-	ReturnType: () => ReturnType,
-	Script: () => Script,
-	String: () => String$2,
-	Symbol: () => Symbol$1,
-	TemplateLiteral: () => TemplateLiteral,
-	This: () => This,
-	Tuple: () => Tuple$1,
-	Uncapitalize: () => Uncapitalize,
-	Undefined: () => Undefined,
-	Union: () => Union,
-	Unknown: () => Unknown,
-	Unsafe: () => Unsafe,
-	Uppercase: () => Uppercase,
-	Void: () => Void
-});
 function IsGuardInterface(value) {
 	return IsObject$1(value) && HasPropertyKey(value, "check") && HasPropertyKey(value, "errors") && IsFunction$1(value.check) && IsFunction$1(value.errors);
 }
@@ -6116,7 +4791,7 @@ function FromLiteralString(context, type, value) {
 }
 function FromLiteral(context, type, value) {
 	if (IsEqual(type.const, value)) return value;
-	return IsLiteralBigInt(type) ? FromLiteralBigInt(context, type, value) : IsLiteralBoolean(type) ? FromLiteralBoolean(context, type, value) : IsLiteralNumber(type) ? FromLiteralNumber(context, type, value) : IsLiteralString(type) ? FromLiteralString(context, type, value) : Unreachable$1();
+	return IsLiteralBigInt(type) ? FromLiteralBigInt(context, type, value) : IsLiteralBoolean(type) ? FromLiteralBoolean(context, type, value) : IsLiteralNumber(type) ? FromLiteralNumber(context, type, value) : IsLiteralString(type) ? FromLiteralString(context, type, value) : Unreachable();
 }
 function FromNull(context, type, value) {
 	if (IsNull$1(value)) return value;
@@ -6327,7 +5002,7 @@ function Callback(direction, context, type, value) {
 	return IsEqual(direction, "Decode") ? Decode$6(context, type, value) : Encode$6(context, type, value);
 }
 function Decode$5(direction, context, type, value) {
-	if (!IsArray$1(value)) return Unreachable$1();
+	if (!IsArray$1(value)) return Unreachable();
 	for (let i = 0; i < value.length; i++) value[i] = FromType(direction, context, type.items, value[i]);
 	return Callback(direction, context, type, value);
 }
@@ -6360,7 +5035,7 @@ function FromIntersect(direction, context, type, value) {
 	return IsEqual(direction, "Decode") ? Decode$4(direction, context, type, value) : Encode$4(direction, context, type, value);
 }
 function Decode$3(direction, context, type, value) {
-	if (!IsObjectNotArray(value)) return Unreachable$1();
+	if (!IsObjectNotArray(value)) return Unreachable();
 	for (const key of Keys(type.properties)) {
 		if (!HasPropertyKey(value, key) || IsOptionalUndefined(type.properties[key], key, value)) continue;
 		value[key] = FromType(direction, context, type.properties[key], value[key]);
@@ -6380,10 +5055,10 @@ function FromObject(direction, context, type, value) {
 	return IsEqual(direction, "Decode") ? Decode$3(direction, context, type, value) : Encode$3(direction, context, type, value);
 }
 function Decode$2(direction, context, type, value) {
-	if (!IsObjectNotArray(value)) return Unreachable$1();
+	if (!IsObjectNotArray(value)) return Unreachable();
 	const regexp = new RegExp(RecordPattern(type));
 	for (const key of Keys(value)) {
-		if (!regexp.test(key)) Unreachable$1();
+		if (!regexp.test(key)) Unreachable();
 		value[key] = FromType(direction, context, RecordValue(type), value[key]);
 	}
 	return Callback(direction, context, type, value);
@@ -6406,7 +5081,7 @@ function FromRef(direction, context, type, value) {
 	return Callback(direction, context, type, value);
 }
 function Decode$1(direction, context, type, value) {
-	if (!IsArray$1(value)) return Unreachable$1();
+	if (!IsArray$1(value)) return Unreachable();
 	for (let i = 0; i < Math.min(type.items.length, value.length); i++) value[i] = FromType(direction, context, type.items[i], value[i]);
 	return Callback(direction, context, type, value);
 }
@@ -6424,7 +5099,7 @@ function Decode(direction, context, type, value) {
 		if (!Check(context, schema, value)) continue;
 		return Callback(direction, context, type, FromType(direction, context, schema, value));
 	}
-	return Unreachable$1();
+	return Unreachable();
 }
 function Encode(direction, context, type, value) {
 	let exterior = Callback(direction, context, type, value);
@@ -6518,80 +5193,80 @@ function Parse(...args) {
 	throw new ParseError(value, Errors(context, type, value));
 }
 Union([
-	_Object_$1({
-		type: Literal$1("insert"),
-		path: String$2(),
+	_Object_({
+		type: Literal("insert"),
+		path: String$1(),
 		value: Unknown()
 	}),
 	Object({
-		type: Literal$1("update"),
-		path: String$2(),
+		type: Literal("update"),
+		path: String$1(),
 		value: Unknown()
 	}),
-	_Object_$1({
-		type: Literal$1("delete"),
-		path: String$2()
+	_Object_({
+		type: Literal("delete"),
+		path: String$1()
 	})
 ]);
-const Timestamp = build_default.Refine(build_default.Unsafe({}), (value) => value instanceof Date);
-const Image = build_default.Object({
-	id: build_default.Number(),
+const Timestamp = Refine(Unsafe({}), (value) => value instanceof Date);
+const Image = _Object_({
+	id: Number$1(),
 	created: Timestamp,
-	title: build_default.String({
+	title: String$1({
 		minLength: 1,
 		maxLength: 100
 	}),
-	type: build_default.Enum(["jpg", "png"]),
-	size: build_default.Number(),
-	url: build_default.String({ format: "url" })
+	type: Enum(["jpg", "png"]),
+	size: Number$1(),
+	url: String$1({ format: "url" })
 });
-const Rating = build_default.Object({
-	id: build_default.Number(),
-	stars: build_default.Number({
+const Rating = _Object_({
+	id: Number$1(),
+	stars: Number$1({
 		minimum: 1,
 		maximum: 5
 	}),
-	title: build_default.String({
+	title: String$1({
 		minLength: 1,
 		maxLength: 100
 	}),
-	text: build_default.String({
+	text: String$1({
 		minLength: 1,
 		maxLength: 1e3
 	}),
-	images: build_default.Array(Image)
+	images: Array$1(Image)
 });
-Parse(build_default.Object({
-	id: build_default.Number(),
+Parse(_Object_({
+	id: Number$1(),
 	created: Timestamp,
-	title: build_default.String({
+	title: String$1({
 		minLength: 1,
 		maxLength: 100
 	}),
-	brand: build_default.String({
+	brand: String$1({
 		minLength: 1,
 		maxLength: 30
 	}),
-	description: build_default.String({
+	description: String$1({
 		minLength: 1,
 		maxLength: 500
 	}),
-	price: build_default.Number({
+	price: Number$1({
 		minimum: 1,
 		maximum: 1e4
 	}),
-	discount: build_default.Union([build_default.Number({
+	discount: Union([Number$1({
 		minimum: 1,
 		maximum: 100
-	}), build_default.Null()]),
-	quantity: build_default.Number({
+	}), Null()]),
+	quantity: Number$1({
 		minimum: 1,
 		maximum: 10
 	}),
-	tags: build_default.Array(build_default.String({
+	tags: Array$1(String$1({
 		minLength: 1,
 		maxLength: 30
 	})),
-	images: build_default.Array(Image),
-	ratings: build_default.Array(Rating)
+	images: Array$1(Image),
+	ratings: Array$1(Rating)
 }), {});
