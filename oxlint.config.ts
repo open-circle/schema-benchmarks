@@ -9,6 +9,7 @@ export default defineConfig({
     "typescript/array-type": ["error", { default: "generic" }],
     "react/react-in-jsx-scope": "off",
     "typescript/no-unsafe-type-assertion": "off",
+    "typescript/consistent-type-imports": "error",
   },
   settings: {
     vitest: {
