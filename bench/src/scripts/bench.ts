@@ -18,6 +18,7 @@ const results: BenchResults = {
   initialization: [],
   validation: { valid: [], invalid: [] },
   parsing: { valid: [], invalid: [] },
+  standard: { valid: [], invalid: [] },
 };
 
 const caseRegistry = new CaseRegistry();
@@ -93,6 +94,28 @@ function processResults(tasks: Array<Task>) {
         });
         break;
       }
+      case "standard": {
+        if (!entry.dataType) {
+          console.error("Missing data type for standard bench:", entry);
+          continue;
+        }
+        if (!entry.errorType) {
+          console.error("Missing error type for standard bench:", entry);
+          continue;
+        }
+        results.standard[entry.dataType].push({
+          type: "standard",
+          id: task.name,
+          libraryName,
+          version,
+          snippet,
+          note,
+          mean: task.result.latency.mean,
+          optimizeType: entry.optimizeType,
+          errorType: entry.errorType,
+        });
+        break;
+      }
     }
   }
 }
@@ -101,7 +124,8 @@ function processResults(tasks: Array<Task>) {
 for (const getConfig of Object.values(libraries)) {
   sigintAc.signal.throwIfAborted();
 
-  const { library, createContext, initialization, validation, parsing } = await getConfig();
+  const { library, createContext, initialization, validation, parsing, standard } =
+    await getConfig();
   const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
   console.log(`\nBenchmarking: ${libraryName}`);
@@ -184,6 +208,38 @@ for (const getConfig of Object.values(libraries)) {
         }
       }
     }
+    if (standard) {
+      for (const [dataType, data] of [
+        ["valid", successData],
+        ["invalid", errorData],
+      ] as const) {
+        for (const [errorType, benchConfigs] of unsafeEntries(standard)) {
+          if (!benchConfigs) continue;
+          for (const benchConfig of ensureArray(benchConfigs)) {
+            const {
+              getSchema,
+              snippet = "upfetch(url, { schema })",
+              note,
+              optimizeType = libraryOptimizeType,
+            } = benchConfig;
+            const schema = await getSchema(context);
+            bench.add(
+              caseRegistry.add({
+                type: "standard",
+                optimizeType,
+                errorType,
+                dataType,
+                libraryName,
+                version,
+                snippet,
+                note,
+              }),
+              () => schema["~standard"].validate(data),
+            );
+          }
+        }
+      }
+    }
   }
 
   // Run benchmarks for this library and process results immediately
@@ -200,6 +256,7 @@ for (const array of [
   results.initialization,
   ...Object.values(results.validation),
   ...Object.values(results.parsing),
+  ...Object.values(results.standard),
 ]) {
   array.sort((a, b) => a.mean - b.mean);
 }

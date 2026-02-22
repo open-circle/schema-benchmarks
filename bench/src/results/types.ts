@@ -37,12 +37,21 @@ export const parsingResultSchema = v.object({
 });
 export type ParsingResult = v.InferOutput<typeof parsingResultSchema>;
 
-export type BenchResult = InitializationResult | ValidationResult | ParsingResult;
+const standardResultSchema = v.object({
+  ...baseBenchResultSchema.entries,
+  optimizeType: optimizeTypeSchema,
+  errorType: errorTypeSchema,
+  type: v.literal("standard"),
+});
+export type StandardResult = v.InferOutput<typeof standardResultSchema>;
+
+export type BenchResult = InitializationResult | ValidationResult | ParsingResult | StandardResult;
 
 export const benchResultsSchema = v.object({
   initialization: v.array(initializationResultSchema),
   parsing: v.object(v.entriesFromList(dataTypeSchema.options, v.array(parsingResultSchema))),
   validation: v.object(v.entriesFromList(dataTypeSchema.options, v.array(validationResultSchema))),
+  standard: v.object(v.entriesFromList(dataTypeSchema.options, v.array(standardResultSchema))),
 });
 export type BenchResults = v.InferOutput<typeof benchResultsSchema>;
 
