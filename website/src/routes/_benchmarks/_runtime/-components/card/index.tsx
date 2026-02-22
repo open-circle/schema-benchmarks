@@ -66,7 +66,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
           <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
           {optimizeTypeProps.labels[result.optimizeType].label}
         </DisplayChip>
-        {result.type === "parsing" && (
+        {(result.type === "parsing" || result.type === "standard") && (
           <DisplayChip>
             <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
             {errorTypeProps.labels[result.errorType].label}

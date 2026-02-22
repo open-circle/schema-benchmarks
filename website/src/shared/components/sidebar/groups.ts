@@ -34,6 +34,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "Parsing",
         icon: "output_circle",
       },
+      {
+        ...linkOptions({ to: "/standard" }),
+        name: "Standard Schema",
+        icon: "schema",
+      },
     ],
   },
   {

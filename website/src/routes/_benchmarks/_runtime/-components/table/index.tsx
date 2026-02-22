@@ -93,7 +93,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
               Downloads (/wk)
             </SortableHeaderLink>
             <th>Optimizations</th>
-            {benchType === "parsing" && <th>Error type</th>}
+            {(benchType === "parsing" || benchType === "standard") && <th>Error type</th>}
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("mean", sortState, { to })}
               className="numeric"
@@ -120,7 +120,10 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                   viewTransitionName: getTransitionName("bench-table-row", {
                     libraryName: result.libraryName,
                     note: result.note,
-                    errorType: result.type === "parsing" ? result.errorType : undefined,
+                    errorType:
+                      result.type === "parsing" || result.type === "standard"
+                        ? result.errorType
+                        : undefined,
                   }),
                 }}
               >
@@ -157,7 +160,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                   </ErrorBoundary>
                 </td>
                 <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
-                {result.type === "parsing" && (
+                {(result.type === "parsing" || result.type === "standard") && (
                   <td>{errorTypeProps.labels[result.errorType].label}</td>
                 )}
                 <td className="numeric">{durationFormatter.format(getDuration(result.mean))}</td>
