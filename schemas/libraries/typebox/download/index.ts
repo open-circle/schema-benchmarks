@@ -1,5 +1,5 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
-import Type, { type StaticDecode } from "typebox";
+import Type, { type Static } from "typebox";
 import * as Value from "typebox/value";
 
 import type { ProductData } from "#src";
@@ -34,6 +34,6 @@ const Product = Type.Object({
   ratings: Type.Array(Rating),
 });
 
-export type SatisfiesTest = Satisfies<StaticDecode<typeof Product>, ProductData>;
+export type SatisfiesTest = Satisfies<Static<typeof Product>, ProductData>;
 
 Value.Parse(Product, {});
