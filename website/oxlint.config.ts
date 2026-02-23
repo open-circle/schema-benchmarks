@@ -13,7 +13,13 @@ const linkComponents = [
   "ListItemExternalLink",
 ];
 
-const buttonComponents = ["Button", "ToggleButton", "FloatingActionButton", "Chip"];
+const buttonComponents = [
+  "Button",
+  "ToggleButton",
+  "FloatingActionButton",
+  "Chip",
+  "ListItemButton",
+];
 
 export default defineConfig({
   extends: [rootConfig],
