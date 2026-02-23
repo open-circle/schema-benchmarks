@@ -86,7 +86,7 @@ export interface BenchmarksConfig<Context, ParseResult = unknown> {
   stack?: StackBenchmarkConfig<Context>;
 }
 
-/* @__PURE__ */
+/* @__NO_SIDE_EFFECTS__ */
 export function defineBenchmarks<const TContext, TParseResult>(
   config: BenchmarksConfig<TContext, TParseResult>,
 ) {
