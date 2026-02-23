@@ -75,8 +75,7 @@ export const Group = meta.story({
   },
 });
 
-export const VerticalGroup = meta.story({
-  ...Group.input,
+export const VerticalGroup = Group.extend({
   render: ({ variant, ...props }) => (
     <ButtonGroup
       variant={variant === "contained" ? "outlined" : variant}

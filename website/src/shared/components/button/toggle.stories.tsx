@@ -77,7 +77,6 @@ export const Group = meta.story({
   render: () => <ToggleButtonGroupDemo />,
 });
 
-export const VerticalGroup = meta.story({
-  ...Group.input,
+export const VerticalGroup = Group.extend({
   render: () => <ToggleButtonGroupDemo orientation="vertical" />,
 });
