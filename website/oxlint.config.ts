@@ -3,13 +3,13 @@ import { defineConfig } from "oxlint";
 import rootConfig from "../oxlint.config.ts";
 
 const linkComponents = [
-  "Link",
-  "LinkChip",
-  "InternalLinkButton",
+  // "Link",
+  // "LinkChip",
+  // "InternalLinkButton",
   "ExternalLinkButton",
-  "InternalLinkToggleButton",
+  // "InternalLinkToggleButton",
   "ExternalLinkToggleButton",
-  "ListItemInternalLink",
+  // "ListItemInternalLink",
   "ListItemExternalLink",
 ];
 
@@ -21,7 +21,7 @@ export default defineConfig({
   settings: {
     "jsx-a11y": {
       components: {
-        // ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
+        ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
         ...Object.fromEntries(buttonComponents.map((component) => [component, "button"])),
         TextField: "input",
       },

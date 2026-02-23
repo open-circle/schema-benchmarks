@@ -41,8 +41,12 @@ export interface ListItemExternalLinkProps extends ComponentPropsWithRef<
   typeof ExternalLinkButton
 > {}
 
-export function ListItemExternalLink({ className, ...props }: ListItemExternalLinkProps) {
-  return <ExternalLinkButton {...props} {...itemCls({ element: "button", extra: className })} />;
+export function ListItemExternalLink({ className, children, ...props }: ListItemExternalLinkProps) {
+  return (
+    <ExternalLinkButton {...props} {...itemCls({ element: "button", extra: className })}>
+      {children}
+    </ExternalLinkButton>
+  );
 }
 
 export const ListItemInternalLink = createLink(ListItemExternalLink);
