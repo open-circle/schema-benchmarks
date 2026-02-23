@@ -36,6 +36,7 @@ const meta = preview.meta({
     variant: "text",
     icon: <MdSymbol>edit</MdSymbol>,
     children: "Edit",
+    "aria-pressed": false,
   },
 });
 

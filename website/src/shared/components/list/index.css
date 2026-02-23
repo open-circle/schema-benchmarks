@@ -21,10 +21,6 @@
   align-items: stretch;
   --button-base-color: var(--list-item-foreground);
   min-width: unset;
-  &[data-status="active"],
-  &[aria-pressed="true"] {
-    --list-item-foreground: var(--primary);
-  }
   .md-symbol {
     --icon-size: 24;
   }

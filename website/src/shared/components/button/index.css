@@ -70,9 +70,6 @@
     --on-button-base-color: var(--on-info);
   }
 
-  &.button--text {
-    padding: 0 0.5rem;
-  }
   &.button--outlined {
     border: 1px solid var(--divider);
   }
@@ -110,23 +107,23 @@
 
     &[data-status="active"],
     &[aria-pressed="true"] {
-      --button-background: color(
-        from var(--button-selected-background) srgb r g b / var(--activated-opacity)
-      );
+      --button-background: var(--button-selected-background);
       --button-foreground: var(--button-selected);
       --icon-fill: 1;
       --icon-weight: 600;
       font-weight: var(--weight-bold);
       &:hover {
-        background-color: color(
-          from var(--button-selected-background) srgb r g b /
-            calc(var(--hover-opacity) + var(--activated-opacity))
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--hover-opacity)
         );
       }
       &:focus-visible {
-        background-color: color(
-          from var(--button-selected-background) srgb r g b /
-            calc(var(--focus-opacity) + var(--activated-opacity))
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--focus-opacity)
         );
       }
     }
@@ -165,6 +162,25 @@
         from var(--button-foreground) srgb r g b / var(--disabled-opacity)
       );
       --button-foreground: var(--page-foreground);
+    }
+    &[data-status="active"],
+    &[aria-pressed="true"] {
+      --button-background: var(--button-selected-background);
+      --button-foreground: var(--button-selected);
+      &:hover {
+        --button-background: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--hover-on-filled-opacity)
+        );
+      }
+      &:focus-visible {
+        --button-background: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--focus-on-filled-opacity)
+        );
+      }
     }
   }
   &.button--text,
