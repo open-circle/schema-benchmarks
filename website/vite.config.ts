@@ -106,6 +106,9 @@ const config = defineConfig({
       },
     ],
   },
+  ssr: {
+    noExternal: ["react-tweet"],
+  },
 });
 
 export default config;
