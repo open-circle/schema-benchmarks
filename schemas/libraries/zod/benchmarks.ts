@@ -1,5 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 import * as z from "zod";
 
 import { defineBenchmarks } from "#src";

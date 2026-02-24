@@ -1,5 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 

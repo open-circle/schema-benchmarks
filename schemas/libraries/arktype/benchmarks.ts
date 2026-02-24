@@ -1,6 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import { type } from "arktype";
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 
 import { defineBenchmarks } from "#src";
 
