@@ -2,8 +2,8 @@ import * as path from "node:path";
 
 import UnpluginTypia from "@ryoppippi/unplugin-typia/vite";
 import macros from "unplugin-macros/vite";
-import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import { defineConfig } from "vitest/config";
 
 import { dependencies } from "./package.json";
 
@@ -32,4 +32,7 @@ export default defineConfig({
     self: "globalThis",
   },
   plugins: [UnpluginTypia({ log: false }), macros(), dts({ rollupTypes: true })],
+  test: {
+    include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
+  },
 });
