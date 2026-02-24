@@ -1,5 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 import { Either } from "effect";
 import * as Schema from "effect/Schema";
 

@@ -1,5 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 import * as Type from "typebox";
 import Compile from "typebox/compile";
 import * as Schema from "typebox/schema";

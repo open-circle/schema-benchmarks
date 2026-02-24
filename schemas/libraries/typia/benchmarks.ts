@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 // @ts-expect-error imported for type portability
 // oxlint-disable-next-line no-unused-vars
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import ts from "dedent" with { type: "macro" };
+import ts from "dedent";
 import typia, { type tags } from "typia";
 
 import { defineBenchmarks } from "#src";
