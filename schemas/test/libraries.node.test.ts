@@ -74,7 +74,9 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         [true, validStrings],
         [false, invalidStrings],
       ] as const)("should return %s for %s data", async (expected, strings) => {
-        expect(config.create(context)(strings[stringType])).toBe(expected);
+        const fn = await config.create(context);
+        const match = await fn(strings[stringType]);
+        expect(match).toBe(expected);
       });
     });
   });

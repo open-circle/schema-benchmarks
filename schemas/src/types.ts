@@ -50,7 +50,7 @@ export const stringFormatSchema = v.picklist(["email", "url", "uuid"]);
 export type StringFormat = v.InferOutput<typeof stringFormatSchema>;
 
 export interface StringBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  create: (context: Context) => (testString: string) => boolean;
+  create: (context: Context) => MaybePromise<(testString: string) => MaybePromise<boolean>>;
 }
 
 export interface LibraryInfo {
