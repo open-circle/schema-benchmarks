@@ -72,7 +72,10 @@ export default defineBenchmarks({
       getSchema: ({ schema }) =>
         Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
       snippet: ts`
-        // const standardSchema = Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } });
+        // const standardSchema = Schema.toStandardSchemaV1(
+        //   schema, 
+        //   { parseOptions: { errors: "all" } }
+        // );
         upfetch(url, { schema: standardSchema });
       `,
     },
@@ -80,7 +83,10 @@ export default defineBenchmarks({
       getSchema: ({ schema }) =>
         Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
       snippet: ts`
-        // const standardSchema = Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } });
+        // const standardSchema = Schema.toStandardSchemaV1(
+        //   schema, 
+        //   { parseOptions: { errors: "first" } }
+        // );
         upfetch(url, { schema: standardSchema });
       `,
     },
