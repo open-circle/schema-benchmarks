@@ -2,9 +2,21 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as z from "zod/mini";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getZodMiniSchema } from ".";
+
+const createStringBenchmark = (
+  factory: () => z.ZodMiniType<string>,
+  snippet: string,
+): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = factory();
+    return (testString) => schema.safeParse(testString).success;
+  },
+  snippet,
+});
 
 export default defineBenchmarks({
   library: {
@@ -51,26 +63,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = z.email();
-        return (testString) => schema.safeParse(testString).success;
-      },
-      snippet: ts`z.email()`,
-    },
-    url: {
-      create() {
-        const schema = z.url();
-        return (testString) => schema.safeParse(testString).success;
-      },
-      snippet: ts`z.url()`,
-    },
-    uuid: {
-      create() {
-        const schema = z.uuid();
-        return (testString) => schema.safeParse(testString).success;
-      },
-      snippet: ts`z.uuid()`,
-    },
+    email: createStringBenchmark(z.email, ts`z.email()`),
+    url: createStringBenchmark(z.url, ts`z.url()`),
+    uuid: createStringBenchmark(z.uuid, ts`z.uuid()`),
   },
 });

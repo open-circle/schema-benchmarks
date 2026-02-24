@@ -2,9 +2,19 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import { type } from "arktype";
 import ts from "dedent";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getArkTypeSchema } from ".";
+
+type Format = Exclude<keyof typeof type.keywords.string, ` ${string}`>;
+
+const createStringBenchmark = (format: Format): StringBenchmarkConfig<unknown> => ({
+  create() {
+    return type(`string.${format}`).allows;
+  },
+  snippet: ts`type("string.${format}")`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -41,23 +51,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        return type("string.email").allows;
-      },
-      snippet: ts`type("string.email")`,
-    },
-    url: {
-      create() {
-        return type("string.url").allows;
-      },
-      snippet: ts`type("string.url")`,
-    },
-    uuid: {
-      create() {
-        return type("string.uuid").allows;
-      },
-      snippet: ts`type("string.uuid")`,
-    },
+    email: createStringBenchmark("email"),
+    url: createStringBenchmark("url"),
+    uuid: createStringBenchmark("uuid"),
   },
 });

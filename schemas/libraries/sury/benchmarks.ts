@@ -2,9 +2,21 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as S from "sury";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getSurySchema } from ".";
+
+const createStringBenchmark = (
+  modifier: (string: typeof S.string) => S.Schema<string>,
+  snippet: string,
+): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = modifier(S.string);
+    return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
+  },
+  snippet,
+});
 
 export default defineBenchmarks({
   library: {
@@ -94,26 +106,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = S.email(S.string);
-        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
-      },
-      snippet: ts`S.email(S.string)`,
-    },
-    url: {
-      create() {
-        const schema = S.url(S.string);
-        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
-      },
-      snippet: ts`S.url(S.string)`,
-    },
-    uuid: {
-      create() {
-        const schema = S.uuid(S.string);
-        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
-      },
-      snippet: ts`S.uuid(S.string)`,
-    },
+    email: createStringBenchmark(S.email, ts`S.email(S.string)`),
+    url: createStringBenchmark(S.url, ts`S.url(S.string)`),
+    uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),
   },
 });

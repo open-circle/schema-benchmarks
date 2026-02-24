@@ -2,9 +2,21 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as v from "valibot";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getValibotSchema } from ".";
+
+const createStringBenchmark = (
+  actionFactory: () => v.GenericValidation<string>,
+  snippet: string,
+): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = v.pipe(v.string(), actionFactory());
+    return (testString) => v.is(schema, testString);
+  },
+  snippet: ts`v.pipe(v.string(), ${snippet})`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -58,26 +70,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = v.pipe(v.string(), v.email());
-        return (testString) => v.is(schema, testString);
-      },
-      snippet: ts`v.pipe(v.string(), v.email())`,
-    },
-    url: {
-      create() {
-        const schema = v.pipe(v.string(), v.url());
-        return (testString) => v.is(schema, testString);
-      },
-      snippet: ts`v.pipe(v.string(), v.url())`,
-    },
-    uuid: {
-      create() {
-        const schema = v.pipe(v.string(), v.uuid());
-        return (testString) => v.is(schema, testString);
-      },
-      snippet: ts`v.pipe(v.string(), v.uuid())`,
-    },
+    email: createStringBenchmark(v.email, ts`v.email()`),
+    url: createStringBenchmark(v.url, ts`v.url()`),
+    uuid: createStringBenchmark(v.uuid, ts`v.uuid()`),
   },
 });

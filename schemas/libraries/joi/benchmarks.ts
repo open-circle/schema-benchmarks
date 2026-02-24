@@ -2,9 +2,22 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import Joi from "joi";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getJoiSchema } from ".";
+
+type FormatMethod = {
+  [M in keyof Joi.StringSchema]-?: Joi.StringSchema[M] extends () => Joi.StringSchema ? M : never;
+}[keyof Joi.StringSchema];
+
+const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = Joi.string()[method]();
+    return (testString) => !schema.validate(testString).error;
+  },
+  snippet: ts`Joi.string().${method}()`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -42,26 +55,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = Joi.string().email();
-        return (testString) => !schema.validate(testString).error;
-      },
-      snippet: ts`Joi.string().email()`,
-    },
-    url: {
-      create() {
-        const schema = Joi.string().uri();
-        return (testString) => !schema.validate(testString).error;
-      },
-      snippet: ts`Joi.string().uri()`,
-    },
-    uuid: {
-      create() {
-        const schema = Joi.string().uuid();
-        return (testString) => !schema.validate(testString).error;
-      },
-      snippet: ts`Joi.string().uuid()`,
-    },
+    email: createStringBenchmark("email"),
+    url: createStringBenchmark("uri"),
+    uuid: createStringBenchmark("uuid"),
   },
 });
