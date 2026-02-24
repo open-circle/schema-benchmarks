@@ -8,7 +8,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const context = await config.createContext();
 
   describe.runIf(config.validation)("validation", () => {
-    describe.each(ensureArray(config.validation ?? []))("config %$", (config) => {
+    describe.each(ensureArray(config.validation ?? []))("config %o", (config) => {
       it.each([
         [true, "valid", successData],
         [false, "invalid", errorData],
@@ -20,7 +20,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
 
   describe.runIf(config.parsing)("parsing", () => {
     describe.each(Object.entries(config.parsing ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %$", (config) => {
+      describe.each(ensureArray(configs))("config %o", (config) => {
         it.each([
           [true, "valid", successData],
           [false, "invalid", errorData],
@@ -34,7 +34,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
 
   describe.runIf(config.standard)("standard", () => {
     describe.each(Object.entries(config.standard ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %$", (config) => {
+      describe.each(ensureArray(configs))("config %o", (config) => {
         it("should create a schema", async () => {
           const schema = await config.getSchema(context);
           expect(schema["~standard"]).toBeDefined();
