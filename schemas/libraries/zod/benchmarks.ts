@@ -17,7 +17,7 @@ export default defineBenchmarks({
   }),
   initialization: {
     run() {
-      getZodSchema();
+      return getZodSchema();
     },
     snippet: ts`z.object(...)`,
   },

@@ -15,7 +15,7 @@ export default defineBenchmarks({
   createContext: () => ({ schema: getYupSchema() }),
   initialization: {
     run() {
-      getYupSchema();
+      return getYupSchema();
     },
     snippet: ts`object(...)`,
   },

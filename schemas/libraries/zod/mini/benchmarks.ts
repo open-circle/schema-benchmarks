@@ -18,7 +18,7 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        getZodMiniSchema();
+        return getZodMiniSchema();
       },
       snippet: ts`z.object(...)`,
     },

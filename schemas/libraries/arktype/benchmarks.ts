@@ -16,7 +16,7 @@ export default defineBenchmarks({
   createContext: () => ({ schema: getArkTypeSchema() }),
   initialization: {
     run() {
-      getArkTypeSchema();
+      return getArkTypeSchema();
     },
     snippet: ts`type(...)`,
   },

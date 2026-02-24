@@ -15,7 +15,7 @@ export default defineBenchmarks({
   createContext: () => ({ schema: getJoiSchema() }),
   initialization: {
     run() {
-      getJoiSchema();
+      return getJoiSchema();
     },
     snippet: ts`object(...)`,
   },

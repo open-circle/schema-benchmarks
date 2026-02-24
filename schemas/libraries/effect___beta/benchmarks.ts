@@ -23,13 +23,13 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        getEffectSchema();
+        return getEffectSchema();
       },
       snippet: ts`Schema.struct(...)`,
     },
     {
       run() {
-        Schema.decodeUnknownOption(getEffectSchema());
+        return Schema.decodeUnknownOption(getEffectSchema());
       },
       note: "decodeUnknownOption",
       snippet: ts`
