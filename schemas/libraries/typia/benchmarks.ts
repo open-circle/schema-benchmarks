@@ -115,5 +115,23 @@ export default defineBenchmarks({
         isUuid(testString);
       `,
     },
+    ipv4: {
+      create() {
+        return typia.createIs<string & tags.Format<"ipv4">>();
+      },
+      snippet: ts`
+        // const isIpv4 = typia.createIs<string & tags.Format<"ipv4">>();
+        isIpv4(testString);
+      `,
+    },
+    ipv6: {
+      create() {
+        return typia.createIs<string & tags.Format<"ipv6">>();
+      },
+      snippet: ts`
+        // const isIpv6 = typia.createIs<string & tags.Format<"ipv6">>();
+        isIpv6(testString);
+      `,
+    },
   },
 });

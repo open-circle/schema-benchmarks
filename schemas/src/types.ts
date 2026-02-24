@@ -46,7 +46,7 @@ export interface StandardSchemaBenchmarkConfig<Context> extends Omit<
   snippet?: string;
 }
 
-export const stringFormatSchema = v.picklist(["email", "url", "uuid"]);
+export const stringFormatSchema = v.picklist(["email", "url", "uuid", "ipv4", "ipv6"]);
 export type StringFormat = v.InferOutput<typeof stringFormatSchema>;
 
 export interface StringBenchmarkConfig<Context> extends BaseBenchmarkConfig {

@@ -7,7 +7,7 @@ import { defineBenchmarks } from "#src";
 
 import { getArkTypeSchema } from ".";
 
-type Format = Exclude<keyof typeof type.keywords.string, ` ${string}`>;
+type Format = Exclude<keyof typeof type.keywords.string, ` ${string}`> | `ip.v${4 | 6}`;
 
 const createStringBenchmark = (format: Format): StringBenchmarkConfig<unknown> => ({
   create() {
@@ -54,5 +54,7 @@ export default defineBenchmarks({
     email: createStringBenchmark("email"),
     url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),
+    ipv4: createStringBenchmark("ip.v4"),
+    ipv6: createStringBenchmark("ip.v6"),
   },
 });

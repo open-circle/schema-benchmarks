@@ -196,10 +196,14 @@ export const validStrings: Record<StringFormat, string> = {
   email: "test@example.com",
   url: "https://www.example.com",
   uuid: "123e4567-e89b-12d3-a456-426614174000",
+  ipv4: "192.168.0.1",
+  ipv6: "2001:0db8:85a3:08d3:1319:8a2e:0370:7344",
 };
 
 export const invalidStrings: Record<StringFormat, string> = {
   email: "invalid",
   url: "invalid",
   uuid: "invalid",
+  ipv4: "invalid",
+  ipv6: "invalid",
 };

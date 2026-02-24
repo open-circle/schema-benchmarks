@@ -63,5 +63,7 @@ export default defineBenchmarks({
     email: createStringBenchmark(z.email, ts`z.email()`),
     url: createStringBenchmark(z.url, ts`z.url()`),
     uuid: createStringBenchmark(z.uuid, ts`z.uuid()`),
+    ipv4: createStringBenchmark(z.ipv4, ts`z.ipv4()`),
+    ipv6: createStringBenchmark(z.ipv6, ts`z.ipv6()`),
   },
 });
