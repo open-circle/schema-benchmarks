@@ -4,7 +4,7 @@ import * as v from "valibot";
 
 import type { ProductData } from "./data.ts";
 
-export const optimizeTypeSchema = /* @__PURE__ */ v.picklist(["none", "jit", "precompiled"]);
+export const optimizeTypeSchema = v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
@@ -22,7 +22,7 @@ export interface ValidationBenchmarkConfig<Context> extends BaseBenchmarkConfig 
   run: (data: unknown, context: Context) => MaybePromise<boolean>;
 }
 
-export const errorTypeSchema = /* @__PURE__ */ v.picklist(["allErrors", "abortEarly"]);
+export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
 export interface ParsingBenchmarkConfig<
@@ -46,17 +46,19 @@ export interface StandardSchemaBenchmarkConfig<Context> extends Omit<
   snippet?: string;
 }
 
+export const stringFormatSchema = v.picklist(["email", "url", "uuid"]);
+export type StringFormat = v.InferOutput<typeof stringFormatSchema>;
+
+export interface StringBenchmarkConfig<Context> extends BaseBenchmarkConfig {
+  create: (context: Context) => (testString: string) => boolean;
+}
+
 export interface LibraryInfo {
   name: string;
   git: string;
   optimizeType: OptimizeType;
   version: string;
 }
-
-export type BenchmarkConfig<Context, ParseResult = unknown> =
-  | InitializationBenchmarkConfig<Context>
-  | ValidationBenchmarkConfig<Context>
-  | ParsingBenchmarkConfig<Context, ParseResult>;
 
 export interface BenchmarksConfig<Context, ParseResult = unknown> {
   library: LibraryInfo;
@@ -65,6 +67,7 @@ export interface BenchmarksConfig<Context, ParseResult = unknown> {
   validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context, ParseResult>>>>;
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig<Context>>>>;
+  string?: Partial<Record<StringFormat, StringBenchmarkConfig<Context>>>;
 }
 
 /* @__PURE__ */

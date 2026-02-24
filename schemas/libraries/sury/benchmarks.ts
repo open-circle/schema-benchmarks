@@ -93,4 +93,27 @@ export default defineBenchmarks({
       getSchema: ({ schema }) => schema,
     },
   },
+  string: {
+    email: {
+      create() {
+        const schema = S.email(S.string);
+        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
+      },
+      snippet: ts`S.email(S.string)`,
+    },
+    url: {
+      create() {
+        const schema = S.url(S.string);
+        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
+      },
+      snippet: ts`S.url(S.string)`,
+    },
+    uuid: {
+      create() {
+        const schema = S.uuid(S.string);
+        return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
+      },
+      snippet: ts`S.uuid(S.string)`,
+    },
+  },
 });

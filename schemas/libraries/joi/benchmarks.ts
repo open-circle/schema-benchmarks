@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import Joi from "joi";
 
 import { defineBenchmarks } from "#src";
 
@@ -38,6 +39,29 @@ export default defineBenchmarks({
   standard: {
     allErrors: {
       getSchema: ({ schema }) => schema,
+    },
+  },
+  string: {
+    email: {
+      create() {
+        const schema = Joi.string().email();
+        return (testString) => !schema.validate(testString).error;
+      },
+      snippet: ts`Joi.string().email()`,
+    },
+    url: {
+      create() {
+        const schema = Joi.string().uri();
+        return (testString) => !schema.validate(testString).error;
+      },
+      snippet: ts`Joi.string().uri()`,
+    },
+    uuid: {
+      create() {
+        const schema = Joi.string().uuid();
+        return (testString) => !schema.validate(testString).error;
+      },
+      snippet: ts`Joi.string().uuid()`,
     },
   },
 });
