@@ -1,4 +1,8 @@
-import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas";
+import {
+  errorTypeSchema,
+  optimizeTypeSchema,
+  stringFormatSchema,
+} from "@schema-benchmarks/schemas";
 import * as v from "valibot";
 
 export const dataTypeSchema = v.picklist(["invalid", "valid"]);
@@ -12,46 +16,60 @@ export const baseBenchResultSchema = v.object({
   snippet: v.string(),
   throws: v.optional(v.boolean()),
   mean: v.number(),
+  optimizeType: optimizeTypeSchema,
 });
 export type BaseBenchResult = v.InferOutput<typeof baseBenchResultSchema>;
 
 export const initializationResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("initialization"),
-  optimizeType: optimizeTypeSchema,
 });
 export type InitializationResult = v.InferOutput<typeof initializationResultSchema>;
 
 export const validationResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("validation"),
-  optimizeType: optimizeTypeSchema,
 });
 export type ValidationResult = v.InferOutput<typeof validationResultSchema>;
 
 export const parsingResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("parsing"),
-  optimizeType: optimizeTypeSchema,
   errorType: errorTypeSchema,
 });
 export type ParsingResult = v.InferOutput<typeof parsingResultSchema>;
 
 const standardResultSchema = v.object({
   ...baseBenchResultSchema.entries,
-  optimizeType: optimizeTypeSchema,
   errorType: errorTypeSchema,
   type: v.literal("standard"),
 });
 export type StandardResult = v.InferOutput<typeof standardResultSchema>;
 
-export type BenchResult = InitializationResult | ValidationResult | ParsingResult | StandardResult;
+const stringResultSchema = v.object({
+  ...baseBenchResultSchema.entries,
+  type: v.literal("string"),
+});
+export type StringResult = v.InferOutput<typeof stringResultSchema>;
+
+export type BenchResult =
+  | InitializationResult
+  | ValidationResult
+  | ParsingResult
+  | StandardResult
+  | StringResult;
 
 export const benchResultsSchema = v.object({
   initialization: v.array(initializationResultSchema),
   parsing: v.object(v.entriesFromList(dataTypeSchema.options, v.array(parsingResultSchema))),
   validation: v.object(v.entriesFromList(dataTypeSchema.options, v.array(validationResultSchema))),
   standard: v.object(v.entriesFromList(dataTypeSchema.options, v.array(standardResultSchema))),
+  string: v.object(
+    v.entriesFromList(
+      stringFormatSchema.options,
+      v.object(v.entriesFromList(dataTypeSchema.options, v.array(stringResultSchema))),
+    ),
+  ),
 });
 export type BenchResults = v.InferOutput<typeof benchResultsSchema>;
 
