@@ -1293,7 +1293,7 @@ const OP_WITH_RUNTIME = "WithRuntime";
 const OP_YIELD = "Yield";
 /** @internal */
 const OP_REVERT_FLAGS = "RevertFlags";
-let moduleVersion = "3.19.18";
+let moduleVersion = "3.19.19";
 const getCurrentVersion = () => moduleVersion;
 /** @internal */
 const EffectTypeId$3 = /* @__PURE__ */ Symbol.for("effect/Effect");
@@ -11328,6 +11328,10 @@ var FiberRuntime = class extends Class$2 {
 	get await() {
 		return async_((resume) => {
 			const cb = (exit) => resume(succeed$9(exit));
+			if (this._exitValue !== null) {
+				cb(this._exitValue);
+				return;
+			}
 			this.tell(stateful((fiber, _) => {
 				if (fiber._exitValue !== null) cb(this._exitValue);
 				else fiber.addObserver(cb);
@@ -12549,16 +12553,22 @@ var Semaphore = class {
 			const observer = () => {
 				if (this.free < n) return;
 				this.waiters.delete(observer);
-				this.taken += n;
-				resume(succeed$9(n));
+				resume(suspend$2(() => {
+					if (this.free < n) return this.take(n);
+					this.taken += n;
+					return succeed$9(n);
+				}));
 			};
 			this.waiters.add(observer);
 			return sync$3(() => {
 				this.waiters.delete(observer);
 			});
 		}
-		this.taken += n;
-		return resume(succeed$9(n));
+		resume(suspend$2(() => {
+			if (this.free < n) return this.take(n);
+			this.taken += n;
+			return succeed$9(n);
+		}));
 	});
 	updateTakenUnsafe(fiber, f) {
 		this.taken = f(this.taken);
