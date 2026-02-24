@@ -15,7 +15,6 @@
   "dependencies": {
     "@railway-ts/pipelines": "^0.1.23",
     "@schema-benchmarks/utils": "workspace:*",
-    "@sinclair/typemap": "^0.10.1",
     "@standard-schema/spec": "catalog:",
     "@vinejs/vine": "^4.3.0",
     "ajv": "^8.18.0",
