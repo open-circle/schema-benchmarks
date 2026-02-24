@@ -78,21 +78,15 @@ export default defineBenchmarks({
     allErrors: {
       getSchema: ({ schema }) => Schema.standardSchemaV1(schema, { errors: "all" }),
       snippet: ts`
-        upfetch(url, {
-          schema: Schema.standardSchemaV1(schema, {
-            errors: "all",
-          }),
-        });
+        // const standardSchema = Schema.standardSchemaV1(schema, { errors: "all" });
+        upfetch(url, { schema: standardSchema });
       `,
     },
     abortEarly: {
       getSchema: ({ schema }) => Schema.standardSchemaV1(schema, { errors: "first" }),
       snippet: ts`
-        upfetch(url, {
-          schema: Schema.standardSchemaV1(schema, {
-            errors: "first",
-          }),
-        });
+        // const standardSchema = Schema.standardSchemaV1(schema, { errors: "first" });
+        upfetch(url, { schema: standardSchema });
       `,
     },
   },
