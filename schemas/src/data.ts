@@ -1,4 +1,4 @@
-import type { StringFormat } from "./types";
+import type { StringFormat } from "./types.ts";
 
 export interface ImageData {
   id: number;
