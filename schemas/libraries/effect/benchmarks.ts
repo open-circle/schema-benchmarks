@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import { Either } from "effect";
 import * as Schema from "effect/Schema";
 
 import { defineBenchmarks } from "#src";
@@ -41,7 +42,7 @@ export default defineBenchmarks({
   ],
   validation: {
     run(data, { is }) {
-      is(data);
+      return is(data);
     },
     snippet: ts`
       // const is = Schema.is(schema);
@@ -51,8 +52,9 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       run(data, { decodeAll }) {
-        decodeAll(data);
+        return decodeAll(data);
       },
+      validateResult: Either.isRight,
       snippet: ts`
         // const decodeAll = Schema.decodeUnknownEither(
         //  schema, 
@@ -63,8 +65,9 @@ export default defineBenchmarks({
     },
     abortEarly: {
       run(data, { decodeFirst }) {
-        decodeFirst(data);
+        return decodeFirst(data);
       },
+      validateResult: Either.isRight,
       snippet: ts`
         // const decodeFirst = Schema.decodeUnknownEither(
         //  schema, 

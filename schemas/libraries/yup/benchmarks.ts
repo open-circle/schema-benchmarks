@@ -21,7 +21,7 @@ export default defineBenchmarks({
   },
   validation: {
     run(data, { schema }) {
-      schema.isValidSync(data);
+      return schema.isValidSync(data);
     },
     snippet: ts`schema.isValidSync(data)`,
   },
@@ -30,8 +30,12 @@ export default defineBenchmarks({
       run(data, { schema }) {
         try {
           schema.validateSync(data, { abortEarly: false });
-        } catch {}
+          return true;
+        } catch {
+          return false;
+        }
       },
+      validateResult: (result) => result,
       snippet: ts`schema.validateSync(data, { abortEarly: false })`,
       throws: true,
     },
@@ -39,8 +43,11 @@ export default defineBenchmarks({
       run(data, { schema }) {
         try {
           schema.validateSync(data, { abortEarly: true });
+          return true;
         } catch {}
+        return false;
       },
+      validateResult: (result) => result,
       snippet: ts`schema.validateSync(data, { abortEarly: true })`,
       throws: true,
     },

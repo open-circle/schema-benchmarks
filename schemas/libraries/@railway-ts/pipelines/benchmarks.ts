@@ -31,12 +31,14 @@ export default defineBenchmarks({
       run(data, { schema }) {
         return validate(data, schema);
       },
+      validateResult: (result) => result.ok,
       snippet: ts`validate(data, schema)`,
     },
     abortEarly: {
       run(data, { schema }) {
         return validate(data, schema, { abortEarly: true });
       },
+      validateResult: (result) => result.ok,
       snippet: ts`validate(data, schema, { abortEarly: true })`,
     },
   },

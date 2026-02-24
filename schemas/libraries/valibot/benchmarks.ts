@@ -6,8 +6,6 @@ import { defineBenchmarks } from "#src";
 
 import { getValibotSchema } from ".";
 
-// results are returned to avoid benchmark body being tree-shaken out
-
 export default defineBenchmarks({
   library: {
     name: "valibot",
@@ -33,6 +31,7 @@ export default defineBenchmarks({
       run(data, { schema }) {
         return v.safeParse(schema, data);
       },
+      validateResult: (result) => result.success,
       snippet: ts`v.safeParse(schema, data)`,
     },
     abortEarly: [
@@ -40,12 +39,14 @@ export default defineBenchmarks({
         run(data, { schema }) {
           return v.safeParse(schema, data, { abortEarly: true });
         },
+        validateResult: (result) => result.success,
         snippet: ts`v.safeParse(schema, data, { abortEarly: true })`,
       },
       {
         run(data, { schema }) {
           return v.safeParse(schema, data, { abortPipeEarly: true });
         },
+        validateResult: (result) => result.success,
         snippet: ts`v.safeParse(schema, data, { abortPipeEarly: true })`,
         note: "abortPipeEarly only",
       },

@@ -39,14 +39,14 @@ export default defineBenchmarks({
   validation: [
     {
       run(data) {
-        typia.is<TypiaSchema>(data);
+        return typia.is<TypiaSchema>(data);
       },
       note: "is",
       snippet: ts`typia.is<TypiaSchema>(data)`,
     },
     {
       run(data, { is }) {
-        is(data);
+        return is(data);
       },
       note: "createIs",
       snippet: ts`
@@ -59,15 +59,17 @@ export default defineBenchmarks({
     allErrors: [
       {
         run(data) {
-          typia.validate<TypiaSchema>(data);
+          return typia.validate<TypiaSchema>(data);
         },
+        validateResult: (result) => result.success,
         note: "validate",
         snippet: ts`typia.validate<TypiaSchema>(data)`,
       },
       {
         run(data, { validate }) {
-          validate(data);
+          return validate(data);
         },
+        validateResult: (result) => result.success,
         note: "createValidate",
         snippet: ts`
           // const validate = typia.createValidate<TypiaSchema>();

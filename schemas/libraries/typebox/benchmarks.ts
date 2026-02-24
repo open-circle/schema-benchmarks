@@ -46,13 +46,13 @@ export default defineBenchmarks({
   validation: [
     {
       run(data, { schema }) {
-        Value.Check(schema, data);
+        return Value.Check(schema, data);
       },
       snippet: ts`Value.Check(schema, data)`,
     },
     {
       run(data, { compiled }) {
-        compiled.Check(data);
+        return compiled.Check(data);
       },
       snippet: ts`
         // const compiled = Compile(schema);
@@ -62,14 +62,14 @@ export default defineBenchmarks({
     },
     {
       run(data, { schema }) {
-        Schema.Check(schema, data);
+        return Schema.Check(schema, data);
       },
       snippet: ts`Schema.Check(schema, data)`,
       note: "schema",
     },
     {
       run(data, { compiledSchema }) {
-        compiledSchema.Check(data);
+        return compiledSchema.Check(data);
       },
       snippet: ts`
         // const compiledSchema = Schema.Compile(schema);
@@ -84,8 +84,12 @@ export default defineBenchmarks({
         run(data, { schema }) {
           try {
             Value.Parse(schema, data);
-          } catch {}
+            return true;
+          } catch {
+            return false;
+          }
         },
+        validateResult: (result) => result,
         snippet: ts`Value.Parse(schema, data)`,
         throws: true,
       },
@@ -93,8 +97,12 @@ export default defineBenchmarks({
         run(data, { compiled }) {
           try {
             compiled.Parse(data);
-          } catch {}
+            return true;
+          } catch {
+            return false;
+          }
         },
+        validateResult: (result) => result,
         snippet: ts`
           // const compiled = Compile(schema);
           compiled.Parse(data);
@@ -106,8 +114,12 @@ export default defineBenchmarks({
         run(data, { schema }) {
           try {
             Schema.Parse(schema, data);
-          } catch {}
+            return true;
+          } catch {
+            return false;
+          }
         },
+        validateResult: (result) => result,
         snippet: ts`Schema.Parse(schema, data)`,
         note: "schema",
         throws: true,
@@ -116,8 +128,12 @@ export default defineBenchmarks({
         run(data, { compiledSchema }) {
           try {
             compiledSchema.Parse(data);
-          } catch {}
+            return true;
+          } catch {
+            return false;
+          }
         },
+        validateResult: (result) => result,
         snippet: ts`
           // const compiledSchema = Schema.Compile(schema);
           compiledSchema.Parse(data);

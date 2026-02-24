@@ -39,8 +39,12 @@ export default defineBenchmarks({
         run(data, { schema }) {
           try {
             S.parseOrThrow(data, schema);
-          } catch {}
+            return { success: true };
+          } catch {
+            return { success: false };
+          }
         },
+        validateResult: (result) => result.success,
         snippet: ts`S.parseOrThrow(data, schema)`,
         throws: true,
       },
@@ -48,8 +52,12 @@ export default defineBenchmarks({
         run(data, { compile }) {
           try {
             compile(data);
-          } catch {}
+            return { success: true };
+          } catch {
+            return { success: false };
+          }
         },
+        validateResult: (result) => result.success,
         snippet: ts`
         // const compile = S.compile(S.schema(...));
         compile(data);
@@ -62,6 +70,7 @@ export default defineBenchmarks({
         run(data, { schema }) {
           return S.safe(() => S.parseOrThrow(data, schema));
         },
+        validateResult: (result) => result.success,
         snippet: ts`S.safe(() => S.parseOrThrow(data, schema))`,
         note: "safe",
       },
@@ -69,6 +78,7 @@ export default defineBenchmarks({
         run(data, { compile }) {
           return S.safe(() => compile(data));
         },
+        validateResult: (result) => result.success,
         snippet: ts`
         // const compile = S.compile(S.schema(...));
         S.safe(() => compile(data));

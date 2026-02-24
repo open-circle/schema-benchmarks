@@ -150,6 +150,9 @@ importers:
       effect___beta:
         specifier: npm:effect@4.0.0-beta.5
         version: effect@4.0.0-beta.5
+      fp-ts:
+        specifier: ^2.16.11
+        version: 2.16.11
       io-ts:
         specifier: ^2.2.22
         version: 2.2.22(fp-ts@2.16.11)

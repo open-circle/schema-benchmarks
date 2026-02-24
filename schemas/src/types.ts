@@ -19,14 +19,18 @@ export interface InitializationBenchmarkConfig<Context> extends BaseBenchmarkCon
 }
 
 export interface ValidationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  run: (data: unknown, context: Context) => MaybePromise<unknown>;
+  run: (data: unknown, context: Context) => MaybePromise<boolean>;
 }
 
 export const errorTypeSchema = /* @__PURE__ */ v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
-export interface ParsingBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  run: (data: unknown, context: Context) => MaybePromise<unknown>;
+export interface ParsingBenchmarkConfig<
+  Context,
+  ParseResult = unknown,
+> extends BaseBenchmarkConfig {
+  run: (data: unknown, context: Context) => MaybePromise<ParseResult>;
+  validateResult: (result: NoInfer<ParseResult>) => boolean;
 }
 
 export interface StandardSchemaBenchmarkConfig<Context> extends Omit<
@@ -49,21 +53,23 @@ export interface LibraryInfo {
   version: string;
 }
 
-export type BenchmarkConfig<Context> =
+export type BenchmarkConfig<Context, ParseResult = unknown> =
   | InitializationBenchmarkConfig<Context>
   | ValidationBenchmarkConfig<Context>
-  | ParsingBenchmarkConfig<Context>;
+  | ParsingBenchmarkConfig<Context, ParseResult>;
 
-export interface BenchmarksConfig<Context> {
+export interface BenchmarksConfig<Context, ParseResult = unknown> {
   library: LibraryInfo;
   createContext: () => MaybePromise<Context>;
   initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
   validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
-  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context>>>>;
+  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context, ParseResult>>>>;
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig<Context>>>>;
 }
 
 /* @__PURE__ */
-export function defineBenchmarks<const TContext>(config: BenchmarksConfig<TContext>) {
+export function defineBenchmarks<const TContext, TParseResult>(
+  config: BenchmarksConfig<TContext, TParseResult>,
+) {
   return config;
 }
