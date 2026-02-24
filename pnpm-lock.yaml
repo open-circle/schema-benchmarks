@@ -162,9 +162,6 @@ importers:
       joi:
         specifier: ^18.0.2
         version: 18.0.2
-      rod-js:
-        specifier: ^0.2.1
-        version: 0.2.1
       sury:
         specifier: 11.0.0-alpha.4
         version: 11.0.0-alpha.4
@@ -6392,9 +6389,6 @@ packages:
 
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
-
-  rod-js@0.2.1:
-    resolution: {integrity: sha512-TconYoIjCAOR9wl0FBhxgyW8OCvmemJ7B6A01SOv3A9gQU/oa+AnLF3l7aQNL5pDnEcbN60vY+EsoiinG4BiPQ==}
 
   rolldown-string@0.2.1:
     resolution: {integrity: sha512-7H8oH5A8+L96pbBTPCt/rZrwayEhZY5/ejhdk9nRODH32H1v7+bfkaCr+kS15DcGQ7VC1HcWdQVNABFYgrMOzg==}
@@ -14098,8 +14092,6 @@ snapshots:
   reusify@1.1.0: {}
 
   robust-predicates@3.0.2: {}
-
-  rod-js@0.2.1: {}
 
   rolldown-string@0.2.1:
     dependencies:
