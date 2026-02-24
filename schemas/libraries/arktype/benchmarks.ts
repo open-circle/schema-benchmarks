@@ -1,4 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import { type } from "arktype";
 import ts from "dedent" with { type: "macro" };
 
 import { defineBenchmarks } from "#src";
@@ -21,15 +22,16 @@ export default defineBenchmarks({
   },
   validation: {
     run(data, { schema }) {
-      schema.allows(data);
+      return schema.allows(data);
     },
     snippet: ts`schema.allows(data)`,
   },
   parsing: {
     allErrors: {
       run(data, { schema }) {
-        schema(data);
+        return schema(data);
       },
+      validateResult: (result) => !(result instanceof type.errors),
       snippet: ts`schema(data)`,
     },
   },

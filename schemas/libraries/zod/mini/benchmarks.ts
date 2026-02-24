@@ -26,15 +26,18 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data, { schema }) {
-          schema.safeParse(data);
+        // manually annotate return type, as SafeParseResult is not exported from zod/mini and thus not portable
+        run(data, { schema }): { success: boolean } {
+          return schema.safeParse(data);
         },
+        validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data)`,
       },
       {
-        run(data, { schema }) {
-          schema.safeParse(data, { jitless: true });
+        run(data, { schema }): { success: boolean } {
+          return schema.safeParse(data, { jitless: true });
         },
+        validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "jitless",
         optimizeType: "none",

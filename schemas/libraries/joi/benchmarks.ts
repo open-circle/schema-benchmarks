@@ -19,23 +19,19 @@ export default defineBenchmarks({
     },
     snippet: ts`object(...)`,
   },
-  validation: {
-    run(data, { schema }) {
-      schema.validate(data);
-    },
-    snippet: ts`schema.validate(data)`,
-  },
   parsing: {
     allErrors: {
       run(data, { schema }) {
-        schema.validate(data, { abortEarly: false });
+        return schema.validate(data, { abortEarly: false });
       },
+      validateResult: (result) => !result.error,
       snippet: ts`schema.validate(data, { abortEarly: false })`,
     },
     abortEarly: {
       run(data, { schema }) {
-        schema.validate(data, { abortEarly: true });
+        return schema.validate(data, { abortEarly: true });
       },
+      validateResult: (result) => !result.error,
       snippet: ts`schema.validate(data, { abortEarly: true })`,
     },
   },

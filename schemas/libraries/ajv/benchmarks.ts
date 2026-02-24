@@ -27,14 +27,14 @@ export default defineBenchmarks({
   validation: [
     {
       run(data, { ajv, schema }) {
-        ajv.validate(schema, data);
+        return ajv.validate(schema, data);
       },
       note: "validate",
       snippet: ts`ajv.validate(schema, data)`,
     },
     {
       run(data, { validate }) {
-        validate(data);
+        return validate(data);
       },
       note: "compile",
       snippet: ts`

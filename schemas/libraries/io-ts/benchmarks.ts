@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import { isRight } from "fp-ts/lib/Either";
 
 import { defineBenchmarks } from "#src";
 
@@ -23,15 +24,16 @@ export default defineBenchmarks({
   },
   validation: {
     run(data, { schema }) {
-      schema.is(data);
+      return schema.is(data);
     },
     snippet: ts`schema.is(data)`,
   },
   parsing: {
     allErrors: {
       run(data, { schema }) {
-        schema.decode(data);
+        return schema.decode(data);
       },
+      validateResult: isRight,
       snippet: ts`schema.decode(data)`,
     },
   },

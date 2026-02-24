@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 
 import { defineBenchmarks } from "#src";
@@ -40,7 +41,7 @@ export default defineBenchmarks({
   ],
   validation: {
     run(data, { is }) {
-      is(data);
+      return is(data);
     },
     snippet: ts`
       // const is = Schema.is(schema);
@@ -50,8 +51,9 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       run(data, { decode }) {
-        decode(data, { errors: "all" });
+        return decode(data, { errors: "all" });
       },
+      validateResult: isSome,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "all" })
@@ -59,8 +61,9 @@ export default defineBenchmarks({
     },
     abortEarly: {
       run(data, { decode }) {
-        decode(data, { errors: "first" });
+        return decode(data, { errors: "first" });
       },
+      validateResult: isSome,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "first" })
