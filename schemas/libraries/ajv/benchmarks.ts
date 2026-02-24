@@ -20,7 +20,7 @@ export default defineBenchmarks({
   },
   initialization: {
     run({ ajv }) {
-      ajv.compile(getAjvSchema());
+      return ajv.compile(getAjvSchema());
     },
     snippet: ts`ajv.compile({...})`,
   },

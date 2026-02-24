@@ -23,14 +23,14 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        typia.createValidate<TypiaSchema>();
+        return typia.createValidate<TypiaSchema>();
       },
       note: "createValidate",
       snippet: ts`typia.createValidate<TypiaSchema>()`,
     },
     {
       run() {
-        typia.createIs<TypiaSchema>();
+        return typia.createIs<TypiaSchema>();
       },
       note: "createIs",
       snippet: ts`typia.createIs<TypiaSchema>()`,

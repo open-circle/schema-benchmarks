@@ -18,7 +18,7 @@ export default defineBenchmarks({
   }),
   initialization: {
     run() {
-      getIotsSchema();
+      return getIotsSchema();
     },
     snippet: ts`t.type(...)`,
   },

@@ -24,20 +24,20 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        getTypeboxSchema();
+        return getTypeboxSchema();
       },
       snippet: ts`Type.Object(...)`,
     },
     {
       run() {
-        Compile(getTypeboxSchema());
+        return Compile(getTypeboxSchema());
       },
       snippet: ts`Compile(Type.Object(...))`,
       note: "compile",
     },
     {
       run() {
-        Schema.Compile(getTypeboxSchema());
+        return Schema.Compile(getTypeboxSchema());
       },
       snippet: ts`Schema.Compile(Type.Object(...))`,
       note: "schema compile",

@@ -15,7 +15,7 @@ export interface BaseBenchmarkConfig {
 }
 
 export interface InitializationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  run: (context: Context) => MaybePromise<unknown>;
+  run: (context: Context) => MaybePromise<NonNullable<unknown>>;
 }
 
 export interface ValidationBenchmarkConfig<Context> extends BaseBenchmarkConfig {

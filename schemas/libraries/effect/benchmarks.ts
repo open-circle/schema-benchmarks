@@ -24,13 +24,13 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        getEffectSchema();
+        return getEffectSchema();
       },
       snippet: ts`Schema.struct(...)`,
     },
     {
       run() {
-        Schema.decodeUnknownEither(getEffectSchema());
+        return Schema.decodeUnknownEither(getEffectSchema());
       },
       note: "decodeUnknownEither",
       snippet: ts`

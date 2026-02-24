@@ -20,13 +20,13 @@ export default defineBenchmarks({
   initialization: [
     {
       run() {
-        getSurySchema();
+        return getSurySchema();
       },
       snippet: ts`S.schema(...)`,
     },
     {
       run() {
-        S.compile(getSurySchema(), "Any", "Output", "Sync");
+        return S.compile(getSurySchema(), "Any", "Output", "Sync");
       },
       snippet: ts`S.compile(S.schema(...))`,
       note: "compile",
