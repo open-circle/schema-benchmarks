@@ -2,9 +2,22 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as yup from "yup";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getYupSchema } from ".";
+
+type FormatMethod = {
+  [M in keyof yup.StringSchema]-?: yup.StringSchema[M] extends () => yup.StringSchema ? M : never;
+}[keyof yup.StringSchema];
+
+const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = yup.string()[method]();
+    return (testString) => schema.isValidSync(testString);
+  },
+  snippet: ts`yup.string().${method}()`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -59,26 +72,8 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = yup.string().email();
-        return (testString) => schema.isValidSync(testString);
-      },
-      snippet: ts`yup.string().email()`,
-    },
-    url: {
-      create() {
-        const schema = yup.string().url();
-        return (testString) => schema.isValidSync(testString);
-      },
-      snippet: ts`yup.string().url()`,
-    },
-    uuid: {
-      create() {
-        const schema = yup.string().uuid();
-        return (testString) => schema.isValidSync(testString);
-      },
-      snippet: ts`yup.string().uuid()`,
-    },
+    email: createStringBenchmark("email"),
+    url: createStringBenchmark("url"),
+    uuid: createStringBenchmark("uuid"),
   },
 });

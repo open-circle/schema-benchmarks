@@ -1,3 +1,4 @@
+import type { Validator } from "@railway-ts/pipelines/schema";
 import {
   is,
   validate,
@@ -10,9 +11,21 @@ import {
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getRailwayTsSchema } from ".";
+
+const createStringBenchmark = (
+  factory: () => Validator<string>,
+  snippet: string,
+): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = chain(string(), factory());
+    return (testString) => is(testString, schema);
+  },
+  snippet: ts`chain(string(), ${snippet})`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -56,19 +69,7 @@ export default defineBenchmarks({
     },
   },
   string: {
-    email: {
-      create() {
-        const schema = chain(string(), email());
-        return (testString) => is(testString, schema);
-      },
-      snippet: ts`chain(string(), email())`,
-    },
-    url: {
-      create() {
-        const schema = chain(string(), url());
-        return (testString) => is(testString, schema);
-      },
-      snippet: ts`chain(string(), url())`,
-    },
+    email: createStringBenchmark(email, "email()"),
+    url: createStringBenchmark(url, "url()"),
   },
 });

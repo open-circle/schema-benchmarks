@@ -1,10 +1,21 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import type Ajv from "ajv";
+import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
 import ts from "dedent";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getAjv, getAjvSchema } from ".";
+
+const createStringBenchmark = (format: FormatName): StringBenchmarkConfig<{ ajv: Ajv }> => ({
+  create({ ajv }) {
+    addFormats(ajv, { formats: [format] });
+    return ajv.compile({ type: "string", format } as const);
+  },
+  snippet: ts`{ type: "string", format: "${format}" }`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -45,26 +56,8 @@ export default defineBenchmarks({
     },
   ],
   string: {
-    email: {
-      create({ ajv }) {
-        addFormats(ajv, { formats: ["email"] });
-        return ajv.compile({ type: "string", format: "email" } as const);
-      },
-      snippet: ts`{ type: "string", format: "email" }`,
-    },
-    url: {
-      create({ ajv }) {
-        addFormats(ajv, { formats: ["url"] });
-        return ajv.compile({ type: "string", format: "url" } as const);
-      },
-      snippet: ts`{ type: "string", format: "url" }`,
-    },
-    uuid: {
-      create({ ajv }) {
-        addFormats(ajv, { formats: ["uuid"] });
-        return ajv.compile({ type: "string", format: "uuid" } as const);
-      },
-      snippet: ts`{ type: "string", format: "uuid" }`,
-    },
+    email: createStringBenchmark("email"),
+    url: createStringBenchmark("url"),
+    uuid: createStringBenchmark("uuid"),
   },
 });

@@ -5,9 +5,18 @@ import Compile from "typebox/compile";
 import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
 
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getTypeboxSchema } from ".";
+
+const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig<unknown> => ({
+  create() {
+    const schema = Type.String({ format });
+    return (testString) => Schema.Check(schema, testString);
+  },
+  snippet: ts`Type.String({ format: "${format}" })`,
+});
 
 export default defineBenchmarks({
   library: {
@@ -145,29 +154,8 @@ export default defineBenchmarks({
     ],
   },
   string: {
-    email: {
-      create() {
-        const schema = Type.String({ format: "email" });
-        return (testString) => Schema.Check(schema, testString);
-      },
-      snippet: ts`Type.String({ format: "email" })`,
-      note: "Value.Check",
-    },
-    url: {
-      create() {
-        const schema = Type.String({ format: "url" });
-        return (testString) => Schema.Check(schema, testString);
-      },
-      snippet: ts`Type.String({ format: "url" })`,
-      note: "Value.Check",
-    },
-    uuid: {
-      create() {
-        const schema = Type.String({ format: "uuid" });
-        return (testString) => Schema.Check(schema, testString);
-      },
-      snippet: ts`Type.String({ format: "uuid" })`,
-      note: "Value.Check",
-    },
+    email: createStringBenchmark("email"),
+    url: createStringBenchmark("url"),
+    uuid: createStringBenchmark("uuid"),
   },
 });
