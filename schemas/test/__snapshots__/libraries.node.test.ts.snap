@@ -1,0 +1,658 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > abortEarly > 0 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > abortEarly > 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > abortEarly > config 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./@vinejs/vine/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "field": "created",
+    "message": "The created field must be a datetime value",
+    "path": "created",
+    "rule": "date",
+  },
+  {
+    "field": "images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.1.created",
+    "rule": "date",
+  },
+  {
+    "field": "images.2.created",
+    "message": "The created field must be a datetime value",
+    "path": "images.2.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.0.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.0.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.0.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.0.created",
+    "rule": "date",
+  },
+  {
+    "field": "ratings.1.images.1.created",
+    "message": "The created field must be a datetime value",
+    "path": "ratings.1.images.1.created",
+    "rule": "date",
+  },
+]
+`;
+
+exports[`./arktype/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./arktype/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./arktype/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > abortEarly > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > abortEarly > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > abortEarly > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > abortEarly > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > abortEarly > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > abortEarly > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./effect___beta/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./joi/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./joi/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./joi/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./sury/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./sury/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./sury/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./typebox/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `
+[
+  {
+    "errors": [],
+    "message": "Never",
+    "path": [],
+    "schema": {
+      "not": {},
+      Symbol(TypeBox.Kind): "Never",
+    },
+    "type": 33,
+    "value": {
+      "brand": "Sunny Backyard",
+      "created": <Date>,
+      "description": "Red apple from Lake Constance",
+      "discount": null,
+      "id": 252,
+      "images": [
+        {
+          "created": <Date>,
+          "id": 248,
+          "size": 92357232,
+          "title": "Close up of an apple on a tree",
+          "type": "jpg",
+          "url": "https://www.example.com/images/248",
+        },
+        {
+          "created": <Date>,
+          "id": 295,
+          "size": 83247232,
+          "title": "Our apples in the final packaging",
+          "type": "jpg",
+          "url": "https://www.example.com/images/295",
+        },
+        {
+          "created": <Date>,
+          "id": 723,
+          "size": 72356345,
+          "title": "Our fruit fields at Lake Constance",
+          "type": "jpg",
+          "url": "https://www.example.com/images/723",
+        },
+      ],
+      "price": 89,
+      "quantity": 5,
+      "ratings": [
+        {
+          "id": 315,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 835,
+              "size": 8247493,
+              "title": "The result of our apple pie",
+              "type": "jpg",
+              "url": "https://www.example.com/images/835",
+            },
+          ],
+          "stars": 4.5,
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.",
+          "title": "Tastes super delicious",
+        },
+        {
+          "id": 642,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 352,
+              "size": 3582543,
+              "title": "The fruit salad in a bowl",
+              "type": "jpg",
+              "url": "https://www.example.com/images/352",
+            },
+            {
+              "created": <Date>,
+              "id": 465,
+              "size": 9824742,
+              "title": "The fruit salad on a plate",
+              "type": "jpg",
+              "url": "https://www.example.com/images/465",
+            },
+          ],
+          "stars": 5,
+          "text": "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.",
+          "title": "Very tasty! I will buy them again!",
+        },
+      ],
+      "tags": [
+        "fruit",
+        "red",
+        "round",
+        "sweet",
+        "juicy",
+        "healthy",
+      ],
+      "title": "Apple",
+    },
+  },
+]
+`;
+
+exports[`./typebox/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "errors": [],
+    "message": "Never",
+    "path": [],
+    "schema": {
+      "not": {},
+      Symbol(TypeBox.Kind): "Never",
+    },
+    "type": 33,
+    "value": {
+      "brand": "Sunny Backyard",
+      "created": <Date>,
+      "description": "Red apple from Lake Constance",
+      "discount": null,
+      "id": 252,
+      "images": [
+        {
+          "created": <Date>,
+          "id": 248,
+          "size": 92357232,
+          "title": "Close up of an apple on a tree",
+          "type": "jpg",
+          "url": "https://www.example.com/images/248",
+        },
+        {
+          "created": <Date>,
+          "id": 295,
+          "size": 83247232,
+          "title": "Our apples in the final packaging",
+          "type": "jpg",
+          "url": "https://www.example.com/images/295",
+        },
+        {
+          "created": <Date>,
+          "id": 723,
+          "size": 72356345,
+          "title": "Our fruit fields at Lake Constance",
+          "type": "jpg",
+          "url": "https://www.example.com/images/723",
+        },
+      ],
+      "price": 89,
+      "quantity": 5,
+      "ratings": [
+        {
+          "id": 315,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 835,
+              "size": 8247493,
+              "title": "The result of our apple pie",
+              "type": "jpg",
+              "url": "https://www.example.com/images/835",
+            },
+          ],
+          "stars": 4.5,
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.",
+          "title": "Tastes super delicious",
+        },
+        {
+          "id": 642,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 352,
+              "size": 3582543,
+              "title": "The fruit salad in a bowl",
+              "type": "jpg",
+              "url": "https://www.example.com/images/352",
+            },
+            {
+              "created": <Date>,
+              "id": 465,
+              "size": 9824742,
+              "title": "The fruit salad on a plate",
+              "type": "jpg",
+              "url": "https://www.example.com/images/465",
+            },
+          ],
+          "stars": 5,
+          "text": "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.",
+          "title": "Very tasty! I will buy them again!",
+        },
+      ],
+      "tags": [
+        "fruit",
+        "red",
+        "round",
+        "sweet",
+        "juicy",
+        "healthy",
+      ],
+      "title": "Apple",
+    },
+  },
+]
+`;
+
+exports[`./typebox/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `
+[
+  {
+    "errors": [],
+    "message": "Never",
+    "path": [],
+    "schema": {
+      "not": {},
+      Symbol(TypeBox.Kind): "Never",
+    },
+    "type": 33,
+    "value": {
+      "brand": "Sunny Backyard",
+      "created": <Date>,
+      "description": "Red apple from Lake Constance",
+      "discount": null,
+      "id": 252,
+      "images": [
+        {
+          "created": <Date>,
+          "id": 248,
+          "size": 92357232,
+          "title": "Close up of an apple on a tree",
+          "type": "jpg",
+          "url": "https://www.example.com/images/248",
+        },
+        {
+          "created": <Date>,
+          "id": 295,
+          "size": 83247232,
+          "title": "Our apples in the final packaging",
+          "type": "jpg",
+          "url": "https://www.example.com/images/295",
+        },
+        {
+          "created": <Date>,
+          "id": 723,
+          "size": 72356345,
+          "title": "Our fruit fields at Lake Constance",
+          "type": "jpg",
+          "url": "https://www.example.com/images/723",
+        },
+      ],
+      "price": 89,
+      "quantity": 5,
+      "ratings": [
+        {
+          "id": 315,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 835,
+              "size": 8247493,
+              "title": "The result of our apple pie",
+              "type": "jpg",
+              "url": "https://www.example.com/images/835",
+            },
+          ],
+          "stars": 4.5,
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.",
+          "title": "Tastes super delicious",
+        },
+        {
+          "id": 642,
+          "images": [
+            {
+              "created": <Date>,
+              "id": 352,
+              "size": 3582543,
+              "title": "The fruit salad in a bowl",
+              "type": "jpg",
+              "url": "https://www.example.com/images/352",
+            },
+            {
+              "created": <Date>,
+              "id": 465,
+              "size": 9824742,
+              "title": "The fruit salad on a plate",
+              "type": "jpg",
+              "url": "https://www.example.com/images/465",
+            },
+          ],
+          "stars": 5,
+          "text": "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.",
+          "title": "Very tasty! I will buy them again!",
+        },
+      ],
+      "tags": [
+        "fruit",
+        "red",
+        "round",
+        "sweet",
+        "juicy",
+        "healthy",
+      ],
+      "title": "Apple",
+    },
+  },
+]
+`;
+
+exports[`./typia/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./typia/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./typia/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./valibot/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./valibot/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./valibot/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./yup/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./yup/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./yup/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/mini/benchmarks.ts > standard > allErrors > 0 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/mini/benchmarks.ts > standard > allErrors > 1 > should return a successful result for valid data 1`] = `undefined`;
+
+exports[`./zod/mini/benchmarks.ts > standard > allErrors > config 1 > should return a successful result for valid data 1`] = `undefined`;
