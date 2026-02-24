@@ -16,7 +16,6 @@
     "@railway-ts/pipelines": "^0.1.23",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
-    "@vinejs/vine": "^4.3.0",
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
