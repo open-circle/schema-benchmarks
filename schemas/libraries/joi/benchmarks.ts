@@ -11,9 +11,12 @@ type FormatMethod = {
   [M in keyof Joi.StringSchema]-?: Joi.StringSchema[M] extends () => Joi.StringSchema ? M : never;
 }[keyof Joi.StringSchema];
 
-const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig<unknown> => ({
+const createStringBenchmark = <Format extends FormatMethod>(
+  method: Format,
+  ...args: Parameters<Joi.StringSchema[Format]>
+): StringBenchmarkConfig<unknown> => ({
   create() {
-    const schema = Joi.string()[method]();
+    const schema = Joi.string()[method](...(args as []));
     return (testString) => !schema.validate(testString).error;
   },
   snippet: ts`Joi.string().${method}()`,
@@ -58,5 +61,7 @@ export default defineBenchmarks({
     email: createStringBenchmark("email"),
     url: createStringBenchmark("uri"),
     uuid: createStringBenchmark("uuid"),
+    ipv4: createStringBenchmark("ip", { version: "ipv4" }),
+    ipv6: createStringBenchmark("ip", { version: "ipv6" }),
   },
 });
