@@ -1,7 +1,13 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
-import { errorData, successData } from "@schema-benchmarks/schemas";
+import {
+  errorData,
+  invalidStrings,
+  stringFormatSchema,
+  successData,
+  validStrings,
+} from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
@@ -19,6 +25,9 @@ const results: BenchResults = {
   validation: { valid: [], invalid: [] },
   parsing: { valid: [], invalid: [] },
   standard: { valid: [], invalid: [] },
+  string: Object.fromEntries(
+    stringFormatSchema.options.map((format) => [format, { valid: [], invalid: [] }]),
+  ) as never,
 };
 
 const caseRegistry = new CaseRegistry();
@@ -116,6 +125,27 @@ function processResults(tasks: Array<Task>) {
         });
         break;
       }
+      case "string": {
+        if (!entry.stringFormat) {
+          console.error("Missing string format for string bench:", entry);
+          continue;
+        }
+        if (!entry.dataType) {
+          console.error("Missing data type for string bench:", entry);
+          continue;
+        }
+        results.string[entry.stringFormat][entry.dataType].push({
+          type: "string",
+          id: task.name,
+          libraryName,
+          version,
+          snippet,
+          note,
+          mean: task.result.latency.mean,
+          optimizeType: entry.optimizeType,
+        });
+        break;
+      }
     }
   }
 }
@@ -124,7 +154,7 @@ function processResults(tasks: Array<Task>) {
 for (const getConfig of Object.values(libraries)) {
   sigintAc.signal.throwIfAborted();
 
-  const { library, createContext, initialization, validation, parsing, standard } =
+  const { library, createContext, initialization, validation, parsing, standard, string } =
     await getConfig();
   const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
@@ -235,6 +265,40 @@ for (const getConfig of Object.values(libraries)) {
                 note,
               }),
               () => schema["~standard"].validate(data),
+            );
+          }
+        }
+      }
+    }
+    if (string) {
+      for (const [dataType, data] of [
+        ["valid", validStrings],
+        ["invalid", invalidStrings],
+      ] as const) {
+        for (const [stringFormat, benchConfigs] of unsafeEntries(string)) {
+          if (!benchConfigs) continue;
+          for (const benchConfig of ensureArray(benchConfigs)) {
+            const {
+              create,
+              snippet,
+              note,
+              optimizeType = libraryOptimizeType,
+              throws,
+            } = benchConfig;
+            const run = await create(context);
+            bench.add(
+              caseRegistry.add({
+                type: "string",
+                optimizeType,
+                dataType,
+                stringFormat,
+                libraryName,
+                version,
+                snippet,
+                note,
+                throws,
+              }),
+              () => run(data[stringFormat]!),
             );
           }
         }

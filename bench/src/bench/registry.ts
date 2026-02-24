@@ -3,6 +3,7 @@ import type {
   BenchmarksConfig,
   ErrorType,
   OptimizeType,
+  StringFormat,
 } from "@schema-benchmarks/schemas";
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
 
@@ -15,6 +16,7 @@ export interface BenchInfo {
   optimizeType: OptimizeType;
   errorType?: ErrorType;
   dataType?: DataType;
+  stringFormat?: StringFormat;
 }
 
 export interface BenchmarkConfigEntry
