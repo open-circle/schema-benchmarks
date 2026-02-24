@@ -1,6 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
-import { isRight } from "fp-ts/lib/Either";
+import { isRight } from "fp-ts/lib/Either.js";
 
 import { defineBenchmarks } from "#src";
 
