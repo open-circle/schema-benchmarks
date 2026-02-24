@@ -26,7 +26,6 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         it("should return a successful result for valid data", async () => {
           const schema = await config.getSchema(context);
           const result = await schema["~standard"].validate(successData);
-          expect(result.issues).toMatchSnapshot();
           expect(result.issues).toBeUndefined();
           assert(!result.issues); // typescript
           expect(result.value).toEqual(successData);
