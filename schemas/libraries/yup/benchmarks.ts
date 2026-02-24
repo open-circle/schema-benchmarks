@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import * as yup from "yup";
 
 import { defineBenchmarks } from "#src";
 
@@ -55,6 +56,29 @@ export default defineBenchmarks({
   standard: {
     allErrors: {
       getSchema: ({ schema }) => schema,
+    },
+  },
+  string: {
+    email: {
+      create() {
+        const schema = yup.string().email();
+        return (testString) => schema.isValidSync(testString);
+      },
+      snippet: ts`yup.string().email()`,
+    },
+    url: {
+      create() {
+        const schema = yup.string().url();
+        return (testString) => schema.isValidSync(testString);
+      },
+      snippet: ts`yup.string().url()`,
+    },
+    uuid: {
+      create() {
+        const schema = yup.string().uuid();
+        return (testString) => schema.isValidSync(testString);
+      },
+      snippet: ts`yup.string().uuid()`,
     },
   },
 });

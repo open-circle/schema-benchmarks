@@ -40,4 +40,24 @@ export default defineBenchmarks({
       getSchema: ({ schema }) => schema,
     },
   },
+  string: {
+    email: {
+      create() {
+        return type("string.email").allows;
+      },
+      snippet: ts`type("string.email")`,
+    },
+    url: {
+      create() {
+        return type("string.url").allows;
+      },
+      snippet: ts`type("string.url")`,
+    },
+    uuid: {
+      create() {
+        return type("string.uuid").allows;
+      },
+      snippet: ts`type("string.uuid")`,
+    },
+  },
 });

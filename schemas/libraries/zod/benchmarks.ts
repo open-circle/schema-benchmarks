@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import * as z from "zod";
 
 import { defineBenchmarks } from "#src";
 
@@ -44,6 +45,29 @@ export default defineBenchmarks({
   standard: {
     allErrors: {
       getSchema: ({ schema }) => schema,
+    },
+  },
+  string: {
+    email: {
+      create() {
+        const schema = z.email();
+        return (testString) => schema.safeParse(testString).success;
+      },
+      snippet: ts`z.email()`,
+    },
+    url: {
+      create() {
+        const schema = z.url();
+        return (testString) => schema.safeParse(testString).success;
+      },
+      snippet: ts`z.url()`,
+    },
+    uuid: {
+      create() {
+        const schema = z.uuid();
+        return (testString) => schema.safeParse(testString).success;
+      },
+      snippet: ts`z.uuid()`,
     },
   },
 });

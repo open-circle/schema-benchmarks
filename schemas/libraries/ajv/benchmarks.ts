@@ -1,4 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import addFormats from "ajv-formats";
 import ts from "dedent" with { type: "macro" };
 
 import { defineBenchmarks } from "#src";
@@ -43,4 +44,27 @@ export default defineBenchmarks({
       `,
     },
   ],
+  string: {
+    email: {
+      create({ ajv }) {
+        addFormats(ajv, { formats: ["email"] });
+        return ajv.compile({ type: "string", format: "email" } as const);
+      },
+      snippet: ts`{ type: "string", format: "email" }`,
+    },
+    url: {
+      create({ ajv }) {
+        addFormats(ajv, { formats: ["url"] });
+        return ajv.compile({ type: "string", format: "url" } as const);
+      },
+      snippet: ts`{ type: "string", format: "url" }`,
+    },
+    uuid: {
+      create({ ajv }) {
+        addFormats(ajv, { formats: ["uuid"] });
+        return ajv.compile({ type: "string", format: "uuid" } as const);
+      },
+      snippet: ts`{ type: "string", format: "uuid" }`,
+    },
+  },
 });

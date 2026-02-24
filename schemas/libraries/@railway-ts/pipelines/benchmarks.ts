@@ -1,4 +1,12 @@
-import { is, validate, toStandardSchema } from "@railway-ts/pipelines/schema";
+import {
+  is,
+  validate,
+  toStandardSchema,
+  chain,
+  string,
+  email,
+  url,
+} from "@railway-ts/pipelines/schema";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
 
@@ -45,6 +53,22 @@ export default defineBenchmarks({
   standard: {
     allErrors: {
       getSchema: ({ schema }) => toStandardSchema(schema),
+    },
+  },
+  string: {
+    email: {
+      create() {
+        const schema = chain(string(), email());
+        return (testString) => is(testString, schema);
+      },
+      snippet: ts`chain(string(), email())`,
+    },
+    url: {
+      create() {
+        const schema = chain(string(), url());
+        return (testString) => is(testString, schema);
+      },
+      snippet: ts`chain(string(), url())`,
     },
   },
 });

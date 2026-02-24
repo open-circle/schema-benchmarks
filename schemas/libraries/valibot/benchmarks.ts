@@ -57,4 +57,27 @@ export default defineBenchmarks({
       getSchema: ({ schema }) => schema,
     },
   },
+  string: {
+    email: {
+      create() {
+        const schema = v.pipe(v.string(), v.email());
+        return (testString) => v.is(schema, testString);
+      },
+      snippet: ts`v.pipe(v.string(), v.email())`,
+    },
+    url: {
+      create() {
+        const schema = v.pipe(v.string(), v.url());
+        return (testString) => v.is(schema, testString);
+      },
+      snippet: ts`v.pipe(v.string(), v.url())`,
+    },
+    uuid: {
+      create() {
+        const schema = v.pipe(v.string(), v.uuid());
+        return (testString) => v.is(schema, testString);
+      },
+      snippet: ts`v.pipe(v.string(), v.uuid())`,
+    },
+  },
 });

@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 // oxlint-disable-next-line no-unused-vars
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent" with { type: "macro" };
-import typia from "typia";
+import typia, { type tags } from "typia";
 
 import { defineBenchmarks } from "#src";
 
@@ -84,6 +84,35 @@ export default defineBenchmarks({
       snippet: ts`
         // const validate = typia.createValidate<TypiaSchema>();
         upfetch(url, { schema: validate })
+      `,
+    },
+  },
+  string: {
+    email: {
+      create() {
+        return typia.createIs<string & tags.Format<"email">>();
+      },
+      snippet: ts`
+        // const isEmail = typia.createIs<string & tags.Format<"email">>();
+        isEmail(testString);
+      `,
+    },
+    url: {
+      create() {
+        return typia.createIs<string & tags.Format<"url">>();
+      },
+      snippet: ts`
+        // const isUrl = typia.createIs<string & tags.Format<"url">>();
+        isUrl(testString);
+      `,
+    },
+    uuid: {
+      create() {
+        return typia.createIs<string & tags.Format<"uuid">>();
+      },
+      snippet: ts`
+        // const isUuid = typia.createIs<string & tags.Format<"uuid">>();
+        isUuid(testString);
       `,
     },
   },

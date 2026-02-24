@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent" with { type: "macro" };
+import * as Type from "typebox";
 import Compile from "typebox/compile";
 import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
@@ -142,5 +143,31 @@ export default defineBenchmarks({
         throws: true,
       },
     ],
+  },
+  string: {
+    email: {
+      create() {
+        const schema = Type.String({ format: "email" });
+        return (testString) => Schema.Check(schema, testString);
+      },
+      snippet: ts`Type.String({ format: "email" })`,
+      note: "Value.Check",
+    },
+    url: {
+      create() {
+        const schema = Type.String({ format: "url" });
+        return (testString) => Schema.Check(schema, testString);
+      },
+      snippet: ts`Type.String({ format: "url" })`,
+      note: "Value.Check",
+    },
+    uuid: {
+      create() {
+        const schema = Type.String({ format: "uuid" });
+        return (testString) => Schema.Check(schema, testString);
+      },
+      snippet: ts`Type.String({ format: "uuid" })`,
+      note: "Value.Check",
+    },
   },
 });

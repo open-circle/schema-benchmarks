@@ -1,3 +1,5 @@
+import type { StringFormat } from "./types";
+
 export interface ImageData {
   id: number;
   created: Date;
@@ -188,4 +190,16 @@ export const errorData: unknown = {
       ],
     },
   ],
+};
+
+export const validStrings: Record<StringFormat, string> = {
+  email: "test@example.com",
+  url: "https://www.example.com",
+  uuid: "123e4567-e89b-12d3-a456-426614174000",
+};
+
+export const invalidStrings: Record<StringFormat, string> = {
+  email: "invalid",
+  url: "invalid",
+  uuid: "invalid",
 };

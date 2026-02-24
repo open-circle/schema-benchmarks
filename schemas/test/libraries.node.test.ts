@@ -1,6 +1,6 @@
-import { errorData, successData } from "@schema-benchmarks/schemas";
+import { errorData, successData, validStrings, invalidStrings } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
-import { ensureArray } from "@schema-benchmarks/utils";
+import { ensureArray, unsafeEntries } from "@schema-benchmarks/utils";
 import { assert, describe, expect, it } from "vitest";
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
@@ -64,6 +64,17 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);
         });
+      });
+    });
+  });
+  describe.runIf(config.string)("string", () => {
+    describe.each(unsafeEntries(config.string ?? {}))("%s", (stringType, config) => {
+      assert(config);
+      it.each([
+        [true, validStrings],
+        [false, invalidStrings],
+      ] as const)("should return %s for %s data", async (expected, strings) => {
+        expect(config.create(context)(strings[stringType])).toBe(expected);
       });
     });
   });
