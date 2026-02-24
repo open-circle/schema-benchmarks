@@ -3,15 +3,34 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray } from "@schema-benchmarks/utils";
 import { assert, describe, expect, it } from "vitest";
 
-expect.addSnapshotSerializer({
-  test: (val) => val instanceof Date,
-  // we don't care about the value, just that it's a date
-  serialize: () => "<Date>",
-});
-
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
   const context = await config.createContext();
+
+  describe.runIf(config.validation)("validation", () => {
+    describe.each(ensureArray(config.validation ?? []))("config %$", (config) => {
+      it.each([
+        [true, "valid", successData],
+        [false, "invalid", errorData],
+      ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
+        expect(config.run(data, context)).toBe(expected);
+      });
+    });
+  });
+
+  describe.runIf(config.parsing)("parsing", () => {
+    describe.each(Object.entries(config.parsing ?? {}))("%s", (_errorType, configs) => {
+      describe.each(ensureArray(configs))("config %$", (config) => {
+        it.each([
+          [true, "valid", successData],
+          [false, "invalid", errorData],
+        ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
+          const result = await config.run(data, context);
+          expect(config.validateResult(result)).toBe(expected);
+        });
+      });
+    });
+  });
 
   describe.runIf(config.standard)("standard", () => {
     describe.each(Object.entries(config.standard ?? {}))("%s", (_errorType, configs) => {
