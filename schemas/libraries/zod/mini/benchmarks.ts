@@ -67,6 +67,7 @@ export default defineBenchmarks({
     date: createStringBenchmark(z.iso.date, ts`z.iso.date()`),
     // doesn't allow offset
     // time: createStringBenchmark(z.iso.time, ts`z.iso.time()`),
+    duration: createStringBenchmark(z.iso.duration, ts`z.iso.duration()`),
     email: createStringBenchmark(z.email, ts`z.email()`),
     url: createStringBenchmark(z.url, ts`z.url()`),
     uuid: createStringBenchmark(z.uuid, ts`z.uuid()`),

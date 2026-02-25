@@ -201,6 +201,7 @@ export const validStrings: Record<StringFormat, string> = {
   "date-time": "2021-01-01T00:00:00Z",
   date: "2021-01-01",
   time: "00:00:00Z",
+  duration: "P1Y2M3DT4H5M6S",
 };
 
 export const invalidStrings: Record<StringFormat, string> = {
@@ -212,4 +213,5 @@ export const invalidStrings: Record<StringFormat, string> = {
   "date-time": "invalid",
   date: "invalid",
   time: "invalid",
+  duration: "invalid",
 };

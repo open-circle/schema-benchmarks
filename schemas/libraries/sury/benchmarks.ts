@@ -106,7 +106,7 @@ export default defineBenchmarks({
     },
   },
   string: {
-    "date-time": createStringBenchmark(S.datetime, ts`S.iso8601(S.string)`),
+    "date-time": createStringBenchmark(S.datetime, ts`S.datetime(S.string)`),
     email: createStringBenchmark(S.email, ts`S.email(S.string)`),
     url: createStringBenchmark(S.url, ts`S.url(S.string)`),
     uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),
