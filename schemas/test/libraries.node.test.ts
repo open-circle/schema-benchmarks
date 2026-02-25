@@ -71,9 +71,9 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     describe.each(unsafeEntries(config.string ?? {}))("%s", (stringType, config) => {
       assert(config);
       it.each([
-        [true, validStrings],
-        [false, invalidStrings],
-      ] as const)("should return %s for %s data", async (expected, strings) => {
+        [true, "valid", validStrings],
+        [false, "invalid", invalidStrings],
+      ] as const)("should return %s for %s data", async (expected, _dataType, strings) => {
         const fn = await config.create(context);
         const match = await fn(strings[stringType]);
         expect(match).toBe(expected);
