@@ -50,6 +50,7 @@ export const stringFormatSchema = v.picklist([
   "date-time",
   "date",
   "time",
+  "duration",
   "email",
   "url",
   "uuid",

@@ -92,73 +92,55 @@ export default defineBenchmarks({
       create() {
         return typia.createIs<string & tags.Format<"date-time">>();
       },
-      snippet: ts`
-        // const isDateTime = typia.createIs<string & tags.Format<"date-time">>();
-        isDateTime(testString);
-      `,
+      snippet: ts`string & tags.Format<"date-time">`,
     },
     date: {
       create() {
         return typia.createIs<string & tags.Format<"date">>();
       },
-      snippet: ts`
-        // const isDate = typia.createIs<string & tags.Format<"date">>();
-        isDate(testString);
-      `,
+      snippet: ts`string & tags.Format<"date">`,
     },
     time: {
       create() {
         return typia.createIs<string & tags.Format<"time">>();
       },
-      snippet: ts`
-        // const isTime = typia.createIs<string & tags.Format<"time">>();
-        isTime(testString);
-      `,
+      snippet: ts`string & tags.Format<"time">`,
+    },
+    duration: {
+      create() {
+        return typia.createIs<string & tags.Format<"duration">>();
+      },
+      snippet: ts`string & tags.Format<"duration">`,
     },
     email: {
       create() {
         return typia.createIs<string & tags.Format<"email">>();
       },
-      snippet: ts`
-        // const isEmail = typia.createIs<string & tags.Format<"email">>();
-        isEmail(testString);
-      `,
+      snippet: ts`string & tags.Format<"email">`,
     },
     url: {
       create() {
         return typia.createIs<string & tags.Format<"url">>();
       },
-      snippet: ts`
-        // const isUrl = typia.createIs<string & tags.Format<"url">>();
-        isUrl(testString);
-      `,
+      snippet: ts`string & tags.Format<"url">`,
     },
     uuid: {
       create() {
         return typia.createIs<string & tags.Format<"uuid">>();
       },
-      snippet: ts`
-        // const isUuid = typia.createIs<string & tags.Format<"uuid">>();
-        isUuid(testString);
-      `,
+      snippet: ts`string & tags.Format<"uuid">`,
     },
     ipv4: {
       create() {
         return typia.createIs<string & tags.Format<"ipv4">>();
       },
-      snippet: ts`
-        // const isIpv4 = typia.createIs<string & tags.Format<"ipv4">>();
-        isIpv4(testString);
-      `,
+      snippet: ts`string & tags.Format<"ipv4">`,
     },
     ipv6: {
       create() {
         return typia.createIs<string & tags.Format<"ipv6">>();
       },
-      snippet: ts`
-        // const isIpv6 = typia.createIs<string & tags.Format<"ipv6">>();
-        isIpv6(testString);
-      `,
+      snippet: ts`string & tags.Format<"ipv6">`,
     },
   },
 });
