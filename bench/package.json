@@ -10,7 +10,7 @@
     "./download.json": "./download.json"
   },
   "scripts": {
-    "bench": "node --expose-gc --max-old-space-size=8192 ./src/scripts/bench.ts",
+    "bench": "node ./src/scripts/bench/orchestrate.ts",
     "download": "node ./src/scripts/download.ts",
     "typecheck": "tsgo"
   },
