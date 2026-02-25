@@ -61,6 +61,9 @@ export const stringFormatProps: Pick<
   title: "Format",
   options: stringFormatSchema.options,
   labels: {
+    "date-time": { label: "Datetime", icon: "calendar_clock" },
+    date: { label: "Date", icon: "calendar_today" },
+    time: { label: "Time", icon: "schedule" },
     email: { label: "Email", icon: "email" },
     url: { label: "URL", icon: "link" },
     uuid: { label: "UUID", icon: "fingerprint" },

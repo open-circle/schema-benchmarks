@@ -154,6 +154,9 @@ export default defineBenchmarks({
     ],
   },
   string: {
+    "date-time": createStringBenchmark("date-time"),
+    date: createStringBenchmark("date"),
+    time: createStringBenchmark("time"),
     email: createStringBenchmark("email"),
     url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),

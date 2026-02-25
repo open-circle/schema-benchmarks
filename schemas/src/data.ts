@@ -198,6 +198,9 @@ export const validStrings: Record<StringFormat, string> = {
   uuid: "123e4567-e89b-12d3-a456-426614174000",
   ipv4: "192.168.0.1",
   ipv6: "2001:0db8:85a3:08d3:1319:8a2e:0370:7344",
+  "date-time": "2021-01-01T00:00:00Z",
+  date: "2021-01-01",
+  time: "00:00:00Z",
 };
 
 export const invalidStrings: Record<StringFormat, string> = {
@@ -206,4 +209,7 @@ export const invalidStrings: Record<StringFormat, string> = {
   uuid: "invalid",
   ipv4: "invalid",
   ipv6: "invalid",
+  "date-time": "invalid",
+  date: "invalid",
+  time: "invalid",
 };

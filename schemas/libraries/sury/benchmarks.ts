@@ -8,7 +8,7 @@ import { defineBenchmarks } from "#src";
 import { getSurySchema } from ".";
 
 const createStringBenchmark = (
-  modifier: (string: typeof S.string) => S.Schema<string>,
+  modifier: (string: typeof S.string) => S.Schema<unknown>,
   snippet: string,
 ): StringBenchmarkConfig<unknown> => ({
   create() {
@@ -106,6 +106,7 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark(S.datetime, ts`S.iso8601(S.string)`),
     email: createStringBenchmark(S.email, ts`S.email(S.string)`),
     url: createStringBenchmark(S.url, ts`S.url(S.string)`),
     uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),

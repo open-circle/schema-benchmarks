@@ -59,6 +59,7 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark("isoDate"),
     email: createStringBenchmark("email"),
     url: createStringBenchmark("uri"),
     uuid: createStringBenchmark("uuid"),

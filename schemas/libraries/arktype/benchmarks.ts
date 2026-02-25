@@ -7,7 +7,10 @@ import { defineBenchmarks } from "#src";
 
 import { getArkTypeSchema } from ".";
 
-type Format = Exclude<keyof typeof type.keywords.string, ` ${string}`> | `ip.v${4 | 6}`;
+type Format =
+  | Exclude<keyof typeof type.keywords.string, ` ${string}`>
+  | `ip.v${4 | 6}`
+  | "date.iso";
 
 const createStringBenchmark = (format: Format): StringBenchmarkConfig<unknown> => ({
   create() {
@@ -51,6 +54,7 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark("date.iso"),
     email: createStringBenchmark("email"),
     url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),

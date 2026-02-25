@@ -60,6 +60,9 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark(z.iso.datetime, ts`z.iso.datetime()`),
+    date: createStringBenchmark(z.iso.date, ts`z.iso.date()`),
+    time: createStringBenchmark(z.iso.time, ts`z.iso.time()`),
     email: createStringBenchmark(z.email, ts`z.email()`),
     url: createStringBenchmark(z.url, ts`z.url()`),
     uuid: createStringBenchmark(z.uuid, ts`z.uuid()`),
