@@ -7,6 +7,10 @@ import {
   string,
   email,
   url,
+  uuid,
+  isoDate,
+  isoTime,
+  isoDateTime,
 } from "@railway-ts/pipelines/schema";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
@@ -69,7 +73,11 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark(isoDateTime, "isoDateTime()"),
+    date: createStringBenchmark(isoDate, "isoDate()"),
+    time: createStringBenchmark(isoTime, "isoTime()"),
     email: createStringBenchmark(email, "email()"),
     url: createStringBenchmark(url, "url()"),
+    uuid: createStringBenchmark(uuid, "uuid()"),
   },
 });

@@ -72,6 +72,7 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": createStringBenchmark("datetime"),
     email: createStringBenchmark("email"),
     url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),

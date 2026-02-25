@@ -88,6 +88,33 @@ export default defineBenchmarks({
     },
   },
   string: {
+    "date-time": {
+      create() {
+        return typia.createIs<string & tags.Format<"date-time">>();
+      },
+      snippet: ts`
+        // const isDateTime = typia.createIs<string & tags.Format<"date-time">>();
+        isDateTime(testString);
+      `,
+    },
+    date: {
+      create() {
+        return typia.createIs<string & tags.Format<"date">>();
+      },
+      snippet: ts`
+        // const isDate = typia.createIs<string & tags.Format<"date">>();
+        isDate(testString);
+      `,
+    },
+    time: {
+      create() {
+        return typia.createIs<string & tags.Format<"time">>();
+      },
+      snippet: ts`
+        // const isTime = typia.createIs<string & tags.Format<"time">>();
+        isTime(testString);
+      `,
+    },
     email: {
       create() {
         return typia.createIs<string & tags.Format<"email">>();
