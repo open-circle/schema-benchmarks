@@ -26,7 +26,7 @@ function forward<T>(promise: child_process.PromiseWithChild<T>) {
 }
 
 for (const lib of Object.keys(libraries)) {
-  const libResultPromise = forward(
+  const libResult = await forward(
     execFile(
       process.execPath,
       [path.resolve(process.cwd(), "./src/scripts/bench/library.ts"), `--lib=${lib}`],
@@ -35,13 +35,10 @@ for (const lib of Object.keys(libraries)) {
       },
     ),
   );
-  const libResult = await libResultPromise;
   const results = libResult.stdout.split("\n").slice(-3).filter(Boolean).pop();
   if (!results) throw new Error(`No results for ${lib}`);
   allResults.push(v.parse(benchResultsSchema, JSON.parse(results)));
 }
-
-console.log(JSON.stringify(allResults));
 
 const merged = getEmptyResults();
 
@@ -68,9 +65,7 @@ for (const array of [
   ...Object.values(merged.validation),
   ...Object.values(merged.parsing),
   ...Object.values(merged.standard),
-  ...Object.values(merged.string)
-    .map((formatResults) => Object.values(formatResults))
-    .flat(),
+  ...Object.values(merged.string).flatMap((formatResults) => Object.values(formatResults)),
 ]) {
   array.sort((a, b) => a.mean - b.mean);
 }
