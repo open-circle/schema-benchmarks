@@ -41,3 +41,5 @@ jobs:
           path: |
             bench/bench.json
             bench/download.json
+            bench/stack.json
+            schemas/libraries/**/download_compiled/**
