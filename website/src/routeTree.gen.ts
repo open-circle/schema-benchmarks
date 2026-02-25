@@ -20,6 +20,7 @@ import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmark
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
 import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
+import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benchmarks/_runtime/string/index'
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
 import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_benchmarks/_runtime/parsing/index'
 import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
@@ -78,6 +79,12 @@ const BenchmarksRuntimeValidationIndexRoute =
     path: '/validation/',
     getParentRoute: () => BenchmarksRuntimeRouteRoute,
   } as any)
+const BenchmarksRuntimeStringIndexRoute =
+  BenchmarksRuntimeStringIndexRouteImport.update({
+    id: '/string/',
+    path: '/string/',
+    getParentRoute: () => BenchmarksRuntimeRouteRoute,
+  } as any)
 const BenchmarksRuntimeStandardIndexRoute =
   BenchmarksRuntimeStandardIndexRouteImport.update({
     id: '/standard/',
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
+  '/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/validation/': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRoutesByTo {
@@ -122,6 +130,7 @@ export interface FileRoutesByTo {
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
+  '/string': typeof BenchmarksRuntimeStringIndexRoute
   '/validation': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRoutesById {
@@ -139,6 +148,7 @@ export interface FileRoutesById {
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
+  '/_benchmarks/_runtime/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/_benchmarks/_runtime/validation/': typeof BenchmarksRuntimeValidationIndexRoute
 }
 export interface FileRouteTypes {
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/initialization/'
     | '/parsing/'
     | '/standard/'
+    | '/string/'
     | '/validation/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/initialization'
     | '/parsing'
     | '/standard'
+    | '/string'
     | '/validation'
   id:
     | '__root__'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
     | '/_benchmarks/_runtime/initialization/'
     | '/_benchmarks/_runtime/parsing/'
     | '/_benchmarks/_runtime/standard/'
+    | '/_benchmarks/_runtime/string/'
     | '/_benchmarks/_runtime/validation/'
   fileRoutesById: FileRoutesById
 }
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksRuntimeValidationIndexRouteImport
       parentRoute: typeof BenchmarksRuntimeRouteRoute
     }
+    '/_benchmarks/_runtime/string/': {
+      id: '/_benchmarks/_runtime/string/'
+      path: '/string'
+      fullPath: '/string/'
+      preLoaderRoute: typeof BenchmarksRuntimeStringIndexRouteImport
+      parentRoute: typeof BenchmarksRuntimeRouteRoute
+    }
     '/_benchmarks/_runtime/standard/': {
       id: '/_benchmarks/_runtime/standard/'
       path: '/standard'
@@ -303,6 +323,7 @@ interface BenchmarksRuntimeRouteRouteChildren {
   BenchmarksRuntimeInitializationIndexRoute: typeof BenchmarksRuntimeInitializationIndexRoute
   BenchmarksRuntimeParsingIndexRoute: typeof BenchmarksRuntimeParsingIndexRoute
   BenchmarksRuntimeStandardIndexRoute: typeof BenchmarksRuntimeStandardIndexRoute
+  BenchmarksRuntimeStringIndexRoute: typeof BenchmarksRuntimeStringIndexRoute
   BenchmarksRuntimeValidationIndexRoute: typeof BenchmarksRuntimeValidationIndexRoute
 }
 
@@ -312,6 +333,7 @@ const BenchmarksRuntimeRouteRouteChildren: BenchmarksRuntimeRouteRouteChildren =
       BenchmarksRuntimeInitializationIndexRoute,
     BenchmarksRuntimeParsingIndexRoute: BenchmarksRuntimeParsingIndexRoute,
     BenchmarksRuntimeStandardIndexRoute: BenchmarksRuntimeStandardIndexRoute,
+    BenchmarksRuntimeStringIndexRoute: BenchmarksRuntimeStringIndexRoute,
     BenchmarksRuntimeValidationIndexRoute:
       BenchmarksRuntimeValidationIndexRoute,
   }

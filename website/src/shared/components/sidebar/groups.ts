@@ -39,6 +39,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "Standard Schema",
         icon: "schema",
       },
+      {
+        ...linkOptions({ to: "/string" }),
+        name: "String",
+        icon: "format_quote",
+      },
     ],
   },
   {

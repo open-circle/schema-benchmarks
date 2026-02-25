@@ -4,6 +4,8 @@ import {
   errorTypeSchema,
   type OptimizeType,
   optimizeTypeSchema,
+  StringFormat,
+  stringFormatSchema,
 } from "@schema-benchmarks/schemas";
 import * as v from "valibot";
 
@@ -48,6 +50,22 @@ export const optimizeTypeProps: Pick<
     none: { label: "None", icon: "flash_off" },
     jit: { label: "JIT", icon: "code" },
     precompiled: { label: "Precompiled", icon: "build" },
+  },
+};
+
+export const optionalStringFormatSchema = v.optional(stringFormatSchema, "email");
+export const stringFormatProps: Pick<
+  PageFilterChipsProps<StringFormat>,
+  "title" | "labels" | "options"
+> = {
+  title: "Format",
+  options: stringFormatSchema.options,
+  labels: {
+    email: { label: "Email", icon: "email" },
+    url: { label: "URL", icon: "link" },
+    uuid: { label: "UUID", icon: "fingerprint" },
+    ipv4: { label: "IPv4", icon: "wifi" },
+    ipv6: { label: "IPv6", icon: "wifi" },
   },
 };
 

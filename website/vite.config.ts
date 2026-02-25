@@ -18,6 +18,7 @@ import {
   dataTypeProps,
   errorTypeProps,
   optimizeTypeProps,
+  stringFormatProps,
 } from "./src/routes/_benchmarks/_runtime/-constants";
 import { minifyTypeProps } from "./src/routes/_benchmarks/download/-constants";
 import { speedPresets } from "./src/routes/_benchmarks/download/-speed";
@@ -49,9 +50,13 @@ const config = defineConfig({
     materialSymbols({
       knownSymbols: [
         ...sidebarGroups.flatMap((group) => group.links.map((link) => link.icon)),
-        ...[errorTypeProps, optimizeTypeProps, minifyTypeProps, dataTypeProps].flatMap((props) =>
-          Object.values(props.labels).map((label) => label.icon),
-        ),
+        ...[
+          errorTypeProps,
+          optimizeTypeProps,
+          minifyTypeProps,
+          dataTypeProps,
+          stringFormatProps,
+        ].flatMap((props) => Object.values(props.labels).map((label) => label.icon)),
         ...[speedPresets, admonitionDefaults, themeLabels, styleLabels].flatMap((map) =>
           Object.values(map).map((value) => value.icon),
         ),
