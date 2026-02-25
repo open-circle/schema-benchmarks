@@ -14,7 +14,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@railway-ts/pipelines": "^0.1.23",
+    "@railway-ts/pipelines": "^0.1.25",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
     "ajv": "^8.18.0",
