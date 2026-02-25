@@ -3,6 +3,7 @@ import {
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
+import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
 export const dataTypeSchema = v.picklist(["invalid", "valid"]);
@@ -72,6 +73,15 @@ export const benchResultsSchema = v.object({
   ),
 });
 export type BenchResults = v.InferOutput<typeof benchResultsSchema>;
+export const getEmptyResults = (): BenchResults => ({
+  initialization: [],
+  parsing: { valid: [], invalid: [] },
+  validation: { valid: [], invalid: [] },
+  standard: { valid: [], invalid: [] },
+  string: unsafeFromEntries(
+    stringFormatSchema.options.map((format) => [format, { valid: [], invalid: [] }]),
+  ),
+});
 
 export const minifyTypeSchema = v.picklist(["minified", "unminified"]);
 export type MinifyType = v.InferOutput<typeof minifyTypeSchema>;
