@@ -298,7 +298,7 @@ for (const getConfig of Object.values(libraries)) {
                 note,
                 throws,
               }),
-              () => run(data[stringFormat]!),
+              () => run(data[stringFormat]),
             );
           }
         }
