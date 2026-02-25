@@ -1,0 +1,6 @@
+Validating different string formats.
+
+```ts
+import * as v from "valibot";
+const url = v.parse(v.pipe(v.string(), v.url()), data);
+```

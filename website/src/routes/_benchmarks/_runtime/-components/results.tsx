@@ -10,7 +10,7 @@ import { SortableKey } from "../-constants";
 import { BenchCard } from "./card";
 import { BenchTable } from "./table";
 
-export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard"}`;
+export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard" | "string"}`;
 
 export interface BenchResultsProps {
   results: DistributiveArray<BenchResult>;
