@@ -70,9 +70,11 @@ export default defineBenchmarks({
     },
   },
   string: {
-    "date-time": createStringBenchmark(v.isoDateTime, ts`v.isoDateTime()`),
+    // only allows hh:mm for some reason
+    // "date-time": createStringBenchmark(v.isoDateTime, ts`v.isoDateTime()`),
     date: createStringBenchmark(v.isoDate, ts`v.isoDate()`),
-    time: createStringBenchmark(v.isoTime, ts`v.isoTime()`),
+    // only allows hh:mm for some reason
+    // time: createStringBenchmark(v.isoTime, ts`v.isoTime()`),
     email: createStringBenchmark(v.email, ts`v.email()`),
     url: createStringBenchmark(v.url, ts`v.url()`),
     uuid: createStringBenchmark(v.uuid, ts`v.uuid()`),
