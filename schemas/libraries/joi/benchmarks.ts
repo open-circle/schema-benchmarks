@@ -13,13 +13,14 @@ type FormatMethod = {
 
 const createStringBenchmark = <Format extends FormatMethod>(
   method: Format,
+  snippet = `${method}()`,
   ...args: Parameters<Joi.StringSchema[Format]>
 ): StringBenchmarkConfig<unknown> => ({
   create() {
     const schema = Joi.string()[method](...(args as []));
     return (testString) => !schema.validate(testString).error;
   },
-  snippet: ts`Joi.string().${method}()`,
+  snippet: ts`Joi.string().${snippet}`,
 });
 
 export default defineBenchmarks({
@@ -61,7 +62,7 @@ export default defineBenchmarks({
     email: createStringBenchmark("email"),
     url: createStringBenchmark("uri"),
     uuid: createStringBenchmark("uuid"),
-    ipv4: createStringBenchmark("ip", { version: "ipv4" }),
-    ipv6: createStringBenchmark("ip", { version: "ipv6" }),
+    ipv4: createStringBenchmark("ip", ts`ip({ version: "ipv4" })`, { version: "ipv4" }),
+    ipv6: createStringBenchmark("ip", ts`ip({ version: "ipv6" })`, { version: "ipv6" }),
   },
 });
