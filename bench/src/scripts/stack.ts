@@ -1,12 +1,17 @@
+import * as child_process from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as url from "node:url";
+import { promisify } from "node:util";
 
 import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
+import { forwardStd } from "@schema-benchmarks/utils/node";
 
-import type { SerializedError, StackResult } from "../results/types.ts";
+import type { StackResult } from "../results/types.ts";
+
+const execFile = promisify(child_process.execFile);
 
 // this is probably quite fragile, worth keeping an eye on when we update node
 
@@ -23,13 +28,15 @@ const cwdRegex = new RegExp(
   "g",
 );
 
-function serializeError(e: Error, customStack?: string): SerializedError {
-  return {
-    message: e.message,
-    name: e.name,
-    stack: customStack,
-    // cause?
-  };
+async function getLoggedOutput(lib: string) {
+  const { stderr } = await forwardStd(
+    execFile(
+      process.execPath,
+      [path.resolve(process.cwd(), "./src/scripts/stack/log.ts"), `--lib=${lib}`],
+      { env: { ...process.env, FORCE_COLOR: "1" } },
+    ),
+  );
+  return stderr.replace(cwdRegex, "");
 }
 
 const results: Array<StackResult> = [];
@@ -45,7 +52,7 @@ function getScriptLineNumber(stack?: string) {
   return "not found";
 }
 
-for (const getConfig of Object.values(libraries)) {
+for (const [lib, getConfig] of Object.entries(libraries)) {
   const {
     library: { name: libraryName, version },
     createContext,
@@ -75,7 +82,7 @@ for (const getConfig of Object.values(libraries)) {
             version,
             snippet,
             line: "no stack",
-            error: serializeError(e),
+            output: await getLoggedOutput(lib),
           });
           continue;
         }
@@ -87,7 +94,7 @@ for (const getConfig of Object.values(libraries)) {
             version,
             snippet,
             line,
-            error: serializeError(e, frames.replace(cwdRegex, "")),
+            output: await getLoggedOutput(lib),
           });
         } else {
           results.push({
@@ -95,7 +102,7 @@ for (const getConfig of Object.values(libraries)) {
             version,
             snippet,
             line: "no external stack",
-            error: serializeError(e),
+            output: await getLoggedOutput(lib),
           });
         }
       } else {
