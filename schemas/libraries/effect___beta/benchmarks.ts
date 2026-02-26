@@ -96,11 +96,11 @@ export default defineBenchmarks({
   },
   stack: {
     throw: ({ schema }, data) => {
-      Schema.decodeUnknownOption(schema)(data, { errors: "first" });
+      Schema.decodeUnknownSync(schema)(data, { errors: "first" });
       assertNotReached();
     },
     snippet: ts`
-      Schema.decodeUnknownOption(schema)(data, { errors: "first" })
+      Schema.decodeUnknownSync(schema)(data, { errors: "first" })
     `,
   },
 });
