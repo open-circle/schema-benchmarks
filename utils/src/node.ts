@@ -1,9 +1,9 @@
-import { exec as ogExec } from "node:child_process";
+import * as child_process from "node:child_process";
 import { promisify } from "node:util";
 
 import * as v from "valibot";
 
-const exec = promisify(ogExec);
+const exec = promisify(child_process.exec);
 
 const pnpmListSchema = v.pipe(
   v.string(),
@@ -31,4 +31,10 @@ export async function getVersion(libraryName: string) {
   if (!dep) throw new Error(`No version found for ${libraryName}`);
   versionCache.set(libraryName, dep.version);
   return dep.version;
+}
+
+export function forwardStd<T>(promise: child_process.PromiseWithChild<T>) {
+  promise.child.stdout?.pipe(process.stdout);
+  promise.child.stderr?.pipe(process.stderr);
+  return promise;
 }

@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { unsafeEntries } from "@schema-benchmarks/utils";
+import { forwardStd } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
 import type { BenchResults } from "../../results/types.ts";
@@ -19,20 +20,12 @@ const execFile = promisify(child_process.execFile);
 
 const allResults: Array<BenchResults> = [];
 
-function forward<T>(promise: child_process.PromiseWithChild<T>) {
-  promise.child.stdout?.pipe(process.stdout);
-  promise.child.stderr?.pipe(process.stderr);
-  return promise;
-}
-
 for (const lib of Object.keys(libraries)) {
-  const libResult = await forward(
+  const libResult = await forwardStd(
     execFile(
       process.execPath,
       [path.resolve(process.cwd(), "./src/scripts/bench/library.ts"), `--lib=${lib}`],
-      {
-        signal: sigintAc.signal,
-      },
+      { signal: sigintAc.signal },
     ),
   );
   const results = libResult.stdout.split("\n").slice(-3).filter(Boolean).pop();
