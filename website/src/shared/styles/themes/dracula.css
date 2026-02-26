@@ -89,6 +89,23 @@ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascr
   --red-40: rgba(from var(--red-ternary) r g b / 0.4);
   --yellow-40: rgba(from var(--yellow-ternary) r g b / 0.4);
 
+  --ansi-black: #21222c;
+  --ansi-red: #ff5555;
+  --ansi-green: #50fa7b;
+  --ansi-yellow: #f1fa8c;
+  --ansi-blue: #bd93f9;
+  --ansi-magenta: #ff79c6;
+  --ansi-cyan: #8be9fd;
+  --ansi-white: #f8f8f2;
+  --ansi-bright-black: #6272a4;
+  --ansi-bright-red: #ff6e6e;
+  --ansi-bright-green: #69ff94;
+  --ansi-bright-yellow: #ffffa5;
+  --ansi-bright-blue: #d6acff;
+  --ansi-bright-magenta: #ff92df;
+  --ansi-bright-cyan: #a4ffff;
+  --ansi-bright-white: #ffffff;
+
   /* Selection */
 
   pre[class*="language-"]::-moz-selection,
