@@ -7,8 +7,6 @@ import { StackCard } from "./index.js";
 
 import "./index.css";
 
-console.log(stackResults);
-
 const meta = preview
   .type<{ args: { resultIdx: number; barScale: ReturnType<typeof Bar.getScale> } }>()
   .meta({
@@ -31,6 +29,9 @@ const meta = preview
           max: stackResults.length - 1,
         },
       },
+    },
+    parameters: {
+      layout: "padded",
     },
   });
 
