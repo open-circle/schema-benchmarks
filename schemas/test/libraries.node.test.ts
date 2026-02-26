@@ -1,6 +1,12 @@
-import { errorData, successData, validStrings, invalidStrings } from "@schema-benchmarks/schemas";
+import {
+  errorData,
+  successData,
+  validStrings,
+  invalidStrings,
+  ShouldHaveThrownError,
+} from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
-import { ensureArray, unsafeEntries } from "@schema-benchmarks/utils";
+import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
 import { assert, describe, expect, it } from "vitest";
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
@@ -78,6 +84,13 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         const match = await fn(strings[stringType]);
         expect(match).toBe(expected);
       });
+    });
+  });
+  describe.runIf(config.stack)("stack", () => {
+    it("should throw", async () => {
+      const promise = promiseTry(() => config.stack?.throw(context, errorData));
+      await expect(promise).rejects.toThrow();
+      await expect(promise).rejects.not.toThrowError(ShouldHaveThrownError);
     });
   });
 });

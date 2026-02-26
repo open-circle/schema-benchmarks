@@ -1,6 +1,6 @@
 export type * from "./types.ts";
 
-import type { PickPartial } from "./types.ts";
+import type { MaybePromise, PickPartial } from "./types.ts";
 
 // Polyfill because Netlify is using Node v22
 import "@formatjs/intl-durationformat/polyfill.js";
@@ -337,4 +337,8 @@ export function pluralize(strings: TemplateStringsArray, ...values: Array<unknow
     }
   }
   return result;
+}
+
+export function promiseTry<T>(fn: () => MaybePromise<T>): Promise<T> {
+  return new Promise((resolve) => resolve(fn()));
 }
