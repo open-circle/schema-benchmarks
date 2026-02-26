@@ -1,0 +1,93 @@
+details {
+  overflow: hidden;
+  border-radius: var(--shape-medium);
+  border: 1px solid var(--divider);
+  --reveal-duration: 250ms;
+
+  @media (prefers-reduced-motion: no-preference) {
+    interpolate-size: allow-keywords;
+  }
+
+  &::details-content {
+    opacity: 0;
+    block-size: 0;
+    overflow-y: clip;
+    transition:
+      content-visibility var(--reveal-duration) allow-discrete,
+      opacity var(--reveal-duration) var(--standard-curve),
+      block-size var(--reveal-duration) var(--standard-curve);
+  }
+
+  &[open] {
+    &::details-content {
+      opacity: 1;
+      block-size: auto;
+    }
+    summary::after {
+      transform: rotate(180deg);
+    }
+  }
+  summary {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-family-button);
+    --details-color: var(--button);
+    color: var(--details-color);
+    transition:
+      color 250ms,
+      background-color 250ms,
+      font-variation-settings 250ms;
+    &::after {
+      content: "keyboard_arrow_down";
+      font-family: "Material Symbols Sharp";
+      color: color(from var(--details-color) srgb r g b / var(--secondary-text));
+      @extend .md-symbol.material-symbols-sharp;
+      transition:
+        color 250ms,
+        transform 250ms var(--standard-curve),
+        font-variation-settings 250ms;
+    }
+    &:hover {
+      background-color: color(from var(--details-color) srgb r g b / var(--hover-opacity));
+    }
+    &:focus-visible {
+      background-color: color(from var(--details-color) srgb r g b / var(--focus-opacity));
+    }
+    &:active {
+      background-color: color(from var(--details-color) srgb r g b / var(--pressed-opacity));
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      opacity: var(--disabled-opacity);
+      pointer-events: none;
+    }
+    details[open] & {
+      background-color: var(--button-selected-background);
+      --details-color: var(--button-selected);
+      &:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--hover-opacity)
+        );
+      }
+      &:focus-visible {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--focus-opacity)
+        );
+      }
+      &:active {
+        background-color: color-mix(
+          in srgb,
+          var(--button-selected-background),
+          var(--button-selected) var(--pressed-opacity)
+        );
+      }
+    }
+  }
+}

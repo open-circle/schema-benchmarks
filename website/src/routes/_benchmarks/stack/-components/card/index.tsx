@@ -44,7 +44,17 @@ export function StackCard({ result, barScale }: StackCardProps) {
           <Bar {...barScale(result.line)} />
         </div>
       )}
-      {result.output && <AnsiBlock>{result.output}</AnsiBlock>}
+      {result.output && (
+        <details>
+          <summary>
+            <span>
+              <MdSymbol>terminal</MdSymbol>
+              Output
+            </span>
+          </summary>
+          <AnsiBlock>{result.output}</AnsiBlock>
+        </details>
+      )}
     </div>
   );
 }
