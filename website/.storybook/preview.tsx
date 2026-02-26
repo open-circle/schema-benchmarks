@@ -7,6 +7,7 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
+import { parseAnsiSequences } from "ansi-sequence-parser";
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
 import Prism from "prismjs";
@@ -15,7 +16,7 @@ import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
 
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import { highlightCode, highlightFn } from "#/shared/lib/highlight";
+import { highlightAnsi, highlightAnsiFn, highlightCode, highlightFn } from "#/shared/lib/highlight";
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { getRouter } from "../src/router";
@@ -138,6 +139,7 @@ document.addEventListener("click", (event) => {
 
 initialize({ onUnhandledRequest: "bypass" }, [
   mockGetServerFn(highlightFn, (data) => highlightCode(Prism, data)),
+  mockGetServerFn(highlightAnsiFn, (data) => highlightAnsi(parseAnsiSequences, data)),
 ]);
 
 export default definePreview({
