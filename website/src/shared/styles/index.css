@@ -277,7 +277,7 @@ a > code.language-text.language-text {
     color: var(--ansi-fg);
   }
   .reverse {
-    background-color: var(--ansi-fg,);
+    background-color: var(--ansi-fg);
     color: var(--ansi-bg);
   }
   .bg-black {
