@@ -5,3 +5,10 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
 }
+
+.output pre {
+  max-width: 32em;
+  max-height: 16em;
+  border: 1px solid var(--divider);
+  border-radius: var(--shape-medium);
+}
