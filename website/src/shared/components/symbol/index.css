@@ -1,5 +1,4 @@
 .md-symbol.material-symbols-sharp {
-  --default-icon-grade: 0;
   user-select: none;
   font-size: calc(var(--icon-size, 24) * 1px);
   font-variation-settings:
@@ -15,13 +14,28 @@
       transform: scaleX(-1);
     }
   }
+}
 
-  [data-theme="dark"] & {
-    --default-icon-grade: -25;
+%light-theme {
+  --default-icon-grade: 0;
+}
+%dark-theme {
+  --default-icon-grade: -25;
+}
+
+[data-theme="light"] {
+  @extend %light-theme;
+}
+[data-theme="dark"] {
+  @extend %dark-theme;
+}
+@media (prefers-color-scheme: light) {
+  [data-theme="system"] {
+    @extend %light-theme;
   }
-  @media (prefers-color-scheme: dark) {
-    [data-theme="system"] & {
-      --default-icon-grade: -25;
-    }
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    @extend %dark-theme;
   }
 }
