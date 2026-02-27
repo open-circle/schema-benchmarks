@@ -43,8 +43,16 @@ details {
     &::after {
       content: "keyboard_arrow_down";
       font-family: "Material Symbols Sharp";
+      user-select: none;
+      height: 1em;
+      width: 1em;
       color: color(from var(--details-color) srgb r g b / var(--secondary-text));
-      @extend .md-symbol.material-symbols-sharp;
+      font-size: calc(var(--icon-size, 24) * 1px);
+      font-variation-settings:
+        "FILL" var(--icon-fill, 0),
+        "wght" var(--icon-weight, 400),
+        "GRAD" clamp(-25, var(--icon-grade, var(--default-icon-grade)), 200),
+        "opsz" clamp(20, var(--icon-optical-size, var(--icon-size, 24)), 48);
       transition:
         color 250ms,
         transform 250ms var(--standard-curve),
