@@ -16,6 +16,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BenchmarksRuntimeRouteRouteImport } from './routes/_benchmarks/_runtime/route'
+import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
@@ -56,6 +57,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 } as any)
 const BenchmarksRuntimeRouteRoute = BenchmarksRuntimeRouteRouteImport.update({
   id: '/_runtime',
+  getParentRoute: () => BenchmarksRouteRoute,
+} as any)
+const BenchmarksStackIndexRoute = BenchmarksStackIndexRouteImport.update({
+  id: '/stack/',
+  path: '/stack/',
   getParentRoute: () => BenchmarksRouteRoute,
 } as any)
 const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
+  '/stack/': typeof BenchmarksStackIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
+  '/stack': typeof BenchmarksStackIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
+  '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download/'
+    | '/stack/'
     | '/initialization/'
     | '/parsing/'
     | '/standard/'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download'
+    | '/stack'
     | '/initialization'
     | '/parsing'
     | '/standard'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
+    | '/_benchmarks/stack/'
     | '/_benchmarks/_runtime/initialization/'
     | '/_benchmarks/_runtime/parsing/'
     | '/_benchmarks/_runtime/standard/'
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BenchmarksRuntimeRouteRouteImport
+      parentRoute: typeof BenchmarksRouteRoute
+    }
+    '/_benchmarks/stack/': {
+      id: '/_benchmarks/stack/'
+      path: '/stack'
+      fullPath: '/stack/'
+      preLoaderRoute: typeof BenchmarksStackIndexRouteImport
       parentRoute: typeof BenchmarksRouteRoute
     }
     '/_benchmarks/download/': {
@@ -346,11 +365,13 @@ const BenchmarksRuntimeRouteRouteWithChildren =
 interface BenchmarksRouteRouteChildren {
   BenchmarksRuntimeRouteRoute: typeof BenchmarksRuntimeRouteRouteWithChildren
   BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
+  BenchmarksStackIndexRoute: typeof BenchmarksStackIndexRoute
 }
 
 const BenchmarksRouteRouteChildren: BenchmarksRouteRouteChildren = {
   BenchmarksRuntimeRouteRoute: BenchmarksRuntimeRouteRouteWithChildren,
   BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
+  BenchmarksStackIndexRoute: BenchmarksStackIndexRoute,
 }
 
 const BenchmarksRouteRouteWithChildren = BenchmarksRouteRoute._addFileChildren(

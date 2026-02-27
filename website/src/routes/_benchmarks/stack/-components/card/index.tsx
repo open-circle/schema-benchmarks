@@ -10,13 +10,13 @@ import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 
 interface StackCardProps {
-  result: OneOf<StackResult>;
-  barScale: ReturnType<typeof Bar.getScale>;
+  result: StackResult;
+  lineScale: ReturnType<typeof Bar.getScale>;
 }
 
 const cls = bem("stack-card");
 
-export function StackCard({ result, barScale }: StackCardProps) {
+export function StackCard({ result, lineScale }: StackCardProps) {
   return (
     <div
       {...cls()}
@@ -41,7 +41,7 @@ export function StackCard({ result, barScale }: StackCardProps) {
       <CodeBlock>{result.snippet}</CodeBlock>
       {typeof result.line === "number" && (
         <div {...cls({ element: "bar" })}>
-          <Bar {...barScale(result.line)} />
+          <Bar {...lineScale(result.line)} />
         </div>
       )}
       {result.output && (
