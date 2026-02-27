@@ -44,6 +44,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "String",
         icon: "format_quote",
       },
+      {
+        ...linkOptions({ to: "/stack" }),
+        name: "Stack",
+        icon: "error",
+      },
     ],
   },
   {

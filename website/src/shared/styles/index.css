@@ -16,6 +16,7 @@
 @import "../components/button/index.css";
 @import "../components/chip/index.css";
 @import "../components/consolewriter/index.css";
+@import "../components/details/index.css";
 @import "../components/dialog/index.css";
 @import "../components/empty-state/index.css";
 @import "../components/footer/index.css";
@@ -248,4 +249,132 @@ main {
 
 a > code.language-text.language-text {
   color: inherit;
+}
+
+.language-ansi {
+  --ansi-bg: var(--code-background);
+  --ansi-fg: var(--foreground);
+  .bold {
+    font-weight: bold;
+  }
+  .dim {
+    opacity: 0.5;
+  }
+  .italic {
+    font-style: italic;
+  }
+  .underline {
+    text-decoration: underline;
+  }
+  .hidden {
+    visibility: hidden;
+  }
+  .strikethrough {
+    text-decoration: line-through;
+  }
+  &,
+  > *:not(.reverse) {
+    background-color: var(--ansi-bg);
+    color: var(--ansi-fg);
+  }
+  .reverse {
+    background-color: var(--ansi-fg);
+    color: var(--ansi-bg);
+  }
+  .bg-black {
+    --ansi-bg: var(--ansi-black);
+  }
+  .fg-black {
+    --ansi-fg: var(--ansi-black);
+  }
+  .bg-red {
+    --ansi-bg: var(--ansi-red);
+  }
+  .fg-red {
+    --ansi-fg: var(--ansi-red);
+  }
+  .bg-green {
+    --ansi-bg: var(--ansi-green);
+  }
+  .fg-green {
+    --ansi-fg: var(--ansi-green);
+  }
+  .bg-yellow {
+    --ansi-bg: var(--ansi-yellow);
+  }
+  .fg-yellow {
+    --ansi-fg: var(--ansi-yellow);
+  }
+  .bg-blue {
+    --ansi-bg: var(--ansi-blue);
+  }
+  .fg-blue {
+    --ansi-fg: var(--ansi-blue);
+  }
+  .bg-magenta {
+    --ansi-bg: var(--ansi-magenta);
+  }
+  .fg-magenta {
+    --ansi-fg: var(--ansi-magenta);
+  }
+  .bg-cyan {
+    --ansi-bg: var(--ansi-cyan);
+  }
+  .fg-cyan {
+    --ansi-fg: var(--ansi-cyan);
+  }
+  .bg-white {
+    --ansi-bg: var(--ansi-white);
+  }
+  .fg-white {
+    --ansi-fg: var(--ansi-white);
+  }
+  .bg-brightBlack {
+    --ansi-bg: var(--ansi-bright-black);
+  }
+  .fg-brightBlack {
+    --ansi-fg: var(--ansi-bright-black);
+  }
+  .bg-brightRed {
+    --ansi-bg: var(--ansi-bright-red);
+  }
+  .fg-brightRed {
+    --ansi-fg: var(--ansi-bright-red);
+  }
+  .bg-brightGreen {
+    --ansi-bg: var(--ansi-bright-green);
+  }
+  .fg-brightGreen {
+    --ansi-fg: var(--ansi-bright-green);
+  }
+  .bg-brightYellow {
+    --ansi-bg: var(--ansi-bright-yellow);
+  }
+  .fg-brightYellow {
+    --ansi-fg: var(--ansi-bright-yellow);
+  }
+  .bg-brightBlue {
+    --ansi-bg: var(--ansi-bright-blue);
+  }
+  .fg-brightBlue {
+    --ansi-fg: var(--ansi-bright-blue);
+  }
+  .bg-brightMagenta {
+    --ansi-bg: var(--ansi-bright-magenta);
+  }
+  .fg-brightMagenta {
+    --ansi-fg: var(--ansi-bright-magenta);
+  }
+  .bg-brightCyan {
+    --ansi-bg: var(--ansi-bright-cyan);
+  }
+  .fg-brightCyan {
+    --ansi-fg: var(--ansi-bright-cyan);
+  }
+  .bg-brightWhite {
+    --ansi-bg: var(--ansi-bright-white);
+  }
+  .fg-brightWhite {
+    --ansi-fg: var(--ansi-bright-white);
+  }
 }

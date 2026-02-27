@@ -3,7 +3,7 @@ import ts from "dedent";
 import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
@@ -93,5 +93,14 @@ export default defineBenchmarks({
         upfetch(url, { schema: standardSchema });
       `,
     },
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      Schema.decodeUnknownSync(schema)(data, { errors: "first" });
+      assertNotReached();
+    },
+    snippet: ts`
+      Schema.decodeUnknownSync(schema)(data, { errors: "first" })
+    `,
   },
 });

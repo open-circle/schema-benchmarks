@@ -3,6 +3,7 @@ import {
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
+import type { OneOf } from "@schema-benchmarks/utils";
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
@@ -101,3 +102,29 @@ export const downloadResultsSchema = v.object({
   unminified: v.array(downloadResultSchema),
 });
 export type DownloadResults = v.InferOutput<typeof downloadResultsSchema>;
+
+const baseStackResultSchema = v.object({
+  libraryName: v.string(),
+  version: v.string(),
+  snippet: v.string(),
+});
+
+const successfulStackResultSchema = v.object({
+  ...baseStackResultSchema.entries,
+  line: v.number(),
+  output: v.string(),
+});
+export const stackResultSchema = v.variant("line", [
+  successfulStackResultSchema,
+  v.object({
+    ...baseStackResultSchema.entries,
+    line: v.picklist(["no throw", "not an error"]),
+  }),
+
+  v.object({
+    ...baseStackResultSchema.entries,
+    line: v.picklist(["no stack", "no external stack", "not found"]),
+    output: v.string(),
+  }),
+]);
+export type StackResult = OneOf<v.InferOutput<typeof stackResultSchema>>;

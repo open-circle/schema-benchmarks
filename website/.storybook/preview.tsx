@@ -7,6 +7,7 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
+import { parseAnsiSequences } from "ansi-sequence-parser";
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
 import Prism from "prismjs";
@@ -15,7 +16,7 @@ import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
 
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import { highlightCode, highlightFn } from "#/shared/lib/highlight";
+import { highlightAnsi, highlightAnsiFn, highlightCode, highlightFn } from "#/shared/lib/highlight";
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { getRouter } from "../src/router";
@@ -28,17 +29,26 @@ const serverFnInput = v.object({
 });
 
 // probably very fragile, but TSS doesn't have anything like this yet
-export function mockGetServerFn<Input, Output>(
+export function mockServerFn<Input, Output>(
   serverFn: {
     (input: { data: Input }): Promise<Output>;
     url: string;
   },
   handler: (input: NoInfer<Input>) => NoInfer<Output>,
 ) {
-  return http.get(new URL(serverFn.url, window.location.href).href, async ({ request }) => {
+  return http.all(new URL(serverFn.url, window.location.href).href, async ({ request }) => {
+    if (request.method !== "POST" && request.method !== "GET") {
+      return HttpResponse.json(
+        { error: "Method not allowed" },
+        { status: 405, headers: { Allow: "POST, GET" } },
+      );
+    }
     try {
-      const payload = new URL(request.url).searchParams.get("payload");
-      const { data } = v.parse(serverFnInput, fromJSON(JSON.parse(payload ?? "{}")));
+      const payload =
+        request.method === "POST"
+          ? await request.json()
+          : JSON.parse(new URL(request.url).searchParams.get("payload") ?? "{}");
+      const { data } = v.parse(serverFnInput, fromJSON(payload));
       const result = handler(data);
       return HttpResponse.json(
         await Promise.resolve(
@@ -137,7 +147,8 @@ document.addEventListener("click", (event) => {
 });
 
 initialize({ onUnhandledRequest: "bypass" }, [
-  mockGetServerFn(highlightFn, (data) => highlightCode(Prism, data)),
+  mockServerFn(highlightFn, (data) => highlightCode(Prism, data)),
+  mockServerFn(highlightAnsiFn, (data) => highlightAnsi(parseAnsiSequences, data)),
 ]);
 
 export default definePreview({

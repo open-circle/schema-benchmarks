@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as z from "zod/mini";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodMiniSchema } from ".";
 
@@ -73,5 +73,12 @@ export default defineBenchmarks({
     uuid: createStringBenchmark(z.uuid, ts`z.uuid()`),
     ipv4: createStringBenchmark(z.ipv4, ts`z.ipv4()`),
     ipv6: createStringBenchmark(z.ipv6, ts`z.ipv6()`),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.parse(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.parse(data)`,
   },
 });

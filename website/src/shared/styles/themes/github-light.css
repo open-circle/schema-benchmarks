@@ -125,6 +125,23 @@
   --background: var(--white);
   --comment: var(--grey);
 
+  --ansi-black: #24292e;
+  --ansi-red: #d73a49;
+  --ansi-green: #28a745;
+  --ansi-yellow: #dbab09;
+  --ansi-blue: #0366d6;
+  --ansi-magenta: #5a32a3;
+  --ansi-cyan: #1b7c83;
+  --ansi-white: #d1d5da;
+  --ansi-bright-black: #959da5;
+  --ansi-bright-red: #cb2431;
+  --ansi-bright-green: #22863a;
+  --ansi-bright-yellow: #b08800;
+  --ansi-bright-blue: #005cc5;
+  --ansi-bright-magenta: #5a32a3;
+  --ansi-bright-cyan: #3192aa;
+  --ansi-bright-white: #d1d5da;
+
   pre[class*="language-"],
   code[class*="language-"] {
     color: var(--foreground);

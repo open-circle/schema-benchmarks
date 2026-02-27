@@ -1,6 +1,6 @@
 export type * from "./types.ts";
 
-import type { PickPartial } from "./types.ts";
+import type { MaybePromise, PickPartial } from "./types.ts";
 
 // Polyfill because Netlify is using Node v22
 import "@formatjs/intl-durationformat/polyfill.js";
@@ -306,3 +306,39 @@ export const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base",
 });
+
+// we use US here, because we only support English (other languages have different types of plural we don't support)
+const pluralRules = new Intl.PluralRules("en-US");
+
+type PluralizeTuple = [count: number, singular: string, plural?: string];
+function isPluralizeTuple(value: unknown): value is PluralizeTuple {
+  return Array.isArray(value) && value.length >= 2 && value.length <= 3;
+}
+
+/**
+ * A tagged template literal that pluralizes the word based on the count.
+ * If unspecified, the plural form is the singular form + `s`.
+ * @example
+ * pluralize`I have ${count} ${[count, "apple"]}.`
+ * pluralize`I have ${count} ${[count, "goose", "geese"]}.`
+ */
+export function pluralize(strings: TemplateStringsArray, ...values: Array<unknown>) {
+  let result = "";
+  for (let i = 0; i < strings.length; i++) {
+    result += strings[i];
+    if (i < values.length) {
+      const value = values[i];
+      if (isPluralizeTuple(value)) {
+        const [count, singular, plural = `${singular}s`] = value;
+        result += pluralRules.select(count) === "one" ? singular : plural;
+      } else {
+        result += value;
+      }
+    }
+  }
+  return result;
+}
+
+export function promiseTry<T>(fn: () => MaybePromise<T>): Promise<T> {
+  return new Promise((resolve) => resolve(fn()));
+}

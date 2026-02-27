@@ -1,0 +1,12 @@
+Comparison of the errors thrown by libraries, including stack trace length.
+
+```ts
+import { personSchema } from "./schemas";
+import * as v from "valibot";
+
+try {
+  v.parse(personSchema, data);
+} catch (e) {
+  console.error(e);
+}
+```

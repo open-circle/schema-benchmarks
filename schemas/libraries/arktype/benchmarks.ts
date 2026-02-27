@@ -3,7 +3,7 @@ import { type } from "arktype";
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getArkTypeSchema } from ".";
 
@@ -60,5 +60,12 @@ export default defineBenchmarks({
     uuid: createStringBenchmark("uuid"),
     ipv4: createStringBenchmark("ip.v4"),
     ipv6: createStringBenchmark("ip.v6"),
+  },
+  stack: {
+    throw: ({ schema }, data) => {
+      schema.assert(data);
+      assertNotReached();
+    },
+    snippet: ts`schema.assert(data)`,
   },
 });

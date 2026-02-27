@@ -63,6 +63,11 @@ export interface StringBenchmarkConfig<Context> extends BaseBenchmarkConfig {
   create: (context: Context) => MaybePromise<(testString: string) => MaybePromise<boolean>>;
 }
 
+export interface StackBenchmarkConfig<Context> {
+  throw: (context: Context, data: unknown) => MaybePromise<never>;
+  snippet: string;
+}
+
 export interface LibraryInfo {
   name: string;
   git: string;
@@ -78,11 +83,23 @@ export interface BenchmarksConfig<Context, ParseResult = unknown> {
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context, ParseResult>>>>;
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig<Context>>>>;
   string?: Partial<Record<StringFormat, StringBenchmarkConfig<Context>>>;
+  stack?: StackBenchmarkConfig<Context>;
 }
 
-/* @__PURE__ */
+/* @__NO_SIDE_EFFECTS__ */
 export function defineBenchmarks<const TContext, TParseResult>(
   config: BenchmarksConfig<TContext, TParseResult>,
 ) {
   return config;
+}
+
+export class ShouldHaveThrownError extends Error {
+  constructor() {
+    super("Expected an error to be thrown, but none was thrown");
+    this.name = "ShouldHaveThrownError";
+  }
+}
+
+export function assertNotReached(): never {
+  throw new ShouldHaveThrownError();
 }
