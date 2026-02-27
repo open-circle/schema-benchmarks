@@ -1,5 +1,5 @@
 import type { StackResult } from "@schema-benchmarks/bench";
-import { getTransitionName, OneOf } from "@schema-benchmarks/utils";
+import { getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
