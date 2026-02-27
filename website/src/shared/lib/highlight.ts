@@ -56,6 +56,10 @@ export const getHighlightedCode = (
       }),
   });
 
+function escapeForHtml(value: string) {
+  return value.replace("<", "&lt;").replace(">", "&gt;");
+}
+
 export const highlightAnsi = (
   parseAnsi: (typeof import("ansi-sequence-parser"))["parseAnsiSequences"],
   { input, lineNumbers }: { input: string; lineNumbers?: boolean },
@@ -72,7 +76,8 @@ export const highlightAnsi = (
     tokens
       .map((token) => {
         // happy path, nothing to do
-        if (!token.background && !token.foreground && !token.decorations.size) return token.value;
+        if (!token.background && !token.foreground && !token.decorations.size)
+          return escapeForHtml(token.value);
         let style = [];
         let classNames = [];
         if (token.background) {
@@ -98,7 +103,7 @@ export const highlightAnsi = (
         if (token.decorations.size) classNames.push(...token.decorations);
         const className = classNames.length ? ` class="${classNames.join(" ")}"` : "";
         const styleAttr = style.length ? ` style="${style.join("; ")}"` : "";
-        return `<span${className}${styleAttr}>${token.value}</span>`;
+        return `<span${className}${styleAttr}>${escapeForHtml(token.value)}</span>`;
       })
       .join("") + lineNumbersWrapper
   );

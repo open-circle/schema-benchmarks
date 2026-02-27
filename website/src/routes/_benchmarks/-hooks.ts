@@ -15,7 +15,7 @@ export function useDownloadsByPkgName(data: Array<{ libraryName: string }>) {
   return useSuspenseQueries({
     queries: useMemo(() => pkgNames.map((pkgName) => getAllWeeklyDownloads(pkgName)), [pkgNames]),
     combine: useCallback(
-      (results: Array<UseSuspenseQueryResult<number>>) =>
+      (results: Array<UseSuspenseQueryResult<number>>): Record<string, number> =>
         Object.fromEntries(results.map((result, idx) => [pkgNames[idx], result.data])),
       [pkgNames],
     ),

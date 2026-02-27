@@ -200,7 +200,9 @@ export function withTooltip<TComp extends TooltipableComponent>(
                         extra: "typo-caption",
                       })}
                     >
-                      {tooltip.subhead}
+                      <ConsoleWriter hidden={!open} delay={0} interval={35}>
+                        {tooltip.subhead}
+                      </ConsoleWriter>
                     </h6>
                   )}
                   <div {...cls("supporting")}>{tooltip.supporting}</div>
