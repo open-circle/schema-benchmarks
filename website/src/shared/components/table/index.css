@@ -113,6 +113,9 @@ table.minimal {
       color 250ms,
       font-variation-settings 250ms;
   }
+  &.numeric .sort-cell__label {
+    justify-content: flex-end;
+  }
   &[aria-sort="descending"] .sort-cell__icon {
     transform: rotate(180deg);
   }
