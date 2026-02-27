@@ -3,6 +3,7 @@ import {
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
+import type { OneOf } from "@schema-benchmarks/utils";
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
@@ -126,4 +127,4 @@ export const stackResultSchema = v.variant("line", [
     output: v.string(),
   }),
 ]);
-export type StackResult = v.InferOutput<typeof stackResultSchema>;
+export type StackResult = OneOf<v.InferOutput<typeof stackResultSchema>>;

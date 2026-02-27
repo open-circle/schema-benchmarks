@@ -36,7 +36,7 @@ export const highlightCode = (
 
 const NEW_LINE_EXP = /\n(?!$)/g;
 
-export const highlightFn = createServerFn()
+export const highlightFn = createServerFn({ method: "POST" })
   .inputValidator(highlightInput)
   .handler(({ data, data: { language } }) => {
     if (!Prism.languages[language]) loadLanguages(language);
@@ -104,7 +104,7 @@ export const highlightAnsi = (
   );
 };
 
-export const highlightAnsiFn = createServerFn()
+export const highlightAnsiFn = createServerFn({ method: "POST" })
   .inputValidator(v.object({ input: v.string(), lineNumbers: v.optional(v.boolean()) }))
   .handler(({ data }) => highlightAnsi(parseAnsiSequences, data));
 

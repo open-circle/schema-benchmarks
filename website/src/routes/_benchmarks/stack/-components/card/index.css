@@ -3,7 +3,6 @@
   flex-direction: column;
   padding: 1rem;
   gap: 0.5rem;
-  min-width: 256px;
   border-radius: var(--shape-medium);
   border: 1px solid var(--divider);
   .stack-card__version {

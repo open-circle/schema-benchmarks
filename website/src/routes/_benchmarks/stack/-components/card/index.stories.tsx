@@ -12,7 +12,7 @@ const meta = preview
   .meta({
     title: "Features/Benchmark/Stack/Card",
     render: ({ resultIdx, barScale }) => (
-      <StackCard result={stackResults[resultIdx]!} barScale={barScale} />
+      <StackCard result={stackResults[resultIdx]!} lineScale={barScale} />
     ),
     args: {
       resultIdx: 0,
