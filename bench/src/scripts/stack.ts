@@ -36,7 +36,9 @@ async function getLoggedOutput(lib: string) {
       { env: { ...process.env, FORCE_COLOR: "1" } },
     ),
   );
-  return stderr.replace(cwdRegex, "");
+  const output = stderr.replace(cwdRegex, "");
+  const lineCount = output.split("\n").length;
+  return { output, lineCount };
 }
 
 const results: Array<StackResult> = [];
@@ -74,7 +76,7 @@ for (const [lib, getConfig] of Object.entries(libraries)) {
             libraryName,
             version,
             snippet,
-            output,
+            ...output,
           });
           continue;
         }
@@ -86,7 +88,7 @@ for (const [lib, getConfig] of Object.entries(libraries)) {
           version,
           snippet,
           frame,
-          output,
+          ...output,
         });
       } else {
         results.push({
@@ -94,7 +96,7 @@ for (const [lib, getConfig] of Object.entries(libraries)) {
           libraryName,
           version,
           snippet,
-          output,
+          ...output,
         });
       }
     }

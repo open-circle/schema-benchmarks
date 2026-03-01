@@ -13,12 +13,13 @@ import { highlightFrame } from "../../-constants";
 
 interface StackCardProps {
   result: StackResult;
-  lineScale: ReturnType<typeof Bar.getScale>;
+  frameScale: ReturnType<typeof Bar.getScale>;
+  lineCountScale: ReturnType<typeof Bar.getScale>;
 }
 
 const cls = bem("stack-card");
 
-export function StackCard({ result, lineScale }: StackCardProps) {
+export function StackCard({ result, frameScale, lineCountScale }: StackCardProps) {
   return (
     <div
       {...cls()}
@@ -42,18 +43,31 @@ export function StackCard({ result, lineScale }: StackCardProps) {
       </div>
       <table className="minimal">
         <tbody>
+          {typeof result.frame === "number" && (
+            <>
+              <tr>
+                <th>Frame #</th>
+                <td className="numeric">{result.frame}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>
+                  <Bar {...frameScale(result.frame)} />
+                </td>
+              </tr>
+            </>
+          )}
           <tr>
-            <th>Frame #</th>
-            <td className="numeric">{result.frame}</td>
+            <th>Line count</th>
+            <td className="numeric">{result.lineCount}</td>
+          </tr>
+          <tr>
+            <td colSpan={2}>
+              <Bar {...lineCountScale(result.lineCount)} />
+            </td>
           </tr>
         </tbody>
       </table>
       <CodeBlock>{result.snippet}</CodeBlock>
-      {typeof result.frame === "number" && (
-        <div {...cls({ element: "bar" })}>
-          <Bar {...lineScale(result.frame)} />
-        </div>
-      )}
       <details>
         <summary>
           <span>

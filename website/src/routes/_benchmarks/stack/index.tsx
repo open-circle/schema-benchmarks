@@ -84,6 +84,8 @@ function RouteComponent() {
                 );
               case "libraryName":
                 return collator.compare(a[sortBy], b[sortBy]);
+              case "lineCount":
+                return a[sortBy] - b[sortBy];
               default:
                 return frameSort(a, b);
             }

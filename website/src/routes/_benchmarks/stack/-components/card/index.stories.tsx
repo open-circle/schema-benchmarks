@@ -9,16 +9,26 @@ import preview from "#storybook/preview";
 import { StackCard } from "./index.js";
 
 const meta = preview
-  .type<{ args: { resultIdx: number; barScale: ReturnType<typeof Bar.getScale> } }>()
+  .type<{
+    args: {
+      resultIdx: number;
+      frameScale: ReturnType<typeof Bar.getScale>;
+      lineCountScale: ReturnType<typeof Bar.getScale>;
+    };
+  }>()
   .meta({
     title: "Features/Benchmark/Stack/Card",
-    render: ({ resultIdx, barScale }) => (
-      <StackCard result={stackResults[resultIdx]!} lineScale={barScale} />
+    render: ({ resultIdx, frameScale, lineCountScale }) => (
+      <StackCard result={stackResults[resultIdx]!} {...{ frameScale, lineCountScale }} />
     ),
     args: {
       resultIdx: 0,
-      barScale: Bar.getScale(
+      frameScale: Bar.getScale(
         filterMap(stackResults, (r) => (typeof r.frame === "number" ? r.frame : exclude)),
+        { lowerBetter: true },
+      ),
+      lineCountScale: Bar.getScale(
+        stackResults.map((r) => r.lineCount),
         { lowerBetter: true },
       ),
     } as const,

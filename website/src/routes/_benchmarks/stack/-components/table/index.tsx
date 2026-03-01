@@ -12,12 +12,13 @@ import { Output } from "./output";
 
 export interface StackTableProps {
   results: Array<StackResult>;
-  lineScale: ReturnType<typeof Bar.getScale>;
+  frameScale: ReturnType<typeof Bar.getScale>;
+  lineCountScale: ReturnType<typeof Bar.getScale>;
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
 
-export function StackTable({ results, lineScale, ...sortState }: StackTableProps) {
+export function StackTable({ results, frameScale, lineCountScale, ...sortState }: StackTableProps) {
   return (
     <div className="card" style={{ viewTransitionName: "stack-table" }}>
       <table className="stack-table">
@@ -42,6 +43,13 @@ export function StackTable({ results, lineScale, ...sortState }: StackTableProps
               className="numeric"
             >
               Frame #
+            </SortableHeaderLink>
+            <th className="bar-after"></th>
+            <SortableHeaderLink
+              {...SortableHeaderLink.getProps("lineCount", sortState, { to: "/stack" })}
+              className="numeric"
+            >
+              Line count
             </SortableHeaderLink>
             <th className="bar-after"></th>
           </tr>
@@ -71,7 +79,11 @@ export function StackTable({ results, lineScale, ...sortState }: StackTableProps
               </td>
               <td className="numeric">{result.frame}</td>
               <td className="bar-after">
-                {typeof result.frame === "number" && <Bar {...lineScale(result.frame)} />}
+                {typeof result.frame === "number" && <Bar {...frameScale(result.frame)} />}
+              </td>
+              <td className="numeric">{result.lineCount}</td>
+              <td className="bar-after">
+                <Bar {...lineCountScale(result.lineCount)} />
               </td>
             </tr>
           ))}
