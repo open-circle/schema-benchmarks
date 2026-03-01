@@ -28,6 +28,9 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  loader: () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
+  staticData: { crumb: undefined },
+
   head: () => {
     const { meta, links } = generateMetadata({
       charSet: "utf-8",
@@ -98,9 +101,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       ],
     };
   },
-  staticData: { crumb: undefined },
-
-  loader: () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
   shellComponent: RootDocument,
 });
 

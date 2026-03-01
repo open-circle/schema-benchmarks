@@ -23,6 +23,7 @@ const buttonComponents = [
 
 export default defineConfig({
   extends: [rootConfig],
+  jsPlugins: ["@tanstack/eslint-plugin-router", "@tanstack/eslint-plugin-query"],
   plugins: ["react", "jsx-a11y"],
   settings: {
     "jsx-a11y": {
@@ -47,4 +48,17 @@ export default defineConfig({
     node: true,
   },
   ignorePatterns: ["**/routeTree.gen.ts"],
+  rules: {
+    "@tanstack/router/create-route-property-order": "error",
+    "@tanstack/router/route-param-names": "error",
+
+    // would be nice to have on, but we get false positives for external abort signals
+    "@tanstack/query/exhaustive-deps": "off",
+    "@tanstack/query/no-rest-destructuring": "warn",
+    "@tanstack/query/stable-query-client": "error",
+    "@tanstack/query/no-unstable-deps": "error",
+    "@tanstack/query/infinite-query-property-order": "error",
+    "@tanstack/query/no-void-query-fn": "error",
+    "@tanstack/query/mutation-property-order": "error",
+  },
 });

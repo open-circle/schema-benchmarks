@@ -21,16 +21,8 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
-  head: () =>
-    generateMetadata({
-      title: "Initialization",
-      description: "Benchmark results for creating a schema.",
-      openGraph: {
-        url: "/initialization/",
-      },
-    }),
-  component: RouteComponent,
   validateSearch: searchSchema,
+  component: RouteComponent,
   loaderDeps: ({ search: { optimizeType } }) => ({ optimizeType }),
   async loader({ context: { queryClient }, deps: { optimizeType }, abortController }) {
     const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
@@ -46,6 +38,14 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
       ),
     );
   },
+  head: () =>
+    generateMetadata({
+      title: "Initialization",
+      description: "Benchmark results for creating a schema.",
+      openGraph: {
+        url: "/initialization/",
+      },
+    }),
   staticData: { crumb: "Initialization" },
 });
 

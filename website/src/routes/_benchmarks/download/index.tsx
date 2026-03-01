@@ -40,20 +40,6 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/_benchmarks/download/")({
-  head: () =>
-    generateMetadata({
-      title: "Download",
-      description: "Comparison of library download sizes.",
-      openGraph: {
-        url: "/download/",
-      },
-      links: [
-        {
-          rel: "stylesheet",
-          href: downloadStyles,
-        },
-      ],
-    }),
   validateSearch: searchSchema,
   loaderDeps: ({ search: { minifyType } }) => ({ minifyType }),
   async loader({ context: { queryClient }, deps: { minifyType }, abortController }) {
@@ -69,6 +55,20 @@ export const Route = createFileRoute("/_benchmarks/download/")({
     }
     await Promise.all(downloadPromises);
   },
+  head: () =>
+    generateMetadata({
+      title: "Download",
+      description: "Comparison of library download sizes.",
+      openGraph: {
+        url: "/download/",
+      },
+      links: [
+        {
+          rel: "stylesheet",
+          href: downloadStyles,
+        },
+      ],
+    }),
   staticData: { crumb: "Download" },
   component: RouteComponent,
 });

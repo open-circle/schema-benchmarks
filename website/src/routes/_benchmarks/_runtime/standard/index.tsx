@@ -33,22 +33,8 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/standard/")({
-  head: () =>
-    generateMetadata({
-      title: "Standard Schema",
-      description: "Benchmark results for parsing data using the Standard Schema interface.",
-      openGraph: {
-        url: "/standard/",
-      },
-      links: [
-        {
-          rel: "stylesheet",
-          href: admonitionCss,
-        },
-      ],
-    }),
-  component: RouteComponent,
   validateSearch: searchSchema,
+  component: RouteComponent,
   loaderDeps: ({ search: { optimizeType, dataType, errorType } }) => ({
     optimizeType,
     dataType,
@@ -73,6 +59,20 @@ export const Route = createFileRoute("/_benchmarks/_runtime/standard/")({
       ]),
     );
   },
+  head: () =>
+    generateMetadata({
+      title: "Standard Schema",
+      description: "Benchmark results for parsing data using the Standard Schema interface.",
+      openGraph: {
+        url: "/standard/",
+      },
+      links: [
+        {
+          rel: "stylesheet",
+          href: admonitionCss,
+        },
+      ],
+    }),
   staticData: { crumb: "Standard Schema" },
 });
 

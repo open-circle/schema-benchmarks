@@ -31,16 +31,8 @@ const searchSchema = v.object({
 });
 
 export const Route = createFileRoute("/_benchmarks/_runtime/string/")({
-  head: () =>
-    generateMetadata({
-      title: "String",
-      description: "Benchmark results for string validation.",
-      openGraph: {
-        url: "/string/",
-      },
-    }),
-  component: RouteComponent,
   validateSearch: searchSchema,
+  component: RouteComponent,
   loaderDeps: ({ search: { optimizeType, dataType, stringFormat } }) => ({
     optimizeType,
     dataType,
@@ -65,6 +57,14 @@ export const Route = createFileRoute("/_benchmarks/_runtime/string/")({
       ]),
     );
   },
+  head: () =>
+    generateMetadata({
+      title: "String",
+      description: "Benchmark results for string validation.",
+      openGraph: {
+        url: "/string/",
+      },
+    }),
   staticData: { crumb: "String" },
 });
 
