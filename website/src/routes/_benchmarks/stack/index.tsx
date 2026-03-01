@@ -25,20 +25,6 @@ const searchSchema = v.object({
 
 export const Route = createFileRoute("/_benchmarks/stack/")({
   component: RouteComponent,
-  head: () =>
-    generateMetadata({
-      title: "Stack",
-      description: "Comparison of errors thrown by libraries.",
-      openGraph: {
-        url: "/stack/",
-      },
-      links: [
-        {
-          rel: "stylesheet",
-          href: styles,
-        },
-      ],
-    }),
   validateSearch: searchSchema,
   loader: async ({ context: { queryClient }, abortController }) => {
     const results = await queryClient.ensureQueryData(getStackResults(abortController.signal));
@@ -53,6 +39,20 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
       ]);
     }
   },
+  head: () =>
+    generateMetadata({
+      title: "Stack",
+      description: "Comparison of errors thrown by libraries.",
+      openGraph: {
+        url: "/stack/",
+      },
+      links: [
+        {
+          rel: "stylesheet",
+          href: styles,
+        },
+      ],
+    }),
   staticData: { crumb: "Stack" },
 });
 
