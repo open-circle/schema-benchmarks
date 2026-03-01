@@ -342,3 +342,23 @@ export function pluralize(strings: TemplateStringsArray, ...values: Array<unknow
 export function promiseTry<T>(fn: () => MaybePromise<T>): Promise<T> {
   return new Promise((resolve) => resolve(fn()));
 }
+
+export const exclude = Symbol("exclude");
+
+/**
+ * Filter and map an array.
+ * @param array The array to filter and map.
+ * @param mapper The function to call for each element. Return `exclude` to exclude the element.
+ * @returns A new array with the mapped values.
+ */
+export function filterMap<T, U>(
+  array: ReadonlyArray<T>,
+  mapper: (value: T) => U | typeof exclude,
+): Array<U> {
+  const filtered: Array<U> = [];
+  for (const value of array) {
+    const mapped = mapper(value);
+    if (mapped !== exclude) filtered.push(mapped);
+  }
+  return filtered;
+}

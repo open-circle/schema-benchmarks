@@ -28,8 +28,8 @@ export function useSortedResults<T extends BenchResult>(
             switch (sortBy) {
               case "downloads":
                 return (
-                  downloadsByPkgName[getPackageName(a.libraryName)] -
-                  downloadsByPkgName[getPackageName(b.libraryName)]
+                  (downloadsByPkgName?.[getPackageName(a.libraryName)] ?? 0) -
+                  (downloadsByPkgName?.[getPackageName(b.libraryName)] ?? 0)
                 );
               case "libraryName":
                 return collator.compare(getLibraryLabel(a), getLibraryLabel(b));

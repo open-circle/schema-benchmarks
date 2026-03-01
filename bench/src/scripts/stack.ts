@@ -42,14 +42,13 @@ async function getLoggedOutput(lib: string) {
 const results: Array<StackResult> = [];
 
 function getScriptLineNumber(stack?: string) {
-  if (!stack) return "no stack";
+  if (!stack) return;
   const lines = stack.split("\n");
   let i = 0;
   while (i < lines.length) {
-    if (lines[i]?.startsWith(search)) return i + 1;
+    if (lines[i]?.startsWith(search)) return i === 0 ? undefined : i + 1;
     i++;
   }
-  return "not found";
 }
 
 for (const [lib, getConfig] of Object.entries(libraries)) {
@@ -65,52 +64,37 @@ for (const [lib, getConfig] of Object.entries(libraries)) {
       await stack.throw(context, errorData);
       assertNotReached();
     } catch (e) {
+      const output = await getLoggedOutput(lib);
       if (Error.isError(e)) {
-        if (e.name === "ShouldHaveThrownError") {
-          results.push({
-            libraryName,
-            version,
-            snippet,
-            line: "no throw",
-          });
-          continue;
-        }
+        if (e.name === "ShouldHaveThrownError") throw e;
         const hasFrames = e.stack?.includes("    at ");
         if (!hasFrames) {
           results.push({
+            type: "no stack",
             libraryName,
             version,
             snippet,
-            line: "no stack",
-            output: await getLoggedOutput(lib),
+            output,
           });
           continue;
         }
         const frames = e.stack?.slice(e.stack.indexOf("    at "));
-        const line = getScriptLineNumber(frames);
-        if (frames && typeof line === "number" && line !== 1) {
-          results.push({
-            libraryName,
-            version,
-            snippet,
-            line,
-            output: await getLoggedOutput(lib),
-          });
-        } else {
-          results.push({
-            libraryName,
-            version,
-            snippet,
-            line: "no external stack",
-            output: await getLoggedOutput(lib),
-          });
-        }
-      } else {
+        const frame = getScriptLineNumber(frames);
         results.push({
+          type: "success",
           libraryName,
           version,
           snippet,
-          line: "not an error",
+          frame,
+          output,
+        });
+      } else {
+        results.push({
+          type: "not an error",
+          libraryName,
+          version,
+          snippet,
+          output,
         });
       }
     }
@@ -122,11 +106,9 @@ await fs.writeFile(
   path.join(process.cwd(), "stack.json"),
   JSON.stringify(
     results.toSorted((a, b) => {
-      if (typeof a.line === "number" && typeof b.line === "number") {
-        return a.line - b.line;
-      }
-      if (typeof a.line === "number") return -1;
-      if (typeof b.line === "number") return 1;
+      if (typeof a.frame === "number" && typeof b.frame === "number") return a.frame - b.frame;
+      if (typeof a.frame === "number") return -1;
+      if (typeof b.frame === "number") return 1;
       return 0;
     }),
   ),

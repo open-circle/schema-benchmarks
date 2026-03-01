@@ -20,7 +20,7 @@ import Content from "./content.mdx";
 import styles from "./index.css?url";
 
 const searchSchema = v.object({
-  ...sortParams(v.optional(v.picklist(sortableKeys), "line")),
+  ...sortParams(v.optional(v.picklist(sortableKeys), "frame")),
 });
 
 export const Route = createFileRoute("/_benchmarks/stack/")({
@@ -56,12 +56,10 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
   staticData: { crumb: "Stack" },
 });
 
-function lineSort(a: StackResult, b: StackResult) {
-  if (typeof a.line === "number" && typeof b.line === "number") {
-    return a.line - b.line;
-  }
-  if (typeof a.line === "number") return -1;
-  if (typeof b.line === "number") return 1;
+function frameSort(a: StackResult, b: StackResult) {
+  if (typeof a.frame === "number" && typeof b.frame === "number") return a.frame - b.frame;
+  if (typeof a.frame === "number") return -1;
+  if (typeof b.frame === "number") return 1;
   return 0;
 }
 
@@ -83,12 +81,12 @@ function RouteComponent() {
               case "libraryName":
                 return collator.compare(a[sortBy], b[sortBy]);
               default:
-                return lineSort(a, b);
+                return frameSort(a, b);
             }
           },
           {
             sortDir,
-            fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName), lineSort],
+            fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName), frameSort],
           },
         ),
       ),

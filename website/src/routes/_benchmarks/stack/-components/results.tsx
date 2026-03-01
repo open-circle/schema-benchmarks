@@ -1,4 +1,5 @@
 import type { StackResult } from "@schema-benchmarks/bench";
+import { exclude, filterMap } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
 import { Bar } from "#/shared/components/table/bar";
@@ -20,7 +21,7 @@ export function StackResults({ results, ...props }: StackResultsProps) {
   const lineScale = useMemo(
     () =>
       Bar.getScale(
-        results.filter((r) => typeof r.line === "number").map((r) => r.line),
+        filterMap(results, (r) => (typeof r.frame === "number" ? r.frame : exclude)),
         { lowerBetter: true },
       ),
     [results],
