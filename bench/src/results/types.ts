@@ -111,5 +111,6 @@ export const stackResultSchema = v.object({
   snippet: v.string(),
   frame: v.optional(v.number()),
   output: v.string(),
+  lineCount: v.number(),
 });
 export type StackResult = v.InferOutput<typeof stackResultSchema>;

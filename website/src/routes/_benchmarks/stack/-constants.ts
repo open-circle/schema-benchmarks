@@ -1,4 +1,4 @@
-export const sortableKeys = ["libraryName", "downloads", "frame"] as const;
+export const sortableKeys = ["libraryName", "downloads", "frame", "lineCount"] as const;
 export type SortableKey = (typeof sortableKeys)[number];
 
 export const highlightFrame = (output: string) =>

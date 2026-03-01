@@ -18,7 +18,7 @@ export interface StackResultsProps {
 
 export function StackResults({ results, ...props }: StackResultsProps) {
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
-  const lineScale = useMemo(
+  const frameScale = useMemo(
     () =>
       Bar.getScale(
         filterMap(results, (r) => (typeof r.frame === "number" ? r.frame : exclude)),
@@ -26,14 +26,22 @@ export function StackResults({ results, ...props }: StackResultsProps) {
       ),
     [results],
   );
+  const lineCountScale = useMemo(
+    () =>
+      Bar.getScale(
+        results.map((r) => r.lineCount),
+        { lowerBetter: true },
+      ),
+    [results],
+  );
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <StackTable {...{ results, lineScale }} {...props} />
+        <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
       ) : (
         <div className="stack-cards">
           {results.map((result) => (
-            <StackCard key={result.libraryName} {...{ result, lineScale }} />
+            <StackCard key={result.libraryName} {...{ result, frameScale, lineCountScale }} />
           ))}
         </div>
       )}
