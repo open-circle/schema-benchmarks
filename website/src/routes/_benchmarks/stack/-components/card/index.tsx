@@ -38,23 +38,29 @@ export function StackCard({ result, lineScale }: StackCardProps) {
           </div>
         </ErrorBoundary>
       </div>
+      <table className="minimal">
+        <tbody>
+          <tr>
+            <th>Frame #</th>
+            <td className="numeric">{result.frame}</td>
+          </tr>
+        </tbody>
+      </table>
       <CodeBlock>{result.snippet}</CodeBlock>
-      {typeof result.line === "number" && (
+      {typeof result.frame === "number" && (
         <div {...cls({ element: "bar" })}>
-          <Bar {...lineScale(result.line)} />
+          <Bar {...lineScale(result.frame)} />
         </div>
       )}
-      {result.output && (
-        <details>
-          <summary>
-            <span>
-              <MdSymbol>terminal</MdSymbol>
-              Output
-            </span>
-          </summary>
-          <AnsiBlock>{result.output}</AnsiBlock>
-        </details>
-      )}
+      <details>
+        <summary>
+          <span>
+            <MdSymbol>terminal</MdSymbol>
+            Output
+          </span>
+        </summary>
+        <AnsiBlock>{result.output}</AnsiBlock>
+      </details>
     </div>
   );
 }

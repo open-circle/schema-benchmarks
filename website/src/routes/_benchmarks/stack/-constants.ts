@@ -1,2 +1,2 @@
-export const sortableKeys = ["libraryName", "downloads", "line"] as const;
+export const sortableKeys = ["libraryName", "downloads", "frame"] as const;
 export type SortableKey = (typeof sortableKeys)[number];

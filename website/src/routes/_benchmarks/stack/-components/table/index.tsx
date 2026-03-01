@@ -38,10 +38,10 @@ export function StackTable({ results, lineScale, ...sortState }: StackTableProps
               Downloads (/wk)
             </SortableHeaderLink>
             <SortableHeaderLink
-              {...SortableHeaderLink.getProps("line", sortState, { to: "/stack" })}
+              {...SortableHeaderLink.getProps("frame", sortState, { to: "/stack" })}
               className="numeric"
             >
-              Line
+              Frame #
             </SortableHeaderLink>
             <th className="bar-after"></th>
           </tr>
@@ -69,9 +69,9 @@ export function StackTable({ results, lineScale, ...sortState }: StackTableProps
               <td className="numeric">
                 <DownloadCount libraryName={result.libraryName} />
               </td>
-              <td className="numeric">{result.line}</td>
+              <td className="numeric">{result.frame}</td>
               <td className="bar-after">
-                {typeof result.line === "number" && <Bar {...lineScale(result.line)} />}
+                {typeof result.frame === "number" && <Bar {...lineScale(result.frame)} />}
               </td>
             </tr>
           ))}
