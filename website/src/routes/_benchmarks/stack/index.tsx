@@ -14,8 +14,8 @@ import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";
 import { StackResults } from "./-components/results";
 import { sortableKeys } from "./-constants";
+import Content, { exampleStack } from "./-content.mdx";
 import { getStackResults } from "./-query";
-import Content from "./content.mdx";
 
 import styles from "./index.css?url";
 
@@ -28,16 +28,20 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
   validateSearch: searchSchema,
   loader: async ({ context: { queryClient }, abortController }) => {
     const results = await queryClient.ensureQueryData(getStackResults(abortController.signal));
-    for (const { output, snippet } of results) {
-      await Promise.all([
+    await Promise.all([
+      AnsiBlock.prefetch(
+        { input: exampleStack, lineNumbers: true },
+        { queryClient, signal: abortController.signal },
+      ),
+      ...results.flatMap(({ output, snippet }) => [
         output &&
           AnsiBlock.prefetch(
             { input: output, lineNumbers: true },
             { queryClient, signal: abortController.signal },
           ),
         CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
-      ]);
-    }
+      ]),
+    ]);
   },
   head: () =>
     generateMetadata({

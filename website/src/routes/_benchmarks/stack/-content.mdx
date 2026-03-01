@@ -1,0 +1,24 @@
+import { AnsiBlock } from "#/shared/components/code/ansi";
+import stackResults from "@schema-benchmarks/bench/stack.json";
+
+Comparison of the errors thrown by libraries, including stack trace length.
+
+```ts
+import { personSchema } from "./schemas";
+import * as v from "valibot";
+
+try {
+  v.parse(personSchema, data);
+} catch (e) {
+  console.error(e);
+}
+```
+
+Where `error.stack` is available, we measure how many frames it takes to reach the line that threw the error.
+
+export const exampleStack = `ValiError: Invalid length: Expected >=1 but received 0
+    at Module.parse (file:///node_modules/\u001b[4m.pnpm\u001b[24m/valibot@1.2.0_typescript@6.0.0-beta/node_modules/\u001b[4mvalibot\u001b[24m/dist/index.mjs:6748:28)
+\x1b[7m    at Object.throw (file:///schemas/dist/benchmarks-D-_Y96Ph.js:93:6)\x1b[0m
+    at \u001b[90mfile:///bench/\u001b[39msrc/scripts/stack/log.ts:24:28`;
+
+<AnsiBlock lineNumbers>{exampleStack}</AnsiBlock>
