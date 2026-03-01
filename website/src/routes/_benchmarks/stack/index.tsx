@@ -13,7 +13,7 @@ import { applySort, sortParams } from "#/shared/lib/sort";
 import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";
 import { StackResults } from "./-components/results";
-import { sortableKeys } from "./-constants";
+import { highlightFrame, sortableKeys } from "./-constants";
 import Content, { exampleStack } from "./-content.mdx";
 import { getStackResults } from "./-query";
 
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
       ...results.flatMap(({ output, snippet }) => [
         output &&
           AnsiBlock.prefetch(
-            { input: output, lineNumbers: true },
+            { input: highlightFrame(output), lineNumbers: true },
             { queryClient, signal: abortController.signal },
           ),
         CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),

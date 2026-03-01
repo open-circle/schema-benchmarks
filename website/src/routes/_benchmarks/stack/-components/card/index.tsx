@@ -9,6 +9,8 @@ import { AnsiBlock } from "#/shared/components/code/ansi";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 
+import { highlightFrame } from "../../-constants";
+
 interface StackCardProps {
   result: StackResult;
   lineScale: ReturnType<typeof Bar.getScale>;
@@ -59,7 +61,7 @@ export function StackCard({ result, lineScale }: StackCardProps) {
             Output
           </span>
         </summary>
-        <AnsiBlock>{result.output}</AnsiBlock>
+        <AnsiBlock>{highlightFrame(result.output)}</AnsiBlock>
       </details>
     </div>
   );

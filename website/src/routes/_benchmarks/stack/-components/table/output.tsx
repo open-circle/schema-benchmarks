@@ -5,6 +5,8 @@ import { AnsiBlock } from "#/shared/components/code/ansi";
 import { Spinner } from "#/shared/components/spinner";
 import { MdSymbol } from "#/shared/components/symbol";
 
+import { highlightFrame } from "../../-constants";
+
 export interface OutputProps {
   output: string;
 }
@@ -17,7 +19,7 @@ export function Output({ output }: OutputProps) {
         supporting: (
           <Suspense fallback={<Spinner />}>
             <div className="output">
-              <AnsiBlock>{output}</AnsiBlock>
+              <AnsiBlock>{highlightFrame(output)}</AnsiBlock>
             </div>
           </Suspense>
         ),
