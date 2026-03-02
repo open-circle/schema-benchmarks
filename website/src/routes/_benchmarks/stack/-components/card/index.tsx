@@ -75,7 +75,7 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
             Output
           </span>
         </summary>
-        <AnsiBlock>{highlightFrame(result.output)}</AnsiBlock>
+        <AnsiBlock lineNumbers>{highlightFrame(result.output)}</AnsiBlock>
       </details>
     </div>
   );

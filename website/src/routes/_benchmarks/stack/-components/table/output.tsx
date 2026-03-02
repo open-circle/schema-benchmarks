@@ -19,7 +19,7 @@ export function Output({ output }: OutputProps) {
         supporting: (
           <Suspense fallback={<Spinner />}>
             <div className="output">
-              <AnsiBlock>{highlightFrame(output)}</AnsiBlock>
+              <AnsiBlock lineNumbers>{highlightFrame(output)}</AnsiBlock>
             </div>
           </Suspense>
         ),
