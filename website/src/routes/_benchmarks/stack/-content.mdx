@@ -14,7 +14,7 @@ try {
 }
 ```
 
-Where `error.stack` is available, we measure how many frames it takes to reach the line that threw the error.
+Where `error.stack` is available, we measure how many frames it takes to reach the line of user code (as opposed to library code).
 
 export const exampleStack = `ValiError: Invalid length: Expected >=1 but received 0
     at Module.parse (file:///node_modules/\u001b[4m.pnpm\u001b[24m/valibot@1.2.0_typescript@6.0.0-beta/node_modules/\u001b[4mvalibot\u001b[24m/dist/index.mjs:6748:28)
