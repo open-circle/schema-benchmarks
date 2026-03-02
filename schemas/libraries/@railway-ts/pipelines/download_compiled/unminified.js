@@ -1,4 +1,4 @@
-var RESULT_BRAND = Symbol("RESULT_BRAND");
+var RESULT_BRAND = /* @__PURE__ */ Symbol("RESULT_BRAND");
 function ok(value) {
 	return {
 		ok: true,
