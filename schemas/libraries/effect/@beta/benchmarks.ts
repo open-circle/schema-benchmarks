@@ -2,6 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
+import * as SchemaGetter from "effect___beta/SchemaGetter";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
@@ -10,6 +11,12 @@ import { getEffectSchema } from ".";
 const schema = getEffectSchema();
 const is = Schema.is(schema);
 const decode = Schema.decodeUnknownOption(schema);
+const DateFromString = Schema.Date.pipe(
+  Schema.encodeTo(Schema.String, {
+    encode: SchemaGetter.String(),
+    decode: SchemaGetter.Date(),
+  }),
+);
 
 export default defineBenchmarks({
   library: {
@@ -98,5 +105,25 @@ export default defineBenchmarks({
     snippet: ts`
       Schema.decodeUnknownSync(schema)(data, { errors: "first" })
     `,
+  },
+  codec: {
+    encode: {
+      run: (data) => {
+        return Schema.encodeSync(DateFromString)(data);
+      },
+      snippet: ts`
+        // const DateFromString = Schema.Date.pipe(...);
+        Schema.encodeSync(DateFromString)(data)
+      `,
+    },
+    decode: {
+      run: (data) => {
+        return Schema.decodeSync(DateFromString)(data);
+      },
+      snippet: ts`
+        // const DateFromString = Schema.Date.pipe(...);
+        Schema.decodeSync(DateFromString)(data)
+      `,
+    },
   },
 });

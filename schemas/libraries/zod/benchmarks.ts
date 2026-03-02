@@ -19,6 +19,10 @@ const createStringBenchmark = (
 });
 
 const schema = getZodSchema();
+const codec = z.codec(z.iso.datetime(), z.date(), {
+  encode: (date) => date.toISOString(),
+  decode: (str) => new Date(str),
+});
 
 export default defineBenchmarks({
   library: {
@@ -74,5 +78,19 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`schema.parse(data)`,
+  },
+  codec: {
+    encode: {
+      run: (data) => {
+        return codec.encode(data);
+      },
+      snippet: ts`z.codec(...).encode(data)`,
+    },
+    decode: {
+      run: (data) => {
+        return codec.decode(data);
+      },
+      snippet: ts`z.codec(...).decode(data)`,
+    },
   },
 });

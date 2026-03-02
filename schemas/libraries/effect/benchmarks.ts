@@ -110,4 +110,18 @@ export default defineBenchmarks({
       Effect.runSync(decodeAll(data));
     `,
   },
+  codec: {
+    encode: {
+      run: (data) => {
+        return Schema.encodeSync(Schema.Date)(data);
+      },
+      snippet: ts`Schema.encodeSync(Schema.Date)(data)`,
+    },
+    decode: {
+      run: (data) => {
+        return Schema.decodeSync(Schema.Date)(data);
+      },
+      snippet: ts`Schema.decodeSync(Schema.Date)(data)`,
+    },
+  },
 });

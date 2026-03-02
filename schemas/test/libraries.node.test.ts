@@ -89,4 +89,18 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       await expect(promise).rejects.not.toThrowError(ShouldHaveThrownError);
     });
   });
+  describe.runIf(config.codec)("codec", () => {
+    describe.each(ensureArray(config.codec ?? []))("config %o", (config) => {
+      it("should encode and decode", async () => {
+        const { encode, decode } = config;
+        const date = new Date(0);
+        const encoded = await encode.run(date);
+        // we don't test for format here - usually it'll be ISO, but no need to require it
+        expect(encoded).toBeTypeOf("string");
+        const decoded = await decode.run(encoded);
+        // check the date is the same
+        expect(decoded).toEqual(date);
+      });
+    });
+  });
 });
