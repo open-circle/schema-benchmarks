@@ -21,6 +21,9 @@ const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig => (
 const schema = getTypeboxSchema();
 const compiled = Compile(schema);
 const compiledSchema = Schema.Compile(schema);
+const DateFromString = Type.Codec(Type.String({ format: "date-time" }))
+  .Decode((a) => new Date(a))
+  .Encode((a) => a.toISOString());
 
 export default defineBenchmarks({
   library: {
@@ -168,5 +171,25 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`Value.Parse(schema, data)`,
+  },
+  codec: {
+    encode: {
+      run: (data) => {
+        return Value.Encode(DateFromString, data);
+      },
+      snippet: ts`
+        // const DateFromString = Type.Codec(...).Decode(...).Encode(...);
+        Value.Encode(DateFromString, data)
+      `,
+    },
+    decode: {
+      run: (data) => {
+        return Value.Decode(DateFromString, data);
+      },
+      snippet: ts`
+        // const DateFromString = Type.Codec(...).Decode(...).Encode(...);
+        Value.Decode(DateFromString, data)
+      `,
+    },
   },
 });
