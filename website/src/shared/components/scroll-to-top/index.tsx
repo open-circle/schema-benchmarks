@@ -2,7 +2,6 @@ import { isServer } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useLayoutEffect, useState } from "react";
 import bem from "react-bem-helper";
-import { useWebHaptics } from "web-haptics/react";
 
 import { FloatingActionButton } from "../button/floating";
 import { MdSymbol } from "../symbol";
@@ -32,14 +31,12 @@ function prefersReducedMotion() {
 
 export function ScrollToTop() {
   const [scrollContainer, scrolled] = useScrolled();
-  const haptics = useWebHaptics();
   return (
     <FloatingActionButton
       {...cls({
         modifiers: { scrolled },
       })}
       onClick={() => {
-        haptics.trigger();
         scrollContainer?.scrollTo({
           top: 0,
           behavior: prefersReducedMotion() ? "auto" : "smooth",
