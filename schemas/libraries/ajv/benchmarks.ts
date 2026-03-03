@@ -1,5 +1,4 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import type Ajv from "ajv";
 import { ValidationError } from "ajv";
 import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
@@ -10,8 +9,13 @@ import { defineBenchmarks } from "#src";
 
 import { getAjv, getAjvSchema } from ".";
 
-const createStringBenchmark = (format: FormatName): StringBenchmarkConfig<{ ajv: Ajv }> => ({
-  create({ ajv }) {
+const ajv = getAjv();
+
+const schema = getAjvSchema();
+const validate = ajv.compile(schema);
+
+const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
+  create() {
     addFormats(ajv, { formats: [format] });
     return ajv.compile({ type: "string", format } as const);
   },
@@ -25,28 +29,22 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("ajv"),
   },
-  createContext: () => {
-    const ajv = getAjv();
-    const schema = getAjvSchema();
-    const validate = ajv.compile(schema);
-    return { ajv, schema, validate };
-  },
   initialization: {
-    run({ ajv }) {
+    run() {
       return ajv.compile(getAjvSchema());
     },
     snippet: ts`ajv.compile({...})`,
   },
   validation: [
     {
-      run(data, { ajv, schema }) {
+      run(data) {
         return ajv.validate(schema, data);
       },
       note: "validate",
       snippet: ts`ajv.validate(schema, data)`,
     },
     {
-      run(data, { validate }) {
+      run(data) {
         return validate(data);
       },
       note: "compile",
@@ -68,7 +66,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark("ipv6"),
   },
   stack: {
-    throw: ({ validate }, data) => {
+    throw: (data) => {
       validate(data);
       throw new ValidationError(validate.errors || []);
     },

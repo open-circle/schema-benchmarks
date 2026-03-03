@@ -9,6 +9,10 @@ import { assertNotReached, defineBenchmarks } from "#src";
 
 import type { TypiaSchema } from ".";
 
+const validate = typia.createValidate<TypiaSchema>();
+const is = typia.createIs<TypiaSchema>();
+const assert = typia.createAssert<TypiaSchema>();
+
 export default defineBenchmarks({
   library: {
     name: "typia",
@@ -16,11 +20,6 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("typia"),
   },
-  createContext: () => ({
-    validate: typia.createValidate<TypiaSchema>(),
-    is: typia.createIs<TypiaSchema>(),
-    assert: typia.createAssert<TypiaSchema>(),
-  }),
   initialization: [
     {
       run() {
@@ -46,7 +45,7 @@ export default defineBenchmarks({
       snippet: ts`typia.is<TypiaSchema>(data)`,
     },
     {
-      run(data, { is }) {
+      run(data) {
         return is(data);
       },
       note: "createIs",
@@ -67,7 +66,7 @@ export default defineBenchmarks({
         snippet: ts`typia.validate<TypiaSchema>(data)`,
       },
       {
-        run(data, { validate }) {
+        run(data) {
           return validate(data);
         },
         validateResult: (result) => result.success,
@@ -81,7 +80,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ validate }) => validate,
+      getSchema: () => validate,
       snippet: ts`
         // const validate = typia.createValidate<TypiaSchema>();
         upfetch(url, { schema: validate })
@@ -145,7 +144,7 @@ export default defineBenchmarks({
     },
   },
   stack: {
-    throw: ({ assert }, data) => {
+    throw: (data) => {
       assert(data);
       assertNotReached();
     },

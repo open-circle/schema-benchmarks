@@ -12,12 +12,14 @@ type Format =
   | `ip.v${4 | 6}`
   | "date.iso";
 
-const createStringBenchmark = (format: Format): StringBenchmarkConfig<unknown> => ({
+const createStringBenchmark = (format: Format): StringBenchmarkConfig => ({
   create() {
     return type(`string.${format}`).allows;
   },
   snippet: ts`type("string.${format}")`,
 });
+
+const schema = getArkTypeSchema();
 
 export default defineBenchmarks({
   library: {
@@ -26,7 +28,6 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("arktype"),
   },
-  createContext: () => ({ schema: getArkTypeSchema() }),
   initialization: {
     run() {
       return getArkTypeSchema();
@@ -34,14 +35,14 @@ export default defineBenchmarks({
     snippet: ts`type(...)`,
   },
   validation: {
-    run(data, { schema }) {
+    run(data) {
       return schema.allows(data);
     },
     snippet: ts`schema.allows(data)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         return schema(data);
       },
       validateResult: (result) => !(result instanceof type.errors),
@@ -50,7 +51,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -62,7 +63,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark("ip.v6"),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       schema.assert(data);
       assertNotReached();
     },

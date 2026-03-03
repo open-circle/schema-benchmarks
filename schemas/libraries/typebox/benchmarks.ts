@@ -10,7 +10,7 @@ import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getTypeboxSchema } from ".";
 
-const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig<unknown> => ({
+const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig => ({
   create() {
     const schema = Type.String({ format });
     return (testString) => Schema.Check(schema, testString);
@@ -18,18 +18,16 @@ const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig<unkn
   snippet: ts`Type.String({ format: "${format}" })`,
 });
 
+const schema = getTypeboxSchema();
+const compiled = Compile(schema);
+const compiledSchema = Schema.Compile(schema);
+
 export default defineBenchmarks({
   library: {
     name: "typebox",
     git: "sinclairzx81/typebox",
     optimizeType: "jit",
     version: await getVersion("typebox"),
-  },
-  createContext: () => {
-    const schema = getTypeboxSchema();
-    const compiled = Compile(schema);
-    const compiledSchema = Schema.Compile(schema);
-    return { schema, compiled, compiledSchema };
   },
   initialization: [
     {
@@ -55,13 +53,13 @@ export default defineBenchmarks({
   ],
   validation: [
     {
-      run(data, { schema }) {
+      run(data) {
         return Value.Check(schema, data);
       },
       snippet: ts`Value.Check(schema, data)`,
     },
     {
-      run(data, { compiled }) {
+      run(data) {
         return compiled.Check(data);
       },
       snippet: ts`
@@ -71,14 +69,14 @@ export default defineBenchmarks({
       note: "compile",
     },
     {
-      run(data, { schema }) {
+      run(data) {
         return Schema.Check(schema, data);
       },
       snippet: ts`Schema.Check(schema, data)`,
       note: "schema",
     },
     {
-      run(data, { compiledSchema }) {
+      run(data) {
         return compiledSchema.Check(data);
       },
       snippet: ts`
@@ -91,7 +89,7 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data, { schema }) {
+        run(data) {
           try {
             Value.Parse(schema, data);
             return true;
@@ -104,7 +102,7 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data, { compiled }) {
+        run(data) {
           try {
             compiled.Parse(data);
             return true;
@@ -121,7 +119,7 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data, { schema }) {
+        run(data) {
           try {
             Schema.Parse(schema, data);
             return true;
@@ -135,7 +133,7 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data, { compiledSchema }) {
+        run(data) {
           try {
             compiledSchema.Parse(data);
             return true;
@@ -165,7 +163,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark("ipv6"),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       Value.Parse(schema, data);
       assertNotReached();
     },

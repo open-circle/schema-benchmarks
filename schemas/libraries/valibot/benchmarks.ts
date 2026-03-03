@@ -10,13 +10,15 @@ import { getValibotSchema } from ".";
 const createStringBenchmark = (
   actionFactory: () => v.GenericValidation<string>,
   snippet: string,
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = v.pipe(v.string(), actionFactory());
     return (testString) => v.is(schema, testString);
   },
   snippet: ts`v.pipe(v.string(), ${snippet})`,
 });
+
+const schema = getValibotSchema();
 
 export default defineBenchmarks({
   library: {
@@ -25,7 +27,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("valibot"),
   },
-  createContext: () => ({ schema: getValibotSchema() }),
   initialization: {
     run() {
       return getValibotSchema();
@@ -33,14 +34,14 @@ export default defineBenchmarks({
     snippet: ts`v.object(...)`,
   },
   validation: {
-    run(data, { schema }) {
+    run(data) {
       return v.is(schema, data);
     },
     snippet: ts`v.is(schema, data)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         return v.safeParse(schema, data);
       },
       validateResult: (result) => result.success,
@@ -48,14 +49,14 @@ export default defineBenchmarks({
     },
     abortEarly: [
       {
-        run(data, { schema }) {
+        run(data) {
           return v.safeParse(schema, data, { abortEarly: true });
         },
         validateResult: (result) => result.success,
         snippet: ts`v.safeParse(schema, data, { abortEarly: true })`,
       },
       {
-        run(data, { schema }) {
+        run(data) {
           return v.safeParse(schema, data, { abortPipeEarly: true });
         },
         validateResult: (result) => result.success,
@@ -66,7 +67,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -82,7 +83,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark(v.ipv6, ts`v.ipv6()`),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       v.parse(schema, data);
       assertNotReached();
     },

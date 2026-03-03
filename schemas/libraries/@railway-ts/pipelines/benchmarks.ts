@@ -24,13 +24,15 @@ import { getRailwayTsSchema } from ".";
 const createStringBenchmark = (
   factory: () => Validator<string>,
   snippet: string,
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = chain(string(), factory());
     return (testString) => is(testString, schema);
   },
   snippet: ts`chain(string(), ${snippet})`,
 });
+
+const schema = getRailwayTsSchema();
 
 export default defineBenchmarks({
   library: {
@@ -39,7 +41,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("@railway-ts/pipelines"),
   },
-  createContext: () => ({ schema: getRailwayTsSchema() }),
   initialization: {
     run() {
       return getRailwayTsSchema();
@@ -47,21 +48,21 @@ export default defineBenchmarks({
     snippet: ts`object(...)`,
   },
   validation: {
-    run(data, { schema }) {
+    run(data) {
       return is(data, schema);
     },
     snippet: ts`is(data, schema)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         return validate(data, schema);
       },
       validateResult: (result) => result.ok,
       snippet: ts`validate(data, schema)`,
     },
     abortEarly: {
-      run(data, { schema }) {
+      run(data) {
         return validate(data, schema, { abortEarly: true });
       },
       validateResult: (result) => result.ok,
@@ -70,7 +71,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => toStandardSchema(schema),
+      getSchema: () => toStandardSchema(schema),
     },
   },
   string: {

@@ -6,6 +6,8 @@ import { defineBenchmarks } from "#src";
 
 import { getIotsSchema } from ".";
 
+const schema = getIotsSchema();
+
 export default defineBenchmarks({
   library: {
     name: "io-ts",
@@ -13,9 +15,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("io-ts"),
   },
-  createContext: () => ({
-    schema: getIotsSchema(),
-  }),
   initialization: {
     run() {
       return getIotsSchema();
@@ -23,14 +22,14 @@ export default defineBenchmarks({
     snippet: ts`t.type(...)`,
   },
   validation: {
-    run(data, { schema }) {
+    run(data) {
       return schema.is(data);
     },
     snippet: ts`schema.is(data)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         return schema.decode(data);
       },
       validateResult: isRight,

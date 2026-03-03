@@ -11,13 +11,15 @@ type FormatMethod = {
   [M in keyof yup.StringSchema]-?: yup.StringSchema[M] extends () => yup.StringSchema ? M : never;
 }[keyof yup.StringSchema];
 
-const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig<unknown> => ({
+const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig => ({
   create() {
     const schema = yup.string()[method]();
     return (testString) => schema.isValidSync(testString);
   },
   snippet: ts`yup.string().${method}()`,
 });
+
+const schema = getYupSchema();
 
 export default defineBenchmarks({
   library: {
@@ -26,7 +28,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("yup"),
   },
-  createContext: () => ({ schema: getYupSchema() }),
   initialization: {
     run() {
       return getYupSchema();
@@ -34,14 +35,14 @@ export default defineBenchmarks({
     snippet: ts`object(...)`,
   },
   validation: {
-    run(data, { schema }) {
+    run(data) {
       return schema.isValidSync(data);
     },
     snippet: ts`schema.isValidSync(data)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         try {
           schema.validateSync(data, { abortEarly: false });
           return true;
@@ -54,7 +55,7 @@ export default defineBenchmarks({
       throws: true,
     },
     abortEarly: {
-      run(data, { schema }) {
+      run(data) {
         try {
           schema.validateSync(data, { abortEarly: true });
           return true;
@@ -68,7 +69,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -78,7 +79,7 @@ export default defineBenchmarks({
     uuid: createStringBenchmark("uuid"),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       schema.validateSync(data);
       assertNotReached();
     },

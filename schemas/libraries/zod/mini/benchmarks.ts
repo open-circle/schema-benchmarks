@@ -10,13 +10,15 @@ import { getZodMiniSchema } from ".";
 const createStringBenchmark = (
   factory: () => z.ZodMiniType<string>,
   snippet: string,
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = factory();
     return (testString) => schema.safeParse(testString).success;
   },
   snippet,
 });
+
+const schema = getZodMiniSchema();
 
 export default defineBenchmarks({
   library: {
@@ -25,9 +27,6 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("zod"),
   },
-  createContext: () => ({
-    schema: getZodMiniSchema(),
-  }),
   initialization: [
     {
       run() {
@@ -40,14 +39,14 @@ export default defineBenchmarks({
     allErrors: [
       {
         // manually annotate return type, as SafeParseResult is not exported from zod/mini and thus not portable
-        run(data, { schema }): { success: boolean } {
+        run(data): { success: boolean } {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data)`,
       },
       {
-        run(data, { schema }): { success: boolean } {
+        run(data): { success: boolean } {
           return schema.safeParse(data, { jitless: true });
         },
         validateResult: (result) => result.success,
@@ -59,7 +58,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -75,7 +74,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark(z.ipv6, ts`z.ipv6()`),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       schema.parse(data);
       assertNotReached();
     },

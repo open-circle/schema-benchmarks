@@ -21,7 +21,7 @@ if (!lib || !libraries[lib]) {
 const config = await libraries[lib]();
 
 try {
-  await config.stack?.throw(await config.createContext(), errorData);
+  await config.stack?.throw(errorData);
   assertNotReached();
 } catch (e) {
   if (Error.isError(e) && e.name === "ShouldHaveThrownError") {
