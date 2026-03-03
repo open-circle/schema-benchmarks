@@ -1,6 +1,8 @@
 import { CodecResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
 
+import { EmptyState } from "#/shared/components/empty-state";
+import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
 import { SortDirection } from "#/shared/lib/sort";
@@ -33,6 +35,15 @@ export function CodecResults({ results, sortBy, sortDir }: CodecResultsProps) {
       ),
     [results],
   );
+  if (!results.length) {
+    return (
+      <EmptyState
+        icon={<MdSymbol>database_off</MdSymbol>}
+        title="No results found"
+        subtitle="Try a different combination of filters"
+      />
+    );
+  }
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
