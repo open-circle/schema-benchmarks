@@ -139,6 +139,17 @@ code[class*="language-"] {
     margin: -1em -1em 1rem;
     border-bottom: 1px solid var(--divider);
     font: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .code-block__copy {
+      margin: -0.5rem;
+      margin-left: auto;
+      &:dir(rtl) {
+        margin-left: -0.5rem;
+        margin-right: auto;
+      }
+    }
   }
   &.line-numbers {
     padding-left: 3.8em;
