@@ -1,0 +1,22 @@
+import { Admonition } from "#/routes/blog/-components/admonition";
+
+Some schema libraries support two way conversion of data, for example converting a `Date` to a string and back again.
+
+We benchmark the time taken to encode and decode a `Date` to and from an ISO 8601 string.
+
+```ts
+import * as z from "zod";
+
+const dateFromString = z.codec(z.iso.datetime(), z.date(), {
+  encode: (date) => date.toISOString(),
+  decode: (str) => new Date(str),
+});
+
+dateFromString.encode(new Date(0)); // "1970-01-01T00:00:00.000Z"
+dateFromString.decode("1970-01-01T00:00:00.000Z"); // Date
+```
+
+<Admonition type="note" title="Invalid data">
+  We don't benchmark codecs with invalid data, as many libraries require the input to be correctly
+  typed *before* passing it to the codec.
+</Admonition>
