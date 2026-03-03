@@ -1,6 +1,5 @@
 @import "#/shared/styles/layout";
 
-@import "./-components/admonition/index.css";
 @import "./-components/card/index.css";
 
 .blog-list {

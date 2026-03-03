@@ -6,7 +6,7 @@ import { Admonition } from "./index.js";
 import "./index.css";
 
 const meta = preview.meta({
-  title: "Features/Blog/Admonition",
+  title: "Components/Admonition",
   component: Admonition,
   argTypes: {
     type: {

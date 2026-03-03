@@ -22,7 +22,7 @@ import {
 } from "./src/routes/_benchmarks/_runtime/-constants";
 import { minifyTypeProps } from "./src/routes/_benchmarks/download/-constants";
 import { speedPresets } from "./src/routes/_benchmarks/download/-speed";
-import { admonitionDefaults } from "./src/routes/blog/-components/admonition/constants";
+import { admonitionDefaults } from "./src/shared/components/admonition/constants";
 import { sidebarGroups } from "./src/shared/components/sidebar/groups";
 import { sortDirectionIcons } from "./src/shared/components/table/constants";
 import * as scales from "./src/shared/data/scale";

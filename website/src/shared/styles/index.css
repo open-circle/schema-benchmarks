@@ -11,6 +11,7 @@
 @import "./shape.css";
 @import "./typography.css";
 
+@import "../components/admonition/index.css";
 @import "../components/avatar/index.css";
 @import "../components/banner/index.css";
 @import "../components/button/index.css";
