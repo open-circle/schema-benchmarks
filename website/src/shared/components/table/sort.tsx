@@ -22,7 +22,7 @@ export interface SortableHeaderButtonProps extends DistributiveOmit<
   "onClick"
 > {
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  haptic?: true | HapticPattern;
+  haptic?: boolean | HapticPattern;
 }
 
 const cls = bem("sort-cell");
@@ -60,7 +60,7 @@ export interface SortableHeaderLinkProps<LinkOptions> extends Omit<
 > {
   linkOptions: ValidateLinkOptions<RegisteredRouter, LinkOptions>;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
-  haptic?: true | HapticPattern;
+  haptic?: boolean | HapticPattern;
 }
 
 export function SortableHeaderLink<LinkOptions>({
