@@ -80,7 +80,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: () => validate,
+      schema: validate,
       snippet: ts`
         // const validate = typia.createValidate<TypiaSchema>();
         upfetch(url, { schema: validate })

@@ -48,23 +48,20 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
 
   describe.runIf(config.standard)("standard", () => {
     describe.each(Object.entries(config.standard ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %o", (config) => {
-        it("should create a schema", async () => {
-          const schema = await config.getSchema();
+      describe.each(ensureArray(configs))("config %o", ({ schema }) => {
+        it("should have a schema", async () => {
           expect(schema["~standard"]).toBeDefined();
           expect(schema["~standard"]).toHaveProperty("version", expect.any(Number));
           expect(schema["~standard"]).toHaveProperty("vendor", expect.any(String));
           expect(schema["~standard"]).toHaveProperty("validate", expect.any(Function));
         });
         it("should return a successful result for valid data", async () => {
-          const schema = await config.getSchema();
           const result = await schema["~standard"].validate(successData);
           expect(result.issues).toBeUndefined();
           assert(!result.issues); // typescript
           expect(result.value).toEqual(successData);
         });
         it("should return an error result for invalid data", async () => {
-          const schema = await config.getSchema();
           const result = await schema["~standard"].validate(errorData);
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);

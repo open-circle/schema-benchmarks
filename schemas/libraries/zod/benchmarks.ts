@@ -54,9 +54,7 @@ export default defineBenchmarks({
     ],
   },
   standard: {
-    allErrors: {
-      getSchema: () => schema,
-    },
+    allErrors: { schema },
   },
   string: {
     "date-time": createStringBenchmark(z.iso.datetime, ts`z.iso.datetime()`),

@@ -68,9 +68,7 @@ export default defineBenchmarks({
     },
   },
   standard: {
-    allErrors: {
-      getSchema: () => schema,
-    },
+    allErrors: { schema },
   },
   string: {
     "date-time": createStringBenchmark("datetime"),

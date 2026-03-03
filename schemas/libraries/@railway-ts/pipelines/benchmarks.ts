@@ -71,7 +71,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: () => toStandardSchema(schema),
+      schema: toStandardSchema(schema),
     },
   },
   string: {

@@ -77,7 +77,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: () => Schema.standardSchemaV1(schema, { errors: "all" }),
+      schema: Schema.standardSchemaV1(schema, { errors: "all" }),
       snippet: ts`
         // const standardSchema = Schema.standardSchemaV1(
         //   schema, 
@@ -87,7 +87,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      getSchema: () => Schema.standardSchemaV1(schema, { errors: "first" }),
+      schema: Schema.standardSchemaV1(schema, { errors: "first" }),
       snippet: ts`
         // const standardSchema = Schema.standardSchemaV1(
         //   schema, 
