@@ -5,7 +5,7 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
-import { BenchmarkConfigEntry, CaseRegistry } from "../../bench/registry.ts";
+import { CaseRegistry } from "../../bench/registry.ts";
 import { getEmptyResults } from "../../results/types.ts";
 
 const {
