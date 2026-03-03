@@ -362,3 +362,6 @@ export function filterMap<T, U>(
   }
   return filtered;
 }
+
+export const safeAssign: <T extends object>(target: T, ...sources: Array<Partial<T>>) => T =
+  Object.assign;
