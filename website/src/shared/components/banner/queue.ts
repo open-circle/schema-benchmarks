@@ -1,11 +1,23 @@
 import { hasAtLeast } from "@schema-benchmarks/utils";
+import { defaultPatterns } from "web-haptics";
 
 import { ExternalStore } from "#/shared/hooks/store";
+import { haptics } from "#/shared/lib/haptics";
 
 import type { BannerProps } from ".";
 
 interface BannerWithId extends BannerProps {
   id: string;
+}
+
+function getBannerHaptic({ color }: Pick<BannerProps, "color">) {
+  switch (color) {
+    case "success":
+    case "error":
+      return defaultPatterns[color].pattern;
+    default:
+      return defaultPatterns.nudge.pattern;
+  }
 }
 
 const removeDelay = 150;
@@ -18,6 +30,8 @@ class BannerStore extends ExternalStore<Array<BannerWithId>> {
     const id = crypto.randomUUID();
     this.setState((banners) => {
       banners.push({ ...banner, id });
+      // if there was no banner before, trigger a haptic
+      if (banners.length === 1) haptics?.trigger(getBannerHaptic(banner));
     });
     return id;
   }
@@ -29,6 +43,7 @@ class BannerStore extends ExternalStore<Array<BannerWithId>> {
     setTimeout(() => {
       this.setState((banners) => {
         banners.shift();
+        if (banners.length !== 0) haptics?.trigger(getBannerHaptic(banners[0]!));
       });
     }, removeDelay);
   }
@@ -45,6 +60,7 @@ class BannerStore extends ExternalStore<Array<BannerWithId>> {
         const index = banners.findIndex((banner) => banner.id === id);
         if (index === -1) return;
         banners.splice(index, 1);
+        if (index === 0 && banners.length !== 0) haptics?.trigger(getBannerHaptic(banners[0]!));
       });
     }, removeDelay);
   }
