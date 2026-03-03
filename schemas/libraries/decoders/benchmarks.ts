@@ -15,13 +15,18 @@ export default defineBenchmarks({
   createContext: () => ({ schema: getDecoderSchema() }),
   initialization: {
     run() {
-      return getDecoderSchema();
+      const schema = getDecoderSchema();
+      // @ts-expect-error make the schema non-thenable
+      // oxlint-disable-next-line unicorn/no-thenable
+      schema.then = undefined;
+      return schema;
     },
     snippet: ts`object(...)`,
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      // manually annotate return type, as inferred return type is not portable
+      run(data, { schema }): { ok: boolean } {
         return schema.decode(data);
       },
       validateResult: (result) => result.ok,
