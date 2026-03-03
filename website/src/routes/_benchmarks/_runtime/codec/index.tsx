@@ -12,8 +12,6 @@ import { DownloadCount } from "../../-components/count";
 import { sortableKeys } from "./-constants";
 import Content from "./content.mdx";
 
-import admonitionCss from "../../../blog/-components/admonition/index.css?url";
-
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
   ...sortParams(v.optional(v.picklist(sortableKeys), "encode")),
@@ -51,12 +49,6 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
       openGraph: {
         url: "/codec/",
       },
-      links: [
-        {
-          rel: "stylesheet",
-          href: admonitionCss,
-        },
-      ],
     }),
   staticData: { crumb: "Codec" },
 });

@@ -23,8 +23,6 @@ import { getBenchResults } from "../-query";
 import { DownloadCount } from "../../-components/count";
 import Content from "./content.mdx";
 
-import admonitionCss from "../../../blog/-components/admonition/index.css?url";
-
 const searchSchema = v.object({
   optimizeType: optionalOptimizeTypeSchema,
   dataType: optionalDataTypeSchema,
@@ -66,12 +64,6 @@ export const Route = createFileRoute("/_benchmarks/_runtime/standard/")({
       openGraph: {
         url: "/standard/",
       },
-      links: [
-        {
-          rel: "stylesheet",
-          href: admonitionCss,
-        },
-      ],
     }),
   staticData: { crumb: "Standard Schema" },
 });
