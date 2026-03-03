@@ -49,8 +49,8 @@ export function Chip({ children, className, activated, haptic, onClick, ...props
       aria-pressed={activated}
       {...cls({ extra: className })}
       onClick={(event) => {
-        onClick?.(event);
         if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        onClick?.(event);
       }}
     >
       {children}
@@ -70,8 +70,8 @@ function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkCh
       {...props}
       {...cls({ extra: className })}
       onClick={(event) => {
-        onClick?.(event);
         if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        onClick?.(event);
       }}
     >
       {children}
