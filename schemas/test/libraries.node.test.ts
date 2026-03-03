@@ -7,7 +7,6 @@ import {
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
-import type { Decoder } from "decoders";
 import { assert, describe, expect, it } from "vitest";
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
@@ -18,10 +17,6 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     describe.each(ensureArray(config.initialization))("config %o", (config) => {
       it("should initialize", async () => {
         let result = config.run(context);
-        // decoders are accidentally thenable, yuck
-        if ((result as PromiseLike<unknown>)?.then && !(result as Decoder<unknown>).decode) {
-          result = await result;
-        }
         expect(result).toBeDefined();
       });
     });
