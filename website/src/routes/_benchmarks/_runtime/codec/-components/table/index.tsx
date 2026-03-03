@@ -3,8 +3,6 @@ import { durationFormatter, getDuration, getTransitionName } from "@schema-bench
 import { ErrorBoundary } from "react-error-boundary";
 
 import { formatLibraryName } from "#/routes/_benchmarks/-lib";
-import { EmptyState } from "#/shared/components/empty-state";
-import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { SortDirection } from "#/shared/lib/sort";
@@ -23,15 +21,6 @@ export interface CodecTableProps {
 }
 
 export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }: CodecTableProps) {
-  if (!results.length) {
-    return (
-      <EmptyState
-        icon={<MdSymbol>database_off</MdSymbol>}
-        title="No results found"
-        subtitle="Try a different combination of filters"
-      />
-    );
-  }
   return (
     <div className="card" style={{ viewTransitionName: "bench-table" }}>
       <table className="bench-table">

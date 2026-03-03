@@ -10,7 +10,6 @@ import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ToggleButton } from "#/shared/components/button/toggle";
-import { EmptyState } from "#/shared/components/empty-state";
 import { Radio } from "#/shared/components/radio";
 import { Scaler } from "#/shared/components/scaler";
 import { MdSymbol } from "#/shared/components/symbol";
@@ -63,15 +62,6 @@ function useComparison(results: Array<BenchResult>) {
 export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTableProps) {
   const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
-  if (!results.length) {
-    return (
-      <EmptyState
-        icon={<MdSymbol>database_off</MdSymbol>}
-        title="No results found"
-        subtitle="Try a different combination of filters"
-      />
-    );
-  }
   const showComparisonColumns = results.length > 1;
   const benchType = results[0]!.type;
   return (
