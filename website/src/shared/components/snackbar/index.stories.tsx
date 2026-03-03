@@ -1,9 +1,8 @@
-import { toast } from "react-hot-toast";
-
 import preview from "#storybook/preview";
 
 import { Snackbars } from ".";
 import { Button } from "../button";
+import { toastWithHaptics as toast } from "./toast";
 
 function SnackbarsDemo() {
   return (
