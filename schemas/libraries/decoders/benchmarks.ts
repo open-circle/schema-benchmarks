@@ -34,6 +34,9 @@ export default defineBenchmarks({
       snippet: ts`schema.decode(data)`,
     },
   },
+  standard: {
+    allErrors: { schema },
+  },
   stack: {
     throw: (data) => {
       schema.verify(data);
