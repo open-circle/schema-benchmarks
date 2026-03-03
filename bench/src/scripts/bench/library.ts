@@ -223,14 +223,14 @@ if (errorTasks.length) {
     errorTasks.map((task) => (task.result.state === "errored" ? task.result.error : task.result)),
   );
 }
+const codecResults: Record<
+  string,
+  Partial<Record<"encode" | "decode", { snippet: string; mean: number }>>
+> = {};
 for (const task of successTasks) {
   const entry = caseRegistry.get(task.name);
   if (!entry) continue;
   const { libraryName, note, version, snippet, throws, optimizeType } = entry;
-  const codecResults: Record<
-    string,
-    Partial<Record<"encode" | "decode", { snippet: string; mean: number }>>
-  > = {};
   switch (entry.type) {
     case "initialization": {
       results.initialization.push({
