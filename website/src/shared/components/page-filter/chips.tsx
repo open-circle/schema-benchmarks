@@ -34,7 +34,12 @@ export function PageFilterChips<Options extends string, LinkOptions>({
     <PageFilter title={title} titleId={titleId}>
       <ChipCollection aria-labelledby={titleId}>
         {options.map((option) => (
-          <LinkChip key={option} {...(getLinkOptions(option) as ValidateLinkOptions)} replace>
+          <LinkChip
+            key={option}
+            {...(getLinkOptions(option) as ValidateLinkOptions)}
+            replace
+            haptic
+          >
             <MdSymbol>{labels[option].icon}</MdSymbol>
             {labels[option].label}
           </LinkChip>

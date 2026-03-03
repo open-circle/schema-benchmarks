@@ -2,6 +2,8 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
+import { HapticPattern } from "web-haptics";
+import { useWebHaptics } from "web-haptics/react";
 
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
@@ -35,19 +37,43 @@ export function DisplayChip({ children, className, ...props }: DisplayChip) {
 
 export interface ChipProps extends ComponentPropsWithRef<"button"> {
   activated?: boolean;
+  haptic?: true | HapticPattern;
 }
 
-export function Chip({ children, className, activated, ...props }: ChipProps) {
+export function Chip({ children, className, activated, haptic, onClick, ...props }: ChipProps) {
+  const haptics = useWebHaptics();
   return (
-    <button type="button" {...props} aria-pressed={activated} {...cls({ extra: className })}>
+    <button
+      type="button"
+      {...props}
+      aria-pressed={activated}
+      {...cls({ extra: className })}
+      onClick={(event) => {
+        onClick?.(event);
+        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+      }}
+    >
       {children}
     </button>
   );
 }
 
-function BaseLinkChip({ children, className, ...props }: ComponentPropsWithRef<"a">) {
+export interface LinkChipProps extends ComponentPropsWithRef<"a"> {
+  haptic?: true | HapticPattern;
+}
+
+function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkChipProps) {
+  const haptics = useWebHaptics();
   return (
-    <a {...props} {...cls({ extra: className })}>
+    // oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions
+    <a
+      {...props}
+      {...cls({ extra: className })}
+      onClick={(event) => {
+        onClick?.(event);
+        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+      }}
+    >
       {children}
     </a>
   );

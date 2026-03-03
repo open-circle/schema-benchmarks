@@ -165,6 +165,7 @@ function RouteComponent() {
                 search={({ minifyType, ...rest }) => ({ ...(rest as {}), minifyType, mbps: slug })}
                 replace
                 resetScroll={false}
+                haptic
               >
                 <MdSymbol>{preset.icon}</MdSymbol>
               </InternalLinkToggleButton>
