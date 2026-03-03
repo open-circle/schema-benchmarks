@@ -124,12 +124,11 @@ if (parsing) {
         if (!benchConfigs) continue;
         for (const benchConfig of ensureArray(benchConfigs)) {
           const {
-            getSchema,
+            schema,
             snippet = "upfetch(url, { schema })",
             note,
             optimizeType = libraryOptimizeType,
           } = benchConfig;
-          const schema = await getSchema();
           bench.add(
             caseRegistry.add({
               type: "standard",

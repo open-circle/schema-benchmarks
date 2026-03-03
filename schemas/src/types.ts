@@ -34,7 +34,7 @@ export interface StandardSchemaBenchmarkConfig extends Omit<
   BaseBenchmarkConfig,
   "throws" | "snippet"
 > {
-  getSchema: () => MaybePromise<StandardSchemaV1<any, ProductData>>;
+  schema: StandardSchemaV1<unknown, ProductData>;
   /**
    * Provide if the schema needs an adapter to become a standard schema.
    * @example
