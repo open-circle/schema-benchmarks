@@ -111,6 +111,7 @@ export function Header() {
               active={style === option}
               onClick={() => setStyle(option)}
               tooltip={styleLabels[option].label}
+              haptic
             >
               <MdSymbol>{styleLabels[option].icon}</MdSymbol>
             </ToggleButton>
@@ -123,6 +124,7 @@ export function Header() {
               active={theme === option}
               onClick={() => setTheme(option)}
               tooltip={themeLabels[option].label}
+              haptic
             >
               <MdSymbol>{themeLabels[option].icon}</MdSymbol>
             </ToggleButton>
