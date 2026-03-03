@@ -118,7 +118,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <div className="sidebar-container">
                 <SidebarProvider>
                   <Sidebar />
-                  <div className="header-container">
+                  <div className="header-container" id="scroll-container">
                     <Header />
                     <Banner />
                     <main>{children}</main>
