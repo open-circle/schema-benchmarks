@@ -2,6 +2,8 @@ import { DistributiveOmit } from "@schema-benchmarks/utils";
 import { Link, RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
 import { ComponentPropsWithRef, MouseEventHandler } from "react";
 import bem from "react-bem-helper";
+import { HapticPattern } from "web-haptics";
+import { useWebHaptics } from "web-haptics/react";
 
 import { SortDirection, SortSearch, toggleSort } from "#/shared/lib/sort";
 
@@ -20,6 +22,7 @@ export interface SortableHeaderButtonProps extends DistributiveOmit<
   "onClick"
 > {
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  haptic?: true | HapticPattern;
 }
 
 const cls = bem("sort-cell");
@@ -29,11 +32,19 @@ export function SortableHeaderButton({
   className,
   onClick,
   "aria-sort": direction,
+  haptic = true,
   ...props
 }: SortableHeaderButtonProps) {
+  const haptics = useWebHaptics();
   return (
     <th {...props} {...cls({ extra: className })} aria-sort={direction}>
-      <button {...cls("label")} {...{ onClick }}>
+      <button
+        {...cls("label")}
+        onClick={(event) => {
+          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
+        }}
+      >
         {children}
         <MdSymbol {...cls("icon")}>{sortDirectionIcons[direction ?? "none"]}</MdSymbol>
       </button>
@@ -43,8 +54,13 @@ export function SortableHeaderButton({
 
 SortableHeaderButton.getSortDirection = getSortDirection;
 
-export interface SortableHeaderLinkProps<LinkOptions> extends ComponentPropsWithRef<"th"> {
+export interface SortableHeaderLinkProps<LinkOptions> extends Omit<
+  ComponentPropsWithRef<"th">,
+  "onClick"
+> {
   linkOptions: ValidateLinkOptions<RegisteredRouter, LinkOptions>;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  haptic?: true | HapticPattern;
 }
 
 export function SortableHeaderLink<LinkOptions>({
@@ -52,11 +68,21 @@ export function SortableHeaderLink<LinkOptions>({
   className,
   linkOptions,
   "aria-sort": direction,
+  haptic = true,
+  onClick,
   ...props
 }: SortableHeaderLinkProps<LinkOptions>) {
+  const haptics = useWebHaptics();
   return (
     <th {...props} {...cls({ extra: className })} aria-sort={direction}>
-      <Link {...linkOptions} {...cls({ element: "label", extra: linkOptions.className })}>
+      <Link
+        {...(linkOptions as any)}
+        {...cls({ element: "label", extra: linkOptions.className })}
+        onClick={(event) => {
+          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
+        }}
+      >
         {children}
         <MdSymbol {...cls("icon")}>{sortDirectionIcons[direction ?? "none"]}</MdSymbol>
       </Link>
