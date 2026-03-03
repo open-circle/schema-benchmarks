@@ -14,30 +14,27 @@ export interface BaseBenchmarkConfig {
   throws?: boolean;
 }
 
-export interface InitializationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  run: (context: Context) => MaybePromise<NonNullable<unknown>>;
+export interface InitializationBenchmarkConfig extends BaseBenchmarkConfig {
+  run: () => MaybePromise<NonNullable<unknown>>;
 }
 
-export interface ValidationBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  run: (data: unknown, context: Context) => MaybePromise<boolean>;
+export interface ValidationBenchmarkConfig extends BaseBenchmarkConfig {
+  run: (data: unknown) => MaybePromise<boolean>;
 }
 
 export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
-export interface ParsingBenchmarkConfig<
-  Context,
-  ParseResult = unknown,
-> extends BaseBenchmarkConfig {
-  run: (data: unknown, context: Context) => MaybePromise<ParseResult>;
+export interface ParsingBenchmarkConfig<ParseResult = unknown> extends BaseBenchmarkConfig {
+  run: (data: unknown) => MaybePromise<ParseResult>;
   validateResult: (result: NoInfer<ParseResult>) => boolean;
 }
 
-export interface StandardSchemaBenchmarkConfig<Context> extends Omit<
+export interface StandardSchemaBenchmarkConfig extends Omit<
   BaseBenchmarkConfig,
   "throws" | "snippet"
 > {
-  getSchema: (context: Context) => MaybePromise<StandardSchemaV1<any, ProductData>>;
+  getSchema: () => MaybePromise<StandardSchemaV1<any, ProductData>>;
   /**
    * Provide if the schema needs an adapter to become a standard schema.
    * @example
@@ -59,12 +56,12 @@ export const stringFormatSchema = v.picklist([
 ]);
 export type StringFormat = v.InferOutput<typeof stringFormatSchema>;
 
-export interface StringBenchmarkConfig<Context> extends BaseBenchmarkConfig {
-  create: (context: Context) => MaybePromise<(testString: string) => MaybePromise<boolean>>;
+export interface StringBenchmarkConfig extends BaseBenchmarkConfig {
+  create: () => MaybePromise<(testString: string) => MaybePromise<boolean>>;
 }
 
-export interface StackBenchmarkConfig<Context> {
-  throw: (context: Context, data: unknown) => MaybePromise<never>;
+export interface StackBenchmarkConfig {
+  throw: (data: unknown) => MaybePromise<never>;
   snippet: string;
 }
 
@@ -75,21 +72,18 @@ export interface LibraryInfo {
   version: string;
 }
 
-export interface BenchmarksConfig<Context, ParseResult = unknown> {
+export interface BenchmarksConfig<ParseResult = unknown> {
   library: LibraryInfo;
-  createContext: () => MaybePromise<Context>;
-  initialization: MaybeArray<InitializationBenchmarkConfig<Context>>;
-  validation?: MaybeArray<ValidationBenchmarkConfig<Context>>;
-  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<Context, ParseResult>>>>;
-  standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig<Context>>>>;
-  string?: Partial<Record<StringFormat, StringBenchmarkConfig<Context>>>;
-  stack?: StackBenchmarkConfig<Context>;
+  initialization: MaybeArray<InitializationBenchmarkConfig>;
+  validation?: MaybeArray<ValidationBenchmarkConfig>;
+  parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<ParseResult>>>>;
+  standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig>>>;
+  string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;
+  stack?: StackBenchmarkConfig;
 }
 
 /* @__NO_SIDE_EFFECTS__ */
-export function defineBenchmarks<const TContext, TParseResult>(
-  config: BenchmarksConfig<TContext, TParseResult>,
-) {
+export function defineBenchmarks<TParseResult>(config: BenchmarksConfig<TParseResult>) {
   return config;
 }
 

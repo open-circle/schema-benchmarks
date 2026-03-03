@@ -5,6 +5,8 @@ import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getDecoderSchema } from ".";
 
+const schema = getDecoderSchema();
+
 export default defineBenchmarks({
   library: {
     name: "decoders",
@@ -12,7 +14,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("decoders"),
   },
-  createContext: () => ({ schema: getDecoderSchema() }),
   initialization: {
     run() {
       const schema = getDecoderSchema();
@@ -26,7 +27,7 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       // manually annotate return type, as inferred return type is not portable
-      run(data, { schema }): { ok: boolean } {
+      run(data): { ok: boolean } {
         return schema.decode(data);
       },
       validateResult: (result) => result.ok,
@@ -34,7 +35,7 @@ export default defineBenchmarks({
     },
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       schema.verify(data);
       assertNotReached();
     },

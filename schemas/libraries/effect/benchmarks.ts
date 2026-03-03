@@ -7,19 +7,17 @@ import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
+const schema = getEffectSchema();
+const is = Schema.is(schema);
+const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
+const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
+
 export default defineBenchmarks({
   library: {
     name: "effect",
     git: "effect-ts/effect",
     optimizeType: "none",
     version: await getVersion("effect"),
-  },
-  createContext: () => {
-    const schema = getEffectSchema();
-    const is = Schema.is(schema);
-    const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
-    const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
-    return { schema, is, decodeAll, decodeFirst };
   },
   initialization: [
     {
@@ -41,7 +39,7 @@ export default defineBenchmarks({
     },
   ],
   validation: {
-    run(data, { is }) {
+    run(data) {
       return is(data);
     },
     snippet: ts`
@@ -51,7 +49,7 @@ export default defineBenchmarks({
   },
   parsing: {
     allErrors: {
-      run(data, { decodeAll }) {
+      run(data) {
         return decodeAll(data);
       },
       validateResult: Either.isRight,
@@ -64,7 +62,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      run(data, { decodeFirst }) {
+      run(data) {
         return decodeFirst(data);
       },
       validateResult: Either.isRight,
@@ -79,7 +77,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => Schema.standardSchemaV1(schema, { errors: "all" }),
+      getSchema: () => Schema.standardSchemaV1(schema, { errors: "all" }),
       snippet: ts`
         // const standardSchema = Schema.standardSchemaV1(
         //   schema, 
@@ -89,7 +87,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      getSchema: ({ schema }) => Schema.standardSchemaV1(schema, { errors: "first" }),
+      getSchema: () => Schema.standardSchemaV1(schema, { errors: "first" }),
       snippet: ts`
         // const standardSchema = Schema.standardSchemaV1(
         //   schema, 
@@ -100,7 +98,7 @@ export default defineBenchmarks({
     },
   },
   stack: {
-    throw: ({ decodeAll }, data) => {
+    throw: (data) => {
       Effect.runSync(decodeAll(data));
       assertNotReached();
     },

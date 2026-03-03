@@ -56,14 +56,12 @@ function getScriptLineNumber(stack?: string) {
 for (const [lib, getConfig] of Object.entries(libraries)) {
   const {
     library: { name: libraryName, version },
-    createContext,
     stack,
   } = await getConfig();
   if (stack) {
     const { snippet } = stack;
     try {
-      const context = await createContext();
-      await stack.throw(context, errorData);
+      await stack.throw(errorData);
       assertNotReached();
     } catch (e) {
       const output = await getLoggedOutput(lib);

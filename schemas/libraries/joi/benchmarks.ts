@@ -15,13 +15,15 @@ const createStringBenchmark = <Format extends FormatMethod>(
   method: Format,
   snippet = `${method}()`,
   ...args: Parameters<Joi.StringSchema[Format]>
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = Joi.string()[method](...(args as []));
     return (testString) => !schema.validate(testString).error;
   },
   snippet: ts`Joi.string().${snippet}`,
 });
+
+const schema = getJoiSchema();
 
 export default defineBenchmarks({
   library: {
@@ -30,7 +32,6 @@ export default defineBenchmarks({
     optimizeType: "none",
     version: await getVersion("joi"),
   },
-  createContext: () => ({ schema: getJoiSchema() }),
   initialization: {
     run() {
       return getJoiSchema();
@@ -39,14 +40,14 @@ export default defineBenchmarks({
   },
   parsing: {
     allErrors: {
-      run(data, { schema }) {
+      run(data) {
         return schema.validate(data, { abortEarly: false });
       },
       validateResult: (result) => !result.error,
       snippet: ts`schema.validate(data, { abortEarly: false })`,
     },
     abortEarly: {
-      run(data, { schema }) {
+      run(data) {
         return schema.validate(data, { abortEarly: true });
       },
       validateResult: (result) => !result.error,
@@ -55,7 +56,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -68,7 +69,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark("ip", ts`ip({ version: "ipv6" })`, { version: "ipv6" }),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       throw schema.validate(data).error;
     },
     snippet: ts`throw schema.validate(data).error`,

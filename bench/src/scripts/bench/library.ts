@@ -34,8 +34,7 @@ const results = getEmptyResults();
 
 const caseRegistry = new CaseRegistry();
 
-const { library, createContext, initialization, validation, parsing, standard, string } =
-  libraryConfig;
+const { library, initialization, validation, parsing, standard, string } = libraryConfig;
 const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
 console.log(`\nBenchmarking: ${libraryName}`);
@@ -52,8 +51,6 @@ bench.addEventListener("complete", () => {
   console.log("Bench complete");
 });
 
-const context = await createContext();
-
 for (const benchConfig of ensureArray(initialization)) {
   const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
   bench.add(
@@ -66,7 +63,7 @@ for (const benchConfig of ensureArray(initialization)) {
       note,
       throws,
     }),
-    () => run(context),
+    () => run(),
   );
 }
 if (validation) {
@@ -87,7 +84,7 @@ if (validation) {
           note,
           throws,
         }),
-        () => run(data, context),
+        () => run(data),
       );
     }
   }
@@ -113,7 +110,7 @@ if (parsing) {
             note,
             throws,
           }),
-          () => run(data, context),
+          () => run(data),
         );
       }
     }
@@ -132,7 +129,7 @@ if (parsing) {
             note,
             optimizeType = libraryOptimizeType,
           } = benchConfig;
-          const schema = await getSchema(context);
+          const schema = await getSchema();
           bench.add(
             caseRegistry.add({
               type: "standard",
@@ -159,7 +156,7 @@ if (parsing) {
         if (!benchConfigs) continue;
         for (const benchConfig of ensureArray(benchConfigs)) {
           const { create, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
-          const run = await create(context);
+          const run = await create();
           bench.add(
             caseRegistry.add({
               type: "string",

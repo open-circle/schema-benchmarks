@@ -10,13 +10,16 @@ import { getSurySchema } from ".";
 const createStringBenchmark = (
   modifier: (string: typeof S.string) => S.Schema<unknown>,
   snippet: string,
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = modifier(S.string);
     return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
   },
   snippet,
 });
+
+const schema = getSurySchema();
+const compile = S.compile(getSurySchema(), "Any", "Output", "Sync");
 
 export default defineBenchmarks({
   library: {
@@ -25,10 +28,6 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("sury"),
   },
-  createContext: () => ({
-    schema: getSurySchema(),
-    compile: S.compile(getSurySchema(), "Any", "Output", "Sync"),
-  }),
   initialization: [
     {
       run() {
@@ -48,7 +47,7 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data, { schema }) {
+        run(data) {
           try {
             S.parseOrThrow(data, schema);
             return { success: true };
@@ -61,7 +60,7 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data, { compile }) {
+        run(data) {
           try {
             compile(data);
             return { success: true };
@@ -79,7 +78,7 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data, { schema }) {
+        run(data) {
           return S.safe(() => S.parseOrThrow(data, schema));
         },
         validateResult: (result) => result.success,
@@ -87,7 +86,7 @@ export default defineBenchmarks({
         note: "safe",
       },
       {
-        run(data, { compile }) {
+        run(data) {
           return S.safe(() => compile(data));
         },
         validateResult: (result) => result.success,
@@ -102,7 +101,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -112,7 +111,7 @@ export default defineBenchmarks({
     uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       S.parseOrThrow(data, schema);
       assertNotReached();
     },

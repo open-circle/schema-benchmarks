@@ -7,18 +7,16 @@ import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
+const schema = getEffectSchema();
+const is = Schema.is(schema);
+const decode = Schema.decodeUnknownOption(schema);
+
 export default defineBenchmarks({
   library: {
     name: "effect___beta",
     git: "effect-ts/effect",
     optimizeType: "none",
     version: await getVersion("effect___beta"),
-  },
-  createContext: () => {
-    const schema = getEffectSchema();
-    const is = Schema.is(schema);
-    const decode = Schema.decodeUnknownOption(schema);
-    return { schema, is, decode };
   },
   initialization: [
     {
@@ -40,7 +38,7 @@ export default defineBenchmarks({
     },
   ],
   validation: {
-    run(data, { is }) {
+    run(data) {
       return is(data);
     },
     snippet: ts`
@@ -50,7 +48,7 @@ export default defineBenchmarks({
   },
   parsing: {
     allErrors: {
-      run(data, { decode }) {
+      run(data) {
         return decode(data, { errors: "all" });
       },
       validateResult: isSome,
@@ -60,7 +58,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      run(data, { decode }) {
+      run(data) {
         return decode(data, { errors: "first" });
       },
       validateResult: isSome,
@@ -72,8 +70,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) =>
-        Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
+      getSchema: () => Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
       snippet: ts`
         // const standardSchema = Schema.toStandardSchemaV1(
         //   schema, 
@@ -83,8 +80,7 @@ export default defineBenchmarks({
       `,
     },
     abortEarly: {
-      getSchema: ({ schema }) =>
-        Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
+      getSchema: () => Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
       snippet: ts`
         // const standardSchema = Schema.toStandardSchemaV1(
         //   schema, 
@@ -95,7 +91,7 @@ export default defineBenchmarks({
     },
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       Schema.decodeUnknownSync(schema)(data, { errors: "first" });
       assertNotReached();
     },

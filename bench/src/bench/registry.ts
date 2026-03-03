@@ -9,7 +9,7 @@ import type { DistributiveOmit } from "@schema-benchmarks/utils";
 
 import type { DataType } from "../results/types.ts";
 
-export type BenchmarkType = Exclude<keyof BenchmarksConfig<unknown>, "library" | "createContext">;
+export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library">;
 
 export interface BenchInfo {
   type: BenchmarkType;

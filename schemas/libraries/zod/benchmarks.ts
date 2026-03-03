@@ -10,13 +10,15 @@ import { getZodSchema } from ".";
 const createStringBenchmark = (
   factory: () => z.ZodType<string>,
   snippet: string,
-): StringBenchmarkConfig<unknown> => ({
+): StringBenchmarkConfig => ({
   create() {
     const schema = factory();
     return (testString) => schema.safeParse(testString).success;
   },
   snippet,
 });
+
+const schema = getZodSchema();
 
 export default defineBenchmarks({
   library: {
@@ -25,9 +27,6 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("zod"),
   },
-  createContext: () => ({
-    schema: getZodSchema(),
-  }),
   initialization: {
     run() {
       return getZodSchema();
@@ -37,14 +36,14 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data, { schema }) {
+        run(data) {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data)`,
       },
       {
-        run(data, { schema }) {
+        run(data) {
           return schema.safeParse(data, { jitless: true });
         },
         validateResult: (result) => result.success,
@@ -56,7 +55,7 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: {
-      getSchema: ({ schema }) => schema,
+      getSchema: () => schema,
     },
   },
   string: {
@@ -72,7 +71,7 @@ export default defineBenchmarks({
     ipv6: createStringBenchmark(z.ipv6, ts`z.ipv6()`),
   },
   stack: {
-    throw: ({ schema }, data) => {
+    throw: (data) => {
       schema.parse(data);
       assertNotReached();
     },
