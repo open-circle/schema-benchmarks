@@ -1,24 +1,27 @@
-import type { BenchResult } from "@schema-benchmarks/bench";
+import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
+import { Fragment } from "react";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 
-import { errorTypeProps, optimizeTypeProps } from "../../-constants";
-import { DownloadCount } from "../../../-components/count";
+import { optimizeTypeProps } from "../../../-constants";
+import { DownloadCount } from "../../../../-components/count";
 
-interface BenchCardProps {
-  meanScaler: ReturnType<typeof Bar.getScale>;
-  result: BenchResult;
+interface CodecCardProps {
+  encodeScaler: ReturnType<typeof Bar.getScale>;
+  decodeScaler: ReturnType<typeof Bar.getScale>;
+  result: CodecResult;
 }
 
 export const cls = bem("bench-card");
 
-export function BenchCard({ result, meanScaler }: BenchCardProps) {
+export function CodecCard({ result, encodeScaler, decodeScaler }: CodecCardProps) {
   return (
     <div
       {...cls()}
@@ -26,7 +29,6 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         viewTransitionName: getTransitionName("bench-card", {
           libraryName: result.libraryName,
           note: result.note,
-          errorType: result.type === "parsing" ? result.errorType : undefined,
         }),
       }}
     >
@@ -34,7 +36,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
       <div {...cls("header-row")}>
         <header {...cls("library-name")}>
           <h4 className="typo-headline5">
-            <code className="language-text">{result.libraryName}</code>
+            <code className="language-text">{formatLibraryName(result.libraryName)}</code>
           </h4>
           {result.note && (
             <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
@@ -48,29 +50,31 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
           </div>
         </ErrorBoundary>
       </div>
-      <CodeBlock>{result.snippet}</CodeBlock>
-      <table className="minimal">
-        <tbody>
-          <tr>
-            <th>Mean</th>
-            <td className="numeric">{durationFormatter.format(getDuration(result.mean))}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div {...cls("bar")}>
-        <Bar {...meanScaler(result.mean)} />
-      </div>
+      {(["encode", "decode"] as const).map((type) => {
+        const { snippet, mean } = result[type];
+        const scaler = type === "encode" ? encodeScaler : decodeScaler;
+        return (
+          <Fragment key={type}>
+            <CodeBlock>{snippet}</CodeBlock>
+            <table className="minimal">
+              <tbody>
+                <tr>
+                  <th>{type === "encode" ? "Encode" : "Decode"}</th>
+                  <td className="numeric">{durationFormatter.format(getDuration(mean))}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div {...cls("bar")}>
+              <Bar {...scaler(mean)} />
+            </div>
+          </Fragment>
+        );
+      })}
       <ChipCollection>
         <DisplayChip>
           <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
           {optimizeTypeProps.labels[result.optimizeType].label}
         </DisplayChip>
-        {(result.type === "parsing" || result.type === "standard") && (
-          <DisplayChip>
-            <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
-            {errorTypeProps.labels[result.errorType].label}
-          </DisplayChip>
-        )}
       </ChipCollection>
     </div>
   );
