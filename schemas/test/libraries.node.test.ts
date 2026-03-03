@@ -15,7 +15,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   describe("initialization", () => {
     describe.each(ensureArray(config.initialization))("config %o", (config) => {
       it("should initialize", async () => {
-        let result = config.run();
+        const result = await config.run();
         expect(result).toBeDefined();
       });
     });
