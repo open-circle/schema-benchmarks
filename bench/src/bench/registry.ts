@@ -17,6 +17,8 @@ export interface BenchInfo {
   errorType?: ErrorType;
   dataType?: DataType;
   stringFormat?: StringFormat;
+  codecType?: "encode" | "decode";
+  codecId?: string;
 }
 
 export interface BenchmarkConfigEntry

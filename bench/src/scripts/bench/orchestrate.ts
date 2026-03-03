@@ -51,6 +51,7 @@ for (const results of allResults) {
       merged.string[format][dataType].push(...data);
     }
   }
+  merged.codec.push(...results.codec);
 }
 
 for (const array of [
@@ -62,5 +63,7 @@ for (const array of [
 ]) {
   array.sort((a, b) => a.mean - b.mean);
 }
+
+merged.codec.sort((a, b) => a.encode.mean - b.encode.mean);
 
 await fs.writeFile(path.resolve(process.cwd(), "./bench.json"), JSON.stringify(merged));

@@ -5,7 +5,7 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
-import { CaseRegistry } from "../../bench/registry.ts";
+import { BenchmarkConfigEntry, CaseRegistry } from "../../bench/registry.ts";
 import { getEmptyResults } from "../../results/types.ts";
 
 const {
@@ -34,7 +34,7 @@ const results = getEmptyResults();
 
 const caseRegistry = new CaseRegistry();
 
-const { library, initialization, validation, parsing, standard, string } = libraryConfig;
+const { library, initialization, validation, parsing, standard, string, codec } = libraryConfig;
 const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
 console.log(`\nBenchmarking: ${libraryName}`);
@@ -174,6 +174,40 @@ if (parsing) {
       }
     }
   }
+  if (codec) {
+    const date = new Date(0);
+    const str = date.toISOString();
+    for (const benchConfig of ensureArray(codec)) {
+      const { encode, decode, note, optimizeType = libraryOptimizeType } = benchConfig;
+      const id = crypto.randomUUID();
+      bench.add(
+        caseRegistry.add({
+          type: "codec",
+          optimizeType,
+          libraryName,
+          version,
+          note,
+          snippet: encode.snippet,
+          codecType: "encode",
+          codecId: id,
+        }),
+        () => encode.run(date),
+      );
+      bench.add(
+        caseRegistry.add({
+          type: "codec",
+          optimizeType,
+          libraryName,
+          version,
+          note,
+          snippet: decode.snippet,
+          codecType: "decode",
+          codecId: id,
+        }),
+        () => decode.run(str),
+      );
+    }
+  }
 }
 
 // Run benchmarks for this library and process results immediately
@@ -193,6 +227,10 @@ for (const task of successTasks) {
   const entry = caseRegistry.get(task.name);
   if (!entry) continue;
   const { libraryName, note, version, snippet, throws } = entry;
+  const codecResults: Record<
+    string,
+    Partial<Record<"encode" | "decode", { snippet: string; mean: number }>>
+  > = {};
   switch (entry.type) {
     case "initialization": {
       results.initialization.push({
@@ -290,6 +328,35 @@ for (const task of successTasks) {
         mean: task.result.latency.mean,
         optimizeType: entry.optimizeType,
       });
+      break;
+    }
+    case "codec": {
+      if (!entry.codecType) {
+        console.error("Missing codec type for codec bench:", entry);
+        continue;
+      }
+      if (!entry.codecId) {
+        console.error("Missing codec id for codec bench:", entry);
+        continue;
+      }
+      codecResults[entry.codecId] ??= {};
+      const codecResult = codecResults[entry.codecId]!;
+      codecResult[entry.codecType] = {
+        snippet,
+        mean: task.result.latency.mean,
+      };
+      if (codecResult.encode && codecResult.decode) {
+        results.codec.push({
+          type: "codec",
+          id: entry.codecId,
+          libraryName,
+          version,
+          note: entry.note,
+          encode: codecResult.encode,
+          decode: codecResult.decode,
+          optimizeType: entry.optimizeType,
+        });
+      }
       break;
     }
   }
