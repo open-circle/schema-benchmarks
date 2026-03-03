@@ -46,8 +46,8 @@ export const ToggleButton = withTooltip(
           extra: className,
         })}
         onClick={(event) => {
-          onClick?.(event);
           if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
         }}
       >
         {loading ? <Spinner segmentCount={1} inheritColor /> : children}
@@ -79,8 +79,8 @@ export const ExternalLinkToggleButton = withTooltip(
           extra: className,
         })}
         onClick={(event) => {
-          onClick?.(event);
           if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
         }}
       >
         {children}
