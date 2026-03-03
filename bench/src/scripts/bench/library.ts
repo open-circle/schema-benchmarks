@@ -226,7 +226,7 @@ if (errorTasks.length) {
 for (const task of successTasks) {
   const entry = caseRegistry.get(task.name);
   if (!entry) continue;
-  const { libraryName, note, version, snippet, throws } = entry;
+  const { libraryName, note, version, snippet, throws, optimizeType } = entry;
   const codecResults: Record<
     string,
     Partial<Record<"encode" | "decode", { snippet: string; mean: number }>>
@@ -242,15 +242,11 @@ for (const task of successTasks) {
         note,
         throws,
         mean: task.result.latency.mean,
-        optimizeType: entry.optimizeType,
+        optimizeType,
       });
       break;
     }
     case "validation": {
-      if (!entry.dataType) {
-        console.error("Missing data type for validation bench:", entry);
-        continue;
-      }
       results.validation[entry.dataType].push({
         type: "validation",
         id: task.name,
@@ -260,19 +256,11 @@ for (const task of successTasks) {
         note,
         throws,
         mean: task.result.latency.mean,
-        optimizeType: entry.optimizeType,
+        optimizeType,
       });
       break;
     }
     case "parsing": {
-      if (!entry.dataType) {
-        console.error("Missing data type for parsing bench:", entry);
-        continue;
-      }
-      if (!entry.errorType) {
-        console.error("Missing error type for parsing bench:", entry);
-        continue;
-      }
       results.parsing[entry.dataType].push({
         type: "parsing",
         id: task.name,
@@ -282,20 +270,12 @@ for (const task of successTasks) {
         note,
         throws,
         mean: task.result.latency.mean,
-        optimizeType: entry.optimizeType,
+        optimizeType,
         errorType: entry.errorType,
       });
       break;
     }
     case "standard": {
-      if (!entry.dataType) {
-        console.error("Missing data type for standard bench:", entry);
-        continue;
-      }
-      if (!entry.errorType) {
-        console.error("Missing error type for standard bench:", entry);
-        continue;
-      }
       results.standard[entry.dataType].push({
         type: "standard",
         id: task.name,
@@ -304,20 +284,12 @@ for (const task of successTasks) {
         snippet,
         note,
         mean: task.result.latency.mean,
-        optimizeType: entry.optimizeType,
+        optimizeType,
         errorType: entry.errorType,
       });
       break;
     }
     case "string": {
-      if (!entry.stringFormat) {
-        console.error("Missing string format for string bench:", entry);
-        continue;
-      }
-      if (!entry.dataType) {
-        console.error("Missing data type for string bench:", entry);
-        continue;
-      }
       results.string[entry.stringFormat][entry.dataType].push({
         type: "string",
         id: task.name,
@@ -326,19 +298,11 @@ for (const task of successTasks) {
         snippet,
         note,
         mean: task.result.latency.mean,
-        optimizeType: entry.optimizeType,
+        optimizeType,
       });
       break;
     }
     case "codec": {
-      if (!entry.codecType) {
-        console.error("Missing codec type for codec bench:", entry);
-        continue;
-      }
-      if (!entry.codecId) {
-        console.error("Missing codec id for codec bench:", entry);
-        continue;
-      }
       codecResults[entry.codecId] ??= {};
       const codecResult = codecResults[entry.codecId]!;
       codecResult[entry.codecType] = {
@@ -354,7 +318,7 @@ for (const task of successTasks) {
           note: entry.note,
           encode: codecResult.encode,
           decode: codecResult.decode,
-          optimizeType: entry.optimizeType,
+          optimizeType,
         });
       }
       break;
