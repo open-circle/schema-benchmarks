@@ -40,3 +40,23 @@ export const Parsing = meta.story({
     ),
   },
 });
+
+export const Standard = meta.story({
+  args: {
+    result: benchResults.standard.valid[0]!,
+    meanScaler: Bar.getScale(
+      benchResults.standard.valid.map((r) => r.mean),
+      { lowerBetter: true },
+    ),
+  },
+});
+
+export const String = meta.story({
+  args: {
+    result: benchResults.string["date-time"].valid[0]!,
+    meanScaler: Bar.getScale(
+      benchResults.string["date-time"].valid.map((r) => r.mean),
+      { lowerBetter: true },
+    ),
+  },
+});
