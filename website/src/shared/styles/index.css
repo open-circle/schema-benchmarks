@@ -42,6 +42,8 @@
   scrollbar-width: thin;
   scroll-behavior: smooth;
   corner-shape: bevel;
+  /* this is for accessibility, but we make sure our links/buttons have their own focus styles */
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
