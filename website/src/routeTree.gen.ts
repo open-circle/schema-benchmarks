@@ -25,6 +25,7 @@ import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benc
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
 import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_benchmarks/_runtime/parsing/index'
 import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
+import { Route as BenchmarksRuntimeCodecIndexRouteImport } from './routes/_benchmarks/_runtime/codec/index'
 
 const BlogRouteRoute = BlogRouteRouteImport.update({
   id: '/blog',
@@ -109,6 +110,12 @@ const BenchmarksRuntimeInitializationIndexRoute =
     path: '/initialization/',
     getParentRoute: () => BenchmarksRuntimeRouteRoute,
   } as any)
+const BenchmarksRuntimeCodecIndexRoute =
+  BenchmarksRuntimeCodecIndexRouteImport.update({
+    id: '/codec/',
+    path: '/codec/',
+    getParentRoute: () => BenchmarksRuntimeRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
+  '/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
@@ -135,6 +143,7 @@ export interface FileRoutesByTo {
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
+  '/codec': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
@@ -154,6 +163,7 @@ export interface FileRoutesById {
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
+  '/_benchmarks/_runtime/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/repo/raw/$'
     | '/download/'
     | '/stack/'
+    | '/codec/'
     | '/initialization/'
     | '/parsing/'
     | '/standard/'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/repo/raw/$'
     | '/download'
     | '/stack'
+    | '/codec'
     | '/initialization'
     | '/parsing'
     | '/standard'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
     | '/repo/raw/$'
     | '/_benchmarks/download/'
     | '/_benchmarks/stack/'
+    | '/_benchmarks/_runtime/codec/'
     | '/_benchmarks/_runtime/initialization/'
     | '/_benchmarks/_runtime/parsing/'
     | '/_benchmarks/_runtime/standard/'
@@ -335,10 +348,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksRuntimeInitializationIndexRouteImport
       parentRoute: typeof BenchmarksRuntimeRouteRoute
     }
+    '/_benchmarks/_runtime/codec/': {
+      id: '/_benchmarks/_runtime/codec/'
+      path: '/codec'
+      fullPath: '/codec/'
+      preLoaderRoute: typeof BenchmarksRuntimeCodecIndexRouteImport
+      parentRoute: typeof BenchmarksRuntimeRouteRoute
+    }
   }
 }
 
 interface BenchmarksRuntimeRouteRouteChildren {
+  BenchmarksRuntimeCodecIndexRoute: typeof BenchmarksRuntimeCodecIndexRoute
   BenchmarksRuntimeInitializationIndexRoute: typeof BenchmarksRuntimeInitializationIndexRoute
   BenchmarksRuntimeParsingIndexRoute: typeof BenchmarksRuntimeParsingIndexRoute
   BenchmarksRuntimeStandardIndexRoute: typeof BenchmarksRuntimeStandardIndexRoute
@@ -348,6 +369,7 @@ interface BenchmarksRuntimeRouteRouteChildren {
 
 const BenchmarksRuntimeRouteRouteChildren: BenchmarksRuntimeRouteRouteChildren =
   {
+    BenchmarksRuntimeCodecIndexRoute: BenchmarksRuntimeCodecIndexRoute,
     BenchmarksRuntimeInitializationIndexRoute:
       BenchmarksRuntimeInitializationIndexRoute,
     BenchmarksRuntimeParsingIndexRoute: BenchmarksRuntimeParsingIndexRoute,

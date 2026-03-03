@@ -49,6 +49,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "Stack",
         icon: "error",
       },
+      {
+        ...linkOptions({ to: "/codec" }),
+        name: "Codec",
+        icon: "swap_horiz",
+      },
     ],
   },
   {
