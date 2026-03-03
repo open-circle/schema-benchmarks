@@ -1,19 +1,48 @@
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import clsx from "clsx";
-import type { ComponentPropsWithRef } from "react";
+import { useRef, type ComponentPropsWithRef } from "react";
 
 import { trackedLinkProps } from "#/shared/lib/analytics";
 
+import { ToggleButton } from "../button/toggle";
+import { toastWithHaptics } from "../snackbar/toast";
+import { MdSymbol } from "../symbol";
+
 interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;
+  disableCopy?: boolean;
 }
 
-export function pre({ title, children, className, ...props }: PreProps) {
+export function pre({ title, children, className, disableCopy, ref, ...props }: PreProps) {
+  const innerRef = useRef<HTMLPreElement>(null);
   return (
     <pre
       {...props}
+      ref={mergeRefs(ref, innerRef)}
       className={clsx(className?.includes("language-") ? "" : "language-text", className)}
     >
-      {title && <h6 className="code-block__title">{title}</h6>}
+      {(title || !disableCopy) && (
+        <div className="code-block__title">
+          {title}
+          {!disableCopy && (
+            <ToggleButton
+              className="code-block__copy"
+              tooltip="Copy to clipboard"
+              onClick={() => {
+                const text = innerRef.current?.querySelector("code")?.textContent;
+                if (text) {
+                  navigator.clipboard.writeText(text).then(
+                    () => toastWithHaptics.success("Copied code to clipboard"),
+                    () => toastWithHaptics.error("Failed to copy"),
+                  );
+                }
+              }}
+            >
+              <MdSymbol>content_copy</MdSymbol>
+            </ToggleButton>
+          )}
+        </div>
+      )}
       {children}
     </pre>
   );

@@ -73,7 +73,7 @@ function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
   const { data } = useSuspenseQuery(getRaw({ fileName }));
   return (
-    <CodeBlock title={fileName} lineNumbers language={getLanguage(fileName)}>
+    <CodeBlock title={fileName} lineNumbers language={getLanguage(fileName)} copy>
       {data}
     </CodeBlock>
   );
