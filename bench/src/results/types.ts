@@ -3,6 +3,7 @@ import {
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
+import type { OneOf } from "@schema-benchmarks/utils";
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
@@ -53,12 +54,24 @@ const stringResultSchema = v.object({
 });
 export type StringResult = v.InferOutput<typeof stringResultSchema>;
 
-export type BenchResult =
-  | InitializationResult
-  | ValidationResult
-  | ParsingResult
-  | StandardResult
-  | StringResult;
+export const codecResultSchema = v.object({
+  ...v.omit(baseBenchResultSchema, ["snippet", "mean"]).entries,
+  encode: v.object({
+    snippet: v.string(),
+    mean: v.number(),
+  }),
+  decode: v.object({
+    snippet: v.string(),
+    mean: v.number(),
+  }),
+  type: v.literal("codec"),
+});
+
+export type CodecResult = v.InferOutput<typeof codecResultSchema>;
+
+export type BenchResult = OneOf<
+  InitializationResult | ValidationResult | ParsingResult | StandardResult | StringResult
+>;
 
 export const benchResultsSchema = v.object({
   initialization: v.array(initializationResultSchema),
@@ -71,6 +84,7 @@ export const benchResultsSchema = v.object({
       v.object(v.entriesFromList(dataTypeSchema.options, v.array(stringResultSchema))),
     ),
   ),
+  codec: v.array(codecResultSchema),
 });
 export type BenchResults = v.InferOutput<typeof benchResultsSchema>;
 export const getEmptyResults = (): BenchResults => ({
@@ -81,6 +95,7 @@ export const getEmptyResults = (): BenchResults => ({
   string: unsafeFromEntries(
     stringFormatSchema.options.map((format) => [format, { valid: [], invalid: [] }]),
   ),
+  codec: [],
 });
 
 export const minifyTypeSchema = v.picklist(["minified", "unminified"]);
