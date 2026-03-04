@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { BenchPlot } from "#/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#/routes/_benchmarks/download/-components/plot";
 import { Admonition } from "#/shared/components/admonition";
+import { CodecPlot } from "#/routes/_benchmarks/_runtime/codec/-components/plot";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -139,3 +140,31 @@ Parsing valid data:
 Parsing invalid data:
 
 <BenchPlot type="standard" dataType="invalid" />
+
+### <Link to="/codec">Codec</Link>
+
+Some libraries support two way conversion of data, often referred to as "encoding" and "decoding".
+
+We benchmark the time taken to encode and decode a `Date` to and from a string (usually an ISO 8601 string, but we don't enforce this).
+
+```ts
+import * as z from "zod";
+
+const dateFromString = z.codec(z.iso.datetime(), z.date(), {
+  encode: (date) => date.toISOString(),
+  decode: (str) => new Date(str),
+});
+```
+
+<Admonition type="note" title="Invalid data">
+  We don't benchmark codecs with invalid data, as many libraries require the input to be correctly
+  typed *before* passing it to the codec.
+</Admonition>
+
+Encoding (`Date → string`):
+
+<CodecPlot encodeDir="encode" />
+
+Decoding (`string → Date`):
+
+<CodecPlot encodeDir="decode" />
