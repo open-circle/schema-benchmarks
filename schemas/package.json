@@ -24,7 +24,7 @@
     "decoders": "^2.8.0",
     "dedent": "catalog:",
     "effect": "^3.19.19",
-    "effect___beta": "npm:effect@4.0.0-beta.5",
+    "effect___beta": "npm:effect@4.0.0-beta.25",
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
