@@ -136,6 +136,9 @@ code[class*="language-"] {
     box-shadow: 0 0 0 2px var(--focus-background);
   }
   .code-block__title {
+    position: sticky;
+    left: -1em;
+    right: -1em;
     padding: 0.5rem 1rem;
     margin: -1em -1em 1rem;
     border-bottom: 1px solid var(--divider);
