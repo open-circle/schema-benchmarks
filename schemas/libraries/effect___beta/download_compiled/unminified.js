@@ -43,11 +43,18 @@ const pipeArguments = (self, args) => {
 /**
 * @since 4.0.0
 */
-const Class$1 = class {
-	pipe() {
-		return pipeArguments(this, arguments);
-	}
-};
+const Prototype = { pipe() {
+	return pipeArguments(this, arguments);
+} };
+/**
+* @since 4.0.0
+* @category constructors
+*/
+const Class$1 = /* @__PURE__ */ function() {
+	function PipeableBase() {}
+	PipeableBase.prototype = Prototype;
+	return PipeableBase;
+}();
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -426,33 +433,6 @@ function isFunction(input) {
 */
 function isNotNullish(input) {
 	return input != null;
-}
-/**
-* Checks whether a value is a plain object (not an array, not `null`).
-*
-* When to use:
-* - You need to accept objects but exclude arrays.
-*
-* Behavior:
-* - Pure; does not mutate input.
-* - Uses `typeof input === "object" && input !== null && !Array.isArray(input)`.
-*
-* **Example** (Guard object)
-*
-* ```ts
-* import { Predicate } from "effect"
-*
-* console.log(Predicate.isObject({ a: 1 }))
-* console.log(Predicate.isObject([1, 2]))
-* ```
-*
-* See also: {@link isObjectOrArray}, {@link isReadonlyObject}
-*
-* @category guards
-* @since 4.0.0
-*/
-function isObject(input) {
-	return typeof input === "object" && input !== null && !Array.isArray(input);
 }
 /**
 * Checks whether a value is an `object` in the JavaScript sense (objects, arrays, functions).
@@ -860,12 +840,44 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 /**
-* The unique identifier used to identify objects that implement the `Equal` interface.
+* The unique string identifier for the {@link Equal} interface.
+*
+* Use this as a computed property key when implementing custom equality on a
+* class or object literal.
+*
+* When to use:
+* - As the method name when implementing the {@link Equal} interface.
+* - To check manually whether an object carries an equality method (prefer
+*   {@link isEqual} instead).
+*
+* Behavior:
+* - Pure constant — no allocation or side effects.
+*
+* **Example** (implementing Equal on a class)
+*
+* ```ts
+* import { Equal, Hash } from "effect"
+*
+* class UserId implements Equal.Equal {
+*   constructor(readonly id: string) {}
+*
+*   [Equal.symbol](that: Equal.Equal): boolean {
+*     return that instanceof UserId && this.id === that.id
+*   }
+*
+*   [Hash.symbol](): number {
+*     return Hash.string(this.id)
+*   }
+* }
+* ```
+*
+* @see {@link Equal} — the interface that uses this symbol
+* @see {@link isEqual} — type guard for `Equal` implementors
 *
 * @since 2.0.0
 */
 const symbol$2 = "~effect/interfaces/Equal";
-function equals$1() {
+function equals$2() {
 	if (arguments.length === 1) return (self) => compareBoth(self, arguments[0]);
 	return compareBoth(arguments[0], arguments[1]);
 }
@@ -983,37 +995,61 @@ function makeCompareSet(equivalence) {
 }
 const compareSets = /* @__PURE__ */ makeCompareSet(compareBoth);
 /**
-* Determines if a value implements the `Equal` interface.
+* Checks whether a value implements the {@link Equal} interface.
 *
-* @example
+* When to use:
+* - To branch on whether a value supports custom equality before calling
+*   its `[Equal.symbol]` method directly.
+* - In generic utility code that needs to distinguish `Equal` implementors
+*   from plain values.
+*
+* Behavior:
+* - Pure function, no side effects.
+* - Returns `true` if and only if `u` has a property keyed by
+*   {@link symbol}.
+* - Acts as a TypeScript type guard, narrowing the input to {@link Equal}.
+*
+* **Example** (type guard)
+*
 * ```ts
 * import { Equal, Hash } from "effect"
-* import * as assert from "node:assert"
 *
-* class MyClass implements Equal.Equal {
+* class Token implements Equal.Equal {
+*   constructor(readonly value: string) {}
 *   [Equal.symbol](that: Equal.Equal): boolean {
-*     return that instanceof MyClass
+*     return that instanceof Token && this.value === that.value
 *   }
 *   [Hash.symbol](): number {
-*     return 0
+*     return Hash.string(this.value)
 *   }
 * }
 *
-* const instance = new MyClass()
-* assert(Equal.isEqual(instance) === true)
-* assert(Equal.isEqual({}) === false)
-* assert(Equal.isEqual(42) === false)
+* console.log(Equal.isEqual(new Token("abc"))) // true
+* console.log(Equal.isEqual({ x: 1 }))         // false
+* console.log(Equal.isEqual(42))                // false
 * ```
+*
+* @see {@link Equal} — the interface being checked
+* @see {@link symbol} — the property key that signals `Equal` support
 *
 * @category guards
 * @since 2.0.0
 */
 const isEqual = (u) => hasProperty(u, symbol$2);
 /**
-* Creates an `Equivalence` instance using the `equals` function.
-* This allows the equality logic to be used with APIs that expect an `Equivalence`.
+* Wraps {@link equals} as an `Equivalence<A>`.
 *
-* @example
+* When to use:
+* - When an API (e.g. `Array.dedupeWith`, `Equivalence.mapInput`) requires an
+*   `Equivalence` and you want to reuse `Equal.equals`.
+*
+* Behavior:
+* - Returns a function `(a: A, b: A) => boolean` that delegates to
+*   {@link equals}.
+* - Pure; allocates a thin wrapper on each call.
+*
+* **Example** (deduplicating with Equal semantics)
+*
 * ```ts
 * import { Array, Equal } from "effect"
 *
@@ -1022,10 +1058,65 @@ const isEqual = (u) => hasProperty(u, symbol$2);
 * console.log(result) // [1, 2, 3]
 * ```
 *
+* @see {@link equals} — the underlying comparison function
+*
 * @category instances
 * @since 2.0.0
 */
-const asEquivalence = () => equals$1;
+const asEquivalence = () => equals$2;
+/**
+* Creates a custom equivalence relation with an optimized reference equality check.
+*
+* When to use this:
+* - When you need a custom equivalence that isn't just strict equality
+* - When creating equivalences for complex types with custom comparison logic
+* - When you want the performance benefit of reference equality optimization
+*
+* Behavior:
+* - Does not mutate inputs
+* - First checks reference equality (`===`) for performance; if values are identical, returns `true` without calling the function
+* - Falls back to the provided equivalence function if values are not the same reference
+* - The provided function must satisfy reflexive, symmetric, and transitive properties
+*
+* **Example** (Case-insensitive string equivalence)
+*
+* ```ts
+* import { Equivalence } from "effect"
+*
+* const caseInsensitive = Equivalence.make<string>((a, b) =>
+*   a.toLowerCase() === b.toLowerCase()
+* )
+*
+* console.log(caseInsensitive("Hello", "HELLO")) // true
+* console.log(caseInsensitive("foo", "bar")) // false
+*
+* // Same reference optimization
+* const str = "test"
+* console.log(caseInsensitive(str, str)) // true (fast path)
+* ```
+*
+* **Example** (Numeric tolerance equivalence)
+*
+* ```ts
+* import { Equivalence } from "effect"
+*
+* const tolerance = Equivalence.make<number>((a, b) => Math.abs(a - b) < 0.0001)
+*
+* console.log(tolerance(1.0, 1.0001)) // false
+* console.log(tolerance(1.0, 1.00001)) // true
+* ```
+*
+* See also: {@link strictEqual}, {@link mapInput}
+*
+* @category constructors
+* @since 2.0.0
+*/
+const make$12 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
+/**
+* @since 2.0.0
+*/
+/** @internal */
+const isArrayNonEmpty$1 = (self) => self.length > 0;
 /**
 * @since 4.0.0
 */
@@ -1119,40 +1210,131 @@ const emptyServiceMap$1 = {
 	}
 };
 /**
+* Utilities for converting arbitrary JavaScript values into human-readable
+* strings, with support for circular references, redaction, and common JS
+* types that `JSON.stringify` handles poorly.
+*
+* Mental model:
+* - A `Formatter<Value, Format>` is a callable `(value: Value) => Format`.
+* - {@link format} is the general-purpose pretty-printer: it handles
+*   primitives, arrays, objects, `BigInt`, `Symbol`, `Date`, `RegExp`,
+*   `Set`, `Map`, class instances, and circular references.
+* - {@link formatJson} is a safe `JSON.stringify` wrapper that silently
+*   drops circular references and applies redaction.
+* - Both functions accept a `space` option for indentation control.
+*
+* Common tasks:
+* - Pretty-print any value for debugging / logging -> {@link format}
+* - Serialize to JSON safely (no circular throws) -> {@link formatJson}
+* - Format a single object property key -> {@link formatPropertyKey}
+* - Format a property path like `["a"]["b"]` -> {@link formatPath}
+* - Format a `Date` to ISO string safely -> {@link formatDate}
+*
+* Gotchas:
+* - {@link format} output is **not** valid JSON; use {@link formatJson} when
+*   you need parseable JSON.
+* - {@link format} calls `toString()` on objects by default; pass
+*   `ignoreToString: true` to disable.
+* - {@link formatJson} silently omits circular references (the key is
+*   dropped from the output).
+* - Values implementing the `Redactable` protocol are automatically
+*   redacted by both {@link format} and {@link formatJson}.
+*
+* **Example** (Pretty-print a value)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* const obj = { name: "Alice", scores: [100, 97] }
+* console.log(Formatter.format(obj))
+* // {"name":"Alice","scores":[100,97]}
+*
+* console.log(Formatter.format(obj, { space: 2 }))
+* // {
+* //   "name": "Alice",
+* //   "scores": [
+* //     100,
+* //     97
+* //   ]
+* // }
+* ```
+*
+* See also: {@link Formatter}, {@link format}, {@link formatJson}
+*
 * @since 4.0.0
 */
 /**
 * Converts any JavaScript value into a human-readable string.
 *
-* For objects that don't have a `toString` method, it applies redaction to
-* protect sensitive information.
+* When to use:
+* - Pretty-printing values for debugging, logging, or error messages.
+* - You need to handle `BigInt`, `Symbol`, `Set`, `Map`, `Date`, `RegExp`,
+*   or class instances that `JSON.stringify` cannot represent.
+* - You want circular references shown as `"[Circular]"` instead of
+*   throwing.
 *
-* Unlike `JSON.stringify`, this formatter:
-* - Handles circular references (printed as `"[Circular]"`).
-* - Supports additional types like `BigInt`, `Symbol`, `Set`, `Map`, `Date`, `RegExp`, and
-*   objects with custom `toString` methods.
-* - Includes constructor names for class instances (e.g. `MyClass({"a":1})`).
-* - Does not guarantee valid JSON output — the result is intended for debugging and inspection.
+* Behavior:
+* - Does not mutate input.
+* - Output is **not** valid JSON; use {@link formatJson} when you need
+*   parseable JSON.
+* - Primitives: stringified naturally (`null`, `undefined`, `123`, `true`).
+*   Strings are JSON-quoted.
+* - Objects with a custom `toString` (not `Object.prototype.toString`):
+*   `toString()` is called unless `ignoreToString` is `true`.
+* - Errors with a `cause`: formatted as `"<message> (cause: <cause>)"`.
+* - Iterables (`Set`, `Map`, etc.): formatted as
+*   `ClassName([...elements])`.
+* - Class instances: wrapped as `ClassName({...})`.
+* - `Redactable` values are automatically redacted.
+* - Arrays/objects with 0–1 entries are inline; larger ones are
+*   pretty-printed when `space` is set.
+* - Circular references are replaced with `"[Circular]"`.
 *
-* Formatting rules:
-* - Primitives are stringified naturally (`null`, `undefined`, `123`, `"abc"`, `true`).
-* - Strings are JSON-quoted.
-* - Arrays and objects with a single element/property are formatted inline.
-* - Larger arrays/objects are pretty-printed with optional indentation.
-* - Circular references are replaced with the literal `"[Circular]"`.
+* Options:
+* - `space` — indentation unit (number of spaces, or a string like
+*   `"\t"`). Defaults to `0` (compact).
+* - `ignoreToString` — skip calling `toString()`. Defaults to `false`.
 *
-* **Options**:
-* - `space`: Indentation used when pretty-printing:
-*   - If a number, that many spaces will be used.
-*   - If a string, the string is used as the indentation unit (e.g. `"\t"`).
-*   - If `0`, empty string, or `undefined`, output is compact (no indentation).
-*   Defaults to `0`.
-* - `ignoreToString`: If `true`, the `toString` method is not called on the value.
-*   Defaults to `false`.
+* **Example** (Compact output)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.format({ a: 1, b: [2, 3] }))
+* // {"a":1,"b":[2,3]}
+* ```
+*
+* **Example** (Pretty-printed output)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.format({ a: 1, b: [2, 3] }, { space: 2 }))
+* // {
+* //   "a": 1,
+* //   "b": [
+* //     2,
+* //     3
+* //   ]
+* // }
+* ```
+*
+* **Example** (Circular reference handling)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* const obj: any = { name: "loop" }
+* obj.self = obj
+* console.log(Formatter.format(obj))
+* // {"name":"loop","self":[Circular]}
+* ```
+*
+* See also: {@link formatJson}, {@link Formatter}
 *
 * @since 4.0.0
 */
-function format$2(input, options) {
+function format$3(input, options) {
 	const space = options?.space ?? 0;
 	const seen = /* @__PURE__ */ new WeakSet();
 	const gap = !space ? "" : typeof space === "number" ? " ".repeat(space) : space;
@@ -1185,10 +1367,10 @@ function format$2(input, options) {
 		if (typeof v === "string") return JSON.stringify(v);
 		if (typeof v === "number" || v == null || typeof v === "boolean" || typeof v === "symbol") return String(v);
 		if (typeof v === "bigint") return String(v) + "n";
-		if (isObject(v)) {
+		if (typeof v === "object" || typeof v === "function") {
 			if (seen.has(v)) return CIRCULAR;
 			seen.add(v);
-			if (symbolRedactable in v) return format$2(getRedacted(v));
+			if (symbolRedactable in v) return format$3(getRedacted(v));
 			if (Symbol.iterator in v) return `${v.constructor.name}(${recur(Array.from(v), d)})`;
 			const keys = ownKeys(v);
 			if (!gap || keys.length <= 1) return wrap(v, `{${keys.map((k) => `${formatPropertyKey(k)}:${recur(v[k], d)}`).join(",")}}`);
@@ -1200,7 +1382,29 @@ function format$2(input, options) {
 }
 const CIRCULAR = "[Circular]";
 /**
-* Fast path for formatting property keys.
+* Formats a single property key for display.
+*
+* When to use:
+* - You are building a custom formatter that needs to render object keys.
+*
+* Behavior:
+* - String keys are JSON-quoted (e.g. `"foo"`).
+* - Symbol and number keys are converted with `String()`.
+* - Pure function; does not mutate input.
+*
+* **Example** (Format property keys)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.formatPropertyKey("name"))
+* // "name"
+*
+* console.log(Formatter.formatPropertyKey(Symbol.for("id")))
+* // Symbol(id)
+* ```
+*
+* See also: {@link formatPath}, {@link format}
 *
 * @internal
 */
@@ -1208,7 +1412,28 @@ function formatPropertyKey(name) {
 	return typeof name === "string" ? JSON.stringify(name) : String(name);
 }
 /**
-* Fast path for formatting property paths.
+* Formats an array of property keys as a bracket-notation path string.
+*
+* When to use:
+* - You need to display a path through a nested object (e.g. in error
+*   messages or schema validation output).
+*
+* Behavior:
+* - Each key is wrapped in brackets and formatted via
+*   {@link formatPropertyKey}.
+* - Returns an empty string for an empty path.
+* - Pure function; does not mutate input.
+*
+* **Example** (Render a property path)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.formatPath(["users", 0, "name"]))
+* // ["users"][0]["name"]
+* ```
+*
+* See also: {@link formatPropertyKey}, {@link format}
 *
 * @internal
 */
@@ -1216,7 +1441,31 @@ function formatPath(path) {
 	return path.map((key) => `[${formatPropertyKey(key)}]`).join("");
 }
 /**
-* Fast path for formatting dates.
+* Formats a `Date` as an ISO 8601 string, returning `"Invalid Date"` for
+* invalid dates instead of throwing.
+*
+* When to use:
+* - You want a safe `toISOString()` that never throws.
+*
+* Behavior:
+* - Returns `date.toISOString()` on success.
+* - Returns `"Invalid Date"` if `toISOString()` throws (e.g. for
+*   `new Date(NaN)`).
+* - Pure function; does not mutate input.
+*
+* **Example** (Safe date formatting)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.formatDate(new Date("2024-01-15T10:30:00Z")))
+* // 2024-01-15T10:30:00.000Z
+*
+* console.log(Formatter.formatDate(new Date("invalid")))
+* // Invalid Date
+* ```
+*
+* See also: {@link format}
 *
 * @internal
 */
@@ -1236,41 +1485,61 @@ function safeToString(input) {
 	}
 }
 /**
-* Safely stringifies objects that may contain circular references.
+* Safely stringifies a value to JSON, silently dropping circular references.
 *
-* This function performs JSON.stringify with circular reference detection and handling.
-* It also applies redaction to sensitive values and provides a safe fallback for
-* any objects that can't be serialized normally.
+* When to use:
+* - You need valid JSON output (unlike {@link format}).
+* - The input may contain circular references and you want them silently
+*   omitted rather than throwing a `TypeError`.
 *
-* **Options**:
-* - `space`: Indentation used when pretty-printing:
-*   - If a number, that many spaces will be used.
-*   - If a string, the string is used as the indentation unit (e.g. `"\t"`).
-*   - If `0`, empty string, or `undefined`, output is compact (no indentation).
-*   Defaults to `0`.
+* Behavior:
+* - Does not mutate input.
+* - Uses `JSON.stringify` internally with a replacer that tracks seen
+*   objects.
+* - Circular references are replaced with `undefined` (omitted from
+*   output).
+* - `Redactable` values are automatically redacted before serialization.
+* - Types not supported by JSON (`BigInt`, `Symbol`, `undefined`,
+*   functions) follow standard `JSON.stringify` behavior (omitted or
+*   `null` in arrays).
 *
-* @example
+* Options:
+* - `space` — indentation unit (number of spaces, or a string like
+*   `"\t"`). Defaults to `0` (compact).
+*
+* **Example** (Compact JSON)
+*
 * ```ts
-* import { formatJson } from "effect/Formatter"
+* import { Formatter } from "effect"
 *
-* // Normal object
-* const simple = { name: "Alice", age: 30 }
-* console.log(formatJson(simple))
+* console.log(Formatter.formatJson({ name: "Alice", age: 30 }))
 * // {"name":"Alice","age":30}
+* ```
 *
-* // Object with circular reference
-* const circular: any = { name: "test" }
-* circular.self = circular
-* console.log(formatJson(circular))
-* // {"name":"test"} (circular reference omitted)
+* **Example** (Circular reference handling)
 *
-* // With formatting
-* console.log(formatJson(simple, { space: 2 }))
+* ```ts
+* import { Formatter } from "effect"
+*
+* const obj: any = { name: "test" }
+* obj.self = obj
+* console.log(Formatter.formatJson(obj))
+* // {"name":"test"}
+* ```
+*
+* **Example** (Pretty-printed JSON)
+*
+* ```ts
+* import { Formatter } from "effect"
+*
+* console.log(Formatter.formatJson({ name: "Alice", age: 30 }, { space: 2 }))
 * // {
 * //   "name": "Alice",
 * //   "age": 30
 * // }
 * ```
+*
+* See also: {@link format}, {@link Formatter}
 *
 * @since 4.0.0
 */
@@ -1444,7 +1713,10 @@ const PipeInspectableProto = {
 		return { ...this };
 	},
 	toString() {
-		return format$2(this, { ignoreToString: true });
+		return format$3(this.toJSON(), {
+			ignoreToString: true,
+			space: 2
+		});
 	},
 	[NodeInspectSymbol]() {
 		return this.toJSON();
@@ -1459,7 +1731,7 @@ const StructuralProto = {
 		const selfKeys = Object.keys(this);
 		const thatKeys = Object.keys(that);
 		if (selfKeys.length !== thatKeys.length) return false;
-		for (let i = 0; i < selfKeys.length; i++) if (selfKeys[i] !== thatKeys[i] && !equals$1(this[selfKeys[i]], that[selfKeys[i]])) return false;
+		for (let i = 0; i < selfKeys.length; i++) if (selfKeys[i] !== thatKeys[i] && !equals$2(this[selfKeys[i]], that[selfKeys[i]])) return false;
 		return true;
 	}
 };
@@ -1467,6 +1739,13 @@ const StructuralProto = {
 const YieldableProto = { [Symbol.iterator]() {
 	return new SingleShotGen(this);
 } };
+/** @internal */
+const YieldableErrorProto = {
+	...YieldableProto,
+	pipe() {
+		return pipeArguments(this, arguments);
+	}
+};
 /** @internal */
 const EffectProto = {
 	[EffectTypeId]: effectVariance,
@@ -1513,13 +1792,13 @@ var CauseImpl = class {
 		};
 	}
 	toString() {
-		return `Cause(${format$2(this.reasons)})`;
+		return `Cause(${format$3(this.reasons)})`;
 	}
 	[NodeInspectSymbol]() {
 		return this.toJSON();
 	}
 	[symbol$2](that) {
-		return isCause$1(that) && this.reasons.length === that.reasons.length && this.reasons.every((e, i) => equals$1(e, that.reasons[i]));
+		return isCause$1(that) && this.reasons.length === that.reasons.length && this.reasons.every((e, i) => equals$2(e, that.reasons[i]));
 	}
 	[symbol$3]() {
 		return array(this.reasons);
@@ -1556,7 +1835,7 @@ var ReasonBase = class {
 		return pipeArguments(this, arguments);
 	}
 	toString() {
-		return format$2(this);
+		return format$3(this);
 	}
 	[NodeInspectSymbol]() {
 		return this.toString();
@@ -1572,7 +1851,7 @@ var Fail = class extends ReasonBase {
 		this.error = error;
 	}
 	toString() {
-		return `Fail(${format$2(this.error)})`;
+		return `Fail(${format$3(this.error)})`;
 	}
 	toJSON() {
 		return {
@@ -1581,7 +1860,7 @@ var Fail = class extends ReasonBase {
 		};
 	}
 	[symbol$2](that) {
-		return isFailReason$1(that) && equals$1(this.error, that.error) && equals$1(this.annotations, that.annotations);
+		return isFailReason$1(that) && equals$2(this.error, that.error) && equals$2(this.annotations, that.annotations);
 	}
 	[symbol$3]() {
 		return combine$1(string$2(this._tag))(combine$1(hash(this.error))(hash(this.annotations)));
@@ -1599,7 +1878,7 @@ var Die = class extends ReasonBase {
 		this.defect = defect;
 	}
 	toString() {
-		return `Die(${format$2(this.defect)})`;
+		return `Die(${format$3(this.defect)})`;
 	}
 	toJSON() {
 		return {
@@ -1608,7 +1887,7 @@ var Die = class extends ReasonBase {
 		};
 	}
 	[symbol$2](that) {
-		return isDieReason$1(that) && equals$1(this.defect, that.defect) && equals$1(this.annotations, that.annotations);
+		return isDieReason$1(that) && equals$2(this.defect, that.defect) && equals$2(this.annotations, that.annotations);
 	}
 	[symbol$3]() {
 		return combine$1(string$2(this._tag))(combine$1(hash(this.defect))(hash(this.annotations)));
@@ -1658,7 +1937,7 @@ const makeExit = (options) => {
 			return this[args];
 		},
 		toString() {
-			return `${options.op}(${format$2(this[args])})`;
+			return `${options.op}(${format$3(this[args])})`;
 		},
 		toJSON() {
 			return {
@@ -1668,7 +1947,7 @@ const makeExit = (options) => {
 			};
 		},
 		[symbol$2](that) {
-			return isExit$1(that) && that._tag === this._tag && equals$1(this[args], that[args]);
+			return isExit$1(that) && that._tag === this._tag && equals$2(this[args], that[args]);
 		},
 		[symbol$3]() {
 			return combine$1(string$2(options.op), hash(this[args]));
@@ -1725,7 +2004,7 @@ const YieldableError = /* @__PURE__ */ function() {
 			return exitFail(this);
 		}
 	}
-	Object.assign(YieldableError.prototype, YieldableProto);
+	Object.assign(YieldableError.prototype, YieldableErrorProto);
 	return YieldableError;
 }();
 /** @internal */
@@ -1770,9 +2049,9 @@ var NoSuchElementError$1 = class extends TaggedError$1("NoSuchElementError") {
 /**
 * @since 2.0.0
 */
-const TypeId$15 = "~effect/data/Option";
+const TypeId$16 = "~effect/data/Option";
 const CommonProto$1 = {
-	[TypeId$15]: { _A: (_) => _ },
+	[TypeId$16]: { _A: (_) => _ },
 	...PipeInspectableProto,
 	...YieldableProto
 };
@@ -1780,13 +2059,13 @@ const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 	_tag: "Some",
 	_op: "Some",
 	[symbol$2](that) {
-		return isOption$1(that) && isSome$1(that) && equals$1(this.value, that.value);
+		return isOption$1(that) && isSome$1(that) && equals$2(this.value, that.value);
 	},
 	[symbol$3]() {
 		return combine$1(hash(this._tag))(hash(this.value));
 	},
 	toString() {
-		return `some(${format$2(this.value)})`;
+		return `some(${format$3(this.value)})`;
 	},
 	toJSON() {
 		return {
@@ -1823,7 +2102,7 @@ const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 	}
 });
 /** @internal */
-const isOption$1 = (input) => hasProperty(input, TypeId$15);
+const isOption$1 = (input) => hasProperty(input, TypeId$16);
 /** @internal */
 const isNone$1 = (fa) => fa._tag === "None";
 /** @internal */
@@ -1836,9 +2115,9 @@ const some$1 = (value) => {
 	a.value = value;
 	return a;
 };
-const TypeId$14 = "~effect/data/Result";
+const TypeId$15 = "~effect/data/Result";
 const CommonProto = {
-	[TypeId$14]: {
+	[TypeId$15]: {
 		_A: (_) => _,
 		_E: (_) => _
 	},
@@ -1849,13 +2128,13 @@ const SuccessProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 	_tag: "Success",
 	_op: "Success",
 	[symbol$2](that) {
-		return isResult$1(that) && isSuccess$4(that) && equals$1(this.success, that.success);
+		return isResult$1(that) && isSuccess$4(that) && equals$2(this.success, that.success);
 	},
 	[symbol$3]() {
 		return combine$1(hash(this._tag))(hash(this.success));
 	},
 	toString() {
-		return `success(${format$2(this.success)})`;
+		return `success(${format$3(this.success)})`;
 	},
 	toJSON() {
 		return {
@@ -1872,13 +2151,13 @@ const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 	_tag: "Failure",
 	_op: "Failure",
 	[symbol$2](that) {
-		return isResult$1(that) && isFailure$4(that) && equals$1(this.failure, that.failure);
+		return isResult$1(that) && isFailure$4(that) && equals$2(this.failure, that.failure);
 	},
 	[symbol$3]() {
 		return combine$1(hash(this._tag))(hash(this.failure));
 	},
 	toString() {
-		return `failure(${format$2(this.failure)})`;
+		return `failure(${format$3(this.failure)})`;
 	},
 	toJSON() {
 		return {
@@ -1892,7 +2171,7 @@ const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 	}
 });
 /** @internal */
-const isResult$1 = (input) => hasProperty(input, TypeId$14);
+const isResult$1 = (input) => hasProperty(input, TypeId$15);
 /** @internal */
 const isFailure$4 = (result) => result._tag === "Failure";
 /** @internal */
@@ -1996,7 +2275,7 @@ const succeed$4 = (success) => {
 * @category constructors
 * @since 2.0.0
 */
-function make$10(compare) {
+function make$11(compare) {
 	return (self, that) => self === that ? 0 : compare(self, that);
 }
 /**
@@ -2034,7 +2313,7 @@ function make$10(compare) {
 * @category instances
 * @since 4.0.0
 */
-const Number$4 = /* @__PURE__ */ make$10((self, that) => {
+const Number$4 = /* @__PURE__ */ make$11((self, that) => {
 	if (globalThis.Number.isNaN(self) && globalThis.Number.isNaN(that)) return 0;
 	if (globalThis.Number.isNaN(self)) return -1;
 	if (globalThis.Number.isNaN(that)) return 1;
@@ -2353,23 +2632,31 @@ const fail$4 = fail$5;
 */
 const isFailure$3 = isFailure$4;
 /**
-* Applies a filter, predicate, or refinement to an input and returns a boxed
-* result. Extra arguments are forwarded to the function.
+* Checks whether a `Result` is a `Success`.
 *
+* - Acts as a TypeScript type guard, narrowing to `Success<A, E>`
+* - After narrowing, you can access `.success` to read the value
+*
+* **Example** (Narrowing to Success)
+*
+* ```ts
+* import { Result } from "effect"
+*
+* const result = Result.succeed(42)
+*
+* if (Result.isSuccess(result)) {
+*   console.log(result.success)
+*   // Output: 42
+* }
+* ```
+*
+* @see {@link isFailure} for the opposite check
+* @see {@link isResult} to check if a value is any Result
+*
+* @category Type Guards
 * @since 4.0.0
-* @category Apply
 */
-const apply = (filter, input, ...args) => {
-	const result = filter(input, ...args);
-	if (result === true) return succeed$3(input);
-	if (result === false) return fail$4(input);
-	return result;
-};
-/**
-* @since 2.0.0
-*/
-/** @internal */
-const isArrayNonEmpty$1 = (self) => self.length > 0;
+const isSuccess$3 = isSuccess$4;
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -2703,6 +2990,311 @@ const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
 	}
 	return [];
 });
+const TypeId$14 = "~effect/BigDecimal";
+const BigDecimalProto = {
+	[TypeId$14]: TypeId$14,
+	[symbol$3]() {
+		const normalized = normalize(this);
+		return combine$1(hash(normalized.value), number$2(normalized.scale));
+	},
+	[symbol$2](that) {
+		return isBigDecimal(that) && equals$1(this, that);
+	},
+	toString() {
+		return `BigDecimal(${format$2(this)})`;
+	},
+	toJSON() {
+		return {
+			_id: "BigDecimal",
+			value: String(this.value),
+			scale: this.scale
+		};
+	},
+	[NodeInspectSymbol]() {
+		return this.toJSON();
+	},
+	pipe() {
+		return pipeArguments(this, arguments);
+	}
+};
+/**
+* Checks if a given value is a `BigDecimal`.
+*
+* @example
+* ```ts
+* import { BigDecimal } from "effect"
+*
+* const decimal = BigDecimal.fromNumber(123.45)
+* console.log(BigDecimal.isBigDecimal(decimal)) // true
+* console.log(BigDecimal.isBigDecimal(123.45)) // false
+* console.log(BigDecimal.isBigDecimal("123.45")) // false
+* ```
+*
+* @since 2.0.0
+* @category guards
+*/
+const isBigDecimal = (u) => hasProperty(u, TypeId$14);
+/**
+* Creates a `BigDecimal` from a `bigint` value and a scale.
+*
+* @example
+* ```ts
+* import { BigDecimal } from "effect"
+*
+* // Create 123.45 (12345 with scale 2)
+* const decimal = BigDecimal.make(12345n, 2)
+* console.log(BigDecimal.format(decimal)) // "123.45"
+*
+* // Create 42 (42 with scale 0)
+* const integer = BigDecimal.make(42n, 0)
+* console.log(BigDecimal.format(integer)) // "42"
+* ```
+*
+* @since 2.0.0
+* @category constructors
+*/
+const make$10 = (value, scale) => {
+	const o = Object.create(BigDecimalProto);
+	o.value = value;
+	o.scale = scale;
+	return o;
+};
+/**
+* Internal function used to create pre-normalized `BigDecimal`s.
+*
+* @internal
+*/
+const makeNormalizedUnsafe = (value, scale) => {
+	if (value !== bigint0$2 && value % bigint10 === bigint0$2) throw new RangeError("Value must be normalized");
+	const o = make$10(value, scale);
+	o.normalized = o;
+	return o;
+};
+const bigint0$2 = /* @__PURE__ */ BigInt(0);
+const bigint10 = /* @__PURE__ */ BigInt(10);
+const zero$1 = /* @__PURE__ */ makeNormalizedUnsafe(bigint0$2, 0);
+/**
+* Normalizes a given `BigDecimal` by removing trailing zeros.
+*
+* @example
+* ```ts
+* import { fromStringUnsafe, make, normalize } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(
+*   normalize(fromStringUnsafe("123.00000")),
+*   normalize(make(123n, 0))
+* )
+* assert.deepStrictEqual(
+*   normalize(fromStringUnsafe("12300000")),
+*   normalize(make(123n, -5))
+* )
+* ```
+*
+* @since 2.0.0
+* @category scaling
+*/
+const normalize = (self) => {
+	if (self.normalized === void 0) if (self.value === bigint0$2) self.normalized = zero$1;
+	else {
+		const digits = `${self.value}`;
+		let trail = 0;
+		for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
+		else break;
+		if (trail === 0) self.normalized = self;
+		self.normalized = makeNormalizedUnsafe(BigInt(digits.substring(0, digits.length - trail)), self.scale - trail);
+	}
+	return self.normalized;
+};
+/**
+* Scales a given `BigDecimal` to the specified scale.
+*
+* If the given scale is smaller than the current scale, the value will be rounded down to
+* the nearest integer.
+*
+* @example
+* ```ts
+* import { BigDecimal } from "effect"
+*
+* const decimal = BigDecimal.fromNumberUnsafe(123.45)
+*
+* // Increase scale (add more precision)
+* const scaled = BigDecimal.scale(decimal, 4)
+* console.log(BigDecimal.format(scaled)) // "123.4500"
+*
+* // Decrease scale (reduce precision, rounds down)
+* const reduced = BigDecimal.scale(decimal, 1)
+* console.log(BigDecimal.format(reduced)) // "123.4"
+* ```
+*
+* @since 2.0.0
+* @category scaling
+*/
+const scale = /* @__PURE__ */ dual(2, (self, scale) => {
+	if (scale > self.scale) return make$10(self.value * bigint10 ** BigInt(scale - self.scale), scale);
+	if (scale < self.scale) return make$10(self.value / bigint10 ** BigInt(self.scale - scale), scale);
+	return self;
+});
+/**
+* Determines the absolute value of a given `BigDecimal`.
+*
+* @example
+* ```ts
+* import { abs, fromStringUnsafe } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(abs(fromStringUnsafe("-5")), fromStringUnsafe("5"))
+* assert.deepStrictEqual(abs(fromStringUnsafe("0")), fromStringUnsafe("0"))
+* assert.deepStrictEqual(abs(fromStringUnsafe("5")), fromStringUnsafe("5"))
+* ```
+*
+* @since 2.0.0
+* @category math
+*/
+const abs = (n) => n.value < bigint0$2 ? make$10(-n.value, n.scale) : n;
+/**
+* Provides an `Equivalence` instance for `BigDecimal` that determines equality between BigDecimal values.
+*
+* @example
+* ```ts
+* import { BigDecimal } from "effect"
+*
+* const a = BigDecimal.fromNumberUnsafe(1.50)
+* const b = BigDecimal.fromNumberUnsafe(1.5)
+* const c = BigDecimal.fromNumberUnsafe(2.0)
+*
+* console.log(BigDecimal.Equivalence(a, b)) // true (1.50 === 1.5)
+* console.log(BigDecimal.Equivalence(a, c)) // false (1.50 !== 2.0)
+* ```
+*
+* @category instances
+* @since 2.0.0
+*/
+const Equivalence$3 = /* @__PURE__ */ make$12((self, that) => {
+	if (self.scale > that.scale) return scale(that, self.scale).value === self.value;
+	if (self.scale < that.scale) return scale(self, that.scale).value === that.value;
+	return self.value === that.value;
+});
+/**
+* Checks if two `BigDecimal`s are equal.
+*
+* @example
+* ```ts
+* import { BigDecimal } from "effect"
+*
+* const a = BigDecimal.fromNumberUnsafe(1.5)
+* const b = BigDecimal.fromNumberUnsafe(1.50)
+* const c = BigDecimal.fromNumberUnsafe(2.0)
+*
+* console.log(BigDecimal.equals(a, b)) // true
+* console.log(BigDecimal.equals(a, c)) // false
+* ```
+*
+* @since 2.0.0
+* @category predicates
+*/
+const equals$1 = /* @__PURE__ */ dual(2, (self, that) => Equivalence$3(self, that));
+/**
+* Formats a given `BigDecimal` as a `string`.
+*
+* If the scale of the `BigDecimal` is greater than or equal to 16, the `BigDecimal` will
+* be formatted in scientific notation.
+*
+* @example
+* ```ts
+* import { format, fromStringUnsafe } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(format(fromStringUnsafe("-5")), "-5")
+* assert.deepStrictEqual(format(fromStringUnsafe("123.456")), "123.456")
+* assert.deepStrictEqual(format(fromStringUnsafe("-0.00000123")), "-0.00000123")
+* ```
+*
+* @since 2.0.0
+* @category conversions
+*/
+const format$2 = (n) => {
+	const normalized = normalize(n);
+	if (Math.abs(normalized.scale) >= 16) return toExponential(normalized);
+	const negative = normalized.value < bigint0$2;
+	const absolute = negative ? `${normalized.value}`.substring(1) : `${normalized.value}`;
+	let before;
+	let after;
+	if (normalized.scale >= absolute.length) {
+		before = "0";
+		after = "0".repeat(normalized.scale - absolute.length) + absolute;
+	} else {
+		const location = absolute.length - normalized.scale;
+		if (location > absolute.length) {
+			const zeros = location - absolute.length;
+			before = `${absolute}${"0".repeat(zeros)}`;
+			after = "";
+		} else {
+			after = absolute.slice(location);
+			before = absolute.slice(0, location);
+		}
+	}
+	const complete = after === "" ? before : `${before}.${after}`;
+	return negative ? `-${complete}` : complete;
+};
+/**
+* Formats a given `BigDecimal` as a `string` in scientific notation.
+*
+* @example
+* ```ts
+* import { make, toExponential } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(toExponential(make(123456n, -5)), "1.23456e+10")
+* ```
+*
+* @since 4.0.0
+* @category conversions
+*/
+const toExponential = (n) => {
+	if (isZero(n)) return "0e+0";
+	const normalized = normalize(n);
+	const digits = `${abs(normalized).value}`;
+	const head = digits.slice(0, 1);
+	const tail = digits.slice(1);
+	let output = `${isNegative(normalized) ? "-" : ""}${head}`;
+	if (tail !== "") output += `.${tail}`;
+	const exp = tail.length - normalized.scale;
+	return `${output}e${exp >= 0 ? "+" : ""}${exp}`;
+};
+/**
+* Checks if a given `BigDecimal` is `0`.
+*
+* @example
+* ```ts
+* import { fromStringUnsafe, isZero } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(isZero(fromStringUnsafe("0")), true)
+* assert.deepStrictEqual(isZero(fromStringUnsafe("1")), false)
+* ```
+*
+* @since 2.0.0
+* @category predicates
+*/
+const isZero = (n) => n.value === bigint0$2;
+/**
+* Checks if a given `BigDecimal` is negative.
+*
+* @example
+* ```ts
+* import { fromStringUnsafe, isNegative } from "effect/BigDecimal"
+* import * as assert from "node:assert"
+*
+* assert.deepStrictEqual(isNegative(fromStringUnsafe("-1")), true)
+* assert.deepStrictEqual(isNegative(fromStringUnsafe("0")), false)
+* assert.deepStrictEqual(isNegative(fromStringUnsafe("1")), false)
+* ```
+*
+* @since 2.0.0
+* @category predicates
+*/
+const isNegative = (n) => n.value < bigint0$2;
 const TypeId$13 = "~effect/time/Duration";
 /**
 * Get the duration in nanoseconds as a bigint.
@@ -2896,7 +3488,7 @@ const Proto$2 = {
 	},
 	[symbol$2](that) {
 		if (!isServiceMap(that) || this.mapUnsafe.size !== that.mapUnsafe.size) return false;
-		for (const k of this.mapUnsafe.keys()) if (!that.mapUnsafe.has(k) || !equals$1(this.mapUnsafe.get(k), that.mapUnsafe.get(k))) return false;
+		for (const k of this.mapUnsafe.keys()) if (!that.mapUnsafe.has(k) || !equals$2(this.mapUnsafe.get(k), that.mapUnsafe.get(k))) return false;
 		return true;
 	},
 	[symbol$3]() {
@@ -3612,7 +4204,7 @@ const causeCombine = /* @__PURE__ */ dual(2, (self, that) => {
 	if (self.reasons.length === 0) return that;
 	else if (that.reasons.length === 0) return self;
 	const newCause = new CauseImpl(union$1(self.reasons, that.reasons));
-	return equals$1(self, newCause) ? self : newCause;
+	return equals$2(self, newCause) ? self : newCause;
 });
 /** @internal */
 const causePartition = (self) => {
@@ -3632,6 +4224,7 @@ const causeSquash = (self) => {
 	else if (partitioned.Interrupt.length > 0) return new globalThis.Error("All fibers interrupted without error");
 	return new globalThis.Error("Empty cause");
 };
+/** @internal */
 const causePrettyError = (original, annotations) => {
 	const kind = typeof original;
 	let error;
@@ -3706,23 +4299,6 @@ const fiberVariance = {
 const fiberIdStore = { id: 0 };
 /** @internal */
 const getCurrentFiber = () => globalThis[currentFiberTypeId];
-const keepAlive = /* @__PURE__ */ (() => {
-	let count = 0;
-	let running = void 0;
-	return {
-		increment() {
-			count++;
-			running ??= globalThis.setInterval(constVoid, 2147483647);
-		},
-		decrement() {
-			count--;
-			if (count === 0 && running !== void 0) {
-				globalThis.clearInterval(running);
-				running = void 0;
-			}
-		}
-	};
-})();
 /** @internal */
 var FiberImpl = class {
 	constructor(services, interruptible = true) {
@@ -3972,10 +4548,8 @@ const callbackOptions = /* @__PURE__ */ makePrimitive({
 		}, controller?.signal);
 		if (yielded !== false) return yielded;
 		yielded = true;
-		keepAlive.increment();
 		fiber._yielded = () => {
 			resumed = true;
-			keepAlive.decrement();
 		};
 		if (controller === void 0 && onCancel === void 0) return Yield;
 		fiber._stack.push(asyncFinalizer(() => {
@@ -4002,22 +4576,27 @@ const asyncFinalizer = /* @__PURE__ */ makePrimitive({
 const callback$1 = (register) => callbackOptions(register, register.length >= 2);
 /** @internal */
 const fnUntraced$1 = (body, ...pipeables) => {
-	return pipeables.length === 0 ? function() {
+	const fn = pipeables.length === 0 ? function() {
 		return suspend$1(() => fromIteratorUnsafe(body.apply(this, arguments)));
 	} : function() {
 		let effect = suspend$1(() => fromIteratorUnsafe(body.apply(this, arguments)));
 		for (let i = 0; i < pipeables.length; i++) effect = pipeables[i](effect, ...arguments);
 		return effect;
 	};
+	return defineFunctionLength(body.length, fn);
 };
+const defineFunctionLength = (length, fn) => Object.defineProperty(fn, "length", {
+	value: length,
+	configurable: true
+});
 /** @internal */
-const fnUntracedEager$1 = (body, ...pipeables) => pipeables.length === 0 ? function() {
+const fnUntracedEager$1 = (body, ...pipeables) => defineFunctionLength(body.length, pipeables.length === 0 ? function() {
 	return fromIteratorEagerUnsafe(() => body.apply(this, arguments));
 } : function() {
 	let effect = fromIteratorEagerUnsafe(() => body.apply(this, arguments));
 	for (const pipeable of pipeables) effect = pipeable(effect);
 	return effect;
-};
+});
 const fromIteratorEagerUnsafe = (evaluate) => {
 	try {
 		const iterator = evaluate();
@@ -4110,6 +4689,8 @@ const catchEager$1 = /* @__PURE__ */ dual(2, (self, f) => {
 	return catch_$1(self, f);
 });
 /** @internal */
+const exitIsSuccess = (self) => self._tag === "Success";
+/** @internal */
 const exitVoid = /* @__PURE__ */ exitSucceed(void 0);
 /** @internal */
 const exitMap = /* @__PURE__ */ dual(2, (self, f) => self._tag === "Success" ? exitSucceed(f(self.value)) : self);
@@ -4127,21 +4708,15 @@ const exitAsVoidAll = (exits) => {
 	return failures.length === 0 ? exitVoid : exitFailCause(causeFromReasons(failures));
 };
 /** @internal */
+const exitGetSuccess = (self) => exitIsSuccess(self) ? some(self.value) : none();
+/** @internal */
 const updateServices$1 = /* @__PURE__ */ dual(2, (self, f) => withFiber$1((fiber) => {
 	const prev = fiber.services;
 	const nextServices = f(prev);
 	if (prev === nextServices) return self;
 	fiber.setServices(nextServices);
-	const newServices = /* @__PURE__ */ new Map();
-	for (const [key, value] of fiber.services.mapUnsafe) if (!prev.mapUnsafe.has(key) || value !== prev.mapUnsafe.get(key)) newServices.set(key, value);
 	return onExitPrimitive$1(self, () => {
-		const map = new Map(fiber.services.mapUnsafe);
-		for (const [key, value] of newServices) {
-			if (value !== map.get(key)) continue;
-			if (prev.mapUnsafe.has(key)) map.set(key, prev.mapUnsafe.get(key));
-			else map.delete(key);
-		}
-		fiber.setServices(makeUnsafe$5(map));
+		fiber.setServices(prev);
 	});
 }));
 /** @internal */
@@ -4166,12 +4741,12 @@ const OnFailureProto = /* @__PURE__ */ makePrimitiveProto({
 	}
 });
 /** @internal */
-const catchCauseIf$1 = /* @__PURE__ */ dual(3, (self, filter, f) => catchCause$1(self, (cause) => {
-	const eb = apply(filter, cause);
-	return !isFailure$3(eb) ? internalCall(() => f(eb.success, cause)) : failCause$2(eb.failure);
+const catchCauseFilter$1 = /* @__PURE__ */ dual(3, (self, filter, f) => catchCause$1(self, (cause) => {
+	const eb = filter(cause);
+	return isFailure$3(eb) ? failCause$2(eb.failure) : internalCall(() => f(eb.success, cause));
 }));
 /** @internal */
-const catch_$1 = /* @__PURE__ */ dual(2, (self, f) => catchCauseIf$1(self, findError$2, (e) => f(e)));
+const catch_$1 = /* @__PURE__ */ dual(2, (self, f) => catchCauseFilter$1(self, findError$2, (e) => f(e)));
 /** @internal */
 const mapError$2 = /* @__PURE__ */ dual(2, (self, f) => catch_$1(self, (error) => failSync$1(() => f(error))));
 /** @internal */
@@ -4293,6 +4868,18 @@ const setInterruptibleTrue = /* @__PURE__ */ (/* @__PURE__ */ makePrimitive({
 		if (fiber._interruptedCause && fiber.interruptible) return () => failCause$2(fiber._interruptedCause);
 	}
 }))(true);
+const findFirstLoop = (iterator, index, predicate, value) => flatMap$1(predicate(value, index), (keep) => {
+	if (keep) return succeed$2(some(value));
+	const next = iterator.next();
+	if (!next.done) return findFirstLoop(iterator, index + 1, predicate, next.value);
+	return succeed$2(none());
+});
+const findFirstFilterLoop = (iterator, index, filter, value) => flatMap$1(filter(value, index), (result) => {
+	if (isSuccess$3(result)) return succeed$2(some(result.success));
+	const next = iterator.next();
+	if (!next.done) return findFirstFilterLoop(iterator, index + 1, filter, next.value);
+	return succeed$2(none());
+});
 /** @internal */
 const whileLoop$1 = /* @__PURE__ */ makePrimitive({
 	op: "While",
@@ -4428,6 +5015,8 @@ const runSyncExitWith$1 = (services) => {
 	};
 };
 /** @internal */
+const runSyncExit$1 = /* @__PURE__ */ runSyncExitWith$1(/* @__PURE__ */ empty$1());
+/** @internal */
 const runSyncWith$1 = (services) => {
 	const runSyncExit = runSyncExitWith$1(services);
 	return (effect) => {
@@ -4487,42 +5076,68 @@ hasProcessStdout || "Deno" in globalThis;
 */
 const findError$1 = findError$2;
 /**
-* Create a tagged error constructor with a specific tag for discriminated unions.
+* Creates a tagged error class with a `_tag` discriminator.
 *
-* This constructor creates errors with a `_tag` property that are both
-* `Cause.YieldableError` and have structural equality semantics.
+* Like {@link Error}, but instances also carry a `readonly _tag` property,
+* enabling `Effect.catchTag` and `Effect.catchTags` for tag-based recovery.
+* The `_tag` is excluded from the constructor argument.
 *
-* @example
+* - Use for domain errors in Effect applications where you want
+*   discriminated-union error handling.
+* - Yielding an instance inside `Effect.gen` fails the effect with this error.
+*
+* **Example** (tag-based error recovery)
+*
 * ```ts
-* import { Data, Effect, pipe } from "effect"
+* import { Data, Effect } from "effect"
 *
-* class NetworkError extends Data.TaggedError("NetworkError")<{
-*   code: number
-*   message: string
+* class NotFound extends Data.TaggedError("NotFound")<{
+*   readonly resource: string
 * }> {}
 *
-* class ValidationError extends Data.TaggedError("ValidationError")<{
-*   field: string
-*   message: string
+* class Forbidden extends Data.TaggedError("Forbidden")<{
+*   readonly reason: string
 * }> {}
 *
 * const program = Effect.gen(function*() {
-*   yield* new NetworkError({ code: 500, message: "Server error" })
+*   yield* new NotFound({ resource: "/users/42" })
 * })
 *
-* const result = pipe(
-*   program,
-*   Effect.catchTag(
-*     "NetworkError",
-*     (error) => Effect.succeed(`Network error: ${error.message}`)
-*   )
+* const recovered = program.pipe(
+*   Effect.catchTag("NotFound", (e) =>
+*     Effect.succeed(`missing: ${e.resource}`))
 * )
 * ```
+*
+* @see {@link Error} — without a `_tag`
+* @see {@link TaggedClass} — tagged class that is not an error
 *
 * @category constructors
 * @since 2.0.0
 */
 const TaggedError = TaggedError$1;
+/**
+* Returns the success value of an Exit as an Option.
+*
+* - Use when you want to optionally extract the value without pattern matching
+* - Returns `Option.some(value)` for a Success, `Option.none()` for a Failure
+*
+* **Example** (Getting the success value)
+*
+* ```ts
+* import { Exit } from "effect"
+*
+* console.log(Exit.getSuccess(Exit.succeed(42))) // { _tag: "Some", value: 42 }
+* console.log(Exit.getSuccess(Exit.fail("err"))) // { _tag: "None" }
+* ```
+*
+* @see {@link getCause} to extract the Cause of a failure
+* @see {@link filterValue} for filter-pipeline usage
+*
+* @category Accessors
+* @since 4.0.0
+*/
+const getSuccess = exitGetSuccess;
 const DeferredProto = {
 	["~effect/Deferred"]: {
 		_A: identity,
@@ -5054,6 +5669,76 @@ const exit = exit$1;
 */
 const runSync = runSync$1;
 /**
+* Runs an effect synchronously and returns the result as an `Exit` type, which
+* represents the outcome (success or failure) of the effect.
+*
+* **When to Use**
+*
+* Use `runSyncExit` to find out whether an effect succeeded or failed,
+* including any defects, without dealing with asynchronous operations.
+*
+* **Details**
+*
+* The `Exit` type represents the result of the effect:
+* - If the effect succeeds, the result is wrapped in a `Success`.
+* - If it fails, the failure information is provided as a `Failure` containing
+*   a `Cause` type.
+*
+* If the effect contains asynchronous operations, `runSyncExit` will
+* return an `Failure` with a `Die` cause, indicating that the effect cannot be
+* resolved synchronously.
+*
+* @example
+* ```ts
+* // Title: Handling Results as Exit
+* import { Effect } from "effect"
+*
+* console.log(Effect.runSyncExit(Effect.succeed(1)))
+* // Output:
+* // {
+* //   _id: "Exit",
+* //   _tag: "Success",
+* //   value: 1
+* // }
+*
+* console.log(Effect.runSyncExit(Effect.fail("my error")))
+* // Output:
+* // {
+* //   _id: "Exit",
+* //   _tag: "Failure",
+* //   cause: {
+* //     _id: "Cause",
+* //     _tag: "Fail",
+* //     failure: "my error"
+* //   }
+* // }
+* ```
+*
+* @example
+* // Title: Asynchronous Operation Resulting in Die
+* import { Effect } from "effect"
+*
+* console.log(Effect.runSyncExit(Effect.promise(() => Promise.resolve(1))))
+* // Output:
+* // {
+* //   _id: 'Exit',
+* //   _tag: 'Failure',
+* //   cause: {
+* //     _id: 'Cause',
+* //     _tag: 'Die',
+* //     defect: [Fiber #0 cannot be resolved synchronously. This is caused by using runSync on an effect that performs async work] {
+* //       fiber: [FiberRuntime],
+* //       _tag: 'AsyncFiberException',
+* //       name: 'AsyncFiberException'
+* //     }
+* //   }
+* // }
+*
+* @since 2.0.0
+* @category Running Effects
+*/
+const runSyncExit = runSyncExit$1;
+/**
 * An optimized version of `map` that checks if an effect is already resolved
 * and applies the mapping function eagerly when possible.
 *
@@ -5234,7 +5919,15 @@ function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
 }
 /** @internal */
+function resolveAt$1(key) {
+	return (ast) => resolve$1(ast)?.[key];
+}
+/** @internal */
+const resolveIdentifier$1 = /* @__PURE__ */ resolveAt$1("identifier");
+/** @internal */
 const getExpected = /* @__PURE__ */ memoize((ast) => {
+	const identifier = resolveIdentifier$1(ast);
+	if (typeof identifier === "string") return identifier;
 	return ast.getExpected(getExpected);
 });
 /**
@@ -5797,9 +6490,9 @@ const defaultLeafHook = (issue) => {
 		case "InvalidType": return getExpectedMessage(getExpected(issue.ast), formatOption(issue.actual));
 		case "InvalidValue": return `Invalid data ${formatOption(issue.actual)}`;
 		case "MissingKey": return "Missing key";
-		case "UnexpectedKey": return `Unexpected key with value ${format$2(issue.actual)}`;
+		case "UnexpectedKey": return `Unexpected key with value ${format$3(issue.actual)}`;
 		case "Forbidden": return "Forbidden operation";
-		case "OneOf": return `Expected exactly one member to match the input ${format$2(issue.actual)}`;
+		case "OneOf": return `Expected exactly one member to match the input ${format$3(issue.actual)}`;
 	}
 };
 /**
@@ -5840,7 +6533,7 @@ function toDefaultIssues(issue, path, leafHook, checkHook) {
 			switch (issue.issue._tag) {
 				case "InvalidValue": return [{
 					path,
-					message: getExpectedMessage(formatCheck(issue.filter), format$2(issue.actual))
+					message: getExpectedMessage(formatCheck(issue.filter), format$3(issue.actual))
 				}];
 				default: return toDefaultIssues(issue.issue, path, leafHook, checkHook);
 			}
@@ -5857,7 +6550,7 @@ function toDefaultIssues(issue, path, leafHook, checkHook) {
 				}];
 				return [{
 					path,
-					message: getExpectedMessage(getExpected(issue.ast), format$2(issue.actual))
+					message: getExpectedMessage(getExpected(issue.ast), format$3(issue.actual))
 				}];
 			}
 			return issue.issues.flatMap((issue) => toDefaultIssues(issue, path, leafHook, checkHook));
@@ -5940,7 +6633,7 @@ function getMessageAnnotation(annotations, type = "message") {
 }
 function formatOption(actual) {
 	if (isNone(actual)) return "no value provided";
-	return format$2(actual.value);
+	return format$3(actual.value);
 }
 /**
 * Composable transformation primitives for the Effect Schema system.
@@ -6553,6 +7246,13 @@ const isNever = /* @__PURE__ */ makeGuard("Never");
 */
 const isLiteral = /* @__PURE__ */ makeGuard("Literal");
 /**
+* Narrows an {@link AST} to {@link UniqueSymbol}.
+*
+* @category Guard
+* @since 4.0.0
+*/
+const isUniqueSymbol = /* @__PURE__ */ makeGuard("UniqueSymbol");
+/**
 * Narrows an {@link AST} to {@link Arrays}.
 *
 * @category Guard
@@ -6708,7 +7408,7 @@ var Declaration = class Declaration extends Base {
 	}
 	/** @internal */
 	getExpected() {
-		const expected = this.annotations?.identifier ?? this.annotations?.expected;
+		const expected = this.annotations?.expected;
 		if (typeof expected === "string") return expected;
 		return "<Declaration>";
 	}
@@ -6764,7 +7464,7 @@ var Literal$1 = class extends Base {
 	literal;
 	constructor(literal, annotations, checks, encoding, context) {
 		super(annotations, checks, encoding, context);
-		if (typeof literal === "number" && !globalThis.Number.isFinite(literal)) throw new Error(`A numeric literal must be finite, got ${format$2(literal)}`);
+		if (typeof literal === "number" && !globalThis.Number.isFinite(literal)) throw new Error(`A numeric literal must be finite, got ${format$3(literal)}`);
 		this.literal = literal;
 	}
 	/** @internal */
@@ -6939,15 +7639,15 @@ var Arrays = class Arrays extends Base {
 				const e = elements[i];
 				const value = i < input.length ? some(input[i]) : none();
 				const eff = e.parser(value, options);
-				const exit$5 = effectIsExit(eff) ? eff : yield* exit(eff);
-				if (exit$5._tag === "Failure") {
-					const issueElement = findError$1(exit$5.cause);
-					if (isFailure$3(issueElement)) return yield* exit$5;
+				const exit$6 = effectIsExit(eff) ? eff : yield* exit(eff);
+				if (exit$6._tag === "Failure") {
+					const issueElement = findError$1(exit$6.cause);
+					if (isFailure$3(issueElement)) return yield* exit$6;
 					const issue = new Pointer([i], issueElement.success);
 					if (errorsAllOption) if (issues) issues.push(issue);
 					else issues = [issue];
 					else return yield* fail(new Composite(ast, oinput, [issue]));
-				} else if (exit$5.value._tag === "Some") output[i] = exit$5.value.value;
+				} else if (exit$6.value._tag === "Some") output[i] = exit$6.value.value;
 				else if (!isOptional(e.ast)) {
 					const issue = new Pointer([i], new MissingKey(e.ast.context?.annotations));
 					if (errorsAllOption) if (issues) issues.push(issue);
@@ -6961,15 +7661,15 @@ var Arrays = class Arrays extends Base {
 				const keyAnnotations = head.ast.context?.annotations;
 				for (; i < len - tail.length; i++) {
 					const eff = head.parser(some(input[i]), options);
-					const exit$6 = effectIsExit(eff) ? eff : yield* exit(eff);
-					if (exit$6._tag === "Failure") {
-						const issueRest = findError$1(exit$6.cause);
-						if (isFailure$3(issueRest)) return yield* exit$6;
+					const exit$3 = effectIsExit(eff) ? eff : yield* exit(eff);
+					if (exit$3._tag === "Failure") {
+						const issueRest = findError$1(exit$3.cause);
+						if (isFailure$3(issueRest)) return yield* exit$3;
 						const issue = new Pointer([i], issueRest.success);
 						if (errorsAllOption) if (issues) issues.push(issue);
 						else issues = [issue];
 						else return yield* fail(new Composite(ast, oinput, [issue]));
-					} else if (exit$6.value._tag === "Some") output[i] = exit$6.value.value;
+					} else if (exit$3.value._tag === "Some") output[i] = exit$3.value.value;
 					else {
 						const issue = new Pointer([i], new MissingKey(keyAnnotations));
 						if (errorsAllOption) if (issues) issues.push(issue);
@@ -6977,25 +7677,28 @@ var Arrays = class Arrays extends Base {
 						else return yield* fail(new Composite(ast, oinput, [issue]));
 					}
 				}
-				for (let j = 0; j < tail.length; j++) if (len < i + 1) continue;
-				else {
-					const tailj = tail[j];
-					const keyAnnotations = tailj.ast.context?.annotations;
-					const eff = tailj.parser(some(input[i]), options);
-					const exit$4 = effectIsExit(eff) ? eff : yield* exit(eff);
-					if (exit$4._tag === "Failure") {
-						const issueRest = findError$1(exit$4.cause);
-						if (isFailure$3(issueRest)) return yield* exit$4;
-						const issue = new Pointer([i], issueRest.success);
-						if (errorsAllOption) if (issues) issues.push(issue);
-						else issues = [issue];
-						else return yield* fail(new Composite(ast, oinput, [issue]));
-					} else if (exit$4.value._tag === "Some") output[i] = exit$4.value.value;
+				for (let j = 0; j < tail.length; j++) {
+					const index = i + j;
+					if (len < index) continue;
 					else {
-						const issue = new Pointer([i], new MissingKey(keyAnnotations));
-						if (errorsAllOption) if (issues) issues.push(issue);
-						else issues = [issue];
-						else return yield* fail(new Composite(ast, oinput, [issue]));
+						const tailj = tail[j];
+						const keyAnnotations = tailj.ast.context?.annotations;
+						const eff = tailj.parser(some(input[index]), options);
+						const exit$5 = effectIsExit(eff) ? eff : yield* exit(eff);
+						if (exit$5._tag === "Failure") {
+							const issueRest = findError$1(exit$5.cause);
+							if (isFailure$3(issueRest)) return yield* exit$5;
+							const issue = new Pointer([index], issueRest.success);
+							if (errorsAllOption) if (issues) issues.push(issue);
+							else issues = [issue];
+							else return yield* fail(new Composite(ast, oinput, [issue]));
+						} else if (exit$5.value._tag === "Some") output[index] = exit$5.value.value;
+						else {
+							const issue = new Pointer([index], new MissingKey(keyAnnotations));
+							if (errorsAllOption) if (issues) issues.push(issue);
+							else issues = [issue];
+							else return yield* fail(new Composite(ast, oinput, [issue]));
+						}
 					}
 				}
 			} else for (let i = elementLen; i <= len - 1; i++) {
@@ -7185,17 +7888,17 @@ var Objects = class Objects extends Base {
 				const p = properties[i];
 				const value = Object.hasOwn(input, p.name) ? some(input[p.name]) : none();
 				const eff = p.parser(value, options);
-				const exit$2 = effectIsExit(eff) ? eff : yield* exit(eff);
-				if (exit$2._tag === "Failure") {
-					const issueProp = findError$1(exit$2.cause);
-					if (isFailure$3(issueProp)) return yield* exit$2;
+				const exit$4 = effectIsExit(eff) ? eff : yield* exit(eff);
+				if (exit$4._tag === "Failure") {
+					const issueProp = findError$1(exit$4.cause);
+					if (isFailure$3(issueProp)) return yield* exit$4;
 					const issue = new Pointer([p.name], issueProp.success);
 					if (errorsAllOption) {
 						if (issues) issues.push(issue);
 						else issues = [issue];
 						continue;
 					} else return yield* fail(new Composite(ast, oinput, [issue]));
-				} else if (exit$2.value._tag === "Some") set(out, p.name, exit$2.value.value);
+				} else if (exit$4.value._tag === "Some") set(out, p.name, exit$4.value.value);
 				else if (!isOptional(p.type)) {
 					const issue = new Pointer([p.name], new MissingKey(p.type.context?.annotations));
 					if (errorsAllOption) {
@@ -7339,24 +8042,31 @@ function getCandidateTypes(ast) {
 /** @internal */
 function collectSentinels(ast) {
 	switch (ast._tag) {
+		default: return [];
 		case "Declaration": {
 			const s = ast.annotations?.["~sentinels"];
-			return Array.isArray(s) && s.length ? s : void 0;
+			return Array.isArray(s) ? s : [];
 		}
-		case "Objects": {
-			const v = ast.propertySignatures.flatMap((ps) => isLiteral(ps.type) && !isOptional(ps.type) ? [{
-				key: ps.name,
-				literal: ps.type.literal
-			}] : []);
-			return v.length ? v : void 0;
-		}
-		case "Arrays": {
-			const v = ast.elements.flatMap((e, i) => isLiteral(e) && !isOptional(e) ? [{
+		case "Objects": return ast.propertySignatures.flatMap((ps) => {
+			const type = ps.type;
+			if (!isOptional(type)) {
+				if (isLiteral(type)) return [{
+					key: ps.name,
+					literal: type.literal
+				}];
+				if (isUniqueSymbol(type)) return [{
+					key: ps.name,
+					literal: type.symbol
+				}];
+			}
+			return [];
+		});
+		case "Arrays": return ast.elements.flatMap((e, i) => {
+			return isLiteral(e) && !isOptional(e) ? [{
 				key: i,
 				literal: e.literal
-			}] : []);
-			return v.length ? v : void 0;
-		}
+			}] : [];
+		});
 		case "Suspend": return collectSentinels(ast.thunk());
 	}
 }
@@ -7372,7 +8082,7 @@ function getIndex(types) {
 		const sentinels = collectSentinels(encoded);
 		idx.byType ??= {};
 		for (const t of types) (idx.byType[t] ??= []).push(a);
-		if (sentinels?.length) {
+		if (sentinels.length > 0) {
 			idx.bySentinel ??= /* @__PURE__ */ new Map();
 			for (const { key, literal } of sentinels) {
 				let m = idx.bySentinel.get(key);
@@ -7471,10 +8181,10 @@ var Union$1 = class Union$1 extends Base {
 			for (let i = 0; i < candidates.length; i++) {
 				const candidate = candidates[i];
 				const eff = recur(candidate)(oinput, options);
-				const exit$3 = effectIsExit(eff) ? eff : yield* exit(eff);
-				if (exit$3._tag === "Failure") {
-					const issueResult = findError$1(exit$3.cause);
-					if (isFailure$3(issueResult)) return yield* exit$3;
+				const exit$2 = effectIsExit(eff) ? eff : yield* exit(eff);
+				if (exit$2._tag === "Failure") {
+					const issueResult = findError$1(exit$2.cause);
+					if (isFailure$3(issueResult)) return yield* exit$2;
 					if (issues) issues.push(issueResult.success);
 					else issues = [issueResult.success];
 					continue;
@@ -7483,7 +8193,7 @@ var Union$1 = class Union$1 extends Base {
 						tracking.successes.push(candidate);
 						return yield* fail(new OneOf(ast, input, tracking.successes));
 					}
-					tracking.out = exit$3.value;
+					tracking.out = exit$2.value;
 					tracking.successes.push(candidate);
 					if (!oneOf) break;
 				}
@@ -8034,6 +8744,16 @@ function makeEffect(schema) {
 * @category Constructing
 * @since 4.0.0
 */
+function makeOption(schema) {
+	const parser = makeEffect(schema);
+	return (input, options) => {
+		return getSuccess(runSyncExit(parser(input, options)));
+	};
+}
+/**
+* @category Constructing
+* @since 4.0.0
+*/
 function makeUnsafe(schema) {
 	const parser = makeEffect(schema);
 	return (input, options) => {
@@ -8137,6 +8857,7 @@ function make$1(ast, options) {
 	self.ast = ast;
 	self.rebuild = (ast) => make$1(ast, options);
 	self.makeUnsafe = makeUnsafe(self);
+	self.makeOption = makeOption(self);
 	return self;
 }
 /**
@@ -8336,7 +9057,7 @@ const makeFilter = makeFilter$1;
 */
 function makeIsGreaterThanOrEqualTo(options) {
 	const gte = isGreaterThanOrEqualTo$3(options.order);
-	const formatter = options.formatter ?? format$2;
+	const formatter = options.formatter ?? format$3;
 	return (minimum, annotations) => {
 		return makeFilter((input) => gte(input, minimum), {
 			expected: `a value greater than or equal to ${formatter(minimum)}`,
@@ -8351,7 +9072,7 @@ function makeIsGreaterThanOrEqualTo(options) {
 */
 function makeIsLessThanOrEqualTo(options) {
 	const lte = isLessThanOrEqualTo$3(options.order);
-	const formatter = options.formatter ?? format$2;
+	const formatter = options.formatter ?? format$3;
 	return (maximum, annotations) => {
 		return makeFilter((input) => lte(input, maximum), {
 			expected: `a value less than or equal to ${formatter(maximum)}`,
