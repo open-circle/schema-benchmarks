@@ -1,8 +1,8 @@
 import { Admonition } from "#/shared/components/admonition";
 
-Some schema libraries support two way conversion of data, for example converting a `Date` to a string and back again.
+Some schema libraries support two way conversion of data, often referred to as "encoding" and "decoding".
 
-We benchmark the time taken to encode and decode a `Date` to and from an ISO 8601 string.
+We benchmark the time taken to encode and decode a `Date` to and from a string (usually an ISO 8601 string, but we don't enforce this).
 
 ```ts
 import * as z from "zod";
