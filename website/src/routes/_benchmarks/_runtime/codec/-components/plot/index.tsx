@@ -1,12 +1,18 @@
 import * as Plot from "@observablehq/plot";
 import type { CodecResult } from "@schema-benchmarks/bench";
-import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/utils";
+import {
+  durationFormatter,
+  getDuration,
+  shortNumFormatter,
+  uniqueBy,
+} from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
+import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getBenchResults } from "../../../-query";
@@ -20,6 +26,7 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
   data: Array<CodecResult>;
   encodeDir: "encode" | "decode";
 }) {
+  const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
   const minWidth = useMemo(() => {
@@ -35,6 +42,9 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
         },
         marginLeft: 48,
         width: Math.max(domRect?.width ?? 0, minWidth),
+        x: {
+          label: "Library",
+        },
         y: {
           grid: true,
           label: "Time",
@@ -55,10 +65,20 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
             y: (d: CodecResult) => d[encodeDir].mean,
             fill: (d: CodecResult) => d[encodeDir].mean,
             sort: { x: "y" },
+            tip: {
+              pointer: "x",
+              className: "plot__tooltip",
+              pathFilter: "",
+              format: {
+                y: (d: number) =>
+                  `${formatNumber(d)} ms (${durationFormatter.format(getDuration(d, 2))})`,
+                fill: false,
+              },
+            },
           }),
         ],
       }),
-    [values, encodeDir, minWidth, domRect?.width],
+    [values, encodeDir, minWidth, domRect?.width, formatNumber],
   );
   return { plot, ref, minWidth };
 });
