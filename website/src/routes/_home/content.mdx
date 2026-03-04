@@ -154,6 +154,9 @@ const dateFromString = z.codec(z.iso.datetime(), z.date(), {
   encode: (date) => date.toISOString(),
   decode: (str) => new Date(str),
 });
+
+dateFromString.encode(new Date(0)); // "1970-01-01T00:00:00.000Z"
+dateFromString.decode("1970-01-01T00:00:00.000Z"); // Date
 ```
 
 <Admonition type="note" title="Invalid data">
