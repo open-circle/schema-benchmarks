@@ -47,18 +47,18 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("encode", sortState, { to: "/codec" })}
               className="numeric border-before"
+              colSpan={2}
             >
               Encode
             </SortableHeaderLink>
-            <th className="action"></th>
             <th className="bar-after"></th>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("decode", sortState, { to: "/codec" })}
               className="numeric border-before"
+              colSpan={2}
             >
               Decode
             </SortableHeaderLink>
-            <th className="action"></th>
             <th className="bar-after"></th>
           </tr>
         </thead>
@@ -86,20 +86,20 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
                 </ErrorBoundary>
               </td>
               <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
-              <td className="numeric border-before">
-                {durationFormatter.format(getDuration(result.encode.mean))}
-              </td>
-              <td className="action">
+              <td className="action border-before">
                 <Snippet code={result.encode.snippet} />
+              </td>
+              <td className="numeric">
+                {durationFormatter.format(getDuration(result.encode.mean))}
               </td>
               <td className="bar-after">
                 <Bar {...encodeScaler(result.encode.mean)} />
               </td>
-              <td className="numeric border-before">
-                {durationFormatter.format(getDuration(result.decode.mean))}
-              </td>
-              <td className="action">
+              <td className="action border-before">
                 <Snippet code={result.decode.snippet} />
+              </td>
+              <td className="numeric">
+                {durationFormatter.format(getDuration(result.decode.mean))}
               </td>
               <td className="bar-after">
                 <Bar {...decodeScaler(result.decode.mean)} />
