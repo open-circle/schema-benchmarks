@@ -36,10 +36,14 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
         },
         marginLeft: 48,
         width: Math.max(domRect?.width ?? 0, minWidth),
+        x: {
+          label: "Library",
+        },
         y: {
           grid: true,
           label: "Size (gzipped)",
           tickFormat: (bytes: number) => formatBytes(bytes, intFormatter),
+          nice: true,
         },
         color: {
           type: "quantize",
@@ -53,6 +57,15 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
             y: "gzipBytes",
             fill: "gzipBytes",
             sort: { x: "y" },
+            tip: {
+              pointer: "x",
+              className: "plot__tooltip",
+              pathFilter: "",
+              format: {
+                y: (bytes: number) => `${formatBytes(bytes, intFormatter)}`,
+                fill: false,
+              },
+            },
           }),
         ],
       }),

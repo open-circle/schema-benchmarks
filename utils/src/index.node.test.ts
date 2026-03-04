@@ -10,6 +10,7 @@ import {
   setAbortableTimeout,
   shallowFilter,
   pluralize,
+  getDuration,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -158,5 +159,13 @@ describe("pluralize", () => {
     expect(pluralize`I have 0 ${[0, "goose", "geese"]}.`).toBe("I have 0 geese.");
     expect(pluralize`I have 1 ${[1, "goose", "geese"]}.`).toBe("I have 1 goose.");
     expect(pluralize`I have 2 ${[2, "goose", "geese"]}.`).toBe("I have 2 geese.");
+  });
+});
+
+describe("getDuration", () => {
+  it("should return the correct duration", () => {
+    expect(getDuration(1.5)).toEqual({ milliseconds: 2 });
+    expect(getDuration(1.5, 2)).toEqual({ milliseconds: 1, microseconds: 500 });
+    expect(getDuration(1500, 2)).toEqual({ seconds: 1, milliseconds: 500 });
   });
 });

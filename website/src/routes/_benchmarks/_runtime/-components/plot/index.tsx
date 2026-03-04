@@ -1,12 +1,18 @@
 import * as Plot from "@observablehq/plot";
 import type { BenchResult, DataType } from "@schema-benchmarks/bench";
 import type { ErrorType } from "@schema-benchmarks/schemas";
-import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/utils";
+import {
+  durationFormatter,
+  getDuration,
+  shortNumFormatter,
+  uniqueBy,
+} from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
+import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getBenchResults } from "../../-query";
@@ -38,12 +44,14 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
 }: {
   data: Array<Exclude<BenchResult, { type: "codec" }>>;
 }) {
+  const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
+  const marginLeft = data[0]?.type === "initialization" ? 84 : 48;
   const minWidth = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + 48;
-  }, [values]);
+    return values.length * (getLabel(longestLabel).length * 6) + marginLeft;
+  }, [values, marginLeft]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -51,12 +59,16 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
-        marginLeft: 48,
+        marginLeft,
         width: Math.max(domRect?.width ?? 0, minWidth),
+        x: {
+          label: "Library",
+        },
         y: {
           grid: true,
           label: "Time",
-          tickFormat: (d: number) => durationFormatter.format(getDuration(d)),
+          tickFormat: (d: number) => durationFormatter.format(getDuration(d, 2)),
+          nice: true,
         },
         color: {
           type: "quantize",
@@ -70,10 +82,20 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
             y: "mean",
             fill: "mean",
             sort: { x: "y" },
+            tip: {
+              pointer: "x",
+              className: "plot__tooltip",
+              pathFilter: "",
+              format: {
+                y: (d: number) =>
+                  `${formatNumber(d)} ms (${durationFormatter.format(getDuration(d, 2))})`,
+                fill: false,
+              },
+            },
           }),
         ],
       }),
-    [values, minWidth, domRect?.width],
+    [values, minWidth, marginLeft, domRect?.width, formatNumber],
   );
   return { plot, ref, minWidth };
 });

@@ -9,3 +9,9 @@
   max-width: calc(100vw - var(--margin) * 2);
   overflow-x: auto;
 }
+
+.plot__tooltip {
+  fill: var(--tooltip-background);
+  color: var(--tooltip-foreground);
+  stroke: var(--divider);
+}

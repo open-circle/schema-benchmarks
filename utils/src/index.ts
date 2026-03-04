@@ -21,6 +21,7 @@ export const numFormatter = new Intl.NumberFormat(undefined, {
 
 export const shortNumFormatter = new Intl.NumberFormat(undefined, {
   notation: "compact",
+  maximumFractionDigits: 2,
 });
 
 export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> = Object.keys;
@@ -105,14 +106,30 @@ const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [
   [1_000, "seconds"],
   [1, "milliseconds"],
   [0.001, "microseconds"],
-  // fallback to nanoseconds
+  [0.000_001, "nanoseconds"],
 ];
 
-export const getDuration = (ms: number): Partial<Record<Intl.DurationFormatUnit, number>> => {
+export const getDuration = (
+  ms: number,
+  unitCount = 1,
+): Partial<Record<Intl.DurationFormatUnit, number>> => {
+  const result: Partial<Record<Intl.DurationFormatUnit, number>> = {};
+  let remaining = ms;
+  let added = 0;
+
   for (const [threshold, unit] of units) {
-    if (ms >= threshold) return { [unit]: Math.round(ms / threshold) };
+    if (remaining >= threshold) {
+      const isLast = added === unitCount - 1;
+      const value = isLast ? Math.round(remaining / threshold) : Math.floor(remaining / threshold);
+      result[unit] = value;
+      remaining -= value * threshold;
+      added++;
+      if (added >= unitCount) break;
+    }
   }
-  return { nanoseconds: Math.round(ms * 1_000_000) };
+
+  if (added === 0) return { nanoseconds: Math.round(ms * 1_000_000) };
+  return result;
 };
 
 const enumerableKeys = (obj: object) =>
