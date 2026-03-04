@@ -20,7 +20,7 @@
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
-    "arktype": "^2.1.29",
+    "arktype": "^2.2.0",
     "decoders": "^2.8.0",
     "dedent": "catalog:",
     "effect": "^3.19.19",
