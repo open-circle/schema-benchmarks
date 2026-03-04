@@ -13,13 +13,15 @@ const downloadsResponseSchema = v.pipe(
 
 export function getPackageName(libraryName: string) {
   // effect/Schema -> effect
+  // effect/@beta -> effect
   // @vinejs/vine -> @vinejs/vine
   // @foo/bar/baz -> @foo/bar
   if (libraryName.includes("/")) {
     libraryName = libraryName
       .split("/")
-      .slice(0, libraryName.includes("@") ? 2 : 1)
-      .join("/");
+      .slice(0, libraryName.startsWith("@") ? 2 : 1)
+      .join("/")
+      .replace("/@", "@");
   }
   // effect___beta -> effect
   if (libraryName.includes("___")) {

@@ -13,7 +13,7 @@ const decode = Schema.decodeUnknownOption(schema);
 
 export default defineBenchmarks({
   library: {
-    name: "effect___beta",
+    name: "effect@beta",
     git: "effect-ts/effect",
     optimizeType: "none",
     version: await getVersion("effect___beta"),
