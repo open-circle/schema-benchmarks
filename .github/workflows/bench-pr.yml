@@ -11,35 +11,78 @@ on:
       - "schemas/**"
 
 jobs:
-  bench-preview:
+  bench-stack:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
-
       - name: Setup environment
         uses: ./.github/actions/environments
+      - name: Run stack benchmark
+        run: pnpm bench:stack
+      - name: Upload stack results
+        uses: actions/upload-artifact@v4
+        with:
+          name: stack-results
+          path: bench/stack.json
 
-      - name: Run benchmarks
-        run: pnpm bench:all
+  bench-download:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.head_ref }}
+      - name: Setup environment
+        uses: ./.github/actions/environments
+      - name: Run download benchmark
+        run: pnpm bench:download
+      - name: Upload download results
+        uses: actions/upload-artifact@v4
+        with:
+          name: download-results
+          path: |
+            bench/download.json
+            schemas/libraries/**/download_compiled/**
 
-      - name: Commit & Push changes (internal PRs only)
-        if: github.event.pull_request.head.repo.full_name == github.repository
+  bench-bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.head_ref }}
+      - name: Setup environment
+        uses: ./.github/actions/environments
+      - name: Run bench benchmark
+        run: pnpm bench:bench
+      - name: Upload bench results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: bench/bench.json
+
+  collect-results:
+    needs: [bench-stack, bench-download, bench-bench]
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Download all benchmark artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-results"
+          merge-multiple: true
+          path: .
+
+      - name: Commit & Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
           message: "Update bench results"
-
-      - name: Upload benchmark results (fork PRs)
-        if: github.event.pull_request.head.repo.full_name != github.repository
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-results
-          path: |
-            bench/bench.json
-            bench/download.json
-            bench/stack.json
-            schemas/libraries/**/download_compiled/**

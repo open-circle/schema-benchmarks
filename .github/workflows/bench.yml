@@ -11,14 +11,61 @@ on:
   workflow_dispatch:
 
 jobs:
-  bench:
+  bench-stack:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
         uses: ./.github/actions/environments
-      - name: Run benchmarks
-        run: pnpm bench:all
+      - name: Run stack benchmark
+        run: pnpm bench:stack
+      - name: Upload stack results
+        uses: actions/upload-artifact@v4
+        with:
+          name: stack-results
+          path: bench/stack.json
+
+  bench-download:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/environments
+      - name: Run download benchmark
+        run: pnpm bench:download
+      - name: Upload download results
+        uses: actions/upload-artifact@v4
+        with:
+          name: download-results
+          path: |
+            bench/download.json
+            schemas/libraries/**/download_compiled/**
+
+  bench-bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/environments
+      - name: Run bench benchmark
+        run: pnpm bench:bench
+      - name: Upload bench results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: bench/bench.json
+
+  collect-results:
+    needs: [bench-stack, bench-download, bench-bench]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all benchmark artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-results"
+          merge-multiple: true
+          path: .
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
