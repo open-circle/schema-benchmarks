@@ -73,11 +73,20 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Download all benchmark artifacts
+      - name: Download bench results
         uses: actions/download-artifact@v4
         with:
-          pattern: "*-results"
-          merge-multiple: true
+          name: bench-results
+          path: bench
+      - name: Download stack results
+        uses: actions/download-artifact@v4
+        with:
+          name: stack-results
+          path: bench
+      - name: Download download results
+        uses: actions/download-artifact@v4
+        with:
+          name: download-results
           path: .
 
       - name: Commit & Push changes
