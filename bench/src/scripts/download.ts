@@ -27,7 +27,7 @@ interface FileDescription {
 
 function getPackageName(libraryName: string) {
   // effect/Schema -> effect
-  // effect/@beta -> effect@beta
+  // effect/@beta -> effect___beta
   // @vinejs/vine -> @vinejs/vine
   // @foo/bar/baz -> @foo/bar
   if (libraryName.includes("/")) {
@@ -35,7 +35,7 @@ function getPackageName(libraryName: string) {
       .split("/")
       .slice(0, libraryName.startsWith("@") ? 2 : 1)
       .join("/")
-      .replace("/@", "@");
+      .replace("/@", "___");
   }
   return libraryName;
 }
