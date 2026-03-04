@@ -33,6 +33,10 @@
     gap: 0.5rem;
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
+  .bench-card__code-title {
+    margin: 0;
+    margin-top: 1rem;
+  }
   table {
     th:first-child,
     td:first-child {

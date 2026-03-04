@@ -55,11 +55,14 @@ export function CodecCard({ result, encodeScaler, decodeScaler }: CodecCardProps
         const scaler = type === "encode" ? encodeScaler : decodeScaler;
         return (
           <Fragment key={type}>
+            <h6 {...cls({ element: "code-title", extra: "typo-subtitle2" })}>
+              {type === "encode" ? "Encode" : "Decode"}
+            </h6>
             <CodeBlock>{snippet}</CodeBlock>
             <table className="minimal">
               <tbody>
                 <tr>
-                  <th>{type === "encode" ? "Encode" : "Decode"}</th>
+                  <th>Mean</th>
                   <td className="numeric">{durationFormatter.format(getDuration(mean))}</td>
                 </tr>
               </tbody>
