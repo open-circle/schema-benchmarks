@@ -4,7 +4,7 @@ import { Button } from "#/shared/components/button";
 import preview from "#storybook/preview";
 
 import { ConfirmDialog } from ".";
-import { confirm } from "./queue";
+import * as confirmQueue from "./queue";
 
 const meta = preview.meta({
   title: "Components/Dialog/Alert/Confirm",
@@ -12,11 +12,12 @@ const meta = preview.meta({
     <>
       <Button
         onClick={() => {
-          confirm({
-            title: "Discard draft?",
-            message: "This cannot be undone.",
-            confirmLabel: "Discard",
-          })
+          confirmQueue
+            .confirm({
+              title: "Discard draft?",
+              message: "This cannot be undone.",
+              confirmLabel: "Discard",
+            })
             .then(onConfirm)
             .otherwise(onCancel)
             .finally(onFinally);

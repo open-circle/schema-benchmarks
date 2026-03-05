@@ -1,6 +1,6 @@
 import { castDraft } from "mutative";
 
-import { ExternalStore } from "#/shared/hooks/store";
+import { createStore } from "#/shared/hooks/store";
 
 import type { ConfirmDialogProps } from ".";
 
@@ -35,55 +35,40 @@ class ConfirmPromise<T> implements PromiseLike<T> {
   }
 }
 
-class ConfirmQueue extends ExternalStore<Array<InternalDescription>> {
-  constructor() {
-    super([]);
-  }
-  #close(id: string) {
-    this.setState((queue) => {
-      const item = queue.find((item) => item.id === id);
-      if (!item) return;
-      item.closing = true;
-    });
-
-    setTimeout(
-      () =>
-        this.setState((queue) => {
-          const index = queue.findIndex((item) => item.id === id);
-          if (index === -1) return;
-          queue.splice(index, 1);
-        }),
-      75,
-    );
-  }
-  add(props: ConfirmDialogProps) {
-    const resolvers = Promise.withResolvers<string | undefined>();
-    const id = crypto.randomUUID();
-
-    this.setState((queue) => {
-      queue.push({ props: castDraft(props), id, resolvers });
-    });
-
-    return new ConfirmPromise(resolvers.promise);
-  }
-  resolve(id: string, returnValue?: string) {
-    const entry = this.state.find((item) => item.id === id);
-
-    entry?.resolvers.resolve(returnValue);
-
-    this.#close(id);
-  }
-  reject(id: string, reason?: unknown) {
-    const entry = this.state.find((item) => item.id === id);
-
-    entry?.resolvers.reject(reason);
-
-    this.#close(id);
-  }
-}
-
-export const confirmQueue = new ConfirmQueue();
+export const store = createStore<Array<InternalDescription>>([]);
 
 export function confirm(description: ConfirmDialogProps) {
-  return confirmQueue.add(description);
+  const id = crypto.randomUUID();
+  const resolvers = Promise.withResolvers<string | undefined>();
+  store.updateState((state) => {
+    state.push({ props: castDraft(description), id, resolvers });
+  });
+  return new ConfirmPromise(resolvers.promise);
+}
+
+function _close(id: string) {
+  store.updateState((state) => {
+    const item = state.find((item) => item.id === id);
+    if (!item) return;
+    item.closing = true;
+  });
+  setTimeout(() => {
+    store.updateState((state) => {
+      const index = state.findIndex((item) => item.id === id);
+      if (index === -1) return;
+      state.splice(index, 1);
+    });
+  }, 75);
+}
+
+export function resolve(id: string, returnValue?: string) {
+  const entry = store.state.find((item) => item.id === id);
+  entry?.resolvers.resolve(returnValue);
+  _close(id);
+}
+
+export function reject(id: string, reason?: unknown) {
+  const entry = store.state.find((item) => item.id === id);
+  entry?.resolvers.reject(reason);
+  _close(id);
 }

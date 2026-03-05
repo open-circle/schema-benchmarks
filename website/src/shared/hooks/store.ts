@@ -1,44 +1,15 @@
+import { ReadonlyStore, Store } from "@tanstack/react-store";
 import { create, type Draft } from "mutative";
-import { useSyncExternalStore } from "react";
 
-export type EqualityFn<T> = (a: T, b: T) => boolean;
-
-const strictEquality: EqualityFn<unknown> = (a, b) => a === b;
-
-const isFunction = (value: unknown): value is Function => typeof value === "function";
-
-export class ExternalStore<T> extends EventTarget {
-  constructor(
-    protected initialState: T,
-    protected isEqual: EqualityFn<T> = strictEquality,
-    public state: T = initialState,
-  ) {
-    super();
-  }
-  setState(setter: T | ((state: Draft<T>) => void | T)) {
-    const state = isFunction(setter) ? (create(this.state, setter) as T) : setter;
-    if (!this.isEqual(this.state, state)) {
-      this.state = state;
-      this.dispatchEvent(new Event("change"));
-    }
-  }
-  reset() {
-    this.setState(this.initialState);
-  }
-  subscribe(callback: () => void) {
-    this.addEventListener("change", callback);
-    return () => this.removeEventListener("change", callback);
+class MutativeStore<T> extends Store<T> {
+  updateState(updater: (state: Draft<T>) => void) {
+    this.setState(create(updater));
   }
 }
 
-export function useExternalStore<T, TSelected = T>(
-  store: ExternalStore<T>,
-  selector: (state: T) => TSelected,
-  serverSelector = selector,
-) {
-  return useSyncExternalStore(
-    (onStoreChange) => store.subscribe(onStoreChange),
-    () => selector(store.state),
-    () => serverSelector(store.state),
-  );
+export function createStore<T>(getValue: (prev?: NoInfer<T>) => T): ReadonlyStore<T>;
+export function createStore<T>(initialState: T): MutativeStore<T>;
+export function createStore<T>(valueOrFn: T | ((prev?: NoInfer<T>) => T)) {
+  if (typeof valueOrFn === "function") return new ReadonlyStore(valueOrFn);
+  return new MutativeStore(valueOrFn);
 }

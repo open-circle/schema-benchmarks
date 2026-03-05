@@ -5,11 +5,11 @@ import { it } from "#test/browser/fixtures";
 
 import { Banner } from ".";
 import { Button } from "../button";
-import { bannerQueue, closeBanner, openBanner } from "./queue";
+import { bannerStore, closeBanner, openBanner } from "./queue";
 
 describe("Banner", () => {
   beforeEach(() => {
-    bannerQueue.reset();
+    bannerStore.setState(() => []);
   });
   it("should show the banner", async () => {
     await page.render(<Banner />);
