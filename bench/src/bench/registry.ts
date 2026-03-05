@@ -24,7 +24,7 @@ type BenchInfoByType = Satisfies<
     parsing: { dataType: DataType; errorType: ErrorType };
     standard: { dataType: DataType; errorType: ErrorType };
     string: { stringFormat: StringFormat; dataType: DataType };
-    codec: { codecType: "encode" | "decode"; codecId: string };
+    codec: { codecType: "encode" | "decode"; codecId: string; acceptsUnknown?: boolean };
   },
   Record<BenchmarkType, unknown>
 >;

@@ -65,6 +65,7 @@ export const codecResultSchema = v.object({
     mean: v.number(),
   }),
   type: v.literal("codec"),
+  acceptsUnknown: v.optional(v.boolean()),
 });
 
 export type CodecResult = v.InferOutput<typeof codecResultSchema>;

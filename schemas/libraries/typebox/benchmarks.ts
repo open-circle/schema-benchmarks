@@ -191,5 +191,6 @@ export default defineBenchmarks({
         Value.Decode(DateFromString, data)
       `,
     },
+    acceptsUnknown: true,
   },
 });
