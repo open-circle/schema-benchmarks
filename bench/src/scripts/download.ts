@@ -27,7 +27,7 @@ interface FileDescription {
 
 function getPackageName(libraryName: string) {
   // effect/Schema -> effect
-  // effect/@beta -> effect___beta
+  // effect@beta -> effect___beta
   // @vinejs/vine -> @vinejs/vine
   // @foo/bar/baz -> @foo/bar
   if (libraryName.includes("/")) {
@@ -35,7 +35,7 @@ function getPackageName(libraryName: string) {
       .split("/")
       .slice(0, libraryName.startsWith("@") ? 2 : 1)
       .join("/")
-      .replace("/@", "___");
+      .replace(/(.+)@(.+)/, "$1___$2");
   }
   return libraryName;
 }
@@ -89,7 +89,10 @@ async function download() {
       path.resolve(process.cwd(), "../schemas/libraries/**/download.ts"),
     )) {
       sigintAc.signal.throwIfAborted();
-      const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download.ts")[0];
+      const libraryName = filePath
+        .split("schemas/libraries/")[1]
+        ?.split("/download.ts")[0]
+        ?.replace("/@", "@");
       if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
       const compiledPath = path.resolve(path.dirname(filePath), `./download_compiled/${minify}.js`);
       results.push(
@@ -107,7 +110,10 @@ async function download() {
       path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts"),
     )) {
       sigintAc.signal.throwIfAborted();
-      const libraryName = filePath.split("schemas/libraries/")[1]?.split("/download/")[0];
+      const libraryName = filePath
+        .split("schemas/libraries/")[1]
+        ?.split("/download/")[0]
+        ?.replace("/@", "@");
       if (!libraryName) throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
       const note = path.basename(filePath).replace("index.ts", "").replace(".ts", "");
       const compiledPath = path.resolve(
