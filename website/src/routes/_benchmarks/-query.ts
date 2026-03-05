@@ -13,19 +13,18 @@ const downloadsResponseSchema = v.pipe(
 
 export function getPackageName(libraryName: string) {
   // effect/Schema -> effect
-  // effect/@beta -> effect
+  // effect@beta -> effect
   // @vinejs/vine -> @vinejs/vine
   // @foo/bar/baz -> @foo/bar
   if (libraryName.includes("/")) {
     libraryName = libraryName
       .split("/")
       .slice(0, libraryName.startsWith("@") ? 2 : 1)
-      .join("/")
-      .replace("/@", "@");
+      .join("/");
   }
-  // effect___beta -> effect
-  if (libraryName.includes("___")) {
-    libraryName = libraryName.split("___")[0]!;
+  const lastAt = libraryName.lastIndexOf("@");
+  if (lastAt > 0) {
+    libraryName = libraryName.slice(0, lastAt);
   }
   return libraryName;
 }
