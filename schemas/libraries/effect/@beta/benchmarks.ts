@@ -106,24 +106,48 @@ export default defineBenchmarks({
       Schema.decodeUnknownSync(schema)(data, { errors: "first" })
     `,
   },
-  codec: {
-    encode: {
-      run: (data) => {
-        return Schema.encodeSync(DateFromString)(data);
-      },
-      snippet: ts`
+  codec: [
+    {
+      encode: {
+        run: (data) => {
+          return Schema.encodeSync(DateFromString)(data);
+        },
+        snippet: ts`
         // const DateFromString = Schema.Date.pipe(...);
         Schema.encodeSync(DateFromString)(data)
       `,
-    },
-    decode: {
-      run: (data) => {
-        return Schema.decodeSync(DateFromString)(data);
       },
-      snippet: ts`
+      decode: {
+        run: (data) => {
+          return Schema.decodeSync(DateFromString)(data);
+        },
+        snippet: ts`
         // const DateFromString = Schema.Date.pipe(...);
         Schema.decodeSync(DateFromString)(data)
       `,
+      },
     },
-  },
+    {
+      encode: {
+        run: (data) => {
+          return Schema.encodeUnknownSync(DateFromString)(data);
+        },
+        snippet: ts`
+        // const DateFromString = Schema.Date.pipe(...);
+        Schema.encodeUnknownSync(DateFromString)(data)
+      `,
+      },
+      decode: {
+        run: (data) => {
+          return Schema.decodeUnknownSync(DateFromString)(data);
+        },
+        snippet: ts`
+        // const DateFromString = Schema.Date.pipe(...);
+        Schema.decodeUnknownSync(DateFromString)(data)
+      `,
+      },
+      acceptsUnknown: true,
+      note: "unknown",
+    },
+  ],
 });

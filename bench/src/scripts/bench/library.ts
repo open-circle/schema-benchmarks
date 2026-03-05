@@ -178,7 +178,13 @@ if (parsing) {
     const date = new Date(0);
     const str = date.toISOString();
     for (const benchConfig of ensureArray(codec)) {
-      const { encode, decode, note, optimizeType = libraryOptimizeType } = benchConfig;
+      const {
+        encode,
+        decode,
+        note,
+        optimizeType = libraryOptimizeType,
+        acceptsUnknown,
+      } = benchConfig;
       const id = crypto.randomUUID();
       bench.add(
         caseRegistry.add({
@@ -190,6 +196,7 @@ if (parsing) {
           snippet: encode.snippet,
           codecType: "encode",
           codecId: id,
+          acceptsUnknown,
         }),
         () => encode.run(date),
       );
@@ -203,6 +210,7 @@ if (parsing) {
           snippet: decode.snippet,
           codecType: "decode",
           codecId: id,
+          acceptsUnknown,
         }),
         () => decode.run(str),
       );
@@ -319,6 +327,7 @@ for (const task of successTasks) {
           encode: codecResult.encode,
           decode: codecResult.decode,
           optimizeType,
+          acceptsUnknown: entry.acceptsUnknown,
         });
       }
       break;
