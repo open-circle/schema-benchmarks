@@ -2,7 +2,7 @@
 
 import type { BenchmarksConfig } from "../src/types.ts";
 
-export const libraries = import.meta.glob<BenchmarksConfig<unknown>>(
+export const libraries = import.meta.glob<BenchmarksConfig>(
   ["./**/benchmarks.ts", "!**/__template__/**/*"],
   {
     import: "default",

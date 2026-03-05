@@ -4,14 +4,13 @@ import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getDownloadResults } from "../../-query";
 
-const getLabel = (d: DownloadResult) => formatLibraryName(d.libraryName);
+const getLabel = (d: DownloadResult) => d.libraryName;
 
 const intFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,

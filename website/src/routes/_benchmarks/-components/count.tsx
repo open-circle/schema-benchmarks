@@ -5,7 +5,6 @@ import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { trackedLinkProps } from "#/shared/lib/analytics";
 import type { PrefetchContext } from "#/shared/lib/fetch";
 
-import { formatLibraryName } from "../-lib";
 import { getAllWeeklyDownloads, getPackageName } from "../-query";
 
 export function DownloadCount({ libraryName }: { libraryName: string }) {
@@ -15,7 +14,7 @@ export function DownloadCount({ libraryName }: { libraryName: string }) {
   return (
     <a
       {...trackedLinkProps(`https://www.npmjs.com/package/${packageName}`)}
-      aria-label={`Download count for ${formatLibraryName(libraryName)}: ${shortNumFormatter.format(data)}`}
+      aria-label={`Download count for ${libraryName}: ${shortNumFormatter.format(data)}`}
     >
       {formatNumber(data)}
     </a>
