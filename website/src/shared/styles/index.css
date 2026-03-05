@@ -165,9 +165,12 @@ code[class*="language-"] {
       margin: -1em;
       margin-bottom: 0;
       margin-left: -3.8em;
+      left: -3.8em;
       &:dir(rtl) {
         margin-left: -1em;
         margin-right: -3.8em;
+        right: -3.8em;
+        left: -1em;
       }
     }
     .line-numbers-rows {
