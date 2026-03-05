@@ -1,5 +1,5 @@
 import { ReadonlyStore, Store } from "@tanstack/react-store";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { createStore } from "./store";
 
@@ -22,5 +22,19 @@ describe("createStore", () => {
     expect(doubleStore.state).toBe(2);
     counterStore.setState((n) => n + 1);
     expect(doubleStore.state).toBe(4);
+  });
+  it("returns disposable when subscribing", () => {
+    const subFn = vi.fn<(value: number) => void>();
+    const store = createStore(0);
+    {
+      using disposable = store.subscribe(subFn);
+      expect(disposable.unsubscribe).toBeTypeOf("function");
+      expect(disposable[Symbol.dispose]).toBeTypeOf("function");
+
+      store.setState(() => 1);
+      expect(subFn).toHaveBeenCalledWith(1);
+    }
+    store.setState(() => 2);
+    expect(subFn).toHaveBeenCalledOnce();
   });
 });
