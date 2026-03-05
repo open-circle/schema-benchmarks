@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { ToggleButton } from "#/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
@@ -72,12 +73,24 @@ export function CodecCard({ result, encodeScaler, decodeScaler }: CodecCardProps
           </Fragment>
         );
       })}
-      <ChipCollection>
-        <DisplayChip>
-          <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
-          {optimizeTypeProps.labels[result.optimizeType].label}
-        </DisplayChip>
-      </ChipCollection>
+      <div {...cls("chips")}>
+        <ChipCollection>
+          <DisplayChip>
+            <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+            {optimizeTypeProps.labels[result.optimizeType].label}
+          </DisplayChip>
+        </ChipCollection>
+        {result.acceptsUnknown && (
+          <ToggleButton
+            tooltip={{
+              subhead: "Accepts unknown values",
+              supporting: "This codec allows unknown input, requiring extra validation.",
+            }}
+          >
+            <MdSymbol>warning</MdSymbol>
+          </ToggleButton>
+        )}
+      </div>
     </div>
   );
 }

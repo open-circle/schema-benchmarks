@@ -3,6 +3,7 @@ import { durationFormatter, getDuration, getTransitionName } from "@schema-bench
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { ToggleButton } from "#/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#/shared/components/chip";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
@@ -60,18 +61,35 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
       <div {...cls("bar")}>
         <Bar {...meanScaler(result.mean)} />
       </div>
-      <ChipCollection>
-        <DisplayChip>
-          <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
-          {optimizeTypeProps.labels[result.optimizeType].label}
-        </DisplayChip>
-        {(result.type === "parsing" || result.type === "standard") && (
+      <div {...cls("chips")}>
+        <ChipCollection>
           <DisplayChip>
-            <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
-            {errorTypeProps.labels[result.errorType].label}
+            <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+            {optimizeTypeProps.labels[result.optimizeType].label}
           </DisplayChip>
+          {(result.type === "parsing" || result.type === "standard") && (
+            <DisplayChip>
+              <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
+              {errorTypeProps.labels[result.errorType].label}
+            </DisplayChip>
+          )}
+        </ChipCollection>
+        {result.throws && (
+          <ToggleButton
+            tooltip={{
+              subhead: "Throws on invalid data",
+              supporting: (
+                <div style={{ maxWidth: "16rem" }}>
+                  This library throws an error when parsing invalid data (and has no non-throwing
+                  equivalent), so the benchmark includes a try/catch.
+                </div>
+              ),
+            }}
+          >
+            <MdSymbol>error</MdSymbol>
+          </ToggleButton>
         )}
-      </ChipCollection>
+      </div>
     </div>
   );
 }

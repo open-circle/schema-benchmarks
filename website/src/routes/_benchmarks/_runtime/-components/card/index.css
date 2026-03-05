@@ -37,6 +37,13 @@
     margin: 0;
     margin-top: 1rem;
   }
+  .bench-card__chips {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
   table {
     th:first-child,
     td:first-child {
