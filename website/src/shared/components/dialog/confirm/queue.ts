@@ -1,6 +1,6 @@
 import { castDraft } from "mutative";
 
-import { createStore } from "#/shared/hooks/store";
+import { createStore } from "#/shared/lib/store";
 
 import type { ConfirmDialogProps } from ".";
 

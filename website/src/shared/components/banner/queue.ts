@@ -1,8 +1,8 @@
 import { hasAtLeast } from "@schema-benchmarks/utils";
 import { defaultPatterns } from "web-haptics";
 
-import { createStore } from "#/shared/hooks/store";
 import { haptics } from "#/shared/lib/haptics";
+import { createStore } from "#/shared/lib/store";
 
 import type { BannerProps } from ".";
 
