@@ -2,7 +2,6 @@ import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { SortDirection } from "#/shared/lib/sort";
@@ -74,7 +73,7 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
               }}
             >
               <td>
-                <code className="language-text">{formatLibraryName(result.libraryName)}</code>
+                <code className="language-text">{result.libraryName}</code>
                 {result.note ? ` (${result.note})` : null}
               </td>
               <td>

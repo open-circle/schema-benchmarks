@@ -9,7 +9,6 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
@@ -17,7 +16,7 @@ import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getBenchResults } from "../../../-query";
 
-const getLabel = (d: CodecResult) => formatLibraryName(d.libraryName);
+const getLabel = (d: CodecResult) => d.libraryName;
 
 export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
   data,
