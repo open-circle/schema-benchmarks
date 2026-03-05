@@ -16,7 +16,7 @@ import { useElementSize } from "#/shared/hooks/use-content-box-size";
 
 import { getBenchResults } from "../../../-query";
 
-const getLabel = (d: CodecResult) => d.libraryName;
+const getLabel = (d: CodecResult) => d.libraryName + (d.acceptsUnknown ? " *" : "");
 
 export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
   data,
