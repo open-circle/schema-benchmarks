@@ -160,8 +160,11 @@ dateFromString.decode("1970-01-01T00:00:00.000Z"); // Date
 ```
 
 <Admonition type="note" title="Invalid data">
-  We don't benchmark codecs with invalid data, as many libraries require the input to be correctly
-  typed *before* passing it to the codec.
+  
+We don't benchmark codecs with invalid data, as many libraries require the input to be correctly typed *before* passing it to the codec.
+
+Codecs that _do_ accept unknown input are marked with an asterisk (\*), as they may be slower.
+
 </Admonition>
 
 Encoding (`Date → string`):
