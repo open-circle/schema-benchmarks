@@ -382,3 +382,10 @@ export function filterMap<T, U>(
 
 export const safeAssign: <T extends object>(target: T, ...sources: Array<Partial<T>>) => T =
   Object.assign;
+
+export function makeDisposable<T extends { unsubscribe: () => void }>(value: T): T & Disposable {
+  return {
+    ...value,
+    [Symbol.dispose]: value.unsubscribe,
+  };
+}
