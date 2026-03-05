@@ -34,8 +34,11 @@ function getPackageName(libraryName: string) {
     libraryName = libraryName
       .split("/")
       .slice(0, libraryName.startsWith("@") ? 2 : 1)
-      .join("/")
-      .replace(/(.+)@(.+)/, "$1___$2");
+      .join("/");
+  }
+  const lastAt = libraryName.lastIndexOf("@");
+  if (lastAt > 0) {
+    libraryName = libraryName.slice(0, lastAt) + "___" + libraryName.slice(lastAt + 1);
   }
   return libraryName;
 }
