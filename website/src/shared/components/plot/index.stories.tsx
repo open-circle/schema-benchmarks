@@ -3,7 +3,6 @@ import downloadResults from "@schema-benchmarks/bench/download.json";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { color } from "#/shared/data/scale";
 import preview from "#storybook/preview";
 
@@ -44,10 +43,10 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
             Plot.barY(
               uniqueBy(
                 downloadResults.minified.toSorted((a, b) => a.gzipBytes - b.gzipBytes),
-                (d) => formatLibraryName(d.libraryName),
+                (d) => d.libraryName,
               ),
               {
-                x: (d) => formatLibraryName(d.libraryName),
+                x: (d) => d.libraryName,
                 y: "gzipBytes",
                 fill: "gzipBytes",
                 sort: { x: "y" },

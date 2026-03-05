@@ -5,7 +5,6 @@ import { durationFormatter, getDuration, uniqueBy } from "@schema-benchmarks/uti
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { createPlotComponent } from "#/shared/components/plot";
 import { color } from "#/shared/data/scale";
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
@@ -30,7 +29,7 @@ export type BenchPlotProps =
     };
 
 const getLabel = (d: BenchResult) =>
-  formatLibraryName(d.libraryName) +
+  d.libraryName +
   (d.throws ? " *" : "") +
   ((d.type === "parsing" || d.type === "standard") && d.errorType === "abortEarly" ? " †" : "");
 

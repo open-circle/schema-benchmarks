@@ -7,7 +7,6 @@ import {
 } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { formatLibraryName } from "#/routes/_benchmarks/-lib";
 import { ButtonGroup } from "#/shared/components/button";
 import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { MdSymbol } from "#/shared/components/symbol";
@@ -89,7 +88,7 @@ export function DownloadTable({
                 }}
               >
                 <td>
-                  <code className="language-text">{formatLibraryName(result.libraryName)}</code>
+                  <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td>

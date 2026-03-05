@@ -6,12 +6,11 @@ import { applySort } from "#/shared/lib/sort";
 import type { SortDirection } from "#/shared/lib/sort";
 
 import { useDownloadsByPkgName } from "../-hooks";
-import { formatLibraryName } from "../-lib";
 import { getPackageName } from "../-query";
 import type { SortableKey } from "./-constants";
 
 function getLibraryLabel({ libraryName, note }: BenchResult) {
-  return `${formatLibraryName(libraryName)}${note ? ` (${note})` : ""}`;
+  return `${libraryName}${note ? ` (${note})` : ""}`;
 }
 
 export function useSortedResults<T extends BenchResult>(

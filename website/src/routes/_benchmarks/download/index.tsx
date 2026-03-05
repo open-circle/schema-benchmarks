@@ -17,7 +17,6 @@ import { sortParams, applySort } from "#/shared/lib/sort";
 
 import { DownloadCount } from "../-components/count";
 import { useDownloadsByPkgName } from "../-hooks";
-import { formatLibraryName } from "../-lib";
 import { getPackageName } from "../-query";
 import { DownloadResults } from "./-components/results";
 import { minifyTypeProps, optionalMinifyTypeSchema, sortableKeys } from "./-constants";
@@ -74,7 +73,7 @@ export const Route = createFileRoute("/_benchmarks/download/")({
 });
 
 function getLibraryLabel({ libraryName, note }: DownloadResult) {
-  return `${formatLibraryName(libraryName)}${note ? ` (${note})` : ""}`;
+  return `${libraryName}${note ? ` (${note})` : ""}`;
 }
 
 function RouteComponent() {
