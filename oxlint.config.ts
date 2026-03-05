@@ -1,6 +1,6 @@
 import { defineConfig } from "oxlint";
 
-export default defineConfig({
+export const baseConfig = defineConfig({
   categories: {
     suspicious: "warn",
   },
@@ -25,4 +25,11 @@ export default defineConfig({
       plugins: ["vitest"],
     },
   ],
+});
+
+export default defineConfig({
+  extends: [baseConfig],
+  options: {
+    typeAware: true,
+  },
 });

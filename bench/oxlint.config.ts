@@ -1,9 +1,9 @@
 import { defineConfig } from "oxlint";
 
-import rootConfig from "../oxlint.config.ts";
+import { baseConfig } from "../oxlint.config.ts";
 
 export default defineConfig({
-  extends: [rootConfig],
+  extends: [baseConfig],
   env: {
     node: true,
   },

@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "format": "oxfmt",
-    "lint": "oxlint --type-aware",
-    "check": "oxfmt --check && oxlint --type-aware",
+    "lint": "oxlint",
+    "check": "oxfmt --check && oxlint",
     "test": "pnpm run --filter '*' test",
     "typecheck": "pnpm run --filter '*' typecheck",
     "schemas:build": "pnpm run --filter schemas build",
