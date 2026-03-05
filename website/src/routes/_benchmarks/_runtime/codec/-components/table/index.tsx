@@ -2,6 +2,8 @@ import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { ToggleButton } from "#/shared/components/button/toggle";
+import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { SortDirection } from "#/shared/lib/sort";
@@ -30,6 +32,7 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
             >
               Library
             </SortableHeaderLink>
+            <th className="action"></th>
             <th>Version</th>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps(
@@ -75,6 +78,18 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
               <td>
                 <code className="language-text">{result.libraryName}</code>
                 {result.note ? ` (${result.note})` : null}
+              </td>
+              <td className="action">
+                {result.acceptsUnknown && (
+                  <ToggleButton
+                    tooltip={{
+                      subhead: "Accepts unknown values",
+                      supporting: "This codec allows unknown input, requiring extra validation.",
+                    }}
+                  >
+                    <MdSymbol>warning</MdSymbol>
+                  </ToggleButton>
+                )}
               </td>
               <td>
                 <code className="language-text">{result.version}</code>
