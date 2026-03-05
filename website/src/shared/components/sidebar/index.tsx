@@ -1,4 +1,5 @@
 import { ClientOnly } from "@tanstack/react-router";
+import { clsx } from "clsx";
 import { radEventListeners } from "rad-event-listeners";
 import { type ReactNode, useContext, useEffect } from "react";
 import bem from "react-bem-helper";
@@ -83,10 +84,10 @@ export function Sidebar() {
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
         <ul {...cls("groups")}>
-          {sidebarGroups.map((groups, index) => (
-            <div key={groups.key} {...cls("group")}>
+          {sidebarGroups.map((group, index) => (
+            <div key={group.key} {...cls("group")}>
               <List>
-                {groups.links.map(({ name, icon, ...link }) => (
+                {group.links.map(({ name, icon, ...link }) => (
                   <ListItem key={link.to}>
                     <ListItemInternalLink {...link} activeOptions={{ includeSearch: false }}>
                       <ListItemContent leading={<MdSymbol>{icon}</MdSymbol>}>
@@ -96,7 +97,9 @@ export function Sidebar() {
                   </ListItem>
                 ))}
               </List>
-              {index !== sidebarGroups.length - 1 && <hr />}
+              {index !== sidebarGroups.length - 1 && (
+                <hr className={clsx({ inset: group.inset })} />
+              )}
             </div>
           ))}
         </ul>

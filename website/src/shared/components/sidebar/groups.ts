@@ -4,6 +4,7 @@ import type { Key } from "react";
 interface SidebarGroup {
   key: Key;
   links: Array<LinkOptions & { name: string; icon: string }>;
+  inset?: boolean;
 }
 
 export const sidebarGroups: Array<SidebarGroup> = [
@@ -12,13 +13,13 @@ export const sidebarGroups: Array<SidebarGroup> = [
     links: [{ ...linkOptions({ to: "/" }), name: "Home", icon: "home" }],
   },
   {
-    key: "benchmarks",
+    key: "pre-runtime",
+    links: [{ ...linkOptions({ to: "/download" }), name: "Download", icon: "download_2" }],
+    inset: true,
+  },
+  {
+    key: "runtime",
     links: [
-      {
-        ...linkOptions({ to: "/download" }),
-        name: "Download",
-        icon: "download_2",
-      },
       {
         ...linkOptions({ to: "/initialization" }),
         name: "Initialization",
@@ -35,6 +36,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         icon: "output_circle",
       },
       {
+        ...linkOptions({ to: "/codec" }),
+        name: "Codec",
+        icon: "swap_horiz",
+      },
+      {
         ...linkOptions({ to: "/standard" }),
         name: "Standard Schema",
         icon: "schema",
@@ -44,17 +50,12 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "String",
         icon: "format_quote",
       },
-      {
-        ...linkOptions({ to: "/stack" }),
-        name: "Stack",
-        icon: "error",
-      },
-      {
-        ...linkOptions({ to: "/codec" }),
-        name: "Codec",
-        icon: "swap_horiz",
-      },
     ],
+    inset: true,
+  },
+  {
+    key: "post-runtime",
+    links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
   },
   {
     key: "blog",

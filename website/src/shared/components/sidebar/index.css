@@ -80,6 +80,15 @@
     }
     hr {
       margin: 1rem 0;
+      &.inset {
+        margin: 0;
+        --inset: calc(2rem + 24px);
+        margin-left: var(--inset);
+        &:dir(rtl) {
+          margin-right: var(--inset);
+          margin-left: 0;
+        }
+      }
     }
   }
 
