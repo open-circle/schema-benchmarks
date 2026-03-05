@@ -1,11 +1,10 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import { mergeRefs } from "@schema-benchmarks/utils/react";
+import { useStore } from "@tanstack/react-store";
 import { useRef } from "react";
 
-import { useExternalStore } from "#/shared/hooks/store.ts";
-
 import { AlertDialog, type AlertDialogProps } from "../alert.tsx";
-import { confirmQueue } from "./queue.ts";
+import * as confirmQueue from "./queue.ts";
 
 export interface ConfirmDialogProps extends DistributiveOmit<
   AlertDialogProps,
@@ -14,7 +13,7 @@ export interface ConfirmDialogProps extends DistributiveOmit<
 
 export function ConfirmDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const current = useExternalStore(confirmQueue, ([current]) => current);
+  const current = useStore(confirmQueue.store, ([current]) => current);
 
   return (
     current && (

@@ -1,9 +1,8 @@
+import { useStore } from "@tanstack/react-store";
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { useExternalStore } from "#/shared/hooks/store";
-
-import { bannerQueue } from "./queue";
+import { bannerStore } from "./queue";
 
 export type BannerColor = "success" | "error" | "warning";
 
@@ -18,7 +17,7 @@ export interface BannerProps {
 const cls = bem("banner");
 
 export function Banner() {
-  const banner = useExternalStore(bannerQueue, ([current]) => current);
+  const banner = useStore(bannerStore, ([current]) => current);
   if (!banner) return null;
   const { color = "", closing = false, icon, children, actions } = banner;
   return (
