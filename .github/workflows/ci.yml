@@ -23,6 +23,20 @@ jobs:
       - uses: CatChen/oxlint-suggestion-action@v1
         with:
           fail-check: true
+  format:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/environments/website
+      - name: Format
+        run: pnpm format
+      - uses: CatChen/check-git-status-action@v2
+        with:
+          fail-if-not-clean: true
+          request-changes-if-not-clean: true
+          request-changes-comment: "Unformatted files detected. Please run `pnpm format` and commit the changes."
   typecheck:
     runs-on: ubuntu-latest
     needs: install
