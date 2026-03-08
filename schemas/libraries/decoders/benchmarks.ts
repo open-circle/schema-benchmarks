@@ -16,11 +16,7 @@ export default defineBenchmarks({
   },
   initialization: {
     run() {
-      const schema = getDecoderSchema();
-      // @ts-expect-error make the schema non-thenable
-      // oxlint-disable-next-line unicorn/no-thenable
-      schema.then = undefined;
-      return schema;
+      return getDecoderSchema();
     },
     snippet: ts`object(...)`,
   },

@@ -1,19 +1,21 @@
 import type { Decoder } from "decoders";
-import { object, number, date, string, array, oneOf, nullable } from "decoders";
+import {
+  object,
+  number,
+  date,
+  string,
+  array,
+  oneOf,
+  nullable,
+  between,
+  sized,
+  urlString,
+} from "decoders";
 
 import type { ProductData } from "#src";
 
 const stringWithLength = (min: number, max: number) =>
-  string.refine(
-    (value) => value.length >= min && value.length <= max,
-    `string must be between ${min} and ${max} characters`,
-  );
-
-const numberInRange = (min: number, max: number) =>
-  number.refine(
-    (value) => value >= min && value <= max,
-    `number must be between ${min} and ${max}`,
-  );
+  sized(string, { min, max });
 
 const imageDecoder = object({
   id: number,
@@ -21,13 +23,12 @@ const imageDecoder = object({
   title: stringWithLength(1, 100),
   type: oneOf(["jpg", "png"]),
   size: number,
-  // decoders.url parses to URL instance, we want to keep it as string
-  url: string.refine((value) => URL.canParse(value), "invalid url"),
+  url: urlString,
 });
 
 const ratingDecoder = object({
   id: number,
-  stars: numberInRange(1, 5),
+  stars: between(1, 5),
   title: stringWithLength(1, 100),
   text: stringWithLength(1, 1000),
   images: array(imageDecoder),
@@ -39,9 +40,9 @@ const productDecoder = object({
   title: stringWithLength(1, 100),
   brand: stringWithLength(1, 30),
   description: stringWithLength(1, 500),
-  price: numberInRange(1, 10000),
-  discount: nullable(numberInRange(1, 100)),
-  quantity: numberInRange(1, 10),
+  price: between(1, 10000),
+  discount: nullable(between(1, 100)),
+  quantity: between(1, 10),
   tags: array(stringWithLength(1, 30)),
   images: array(imageDecoder),
   ratings: array(ratingDecoder),
