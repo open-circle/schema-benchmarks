@@ -75,9 +75,23 @@ body {
   background-color: var(--background);
   color: color(from var(--foreground) srgb r g b / var(--primary-text));
   @extend .typo-body1;
+
+  &,
+  & .sidebar-container {
+    scrollbar-gutter: stable;
+  }
   &[data-modal-open] {
-    overflow: hidden;
-    padding-right: var(--scrollbar-width);
+    &,
+    & .sidebar-container {
+      overflow: hidden;
+      @supports not (scrollbar-gutter: stable) {
+        padding-right: var(--scrollbar-width);
+        &:dir(rtl) {
+          padding-right: 0;
+          padding-left: var(--scrollbar-width);
+        }
+      }
+    }
   }
 }
 
