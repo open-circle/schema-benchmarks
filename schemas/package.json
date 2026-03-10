@@ -11,6 +11,7 @@
   "scripts": {
     "build": "vite build",
     "typecheck": "tsgo",
+    "typecheck:tsc": "tsc",
     "test": "vitest"
   },
   "dependencies": {
@@ -21,7 +22,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.0",
-    "decoders": "^2.8.0",
+    "decoders": "^2.9.0",
     "dedent": "catalog:",
     "effect": "^3.19.19",
     "effect___beta": "npm:effect@4.0.0-beta.25",
@@ -30,7 +31,7 @@
     "io-ts-types": "^0.5.19",
     "joi": "^18.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.1.5",
+    "typebox": "^1.1.6",
     "typia": "^11.0.3",
     "valibot": "catalog:",
     "yup": "^1.7.1",
