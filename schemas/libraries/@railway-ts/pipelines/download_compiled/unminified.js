@@ -1,3 +1,4 @@
+//#region ../node_modules/.pnpm/@railway-ts+pipelines@0.1.27_typescript@6.0.1-rc/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
 var RESULT_BRAND = /* @__PURE__ */ Symbol("RESULT_BRAND");
 function ok(value) {
 	return {
@@ -274,6 +275,8 @@ function union(validators, options) {
 		return buildError(allErrors);
 	};
 }
+//#endregion
+//#region ../schemas/libraries/@railway-ts/pipelines/download.ts
 const imageSchema = object({
 	id: required(number()),
 	created: required(date()),
@@ -302,3 +305,4 @@ validate({}, object({
 	images: required(array(imageSchema)),
 	ratings: required(array(ratingSchema))
 }));
+//#endregion

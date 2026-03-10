@@ -1,3 +1,4 @@
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.4/node_modules/sury/src/Sury.res.mjs
 function some(x) {
 	if (x === void 0) return { BS_PRIVATE_NESTED_SOME_NONE: 0 };
 	else if (x !== null && x.BS_PRIVATE_NESTED_SOME_NONE !== void 0) return { BS_PRIVATE_NESTED_SOME_NONE: x.BS_PRIVATE_NESTED_SOME_NONE + 1 | 0 };
@@ -2618,6 +2619,8 @@ var parseOrThrow = parseOrThrow$1;
 var min = min$1;
 var max = max$1;
 var url = url$1;
+//#endregion
+//#region ../schemas/libraries/sury/download/index.ts
 const imageSchema = schema({
 	id: number,
 	created: instance(Date),
@@ -2646,3 +2649,4 @@ parseOrThrow({}, schema({
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
 }));
+//#endregion

@@ -48,6 +48,8 @@ function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -171,6 +173,8 @@ function getLengthableOrigin(input) {
 	if (typeof input === "string") return "string";
 	return "unknown";
 }
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
 const initializer = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -189,6 +193,8 @@ const initializer = (inst, def) => {
 };
 const $ZodError = $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, { Parent: Error });
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
 	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
 	const result = schema._zod.run({
@@ -259,6 +265,8 @@ const string$1 = (params) => {
 	return new RegExp(`^${regex}$`);
 };
 const number$1 = /^-?\d+(?:\.\d+)?$/;
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -392,11 +400,15 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 	});
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 3,
 	patch: 6
 };
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -761,6 +773,8 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/registries.js
 var _a;
 var $ZodRegistry = class {
 	constructor() {
@@ -806,6 +820,8 @@ function registry() {
 }
 (_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
 globalThis.__zod_globalRegistry;
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
 /* @__NO_SIDE_EFFECTS__ */
 function _string(Class, params) {
 	return new Class({
@@ -872,6 +888,8 @@ function _minLength(minimum, params) {
 		minimum
 	});
 }
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /* @__PURE__ */ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
@@ -985,6 +1003,8 @@ function nullable(innerType) {
 		innerType
 	});
 }
+//#endregion
+//#region ../schemas/libraries/zod/mini/download.ts
 const imageSchema = /* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
 	created: /* @__PURE__ */ date(),
@@ -1013,3 +1033,4 @@ const ratingSchema = /* @__PURE__ */ object({
 	images: /* @__PURE__ */ array(imageSchema),
 	ratings: /* @__PURE__ */ array(ratingSchema)
 })).parse({});
+//#endregion
