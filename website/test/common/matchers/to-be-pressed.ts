@@ -48,7 +48,6 @@ export function toBePressed(this: MatcherState, actual: Element | Locator): Expe
 }
 
 declare module "vitest" {
-  // oxlint-disable-next-line no-unused-vars
   interface Assertion<T> {
     /**
      * @description
