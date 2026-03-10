@@ -52,7 +52,7 @@ export default defineConfig({
     // server side
     node: true,
   },
-  ignorePatterns: ["**/routeTree.gen.ts"],
+  ignorePatterns: ["**/routeTree.gen.ts", "public/mockServiceWorker.js"],
   rules: {
     ...eslintPluginRouter.configs.recommended.rules,
     ...eslintPluginQuery.configs.recommended.rules,

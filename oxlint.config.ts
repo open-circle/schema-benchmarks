@@ -31,5 +31,6 @@ export default defineConfig({
   extends: [baseConfig],
   options: {
     typeAware: true,
+    reportUnusedDisableDirectives: "error",
   },
 });
