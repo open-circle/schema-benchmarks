@@ -1,3 +1,4 @@
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util) {
 	util.assertEqual = (_) => {};
@@ -92,6 +93,8 @@ const getParsedType = (data) => {
 		default: return ZodParsedType.unknown;
 	}
 };
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/ZodError.js
 const ZodIssueCode = util.arrayToEnum([
 	"invalid_type",
 	"invalid_literal",
@@ -189,6 +192,8 @@ var ZodError = class ZodError extends Error {
 ZodError.create = (issues) => {
 	return new ZodError(issues);
 };
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/locales/en.js
 const errorMap = (issue, _ctx) => {
 	let message;
 	switch (issue.code) {
@@ -264,10 +269,14 @@ const errorMap = (issue, _ctx) => {
 	}
 	return { message };
 };
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/errors.js
 let overrideErrorMap = errorMap;
 function getErrorMap() {
 	return overrideErrorMap;
 }
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/helpers/parseUtil.js
 const makeIssue = (params) => {
 	const { data, path, errorMaps, issueData } = params;
 	const fullPath = [...path, ...issueData.path || []];
@@ -370,11 +379,15 @@ const isAborted = (x) => x.status === "aborted";
 const isDirty = (x) => x.status === "dirty";
 const isValid = (x) => x.status === "valid";
 const isAsync = (x) => typeof Promise !== "undefined" && x instanceof Promise;
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
 (function(errorUtil) {
 	errorUtil.errToObj = (message) => typeof message === "string" ? { message } : message || {};
 	errorUtil.toString = (message) => typeof message === "string" ? message : message?.message;
 })(errorUtil || (errorUtil = {}));
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/types.js
 var ParseInputLazyPath = class {
 	constructor(parent, value, path, key) {
 		this._cachedPath = [];
@@ -3523,6 +3536,8 @@ ZodOptional.create;
 ZodNullable.create;
 ZodEffects.createWithPreprocess;
 ZodPipeline.create;
+//#endregion
+//#region ../schemas/libraries/zod/v3/download.ts
 const imageSchema = objectType({
 	id: numberType(),
 	created: dateType(),
@@ -3551,3 +3566,4 @@ objectType({
 	images: arrayType(imageSchema),
 	ratings: arrayType(ratingSchema)
 }).parse({});
+//#endregion

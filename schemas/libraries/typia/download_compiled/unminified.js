@@ -1,3 +1,4 @@
+//#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -19,6 +20,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
+//#endregion
+//#region ../node_modules/.pnpm/typia@11.0.3_@types+node@25.4.0_typescript@6.0.1-rc/node_modules/typia/lib/internal/_isFormatUrl.js
 var require__isFormatUrl = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._isFormatUrl = void 0;
@@ -26,6 +29,8 @@ var require__isFormatUrl = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports._isFormatUrl = _isFormatUrl;
 	const PATTERN = /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)(?:\.(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 }));
+//#endregion
+//#region ../node_modules/.pnpm/typia@11.0.3_@types+node@25.4.0_typescript@6.0.1-rc/node_modules/typia/lib/internal/_validateReport.js
 var require__validateReport = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports._validateReport = void 0;
@@ -50,6 +55,8 @@ var require__validateReport = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports._validateReport = _validateReport;
 }));
+//#endregion
+//#region ../schemas/libraries/typia/download.ts
 var import__isFormatUrl = /* @__PURE__ */ __toESM(require__isFormatUrl(), 1);
 var import__validateReport = /* @__PURE__ */ __toESM(require__validateReport(), 1);
 (() => {
@@ -340,3 +347,4 @@ var import__validateReport = /* @__PURE__ */ __toESM(require__validateReport(), 
 		};
 	};
 })()({});
+//#endregion

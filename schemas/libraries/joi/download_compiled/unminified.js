@@ -1,3 +1,4 @@
+//#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -19,6 +20,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
+//#endregion
+//#region ../schemas/libraries/joi/download.ts
 var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
 	(function(e, t) {
 		"object" == typeof exports && "object" == typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports ? exports.joi = t() : e.joi = t();
@@ -7705,3 +7708,4 @@ import_joi_browser_min.default.object({
 	images: import_joi_browser_min.default.array().items(imageSchema).required(),
 	ratings: import_joi_browser_min.default.array().items(ratingSchema).required()
 }).validate({});
+//#endregion

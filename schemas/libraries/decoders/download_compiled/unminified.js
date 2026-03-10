@@ -1,22 +1,25 @@
+//#region ../node_modules/.pnpm/decoders@2.9.0/node_modules/decoders/dist/index.js
+/* @__NO_SIDE_EFFECTS__ */
 function isNumber(value) {
 	return typeof value === "number";
 }
+/* @__NO_SIDE_EFFECTS__ */
 function isString(value) {
 	return typeof value === "string";
 }
-function isBigInt(value) {
-	return typeof value === "bigint";
-}
+/* @__NO_SIDE_EFFECTS__ */
 function isDate(value) {
 	return !!value && Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value);
 }
+/* @__NO_SIDE_EFFECTS__ */
 function isPromiseLike(value) {
 	return typeof value === "object" && value !== null && "then" in value && typeof value.then === "function";
 }
+/* @__NO_SIDE_EFFECTS__ */
 function isPlainObject(value) {
 	return value !== null && typeof value === "object" && Object.prototype.toString.call(value) === "[object Object]";
 }
-var kAnnotationRegistry = Symbol.for("decoders.kAnnotationRegistry");
+var kAnnotationRegistry = /* @__PURE__ */ Symbol.for("decoders.kAnnotationRegistry");
 var _register = globalThis[kAnnotationRegistry] ??= /* @__PURE__ */ new WeakSet();
 function brand(ann) {
 	_register.add(ann);
@@ -66,7 +69,7 @@ function isAnnotation(thing) {
 function annotateArray(arr, text, seen) {
 	seen.add(arr);
 	const items = [];
-	for (const value of arr) items.push(annotate(value, void 0, seen));
+	for (const value of arr) items.push(__annotate(value, void 0, seen));
 	return makeArrayAnn(items, text);
 }
 function annotateObject(obj, text, seen) {
@@ -74,56 +77,60 @@ function annotateObject(obj, text, seen) {
 	const fields = /* @__PURE__ */ new Map();
 	for (const key of Object.keys(obj)) {
 		const value = obj[key];
-		fields.set(key, annotate(value, void 0, seen));
+		fields.set(key, __annotate(value, void 0, seen));
 	}
 	return makeObjectAnn(fields, text);
 }
-function annotate(value, text, seen) {
+function __annotate(value, text, seen) {
 	if (value === null || value === void 0 || typeof value === "string" || typeof value === "number" || typeof value === "boolean" || typeof value === "symbol" || typeof value === "bigint" || typeof value.getMonth === "function") return makeScalarAnn(value, text);
 	if (isAnnotation(value)) return updateText(value, text);
 	if (Array.isArray(value)) if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
 	else return annotateArray(value, text, seen);
-	if (isPlainObject(value)) if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
+	if (/* @__PURE__ */ isPlainObject(value)) if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
 	else return annotateObject(value, text, seen);
 	if (typeof value === "function") return makeOpaqueAnn("<function>", text);
-	if (isPromiseLike(value)) return makeOpaqueAnn("<Promise>", text);
+	if (/* @__PURE__ */ isPromiseLike(value)) return makeOpaqueAnn("<Promise>", text);
 	if (value?.constructor?.name) return makeOpaqueAnn(`<${value.constructor.name}>`, text);
 	else return makeOpaqueAnn("???", text);
 }
 function public_annotate(value, text) {
-	return annotate(value, text, /* @__PURE__ */ new WeakSet());
+	return __annotate(value, text, /* @__PURE__ */ new WeakSet());
 }
 function public_annotateObject(obj, text) {
 	return annotateObject(obj, text, /* @__PURE__ */ new WeakSet());
 }
 var INDENT = "  ";
+/* @__NO_SIDE_EFFECTS__ */
 function isMultiline(s) {
 	return s.includes("\n");
 }
+/* @__NO_SIDE_EFFECTS__ */
 function indent(s, prefix = INDENT) {
-	if (isMultiline(s)) return s.split("\n").map((line) => `${prefix}${line}`).join("\n");
+	if (/* @__PURE__ */ isMultiline(s)) return s.split("\n").map((line) => `${prefix}${line}`).join("\n");
 	else return `${prefix}${s}`;
 }
 var quotePattern = /'/g;
+/* @__NO_SIDE_EFFECTS__ */
 function quote(value) {
 	return typeof value === "string" ? "'" + value.replace(quotePattern, "\\'") + "'" : value === void 0 ? "undefined" : JSON.stringify(value);
 }
+/* @__NO_SIDE_EFFECTS__ */
 function summarize(ann, keypath = []) {
 	const result = [];
 	if (ann.type === "array") {
 		const items = ann.items;
 		let index = 0;
-		for (const ann2 of items) for (const item of summarize(ann2, [...keypath, index++])) result.push(item);
+		for (const ann2 of items) for (const item of /* @__PURE__ */ summarize(ann2, [...keypath, index++])) result.push(item);
 	} else if (ann.type === "object") {
 		const fields = ann.fields;
-		for (const [key, value] of fields) for (const item of summarize(value, [...keypath, key])) result.push(item);
+		for (const [key, value] of fields) for (const item of /* @__PURE__ */ summarize(value, [...keypath, key])) result.push(item);
 	}
 	const text = ann.text;
 	if (!text) return result;
 	let prefix;
 	if (keypath.length === 0) prefix = "";
-	else if (keypath.length === 1) prefix = typeof keypath[0] === "number" ? `Value at index ${keypath[0]}: ` : `Value at key ${quote(keypath[0])}: `;
-	else prefix = `Value at keypath ${quote(keypath.map(String).join("."))}: `;
+	else if (keypath.length === 1) prefix = typeof keypath[0] === "number" ? `Value at index ${keypath[0]}: ` : `Value at key ${/* @__PURE__ */ quote(keypath[0])}: `;
+	else prefix = `Value at keypath ${/* @__PURE__ */ quote(keypath.map(String).join("."))}: `;
 	return [...result, `${prefix}${text}`];
 }
 function serializeString(s, width = 80) {
@@ -140,7 +147,7 @@ function serializeArray(annotation, prefix) {
 	for (const item of items) {
 		const [ser, ann] = serializeAnnotation(item, `${prefix}${INDENT}`);
 		result.push(`${prefix}${INDENT}${ser},`);
-		if (ann !== void 0) result.push(indent(ann, `${prefix}${INDENT}`));
+		if (ann !== void 0) result.push(/* @__PURE__ */ indent(ann, `${prefix}${INDENT}`));
 	}
 	return [
 		"[",
@@ -157,7 +164,7 @@ function serializeObject(annotation, prefix) {
 		const valPrefix = `${prefix}${INDENT}${" ".repeat(kser.length + 2)}`;
 		const [vser, vann] = serializeAnnotation(valueAnnotation, `${prefix}${INDENT}`);
 		result.push(`${prefix}${INDENT}${kser}: ${vser},`);
-		if (vann !== void 0) result.push(indent(vann, valPrefix));
+		if (vann !== void 0) result.push(/* @__PURE__ */ indent(vann, valPrefix));
 	}
 	return [
 		"{",
@@ -171,7 +178,7 @@ function serializeValue(value) {
 	else if (value === null) return "null";
 	else if (value === void 0) return "undefined";
 	else if (typeof value === "bigint") return `${value.toString()}n`;
-	else if (isDate(value)) return `new Date(${quote(value.toISOString())})`;
+	else if (/* @__PURE__ */ isDate(value)) return `new Date(${/* @__PURE__ */ quote(value.toISOString())})`;
 	else if (value instanceof Date) return "(Invalid Date)";
 	else return "(unserializable)";
 }
@@ -183,8 +190,8 @@ function serializeAnnotation(ann, prefix = "") {
 	else serialized = ann.value;
 	const text = ann.text;
 	if (text !== void 0) {
-		const sep = "^".repeat(isMultiline(serialized) ? 1 : serialized.length);
-		return [serialized, [sep, text].join(isMultiline(text) ? "\n" : " ")];
+		const sep = "^".repeat(/* @__PURE__ */ isMultiline(serialized) ? 1 : serialized.length);
+		return [serialized, [sep, text].join(/* @__PURE__ */ isMultiline(text) ? "\n" : " ")];
 	} else return [serialized, void 0];
 }
 function formatInline(ann) {
@@ -192,9 +199,6 @@ function formatInline(ann) {
 	if (annotation !== void 0) return `${serialized}
 ${annotation}`;
 	else return serialized;
-}
-function formatShort(ann) {
-	return summarize(ann, []).join("\n");
 }
 function* iterAnnotation(ann, stack) {
 	if (ann.text) if (stack.length > 0) yield {
@@ -226,6 +230,7 @@ function* iterAnnotation(ann, stack) {
 function formatAsIssues(ann) {
 	return Array.from(iterAnnotation(ann, []));
 }
+/* @__NO_SIDE_EFFECTS__ */
 function ok(value) {
 	return {
 		ok: true,
@@ -233,6 +238,7 @@ function ok(value) {
 		error: void 0
 	};
 }
+/* @__NO_SIDE_EFFECTS__ */
 function err(error) {
 	return {
 		ok: false,
@@ -243,9 +249,9 @@ function err(error) {
 function noThrow(fn) {
 	return (t) => {
 		try {
-			return ok(fn(t));
+			return /* @__PURE__ */ ok(fn(t));
 		} catch (e) {
-			return err(public_annotate(t, e instanceof Error ? e.message : String(e)));
+			return /* @__PURE__ */ err(public_annotate(t, e instanceof Error ? e.message : String(e)));
 		}
 	};
 }
@@ -258,9 +264,10 @@ ${formatted}`);
 		return err3;
 	} else return formatted;
 }
+/* @__NO_SIDE_EFFECTS__ */
 function define(fn) {
 	function decode(blob) {
-		const makeFlexErr = (msg) => err(isAnnotation(msg) ? msg : public_annotate(blob, msg));
+		const makeFlexErr = (msg) => /* @__PURE__ */ err(isAnnotation(msg) ? msg : public_annotate(blob, msg));
 		return fn(blob, ok, makeFlexErr);
 	}
 	function verify(blob, formatter = formatInline) {
@@ -272,7 +279,7 @@ function define(fn) {
 		return decode(blob).value;
 	}
 	function transform(transformFn) {
-		return then(noThrow(transformFn));
+		return chain(noThrow(transformFn));
 	}
 	function refine(predicateFn, errmsg) {
 		return reject((value2) => predicateFn(value2) ? null : errmsg);
@@ -280,25 +287,25 @@ function define(fn) {
 	function refineType() {
 		return self;
 	}
-	function then(next) {
-		return define((blob, ok2, err2) => {
+	function chain(next) {
+		return /* @__PURE__ */ define((blob, ok2, err2) => {
 			const r1 = decode(blob);
 			if (!r1.ok) return r1;
-			const r2 = isDecoder(next) ? next : next(r1.value, ok2, err2);
-			return isDecoder(r2) ? r2.decode(r1.value) : r2;
+			const r2 = /* @__PURE__ */ isDecoder(next) ? next : next(r1.value, ok2, err2);
+			return /* @__PURE__ */ isDecoder(r2) ? r2.decode(r1.value) : r2;
 		});
 	}
 	function pipe(next) {
-		return then(next);
+		return chain(next);
 	}
 	function reject(rejectFn) {
-		return then((blob, ok2, err2) => {
+		return chain((blob, ok2, err2) => {
 			const errmsg = rejectFn(blob);
 			return errmsg === null ? ok2(blob) : err2(typeof errmsg === "string" ? public_annotate(blob, errmsg) : errmsg);
 		});
 	}
 	function describe(message) {
-		return define((blob, _, err2) => {
+		return /* @__PURE__ */ define((blob, _, err2) => {
 			const result = decode(blob);
 			if (result.ok) return result;
 			else return err2(public_annotate(result.error, message));
@@ -313,7 +320,7 @@ function define(fn) {
 		refineType,
 		reject,
 		describe,
-		then,
+		chain,
 		pipe,
 		"~standard": {
 			version: 1,
@@ -327,22 +334,24 @@ function define(fn) {
 	});
 	return self;
 }
-var kDecoderRegistry = Symbol.for("decoders.kDecoderRegistry");
+var kDecoderRegistry = /* @__PURE__ */ Symbol.for("decoders.kDecoderRegistry");
 var _register2 = globalThis[kDecoderRegistry] ??= /* @__PURE__ */ new WeakSet();
 function brand2(decoder) {
 	_register2.add(decoder);
 	return decoder;
 }
+/* @__NO_SIDE_EFFECTS__ */
 function isDecoder(value) {
 	return _register2.has(value);
 }
-var poja = define((blob, ok2, err2) => {
+var poja = /* @__PURE__ */ define((blob, ok2, err2) => {
 	if (!Array.isArray(blob)) return err2("Must be an array");
 	return ok2(blob);
 });
+/* @__NO_SIDE_EFFECTS__ */
 function array(decoder) {
 	const decodeFn = decoder.decode;
-	return poja.then((inputs, ok2, err2) => {
+	return poja.chain((inputs, ok2, err2) => {
 		const results = [];
 		for (let i = 0; i < inputs.length; ++i) {
 			const blob = inputs[i];
@@ -359,22 +368,41 @@ function array(decoder) {
 		return ok2(results);
 	});
 }
-function instanceOf(klass) {
-	return define((blob, ok2, err2) => blob instanceof klass ? ok2(blob) : err2(`Must be ${klass.name} instance`));
+/* @__NO_SIDE_EFFECTS__ */
+function bySizeOptions(options) {
+	const size = options.size;
+	const min2 = size ?? options.min;
+	const max2 = size ?? options.max;
+	const atLeast = min2 === max2 ? "" : "at least ";
+	const atMost = min2 === max2 ? "" : "at most ";
+	return (value) => {
+		const len = value.length ?? value.size;
+		if (typeof value === "string") {
+			if (min2 !== void 0 && len < min2) return `Too short, must be ${atLeast}${min2} chars`;
+			if (max2 !== void 0 && len > max2) return `Too long, must be ${atMost}${max2} chars`;
+		} else {
+			if (min2 !== void 0 && len < min2) return `Must have ${atLeast}${min2} items`;
+			if (max2 !== void 0 && len > max2) return `Must have ${atMost}${max2} items`;
+		}
+		return null;
+	};
 }
-function lazy(decoderFn) {
-	return define((blob) => decoderFn().decode(blob));
+/* @__NO_SIDE_EFFECTS__ */
+function sized(decoder, options) {
+	return decoder.reject(/* @__PURE__ */ bySizeOptions(options));
 }
+/* @__NO_SIDE_EFFECTS__ */
 function difference(xs, ys) {
 	const result = /* @__PURE__ */ new Set();
 	for (const x of xs) if (!ys.has(x)) result.add(x);
 	return result;
 }
-var pojo = define((blob, ok2, err2) => isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
+var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
+/* @__NO_SIDE_EFFECTS__ */
 function object(decoders) {
 	const knownKeys = new Set(Object.keys(decoders));
-	return pojo.then((plainObj, ok2, err2) => {
-		const missingKeys = difference(knownKeys, new Set(Object.keys(plainObj)));
+	return pojo.chain((plainObj, ok2, err2) => {
+		const missingKeys = /* @__PURE__ */ difference(knownKeys, new Set(Object.keys(plainObj)));
 		const record2 = {};
 		let errors = null;
 		for (const key of Object.keys(decoders)) {
@@ -409,125 +437,109 @@ function object(decoders) {
 }
 var EITHER_PREFIX = "Either:\n";
 function itemize(s) {
-	return `-${indent(s).substring(1)}`;
+	return `-${(/* @__PURE__ */ indent(s)).substring(1)}`;
 }
 function nest(errText) {
 	return errText.startsWith(EITHER_PREFIX) ? errText.substring(EITHER_PREFIX.length) : itemize(errText);
 }
+/* @__NO_SIDE_EFFECTS__ */
 function either(...decoders) {
 	if (decoders.length === 0) throw new Error("Pass at least one decoder to either()");
-	return define((blob, _, err2) => {
+	return /* @__PURE__ */ define((blob, _, err2) => {
 		const errors = [];
 		for (const decoder of decoders) {
 			const result = decoder.decode(blob);
 			if (result.ok) return result;
 			else errors.push(result.error);
 		}
-		return err2(EITHER_PREFIX + errors.map((err3) => nest(summarize(err3).join("\n"))).join("\n"));
+		return err2(EITHER_PREFIX + errors.map((err3) => nest((/* @__PURE__ */ summarize(err3)).join("\n"))).join("\n"));
 	});
 }
+/* @__NO_SIDE_EFFECTS__ */
 function oneOf(constants) {
-	return define((blob, ok2, err2) => {
+	return /* @__PURE__ */ define((blob, ok2, err2) => {
 		const index = constants.indexOf(blob);
 		if (index !== -1) return ok2(constants[index]);
-		return err2(`Must be one of ${constants.map((value) => quote(value)).join(", ")}`);
+		return err2(`Must be one of ${constants.map((value) => /* @__PURE__ */ quote(value)).join(", ")}`);
 	});
 }
 function lazyval(value) {
 	return typeof value === "function" ? value() : value;
 }
-var null_ = constant(null);
-constant(void 0);
-define((blob, ok2, err2) => blob == null ? ok2(blob) : err2("Must be undefined or null"));
+var null_ = /* @__PURE__ */ constant(null);
+/* @__NO_SIDE_EFFECTS__ */
 function nullable(decoder, defaultValue) {
-	const rv = either(null_, decoder);
+	const rv = /* @__PURE__ */ either(null_, decoder);
 	return arguments.length >= 2 ? rv.transform((value) => value ?? lazyval(defaultValue)) : rv;
 }
+/* @__NO_SIDE_EFFECTS__ */
 function constant(value) {
-	return define((blob, ok2, err2) => blob === value ? ok2(value) : err2(`Must be ${typeof value === "symbol" ? String(value) : quote(value)}`));
-}
-define((blob, ok2, _) => ok2(blob));
-var boolean = define((blob, ok2, err2) => {
-	return typeof blob === "boolean" ? ok2(blob) : err2("Must be boolean");
-});
-define((blob, ok2, _) => ok2(!!blob));
-function record(fst, snd) {
-	const keyDecoder = snd !== void 0 ? fst : void 0;
-	const valueDecoder = snd ?? fst;
-	return pojo.then((input, ok2, err2) => {
-		let rv = {};
-		const errors = /* @__PURE__ */ new Map();
-		for (const key of Object.keys(input)) {
-			const value = input[key];
-			const keyResult = keyDecoder?.decode(key);
-			if (keyResult?.ok === false) return err2(public_annotate(input, `Invalid key ${quote(key)}: ${formatShort(keyResult.error)}`));
-			const k = keyResult?.value ?? key;
-			const result = valueDecoder.decode(value);
-			if (result.ok) {
-				if (errors.size === 0) rv[k] = result.value;
-			} else {
-				errors.set(key, result.error);
-				rv = {};
-			}
-		}
-		if (errors.size > 0) return err2(merge(public_annotateObject(input), errors));
-		else return ok2(rv);
-	});
+	return /* @__PURE__ */ define((blob, ok2, err2) => blob === value ? ok2(value) : err2(`Must be ${typeof value === "symbol" ? String(value) : /* @__PURE__ */ quote(value)}`));
 }
 var url_re = /^([A-Za-z]{2,12}(?:[+][A-Za-z]{2,12})?):\/\/(?:([^@:]*:?(?:[^@]+)?)@)?(?:([A-Za-z0-9.-]+)(?::([0-9]{2,5}))?)(\/(?:[-+~%/.,\w]*)?(?:\?[-+=&;%@.,/\w]*)?(?:#[.,!/\w]*)?)?$/;
-var string = define((blob, ok2, err2) => isString(blob) ? ok2(blob) : err2("Must be string"));
-regex(/\S/, "Must be non-empty string");
+var string = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isString(blob) ? ok2(blob) : err2("Must be string"));
+/* @__NO_SIDE_EFFECTS__ */
 function regex(regex2, msg) {
 	return string.refine((s) => regex2.test(s), msg);
 }
-regex(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "Must be email");
-either(regex(url_re, "Must be URL").transform((value) => new URL(value)), instanceOf(URL)).refine((value) => value.protocol === "https:", "Must be an HTTPS URL");
-regex(/^[a-z_][a-z0-9_]*$/i, "Must be valid identifier");
-var uuid = regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, "Must be uuid");
-uuid.refine((value) => value[14] === "1", "Must be uuidv1");
-uuid.refine((value) => value[14] === "4", "Must be uuidv4");
-var decimal = regex(/^[0-9]+$/, "Must only contain digits");
-regex(/^[0-9a-f]+$/i, "Must only contain hexadecimal digits");
-decimal.transform(Number);
-var iso8601_re = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d+)?(?:Z|[+-]\d{2}:?\d{2})$/;
-var date = define((blob, ok2, err2) => {
-	return isDate(blob) ? ok2(blob) : err2("Must be a Date");
+var urlString = /* @__PURE__ */ regex(url_re, "Must be URL");
+var date = /* @__PURE__ */ define((blob, ok2, err2) => {
+	return /* @__PURE__ */ isDate(blob) ? ok2(blob) : err2("Must be a Date");
 });
-either(date, regex(iso8601_re, "Must be ISO8601 format").refine((value) => !Number.isNaN(new Date(value).getTime()), "Must be valid date/time value").transform((value) => new Date(value))).describe("Must be a Date or date string");
-var number = define((blob, ok2, err2) => isNumber(blob) ? ok2(blob) : err2("Must be number")).refine((n) => Number.isFinite(n), "Number must be finite");
-var integer = number.refine((n) => Number.isInteger(n), "Number must be an integer");
-number.refine((n) => n >= 0 && !Object.is(n, -0), "Number must be positive");
-integer.refine((n) => n >= 0 && !Object.is(n, -0), "Number must be positive");
-define((blob, ok2, err2) => isBigInt(blob) ? ok2(blob) : err2("Must be bigint"));
-var json = either(null_, string, number, boolean, lazy(() => record(json)), lazy(() => array(json))).describe("Must be valid JSON value");
+var number = /* @__PURE__ */ (/* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isNumber(blob) ? ok2(blob) : err2("Must be number"))).refine((n) => Number.isFinite(n), "Number must be finite");
+/* @__NO_SIDE_EFFECTS__ */
+function between(min2, max2, decoder = number) {
+	return decoder.reject((value) => value < min2 ? `Too low, must be between ${min2} and ${max2}` : value > max2 ? `Too high, must be between ${min2} and ${max2}` : null);
+}
 // istanbul ignore else -- @preserve
-const stringWithLength = (min, max) => string.refine((value) => value.length >= min && value.length <= max, `string must be between ${min} and ${max} characters`);
-const numberInRange = (min, max) => number.refine((value) => value >= min && value <= max, `number must be between ${min} and ${max}`);
-const imageDecoder = object({
+//#endregion
+//#region ../schemas/libraries/decoders/download.ts
+const imageDecoder = /* @__PURE__ */ object({
 	id: number,
 	created: date,
-	title: stringWithLength(1, 100),
-	type: oneOf(["jpg", "png"]),
+	title: /* @__PURE__ */ sized(string, {
+		min: 1,
+		max: 100
+	}),
+	type: /* @__PURE__ */ oneOf(["jpg", "png"]),
 	size: number,
-	url: string.refine((value) => URL.canParse(value), "invalid url")
+	url: urlString
 });
-const ratingDecoder = object({
-	id: number,
-	stars: numberInRange(1, 5),
-	title: stringWithLength(1, 100),
-	text: stringWithLength(1, 1e3),
-	images: array(imageDecoder)
-});
-object({
+(/* @__PURE__ */ object({
 	id: number,
 	created: date,
-	title: stringWithLength(1, 100),
-	brand: stringWithLength(1, 30),
-	description: stringWithLength(1, 500),
-	price: numberInRange(1, 1e4),
-	discount: nullable(numberInRange(1, 100)),
-	quantity: numberInRange(1, 10),
-	tags: array(stringWithLength(1, 30)),
-	images: array(imageDecoder),
-	ratings: array(ratingDecoder)
-}).verify({});
+	title: /* @__PURE__ */ sized(string, {
+		min: 1,
+		max: 100
+	}),
+	brand: /* @__PURE__ */ sized(string, {
+		min: 1,
+		max: 30
+	}),
+	description: /* @__PURE__ */ sized(string, {
+		min: 1,
+		max: 500
+	}),
+	price: /* @__PURE__ */ between(1, 1e4),
+	discount: /* @__PURE__ */ nullable(/* @__PURE__ */ between(1, 100)),
+	quantity: /* @__PURE__ */ between(1, 10),
+	tags: /* @__PURE__ */ array(/* @__PURE__ */ sized(string, {
+		min: 1,
+		max: 30
+	})),
+	images: /* @__PURE__ */ array(imageDecoder),
+	ratings: /* @__PURE__ */ array(/* @__PURE__ */ object({
+		id: number,
+		stars: /* @__PURE__ */ between(1, 5),
+		title: /* @__PURE__ */ sized(string, {
+			min: 1,
+			max: 100
+		}),
+		text: /* @__PURE__ */ sized(string, {
+			min: 1,
+			max: 1e3
+		}),
+		images: /* @__PURE__ */ array(imageDecoder)
+	}))
+})).verify({});
+//#endregion

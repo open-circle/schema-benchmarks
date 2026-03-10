@@ -1,3 +1,4 @@
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -55,6 +56,8 @@ const Class$1 = /* @__PURE__ */ function() {
 	PipeableBase.prototype = Prototype;
 	return PipeableBase;
 }();
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -255,6 +258,8 @@ function memoize(f) {
 		return result;
 	};
 }
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -272,6 +277,8 @@ const getAllObjectKeys = (obj) => {
 };
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -492,6 +499,8 @@ function isObjectKeyword(input) {
 * @since 2.0.0
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -839,6 +848,8 @@ function withVisitedTracking$1(obj, fn) {
 	visitedObjects.delete(obj);
 	return result;
 }
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
@@ -1064,6 +1075,8 @@ const isEqual = (u) => hasProperty(u, symbol$2);
 * @since 2.0.0
 */
 const asEquivalence = () => equals$2;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1112,11 +1125,15 @@ const asEquivalence = () => equals$2;
 * @since 2.0.0
 */
 const make$12 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Redactable.js
 /**
 * @since 4.0.0
 */
@@ -1198,7 +1215,7 @@ function redact(u) {
 * @since 4.0.0
 */
 function getRedacted(redactable) {
-	return redactable[symbolRedactable](globalThis[currentFiberTypeId]?.services ?? emptyServiceMap$1);
+	return redactable[symbolRedactable](globalThis["~effect/Fiber/currentFiber"]?.services ?? emptyServiceMap$1);
 }
 /** @internal */
 const currentFiberTypeId = "~effect/Fiber/currentFiber";
@@ -1209,6 +1226,8 @@ const emptyServiceMap$1 = {
 		return pipeArguments(this, arguments);
 	}
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1549,6 +1568,8 @@ function formatJson(input, options) {
 	cache = void 0;
 	return out;
 }
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Inspectable.js
 /**
 * This module provides utilities for making values inspectable and debuggable in TypeScript.
 *
@@ -1681,6 +1702,8 @@ const forced = { [InternalTypeId]: (body) => {
 */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
 (function* () {}).constructor;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2046,6 +2069,8 @@ var NoSuchElementError$1 = class extends TaggedError$1("NoSuchElementError") {
 		super({ message });
 	}
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2115,6 +2140,8 @@ const some$1 = (value) => {
 	a.value = value;
 	return a;
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/result.js
 const TypeId$15 = "~effect/data/Result";
 const CommonProto = {
 	[TypeId$15]: {
@@ -2188,6 +2215,8 @@ const succeed$4 = (success) => {
 	a.success = success;
 	return a;
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2387,6 +2416,8 @@ const isLessThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== 1
 * @since 2.0.0
 */
 const isGreaterThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== -1);
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2543,6 +2574,8 @@ const isSome = isSome$1;
 * @since 2.0.0
 */
 const map$5 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
 *
@@ -2657,6 +2690,8 @@ const isFailure$3 = isFailure$4;
 * @since 4.0.0
 */
 const isSuccess$3 = isSuccess$4;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -3295,6 +3330,8 @@ const isZero = (n) => n.value === bigint0$2;
 * @category predicates
 */
 const isNegative = (n) => n.value < bigint0$2;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Duration.js
 const TypeId$13 = "~effect/time/Duration";
 /**
 * Get the duration in nanoseconds as a bigint.
@@ -3370,6 +3407,8 @@ const Equivalence$2 = (self, that) => matchPair(self, that, {
 	onNanos: (self, that) => self === that,
 	onInfinity: (self, that) => self.value._tag === that.value._tag
 });
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/ServiceMap.js
 const ServiceTypeId = "~effect/ServiceMap/Service";
 /**
 * @example
@@ -3754,6 +3793,8 @@ const mergeAll$1 = (...ctxs) => {
 * @category References
 */
 const Reference = Service;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Scheduler.js
 /**
 * @since 4.0.0
 * @category references
@@ -3980,6 +4021,8 @@ var MixedScheduler = class {
 * @category references
 */
 const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBeforeYield", { defaultValue: () => 2048 });
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Tracer.js
 /**
 * @since 2.0.0
 * @category tags
@@ -4014,6 +4057,8 @@ const DisablePropagation = /* @__PURE__ */ Reference("effect/Tracer/DisablePropa
 * @category references
 */
 const TracerKey = "effect/Tracer";
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/References.js
 /**
 * This module provides a collection of reference implementations for commonly used
 * Effect runtime configuration values. These references allow you to access and
@@ -4161,9 +4206,12 @@ const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogL
 * @since 4.0.0
 */
 const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
-const version = "dev";
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4291,7 +4339,7 @@ const renderErrorCause = (cause, prefix) => {
 	return stack;
 };
 /** @internal */
-const FiberTypeId = `~effect/Fiber/${version}`;
+const FiberTypeId = `~effect/Fiber/dev`;
 const fiberVariance = {
 	_A: identity,
 	_E: identity
@@ -5138,6 +5186,8 @@ const TaggedError = TaggedError$1;
 * @since 4.0.0
 */
 const getSuccess = exitGetSuccess;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Deferred.js
 const DeferredProto = {
 	["~effect/Deferred"]: {
 		_A: identity,
@@ -5227,6 +5277,8 @@ const forkUnsafe = scopeForkUnsafe;
 * @since 4.0.0
 */
 const close = scopeClose;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Layer.js
 const TypeId$10 = "~effect/Layer";
 /**
 * Returns `true` if the specified value is a `Layer`, `false` otherwise.
@@ -5406,6 +5458,8 @@ const provideWith = (self, that, f) => fromBuild((memoMap, scope) => flatMap$1(A
 * @category utils
 */
 const provide$2 = /* @__PURE__ */ dual(2, (self, that) => provideWith(self, that, identity));
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/ExecutionPlan.js
 /**
 * @since 3.16.0
 * @category Type IDs
@@ -5429,6 +5483,8 @@ const makeProto = (steps) => {
 	self.steps = steps;
 	return self;
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$8 = "~effect/time/DateTime";
 /** @internal */
@@ -5914,6 +5970,8 @@ const catchEager = catchEager$1;
 const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5930,6 +5988,8 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	if (typeof identifier === "string") return identifier;
 	return ast.getExpected(getExpected);
 });
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -5960,6 +6020,8 @@ globalThis.RegExp;
 * @since 2.0.0
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaIssue.js
 const TypeId$4 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -6635,6 +6697,8 @@ function formatOption(actual) {
 	if (isNone(actual)) return "no value provided";
 	return format$3(actual.value);
 }
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6907,6 +6971,8 @@ function String$3() {
 function Number$3() {
 	return transform$1(globalThis.Number);
 }
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Bidirectional transformations for the Effect Schema system.
 *
@@ -7147,6 +7213,8 @@ function passthrough() {
 * @since 4.0.0
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -8706,6 +8774,8 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 * @since 4.0.0
 */
 const lambda = (f) => f;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaParser.js
 /**
 * @since 4.0.0
 */
@@ -8833,6 +8903,8 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 		return sroa;
 	};
 });
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId$1 = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -9209,6 +9281,8 @@ globalThis.File;
 globalThis.FormData;
 globalThis.URLSearchParams;
 globalThis.Uint8Array;
+//#endregion
+//#region ../schemas/libraries/effect/@beta/download.ts
 const Image = Struct({
 	id: Number$1,
 	created: instanceOf(Date),
@@ -9237,3 +9311,4 @@ decodeUnknownSync(Struct({
 	images: mutable(Array$1(Image)),
 	ratings: mutable(Array$1(Rating))
 }))({});
+//#endregion

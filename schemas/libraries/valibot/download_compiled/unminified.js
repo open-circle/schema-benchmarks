@@ -1,3 +1,4 @@
+//#region ../node_modules/.pnpm/valibot@1.2.0_typescript@6.0.1-rc/node_modules/valibot/dist/index.mjs
 let store$4;
 /**
 * Returns the global configuration.
@@ -516,6 +517,8 @@ function pipe(...pipe$1) {
 		}
 	};
 }
+//#endregion
+//#region ../schemas/libraries/valibot/download.ts
 const imageSchema = /* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
 	created: /* @__PURE__ */ date(),
@@ -543,3 +546,4 @@ parse(/* @__PURE__ */ object({
 		images: /* @__PURE__ */ array(imageSchema)
 	}))
 }), {});
+//#endregion
