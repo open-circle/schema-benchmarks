@@ -12,6 +12,7 @@
     "schemas:build": "pnpm run --filter schemas build",
     "website:dev": "pnpm run --filter website dev",
     "website:build": "pnpm run --filter website build",
+    "website:build:devtools": "pnpm run --filter website build:devtools",
     "website:serve": "pnpm run --filter website serve",
     "website:storybook": "pnpm run --filter website storybook",
     "bench:bench": "pnpm run --filter '*/bench' bench",
@@ -22,13 +23,13 @@
   },
   "devDependencies": {
     "lefthook": "^2.1.3",
-    "oxfmt": "^0.37.0",
-    "oxlint": "^1.52.0",
+    "oxfmt": "^0.38.0",
+    "oxlint": "^1.53.0",
     "oxlint-tsgolint": "^0.16.0",
     "playwright": "catalog:",
-    "typescript": "6.0.1-rc"
+    "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
   "pnpm": {
     "overrides": {
       "vite": "catalog:"
