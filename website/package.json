@@ -12,7 +12,8 @@
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc",
     "copy-results": "cp ../bench/bench.json ../bench/download.json ../bench/stack.json ./public/",
-    "prebuild": "pnpm copy-results"
+    "prebuild": "pnpm copy-results",
+    "predev": "pnpm copy-results"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",
