@@ -1,15 +1,16 @@
-import stackResults from "@schema-benchmarks/bench/stack.json" with { type: "json" };
+import { stackResultSchema } from "@schema-benchmarks/bench";
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { createServerFn } from "@tanstack/react-start";
+import * as v from "valibot";
 
-export const getStackResultsFn = createServerFn().handler(() => stackResults);
+import { upfetch } from "#/shared/lib/fetch";
 
 export const getStackResults = (signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["stack"],
     queryFn: ({ signal }) =>
-      getStackResultsFn({
+      upfetch("/stack.json", {
+        schema: v.array(stackResultSchema),
         signal: anyAbortSignal(signal, signalOpt),
       }),
   });

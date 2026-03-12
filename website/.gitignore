@@ -4,3 +4,8 @@
 .content-collections
 
 dev-dist/
+
+# Benchmark results (copied over from bench/)
+public/bench.json
+public/download.json
+public/stack.json
