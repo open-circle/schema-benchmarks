@@ -48,7 +48,6 @@
     "tanstack-meta": "^0.6.1",
     "up-fetch": "^2.6.0",
     "valibot": "catalog:",
-    "vite-tsconfig-paths": "^6.1.1",
     "web-haptics": "^0.0.6"
   },
   "devDependencies": {

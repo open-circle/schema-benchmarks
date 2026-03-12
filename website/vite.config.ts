@@ -11,7 +11,6 @@ import rehypeSlug from "rehype-slug";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import svgr from "vite-plugin-svgr";
-import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 import {
@@ -35,10 +34,6 @@ const config = defineConfig({
   },
   plugins: [
     devtools(),
-    // this is the plugin that enables path aliases
-    viteTsConfigPaths({
-      projects: ["./tsconfig.json"],
-    }),
     tanstackStart(),
     mdx({
       rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
@@ -75,6 +70,7 @@ const config = defineConfig({
       "#storybook/": "/.storybook/",
       "#/": "/src/",
     },
+    tsconfigPaths: true,
   },
   test: {
     projects: [
