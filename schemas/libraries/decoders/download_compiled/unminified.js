@@ -1,4 +1,8 @@
-//#region ../node_modules/.pnpm/decoders@2.9.0/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.9.1/node_modules/decoders/dist/index.js
+/* @__NO_SIDE_EFFECTS__ */
+function qty(n, unit) {
+	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
+}
 /* @__NO_SIDE_EFFECTS__ */
 function isNumber(value) {
 	return typeof value === "number";
@@ -378,11 +382,11 @@ function bySizeOptions(options) {
 	return (value) => {
 		const len = value.length ?? value.size;
 		if (typeof value === "string") {
-			if (min2 !== void 0 && len < min2) return `Too short, must be ${atLeast}${min2} chars`;
-			if (max2 !== void 0 && len > max2) return `Too long, must be ${atMost}${max2} chars`;
+			if (min2 !== void 0 && len < min2) return `Too short, must be ${atLeast}${/* @__PURE__ */ qty(min2, "char")}`;
+			if (max2 !== void 0 && len > max2) return `Too long, must be ${atMost}${/* @__PURE__ */ qty(max2, "char")}`;
 		} else {
-			if (min2 !== void 0 && len < min2) return `Must have ${atLeast}${min2} items`;
-			if (max2 !== void 0 && len > max2) return `Must have ${atMost}${max2} items`;
+			if (min2 !== void 0 && len < min2) return `Must have ${atLeast}${/* @__PURE__ */ qty(min2, "item")}`;
+			if (max2 !== void 0 && len > max2) return `Must have ${atMost}${/* @__PURE__ */ qty(max2, "item")}`;
 		}
 		return null;
 	};
