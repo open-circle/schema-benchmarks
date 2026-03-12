@@ -5,6 +5,8 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { createClientOnlyFn } from "@tanstack/react-start";
+import { useEffect } from "react";
 import { generateMetadata } from "tanstack-meta";
 
 import { Banner } from "#/shared/components/banner";
@@ -111,6 +113,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { theme, style } = Route.useLoaderData();
+  useEffect(() => {
+    createClientOnlyFn(() => import("#/shared/lib/pwa.client"))();
+  }, []);
   return (
     <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
       <head>
