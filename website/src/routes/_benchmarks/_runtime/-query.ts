@@ -1,15 +1,15 @@
-import benchResults from "@schema-benchmarks/bench/bench.json" with { type: "json" };
+import { benchResultsSchema } from "@schema-benchmarks/bench";
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { createServerFn } from "@tanstack/react-start";
 
-export const getBenchResultsFn = createServerFn().handler(() => benchResults);
+import { upfetch } from "#/shared/lib/fetch";
 
 export const getBenchResults = (signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["bench"],
     queryFn: ({ signal }) =>
-      getBenchResultsFn({
+      upfetch("/bench.json", {
+        schema: benchResultsSchema,
         signal: anyAbortSignal(signal, signalOpt),
       }),
   });

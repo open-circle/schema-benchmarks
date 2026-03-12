@@ -69,7 +69,7 @@ const config = defineConfig({
       devOptions: {
         enabled: true,
       },
-      includeAssets: ["fonts/*.woff2"],
+      includeAssets: ["fonts/*.woff2", "bench.json", "stack.json", "download.json"],
       manifest: {
         background_color: "#eceff1",
         display: "standalone",
