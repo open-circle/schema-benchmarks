@@ -2,3 +2,5 @@
 .netlify
 .vite-inspect
 .content-collections
+
+dev-dist/
