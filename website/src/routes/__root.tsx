@@ -42,6 +42,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           { color: "#21222c", media: "(prefers-color-scheme: dark)" },
         ],
       },
+      manifest: "/manifest.webmanifest",
       icons: {
         icon: [
           {
@@ -55,16 +56,20 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             sizes: "any",
           },
           {
-            url: "/icon_dark.svg",
+            url: "/logo_dark.svg",
             media: "(prefers-color-scheme: dark)",
             type: "image/svg+xml",
           },
           {
-            url: "/icon_light.svg",
+            url: "/logo_light.svg",
             media: "(prefers-color-scheme: light)",
             type: "image/svg+xml",
           },
         ],
+        apple: {
+          url: "/apple-touch-icon.png",
+          sizes: "180x180",
+        },
       },
     });
     return {
