@@ -100,7 +100,8 @@
     "vite-plugin-svgr": "^4.5.0",
     "vitest": "catalog:",
     "vitest-browser-react": "^2.1.0",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "workbox-window": "^7.4.0"
   },
   "msw": {
     "workerDirectory": [
