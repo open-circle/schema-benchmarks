@@ -21,7 +21,7 @@ export const highlightCode = (
   Prism.hooks.add("before-tokenize", (env) => {
     const match = env.code.match(NEW_LINE_EXP);
     const linesNum = match ? match.length + 1 : 1;
-    const lines = new Array(linesNum + 1).join("<span></span>");
+    const lines = Array.from({ length: linesNum + 1 }).join("<span></span>");
 
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   });
@@ -69,7 +69,7 @@ export const highlightAnsi = (
   if (lineNumbers) {
     const match = input.match(NEW_LINE_EXP);
     const linesNum = match ? match.length + 1 : 1;
-    const lines = new Array(linesNum + 1).join("<span></span>");
+    const lines = Array.from({ length: linesNum + 1 }).join("<span></span>");
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
   return (

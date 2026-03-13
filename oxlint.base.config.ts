@@ -10,6 +10,7 @@ const baseConfig: OxlintConfig = {
     "react/react-in-jsx-scope": "off",
     "typescript/no-unsafe-type-assertion": "off",
     "typescript/consistent-type-imports": "error",
+    "no-this-in-exported-function": "off",
   },
   settings: {
     vitest: {
