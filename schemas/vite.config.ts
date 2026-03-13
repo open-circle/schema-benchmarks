@@ -5,7 +5,7 @@ import macros from "unplugin-macros/vite";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vite-plus";
 
-import { baseConfig } from "../oxlint.base.config.ts";
+import baseConfig from "../oxlint.base.config.ts";
 import { dependencies } from "./package.json";
 
 export default defineConfig({

@@ -1,7 +1,7 @@
 import { defineConfig } from "vite-plus";
 import { playwright } from "vite-plus/test/browser-playwright";
 
-import { baseConfig } from "../oxlint.base.config.ts";
+import baseConfig from "../oxlint.base.config.ts";
 
 export default defineConfig({
   test: {

@@ -1,6 +1,6 @@
 import type { OxlintConfig } from "vite-plus/lint";
 
-export const baseConfig: OxlintConfig = {
+const baseConfig: OxlintConfig = {
   categories: {
     suspicious: "warn",
   },
@@ -26,3 +26,5 @@ export const baseConfig: OxlintConfig = {
     },
   ],
 };
+
+export default baseConfig;
