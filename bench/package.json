@@ -11,9 +11,6 @@
     "./stack.json": "./stack.json"
   },
   "scripts": {
-    "bench": "node ./src/scripts/bench/orchestrate.ts",
-    "download": "node ./src/scripts/download.ts",
-    "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc"
   },

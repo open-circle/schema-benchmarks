@@ -3,21 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "format": "vp fmt",
-    "lint": "vp lint",
-    "check": "vp check",
     "test": "pnpm run --filter '*' test",
     "typecheck": "pnpm run --filter '*' typecheck",
-    "typecheck:tsc": "pnpm run --filter '*' typecheck:tsc",
-    "schemas:build": "pnpm run --filter schemas build",
-    "website:dev": "pnpm run --filter website dev",
-    "website:build": "pnpm run --filter website build",
-    "website:serve": "pnpm run --filter website serve",
-    "website:storybook": "pnpm run --filter website storybook",
-    "bench:bench": "pnpm run --filter '*/bench' bench",
-    "bench:download": "pnpm run --filter '*/bench' download",
-    "bench:stack": "pnpm run --filter '*/bench' stack",
-    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack"
+    "typecheck:tsc": "pnpm run --filter '*' typecheck:tsc"
   },
   "devDependencies": {
     "@types/node": "catalog:",

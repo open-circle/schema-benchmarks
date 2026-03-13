@@ -9,4 +9,4 @@ runs:
 
     - name: Build website
       shell: bash
-      run: vp run website:build
+      run: vp run @schema-benchmarks/website#build

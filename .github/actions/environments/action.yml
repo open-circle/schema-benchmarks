@@ -15,4 +15,4 @@ runs:
 
     - name: Build schemas
       shell: bash
-      run: vp run schemas:build
+      run: vp run @schema-benchmarks/schemas#build

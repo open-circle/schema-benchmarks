@@ -9,10 +9,8 @@
     "./libraries": "./dist/index.js"
   },
   "scripts": {
-    "build": "vp build",
     "typecheck": "tsgo",
-    "typecheck:tsc": "tsc",
-    "test": "vp test"
+    "typecheck:tsc": "tsc"
   },
   "dependencies": {
     "@railway-ts/pipelines": "^0.1.27",

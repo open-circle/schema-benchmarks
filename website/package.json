@@ -3,12 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vp build",
-    "build-storybook": "storybook build",
-    "dev": "vp dev --port 3000",
-    "serve": "node preview.ts",
-    "storybook": "storybook dev -p 6006",
-    "test": "vp test",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc"
   },

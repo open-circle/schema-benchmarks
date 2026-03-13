@@ -170,6 +170,16 @@ const config = defineConfig({
       "@tanstack/query/exhaustive-deps": "off",
     },
   },
+  run: {
+    tasks: {
+      storybook: {
+        command: "storybook dev -p 6006",
+      },
+      preview: {
+        command: "node preview.ts",
+      },
+    },
+  },
 });
 
 export default config;
