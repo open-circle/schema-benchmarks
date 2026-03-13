@@ -10,7 +10,7 @@ export function ThemeProvider({ children, theme }: { children: ReactNode; theme:
   const router = useRouter();
 
   function setTheme(val: Theme) {
-    setThemeFn({ data: val }).then(() =>
+    void setThemeFn({ data: val }).then(() =>
       router.invalidate({
         filter: (d) => d.id === rootRouteId,
       }),
@@ -24,7 +24,7 @@ export function StyleProvider({ children, style }: { children: ReactNode; style:
   const router = useRouter();
 
   function setStyle(val: Style) {
-    setStyleFn({ data: val }).then(() =>
+    void setStyleFn({ data: val }).then(() =>
       router.invalidate({
         filter: (d) => d.id === rootRouteId,
       }),

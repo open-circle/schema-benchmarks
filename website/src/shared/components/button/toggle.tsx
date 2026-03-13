@@ -46,7 +46,7 @@ export const ToggleButton = withTooltip(
           extra: className,
         })}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >
@@ -79,7 +79,7 @@ export const ExternalLinkToggleButton = withTooltip(
           extra: className,
         })}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >

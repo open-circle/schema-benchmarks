@@ -43,7 +43,7 @@ export function SortableHeaderButton({
       <button
         {...cls("label")}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >
@@ -81,7 +81,7 @@ export function SortableHeaderLink<LinkOptions>({
         {...(linkOptions as any)}
         {...cls({ element: "label", extra: linkOptions.className })}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >

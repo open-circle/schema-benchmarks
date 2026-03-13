@@ -10,7 +10,7 @@ function withHaptics<Args extends Array<any>, Return>(
   pattern: HapticPattern,
 ) {
   return (...args: Args) => {
-    haptics?.trigger(pattern);
+    void haptics?.trigger(pattern);
     return fn(...args);
   };
 }
@@ -24,7 +24,7 @@ export const toastWithHaptics = safeAssign<typeof toast>(
     loading: withHaptics(toast.loading, defaultPatterns.nudge.pattern),
     custom: withHaptics(toast.custom, defaultPatterns.nudge.pattern),
     promise: (promise, msgs, opts) => {
-      haptics?.trigger(defaultPatterns.nudge.pattern);
+      void haptics?.trigger(defaultPatterns.nudge.pattern);
       return toast.promise(
         () => {
           const p = typeof promise === "function" ? promise() : promise;

@@ -33,7 +33,7 @@ export function PageFilterTextField<LinkOptions>({
   const navigate = useNavigate();
   const debouncedOnChange = useDebouncedCallback(
     (event) => {
-      navigate({ ...getLinkOptions(event), replace: true });
+      void navigate({ ...getLinkOptions(event), replace: true });
     },
     { wait: 200 },
   );
