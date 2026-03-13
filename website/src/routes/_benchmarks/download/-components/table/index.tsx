@@ -12,9 +12,9 @@ import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
-import { SortDirection } from "#/shared/lib/sort";
+import type { SortDirection } from "#/shared/lib/sort";
 
-import { SortableKey } from "../../-constants";
+import type { SortableKey } from "../../-constants";
 import { getCompiledPath } from "../../-query";
 import { getDownloadTime } from "../../-speed";
 import { DownloadCount } from "../../../-components/count";

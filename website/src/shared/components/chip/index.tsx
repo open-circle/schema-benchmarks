@@ -2,7 +2,7 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
-import { HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";

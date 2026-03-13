@@ -1,6 +1,6 @@
-import { defineConfig } from "oxlint";
+import type { OxlintConfig } from "vite-plus/lint";
 
-export const baseConfig = defineConfig({
+export const baseConfig: OxlintConfig = {
   categories: {
     suspicious: "warn",
   },
@@ -25,12 +25,4 @@ export const baseConfig = defineConfig({
       plugins: ["vitest"],
     },
   ],
-});
-
-export default defineConfig({
-  extends: [baseConfig],
-  options: {
-    typeAware: true,
-    reportUnusedDisableDirectives: "error",
-  },
-});
+};

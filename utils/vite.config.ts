@@ -1,5 +1,7 @@
-import { playwright } from "@vitest/browser-playwright";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
+import { playwright } from "vite-plus/test/browser-playwright";
+
+import { baseConfig } from "../oxlint.base.config.ts";
 
 export default defineConfig({
   test: {
@@ -35,5 +37,11 @@ export default defineConfig({
         },
       },
     ],
+  },
+  lint: {
+    extends: [baseConfig],
+    env: {
+      "shared-node-browser": true,
+    },
   },
 });

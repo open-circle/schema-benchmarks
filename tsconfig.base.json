@@ -13,6 +13,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "types": ["node"]
   }
 }

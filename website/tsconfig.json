@@ -26,6 +26,7 @@
       "#test/*": ["./test/*"],
       "#storybook/*": ["./.storybook/*"],
       "content-collections": ["./.content-collections/generated"]
-    }
+    },
+    "types": ["node", "vite-plus/client", "vite-plugin-svgr/client"]
   }
 }

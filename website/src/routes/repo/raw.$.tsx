@@ -61,7 +61,7 @@ export const Route = createFileRoute("/repo/raw/$")({
   },
   head: ({ params: { _splat: fileName }, loaderData }) =>
     generateMetadata({
-      title: loaderData?.crumb ? [...loaderData.crumb].reverse().join(" | ") : "Unknown",
+      title: loaderData?.crumb ? [...loaderData.crumb].toReversed().join(" | ") : "Unknown",
       description: "View the raw contents of a file in the repository.",
       openGraph: {
         url: `/repo/raw/${fileName}`,

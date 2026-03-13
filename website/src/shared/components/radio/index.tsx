@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
-import { HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
 const cls = bem("radio");

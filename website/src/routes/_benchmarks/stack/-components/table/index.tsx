@@ -5,9 +5,9 @@ import { DownloadCount } from "#/routes/_benchmarks/-components/count";
 import { Snippet } from "#/routes/_benchmarks/_runtime/-components/table/snippet";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
-import { SortDirection } from "#/shared/lib/sort";
+import type { SortDirection } from "#/shared/lib/sort";
 
-import { SortableKey } from "../../-constants";
+import type { SortableKey } from "../../-constants";
 import { Output } from "./output";
 
 export interface StackTableProps {

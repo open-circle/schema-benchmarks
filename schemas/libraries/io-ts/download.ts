@@ -16,7 +16,7 @@ const numberInRange = (min: number, max: number) =>
 // URL validation (basic)
 const urlString = t.refinement(t.string, (s) => URL.canParse(s), "url");
 
-const literals = <T extends string>([l1, l2, ...literals]: [T, T, ...T[]]) =>
+const literals = <T extends string>([l1, l2, ...literals]: [T, T, ...Array<T>]) =>
   t.union([t.literal(l1), t.literal(l2), ...literals.map((l) => t.literal(l))]);
 
 const ImageData = t.type({

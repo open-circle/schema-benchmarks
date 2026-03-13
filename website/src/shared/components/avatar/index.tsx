@@ -45,7 +45,7 @@ export function AvatarList({ items, size = "md", ...props }: AvatarListProps) {
     <ul {...listCls({ modifiers: size })} {...props}>
       {items
         .slice()
-        .reverse()
+        .toReversed()
         .map((item) => (
           <Avatar key={item.label} {...item} size={size} {...{ "~as": "li" }} />
         ))}

@@ -1,13 +1,13 @@
-import { CodecResult } from "@schema-benchmarks/bench";
+import type { CodecResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
 
 import { EmptyState } from "#/shared/components/empty-state";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
-import { SortDirection } from "#/shared/lib/sort";
+import type { SortDirection } from "#/shared/lib/sort";
 
-import { SortableKey } from "../-constants";
+import type { SortableKey } from "../-constants";
 import { CodecCard } from "./card";
 import { CodecTable } from "./table";
 

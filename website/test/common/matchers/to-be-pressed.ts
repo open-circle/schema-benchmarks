@@ -1,5 +1,5 @@
 import type { ExpectationResult, MatcherState } from "@vitest/expect";
-import type { Locator } from "vitest/browser";
+import type { Locator } from "vite-plus/test/browser";
 
 import { getElementFromUserInput, getMessage } from "./utils";
 
@@ -47,7 +47,7 @@ export function toBePressed(this: MatcherState, actual: Element | Locator): Expe
   };
 }
 
-declare module "vitest" {
+declare module "vite-plus/test" {
   interface Assertion<T> {
     /**
      * @description

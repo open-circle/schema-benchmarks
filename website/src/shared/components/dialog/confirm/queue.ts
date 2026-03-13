@@ -19,18 +19,19 @@ class ConfirmPromise<T> implements PromiseLike<T> {
 
     this.#basePromise = basePromise;
   }
+  // oxlint-disable-next-line unicorn/no-thenable
   then<TResult1 = T, TResult2 = never>(
-    onconfirm?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-    ondeny?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    onconfirm?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+    ondeny?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
   ): ConfirmPromise<TResult1 | TResult2> {
     return new ConfirmPromise(this.#basePromise.then(onconfirm, ondeny));
   }
   otherwise<TResult>(
-    ondeny?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ondeny?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
   ): ConfirmPromise<T | TResult> {
     return new ConfirmPromise(this.#basePromise.catch(ondeny));
   }
-  finally(onfinally?: (() => void) | undefined | null): ConfirmPromise<T> {
+  finally(onfinally?: (() => void) | null): ConfirmPromise<T> {
     return new ConfirmPromise(this.#basePromise.finally(onfinally));
   }
 }

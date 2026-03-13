@@ -4,6 +4,7 @@
   "compilerOptions": {
     "module": "nodenext",
     "allowImportingTsExtensions": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["node"]
   }
 }

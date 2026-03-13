@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "format": "oxfmt",
-    "lint": "oxlint",
-    "check": "oxfmt --check && oxlint",
+    "format": "vp fmt",
+    "lint": "vp lint",
+    "check": "vp check",
     "test": "pnpm run --filter '*' test",
     "typecheck": "pnpm run --filter '*' typecheck",
     "typecheck:tsc": "pnpm run --filter '*' typecheck:tsc",
@@ -17,21 +17,17 @@
     "bench:bench": "pnpm run --filter '*/bench' bench",
     "bench:download": "pnpm run --filter '*/bench' download",
     "bench:stack": "pnpm run --filter '*/bench' stack",
-    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack",
-    "postinstall": "lefthook install"
+    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack"
   },
   "devDependencies": {
-    "lefthook": "^2.1.4",
-    "oxfmt": "^0.40.0",
-    "oxlint": "^1.55.0",
+    "@types/node": "catalog:",
     "oxlint-tsgolint": "^0.16.0",
     "playwright": "catalog:",
-    "typescript": "6.0.1-rc"
+    "typescript": "6.0.1-rc",
+    "vite-plus": "catalog:"
   },
   "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
   "pnpm": {
-    "overrides": {
-      "vite": "catalog:"
-    }
+    "overrides": {}
   }
 }

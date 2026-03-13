@@ -9,10 +9,10 @@
     "./libraries": "./dist/index.js"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vp build",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc",
-    "test": "vitest"
+    "test": "vp test"
   },
   "dependencies": {
     "@railway-ts/pipelines": "^0.1.27",
@@ -43,8 +43,8 @@
     "@typescript/native-preview": "catalog:",
     "typescript": "catalog:",
     "unplugin-macros": "^0.19.1",
-    "vite": "catalog:",
     "vite-plugin-dts": "^4.5.4",
+    "vite-plus": "catalog:",
     "vitest": "catalog:"
   }
 }

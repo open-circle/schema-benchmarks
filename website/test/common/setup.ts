@@ -1,4 +1,4 @@
-import { type ExpectPollOptions, expect } from "vitest";
+import { type ExpectPollOptions, expect } from "vite-plus/test";
 
 import { toBeCurrent } from "./matchers/to-be-current";
 import { toBePressed } from "./matchers/to-be-pressed";
@@ -7,7 +7,7 @@ expect.extend({ toBePressed, toBeCurrent });
 
 expect.ref = (refObject, pollOptions) => expect.poll(() => refObject.current, pollOptions);
 
-declare module "vitest" {
+declare module "vite-plus/test" {
   interface ExpectStatic {
     /**
      * `expect.ref(refObject)` is a shorthand for `expect.poll(() => refObject.current)`.

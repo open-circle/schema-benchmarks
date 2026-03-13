@@ -1,6 +1,6 @@
-import { describe, expect } from "vitest";
+import { describe, expect } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 import { renderHook } from "vitest-browser-react";
-import { page } from "vitest/browser";
 
 import { it } from "#test/browser/fixtures";
 

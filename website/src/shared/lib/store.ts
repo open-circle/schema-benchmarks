@@ -1,5 +1,6 @@
 import { makeDisposable } from "@schema-benchmarks/utils";
-import { Observer, ReadonlyStore, Store } from "@tanstack/react-store";
+import type { Observer } from "@tanstack/react-store";
+import { ReadonlyStore, Store } from "@tanstack/react-store";
 import { create, type Draft } from "mutative";
 
 class MutativeStore<T> extends Store<T> {

@@ -3,8 +3,9 @@ import * as path from "node:path";
 import UnpluginTypia from "@ryoppippi/unplugin-typia/vite";
 import macros from "unplugin-macros/vite";
 import dts from "vite-plugin-dts";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 
+import { baseConfig } from "../oxlint.base.config.ts";
 import { dependencies } from "./package.json";
 
 export default defineConfig({
@@ -34,5 +35,11 @@ export default defineConfig({
   plugins: [UnpluginTypia({ log: false }), macros(), dts({ rollupTypes: true })],
   test: {
     include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
+  },
+  lint: {
+    extends: [baseConfig],
+    env: {
+      node: true,
+    },
   },
 });
