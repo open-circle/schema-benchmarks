@@ -9,4 +9,4 @@ runs:
 
     - name: Build website
       shell: bash
-      run: pnpm website:build
+      run: vp run website:build

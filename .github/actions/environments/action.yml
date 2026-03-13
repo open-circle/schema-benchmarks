@@ -4,22 +4,15 @@ description: Setup environment with Node.js and pnpm, plus building schemas
 runs:
   using: composite
   steps:
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
+    - uses: voidzero-dev/setup-vp@v1
       with:
-        run_install: false
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version: 24
-        registry-url: "https://registry.npmjs.org"
-        cache: pnpm
+        node-version: "22"
+        cache: true
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: vp install
 
     - name: Build schemas
       shell: bash
-      run: pnpm schemas:build
+      run: vp run schemas:build

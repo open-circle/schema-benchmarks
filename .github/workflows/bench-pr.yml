@@ -21,7 +21,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run stack benchmark
-        run: pnpm bench:stack
+        run: vp run bench:stack
       - name: Upload stack results
         uses: actions/upload-artifact@v4
         with:
@@ -38,7 +38,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run download benchmark
-        run: pnpm bench:download
+        run: vp run bench:download
       - name: Upload download results
         uses: actions/upload-artifact@v4
         with:
@@ -57,7 +57,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run bench benchmark
-        run: pnpm bench:bench
+        run: vp run bench:bench
       - name: Upload bench results
         uses: actions/upload-artifact@v4
         with:
