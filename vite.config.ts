@@ -19,6 +19,7 @@ export default defineConfig({
       "website/**/routeTree.gen.ts",
       "website/src/routes/blog/-content/assets/**/*.json",
       "website/public/mockServiceWorker.js",
+      "**/dist/**",
     ],
   },
   fmt: {
@@ -30,6 +31,7 @@ export default defineConfig({
       "website/**/routeTree.gen.ts",
       "website/src/routes/blog/-content/assets/**/*.json",
       "website/public/mockServiceWorker.js",
+      "**/dist/**",
     ],
     experimentalSortImports: {},
   },
