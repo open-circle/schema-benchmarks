@@ -1,10 +1,10 @@
 import { defineConfig } from "vite-plus";
 
-import baseConfig from "../oxlint.base.config.ts";
+import { baseLintConfig } from "../vite.config.ts";
 
 export default defineConfig({
   lint: {
-    extends: [baseConfig],
+    extends: [baseLintConfig],
     env: {
       node: true,
     },

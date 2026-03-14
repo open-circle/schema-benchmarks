@@ -15,7 +15,7 @@ import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite-plus";
 import { playwright } from "vite-plus/test/browser-playwright";
 
-import baseConfig from "../oxlint.base.config.ts";
+import { baseLintConfig } from "../vite.config.ts";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -134,7 +134,7 @@ const config = defineConfig({
     noExternal: ["react-tweet"],
   },
   lint: {
-    extends: [baseConfig],
+    extends: [baseLintConfig],
     jsPlugins: [
       { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
       { name: "@tanstack/query", specifier: "@tanstack/eslint-plugin-query" },

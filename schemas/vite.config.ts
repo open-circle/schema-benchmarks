@@ -5,7 +5,7 @@ import macros from "unplugin-macros/vite";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vite-plus";
 
-import baseConfig from "../oxlint.base.config.ts";
+import { baseLintConfig } from "../vite.config.ts";
 import { dependencies } from "./package.json";
 
 export default defineConfig({
@@ -37,7 +37,7 @@ export default defineConfig({
     include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
   },
   lint: {
-    extends: [baseConfig],
+    extends: [baseLintConfig],
     env: {
       node: true,
     },

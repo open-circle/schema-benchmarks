@@ -1,10 +1,37 @@
 import { defineConfig } from "vite-plus";
+import type { OxlintConfig } from "vite-plus/lint";
 
-import baseConfig from "./oxlint.base.config.ts";
+export const baseLintConfig: OxlintConfig = {
+  categories: {
+    suspicious: "warn",
+  },
+  rules: {
+    "eslint/no-shadow": "off",
+    "typescript/array-type": ["error", { default: "generic" }],
+    "react/react-in-jsx-scope": "off",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/consistent-type-imports": "error",
+    "no-this-in-exported-function": "off",
+  },
+  settings: {
+    vitest: {
+      typecheck: true,
+    },
+  },
+  env: {
+    builtin: true,
+  },
+  overrides: [
+    {
+      files: ["**/*.test.ts", "**/*.test.tsx"],
+      plugins: ["vitest"],
+    },
+  ],
+};
 
 export default defineConfig({
   lint: {
-    extends: [baseConfig],
+    extends: [baseLintConfig],
     options: {
       typeAware: true,
       typeCheck: true,
