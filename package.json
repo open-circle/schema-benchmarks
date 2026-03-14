@@ -6,9 +6,9 @@
     "format": "oxfmt",
     "lint": "oxlint",
     "check": "oxfmt --check && oxlint",
-    "test": "pnpm run --filter '*' test",
-    "typecheck": "pnpm run --filter '*' typecheck",
-    "typecheck:tsc": "pnpm run --filter '*' typecheck:tsc",
+    "test": "pnpm run -r test",
+    "typecheck": "pnpm run -r typecheck",
+    "typecheck:tsc": "pnpm run -r typecheck:tsc",
     "schemas:build": "pnpm run --filter schemas build",
     "website:dev": "pnpm run --filter website dev",
     "website:build": "pnpm run --filter website build",
@@ -26,7 +26,7 @@
     "oxlint": "^1.55.0",
     "oxlint-tsgolint": "^0.16.0",
     "playwright": "catalog:",
-    "typescript": "6.0.1-rc"
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
   "pnpm": {
