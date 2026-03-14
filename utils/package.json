@@ -14,10 +14,6 @@
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc"
   },
-  "dependencies": {
-    "@formatjs/intl-durationformat": "^0.10.1",
-    "@formatjs/intl-numberformat": "^9.2.3"
-  },
   "devDependencies": {
     "@types/react": "catalog:",
     "@typescript/native-preview": "catalog:",
