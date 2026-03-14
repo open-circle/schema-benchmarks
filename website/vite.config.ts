@@ -178,6 +178,9 @@ const config = defineConfig({
       preview: {
         command: "node preview.ts",
       },
+      build: {
+        command: "vp build",
+      },
     },
   },
 });

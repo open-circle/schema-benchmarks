@@ -42,4 +42,11 @@ export default defineConfig({
       node: true,
     },
   },
+  run: {
+    tasks: {
+      build: {
+        command: "vp build",
+      },
+    },
+  },
 });
