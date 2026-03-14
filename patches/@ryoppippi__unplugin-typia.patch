@@ -1,0 +1,13 @@
+diff --git a/dist/core-Ct1HASeF.js b/dist/core-Ct1HASeF.js
+index b4a99b4ffb5d8cf1337c03fc1d2ccebe871d386c..9b6bf845b994b64ffd70b08a64c0446f9bf3c708 100644
+--- a/dist/core-Ct1HASeF.js
++++ b/dist/core-Ct1HASeF.js
+@@ -7,7 +7,7 @@ import { basename, dirname, join, resolve } from "pathe";
+ import { createDefu } from "defu";
+ import ts from "typescript";
+ import { resolveTSConfig } from "pkg-types";
+-import { transform } from "typia/lib/transform.js";
++import { transform } from "typia/lib/transform";
+ import { consola } from "consola";
+ import w, { accessSync, constants, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+ import { createHash } from "node:crypto";

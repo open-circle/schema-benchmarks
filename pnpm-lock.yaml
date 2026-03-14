@@ -58,6 +58,11 @@ catalogs:
 overrides:
   vite: ^8.0.0
 
+patchedDependencies:
+  '@ryoppippi/unplugin-typia':
+    hash: ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd
+    path: patches/@ryoppippi__unplugin-typia.patch
+
 importers:
 
   .:
@@ -85,7 +90,7 @@ importers:
     dependencies:
       '@ryoppippi/unplugin-typia':
         specifier: 'catalog:'
-        version: 2.6.5(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
+        version: 2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
       '@schema-benchmarks/schemas':
         specifier: workspace:*
         version: link:../schemas
@@ -186,7 +191,7 @@ importers:
     devDependencies:
       '@ryoppippi/unplugin-typia':
         specifier: 'catalog:'
-        version: 2.6.5(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
+        version: 2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
       '@types/node':
         specifier: 'catalog:'
         version: 25.5.0
@@ -9470,7 +9475,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@ryoppippi/unplugin-typia@2.6.5(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@ryoppippi/unplugin-typia@2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.1-rc)(typia@12.0.0(@types/node@25.5.0)(typescript@6.0.1-rc))(vite@8.0.0(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
       bun-only: 0.0.1
