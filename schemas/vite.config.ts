@@ -5,7 +5,7 @@ import macros from "unplugin-macros/vite";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vite-plus";
 
-import { baseLintConfig } from "../vite.config.ts";
+import { baseLintConfig, builtInTasks } from "../vite.config.ts";
 import { dependencies } from "./package.json";
 
 export default defineConfig({
@@ -44,6 +44,7 @@ export default defineConfig({
   },
   run: {
     tasks: {
+      ...builtInTasks,
       build: {
         command: "vp build",
       },

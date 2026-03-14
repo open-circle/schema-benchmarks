@@ -6,12 +6,9 @@ runs:
   steps:
     - uses: voidzero-dev/setup-vp@v1
       with:
-        node-version: "24"
+        node-version-file: .node-version
         cache: true
-
-    - name: Install dependencies
-      shell: bash
-      run: vp install
+        run-install: true
 
     - name: Build schemas
       shell: bash

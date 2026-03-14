@@ -29,6 +29,10 @@ export const baseLintConfig: OxlintConfig = {
   ],
 };
 
+export const builtInTasks = Object.fromEntries(
+  (["lint", "fmt", "check", "test"] as const).map((task) => [task, { command: `vp ${task}` }]),
+);
+
 export default defineConfig({
   lint: {
     extends: [baseLintConfig],

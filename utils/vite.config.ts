@@ -1,7 +1,7 @@
 import { defineConfig } from "vite-plus";
 import { playwright } from "vite-plus/test/browser-playwright";
 
-import { baseLintConfig } from "../vite.config.ts";
+import { baseLintConfig, builtInTasks } from "../vite.config.ts";
 
 export default defineConfig({
   test: {
@@ -42,6 +42,11 @@ export default defineConfig({
     extends: [baseLintConfig],
     env: {
       "shared-node-browser": true,
+    },
+  },
+  run: {
+    tasks: {
+      ...builtInTasks,
     },
   },
 });

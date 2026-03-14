@@ -1,6 +1,6 @@
 import { defineConfig } from "vite-plus";
 
-import { baseLintConfig } from "../vite.config.ts";
+import { baseLintConfig, builtInTasks } from "../vite.config.ts";
 
 export default defineConfig({
   lint: {
@@ -11,6 +11,7 @@ export default defineConfig({
   },
   run: {
     tasks: {
+      ...builtInTasks,
       download: {
         command: "node ./src/scripts/download.ts",
       },

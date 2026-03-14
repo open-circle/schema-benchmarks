@@ -15,7 +15,7 @@ import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite-plus";
 import { playwright } from "vite-plus/test/browser-playwright";
 
-import { baseLintConfig } from "../vite.config.ts";
+import { baseLintConfig, builtInTasks } from "../vite.config.ts";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -172,6 +172,7 @@ const config = defineConfig({
   },
   run: {
     tasks: {
+      ...builtInTasks,
       storybook: {
         command: "storybook dev -p 6006",
       },
