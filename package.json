@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "lefthook": "^2.1.4",
-    "oxfmt": "^0.40.0",
-    "oxlint": "^1.55.0",
-    "oxlint-tsgolint": "^0.16.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "oxlint-tsgolint": "^0.17.0",
     "playwright": "catalog:",
     "typescript": "catalog:"
   },
