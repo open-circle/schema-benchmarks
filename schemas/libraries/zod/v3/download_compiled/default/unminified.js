@@ -1,3 +1,15 @@
+//#region \0rolldown/runtime.js
+var __defProp = Object.defineProperty;
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
+//#endregion
 //#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util) {
@@ -113,6 +125,9 @@ const ZodIssueCode = util.arrayToEnum([
 	"not_multiple_of",
 	"not_finite"
 ]);
+const quotelessJson = (obj) => {
+	return JSON.stringify(obj, null, 2).replace(/"([^"]+)":/g, "$1:");
+};
 var ZodError = class ZodError extends Error {
 	get errors() {
 		return this.issues;
@@ -272,6 +287,9 @@ const errorMap = (issue, _ctx) => {
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/errors.js
 let overrideErrorMap = errorMap;
+function setErrorMap(map) {
+	overrideErrorMap = map;
+}
 function getErrorMap() {
 	return overrideErrorMap;
 }
@@ -301,6 +319,7 @@ const makeIssue = (params) => {
 		message: errorMessage
 	};
 };
+const EMPTY_PATH = [];
 function addIssueToContext(ctx, issueData) {
 	const overrideMap = getErrorMap();
 	const issue = makeIssue({
@@ -3379,6 +3398,7 @@ ZodNaN.create = (params) => {
 		...processCreateParams(params)
 	});
 };
+const BRAND = Symbol("zod_brand");
 var ZodBranded = class extends ZodType {
 	_parse(input) {
 		const { ctx } = this._processInputParams(input);
@@ -3462,7 +3482,37 @@ ZodReadonly.create = (type, params) => {
 		...processCreateParams(params)
 	});
 };
-ZodObject.lazycreate;
+function cleanParams(params, data) {
+	const p = typeof params === "function" ? params(data) : typeof params === "string" ? { message: params } : params;
+	return typeof p === "string" ? { message: p } : p;
+}
+function custom(check, _params = {}, fatal) {
+	if (check) return ZodAny.create().superRefine((data, ctx) => {
+		const r = check(data);
+		if (r instanceof Promise) return r.then((r) => {
+			if (!r) {
+				const params = cleanParams(_params, data);
+				const _fatal = params.fatal ?? fatal ?? true;
+				ctx.addIssue({
+					code: "custom",
+					...params,
+					fatal: _fatal
+				});
+			}
+		});
+		if (!r) {
+			const params = cleanParams(_params, data);
+			const _fatal = params.fatal ?? fatal ?? true;
+			ctx.addIssue({
+				code: "custom",
+				...params,
+				fatal: _fatal
+			});
+		}
+	});
+	return ZodAny.create();
+}
+const late = { object: ZodObject.lazycreate };
 var ZodFirstPartyTypeKind;
 (function(ZodFirstPartyTypeKind) {
 	ZodFirstPartyTypeKind["ZodString"] = "ZodString";
@@ -3502,68 +3552,206 @@ var ZodFirstPartyTypeKind;
 	ZodFirstPartyTypeKind["ZodPipeline"] = "ZodPipeline";
 	ZodFirstPartyTypeKind["ZodReadonly"] = "ZodReadonly";
 })(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
+const instanceOfType = (cls, params = { message: `Input not instance of ${cls.name}` }) => custom((data) => data instanceof cls, params);
 const stringType = ZodString.create;
 const numberType = ZodNumber.create;
-ZodNaN.create;
-ZodBigInt.create;
-ZodBoolean.create;
+const nanType = ZodNaN.create;
+const bigIntType = ZodBigInt.create;
+const booleanType = ZodBoolean.create;
 const dateType = ZodDate.create;
-ZodSymbol.create;
-ZodUndefined.create;
-ZodNull.create;
-ZodAny.create;
-ZodUnknown.create;
-ZodNever.create;
-ZodVoid.create;
+const symbolType = ZodSymbol.create;
+const undefinedType = ZodUndefined.create;
+const nullType = ZodNull.create;
+const anyType = ZodAny.create;
+const unknownType = ZodUnknown.create;
+const neverType = ZodNever.create;
+const voidType = ZodVoid.create;
 const arrayType = ZodArray.create;
 const objectType = ZodObject.create;
-ZodObject.strictCreate;
-ZodUnion.create;
-ZodDiscriminatedUnion.create;
-ZodIntersection.create;
-ZodTuple.create;
-ZodRecord.create;
-ZodMap.create;
-ZodSet.create;
-ZodFunction.create;
-ZodLazy.create;
-ZodLiteral.create;
+const strictObjectType = ZodObject.strictCreate;
+const unionType = ZodUnion.create;
+const discriminatedUnionType = ZodDiscriminatedUnion.create;
+const intersectionType = ZodIntersection.create;
+const tupleType = ZodTuple.create;
+const recordType = ZodRecord.create;
+const mapType = ZodMap.create;
+const setType = ZodSet.create;
+const functionType = ZodFunction.create;
+const lazyType = ZodLazy.create;
+const literalType = ZodLiteral.create;
 const enumType = ZodEnum.create;
-ZodNativeEnum.create;
-ZodPromise.create;
-ZodEffects.create;
-ZodOptional.create;
-ZodNullable.create;
-ZodEffects.createWithPreprocess;
-ZodPipeline.create;
+const nativeEnumType = ZodNativeEnum.create;
+const promiseType = ZodPromise.create;
+const effectsType = ZodEffects.create;
+const optionalType = ZodOptional.create;
+const nullableType = ZodNullable.create;
+const preprocessType = ZodEffects.createWithPreprocess;
+const pipelineType = ZodPipeline.create;
+const ostring = () => stringType().optional();
+const onumber = () => numberType().optional();
+const oboolean = () => booleanType().optional();
+const coerce = {
+	string: ((arg) => ZodString.create({
+		...arg,
+		coerce: true
+	})),
+	number: ((arg) => ZodNumber.create({
+		...arg,
+		coerce: true
+	})),
+	boolean: ((arg) => ZodBoolean.create({
+		...arg,
+		coerce: true
+	})),
+	bigint: ((arg) => ZodBigInt.create({
+		...arg,
+		coerce: true
+	})),
+	date: ((arg) => ZodDate.create({
+		...arg,
+		coerce: true
+	}))
+};
+const NEVER = INVALID;
 //#endregion
-//#region ../schemas/libraries/zod/v3/download/index.ts
-const imageSchema = objectType({
-	id: numberType(),
-	created: dateType(),
-	title: stringType().min(1).max(100),
-	type: enumType(["jpg", "png"]),
-	size: numberType(),
-	url: stringType().url()
+//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v3/index.js
+var v3_default = /* @__PURE__ */ __exportAll({
+	BRAND: () => BRAND,
+	DIRTY: () => DIRTY,
+	EMPTY_PATH: () => EMPTY_PATH,
+	INVALID: () => INVALID,
+	NEVER: () => NEVER,
+	OK: () => OK,
+	ParseStatus: () => ParseStatus,
+	Schema: () => ZodType,
+	ZodAny: () => ZodAny,
+	ZodArray: () => ZodArray,
+	ZodBigInt: () => ZodBigInt,
+	ZodBoolean: () => ZodBoolean,
+	ZodBranded: () => ZodBranded,
+	ZodCatch: () => ZodCatch,
+	ZodDate: () => ZodDate,
+	ZodDefault: () => ZodDefault,
+	ZodDiscriminatedUnion: () => ZodDiscriminatedUnion,
+	ZodEffects: () => ZodEffects,
+	ZodEnum: () => ZodEnum,
+	ZodError: () => ZodError,
+	ZodFirstPartyTypeKind: () => ZodFirstPartyTypeKind,
+	ZodFunction: () => ZodFunction,
+	ZodIntersection: () => ZodIntersection,
+	ZodIssueCode: () => ZodIssueCode,
+	ZodLazy: () => ZodLazy,
+	ZodLiteral: () => ZodLiteral,
+	ZodMap: () => ZodMap,
+	ZodNaN: () => ZodNaN,
+	ZodNativeEnum: () => ZodNativeEnum,
+	ZodNever: () => ZodNever,
+	ZodNull: () => ZodNull,
+	ZodNullable: () => ZodNullable,
+	ZodNumber: () => ZodNumber,
+	ZodObject: () => ZodObject,
+	ZodOptional: () => ZodOptional,
+	ZodParsedType: () => ZodParsedType,
+	ZodPipeline: () => ZodPipeline,
+	ZodPromise: () => ZodPromise,
+	ZodReadonly: () => ZodReadonly,
+	ZodRecord: () => ZodRecord,
+	ZodSchema: () => ZodType,
+	ZodSet: () => ZodSet,
+	ZodString: () => ZodString,
+	ZodSymbol: () => ZodSymbol,
+	ZodTransformer: () => ZodEffects,
+	ZodTuple: () => ZodTuple,
+	ZodType: () => ZodType,
+	ZodUndefined: () => ZodUndefined,
+	ZodUnion: () => ZodUnion,
+	ZodUnknown: () => ZodUnknown,
+	ZodVoid: () => ZodVoid,
+	addIssueToContext: () => addIssueToContext,
+	any: () => anyType,
+	array: () => arrayType,
+	bigint: () => bigIntType,
+	boolean: () => booleanType,
+	coerce: () => coerce,
+	custom: () => custom,
+	date: () => dateType,
+	datetimeRegex: () => datetimeRegex,
+	defaultErrorMap: () => errorMap,
+	discriminatedUnion: () => discriminatedUnionType,
+	effect: () => effectsType,
+	enum: () => enumType,
+	function: () => functionType,
+	getErrorMap: () => getErrorMap,
+	getParsedType: () => getParsedType,
+	instanceof: () => instanceOfType,
+	intersection: () => intersectionType,
+	isAborted: () => isAborted,
+	isAsync: () => isAsync,
+	isDirty: () => isDirty,
+	isValid: () => isValid,
+	late: () => late,
+	lazy: () => lazyType,
+	literal: () => literalType,
+	makeIssue: () => makeIssue,
+	map: () => mapType,
+	nan: () => nanType,
+	nativeEnum: () => nativeEnumType,
+	never: () => neverType,
+	null: () => nullType,
+	nullable: () => nullableType,
+	number: () => numberType,
+	object: () => objectType,
+	objectUtil: () => objectUtil,
+	oboolean: () => oboolean,
+	onumber: () => onumber,
+	optional: () => optionalType,
+	ostring: () => ostring,
+	pipeline: () => pipelineType,
+	preprocess: () => preprocessType,
+	promise: () => promiseType,
+	quotelessJson: () => quotelessJson,
+	record: () => recordType,
+	set: () => setType,
+	setErrorMap: () => setErrorMap,
+	strictObject: () => strictObjectType,
+	string: () => stringType,
+	symbol: () => symbolType,
+	transformer: () => effectsType,
+	tuple: () => tupleType,
+	undefined: () => undefinedType,
+	union: () => unionType,
+	unknown: () => unknownType,
+	util: () => util,
+	void: () => voidType
 });
-const ratingSchema = objectType({
-	id: numberType(),
-	stars: numberType().min(0).max(5),
-	title: stringType().min(1).max(100),
-	text: stringType().min(1).max(1e3),
-	images: arrayType(imageSchema)
+//#endregion
+//#region ../schemas/libraries/zod/v3/download/default.ts
+const imageSchema = v3_default.object({
+	id: v3_default.number(),
+	created: v3_default.date(),
+	title: v3_default.string().min(1).max(100),
+	type: v3_default.enum(["jpg", "png"]),
+	size: v3_default.number(),
+	url: v3_default.string().url()
 });
-objectType({
-	id: numberType(),
-	created: dateType(),
-	title: stringType().min(1).max(100),
-	brand: stringType().min(1).max(30),
-	description: stringType().min(1).max(500),
-	price: numberType().min(1).max(1e4),
-	discount: numberType().min(1).max(100).nullable(),
-	quantity: numberType().min(0).max(10),
-	tags: arrayType(stringType().min(1).max(30)),
-	images: arrayType(imageSchema),
-	ratings: arrayType(ratingSchema)
+const ratingSchema = v3_default.object({
+	id: v3_default.number(),
+	stars: v3_default.number().min(0).max(5),
+	title: v3_default.string().min(1).max(100),
+	text: v3_default.string().min(1).max(1e3),
+	images: v3_default.array(imageSchema)
+});
+v3_default.object({
+	id: v3_default.number(),
+	created: v3_default.date(),
+	title: v3_default.string().min(1).max(100),
+	brand: v3_default.string().min(1).max(30),
+	description: v3_default.string().min(1).max(500),
+	price: v3_default.number().min(1).max(1e4),
+	discount: v3_default.number().min(1).max(100).nullable(),
+	quantity: v3_default.number().min(0).max(10),
+	tags: v3_default.array(v3_default.string().min(1).max(30)),
+	images: v3_default.array(imageSchema),
+	ratings: v3_default.array(ratingSchema)
 }).parse({});
 //#endregion

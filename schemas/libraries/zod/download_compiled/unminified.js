@@ -3688,7 +3688,7 @@ function superRefine(fn) {
 	return /* @__PURE__ */ _superRefine(fn);
 }
 //#endregion
-//#region ../schemas/libraries/zod/download.ts
+//#region ../schemas/libraries/zod/download/index.ts
 const imageSchema = object({
 	id: number(),
 	created: date(),
