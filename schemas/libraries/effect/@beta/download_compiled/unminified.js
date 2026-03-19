@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -57,7 +57,7 @@ const Class$1 = /* @__PURE__ */ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -259,7 +259,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -278,7 +278,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -500,7 +500,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -849,7 +849,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
@@ -1076,7 +1076,7 @@ const isEqual = (u) => hasProperty(u, symbol$2);
 */
 const asEquivalence = () => equals$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1126,14 +1126,14 @@ const asEquivalence = () => equals$2;
 */
 const make$12 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Redactable.js
 /**
 * @since 4.0.0
 */
@@ -1227,7 +1227,7 @@ const emptyServiceMap$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1569,7 +1569,7 @@ function formatJson(input, options) {
 	return out;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Inspectable.js
 /**
 * This module provides utilities for making values inspectable and debuggable in TypeScript.
 *
@@ -1656,7 +1656,45 @@ const toJson = (input) => {
 	}
 	return redact(input);
 };
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Utils.js
 /**
+* An `IterableIterator` that yields its wrapped value exactly once.
+*
+* When to use:
+*
+* - Implement `[Symbol.iterator]()` on Effect-like types so they can be
+*   `yield*`-ed inside generator functions (e.g. `Effect.gen`, `Option.gen`).
+* - You almost never construct this directly — it is created internally by
+*   yieldable types.
+*
+* Behavior:
+*
+* - The first call to `next()` returns `{ value: self, done: false }`.
+* - Every subsequent call returns `{ value: a, done: true }` where `a` is
+*   the argument passed to `next()`.
+* - `[Symbol.iterator]()` returns a **new** `SingleShotGen` wrapping the same
+*   value, so the outer type can be iterated multiple times.
+* - Does not mutate the wrapped value.
+*
+* **Example** (Yielding a wrapped value in a generator)
+*
+* ```ts
+* import { Utils } from "effect"
+*
+* const gen = new Utils.SingleShotGen<string, number>("hello")
+*
+* // First call yields the wrapped value
+* console.log(gen.next(0))
+* // { value: "hello", done: false }
+*
+* // Second call signals completion with the provided value
+* console.log(gen.next(42))
+* // { value: 42, done: true }
+* ```
+*
+* @see {@link Gen} — the type-level signature that relies on `SingleShotGen`
+*
 * @category constructors
 * @since 2.0.0
 */
@@ -1685,7 +1723,7 @@ var SingleShotGen = class SingleShotGen {
 		return new SingleShotGen(this.self);
 	}
 };
-const InternalTypeId = "~effect/Effect/internal";
+const InternalTypeId = "~effect/Utils/internal";
 const standard = { [InternalTypeId]: (body) => {
 	return body();
 } };
@@ -1694,15 +1732,10 @@ const forced = { [InternalTypeId]: (body) => {
 		return body();
 	} finally {}
 } };
-/**
-* @since 3.2.2
-* @status experimental
-* @category tracing
-*/
+/** @internal */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
-(function* () {}).constructor;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2069,13 +2102,13 @@ var NoSuchElementError$1 = class extends TaggedError$1("NoSuchElementError") {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
-const TypeId$16 = "~effect/data/Option";
+const TypeId$15 = "~effect/data/Option";
 const CommonProto$1 = {
-	[TypeId$16]: { _A: (_) => _ },
+	[TypeId$15]: { _A: (_) => _ },
 	...PipeInspectableProto,
 	...YieldableProto
 };
@@ -2102,10 +2135,14 @@ const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 		return exitSucceed(this.value);
 	}
 });
+Object.defineProperty(SomeProto, "valueOrUndefined", { get() {
+	return this.value;
+} });
 const NoneHash = /* @__PURE__ */ hash("None");
 const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto$1), {
 	_tag: "None",
 	_op: "None",
+	valueOrUndefined: void 0,
 	[symbol$2](that) {
 		return isOption$1(that) && isNone$1(that);
 	},
@@ -2126,7 +2163,7 @@ const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 	}
 });
 /** @internal */
-const isOption$1 = (input) => hasProperty(input, TypeId$16);
+const isOption$1 = (input) => hasProperty(input, TypeId$15);
 /** @internal */
 const isNone$1 = (fa) => fa._tag === "None";
 /** @internal */
@@ -2140,10 +2177,10 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/result.js
-const TypeId$15 = "~effect/data/Result";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/result.js
+const TypeId$14 = "~effect/data/Result";
 const CommonProto = {
-	[TypeId$15]: {
+	[TypeId$14]: {
 		_A: (_) => _,
 		_E: (_) => _
 	},
@@ -2197,7 +2234,7 @@ const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 	}
 });
 /** @internal */
-const isResult$1 = (input) => hasProperty(input, TypeId$15);
+const isResult$1 = (input) => hasProperty(input, TypeId$14);
 /** @internal */
 const isFailure$4 = (result) => result._tag === "Failure";
 /** @internal */
@@ -2215,7 +2252,7 @@ const succeed$4 = (success) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2416,7 +2453,7 @@ const isLessThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2540,6 +2577,37 @@ const isNone = isNone$1;
 */
 const isSome = isSome$1;
 /**
+* Extracts the value from a `Some`, or returns `undefined` for `None`.
+*
+* **When to use**
+*
+* - Interoping with APIs that use `undefined` for missing values
+*
+* **Behavior**
+*
+* - `Some` → the inner value
+* - `None` → `undefined`
+*
+* **Example** (Unwrapping to undefined)
+*
+* ```ts
+* import { Option } from "effect"
+*
+* console.log(Option.getOrUndefined(Option.some(1)))
+* // Output: 1
+*
+* console.log(Option.getOrUndefined(Option.none()))
+* // Output: undefined
+* ```
+*
+* @see {@link getOrNull} to return `null` instead
+* @see {@link getOrElse} for a custom fallback
+*
+* @category Getters
+* @since 2.0.0
+*/
+const getOrUndefined = /* @__PURE__ */ (/* @__PURE__ */ dual(2, (self, onNone) => isNone(self) ? onNone() : self.value))(constUndefined);
+/**
 * Transforms the value inside a `Some` using the provided function, leaving
 * `None` unchanged.
 *
@@ -2572,9 +2640,9 @@ const isSome = isSome$1;
 * @category Mapping
 * @since 2.0.0
 */
-const map$5 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
+const map$4 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
 *
@@ -2690,7 +2758,7 @@ const isFailure$3 = isFailure$4;
 */
 const isSuccess$3 = isSuccess$4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -3024,9 +3092,9 @@ const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
 	}
 	return [];
 });
-const TypeId$14 = "~effect/BigDecimal";
+const TypeId$13 = "~effect/BigDecimal";
 const BigDecimalProto = {
-	[TypeId$14]: TypeId$14,
+	[TypeId$13]: TypeId$13,
 	[symbol$3]() {
 		const normalized = normalize(this);
 		return combine$1(hash(normalized.value), number$2(normalized.scale));
@@ -3067,7 +3135,7 @@ const BigDecimalProto = {
 * @since 2.0.0
 * @category guards
 */
-const isBigDecimal = (u) => hasProperty(u, TypeId$14);
+const isBigDecimal = (u) => hasProperty(u, TypeId$13);
 /**
 * Creates a `BigDecimal` from a `bigint` value and a scale.
 *
@@ -3330,8 +3398,8 @@ const isZero = (n) => n.value === bigint0$2;
 */
 const isNegative = (n) => n.value < bigint0$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Duration.js
-const TypeId$13 = "~effect/time/Duration";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Duration.js
+const TypeId$12 = "~effect/time/Duration";
 /**
 * Get the duration in nanoseconds as a bigint.
 *
@@ -3407,7 +3475,7 @@ const Equivalence$2 = (self, that) => matchPair(self, that, {
 	onInfinity: (self, that) => self.value._tag === that.value._tag
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/ServiceMap.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/ServiceMap.js
 const ServiceTypeId = "~effect/ServiceMap/Service";
 /**
 * @example
@@ -3490,7 +3558,7 @@ const ServiceProto = {
 	}
 };
 const ReferenceTypeId = "~effect/ServiceMap/Reference";
-const TypeId$12 = "~effect/ServiceMap";
+const TypeId$11 = "~effect/ServiceMap";
 /**
 * @example
 * ```ts
@@ -3510,11 +3578,12 @@ const TypeId$12 = "~effect/ServiceMap";
 const makeUnsafe$5 = (mapUnsafe) => {
 	const self = Object.create(Proto$2);
 	self.mapUnsafe = mapUnsafe;
+	self.mutable = false;
 	return self;
 };
 const Proto$2 = {
 	...PipeInspectableProto,
-	[TypeId$12]: { _Services: (_) => _ },
+	[TypeId$11]: { _Services: (_) => _ },
 	toJSON() {
 		return {
 			_id: "ServiceMap",
@@ -3547,7 +3616,7 @@ const Proto$2 = {
 * @since 4.0.0
 * @category Guards
 */
-const isServiceMap = (u) => hasProperty(u, TypeId$12);
+const isServiceMap = (u) => hasProperty(u, TypeId$11);
 /**
 * Returns an empty `ServiceMap`.
 *
@@ -3608,11 +3677,9 @@ const make$8 = (key, service) => makeUnsafe$5(new Map([[key.key, service]]));
 * @since 4.0.0
 * @category Adders
 */
-const add$2 = /* @__PURE__ */ dual(3, (self, key, service) => {
-	const map = new Map(self.mapUnsafe);
+const add$2 = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, (map) => {
 	map.set(key.key, service);
-	return makeUnsafe$5(map);
-});
+}));
 /**
 * Get a service from the context that corresponds to the given key.
 *
@@ -3718,9 +3785,9 @@ const serviceNotFoundError = (service) => {
 const merge = /* @__PURE__ */ dual(2, (self, that) => {
 	if (self.mapUnsafe.size === 0) return that;
 	if (that.mapUnsafe.size === 0) return self;
-	const map = new Map(self.mapUnsafe);
-	that.mapUnsafe.forEach((value, key) => map.set(key, value));
-	return makeUnsafe$5(map);
+	return withMapUnsafe(self, (map) => {
+		that.mapUnsafe.forEach((value, key) => map.set(key, value));
+	});
 });
 /**
 * Merges any number of `ServiceMap`s, returning a new `ServiceMap` containing the services of all.
@@ -3758,6 +3825,15 @@ const mergeAll$1 = (...ctxs) => {
 	});
 	return makeUnsafe$5(map);
 };
+const withMapUnsafe = (self, f) => {
+	if (self.mutable) {
+		f(self.mapUnsafe);
+		return self;
+	}
+	const map = new Map(self.mapUnsafe);
+	f(map);
+	return makeUnsafe$5(map);
+};
 /**
 * Creates a service map key with a default value.
 *
@@ -3793,7 +3869,7 @@ const mergeAll$1 = (...ctxs) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Scheduler.js
 /**
 * @since 4.0.0
 * @category references
@@ -3838,44 +3914,34 @@ var PriorityBuckets = class {
 * - Automatic yielding based on operation count
 * - Optimized for high-throughput scenarios
 *
-* @example
-* ```ts
-* import { MixedScheduler } from "effect/Scheduler"
-*
-* // Create a mixed scheduler with async execution (default)
-* const asyncScheduler = new MixedScheduler("async")
-*
-* // Create a mixed scheduler with sync execution
-* const syncScheduler = new MixedScheduler("sync")
-*
-* // Schedule tasks with different priorities
-* asyncScheduler.scheduleTask(() => console.log("High priority task"), 10)
-* asyncScheduler.scheduleTask(() => console.log("Normal priority task"), 0)
-* asyncScheduler.scheduleTask(() => console.log("Low priority task"), -1)
-*
-* // For sync scheduler, you can flush tasks immediately
-* syncScheduler.scheduleTask(() => console.log("Task 1"), 0)
-* syncScheduler.scheduleTask(() => console.log("Task 2"), 0)
-*
-* // Force flush all pending tasks in sync mode
-* syncScheduler.flush()
-* // Output: "Task 1", "Task 2"
-*
-* // Check execution mode
-* console.log(asyncScheduler.executionMode) // "async"
-* console.log(syncScheduler.executionMode) // "sync"
-* ```
-*
 * @since 2.0.0
 * @category schedulers
 */
 var MixedScheduler = class {
-	tasks = /* @__PURE__ */ new PriorityBuckets();
-	running = void 0;
 	executionMode;
 	setImmediate;
 	constructor(executionMode = "async", setImmediateFn = setImmediate) {
 		this.executionMode = executionMode;
+		this.setImmediate = setImmediateFn;
+	}
+	/**
+	* @since 2.0.0
+	*/
+	shouldYield(fiber) {
+		return fiber.currentOpCount >= fiber.maxOpsBeforeYield;
+	}
+	/**
+	* @since 2.0.0
+	*/
+	makeDispatcher() {
+		return new MixedSchedulerDispatcher(this.setImmediate);
+	}
+};
+var MixedSchedulerDispatcher = class {
+	tasks = /* @__PURE__ */ new PriorityBuckets();
+	running = void 0;
+	setImmediate;
+	constructor(setImmediateFn = setImmediate) {
 		this.setImmediate = setImmediateFn;
 	}
 	/**
@@ -3905,12 +3971,6 @@ var MixedScheduler = class {
 	/**
 	* @since 2.0.0
 	*/
-	shouldYield(fiber) {
-		return fiber.currentOpCount >= fiber.maxOpsBeforeYield;
-	}
-	/**
-	* @since 2.0.0
-	*/
 	flush() {
 		while (this.tasks.buckets.length > 0) {
 			if (this.running !== void 0) {
@@ -3929,99 +3989,21 @@ var MixedScheduler = class {
 * The default value is 2048 operations, which provides a good balance between
 * performance and fairness in concurrent execution.
 *
-* @example
-* ```ts
-* import { Effect } from "effect"
-* import { MaxOpsBeforeYield } from "effect/Scheduler"
-*
-* // Configure a fiber to yield more frequently
-* const program = Effect.gen(function*() {
-*   // Get current max ops setting (default is 2048)
-*   const currentMax = yield* MaxOpsBeforeYield
-*   yield* Effect.log(`Default max ops before yield: ${currentMax}`)
-*
-*   // Run with reduced max ops for more frequent yielding
-*   return yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const maxOps = yield* MaxOpsBeforeYield
-*       yield* Effect.log(`Max ops before yield: ${maxOps}`)
-*
-*       // Run a compute-intensive task that will yield frequently
-*       let result = 0
-*       for (let i = 0; i < 10000; i++) {
-*         result += i
-*         // This will cause yielding every 100 operations
-*         yield* Effect.sync(() => result)
-*       }
-*       return result
-*     }),
-*     MaxOpsBeforeYield,
-*     100
-*   )
-* })
-*
-* // Configure for high-performance scenarios
-* const highPerformanceProgram = Effect.gen(function*() {
-*   // Run with increased max ops for better performance (less yielding)
-*   return yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const maxOps = yield* MaxOpsBeforeYield
-*       yield* Effect.log(`High-performance max ops: ${maxOps}`)
-*
-*       // Run multiple concurrent tasks
-*       const tasks = Array.from(
-*         { length: 100 },
-*         (_, i) =>
-*           Effect.gen(function*() {
-*             yield* Effect.sleep(`${i * 10} millis`)
-*             return `Task ${i} completed`
-*           })
-*       )
-*
-*       return yield* Effect.all(tasks, { concurrency: "unbounded" })
-*     }),
-*     MaxOpsBeforeYield,
-*     10000
-*   )
-* })
-*
-* // Configure for fair scheduling
-* const fairSchedulingProgram = Effect.gen(function*() {
-*   // Run with lower max ops for more frequent yielding
-*   return yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const maxOps = yield* MaxOpsBeforeYield
-*       yield* Effect.log(`Fair scheduling max ops: ${maxOps}`)
-*
-*       const longRunningTask = Effect.gen(function*() {
-*         for (let i = 0; i < 1000; i++) {
-*           yield* Effect.sync(() => Math.random())
-*         }
-*         return "Long task completed"
-*       })
-*
-*       const quickTask = Effect.gen(function*() {
-*         yield* Effect.sleep("10 millis")
-*         return "Quick task completed"
-*       })
-*
-*       // Both tasks will execute fairly due to frequent yielding
-*       return yield* Effect.all([longRunningTask, quickTask], {
-*         concurrency: "unbounded"
-*       })
-*     }),
-*     MaxOpsBeforeYield,
-*     50
-*   )
-* })
-* ```
-*
 * @since 4.0.0
 * @category references
 */
 const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBeforeYield", { defaultValue: () => 2048 });
+/**
+* A service reference that controls whether the runtime should bypass scheduler
+* yield checks. When set to `true`, the fiber run loop won't call
+* `Scheduler.shouldYield`.
+*
+* @since 4.0.0
+* @category references
+*/
+const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Tracer.js
 /**
 * @since 2.0.0
 * @category tags
@@ -4057,7 +4039,7 @@ const DisablePropagation = /* @__PURE__ */ Reference("effect/Tracer/DisablePropa
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/References.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/References.js
 /**
 * This module provides a collection of reference implementations for commonly used
 * Effect runtime configuration values. These references allow you to access and
@@ -4206,11 +4188,11 @@ const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogL
 */
 const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4383,6 +4365,11 @@ var FiberImpl = class {
 	currentStackFrame;
 	runtimeMetrics;
 	maxOpsBeforeYield;
+	currentPreventYield;
+	_dispatcher = void 0;
+	get currentDispatcher() {
+		return this._dispatcher ??= this.currentScheduler.makeDispatcher();
+	}
 	getRef(ref) {
 		return getReferenceUnsafe(this.services, ref);
 	}
@@ -4435,7 +4422,7 @@ var FiberImpl = class {
 		try {
 			while (true) {
 				this.currentOpCount++;
-				if (!yielding && this.currentScheduler.shouldYield(this)) {
+				if (!yielding && !this.currentPreventYield && this.currentScheduler.shouldYield(this)) {
 					yielding = true;
 					const prev = current;
 					current = flatMap$1(yieldNow$1, () => prev);
@@ -4482,12 +4469,17 @@ var FiberImpl = class {
 	}
 	setServices(services) {
 		this.services = services;
-		this.currentScheduler = this.getRef(Scheduler);
+		const scheduler = this.getRef(Scheduler);
+		if (scheduler !== this.currentScheduler) {
+			this.currentScheduler = scheduler;
+			this._dispatcher = void 0;
+		}
 		this.currentSpan = services.mapUnsafe.get(ParentSpanKey);
 		this.currentLogLevel = this.getRef(CurrentLogLevel);
 		this.minimumLogLevel = this.getRef(MinimumLogLevel);
 		this.currentStackFrame = services.mapUnsafe.get(CurrentStackFrame.key);
 		this.maxOpsBeforeYield = this.getRef(MaxOpsBeforeYield);
+		this.currentPreventYield = this.getRef(PreventSchedulerYield);
 		this.runtimeMetrics = services.mapUnsafe.get(FiberRuntimeMetricsKey);
 		const currentTracer = services.mapUnsafe.get(TracerKey);
 		this.currentTracerContext = currentTracer ? currentTracer["context"] : void 0;
@@ -4560,7 +4552,7 @@ const yieldNow$1 = /* @__PURE__ */ (/* @__PURE__ */ makePrimitive({
 	op: "Yield",
 	[evaluate](fiber) {
 		let resumed = false;
-		fiber.currentScheduler.scheduleTask(() => {
+		fiber.currentDispatcher.scheduleTask(() => {
 			if (resumed) return;
 			fiber.evaluate(exitVoid);
 		}, this[args] ?? 0);
@@ -5029,7 +5021,7 @@ const forkUnsafe$1 = (parent, effect, immediate = false, daemon = false, uninter
 	const interruptible = uninterruptible === "inherit" ? parent.interruptible : !uninterruptible;
 	const child = new FiberImpl(parent.services, interruptible);
 	if (immediate) child.evaluate(effect);
-	else parent.currentScheduler.scheduleTask(() => child.evaluate(effect), 0);
+	else parent.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
 	if (!daemon && !child._exit) {
 		parent.children().add(child);
 		child.addObserver(() => parent._children.delete(child));
@@ -5038,8 +5030,7 @@ const forkUnsafe$1 = (parent, effect, immediate = false, daemon = false, uninter
 };
 /** @internal */
 const runForkWith$1 = (services) => (effect, options) => {
-	const scheduler = options?.scheduler || !services.mapUnsafe.has(Scheduler.key) && new MixedScheduler();
-	const fiber = new FiberImpl(scheduler ? add$2(services, Scheduler, scheduler) : services, options?.uninterruptible !== true);
+	const fiber = new FiberImpl(options?.scheduler ? add$2(services, Scheduler, options.scheduler) : services, options?.uninterruptible !== true);
 	fiber.evaluate(effect);
 	if (fiber._exit) return fiber;
 	if (options?.signal) if (options.signal.aborted) fiber.interruptUnsafe();
@@ -5055,9 +5046,8 @@ const runSyncExitWith$1 = (services) => {
 	const runFork = runForkWith$1(services);
 	return (effect) => {
 		if (effectIsExit(effect)) return effect;
-		const scheduler = new MixedScheduler("sync");
-		const fiber = runFork(effect, { scheduler });
-		scheduler.flush();
+		const fiber = runFork(effect, { scheduler: new MixedScheduler("sync") });
+		fiber.currentDispatcher?.flush();
 		return fiber._exit ?? exitDie(fiber);
 	};
 };
@@ -5075,7 +5065,8 @@ const runSyncWith$1 = (services) => {
 /** @internal */
 const runSync$1 = /* @__PURE__ */ runSyncWith$1(/* @__PURE__ */ empty$1());
 const filterDisablePropagation = (span) => {
-	if (span) return get(span.annotations, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(span.parent) : void 0 : span;
+	if (!span) return none();
+	return get(span.annotations, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(getOrUndefined(span.parent)) : none() : some(span);
 };
 TaggedError$1("TimeoutError");
 TaggedError$1("IllegalArgumentError");
@@ -5147,7 +5138,7 @@ const findError$1 = findError$2;
 * }> {}
 *
 * const program = Effect.gen(function*() {
-*   yield* new NotFound({ resource: "/users/42" })
+*   return yield* new NotFound({ resource: "/users/42" })
 * })
 *
 * const recovered = program.pipe(
@@ -5186,7 +5177,7 @@ const TaggedError = TaggedError$1;
 */
 const getSuccess = exitGetSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Deferred.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Deferred.js
 const DeferredProto = {
 	["~effect/Deferred"]: {
 		_A: identity,
@@ -5277,8 +5268,8 @@ const forkUnsafe = scopeForkUnsafe;
 */
 const close = scopeClose;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/Layer.js
-const TypeId$10 = "~effect/Layer";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/Layer.js
+const TypeId$9 = "~effect/Layer";
 /**
 * Returns `true` if the specified value is a `Layer`, `false` otherwise.
 *
@@ -5291,7 +5282,7 @@ const TypeId$10 = "~effect/Layer";
 * }>()("Database") {}
 *
 * const dbLayer = Layer.succeed(Database)({
-*   query: (sql: string) => Effect.succeed("result")
+*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed("result"))
 * })
 * const notALayer = { someProperty: "value" }
 *
@@ -5302,9 +5293,9 @@ const TypeId$10 = "~effect/Layer";
 * @since 2.0.0
 * @category getters
 */
-const isLayer = (u) => hasProperty(u, TypeId$10);
+const isLayer = (u) => hasProperty(u, TypeId$9);
 const LayerProto = {
-	[TypeId$10]: {
+	[TypeId$9]: {
 		_ROut: identity,
 		_E: identity,
 		_RIn: identity
@@ -5369,7 +5360,7 @@ Service()("effect/Layer/CurrentMemoMap");
 * }>()("Logger") {}
 *
 * const services = ServiceMap.make(Database, {
-*   query: (sql: string) => Effect.succeed("result")
+*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed("result"))
 * })
 *   .pipe(
 *     ServiceMap.add(Logger, {
@@ -5415,11 +5406,11 @@ const provideWith = (self, that, f) => fromBuild((memoMap, scope) => flatMap$1(A
 *
 * // Create dependency layers
 * const databaseLayer = Layer.succeed(Database)({
-*   query: (sql: string) => Effect.succeed(`DB: ${sql}`)
+*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed(`DB: ${sql}`))
 * })
 *
 * const loggerLayer = Layer.succeed(Logger)({
-*   log: (msg: string) => Effect.sync(() => console.log(`[LOG] ${msg}`))
+*   log: Effect.fn("Logger.log")((msg: string) => Effect.sync(() => console.log(`[LOG] ${msg}`)))
 * })
 *
 * // UserService depends on Database and Logger
@@ -5428,8 +5419,7 @@ const provideWith = (self, that, f) => fromBuild((memoMap, scope) => flatMap$1(A
 *   const logger = yield* Logger
 *
 *   return {
-*     getUser: (id: string) =>
-*       Effect.gen(function*() {
+*     getUser: Effect.fn("UserService.getUser")(function*(id: string) {
 *         yield* logger.log(`Looking up user ${id}`)
 *         const result = yield* database.query(
 *           `SELECT * FROM users WHERE id = ${id}`
@@ -5458,14 +5448,14 @@ const provideWith = (self, that, f) => fromBuild((memoMap, scope) => flatMap$1(A
 */
 const provide$2 = /* @__PURE__ */ dual(2, (self, that) => provideWith(self, that, identity));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/ExecutionPlan.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/ExecutionPlan.js
 /**
 * @since 3.16.0
 * @category Type IDs
 */
-const TypeId$9 = "~effect/ExecutionPlan";
+const TypeId$8 = "~effect/ExecutionPlan";
 const Proto$1 = {
-	[TypeId$9]: TypeId$9,
+	[TypeId$8]: TypeId$8,
 	get withRequirements() {
 		const self = this;
 		return servicesWith$1((services) => succeed$2(makeProto(self.steps.map((step) => ({
@@ -5483,13 +5473,13 @@ const makeProto = (steps) => {
 	return self;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
-const TypeId$8 = "~effect/time/DateTime";
+const TypeId$7 = "~effect/time/DateTime";
 /** @internal */
 const TimeZoneTypeId = "~effect/time/DateTime/TimeZone";
 const Proto = {
-	[TypeId$8]: TypeId$8,
+	[TypeId$7]: TypeId$7,
 	pipe() {
 		return pipeArguments(this, arguments);
 	},
@@ -5511,17 +5501,17 @@ const ProtoTimeZone = {
 ({ ...ProtoTimeZone });
 ({ ...ProtoTimeZone });
 /** @internal */
-const toDateUtc$1 = (self) => new Date(self.epochMillis);
+const toDateUtc$1 = (self) => new Date(self.epochMilliseconds);
 /** @internal */
 const toDate$1 = (self) => {
-	if (self._tag === "Utc") return new Date(self.epochMillis);
-	else if (self.zone._tag === "Offset") return new Date(self.epochMillis + self.zone.offset);
-	else if (self.adjustedEpochMillis !== void 0) return new Date(self.adjustedEpochMillis);
-	const parts = self.zone.format.formatToParts(self.epochMillis).filter((_) => _.type !== "literal");
+	if (self._tag === "Utc") return new Date(self.epochMilliseconds);
+	else if (self.zone._tag === "Offset") return new Date(self.epochMilliseconds + self.zone.offset);
+	else if (self.adjustedEpochMilliseconds !== void 0) return new Date(self.adjustedEpochMilliseconds);
+	const parts = self.zone.format.formatToParts(self.epochMilliseconds).filter((_) => _.type !== "literal");
 	const date = /* @__PURE__ */ new Date(0);
 	date.setUTCFullYear(Number(parts[2].value), Number(parts[0].value) - 1, Number(parts[1].value));
 	date.setUTCHours(Number(parts[3].value), Number(parts[4].value), Number(parts[5].value), Number(parts[6].value));
-	self.adjustedEpochMillis = date.getTime();
+	self.adjustedEpochMilliseconds = date.getTime();
 	return date;
 };
 /** @internal */
@@ -5539,7 +5529,7 @@ const offsetToString = (offset) => {
 	return `${offset < 0 ? "-" : "+"}${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 };
 /** @internal */
-const toEpochMillis$1 = (self) => self.epochMillis;
+const toEpochMillis$1 = (self) => self.epochMilliseconds;
 ({ ...StructuralProto });
 /**
 * Creates an `Effect` that always succeeds with a given value.
@@ -5615,12 +5605,14 @@ const succeedSome = succeedSome$1;
 * @example
 * ```ts
 * // Title: Creating a Failed Effect
-* import { Effect } from "effect"
+* import { Data, Effect } from "effect"
 *
-* //      ┌─── Effect<never, Error, never>
+* class OperationFailedError extends Data.TaggedError("OperationFailedError")<{}> {}
+*
+* //      ┌─── Effect<never, OperationFailedError, never>
 * //      ▼
 * const failure = Effect.fail(
-*   new Error("Operation failed due to network error")
+*   new OperationFailedError()
 * )
 * ```
 *
@@ -5970,7 +5962,7 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5988,7 +5980,7 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -6020,7 +6012,7 @@ globalThis.RegExp;
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/SchemaIssue.js
 const TypeId$4 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -6697,7 +6689,7 @@ function formatOption(actual) {
 	return format$3(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6829,7 +6821,7 @@ var Getter = class Getter extends Class$1 {
 		this.run = run;
 	}
 	map(f) {
-		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$5(f))));
+		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$4(f))));
 	}
 	compose(other) {
 		if (isPassthrough(this)) return other;
@@ -6881,7 +6873,7 @@ function passthrough$1() {
 * @since 4.0.0
 */
 function transform$1(f) {
-	return transformOptional(map$5(f));
+	return transformOptional(map$4(f));
 }
 /**
 * Creates a getter that transforms the full `Option` — both present and absent values.
@@ -6971,7 +6963,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Bidirectional transformations for the Effect Schema system.
 *
@@ -7213,7 +7205,7 @@ function passthrough() {
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -8723,7 +8715,6 @@ const numberToString = /* @__PURE__ */ new Link(/* @__PURE__ */ new Union$1([fin
 */
 const BIGINT_PATTERN = "-?\\d+";
 `${BIGINT_PATTERN}`;
-globalThis.BigInt;
 /** @internal */
 function collectIssues(checks, value, issues, ast, options) {
 	for (let i = 0; i < checks.length; i++) {
@@ -8774,7 +8765,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/SchemaParser.js
 /**
 * @since 4.0.0
 */
@@ -8903,7 +8894,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.25/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.35/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId$1 = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8932,9 +8923,51 @@ function make$1(ast, options) {
 	return self;
 }
 /**
-* An API for creating schemas for parametric types.
+* Creates a schema for a **parametric** type (a generic container such as
+* `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
+* and a decoder factory.
 *
-* @see {@link declare} for creating schemas for non parametric types.
+* The outer call `declareConstructor<T, E, Iso>()` fixes the decoded type `T`,
+* the encoded type `E`, and the optional iso type. The inner call receives:
+* - `typeParameters` — the concrete schemas for each type variable
+* - `run` — a factory that, given resolved codecs for each type parameter,
+*   returns a parsing function `(u, ast, options) => Effect<T, Issue>`
+* - `annotations` — optional metadata
+*
+* @see {@link declare} for creating schemas for non-parametric types.
+*
+* **Example** (Schema for a parametric `Box<A>` type)
+*
+* ```ts
+* import { Effect, Schema } from "effect"
+* import * as SchemaParser from "effect/SchemaParser"
+* import * as Issue from "effect/SchemaIssue"
+* import * as Option from "effect/Option"
+*
+* interface Box<A> {
+*   readonly value: A
+* }
+*
+* const isBox = (u: unknown): u is Box<unknown> =>
+*   typeof u === "object" && u !== null && "value" in u
+*
+* const Box = <A extends Schema.Top>(item: A) =>
+*   Schema.declareConstructor<Box<A["Type"]>, Box<A["Encoded"]>>()(
+*     [item],
+*     ([itemCodec]) =>
+*       (u, ast, options) => {
+*         if (!isBox(u)) {
+*           return Effect.fail(new Issue.InvalidType(ast, Option.some(u)))
+*         }
+*         return Effect.map(
+*           SchemaParser.decodeUnknownEffect(itemCodec)(u.value, options),
+*           (value) => ({ value })
+*         )
+*       }
+*   )
+*
+* const schema = Box(Schema.Number)
+* ```
 *
 * @category Constructors
 * @since 4.0.0
@@ -8945,16 +8978,62 @@ function declareConstructor() {
 	};
 }
 /**
-* An API for creating schemas for non parametric types.
+* Creates a schema for a **non-parametric** opaque type using a type-guard
+* function. The schema accepts any unknown value and succeeds when `is` returns
+* `true`, failing with an `InvalidType` issue otherwise.
+*
+* Use this when the type has no type parameters. For parametric types such as
+* `Option<A>` or `Array<A>`, use {@link declareConstructor} instead.
+*
+* **Example** (Schema for a custom `UserId` branded type)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* type UserId = string & { readonly _tag: "UserId" }
+*
+* const isUserId = (u: unknown): u is UserId =>
+*   typeof u === "string" && u.startsWith("user_")
+*
+* const UserId = Schema.declare<UserId>(isUserId, {
+*   title: "UserId",
+*   description: "A user identifier starting with 'user_'"
+* })
+* ```
 *
 * @see {@link declareConstructor} for creating schemas for parametric types.
 *
+* @category Constructors
 * @since 4.0.0
 */
 function declare(is, annotations) {
 	return declareConstructor()([], () => (input, ast) => is(input) ? succeed(input) : fail(new InvalidType(ast, some(input))), annotations);
 }
 /**
+* Decodes an `unknown` input against a schema synchronously, throwing a
+* {@link SchemaError} on failure. Use this when you want to validate data at a
+* boundary and treat a schema mismatch as an unrecoverable error. For
+* non-throwing alternatives see {@link decodeUnknownOption},
+* {@link decodeUnknownExit}, or {@link decodeUnknownEffect}. For typed input
+* use {@link decodeSync}.
+*
+* **Example** (Decoding with a transformation schema)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const NumberFromString = Schema.NumberFromString
+*
+* console.log(Schema.decodeUnknownSync(NumberFromString)("42"))
+* // Output: 42
+*
+* Schema.decodeUnknownSync(NumberFromString)("not a number")
+* // throws SchemaError: NumberFromString
+* //   └─ Encoded side transformation failure
+* //      └─ NumberFromString
+* //         └─ Expected a numeric string, actual "not a number"
+* ```
+*
 * @category Decoding
 * @since 4.0.0
 */
@@ -8976,6 +9055,16 @@ const decodeUnknownSync = decodeUnknownSync$1;
 */
 const make = make$1;
 /**
+* Creates a schema for a single literal value (string, number, bigint, boolean, or null).
+*
+* **Example** (String literal)
+* ```ts
+* import { Schema } from "effect"
+*
+* const schema = Schema.Literal("hello")
+* // Type: Schema.Literal<"hello">
+* ```
+*
 * @see {@link Literals} for a schema that represents a union of literals.
 * @see {@link tag} for a schema that represents a literal value that can be
 * used as a discriminator field in tagged unions and has a constructor default.
@@ -8994,23 +9083,27 @@ function Literal(literal) {
 	return out;
 }
 /**
+* Schema for the `null` literal. Validates that the input is strictly `null`.
+*
+* @see {@link NullOr} for a union with another schema.
 * @since 4.0.0
 */
 const Null = /* @__PURE__ */ make(null_);
 /**
-* A schema for all strings.
+* Schema for `string` values. Validates that the input is `typeof` `"string"`.
 *
 * @since 4.0.0
 */
 const String$1 = /* @__PURE__ */ make(string);
 /**
-* A schema for all numbers, including `NaN`, `Infinity`, and `-Infinity`.
+* Schema for `number` values, including `NaN`, `Infinity`, and `-Infinity`.
 *
 * **Default Json Serializer**
 *
-* - If the number is finite, it is serialized as a number.
-* - Otherwise, it is serialized as a string ("NaN", "Infinity", or "-Infinity").
+* - Finite numbers are serialized as numbers.
+* - Non-finite values are serialized as strings (`"NaN"`, `"Infinity"`, `"-Infinity"`).
 *
+* @see {@link Finite} for a schema that excludes non-finite values.
 * @since 4.0.0
 */
 const Number$1 = /* @__PURE__ */ make(number);
@@ -9024,6 +9117,34 @@ function makeStruct(ast, fields) {
 	});
 }
 /**
+* Defines a struct schema from a map of field schemas.
+*
+* Each field value is a schema. Use {@link optionalKey} or {@link optional} to
+* mark fields as optional, and {@link mutableKey} to mark them as mutable.
+*
+* The resulting schema's `Type` is a readonly object type with the fields'
+* decoded types. The `Encoded` form mirrors the field schemas' encoded types.
+*
+* **Example** (Basic struct)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const Person = Schema.Struct({
+*   name: Schema.String,
+*   age: Schema.Number,
+*   email: Schema.optionalKey(Schema.String)
+* })
+*
+* // { readonly name: string; readonly age: number; readonly email?: string }
+* type Person = typeof Person.Type
+*
+* const alice = Schema.decodeUnknownSync(Person)({ name: "Alice", age: 30 })
+* console.log(alice)
+* // { name: 'Alice', age: 30 }
+* ```
+*
+* @category Constructors
 * @since 4.0.0
 */
 function Struct(fields) {
@@ -9039,12 +9160,37 @@ function makeTuple(ast, elements) {
 	});
 }
 /**
+* Defines a `ReadonlyArray` schema for a given element schema.
+*
+* **Example** (Array of strings)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const schema = Schema.Array(Schema.String)
+*
+* const result = Schema.decodeUnknownSync(schema)(["a", "b", "c"])
+* console.log(result)
+* // [ 'a', 'b', 'c' ]
+* ```
+*
 * @category Constructors
 * @since 4.0.0
 */
 const Array$1 = /* @__PURE__ */ lambda((schema) => make(new Arrays(false, [], [schema.ast]), { schema }));
 /**
-* Makes arrays or tuples mutable.
+* Makes an array or tuple schema mutable, removing the `readonly` modifier.
+*
+* **Example** (Mutable array)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const schema = Schema.mutable(Schema.Array(Schema.Number))
+*
+* // number[]   (mutable)
+* type T = typeof schema.Type
+* ```
 *
 * @since 4.0.0
 */
@@ -9061,12 +9207,23 @@ function makeUnion(ast, members) {
 	});
 }
 /**
-* Creates a schema that represents a union of multiple schemas. Members are checked in order, and the first match is returned.
+* Creates a union schema from an array of member schemas. Members are tested in
+* order; the first match is returned.
 *
-* Optionally, you can specify the `mode` to be `"anyOf"` or `"oneOf"`.
+* Optionally, specify `mode`:
+* - `"anyOf"` (default) — matches if any member matches.
+* - `"oneOf"` — matches if exactly one member matches.
 *
-* - `"anyOf"` - The union matches if any member matches.
-* - `"oneOf"` - The union matches if exactly one member matches.
+* **Example** (String or number union)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const schema = Schema.Union([Schema.String, Schema.Number])
+*
+* Schema.decodeUnknownSync(schema)("hello") // "hello"
+* Schema.decodeUnknownSync(schema)(42)       // 42
+* ```
 *
 * @category Constructors
 * @since 4.0.0
@@ -9075,6 +9232,16 @@ function Union(members, options) {
 	return makeUnion(union(members, options?.mode ?? "anyOf", void 0), members);
 }
 /**
+* Creates a union schema from an array of literal values.
+*
+* **Example** (Status codes)
+* ```ts
+* import { Schema } from "effect"
+*
+* const schema = Schema.Literals(["active", "inactive", "pending"])
+* // accepts "active", "inactive", or "pending"
+* ```
+*
 * @see {@link Literal} for a schema that represents a single literal.
 * @category Constructors
 * @since 4.0.0
@@ -9096,6 +9263,8 @@ function Literals(literals) {
 	});
 }
 /**
+* Creates a union schema of `S | null`.
+*
 * @category Constructors
 * @since 4.0.0
 */
@@ -9109,7 +9278,19 @@ function decodeTo(to, transformation) {
 	};
 }
 /**
-* Creates a schema that validates an instance of a specific class constructor.
+* Creates a schema that validates values using `instanceof`.
+* Decoding and encoding pass the value through unchanged.
+*
+* **Example** (Schema for a built-in class)
+*
+* ```ts
+* import { Schema } from "effect"
+*
+* const DateSchema = Schema.instanceOf(Date)
+*
+* const decoded = Schema.decodeUnknownSync(DateSchema)(new Date("2024-01-01"))
+* // decoded: Date
+* ```
 *
 * @category Constructors
 * @since 4.0.0
@@ -9118,11 +9299,30 @@ function instanceOf(constructor, annotations) {
 	return declare((u) => u instanceof constructor, annotations);
 }
 /**
+* Creates a custom filter check from a predicate function. The predicate
+* receives the input value, the schema's AST, and parse options, and returns
+* `true`/`undefined` on success or a failure description on error.
+*
+* **Example** (Custom filter check)
+* ```ts
+* import { Schema } from "effect"
+*
+* // Check that a number is even
+* const isEven = Schema.makeFilter(
+*   (n: number) => n % 2 === 0 || "expected an even number"
+* )
+*
+* const EvenNumber = Schema.Number.check(isEven)
+* ```
+*
 * @category Checks Constructors
 * @since 4.0.0
 */
 const makeFilter = makeFilter$1;
 /**
+* Generic factory for creating a ">=" check for any ordered type by supplying
+* an {@link Order.Order} instance.
+*
 * @category Order checks
 * @since 4.0.0
 */
@@ -9138,6 +9338,9 @@ function makeIsGreaterThanOrEqualTo(options) {
 	};
 }
 /**
+* Generic factory for creating a "<=" check for any ordered type by supplying
+* an {@link Order.Order} instance.
+*
 * @category Order checks
 * @since 4.0.0
 */
@@ -9218,6 +9421,14 @@ const isLessThanOrEqualTo = /* @__PURE__ */ makeIsLessThanOrEqualTo({
 * When generating test data with fast-check, this applies a `minLength`
 * constraint to ensure generated strings or arrays have at least the required
 * length.
+*
+* **Example** (Minimum length check)
+* ```ts
+* import { Schema } from "effect"
+*
+* const NonEmptyStringSchema = Schema.String.check(Schema.isMinLength(1))
+* const NonEmptyArraySchema = Schema.Array(Schema.Number).check(Schema.isMinLength(1))
+* ```
 *
 * @category Length checks
 * @since 4.0.0
