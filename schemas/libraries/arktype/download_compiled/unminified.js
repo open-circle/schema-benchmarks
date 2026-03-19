@@ -720,7 +720,6 @@ var Scanner = class {
 const writeUnmatchedGroupCloseMessage = (char, unscanned) => `Unmatched ${char}${unscanned === "" ? "" : ` before ${unscanned}`}`;
 const writeUnclosedGroupMessage = (missingChar) => `Missing ${missingChar}`;
 noSuggest("implementedTraits");
-Symbol.hasInstance;
 //#endregion
 //#region ../node_modules/.pnpm/@ark+schema@0.56.0/node_modules/@ark/schema/out/shared/registry.js
 let _registryName = "$ark";

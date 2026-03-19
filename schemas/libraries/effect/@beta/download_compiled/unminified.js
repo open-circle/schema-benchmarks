@@ -1656,7 +1656,6 @@ const toJson = (input) => {
 	}
 	return redact(input);
 };
-Symbol.iterator;
 /**
 * @category constructors
 * @since 2.0.0

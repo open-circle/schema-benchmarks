@@ -2147,12 +2147,11 @@ function Extends(inferred, left, right) {
 //#region ../node_modules/.pnpm/typebox@1.1.6/node_modules/typebox/build/type/engine/call/resolve-arguments.mjs
 function AssertArgumentExtends(name, type, extends_) {
 	if (IsInfer(type) || IsCall(type) || IsExtendsTrueLike(Extends({}, type, extends_))) return;
-	const cause = {
+	throw new Error("Generic argument does not satify constraint", { cause: {
 		parameter: name,
 		extends: extends_,
 		received: type
-	};
-	throw new Error("Generic argument does not satify constraint", { cause });
+	} });
 }
 function BindArgument(context, state, name, extends_, type) {
 	const instantiatedArgument = InstantiateType(context, state, type);
