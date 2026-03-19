@@ -16,8 +16,8 @@
     "typecheck:tsc": "tsc"
   },
   "dependencies": {
-    "@formatjs/intl-durationformat": "^0.10.2",
-    "@formatjs/intl-numberformat": "^9.2.4"
+    "@formatjs/intl-durationformat": "^0.10.3",
+    "@formatjs/intl-numberformat": "^9.3.1"
   },
   "devDependencies": {
     "@types/react": "catalog:",
