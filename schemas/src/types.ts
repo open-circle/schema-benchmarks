@@ -4,7 +4,7 @@ import * as v from "valibot";
 
 import type { ProductData } from "./data.ts";
 
-export const optimizeTypeSchema = v.picklist(["none", "jit", "precompiled"]);
+export const optimizeTypeSchema = /* @__PURE__ */ v.picklist(["none", "jit", "precompiled"]);
 export type OptimizeType = v.InferOutput<typeof optimizeTypeSchema>;
 
 export interface BaseBenchmarkConfig {
@@ -22,7 +22,7 @@ export interface ValidationBenchmarkConfig extends BaseBenchmarkConfig {
   run: (data: unknown) => MaybePromise<boolean>;
 }
 
-export const errorTypeSchema = v.picklist(["allErrors", "abortEarly"]);
+export const errorTypeSchema = /* @__PURE__ */ v.picklist(["allErrors", "abortEarly"]);
 export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 
 export interface ParsingBenchmarkConfig<ParseResult = unknown> extends BaseBenchmarkConfig {
@@ -43,7 +43,7 @@ export interface StandardSchemaBenchmarkConfig extends Omit<
   snippet?: string;
 }
 
-export const stringFormatSchema = v.picklist([
+export const stringFormatSchema = /* @__PURE__ */ v.picklist([
   "date-time",
   "date",
   "time",
