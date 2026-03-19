@@ -23,7 +23,7 @@
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
     "gzip-size": "^7.0.0",
-    "rolldown": "1.0.0-rc.9",
+    "rolldown": "1.0.0-rc.10",
     "tinybench": "^6.0.0",
     "typescript": "catalog:",
     "valibot": "catalog:"
