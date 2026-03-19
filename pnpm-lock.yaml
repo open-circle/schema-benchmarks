@@ -156,8 +156,8 @@ importers:
         specifier: ^3.20.0
         version: 3.20.0
       effect___beta:
-        specifier: npm:effect@4.0.0-beta.25
-        version: effect@4.0.0-beta.25
+        specifier: npm:effect@beta
+        version: effect@4.0.0-beta.35
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -4319,8 +4319,8 @@ packages:
   effect@3.20.0:
     resolution: {integrity: sha512-qMLfDJscrNG8p/aw+IkT9W7fgj50Z4wG5bLBy0Txsxz8iUHjDIkOgO3SV0WZfnQbNG2VJYb0b+rDLMrhM4+Krw==}
 
-  effect@4.0.0-beta.25:
-    resolution: {integrity: sha512-5dFGfJuJOITAlKnK9tmBNAtTxJt0/G65QO0ouet0QqFsDNDptZf8egYaWAJ/8RnYigzLhieE/A8qvnyKwmAPjw==}
+  effect@4.0.0-beta.35:
+    resolution: {integrity: sha512-64j8dgJmoEMeq6Y3WLYcZIRqPZ5E/lqnULCf6QW5te3hQ/sa13UodWLGwBEviEqBoq72U8lArhVX+T7ntzhJGQ==}
 
   electron-to-chromium@1.5.321:
     resolution: {integrity: sha512-L2C7Q279W2D/J4PLZLk7sebOILDSWos7bMsMNN06rK482umHUrh/3lM8G7IlHFOYip2oAg5nha1rCMxr/rs6ZQ==}
@@ -11556,7 +11556,7 @@ snapshots:
       '@standard-schema/spec': 1.1.0
       fast-check: 3.23.2
 
-  effect@4.0.0-beta.25:
+  effect@4.0.0-beta.35:
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-check: 4.6.0
