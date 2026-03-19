@@ -2,11 +2,6 @@ export type * from "./types.ts";
 
 import type { MaybePromise, PickPartial } from "./types.ts";
 
-// Polyfill because Netlify is using Node v22
-import "@formatjs/intl-durationformat/polyfill.js";
-import "@formatjs/intl-numberformat/polyfill.js";
-import "@formatjs/intl-numberformat/locale-data/en.js";
-
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
