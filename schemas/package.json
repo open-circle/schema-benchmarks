@@ -24,7 +24,7 @@
     "arktype": "^2.2.0",
     "decoders": "^2.9.1",
     "dedent": "catalog:",
-    "effect": "^3.20.0",
+    "effect": "^3.21.0",
     "effect___beta": "npm:effect@beta",
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.22",
