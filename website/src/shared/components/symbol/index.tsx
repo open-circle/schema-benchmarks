@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 
 export interface MdSymbolProps extends ComponentPropsWithRef<"span"> {
-  children: string;
+  children: ReactNode;
   flipRtl?: boolean;
 
   // provided for convenience, but prefer using CSS vars where possible
