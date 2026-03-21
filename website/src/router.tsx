@@ -10,6 +10,7 @@ import { makeQueryClient } from "#/shared/data/query";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { isOfflineError, Offline } from "./shared/components/empty-state/offline";
 
 // Create a new router instance
 export const getRouter = ({
@@ -28,15 +29,18 @@ export const getRouter = ({
     context: { queryClient },
     defaultViewTransition: true,
     defaultPendingComponent: () => <Spinner size={64} style={{ margin: "auto" }} />,
-    defaultErrorComponent: ({ error, reset }) => (
-      <EmptyState
-        icon={<MdSymbol>error</MdSymbol>}
-        title="Error"
-        subtitle={error.message || "An error occurred."}
-      >
-        <Button onClick={reset}>Retry</Button>
-      </EmptyState>
-    ),
+    defaultErrorComponent: ({ error, reset }) =>
+      isOfflineError(error) ? (
+        <Offline />
+      ) : (
+        <EmptyState
+          icon={<MdSymbol>error</MdSymbol>}
+          title="Error"
+          subtitle={error.message || "An error occurred."}
+        >
+          <Button onClick={reset}>Retry</Button>
+        </EmptyState>
+      ),
     defaultNotFoundComponent: () => (
       <EmptyState
         icon={<MdSymbol>warning</MdSymbol>}

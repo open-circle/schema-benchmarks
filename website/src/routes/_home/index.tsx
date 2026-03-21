@@ -10,8 +10,8 @@ export const Route = createFileRoute("/_home/")({
   component: App,
   loader: async ({ context: { queryClient }, abortController }) => {
     await Promise.all([
-      queryClient.prefetchQuery(getBenchResults(abortController.signal)),
-      queryClient.prefetchQuery(getDownloadResults(abortController.signal)),
+      queryClient.ensureQueryData(getBenchResults(abortController.signal)),
+      queryClient.ensureQueryData(getDownloadResults(abortController.signal)),
     ]);
   },
   head: () =>

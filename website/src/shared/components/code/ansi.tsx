@@ -20,4 +20,4 @@ export function AnsiBlock({ children, lineNumbers = false }: AnsiProps) {
 AnsiBlock.prefetch = (
   { input, lineNumbers }: { input: string; lineNumbers?: boolean },
   { queryClient, signal }: PrefetchContext,
-) => queryClient.prefetchQuery(getHighlightedAnsi({ input, lineNumbers }, signal));
+) => queryClient.ensureQueryData(getHighlightedAnsi({ input, lineNumbers }, signal));

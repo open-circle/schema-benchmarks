@@ -5,9 +5,8 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { createClientOnlyFn } from "@tanstack/react-start";
-import { useEffect } from "react";
 import { generateMetadata } from "tanstack-meta";
+import { useRegisterSW } from "virtual:pwa-register/react";
 
 import { Banner } from "#/shared/components/banner";
 import { ConfirmDialog } from "#/shared/components/dialog/confirm";
@@ -94,6 +93,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         {
           rel: "stylesheet",
           href: symbolsUrl,
+          crossOrigin: "anonymous",
         },
       ],
       scripts: [
@@ -113,9 +113,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { theme, style } = Route.useLoaderData();
-  useEffect(() => {
-    createClientOnlyFn(() => import("#/shared/lib/pwa.client"))();
-  }, []);
+  useRegisterSW({ immediate: true });
   return (
     <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
       <head>

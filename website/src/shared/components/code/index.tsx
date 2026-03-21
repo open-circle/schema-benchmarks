@@ -27,7 +27,7 @@ const prefetchCode = (
     language?: string;
   },
   { queryClient, signal }: PrefetchContext,
-) => queryClient.prefetchQuery(getHighlightedCode({ code, lineNumbers, language }, signal));
+) => queryClient.ensureQueryData(getHighlightedCode({ code, lineNumbers, language }, signal));
 
 export function InlineCode({
   children,

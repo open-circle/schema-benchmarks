@@ -14,6 +14,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
+import vitePwaOpts from "./offline/opts";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -64,36 +65,14 @@ const config = defineConfig({
     }),
     svgr(),
     !process.env.VITEST && contentCollections(),
+    // due to a bug, this is only used to generate the manifest - the service worker is written separately in scripts/pwa/generate-sw.ts
     VitePWA({
-      registerType: "autoUpdate",
+      ...vitePwaOpts,
+      injectRegister: false,
       devOptions: {
-        enabled: true,
-      },
-      includeAssets: ["fonts/*.woff2", "bench.json", "stack.json", "download.json"],
-      manifest: {
-        background_color: "#eceff1",
-        display: "standalone",
-        icons: [
-          {
-            sizes: "64x64 32x32 24x24 16x16",
-            src: "favicon_dark.ico",
-            type: "image/x-icon",
-          },
-          {
-            sizes: "192x192",
-            src: "logo192_dark.png",
-            type: "image/png",
-          },
-          {
-            sizes: "512x512",
-            src: "logo512_dark.png",
-            type: "image/png",
-          },
-        ],
-        name: "Schema Benchmarks",
-        short_name: "Schema Benchmarks",
-        start_url: ".",
-        theme_color: "#21222c",
+        enabled: false,
+        type: "module",
+        suppressWarnings: true,
       },
     }),
   ],

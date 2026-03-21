@@ -7,7 +7,8 @@
     "./preview.ts",
     "./src/**/*",
     "./test/**/*",
-    "./vite/**/*"
+    "./vite/**/*",
+    "./offline/**/*"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
