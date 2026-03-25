@@ -6,6 +6,8 @@ import {
   partition,
   promiseAllKeyed,
   promiseAllSettledKeyed,
+  filterMap,
+  exclude,
 } from "./index.ts";
 
 describe("partition", () => {
@@ -68,5 +70,16 @@ describe("promiseAllSettledKeyed", () => {
       b: PromiseSettledResult<number>;
       c: PromiseSettledResult<number>;
     }>();
+  });
+});
+
+describe("filterMap", () => {
+  it("should filter and map an array", () => {
+    const mixedArray = [1, "foo", 2, "bar", 3, "baz"];
+    const result = filterMap(mixedArray, (value) => {
+      if (typeof value === "number") return `num-${value}` as const;
+      return exclude;
+    });
+    expectTypeOf(result).toEqualTypeOf<Array<`num-${number}`>>();
   });
 });

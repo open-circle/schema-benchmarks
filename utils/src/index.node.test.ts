@@ -11,6 +11,8 @@ import {
   shallowFilter,
   pluralize,
   getDuration,
+  filterMap,
+  exclude,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -167,5 +169,16 @@ describe("getDuration", () => {
     expect(getDuration(1.5)).toEqual({ milliseconds: 2 });
     expect(getDuration(1.5, 2)).toEqual({ milliseconds: 1, microseconds: 500 });
     expect(getDuration(1500, 2)).toEqual({ seconds: 1, milliseconds: 500 });
+  });
+});
+
+describe("filterMap", () => {
+  it("should filter and map an array", () => {
+    const mixedArray = [1, "foo", 2, "bar", 3, "baz"];
+    const result = filterMap(mixedArray, (value) => {
+      if (typeof value === "number") return `num-${value}` as const;
+      return exclude;
+    });
+    expect(result).toEqual(["num-1", "num-2", "num-3"]);
   });
 });
