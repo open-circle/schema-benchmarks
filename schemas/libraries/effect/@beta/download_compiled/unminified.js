@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -57,7 +57,7 @@ const Class$1 = /* @__PURE__ */ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -259,7 +259,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -278,7 +278,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -500,7 +500,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -849,7 +849,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
@@ -1076,7 +1076,7 @@ const isEqual = (u) => hasProperty(u, symbol$2);
 */
 const asEquivalence = () => equals$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1126,14 +1126,14 @@ const asEquivalence = () => equals$2;
 */
 const make$12 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Redactable.js
 /**
 * @since 4.0.0
 */
@@ -1227,7 +1227,7 @@ const emptyServiceMap$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1569,46 +1569,7 @@ function formatJson(input, options) {
 	return out;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Inspectable.js
-/**
-* This module provides utilities for making values inspectable and debuggable in TypeScript.
-*
-* The Inspectable interface provides a standard way to implement custom string representations
-* for objects, making them easier to debug and inspect. It includes support for JSON
-* serialization, Node.js inspection, and safe circular reference handling.
-*
-* The module also includes redaction capabilities for sensitive data, allowing objects
-* to provide different representations based on the current execution context.
-*
-* @example
-* ```ts
-* import { Inspectable } from "effect"
-* import { format } from "effect/Formatter"
-*
-* class User extends Inspectable.Class {
-*   constructor(
-*     public readonly name: string,
-*     public readonly email: string
-*   ) {
-*     super()
-*   }
-*
-*   toJSON() {
-*     return {
-*       _tag: "User",
-*       name: this.name,
-*       email: this.email
-*     }
-*   }
-* }
-*
-* const user = new User("Alice", "alice@example.com")
-* console.log(user.toString()) // Pretty printed JSON
-* console.log(format(user)) // Same as toString()
-* ```
-*
-* @since 2.0.0
-*/
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Inspectable.js
 /**
 * Symbol used by Node.js for custom object inspection.
 *
@@ -1657,7 +1618,7 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Utils.js
 /**
 * An `IterableIterator` that yields its wrapped value exactly once.
 *
@@ -1735,7 +1696,7 @@ const forced = { [InternalTypeId]: (body) => {
 /** @internal */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2102,13 +2063,13 @@ var NoSuchElementError$1 = class extends TaggedError$1("NoSuchElementError") {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
-const TypeId$15 = "~effect/data/Option";
+const TypeId$14 = "~effect/data/Option";
 const CommonProto$1 = {
-	[TypeId$15]: { _A: (_) => _ },
+	[TypeId$14]: { _A: (_) => _ },
 	...PipeInspectableProto,
 	...YieldableProto
 };
@@ -2163,7 +2124,7 @@ const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 	}
 });
 /** @internal */
-const isOption$1 = (input) => hasProperty(input, TypeId$15);
+const isOption$1 = (input) => hasProperty(input, TypeId$14);
 /** @internal */
 const isNone$1 = (fa) => fa._tag === "None";
 /** @internal */
@@ -2177,10 +2138,10 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/result.js
-const TypeId$14 = "~effect/data/Result";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/result.js
+const TypeId$13 = "~effect/data/Result";
 const CommonProto = {
-	[TypeId$14]: {
+	[TypeId$13]: {
 		_A: (_) => _,
 		_E: (_) => _
 	},
@@ -2234,7 +2195,7 @@ const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 	}
 });
 /** @internal */
-const isResult$1 = (input) => hasProperty(input, TypeId$14);
+const isResult$1 = (input) => hasProperty(input, TypeId$13);
 /** @internal */
 const isFailure$4 = (result) => result._tag === "Failure";
 /** @internal */
@@ -2252,7 +2213,7 @@ const succeed$4 = (success) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2453,7 +2414,7 @@ const isLessThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2642,7 +2603,7 @@ const getOrUndefined = /* @__PURE__ */ (/* @__PURE__ */ dual(2, (self, onNone) =
 */
 const map$4 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
 *
@@ -2758,7 +2719,7 @@ const isFailure$3 = isFailure$4;
 */
 const isSuccess$3 = isSuccess$4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -2862,7 +2823,7 @@ const isSuccess$3 = isSuccess$4;
 * @category constructors
 * @since 4.0.0
 */
-const Array$2 = globalThis.Array;
+const Array$1 = globalThis.Array;
 /**
 * Converts an `Iterable` to an `Array`.
 *
@@ -2886,7 +2847,7 @@ const Array$2 = globalThis.Array;
 * @category constructors
 * @since 2.0.0
 */
-const fromIterable = (collection) => Array$2.isArray(collection) ? collection : Array$2.from(collection);
+const fromIterable = (collection) => Array$1.isArray(collection) ? collection : Array$1.from(collection);
 /**
 * Adds a single element to the end of an iterable, returning a `NonEmptyArray`.
 *
@@ -2931,7 +2892,7 @@ const append = /* @__PURE__ */ dual(2, (self, last) => [...self, last]);
 * @since 2.0.0
 */
 const appendAll = /* @__PURE__ */ dual(2, (self, that) => fromIterable(self).concat(fromIterable(that)));
-Array$2.isArray;
+Array$1.isArray;
 /**
 * Tests whether a mutable `Array` is non-empty, narrowing the type to
 * `NonEmptyArray`.
@@ -3092,9 +3053,9 @@ const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
 	}
 	return [];
 });
-const TypeId$13 = "~effect/BigDecimal";
+const TypeId$12 = "~effect/BigDecimal";
 const BigDecimalProto = {
-	[TypeId$13]: TypeId$13,
+	[TypeId$12]: TypeId$12,
 	[symbol$3]() {
 		const normalized = normalize(this);
 		return combine$1(hash(normalized.value), number$2(normalized.scale));
@@ -3135,7 +3096,7 @@ const BigDecimalProto = {
 * @since 2.0.0
 * @category guards
 */
-const isBigDecimal = (u) => hasProperty(u, TypeId$13);
+const isBigDecimal = (u) => hasProperty(u, TypeId$12);
 /**
 * Creates a `BigDecimal` from a `bigint` value and a scale.
 *
@@ -3398,8 +3359,8 @@ const isZero = (n) => n.value === bigint0$2;
 */
 const isNegative = (n) => n.value < bigint0$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Duration.js
-const TypeId$12 = "~effect/time/Duration";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Duration.js
+const TypeId$11 = "~effect/time/Duration";
 /**
 * Get the duration in nanoseconds as a bigint.
 *
@@ -3475,7 +3436,7 @@ const Equivalence$2 = (self, that) => matchPair(self, that, {
 	onInfinity: (self, that) => self.value._tag === that.value._tag
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/ServiceMap.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/ServiceMap.js
 const ServiceTypeId = "~effect/ServiceMap/Service";
 /**
 * @example
@@ -3558,7 +3519,7 @@ const ServiceProto = {
 	}
 };
 const ReferenceTypeId = "~effect/ServiceMap/Reference";
-const TypeId$11 = "~effect/ServiceMap";
+const TypeId$10 = "~effect/ServiceMap";
 /**
 * @example
 * ```ts
@@ -3576,14 +3537,14 @@ const TypeId$11 = "~effect/ServiceMap";
 * @category Constructors
 */
 const makeUnsafe$5 = (mapUnsafe) => {
-	const self = Object.create(Proto$2);
+	const self = Object.create(Proto$1);
 	self.mapUnsafe = mapUnsafe;
 	self.mutable = false;
 	return self;
 };
-const Proto$2 = {
+const Proto$1 = {
 	...PipeInspectableProto,
-	[TypeId$11]: { _Services: (_) => _ },
+	[TypeId$10]: { _Services: (_) => _ },
 	toJSON() {
 		return {
 			_id: "ServiceMap",
@@ -3616,7 +3577,7 @@ const Proto$2 = {
 * @since 4.0.0
 * @category Guards
 */
-const isServiceMap = (u) => hasProperty(u, TypeId$11);
+const isServiceMap = (u) => hasProperty(u, TypeId$10);
 /**
 * Returns an empty `ServiceMap`.
 *
@@ -3756,75 +3717,6 @@ const serviceNotFoundError = (service) => {
 	}
 	return error;
 };
-/**
-* Merges two `ServiceMap`s, returning a new `ServiceMap` containing the services of both.
-*
-* @param self - The first `ServiceMap` to merge.
-* @param that - The second `ServiceMap` to merge.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const Port = ServiceMap.Service<{ PORT: number }>("Port")
-* const Timeout = ServiceMap.Service<{ TIMEOUT: number }>("Timeout")
-*
-* const firstServiceMap = ServiceMap.make(Port, { PORT: 8080 })
-* const secondServiceMap = ServiceMap.make(Timeout, { TIMEOUT: 5000 })
-*
-* const Services = ServiceMap.merge(firstServiceMap, secondServiceMap)
-*
-* assert.deepStrictEqual(ServiceMap.get(Services, Port), { PORT: 8080 })
-* assert.deepStrictEqual(ServiceMap.get(Services, Timeout), { TIMEOUT: 5000 })
-* ```
-*
-* @since 4.0.0
-* @category Utils
-*/
-const merge = /* @__PURE__ */ dual(2, (self, that) => {
-	if (self.mapUnsafe.size === 0) return that;
-	if (that.mapUnsafe.size === 0) return self;
-	return withMapUnsafe(self, (map) => {
-		that.mapUnsafe.forEach((value, key) => map.set(key, value));
-	});
-});
-/**
-* Merges any number of `ServiceMap`s, returning a new `ServiceMap` containing the services of all.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const Port = ServiceMap.Service<{ PORT: number }>("Port")
-* const Timeout = ServiceMap.Service<{ TIMEOUT: number }>("Timeout")
-* const Host = ServiceMap.Service<{ HOST: string }>("Host")
-*
-* const firstServiceMap = ServiceMap.make(Port, { PORT: 8080 })
-* const secondServiceMap = ServiceMap.make(Timeout, { TIMEOUT: 5000 })
-* const thirdServiceMap = ServiceMap.make(Host, { HOST: "localhost" })
-*
-* const Services = ServiceMap.mergeAll(
-*   firstServiceMap,
-*   secondServiceMap,
-*   thirdServiceMap
-* )
-*
-* assert.deepStrictEqual(ServiceMap.get(Services, Port), { PORT: 8080 })
-* assert.deepStrictEqual(ServiceMap.get(Services, Timeout), { TIMEOUT: 5000 })
-* assert.deepStrictEqual(ServiceMap.get(Services, Host), { HOST: "localhost" })
-* ```
-*
-* @since 3.12.0
-*/
-const mergeAll$1 = (...ctxs) => {
-	const map = /* @__PURE__ */ new Map();
-	for (let i = 0; i < ctxs.length; i++) ctxs[i].mapUnsafe.forEach((value, key) => {
-		map.set(key, value);
-	});
-	return makeUnsafe$5(map);
-};
 const withMapUnsafe = (self, f) => {
 	if (self.mutable) {
 		f(self.mapUnsafe);
@@ -3869,7 +3761,7 @@ const withMapUnsafe = (self, f) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Scheduler.js
 /**
 * @since 4.0.0
 * @category references
@@ -4003,7 +3895,7 @@ const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBefo
 */
 const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Tracer.js
 /**
 * @since 2.0.0
 * @category tags
@@ -4039,160 +3931,17 @@ const DisablePropagation = /* @__PURE__ */ Reference("effect/Tracer/DisablePropa
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/References.js
-/**
-* This module provides a collection of reference implementations for commonly used
-* Effect runtime configuration values. These references allow you to access and
-* modify runtime behavior such as concurrency limits, scheduling policies,
-* tracing configuration, and logging settings.
-*
-* References are special service instances that can be dynamically updated
-* during runtime, making them ideal for configuration that may need to change
-* based on application state or external conditions.
-*
-* @since 4.0.0
-*/
-/**
-* Reference for controlling the current concurrency limit. Can be set to "unbounded"
-* for unlimited concurrency or a specific number to limit concurrent operations.
-*
-* @example
-* ```ts
-* import { Effect, References } from "effect"
-*
-* const limitConcurrency = Effect.gen(function*() {
-*   // Get current setting
-*   const current = yield* References.CurrentConcurrency
-*   console.log(current) // "unbounded" (default)
-*
-*   // Run with limited concurrency
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const limited = yield* References.CurrentConcurrency
-*       console.log(limited) // 10
-*     }),
-*     References.CurrentConcurrency,
-*     10
-*   )
-*
-*   // Run with unlimited concurrency
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const unlimited = yield* References.CurrentConcurrency
-*       console.log(unlimited) // "unbounded"
-*     }),
-*     References.CurrentConcurrency,
-*     "unbounded"
-*   )
-* })
-* ```
-*
-* @category references
-* @since 4.0.0
-*/
-const CurrentConcurrency = /* @__PURE__ */ Reference("effect/References/CurrentConcurrency", { defaultValue: () => "unbounded" });
-/**
-* @since 4.0.0
-* @category references
-*/
-const CurrentStackFrame = /* @__PURE__ */ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
-/**
-* Reference for controlling the current log level for dynamic filtering.
-*
-* @example
-* ```ts
-* import { Console, Effect, References } from "effect"
-*
-* const dynamicLogging = Effect.gen(function*() {
-*   // Get current log level (default is "Info")
-*   const current = yield* References.CurrentLogLevel
-*   console.log(current) // "Info"
-*
-*   // Set log level to Debug for detailed logging
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const level = yield* References.CurrentLogLevel
-*       console.log(level) // "Debug"
-*       yield* Console.debug("This debug message will be shown")
-*     }),
-*     References.CurrentLogLevel,
-*     "Debug"
-*   )
-*
-*   // Change to Error level to reduce noise
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const level = yield* References.CurrentLogLevel
-*       console.log(level) // "Error"
-*       yield* Console.info("This info message will be filtered out")
-*       yield* Console.error("This error message will be shown")
-*     }),
-*     References.CurrentLogLevel,
-*     "Error"
-*   )
-* })
-* ```
-*
-* @category references
-* @since 4.0.0
-*/
-const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogLevel", { defaultValue: () => "Info" });
-/**
-* Reference for setting the minimum log level threshold. Log entries below this
-* level will be filtered out completely.
-*
-* @example
-* ```ts
-* import { Console, Effect, References } from "effect"
-*
-* const configureMinimumLogging = Effect.gen(function*() {
-*   // Get current minimum level (default is "Info")
-*   const current = yield* References.MinimumLogLevel
-*   console.log(current) // "Info"
-*
-*   // Set minimum level to Warn - Debug and Info will be filtered
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const minLevel = yield* References.MinimumLogLevel
-*       console.log(minLevel) // "Warn"
-*
-*       // These won't be processed at all
-*       yield* Console.debug("Debug message") // Filtered out
-*       yield* Console.info("Info message") // Filtered out
-*
-*       // These will be processed
-*       yield* Console.warn("Warning message") // Shown
-*       yield* Console.error("Error message") // Shown
-*     }),
-*     References.MinimumLogLevel,
-*     "Warn"
-*   )
-*
-*   // Reset to default Info level
-*   yield* Effect.provideService(
-*     Effect.gen(function*() {
-*       const minLevel = yield* References.MinimumLogLevel
-*       console.log(minLevel) // "Info"
-*
-*       // Now info messages will be processed
-*       yield* Console.info("Info message") // Shown
-*     }),
-*     References.MinimumLogLevel,
-*     "Info"
-*   )
-* })
-* ```
-*
-* @category references
-* @since 4.0.0
-*/
-const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
-//#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
+/** @internal */
+const CurrentStackFrame = /* @__PURE__ */ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
+/** @internal */
+const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogLevel", { defaultValue: () => "Info" });
+/** @internal */
+const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4489,12 +4238,6 @@ var FiberImpl = class {
 	}
 };
 const fiberMiddleware = { interruptChildren: void 0 };
-const fiberStackAnnotations = (fiber) => {
-	if (!fiber.currentStackFrame) return void 0;
-	const annotations = /* @__PURE__ */ new Map();
-	annotations.set(StackTraceKey.key, fiber.currentStackFrame);
-	return makeUnsafe$5(annotations);
-};
 /** @internal */
 const fiberAwaitAll = (self) => callback$1((resume) => {
 	const iter = self[Symbol.iterator]();
@@ -4518,12 +4261,6 @@ const fiberAwaitAll = (self) => callback$1((resume) => {
 	}
 	loop();
 	return sync$1(() => cancel?.());
-});
-/** @internal */
-const fiberInterruptAll = (fibers) => withFiber$1((parent) => {
-	const annotations = fiberStackAnnotations(parent);
-	for (const fiber of fibers) fiber.interruptUnsafe(parent.id, annotations);
-	return asVoid$2(fiberAwaitAll(fibers));
 });
 /** @internal */
 const succeed$2 = exitSucceed;
@@ -4684,13 +4421,6 @@ const fromIteratorUnsafe = /* @__PURE__ */ makePrimitive({
 	}
 });
 /** @internal */
-const as$1 = /* @__PURE__ */ dual(2, (self, value) => {
-	const b = succeed$2(value);
-	return flatMap$1(self, (_) => b);
-});
-/** @internal */
-const asVoid$2 = (self) => flatMap$1(self, (_) => exitVoid);
-/** @internal */
 const flatMap$1 = /* @__PURE__ */ dual(2, (self, f) => {
 	const onSuccess = Object.create(OnSuccessProto);
 	onSuccess[args] = self;
@@ -4748,23 +4478,6 @@ const exitAsVoidAll = (exits) => {
 };
 /** @internal */
 const exitGetSuccess = (self) => exitIsSuccess(self) ? some(self.value) : none();
-/** @internal */
-const updateServices$1 = /* @__PURE__ */ dual(2, (self, f) => withFiber$1((fiber) => {
-	const prev = fiber.services;
-	const nextServices = f(prev);
-	if (prev === nextServices) return self;
-	fiber.setServices(nextServices);
-	return onExitPrimitive$1(self, () => {
-		fiber.setServices(prev);
-	});
-}));
-/** @internal */
-const servicesWith$1 = (f) => withFiber$1((fiber) => f(fiber.services));
-/** @internal */
-const provideServices$1 = /* @__PURE__ */ dual(2, (self, services) => {
-	if (effectIsExit(self)) return self;
-	return updateServices$1(self, merge(services));
-});
 /** @internal */
 const catchCause$1 = /* @__PURE__ */ dual(2, (self, f) => {
 	const onFailure = Object.create(OnFailureProto);
@@ -4842,28 +4555,12 @@ const scopeCloseFinalizers = /* @__PURE__ */ fnUntraced$1(function* (self, final
 	return yield* exitAsVoidAll(exits);
 });
 /** @internal */
-const scopeForkUnsafe = (scope, finalizerStrategy) => {
-	const newScope = scopeMakeUnsafe(finalizerStrategy);
-	if (scope.state._tag === "Closed") {
-		newScope.state = scope.state;
-		return newScope;
-	}
-	const key = {};
-	scopeAddFinalizerUnsafe(scope, key, (exit) => scopeClose(newScope, exit));
-	scopeAddFinalizerUnsafe(newScope, key, (_) => sync$1(() => scopeRemoveFinalizerUnsafe(scope, key)));
-	return newScope;
-};
-/** @internal */
 const scopeAddFinalizerUnsafe = (scope, key, finalizer) => {
 	if (scope.state._tag === "Empty") scope.state = {
 		_tag: "Open",
 		finalizers: new Map([[key, finalizer]])
 	};
 	else if (scope.state._tag === "Open") scope.state.finalizers.set(key, finalizer);
-};
-/** @internal */
-const scopeRemoveFinalizerUnsafe = (scope, key) => {
-	if (scope.state._tag === "Open") scope.state.finalizers.delete(key);
 };
 /** @internal */
 const scopeMakeUnsafe = (finalizerStrategy = "sequential") => ({
@@ -4873,33 +4570,6 @@ const scopeMakeUnsafe = (finalizerStrategy = "sequential") => ({
 	state: constScopeEmpty
 });
 const constScopeEmpty = { _tag: "Empty" };
-/** @internal */
-const onExitPrimitive$1 = /* @__PURE__ */ makePrimitive({
-	op: "OnExit",
-	single: false,
-	[evaluate](fiber) {
-		fiber._stack.push(this);
-		return this[args][0];
-	},
-	[contAll](fiber) {
-		if (fiber.interruptible && this[args][2] !== true) {
-			fiber._stack.push(setInterruptibleTrue);
-			fiber.interruptible = false;
-		}
-	},
-	[contA](value, _, exit) {
-		exit ??= exitSucceed(value);
-		const eff = this[args][1](exit);
-		return eff ? flatMap$1(eff, (_) => exit) : exit;
-	},
-	[contE](cause, _, exit) {
-		exit ??= exitFailCause(cause);
-		const eff = this[args][1](exit);
-		return eff ? flatMap$1(eff, (_) => exit) : exit;
-	}
-});
-/** @internal */
-const onExit$1 = /* @__PURE__ */ dual(2, onExitPrimitive$1);
 const setInterruptibleTrue = /* @__PURE__ */ (/* @__PURE__ */ makePrimitive({
 	op: "SetInterruptible",
 	[contAll](fiber) {
@@ -4918,103 +4588,6 @@ const findFirstFilterLoop = (iterator, index, filter, value) => flatMap$1(filter
 	const next = iterator.next();
 	if (!next.done) return findFirstFilterLoop(iterator, index + 1, filter, next.value);
 	return succeed$2(none());
-});
-/** @internal */
-const whileLoop$1 = /* @__PURE__ */ makePrimitive({
-	op: "While",
-	[contA](value, fiber) {
-		this[args].step(value);
-		if (this[args].while()) {
-			fiber._stack.push(this);
-			return this[args].body();
-		}
-		return exitVoid;
-	},
-	[evaluate](fiber) {
-		if (this[args].while()) {
-			fiber._stack.push(this);
-			return this[args].body();
-		}
-		return exitVoid;
-	}
-});
-/** @internal */
-const forEach$1 = /* @__PURE__ */ dual((args) => typeof args[1] === "function", (iterable, f, options) => withFiber$1((parent) => {
-	const concurrencyOption = options?.concurrency === "inherit" ? parent.getRef(CurrentConcurrency) : options?.concurrency ?? 1;
-	const concurrency = concurrencyOption === "unbounded" ? Number.POSITIVE_INFINITY : Math.max(1, concurrencyOption);
-	if (concurrency === 1) return forEachSequential(iterable, f, options);
-	const items = fromIterable(iterable);
-	let length = items.length;
-	if (length === 0) return options?.discard ? void_$3 : succeed$2([]);
-	const out = options?.discard ? void 0 : new Array(length);
-	let index = 0;
-	const annotations = fiberStackAnnotations(parent);
-	return callback$1((resume) => {
-		const fibers = /* @__PURE__ */ new Set();
-		const failures = [];
-		let failed = false;
-		let inProgress = 0;
-		let doneCount = 0;
-		let pumping = false;
-		let interrupted = false;
-		function pump() {
-			pumping = true;
-			while (inProgress < concurrency && index < length) {
-				const currentIndex = index;
-				const item = items[currentIndex];
-				index++;
-				inProgress++;
-				try {
-					const child = forkUnsafe$1(parent, f(item, currentIndex), true, true, "inherit");
-					fibers.add(child);
-					child.addObserver((exit) => {
-						if (interrupted) return;
-						fibers.delete(child);
-						if (exit._tag === "Failure") if (!failed) {
-							failed = true;
-							length = index;
-							failures.push(...exit.cause.reasons);
-							fibers.forEach((fiber) => fiber.interruptUnsafe(parent.id, annotations));
-						} else for (const f of exit.cause.reasons) {
-							if (f._tag === "Interrupt") continue;
-							failures.push(f);
-						}
-						else if (out !== void 0) out[currentIndex] = exit.value;
-						doneCount++;
-						inProgress--;
-						if (doneCount === length) resume(failures.length > 0 ? exitFailCause(causeFromReasons(failures)) : succeed$2(out));
-						else if (!pumping && !failed && inProgress < concurrency) pump();
-					});
-				} catch (err) {
-					failed = true;
-					length = index;
-					failures.push(new Die(err));
-					fibers.forEach((fiber) => fiber.interruptUnsafe(parent.id, annotations));
-				}
-			}
-			pumping = false;
-		}
-		pump();
-		return suspend$1(() => {
-			interrupted = true;
-			index = length;
-			return fiberInterruptAll(fibers);
-		});
-	});
-}));
-const forEachSequential = (iterable, f, options) => suspend$1(() => {
-	const out = options?.discard ? void 0 : [];
-	const iterator = iterable[Symbol.iterator]();
-	let state = iterator.next();
-	let index = 0;
-	return as$1(whileLoop$1({
-		while: () => !state.done,
-		body: () => f(state.value, index++),
-		step: (b) => {
-			if (out) out.push(b);
-			state = iterator.next();
-		}
-	}), out);
 });
 /** @internal */
 const forkUnsafe$1 = (parent, effect, immediate = false, daemon = false, uninterruptible = false) => {
@@ -5048,7 +4621,7 @@ const runSyncExitWith$1 = (services) => {
 		if (effectIsExit(effect)) return effect;
 		const fiber = runFork(effect, { scheduler: new MixedScheduler("sync") });
 		fiber.currentDispatcher?.flush();
-		return fiber._exit ?? exitDie(fiber);
+		return fiber._exit ?? exitDie(new AsyncFiberError$1(fiber));
 	};
 };
 /** @internal */
@@ -5071,6 +4644,18 @@ const filterDisablePropagation = (span) => {
 TaggedError$1("TimeoutError");
 TaggedError$1("IllegalArgumentError");
 TaggedError$1("ExceededCapacityError");
+/** @internal */
+const AsyncFiberErrorTypeId$1 = "~effect/Cause/AsyncFiberError";
+/** @internal */
+var AsyncFiberError$1 = class extends TaggedError$1("AsyncFiberError") {
+	[AsyncFiberErrorTypeId$1] = AsyncFiberErrorTypeId$1;
+	constructor(fiber) {
+		super({
+			message: "An asynchronous Effect was executed with Effect.runSync",
+			fiber
+		});
+	}
+};
 TaggedError$1("UnknownError");
 const colors = {
 	bold: "1",
@@ -5113,6 +4698,8 @@ hasProcessStdout || "Deno" in globalThis;
 * @since 4.0.0
 */
 const findError$1 = findError$2;
+Service()("effect/Cause/StackTrace");
+Service()("effect/Cause/InterruptorStackTrace");
 /**
 * Creates a tagged error class with a `_tag` discriminator.
 *
@@ -5177,7 +4764,7 @@ const TaggedError = TaggedError$1;
 */
 const getSuccess = exitGetSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Deferred.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/Deferred.js
 const DeferredProto = {
 	["~effect/Deferred"]: {
 		_A: identity,
@@ -5212,268 +4799,9 @@ const doneUnsafe = (self, effect) => {
 	}
 	return true;
 };
-/**
-* Creates a child scope from a parent scope synchronously without wrapping it in an `Effect`.
-* The child scope inherits the parent's finalization strategy unless overridden.
-*
-* @example
-* ```ts
-* import { Console, Effect, Exit, Scope } from "effect"
-*
-* const program = Effect.gen(function*() {
-*   const parentScope = Scope.makeUnsafe("sequential")
-*   const childScope = Scope.forkUnsafe(parentScope, "parallel")
-*
-*   // Add finalizers to both scopes
-*   yield* Scope.addFinalizer(parentScope, Console.log("Parent cleanup"))
-*   yield* Scope.addFinalizer(childScope, Console.log("Child cleanup"))
-*
-*   // Close child first, then parent
-*   yield* Scope.close(childScope, Exit.void)
-*   yield* Scope.close(parentScope, Exit.void)
-* })
-* ```
-*
-* @since 4.0.0
-* @category combinators
-*/
-const forkUnsafe = scopeForkUnsafe;
-/**
-* Closes a scope, running all registered finalizers in the appropriate order.
-* The exit value is passed to each finalizer.
-*
-* @example
-* ```ts
-* import { Console, Effect, Exit, Scope } from "effect"
-*
-* const resourceManagement = Effect.gen(function*() {
-*   const scope = yield* Scope.make("sequential")
-*
-*   // Add multiple finalizers
-*   yield* Scope.addFinalizer(scope, Console.log("Close database connection"))
-*   yield* Scope.addFinalizer(scope, Console.log("Close file handle"))
-*   yield* Scope.addFinalizer(scope, Console.log("Release memory"))
-*
-*   // Do some work...
-*   yield* Console.log("Performing operations...")
-*
-*   // Close scope - finalizers run in reverse order of registration
-*   yield* Scope.close(scope, Exit.succeed("Success!"))
-*   // Output: "Release memory", "Close file handle", "Close database connection"
-* })
-* ```
-*
-* @category combinators
-* @since 4.0.0
-*/
-const close = scopeClose;
-//#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/Layer.js
-const TypeId$9 = "~effect/Layer";
-/**
-* Returns `true` if the specified value is a `Layer`, `false` otherwise.
-*
-* @example
-* ```ts
-* import { Effect, Layer, ServiceMap } from "effect"
-*
-* class Database extends ServiceMap.Service<Database, {
-*   readonly query: (sql: string) => Effect.Effect<string>
-* }>()("Database") {}
-*
-* const dbLayer = Layer.succeed(Database)({
-*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed("result"))
-* })
-* const notALayer = { someProperty: "value" }
-*
-* console.log(Layer.isLayer(dbLayer)) // true
-* console.log(Layer.isLayer(notALayer)) // false
-* ```
-*
-* @since 2.0.0
-* @category getters
-*/
-const isLayer = (u) => hasProperty(u, TypeId$9);
-const LayerProto = {
-	[TypeId$9]: {
-		_ROut: identity,
-		_E: identity,
-		_RIn: identity
-	},
-	pipe() {
-		return pipeArguments(this, arguments);
-	}
-};
-const fromBuildUnsafe = (build) => {
-	const self = Object.create(LayerProto);
-	self.build = build;
-	return self;
-};
-/**
-* Constructs a Layer from a function that uses a `MemoMap` and `Scope` to build the layer.
-*
-* The function receives a `MemoMap` for memoization and a `Scope` for resource management.
-* A child scope is created, and if the build fails, the child scope is closed.
-*
-* @example
-* ```ts
-* import { Effect, Layer, ServiceMap } from "effect"
-*
-* class Database extends ServiceMap.Service<Database, {
-*   readonly query: (sql: string) => Effect.Effect<string>
-* }>()("Database") {}
-*
-* const databaseLayer = Layer.fromBuild(() =>
-*   Effect.sync(() =>
-*     ServiceMap.make(Database, {
-*       query: (sql: string) => Effect.succeed("result")
-*     })
-*   )
-* )
-* ```
-*
-* @since 4.0.0
-* @category constructors
-*/
-const fromBuild = (build) => fromBuildUnsafe((memoMap, scope) => {
-	const layerScope = forkUnsafe(scope);
-	return onExit$1(build(memoMap, layerScope), (exit) => exit._tag === "Failure" ? close(layerScope, exit) : void_$3);
-});
 Service()("effect/Layer/CurrentMemoMap");
-/**
-* Constructs a layer from the specified value, which must return one or more
-* services.
-*
-* This is a more general version of `succeed` that allows you to provide multiple
-* services at once through a `ServiceMap`.
-*
-* @example
-* ```ts
-* import { Effect, Layer, ServiceMap } from "effect"
-*
-* class Database extends ServiceMap.Service<Database, {
-*   readonly query: (sql: string) => Effect.Effect<string>
-* }>()("Database") {}
-*
-* class Logger extends ServiceMap.Service<Logger, {
-*   readonly log: (msg: string) => Effect.Effect<void>
-* }>()("Logger") {}
-*
-* const services = ServiceMap.make(Database, {
-*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed("result"))
-* })
-*   .pipe(
-*     ServiceMap.add(Logger, {
-*       log: (msg: string) => Effect.sync(() => console.log(msg))
-*     })
-*   )
-*
-* const layer = Layer.succeedServices(services)
-* ```
-*
-* @since 2.0.0
-* @category constructors
-*/
-const succeedServices = (services) => fromBuildUnsafe(constant(succeed$2(services)));
-const mergeAllEffect = (layers, memoMap, scope) => {
-	const parentScope = forkUnsafe(scope, "parallel");
-	return forEach$1(layers, (layer) => layer.build(memoMap, forkUnsafe(parentScope, "sequential")), { concurrency: layers.length }).pipe(map$3((services) => mergeAll$1(...services)));
-};
-const provideWith = (self, that, f) => fromBuild((memoMap, scope) => flatMap$1(Array.isArray(that) ? mergeAllEffect(that, memoMap, scope) : that.build(memoMap, scope), (context) => self.build(memoMap, scope).pipe(provideServices$1(context), map$3((merged) => f(merged, context)))));
-/**
-* Feeds the output services of this builder into the input of the specified
-* builder, resulting in a new builder with the inputs of this builder as
-* well as any leftover inputs, and the outputs of the specified builder.
-*
-* @example
-* ```ts
-* import { Effect, Layer, ServiceMap } from "effect"
-*
-* class Database extends ServiceMap.Service<Database, {
-*   readonly query: (sql: string) => Effect.Effect<string>
-* }>()("Database") {}
-*
-* class UserService extends ServiceMap.Service<UserService, {
-*   readonly getUser: (id: string) => Effect.Effect<{
-*     id: string
-*     name: string
-*   }>
-* }>()("UserService") {}
-*
-* class Logger extends ServiceMap.Service<Logger, {
-*   readonly log: (msg: string) => Effect.Effect<void>
-* }>()("Logger") {}
-*
-* // Create dependency layers
-* const databaseLayer = Layer.succeed(Database)({
-*   query: Effect.fn("Database.query")((sql: string) => Effect.succeed(`DB: ${sql}`))
-* })
-*
-* const loggerLayer = Layer.succeed(Logger)({
-*   log: Effect.fn("Logger.log")((msg: string) => Effect.sync(() => console.log(`[LOG] ${msg}`)))
-* })
-*
-* // UserService depends on Database and Logger
-* const userServiceLayer = Layer.effect(UserService)(Effect.gen(function*() {
-*   const database = yield* Database
-*   const logger = yield* Logger
-*
-*   return {
-*     getUser: Effect.fn("UserService.getUser")(function*(id: string) {
-*         yield* logger.log(`Looking up user ${id}`)
-*         const result = yield* database.query(
-*           `SELECT * FROM users WHERE id = ${id}`
-*         )
-*         return { id, name: result }
-*       })
-*   }
-* }))
-*
-* // Provide dependencies to UserService layer
-* const userServiceWithDependencies = userServiceLayer.pipe(
-*   Layer.provide(Layer.mergeAll(databaseLayer, loggerLayer))
-* )
-*
-* // Now UserService layer has no dependencies
-* const program = Effect.gen(function*() {
-*   const userService = yield* UserService
-*   return yield* userService.getUser("123")
-* }).pipe(
-*   Effect.provide(userServiceWithDependencies)
-* )
-* ```
-*
-* @since 2.0.0
-* @category utils
-*/
-const provide$2 = /* @__PURE__ */ dual(2, (self, that) => provideWith(self, that, identity));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/ExecutionPlan.js
-/**
-* @since 3.16.0
-* @category Type IDs
-*/
-const TypeId$8 = "~effect/ExecutionPlan";
-const Proto$1 = {
-	[TypeId$8]: TypeId$8,
-	get withRequirements() {
-		const self = this;
-		return servicesWith$1((services) => succeed$2(makeProto(self.steps.map((step) => ({
-			...step,
-			provide: isLayer(step.provide) ? provide$2(step.provide, succeedServices(services)) : step.provide
-		})))));
-	},
-	pipe() {
-		return pipeArguments(this, arguments);
-	}
-};
-const makeProto = (steps) => {
-	const self = Object.create(Proto$1);
-	self.steps = steps;
-	return self;
-};
-//#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$7 = "~effect/time/DateTime";
 /** @internal */
@@ -5785,6 +5113,7 @@ const runSync = runSync$1;
 * @category Running Effects
 */
 const runSyncExit = runSyncExit$1;
+Service()("effect/Effect/Transaction");
 /**
 * An optimized version of `map` that checks if an effect is already resolved
 * and applies the mapping function eagerly when possible.
@@ -5962,7 +5291,7 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5980,7 +5309,7 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -6012,7 +5341,7 @@ globalThis.RegExp;
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/SchemaIssue.js
 const TypeId$4 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -6689,7 +6018,7 @@ function formatOption(actual) {
 	return format$3(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6963,7 +6292,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Bidirectional transformations for the Effect Schema system.
 *
@@ -7205,7 +6534,7 @@ function passthrough() {
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -8765,7 +8094,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/SchemaParser.js
 /**
 * @since 4.0.0
 */
@@ -8797,7 +8126,10 @@ const recurDefaults = /* @__PURE__ */ memoize((ast) => {
 function makeEffect(schema) {
 	const parser = run(recurDefaults(toType(schema.ast)));
 	return (input, options) => {
-		return parser(input, options?.parseOptions);
+		return parser(input, options?.disableChecks ? options?.parseOptions ? {
+			...options.parseOptions,
+			disableChecks: true
+		} : { disableChecks: true } : options?.parseOptions);
 	};
 }
 /**
@@ -8873,7 +8205,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 		}
 		parser ??= ast.getParser(recur);
 		let sroa = srou ? flatMapEager(srou, (ou) => parser(ou, options)) : parser(ou, options);
-		if (ast.checks) {
+		if (ast.checks && !options?.disableChecks) {
 			const checks = ast.checks;
 			if (options?.errors === "all" && isStructural && isSome(ou)) sroa = catchEager(sroa, (issue) => {
 				const issues = [];
@@ -8894,7 +8226,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.36/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.40/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId$1 = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -9160,24 +8492,10 @@ function makeTuple(ast, elements) {
 	});
 }
 /**
-* Defines a `ReadonlyArray` schema for a given element schema.
-*
-* **Example** (Array of strings)
-*
-* ```ts
-* import { Schema } from "effect"
-*
-* const schema = Schema.Array(Schema.String)
-*
-* const result = Schema.decodeUnknownSync(schema)(["a", "b", "c"])
-* console.log(result)
-* // [ 'a', 'b', 'c' ]
-* ```
-*
 * @category Constructors
 * @since 4.0.0
 */
-const Array$1 = /* @__PURE__ */ lambda((schema) => make(new Arrays(false, [], [schema.ast]), { schema }));
+const ArraySchema = /* @__PURE__ */ lambda((schema) => make(new Arrays(false, [], [schema.ast]), { schema }));
 /**
 * Makes an array or tuple schema mutable, removing the `readonly` modifier.
 *
@@ -9506,7 +8824,7 @@ const Rating = Struct({
 	stars: Number$1.check(isGreaterThanOrEqualTo(0), isLessThanOrEqualTo(5)),
 	title: String$1.check(isMinLength(1), isMaxLength(100)),
 	text: String$1.check(isMinLength(1), isMaxLength(1e3)),
-	images: mutable(Array$1(Image))
+	images: mutable(ArraySchema(Image))
 });
 decodeUnknownSync(Struct({
 	id: Number$1,
@@ -9517,8 +8835,8 @@ decodeUnknownSync(Struct({
 	price: Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(1e4)),
 	discount: NullOr(Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(100))),
 	quantity: Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(10)),
-	tags: mutable(Array$1(String$1.check(isMinLength(1), isMaxLength(30)))),
-	images: mutable(Array$1(Image)),
-	ratings: mutable(Array$1(Rating))
+	tags: mutable(ArraySchema(String$1.check(isMinLength(1), isMaxLength(30)))),
+	images: mutable(ArraySchema(Image)),
+	ratings: mutable(ArraySchema(Rating))
 }))({});
 //#endregion
