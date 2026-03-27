@@ -11,10 +11,10 @@ type FormatMethod = {
   [K in keyof z.ZodString]-?: z.ZodString[K] extends () => z.ZodString ? K : never;
 }[keyof z.ZodString];
 
-const createStringBenchmark = (
-  method: FormatMethod,
+const createStringBenchmark = <Method extends FormatMethod>(
+  method: Method,
   snippet = `${method}()`,
-  ...args: Parameters<z.ZodString[FormatMethod]>
+  ...args: Parameters<z.ZodString[Method]>
 ): StringBenchmarkConfig => ({
   create() {
     const schema = z.string()[method](...(args as []));
