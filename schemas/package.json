@@ -30,6 +30,7 @@
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
     "joi": "^18.1.1",
+    "superstruct": "^2.0.2",
     "sury": "11.0.0-alpha.4",
     "typebox": "^1.1.6",
     "typia": "^12.0.1",
