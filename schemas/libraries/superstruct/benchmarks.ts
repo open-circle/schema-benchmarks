@@ -37,21 +37,55 @@ export default defineBenchmarks({
     },
   ],
   parsing: {
-    allErrors: [
+    abortEarly: [
       {
         run(data) {
-          return validate(data, schema);
+          return validate(data, schema)[0];
         },
-        validateResult: ([error]) => !error,
+        validateResult: (error) => !error,
         snippet: ts`validate(data, schema)`,
       },
       {
         run(data) {
-          return schema.validate(data);
+          return schema.validate(data)[0];
         },
-        validateResult: ([error]) => !error,
+        validateResult: (error) => !error,
         snippet: ts`schema.validate(data)`,
         note: "schema.validate",
+      },
+    ],
+    allErrors: [
+      {
+        run(data) {
+          const [error] = validate(data, schema);
+          for (const _failure of error?.failures() ?? []) {
+            // force iteration
+          }
+          return error;
+        },
+        validateResult: (result) => !result,
+        snippet: ts`
+          const [error] = validate(data, schema);
+          for (const failure of error.failures()) {
+            // ...
+          }
+        `,
+      },
+      {
+        run(data) {
+          const [error] = schema.validate(data);
+          for (const _failure of error?.failures() ?? []) {
+            // force iteration
+          }
+          return error;
+        },
+        validateResult: (result) => !result,
+        snippet: ts`
+          const [error] = schema.validate(data);
+          for (const failure of error.failures()) {
+            // ...
+          }
+        `,
       },
     ],
   },
