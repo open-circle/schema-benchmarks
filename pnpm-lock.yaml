@@ -146,6 +146,9 @@ importers:
       arktype:
         specifier: ^2.2.0
         version: 2.2.0
+      ata-validator:
+        specifier: ^0.4.15
+        version: 0.4.15
       decoders:
         specifier: ^2.9.1
         version: 2.9.1
@@ -4000,6 +4003,10 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
+  ata-validator@0.4.15:
+    resolution: {integrity: sha512-h1Kbcct0QBGAXQkx/wzcVwJILidrLhaE+YYzPWNhDtKEwkeDnG7iB7p+s6ic7diwcnD0LtvPMQ7JbxtVcjoLgQ==}
+    engines: {node: '>=18.0.0'}
+
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
@@ -6428,6 +6435,10 @@ packages:
 
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
+
+  node-addon-api@8.7.0:
+    resolution: {integrity: sha512-9MdFxmkKaOYVTV+XVRG8ArDwwQ77XIgIPyKASB1k3JPq3M8fGQQQE3YpMOrKm6g//Ktx8ivZr8xo1Qmtqub+GA==}
+    engines: {node: ^18 || ^20 || >= 21}
 
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
@@ -12122,6 +12133,11 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
+  ata-validator@0.4.15:
+    dependencies:
+      node-addon-api: 8.7.0
+      node-gyp-build: 4.8.4
+
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
@@ -14972,6 +14988,8 @@ snapshots:
       tslib: 2.8.1
 
   node-addon-api@7.1.1: {}
+
+  node-addon-api@8.7.0: {}
 
   node-domexception@1.0.0: {}
 
