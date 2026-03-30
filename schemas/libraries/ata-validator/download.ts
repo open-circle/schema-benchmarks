@@ -41,10 +41,7 @@ const productSchema: JSONSchemaType<ProductData> = {
     description: { type: "string", minLength: 1, maxLength: 500 },
     price: { type: "number", minimum: 1, maximum: 10000 },
     discount: {
-      type: "number",
-      minimum: 1,
-      maximum: 100,
-      nullable: true,
+      oneOf: [{ type: "number", minimum: 1, maximum: 100 }, { type: "null" }],
     } as never,
     quantity: { type: "number", minimum: 0, maximum: 10 },
     tags: {
