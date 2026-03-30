@@ -15,6 +15,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@ata-project/keywords": "^0.1.0",
     "@railway-ts/pipelines": "^0.1.27",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",

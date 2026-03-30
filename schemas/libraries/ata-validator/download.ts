@@ -1,3 +1,4 @@
+import { withKeywords } from "@ata-project/keywords";
 import type { JSONSchemaType } from "ajv";
 import { Validator } from "ata-validator";
 
@@ -66,6 +67,6 @@ const productSchema: JSONSchemaType<ProductData> = {
   ],
 };
 
-const productValidator = new Validator(productSchema);
+const productValidator = withKeywords(new Validator(productSchema));
 
 productValidator.validate({});

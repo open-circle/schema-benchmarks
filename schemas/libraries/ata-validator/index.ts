@@ -1,3 +1,4 @@
+import { withKeywords } from "@ata-project/keywords";
 import type { JSONSchemaType } from "ajv";
 import { Validator } from "ata-validator";
 
@@ -32,38 +33,40 @@ export function getAtaValidatorSchema() {
     },
     required: ["id", "stars", "title", "text", "images"],
   };
-  return new Validator({
-    type: "object",
-    properties: {
-      id: { type: "number" },
-      created: dateSchema,
-      title: { type: "string", minLength: 1, maxLength: 100 },
-      brand: { type: "string", minLength: 1, maxLength: 30 },
-      description: { type: "string", minLength: 1, maxLength: 500 },
-      price: { type: "number", minimum: 1, maximum: 10000 },
-      discount: {
-        oneOf: [{ type: "number", minimum: 1, maximum: 100 }, { type: "null" }],
-      } as never,
-      quantity: { type: "number", minimum: 0, maximum: 10 },
-      tags: {
-        type: "array",
-        items: { type: "string", minLength: 1, maxLength: 30 },
+  return withKeywords(
+    new Validator({
+      type: "object",
+      properties: {
+        id: { type: "number" },
+        created: dateSchema,
+        title: { type: "string", minLength: 1, maxLength: 100 },
+        brand: { type: "string", minLength: 1, maxLength: 30 },
+        description: { type: "string", minLength: 1, maxLength: 500 },
+        price: { type: "number", minimum: 1, maximum: 10000 },
+        discount: {
+          oneOf: [{ type: "number", minimum: 1, maximum: 100 }, { type: "null" }],
+        } as never,
+        quantity: { type: "number", minimum: 0, maximum: 10 },
+        tags: {
+          type: "array",
+          items: { type: "string", minLength: 1, maxLength: 30 },
+        },
+        images: { type: "array", items: imageSchema },
+        ratings: { type: "array", items: ratingSchema },
       },
-      images: { type: "array", items: imageSchema },
-      ratings: { type: "array", items: ratingSchema },
-    },
-    required: [
-      "id",
-      "created",
-      "title",
-      "brand",
-      "description",
-      "price",
-      "discount",
-      "quantity",
-      "tags",
-      "images",
-      "ratings",
-    ],
-  } satisfies JSONSchemaType<ProductData>);
+      required: [
+        "id",
+        "created",
+        "title",
+        "brand",
+        "description",
+        "price",
+        "discount",
+        "quantity",
+        "tags",
+        "images",
+        "ratings",
+      ],
+    } satisfies JSONSchemaType<ProductData>),
+  );
 }
