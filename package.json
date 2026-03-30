@@ -35,9 +35,6 @@
     },
     "patchedDependencies": {
       "@ryoppippi/unplugin-typia": "patches/@ryoppippi__unplugin-typia.patch"
-    },
-    "onlyBuiltDependencies": [
-      "ata-validator"
-    ]
+    }
   }
 }
