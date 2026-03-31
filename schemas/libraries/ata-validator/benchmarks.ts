@@ -58,7 +58,6 @@ export default defineBenchmarks({
     time: createStringBenchmark("time"),
     duration: createStringBenchmark("duration"),
     email: createStringBenchmark("email"),
-    url: createStringBenchmark("url"),
     uuid: createStringBenchmark("uuid"),
     ipv4: createStringBenchmark("ipv4"),
     ipv6: createStringBenchmark("ipv6"),
