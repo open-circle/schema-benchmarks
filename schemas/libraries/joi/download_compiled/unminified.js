@@ -3800,7 +3800,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							method() {
 								return this.$_addRule("port");
 							},
-							validate: (e, t) => Number.isSafeInteger(e) && e >= 0 && e <= 65535 ? e : t.error("number.port")
+							validate: (e, t) => Number.isSafeInteger(e) && e >= 0 && e <= 65535 ? e : t.error("number.port"),
+							jsonSchema: (e, t) => (t.type = "integer", t.minimum = 0, t.maximum = 65535, t)
 						},
 						positive: { method() {
 							return this.sign("positive");
@@ -3829,10 +3830,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								});
 							},
 							validate: (e, t, { sign: r }) => "negative" === r && e < 0 || "positive" === r && e > 0 ? e : t.error(`number.${r}`),
-							jsonSchema: (e, t) => (t["x-constraint"] = {
-								...t["x-constraint"],
-								sign: e.args.sign
-							}, t)
+							jsonSchema: (e, t) => ("positive" === e.args.sign ? t.exclusiveMinimum = 0 : t.exclusiveMaximum = 0, t)
 						},
 						unsafe: { method(e = !0) {
 							return s("boolean" == typeof e, "enabled must be a boolean"), this.$_setFlag("unsafe", e);
@@ -7887,7 +7885,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.1.1" };
+				e.exports = { version: "18.1.2" };
 			}
 		}, t = {};
 		function r(s) {
