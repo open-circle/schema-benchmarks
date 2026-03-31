@@ -42,9 +42,9 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@ryoppippi/unplugin-typia": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
+    "@typia/unplugin": "catalog:",
     "typescript": "catalog:",
     "unplugin-macros": "^0.19.1",
     "vite": "catalog:",

@@ -6,9 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@ryoppippi/unplugin-typia':
-      specifier: ^2.6.5
-      version: 2.6.5
     '@standard-schema/spec':
       specifier: ^1.1.0
       version: 1.1.0
@@ -24,6 +21,9 @@ catalogs:
     '@typescript/native-preview':
       specifier: 7.0.0-dev.20260331.1
       version: 7.0.0-dev.20260331.1
+    '@typia/unplugin':
+      specifier: ^12.0.1
+      version: 12.0.1
     '@vitest/browser-playwright':
       specifier: ^4.1.2
       version: 4.1.2
@@ -58,11 +58,6 @@ catalogs:
 overrides:
   vite: ^8.0.3
 
-patchedDependencies:
-  '@ryoppippi/unplugin-typia':
-    hash: ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd
-    path: patches/@ryoppippi__unplugin-typia.patch
-
 importers:
 
   .:
@@ -88,9 +83,6 @@ importers:
 
   bench:
     dependencies:
-      '@ryoppippi/unplugin-typia':
-        specifier: 'catalog:'
-        version: 2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.2)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
       '@schema-benchmarks/schemas':
         specifier: workspace:*
         version: link:../schemas
@@ -100,6 +92,9 @@ importers:
       '@standard-schema/spec':
         specifier: 'catalog:'
         version: 1.1.0
+      '@typia/unplugin':
+        specifier: 'catalog:'
+        version: 12.0.1(rollup@4.57.1)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -201,15 +196,15 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@ryoppippi/unplugin-typia':
-        specifier: 'catalog:'
-        version: 2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.2)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
       '@types/node':
         specifier: 'catalog:'
         version: 25.5.0
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20260331.1
+      '@typia/unplugin':
+        specifier: 'catalog:'
+        version: 12.0.1(rollup@4.57.1)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
       typescript:
         specifier: 'catalog:'
         version: 6.0.2
@@ -2990,20 +2985,6 @@ packages:
   '@rushstack/ts-command-line@5.3.3':
     resolution: {integrity: sha512-c+ltdcvC7ym+10lhwR/vWiOhsrm/bP3By2VsFcs5qTKv+6tTmxgbVrtJ5NdNjANiV5TcmOZgUN+5KYQ4llsvEw==}
 
-  '@ryoppippi/unplugin-typia@2.6.5':
-    resolution: {integrity: sha512-Lg7Rho00E6Jn00Gle/Rn6ZWhUJj9U0J0iahfBUqqiXWrLWZdjXbeMCW1+82/7qnVQaqhlgz69hbd3JWYCtYivQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      svelte: ^5.28.2
-      typescript: '>=4.8.0 <5.9.0'
-      typia: '>=9.3.0'
-      vite: ^8.0.3
-    peerDependenciesMeta:
-      svelte:
-        optional: true
-      vite:
-        optional: true
-
   '@so-ric/colorspace@1.1.6':
     resolution: {integrity: sha512-/KiKkpHNOBgkFJwu9sh48LkHSMYGyuTcSFK/qMBdnOAlrRJzRSXAOFB5qwzaVQuDl8wAvHVMkaASQDReTahxuw==}
 
@@ -3709,6 +3690,18 @@ packages:
 
   '@typia/transform@12.0.1':
     resolution: {integrity: sha512-SX4VCRPHTxRY3l99iU74yn8iqZIQ0DE4939n+XYoojKlvFVmTlg/OCMxsWq3xe6Qw19Vaa8bdcXGV4tx+TAlqw==}
+
+  '@typia/unplugin@12.0.1':
+    resolution: {integrity: sha512-/Q9meFSRbrLWcQ/V6k24Ks/9fkO2M3ke2P8Vam1wrOOgDTbX0vAJGpW9IDebquqT9hDaFGq7w2HIP10y6lYJWg==}
+    peerDependencies:
+      svelte: ^5.28.2
+      typia: ^12.0.1
+      vite: ^8.0.3
+    peerDependenciesMeta:
+      svelte:
+        optional: true
+      vite:
+        optional: true
 
   '@typia/utils@12.0.1':
     resolution: {integrity: sha512-JIKsRhY4jxLtl/obttkR3vGp8d8hPysY6g0PUsIEDZ9/OO85OU7q8lYhu2GkZOJN/7htyqP+95GhpSNt2uELBQ==}
@@ -10814,46 +10807,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@ryoppippi/unplugin-typia@2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.2)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))':
-    dependencies:
-      '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
-      bun-only: 0.0.1
-      consola: 3.4.2
-      defu: 6.1.4
-      diff-match-patch-es: 1.0.1
-      find-cache-dir: 5.0.0
-      magic-string: 0.30.21
-      pathe: 2.0.3
-      pkg-types: 2.3.0
-      type-fest: 4.41.0
-      typescript: 6.0.2
-      typia: 12.0.1(@types/node@25.5.0)(typescript@6.0.2)
-      unplugin: 2.3.11
-    optionalDependencies:
-      vite: 8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
-    transitivePeerDependencies:
-      - rollup
-
-  '@ryoppippi/unplugin-typia@2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(rollup@4.57.1)(typescript@6.0.2)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))':
-    dependencies:
-      '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
-      bun-only: 0.0.1
-      consola: 3.4.2
-      defu: 6.1.4
-      diff-match-patch-es: 1.0.1
-      find-cache-dir: 5.0.0
-      magic-string: 0.30.21
-      pathe: 2.0.3
-      pkg-types: 2.3.0
-      type-fest: 4.41.0
-      typescript: 6.0.2
-      typia: 12.0.1(@types/node@25.5.0)(typescript@6.0.2)
-      unplugin: 2.3.11
-    optionalDependencies:
-      vite: 8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
-    transitivePeerDependencies:
-      - rollup
-
   '@so-ric/colorspace@1.1.6':
     dependencies:
       color: 5.0.3
@@ -11743,6 +11696,44 @@ snapshots:
       '@typia/core': 12.0.1
       '@typia/interface': 12.0.1
       '@typia/utils': 12.0.1
+
+  '@typia/unplugin@12.0.1(rollup@4.57.1)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))':
+    dependencies:
+      '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
+      bun-only: 0.0.1
+      consola: 3.4.2
+      defu: 6.1.4
+      diff-match-patch-es: 1.0.1
+      find-cache-dir: 5.0.0
+      magic-string: 0.30.21
+      pathe: 2.0.3
+      pkg-types: 2.3.0
+      type-fest: 4.41.0
+      typia: 12.0.1(@types/node@25.5.0)(typescript@6.0.2)
+      unplugin: 2.3.11
+    optionalDependencies:
+      vite: 8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
+    transitivePeerDependencies:
+      - rollup
+
+  '@typia/unplugin@12.0.1(rollup@4.57.1)(typia@12.0.1(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))':
+    dependencies:
+      '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
+      bun-only: 0.0.1
+      consola: 3.4.2
+      defu: 6.1.4
+      diff-match-patch-es: 1.0.1
+      find-cache-dir: 5.0.0
+      magic-string: 0.30.21
+      pathe: 2.0.3
+      pkg-types: 2.3.0
+      type-fest: 4.41.0
+      typia: 12.0.1(@types/node@25.5.0)(typescript@6.0.2)
+      unplugin: 2.3.11
+    optionalDependencies:
+      vite: 8.0.3(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
+    transitivePeerDependencies:
+      - rollup
 
   '@typia/utils@12.0.1':
     dependencies:
