@@ -26,7 +26,7 @@ export function getRuntypesSchema() {
     images: Array(Image),
   });
 
-  return Object({
+  const schema = Object({
     id: Number,
     created: InstanceOf(Date),
     title: StringWithLength(1, 100),
@@ -38,5 +38,10 @@ export function getRuntypesSchema() {
     tags: Array(StringWithLength(1, 30)),
     images: Array(Image),
     ratings: Array(Rating),
-  }).conform<ProductData>();
+  });
+
+  // returning this has type portability issues
+  schema.conform<ProductData>();
+
+  return schema;
 }
