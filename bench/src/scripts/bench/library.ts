@@ -3,6 +3,7 @@ import { parseArgs } from "node:util";
 import { errorData, invalidStrings, successData, validStrings } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
+import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
 import { CaseRegistry } from "../../bench/registry.ts";
@@ -25,10 +26,7 @@ if (!lib || !libraries[lib]) {
 
 const libraryConfig = await libraries[lib]();
 
-const sigintAc = new AbortController();
-process.on("SIGINT", (signal) => {
-  sigintAc.abort(signal);
-});
+const sigintSignal = getSigintSignal();
 
 const results = getEmptyResults();
 
@@ -40,7 +38,7 @@ const { name: libraryName, optimizeType: libraryOptimizeType, version } = librar
 console.log(`\nBenchmarking: ${libraryName}`);
 
 // Create a fresh Bench for this library
-const bench = new Bench({ signal: sigintAc.signal });
+const bench = new Bench({ signal: sigintSignal });
 bench.addEventListener("start", () => {
   console.log("Starting bench...");
 });

@@ -38,3 +38,17 @@ export function forwardStd<T>(promise: child_process.PromiseWithChild<T>) {
   promise.child.stderr?.pipe(process.stderr);
   return promise;
 }
+
+let sigintAc: AbortController | undefined;
+/**
+ * Returns an abort signal that is aborted when the process receives a SIGINT signal.
+ * @returns The abort signal.
+ */
+export const getSigintSignal = () => {
+  if (sigintAc) return sigintAc.signal;
+  sigintAc = new AbortController();
+  process.on("SIGINT", (signal) => {
+    sigintAc?.abort(signal);
+  });
+  return sigintAc.signal;
+};

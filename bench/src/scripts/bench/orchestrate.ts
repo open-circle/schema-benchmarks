@@ -5,16 +5,13 @@ import { promisify } from "node:util";
 
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { unsafeEntries } from "@schema-benchmarks/utils";
-import { forwardStd } from "@schema-benchmarks/utils/node";
+import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
 import type { BenchResults } from "../../results/types.ts";
 import { benchResultsSchema, getEmptyResults } from "../../results/types.ts";
 
-const sigintAc = new AbortController();
-process.on("SIGINT", (signal) => {
-  sigintAc.abort(signal);
-});
+const sigintSignal = getSigintSignal();
 
 const execFile = promisify(child_process.execFile);
 
@@ -25,7 +22,7 @@ for (const lib of Object.keys(libraries)) {
     execFile(
       process.execPath,
       [path.resolve(process.cwd(), "./src/scripts/bench/library.ts"), `--lib=${lib}`],
-      { signal: sigintAc.signal },
+      { signal: sigintSignal },
     ),
   );
   const results = libResult.stdout.split("\n").slice(-3).filter(Boolean).pop();

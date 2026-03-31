@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 import UnpluginTypia from "@ryoppippi/unplugin-typia/rolldown";
-import { getVersion } from "@schema-benchmarks/utils/node";
+import { getSigintSignal, getVersion } from "@schema-benchmarks/utils/node";
 import { gzipSize } from "gzip-size";
 import { rolldown } from "rolldown";
 
@@ -13,10 +13,7 @@ import {
   minifyTypeSchema,
 } from "../results/types.ts";
 
-const sigintAc = new AbortController();
-process.on("SIGINT", (signal) => {
-  sigintAc.abort(signal);
-});
+const sigintSignal = getSigintSignal();
 
 interface FileDescription {
   path: string;
@@ -91,7 +88,7 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download.ts"),
     )) {
-      sigintAc.signal.throwIfAborted();
+      sigintSignal.throwIfAborted();
       const libraryName = filePath
         .split("schemas/libraries/")[1]
         ?.split("/download.ts")[0]
@@ -112,7 +109,7 @@ async function download() {
     for await (const filePath of fs.glob(
       path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts"),
     )) {
-      sigintAc.signal.throwIfAborted();
+      sigintSignal.throwIfAborted();
       const libraryName = filePath
         .split("schemas/libraries/")[1]
         ?.split("/download/")[0]
