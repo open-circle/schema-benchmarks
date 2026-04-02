@@ -3160,31 +3160,28 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		parse: wsParse,
 		serialize: wsSerialize
 	};
-	const wss = {
-		scheme: "wss",
-		domainHost: ws.domainHost,
-		parse: ws.parse,
-		serialize: ws.serialize
-	};
-	const urn = {
-		scheme: "urn",
-		parse: urnParse,
-		serialize: urnSerialize,
-		skipNormalize: true
-	};
-	const urnuuid = {
-		scheme: "urn:uuid",
-		parse: urnuuidParse,
-		serialize: urnuuidSerialize,
-		skipNormalize: true
-	};
 	const SCHEMES = {
 		http,
 		https,
 		ws,
-		wss,
-		urn,
-		"urn:uuid": urnuuid
+		wss: {
+			scheme: "wss",
+			domainHost: ws.domainHost,
+			parse: ws.parse,
+			serialize: ws.serialize
+		},
+		urn: {
+			scheme: "urn",
+			parse: urnParse,
+			serialize: urnSerialize,
+			skipNormalize: true
+		},
+		"urn:uuid": {
+			scheme: "urn:uuid",
+			parse: urnuuidParse,
+			serialize: urnuuidSerialize,
+			skipNormalize: true
+		}
 	};
 	Object.setPrototypeOf(SCHEMES, null);
 	/**
