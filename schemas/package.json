@@ -15,7 +15,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@ata-project/keywords": "^0.1.4",
+    "@ata-project/keywords": "^0.1.6",
     "@railway-ts/pipelines": "^0.1.27",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
@@ -23,11 +23,11 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.0",
-    "ata-validator": "^0.5.1",
+    "ata-validator": "^0.6.1",
     "decoders": "^2.9.2",
     "dedent": "catalog:",
     "effect": "^3.21.0",
-    "effect___beta": "npm:effect@beta",
+    "effect___beta": "npm:effect@4.0.0-beta.43",
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
@@ -35,8 +35,8 @@
     "runtypes": "^7.0.4",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.1.13",
-    "typia": "^12.0.1",
+    "typebox": "^1.1.14",
+    "typia": "^12.0.2",
     "valibot": "catalog:",
     "yup": "^1.7.1",
     "zod": "^4.3.6"
