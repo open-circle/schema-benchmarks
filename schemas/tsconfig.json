@@ -9,6 +9,6 @@
     "paths": {
       "#src": ["./src/index.ts"]
     },
-    "types": ["node", "vite/client"]
+    "types": ["node", "tsdown/client"]
   }
 }

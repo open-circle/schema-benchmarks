@@ -6,10 +6,10 @@
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./libraries": "./dist/index.js"
+    "./libraries": "./dist/index.mjs"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "tsdown",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc",
     "test": "vitest"
@@ -46,6 +46,7 @@
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@typia/unplugin": "catalog:",
+    "tsdown": "^0.21.7",
     "typescript": "catalog:",
     "unplugin-macros": "^0.19.1",
     "vite": "catalog:",
