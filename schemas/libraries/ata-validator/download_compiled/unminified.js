@@ -1,11 +1,27 @@
 //#region \0rolldown/runtime.js
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, { get: (a, b) => (typeof require !== "undefined" ? require : a)[b] }) : x)(function(x) {
-	if (typeof require !== "undefined") return require.apply(this, arguments);
-	throw Error("Calling `require` for \"" + x + "\" in an environment that doesn't expose the `require` function. See https://rolldown.rs/in-depth/bundling-cjs#require-external-modules for more details.");
-});
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.6_ata-validator@0.6.1/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.7_ata-validator@0.7.3/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -124,170 +140,18 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/node-gyp-build@4.8.4/node_modules/node-gyp-build/node-gyp-build.js
-var require_node_gyp_build$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var fs = __require("fs");
-	var path = __require("path");
-	var os = __require("os");
-	var runtimeRequire = typeof __webpack_require__ === "function" ? __non_webpack_require__ : __require;
-	var vars = process.config && process.config.variables || {};
-	var prebuildsOnly = !!process.env.PREBUILDS_ONLY;
-	var abi = process.versions.modules;
-	var runtime = isElectron() ? "electron" : isNwjs() ? "node-webkit" : "node";
-	var arch = process.env.npm_config_arch || os.arch();
-	var platform = process.env.npm_config_platform || os.platform();
-	var libc = process.env.LIBC || (isAlpine(platform) ? "musl" : "glibc");
-	var armv = process.env.ARM_VERSION || (arch === "arm64" ? "8" : vars.arm_version) || "";
-	var uv = (process.versions.uv || "").split(".")[0];
-	module.exports = load;
-	function load(dir) {
-		return runtimeRequire(load.resolve(dir));
-	}
-	load.resolve = load.path = function(dir) {
-		dir = path.resolve(dir || ".");
-		try {
-			var name = runtimeRequire(path.join(dir, "package.json")).name.toUpperCase().replace(/-/g, "_");
-			if (process.env[name + "_PREBUILD"]) dir = process.env[name + "_PREBUILD"];
-		} catch (err) {}
-		if (!prebuildsOnly) {
-			var release = getFirst(path.join(dir, "build/Release"), matchBuild);
-			if (release) return release;
-			var debug = getFirst(path.join(dir, "build/Debug"), matchBuild);
-			if (debug) return debug;
-		}
-		var prebuild = resolve(dir);
-		if (prebuild) return prebuild;
-		var nearby = resolve(path.dirname(process.execPath));
-		if (nearby) return nearby;
-		var target = [
-			"platform=" + platform,
-			"arch=" + arch,
-			"runtime=" + runtime,
-			"abi=" + abi,
-			"uv=" + uv,
-			armv ? "armv=" + armv : "",
-			"libc=" + libc,
-			"node=" + process.versions.node,
-			process.versions.electron ? "electron=" + process.versions.electron : "",
-			typeof __webpack_require__ === "function" ? "webpack=true" : ""
-		].filter(Boolean).join(" ");
-		throw new Error("No native build was found for " + target + "\n    loaded from: " + dir + "\n");
-		function resolve(dir) {
-			var tuple = readdirSync(path.join(dir, "prebuilds")).map(parseTuple).filter(matchTuple(platform, arch)).sort(compareTuples)[0];
-			if (!tuple) return;
-			var prebuilds = path.join(dir, "prebuilds", tuple.name);
-			var winner = readdirSync(prebuilds).map(parseTags).filter(matchTags(runtime, abi)).sort(compareTags(runtime))[0];
-			if (winner) return path.join(prebuilds, winner.file);
-		}
+//#region (ignored) ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator
+var require_ata_validator$1 = /* @__PURE__ */ __commonJSMin((() => {}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/binding-options.js
+var require_binding_options = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = {
+		name: "ata",
+		napi_versions: [10]
 	};
-	function readdirSync(dir) {
-		try {
-			return fs.readdirSync(dir);
-		} catch (err) {
-			return [];
-		}
-	}
-	function getFirst(dir, filter) {
-		var files = readdirSync(dir).filter(filter);
-		return files[0] && path.join(dir, files[0]);
-	}
-	function matchBuild(name) {
-		return /\.node$/.test(name);
-	}
-	function parseTuple(name) {
-		var arr = name.split("-");
-		if (arr.length !== 2) return;
-		var platform = arr[0];
-		var architectures = arr[1].split("+");
-		if (!platform) return;
-		if (!architectures.length) return;
-		if (!architectures.every(Boolean)) return;
-		return {
-			name,
-			platform,
-			architectures
-		};
-	}
-	function matchTuple(platform, arch) {
-		return function(tuple) {
-			if (tuple == null) return false;
-			if (tuple.platform !== platform) return false;
-			return tuple.architectures.includes(arch);
-		};
-	}
-	function compareTuples(a, b) {
-		return a.architectures.length - b.architectures.length;
-	}
-	function parseTags(file) {
-		var arr = file.split(".");
-		var extension = arr.pop();
-		var tags = {
-			file,
-			specificity: 0
-		};
-		if (extension !== "node") return;
-		for (var i = 0; i < arr.length; i++) {
-			var tag = arr[i];
-			if (tag === "node" || tag === "electron" || tag === "node-webkit") tags.runtime = tag;
-			else if (tag === "napi") tags.napi = true;
-			else if (tag.slice(0, 3) === "abi") tags.abi = tag.slice(3);
-			else if (tag.slice(0, 2) === "uv") tags.uv = tag.slice(2);
-			else if (tag.slice(0, 4) === "armv") tags.armv = tag.slice(4);
-			else if (tag === "glibc" || tag === "musl") tags.libc = tag;
-			else continue;
-			tags.specificity++;
-		}
-		return tags;
-	}
-	function matchTags(runtime, abi) {
-		return function(tags) {
-			if (tags == null) return false;
-			if (tags.runtime && tags.runtime !== runtime && !runtimeAgnostic(tags)) return false;
-			if (tags.abi && tags.abi !== abi && !tags.napi) return false;
-			if (tags.uv && tags.uv !== uv) return false;
-			if (tags.armv && tags.armv !== armv) return false;
-			if (tags.libc && tags.libc !== libc) return false;
-			return true;
-		};
-	}
-	function runtimeAgnostic(tags) {
-		return tags.runtime === "node" && tags.napi;
-	}
-	function compareTags(runtime) {
-		return function(a, b) {
-			if (a.runtime !== b.runtime) return a.runtime === runtime ? -1 : 1;
-			else if (a.abi !== b.abi) return a.abi ? -1 : 1;
-			else if (a.specificity !== b.specificity) return a.specificity > b.specificity ? -1 : 1;
-			else return 0;
-		};
-	}
-	function isNwjs() {
-		return !!(process.versions && process.versions.nw);
-	}
-	function isElectron() {
-		if (process.versions && process.versions.electron) return true;
-		if (process.env.ELECTRON_RUN_AS_NODE) return true;
-		return typeof window !== "undefined" && window.process && window.process.type === "renderer";
-	}
-	function isAlpine(platform) {
-		return platform === "linux" && fs.existsSync("/etc/alpine-release");
-	}
-	load.parseTags = parseTags;
-	load.matchTags = matchTags;
-	load.compareTags = compareTags;
-	load.parseTuple = parseTuple;
-	load.matchTuple = matchTuple;
-	load.compareTuples = compareTuples;
 }));
 //#endregion
-//#region ../node_modules/.pnpm/node-gyp-build@4.8.4/node_modules/node-gyp-build/index.js
-var require_node_gyp_build = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const runtimeRequire = typeof __webpack_require__ === "function" ? __non_webpack_require__ : __require;
-	if (typeof runtimeRequire.addon === "function") module.exports = runtimeRequire.addon.bind(runtimeRequire);
-	else module.exports = require_node_gyp_build$1();
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.6.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const AJV_MESSAGES = {
 		type: (p) => `must be ${p.type}`,
@@ -1995,17 +1859,19 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (destructKeys.length > 0) lines.push(`const{${destructKeys.join(",")}}=${v}`);
 			for (const key of schema.required) {
 				const check = hoisted[key] ? `${hoisted[key]}===undefined` : `${v}[${JSON.stringify(key)}]===undefined`;
-				const errVar = `_E${ctx.varCounter++}`;
-				const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
-				ctx.closureVars.push(errVar);
-				ctx.closureVals.push(Object.freeze({
-					keyword: "required",
-					instancePath: pathVal,
-					schemaPath: `${schemaPrefix}/required`,
-					params: Object.freeze({ missingProperty: key }),
-					message: `must have required property '${key}'`
-				}));
-				lines.push(`if(${check}){(_e||(_e=[])).push(${errVar})}`);
+				if (isStaticPath) {
+					const errVar = `_E${ctx.varCounter++}`;
+					const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
+					ctx.closureVars.push(errVar);
+					ctx.closureVals.push(Object.freeze({
+						keyword: "required",
+						instancePath: pathVal,
+						schemaPath: `${schemaPrefix}/required`,
+						params: Object.freeze({ missingProperty: key }),
+						message: `must have required property '${key}'`
+					}));
+					lines.push(`if(${check}){(_e||(_e=[])).push(${errVar})}`);
+				} else lines.push(`if(${check}){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required',params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
 			}
 		} else if (schema.required) for (const key of schema.required) if (!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) {
 			const errVar = `_E${ctx.varCounter++}`;
@@ -2407,7 +2273,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.6.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -2475,23 +2341,44 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.6.1/node_modules/ata-validator/package.json
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/package.json
 var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		"name": "ata-validator",
-		"version": "0.6.1",
+		"version": "0.7.3",
 		"description": "Ultra-fast JSON Schema validator. 4.7x faster validation, 1,800x faster compilation. Works without native addon. Cross-schema $ref, Draft 2020-12 + Draft 7, V8-optimized JS codegen, simdjson, RE2, multi-core. Standard Schema V1 compatible.",
 		"main": "index.js",
+		"module": "index.mjs",
 		"types": "index.d.ts",
+		"exports": {
+			".": {
+				"types": "./index.d.ts",
+				"browser": {
+					"import": "./index.browser.mjs",
+					"require": "./index.js"
+				},
+				"import": "./index.mjs",
+				"require": "./index.js"
+			},
+			"./compat": {
+				"types": "./compat.d.ts",
+				"import": "./compat.mjs",
+				"require": "./compat.js"
+			}
+		},
+		"sideEffects": false,
+		"browser": { "pkg-prebuilds": false },
 		"scripts": {
-			"install": "node-gyp-build",
-			"build": "node-gyp rebuild",
-			"prebuild": "prebuildify --napi --strip",
-			"prebuild-all": "prebuildify --napi --strip --arch x64 && prebuildify --napi --strip --arch arm64",
+			"install": "node scripts/install.js",
+			"build": "cmake-js build --target ata",
+			"rebuild": "cmake-js rebuild --target ata",
+			"prebuild": "pkg-prebuilds-copy --baseDir build/Release --source ata.node --name=ata --strip --napi_version=10",
+			"prebuild-all": "npm run prebuild -- --arch x64 && npm run prebuild -- --arch arm64",
 			"test": "node test.js",
 			"test:suite": "node tests/run_suite.js",
 			"test:compat": "node tests/test_compat.js",
 			"test:standard-schema": "node tests/test_standard_schema.js",
+			"test:browser": "node tests/test_browser.js",
 			"bench": "node benchmark/bench_large.js",
 			"fuzz": "node tests/fuzz_differential.js",
 			"fuzz:long": "FUZZ_ITERATIONS=100000 node tests/fuzz_differential.js"
@@ -2522,41 +2409,46 @@ var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"engines": { "node": ">=18.0.0" },
 		"files": [
 			"index.js",
+			"index.mjs",
+			"index.browser.mjs",
 			"index.d.ts",
 			"lib/",
 			"compat.js",
+			"compat.mjs",
 			"compat.d.ts",
-			"binding.gyp",
+			"binding-options.js",
 			"binding/",
 			"include/",
 			"src/",
 			"deps/",
 			"prebuilds/",
+			"scripts/",
+			"CMakeLists.txt",
 			"README.md",
 			"LICENSE"
 		],
 		"dependencies": {
-			"node-addon-api": "^8.0.0",
-			"node-gyp-build": "^4.8.4"
+			"node-addon-api": "^8.7.0",
+			"node-api-headers": "^1.8.0",
+			"pkg-prebuilds": "^1.0.0"
 		},
 		"devDependencies": {
 			"@sinclair/typebox": "^0.34.49",
+			"cmake-js": "^8.0.0",
 			"mitata": "^1.0.34",
-			"node-gyp": "^11.0.0",
-			"prebuildify": "^6.0.1",
 			"typebox": "^1.1.7",
 			"valibot": "^1.3.1",
 			"zod": "^4.3.6"
 		},
-		"gypfile": true
+		"binary": { "napi_versions": [10] }
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.6.1/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let native;
 	try {
-		native = require_node_gyp_build()(__dirname);
+		native = require_ata_validator$1()(__dirname, require_binding_options());
 	} catch {}
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
 	const { normalizeDraft7 } = require_draft7();
@@ -2746,6 +2638,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		return path.split("/").filter(Boolean).map((seg) => ({ key: seg.replace(/~1/g, "/").replace(/~0/g, "~") }));
 	}
 	function createPaddedBuffer(jsonStr) {
+		if (typeof Buffer === "undefined") throw new Error("createPaddedBuffer requires Node.js Buffer");
 		const jsonBuf = Buffer.from(jsonStr);
 		const padded = Buffer.allocUnsafe(jsonBuf.length + SIMDJSON_PADDING);
 		jsonBuf.copy(padded);
@@ -2845,11 +2738,12 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			const mapKey = this._schemaMap.size > 0 ? this._schemaStr + "\0" + [...this._schemaMap.keys()].sort().join("\0") : this._schemaStr;
 			const cached = _compileCache.get(mapKey);
 			let jsFn, jsCombinedFn, jsErrFn;
-			if (cached && !process.env.ATA_FORCE_NAPI) {
+			var _forceNapi = typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
+			if (cached && !_forceNapi) {
 				jsFn = cached.jsFn;
 				jsCombinedFn = cached.combined;
 				jsErrFn = cached.errFn;
-			} else if (!process.env.ATA_FORCE_NAPI) {
+			} else if (!_forceNapi) {
 				jsFn = compileToJSCodegen(schemaObj, sm) || compileToJS(schemaObj, null, sm);
 				jsCombinedFn = compileToJSCombined(schemaObj, VALID_RESULT, sm);
 				jsErrFn = compileToJSCodegenWithErrors(schemaObj, sm);
@@ -3074,7 +2968,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		}
 		_ensureCodegen() {
 			if (this._jsFn) return;
-			if (process.env.ATA_FORCE_NAPI) return;
+			if (typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI) return;
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = this._schemaMap.size > 0 ? this._schemaStr + "\0" + [...this._schemaMap.keys()].sort().join("\0") : this._schemaStr;
 			const cached = _compileCache.get(mapKey);
@@ -3236,7 +3130,11 @@ module.exports = { boolFn, hybridFactory, errFn };
 	}
 	function version() {
 		if (native) return native.version();
-		return require_package().version;
+		try {
+			return require_package().version;
+		} catch {
+			return "unknown";
+		}
 	}
 	Validator.bundle = function(schemas, opts) {
 		return "'use strict';\nmodule.exports = [\n" + schemas.map((schema) => {
@@ -3322,9 +3220,11 @@ module.exports = { boolFn, hybridFactory, errFn };
 	};
 }));
 //#endregion
-//#region ../schemas/libraries/ata-validator/download.ts
+//#region ../node_modules/.pnpm/ata-validator@0.7.3/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
-var import_ata_validator = require_ata_validator();
+const { Validator, validate, version, createPaddedBuffer, SIMDJSON_PADDING } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
+//#endregion
+//#region ../schemas/libraries/ata-validator/download.ts
 const dateSchema = {
 	type: "object",
 	instanceof: "Date",
@@ -3359,7 +3259,7 @@ const imageSchema = {
 		"url"
 	]
 };
-(0, import_keywords.withKeywords)(new import_ata_validator.Validator({
+(0, import_keywords.withKeywords)(new Validator({
 	type: "object",
 	properties: {
 		id: { type: "number" },

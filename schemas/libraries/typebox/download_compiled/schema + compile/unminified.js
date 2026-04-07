@@ -10,7 +10,7 @@ var __exportAll = (all, no_symbols) => {
 	return target;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/memory/metrics.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/memory/metrics.mjs
 /** TypeBox instantiation metrics */
 const Metrics = {
 	assign: 0,
@@ -20,7 +20,7 @@ const Metrics = {
 	update: 0
 };
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/guard/string.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/guard/string.mjs
 function IsBetween(value, min, max) {
 	return value >= min && value <= max;
 }
@@ -30,7 +30,7 @@ function IsRegionalIndicator(value) {
 function IsVariationSelector(value) {
 	return IsBetween(value, 65024, 65039);
 }
-function IsCombiningMark(value) {
+function IsCombiningMark$1(value) {
 	return IsBetween(value, 768, 879) || IsBetween(value, 6832, 6911) || IsBetween(value, 7616, 7679) || IsBetween(value, 65056, 65071);
 }
 function CodePointLength(value) {
@@ -39,7 +39,7 @@ function CodePointLength(value) {
 function ConsumeModifiers(value, index) {
 	while (index < value.length) {
 		const point = value.codePointAt(index);
-		if (IsCombiningMark(point) || IsVariationSelector(point)) index += CodePointLength(point);
+		if (IsCombiningMark$1(point) || IsVariationSelector(point)) index += CodePointLength(point);
 		else break;
 	}
 	return index;
@@ -114,7 +114,7 @@ function IsMaxLengthFast(value, maxLength) {
 	return true;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/guard/guard.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/guard/guard.mjs
 var guard_exports = /* @__PURE__ */ __exportAll({
 	Entries: () => Entries$2,
 	EntriesRegExp: () => EntriesRegExp,
@@ -307,7 +307,7 @@ function IsDeepEqual$1(left, right) {
 	return IsArray$1(left) ? DeepEqualArray(left, right) : IsObject$1(left) ? DeepEqualObject(left, right) : IsEqual$1(left, right);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/guard/emit.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/guard/emit.mjs
 const identifierRegExp = /^[\p{ID_Start}_$][\p{ID_Continue}_$\u200C\u200D]*$/u;
 /** Returns true if this value is a valid JavaScript identifier */
 function IsIdentifier(value) {
@@ -462,7 +462,7 @@ function MultipleOf(dividend, divisor) {
 	return `Guard.IsMultipleOf(${dividend}, ${divisor})`;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/guard/globals.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/guard/globals.mjs
 function IsBoolean(value) {
 	return value instanceof Boolean;
 }
@@ -484,7 +484,7 @@ function IsDate$1(value) {
 	return value instanceof globalThis.Date;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/memory/clone.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/memory/clone.mjs
 function IsGuard$1(value) {
 	return IsObject$1(value) && HasPropertyKey$1(value, "~guard");
 }
@@ -525,7 +525,7 @@ function Clone(value) {
 	return FromValue$2(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/settings/settings.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/settings/settings.mjs
 const settings = {
 	immutableTypes: false,
 	maxErrors: 8,
@@ -539,7 +539,7 @@ function Get$3() {
 	return settings;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/memory/create.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/memory/create.mjs
 function MergeHidden(left, right, configuration = {}) {
 	for (const key of Object.keys(right)) Object.defineProperty(left, key, {
 		configurable: true,
@@ -568,7 +568,7 @@ function Create(hidden, enumerable, options = {}) {
 	return settings.immutableTypes ? Object.freeze(withHidden) : withHidden;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/memory/update.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/memory/update.mjs
 /**
 * Updates a value with new properties while preserving property enumerability. Use this function to modify
 * existing types without altering their configuration.
@@ -592,18 +592,18 @@ function Update(current, hidden, enumerable) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/schema.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/schema.mjs
 function IsSchema$1(value) {
 	return IsObject$1(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/_optional.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/_optional.mjs
 /** Returns true if the given value is TOptional */
 function IsOptional(value) {
 	return IsSchema$1(value) && HasPropertyKey$1(value, "~optional");
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/array.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/array.mjs
 /** Creates an Array type. */
 function Array$1(items, options) {
 	return Create({ "~kind": "Array" }, {
@@ -612,13 +612,13 @@ function Array$1(items, options) {
 	}, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/properties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/properties.mjs
 /** Creates a RequiredArray derived from the given TProperties value. */
 function RequiredArray(properties) {
 	return Keys$1(properties).filter((key) => !IsOptional(properties[key]));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/object.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/object.mjs
 /** Creates an Object type. */
 function _Object_(properties, options = {}) {
 	const requiredKeys = RequiredArray(properties);
@@ -629,13 +629,13 @@ function _Object_(properties, options = {}) {
 	}, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/union.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/union.mjs
 /** Creates a Union type. */
 function Union(anyOf, options = {}) {
 	return Create({ "~kind": "Union" }, { anyOf }, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/arguments/arguments.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/arguments/arguments.mjs
 /**
 * Match arguments for overloaded functions that use the `...args: unknown[]` pattern. Arguments
 * are parsed using argument length only.
@@ -646,7 +646,7 @@ function Match$1(args, match) {
 	})();
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/engine/enum/typescript-enum-to-enum-values.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/engine/enum/typescript-enum-to-enum-values.mjs
 function IsTypeScriptEnumLike(value) {
 	return IsObjectNotArray$1(value);
 }
@@ -654,19 +654,19 @@ function TypeScriptEnumToEnumValues(type) {
 	return Keys$1(type).filter((key) => isNaN(key)).reduce((result, key) => [...result, type[key]], []);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/enum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/enum.mjs
 /** Creates an Enum type. */
 function Enum(value, options) {
 	return Create({ "~kind": "Enum" }, { enum: IsTypeScriptEnumLike(value) ? TypeScriptEnumToEnumValues(value) : value }, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/unreachable/unreachable.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/unreachable/unreachable.mjs
 /** Used for unreachable logic */
 function Unreachable() {
 	throw new Error("Unreachable");
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/environment/can-evaluate.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/environment/can-evaluate.mjs
 let supported = void 0;
 function TryEval() {
 	try {
@@ -682,7 +682,7 @@ function CanAccelerate() {
 	return supported && Get$3().useAcceleration;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/hashing/hash.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/hashing/hash.mjs
 var hash_exports = /* @__PURE__ */ __exportAll({
 	Hash: () => Hash,
 	HashCode: () => HashCode
@@ -801,7 +801,7 @@ function Hash(value) {
 	return HashCode(value).toString(16).padStart(16, "0");
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/locale/en_US.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/locale/en_US.mjs
 /** en_US: English (United States) - ISO 639-1 language code 'en' with ISO 3166-1 alpha-2 country code 'US' for United States. */
 function en_US(error) {
 	switch (error.keyword) {
@@ -841,14 +841,14 @@ function en_US(error) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/system/locale/_config.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/system/locale/_config.mjs
 let locale = en_US;
 /** Gets the locale */
 function Get$2() {
 	return locale;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/_refine.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/_refine.mjs
 /** Applies a Refine check to the given type. */
 function RefineAdd(type, refinement) {
 	return Update(type, { "~refine": IsRefine$1(type) ? [...type["~refine"], refinement] : [refinement] }, {});
@@ -865,23 +865,23 @@ function IsRefine$1(value) {
 	return IsSchema$1(value) && HasPropertyKey$1(value, "~refine");
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/integer.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/integer.mjs
 const IntegerPattern = "-?(?:0|[1-9][0-9]*)";
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/null.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/null.mjs
 /** Creates a Null type. */
 function Null(options) {
 	return Create({ "~kind": "Null" }, { type: "null" }, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/number.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/number.mjs
 const NumberPattern = "-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?";
 /** Creates a Number type. */
 function Number$1(options) {
 	return Create({ "~kind": "Number" }, { type: "number" }, options);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/string.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/string.mjs
 /** Creates a String type. */
 function String$1(options) {
 	return Create({ "~kind": "String" }, { type: "string" }, options);
@@ -889,13 +889,13 @@ function String$1(options) {
 `${IntegerPattern}`;
 `${NumberPattern}`;
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/types/unsafe.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/types/unsafe.mjs
 /** Creates a Unsafe type. */
 function Unsafe(schema) {
 	return Create({ ["~kind"]: "Unsafe" }, {}, schema);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/type/script/token/internal/char.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/type/script/token/internal/char.mjs
 function Range(start, end) {
 	return Array.from({ length: end - start + 1 }, (_, i) => String.fromCharCode(start + i));
 }
@@ -909,7 +909,7 @@ const Digit = ["0", ...Range(49, 57)];
 ], ...Digit];
 [...Digit];
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/_guard.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/_guard.mjs
 function IsGuardInterface(value) {
 	return IsObject$1(value) && HasPropertyKey$1(value, "check") && HasPropertyKey$1(value, "errors") && IsFunction$1(value.check) && IsFunction$1(value.errors);
 }
@@ -917,7 +917,7 @@ function IsGuard(value) {
 	return HasPropertyKey$1(value, "~guard") && IsGuardInterface(value["~guard"]);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/_refine.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/_refine.mjs
 /**
 * Returns true if the schema contains an '~refine` keyword
 * @specification None
@@ -926,7 +926,7 @@ function IsRefine(value) {
 	return HasPropertyKey$1(value, "~refine") && IsArray$1(value["~refine"]) && Every$1(value["~refine"], 0, (value) => IsObject$1(value) && HasPropertyKey$1(value, "refine") && HasPropertyKey$1(value, "message") && IsFunction$1(value.refine) && IsString$2(value.message));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/schema.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/schema.mjs
 /** Returns true if this value is object like */
 function IsSchemaObject(value) {
 	return IsObject$1(value) && !IsArray$1(value);
@@ -940,7 +940,7 @@ function IsSchema(value) {
 	return IsSchemaObject(value) || IsBooleanSchema(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/additionalItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/additionalItems.mjs
 /**
 * Returns true if the schema contains a valid additionalItems property
 * @specification Json Schema 7
@@ -949,7 +949,7 @@ function IsAdditionalItems(schema) {
 	return HasPropertyKey$1(schema, "additionalItems") && IsSchema(schema.additionalItems);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/additionalProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/additionalProperties.mjs
 /**
 * Returns true if the schema contains a valid additionalProperties property
 * @specification Json Schema 7
@@ -958,7 +958,7 @@ function IsAdditionalProperties(schema) {
 	return HasPropertyKey$1(schema, "additionalProperties") && IsSchema(schema.additionalProperties);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/allOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/allOf.mjs
 /**
 * Returns true if the schema contains a valid allOf property
 * @specification Json Schema 7
@@ -967,7 +967,7 @@ function IsAllOf(schema) {
 	return HasPropertyKey$1(schema, "allOf") && IsArray$1(schema.allOf) && schema.allOf.every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/anchor.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/anchor.mjs
 /**
 * Returns true if the schema contains a valid $anchor property
 */
@@ -975,7 +975,7 @@ function IsAnchor(schema) {
 	return HasPropertyKey$1(schema, "$anchor") && IsString$2(schema.$anchor);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/anyOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/anyOf.mjs
 /**
 * Returns true if the schema contains a valid anyOf property
 * @specification Json Schema 7
@@ -984,7 +984,7 @@ function IsAnyOf(schema) {
 	return HasPropertyKey$1(schema, "anyOf") && IsArray$1(schema.anyOf) && schema.anyOf.every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/const.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/const.mjs
 /**
 * Returns true if the schema contains a valid const property
 * @specification Json Schema 7
@@ -993,7 +993,7 @@ function IsConst(value) {
 	return HasPropertyKey$1(value, "const");
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/contains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/contains.mjs
 /**
 * Returns true if the schema contains a valid contains property
 * @specification Json Schema 7
@@ -1002,7 +1002,7 @@ function IsContains(schema) {
 	return HasPropertyKey$1(schema, "contains") && IsSchema(schema.contains);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/dependencies.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/dependencies.mjs
 /**
 * Returns true if the schema contains a valid dependencies property
 * @specification Json Schema 7
@@ -1011,7 +1011,7 @@ function IsDependencies(schema) {
 	return HasPropertyKey$1(schema, "dependencies") && IsObject$1(schema.dependencies) && Object.values(schema.dependencies).every((value) => IsSchema(value) || IsArray$1(value) && value.every((value) => IsString$2(value)));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/dependentRequired.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/dependentRequired.mjs
 /**
 * Returns true if the schema contains a valid dependentRequired property
 * @specification Json Schema 2019-09
@@ -1020,7 +1020,7 @@ function IsDependentRequired(schema) {
 	return HasPropertyKey$1(schema, "dependentRequired") && IsObject$1(schema.dependentRequired) && Object.values(schema.dependentRequired).every((value) => IsArray$1(value) && value.every((value) => IsString$2(value)));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/dependentSchemas.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/dependentSchemas.mjs
 /**
 * Returns true if the schema contains a valid dependentRequired property
 * @specification Json Schema 2019-09
@@ -1029,7 +1029,7 @@ function IsDependentSchemas(schema) {
 	return HasPropertyKey$1(schema, "dependentSchemas") && IsObject$1(schema.dependentSchemas) && Object.values(schema.dependentSchemas).every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/dynamicAnchor.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/dynamicAnchor.mjs
 /**
 * Returns true if the schema contains a valid $dynamicAnchor property
 */
@@ -1037,7 +1037,7 @@ function IsDynamicAnchor(schema) {
 	return HasPropertyKey$1(schema, "$dynamicAnchor") && IsString$2(schema.$dynamicAnchor);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/else.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/else.mjs
 /**
 * Returns true if the schema contains a valid else property
 * @specification Json Schema 7
@@ -1046,7 +1046,7 @@ function IsElse(schema) {
 	return HasPropertyKey$1(schema, "else") && IsSchema(schema.else);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/enum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/enum.mjs
 /**
 * Returns true if the schema contains a valid enum property
 * @specification Json Schema 7
@@ -1055,7 +1055,7 @@ function IsEnum(schema) {
 	return HasPropertyKey$1(schema, "enum") && IsArray$1(schema.enum);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/exclusiveMaximum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/exclusiveMaximum.mjs
 /**
 * Returns true if the schema contains a valid exclusiveMaximum property
 * @specification Json Schema 7
@@ -1064,7 +1064,7 @@ function IsExclusiveMaximum(schema) {
 	return HasPropertyKey$1(schema, "exclusiveMaximum") && (IsNumber$2(schema.exclusiveMaximum) || IsBigInt$1(schema.exclusiveMaximum));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/exclusiveMinimum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/exclusiveMinimum.mjs
 /**
 * Returns true if the schema contains a valid exclusiveMinimum property
 * @specification Json Schema 7
@@ -1073,7 +1073,7 @@ function IsExclusiveMinimum(schema) {
 	return HasPropertyKey$1(schema, "exclusiveMinimum") && (IsNumber$2(schema.exclusiveMinimum) || IsBigInt$1(schema.exclusiveMinimum));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/format.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/format.mjs
 /**
 * Returns true if the schema contains a valid format property
 * @specification Json Schema 7
@@ -1082,7 +1082,7 @@ function IsFormat(schema) {
 	return HasPropertyKey$1(schema, "format") && IsString$2(schema.format);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/id.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/id.mjs
 /**
 * Returns true if the schema contains a valid $id property
 * @specification Json Schema 7
@@ -1091,7 +1091,7 @@ function IsId(schema) {
 	return HasPropertyKey$1(schema, "$id") && IsString$2(schema.$id);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/if.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/if.mjs
 /**
 * Returns true if the schema contains a valid $id property
 * @specification Json Schema 7
@@ -1100,7 +1100,7 @@ function IsIf(schema) {
 	return HasPropertyKey$1(schema, "if") && IsSchema(schema.if);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/items.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/items.mjs
 /**
 * Returns true if the schema contains a valid items property
 * @specification Json Schema 7
@@ -1115,7 +1115,7 @@ function IsItemsSized(schema) {
 	return IsItems(schema) && IsArray$1(schema.items);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/maximum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/maximum.mjs
 /**
 * Returns true if the schema contains a valid maximum property
 * @specification Json Schema 7
@@ -1124,7 +1124,7 @@ function IsMaximum(schema) {
 	return HasPropertyKey$1(schema, "maximum") && (IsNumber$2(schema.maximum) || IsBigInt$1(schema.maximum));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/maxContains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/maxContains.mjs
 /**
 * Returns true if the schema contains a valid maxContains property
 * @specification Json Schema 2019-09
@@ -1133,7 +1133,7 @@ function IsMaxContains(schema) {
 	return HasPropertyKey$1(schema, "maxContains") && IsNumber$2(schema.maxContains);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/maxItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/maxItems.mjs
 /**
 * Returns true if the schema contains a valid maxItems property
 * @specification Json Schema 7
@@ -1142,7 +1142,7 @@ function IsMaxItems(schema) {
 	return HasPropertyKey$1(schema, "maxItems") && IsNumber$2(schema.maxItems);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/maxLength.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/maxLength.mjs
 /**
 * Returns true if the schema contains a valid maxLength property
 * @specification Json Schema 7
@@ -1151,7 +1151,7 @@ function IsMaxLength(schema) {
 	return HasPropertyKey$1(schema, "maxLength") && IsNumber$2(schema.maxLength);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/maxProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/maxProperties.mjs
 /**
 * Returns true if the schema contains a valid maxProperties property
 * @specification Json Schema 7
@@ -1160,7 +1160,7 @@ function IsMaxProperties(schema) {
 	return HasPropertyKey$1(schema, "maxProperties") && IsNumber$2(schema.maxProperties);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/minimum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/minimum.mjs
 /**
 * Returns true if the schema contains a valid minimum property
 * @specification Json Schema 7
@@ -1169,7 +1169,7 @@ function IsMinimum(schema) {
 	return HasPropertyKey$1(schema, "minimum") && (IsNumber$2(schema.minimum) || IsBigInt$1(schema.minimum));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/minContains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/minContains.mjs
 /**
 * Returns true if the schema contains a valid maxContains property
 * @specification Json Schema 2019-09
@@ -1178,7 +1178,7 @@ function IsMinContains(schema) {
 	return HasPropertyKey$1(schema, "minContains") && IsNumber$2(schema.minContains);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/minItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/minItems.mjs
 /**
 * Returns true if the schema contains a valid minItems property
 * @specification Json Schema 7
@@ -1187,7 +1187,7 @@ function IsMinItems(schema) {
 	return HasPropertyKey$1(schema, "minItems") && IsNumber$2(schema.minItems);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/minLength.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/minLength.mjs
 /**
 * Returns true if the schema contains a valid minLength property
 * @specification Json Schema 7
@@ -1196,7 +1196,7 @@ function IsMinLength(schema) {
 	return HasPropertyKey$1(schema, "minLength") && IsNumber$2(schema.minLength);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/minProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/minProperties.mjs
 /**
 * Returns true if the schema contains a valid minProperties property
 * @specification Json Schema 7
@@ -1205,7 +1205,7 @@ function IsMinProperties(schema) {
 	return HasPropertyKey$1(schema, "minProperties") && IsNumber$2(schema.minProperties);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/multipleOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/multipleOf.mjs
 /**
 * Returns true if the schema contains a valid multipleOf property
 * @specification Json Schema 7
@@ -1214,7 +1214,7 @@ function IsMultipleOf(schema) {
 	return HasPropertyKey$1(schema, "multipleOf") && (IsNumber$2(schema.multipleOf) || IsBigInt$1(schema.multipleOf));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/not.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/not.mjs
 /**
 * Returns true if the schema contains a valid not property
 * @specification Json Schema 7
@@ -1223,7 +1223,7 @@ function IsNot(schema) {
 	return HasPropertyKey$1(schema, "not") && IsSchema(schema.not);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/oneOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/oneOf.mjs
 /**
 * Returns true if the schema contains a valid oneOf property
 * @specification Json Schema 7
@@ -1232,7 +1232,7 @@ function IsOneOf(schema) {
 	return HasPropertyKey$1(schema, "oneOf") && IsArray$1(schema.oneOf) && schema.oneOf.every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/pattern.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/pattern.mjs
 /**
 * Returns true if the schema contains a valid pattern property
 * @specification Json Schema 7
@@ -1241,7 +1241,7 @@ function IsPattern(schema) {
 	return HasPropertyKey$1(schema, "pattern") && (IsString$2(schema.pattern) || schema.pattern instanceof RegExp);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/patternProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/patternProperties.mjs
 /**
 * Returns true if the schema contains a valid patternProperties property
 * @specification Json Schema 7
@@ -1250,7 +1250,7 @@ function IsPatternProperties(schema) {
 	return HasPropertyKey$1(schema, "patternProperties") && IsObject$1(schema.patternProperties) && Object.values(schema.patternProperties).every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/prefixItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/prefixItems.mjs
 /**
 * Returns true if the schema contains a valid prefixItems property
 */
@@ -1258,7 +1258,7 @@ function IsPrefixItems(schema) {
 	return HasPropertyKey$1(schema, "prefixItems") && IsArray$1(schema.prefixItems) && schema.prefixItems.every((schema) => IsSchema(schema));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/properties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/properties.mjs
 /**
 * Returns true if the schema contains a valid properties property
 * @specification Json Schema 7
@@ -1267,7 +1267,7 @@ function IsProperties(schema) {
 	return HasPropertyKey$1(schema, "properties") && IsObject$1(schema.properties) && Object.values(schema.properties).every((value) => IsSchema(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/propertyNames.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/propertyNames.mjs
 /**
 * Returns true if the schema contains a valid propertyNames property
 * @specification Json Schema 7
@@ -1276,7 +1276,7 @@ function IsPropertyNames(schema) {
 	return HasPropertyKey$1(schema, "propertyNames") && (IsObject$1(schema.propertyNames) || IsSchema(schema.propertyNames));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/recursiveAnchor.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/recursiveAnchor.mjs
 /**
 * Returns true if the schema contains a valid $recursiveAnchor property
 */
@@ -1290,7 +1290,7 @@ function IsRecursiveAnchorTrue(schema) {
 	return IsRecursiveAnchor(schema) && IsEqual$1(schema.$recursiveAnchor, true);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/recursiveRef.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/recursiveRef.mjs
 /**
 * Returns true if the schema contains a valid $recursiveRef property
 */
@@ -1298,7 +1298,7 @@ function IsRecursiveRef(schema) {
 	return HasPropertyKey$1(schema, "$recursiveRef") && IsString$2(schema.$recursiveRef);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/ref.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/ref.mjs
 /**
 * Returns true if the schema contains a valid $ref property
 * @specification Json Schema 7
@@ -1307,7 +1307,7 @@ function IsRef(schema) {
 	return HasPropertyKey$1(schema, "$ref") && IsString$2(schema.$ref);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/required.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/required.mjs
 /**
 * Returns true if the schema contains a valid required property
 * @specification Json Schema 7
@@ -1316,7 +1316,7 @@ function IsRequired(schema) {
 	return HasPropertyKey$1(schema, "required") && IsArray$1(schema.required) && schema.required.every((value) => IsString$2(value));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/then.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/then.mjs
 /**
 * Returns true if the schema contains a valid then property
 * @specification Json Schema 7
@@ -1325,7 +1325,7 @@ function IsThen(schema) {
 	return HasPropertyKey$1(schema, "then") && IsSchema(schema.then);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/type.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/type.mjs
 /**
 * Returns true if the schema contains a valid type property
 * @specification Json Schema 7
@@ -1334,7 +1334,7 @@ function IsType(schema) {
 	return HasPropertyKey$1(schema, "type") && (IsString$2(schema.type) || IsArray$1(schema.type) && schema.type.every((value) => IsString$2(value)));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/uniqueItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/uniqueItems.mjs
 /**
 * Returns true if the schema contains a valid uniqueItems property
 * @specification Json Schema 7
@@ -1343,7 +1343,7 @@ function IsUniqueItems(schema) {
 	return HasPropertyKey$1(schema, "uniqueItems") && IsBoolean$2(schema.uniqueItems);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/unevaluatedItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/unevaluatedItems.mjs
 /**
 * Returns true if the schema contains a valid unevaluatedItems property
 * @specification Json Schema 2019-09
@@ -1352,7 +1352,7 @@ function IsUnevaluatedItems(schema) {
 	return HasPropertyKey$1(schema, "unevaluatedItems") && IsSchema(schema.unevaluatedItems);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/types/unevaluatedProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/types/unevaluatedProperties.mjs
 /**
 * Returns true if the schema contains a valid unevaluatedProperties property
 * @specification Json Schema 2019-09
@@ -1361,7 +1361,7 @@ function IsUnevaluatedProperties(schema) {
 	return HasPropertyKey$1(schema, "unevaluatedProperties") && IsSchema(schema.unevaluatedProperties);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_context.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_context.mjs
 function HasUnevaluatedFromObject(value) {
 	return IsUnevaluatedItems(value) || IsUnevaluatedProperties(value) || Keys$1(value).some((key) => HasUnevaluatedFromUnknown(value[key]));
 }
@@ -1381,6 +1381,12 @@ var BuildContext = class {
 	UseUnevaluated() {
 		return this.hasUnevaluated;
 	}
+	Push() {
+		return Call(Member("context", "Push"), []);
+	}
+	Pop() {
+		return Call(Member("context", "Pop"), []);
+	}
 	AddIndex(index) {
 		return Call(Member("context", "AddIndex"), [index]);
 	}
@@ -1393,27 +1399,42 @@ var BuildContext = class {
 };
 var CheckContext = class {
 	constructor() {
-		this.indices = /* @__PURE__ */ new Set();
-		this.keys = /* @__PURE__ */ new Set();
+		this.stack = [{
+			indices: /* @__PURE__ */ new Set(),
+			keys: /* @__PURE__ */ new Set()
+		}];
+	}
+	Push() {
+		const indices = /* @__PURE__ */ new Set();
+		const keys = /* @__PURE__ */ new Set();
+		this.stack.push({
+			indices,
+			keys
+		});
+		return true;
+	}
+	Pop() {
+		this.stack.pop();
+		return true;
 	}
 	AddIndex(index) {
-		this.indices.add(index);
+		this.GetIndices().add(index);
 		return true;
 	}
 	AddKey(key) {
-		this.keys.add(key);
+		this.GetKeys().add(key);
 		return true;
 	}
 	GetIndices() {
-		return this.indices;
+		return this.stack[this.stack.length - 1].indices;
 	}
 	GetKeys() {
-		return this.keys;
+		return this.stack[this.stack.length - 1].keys;
 	}
 	Merge(results) {
 		for (const context of results) {
-			context.indices.forEach((value) => this.indices.add(value));
-			context.keys.forEach((value) => this.keys.add(value));
+			context.GetIndices().forEach((value) => this.GetIndices().add(value));
+			context.GetKeys().forEach((value) => this.GetKeys().add(value));
 		}
 		return true;
 	}
@@ -1442,28 +1463,24 @@ var AccumulatedErrorContext = class extends ErrorContext {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_externals.mjs
-const identifier = "external_";
-let resetCount = 0;
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_externals.mjs
 const state = {
-	identifier: `${identifier}${resetCount}`,
+	identifier: "External",
 	variables: []
 };
-function ResetExternal() {
-	state.identifier = `${identifier}${resetCount}`;
-	state.variables = [];
-	resetCount += 1;
-}
 function CreateVariable(value) {
-	const call = `${state.identifier}[${state.variables.length}]`;
+	const call = `External[${state.variables.length}]`;
 	state.variables.push(value);
 	return call;
 }
+function ResetExternal() {
+	state.variables = [];
+}
 function GetExternal() {
-	return state;
+	return { ...state };
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_guard.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_guard.mjs
 function BuildGuard(stack, context, schema, value) {
 	return Call(Member(Member(CreateVariable(schema), "~guard"), "check"), [value]);
 }
@@ -1479,7 +1496,7 @@ function ErrorGuard(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_refine.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_refine.mjs
 function BuildRefine(stack, context, schema, value) {
 	return Every(CreateVariable(schema["~refine"].map((refinement) => refinement)), Constant(0), ["refinement", "_"], Call(Member("refinement", "refine"), [value]));
 }
@@ -1500,21 +1517,21 @@ function ErrorRefine(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_unique.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_unique.mjs
 let index = 0;
 /** Returns a Unique Variable Name */
 function Unique() {
 	return `var_${index++}`;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/additionalItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/additionalItems.mjs
 function IsValid$4(schema) {
 	return IsItems(schema) && IsArray$1(schema.items);
 }
 function BuildAdditionalItems(stack, context, schema, value) {
 	if (!IsValid$4(schema)) return Constant(true);
 	const [item, index] = [Unique(), Unique()];
-	const isSchema = BuildSchema(stack, context, schema.additionalItems, item);
+	const isSchema = BuildSchemaPushStack(stack, context, schema.additionalItems, item);
 	const isLength = IsLessThan(index, Constant(schema.items.length));
 	const addIndex = context.AddIndex(index);
 	const guarded = context.UseUnevaluated() ? Or(isLength, And(isSchema, addIndex)) : Or(isLength, isSchema);
@@ -1523,7 +1540,7 @@ function BuildAdditionalItems(stack, context, schema, value) {
 function CheckAdditionalItems(stack, context, schema, value) {
 	if (!IsValid$4(schema)) return true;
 	return value.every((item, index) => {
-		return IsLessThan$1(index, schema.items.length) || CheckSchema(stack, context, schema.additionalItems, item) && context.AddIndex(index);
+		return IsLessThan$1(index, schema.items.length) || CheckSchemaPushStack(stack, context, schema.additionalItems, item) && context.AddIndex(index);
 	});
 }
 function ErrorAdditionalItems(stack, context, schemaPath, instancePath, schema, value) {
@@ -1531,11 +1548,11 @@ function ErrorAdditionalItems(stack, context, schemaPath, instancePath, schema, 
 	return value.every((item, index) => {
 		const nextSchemaPath = `${schemaPath}/additionalItems`;
 		const nextInstancePath = `${instancePath}/${index}`;
-		return IsLessThan$1(index, schema.items.length) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema.additionalItems, item) && context.AddIndex(index);
+		return IsLessThan$1(index, schema.items.length) || ErrorSchemaPushStack(stack, context, nextSchemaPath, nextInstancePath, schema.additionalItems, item) && context.AddIndex(index);
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/additionalProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/additionalProperties.mjs
 function GetPropertyKeyAsPattern(key) {
 	return `^${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`;
 }
@@ -1554,7 +1571,7 @@ function BuildAdditionalPropertiesFast(context, schema, value) {
 function BuildAdditionalPropertiesStandard(stack, context, schema, value) {
 	const [key, _index] = [Unique(), Unique()];
 	const regexp = CreateVariable(new RegExp(GetPropertiesPattern(schema)));
-	const isSchema = BuildSchema(stack, context, schema.additionalProperties, `${value}[${key}]`);
+	const isSchema = BuildSchemaPushStack(stack, context, schema.additionalProperties, `${value}[${key}]`);
 	const isKey = Call(Member(regexp, "test"), [key]);
 	const addKey = context.AddKey(key);
 	const guarded = context.UseUnevaluated() ? Or(isKey, And(isSchema, addKey)) : Or(isKey, isSchema);
@@ -1566,7 +1583,7 @@ function BuildAdditionalProperties(stack, context, schema, value) {
 function CheckAdditionalProperties(stack, context, schema, value) {
 	const regexp = new RegExp(GetPropertiesPattern(schema));
 	return Every$1(Keys$1(value), 0, (key, _index) => {
-		return regexp.test(key) || CheckSchema(stack, context, schema.additionalProperties, value[key]) && context.AddKey(key);
+		return regexp.test(key) || CheckSchemaPushStack(stack, context, schema.additionalProperties, value[key]) && context.AddKey(key);
 	});
 }
 function ErrorAdditionalProperties(stack, context, schemaPath, instancePath, schema, value) {
@@ -1576,7 +1593,7 @@ function ErrorAdditionalProperties(stack, context, schemaPath, instancePath, sch
 		const nextSchemaPath = `${schemaPath}/additionalProperties`;
 		const nextInstancePath = `${instancePath}/${key}`;
 		const nextContext = new AccumulatedErrorContext();
-		const isAdditionalProperty = regexp.test(key) || ErrorSchema(stack, nextContext, nextSchemaPath, nextInstancePath, schema.additionalProperties, value[key]) && context.AddKey(key);
+		const isAdditionalProperty = regexp.test(key) || ErrorSchemaPushStack(stack, nextContext, nextSchemaPath, nextInstancePath, schema.additionalProperties, value[key]) && context.AddKey(key);
 		if (!isAdditionalProperty) additionalProperties.push(key);
 		return isAdditionalProperty;
 	}) || context.AddError({
@@ -1587,7 +1604,7 @@ function ErrorAdditionalProperties(stack, context, schemaPath, instancePath, sch
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_reducer.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_reducer.mjs
 function Reducer(stack, context, schemas, value, check) {
 	const results = ConstDeclaration("results", "[]");
 	const context_n = schemas.map((_schema, index) => ConstDeclaration(`context_${index}`, New("CheckContext", [])));
@@ -1603,7 +1620,7 @@ function Reducer(stack, context, schemas, value, check) {
 	])), []);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/allOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/allOf.mjs
 function BuildAllOfStandard(stack, context, schema, value) {
 	return Reducer(stack, context, schema.allOf, value, IsEqual(Member("results", "length"), Constant(schema.allOf.length)));
 }
@@ -1634,7 +1651,7 @@ function ErrorAllOf(stack, context, schemaPath, instancePath, schema, value) {
 	return isAllOf;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/anyOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/anyOf.mjs
 function BuildAnyOfStandard(stack, context, schema, value) {
 	return Reducer(stack, context, schema.anyOf, value, IsGreaterThan(Member("results", "length"), Constant(0)));
 }
@@ -1669,7 +1686,7 @@ function ErrorAnyOf(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/boolean.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/boolean.mjs
 function BuildBooleanSchema(stack, context, schema, value) {
 	return schema ? Constant(true) : Constant(false);
 }
@@ -1685,7 +1702,7 @@ function ErrorBooleanSchema(stack, context, schemaPath, instancePath, schema, va
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/const.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/const.mjs
 function BuildConst(stack, context, schema, value) {
 	return IsValueLike(schema.const) ? IsEqual(value, Constant(schema.const)) : IsDeepEqual(value, CreateVariable(schema.const));
 }
@@ -1701,7 +1718,7 @@ function ErrorConst(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/contains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/contains.mjs
 function IsValid$3(schema) {
 	return !(IsMinContains(schema) && IsEqual$1(schema.minContains, 0));
 }
@@ -1723,7 +1740,7 @@ function ErrorContains(stack, context, schemaPath, instancePath, schema, value) 
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/dependencies.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/dependencies.mjs
 function BuildDependencies(stack, context, schema, value) {
 	return Or(IsEqual(Member(Keys(value), "length"), Constant(0)), ReduceAnd(Entries$2(schema.dependencies).map(([key, schema]) => {
 		const notKey = Not(HasPropertyKey(value, Constant(key)));
@@ -1756,7 +1773,7 @@ function ErrorDependencies(stack, context, schemaPath, instancePath, schema, val
 	return isLength || isEvery;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/dependentRequired.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/dependentRequired.mjs
 function BuildDependentRequired(stack, context, schema, value) {
 	return Or(IsEqual(Member(Keys(value), "length"), Constant(0)), ReduceAnd(Entries$2(schema.dependentRequired).map(([key, keys]) => {
 		return Or(Not(HasPropertyKey(value, Constant(key))), ReduceAnd(keys.map((key) => HasPropertyKey(value, Constant(key)))));
@@ -1785,7 +1802,7 @@ function ErrorDependentRequired(stack, context, schemaPath, instancePath, schema
 	return isLength || isEveryEntry;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/dependentSchemas.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/dependentSchemas.mjs
 function BuildDependentSchemas(stack, context, schema, value) {
 	return Or(IsEqual(Member(Keys(value), "length"), Constant(0)), ReduceAnd(Entries$2(schema.dependentSchemas).map(([key, schema]) => {
 		return Or(Not(HasPropertyKey(value, Constant(key))), BuildSchema(stack, context, schema, value));
@@ -1807,7 +1824,7 @@ function ErrorDependentSchemas(stack, context, schemaPath, instancePath, schema,
 	return isLength || isEvery;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/enum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/enum.mjs
 function BuildEnum(stack, context, schema, value) {
 	return ReduceOr(schema.enum.map((option) => {
 		if (IsValueLike(option)) return IsEqual(value, Constant(option));
@@ -1826,7 +1843,7 @@ function ErrorEnum(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/exclusiveMaximum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/exclusiveMaximum.mjs
 function BuildExclusiveMaximum(stack, context, schema, value) {
 	return IsLessThan(value, Constant(schema.exclusiveMaximum));
 }
@@ -1845,7 +1862,7 @@ function ErrorExclusiveMaximum(stack, context, schemaPath, instancePath, schema,
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/exclusiveMinimum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/exclusiveMinimum.mjs
 function BuildExclusiveMinimum(stack, context, schema, value) {
 	return IsGreaterThan(value, Constant(schema.exclusiveMinimum));
 }
@@ -1864,7 +1881,7 @@ function ErrorExclusiveMinimum(stack, context, schemaPath, instancePath, schema,
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/date.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/date.mjs
 const DAYS = [
 	0,
 	31,
@@ -1898,7 +1915,7 @@ function IsDate(value) {
 	return month >= 1 && month <= 12 && day >= 1 && day <= (month === 2 && IsLeapYear(year) ? 29 : DAYS[month]);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/time.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/time.mjs
 const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(?:Z|([+-])(\d\d):(\d\d))?$/i;
 /**
 * Returns true if the value is a ISO time string
@@ -1921,7 +1938,7 @@ function IsTime(value, strictTimeZone = true) {
 	return (utcHr === 23 || utcHr === -1) && (utcMin === 59 || utcMin === -1) && sec < 61;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/date-time.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/date-time.mjs
 /**
 * Returns true if the value is a ISO8601 DateTime string
 * @source ajv-formats
@@ -1932,17 +1949,17 @@ function IsDateTime(value, strictTimeZone = true) {
 	return dateTime.length === 2 && IsDate(dateTime[0]) && IsTime(dateTime[1], strictTimeZone);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/duration.mjs
-const Duration = /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/;
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/duration.mjs
+const Duration = /^P((\d+Y(\d+M(\d+D)?)?|\d+M(\d+D)?|\d+D)(T(\d+H(\d+M(\d+S)?)?|\d+M(\d+S)?|\d+S))?|T(\d+H(\d+M(\d+S)?)?|\d+M(\d+S)?|\d+S)|\d+W)$/;
 /**
-* Returns true if the value is a Duration string
-* @source ajv-formats
+* Returns true if the value is a valid ISO-8601 duration.
+* @specification https://tools.ietf.org/html/rfc3339
 */
 function IsDuration(value) {
 	return Duration.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/ipv4.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/ipv4.mjs
 function IsIPv4Internal(value, start, end) {
 	let dots = 0;
 	let num = 0;
@@ -1972,7 +1989,7 @@ function IsIPv4(value) {
 	return IsIPv4Internal(value, 0, value.length);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/email.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/email.mjs
 /**
 * Returns true if the value is an Email
 * @specification Json Schema 2020-12
@@ -1987,32 +2004,228 @@ function IsEmail(value) {
 	return at > 0 && at < value.length - 1 && !(!quoted && dot === 0 || !quoted && dot !== -1 && value.indexOf(".", dot + 1) === dot + 1 || dot !== -1 && value.indexOf("@", dot) === dot + 1 || !quoted && value.indexOf(" ") !== -1 || value.indexOf(",") !== -1 || ipLiteral && !ipv4 && !ipv6 || value.indexOf("=", at) !== -1);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/hostname.mjs
-/**
-* Returns true if the value matches RFC 1123 hostname syntax.
-* @specification https://tools.ietf.org/html/rfc1123
-*/
-function IsHostname(value) {
-	if (value.length > 253 || value.length === 0) return false;
-	let start = 0;
-	let prev = 0;
-	for (let i = 0; i < value.length; i++) {
-		const ch = value.charCodeAt(i);
-		if (ch === 46) {
-			if (i === value.length - 1 && start < i) break;
-			const len = i - start;
-			if (len === 0 || len > 63 || value.charCodeAt(start) === 45 || prev === 45) return false;
-			start = i + 1;
-		} else if (!(ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90 || ch >= 48 && ch <= 57 || ch === 45)) return false;
-		prev = ch;
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/_puny.mjs
+const PUNYCODE_BASE = 36;
+const PUNYCODE_TMIN = 1;
+const PUNYCODE_TMAX = 26;
+const PUNYCODE_SKEW = 38;
+const PUNYCODE_DAMP = 700;
+const PUNYCODE_INITIAL_BIAS = 72;
+const PUNYCODE_INITIAL_N = 128;
+function Adapt(delta, numPoints, firstTime) {
+	delta = firstTime ? Math.floor(delta / PUNYCODE_DAMP) : delta >> 1;
+	delta += Math.floor(delta / numPoints);
+	let k = 0;
+	while (delta > (PUNYCODE_BASE - PUNYCODE_TMIN) * PUNYCODE_TMAX >> 1) {
+		delta = Math.floor(delta / (PUNYCODE_BASE - PUNYCODE_TMIN));
+		k += PUNYCODE_BASE;
 	}
-	const length = value.length - start;
-	const first = value.charCodeAt(start);
-	const last = value.charCodeAt(value.length - 1);
-	return length > 0 && length <= 63 && first !== 45 && last !== 45;
+	return k + Math.floor((PUNYCODE_BASE - PUNYCODE_TMIN + 1) * delta / (delta + PUNYCODE_SKEW));
+}
+function Decode(value) {
+	const output = [];
+	let n = PUNYCODE_INITIAL_N;
+	let i = 0;
+	let bias = PUNYCODE_INITIAL_BIAS;
+	const delimIdx = value.lastIndexOf("-");
+	if (delimIdx > 0) for (let j = 0; j < delimIdx; j++) {
+		const cp = value.charCodeAt(j);
+		if (cp >= 128) throw new Error("Invalid punycode: non-basic before delimiter");
+		output.push(cp);
+	}
+	let inIdx = delimIdx < 0 ? 0 : delimIdx + 1;
+	while (inIdx < value.length) {
+		const oldi = i;
+		let w = 1;
+		let k = PUNYCODE_BASE;
+		while (true) {
+			if (inIdx >= value.length) throw new Error("Invalid punycode: unexpected end of input");
+			const ch = value.charCodeAt(inIdx++);
+			let digit;
+			if (ch >= 97 && ch <= 122) digit = ch - 97;
+			else if (ch >= 48 && ch <= 57) digit = ch - 48 + 26;
+			else if (ch >= 65 && ch <= 90) digit = ch - 65;
+			else throw new Error("Invalid punycode: bad digit character");
+			i += digit * w;
+			const t = k <= bias ? PUNYCODE_TMIN : k >= bias + PUNYCODE_TMAX ? PUNYCODE_TMAX : k - bias;
+			if (digit < t) break;
+			w *= PUNYCODE_BASE - t;
+			k += PUNYCODE_BASE;
+		}
+		const outLen = output.length + 1;
+		bias = Adapt(i - oldi, outLen, oldi === 0);
+		n += Math.floor(i / outLen);
+		i %= outLen;
+		output.splice(i, 0, n);
+		i++;
+	}
+	return globalThis.String.fromCodePoint(...output);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/idn-email.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/_idna.mjs
+function IsNonspacingMark(cp) {
+	return /\p{Mn}/u.test(String.fromCodePoint(cp));
+}
+function IsSpacingCombiningMark(cp) {
+	return /\p{Mc}/u.test(String.fromCodePoint(cp));
+}
+function IsEnclosingMark(cp) {
+	return /\p{Me}/u.test(String.fromCodePoint(cp));
+}
+function IsCombiningMark(cp) {
+	return IsNonspacingMark(cp) || IsSpacingCombiningMark(cp) || IsEnclosingMark(cp);
+}
+const RFC5892_DISALLOWED = new Set([
+	1600,
+	2042,
+	12334,
+	12335,
+	12337,
+	12338,
+	12339,
+	12340,
+	12341,
+	12347
+]);
+const VIRAMA_CPS = new Set([
+	2381,
+	2509,
+	2637,
+	2765,
+	2893,
+	3021,
+	3149,
+	3277,
+	3387,
+	3388,
+	3405,
+	3530,
+	6980,
+	7082,
+	7083,
+	43456,
+	69702,
+	69759,
+	69817,
+	69939,
+	69940,
+	70080,
+	70197,
+	70477,
+	70722,
+	70850,
+	71103,
+	71231,
+	71350,
+	72767,
+	73028,
+	73029
+]);
+function IsGreek(cp) {
+	return /\p{Script=Greek}/u.test(String.fromCodePoint(cp));
+}
+function IsHebrew(cp) {
+	return /\p{Script=Hebrew}/u.test(String.fromCodePoint(cp));
+}
+function IsHiragana(cp) {
+	return /\p{Script=Hiragana}/u.test(String.fromCodePoint(cp));
+}
+function IsKatakana(cp) {
+	return /\p{Script=Katakana}/u.test(String.fromCodePoint(cp));
+}
+function IsHan(cp) {
+	return /\p{Script=Han}/u.test(String.fromCodePoint(cp));
+}
+function IsArabicIndicDigit(cp) {
+	return cp >= 1632 && cp <= 1641;
+}
+function IsExtendedArabicIndicDigit(cp) {
+	return cp >= 1776 && cp <= 1785;
+}
+function IsVirama(cp) {
+	return VIRAMA_CPS.has(cp);
+}
+function IsUnicodeLabel(value) {
+	if (value.length === 0) return false;
+	const cps = [...value].map((c) => c.codePointAt(0));
+	const len = cps.length;
+	if (cps[0] === 45 || cps[len - 1] === 45) return false;
+	if (len >= 4 && cps[2] === 45 && cps[3] === 45) return false;
+	if (IsCombiningMark(cps[0])) return false;
+	let hasJapanese = false;
+	let hasArabicIndic = false;
+	let hasExtendedArabicIndic = false;
+	for (let i = 0; i < len; i++) {
+		const cp = cps[i];
+		if (RFC5892_DISALLOWED.has(cp)) return false;
+		if (IsHiragana(cp) || IsKatakana(cp) || IsHan(cp)) hasJapanese = true;
+		if (IsArabicIndicDigit(cp)) hasArabicIndic = true;
+		if (IsExtendedArabicIndicDigit(cp)) hasExtendedArabicIndic = true;
+		const prev = cps[i - 1], next = cps[i + 1];
+		switch (cp) {
+			case 183:
+				if (prev !== 108 || next !== 108) return false;
+				break;
+			case 885:
+				if (next === void 0 || !IsGreek(next)) return false;
+				break;
+			case 1523:
+			case 1524:
+				if (prev === void 0 || !IsHebrew(prev)) return false;
+				break;
+			case 8205:
+				if (prev === void 0 || !IsVirama(prev)) return false;
+				break;
+			case 12539: break;
+		}
+	}
+	if (value.includes("・") && !hasJapanese) return false;
+	if (hasArabicIndic && hasExtendedArabicIndic) return false;
+	return true;
+}
+function IsAsciiLabel(value) {
+	if (value.charCodeAt(0) === 45 || value.charCodeAt(value.length - 1) === 45) return false;
+	if (value.length >= 4 && value.charCodeAt(2) === 45 && value.charCodeAt(3) === 45) return false;
+	for (let i = 0; i < value.length; i++) {
+		const ch = value.charCodeAt(i);
+		if (!(ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90 || ch >= 48 && ch <= 57 || ch === 45)) return false;
+	}
+	return true;
+}
+function IsPuny(value) {
+	return value.toLowerCase().startsWith("xn--");
+}
+function IsPunyLabel(value) {
+	try {
+		return IsUnicodeLabel(Decode(value.slice(4)));
+	} catch {
+		return false;
+	}
+}
+function IsIdnLabel(value) {
+	if (value.length === 0 || value.length > 63) return false;
+	return IsPuny(value) ? IsPunyLabel(value) : IsUnicodeLabel(value);
+}
+function IsLabel(value) {
+	if (value.length === 0 || value.length > 63) return false;
+	return IsPuny(value) ? IsPunyLabel(value) : IsAsciiLabel(value);
+}
+//#endregion
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/hostname.mjs
+/**
+* Returns true if the value is a valid hostname.
+* @specification https://tools.ietf.org/html/rfc1123
+* @specification https://tools.ietf.org/html/rfc5891
+* @specification https://tools.ietf.org/html/rfc5892
+*/
+function IsHostname(value) {
+	if (value.length === 0 || value.length > 253) return false;
+	if (value.charCodeAt(value.length - 1) === 46) return false;
+	for (const label of value.split(".")) if (!IsLabel(label)) return false;
+	return true;
+}
+//#endregion
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/idn-email.mjs
 /**
 * Returns true if the value is an IdnEmail
 * @specification Json Schema 2020-12
@@ -2021,72 +2234,22 @@ function IsIdnEmail(value) {
 	return IsEmail(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/idn-hostname.mjs
-function IsValidAdjacentForKatakanaMiddleDot(cp) {
-	return cp >= 12352 && cp <= 12447 || cp >= 12448 && cp <= 12543 && cp !== 12539 || cp >= 19968 && cp <= 40959;
-}
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/idn-hostname.mjs
 /**
-* Returns true if the value is an IDN Hostname
-* @specification Json Schema 2020-12
+* Returns true if the value is a valid internationalized (IDN) hostname.
+* @specification https://tools.ietf.org/html/rfc3490
+* @specification https://tools.ietf.org/html/rfc5891
+* @specification https://tools.ietf.org/html/rfc5892
 */
 function IsIdnHostname(value) {
 	if (value.length === 0 || value.includes(" ")) return false;
-	const normalized = value.normalize("NFC").replace(/[\u002E\u3002\uFF0E\uFF61]/g, ".");
-	if (normalized.length > 253) return false;
-	const labels = normalized.split(".");
-	for (const label of labels) {
-		if (label.length === 0 || label.length > 63) return false;
-		if (label.charCodeAt(0) === 45 || label.charCodeAt(label.length - 1) === 45) return false;
-		if ((label.charCodeAt(0) === 120 || label.charCodeAt(0) === 88) && (label.charCodeAt(1) === 110 || label.charCodeAt(1) === 78) && label.charCodeAt(2) === 45 && label.charCodeAt(3) === 45) {
-			const punycodePart = label.slice(4);
-			if (punycodePart.length < 2 || punycodePart.includes("---")) return false;
-			continue;
-		}
-		let hasArabicIndic = false;
-		let hasExtendedArabicIndic = false;
-		for (let i = 0; i < label.length; i++) {
-			const cp = label.codePointAt(i) ?? 0;
-			if (cp === 12334 || cp === 12335 || cp === 12337 || cp === 12338 || cp === 12339 || cp === 12340 || cp === 12341 || cp === 12347 || cp === 1600 || cp === 2042) return false;
-			if (i === 0 && (cp === 2307 || cp === 768 || cp === 1160)) return false;
-			if (cp === 183) {
-				if (i === 0 || i === label.length - 1) return false;
-				const prev = label.codePointAt(i - 1) ?? 0;
-				const next = label.codePointAt(i + 1) ?? 0;
-				if (prev !== 108 && prev !== 76 || next !== 108 && next !== 76) return false;
-			}
-			if (cp === 12539) {
-				if (label.length === 1) return false;
-				if (i === 0) {
-					if (!IsValidAdjacentForKatakanaMiddleDot(label.codePointAt(i + 1) ?? 0)) return false;
-				} else {
-					const prev = label.codePointAt(i - 1) ?? 0;
-					const next = label.codePointAt(i + 1) ?? 0;
-					if (!IsValidAdjacentForKatakanaMiddleDot(prev) || !IsValidAdjacentForKatakanaMiddleDot(next)) return false;
-				}
-			}
-			if (cp === 885) {
-				if (i === label.length - 1) return false;
-				const next = label.codePointAt(i + 1) ?? 0;
-				if (next < 880 || next > 1023) return false;
-			}
-			if (cp === 1523 || cp === 1524) {
-				if (i === 0) return false;
-				const prev = label.codePointAt(i - 1) ?? 0;
-				if (prev < 1488 || prev > 1514) return false;
-			}
-			if (cp === 8205) {
-				if (i === 0) return false;
-				if ((label.codePointAt(i - 1) ?? 0) !== 2381) return false;
-			}
-			if (cp >= 1632 && cp <= 1641) hasArabicIndic = true;
-			if (cp >= 1776 && cp <= 1785) hasExtendedArabicIndic = true;
-		}
-		if (hasArabicIndic && hasExtendedArabicIndic) return false;
-	}
+	const canonical = value.normalize("NFC").replace(/[\u002E\u3002\uFF0E\uFF61]/g, ".");
+	if (canonical.length > 253) return false;
+	for (const label of canonical.split(".")) if (!IsIdnLabel(label)) return false;
 	return true;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/ipv6.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/ipv6.mjs
 function InRange(ch) {
 	return ch >= 48 && ch <= 57 || ch >= 65 && ch <= 70 || ch >= 97 && ch <= 102;
 }
@@ -2136,7 +2299,7 @@ function IsIPv6(value) {
 	return compressed ? groups <= 7 : groups === 8;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/iri-reference.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/iri-reference.mjs
 function TryUrl(value) {
 	try {
 		new URL(value, "http://example.com");
@@ -2163,7 +2326,7 @@ function IsIriReference(value) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/iri.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/iri.mjs
 /**
 * Returns true if the value is a Iri
 * @specification
@@ -2177,7 +2340,7 @@ function IsIri(value) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/json-pointer-uri-fragment.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/json-pointer-uri-fragment.mjs
 const JsonPointerUriFragment = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i;
 /**
 * Returns true if the value is a json pointer uri fragment
@@ -2188,7 +2351,7 @@ function IsJsonPointerUriFragment(value) {
 	return JsonPointerUriFragment.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/json-pointer.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/json-pointer.mjs
 const JsonPointer = /^(?:\/(?:[^~/]|~0|~1)*)*$/;
 /**
 * Returns true if the value is a json pointer
@@ -2199,7 +2362,7 @@ function IsJsonPointer(value) {
 	return JsonPointer.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/regex.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/regex.mjs
 /**
 * Returns true if the value is a regular expression string pattern
 * @specification
@@ -2215,7 +2378,7 @@ function IsRegex(value) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/relative-json-pointer.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/relative-json-pointer.mjs
 const RelativeJsonPointer = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/;
 /**
 * Returns true if the value is a relative json pointer
@@ -2226,18 +2389,17 @@ function IsRelativeJsonPointer(value) {
 	return RelativeJsonPointer.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/uri-reference.mjs
-const UriReference = /^(?:(?:[a-z][a-z0-9+\-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i;
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/uri-reference.mjs
+const UriReference = /^(?!.*[^\x00-\x7F])(?!.*\\)(?:(?:[a-z][a-z0-9+\-.]*:)?(?:\/\/[^\s[\]{}<>^`|]*)?|[^\s[\]{}<>^`|]*)(?:\?[^\s[\]{}<>^`|]*)?(?:#[^\s[\]{}<>^`|]*)?$/i;
 /**
-* Returns true if the value is a uri reference
-* @specification
-* @source ajv-formats
+* Returns true if the value is a valid URI Reference.
+* @specification https://tools.ietf.org/html/rfc3986
 */
 function IsUriReference(value) {
 	return UriReference.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/uri-template.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/uri-template.mjs
 const UriTemplate = /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?)*\})*$/i;
 /**
 * Returns true if the value is a uri template
@@ -2248,7 +2410,7 @@ function IsUriTemplate(value) {
 	return UriTemplate.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/uri.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/uri.mjs
 function IsAlpha(ch) {
 	return ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90;
 }
@@ -2343,7 +2505,7 @@ function IsUri(value) {
 	return true;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/url.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/url.mjs
 const Url = /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)(?:\.(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 /**
 * Returns true if the value is a Url
@@ -2354,7 +2516,7 @@ function IsUrl(value) {
 	return Url.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/uuid.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/uuid.mjs
 const Uuid = /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 /**
 * Returns true if the value is a uuid
@@ -2365,7 +2527,7 @@ function IsUuid(value) {
 	return Uuid.test(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/_registry.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/_registry.mjs
 const formats = /* @__PURE__ */ new Map();
 /** Clears all entries */
 function Clear() {
@@ -2418,7 +2580,7 @@ function Reset() {
 }
 Reset();
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/format/format.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/format/format.mjs
 var format_exports = /* @__PURE__ */ __exportAll({
 	Clear: () => Clear,
 	Entries: () => Entries,
@@ -2450,7 +2612,7 @@ var format_exports = /* @__PURE__ */ __exportAll({
 	Test: () => Test
 });
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/format.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/format.mjs
 function BuildFormat(stack, context, schema, value) {
 	return Call(Member("Format", "Test"), [Constant(schema.format), value]);
 }
@@ -2466,7 +2628,7 @@ function ErrorFormat(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/if.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/if.mjs
 function BuildIf(stack, context, schema, value) {
 	const thenSchema = IsThen(schema) ? schema.then : true;
 	const elseSchema = IsElse(schema) ? schema.else : true;
@@ -2496,42 +2658,42 @@ function ErrorIf(stack, context, schemaPath, instancePath, schema, value) {
 	return isIf;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/items.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/items.mjs
 function BuildItemsSized(stack, context, schema, value) {
 	return ReduceAnd(schema.items.map((schema, index) => {
 		const isLength = IsLessEqualThan(Member(value, "length"), Constant(index));
-		const isSchema = BuildSchema(stack, context, schema, `${value}[${index}]`);
+		const isSchema = BuildSchemaPushStack(stack, context, schema, `${value}[${index}]`);
 		const addIndex = context.AddIndex(Constant(index));
 		return Or(isLength, context.UseUnevaluated() ? And(isSchema, addIndex) : isSchema);
 	}));
 }
 function CheckItemsSized(stack, context, schema, value) {
 	return Every$1(schema.items, 0, (schema, index) => {
-		return IsLessEqualThan$1(value.length, index) || CheckSchema(stack, context, schema, value[index]) && context.AddIndex(index);
+		return IsLessEqualThan$1(value.length, index) || CheckSchemaPushStack(stack, context, schema, value[index]) && context.AddIndex(index);
 	});
 }
 function ErrorItemsSized(stack, context, schemaPath, instancePath, schema, value) {
 	return EveryAll(schema.items, 0, (schema, index) => {
 		const nextSchemaPath = `${schemaPath}/items/${index}`;
 		const nextInstancePath = `${instancePath}/${index}`;
-		return IsLessEqualThan$1(value.length, index) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema, value[index]) && context.AddIndex(index);
+		return IsLessEqualThan$1(value.length, index) || ErrorSchemaPushStack(stack, context, nextSchemaPath, nextInstancePath, schema, value[index]) && context.AddIndex(index);
 	});
 }
 function BuildItemsUnsized(stack, context, schema, value) {
 	const offset = IsPrefixItems(schema) ? schema.prefixItems.length : 0;
-	const isSchema = BuildSchema(stack, context, schema.items, "element");
+	const isSchema = BuildSchemaPushStack(stack, context, schema.items, "element");
 	const addIndex = context.AddIndex("index");
 	const guarded = context.UseUnevaluated() ? And(isSchema, addIndex) : isSchema;
 	return Every(value, Constant(offset), ["element", "index"], guarded);
 }
 function CheckItemsUnsized(stack, context, schema, value) {
 	return Every$1(value, IsPrefixItems(schema) ? schema.prefixItems.length : 0, (element, index) => {
-		return CheckSchema(stack, context, schema.items, element) && context.AddIndex(index);
+		return CheckSchemaPushStack(stack, context, schema.items, element) && context.AddIndex(index);
 	});
 }
 function ErrorItemsUnsized(stack, context, schemaPath, instancePath, schema, value) {
 	return EveryAll(value, IsPrefixItems(schema) ? schema.prefixItems.length : 0, (element, index) => {
-		return ErrorSchema(stack, context, `${schemaPath}/items`, `${instancePath}/${index}`, schema.items, element) && context.AddIndex(index);
+		return ErrorSchemaPushStack(stack, context, `${schemaPath}/items`, `${instancePath}/${index}`, schema.items, element) && context.AddIndex(index);
 	});
 }
 function BuildItems(stack, context, schema, value) {
@@ -2544,7 +2706,7 @@ function ErrorItems(stack, context, schemaPath, instancePath, schema, value) {
 	return IsItemsSized(schema) ? ErrorItemsSized(stack, context, schemaPath, instancePath, schema, value) : ErrorItemsUnsized(stack, context, schemaPath, instancePath, schema, value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/maxContains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/maxContains.mjs
 function IsValid$2(schema) {
 	return IsContains(schema);
 }
@@ -2570,7 +2732,7 @@ function ErrorMaxContains(stack, context, schemaPath, instancePath, schema, valu
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/maximum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/maximum.mjs
 function BuildMaximum(stack, context, schema, value) {
 	return IsLessEqualThan(value, Constant(schema.maximum));
 }
@@ -2589,7 +2751,7 @@ function ErrorMaximum(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/maxItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/maxItems.mjs
 function BuildMaxItems(stack, context, schema, value) {
 	return IsLessEqualThan(Member(value, "length"), Constant(schema.maxItems));
 }
@@ -2605,7 +2767,7 @@ function ErrorMaxItems(stack, context, schemaPath, instancePath, schema, value) 
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/maxLength.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/maxLength.mjs
 function BuildMaxLength(stack, context, schema, value) {
 	return IsMaxLength$1(value, Constant(schema.maxLength));
 }
@@ -2621,7 +2783,7 @@ function ErrorMaxLength(stack, context, schemaPath, instancePath, schema, value)
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/maxProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/maxProperties.mjs
 function BuildMaxProperties(stack, context, schema, value) {
 	return IsLessEqualThan(Member(Keys(value), "length"), Constant(schema.maxProperties));
 }
@@ -2637,7 +2799,7 @@ function ErrorMaxProperties(stack, context, schemaPath, instancePath, schema, va
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/minContains.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/minContains.mjs
 function IsValid$1(schema) {
 	return IsContains(schema);
 }
@@ -2659,7 +2821,7 @@ function ErrorMinContains(stack, context, schemaPath, instancePath, schema, valu
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/minimum.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/minimum.mjs
 function BuildMinimum(stack, context, schema, value) {
 	return IsGreaterEqualThan(value, Constant(schema.minimum));
 }
@@ -2678,7 +2840,7 @@ function ErrorMinimum(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/minItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/minItems.mjs
 function BuildMinItems(stack, context, schema, value) {
 	return IsGreaterEqualThan(Member(value, "length"), Constant(schema.minItems));
 }
@@ -2694,7 +2856,7 @@ function ErrorMinItems(stack, context, schemaPath, instancePath, schema, value) 
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/minLength.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/minLength.mjs
 function BuildMinLength(stack, context, schema, value) {
 	return IsMinLength$1(value, Constant(schema.minLength));
 }
@@ -2710,7 +2872,7 @@ function ErrorMinLength(stack, context, schemaPath, instancePath, schema, value)
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/minProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/minProperties.mjs
 function BuildMinProperties(stack, context, schema, value) {
 	return IsGreaterEqualThan(Member(Keys(value), "length"), Constant(schema.minProperties));
 }
@@ -2726,7 +2888,7 @@ function ErrorMinProperties(stack, context, schemaPath, instancePath, schema, va
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/multipleOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/multipleOf.mjs
 function BuildMultipleOf(stack, context, schema, value) {
 	return MultipleOf(value, Constant(schema.multipleOf));
 }
@@ -2742,7 +2904,7 @@ function ErrorMultipleOf(stack, context, schemaPath, instancePath, schema, value
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/not.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/not.mjs
 function BuildNotUnevaluated(stack, context, schema, value) {
 	return Reducer(stack, context, [schema.not], value, Not(IsEqual(Member("results", "length"), Constant(1))));
 }
@@ -2765,7 +2927,7 @@ function ErrorNot(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/oneOf.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/oneOf.mjs
 function BuildOneOfUnevaluated(stack, context, schema, value) {
 	return Reducer(stack, context, schema.oneOf, value, IsEqual(Member("results", "length"), Constant(1)));
 }
@@ -2802,12 +2964,12 @@ function ErrorOneOf(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/pattern.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/pattern.mjs
 function BuildPattern(stack, context, schema, value) {
-	return Call(Member(CreateVariable(IsString$2(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern), "test"), [value]);
+	return Call(Member(CreateVariable(IsString$2(schema.pattern) ? new RegExp(schema.pattern, "u") : schema.pattern), "test"), [value]);
 }
 function CheckPattern(stack, context, schema, value) {
-	return (IsString$2(schema.pattern) ? new RegExp(schema.pattern) : schema.pattern).test(value);
+	return (IsString$2(schema.pattern) ? new RegExp(schema.pattern, "u") : schema.pattern).test(value);
 }
 function ErrorPattern(stack, context, schemaPath, instancePath, schema, value) {
 	return CheckPattern(stack, context, schema, value) || context.AddError({
@@ -2818,12 +2980,12 @@ function ErrorPattern(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/patternProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/patternProperties.mjs
 function BuildPatternProperties(stack, context, schema, value) {
 	return ReduceAnd(Entries$2(schema.patternProperties).map(([pattern, schema]) => {
 		const [key, prop] = [Unique(), Unique()];
-		const notKey = Not(Call(Member(CreateVariable(new RegExp(pattern)), "test"), [key]));
-		const isSchema = BuildSchema(stack, context, schema, prop);
+		const notKey = Not(Call(Member(CreateVariable(new RegExp(pattern, "u")), "test"), [key]));
+		const isSchema = BuildSchemaPushStack(stack, context, schema, prop);
 		const addKey = context.AddKey(key);
 		const guarded = context.UseUnevaluated() ? Or(notKey, And(isSchema, addKey)) : Or(notKey, isSchema);
 		return Every(Entries$1(value), Constant(0), [`[${key}, ${prop}]`, "_"], guarded);
@@ -2831,46 +2993,46 @@ function BuildPatternProperties(stack, context, schema, value) {
 }
 function CheckPatternProperties(stack, context, schema, value) {
 	return Every$1(Entries$2(schema.patternProperties), 0, ([pattern, schema]) => {
-		const regexp = new RegExp(pattern);
+		const regexp = new RegExp(pattern, "u");
 		return Every$1(Entries$2(value), 0, ([key, prop]) => {
-			return !regexp.test(key) || CheckSchema(stack, context, schema, prop) && context.AddKey(key);
+			return !regexp.test(key) || CheckSchemaPushStack(stack, context, schema, prop) && context.AddKey(key);
 		});
 	});
 }
 function ErrorPatternProperties(stack, context, schemaPath, instancePath, schema, value) {
 	return EveryAll(Entries$2(schema.patternProperties), 0, ([pattern, schema]) => {
 		const nextSchemaPath = `${schemaPath}/patternProperties/${pattern}`;
-		const regexp = new RegExp(pattern);
+		const regexp = new RegExp(pattern, "u");
 		return EveryAll(Entries$2(value), 0, ([key, value]) => {
 			const nextInstancePath = `${instancePath}/${key}`;
-			return !regexp.test(key) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema, value) && context.AddKey(key);
+			return !regexp.test(key) || ErrorSchemaPushStack(stack, context, nextSchemaPath, nextInstancePath, schema, value) && context.AddKey(key);
 		});
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/prefixItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/prefixItems.mjs
 function BuildPrefixItems(stack, context, schema, value) {
 	return ReduceAnd(schema.prefixItems.map((schema, index) => {
 		const isLength = IsLessEqualThan(Member(value, "length"), Constant(index));
-		const isSchema = BuildSchema(stack, context, schema, `${value}[${index}]`);
+		const isSchema = BuildSchemaPushStack(stack, context, schema, `${value}[${index}]`);
 		const addIndex = context.AddIndex(Constant(index));
 		return Or(isLength, context.UseUnevaluated() ? And(isSchema, addIndex) : isSchema);
 	}));
 }
 function CheckPrefixItems(stack, context, schema, value) {
 	return IsEqual$1(value.length, 0) || Every$1(schema.prefixItems, 0, (schema, index) => {
-		return IsLessEqualThan$1(value.length, index) || CheckSchema(stack, context, schema, value[index]) && context.AddIndex(index);
+		return IsLessEqualThan$1(value.length, index) || CheckSchemaPushStack(stack, context, schema, value[index]) && context.AddIndex(index);
 	});
 }
 function ErrorPrefixItems(stack, context, schemaPath, instancePath, schema, value) {
 	return IsEqual$1(value.length, 0) || EveryAll(schema.prefixItems, 0, (schema, index) => {
 		const nextSchemaPath = `${schemaPath}/prefixItems/${index}`;
 		const nextInstancePath = `${instancePath}/${index}`;
-		return IsLessEqualThan$1(value.length, index) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema, value[index]) && context.AddIndex(index);
+		return IsLessEqualThan$1(value.length, index) || ErrorSchemaPushStack(stack, context, nextSchemaPath, nextInstancePath, schema, value[index]) && context.AddIndex(index);
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_exact_optional.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_exact_optional.mjs
 function IsExactOptional(required, key) {
 	return required.includes(key) || Get$3().exactOptionalPropertyTypes;
 }
@@ -2881,12 +3043,12 @@ function InexactOptionalCheck(value, key) {
 	return IsUndefined$1(value[key]);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/properties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/properties.mjs
 function BuildProperties(stack, context, schema, value) {
 	const required = IsRequired(schema) ? schema.required : [];
 	return ReduceAnd(Entries$2(schema.properties).map(([key, schema]) => {
 		const notKey = Not(HasPropertyKey(value, Constant(key)));
-		const isSchema = BuildSchema(stack, context, schema, Member(value, key));
+		const isSchema = BuildSchemaPushStack(stack, context, schema, Member(value, key));
 		const addKey = context.AddKey(Constant(key));
 		const guarded = context.UseUnevaluated() ? And(isSchema, addKey) : isSchema;
 		const isProperty = required.includes(key) ? guarded : Or(notKey, guarded);
@@ -2896,7 +3058,7 @@ function BuildProperties(stack, context, schema, value) {
 function CheckProperties(stack, context, schema, value) {
 	const required = IsRequired(schema) ? schema.required : [];
 	return Every$1(Entries$2(schema.properties), 0, ([key, schema]) => {
-		const isProperty = !HasPropertyKey$1(value, key) || CheckSchema(stack, context, schema, value[key]) && context.AddKey(key);
+		const isProperty = !HasPropertyKey$1(value, key) || CheckSchemaPushStack(stack, context, schema, value[key]) && context.AddKey(key);
 		return IsExactOptional(required, key) ? isProperty : InexactOptionalCheck(value, key) || isProperty;
 	});
 }
@@ -2905,12 +3067,12 @@ function ErrorProperties(stack, context, schemaPath, instancePath, schema, value
 	return EveryAll(Entries$2(schema.properties), 0, ([key, schema]) => {
 		const nextSchemaPath = `${schemaPath}/properties/${key}`;
 		const nextInstancePath = `${instancePath}/${key}`;
-		const isProperty = () => !HasPropertyKey$1(value, key) || ErrorSchema(stack, context, nextSchemaPath, nextInstancePath, schema, value[key]) && context.AddKey(key);
+		const isProperty = () => !HasPropertyKey$1(value, key) || ErrorSchemaPushStack(stack, context, nextSchemaPath, nextInstancePath, schema, value[key]) && context.AddKey(key);
 		return IsExactOptional(required, key) ? isProperty() : InexactOptionalCheck(value, key) || isProperty();
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/propertyNames.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/propertyNames.mjs
 function BuildPropertyNames(stack, context, schema, value) {
 	const [key, _index] = [Unique(), Unique()];
 	return Every(Keys(value), Constant(0), [key, _index], BuildSchema(stack, context, schema.propertyNames, key));
@@ -2934,7 +3096,7 @@ function ErrorPropertyNames(stack, context, schemaPath, instancePath, schema, va
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/recursiveRef.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/recursiveRef.mjs
 function BuildRecursiveRef(stack, context, schema, value) {
 	return CreateFunction(stack, context, stack.RecursiveRef(schema.$recursiveRef) ?? false, value);
 }
@@ -2947,7 +3109,7 @@ function ErrorRecursiveRef(stack, context, schemaPath, instancePath, schema, val
 	return IsSchema(target) && ErrorSchema(stack, context, "#", instancePath, target, value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/ref.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/ref.mjs
 function BuildRefStandard(stack, context, target, value) {
 	const interior = ArrowFunction(["context", "value"], CreateFunction(stack, context, target, "value"));
 	return Call(ArrowFunction(["context", "value"], Statements([
@@ -2980,7 +3142,7 @@ function ErrorRef(stack, context, schemaPath, instancePath, schema, value) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/required.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/required.mjs
 function BuildRequired(stack, context, schema, value) {
 	return ReduceAnd(schema.required.map((key) => HasPropertyKey(value, Constant(key))));
 }
@@ -3001,7 +3163,7 @@ function ErrorRequired(stack, context, schemaPath, instancePath, schema, value) 
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/type.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/type.mjs
 function BuildTypeName(stack, context, type, value) {
 	return IsEqual$1(type, "object") ? IsObjectNotArray(value) : IsEqual$1(type, "array") ? IsArray(value) : IsEqual$1(type, "boolean") ? IsBoolean$1(value) : IsEqual$1(type, "integer") ? IsInteger(value) : IsEqual$1(type, "number") ? IsNumber$1(value) : IsEqual$1(type, "null") ? IsNull(value) : IsEqual$1(type, "string") ? IsString$1(value) : IsEqual$1(type, "asyncIterator") ? IsAsyncIterator(value) : IsEqual$1(type, "bigint") ? IsBigInt(value) : IsEqual$1(type, "constructor") ? IsConstructor(value) : IsEqual$1(type, "function") ? IsFunction(value) : IsEqual$1(type, "iterator") ? IsIterator(value) : IsEqual$1(type, "symbol") ? IsSymbol(value) : IsEqual$1(type, "undefined") ? IsUndefined(value) : IsEqual$1(type, "void") ? IsUndefined(value) : Constant(true);
 }
@@ -3029,7 +3191,7 @@ function ErrorType(stack, context, schemaPath, instancePath, schema, value) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/unevaluatedItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/unevaluatedItems.mjs
 function BuildUnevaluatedItems(stack, context, schema, value) {
 	const [index, item] = [Unique(), Unique()];
 	const indices = Call(Member("context", "GetIndices"), []);
@@ -3061,7 +3223,7 @@ function ErrorUnevaluatedItems(stack, context, schemaPath, instancePath, schema,
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/unevaluatedProperties.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/unevaluatedProperties.mjs
 function BuildUnevaluatedProperties(stack, context, schema, value) {
 	const [key, prop] = [Unique(), Unique()];
 	const keys = Call(Member("context", "GetKeys"), []);
@@ -3093,7 +3255,7 @@ function ErrorUnevaluatedProperties(stack, context, schemaPath, instancePath, sc
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/uniqueItems.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/uniqueItems.mjs
 function IsValid(schema) {
 	return !IsEqual$1(schema.uniqueItems, false);
 }
@@ -3124,7 +3286,7 @@ function ErrorUniqueItems(stack, context, schemaPath, instancePath, schema, valu
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/schema.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/schema.mjs
 function HasTypeName(schema, typename) {
 	return IsType(schema) && (IsArray$1(schema.type) && schema.type.includes(typename) || IsEqual$1(schema.type, typename));
 }
@@ -3151,6 +3313,9 @@ function HasNumberType(schema) {
 }
 function HasNumberKeywords(schema) {
 	return IsSchemaObject(schema) && (IsMinimum(schema) || IsMaximum(schema) || IsExclusiveMaximum(schema) || IsExclusiveMinimum(schema) || IsMultipleOf(schema));
+}
+function BuildSchemaPushStack(stack, context, schema, value) {
+	return context.UseUnevaluated() ? And(And(context.Push(), BuildSchema(stack, context, schema, value)), context.Pop()) : BuildSchema(stack, context, schema, value);
 }
 function BuildSchema(stack, context, schema, value) {
 	stack.Push(schema);
@@ -3226,11 +3391,17 @@ function BuildSchema(stack, context, schema, value) {
 	stack.Pop(schema);
 	return result;
 }
+function CheckSchemaPushStack(stack, context, schema, value) {
+	return context.Push() && CheckSchema(stack, context, schema, value) && context.Pop();
+}
 function CheckSchema(stack, context, schema, value) {
 	stack.Push(schema);
 	const result = IsBooleanSchema(schema) ? CheckBooleanSchema(stack, context, schema, value) : (!IsType(schema) || CheckType(stack, context, schema, value)) && (!(IsObject$1(value) && !IsArray$1(value)) || (!IsRequired(schema) || CheckRequired(stack, context, schema, value)) && (!IsAdditionalProperties(schema) || CheckAdditionalProperties(stack, context, schema, value)) && (!IsDependencies(schema) || CheckDependencies(stack, context, schema, value)) && (!IsDependentRequired(schema) || CheckDependentRequired(stack, context, schema, value)) && (!IsDependentSchemas(schema) || CheckDependentSchemas(stack, context, schema, value)) && (!IsPatternProperties(schema) || CheckPatternProperties(stack, context, schema, value)) && (!IsProperties(schema) || CheckProperties(stack, context, schema, value)) && (!IsPropertyNames(schema) || CheckPropertyNames(stack, context, schema, value)) && (!IsMinProperties(schema) || CheckMinProperties(stack, context, schema, value)) && (!IsMaxProperties(schema) || CheckMaxProperties(stack, context, schema, value))) && (!IsArray$1(value) || (!IsAdditionalItems(schema) || CheckAdditionalItems(stack, context, schema, value)) && (!IsContains(schema) || CheckContains(stack, context, schema, value)) && (!IsItems(schema) || CheckItems(stack, context, schema, value)) && (!IsMaxContains(schema) || CheckMaxContains(stack, context, schema, value)) && (!IsMaxItems(schema) || CheckMaxItems(stack, context, schema, value)) && (!IsMinContains(schema) || CheckMinContains(stack, context, schema, value)) && (!IsMinItems(schema) || CheckMinItems(stack, context, schema, value)) && (!IsPrefixItems(schema) || CheckPrefixItems(stack, context, schema, value)) && (!IsUniqueItems(schema) || CheckUniqueItems(stack, context, schema, value))) && (!IsString$2(value) || (!IsMaxLength(schema) || CheckMaxLength(stack, context, schema, value)) && (!IsMinLength(schema) || CheckMinLength(stack, context, schema, value)) && (!IsFormat(schema) || CheckFormat(stack, context, schema, value)) && (!IsPattern(schema) || CheckPattern(stack, context, schema, value))) && (!(IsNumber$2(value) || IsBigInt$1(value)) || (!IsExclusiveMaximum(schema) || CheckExclusiveMaximum(stack, context, schema, value)) && (!IsExclusiveMinimum(schema) || CheckExclusiveMinimum(stack, context, schema, value)) && (!IsMaximum(schema) || CheckMaximum(stack, context, schema, value)) && (!IsMinimum(schema) || CheckMinimum(stack, context, schema, value)) && (!IsMultipleOf(schema) || CheckMultipleOf(stack, context, schema, value))) && (!IsRecursiveRef(schema) || CheckRecursiveRef(stack, context, schema, value)) && (!IsRef(schema) || CheckRef(stack, context, schema, value)) && (!IsGuard(schema) || CheckGuard(stack, context, schema, value)) && (!IsConst(schema) || CheckConst(stack, context, schema, value)) && (!IsEnum(schema) || CheckEnum(stack, context, schema, value)) && (!IsIf(schema) || CheckIf(stack, context, schema, value)) && (!IsNot(schema) || CheckNot(stack, context, schema, value)) && (!IsAllOf(schema) || CheckAllOf(stack, context, schema, value)) && (!IsAnyOf(schema) || CheckAnyOf(stack, context, schema, value)) && (!IsOneOf(schema) || CheckOneOf(stack, context, schema, value)) && (!IsUnevaluatedItems(schema) || !IsArray$1(value) || CheckUnevaluatedItems(stack, context, schema, value)) && (!IsUnevaluatedProperties(schema) || !IsObject$1(value) || CheckUnevaluatedProperties(stack, context, schema, value)) && (!IsRefine(schema) || CheckRefine(stack, context, schema, value));
 	stack.Pop(schema);
 	return result;
+}
+function ErrorSchemaPushStack(stack, context, schemaPath, instancePath, schema, value) {
+	return context.Push() && ErrorSchema(stack, context, schemaPath, instancePath, schema, value) && context.Pop();
 }
 function ErrorSchema(stack, context, schemaPath, instancePath, schema, value) {
 	stack.Push(schema);
@@ -3239,7 +3410,7 @@ function ErrorSchema(stack, context, schemaPath, instancePath, schema, value) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_functions.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_functions.mjs
 const functions = /* @__PURE__ */ new Map();
 function CreateCallExpression(context, schema, hash, value) {
 	return context.UseUnevaluated() ? Call(`check_${hash}`, ["context", value]) : Call(`check_${hash}`, [value]);
@@ -3266,7 +3437,7 @@ function CreateFunction(stack, context, schema, value) {
 	return call;
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/pointer/pointer.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/pointer/pointer.mjs
 function GetIndex(index, value) {
 	return IsObject$1(value) ? value[index] : void 0;
 }
@@ -3284,7 +3455,7 @@ function Get(value, pointer) {
 	return GetIndices(Indices(pointer), value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/resolve/ref.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/resolve/ref.mjs
 function MatchId(schema, base, ref) {
 	if (schema.$id === ref.hash) return schema;
 	const absoluteId = new URL(schema.$id, base.href);
@@ -3338,7 +3509,7 @@ function Ref(schema, ref) {
 	return FromValue(schema, initialBase, new URL(ref, initialBase.href));
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/engine/_stack.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/engine/_stack.mjs
 var Stack = class {
 	constructor(context, schema) {
 		this.context = context;
@@ -3383,7 +3554,7 @@ var Stack = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/build.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/build.mjs
 function CreateCode(build) {
 	return `${build.Functions().join(";\n")}; return (value) => { ${(build.UseUnevaluated() ? ["const context = new CheckContext({}, {})", `return ${build.Call()}`] : [`return ${build.Call()}`]).join("; ")} }`;
 }
@@ -3457,7 +3628,7 @@ function Build(...args) {
 	return new BuildResult(context, schema, GetExternal(), functions, call, build.UseUnevaluated());
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/errors.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/errors.mjs
 /** Checks a value and returns validation errors */
 function Errors(...args) {
 	const [context, schema, value] = Match$1(args, {
@@ -3484,7 +3655,7 @@ function Errors(...args) {
 	}), "#", "", schema, value), errors];
 }
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/parse.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/parse.mjs
 var ParseError = class {
 	constructor(schema, value, errors) {
 		this.schema = schema;
@@ -3493,7 +3664,7 @@ var ParseError = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.14/node_modules/typebox/build/schema/compile.mjs
+//#region ../node_modules/.pnpm/typebox@1.1.18/node_modules/typebox/build/schema/compile.mjs
 var Validator = class {
 	constructor(context, schema) {
 		this.build = Build(context, schema);
