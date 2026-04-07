@@ -2,6 +2,7 @@ import { defineConfig } from "oxlint";
 
 export const baseConfig = defineConfig({
   categories: {
+    correctness: "error",
     suspicious: "warn",
   },
   rules: {

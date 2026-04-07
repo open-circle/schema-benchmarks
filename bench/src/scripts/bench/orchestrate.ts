@@ -25,7 +25,7 @@ for (const lib of Object.keys(libraries)) {
       { signal: sigintSignal },
     ),
   );
-  const results = libResult.stdout.split("\n").slice(-3).filter(Boolean).pop();
+  const results = libResult.stdout.split("\n").slice(-3).findLast(Boolean);
   if (!results) throw new Error(`No results for ${lib}`);
   allResults.push(v.parse(benchResultsSchema, JSON.parse(results)));
 }
