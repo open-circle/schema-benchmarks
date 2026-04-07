@@ -81,7 +81,7 @@ describe("setAbortableInterval", () => {
   });
   it("should call the function every `delay` milliseconds, until aborted", async () => {
     const ac = new AbortController();
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const delay = 100;
     setAbortableInterval(fn, delay, ac.signal);
     expect(fn).not.toHaveBeenCalled();
@@ -107,7 +107,7 @@ describe("setAbortableTimeout", () => {
   });
   it("should call the function after `delay` milliseconds, if not aborted", async () => {
     const ac = new AbortController();
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const delay = 100;
     setAbortableTimeout(fn, delay, ac.signal);
     expect(fn).not.toHaveBeenCalled();
@@ -117,7 +117,7 @@ describe("setAbortableTimeout", () => {
   });
   it("should not call the function if aborted before `delay`", async () => {
     const ac = new AbortController();
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const delay = 100;
     setAbortableTimeout(fn, delay, ac.signal);
     expect(fn).not.toHaveBeenCalled();

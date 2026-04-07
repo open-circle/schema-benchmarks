@@ -44,13 +44,14 @@ async function getLoggedOutput(lib: string) {
 const results: Array<StackResult> = [];
 
 function getScriptLineNumber(stack?: string) {
-  if (!stack) return;
+  if (!stack) return undefined;
   const lines = stack.split("\n");
   let i = 0;
   while (i < lines.length) {
     if (lines[i]?.startsWith(search)) return i === 0 ? undefined : i + 1;
     i++;
   }
+  return undefined;
 }
 
 for (const [lib, getConfig] of Object.entries(libraries)) {

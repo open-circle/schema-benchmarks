@@ -1,11 +1,12 @@
+import type { RefCallback, RefObject } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { mergeRefs } from "./index.ts";
 
 describe("mergeRefs", () => {
   it("should call all refs", () => {
-    const refObject = { current: null };
-    const refCallback = vi.fn();
+    const refObject: RefObject<string | null> = { current: null };
+    const refCallback = vi.fn<RefCallback<string>>();
     const merged = mergeRefs(refObject, refCallback);
 
     const value = "foo";
