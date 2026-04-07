@@ -15,7 +15,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@ata-project/keywords": "^0.1.6",
+    "@ata-project/keywords": "^0.1.7",
     "@railway-ts/pipelines": "^0.1.27",
     "@sapphire/shapeshift": "^4.0.0",
     "@schema-benchmarks/utils": "workspace:*",
@@ -24,7 +24,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.0",
-    "ata-validator": "^0.6.1",
+    "ata-validator": "^0.7.3",
     "decoders": "^2.9.2",
     "dedent": "catalog:",
     "effect": "^3.21.0",
@@ -36,7 +36,7 @@
     "runtypes": "^7.0.4",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.1.14",
+    "typebox": "^1.1.18",
     "typia": "^12.0.2",
     "valibot": "catalog:",
     "yup": "^1.7.1",
