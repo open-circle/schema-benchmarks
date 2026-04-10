@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -57,7 +57,7 @@ const Class$1 = /* @__PURE__ */ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -246,6 +246,35 @@ const constUndefined = /* @__PURE__ */ constant(void 0);
 * @since 2.0.0
 */
 const constVoid = constUndefined;
+function flow(ab, bc, cd, de, ef, fg, gh, hi, ij) {
+	switch (arguments.length) {
+		case 1: return ab;
+		case 2: return function() {
+			return bc(ab.apply(this, arguments));
+		};
+		case 3: return function() {
+			return cd(bc(ab.apply(this, arguments)));
+		};
+		case 4: return function() {
+			return de(cd(bc(ab.apply(this, arguments))));
+		};
+		case 5: return function() {
+			return ef(de(cd(bc(ab.apply(this, arguments)))));
+		};
+		case 6: return function() {
+			return fg(ef(de(cd(bc(ab.apply(this, arguments))))));
+		};
+		case 7: return function() {
+			return gh(fg(ef(de(cd(bc(ab.apply(this, arguments)))))));
+		};
+		case 8: return function() {
+			return hi(gh(fg(ef(de(cd(bc(ab.apply(this, arguments))))))));
+		};
+		case 9: return function() {
+			return ij(hi(gh(fg(ef(de(cd(bc(ab.apply(this, arguments)))))))));
+		};
+	}
+}
 /**
 * @since 4.0.0
 */
@@ -259,7 +288,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -278,7 +307,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -500,7 +529,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -569,7 +598,7 @@ const hash = (self) => {
 			const h = withVisitedTracking$1(self, () => {
 				if (isHash(self)) return self[symbol$3]();
 				else if (typeof self === "function") return random(self);
-				else if (Array.isArray(self)) return array(self);
+				else if (Array.isArray(self) || ArrayBuffer.isView(self)) return array(self);
 				else if (self instanceof Map) return hashMap(self);
 				else if (self instanceof Set) return hashSet(self);
 				return structure(self);
@@ -849,7 +878,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
@@ -937,6 +966,9 @@ function compareObjects(self, that) {
 		else if (Array.isArray(self)) {
 			if (!Array.isArray(that) || self.length !== that.length) return false;
 			return compareArrays(self, that);
+		} else if (ArrayBuffer.isView(self)) {
+			if (!ArrayBuffer.isView(that) || self.byteLength !== that.byteLength) return false;
+			return compareTypedArrays(self, that);
 		} else if (self instanceof Map) {
 			if (!(that instanceof Map) || self.size !== that.size) return false;
 			return compareMaps(self, that);
@@ -966,6 +998,11 @@ function withCache(self, that, f) {
 const equalityCache = /* @__PURE__ */ new WeakMap();
 function compareArrays(self, that) {
 	for (let i = 0; i < self.length; i++) if (!compareBoth(self[i], that[i])) return false;
+	return true;
+}
+function compareTypedArrays(self, that) {
+	if (self.length !== that.length) return false;
+	for (let i = 0; i < self.length; i++) if (self[i] !== that[i]) return false;
 	return true;
 }
 function compareRecords(self, that) {
@@ -1076,7 +1113,7 @@ const isEqual = (u) => hasProperty(u, symbol$2);
 */
 const asEquivalence = () => equals$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1126,84 +1163,74 @@ const asEquivalence = () => equals$2;
 */
 const make$12 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Redactable.js
 /**
-* @since 4.0.0
-*/
-/**
-* Symbol used to identify objects that implement redaction capabilities.
+* Symbol used to identify objects that implement the {@link Redactable}
+* protocol.
+*
+* Add a method under this key to make an object redactable. The method
+* receives the current `Context` and must return the replacement value.
+*
+* - Use this symbol as the property key when implementing {@link Redactable}.
+* - Registered globally via `Symbol.for("~effect/Redactable")`,
+*   so it is identical across multiple copies of the library at runtime.
+*
+* **Example** (Masking an API key)
+*
+* ```ts
+* import { Context, Redactable } from "effect"
+*
+* class ApiKey {
+*   constructor(readonly raw: string) {}
+*
+*   [Redactable.symbolRedactable](_ctx: Context.Context<never>) {
+*     return this.raw.slice(0, 4) + "..."
+*   }
+* }
+* ```
+*
+* See also:
+* - {@link Redactable} - the interface this symbol belongs to
+* - {@link isRedactable} - check whether a value has this symbol
 *
 * @since 4.0.0
 * @category symbol
 */
-const symbolRedactable = /* @__PURE__ */ Symbol.for("~effect/Inspectable/redactable");
+const symbolRedactable = /* @__PURE__ */ Symbol.for("~effect/Redactable");
 /**
-* Checks if a value implements the `Redactable` interface.
+* Type guard that checks whether a value implements the {@link Redactable}
+* interface.
 *
-* This function determines whether a given value has redaction capabilities,
-* meaning it can provide alternative representations based on context.
-*
-* @param u - The value to check
-*
-* @example
-* ```ts
-* import { Redactable } from "effect"
-*
-* class RedactableSecret {
-*   [Redactable.symbolRedactable]() {
-*     return "[REDACTED]"
-*   }
-* }
-*
-* const secret = new RedactableSecret()
-* const normal = { value: 42 }
-*
-* console.log(Redactable.isRedactable(secret)) // true
-* console.log(Redactable.isRedactable(normal)) // false
-* console.log(Redactable.isRedactable("string")) // false
-* ```
+* See also:
+* - {@link Redactable} - the interface being checked
+* - {@link redact} - applies redaction if the value is redactable
 *
 * @since 4.0.0
-* @category redactable
+* @category guards
 */
 const isRedactable = (u) => hasProperty(u, symbolRedactable);
 /**
-* Applies redaction to a value if it implements the Redactable interface.
+* Redacts a value if it implements {@link Redactable}, otherwise returns it
+* unchanged.
 *
-* This function checks if the value is redactable and applies the redaction
-* transformation if a current fiber context is available. Otherwise, it returns
-* the value unchanged.
+* - Use this as the general-purpose entry point for redaction: it is safe to
+*   call on any value.
+* - Internally calls {@link isRedactable} and, if `true`, delegates to
+*   {@link getRedacted}.
+* - Not recursive: nested redactable values inside the returned object are not
+*   automatically redacted.
+* - Pure with respect to its argument (does not mutate the input).
 *
-* @param u - The value to potentially redact
-*
-* @example
-* ```ts
-* import { Redactable } from "effect"
-*
-* class CreditCard {
-*   constructor(private number: string) {}
-*
-*   [Redactable.symbolRedactable]() {
-*     return {
-*       number: this.number.slice(0, 4) + "****"
-*     }
-*   }
-* }
-*
-* const card = new CreditCard("1234567890123456")
-* console.log(Redactable.redact(card)) // { number: "1234****" }
-*
-* // Non-redactable values are returned unchanged
-* console.log(Redactable.redact("normal string")) // "normal string"
-* console.log(Redactable.redact({ id: 123 })) // { id: 123 }
-* ```
+* See also:
+* - {@link isRedactable} - check before redacting
+* - {@link getRedacted} - lower-level variant for known redactables
 *
 * @since 4.0.0
 */
@@ -1212,22 +1239,36 @@ function redact(u) {
 	return u;
 }
 /**
+* Calls `[symbolRedactable]` on a value that is already known to be
+* {@link Redactable} and returns the result.
+*
+* - Use this when you have already verified the value is `Redactable` (e.g.,
+*   via {@link isRedactable}) and want to avoid a second check.
+* - Reads the current fiber's `Context` from the global fiber reference. If
+*   no fiber is active, an empty `Context` is passed to the redaction
+*   method.
+* - Does not mutate the input.
+*
+* See also:
+* - {@link redact} - higher-level variant that handles non-redactable values
+* - {@link isRedactable} - type guard to verify before calling this
+*
 * @since 4.0.0
 */
 function getRedacted(redactable) {
-	return redactable[symbolRedactable](globalThis["~effect/Fiber/currentFiber"]?.services ?? emptyServiceMap$1);
+	return redactable[symbolRedactable](globalThis["~effect/Fiber/currentFiber"]?.context ?? emptyContext$1);
 }
 /** @internal */
 const currentFiberTypeId = "~effect/Fiber/currentFiber";
-const emptyServiceMap$1 = {
-	"~effect/ServiceMap": {},
+const emptyContext$1 = {
+	"~effect/Context": {},
 	mapUnsafe: /* @__PURE__ */ new Map(),
 	pipe() {
 		return pipeArguments(this, arguments);
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1569,7 +1610,7 @@ function formatJson(input, options) {
 	return out;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Inspectable.js
 /**
 * Symbol used by Node.js for custom object inspection.
 *
@@ -1618,7 +1659,7 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Utils.js
 /**
 * An `IterableIterator` that yields its wrapped value exactly once.
 *
@@ -1696,7 +1737,7 @@ const forced = { [InternalTypeId]: (body) => {
 /** @internal */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2063,7 +2104,7 @@ var NoSuchElementError$1 = class extends TaggedError$1("NoSuchElementError") {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2138,7 +2179,7 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/result.js
 const TypeId$13 = "~effect/data/Result";
 const CommonProto = {
 	[TypeId$13]: {
@@ -2213,7 +2254,7 @@ const succeed$4 = (success) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2414,7 +2455,7 @@ const isLessThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$3 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2601,9 +2642,9 @@ const getOrUndefined = /* @__PURE__ */ (/* @__PURE__ */ dual(2, (self, onNone) =
 * @category Mapping
 * @since 2.0.0
 */
-const map$4 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
+const map$5 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
 *
@@ -2719,7 +2760,7 @@ const isFailure$3 = isFailure$4;
 */
 const isSuccess$3 = isSuccess$4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -3359,8 +3400,334 @@ const isZero = (n) => n.value === bigint0$2;
 */
 const isNegative = (n) => n.value < bigint0$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Duration.js
-const TypeId$11 = "~effect/time/Duration";
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Context.js
+/**
+* @since 4.0.0
+* @category Type Identifiers
+*/
+const ServiceTypeId = "~effect/Context/Service";
+/**
+* @example
+* ```ts
+* import { Context } from "effect"
+*
+* // Create a simple service
+* const Database = Context.Service<{
+*   query: (sql: string) => string
+* }>("Database")
+*
+* // Create a service class
+* class Config extends Context.Service<Config, {
+*   port: number
+* }>()("Config") {}
+*
+* // Use the services to create contexts
+* const db = Context.make(Database, {
+*   query: (sql) => `Result: ${sql}`
+* })
+* const config = Context.make(Config, { port: 8080 })
+* ```
+*
+* @since 4.0.0
+* @category Constructors
+*/
+const Service = function() {
+	const prevLimit = Error.stackTraceLimit;
+	Error.stackTraceLimit = 2;
+	const err = /* @__PURE__ */ new Error();
+	Error.stackTraceLimit = prevLimit;
+	function KeyClass() {}
+	const self = KeyClass;
+	Object.setPrototypeOf(self, ServiceProto);
+	Object.defineProperty(self, "stack", { get() {
+		return err.stack;
+	} });
+	if (arguments.length > 0) {
+		self.key = arguments[0];
+		if (arguments[1]?.defaultValue) {
+			self[ReferenceTypeId] = ReferenceTypeId;
+			self.defaultValue = arguments[1].defaultValue;
+		}
+		return self;
+	}
+	return function(key, options) {
+		self.key = key;
+		if (options?.make) self.make = options.make;
+		return self;
+	};
+};
+const ServiceProto = {
+	[ServiceTypeId]: ServiceTypeId,
+	...PipeInspectableProto,
+	...YieldableProto,
+	toJSON() {
+		return {
+			_id: "Service",
+			key: this.key,
+			stack: this.stack
+		};
+	},
+	asEffect() {
+		return (this.asEffect = constant(withFiber$1((fiber) => exitSucceed(get(fiber.context, this)))))();
+	},
+	of(self) {
+		return self;
+	},
+	context(self) {
+		return make$9(this, self);
+	},
+	use(f) {
+		return withFiber$1((fiber) => f(get(fiber.context, this)));
+	},
+	useSync(f) {
+		return withFiber$1((fiber) => exitSucceed(f(get(fiber.context, this))));
+	}
+};
+const ReferenceTypeId = "~effect/Context/Reference";
+const TypeId$11 = "~effect/Context";
+/**
+* @example
+* ```ts
+* import { Context } from "effect"
+*
+* // Create a context from a Map (unsafe)
+* const map = new Map([
+*   ["Logger", { log: (msg: string) => console.log(msg) }]
+* ])
+*
+* const context = Context.makeUnsafe(map)
+* ```
+*
+* @since 4.0.0
+* @category Constructors
+*/
+const makeUnsafe$5 = (mapUnsafe) => {
+	const self = Object.create(Proto$1);
+	self.mapUnsafe = mapUnsafe;
+	self.mutable = false;
+	return self;
+};
+const Proto$1 = {
+	...PipeInspectableProto,
+	[TypeId$11]: { _Services: (_) => _ },
+	toJSON() {
+		return {
+			_id: "Context",
+			services: Array.from(this.mapUnsafe).map(([key, value]) => ({
+				key,
+				value
+			}))
+		};
+	},
+	[symbol$2](that) {
+		if (!isContext(that) || this.mapUnsafe.size !== that.mapUnsafe.size) return false;
+		for (const k of this.mapUnsafe.keys()) if (!that.mapUnsafe.has(k) || !equals$2(this.mapUnsafe.get(k), that.mapUnsafe.get(k))) return false;
+		return true;
+	},
+	[symbol$3]() {
+		return number$2(this.mapUnsafe.size);
+	}
+};
+/**
+* Checks if the provided argument is a `Context`.
+*
+* @example
+* ```ts
+* import { Context } from "effect"
+* import * as assert from "node:assert"
+*
+* assert.strictEqual(Context.isContext(Context.empty()), true)
+* ```
+*
+* @since 4.0.0
+* @category Guards
+*/
+const isContext = (u) => hasProperty(u, TypeId$11);
+/**
+* Returns an empty `Context`.
+*
+* @example
+* ```ts
+* import { Context } from "effect"
+* import * as assert from "node:assert"
+*
+* assert.strictEqual(Context.isContext(Context.empty()), true)
+* ```
+*
+* @since 4.0.0
+* @category Constructors
+*/
+const empty$1 = () => emptyContext;
+const emptyContext = /* @__PURE__ */ makeUnsafe$5(/* @__PURE__ */ new Map());
+/**
+* Creates a new `Context` with a single service associated to the key.
+*
+* @example
+* ```ts
+* import { Context } from "effect"
+* import * as assert from "node:assert"
+*
+* const Port = Context.Service<{ PORT: number }>("Port")
+*
+* const context = Context.make(Port, { PORT: 8080 })
+*
+* assert.deepStrictEqual(Context.get(context, Port), { PORT: 8080 })
+* ```
+*
+* @since 4.0.0
+* @category Constructors
+*/
+const make$9 = (key, service) => makeUnsafe$5(new Map([[key.key, service]]));
+/**
+* Adds a service to a given `Context`.
+*
+* @example
+* ```ts
+* import { pipe, Context } from "effect"
+* import * as assert from "node:assert"
+*
+* const Port = Context.Service<{ PORT: number }>("Port")
+* const Timeout = Context.Service<{ TIMEOUT: number }>("Timeout")
+*
+* const someContext = Context.make(Port, { PORT: 8080 })
+*
+* const context = pipe(
+*   someContext,
+*   Context.add(Timeout, { TIMEOUT: 5000 })
+* )
+*
+* assert.deepStrictEqual(Context.get(context, Port), { PORT: 8080 })
+* assert.deepStrictEqual(Context.get(context, Timeout), { TIMEOUT: 5000 })
+* ```
+*
+* @since 4.0.0
+* @category Adders
+*/
+const add$2 = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, (map) => {
+	map.set(key.key, service);
+}));
+/**
+* Get a service from the context that corresponds to the given key.
+*
+* @param self - The `Context` to search for the service.
+* @param service - The `Service` of the service to retrieve.
+*
+* @example
+* ```ts
+* import { pipe, Context } from "effect"
+* import * as assert from "node:assert"
+*
+* const Port = Context.Service<{ PORT: number }>("Port")
+* const Timeout = Context.Service<{ TIMEOUT: number }>("Timeout")
+*
+* const context = pipe(
+*   Context.make(Port, { PORT: 8080 }),
+*   Context.add(Timeout, { TIMEOUT: 5000 })
+* )
+*
+* assert.deepStrictEqual(Context.get(context, Timeout), { TIMEOUT: 5000 })
+* ```
+*
+* @since 4.0.0
+* @category Getters
+*/
+const get = /* @__PURE__ */ dual(2, (self, service) => {
+	if (!self.mapUnsafe.has(service.key)) {
+		if (ReferenceTypeId in service) return getDefaultValue(service);
+		throw serviceNotFoundError(service);
+	}
+	return self.mapUnsafe.get(service.key);
+});
+/**
+* @example
+* ```ts
+* import { Context } from "effect"
+* import * as assert from "node:assert"
+*
+* const LoggerRef = Context.Reference("Logger", {
+*   defaultValue: () => ({ log: (msg: string) => console.log(msg) })
+* })
+*
+* const context = Context.empty()
+* const logger = Context.getReferenceUnsafe(context, LoggerRef)
+*
+* assert.deepStrictEqual(logger, { log: (msg: string) => console.log(msg) })
+* ```
+*
+* @since 4.0.0
+* @category unsafe
+*/
+const getReferenceUnsafe = (self, service) => {
+	if (!self.mapUnsafe.has(service.key)) return getDefaultValue(service);
+	return self.mapUnsafe.get(service.key);
+};
+const defaultValueCacheKey = "~effect/Context/defaultValue";
+const getDefaultValue = (ref) => {
+	if (defaultValueCacheKey in ref) return ref[defaultValueCacheKey];
+	return ref[defaultValueCacheKey] = ref.defaultValue();
+};
+const serviceNotFoundError = (service) => {
+	const error = /* @__PURE__ */ new Error(`Service not found${service.key ? `: ${String(service.key)}` : ""}`);
+	if (service.stack) {
+		const lines = service.stack.split("\n");
+		if (lines.length > 2) {
+			const afterAt = lines[2].match(/at (.*)/);
+			if (afterAt) error.message = error.message + ` (defined at ${afterAt[1]})`;
+		}
+	}
+	if (error.stack) {
+		const lines = error.stack.split("\n");
+		lines.splice(1, 3);
+		error.stack = lines.join("\n");
+	}
+	return error;
+};
+const withMapUnsafe = (self, f) => {
+	if (self.mutable) {
+		f(self.mapUnsafe);
+		return self;
+	}
+	const map = new Map(self.mapUnsafe);
+	f(map);
+	return makeUnsafe$5(map);
+};
+/**
+* Creates a context key with a default value.
+*
+* **Details**
+*
+* `Context.Reference` allows you to create a key that can hold a value. You
+* can provide a default value for the service, which will automatically be used
+* when the context is accessed, or override it with a custom implementation
+* when needed.
+*
+* @example
+* ```ts
+* import { Context } from "effect"
+*
+* // Create a reference with a default value
+* const LoggerRef = Context.Reference("Logger", {
+*   defaultValue: () => ({ log: (msg: string) => console.log(msg) })
+* })
+*
+* // The reference provides the default value when accessed from an empty context
+* const context = Context.empty()
+* const logger = Context.get(context, LoggerRef)
+*
+* // You can also override the default value
+* const customContext = Context.make(LoggerRef, {
+*   log: (msg: string) => `Custom: ${msg}`
+* })
+* const customLogger = Context.get(customContext, LoggerRef)
+* ```
+*
+* @since 4.0.0
+* @category References
+*/
+const Reference = Service;
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Duration.js
+const TypeId$10 = "~effect/time/Duration";
 /**
 * Get the duration in nanoseconds as a bigint.
 *
@@ -3436,333 +3803,10 @@ const Equivalence$2 = (self, that) => matchPair(self, that, {
 	onInfinity: (self, that) => self.value._tag === that.value._tag
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/ServiceMap.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Scheduler.js
 /**
-* @since 4.0.0
-* @category Type Identifiers
+* @since 2.0.0
 */
-const ServiceTypeId = "~effect/ServiceMap/Service";
-/**
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-*
-* // Create a simple service
-* const Database = ServiceMap.Service<{
-*   query: (sql: string) => string
-* }>("Database")
-*
-* // Create a service class
-* class Config extends ServiceMap.Service<Config, {
-*   port: number
-* }>()("Config") {}
-*
-* // Use the services to create service maps
-* const db = ServiceMap.make(Database, {
-*   query: (sql) => `Result: ${sql}`
-* })
-* const config = ServiceMap.make(Config, { port: 8080 })
-* ```
-*
-* @since 4.0.0
-* @category Constructors
-*/
-const Service = function() {
-	const prevLimit = Error.stackTraceLimit;
-	Error.stackTraceLimit = 2;
-	const err = /* @__PURE__ */ new Error();
-	Error.stackTraceLimit = prevLimit;
-	function KeyClass() {}
-	const self = KeyClass;
-	Object.setPrototypeOf(self, ServiceProto);
-	Object.defineProperty(self, "stack", { get() {
-		return err.stack;
-	} });
-	if (arguments.length > 0) {
-		self.key = arguments[0];
-		if (arguments[1]?.defaultValue) {
-			self[ReferenceTypeId] = ReferenceTypeId;
-			self.defaultValue = arguments[1].defaultValue;
-		}
-		return self;
-	}
-	return function(key, options) {
-		self.key = key;
-		if (options?.make) self.make = options.make;
-		return self;
-	};
-};
-const ServiceProto = {
-	[ServiceTypeId]: ServiceTypeId,
-	...PipeInspectableProto,
-	...YieldableProto,
-	toJSON() {
-		return {
-			_id: "Service",
-			key: this.key,
-			stack: this.stack
-		};
-	},
-	asEffect() {
-		return (this.asEffect = constant(withFiber$1((fiber) => exitSucceed(get(fiber.services, this)))))();
-	},
-	of(self) {
-		return self;
-	},
-	serviceMap(self) {
-		return make$8(this, self);
-	},
-	use(f) {
-		return withFiber$1((fiber) => f(get(fiber.services, this)));
-	},
-	useSync(f) {
-		return withFiber$1((fiber) => exitSucceed(f(get(fiber.services, this))));
-	}
-};
-const ReferenceTypeId = "~effect/ServiceMap/Reference";
-const TypeId$10 = "~effect/ServiceMap";
-/**
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-*
-* // Create a service map from a Map (unsafe)
-* const map = new Map([
-*   ["Logger", { log: (msg: string) => console.log(msg) }]
-* ])
-*
-* const services = ServiceMap.makeUnsafe(map)
-* ```
-*
-* @since 4.0.0
-* @category Constructors
-*/
-const makeUnsafe$5 = (mapUnsafe) => {
-	const self = Object.create(Proto$1);
-	self.mapUnsafe = mapUnsafe;
-	self.mutable = false;
-	return self;
-};
-const Proto$1 = {
-	...PipeInspectableProto,
-	[TypeId$10]: { _Services: (_) => _ },
-	toJSON() {
-		return {
-			_id: "ServiceMap",
-			services: Array.from(this.mapUnsafe).map(([key, value]) => ({
-				key,
-				value
-			}))
-		};
-	},
-	[symbol$2](that) {
-		if (!isServiceMap(that) || this.mapUnsafe.size !== that.mapUnsafe.size) return false;
-		for (const k of this.mapUnsafe.keys()) if (!that.mapUnsafe.has(k) || !equals$2(this.mapUnsafe.get(k), that.mapUnsafe.get(k))) return false;
-		return true;
-	},
-	[symbol$3]() {
-		return number$2(this.mapUnsafe.size);
-	}
-};
-/**
-* Checks if the provided argument is a `ServiceMap`.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* assert.strictEqual(ServiceMap.isServiceMap(ServiceMap.empty()), true)
-* ```
-*
-* @since 4.0.0
-* @category Guards
-*/
-const isServiceMap = (u) => hasProperty(u, TypeId$10);
-/**
-* Returns an empty `ServiceMap`.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* assert.strictEqual(ServiceMap.isServiceMap(ServiceMap.empty()), true)
-* ```
-*
-* @since 4.0.0
-* @category Constructors
-*/
-const empty$1 = () => emptyServiceMap;
-const emptyServiceMap = /* @__PURE__ */ makeUnsafe$5(/* @__PURE__ */ new Map());
-/**
-* Creates a new `ServiceMap` with a single service associated to the key.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const Port = ServiceMap.Service<{ PORT: number }>("Port")
-*
-* const Services = ServiceMap.make(Port, { PORT: 8080 })
-*
-* assert.deepStrictEqual(ServiceMap.get(Services, Port), { PORT: 8080 })
-* ```
-*
-* @since 4.0.0
-* @category Constructors
-*/
-const make$8 = (key, service) => makeUnsafe$5(new Map([[key.key, service]]));
-/**
-* Adds a service to a given `ServiceMap`.
-*
-* @example
-* ```ts
-* import { pipe, ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const Port = ServiceMap.Service<{ PORT: number }>("Port")
-* const Timeout = ServiceMap.Service<{ TIMEOUT: number }>("Timeout")
-*
-* const someServiceMap = ServiceMap.make(Port, { PORT: 8080 })
-*
-* const Services = pipe(
-*   someServiceMap,
-*   ServiceMap.add(Timeout, { TIMEOUT: 5000 })
-* )
-*
-* assert.deepStrictEqual(ServiceMap.get(Services, Port), { PORT: 8080 })
-* assert.deepStrictEqual(ServiceMap.get(Services, Timeout), { TIMEOUT: 5000 })
-* ```
-*
-* @since 4.0.0
-* @category Adders
-*/
-const add$2 = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, (map) => {
-	map.set(key.key, service);
-}));
-/**
-* Get a service from the context that corresponds to the given key.
-*
-* @param self - The `ServiceMap` to search for the service.
-* @param service - The `Service` of the service to retrieve.
-*
-* @example
-* ```ts
-* import { pipe, ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const Port = ServiceMap.Service<{ PORT: number }>("Port")
-* const Timeout = ServiceMap.Service<{ TIMEOUT: number }>("Timeout")
-*
-* const Services = pipe(
-*   ServiceMap.make(Port, { PORT: 8080 }),
-*   ServiceMap.add(Timeout, { TIMEOUT: 5000 })
-* )
-*
-* assert.deepStrictEqual(ServiceMap.get(Services, Timeout), { TIMEOUT: 5000 })
-* ```
-*
-* @since 4.0.0
-* @category Getters
-*/
-const get = /* @__PURE__ */ dual(2, (self, service) => {
-	if (!self.mapUnsafe.has(service.key)) {
-		if (ReferenceTypeId in service) return getDefaultValue(service);
-		throw serviceNotFoundError(service);
-	}
-	return self.mapUnsafe.get(service.key);
-});
-/**
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-* import * as assert from "node:assert"
-*
-* const LoggerRef = ServiceMap.Reference("Logger", {
-*   defaultValue: () => ({ log: (msg: string) => console.log(msg) })
-* })
-*
-* const services = ServiceMap.empty()
-* const logger = ServiceMap.getReferenceUnsafe(services, LoggerRef)
-*
-* assert.deepStrictEqual(logger, { log: (msg: string) => console.log(msg) })
-* ```
-*
-* @since 4.0.0
-* @category unsafe
-*/
-const getReferenceUnsafe = (self, service) => {
-	if (!self.mapUnsafe.has(service.key)) return getDefaultValue(service);
-	return self.mapUnsafe.get(service.key);
-};
-const defaultValueCacheKey = "~effect/ServiceMap/defaultValue";
-const getDefaultValue = (ref) => {
-	if (defaultValueCacheKey in ref) return ref[defaultValueCacheKey];
-	return ref[defaultValueCacheKey] = ref.defaultValue();
-};
-const serviceNotFoundError = (service) => {
-	const error = /* @__PURE__ */ new Error(`Service not found${service.key ? `: ${String(service.key)}` : ""}`);
-	if (service.stack) {
-		const lines = service.stack.split("\n");
-		if (lines.length > 2) {
-			const afterAt = lines[2].match(/at (.*)/);
-			if (afterAt) error.message = error.message + ` (defined at ${afterAt[1]})`;
-		}
-	}
-	if (error.stack) {
-		const lines = error.stack.split("\n");
-		lines.splice(1, 3);
-		error.stack = lines.join("\n");
-	}
-	return error;
-};
-const withMapUnsafe = (self, f) => {
-	if (self.mutable) {
-		f(self.mapUnsafe);
-		return self;
-	}
-	const map = new Map(self.mapUnsafe);
-	f(map);
-	return makeUnsafe$5(map);
-};
-/**
-* Creates a service map key with a default value.
-*
-* **Details**
-*
-* `ServiceMap.Reference` allows you to create a key that can hold a value. You
-* can provide a default value for the service, which will automatically be used
-* when the context is accessed, or override it with a custom implementation
-* when needed.
-*
-* @example
-* ```ts
-* import { ServiceMap } from "effect"
-*
-* // Create a reference with a default value
-* const LoggerRef = ServiceMap.Reference("Logger", {
-*   defaultValue: () => ({ log: (msg: string) => console.log(msg) })
-* })
-*
-* // The reference provides the default value when accessed from an empty context
-* const services = ServiceMap.empty()
-* const logger = ServiceMap.get(services, LoggerRef)
-*
-* // You can also override the default value
-* const customServices = ServiceMap.make(LoggerRef, {
-*   log: (msg: string) => `Custom: ${msg}`
-* })
-* const customLogger = ServiceMap.get(customServices, LoggerRef)
-* ```
-*
-* @since 4.0.0
-* @category References
-*/
-const Reference = Service;
-//#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Scheduler.js
 /**
 * @since 4.0.0
 * @category references
@@ -3896,7 +3940,10 @@ const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBefo
 */
 const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Tracer.js
+/**
+* @since 2.0.0
+*/
 /**
 * @since 2.0.0
 * @category tags
@@ -3904,7 +3951,7 @@ const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/Preven
 * ```ts
 * import { Tracer } from "effect"
 *
-* // The key used to identify parent spans in the service map
+* // The key used to identify parent spans in the context
 * console.log(Tracer.ParentSpanKey) // "effect/Tracer/ParentSpan"
 * ```
 */
@@ -3932,7 +3979,7 @@ const DisablePropagation = /* @__PURE__ */ Reference("effect/Tracer/DisablePropa
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 /** @internal */
@@ -3942,7 +3989,7 @@ const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogL
 /** @internal */
 const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4080,9 +4127,9 @@ const fiberIdStore = { id: 0 };
 const getCurrentFiber = () => globalThis[currentFiberTypeId];
 /** @internal */
 var FiberImpl = class {
-	constructor(services, interruptible = true) {
+	constructor(context, interruptible = true) {
 		this[FiberTypeId] = fiberVariance;
-		this.setServices(services);
+		this.setContext(context);
 		this.id = ++fiberIdStore.id;
 		this.currentOpCount = 0;
 		this.currentLoopCount = 0;
@@ -4106,7 +4153,7 @@ var FiberImpl = class {
 	_children;
 	_interruptedCause;
 	_yielded;
-	services;
+	context;
 	currentScheduler;
 	currentTracerContext;
 	currentSpan;
@@ -4121,7 +4168,7 @@ var FiberImpl = class {
 		return this._dispatcher ??= this.currentScheduler.makeDispatcher();
 	}
 	getRef(ref) {
-		return getReferenceUnsafe(this.services, ref);
+		return getReferenceUnsafe(this.context, ref);
 	}
 	addObserver(cb) {
 		if (this._exit) {
@@ -4137,7 +4184,7 @@ var FiberImpl = class {
 	interruptUnsafe(fiberId, annotations) {
 		if (this._exit) return;
 		let cause = causeInterrupt(fiberId);
-		if (this.currentStackFrame) cause = causeAnnotate(cause, make$8(StackTraceKey, this.currentStackFrame));
+		if (this.currentStackFrame) cause = causeAnnotate(cause, make$9(StackTraceKey, this.currentStackFrame));
 		if (annotations) cause = causeAnnotate(cause, annotations);
 		this._interruptedCause = this._interruptedCause ? causeCombine(this._interruptedCause, cause) : cause;
 		if (this.interruptible) this.evaluate(failCause$2(this._interruptedCause));
@@ -4146,7 +4193,7 @@ var FiberImpl = class {
 		return this._exit;
 	}
 	evaluate(effect) {
-		this.runtimeMetrics?.recordFiberStart(this.services);
+		this.runtimeMetrics?.recordFiberStart(this.context);
 		if (this._exit) return;
 		else if (this._yielded !== void 0) {
 			const yielded = this._yielded;
@@ -4158,7 +4205,7 @@ var FiberImpl = class {
 		const interruptChildren = fiberMiddleware.interruptChildren && fiberMiddleware.interruptChildren(this);
 		if (interruptChildren !== void 0) return this.evaluate(flatMap$1(interruptChildren, () => exit));
 		this._exit = exit;
-		this.runtimeMetrics?.recordFiberEnd(this.services, this._exit);
+		this.runtimeMetrics?.recordFiberEnd(this.context, this._exit);
 		for (let i = 0; i < this._observers.length; i++) this._observers[i](exit);
 		this._observers.length = 0;
 	}
@@ -4217,21 +4264,21 @@ var FiberImpl = class {
 	pipe() {
 		return pipeArguments(this, arguments);
 	}
-	setServices(services) {
-		this.services = services;
+	setContext(context) {
+		this.context = context;
 		const scheduler = this.getRef(Scheduler);
 		if (scheduler !== this.currentScheduler) {
 			this.currentScheduler = scheduler;
 			this._dispatcher = void 0;
 		}
-		this.currentSpan = services.mapUnsafe.get(ParentSpanKey);
+		this.currentSpan = context.mapUnsafe.get(ParentSpanKey);
 		this.currentLogLevel = this.getRef(CurrentLogLevel);
 		this.minimumLogLevel = this.getRef(MinimumLogLevel);
-		this.currentStackFrame = services.mapUnsafe.get(CurrentStackFrame.key);
+		this.currentStackFrame = context.mapUnsafe.get(CurrentStackFrame.key);
 		this.maxOpsBeforeYield = this.getRef(MaxOpsBeforeYield);
 		this.currentPreventYield = this.getRef(PreventSchedulerYield);
-		this.runtimeMetrics = services.mapUnsafe.get(FiberRuntimeMetricsKey);
-		const currentTracer = services.mapUnsafe.get(TracerKey);
+		this.runtimeMetrics = context.mapUnsafe.get(FiberRuntimeMetricsKey);
+		const currentTracer = context.mapUnsafe.get(TracerKey);
 		this.currentTracerContext = currentTracer ? currentTracer["context"] : void 0;
 	}
 	get currentSpanLocal() {
@@ -4593,7 +4640,7 @@ const findFirstFilterLoop = (iterator, index, filter, value) => flatMap$1(filter
 /** @internal */
 const forkUnsafe$1 = (parent, effect, immediate = false, daemon = false, uninterruptible = false) => {
 	const interruptible = uninterruptible === "inherit" ? parent.interruptible : !uninterruptible;
-	const child = new FiberImpl(parent.services, interruptible);
+	const child = new FiberImpl(parent.context, interruptible);
 	if (immediate) child.evaluate(effect);
 	else parent.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
 	if (!daemon && !child._exit) {
@@ -4603,8 +4650,8 @@ const forkUnsafe$1 = (parent, effect, immediate = false, daemon = false, uninter
 	return child;
 };
 /** @internal */
-const runForkWith$1 = (services) => (effect, options) => {
-	const fiber = new FiberImpl(options?.scheduler ? add$2(services, Scheduler, options.scheduler) : services, options?.uninterruptible !== true);
+const runForkWith$1 = (context) => (effect, options) => {
+	const fiber = new FiberImpl(options?.scheduler ? add$2(context, Scheduler, options.scheduler) : context, options?.uninterruptible !== true);
 	fiber.evaluate(effect);
 	if (fiber._exit) return fiber;
 	if (options?.signal) if (options.signal.aborted) fiber.interruptUnsafe();
@@ -4617,8 +4664,8 @@ const runForkWith$1 = (services) => (effect, options) => {
 	return fiber;
 };
 /** @internal */
-const runSyncExitWith$1 = (services) => {
-	const runFork = runForkWith$1(services);
+const runSyncExitWith$1 = (context) => {
+	const runFork = runForkWith$1(context);
 	return (effect) => {
 		if (effectIsExit(effect)) return effect;
 		const fiber = runFork(effect, { scheduler: new MixedScheduler("sync") });
@@ -4629,8 +4676,8 @@ const runSyncExitWith$1 = (services) => {
 /** @internal */
 const runSyncExit$1 = /* @__PURE__ */ runSyncExitWith$1(/* @__PURE__ */ empty$1());
 /** @internal */
-const runSyncWith$1 = (services) => {
-	const runSyncExit = runSyncExitWith$1(services);
+const runSyncWith$1 = (context) => {
+	const runSyncExit = runSyncExitWith$1(context);
 	return (effect) => {
 		const exit = runSyncExit(effect);
 		if (exit._tag === "Failure") throw causeSquash(exit.cause);
@@ -4644,7 +4691,14 @@ const filterDisablePropagation = (span) => {
 	return get(span.annotations, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(getOrUndefined(span.parent)) : none() : some(span);
 };
 TaggedError$1("TimeoutError");
-TaggedError$1("IllegalArgumentError");
+/** @internal */
+const IllegalArgumentErrorTypeId$1 = "~effect/Cause/IllegalArgumentError";
+(class extends TaggedError$1("IllegalArgumentError") {
+	[IllegalArgumentErrorTypeId$1] = IllegalArgumentErrorTypeId$1;
+	constructor(message) {
+		super({ message });
+	}
+});
 TaggedError$1("ExceededCapacityError");
 /** @internal */
 const AsyncFiberErrorTypeId$1 = "~effect/Cause/AsyncFiberError";
@@ -4766,7 +4820,7 @@ const TaggedError = TaggedError$1;
 */
 const getSuccess = exitGetSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/Deferred.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/Deferred.js
 const DeferredProto = {
 	["~effect/Deferred"]: {
 		_A: identity,
@@ -4803,7 +4857,7 @@ const doneUnsafe = (self, effect) => {
 };
 Service()("effect/Layer/CurrentMemoMap");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$7 = "~effect/time/DateTime";
 /** @internal */
@@ -4828,8 +4882,31 @@ const ProtoTimeZone = {
 		return this.toString();
 	}
 };
+({
+	...ProtoTimeZone,
+	_tag: "Named",
+	[symbol$3]() {
+		return string$2(`Named:${this.id}`);
+	},
+	[symbol$2](that) {
+		return isTimeZone$1(that) && that._tag === "Named" && this.id === that.id;
+	},
+	toString() {
+		return `TimeZone.Named(${this.id})`;
+	},
+	toJSON() {
+		return {
+			_id: "TimeZone",
+			_tag: "Named",
+			id: this.id
+		};
+	}
+});
 ({ ...ProtoTimeZone });
-({ ...ProtoTimeZone });
+/** @internal */
+const isDateTime$1 = (u) => hasProperty(u, TypeId$7);
+/** @internal */
+const isTimeZone$1 = (u) => hasProperty(u, TimeZoneTypeId);
 /** @internal */
 const toDateUtc$1 = (self) => new Date(self.epochMilliseconds);
 /** @internal */
@@ -4859,7 +4936,16 @@ const offsetToString = (offset) => {
 	return `${offset < 0 ? "-" : "+"}${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 };
 /** @internal */
+const zonedOffsetIso$1 = (self) => offsetToString(zonedOffset$1(self));
+/** @internal */
 const toEpochMillis$1 = (self) => self.epochMilliseconds;
+/** @internal */
+const formatIsoOffset$1 = (self) => {
+	const date = toDate$1(self);
+	return self._tag === "Utc" ? date.toISOString() : `${date.toISOString().slice(0, -1)}${zonedOffsetIso$1(self)}`;
+};
+/** @internal */
+const formatIsoZoned$1 = (self) => self.zone._tag === "Offset" ? formatIsoOffset$1(self) : `${formatIsoOffset$1(self)}[${self.zone.id}]`;
 ({ ...StructuralProto });
 /**
 * Creates an `Effect` that always succeeds with a given value.
@@ -5293,7 +5379,7 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5311,7 +5397,7 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -5343,7 +5429,7 @@ globalThis.RegExp;
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/SchemaIssue.js
 const TypeId$4 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -6020,7 +6106,7 @@ function formatOption(actual) {
 	return format$3(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6061,6 +6147,7 @@ function formatOption(actual) {
 * - Parse/stringify JSON → {@link parseJson}, {@link stringifyJson}
 * - Encode/decode Base64 → {@link encodeBase64}, {@link decodeBase64}, {@link decodeBase64String}
 * - Encode/decode Hex → {@link encodeHex}, {@link decodeHex}, {@link decodeHexString}
+* - Encode/decode URI components → {@link encodeUriComponent}, {@link decodeUriComponent}
 * - Parse DateTime → {@link dateTimeUtcFromInput}
 * - Decode/encode FormData → {@link decodeFormData}, {@link encodeFormData}
 * - Decode/encode URLSearchParams → {@link decodeURLSearchParams}, {@link encodeURLSearchParams}
@@ -6152,7 +6239,7 @@ var Getter = class Getter extends Class$1 {
 		this.run = run;
 	}
 	map(f) {
-		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$4(f))));
+		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$5(f))));
 	}
 	compose(other) {
 		if (isPassthrough(this)) return other;
@@ -6204,7 +6291,7 @@ function passthrough$1() {
 * @since 4.0.0
 */
 function transform$1(f) {
-	return transformOptional(map$4(f));
+	return transformOptional(map$5(f));
 }
 /**
 * Creates a getter that transforms the full `Option` — both present and absent values.
@@ -6294,7 +6381,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Bidirectional transformations for the Effect Schema system.
 *
@@ -6332,10 +6419,13 @@ function Number$3() {
 * - Trim/case strings → {@link trim}, {@link toLowerCase}, {@link toUpperCase}, {@link capitalize}, {@link uncapitalize}, {@link snakeToCamel}
 * - Parse key-value strings → {@link splitKeyValue}
 * - Coerce string ↔ number/bigint → {@link numberFromString}, {@link bigintFromString}
+* - Coerce string ↔ Date → {@link dateFromString}
 * - Decode durations → {@link durationFromNanos}, {@link durationFromMillis}
 * - Wrap nullable/optional as Option → {@link optionFromNullOr}, {@link optionFromOptionalKey}, {@link optionFromOptional}
 * - Parse URLs → {@link urlFromString}
 * - Base64 ↔ Uint8Array → {@link uint8ArrayFromBase64String}
+* - Base64 ↔ string → {@link stringFromBase64String}
+* - URI component ↔ string → {@link stringFromUriComponent}
 * - JSON string ↔ unknown → {@link fromJsonString}
 * - FormData/URLSearchParams ↔ unknown → {@link fromFormData}, {@link fromURLSearchParams}
 * - Check if a value is a Transformation → {@link isTransformation}
@@ -6536,7 +6626,7 @@ function passthrough() {
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -8096,7 +8186,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/SchemaParser.js
 /**
 * @since 4.0.0
 */
@@ -8228,7 +8318,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.43/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.46/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId$1 = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8252,10 +8342,28 @@ function make$1(ast, options) {
 	if (options) Object.assign(self, options);
 	self.ast = ast;
 	self.rebuild = (ast) => make$1(ast, options);
-	self.makeUnsafe = makeUnsafe(self);
+	self.makeEffect = flow(makeEffect(self), mapErrorEager((issue) => new SchemaError(issue)));
+	self.make = makeUnsafe(self);
 	self.makeOption = makeOption(self);
 	return self;
 }
+/** @internal */
+const SchemaErrorTypeId = "~effect/Schema/SchemaError";
+var SchemaError = class {
+	[SchemaErrorTypeId] = SchemaErrorTypeId;
+	_tag = "SchemaError";
+	name = "SchemaError";
+	issue;
+	constructor(issue) {
+		this.issue = issue;
+	}
+	get message() {
+		return this.issue.toString();
+	}
+	toString() {
+		return `SchemaError(${this.message})`;
+	}
+};
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
