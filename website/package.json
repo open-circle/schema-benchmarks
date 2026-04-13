@@ -82,6 +82,7 @@
     "ansi-styles": "^6.2.3",
     "esquery": "^1.7.0",
     "jiti": "^2.6.1",
+    "mix-n-matchers": "^2.0.1",
     "msw": "^2.13.2",
     "msw-storybook-addon": "^2.0.7",
     "playwright": "catalog:",

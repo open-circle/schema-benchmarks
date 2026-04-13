@@ -1,24 +1,26 @@
-import { useDebouncedCallback } from "@tanstack/react-pacer";
+import { useDebouncedState } from "@tanstack/react-pacer";
 import { useEffect, useState } from "react";
 
 export function useElementSize({ debounce = 0 }: { debounce?: number } = {}) {
-  const [size, setSize] = useState<DOMRect>();
-  const setDebouncedSize = useDebouncedCallback(setSize, { wait: debounce });
+  const [size, setSize, debouncer] = useDebouncedState<DOMRect | undefined>(undefined, {
+    wait: debounce,
+  });
   const [resizeObserver] = useState(() =>
     typeof ResizeObserver === "undefined"
       ? null
       : new ResizeObserver(([entry]) => {
           const domRect = entry?.target.getBoundingClientRect();
-          setDebouncedSize(domRect);
+          setSize(domRect);
         }),
   );
   const [targetRef, setTargetRef] = useState<HTMLElement | null>(null);
   useEffect(() => {
     if (targetRef) {
-      setSize(targetRef.getBoundingClientRect());
+      // set immediately
+      debouncer.fn(targetRef.getBoundingClientRect());
       resizeObserver?.observe(targetRef);
       return () => resizeObserver?.unobserve(targetRef);
     }
-  }, [resizeObserver, targetRef]);
+  }, [resizeObserver, targetRef, debouncer]);
   return [size, setTargetRef] as const;
 }
