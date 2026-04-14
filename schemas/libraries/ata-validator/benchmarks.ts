@@ -1,5 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import type { StandardSchemaV1 } from "@standard-schema/spec";
+import type { JSONSchemaType } from "ajv";
 import type { FormatName } from "ajv-formats";
 import { Validator } from "ata-validator";
 import ts from "dedent";
@@ -11,7 +12,7 @@ import { getAtaValidatorSchema } from ".";
 
 const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
   create() {
-    const schema = new Validator({ type: "string", format } as const);
+    const schema = new Validator({ type: "string", format } satisfies JSONSchemaType<string>);
     return (testString) => schema.isValidObject(testString);
   },
   snippet: ts`{ type: "string", format: "${format}" }`,
