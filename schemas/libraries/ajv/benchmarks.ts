@@ -1,4 +1,5 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import type { JSONSchemaType } from "ajv";
 import { ValidationError } from "ajv";
 import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
@@ -17,7 +18,7 @@ const validate = ajv.compile(schema);
 const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
   create() {
     addFormats(ajv, { formats: [format] });
-    return ajv.compile({ type: "string", format } as const);
+    return ajv.compile({ type: "string", format } satisfies JSONSchemaType<string>);
   },
   snippet: ts`{ type: "string", format: "${format}" }`,
 });
