@@ -1,7 +1,7 @@
 pre-commit:
   commands:
     lint:
-      run: pnpm run lint --fix {staged_files}
+      run: pnpm run lint --fix --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
     format:
       run: pnpm run format --no-error-on-unmatched-pattern {staged_files}
