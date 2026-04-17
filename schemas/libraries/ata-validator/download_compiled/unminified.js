@@ -5,7 +5,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
 var __copyProps = (to, from, except, desc) => {
 	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
 		key = keys[i];
@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.8_ata-validator@0.9.3/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.9_ata-validator@0.10.1/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -140,10 +140,10 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region (ignored) ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator
+//#region (ignored) ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator
 var require_ata_validator$1 = /* @__PURE__ */ __commonJSMin((() => {}));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/binding-options.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/binding-options.js
 var require_binding_options = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		name: "ata",
@@ -151,8 +151,13 @@ var require_binding_options = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function _cpLen(s) {
+		let n = 0;
+		for (const _ of s) n++;
+		return n;
+	}
 	const AJV_MESSAGES = {
 		type: (p) => `must be ${p.type}`,
 		required: (p) => `must have required property '${p.missingProperty}'`,
@@ -349,11 +354,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		if (schema.minLength !== void 0) {
 			const min = schema.minLength;
-			checks.push((d) => typeof d !== "string" || d.length >= min);
+			checks.push((d) => typeof d !== "string" || _cpLen(d) >= min);
 		}
 		if (schema.maxLength !== void 0) {
 			const max = schema.maxLength;
-			checks.push((d) => typeof d !== "string" || d.length <= max);
+			checks.push((d) => typeof d !== "string" || _cpLen(d) <= max);
 		}
 		if (schema.pattern) try {
 			const re = new RegExp(schema.pattern);
@@ -754,8 +759,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			varCounter: 0,
 			helpers: [],
 			helperCode: [],
-			closureVars: [],
-			closureVals: [],
+			closureVars: ["_cpLen"],
+			closureVals: [_cpLen],
 			rootDefs,
 			refStack: /* @__PURE__ */ new Set(),
 			schemaMap: schemaMap || null,
@@ -860,8 +865,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const t = types[0];
 		if (t === "string") {
 			const conds = [`typeof _v!=='string'`];
-			if (schema.minLength !== void 0) conds.push(`_v.length<${schema.minLength}`);
-			if (schema.maxLength !== void 0) conds.push(`_v.length>${schema.maxLength}`);
+			if (schema.minLength !== void 0) conds.push(`_cpLen(_v)<${schema.minLength}`);
+			if (schema.maxLength !== void 0) conds.push(`_cpLen(_v)>${schema.maxLength}`);
 			if (conds.length < 2 && !schema.pattern && !schema.format) return null;
 			if (schema.pattern || schema.format) return null;
 			ctx.varCounter++;
@@ -893,6 +898,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	function genCode(schema, v, lines, ctx, knownType) {
 		if (typeof schema !== "object" || schema === null) return;
+		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
 		const hasSiblings = schema.$ref && (schema.unevaluatedProperties !== void 0 || schema.unevaluatedItems !== void 0);
 		if (schema.$ref) {
 			if (schema.$ref === "#") {
@@ -1048,8 +1054,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.exclusiveMinimum !== void 0) lines.push(isNum ? `if(${v}<=${schema.exclusiveMinimum})return false` : `if(typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum})return false`);
 		if (schema.exclusiveMaximum !== void 0) lines.push(isNum ? `if(${v}>=${schema.exclusiveMaximum})return false` : `if(typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum})return false`);
 		if (schema.multipleOf !== void 0) lines.push(isNum ? `if(${v}%${schema.multipleOf}!==0)return false` : `if(typeof ${v}==='number'&&${v}%${schema.multipleOf}!==0)return false`);
-		if (schema.minLength !== void 0) lines.push(isStr ? `if(${v}.length<${schema.minLength})return false` : `if(typeof ${v}==='string'&&${v}.length<${schema.minLength})return false`);
-		if (schema.maxLength !== void 0) lines.push(isStr ? `if(${v}.length>${schema.maxLength})return false` : `if(typeof ${v}==='string'&&${v}.length>${schema.maxLength})return false`);
+		if (schema.minLength !== void 0) lines.push(isStr ? `if(_cpLen(${v})<${schema.minLength})return false` : `if(typeof ${v}==='string'&&_cpLen(${v})<${schema.minLength})return false`);
+		if (schema.maxLength !== void 0) lines.push(isStr ? `if(_cpLen(${v})>${schema.maxLength})return false` : `if(typeof ${v}==='string'&&_cpLen(${v})>${schema.maxLength})return false`);
 		if (schema.minItems !== void 0) lines.push(isArr ? `if(${v}.length<${schema.minItems})return false` : `if(Array.isArray(${v})&&${v}.length<${schema.minItems})return false`);
 		if (schema.maxItems !== void 0) lines.push(isArr ? `if(${v}.length>${schema.maxItems})return false` : `if(Array.isArray(${v})&&${v}.length>${schema.maxItems})return false`);
 		if (schema.minProperties !== void 0) lines.push(`if(${objGuard}Object.keys(${v}).length<${schema.minProperties})return false`);
@@ -1058,8 +1064,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const inlineCheck = compilePatternInline(schema.pattern, v);
 			if (inlineCheck) lines.push(isStr ? `if(!(${inlineCheck}))return false` : `if(typeof ${v}==='string'&&!(${inlineCheck}))return false`);
 			else {
-				const ri = ctx.varCounter++;
-				ctx.helperCode.push(`const _re${ri}=new RegExp(${JSON.stringify(schema.pattern)})`);
+				const pattern = JSON.stringify(schema.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const ri = ctx.regExpMap.get(pattern);
 				lines.push(isStr ? `if(!_re${ri}.test(${v}))return false` : `if(typeof ${v}==='string'&&!_re${ri}.test(${v}))return false`);
 			}
 		}
@@ -1836,6 +1847,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			anchors: eAnchors,
 			rootSchema: schema
 		};
+		ctx.helperCode.push("const _cpLen=s=>{let n=0;for(const _ of s)n++;return n}");
 		const lines = [];
 		genCodeE(schema, "d", "", lines, ctx, "#");
 		if (lines.length === 0) return (d) => ({
@@ -1857,6 +1869,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
 		if (!schemaPrefix) schemaPrefix = "#";
 		if (typeof schema !== "object" || schema === null) return;
+		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
 		if (schema.$ref) {
 			if (schema.$ref === "#") return;
 			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
@@ -1966,11 +1979,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			lines.push(`{const _r${ci}=typeof ${v}==='number'?${v}%${m}:NaN;if(typeof ${v}==='number'&&Math.abs(_r${ci})>1e-8&&Math.abs(_r${ci}-${m})>1e-8){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
 		}
 		if (schema.minLength !== void 0) {
-			const c = `typeof ${v}==='string'&&${v}.length<${schema.minLength}`;
+			const c = `typeof ${v}==='string'&&_cpLen(${v})<${schema.minLength}`;
 			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${schema.minLength}}`, `'must NOT have fewer than ${schema.minLength} characters'`)}}`);
 		}
 		if (schema.maxLength !== void 0) {
-			const c = `typeof ${v}==='string'&&${v}.length>${schema.maxLength}`;
+			const c = `typeof ${v}==='string'&&_cpLen(${v})>${schema.maxLength}`;
 			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${schema.maxLength}}`, `'must NOT have more than ${schema.maxLength} characters'`)}}`);
 		}
 		if (schema.pattern) {
@@ -1979,9 +1992,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				const c = `typeof ${v}==='string'&&!(${inlineCheck})`;
 				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
 			} else {
-				const ri = ctx.varCounter++;
-				ctx.helperCode.push(`const _re${ri}=new RegExp(${JSON.stringify(schema.pattern)})`);
-				const c = `typeof ${v}==='string'&&!_re${ri}.test(${v})`;
+				const pattern = JSON.stringify(schema.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const c = `typeof ${v}==='string'&&!_re${ctx.regExpMap.get(pattern)}.test(${v})`;
 				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
 			}
 		}
@@ -2031,8 +2048,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			lines.push(`}`);
 		}
 		if (schema.patternProperties) for (const [pat, sub] of Object.entries(schema.patternProperties)) {
-			const ri = ctx.varCounter++;
-			ctx.helperCode.push(`const _re${ri}=new RegExp(${JSON.stringify(pat)})`);
+			const pattern = JSON.stringify(pat);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+			}
+			const ri = ctx.regExpMap.get(pattern);
 			const ki = ctx.varCounter++;
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){if(_re${ri}.test(_k${ki})){`);
 			const p = pathExpr ? `${pathExpr}+'/'+_k${ki}` : `'/'+_k${ki}`;
@@ -2051,8 +2073,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
 			if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
 			if (pn.pattern) {
-				const ri = ctx.varCounter++;
-				ctx.helperCode.push(`const _re${ri}=new RegExp(${JSON.stringify(pn.pattern)})`);
+				const pattern = JSON.stringify(pn.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const ri = ctx.regExpMap.get(pattern);
 				lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
 			}
 			if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
@@ -2194,8 +2221,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const ctx = {
 			varCounter: 0,
 			helperCode: [],
-			closureVars: [],
-			closureVals: [],
+			closureVars: ["_cpLen"],
+			closureVals: [_cpLen],
 			rootDefs: cRootDefs,
 			refStack: /* @__PURE__ */ new Set(),
 			schemaMap: schemaMap || null,
@@ -2390,11 +2417,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			lines.push(`{const _r${ci}=typeof ${v}==='number'?${v}%${m}:NaN;if(typeof ${v}==='number'&&Math.abs(_r${ci})>1e-8&&Math.abs(_r${ci}-${m})>1e-8){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
 		}
 		if (schema.minLength !== void 0) {
-			const c = isStr ? `${v}.length<${schema.minLength}` : `typeof ${v}==='string'&&${v}.length<${schema.minLength}`;
+			const c = isStr ? `_cpLen(${v})<${schema.minLength}` : `typeof ${v}==='string'&&_cpLen(${v})<${schema.minLength}`;
 			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${schema.minLength}}`, `'must NOT have fewer than ${schema.minLength} characters'`)}}`);
 		}
 		if (schema.maxLength !== void 0) {
-			const c = isStr ? `${v}.length>${schema.maxLength}` : `typeof ${v}==='string'&&${v}.length>${schema.maxLength}`;
+			const c = isStr ? `_cpLen(${v})>${schema.maxLength}` : `typeof ${v}==='string'&&_cpLen(${v})>${schema.maxLength}`;
 			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${schema.maxLength}}`, `'must NOT have more than ${schema.maxLength} characters'`)}}`);
 		}
 		if (schema.pattern) {
@@ -2769,7 +2796,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -2837,11 +2864,298 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/package.json
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/shape-classifier.js
+var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const PRIMITIVE_TYPES = new Set([
+		"string",
+		"number",
+		"integer",
+		"boolean"
+	]);
+	const META_KEYS = new Set([
+		"$schema",
+		"$id",
+		"$comment",
+		"title",
+		"description",
+		"default",
+		"examples",
+		"deprecated",
+		"readOnly",
+		"writeOnly"
+	]);
+	const TIER0_OBJECT_ALLOWED = new Set([
+		"type",
+		"properties",
+		"required",
+		"additionalProperties",
+		...META_KEYS
+	]);
+	const TIER0_PRIMITIVE_ALLOWED = new Set([
+		"type",
+		"enum",
+		"const",
+		"minLength",
+		"maxLength",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf",
+		"format",
+		...META_KEYS
+	]);
+	const MAX_TIER0_PROPS = 10;
+	const MAX_TIER0_ENUM = 256;
+	function isPrimitiveType(t) {
+		return typeof t === "string" && PRIMITIVE_TYPES.has(t);
+	}
+	function isPrimitiveEnumValue(v) {
+		const t = typeof v;
+		return v === null || t === "string" || t === "number" || t === "boolean";
+	}
+	function isTier0Primitive(schema) {
+		if (typeof schema !== "object" || schema === null || Array.isArray(schema)) return false;
+		if (!isPrimitiveType(schema.type)) return false;
+		for (const k of Object.keys(schema)) if (!TIER0_PRIMITIVE_ALLOWED.has(k)) return false;
+		if (schema.enum !== void 0) {
+			if (!Array.isArray(schema.enum)) return false;
+			if (schema.enum.length === 0 || schema.enum.length > MAX_TIER0_ENUM) return false;
+			for (const v of schema.enum) if (!isPrimitiveEnumValue(v)) return false;
+		}
+		if (schema.const !== void 0 && !isPrimitiveEnumValue(schema.const)) return false;
+		return true;
+	}
+	function isTier0Object(schema) {
+		if (schema.type !== "object") return false;
+		for (const k of Object.keys(schema)) if (!TIER0_OBJECT_ALLOWED.has(k)) return false;
+		const ap = schema.additionalProperties;
+		if (ap !== void 0 && ap !== true && ap !== false) return false;
+		if (schema.required !== void 0) {
+			if (!Array.isArray(schema.required)) return false;
+			for (const r of schema.required) if (typeof r !== "string") return false;
+		}
+		const props = schema.properties;
+		if (props === void 0) return true;
+		if (typeof props !== "object" || props === null || Array.isArray(props)) return false;
+		const keys = Object.keys(props);
+		if (keys.length > MAX_TIER0_PROPS) return false;
+		for (const k of keys) if (!isTier0Primitive(props[k])) return false;
+		return true;
+	}
+	function classify(schema) {
+		if (typeof schema !== "object" || schema === null || Array.isArray(schema)) return {
+			tier: 2,
+			plan: null
+		};
+		if (isTier0Primitive(schema)) return {
+			tier: 0,
+			plan: null
+		};
+		if (isTier0Object(schema)) return {
+			tier: 0,
+			plan: null
+		};
+		return {
+			tier: 2,
+			plan: null
+		};
+	}
+	module.exports = {
+		classify,
+		MAX_TIER0_PROPS,
+		MAX_TIER0_ENUM,
+		PRIMITIVE_TYPES
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/tier0.js
+var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const TYPE_MASK = {
+		string: 1,
+		number: 2,
+		integer: 4,
+		boolean: 8
+	};
+	const T_STRING = TYPE_MASK.string;
+	const T_NUMBER = TYPE_MASK.number;
+	const T_INTEGER = TYPE_MASK.integer;
+	const T_BOOLEAN = TYPE_MASK.boolean;
+	function codePointLength(s) {
+		let n = 0;
+		for (const _ of s) n++;
+		return n;
+	}
+	const F_MIN = 1;
+	const F_MAX = 2;
+	const F_EXCL_MIN = 4;
+	const F_EXCL_MAX = 8;
+	const F_MULT = 16;
+	function primConstraint(key, propSchema) {
+		const t = propSchema.type;
+		const hasEnum = Array.isArray(propSchema.enum);
+		const hasConst = propSchema.const !== void 0;
+		let numFlags = 0;
+		if (typeof propSchema.minimum === "number") numFlags |= F_MIN;
+		if (typeof propSchema.maximum === "number") numFlags |= F_MAX;
+		if (typeof propSchema.exclusiveMinimum === "number") numFlags |= F_EXCL_MIN;
+		if (typeof propSchema.exclusiveMaximum === "number") numFlags |= F_EXCL_MAX;
+		if (typeof propSchema.multipleOf === "number") numFlags |= F_MULT;
+		return {
+			key,
+			typeMask: TYPE_MASK[t] | 0,
+			numFlags,
+			hasEnum,
+			hasConst,
+			enumSet: hasEnum ? new Set(propSchema.enum) : null,
+			constVal: hasConst ? propSchema.const : void 0,
+			minLen: typeof propSchema.minLength === "number" ? propSchema.minLength : -1,
+			maxLen: typeof propSchema.maxLength === "number" ? propSchema.maxLength : -1,
+			min: typeof propSchema.minimum === "number" ? propSchema.minimum : 0,
+			max: typeof propSchema.maximum === "number" ? propSchema.maximum : 0,
+			exclMin: typeof propSchema.exclusiveMinimum === "number" ? propSchema.exclusiveMinimum : 0,
+			exclMax: typeof propSchema.exclusiveMaximum === "number" ? propSchema.exclusiveMaximum : 0,
+			multipleOf: typeof propSchema.multipleOf === "number" ? propSchema.multipleOf : 0
+		};
+	}
+	function buildTier0Plan(schema) {
+		if (schema.type !== "object") return {
+			isPrimitive: true,
+			constraints: [primConstraint("__root__", schema)],
+			requiredMask: 0,
+			additionalAllowed: true,
+			knownKeys: null
+		};
+		const props = schema.properties || {};
+		const keys = Object.keys(props);
+		const required = schema.required ? new Set(schema.required) : null;
+		const constraints = new Array(keys.length);
+		const knownKeys = /* @__PURE__ */ new Set();
+		let requiredMask = 0;
+		for (let i = 0; i < keys.length; i++) {
+			const k = keys[i];
+			constraints[i] = primConstraint(k, props[k]);
+			knownKeys.add(k);
+			if (required && required.has(k)) requiredMask |= 1 << i;
+		}
+		return {
+			isPrimitive: false,
+			constraints,
+			requiredMask,
+			additionalAllowed: schema.additionalProperties !== false,
+			knownKeys
+		};
+	}
+	function checkPrimitive(c, v) {
+		const m = c.typeMask;
+		if (m === T_STRING) {
+			if (typeof v !== "string") return false;
+			const minLen = c.minLen;
+			const maxLen = c.maxLen;
+			if (minLen >= 0 && codePointLength(v) < minLen) return false;
+			if (maxLen >= 0 && codePointLength(v) > maxLen) return false;
+		} else if (m === T_INTEGER) {
+			if (typeof v !== "number" || !Number.isInteger(v)) return false;
+			const f = c.numFlags;
+			if (f !== 0) {
+				if (f & F_MIN && v < c.min) return false;
+				if (f & F_MAX && v > c.max) return false;
+				if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+				if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+				if (f & F_MULT && v % c.multipleOf !== 0) return false;
+			}
+		} else if (m === T_NUMBER) {
+			if (typeof v !== "number") return false;
+			const f = c.numFlags;
+			if (f !== 0) {
+				if (f & F_MIN && v < c.min) return false;
+				if (f & F_MAX && v > c.max) return false;
+				if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+				if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+				if (f & F_MULT && v % c.multipleOf !== 0) return false;
+			}
+		} else if (m === T_BOOLEAN) {
+			if (typeof v !== "boolean") return false;
+		} else return false;
+		if (c.hasEnum && !c.enumSet.has(v)) return false;
+		if (c.hasConst && v !== c.constVal) return false;
+		return true;
+	}
+	function tier0ValidateObject(plan, data) {
+		if (typeof data !== "object" || data === null || Array.isArray(data)) return false;
+		const cs = plan.constraints;
+		const n = cs.length;
+		const reqMask = plan.requiredMask;
+		let seenMask = 0;
+		for (let i = 0; i < n; i++) {
+			const c = cs[i];
+			const v = data[c.key];
+			if (v === void 0) {
+				if (reqMask & 1 << i) return false;
+				continue;
+			}
+			seenMask |= 1 << i;
+			const m = c.typeMask;
+			if (m === T_STRING) {
+				if (typeof v !== "string") return false;
+				const minLen = c.minLen;
+				const maxLen = c.maxLen;
+				if (minLen >= 0 && v.length < minLen) return false;
+				if (maxLen >= 0 && v.length > maxLen) return false;
+			} else if (m === T_INTEGER) {
+				if (typeof v !== "number" || !Number.isInteger(v)) return false;
+				const f = c.numFlags;
+				if (f !== 0) {
+					if (f & F_MIN && v < c.min) return false;
+					if (f & F_MAX && v > c.max) return false;
+					if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+					if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+					if (f & F_MULT && v % c.multipleOf !== 0) return false;
+				}
+			} else if (m === T_NUMBER) {
+				if (typeof v !== "number") return false;
+				const f = c.numFlags;
+				if (f !== 0) {
+					if (f & F_MIN && v < c.min) return false;
+					if (f & F_MAX && v > c.max) return false;
+					if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+					if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+					if (f & F_MULT && v % c.multipleOf !== 0) return false;
+				}
+			} else if (m === T_BOOLEAN) {
+				if (typeof v !== "boolean") return false;
+			} else return false;
+			if (c.hasEnum && !c.enumSet.has(v)) return false;
+			if (c.hasConst && v !== c.constVal) return false;
+		}
+		if ((seenMask & reqMask) !== reqMask) return false;
+		if (!plan.additionalAllowed) {
+			const known = plan.knownKeys;
+			for (const k in data) {
+				if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+				if (!known.has(k)) return false;
+			}
+		}
+		return true;
+	}
+	function tier0Validate(plan, data) {
+		if (plan.isPrimitive) return checkPrimitive(plan.constraints[0], data);
+		return tier0ValidateObject(plan, data);
+	}
+	module.exports = {
+		buildTier0Plan,
+		tier0Validate,
+		tier0ValidateObject,
+		checkPrimitive,
+		TYPE_MASK
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/package.json
 var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		"name": "ata-validator",
-		"version": "0.9.3",
+		"version": "0.10.1",
 		"description": "Ultra-fast JSON Schema validator. 4.7x faster validation, 1,800x faster compilation. Works without native addon. Cross-schema $ref, Draft 2020-12 + Draft 7, V8-optimized JS codegen, simdjson, RE2, multi-core. Standard Schema V1 compatible.",
 		"main": "index.js",
 		"module": "index.mjs",
@@ -2942,7 +3256,7 @@ var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let native;
 	try {
@@ -2950,6 +3264,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	} catch {}
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
 	const { normalizeDraft7 } = require_draft7();
+	const { classify } = require_shape_classifier();
+	const { buildTier0Plan, tier0Validate } = require_tier0();
 	function buildDefaultsApplier(schema) {
 		if (typeof schema !== "object" || schema === null) return null;
 		const actions = [];
@@ -3236,6 +3552,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				enumerable: false,
 				configurable: false
 			});
+			if (classify(schemaObj).tier === 0) {
+				const _plan = buildTier0Plan(schemaObj);
+				this.isValidObject = (data) => tier0Validate(_plan, data);
+			}
+			if (!opts && typeof schema === "object" && schema !== null) _identityCache.set(schema, this);
 		}
 		_ensureCompiled() {
 			if (this._initialized) return;
@@ -3785,7 +4106,7 @@ module.exports = { boolFn, hybridFactory, errFn };
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.9.3/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
 const { Validator, validate, version, createPaddedBuffer, SIMDJSON_PADDING } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
