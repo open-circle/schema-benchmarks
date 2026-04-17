@@ -1,7 +1,7 @@
 import { anyAbortSignal, Override } from "@schema-benchmarks/utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
-import { createFromReadableStream, renderToReadableStream } from "@tanstack/react-start/rsc";
+import { renderServerComponent } from "@tanstack/react-start/rsc";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/";
 import { ReactNode } from "react";
@@ -37,7 +37,7 @@ export const InlineCode = createServerOnlyFn(async function InlineCode({
 
 export const getCodeBlockFn = createServerFn({ method: "POST" })
   .inputValidator(codeProps)
-  .handler(({ data }) => renderToReadableStream(<InlineCode {...data} />));
+  .handler(({ data }) => renderServerComponent(<InlineCode {...data} />));
 
 export const getCodeBlock = (
   { children, language, lineNumbers }: InlineCodeProps,
@@ -49,7 +49,7 @@ export const getCodeBlock = (
       getCodeBlockFn({
         data: { children, language, lineNumbers },
         signal: anyAbortSignal(signal, signalOpt),
-      }).then(createFromReadableStream),
+      }),
   });
 
 export interface CodeProps extends InlineCodeProps {

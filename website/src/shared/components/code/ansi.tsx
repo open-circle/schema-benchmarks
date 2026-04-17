@@ -1,7 +1,7 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
-import { createFromReadableStream, renderToReadableStream } from "@tanstack/react-start/rsc";
+import { renderServerComponent } from "@tanstack/react-start/rsc";
 import * as v from "valibot";
 
 import { highlightAnsi } from "#/shared/lib/highlight";
@@ -26,7 +26,7 @@ export const AnsiBlock = createServerOnlyFn(async function AnsiBlock({
 
 export const getAnsiBlockFn = createServerFn({ method: "POST" })
   .inputValidator(ansiBlockProps)
-  .handler(({ data: props }) => renderToReadableStream(<AnsiBlock {...props} />));
+  .handler(({ data: props }) => renderServerComponent(<AnsiBlock {...props} />));
 
 export const getAnsiBlock = (
   { children, lineNumbers = false }: AnsiBlockProps,
@@ -38,5 +38,5 @@ export const getAnsiBlock = (
       getAnsiBlockFn({
         data: { children, lineNumbers },
         signal: anyAbortSignal(signal, signalOpt),
-      }).then(createFromReadableStream),
+      }),
   });
