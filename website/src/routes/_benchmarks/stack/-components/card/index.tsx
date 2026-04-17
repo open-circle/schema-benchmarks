@@ -1,11 +1,12 @@
 import type { StackResult } from "@schema-benchmarks/bench";
 import { getTransitionName } from "@schema-benchmarks/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
 import { CodeBlock } from "#/shared/components/code";
-import { AnsiBlock } from "#/shared/components/code/ansi";
+import { getAnsiBlock } from "#/shared/components/code/ansi";
 import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 
@@ -20,6 +21,9 @@ interface StackCardProps {
 const cls = bem("stack-card");
 
 export function StackCard({ result, frameScale, lineCountScale }: StackCardProps) {
+  const { data } = useSuspenseQuery(
+    getAnsiBlock({ children: highlightFrame(result.output), lineNumbers: true }),
+  );
   return (
     <div
       {...cls()}
@@ -75,7 +79,7 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
             Output
           </span>
         </summary>
-        <AnsiBlock lineNumbers>{highlightFrame(result.output)}</AnsiBlock>
+        {data}
       </details>
     </div>
   );
