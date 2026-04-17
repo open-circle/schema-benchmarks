@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
 
-import { CodeBlock } from "#/shared/components/code";
+import { CodeBlock, getCodeBlock } from "#/shared/components/code";
 import { generateMetadata } from "#/shared/data/meta";
 
 import { getRaw } from "./-query";
@@ -46,9 +46,8 @@ export const Route = createFileRoute("/repo/raw/$")({
     if (!fileName) throw notFound();
     try {
       const code = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
-      await CodeBlock.prefetch(
-        { code, language: getLanguage(fileName) },
-        { queryClient, signal: abortController.signal },
+      await queryClient.prefetchQuery(
+        getCodeBlock({ children: code, language: getLanguage(fileName) }, abortController.signal),
       );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();

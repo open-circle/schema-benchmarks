@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
-import { CodeBlock } from "#/shared/components/code";
+import { getCodeBlock } from "#/shared/components/code";
 import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
             queryClient,
             signal: abortController.signal,
           }),
-          CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
+          queryClient.prefetchQuery(getCodeBlock({ children: snippet }, abortController.signal)),
         ],
       ),
     );

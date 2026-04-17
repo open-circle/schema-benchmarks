@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { CodeBlock } from "#/shared/components/code";
+import { getCodeBlock } from "#/shared/components/code";
 import { getAnsiBlock } from "#/shared/components/code/ansi";
 import { generateMetadata } from "#/shared/data/meta";
 import { applySort, sortParams } from "#/shared/lib/sort";
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
               abortController.signal,
             ),
           ),
-        CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
+        queryClient.prefetchQuery(getCodeBlock({ children: snippet }, abortController.signal)),
       ]),
     ]);
   },

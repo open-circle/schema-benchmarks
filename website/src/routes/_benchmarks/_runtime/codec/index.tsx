@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { CodeBlock } from "#/shared/components/code";
+import { getCodeBlock } from "#/shared/components/code";
 import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
@@ -37,13 +37,11 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
             queryClient,
             signal: abortController.signal,
           }),
-          CodeBlock.prefetch(
-            { code: encode.snippet },
-            { queryClient, signal: abortController.signal },
+          queryClient.prefetchQuery(
+            getCodeBlock({ children: encode.snippet }, abortController.signal),
           ),
-          CodeBlock.prefetch(
-            { code: decode.snippet },
-            { queryClient, signal: abortController.signal },
+          queryClient.prefetchQuery(
+            getCodeBlock({ children: decode.snippet }, abortController.signal),
           ),
         ],
       ),

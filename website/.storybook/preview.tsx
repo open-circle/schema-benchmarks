@@ -9,13 +9,11 @@ import {
 } from "@tanstack/react-router";
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
-import Prism from "prismjs";
 import { fromJSON, toCrossJSONAsync } from "seroval";
 import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
 
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import { highlightCode, highlightFn } from "#/shared/lib/highlight";
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { getRouter } from "../src/router";
@@ -145,9 +143,7 @@ document.addEventListener("click", (event) => {
   }
 });
 
-initialize({ onUnhandledRequest: "bypass" }, [
-  mockServerFn(highlightFn, (data) => highlightCode(Prism, data)),
-]);
+initialize({ onUnhandledRequest: "bypass" });
 
 export default definePreview({
   parameters: {
