@@ -122,7 +122,7 @@ importers:
     dependencies:
       '@ata-project/keywords':
         specifier: ^0.1.9
-        version: 0.1.9(ata-validator@0.10.1)
+        version: 0.1.9(ata-validator@0.10.2)
       '@railway-ts/pipelines':
         specifier: ^0.1.28
         version: 0.1.28(typescript@6.0.3)
@@ -148,8 +148,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       ata-validator:
-        specifier: ^0.10.1
-        version: 0.10.1
+        specifier: ^0.10.2
+        version: 0.10.2
       decoders:
         specifier: ^2.9.3
         version: 2.9.3
@@ -157,8 +157,8 @@ importers:
         specifier: 'catalog:'
         version: 1.7.2
       effect:
-        specifier: ^3.21.0
-        version: 3.21.0
+        specifier: ^3.21.1
+        version: 3.21.1
       effect___beta:
         specifier: npm:effect@beta
         version: effect@4.0.0-beta.50
@@ -278,8 +278,8 @@ importers:
         specifier: ^0.10.2
         version: 0.10.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(csstype@3.2.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(solid-js@1.9.10)
       '@tanstack/react-pacer':
-        specifier: ^0.21.1
-        version: 0.21.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: ^0.22.0
+        version: 0.22.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@tanstack/react-query':
         specifier: ^5.99.0
         version: 5.99.0(react@19.2.5)
@@ -299,8 +299,8 @@ importers:
         specifier: ^1.167.41
         version: 1.167.41(crossws@0.4.5(srvx@0.11.15))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(vite@8.0.8(@types/node@25.6.0)(esbuild@0.25.12)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
       '@tanstack/react-store':
-        specifier: ^0.10.0
-        version: 0.10.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: ^0.11.0
+        version: 0.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       ansi-sequence-parser:
         specifier: ^1.1.3
         version: 1.1.3
@@ -1741,12 +1741,16 @@ packages:
   '@hapi/topo@6.0.2':
     resolution: {integrity: sha512-KR3rD5inZbGMrHmgPxsJ9dbi6zEK+C3ZwUwTa+eMwWLz7oijWUTWD2pMSNNYJAU6Qq+65NkxXjqHr/7LM2Xkqg==}
 
-  '@humanfs/core@0.19.1':
-    resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
+  '@humanfs/core@0.19.2':
+    resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
     engines: {node: '>=18.18.0'}
 
   '@humanfs/node@0.16.7':
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
+    engines: {node: '>=18.18.0'}
+
+  '@humanfs/types@0.15.0':
+    resolution: {integrity: sha512-ZZ1w0aoQkwuUuC7Yf+7sdeaNfqQiiLcSRbfI08oAxqLtpXQr9AIVX7Ay7HLDuiLYAaFPu8oBYNq/QIi9URHJ3Q==}
     engines: {node: '>=18.18.0'}
 
   '@humanwhocodes/module-importer@1.0.1':
@@ -2044,11 +2048,11 @@ packages:
     peerDependencies:
       rollup: '>=2'
 
-  '@microsoft/api-extractor-model@7.33.6':
-    resolution: {integrity: sha512-E9iI4yGEVVusbTAqSLetVFxDuBVCVqCigcoQwdJuOjsLq5Hry3MkBgUQhSZNzLCu17pgjk58MI80GRDJLht/1A==}
+  '@microsoft/api-extractor-model@7.33.7':
+    resolution: {integrity: sha512-VA/Xp2vc+LzGW3+5K8Nzc6dlNf0KOAxGY5s524v8L3ib5hvsL8eNhUYBwK3mxj10+kMv+X4gcE72EkZQ33hDiA==}
 
-  '@microsoft/api-extractor@7.58.2':
-    resolution: {integrity: sha512-qmqWa0Fx1xn3irQy8MyuAKUs8e3CdwMJOujaPkM8gx5v/V7RcLhTjBU0/uL2kdhmROpW+5WG1FD98O441kkvQQ==}
+  '@microsoft/api-extractor@7.58.3':
+    resolution: {integrity: sha512-T5BNT3qpOONZf4uypEWxmS9XvjJWfq49IaaJ+tWCyT5UDMxMr3iAQbDj1VoX4fFJq8DpY2bgIcnC3D1z+bLJHA==}
     hasBin: true
 
   '@microsoft/tsdoc-config@0.18.1':
@@ -3111,8 +3115,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rushstack/node-core-library@5.22.0':
-    resolution: {integrity: sha512-S/Dm/N+8tkbasS6yM5cF6q4iDFt14mQQniiVIwk1fd0zpPwWESspO4qtPyIl8szEaN86XOYC1HRRzZrOowxjtw==}
+  '@rushstack/node-core-library@5.23.0':
+    resolution: {integrity: sha512-u72ykLhvp47EPFECnkBjNhTBOVwPBHaIznWpzqP7jTkcnvMRdfyI2K23RSFAi/HjVML6nuw8LRsLS/q5cmEp3g==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -3130,16 +3134,16 @@ packages:
   '@rushstack/rig-package@0.7.2':
     resolution: {integrity: sha512-9XbFWuqMYcHUso4mnETfhGVUSaADBRj6HUAAEYk50nMPn8WRICmBuCphycQGNB3duIR6EEZX3Xj3SYc2XiP+9A==}
 
-  '@rushstack/terminal@0.22.5':
-    resolution: {integrity: sha512-umej8J6A+WRbfQV1G/uNfnz4bMa8CzFU9IJzQb/ZcH4j7Ybg3BQ8UBKOCF3o5U3/2yah1TDU/zE71ugg2JJv+Q==}
+  '@rushstack/terminal@0.22.6':
+    resolution: {integrity: sha512-8qU5oENxccJmyoby7h5uuRyE73jxpaliMyTSpPO/0Qxi8+p/DER4zOJk4fZpr9jsRnyT1psHbnCFYBALeJN0Hw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
       '@types/node':
         optional: true
 
-  '@rushstack/ts-command-line@5.3.5':
-    resolution: {integrity: sha512-ToJQu3+o6aEdDoApGrwb/RsbwDi/NSC7jIEaAezzWM470TRrsXfSHoYAm1eWkhh34xJ+kZxU1ZzKSHiOMlOFPA==}
+  '@rushstack/ts-command-line@5.3.6':
+    resolution: {integrity: sha512-ZMGtpDyH+EY9Bmg604Ol5aEMNjitEj0CxWUOsKe8/RbqcDiXuiQZJ3fWipd3w524eNpCxxVAnA6hUnW+co+ErA==}
 
   '@sapphire/shapeshift@4.0.0':
     resolution: {integrity: sha512-d9dUmWVA7MMiKobL3VpLF8P2aeanRTu6ypG2OIaEv/ZHH/SUQ2iHOVyi5wAPjQ+HmnMuL0whK9ez8I/raWbtIg==}
@@ -3373,8 +3377,8 @@ packages:
     resolution: {integrity: sha512-NaOGLRrddszbQj9upGat6HG/4TKvXLvu+osAIgfxPYA+eIvYKv8GKDJOrY2D3/U9MRnKfMWD7bU4jeD4xmqyIg==}
     engines: {node: '>=20.19'}
 
-  '@tanstack/pacer@0.20.1':
-    resolution: {integrity: sha512-ZNQ1bIL6eUXVKdic0tiImvBVkWrg/IoSK6VIacTrO3d3HAGnd70qFJNJagR/YOJIOw4EKGWnodwpYZkN1pWuVQ==}
+  '@tanstack/pacer@0.21.0':
+    resolution: {integrity: sha512-EZyU3fQvdz7faj0vBVrPd5ejkSS9pbGKtrGZI56dLJgotca6iZKhaNDRv7dweG4dnWx0LovE9YYf1MAErGpbLQ==}
     engines: {node: '>=18'}
 
   '@tanstack/query-core@5.99.0':
@@ -3392,8 +3396,8 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/react-pacer@0.21.1':
-    resolution: {integrity: sha512-BIBWmxSi+RHuB4Sh8SPyh3i3PVK8GR3yAyxOqXjERyww1cfvKdu2veUfJuTTiR4os1lfdctcS4HAibt8KTmMiw==}
+  '@tanstack/react-pacer@0.22.0':
+    resolution: {integrity: sha512-AuKrkcP/LheBuq1tJCN8DDkwU+RmSql3zpJ1RFwvdc7qJED7Ba+jwlfFkeOZ62WcMtV54RceG9Uyprr0j99Qnw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=16.8'
@@ -3477,8 +3481,8 @@ packages:
       '@vitejs/plugin-rsc':
         optional: true
 
-  '@tanstack/react-store@0.10.0':
-    resolution: {integrity: sha512-S1rdnL5OtGLpUBlM9hrQ0heGZFBIzjIwhqrboFWq4pAAufpOuf2eL/dqyupXO9OCblwxBhuB2n43ZcDNqrtoDw==}
+  '@tanstack/react-store@0.11.0':
+    resolution: {integrity: sha512-tX4YXh3PDkmpvGQWkWqKpzs/MSqbtuwY9dWdWhtV9Q50PmO+jOkUKIWIX4G85dwt7lxdHLXsiaEKPdKmC8F41w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -3565,8 +3569,8 @@ packages:
     resolution: {integrity: sha512-KrJYudc1nbnTY43jdN+hQFMYkhz7+3T+hkgBoGnIP1OspSe6vGQaYGDB4EUXYnkLfyQp+iUuKubgS8hSKeJ0ng==}
     engines: {node: '>=22.12.0'}
 
-  '@tanstack/store@0.10.0':
-    resolution: {integrity: sha512-KXAPlXun5J9DjO5LYo+EVjVHGdHfOl5YWE9TVPh4MeHl6gIngIV0fC5rE22JTRZa9KCMiKidh5FG6ufE2usr7Q==}
+  '@tanstack/store@0.11.0':
+    resolution: {integrity: sha512-WlzzCt3xi0G6pCAJu1U+2jiECwabETDpQDi3hfkFZvJii9AuZqEKbOiVarX1/bWhTNjU486yQtJCCasi/0q+Cw==}
 
   '@tanstack/store@0.9.3':
     resolution: {integrity: sha512-8reSzl/qGWGGVKhBoxXPMWzATSbZLZFWhwBAFO9NAyp0TxzfBP0mIrGb8CP8KrQTmvzXlR/vFPPUrHTLBGyFyw==}
@@ -4207,8 +4211,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@0.10.1:
-    resolution: {integrity: sha512-T0ROl4J1xkRaMAfiwLvvN5XY0YU/rGJWmcikrjZvEtw6nz6P0PaLQT3Ublh8izGs1Q31fBKBcSwQxcvyi1EIgQ==}
+  ata-validator@0.10.2:
+    resolution: {integrity: sha512-xPEa3AJjXoh4hg+mZ5BS1MjvMAsqBKRd3A8UWOwoTekSuD981qEpNfsYImwfHlr9lzKBJcUme83u+Pb/Si3p9Q==}
     engines: {node: '>=18.0.0'}
 
   available-typed-arrays@1.0.7:
@@ -5060,8 +5064,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect@3.21.0:
-    resolution: {integrity: sha512-PPN80qRokCd1f015IANNhrwOnLO7GrrMQfk4/lnZRE/8j7UPWrNNjPV0uBrZutI/nHzernbW+J0hdqQysHiSnQ==}
+  effect@3.21.1:
+    resolution: {integrity: sha512-bA3TsBd0mByThuCnE6FQqS+L3DLazk4UbE9jp0CqVfIjQl5DKi8sAe93O/ZKeF7clL65fJxcsVGiAKYXdnHByA==}
 
   effect@4.0.0-beta.50:
     resolution: {integrity: sha512-UsENighZms6LWDSnF/05F9JinDAewV3sGXHAt9M7+dL3VnoFZIwduFxXvmFc7QJm7iV1s7rB98hv1SD3ALA9qg==}
@@ -5307,8 +5311,8 @@ packages:
     resolution: {integrity: sha512-h5+1OzzfCC3Ef7VbtKdcv7zsstUQwUDlYpUTvjeUsJAssPgLn7QzbboPtL5ro04Mq0rPOsMzl7q5hIbRs2wD1A==}
     engines: {node: '>=8.0.0'}
 
-  fast-check@4.6.0:
-    resolution: {integrity: sha512-h7H6Dm0Fy+H4ciQYFxFjXnXkzR2kr9Fb22c0UBpHnm59K2zpr2t13aPTHlltFiNT6zuxp6HMPAVVvgur4BLdpA==}
+  fast-check@4.7.0:
+    resolution: {integrity: sha512-NsZRtqvSSoCP0HbNjUD+r1JH8zqZalyp6gLY9e7OYs7NK9b6AHOs2baBFeBG7bVNsuoukh89x2Yg3rPsul8ziQ==}
     engines: {node: '>=12.17.0'}
 
   fast-deep-equal@3.1.3:
@@ -8780,9 +8784,9 @@ snapshots:
   '@asamuzakjp/nwsapi@2.3.9':
     optional: true
 
-  '@ata-project/keywords@0.1.9(ata-validator@0.10.1)':
+  '@ata-project/keywords@0.1.9(ata-validator@0.10.2)':
     dependencies:
-      ata-validator: 0.10.1
+      ata-validator: 0.10.2
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -9918,12 +9922,16 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@humanfs/core@0.19.1': {}
+  '@humanfs/core@0.19.2':
+    dependencies:
+      '@humanfs/types': 0.15.0
 
   '@humanfs/node@0.16.7':
     dependencies:
-      '@humanfs/core': 0.19.1
+      '@humanfs/core': 0.19.2
       '@humanwhocodes/retry': 0.4.3
+
+  '@humanfs/types@0.15.0': {}
 
   '@humanwhocodes/module-importer@1.0.1': {}
 
@@ -10194,25 +10202,24 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@microsoft/api-extractor-model@7.33.6(@types/node@25.6.0)':
+  '@microsoft/api-extractor-model@7.33.7(@types/node@25.6.0)':
     dependencies:
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.22.0(@types/node@25.6.0)
+      '@rushstack/node-core-library': 5.23.0(@types/node@25.6.0)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@microsoft/api-extractor@7.58.2(@types/node@25.6.0)':
+  '@microsoft/api-extractor@7.58.3(@types/node@25.6.0)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.33.6(@types/node@25.6.0)
+      '@microsoft/api-extractor-model': 7.33.7(@types/node@25.6.0)
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.22.0(@types/node@25.6.0)
+      '@rushstack/node-core-library': 5.23.0(@types/node@25.6.0)
       '@rushstack/rig-package': 0.7.2
-      '@rushstack/terminal': 0.22.5(@types/node@25.6.0)
-      '@rushstack/ts-command-line': 5.3.5(@types/node@25.6.0)
+      '@rushstack/terminal': 0.22.6(@types/node@25.6.0)
+      '@rushstack/ts-command-line': 5.3.6(@types/node@25.6.0)
       diff: 8.0.4
-      lodash: 4.18.1
       minimatch: 10.2.3
       resolve: 1.22.12
       semver: 7.5.4
@@ -11203,7 +11210,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.57.1':
     optional: true
 
-  '@rushstack/node-core-library@5.22.0(@types/node@25.6.0)':
+  '@rushstack/node-core-library@5.23.0(@types/node@25.6.0)':
     dependencies:
       ajv: 8.18.0
       ajv-draft-04: 1.0.0(ajv@8.18.0)
@@ -11225,17 +11232,17 @@ snapshots:
       resolve: 1.22.12
       strip-json-comments: 3.1.1
 
-  '@rushstack/terminal@0.22.5(@types/node@25.6.0)':
+  '@rushstack/terminal@0.22.6(@types/node@25.6.0)':
     dependencies:
-      '@rushstack/node-core-library': 5.22.0(@types/node@25.6.0)
+      '@rushstack/node-core-library': 5.23.0(@types/node@25.6.0)
       '@rushstack/problem-matcher': 0.2.1(@types/node@25.6.0)
       supports-color: 8.1.1
     optionalDependencies:
       '@types/node': 25.6.0
 
-  '@rushstack/ts-command-line@5.3.5(@types/node@25.6.0)':
+  '@rushstack/ts-command-line@5.3.6(@types/node@25.6.0)':
     dependencies:
-      '@rushstack/terminal': 0.22.5(@types/node@25.6.0)
+      '@rushstack/terminal': 0.22.6(@types/node@25.6.0)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -11519,10 +11526,10 @@ snapshots:
 
   '@tanstack/history@1.161.6': {}
 
-  '@tanstack/pacer@0.20.1':
+  '@tanstack/pacer@0.21.0':
     dependencies:
       '@tanstack/devtools-event-client': 0.4.3
-      '@tanstack/store': 0.9.3
+      '@tanstack/store': 0.11.0
 
   '@tanstack/query-core@5.99.0': {}
 
@@ -11541,10 +11548,10 @@ snapshots:
       - solid-js
       - utf-8-validate
 
-  '@tanstack/react-pacer@0.21.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@tanstack/react-pacer@0.22.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@tanstack/pacer': 0.20.1
-      '@tanstack/react-store': 0.9.3(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@tanstack/pacer': 0.21.0
+      '@tanstack/react-store': 0.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
 
@@ -11653,9 +11660,9 @@ snapshots:
       - vite-plugin-solid
       - webpack
 
-  '@tanstack/react-store@0.10.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@tanstack/react-store@0.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@tanstack/store': 0.10.0
+      '@tanstack/store': 0.11.0
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
       use-sync-external-store: 1.6.0(react@19.2.5)
@@ -11792,7 +11799,7 @@ snapshots:
     dependencies:
       '@tanstack/router-core': 1.168.15
 
-  '@tanstack/store@0.10.0': {}
+  '@tanstack/store@0.11.0': {}
 
   '@tanstack/store@0.9.3': {}
 
@@ -12628,7 +12635,7 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@0.10.1:
+  ata-validator@0.10.2:
     dependencies:
       node-addon-api: 8.7.0
       node-api-headers: 1.8.0
@@ -13455,7 +13462,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect@3.21.0:
+  effect@3.21.1:
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-check: 3.23.2
@@ -13463,7 +13470,7 @@ snapshots:
   effect@4.0.0-beta.50:
     dependencies:
       '@standard-schema/spec': 1.1.0
-      fast-check: 4.6.0
+      fast-check: 4.7.0
       find-my-way-ts: 0.1.6
       ini: 6.0.0
       kubernetes-types: 1.30.0
@@ -13868,7 +13875,7 @@ snapshots:
     dependencies:
       pure-rand: 6.1.0
 
-  fast-check@4.6.0:
+  fast-check@4.7.0:
     dependencies:
       pure-rand: 8.4.0
 
@@ -17412,7 +17419,7 @@ snapshots:
 
   vite-plugin-dts@4.5.4(@types/node@25.6.0)(rollup@4.57.1)(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.0)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)):
     dependencies:
-      '@microsoft/api-extractor': 7.58.2(@types/node@25.6.0)
+      '@microsoft/api-extractor': 7.58.3(@types/node@25.6.0)
       '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
       '@volar/typescript': 2.4.28
       '@vue/language-core': 2.2.0(typescript@6.0.3)
