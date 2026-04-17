@@ -34,6 +34,7 @@ export const getAnsiBlock = (
 ) =>
   queryOptions({
     queryKey: ["ansi-rsc", children, lineNumbers],
+    structuralSharing: false,
     queryFn: ({ signal }) =>
       getAnsiBlockFn({
         data: { children, lineNumbers },

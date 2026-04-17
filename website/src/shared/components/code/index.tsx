@@ -48,6 +48,7 @@ export const getCodeBlock = (
 ) =>
   queryOptions({
     queryKey: ["code-rsc", language, children, lineNumbers],
+    structuralSharing: false,
     queryFn: ({ signal }) =>
       getCodeBlockFn({
         data: { children, language, lineNumbers },
