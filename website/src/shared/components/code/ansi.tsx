@@ -34,11 +34,9 @@ export const getAnsiBlock = (
 ) =>
   queryOptions({
     queryKey: ["ansi-rsc", children, lineNumbers],
-    queryFn: async ({ signal }) =>
-      await createFromReadableStream(
-        await getAnsiBlockFn({
-          data: { children, lineNumbers },
-          signal: anyAbortSignal(signal, signalOpt),
-        }),
-      ),
+    queryFn: ({ signal }) =>
+      getAnsiBlockFn({
+        data: { children, lineNumbers },
+        signal: anyAbortSignal(signal, signalOpt),
+      }).then(createFromReadableStream),
   });

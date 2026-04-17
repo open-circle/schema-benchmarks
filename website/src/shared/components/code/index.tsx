@@ -1,54 +1,70 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { anyAbortSignal, Override } from "@schema-benchmarks/utils";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
+import { createFromReadableStream, renderToReadableStream } from "@tanstack/react-start/rsc";
+import Prism from "prismjs";
+import loadLanguages from "prismjs/components/";
+import { ReactNode } from "react";
+import * as v from "valibot";
 
-import type { PrefetchContext } from "#/shared/lib/fetch";
-import { getHighlightedCode } from "#/shared/lib/highlight";
+import { highlightCode } from "#/shared/lib/highlight";
 
 import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";
 import { MdSymbol } from "../symbol";
 
-export interface CodeProps {
-  children: string;
-  language?: string;
+const codeProps = v.object({
+  children: v.string(),
+  language: v.optional(v.string()),
+  lineNumbers: v.optional(v.boolean()),
+});
+type InlineCodeProps = v.InferOutput<typeof codeProps>;
 
-  lineNumbers?: boolean;
+export const InlineCode = createServerOnlyFn(async function InlineCode({
+  children,
+  language = "typescript",
+  lineNumbers,
+}: InlineCodeProps) {
+  if (!Prism.languages[language]) loadLanguages(language);
+  return (
+    <code
+      dir="ltr"
+      className={`language-${language}`}
+      dangerouslySetInnerHTML={{ __html: highlightCode({ code: children, language, lineNumbers }) }}
+    />
+  );
+});
+
+export const getCodeBlockFn = createServerFn({ method: "POST" })
+  .inputValidator(codeProps)
+  .handler(({ data }) => renderToReadableStream(<InlineCode {...data} />));
+
+export const getCodeBlock = (
+  { children, language, lineNumbers }: InlineCodeProps,
+  signalOpt?: AbortSignal,
+) =>
+  queryOptions({
+    queryKey: ["code-rsc", language, children, lineNumbers],
+    queryFn: ({ signal }) =>
+      getCodeBlockFn({
+        data: { children, language, lineNumbers },
+        signal: anyAbortSignal(signal, signalOpt),
+      }).then(createFromReadableStream),
+  });
+
+export interface CodeProps extends InlineCodeProps {
   title?: string;
   copy?: boolean;
 }
 
-const prefetchCode = (
-  {
-    code,
-    lineNumbers,
-    language,
-  }: {
-    code: string;
-    lineNumbers?: boolean;
-    language?: string;
-  },
-  { queryClient, signal }: PrefetchContext,
-) => queryClient.ensureQueryData(getHighlightedCode({ code, lineNumbers, language }, signal));
-
-export function InlineCode({
-  children,
-  language = "typescript",
-}: Pick<CodeProps, "children" | "language">) {
-  const { data } = useSuspenseQuery(getHighlightedCode({ code: children, language }));
-  return (
-    <code dir="ltr" className={`language-${language}`} dangerouslySetInnerHTML={{ __html: data }} />
-  );
-}
-
-InlineCode.prefetch = prefetchCode;
-
-export function CodeBlock({
+export function CodeBlockContainer({
   children,
   title,
   lineNumbers = false,
   language = "typescript",
   copy,
-}: CodeProps) {
-  const { data } = useSuspenseQuery(getHighlightedCode({ code: children, lineNumbers, language }));
+  raw,
+}: Override<CodeProps, { children: ReactNode; raw: string }>) {
   return (
     <pre dir="ltr" className={`language-${language} ${lineNumbers ? "line-numbers" : ""}`}>
       {(title || copy) && (
@@ -59,7 +75,7 @@ export function CodeBlock({
               className="code-block__copy"
               tooltip="Copy to clipboard"
               onClick={() => {
-                navigator.clipboard.writeText(children).then(
+                navigator.clipboard.writeText(raw).then(
                   () => toastWithHaptics.success("Copied code to clipboard"),
                   () => toastWithHaptics.error("Failed to copy"),
                 );
@@ -70,9 +86,16 @@ export function CodeBlock({
           )}
         </div>
       )}
-      <code className={`language-${language}`} dangerouslySetInnerHTML={{ __html: data }} />
+      {children}
     </pre>
   );
 }
 
-CodeBlock.prefetch = prefetchCode;
+export function CodeBlock({ children, ...props }: CodeProps) {
+  const { data } = useSuspenseQuery(getCodeBlock({ children, ...props }));
+  return (
+    <CodeBlockContainer {...props} raw={children}>
+      {data}
+    </CodeBlockContainer>
+  );
+}
