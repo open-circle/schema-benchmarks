@@ -432,7 +432,8 @@ const handleResult = (ctx, result) => {
 			success: false,
 			get error() {
 				if (this._error) return this._error;
-				this._error = new ZodError(ctx.common.issues);
+				const error = new ZodError(ctx.common.issues);
+				this._error = error;
 				return this._error;
 			}
 		};
@@ -2120,9 +2121,10 @@ var ZodObject = class ZodObject extends ZodType {
 	_getCached() {
 		if (this._cached !== null) return this._cached;
 		const shape = this._def.shape();
+		const keys = util.objectKeys(shape);
 		this._cached = {
 			shape,
-			keys: util.objectKeys(shape)
+			keys
 		};
 		return this._cached;
 	}

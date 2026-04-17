@@ -5,7 +5,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
 var __copyProps = (to, from, except, desc) => {
 	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
 		key = keys[i];
@@ -1455,7 +1455,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if (!this.ancestor) return void (this.display = `ref:${this.separator}${e}`);
 						if ("root" === this.ancestor) return void (this.display = `ref:root:${e}`);
 						if (1 === this.ancestor) return void (this.display = `ref:${e || ".."}`);
-						this.display = `ref:${new Array(this.ancestor + 1).fill(this.separator).join("")}${e || ""}`;
+						const t = new Array(this.ancestor + 1).fill(this.separator).join("");
+						this.display = `ref:${t}${e || ""}`;
 					}
 				}, l.Ref.prototype[i.symbols.ref] = !0, t.build = function(e) {
 					return "value" === (e = Object.assign({}, l.defaults, e)).type && void 0 === e.ancestor && (e.ancestor = 1), new l.Ref(e);
