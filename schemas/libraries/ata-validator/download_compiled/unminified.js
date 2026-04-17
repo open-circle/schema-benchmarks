@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.9_ata-validator@0.10.1/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.9_ata-validator@0.10.2/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -140,10 +140,10 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region (ignored) ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator
+//#region (ignored) ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator
 var require_ata_validator$1 = /* @__PURE__ */ __commonJSMin((() => {}));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/binding-options.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/binding-options.js
 var require_binding_options = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		name: "ata",
@@ -151,12 +151,16 @@ var require_binding_options = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _cpLen(s) {
-		let n = 0;
-		for (const _ of s) n++;
-		return n;
+		const len = s.length;
+		for (let i = 0; i < len; i++) if (s.charCodeAt(i) >= 55296 && s.charCodeAt(i) <= 56319) {
+			let n = 0;
+			for (const _ of s) n++;
+			return n;
+		}
+		return len;
 	}
 	const AJV_MESSAGES = {
 		type: (p) => `must be ${p.type}`,
@@ -354,11 +358,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		if (schema.minLength !== void 0) {
 			const min = schema.minLength;
-			checks.push((d) => typeof d !== "string" || _cpLen(d) >= min);
+			const min2 = min * 2;
+			checks.push((d) => typeof d !== "string" || d.length >= min2 || d.length >= min && _cpLen(d) >= min);
 		}
 		if (schema.maxLength !== void 0) {
 			const max = schema.maxLength;
-			checks.push((d) => typeof d !== "string" || _cpLen(d) <= max);
+			checks.push((d) => typeof d !== "string" || d.length <= max || _cpLen(d) <= max);
 		}
 		if (schema.pattern) try {
 			const re = new RegExp(schema.pattern);
@@ -2796,7 +2801,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -2864,7 +2869,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = new Set([
 		"string",
@@ -2902,7 +2907,6 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		"exclusiveMinimum",
 		"exclusiveMaximum",
 		"multipleOf",
-		"format",
 		...META_KEYS
 	]);
 	const MAX_TIER0_PROPS = 10;
@@ -2969,7 +2973,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -2982,9 +2986,13 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const T_INTEGER = TYPE_MASK.integer;
 	const T_BOOLEAN = TYPE_MASK.boolean;
 	function codePointLength(s) {
-		let n = 0;
-		for (const _ of s) n++;
-		return n;
+		const len = s.length;
+		for (let i = 0; i < len; i++) if (s.charCodeAt(i) >= 55296 && s.charCodeAt(i) <= 56319) {
+			let n = 0;
+			for (const _ of s) n++;
+			return n;
+		}
+		return len;
 	}
 	const F_MIN = 1;
 	const F_MAX = 2;
@@ -3052,8 +3060,14 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (typeof v !== "string") return false;
 			const minLen = c.minLen;
 			const maxLen = c.maxLen;
-			if (minLen >= 0 && codePointLength(v) < minLen) return false;
-			if (maxLen >= 0 && codePointLength(v) > maxLen) return false;
+			if (minLen >= 0) {
+				const l = v.length;
+				if (l < minLen) return false;
+				if (l < minLen * 2 && codePointLength(v) < minLen) return false;
+			}
+			if (maxLen >= 0) {
+				if (v.length > maxLen && codePointLength(v) > maxLen) return false;
+			}
 		} else if (m === T_INTEGER) {
 			if (typeof v !== "number" || !Number.isInteger(v)) return false;
 			const f = c.numFlags;
@@ -3100,8 +3114,14 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				if (typeof v !== "string") return false;
 				const minLen = c.minLen;
 				const maxLen = c.maxLen;
-				if (minLen >= 0 && v.length < minLen) return false;
-				if (maxLen >= 0 && v.length > maxLen) return false;
+				if (minLen >= 0) {
+					const l = v.length;
+					if (l < minLen) return false;
+					if (l < minLen * 2 && codePointLength(v) < minLen) return false;
+				}
+				if (maxLen >= 0) {
+					if (v.length > maxLen && codePointLength(v) > maxLen) return false;
+				}
 			} else if (m === T_INTEGER) {
 				if (typeof v !== "number" || !Number.isInteger(v)) return false;
 				const f = c.numFlags;
@@ -3151,11 +3171,11 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/package.json
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/package.json
 var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		"name": "ata-validator",
-		"version": "0.10.1",
+		"version": "0.10.2",
 		"description": "Ultra-fast JSON Schema validator. 4.7x faster validation, 1,800x faster compilation. Works without native addon. Cross-schema $ref, Draft 2020-12 + Draft 7, V8-optimized JS codegen, simdjson, RE2, multi-core. Standard Schema V1 compatible.",
 		"main": "index.js",
 		"module": "index.mjs",
@@ -3256,7 +3276,7 @@ var require_package = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let native;
 	try {
@@ -4106,7 +4126,7 @@ module.exports = { boolFn, hybridFactory, errFn };
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.10.1/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@0.10.2/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
 const { Validator, validate, version, createPaddedBuffer, SIMDJSON_PADDING } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
