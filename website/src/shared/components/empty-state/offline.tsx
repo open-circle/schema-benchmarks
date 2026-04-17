@@ -2,7 +2,6 @@ import { EmptyState } from ".";
 import { MdSymbol } from "../symbol";
 
 export function isOfflineError(err: Error) {
-  console.log(err);
   return !navigator.onLine || err.message.includes("Failed to fetch") || err.name === "AbortError";
 }
 
