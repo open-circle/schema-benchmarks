@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import * as v from "valibot";
 
 import { CodeBlock } from "#/shared/components/code";
-import { AnsiBlock } from "#/shared/components/code/ansi";
+import { getAnsiBlock } from "#/shared/components/code/ansi";
 import { generateMetadata } from "#/shared/data/meta";
 import { applySort, sortParams } from "#/shared/lib/sort";
 
@@ -14,7 +14,7 @@ import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";
 import { StackResults } from "./-components/results";
 import { highlightFrame, sortableKeys } from "./-constants";
-import Content, { exampleStack } from "./-content.mdx";
+import Content from "./-content.mdx";
 import { getStackResults } from "./-query";
 
 import styles from "./index.css?url";
@@ -23,21 +23,27 @@ const searchSchema = v.object({
   ...sortParams(v.optional(v.picklist(sortableKeys), "frame")),
 });
 
+const exampleStack = `ValiError: Invalid length: Expected >=1 but received 0
+    at Module.parse (file:///node_modules/\u001b[4m.pnpm\u001b[24m/valibot@1.2.0_typescript@6.0.0-beta/node_modules/\u001b[4mvalibot\u001b[24m/dist/index.mjs:6748:28)
+\x1b[7m    at Object.throw (file:///schemas/dist/benchmarks-D-_Y96Ph.js:93:6)\x1b[0m
+    at \u001b[90mfile:///bench/\u001b[39msrc/scripts/stack/log.ts:24:28`;
+
 export const Route = createFileRoute("/_benchmarks/stack/")({
   component: RouteComponent,
   validateSearch: searchSchema,
   loader: async ({ context: { queryClient }, abortController }) => {
     const results = await queryClient.ensureQueryData(getStackResults(abortController.signal));
     await Promise.all([
-      AnsiBlock.prefetch(
-        { input: exampleStack, lineNumbers: true },
-        { queryClient, signal: abortController.signal },
+      queryClient.prefetchQuery(
+        getAnsiBlock({ children: exampleStack, lineNumbers: true }, abortController.signal),
       ),
       ...results.flatMap(({ output, snippet }) => [
         output &&
-          AnsiBlock.prefetch(
-            { input: highlightFrame(output), lineNumbers: true },
-            { queryClient, signal: abortController.signal },
+          queryClient.prefetchQuery(
+            getAnsiBlock(
+              { children: highlightFrame(output), lineNumbers: true },
+              abortController.signal,
+            ),
           ),
         CodeBlock.prefetch({ code: snippet }, { queryClient, signal: abortController.signal }),
       ]),
@@ -70,6 +76,9 @@ function frameSort(a: StackResult, b: StackResult) {
 function RouteComponent() {
   const { sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery(getStackResults());
+  const { data: exampleAnsi } = useSuspenseQuery(
+    getAnsiBlock({ children: exampleStack, lineNumbers: true }),
+  );
   const downloadsByPkgName = useDownloadsByPkgName(data);
   const sortedData = useMemo(
     () =>
@@ -100,7 +109,10 @@ function RouteComponent() {
   );
   return (
     <>
-      <Content components={{ wrapper: "div" }} />
+      <div>
+        <Content />
+        {exampleAnsi}
+      </div>
       <StackResults results={sortedData} {...{ sortBy, sortDir }} />
     </>
   );

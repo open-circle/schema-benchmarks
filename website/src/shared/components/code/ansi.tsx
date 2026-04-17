@@ -1,23 +1,44 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { queryOptions } from "@tanstack/react-query";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
+import { createFromReadableStream, renderToReadableStream } from "@tanstack/react-start/rsc";
+import * as v from "valibot";
 
-import type { PrefetchContext } from "#/shared/lib/fetch";
-import { getHighlightedAnsi } from "#/shared/lib/highlight";
+import { highlightAnsi } from "#/shared/lib/highlight";
 
-export interface AnsiProps {
-  children: string;
-  lineNumbers?: boolean;
-}
+const ansiBlockProps = v.object({ children: v.string(), lineNumbers: v.optional(v.boolean()) });
 
-export function AnsiBlock({ children, lineNumbers = false }: AnsiProps) {
-  const { data } = useSuspenseQuery(getHighlightedAnsi({ input: children, lineNumbers }));
+type AnsiBlockProps = v.InferOutput<typeof ansiBlockProps>;
+
+export const AnsiBlock = createServerOnlyFn(async function AnsiBlock({
+  children,
+  lineNumbers = false,
+}: AnsiBlockProps) {
   return (
     <pre dir="ltr" className={`language-ansi ${lineNumbers ? "line-numbers" : ""}`}>
-      <code className="language-ansi" dangerouslySetInnerHTML={{ __html: data }} />
+      <code
+        className="language-ansi"
+        dangerouslySetInnerHTML={{ __html: highlightAnsi({ input: children, lineNumbers }) }}
+      />
     </pre>
   );
-}
+});
 
-AnsiBlock.prefetch = (
-  { input, lineNumbers }: { input: string; lineNumbers?: boolean },
-  { queryClient, signal }: PrefetchContext,
-) => queryClient.ensureQueryData(getHighlightedAnsi({ input, lineNumbers }, signal));
+export const getAnsiBlockFn = createServerFn({ method: "POST" })
+  .inputValidator(ansiBlockProps)
+  .handler(({ data: props }) => renderToReadableStream(<AnsiBlock {...props} />));
+
+export const getAnsiBlock = (
+  { children, lineNumbers = false }: AnsiBlockProps,
+  signalOpt?: AbortSignal,
+) =>
+  queryOptions({
+    queryKey: ["ansi-rsc", children, lineNumbers],
+    queryFn: async ({ signal }) =>
+      await createFromReadableStream(
+        await getAnsiBlockFn({
+          data: { children, lineNumbers },
+          signal: anyAbortSignal(signal, signalOpt),
+        }),
+      ),
+  });
