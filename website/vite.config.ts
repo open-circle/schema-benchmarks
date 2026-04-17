@@ -4,6 +4,7 @@ import netlify from "@netlify/vite-plugin-tanstack-start";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import viteRsc from "@vitejs/plugin-rsc";
 import { playwright } from "@vitest/browser-playwright";
 import rehypeCodeProps from "rehype-mdx-code-props";
 import rehypePrism from "rehype-prism-plus";
@@ -36,7 +37,11 @@ const config = defineConfig({
   },
   plugins: [
     devtools(),
-    tanstackStart(),
+    tanstackStart({
+      rsc: {
+        enabled: true,
+      },
+    }),
     mdx({
       rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
@@ -44,6 +49,7 @@ const config = defineConfig({
     }),
     netlify(),
     viteReact(),
+    viteRsc(),
     materialSymbols({
       knownSymbols: [
         "keyboard_arrow_down",
