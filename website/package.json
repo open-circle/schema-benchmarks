@@ -75,6 +75,7 @@
     "@types/react-dom": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-rsc": "^0.5.24",
     "@vitest/browser-playwright": "catalog:",
     "@vitest/expect": "catalog:",
     "@vitest/pretty-format": "catalog:",
