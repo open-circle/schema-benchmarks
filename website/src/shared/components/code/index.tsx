@@ -15,7 +15,7 @@ import { MdSymbol } from "../symbol";
 
 const codeProps = v.object({
   children: v.string(),
-  language: v.optional(v.string()),
+  language: v.optional(v.string(), "typescript"),
   lineNumbers: v.optional(v.boolean()),
 });
 type InlineCodeProps = v.InferOutput<typeof codeProps>;
@@ -25,7 +25,6 @@ export const InlineCode = createServerOnlyFn(async function InlineCode({
   language = "typescript",
   lineNumbers,
 }: InlineCodeProps) {
-  if (!Prism.languages[language]) loadLanguages(language);
   return (
     <code
       dir="ltr"
@@ -37,7 +36,11 @@ export const InlineCode = createServerOnlyFn(async function InlineCode({
 
 export const getCodeBlockFn = createServerFn({ method: "POST" })
   .inputValidator(codeProps)
-  .handler(({ data }) => renderServerComponent(<InlineCode {...data} />));
+  .handler(({ data, data: { language } }) => {
+    if (!Prism.languages[language]) loadLanguages(language);
+
+    return renderServerComponent(<InlineCode {...data} />);
+  });
 
 export const getCodeBlock = (
   { children, language, lineNumbers }: InlineCodeProps,
