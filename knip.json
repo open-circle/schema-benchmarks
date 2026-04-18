@@ -7,6 +7,8 @@
     },
     "schemas": {},
     "utils": {},
-    "website": {}
+    "website": {
+      "postcss": true
+    }
   }
 }
