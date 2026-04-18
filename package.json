@@ -18,9 +18,12 @@
     "bench:download": "pnpm run --filter '*/bench' download",
     "bench:stack": "pnpm run --filter '*/bench' stack",
     "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack",
-    "postinstall": "lefthook install"
+    "postinstall": "lefthook install",
+    "knip": "knip"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
+    "knip": "^6.4.1",
     "lefthook": "^2.1.6",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
