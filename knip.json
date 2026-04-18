@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "tags": ["-lintignore"],
+  "workspaces": {
+    "bench": {
+      "entry": ["src/index.ts", "src/scripts/**/*.ts"]
+    },
+    "schemas": {},
+    "utils": {},
+    "website": {}
+  }
+}
