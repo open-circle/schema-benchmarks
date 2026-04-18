@@ -13,16 +13,18 @@ import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";
 import { MdSymbol } from "../symbol";
 
+const defaultLanguage = "typescript";
+
 const codeProps = v.object({
   children: v.string(),
-  language: v.optional(v.string(), "typescript"),
+  language: v.optional(v.string(), defaultLanguage),
   lineNumbers: v.optional(v.boolean()),
 });
-type InlineCodeProps = v.InferOutput<typeof codeProps>;
+type InlineCodeProps = v.InferInput<typeof codeProps>;
 
 export const InlineCode = createServerOnlyFn(async function InlineCode({
   children,
-  language = "typescript",
+  language = defaultLanguage,
   lineNumbers,
 }: InlineCodeProps) {
   return (
@@ -65,7 +67,7 @@ export function CodeBlockContainer({
   children,
   title,
   lineNumbers = false,
-  language = "typescript",
+  language = defaultLanguage,
   copy,
   raw,
 }: Override<CodeProps, { children: ReactNode; raw: string }>) {
