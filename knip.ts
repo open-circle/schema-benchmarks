@@ -21,7 +21,14 @@ export default {
     },
     utils: {},
     website: {
-      entry: ["content-collections.ts", "src/routes/blog/-content/*.mdx"],
+      entry: [
+        "content-collections.ts",
+        "src/router.tsx",
+        "src/routes/blog/-content/*.mdx",
+        "offline/root.tsx",
+        "offline/index.html",
+        "offline/generate.ts",
+      ],
       postcss: true,
       ignoreFiles: ["**/*.d.json.ts"],
     },
