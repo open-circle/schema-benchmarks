@@ -35,40 +35,38 @@ class ConfirmPromise<T> implements PromiseLike<T> {
   }
 }
 
-export const store = createStore<Array<InternalDescription>>([]);
-
-export function confirm(description: ConfirmDialogProps) {
-  const id = crypto.randomUUID();
-  const resolvers = Promise.withResolvers<string | undefined>();
-  store.updateState((state) => {
-    state.push({ props: castDraft(description), id, resolvers });
-  });
-  return new ConfirmPromise(resolvers.promise);
-}
-
-function _close(id: string) {
-  store.updateState((state) => {
-    const item = state.find((item) => item.id === id);
-    if (!item) return;
-    item.closing = true;
-  });
-  setTimeout(() => {
-    store.updateState((state) => {
-      const index = state.findIndex((item) => item.id === id);
-      if (index === -1) return;
-      state.splice(index, 1);
-    });
-  }, 75);
-}
-
-export function resolve(id: string, returnValue?: string) {
-  const entry = store.state.find((item) => item.id === id);
-  entry?.resolvers.resolve(returnValue);
-  _close(id);
-}
-
-export function reject(id: string, reason?: unknown) {
-  const entry = store.state.find((item) => item.id === id);
-  entry?.resolvers.reject(reason);
-  _close(id);
-}
+export const confirmQueue = createStore(
+  [] as Array<InternalDescription>,
+  ({ updateState, get }) => ({
+    confirm(description: ConfirmDialogProps) {
+      const id = crypto.randomUUID();
+      const resolvers = Promise.withResolvers<string | undefined>();
+      updateState((state) => {
+        state.push({ props: castDraft(description), id, resolvers });
+      });
+      resolvers.promise.finally(() => {
+        updateState((state) => {
+          const item = state.find((item) => item.id === id);
+          if (!item) return;
+          item.closing = true;
+        });
+        setTimeout(() => {
+          updateState((state) => {
+            const index = state.findIndex((item) => item.id === id);
+            if (index === -1) return;
+            state.splice(index, 1);
+          });
+        }, 75);
+      });
+      return new ConfirmPromise(resolvers.promise);
+    },
+    resolve(id: string, returnValue?: string) {
+      const entry = get().find((item) => item.id === id);
+      entry?.resolvers.resolve(returnValue);
+    },
+    reject(id: string, reason?: unknown) {
+      const entry = get().find((item) => item.id === id);
+      entry?.resolvers.reject(reason);
+    },
+  }),
+);

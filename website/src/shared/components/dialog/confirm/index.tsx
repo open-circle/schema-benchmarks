@@ -1,10 +1,10 @@
 import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import { mergeRefs } from "@schema-benchmarks/utils/react";
-import { useStore } from "@tanstack/react-store";
+import { useSelector } from "@tanstack/react-store";
 import { useRef } from "react";
 
 import { AlertDialog, type AlertDialogProps } from "../alert.tsx";
-import * as confirmQueue from "./queue.ts";
+import { confirmQueue } from "./queue.ts";
 
 export interface ConfirmDialogProps extends DistributiveOmit<
   AlertDialogProps,
@@ -13,7 +13,7 @@ export interface ConfirmDialogProps extends DistributiveOmit<
 
 export function ConfirmDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const current = useStore(confirmQueue.store, ([current]) => current);
+  const current = useSelector(confirmQueue, ([current]) => current);
 
   return (
     current && (
@@ -23,10 +23,10 @@ export function ConfirmDialog() {
         open={!current.closing}
         onConfirm={(close) => {
           close();
-          confirmQueue.resolve(current.id, dialogRef.current?.returnValue);
+          confirmQueue.actions.resolve(current.id, dialogRef.current?.returnValue);
         }}
         onCancel={() => {
-          confirmQueue.reject(current.id, dialogRef.current?.returnValue);
+          confirmQueue.actions.reject(current.id, dialogRef.current?.returnValue);
         }}
       />
     )

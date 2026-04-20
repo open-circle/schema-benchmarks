@@ -3,13 +3,13 @@ import preview from "#storybook/preview";
 import { Banner, type BannerProps } from ".";
 import { Button } from "../button";
 import { MdSymbol } from "../symbol";
-import { closeBanner, openBanner } from "./queue";
+import { bannerStore } from "./queue";
 
 function BannerDemo(bannerProps: BannerProps) {
   return (
     <>
       <Banner />
-      <Button onClick={() => openBanner(bannerProps)}>Open Banner</Button>
+      <Button onClick={() => bannerStore.actions.open(bannerProps)}>Open Banner</Button>
     </>
   );
 }
@@ -31,7 +31,7 @@ const meta = preview.meta({
   args: {
     icon: <MdSymbol>warning</MdSymbol>,
     children: "Hello World",
-    actions: <Button onClick={() => closeBanner()}>Close</Button>,
+    actions: <Button onClick={() => bannerStore.actions.close()}>Close</Button>,
   },
 });
 
