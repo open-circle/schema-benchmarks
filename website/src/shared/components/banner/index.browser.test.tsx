@@ -5,7 +5,7 @@ import { it } from "#test/browser/fixtures";
 
 import { Banner } from ".";
 import { Button } from "../button";
-import { bannerStore, closeBanner, openBanner } from "./queue";
+import { bannerStore } from "./queue";
 
 describe("Banner", () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe("Banner", () => {
   it("should show the banner", async () => {
     await page.render(<Banner />);
 
-    openBanner({
+    bannerStore.actions.open({
       children: "Hello World",
     });
 
@@ -23,9 +23,9 @@ describe("Banner", () => {
   it("should close the banner", async () => {
     await page.render(<Banner />);
 
-    openBanner({
+    bannerStore.actions.open({
       children: "Hello World",
-      actions: <Button onClick={() => closeBanner()}>Close</Button>,
+      actions: <Button onClick={() => bannerStore.actions.close()}>Close</Button>,
     });
 
     await expect.element(page.getByText("Hello World")).toBeInTheDocument();

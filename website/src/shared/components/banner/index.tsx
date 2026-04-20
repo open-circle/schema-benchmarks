@@ -1,4 +1,4 @@
-import { useStore } from "@tanstack/react-store";
+import { useSelector } from "@tanstack/react-store";
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
@@ -17,7 +17,7 @@ export interface BannerProps {
 const cls = bem("banner");
 
 export function Banner() {
-  const banner = useStore(bannerStore, ([current]) => current);
+  const banner = useSelector(bannerStore, ([current]) => current);
   if (!banner) return null;
   const { color = "", closing = false, icon, children, actions } = banner;
   return (

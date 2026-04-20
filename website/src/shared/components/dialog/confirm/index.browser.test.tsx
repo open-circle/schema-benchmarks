@@ -4,15 +4,15 @@ import { page } from "vitest/browser";
 import { it } from "#test/browser/fixtures";
 
 import { ConfirmDialog } from ".";
-import * as confirmQueue from "./queue";
+import { confirmQueue } from "./queue";
 
 describe("ConfirmDialog", () => {
   beforeEach(() => {
-    confirmQueue.store.setState(() => []);
+    confirmQueue.setState(() => []);
   });
   it("should show the dialog", async () => {
     await page.render(<ConfirmDialog />);
-    confirmQueue.confirm({
+    confirmQueue.actions.confirm({
       title: "Discard draft?",
       message: "This cannot be undone.",
       confirmLabel: "Discard",
@@ -27,7 +27,7 @@ describe("ConfirmDialog", () => {
   it("should resolve the promise when confirmed", async () => {
     await page.render(<ConfirmDialog />);
 
-    const promise = confirmQueue.confirm({
+    const promise = confirmQueue.actions.confirm({
       title: "Discard draft?",
       message: "This cannot be undone.",
       confirmLabel: "Discard",
@@ -43,7 +43,7 @@ describe("ConfirmDialog", () => {
   it("should reject the promise when cancelled", async () => {
     await page.render(<ConfirmDialog />);
 
-    const promise = confirmQueue.confirm({
+    const promise = confirmQueue.actions.confirm({
       title: "Discard draft?",
       message: "This cannot be undone.",
       confirmLabel: "Discard",
