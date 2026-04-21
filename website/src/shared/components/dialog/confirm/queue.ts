@@ -44,21 +44,22 @@ export const confirmQueue = createStore(
       updateState((state) => {
         state.push({ props: castDraft(description), id, resolvers });
       });
-      resolvers.promise.finally(() => {
-        updateState((state) => {
-          const item = state.find((item) => item.id === id);
-          if (!item) return;
-          item.closing = true;
-        });
-        setTimeout(() => {
+      return new ConfirmPromise(
+        resolvers.promise.finally(() => {
           updateState((state) => {
-            const index = state.findIndex((item) => item.id === id);
-            if (index === -1) return;
-            state.splice(index, 1);
+            const item = state.find((item) => item.id === id);
+            if (!item) return;
+            item.closing = true;
           });
-        }, 75);
-      });
-      return new ConfirmPromise(resolvers.promise);
+          setTimeout(() => {
+            updateState((state) => {
+              const index = state.findIndex((item) => item.id === id);
+              if (index === -1) return;
+              state.splice(index, 1);
+            });
+          }, 75);
+        }),
+      );
     },
     resolve(id: string, returnValue?: string) {
       const entry = get().find((item) => item.id === id);
