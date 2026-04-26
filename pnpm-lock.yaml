@@ -128,7 +128,7 @@ importers:
     dependencies:
       '@ata-project/keywords':
         specifier: ^0.1.9
-        version: 0.1.9(ata-validator@0.10.3)
+        version: 0.1.9(ata-validator@0.12.1)
       '@railway-ts/pipelines':
         specifier: ^0.1.29
         version: 0.1.29(typescript@6.0.3)
@@ -154,8 +154,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       ata-validator:
-        specifier: ^0.10.3
-        version: 0.10.3
+        specifier: ^0.12.1
+        version: 0.12.1
       decoders:
         specifier: ^2.9.3
         version: 2.9.3
@@ -4265,9 +4265,10 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@0.10.3:
-    resolution: {integrity: sha512-TtPYByzgYsSSiB6zY1cvFcOnHXFWm9NW2/lMaR6BU3Xmfc+qwUMtibP9pRO7FRjVbx/Jm6P3GCRusS5ENMSM3w==}
+  ata-validator@0.12.1:
+    resolution: {integrity: sha512-7Km17wx84JErCK1Eyf7z8aTyUJFNSTGs2x9dPZtFqJHzS7JXmwC3xSwwo7vLuqeM0uSmiOD6uUWpP7ggqRSg8Q==}
     engines: {node: '>=18.0.0'}
+    hasBin: true
 
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -8795,9 +8796,9 @@ snapshots:
   '@asamuzakjp/nwsapi@2.3.9':
     optional: true
 
-  '@ata-project/keywords@0.1.9(ata-validator@0.10.3)':
+  '@ata-project/keywords@0.1.9(ata-validator@0.12.1)':
     dependencies:
-      ata-validator: 0.10.3
+      ata-validator: 0.12.1
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -12565,7 +12566,7 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@0.10.3:
+  ata-validator@0.12.1:
     dependencies:
       node-addon-api: 8.7.0
       node-api-headers: 1.8.0
