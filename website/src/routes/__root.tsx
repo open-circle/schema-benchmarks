@@ -5,11 +5,13 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { useState } from "react";
 import { generateMetadata } from "tanstack-meta";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
 import { Banner } from "#/shared/components/banner";
 import { ConfirmDialog } from "#/shared/components/dialog/confirm";
+import { PreferencesDialog } from "#/shared/components/dialog/pref";
 import { Footer } from "#/shared/components/footer";
 import { Header } from "#/shared/components/header";
 import * as mdxComponents from "#/shared/components/mdx";
@@ -115,6 +117,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { theme, style, npmSite } = Route.useLoaderData();
   useRegisterSW({ immediate: true });
+  const [prefsOpen, setPrefsOpen] = useState(false);
   return (
     <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
       <head>
@@ -129,13 +132,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   <SidebarProvider>
                     <Sidebar />
                     <div className="header-container" id="scroll-container">
-                      <Header />
+                      <Header onPrefs={() => setPrefsOpen(true)} />
                       <Banner />
                       <main>{children}</main>
                       <Footer />
                       <ScrollToTop />
                       <Snackbars />
                       <ConfirmDialog />
+                      <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />
                     </div>
                   </SidebarProvider>
                 </div>
