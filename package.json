@@ -23,11 +23,11 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "knip": "^6.6.0",
+    "knip": "^6.7.0",
     "lefthook": "^2.1.6",
-    "oxfmt": "^0.46.0",
-    "oxlint": "^1.61.0",
-    "oxlint-tsgolint": "^0.21.1",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
+    "oxlint-tsgolint": "^0.22.1",
     "playwright": "catalog:",
     "typescript": "catalog:"
   },
