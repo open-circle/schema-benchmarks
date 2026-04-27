@@ -4,7 +4,15 @@ import bem from "react-bem-helper";
 
 import { useIdDefault } from "#/shared/hooks/use-id-default";
 
-import { type CloseDialog, Dialog, DialogActions, type DialogProps } from ".";
+import {
+  type CloseDialog,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogMessage,
+  type DialogProps,
+  DialogTitle,
+} from ".";
 import { Button, type ButtonProps } from "../button";
 
 type ActionProps = DistributiveOmit<ButtonProps, "children" | "onClick">;
@@ -28,7 +36,6 @@ export interface AlertDialogProps extends DistributiveOmit<
 }
 
 const cls = bem("alert-dialog");
-const dialogCls = bem("dialog");
 
 export function AlertDialog({
   title,
@@ -55,18 +62,12 @@ export function AlertDialog({
       aria-describedby={messageId}
       {...cls({ extra: className })}
     >
-      {(close) => (
+      {({ close, requestClose }) => (
         <>
-          <div {...dialogCls("content")}>
-            {title && (
-              <h2 id={titleId} {...dialogCls("title")}>
-                {title}
-              </h2>
-            )}
-            <p id={messageId} {...dialogCls("message")}>
-              {message}
-            </p>
-          </div>
+          <DialogContent>
+            {title && <DialogTitle id={titleId}>{title}</DialogTitle>}
+            <DialogMessage id={messageId}>{message}</DialogMessage>
+          </DialogContent>
           <DialogActions>
             <Button
               {...cancelProps}
@@ -74,8 +75,15 @@ export function AlertDialog({
               onClick={() => {
                 const returnValue =
                   typeof cancelProps?.value === "string" ? cancelProps.value : undefined;
-                if (closeOnCancel) close(returnValue);
-                onCancel?.((newReturnValue) => close(newReturnValue ?? returnValue));
+                if (closeOnCancel) requestClose(returnValue);
+                onCancel?.({
+                  close(newReturnValue) {
+                    close(newReturnValue ?? returnValue);
+                  },
+                  requestClose(newReturnValue) {
+                    requestClose(newReturnValue ?? returnValue);
+                  },
+                });
               }}
             >
               {cancelLabel}
@@ -84,11 +92,15 @@ export function AlertDialog({
               {...confirmProps}
               {...cls("button", "confirm", confirmProps?.className)}
               onClick={() => {
-                onConfirm((returnValue) => {
-                  close(
-                    returnValue ??
-                      (typeof confirmProps?.value === "string" ? confirmProps.value : undefined),
-                  );
+                const returnValue =
+                  typeof confirmProps?.value === "string" ? confirmProps.value : undefined;
+                onConfirm({
+                  close(newReturnValue) {
+                    close(newReturnValue ?? returnValue);
+                  },
+                  requestClose(newReturnValue) {
+                    requestClose(newReturnValue ?? returnValue);
+                  },
                 });
               }}
             >
