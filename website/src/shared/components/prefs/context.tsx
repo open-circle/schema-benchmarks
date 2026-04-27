@@ -1,6 +1,13 @@
 import { createOptionalContext } from "required-react-context";
 
-import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
+import {
+  type NpmSite,
+  npmSiteSchema,
+  type Style,
+  styleSchema,
+  type Theme,
+  themeSchema,
+} from "#/shared/lib/prefs/constants";
 
 export const { ThemeContext, useTheme } = createOptionalContext<{
   theme: Theme;
@@ -20,4 +27,14 @@ export const { StyleContext, useStyle } = createOptionalContext<{
   setStyle: () => {},
 }).with({
   name: "style",
+});
+
+export const { NpmSiteContext, useNpmSite } = createOptionalContext<{
+  npmSite: NpmSite;
+  setNpmSite: (npmSite: NpmSite) => void;
+}>({
+  npmSite: npmSiteSchema.fallback,
+  setNpmSite: () => {},
+}).with({
+  name: "npmSite",
 });

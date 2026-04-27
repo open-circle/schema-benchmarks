@@ -1,10 +1,10 @@
 import { rootRouteId, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
-import { setStyleFn, setThemeFn } from "#/shared/lib/prefs";
-import type { Style, Theme } from "#/shared/lib/prefs/constants";
+import { setNpmSiteFn, setStyleFn, setThemeFn } from "#/shared/lib/prefs";
+import type { NpmSite, Style, Theme } from "#/shared/lib/prefs/constants";
 
-import { StyleContext, ThemeContext } from "./context";
+import { NpmSiteContext, StyleContext, ThemeContext } from "./context";
 
 export function ThemeProvider({ children, theme }: { children: ReactNode; theme: Theme }) {
   const router = useRouter();
@@ -32,4 +32,18 @@ export function StyleProvider({ children, style }: { children: ReactNode; style:
   }
 
   return <StyleContext value={{ style, setStyle }}>{children}</StyleContext>;
+}
+
+export function NpmSiteProvider({ children, npmSite }: { children: ReactNode; npmSite: NpmSite }) {
+  const router = useRouter();
+
+  function setNpmSite(val: NpmSite) {
+    setNpmSiteFn({ data: val }).then(() =>
+      router.invalidate({
+        filter: (d) => d.id === rootRouteId,
+      }),
+    );
+  }
+
+  return <NpmSiteContext value={{ npmSite, setNpmSite }}>{children}</NpmSiteContext>;
 }

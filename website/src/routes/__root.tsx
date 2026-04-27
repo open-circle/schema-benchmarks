@@ -13,12 +13,12 @@ import { ConfirmDialog } from "#/shared/components/dialog/confirm";
 import { Footer } from "#/shared/components/footer";
 import { Header } from "#/shared/components/header";
 import * as mdxComponents from "#/shared/components/mdx";
-import { StyleProvider, ThemeProvider } from "#/shared/components/prefs/provider";
+import { NpmSiteProvider, StyleProvider, ThemeProvider } from "#/shared/components/prefs/provider";
 import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
-import { getStyleFn, getThemeFn } from "#/shared/lib/prefs";
+import { getNpmSiteFn, getStyleFn, getThemeFn } from "#/shared/lib/prefs";
 
 import { symbolsUrl } from "../../vite/symbols";
 
@@ -29,7 +29,8 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  loader: () => promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn() }),
+  loader: () =>
+    promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn(), npmSite: getNpmSiteFn() }),
   staticData: { crumb: undefined },
 
   head: () => {
@@ -112,7 +113,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { theme, style } = Route.useLoaderData();
+  const { theme, style, npmSite } = Route.useLoaderData();
   useRegisterSW({ immediate: true });
   return (
     <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
@@ -122,22 +123,24 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider theme={theme}>
           <StyleProvider style={style}>
-            <MDXProvider components={mdxComponents}>
-              <div className="sidebar-container">
-                <SidebarProvider>
-                  <Sidebar />
-                  <div className="header-container" id="scroll-container">
-                    <Header />
-                    <Banner />
-                    <main>{children}</main>
-                    <Footer />
-                    <ScrollToTop />
-                    <Snackbars />
-                    <ConfirmDialog />
-                  </div>
-                </SidebarProvider>
-              </div>
-            </MDXProvider>
+            <NpmSiteProvider npmSite={npmSite}>
+              <MDXProvider components={mdxComponents}>
+                <div className="sidebar-container">
+                  <SidebarProvider>
+                    <Sidebar />
+                    <div className="header-container" id="scroll-container">
+                      <Header />
+                      <Banner />
+                      <main>{children}</main>
+                      <Footer />
+                      <ScrollToTop />
+                      <Snackbars />
+                      <ConfirmDialog />
+                    </div>
+                  </SidebarProvider>
+                </div>
+              </MDXProvider>
+            </NpmSiteProvider>
           </StyleProvider>
         </ThemeProvider>
         <TanStackDevtools
