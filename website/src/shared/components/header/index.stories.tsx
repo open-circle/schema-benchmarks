@@ -1,3 +1,5 @@
+import { fn } from "storybook/test";
+
 import preview from "#storybook/preview";
 
 import { Header } from ".";
@@ -7,6 +9,9 @@ const meta = preview.meta({
   component: Header,
   parameters: {
     layout: "fullscreen",
+  },
+  args: {
+    onPrefs: fn(),
   },
 });
 
