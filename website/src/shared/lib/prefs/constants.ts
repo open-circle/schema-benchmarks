@@ -14,3 +14,6 @@ export const styleLabels: Record<Style, { label: string; icon: string }> = {
   code: { label: "Code style", icon: "code" },
   normal: { label: "Normal style", icon: "match_case" },
 };
+
+export const npmSiteSchema = v.fallback(v.picklist(["npmjs.com", "npmx.dev"]), "npmx.dev");
+export type NpmSite = v.InferOutput<typeof npmSiteSchema>;

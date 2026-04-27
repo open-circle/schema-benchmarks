@@ -2,7 +2,7 @@ import { createMiddleware, createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import * as v from "valibot";
 
-import { styleSchema, themeSchema } from "./constants";
+import { npmSiteSchema, styleSchema, themeSchema } from "./constants";
 
 const themeKey = "benchmarks::theme";
 
@@ -33,3 +33,20 @@ const styleMw = createMiddleware({ type: "function" })
 export const setStyleFn = createServerFn()
   .middleware([styleMw])
   .handler(({ data: style }) => setCookie(styleKey, style));
+
+const npmSiteKey = "benchmarks::npm-site";
+
+export const getNpmSiteFn = createServerFn().handler(() =>
+  v.parse(npmSiteSchema, getCookie(npmSiteKey)),
+);
+
+const npmSiteMw = createMiddleware({ type: "function" })
+  .inputValidator(npmSiteSchema)
+  .client(({ data: npmSite, next }) => {
+    window.umami?.track("change_npm_site", { npmSite });
+    return next();
+  });
+
+export const setNpmSiteFn = createServerFn()
+  .middleware([npmSiteMw])
+  .handler(({ data: npmSite }) => setCookie(npmSiteKey, npmSite));
