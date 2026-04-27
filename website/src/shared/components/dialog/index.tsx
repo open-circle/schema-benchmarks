@@ -3,9 +3,10 @@ import { type ComponentPropsWithRef, type ReactNode, useEffect, useRef } from "r
 import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 
+import { classed } from "#/shared/components/utils";
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
-export type CloseDialog = (returnValue?: string) => void;
+export type CloseDialog = Record<"close" | "requestClose", (returnValue?: string) => void>;
 
 export interface DialogProps extends Omit<ComponentPropsWithRef<"dialog">, "children"> {
   children: ValueOrFunction<ReactNode, CloseDialog>;
@@ -24,7 +25,14 @@ export function Dialog({ open, children, ref, className, ...props }: DialogProps
   }, [open]);
   return (
     <dialog {...props} {...cls({ extra: className })} ref={mergeRefs(ref, dialogRef)}>
-      {resolveValue(children, (returnValue) => dialogRef.current?.close(returnValue))}
+      {resolveValue(children, {
+        close(returnValue) {
+          return dialogRef.current?.close(returnValue);
+        },
+        requestClose(returnValue) {
+          return dialogRef.current?.requestClose(returnValue);
+        },
+      })}
     </dialog>
   );
 }
@@ -43,3 +51,15 @@ export function DialogActions({
     </div>
   );
 }
+
+export const DialogContent = classed.div(cls("content").className);
+
+DialogContent.displayName = "DialogContent";
+
+export const DialogTitle = classed.h2(cls("title").className);
+
+DialogTitle.displayName = "DialogTitle";
+
+export const DialogMessage = classed.p(cls("message").className);
+
+DialogMessage.displayName = "DialogMessage";

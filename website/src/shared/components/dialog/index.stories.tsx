@@ -16,7 +16,7 @@ const meta = preview.meta({
   },
   args: {
     open: true,
-    children: (close: CloseDialog) => (
+    children: ({ close }: CloseDialog) => (
       <>
         <div className="dialog__content">
           <h2 className="dialog__title">Hello world</h2>

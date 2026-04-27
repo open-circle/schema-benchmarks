@@ -21,7 +21,7 @@ export function ConfirmDialog() {
         {...current.props}
         ref={mergeRefs(dialogRef, current.props.ref)}
         open={!current.closing}
-        onConfirm={(close) => {
+        onConfirm={({ close }) => {
           close();
           confirmQueue.actions.resolve(current.id, dialogRef.current?.returnValue);
         }}
