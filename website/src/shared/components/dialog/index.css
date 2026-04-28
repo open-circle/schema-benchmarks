@@ -1,3 +1,5 @@
+@import "./pref.css";
+
 :root {
   --dialog-enter-time: 150ms;
   --dialog-exit-time: 75ms;
