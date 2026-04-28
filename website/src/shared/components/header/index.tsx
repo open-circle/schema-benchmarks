@@ -30,7 +30,7 @@ const crumbSchema = v.object({
   crumb: v.union([v.string(), v.array(v.string())]),
 });
 
-export function Header({ onPrefs }: { onPrefs: () => void }) {
+export function Header({ prefsOpen, onPrefs }: { prefsOpen: boolean; onPrefs: () => void }) {
   const { open, setOpen } = useContext(SidebarOpenContext);
   const [crumbs, currentCrumbs] = useMatches({
     select: (matches) => {
@@ -116,7 +116,7 @@ export function Header({ onPrefs }: { onPrefs: () => void }) {
           <DiscordIcon height={24} width={24} style={{ padding: 2 }} />
         </ExternalLinkToggleButton>
         <ToggleButton tooltip="Preferences" onClick={onPrefs}>
-          <MdSymbol>settings</MdSymbol>
+          <MdSymbol fill={prefsOpen}>settings</MdSymbol>
         </ToggleButton>
       </div>
     </header>
