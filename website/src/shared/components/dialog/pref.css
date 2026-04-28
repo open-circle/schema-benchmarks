@@ -1,0 +1,15 @@
+.pref-dialog {
+  .pref-dialog__prefs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 1.5rem;
+    gap: 1.5rem;
+  }
+  .pref-dialog__group {
+    h5 {
+      margin: 0;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
