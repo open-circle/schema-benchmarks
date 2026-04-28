@@ -18,7 +18,7 @@ export interface PageFilterTextFieldProps<LinkOptions = unknown>
    * Create the new link options based on the current event.
    */
   getLinkOptions: (
-    event: ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) => ValidateLinkOptions<RegisteredRouter, LinkOptions>;
 }
 
@@ -32,7 +32,7 @@ export function PageFilterTextField<LinkOptions>({
   const titleId = useIdDefault(titleIdProp);
   const navigate = useNavigate();
   const debouncedOnChange = useDebouncedCallback(
-    (event) => {
+    (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
       navigate({ ...getLinkOptions(event), replace: true });
     },
     { wait: 200 },
