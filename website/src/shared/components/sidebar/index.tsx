@@ -6,12 +6,8 @@ import bem from "react-bem-helper";
 
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
 import { useScrollLockEffect } from "#/shared/hooks/use-scroll-lock";
-import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
-import { ButtonGroup } from "../button";
-import { ToggleButton } from "../button/toggle";
 import { List, ListItem, ListItemContent, ListItemInternalLink } from "../list";
-import { useStyle, useTheme } from "../prefs/context";
 import { MdSymbol } from "../symbol";
 import { SidebarOpenContext } from "./context";
 import { sidebarGroups } from "./groups";
@@ -78,14 +74,12 @@ function BreakpointSidebar({ children }: { children?: ReactNode }) {
 }
 
 export function Sidebar() {
-  const { theme, setTheme } = useTheme();
-  const { style, setStyle } = useStyle();
   return (
     <BreakpointSidebar>
       <nav className="typo-subtitle1">
         <ul {...cls("groups")}>
           {sidebarGroups.map((group, index) => (
-            <div key={group.key} {...cls("group")}>
+            <li key={group.key} {...cls("group")}>
               <List>
                 {group.links.map(({ name, icon, ...link }) => (
                   <ListItem key={link.to}>
@@ -100,38 +94,10 @@ export function Sidebar() {
               {index !== sidebarGroups.length - 1 && (
                 <hr className={clsx({ inset: group.inset })} />
               )}
-            </div>
+            </li>
           ))}
         </ul>
       </nav>
-      <div className="pref-switchers">
-        <ButtonGroup ariaLabel="Style" className="pref-switcher">
-          {styleSchema.options.map((option) => (
-            <ToggleButton
-              key={option}
-              active={style === option}
-              onClick={() => setStyle(option)}
-              tooltip={styleLabels[option].label}
-              haptic
-            >
-              <MdSymbol>{styleLabels[option].icon}</MdSymbol>
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-        <ButtonGroup ariaLabel="Theme" className="pref-switcher">
-          {themeSchema.options.map((option) => (
-            <ToggleButton
-              key={option}
-              active={theme === option}
-              onClick={() => setTheme(option)}
-              tooltip={themeLabels[option].label}
-              haptic
-            >
-              <MdSymbol>{themeLabels[option].icon}</MdSymbol>
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-      </div>
     </BreakpointSidebar>
   );
 }

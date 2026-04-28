@@ -10,12 +10,9 @@ import bem from "react-bem-helper";
 import * as v from "valibot";
 
 import { trackedLinkProps } from "#/shared/lib/analytics";
-import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
-import { ButtonGroup } from "../button";
 import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
 import { ConsoleWriter } from "../consolewriter";
-import { useStyle, useTheme } from "../prefs/context";
 import { SidebarOpenContext } from "../sidebar/context";
 import { MdSymbol } from "../symbol";
 import DiscordIcon from "./discord.svg?react";
@@ -61,8 +58,6 @@ export function Header({ onPrefs }: { onPrefs: () => void }) {
       return partition(allCrumbs, (crumb) => crumb.to !== currentPathname);
     },
   });
-  const { theme, setTheme } = useTheme();
-  const { style, setStyle } = useStyle();
   return (
     <header {...cls()}>
       <ToggleButton
@@ -104,32 +99,6 @@ export function Header({ onPrefs }: { onPrefs: () => void }) {
         ))}
       </nav>
       <div {...cls("actions")}>
-        <ButtonGroup ariaLabel="Style" className="pref-switcher">
-          {styleSchema.options.map((option) => (
-            <ToggleButton
-              key={option}
-              active={style === option}
-              onClick={() => setStyle(option)}
-              tooltip={styleLabels[option].label}
-              haptic
-            >
-              <MdSymbol>{styleLabels[option].icon}</MdSymbol>
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-        <ButtonGroup ariaLabel="Theme" className="pref-switcher">
-          {themeSchema.options.map((option) => (
-            <ToggleButton
-              key={option}
-              active={theme === option}
-              onClick={() => setTheme(option)}
-              tooltip={themeLabels[option].label}
-              haptic
-            >
-              <MdSymbol>{themeLabels[option].icon}</MdSymbol>
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
         <ExternalLinkToggleButton
           {...trackedLinkProps("https://github.com/open-circle/schema-benchmarks")}
           target="_blank"
