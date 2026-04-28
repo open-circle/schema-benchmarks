@@ -132,7 +132,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   <SidebarProvider>
                     <Sidebar />
                     <div className="header-container" id="scroll-container">
-                      <Header onPrefs={() => setPrefsOpen(true)} />
+                      <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
                       <Banner />
                       <main>{children}</main>
                       <Footer />

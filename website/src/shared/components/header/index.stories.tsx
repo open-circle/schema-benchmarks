@@ -12,6 +12,7 @@ const meta = preview.meta({
   },
   args: {
     onPrefs: fn(),
+    prefsOpen: false,
   },
 });
 
