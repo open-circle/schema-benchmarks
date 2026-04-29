@@ -1,10 +1,11 @@
-import { anyAbortSignal, Override } from "@schema-benchmarks/utils";
+import type { Override } from "@schema-benchmarks/utils";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { renderServerComponent } from "@tanstack/react-start/rsc";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import * as v from "valibot";
 
 import { highlightCode } from "#/shared/lib/highlight";

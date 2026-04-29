@@ -1,5 +1,6 @@
 import { uniqueBy } from "@schema-benchmarks/utils";
-import { useSuspenseQueries, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { UseSuspenseQueryResult } from "@tanstack/react-query";
+import { useSuspenseQueries } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 
 import { getAllWeeklyDownloads, getPackageName } from "./-query";

@@ -1,5 +1,5 @@
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
 import { Button, ButtonGroup } from "#/shared/components/button";
