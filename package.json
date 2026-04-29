@@ -22,6 +22,8 @@
     "knip": "knip"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "catalog:",
+    "@tanstack/eslint-plugin-router": "catalog:",
     "@types/node": "catalog:",
     "knip": "^6.9.0",
     "lefthook": "^2.1.6",

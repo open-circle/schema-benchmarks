@@ -1,8 +1,6 @@
 import eslintPluginQuery from "@tanstack/eslint-plugin-query";
 import eslintPluginRouter from "@tanstack/eslint-plugin-router";
-import { defineConfig } from "oxlint";
-
-import { baseConfig } from "../oxlint.config.ts";
+import type { OxlintOverride, OxlintConfig } from "vite-plus/lint";
 
 const linkComponents = [
   // "Link",
@@ -23,36 +21,35 @@ const buttonComponents = [
   "ListItemButton",
 ];
 
-export default defineConfig({
-  extends: [baseConfig],
+export const websiteSettings = {
+  "jsx-a11y": {
+    components: {
+      ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
+      ...Object.fromEntries(buttonComponents.map((component) => [component, "button"])),
+      TextField: "input",
+    },
+  },
+  react: {
+    componentWrapperFunctions: ["withTooltip", "createLink"],
+    linkComponents: linkComponents.map((component) => ({
+      name: component,
+      attributes: ["to", "href"],
+    })),
+  },
+} satisfies OxlintConfig["settings"];
+
+export default {
   jsPlugins: [
     { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
     { name: "@tanstack/query", specifier: "@tanstack/eslint-plugin-query" },
   ],
   plugins: ["react", "jsx-a11y"],
-  settings: {
-    "jsx-a11y": {
-      components: {
-        ...Object.fromEntries(linkComponents.map((component) => [component, "a"])),
-        ...Object.fromEntries(buttonComponents.map((component) => [component, "button"])),
-        TextField: "input",
-      },
-    },
-    react: {
-      componentWrapperFunctions: ["withTooltip", "createLink"],
-      linkComponents: linkComponents.map((component) => ({
-        name: component,
-        attributes: ["to", "href"],
-      })),
-    },
-  },
   env: {
     // client side
     browser: true,
     // server side
     node: true,
   },
-  ignorePatterns: ["**/routeTree.gen.ts", "public/mockServiceWorker.js"],
   rules: {
     ...eslintPluginRouter.configs.recommended.rules,
     ...eslintPluginQuery.configs.recommended.rules,
@@ -60,4 +57,4 @@ export default defineConfig({
     // would be nice to have on, but we get false positives for external abort signals
     "@tanstack/query/exhaustive-deps": "off",
   },
-});
+} satisfies Omit<OxlintOverride, "files">;

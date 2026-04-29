@@ -60,6 +60,12 @@ importers:
 
   .:
     devDependencies:
+      '@tanstack/eslint-plugin-query':
+        specifier: ^5.100.5
+        version: 5.100.5(eslint@10.0.2(jiti@2.6.1))(typescript@6.0.3)
+      '@tanstack/eslint-plugin-router':
+        specifier: ^1.161.6
+        version: 1.161.6(eslint@10.0.2(jiti@2.6.1))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 25.6.0
