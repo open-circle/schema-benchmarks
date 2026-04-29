@@ -7,7 +7,7 @@ import {
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
-import { assert, describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vite-plus/test";
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();

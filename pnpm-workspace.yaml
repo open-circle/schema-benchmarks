@@ -3,6 +3,14 @@ packages:
   - bench
   - utils
   - schemas
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  ata-validator: set this to true or false
+  esbuild: set this to true or false
+  lefthook: set this to true or false
+  msgpackr-extract: set this to true or false
+  msw: set this to true or false
+  sharp: set this to true or false
 
 catalog:
   "@standard-schema/spec": ^1.1.0
@@ -11,7 +19,6 @@ catalog:
   "@types/react-dom": ^19.2.3
   "@typescript/native-preview": 7.0.0-dev.20260430.1
   "@typia/unplugin": ^12.0.2
-  "@vitest/browser-playwright": ^4.1.5
   "@vitest/expect": ^4.1.5
   "@vitest/pretty-format": ^4.1.5
   dedent: ^1.7.2
@@ -20,7 +27,16 @@ catalog:
   react-dom: ^19.2.5
   typescript: 6.0.3
   valibot: ^1.3.1
-  vite: ^8.0.10
-  vitest: ^4.1.5
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vite-plus: latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
 overrides:
   vite: "catalog:"
+  vitest: "catalog:"
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: "*"
+    vitest: "*"

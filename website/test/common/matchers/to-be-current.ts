@@ -1,6 +1,6 @@
 import type { Autocomplete } from "@schema-benchmarks/utils";
 import type { ExpectationResult, MatcherState } from "@vitest/expect";
-import type { Locator } from "vitest/browser";
+import type { Locator } from "vite-plus/test/browser";
 
 import { getElementFromUserInput, getMessage } from "./utils";
 
@@ -60,7 +60,7 @@ function getAttributeComment(stringify: (obj: unknown) => string, name: string, 
     : `element.getAttribute(${stringify(name)}) === ${stringify(value)}`;
 }
 
-declare module "vitest" {
+declare module "vite-plus/test" {
   interface Assertion<T> {
     toBeCurrent: {
       /**

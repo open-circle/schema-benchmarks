@@ -1,4 +1,4 @@
-import { test as testBase } from "vitest";
+import { test as testBase } from "vite-plus/test";
 
 import { worker } from "./mocks";
 

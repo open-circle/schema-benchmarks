@@ -3,10 +3,10 @@ import * as path from "node:path";
 
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { build, createServer } from "vite";
-import type { UserConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
+import { build, createServer } from "vite-plus";
+import type { UserConfig } from "vite-plus";
 
 import vitePwaOpts from "./opts.ts";
 

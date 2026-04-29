@@ -1,7 +1,7 @@
 import { partition } from "@schema-benchmarks/utils";
 import esquery from "esquery";
 import type { Literal } from "estree";
-import type { Plugin } from "vite";
+import type { Plugin } from "vite-plus";
 
 const component = "MdSymbol";
 
