@@ -17,8 +17,8 @@ export default defineConfig({
     deps: {
       neverBundle: [/node:/],
     },
+    plugins: [UnpluginTypia({ log: false }), macros()],
   },
-  plugins: [UnpluginTypia({ log: false }), macros()],
   test: {
     include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
   },
