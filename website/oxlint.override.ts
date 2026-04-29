@@ -56,5 +56,6 @@ export default {
 
     // would be nice to have on, but we get false positives for external abort signals
     "@tanstack/query/exhaustive-deps": "off",
+    "react/react-in-jsx-scope": "off",
   },
 } satisfies Omit<OxlintOverride, "files">;
