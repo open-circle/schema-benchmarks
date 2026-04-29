@@ -9,6 +9,7 @@ import { build, createServer } from "vite-plus";
 import type { UserConfig } from "vite-plus";
 
 import vitePwaOpts from "./opts.ts";
+import type * as rootModule from "./root";
 
 const sharedOpts = {
   resolve: {
@@ -54,9 +55,7 @@ const vite = await createServer({
 });
 
 try {
-  const { default: Root } = (await vite.ssrLoadModule(
-    "/offline/root.tsx",
-  )) as typeof import("./root.tsx");
+  const { default: Root } = (await vite.ssrLoadModule("/offline/root.tsx")) as typeof rootModule;
   const rootHtml = renderToStaticMarkup(createElement(Root));
   const html = await fs.readFile(htmlFile, "utf8");
 

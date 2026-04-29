@@ -15,7 +15,7 @@ export function Radio({ className, haptic = true, ...props }: RadioProps) {
     <label
       {...cls({ extra: className })}
       onClick={() => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
       }}
     >
       <input type="radio" {...props} />
