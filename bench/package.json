@@ -23,8 +23,8 @@
     "@standard-schema/spec": "catalog:",
     "@typia/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
-    "rolldown": "1.0.0-rc.17",
-    "tinybench": "^6.0.0",
+    "rolldown": "1.0.0-rc.18",
+    "tinybench": "^6.0.1",
     "typescript": "catalog:",
     "valibot": "catalog:"
   },
