@@ -10,9 +10,10 @@ var __exportAll = (all, no_symbols) => {
 	return target;
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/core.js
+var _a$1;
 /** A special constant with type `never` */
-const NEVER = Object.freeze({ status: "aborted" });
+const NEVER = /* @__PURE__ */ Object.freeze({ status: "aborted" });
 function $constructor(name, initializer, params) {
 	function init(inst, def) {
 		if (!inst._zod) Object.defineProperty(inst, "_zod", {
@@ -64,13 +65,14 @@ var $ZodEncodeError = class extends Error {
 		this.name = "ZodEncodeError";
 	}
 };
-const globalConfig = {};
+(_a$1 = globalThis).__zod_globalConfig ?? (_a$1.__zod_globalConfig = {});
+const globalConfig = globalThis.__zod_globalConfig;
 function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/util.js
 var util_exports = /* @__PURE__ */ __exportAll({
 	BIGINT_FORMAT_RANGES: () => BIGINT_FORMAT_RANGES,
 	Class: () => Class,
@@ -95,6 +97,7 @@ var util_exports = /* @__PURE__ */ __exportAll({
 	defineLazy: () => defineLazy,
 	esc: () => esc,
 	escapeRegex: () => escapeRegex,
+	explicitlyAborted: () => explicitlyAborted,
 	extend: () => extend,
 	finalizeIssue: () => finalizeIssue,
 	floatSafeRemainder: () => floatSafeRemainder,
@@ -176,17 +179,13 @@ function cleanRegex(source) {
 	return source.slice(start, end);
 }
 function floatSafeRemainder(val, step) {
-	const valDecCount = (val.toString().split(".")[1] || "").length;
-	const stepString = step.toString();
-	let stepDecCount = (stepString.split(".")[1] || "").length;
-	if (stepDecCount === 0 && /\d?e-\d?/.test(stepString)) {
-		const match = stepString.match(/\d?e-(\d?)/);
-		if (match?.[1]) stepDecCount = Number.parseInt(match[1]);
-	}
-	const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
-	return Number.parseInt(val.toFixed(decCount).replace(".", "")) % Number.parseInt(step.toFixed(decCount).replace(".", "")) / 10 ** decCount;
+	const ratio = val / step;
+	const roundedRatio = Math.round(ratio);
+	const tolerance = Number.EPSILON * Math.max(Math.abs(ratio), 1);
+	if (Math.abs(ratio - roundedRatio) < tolerance) return 0;
+	return ratio - roundedRatio;
 }
-const EVALUATING = Symbol("evaluating");
+const EVALUATING = /* @__PURE__ */ Symbol("evaluating");
 function defineLazy(object, key, getter) {
 	let value = void 0;
 	Object.defineProperty(object, key, {
@@ -252,7 +251,8 @@ const captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace
 function isObject(data) {
 	return typeof data === "object" && data !== null && !Array.isArray(data);
 }
-const allowsEval = cached(() => {
+const allowsEval = /* @__PURE__ */ cached(() => {
+	if (globalConfig.jitless) return false;
 	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
 	try {
 		new Function("");
@@ -274,6 +274,8 @@ function isPlainObject(o) {
 function shallowClone(o) {
 	if (isPlainObject(o)) return { ...o };
 	if (Array.isArray(o)) return [...o];
+	if (o instanceof Map) return new Map(o);
+	if (o instanceof Set) return new Set(o);
 	return o;
 }
 function numKeys(data) {
@@ -303,12 +305,12 @@ const getParsedType = (data) => {
 		default: throw new Error(`Unknown data type: ${t}`);
 	}
 };
-const propertyKeyTypes = new Set([
+const propertyKeyTypes = /* @__PURE__ */ new Set([
 	"string",
 	"number",
 	"symbol"
 ]);
-const primitiveTypes = new Set([
+const primitiveTypes = /* @__PURE__ */ new Set([
 	"string",
 	"number",
 	"bigint",
@@ -457,6 +459,7 @@ function safeExtend(schema, shape) {
 	} }));
 }
 function merge(a, b) {
+	if (a._zod.def.checks?.length) throw new Error(".merge() cannot be used on object schemas containing refinements. Use .safeExtend() instead.");
 	return clone(a, mergeDefs(a._zod.def, {
 		get shape() {
 			const _shape = {
@@ -469,7 +472,7 @@ function merge(a, b) {
 		get catchall() {
 			return b._zod.def.catchall;
 		},
-		checks: []
+		checks: b._zod.def.checks ?? []
 	}));
 }
 function partial(Class, schema, mask) {
@@ -522,6 +525,11 @@ function aborted(x, startIndex = 0) {
 	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue !== true) return true;
 	return false;
 }
+function explicitlyAborted(x, startIndex = 0) {
+	if (x.aborted === true) return true;
+	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue === false) return true;
+	return false;
+}
 function prefixIssues(path, issues) {
 	return issues.map((iss) => {
 		var _a;
@@ -534,15 +542,12 @@ function unwrapMessage(message) {
 	return typeof message === "string" ? message : message?.message;
 }
 function finalizeIssue(iss, ctx, config) {
-	const full = {
-		...iss,
-		path: iss.path ?? []
-	};
-	if (!iss.message) full.message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
-	delete full.inst;
-	delete full.continue;
-	if (!ctx?.reportInput) delete full.input;
-	return full;
+	const message = iss.message ? iss.message : unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
+	const { inst: _inst, continue: _continue, input: _input, ...rest } = iss;
+	rest.path ?? (rest.path = []);
+	rest.message = message;
+	if (ctx?.reportInput) rest.input = _input;
+	return rest;
 }
 function getSizableOrigin(input) {
 	if (input instanceof Set) return "set";
@@ -615,7 +620,7 @@ var Class = class {
 	constructor(..._args) {}
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/errors.js
 const initializer$1 = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -648,23 +653,26 @@ function flattenError(error, mapper = (issue) => issue.message) {
 }
 function formatError(error, mapper = (issue) => issue.message) {
 	const fieldErrors = { _errors: [] };
-	const processError = (error) => {
-		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }));
-		else if (issue.code === "invalid_key") processError({ issues: issue.issues });
-		else if (issue.code === "invalid_element") processError({ issues: issue.issues });
-		else if (issue.path.length === 0) fieldErrors._errors.push(mapper(issue));
+	const processError = (error, path = []) => {
+		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }, [...path, ...issue.path]));
+		else if (issue.code === "invalid_key") processError({ issues: issue.issues }, [...path, ...issue.path]);
+		else if (issue.code === "invalid_element") processError({ issues: issue.issues }, [...path, ...issue.path]);
 		else {
-			let curr = fieldErrors;
-			let i = 0;
-			while (i < issue.path.length) {
-				const el = issue.path[i];
-				if (!(i === issue.path.length - 1)) curr[el] = curr[el] || { _errors: [] };
-				else {
-					curr[el] = curr[el] || { _errors: [] };
-					curr[el]._errors.push(mapper(issue));
+			const fullpath = [...path, ...issue.path];
+			if (fullpath.length === 0) fieldErrors._errors.push(mapper(issue));
+			else {
+				let curr = fieldErrors;
+				let i = 0;
+				while (i < fullpath.length) {
+					const el = fullpath[i];
+					if (!(i === fullpath.length - 1)) curr[el] = curr[el] || { _errors: [] };
+					else {
+						curr[el] = curr[el] || { _errors: [] };
+						curr[el]._errors.push(mapper(issue));
+					}
+					curr = curr[el];
+					i++;
 				}
-				curr = curr[el];
-				i++;
 			}
 		}
 	};
@@ -675,9 +683,9 @@ function treeifyError(error, mapper = (issue) => issue.message) {
 	const result = { errors: [] };
 	const processError = (error, path = []) => {
 		var _a, _b;
-		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }, issue.path));
-		else if (issue.code === "invalid_key") processError({ issues: issue.issues }, issue.path);
-		else if (issue.code === "invalid_element") processError({ issues: issue.issues }, issue.path);
+		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }, [...path, ...issue.path]));
+		else if (issue.code === "invalid_key") processError({ issues: issue.issues }, [...path, ...issue.path]);
+		else if (issue.code === "invalid_element") processError({ issues: issue.issues }, [...path, ...issue.path]);
 		else {
 			const fullpath = [...path, ...issue.path];
 			if (fullpath.length === 0) {
@@ -760,9 +768,12 @@ function prettifyError(error) {
 	return lines.join("\n");
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: false
+	} : { async: false };
 	const result = schema._zod.run({
 		value,
 		issues: []
@@ -777,7 +788,10 @@ const _parse = (_Err) => (schema, value, _ctx, _params) => {
 };
 const parse$1 = /* @__PURE__ */ _parse($ZodRealError);
 const _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: true
+	} : { async: true };
 	let result = schema._zod.run({
 		value,
 		issues: []
@@ -811,7 +825,10 @@ const _safeParse = (_Err) => (schema, value, _ctx) => {
 };
 const safeParse$1 = /* @__PURE__ */ _safeParse($ZodRealError);
 const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: true
+	} : { async: true };
 	let result = schema._zod.run({
 		value,
 		issues: []
@@ -827,7 +844,10 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 };
 const safeParseAsync$1 = /* @__PURE__ */ _safeParseAsync($ZodRealError);
 const _encode = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	const ctx = _ctx ? {
+		..._ctx,
+		direction: "backward"
+	} : { direction: "backward" };
 	return _parse(_Err)(schema, value, ctx);
 };
 const encode$1 = /* @__PURE__ */ _encode($ZodRealError);
@@ -836,7 +856,10 @@ const _decode = (_Err) => (schema, value, _ctx) => {
 };
 const decode$1 = /* @__PURE__ */ _decode($ZodRealError);
 const _encodeAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	const ctx = _ctx ? {
+		..._ctx,
+		direction: "backward"
+	} : { direction: "backward" };
 	return _parseAsync(_Err)(schema, value, ctx);
 };
 const encodeAsync$1 = /* @__PURE__ */ _encodeAsync($ZodRealError);
@@ -845,7 +868,10 @@ const _decodeAsync = (_Err) => async (schema, value, _ctx) => {
 };
 const decodeAsync$1 = /* @__PURE__ */ _decodeAsync($ZodRealError);
 const _safeEncode = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	const ctx = _ctx ? {
+		..._ctx,
+		direction: "backward"
+	} : { direction: "backward" };
 	return _safeParse(_Err)(schema, value, ctx);
 };
 const safeEncode$1 = /* @__PURE__ */ _safeEncode($ZodRealError);
@@ -854,7 +880,10 @@ const _safeDecode = (_Err) => (schema, value, _ctx) => {
 };
 const safeDecode$1 = /* @__PURE__ */ _safeDecode($ZodRealError);
 const _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	const ctx = _ctx ? {
+		..._ctx,
+		direction: "backward"
+	} : { direction: "backward" };
 	return _safeParseAsync(_Err)(schema, value, ctx);
 };
 const safeEncodeAsync$1 = /* @__PURE__ */ _safeEncodeAsync($ZodRealError);
@@ -863,7 +892,7 @@ const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 };
 const safeDecodeAsync$1 = /* @__PURE__ */ _safeDecodeAsync($ZodRealError);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/regexes.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/regexes.js
 var regexes_exports = /* @__PURE__ */ __exportAll({
 	base64: () => base64$1,
 	base64url: () => base64url$1,
@@ -886,6 +915,7 @@ var regexes_exports = /* @__PURE__ */ __exportAll({
 	hex: () => hex$1,
 	hostname: () => hostname$1,
 	html5Email: () => html5Email,
+	httpProtocol: () => httpProtocol,
 	idnEmail: () => idnEmail,
 	integer: () => integer,
 	ipv4: () => ipv4$1,
@@ -924,7 +954,12 @@ var regexes_exports = /* @__PURE__ */ __exportAll({
 	uuid7: () => uuid7,
 	xid: () => xid$1
 });
-const cuid$1 = /^[cC][^\s-]{8,}$/;
+/**
+* @deprecated CUID v1 is deprecated by its authors due to information leakage
+* (timestamps embedded in the id). Use {@link cuid2} instead.
+* See https://github.com/paralleldrive/cuid.
+*/
+const cuid$1 = /^[cC][0-9a-z]{6,}$/;
 const cuid2$1 = /^[0-9a-z]+$/;
 const ulid$1 = /^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$/;
 const xid$1 = /^[0-9a-vA-V]{20}$/;
@@ -972,6 +1007,7 @@ const base64$1 = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA
 const base64url$1 = /^[A-Za-z0-9_-]*$/;
 const hostname$1 = /^(?=.{1,253}\.?$)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?)*\.?$/;
 const domain = /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+const httpProtocol = /^https?$/;
 const e164$1 = /^\+[1-9]\d{6,14}$/;
 const dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
 const date$3 = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
@@ -1025,7 +1061,7 @@ const sha512_hex = /^[0-9a-fA-F]{128}$/;
 const sha512_base64 = /* @__PURE__ */ fixedBase64(86, "==");
 const sha512_base64url = /* @__PURE__ */ fixedBase64url(86);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -1530,7 +1566,7 @@ const $ZodCheckOverwrite = /* @__PURE__ */ $constructor("$ZodCheckOverwrite", (i
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/doc.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = []) {
 		this.content = [];
@@ -1561,14 +1597,14 @@ var Doc = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
-	minor: 3,
-	patch: 6
+	minor: 4,
+	patch: 1
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -1589,6 +1625,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 			let asyncResult;
 			for (const ch of checks) {
 				if (ch._zod.def.when) {
+					if (explicitlyAborted(payload)) continue;
 					if (!ch._zod.def.when(payload)) continue;
 				} else if (isAborted) continue;
 				const currLen = payload.issues.length;
@@ -1708,6 +1745,19 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 	inst._zod.check = (payload) => {
 		try {
 			const trimmed = payload.value.trim();
+			if (!def.normalize && def.protocol?.source === httpProtocol.source) {
+				if (!/^https?:\/\//i.test(trimmed)) {
+					payload.issues.push({
+						code: "invalid_format",
+						format: "url",
+						note: "Invalid URL format",
+						input: payload.value,
+						inst,
+						continue: !def.abort
+					});
+					return;
+				}
+			}
 			const url = new URL(trimmed);
 			if (def.hostname) {
 				def.hostname.lastIndex = 0;
@@ -1755,6 +1805,11 @@ const $ZodNanoID = /* @__PURE__ */ $constructor("$ZodNanoID", (inst, def) => {
 	def.pattern ?? (def.pattern = nanoid$1);
 	$ZodStringFormat.init(inst, def);
 });
+/**
+* @deprecated CUID v1 is deprecated by its authors due to information leakage
+* (timestamps embedded in the id). Use {@link $ZodCUID2} instead.
+* See https://github.com/paralleldrive/cuid.
+*/
 const $ZodCUID = /* @__PURE__ */ $constructor("$ZodCUID", (inst, def) => {
 	def.pattern ?? (def.pattern = cuid$1);
 	$ZodStringFormat.init(inst, def);
@@ -1849,6 +1904,7 @@ const $ZodCIDRv6 = /* @__PURE__ */ $constructor("$ZodCIDRv6", (inst, def) => {
 });
 function isValidBase64(data) {
 	if (data === "") return true;
+	if (/\s/.test(data)) return false;
 	if (data.length % 4 !== 0) return false;
 	try {
 		atob(data);
@@ -2018,8 +2074,6 @@ const $ZodUndefined = /* @__PURE__ */ $constructor("$ZodUndefined", (inst, def) 
 	$ZodType.init(inst, def);
 	inst._zod.pattern = _undefined$2;
 	inst._zod.values = new Set([void 0]);
-	inst._zod.optin = "optional";
-	inst._zod.optout = "optional";
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (typeof input === "undefined") return payload;
@@ -2133,13 +2187,23 @@ const $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
 		return payload;
 	};
 });
-function handlePropertyResult(result, final, key, input, isOptionalOut) {
+function handlePropertyResult(result, final, key, input, isOptionalIn, isOptionalOut) {
+	const isPresent = key in input;
 	if (result.issues.length) {
-		if (isOptionalOut && !(key in input)) return;
+		if (isOptionalIn && isOptionalOut && !isPresent) return;
 		final.issues.push(...prefixIssues(key, result.issues));
 	}
+	if (!isPresent && !isOptionalIn) {
+		if (!result.issues.length) final.issues.push({
+			code: "invalid_type",
+			expected: "nonoptional",
+			input: void 0,
+			path: [key]
+		});
+		return;
+	}
 	if (result.value === void 0) {
-		if (key in input) final.value[key] = void 0;
+		if (isPresent) final.value[key] = void 0;
 	} else final.value[key] = result.value;
 }
 function normalizeDef(def) {
@@ -2159,8 +2223,10 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 	const keySet = def.keySet;
 	const _catchall = def.catchall._zod;
 	const t = _catchall.def.type;
+	const isOptionalIn = _catchall.optin === "optional";
 	const isOptionalOut = _catchall.optout === "optional";
 	for (const key in input) {
+		if (key === "__proto__") continue;
 		if (keySet.has(key)) continue;
 		if (t === "never") {
 			unrecognized.push(key);
@@ -2170,8 +2236,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 			value: input[key],
 			issues: []
 		}, ctx);
-		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
-		else handlePropertyResult(r, payload, key, input, isOptionalOut);
+		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut)));
+		else handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
 	}
 	if (unrecognized.length) payload.issues.push({
 		code: "unrecognized_keys",
@@ -2207,13 +2273,13 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		}
 		return propValues;
 	});
-	const isObject$2 = isObject;
+	const isObject$1 = isObject;
 	const catchall = def.catchall;
 	let value;
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$2(input)) {
+		if (!isObject$1(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -2227,13 +2293,14 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		const shape = value.shape;
 		for (const key of value.keys) {
 			const el = shape[key];
+			const isOptionalIn = el._zod.optin === "optional";
 			const isOptionalOut = el._zod.optout === "optional";
 			const r = el._zod.run({
 				value: input[key],
 				issues: []
 			}, ctx);
-			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
-			else handlePropertyResult(r, payload, key, input, isOptionalOut);
+			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut)));
+			else handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
 		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
@@ -2262,9 +2329,11 @@ const $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) 
 		for (const key of normalized.keys) {
 			const id = ids[key];
 			const k = esc(key);
-			const isOptionalOut = shape[key]?._zod?.optout === "optional";
+			const schema = shape[key];
+			const isOptionalIn = schema?._zod?.optin === "optional";
+			const isOptionalOut = schema?._zod?.optout === "optional";
 			doc.write(`const ${id} = ${parseStr(key)};`);
-			if (isOptionalOut) doc.write(`
+			if (isOptionalIn && isOptionalOut) doc.write(`
         if (${id}.issues.length) {
           if (${k} in input) {
             payload.issues = payload.issues.concat(${id}.issues.map(iss => ({
@@ -2282,6 +2351,32 @@ const $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) 
           newResult[${k}] = ${id}.value;
         }
         
+      `);
+			else if (!isOptionalIn) doc.write(`
+        const ${id}_present = ${k} in input;
+        if (${id}.issues.length) {
+          payload.issues = payload.issues.concat(${id}.issues.map(iss => ({
+            ...iss,
+            path: iss.path ? [${k}, ...iss.path] : [${k}]
+          })));
+        }
+        if (!${id}_present && !${id}.issues.length) {
+          payload.issues.push({
+            code: "invalid_type",
+            expected: "nonoptional",
+            input: undefined,
+            path: [${k}]
+          });
+        }
+
+        if (${id}_present) {
+          if (${id}.value === undefined) {
+            newResult[${k}] = undefined;
+          } else {
+            newResult[${k}] = ${id}.value;
+          }
+        }
+
       `);
 			else doc.write(`
         if (${id}.issues.length) {
@@ -2307,7 +2402,7 @@ const $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) 
 		return (payload, ctx) => fn(shape, payload, ctx);
 	};
 	let fastpass;
-	const isObject$1 = isObject;
+	const isObject$2 = isObject;
 	const jit = !globalConfig.jitless;
 	const fastEnabled = jit && allowsEval.value;
 	const catchall = def.catchall;
@@ -2315,7 +2410,7 @@ const $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) 
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$1(input)) {
+		if (!isObject$2(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -2364,10 +2459,9 @@ const $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
 			return new RegExp(`^(${patterns.map((p) => cleanRegex(p.source)).join("|")})$`);
 		}
 	});
-	const single = def.options.length === 1;
-	const first = def.options[0]._zod.run;
+	const first = def.options.length === 1 ? def.options[0]._zod.run : null;
 	inst._zod.parse = (payload, ctx) => {
-		if (single) return first(payload, ctx);
+		if (first) return first(payload, ctx);
 		let async = false;
 		const results = [];
 		for (const option of def.options) {
@@ -2413,10 +2507,9 @@ function handleExclusiveUnionResults(results, final, inst, ctx) {
 const $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
 	$ZodUnion.init(inst, def);
 	def.inclusive = false;
-	const single = def.options.length === 1;
-	const first = def.options[0]._zod.run;
+	const first = def.options.length === 1 ? def.options[0]._zod.run : null;
 	inst._zod.parse = (payload, ctx) => {
-		if (single) return first(payload, ctx);
+		if (first) return first(payload, ctx);
 		let async = false;
 		const results = [];
 		for (const option of def.options) {
@@ -2477,12 +2570,13 @@ const $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUn
 		}
 		const opt = disc.value.get(input?.[def.discriminator]);
 		if (opt) return opt._zod.run(payload, ctx);
-		if (def.unionFallback) return _super(payload, ctx);
+		if (def.unionFallback || ctx.direction === "backward") return _super(payload, ctx);
 		payload.issues.push({
 			code: "invalid_union",
 			errors: [],
 			note: "No matching discriminator",
 			discriminator: def.discriminator,
+			options: Array.from(disc.value.keys()),
 			input,
 			path: [def.discriminator],
 			inst
@@ -2605,42 +2699,42 @@ const $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
 		}
 		payload.value = [];
 		const proms = [];
-		const reversedIndex = [...items].reverse().findIndex((item) => item._zod.optin !== "optional");
-		const optStart = reversedIndex === -1 ? 0 : items.length - reversedIndex;
+		const optinStart = getTupleOptStart(items, "optin");
+		const optoutStart = getTupleOptStart(items, "optout");
 		if (!def.rest) {
-			const tooBig = input.length > items.length;
-			const tooSmall = input.length < optStart - 1;
-			if (tooBig || tooSmall) {
+			if (input.length < optinStart) {
 				payload.issues.push({
-					...tooBig ? {
-						code: "too_big",
-						maximum: items.length,
-						inclusive: true
-					} : {
-						code: "too_small",
-						minimum: items.length
-					},
+					code: "too_small",
+					minimum: optinStart,
+					inclusive: true,
 					input,
 					inst,
 					origin: "array"
 				});
 				return payload;
 			}
+			if (input.length > items.length) payload.issues.push({
+				code: "too_big",
+				maximum: items.length,
+				inclusive: true,
+				input,
+				inst,
+				origin: "array"
+			});
 		}
-		let i = -1;
-		for (const item of items) {
-			i++;
-			if (i >= input.length) {
-				if (i >= optStart) continue;
-			}
-			const result = item._zod.run({
+		const itemResults = new Array(items.length);
+		for (let i = 0; i < items.length; i++) {
+			const r = items[i]._zod.run({
 				value: input[i],
 				issues: []
 			}, ctx);
-			if (result instanceof Promise) proms.push(result.then((result) => handleTupleResult(result, payload, i)));
-			else handleTupleResult(result, payload, i);
+			if (r instanceof Promise) proms.push(r.then((rr) => {
+				itemResults[i] = rr;
+			}));
+			else itemResults[i] = r;
 		}
 		if (def.rest) {
+			let i = items.length - 1;
 			const rest = input.slice(items.length);
 			for (const el of rest) {
 				i++;
@@ -2648,17 +2742,38 @@ const $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
 					value: el,
 					issues: []
 				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result) => handleTupleResult(result, payload, i)));
+				if (result instanceof Promise) proms.push(result.then((r) => handleTupleResult(r, payload, i)));
 				else handleTupleResult(result, payload, i);
 			}
 		}
-		if (proms.length) return Promise.all(proms).then(() => payload);
-		return payload;
+		if (proms.length) return Promise.all(proms).then(() => handleTupleResults(itemResults, payload, items, input, optoutStart));
+		return handleTupleResults(itemResults, payload, items, input, optoutStart);
 	};
 });
+function getTupleOptStart(items, key) {
+	for (let i = items.length - 1; i >= 0; i--) if (items[i]._zod[key] !== "optional") return i + 1;
+	return 0;
+}
 function handleTupleResult(result, final, index) {
 	if (result.issues.length) final.issues.push(...prefixIssues(index, result.issues));
 	final.value[index] = result.value;
+}
+function handleTupleResults(itemResults, final, items, input, optoutStart) {
+	for (let i = 0; i < items.length; i++) {
+		const r = itemResults[i];
+		const isPresent = i < input.length;
+		if (r.issues.length) {
+			if (!isPresent && i >= optoutStart) {
+				final.value.length = i;
+				break;
+			}
+			final.issues.push(...prefixIssues(i, r.issues));
+		}
+		final.value[i] = r.value;
+	}
+	for (let i = final.value.length - 1; i >= input.length; i--) if (items[i]._zod.optout === "optional" && final.value[i] === void 0) final.value.length = i;
+	else break;
+	return final;
 }
 const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 	$ZodType.init(inst, def);
@@ -2680,17 +2795,34 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 			const recordKeys = /* @__PURE__ */ new Set();
 			for (const key of values) if (typeof key === "string" || typeof key === "number" || typeof key === "symbol") {
 				recordKeys.add(typeof key === "number" ? key.toString() : key);
+				const keyResult = def.keyType._zod.run({
+					value: key,
+					issues: []
+				}, ctx);
+				if (keyResult instanceof Promise) throw new Error("Async schemas not supported in object keys currently");
+				if (keyResult.issues.length) {
+					payload.issues.push({
+						code: "invalid_key",
+						origin: "record",
+						issues: keyResult.issues.map((iss) => finalizeIssue(iss, ctx, config())),
+						input: key,
+						path: [key],
+						inst
+					});
+					continue;
+				}
+				const outKey = keyResult.value;
 				const result = def.valueType._zod.run({
 					value: input[key],
 					issues: []
 				}, ctx);
 				if (result instanceof Promise) proms.push(result.then((result) => {
 					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
-					payload.value[key] = result.value;
+					payload.value[outKey] = result.value;
 				}));
 				else {
 					if (result.issues.length) payload.issues.push(...prefixIssues(key, result.issues));
-					payload.value[key] = result.value;
+					payload.value[outKey] = result.value;
 				}
 			}
 			let unrecognized;
@@ -2708,6 +2840,7 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 			payload.value = {};
 			for (const key of Reflect.ownKeys(input)) {
 				if (key === "__proto__") continue;
+				if (!Object.prototype.propertyIsEnumerable.call(input, key)) continue;
 				let keyResult = def.keyType._zod.run({
 					value: key,
 					issues: []
@@ -3262,7 +3395,11 @@ const $ZodPromise = /* @__PURE__ */ $constructor("$ZodPromise", (inst, def) => {
 });
 const $ZodLazy = /* @__PURE__ */ $constructor("$ZodLazy", (inst, def) => {
 	$ZodType.init(inst, def);
-	defineLazy(inst._zod, "innerType", () => def.getter());
+	defineLazy(inst._zod, "innerType", () => {
+		const d = def;
+		if (!d._cachedInner) d._cachedInner = def.getter();
+		return d._cachedInner;
+	});
 	defineLazy(inst._zod, "pattern", () => inst._zod.innerType?._zod?.pattern);
 	defineLazy(inst._zod, "propValues", () => inst._zod.innerType?._zod?.propValues);
 	defineLazy(inst._zod, "optin", () => inst._zod.innerType?._zod?.optin ?? void 0);
@@ -3298,8 +3435,8 @@ function handleRefineResult(result, payload, input, inst) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ar.js
-const error$46 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ar.js
+const error$49 = () => {
 	const Sizable = {
 		string: {
 			unit: "حرف",
@@ -3394,11 +3531,11 @@ const error$46 = () => {
 	};
 };
 function ar_default() {
-	return { localeError: error$46() };
+	return { localeError: error$49() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/az.js
-const error$45 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/az.js
+const error$48 = () => {
 	const Sizable = {
 		string: {
 			unit: "simvol",
@@ -3493,10 +3630,10 @@ const error$45 = () => {
 	};
 };
 function az_default() {
-	return { localeError: error$45() };
+	return { localeError: error$48() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/be.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/be.js
 function getBelarusianPlural(count, one, few, many) {
 	const absCount = Math.abs(count);
 	const lastDigit = absCount % 10;
@@ -3506,7 +3643,7 @@ function getBelarusianPlural(count, one, few, many) {
 	if (lastDigit >= 2 && lastDigit <= 4) return few;
 	return many;
 }
-const error$44 = () => {
+const error$47 = () => {
 	const Sizable = {
 		string: {
 			unit: {
@@ -3627,11 +3764,11 @@ const error$44 = () => {
 	};
 };
 function be_default() {
-	return { localeError: error$44() };
+	return { localeError: error$47() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/bg.js
-const error$43 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/bg.js
+const error$46 = () => {
 	const Sizable = {
 		string: {
 			unit: "символа",
@@ -3736,11 +3873,11 @@ const error$43 = () => {
 	};
 };
 function bg_default() {
-	return { localeError: error$43() };
+	return { localeError: error$46() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ca.js
-const error$42 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ca.js
+const error$45 = () => {
 	const Sizable = {
 		string: {
 			unit: "caràcters",
@@ -3835,11 +3972,11 @@ const error$42 = () => {
 	};
 };
 function ca_default() {
-	return { localeError: error$42() };
+	return { localeError: error$45() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/cs.js
-const error$41 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/cs.js
+const error$44 = () => {
 	const Sizable = {
 		string: {
 			unit: "znaků",
@@ -3940,11 +4077,11 @@ const error$41 = () => {
 	};
 };
 function cs_default() {
-	return { localeError: error$41() };
+	return { localeError: error$44() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/da.js
-const error$40 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/da.js
+const error$43 = () => {
 	const Sizable = {
 		string: {
 			unit: "tegn",
@@ -4050,11 +4187,11 @@ const error$40 = () => {
 	};
 };
 function da_default() {
-	return { localeError: error$40() };
+	return { localeError: error$43() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/de.js
-const error$39 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/de.js
+const error$42 = () => {
 	const Sizable = {
 		string: {
 			unit: "Zeichen",
@@ -4153,11 +4290,115 @@ const error$39 = () => {
 	};
 };
 function de_default() {
-	return { localeError: error$39() };
+	return { localeError: error$42() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/en.js
-const error$38 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/el.js
+const error$41 = () => {
+	const Sizable = {
+		string: {
+			unit: "χαρακτήρες",
+			verb: "να έχει"
+		},
+		file: {
+			unit: "bytes",
+			verb: "να έχει"
+		},
+		array: {
+			unit: "στοιχεία",
+			verb: "να έχει"
+		},
+		set: {
+			unit: "στοιχεία",
+			verb: "να έχει"
+		},
+		map: {
+			unit: "καταχωρήσεις",
+			verb: "να έχει"
+		}
+	};
+	function getSizing(origin) {
+		return Sizable[origin] ?? null;
+	}
+	const FormatDictionary = {
+		regex: "είσοδος",
+		email: "διεύθυνση email",
+		url: "URL",
+		emoji: "emoji",
+		uuid: "UUID",
+		uuidv4: "UUIDv4",
+		uuidv6: "UUIDv6",
+		nanoid: "nanoid",
+		guid: "GUID",
+		cuid: "cuid",
+		cuid2: "cuid2",
+		ulid: "ULID",
+		xid: "XID",
+		ksuid: "KSUID",
+		datetime: "ISO ημερομηνία και ώρα",
+		date: "ISO ημερομηνία",
+		time: "ISO ώρα",
+		duration: "ISO διάρκεια",
+		ipv4: "διεύθυνση IPv4",
+		ipv6: "διεύθυνση IPv6",
+		mac: "διεύθυνση MAC",
+		cidrv4: "εύρος IPv4",
+		cidrv6: "εύρος IPv6",
+		base64: "συμβολοσειρά κωδικοποιημένη σε base64",
+		base64url: "συμβολοσειρά κωδικοποιημένη σε base64url",
+		json_string: "συμβολοσειρά JSON",
+		e164: "αριθμός E.164",
+		jwt: "JWT",
+		template_literal: "είσοδος"
+	};
+	const TypeDictionary = { nan: "NaN" };
+	return (issue) => {
+		switch (issue.code) {
+			case "invalid_type": {
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
+				const received = TypeDictionary[receivedType] ?? receivedType;
+				if (typeof issue.expected === "string" && /^[A-Z]/.test(issue.expected)) return `Μη έγκυρη είσοδος: αναμενόταν instanceof ${issue.expected}, λήφθηκε ${received}`;
+				return `Μη έγκυρη είσοδος: αναμενόταν ${expected}, λήφθηκε ${received}`;
+			}
+			case "invalid_value":
+				if (issue.values.length === 1) return `Μη έγκυρη είσοδος: αναμενόταν ${stringifyPrimitive(issue.values[0])}`;
+				return `Μη έγκυρη επιλογή: αναμενόταν ένα από ${joinValues(issue.values, "|")}`;
+			case "too_big": {
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Πολύ μεγάλο: αναμενόταν ${issue.origin ?? "τιμή"} να έχει ${adj}${issue.maximum.toString()} ${sizing.unit ?? "στοιχεία"}`;
+				return `Πολύ μεγάλο: αναμενόταν ${issue.origin ?? "τιμή"} να είναι ${adj}${issue.maximum.toString()}`;
+			}
+			case "too_small": {
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Πολύ μικρό: αναμενόταν ${issue.origin} να έχει ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Πολύ μικρό: αναμενόταν ${issue.origin} να είναι ${adj}${issue.minimum.toString()}`;
+			}
+			case "invalid_format": {
+				const _issue = issue;
+				if (_issue.format === "starts_with") return `Μη έγκυρη συμβολοσειρά: πρέπει να ξεκινά με "${_issue.prefix}"`;
+				if (_issue.format === "ends_with") return `Μη έγκυρη συμβολοσειρά: πρέπει να τελειώνει με "${_issue.suffix}"`;
+				if (_issue.format === "includes") return `Μη έγκυρη συμβολοσειρά: πρέπει να περιέχει "${_issue.includes}"`;
+				if (_issue.format === "regex") return `Μη έγκυρη συμβολοσειρά: πρέπει να ταιριάζει με το μοτίβο ${_issue.pattern}`;
+				return `Μη έγκυρο: ${FormatDictionary[_issue.format] ?? issue.format}`;
+			}
+			case "not_multiple_of": return `Μη έγκυρος αριθμός: πρέπει να είναι πολλαπλάσιο του ${issue.divisor}`;
+			case "unrecognized_keys": return `Άγνωστ${issue.keys.length > 1 ? "α" : "ο"} κλειδ${issue.keys.length > 1 ? "ιά" : "ί"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Μη έγκυρο κλειδί στο ${issue.origin}`;
+			case "invalid_union": return "Μη έγκυρη είσοδος";
+			case "invalid_element": return `Μη έγκυρη τιμή στο ${issue.origin}`;
+			default: return `Μη έγκυρη είσοδος`;
+		}
+	};
+};
+function el_default() {
+	return { localeError: error$41() };
+}
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/en.js
+const error$40 = () => {
 	const Sizable = {
 		string: {
 			unit: "characters",
@@ -4248,18 +4489,20 @@ const error$38 = () => {
 			case "not_multiple_of": return `Invalid number: must be a multiple of ${issue.divisor}`;
 			case "unrecognized_keys": return `Unrecognized key${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
 			case "invalid_key": return `Invalid key in ${issue.origin}`;
-			case "invalid_union": return "Invalid input";
+			case "invalid_union":
+				if (issue.options && Array.isArray(issue.options) && issue.options.length > 0) return `Invalid discriminator value. Expected ${issue.options.map((o) => `'${o}'`).join(" | ")}`;
+				return "Invalid input";
 			case "invalid_element": return `Invalid value in ${issue.origin}`;
 			default: return `Invalid input`;
 		}
 	};
 };
 function en_default() {
-	return { localeError: error$38() };
+	return { localeError: error$40() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/eo.js
-const error$37 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/eo.js
+const error$39 = () => {
 	const Sizable = {
 		string: {
 			unit: "karaktrojn",
@@ -4359,11 +4602,11 @@ const error$37 = () => {
 	};
 };
 function eo_default() {
-	return { localeError: error$37() };
+	return { localeError: error$39() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/es.js
-const error$36 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/es.js
+const error$38 = () => {
 	const Sizable = {
 		string: {
 			unit: "caracteres",
@@ -4486,11 +4729,11 @@ const error$36 = () => {
 	};
 };
 function es_default() {
-	return { localeError: error$36() };
+	return { localeError: error$38() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fa.js
-const error$35 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/fa.js
+const error$37 = () => {
 	const Sizable = {
 		string: {
 			unit: "کاراکتر",
@@ -4589,11 +4832,11 @@ const error$35 = () => {
 	};
 };
 function fa_default() {
-	return { localeError: error$35() };
+	return { localeError: error$37() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fi.js
-const error$34 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/fi.js
+const error$36 = () => {
 	const Sizable = {
 		string: {
 			unit: "merkkiä",
@@ -4704,11 +4947,11 @@ const error$34 = () => {
 	};
 };
 function fi_default() {
-	return { localeError: error$34() };
+	return { localeError: error$36() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fr.js
-const error$33 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/fr.js
+const error$35 = () => {
 	const Sizable = {
 		string: {
 			unit: "caractères",
@@ -4761,9 +5004,27 @@ const error$33 = () => {
 		template_literal: "entrée"
 	};
 	const TypeDictionary = {
-		nan: "NaN",
+		string: "chaîne",
 		number: "nombre",
-		array: "tableau"
+		int: "entier",
+		boolean: "booléen",
+		bigint: "grand entier",
+		symbol: "symbole",
+		undefined: "indéfini",
+		null: "null",
+		never: "jamais",
+		void: "vide",
+		date: "date",
+		array: "tableau",
+		object: "objet",
+		tuple: "tuple",
+		record: "enregistrement",
+		map: "carte",
+		set: "ensemble",
+		file: "fichier",
+		nonoptional: "non-optionnel",
+		nan: "NaN",
+		function: "fonction"
 	};
 	return (issue) => {
 		switch (issue.code) {
@@ -4780,14 +5041,14 @@ const error$33 = () => {
 			case "too_big": {
 				const adj = issue.inclusive ? "<=" : "<";
 				const sizing = getSizing(issue.origin);
-				if (sizing) return `Trop grand : ${issue.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "élément(s)"}`;
-				return `Trop grand : ${issue.origin ?? "valeur"} doit être ${adj}${issue.maximum.toString()}`;
+				if (sizing) return `Trop grand : ${TypeDictionary[issue.origin] ?? "valeur"} doit ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "élément(s)"}`;
+				return `Trop grand : ${TypeDictionary[issue.origin] ?? "valeur"} doit être ${adj}${issue.maximum.toString()}`;
 			}
 			case "too_small": {
 				const adj = issue.inclusive ? ">=" : ">";
 				const sizing = getSizing(issue.origin);
-				if (sizing) return `Trop petit : ${issue.origin} doit ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
-				return `Trop petit : ${issue.origin} doit être ${adj}${issue.minimum.toString()}`;
+				if (sizing) return `Trop petit : ${TypeDictionary[issue.origin] ?? "valeur"} doit ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Trop petit : ${TypeDictionary[issue.origin] ?? "valeur"} doit être ${adj}${issue.minimum.toString()}`;
 			}
 			case "invalid_format": {
 				const _issue = issue;
@@ -4807,11 +5068,11 @@ const error$33 = () => {
 	};
 };
 function fr_default() {
-	return { localeError: error$33() };
+	return { localeError: error$35() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/fr-CA.js
-const error$32 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/fr-CA.js
+const error$34 = () => {
 	const Sizable = {
 		string: {
 			unit: "caractères",
@@ -4906,11 +5167,11 @@ const error$32 = () => {
 	};
 };
 function fr_CA_default() {
-	return { localeError: error$32() };
+	return { localeError: error$34() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/he.js
-const error$31 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/he.js
+const error$33 = () => {
 	const TypeNames = {
 		string: {
 			label: "מחרוזת",
@@ -5211,11 +5472,128 @@ const error$31 = () => {
 	};
 };
 function he_default() {
-	return { localeError: error$31() };
+	return { localeError: error$33() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/hu.js
-const error$30 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/hr.js
+const error$32 = () => {
+	const Sizable = {
+		string: {
+			unit: "znakova",
+			verb: "imati"
+		},
+		file: {
+			unit: "bajtova",
+			verb: "imati"
+		},
+		array: {
+			unit: "stavki",
+			verb: "imati"
+		},
+		set: {
+			unit: "stavki",
+			verb: "imati"
+		}
+	};
+	function getSizing(origin) {
+		return Sizable[origin] ?? null;
+	}
+	const FormatDictionary = {
+		regex: "unos",
+		email: "email adresa",
+		url: "URL",
+		emoji: "emoji",
+		uuid: "UUID",
+		uuidv4: "UUIDv4",
+		uuidv6: "UUIDv6",
+		nanoid: "nanoid",
+		guid: "GUID",
+		cuid: "cuid",
+		cuid2: "cuid2",
+		ulid: "ULID",
+		xid: "XID",
+		ksuid: "KSUID",
+		datetime: "ISO datum i vrijeme",
+		date: "ISO datum",
+		time: "ISO vrijeme",
+		duration: "ISO trajanje",
+		ipv4: "IPv4 adresa",
+		ipv6: "IPv6 adresa",
+		cidrv4: "IPv4 raspon",
+		cidrv6: "IPv6 raspon",
+		base64: "base64 kodirani tekst",
+		base64url: "base64url kodirani tekst",
+		json_string: "JSON tekst",
+		e164: "E.164 broj",
+		jwt: "JWT",
+		template_literal: "unos"
+	};
+	const TypeDictionary = {
+		nan: "NaN",
+		string: "tekst",
+		number: "broj",
+		boolean: "boolean",
+		array: "niz",
+		object: "objekt",
+		set: "skup",
+		file: "datoteka",
+		date: "datum",
+		bigint: "bigint",
+		symbol: "simbol",
+		undefined: "undefined",
+		null: "null",
+		function: "funkcija",
+		map: "mapa"
+	};
+	return (issue) => {
+		switch (issue.code) {
+			case "invalid_type": {
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
+				const received = TypeDictionary[receivedType] ?? receivedType;
+				if (/^[A-Z]/.test(issue.expected)) return `Neispravan unos: očekuje se instanceof ${issue.expected}, a primljeno je ${received}`;
+				return `Neispravan unos: očekuje se ${expected}, a primljeno je ${received}`;
+			}
+			case "invalid_value":
+				if (issue.values.length === 1) return `Neispravna vrijednost: očekivano ${stringifyPrimitive(issue.values[0])}`;
+				return `Neispravna opcija: očekivano jedno od ${joinValues(issue.values, "|")}`;
+			case "too_big": {
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `Preveliko: očekivano da ${origin ?? "vrijednost"} ima ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemenata"}`;
+				return `Preveliko: očekivano da ${origin ?? "vrijednost"} bude ${adj}${issue.maximum.toString()}`;
+			}
+			case "too_small": {
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				const origin = TypeDictionary[issue.origin] ?? issue.origin;
+				if (sizing) return `Premalo: očekivano da ${origin} ima ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Premalo: očekivano da ${origin} bude ${adj}${issue.minimum.toString()}`;
+			}
+			case "invalid_format": {
+				const _issue = issue;
+				if (_issue.format === "starts_with") return `Neispravan tekst: mora započinjati s "${_issue.prefix}"`;
+				if (_issue.format === "ends_with") return `Neispravan tekst: mora završavati s "${_issue.suffix}"`;
+				if (_issue.format === "includes") return `Neispravan tekst: mora sadržavati "${_issue.includes}"`;
+				if (_issue.format === "regex") return `Neispravan tekst: mora odgovarati uzorku ${_issue.pattern}`;
+				return `Neispravna ${FormatDictionary[_issue.format] ?? issue.format}`;
+			}
+			case "not_multiple_of": return `Neispravan broj: mora biti višekratnik od ${issue.divisor}`;
+			case "unrecognized_keys": return `Neprepoznat${issue.keys.length > 1 ? "i ključevi" : " ključ"}: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Neispravan ključ u ${TypeDictionary[issue.origin] ?? issue.origin}`;
+			case "invalid_union": return "Neispravan unos";
+			case "invalid_element": return `Neispravna vrijednost u ${TypeDictionary[issue.origin] ?? issue.origin}`;
+			default: return `Neispravan unos`;
+		}
+	};
+};
+function hr_default() {
+	return { localeError: error$32() };
+}
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/hu.js
+const error$31 = () => {
 	const Sizable = {
 		string: {
 			unit: "karakter",
@@ -5314,10 +5692,10 @@ const error$30 = () => {
 	};
 };
 function hu_default() {
-	return { localeError: error$30() };
+	return { localeError: error$31() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/hy.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/hy.js
 function getArmenianPlural(count, one, many) {
 	return Math.abs(count) === 1 ? one : many;
 }
@@ -5335,7 +5713,7 @@ function withDefiniteArticle(word) {
 	const lastChar = word[word.length - 1];
 	return word + (vowels.includes(lastChar) ? "ն" : "ը");
 }
-const error$29 = () => {
+const error$30 = () => {
 	const Sizable = {
 		string: {
 			unit: {
@@ -5452,11 +5830,11 @@ const error$29 = () => {
 	};
 };
 function hy_default() {
-	return { localeError: error$29() };
+	return { localeError: error$30() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/id.js
-const error$28 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/id.js
+const error$29 = () => {
 	const Sizable = {
 		string: {
 			unit: "karakter",
@@ -5551,11 +5929,11 @@ const error$28 = () => {
 	};
 };
 function id_default() {
-	return { localeError: error$28() };
+	return { localeError: error$29() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/is.js
-const error$27 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/is.js
+const error$28 = () => {
 	const Sizable = {
 		string: {
 			unit: "stafi",
@@ -5654,11 +6032,11 @@ const error$27 = () => {
 	};
 };
 function is_default() {
-	return { localeError: error$27() };
+	return { localeError: error$28() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/it.js
-const error$26 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/it.js
+const error$27 = () => {
 	const Sizable = {
 		string: {
 			unit: "caratteri",
@@ -5745,7 +6123,7 @@ const error$26 = () => {
 				if (_issue.format === "ends_with") return `Stringa non valida: deve terminare con "${_issue.suffix}"`;
 				if (_issue.format === "includes") return `Stringa non valida: deve includere "${_issue.includes}"`;
 				if (_issue.format === "regex") return `Stringa non valida: deve corrispondere al pattern ${_issue.pattern}`;
-				return `Invalid ${FormatDictionary[_issue.format] ?? issue.format}`;
+				return `Input non valido: ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
 			case "not_multiple_of": return `Numero non valido: deve essere un multiplo di ${issue.divisor}`;
 			case "unrecognized_keys": return `Chiav${issue.keys.length > 1 ? "i" : "e"} non riconosciut${issue.keys.length > 1 ? "e" : "a"}: ${joinValues(issue.keys, ", ")}`;
@@ -5757,11 +6135,11 @@ const error$26 = () => {
 	};
 };
 function it_default() {
-	return { localeError: error$26() };
+	return { localeError: error$27() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ja.js
-const error$25 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ja.js
+const error$26 = () => {
 	const Sizable = {
 		string: {
 			unit: "文字",
@@ -5860,11 +6238,11 @@ const error$25 = () => {
 	};
 };
 function ja_default() {
-	return { localeError: error$25() };
+	return { localeError: error$26() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ka.js
-const error$24 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ka.js
+const error$25 = () => {
 	const Sizable = {
 		string: {
 			unit: "სიმბოლო",
@@ -5909,9 +6287,9 @@ const error$24 = () => {
 		ipv6: "IPv6 მისამართი",
 		cidrv4: "IPv4 დიაპაზონი",
 		cidrv6: "IPv6 დიაპაზონი",
-		base64: "base64-კოდირებული სტრინგი",
-		base64url: "base64url-კოდირებული სტრინგი",
-		json_string: "JSON სტრინგი",
+		base64: "base64-კოდირებული ველი",
+		base64url: "base64url-კოდირებული ველი",
+		json_string: "JSON ველი",
 		e164: "E.164 ნომერი",
 		jwt: "JWT",
 		template_literal: "შეყვანა"
@@ -5919,7 +6297,7 @@ const error$24 = () => {
 	const TypeDictionary = {
 		nan: "NaN",
 		number: "რიცხვი",
-		string: "სტრინგი",
+		string: "ველი",
 		boolean: "ბულეანი",
 		function: "ფუნქცია",
 		array: "მასივი"
@@ -5950,10 +6328,10 @@ const error$24 = () => {
 			}
 			case "invalid_format": {
 				const _issue = issue;
-				if (_issue.format === "starts_with") return `არასწორი სტრინგი: უნდა იწყებოდეს "${_issue.prefix}"-ით`;
-				if (_issue.format === "ends_with") return `არასწორი სტრინგი: უნდა მთავრდებოდეს "${_issue.suffix}"-ით`;
-				if (_issue.format === "includes") return `არასწორი სტრინგი: უნდა შეიცავდეს "${_issue.includes}"-ს`;
-				if (_issue.format === "regex") return `არასწორი სტრინგი: უნდა შეესაბამებოდეს შაბლონს ${_issue.pattern}`;
+				if (_issue.format === "starts_with") return `არასწორი ველი: უნდა იწყებოდეს "${_issue.prefix}"-ით`;
+				if (_issue.format === "ends_with") return `არასწორი ველი: უნდა მთავრდებოდეს "${_issue.suffix}"-ით`;
+				if (_issue.format === "includes") return `არასწორი ველი: უნდა შეიცავდეს "${_issue.includes}"-ს`;
+				if (_issue.format === "regex") return `არასწორი ველი: უნდა შეესაბამებოდეს შაბლონს ${_issue.pattern}`;
 				return `არასწორი ${FormatDictionary[_issue.format] ?? issue.format}`;
 			}
 			case "not_multiple_of": return `არასწორი რიცხვი: უნდა იყოს ${issue.divisor}-ის ჯერადი`;
@@ -5966,11 +6344,11 @@ const error$24 = () => {
 	};
 };
 function ka_default() {
-	return { localeError: error$24() };
+	return { localeError: error$25() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/km.js
-const error$23 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/km.js
+const error$24 = () => {
 	const Sizable = {
 		string: {
 			unit: "តួអក្សរ",
@@ -6070,17 +6448,17 @@ const error$23 = () => {
 	};
 };
 function km_default() {
-	return { localeError: error$23() };
+	return { localeError: error$24() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/kh.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/kh.js
 /** @deprecated Use `km` instead. */
 function kh_default() {
 	return km_default();
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ko.js
-const error$22 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ko.js
+const error$23 = () => {
 	const Sizable = {
 		string: {
 			unit: "문자",
@@ -6179,10 +6557,10 @@ const error$22 = () => {
 	};
 };
 function ko_default() {
-	return { localeError: error$22() };
+	return { localeError: error$23() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/lt.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/lt.js
 const capitalizeFirstCharacter = (text) => {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 };
@@ -6194,7 +6572,7 @@ function getUnitTypeFromNumber(number) {
 	if (last === 1) return "one";
 	return "few";
 }
-const error$21 = () => {
+const error$22 = () => {
 	const Sizable = {
 		string: {
 			unit: {
@@ -6360,11 +6738,11 @@ const error$21 = () => {
 	};
 };
 function lt_default() {
-	return { localeError: error$21() };
+	return { localeError: error$22() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/mk.js
-const error$20 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/mk.js
+const error$21 = () => {
 	const Sizable = {
 		string: {
 			unit: "знаци",
@@ -6463,11 +6841,11 @@ const error$20 = () => {
 	};
 };
 function mk_default() {
-	return { localeError: error$20() };
+	return { localeError: error$21() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ms.js
-const error$19 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ms.js
+const error$20 = () => {
 	const Sizable = {
 		string: {
 			unit: "aksara",
@@ -6565,11 +6943,11 @@ const error$19 = () => {
 	};
 };
 function ms_default() {
-	return { localeError: error$19() };
+	return { localeError: error$20() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/nl.js
-const error$18 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/nl.js
+const error$19 = () => {
 	const Sizable = {
 		string: {
 			unit: "tekens",
@@ -6669,11 +7047,11 @@ const error$18 = () => {
 	};
 };
 function nl_default() {
-	return { localeError: error$18() };
+	return { localeError: error$19() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/no.js
-const error$17 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/no.js
+const error$18 = () => {
 	const Sizable = {
 		string: {
 			unit: "tegn",
@@ -6772,11 +7150,11 @@ const error$17 = () => {
 	};
 };
 function no_default() {
-	return { localeError: error$17() };
+	return { localeError: error$18() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ota.js
-const error$16 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ota.js
+const error$17 = () => {
 	const Sizable = {
 		string: {
 			unit: "harf",
@@ -6876,11 +7254,11 @@ const error$16 = () => {
 	};
 };
 function ota_default() {
-	return { localeError: error$16() };
+	return { localeError: error$17() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ps.js
-const error$15 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ps.js
+const error$16 = () => {
 	const Sizable = {
 		string: {
 			unit: "توکي",
@@ -6979,11 +7357,11 @@ const error$15 = () => {
 	};
 };
 function ps_default() {
-	return { localeError: error$15() };
+	return { localeError: error$16() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/pl.js
-const error$14 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/pl.js
+const error$15 = () => {
 	const Sizable = {
 		string: {
 			unit: "znaków",
@@ -7082,11 +7460,11 @@ const error$14 = () => {
 	};
 };
 function pl_default() {
-	return { localeError: error$14() };
+	return { localeError: error$15() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/pt.js
-const error$13 = () => {
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/pt.js
+const error$14 = () => {
 	const Sizable = {
 		string: {
 			unit: "caracteres",
@@ -7185,10 +7563,127 @@ const error$13 = () => {
 	};
 };
 function pt_default() {
+	return { localeError: error$14() };
+}
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ro.js
+const error$13 = () => {
+	const Sizable = {
+		string: {
+			unit: "caractere",
+			verb: "să aibă"
+		},
+		file: {
+			unit: "octeți",
+			verb: "să aibă"
+		},
+		array: {
+			unit: "elemente",
+			verb: "să aibă"
+		},
+		set: {
+			unit: "elemente",
+			verb: "să aibă"
+		},
+		map: {
+			unit: "intrări",
+			verb: "să aibă"
+		}
+	};
+	function getSizing(origin) {
+		return Sizable[origin] ?? null;
+	}
+	const FormatDictionary = {
+		regex: "intrare",
+		email: "adresă de email",
+		url: "URL",
+		emoji: "emoji",
+		uuid: "UUID",
+		uuidv4: "UUIDv4",
+		uuidv6: "UUIDv6",
+		nanoid: "nanoid",
+		guid: "GUID",
+		cuid: "cuid",
+		cuid2: "cuid2",
+		ulid: "ULID",
+		xid: "XID",
+		ksuid: "KSUID",
+		datetime: "dată și oră ISO",
+		date: "dată ISO",
+		time: "oră ISO",
+		duration: "durată ISO",
+		ipv4: "adresă IPv4",
+		ipv6: "adresă IPv6",
+		mac: "adresă MAC",
+		cidrv4: "interval IPv4",
+		cidrv6: "interval IPv6",
+		base64: "șir codat base64",
+		base64url: "șir codat base64url",
+		json_string: "șir JSON",
+		e164: "număr E.164",
+		jwt: "JWT",
+		template_literal: "intrare"
+	};
+	const TypeDictionary = {
+		nan: "NaN",
+		string: "șir",
+		number: "număr",
+		boolean: "boolean",
+		function: "funcție",
+		array: "matrice",
+		object: "obiect",
+		undefined: "nedefinit",
+		symbol: "simbol",
+		bigint: "număr mare",
+		void: "void",
+		never: "never",
+		map: "hartă",
+		set: "set"
+	};
+	return (issue) => {
+		switch (issue.code) {
+			case "invalid_type": {
+				const expected = TypeDictionary[issue.expected] ?? issue.expected;
+				const receivedType = parsedType(issue.input);
+				return `Intrare invalidă: așteptat ${expected}, primit ${TypeDictionary[receivedType] ?? receivedType}`;
+			}
+			case "invalid_value":
+				if (issue.values.length === 1) return `Intrare invalidă: așteptat ${stringifyPrimitive(issue.values[0])}`;
+				return `Opțiune invalidă: așteptat una dintre ${joinValues(issue.values, "|")}`;
+			case "too_big": {
+				const adj = issue.inclusive ? "<=" : "<";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Prea mare: așteptat ca ${issue.origin ?? "valoarea"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemente"}`;
+				return `Prea mare: așteptat ca ${issue.origin ?? "valoarea"} să fie ${adj}${issue.maximum.toString()}`;
+			}
+			case "too_small": {
+				const adj = issue.inclusive ? ">=" : ">";
+				const sizing = getSizing(issue.origin);
+				if (sizing) return `Prea mic: așteptat ca ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+				return `Prea mic: așteptat ca ${issue.origin} să fie ${adj}${issue.minimum.toString()}`;
+			}
+			case "invalid_format": {
+				const _issue = issue;
+				if (_issue.format === "starts_with") return `Șir invalid: trebuie să înceapă cu "${_issue.prefix}"`;
+				if (_issue.format === "ends_with") return `Șir invalid: trebuie să se termine cu "${_issue.suffix}"`;
+				if (_issue.format === "includes") return `Șir invalid: trebuie să includă "${_issue.includes}"`;
+				if (_issue.format === "regex") return `Șir invalid: trebuie să se potrivească cu modelul ${_issue.pattern}`;
+				return `Format invalid: ${FormatDictionary[_issue.format] ?? issue.format}`;
+			}
+			case "not_multiple_of": return `Număr invalid: trebuie să fie multiplu de ${issue.divisor}`;
+			case "unrecognized_keys": return `Chei nerecunoscute: ${joinValues(issue.keys, ", ")}`;
+			case "invalid_key": return `Cheie invalidă în ${issue.origin}`;
+			case "invalid_union": return "Intrare invalidă";
+			case "invalid_element": return `Valoare invalidă în ${issue.origin}`;
+			default: return `Intrare invalidă`;
+		}
+	};
+};
+function ro_default() {
 	return { localeError: error$13() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ru.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ru.js
 function getRussianPlural(count, one, few, many) {
 	const absCount = Math.abs(count);
 	const lastDigit = absCount % 10;
@@ -7322,7 +7817,7 @@ function ru_default() {
 	return { localeError: error$12() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/sl.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/sl.js
 const error$11 = () => {
 	const Sizable = {
 		string: {
@@ -7425,7 +7920,7 @@ function sl_default() {
 	return { localeError: error$11() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/sv.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/sv.js
 const error$10 = () => {
 	const Sizable = {
 		string: {
@@ -7528,7 +8023,7 @@ function sv_default() {
 	return { localeError: error$10() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ta.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ta.js
 const error$9 = () => {
 	const Sizable = {
 		string: {
@@ -7632,7 +8127,7 @@ function ta_default() {
 	return { localeError: error$9() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/th.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/th.js
 const error$8 = () => {
 	const Sizable = {
 		string: {
@@ -7736,7 +8231,7 @@ function th_default() {
 	return { localeError: error$8() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/tr.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/tr.js
 const error$7 = () => {
 	const Sizable = {
 		string: {
@@ -7835,7 +8330,7 @@ function tr_default() {
 	return { localeError: error$7() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/uk.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/uk.js
 const error$6 = () => {
 	const Sizable = {
 		string: {
@@ -7938,13 +8433,13 @@ function uk_default() {
 	return { localeError: error$6() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ua.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ua.js
 /** @deprecated Use `uk` instead. */
 function ua_default() {
 	return uk_default();
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/ur.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/ur.js
 const error$5 = () => {
 	const Sizable = {
 		string: {
@@ -8048,7 +8543,7 @@ function ur_default() {
 	return { localeError: error$5() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/uz.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/uz.js
 const error$4 = () => {
 	const Sizable = {
 		string: {
@@ -8065,6 +8560,10 @@ const error$4 = () => {
 		},
 		set: {
 			unit: "element",
+			verb: "bo‘lishi kerak"
+		},
+		map: {
+			unit: "yozuv",
 			verb: "bo‘lishi kerak"
 		}
 	};
@@ -8152,7 +8651,7 @@ function uz_default() {
 	return { localeError: error$4() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/vi.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/vi.js
 const error$3 = () => {
 	const Sizable = {
 		string: {
@@ -8255,7 +8754,7 @@ function vi_default() {
 	return { localeError: error$3() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/zh-CN.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/zh-CN.js
 const error$2 = () => {
 	const Sizable = {
 		string: {
@@ -8359,7 +8858,7 @@ function zh_CN_default() {
 	return { localeError: error$2() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/zh-TW.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/zh-TW.js
 const error$1 = () => {
 	const Sizable = {
 		string: {
@@ -8458,7 +8957,7 @@ function zh_TW_default() {
 	return { localeError: error$1() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/yo.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/yo.js
 const error = () => {
 	const Sizable = {
 		string: {
@@ -8561,7 +9060,7 @@ function yo_default() {
 	return { localeError: error() };
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/locales/index.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/locales/index.js
 var locales_exports = /* @__PURE__ */ __exportAll({
 	ar: () => ar_default,
 	az: () => az_default,
@@ -8571,6 +9070,7 @@ var locales_exports = /* @__PURE__ */ __exportAll({
 	cs: () => cs_default,
 	da: () => da_default,
 	de: () => de_default,
+	el: () => el_default,
 	en: () => en_default,
 	eo: () => eo_default,
 	es: () => es_default,
@@ -8579,6 +9079,7 @@ var locales_exports = /* @__PURE__ */ __exportAll({
 	fr: () => fr_default,
 	frCA: () => fr_CA_default,
 	he: () => he_default,
+	hr: () => hr_default,
 	hu: () => hu_default,
 	hy: () => hy_default,
 	id: () => id_default,
@@ -8598,6 +9099,7 @@ var locales_exports = /* @__PURE__ */ __exportAll({
 	pl: () => pl_default,
 	ps: () => ps_default,
 	pt: () => pt_default,
+	ro: () => ro_default,
 	ru: () => ru_default,
 	sl: () => sl_default,
 	sv: () => sv_default,
@@ -8614,7 +9116,7 @@ var locales_exports = /* @__PURE__ */ __exportAll({
 	zhTW: () => zh_TW_default
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/registries.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/registries.js
 var _a;
 const $output = Symbol("ZodOutput");
 const $input = Symbol("ZodInput");
@@ -8663,7 +9165,7 @@ function registry() {
 (_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
 const globalRegistry = globalThis.__zod_globalRegistry;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/api.js
 /* @__NO_SIDE_EFFECTS__ */
 function _string(Class, params) {
 	return new Class({
@@ -8772,6 +9274,11 @@ function _nanoid(Class, params) {
 		...normalizeParams(params)
 	});
 }
+/**
+* @deprecated CUID v1 is deprecated by its authors due to information leakage
+* (timestamps embedded in the id). Use {@link _cuid2} instead.
+* See https://github.com/paralleldrive/cuid.
+*/
 /* @__NO_SIDE_EFFECTS__ */
 function _cuid(Class, params) {
 	return new Class({
@@ -9572,7 +10079,7 @@ function _refine(Class, fn, _params) {
 	});
 }
 /* @__NO_SIDE_EFFECTS__ */
-function _superRefine(fn) {
+function _superRefine(fn, params) {
 	const ch = /* @__PURE__ */ _check((payload) => {
 		payload.addIssue = (issue$2) => {
 			if (typeof issue$2 === "string") payload.issues.push(issue(issue$2, payload.value, ch._zod.def));
@@ -9587,7 +10094,7 @@ function _superRefine(fn) {
 			}
 		};
 		return fn(payload.value, payload);
-	});
+	}, params);
 	return ch;
 }
 /* @__NO_SIDE_EFFECTS__ */
@@ -9702,7 +10209,7 @@ function _stringFormat(Class, format, fnOrRegex, _params = {}) {
 	return new Class(def);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/to-json-schema.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/to-json-schema.js
 function initializeContext(params) {
 	let target = params?.target ?? "draft-2020-12";
 	if (target === "draft-4") target = "draft-04";
@@ -9768,7 +10275,7 @@ function process(schema, ctx, _params = {
 		delete result.schema.examples;
 		delete result.schema.default;
 	}
-	if (ctx.io === "input" && result.schema._prefault) (_a = result.schema).default ?? (_a.default = result.schema._prefault);
+	if (ctx.io === "input" && "_prefault" in result.schema) (_a = result.schema).default ?? (_a.default = result.schema._prefault);
 	delete result.schema._prefault;
 	return ctx.seen.get(schema).schema;
 }
@@ -9908,10 +10415,15 @@ function finalize(ctx, schema) {
 		result.$id = ctx.external.uri(id);
 	}
 	Object.assign(result, root.def ?? root.schema);
+	const rootMetaId = ctx.metadataRegistry.get(schema)?.id;
+	if (rootMetaId !== void 0 && result.id === rootMetaId) delete result.id;
 	const defs = ctx.external?.defs ?? {};
 	for (const entry of ctx.seen.entries()) {
 		const seen = entry[1];
-		if (seen.def && seen.defId) defs[seen.defId] = seen.def;
+		if (seen.def && seen.defId) {
+			if (seen.def.id === seen.defId) delete seen.def.id;
+			defs[seen.defId] = seen.def;
+		}
 	}
 	if (ctx.external) {} else if (Object.keys(defs).length > 0) if (ctx.target === "draft-2020-12") result.$defs = defs;
 	else result.definitions = defs;
@@ -9987,7 +10499,7 @@ const createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params)
 	return finalize(ctx, schema);
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema-processors.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/json-schema-processors.js
 const formatMap = {
 	guid: "uuid",
 	url: "uri",
@@ -10021,24 +10533,19 @@ const numberProcessor = (schema, ctx, _json, _params) => {
 	const { minimum, maximum, format, multipleOf, exclusiveMaximum, exclusiveMinimum } = schema._zod.bag;
 	if (typeof format === "string" && format.includes("int")) json.type = "integer";
 	else json.type = "number";
-	if (typeof exclusiveMinimum === "number") if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
+	const exMin = typeof exclusiveMinimum === "number" && exclusiveMinimum >= (minimum ?? Number.NEGATIVE_INFINITY);
+	const exMax = typeof exclusiveMaximum === "number" && exclusiveMaximum <= (maximum ?? Number.POSITIVE_INFINITY);
+	const legacy = ctx.target === "draft-04" || ctx.target === "openapi-3.0";
+	if (exMin) if (legacy) {
 		json.minimum = exclusiveMinimum;
 		json.exclusiveMinimum = true;
 	} else json.exclusiveMinimum = exclusiveMinimum;
-	if (typeof minimum === "number") {
-		json.minimum = minimum;
-		if (typeof exclusiveMinimum === "number" && ctx.target !== "draft-04") if (exclusiveMinimum >= minimum) delete json.minimum;
-		else delete json.exclusiveMinimum;
-	}
-	if (typeof exclusiveMaximum === "number") if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
+	else if (typeof minimum === "number") json.minimum = minimum;
+	if (exMax) if (legacy) {
 		json.maximum = exclusiveMaximum;
 		json.exclusiveMaximum = true;
 	} else json.exclusiveMaximum = exclusiveMaximum;
-	if (typeof maximum === "number") {
-		json.maximum = maximum;
-		if (typeof exclusiveMaximum === "number" && ctx.target !== "draft-04") if (exclusiveMaximum <= maximum) delete json.maximum;
-		else delete json.exclusiveMaximum;
-	}
+	else if (typeof maximum === "number") json.maximum = maximum;
 	if (typeof multipleOf === "number") json.multipleOf = multipleOf;
 };
 const booleanProcessor = (_schema, _ctx, json, _params) => {
@@ -10443,7 +10950,7 @@ function toJSONSchema(input, params) {
 	return finalize(ctx, input);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema-generator.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/json-schema-generator.js
 /**
 * Legacy class-based interface for JSON Schema generation.
 * This class wraps the new functional implementation to provide backward compatibility.
@@ -10532,10 +11039,10 @@ var JSONSchemaGenerator = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/json-schema.js
 var json_schema_exports = /* @__PURE__ */ __exportAll({});
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/index.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/index.js
 var core_exports = /* @__PURE__ */ __exportAll({
 	$ZodAny: () => $ZodAny,
 	$ZodArray: () => $ZodArray,
@@ -10812,7 +11319,7 @@ var core_exports = /* @__PURE__ */ __exportAll({
 	version: () => version
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/checks.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/checks.js
 var checks_exports = /* @__PURE__ */ __exportAll({
 	endsWith: () => _endsWith,
 	gt: () => _gt,
@@ -10845,7 +11352,7 @@ var checks_exports = /* @__PURE__ */ __exportAll({
 	uppercase: () => _uppercase
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/iso.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/iso.js
 var iso_exports = /* @__PURE__ */ __exportAll({
 	ZodISODate: () => ZodISODate,
 	ZodISODateTime: () => ZodISODateTime,
@@ -10885,7 +11392,7 @@ function duration(params) {
 	return /* @__PURE__ */ _isoDuration(ZodISODuration, params);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/errors.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/errors.js
 const initializer = (inst, issues) => {
 	$ZodError.init(inst, issues);
 	inst.name = "ZodError";
@@ -10905,10 +11412,10 @@ const initializer = (inst, issues) => {
 		} }
 	});
 };
-const ZodError = $constructor("ZodError", initializer);
-const ZodRealError = $constructor("ZodError", initializer, { Parent: Error });
+const ZodError = /* @__PURE__ */ $constructor("ZodError", initializer);
+const ZodRealError = /* @__PURE__ */ $constructor("ZodError", initializer, { Parent: Error });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/parse.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/parse.js
 const parse = /* @__PURE__ */ _parse(ZodRealError);
 const parseAsync = /* @__PURE__ */ _parseAsync(ZodRealError);
 const safeParse = /* @__PURE__ */ _safeParse(ZodRealError);
@@ -10922,7 +11429,7 @@ const safeDecode = /* @__PURE__ */ _safeDecode(ZodRealError);
 const safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 const safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/schemas.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/schemas.js
 var schemas_exports = /* @__PURE__ */ __exportAll({
 	ZodAny: () => ZodAny,
 	ZodArray: () => ZodArray,
@@ -11031,6 +11538,7 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 	int32: () => int32,
 	int64: () => int64,
 	intersection: () => intersection,
+	invertCodec: () => invertCodec,
 	ipv4: () => ipv4,
 	ipv6: () => ipv6,
 	json: () => json,
@@ -11089,6 +11597,42 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 	xid: () => xid,
 	xor: () => xor
 });
+const _installedGroups = /* @__PURE__ */ new WeakMap();
+function _installLazyMethods(inst, group, methods) {
+	const proto = Object.getPrototypeOf(inst);
+	let installed = _installedGroups.get(proto);
+	if (!installed) {
+		installed = /* @__PURE__ */ new Set();
+		_installedGroups.set(proto, installed);
+	}
+	if (installed.has(group)) return;
+	installed.add(group);
+	for (const key in methods) {
+		const fn = methods[key];
+		Object.defineProperty(proto, key, {
+			configurable: true,
+			enumerable: false,
+			get() {
+				const bound = fn.bind(this);
+				Object.defineProperty(this, key, {
+					configurable: true,
+					writable: true,
+					enumerable: true,
+					value: bound
+				});
+				return bound;
+			},
+			set(v) {
+				Object.defineProperty(this, key, {
+					configurable: true,
+					writable: true,
+					enumerable: true,
+					value: v
+				});
+			}
+		});
+	}
+}
 const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 	$ZodType.init(inst, def);
 	Object.assign(inst["~standard"], { jsonSchema: {
@@ -11099,20 +11643,6 @@ const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 	inst.def = def;
 	inst.type = def.type;
 	Object.defineProperty(inst, "_def", { value: def });
-	inst.check = (...checks) => {
-		return inst.clone(mergeDefs(def, { checks: [...def.checks ?? [], ...checks.map((ch) => typeof ch === "function" ? { _zod: {
-			check: ch,
-			def: { check: "custom" },
-			onattach: []
-		} } : ch)] }), { parent: true });
-	};
-	inst.with = inst.check;
-	inst.clone = (def, params) => clone(inst, def, params);
-	inst.brand = () => inst;
-	inst.register = ((reg, meta) => {
-		reg.add(inst, meta);
-		return inst;
-	});
 	inst.parse = (data, params) => parse(inst, data, params, { callee: inst.parse });
 	inst.safeParse = (data, params) => safeParse(inst, data, params);
 	inst.parseAsync = async (data, params) => parseAsync(inst, data, params, { callee: inst.parseAsync });
@@ -11126,43 +11656,106 @@ const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 	inst.safeDecode = (data, params) => safeDecode(inst, data, params);
 	inst.safeEncodeAsync = async (data, params) => safeEncodeAsync(inst, data, params);
 	inst.safeDecodeAsync = async (data, params) => safeDecodeAsync(inst, data, params);
-	inst.refine = (check, params) => inst.check(refine(check, params));
-	inst.superRefine = (refinement) => inst.check(superRefine(refinement));
-	inst.overwrite = (fn) => inst.check(/* @__PURE__ */ _overwrite(fn));
-	inst.optional = () => optional(inst);
-	inst.exactOptional = () => exactOptional(inst);
-	inst.nullable = () => nullable(inst);
-	inst.nullish = () => optional(nullable(inst));
-	inst.nonoptional = (params) => nonoptional(inst, params);
-	inst.array = () => array(inst);
-	inst.or = (arg) => union([inst, arg]);
-	inst.and = (arg) => intersection(inst, arg);
-	inst.transform = (tx) => pipe(inst, transform(tx));
-	inst.default = (def) => _default(inst, def);
-	inst.prefault = (def) => prefault(inst, def);
-	inst.catch = (params) => _catch(inst, params);
-	inst.pipe = (target) => pipe(inst, target);
-	inst.readonly = () => readonly(inst);
-	inst.describe = (description) => {
-		const cl = inst.clone();
-		globalRegistry.add(cl, { description });
-		return cl;
-	};
+	_installLazyMethods(inst, "ZodType", {
+		check(...chks) {
+			const def = this.def;
+			return this.clone(mergeDefs(def, { checks: [...def.checks ?? [], ...chks.map((ch) => typeof ch === "function" ? { _zod: {
+				check: ch,
+				def: { check: "custom" },
+				onattach: []
+			} } : ch)] }), { parent: true });
+		},
+		with(...chks) {
+			return this.check(...chks);
+		},
+		clone(def, params) {
+			return clone(this, def, params);
+		},
+		brand() {
+			return this;
+		},
+		register(reg, meta) {
+			reg.add(this, meta);
+			return this;
+		},
+		refine(check, params) {
+			return this.check(refine(check, params));
+		},
+		superRefine(refinement, params) {
+			return this.check(superRefine(refinement, params));
+		},
+		overwrite(fn) {
+			return this.check(/* @__PURE__ */ _overwrite(fn));
+		},
+		optional() {
+			return optional(this);
+		},
+		exactOptional() {
+			return exactOptional(this);
+		},
+		nullable() {
+			return nullable(this);
+		},
+		nullish() {
+			return optional(nullable(this));
+		},
+		nonoptional(params) {
+			return nonoptional(this, params);
+		},
+		array() {
+			return array(this);
+		},
+		or(arg) {
+			return union([this, arg]);
+		},
+		and(arg) {
+			return intersection(this, arg);
+		},
+		transform(tx) {
+			return pipe(this, transform(tx));
+		},
+		default(d) {
+			return _default(this, d);
+		},
+		prefault(d) {
+			return prefault(this, d);
+		},
+		catch(params) {
+			return _catch(this, params);
+		},
+		pipe(target) {
+			return pipe(this, target);
+		},
+		readonly() {
+			return readonly(this);
+		},
+		describe(description) {
+			const cl = this.clone();
+			globalRegistry.add(cl, { description });
+			return cl;
+		},
+		meta(...args) {
+			if (args.length === 0) return globalRegistry.get(this);
+			const cl = this.clone();
+			globalRegistry.add(cl, args[0]);
+			return cl;
+		},
+		isOptional() {
+			return this.safeParse(void 0).success;
+		},
+		isNullable() {
+			return this.safeParse(null).success;
+		},
+		apply(fn) {
+			return fn(this);
+		}
+	});
 	Object.defineProperty(inst, "description", {
 		get() {
 			return globalRegistry.get(inst)?.description;
 		},
 		configurable: true
 	});
-	inst.meta = (...args) => {
-		if (args.length === 0) return globalRegistry.get(inst);
-		const cl = inst.clone();
-		globalRegistry.add(cl, args[0]);
-		return cl;
-	};
-	inst.isOptional = () => inst.safeParse(void 0).success;
-	inst.isNullable = () => inst.safeParse(null).success;
-	inst.apply = (fn) => fn(inst);
 	return inst;
 });
 /** @internal */
@@ -11174,21 +11767,53 @@ const _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
 	inst.format = bag.format ?? null;
 	inst.minLength = bag.minimum ?? null;
 	inst.maxLength = bag.maximum ?? null;
-	inst.regex = (...args) => inst.check(/* @__PURE__ */ _regex(...args));
-	inst.includes = (...args) => inst.check(/* @__PURE__ */ _includes(...args));
-	inst.startsWith = (...args) => inst.check(/* @__PURE__ */ _startsWith(...args));
-	inst.endsWith = (...args) => inst.check(/* @__PURE__ */ _endsWith(...args));
-	inst.min = (...args) => inst.check(/* @__PURE__ */ _minLength(...args));
-	inst.max = (...args) => inst.check(/* @__PURE__ */ _maxLength(...args));
-	inst.length = (...args) => inst.check(/* @__PURE__ */ _length(...args));
-	inst.nonempty = (...args) => inst.check(/* @__PURE__ */ _minLength(1, ...args));
-	inst.lowercase = (params) => inst.check(/* @__PURE__ */ _lowercase(params));
-	inst.uppercase = (params) => inst.check(/* @__PURE__ */ _uppercase(params));
-	inst.trim = () => inst.check(/* @__PURE__ */ _trim());
-	inst.normalize = (...args) => inst.check(/* @__PURE__ */ _normalize(...args));
-	inst.toLowerCase = () => inst.check(/* @__PURE__ */ _toLowerCase());
-	inst.toUpperCase = () => inst.check(/* @__PURE__ */ _toUpperCase());
-	inst.slugify = () => inst.check(/* @__PURE__ */ _slugify());
+	_installLazyMethods(inst, "_ZodString", {
+		regex(...args) {
+			return this.check(/* @__PURE__ */ _regex(...args));
+		},
+		includes(...args) {
+			return this.check(/* @__PURE__ */ _includes(...args));
+		},
+		startsWith(...args) {
+			return this.check(/* @__PURE__ */ _startsWith(...args));
+		},
+		endsWith(...args) {
+			return this.check(/* @__PURE__ */ _endsWith(...args));
+		},
+		min(...args) {
+			return this.check(/* @__PURE__ */ _minLength(...args));
+		},
+		max(...args) {
+			return this.check(/* @__PURE__ */ _maxLength(...args));
+		},
+		length(...args) {
+			return this.check(/* @__PURE__ */ _length(...args));
+		},
+		nonempty(...args) {
+			return this.check(/* @__PURE__ */ _minLength(1, ...args));
+		},
+		lowercase(params) {
+			return this.check(/* @__PURE__ */ _lowercase(params));
+		},
+		uppercase(params) {
+			return this.check(/* @__PURE__ */ _uppercase(params));
+		},
+		trim() {
+			return this.check(/* @__PURE__ */ _trim());
+		},
+		normalize(...args) {
+			return this.check(/* @__PURE__ */ _normalize(...args));
+		},
+		toLowerCase() {
+			return this.check(/* @__PURE__ */ _toLowerCase());
+		},
+		toUpperCase() {
+			return this.check(/* @__PURE__ */ _toUpperCase());
+		},
+		slugify() {
+			return this.check(/* @__PURE__ */ _slugify());
+		}
+	});
 });
 const ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
 	$ZodString.init(inst, def);
@@ -11267,7 +11892,7 @@ function url(params) {
 }
 function httpUrl(params) {
 	return /* @__PURE__ */ _url(ZodURL, {
-		protocol: /^https?$/,
+		protocol: httpProtocol,
 		hostname: domain,
 		...normalizeParams(params)
 	});
@@ -11286,10 +11911,22 @@ const ZodNanoID = /* @__PURE__ */ $constructor("ZodNanoID", (inst, def) => {
 function nanoid(params) {
 	return /* @__PURE__ */ _nanoid(ZodNanoID, params);
 }
+/**
+* @deprecated CUID v1 is deprecated by its authors due to information leakage
+* (timestamps embedded in the id). Use {@link ZodCUID2} instead.
+* See https://github.com/paralleldrive/cuid.
+*/
 const ZodCUID = /* @__PURE__ */ $constructor("ZodCUID", (inst, def) => {
 	$ZodCUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
+/**
+* Validates a CUID v1 string.
+*
+* @deprecated CUID v1 is deprecated by its authors due to information leakage
+* (timestamps embedded in the id). Use {@link cuid2 | `z.cuid2()`} instead.
+* See https://github.com/paralleldrive/cuid.
+*/
 function cuid(params) {
 	return /* @__PURE__ */ _cuid(ZodCUID, params);
 }
@@ -11407,21 +12044,53 @@ const ZodNumber = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
 	$ZodNumber.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => numberProcessor(inst, ctx, json, params);
-	inst.gt = (value, params) => inst.check(/* @__PURE__ */ _gt(value, params));
-	inst.gte = (value, params) => inst.check(/* @__PURE__ */ _gte(value, params));
-	inst.min = (value, params) => inst.check(/* @__PURE__ */ _gte(value, params));
-	inst.lt = (value, params) => inst.check(/* @__PURE__ */ _lt(value, params));
-	inst.lte = (value, params) => inst.check(/* @__PURE__ */ _lte(value, params));
-	inst.max = (value, params) => inst.check(/* @__PURE__ */ _lte(value, params));
-	inst.int = (params) => inst.check(int(params));
-	inst.safe = (params) => inst.check(int(params));
-	inst.positive = (params) => inst.check(/* @__PURE__ */ _gt(0, params));
-	inst.nonnegative = (params) => inst.check(/* @__PURE__ */ _gte(0, params));
-	inst.negative = (params) => inst.check(/* @__PURE__ */ _lt(0, params));
-	inst.nonpositive = (params) => inst.check(/* @__PURE__ */ _lte(0, params));
-	inst.multipleOf = (value, params) => inst.check(/* @__PURE__ */ _multipleOf(value, params));
-	inst.step = (value, params) => inst.check(/* @__PURE__ */ _multipleOf(value, params));
-	inst.finite = () => inst;
+	_installLazyMethods(inst, "ZodNumber", {
+		gt(value, params) {
+			return this.check(/* @__PURE__ */ _gt(value, params));
+		},
+		gte(value, params) {
+			return this.check(/* @__PURE__ */ _gte(value, params));
+		},
+		min(value, params) {
+			return this.check(/* @__PURE__ */ _gte(value, params));
+		},
+		lt(value, params) {
+			return this.check(/* @__PURE__ */ _lt(value, params));
+		},
+		lte(value, params) {
+			return this.check(/* @__PURE__ */ _lte(value, params));
+		},
+		max(value, params) {
+			return this.check(/* @__PURE__ */ _lte(value, params));
+		},
+		int(params) {
+			return this.check(int(params));
+		},
+		safe(params) {
+			return this.check(int(params));
+		},
+		positive(params) {
+			return this.check(/* @__PURE__ */ _gt(0, params));
+		},
+		nonnegative(params) {
+			return this.check(/* @__PURE__ */ _gte(0, params));
+		},
+		negative(params) {
+			return this.check(/* @__PURE__ */ _lt(0, params));
+		},
+		nonpositive(params) {
+			return this.check(/* @__PURE__ */ _lte(0, params));
+		},
+		multipleOf(value, params) {
+			return this.check(/* @__PURE__ */ _multipleOf(value, params));
+		},
+		step(value, params) {
+			return this.check(/* @__PURE__ */ _multipleOf(value, params));
+		},
+		finite() {
+			return this;
+		}
+	});
 	const bag = inst._zod.bag;
 	inst.minValue = Math.max(bag.minimum ?? Number.NEGATIVE_INFINITY, bag.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null;
 	inst.maxValue = Math.min(bag.maximum ?? Number.POSITIVE_INFINITY, bag.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null;
@@ -11521,7 +12190,7 @@ function _null(params) {
 const ZodAny = /* @__PURE__ */ $constructor("ZodAny", (inst, def) => {
 	$ZodAny.init(inst, def);
 	ZodType.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => anyProcessor(inst, ctx, json, params);
+	inst._zod.processJSONSchema = (ctx, json, params) => void 0;
 });
 function any() {
 	return /* @__PURE__ */ _any(ZodAny);
@@ -11529,7 +12198,7 @@ function any() {
 const ZodUnknown = /* @__PURE__ */ $constructor("ZodUnknown", (inst, def) => {
 	$ZodUnknown.init(inst, def);
 	ZodType.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => unknownProcessor(inst, ctx, json, params);
+	inst._zod.processJSONSchema = (ctx, json, params) => void 0;
 });
 function unknown() {
 	return /* @__PURE__ */ _unknown(ZodUnknown);
@@ -11568,11 +12237,23 @@ const ZodArray = /* @__PURE__ */ $constructor("ZodArray", (inst, def) => {
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => arrayProcessor(inst, ctx, json, params);
 	inst.element = def.element;
-	inst.min = (minLength, params) => inst.check(/* @__PURE__ */ _minLength(minLength, params));
-	inst.nonempty = (params) => inst.check(/* @__PURE__ */ _minLength(1, params));
-	inst.max = (maxLength, params) => inst.check(/* @__PURE__ */ _maxLength(maxLength, params));
-	inst.length = (len, params) => inst.check(/* @__PURE__ */ _length(len, params));
-	inst.unwrap = () => inst.element;
+	_installLazyMethods(inst, "ZodArray", {
+		min(n, params) {
+			return this.check(/* @__PURE__ */ _minLength(n, params));
+		},
+		nonempty(params) {
+			return this.check(/* @__PURE__ */ _minLength(1, params));
+		},
+		max(n, params) {
+			return this.check(/* @__PURE__ */ _maxLength(n, params));
+		},
+		length(n, params) {
+			return this.check(/* @__PURE__ */ _length(n, params));
+		},
+		unwrap() {
+			return this.element;
+		}
+	});
 });
 function array(element, params) {
 	return /* @__PURE__ */ _array(ZodArray, element, params);
@@ -11588,38 +12269,62 @@ const ZodObject = /* @__PURE__ */ $constructor("ZodObject", (inst, def) => {
 	defineLazy(inst, "shape", () => {
 		return def.shape;
 	});
-	inst.keyof = () => _enum(Object.keys(inst._zod.def.shape));
-	inst.catchall = (catchall) => inst.clone({
-		...inst._zod.def,
-		catchall
+	_installLazyMethods(inst, "ZodObject", {
+		keyof() {
+			return _enum(Object.keys(this._zod.def.shape));
+		},
+		catchall(catchall) {
+			return this.clone({
+				...this._zod.def,
+				catchall
+			});
+		},
+		passthrough() {
+			return this.clone({
+				...this._zod.def,
+				catchall: unknown()
+			});
+		},
+		loose() {
+			return this.clone({
+				...this._zod.def,
+				catchall: unknown()
+			});
+		},
+		strict() {
+			return this.clone({
+				...this._zod.def,
+				catchall: never()
+			});
+		},
+		strip() {
+			return this.clone({
+				...this._zod.def,
+				catchall: void 0
+			});
+		},
+		extend(incoming) {
+			return extend(this, incoming);
+		},
+		safeExtend(incoming) {
+			return safeExtend(this, incoming);
+		},
+		merge(other) {
+			return merge(this, other);
+		},
+		pick(mask) {
+			return pick(this, mask);
+		},
+		omit(mask) {
+			return omit(this, mask);
+		},
+		partial(...args) {
+			return partial(ZodOptional, this, args[0]);
+		},
+		required(...args) {
+			return required(ZodNonOptional, this, args[0]);
+		}
 	});
-	inst.passthrough = () => inst.clone({
-		...inst._zod.def,
-		catchall: unknown()
-	});
-	inst.loose = () => inst.clone({
-		...inst._zod.def,
-		catchall: unknown()
-	});
-	inst.strict = () => inst.clone({
-		...inst._zod.def,
-		catchall: never()
-	});
-	inst.strip = () => inst.clone({
-		...inst._zod.def,
-		catchall: void 0
-	});
-	inst.extend = (incoming) => {
-		return extend(inst, incoming);
-	};
-	inst.safeExtend = (incoming) => {
-		return safeExtend(inst, incoming);
-	};
-	inst.merge = (other) => merge(inst, other);
-	inst.pick = (mask) => pick(inst, mask);
-	inst.omit = (mask) => omit(inst, mask);
-	inst.partial = (...args) => partial(ZodOptional, inst, args[0]);
-	inst.required = (...args) => required(ZodNonOptional, inst, args[0]);
 });
 function object(shape, params) {
 	return new ZodObject({
@@ -11724,6 +12429,12 @@ const ZodRecord = /* @__PURE__ */ $constructor("ZodRecord", (inst, def) => {
 	inst.valueType = def.valueType;
 });
 function record(keyType, valueType, params) {
+	if (!valueType || !valueType._zod) return new ZodRecord({
+		type: "record",
+		keyType: string$1(),
+		valueType: keyType,
+		...normalizeParams(valueType)
+	});
 	return new ZodRecord({
 		type: "record",
 		keyType,
@@ -12040,6 +12751,16 @@ function codec(in_, out, params) {
 		reverseTransform: params.encode
 	});
 }
+function invertCodec(codec) {
+	const def = codec._zod.def;
+	return new ZodCodec({
+		type: "pipe",
+		in: def.out,
+		out: def.in,
+		transform: def.reverseTransform,
+		reverseTransform: def.transform
+	});
+}
 const ZodReadonly = /* @__PURE__ */ $constructor("ZodReadonly", (inst, def) => {
 	$ZodReadonly.init(inst, def);
 	ZodType.init(inst, def);
@@ -12116,8 +12837,8 @@ function custom(fn, _params) {
 function refine(fn, _params = {}) {
 	return /* @__PURE__ */ _refine(ZodCustom, fn, _params);
 }
-function superRefine(fn) {
-	return /* @__PURE__ */ _superRefine(fn);
+function superRefine(fn, params) {
+	return /* @__PURE__ */ _superRefine(fn, params);
 }
 const describe = describe$1;
 const meta = meta$1;
@@ -12163,7 +12884,7 @@ function preprocess(fn, schema) {
 	return pipe(transform(fn), schema);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/compat.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/compat.js
 /** @deprecated Use the raw string literal codes instead, e.g. "invalid_type". */
 const ZodIssueCode = {
 	invalid_type: "invalid_type",
@@ -12190,13 +12911,13 @@ function getErrorMap() {
 var ZodFirstPartyTypeKind;
 (function(ZodFirstPartyTypeKind) {})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/from-json-schema.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/from-json-schema.js
 const z = {
 	...schemas_exports,
 	...checks_exports,
 	iso: iso_exports
 };
-const RECOGNIZED_KEYS = new Set([
+const RECOGNIZED_KEYS = /* @__PURE__ */ new Set([
 	"$schema",
 	"$ref",
 	"$defs",
@@ -12454,8 +13175,6 @@ function convertBaseSchema(schema, ctx) {
 		}
 		default: throw new Error(`Unsupported type: ${type}`);
 	}
-	if (schema.description) zodSchema = zodSchema.describe(schema.description);
-	if (schema.default !== void 0) zodSchema = zodSchema.default(schema.default);
 	return zodSchema;
 }
 function convertSchema(schema, ctx) {
@@ -12481,6 +13200,7 @@ function convertSchema(schema, ctx) {
 	}
 	if (schema.nullable === true && ctx.version === "openapi-3.0") baseSchema = z.nullable(baseSchema);
 	if (schema.readOnly === true) baseSchema = z.readonly(baseSchema);
+	if (schema.default !== void 0) baseSchema = baseSchema.default(schema.default);
 	const extraMeta = {};
 	for (const key of [
 		"$id",
@@ -12498,23 +13218,31 @@ function convertSchema(schema, ctx) {
 	]) if (key in schema) extraMeta[key] = schema[key];
 	for (const key of Object.keys(schema)) if (!RECOGNIZED_KEYS.has(key)) extraMeta[key] = schema[key];
 	if (Object.keys(extraMeta).length > 0) ctx.registry.add(baseSchema, extraMeta);
+	if (schema.description) baseSchema = baseSchema.describe(schema.description);
 	return baseSchema;
 }
 /**
 * Converts a JSON Schema to a Zod schema. This function should be considered semi-experimental. It's behavior is liable to change. */
 function fromJSONSchema(schema, params) {
 	if (typeof schema === "boolean") return schema ? z.any() : z.never();
-	return convertSchema(schema, {
-		version: detectVersion(schema, params?.defaultTarget),
-		defs: schema.$defs || schema.definitions || {},
+	let normalized;
+	try {
+		normalized = JSON.parse(JSON.stringify(schema));
+	} catch {
+		throw new Error("fromJSONSchema input is not valid JSON (possibly cyclic); use $defs/$ref for recursive schemas");
+	}
+	const ctx = {
+		version: detectVersion(normalized, params?.defaultTarget),
+		defs: normalized.$defs || normalized.definitions || {},
 		refs: /* @__PURE__ */ new Map(),
 		processing: /* @__PURE__ */ new Set(),
-		rootSchema: schema,
+		rootSchema: normalized,
 		registry: params?.registry ?? globalRegistry
-	});
+	};
+	return convertSchema(normalized, ctx);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/coerce.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/coerce.js
 var coerce_exports = /* @__PURE__ */ __exportAll({
 	bigint: () => bigint,
 	boolean: () => boolean,
@@ -12538,7 +13266,7 @@ function date(params) {
 	return /* @__PURE__ */ _coercedDate(ZodDate, params);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/external.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/classic/external.js
 var external_exports = /* @__PURE__ */ __exportAll({
 	$brand: () => $brand,
 	$input: () => $input,
@@ -12677,6 +13405,7 @@ var external_exports = /* @__PURE__ */ __exportAll({
 	int32: () => int32,
 	int64: () => int64,
 	intersection: () => intersection,
+	invertCodec: () => invertCodec,
 	ipv4: () => ipv4,
 	ipv6: () => ipv6,
 	iso: () => iso_exports,
@@ -12779,7 +13508,7 @@ var external_exports = /* @__PURE__ */ __exportAll({
 });
 config(en_default());
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/index.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/index.js
 var zod_default = external_exports;
 //#endregion
 //#region ../schemas/libraries/zod/download/default.ts

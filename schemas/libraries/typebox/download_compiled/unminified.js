@@ -7154,7 +7154,6 @@ function IsOk(value) {
 function Ok(value) {
 	return { value };
 }
-function Fail() {}
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_array.mjs
 function TryArray(value) {
@@ -7179,49 +7178,49 @@ function IsStringIntegerLike(value) {
 }
 function FromString$5(value) {
 	const lowercase = value.toLowerCase();
-	return IsStringBigIntLike(value) ? Ok(BigInt(value.slice(0, value.length - 1))) : IsStringDecimalLike(value) ? Ok(BigInt(value.split(".")[0])) : IsStringIntegerLike(value) ? Ok(BigInt(value)) : IsEqual(lowercase, "false") ? Ok(BigInt(0)) : IsEqual(lowercase, "true") ? Ok(BigInt(1)) : /* @__PURE__ */ Fail();
+	return IsStringBigIntLike(value) ? Ok(BigInt(value.slice(0, value.length - 1))) : IsStringDecimalLike(value) ? Ok(BigInt(value.split(".")[0])) : IsStringIntegerLike(value) ? Ok(BigInt(value)) : IsEqual(lowercase, "false") ? Ok(BigInt(0)) : IsEqual(lowercase, "true") ? Ok(BigInt(1)) : void 0;
 }
 function TryBigInt(value) {
-	return IsBigInt$1(value) ? Ok(value) : IsBoolean$2(value) ? FromBoolean$4(value) : IsNumber$2(value) ? Ok(BigInt(Math.trunc(value))) : IsNull$1(value) ? Ok(BigInt(0)) : IsString$2(value) ? FromString$5(value) : IsUndefined$1(value) ? Ok(BigInt(0)) : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? Ok(value) : IsBoolean$2(value) ? FromBoolean$4(value) : IsNumber$2(value) ? Ok(BigInt(Math.trunc(value))) : IsNull$1(value) ? Ok(BigInt(0)) : IsString$2(value) ? FromString$5(value) : IsUndefined$1(value) ? Ok(BigInt(0)) : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_boolean.mjs
 function FromBigInt$4(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(false) : IsEqual(value, BigInt(1)) ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual(value, BigInt(0)) ? Ok(false) : IsEqual(value, BigInt(1)) ? Ok(true) : void 0;
 }
 function FromNumber$3(value) {
-	return IsEqual(value, 0) ? Ok(false) : IsEqual(value, 1) ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual(value, 0) ? Ok(false) : IsEqual(value, 1) ? Ok(true) : void 0;
 }
 function FromString$4(value) {
-	return IsEqual(value.toLowerCase(), "false") ? Ok(false) : IsEqual(value.toLowerCase(), "true") ? Ok(true) : IsEqual(value, "0") ? Ok(false) : IsEqual(value, "1") ? Ok(true) : /* @__PURE__ */ Fail();
+	return IsEqual(value.toLowerCase(), "false") ? Ok(false) : IsEqual(value.toLowerCase(), "true") ? Ok(true) : IsEqual(value, "0") ? Ok(false) : IsEqual(value, "1") ? Ok(true) : void 0;
 }
 function TryBoolean(value) {
-	return IsBigInt$1(value) ? FromBigInt$4(value) : IsBoolean$2(value) ? Ok(value) : IsNumber$2(value) ? FromNumber$3(value) : IsNull$1(value) ? Ok(false) : IsString$2(value) ? FromString$4(value) : IsUndefined$1(value) ? Ok(false) : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? FromBigInt$4(value) : IsBoolean$2(value) ? Ok(value) : IsNumber$2(value) ? FromNumber$3(value) : IsNull$1(value) ? Ok(false) : IsString$2(value) ? FromString$4(value) : IsUndefined$1(value) ? Ok(false) : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_null.mjs
 function FromBigInt$3(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual(value, BigInt(0)) ? Ok(null) : void 0;
 }
 function FromBoolean$3(value) {
-	return IsEqual(value, false) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual(value, false) ? Ok(null) : void 0;
 }
 function FromNumber$2(value) {
-	return IsEqual(value, 0) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual(value, 0) ? Ok(null) : void 0;
 }
 function FromString$3(value) {
 	const lowercase = value.toLowerCase();
-	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(null) : void 0;
 }
 function TryNull(value) {
-	return IsBigInt$1(value) ? FromBigInt$3(value) : IsBoolean$2(value) ? FromBoolean$3(value) : IsNumber$2(value) ? FromNumber$2(value) : IsNull$1(value) ? Ok(null) : IsString$2(value) ? FromString$3(value) : IsUndefined$1(value) ? Ok(null) : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? FromBigInt$3(value) : IsBoolean$2(value) ? FromBoolean$3(value) : IsNumber$2(value) ? FromNumber$2(value) : IsNull$1(value) ? Ok(null) : IsString$2(value) ? FromString$3(value) : IsUndefined$1(value) ? Ok(null) : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_number.mjs
 const maxBigInt = BigInt(Number.MAX_SAFE_INTEGER);
 const minBigInt = BigInt(Number.MIN_SAFE_INTEGER);
 function FromBigInt$2(value) {
-	return value <= maxBigInt && value >= minBigInt ? Ok(Number(value)) : /* @__PURE__ */ Fail();
+	return value <= maxBigInt && value >= minBigInt ? Ok(Number(value)) : void 0;
 }
 function FromBoolean$2(value) {
 	return Ok(value ? 1 : 0);
@@ -7233,34 +7232,33 @@ function FromString$2(value) {
 	if (IsEqual(lowercase, "false")) return Ok(0);
 	if (IsEqual(lowercase, "true")) return Ok(1);
 	const result = TryBigInt(value);
-	if (IsOk(result)) return result.value <= maxBigInt && result.value >= minBigInt ? Ok(Number(result.value)) : /* @__PURE__ */ Fail();
-	return /* @__PURE__ */ Fail();
+	if (IsOk(result)) return result.value <= maxBigInt && result.value >= minBigInt ? Ok(Number(result.value)) : void 0;
 }
 function TryNumber(value) {
-	return IsBigInt$1(value) ? FromBigInt$2(value) : IsBoolean$2(value) ? FromBoolean$2(value) : IsNumber$2(value) ? Ok(value) : IsNull$1(value) ? Ok(0) : IsString$2(value) ? FromString$2(value) : IsUndefined$1(value) ? Ok(0) : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? FromBigInt$2(value) : IsBoolean$2(value) ? FromBoolean$2(value) : IsNumber$2(value) ? Ok(value) : IsNull$1(value) ? Ok(0) : IsString$2(value) ? FromString$2(value) : IsUndefined$1(value) ? Ok(0) : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_string.mjs
 function TryString(value) {
-	return IsBigInt$1(value) ? Ok(value.toString()) : IsBoolean$2(value) ? Ok(value.toString()) : IsNumber$2(value) ? Ok(value.toString()) : IsNull$1(value) ? Ok("null") : IsString$2(value) ? Ok(value) : IsUndefined$1(value) ? Ok("") : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? Ok(value.toString()) : IsBoolean$2(value) ? Ok(value.toString()) : IsNumber$2(value) ? Ok(value.toString()) : IsNull$1(value) ? Ok("null") : IsString$2(value) ? Ok(value) : IsUndefined$1(value) ? Ok("") : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/try/try_undefined.mjs
 function FromBigInt$1(value) {
-	return IsEqual(value, BigInt(0)) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual(value, BigInt(0)) ? Ok(void 0) : void 0;
 }
 function FromBoolean$1(value) {
-	return IsEqual(value, false) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual(value, false) ? Ok(void 0) : void 0;
 }
 function FromNumber$1(value) {
-	return IsEqual(value, 0) ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual(value, 0) ? Ok(void 0) : void 0;
 }
 function FromString$1(value) {
 	const lowercase = value.toLowerCase();
-	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(void 0) : /* @__PURE__ */ Fail();
+	return IsEqual(lowercase, "undefined") || IsEqual(lowercase, "null") || IsEqual(value, "") || IsEqual(value, "0") ? Ok(void 0) : void 0;
 }
 function TryUndefined(value) {
-	return IsBigInt$1(value) ? FromBigInt$1(value) : IsBoolean$2(value) ? FromBoolean$1(value) : IsNumber$2(value) ? FromNumber$1(value) : IsNull$1(value) ? Ok(void 0) : IsString$2(value) ? FromString$1(value) : IsUndefined$1(value) ? Ok(value) : /* @__PURE__ */ Fail();
+	return IsBigInt$1(value) ? FromBigInt$1(value) : IsBoolean$2(value) ? FromBoolean$1(value) : IsNumber$2(value) ? FromNumber$1(value) : IsNull$1(value) ? Ok(void 0) : IsString$2(value) ? FromString$1(value) : IsUndefined$1(value) ? Ok(value) : void 0;
 }
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/convert/from_array.mjs
@@ -7744,52 +7742,6 @@ function FromUnion(direction, context, type, value) {
 function FromType(direction, context, type, value) {
 	return IsArray(type) ? FromArray(direction, context, type, value) : IsCyclic(type) ? FromCyclic(direction, context, type, value) : IsIntersect(type) ? FromIntersect(direction, context, type, value) : IsObject(type) ? FromObject(direction, context, type, value) : IsRecord(type) ? FromRecord(direction, context, type, value) : IsRef$1(type) ? FromRef(direction, context, type, value) : IsTuple(type) ? FromTuple(direction, context, type, value) : IsUnion(type) ? FromUnion(direction, context, type, value) : Callback(direction, context, type, value);
 }
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/codec/decode.mjs
-var DecodeError = class extends AssertError {
-	constructor(value, errors) {
-		super("Decode", value, errors);
-	}
-};
-function Assert$2(context, type, value) {
-	if (!Check(context, type, value)) throw new DecodeError(value, Errors(context, type, value));
-	return value;
-}
-/** Executes Decode callbacks only */
-function DecodeUnsafe(context, type, value) {
-	return FromType("Decode", context, type, value);
-}
-Pipeline([
-	(_context, _type, value) => Clone(value),
-	(context, type, value) => Default(context, type, value),
-	(context, type, value) => Convert(context, type, value),
-	(context, type, value) => Clean(context, type, value),
-	(context, type, value) => Assert$2(context, type, value),
-	(context, type, value) => DecodeUnsafe(context, type, value)
-]);
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/codec/encode.mjs
-var EncodeError = class extends AssertError {
-	constructor(value, errors) {
-		super("Encode", value, errors);
-	}
-};
-function Assert$1(context, type, value) {
-	if (!Check(context, type, value)) throw new EncodeError(value, Errors(context, type, value));
-	return value;
-}
-/** Executes Encode callbacks only */
-function EncodeUnsafe(context, type, value) {
-	return FromType("Encode", context, type, value);
-}
-Pipeline([
-	(_context, _type, value) => Clone(value),
-	(context, type, value) => EncodeUnsafe(context, type, value),
-	(context, type, value) => Default(context, type, value),
-	(context, type, value) => Convert(context, type, value),
-	(context, type, value) => Clean(context, type, value),
-	(context, type, value) => Assert$1(context, type, value)
-]);
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.34/node_modules/typebox/build/value/parse/parse.mjs
 var ParseError = class extends AssertError {
