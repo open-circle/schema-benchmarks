@@ -15086,74 +15086,6 @@ var UniqueSymbol = class {
 * @category model
 * @since 3.10.0
 */
-var UndefinedKeyword = class {
-	annotations;
-	/**
-	* @since 3.10.0
-	*/
-	_tag = "UndefinedKeyword";
-	constructor(annotations = {}) {
-		this.annotations = annotations;
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toString() {
-		return formatKeyword(this);
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toJSON() {
-		return {
-			_tag: this._tag,
-			annotations: toJSONAnnotations(this.annotations)
-		};
-	}
-};
-/**
-* @category constructors
-* @since 3.10.0
-*/
-const undefinedKeyword = /* @__PURE__ */ new UndefinedKeyword({ [TitleAnnotationId]: "undefined" });
-/**
-* @category model
-* @since 3.10.0
-*/
-var VoidKeyword = class {
-	annotations;
-	/**
-	* @since 3.10.0
-	*/
-	_tag = "VoidKeyword";
-	constructor(annotations = {}) {
-		this.annotations = annotations;
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toString() {
-		return formatKeyword(this);
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toJSON() {
-		return {
-			_tag: this._tag,
-			annotations: toJSONAnnotations(this.annotations)
-		};
-	}
-};
-/**
-* @category constructors
-* @since 3.10.0
-*/
-const voidKeyword = /* @__PURE__ */ new VoidKeyword({ [TitleAnnotationId]: "void" });
-/**
-* @category model
-* @since 3.10.0
-*/
 var NeverKeyword = class {
 	annotations;
 	/**
@@ -15447,43 +15379,6 @@ const symbolKeyword = /* @__PURE__ */ new SymbolKeyword({
 * @since 3.10.0
 */
 const isSymbolKeyword = /* @__PURE__ */ createASTGuard("SymbolKeyword");
-/**
-* @category model
-* @since 3.10.0
-*/
-var ObjectKeyword = class {
-	annotations;
-	/**
-	* @since 3.10.0
-	*/
-	_tag = "ObjectKeyword";
-	constructor(annotations = {}) {
-		this.annotations = annotations;
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toString() {
-		return formatKeyword(this);
-	}
-	/**
-	* @since 3.10.0
-	*/
-	toJSON() {
-		return {
-			_tag: this._tag,
-			annotations: toJSONAnnotations(this.annotations)
-		};
-	}
-};
-/**
-* @category constructors
-* @since 3.10.0
-*/
-const objectKeyword = /* @__PURE__ */ new ObjectKeyword({
-	[TitleAnnotationId]: "object",
-	[DescriptionAnnotationId]: "an object in the TypeScript meaning, i.e. the `object` type"
-});
 /**
 * @category model
 * @since 3.10.0
@@ -17575,8 +17470,6 @@ const instanceOf = (constructor, annotations) => declare((u) => u instanceof con
 	[InstanceOfSchemaId]: { constructor },
 	...annotations
 });
-make(undefinedKeyword);
-make(voidKeyword);
 /**
 * @category primitives
 * @since 3.10.0
@@ -17592,7 +17485,6 @@ var Never = class extends make(neverKeyword) {};
 * @since 3.10.0
 */
 var Unknown = class extends make(unknownKeyword) {};
-make(anyKeyword);
 /**
 * @category primitives
 * @since 3.10.0
@@ -17609,7 +17501,6 @@ var String$ = class extends make(stringKeyword) {};
 var Number$ = class extends make(numberKeyword) {};
 /** @ignore */
 var Boolean$ = class extends make(booleanKeyword) {};
-make(objectKeyword);
 const getDefaultUnionAST = (members) => Union$1.make(members.map((m) => m.ast));
 function makeUnionClass(members, ast = getDefaultUnionAST(members)) {
 	return class UnionClass extends make(ast) {

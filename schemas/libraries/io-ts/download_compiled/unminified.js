@@ -1,13 +1,3 @@
-//#region ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/function.js
-var __spreadArray$2 = function(to, from, pack) {
-	if (pack || arguments.length === 2) {
-		for (var i = 0, l = from.length, ar; i < l; i++) if (ar || !(i in from)) {
-			if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-			ar[i] = from[i];
-		}
-	}
-	return to.concat(ar || Array.prototype.slice.call(from));
-};
 /**
 * @since 2.0.0
 */
@@ -31,19 +21,6 @@ function pipe(a, ab, bc, cd, de, ef, fg, gh, hi) {
 			return ret;
 	}
 }
-/** @internal */
-var dual = function(arity, body) {
-	var isDataFirst = typeof arity === "number" ? function(args) {
-		return args.length >= arity;
-	} : arity;
-	return function() {
-		var args = Array.from(arguments);
-		if (isDataFirst(arguments)) return body.apply(this, args);
-		return function(self) {
-			return body.apply(void 0, __spreadArray$2([self], args, false));
-		};
-	};
-};
 /** @internal */
 var isLeft$1 = function(ma) {
 	return ma._tag === "Left";
@@ -80,18 +57,6 @@ function asUnit$1(F) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Chain.js
-/** @internal */
-function tap$1(M) {
-	return function(first, f) {
-		return M.chain(first, function(a) {
-			return M.map(f(a), function() {
-				return a;
-			});
-		});
-	};
-}
-//#endregion
 //#region ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Either.js
 /**
 * Constructs a new `Either` holding a `Left` value. This usually represents a failure, due to the right-bias of this
@@ -109,18 +74,8 @@ var left = left$1;
 * @since 2.0.0
 */
 var right = right$1;
-/**
-* @category sequencing
-* @since 2.14.0
-*/
-var flatMap = /* @__PURE__ */ dual(2, function(ma, f) {
-	return isLeft(ma) ? ma : f(ma.right);
-});
 var _map = function(fa, f) {
 	return pipe(fa, map(f));
-};
-var _ap = function(fab, fa) {
-	return pipe(fab, ap(fa));
 };
 /**
 * @category type lambdas
@@ -136,42 +91,10 @@ var map = function(f) {
 		return isLeft(fa) ? fa : right(f(fa.right));
 	};
 };
-/**
-* @category instances
-* @since 2.7.0
-*/
-var Functor = {
+asUnit$1({
 	URI,
 	map: _map
-};
-dual(2, as$1(Functor));
-asUnit$1(Functor);
-/**
-* Less strict version of [`ap`](#ap).
-*
-* The `W` suffix (short for **W**idening) means that the error types will be merged.
-*
-* @since 2.8.0
-*/
-var apW = function(fa) {
-	return function(fab) {
-		return isLeft(fab) ? fab : isLeft(fa) ? fa : right(fab.right(fa.right));
-	};
-};
-/**
-* @since 2.0.0
-*/
-var ap = apW;
-/**
-* @category instances
-* @since 2.10.0
-*/
-var Chain = {
-	URI,
-	map: _map,
-	ap: _ap,
-	chain: flatMap
-};
+});
 /**
 * @category instances
 * @since 2.10.0
@@ -187,7 +110,6 @@ var FromEither = {
 * @since 2.0.0
 */
 var isLeft = isLeft$1;
-tap$1(Chain);
 FromEither.fromEither;
 //#endregion
 //#region ../node_modules/.pnpm/io-ts@2.2.22_fp-ts@2.16.11/node_modules/io-ts/es6/index.js

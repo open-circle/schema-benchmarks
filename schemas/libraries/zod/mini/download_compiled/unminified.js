@@ -1,4 +1,5 @@
-Object.freeze({ status: "aborted" });
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/core.js
+var _a;
 function $constructor(name, initializer, params) {
 	function init(inst, def) {
 		if (!inst._zod) Object.defineProperty(inst, "_zod", {
@@ -43,13 +44,14 @@ var $ZodAsyncError = class extends Error {
 		super(`Encountered Promise during synchronous parse. Use .parseAsync() instead.`);
 	}
 };
-const globalConfig = {};
+(_a = globalThis).__zod_globalConfig ?? (_a.__zod_globalConfig = {});
+const globalConfig = globalThis.__zod_globalConfig;
 function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -76,7 +78,7 @@ function cleanRegex(source) {
 	const end = source.endsWith("$") ? source.length - 1 : source.length;
 	return source.slice(start, end);
 }
-const EVALUATING = Symbol("evaluating");
+const EVALUATING = /* @__PURE__ */ Symbol("evaluating");
 function defineLazy(object, key, getter) {
 	let value = void 0;
 	Object.defineProperty(object, key, {
@@ -98,16 +100,7 @@ const captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace
 function isObject(data) {
 	return typeof data === "object" && data !== null && !Array.isArray(data);
 }
-cached(() => {
-	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
-	try {
-		new Function("");
-		return true;
-	} catch (_) {
-		return false;
-	}
-});
-const propertyKeyTypes = new Set([
+const propertyKeyTypes = /* @__PURE__ */ new Set([
 	"string",
 	"number",
 	"symbol"
@@ -146,6 +139,11 @@ function aborted(x, startIndex = 0) {
 	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue !== true) return true;
 	return false;
 }
+function explicitlyAborted(x, startIndex = 0) {
+	if (x.aborted === true) return true;
+	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue === false) return true;
+	return false;
+}
 function prefixIssues(path, issues) {
 	return issues.map((iss) => {
 		var _a;
@@ -158,15 +156,12 @@ function unwrapMessage(message) {
 	return typeof message === "string" ? message : message?.message;
 }
 function finalizeIssue(iss, ctx, config) {
-	const full = {
-		...iss,
-		path: iss.path ?? []
-	};
-	if (!iss.message) full.message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
-	delete full.inst;
-	delete full.continue;
-	if (!ctx?.reportInput) delete full.input;
-	return full;
+	const message = iss.message ? iss.message : unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
+	const { inst: _inst, continue: _continue, input: _input, ...rest } = iss;
+	rest.path ?? (rest.path = []);
+	rest.message = message;
+	if (ctx?.reportInput) rest.input = _input;
+	return rest;
 }
 function getLengthableOrigin(input) {
 	if (Array.isArray(input)) return "array";
@@ -174,7 +169,7 @@ function getLengthableOrigin(input) {
 	return "unknown";
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/errors.js
 const initializer = (inst, def) => {
 	inst.name = "$ZodError";
 	Object.defineProperty(inst, "_zod", {
@@ -194,9 +189,12 @@ const initializer = (inst, def) => {
 const $ZodError = $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, { Parent: Error });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => (schema, value, _ctx, _params) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: false
+	} : { async: false };
 	const result = schema._zod.run({
 		value,
 		issues: []
@@ -211,7 +209,10 @@ const _parse = (_Err) => (schema, value, _ctx, _params) => {
 };
 const parse = /* @__PURE__ */ _parse($ZodRealError);
 const _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: true
+	} : { async: true };
 	let result = schema._zod.run({
 		value,
 		issues: []
@@ -245,7 +246,10 @@ const _safeParse = (_Err) => (schema, value, _ctx) => {
 };
 const safeParse = /* @__PURE__ */ _safeParse($ZodRealError);
 const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	const ctx = _ctx ? {
+		..._ctx,
+		async: true
+	} : { async: true };
 	let result = schema._zod.run({
 		value,
 		issues: []
@@ -260,13 +264,16 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	};
 };
 const safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
+//#endregion
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/regexes.js
+const httpProtocol = /^https?$/;
 const string$1 = (params) => {
 	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
 	return new RegExp(`^${regex}$`);
 };
 const number$1 = /^-?\d+(?:\.\d+)?$/;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -401,14 +408,14 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
-	minor: 3,
-	patch: 6
+	minor: 4,
+	patch: 1
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/schemas.js
 const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -429,6 +436,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 			let asyncResult;
 			for (const ch of checks) {
 				if (ch._zod.def.when) {
+					if (explicitlyAborted(payload)) continue;
 					if (!ch._zod.def.when(payload)) continue;
 				} else if (isAborted) continue;
 				const currLen = payload.issues.length;
@@ -523,6 +531,19 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 	inst._zod.check = (payload) => {
 		try {
 			const trimmed = payload.value.trim();
+			if (!def.normalize && def.protocol?.source === httpProtocol.source) {
+				if (!/^https?:\/\//i.test(trimmed)) {
+					payload.issues.push({
+						code: "invalid_format",
+						format: "url",
+						note: "Invalid URL format",
+						input: payload.value,
+						inst,
+						continue: !def.abort
+					});
+					return;
+				}
+			}
 			const url = new URL(trimmed);
 			if (def.hostname) {
 				def.hostname.lastIndex = 0;
@@ -633,13 +654,23 @@ const $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
 		return payload;
 	};
 });
-function handlePropertyResult(result, final, key, input, isOptionalOut) {
+function handlePropertyResult(result, final, key, input, isOptionalIn, isOptionalOut) {
+	const isPresent = key in input;
 	if (result.issues.length) {
-		if (isOptionalOut && !(key in input)) return;
+		if (isOptionalIn && isOptionalOut && !isPresent) return;
 		final.issues.push(...prefixIssues(key, result.issues));
 	}
+	if (!isPresent && !isOptionalIn) {
+		if (!result.issues.length) final.issues.push({
+			code: "invalid_type",
+			expected: "nonoptional",
+			input: void 0,
+			path: [key]
+		});
+		return;
+	}
 	if (result.value === void 0) {
-		if (key in input) final.value[key] = void 0;
+		if (isPresent) final.value[key] = void 0;
 	} else final.value[key] = result.value;
 }
 function normalizeDef(def) {
@@ -659,8 +690,10 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 	const keySet = def.keySet;
 	const _catchall = def.catchall._zod;
 	const t = _catchall.def.type;
+	const isOptionalIn = _catchall.optin === "optional";
 	const isOptionalOut = _catchall.optout === "optional";
 	for (const key in input) {
+		if (key === "__proto__") continue;
 		if (keySet.has(key)) continue;
 		if (t === "never") {
 			unrecognized.push(key);
@@ -670,8 +703,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 			value: input[key],
 			issues: []
 		}, ctx);
-		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
-		else handlePropertyResult(r, payload, key, input, isOptionalOut);
+		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut)));
+		else handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
 	}
 	if (unrecognized.length) payload.issues.push({
 		code: "unrecognized_keys",
@@ -707,13 +740,13 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		}
 		return propValues;
 	});
-	const isObject$2 = isObject;
+	const isObject$1 = isObject;
 	const catchall = def.catchall;
 	let value;
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$2(input)) {
+		if (!isObject$1(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -727,13 +760,14 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		const shape = value.shape;
 		for (const key of value.keys) {
 			const el = shape[key];
+			const isOptionalIn = el._zod.optin === "optional";
 			const isOptionalOut = el._zod.optout === "optional";
 			const r = el._zod.run({
 				value: input[key],
 				issues: []
 			}, ctx);
-			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
-			else handlePropertyResult(r, payload, key, input, isOptionalOut);
+			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut)));
+			else handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
 		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
@@ -774,7 +808,7 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/core/api.js
 /* @__NO_SIDE_EFFECTS__ */
 function _string(Class, params) {
 	return new Class({
@@ -842,7 +876,7 @@ function _minLength(minimum, params) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/mini/schemas.js
+//#region ../node_modules/.pnpm/zod@4.4.1/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /* @__PURE__ */ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
