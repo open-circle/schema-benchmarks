@@ -1,49 +1,48 @@
+import { capitalize, Compute } from "@schema-benchmarks/utils";
 import { rootRouteId, useRouter } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import type { Context, FC, ReactNode } from "react";
 
 import { setNpmSiteFn, setStyleFn, setThemeFn } from "#/shared/lib/prefs";
-import type { NpmSite, Style, Theme } from "#/shared/lib/prefs/constants";
 
-import { NpmSiteContext, StyleContext, ThemeContext } from "./context";
+import { NpmSiteContext, PrefContextValue, StyleContext, ThemeContext } from "./context";
 
-export function ThemeProvider({ children, theme }: { children: ReactNode; theme: Theme }) {
-  const router = useRouter();
+type PrefProviderProps<Name extends string, Value> = Compute<
+  Record<Name, Value> & { children: ReactNode }
+>;
 
-  function setTheme(val: Theme) {
-    setThemeFn({ data: val }).then(() =>
-      router.invalidate({
-        filter: (d) => d.id === rootRouteId,
-      }),
+function createPrefProvider<Name extends string, Value>(
+  name: Name,
+  Ctx: Context<PrefContextValue<Name, Value>>,
+  serverFn: (opts: { data: Value }) => Promise<unknown>,
+) {
+  const PrefProvider: FC<PrefProviderProps<Name, Value>> = ({ children, [name]: value }) => {
+    const router = useRouter();
+    function setPref(data: Value) {
+      void serverFn({ data }).then(() =>
+        router.invalidate({
+          filter: (d) => d.id === rootRouteId,
+        }),
+      );
+    }
+    return (
+      <Ctx
+        value={
+          {
+            [name]: value,
+            [`set${capitalize(name)}`]: setPref,
+          } as never
+        }
+      >
+        {children}
+      </Ctx>
     );
-  }
-
-  return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
+  };
+  PrefProvider.displayName = `${capitalize(name)}Provider`;
+  return PrefProvider;
 }
 
-export function StyleProvider({ children, style }: { children: ReactNode; style: Style }) {
-  const router = useRouter();
+export const ThemeProvider = createPrefProvider("theme", ThemeContext, setThemeFn);
 
-  function setStyle(val: Style) {
-    setStyleFn({ data: val }).then(() =>
-      router.invalidate({
-        filter: (d) => d.id === rootRouteId,
-      }),
-    );
-  }
+export const StyleProvider = createPrefProvider("style", StyleContext, setStyleFn);
 
-  return <StyleContext value={{ style, setStyle }}>{children}</StyleContext>;
-}
-
-export function NpmSiteProvider({ children, npmSite }: { children: ReactNode; npmSite: NpmSite }) {
-  const router = useRouter();
-
-  function setNpmSite(val: NpmSite) {
-    setNpmSiteFn({ data: val }).then(() =>
-      router.invalidate({
-        filter: (d) => d.id === rootRouteId,
-      }),
-    );
-  }
-
-  return <NpmSiteContext value={{ npmSite, setNpmSite }}>{children}</NpmSiteContext>;
-}
+export const NpmSiteProvider = createPrefProvider("npmSite", NpmSiteContext, setNpmSiteFn);

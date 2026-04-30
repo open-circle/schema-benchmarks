@@ -384,3 +384,6 @@ export function makeDisposable<T extends { unsubscribe: () => void }>(value: T):
     [Symbol.dispose]: value.unsubscribe,
   };
 }
+
+export const capitalize = <S extends string>(str: S): Capitalize<S> =>
+  (str.charAt(0).toUpperCase() + str.slice(1)) as never;

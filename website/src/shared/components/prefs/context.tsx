@@ -1,40 +1,25 @@
+import { capitalize, Compute } from "@schema-benchmarks/utils";
 import { createOptionalContext } from "required-react-context";
+import * as v from "valibot";
 
-import {
-  type NpmSite,
-  npmSiteSchema,
-  type Style,
-  styleSchema,
-  type Theme,
-  themeSchema,
-} from "#/shared/lib/prefs/constants";
+import { npmSiteSchema, styleSchema, themeSchema } from "#/shared/lib/prefs/constants";
 
-export const { ThemeContext, useTheme } = createOptionalContext<{
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-}>({
-  theme: themeSchema.fallback,
-  setTheme: () => {},
-}).with({
-  name: "theme",
-});
+export type PrefContextValue<Name extends string, Value> = Compute<
+  Record<Name, Value> & Record<`set${Capitalize<Name>}`, (value: Value) => void>
+>;
 
-export const { StyleContext, useStyle } = createOptionalContext<{
-  style: Style;
-  setStyle: (style: Style) => void;
-}>({
-  style: styleSchema.fallback,
-  setStyle: () => {},
-}).with({
-  name: "style",
-});
+function createPrefContext<Name extends string, Value>(
+  name: Name,
+  schema: v.SchemaWithFallback<v.GenericSchema<Value>, Value>,
+) {
+  return createOptionalContext<PrefContextValue<Name, Value>>({
+    [name]: schema.fallback,
+    [`set${capitalize(name)}`]: () => {},
+  } as never).with({ name });
+}
 
-export const { NpmSiteContext, useNpmSite } = createOptionalContext<{
-  npmSite: NpmSite;
-  setNpmSite: (npmSite: NpmSite) => void;
-}>({
-  npmSite: npmSiteSchema.fallback,
-  setNpmSite: () => {},
-}).with({
-  name: "npmSite",
-});
+export const { ThemeContext, useTheme } = createPrefContext("theme", themeSchema);
+
+export const { StyleContext, useStyle } = createPrefContext("style", styleSchema);
+
+export const { NpmSiteContext, useNpmSite } = createPrefContext("npmSite", npmSiteSchema);
