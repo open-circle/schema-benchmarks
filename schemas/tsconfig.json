@@ -9,6 +9,8 @@
     "paths": {
       "#src": ["./src/index.ts"]
     },
-    "types": ["node", "tsdown/client"]
+    "types": ["node", "tsdown/client"],
+    "declaration": true,
+    "declarationMap": true
   }
 }
