@@ -16,11 +16,12 @@ import { MdSymbol } from "#/shared/components/symbol";
 import { Bar } from "#/shared/components/table/bar";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
-import { SortDirection } from "#/shared/lib/sort";
+import type { SortDirection } from "#/shared/lib/sort";
 
-import { errorTypeProps, optimizeTypeProps, SortableKey } from "../../-constants";
+import type { SortableKey } from "../../-constants";
+import { errorTypeProps, optimizeTypeProps } from "../../-constants";
 import { DownloadCount } from "../../../-components/count";
-import { BenchTo } from "../results";
+import type { BenchTo } from "../results";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {

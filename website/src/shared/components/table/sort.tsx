@@ -1,11 +1,13 @@
-import { DistributiveOmit } from "@schema-benchmarks/utils";
-import { Link, RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
-import { ComponentPropsWithRef, MouseEventHandler } from "react";
+import type { DistributiveOmit } from "@schema-benchmarks/utils";
+import type { RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
+import type { ComponentPropsWithRef, MouseEventHandler } from "react";
 import bem from "react-bem-helper";
-import { HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
-import { SortDirection, SortSearch, toggleSort } from "#/shared/lib/sort";
+import type { SortDirection, SortSearch } from "#/shared/lib/sort";
+import { toggleSort } from "#/shared/lib/sort";
 
 import { MdSymbol } from "../symbol";
 import { sortDirectionIcons } from "./constants";
@@ -41,7 +43,7 @@ export function SortableHeaderButton({
       <button
         {...cls("label")}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >
@@ -79,7 +81,7 @@ export function SortableHeaderLink<LinkOptions>({
         {...(linkOptions as any)}
         {...cls({ element: "label", extra: linkOptions.className })}
         onClick={(event) => {
-          if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
         }}
       >

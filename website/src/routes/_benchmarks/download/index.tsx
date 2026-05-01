@@ -1,4 +1,4 @@
-import { DownloadResult } from "@schema-benchmarks/bench";
+import type { DownloadResult } from "@schema-benchmarks/bench";
 import { collator, toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";

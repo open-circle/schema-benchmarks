@@ -43,12 +43,9 @@ const listCls = bem("avatar-list");
 export function AvatarList({ items, size = "md", ...props }: AvatarListProps) {
   return (
     <ul {...listCls({ modifiers: size })} {...props}>
-      {items
-        .slice()
-        .reverse()
-        .map((item) => (
-          <Avatar key={item.label} {...item} size={size} {...{ "~as": "li" }} />
-        ))}
+      {items.toReversed().map((item) => (
+        <Avatar key={item.label} {...item} size={size} {...{ "~as": "li" }} />
+      ))}
     </ul>
   );
 }

@@ -36,5 +36,8 @@
   },
   "[css]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
+  },
+  "oxc.fmt.configPath": "./vite.config.ts",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file"
 }

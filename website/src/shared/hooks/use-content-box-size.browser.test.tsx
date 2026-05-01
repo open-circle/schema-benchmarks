@@ -1,7 +1,7 @@
 import { delay } from "msw";
 import type { Ref } from "react";
-import { describe, expect } from "vitest";
-import { page } from "vitest/browser";
+import { describe, expect } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 
 import { useElementSize } from "#/shared/hooks/use-content-box-size";
 import { it } from "#test/browser/fixtures";

@@ -1,7 +1,7 @@
 import { partition } from "@schema-benchmarks/utils";
 import esquery from "esquery";
 import type { Literal } from "estree";
-import type { Plugin } from "vite";
+import type { Plugin } from "vite-plus";
 
 const component = "MdSymbol";
 
@@ -58,7 +58,9 @@ export default function materialSymbols({ knownSymbols = [] }: Options = {}): Ar
       apply: "build",
       generateBundle(_opts, bundle) {
         if (!usedSymbols.size) return;
-        const finalUrl = `${symbolsUrl}&icon_names=${[...usedSymbols.values()].sort().join(",")}`;
+        // mutation is fine here, we literally just made the array
+        // oxlint-disable-next-line unicorn/no-array-sort
+        const finalUrl = `${symbolsUrl}&icon_names=${Array.from(usedSymbols.values()).sort().join(",")}`;
         for (const assetOrChunk of Object.values(bundle)) {
           if (assetOrChunk.type === "asset" || !assetOrChunk.code.includes(symbolsUrl)) continue;
           assetOrChunk.code = assetOrChunk.code.replaceAll(symbolsUrl, finalUrl);

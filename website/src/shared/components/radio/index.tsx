@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
-import { HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
 const cls = bem("radio");
@@ -15,7 +15,7 @@ export function Radio({ className, haptic = true, ...props }: RadioProps) {
     <label
       {...cls({ extra: className })}
       onClick={() => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
       }}
     >
       <input type="radio" {...props} />

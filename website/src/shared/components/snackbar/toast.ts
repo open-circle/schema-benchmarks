@@ -1,15 +1,16 @@
 import { safeAssign } from "@schema-benchmarks/utils";
 import { toast } from "react-hot-toast";
-import { defaultPatterns, HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
+import { defaultPatterns } from "web-haptics";
 
 import { haptics } from "#/shared/lib/haptics";
 
-function withHaptics<Args extends any[], Return>(
+function withHaptics<Args extends Array<any>, Return>(
   fn: (...args: Args) => Return,
   pattern: HapticPattern,
 ) {
   return (...args: Args) => {
-    haptics?.trigger(pattern);
+    void haptics?.trigger(pattern);
     return fn(...args);
   };
 }
@@ -23,13 +24,13 @@ export const toastWithHaptics = safeAssign<typeof toast>(
     loading: withHaptics(toast.loading, defaultPatterns.nudge.pattern),
     custom: withHaptics(toast.custom, defaultPatterns.nudge.pattern),
     promise: (promise, msgs, opts) => {
-      haptics?.trigger(defaultPatterns.nudge.pattern);
+      void haptics?.trigger(defaultPatterns.nudge.pattern);
       return toast.promise(
         () => {
           const p = typeof promise === "function" ? promise() : promise;
           p.then(
-            () => haptics?.trigger(defaultPatterns.success.pattern),
-            () => haptics?.trigger(defaultPatterns.error.pattern),
+            () => void haptics?.trigger(defaultPatterns.success.pattern),
+            () => void haptics?.trigger(defaultPatterns.error.pattern),
           );
           return p;
         },

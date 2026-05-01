@@ -2,7 +2,7 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
-import { HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
@@ -49,7 +49,7 @@ export function Chip({ children, className, activated, haptic, onClick, ...props
       aria-pressed={activated}
       {...cls({ extra: className })}
       onClick={(event) => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
         onClick?.(event);
       }}
     >
@@ -70,7 +70,7 @@ function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkCh
       {...props}
       {...cls({ extra: className })}
       onClick={(event) => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
         onClick?.(event);
       }}
     >

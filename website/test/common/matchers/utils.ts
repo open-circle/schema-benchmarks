@@ -3,7 +3,7 @@ import type { Plugin } from "@vitest/pretty-format";
 import ansiRegex from "ansi-regex";
 import style from "ansi-styles";
 import redent from "redent";
-import type { Locator } from "vitest/browser";
+import type { Locator } from "vite-plus/test/browser";
 
 export const alignedAnsiStyleSerializer: Plugin = {
   serialize(val: string | Error): string {

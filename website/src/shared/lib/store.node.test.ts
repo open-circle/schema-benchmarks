@@ -1,5 +1,5 @@
 import { ReadonlyStore, Store } from "@tanstack/react-store";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vite-plus/test";
 
 import { createStore } from "./store";
 

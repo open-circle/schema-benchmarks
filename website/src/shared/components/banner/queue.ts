@@ -28,7 +28,7 @@ export const bannerStore = createStore([] as Array<BannerWithId>, ({ updateState
     updateState((banners) => {
       banners.push({ ...banner, id });
       // if there was no banner before, trigger a haptic
-      if (banners.length === 1) haptics?.trigger(getBannerHaptic(banner));
+      if (banners.length === 1) void haptics?.trigger(getBannerHaptic(banner));
     });
     return id;
   },
@@ -46,7 +46,8 @@ export const bannerStore = createStore([] as Array<BannerWithId>, ({ updateState
           const index = banners.findIndex((banner) => banner.id === id);
           if (index === -1) return;
           banners.splice(index, 1);
-          if (index === 0 && banners.length !== 0) haptics?.trigger(getBannerHaptic(banners[0]!));
+          if (index === 0 && banners.length !== 0)
+            void haptics?.trigger(getBannerHaptic(banners[0]!));
         });
       }, removeDelay);
     } else {
@@ -57,7 +58,7 @@ export const bannerStore = createStore([] as Array<BannerWithId>, ({ updateState
       setTimeout(() => {
         updateState((banners) => {
           banners.shift();
-          if (banners.length !== 0) haptics?.trigger(getBannerHaptic(banners[0]!));
+          if (banners.length !== 0) void haptics?.trigger(getBannerHaptic(banners[0]!));
         });
       }, removeDelay);
     }

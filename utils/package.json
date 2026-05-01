@@ -11,18 +11,18 @@
     "./valibot": "./src/valibot.ts"
   },
   "scripts": {
-    "test": "vitest",
+    "test": "vp test",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc"
   },
   "devDependencies": {
     "@types/react": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "@vitest/browser-playwright": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
     "typescript": "catalog:",
     "valibot": "catalog:",
+    "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {

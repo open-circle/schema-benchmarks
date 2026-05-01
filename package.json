@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "format": "oxfmt",
-    "lint": "oxlint",
-    "check": "oxfmt --check && oxlint",
+    "format": "vp fmt",
+    "lint": "vp lint",
+    "check": "vp fmt --check && vp lint",
     "test": "pnpm run -r test",
     "typecheck": "pnpm run -r typecheck",
     "typecheck:tsc": "pnpm run -r typecheck:tsc",
@@ -22,14 +22,14 @@
     "knip": "knip"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "catalog:",
+    "@tanstack/eslint-plugin-router": "catalog:",
     "@types/node": "catalog:",
     "knip": "^6.9.0",
     "lefthook": "^2.1.6",
-    "oxfmt": "^0.47.0",
-    "oxlint": "^1.62.0",
-    "oxlint-tsgolint": "^0.22.1",
     "playwright": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   },
   "packageManager": "pnpm@11.0.3"
 }

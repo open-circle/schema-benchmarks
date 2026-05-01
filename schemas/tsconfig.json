@@ -9,6 +9,7 @@
     "paths": {
       "#src": ["./src/index.ts"]
     },
+    // remove tsdown dependency once https://github.com/voidzero-dev/vite-plus/issues/1500 is resolved
     "types": ["node", "tsdown/client"],
     "declaration": true,
     "declarationMap": true

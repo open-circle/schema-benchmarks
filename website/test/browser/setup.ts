@@ -1,7 +1,7 @@
 import "vitest-browser-react";
 import "#/shared/styles/index.css";
+import { page } from "vite-plus/test/browser";
 import { renderHook } from "vitest-browser-react";
-import { page } from "vitest/browser";
 
 import { renderWithProviders } from "./render";
 
@@ -10,7 +10,7 @@ page.extend({
   renderHook,
 });
 
-declare module "vitest/browser" {
+declare module "vite-plus/test/browser" {
   interface BrowserPage {
     renderWithProviders: typeof renderWithProviders;
     renderHook: typeof renderHook;
