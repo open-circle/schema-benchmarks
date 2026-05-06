@@ -1,5 +1,11 @@
-//#region ../node_modules/.pnpm/valibot@1.3.1_typescript@6.0.3/node_modules/valibot/dist/index.mjs
+//#region ../node_modules/.pnpm/valibot@1.4.0_typescript@6.0.3/node_modules/valibot/dist/index.mjs
 let store$4;
+const DEFAULT_CONFIG = {
+	lang: void 0,
+	message: void 0,
+	abortEarly: void 0,
+	abortPipeEarly: void 0
+};
 /**
 * Returns the global configuration.
 *
@@ -9,6 +15,7 @@ let store$4;
 */
 /* @__NO_SIDE_EFFECTS__ */
 function getGlobalConfig(config$1) {
+	if (!config$1 && true) return DEFAULT_CONFIG;
 	return {
 		lang: config$1?.lang ?? store$4?.lang,
 		message: config$1?.message,
@@ -106,6 +113,7 @@ function _addIssue(context, label, dataset, config$1, other) {
 	if (dataset.issues) dataset.issues.push(issue);
 	else dataset.issues = [issue];
 }
+const _standardCache = /* @__PURE__ */ new WeakMap();
 /**
 * Returns the Standard Schema properties.
 *
@@ -115,13 +123,18 @@ function _addIssue(context, label, dataset, config$1, other) {
 */
 /* @__NO_SIDE_EFFECTS__ */
 function _getStandardProps(context) {
-	return {
-		version: 1,
-		vendor: "valibot",
-		validate(value$1) {
-			return context["~run"]({ value: value$1 }, /* @__PURE__ */ getGlobalConfig());
-		}
-	};
+	let cached = _standardCache.get(context);
+	if (!cached) {
+		cached = {
+			version: 1,
+			vendor: "valibot",
+			validate(value$1) {
+				return context["~run"]({ value: value$1 }, /* @__PURE__ */ getGlobalConfig());
+			}
+		};
+		_standardCache.set(context, cached);
+	}
+	return cached;
 }
 /**
 * Joins multiple `expects` values with the given separator.
