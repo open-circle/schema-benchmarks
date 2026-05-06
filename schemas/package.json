@@ -24,7 +24,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.0",
-    "ata-validator": "^0.12.1",
+    "ata-validator": "^0.12.6",
     "decoders": "^2.9.3",
     "dedent": "catalog:",
     "effect": "^3.21.2",
@@ -32,15 +32,15 @@
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
-    "joi": "^18.1.2",
+    "joi": "^18.2.1",
     "runtypes": "^7.0.4",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-alpha.4",
-    "typebox": "^1.1.34",
-    "typia": "^12.0.2",
+    "typebox": "^1.1.37",
+    "typia": "^12.1.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "zod": "^4.4.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "catalog:",
