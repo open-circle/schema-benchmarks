@@ -8,7 +8,7 @@ import * as Value from "typebox/value";
 import type { StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { getTypeboxSchema } from ".";
+import { getTypeboxSchema, getTypeboxScriptSchema } from ".";
 
 const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig => ({
   create() {
@@ -24,6 +24,9 @@ const compiledSchema = Schema.Compile(schema);
 const DateFromString = Type.Codec(Type.String({ format: "date-time" }))
   .Decode((a) => new Date(a))
   .Encode((a) => a.toISOString());
+
+const scriptSchema = getTypeboxScriptSchema();
+const compiledScriptSchema = Schema.Compile(scriptSchema);
 
 export default defineBenchmarks({
   library: {
@@ -52,6 +55,20 @@ export default defineBenchmarks({
       },
       snippet: ts`Schema.Compile(Type.Object(...))`,
       note: "schema compile",
+    },
+    {
+      run() {
+        return getTypeboxScriptSchema();
+      },
+      snippet: ts`Type.Script(...)`,
+      note: "script",
+    },
+    {
+      run() {
+        return Schema.Compile(getTypeboxScriptSchema());
+      },
+      snippet: ts`Schema.Compile(Type.Script(...))`,
+      note: "script compile",
     },
   ],
   validation: [
@@ -87,6 +104,16 @@ export default defineBenchmarks({
         compiledSchema.Check(data);
       `,
       note: "schema compile",
+    },
+    {
+      run(data) {
+        return compiledScriptSchema.Check(data);
+      },
+      snippet: ts`
+        // const compiledScriptSchema = Schema.Compile(scriptSchema);
+        compiledScriptSchema.Check(data);
+      `,
+      note: "script compile",
     },
   ],
   parsing: {
@@ -150,6 +177,23 @@ export default defineBenchmarks({
           compiledSchema.Parse(data);
         `,
         note: "schema compile",
+        throws: true,
+      },
+      {
+        run(data) {
+          try {
+            compiledScriptSchema.Parse(data);
+            return true;
+          } catch {
+            return false;
+          }
+        },
+        validateResult: (result) => result,
+        snippet: ts`
+          // const compiledScriptSchema = Schema.Compile(scriptSchema);
+          compiledScriptSchema.Parse(data);
+        `,
+        note: "script compile",
         throws: true,
       },
     ],
