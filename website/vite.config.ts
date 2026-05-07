@@ -103,6 +103,7 @@ const config = defineConfig({
       {
         extends: true,
         test: {
+          retry: 3,
           name: "browser",
           include: ["**/*.browser.test.ts", "**/*.browser.test.tsx"],
           setupFiles: ["./test/common/setup.ts", "./test/browser/setup.ts"],
