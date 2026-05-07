@@ -38,7 +38,7 @@ export function mockServerFn<Input, Output>(
     (input: { data: Input }): Promise<Output>;
     url: string;
   },
-  handler: (input: NoInfer<Input>) => NoInfer<Output>,
+  handler: (input: NoInfer<Input>) => NoInfer<Output> | Promise<NoInfer<Output>>,
 ) {
   return http.all(new URL(serverFn.url, window.location.href).href, async ({ request }) => {
     if (request.method !== "POST" && request.method !== "GET") {
@@ -53,7 +53,7 @@ export function mockServerFn<Input, Output>(
           ? await request.json()
           : JSON.parse(new URL(request.url).searchParams.get("payload") ?? "{}");
       const { data } = v.parse(serverFnInput, fromJSON(payload));
-      const result = handler(data);
+      const result = await handler(data);
       return HttpResponse.json(
         await Promise.resolve(
           toCrossJSONAsync({ result, error: undefined, context: {} }, { refs: new Map() }),
