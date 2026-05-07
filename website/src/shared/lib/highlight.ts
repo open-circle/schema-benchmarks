@@ -1,6 +1,9 @@
-import { createServerOnlyFn } from "@tanstack/react-start";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { queryOptions } from "@tanstack/react-query";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { parseAnsiSequences } from "ansi-sequence-parser";
-import Prism from "prismjs";
+import _Prism from "prismjs";
+import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
 
 const highlightInput = v.object({
@@ -10,7 +13,11 @@ const highlightInput = v.object({
 });
 
 export const highlightCode = createServerOnlyFn(
-  ({ code, language = "typescript", lineNumbers }: v.InferInput<typeof highlightInput>) => {
+  (
+    Prism: typeof _Prism,
+    { code, language = "typescript", lineNumbers }: v.InferInput<typeof highlightInput>,
+  ) => {
+    if (!Prism.languages[language]) loadLanguages(language);
     let lineNumbersWrapper = "";
     Prism.hooks.add("before-tokenize", (env) => {
       const match = env.code.match(NEW_LINE_EXP);
@@ -29,6 +36,24 @@ export const highlightCode = createServerOnlyFn(
   },
 );
 
+export const getHighlightedCodeFn = createServerFn({ method: "POST" })
+  .inputValidator(highlightInput)
+  .handler(({ data }) => highlightCode(_Prism, data));
+
+export const getHighlightedCode = (
+  { code, language, lineNumbers }: v.InferInput<typeof highlightInput>,
+  signalOpt?: AbortSignal,
+) =>
+  queryOptions({
+    queryKey: ["highlight-code", language, code, lineNumbers],
+    structuralSharing: false,
+    queryFn: ({ signal }) =>
+      getHighlightedCodeFn({
+        data: { code, language, lineNumbers },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });
+
 const NEW_LINE_EXP = /\n(?!$)/g;
 
 function escapeForHtml(value: string) {
@@ -36,8 +61,11 @@ function escapeForHtml(value: string) {
 }
 
 export const highlightAnsi = createServerOnlyFn(
-  ({ input, lineNumbers }: { input: string; lineNumbers?: boolean }): string => {
-    const tokens = parseAnsiSequences(input);
+  (
+    parseSequences: typeof parseAnsiSequences,
+    { input, lineNumbers }: { input: string; lineNumbers?: boolean },
+  ): string => {
+    const tokens = parseSequences(input);
     let lineNumbersWrapper = "";
     if (lineNumbers) {
       const match = input.match(NEW_LINE_EXP);
@@ -82,3 +110,25 @@ export const highlightAnsi = createServerOnlyFn(
     );
   },
 );
+
+const highlightAnsiInput = v.object({
+  input: v.string(),
+  lineNumbers: v.optional(v.boolean()),
+});
+
+export const getHighlightedAnsiFn = createServerFn({ method: "POST" })
+  .inputValidator(highlightAnsiInput)
+  .handler(({ data }) => highlightAnsi(parseAnsiSequences, data));
+
+export const getHighlightedAnsi = (
+  { input, lineNumbers }: v.InferInput<typeof highlightAnsiInput>,
+  signalOpt?: AbortSignal,
+) =>
+  queryOptions({
+    queryKey: ["highlight-ansi", input, lineNumbers],
+    queryFn: ({ signal }) =>
+      getHighlightedAnsiFn({
+        data: { input, lineNumbers },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });

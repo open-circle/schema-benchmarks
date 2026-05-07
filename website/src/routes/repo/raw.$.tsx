@@ -2,8 +2,9 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
 
-import { CodeBlock, getCodeBlock } from "#/shared/components/code";
+import { CodeBlock } from "#/shared/components/code";
 import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 
 import { getRaw } from "./-query";
 
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/repo/raw/$")({
     try {
       const code = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
       await queryClient.prefetchQuery(
-        getCodeBlock({ children: code, language: getLanguage(fileName) }, abortController.signal),
+        getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
       );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();

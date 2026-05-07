@@ -1,43 +1,17 @@
-import { anyAbortSignal } from "@schema-benchmarks/utils";
-import { queryOptions } from "@tanstack/react-query";
-import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
-import { renderServerComponent } from "@tanstack/react-start/rsc";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import * as v from "valibot";
 
-import { highlightAnsi } from "#/shared/lib/highlight";
+import { getHighlightedAnsi } from "#/shared/lib/highlight";
 
 const ansiBlockProps = v.object({ children: v.string(), lineNumbers: v.optional(v.boolean()) });
 
 type AnsiBlockProps = v.InferOutput<typeof ansiBlockProps>;
 
-export const AnsiBlock = createServerOnlyFn(async function AnsiBlock({
-  children,
-  lineNumbers = false,
-}: AnsiBlockProps) {
+export function AnsiBlock({ children, lineNumbers = false }: AnsiBlockProps) {
+  const { data } = useSuspenseQuery(getHighlightedAnsi({ input: children, lineNumbers }));
   return (
     <pre dir="ltr" className={`language-ansi ${lineNumbers ? "line-numbers" : ""}`}>
-      <code
-        className="language-ansi"
-        dangerouslySetInnerHTML={{ __html: highlightAnsi({ input: children, lineNumbers }) }}
-      />
+      <code className="language-ansi" dangerouslySetInnerHTML={{ __html: data }} />
     </pre>
   );
-});
-
-export const getAnsiBlockFn = createServerFn({ method: "POST" })
-  .inputValidator(ansiBlockProps)
-  .handler(({ data: props }) => renderServerComponent(<AnsiBlock {...props} />));
-
-export const getAnsiBlock = (
-  { children, lineNumbers = false }: AnsiBlockProps,
-  signalOpt?: AbortSignal,
-) =>
-  queryOptions({
-    queryKey: ["ansi-rsc", children, lineNumbers],
-    structuralSharing: false,
-    queryFn: ({ signal }) =>
-      getAnsiBlockFn({
-        data: { children, lineNumbers },
-        signal: anyAbortSignal(signal, signalOpt),
-      }),
-  });
+}
