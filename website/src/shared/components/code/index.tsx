@@ -1,13 +1,9 @@
-import { anyAbortSignal, Override } from "@schema-benchmarks/utils";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
-import { renderServerComponent } from "@tanstack/react-start/rsc";
-import Prism from "prismjs";
-import loadLanguages from "prismjs/components/index";
+import { Override } from "@schema-benchmarks/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import * as v from "valibot";
 
-import { highlightCode } from "#/shared/lib/highlight";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 
 import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";
@@ -22,41 +18,12 @@ const codeProps = v.object({
 });
 type InlineCodeProps = v.InferInput<typeof codeProps>;
 
-export const InlineCode = createServerOnlyFn(async function InlineCode({
-  children,
-  language = defaultLanguage,
-  lineNumbers,
-}: InlineCodeProps) {
+export function InlineCode({ children, language = defaultLanguage, lineNumbers }: InlineCodeProps) {
+  const { data } = useSuspenseQuery(getHighlightedCode({ code: children, language, lineNumbers }));
   return (
-    <code
-      dir="ltr"
-      className={`language-${language}`}
-      dangerouslySetInnerHTML={{ __html: highlightCode({ code: children, language, lineNumbers }) }}
-    />
+    <code dir="ltr" className={`language-${language}`} dangerouslySetInnerHTML={{ __html: data }} />
   );
-});
-
-export const getCodeBlockFn = createServerFn({ method: "POST" })
-  .inputValidator(codeProps)
-  .handler(({ data, data: { language } }) => {
-    if (!Prism.languages[language]) loadLanguages(language);
-
-    return renderServerComponent(<InlineCode {...data} />);
-  });
-
-export const getCodeBlock = (
-  { children, language, lineNumbers }: InlineCodeProps,
-  signalOpt?: AbortSignal,
-) =>
-  queryOptions({
-    queryKey: ["code-rsc", language, children, lineNumbers],
-    structuralSharing: false,
-    queryFn: ({ signal }) =>
-      getCodeBlockFn({
-        data: { children, language, lineNumbers },
-        signal: anyAbortSignal(signal, signalOpt),
-      }),
-  });
+}
 
 export interface CodeProps extends InlineCodeProps {
   title?: string;
@@ -98,10 +65,9 @@ export function CodeBlockContainer({
 }
 
 export function CodeBlock({ children, ...props }: CodeProps) {
-  const { data } = useSuspenseQuery(getCodeBlock({ children, ...props }));
   return (
     <CodeBlockContainer {...props} raw={children}>
-      {data}
+      <InlineCode {...props}>{children}</InlineCode>
     </CodeBlockContainer>
   );
 }

@@ -3,10 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
-import { getCodeBlock } from "#/shared/components/code";
 import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 
 import { BenchResults } from "../-components/results";
 import {
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/standard/")({
           queryClient,
           signal: abortController.signal,
         }),
-        queryClient.prefetchQuery(getCodeBlock({ children: snippet }, abortController.signal)),
+        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
       ]),
     );
   },

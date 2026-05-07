@@ -4,10 +4,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { getCodeBlock } from "#/shared/components/code";
 import { PageFilters } from "#/shared/components/page-filter";
 import { PageFilterChips } from "#/shared/components/page-filter/chips";
 import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 import { applySort, sortParams } from "#/shared/lib/sort";
 
 import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
@@ -38,10 +38,10 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
             signal: abortController.signal,
           }),
           queryClient.prefetchQuery(
-            getCodeBlock({ children: encode.snippet }, abortController.signal),
+            getHighlightedCode({ code: encode.snippet }, abortController.signal),
           ),
           queryClient.prefetchQuery(
-            getCodeBlock({ children: decode.snippet }, abortController.signal),
+            getHighlightedCode({ code: decode.snippet }, abortController.signal),
           ),
         ],
       ),

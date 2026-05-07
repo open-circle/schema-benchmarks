@@ -98,7 +98,6 @@
     "storybook": "^10.3.6",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-prismjs": "^0.0.11",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "catalog:",

@@ -5,9 +5,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { getCodeBlock } from "#/shared/components/code";
-import { getAnsiBlock } from "#/shared/components/code/ansi";
+import { AnsiBlock } from "#/shared/components/code/ansi";
 import { generateMetadata } from "#/shared/data/meta";
+import { getHighlightedCode } from "#/shared/lib/highlight";
+import { getHighlightedAnsi } from "#/shared/lib/highlight";
 import { applySort, sortParams } from "#/shared/lib/sort";
 
 import { useDownloadsByPkgName } from "../-hooks";
@@ -35,17 +36,17 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
     const results = await queryClient.ensureQueryData(getStackResults(abortController.signal));
     await Promise.all([
       queryClient.prefetchQuery(
-        getAnsiBlock({ children: exampleStack, lineNumbers: true }, abortController.signal),
+        getHighlightedAnsi({ input: exampleStack, lineNumbers: true }, abortController.signal),
       ),
       ...results.flatMap(({ output, snippet }) => [
         output &&
           queryClient.prefetchQuery(
-            getAnsiBlock(
-              { children: highlightFrame(output), lineNumbers: true },
+            getHighlightedAnsi(
+              { input: highlightFrame(output), lineNumbers: true },
               abortController.signal,
             ),
           ),
-        queryClient.prefetchQuery(getCodeBlock({ children: snippet }, abortController.signal)),
+        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
       ]),
     ]);
   },
@@ -76,9 +77,6 @@ function frameSort(a: StackResult, b: StackResult) {
 function RouteComponent() {
   const { sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery(getStackResults());
-  const { data: exampleAnsi } = useSuspenseQuery(
-    getAnsiBlock({ children: exampleStack, lineNumbers: true }),
-  );
   const downloadsByPkgName = useDownloadsByPkgName(data);
   const sortedData = useMemo(
     () =>
@@ -111,7 +109,7 @@ function RouteComponent() {
     <>
       <div>
         <Content />
-        {exampleAnsi}
+        <AnsiBlock lineNumbers>{exampleStack}</AnsiBlock>
       </div>
       <StackResults results={sortedData} {...{ sortBy, sortDir }} />
     </>
