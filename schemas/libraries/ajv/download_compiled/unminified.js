@@ -2737,12 +2737,18 @@ var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/lib/utils.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.2/node_modules/fast-uri/lib/utils.js
 var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/** @type {(value: string) => boolean} */
 	const isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
 	/** @type {(value: string) => boolean} */
 	const isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
+	/** @type {(value: string) => boolean} */
+	const isHexPair = RegExp.prototype.test.bind(/^[\da-f]{2}$/iu);
+	/** @type {(value: string) => boolean} */
+	const isUnreserved = RegExp.prototype.test.bind(/^[\da-z\-._~]$/iu);
+	/** @type {(value: string) => boolean} */
+	const isPathCharacter = RegExp.prototype.test.bind(/^[\da-z\-._~!$&'()*+,;=:@/]$/iu);
 	/**
 	* @param {Array<string>} input
 	* @returns {string}
@@ -2965,19 +2971,103 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return output.join("");
 	}
 	/**
-	* @param {import('../types/index').URIComponent} component
-	* @param {boolean} esc
-	* @returns {import('../types/index').URIComponent}
+	* Re-escape RFC 3986 gen-delims that must not appear literally in the host.
+	* After the URI regex parses, these characters cannot be literal in the host
+	* field, so any that appear after decoding came from percent-encoding and
+	* must be restored to prevent authority structure changes.
+	*
+	* @param {string} host
+	* @param {boolean} isIP - true for IPv4/IPv6 hosts (skip colon re-escaping)
+	* @returns {string}
 	*/
-	function normalizeComponentEncoding(component, esc) {
-		const func = esc !== true ? escape : unescape;
-		if (component.scheme !== void 0) component.scheme = func(component.scheme);
-		if (component.userinfo !== void 0) component.userinfo = func(component.userinfo);
-		if (component.host !== void 0) component.host = func(component.host);
-		if (component.path !== void 0) component.path = func(component.path);
-		if (component.query !== void 0) component.query = func(component.query);
-		if (component.fragment !== void 0) component.fragment = func(component.fragment);
-		return component;
+	const HOST_DELIMS = {
+		"@": "%40",
+		"/": "%2F",
+		"?": "%3F",
+		"#": "%23",
+		":": "%3A"
+	};
+	const HOST_DELIM_RE = /[@/?#:]/g;
+	const HOST_DELIM_NO_COLON_RE = /[@/?#]/g;
+	function reescapeHostDelimiters(host, isIP) {
+		const re = isIP ? HOST_DELIM_NO_COLON_RE : HOST_DELIM_RE;
+		re.lastIndex = 0;
+		return host.replace(re, (ch) => HOST_DELIMS[ch]);
+	}
+	/**
+	* Normalizes percent escapes and optionally decodes only unreserved ASCII bytes.
+	* Reserved delimiters such as `%2F` and `%2E` stay escaped.
+	*
+	* @param {string} input
+	* @param {boolean} [decodeUnreserved=false]
+	* @returns {string}
+	*/
+	function normalizePercentEncoding(input, decodeUnreserved = false) {
+		if (input.indexOf("%") === -1) return input;
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			if (input[i] === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					const normalizedHex = hex.toUpperCase();
+					const decoded = String.fromCharCode(parseInt(normalizedHex, 16));
+					if (decodeUnreserved && isUnreserved(decoded)) output += decoded;
+					else output += "%" + normalizedHex;
+					i += 2;
+					continue;
+				}
+			}
+			output += input[i];
+		}
+		return output;
+	}
+	/**
+	* Normalizes path data without turning reserved escapes into live path syntax.
+	* Valid escapes are uppercased, raw unsafe characters are escaped, and only
+	* unreserved bytes that are not `.` are decoded.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function normalizePathEncoding(input) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			if (input[i] === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					const normalizedHex = hex.toUpperCase();
+					const decoded = String.fromCharCode(parseInt(normalizedHex, 16));
+					if (decoded !== "." && isUnreserved(decoded)) output += decoded;
+					else output += "%" + normalizedHex;
+					i += 2;
+					continue;
+				}
+			}
+			if (isPathCharacter(input[i])) output += input[i];
+			else output += escape(input[i]);
+		}
+		return output;
+	}
+	/**
+	* Escapes a component while preserving existing valid percent escapes.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function escapePreservingEscapes(input) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			if (input[i] === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					output += "%" + hex.toUpperCase();
+					i += 2;
+					continue;
+				}
+			}
+			output += escape(input[i]);
+		}
+		return output;
 	}
 	/**
 	* @param {import('../types/index').URIComponent} component
@@ -2994,7 +3084,7 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (!isIPv4(host)) {
 				const ipV6res = normalizeIPv6(host);
 				if (ipV6res.isIPV6 === true) host = `[${ipV6res.escapedHost}]`;
-				else host = component.host;
+				else host = reescapeHostDelimiters(host, false);
 			}
 			uriTokens.push(host);
 		}
@@ -3007,7 +3097,10 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		nonSimpleDomain,
 		recomposeAuthority,
-		normalizeComponentEncoding,
+		reescapeHostDelimiters,
+		normalizePercentEncoding,
+		normalizePathEncoding,
+		escapePreservingEscapes,
 		removeDotSegments,
 		isIPv4,
 		isUUID,
@@ -3016,7 +3109,7 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/lib/schemes.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.2/node_modules/fast-uri/lib/schemes.js
 var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { isUUID } = require_utils();
 	const URN_REG = /([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-.:;=@]|%[\da-f]{2})+)/iu;
@@ -3199,9 +3292,9 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/index.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.2/node_modules/fast-uri/index.js
 var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizeComponentEncoding, isIPv4, nonSimpleDomain } = require_utils();
+	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, escapePreservingEscapes, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
 	const { SCHEMES, getSchemeHandler } = require_schemes();
 	/**
 	* @template {import('./types/index').URIComponent|string} T
@@ -3210,7 +3303,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @returns {T}
 	*/
 	function normalize(uri, options) {
-		if (typeof uri === "string") uri = serialize(parse(uri, options), options);
+		if (typeof uri === "string") uri = normalizeString(uri, options);
 		else if (typeof uri === "object") uri = parse(serialize(uri, options), options);
 		return uri;
 	}
@@ -3286,27 +3379,9 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @returns {boolean}
 	*/
 	function equal(uriA, uriB, options) {
-		if (typeof uriA === "string") {
-			uriA = unescape(uriA);
-			uriA = serialize(normalizeComponentEncoding(parse(uriA, options), true), {
-				...options,
-				skipEscape: true
-			});
-		} else if (typeof uriA === "object") uriA = serialize(normalizeComponentEncoding(uriA, true), {
-			...options,
-			skipEscape: true
-		});
-		if (typeof uriB === "string") {
-			uriB = unescape(uriB);
-			uriB = serialize(normalizeComponentEncoding(parse(uriB, options), true), {
-				...options,
-				skipEscape: true
-			});
-		} else if (typeof uriB === "object") uriB = serialize(normalizeComponentEncoding(uriB, true), {
-			...options,
-			skipEscape: true
-		});
-		return uriA.toLowerCase() === uriB.toLowerCase();
+		const normalizedA = normalizeComparableURI(uriA, options);
+		const normalizedB = normalizeComparableURI(uriB, options);
+		return normalizedA !== void 0 && normalizedB !== void 0 && normalizedA.toLowerCase() === normalizedB.toLowerCase();
 	}
 	/**
 	* @param {Readonly<import('./types/index').URIComponent>} cmpts
@@ -3335,9 +3410,9 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const schemeHandler = getSchemeHandler(options.scheme || component.scheme);
 		if (schemeHandler && schemeHandler.serialize) schemeHandler.serialize(component, options);
 		if (component.path !== void 0) if (!options.skipEscape) {
-			component.path = escape(component.path);
+			component.path = escapePreservingEscapes(component.path);
 			if (component.scheme !== void 0) component.path = component.path.split("%3A").join(":");
-		} else component.path = unescape(component.path);
+		} else component.path = normalizePercentEncoding(component.path);
 		if (options.reference !== "suffix" && component.scheme) uriTokens.push(component.scheme, ":");
 		const authority = recomposeAuthority(component);
 		if (authority !== void 0) {
@@ -3357,11 +3432,20 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	const URI_PARSE = /^(?:([^#/:?]+):)?(?:\/\/((?:([^#/?@]*)@)?(\[[^#/?\]]+\]|[^#/:?]*)(?::(\d*))?))?([^#?]*)(?:\?([^#]*))?(?:#((?:.|[\n\r])*))?/u;
 	/**
+	* @param {import('./types/index').URIComponent} parsed
+	* @param {RegExpMatchArray} matches
+	* @returns {string|undefined}
+	*/
+	function getParseError(parsed, matches) {
+		if (matches[2] !== void 0 && parsed.path && parsed.path[0] !== "/") return "URI path must start with \"/\" when authority is present.";
+		if (typeof parsed.port === "number" && (parsed.port < 0 || parsed.port > 65535)) return "URI port is malformed.";
+	}
+	/**
 	* @param {string} uri
 	* @param {import('./types/index').Options} [opts]
-	* @returns
+	* @returns {{ parsed: import('./types/index').URIComponent, malformedAuthorityOrPort: boolean }}
 	*/
-	function parse(uri, opts) {
+	function parseWithStatus(uri, opts) {
 		const options = Object.assign({}, opts);
 		/** @type {import('./types/index').URIComponent} */
 		const parsed = {
@@ -3373,6 +3457,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			query: void 0,
 			fragment: void 0
 		};
+		let malformedAuthorityOrPort = false;
 		let isIP = false;
 		if (options.reference === "suffix") if (options.scheme) uri = options.scheme + ":" + uri;
 		else uri = "//" + uri;
@@ -3386,6 +3471,11 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			parsed.query = matches[7];
 			parsed.fragment = matches[8];
 			if (isNaN(parsed.port)) parsed.port = matches[5];
+			const parseError = getParseError(parsed, matches);
+			if (parseError !== void 0) {
+				parsed.error = parsed.error || parseError;
+				malformedAuthorityOrPort = true;
+			}
 			if (parsed.host) if (isIPv4(parsed.host) === false) {
 				const ipv6result = normalizeIPv6(parsed.host);
 				parsed.host = ipv6result.host.toLowerCase();
@@ -3407,14 +3497,61 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (!schemeHandler || schemeHandler && !schemeHandler.skipNormalize) {
 				if (uri.indexOf("%") !== -1) {
 					if (parsed.scheme !== void 0) parsed.scheme = unescape(parsed.scheme);
-					if (parsed.host !== void 0) parsed.host = unescape(parsed.host);
+					if (parsed.host !== void 0) parsed.host = reescapeHostDelimiters(unescape(parsed.host), isIP);
 				}
-				if (parsed.path) parsed.path = escape(unescape(parsed.path));
-				if (parsed.fragment) parsed.fragment = encodeURI(decodeURIComponent(parsed.fragment));
+				if (parsed.path) parsed.path = normalizePathEncoding(parsed.path);
+				if (parsed.fragment) try {
+					parsed.fragment = encodeURI(decodeURIComponent(parsed.fragment));
+				} catch {
+					parsed.error = parsed.error || "URI malformed";
+				}
 			}
 			if (schemeHandler && schemeHandler.parse) schemeHandler.parse(parsed, options);
 		} else parsed.error = parsed.error || "URI can not be parsed.";
-		return parsed;
+		return {
+			parsed,
+			malformedAuthorityOrPort
+		};
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns
+	*/
+	function parse(uri, opts) {
+		return parseWithStatus(uri, opts).parsed;
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {string}
+	*/
+	function normalizeString(uri, opts) {
+		return normalizeStringWithStatus(uri, opts).normalized;
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {{ normalized: string, malformedAuthorityOrPort: boolean }}
+	*/
+	function normalizeStringWithStatus(uri, opts) {
+		const { parsed, malformedAuthorityOrPort } = parseWithStatus(uri, opts);
+		return {
+			normalized: malformedAuthorityOrPort ? uri : serialize(parsed, opts),
+			malformedAuthorityOrPort
+		};
+	}
+	/**
+	* @param {import ('./types/index').URIComponent|string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {string|undefined}
+	*/
+	function normalizeComparableURI(uri, opts) {
+		if (typeof uri === "string") {
+			const { normalized, malformedAuthorityOrPort } = normalizeStringWithStatus(uri, opts);
+			return malformedAuthorityOrPort ? void 0 : normalized;
+		}
+		if (typeof uri === "object") return serialize(uri, opts);
 	}
 	const fastUri = {
 		SCHEMES,

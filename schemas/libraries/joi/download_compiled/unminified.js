@@ -3582,10 +3582,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const { ref: n } = e.$_terms.link[0];
 						return "root" === n.ancestor || n.ancestor > 0 ? (t.$ref = `#/${n.path.map((e) => `properties/${e}`).join("/")}`, t) : (1 === n.path.length ? t.$ref = `#/$defs/${n.path[0]}` : t.$ref = `#/${n.path.slice(1).map((e) => `properties/${e}`).join("/")}`, t);
 					},
-					validate(e, { schema: t, state: r, prefs: n }) {
+					validate(e, { schema: t, state: r, prefs: n, error: a }) {
 						s(t.$_terms.link, "Uninitialized link schema");
-						const a = l.generate(t, e, r, n), i = t.$_terms.link[0].ref;
-						return a.$_validate(e, r.nest(a, `link:${i.display}:${a.type}`), n);
+						const i = t._flags.maxRecursion;
+						if (void 0 !== i && r.schemas.filter((e) => e.schema === t).length > i) return {
+							value: e,
+							errors: a("link.maxRecursion", { limit: i })
+						};
+						const o = l.generate(t, e, r, n), c = t.$_terms.link[0].ref;
+						try {
+							return o.$_validate(e, r.nest(o, `link:${c.display}:${o.type}`), n);
+						} catch (t) {
+							if (!(t instanceof RangeError)) throw t;
+							return {
+								value: e,
+								errors: a("link.depth")
+							};
+						}
 					},
 					generate: (e, t, r, s) => l.generate(e, t, r, s),
 					rules: {
@@ -3596,7 +3609,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						} },
 						relative: { method(e = !0) {
 							return this.$_setFlag("relative", e);
+						} },
+						maxRecursion: { method(e) {
+							return s(Number.isSafeInteger(e) && e >= 1, "limit must be a positive integer"), this.$_setFlag("maxRecursion", e);
 						} }
+					},
+					messages: {
+						"link.depth": "{{#label}} exceeds maximum recursion depth supported by the runtime",
+						"link.maxRecursion": "{{#label}} exceeds maximum recursion depth of {{#limit}}"
 					},
 					overrides: { concat(e) {
 						s(this.$_terms.link, "Uninitialized link schema"), s(a.isSchema(e), "Invalid schema object"), s("link" !== e.type, "Cannot merge type link with another link");
@@ -3874,7 +3894,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			9033(e, t, r) {
 				"use strict";
-				const { assert: s, escapeRegex: n } = r(3115), { isDomainValid: a, isEmailValid: i, ipRegex: o, uriRegex: l } = r(3305), c = r(1339), u = r(680), f = r(9415), m = {
+				const { assert: s, escapeRegex: n } = r(3115), { isDomainValid: a, isEmailValid: i, ipRegex: o, uriRegex: l } = r(9089), c = r(1339), u = r(680), f = r(9415), m = {
 					tlds: c.tlds instanceof Set && { tlds: {
 						allow: c.tlds,
 						deny: null
@@ -4842,18 +4862,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return t;
 				};
 			},
-			3305(e, t, r) {
+			9089(e, t, r) {
 				"use strict";
-				r.r(t), r.d(t, {
-					analyzeDomain: () => h,
-					analyzeEmail: () => v,
-					errorCodes: () => n,
-					ipRegex: () => D,
-					isDomainValid: () => p,
-					isEmailValid: () => _,
-					uriDecode: () => P,
-					uriRegex: () => j,
-					validateDomainOptions: () => d
+				r.d(t, {
+					ipRegex: () => C,
+					isDomainValid: () => h,
+					isEmailValid: () => y,
+					uriRegex: () => T
 				});
 				var s = r(8663);
 				const n = {
@@ -4884,10 +4899,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					};
 				}
 				const i = /[^\x00-\x7f]/, o = /[\x00-\x20@\:\/\\#!\$&\'\(\)\*\+,;=\?]/, l = /^[a-zA-Z](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, c = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, u = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, f = s.URL || URL;
-				function m(e) {
-					return !!e.allow;
-				}
-				function h(e, t = {}) {
+				function m(e, t = {}) {
 					if (!e) return a("DOMAIN_NON_EMPTY_STRING");
 					if ("string" != typeof e) throw new Error("Invalid input: domain must be a string");
 					if (e.length > 256) return a("DOMAIN_TOO_LONG");
@@ -4910,7 +4922,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					const n = t.tlds;
 					if (n) {
 						const e = s[s.length - 1].toLowerCase();
-						if (m(n)) {
+						if (function(e) {
+							return !!e.allow;
+						}(n)) {
 							if (!n.allow.has(e)) return a("DOMAIN_FORBIDDEN_TLDS");
 						} else if (n.deny.has(e)) return a("DOMAIN_FORBIDDEN_TLDS");
 					}
@@ -4926,67 +4940,54 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					return null;
 				}
-				function p(e, t) {
-					return !h(e, t);
+				function h(e, t) {
+					return !m(e, t);
 				}
-				function d(e) {
-					if (e) {
-						if ("object" != typeof e.tlds) throw new Error("Invalid options: tlds must be a boolean or an object");
-						if (m(e.tlds)) {
-							if (e.tlds.allow instanceof Set == 0) throw new Error("Invalid options: tlds.allow must be a Set object or true");
-							if (e.tlds.deny) throw new Error("Invalid options: cannot specify both tlds.allow and tlds.deny lists");
-						} else if (e.tlds.deny instanceof Set == 0) throw new Error("Invalid options: tlds.deny must be a Set object");
-					}
-				}
-				var g = r(6984);
-				const y = /[^\x00-\x7f]/, b = new (g.TextEncoder || TextEncoder)();
-				function v(e, t) {
-					return A(e, t);
-				}
-				function _(e, t) {
-					return !A(e, t);
-				}
-				function A(e, t = {}) {
-					if ("string" != typeof e) throw new Error("Invalid input: email must be a string");
-					if (!e) return a("EMPTY_STRING");
-					const r = !y.test(e);
-					if (!r) {
-						if (!1 === t.allowUnicode) return a("FORBIDDEN_UNICODE");
-						e = e.normalize("NFC");
-					}
-					const s = e.split("@");
-					if (2 !== s.length) return s.length > 2 ? a("MULTIPLE_AT_CHAR") : a("MISSING_AT_CHAR");
-					const [n, i] = s;
-					if (!n) return a("EMPTY_LOCAL");
-					if (!t.ignoreLength) {
-						if (e.length > 254) return a("ADDRESS_TOO_LONG");
-						if (b.encode(n).length > 64) return a("LOCAL_TOO_LONG");
-					}
-					return function(e, t) {
-						const r = e.split(".");
-						for (const e of r) {
-							if (!e.length) return a("EMPTY_LOCAL_SEGMENT");
-							if (t) {
-								if (!E.test(e)) return a("INVALID_LOCAL_CHARS");
-							} else for (const t of e) {
-								if (E.test(t)) continue;
-								const e = S(t);
-								if (!O.test(e)) return a("INVALID_LOCAL_CHARS");
-							}
+				var p = r(6984);
+				const d = /[^\x00-\x7f]/, g = new (p.TextEncoder || TextEncoder)();
+				function y(e, t) {
+					return !function(e, t = {}) {
+						if ("string" != typeof e) throw new Error("Invalid input: email must be a string");
+						if (!e) return a("EMPTY_STRING");
+						const r = !d.test(e);
+						if (!r) {
+							if (!1 === t.allowUnicode) return a("FORBIDDEN_UNICODE");
+							e = e.normalize("NFC");
 						}
-						return null;
-					}(n, r) || h(i, t);
+						const s = e.split("@");
+						if (2 !== s.length) return s.length > 2 ? a("MULTIPLE_AT_CHAR") : a("MISSING_AT_CHAR");
+						const [n, i] = s;
+						if (!n) return a("EMPTY_LOCAL");
+						if (!t.ignoreLength) {
+							if (e.length > 254) return a("ADDRESS_TOO_LONG");
+							if (g.encode(n).length > 64) return a("LOCAL_TOO_LONG");
+						}
+						return function(e, t) {
+							const r = e.split(".");
+							for (const e of r) {
+								if (!e.length) return a("EMPTY_LOCAL_SEGMENT");
+								if (t) {
+									if (!v.test(e)) return a("INVALID_LOCAL_CHARS");
+								} else for (const t of e) {
+									if (v.test(t)) continue;
+									const e = b(t);
+									if (!_.test(e)) return a("INVALID_LOCAL_CHARS");
+								}
+							}
+							return null;
+						}(n, r) || m(i, t);
+					}(e, t);
 				}
-				function S(e) {
-					return Array.from(b.encode(e), (e) => String.fromCharCode(e)).join("");
+				function b(e) {
+					return Array.from(g.encode(e), (e) => String.fromCharCode(e)).join("");
 				}
-				const E = /^[\w!#\$%&'\*\+\-/=\?\^`\{\|\}~]+$/, O = new RegExp([
+				const v = /^[\w!#\$%&'\*\+\-/=\?\^`\{\|\}~]+$/, _ = new RegExp([
 					"(?:[\\xc2-\\xdf][\\x80-\\xbf])",
 					"(?:\\xe0[\\xa0-\\xbf][\\x80-\\xbf])|(?:[\\xe1-\\xec][\\x80-\\xbf]{2})|(?:\\xed[\\x80-\\x9f][\\x80-\\xbf])|(?:[\\xee-\\xef][\\x80-\\xbf]{2})",
 					"(?:\\xf0[\\x90-\\xbf][\\x80-\\xbf]{2})|(?:[\\xf1-\\xf3][\\x80-\\xbf]{3})|(?:\\xf4[\\x80-\\x8f][\\x80-\\xbf]{2})"
 				].join("|"));
-				var R = r(8253), w = r.n(R), N = r(8669), I = r.n(N);
-				const $ = function() {
+				var A = r(8253), S = r.n(A), E = r(8669), R = r.n(E);
+				const O = function() {
 					const e = {}, t = "\\dA-Fa-f", r = "[" + t + "]", s = "\\w-\\.~", n = "!\\$&'\\(\\)\\*\\+,;=", a = "%" + t, i = s + a + n + ":@", o = "[" + i + "]";
 					e.ipv4address = "(?:(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])";
 					const c = r + "{1,4}", u = "(?:" + c + ":[\\dA-Fa-f]{1,4}|" + e.ipv4address + ")", f = "(?:" + c + ":){6}" + u, m = "::(?:" + c + ":){5}" + u, h = "(?:" + c + ")?::(?:[\\dA-Fa-f]{1,4}:){4}" + u, p = "(?:(?:" + c + ":){0,1}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){3}" + u, d = "(?:(?:" + c + ":){0,2}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){2}" + u, g = "(?:(?:" + c + ":){0,3}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}:" + u, y = "(?:(?:" + c + ":){0,4}[\\dA-Fa-f]{1,4})?::" + u;
@@ -4995,67 +4996,67 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					e.ipv4Cidr = "(?:\\d|[1-2]\\d|3[0-2])", e.ipv6Cidr = "(?:0{0,2}\\d|0?[1-9]\\d|1[01]\\d|12[0-8])", e.ipv6address = "(?:" + f + "|" + m + "|" + h + "|" + p + "|" + d + "|" + g + "|" + y + "|(?:(?:[\\dA-Fa-f]{1,4}:){0,5}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}|(?:(?:[\\dA-Fa-f]{1,4}:){0,6}[\\dA-Fa-f]{1,4})?::)", e.ipvFuture = "v" + r + "+\\.[\\w-\\.~!\\$&'\\(\\)\\*\\+,;=:]+", e.scheme = "[a-zA-Z][a-zA-Z\\d+-\\.]*", e.schemeRegex = new RegExp(e.scheme);
 					const _ = "[" + s + a + n + ":]*";
 					"" + s + a + n;
-					const S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:" + _ + "@)?" + S + "(?::\\d*)?", O = "(?:" + _ + "@)?(" + S + ")(?::\\d*)?", R = o + "*", w = o + "+", N = "(?:\\/" + R + ")*", I = "\\/(?:" + w + N + ")?", $ = w + N, T = "[" + s + a + n + "@]+" + N, C = "(?:\\/\\/\\/" + R + N + ")";
-					return e.hierPart = "(?:(?:\\/\\/" + E + N + ")|" + I + "|" + $ + "|" + C + ")", e.hierPartCapture = "(?:(?:\\/\\/" + O + N + ")|" + I + "|" + $ + ")", e.relativeRef = "(?:(?:\\/\\/" + E + N + ")|" + I + "|" + T + "|)", e.relativeRefCapture = "(?:(?:\\/\\/" + O + N + ")|" + I + "|" + T + "|)", e.query = "[" + i + "\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[" + i + "\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[" + i + "\\/\\?]*", e;
-				}(), T = {
-					v4Cidr: $.ipv4Cidr,
-					v6Cidr: $.ipv6Cidr,
-					ipv4: $.ipv4address,
-					ipv6: $.ipv6address,
-					ipvfuture: $.ipvFuture
+					const S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:" + _ + "@)?" + S + "(?::\\d*)?", R = "(?:" + _ + "@)?(" + S + ")(?::\\d*)?", O = o + "*", w = o + "+", N = "(?:\\/" + O + ")*", I = "\\/(?:" + w + N + ")?", $ = w + N, T = "[" + s + a + n + "@]+" + N, C = "(?:\\/\\/\\/" + O + N + ")";
+					return e.hierPart = "(?:(?:\\/\\/" + E + N + ")|" + I + "|" + $ + "|" + C + ")", e.hierPartCapture = "(?:(?:\\/\\/" + R + N + ")|" + I + "|" + $ + ")", e.relativeRef = "(?:(?:\\/\\/" + E + N + ")|" + I + "|" + T + "|)", e.relativeRefCapture = "(?:(?:\\/\\/" + R + N + ")|" + I + "|" + T + "|)", e.query = "[" + i + "\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[" + i + "\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[" + i + "\\/\\?]*", e;
+				}(), w = {
+					v4Cidr: O.ipv4Cidr,
+					v6Cidr: O.ipv6Cidr,
+					ipv4: O.ipv4address,
+					ipv6: O.ipv6address,
+					ipvfuture: O.ipvFuture
 				};
-				function C(e) {
-					const t = $, r = "(?:\\?" + (e.allowQuerySquareBrackets ? t.queryWithSquareBrackets : t.query) + ")?(?:#" + t.fragment + ")?", s = e.domain ? t.relativeRefCapture : t.relativeRef;
-					if (e.relativeOnly) return x(s + r);
+				function N(e) {
+					const t = O, r = "(?:\\?" + (e.allowQuerySquareBrackets ? t.queryWithSquareBrackets : t.query) + ")?(?:#" + t.fragment + ")?", s = e.domain ? t.relativeRefCapture : t.relativeRef;
+					if (e.relativeOnly) return I(s + r);
 					let n = "";
 					if (e.scheme) {
-						w()(e.scheme instanceof RegExp || "string" == typeof e.scheme || Array.isArray(e.scheme), "scheme must be a RegExp, String, or Array");
+						S()(e.scheme instanceof RegExp || "string" == typeof e.scheme || Array.isArray(e.scheme), "scheme must be a RegExp, String, or Array");
 						const r = [].concat(e.scheme);
-						w()(r.length >= 1, "scheme must have at least 1 scheme specified");
+						S()(r.length >= 1, "scheme must have at least 1 scheme specified");
 						const s = [];
 						for (let e = 0; e < r.length; ++e) {
 							const n = r[e];
-							w()(n instanceof RegExp || "string" == typeof n, "scheme at position " + e + " must be a RegExp or String"), n instanceof RegExp ? s.push(n.source.toString()) : (w()(t.schemeRegex.test(n), "scheme at position " + e + " must be a valid scheme"), s.push(I()(n)));
+							S()(n instanceof RegExp || "string" == typeof n, "scheme at position " + e + " must be a RegExp or String"), n instanceof RegExp ? s.push(n.source.toString()) : (S()(t.schemeRegex.test(n), "scheme at position " + e + " must be a valid scheme"), s.push(R()(n)));
 						}
 						n = s.join("|");
 					}
 					const a = "(?:" + (n ? "(?:" + n + ")" : t.scheme) + ":" + (e.domain ? t.hierPartCapture : t.hierPart) + ")";
-					return x((e.allowRelative ? "(?:" + a + "|" + s + ")" : a) + r, n);
+					return I((e.allowRelative ? "(?:" + a + "|" + s + ")" : a) + r, n);
 				}
-				function x(e, t = null) {
+				function I(e, t = null) {
 					return {
 						raw: e = `(?=.)(?!https?:/(?:$|[^/]))(?!https?:///)(?!https?:[^/])${e}`,
 						regex: new RegExp(`^${e}$`),
 						scheme: t
 					};
 				}
-				const L = C({});
-				function j(e = {}) {
-					return e.scheme || e.allowRelative || e.relativeOnly || e.allowQuerySquareBrackets || e.domain ? C(e) : L;
+				const $ = N({});
+				function T(e = {}) {
+					return e.scheme || e.allowRelative || e.relativeOnly || e.allowQuerySquareBrackets || e.domain ? N(e) : $;
 				}
-				function D(e = {}) {
+				function C(e = {}) {
 					const t = e.cidr || "optional";
-					w()([
+					S()([
 						"required",
 						"optional",
 						"forbidden"
-					].includes(t), "options.cidr must be one of required, optional, forbidden"), w()(void 0 === e.version || "string" == typeof e.version || Array.isArray(e.version), "options.version must be a string or an array of string");
+					].includes(t), "options.cidr must be one of required, optional, forbidden"), S()(void 0 === e.version || "string" == typeof e.version || Array.isArray(e.version), "options.version must be a string or an array of string");
 					let r = e.version || [
 						"ipv4",
 						"ipv6",
 						"ipvfuture"
 					];
-					Array.isArray(r) || (r = [r]), w()(r.length >= 1, "options.version must have at least 1 version specified");
-					for (const e of r) w()("string" == typeof e && e === e.toLowerCase(), "Invalid options.version value"), w()([
+					Array.isArray(r) || (r = [r]), S()(r.length >= 1, "options.version must have at least 1 version specified");
+					for (const e of r) S()("string" == typeof e && e === e.toLowerCase(), "Invalid options.version value"), S()([
 						"ipv4",
 						"ipv6",
 						"ipvfuture"
 					].includes(e), "options.version contains unknown version " + e + " - must be one of ipv4, ipv6, ipvfuture");
 					r = Array.from(new Set(r));
 					const s = `(?:${r.map((e) => {
-						if ("forbidden" === t) return T[e];
-						const r = `\\/${"ipv4" === e ? T.v4Cidr : T.v6Cidr}`;
-						return "required" === t ? `${T[e]}${r}` : `${T[e]}(?:${r})?`;
+						if ("forbidden" === t) return w[e];
+						const r = `\\/${"ipv4" === e ? w.v4Cidr : w.v6Cidr}`;
+						return "required" === t ? `${w[e]}${r}` : `${w[e]}(?:${r})?`;
 					}).join("|")})`, n = new RegExp(`^${s}$`);
 					return {
 						cidr: t,
@@ -5063,428 +5064,6 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						regex: n,
 						raw: s
 					};
-				}
-				const M = {
-					0: 0,
-					1: 1,
-					2: 2,
-					3: 3,
-					4: 4,
-					5: 5,
-					6: 6,
-					7: 7,
-					8: 8,
-					9: 9,
-					a: 10,
-					A: 10,
-					b: 11,
-					B: 11,
-					c: 12,
-					C: 12,
-					d: 13,
-					D: 13,
-					e: 14,
-					E: 14,
-					f: 15,
-					F: 15
-				}, k = {
-					accept: 12,
-					reject: 0,
-					data: [
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						1,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						2,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						3,
-						4,
-						4,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						5,
-						6,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						7,
-						8,
-						7,
-						7,
-						10,
-						9,
-						9,
-						9,
-						11,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						4,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						12,
-						0,
-						0,
-						0,
-						0,
-						24,
-						36,
-						48,
-						60,
-						72,
-						84,
-						96,
-						0,
-						12,
-						12,
-						12,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						24,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						24,
-						24,
-						24,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						24,
-						24,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						48,
-						48,
-						48,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						48,
-						48,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						48,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						127,
-						63,
-						63,
-						63,
-						0,
-						31,
-						15,
-						15,
-						15,
-						7,
-						7,
-						7
-					]
-				};
-				function P(e) {
-					let t = e.indexOf("%");
-					if (-1 === t) return e;
-					let r = "", s = 0, n = 0, a = t, i = k.accept;
-					for (; t > -1 && t < e.length;) {
-						const o = B(e[t + 1], 4) | B(e[t + 2], 0), l = k.data[o];
-						if (i = k.data[256 + i + l], n = n << 6 | o & k.data[364 + l], i !== k.accept) {
-							if (i === k.reject) return null;
-							if (t += 3, t >= e.length || "%" !== e[t]) return null;
-						} else r += e.slice(s, a), r += n <= 65535 ? String.fromCharCode(n) : String.fromCharCode(55232 + (n >> 10), 56320 + (1023 & n)), n = 0, s = t + 3, t = e.indexOf("%", s), a = t;
-					}
-					return r + e.slice(s);
-				}
-				function B(e, t) {
-					const r = M[e];
-					return void 0 === r ? 255 : r << t;
 				}
 			},
 			679(e, t) {
@@ -6176,7 +5755,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			3115(e, t, r) {
 				"use strict";
-				t.applyToDefaults = r(6084), t.assert = r(8253), t.AssertError = r(1803), t.Bench = r(9145), t.block = r(3386), t.clone = r(4126), t.contain = r(2847), t.deepEqual = r(7125), t.escapeHeaderAttribute = r(9241), t.escapeHtml = r(8121), t.escapeJson = r(5570), t.escapeRegex = r(8669), t.flatten = r(5553), t.ignore = r(9725), t.intersect = r(3110), t.isPromise = r(834), t.merge = r(9315), t.once = r(8762), t.reach = r(1528), t.reachTemplate = r(1626), t.stringify = r(8314), t.wait = r(7858);
+				t.applyToDefaults = r(6084), t.assert = r(8253), t.AssertError = r(1803), r(9145), r(3386), t.clone = r(4126), r(2847), t.deepEqual = r(7125), r(9241), t.escapeHtml = r(8121), r(5570), t.escapeRegex = r(8669), r(5553), t.ignore = r(9725), r(3110), r(834), t.merge = r(9315), r(8762), t.reach = r(1528), r(1626), r(8314), r(7858);
 			},
 			3110(e) {
 				"use strict";
@@ -7886,7 +7465,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.1.2" };
+				e.exports = { version: "18.2.1" };
 			}
 		}, t = {};
 		function r(s) {
@@ -7903,9 +7482,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				enumerable: !0,
 				get: t[s]
 			});
-		}, r.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t), r.r = (e) => {
-			"undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 });
-		}, r(1100);
+		}, r.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t), r(1100);
 	})());
 })))(), 1);
 const imageSchema = import_joi_browser_min.default.object({
