@@ -158,8 +158,8 @@ initCodeHighlight(Prism, loadLanguages);
 initAnsiHighlight(parseAnsiSequences);
 
 initialize({ onUnhandledRequest: "bypass" }, [
-  mockServerFn(getHighlightedCodeFn, (data) => highlightCode(data)),
-  mockServerFn(getHighlightedAnsiFn, (data) => highlightAnsi(data)),
+  mockServerFn(getHighlightedCodeFn, highlightCode),
+  mockServerFn(getHighlightedAnsiFn, highlightAnsi),
 ]);
 
 export default definePreview({
