@@ -41,6 +41,11 @@ const config = defineConfig({
       rsc: {
         enabled: true,
       },
+      importProtection: {
+        client: {
+          specifiers: ["prismjs", "prismjs/**"],
+        },
+      },
     }),
     mdx({
       rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
