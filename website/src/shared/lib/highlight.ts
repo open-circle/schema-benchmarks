@@ -1,10 +1,27 @@
-import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { anyAbortSignal, assert, promiseAllKeyed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { createServerFn } from "@tanstack/react-start";
-import { parseAnsiSequences } from "ansi-sequence-parser";
-import _Prism from "prismjs";
-import loadLanguages from "prismjs/components/index";
+import { createIsomorphicFn, createServerFn } from "@tanstack/react-start";
+import { type parseAnsiSequences as _parseAnsiSequences } from "ansi-sequence-parser";
+import type _Prism from "prismjs";
+import type _loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
+
+let Prism: typeof _Prism | undefined;
+let loadLanguages: typeof _loadLanguages | undefined;
+
+export function initCodeHighlight(prism: typeof _Prism, loadLanguagesFn: typeof _loadLanguages) {
+  Prism = prism;
+  loadLanguages = loadLanguagesFn;
+}
+
+await createIsomorphicFn().server(() =>
+  promiseAllKeyed({
+    Prism: import("prismjs"),
+    loadLanguages: import("prismjs/components/index"),
+  }).then(({ Prism: { default: prism }, loadLanguages: { default: loadLanguages } }) =>
+    initCodeHighlight(prism, loadLanguages),
+  ),
+)();
 
 const highlightInput = v.object({
   code: v.string(),
@@ -14,11 +31,12 @@ const highlightInput = v.object({
 
 let hookAdded = false;
 
-export const highlightCode = (
-  Prism: typeof _Prism,
-  { code, language = "typescript", lineNumbers }: v.InferInput<typeof highlightInput>,
-) => {
-  if (!Prism.languages[language]) loadLanguages(language);
+export const highlightCode = ({
+  code,
+  language = "typescript",
+  lineNumbers,
+}: v.InferInput<typeof highlightInput>) => {
+  assert(Prism, "Prism must be initialized before using highlightCode");
   let lineNumbersWrapper = "";
   if (lineNumbers) {
     const match = code.match(NEW_LINE_EXP);
@@ -41,7 +59,14 @@ export const highlightCode = (
 
 export const getHighlightedCodeFn = createServerFn({ method: "POST" })
   .inputValidator(highlightInput)
-  .handler(({ data }) => highlightCode(_Prism, data));
+  .handler(({ data, data: { language } }) => {
+    assert(
+      Prism && loadLanguages,
+      "Prism and loadLanguages must be initialized before using getHighlightedCodeFn",
+    );
+    if (!Prism.languages[language]) loadLanguages(language);
+    return highlightCode(data);
+  });
 
 export const getHighlightedCode = (
   data: v.InferInput<typeof highlightInput>,
@@ -70,17 +95,27 @@ function escapeForHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
+let parseAnsiSequences: typeof _parseAnsiSequences | undefined;
+
+export function initAnsiHighlight(parseFn: typeof _parseAnsiSequences) {
+  parseAnsiSequences = parseFn;
+}
+
+await createIsomorphicFn().server(() =>
+  import("ansi-sequence-parser").then(({ parseAnsiSequences }) =>
+    initAnsiHighlight(parseAnsiSequences),
+  ),
+)();
+
 const highlightAnsiInput = v.object({
   input: v.string(),
   lineNumbers: v.optional(v.boolean(), false),
 });
 
-export const highlightAnsi = (
-  parseSequences: typeof parseAnsiSequences,
-  data: v.InferInput<typeof highlightAnsiInput>,
-): string => {
+export const highlightAnsi = (data: v.InferInput<typeof highlightAnsiInput>): string => {
+  assert(parseAnsiSequences, "parseAnsiSequences must be initialized before using highlightAnsi");
   const { input, lineNumbers } = v.parse(highlightAnsiInput, data);
-  const tokens = parseSequences(input);
+  const tokens = parseAnsiSequences(input);
   let lineNumbersWrapper = "";
   if (lineNumbers) {
     const match = input.match(NEW_LINE_EXP);
@@ -127,7 +162,7 @@ export const highlightAnsi = (
 
 export const getHighlightedAnsiFn = createServerFn({ method: "POST" })
   .inputValidator(highlightAnsiInput)
-  .handler(({ data }) => highlightAnsi(parseAnsiSequences, data));
+  .handler(({ data }) => highlightAnsi(data));
 
 export const getHighlightedAnsi = (
   data: v.InferInput<typeof highlightAnsiInput>,

@@ -11,6 +11,7 @@ import { parseAnsiSequences } from "ansi-sequence-parser";
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
 import Prism from "prismjs";
+import loadLanguages from "prismjs/components/index";
 import { fromJSON, toCrossJSONAsync } from "seroval";
 import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
@@ -21,10 +22,13 @@ import {
   getHighlightedCodeFn,
   highlightAnsi,
   highlightCode,
+  initAnsiHighlight,
+  initCodeHighlight,
 } from "#/shared/lib/highlight";
-import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
 
 import "../src/shared/styles/index.css";
+import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
+
 import { getRouter } from "../src/router";
 import { makeQueryClient } from "../src/shared/data/query";
 
@@ -150,9 +154,12 @@ document.addEventListener("click", (event) => {
   }
 });
 
+initCodeHighlight(Prism, loadLanguages);
+initAnsiHighlight(parseAnsiSequences);
+
 initialize({ onUnhandledRequest: "bypass" }, [
-  mockServerFn(getHighlightedCodeFn, (data) => highlightCode(Prism, data)),
-  mockServerFn(getHighlightedAnsiFn, (data) => highlightAnsi(parseAnsiSequences, data)),
+  mockServerFn(getHighlightedCodeFn, (data) => highlightCode(data)),
+  mockServerFn(getHighlightedAnsiFn, (data) => highlightAnsi(data)),
 ]);
 
 export default definePreview({
