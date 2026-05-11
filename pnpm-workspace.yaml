@@ -14,10 +14,10 @@ allowBuilds:
 
 catalog:
   "@standard-schema/spec": ^1.1.0
-  "@types/node": 25.6.0
+  "@types/node": 25.6.2
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20260506.1
+  "@typescript/native-preview": 7.0.0-dev.20260511.1
   "@typia/unplugin": ^12.1.1
   "@vitest/browser-playwright": ^4.1.5
   "@vitest/expect": ^4.1.5
@@ -28,7 +28,7 @@ catalog:
   react-dom: ^19.2.6
   typescript: 6.0.3
   valibot: ^1.4.0
-  vite: ^8.0.11
+  vite: ^8.0.12
   vitest: ^4.1.5
 overrides:
   vite: "catalog:"
