@@ -4216,6 +4216,11 @@ var _Shapes = class _Shapes {
 };
 __name(_Shapes, "Shapes");
 var s3 = new _Shapes();
+/**
+* @license MIT
+* @copyright 2020 Colin McDonnell
+* @see https://github.com/colinhacks/zod/blob/master/LICENSE
+*/
 //#endregion
 //#region ../schemas/libraries/@sapphire/shapeshift/download.ts
 const imageSchema = s3.object({
