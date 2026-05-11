@@ -7,24 +7,15 @@ import {
   RouterContextProvider,
   type RouterHistory,
 } from "@tanstack/react-router";
-import { parseAnsiSequences } from "ansi-sequence-parser";
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
-import Prism from "prismjs";
-import loadLanguages from "prismjs/components/index";
 import { fromJSON, toCrossJSONAsync } from "seroval";
 import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
 
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import {
-  getHighlightedAnsiFn,
-  getHighlightedCodeFn,
-  highlightAnsi,
-  highlightCode,
-  initAnsiHighlight,
-  initCodeHighlight,
-} from "#/shared/lib/highlight";
+import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
 
 import "../src/shared/styles/index.css";
 import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
@@ -153,9 +144,6 @@ document.addEventListener("click", (event) => {
     event.preventDefault();
   }
 });
-
-initCodeHighlight(Prism, loadLanguages);
-initAnsiHighlight(parseAnsiSequences);
 
 initialize({ onUnhandledRequest: "bypass" }, [
   mockServerFn(getHighlightedCodeFn, highlightCode),

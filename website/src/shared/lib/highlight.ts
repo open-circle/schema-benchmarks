@@ -1,77 +1,28 @@
-import { anyAbortSignal, assert, promiseAllKeyed } from "@schema-benchmarks/utils";
+import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
-import { createIsomorphicFn, createServerFn } from "@tanstack/react-start";
-import { type parseAnsiSequences as _parseAnsiSequences } from "ansi-sequence-parser";
-import type _Prism from "prismjs";
-import type _loadLanguages from "prismjs/components/index";
+import { createServerFn } from "@tanstack/react-start";
+import Prism from "prismjs";
+import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
 
-let Prism: typeof _Prism | undefined;
-let loadLanguages: typeof _loadLanguages | undefined;
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
 
-export function initCodeHighlight(prism: typeof _Prism, loadLanguagesFn: typeof _loadLanguages) {
-  Prism = prism;
-  loadLanguages = loadLanguagesFn;
-}
-
-await createIsomorphicFn().server(() =>
-  promiseAllKeyed({
-    Prism: import("prismjs"),
-    loadLanguages: import("prismjs/components/index"),
-  }).then(({ Prism: { default: prism }, loadLanguages: { default: loadLanguages } }) =>
-    initCodeHighlight(prism, loadLanguages),
-  ),
-)();
-
-const highlightInput = v.object({
+export const highlightInput = v.object({
   code: v.string(),
   language: v.optional(v.string(), "typescript"),
   lineNumbers: v.optional(v.boolean(), false),
 });
 
-let hookAdded = false;
-
-export const highlightCode = ({
-  code,
-  language = "typescript",
-  lineNumbers,
-}: v.InferInput<typeof highlightInput>) => {
-  assert(Prism, "Prism must be initialized before using highlightCode");
-  let lineNumbersWrapper = "";
-  if (lineNumbers) {
-    const match = code.match(NEW_LINE_EXP);
-    const linesNum = match ? match.length + 1 : 1;
-    const lines = new Array(linesNum + 1).join("<span></span>");
-
-    lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
-  }
-  if (!hookAdded) {
-    Prism.hooks.add("wrap", (env) => {
-      if (env.type === "comment" && env.content.startsWith("/**")) {
-        env.classes.push("doc-comment");
-      }
-    });
-    hookAdded = true;
-  }
-  const formatted = Prism.highlight(code, Prism.languages[language]!, language);
-  return formatted + lineNumbersWrapper;
-};
+export type HighlightInput = v.InferInput<typeof highlightInput>;
 
 export const getHighlightedCodeFn = createServerFn({ method: "POST" })
   .inputValidator(highlightInput)
   .handler(({ data, data: { language } }) => {
-    assert(
-      Prism && loadLanguages,
-      "Prism and loadLanguages must be initialized before using getHighlightedCodeFn",
-    );
     if (!Prism.languages[language]) loadLanguages(language);
     return highlightCode(data);
   });
 
-export const getHighlightedCode = (
-  data: v.InferInput<typeof highlightInput>,
-  signalOpt?: AbortSignal,
-) => {
+export const getHighlightedCode = (data: HighlightInput, signalOpt?: AbortSignal) => {
   const { code, language, lineNumbers } = v.parse(highlightInput, data);
   return queryOptions({
     queryKey: ["highlight-code", language, code, lineNumbers],
@@ -84,90 +35,18 @@ export const getHighlightedCode = (
   });
 };
 
-const NEW_LINE_EXP = /\n(?!$)/g;
-
-function escapeForHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-let parseAnsiSequences: typeof _parseAnsiSequences | undefined;
-
-export function initAnsiHighlight(parseFn: typeof _parseAnsiSequences) {
-  parseAnsiSequences = parseFn;
-}
-
-await createIsomorphicFn().server(() =>
-  import("ansi-sequence-parser").then(({ parseAnsiSequences }) =>
-    initAnsiHighlight(parseAnsiSequences),
-  ),
-)();
-
 const highlightAnsiInput = v.object({
   input: v.string(),
   lineNumbers: v.optional(v.boolean(), false),
 });
 
-export const highlightAnsi = (data: v.InferInput<typeof highlightAnsiInput>): string => {
-  assert(parseAnsiSequences, "parseAnsiSequences must be initialized before using highlightAnsi");
-  const { input, lineNumbers } = v.parse(highlightAnsiInput, data);
-  const tokens = parseAnsiSequences(input);
-  let lineNumbersWrapper = "";
-  if (lineNumbers) {
-    const match = input.match(NEW_LINE_EXP);
-    const linesNum = match ? match.length + 1 : 1;
-    const lines = new Array(linesNum + 1).join("<span></span>");
-    lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
-  }
-  return (
-    tokens
-      .map((token) => {
-        // happy path, nothing to do
-        if (!token.background && !token.foreground && !token.decorations.size)
-          return escapeForHtml(token.value);
-        let style = [];
-        let classNames = [];
-        if (token.background) {
-          switch (token.background.type) {
-            case "named":
-              classNames.push(`bg-${token.background.name}`);
-              break;
-            case "rgb":
-              style.push(`background-color: rgb(${token.background.rgb.join(", ")})`);
-              break;
-          }
-        }
-        if (token.foreground) {
-          switch (token.foreground.type) {
-            case "named":
-              classNames.push(`fg-${token.foreground.name}`);
-              break;
-            case "rgb":
-              style.push(`color: rgb(${token.foreground.rgb.join(", ")})`);
-              break;
-          }
-        }
-        if (token.decorations.size) classNames.push(...token.decorations);
-        const className = classNames.length ? ` class="${classNames.join(" ")}"` : "";
-        const styleAttr = style.length ? ` style="${style.join("; ")}"` : "";
-        return `<span${className}${styleAttr}>${escapeForHtml(token.value)}</span>`;
-      })
-      .join("") + lineNumbersWrapper
-  );
-};
+export type HighlightAnsiInput = v.InferInput<typeof highlightAnsiInput>;
 
 export const getHighlightedAnsiFn = createServerFn({ method: "POST" })
   .inputValidator(highlightAnsiInput)
   .handler(({ data }) => highlightAnsi(data));
 
-export const getHighlightedAnsi = (
-  data: v.InferInput<typeof highlightAnsiInput>,
-  signalOpt?: AbortSignal,
-) => {
+export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSignal) => {
   const { input, lineNumbers } = v.parse(highlightAnsiInput, data);
   return queryOptions({
     queryKey: ["highlight-ansi", input, lineNumbers],
