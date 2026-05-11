@@ -20,7 +20,7 @@ catalogs:
       version: 19.2.3
     '@typescript/native-preview':
       specifier: 7.0.0-dev.20260511.1
-      version: 7.0.0-dev.20260510.1
+      version: 7.0.0-dev.20260511.1
     '@typia/unplugin':
       specifier: ^12.1.1
       version: 12.1.1
@@ -38,7 +38,7 @@ catalogs:
       version: 1.7.2
     playwright:
       specifier: ^1.59.1
-      version: 1.60.0
+      version: 1.59.1
     react:
       specifier: ^19.2.6
       version: 19.2.6
@@ -290,16 +290,16 @@ importers:
         specifier: ^5.100.9
         version: 5.100.9(@tanstack/react-query@5.100.9(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router':
-        specifier: ^1.169.2
+        specifier: 1.169.2
         version: 1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router-devtools':
-        specifier: ^1.166.13
+        specifier: 1.166.13
         version: 1.166.13(@tanstack/react-router@1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/router-core@1.169.2)(csstype@3.2.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router-ssr-query':
-        specifier: ^1.166.12
+        specifier: 1.166.12
         version: 1.166.12(@tanstack/query-core@5.100.9)(@tanstack/react-query@5.100.9(react@19.2.6))(@tanstack/react-router@1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/router-core@1.169.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-start':
-        specifier: ^1.167.65
+        specifier: 1.167.65
         version: 1.167.65(crossws@0.4.5(srvx@0.11.15))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.12(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.47.1)(yaml@2.8.4))
       '@tanstack/react-store':
         specifier: ^0.11.0
@@ -390,7 +390,7 @@ importers:
         specifier: ^5.100.9
         version: 5.100.9(eslint@10.0.2(jiti@2.7.0))(typescript@6.0.3)
       '@tanstack/eslint-plugin-router':
-        specifier: ^1.161.6
+        specifier: 1.161.6
         version: 1.161.6(eslint@10.0.2(jiti@2.7.0))(typescript@6.0.3)
       '@types/d3':
         specifier: ^7.4.3
@@ -3516,7 +3516,6 @@ packages:
   '@tanstack/react-start@1.167.65':
     resolution: {integrity: sha512-vCGga3RECeR4VpSVuXIU/+zxak5f2qdpUXdZ2yrgcwwKoYPtatdJm6zjS0Py7UOecRqLqMtSeuOjowBJ1higWQ==}
     engines: {node: '>=22.12.0'}
-    hasBin: true
     peerDependencies:
       '@rsbuild/core': ^2.0.0
       '@vitejs/plugin-rsc': '*'
@@ -17248,7 +17247,7 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/node': 25.6.2
-      '@vitest/browser-playwright': 4.1.5(msw@2.14.5(@types/node@25.6.2)(typescript@6.0.3))(playwright@1.59.1)(vite@8.0.12(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.47.1)(yaml@2.8.4))(vitest@4.1.5)
+      '@vitest/browser-playwright': 4.1.5(msw@2.14.5(@types/node@25.6.2)(typescript@6.0.3))(playwright@1.60.0)(vite@8.0.12(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.47.1)(yaml@2.8.4))(vitest@4.1.5)
     transitivePeerDependencies:
       - msw
 
