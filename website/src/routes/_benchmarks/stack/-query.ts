@@ -6,7 +6,7 @@ import * as v from "valibot";
 
 import { upfetch } from "#/shared/lib/fetch";
 
-const getStackResultsFn = createIsomorphicFn()
+export const getStackResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>
     upfetch("/stack.json", { schema: v.array(stackResultSchema), signal }),
   )

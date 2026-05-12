@@ -13,7 +13,7 @@ export function getCompiledPath(fileName: string, minify: MinifyType) {
     .replace(".ts", `/${minify}.js`);
 }
 
-const getDownloadResultsFn = createIsomorphicFn()
+export const getDownloadResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>
     upfetch("/download.json", { schema: downloadResultsSchema, signal }),
   )

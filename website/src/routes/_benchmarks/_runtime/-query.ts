@@ -5,7 +5,7 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 
 import { upfetch } from "#/shared/lib/fetch";
 
-const getBenchResultsFn = createIsomorphicFn()
+export const getBenchResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>
     upfetch("/bench.json", { schema: benchResultsSchema, signal }),
   )
