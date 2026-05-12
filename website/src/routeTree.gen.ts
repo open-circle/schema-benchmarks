@@ -15,11 +15,13 @@ import { Route as ContributingIndexRouteImport } from './routes/contributing/ind
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as BenchmarksLibraryRouteRouteImport } from './routes/_benchmarks/library/route'
 import { Route as BenchmarksRuntimeRouteRouteImport } from './routes/_benchmarks/_runtime/route'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
+import { Route as BenchmarksLibrarySplatIndexRouteImport } from './routes/_benchmarks/library/$/index'
 import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
 import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benchmarks/_runtime/string/index'
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
@@ -56,6 +58,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRouteRoute,
 } as any)
+const BenchmarksLibraryRouteRoute = BenchmarksLibraryRouteRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => BenchmarksRouteRoute,
+} as any)
 const BenchmarksRuntimeRouteRoute = BenchmarksRuntimeRouteRouteImport.update({
   id: '/_runtime',
   getParentRoute: () => BenchmarksRouteRoute,
@@ -80,6 +87,12 @@ const ApiTweetIdRoute = ApiTweetIdRouteImport.update({
   path: '/api/tweet/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarksLibrarySplatIndexRoute =
+  BenchmarksLibrarySplatIndexRouteImport.update({
+    id: '/$/',
+    path: '/$/',
+    getParentRoute: () => BenchmarksLibraryRouteRoute,
+  } as any)
 const BenchmarksRuntimeValidationIndexRoute =
   BenchmarksRuntimeValidationIndexRouteImport.update({
     id: '/validation/',
@@ -120,6 +133,7 @@ const BenchmarksRuntimeCodecIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/blog': typeof BlogRouteRouteWithChildren
+  '/library': typeof BenchmarksLibraryRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/contributing/': typeof ContributingIndexRoute
@@ -133,9 +147,11 @@ export interface FileRoutesByFullPath {
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/validation/': typeof BenchmarksRuntimeValidationIndexRoute
+  '/library/$/': typeof BenchmarksLibrarySplatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
+  '/library': typeof BenchmarksLibraryRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
   '/contributing': typeof ContributingIndexRoute
@@ -149,12 +165,14 @@ export interface FileRoutesByTo {
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
   '/string': typeof BenchmarksRuntimeStringIndexRoute
   '/validation': typeof BenchmarksRuntimeValidationIndexRoute
+  '/library/$': typeof BenchmarksLibrarySplatIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_benchmarks': typeof BenchmarksRouteRouteWithChildren
   '/blog': typeof BlogRouteRouteWithChildren
   '/_benchmarks/_runtime': typeof BenchmarksRuntimeRouteRouteWithChildren
+  '/_benchmarks/library': typeof BenchmarksLibraryRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -169,12 +187,14 @@ export interface FileRoutesById {
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/_benchmarks/_runtime/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/_benchmarks/_runtime/validation/': typeof BenchmarksRuntimeValidationIndexRoute
+  '/_benchmarks/library/$/': typeof BenchmarksLibrarySplatIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/blog'
+    | '/library'
     | '/blog/$slug'
     | '/blog/'
     | '/contributing/'
@@ -188,9 +208,11 @@ export interface FileRouteTypes {
     | '/standard/'
     | '/string/'
     | '/validation/'
+    | '/library/$/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/library'
     | '/blog/$slug'
     | '/blog'
     | '/contributing'
@@ -204,11 +226,13 @@ export interface FileRouteTypes {
     | '/standard'
     | '/string'
     | '/validation'
+    | '/library/$'
   id:
     | '__root__'
     | '/_benchmarks'
     | '/blog'
     | '/_benchmarks/_runtime'
+    | '/_benchmarks/library'
     | '/blog/$slug'
     | '/_home/'
     | '/blog/'
@@ -223,6 +247,7 @@ export interface FileRouteTypes {
     | '/_benchmarks/_runtime/standard/'
     | '/_benchmarks/_runtime/string/'
     | '/_benchmarks/_runtime/validation/'
+    | '/_benchmarks/library/$/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -278,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRouteRoute
     }
+    '/_benchmarks/library': {
+      id: '/_benchmarks/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof BenchmarksLibraryRouteRouteImport
+      parentRoute: typeof BenchmarksRouteRoute
+    }
     '/_benchmarks/_runtime': {
       id: '/_benchmarks/_runtime'
       path: ''
@@ -312,6 +344,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/tweet/$id'
       preLoaderRoute: typeof ApiTweetIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_benchmarks/library/$/': {
+      id: '/_benchmarks/library/$/'
+      path: '/$'
+      fullPath: '/library/$/'
+      preLoaderRoute: typeof BenchmarksLibrarySplatIndexRouteImport
+      parentRoute: typeof BenchmarksLibraryRouteRoute
     }
     '/_benchmarks/_runtime/validation/': {
       id: '/_benchmarks/_runtime/validation/'
@@ -384,14 +423,30 @@ const BenchmarksRuntimeRouteRouteWithChildren =
     BenchmarksRuntimeRouteRouteChildren,
   )
 
+interface BenchmarksLibraryRouteRouteChildren {
+  BenchmarksLibrarySplatIndexRoute: typeof BenchmarksLibrarySplatIndexRoute
+}
+
+const BenchmarksLibraryRouteRouteChildren: BenchmarksLibraryRouteRouteChildren =
+  {
+    BenchmarksLibrarySplatIndexRoute: BenchmarksLibrarySplatIndexRoute,
+  }
+
+const BenchmarksLibraryRouteRouteWithChildren =
+  BenchmarksLibraryRouteRoute._addFileChildren(
+    BenchmarksLibraryRouteRouteChildren,
+  )
+
 interface BenchmarksRouteRouteChildren {
   BenchmarksRuntimeRouteRoute: typeof BenchmarksRuntimeRouteRouteWithChildren
+  BenchmarksLibraryRouteRoute: typeof BenchmarksLibraryRouteRouteWithChildren
   BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
   BenchmarksStackIndexRoute: typeof BenchmarksStackIndexRoute
 }
 
 const BenchmarksRouteRouteChildren: BenchmarksRouteRouteChildren = {
   BenchmarksRuntimeRouteRoute: BenchmarksRuntimeRouteRouteWithChildren,
+  BenchmarksLibraryRouteRoute: BenchmarksLibraryRouteRouteWithChildren,
   BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
   BenchmarksStackIndexRoute: BenchmarksStackIndexRoute,
 }
