@@ -58,6 +58,10 @@ export const sidebarGroups: Array<SidebarGroup> = [
     links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
   },
   {
+    key: "library",
+    links: [{ ...linkOptions({ to: "/library" }), name: "Libraries", icon: "deployed_code" }],
+  },
+  {
     key: "blog",
     links: [
       {

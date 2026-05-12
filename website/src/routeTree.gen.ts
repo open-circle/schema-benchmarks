@@ -18,6 +18,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BenchmarksLibraryRouteRouteImport } from './routes/_benchmarks/library/route'
 import { Route as BenchmarksRuntimeRouteRouteImport } from './routes/_benchmarks/_runtime/route'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
+import { Route as BenchmarksLibraryIndexRouteImport } from './routes/_benchmarks/library/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
@@ -71,6 +72,11 @@ const BenchmarksStackIndexRoute = BenchmarksStackIndexRouteImport.update({
   id: '/stack/',
   path: '/stack/',
   getParentRoute: () => BenchmarksRouteRoute,
+} as any)
+const BenchmarksLibraryIndexRoute = BenchmarksLibraryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BenchmarksLibraryRouteRoute,
 } as any)
 const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
   id: '/download/',
@@ -140,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
+  '/library/': typeof BenchmarksLibraryIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
   '/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
@@ -151,13 +158,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
-  '/library': typeof BenchmarksLibraryRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
   '/contributing': typeof ContributingIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
+  '/library': typeof BenchmarksLibraryIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
   '/codec': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
@@ -180,6 +187,7 @@ export interface FileRoutesById {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
+  '/_benchmarks/library/': typeof BenchmarksLibraryIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
   '/_benchmarks/_runtime/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
@@ -201,6 +209,7 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download/'
+    | '/library/'
     | '/stack/'
     | '/codec/'
     | '/initialization/'
@@ -212,13 +221,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/library'
     | '/blog/$slug'
     | '/blog'
     | '/contributing'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download'
+    | '/library'
     | '/stack'
     | '/codec'
     | '/initialization'
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
+    | '/_benchmarks/library/'
     | '/_benchmarks/stack/'
     | '/_benchmarks/_runtime/codec/'
     | '/_benchmarks/_runtime/initialization/'
@@ -323,6 +333,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/stack/'
       preLoaderRoute: typeof BenchmarksStackIndexRouteImport
       parentRoute: typeof BenchmarksRouteRoute
+    }
+    '/_benchmarks/library/': {
+      id: '/_benchmarks/library/'
+      path: '/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof BenchmarksLibraryIndexRouteImport
+      parentRoute: typeof BenchmarksLibraryRouteRoute
     }
     '/_benchmarks/download/': {
       id: '/_benchmarks/download/'
@@ -424,11 +441,13 @@ const BenchmarksRuntimeRouteRouteWithChildren =
   )
 
 interface BenchmarksLibraryRouteRouteChildren {
+  BenchmarksLibraryIndexRoute: typeof BenchmarksLibraryIndexRoute
   BenchmarksLibrarySplatIndexRoute: typeof BenchmarksLibrarySplatIndexRoute
 }
 
 const BenchmarksLibraryRouteRouteChildren: BenchmarksLibraryRouteRouteChildren =
   {
+    BenchmarksLibraryIndexRoute: BenchmarksLibraryIndexRoute,
     BenchmarksLibrarySplatIndexRoute: BenchmarksLibrarySplatIndexRoute,
   }
 

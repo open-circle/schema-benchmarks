@@ -4,12 +4,9 @@ import { useCallback, useMemo } from "react";
 
 import { getAllWeeklyDownloads, getPackageName } from "./-query";
 
-export function useDownloadsByPkgName(data: Array<{ libraryName: string }>) {
+export function useDownloadsByPkgName(data: Array<{ libraryName: string } | string>) {
   const pkgNames = useMemo(
-    () =>
-      uniqueBy(data, (d) => getPackageName(d.libraryName)).map((d) =>
-        getPackageName(d.libraryName),
-      ),
+    () => uniqueBy(data.map((d) => getPackageName(typeof d === "string" ? d : d.libraryName))),
     [data],
   );
   return useSuspenseQueries({

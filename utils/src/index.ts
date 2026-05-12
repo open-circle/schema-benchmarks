@@ -294,7 +294,10 @@ export function getTransitionName(prefix: string, values: Record<string, unknown
   return name.replace(/[^a-zA-Z0-9]/g, "-");
 }
 
-export function uniqueBy<T>(values: ReadonlyArray<T>, getKey: (value: T) => unknown) {
+export function uniqueBy<T>(
+  values: ReadonlyArray<T>,
+  getKey: (value: T) => unknown = (value) => value,
+): Array<T> {
   const keys = new Set();
   return values.filter((value) => {
     const key = getKey(value);
