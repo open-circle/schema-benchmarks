@@ -15,16 +15,18 @@ export const getAllLibrariesFn = createServerFn().handler(async () => {
     stack: getStackResultsFn({ signal }),
   });
 
-  const allItems = [
+  const allItems: Array<{ libraryName: string }> = [
     ...allResults.bench.initialization,
     ...Object.values(allResults.bench.validation).flat(),
     ...Object.values(allResults.bench.parsing).flat(),
     ...Object.values(allResults.bench.standard).flat(),
-    ...Object.values(allResults.bench.string).flatMap(Object.values).flat(),
+    ...Object.values(allResults.bench.string)
+      .flatMap((formatResults) => Object.values(formatResults))
+      .flat(),
     ...allResults.bench.codec,
     ...Object.values(allResults.download).flat(),
     ...allResults.stack,
-  ] satisfies Array<{ libraryName: string }>;
+  ];
 
   const libraryNames = new Set(allItems.map(({ libraryName }) => libraryName));
 
