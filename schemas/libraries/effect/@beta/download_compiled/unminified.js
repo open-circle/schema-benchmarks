@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -44,7 +44,7 @@ const pipeArguments = (self, args) => {
 /**
 * @since 4.0.0
 */
-const Prototype = { pipe() {
+const Prototype$1 = { pipe() {
 	return pipeArguments(this, arguments);
 } };
 /**
@@ -53,11 +53,11 @@ const Prototype = { pipe() {
 */
 const Class$1 = /* @__PURE__ */ function() {
 	function PipeableBase() {}
-	PipeableBase.prototype = Prototype;
+	PipeableBase.prototype = Prototype$1;
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be used in a data-last (aka `pipe`able) or
 * data-first style.
@@ -273,7 +273,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -292,7 +292,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -514,7 +514,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -863,7 +863,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
@@ -1098,7 +1098,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 */
 const asEquivalence = () => equals$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1148,14 +1148,14 @@ const asEquivalence = () => equals$1;
 */
 const make$9 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Redactable.js
 /**
 * Symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1253,7 +1253,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1530,7 +1530,7 @@ function safeToString(input) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Inspectable.js
 /**
 * Symbol used by Node.js for custom object inspection.
 *
@@ -1579,7 +1579,7 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Utils.js
 /**
 * An `IterableIterator` that yields its wrapped value exactly once.
 *
@@ -1657,7 +1657,7 @@ const forced = { [InternalTypeId]: (body) => {
 /** @internal */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -1700,25 +1700,11 @@ const PipeInspectableProto = {
 	}
 };
 /** @internal */
-const YieldableProto = { [Symbol.iterator]() {
-	return new SingleShotGen(this);
-} };
-/** @internal */
-const YieldableErrorProto = {
-	...YieldableProto,
-	pipe() {
-		return pipeArguments(this, arguments);
-	}
-};
-/** @internal */
 const EffectProto = {
 	[EffectTypeId]: effectVariance,
 	...PipeInspectableProto,
 	[Symbol.iterator]() {
 		return new SingleShotGen(this);
-	},
-	asEffect() {
-		return this;
 	},
 	toJSON() {
 		return {
@@ -1961,12 +1947,15 @@ const withFiber = /* @__PURE__ */ makePrimitive({
 });
 /** @internal */
 const YieldableError = /* @__PURE__ */ function() {
-	class YieldableError extends globalThis.Error {
-		asEffect() {
+	class YieldableError extends globalThis.Error {}
+	const proto = /* @__PURE__ */ makePrimitiveProto({
+		op: "YieldableError",
+		[evaluate]() {
 			return exitFail(this);
 		}
-	}
-	Object.assign(YieldableError.prototype, YieldableErrorProto);
+	});
+	delete proto.toString;
+	Object.assign(YieldableError.prototype, proto);
 	return YieldableError;
 }();
 /** @internal */
@@ -1999,17 +1988,9 @@ const TaggedError$1 = (tag) => {
 	Base.prototype.name = tag;
 	return Base;
 };
-/** @internal */
-const NoSuchElementErrorTypeId = "~effect/Cause/NoSuchElementError";
-/** @internal */
-var NoSuchElementError = class extends TaggedError$1("NoSuchElementError") {
-	[NoSuchElementErrorTypeId] = NoSuchElementErrorTypeId;
-	constructor(message) {
-		super({ message });
-	}
-};
+TaggedError$1("NoSuchElementError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2017,7 +1998,9 @@ const TypeId$8 = "~effect/data/Option";
 const CommonProto$1 = {
 	[TypeId$8]: { _A: (_) => _ },
 	...PipeInspectableProto,
-	...YieldableProto
+	[Symbol.iterator]() {
+		return new SingleShotGen(this);
+	}
 };
 const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto$1), {
 	_tag: "Some",
@@ -2037,9 +2020,6 @@ const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 			_tag: this._tag,
 			value: toJson(this.value)
 		};
-	},
-	asEffect() {
-		return exitSucceed(this.value);
 	}
 });
 Object.defineProperty(SomeProto, "valueOrUndefined", { get() {
@@ -2064,9 +2044,6 @@ const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 			_id: "Option",
 			_tag: this._tag
 		};
-	},
-	asEffect() {
-		return exitFail(new NoSuchElementError());
 	}
 });
 /** @internal */
@@ -2084,7 +2061,7 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/result.js
 const TypeId$7 = "~effect/data/Result";
 const CommonProto = {
 	[TypeId$7]: {
@@ -2093,7 +2070,9 @@ const CommonProto = {
 		_E: (_) => _
 	},
 	...PipeInspectableProto,
-	...YieldableProto
+	[Symbol.iterator]() {
+		return new SingleShotGen(this);
+	}
 };
 const SuccessProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto), {
 	_tag: "Success",
@@ -2113,9 +2092,6 @@ const SuccessProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 			_tag: this._tag,
 			value: toJson(this.success)
 		};
-	},
-	asEffect() {
-		return exitSucceed(this.success);
 	}
 });
 const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto), {
@@ -2136,9 +2112,6 @@ const FailureProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create
 			_tag: this._tag,
 			failure: toJson(this.failure)
 		};
-	},
-	asEffect() {
-		return exitFail(this.failure);
 	}
 });
 /** @internal */
@@ -2160,7 +2133,7 @@ const succeed$3 = (success) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2361,7 +2334,7 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2519,7 +2492,7 @@ const isSome = isSome$1;
 */
 const map$3 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
 *
@@ -2609,7 +2582,7 @@ const fail$3 = fail$4;
 */
 const isFailure = isFailure$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -2983,7 +2956,7 @@ const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
 	return [];
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/BigDecimal.js
 /**
 * This module provides utility functions and type class instances for working with the `BigDecimal` type in TypeScript.
 * It includes functions for basic arithmetic operations.
@@ -3305,7 +3278,21 @@ const isZero = (n) => n.value === bigint0;
 */
 const isNegative = (n) => n.value < bigint0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Effectable.js
+/**
+* Create a low-level `Effect` prototype.
+*
+* When the effect is evaluated, it will call `evaluate` with the current fiber.
+*
+* @since 4.0.0
+* @category Prototypes
+*/
+const Prototype = (options) => makePrimitiveProto({
+	op: options.label,
+	[evaluate]: options.evaluate
+});
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Context.js
 /**
 * @since 4.0.0
 * @category Type Identifiers
@@ -3363,17 +3350,18 @@ const Service = function() {
 };
 const ServiceProto = {
 	[ServiceTypeId]: ServiceTypeId,
-	...PipeInspectableProto,
-	...YieldableProto,
+	.../* @__PURE__ */ Prototype({
+		label: "Service",
+		evaluate(fiber) {
+			return exitSucceed(get(fiber.context, this));
+		}
+	}),
 	toJSON() {
 		return {
 			_id: "Service",
 			key: this.key,
 			stack: this.stack
 		};
-	},
-	asEffect() {
-		return (this.asEffect = constant(withFiber((fiber) => exitSucceed(get(fiber.context, this)))))();
 	},
 	of(self) {
 		return self;
@@ -3631,7 +3619,7 @@ const withMapUnsafe = (self, f) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Scheduler.js
 /**
 * @since 2.0.0
 */
@@ -3768,7 +3756,7 @@ const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBefo
 */
 const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Tracer.js
 /**
 * @since 2.0.0
 */
@@ -3791,11 +3779,11 @@ Service()(ParentSpanKey);
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /* @__PURE__ */ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
 /** @internal */
@@ -3803,7 +3791,7 @@ const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogL
 /** @internal */
 const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4177,18 +4165,17 @@ const fromIteratorEagerUnsafe = (evaluate) => {
 		while (true) {
 			const state = iterator.next(value);
 			if (state.done) return succeed$1(state.value);
-			const effect = state.value.asEffect();
-			const primitive = effect;
+			const primitive = state.value;
 			if (primitive && primitive._tag === "Success") {
 				value = primitive.value;
 				continue;
-			} else if (primitive && primitive._tag === "Failure") return effect;
+			} else if (primitive && primitive._tag === "Failure") return state.value;
 			else {
 				let isFirstExecution = true;
 				return suspend(() => {
 					if (isFirstExecution) {
 						isFirstExecution = false;
-						return flatMap$1(effect, (value) => fromIteratorUnsafe(iterator, value));
+						return flatMap$1(state.value, (value) => fromIteratorUnsafe(iterator, value));
 					} else return suspend(() => fromIteratorUnsafe(evaluate()));
 				});
 			}
@@ -4205,12 +4192,11 @@ const fromIteratorUnsafe = /* @__PURE__ */ makePrimitive({
 		while (true) {
 			const state = iter.next(value);
 			if (state.done) return succeed$1(state.value);
-			const eff = state.value.asEffect();
-			if (!effectIsExit(eff)) {
+			if (!effectIsExit(state.value)) {
 				fiber._stack.push(this);
-				return eff;
-			} else if (eff._tag === "Failure") return eff;
-			value = eff.value;
+				return state.value;
+			} else if (state.value._tag === "Failure") return state.value;
+			value = state.value.value;
 		}
 	},
 	[evaluate](fiber) {
@@ -4490,7 +4476,7 @@ const hasProcessStdout = typeof process === "object" && process !== null && type
 hasProcessStdout && process.stdout.isTTY;
 hasProcessStdout || "Deno" in globalThis;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Cause.js
 /**
 * Structured representation of how an Effect can fail.
 *
@@ -4639,7 +4625,7 @@ Service()("effect/Cause/InterruptorStackTrace");
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Exit.js
 /**
 * Creates a failed Exit from a typed error value.
 *
@@ -4689,7 +4675,7 @@ const void_ = exitVoid;
 */
 const getSuccess = exitGetSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$4 = "~effect/time/DateTime";
 /** @internal */
@@ -5214,7 +5200,7 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5232,7 +5218,7 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -5264,7 +5250,7 @@ globalThis.RegExp;
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaIssue.js
 const TypeId$3 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -5956,7 +5942,7 @@ function formatOption(actual) {
 	return format$1(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6231,7 +6217,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaTransformation.js
 const TypeId$2 = "~effect/SchemaTransformation/Transformation";
 /**
 * A bidirectional transformation between a decoded type `T` and an encoded
@@ -6390,7 +6376,7 @@ function passthrough() {
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -7916,7 +7902,7 @@ const ClassTypeId = "~effect/Schema/Class";
 /** @internal */
 const STRUCTURAL_ANNOTATION_KEY = "~structural";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -7949,7 +7935,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaParser.js
 /**
 * @since 4.0.0
 */
@@ -8089,7 +8075,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8136,7 +8122,7 @@ var SchemaError = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.65/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
