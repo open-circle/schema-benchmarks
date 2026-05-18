@@ -24,7 +24,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.0",
-    "ata-validator": "^0.13.2",
+    "ata-validator": "^0.14.0",
     "decoders": "^2.9.3",
     "dedent": "catalog:",
     "effect": "^3.21.2",
@@ -48,7 +48,7 @@
     "@typia/unplugin": "catalog:",
     "tsdown": "^0.22.0",
     "typescript": "catalog:",
-    "unplugin-macros": "^0.19.2",
+    "unplugin-macros": "^0.20.0",
     "vite": "catalog:",
     "vitest": "catalog:"
   }
