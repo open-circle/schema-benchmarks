@@ -24,10 +24,10 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "knip": "^6.14.1",
-    "lefthook": "^2.1.6",
-    "oxfmt": "^0.50.0",
-    "oxlint": "^1.65.0",
-    "oxlint-tsgolint": "^0.22.1",
+    "lefthook": "^2.1.8",
+    "oxfmt": "^0.51.0",
+    "oxlint": "^1.66.0",
+    "oxlint-tsgolint": "^0.23.0",
     "playwright": "catalog:",
     "typescript": "catalog:"
   },
