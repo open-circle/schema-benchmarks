@@ -20,6 +20,8 @@ const createStringBenchmark = (
 
 const schema = getSurySchema();
 const parser = S.parser(getSurySchema());
+const encoder = S.encoder(S.date, S.string);
+const decoder = S.decoder(S.string, S.date);
 
 export default defineBenchmarks({
   library: {
@@ -91,5 +93,25 @@ export default defineBenchmarks({
     // const parser = S.parser(S.schema(...));
     parser(data)
     `,
+  },
+  codec: {
+    encode: {
+      run(data) {
+        return encoder(data);
+      },
+      snippet: ts`
+      // const encoder = S.encoder(S.date, S.string);
+      encoder(data)
+      `,
+    },
+    decode: {
+      run(data) {
+        return decoder(data);
+      },
+      snippet: ts`
+      // const decoder = S.decoder(S.string, S.date);
+      decoder(data)
+      `,
+    },
   },
 });
