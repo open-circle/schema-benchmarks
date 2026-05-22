@@ -1,5 +1,3 @@
-//#region ../node_modules/.pnpm/valibot@1.4.0_typescript@6.0.3/node_modules/valibot/dist/index.mjs
-let store$4;
 const DEFAULT_CONFIG = {
 	lang: void 0,
 	message: void 0,
@@ -17,48 +15,11 @@ const DEFAULT_CONFIG = {
 function getGlobalConfig(config$1) {
 	if (!config$1 && true) return DEFAULT_CONFIG;
 	return {
-		lang: config$1?.lang ?? store$4?.lang,
+		lang: config$1?.lang ?? void 0,
 		message: config$1?.message,
-		abortEarly: config$1?.abortEarly ?? store$4?.abortEarly,
-		abortPipeEarly: config$1?.abortPipeEarly ?? store$4?.abortPipeEarly
+		abortEarly: config$1?.abortEarly ?? void 0,
+		abortPipeEarly: config$1?.abortPipeEarly ?? void 0
 	};
-}
-let store$3;
-/**
-* Returns a global error message.
-*
-* @param lang The language of the message.
-*
-* @returns The error message.
-*/
-/* @__NO_SIDE_EFFECTS__ */
-function getGlobalMessage(lang) {
-	return store$3?.get(lang);
-}
-let store$2;
-/**
-* Returns a schema error message.
-*
-* @param lang The language of the message.
-*
-* @returns The error message.
-*/
-/* @__NO_SIDE_EFFECTS__ */
-function getSchemaMessage(lang) {
-	return store$2?.get(lang);
-}
-let store$1;
-/**
-* Returns a specific error message.
-*
-* @param reference The identifier reference.
-* @param lang The language of the message.
-*
-* @returns The error message.
-*/
-/* @__NO_SIDE_EFFECTS__ */
-function getSpecificMessage(reference, lang) {
-	return store$1?.get(reference)?.get(lang);
 }
 /**
 * Stringifies an unknown input to a literal or type string.
@@ -107,7 +68,7 @@ function _addIssue(context, label, dataset, config$1, other) {
 		abortPipeEarly: config$1.abortPipeEarly
 	};
 	const isSchema = context.kind === "schema";
-	const message$1 = other?.message ?? context.message ?? /* @__PURE__ */ getSpecificMessage(context.reference, issue.lang) ?? (isSchema ? /* @__PURE__ */ getSchemaMessage(issue.lang) : null) ?? config$1.message ?? /* @__PURE__ */ getGlobalMessage(issue.lang);
+	const message$1 = other?.message ?? context.message ?? (context.reference, issue.lang, void 0) ?? (isSchema ? (issue.lang, void 0) : null) ?? config$1.message ?? (issue.lang, void 0);
 	if (message$1 !== void 0) issue.message = typeof message$1 === "function" ? message$1(issue) : message$1;
 	if (isSchema) dataset.typed = false;
 	if (dataset.issues) dataset.issues.push(issue);

@@ -1,0 +1,1874 @@
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.5/node_modules/sury/src/Sury.res.mjs
+let idMap = {};
+function create(str) {
+	let v = idMap[str];
+	if (v !== void 0) {
+		let id = v + 1 | 0;
+		idMap[str] = id;
+		return str + ("/" + id);
+	}
+	idMap[str] = 1;
+	return str;
+}
+let immutableEmpty = {};
+let immutableEmpty$1 = [];
+let copy = ((d) => ({ ...d }));
+function fromString(string) {
+	let _idx = 0;
+	while (true) {
+		let idx = _idx;
+		let match = string[idx];
+		if (match === void 0) return "\"" + string + "\"";
+		switch (match) {
+			case "\"":
+			case "\n": return JSON.stringify(string);
+			default:
+				_idx = idx + 1 | 0;
+				continue;
+		}
+	}
+}
+function toArray(path) {
+	if (path === "") return [];
+	else return JSON.parse(path.split("\"][\"").join("\",\""));
+}
+let vendor = "sury";
+let s = Symbol(vendor);
+let stringTag = "string";
+let numberTag = "number";
+let bigintTag = "bigint";
+let booleanTag = "boolean";
+let symbolTag = "symbol";
+let nullTag = "null";
+let undefinedTag = "undefined";
+let nanTag = "nan";
+let instanceTag = "instance";
+let arrayTag = "array";
+let objectTag = "object";
+let unionTag = "union";
+let neverTag = "never";
+let unknownTag = "unknown";
+let refTag = "ref";
+let Exn = /* @__PURE__ */ create("Sury.Exn");
+let constField = "const";
+function has(acc, flag) {
+	return (acc & flag) !== 0;
+}
+let flags = {
+	[unknownTag]: 1,
+	[stringTag]: 2,
+	[numberTag]: 4,
+	[booleanTag]: 8,
+	[undefinedTag]: 16,
+	[nullTag]: 32,
+	[objectTag]: 64,
+	[arrayTag]: 128,
+	[unionTag]: 256,
+	[refTag]: 512,
+	[bigintTag]: 1024,
+	[nanTag]: 2048,
+	["function"]: 4096,
+	[instanceTag]: 8192,
+	[neverTag]: 32768,
+	[symbolTag]: 16384
+};
+function stringify(unknown) {
+	let tagFlag = flags[typeof unknown];
+	if (tagFlag & 16) return undefinedTag;
+	if (!(tagFlag & 64)) if (tagFlag & 2) return "\"" + unknown + "\"";
+	else if (tagFlag & 1024) return unknown + "n";
+	else if (tagFlag & 4096) return "Function";
+	else return unknown.toString();
+	if (unknown === null) return nullTag;
+	if (Array.isArray(unknown)) {
+		let string = "[";
+		for (let i = 0, i_finish = unknown.length; i < i_finish; ++i) {
+			if (i !== 0) string = string + ", ";
+			string = string + stringify(unknown[i]);
+		}
+		return string + "]";
+	}
+	if (unknown.constructor !== Object) return Object.prototype.toString.call(unknown);
+	let keys = Object.keys(unknown);
+	let string$1 = "{ ";
+	for (let i$1 = 0, i_finish$1 = keys.length; i$1 < i_finish$1; ++i$1) {
+		let key = keys[i$1];
+		let value = unknown[key];
+		string$1 = string$1 + key + ": " + stringify(value) + "; ";
+	}
+	return string$1 + "}";
+}
+function toExpression(schema) {
+	let tag = schema.type;
+	let to = schema.to;
+	let $$const = schema.const;
+	let name = schema.name;
+	if (name !== void 0) return name;
+	if ($$const !== void 0) return stringify($$const);
+	let format = schema.format;
+	let anyOf = schema.anyOf;
+	if (anyOf !== void 0) return anyOf.map(toExpression).join(" | ");
+	if (format !== void 0) {
+		if (format !== "compactColumns") return format;
+		let additionalItems = schema.additionalItems;
+		if (to === void 0) if (additionalItems !== void 0 && additionalItems !== "strip" && additionalItems !== "strict") return toExpression(additionalItems) + "[]";
+		else return "unknown[][]";
+		let props = to.properties;
+		if (props === void 0) return "unknown[][]";
+		return "[" + Object.keys(props).map((key) => {
+			let propSchema = props[key];
+			return toExpression(propSchema) + "[]";
+		}).join(", ") + "]";
+	}
+	switch (tag) {
+		case "nan": return "NaN";
+		case "object":
+			let additionalItems$1 = schema.additionalItems;
+			let properties = schema.properties;
+			let locations = Object.keys(properties);
+			if (locations.length === 0) if (typeof additionalItems$1 === objectTag) return "{ [key: string]: " + toExpression(additionalItems$1) + "; }";
+			else return "{}";
+			else return "{ " + locations.map((location) => location + ": " + toExpression(properties[location]) + ";").join(" ") + " }";
+		default:
+			if (schema.b) return tag;
+			switch (tag) {
+				case "instance": return schema.class.name;
+				case "array":
+					let additionalItems$2 = schema.additionalItems;
+					let items = schema.items;
+					if (typeof additionalItems$2 !== objectTag) return "[" + items.map(toExpression).join(", ") + "]";
+					let itemName = toExpression(additionalItems$2);
+					return (additionalItems$2.type === unionTag ? "(" + itemName + ")" : itemName) + "[]";
+				default: return tag;
+			}
+	}
+}
+var SuryError = class extends Error {
+	constructor(params) {
+		super();
+		for (let key in params) this[key] = params[key];
+	}
+};
+var d = Object.defineProperty, p = SuryError.prototype;
+d(p, "message", { get() {
+	return message(this);
+} });
+d(p, "name", { value: "SuryError" });
+d(p, "s", { value: s });
+d(p, "_1", { get() {
+	return this;
+} });
+d(p, "RE_EXN_ID", { value: Exn });
+var seq = 1;
+var Schema = function() {}, sp = Object.create(null);
+d(sp, "with", { get() {
+	return (fn, ...args) => fn(this, ...args);
+} });
+Schema.prototype = sp;
+function getOrRethrow(exn) {
+	if (exn && exn.s === s) return exn;
+	throw exn;
+}
+function message(error) {
+	let nonEmptyPath = error.path;
+	return (nonEmptyPath === "" ? "" : "Failed at " + nonEmptyPath + ": ") + error.reason;
+}
+let globalConfig = {
+	m: message,
+	d: void 0,
+	a: "strip",
+	f: 0
+};
+let valueOptions = {};
+let valKey = "value";
+let reversedKey = "r";
+function base(tag, selfReverse) {
+	let s = new Schema();
+	s.type = tag;
+	s.seq = seq++;
+	if (selfReverse) {
+		valueOptions[valKey] = s;
+		d(s, reversedKey, valueOptions);
+	}
+	return s;
+}
+function noopDecoder(input) {
+	return input;
+}
+let factoryCache = {};
+function cached(key, tag, init) {
+	if (factoryCache[key]) return factoryCache[key];
+	let s = base(tag, true);
+	init(s);
+	factoryCache[key] = s;
+	return s;
+}
+let unknown = base(unknownTag, true);
+unknown.decoder = noopDecoder;
+let copySchema = ((schema) => {
+	let c = new Schema();
+	for (let k in schema) c[k] = schema[k];
+	c.seq = seq++;
+	return c;
+});
+function updateOutput(schema, fn) {
+	let root = copySchema(schema);
+	let mut = root;
+	while (mut.to) {
+		let next = copySchema(mut.to);
+		mut.to = next;
+		mut = next;
+	}
+	fn(mut);
+	return root;
+}
+let $$class = SuryError;
+function make(prim) {
+	return new SuryError(prim);
+}
+let $$Error = {
+	$$class,
+	make
+};
+function embed(b, value) {
+	let e = b.g.e;
+	let l = e.length;
+	e[l] = value;
+	return "e[" + l + "]";
+}
+function inlineConst(b, schema) {
+	let tagFlag = flags[schema.type];
+	let $$const = schema.const;
+	if (tagFlag & 16) return "void 0";
+	else if (tagFlag & 2) return fromString($$const);
+	else if (tagFlag & 1024) return $$const + "n";
+	else if (tagFlag & 28672) return embed(b, schema.const);
+	else return $$const;
+}
+function inlineLocation(global, location) {
+	let key = "\"" + location + "\"";
+	let i = global[key];
+	if (i !== void 0) return i;
+	let inlinedLocation = fromString(location);
+	global[key] = inlinedLocation;
+	return inlinedLocation;
+}
+function secondAllocate(v) {
+	let b = this;
+	b.l = b.l + "," + v;
+}
+function initialAllocate(v) {
+	let b = this;
+	b.l = v;
+	b.a = secondAllocate;
+}
+function _var() {
+	return this.i;
+}
+function _bondVar() {
+	return this.b.v();
+}
+function _prevVar() {
+	return this.prev.v();
+}
+function varWithoutAllocation(global) {
+	let newCounter = global.v + 1;
+	global.v = newCounter;
+	return "v" + newCounter;
+}
+function _notVarBeforeValidation() {
+	let val = this;
+	let v = varWithoutAllocation(val.g);
+	val.cp = "let " + v + "=" + val.i + ";";
+	val.i = v;
+	val.v = _var;
+	return v;
+}
+function _notVarAtParent() {
+	let val = this;
+	let v = varWithoutAllocation(val.g);
+	val.p.a(v + "=" + val.i);
+	val.v = _var;
+	val.i = v;
+	return v;
+}
+function _notVar() {
+	let val = this;
+	let v = varWithoutAllocation(val.g);
+	let from = val.prev;
+	let target = from !== void 0 ? from : val;
+	let i = val.i;
+	if (i === "") target.a(v);
+	else if (val.cp !== "") {
+		target.a(v);
+		val.cp = val.cp + v + "=" + i + ";";
+	} else target.a(v + "=" + i);
+	val.v = _var;
+	val.i = v;
+	return v;
+}
+function operationArg(schema, expected, flag, defs) {
+	return {
+		v: _var,
+		i: "i",
+		s: schema,
+		e: expected,
+		f: 0,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		path: "",
+		g: {
+			v: -1,
+			o: flag,
+			e: [],
+			d: defs
+		}
+	};
+}
+function failWithArg(b, fn, arg) {
+	return embed(b, (arg) => {
+		throw new SuryError(fn(arg));
+	}) + "(" + arg + ")";
+}
+function makeInvalidInputDetails(expected, received, path, input, includeInput, unionErrors, reasonOverride) {
+	let reasonRef = reasonOverride !== void 0 ? reasonOverride : "Expected " + toExpression(expected) + ", received " + (includeInput ? stringify(input) : toExpression(received));
+	if (unionErrors !== void 0) {
+		let reasonsDict = {};
+		for (let idx = 0, idx_finish = unionErrors.length; idx < idx_finish; ++idx) {
+			let caseError = unionErrors[idx];
+			let caseReason = caseError.reason.split("\n").join("\n  ");
+			let nonEmptyPath = caseError.path;
+			let line = "\n- " + (nonEmptyPath === "" ? "" : "At " + nonEmptyPath + ": ") + caseReason;
+			if (!reasonsDict[line]) {
+				reasonsDict[line] = 1;
+				reasonRef = reasonRef + line;
+			}
+		}
+	}
+	let details = {
+		code: "invalid_input",
+		path,
+		reason: reasonRef,
+		expected,
+		received,
+		unionErrors
+	};
+	if (includeInput) details.input = input;
+	return details;
+}
+function invalidInputBuilder(expected, $staropt$star, reasonOverride, $staropt$star$1) {
+	return (input) => {
+		let extraPath = $staropt$star !== void 0 ? $staropt$star : "";
+		let includeInput = $staropt$star$1 !== void 0 ? $staropt$star$1 : true;
+		let expected$1 = expected !== void 0 ? expected : input.e;
+		let p = input.prev;
+		let received = p !== void 0 ? p.s : input.s;
+		let path = extraPath === "" ? input.path : input.path + extraPath;
+		return (value) => makeInvalidInputDetails(expected$1, received, path, value, includeInput, void 0, reasonOverride);
+	};
+}
+function failInvalidType(input) {
+	let em = input.e.errorMessage;
+	let override;
+	if (em !== void 0) {
+		let m = em["type"];
+		override = m !== void 0 ? m : em["_"];
+	} else override = void 0;
+	return invalidInputBuilder(void 0, void 0, override, void 0)(input);
+}
+function failWithErrorMessage(key, defaultMessage) {
+	return (input) => {
+		let em = input.e.errorMessage;
+		let override;
+		if (em !== void 0) {
+			let m = em[key];
+			override = m !== void 0 ? m : em["_"];
+		} else override = void 0;
+		let m$1;
+		if (override !== void 0) m$1 = override;
+		else {
+			if (defaultMessage === void 0) return failInvalidType(input);
+			m$1 = defaultMessage;
+		}
+		return invalidInputBuilder(void 0, void 0, m$1, void 0)(input);
+	};
+}
+function embedInvalidInput(input, expectedOpt) {
+	return failWithArg(input, invalidInputBuilder(expectedOpt !== void 0 ? expectedOpt : input.e, void 0, void 0, void 0)(input), input.v());
+}
+function emitChecks(val, inputVar) {
+	let checks = val.vc;
+	let len = checks.length;
+	if (len === 1) {
+		let check = checks[0];
+		return check.c(inputVar) + "||" + failWithArg(val, check.f(val), inputVar) + ";";
+	}
+	let out = "";
+	let i = 0;
+	while (i < len) {
+		let head = checks[i];
+		let fail = head.f;
+		let cond = head.c(inputVar);
+		i = i + 1 | 0;
+		while (i < len && checks[i].f === fail) {
+			cond = cond + "&&" + checks[i].c(inputVar);
+			i = i + 1 | 0;
+		}
+		out = out + (cond + "||" + failWithArg(val, fail(val), inputVar) + ";");
+	}
+	return out;
+}
+function merge(val, hoistCond) {
+	let current = val;
+	let code = "";
+	while (current !== void 0) {
+		let val$1 = current;
+		current = val$1.prev;
+		let currentCode = "";
+		if (val$1.vc) {
+			if (hoistCond !== void 0 && (val$1.t === true ? val$1.prev.t !== true && val$1.cp === "" : true)) {
+				let inputVar = current.v();
+				let allChecks = val$1.vc;
+				let localHoist = "";
+				for (let i = 0, i_finish = allChecks.length; i < i_finish; ++i) {
+					let check = allChecks[i];
+					let condCode = check.c(inputVar);
+					if (check.f === failInvalidType) localHoist = localHoist ? localHoist + "&&" + condCode : condCode;
+					else if (val$1.e.noValidation !== true) currentCode = currentCode + (condCode + "||" + failWithArg(val$1, check.f(val$1), inputVar) + ";");
+				}
+				if (localHoist) if (hoistCond.contents) hoistCond.contents = localHoist + "&&" + hoistCond.contents;
+				else hoistCond.contents = localHoist;
+			} else if (val$1.e.noValidation !== true) currentCode = emitChecks(val$1, current.v());
+		}
+		if (val$1.l !== "") currentCode = currentCode + ("let " + val$1.l + ";");
+		delete val$1.a;
+		currentCode = val$1.cp + currentCode;
+		code = currentCode + code;
+	}
+	return code;
+}
+function next(prev, initial, schema, expectedOpt) {
+	return {
+		v: _notVar,
+		i: initial,
+		s: schema,
+		e: expectedOpt !== void 0 ? expectedOpt : prev.e,
+		prev,
+		f: 0,
+		d: prev.d,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		t: true,
+		path: prev.path,
+		g: prev.g
+	};
+}
+function refine(val, schemaOpt, checks, expectedOpt) {
+	let schema = schemaOpt !== void 0 ? schemaOpt : val.s;
+	let expected = expectedOpt !== void 0 ? expectedOpt : val.e;
+	let shouldLink = val.v !== _var;
+	let nextVal = {
+		v: shouldLink ? _prevVar : _var,
+		i: val.i,
+		s: schema,
+		e: expected,
+		prev: val,
+		f: val.f,
+		d: val.d,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		vc: checks,
+		t: val.t,
+		path: val.path,
+		g: val.g
+	};
+	if (shouldLink) {
+		let valVar = val.v.bind(val);
+		val.v = () => {
+			let v = valVar();
+			nextVal.i = v;
+			nextVal.v = _var;
+			return v;
+		};
+	}
+	return nextVal;
+}
+function pushCheck(val, check) {
+	let arr = val.vc;
+	if (arr !== void 0) arr.push(check);
+	else val.vc = [check];
+}
+function markOutput(val, valInput) {
+	let fn = valInput.e.inputRefiner;
+	let deferredInputChecks;
+	if (fn !== void 0) {
+		let checks = fn(valInput);
+		if (checks.length > 0) if (valInput.prev !== void 0) {
+			for (let i = 0, i_finish = checks.length; i < i_finish; ++i) pushCheck(valInput, checks[i]);
+			deferredInputChecks = void 0;
+		} else deferredInputChecks = checks;
+		else deferredInputChecks = void 0;
+	} else deferredInputChecks = void 0;
+	let fn$1 = val.e.refiner;
+	let outputChecks;
+	if (fn$1 !== void 0) {
+		let checks$1 = fn$1(val);
+		outputChecks = checks$1.length > 0 ? checks$1 : void 0;
+	} else outputChecks = void 0;
+	let val$1 = deferredInputChecks !== void 0 ? outputChecks !== void 0 ? refine(val, void 0, deferredInputChecks.concat(outputChecks), void 0) : refine(val, void 0, deferredInputChecks, void 0) : outputChecks !== void 0 ? refine(val, void 0, outputChecks, void 0) : val;
+	val$1.io = true;
+	return val$1;
+}
+function hoistChildChecks(parent, child, key) {
+	if (!child.vc) return;
+	let pathAppend = "[" + inlineLocation(parent.g, key) + "]";
+	child.vc.forEach((check) => pushCheck(parent, {
+		c: (inputVar) => check.c(inputVar + pathAppend),
+		f: check.f
+	}));
+	child.vc = void 0;
+}
+function dynamicScope(from, locationVar) {
+	return {
+		p: from,
+		v: _notVarBeforeValidation,
+		i: from.v() + "[" + locationVar + "]",
+		s: from.s.additionalItems,
+		e: from.e.additionalItems,
+		f: from.f,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		path: "",
+		g: from.g
+	};
+}
+function nextConst(from, schema, expected) {
+	return next(from, inlineConst(from, schema), schema, expected);
+}
+function asyncVal(from, initial) {
+	let v = next(from, initial, from.s, void 0);
+	v.f = 1;
+	return v;
+}
+function add(objectVal, location, val) {
+	if (objectVal.s.type === arrayTag) objectVal.s.items.push(val.s);
+	else {
+		if (!val.o) objectVal.s.required.push(location);
+		objectVal.s.properties[location] = val.s;
+	}
+	if (val.f & 1) val.v();
+	objectVal.cp = objectVal.cp + merge(val, void 0);
+	objectVal.d[location] = val;
+}
+function addKey(objVal, key, value) {
+	return objVal.v() + "[" + key + "]=" + value.i;
+}
+function scope(val) {
+	let shouldLink = val.v !== _var;
+	let nextVal = {
+		b: val,
+		v: shouldLink ? _bondVar : _var,
+		i: val.i,
+		s: val.s,
+		io: val.io,
+		e: val.e,
+		f: 0,
+		d: val.d,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		u: false,
+		t: false,
+		path: val.path,
+		g: val.g
+	};
+	if (shouldLink) {
+		let valVar = val.v.bind(val);
+		val.v = () => {
+			let v = valVar();
+			nextVal.i = v;
+			nextVal.v = _var;
+			return v;
+		};
+	}
+	return nextVal;
+}
+function get(parent, location) {
+	let d = parent.d;
+	let vals;
+	if (d !== void 0) vals = d;
+	else {
+		let d$1 = {};
+		parent.d = d$1;
+		vals = d$1;
+	}
+	let v = vals[location];
+	if (v !== void 0) return scope(v);
+	let locationSchema = parent.s.type === objectTag ? parent.s.properties[location] : parent.s.items[location];
+	let schema;
+	if (locationSchema !== void 0) schema = locationSchema;
+	else {
+		let s = parent.s.additionalItems;
+		if (s === "strip" || s === "strict") {
+			if (s === "strip") throw new Error("[Sury] The schema doesn't have additional items");
+			throw new Error("[Sury] The schema doesn't have additional items");
+		} else schema = s;
+	}
+	let pathAppend = "[" + inlineLocation(parent.g, location) + "]";
+	let item = {
+		p: parent,
+		v: _notVarAtParent,
+		i: constField in schema ? inlineConst(parent, schema) : parent.v() + pathAppend,
+		s: schema,
+		e: schema,
+		f: 0,
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		path: parent.path + pathAppend,
+		g: parent.g
+	};
+	vals[location] = item;
+	return item;
+}
+function mergeWithPathPrepend(val, parent, locationVar, appendSafe) {
+	if (val.path === "" && locationVar === void 0) return merge(val, void 0);
+	else {
+		let $$catch = (errorVar) => {
+			let path = parent.path;
+			let tmp = path === "" ? "" : fromString(path) + "+";
+			return errorVar + ".path=" + tmp + (locationVar !== void 0 ? "'[\"'+" + locationVar + "+'\"]'+" : "") + errorVar + ".path";
+		};
+		let valCode = merge(val, void 0);
+		if (valCode === "" && !(val.f & 1)) return valCode + (appendSafe !== void 0 ? appendSafe() : "");
+		let errorVar = varWithoutAllocation(val.g);
+		let catchCode = $$catch(errorVar) + ";throw " + errorVar;
+		if (val.f & 1) val.i = val.i + ".catch(" + errorVar + "=>{" + catchCode + "})";
+		return "try{" + valCode + (appendSafe !== void 0 ? appendSafe() : "") + "}catch(" + errorVar + "){" + catchCode + "}";
+	}
+}
+function unsupportedDecode(b, from, target) {
+	throw new SuryError({
+		code: "unsupported_decode",
+		path: b.path,
+		reason: "Can't decode " + toExpression(from) + " to " + toExpression(target) + ". Use S.to to define a custom decoder",
+		from,
+		to: target
+	});
+}
+function noopOperation(i) {
+	return i;
+}
+noopOperation.embedded = immutableEmpty$1;
+function int32FormatValidation(inputVar) {
+	return inputVar + "<=2147483647&&" + inputVar + ">=-2147483648&&" + inputVar + "%1===0";
+}
+function numberDecoder(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) {
+		let checks = [{
+			c: (inputVar) => "typeof " + inputVar + "===\"number\"",
+			f: failInvalidType
+		}];
+		let match = input.e.format;
+		let exit = 0;
+		if (match === "int32") checks.push({
+			c: int32FormatValidation,
+			f: failInvalidType
+		});
+		else exit = 1;
+		if (exit === 1) {
+			if (!(input.g.o & 2)) checks.push({
+				c: (inputVar) => "!Number.isNaN(" + inputVar + ")",
+				f: failInvalidType
+			});
+		}
+		return refine(input, input.e, checks, void 0);
+	}
+	if (!(inputTagFlag & 2)) if (inputTagFlag & 4) if (input.s.format !== input.e.format && input.e.format === "int32") return refine(input, input.e, [{
+		c: int32FormatValidation,
+		f: failInvalidType
+	}], void 0);
+	else return input;
+	else return unsupportedDecode(input, input.s, input.e);
+	let outputVar = varWithoutAllocation(input.g);
+	input.a(outputVar + "=+" + input.v());
+	let output = next(input, outputVar, input.e, void 0);
+	output.v = _var;
+	output.vc = [{
+		c: (param) => {
+			let match = input.e.format;
+			if (match !== void 0) if (match === "int32") return int32FormatValidation(outputVar);
+			else return "!Number.isNaN(" + outputVar + ")";
+			else return "!Number.isNaN(" + outputVar + ")";
+		},
+		f: failInvalidType
+	}];
+	return output;
+}
+function float() {
+	return cached(numberTag, numberTag, (s) => {
+		s.decoder = numberDecoder;
+	});
+}
+function inputToString(input) {
+	return next(input, "\"\"+" + input.i, string$2(), void 0);
+}
+function stringDecoderFn(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) return refine(input, input.e, [{
+		c: (inputVar) => "typeof " + inputVar + "===\"string\"",
+		f: failInvalidType
+	}], void 0);
+	if (!(inputTagFlag & 3132 && constField in input.s)) if (inputTagFlag & 1036) return inputToString(input);
+	else if (inputTagFlag & 2) return input;
+	else return unsupportedDecode(input, input.s, input.e);
+	let $$const = "" + input.s.const;
+	let schema = base(stringTag, false);
+	schema.const = $$const;
+	return next(input, "\"" + $$const + "\"", schema, void 0);
+}
+function string$2() {
+	return cached(stringTag, stringTag, (s) => {
+		s.decoder = stringDecoderFn;
+	});
+}
+function booleanDecoder(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) return refine(input, input.e, [{
+		c: (inputVar) => "typeof " + inputVar + "===\"boolean\"",
+		f: failInvalidType
+	}], void 0);
+	if (!(inputTagFlag & 2)) if (inputTagFlag & 8) return input;
+	else return unsupportedDecode(input, input.s, input.e);
+	let outputVar = varWithoutAllocation(input.g);
+	input.a(outputVar);
+	let output = next(input, outputVar, input.e, void 0);
+	output.v = _var;
+	let inputVar = input.v();
+	output.cp = "(" + output.i + "=" + inputVar + "===\"true\")||" + inputVar + "===\"false\"||" + embedInvalidInput(input, void 0) + ";";
+	return output;
+}
+function bool() {
+	return cached(booleanTag, booleanTag, (s) => {
+		s.decoder = booleanDecoder;
+	});
+}
+function bigintDecoder(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) return refine(input, input.e, [{
+		c: (inputVar) => "typeof " + inputVar + "===\"bigint\"",
+		f: failInvalidType
+	}], void 0);
+	if (!(inputTagFlag & 2)) if (inputTagFlag & 4) return next(input, "BigInt(" + input.i + ")", input.e, void 0);
+	else if (inputTagFlag & 1024) return input;
+	else return unsupportedDecode(input, input.s, input.e);
+	let outputVar = varWithoutAllocation(input.g);
+	input.a(outputVar);
+	let output = next(input, outputVar, input.e, void 0);
+	output.v = _var;
+	output.cp = "try{" + outputVar + "=BigInt(" + input.v() + ")}catch(_){" + embedInvalidInput(input, void 0) + "}";
+	return output;
+}
+function bigint() {
+	return cached(bigintTag, bigintTag, (s) => {
+		s.decoder = bigintDecoder;
+	});
+}
+function symbolDecoder(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) return refine(input, input.e, [{
+		c: (inputVar) => "typeof " + inputVar + "===\"symbol\"",
+		f: failInvalidType
+	}], void 0);
+	else if (inputTagFlag & 16384) return input;
+	else return unsupportedDecode(input, input.s, input.e);
+}
+function symbol() {
+	return cached(symbolTag, symbolTag, (s) => {
+		s.decoder = symbolDecoder;
+	});
+}
+function setHas(has, tag) {
+	has[flags[tag] & 768 ? unknownTag : tag] = true;
+}
+let jsonName = "JSON";
+function literalDecoder(input) {
+	let expectedSchema = input.e;
+	if (expectedSchema.noValidation && !input.u) return nextConst(input, expectedSchema, void 0);
+	if (constField in input.s) if (input.s.const === expectedSchema.const) return input;
+	else return nextConst(input, expectedSchema, void 0);
+	let schemaTagFlag = flags[expectedSchema.type];
+	if (!(flags[input.s.type] & 2 && schemaTagFlag & 3132)) if (schemaTagFlag & 2048) return refine(input, expectedSchema, [{
+		c: (inputVar) => "Number.isNaN(" + inputVar + ")",
+		f: failInvalidType
+	}], void 0);
+	else return refine(input, expectedSchema, [{
+		c: (inputVar) => inputVar + "===" + inlineConst(input, expectedSchema),
+		f: failInvalidType
+	}], void 0);
+	let stringConstSchema = base(stringTag, false);
+	stringConstSchema.const = "" + expectedSchema.const;
+	let stringConstVal = nextConst(input, stringConstSchema, stringConstSchema);
+	stringConstVal.vc = [{
+		c: (inputVar) => inputVar + "===\"" + stringConstSchema.const + "\"",
+		f: failInvalidType
+	}];
+	return nextConst(stringConstVal, expectedSchema, expectedSchema);
+}
+function unit() {
+	return cached(undefinedTag, undefinedTag, (s) => {
+		s.const = void 0;
+		s.decoder = literalDecoder;
+	});
+}
+function nullLiteral() {
+	return cached(nullTag, nullTag, (s) => {
+		s.const = null;
+		s.decoder = literalDecoder;
+	});
+}
+function nan() {
+	return cached(nanTag, nanTag, (s) => {
+		s.const = NaN;
+		s.decoder = literalDecoder;
+	});
+}
+function parse(value) {
+	if (value === null) return nullLiteral();
+	let $$typeof = typeof value;
+	if ($$typeof === "object") {
+		let s = base(instanceTag, true);
+		s.class = value.constructor;
+		s.const = value;
+		s.decoder = literalDecoder;
+		return s;
+	}
+	if ($$typeof === "undefined") return unit();
+	if ($$typeof === "number" && Number.isNaN(value)) return nan();
+	let s$1 = base($$typeof, true);
+	s$1.const = value;
+	s$1.decoder = literalDecoder;
+	return s$1;
+}
+function parse$1(input) {
+	let valRef = input;
+	let appliedEncoderRef;
+	let loopCount = 0;
+	while (!valRef.io || valRef.e.to) {
+		let appliedEncoder = appliedEncoderRef;
+		appliedEncoderRef = void 0;
+		let loopInput = valRef;
+		loopCount = loopCount + 1 | 0;
+		if (loopCount > 50) throw /* @__PURE__ */ new Error("Loop count exceeded 100");
+		if (loopInput.e.$defs) if (loopInput.g.d) Object.assign(loopInput.g.d, loopInput.e.$defs);
+		else loopInput.g.d = loopInput.e.$defs;
+		if (loopInput.f & 1) {
+			let operationInputVar = loopInput.v();
+			let operationInput = scope(loopInput);
+			let operationOutput = parse$1(operationInput);
+			let operationCode = merge(operationOutput, void 0);
+			valRef = operationInput.i !== operationOutput.i || operationCode !== "" ? next(loopInput, operationInputVar + ".then(" + operationInputVar + "=>{" + operationCode + "return " + operationOutput.i + "})", operationOutput.s, operationOutput.e) : refine(loopInput, operationOutput.s, void 0, operationOutput.e);
+			valRef.f = valRef.f | 1;
+			valRef.io = true;
+		} else if (loopInput.io) {
+			let to = loopInput.e.to;
+			let parser = loopInput.e.parser;
+			valRef = parser !== void 0 ? parser(loopInput) : refine(valRef, void 0, void 0, to);
+		} else {
+			let maybeEncoder = loopInput.s.encoder;
+			if (maybeEncoder && maybeEncoder !== appliedEncoder && loopInput.s !== loopInput.e && loopInput.e.type !== unknownTag) valRef = maybeEncoder(loopInput, loopInput.e);
+			if (loopInput !== valRef) appliedEncoderRef = maybeEncoder;
+			else {
+				valRef = loopInput.e.decoder(loopInput);
+				if (!valRef.io) valRef = markOutput(valRef, valRef);
+			}
+		}
+	}
+	return valRef;
+}
+function getOutputSchema(_schema) {
+	while (true) {
+		let schema = _schema;
+		let to = schema.to;
+		if (to === void 0) return schema;
+		_schema = to;
+		continue;
+	}
+}
+function parseDynamic(input) {
+	try {
+		return parse$1(input);
+	} catch (exn) {
+		let error = getOrRethrow(exn);
+		let p = input.p;
+		error.path = (p !== void 0 ? p.path : "") + (input.path + "[]" + error.path);
+		throw error;
+	}
+}
+function compileDecoder(schema, expected, flag, defs) {
+	let input = operationArg(constField in schema ? unknown : schema, expected, flag, defs);
+	let output = parse$1(input);
+	let code = merge(output, void 0);
+	let isAsync = has(output.f, 1);
+	expected.isAsync = isAsync;
+	expected.hasTransform = output.t === true;
+	if (code === "" && (output === input || output.i === input.i) && !(flag & 1)) return noopOperation;
+	let inlinedOutput = output.i;
+	if (flag & 1 && !isAsync && !defs) inlinedOutput = "Promise.resolve(" + inlinedOutput + ")";
+	let inlinedFunction = "i=>{" + code + "return " + inlinedOutput + "}";
+	let ctxVarValue1 = input.g.e;
+	let fn = new Function("e", "s", "return " + inlinedFunction)(ctxVarValue1, s);
+	fn.embedded = input.g.e;
+	return fn;
+}
+function getDecoder(param, param$1) {
+	let args = arguments;
+	let idx = 0;
+	let flag;
+	let keyRef = "";
+	let maxSeq = 0;
+	let cacheTarget;
+	while (flag === void 0) {
+		let arg = args[idx];
+		if (arg) if (typeof arg === "number") {
+			let f = arg | globalConfig.f;
+			flag = f;
+			keyRef = keyRef + "-" + f;
+		} else {
+			let seq = arg.seq;
+			if (seq > maxSeq) {
+				maxSeq = seq;
+				cacheTarget = arg;
+			}
+			keyRef = keyRef + seq + "-";
+			idx = idx + 1 | 0;
+		}
+		else {
+			let f$1 = globalConfig.f;
+			flag = f$1;
+			keyRef = keyRef + "-" + f$1;
+		}
+	}
+	let cacheTarget$1 = cacheTarget;
+	if (cacheTarget$1 !== void 0) {
+		let key = keyRef;
+		if (key in cacheTarget$1) return cacheTarget$1[key];
+		let schema = args[idx - 1 | 0];
+		for (let i = idx - 2 | 0; i >= 0; --i) {
+			let to = schema;
+			schema = updateOutput(args[i], (mut) => {
+				mut.to = to;
+			});
+		}
+		let f$2 = compileDecoder(schema, schema, flag, 0);
+		valueOptions[valKey] = f$2;
+		d(cacheTarget$1, key, valueOptions);
+		return f$2;
+	}
+	throw new Error("[Sury] No schema provided for decoder.");
+}
+function makeObjectVal(prev, schema) {
+	return {
+		v: _notVar,
+		i: "",
+		s: schema.type === arrayTag ? {
+			type: arrayTag,
+			decoder: arrayDecoder,
+			additionalItems: "strict",
+			items: []
+		} : {
+			type: objectTag,
+			decoder: objectDecoder,
+			additionalItems: "strict",
+			required: [],
+			properties: {}
+		},
+		e: prev.e,
+		prev,
+		f: 0,
+		d: {},
+		cp: "",
+		l: "",
+		a: initialAllocate,
+		t: true,
+		path: prev.path,
+		g: prev.g
+	};
+}
+function completeObjectVal(objectVal) {
+	let isArray = objectVal.s.type === arrayTag;
+	let inline = "";
+	let promiseAllContent = "";
+	let optionalSettingCode;
+	let keys = Object.keys(objectVal.d);
+	for (let idx = 0, idx_finish = keys.length; idx < idx_finish; ++idx) {
+		let key = keys[idx];
+		let val = objectVal.d[key];
+		if (val.f & 1) promiseAllContent = promiseAllContent + val.i + ",";
+		if (val.o) {
+			let existingFn = optionalSettingCode;
+			optionalSettingCode = (objectVar) => (existingFn !== void 0 ? existingFn(objectVar) : "") + ("if(" + val.v() + "!==void 0){" + objectVar + "[" + inlineLocation(objectVal.g, key) + "]=" + val.i + "}");
+		} else inline = inline + (isArray ? val.i : inlineLocation(objectVal.g, key) + ":" + val.i) + ",";
+	}
+	objectVal.i = isArray ? "[" + inline + "]" : "{" + inline + "}";
+	if (promiseAllContent) {
+		let operationInput = scope(objectVal);
+		operationInput.io = true;
+		let operationOutput = parse$1(operationInput);
+		let operationCode = merge(operationOutput, void 0);
+		if (operationCode === "" && promiseAllContent === operationOutput.i + ",") objectVal.i = operationOutput.i;
+		else objectVal.i = "Promise.all([" + promiseAllContent + "]).then(([" + promiseAllContent + "])=>{" + operationCode + "return " + operationOutput.i + "})";
+		objectVal.f = objectVal.f | 1;
+		objectVal.s = operationOutput.s;
+		objectVal.e = operationOutput.e;
+		objectVal.io = true;
+		return objectVal;
+	}
+	let fn = optionalSettingCode;
+	if (fn === void 0) return objectVal;
+	let code = fn(objectVal.v());
+	let output = refine(objectVal, void 0, void 0, void 0);
+	output.cp = output.cp + code;
+	return output;
+}
+function array$2(item) {
+	let mut = base(arrayTag, item[reversedKey] === item);
+	mut.additionalItems = item;
+	mut.items = immutableEmpty$1;
+	mut.decoder = arrayDecoder;
+	return mut;
+}
+function arrayDecoder(unknownInput) {
+	let isUnion = unknownInput.u;
+	let expectedSchema = unknownInput.e;
+	let unknownInputTagFlag = flags[unknownInput.s.type];
+	let expectedItems = expectedSchema.items;
+	let expectedLength = expectedItems.length;
+	let input;
+	if (unknownInputTagFlag & 129) {
+		let isArrayInput = unknownInputTagFlag & 128;
+		let schema = isArrayInput ? unknownInput.s : array$2(unknown);
+		let checks = [];
+		if (!isArrayInput) checks.push({
+			c: (inputVar) => "Array.isArray(" + inputVar + ")",
+			f: failInvalidType
+		});
+		let match = schema.additionalItems;
+		let isExactSize;
+		isExactSize = match === "strip" || match === "strict" ? schema.items.length === expectedLength : false;
+		if (!isExactSize) {
+			let match$1 = expectedSchema.additionalItems;
+			if (match$1 === "strip" || match$1 === "strict") if (match$1 === "strip") checks.push({
+				c: (inputVar) => inputVar + ".length>=" + expectedLength,
+				f: failInvalidType
+			});
+			else checks.push({
+				c: (inputVar) => inputVar + ".length===" + expectedLength,
+				f: failInvalidType
+			});
+		}
+		input = checks.length > 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
+	} else input = unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
+	let itemSchema = expectedSchema.additionalItems;
+	let output;
+	let exit = 0;
+	if (itemSchema === "strip" || itemSchema === "strict") exit = 1;
+	else if (itemSchema === unknown) output = input;
+	else {
+		let inputVar = input.v();
+		let iteratorVar = varWithoutAllocation(input.g);
+		let itemOutput = parseDynamic(dynamicScope(input, iteratorVar));
+		let hasTransform = itemOutput.t;
+		let output$1 = hasTransform ? next(input, "new Array(" + inputVar + ".length)", expectedSchema, void 0) : refine(input, expectedSchema, void 0, void 0);
+		let itemCode = mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => addKey(output$1, iteratorVar, itemOutput) : void 0);
+		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + ("for(let " + iteratorVar + "=" + expectedLength + ";" + iteratorVar + "<" + inputVar + ".length;++" + iteratorVar + "){" + itemCode + "}");
+		output = itemOutput.f & 1 ? asyncVal(output$1, "Promise.all(" + output$1.i + ")") : output$1;
+	}
+	if (exit === 1) {
+		let objectVal = makeObjectVal(input, expectedSchema);
+		let match$2 = expectedSchema.additionalItems;
+		let shouldRecreateInput;
+		if (match$2 === "strip" || match$2 === "strict") if (match$2 === "strip") {
+			let match$3 = input.s.additionalItems;
+			shouldRecreateInput = match$3 === "strip" || match$3 === "strict" ? input.s.items.length !== expectedLength : true;
+		} else shouldRecreateInput = false;
+		else shouldRecreateInput = true;
+		for (let idx = 0; idx < expectedLength; ++idx) {
+			let schema$1 = expectedItems[idx];
+			let key = idx.toString();
+			let itemInput$1 = get(input, key);
+			itemInput$1.e = schema$1;
+			itemInput$1.io = false;
+			itemInput$1.u = isUnion;
+			let itemOutput$1 = parse$1(itemInput$1);
+			if (isUnion && constField in schema$1) hoistChildChecks(input, itemOutput$1, key);
+			add(objectVal, key, itemOutput$1);
+			if (!shouldRecreateInput) shouldRecreateInput = itemOutput$1.t;
+		}
+		if (shouldRecreateInput) output = completeObjectVal(objectVal);
+		else {
+			let o = refine(input, void 0, void 0, void 0);
+			o.cp = objectVal.cp;
+			o.d = objectVal.d;
+			output = o;
+		}
+	}
+	return markOutput(output, input);
+}
+function objectDecoder(unknownInput) {
+	let isUnion = unknownInput.u;
+	let expectedSchema = unknownInput.e;
+	let unknownInputTagFlag = flags[unknownInput.s.type];
+	let input;
+	if (unknownInputTagFlag & 65) {
+		let isObjectInput = unknownInputTagFlag & 64;
+		let schema;
+		if (isObjectInput) schema = unknownInput.s;
+		else {
+			let mut = base(objectTag, false);
+			mut.properties = immutableEmpty;
+			mut.additionalItems = unknown;
+			schema = mut;
+		}
+		let checks = [];
+		if (!isObjectInput) {
+			checks.push({
+				c: (inputVar) => "typeof " + inputVar + "===\"object\"&&" + inputVar,
+				f: failInvalidType
+			});
+			if (expectedSchema.additionalItems !== "strip") checks.push({
+				c: (inputVar) => "!Array.isArray(" + inputVar + ")",
+				f: failInvalidType
+			});
+		}
+		input = checks.length > 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
+	} else input = unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
+	let itemSchema = expectedSchema.additionalItems;
+	let output;
+	let exit = 0;
+	if (itemSchema === "strip" || itemSchema === "strict") exit = 1;
+	else if (itemSchema === unknown) output = input;
+	else {
+		let inputVar = input.v();
+		let keyVar = varWithoutAllocation(input.g);
+		let itemOutput = parseDynamic(dynamicScope(input, keyVar));
+		let hasTransform = itemOutput.t;
+		let output$1 = hasTransform ? next(input, "{}", expectedSchema, void 0) : refine(input, expectedSchema, void 0, void 0);
+		let itemCode = mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => addKey(output$1, keyVar, itemOutput) : void 0);
+		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + ("for(let " + keyVar + " in " + inputVar + "){" + itemCode + "}");
+		if (itemOutput.f & 1) {
+			let resolveVar = varWithoutAllocation(output$1.g);
+			let rejectVar = varWithoutAllocation(output$1.g);
+			let asyncParseResultVar = varWithoutAllocation(output$1.g);
+			let counterVar = varWithoutAllocation(output$1.g);
+			let outputVar = output$1.v();
+			output = asyncVal(output$1, "new Promise((" + resolveVar + "," + rejectVar + ")=>{let " + counterVar + "=Object.keys(" + outputVar + ").length;for(let " + keyVar + " in " + outputVar + "){" + outputVar + "[" + keyVar + "].then(" + asyncParseResultVar + "=>{" + outputVar + "[" + keyVar + "]=" + asyncParseResultVar + ";if(" + counterVar + "--===1){" + resolveVar + "(" + outputVar + ")}}," + rejectVar + ")}})");
+		} else output = output$1;
+	}
+	if (exit === 1) {
+		let properties = expectedSchema.properties;
+		let keys = Object.keys(properties);
+		let keysCount = keys.length;
+		let objectVal = makeObjectVal(input, expectedSchema);
+		let match = expectedSchema.additionalItems;
+		let shouldRecreateInput;
+		if (match === "strip" || match === "strict") if (match === "strip") {
+			let match$1 = input.s.additionalItems;
+			let exit$1 = 0;
+			if (match$1 === "strip" || match$1 === "strict") exit$1 = 2;
+			else shouldRecreateInput = true;
+			if (exit$1 === 2) shouldRecreateInput = Object.keys(input.s.properties).length !== keysCount;
+		} else shouldRecreateInput = false;
+		else shouldRecreateInput = true;
+		let s = input.s.additionalItems;
+		let isJsonParent;
+		isJsonParent = s === "strip" || s === "strict" ? false : s.name === jsonName;
+		for (let idx = 0; idx < keysCount; ++idx) {
+			let key = keys[idx];
+			let schema$1 = properties[key];
+			let itemInput$1 = get(input, key);
+			itemInput$1.e = schema$1;
+			itemInput$1.io = false;
+			itemInput$1.u = isUnion;
+			if (isJsonParent && schema$1.type === unionTag && schema$1.has[undefinedTag]) itemInput$1.i = "(" + itemInput$1.i + "??null)";
+			let itemOutput$1 = parse$1(itemInput$1);
+			if (isUnion && constField in schema$1) hoistChildChecks(input, itemOutput$1, key);
+			add(objectVal, key, itemOutput$1);
+			if (!shouldRecreateInput) shouldRecreateInput = itemOutput$1.t;
+		}
+		let tmp = false;
+		if (expectedSchema.additionalItems === "strict") {
+			let match$2 = input.s.additionalItems;
+			let tmp$1;
+			tmp$1 = match$2 !== "strip" && match$2 !== "strict";
+			tmp = tmp$1;
+		}
+		if (tmp) {
+			let keyVar$1 = varWithoutAllocation(objectVal.g);
+			input.a(keyVar$1);
+			objectVal.cp = objectVal.cp + ("for(" + keyVar$1 + " in " + input.v() + "){if(");
+			if (keys.length !== 0) for (let idx$1 = 0, idx_finish = keys.length; idx$1 < idx_finish; ++idx$1) {
+				let key$1 = keys[idx$1];
+				if (idx$1 !== 0) objectVal.cp = objectVal.cp + "&&";
+				objectVal.cp = objectVal.cp + (keyVar$1 + "!==" + inlineLocation(input.g, key$1));
+			}
+			else objectVal.cp = objectVal.cp + "true";
+			objectVal.cp = objectVal.cp + ("){" + failWithArg(input, (exccessFieldName) => ({
+				code: "unrecognized_keys",
+				path: objectVal.path,
+				reason: "Unrecognized key \"" + exccessFieldName + "\"",
+				keys: [exccessFieldName]
+			}), keyVar$1) + "}}");
+		}
+		if (shouldRecreateInput) output = completeObjectVal(objectVal);
+		else {
+			let o = refine(input, void 0, void 0, void 0);
+			o.cp = objectVal.cp;
+			o.d = objectVal.d;
+			output = o;
+		}
+	}
+	return markOutput(output, input);
+}
+function instanceDecoder(input) {
+	let inputTagFlag = flags[input.s.type];
+	if (inputTagFlag & 1) return refine(input, input.e, [{
+		c: (inputVar) => inputVar + " instanceof " + embed(input, input.e.class),
+		f: failInvalidType
+	}], void 0);
+	else if (inputTagFlag & 8192 && input.s.class === input.e.class) return input;
+	else return unsupportedDecode(input, input.s, input.e);
+}
+function instance(class_) {
+	let mut = base(instanceTag, true);
+	mut.class = class_;
+	mut.decoder = instanceDecoder;
+	return mut;
+}
+d(sp, "~standard", { get: function() {
+	let schema = this;
+	return {
+		version: 1,
+		vendor,
+		validate: (input) => {
+			try {
+				return { value: getDecoder(unknown, schema)(input) };
+			} catch (exn) {
+				let error = getOrRethrow(exn);
+				return { issues: [{
+					message: error.reason,
+					path: error.path === "" ? void 0 : toArray(error.path)
+				}] };
+			}
+		}
+	};
+} });
+function internalRefine(schema, makeRefiner) {
+	return updateOutput(schema, (mut) => {
+		let refiner = makeRefiner(mut);
+		let existingRefiner = mut.refiner;
+		if (existingRefiner !== void 0) mut.refiner = (input) => {
+			let arr = existingRefiner(input);
+			let next = refiner(input);
+			for (let i = 0, i_finish = next.length; i < i_finish; ++i) arr.push(next[i]);
+			return arr;
+		};
+		else mut.refiner = refiner;
+	});
+}
+function getMutErrorMessage(mut) {
+	let em = mut.errorMessage ? copy(mut.errorMessage) : {};
+	mut.errorMessage = em;
+	return em;
+}
+function neverBuilderFn(input) {
+	let output = refine(input, void 0, void 0, never_());
+	output.cp = embedInvalidInput(input, void 0) + ";";
+	return output;
+}
+function never_() {
+	return cached(neverTag, neverTag, (s) => {
+		s.decoder = neverBuilderFn;
+	});
+}
+let nestedLoc = "BS_PRIVATE_NESTED_SOME_NONE";
+function factory(item) {
+	let mut = base(objectTag, item[reversedKey] === item);
+	mut.properties = immutableEmpty;
+	mut.additionalItems = item;
+	mut.decoder = objectDecoder;
+	return mut;
+}
+function toKey(schema) {
+	if (flags[schema.type] & 8192) return schema.class.name;
+	else return schema.type;
+}
+function isPriority(tagFlag, byKey) {
+	if (tagFlag & 8320 && objectTag in byKey) return true;
+	else if (tagFlag & 2048) return numberTag in byKey;
+	else return false;
+}
+function isWiderUnionSchema(schemaAnyOf, inputAnyOf) {
+	return inputAnyOf.every((inputSchema, idx) => {
+		let schema = schemaAnyOf[idx];
+		if (schema !== void 0 && !(flags[inputSchema.type] & 9152) && inputSchema.type === schema.type && inputSchema.const === schema.const) return inputSchema.to === void 0;
+		else return false;
+	});
+}
+function unionDecoder(input) {
+	let selfSchema = input.e;
+	let schemas = selfSchema.anyOf;
+	let initialInputTagFlag = flags[input.s.type];
+	let match = selfSchema.parser;
+	let toPerCase;
+	if (match !== void 0) toPerCase = void 0;
+	else {
+		let to = selfSchema.to;
+		toPerCase = to !== void 0 ? to : void 0;
+	}
+	if (initialInputTagFlag & 256 && isWiderUnionSchema(schemas, input.s.anyOf) && toPerCase === void 0 || input.io && input.e === input.s) return input;
+	if (input.s.encoder === void 0 && initialInputTagFlag & 768) input.s = unknown;
+	let activeKey = "";
+	if (!(initialInputTagFlag & 769)) {
+		let sourceKey = toKey(input.s);
+		let hasNull = false;
+		let hasUndefined = false;
+		let len = schemas.length;
+		let i = 0;
+		while (activeKey === "" && i < len) {
+			let s = schemas[i];
+			if (toKey(s) === sourceKey) activeKey = sourceKey;
+			else if (s.type === nullTag) hasNull = true;
+			else if (s.type === undefinedTag) hasUndefined = true;
+			i = i + 1 | 0;
+		}
+		if (activeKey === "") {
+			if (initialInputTagFlag & 16 && hasNull) activeKey = nullTag;
+			else if (initialInputTagFlag & 32 && hasUndefined) activeKey = undefinedTag;
+		}
+	}
+	let activeKey$1 = activeKey;
+	let initialInline = input.i;
+	let fail = (caught) => embed(input, function() {
+		let args = arguments;
+		throw new SuryError(makeInvalidInputDetails(selfSchema, unknown, input.path, args[0], true, args.length > 1 ? Array.from(args).slice(1) : void 0, void 0));
+	}) + "(" + input.v() + caught + ")";
+	let output = refine(input, void 0, void 0, void 0);
+	let outputAnyOf = [];
+	let getArrItemsCode = (arr, isDeopt) => {
+		let typeValidationInput = arr[0];
+		let typeValidationOutput = arr[1];
+		let itemStart = "";
+		let itemEnd = "";
+		let itemNextElse = false;
+		let itemNoop = { contents: "" };
+		let caught = "";
+		let byDiscriminant = {};
+		let itemIdx = 2;
+		let lastIdx = arr.length - 1 | 0;
+		while (itemIdx <= lastIdx) {
+			let input = scope(typeValidationOutput);
+			input.u = true;
+			input.t = typeValidationOutput.t;
+			input.io = false;
+			input.e = arr[itemIdx];
+			let isLast = itemIdx === lastIdx;
+			let isFirst = itemIdx === 2;
+			let withExhaustiveCheck = !(isFirst && isLast);
+			let itemCode = "";
+			let itemCond = { contents: "" };
+			try {
+				let itemOutput = parse$1(input);
+				outputAnyOf.push(itemOutput.s);
+				itemCode = merge(itemOutput, itemCond);
+				if (itemOutput.t) {
+					output.t = true;
+					if (itemOutput.f & 1) output.f = output.f | 1;
+					itemCode = itemCode + (typeValidationInput.v() + "=" + itemOutput.i);
+				}
+			} catch (exn) {
+				let errorVar = embed(input, getOrRethrow(exn));
+				if (isLast) withExhaustiveCheck = false;
+				let tmp;
+				if (isLast && !isDeopt) {
+					withExhaustiveCheck = false;
+					tmp = fail("," + errorVar);
+				} else tmp = "throw " + errorVar;
+				itemCode = tmp;
+			}
+			let itemCond$1 = itemCond.contents;
+			let itemCode$1 = itemCode;
+			if (itemCond$1) if (itemCode$1) {
+				let match = byDiscriminant[itemCond$1];
+				if (match !== void 0) if (typeof match === "string") byDiscriminant[itemCond$1] = [match, itemCode$1];
+				else match.push(itemCode$1);
+				else byDiscriminant[itemCond$1] = itemCode$1;
+			} else itemNoop.contents = itemNoop.contents ? itemNoop.contents + "||" + itemCond$1 : itemCond$1;
+			if (!itemCond$1 || isLast) {
+				let accedDiscriminants = Object.keys(byDiscriminant);
+				for (let idx = 0, idx_finish = accedDiscriminants.length; idx < idx_finish; ++idx) {
+					let discrim = accedDiscriminants[idx];
+					itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(" + discrim + "){");
+					let code = byDiscriminant[discrim];
+					if (typeof code === "string") itemStart = itemStart + code + "}";
+					else {
+						let caught$1 = "";
+						for (let idx$1 = 0, idx_finish$1 = code.length; idx$1 < idx_finish$1; ++idx$1) {
+							let code$1 = code[idx$1];
+							let errorVar$1 = "e" + idx$1;
+							itemStart = itemStart + ("try{" + code$1 + "}catch(" + errorVar$1 + "){");
+							caught$1 = caught$1 + "," + errorVar$1;
+						}
+						itemStart = itemStart + fail(caught$1) + "}".repeat(code.length) + "}";
+					}
+					itemNextElse = true;
+				}
+				byDiscriminant = {};
+			}
+			if (!itemCond$1) if (itemCode$1) {
+				if (itemNoop.contents) {
+					itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){");
+					itemEnd = "}" + itemEnd;
+					itemNoop.contents = "";
+					itemNextElse = false;
+				}
+				if (isLast && (isDeopt || !withExhaustiveCheck || isFirst)) {
+					itemStart = itemStart + ((itemNextElse ? "else{" : "") + itemCode$1);
+					itemEnd = (itemNextElse ? "}" : "") + itemEnd;
+				} else {
+					let errorVar$2 = "e" + (itemIdx - 2 | 0);
+					itemStart = itemStart + ((itemNextElse ? "else{" : "") + "try{" + itemCode$1 + "}catch(" + errorVar$2 + "){");
+					itemEnd = (itemNextElse ? "}" : "") + "}" + itemEnd;
+					caught = caught + "," + errorVar$2;
+					itemNextElse = false;
+				}
+			} else {
+				itemNoop.contents = "";
+				itemIdx = lastIdx;
+				withExhaustiveCheck = false;
+			}
+			if (isLast) {
+				if (itemNoop.contents) if (itemStart) itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){" + fail(caught) + "}");
+				else pushCheck(typeValidationOutput, {
+					c: (param) => "(" + itemNoop.contents + ")",
+					f: failInvalidType
+				});
+				else if (withExhaustiveCheck) {
+					let errorCode = fail(caught);
+					itemStart = itemStart + (itemNextElse ? "else{" + errorCode + "}" : errorCode);
+				}
+			}
+			itemIdx = itemIdx + 1;
+		}
+		return itemStart + itemEnd;
+	};
+	let start = "";
+	let end = "";
+	let caught = "";
+	let exit = false;
+	let lastIdx = schemas.length - 1 | 0;
+	let byKey = {};
+	let keys = [];
+	let unionRefiner = selfSchema.refiner;
+	let unionInputRefiner = selfSchema.inputRefiner;
+	let cachedRefinerChecks = { contents: void 0 };
+	let cachedInputRefinerChecks = { contents: void 0 };
+	let attach = (current, source, cache) => {
+		if (source === void 0) return current;
+		let getCached = (input) => {
+			let checks = cache.contents;
+			if (checks !== void 0) return checks;
+			let checks$1 = source(input);
+			cache.contents = checks$1;
+			return checks$1;
+		};
+		if (current !== void 0) return (input) => {
+			let arr = current(input);
+			let next = getCached(input);
+			for (let i = 0, i_finish = next.length; i < i_finish; ++i) arr.push(next[i]);
+			return arr;
+		};
+		else return getCached;
+	};
+	let appendUnionRefiners = (mut) => {
+		let r = attach(mut.refiner, unionRefiner, cachedRefinerChecks);
+		if (r !== void 0) mut.refiner = r;
+		let r$1 = attach(mut.inputRefiner, unionInputRefiner, cachedInputRefinerChecks);
+		if (r$1 !== void 0) {
+			mut.inputRefiner = r$1;
+			return;
+		}
+	};
+	for (let idx = 0; idx <= lastIdx; ++idx) {
+		let schema = toPerCase !== void 0 ? updateOutput(schemas[idx], (mut) => {
+			appendUnionRefiners(mut);
+			mut.to = toPerCase;
+		}) : schemas[idx];
+		let tagFlag = flags[schema.type];
+		let key = toKey(schema);
+		if ((activeKey$1 === "" || activeKey$1 === key) && !(tagFlag & 16 && "fromDefault" in selfSchema)) {
+			let initialArr = byKey[key];
+			if (initialArr !== void 0) {
+				if (tagFlag & 64 && nestedLoc in schema.properties) initialArr.splice(initialArr.length - 1 | 0, 0, schema);
+				else if (!(tagFlag & 2096)) initialArr.push(schema);
+			} else {
+				let typeValidationInput = scope(input);
+				typeValidationInput.e = tagFlag & 32 ? nullLiteral() : tagFlag & 16 ? unit() : tagFlag & 64 ? factory(unknown) : tagFlag & 128 ? array$2(unknown) : tagFlag & 8192 ? instance(schema.class) : tagFlag & 2048 ? nan() : tagFlag & 2 ? string$2() : tagFlag & 4 ? float() : tagFlag & 8 ? bool() : tagFlag & 1024 ? bigint() : tagFlag & 16384 ? symbol() : unknown;
+				let typeValidationOutput;
+				try {
+					typeValidationOutput = parse$1(typeValidationInput);
+				} catch (exn) {
+					typeValidationInput.vc = void 0;
+					typeValidationOutput = typeValidationInput;
+				}
+				if (isPriority(tagFlag, byKey)) keys.unshift(key);
+				else keys.push(key);
+				byKey[key] = [
+					typeValidationInput,
+					typeValidationOutput,
+					schema
+				];
+				let shouldDeopt = true;
+				let valRef = typeValidationOutput;
+				while (valRef !== void 0 && shouldDeopt) {
+					let v = valRef;
+					valRef = v.prev;
+					shouldDeopt = !(v.vc && (v.t === true ? v.prev.t !== true && v.cp === "" : true));
+				}
+				if (shouldDeopt) {
+					for (let keyIdx = 0, keyIdx_finish = keys.length; keyIdx < keyIdx_finish; ++keyIdx) {
+						let key$1 = keys[keyIdx];
+						if (!exit) {
+							let arr = byKey[key$1];
+							let typeValidationOutput$1 = arr[1];
+							let itemsCode = getArrItemsCode(arr, true);
+							let blockCode = merge(typeValidationOutput$1, void 0) + itemsCode;
+							if (blockCode) {
+								let errorVar = "e" + (idx + keyIdx | 0);
+								start = start + ("try{" + blockCode + "}catch(" + errorVar + "){");
+								end = "}" + end;
+								caught = caught + "," + errorVar;
+							} else exit = true;
+						}
+					}
+					byKey = {};
+					keys = [];
+				}
+			}
+		}
+	}
+	let byKey$1 = byKey;
+	let keys$1 = keys;
+	if (!exit) {
+		let nextElse = false;
+		let noop = "";
+		for (let idx$1 = 0, idx_finish = keys$1.length; idx$1 < idx_finish; ++idx$1) {
+			let arr$1 = byKey$1[keys$1[idx$1]];
+			let typeValidationOutput$2 = arr$1[1];
+			let firstSchema = arr$1[2];
+			let itemsCode$1 = getArrItemsCode(arr$1, false);
+			let blockCond = { contents: "" };
+			let blockCode$1 = merge(typeValidationOutput$2, blockCond) + itemsCode$1;
+			let blockCond$1 = blockCond.contents;
+			if (blockCode$1 || isPriority(flags[firstSchema.type], byKey$1)) {
+				start = start + (nextElse ? "else if" : "if") + ("(" + blockCond$1 + "){" + blockCode$1 + "}");
+				nextElse = true;
+			} else noop = noop ? noop + "||" + blockCond$1 : blockCond$1;
+		}
+		let errorCode = fail(caught);
+		let tmp;
+		if (noop) tmp = (nextElse ? "else if" : "if") + ("(!(" + noop + ")){" + errorCode + "}");
+		else tmp = nextElse ? "else{" + errorCode + "}" : errorCode;
+		start = start + tmp;
+	}
+	output.cp = output.cp + start + end;
+	if (input.i !== output.i) output.i = input.i;
+	let o = output.f & 1 ? (output.i = "Promise.resolve(" + output.i + ")", output.v = _notVar, output) : output.v === _var && input.cp === "" && output.cp === "" && (output.l === output.i + "=" + initialInline || initialInline === "i") ? (input.l = "", input.a = initialAllocate, input.v = _notVar, input.i = initialInline, input) : output;
+	o.s = outputAnyOf.length ? factory$1(outputAnyOf) : never_();
+	o.e = toPerCase !== void 0 ? (o.io = true, getOutputSchema(toPerCase)) : selfSchema;
+	return o;
+}
+function factory$1(schemas) {
+	let len = schemas.length;
+	if (len === 1) return schemas[0];
+	if (len !== 0) {
+		let has = {};
+		let anyOf = /* @__PURE__ */ new Set();
+		for (let idx = 0, idx_finish = schemas.length; idx < idx_finish; ++idx) {
+			let schema = schemas[idx];
+			if (schema.type === unionTag && schema.to === void 0) {
+				schema.anyOf.forEach((item) => {
+					anyOf.add(item);
+				});
+				Object.assign(has, schema.has);
+			} else {
+				anyOf.add(schema);
+				setHas(has, schema.type);
+			}
+		}
+		let mut = base(unionTag, false);
+		mut.anyOf = Array.from(anyOf);
+		mut.decoder = unionDecoder;
+		mut.has = has;
+		return mut;
+	}
+	throw new Error("[Sury] S.union requires at least one item");
+}
+function url$1() {
+	return cached("url", stringTag, (s) => {
+		let urlValidator = ((s) => {
+			try {
+				new URL(s);
+				return true;
+			} catch (_) {
+				return false;
+			}
+		});
+		s.decoder = stringDecoderFn;
+		s.format = "url";
+		s.refiner = (input) => [{
+			c: (inputVar) => embed(input, urlValidator) + "(" + inputVar + ")",
+			f: failWithErrorMessage("format", void 0)
+		}];
+	});
+}
+function invalidDateRefine(input) {
+	return refine(input, input.e, [{
+		c: (inputVar) => "!Number.isNaN(" + inputVar + ".getTime())",
+		f: failInvalidType
+	}], void 0);
+}
+function date$1() {
+	return cached(instanceTag, instanceTag, (s) => {
+		s.class = Date;
+		s.decoder = (input) => {
+			let inputTagFlag = flags[input.s.type];
+			if (inputTagFlag & 2) return invalidDateRefine(next(input, "new Date(" + input.i + ")", s, void 0));
+			else if (inputTagFlag & 1) return invalidDateRefine(instanceDecoder(input));
+			else if (inputTagFlag & 8192 && input.s.class === s.class) return input;
+			else return unsupportedDecode(input, input.s, input.e);
+		};
+		s.encoder = (input, target) => {
+			if (!(flags[target.type] & 2)) return input;
+			let dateTimeString = base(stringTag, false);
+			dateTimeString.format = "date-time";
+			return parse$1(next(input, input.i + ".toISOString()", dateTimeString, target));
+		};
+	});
+}
+function traverseDefinition(definition, onNode) {
+	if (typeof definition !== "object" || definition === null) return parse(definition);
+	let s = onNode(definition);
+	if (s !== void 0) return s;
+	if (Array.isArray(definition)) {
+		for (let idx = 0, idx_finish = definition.length; idx < idx_finish; ++idx) definition[idx] = traverseDefinition(definition[idx], onNode);
+		let mut = base(arrayTag, false);
+		mut.items = definition;
+		mut.additionalItems = "strict";
+		mut.decoder = arrayDecoder;
+		return mut;
+	}
+	let cnstr = definition.constructor;
+	if (cnstr && cnstr !== Object) {
+		let mut$1 = base(instanceTag, true);
+		mut$1.class = cnstr;
+		mut$1.const = definition;
+		mut$1.decoder = literalDecoder;
+		return mut$1;
+	}
+	let fieldNames = Object.keys(definition);
+	let length = fieldNames.length;
+	for (let idx$1 = 0; idx$1 < length; ++idx$1) {
+		let location = fieldNames[idx$1];
+		definition[location] = traverseDefinition(definition[location], onNode);
+	}
+	let mut$2 = base(objectTag, false);
+	mut$2.required = fieldNames;
+	mut$2.properties = definition;
+	mut$2.additionalItems = globalConfig.a;
+	mut$2.decoder = objectDecoder;
+	return mut$2;
+}
+function definitionToSchema(definition) {
+	return traverseDefinition(definition, (node) => {
+		if (node["~standard"]) return node;
+	});
+}
+let js_schema = definitionToSchema;
+function assertNumber(fnName, n) {
+	if (!(typeof n !== "number" || Number.isNaN(n))) return;
+	throw new SuryError({
+		code: "invalid_operation",
+		path: "",
+		reason: "[S." + fnName + "] Expected number, received " + stringify(n)
+	});
+}
+function intMin(schema, minValue, maybeMessage) {
+	assertNumber("min", minValue);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	return internalRefine(schema, (mut) => {
+		mut.minimum = minValue;
+		getMutErrorMessage(mut)["minimum"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + ">" + (minValue - 1 | 0),
+			f: failWithErrorMessage("minimum", message)
+		}];
+	});
+}
+function intMax(schema, maxValue, maybeMessage) {
+	assertNumber("max", maxValue);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	return internalRefine(schema, (mut) => {
+		mut.maximum = maxValue;
+		getMutErrorMessage(mut)["maximum"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + "<" + (maxValue + 1 | 0),
+			f: failWithErrorMessage("maximum", message)
+		}];
+	});
+}
+function floatMin(schema, minValue, maybeMessage) {
+	assertNumber("min", minValue);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	return internalRefine(schema, (mut) => {
+		mut.minimum = minValue;
+		getMutErrorMessage(mut)["minimum"] = message;
+		return (input) => [{
+			c: (inputVar) => inputVar + ">=" + embed(input, minValue),
+			f: failWithErrorMessage("minimum", message)
+		}];
+	});
+}
+function floatMax(schema, maxValue, maybeMessage) {
+	assertNumber("max", maxValue);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	return internalRefine(schema, (mut) => {
+		mut.maximum = maxValue;
+		getMutErrorMessage(mut)["maximum"] = message;
+		return (input) => [{
+			c: (inputVar) => inputVar + "<=" + embed(input, maxValue),
+			f: failWithErrorMessage("maximum", message)
+		}];
+	});
+}
+function arrayMinLength(schema, length, maybeMessage) {
+	assertNumber("min", length);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length + " or more items long";
+	return internalRefine(schema, (mut) => {
+		mut.minItems = length;
+		getMutErrorMessage(mut)["minItems"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + ".length>" + (length - 1 | 0),
+			f: failWithErrorMessage("minItems", message)
+		}];
+	});
+}
+function arrayMaxLength(schema, length, maybeMessage) {
+	assertNumber("max", length);
+	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length + " or fewer items long";
+	return internalRefine(schema, (mut) => {
+		mut.maxItems = length;
+		getMutErrorMessage(mut)["maxItems"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + ".length<" + (length + 1 | 0),
+			f: failWithErrorMessage("maxItems", message)
+		}];
+	});
+}
+function stringMinLength(schema, length, maybeMessage) {
+	assertNumber("min", length);
+	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length + " or more characters long";
+	return internalRefine(schema, (mut) => {
+		mut.minLength = length;
+		getMutErrorMessage(mut)["minLength"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + ".length>" + (length - 1 | 0),
+			f: failWithErrorMessage("minLength", message)
+		}];
+	});
+}
+function stringMaxLength(schema, length, maybeMessage) {
+	assertNumber("max", length);
+	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length + " or fewer characters long";
+	return internalRefine(schema, (mut) => {
+		mut.maxLength = length;
+		getMutErrorMessage(mut)["maxLength"] = message;
+		return (param) => [{
+			c: (inputVar) => inputVar + ".length<" + (length + 1 | 0),
+			f: failWithErrorMessage("maxLength", message)
+		}];
+	});
+}
+let js_parser = ((...args) => getDecoder(unknown, ...args));
+function js_union(values) {
+	return factory$1(values.map(definitionToSchema));
+}
+function min$1(schema, minValue, maybeMessage) {
+	switch (schema.type) {
+		case "string": return stringMinLength(schema, minValue, maybeMessage);
+		case "number": if (schema.format !== void 0) return intMin(schema, minValue, maybeMessage);
+		else return floatMin(schema, minValue, maybeMessage);
+		case "array": return arrayMinLength(schema, minValue, maybeMessage);
+		default:
+			let message = "S.min is not supported for " + toExpression(schema) + " schema. Coerce the schema to string, number or array using S.to first.";
+			throw new Error("[Sury] " + message);
+	}
+}
+function max$1(schema, maxValue, maybeMessage) {
+	switch (schema.type) {
+		case "string": return stringMaxLength(schema, maxValue, maybeMessage);
+		case "number": if (schema.format !== void 0) return intMax(schema, maxValue, maybeMessage);
+		else return floatMax(schema, maxValue, maybeMessage);
+		case "array": return arrayMaxLength(schema, maxValue, maybeMessage);
+		default:
+			let message = "S.max is not supported for " + toExpression(schema) + " schema. Coerce the schema to string, number or array using S.to first.";
+			throw new Error("[Sury] " + message);
+	}
+}
+$$Error.$$class;
+var string = /* @__PURE__ */ string$2();
+var number = /* @__PURE__ */ float();
+var array = array$2;
+var date = /* @__PURE__ */ date$1();
+var union = js_union;
+var schema = js_schema;
+var parser = js_parser;
+var min = min$1;
+var max = max$1;
+var url = /* @__PURE__ */ url$1();
+//#endregion
+//#region ../schemas/libraries/sury/download.ts
+const imageSchema = schema({
+	id: number,
+	created: date,
+	title: min(max(string, 100), 1),
+	type: union(["jpg", "png"]),
+	size: number,
+	url
+});
+const ratingSchema = schema({
+	id: number,
+	stars: min(max(number, 5), 0),
+	title: min(max(string, 100), 1),
+	text: min(max(string, 1e3), 1),
+	images: array(imageSchema)
+});
+parser(schema({
+	id: number,
+	created: date,
+	title: min(max(string, 100), 1),
+	brand: min(max(string, 30), 1),
+	description: min(max(string, 500), 1),
+	price: min(max(number, 1e4), 1),
+	discount: union([min(max(number, 100), 1), null]),
+	quantity: min(max(number, 10), 0),
+	tags: array(min(max(string, 30), 1)),
+	images: array(imageSchema),
+	ratings: array(ratingSchema)
+}))({});
+//#endregion

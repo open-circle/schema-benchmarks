@@ -1,26 +1,59 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Pipeable.js
 /**
+* The `Pipeable` module defines the shared interface and implementation helpers
+* for values that support Effect-style method chaining with `.pipe(...)`.
+*
+* A `Pipeable` value can pass itself through a sequence of unary functions from
+* left to right, so code can be written as `value.pipe(f, g, h)` instead of
+* deeply nesting calls. This is the method form used by many Effect data types
+* to compose transformations, validations, and effectful operations while
+* keeping the original value as the starting point of the pipeline.
+*
+* **Common tasks**
+*
+* - Type values that expose a `.pipe(...)` method with the {@link Pipeable} interface
+* - Implement a custom `.pipe(...)` method with {@link pipeArguments}
+* - Reuse the standard implementation through {@link Prototype}, {@link Class}, or {@link Mixin}
+*
+* **Gotchas**
+*
+* - Each function receives the result of the previous function, not the original value
+* - The overloads preserve precise types for long pipelines, but very long chains may be easier to read when split
+*
 * @since 2.0.0
 */
 /**
-* @since 2.0.0
-* @category utilities
-* @example
+* Applies a `pipe` method's variadic arguments to an initial value from left
+* to right.
+*
+* **Details**
+*
+* This helper is intended for implementing `Pipeable.pipe` methods that
+* receive JavaScript's `arguments` object. With no functions it returns the
+* original value; otherwise it feeds each result into the next function.
+*
+* **Example** (Implementing a pipe method)
+*
 * ```ts
 * import { Pipeable } from "effect"
 *
-* // pipeArguments is used internally to implement efficient piping
-* function customPipe<A>(self: A, ...fns: Array<(a: any) => any>): unknown {
-*   return Pipeable.pipeArguments(self, arguments as any)
+* class NumberBox {
+*   constructor(readonly value: number) {}
+*
+*   pipe(..._fns: ReadonlyArray<(value: number) => number>): number {
+*     return Pipeable.pipeArguments(this.value, arguments) as number
+*   }
 * }
 *
-* // Example usage
-* const add = (x: number) => (y: number) => x + y
-* const multiply = (x: number) => (y: number) => x * y
-*
-* const result = customPipe(5, add(2), multiply(3))
+* const result = new NumberBox(5).pipe(
+*   (n) => n + 2,
+*   (n) => n * 3
+* )
 * console.log(result) // 21
 * ```
+*
+* @category utils
+* @since 2.0.0
 */
 const pipeArguments = (self, args) => {
 	switch (args.length) {
@@ -42,14 +75,30 @@ const pipeArguments = (self, args) => {
 	}
 };
 /**
-* @since 4.0.0
+* Reusable prototype that implements `Pipeable.pipe`.
+*
+* **When to use**
+*
+* Classes or object prototypes can reuse this value when they need the
+* standard pipe implementation backed by `pipeArguments`.
+*
+* @category models
+* @since 3.15.0
 */
 const Prototype$1 = { pipe() {
 	return pipeArguments(this, arguments);
 } };
 /**
-* @since 4.0.0
+* Base constructor whose instances implement the standard `Pipeable.pipe`
+* method.
+*
+* **When to use**
+*
+* Extend or compose this constructor when defining a class that should support
+* Effect-style method chaining through `.pipe(...)`.
+*
 * @category constructors
+* @since 3.15.0
 */
 const Class$1 = /* @__PURE__ */ function() {
 	function PipeableBase() {}
@@ -57,44 +106,23 @@ const Class$1 = /* @__PURE__ */ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Function.js
 /**
-* Creates a function that can be used in a data-last (aka `pipe`able) or
-* data-first style.
+* Creates a function that can be called in data-first style or data-last
+* (`pipe`-friendly) style.
 *
-* The first parameter to `dual` is either the arity of the uncurried function
-* or a predicate that determines if the function is being used in a data-first
-* or data-last style.
+* **Details**
 *
-* Using the arity is the most common use case, but there are some cases where
-* you may want to use a predicate. For example, if you have a function that
-* takes an optional argument, you can use a predicate to determine if the
-* function is being used in a data-first or data-last style.
-*
-* You can pass either the arity of the uncurried function or a predicate
-* which determines if the function is being used in a data-first or
-* data-last style.
-*
-* @example
-* ```ts
-* import { dual, pipe } from "effect/Function"
-*
-* // Using arity to determine data-first or data-last style
-* const sum = dual<
-*   (that: number) => (self: number) => number,
-*   (self: number, that: number) => number
-* >(2, (self, that) => self + that)
-*
-* console.log(sum(2, 3)) // 5 (data-first)
-* console.log(pipe(2, sum(3))) // 5 (data-last)
-* ```
+* Pass either the arity of the uncurried function or a predicate that decides
+* whether the current call is data-first. Arity is the common case. Use a
+* predicate when optional arguments make arity ambiguous.
 *
 * **Example** (Using arity to determine data-first or data-last style)
 *
 * ```ts
-* import { dual, pipe } from "effect/Function"
+* import { Function, pipe } from "effect"
 *
-* const sum = dual<
+* const sum = Function.dual<
 *   (that: number) => (self: number) => number,
 *   (self: number, that: number) => number
 * >(2, (self, that) => self + that)
@@ -106,12 +134,12 @@ const Class$1 = /* @__PURE__ */ function() {
 * **Example** (Using call signatures to define the overloads)
 *
 * ```ts
-* import { dual, pipe } from "effect/Function"
+* import { Function, pipe } from "effect"
 *
 * const sum: {
 *   (that: number): (self: number) => number
 *   (self: number, that: number): number
-* } = dual(2, (self: number, that: number): number => self + that)
+* } = Function.dual(2, (self: number, that: number): number => self + that)
 *
 * console.log(sum(2, 3)) // 5
 * console.log(pipe(2, sum(3))) // 5
@@ -120,9 +148,9 @@ const Class$1 = /* @__PURE__ */ function() {
 * **Example** (Using a predicate to determine data-first or data-last style)
 *
 * ```ts
-* import { dual, pipe } from "effect/Function"
+* import { Function, pipe } from "effect"
 *
-* const sum = dual<
+* const sum = Function.dual<
 *   (that: number) => (self: number) => number,
 *   (self: number, that: number) => number
 * >(
@@ -168,9 +196,10 @@ const dual = function(arity, body) {
 /**
 * The identity function, i.e. A function that returns its input argument.
 *
-* @example
+* **Example** (Returning the same value)
+*
 * ```ts
-* import { identity } from "effect/Function"
+* import { identity } from "effect"
 * import * as assert from "node:assert"
 *
 * assert.deepStrictEqual(identity(5), 5)
@@ -181,17 +210,20 @@ const dual = function(arity, body) {
 */
 const identity = (a) => a;
 /**
-* Creates a constant value that never changes.
+* Creates a zero-argument function that always returns the provided value.
 *
-* This is useful when you want to pass a value to a higher-order function (a function that takes another function as its argument)
-* and want that inner function to always use the same value, no matter how many times it is called.
+* **When to use**
 *
-* @example
+* Use `constant` when an API expects a thunk or callback and every invocation
+* should return the same value.
+*
+* **Example** (Creating a constant thunk)
+*
 * ```ts
-* import { constant } from "effect/Function"
+* import { Function } from "effect"
 * import * as assert from "node:assert"
 *
-* const constNull = constant(null)
+* const constNull = Function.constant(null)
 *
 * assert.deepStrictEqual(constNull(), null)
 * assert.deepStrictEqual(constNull(), null)
@@ -204,12 +236,13 @@ const constant = (value) => () => value;
 /**
 * A thunk that returns always `undefined`.
 *
-* @example
+* **Example** (Returning undefined from a thunk)
+*
 * ```ts
-* import { constUndefined } from "effect/Function"
+* import { Function } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(constUndefined(), undefined)
+* assert.deepStrictEqual(Function.constUndefined(), undefined)
 * ```
 *
 * @category constants
@@ -219,12 +252,13 @@ const constUndefined = /* @__PURE__ */ constant(void 0);
 /**
 * A thunk that returns always `void`.
 *
-* @example
+* **Example** (Returning void from a thunk)
+*
 * ```ts
-* import { constVoid } from "effect/Function"
+* import { Function } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(constVoid(), undefined)
+* assert.deepStrictEqual(Function.constVoid(), undefined)
 * ```
 *
 * @category constants
@@ -261,6 +295,10 @@ function flow(ab, bc, cd, de, ef, fg, gh, hi, ij) {
 	}
 }
 /**
+* Memoizes a function whose input is an object, caching results by object
+* identity.
+*
+* @category utils
 * @since 4.0.0
 */
 function memoize(f) {
@@ -273,7 +311,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -292,7 +330,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Predicate.js
 /**
 * Predicate and Refinement helpers for runtime checks, filtering, and type narrowing.
 * This module provides small, pure functions you can combine to decide whether a
@@ -322,7 +360,7 @@ const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 * **Example** (Filter by a predicate)
 *
 * ```ts
-* import * as Predicate from "effect/Predicate"
+* import { Predicate } from "effect"
 *
 * const isPositive = (n: number) => n > 0
 * const data = [2, -1, 3]
@@ -337,11 +375,13 @@ const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 /**
 * Checks whether a value is a `string`.
 *
-* When to use:
+* **When to use**
+*
 * - You need to guard an `unknown` value as a string.
 * - You want to narrow in `if` statements.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Uses `typeof input === "string"`.
 *
@@ -357,8 +397,9 @@ const byReferenceInstances = /* @__PURE__ */ new WeakSet();
 * }
 * ```
 *
-* See also: {@link isNumber}, {@link isBoolean}, {@link Refinement}
-*
+* @see {@link isNumber}
+* @see {@link isBoolean}
+* @see {@link Refinement}
 * @category guards
 * @since 2.0.0
 */
@@ -368,10 +409,12 @@ function isString(input) {
 /**
 * Checks whether a value is a `number`.
 *
-* When to use:
+* **When to use**
+*
 * - You need to guard an `unknown` value as a number.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Uses `typeof input === "number"`.
 * - Does not exclude `NaN` or `Infinity`.
@@ -388,8 +431,8 @@ function isString(input) {
 * }
 * ```
 *
-* See also: {@link isBigInt}, {@link isString}
-*
+* @see {@link isBigInt}
+* @see {@link isString}
 * @category guards
 * @since 2.0.0
 */
@@ -399,10 +442,12 @@ function isNumber(input) {
 /**
 * Checks whether a value is a `function`.
 *
-* When to use:
+* **When to use**
+*
 * - You need to guard an `unknown` value as callable.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Uses `typeof input === "function"`.
 *
@@ -418,8 +463,7 @@ function isNumber(input) {
 * }
 * ```
 *
-* See also: {@link isObjectKeyword}
-*
+* @see {@link isObjectKeyword}
 * @category guards
 * @since 2.0.0
 */
@@ -429,10 +473,12 @@ function isFunction(input) {
 /**
 * Checks whether a value is not `null` and not `undefined`.
 *
-* When to use:
+* **When to use**
+*
 * - You want to filter out nullish values but keep other falsy ones.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Uses `input != null`.
 *
@@ -447,8 +493,9 @@ function isFunction(input) {
 * console.log(present)
 * ```
 *
-* See also: {@link isNullish}, {@link isNotNull}, {@link isNotUndefined}
-*
+* @see {@link isNullish}
+* @see {@link isNotNull}
+* @see {@link isNotUndefined}
 * @category guards
 * @since 4.0.0
 */
@@ -458,10 +505,12 @@ function isNotNullish(input) {
 /**
 * Checks whether a value is an `object` in the JavaScript sense (objects, arrays, functions).
 *
-* When to use:
+* **When to use**
+*
 * - You want to accept arrays and functions as well as objects.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Returns `true` for arrays and functions, `false` for `null`.
 *
@@ -474,10 +523,10 @@ function isNotNullish(input) {
 * console.log(Predicate.isObjectKeyword(null))
 * ```
 *
-* See also: {@link isObject}, {@link isObjectOrArray}
-*
+* @see {@link isObject}
+* @see {@link isObjectOrArray}
 * @category guards
-* @since 2.0.0
+* @since 4.0.0
 */
 function isObjectKeyword(input) {
 	return typeof input === "object" && input !== null || isFunction(input);
@@ -485,11 +534,13 @@ function isObjectKeyword(input) {
 /**
 * Checks whether a value has a given property key.
 *
-* When to use:
+* **When to use**
+*
 * - You need to guard property access on `unknown` values.
 * - You want a simple structural guard for objects.
 *
-* Behavior:
+* **Details**
+*
 * - Pure; does not mutate input.
 * - Uses the `in` operator and {@link isObjectKeyword}.
 * - Does not check property value types.
@@ -507,14 +558,14 @@ function isObjectKeyword(input) {
 * }
 * ```
 *
-* See also: {@link isTagged}, {@link isObjectKeyword}
-*
+* @see {@link isTagged}
+* @see {@link isObjectKeyword}
 * @category guards
 * @since 2.0.0
 */
 const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Hash.js
 /**
 * This module provides utilities for hashing values in TypeScript.
 *
@@ -527,27 +578,29 @@ const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObjectKeyword(
 /**
 * The unique identifier used to identify objects that implement the Hash interface.
 *
+* @category symbols
 * @since 2.0.0
 */
 const symbol$1 = "~effect/interfaces/Hash";
 /**
 * Computes a hash value for any given value.
 *
+* **Details**
+*
 * This function can hash primitives (numbers, strings, booleans, etc.) as well as
 * objects, arrays, and other complex data structures. It automatically handles
 * different types and provides a consistent hash value for equivalent inputs.
 *
-* **⚠️ CRITICAL IMMUTABILITY REQUIREMENT**: Objects being hashed must be treated as
-* immutable after their first hash computation. Hash results are cached, so mutating
-* an object after hashing will lead to stale cached values and broken hash-based
-* operations. For mutable objects, use referential equality by implementing custom
-* `Hash` interface that hashes the object reference, not its content.
+* **Gotchas**
 *
-* **FORBIDDEN**: Modifying objects after `Hash.hash()` has been called on them
-* **ALLOWED**: Using immutable objects, or mutable objects with custom `Hash` interface
-* that uses referential equality (hashes the object reference, not content)
+* Objects being hashed must be treated as immutable after their first hash
+* computation. Hash results are cached, so mutating an object after hashing will
+* lead to stale cached values and broken hash-based operations. For mutable
+* objects, implement a custom `Hash` interface that hashes the object reference
+* rather than its content.
 *
-* @example
+* **Example** (Hashing different values)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -559,7 +612,7 @@ const symbol$1 = "~effect/interfaces/Hash";
 * // Hash objects and arrays
 * console.log(Hash.hash({ name: "John", age: 30 }))
 * console.log(Hash.hash([1, 2, 3]))
-* console.log(Hash.hash(new Date("2023-01-01")))
+* console.log(Hash.hash({ id: "user-1", roles: ["admin", "editor"] }))
 * ```
 *
 * @category hashing
@@ -597,11 +650,14 @@ const hash = (self) => {
 /**
 * Generates a random hash value for an object and caches it.
 *
+* **Details**
+*
 * This function creates a random hash value for objects that don't have their own
 * hash implementation. The hash value is cached using a WeakMap, so the same object
 * will always return the same hash value during its lifetime.
 *
-* @example
+* **Example** (Hashing objects by reference)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -625,16 +681,18 @@ const random = (self) => {
 /**
 * Combines two hash values into a single hash value.
 *
+* **Details**
+*
 * This function takes two hash values and combines them using a mathematical
 * operation to produce a new hash value. It's useful for creating hash values
 * of composite structures.
 *
-* @example
+* **Example** (Combining hash values)
+*
 * ```ts
-* import { Hash } from "effect" // combined hash value
+* import { Hash, pipe } from "effect"
 *
 * // Can also be used with pipe
-* import { pipe } from "effect"
 *
 * const hash1 = Hash.hash("hello")
 * const hash2 = Hash.hash("world")
@@ -652,10 +710,13 @@ const combine = /* @__PURE__ */ dual(2, (self, b) => self * 53 ^ b);
 /**
 * Optimizes a hash value by applying bit manipulation techniques.
 *
+* **Details**
+*
 * This function takes a hash value and applies bitwise operations to improve
 * the distribution of hash values, reducing the likelihood of collisions.
 *
-* @example
+* **Example** (Optimizing a hash value)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -674,10 +735,13 @@ const optimize = (n) => n & 3221225471 | n >>> 1 & 1073741824;
 /**
 * Checks if a value implements the Hash interface.
 *
+* **Details**
+*
 * This function determines whether a given value has the Hash symbol property,
 * indicating that it can provide its own hash value implementation.
 *
-* @example
+* **Example** (Checking for Hash support)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -700,11 +764,14 @@ const isHash = (u) => hasProperty(u, symbol$1);
 /**
 * Computes a hash value for a number.
 *
+* **Details**
+*
 * This function creates a hash value for numeric inputs, handling special cases
 * like NaN, Infinity, and -Infinity with distinct hash values. It uses bitwise operations to ensure good distribution
 * of hash values across different numeric inputs.
 *
-* @example
+* **Example** (Hashing numbers)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -732,11 +799,14 @@ const number$1 = (n) => {
 /**
 * Computes a hash value for a string using the djb2 algorithm.
 *
+* **Details**
+*
 * This function implements a variation of the djb2 hash algorithm, which is
 * known for its good distribution properties and speed. It processes each
 * character of the string to produce a consistent hash value.
 *
-* @example
+* **Example** (Hashing strings)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -759,11 +829,14 @@ const string$1 = (str) => {
 /**
 * Computes a hash value for an object using only the specified keys.
 *
+* **Details**
+*
 * This function allows you to hash an object by considering only specific keys,
 * which is useful when you want to create a hash based on a subset of an object's
 * properties.
 *
-* @example
+* **Example** (Hashing selected object keys)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -791,13 +864,15 @@ const structureKeys = (o, keys) => {
 	return optimize(h);
 };
 /**
-* Computes a hash value for an object using all of its enumerable keys.
+* Computes a structural hash for an object using Effect's object key collection.
 *
-* This function creates a hash value based on all enumerable properties of an object.
-* It's a convenient way to hash an entire object structure when you want to consider
-* all its properties.
+* **Details**
 *
-* @example
+* The hash is based on the object's structural keys and their values, including
+* symbol keys and relevant prototype keys for non-plain objects.
+*
+* **Example** (Hashing object structures)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -825,11 +900,14 @@ const iterableWith = (seed, f) => (iter) => {
 /**
 * Computes a hash value for an array by hashing all of its elements.
 *
+* **Details**
+*
 * This function creates a hash value based on all elements in the array.
 * The order of elements matters, so arrays with the same elements in different
 * orders will produce different hash values.
 *
-* @example
+* **Example** (Hashing arrays)
+*
 * ```ts
 * import { Hash } from "effect"
 *
@@ -863,22 +941,22 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Equal.js
 /**
 * The unique string identifier for the {@link Equal} interface.
 *
-* Use this as a computed property key when implementing custom equality on a
-* class or object literal.
+* **When to use**
 *
-* When to use:
-* - As the method name when implementing the {@link Equal} interface.
-* - To check manually whether an object carries an equality method (prefer
+* - Use it as the computed property key when implementing custom equality on a
+*   class or object literal.
+* - Use it to check manually whether an object carries an equality method (prefer
 *   {@link isEqual} instead).
 *
-* Behavior:
-* - Pure constant — no allocation or side effects.
+* **Details**
 *
-* **Example** (implementing Equal on a class)
+* This is a pure constant with no allocation or side effects.
+*
+* **Example** (Implementing Equal on a Class)
 *
 * ```ts
 * import { Equal, Hash } from "effect"
@@ -898,7 +976,7 @@ function withVisitedTracking$1(obj, fn) {
 *
 * @see {@link Equal} — the interface that uses this symbol
 * @see {@link isEqual} — type guard for `Equal` implementors
-*
+* @category symbols
 * @since 2.0.0
 */
 const symbol = "~effect/interfaces/Equal";
@@ -1030,19 +1108,21 @@ const compareSets = /* @__PURE__ */ makeCompareSet(compareBoth);
 /**
 * Checks whether a value implements the {@link Equal} interface.
 *
-* When to use:
+* **When to use**
+*
 * - To branch on whether a value supports custom equality before calling
 *   its `[Equal.symbol]` method directly.
 * - In generic utility code that needs to distinguish `Equal` implementors
 *   from plain values.
 *
-* Behavior:
+* **Details**
+*
 * - Pure function, no side effects.
 * - Returns `true` if and only if `u` has a property keyed by
 *   {@link symbol}.
 * - Acts as a TypeScript type guard, narrowing the input to {@link Equal}.
 *
-* **Example** (type guard)
+* **Example** (Type Guard)
 *
 * ```ts
 * import { Equal, Hash } from "effect"
@@ -1064,7 +1144,6 @@ const compareSets = /* @__PURE__ */ makeCompareSet(compareBoth);
 *
 * @see {@link Equal} — the interface being checked
 * @see {@link symbol} — the property key that signals `Equal` support
-*
 * @category guards
 * @since 2.0.0
 */
@@ -1072,16 +1151,18 @@ const isEqual = (u) => hasProperty(u, symbol);
 /**
 * Wraps {@link equals} as an `Equivalence<A>`.
 *
-* When to use:
+* **When to use**
+*
 * - When an API (e.g. `Array.dedupeWith`, `Equivalence.mapInput`) requires an
 *   `Equivalence` and you want to reuse `Equal.equals`.
 *
-* Behavior:
+* **Details**
+*
 * - Returns a function `(a: A, b: A) => boolean` that delegates to
 *   {@link equals}.
 * - Pure; allocates a thin wrapper on each call.
 *
-* **Example** (deduplicating with Equal semantics)
+* **Example** (Deduplicating with Equal Semantics)
 *
 * ```ts
 * import { Array, Equal } from "effect"
@@ -1092,22 +1173,23 @@ const isEqual = (u) => hasProperty(u, symbol);
 * ```
 *
 * @see {@link equals} — the underlying comparison function
-*
 * @category instances
-* @since 2.0.0
+* @since 4.0.0
 */
 const asEquivalence = () => equals$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
-* When to use this:
-* - When you need a custom equivalence that isn't just strict equality
-* - When creating equivalences for complex types with custom comparison logic
-* - When you want the performance benefit of reference equality optimization
+* **When to use**
 *
-* Behavior:
+* - Use when you need a custom equivalence that is not just strict equality
+* - Use when creating equivalences for complex types with custom comparison logic
+* - Use when you want the performance benefit of reference equality optimization
+*
+* **Details**
+*
 * - Does not mutate inputs
 * - First checks reference equality (`===`) for performance; if values are identical, returns `true` without calling the function
 * - Falls back to the provided equivalence function if values are not the same reference
@@ -1137,35 +1219,39 @@ const asEquivalence = () => equals$1;
 *
 * const tolerance = Equivalence.make<number>((a, b) => Math.abs(a - b) < 0.0001)
 *
-* console.log(tolerance(1.0, 1.0001)) // false
+* console.log(tolerance(1.0, 1.001)) // false
 * console.log(tolerance(1.0, 1.00001)) // true
 * ```
 *
-* See also: {@link strictEqual}, {@link mapInput}
-*
+* @see {@link strictEqual}
+* @see {@link mapInput}
 * @category constructors
 * @since 2.0.0
 */
-const make$9 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
+const make$10 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Redactable.js
 /**
 * Symbol used to identify objects that implement the {@link Redactable}
 * protocol.
 *
-* Add a method under this key to make an object redactable. The method
-* receives the current `Context` and must return the replacement value.
+* **When to use**
 *
-* - Use this symbol as the property key when implementing {@link Redactable}.
-* - Registered globally via `Symbol.for("~effect/Redactable")`,
-*   so it is identical across multiple copies of the library at runtime.
+* Use this symbol as the property key when implementing {@link Redactable}.
+*
+* **Details**
+*
+* Add a method under this key to make an object redactable. The method receives
+* the current `Context` and must return the replacement value. The symbol is
+* registered globally via `Symbol.for("~effect/Redactable")`, so it is
+* identical across multiple copies of the library at runtime.
 *
 * **Example** (Masking an API key)
 *
@@ -1181,43 +1267,45 @@ const isArrayNonEmpty$1 = (self) => self.length > 0;
 * }
 * ```
 *
-* See also:
-* - {@link Redactable} - the interface this symbol belongs to
-* - {@link isRedactable} - check whether a value has this symbol
-*
-* @since 4.0.0
+* @see {@link Redactable} - the interface this symbol belongs to
+* @see {@link isRedactable} - check whether a value has this symbol
 * @category symbol
+* @since 3.10.0
 */
 const symbolRedactable = /* @__PURE__ */ Symbol.for("~effect/Redactable");
 /**
 * Type guard that checks whether a value implements the {@link Redactable}
 * interface.
 *
-* See also:
-* - {@link Redactable} - the interface being checked
-* - {@link redact} - applies redaction if the value is redactable
-*
-* @since 4.0.0
+* @see {@link Redactable} - the interface being checked
+* @see {@link redact} - applies redaction if the value is redactable
 * @category guards
+* @since 3.10.0
 */
 const isRedactable = (u) => hasProperty(u, symbolRedactable);
 /**
 * Redacts a value if it implements {@link Redactable}, otherwise returns it
 * unchanged.
 *
-* - Use this as the general-purpose entry point for redaction: it is safe to
-*   call on any value.
-* - Internally calls {@link isRedactable} and, if `true`, delegates to
-*   {@link getRedacted}.
-* - Not recursive: nested redactable values inside the returned object are not
-*   automatically redacted.
-* - Pure with respect to its argument (does not mutate the input).
+* **When to use**
 *
-* See also:
-* - {@link isRedactable} - check before redacting
-* - {@link getRedacted} - lower-level variant for known redactables
+* Use this as the general-purpose entry point for redaction when the input may
+* or may not implement the redaction protocol.
 *
-* @since 4.0.0
+* **Details**
+*
+* This function calls {@link isRedactable} and, when it returns `true`,
+* delegates to {@link getRedacted}. It does not mutate the input.
+*
+* **Gotchas**
+*
+* Redaction is not recursive. Nested redactable values inside the returned
+* object are not automatically redacted.
+*
+* @see {@link isRedactable} - check before redacting
+* @see {@link getRedacted} - lower-level variant for known redactables
+* @category destructors
+* @since 3.10.0
 */
 function redact(u) {
 	if (isRedactable(u)) return getRedacted(u);
@@ -1227,17 +1315,23 @@ function redact(u) {
 * Calls `[symbolRedactable]` on a value that is already known to be
 * {@link Redactable} and returns the result.
 *
-* - Use this when you have already verified the value is `Redactable` (e.g.,
-*   via {@link isRedactable}) and want to avoid a second check.
-* - Reads the current fiber's `Context` from the global fiber reference. If
-*   no fiber is active, an empty `Context` is passed to the redaction
-*   method.
-* - Does not mutate the input.
+* **When to use**
 *
-* See also:
-* - {@link redact} - higher-level variant that handles non-redactable values
-* - {@link isRedactable} - type guard to verify before calling this
+* Use this when you have already verified the value is `Redactable`, for
+* example with {@link isRedactable}, and want to avoid a second check.
 *
+* **Details**
+*
+* This function reads the current fiber's `Context` from the global fiber
+* reference and passes it to the redaction method. It does not mutate the input.
+*
+* **Gotchas**
+*
+* If no fiber is active, an empty `Context` is passed to the redaction method.
+*
+* @see {@link redact} - higher-level variant that handles non-redactable values
+* @see {@link isRedactable} - type guard to verify before calling this
+* @category destructors
 * @since 4.0.0
 */
 function getRedacted(redactable) {
@@ -1253,7 +1347,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Formatter.js
 /**
 * Utilities for converting arbitrary JavaScript values into human-readable
 * strings, with support for circular references, redaction, and common JS
@@ -1311,14 +1405,16 @@ const emptyContext$1 = {
 /**
 * Converts any JavaScript value into a human-readable string.
 *
-* When to use:
+* **When to use**
+*
 * - Pretty-printing values for debugging, logging, or error messages.
 * - You need to handle `BigInt`, `Symbol`, `Set`, `Map`, `Date`, `RegExp`,
 *   or class instances that `JSON.stringify` cannot represent.
 * - You want circular references shown as `"[Circular]"` instead of
 *   throwing.
 *
-* Behavior:
+* **Details**
+*
 * - Does not mutate input.
 * - Output is **not** valid JSON; use {@link formatJson} when you need
 *   parseable JSON.
@@ -1334,8 +1430,6 @@ const emptyContext$1 = {
 * - Arrays/objects with 0–1 entries are inline; larger ones are
 *   pretty-printed when `space` is set.
 * - Circular references are replaced with `"[Circular]"`.
-*
-* Options:
 * - `space` — indentation unit (number of spaces, or a string like
 *   `"\t"`). Defaults to `0` (compact).
 * - `ignoreToString` — skip calling `toString()`. Defaults to `false`.
@@ -1375,9 +1469,10 @@ const emptyContext$1 = {
 * // {"name":"loop","self":[Circular]}
 * ```
 *
-* See also: {@link formatJson}, {@link Formatter}
-*
-* @since 4.0.0
+* @see {@link formatJson}
+* @see {@link Formatter}
+* @category formatting
+* @since 2.0.0
 */
 function format$1(input, options) {
 	const space = options?.space ?? 0;
@@ -1427,30 +1522,6 @@ function format$1(input, options) {
 }
 const CIRCULAR = "[Circular]";
 /**
-* Formats a single property key for display.
-*
-* When to use:
-* - You are building a custom formatter that needs to render object keys.
-*
-* Behavior:
-* - String keys are JSON-quoted (e.g. `"foo"`).
-* - Symbol and number keys are converted with `String()`.
-* - Pure function; does not mutate input.
-*
-* **Example** (Format property keys)
-*
-* ```ts
-* import { Formatter } from "effect"
-*
-* console.log(Formatter.formatPropertyKey("name"))
-* // "name"
-*
-* console.log(Formatter.formatPropertyKey(Symbol.for("id")))
-* // Symbol(id)
-* ```
-*
-* See also: {@link formatPath}, {@link format}
-*
 * @internal
 */
 function formatPropertyKey(name) {
@@ -1458,27 +1529,6 @@ function formatPropertyKey(name) {
 }
 /**
 * Formats an array of property keys as a bracket-notation path string.
-*
-* When to use:
-* - You need to display a path through a nested object (e.g. in error
-*   messages or schema validation output).
-*
-* Behavior:
-* - Each key is wrapped in brackets and formatted via
-*   {@link formatPropertyKey}.
-* - Returns an empty string for an empty path.
-* - Pure function; does not mutate input.
-*
-* **Example** (Render a property path)
-*
-* ```ts
-* import { Formatter } from "effect"
-*
-* console.log(Formatter.formatPath(["users", 0, "name"]))
-* // ["users"][0]["name"]
-* ```
-*
-* See also: {@link formatPropertyKey}, {@link format}
 *
 * @internal
 */
@@ -1488,29 +1538,6 @@ function formatPath(path) {
 /**
 * Formats a `Date` as an ISO 8601 string, returning `"Invalid Date"` for
 * invalid dates instead of throwing.
-*
-* When to use:
-* - You want a safe `toISOString()` that never throws.
-*
-* Behavior:
-* - Returns `date.toISOString()` on success.
-* - Returns `"Invalid Date"` if `toISOString()` throws (e.g. for
-*   `new Date(NaN)`).
-* - Pure function; does not mutate input.
-*
-* **Example** (Safe date formatting)
-*
-* ```ts
-* import { Formatter } from "effect"
-*
-* console.log(Formatter.formatDate(new Date("2024-01-15T10:30:00Z")))
-* // 2024-01-15T10:30:00.000Z
-*
-* console.log(Formatter.formatDate(new Date("invalid")))
-* // Invalid Date
-* ```
-*
-* See also: {@link format}
 *
 * @internal
 */
@@ -1530,15 +1557,18 @@ function safeToString(input) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Inspectable.js
 /**
 * Symbol used by Node.js for custom object inspection.
+*
+* **Details**
 *
 * This symbol is recognized by Node.js's `util.inspect()` function and the REPL
 * for custom object representation. When an object has a method with this symbol,
 * it will be called to determine how the object should be displayed.
 *
-* @example
+* **Example** (Defining custom Node inspection)
+*
 * ```ts
 * import { Inspectable } from "effect"
 *
@@ -1554,20 +1584,22 @@ function safeToString(input) {
 * console.log(obj) // Displays: CustomObject(hello)
 * ```
 *
-* @since 2.0.0
 * @category symbols
+* @since 2.0.0
 */
 const NodeInspectSymbol = /* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom");
 /**
-* Safely converts a value to a JSON-serializable representation, useful for
-* implementing the `toJSON` method of the {@link Inspectable} interface.
+* Safely converts a value to a JSON-serializable representation.
+*
+* **Details**
 *
 * This function attempts to extract JSON data from objects that implement the
 * `toJSON` method, recursively processes arrays, and handles errors gracefully.
 * For objects that don't have a `toJSON` method, it applies redaction to
 * protect sensitive information.
 *
-* @since 2.0.0
+* @category converting
+* @since 4.0.0
 */
 const toJson = (input) => {
 	try {
@@ -1579,25 +1611,24 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Utils.js
 /**
 * An `IterableIterator` that yields its wrapped value exactly once.
 *
-* When to use:
+* **When to use**
 *
-* - Implement `[Symbol.iterator]()` on Effect-like types so they can be
-*   `yield*`-ed inside generator functions (e.g. `Effect.gen`, `Option.gen`).
-* - You almost never construct this directly — it is created internally by
-*   yieldable types.
+* Implement `[Symbol.iterator]()` on Effect-like types so they can be
+* `yield*`-ed inside generator functions, such as `Effect.gen` and
+* `Option.gen`. You almost never construct this directly — it is created
+* internally by yieldable types.
 *
-* Behavior:
+* **Details**
 *
-* - The first call to `next()` returns `{ value: self, done: false }`.
-* - Every subsequent call returns `{ value: a, done: true }` where `a` is
-*   the argument passed to `next()`.
-* - `[Symbol.iterator]()` returns a **new** `SingleShotGen` wrapping the same
-*   value, so the outer type can be iterated multiple times.
-* - Does not mutate the wrapped value.
+* The first call to `next()` returns `{ value: self, done: false }`. Every
+* subsequent call returns `{ value: a, done: true }` where `a` is the argument
+* passed to `next()`. `[Symbol.iterator]()` returns a **new** `SingleShotGen`
+* wrapping the same value, so the outer type can be iterated multiple times.
+* It does not mutate the wrapped value.
 *
 * **Example** (Yielding a wrapped value in a generator)
 *
@@ -1616,7 +1647,6 @@ const toJson = (input) => {
 * ```
 *
 * @see {@link Gen} — the type-level signature that relies on `SingleShotGen`
-*
 * @category constructors
 * @since 2.0.0
 */
@@ -1627,6 +1657,8 @@ var SingleShotGen = class SingleShotGen {
 		this.self = self;
 	}
 	/**
+	* Yields the stored value once, then completes with the value sent back in.
+	*
 	* @since 2.0.0
 	*/
 	next(a) {
@@ -1639,6 +1671,8 @@ var SingleShotGen = class SingleShotGen {
 		});
 	}
 	/**
+	* Creates a fresh single-shot iterator over the stored value.
+	*
 	* @since 2.0.0
 	*/
 	[Symbol.iterator]() {
@@ -1657,7 +1691,7 @@ const forced = { [InternalTypeId]: (body) => {
 /** @internal */
 const internalCall = /* @__PURE__ */ standard[InternalTypeId](() => (/* @__PURE__ */ new Error()).stack)?.includes(InternalTypeId) === true ? standard[InternalTypeId] : forced[InternalTypeId];
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -1990,7 +2024,7 @@ const TaggedError$1 = (tag) => {
 };
 TaggedError$1("NoSuchElementError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2061,7 +2095,7 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/result.js
 const TypeId$7 = "~effect/data/Result";
 const CommonProto = {
 	[TypeId$7]: {
@@ -2133,7 +2167,7 @@ const succeed$3 = (success) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Order.js
 /**
 * This module provides the `Order` type class for defining total orderings on types.
 * An `Order` is a comparison function that returns `-1` (less than), `0` (equal), or `1` (greater than).
@@ -2188,12 +2222,14 @@ const succeed$3 = (success) => {
 /**
 * Creates a new `Order` instance from a comparison function.
 *
-* When to use this:
+* **When to use**
+*
 * - When creating a custom order for a type that doesn't have a built-in order
 * - When you need fine-grained control over comparison logic
 * - When implementing orders for complex types
 *
-* Behavior:
+* **Details**
+*
 * - Pure function: does not mutate inputs
 * - Uses reference equality (`===`) as a shortcut: if `self === that`, returns `0` without calling the comparison function
 * - The comparison function should return `-1`, `0`, or `1` based on the comparison result
@@ -2214,25 +2250,25 @@ const succeed$3 = (success) => {
 * console.log(byAge({ name: "Alice", age: 25 }, { name: "Bob", age: 30 })) // -1
 * ```
 *
-* See also:
-* - {@link mapInput} - Transform an order by mapping the input type
-* - {@link combine} - Combine multiple orders
-*
+* @see {@link mapInput} - Transform an order by mapping the input type
+* @see {@link combine} - Combine multiple orders
 * @category constructors
 * @since 2.0.0
 */
-function make$8(compare) {
+function make$9(compare) {
 	return (self, that) => self === that ? 0 : compare(self, that);
 }
 /**
 * An `Order` instance for numbers that compares them numerically.
 *
-* When to use this:
+* **When to use**
+*
 * - When comparing numbers for sorting or searching
 * - As a base for creating orders on types containing numbers
 * - When implementing numeric comparisons in data structures
 *
-* Behavior:
+* **Details**
+*
 * - Pure function: does not mutate inputs
 * - `0` is considered equal to `-0`
 * - All `NaN` values are considered equal to each other
@@ -2252,14 +2288,12 @@ function make$8(compare) {
 * console.log(Order.Number(NaN, 1)) // -1
 * ```
 *
-* See also:
-* - {@link mapInput} - Use this order to compare objects by a number property
-* - {@link BigInt} - For bigint comparisons
-*
+* @see {@link mapInput} - Use this order to compare objects by a number property
+* @see {@link BigInt} - For bigint comparisons
 * @category instances
 * @since 4.0.0
 */
-const Number$4 = /* @__PURE__ */ make$8((self, that) => {
+const Number$4 = /* @__PURE__ */ make$9((self, that) => {
 	if (globalThis.Number.isNaN(self) && globalThis.Number.isNaN(that)) return 0;
 	if (globalThis.Number.isNaN(self)) return -1;
 	if (globalThis.Number.isNaN(that)) return 1;
@@ -2268,12 +2302,14 @@ const Number$4 = /* @__PURE__ */ make$8((self, that) => {
 /**
 * Tests whether one value is less than or equal to another according to the given order.
 *
-* When to use this:
+* **When to use**
+*
 * - When you need a boolean predicate for non-strict comparison
 * - When checking if a value is within a range (inclusive lower bound)
 * - When implementing inclusive comparisons
 *
-* Behavior:
+* **Details**
+*
 * - Pure function: does not mutate inputs
 * - Returns `true` if the order returns `-1` or `0` (less than or equal)
 * - Returns `false` only if the order returns `1` (greater than)
@@ -2291,23 +2327,23 @@ const Number$4 = /* @__PURE__ */ make$8((self, that) => {
 * console.log(isLessThanOrEqualToNumber(2, 1)) // false
 * ```
 *
-* See also:
-* - {@link isLessThan} - Strict less than
-* - {@link isGreaterThan} - Strict greater than
-*
+* @see {@link isLessThan} - Strict less than
+* @see {@link isGreaterThan} - Strict greater than
 * @category predicates
-* @since 2.0.0
+* @since 4.0.0
 */
 const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1);
 /**
 * Tests whether one value is greater than or equal to another according to the given order.
 *
-* When to use this:
+* **When to use**
+*
 * - When you need a boolean predicate for non-strict comparison
 * - When checking if a value is within a range (inclusive upper bound)
 * - When implementing inclusive comparisons
 *
-* Behavior:
+* **Details**
+*
 * - Pure function: does not mutate inputs
 * - Returns `true` if the order returns `1` or `0` (greater than or equal)
 * - Returns `false` only if the order returns `-1` (less than)
@@ -2325,16 +2361,14 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 * console.log(isGreaterThanOrEqualToNumber(1, 2)) // false
 * ```
 *
-* See also:
-* - {@link isGreaterThan} - Strict greater than
-* - {@link isLessThanOrEqualTo} - Less than or equal
-*
+* @see {@link isGreaterThan} - Strict greater than
+* @see {@link isLessThanOrEqualTo} - Less than or equal
 * @category predicates
-* @since 2.0.0
+* @since 4.0.0
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2343,7 +2377,7 @@ const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !=
 * - Representing a missing or uninitialized value
 * - Returning "no result" from a function
 *
-* **Behavior**
+* **Details**
 *
 * - Returns `Option<never>`, which is a subtype of `Option<A>` for any `A`
 * - Always returns the same singleton instance
@@ -2363,7 +2397,7 @@ const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !=
 *
 * @see {@link some} for the opposite operation.
 *
-* @category Constructors
+* @category constructors
 * @since 2.0.0
 */
 const none = () => none$1;
@@ -2375,7 +2409,7 @@ const none = () => none$1;
 * - Wrapping a known-present value as `Option`
 * - Returning a successful result from a partial function
 *
-* **Behavior**
+* **Details**
 *
 * - Always returns `Some<A>`
 * - Does not filter `null` or `undefined`; use {@link fromNullishOr} for that
@@ -2395,7 +2429,7 @@ const none = () => none$1;
 *
 * @see {@link none} for the opposite operation.
 *
-* @category Constructors
+* @category constructors
 * @since 2.0.0
 */
 const some = some$1;
@@ -2406,7 +2440,7 @@ const some = some$1;
 *
 * - Branching on absence before accessing `.value`
 *
-* **Behavior**
+* **Details**
 *
 * - Acts as a type guard, narrowing to `None<A>`
 *
@@ -2424,7 +2458,7 @@ const some = some$1;
 *
 * @see {@link isSome} for the opposite check.
 *
-* @category Guards
+* @category guards
 * @since 2.0.0
 */
 const isNone = isNone$1;
@@ -2435,7 +2469,7 @@ const isNone = isNone$1;
 *
 * - Branching on presence before accessing `.value`
 *
-* **Behavior**
+* **Details**
 *
 * - Acts as a type guard, narrowing to `Some<A>`
 *
@@ -2453,7 +2487,7 @@ const isNone = isNone$1;
 *
 * @see {@link isNone} for the opposite check.
 *
-* @category Guards
+* @category guards
 * @since 2.0.0
 */
 const isSome = isSome$1;
@@ -2466,7 +2500,7 @@ const isSome = isSome$1;
 * - Applying a pure transformation to an optional value
 * - Chaining transformations in a pipeline
 *
-* **Behavior**
+* **Details**
 *
 * - `Some` → applies `f` and wraps the result in a new `Some`
 * - `None` → returns `None` unchanged
@@ -2487,24 +2521,20 @@ const isSome = isSome$1;
 * @see {@link flatMap} when `f` returns an `Option`
 * @see {@link as} to replace the value with a constant
 *
-* @category Mapping
+* @category mapping
 * @since 2.0.0
 */
-const map$3 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
+const map$2 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Result.js
 /**
 * Creates a `Result` holding a `Success` value.
+*
+* **Details**
 *
 * - Use when you have a value and want to lift it into the `Result` type
 * - The error type `E` defaults to `never`
 * - Does not mutate input; allocates a new `Success` wrapper
-*
-* **Previously Known As**
-*
-* This API replaces the following from Effect 3.x:
-*
-* - `Either.right`
 *
 * **Example** (Wrapping a value)
 *
@@ -2520,22 +2550,18 @@ const map$3 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none() : some(
 * @see {@link fail} to create a Failure
 * @see {@link void} for a pre-built `Success<void>`
 *
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 const succeed$2 = succeed$3;
 /**
 * Creates a `Result` holding a `Failure` value.
 *
+* **Details**
+*
 * - Use when you want to represent a failed computation
 * - The success type `A` defaults to `never`
 * - Does not mutate input; allocates a new `Failure` wrapper
-*
-* **Previously Known As**
-*
-* This API replaces the following from Effect 3.x:
-*
-* - `Either.left`
 *
 * **Example** (Creating a failure)
 *
@@ -2551,12 +2577,14 @@ const succeed$2 = succeed$3;
 * @see {@link succeed} to create a Success
 * @see {@link mapError} to transform the error
 *
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 const fail$3 = fail$4;
 /**
 * Checks whether a `Result` is a `Failure`.
+*
+* **Details**
 *
 * - Acts as a TypeScript type guard, narrowing to `Failure<A, E>`
 * - After narrowing, you can access `.failure` to read the error value
@@ -2582,7 +2610,7 @@ const fail$3 = fail$4;
 */
 const isFailure = isFailure$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Array.js
 /**
 * Utilities for working with immutable arrays (and non-empty arrays) in a
 * functional style. All functions treat arrays as immutable — they return new
@@ -2671,6 +2699,8 @@ const isFailure = isFailure$1;
 /**
 * Reference to the global `Array` constructor.
 *
+* **When to use**
+*
 * Use this when you need the native `Array` constructor while the `Array`
 * namespace is in scope (e.g. `Array.Array.isArray`, `Array.Array.from`).
 *
@@ -2689,6 +2719,8 @@ const isFailure = isFailure$1;
 const Array$1 = globalThis.Array;
 /**
 * Converts an `Iterable` to an `Array`.
+*
+* **Details**
 *
 * - If the input is already an array, returns it **by reference** (no copy).
 * - Otherwise, creates a new array from the iterable.
@@ -2714,6 +2746,8 @@ const fromIterable = (collection) => Array$1.isArray(collection) ? collection : 
 /**
 * Adds a single element to the end of an iterable, returning a `NonEmptyArray`.
 *
+* **Details**
+*
 * - Always returns a non-empty array.
 * - Does not mutate the input.
 *
@@ -2735,6 +2769,8 @@ const fromIterable = (collection) => Array$1.isArray(collection) ? collection : 
 const append = /* @__PURE__ */ dual(2, (self, last) => [...self, last]);
 /**
 * Concatenates two iterables into a single array.
+*
+* **Details**
 *
 * - If either input is non-empty, the result is a `NonEmptyArray`.
 * - Does not mutate the inputs.
@@ -2773,7 +2809,7 @@ Array$1.isArray;
 * @see {@link isArrayEmpty} — opposite check
 *
 * @category guards
-* @since 2.0.0
+* @since 4.0.0
 */
 const isArrayNonEmpty = isArrayNonEmpty$1;
 /**
@@ -2793,7 +2829,7 @@ const isArrayNonEmpty = isArrayNonEmpty$1;
 * @see {@link isReadonlyArrayEmpty} — opposite check
 *
 * @category guards
-* @since 2.0.0
+* @since 4.0.0
 */
 const isReadonlyArrayNonEmpty = isArrayNonEmpty$1;
 /** @internal */
@@ -2910,6 +2946,8 @@ const empty$1 = () => [];
 /**
 * Transforms each element using a function, returning a new array.
 *
+* **Details**
+*
 * - The function receives `(element, index)`.
 * - Preserves `NonEmptyArray` in the return type.
 *
@@ -2926,7 +2964,7 @@ const empty$1 = () => [];
 * @category mapping
 * @since 2.0.0
 */
-const map$2 = /* @__PURE__ */ dual(2, (self, f) => self.map(f));
+const map$1 = /* @__PURE__ */ dual(2, (self, f) => self.map(f));
 /**
 * Removes duplicates using a custom equivalence, preserving the order of the
 * first occurrence.
@@ -2956,7 +2994,7 @@ const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
 	return [];
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/BigDecimal.js
 /**
 * This module provides utility functions and type class instances for working with the `BigDecimal` type in TypeScript.
 * It includes functions for basic arithmetic operations.
@@ -3002,7 +3040,8 @@ const BigDecimalProto = {
 /**
 * Checks if a given value is a `BigDecimal`.
 *
-* @example
+* **Example** (Checking BigDecimal values)
+*
 * ```ts
 * import { BigDecimal } from "effect"
 *
@@ -3012,14 +3051,15 @@ const BigDecimalProto = {
 * console.log(BigDecimal.isBigDecimal("123.45")) // false
 * ```
 *
-* @since 2.0.0
 * @category guards
+* @since 2.0.0
 */
 const isBigDecimal = (u) => hasProperty(u, TypeId$6);
 /**
 * Creates a `BigDecimal` from a `bigint` value and a scale.
 *
-* @example
+* **Example** (Creating decimals from bigint and scale)
+*
 * ```ts
 * import { BigDecimal } from "effect"
 *
@@ -3032,10 +3072,10 @@ const isBigDecimal = (u) => hasProperty(u, TypeId$6);
 * console.log(BigDecimal.format(integer)) // "42"
 * ```
 *
-* @since 2.0.0
 * @category constructors
+* @since 2.0.0
 */
-const make$7 = (value, scale) => {
+const make$8 = (value, scale) => {
 	const o = Object.create(BigDecimalProto);
 	o.value = value;
 	o.scale = scale;
@@ -3048,7 +3088,7 @@ const make$7 = (value, scale) => {
 */
 const makeNormalizedUnsafe = (value, scale) => {
 	if (value !== bigint0 && value % bigint10 === bigint0) throw new RangeError("Value must be normalized");
-	const o = make$7(value, scale);
+	const o = make$8(value, scale);
 	o.normalized = o;
 	return o;
 };
@@ -3058,23 +3098,24 @@ const zero = /* @__PURE__ */ makeNormalizedUnsafe(bigint0, 0);
 /**
 * Normalizes a given `BigDecimal` by removing trailing zeros.
 *
-* @example
+* **Example** (Normalizing trailing zeros)
+*
 * ```ts
-* import { fromStringUnsafe, make, normalize } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
 * assert.deepStrictEqual(
-*   normalize(fromStringUnsafe("123.00000")),
-*   normalize(make(123n, 0))
+*   BigDecimal.normalize(BigDecimal.fromStringUnsafe("123.00000")),
+*   BigDecimal.normalize(BigDecimal.make(123n, 0))
 * )
 * assert.deepStrictEqual(
-*   normalize(fromStringUnsafe("12300000")),
-*   normalize(make(123n, -5))
+*   BigDecimal.normalize(BigDecimal.fromStringUnsafe("12300000")),
+*   BigDecimal.normalize(BigDecimal.make(123n, -5))
 * )
 * ```
 *
-* @since 2.0.0
 * @category scaling
+* @since 2.0.0
 */
 const normalize = (self) => {
 	if (self.normalized === void 0) if (self.value === bigint0) self.normalized = zero;
@@ -3089,12 +3130,16 @@ const normalize = (self) => {
 	return self.normalized;
 };
 /**
-* Scales a given `BigDecimal` to the specified scale.
+* Scales a `BigDecimal` to the specified scale.
 *
-* If the given scale is smaller than the current scale, the value will be rounded down to
-* the nearest integer.
+* **Details**
 *
-* @example
+* Increasing the scale appends decimal zeros. Decreasing the scale discards
+* digits beyond the target scale by `bigint` division, which truncates toward
+* zero.
+*
+* **Example** (Scaling decimal precision)
+*
 * ```ts
 * import { BigDecimal } from "effect"
 *
@@ -3109,41 +3154,43 @@ const normalize = (self) => {
 * console.log(BigDecimal.format(reduced)) // "123.4"
 * ```
 *
-* @since 2.0.0
 * @category scaling
+* @since 2.0.0
 */
 const scale = /* @__PURE__ */ dual(2, (self, scale) => {
-	if (scale > self.scale) return make$7(self.value * bigint10 ** BigInt(scale - self.scale), scale);
-	if (scale < self.scale) return make$7(self.value / bigint10 ** BigInt(self.scale - scale), scale);
+	if (scale > self.scale) return make$8(self.value * bigint10 ** BigInt(scale - self.scale), scale);
+	if (scale < self.scale) return make$8(self.value / bigint10 ** BigInt(self.scale - scale), scale);
 	return self;
 });
 /**
 * Determines the absolute value of a given `BigDecimal`.
 *
-* @example
+* **Example** (Calculating absolute values)
+*
 * ```ts
-* import { abs, fromStringUnsafe } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(abs(fromStringUnsafe("-5")), fromStringUnsafe("5"))
-* assert.deepStrictEqual(abs(fromStringUnsafe("0")), fromStringUnsafe("0"))
-* assert.deepStrictEqual(abs(fromStringUnsafe("5")), fromStringUnsafe("5"))
+* assert.deepStrictEqual(BigDecimal.abs(BigDecimal.fromStringUnsafe("-5")), BigDecimal.fromStringUnsafe("5"))
+* assert.deepStrictEqual(BigDecimal.abs(BigDecimal.fromStringUnsafe("0")), BigDecimal.fromStringUnsafe("0"))
+* assert.deepStrictEqual(BigDecimal.abs(BigDecimal.fromStringUnsafe("5")), BigDecimal.fromStringUnsafe("5"))
 * ```
 *
-* @since 2.0.0
 * @category math
+* @since 2.0.0
 */
-const abs = (n) => n.value < bigint0 ? make$7(-n.value, n.scale) : n;
+const abs = (n) => n.value < bigint0 ? make$8(-n.value, n.scale) : n;
 /**
 * Provides an `Equivalence` instance for `BigDecimal` that determines equality between BigDecimal values.
 *
-* @example
+* **Example** (Checking decimal equivalence)
+*
 * ```ts
 * import { BigDecimal } from "effect"
 *
-* const a = BigDecimal.fromNumberUnsafe(1.50)
-* const b = BigDecimal.fromNumberUnsafe(1.5)
-* const c = BigDecimal.fromNumberUnsafe(2.0)
+* const a = BigDecimal.fromStringUnsafe("1.50")
+* const b = BigDecimal.fromStringUnsafe("1.5")
+* const c = BigDecimal.fromStringUnsafe("2.0")
 *
 * console.log(BigDecimal.Equivalence(a, b)) // true (1.50 === 1.5)
 * console.log(BigDecimal.Equivalence(a, c)) // false (1.50 !== 2.0)
@@ -3152,7 +3199,7 @@ const abs = (n) => n.value < bigint0 ? make$7(-n.value, n.scale) : n;
 * @category instances
 * @since 2.0.0
 */
-const Equivalence$2 = /* @__PURE__ */ make$9((self, that) => {
+const Equivalence$2 = /* @__PURE__ */ make$10((self, that) => {
 	if (self.scale > that.scale) return scale(that, self.scale).value === self.value;
 	if (self.scale < that.scale) return scale(self, that.scale).value === that.value;
 	return self.value === that.value;
@@ -3160,40 +3207,45 @@ const Equivalence$2 = /* @__PURE__ */ make$9((self, that) => {
 /**
 * Checks if two `BigDecimal`s are equal.
 *
-* @example
+* **Example** (Checking decimal equality)
+*
 * ```ts
 * import { BigDecimal } from "effect"
 *
-* const a = BigDecimal.fromNumberUnsafe(1.5)
-* const b = BigDecimal.fromNumberUnsafe(1.50)
-* const c = BigDecimal.fromNumberUnsafe(2.0)
+* const a = BigDecimal.fromStringUnsafe("1.5")
+* const b = BigDecimal.fromStringUnsafe("1.50")
+* const c = BigDecimal.fromStringUnsafe("2.0")
 *
 * console.log(BigDecimal.equals(a, b)) // true
 * console.log(BigDecimal.equals(a, c)) // false
 * ```
 *
-* @since 2.0.0
 * @category predicates
+* @since 2.0.0
 */
 const equals = /* @__PURE__ */ dual(2, (self, that) => Equivalence$2(self, that));
 /**
-* Formats a given `BigDecimal` as a `string`.
+* Formats a `BigDecimal` as a string.
 *
-* If the scale of the `BigDecimal` is greater than or equal to 16, the `BigDecimal` will
-* be formatted in scientific notation.
+* **Details**
 *
-* @example
+* The value is normalized before formatting. Scientific notation is used when
+* the absolute value of the normalized scale is at least `16`; otherwise plain
+* decimal notation is used.
+*
+* **Example** (Formatting decimals)
+*
 * ```ts
-* import { format, fromStringUnsafe } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(format(fromStringUnsafe("-5")), "-5")
-* assert.deepStrictEqual(format(fromStringUnsafe("123.456")), "123.456")
-* assert.deepStrictEqual(format(fromStringUnsafe("-0.00000123")), "-0.00000123")
+* assert.deepStrictEqual(BigDecimal.format(BigDecimal.fromStringUnsafe("-5")), "-5")
+* assert.deepStrictEqual(BigDecimal.format(BigDecimal.fromStringUnsafe("123.456")), "123.456")
+* assert.deepStrictEqual(BigDecimal.format(BigDecimal.fromStringUnsafe("-0.00000123")), "-0.00000123")
 * ```
 *
+* @category converting
 * @since 2.0.0
-* @category conversions
 */
 const format = (n) => {
 	const normalized = normalize(n);
@@ -3222,16 +3274,17 @@ const format = (n) => {
 /**
 * Formats a given `BigDecimal` as a `string` in scientific notation.
 *
-* @example
+* **Example** (Formatting decimals exponentially)
+*
 * ```ts
-* import { make, toExponential } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(toExponential(make(123456n, -5)), "1.23456e+10")
+* assert.deepStrictEqual(BigDecimal.toExponential(BigDecimal.make(123456n, -5)), "1.23456e+10")
 * ```
 *
-* @since 4.0.0
-* @category conversions
+* @category converting
+* @since 3.11.0
 */
 const toExponential = (n) => {
 	if (isZero(n)) return "0e+0";
@@ -3247,59 +3300,76 @@ const toExponential = (n) => {
 /**
 * Checks if a given `BigDecimal` is `0`.
 *
-* @example
+* **Example** (Checking zero decimals)
+*
 * ```ts
-* import { fromStringUnsafe, isZero } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(isZero(fromStringUnsafe("0")), true)
-* assert.deepStrictEqual(isZero(fromStringUnsafe("1")), false)
+* assert.deepStrictEqual(BigDecimal.isZero(BigDecimal.fromStringUnsafe("0")), true)
+* assert.deepStrictEqual(BigDecimal.isZero(BigDecimal.fromStringUnsafe("1")), false)
 * ```
 *
-* @since 2.0.0
 * @category predicates
+* @since 2.0.0
 */
 const isZero = (n) => n.value === bigint0;
 /**
 * Checks if a given `BigDecimal` is negative.
 *
-* @example
+* **Example** (Checking negative decimals)
+*
 * ```ts
-* import { fromStringUnsafe, isNegative } from "effect/BigDecimal"
+* import { BigDecimal } from "effect"
 * import * as assert from "node:assert"
 *
-* assert.deepStrictEqual(isNegative(fromStringUnsafe("-1")), true)
-* assert.deepStrictEqual(isNegative(fromStringUnsafe("0")), false)
-* assert.deepStrictEqual(isNegative(fromStringUnsafe("1")), false)
+* assert.deepStrictEqual(BigDecimal.isNegative(BigDecimal.fromStringUnsafe("-1")), true)
+* assert.deepStrictEqual(BigDecimal.isNegative(BigDecimal.fromStringUnsafe("0")), false)
+* assert.deepStrictEqual(BigDecimal.isNegative(BigDecimal.fromStringUnsafe("1")), false)
 * ```
 *
-* @since 2.0.0
 * @category predicates
+* @since 2.0.0
 */
 const isNegative = (n) => n.value < bigint0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Effectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
-* When the effect is evaluated, it will call `evaluate` with the current fiber.
+* **Details**
 *
-* @since 4.0.0
+* When the effect is evaluated, it calls `evaluate` with the current fiber.
+*
 * @category Prototypes
+* @since 4.0.0
 */
 const Prototype = (options) => makePrimitiveProto({
 	op: options.label,
 	[evaluate]: options.evaluate
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Context.js
 /**
-* @since 4.0.0
+* Runtime type identifier attached to `Context` service keys and used by
+* `isKey` to recognize them.
+*
 * @category Type Identifiers
+* @since 4.0.0
 */
 const ServiceTypeId = "~effect/Context/Service";
 /**
-* @example
+* Creates a `Context` service key.
+*
+* **Details**
+*
+* Call `Context.Service("Key")` for a function-style key, or use the two-stage
+* form `Context.Service<Self, Shape>()("Key")` for class-style service
+* declarations. The returned key can be yielded as an Effect and passed to
+* `Context.make`, `Context.add`, and the Context getter functions.
+*
+* **Example** (Creating service keys)
+*
 * ```ts
 * import { Context } from "effect"
 *
@@ -3320,8 +3390,8 @@ const ServiceTypeId = "~effect/Context/Service";
 * const config = Context.make(Config, { port: 8080 })
 * ```
 *
+* @category constructors
 * @since 4.0.0
-* @category Constructors
 */
 const Service = function() {
 	const prevLimit = Error.stackTraceLimit;
@@ -3367,7 +3437,7 @@ const ServiceProto = {
 		return self;
 	},
 	context(self) {
-		return make$6(this, self);
+		return make$7(this, self);
 	},
 	use(f) {
 		return withFiber((fiber) => f(get(fiber.context, this)));
@@ -3379,7 +3449,17 @@ const ServiceProto = {
 const ReferenceTypeId = "~effect/Context/Reference";
 const TypeId$5 = "~effect/Context";
 /**
-* @example
+* Creates a `Context` from an existing service map without validating or
+* copying it.
+*
+* **Gotchas**
+*
+* This is unsafe because later mutation of the provided map can affect the
+* created `Context`. Prefer `empty`, `make`, `add`, or `merge` for normal
+* Context construction.
+*
+* **Example** (Creating a context from a map)
+*
 * ```ts
 * import { Context } from "effect"
 *
@@ -3391,10 +3471,10 @@ const TypeId$5 = "~effect/Context";
 * const context = Context.makeUnsafe(map)
 * ```
 *
+* @category constructors
 * @since 4.0.0
-* @category Constructors
 */
-const makeUnsafe$2 = (mapUnsafe) => {
+const makeUnsafe$1 = (mapUnsafe) => {
 	const self = Object.create(Proto$1);
 	self.mapUnsafe = mapUnsafe;
 	self.mutable = false;
@@ -3424,7 +3504,8 @@ const Proto$1 = {
 /**
 * Checks if the provided argument is a `Context`.
 *
-* @example
+* **Example** (Checking for contexts)
+*
 * ```ts
 * import { Context } from "effect"
 * import * as assert from "node:assert"
@@ -3432,14 +3513,15 @@ const Proto$1 = {
 * assert.strictEqual(Context.isContext(Context.empty()), true)
 * ```
 *
-* @since 4.0.0
-* @category Guards
+* @category guards
+* @since 2.0.0
 */
 const isContext = (u) => hasProperty(u, TypeId$5);
 /**
 * Returns an empty `Context`.
 *
-* @example
+* **Example** (Creating an empty context)
+*
 * ```ts
 * import { Context } from "effect"
 * import * as assert from "node:assert"
@@ -3447,15 +3529,16 @@ const isContext = (u) => hasProperty(u, TypeId$5);
 * assert.strictEqual(Context.isContext(Context.empty()), true)
 * ```
 *
-* @since 4.0.0
-* @category Constructors
+* @category constructors
+* @since 2.0.0
 */
 const empty = () => emptyContext;
-const emptyContext = /* @__PURE__ */ makeUnsafe$2(/* @__PURE__ */ new Map());
+const emptyContext = /* @__PURE__ */ makeUnsafe$1(/* @__PURE__ */ new Map());
 /**
 * Creates a new `Context` with a single service associated to the key.
 *
-* @example
+* **Example** (Creating a context with one service)
+*
 * ```ts
 * import { Context } from "effect"
 * import * as assert from "node:assert"
@@ -3467,16 +3550,17 @@ const emptyContext = /* @__PURE__ */ makeUnsafe$2(/* @__PURE__ */ new Map());
 * assert.deepStrictEqual(Context.get(context, Port), { PORT: 8080 })
 * ```
 *
-* @since 4.0.0
-* @category Constructors
+* @category constructors
+* @since 2.0.0
 */
-const make$6 = (key, service) => makeUnsafe$2(new Map([[key.key, service]]));
+const make$7 = (key, service) => makeUnsafe$1(new Map([[key.key, service]]));
 /**
 * Adds a service to a given `Context`.
 *
-* @example
+* **Example** (Adding a service to a context)
+*
 * ```ts
-* import { pipe, Context } from "effect"
+* import { Context, pipe } from "effect"
 * import * as assert from "node:assert"
 *
 * const Port = Context.Service<{ PORT: number }>("Port")
@@ -3493,8 +3577,8 @@ const make$6 = (key, service) => makeUnsafe$2(new Map([[key.key, service]]));
 * assert.deepStrictEqual(Context.get(context, Timeout), { TIMEOUT: 5000 })
 * ```
 *
-* @since 4.0.0
 * @category Adders
+* @since 2.0.0
 */
 const add = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, (map) => {
 	map.set(key.key, service);
@@ -3502,12 +3586,10 @@ const add = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, 
 /**
 * Get a service from the context that corresponds to the given key.
 *
-* @param self - The `Context` to search for the service.
-* @param service - The `Service` of the service to retrieve.
+* **Example** (Getting a service from a context)
 *
-* @example
 * ```ts
-* import { pipe, Context } from "effect"
+* import { Context, pipe } from "effect"
 * import * as assert from "node:assert"
 *
 * const Port = Context.Service<{ PORT: number }>("Port")
@@ -3521,8 +3603,8 @@ const add = /* @__PURE__ */ dual(3, (self, key, service) => withMapUnsafe(self, 
 * assert.deepStrictEqual(Context.get(context, Timeout), { TIMEOUT: 5000 })
 * ```
 *
-* @since 4.0.0
-* @category Getters
+* @category getters
+* @since 2.0.0
 */
 const get = /* @__PURE__ */ dual(2, (self, service) => {
 	if (!self.mapUnsafe.has(service.key)) {
@@ -3532,10 +3614,13 @@ const get = /* @__PURE__ */ dual(2, (self, service) => {
 	return self.mapUnsafe.get(service.key);
 });
 /**
-* @example
+* Gets the value for a `Context.Reference`, returning its cached default when
+* the context does not contain an override.
+*
+* **Example** (Getting reference defaults unsafely)
+*
 * ```ts
 * import { Context } from "effect"
-* import * as assert from "node:assert"
 *
 * const LoggerRef = Context.Reference("Logger", {
 *   defaultValue: () => ({ log: (msg: string) => console.log(msg) })
@@ -3544,11 +3629,11 @@ const get = /* @__PURE__ */ dual(2, (self, service) => {
 * const context = Context.empty()
 * const logger = Context.getReferenceUnsafe(context, LoggerRef)
 *
-* assert.deepStrictEqual(logger, { log: (msg: string) => console.log(msg) })
+* console.log(typeof logger.log) // "function"
 * ```
 *
-* @since 4.0.0
 * @category unsafe
+* @since 4.0.0
 */
 const getReferenceUnsafe = (self, service) => {
 	if (!self.mapUnsafe.has(service.key)) return getDefaultValue(service);
@@ -3582,7 +3667,7 @@ const withMapUnsafe = (self, f) => {
 	}
 	const map = new Map(self.mapUnsafe);
 	f(map);
-	return makeUnsafe$2(map);
+	return makeUnsafe$1(map);
 };
 /**
 * Creates a context key with a default value.
@@ -3594,7 +3679,8 @@ const withMapUnsafe = (self, f) => {
 * when the context is accessed, or override it with a custom implementation
 * when needed.
 *
-* @example
+* **Example** (Creating references with default values)
+*
 * ```ts
 * import { Context } from "effect"
 *
@@ -3614,18 +3700,44 @@ const withMapUnsafe = (self, f) => {
 * const customLogger = Context.get(customContext, LoggerRef)
 * ```
 *
-* @since 4.0.0
-* @category References
+* @category references
+* @since 3.11.0
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Scheduler.js
 /**
+* The `Scheduler` module defines the runtime scheduling services used by
+* Effect fibers. A scheduler decides how runnable tasks are enqueued, when they
+* are dispatched, and whether a fiber should yield after consuming its
+* operation budget.
+*
+* **Common tasks**
+*
+* - Use {@link Scheduler} to provide a custom runtime scheduler
+* - Use {@link MixedScheduler} for the default priority-aware scheduler
+* - Use {@link MaxOpsBeforeYield} to tune fairness for CPU-bound fibers
+* - Use {@link PreventSchedulerYield} only when a runtime should bypass yield checks
+*
+* **Gotchas**
+*
+* - Scheduler priorities affect the order of queued runtime tasks, not the
+*   semantic result of an `Effect`
+* - Disabling scheduler yields can improve throughput for controlled workloads,
+*   but it can also let long-running fibers monopolize the JavaScript thread
+*
 * @since 2.0.0
 */
 /**
-* @since 4.0.0
+* Context reference for the scheduler used by the Effect runtime.
+*
+* **Details**
+*
+* The default value creates a `MixedScheduler`. Provide this service to
+* customize execution mode, task dispatching, or yield behavior.
+*
 * @category references
+* @since 2.0.0
 */
 const Scheduler = /* @__PURE__ */ Reference("effect/Scheduler", { defaultValue: () => new MixedScheduler() });
 const setImmediate = "setImmediate" in globalThis ? (f) => {
@@ -3657,18 +3769,17 @@ var PriorityBuckets = class {
 	}
 };
 /**
-* A scheduler implementation that provides efficient task scheduling
-* with support for both synchronous and asynchronous execution modes.
+* A scheduler implementation that batches queued tasks and dispatches them by
+* priority.
 *
-* Features:
-* - Batches tasks for efficient execution
-* - Supports priority-based task scheduling
-* - Configurable execution mode (sync/async)
-* - Automatic yielding based on operation count
-* - Optimized for high-throughput scenarios
+* **Details**
 *
-* @since 2.0.0
+* `MixedScheduler` supports synchronous and asynchronous execution modes, uses
+* operation counts to decide when fibers should yield, and is the default
+* scheduler implementation.
+*
 * @category schedulers
+* @since 2.0.0
 */
 var MixedScheduler = class {
 	executionMode;
@@ -3678,13 +3789,17 @@ var MixedScheduler = class {
 		this.setImmediate = setImmediateFn;
 	}
 	/**
+	* Returns whether the fiber has reached its operation budget and should yield.
+	*
 	* @since 2.0.0
 	*/
 	shouldYield(fiber) {
 		return fiber.currentOpCount >= fiber.maxOpsBeforeYield;
 	}
 	/**
-	* @since 2.0.0
+	* Creates a dispatcher that schedules work through this scheduler.
+	*
+	* @since 4.0.0
 	*/
 	makeDispatcher() {
 		return new MixedSchedulerDispatcher(this.setImmediate);
@@ -3736,14 +3851,16 @@ var MixedSchedulerDispatcher = class {
 };
 /**
 * A service reference that controls the maximum number of operations a fiber
-* can perform before yielding control back to the scheduler. This helps
-* prevent long-running fibers from monopolizing the execution thread.
+* can perform before yielding control back to the scheduler.
 *
-* The default value is 2048 operations, which provides a good balance between
-* performance and fairness in concurrent execution.
+* **Details**
 *
-* @since 4.0.0
+* The default value is `2048` operations, which balances performance and
+* fairness by helping prevent long-running fibers from monopolizing the
+* execution thread.
+*
 * @category references
+* @since 4.0.0
 */
 const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBeforeYield", { defaultValue: () => 2048 });
 /**
@@ -3751,39 +3868,83 @@ const MaxOpsBeforeYield = /* @__PURE__ */ Reference("effect/Scheduler/MaxOpsBefo
 * yield checks. When set to `true`, the fiber run loop won't call
 * `Scheduler.shouldYield`.
 *
-* @since 4.0.0
 * @category references
+* @since 4.0.0
 */
 const PreventSchedulerYield = /* @__PURE__ */ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Tracer.js
 /**
+* The `Tracer` module defines the low-level tracing model used by Effect to
+* describe and propagate spans. A span records the lifetime of an operation,
+* including its name, parent, attributes, links, annotations, sampling decision,
+* kind, and completion status.
+*
+* **Mental model**
+*
+* - `Tracer` is the backend interface responsible for creating spans
+* - `Span` values represent Effect-managed operations with mutable lifecycle
+*   hooks for ending spans and adding attributes, events, or links
+* - `ExternalSpan` represents trace context imported from another tracing
+*   system so Effect spans can be parented by or linked to external work
+* - `ParentSpan`, `Tracer`, and related context references control propagation,
+*   sampling, and trace-level filtering through the Effect context
+*
+* **Common tasks**
+*
+* - Implement a custom tracing backend with {@link make}
+* - Provide or inspect parent span context with {@link ParentSpan}
+* - Convert external trace identifiers into Effect span values with
+*   {@link externalSpan}
+* - Configure span metadata with {@link SpanOptions}, {@link SpanKind}, and
+*   {@link SpanLink}
+* - Disable propagation or adjust trace filtering with
+*   {@link DisablePropagation}, {@link CurrentTraceLevel}, and
+*   {@link MinimumTraceLevel}
+*
+* **Gotchas**
+*
+* - This module exposes the tracing data model and backend hooks; most
+*   application code should create spans through higher-level Effect APIs such
+*   as `Effect.withSpan`
+* - `ExternalSpan` only carries identity and metadata from another system; it
+*   does not have lifecycle methods like `Span`
+* - Propagation and sampling are context-dependent, so parent selection can be
+*   affected by disabled propagation, root span options, and trace-level
+*   thresholds
+*
 * @since 2.0.0
 */
 /**
-* @since 2.0.0
-* @category tags
-* @example
+* The string key used to identify the `ParentSpan` context service.
+*
+* **Example** (Reading the parent span key)
+*
 * ```ts
 * import { Tracer } from "effect"
 *
 * // The key used to identify parent spans in the context
 * console.log(Tracer.ParentSpanKey) // "effect/Tracer/ParentSpan"
 * ```
+*
+* @category tags
+* @since 4.0.0
 */
 const ParentSpanKey = "effect/Tracer/ParentSpan";
 Service()(ParentSpanKey);
 /**
-* @since 4.0.0
+* The string key used to identify the active `Tracer` context reference.
+*
 * @category references
+* @since 4.0.0
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /* @__PURE__ */ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
 /** @internal */
@@ -3791,7 +3952,7 @@ const CurrentLogLevel = /* @__PURE__ */ Reference("effect/References/CurrentLogL
 /** @internal */
 const MinimumLogLevel = /* @__PURE__ */ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -3921,7 +4082,7 @@ var FiberImpl = class {
 	interruptUnsafe(fiberId, annotations) {
 		if (this._exit) return;
 		let cause = causeInterrupt(fiberId);
-		if (this.currentStackFrame) cause = causeAnnotate(cause, make$6(StackTraceKey, this.currentStackFrame));
+		if (this.currentStackFrame) cause = causeAnnotate(cause, make$7(StackTraceKey, this.currentStackFrame));
 		if (annotations) cause = causeAnnotate(cause, annotations);
 		this._interruptedCause = this._interruptedCause ? causeCombine(this._interruptedCause, cause) : cause;
 		if (this.interruptible) this.evaluate(failCause(this._interruptedCause));
@@ -4026,7 +4187,7 @@ const fiberStackAnnotations = (fiber) => {
 	if (!fiber.currentStackFrame) return void 0;
 	const annotations = /* @__PURE__ */ new Map();
 	annotations.set(StackTraceKey.key, fiber.currentStackFrame);
-	return makeUnsafe$2(annotations);
+	return makeUnsafe$1(annotations);
 };
 /** @internal */
 const fiberAwaitAll = (self) => callback((resume) => {
@@ -4227,9 +4388,9 @@ const flatMapEager$1 = /* @__PURE__ */ dual(2, (self, f) => {
 	return flatMap$1(self, f);
 });
 /** @internal */
-const map$1 = /* @__PURE__ */ dual(2, (self, f) => flatMap$1(self, (a) => succeed$1(internalCall(() => f(a)))));
+const map = /* @__PURE__ */ dual(2, (self, f) => flatMap$1(self, (a) => succeed$1(internalCall(() => f(a)))));
 /** @internal */
-const mapEager$1 = /* @__PURE__ */ dual(2, (self, f) => effectIsExit(self) ? exitMap(self, f) : map$1(self, f));
+const mapEager$1 = /* @__PURE__ */ dual(2, (self, f) => effectIsExit(self) ? exitMap(self, f) : map(self, f));
 /** @internal */
 const mapErrorEager$1 = /* @__PURE__ */ dual(2, (self, f) => effectIsExit(self) ? exitMapError(self, f) : mapError(self, f));
 /** @internal */
@@ -4476,7 +4637,7 @@ const hasProcessStdout = typeof process === "object" && process !== null && type
 hasProcessStdout && process.stdout.isTTY;
 hasProcessStdout || "Deno" in globalThis;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Cause.js
 /**
 * Structured representation of how an Effect can fail.
 *
@@ -4557,8 +4718,12 @@ hasProcessStdout || "Deno" in globalThis;
 * @since 2.0.0
 */
 /**
-* Returns the first typed error value `E` from a cause.
-* Returns `Filter.fail` with the remaining cause when no `Fail` is found.
+* Returns a `Result` whose success value is the first typed error value `E`
+* from a {@link Fail} reason in the cause. If the cause has no `Fail` reason,
+* the failure value is the original cause narrowed to `Cause<never>`, because
+* it contains no typed error reasons.
+*
+* **When to use**
 *
 * Use {@link findFail} if you need the full {@link Fail} reason (including
 * annotations). Use {@link findErrorOption} if you prefer an `Option`.
@@ -4586,15 +4751,18 @@ Service()("effect/Cause/InterruptorStackTrace");
 /**
 * Creates a tagged error class with a `_tag` discriminator.
 *
+* **When to use**
+*
+* Use `TaggedError` for domain errors in Effect applications where you want discriminated-union error handling.
+*
+* **Details**
+*
 * Like {@link Error}, but instances also carry a `readonly _tag` property,
 * enabling `Effect.catchTag` and `Effect.catchTags` for tag-based recovery.
-* The `_tag` is excluded from the constructor argument.
+* The `_tag` is excluded from the constructor argument. Yielding an instance
+* inside `Effect.gen` fails the effect with this error.
 *
-* - Use for domain errors in Effect applications where you want
-*   discriminated-union error handling.
-* - Yielding an instance inside `Effect.gen` fails the effect with this error.
-*
-* **Example** (tag-based error recovery)
+* **Example** (Tag-based error recovery)
 *
 * ```ts
 * import { Data, Effect } from "effect"
@@ -4625,11 +4793,16 @@ Service()("effect/Cause/InterruptorStackTrace");
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Exit.js
 /**
 * Creates a failed Exit from a typed error value.
 *
+* **When to use**
+*
 * - Use for expected, recoverable failures
+*
+* **Details**
+*
 * - The error is wrapped in a `Cause.Fail` internally
 *
 * Returns a `Failure<never, E>`.
@@ -4655,7 +4828,12 @@ const void_ = exitVoid;
 /**
 * Returns the success value of an Exit as an Option.
 *
+* **When to use**
+*
 * - Use when you want to optionally extract the value without pattern matching
+*
+* **Details**
+*
 * - Returns `Option.some(value)` for a Success, `Option.none()` for a Failure
 *
 * **Example** (Getting the success value)
@@ -4675,7 +4853,7 @@ const void_ = exitVoid;
 */
 const getSuccess = exitGetSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$4 = "~effect/time/DateTime";
 /** @internal */
@@ -4707,16 +4885,14 @@ const toDateUtc$1 = (self) => new Date(self.epochMilliseconds);
 /**
 * Creates an `Effect` that always succeeds with a given value.
 *
-* **When to Use**
+* **When to use**
 *
 * Use this function when you need an effect that completes successfully with a
 * specific value without any errors or external dependencies.
 *
-* @see {@link fail} to create an effect that represents a failure.
+* **Example** (Creating a successful effect)
 *
-* @example
 * ```ts
-* // Title: Creating a Successful Effect
 * import { Effect } from "effect"
 *
 * // Creating an effect that represents a successful scenario
@@ -4726,14 +4902,16 @@ const toDateUtc$1 = (self) => new Date(self.epochMilliseconds);
 * const success = Effect.succeed(42)
 * ```
 *
-* @since 2.0.0
+* @see {@link fail} to create an effect that represents a failure.
 * @category Creating Effects
+* @since 2.0.0
 */
 const succeed = succeed$1;
 /**
 * Returns an effect which succeeds with `None`.
 *
-* @example
+* **Example** (Succeeding with Option.none)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -4743,14 +4921,15 @@ const succeed = succeed$1;
 * // Output: { _id: 'Option', _tag: 'None' }
 * ```
 *
-* @since 2.0.0
 * @category Creating Effects
+* @since 2.0.0
 */
 const succeedNone = succeedNone$1;
 /**
 * Returns an effect which succeeds with the value wrapped in a `Some`.
 *
-* @example
+* **Example** (Succeeding with Option.some)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -4760,24 +4939,22 @@ const succeedNone = succeedNone$1;
 * // Output: { _id: 'Option', _tag: 'Some', value: 42 }
 * ```
 *
-* @since 2.0.0
 * @category Creating Effects
+* @since 2.0.0
 */
 const succeedSome = succeedSome$1;
 /**
 * Creates an `Effect` that represents a recoverable error.
 *
-* **When to Use**
+* **When to use**
 *
 * Use this function to explicitly signal an error in an `Effect`. The error
 * will keep propagating unless it is handled. You can handle the error with
-* functions like {@link catchAll} or {@link catchTag}.
+* functions like {@link catchTag} or {@link catchTags}.
 *
-* @see {@link succeed} to create an effect that represents a successful value.
+* **Example** (Creating a failed effect)
 *
-* @example
 * ```ts
-* // Title: Creating a Failed Effect
 * import { Data, Effect } from "effect"
 *
 * class OperationFailedError extends Data.TaggedError("OperationFailedError")<{}> {}
@@ -4789,23 +4966,20 @@ const succeedSome = succeedSome$1;
 * )
 * ```
 *
-* @since 2.0.0
+* @see {@link succeed} to create an effect that represents a successful value.
 * @category Creating Effects
+* @since 2.0.0
 */
 const fail = fail$2;
 /**
 * Chains effects to produce new `Effect` instances, useful for combining
 * operations that depend on previous results.
 *
-* **Syntax**
+* **When to use**
 *
-* ```ts skip-type-checking
-* const flatMappedEffect = pipe(myEffect, Effect.flatMap(transformation))
-* // or
-* const flatMappedEffect = Effect.flatMap(myEffect, transformation)
-* // or
-* const flatMappedEffect = myEffect.pipe(Effect.flatMap(transformation))
-* ```
+* Use `flatMap` when you need to chain multiple effects, ensuring that each
+* step produces a new `Effect` while flattening any nested effects that may
+* occur.
 *
 * **Details**
 *
@@ -4817,13 +4991,21 @@ const fail = fail$2;
 * Since effects are immutable, `flatMap` always returns a new effect instead of
 * changing the original one.
 *
-* **When to Use**
+* **Example** (Syntax)
 *
-* Use `flatMap` when you need to chain multiple effects, ensuring that each
-* step produces a new `Effect` while flattening any nested effects that may
-* occur.
+* ```ts
+* import { Effect, pipe } from "effect"
 *
-* @example
+* const myEffect = Effect.succeed(1)
+* const transformation = (n: number) => Effect.succeed(n + 1)
+*
+* const flatMappedWithPipe = pipe(myEffect, Effect.flatMap(transformation))
+* const flatMappedWithDataFirst = Effect.flatMap(myEffect, transformation)
+* const flatMappedWithMethod = myEffect.pipe(Effect.flatMap(transformation))
+* ```
+*
+* **Example** (Sequencing dependent effects)
+*
 * ```ts
 * import { Data, Effect, pipe } from "effect"
 *
@@ -4852,9 +5034,8 @@ const fail = fail$2;
 * ```
 *
 * @see {@link tap} for a version that ignores the result of the effect.
-*
+* @category sequencing
 * @since 2.0.0
-* @category Sequencing
 */
 const flatMap = flatMap$1;
 /**
@@ -4870,7 +5051,8 @@ const flatMap = flatMap$1;
 * the `Exit.Failure` type. The error type is set to `never`, indicating that
 * the effect is structured to never fail directly.
 *
-* @example
+* **Example** (Capturing completion as Exit)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -4890,28 +5072,26 @@ const flatMap = flatMap$1;
 * @see {@link option} for a version that uses `Option` instead.
 * @see {@link result} for a version that uses `Result` instead.
 *
-* @since 2.0.0
 * @category Outcome Encapsulation
+* @since 2.0.0
 */
 const exit = exit$1;
 /**
-* Executes an effect synchronously, running it immediately and returning the
-* result.
+* Executes an effect synchronously and returns its success value.
 *
-* **When to Use**
+* **When to use**
 *
-* Use `runSync` to run an effect that does not fail and does not include
-* any asynchronous operations.
+* Use `runSync` only for effects that can complete synchronously.
 *
-* If the effect fails or involves asynchronous work, it will throw an error,
-* and execution will stop where the failure or async operation occurs.
+* **Details**
 *
-* @see {@link runSyncExit} for a version that returns an `Exit` type instead of
-* throwing an error.
+* If the effect fails, dies, is interrupted, or performs asynchronous work,
+* `runSync` throws a `FiberFailure` instead of returning a value. Use
+* `runSyncExit` when you want the failure captured as an `Exit`.
 *
-* @example
+* **Example** (Running a synchronous effect)
+*
 * ```ts
-* // Title: Synchronous Logging
 * import { Effect } from "effect"
 *
 * const program = Effect.sync(() => {
@@ -4926,8 +5106,9 @@ const exit = exit$1;
 * // Output: 1
 * ```
 *
-* @example
-* // Title: Incorrect Usage with Failing or Async Effects
+* **Example** (Throwing for failed or async effects)
+*
+* ```ts
 * import { Effect } from "effect"
 *
 * try {
@@ -4947,16 +5128,19 @@ const exit = exit$1;
 * }
 * // Output:
 * // (FiberFailure) AsyncFiberException: Fiber #0 cannot be resolved synchronously. This is caused by using runSync on an effect that performs async work
+* ```
 *
-* @since 2.0.0
+* @see {@link runSyncExit} for a version that returns an `Exit` type instead of
+* throwing an error.
 * @category Running Effects
+* @since 2.0.0
 */
 const runSync = runSync$1;
 /**
 * Runs an effect synchronously and returns the result as an `Exit` type, which
 * represents the outcome (success or failure) of the effect.
 *
-* **When to Use**
+* **When to use**
 *
 * Use `runSyncExit` to find out whether an effect succeeded or failed,
 * including any defects, without dealing with asynchronous operations.
@@ -4972,9 +5156,9 @@ const runSync = runSync$1;
 * return an `Failure` with a `Die` cause, indicating that the effect cannot be
 * resolved synchronously.
 *
-* @example
+* **Example** (Observing synchronous results as Exit)
+*
 * ```ts
-* // Title: Handling Results as Exit
 * import { Effect } from "effect"
 *
 * console.log(Effect.runSyncExit(Effect.succeed(1)))
@@ -4998,8 +5182,9 @@ const runSync = runSync$1;
 * // }
 * ```
 *
-* @example
-* // Title: Asynchronous Operation Resulting in Die
+* **Example** (Capturing async work as a Die cause)
+*
+* ```ts
 * import { Effect } from "effect"
 *
 * console.log(Effect.runSyncExit(Effect.promise(() => Promise.resolve(1))))
@@ -5017,9 +5202,10 @@ const runSync = runSync$1;
 * //     }
 * //   }
 * // }
+* ```
 *
-* @since 2.0.0
 * @category Running Effects
+* @since 2.0.0
 */
 const runSyncExit = runSyncExit$1;
 Service()("effect/Effect/Transaction");
@@ -5027,19 +5213,22 @@ Service()("effect/Effect/Transaction");
 * An optimized version of `map` that checks if an effect is already resolved
 * and applies the mapping function eagerly when possible.
 *
-* **When to Use**
+* **When to use**
 *
 * `mapEager` provides better performance for effects that are already resolved
 * by applying the transformation immediately instead of deferring it through
 * the effect pipeline.
 *
-* **Behavior**
+* **Details**
+*
+* Behavior:
 *
 * - For **Success effects**: Applies the mapping function immediately to the value
 * - For **Failure effects**: Returns the failure as-is without applying the mapping
 * - For **Pending effects**: Falls back to the regular `map` behavior
 *
-* @example
+* **Example** (Mapping already completed effects)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -5052,27 +5241,30 @@ Service()("effect/Effect/Transaction");
 * const mappedPending = Effect.mapEager(pending, (n) => n * 2) // Uses regular map
 * ```
 *
-* @since 4.0.0
 * @category Eager
+* @since 4.0.0
 */
 const mapEager = mapEager$1;
 /**
 * An optimized version of `mapError` that checks if an effect is already resolved
 * and applies the error mapping function eagerly when possible.
 *
-* **When to Use**
+* **When to use**
 *
 * `mapErrorEager` provides better performance for effects that are already resolved
 * by applying the error transformation immediately instead of deferring it through
 * the effect pipeline.
 *
-* **Behavior**
+* **Details**
+*
+* Behavior:
 *
 * - For **Success effects**: Returns the success as-is (no error to transform)
 * - For **Failure effects**: Applies the mapping function immediately to the error
 * - For **Pending effects**: Falls back to the regular `mapError` behavior
 *
-* @example
+* **Example** (Mapping errors eagerly when possible)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -5088,27 +5280,30 @@ const mapEager = mapEager$1;
 * ) // Uses regular mapError
 * ```
 *
-* @since 4.0.0
 * @category Eager
+* @since 4.0.0
 */
 const mapErrorEager = mapErrorEager$1;
 /**
 * An optimized version of `flatMap` that checks if an effect is already resolved
 * and applies the flatMap function eagerly when possible.
 *
-* **When to Use**
+* **When to use**
 *
 * `flatMapEager` provides better performance for effects that are already resolved
 * by applying the transformation immediately instead of deferring it through
 * the effect pipeline.
 *
-* **Behavior**
+* **Details**
+*
+* Behavior:
 *
 * - For **Success effects**: Applies the flatMap function immediately to the value
 * - For **Failure effects**: Returns the failure as-is without applying the flatMap
 * - For **Pending effects**: Falls back to the regular `flatMap` behavior
 *
-* @example
+* **Example** (Flat mapping eagerly when possible)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -5124,27 +5319,30 @@ const mapErrorEager = mapErrorEager$1;
 * ) // Uses regular flatMap
 * ```
 *
-* @since 4.0.0
 * @category Eager
+* @since 4.0.0
 */
 const flatMapEager = flatMapEager$1;
 /**
 * An optimized version of `catch` that checks if an effect is already resolved
 * and applies the catch function eagerly when possible.
 *
-* **When to Use**
+* **When to use**
 *
 * `catchEager` provides better performance for effects that are already resolved
 * by applying the error recovery immediately instead of deferring it through
 * the effect pipeline.
 *
-* **Behavior**
+* **Details**
+*
+* Behavior:
 *
 * - For **Success effects**: Returns the success as-is (no error to catch)
 * - For **Failure effects**: Applies the catch function immediately to the error
 * - For **Pending effects**: Falls back to the regular `catch` behavior
 *
-* @example
+* **Example** (Catching failures eagerly when possible)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -5170,17 +5368,20 @@ const flatMapEager = flatMapEager$1;
 * ) // Uses regular catch
 * ```
 *
-* @since 4.0.0
 * @category Eager
+* @since 4.0.0
 */
 const catchEager = catchEager$1;
 /**
 * Creates untraced function effects with eager evaluation optimization.
 *
+* **Details**
+*
 * Executes generator functions eagerly when all yielded effects are synchronous,
 * stopping at the first async effect and deferring to normal execution.
 *
-* @example
+* **Example** (Defining eager untraced effect functions)
+*
 * ```ts
 * import { Effect } from "effect"
 *
@@ -5193,14 +5394,14 @@ const catchEager = catchEager$1;
 * const effect = computation() // Executed immediately if all effects are sync
 * ```
 *
-* @since 4.0.0
 * @category Eager
+* @since 4.0.0
 */
 const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5218,7 +5419,7 @@ const getExpected = /* @__PURE__ */ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -5237,7 +5438,8 @@ globalThis.RegExp;
 /**
 * Escapes special characters in a regular expression pattern.
 *
-* @example
+* **Example** (Escaping a pattern string)
+*
 * ```ts
 * import { RegExp } from "effect"
 * import * as assert from "node:assert"
@@ -5245,22 +5447,22 @@ globalThis.RegExp;
 * assert.deepStrictEqual(RegExp.escape("a*b"), "a\\*b")
 * ```
 *
-* @category utilities
+* @category utils
 * @since 2.0.0
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/SchemaIssue.js
 const TypeId$3 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
 *
-* When to use:
+* **When to use**
 *
 * - Narrowing an `unknown` value to `Issue` in error-handling code.
 * - Distinguishing an `Issue` from other error types in a catch-all handler.
 *
-* Behaviour:
+* **Details**
 *
 * - Pure; does not mutate input.
 * - Checks for the internal `TypeId` brand on the value.
@@ -5279,6 +5481,7 @@ const TypeId$3 = "~effect/SchemaIssue/Issue";
 *
 * @see {@link Issue}
 *
+* @category guards
 * @since 4.0.0
 */
 function isIssue(u) {
@@ -5293,12 +5496,12 @@ var Base$1 = class {
 /**
 * Issue produced when a schema filter (refinement check) fails.
 *
-* When to use:
+* **When to use**
 *
 * - Inspect which filter rejected the value.
 * - Walk the inner `issue` for the specific validation failure.
 *
-* Behaviour:
+* **Details**
 *
 * - `actual` is the raw input value that was tested (plain `unknown`, not
 *   wrapped in `Option`).
@@ -5321,7 +5524,7 @@ var Base$1 = class {
 * @see {@link Leaf} — terminal issue types that commonly appear as the inner `issue`
 * @see {@link CheckHook} — formatter hook for `Filter` issues
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Filter$1 = class extends Base$1 {
@@ -5348,13 +5551,13 @@ var Filter$1 = class extends Base$1 {
 /**
 * Issue produced when a schema transformation (encode/decode step) fails.
 *
-* When to use:
+* **When to use**
 *
 * - Inspect failures from `Schema.decodeTo` / `Schema.encodeTo`
 *   transformations.
 * - Walk the inner `issue` for the root cause of the transformation failure.
 *
-* Behaviour:
+* **Details**
 *
 * - `ast` is the AST node for the transformation that failed.
 * - `actual` is `Option.some(value)` when the input was present, or
@@ -5364,7 +5567,7 @@ var Filter$1 = class extends Base$1 {
 * @see {@link Filter} — failure from a refinement check (not a transformation)
 * @see {@link Composite} — multiple issues from a single schema node
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Encoding = class extends Base$1 {
@@ -5392,12 +5595,12 @@ var Encoding = class extends Base$1 {
 * Wraps an inner {@link Issue} with a property-key path, indicating *where* in
 * a nested structure the error occurred.
 *
-* When to use:
+* **When to use**
 *
 * - Walk the issue tree to accumulate path segments for error reporting.
 * - Match on `_tag === "Pointer"` when flattening nested issues.
 *
-* Behaviour:
+* **Details**
 *
 * - `path` is an array of property keys (strings, numbers, or symbols).
 * - Has no `actual` value — {@link getActual} returns `Option.none()`.
@@ -5407,8 +5610,8 @@ var Encoding = class extends Base$1 {
 * @see {@link getActual} — returns `Option.none()` for `Pointer`
 * @see {@link Composite} — groups multiple issues under one schema node
 *
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var Pointer = class extends Base$1 {
 	_tag = "Pointer";
@@ -5429,13 +5632,13 @@ var Pointer = class extends Base$1 {
 /**
 * Issue produced when a required key or tuple index is missing from the input.
 *
-* When to use:
+* **When to use**
 *
 * - Detect absent fields in struct/tuple validation.
 * - Typically found inside a {@link Pointer} that indicates which key is
 *   missing.
 *
-* Behaviour:
+* **Details**
 *
 * - Has no `actual` value — {@link getActual} returns `Option.none()`.
 * - `annotations` may contain a custom `messageMissingKey` for formatting.
@@ -5443,7 +5646,7 @@ var Pointer = class extends Base$1 {
 * @see {@link Pointer} — wraps this issue with the missing key's path
 * @see {@link UnexpectedKey} — the opposite case (extra key present)
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var MissingKey = class extends Base$1 {
@@ -5461,13 +5664,13 @@ var MissingKey = class extends Base$1 {
 * Issue produced when an input object or tuple contains a key/index not
 * declared by the schema.
 *
-* When to use:
+* **When to use**
 *
 * - Detect excess properties during strict struct/tuple validation.
 * - Typically found inside a {@link Pointer} that indicates which key was
 *   unexpected.
 *
-* Behaviour:
+* **Details**
 *
 * - `actual` is the raw value at the unexpected key (plain `unknown`).
 * - `ast` is the schema that was being validated against.
@@ -5476,7 +5679,7 @@ var MissingKey = class extends Base$1 {
 * @see {@link MissingKey} — the opposite case (required key absent)
 * @see {@link Pointer} — wraps this issue with the unexpected key's path
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var UnexpectedKey = class extends Base$1 {
@@ -5498,13 +5701,13 @@ var UnexpectedKey = class extends Base$1 {
 /**
 * Issue that groups multiple child issues under a single schema node.
 *
-* When to use:
+* **When to use**
 *
 * - Walk the issue tree for struct/tuple schemas that collect all field errors
 *   rather than failing on the first.
 * - Match on `_tag === "Composite"` to iterate over `issues`.
 *
-* Behaviour:
+* **Details**
 *
 * - `issues` is a non-empty readonly array (at least one child).
 * - `actual` is `Option.some(value)` when the input was present, or
@@ -5514,8 +5717,8 @@ var UnexpectedKey = class extends Base$1 {
 * @see {@link AnyOf} — used for union no-match errors (similar but different semantics)
 * @see {@link Pointer} — adds path context to individual issues
 *
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var Composite = class extends Base$1 {
 	_tag = "Composite";
@@ -5542,13 +5745,13 @@ var Composite = class extends Base$1 {
 * Issue produced when the runtime type of the input does not match the type
 * expected by the schema (e.g. got `null` when `string` was expected).
 *
-* When to use:
+* **When to use**
 *
 * - Detect basic type mismatches (wrong primitive, null where object expected,
 *   etc.).
 * - The most common leaf issue in typical validation failures.
 *
-* Behaviour:
+* **Details**
 *
 * - `ast` is the schema node that expected a different type.
 * - `actual` is `Option.some(value)` when the input was present, or
@@ -5572,7 +5775,7 @@ var Composite = class extends Base$1 {
 *
 * @see {@link InvalidValue} — the input has the right type but fails a value constraint
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var InvalidType = class extends Base$1 {
@@ -5595,13 +5798,13 @@ var InvalidType = class extends Base$1 {
 * Issue produced when the input has the correct type but its value violates a
 * constraint (e.g. a string that is too short, a number out of range).
 *
-* When to use:
+* **When to use**
 *
 * - Detect constraint violations from `Schema.filter`, `Schema.minLength`,
 *   `Schema.greaterThan`, etc.
 * - Create custom validation errors in `Schema.makeFilter` callbacks.
 *
-* Behaviour:
+* **Details**
 *
 * - `actual` is `Option.some(value)` when the failing value is known, or
 *   `Option.none()` when absent.
@@ -5625,7 +5828,7 @@ var InvalidType = class extends Base$1 {
 * @see {@link InvalidType} — the input has the wrong type entirely
 * @see {@link Filter} — composite wrapper when a schema filter produces this issue
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var InvalidValue = class extends Base$1 {
@@ -5647,13 +5850,13 @@ var InvalidValue = class extends Base$1 {
 /**
 * Issue produced when a value does not match *any* member of a union schema.
 *
-* When to use:
+* **When to use**
 *
 * - Inspect which union members were attempted and why each failed.
 * - `issues` may be empty when the union has no members or when the input does
 *   not pass the initial type guard.
 *
-* Behaviour:
+* **Details**
 *
 * - `ast` is the `Union` AST node.
 * - `actual` is the raw input value (plain `unknown`).
@@ -5663,7 +5866,7 @@ var InvalidValue = class extends Base$1 {
 * @see {@link OneOf} — the opposite: *too many* members matched
 * @see {@link Composite} — groups multiple issues under a non-union schema
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var AnyOf = class extends Base$1 {
@@ -5691,12 +5894,12 @@ var AnyOf = class extends Base$1 {
 * Issue produced when a value matches *multiple* members of a union that is
 * configured to allow exactly one match (oneOf mode).
 *
-* When to use:
+* **When to use**
 *
 * - Detect ambiguous union matches when `oneOf` validation is enabled.
 * - Inspect `successes` to see which members matched.
 *
-* Behaviour:
+* **Details**
 *
 * - `ast` is the `Union` AST node.
 * - `actual` is the raw input value (plain `unknown`).
@@ -5706,7 +5909,7 @@ var AnyOf = class extends Base$1 {
 *
 * @see {@link AnyOf} — the opposite: *no* members matched
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var OneOf = class extends Base$1 {
@@ -5743,11 +5946,11 @@ function makeSingle(input, out) {
 	return makeFilterIssue(input, out);
 }
 /** @internal */
-function make$3(input, ast, out) {
+function make$4(input, ast, out) {
 	if (Array.isArray(out)) {
 		if (isReadonlyArrayNonEmpty(out)) {
 			if (out.length === 1) return makeFilterIssue(input, out[0]);
-			return new Composite(ast, some(input), map$2(out, (entry) => makeFilterIssue(input, entry)));
+			return new Composite(ast, some(input), map$1(out, (entry) => makeFilterIssue(input, entry)));
 		}
 		return;
 	}
@@ -5756,13 +5959,13 @@ function make$3(input, ast, out) {
 /**
 * The built-in {@link LeafHook} used by default formatters.
 *
-* When to use:
+* **When to use**
 *
 * - Use as-is when you only need to customise the {@link CheckHook} but want
 *   the default leaf rendering.
 * - Reference as a starting point for custom `LeafHook` implementations.
 *
-* Behaviour:
+* **Details**
 *
 * - Checks for a `message` annotation first; returns it if present.
 * - Otherwise generates a default message per `_tag`:
@@ -5804,12 +6007,12 @@ const defaultLeafHook = (issue) => {
 /**
 * The built-in {@link CheckHook} used by default formatters.
 *
-* When to use:
+* **When to use**
 *
 * - Use as-is when you only need to customise the {@link LeafHook} but want
 *   the default filter rendering.
 *
-* Behaviour:
+* **Details**
 *
 * - Looks for a `message` annotation on the inner issue first, then on the
 *   filter itself.
@@ -5879,13 +6082,13 @@ function formatCheck(check) {
 * Creates a {@link Formatter} that converts an {@link Issue} into a
 * human-readable multi-line string.
 *
-* When to use:
+* **When to use**
 *
 * - Produce error messages for logging, CLI output, or developer-facing
 *   diagnostics.
 * - This is the default formatter used by `Issue.toString()`.
 *
-* Behaviour:
+* **Details**
 *
 * - Flattens the issue tree into `{ message, path }` entries using
 *   {@link defaultLeafHook} and {@link defaultCheckHook}.
@@ -5942,7 +6145,7 @@ function formatOption(actual) {
 	return format$1(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/SchemaGetter.js
 /**
 * Composable transformation primitives for the Effect Schema system.
 *
@@ -6033,17 +6236,18 @@ function formatOption(actual) {
 /**
 * A composable transformation from an encoded type `E` to a decoded type `T`.
 *
-* A Getter wraps a function `Option<E> -> Effect<Option<T>, Issue, R>`:
+* **When to use**
+*
+* - Building custom schema transformations with `Schema.decodeTo` or `Schema.decode`.
+* - Composing multiple transformation steps into a single getter.
+*
+* **Details**
+*
+* - A getter wraps a function `Option<E> -> Effect<Option<T>, Issue, R>`.
 * - Receives `Option.None` when the encoded key is absent (e.g. missing struct field).
 * - Returns `Option.None` to omit the value from the decoded output.
 * - Fails with `Issue` on invalid input.
 * - May require Effect services via `R`.
-*
-* Use this when:
-* - Building custom schema transformations with `Schema.decodeTo` or `Schema.decode`.
-* - Composing multiple transformation steps into a single getter.
-*
-* Behavior:
 * - Immutable — constructing or composing getters does not mutate existing instances.
 * - `.map(f)` applies `f` to the decoded value (inside the `Some`), leaving `None` unchanged.
 * - `.compose(other)` chains two getters: the output of `this` feeds into `other`.
@@ -6060,12 +6264,11 @@ function formatOption(actual) {
 * // composed: Getter<number, string> — parses then doubles
 * ```
 *
-* See also:
-* - {@link transform} — create a getter from a pure function
-* - {@link passthrough} — identity getter
-* - {@link transformOrFail} — fallible transformation
+* @see {@link transform} - create a getter from a pure function
+* @see {@link passthrough} - identity getter
+* @see {@link transformOrFail} - fallible transformation
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Getter = class Getter extends Class$1 {
@@ -6075,7 +6278,7 @@ var Getter = class Getter extends Class$1 {
 		this.run = run;
 	}
 	map(f) {
-		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$3(f))));
+		return new Getter((oe, options) => this.run(oe, options).pipe(mapEager(map$2(f))));
 	}
 	compose(other) {
 		if (isPassthrough(this)) return other;
@@ -6093,14 +6296,15 @@ function passthrough$1() {
 /**
 * Creates a getter that applies a pure function to present values.
 *
-* This is the most commonly used constructor. It transforms `Some(e)` to
-* `Some(f(e))` and leaves `None` unchanged.
+* **When to use**
 *
-* Use this when:
 * - You have a pure, infallible transformation between types.
 * - Building encode/decode pairs for `Schema.decodeTo`.
 *
-* Behavior:
+* **Details**
+*
+* - This is the most commonly used constructor.
+* - Transforms `Some(e)` to `Some(f(e))` and leaves `None` unchanged.
 * - Pure, does not mutate input.
 * - Skips `None` inputs — only called when a value is present.
 * - Never fails.
@@ -6118,43 +6322,43 @@ function passthrough$1() {
 * )
 * ```
 *
-* See also:
-* - {@link transformOrFail} — when the transformation can fail
-* - {@link transformOptional} — when you need to handle `None` inputs
-* - {@link passthrough} — when no transformation is needed
+* @see {@link transformOrFail} - when the transformation can fail
+* @see {@link transformOptional} - when you need to handle `None` inputs
+* @see {@link passthrough} - when no transformation is needed
 *
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 function transform$1(f) {
-	return transformOptional(map$3(f));
+	return transformOptional(map$2(f));
 }
 /**
 * Creates a getter that transforms the full `Option` — both present and absent values.
 *
-* Use this when:
+* **When to use**
+*
 * - You need to handle both `Some` and `None` cases.
 * - You want to turn a present value into absent, or vice versa.
 *
-* Behavior:
+* **Details**
+*
 * - Pure, never fails.
 * - Receives the full `Option<E>` and must return `Option<T>`.
 *
 * **Example** (Filter out empty strings)
 *
 * ```ts
-* import { SchemaGetter, Option } from "effect"
+* import { Option, SchemaGetter } from "effect"
 *
 * const skipEmpty = SchemaGetter.transformOptional<string, string>((o) =>
 *   Option.filter(o, (s) => s.length > 0)
 * )
 * ```
 *
-* See also:
-* - {@link transform} — simpler, only handles present values
-* - {@link omit} — always returns `None`
+* @see {@link transform} - simpler, only handles present values
+* @see {@link omit} - always returns `None`
 *
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 function transformOptional(f) {
@@ -6163,10 +6367,12 @@ function transformOptional(f) {
 /**
 * Coerces any value to a `string` using the global `String()` constructor.
 *
-* Use this when:
+* **When to use**
+*
 * - You need a string representation of an arbitrary encoded value.
 *
-* Behavior:
+* **Details**
+*
 * - Pure, never fails.
 * - Delegates to `globalThis.String`.
 *
@@ -6179,8 +6385,7 @@ function transformOptional(f) {
 * // Getter<string, number>
 * ```
 *
-* See also:
-* - {@link transform} — for custom string conversions
+* @see {@link transform} - for custom string conversions
 *
 * @category Coercions
 * @since 4.0.0
@@ -6191,10 +6396,12 @@ function String$3() {
 /**
 * Coerces any value to a `number` using the global `Number()` constructor.
 *
-* Use this when:
+* **When to use**
+*
 * - You need numeric coercion of an encoded value.
 *
-* Behavior:
+* **Details**
+*
 * - Pure, never fails (may produce `NaN` for non-numeric inputs).
 * - Delegates to `globalThis.Number`.
 *
@@ -6207,8 +6414,7 @@ function String$3() {
 * // Getter<number, string>
 * ```
 *
-* See also:
-* - {@link transformOrFail} — for validated number parsing
+* @see {@link transformOrFail} - for validated number parsing
 *
 * @category Coercions
 * @since 4.0.0
@@ -6217,22 +6423,24 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/SchemaTransformation.js
 const TypeId$2 = "~effect/SchemaTransformation/Transformation";
 /**
 * A bidirectional transformation between a decoded type `T` and an encoded
 * type `E`, built from a pair of `Getter`s.
 *
-* This is the primary building block for `Schema.decodeTo`, `Schema.encodeTo`,
-* `Schema.decode`, `Schema.encode`, and `Schema.link`. Each direction is a
-* `SchemaGetter.Getter` that handles optionality, failure, and Effect services.
+* **When to use**
 *
-* When to use this:
 * - You need to define how a schema converts between two representations.
 * - You want to compose multiple transformations into a pipeline.
 * - You want to flip a transformation to swap decode/encode.
 *
-* Behavior:
+* **Details**
+*
+* This is the primary building block for `Schema.decodeTo`, `Schema.encodeTo`,
+* `Schema.decode`, `Schema.encode`, and `Schema.link`. Each direction is a
+* `SchemaGetter.Getter` that handles optionality, failure, and Effect services.
+*
 * - Immutable — `flip()` and `compose()` return new instances.
 * - `flip()` swaps the decode and encode getters.
 * - `compose(other)` chains: `this.decode` then `other.decode` for decoding,
@@ -6250,13 +6458,12 @@ const TypeId$2 = "~effect/SchemaTransformation/Transformation";
 * // encode: passthrough (both directions)
 * ```
 *
-* See also:
-* - {@link make} — construct from `{ decode, encode }` getters
-* - {@link transform} — construct from pure functions
-* - {@link transformOrFail} — construct from effectful functions
-* - {@link Middleware} — effect-pipeline-level alternative
+* @see {@link make} — construct from `{ decode, encode }` getters
+* @see {@link transform} — construct from pure functions
+* @see {@link transformOrFail} — construct from effectful functions
+* @see {@link Middleware} — effect-pipeline-level alternative
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Transformation = class Transformation {
@@ -6278,10 +6485,12 @@ var Transformation = class Transformation {
 /**
 * Returns `true` if `u` is a `Transformation` instance.
 *
-* When to use this:
+* **When to use**
+*
 * - Checking whether a value is already a Transformation before wrapping it.
 *
-* Behavior:
+* **Details**
+*
 * - Pure predicate, no side effects.
 * - Acts as a TypeScript type guard.
 *
@@ -6297,10 +6506,10 @@ var Transformation = class Transformation {
 * // false
 * ```
 *
-* See also:
-* - {@link Transformation}
-* - {@link make}
+* @see {@link Transformation}
+* @see {@link make}
 *
+* @category guards
 * @since 4.0.0
 */
 function isTransformation(u) {
@@ -6310,11 +6519,13 @@ function isTransformation(u) {
 * Constructs a `Transformation` from an object with `decode` and `encode`
 * `Getter`s. If the input is already a `Transformation`, returns it as-is.
 *
-* When to use this:
+* **When to use**
+*
 * - You already have `Getter` instances and want to pair them.
 * - You want idempotent wrapping (won't double-wrap).
 *
-* Behavior:
+* **Details**
+*
 * - Does not mutate the input.
 * - Returns the input unchanged if it is already a `Transformation`.
 *
@@ -6329,14 +6540,14 @@ function isTransformation(u) {
 * })
 * ```
 *
-* See also:
-* - {@link transform} — simpler constructor from pure functions
-* - {@link transformOrFail} — constructor from effectful functions
-* - {@link Transformation}
+* @see {@link transform} — simpler constructor from pure functions
+* @see {@link transformOrFail} — constructor from effectful functions
+* @see {@link Transformation}
 *
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
-const make$2 = (options) => {
+const make$3 = (options) => {
 	if (isTransformation(options)) return options;
 	return new Transformation(options.decode, options.encode);
 };
@@ -6348,10 +6559,12 @@ function passthrough() {
 * Decodes a `string` into a `number` and encodes a `number` back to a
 * `string`.
 *
-* When to use this:
+* **When to use**
+*
 * - Parsing numeric strings from APIs, form data, or URL parameters.
 *
-* Behavior:
+* **Details**
+*
 * - Decode: coerces the string to a number (like `Number(s)`).
 * - Encode: coerces the number to a string (like `String(n)`).
 * - Does not validate that the result is finite — combine with
@@ -6367,16 +6580,15 @@ function passthrough() {
 * )
 * ```
 *
-* See also:
-* - {@link bigintFromString}
-* - {@link transform}
+* @see {@link bigintFromString}
+* @see {@link transform}
 *
 * @category Coercions
 * @since 4.0.0
 */
 const numberFromString = /* @__PURE__ */ new Transformation(/* @__PURE__ */ Number$3(), /* @__PURE__ */ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/SchemaAST.js
 /**
 * Abstract Syntax Tree (AST) representation for Effect schemas.
 *
@@ -6457,56 +6669,59 @@ function makeGuard(tag) {
 /**
 * Narrows an {@link AST} to {@link Declaration}.
 *
-* @category Guard
-* @since 4.0.0
+* @category guards
+* @since 3.10.0
 */
 const isDeclaration = /* @__PURE__ */ makeGuard("Declaration");
 /**
 * Narrows an {@link AST} to {@link Never}.
 *
-* @category Guard
+* @category guards
 * @since 4.0.0
 */
 const isNever = /* @__PURE__ */ makeGuard("Never");
 /**
 * Narrows an {@link AST} to {@link Literal}.
 *
-* @category Guard
-* @since 4.0.0
+* @category guards
+* @since 3.10.0
 */
 const isLiteral = /* @__PURE__ */ makeGuard("Literal");
 /**
 * Narrows an {@link AST} to {@link UniqueSymbol}.
 *
-* @category Guard
-* @since 4.0.0
+* @category guards
+* @since 3.10.0
 */
 const isUniqueSymbol = /* @__PURE__ */ makeGuard("UniqueSymbol");
 /**
 * Narrows an {@link AST} to {@link Arrays}.
 *
-* @category Guard
+* @category guards
 * @since 4.0.0
 */
 const isArrays = /* @__PURE__ */ makeGuard("Arrays");
 /**
 * Narrows an {@link AST} to {@link Objects}.
 *
-* @category Guard
+* @category guards
 * @since 4.0.0
 */
 const isObjects = /* @__PURE__ */ makeGuard("Objects");
 /**
 * Narrows an {@link AST} to {@link Union}.
 *
-* @category Guard
-* @since 4.0.0
+* @category guards
+* @since 3.10.0
 */
 const isUnion = /* @__PURE__ */ makeGuard("Union");
 /**
-* A single step in an {@link Encoding} chain, pairing a target {@link AST}
-* with a `Transformation` or `Middleware` that converts values between the
-* current node and the target.
+* A single step in an {@link Encoding} chain.
+*
+* **Details**
+*
+* A link pairs a target {@link AST} with a `Transformation` or `Middleware`
+* that converts values between the current node and the target.
 *
 * - `to` — the AST node on the other side of this transformation step.
 * - `transformation` — the bidirectional conversion logic (decode/encode).
@@ -6516,8 +6731,7 @@ const isUnion = /* @__PURE__ */ makeGuard("Union");
 *
 * @see {@link Encoding}
 * @see {@link decodeTo}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Link = class {
@@ -6533,6 +6747,8 @@ const defaultParseOptions = {};
 /**
 * Per-property metadata attached to AST nodes via {@link Base.context}.
 *
+* **Details**
+*
 * Tracks whether a property key is optional, mutable, has a constructor
 * default, or carries key-level annotations. Typically set by helpers like
 * {@link optionalKey} and `Schema.mutableKey`.
@@ -6546,8 +6762,7 @@ const defaultParseOptions = {};
 *
 * @see {@link optionalKey}
 * @see {@link isOptional}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Context = class {
@@ -6567,6 +6782,8 @@ const TypeId$1 = "~effect/Schema";
 /**
 * Abstract base class for all {@link AST} node variants.
 *
+* **Details**
+*
 * Every AST node extends `Base` and inherits these fields:
 *
 * - `annotations` — user-supplied metadata (identifier, title, description,
@@ -6579,8 +6796,7 @@ const TypeId$1 = "~effect/Schema";
 * Subclasses add a `_tag` discriminant and variant-specific data.
 *
 * @see {@link AST}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Base = class {
@@ -6602,17 +6818,20 @@ var Base = class {
 /**
 * AST node for user-defined opaque types with custom parsing logic.
 *
+* **When to use**
+*
 * Use when none of the built-in AST nodes fit. The `run` function receives
 * `typeParameters` and returns a parser that validates/transforms raw input.
+*
+* **Details**
 *
 * - `typeParameters` — inner schemas this declaration is parameterized over
 *   (e.g. the element type for a custom collection).
 * - `run` — factory producing the actual parse function.
 *
 * @see {@link isDeclaration}
-*
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var Declaration = class Declaration extends Base {
 	_tag = "Declaration";
@@ -6646,12 +6865,13 @@ var Declaration = class Declaration extends Base {
 /**
 * AST node matching the `null` literal value.
 *
+* **Details**
+*
 * Parsing succeeds only when the input is exactly `null`.
 *
 * @see {@link null}
 * @see {@link isNull}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Null$1 = class extends Base {
@@ -6670,6 +6890,8 @@ const null_ = /* @__PURE__ */ new Null$1();
 * AST node matching an exact primitive value (string, number, boolean, or
 * bigint).
 *
+* **Details**
+*
 * Parsing succeeds only when the input is strictly equal (`===`) to the
 * stored `literal`. Numeric literals must be finite — `Infinity`, `-Infinity`,
 * and `NaN` are rejected at construction time.
@@ -6685,9 +6907,8 @@ const null_ = /* @__PURE__ */ new Null$1();
 *
 * @see {@link LiteralValue}
 * @see {@link isLiteral}
-*
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var Literal$1 = class extends Base {
 	_tag = "Literal";
@@ -6724,7 +6945,7 @@ function literalToString(ast) {
 * @see {@link string}
 * @see {@link isString}
 *
-* @category model
+* @category models
 * @since 4.0.0
 */
 var String$2 = class extends Base {
@@ -6741,6 +6962,7 @@ var String$2 = class extends Base {
 /**
 * Singleton {@link String} AST instance.
 *
+* @category constructors
 * @since 4.0.0
 */
 const string = /* @__PURE__ */ new String$2();
@@ -6748,7 +6970,10 @@ const string = /* @__PURE__ */ new String$2();
 * AST node matching any `number` value (including `NaN`, `Infinity`,
 * `-Infinity`).
 *
+* **Details**
+*
 * Default JSON serialization:
+*
 * - Finite numbers are serialized as JSON numbers.
 * - `Infinity`, `-Infinity`, and `NaN` are serialized as JSON strings.
 *
@@ -6757,8 +6982,7 @@ const string = /* @__PURE__ */ new String$2();
 *
 * @see {@link number}
 * @see {@link isNumber}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Number$2 = class extends Base {
@@ -6793,11 +7017,14 @@ function hasCheck(checks, tag) {
 /**
 * Singleton {@link Number} AST instance.
 *
+* @category constructors
 * @since 4.0.0
 */
 const number = /* @__PURE__ */ new Number$2();
 /**
 * AST node for array-like types — both tuples and arrays.
+*
+* **Details**
 *
 * - `elements` — positional element types (tuple elements). An element is
 *   optional if its {@link Context.isOptional} is `true`.
@@ -6806,6 +7033,8 @@ const number = /* @__PURE__ */ new Number$2();
 *   entries are trailing positional elements after the spread.
 * - `isMutable` — whether the resulting array is `readonly` (`false`) or
 *   mutable (`true`).
+*
+* **Gotchas**
 *
 * Construction enforces TypeScript ordering rules: a required element
 * cannot follow an optional one, and an optional element cannot follow a
@@ -6827,8 +7056,7 @@ const number = /* @__PURE__ */ new Number$2();
 *
 * @see {@link isArrays}
 * @see {@link Objects}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Arrays = class Arrays extends Base {
@@ -6965,14 +7193,15 @@ function getIndexSignatureKeys(input, parameter) {
 /**
 * A named property within an {@link Objects} node.
 *
+* **Details**
+*
 * Pairs a `name` (any `PropertyKey`) with a `type` ({@link AST}). The
 * property's optionality and mutability are determined by the `type`'s
 * {@link Context}.
 *
 * @see {@link Objects}
-*
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var PropertySignature = class {
 	name;
@@ -6985,19 +7214,22 @@ var PropertySignature = class {
 /**
 * An index signature entry within an {@link Objects} node.
 *
+* **Details**
+*
 * - `parameter` — the key type AST (e.g. {@link String} for `string` keys,
 *   {@link TemplateLiteral} for patterned keys).
 * - `type` — the value type AST.
 * - `merge` — optional {@link KeyValueCombiner} for handling duplicate keys.
+*
+* **Gotchas**
 *
 * Using `Schema.optionalKey` on the value type is not allowed for index
 * signatures (throws at construction); use `Schema.optional` instead.
 *
 * @see {@link Objects}
 * @see {@link PropertySignature}
-*
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var IndexSignature = class {
 	parameter;
@@ -7011,14 +7243,19 @@ var IndexSignature = class {
 	}
 };
 /**
-* AST node for object-like types — both structs and records.
+* AST node for object-like schemas, including structs and records.
+*
+* **Details**
 *
 * - `propertySignatures` — named properties with their types (struct fields).
 * - `indexSignatures` — index signature entries (record patterns), each with
-*   a `parameter` AST (the key type) and a `type` AST (the value type).
+*   a `parameter` AST for matching keys and a `type` AST for values.
 *
-* An `Objects` with no properties and no index signatures acts as a bare
-* `object | array` type check (accepts any non-nullish value).
+* An `Objects` node with no properties and no index signatures performs only a
+* non-nullish check: it accepts any value except `null` and `undefined`,
+* including primitive values.
+*
+* **Gotchas**
 *
 * Duplicate property names throw at construction time.
 *
@@ -7042,8 +7279,7 @@ var IndexSignature = class {
 * @see {@link PropertySignature}
 * @see {@link IndexSignature}
 * @see {@link Arrays}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Objects = class Objects extends Base {
@@ -7348,6 +7584,8 @@ function getCandidates(input, types) {
 /**
 * AST node representing a union of schemas.
 *
+* **Details**
+*
 * - `types` — the member AST nodes.
 * - `mode` — `"anyOf"` succeeds on the first match (like TypeScript unions);
 *   `"oneOf"` requires exactly one member to match (fails if multiple do).
@@ -7371,9 +7609,8 @@ function getCandidates(input, types) {
 * ```
 *
 * @see {@link isUnion}
-*
-* @category model
-* @since 4.0.0
+* @category models
+* @since 3.10.0
 */
 var Union$1 = class Union$1 extends Base {
 	_tag = "Union";
@@ -7473,6 +7710,8 @@ function formatIsOptional(isOptional) {
 /**
 * A single validation check attached to an AST node.
 *
+* **Details**
+*
 * - `run` — the validation function. Returns `undefined` on success, or an
 *   `Issue` on failure.
 * - `annotations` — optional filter-level metadata (expected message, meta
@@ -7486,8 +7725,7 @@ function formatIsOptional(isOptional) {
 * @see {@link FilterGroup}
 * @see {@link Check}
 * @see {@link isPattern}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var Filter = class Filter extends Class$1 {
@@ -7520,14 +7758,15 @@ var Filter = class Filter extends Class$1 {
 /**
 * A composite validation check grouping multiple {@link Check} values.
 *
+* **Details**
+*
 * Created by calling `.and()` on a {@link Filter} or another `FilterGroup`.
 * All inner checks are run; failures from aborted filters still stop
 * evaluation.
 *
 * @see {@link Filter}
 * @see {@link Check}
-*
-* @category model
+* @category models
 * @since 4.0.0
 */
 var FilterGroup = class FilterGroup extends Class$1 {
@@ -7551,15 +7790,22 @@ var FilterGroup = class FilterGroup extends Class$1 {
 };
 /** @internal */
 function makeFilter$1(filter, annotations, aborted = false) {
-	return new Filter((input, ast, options) => make$3(input, ast, filter(input, ast, options)), annotations, aborted);
+	return new Filter((input, ast, options) => make$4(input, ast, filter(input, ast, options)), annotations, aborted);
 }
 /**
-* Creates a {@link Filter} that validates strings against a regular expression.
+* Creates a {@link Filter} that validates strings by running `RegExp.test`.
 *
-* - Returns a `Filter<string>` suitable for use with `Schema.filter` or
-*   attached directly to a `String` AST node via checks.
-* - The regex `source` is stored in annotations for serialization and
-*   arbitrary generation.
+* **Details**
+*
+* The filter can be used with `Schema.filter` or attached directly to a
+* `String` AST node through checks. The regular expression source is stored in
+* annotations for serialization and arbitrary generation.
+*
+* **Gotchas**
+*
+* Use a non-global, non-sticky regular expression, or reset `lastIndex`
+* yourself, because `RegExp.test` is stateful for expressions with the `g` or
+* `y` flag.
 *
 * **Example** (Validating an email pattern)
 *
@@ -7570,7 +7816,7 @@ function makeFilter$1(filter, annotations, aborted = false) {
 * ```
 *
 * @see {@link Filter}
-*
+* @category constructors
 * @since 4.0.0
 */
 function isPattern$1(regExp, annotations) {
@@ -7667,12 +7913,14 @@ const optionalKeyLastLink = /* @__PURE__ */ applyToLastLink(optionalKey$1);
 * Marks an AST node's property key as optional by setting
 * {@link Context.isOptional} to `true`.
 *
+* **Details**
+*
 * Also propagates the optional flag through the last link of the encoding
 * chain if present.
 *
 * @see {@link isOptional}
 * @see {@link Context}
-*
+* @category transforming
 * @since 4.0.0
 */
 function optionalKey$1(ast) {
@@ -7681,6 +7929,8 @@ function optionalKey$1(ast) {
 /**
 * Attaches a `Transformation` to the `to` AST, making it decode from the
 * `from` AST and encode back to it.
+*
+* **Details**
 *
 * This is the low-level primitive behind `Schema.transform` and
 * `Schema.transformOrFail`. It appends a {@link Link} to the `to` node's
@@ -7692,7 +7942,7 @@ function optionalKey$1(ast) {
 * @see {@link Link}
 * @see {@link Encoding}
 * @see {@link flip}
-*
+* @category transforming
 * @since 4.0.0
 */
 function decodeTo$1(from, to, transformation) {
@@ -7701,12 +7951,14 @@ function decodeTo$1(from, to, transformation) {
 /**
 * Returns `true` if the AST node represents an optional property.
 *
+* **Details**
+*
 * Checks `ast.context?.isOptional`. Defaults to `false` when no
 * {@link Context} is set.
 *
 * @see {@link optionalKey}
 * @see {@link Context}
-*
+* @category predicates
 * @since 4.0.0
 */
 function isOptional(ast) {
@@ -7715,6 +7967,8 @@ function isOptional(ast) {
 /**
 * Strips all encoding transformations from an AST, returning the decoded
 * (type-level) representation.
+*
+* **Details**
 *
 * - Memoized: same input reference → same output reference.
 * - Recursively walks into composite nodes ({@link Arrays}, {@link Objects},
@@ -7733,7 +7987,7 @@ function isOptional(ast) {
 *
 * @see {@link toEncoded}
 * @see {@link flip}
-*
+* @category transforming
 * @since 4.0.0
 */
 const toType = /* @__PURE__ */ memoize((ast) => {
@@ -7744,6 +7998,8 @@ const toType = /* @__PURE__ */ memoize((ast) => {
 /**
 * Returns the encoded (wire-format) AST by flipping and then stripping
 * encodings.
+*
+* **Details**
 *
 * Equivalent to `toType(flip(ast))`. This gives you the AST that describes
 * the shape of the serialized/encoded data.
@@ -7763,7 +8019,7 @@ const toType = /* @__PURE__ */ memoize((ast) => {
 *
 * @see {@link toType}
 * @see {@link flip}
-*
+* @category transforming
 * @since 4.0.0
 */
 const toEncoded = /* @__PURE__ */ memoize((ast) => {
@@ -7782,6 +8038,8 @@ function flipEncoding(ast, encoding) {
 /**
 * Swaps the decode and encode directions of an AST's {@link Encoding} chain.
 *
+* **Details**
+*
 * After flipping, what was decoding becomes encoding and vice versa. This is
 * the core operation behind `Schema.encode` — encoding a value is decoding
 * with a flipped AST.
@@ -7792,7 +8050,7 @@ function flipEncoding(ast, encoding) {
 *
 * @see {@link toType}
 * @see {@link toEncoded}
-*
+* @category transforming
 * @since 4.0.0
 */
 const flip = /* @__PURE__ */ memoize((ast) => {
@@ -7882,7 +8140,6 @@ const numberToString = /* @__PURE__ */ new Link(/* @__PURE__ */ new Union$1([fin
 * signed integer only (no leading "+" because TypeScript doesn't support it)
 */
 const BIGINT_PATTERN = "-?\\d+";
-`${BIGINT_PATTERN}`;
 /** @internal */
 function collectIssues(checks, value, issues, ast, options) {
 	for (let i = 0; i < checks.length; i++) {
@@ -7902,15 +8159,17 @@ const ClassTypeId = "~effect/Schema/Class";
 /** @internal */
 const STRUCTURAL_ANNOTATION_KEY = "~structural";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
 *
-* - The type parameter `L` encodes both the input and output types at the type
-*   level, allowing the compiler to track how struct value types change.
-* - At runtime, the returned value is the same function — `lambda` only
-*   adjusts the type.
+* **Details**
+*
+* The type parameter `L` encodes both the input and output types at the type
+* level, allowing the compiler to track how struct value types change. At
+* runtime, the returned value is the same function; `lambda` only adjusts the
+* type.
 *
 * **Example** (Wrapping values in arrays)
 *
@@ -7929,14 +8188,32 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 *
 * @see {@link Lambda} – the type-level interface
 * @see {@link map} – apply a lambda to all struct values
-*
 * @category Lambda
 * @since 4.0.0
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/SchemaParser.js
 /**
+* The `SchemaParser` module turns schemas into reusable runtime operations for
+* constructing, validating, decoding, and encoding values. It is the execution
+* layer behind a schema's AST: parsers walk the schema structure, apply
+* transformations, honor parse options, run checks, and report failures as
+* `SchemaIssue.Issue` values.
+*
+* Use this module when you need a parser with a specific result shape:
+* `Effect` for effectful parsing and service requirements, `Promise` for
+* JavaScript interop, `Exit` or `Result` when failures should stay in data,
+* `Option` for yes/no validation, and synchronous helpers when throwing is the
+* desired boundary.
+*
+* Decoding reads from the encoded/input side of a schema into its decoded
+* `Type`, while encoding runs the schema in the opposite direction. The
+* `make*` helpers construct decoded values and apply constructor defaults before
+* validation. Parse options supplied when a parser is created are merged with
+* options supplied at call time, and schema-level parse annotations can further
+* refine behavior.
+*
 * @since 4.0.0
 */
 const recurDefaults = /* @__PURE__ */ memoize((ast) => {
@@ -7961,6 +8238,14 @@ const recurDefaults = /* @__PURE__ */ memoize((ast) => {
 	}
 });
 /**
+* Creates an effectful maker for the schema's decoded type side.
+*
+* **Details**
+*
+* The returned function accepts constructor input, applies constructor defaults,
+* runs type-side validation unless checks are disabled, and fails with a
+* `SchemaIssue.Issue` when construction fails.
+*
 * @category Constructing
 * @since 4.0.0
 */
@@ -7974,6 +8259,14 @@ function makeEffect(schema) {
 	};
 }
 /**
+* Creates a synchronous maker that returns `Option.some` with the constructed
+* value on success, or `Option.none` when construction fails.
+*
+* **When to use**
+*
+* Use this when you only need to know whether constructor input is valid and do
+* not need error details.
+*
 * @category Constructing
 * @since 4.0.0
 */
@@ -7984,29 +8277,57 @@ function makeOption(schema) {
 	};
 }
 /**
+* Creates a synchronous maker for the schema's decoded type side.
+*
+* **Details**
+*
+* The returned function constructs a value from constructor input and throws an
+* `Error` with the `SchemaIssue.Issue` in its `cause` when construction fails.
+*
 * @category Constructing
 * @since 4.0.0
 */
-function makeUnsafe(schema) {
+function make$2(schema) {
 	const parser = makeEffect(schema);
 	return (input, options) => {
 		return runSync(mapErrorEager(parser(input, options), (issue) => new Error(issue.toString(), { cause: issue })));
 	};
 }
 /**
-* @category Decoding
+* Creates an effectful decoder for `unknown` input.
+*
+* **Details**
+*
+* The returned function succeeds with the schema's decoded `Type` or fails with a
+* `SchemaIssue.Issue`. Decoding service requirements are preserved in the returned
+* `Effect`. Parse options may be provided when creating the decoder and overridden
+* when applying it.
+*
+* @category decoding
 * @since 4.0.0
 */
-function decodeUnknownEffect(schema) {
-	return run(schema.ast);
+function decodeUnknownEffect(schema, options) {
+	const parser = run(schema.ast);
+	return options === void 0 ? parser : (input, overrideOptions) => parser(input, mergeParseOptions(options, overrideOptions));
 }
 /**
-* @category Decoding
-* @since 4.0.0
+* Creates a synchronous decoder for `unknown` input.
+*
+* **Details**
+*
+* The returned function returns the decoded `Type` on success and throws an
+* `Error` with the `SchemaIssue.Issue` in its `cause` on decoding failure.
+*
+* @category decoding
+* @since 3.10.0
 */
-function decodeUnknownSync$1(schema) {
-	return asSync(decodeUnknownEffect(schema));
+function decodeUnknownSync$1(schema, options) {
+	return asSync(decodeUnknownEffect(schema, options));
 }
+const mergeParseOptions = (options, overrideOptions) => overrideOptions === void 0 ? options : {
+	...options,
+	...overrideOptions
+};
 /** @internal */
 function run(ast) {
 	const parser = recur(ast);
@@ -8075,7 +8396,7 @@ const recur = /* @__PURE__ */ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8100,7 +8421,7 @@ function make$1(ast, options) {
 	self.ast = ast;
 	self.rebuild = (ast) => make$1(ast, options);
 	self.makeEffect = flow(makeEffect(self), mapErrorEager((issue) => new SchemaError(issue)));
-	self.make = makeUnsafe(self);
+	self.make = make$2(self);
 	self.makeOption = makeOption(self);
 	return self;
 }
@@ -8122,11 +8443,13 @@ var SchemaError = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.66/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.70/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
 * and a decoder factory.
+*
+* **Details**
 *
 * The outer call `declareConstructor<T, E, Iso>()` fixes the decoded type `T`,
 * the encoded type `E`, and the optional iso type. The inner call receives:
@@ -8140,10 +8463,7 @@ var SchemaError = class {
 * **Example** (Schema for a parametric `Box<A>` type)
 *
 * ```ts
-* import { Effect, Schema } from "effect"
-* import * as SchemaParser from "effect/SchemaParser"
-* import * as Issue from "effect/SchemaIssue"
-* import * as Option from "effect/Option"
+* import { Effect, Option, Schema, SchemaIssue as Issue, SchemaParser } from "effect"
 *
 * interface Box<A> {
 *   readonly value: A
@@ -8170,7 +8490,7 @@ var SchemaError = class {
 * const schema = Box(Schema.Number)
 * ```
 *
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 function declareConstructor() {
@@ -8182,6 +8502,8 @@ function declareConstructor() {
 * Creates a schema for a **non-parametric** opaque type using a type-guard
 * function. The schema accepts any unknown value and succeeds when `is` returns
 * `true`, failing with an `InvalidType` issue otherwise.
+*
+* **Details**
 *
 * Use this when the type has no type parameters. For parametric types such as
 * `Option<A>` or `Array<A>`, use {@link declareConstructor} instead.
@@ -8204,19 +8526,24 @@ function declareConstructor() {
 *
 * @see {@link declareConstructor} for creating schemas for parametric types.
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 function declare(is, annotations) {
 	return declareConstructor()([], () => (input, ast) => is(input) ? succeed(input) : fail(new InvalidType(ast, some(input))), annotations);
 }
 /**
-* Decodes an `unknown` input against a schema synchronously, throwing a
-* {@link SchemaError} on failure. Use this when you want to validate data at a
-* boundary and treat a schema mismatch as an unrecoverable error. For
-* non-throwing alternatives see {@link decodeUnknownOption},
-* {@link decodeUnknownExit}, or {@link decodeUnknownEffect}. For typed input
-* use {@link decodeSync}.
+* Decodes an `unknown` input against a schema synchronously, returning the
+* decoded value or throwing an `Error` whose cause contains the schema issue.
+* Use this when you want to validate data at a boundary and treat a schema
+* mismatch as an exception. For typed input use `decodeSync`.
+*
+* **Details**
+*
+* Only service-free schemas can be decoded synchronously. For non-throwing
+* alternatives see `decodeUnknownOption`, `decodeUnknownExit`, or
+* `decodeUnknownEffect`. Options may be provided either when creating the
+* decoder or when applying it; application options override creation options.
 *
 * **Example** (Decoding with a transformation schema)
 *
@@ -8235,12 +8562,14 @@ function declare(is, annotations) {
 * //         └─ Expected a numeric string, actual "not a number"
 * ```
 *
-* @category Decoding
+* @category decoding
 * @since 4.0.0
 */
 const decodeUnknownSync = decodeUnknownSync$1;
 /**
 * Creates a schema from an AST (Abstract Syntax Tree) node.
+*
+* **Details**
 *
 * This is the fundamental constructor for all schemas in the Effect Schema
 * library. It takes an AST node and wraps it in a fully-typed schema that
@@ -8251,14 +8580,15 @@ const decodeUnknownSync = decodeUnknownSync$1;
 * the bridge between the untyped AST representation and the strongly-typed
 * schema.
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 const make = make$1;
 /**
 * Creates a schema for a single literal value (string, number, bigint, boolean, or null).
 *
 * **Example** (String literal)
+*
 * ```ts
 * import { Schema } from "effect"
 *
@@ -8269,7 +8599,8 @@ const make = make$1;
 * @see {@link Literals} for a schema that represents a union of literals.
 * @see {@link tag} for a schema that represents a literal value that can be
 * used as a discriminator field in tagged unions and has a constructor default.
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 function Literal(literal) {
 	const out = make(new Literal$1(literal), {
@@ -8287,24 +8618,29 @@ function Literal(literal) {
 * Schema for the `null` literal. Validates that the input is strictly `null`.
 *
 * @see {@link NullOr} for a union with another schema.
-* @since 4.0.0
+* @category schemas
+* @since 3.10.0
 */
 const Null = /* @__PURE__ */ make(null_);
 /**
 * Schema for `string` values. Validates that the input is `typeof` `"string"`.
 *
+* @category schemas
 * @since 4.0.0
 */
 const String$1 = /* @__PURE__ */ make(string);
 /**
 * Schema for `number` values, including `NaN`, `Infinity`, and `-Infinity`.
 *
-* **Default Json Serializer**
+* **Details**
+*
+* Default JSON serializer:
 *
 * - Finite numbers are serialized as numbers.
 * - Non-finite values are serialized as strings (`"NaN"`, `"Infinity"`, `"-Infinity"`).
 *
 * @see {@link Finite} for a schema that excludes non-finite values.
+* @category schemas
 * @since 4.0.0
 */
 const Number$1 = /* @__PURE__ */ make(number);
@@ -8319,6 +8655,8 @@ function makeStruct(ast, fields) {
 }
 /**
 * Defines a struct schema from a map of field schemas.
+*
+* **Details**
 *
 * Each field value is a schema. Use {@link optionalKey} or {@link optional} to
 * mark fields as optional, and {@link mutableKey} to mark them as mutable.
@@ -8345,8 +8683,8 @@ function makeStruct(ast, fields) {
 * // { name: 'Alice', age: 30 }
 * ```
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 function Struct(fields) {
 	return makeStruct(struct(fields, void 0), fields);
@@ -8361,7 +8699,7 @@ function makeTuple(ast, elements) {
 	});
 }
 /**
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 const ArraySchema = /* @__PURE__ */ lambda((schema) => make(new Arrays(false, [], [schema.ast]), { schema }));
@@ -8379,7 +8717,8 @@ const ArraySchema = /* @__PURE__ */ lambda((schema) => make(new Arrays(false, []
 * type T = typeof schema.Type
 * ```
 *
-* @since 4.0.0
+* @category transforming
+* @since 3.10.0
 */
 const mutable = /* @__PURE__ */ lambda((schema) => {
 	return make(new Arrays(true, schema.ast.elements, schema.ast.rest), { schema });
@@ -8397,6 +8736,8 @@ function makeUnion(ast, members) {
 * Creates a union schema from an array of member schemas. Members are tested in
 * order; the first match is returned.
 *
+* **Details**
+*
 * Optionally, specify `mode`:
 * - `"anyOf"` (default) — matches if any member matches.
 * - `"oneOf"` — matches if exactly one member matches.
@@ -8412,8 +8753,8 @@ function makeUnion(ast, members) {
 * Schema.decodeUnknownSync(schema)(42)       // 42
 * ```
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 function Union(members, options) {
 	return makeUnion(union(members, options?.mode ?? "anyOf", void 0), members);
@@ -8422,6 +8763,7 @@ function Union(members, options) {
 * Creates a union schema from an array of literal values.
 *
 * **Example** (Status codes)
+*
 * ```ts
 * import { Schema } from "effect"
 *
@@ -8430,7 +8772,7 @@ function Union(members, options) {
 * ```
 *
 * @see {@link Literal} for a schema that represents a single literal.
-* @category Constructors
+* @category constructors
 * @since 4.0.0
 */
 function Literals(literals) {
@@ -8452,13 +8794,13 @@ function Literals(literals) {
 /**
 * Creates a union schema of `S | null`.
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 const NullOr = /* @__PURE__ */ lambda((self) => Union([self, Null]));
 function decodeTo(to, transformation) {
 	return (from) => {
-		return make(decodeTo$1(from.ast, to.ast, transformation ? make$2(transformation) : passthrough()), {
+		return make(decodeTo$1(from.ast, to.ast, transformation ? make$3(transformation) : passthrough()), {
 			from,
 			to
 		});
@@ -8479,16 +8821,25 @@ function decodeTo(to, transformation) {
 * // decoded: Date
 * ```
 *
-* @category Constructors
-* @since 4.0.0
+* @category constructors
+* @since 3.10.0
 */
 function instanceOf(constructor, annotations) {
 	return declare((u) => u instanceof constructor, annotations);
 }
 /**
-* Creates a custom filter check from a predicate function. The predicate
-* receives the input value, the schema's AST, and parse options, and returns
-* a value of type {@link FilterOutput}.
+* Creates a custom validation filter from a predicate function.
+*
+* **Details**
+*
+* The predicate receives the decoded input value, the schema AST, and parse
+* options, and returns a `FilterOutput`. Non-success outputs are normalized into
+* schema issues. The `annotations` parameter annotates the filter itself; with
+* the default formatter, failures use `message` first, `expected` second, and
+* `<filter>` when neither is provided.
+*
+* When `abort` is `true`, parsing stops after this filter fails instead of
+* collecting later check failures.
 *
 * **Example** (Failure at a nested path)
 *
@@ -8575,11 +8926,13 @@ function makeIsLessThanOrEqualTo(options) {
 * Validates that a number is greater than or equal to the specified value
 * (inclusive).
 *
-* **JSON Schema**
+* **Details**
+*
+* JSON Schema:
 *
 * This check corresponds to the `minimum` constraint in JSON Schema.
 *
-* **Arbitrary**
+* Arbitrary:
 *
 * When generating test data with fast-check, this applies a `min` constraint
 * to ensure generated numbers are greater than or equal to the specified value.
@@ -8601,11 +8954,13 @@ const isGreaterThanOrEqualTo = /* @__PURE__ */ makeIsGreaterThanOrEqualTo({
 * Validates that a number is less than or equal to the specified value
 * (inclusive).
 *
-* **JSON Schema**
+* **Details**
+*
+* JSON Schema:
 *
 * This check corresponds to the `maximum` constraint in JSON Schema.
 *
-* **Arbitrary**
+* Arbitrary:
 *
 * When generating test data with fast-check, this applies a `max` constraint
 * to ensure generated numbers are less than or equal to the specified value.
@@ -8627,18 +8982,21 @@ const isLessThanOrEqualTo = /* @__PURE__ */ makeIsLessThanOrEqualTo({
 * Validates that a value has at least the specified length. Works with strings
 * and arrays.
 *
-* **JSON Schema**
+* **Details**
+*
+* JSON Schema:
 *
 * This check corresponds to the `minLength` constraint for strings or the
 * `minItems` constraint for arrays in JSON Schema.
 *
-* **Arbitrary**
+* Arbitrary:
 *
 * When generating test data with fast-check, this applies a `minLength`
 * constraint to ensure generated strings or arrays have at least the required
 * length.
 *
 * **Example** (Minimum length check)
+*
 * ```ts
 * import { Schema } from "effect"
 *
@@ -8669,12 +9027,14 @@ function isMinLength(minLength, annotations) {
 * Validates that a value has at most the specified length. Works with strings
 * and arrays.
 *
-* **JSON Schema**
+* **Details**
+*
+* JSON Schema:
 *
 * This check corresponds to the `maxLength` constraint for strings or the
 * `maxItems` constraint for arrays in JSON Schema.
 *
-* **Arbitrary**
+* Arbitrary:
 *
 * When generating test data with fast-check, this applies a `maxLength`
 * constraint to ensure generated strings or arrays have at most the required

@@ -916,9 +916,6 @@ const IntegerPattern = "-?(?:0|[1-9][0-9]*)";
 function Null(options) {
 	return Create({ "~kind": "Null" }, { type: "null" }, options);
 }
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.1.38/node_modules/typebox/build/type/types/number.mjs
-const NumberPattern = "-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?";
 /** Creates a Number type. */
 function Number$1(options) {
 	return Create({ "~kind": "Number" }, { type: "number" }, options);
@@ -932,7 +929,6 @@ function String$1(options) {
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.38/node_modules/typebox/build/type/types/record.mjs
 const IntegerKey = `^${IntegerPattern}$`;
-`${NumberPattern}`;
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.1.38/node_modules/typebox/build/type/script/token/internal/char.mjs
 function Range(start, end) {
@@ -2044,11 +2040,11 @@ function Adapt(delta, numPoints, firstTime) {
 	delta = firstTime ? Math.floor(delta / PUNYCODE_DAMP) : delta >> 1;
 	delta += Math.floor(delta / numPoints);
 	let k = 0;
-	while (delta > (PUNYCODE_BASE - PUNYCODE_TMIN) * PUNYCODE_TMAX >> 1) {
+	while (delta > 455) {
 		delta = Math.floor(delta / (PUNYCODE_BASE - PUNYCODE_TMIN));
 		k += PUNYCODE_BASE;
 	}
-	return k + Math.floor((PUNYCODE_BASE - PUNYCODE_TMIN + 1) * delta / (delta + PUNYCODE_SKEW));
+	return k + Math.floor(36 * delta / (delta + PUNYCODE_SKEW));
 }
 function Decode(value) {
 	const output = [];
