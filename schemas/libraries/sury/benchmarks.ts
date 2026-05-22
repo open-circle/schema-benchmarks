@@ -8,18 +8,18 @@ import { assertNotReached, defineBenchmarks } from "#src";
 import { getSurySchema } from ".";
 
 const createStringBenchmark = (
-  modifier: (string: typeof S.string) => S.Schema<unknown>,
+  schema: S.Schema<string>,
   snippet: string,
 ): StringBenchmarkConfig => ({
   create() {
-    const schema = modifier(S.string);
-    return (testString) => S.safe(() => S.parseOrThrow(testString, schema)).success;
+    const parser = S.parser(schema);
+    return (testString) => S.safe(() => parser(testString)).success;
   },
   snippet,
 });
 
 const schema = getSurySchema();
-const compile = S.compile(getSurySchema(), "Any", "Output", "Sync");
+const parser = S.parser(getSurySchema());
 
 export default defineBenchmarks({
   library: {
@@ -37,10 +37,10 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return S.compile(getSurySchema(), "Any", "Output", "Sync");
+        return S.parser(getSurySchema());
       },
-      snippet: ts`S.compile(S.schema(...))`,
-      note: "compile",
+      snippet: ts`S.parser(S.schema(...))`,
+      note: "parser",
       optimizeType: "jit",
     },
   ],
@@ -49,20 +49,7 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            S.parseOrThrow(data, schema);
-            return { success: true };
-          } catch {
-            return { success: false };
-          }
-        },
-        validateResult: (result) => result.success,
-        snippet: ts`S.parseOrThrow(data, schema)`,
-        throws: true,
-      },
-      {
-        run(data) {
-          try {
-            compile(data);
+            parser(data);
             return { success: true };
           } catch {
             return { success: false };
@@ -70,32 +57,19 @@ export default defineBenchmarks({
         },
         validateResult: (result) => result.success,
         snippet: ts`
-        // const compile = S.compile(S.schema(...));
-        compile(data);
+        // const parser = S.parser(S.schema(...));
+        parser(data);
       `,
-        note: "compile",
         optimizeType: "jit",
         throws: true,
       },
       {
         run(data) {
-          return S.safe(() => S.parseOrThrow(data, schema));
+          return S.safe(() => parser(data));
         },
         validateResult: (result) => result.success,
-        snippet: ts`S.safe(() => S.parseOrThrow(data, schema))`,
+        snippet: ts`S.safe(() => parser(data))`,
         note: "safe",
-      },
-      {
-        run(data) {
-          return S.safe(() => compile(data));
-        },
-        validateResult: (result) => result.success,
-        snippet: ts`
-        // const compile = S.compile(S.schema(...));
-        S.safe(() => compile(data));
-      `,
-        note: "compile + safe",
-        optimizeType: "jit",
       },
     ],
   },
@@ -103,16 +77,19 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   string: {
-    "date-time": createStringBenchmark(S.datetime, ts`S.datetime(S.string)`),
-    email: createStringBenchmark(S.email, ts`S.email(S.string)`),
-    url: createStringBenchmark(S.url, ts`S.url(S.string)`),
-    uuid: createStringBenchmark(S.uuid, ts`S.uuid(S.string)`),
+    "date-time": createStringBenchmark(S.isoDateTime, ts`S.isoDateTime`),
+    email: createStringBenchmark(S.email, ts`S.email`),
+    url: createStringBenchmark(S.url, ts`S.url`),
+    uuid: createStringBenchmark(S.uuid, ts`S.uuid`),
   },
   stack: {
     throw: (data) => {
-      S.parseOrThrow(data, schema);
+      parser(data);
       assertNotReached();
     },
-    snippet: ts`S.parseOrThrow(data, schema)`,
+    snippet: ts`
+    // const parser = S.parser(S.schema(...));
+    parser(data)
+    `,
   },
 });

@@ -4,11 +4,11 @@ import type { ProductData } from "#src";
 
 const imageSchema = S.schema({
   id: S.number,
-  created: S.instance(Date),
+  created: S.date,
   title: S.min(S.max(S.string, 100), 1),
   type: S.union(["jpg", "png"]),
   size: S.number,
-  url: S.url(S.string),
+  url: S.url,
 });
 const ratingSchema = S.schema({
   id: S.number,
@@ -19,7 +19,7 @@ const ratingSchema = S.schema({
 });
 const productSchema = S.schema({
   id: S.number,
-  created: S.instance(Date),
+  created: S.date,
   title: S.min(S.max(S.string, 100), 1),
   brand: S.min(S.max(S.string, 30), 1),
   description: S.min(S.max(S.string, 500), 1),
@@ -31,4 +31,4 @@ const productSchema = S.schema({
   ratings: S.array(ratingSchema),
 }) satisfies S.Schema<ProductData>;
 
-S.parseOrThrow({}, productSchema);
+S.parser(productSchema)({});
