@@ -10,7 +10,6 @@ import {
 import { http, HttpResponse } from "msw";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
 import { fromJSON, toCrossJSONAsync } from "seroval";
-import { useArgs } from "storybook/preview-api";
 import * as v from "valibot";
 
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
@@ -18,7 +17,7 @@ import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlig
 import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
 
 import "../src/shared/styles/index.css";
-import { type Style, styleSchema, type Theme, themeSchema } from "#/shared/lib/prefs/constants";
+import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { getRouter } from "../src/router";
 import { makeQueryClient } from "../src/shared/data/query";
@@ -74,35 +73,24 @@ export function mockServerFn<Input, Output>(
   });
 }
 
-const dirDecorator: Decorator<{ dir?: "ltr" | "rtl" }> = (Story, { args }) => {
-  document.dir = args.dir ?? "ltr";
+const dirDecorator: Decorator = (Story, { globals: { dir = "ltr" } }) => {
+  document.dir = dir;
   return <Story />;
 };
 
-const themeDecorator: Decorator<{ theme?: Theme }> = (Story) => {
-  const [{ theme = "system" }, setArgs] = useArgs<{
-    theme?: Theme;
-  }>();
+const themeDecorator: Decorator = (Story, { globals: { theme = themeSchema.fallback } }) => {
   document.documentElement.dataset.theme = theme;
   return (
-    <ThemeContext value={{ theme, setTheme: (newTheme) => setArgs({ theme: newTheme }) }}>
+    <ThemeContext value={{ theme, setTheme: () => {} }}>
       <Story />
     </ThemeContext>
   );
 };
 
-const styleDecorator: Decorator<{ pageStyle?: Style }> = (Story) => {
-  const [{ pageStyle = "code" }, setArgs] = useArgs<{
-    pageStyle?: Style;
-  }>();
-  document.documentElement.dataset.style = pageStyle;
+const styleDecorator: Decorator = (Story, { globals: { style = styleSchema.fallback } }) => {
+  document.documentElement.dataset.style = style;
   return (
-    <StyleContext
-      value={{
-        style: pageStyle,
-        setStyle: (newStyle) => setArgs({ pageStyle: newStyle }),
-      }}
-    >
+    <StyleContext value={{ style, setStyle: () => {} }}>
       <Story />
     </StyleContext>
   );
@@ -161,31 +149,49 @@ export default definePreview({
     },
   },
 
-  argTypes: {
+  globalTypes: {
     dir: {
-      control: {
-        type: "inline-radio",
+      description: "The text direction of the page",
+      defaultValue: "ltr",
+      toolbar: {
+        icon: "paragraph",
+        items: [
+          { value: "ltr", title: "LTR" },
+          { value: "rtl", title: "RTL" },
+        ],
+        dynamicTitle: true,
       },
-      options: ["ltr", "rtl"],
     },
     theme: {
-      control: {
-        type: "inline-radio",
+      description: "The theme of the page",
+      defaultValue: themeSchema.fallback,
+      toolbar: {
+        icon: "circlehollow",
+        items: themeSchema.options.map((option) => ({
+          value: option,
+          title: themeLabels[option].label,
+        })),
+        dynamicTitle: true,
       },
-      options: themeSchema.options,
     },
-    pageStyle: {
-      control: {
-        type: "inline-radio",
+    style: {
+      description: "The style of the page",
+      defaultValue: styleSchema.fallback,
+      toolbar: {
+        icon: "paintbrush",
+        items: styleSchema.options.map((option) => ({
+          value: option,
+          title: styleLabels[option].label,
+        })),
+        dynamicTitle: true,
       },
-      options: styleSchema.options,
     },
   },
 
-  args: {
+  initialGlobals: {
     dir: "ltr",
-    theme: "system",
-    pageStyle: "code",
+    theme: themeSchema.fallback,
+    style: styleSchema.fallback,
   },
 
   decorators: [dirDecorator, themeDecorator, styleDecorator, queryClientDecorator, routerDecorator],
