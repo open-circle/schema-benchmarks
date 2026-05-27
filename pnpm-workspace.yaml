@@ -17,7 +17,7 @@ catalog:
   "@types/node": 25.9.1
   "@types/react": ^19.2.15
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20260521.1
+  "@typescript/native-preview": 7.0.0-dev.20260527.1
   "@typia/unplugin": ^12.1.1
   "@vitest/browser-playwright": ^4.1.7
   "@vitest/expect": ^4.1.7
@@ -27,7 +27,7 @@ catalog:
   react: ^19.2.6
   react-dom: ^19.2.6
   typescript: 6.0.3
-  valibot: ^1.4.0
+  valibot: ^1.4.1
   vite: ^8.0.14
   vitest: ^4.1.7
 overrides:
