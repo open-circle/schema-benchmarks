@@ -1,11 +1,12 @@
 import { collator } from "@schema-benchmarks/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useSuspenseQueries } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
 import { useDownloadsByPkgName } from "#/routes/_benchmarks/-hooks";
+import { getPackageMetadata, getPackageName } from "#/routes/_benchmarks/-query";
 import { getAllLibraries } from "#/routes/_benchmarks/library/-query";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { generateMetadata } from "#/shared/data/meta";
@@ -18,7 +19,14 @@ const searchSchema = v.object({
 export const Route = createFileRoute("/_benchmarks/library/")({
   validateSearch: searchSchema,
   loader: async ({ abortController, context: { queryClient } }) => {
-    await queryClient.ensureQueryData(getAllLibraries(abortController.signal));
+    const libraries = await queryClient.ensureQueryData(getAllLibraries(abortController.signal));
+    await Promise.all(
+      libraries.map(({ libraryName, version }) =>
+        queryClient.ensureQueryData(
+          getPackageMetadata(getPackageName(libraryName), version, abortController.signal),
+        ),
+      ),
+    );
   },
   head: () => {
     const { links, meta } = generateMetadata({
@@ -42,9 +50,12 @@ function RouteComponent() {
           (a, b) => {
             switch (sortBy) {
               case "downloads":
-                return (downloadsByPkg?.[a] ?? 0) - (downloadsByPkg?.[b] ?? 0);
+                return (
+                  (downloadsByPkg?.[getPackageName(a.libraryName)] ?? 0) -
+                  (downloadsByPkg?.[getPackageName(b.libraryName)] ?? 0)
+                );
               default:
-                return collator.compare(a, b);
+                return collator.compare(a.libraryName, b.libraryName);
             }
           },
           { sortDir },
@@ -52,6 +63,11 @@ function RouteComponent() {
       ),
     [libraries, sortBy, downloadsByPkg, sortDir],
   );
+  const libraryMetadata = useSuspenseQueries({
+    queries: sortedLibraries.map(({ libraryName, version }) =>
+      getPackageMetadata(getPackageName(libraryName), version),
+    ),
+  });
   return (
     <table>
       <thead>
@@ -72,19 +88,21 @@ function RouteComponent() {
           >
             Downloads (/wk)
           </SortableHeaderLink>
+          <th>Description</th>
         </tr>
       </thead>
       <tbody>
-        {sortedLibraries.map((library) => (
-          <tr key={library}>
+        {sortedLibraries.map(({ libraryName }, idx) => (
+          <tr key={libraryName}>
             <td>
-              <Link to="/library/$" params={{ _splat: library }}>
-                {library}
+              <Link to="/library/$" params={{ _splat: libraryName }}>
+                {libraryName}
               </Link>
             </td>
             <td className="numeric">
-              <DownloadCount libraryName={library} />
+              <DownloadCount libraryName={libraryName} />
             </td>
+            <td>{libraryMetadata[idx]!.data.description}</td>
           </tr>
         ))}
       </tbody>

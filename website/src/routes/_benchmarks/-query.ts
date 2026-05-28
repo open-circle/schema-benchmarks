@@ -42,21 +42,21 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
       ),
   });
 
-const versionResponseSchema = v.pipe(
-  v.object({
-    downloads: v.record(v.string(), v.number()),
-  }),
-  v.transform(({ downloads }) => downloads),
-);
+const packageMetadataSchema = v.object({
+  description: v.string(),
+});
 
-export const getWeeklyDownloadsByVersion = (packageName: string, signalOpt?: AbortSignal) =>
+export const getPackageMetadata = (packageName: string, version: string, signalOpt?: AbortSignal) =>
   queryOptions({
-    queryKey: ["npm", "downloads-by-version", "week", packageName],
+    queryKey: ["npm", "metadata", packageName, version],
     queryFn: ({ signal }) =>
-      upfetch(`https://api.npmjs.org/versions/${encodeURIComponent(packageName)}/last-week`, {
-        signal: anyAbortSignal(signal, signalOpt),
-        schema: versionResponseSchema,
-      }),
+      upfetch(
+        `https://registry.npmjs.org/${encodeURIComponent(packageName)}/${encodeURIComponent(version)}`,
+        {
+          signal: anyAbortSignal(signal, signalOpt),
+          schema: packageMetadataSchema,
+        },
+      ),
   });
 
 const githubRepoSchema = v.object({

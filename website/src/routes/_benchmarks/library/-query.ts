@@ -15,7 +15,7 @@ export const getAllLibrariesFn = createServerFn().handler(async () => {
     stack: getStackResultsFn({ signal }),
   });
 
-  const allItems: Array<{ libraryName: string }> = [
+  const allItems: Array<{ libraryName: string; version: string }> = [
     ...allResults.bench.initialization,
     ...Object.values(allResults.bench.validation).flat(),
     ...Object.values(allResults.bench.parsing).flat(),
@@ -28,9 +28,14 @@ export const getAllLibrariesFn = createServerFn().handler(async () => {
     ...allResults.stack,
   ];
 
-  const libraryNames = new Set(allItems.map(({ libraryName }) => libraryName));
+  const libraryNames = new Map<string, string>();
+  for (const { libraryName, version } of allItems) {
+    libraryNames.set(libraryName, version);
+  }
 
-  return Array.from(libraryNames).sort(collator.compare);
+  return Array.from(libraryNames)
+    .map(([libraryName, version]) => ({ libraryName, version }))
+    .sort((a, b) => collator.compare(a.libraryName, b.libraryName));
 });
 
 export const getAllLibraries = (signalOpt?: AbortSignal) =>

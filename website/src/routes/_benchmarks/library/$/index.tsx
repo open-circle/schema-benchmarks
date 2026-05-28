@@ -1,5 +1,8 @@
+import { promiseAllKeyed } from "@schema-benchmarks/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
+import { getPackageMetadata } from "#/routes/_benchmarks/-query";
 import { getLibraryResults, type getLibraryResultsFn } from "#/routes/_benchmarks/library/$/-query";
 import { generateMetadata } from "#/shared/data/meta";
 
@@ -31,7 +34,15 @@ export const Route = createFileRoute("/_benchmarks/library/$/")({
       getLibraryResults(libraryName, abortController.signal),
     );
     if (areResultsEmpty(libResults)) throw notFound();
-    return { crumb: libraryName };
+    // every library should have at least one initialization result, so we can get the version from there
+    const version = libResults.bench.initialization[0]?.version;
+    if (!version) throw notFound();
+    await promiseAllKeyed({
+      metadata: queryClient.ensureQueryData(
+        getPackageMetadata(libraryName, version, abortController.signal),
+      ),
+    });
+    return { crumb: libraryName, version };
   },
   head: ({ params: { _splat: libraryName } }) => {
     const { links, meta } = generateMetadata({
@@ -45,5 +56,12 @@ export const Route = createFileRoute("/_benchmarks/library/$/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_benchmarks/library/$libraryName/"!</div>;
+  const { _splat: libraryName } = Route.useParams();
+  const { version } = Route.useLoaderData();
+  const { data: metadata } = useSuspenseQuery(getPackageMetadata(libraryName!, version));
+  return (
+    <>
+      <p>{metadata.description}</p>
+    </>
+  );
 }
