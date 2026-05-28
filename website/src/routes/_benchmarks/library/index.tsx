@@ -1,3 +1,4 @@
+// oxlint-disable jsx-a11y/control-has-associated-label
 import { collator } from "@schema-benchmarks/utils";
 import { useSuspenseQuery, useSuspenseQueries } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -5,9 +6,10 @@ import { useMemo } from "react";
 import * as v from "valibot";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
+import { RepoLink } from "#/routes/_benchmarks/-components/repo";
 import { useDownloadsByPkgName } from "#/routes/_benchmarks/-hooks";
 import { getPackageMetadata, getPackageName } from "#/routes/_benchmarks/-query";
-import { getAllLibraries } from "#/routes/_benchmarks/library/-query";
+import { getAllLibraries, getPkgSlug } from "#/routes/_benchmarks/library/-query";
 import { SortableHeaderLink } from "#/shared/components/table/sort";
 import { generateMetadata } from "#/shared/data/meta";
 import { applySort, sortParams } from "#/shared/lib/sort";
@@ -15,7 +17,6 @@ import { applySort, sortParams } from "#/shared/lib/sort";
 const searchSchema = v.object({
   ...sortParams(v.optional(v.picklist(["libraryName", "downloads"]), "libraryName")),
 });
-
 export const Route = createFileRoute("/_benchmarks/library/")({
   validateSearch: searchSchema,
   loader: async ({ abortController, context: { queryClient } }) => {
@@ -77,6 +78,7 @@ function RouteComponent() {
           >
             Library
           </SortableHeaderLink>
+          <th className="action"></th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps(
               "downloads",
@@ -92,12 +94,15 @@ function RouteComponent() {
         </tr>
       </thead>
       <tbody>
-        {sortedLibraries.map(({ libraryName }, idx) => (
-          <tr key={libraryName}>
+        {sortedLibraries.map(({ libraryName, version }, idx) => (
+          <tr key={getPkgSlug({ libraryName, version })}>
             <td>
               <Link to="/library/$" params={{ _splat: libraryName }}>
                 {libraryName}
               </Link>
+            </td>
+            <td className="action">
+              <RepoLink libraryName={libraryName} version={version} />
             </td>
             <td className="numeric">
               <DownloadCount libraryName={libraryName} />
