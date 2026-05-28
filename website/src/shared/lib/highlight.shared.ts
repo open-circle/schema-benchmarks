@@ -1,12 +1,13 @@
-import { parseAnsiSequences } from "ansi-sequence-parser";
-import Prism from "prismjs";
-
 import type { HighlightAnsiInput, HighlightInput } from "#/shared/lib/highlight";
+import "@tanstack/react-start/server-only";
 
 const NEW_LINE_EXP = /\n(?!$)/g;
 
 let hookAdded = false;
-export const highlightCode = ({ code, language = "typescript", lineNumbers }: HighlightInput) => {
+export const highlightCode = (
+  Prism: typeof import("prismjs"),
+  { code, language = "typescript", lineNumbers }: HighlightInput,
+) => {
   let lineNumbersWrapper = "";
   if (lineNumbers) {
     const match = code.match(NEW_LINE_EXP);
@@ -36,7 +37,10 @@ function escapeForHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
-export const highlightAnsi = ({ input, lineNumbers }: HighlightAnsiInput): string => {
+export const highlightAnsi = (
+  parseAnsiSequences: (typeof import("ansi-sequence-parser"))["parseAnsiSequences"],
+  { input, lineNumbers }: HighlightAnsiInput,
+): string => {
   const tokens = parseAnsiSequences(input);
   let lineNumbersWrapper = "";
   if (lineNumbers) {

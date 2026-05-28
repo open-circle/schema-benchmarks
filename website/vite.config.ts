@@ -39,6 +39,7 @@ const config = defineConfig({
     tanstackStart({
       importProtection: {
         client: {
+          // disallow importing these on the client, for bundle size reasons
           specifiers: ["prismjs", "prismjs/**", "ansi-sequence-parser"],
         },
       },
