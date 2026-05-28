@@ -10,7 +10,7 @@ import "../src/shared/styles/index.css";
 import { RouterContext } from "#/routes/__root";
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
 import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
-import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.shared";
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight";
 import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { makeQueryClient } from "../src/shared/data/query";
