@@ -43,7 +43,10 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
   });
 
 const packageMetadataSchema = v.object({
+  name: v.string(),
+  version: v.string(),
   description: v.string(),
+  homepage: v.optional(v.string()),
   repository: v.optional(
     v.object({
       type: v.string(),
