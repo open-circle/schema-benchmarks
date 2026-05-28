@@ -1,77 +1,19 @@
-import type { Decorator } from "@storybook/react-vite";
-import { definePreview } from "@storybook/react-vite";
-import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  createMemoryHistory,
-  type RegisteredRouter,
-  RouterContextProvider,
-  type RouterHistory,
-} from "@tanstack/react-router";
-import { http, HttpResponse } from "msw";
+import type { Decorator } from "@storybook/tanstack-react";
+import { definePreview } from "@storybook/tanstack-react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
-import { fromJSON, toCrossJSONAsync } from "seroval";
-import * as v from "valibot";
+import { mocked } from "storybook/test";
 
+import { RouterContext } from "#/routes/__root";
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
-import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
 
 import "../src/shared/styles/index.css";
+import { clientPreloadImage, preloadImage } from "#/shared/lib/fetch";
+import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
 import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
-import { getRouter } from "../src/router";
 import { makeQueryClient } from "../src/shared/data/query";
-
-const serverFnInput = v.object({
-  data: v.any(),
-});
-
-// probably very fragile, but TSS doesn't have anything like this yet
-export function mockServerFn<Input, Output>(
-  serverFn: {
-    (input: { data: Input }): Promise<Output>;
-    url: string;
-  },
-  handler: (input: NoInfer<Input>) => NoInfer<Output> | Promise<NoInfer<Output>>,
-) {
-  return http.all(new URL(serverFn.url, window.location.href).href, async ({ request }) => {
-    if (request.method !== "POST" && request.method !== "GET") {
-      return HttpResponse.json(
-        { error: "Method not allowed" },
-        { status: 405, headers: { Allow: "POST, GET" } },
-      );
-    }
-    try {
-      const payload =
-        request.method === "POST"
-          ? await request.json()
-          : JSON.parse(new URL(request.url).searchParams.get("payload") ?? "{}");
-      const { data } = v.parse(serverFnInput, fromJSON(payload));
-      const result = await handler(data);
-      return HttpResponse.json(
-        await Promise.resolve(
-          toCrossJSONAsync({ result, error: undefined, context: {} }, { refs: new Map() }),
-        ),
-        {
-          headers: {
-            "X-TSS-Serialized": "true",
-          },
-        },
-      );
-    } catch (error) {
-      return HttpResponse.json(
-        await Promise.resolve(
-          toCrossJSONAsync({ result: undefined, error, context: {} }, { refs: new Map() }),
-        ),
-        {
-          headers: {
-            "X-TSS-Serialized": "true",
-          },
-        },
-      );
-    }
-  });
-}
 
 const dirDecorator: Decorator = (Story, { globals: { dir = "ltr" } }) => {
   document.dir = dir;
@@ -96,32 +38,15 @@ const styleDecorator: Decorator = (Story, { globals: { style = styleSchema.fallb
   );
 };
 
-declare module "@storybook/react-vite" {
-  export interface Parameters extends MswParameters {
-    historyOpts?: {
-      initialEntries: Array<string>;
-      initialIndex?: number;
-    };
-    history?: RouterHistory;
-    router?: RegisteredRouter;
-    queryClient?: QueryClient;
-  }
+declare module "@storybook/tanstack-react" {
+  export interface Parameters extends MswParameters {}
 }
 
-const routerDecorator: Decorator = (Story, { parameters }) => {
-  parameters.history ??= createMemoryHistory(parameters.historyOpts);
-  parameters.router ??= getRouter(parameters);
-  return (
-    <RouterContextProvider router={parameters.router}>
-      <Story />
-    </RouterContextProvider>
-  );
-};
+const queryClient = makeQueryClient();
 
-const queryClientDecorator: Decorator = (Story, { parameters }) => {
-  parameters.queryClient ??= makeQueryClient();
+const queryClientDecorator: Decorator = (Story) => {
   return (
-    <QueryClientProvider client={parameters.queryClient}>
+    <QueryClientProvider client={queryClient}>
       <Story />
     </QueryClientProvider>
   );
@@ -133,18 +58,26 @@ document.addEventListener("click", (event) => {
   }
 });
 
-initialize({ onUnhandledRequest: "bypass" }, [
-  mockServerFn(getHighlightedCodeFn, highlightCode),
-  mockServerFn(getHighlightedAnsiFn, highlightAnsi),
-]);
+initialize({ onUnhandledRequest: "bypass" });
 
 export default definePreview({
+  beforeEach: () => {
+    queryClient.clear();
+    mocked(getHighlightedCodeFn).mockImplementation(async ({ data }) => highlightCode(data));
+    mocked(getHighlightedAnsiFn).mockImplementation(async ({ data }) => highlightAnsi(data));
+    mocked(preloadImage).mockImplementation(clientPreloadImage);
+  },
   parameters: {
     layout: "centered",
     options: {
       storySort: {
         order: ["Theme", "Components", "Features"],
         method: "alphabetical",
+      },
+    },
+    tanstack: {
+      router: {
+        context: { queryClient } satisfies RouterContext,
       },
     },
   },
@@ -194,7 +127,7 @@ export default definePreview({
     style: styleSchema.fallback,
   },
 
-  decorators: [dirDecorator, themeDecorator, styleDecorator, queryClientDecorator, routerDecorator],
+  decorators: [dirDecorator, themeDecorator, styleDecorator, queryClientDecorator],
   addons: [],
   loaders: [mswLoader],
 });

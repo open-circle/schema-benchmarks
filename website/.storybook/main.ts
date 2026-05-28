@@ -1,11 +1,11 @@
-import { defineMain } from "@storybook/react-vite/node";
+import { defineMain } from "@storybook/tanstack-react/node";
 import prismjs from "vite-plugin-prismjs";
 
 export default defineMain({
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [],
   framework: {
-    name: "@storybook/react-vite",
+    name: "@storybook/tanstack-react",
     options: {},
   },
   staticDirs: ["../public"],

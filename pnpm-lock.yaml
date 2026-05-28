@@ -380,9 +380,9 @@ importers:
       '@netlify/vite-plugin-tanstack-start':
         specifier: ^1.3.14
         version: 1.3.14(@tanstack/react-start@1.168.13(crossws@0.4.5(srvx@0.11.16))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))(rollup@4.57.1)(srvx@0.11.16)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
-      '@storybook/react-vite':
-        specifier: ^10.4.1
-        version: 10.4.1(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(esbuild@0.28.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rollup@4.57.1)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@storybook/tanstack-react':
+        specifier: 10.4.1
+        version: 10.4.1(@tanstack/react-router@1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/react-start@1.168.13(crossws@0.4.5(srvx@0.11.16))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))(@tanstack/router-core@1.171.6)(@tanstack/start-client-core@1.170.4)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(esbuild@0.28.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rollup@4.57.1)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
       '@tanstack/devtools-vite':
         specifier: ^0.7.0
         version: 0.7.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
@@ -3554,6 +3554,23 @@ packages:
       '@types/react-dom':
         optional: true
       typescript:
+        optional: true
+
+  '@storybook/tanstack-react@10.4.1':
+    resolution: {integrity: sha512-9H4CJR7TGiafZoIfI6UmAuCLmKg+N9vl73mgbs4o2Fl7k5XF3iJ+SHPy5/qlSh2si7EEqCWVfDeIVW0T5vppvQ==}
+    peerDependencies:
+      '@tanstack/react-router': ^1.168.10
+      '@tanstack/react-start': ^1.167.16
+      '@tanstack/router-core': ^1.168.9
+      '@tanstack/start-client-core': ^1.167.9
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      storybook: ^10.4.1
+      vite: ^8.0.14
+    peerDependenciesMeta:
+      '@tanstack/react-start':
+        optional: true
+      '@tanstack/start-client-core':
         optional: true
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
@@ -11622,6 +11639,29 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@storybook/tanstack-react@10.4.1(@tanstack/react-router@1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/react-start@1.168.13(crossws@0.4.5(srvx@0.11.16))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))(@tanstack/router-core@1.171.6)(@tanstack/start-client-core@1.170.4)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(esbuild@0.28.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rollup@4.57.1)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))':
+    dependencies:
+      '@storybook/builder-vite': 10.4.1(esbuild@0.28.0)(rollup@4.57.1)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@storybook/react': 10.4.1(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript@6.0.3)
+      '@storybook/react-vite': 10.4.1(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(esbuild@0.28.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rollup@4.57.1)(storybook@10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@tanstack/react-router': 1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@tanstack/router-core': 1.171.6
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      storybook: 10.4.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@testing-library/dom@10.4.1)(@types/react@19.2.15)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      vite: 8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
+    optionalDependencies:
+      '@tanstack/react-start': 1.168.13(crossws@0.4.5(srvx@0.11.16))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@tanstack/start-client-core': 1.170.4
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - esbuild
+      - rollup
+      - supports-color
+      - typescript
+      - webpack
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     dependencies:

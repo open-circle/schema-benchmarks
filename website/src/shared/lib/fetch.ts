@@ -10,28 +10,28 @@ export interface PrefetchContext {
 
 export const upfetch = up(fetch);
 
+export const clientPreloadImage = (src: string) =>
+  new Promise<void>((resolve, reject) => {
+    const image = new Image();
+    const unsub = radEventListeners(
+      image,
+      {
+        load() {
+          resolve();
+          unsub();
+        },
+        error(event) {
+          reject((event as ErrorEvent).error);
+          unsub();
+        },
+      },
+      { once: true },
+    );
+    image.src = src;
+  });
+
 export const preloadImage = createIsomorphicFn()
-  .client(
-    (src: string) =>
-      new Promise<void>((resolve, reject) => {
-        const image = new Image();
-        const unsub = radEventListeners(
-          image,
-          {
-            load() {
-              resolve();
-              unsub();
-            },
-            error(event) {
-              reject((event as ErrorEvent).error);
-              unsub();
-            },
-          },
-          { once: true },
-        );
-        image.src = src;
-      }),
-  )
+  .client(clientPreloadImage)
   .server(() => Promise.resolve());
 
 export const preloadImages = (sources: Iterable<string>) =>

@@ -26,7 +26,7 @@ import { symbolsUrl } from "../../vite/symbols";
 
 import appCss from "#/shared/styles/index.css?url";
 
-interface RouterContext {
+export interface RouterContext {
   queryClient: QueryClient;
 }
 
