@@ -44,7 +44,20 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
 
 const packageMetadataSchema = v.object({
   description: v.string(),
+  repository: v.optional(
+    v.object({
+      type: v.string(),
+      url: v.string(),
+    }),
+  ),
 });
+
+export const getRepoLink = (repository: { type: string; url: string }) => {
+  if (repository.type === "git" && repository.url.startsWith("git+")) {
+    return repository.url.slice(4);
+  }
+  return repository.url;
+};
 
 export const getPackageMetadata = (packageName: string, version: string, signalOpt?: AbortSignal) =>
   queryOptions({

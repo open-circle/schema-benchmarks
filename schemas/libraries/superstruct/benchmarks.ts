@@ -11,7 +11,6 @@ const schema = getSuperstructSchema();
 export default defineBenchmarks({
   library: {
     name: "superstruct",
-    git: "ianstormtaylor/superstruct",
     optimizeType: "none",
     version: await getVersion("superstruct"),
   },

@@ -15,7 +15,6 @@ const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
 export default defineBenchmarks({
   library: {
     name: "effect",
-    git: "effect-ts/effect",
     optimizeType: "none",
     version: await getVersion("effect"),
   },

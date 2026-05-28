@@ -10,7 +10,6 @@ const schema = getRuntypesSchema();
 export default defineBenchmarks({
   library: {
     name: "runtypes",
-    git: "pelotom/runtypes",
     optimizeType: "none",
     version: await getVersion("runtypes"),
   },

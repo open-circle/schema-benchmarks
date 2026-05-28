@@ -23,7 +23,6 @@ const schema = getAtaValidatorSchema();
 export default defineBenchmarks({
   library: {
     name: "ata-validator",
-    git: "ata-core/ata-validator",
     optimizeType: "jit",
     version: await getVersion("ata-validator"),
   },

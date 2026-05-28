@@ -31,7 +31,6 @@ const compiledScriptSchema = Schema.Compile(scriptSchema);
 export default defineBenchmarks({
   library: {
     name: "typebox",
-    git: "sinclairzx81/typebox",
     optimizeType: "jit",
     version: await getVersion("typebox"),
   },

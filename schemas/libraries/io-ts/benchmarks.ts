@@ -21,7 +21,6 @@ const DateFromString = new t.Type<Date, string, string>(
 export default defineBenchmarks({
   library: {
     name: "io-ts",
-    git: "gcanti/io-ts",
     optimizeType: "none",
     version: await getVersion("io-ts"),
   },

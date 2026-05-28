@@ -16,7 +16,6 @@ const assert = typia.createAssert<TypiaSchema>();
 export default defineBenchmarks({
   library: {
     name: "typia",
-    git: "samchon/typia",
     optimizeType: "precompiled",
     version: await getVersion("typia"),
   },

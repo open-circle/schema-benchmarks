@@ -37,7 +37,6 @@ const schema = getRailwayTsSchema();
 export default defineBenchmarks({
   library: {
     name: "@railway-ts/pipelines",
-    git: "sakobu/railway-ts-pipelines",
     optimizeType: "none",
     version: await getVersion("@railway-ts/pipelines"),
   },

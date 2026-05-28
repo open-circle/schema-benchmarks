@@ -27,7 +27,6 @@ const codec = z.codec(z.iso.datetime(), z.date(), {
 export default defineBenchmarks({
   library: {
     name: "zod",
-    git: "colinhacks/zod",
     optimizeType: "jit",
     version: await getVersion("zod"),
   },

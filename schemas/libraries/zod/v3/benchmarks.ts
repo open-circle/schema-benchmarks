@@ -28,7 +28,6 @@ const schema = getZodSchema();
 export default defineBenchmarks({
   library: {
     name: "zod/v3",
-    git: "colinhacks/zod",
     optimizeType: "none",
     version: await getVersion("zod"),
   },
