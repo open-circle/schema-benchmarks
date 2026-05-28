@@ -1,16 +1,17 @@
 import type { Decorator } from "@storybook/tanstack-react";
 import { definePreview } from "@storybook/tanstack-react";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { parseAnsiSequences } from "ansi-sequence-parser";
 import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
+import Prism from "prismjs";
 import { mocked } from "storybook/test";
 
+import "../src/shared/styles/index.css";
 import { RouterContext } from "#/routes/__root";
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-
-import "../src/shared/styles/index.css";
 import { clientPreloadImage, preloadImage } from "#/shared/lib/fetch";
 import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
-import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.shared";
 import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
 
 import { makeQueryClient } from "../src/shared/data/query";
@@ -63,8 +64,10 @@ initialize({ onUnhandledRequest: "bypass" });
 export default definePreview({
   beforeEach: () => {
     queryClient.clear();
-    mocked(getHighlightedCodeFn).mockImplementation(async ({ data }) => highlightCode(data));
-    mocked(getHighlightedAnsiFn).mockImplementation(async ({ data }) => highlightAnsi(data));
+    mocked(getHighlightedCodeFn).mockImplementation(async ({ data }) => highlightCode(Prism, data));
+    mocked(getHighlightedAnsiFn).mockImplementation(async ({ data }) =>
+      highlightAnsi(parseAnsiSequences, data),
+    );
     mocked(preloadImage).mockImplementation(clientPreloadImage);
   },
   parameters: {

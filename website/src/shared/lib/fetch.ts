@@ -35,4 +35,4 @@ export const preloadImage = createIsomorphicFn()
   .server(() => Promise.resolve());
 
 export const preloadImages = (sources: Iterable<string>) =>
-  Promise.all(Array.from(sources, (src) => preloadImage(src)));
+  Promise.all(Array.from(sources, preloadImage));

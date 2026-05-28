@@ -1,11 +1,12 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { parseAnsiSequences } from "ansi-sequence-parser";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
 
-import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.server";
+import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.shared";
 
 export const highlightInput = v.object({
   code: v.string(),
@@ -19,7 +20,7 @@ export const getHighlightedCodeFn = createServerFn({ method: "POST" })
   .inputValidator(highlightInput)
   .handler(({ data, data: { language } }) => {
     if (!Prism.languages[language]) loadLanguages(language);
-    return highlightCode(data);
+    return highlightCode(Prism, data);
   });
 
 export const getHighlightedCode = (data: HighlightInput, signalOpt?: AbortSignal) => {
@@ -44,7 +45,7 @@ export type HighlightAnsiInput = v.InferInput<typeof highlightAnsiInput>;
 
 export const getHighlightedAnsiFn = createServerFn({ method: "POST" })
   .inputValidator(highlightAnsiInput)
-  .handler(({ data }) => highlightAnsi(data));
+  .handler(({ data }) => highlightAnsi(parseAnsiSequences, data));
 
 export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSignal) => {
   const { input, lineNumbers } = v.parse(highlightAnsiInput, data);
