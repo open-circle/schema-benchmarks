@@ -73,7 +73,6 @@ export interface CodecBenchmarkConfig extends Omit<BaseBenchmarkConfig, "snippet
 
 export interface LibraryInfo {
   name: string;
-  git: string;
   optimizeType: OptimizeType;
   version: string;
 }

@@ -2,9 +2,11 @@ import { promiseAllKeyed } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
-import { getPackageMetadata } from "#/routes/_benchmarks/-query";
+import { getPackageMetadata, getPackageName } from "#/routes/_benchmarks/-query";
 import { getLibraryResults, type getLibraryResultsFn } from "#/routes/_benchmarks/library/$/-query";
 import { generateMetadata } from "#/shared/data/meta";
+
+import { RepoLink } from "../../-components/repo";
 
 function areResultsEmpty(results: Awaited<ReturnType<typeof getLibraryResultsFn>>) {
   return (
@@ -39,7 +41,7 @@ export const Route = createFileRoute("/_benchmarks/library/$/")({
     if (!version) throw notFound();
     await promiseAllKeyed({
       metadata: queryClient.ensureQueryData(
-        getPackageMetadata(libraryName, version, abortController.signal),
+        getPackageMetadata(getPackageName(libraryName), version, abortController.signal),
       ),
     });
     return { crumb: libraryName, version };
@@ -58,9 +60,12 @@ export const Route = createFileRoute("/_benchmarks/library/$/")({
 function RouteComponent() {
   const { _splat: libraryName } = Route.useParams();
   const { version } = Route.useLoaderData();
-  const { data: metadata } = useSuspenseQuery(getPackageMetadata(libraryName!, version));
+  const { data: metadata } = useSuspenseQuery(
+    getPackageMetadata(getPackageName(libraryName!), version),
+  );
   return (
     <>
+      <RepoLink libraryName={libraryName!} version={version} />
       <p>{metadata.description}</p>
     </>
   );

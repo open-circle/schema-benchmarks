@@ -24,7 +24,6 @@ const schema = getYupSchema();
 export default defineBenchmarks({
   library: {
     name: "yup",
-    git: "jquense/yup",
     optimizeType: "none",
     version: await getVersion("yup"),
   },

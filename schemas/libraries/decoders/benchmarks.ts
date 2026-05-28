@@ -10,7 +10,6 @@ const schema = getDecoderSchema();
 export default defineBenchmarks({
   library: {
     name: "decoders",
-    git: "nvie/decoders",
     optimizeType: "none",
     version: await getVersion("decoders"),
   },

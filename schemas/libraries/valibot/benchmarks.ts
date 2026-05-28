@@ -23,7 +23,6 @@ const schema = getValibotSchema();
 export default defineBenchmarks({
   library: {
     name: "valibot",
-    git: "open-circle/valibot",
     optimizeType: "none",
     version: await getVersion("valibot"),
   },

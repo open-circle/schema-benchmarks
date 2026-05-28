@@ -24,7 +24,6 @@ const schema = getArkTypeSchema();
 export default defineBenchmarks({
   library: {
     name: "arktype",
-    git: "arktypeio/arktype",
     optimizeType: "jit",
     version: await getVersion("arktype"),
   },

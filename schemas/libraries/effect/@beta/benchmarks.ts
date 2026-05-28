@@ -21,7 +21,6 @@ const DateFromString = Schema.Date.pipe(
 export default defineBenchmarks({
   library: {
     name: "effect@beta",
-    git: "effect-ts/effect",
     optimizeType: "none",
     version: await getVersion("effect___beta"),
   },

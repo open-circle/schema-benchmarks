@@ -26,7 +26,6 @@ const schema = getShapeshiftSchema();
 export default defineBenchmarks({
   library: {
     name: "@sapphire/shapeshift",
-    git: "sapphiredev/shapeshift",
     optimizeType: "none",
     version: await getVersion("@sapphire/shapeshift"),
   },

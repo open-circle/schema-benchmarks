@@ -26,7 +26,6 @@ const decoder = S.decoder(S.string, S.date);
 export default defineBenchmarks({
   library: {
     name: "sury",
-    git: "DZakh/sury",
     optimizeType: "jit",
     version: await getVersion("sury"),
   },
