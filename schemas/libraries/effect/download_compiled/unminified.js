@@ -167,7 +167,7 @@ const constant = (value) => () => value;
 *
 * @since 2.0.0
 */
-const constTrue = /* @__PURE__ */ constant(true);
+const constTrue = /*#__PURE__*/ constant(true);
 /**
 * A thunk that returns always `false`.
 *
@@ -181,7 +181,7 @@ const constTrue = /* @__PURE__ */ constant(true);
 *
 * @since 2.0.0
 */
-const constFalse = /* @__PURE__ */ constant(false);
+const constFalse = /*#__PURE__*/ constant(false);
 /**
 * A thunk that returns always `undefined`.
 *
@@ -195,7 +195,7 @@ const constFalse = /* @__PURE__ */ constant(false);
 *
 * @since 2.0.0
 */
-const constUndefined = /* @__PURE__ */ constant(void 0);
+const constUndefined = /*#__PURE__*/ constant(void 0);
 /**
 * A thunk that returns always `void`.
 *
@@ -254,17 +254,17 @@ const strict = () => isStrictEquivalent;
 * @category instances
 * @since 2.0.0
 */
-const number$2 = /* @__PURE__ */ strict();
+const number$2 = /*#__PURE__*/ strict();
 /**
 * @category mapping
 * @since 2.0.0
 */
-const mapInput$1 = /* @__PURE__ */ dual(2, (self, f) => make$25((x, y) => self(f(x), f(y))));
+const mapInput$1 = /*#__PURE__*/ dual(2, (self, f) => make$25((x, y) => self(f(x), f(y))));
 /**
 * @category instances
 * @since 2.0.0
 */
-const Date$1 = /* @__PURE__ */ mapInput$1(number$2, (date) => date.getTime());
+const Date$1 = /*#__PURE__*/ mapInput$1(number$2, (date) => date.getTime());
 /**
 * Creates a new `Equivalence` for an array of values based on a given `Equivalence` for the elements of the array.
 *
@@ -563,7 +563,7 @@ const isObject = (input) => isRecordOrArray(input) || isFunction(input);
 * @category guards
 * @since 2.0.0
 */
-const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObject(self) && property in self);
+const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObject(self) && property in self);
 /**
 * A refinement that checks if a value is an object with a `_tag` property
 * that matches the given tag. This is a powerful tool for working with
@@ -593,7 +593,7 @@ const hasProperty = /* @__PURE__ */ dual(2, (self, property) => isObject(self) &
 * @category guards
 * @since 2.0.0
 */
-const isTagged = /* @__PURE__ */ dual(2, (self, tag) => hasProperty(self, "_tag") && self["_tag"] === tag);
+const isTagged = /*#__PURE__*/ dual(2, (self, tag) => hasProperty(self, "_tag") && self["_tag"] === tag);
 /**
 * A refinement that checks if a value is either `null` or `undefined`.
 *
@@ -919,7 +919,7 @@ function add64(out, aHi, aLo, bHi, bLo) {
 /**
 * @since 3.0.6
 */
-const YieldWrapTypeId = /* @__PURE__ */ Symbol.for("effect/Utils/YieldWrap");
+const YieldWrapTypeId = /*#__PURE__*/ Symbol.for("effect/Utils/YieldWrap");
 /**
 * @since 3.0.6
 */
@@ -952,7 +952,7 @@ function yieldWrapGet(self) {
 * @status experimental
 * @category modifiers
 */
-const structuralRegionState = /* @__PURE__ */ globalValue("effect/Utils/isStructuralRegion", () => ({
+const structuralRegionState = /*#__PURE__*/ globalValue("effect/Utils/isStructuralRegion", () => ({
 	enabled: false,
 	tester: void 0
 }));
@@ -964,7 +964,7 @@ const standard = { effect_internal_function: (body) => {
 * @status experimental
 * @category tracing
 */
-const internalCall = /* @__PURE__ */ standard.effect_internal_function(() => (/* @__PURE__ */ new Error()).stack)?.includes("effect_internal_function") === true ? standard.effect_internal_function : { effect_internal_function: (body) => {
+const internalCall = /*#__PURE__*/ standard.effect_internal_function(() => (/* @__PURE__ */ new Error()).stack)?.includes("effect_internal_function") === true ? standard.effect_internal_function : { effect_internal_function: (body) => {
 	try {
 		return body();
 	} finally {}
@@ -976,12 +976,12 @@ const internalCall = /* @__PURE__ */ standard.effect_internal_function(() => (/*
 * @since 2.0.0
 */
 /** @internal */
-const randomHashCache = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Hash/randomHashCache"), () => /* @__PURE__ */ new WeakMap());
+const randomHashCache = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Hash/randomHashCache"), () => /* @__PURE__ */ new WeakMap());
 /**
 * @since 2.0.0
 * @category symbols
 */
-const symbol$1 = /* @__PURE__ */ Symbol.for("effect/Hash");
+const symbol$1 = /*#__PURE__*/ Symbol.for("effect/Hash");
 /**
 * @since 2.0.0
 * @category hashing
@@ -1105,7 +1105,7 @@ const cached = function() {
 * @since 2.0.0
 * @category symbols
 */
-const symbol = /* @__PURE__ */ Symbol.for("effect/Equal");
+const symbol = /*#__PURE__*/ Symbol.for("effect/Equal");
 function equals$2() {
 	if (arguments.length === 1) return (self) => compareBoth(self, arguments[0]);
 	return compareBoth(arguments[0], arguments[1]);
@@ -1156,7 +1156,7 @@ const equivalence = () => equals$2;
 * @since 2.0.0
 * @category symbols
 */
-const NodeInspectSymbol = /* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom");
+const NodeInspectSymbol = /*#__PURE__*/ Symbol.for("nodejs.util.inspect.custom");
 /**
 * @since 2.0.0
 */
@@ -1268,13 +1268,13 @@ const stringifyCircular = (obj, whitespace) => {
 * @since 3.10.0
 * @category redactable
 */
-const symbolRedactable = /* @__PURE__ */ Symbol.for("effect/Inspectable/Redactable");
+const symbolRedactable = /*#__PURE__*/ Symbol.for("effect/Inspectable/Redactable");
 /**
 * @since 3.10.0
 * @category redactable
 */
 const isRedactable = (u) => typeof u === "object" && u !== null && symbolRedactable in u;
-const redactableState = /* @__PURE__ */ globalValue("effect/Inspectable/redactableState", () => ({ fiberRefs: void 0 }));
+const redactableState = /*#__PURE__*/ globalValue("effect/Inspectable/redactableState", () => ({ fiberRefs: void 0 }));
 /**
 * @since 3.10.0
 * @category redactable
@@ -1360,13 +1360,13 @@ const getCurrentVersion = () => moduleVersion;
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/effectable.js
 /** @internal */
-const EffectTypeId$1 = /* @__PURE__ */ Symbol.for("effect/Effect");
+const EffectTypeId$1 = /*#__PURE__*/ Symbol.for("effect/Effect");
 /** @internal */
-const StreamTypeId = /* @__PURE__ */ Symbol.for("effect/Stream");
+const StreamTypeId = /*#__PURE__*/ Symbol.for("effect/Stream");
 /** @internal */
-const SinkTypeId = /* @__PURE__ */ Symbol.for("effect/Sink");
+const SinkTypeId = /*#__PURE__*/ Symbol.for("effect/Sink");
 /** @internal */
-const ChannelTypeId = /* @__PURE__ */ Symbol.for("effect/Channel");
+const ChannelTypeId = /*#__PURE__*/ Symbol.for("effect/Channel");
 /** @internal */
 const effectVariance = {
 	/* c8 ignore next */
@@ -1375,7 +1375,7 @@ const effectVariance = {
 	_E: (_) => _,
 	/* c8 ignore next */
 	_A: (_) => _,
-	_V: /* @__PURE__ */ getCurrentVersion()
+	_V: /*#__PURE__*/ getCurrentVersion()
 };
 const sinkVariance = {
 	/* c8 ignore next */
@@ -1448,7 +1448,7 @@ const StructuralCommitPrototype = {
 	...StructuralPrototype
 };
 /** @internal */
-const Base$1 = /* @__PURE__ */ function() {
+const Base$1 = /*#__PURE__*/ function() {
 	function Base() {}
 	Base.prototype = CommitPrototype;
 	return Base;
@@ -1458,7 +1458,7 @@ const Base$1 = /* @__PURE__ */ function() {
 /**
 * @since 2.0.0
 */
-const TypeId$12 = /* @__PURE__ */ Symbol.for("effect/Option");
+const TypeId$12 = /*#__PURE__*/ Symbol.for("effect/Option");
 const CommonProto$1 = {
 	...EffectPrototype$1,
 	[TypeId$12]: { _A: (_) => _ },
@@ -1469,7 +1469,7 @@ const CommonProto$1 = {
 		return format$4(this.toJSON());
 	}
 };
-const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto$1), {
+const SomeProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(CommonProto$1), {
 	_tag: "Some",
 	_op: "Some",
 	[symbol](that) {
@@ -1486,8 +1486,8 @@ const SomeProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(Co
 		};
 	}
 });
-const NoneHash = /* @__PURE__ */ hash("None");
-const NoneProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto$1), {
+const NoneHash = /*#__PURE__*/ hash("None");
+const NoneProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(CommonProto$1), {
 	_tag: "None",
 	_op: "None",
 	[symbol](that) {
@@ -1510,7 +1510,7 @@ const isNone$1 = (fa) => fa._tag === "None";
 /** @internal */
 const isSome$1 = (fa) => fa._tag === "Some";
 /** @internal */
-const none$5 = /* @__PURE__ */ Object.create(NoneProto);
+const none$5 = /*#__PURE__*/ Object.create(NoneProto);
 /** @internal */
 const some$1 = (value) => {
 	const a = Object.create(SomeProto);
@@ -1525,7 +1525,7 @@ const some$1 = (value) => {
 /**
 * @internal
 */
-const TypeId$11 = /* @__PURE__ */ Symbol.for("effect/Either");
+const TypeId$11 = /*#__PURE__*/ Symbol.for("effect/Either");
 const CommonProto = {
 	...EffectPrototype$1,
 	[TypeId$11]: { _R: (_) => _ },
@@ -1536,7 +1536,7 @@ const CommonProto = {
 		return format$4(this.toJSON());
 	}
 };
-const RightProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto), {
+const RightProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(CommonProto), {
 	_tag: "Right",
 	_op: "Right",
 	[symbol](that) {
@@ -1553,7 +1553,7 @@ const RightProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(C
 		};
 	}
 });
-const LeftProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(CommonProto), {
+const LeftProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(CommonProto), {
 	_tag: "Left",
 	_op: "Left",
 	[symbol](that) {
@@ -1589,7 +1589,7 @@ const right$1 = (right) => {
 	return a;
 };
 /** @internal */
-const fromOption$2 = /* @__PURE__ */ dual(2, (self, onNone) => isNone$1(self) ? left$1(onNone()) : right$1(self.value));
+const fromOption$2 = /*#__PURE__*/ dual(2, (self, onNone) => isNone$1(self) ? left$1(onNone()) : right$1(self.value));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/Either.js
 /**
@@ -1687,21 +1687,21 @@ const isRight = isRight$1;
 * @category mapping
 * @since 2.0.0
 */
-const mapBoth$3 = /* @__PURE__ */ dual(2, (self, { onLeft, onRight }) => isLeft(self) ? left(onLeft(self.left)) : right(onRight(self.right)));
+const mapBoth$3 = /*#__PURE__*/ dual(2, (self, { onLeft, onRight }) => isLeft(self) ? left(onLeft(self.left)) : right(onRight(self.right)));
 /**
 * Maps the `Left` side of an `Either` value to a new `Either` value.
 *
 * @category mapping
 * @since 2.0.0
 */
-const mapLeft = /* @__PURE__ */ dual(2, (self, f) => isLeft(self) ? left(f(self.left)) : right(self.right));
+const mapLeft = /*#__PURE__*/ dual(2, (self, f) => isLeft(self) ? left(f(self.left)) : right(self.right));
 /**
 * Maps the `Right` side of an `Either` value to a new `Either` value.
 *
 * @category mapping
 * @since 2.0.0
 */
-const map$7 = /* @__PURE__ */ dual(2, (self, f) => isRight(self) ? right(f(self.right)) : left(self.left));
+const map$7 = /*#__PURE__*/ dual(2, (self, f) => isRight(self) ? right(f(self.right)) : left(self.left));
 /**
 * Takes two functions and an `Either` value, if the value is a `Left` the inner value is applied to the `onLeft function,
 * if the value is a `Right` the inner value is applied to the `onRight` function.
@@ -1725,12 +1725,12 @@ const map$7 = /* @__PURE__ */ dual(2, (self, f) => isRight(self) ? right(f(self.
 * @category pattern matching
 * @since 2.0.0
 */
-const match$4 = /* @__PURE__ */ dual(2, (self, { onLeft, onRight }) => isLeft(self) ? onLeft(self.left) : onRight(self.right));
+const match$4 = /*#__PURE__*/ dual(2, (self, { onLeft, onRight }) => isLeft(self) ? onLeft(self.left) : onRight(self.right));
 /**
 * @category getters
 * @since 2.0.0
 */
-const merge$3 = /* @__PURE__ */ match$4({
+const merge$3 = /*#__PURE__*/ match$4({
 	onLeft: identity,
 	onRight: identity
 });
@@ -1754,7 +1754,7 @@ const merge$3 = /* @__PURE__ */ match$4({
 * @category getters
 * @since 2.0.0
 */
-const getOrThrowWith$1 = /* @__PURE__ */ dual(2, (self, onLeft) => {
+const getOrThrowWith$1 = /*#__PURE__*/ dual(2, (self, onLeft) => {
 	if (isRight(self)) return self.right;
 	throw onLeft(self.left);
 });
@@ -1777,7 +1777,7 @@ const getOrThrowWith$1 = /* @__PURE__ */ dual(2, (self, onLeft) => {
 * @category getters
 * @since 2.0.0
 */
-const getOrThrow = /* @__PURE__ */ getOrThrowWith$1(() => /* @__PURE__ */ new Error("getOrThrow called on a Left"));
+const getOrThrow = /*#__PURE__*/ getOrThrowWith$1(() => /* @__PURE__ */ new Error("getOrThrow called on a Left"));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/array.js
 /**
@@ -1814,12 +1814,12 @@ const make$24 = (compare) => (self, that) => self === that ? 0 : compare(self, t
 * @category instances
 * @since 2.0.0
 */
-const number = /* @__PURE__ */ make$24((self, that) => self < that ? -1 : 1);
+const number = /*#__PURE__*/ make$24((self, that) => self < that ? -1 : 1);
 /**
 * @category mapping
 * @since 2.0.0
 */
-const mapInput = /* @__PURE__ */ dual(2, (self, f) => make$24((b1, b2) => self(f(b1), f(b2))));
+const mapInput = /*#__PURE__*/ dual(2, (self, f) => make$24((b1, b2) => self(f(b1), f(b2))));
 /**
 * Test whether one value is _strictly greater than_ another.
 *
@@ -1987,7 +1987,7 @@ const isSome = isSome$1;
 * @category Pattern matching
 * @since 2.0.0
 */
-const match$3 = /* @__PURE__ */ dual(2, (self, { onNone, onSome }) => isNone(self) ? onNone() : onSome(self.value));
+const match$3 = /*#__PURE__*/ dual(2, (self, { onNone, onSome }) => isNone(self) ? onNone() : onSome(self.value));
 /**
 * Returns the value contained in the `Option` if it is `Some`, otherwise
 * evaluates and returns the result of `onNone`.
@@ -2021,7 +2021,7 @@ const match$3 = /* @__PURE__ */ dual(2, (self, { onNone, onSome }) => isNone(sel
 * @category Getters
 * @since 2.0.0
 */
-const getOrElse = /* @__PURE__ */ dual(2, (self, onNone) => isNone(self) ? onNone() : self.value);
+const getOrElse = /*#__PURE__*/ dual(2, (self, onNone) => isNone(self) ? onNone() : self.value);
 /**
 * Returns the provided `Option` `that` if the current `Option` (`self`) is
 * `None`; otherwise, it returns `self`.
@@ -2058,7 +2058,7 @@ const getOrElse = /* @__PURE__ */ dual(2, (self, onNone) => isNone(self) ? onNon
 * @category Error handling
 * @since 2.0.0
 */
-const orElse$1 = /* @__PURE__ */ dual(2, (self, that) => isNone(self) ? that() : self);
+const orElse$1 = /*#__PURE__*/ dual(2, (self, that) => isNone(self) ? that() : self);
 /**
 * Returns the provided default value wrapped in `Some` if the current `Option`
 * (`self`) is `None`; otherwise, returns `self`.
@@ -2088,7 +2088,7 @@ const orElse$1 = /* @__PURE__ */ dual(2, (self, that) => isNone(self) ? that() :
 * @category Error handling
 * @since 2.0.0
 */
-const orElseSome = /* @__PURE__ */ dual(2, (self, onNone) => isNone(self) ? some(onNone()) : self);
+const orElseSome = /*#__PURE__*/ dual(2, (self, onNone) => isNone(self) ? some(onNone()) : self);
 /**
 * Converts a nullable value into an `Option`. Returns `None` if the value is
 * `null` or `undefined`, otherwise wraps the value in a `Some`.
@@ -2138,7 +2138,7 @@ const fromNullable = (nullableValue) => nullableValue == null ? none$4() : some(
 * @category Getters
 * @since 2.0.0
 */
-const getOrUndefined = /* @__PURE__ */ getOrElse(constUndefined);
+const getOrUndefined = /*#__PURE__*/ getOrElse(constUndefined);
 /**
 * Lifts a function that throws exceptions into a function that returns an
 * `Option`.
@@ -2203,7 +2203,7 @@ const liftThrowable = (f) => (...a) => {
 * @category Conversions
 * @since 2.0.0
 */
-const getOrThrowWith = /* @__PURE__ */ dual(2, (self, onNone) => {
+const getOrThrowWith = /*#__PURE__*/ dual(2, (self, onNone) => {
 	if (isSome(self)) return self.value;
 	throw onNone();
 });
@@ -2241,7 +2241,7 @@ const getOrThrowWith = /* @__PURE__ */ dual(2, (self, onNone) => {
 * @category Mapping
 * @since 2.0.0
 */
-const map$6 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none$4() : some(f(self.value)));
+const map$6 = /*#__PURE__*/ dual(2, (self, f) => isNone(self) ? none$4() : some(f(self.value)));
 /**
 * Applies a function to the value of a `Some` and flattens the resulting
 * `Option`. If the input is `None`, it remains `None`.
@@ -2295,7 +2295,7 @@ const map$6 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none$4() : som
 * @category Sequencing
 * @since 2.0.0
 */
-const flatMap$5 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none$4() : f(self.value));
+const flatMap$5 = /*#__PURE__*/ dual(2, (self, f) => isNone(self) ? none$4() : f(self.value));
 /**
 * Combines `flatMap` and `fromNullable`, transforming the value inside a `Some`
 * using a function that may return `null` or `undefined`.
@@ -2348,7 +2348,7 @@ const flatMap$5 = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none$4() :
 * @category Sequencing
 * @since 2.0.0
 */
-const flatMapNullable = /* @__PURE__ */ dual(2, (self, f) => isNone(self) ? none$4() : fromNullable(f(self.value)));
+const flatMapNullable = /*#__PURE__*/ dual(2, (self, f) => isNone(self) ? none$4() : fromNullable(f(self.value)));
 /**
 * Alias of {@link flatMap}.
 *
@@ -2399,7 +2399,7 @@ const filterMap$1 = flatMap$5;
 * @category Filtering
 * @since 2.0.0
 */
-const filter$1 = /* @__PURE__ */ dual(2, (self, predicate) => filterMap$1(self, (b) => predicate(b) ? some$1(b) : none$5));
+const filter$1 = /*#__PURE__*/ dual(2, (self, predicate) => filterMap$1(self, (b) => predicate(b) ? some$1(b) : none$5));
 /**
 * Creates an `Equivalence` instance for comparing `Option` values, using a
 * provided `Equivalence` for the inner type.
@@ -2507,7 +2507,7 @@ const containsWith = (isEquivalent) => dual(2, (self, a) => isNone(self) ? false
 * @category Elements
 * @since 2.0.0
 */
-const contains = /* @__PURE__ */ containsWith(/* @__PURE__ */ equivalence());
+const contains = /*#__PURE__*/ containsWith(/* @__PURE__ */ equivalence());
 /**
 * Checks if a value in an `Option` satisfies a given predicate or refinement.
 *
@@ -2540,7 +2540,7 @@ const contains = /* @__PURE__ */ containsWith(/* @__PURE__ */ equivalence());
 * @category Elements
 * @since 2.0.0
 */
-const exists = /* @__PURE__ */ dual(2, (self, refinement) => isNone(self) ? false : refinement(self.value));
+const exists = /*#__PURE__*/ dual(2, (self, refinement) => isNone(self) ? false : refinement(self.value));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/Tuple.js
 /**
@@ -2593,7 +2593,7 @@ const allocate = (n) => new Array(n);
 * @category constructors
 * @since 2.0.0
 */
-const makeBy = /* @__PURE__ */ dual(2, (n, f) => {
+const makeBy = /*#__PURE__*/ dual(2, (n, f) => {
 	const max = Math.max(1, Math.floor(n));
 	const out = new Array(max);
 	for (let i = 0; i < max; i++) out[i] = f(i);
@@ -2653,7 +2653,7 @@ const ensure = (self) => Array.isArray(self) ? self : [self];
 * @category pattern matching
 * @since 2.0.0
 */
-const matchLeft = /* @__PURE__ */ dual(2, (self, { onEmpty, onNonEmpty }) => isNonEmptyReadonlyArray(self) ? onNonEmpty(headNonEmpty$1(self), tailNonEmpty$1(self)) : onEmpty());
+const matchLeft = /*#__PURE__*/ dual(2, (self, { onEmpty, onNonEmpty }) => isNonEmptyReadonlyArray(self) ? onNonEmpty(headNonEmpty$1(self), tailNonEmpty$1(self)) : onEmpty());
 /**
 * Prepend an element to the front of an `Iterable`, creating a new `NonEmptyArray`.
 *
@@ -2669,7 +2669,7 @@ const matchLeft = /* @__PURE__ */ dual(2, (self, { onEmpty, onNonEmpty }) => isN
 * @category concatenating
 * @since 2.0.0
 */
-const prepend$2 = /* @__PURE__ */ dual(2, (self, head) => [head, ...self]);
+const prepend$2 = /*#__PURE__*/ dual(2, (self, head) => [head, ...self]);
 /**
 * Append an element to the end of an `Iterable`, creating a new `NonEmptyArray`.
 *
@@ -2685,7 +2685,7 @@ const prepend$2 = /* @__PURE__ */ dual(2, (self, head) => [head, ...self]);
 * @category concatenating
 * @since 2.0.0
 */
-const append$1 = /* @__PURE__ */ dual(2, (self, last) => [...self, last]);
+const append$1 = /*#__PURE__*/ dual(2, (self, last) => [...self, last]);
 /**
 * Concatenates two arrays (or iterables), combining their elements.
 * If either array is non-empty, the result is also a non-empty array.
@@ -2693,7 +2693,7 @@ const append$1 = /* @__PURE__ */ dual(2, (self, last) => [...self, last]);
 * @category concatenating
 * @since 2.0.0
 */
-const appendAll$2 = /* @__PURE__ */ dual(2, (self, that) => fromIterable$6(self).concat(fromIterable$6(that)));
+const appendAll$2 = /*#__PURE__*/ dual(2, (self, that) => fromIterable$6(self).concat(fromIterable$6(that)));
 /**
 * Determine if `unknown` is an Array.
 *
@@ -2786,7 +2786,7 @@ const clamp = (i, as) => Math.floor(Math.min(Math.max(0, i), as.length));
 * @category getters
 * @since 2.0.0
 */
-const get$7 = /* @__PURE__ */ dual(2, (self, index) => {
+const get$7 = /*#__PURE__*/ dual(2, (self, index) => {
 	const i = Math.floor(index);
 	return isOutOfBounds(i, self) ? none$4() : some(self[i]);
 });
@@ -2796,7 +2796,7 @@ const get$7 = /* @__PURE__ */ dual(2, (self, index) => {
 * @since 2.0.0
 * @category unsafe
 */
-const unsafeGet$3 = /* @__PURE__ */ dual(2, (self, index) => {
+const unsafeGet$3 = /*#__PURE__*/ dual(2, (self, index) => {
 	const i = Math.floor(index);
 	if (isOutOfBounds(i, self)) throw new Error(`Index ${i} out of bounds`);
 	return self[i];
@@ -2807,7 +2807,7 @@ const unsafeGet$3 = /* @__PURE__ */ dual(2, (self, index) => {
 * @category getters
 * @since 2.0.0
 */
-const head = /* @__PURE__ */ get$7(0);
+const head = /*#__PURE__*/ get$7(0);
 /**
 * Get the first element of a non empty array.
 *
@@ -2823,7 +2823,7 @@ const head = /* @__PURE__ */ get$7(0);
 * @category getters
 * @since 2.0.0
 */
-const headNonEmpty$1 = /* @__PURE__ */ unsafeGet$3(0);
+const headNonEmpty$1 = /*#__PURE__*/ unsafeGet$3(0);
 /**
 * Get the last element in a `ReadonlyArray`, or `None` if the `ReadonlyArray` is empty.
 *
@@ -2880,7 +2880,7 @@ const spanIndex = (self, predicate) => {
 * @category splitting
 * @since 2.0.0
 */
-const span = /* @__PURE__ */ dual(2, (self, predicate) => splitAt(self, spanIndex(self, predicate)));
+const span = /*#__PURE__*/ dual(2, (self, predicate) => splitAt(self, spanIndex(self, predicate)));
 /**
 * Drop a max number of elements from the start of an `Iterable`, creating a new `Array`.
 *
@@ -2898,7 +2898,7 @@ const span = /* @__PURE__ */ dual(2, (self, predicate) => splitAt(self, spanInde
 * @category getters
 * @since 2.0.0
 */
-const drop$1 = /* @__PURE__ */ dual(2, (self, n) => {
+const drop$1 = /*#__PURE__*/ dual(2, (self, n) => {
 	const input = fromIterable$6(self);
 	return input.slice(clamp(n, input), input.length);
 });
@@ -2925,7 +2925,7 @@ const reverse$2 = (self) => Array.from(self).reverse();
 * @category sorting
 * @since 2.0.0
 */
-const sort = /* @__PURE__ */ dual(2, (self, O) => {
+const sort = /*#__PURE__*/ dual(2, (self, O) => {
 	const out = Array.from(self);
 	out.sort(O);
 	return out;
@@ -2947,7 +2947,7 @@ const sort = /* @__PURE__ */ dual(2, (self, O) => {
 * @category zipping
 * @since 2.0.0
 */
-const zip$1 = /* @__PURE__ */ dual(2, (self, that) => zipWith(self, that, make$23));
+const zip$1 = /*#__PURE__*/ dual(2, (self, that) => zipWith(self, that, make$23));
 /**
 * Apply a function to pairs of elements at the same index in two `Iterable`s, collecting the results in a new `Array`. If one
 * input `Iterable` is short, excess elements of the longer `Iterable` are discarded.
@@ -2964,7 +2964,7 @@ const zip$1 = /* @__PURE__ */ dual(2, (self, that) => zipWith(self, that, make$2
 * @category zipping
 * @since 2.0.0
 */
-const zipWith = /* @__PURE__ */ dual(3, (self, that, f) => {
+const zipWith = /*#__PURE__*/ dual(3, (self, that, f) => {
 	const as = fromIterable$6(self);
 	const bs = fromIterable$6(that);
 	if (isNonEmptyReadonlyArray(as) && isNonEmptyReadonlyArray(bs)) {
@@ -2975,7 +2975,7 @@ const zipWith = /* @__PURE__ */ dual(3, (self, that, f) => {
 	}
 	return [];
 });
-const _equivalence$2 = /* @__PURE__ */ equivalence();
+const _equivalence$2 = /*#__PURE__*/ equivalence();
 /**
 * Splits an `Iterable` into two segments, with the first segment containing a maximum of `n` elements.
 * The value of `n` can be `0`.
@@ -2992,7 +2992,7 @@ const _equivalence$2 = /* @__PURE__ */ equivalence();
 * @category splitting
 * @since 2.0.0
 */
-const splitAt = /* @__PURE__ */ dual(2, (self, n) => {
+const splitAt = /*#__PURE__*/ dual(2, (self, n) => {
 	const input = Array.from(self);
 	const _n = Math.floor(n);
 	if (isNonEmptyReadonlyArray(input)) {
@@ -3017,7 +3017,7 @@ const splitAt = /* @__PURE__ */ dual(2, (self, n) => {
 * @category splitting
 * @since 2.0.0
 */
-const splitNonEmptyAt = /* @__PURE__ */ dual(2, (self, n) => {
+const splitNonEmptyAt = /*#__PURE__*/ dual(2, (self, n) => {
 	const _n = Math.max(1, Math.floor(n));
 	return _n >= self.length ? [copy$1(self), []] : [prepend$2(self.slice(1, _n), headNonEmpty$1(self)), self.slice(_n)];
 });
@@ -3050,7 +3050,7 @@ const copy$1 = (self) => self.slice();
 *
 * @since 2.0.0
 */
-const unionWith = /* @__PURE__ */ dual(3, (self, that, isEquivalent) => {
+const unionWith = /*#__PURE__*/ dual(3, (self, that, isEquivalent) => {
 	const a = fromIterable$6(self);
 	const b = fromIterable$6(that);
 	if (isNonEmptyReadonlyArray(a)) {
@@ -3073,7 +3073,7 @@ const unionWith = /* @__PURE__ */ dual(3, (self, that, isEquivalent) => {
 *
 * @since 2.0.0
 */
-const union$2 = /* @__PURE__ */ dual(2, (self, that) => unionWith(self, that, _equivalence$2));
+const union$2 = /*#__PURE__*/ dual(2, (self, that) => unionWith(self, that, _equivalence$2));
 /**
 * @category constructors
 * @since 2.0.0
@@ -3090,14 +3090,14 @@ const of$2 = (a) => [a];
 * @category mapping
 * @since 2.0.0
 */
-const map$5 = /* @__PURE__ */ dual(2, (self, f) => self.map(f));
+const map$5 = /*#__PURE__*/ dual(2, (self, f) => self.map(f));
 /**
 * Applies a function to each element in an array and returns a new array containing the concatenated mapped elements.
 *
 * @category sequencing
 * @since 2.0.0
 */
-const flatMap$4 = /* @__PURE__ */ dual(2, (self, f) => {
+const flatMap$4 = /*#__PURE__*/ dual(2, (self, f) => {
 	if (isEmptyReadonlyArray(self)) return [];
 	const out = [];
 	for (let i = 0; i < self.length; i++) {
@@ -3123,7 +3123,7 @@ const flatMap$4 = /* @__PURE__ */ dual(2, (self, f) => {
 * @category sequencing
 * @since 2.0.0
 */
-const flatten$3 = /* @__PURE__ */ flatMap$4(identity);
+const flatten$3 = /*#__PURE__*/ flatMap$4(identity);
 /**
 * Applies a function to each element of the `Iterable` and filters based on the result, keeping the transformed values where the function returns `Some`.
 * This method combines filtering and mapping functionalities, allowing transformations and filtering of elements based on a single function pass.
@@ -3142,7 +3142,7 @@ const flatten$3 = /* @__PURE__ */ flatMap$4(identity);
 * @category filtering
 * @since 2.0.0
 */
-const filterMap = /* @__PURE__ */ dual(2, (self, f) => {
+const filterMap = /*#__PURE__*/ dual(2, (self, f) => {
 	const as = fromIterable$6(self);
 	const out = [];
 	for (let i = 0; i < as.length; i++) {
@@ -3166,7 +3166,7 @@ const filterMap = /* @__PURE__ */ dual(2, (self, f) => {
 * @category folding
 * @since 2.0.0
 */
-const reduce$6 = /* @__PURE__ */ dual(3, (self, b, f) => fromIterable$6(self).reduce((b, a, i) => f(b, a, i), b));
+const reduce$6 = /*#__PURE__*/ dual(3, (self, b, f) => fromIterable$6(self).reduce((b, a, i) => f(b, a, i), b));
 /**
 * @category constructors
 * @since 2.0.0
@@ -3213,7 +3213,7 @@ const getEquivalence$2 = array$1;
 *
 * @since 2.0.0
 */
-const dedupeWith = /* @__PURE__ */ dual(2, (self, isEquivalent) => {
+const dedupeWith = /*#__PURE__*/ dual(2, (self, isEquivalent) => {
 	const input = fromIterable$6(self);
 	if (isNonEmptyReadonlyArray(input)) {
 		const out = [headNonEmpty$1(input)];
@@ -3246,7 +3246,7 @@ const dedupe = (self) => dedupeWith(self, equivalence());
 * @since 2.0.0
 * @category folding
 */
-const join$1 = /* @__PURE__ */ dual(2, (self, sep) => fromIterable$6(self).join(sep));
+const join$1 = /*#__PURE__*/ dual(2, (self, sep) => fromIterable$6(self).join(sep));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/BigDecimal.js
 /**
@@ -3272,7 +3272,7 @@ const FINITE_INT_REGEX = /^[+-]?\d+$/;
 * @since 2.0.0
 * @category symbols
 */
-const TypeId$10 = /* @__PURE__ */ Symbol.for("effect/BigDecimal");
+const TypeId$10 = /*#__PURE__*/ Symbol.for("effect/BigDecimal");
 const BigDecimalProto = {
 	[TypeId$10]: TypeId$10,
 	[symbol$1]() {
@@ -3329,9 +3329,9 @@ const unsafeMakeNormalized = (value, scale) => {
 	o.normalized = o;
 	return o;
 };
-const bigint0$2 = /* @__PURE__ */ BigInt(0);
-const bigint10 = /* @__PURE__ */ BigInt(10);
-const zero$1 = /* @__PURE__ */ unsafeMakeNormalized(bigint0$2, 0);
+const bigint0$2 = /*#__PURE__*/ BigInt(0);
+const bigint10 = /*#__PURE__*/ BigInt(10);
+const zero$1 = /*#__PURE__*/ unsafeMakeNormalized(bigint0$2, 0);
 /**
 * Normalizes a given `BigDecimal` by removing trailing zeros.
 *
@@ -3369,7 +3369,7 @@ const normalize = (self) => {
 * @since 2.0.0
 * @category scaling
 */
-const scale = /* @__PURE__ */ dual(2, (self, scale) => {
+const scale = /*#__PURE__*/ dual(2, (self, scale) => {
 	if (scale > self.scale) return make$22(self.value * bigint10 ** BigInt(scale - self.scale), scale);
 	if (scale < self.scale) return make$22(self.value / bigint10 ** BigInt(self.scale - scale), scale);
 	return self;
@@ -3395,7 +3395,7 @@ const abs = (n) => n.value < bigint0$2 ? make$22(-n.value, n.scale) : n;
 * @category instances
 * @since 2.0.0
 */
-const Equivalence$3 = /* @__PURE__ */ make$25((self, that) => {
+const Equivalence$3 = /*#__PURE__*/ make$25((self, that) => {
 	if (self.scale > that.scale) return scale(that, self.scale).value === self.value;
 	if (self.scale < that.scale) return scale(self, that.scale).value === that.value;
 	return self.value === that.value;
@@ -3406,7 +3406,7 @@ const Equivalence$3 = /* @__PURE__ */ make$25((self, that) => {
 * @since 2.0.0
 * @category predicates
 */
-const equals$1 = /* @__PURE__ */ dual(2, (self, that) => Equivalence$3(self, that));
+const equals$1 = /*#__PURE__*/ dual(2, (self, that) => Equivalence$3(self, that));
 /**
 * Creates a `BigDecimal` from a `number` value.
 *
@@ -3724,7 +3724,7 @@ const not = (self) => !self;
 /**
 * @since 2.0.0
 */
-const TypeId$9 = /* @__PURE__ */ Symbol.for("effect/Chunk");
+const TypeId$9 = /*#__PURE__*/ Symbol.for("effect/Chunk");
 function copy(src, srcPos, dest, destPos, len) {
 	for (let i = srcPos; i < Math.min(src.length, srcPos + len); i++) dest[destPos + i - srcPos] = src[i];
 	return dest;
@@ -3737,7 +3737,7 @@ const emptyArray = [];
 * @since 2.0.0
 */
 const getEquivalence$1 = (isEquivalent) => make$25((self, that) => self.length === that.length && toReadonlyArray(self).every((value, i) => isEquivalent(value, unsafeGet$2(that, i))));
-const _equivalence$1 = /* @__PURE__ */ getEquivalence$1(equals$2);
+const _equivalence$1 = /*#__PURE__*/ getEquivalence$1(equals$2);
 const ChunkProto = {
 	[TypeId$9]: { _A: (_) => _ },
 	toString() {
@@ -3813,7 +3813,7 @@ const makeChunk = (backing) => {
 * @since 2.0.0
 */
 const isChunk = (u) => hasProperty(u, TypeId$9);
-const _empty$6 = /* @__PURE__ */ makeChunk({ _tag: "IEmpty" });
+const _empty$6 = /*#__PURE__*/ makeChunk({ _tag: "IEmpty" });
 /**
 * @category constructors
 * @since 2.0.0
@@ -3953,7 +3953,7 @@ const unsafeFromNonEmptyArray = (self) => unsafeFromArray(self);
 * @since 2.0.0
 * @category unsafe
 */
-const unsafeGet$2 = /* @__PURE__ */ dual(2, (self, index) => {
+const unsafeGet$2 = /*#__PURE__*/ dual(2, (self, index) => {
 	switch (self.backing._tag) {
 		case "IEmpty": throw new Error(`Index out of bounds`);
 		case "ISingleton":
@@ -3972,20 +3972,20 @@ const unsafeGet$2 = /* @__PURE__ */ dual(2, (self, index) => {
 * @category concatenating
 * @since 2.0.0
 */
-const append = /* @__PURE__ */ dual(2, (self, a) => appendAll$1(self, of$1(a)));
+const append = /*#__PURE__*/ dual(2, (self, a) => appendAll$1(self, of$1(a)));
 /**
 * Prepend an element to the front of a `Chunk`, creating a new `NonEmptyChunk`.
 *
 * @category concatenating
 * @since 2.0.0
 */
-const prepend$1 = /* @__PURE__ */ dual(2, (self, elem) => appendAll$1(of$1(elem), self));
+const prepend$1 = /*#__PURE__*/ dual(2, (self, elem) => appendAll$1(of$1(elem), self));
 /**
 * Drops the first up to `n` elements from the chunk
 *
 * @since 2.0.0
 */
-const drop = /* @__PURE__ */ dual(2, (self, n) => {
+const drop = /*#__PURE__*/ dual(2, (self, n) => {
 	if (n <= 0) return self;
 	else if (n >= self.length) return _empty$6;
 	else switch (self.backing._tag) {
@@ -4028,7 +4028,7 @@ const drop = /* @__PURE__ */ dual(2, (self, n) => {
 * @category concatenating
 * @since 2.0.0
 */
-const appendAll$1 = /* @__PURE__ */ dual(2, (self, that) => {
+const appendAll$1 = /*#__PURE__*/ dual(2, (self, that) => {
 	if (self.backing._tag === "IEmpty") return that;
 	if (that.backing._tag === "IEmpty") return self;
 	const diff = that.depth - self.depth;
@@ -4132,7 +4132,7 @@ const headNonEmpty = unsafeHead;
 */
 const tailNonEmpty = (self) => drop(self, 1);
 /** @internal */
-const BUCKET_SIZE = /* @__PURE__ */ Math.pow(2, 5);
+const BUCKET_SIZE = /*#__PURE__*/ Math.pow(2, 5);
 /** @internal */
 const MASK = BUCKET_SIZE - 1;
 /** @internal */
@@ -4455,7 +4455,7 @@ function mergeLeaves(edit, shift, h1, n1, h2, n2) {
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/hashMap.js
 const HashMapSymbolKey = "effect/HashMap";
 /** @internal */
-const HashMapTypeId = /* @__PURE__ */ Symbol.for(HashMapSymbolKey);
+const HashMapTypeId = /*#__PURE__*/ Symbol.for(HashMapSymbolKey);
 const HashMapProto = {
 	[HashMapTypeId]: HashMapTypeId,
 	[Symbol.iterator]() {
@@ -4558,7 +4558,7 @@ const visitLazyChildren = (len, children, i, f, cont) => {
 	}
 	return applyCont(cont);
 };
-const _empty$5 = /* @__PURE__ */ makeImpl$1(false, 0, /* @__PURE__ */ new EmptyNode(), 0);
+const _empty$5 = /*#__PURE__*/ makeImpl$1(false, 0, /*#__PURE__*/ new EmptyNode(), 0);
 /** @internal */
 const empty$17 = () => _empty$5;
 /** @internal */
@@ -4572,9 +4572,9 @@ const isHashMap = (u) => hasProperty(u, HashMapTypeId);
 /** @internal */
 const isEmpty$2 = (self) => self && isEmptyNode(self._root);
 /** @internal */
-const get$6 = /* @__PURE__ */ dual(2, (self, key) => getHash(self, key, hash(key)));
+const get$6 = /*#__PURE__*/ dual(2, (self, key) => getHash(self, key, hash(key)));
 /** @internal */
-const getHash = /* @__PURE__ */ dual(3, (self, key, hash) => {
+const getHash = /*#__PURE__*/ dual(3, (self, key, hash) => {
 	let node = self._root;
 	let shift = 0;
 	while (true) switch (node._tag) {
@@ -4608,11 +4608,11 @@ const getHash = /* @__PURE__ */ dual(3, (self, key, hash) => {
 	}
 });
 /** @internal */
-const has$3 = /* @__PURE__ */ dual(2, (self, key) => isSome(getHash(self, key, hash(key))));
+const has$3 = /*#__PURE__*/ dual(2, (self, key) => isSome(getHash(self, key, hash(key))));
 /** @internal */
-const set$3 = /* @__PURE__ */ dual(3, (self, key, value) => modifyAt$1(self, key, () => some(value)));
+const set$3 = /*#__PURE__*/ dual(3, (self, key, value) => modifyAt$1(self, key, () => some(value)));
 /** @internal */
-const setTree = /* @__PURE__ */ dual(3, (self, newRoot, newSize) => {
+const setTree = /*#__PURE__*/ dual(3, (self, newRoot, newSize) => {
 	if (self._editable) {
 		self._root = newRoot;
 		self._size = newSize;
@@ -4632,25 +4632,25 @@ const endMutation$1 = (self) => {
 	return self;
 };
 /** @internal */
-const modifyAt$1 = /* @__PURE__ */ dual(3, (self, key, f) => modifyHash(self, key, hash(key), f));
+const modifyAt$1 = /*#__PURE__*/ dual(3, (self, key, f) => modifyHash(self, key, hash(key), f));
 /** @internal */
-const modifyHash = /* @__PURE__ */ dual(4, (self, key, hash, f) => {
+const modifyHash = /*#__PURE__*/ dual(4, (self, key, hash, f) => {
 	const size = { value: self._size };
 	return pipe(self, setTree(self._root.modify(self._editable ? self._edit : NaN, 0, f, hash, key, size), size.value));
 });
 /** @internal */
-const remove$2 = /* @__PURE__ */ dual(2, (self, key) => modifyAt$1(self, key, none$4));
+const remove$2 = /*#__PURE__*/ dual(2, (self, key) => modifyAt$1(self, key, none$4));
 /**
 * Maps over the entries of the `HashMap` using the specified function.
 *
 * @since 2.0.0
 * @category mapping
 */
-const map$4 = /* @__PURE__ */ dual(2, (self, f) => reduce$5(self, empty$17(), (map, value, key) => set$3(map, key, f(value, key))));
+const map$4 = /*#__PURE__*/ dual(2, (self, f) => reduce$5(self, empty$17(), (map, value, key) => set$3(map, key, f(value, key))));
 /** @internal */
-const forEach$3 = /* @__PURE__ */ dual(2, (self, f) => reduce$5(self, void 0, (_, value, key) => f(value, key)));
+const forEach$3 = /*#__PURE__*/ dual(2, (self, f) => reduce$5(self, void 0, (_, value, key) => f(value, key)));
 /** @internal */
-const reduce$5 = /* @__PURE__ */ dual(3, (self, zero, f) => {
+const reduce$5 = /*#__PURE__*/ dual(3, (self, zero, f) => {
 	const root = self._root;
 	if (root._tag === "LeafNode") return isSome(root.value) ? f(zero, root.value.value, root.key) : zero;
 	if (root._tag === "EmptyNode") return zero;
@@ -4668,7 +4668,7 @@ const reduce$5 = /* @__PURE__ */ dual(3, (self, zero, f) => {
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/hashSet.js
 const HashSetSymbolKey = "effect/HashSet";
 /** @internal */
-const HashSetTypeId = /* @__PURE__ */ Symbol.for(HashSetSymbolKey);
+const HashSetTypeId = /*#__PURE__*/ Symbol.for(HashSetSymbolKey);
 const HashSetProto = {
 	[HashSetTypeId]: HashSetTypeId,
 	[Symbol.iterator]() {
@@ -4705,7 +4705,7 @@ const makeImpl = (keyMap) => {
 };
 /** @internal */
 const isHashSet = (u) => hasProperty(u, HashSetTypeId);
-const _empty$4 = /* @__PURE__ */ makeImpl(/* @__PURE__ */ empty$17());
+const _empty$4 = /*#__PURE__*/ makeImpl(/*#__PURE__*/ empty$17());
 /** @internal */
 const empty$16 = () => _empty$4;
 /** @internal */
@@ -4721,7 +4721,7 @@ const make$19 = (...elements) => {
 	return endMutation(set);
 };
 /** @internal */
-const has$2 = /* @__PURE__ */ dual(2, (self, value) => has$3(self._keyMap, value));
+const has$2 = /*#__PURE__*/ dual(2, (self, value) => has$3(self._keyMap, value));
 /** @internal */
 const size$1 = (self) => size$2(self._keyMap);
 /** @internal */
@@ -4732,28 +4732,28 @@ const endMutation = (self) => {
 	return self;
 };
 /** @internal */
-const mutate = /* @__PURE__ */ dual(2, (self, f) => {
+const mutate = /*#__PURE__*/ dual(2, (self, f) => {
 	const transient = beginMutation(self);
 	f(transient);
 	return endMutation(transient);
 });
 /** @internal */
-const add$3 = /* @__PURE__ */ dual(2, (self, value) => self._keyMap._editable ? (set$3(value, true)(self._keyMap), self) : makeImpl(set$3(value, true)(self._keyMap)));
+const add$3 = /*#__PURE__*/ dual(2, (self, value) => self._keyMap._editable ? (set$3(value, true)(self._keyMap), self) : makeImpl(set$3(value, true)(self._keyMap)));
 /** @internal */
-const remove$1 = /* @__PURE__ */ dual(2, (self, value) => self._keyMap._editable ? (remove$2(value)(self._keyMap), self) : makeImpl(remove$2(value)(self._keyMap)));
+const remove$1 = /*#__PURE__*/ dual(2, (self, value) => self._keyMap._editable ? (remove$2(value)(self._keyMap), self) : makeImpl(remove$2(value)(self._keyMap)));
 /** @internal */
-const difference$1 = /* @__PURE__ */ dual(2, (self, that) => mutate(self, (set) => {
+const difference$1 = /*#__PURE__*/ dual(2, (self, that) => mutate(self, (set) => {
 	for (const value of that) remove$1(set, value);
 }));
 /** @internal */
-const union$1 = /* @__PURE__ */ dual(2, (self, that) => mutate(empty$16(), (set) => {
+const union$1 = /*#__PURE__*/ dual(2, (self, that) => mutate(empty$16(), (set) => {
 	forEach$2(self, (value) => add$3(set, value));
 	for (const value of that) add$3(set, value);
 }));
 /** @internal */
-const forEach$2 = /* @__PURE__ */ dual(2, (self, f) => forEach$3(self._keyMap, (_, k) => f(k)));
+const forEach$2 = /*#__PURE__*/ dual(2, (self, f) => forEach$3(self._keyMap, (_, k) => f(k)));
 /** @internal */
-const reduce$4 = /* @__PURE__ */ dual(3, (self, zero, f) => reduce$5(self._keyMap, zero, (z, _, a) => f(z, a)));
+const reduce$4 = /*#__PURE__*/ dual(3, (self, zero, f) => reduce$5(self._keyMap, zero, (z, _, a) => f(z, a)));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/HashSet.js
 /**
@@ -5435,7 +5435,7 @@ const OP_SEQUENTIAL$1 = "Sequential";
 /** @internal */
 const CauseSymbolKey = "effect/Cause";
 /** @internal */
-const CauseTypeId = /* @__PURE__ */ Symbol.for(CauseSymbolKey);
+const CauseTypeId = /*#__PURE__*/ Symbol.for(CauseSymbolKey);
 const variance$4 = { 
 /* c8 ignore next */
 _E: (_) => _ };
@@ -5489,8 +5489,8 @@ const proto$1 = {
 	}
 };
 /** @internal */
-const empty$14 = /* @__PURE__ */ (() => {
-	const o = /* @__PURE__ */ Object.create(proto$1);
+const empty$14 = /*#__PURE__*/ (() => {
+	const o = /*#__PURE__*/ Object.create(proto$1);
 	o._tag = OP_EMPTY$2;
 	return o;
 })();
@@ -5634,7 +5634,7 @@ const flattenCauseLoop = (causes, flattened) => {
 	throw new Error(getBugErrorMessage("Cause.flattenCauseLoop"));
 };
 /** @internal */
-const find = /* @__PURE__ */ dual(2, (self, pf) => {
+const find = /*#__PURE__*/ dual(2, (self, pf) => {
 	const stack = [self];
 	while (stack.length > 0) {
 		const item = stack.pop();
@@ -5721,7 +5721,7 @@ const IsInterruptedOnlyCauseReducer = {
 const OP_SEQUENTIAL_CASE = "SequentialCase";
 const OP_PARALLEL_CASE = "ParallelCase";
 /** @internal */
-const match$2 = /* @__PURE__ */ dual(2, (self, { onDie, onEmpty, onFail, onInterrupt, onParallel, onSequential }) => {
+const match$2 = /*#__PURE__*/ dual(2, (self, { onDie, onEmpty, onFail, onInterrupt, onParallel, onSequential }) => {
 	return reduceWithContext(self, void 0, {
 		emptyCase: () => onEmpty,
 		failCase: (_, error) => onFail(error),
@@ -5732,7 +5732,7 @@ const match$2 = /* @__PURE__ */ dual(2, (self, { onDie, onEmpty, onFail, onInter
 	});
 });
 /** @internal */
-const reduce$2 = /* @__PURE__ */ dual(3, (self, zero, pf) => {
+const reduce$2 = /*#__PURE__*/ dual(3, (self, zero, pf) => {
 	let accumulator = zero;
 	let cause = self;
 	const causes = [];
@@ -5757,7 +5757,7 @@ const reduce$2 = /* @__PURE__ */ dual(3, (self, zero, pf) => {
 	return accumulator;
 });
 /** @internal */
-const reduceWithContext = /* @__PURE__ */ dual(3, (self, context, reducer) => {
+const reduceWithContext = /*#__PURE__*/ dual(3, (self, context, reducer) => {
 	const input = [self];
 	const output = [];
 	while (input.length > 0) {
@@ -5874,7 +5874,7 @@ const prettyErrorMessage = (u) => {
 };
 const locationRegex = /\((.*)\)/g;
 /** @internal */
-const spanToTrace = /* @__PURE__ */ globalValue("effect/Tracer/spanToTrace", () => /* @__PURE__ */ new WeakMap());
+const spanToTrace = /*#__PURE__*/ globalValue("effect/Tracer/spanToTrace", () => /* @__PURE__ */ new WeakMap());
 const prettyErrorStack = (message, stack, span) => {
 	const out = [message];
 	const lines = stack.startsWith(message) ? stack.slice(message.length).split("\n") : stack.split("\n");
@@ -5911,7 +5911,7 @@ const prettyErrorStack = (message, stack, span) => {
 	return out.join("\n");
 };
 /** @internal */
-const spanSymbol = /* @__PURE__ */ Symbol.for("effect/SpanAnnotation");
+const spanSymbol = /*#__PURE__*/ Symbol.for("effect/SpanAnnotation");
 /** @internal */
 const prettyErrors = (cause) => reduceWithContext(cause, void 0, {
 	emptyCase: () => [],
@@ -5928,11 +5928,11 @@ const prettyErrors = (cause) => reduceWithContext(cause, void 0, {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/context.js
 /** @internal */
-const TagTypeId = /* @__PURE__ */ Symbol.for("effect/Context/Tag");
+const TagTypeId = /*#__PURE__*/ Symbol.for("effect/Context/Tag");
 /** @internal */
-const ReferenceTypeId = /* @__PURE__ */ Symbol.for("effect/Context/Reference");
+const ReferenceTypeId = /*#__PURE__*/ Symbol.for("effect/Context/Reference");
 /** @internal */
-const STMTypeId = /* @__PURE__ */ Symbol.for("effect/STM");
+const STMTypeId = /*#__PURE__*/ Symbol.for("effect/STM");
 /** @internal */
 const TagProto = {
 	...EffectPrototype$1,
@@ -6009,7 +6009,7 @@ const Reference$1 = () => (id, options) => {
 	return ReferenceClass;
 };
 /** @internal */
-const TypeId$8 = /* @__PURE__ */ Symbol.for("effect/Context");
+const TypeId$8 = /*#__PURE__*/ Symbol.for("effect/Context");
 /** @internal */
 const ContextProto = {
 	[TypeId$8]: { _Services: (_) => _ },
@@ -6067,18 +6067,18 @@ const serviceNotFoundError = (tag) => {
 const isContext = (u) => hasProperty(u, TypeId$8);
 /** @internal */
 const isReference = (u) => hasProperty(u, ReferenceTypeId);
-const _empty$3 = /* @__PURE__ */ makeContext(/* @__PURE__ */ new Map());
+const _empty$3 = /*#__PURE__*/ makeContext(/*#__PURE__*/ new Map());
 /** @internal */
 const empty$13 = () => _empty$3;
 /** @internal */
 const make$17 = (tag, service) => makeContext(new Map([[tag.key, service]]));
 /** @internal */
-const add$1 = /* @__PURE__ */ dual(3, (self, tag, service) => {
+const add$1 = /*#__PURE__*/ dual(3, (self, tag, service) => {
 	const map = new Map(self.unsafeMap);
 	map.set(tag.key, service);
 	return makeContext(map);
 });
-const defaultValueCache = /* @__PURE__ */ globalValue("effect/Context/defaultValueCache", () => /* @__PURE__ */ new Map());
+const defaultValueCache = /*#__PURE__*/ globalValue("effect/Context/defaultValueCache", () => /* @__PURE__ */ new Map());
 const getDefaultValue = (tag) => {
 	if (defaultValueCache.has(tag.key)) return defaultValueCache.get(tag.key);
 	const value = tag.defaultValue();
@@ -6090,7 +6090,7 @@ const unsafeGetReference = (self, tag) => {
 	return self.unsafeMap.has(tag.key) ? self.unsafeMap.get(tag.key) : getDefaultValue(tag);
 };
 /** @internal */
-const unsafeGet$1 = /* @__PURE__ */ dual(2, (self, tag) => {
+const unsafeGet$1 = /*#__PURE__*/ dual(2, (self, tag) => {
 	if (!self.unsafeMap.has(tag.key)) {
 		if (ReferenceTypeId in tag) return getDefaultValue(tag);
 		throw serviceNotFoundError(tag);
@@ -6100,12 +6100,12 @@ const unsafeGet$1 = /* @__PURE__ */ dual(2, (self, tag) => {
 /** @internal */
 const get$5 = unsafeGet$1;
 /** @internal */
-const getOption$1 = /* @__PURE__ */ dual(2, (self, tag) => {
+const getOption$1 = /*#__PURE__*/ dual(2, (self, tag) => {
 	if (!self.unsafeMap.has(tag.key)) return isReference(tag) ? some$1(getDefaultValue(tag)) : none$5;
 	return some$1(self.unsafeMap.get(tag.key));
 });
 /** @internal */
-const merge$2 = /* @__PURE__ */ dual(2, (self, that) => {
+const merge$2 = /*#__PURE__*/ dual(2, (self, that) => {
 	const map = new Map(self.unsafeMap);
 	for (const [tag, s] of that.unsafeMap) map.set(tag, s);
 	return makeContext(map);
@@ -6358,13 +6358,13 @@ const Reference = Reference$1;
 /**
 * @since 2.0.0
 */
-const TypeId$7 = /* @__PURE__ */ Symbol.for("effect/Duration");
-const bigint0$1 = /* @__PURE__ */ BigInt(0);
-const bigint24 = /* @__PURE__ */ BigInt(24);
-const bigint60 = /* @__PURE__ */ BigInt(60);
-const bigint1e3 = /* @__PURE__ */ BigInt(1e3);
-const bigint1e6 = /* @__PURE__ */ BigInt(1e6);
-const bigint1e9 = /* @__PURE__ */ BigInt(1e9);
+const TypeId$7 = /*#__PURE__*/ Symbol.for("effect/Duration");
+const bigint0$1 = /*#__PURE__*/ BigInt(0);
+const bigint24 = /*#__PURE__*/ BigInt(24);
+const bigint60 = /*#__PURE__*/ BigInt(60);
+const bigint1e3 = /*#__PURE__*/ BigInt(1e3);
+const bigint1e6 = /*#__PURE__*/ BigInt(1e6);
+const bigint1e9 = /*#__PURE__*/ BigInt(1e9);
 const DURATION_REGEX = /^(-?\d+(?:\.\d+)?)\s+(nanos?|micros?|millis?|seconds?|minutes?|hours?|days?|weeks?)$/;
 /**
 * @since 2.0.0
@@ -6489,12 +6489,12 @@ const isZero = (self) => {
 * @since 2.0.0
 * @category constructors
 */
-const zero = /* @__PURE__ */ make$15(0);
+const zero = /*#__PURE__*/ make$15(0);
 /**
 * @since 2.0.0
 * @category constructors
 */
-const infinity = /* @__PURE__ */ make$15(Infinity);
+const infinity = /*#__PURE__*/ make$15(Infinity);
 /**
 * @since 2.0.0
 * @category constructors
@@ -6591,7 +6591,7 @@ const toHrTime = (self) => {
 * @since 2.0.0
 * @category pattern matching
 */
-const match$1 = /* @__PURE__ */ dual(2, (self, options) => {
+const match$1 = /*#__PURE__*/ dual(2, (self, options) => {
 	const _self = decode(self);
 	switch (_self.value._tag) {
 		case "Nanos": return options.onNanos(_self.value.nanos);
@@ -6603,7 +6603,7 @@ const match$1 = /* @__PURE__ */ dual(2, (self, options) => {
 * @since 2.0.0
 * @category pattern matching
 */
-const matchWith = /* @__PURE__ */ dual(3, (self, that, options) => {
+const matchWith = /*#__PURE__*/ dual(3, (self, that, options) => {
 	const _self = decode(self);
 	const _that = decode(that);
 	if (_self.value._tag === "Infinity" || _that.value._tag === "Infinity") return options.onMillis(toMillis(_self), toMillis(_that));
@@ -6626,7 +6626,7 @@ const Equivalence$2 = (self, that) => matchWith(self, that, {
 * @since 2.0.0
 * @category predicates
 */
-const lessThanOrEqualTo$1 = /* @__PURE__ */ dual(2, (self, that) => matchWith(self, that, {
+const lessThanOrEqualTo$1 = /*#__PURE__*/ dual(2, (self, that) => matchWith(self, that, {
 	onMillis: (self, that) => self <= that,
 	onNanos: (self, that) => self <= that
 }));
@@ -6634,7 +6634,7 @@ const lessThanOrEqualTo$1 = /* @__PURE__ */ dual(2, (self, that) => matchWith(se
 * @since 2.0.0
 * @category predicates
 */
-const greaterThanOrEqualTo$1 = /* @__PURE__ */ dual(2, (self, that) => matchWith(self, that, {
+const greaterThanOrEqualTo$1 = /*#__PURE__*/ dual(2, (self, that) => matchWith(self, that, {
 	onMillis: (self, that) => self >= that,
 	onNanos: (self, that) => self >= that
 }));
@@ -6642,7 +6642,7 @@ const greaterThanOrEqualTo$1 = /* @__PURE__ */ dual(2, (self, that) => matchWith
 * @since 2.0.0
 * @category predicates
 */
-const equals = /* @__PURE__ */ dual(2, (self, that) => Equivalence$2(decode(self), decode(that)));
+const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$2(decode(self), decode(that)));
 /**
 * Converts a `Duration` to its parts.
 *
@@ -6703,7 +6703,7 @@ const format$2 = (self) => {
 };
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/MutableRef.js
-const TypeId$6 = /* @__PURE__ */ Symbol.for("effect/MutableRef");
+const TypeId$6 = /*#__PURE__*/ Symbol.for("effect/MutableRef");
 const MutableRefProto = {
 	[TypeId$6]: TypeId$6,
 	toString() {
@@ -6740,7 +6740,7 @@ const get$3 = (self) => self.current;
 * @since 2.0.0
 * @category general
 */
-const set$2 = /* @__PURE__ */ dual(2, (self, value) => {
+const set$2 = /*#__PURE__*/ dual(2, (self, value) => {
 	self.current = value;
 	return self;
 });
@@ -6749,14 +6749,14 @@ const set$2 = /* @__PURE__ */ dual(2, (self, value) => {
 /** @internal */
 const FiberIdSymbolKey = "effect/FiberId";
 /** @internal */
-const FiberIdTypeId = /* @__PURE__ */ Symbol.for(FiberIdSymbolKey);
+const FiberIdTypeId = /*#__PURE__*/ Symbol.for(FiberIdSymbolKey);
 /** @internal */
 const OP_NONE = "None";
 /** @internal */
 const OP_RUNTIME = "Runtime";
 /** @internal */
 const OP_COMPOSITE = "Composite";
-const emptyHash = /* @__PURE__ */ string(`${FiberIdSymbolKey}-${OP_NONE}`);
+const emptyHash = /*#__PURE__*/ string(`${FiberIdSymbolKey}-${OP_NONE}`);
 /** @internal */
 var None$2 = class {
 	[FiberIdTypeId] = FiberIdTypeId;
@@ -6846,7 +6846,7 @@ var Composite$1 = class {
 	}
 };
 /** @internal */
-const none$3 = /* @__PURE__ */ new None$2();
+const none$3 = /*#__PURE__*/ new None$2();
 /** @internal */
 const runtime$1 = (id, startTimeMillis) => {
 	return new Runtime(id, startTimeMillis);
@@ -6865,7 +6865,7 @@ const ids = (self) => {
 		case OP_COMPOSITE: return pipe(ids(self.left), union(ids(self.right)));
 	}
 };
-const _fiberCounter = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Fiber/Id/_fiberCounter"), () => make$14(0));
+const _fiberCounter = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Fiber/Id/_fiberCounter"), () => make$14(0));
 /** @internal */
 const threadName$1 = (self) => {
 	return Array.from(ids(self)).map((n) => `#${n}`).join(",");
@@ -7017,7 +7017,7 @@ const reduce$1 = reduce$5;
 * @since 2.0.0
 * @category symbol
 */
-const TypeId$5 = /* @__PURE__ */ Symbol.for("effect/List");
+const TypeId$5 = /*#__PURE__*/ Symbol.for("effect/List");
 /**
 * Converts the specified `List` to an `Array`.
 *
@@ -7030,7 +7030,7 @@ const toArray = (self) => fromIterable$6(self);
 * @since 2.0.0
 */
 const getEquivalence = (isEquivalent) => mapInput$1(getEquivalence$2(isEquivalent), toArray);
-const _equivalence = /* @__PURE__ */ getEquivalence(equals$2);
+const _equivalence = /*#__PURE__*/ getEquivalence(equals$2);
 const ConsProto = {
 	[TypeId$5]: TypeId$5,
 	_tag: "Cons",
@@ -7089,8 +7089,8 @@ const makeCons = (head, tail) => {
 	cons.tail = tail;
 	return cons;
 };
-const NilHash = /* @__PURE__ */ string("Nil");
-const _Nil = /* @__PURE__ */ Object.create({
+const NilHash = /*#__PURE__*/ string("Nil");
+const _Nil = /*#__PURE__*/ Object.create({
 	[TypeId$5]: TypeId$5,
 	_tag: "Nil",
 	toString() {
@@ -7192,14 +7192,14 @@ const of = (value) => makeCons(value, _Nil);
 * @category concatenating
 * @since 2.0.0
 */
-const appendAll = /* @__PURE__ */ dual(2, (self, that) => prependAll(that, self));
+const appendAll = /*#__PURE__*/ dual(2, (self, that) => prependAll(that, self));
 /**
 * Prepends the specified element to the beginning of the list.
 *
 * @category concatenating
 * @since 2.0.0
 */
-const prepend = /* @__PURE__ */ dual(2, (self, element) => cons(element, self));
+const prepend = /*#__PURE__*/ dual(2, (self, element) => cons(element, self));
 /**
 * Prepends the specified prefix list to the beginning of the specified list.
 * If either list is non-empty, the result is also a non-empty list.
@@ -7218,7 +7218,7 @@ const prepend = /* @__PURE__ */ dual(2, (self, element) => cons(element, self));
 * @category concatenating
 * @since 2.0.0
 */
-const prependAll = /* @__PURE__ */ dual(2, (self, prefix) => {
+const prependAll = /*#__PURE__*/ dual(2, (self, prefix) => {
 	if (isNil(self)) return prefix;
 	else if (isNil(prefix)) return self;
 	else {
@@ -7241,7 +7241,7 @@ const prependAll = /* @__PURE__ */ dual(2, (self, prefix) => {
 * @since 2.0.0
 * @category folding
 */
-const reduce = /* @__PURE__ */ dual(3, (self, zero, f) => {
+const reduce = /*#__PURE__*/ dual(3, (self, zero, f) => {
 	let acc = zero;
 	let these = self;
 	while (!isNil(these)) {
@@ -7267,7 +7267,7 @@ const reverse = (self) => {
 };
 Array.prototype;
 /** @internal */
-const Structural = /* @__PURE__ */ function() {
+const Structural = /*#__PURE__*/ function() {
 	function Structural(args) {
 		if (args) Object.assign(this, args);
 	}
@@ -7277,7 +7277,7 @@ const Structural = /* @__PURE__ */ function() {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/differ/contextPatch.js
 /** @internal */
-const ContextPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferContextPatch");
+const ContextPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferContextPatch");
 function variance$3(a) {
 	return a;
 }
@@ -7289,32 +7289,32 @@ const PatchProto$2 = {
 		_Patch: variance$3
 	}
 };
-const _empty$2 = /* @__PURE__ */ Object.create(/* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$2), { _tag: "Empty" }));
+const _empty$2 = /*#__PURE__*/ Object.create(/* @__PURE__ */ Object.assign(/*#__PURE__*/ Object.create(PatchProto$2), { _tag: "Empty" }));
 /**
 * @internal
 */
 const empty$9 = () => _empty$2;
-const AndThenProto$2 = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$2), { _tag: "AndThen" });
+const AndThenProto$2 = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$2), { _tag: "AndThen" });
 const makeAndThen$2 = (first, second) => {
 	const o = Object.create(AndThenProto$2);
 	o.first = first;
 	o.second = second;
 	return o;
 };
-const AddServiceProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$2), { _tag: "AddService" });
+const AddServiceProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$2), { _tag: "AddService" });
 const makeAddService = (key, service) => {
 	const o = Object.create(AddServiceProto);
 	o.key = key;
 	o.service = service;
 	return o;
 };
-const RemoveServiceProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$2), { _tag: "RemoveService" });
+const RemoveServiceProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$2), { _tag: "RemoveService" });
 const makeRemoveService = (key) => {
 	const o = Object.create(RemoveServiceProto);
 	o.key = key;
 	return o;
 };
-const UpdateServiceProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$2), { _tag: "UpdateService" });
+const UpdateServiceProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$2), { _tag: "UpdateService" });
 const makeUpdateService = (key, update) => {
 	const o = Object.create(UpdateServiceProto);
 	o.key = key;
@@ -7337,9 +7337,9 @@ const diff$6 = (oldValue, newValue) => {
 	return patch;
 };
 /** @internal */
-const combine$4 = /* @__PURE__ */ dual(2, (self, that) => makeAndThen$2(self, that));
+const combine$4 = /*#__PURE__*/ dual(2, (self, that) => makeAndThen$2(self, that));
 /** @internal */
-const patch$7 = /* @__PURE__ */ dual(2, (self, context) => {
+const patch$7 = /*#__PURE__*/ dual(2, (self, context) => {
 	if (self._tag === "Empty") return context;
 	let wasServiceUpdated = false;
 	let patches = of$1(self);
@@ -7381,7 +7381,7 @@ const patch$7 = /* @__PURE__ */ dual(2, (self, context) => {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/differ/hashSetPatch.js
 /** @internal */
-const HashSetPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferHashSetPatch");
+const HashSetPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferHashSetPatch");
 function variance$2(a) {
 	return a;
 }
@@ -7394,10 +7394,10 @@ const PatchProto$1 = {
 		_Patch: variance$2
 	}
 };
-const _empty$1 = /* @__PURE__ */ Object.create(/* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$1), { _tag: "Empty" }));
+const _empty$1 = /*#__PURE__*/ Object.create(/* @__PURE__ */ Object.assign(/*#__PURE__*/ Object.create(PatchProto$1), { _tag: "Empty" }));
 /** @internal */
 const empty$8 = () => _empty$1;
-const AndThenProto$1 = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$1), { _tag: "AndThen" });
+const AndThenProto$1 = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$1), { _tag: "AndThen" });
 /** @internal */
 const makeAndThen$1 = (first, second) => {
 	const o = Object.create(AndThenProto$1);
@@ -7405,14 +7405,14 @@ const makeAndThen$1 = (first, second) => {
 	o.second = second;
 	return o;
 };
-const AddProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$1), { _tag: "Add" });
+const AddProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$1), { _tag: "Add" });
 /** @internal */
 const makeAdd = (value) => {
 	const o = Object.create(AddProto);
 	o.value = value;
 	return o;
 };
-const RemoveProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto$1), { _tag: "Remove" });
+const RemoveProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto$1), { _tag: "Remove" });
 /** @internal */
 const makeRemove = (value) => {
 	const o = Object.create(RemoveProto);
@@ -7428,9 +7428,9 @@ const diff$5 = (oldValue, newValue) => {
 	return reduce$3(patch, (patch, value) => combine$3(makeRemove(value))(patch))(removed);
 };
 /** @internal */
-const combine$3 = /* @__PURE__ */ dual(2, (self, that) => makeAndThen$1(self, that));
+const combine$3 = /*#__PURE__*/ dual(2, (self, that) => makeAndThen$1(self, that));
 /** @internal */
-const patch$6 = /* @__PURE__ */ dual(2, (self, oldValue) => {
+const patch$6 = /*#__PURE__*/ dual(2, (self, oldValue) => {
 	if (self._tag === "Empty") return oldValue;
 	let set = oldValue;
 	let patches = of$1(self);
@@ -7458,7 +7458,7 @@ const patch$6 = /* @__PURE__ */ dual(2, (self, oldValue) => {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/differ/readonlyArrayPatch.js
 /** @internal */
-const ReadonlyArrayPatchTypeId = /* @__PURE__ */ Symbol.for("effect/DifferReadonlyArrayPatch");
+const ReadonlyArrayPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferReadonlyArrayPatch");
 function variance$1(a) {
 	return a;
 }
@@ -7469,32 +7469,32 @@ const PatchProto = {
 		_Patch: variance$1
 	}
 };
-const _empty = /* @__PURE__ */ Object.create(/* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto), { _tag: "Empty" }));
+const _empty = /*#__PURE__*/ Object.create(/* @__PURE__ */ Object.assign(/*#__PURE__*/ Object.create(PatchProto), { _tag: "Empty" }));
 /**
 * @internal
 */
 const empty$7 = () => _empty;
-const AndThenProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto), { _tag: "AndThen" });
+const AndThenProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto), { _tag: "AndThen" });
 const makeAndThen = (first, second) => {
 	const o = Object.create(AndThenProto);
 	o.first = first;
 	o.second = second;
 	return o;
 };
-const AppendProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto), { _tag: "Append" });
+const AppendProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto), { _tag: "Append" });
 const makeAppend = (values) => {
 	const o = Object.create(AppendProto);
 	o.values = values;
 	return o;
 };
-const SliceProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto), { _tag: "Slice" });
+const SliceProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto), { _tag: "Slice" });
 const makeSlice = (from, until) => {
 	const o = Object.create(SliceProto);
 	o.from = from;
 	o.until = until;
 	return o;
 };
-const UpdateProto = /* @__PURE__ */ Object.assign(/* @__PURE__ */ Object.create(PatchProto), { _tag: "Update" });
+const UpdateProto = /*#__PURE__*/ Object.assign(/*#__PURE__*/ Object.create(PatchProto), { _tag: "Update" });
 const makeUpdate = (index, patch) => {
 	const o = Object.create(UpdateProto);
 	o.index = index;
@@ -7517,9 +7517,9 @@ const diff$4 = (options) => {
 	return patch;
 };
 /** @internal */
-const combine$2 = /* @__PURE__ */ dual(2, (self, that) => makeAndThen(self, that));
+const combine$2 = /*#__PURE__*/ dual(2, (self, that) => makeAndThen(self, that));
 /** @internal */
-const patch$5 = /* @__PURE__ */ dual(3, (self, oldValue, differ) => {
+const patch$5 = /*#__PURE__*/ dual(3, (self, oldValue, differ) => {
 	if (self._tag === "Empty") return oldValue;
 	let readonlyArray = oldValue.slice();
 	let patches = of$2(self);
@@ -7623,40 +7623,40 @@ const enabled = (patch) => patch >> BIT_SHIFT & BIT_MASK;
 /** @internal */
 const make$12 = (active, enabled) => (active & BIT_MASK) + ((enabled & active & BIT_MASK) << BIT_SHIFT);
 /** @internal */
-const empty$6 = /* @__PURE__ */ make$12(0, 0);
+const empty$6 = /*#__PURE__*/ make$12(0, 0);
 /** @internal */
 const enable$2 = (flag) => make$12(flag, flag);
 /** @internal */
 const disable$1 = (flag) => make$12(flag, 0);
 /** @internal */
-const exclude$1 = /* @__PURE__ */ dual(2, (self, flag) => make$12(active(self) & ~flag, enabled(self)));
+const exclude$1 = /*#__PURE__*/ dual(2, (self, flag) => make$12(active(self) & ~flag, enabled(self)));
 /** @internal */
-const andThen = /* @__PURE__ */ dual(2, (self, that) => self | that);
+const andThen = /*#__PURE__*/ dual(2, (self, that) => self | that);
 /** @internal */
 const invert = (n) => ~n >>> 0 & BIT_MASK;
 /** @internal */
 const cooperativeYielding = (self) => isEnabled(self, 32);
 /** @internal */
-const enable$1 = /* @__PURE__ */ dual(2, (self, flag) => self | flag);
+const enable$1 = /*#__PURE__*/ dual(2, (self, flag) => self | flag);
 /** @internal */
 const interruptible$2 = (self) => interruption(self) && !windDown(self);
 /** @internal */
 const interruption = (self) => isEnabled(self, 1);
 /** @internal */
-const isEnabled = /* @__PURE__ */ dual(2, (self, flag) => (self & flag) !== 0);
+const isEnabled = /*#__PURE__*/ dual(2, (self, flag) => (self & flag) !== 0);
 /** @internal */
 const make$11 = (...flags) => flags.reduce((a, b) => a | b, 0);
 /** @internal */
-const none$1 = /* @__PURE__ */ make$11(0);
+const none$1 = /*#__PURE__*/ make$11(0);
 /** @internal */
 const runtimeMetrics = (self) => isEnabled(self, 4);
 const windDown = (self) => isEnabled(self, 16);
 /** @internal */
-const diff$3 = /* @__PURE__ */ dual(2, (self, that) => make$12(self ^ that, that));
+const diff$3 = /*#__PURE__*/ dual(2, (self, that) => make$12(self ^ that, that));
 /** @internal */
-const patch$4 = /* @__PURE__ */ dual(2, (self, patch) => self & (invert(active(patch)) | enabled(patch)) | active(patch) & enabled(patch));
+const patch$4 = /*#__PURE__*/ dual(2, (self, patch) => self & (invert(active(patch)) | enabled(patch)) | active(patch) & enabled(patch));
 /** @internal */
-const differ$1 = /* @__PURE__ */ make$13({
+const differ$1 = /*#__PURE__*/ make$13({
 	empty: empty$6,
 	diff: (oldValue, newValue) => diff$3(oldValue, newValue),
 	combine: (first, second) => andThen(second)(first),
@@ -7801,7 +7801,7 @@ const merge = (sequential, parallel) => {
 	return cons(parallelCollectionToSequentialCollection(parallel), sequential);
 };
 /** @internal */
-const RequestBlockParallelTypeId = /* @__PURE__ */ Symbol.for("effect/RequestBlock/RequestBlockParallel");
+const RequestBlockParallelTypeId = /*#__PURE__*/ Symbol.for("effect/RequestBlock/RequestBlockParallel");
 const parallelVariance = { 
 /* c8 ignore next */
 _R: (_) => _ };
@@ -7828,7 +7828,7 @@ const parallelCollectionKeys = (self) => Array.from(keys(self.map));
 /** @internal */
 const parallelCollectionToSequentialCollection = (self) => sequentialCollectionMake(map$3(self.map, (x) => of$1(x)));
 /** @internal */
-const SequentialCollectionTypeId = /* @__PURE__ */ Symbol.for("effect/RequestBlock/RequestBlockSequential");
+const SequentialCollectionTypeId = /*#__PURE__*/ Symbol.for("effect/RequestBlock/RequestBlockSequential");
 const sequentialVariance = { 
 /* c8 ignore next */
 _R: (_) => _ };
@@ -7857,7 +7857,7 @@ const OP_STATE_PENDING = "Pending";
 /** @internal */
 const OP_STATE_DONE = "Done";
 /** @internal */
-const DeferredTypeId = /* @__PURE__ */ Symbol.for("effect/Deferred");
+const DeferredTypeId = /*#__PURE__*/ Symbol.for("effect/Deferred");
 /** @internal */
 const deferredVariance = {
 	/* c8 ignore next */
@@ -7930,7 +7930,7 @@ const runRequestBlock = (blockedRequests) => {
 	return effect;
 };
 /** @internal */
-const EffectTypeId = /* @__PURE__ */ Symbol.for("effect/Effect");
+const EffectTypeId = /*#__PURE__*/ Symbol.for("effect/Effect");
 /** @internal */
 var RevertFlags = class {
 	patch;
@@ -8068,7 +8068,7 @@ const withFiberRuntime = (withRuntime) => {
 	effect.effect_instruction_i0 = withRuntime;
 	return effect;
 };
-const acquireUseRelease = /* @__PURE__ */ dual(3, (acquire, use, release) => uninterruptibleMask$1((restore) => flatMap$3(acquire, (a) => flatMap$3(exit(suspend$2(() => restore(use(a)))), (exit) => {
+const acquireUseRelease = /*#__PURE__*/ dual(3, (acquire, use, release) => uninterruptibleMask$1((restore) => flatMap$3(acquire, (a) => flatMap$3(exit(suspend$2(() => restore(use(a)))), (exit) => {
 	return suspend$2(() => release(a, exit)).pipe(matchCauseEffect$1({
 		onFailure: (cause) => {
 			switch (exit._tag) {
@@ -8079,7 +8079,7 @@ const acquireUseRelease = /* @__PURE__ */ dual(3, (acquire, use, release) => uni
 		onSuccess: () => exit
 	}));
 }))));
-const as = /* @__PURE__ */ dual(2, (self, value) => flatMap$3(self, () => succeed$2(value)));
+const as = /*#__PURE__*/ dual(2, (self, value) => flatMap$3(self, () => succeed$2(value)));
 const asVoid = (self) => as(self, void 0);
 const custom = function() {
 	const wrapper = new EffectPrimitive(OP_COMMIT);
@@ -8139,11 +8139,11 @@ const async_ = (resume, blockingOn = none$2) => {
 		}) : effect;
 	});
 };
-const catchAll$1 = /* @__PURE__ */ dual(2, (self, f) => matchEffect(self, {
+const catchAll$1 = /*#__PURE__*/ dual(2, (self, f) => matchEffect(self, {
 	onFailure: f,
 	onSuccess: succeed$2
 }));
-const originalSymbol = /* @__PURE__ */ Symbol.for("effect/OriginalAnnotation");
+const originalSymbol = /*#__PURE__*/ Symbol.for("effect/OriginalAnnotation");
 const capture = (obj, span) => {
 	if (isSome(span)) return new Proxy(obj, {
 		has(target, p) {
@@ -8175,9 +8175,9 @@ const failCause$1 = (cause) => {
 	return effect;
 };
 const failCauseSync = (evaluate) => flatMap$3(sync(evaluate), failCause$1);
-const fiberId = /* @__PURE__ */ withFiberRuntime((state) => succeed$2(state.id()));
+const fiberId = /*#__PURE__*/ withFiberRuntime((state) => succeed$2(state.id()));
 const fiberIdWith = (f) => withFiberRuntime((state) => f(state.id()));
-const flatMap$3 = /* @__PURE__ */ dual(2, (self, f) => {
+const flatMap$3 = /*#__PURE__*/ dual(2, (self, f) => {
 	const effect = new EffectPrimitive(OP_ON_SUCCESS);
 	effect.effect_instruction_i0 = self;
 	effect.effect_instruction_i1 = f;
@@ -8189,18 +8189,18 @@ const step = (self) => {
 	return effect;
 };
 const flatten$1 = (self) => flatMap$3(self, identity);
-const matchCause = /* @__PURE__ */ dual(2, (self, options) => matchCauseEffect$1(self, {
+const matchCause = /*#__PURE__*/ dual(2, (self, options) => matchCauseEffect$1(self, {
 	onFailure: (cause) => succeed$2(options.onFailure(cause)),
 	onSuccess: (a) => succeed$2(options.onSuccess(a))
 }));
-const matchCauseEffect$1 = /* @__PURE__ */ dual(2, (self, options) => {
+const matchCauseEffect$1 = /*#__PURE__*/ dual(2, (self, options) => {
 	const effect = new EffectPrimitive(OP_ON_SUCCESS_AND_FAILURE);
 	effect.effect_instruction_i0 = self;
 	effect.effect_instruction_i1 = options.onFailure;
 	effect.effect_instruction_i2 = options.onSuccess;
 	return effect;
 });
-const matchEffect = /* @__PURE__ */ dual(2, (self, options) => matchCauseEffect$1(self, {
+const matchEffect = /*#__PURE__*/ dual(2, (self, options) => matchCauseEffect$1(self, {
 	onFailure: (cause) => {
 		if (defects(cause).length > 0) return failCause$1(electFailures(cause));
 		const failures$2 = failures(cause);
@@ -8209,7 +8209,7 @@ const matchEffect = /* @__PURE__ */ dual(2, (self, options) => matchCauseEffect$
 	},
 	onSuccess: options.onSuccess
 }));
-const forEachSequential = /* @__PURE__ */ dual(2, (self, f) => suspend$2(() => {
+const forEachSequential = /*#__PURE__*/ dual(2, (self, f) => suspend$2(() => {
 	const arr = fromIterable$6(self);
 	const ret = allocate(arr.length);
 	let i = 0;
@@ -8221,7 +8221,7 @@ const forEachSequential = /* @__PURE__ */ dual(2, (self, f) => suspend$2(() => {
 		}
 	}), ret);
 }));
-const forEachSequentialDiscard = /* @__PURE__ */ dual(2, (self, f) => suspend$2(() => {
+const forEachSequentialDiscard = /*#__PURE__*/ dual(2, (self, f) => suspend$2(() => {
 	const arr = fromIterable$6(self);
 	let i = 0;
 	return whileLoop({
@@ -8238,12 +8238,12 @@ const interruptible$1 = (self) => {
 	effect.effect_instruction_i1 = () => self;
 	return effect;
 };
-const map$2 = /* @__PURE__ */ dual(2, (self, f) => flatMap$3(self, (a) => sync(() => f(a))));
-const mapBoth$2 = /* @__PURE__ */ dual(2, (self, options) => matchEffect(self, {
+const map$2 = /*#__PURE__*/ dual(2, (self, f) => flatMap$3(self, (a) => sync(() => f(a))));
+const mapBoth$2 = /*#__PURE__*/ dual(2, (self, options) => matchEffect(self, {
 	onFailure: (e) => failSync(() => options.onFailure(e)),
 	onSuccess: (a) => sync(() => options.onSuccess(a))
 }));
-const mapError$2 = /* @__PURE__ */ dual(2, (self, f) => matchCauseEffect$1(self, {
+const mapError$2 = /*#__PURE__*/ dual(2, (self, f) => matchCauseEffect$1(self, {
 	onFailure: (cause) => {
 		const either = failureOrCause(cause);
 		switch (either._tag) {
@@ -8253,7 +8253,7 @@ const mapError$2 = /* @__PURE__ */ dual(2, (self, f) => matchCauseEffect$1(self,
 	},
 	onSuccess: succeed$2
 }));
-const onExit$1 = /* @__PURE__ */ dual(2, (self, cleanup) => uninterruptibleMask$1((restore) => matchCauseEffect$1(restore(self), {
+const onExit$1 = /*#__PURE__*/ dual(2, (self, cleanup) => uninterruptibleMask$1((restore) => matchCauseEffect$1(restore(self), {
 	onFailure: (cause1) => {
 		const result = exitFailCause$1(cause1);
 		return matchCauseEffect$1(cleanup(result), {
@@ -8266,7 +8266,7 @@ const onExit$1 = /* @__PURE__ */ dual(2, (self, cleanup) => uninterruptibleMask$
 		return zipRight(cleanup(result), result);
 	}
 })));
-const onInterrupt = /* @__PURE__ */ dual(2, (self, cleanup) => onExit$1(self, exitMatch({
+const onInterrupt = /*#__PURE__*/ dual(2, (self, cleanup) => onExit$1(self, exitMatch({
 	onFailure: (cause) => isInterruptedOnly(cause) ? asVoid(cleanup(interruptors(cause))) : void_$1,
 	onSuccess: () => void_$1
 })));
@@ -8285,7 +8285,7 @@ const sync = (thunk) => {
 	effect.effect_instruction_i0 = thunk;
 	return effect;
 };
-const tap = /* @__PURE__ */ dual((args) => args.length === 3 || args.length === 2 && !(isObject(args[1]) && "onlyEffect" in args[1]), (self, f) => flatMap$3(self, (a) => {
+const tap = /*#__PURE__*/ dual((args) => args.length === 3 || args.length === 2 && !(isObject(args[1]) && "onlyEffect" in args[1]), (self, f) => flatMap$3(self, (a) => {
 	const b = typeof f === "function" ? f(a) : f;
 	if (isEffect$1(b)) return as(b, a);
 	else if (isPromiseLike(b)) return unsafeAsync((resume) => {
@@ -8308,7 +8308,7 @@ const uninterruptibleMask$1 = (f) => custom(f, function() {
 	effect.effect_instruction_i1 = (oldFlags) => interruption(oldFlags) ? internalCall(() => this.effect_instruction_i0(interruptible$1)) : internalCall(() => this.effect_instruction_i0(uninterruptible));
 	return effect;
 });
-const void_$1 = /* @__PURE__ */ succeed$2(void 0);
+const void_$1 = /*#__PURE__*/ succeed$2(void 0);
 const updateRuntimeFlags = (patch) => {
 	const effect = new EffectPrimitive(OP_UPDATE_RUNTIME_FLAGS);
 	effect.effect_instruction_i0 = patch;
@@ -8326,11 +8326,11 @@ const yieldNow$2 = (options) => {
 	const effect = new EffectPrimitive(OP_YIELD);
 	return typeof options?.priority !== "undefined" ? withSchedulingPriority(effect, options.priority) : effect;
 };
-const zip = /* @__PURE__ */ dual(2, (self, that) => flatMap$3(self, (a) => map$2(that, (b) => [a, b])));
-const zipLeft = /* @__PURE__ */ dual(2, (self, that) => flatMap$3(self, (a) => as(that, a)));
-const zipRight = /* @__PURE__ */ dual(2, (self, that) => flatMap$3(self, () => that));
+const zip = /*#__PURE__*/ dual(2, (self, that) => flatMap$3(self, (a) => map$2(that, (b) => [a, b])));
+const zipLeft = /*#__PURE__*/ dual(2, (self, that) => flatMap$3(self, (a) => as(that, a)));
+const zipRight = /*#__PURE__*/ dual(2, (self, that) => flatMap$3(self, () => that));
 const interruptFiber = (self) => flatMap$3(fiberId, (fiberId) => pipe(self, interruptAsFiber(fiberId)));
-const interruptAsFiber = /* @__PURE__ */ dual(2, (self, fiberId) => flatMap$3(self.interruptAsFork(fiberId), () => self.await));
+const interruptAsFiber = /*#__PURE__*/ dual(2, (self, fiberId) => flatMap$3(self.interruptAsFork(fiberId), () => self.await));
 /** @internal */
 const logLevelAll = {
 	_tag: "All",
@@ -8412,19 +8412,19 @@ const logLevelNone = {
 	}
 };
 /** @internal */
-const FiberRefTypeId = /* @__PURE__ */ Symbol.for("effect/FiberRef");
+const FiberRefTypeId = /*#__PURE__*/ Symbol.for("effect/FiberRef");
 const fiberRefVariance = { 
 /* c8 ignore next */
 _A: (_) => _ };
 const fiberRefGet = (self) => withFiberRuntime((fiber) => exitSucceed$1(fiber.getFiberRef(self)));
-const fiberRefGetWith = /* @__PURE__ */ dual(2, (self, f) => flatMap$3(fiberRefGet(self), f));
-const fiberRefSet = /* @__PURE__ */ dual(2, (self, value) => fiberRefModify(self, () => [void 0, value]));
-const fiberRefModify = /* @__PURE__ */ dual(2, (self, f) => withFiberRuntime((state) => {
+const fiberRefGetWith = /*#__PURE__*/ dual(2, (self, f) => flatMap$3(fiberRefGet(self), f));
+const fiberRefSet = /*#__PURE__*/ dual(2, (self, value) => fiberRefModify(self, () => [void 0, value]));
+const fiberRefModify = /*#__PURE__*/ dual(2, (self, f) => withFiberRuntime((state) => {
 	const [b, a] = f(state.getFiberRef(self));
 	state.setFiberRef(self, a);
 	return succeed$2(b);
 }));
-const fiberRefLocally = /* @__PURE__ */ dual(3, (use, self, value) => acquireUseRelease(zipLeft(fiberRefGet(self), fiberRefSet(self, value)), () => use, (oldValue) => fiberRefSet(self, oldValue)));
+const fiberRefLocally = /*#__PURE__*/ dual(3, (use, self, value) => acquireUseRelease(zipLeft(fiberRefGet(self), fiberRefSet(self, value)), () => use, (oldValue) => fiberRefSet(self, oldValue)));
 /** @internal */
 const fiberRefUnsafeMake = (initial, options) => fiberRefUnsafeMakePatch(initial, {
 	differ: update$1(),
@@ -8477,50 +8477,50 @@ const fiberRefUnsafeMakeRuntimeFlags = (initial) => fiberRefUnsafeMakePatch(init
 	fork: differ$1.empty
 });
 /** @internal */
-const currentContext = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentContext"), () => fiberRefUnsafeMakeContext(empty$12()));
+const currentContext = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentContext"), () => fiberRefUnsafeMakeContext(empty$12()));
 /** @internal */
-const currentSchedulingPriority = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentSchedulingPriority"), () => fiberRefUnsafeMake(0));
+const currentSchedulingPriority = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentSchedulingPriority"), () => fiberRefUnsafeMake(0));
 /** @internal */
-const currentMaxOpsBeforeYield = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentMaxOpsBeforeYield"), () => fiberRefUnsafeMake(2048));
+const currentMaxOpsBeforeYield = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentMaxOpsBeforeYield"), () => fiberRefUnsafeMake(2048));
 /** @internal */
-const currentLogAnnotations = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentLogAnnotation"), () => fiberRefUnsafeMake(empty$11()));
+const currentLogAnnotations = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentLogAnnotation"), () => fiberRefUnsafeMake(empty$11()));
 /** @internal */
-const currentLogLevel = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentLogLevel"), () => fiberRefUnsafeMake(logLevelInfo));
+const currentLogLevel = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentLogLevel"), () => fiberRefUnsafeMake(logLevelInfo));
 /** @internal */
-const currentLogSpan = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentLogSpan"), () => fiberRefUnsafeMake(empty$10()));
+const currentLogSpan = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentLogSpan"), () => fiberRefUnsafeMake(empty$10()));
 /** @internal */
-const withSchedulingPriority = /* @__PURE__ */ dual(2, (self, scheduler) => fiberRefLocally(self, currentSchedulingPriority, scheduler));
+const withSchedulingPriority = /*#__PURE__*/ dual(2, (self, scheduler) => fiberRefLocally(self, currentSchedulingPriority, scheduler));
 /** @internal */
-const currentConcurrency = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentConcurrency"), () => fiberRefUnsafeMake("unbounded"));
+const currentConcurrency = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentConcurrency"), () => fiberRefUnsafeMake("unbounded"));
 /**
 * @internal
 */
-const currentRequestBatching = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentRequestBatching"), () => fiberRefUnsafeMake(true));
+const currentRequestBatching = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentRequestBatching"), () => fiberRefUnsafeMake(true));
 /** @internal */
-const currentUnhandledErrorLogLevel = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentUnhandledErrorLogLevel"), () => fiberRefUnsafeMake(some(logLevelDebug)));
+const currentUnhandledErrorLogLevel = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentUnhandledErrorLogLevel"), () => fiberRefUnsafeMake(some(logLevelDebug)));
 /** @internal */
-const currentVersionMismatchErrorLogLevel = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/versionMismatchErrorLogLevel"), () => fiberRefUnsafeMake(some(logLevelWarning)));
+const currentVersionMismatchErrorLogLevel = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/versionMismatchErrorLogLevel"), () => fiberRefUnsafeMake(some(logLevelWarning)));
 /** @internal */
-const currentMetricLabels = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentMetricLabels"), () => fiberRefUnsafeMakeReadonlyArray(empty$19()));
+const currentMetricLabels = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentMetricLabels"), () => fiberRefUnsafeMakeReadonlyArray(empty$19()));
 /** @internal */
-const currentForkScopeOverride = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentForkScopeOverride"), () => fiberRefUnsafeMake(none$4(), {
+const currentForkScopeOverride = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentForkScopeOverride"), () => fiberRefUnsafeMake(none$4(), {
 	fork: () => none$4(),
 	join: (parent, _) => parent
 }));
 /** @internal */
-const currentInterruptedCause = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentInterruptedCause"), () => fiberRefUnsafeMake(empty$14, {
+const currentInterruptedCause = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentInterruptedCause"), () => fiberRefUnsafeMake(empty$14, {
 	fork: () => empty$14,
 	join: (parent, _) => parent
 }));
 /** @internal */
-const ScopeTypeId = /* @__PURE__ */ Symbol.for("effect/Scope");
+const ScopeTypeId = /*#__PURE__*/ Symbol.for("effect/Scope");
 /** @internal */
-const CloseableScopeTypeId = /* @__PURE__ */ Symbol.for("effect/CloseableScope");
+const CloseableScopeTypeId = /*#__PURE__*/ Symbol.for("effect/CloseableScope");
 const scopeAddFinalizer = (self, finalizer) => self.addFinalizer(() => asVoid(finalizer));
 const scopeClose = (self, exit) => self.close(exit);
 const scopeFork = (self, strategy) => self.fork(strategy);
 /** @internal */
-const YieldableError$1 = /* @__PURE__ */ function() {
+const YieldableError$1 = /*#__PURE__*/ function() {
 	class YieldableError extends globalThis.Error {
 		commit() {
 			return fail$2(this);
@@ -8549,25 +8549,25 @@ const makeException = (proto, tag) => {
 	return Base;
 };
 /** @internal */
-const RuntimeExceptionTypeId = /* @__PURE__ */ Symbol.for("effect/Cause/errors/RuntimeException");
+const RuntimeExceptionTypeId = /*#__PURE__*/ Symbol.for("effect/Cause/errors/RuntimeException");
 /** @internal */
-const RuntimeException = /* @__PURE__ */ makeException({ [RuntimeExceptionTypeId]: RuntimeExceptionTypeId }, "RuntimeException");
+const RuntimeException = /*#__PURE__*/ makeException({ [RuntimeExceptionTypeId]: RuntimeExceptionTypeId }, "RuntimeException");
 /** @internal */
-const InterruptedExceptionTypeId = /* @__PURE__ */ Symbol.for("effect/Cause/errors/InterruptedException");
+const InterruptedExceptionTypeId = /*#__PURE__*/ Symbol.for("effect/Cause/errors/InterruptedException");
 /** @internal */
 const isInterruptedException = (u) => hasProperty(u, InterruptedExceptionTypeId);
 /** @internal */
-const IllegalArgumentExceptionTypeId = /* @__PURE__ */ Symbol.for("effect/Cause/errors/IllegalArgument");
+const IllegalArgumentExceptionTypeId = /*#__PURE__*/ Symbol.for("effect/Cause/errors/IllegalArgument");
 /** @internal */
-const IllegalArgumentException$1 = /* @__PURE__ */ makeException({ [IllegalArgumentExceptionTypeId]: IllegalArgumentExceptionTypeId }, "IllegalArgumentException");
+const IllegalArgumentException$1 = /*#__PURE__*/ makeException({ [IllegalArgumentExceptionTypeId]: IllegalArgumentExceptionTypeId }, "IllegalArgumentException");
 /** @internal */
-const NoSuchElementExceptionTypeId = /* @__PURE__ */ Symbol.for("effect/Cause/errors/NoSuchElement");
+const NoSuchElementExceptionTypeId = /*#__PURE__*/ Symbol.for("effect/Cause/errors/NoSuchElement");
 /** @internal */
-const NoSuchElementException$1 = /* @__PURE__ */ makeException({ [NoSuchElementExceptionTypeId]: NoSuchElementExceptionTypeId }, "NoSuchElementException");
+const NoSuchElementException$1 = /*#__PURE__*/ makeException({ [NoSuchElementExceptionTypeId]: NoSuchElementExceptionTypeId }, "NoSuchElementException");
 /** @internal */
-const UnknownExceptionTypeId = /* @__PURE__ */ Symbol.for("effect/Cause/errors/UnknownException");
+const UnknownExceptionTypeId = /*#__PURE__*/ Symbol.for("effect/Cause/errors/UnknownException");
 /** @internal */
-const UnknownException = /* @__PURE__ */ function() {
+const UnknownException = /*#__PURE__*/ function() {
 	class UnknownException extends YieldableError$1 {
 		_tag = "UnknownException";
 		error;
@@ -8587,7 +8587,7 @@ const exitIsExit = (u) => isEffect$1(u) && "_tag" in u && (u._tag === "Success" 
 /** @internal */
 const exitIsSuccess = (self) => self._tag === "Success";
 /** @internal */
-const exitAs = /* @__PURE__ */ dual(2, (self, value) => {
+const exitAs = /*#__PURE__*/ dual(2, (self, value) => {
 	switch (self._tag) {
 		case OP_FAILURE: return exitFailCause$1(self.effect_instruction_i0);
 		case OP_SUCCESS: return exitSucceed$1(value);
@@ -8610,14 +8610,14 @@ const exitFailCause$1 = (cause) => {
 /** @internal */
 const exitInterrupt$1 = (fiberId) => exitFailCause$1(interrupt(fiberId));
 /** @internal */
-const exitMap = /* @__PURE__ */ dual(2, (self, f) => {
+const exitMap = /*#__PURE__*/ dual(2, (self, f) => {
 	switch (self._tag) {
 		case OP_FAILURE: return exitFailCause$1(self.effect_instruction_i0);
 		case OP_SUCCESS: return exitSucceed$1(f(self.effect_instruction_i0));
 	}
 });
 /** @internal */
-const exitMatch = /* @__PURE__ */ dual(2, (self, { onFailure, onSuccess }) => {
+const exitMatch = /*#__PURE__*/ dual(2, (self, { onFailure, onSuccess }) => {
 	switch (self._tag) {
 		case OP_FAILURE: return onFailure(self.effect_instruction_i0);
 		case OP_SUCCESS: return onSuccess(self.effect_instruction_i0);
@@ -8630,9 +8630,9 @@ const exitSucceed$1 = (value) => {
 	return effect;
 };
 /** @internal */
-const exitVoid$1 = /* @__PURE__ */ exitSucceed$1(void 0);
+const exitVoid$1 = /*#__PURE__*/ exitSucceed$1(void 0);
 /** @internal */
-const exitZipWith = /* @__PURE__ */ dual(3, (self, that, { onFailure, onSuccess }) => {
+const exitZipWith = /*#__PURE__*/ dual(3, (self, that, { onFailure, onSuccess }) => {
 	switch (self._tag) {
 		case OP_FAILURE: switch (that._tag) {
 			case OP_SUCCESS: return exitFailCause$1(self.effect_instruction_i0);
@@ -8688,11 +8688,11 @@ const deferredInterruptJoiner = (self, joiner) => sync(() => {
 		if (index >= 0) state.joiners.splice(index, 1);
 	}
 });
-const constContext = /* @__PURE__ */ withFiberRuntime((fiber) => exitSucceed$1(fiber.currentContext));
+const constContext = /*#__PURE__*/ withFiberRuntime((fiber) => exitSucceed$1(fiber.currentContext));
 const context = () => constContext;
 const contextWithEffect = (f) => flatMap$3(context(), f);
-const provideContext$1 = /* @__PURE__ */ dual(2, (self, context) => fiberRefLocally(currentContext, context)(self));
-const mapInputContext = /* @__PURE__ */ dual(2, (self, f) => contextWithEffect((context) => provideContext$1(self, f(context))));
+const provideContext$1 = /*#__PURE__*/ dual(2, (self, context) => fiberRefLocally(currentContext, context)(self));
+const mapInputContext = /*#__PURE__*/ dual(2, (self, f) => contextWithEffect((context) => provideContext$1(self, f(context))));
 /** @internal */
 const currentSpanFromFiber = (fiber) => {
 	const span = fiber.currentSpan;
@@ -8750,7 +8750,7 @@ const OP_SOURCE_UNAVAILABLE = "SourceUnavailable";
 /** @internal */
 const OP_UNSUPPORTED = "Unsupported";
 /** @internal */
-const ConfigErrorTypeId = /* @__PURE__ */ Symbol.for("effect/ConfigError");
+const ConfigErrorTypeId = /*#__PURE__*/ Symbol.for("effect/ConfigError");
 /** @internal */
 const proto = {
 	_tag: "ConfigError",
@@ -8854,7 +8854,7 @@ const Unsupported = (path, message, options = { pathDelim: "." }) => {
 	return error;
 };
 /** @internal */
-const prefixed = /* @__PURE__ */ dual(2, (self, prefix) => {
+const prefixed = /*#__PURE__*/ dual(2, (self, prefix) => {
 	switch (self._op) {
 		case "And": return And(prefixed(self.left, prefix), prefixed(self.right, prefix));
 		case "Or": return Or(prefixed(self.left, prefix), prefixed(self.right, prefix));
@@ -8865,9 +8865,9 @@ const prefixed = /* @__PURE__ */ dual(2, (self, prefix) => {
 	}
 });
 /** @internal */
-const ClockTypeId = /* @__PURE__ */ Symbol.for("effect/Clock");
+const ClockTypeId = /*#__PURE__*/ Symbol.for("effect/Clock");
 /** @internal */
-const clockTag = /* @__PURE__ */ GenericTag("effect/Clock");
+const clockTag = /*#__PURE__*/ GenericTag("effect/Clock");
 /** @internal */
 const MAX_TIMER_MILLIS = 2 ** 31 - 1;
 /** @internal */
@@ -8884,8 +8884,8 @@ const globalClockScheduler = { unsafeSchedule(task, duration) {
 		return !completed;
 	};
 } };
-const performanceNowNanos = /* @__PURE__ */ function() {
-	const bigint1e6 = /* @__PURE__ */ BigInt(1e6);
+const performanceNowNanos = /*#__PURE__*/ function() {
+	const bigint1e6 = /*#__PURE__*/ BigInt(1e6);
 	if (typeof performance === "undefined" || typeof performance.now !== "function") return () => BigInt(Date.now()) * bigint1e6;
 	let origin;
 	return () => {
@@ -8893,10 +8893,10 @@ const performanceNowNanos = /* @__PURE__ */ function() {
 		return origin + BigInt(Math.round(performance.now() * 1e6));
 	};
 }();
-const processOrPerformanceNow = /* @__PURE__ */ function() {
+const processOrPerformanceNow = /*#__PURE__*/ function() {
 	const processHrtime = typeof process === "object" && "hrtime" in process && typeof process.hrtime.bigint === "function" ? process.hrtime : void 0;
 	if (!processHrtime) return performanceNowNanos;
-	const origin = /* @__PURE__ */ performanceNowNanos() - /* @__PURE__ */ processHrtime.bigint();
+	const origin = /*#__PURE__*/ performanceNowNanos() - /*#__PURE__*/ processHrtime.bigint();
 	return () => origin + processHrtime.bigint();
 }();
 /** @internal */
@@ -8908,8 +8908,8 @@ var ClockImpl = class {
 	unsafeCurrentTimeNanos() {
 		return processOrPerformanceNow();
 	}
-	currentTimeMillis = /* @__PURE__ */ sync(() => this.unsafeCurrentTimeMillis());
-	currentTimeNanos = /* @__PURE__ */ sync(() => this.unsafeCurrentTimeNanos());
+	currentTimeMillis = /*#__PURE__*/ sync(() => this.unsafeCurrentTimeMillis());
+	currentTimeNanos = /*#__PURE__*/ sync(() => this.unsafeCurrentTimeNanos());
 	scheduler() {
 		return succeed$2(globalClockScheduler);
 	}
@@ -8967,7 +8967,7 @@ const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 /** @internal */
 const empty$5 = { _tag: "Empty" };
 /** @internal */
-const patch$3 = /* @__PURE__ */ dual(2, (path, patch) => {
+const patch$3 = /*#__PURE__*/ dual(2, (path, patch) => {
 	let input = of(patch);
 	let output = path;
 	while (isCons(input)) {
@@ -9025,11 +9025,11 @@ const OP_ZIP_WITH = "ZipWith";
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/configProvider.js
 const concat = (l, r) => [...l, ...r];
 /** @internal */
-const ConfigProviderTypeId = /* @__PURE__ */ Symbol.for("effect/ConfigProvider");
+const ConfigProviderTypeId = /*#__PURE__*/ Symbol.for("effect/ConfigProvider");
 /** @internal */
-const configProviderTag = /* @__PURE__ */ GenericTag("effect/ConfigProvider");
+const configProviderTag = /*#__PURE__*/ GenericTag("effect/ConfigProvider");
 /** @internal */
-const FlatConfigProviderTypeId = /* @__PURE__ */ Symbol.for("effect/ConfigProviderFlat");
+const FlatConfigProviderTypeId = /*#__PURE__*/ Symbol.for("effect/ConfigProviderFlat");
 /** @internal */
 const make$9 = (options) => ({
 	[ConfigProviderTypeId]: ConfigProviderTypeId,
@@ -9182,9 +9182,9 @@ const parseInteger = (str) => {
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/defaultServices/console.js
 /** @internal */
-const TypeId$4 = /* @__PURE__ */ Symbol.for("effect/Console");
+const TypeId$4 = /*#__PURE__*/ Symbol.for("effect/Console");
 /** @internal */
-const consoleTag = /* @__PURE__ */ GenericTag("effect/Console");
+const consoleTag = /*#__PURE__*/ GenericTag("effect/Console");
 /** @internal */
 const defaultConsole = {
 	[TypeId$4]: TypeId$4,
@@ -9193,7 +9193,7 @@ const defaultConsole = {
 			console.assert(condition, ...args);
 		});
 	},
-	clear: /* @__PURE__ */ sync(() => {
+	clear: /*#__PURE__*/ sync(() => {
 		console.clear();
 	}),
 	count(label) {
@@ -9229,7 +9229,7 @@ const defaultConsole = {
 	group(options) {
 		return options?.collapsed ? sync(() => console.groupCollapsed(options?.label)) : sync(() => console.group(options?.label));
 	},
-	groupEnd: /* @__PURE__ */ sync(() => {
+	groupEnd: /*#__PURE__*/ sync(() => {
 		console.groupEnd();
 	}),
 	info(...args) {
@@ -9271,9 +9271,9 @@ const defaultConsole = {
 	unsafe: console
 };
 /** @internal */
-const RandomTypeId = /* @__PURE__ */ Symbol.for("effect/Random");
+const RandomTypeId = /*#__PURE__*/ Symbol.for("effect/Random");
 /** @internal */
-const randomTag = /* @__PURE__ */ GenericTag("effect/Random");
+const randomTag = /*#__PURE__*/ GenericTag("effect/Random");
 /** @internal */
 var RandomImpl = class {
 	seed;
@@ -9322,17 +9322,17 @@ const make$8 = (seed) => new RandomImpl(hash(seed));
 * @since 2.0.0
 */
 /** @internal */
-const TracerTypeId = /* @__PURE__ */ Symbol.for("effect/Tracer");
+const TracerTypeId = /*#__PURE__*/ Symbol.for("effect/Tracer");
 /** @internal */
 const make$7 = (options) => ({
 	[TracerTypeId]: TracerTypeId,
 	...options
 });
 /** @internal */
-const tracerTag = /* @__PURE__ */ GenericTag("effect/Tracer");
+const tracerTag = /*#__PURE__*/ GenericTag("effect/Tracer");
 /** @internal */
-const spanTag = /* @__PURE__ */ GenericTag("effect/ParentSpan");
-const randomHexString = /* @__PURE__ */ function() {
+const spanTag = /*#__PURE__*/ GenericTag("effect/ParentSpan");
+const randomHexString = /*#__PURE__*/ function() {
 	const characters = "abcdef0123456789";
 	const charactersLength = 16;
 	return function(length) {
@@ -9394,23 +9394,23 @@ var NativeSpan = class {
 	}
 };
 /** @internal */
-const nativeTracer = /* @__PURE__ */ make$7({
+const nativeTracer = /*#__PURE__*/ make$7({
 	span: (name, parent, context, links, startTime, kind) => new NativeSpan(name, parent, context, links, startTime, kind),
 	context: (f) => f()
 });
 /** @internal */
-const DisablePropagation = /* @__PURE__ */ Reference()("effect/Tracer/DisablePropagation", { defaultValue: constFalse });
+const DisablePropagation = /*#__PURE__*/ Reference()("effect/Tracer/DisablePropagation", { defaultValue: constFalse });
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/defaultServices.js
 /** @internal */
-const liveServices = /* @__PURE__ */ pipe(/* @__PURE__ */ empty$12(), /* @__PURE__ */ add(clockTag, /* @__PURE__ */ make$10()), /* @__PURE__ */ add(consoleTag, defaultConsole), /* @__PURE__ */ add(randomTag, /* @__PURE__ */ make$8(/* @__PURE__ */ Math.random())), /* @__PURE__ */ add(configProviderTag, /* @__PURE__ */ fromEnv()), /* @__PURE__ */ add(tracerTag, nativeTracer));
+const liveServices = /*#__PURE__*/ pipe(/*#__PURE__*/ empty$12(), /*#__PURE__*/ add(clockTag, /*#__PURE__*/ make$10()), /*#__PURE__*/ add(consoleTag, defaultConsole), /*#__PURE__*/ add(randomTag, /*#__PURE__*/ make$8(/*#__PURE__*/ Math.random())), /*#__PURE__*/ add(configProviderTag, /*#__PURE__*/ fromEnv()), /*#__PURE__*/ add(tracerTag, nativeTracer));
 /**
 * The `FiberRef` holding the default `Effect` services.
 *
 * @since 2.0.0
 * @category fiberRefs
 */
-const currentServices = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/DefaultServices/currentServices"), () => fiberRefUnsafeMakeContext(liveServices));
+const currentServices = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/DefaultServices/currentServices"), () => fiberRefUnsafeMakeContext(liveServices));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/Data.js
 /**
@@ -9419,8 +9419,8 @@ const currentServices = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("
 * @since 2.0.0
 * @category constructors
 */
-const Error$3 = /* @__PURE__ */ function() {
-	const plainArgsSymbol = /* @__PURE__ */ Symbol.for("effect/Data/Error/plainArgs");
+const Error$3 = /*#__PURE__*/ function() {
+	const plainArgsSymbol = /*#__PURE__*/ Symbol.for("effect/Data/Error/plainArgs");
 	return { BaseEffectError: class extends YieldableError$1 {
 		constructor(args) {
 			super(args?.message, args?.cause ? { cause: args.cause } : void 0);
@@ -9519,7 +9519,7 @@ function empty$4() {
 	return unsafeMake$4(/* @__PURE__ */ new Map());
 }
 /** @internal */
-const FiberRefsSym = /* @__PURE__ */ Symbol.for("effect/FiberRefs");
+const FiberRefsSym = /*#__PURE__*/ Symbol.for("effect/FiberRefs");
 /** @internal */
 var FiberRefsImpl = class {
 	locals;
@@ -9557,7 +9557,7 @@ const findAncestor = (_ref, _parentStack, _childStack, _childModified = false) =
 	return ret;
 };
 /** @internal */
-const joinAs = /* @__PURE__ */ dual(3, (self, fiberId, that) => {
+const joinAs = /*#__PURE__*/ dual(3, (self, fiberId, that) => {
 	const parentFiberRefs = new Map(self.locals);
 	that.locals.forEach((childStack, fiberRef) => {
 		const childValue = childStack[0][1];
@@ -9586,7 +9586,7 @@ const joinAs = /* @__PURE__ */ dual(3, (self, fiberId, that) => {
 	return new FiberRefsImpl(parentFiberRefs);
 });
 /** @internal */
-const forkAs = /* @__PURE__ */ dual(2, (self, childId) => {
+const forkAs = /*#__PURE__*/ dual(2, (self, childId) => {
 	const map = /* @__PURE__ */ new Map();
 	unsafeForkAs(self, map, childId);
 	return new FiberRefsImpl(map);
@@ -9600,20 +9600,20 @@ const unsafeForkAs = (self, map, fiberId) => {
 	});
 };
 /** @internal */
-const delete_ = /* @__PURE__ */ dual(2, (self, fiberRef) => {
+const delete_ = /*#__PURE__*/ dual(2, (self, fiberRef) => {
 	const locals = new Map(self.locals);
 	locals.delete(fiberRef);
 	return new FiberRefsImpl(locals);
 });
 /** @internal */
-const get$1 = /* @__PURE__ */ dual(2, (self, fiberRef) => {
+const get$1 = /*#__PURE__*/ dual(2, (self, fiberRef) => {
 	if (!self.locals.has(fiberRef)) return none$4();
 	return some(headNonEmpty$1(self.locals.get(fiberRef))[1]);
 });
 /** @internal */
-const getOrDefault$1 = /* @__PURE__ */ dual(2, (self, fiberRef) => pipe(get$1(self, fiberRef), getOrElse(() => fiberRef.initial)));
+const getOrDefault$1 = /*#__PURE__*/ dual(2, (self, fiberRef) => pipe(get$1(self, fiberRef), getOrElse(() => fiberRef.initial)));
 /** @internal */
-const updateAs = /* @__PURE__ */ dual(2, (self, { fiberId, fiberRef, value }) => {
+const updateAs = /*#__PURE__*/ dual(2, (self, { fiberId, fiberRef, value }) => {
 	if (self.locals.size === 0) return new FiberRefsImpl(new Map([[fiberRef, [[fiberId, value]]]]));
 	const locals = new Map(self.locals);
 	unsafeUpdateAs(locals, fiberId, fiberRef, value);
@@ -9631,7 +9631,7 @@ const unsafeUpdateAs = (locals, fiberId, fiberRef, value) => {
 	locals.set(fiberRef, newStack);
 };
 /** @internal */
-const updateManyAs$1 = /* @__PURE__ */ dual(2, (self, { entries, forkAs }) => {
+const updateManyAs$1 = /*#__PURE__*/ dual(2, (self, { entries, forkAs }) => {
 	if (self.locals.size === 0) return new FiberRefsImpl(new Map(entries));
 	const locals = new Map(self.locals);
 	if (forkAs !== void 0) unsafeForkAs(self, locals, forkAs);
@@ -9707,13 +9707,13 @@ const diff$2 = (oldValue, newValue) => {
 	return patch;
 };
 /** @internal */
-const combine$1 = /* @__PURE__ */ dual(2, (self, that) => ({
+const combine$1 = /*#__PURE__*/ dual(2, (self, that) => ({
 	_tag: OP_AND_THEN$1,
 	first: self,
 	second: that
 }));
 /** @internal */
-const patch$2 = /* @__PURE__ */ dual(3, (self, fiberId, oldValue) => {
+const patch$2 = /*#__PURE__*/ dual(3, (self, fiberId, oldValue) => {
 	let fiberRefs = oldValue;
 	let patches = of$2(self);
 	while (isNonEmptyReadonlyArray(patches)) {
@@ -9774,14 +9774,14 @@ const patch$1 = patch$2;
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/fiberStatus.js
 const FiberStatusSymbolKey = "effect/FiberStatus";
 /** @internal */
-const FiberStatusTypeId = /* @__PURE__ */ Symbol.for(FiberStatusSymbolKey);
+const FiberStatusTypeId = /*#__PURE__*/ Symbol.for(FiberStatusSymbolKey);
 /** @internal */
 const OP_DONE = "Done";
 /** @internal */
 const OP_RUNNING = "Running";
 /** @internal */
 const OP_SUSPENDED = "Suspended";
-const DoneHash = /* @__PURE__ */ string(`${FiberStatusSymbolKey}-${OP_DONE}`);
+const DoneHash = /*#__PURE__*/ string(`${FiberStatusSymbolKey}-${OP_DONE}`);
 /** @internal */
 var Done = class {
 	[FiberStatusTypeId] = FiberStatusTypeId;
@@ -9826,7 +9826,7 @@ var Suspended = class {
 	}
 };
 /** @internal */
-const done$1 = /* @__PURE__ */ new Done();
+const done$1 = /*#__PURE__*/ new Done();
 /** @internal */
 const running$1 = (runtimeFlags) => new Running(runtimeFlags);
 /** @internal */
@@ -9905,7 +9905,7 @@ const None = logLevelNone;
 * @since 2.0.0
 * @category ordering
 */
-const greaterThan$1 = /* @__PURE__ */ greaterThan$2(/* @__PURE__ */ pipe(Order$1, /* @__PURE__ */ mapInput((level) => level.ordinal)));
+const greaterThan$1 = /*#__PURE__*/ greaterThan$2(/* @__PURE__ */ pipe(Order$1, /*#__PURE__*/ mapInput((level) => level.ordinal)));
 /**
 * @since 2.0.0
 * @category conversions
@@ -9929,19 +9929,19 @@ const fromLiteral = (literal) => {
 * @experimental
 * @category type ids
 */
-const TypeId$3 = /* @__PURE__ */ Symbol.for("effect/Micro");
+const TypeId$3 = /*#__PURE__*/ Symbol.for("effect/Micro");
 /**
 * @since 3.4.0
 * @experimental
 * @category MicroExit
 */
-const MicroExitTypeId = /* @__PURE__ */ Symbol.for("effect/Micro/MicroExit");
+const MicroExitTypeId = /*#__PURE__*/ Symbol.for("effect/Micro/MicroExit");
 /**
 * @since 3.4.6
 * @experimental
 * @category MicroCause
 */
-const MicroCauseTypeId = /* @__PURE__ */ Symbol.for("effect/Micro/MicroCause");
+const MicroCauseTypeId = /*#__PURE__*/ Symbol.for("effect/Micro/MicroCause");
 const microCauseVariance = { _E: identity };
 var MicroCauseImpl = class extends globalThis.Error {
 	_tag;
@@ -10028,7 +10028,7 @@ const causeIsInterrupt = (self) => self._tag === "Interrupt";
 * @experimental
 * @category MicroFiber
 */
-const MicroFiberTypeId = /* @__PURE__ */ Symbol.for("effect/Micro/MicroFiber");
+const MicroFiberTypeId = /*#__PURE__*/ Symbol.for("effect/Micro/MicroFiber");
 const fiberVariance$1 = {
 	_A: identity,
 	_E: identity
@@ -10130,14 +10130,14 @@ var MicroFiberImpl = class {
 		return this._children ??= /* @__PURE__ */ new Set();
 	}
 };
-const fiberMiddleware = /* @__PURE__ */ globalValue("effect/Micro/fiberMiddleware", () => ({ interruptChildren: void 0 }));
-const identifier = /* @__PURE__ */ Symbol.for("effect/Micro/identifier");
-const args = /* @__PURE__ */ Symbol.for("effect/Micro/args");
-const evaluate = /* @__PURE__ */ Symbol.for("effect/Micro/evaluate");
-const successCont = /* @__PURE__ */ Symbol.for("effect/Micro/successCont");
-const failureCont = /* @__PURE__ */ Symbol.for("effect/Micro/failureCont");
-const ensureCont = /* @__PURE__ */ Symbol.for("effect/Micro/ensureCont");
-const Yield = /* @__PURE__ */ Symbol.for("effect/Micro/Yield");
+const fiberMiddleware = /*#__PURE__*/ globalValue("effect/Micro/fiberMiddleware", () => ({ interruptChildren: void 0 }));
+const identifier = /*#__PURE__*/ Symbol.for("effect/Micro/identifier");
+const args = /*#__PURE__*/ Symbol.for("effect/Micro/args");
+const evaluate = /*#__PURE__*/ Symbol.for("effect/Micro/evaluate");
+const successCont = /*#__PURE__*/ Symbol.for("effect/Micro/successCont");
+const failureCont = /*#__PURE__*/ Symbol.for("effect/Micro/failureCont");
+const ensureCont = /*#__PURE__*/ Symbol.for("effect/Micro/ensureCont");
+const Yield = /*#__PURE__*/ Symbol.for("effect/Micro/Yield");
 const microVariance = {
 	_A: identity,
 	_E: identity,
@@ -10224,7 +10224,7 @@ const makeExit = (options) => {
 * @experimental
 * @category constructors
 */
-const succeed$1 = /* @__PURE__ */ makeExit({
+const succeed$1 = /*#__PURE__*/ makeExit({
 	op: "Success",
 	prop: "value",
 	eval(fiber) {
@@ -10239,7 +10239,7 @@ const succeed$1 = /* @__PURE__ */ makeExit({
 * @experimental
 * @category constructors
 */
-const failCause = /* @__PURE__ */ makeExit({
+const failCause = /*#__PURE__*/ makeExit({
 	op: "Failure",
 	prop: "cause",
 	eval(fiber) {
@@ -10267,7 +10267,7 @@ const fail$1 = (error) => failCause(causeFail(error));
 * @experimental
 * @category constructors
 */
-const yieldNow$1 = /* @__PURE__ */ (/* @__PURE__ */ makePrimitive({
+const yieldNow$1 = /*#__PURE__*/ (/* @__PURE__ */ makePrimitive({
 	op: "Yield",
 	eval(fiber) {
 		let resumed = false;
@@ -10280,7 +10280,7 @@ const yieldNow$1 = /* @__PURE__ */ (/* @__PURE__ */ makePrimitive({
 		});
 	}
 }))(0);
-const void_ = /* @__PURE__ */ succeed$1(void 0);
+const void_ = /*#__PURE__*/ succeed$1(void 0);
 /**
 * Create a `Micro` effect using the current `MicroFiber`.
 *
@@ -10288,7 +10288,7 @@ const void_ = /* @__PURE__ */ succeed$1(void 0);
 * @experimental
 * @category constructors
 */
-const withMicroFiber = /* @__PURE__ */ makePrimitive({
+const withMicroFiber = /*#__PURE__*/ makePrimitive({
 	op: "WithMicroFiber",
 	eval(fiber) {
 		return this[args](fiber);
@@ -10302,13 +10302,13 @@ const withMicroFiber = /* @__PURE__ */ makePrimitive({
 * @experimental
 * @category mapping & sequencing
 */
-const flatMap$2 = /* @__PURE__ */ dual(2, (self, f) => {
+const flatMap$2 = /*#__PURE__*/ dual(2, (self, f) => {
 	const onSuccess = Object.create(OnSuccessProto);
 	onSuccess[args] = self;
 	onSuccess[successCont] = f;
 	return onSuccess;
 });
-const OnSuccessProto = /* @__PURE__ */ makePrimitiveProto({
+const OnSuccessProto = /*#__PURE__*/ makePrimitiveProto({
 	op: "OnSuccess",
 	eval(fiber) {
 		fiber._stack.push(this);
@@ -10338,7 +10338,7 @@ const exitFailCause = failCause;
 * @experimental
 * @category MicroExit
 */
-const exitInterrupt = /* @__PURE__ */ exitFailCause(/* @__PURE__ */ causeInterrupt());
+const exitInterrupt = /*#__PURE__*/ exitFailCause(/*#__PURE__*/ causeInterrupt());
 /**
 * @since 3.4.6
 * @experimental
@@ -10350,7 +10350,7 @@ const exitDie = (defect) => exitFailCause(causeDie(defect));
 * @experimental
 * @category MicroExit
 */
-const exitVoid = /* @__PURE__ */ exitSucceed(void 0);
+const exitVoid = /*#__PURE__*/ exitSucceed(void 0);
 const setImmediate = "setImmediate" in globalThis ? globalThis.setImmediate : (f) => setTimeout(f, 0);
 /**
 * @since 3.5.9
@@ -10405,7 +10405,7 @@ var MicroSchedulerDefault = class {
 * @experimental
 * @category environment
 */
-const updateContext = /* @__PURE__ */ dual(2, (self, f) => withMicroFiber((fiber) => {
+const updateContext = /*#__PURE__*/ dual(2, (self, f) => withMicroFiber((fiber) => {
 	const prev = fiber.context;
 	fiber.context = f(prev);
 	return onExit(self, () => {
@@ -10420,7 +10420,7 @@ const updateContext = /* @__PURE__ */ dual(2, (self, f) => withMicroFiber((fiber
 * @experimental
 * @category environment
 */
-const provideContext = /* @__PURE__ */ dual(2, (self, provided) => updateContext(self, merge$1(provided)));
+const provideContext = /*#__PURE__*/ dual(2, (self, provided) => updateContext(self, merge$1(provided)));
 /**
 * @since 3.11.0
 * @experimental
@@ -10439,14 +10439,14 @@ var CurrentScheduler = class extends Reference()("effect/Micro/currentScheduler"
 * @experimental
 * @category pattern matching
 */
-const matchCauseEffect = /* @__PURE__ */ dual(2, (self, options) => {
+const matchCauseEffect = /*#__PURE__*/ dual(2, (self, options) => {
 	const primitive = Object.create(OnSuccessAndFailureProto);
 	primitive[args] = self;
 	primitive[successCont] = options.onSuccess;
 	primitive[failureCont] = options.onFailure;
 	return primitive;
 });
-const OnSuccessAndFailureProto = /* @__PURE__ */ makePrimitiveProto({
+const OnSuccessAndFailureProto = /*#__PURE__*/ makePrimitiveProto({
 	op: "OnSuccessAndFailure",
 	eval(fiber) {
 		fiber._stack.push(this);
@@ -10461,11 +10461,11 @@ const OnSuccessAndFailureProto = /* @__PURE__ */ makePrimitiveProto({
 * @experimental
 * @category resources & finalization
 */
-const onExit = /* @__PURE__ */ dual(2, (self, f) => uninterruptibleMask((restore) => matchCauseEffect(restore(self), {
+const onExit = /*#__PURE__*/ dual(2, (self, f) => uninterruptibleMask((restore) => matchCauseEffect(restore(self), {
 	onFailure: (cause) => flatMap$2(f(exitFailCause(cause)), () => failCause(cause)),
 	onSuccess: (a) => flatMap$2(f(exitSucceed(a)), () => succeed$1(a))
 })));
-const setInterruptible = /* @__PURE__ */ makePrimitive({
+const setInterruptible = /*#__PURE__*/ makePrimitive({
 	op: "SetInterruptible",
 	ensure(fiber) {
 		fiber.interruptible = this[args];
@@ -10551,7 +10551,7 @@ const runFork$1 = (effect, options) => {
 	}
 	return fiber;
 };
-const YieldableError = /* @__PURE__ */ function() {
+const YieldableError = /*#__PURE__*/ function() {
 	class YieldableError extends globalThis.Error {}
 	Object.assign(YieldableError.prototype, MicroProto, StructuralPrototype, {
 		[identifier]: "Failure",
@@ -10577,7 +10577,7 @@ const YieldableError = /* @__PURE__ */ function() {
 * @experimental
 * @category errors
 */
-const Error$1 = /* @__PURE__ */ function() {
+const Error$1 = /*#__PURE__*/ function() {
 	return class extends YieldableError {
 		constructor(args) {
 			super();
@@ -10608,7 +10608,7 @@ TaggedError("TimeoutException");
 var SchedulerRunner = class SchedulerRunner {
 	scheduleDrain;
 	running = false;
-	tasks = /* @__PURE__ */ new PriorityBuckets();
+	tasks = /*#__PURE__*/ new PriorityBuckets();
 	constructor(scheduleDrain) {
 		this.scheduleDrain = scheduleDrain;
 	}
@@ -10676,7 +10676,7 @@ var PriorityBuckets = class {
 */
 var MixedScheduler = class {
 	maxNextTickBeforeTimer;
-	getRunner = /* @__PURE__ */ SchedulerRunner.cached((depth, drain) => {
+	getRunner = /*#__PURE__*/ SchedulerRunner.cached((depth, drain) => {
 		if (depth >= this.maxNextTickBeforeTimer) setTimeout(() => drain(0), 0);
 		else Promise.resolve(void 0).then(() => drain(depth + 1));
 	});
@@ -10700,7 +10700,7 @@ var MixedScheduler = class {
 * @since 2.0.0
 * @category schedulers
 */
-const defaultScheduler = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Scheduler/defaultScheduler"), () => new MixedScheduler(2048));
+const defaultScheduler = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Scheduler/defaultScheduler"), () => new MixedScheduler(2048));
 /**
 * @since 2.0.0
 * @category constructors
@@ -10709,7 +10709,7 @@ var SyncScheduler = class {
 	/**
 	* @since 2.0.0
 	*/
-	tasks = /* @__PURE__ */ new PriorityBuckets();
+	tasks = /*#__PURE__*/ new PriorityBuckets();
 	/**
 	* @since 2.0.0
 	*/
@@ -10740,11 +10740,11 @@ var SyncScheduler = class {
 	}
 };
 /** @internal */
-const currentScheduler = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentScheduler"), () => fiberRefUnsafeMake(defaultScheduler));
+const currentScheduler = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentScheduler"), () => fiberRefUnsafeMake(defaultScheduler));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/completedRequestMap.js
 /** @internal */
-const currentRequestMap = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentRequestMap"), () => fiberRefUnsafeMake(/* @__PURE__ */ new Map()));
+const currentRequestMap = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentRequestMap"), () => fiberRefUnsafeMake(/* @__PURE__ */ new Map()));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/concurrency.js
 /** @internal */
@@ -10773,7 +10773,7 @@ const render = (now) => (self) => {
 /** @internal */
 const MetricLabelSymbolKey = "effect/MetricLabel";
 /** @internal */
-const MetricLabelTypeId = /* @__PURE__ */ Symbol.for(MetricLabelSymbolKey);
+const MetricLabelTypeId = /*#__PURE__*/ Symbol.for(MetricLabelSymbolKey);
 /** @internal */
 var MetricLabelImpl = class {
 	key;
@@ -10803,7 +10803,7 @@ const make$6 = (key, value) => {
 const isMetricLabel = (u) => hasProperty(u, MetricLabelTypeId);
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/core-effect.js
-const filterDisablePropagation = /* @__PURE__ */ flatMap$5((span) => get$4(span.context, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(span.parent) : none$4() : some(span));
+const filterDisablePropagation = /*#__PURE__*/ flatMap$5((span) => get$4(span.context, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(span.parent) : none$4() : some(span));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/Exit.js
 /**
@@ -10841,12 +10841,12 @@ const resume = (effect) => ({
 /** @internal */
 const yieldNow = () => ({ _tag: OP_YIELD_NOW });
 /** @internal */
-const FiberScopeTypeId = /* @__PURE__ */ Symbol.for("effect/FiberScope");
+const FiberScopeTypeId = /*#__PURE__*/ Symbol.for("effect/FiberScope");
 /** @internal */
 var Global = class {
 	[FiberScopeTypeId] = FiberScopeTypeId;
 	fiberId = none$2;
-	roots = /* @__PURE__ */ new Set();
+	roots = /*#__PURE__*/ new Set();
 	add(_runtimeFlags, child) {
 		this.roots.add(child);
 		child.addObserver(() => {
@@ -10877,9 +10877,9 @@ const unsafeMake$3 = (fiber) => {
 	return new Local(fiber.id(), fiber);
 };
 /** @internal */
-const globalScope = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberScope/Global"), () => new Global());
+const globalScope = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberScope/Global"), () => new Global());
 /** @internal */
-const FiberTypeId = /* @__PURE__ */ Symbol.for("effect/Fiber");
+const FiberTypeId = /*#__PURE__*/ Symbol.for("effect/Fiber");
 /** @internal */
 const fiberVariance = {
 	/* c8 ignore next */
@@ -10895,14 +10895,14 @@ const fiberProto = {
 	}
 };
 /** @internal */
-const RuntimeFiberTypeId = /* @__PURE__ */ Symbol.for("effect/Fiber");
+const RuntimeFiberTypeId = /*#__PURE__*/ Symbol.for("effect/Fiber");
 /** @internal */
 const join = (self) => zipLeft(flatten$1(self.await), self.inheritAll);
 ({ ...CommitPrototype }), { ...fiberProto };
 /** @internal */
 const currentFiberURI = "effect/FiberCurrent";
 /** @internal */
-const LoggerTypeId = /* @__PURE__ */ Symbol.for("effect/Logger");
+const LoggerTypeId = /*#__PURE__*/ Symbol.for("effect/Logger");
 const loggerVariance = {
 	/* c8 ignore next */
 	_Message: (_) => _,
@@ -10947,7 +10947,7 @@ const format$1 = (quoteValue, whitespace) => ({ annotations, cause, date, fiberI
 /** @internal */
 const escapeDoubleQuotes = (s) => `"${s.replace(/\\([\s\S])|(")/g, "\\$1$2")}"`;
 /** @internal */
-const stringLogger = /* @__PURE__ */ makeLogger(/* @__PURE__ */ format$1(escapeDoubleQuotes));
+const stringLogger = /*#__PURE__*/ makeLogger(/*#__PURE__*/ format$1(escapeDoubleQuotes));
 const colors = {
 	bold: "1",
 	red: "31",
@@ -10969,7 +10969,7 @@ hasProcessStdout || "Deno" in globalThis;
 /** @internal */
 const MetricBoundariesSymbolKey = "effect/MetricBoundaries";
 /** @internal */
-const MetricBoundariesTypeId = /* @__PURE__ */ Symbol.for(MetricBoundariesSymbolKey);
+const MetricBoundariesTypeId = /*#__PURE__*/ Symbol.for(MetricBoundariesSymbolKey);
 /** @internal */
 var MetricBoundariesImpl = class {
 	values;
@@ -10998,21 +10998,21 @@ const fromIterable = (iterable) => {
 /** @internal */
 const exponential = (options) => pipe(makeBy(options.count - 1, (i) => options.start * Math.pow(options.factor, i)), unsafeFromArray, fromIterable);
 /** @internal */
-const MetricKeyTypeTypeId = /* @__PURE__ */ Symbol.for("effect/MetricKeyType");
+const MetricKeyTypeTypeId = /*#__PURE__*/ Symbol.for("effect/MetricKeyType");
 /** @internal */
 const CounterKeyTypeSymbolKey = "effect/MetricKeyType/Counter";
 /** @internal */
-const CounterKeyTypeTypeId = /* @__PURE__ */ Symbol.for(CounterKeyTypeSymbolKey);
+const CounterKeyTypeTypeId = /*#__PURE__*/ Symbol.for(CounterKeyTypeSymbolKey);
 /** @internal */
-const FrequencyKeyTypeTypeId = /* @__PURE__ */ Symbol.for("effect/MetricKeyType/Frequency");
+const FrequencyKeyTypeTypeId = /*#__PURE__*/ Symbol.for("effect/MetricKeyType/Frequency");
 /** @internal */
-const GaugeKeyTypeTypeId = /* @__PURE__ */ Symbol.for("effect/MetricKeyType/Gauge");
+const GaugeKeyTypeTypeId = /*#__PURE__*/ Symbol.for("effect/MetricKeyType/Gauge");
 /** @internal */
 const HistogramKeyTypeSymbolKey = "effect/MetricKeyType/Histogram";
 /** @internal */
-const HistogramKeyTypeTypeId = /* @__PURE__ */ Symbol.for(HistogramKeyTypeSymbolKey);
+const HistogramKeyTypeTypeId = /*#__PURE__*/ Symbol.for(HistogramKeyTypeSymbolKey);
 /** @internal */
-const SummaryKeyTypeTypeId = /* @__PURE__ */ Symbol.for("effect/MetricKeyType/Summary");
+const SummaryKeyTypeTypeId = /*#__PURE__*/ Symbol.for("effect/MetricKeyType/Summary");
 const metricKeyTypeVariance = {
 	/* c8 ignore next */
 	_In: (_) => _,
@@ -11078,11 +11078,11 @@ const isHistogramKey = (u) => hasProperty(u, HistogramKeyTypeTypeId);
 /** @internal */
 const isSummaryKey = (u) => hasProperty(u, SummaryKeyTypeTypeId);
 /** @internal */
-const MetricKeyTypeId = /* @__PURE__ */ Symbol.for("effect/MetricKey");
+const MetricKeyTypeId = /*#__PURE__*/ Symbol.for("effect/MetricKey");
 const metricKeyVariance = { 
 /* c8 ignore next */
 _Type: (_) => _ };
-const arrayEquivilence = /* @__PURE__ */ getEquivalence$2(equals$2);
+const arrayEquivilence = /*#__PURE__*/ getEquivalence$2(equals$2);
 /** @internal */
 var MetricKeyImpl = class {
 	name;
@@ -11115,10 +11115,10 @@ const counter$3 = (name, options) => new MetricKeyImpl(name, counter$4(options),
 /** @internal */
 const histogram$3 = (name, boundaries, description) => new MetricKeyImpl(name, histogram$4(boundaries), fromNullable(description));
 /** @internal */
-const taggedWithLabels$1 = /* @__PURE__ */ dual(2, (self, extraTags) => extraTags.length === 0 ? self : new MetricKeyImpl(self.name, self.keyType, self.description, union$2(self.tags, extraTags)));
+const taggedWithLabels$1 = /*#__PURE__*/ dual(2, (self, extraTags) => extraTags.length === 0 ? self : new MetricKeyImpl(self.name, self.keyType, self.description, union$2(self.tags, extraTags)));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/MutableHashMap.js
-const TypeId$2 = /* @__PURE__ */ Symbol.for("effect/MutableHashMap");
+const TypeId$2 = /*#__PURE__*/ Symbol.for("effect/MutableHashMap");
 const MutableHashMapProto = {
 	[TypeId$2]: TypeId$2,
 	[Symbol.iterator]() {
@@ -11196,7 +11196,7 @@ const empty$1 = () => {
 * @since 2.0.0
 * @category elements
 */
-const get = /* @__PURE__ */ dual(2, (self, key) => {
+const get = /*#__PURE__*/ dual(2, (self, key) => {
 	if (isEqual(key) === false) return self.referential.has(key) ? some(self.referential.get(key)) : none$4();
 	const hash = key[symbol$1]();
 	const bucket = self.buckets.get(hash);
@@ -11218,11 +11218,11 @@ const getFromBucket = (self, bucket, key, remove = false) => {
 * @since 2.0.0
 * @category elements
 */
-const has = /* @__PURE__ */ dual(2, (self, key) => isSome(get(self, key)));
+const has = /*#__PURE__*/ dual(2, (self, key) => isSome(get(self, key)));
 /**
 * @since 2.0.0
 */
-const set = /* @__PURE__ */ dual(3, (self, key, value) => {
+const set = /*#__PURE__*/ dual(3, (self, key, value) => {
 	if (isEqual(key) === false) {
 		self.referential.set(key, value);
 		return self;
@@ -11247,27 +11247,27 @@ const removeFromBucket = (self, bucket, key) => {
 	}
 };
 /** @internal */
-const MetricStateTypeId = /* @__PURE__ */ Symbol.for("effect/MetricState");
+const MetricStateTypeId = /*#__PURE__*/ Symbol.for("effect/MetricState");
 /** @internal */
 const CounterStateSymbolKey = "effect/MetricState/Counter";
 /** @internal */
-const CounterStateTypeId = /* @__PURE__ */ Symbol.for(CounterStateSymbolKey);
+const CounterStateTypeId = /*#__PURE__*/ Symbol.for(CounterStateSymbolKey);
 /** @internal */
 const FrequencyStateSymbolKey = "effect/MetricState/Frequency";
 /** @internal */
-const FrequencyStateTypeId = /* @__PURE__ */ Symbol.for(FrequencyStateSymbolKey);
+const FrequencyStateTypeId = /*#__PURE__*/ Symbol.for(FrequencyStateSymbolKey);
 /** @internal */
 const GaugeStateSymbolKey = "effect/MetricState/Gauge";
 /** @internal */
-const GaugeStateTypeId = /* @__PURE__ */ Symbol.for(GaugeStateSymbolKey);
+const GaugeStateTypeId = /*#__PURE__*/ Symbol.for(GaugeStateSymbolKey);
 /** @internal */
 const HistogramStateSymbolKey = "effect/MetricState/Histogram";
 /** @internal */
-const HistogramStateTypeId = /* @__PURE__ */ Symbol.for(HistogramStateSymbolKey);
+const HistogramStateTypeId = /*#__PURE__*/ Symbol.for(HistogramStateSymbolKey);
 /** @internal */
 const SummaryStateSymbolKey = "effect/MetricState/Summary";
 /** @internal */
-const SummaryStateTypeId = /* @__PURE__ */ Symbol.for(SummaryStateSymbolKey);
+const SummaryStateTypeId = /*#__PURE__*/ Symbol.for(SummaryStateSymbolKey);
 const metricStateVariance = { 
 /* c8 ignore next */
 _A: (_) => _ };
@@ -11289,7 +11289,7 @@ var CounterState = class {
 		return pipeArguments(this, arguments);
 	}
 };
-const arrayEquals = /* @__PURE__ */ getEquivalence$2(equals$2);
+const arrayEquals = /*#__PURE__*/ getEquivalence$2(equals$2);
 /** @internal */
 var FrequencyState = class {
 	occurrences;
@@ -11416,7 +11416,7 @@ const isHistogramState = (u) => hasProperty(u, HistogramStateTypeId);
 */
 const isSummaryState = (u) => hasProperty(u, SummaryStateTypeId);
 /** @internal */
-const MetricHookTypeId = /* @__PURE__ */ Symbol.for("effect/MetricHook");
+const MetricHookTypeId = /*#__PURE__*/ Symbol.for("effect/MetricHook");
 const metricHookVariance = {
 	/* c8 ignore next */
 	_In: (_) => _,
@@ -11431,7 +11431,7 @@ const make$5 = (options) => ({
 	},
 	...options
 });
-const bigint0 = /* @__PURE__ */ BigInt(0);
+const bigint0 = /*#__PURE__*/ BigInt(0);
 /** @internal */
 const counter$1 = (key) => {
 	let sum = key.keyType.bigint ? bigint0 : 0;
@@ -11684,7 +11684,7 @@ const resolveQuantile = (error, sampleCount, current, consumed, quantile, rest) 
 	throw new Error("BUG: MetricHook.resolveQuantiles - please report an issue at https://github.com/Effect-TS/effect/issues");
 };
 /** @internal */
-const MetricPairTypeId = /* @__PURE__ */ Symbol.for("effect/MetricPair");
+const MetricPairTypeId = /*#__PURE__*/ Symbol.for("effect/MetricPair");
 const metricPairVariance = { 
 /* c8 ignore next */
 _Type: (_) => _ };
@@ -11700,11 +11700,11 @@ const unsafeMake$2 = (metricKey, metricState) => {
 	};
 };
 /** @internal */
-const MetricRegistryTypeId = /* @__PURE__ */ Symbol.for("effect/MetricRegistry");
+const MetricRegistryTypeId = /*#__PURE__*/ Symbol.for("effect/MetricRegistry");
 /** @internal */
 var MetricRegistryImpl = class {
 	[MetricRegistryTypeId] = MetricRegistryTypeId;
-	map = /* @__PURE__ */ empty$1();
+	map = /*#__PURE__*/ empty$1();
 	snapshot() {
 		const result = [];
 		for (const [key, hook] of this.map) result.push(unsafeMake$2(key, hook.get()));
@@ -11772,7 +11772,7 @@ const make$4 = () => {
 	return new MetricRegistryImpl();
 };
 /** @internal */
-const MetricTypeId = /* @__PURE__ */ Symbol.for("effect/Metric");
+const MetricTypeId = /*#__PURE__*/ Symbol.for("effect/Metric");
 const metricVariance = {
 	/* c8 ignore next */
 	_Type: (_) => _,
@@ -11782,7 +11782,7 @@ const metricVariance = {
 	_Out: (_) => _
 };
 /** @internal */
-const globalMetricRegistry = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Metric/globalMetricRegistry"), () => make$4());
+const globalMetricRegistry = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Metric/globalMetricRegistry"), () => make$4());
 /** @internal */
 const make$3 = function(keyType, unsafeUpdate, unsafeValue, unsafeModify) {
 	const metric = Object.assign((effect) => tap(effect, (a) => update(metric, a)), {
@@ -11824,15 +11824,15 @@ const fromMetricKey = (key) => {
 /** @internal */
 const histogram = (name, boundaries, description) => fromMetricKey(histogram$3(name, boundaries, description));
 /** @internal */
-const tagged = /* @__PURE__ */ dual(3, (self, key, value) => taggedWithLabels(self, [make$6(key, value)]));
+const tagged = /*#__PURE__*/ dual(3, (self, key, value) => taggedWithLabels(self, [make$6(key, value)]));
 /** @internal */
-const taggedWithLabels = /* @__PURE__ */ dual(2, (self, extraTags) => {
+const taggedWithLabels = /*#__PURE__*/ dual(2, (self, extraTags) => {
 	return make$3(self.keyType, (input, extraTags1) => self.unsafeUpdate(input, union$2(extraTags, extraTags1)), (extraTags1) => self.unsafeValue(union$2(extraTags, extraTags1)), (input, extraTags1) => self.unsafeModify(input, union$2(extraTags, extraTags1)));
 });
-const update = /* @__PURE__ */ dual(2, (self, input) => fiberRefGetWith(currentMetricLabels, (tags) => sync(() => self.unsafeUpdate(input, tags))));
+const update = /*#__PURE__*/ dual(2, (self, input) => fiberRefGetWith(currentMetricLabels, (tags) => sync(() => self.unsafeUpdate(input, tags))));
 ({ ...StructuralPrototype });
 /** @internal */
-const complete = /* @__PURE__ */ dual(2, (self, result) => fiberRefGetWith(currentRequestMap, (map) => sync(() => {
+const complete = /*#__PURE__*/ dual(2, (self, result) => fiberRefGetWith(currentRequestMap, (map) => sync(() => {
 	if (map.has(self)) {
 		const entry = map.get(self);
 		if (!entry.state.completed) {
@@ -11842,7 +11842,7 @@ const complete = /* @__PURE__ */ dual(2, (self, result) => fiberRefGetWith(curre
 	}
 })));
 /** @internal */
-const SupervisorTypeId = /* @__PURE__ */ Symbol.for("effect/Supervisor");
+const SupervisorTypeId = /*#__PURE__*/ Symbol.for("effect/Supervisor");
 /** @internal */
 const supervisorVariance = { 
 /* c8 ignore next */
@@ -11953,7 +11953,7 @@ const fromEffect = (effect) => {
 	return new Const(effect);
 };
 /** @internal */
-const none = /* @__PURE__ */ globalValue("effect/Supervisor/none", () => fromEffect(void_$1));
+const none = /*#__PURE__*/ globalValue("effect/Supervisor/none", () => fromEffect(void_$1));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/Differ.js
 /**
@@ -12051,7 +12051,7 @@ const diff = (oldValue, newValue) => {
 	}))));
 };
 /** @internal */
-const differ = /* @__PURE__ */ make$2({
+const differ = /*#__PURE__*/ make$2({
 	empty,
 	patch,
 	combine,
@@ -12060,15 +12060,15 @@ const differ = /* @__PURE__ */ make$2({
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/fiberRuntime.js
 /** @internal */
-const fiberStarted = /* @__PURE__ */ counter("effect_fiber_started", { incremental: true });
+const fiberStarted = /*#__PURE__*/ counter("effect_fiber_started", { incremental: true });
 /** @internal */
-const fiberActive = /* @__PURE__ */ counter("effect_fiber_active");
+const fiberActive = /*#__PURE__*/ counter("effect_fiber_active");
 /** @internal */
-const fiberSuccesses = /* @__PURE__ */ counter("effect_fiber_successes", { incremental: true });
+const fiberSuccesses = /*#__PURE__*/ counter("effect_fiber_successes", { incremental: true });
 /** @internal */
-const fiberFailures = /* @__PURE__ */ counter("effect_fiber_failures", { incremental: true });
+const fiberFailures = /*#__PURE__*/ counter("effect_fiber_failures", { incremental: true });
 /** @internal */
-const fiberLifetimes = /* @__PURE__ */ tagged(/* @__PURE__ */ histogram("effect_fiber_lifetimes", /* @__PURE__ */ exponential({
+const fiberLifetimes = /*#__PURE__*/ tagged(/*#__PURE__*/ histogram("effect_fiber_lifetimes", /*#__PURE__*/ exponential({
 	start: .5,
 	factor: 2,
 	count: 35
@@ -12088,8 +12088,8 @@ const runtimeFiberVariance = {
 const absurd = (_) => {
 	throw new Error(`BUG: FiberRuntime - ${toStringUnknown(_)} - please report an issue at https://github.com/Effect-TS/effect/issues`);
 };
-const YieldedOp = /* @__PURE__ */ Symbol.for("effect/internal/fiberRuntime/YieldedOp");
-const yieldedOpChannel = /* @__PURE__ */ globalValue("effect/internal/fiberRuntime/yieldedOpChannel", () => ({ currentOp: null }));
+const YieldedOp = /*#__PURE__*/ Symbol.for("effect/internal/fiberRuntime/YieldedOp");
+const yieldedOpChannel = /*#__PURE__*/ globalValue("effect/internal/fiberRuntime/yieldedOpChannel", () => ({ currentOp: null }));
 const contOpSuccess = {
 	[OP_ON_SUCCESS]: (_, cont, value) => {
 		return internalCall(() => cont.effect_instruction_i1(value));
@@ -12156,16 +12156,16 @@ const runBlockedRequests = (self) => forEachSequentialDiscard(flatten$2(self), (
 		entry.listeners.interrupted = true;
 	})), currentRequestMap, map);
 }, false, false));
-const _version = /* @__PURE__ */ getCurrentVersion();
+const _version = /*#__PURE__*/ getCurrentVersion();
 /** @internal */
 var FiberRuntime = class extends Class {
 	[FiberTypeId] = fiberVariance;
 	[RuntimeFiberTypeId] = runtimeFiberVariance;
 	_fiberRefs;
 	_fiberId;
-	_queue = /* @__PURE__ */ new Array();
+	_queue = /*#__PURE__*/ new Array();
 	_children = null;
-	_observers = /* @__PURE__ */ new Array();
+	_observers = /*#__PURE__*/ new Array();
 	_running = false;
 	_stack = [];
 	_asyncInterruptor = null;
@@ -12998,15 +12998,15 @@ var FiberRuntime = class extends Class {
 	};
 };
 /** @internal */
-const currentMinimumLogLevel = /* @__PURE__ */ globalValue("effect/FiberRef/currentMinimumLogLevel", () => fiberRefUnsafeMake(fromLiteral("Info")));
+const currentMinimumLogLevel = /*#__PURE__*/ globalValue("effect/FiberRef/currentMinimumLogLevel", () => fiberRefUnsafeMake(fromLiteral("Info")));
 /** @internal */
 const loggerWithConsoleLog = (self) => makeLogger((opts) => {
 	get$4(getOrDefault(opts.context, currentServices), consoleTag).unsafe.log(self.log(opts));
 });
 /** @internal */
-const defaultLogger = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Logger/defaultLogger"), () => loggerWithConsoleLog(stringLogger));
+const defaultLogger = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Logger/defaultLogger"), () => loggerWithConsoleLog(stringLogger));
 /** @internal */
-const tracerLogger = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Logger/tracerLogger"), () => makeLogger(({ annotations, cause, context, fiberId, logLevel, message }) => {
+const tracerLogger = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Logger/tracerLogger"), () => makeLogger(({ annotations, cause, context, fiberId, logLevel, message }) => {
 	const span = filterDisablePropagation(getOption(getOrDefault$1(context, currentContext), spanTag));
 	if (span._tag === "None" || span.value._tag === "ExternalSpan") return;
 	const clockService = unsafeGet(getOrDefault$1(context, currentServices), clockTag);
@@ -13018,8 +13018,8 @@ const tracerLogger = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("eff
 	span.value.event(toStringUnknown(Array.isArray(message) && message.length === 1 ? message[0] : message), clockService.unsafeCurrentTimeNanos(), attributes);
 }));
 /** @internal */
-const currentLoggers = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/FiberRef/currentLoggers"), () => fiberRefUnsafeMakeHashSet(make$18(defaultLogger, tracerLogger)));
-const forEach$1 = /* @__PURE__ */ dual((args) => isIterable(args[0]), (self, f, options) => withFiberRuntime((r) => {
+const currentLoggers = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentLoggers"), () => fiberRefUnsafeMakeHashSet(make$18(defaultLogger, tracerLogger)));
+const forEach$1 = /*#__PURE__*/ dual((args) => isIterable(args[0]), (self, f, options) => withFiberRuntime((r) => {
 	const isRequestBatchingEnabled = options?.batching === true || options?.batching === "inherit" && r.getFiberRef(currentRequestBatching);
 	if (options?.discard) return match(options.concurrency, () => finalizersMaskInternal(sequential, options?.concurrentFinalizers)((restore) => isRequestBatchingEnabled ? forEachConcurrentDiscard(self, (a, i) => restore(f(a, i)), true, false, 1) : forEachSequentialDiscard(self, (a, i) => restore(f(a, i)))), () => finalizersMaskInternal(parallel, options?.concurrentFinalizers)((restore) => forEachConcurrentDiscard(self, (a, i) => restore(f(a, i)), isRequestBatchingEnabled, false)), (n) => finalizersMaskInternal(parallelN(n), options?.concurrentFinalizers)((restore) => forEachConcurrentDiscard(self, (a, i) => restore(f(a, i)), isRequestBatchingEnabled, false, n)));
 	return match(options?.concurrency, () => finalizersMaskInternal(sequential, options?.concurrentFinalizers)((restore) => isRequestBatchingEnabled ? forEachParN(self, 1, (a, i) => restore(f(a, i)), true) : forEachSequential(self, (a, i) => restore(f(a, i)))), () => finalizersMaskInternal(parallel, options?.concurrentFinalizers)((restore) => forEachParUnbounded(self, (a, i) => restore(f(a, i)), isRequestBatchingEnabled)), (n) => finalizersMaskInternal(parallelN(n), options?.concurrentFinalizers)((restore) => forEachParN(self, n, (a, i) => restore(f(a, i)), isRequestBatchingEnabled)));
@@ -13220,7 +13220,7 @@ const sequentialFinalizers = (self) => contextWithEffect((context) => match$3(ge
 	}
 }));
 /** @internal */
-const scopeTag = /* @__PURE__ */ GenericTag("effect/Scope");
+const scopeTag = /*#__PURE__*/ GenericTag("effect/Scope");
 const scopeUnsafeAddFinalizer = (scope, fin) => {
 	if (scope.state._tag === "Open") scope.state.finalizers.set({}, fin);
 };
@@ -13275,18 +13275,18 @@ const scopeUnsafeMake = (strategy = sequential$1) => {
 	};
 	return scope;
 };
-const scopeExtend = /* @__PURE__ */ dual(2, (effect, scope) => mapInputContext(effect, merge$1(make$16(scopeTag, scope))));
+const scopeExtend = /*#__PURE__*/ dual(2, (effect, scope) => mapInputContext(effect, merge$1(make$16(scopeTag, scope))));
 /** @internal */
 const fiberRefUnsafeMakeSupervisor = (initial) => fiberRefUnsafeMakePatch(initial, {
 	differ,
 	fork: empty
 });
 /** @internal */
-const currentRuntimeFlags = /* @__PURE__ */ fiberRefUnsafeMakeRuntimeFlags(none$1);
+const currentRuntimeFlags = /*#__PURE__*/ fiberRefUnsafeMakeRuntimeFlags(none$1);
 /** @internal */
-const currentSupervisor = /* @__PURE__ */ fiberRefUnsafeMakeSupervisor(none);
+const currentSupervisor = /*#__PURE__*/ fiberRefUnsafeMakeSupervisor(none);
 /** @internal */
-const ensuring = /* @__PURE__ */ dual(2, (self, finalizer) => uninterruptibleMask$1((restore) => matchCauseEffect$1(restore(self), {
+const ensuring = /*#__PURE__*/ dual(2, (self, finalizer) => uninterruptibleMask$1((restore) => matchCauseEffect$1(restore(self), {
 	onFailure: (cause1) => matchCauseEffect$1(finalizer, {
 		onFailure: (cause2) => failCause$1(sequential$2(cause1, cause2)),
 		onSuccess: () => failCause$1(cause1)
@@ -13362,7 +13362,7 @@ const makeDual = (f) => function() {
 	return f.apply(this, arguments);
 };
 /** @internal */
-const unsafeFork = /* @__PURE__ */ makeDual((runtime, self, options) => {
+const unsafeFork = /*#__PURE__*/ makeDual((runtime, self, options) => {
 	const fiberId = unsafeMake$5();
 	const fiberRefUpdates = [[currentContext, [[fiberId, runtime.context]]]];
 	if (options?.scheduler) fiberRefUpdates.push([currentScheduler, [[fiberId, options.scheduler]]]);
@@ -13385,7 +13385,7 @@ const unsafeFork = /* @__PURE__ */ makeDual((runtime, self, options) => {
 	return fiberRuntime;
 });
 /** @internal */
-const unsafeRunSync = /* @__PURE__ */ makeDual((runtime, effect) => {
+const unsafeRunSync = /*#__PURE__*/ makeDual((runtime, effect) => {
 	const result = unsafeRunSyncExit(runtime)(effect);
 	if (result._tag === "Failure") throw fiberFailure(result.effect_instruction_i0);
 	return result.effect_instruction_i0;
@@ -13408,9 +13408,9 @@ const asyncFiberException = (fiber) => {
 	return error;
 };
 /** @internal */
-const FiberFailureId = /* @__PURE__ */ Symbol.for("effect/Runtime/FiberFailure");
+const FiberFailureId = /*#__PURE__*/ Symbol.for("effect/Runtime/FiberFailure");
 /** @internal */
-const FiberFailureCauseId = /* @__PURE__ */ Symbol.for("effect/Runtime/FiberFailure/Cause");
+const FiberFailureCauseId = /*#__PURE__*/ Symbol.for("effect/Runtime/FiberFailure/Cause");
 var FiberFailureImpl = class extends Error {
 	[FiberFailureId];
 	[FiberFailureCauseId];
@@ -13455,7 +13455,7 @@ const fastPath = (effect) => {
 	}
 };
 /** @internal */
-const unsafeRunSyncExit = /* @__PURE__ */ makeDual((runtime, effect) => {
+const unsafeRunSyncExit = /*#__PURE__*/ makeDual((runtime, effect) => {
 	const op = fastPath(effect);
 	if (op) return op;
 	const scheduler = new SyncScheduler();
@@ -13482,21 +13482,21 @@ var RuntimeImpl = class {
 /** @internal */
 const make$1 = (options) => new RuntimeImpl(options.context, options.runtimeFlags, options.fiberRefs);
 /** @internal */
-const defaultRuntime = /* @__PURE__ */ make$1({
-	context: /* @__PURE__ */ empty$12(),
+const defaultRuntime = /*#__PURE__*/ make$1({
+	context: /*#__PURE__*/ empty$12(),
 	runtimeFlags: /* @__PURE__ */ make$11(1, 32, 4),
-	fiberRefs: /* @__PURE__ */ empty$3()
+	fiberRefs: /*#__PURE__*/ empty$3()
 });
 /** @internal */
-const unsafeForkEffect = /* @__PURE__ */ unsafeFork(defaultRuntime);
+const unsafeForkEffect = /*#__PURE__*/ unsafeFork(defaultRuntime);
 /** @internal */
-const unsafeRunSyncEffect = /* @__PURE__ */ unsafeRunSync(defaultRuntime);
+const unsafeRunSyncEffect = /*#__PURE__*/ unsafeRunSync(defaultRuntime);
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/dateTime.js
 /** @internal */
-const TypeId$1 = /* @__PURE__ */ Symbol.for("effect/DateTime");
+const TypeId$1 = /*#__PURE__*/ Symbol.for("effect/DateTime");
 /** @internal */
-const TimeZoneTypeId = /* @__PURE__ */ Symbol.for("effect/DateTime/TimeZone");
+const TimeZoneTypeId = /*#__PURE__*/ Symbol.for("effect/DateTime/TimeZone");
 const Proto = {
 	[TypeId$1]: TypeId$1,
 	pipe() {
@@ -13616,7 +13616,7 @@ const isUtc$1 = (self) => self._tag === "Utc";
 /** @internal */
 const isZoned$1 = (self) => self._tag === "Zoned";
 /** @internal */
-const Equivalence$1 = /* @__PURE__ */ make$25((a, b) => a.epochMillis === b.epochMillis);
+const Equivalence$1 = /*#__PURE__*/ make$25((a, b) => a.epochMillis === b.epochMillis);
 const makeUtc = (epochMillis) => {
 	const self = Object.create(ProtoUtc);
 	self.epochMillis = epochMillis;
@@ -13665,7 +13665,7 @@ const unsafeMakeZoned$1 = (input, options) => {
 	return makeZonedFromAdjusted(self.epochMillis, zone, options?.disambiguation ?? "compatible");
 };
 /** @internal */
-const makeZoned = /* @__PURE__ */ liftThrowable(unsafeMakeZoned$1);
+const makeZoned = /*#__PURE__*/ liftThrowable(unsafeMakeZoned$1);
 const zonedStringRegex = /^(.{17,35})\[(.+)\]$/;
 /** @internal */
 const makeZonedFromString$1 = (input) => {
@@ -13677,7 +13677,7 @@ const makeZonedFromString$1 = (input) => {
 	const [, isoString, timeZone] = match;
 	return makeZoned(isoString, { timeZone });
 };
-const validZoneCache = /* @__PURE__ */ globalValue("effect/DateTime/validZoneCache", () => /* @__PURE__ */ new Map());
+const validZoneCache = /*#__PURE__*/ globalValue("effect/DateTime/validZoneCache", () => /* @__PURE__ */ new Map());
 const formatOptions = {
 	day: "numeric",
 	month: "numeric",
@@ -13717,7 +13717,7 @@ const zoneMakeOffset$1 = (offset) => {
 	return zone;
 };
 /** @internal */
-const zoneMakeNamed = /* @__PURE__ */ liftThrowable(zoneUnsafeMakeNamed$1);
+const zoneMakeNamed = /*#__PURE__*/ liftThrowable(zoneUnsafeMakeNamed$1);
 const offsetZoneRegex = /^(?:GMT|[+-])/;
 /** @internal */
 const zoneFromString$1 = (zone) => {
@@ -14736,9 +14736,9 @@ const getASTUnsupportedLiteralErrorMessage = (literal) => getErrorMessage$1("Uns
 /** @internal */
 const getASTDuplicateIndexSignatureErrorMessage = (type) => getErrorMessage$1("Duplicate index signature", `${type} index signature`);
 /** @internal */
-const getASTIndexSignatureParameterErrorMessage = /* @__PURE__ */ getErrorMessage$1("Unsupported index signature parameter", "An index signature parameter type must be `string`, `symbol`, a template literal type or a refinement of the previous types");
+const getASTIndexSignatureParameterErrorMessage = /*#__PURE__*/ getErrorMessage$1("Unsupported index signature parameter", "An index signature parameter type must be `string`, `symbol`, a template literal type or a refinement of the previous types");
 /** @internal */
-const getASTRequiredElementFollowinAnOptionalElementErrorMessage = /* @__PURE__ */ getErrorMessage$1("Invalid element", "A required element cannot follow an optional element. ts(1257)");
+const getASTRequiredElementFollowinAnOptionalElementErrorMessage = /*#__PURE__*/ getErrorMessage$1("Invalid element", "A required element cannot follow an optional element. ts(1257)");
 /** @internal */
 const getASTDuplicatePropertySignatureTransformationErrorMessage = (key) => getErrorMessage$1("Duplicate property signature transformation", `Duplicate key ${formatUnknown(key)}`);
 /** @internal */
@@ -14746,35 +14746,35 @@ const getASTDuplicatePropertySignatureErrorMessage = (key) => getErrorMessage$1(
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/internal/schema/schemaId.js
 /** @internal */
-const DateFromSelfSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/DateFromSelf");
+const DateFromSelfSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/DateFromSelf");
 /** @internal */
-const GreaterThanSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/GreaterThan");
+const GreaterThanSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/GreaterThan");
 /** @internal */
-const GreaterThanOrEqualToSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/GreaterThanOrEqualTo");
+const GreaterThanOrEqualToSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/GreaterThanOrEqualTo");
 /** @internal */
-const LessThanSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/LessThan");
+const LessThanSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/LessThan");
 /** @internal */
-const LessThanOrEqualToSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/LessThanOrEqualTo");
+const LessThanOrEqualToSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/LessThanOrEqualTo");
 /** @internal */
-const IntSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/Int");
+const IntSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/Int");
 /** @internal */
-const NonNaNSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/NonNaN");
+const NonNaNSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/NonNaN");
 /** @internal */
-const FiniteSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/Finite");
+const FiniteSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/Finite");
 /** @internal */
-const JsonNumberSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/JsonNumber");
+const JsonNumberSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/JsonNumber");
 /** @internal */
-const BetweenSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/Between");
+const BetweenSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/Between");
 /** @internal */
-const GreaterThanOrEqualToBigIntSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/GreaterThanOrEqualToBigint");
+const GreaterThanOrEqualToBigIntSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/GreaterThanOrEqualToBigint");
 /** @internal */
-const BetweenBigintSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/BetweenBigint");
+const BetweenBigintSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/BetweenBigint");
 /** @internal */
-const MinLengthSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/MinLength");
+const MinLengthSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/MinLength");
 /** @internal */
-const MaxLengthSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/MaxLength");
+const MaxLengthSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/MaxLength");
 /** @internal */
-const LengthSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/Length");
+const LengthSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/Length");
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.2/node_modules/effect/dist/esm/SchemaAST.js
 /**
@@ -14785,191 +14785,191 @@ const LengthSchemaId$1 = /* @__PURE__ */ Symbol.for("effect/SchemaId/Length");
 * @since 3.19.0
 * @experimental
 */
-const TypeConstructorAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/TypeConstructor");
+const TypeConstructorAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/TypeConstructor");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const BrandAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Brand");
+const BrandAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Brand");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const SchemaIdAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/SchemaId");
+const SchemaIdAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/SchemaId");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const MessageAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Message");
+const MessageAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Message");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const MissingMessageAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/MissingMessage");
+const MissingMessageAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/MissingMessage");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const IdentifierAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Identifier");
+const IdentifierAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Identifier");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const TitleAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Title");
+const TitleAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Title");
 /** @internal */
-const AutoTitleAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/AutoTitle");
+const AutoTitleAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/AutoTitle");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const DescriptionAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Description");
+const DescriptionAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Description");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const ExamplesAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Examples");
+const ExamplesAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Examples");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const DefaultAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Default");
+const DefaultAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Default");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const JSONSchemaAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/JSONSchema");
+const JSONSchemaAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/JSONSchema");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const ArbitraryAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Arbitrary");
+const ArbitraryAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Arbitrary");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const PrettyAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Pretty");
+const PrettyAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Pretty");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const EquivalenceAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Equivalence");
+const EquivalenceAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Equivalence");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const DocumentationAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Documentation");
+const DocumentationAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Documentation");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const ConcurrencyAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Concurrency");
+const ConcurrencyAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Concurrency");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const BatchingAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Batching");
+const BatchingAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Batching");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const ParseIssueTitleAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/ParseIssueTitle");
+const ParseIssueTitleAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/ParseIssueTitle");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const ParseOptionsAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/ParseOptions");
+const ParseOptionsAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/ParseOptions");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const DecodingFallbackAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/DecodingFallback");
+const DecodingFallbackAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/DecodingFallback");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const SurrogateAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/Surrogate");
+const SurrogateAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/Surrogate");
 /** @internal */
-const StableFilterAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/StableFilter");
+const StableFilterAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/StableFilter");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getAnnotation = /* @__PURE__ */ dual(2, (annotated, key) => Object.prototype.hasOwnProperty.call(annotated.annotations, key) ? some(annotated.annotations[key]) : none$4());
+const getAnnotation = /*#__PURE__*/ dual(2, (annotated, key) => Object.prototype.hasOwnProperty.call(annotated.annotations, key) ? some(annotated.annotations[key]) : none$4());
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getBrandAnnotation = /* @__PURE__ */ getAnnotation(BrandAnnotationId);
+const getBrandAnnotation = /*#__PURE__*/ getAnnotation(BrandAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getMessageAnnotation = /* @__PURE__ */ getAnnotation(MessageAnnotationId);
+const getMessageAnnotation = /*#__PURE__*/ getAnnotation(MessageAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getMissingMessageAnnotation = /* @__PURE__ */ getAnnotation(MissingMessageAnnotationId);
+const getMissingMessageAnnotation = /*#__PURE__*/ getAnnotation(MissingMessageAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getTitleAnnotation = /* @__PURE__ */ getAnnotation(TitleAnnotationId);
+const getTitleAnnotation = /*#__PURE__*/ getAnnotation(TitleAnnotationId);
 /** @internal */
-const getAutoTitleAnnotation = /* @__PURE__ */ getAnnotation(AutoTitleAnnotationId);
+const getAutoTitleAnnotation = /*#__PURE__*/ getAnnotation(AutoTitleAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getIdentifierAnnotation = /* @__PURE__ */ getAnnotation(IdentifierAnnotationId);
+const getIdentifierAnnotation = /*#__PURE__*/ getAnnotation(IdentifierAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getDescriptionAnnotation = /* @__PURE__ */ getAnnotation(DescriptionAnnotationId);
+const getDescriptionAnnotation = /*#__PURE__*/ getAnnotation(DescriptionAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getConcurrencyAnnotation = /* @__PURE__ */ getAnnotation(ConcurrencyAnnotationId);
+const getConcurrencyAnnotation = /*#__PURE__*/ getAnnotation(ConcurrencyAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getBatchingAnnotation = /* @__PURE__ */ getAnnotation(BatchingAnnotationId);
+const getBatchingAnnotation = /*#__PURE__*/ getAnnotation(BatchingAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getParseIssueTitleAnnotation$1 = /* @__PURE__ */ getAnnotation(ParseIssueTitleAnnotationId);
+const getParseIssueTitleAnnotation$1 = /*#__PURE__*/ getAnnotation(ParseIssueTitleAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getParseOptionsAnnotation = /* @__PURE__ */ getAnnotation(ParseOptionsAnnotationId);
+const getParseOptionsAnnotation = /*#__PURE__*/ getAnnotation(ParseOptionsAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getDecodingFallbackAnnotation = /* @__PURE__ */ getAnnotation(DecodingFallbackAnnotationId);
+const getDecodingFallbackAnnotation = /*#__PURE__*/ getAnnotation(DecodingFallbackAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getSurrogateAnnotation = /* @__PURE__ */ getAnnotation(SurrogateAnnotationId);
-const getStableFilterAnnotation = /* @__PURE__ */ getAnnotation(StableFilterAnnotationId);
+const getSurrogateAnnotation = /*#__PURE__*/ getAnnotation(SurrogateAnnotationId);
+const getStableFilterAnnotation = /*#__PURE__*/ getAnnotation(StableFilterAnnotationId);
 /** @internal */
 const hasStableFilter = (annotated) => exists(getStableFilterAnnotation(annotated), (b) => b === true);
 /**
 * @category annotations
 * @since 3.10.0
 */
-const JSONIdentifierAnnotationId = /* @__PURE__ */ Symbol.for("effect/annotation/JSONIdentifier");
+const JSONIdentifierAnnotationId = /*#__PURE__*/ Symbol.for("effect/annotation/JSONIdentifier");
 /**
 * @category annotations
 * @since 3.10.0
 */
-const getJSONIdentifierAnnotation = /* @__PURE__ */ getAnnotation(JSONIdentifierAnnotationId);
+const getJSONIdentifierAnnotation = /*#__PURE__*/ getAnnotation(JSONIdentifierAnnotationId);
 /**
 * @category annotations
 * @since 3.10.0
@@ -15048,8 +15048,8 @@ var Literal$1 = class {
 * @category guards
 * @since 3.10.0
 */
-const isLiteral = /* @__PURE__ */ createASTGuard("Literal");
-const $null = /* @__PURE__ */ new Literal$1(null);
+const isLiteral = /*#__PURE__*/ createASTGuard("Literal");
+const $null = /*#__PURE__*/ new Literal$1(null);
 /**
 * @category model
 * @since 3.10.0
@@ -15115,7 +15115,7 @@ var NeverKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const neverKeyword = /* @__PURE__ */ new NeverKeyword({ [TitleAnnotationId]: "never" });
+const neverKeyword = /*#__PURE__*/ new NeverKeyword({ [TitleAnnotationId]: "never" });
 /**
 * @category model
 * @since 3.10.0
@@ -15149,7 +15149,7 @@ var UnknownKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const unknownKeyword = /* @__PURE__ */ new UnknownKeyword({ [TitleAnnotationId]: "unknown" });
+const unknownKeyword = /*#__PURE__*/ new UnknownKeyword({ [TitleAnnotationId]: "unknown" });
 /**
 * @category model
 * @since 3.10.0
@@ -15183,7 +15183,7 @@ var AnyKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const anyKeyword = /* @__PURE__ */ new AnyKeyword({ [TitleAnnotationId]: "any" });
+const anyKeyword = /*#__PURE__*/ new AnyKeyword({ [TitleAnnotationId]: "any" });
 /**
 * @category model
 * @since 3.10.0
@@ -15217,7 +15217,7 @@ var StringKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const stringKeyword = /* @__PURE__ */ new StringKeyword({
+const stringKeyword = /*#__PURE__*/ new StringKeyword({
 	[TitleAnnotationId]: "string",
 	[DescriptionAnnotationId]: "a string"
 });
@@ -15225,7 +15225,7 @@ const stringKeyword = /* @__PURE__ */ new StringKeyword({
 * @category guards
 * @since 3.10.0
 */
-const isStringKeyword = /* @__PURE__ */ createASTGuard("StringKeyword");
+const isStringKeyword = /*#__PURE__*/ createASTGuard("StringKeyword");
 /**
 * @category model
 * @since 3.10.0
@@ -15259,7 +15259,7 @@ var NumberKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const numberKeyword = /* @__PURE__ */ new NumberKeyword({
+const numberKeyword = /*#__PURE__*/ new NumberKeyword({
 	[TitleAnnotationId]: "number",
 	[DescriptionAnnotationId]: "a number"
 });
@@ -15296,7 +15296,7 @@ var BooleanKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const booleanKeyword = /* @__PURE__ */ new BooleanKeyword({
+const booleanKeyword = /*#__PURE__*/ new BooleanKeyword({
 	[TitleAnnotationId]: "boolean",
 	[DescriptionAnnotationId]: "a boolean"
 });
@@ -15333,7 +15333,7 @@ var BigIntKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const bigIntKeyword = /* @__PURE__ */ new BigIntKeyword({
+const bigIntKeyword = /*#__PURE__*/ new BigIntKeyword({
 	[TitleAnnotationId]: "bigint",
 	[DescriptionAnnotationId]: "a bigint"
 });
@@ -15370,7 +15370,7 @@ var SymbolKeyword = class {
 * @category constructors
 * @since 3.10.0
 */
-const symbolKeyword = /* @__PURE__ */ new SymbolKeyword({
+const symbolKeyword = /*#__PURE__*/ new SymbolKeyword({
 	[TitleAnnotationId]: "symbol",
 	[DescriptionAnnotationId]: "a symbol"
 });
@@ -15378,7 +15378,7 @@ const symbolKeyword = /* @__PURE__ */ new SymbolKeyword({
 * @category guards
 * @since 3.10.0
 */
-const isSymbolKeyword = /* @__PURE__ */ createASTGuard("SymbolKeyword");
+const isSymbolKeyword = /*#__PURE__*/ createASTGuard("SymbolKeyword");
 /**
 * @category model
 * @since 3.10.0
@@ -15643,7 +15643,7 @@ const formatTypeLiteral = (ast) => {
 	} else if (ast.indexSignatures.length > 0) return `{ ${formatIndexSignatures(ast.indexSignatures)} }`;
 	else return "{}";
 };
-const sortCandidates = /* @__PURE__ */ sort(/* @__PURE__ */ mapInput(Order$1, (ast) => {
+const sortCandidates = /*#__PURE__*/ sort(/*#__PURE__*/ mapInput(Order$1, (ast) => {
 	switch (ast._tag) {
 		case "AnyKeyword": return 0;
 		case "UnknownKeyword": return 1;
@@ -15776,8 +15776,8 @@ const isMembers = (as) => as.length > 1;
 * @category guards
 * @since 3.10.0
 */
-const isUnion = /* @__PURE__ */ createASTGuard("Union");
-const toJSONMemoMap = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/Schema/AST/toJSONMemoMap"), () => /* @__PURE__ */ new WeakMap());
+const isUnion = /*#__PURE__*/ createASTGuard("Union");
+const toJSONMemoMap = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Schema/AST/toJSONMemoMap"), () => /* @__PURE__ */ new WeakMap());
 /**
 * @category model
 * @since 3.10.0
@@ -15858,7 +15858,7 @@ var Refinement$1 = class {
 * @category guards
 * @since 3.10.0
 */
-const isRefinement$1 = /* @__PURE__ */ createASTGuard("Refinement");
+const isRefinement$1 = /*#__PURE__*/ createASTGuard("Refinement");
 /**
 * @since 3.10.0
 */
@@ -16102,7 +16102,7 @@ const pickAnnotations = (annotationIds) => (annotated) => {
 	}
 	return out;
 };
-const preserveTransformationAnnotations = /* @__PURE__ */ pickAnnotations([
+const preserveTransformationAnnotations = /*#__PURE__*/ pickAnnotations([
 	ExamplesAnnotationId,
 	DefaultAnnotationId,
 	JSONSchemaAnnotationId,
@@ -16430,7 +16430,7 @@ var Forbidden = class {
 * @category type id
 * @since 3.10.0
 */
-const ParseErrorTypeId = /* @__PURE__ */ Symbol.for("effect/Schema/ParseErrorTypeId");
+const ParseErrorTypeId = /*#__PURE__*/ Symbol.for("effect/Schema/ParseErrorTypeId");
 /**
 * @since 3.10.0
 */
@@ -16490,7 +16490,7 @@ const isEither = isEither$1;
 * @category optimisation
 * @since 3.10.0
 */
-const flatMap = /* @__PURE__ */ dual(2, (self, f) => {
+const flatMap = /*#__PURE__*/ dual(2, (self, f) => {
 	return isEither(self) ? match$4(self, {
 		onLeft: left,
 		onRight: f
@@ -16500,21 +16500,21 @@ const flatMap = /* @__PURE__ */ dual(2, (self, f) => {
 * @category optimisation
 * @since 3.10.0
 */
-const map = /* @__PURE__ */ dual(2, (self, f) => {
+const map = /*#__PURE__*/ dual(2, (self, f) => {
 	return isEither(self) ? map$7(self, f) : map$1(self, f);
 });
 /**
 * @category optimisation
 * @since 3.10.0
 */
-const mapError = /* @__PURE__ */ dual(2, (self, f) => {
+const mapError = /*#__PURE__*/ dual(2, (self, f) => {
 	return isEither(self) ? mapLeft(self, f) : mapError$1(self, f);
 });
 /**
 * @category optimisation
 * @since 3.10.0
 */
-const mapBoth = /* @__PURE__ */ dual(2, (self, options) => {
+const mapBoth = /*#__PURE__*/ dual(2, (self, options) => {
 	return isEither(self) ? mapBoth$3(self, {
 		onLeft: options.onFailure,
 		onRight: options.onSuccess
@@ -16524,7 +16524,7 @@ const mapBoth = /* @__PURE__ */ dual(2, (self, options) => {
 * @category optimisation
 * @since 3.10.0
 */
-const orElse = /* @__PURE__ */ dual(2, (self, f) => {
+const orElse = /*#__PURE__*/ dual(2, (self, f) => {
 	return isEither(self) ? match$4(self, {
 		onLeft: f,
 		onRight: right
@@ -16575,8 +16575,8 @@ const encodeUnknown = (schema, options) => getEffect(schema.ast, false, options)
 * @since 3.10.0
 */
 const validateSync = (schema, options) => getSync(typeAST(schema.ast), true, options);
-const decodeMemoMap = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/ParseResult/decodeMemoMap"), () => /* @__PURE__ */ new WeakMap());
-const encodeMemoMap = /* @__PURE__ */ globalValue(/* @__PURE__ */ Symbol.for("effect/ParseResult/encodeMemoMap"), () => /* @__PURE__ */ new WeakMap());
+const decodeMemoMap = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/ParseResult/decodeMemoMap"), () => /* @__PURE__ */ new WeakMap());
+const encodeMemoMap = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/ParseResult/encodeMemoMap"), () => /* @__PURE__ */ new WeakMap());
 const goMemo = (ast, isDecoding) => {
 	const memoMap = isDecoding ? decodeMemoMap : encodeMemoMap;
 	const memo = memoMap.get(ast);
@@ -17195,7 +17195,7 @@ const formatRefinementKind = (kind) => {
 	}
 };
 const getAnnotated = (issue) => "ast" in issue ? some(issue.ast) : none$4();
-const Either_void = /* @__PURE__ */ right(void 0);
+const Either_void = /*#__PURE__*/ right(void 0);
 const getCurrentMessage = (issue) => getAnnotated(issue).pipe(flatMap$5(getMessageAnnotation), match$3({
 	onNone: () => Either_void,
 	onSome: (messageAnnotation) => {
@@ -17225,9 +17225,9 @@ const createParseIssueGuard = (tag) => (issue) => issue._tag === tag;
 * @category guards
 * @since 3.10.0
 */
-const isComposite = /* @__PURE__ */ createParseIssueGuard("Composite");
-const isRefinement = /* @__PURE__ */ createParseIssueGuard("Refinement");
-const isTransformation = /* @__PURE__ */ createParseIssueGuard("Transformation");
+const isComposite = /*#__PURE__*/ createParseIssueGuard("Composite");
+const isRefinement = /*#__PURE__*/ createParseIssueGuard("Refinement");
+const isTransformation = /*#__PURE__*/ createParseIssueGuard("Transformation");
 const getMessage = (issue) => flatMap(getCurrentMessage(issue), (currentMessage) => {
 	if (currentMessage !== void 0) return !currentMessage.override && (isComposite(issue) || isRefinement(issue) && issue.kind === "From" || isTransformation(issue) && issue.kind !== "Transformation") ? isTransformation(issue) || isRefinement(issue) ? getMessage(issue.issue) : Either_void : right(currentMessage.message);
 	return Either_void;
@@ -17291,7 +17291,7 @@ const formatTree = (issue) => {
 *
 * @since 2.0.0
 */
-const pick = /* @__PURE__ */ dual((args) => isObject(args[0]), (s, ...keys) => {
+const pick = /*#__PURE__*/ dual((args) => isObject(args[0]), (s, ...keys) => {
 	const out = {};
 	for (const k of keys) if (k in s) out[k] = s[k];
 	return out;
@@ -17310,7 +17310,7 @@ const pick = /* @__PURE__ */ dual((args) => isObject(args[0]), (s, ...keys) => {
 *
 * @since 2.0.0
 */
-const omit = /* @__PURE__ */ dual((args) => isObject(args[0]), (s, ...keys) => {
+const omit = /*#__PURE__*/ dual((args) => isObject(args[0]), (s, ...keys) => {
 	const out = { ...s };
 	for (const k of keys) delete out[k];
 	return out;
@@ -17324,7 +17324,7 @@ const omit = /* @__PURE__ */ dual((args) => isObject(args[0]), (s, ...keys) => {
 * @since 3.10.0
 * @category symbol
 */
-const TypeId = /* @__PURE__ */ Symbol.for("effect/Schema");
+const TypeId = /*#__PURE__*/ Symbol.for("effect/Schema");
 /**
 * @category constructors
 * @since 3.10.0
@@ -17457,7 +17457,7 @@ const declare = function() {
 * @category schema id
 * @since 3.10.0
 */
-const InstanceOfSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/InstanceOf");
+const InstanceOfSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/InstanceOf");
 /**
 * @category constructors
 * @since 3.10.0
@@ -17649,7 +17649,7 @@ const mergeSignatureAnnotations = (ast, annotations) => {
 * @since 3.10.0
 * @category symbol
 */
-const PropertySignatureTypeId = /* @__PURE__ */ Symbol.for("effect/PropertySignature");
+const PropertySignatureTypeId = /*#__PURE__*/ Symbol.for("effect/PropertySignature");
 /**
 * @since 3.10.0
 * @category guards
@@ -17704,14 +17704,14 @@ const propertySignature = (self) => new PropertySignatureWithFromImpl(new Proper
 * @category PropertySignature
 * @since 3.10.0
 */
-const withConstructorDefault = /* @__PURE__ */ dual(2, (self, defaultValue) => {
+const withConstructorDefault = /*#__PURE__*/ dual(2, (self, defaultValue) => {
 	const ast = self.ast;
 	switch (ast._tag) {
 		case "PropertySignatureDeclaration": return makePropertySignature(new PropertySignatureDeclaration(ast.type, ast.isOptional, ast.isReadonly, ast.annotations, defaultValue));
 		case "PropertySignatureTransformation": return makePropertySignature(new PropertySignatureTransformation(ast.from, new ToPropertySignature(ast.to.type, ast.to.isOptional, ast.to.isReadonly, ast.to.annotations, defaultValue), ast.decode, ast.encode));
 	}
 });
-const preserveMissingMessageAnnotation = /* @__PURE__ */ pickAnnotations([MissingMessageAnnotationId]);
+const preserveMissingMessageAnnotation = /*#__PURE__*/ pickAnnotations([MissingMessageAnnotationId]);
 const getDefaultTypeLiteralAST = (fields, records) => {
 	const ownKeys = Reflect.ownKeys(fields);
 	const pss = [];
@@ -17872,7 +17872,7 @@ const suspend = (f) => make(new Suspend(() => f().ast));
 * @since 3.10.0
 * @category symbol
 */
-const RefineSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Refine");
+const RefineSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Refine");
 function makeRefineClass(from, filter, ast) {
 	return class RefineClass extends make(ast) {
 		static annotations(annotations) {
@@ -17928,7 +17928,7 @@ function makeTransformationClass(from, to, ast) {
 * @category transformations
 * @since 3.10.0
 */
-const transformOrFail = /* @__PURE__ */ dual((args) => isSchema(args[0]) && isSchema(args[1]), (from, to, options) => makeTransformationClass(from, to, new Transformation$1(from.ast, to.ast, new FinalTransformation(options.decode, options.encode))));
+const transformOrFail = /*#__PURE__*/ dual((args) => isSchema(args[0]) && isSchema(args[1]), (from, to, options) => makeTransformationClass(from, to, new Transformation$1(from.ast, to.ast, new FinalTransformation(options.decode, options.encode))));
 /**
 * Create a new `Schema` by transforming the input and output of an existing `Schema`
 * using the provided mapping functions.
@@ -17936,7 +17936,7 @@ const transformOrFail = /* @__PURE__ */ dual((args) => isSchema(args[0]) && isSc
 * @category transformations
 * @since 3.10.0
 */
-const transform = /* @__PURE__ */ dual((args) => isSchema(args[0]) && isSchema(args[1]), (from, to, options) => transformOrFail(from, to, {
+const transform = /*#__PURE__*/ dual((args) => isSchema(args[0]) && isSchema(args[1]), (from, to, options) => transformOrFail(from, to, {
 	strict: true,
 	decode: (fromA, _options, _ast, toA) => succeed(options.decode(fromA, toA)),
 	encode: (toI, _options, _ast, toA) => succeed(options.encode(toI, toA))
@@ -17945,7 +17945,7 @@ const transform = /* @__PURE__ */ dual((args) => isSchema(args[0]) && isSchema(a
 * @category schema id
 * @since 3.10.0
 */
-const TrimmedSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Trimmed");
+const TrimmedSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Trimmed");
 /**
 * Verifies that a string contains no leading or trailing whitespaces.
 *
@@ -18031,7 +18031,7 @@ const length = (length, annotations) => (self) => {
 * @category schema id
 * @since 3.10.0
 */
-const PatternSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Pattern");
+const PatternSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Pattern");
 /**
 * @category string filters
 * @since 3.10.0
@@ -18053,7 +18053,7 @@ const pattern = (regex, annotations) => (self) => {
 * @category schema id
 * @since 3.10.0
 */
-const LowercasedSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Lowercased");
+const LowercasedSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Lowercased");
 /**
 * Verifies that a string is lowercased.
 *
@@ -18071,12 +18071,12 @@ const lowercased = (annotations) => (self) => self.pipe(filter((a) => a === a.to
 * @category string constructors
 * @since 3.10.0
 */
-var Lowercased = class extends String$.pipe(/* @__PURE__ */ lowercased({ identifier: "Lowercased" })) {};
+var Lowercased = class extends String$.pipe(/*#__PURE__*/ lowercased({ identifier: "Lowercased" })) {};
 /**
 * @category schema id
 * @since 3.10.0
 */
-const UppercasedSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Uppercased");
+const UppercasedSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Uppercased");
 /**
 * Verifies that a string is uppercased.
 *
@@ -18094,12 +18094,12 @@ const uppercased = (annotations) => (self) => self.pipe(filter((a) => a === a.to
 * @category string constructors
 * @since 3.10.0
 */
-var Uppercased = class extends String$.pipe(/* @__PURE__ */ uppercased({ identifier: "Uppercased" })) {};
+var Uppercased = class extends String$.pipe(/*#__PURE__*/ uppercased({ identifier: "Uppercased" })) {};
 /**
 * @category schema id
 * @since 3.10.0
 */
-const CapitalizedSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Capitalized");
+const CapitalizedSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Capitalized");
 /**
 * Verifies that a string is capitalized.
 *
@@ -18117,12 +18117,12 @@ const capitalized = (annotations) => (self) => self.pipe(filter((a) => a[0]?.toU
 * @category string constructors
 * @since 3.10.0
 */
-var Capitalized = class extends String$.pipe(/* @__PURE__ */ capitalized({ identifier: "Capitalized" })) {};
+var Capitalized = class extends String$.pipe(/*#__PURE__*/ capitalized({ identifier: "Capitalized" })) {};
 /**
 * @category schema id
 * @since 3.10.0
 */
-const UncapitalizedSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/Uncapitalized");
+const UncapitalizedSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/Uncapitalized");
 /**
 * Verifies that a string is uncapitalized.
 *
@@ -18140,8 +18140,8 @@ const uncapitalized = (annotations) => (self) => self.pipe(filter((a) => a[0]?.t
 * @category string constructors
 * @since 3.10.0
 */
-var Uncapitalized = class extends String$.pipe(/* @__PURE__ */ uncapitalized({ identifier: "Uncapitalized" })) {};
-String$.pipe(/* @__PURE__ */ length(1, { identifier: "Char" }));
+var Uncapitalized = class extends String$.pipe(/*#__PURE__*/ uncapitalized({ identifier: "Uncapitalized" })) {};
+String$.pipe(/*#__PURE__*/ length(1, { identifier: "Char" }));
 /**
 * @category string filters
 * @since 3.10.0
@@ -18175,7 +18175,7 @@ transform(String$.annotations({ description: "a string that will be converted to
 * @category string constructors
 * @since 3.10.0
 */
-var Trimmed = class extends String$.pipe(/* @__PURE__ */ trimmed({ identifier: "Trimmed" })) {};
+var Trimmed = class extends String$.pipe(/*#__PURE__*/ trimmed({ identifier: "Trimmed" })) {};
 /**
 * Useful for validating strings that must contain meaningful characters without
 * leading or trailing whitespace.
@@ -18192,21 +18192,21 @@ var Trimmed = class extends String$.pipe(/* @__PURE__ */ trimmed({ identifier: "
 * @category string constructors
 * @since 3.10.0
 */
-var NonEmptyTrimmedString = class extends Trimmed.pipe(/* @__PURE__ */ nonEmptyString({ identifier: "NonEmptyTrimmedString" })) {};
+var NonEmptyTrimmedString = class extends Trimmed.pipe(/*#__PURE__*/ nonEmptyString({ identifier: "NonEmptyTrimmedString" })) {};
 transform(String$.annotations({ description: "a string that will be trimmed" }), Trimmed, {
 	strict: true,
 	decode: (i) => i.trim(),
 	encode: identity
 }).annotations({ identifier: "Trim" });
 const getErrorMessage = (e) => e instanceof Error ? e.message : String(e);
-String$.pipe(/* @__PURE__ */ nonEmptyString({ identifier: "NonEmptyString" }));
+String$.pipe(/*#__PURE__*/ nonEmptyString({ identifier: "NonEmptyString" }));
 /**
 * @category schema id
 * @since 3.10.0
 */
-const UUIDSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/UUID");
+const UUIDSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/UUID");
 const uuidRegexp = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i;
-String$.pipe(/* @__PURE__ */ pattern(uuidRegexp, {
+String$.pipe(/*#__PURE__*/ pattern(uuidRegexp, {
 	schemaId: UUIDSchemaId,
 	identifier: "UUID",
 	jsonSchema: {
@@ -18220,8 +18220,8 @@ String$.pipe(/* @__PURE__ */ pattern(uuidRegexp, {
 * @category schema id
 * @since 3.10.0
 */
-const ULIDSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/ULID");
-String$.pipe(/* @__PURE__ */ pattern(/^[0-7][0-9A-HJKMNP-TV-Z]{25}$/i, {
+const ULIDSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/ULID");
+String$.pipe(/*#__PURE__*/ pattern(/^[0-7][0-9A-HJKMNP-TV-Z]{25}$/i, {
 	schemaId: ULIDSchemaId,
 	identifier: "ULID",
 	description: "a Universally Unique Lexicographically Sortable Identifier",
@@ -18447,31 +18447,31 @@ function parseNumber(self) {
 	});
 }
 parseNumber(String$.annotations({ description: "a string to be decoded into a number" })).annotations({ identifier: "NumberFromString" });
-Number$.pipe(/* @__PURE__ */ finite({ identifier: "Finite" }));
+Number$.pipe(/*#__PURE__*/ finite({ identifier: "Finite" }));
 /**
 * @category number constructors
 * @since 3.10.0
 */
-var Int = class extends Number$.pipe(/* @__PURE__ */ int({ identifier: "Int" })) {};
-Number$.pipe(/* @__PURE__ */ nonNaN({ identifier: "NonNaN" }));
-Number$.pipe(/* @__PURE__ */ positive({ identifier: "Positive" }));
-Number$.pipe(/* @__PURE__ */ negative({ identifier: "Negative" }));
-Number$.pipe(/* @__PURE__ */ nonPositive({ identifier: "NonPositive" }));
+var Int = class extends Number$.pipe(/*#__PURE__*/ int({ identifier: "Int" })) {};
+Number$.pipe(/*#__PURE__*/ nonNaN({ identifier: "NonNaN" }));
+Number$.pipe(/*#__PURE__*/ positive({ identifier: "Positive" }));
+Number$.pipe(/*#__PURE__*/ negative({ identifier: "Negative" }));
+Number$.pipe(/*#__PURE__*/ nonPositive({ identifier: "NonPositive" }));
 /**
 * @category number constructors
 * @since 3.10.0
 */
-var NonNegative = class extends Number$.pipe(/* @__PURE__ */ nonNegative({ identifier: "NonNegative" })) {};
+var NonNegative = class extends Number$.pipe(/*#__PURE__*/ nonNegative({ identifier: "NonNegative" })) {};
 /**
 * @category schema id
 * @since 3.10.0
 */
 const JsonNumberSchemaId = JsonNumberSchemaId$1;
-Number$.pipe(/* @__PURE__ */ finite({
+Number$.pipe(/*#__PURE__*/ finite({
 	schemaId: JsonNumberSchemaId,
 	identifier: "JsonNumber"
 }));
-transform(/* @__PURE__ */ Boolean$.annotations({ description: "a boolean that will be negated" }), Boolean$, {
+transform(/*#__PURE__*/ Boolean$.annotations({ description: "a boolean that will be negated" }), Boolean$, {
 	strict: true,
 	decode: (i) => not(i),
 	encode: (a) => not(a)
@@ -18539,7 +18539,7 @@ var BigInt$ = class extends transformOrFail(String$.annotations({ description: "
 * @category bigint constructors
 * @since 3.10.0
 */
-const NonNegativeBigIntFromSelf = /* @__PURE__ */ BigIntFromSelf.pipe(/* @__PURE__ */ nonNegativeBigInt({ identifier: "NonNegativeBigintFromSelf" }));
+const NonNegativeBigIntFromSelf = /*#__PURE__*/ BigIntFromSelf.pipe(/*#__PURE__*/ nonNegativeBigInt({ identifier: "NonNegativeBigintFromSelf" }));
 transformOrFail(Number$.annotations({ description: "a number to be decoded into a bigint" }), BigIntFromSelf.pipe(betweenBigInt(BigInt(Number.MIN_SAFE_INTEGER), BigInt(Number.MAX_SAFE_INTEGER))), {
 	strict: true,
 	decode: (i, _, ast) => fromOption(fromNumber(i), () => new Type(ast, i, `Unable to decode ${i} into a bigint`)),
@@ -18574,21 +18574,21 @@ transformOrFail(NonNegativeBigIntFromSelf.annotations({ description: "a bigint t
 * @category number constructors
 * @since 3.11.10
 */
-const NonNegativeInt = /* @__PURE__ */ NonNegative.pipe(int()).annotations({ identifier: "NonNegativeInt" });
+const NonNegativeInt = /*#__PURE__*/ NonNegative.pipe(int()).annotations({ identifier: "NonNegativeInt" });
 transform(NonNegative.annotations({ description: "a non-negative number to be decoded into a Duration" }), DurationFromSelf, {
 	strict: true,
 	decode: (i) => millis(i),
 	encode: (a) => toMillis(a)
 }).annotations({ identifier: "DurationFromMillis" });
-const DurationValueMillis = /* @__PURE__ */ TaggedStruct("Millis", { millis: NonNegativeInt });
-const DurationValueNanos = /* @__PURE__ */ TaggedStruct("Nanos", { nanos: BigInt$ });
-const DurationValueInfinity = /* @__PURE__ */ TaggedStruct("Infinity", {});
-const durationValueInfinity = /* @__PURE__ */ DurationValueInfinity.make({});
-const DurationValue = /* @__PURE__ */ Union(DurationValueMillis, DurationValueNanos, DurationValueInfinity).annotations({
+const DurationValueMillis = /*#__PURE__*/ TaggedStruct("Millis", { millis: NonNegativeInt });
+const DurationValueNanos = /*#__PURE__*/ TaggedStruct("Nanos", { nanos: BigInt$ });
+const DurationValueInfinity = /*#__PURE__*/ TaggedStruct("Infinity", {});
+const durationValueInfinity = /*#__PURE__*/ DurationValueInfinity.make({});
+const DurationValue = /*#__PURE__*/ Union(DurationValueMillis, DurationValueNanos, DurationValueInfinity).annotations({
 	identifier: "DurationValue",
 	description: "an JSON-compatible tagged union to be decoded into a Duration"
 });
-const HRTime = /* @__PURE__ */ Union(/* @__PURE__ */ Tuple(element(NonNegativeInt).annotations({ title: "seconds" }), element(NonNegativeInt).annotations({ title: "nanos" })).annotations({ identifier: "FiniteHRTime" }), /* @__PURE__ */ Tuple(Literal(-1), Literal(0)).annotations({ identifier: "InfiniteHRTime" })).annotations({
+const HRTime = /*#__PURE__*/ Union(/* @__PURE__ */ Tuple(element(NonNegativeInt).annotations({ title: "seconds" }), element(NonNegativeInt).annotations({ title: "nanos" })).annotations({ identifier: "FiniteHRTime" }), /* @__PURE__ */ Tuple(Literal(-1), Literal(0)).annotations({ identifier: "InfiniteHRTime" })).annotations({
 	identifier: "HRTime",
 	description: "a tuple of seconds and nanos to be decoded into a Duration"
 });
@@ -18627,7 +18627,7 @@ var Uint8ArrayFromSelf = class extends declare(isUint8Array, {
 * @category number constructors
 * @since 3.11.10
 */
-var Uint8 = class extends Number$.pipe(/* @__PURE__ */ between(0, 255, {
+var Uint8 = class extends Number$.pipe(/*#__PURE__*/ between(0, 255, {
 	identifier: "Uint8",
 	description: "a 8-bit unsigned integer"
 })) {};
@@ -18640,7 +18640,7 @@ transform(Array$(Uint8).annotations({ description: "an array of 8-bit unsigned i
 * @category schema id
 * @since 3.10.0
 */
-const ValidDateSchemaId = /* @__PURE__ */ Symbol.for("effect/SchemaId/ValidDate");
+const ValidDateSchemaId = /*#__PURE__*/ Symbol.for("effect/SchemaId/ValidDate");
 /**
 * Defines a filter that specifically rejects invalid dates, such as `new
 * Date("Invalid Date")`. This filter ensures that only properly formatted and
@@ -18679,7 +18679,7 @@ var DateFromSelf = class extends declare(isDate, {
 	arbitrary: () => (fc) => fc.date({ noInvalidDate: false }),
 	equivalence: () => Date$1
 }) {};
-DateFromSelf.pipe(/* @__PURE__ */ validDate({
+DateFromSelf.pipe(/*#__PURE__*/ validDate({
 	identifier: "ValidDateFromSelf",
 	description: "a valid Date instance"
 }));
@@ -18697,7 +18697,7 @@ var DateFromString = class extends transform(String$.annotations({ description: 
 	decode: (i) => new Date(i),
 	encode: (a) => formatDate(a)
 }).annotations({ identifier: "DateFromString" }) {};
-DateFromString.pipe(/* @__PURE__ */ validDate({ identifier: "Date" }));
+DateFromString.pipe(/*#__PURE__*/ validDate({ identifier: "Date" }));
 transform(Number$.annotations({ description: "a number to be decoded into a Date" }), DateFromSelf, {
 	strict: true,
 	decode: (i) => new Date(i),
@@ -18847,7 +18847,7 @@ const OptionFromSelf_ = (value) => {
 const OptionFromSelf = (value) => {
 	return OptionFromSelf_(value).annotations({ description: `Option<${format(value)}>` });
 };
-transform(String$, /* @__PURE__ */ OptionFromSelf(NonEmptyTrimmedString), {
+transform(String$, /*#__PURE__*/ OptionFromSelf(NonEmptyTrimmedString), {
 	strict: true,
 	decode: (i) => filter$1(some(i.trim()), isNonEmpty$1),
 	encode: (a) => getOrElse(a, () => "")
@@ -18884,7 +18884,7 @@ transform(Number$.annotations({ description: "a number to be decoded into a BigD
 function getDisableValidationMakeOption(options) {
 	return isBoolean(options) ? options : options?.disableValidation ?? false;
 }
-const FiberIdEncoded = /* @__PURE__ */ Union(/* @__PURE__ */ Struct({ _tag: Literal("None") }).annotations({ identifier: "FiberIdNoneEncoded" }), /* @__PURE__ */ Struct({
+const FiberIdEncoded = /*#__PURE__*/ Union(/* @__PURE__ */ Struct({ _tag: Literal("None") }).annotations({ identifier: "FiberIdNoneEncoded" }), /* @__PURE__ */ Struct({
 	_tag: Literal("Runtime"),
 	id: Int,
 	startTimeMillis: Int
@@ -18980,8 +18980,8 @@ transform(Literal("true", "false").annotations({ description: "a string to be de
 	decode: (i) => i === "true",
 	encode: (a) => a ? "true" : "false"
 }).annotations({ identifier: "BooleanFromString" });
-const SymbolStruct = /* @__PURE__ */ TaggedStruct("symbol", { key: String$ }).annotations({ description: "an object to be decoded into a globally shared symbol" });
-const SymbolFromStruct = /* @__PURE__ */ transformOrFail(SymbolStruct, SymbolFromSelf, {
+const SymbolStruct = /*#__PURE__*/ TaggedStruct("symbol", { key: String$ }).annotations({ description: "an object to be decoded into a globally shared symbol" });
+const SymbolFromStruct = /*#__PURE__*/ transformOrFail(SymbolStruct, SymbolFromSelf, {
 	strict: true,
 	decode: (i) => decodeSymbol(i.key),
 	encode: (a, _, ast) => map(encodeSymbol(a, ast), (key) => SymbolStruct.make({ key }))

@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-alpha.5/node_modules/sury/src/Sury.res.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.6/node_modules/sury/src/Sury.res.mjs
 let idMap = {};
 function create(str) {
 	let v = idMap[str];
@@ -18,7 +18,7 @@ function fromString(string) {
 	while (true) {
 		let idx = _idx;
 		let match = string[idx];
-		if (match === void 0) return "\"" + string + "\"";
+		if (match === void 0) return `"` + string + `"`;
 		switch (match) {
 			case "\"":
 			case "\n": return JSON.stringify(string);
@@ -30,7 +30,7 @@ function fromString(string) {
 }
 function toArray(path) {
 	if (path === "") return [];
-	else return JSON.parse(path.split("\"][\"").join("\",\""));
+	else return JSON.parse(path.split(`"]["`).join(`","`));
 }
 let vendor = "sury";
 let s = Symbol(vendor);
@@ -75,9 +75,9 @@ let flags = {
 function stringify(unknown) {
 	let tagFlag = flags[typeof unknown];
 	if (tagFlag & 16) return undefinedTag;
-	if (!(tagFlag & 64)) if (tagFlag & 2) return "\"" + unknown + "\"";
-	else if (tagFlag & 1024) return unknown + "n";
-	else if (tagFlag & 4096) return "Function";
+	if (!(tagFlag & 64)) if (tagFlag & 2) return `"` + unknown + `"`;
+	else if (tagFlag & 1024) return unknown + `n`;
+	else if (tagFlag & 4096) return `Function`;
 	else return unknown.toString();
 	if (unknown === null) return nullTag;
 	if (Array.isArray(unknown)) {
@@ -94,7 +94,7 @@ function stringify(unknown) {
 	for (let i$1 = 0, i_finish$1 = keys.length; i$1 < i_finish$1; ++i$1) {
 		let key = keys[i$1];
 		let value = unknown[key];
-		string$1 = string$1 + key + ": " + stringify(value) + "; ";
+		string$1 = string$1 + key + `: ` + stringify(value) + `; `;
 	}
 	return string$1 + "}";
 }
@@ -111,14 +111,14 @@ function toExpression(schema) {
 	if (format !== void 0) {
 		if (format !== "compactColumns") return format;
 		let additionalItems = schema.additionalItems;
-		if (to === void 0) if (additionalItems !== void 0 && additionalItems !== "strip" && additionalItems !== "strict") return toExpression(additionalItems) + "[]";
+		if (to === void 0) if (additionalItems !== void 0 && additionalItems !== "strip" && additionalItems !== "strict") return toExpression(additionalItems) + `[]`;
 		else return "unknown[][]";
 		let props = to.properties;
 		if (props === void 0) return "unknown[][]";
-		return "[" + Object.keys(props).map((key) => {
+		return `[` + Object.keys(props).map((key) => {
 			let propSchema = props[key];
-			return toExpression(propSchema) + "[]";
-		}).join(", ") + "]";
+			return toExpression(propSchema) + `[]`;
+		}).join(", ") + `]`;
 	}
 	switch (tag) {
 		case "nan": return "NaN";
@@ -126,9 +126,9 @@ function toExpression(schema) {
 			let additionalItems$1 = schema.additionalItems;
 			let properties = schema.properties;
 			let locations = Object.keys(properties);
-			if (locations.length === 0) if (typeof additionalItems$1 === objectTag) return "{ [key: string]: " + toExpression(additionalItems$1) + "; }";
-			else return "{}";
-			else return "{ " + locations.map((location) => location + ": " + toExpression(properties[location]) + ";").join(" ") + " }";
+			if (locations.length === 0) if (typeof additionalItems$1 === objectTag) return `{ [key: string]: ` + toExpression(additionalItems$1) + `; }`;
+			else return `{}`;
+			else return `{ ` + locations.map((location) => location + `: ` + toExpression(properties[location]) + `;`).join(" ") + ` }`;
 		default:
 			if (schema.b) return tag;
 			switch (tag) {
@@ -136,9 +136,9 @@ function toExpression(schema) {
 				case "array":
 					let additionalItems$2 = schema.additionalItems;
 					let items = schema.items;
-					if (typeof additionalItems$2 !== objectTag) return "[" + items.map(toExpression).join(", ") + "]";
+					if (typeof additionalItems$2 !== objectTag) return `[` + items.map(toExpression).join(", ") + `]`;
 					let itemName = toExpression(additionalItems$2);
-					return (additionalItems$2.type === unionTag ? "(" + itemName + ")" : itemName) + "[]";
+					return (additionalItems$2.type === unionTag ? `(` + itemName + `)` : itemName) + "[]";
 				default: return tag;
 			}
 	}
@@ -171,7 +171,7 @@ function getOrRethrow(exn) {
 }
 function message(error) {
 	let nonEmptyPath = error.path;
-	return (nonEmptyPath === "" ? "" : "Failed at " + nonEmptyPath + ": ") + error.reason;
+	return (nonEmptyPath === "" ? "" : `Failed at ` + nonEmptyPath + `: `) + error.reason;
 }
 let globalConfig = {
 	m: message,
@@ -234,7 +234,7 @@ function embed(b, value) {
 	let e = b.g.e;
 	let l = e.length;
 	e[l] = value;
-	return "e[" + l + "]";
+	return `e[` + l + `]`;
 }
 function inlineConst(b, schema) {
 	let tagFlag = flags[schema.type];
@@ -246,7 +246,7 @@ function inlineConst(b, schema) {
 	else return $$const;
 }
 function inlineLocation(global, location) {
-	let key = "\"" + location + "\"";
+	let key = `"` + location + `"`;
 	let i = global[key];
 	if (i !== void 0) return i;
 	let inlinedLocation = fromString(location);
@@ -274,23 +274,27 @@ function _prevVar() {
 function varWithoutAllocation(global) {
 	let newCounter = global.v + 1;
 	global.v = newCounter;
-	return "v" + newCounter;
+	return `v` + newCounter;
 }
 function _notVarBeforeValidation() {
 	let val = this;
 	let v = varWithoutAllocation(val.g);
-	val.cp = "let " + v + "=" + val.i + ";";
+	val.cp = `let ` + v + `=` + val.i + `;`;
 	val.i = v;
 	val.v = _var;
 	return v;
 }
 function _notVarAtParent() {
 	let val = this;
-	let v = varWithoutAllocation(val.g);
-	val.p.a(v + "=" + val.i);
+	if (val.p.a) {
+		let v = varWithoutAllocation(val.g);
+		val.p.a(v + `=` + val.i);
+		val.v = _var;
+		val.i = v;
+		return v;
+	}
 	val.v = _var;
-	val.i = v;
-	return v;
+	return val.i;
 }
 function _notVar() {
 	let val = this;
@@ -301,8 +305,8 @@ function _notVar() {
 	if (i === "") target.a(v);
 	else if (val.cp !== "") {
 		target.a(v);
-		val.cp = val.cp + v + "=" + i + ";";
-	} else target.a(v + "=" + i);
+		val.cp = val.cp + v + `=` + i + `;`;
+	} else target.a(v + `=` + i);
 	val.v = _var;
 	val.i = v;
 	return v;
@@ -329,17 +333,17 @@ function operationArg(schema, expected, flag, defs) {
 function failWithArg(b, fn, arg) {
 	return embed(b, (arg) => {
 		throw new SuryError(fn(arg));
-	}) + "(" + arg + ")";
+	}) + `(` + arg + `)`;
 }
 function makeInvalidInputDetails(expected, received, path, input, includeInput, unionErrors, reasonOverride) {
-	let reasonRef = reasonOverride !== void 0 ? reasonOverride : "Expected " + toExpression(expected) + ", received " + (includeInput ? stringify(input) : toExpression(received));
+	let reasonRef = reasonOverride !== void 0 ? reasonOverride : `Expected ` + toExpression(expected) + `, received ` + (includeInput ? stringify(input) : toExpression(received));
 	if (unionErrors !== void 0) {
 		let reasonsDict = {};
 		for (let idx = 0, idx_finish = unionErrors.length; idx < idx_finish; ++idx) {
 			let caseError = unionErrors[idx];
 			let caseReason = caseError.reason.split("\n").join("\n  ");
 			let nonEmptyPath = caseError.path;
-			let line = "\n- " + (nonEmptyPath === "" ? "" : "At " + nonEmptyPath + ": ") + caseReason;
+			let line = `\n- ` + (nonEmptyPath === "" ? "" : `At ` + nonEmptyPath + `: `) + caseReason;
 			if (!reasonsDict[line]) {
 				reasonsDict[line] = 1;
 				reasonRef = reasonRef + line;
@@ -402,7 +406,7 @@ function emitChecks(val, inputVar) {
 	let len = checks.length;
 	if (len === 1) {
 		let check = checks[0];
-		return check.c(inputVar) + "||" + failWithArg(val, check.f(val), inputVar) + ";";
+		return check.c(inputVar) + `||` + failWithArg(val, check.f(val), inputVar) + `;`;
 	}
 	let out = "";
 	let i = 0;
@@ -415,7 +419,7 @@ function emitChecks(val, inputVar) {
 			cond = cond + "&&" + checks[i].c(inputVar);
 			i = i + 1 | 0;
 		}
-		out = out + (cond + "||" + failWithArg(val, fail(val), inputVar) + ";");
+		out = out + (cond + `||` + failWithArg(val, fail(val), inputVar) + `;`);
 	}
 	return out;
 }
@@ -434,14 +438,14 @@ function merge(val, hoistCond) {
 				for (let i = 0, i_finish = allChecks.length; i < i_finish; ++i) {
 					let check = allChecks[i];
 					let condCode = check.c(inputVar);
-					if (check.f === failInvalidType) localHoist = localHoist ? localHoist + "&&" + condCode : condCode;
-					else if (val$1.e.noValidation !== true) currentCode = currentCode + (condCode + "||" + failWithArg(val$1, check.f(val$1), inputVar) + ";");
+					if (check.f === failInvalidType) localHoist = localHoist ? localHoist + `&&` + condCode : condCode;
+					else if (val$1.e.noValidation !== true) currentCode = currentCode + (condCode + `||` + failWithArg(val$1, check.f(val$1), inputVar) + `;`);
 				}
-				if (localHoist) if (hoistCond.contents) hoistCond.contents = localHoist + "&&" + hoistCond.contents;
+				if (localHoist) if (hoistCond.contents) hoistCond.contents = localHoist + `&&` + hoistCond.contents;
 				else hoistCond.contents = localHoist;
 			} else if (val$1.e.noValidation !== true) currentCode = emitChecks(val$1, current.v());
 		}
-		if (val$1.l !== "") currentCode = currentCode + ("let " + val$1.l + ";");
+		if (val$1.l !== "") currentCode = currentCode + (`let ` + val$1.l + `;`);
 		delete val$1.a;
 		currentCode = val$1.cp + currentCode;
 		code = currentCode + code;
@@ -506,7 +510,7 @@ function markOutput(val, valInput) {
 	let deferredInputChecks;
 	if (fn !== void 0) {
 		let checks = fn(valInput);
-		if (checks.length > 0) if (valInput.prev !== void 0) {
+		if (checks.length !== 0) if (valInput.prev !== void 0) {
 			for (let i = 0, i_finish = checks.length; i < i_finish; ++i) pushCheck(valInput, checks[i]);
 			deferredInputChecks = void 0;
 		} else deferredInputChecks = checks;
@@ -516,7 +520,7 @@ function markOutput(val, valInput) {
 	let outputChecks;
 	if (fn$1 !== void 0) {
 		let checks$1 = fn$1(val);
-		outputChecks = checks$1.length > 0 ? checks$1 : void 0;
+		outputChecks = checks$1.length !== 0 ? checks$1 : void 0;
 	} else outputChecks = void 0;
 	let val$1 = deferredInputChecks !== void 0 ? outputChecks !== void 0 ? refine(val, void 0, deferredInputChecks.concat(outputChecks), void 0) : refine(val, void 0, deferredInputChecks, void 0) : outputChecks !== void 0 ? refine(val, void 0, outputChecks, void 0) : val;
 	val$1.io = true;
@@ -524,7 +528,7 @@ function markOutput(val, valInput) {
 }
 function hoistChildChecks(parent, child, key) {
 	if (!child.vc) return;
-	let pathAppend = "[" + inlineLocation(parent.g, key) + "]";
+	let pathAppend = `[` + inlineLocation(parent.g, key) + `]`;
 	child.vc.forEach((check) => pushCheck(parent, {
 		c: (inputVar) => check.c(inputVar + pathAppend),
 		f: check.f
@@ -535,7 +539,7 @@ function dynamicScope(from, locationVar) {
 	return {
 		p: from,
 		v: _notVarBeforeValidation,
-		i: from.v() + "[" + locationVar + "]",
+		i: from.v() + `[` + locationVar + `]`,
 		s: from.s.additionalItems,
 		e: from.e.additionalItems,
 		f: from.f,
@@ -565,7 +569,7 @@ function add(objectVal, location, val) {
 	objectVal.d[location] = val;
 }
 function addKey(objVal, key, value) {
-	return objVal.v() + "[" + key + "]=" + value.i;
+	return objVal.v() + `[` + key + `]=` + value.i;
 }
 function scope(val) {
 	let shouldLink = val.v !== _var;
@@ -618,7 +622,7 @@ function get(parent, location) {
 			throw new Error("[Sury] The schema doesn't have additional items");
 		} else schema = s;
 	}
-	let pathAppend = "[" + inlineLocation(parent.g, location) + "]";
+	let pathAppend = `[` + inlineLocation(parent.g, location) + `]`;
 	let item = {
 		p: parent,
 		v: _notVarAtParent,
@@ -640,22 +644,22 @@ function mergeWithPathPrepend(val, parent, locationVar, appendSafe) {
 	else {
 		let $$catch = (errorVar) => {
 			let path = parent.path;
-			let tmp = path === "" ? "" : fromString(path) + "+";
-			return errorVar + ".path=" + tmp + (locationVar !== void 0 ? "'[\"'+" + locationVar + "+'\"]'+" : "") + errorVar + ".path";
+			let tmp = path === "" ? "" : fromString(path) + `+`;
+			return errorVar + `.path=` + tmp + (locationVar !== void 0 ? `'["'+` + locationVar + `+'"]'+` : "") + errorVar + `.path`;
 		};
 		let valCode = merge(val, void 0);
 		if (valCode === "" && !(val.f & 1)) return valCode + (appendSafe !== void 0 ? appendSafe() : "");
 		let errorVar = varWithoutAllocation(val.g);
-		let catchCode = $$catch(errorVar) + ";throw " + errorVar;
-		if (val.f & 1) val.i = val.i + ".catch(" + errorVar + "=>{" + catchCode + "})";
-		return "try{" + valCode + (appendSafe !== void 0 ? appendSafe() : "") + "}catch(" + errorVar + "){" + catchCode + "}";
+		let catchCode = $$catch(errorVar) + `;throw ` + errorVar;
+		if (val.f & 1) val.i = val.i + `.catch(` + errorVar + `=>{` + catchCode + `})`;
+		return `try{` + valCode + (appendSafe !== void 0 ? appendSafe() : "") + `}catch(` + errorVar + `){` + catchCode + `}`;
 	}
 }
 function unsupportedDecode(b, from, target) {
 	throw new SuryError({
 		code: "unsupported_decode",
 		path: b.path,
-		reason: "Can't decode " + toExpression(from) + " to " + toExpression(target) + ". Use S.to to define a custom decoder",
+		reason: `Can't decode ` + toExpression(from) + ` to ` + toExpression(target) + `. Use S.to to define a custom decoder`,
 		from,
 		to: target
 	});
@@ -665,13 +669,13 @@ function noopOperation(i) {
 }
 noopOperation.embedded = immutableEmpty$1;
 function int32FormatValidation(inputVar) {
-	return inputVar + "<=2147483647&&" + inputVar + ">=-2147483648&&" + inputVar + "%1===0";
+	return inputVar + `<=2147483647&&` + inputVar + `>=-2147483648&&` + inputVar + `%1===0`;
 }
 function numberDecoder(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) {
 		let checks = [{
-			c: (inputVar) => "typeof " + inputVar + "===\"number\"",
+			c: (inputVar) => `typeof ` + inputVar + "===\"number\"",
 			f: failInvalidType
 		}];
 		let match = input.e.format;
@@ -683,7 +687,7 @@ function numberDecoder(input) {
 		else exit = 1;
 		if (exit === 1) {
 			if (!(input.g.o & 2)) checks.push({
-				c: (inputVar) => "!Number.isNaN(" + inputVar + ")",
+				c: (inputVar) => `!Number.isNaN(` + inputVar + `)`,
 				f: failInvalidType
 			});
 		}
@@ -696,15 +700,15 @@ function numberDecoder(input) {
 	else return input;
 	else return unsupportedDecode(input, input.s, input.e);
 	let outputVar = varWithoutAllocation(input.g);
-	input.a(outputVar + "=+" + input.v());
+	input.a(outputVar + `=+` + input.v());
 	let output = next(input, outputVar, input.e, void 0);
 	output.v = _var;
 	output.vc = [{
 		c: (param) => {
 			let match = input.e.format;
 			if (match !== void 0) if (match === "int32") return int32FormatValidation(outputVar);
-			else return "!Number.isNaN(" + outputVar + ")";
-			else return "!Number.isNaN(" + outputVar + ")";
+			else return `!Number.isNaN(` + outputVar + `)`;
+			else return `!Number.isNaN(` + outputVar + `)`;
 		},
 		f: failInvalidType
 	}];
@@ -716,12 +720,12 @@ function float() {
 	});
 }
 function inputToString(input) {
-	return next(input, "\"\"+" + input.i, string$2(), void 0);
+	return next(input, `""+` + input.i, string$2(), void 0);
 }
 function stringDecoderFn(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) return refine(input, input.e, [{
-		c: (inputVar) => "typeof " + inputVar + "===\"string\"",
+		c: (inputVar) => `typeof ` + inputVar + "===\"string\"",
 		f: failInvalidType
 	}], void 0);
 	if (!(inputTagFlag & 3132 && constField in input.s)) if (inputTagFlag & 1036) return inputToString(input);
@@ -730,7 +734,7 @@ function stringDecoderFn(input) {
 	let $$const = "" + input.s.const;
 	let schema = base(stringTag, false);
 	schema.const = $$const;
-	return next(input, "\"" + $$const + "\"", schema, void 0);
+	return next(input, `"` + $$const + `"`, schema, void 0);
 }
 function string$2() {
 	return cached(stringTag, stringTag, (s) => {
@@ -740,7 +744,7 @@ function string$2() {
 function booleanDecoder(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) return refine(input, input.e, [{
-		c: (inputVar) => "typeof " + inputVar + "===\"boolean\"",
+		c: (inputVar) => `typeof ` + inputVar + "===\"boolean\"",
 		f: failInvalidType
 	}], void 0);
 	if (!(inputTagFlag & 2)) if (inputTagFlag & 8) return input;
@@ -750,7 +754,7 @@ function booleanDecoder(input) {
 	let output = next(input, outputVar, input.e, void 0);
 	output.v = _var;
 	let inputVar = input.v();
-	output.cp = "(" + output.i + "=" + inputVar + "===\"true\")||" + inputVar + "===\"false\"||" + embedInvalidInput(input, void 0) + ";";
+	output.cp = `(` + output.i + `=` + inputVar + `==="true")||` + inputVar + `==="false"||` + embedInvalidInput(input, void 0) + `;`;
 	return output;
 }
 function bool() {
@@ -761,17 +765,17 @@ function bool() {
 function bigintDecoder(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) return refine(input, input.e, [{
-		c: (inputVar) => "typeof " + inputVar + "===\"bigint\"",
+		c: (inputVar) => `typeof ` + inputVar + "===\"bigint\"",
 		f: failInvalidType
 	}], void 0);
-	if (!(inputTagFlag & 2)) if (inputTagFlag & 4) return next(input, "BigInt(" + input.i + ")", input.e, void 0);
+	if (!(inputTagFlag & 2)) if (inputTagFlag & 4) return next(input, `BigInt(` + input.i + `)`, input.e, void 0);
 	else if (inputTagFlag & 1024) return input;
 	else return unsupportedDecode(input, input.s, input.e);
 	let outputVar = varWithoutAllocation(input.g);
 	input.a(outputVar);
 	let output = next(input, outputVar, input.e, void 0);
 	output.v = _var;
-	output.cp = "try{" + outputVar + "=BigInt(" + input.v() + ")}catch(_){" + embedInvalidInput(input, void 0) + "}";
+	output.cp = `try{` + outputVar + `=BigInt(` + input.v() + `)}catch(_){` + embedInvalidInput(input, void 0) + `}`;
 	return output;
 }
 function bigint() {
@@ -782,7 +786,7 @@ function bigint() {
 function symbolDecoder(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) return refine(input, input.e, [{
-		c: (inputVar) => "typeof " + inputVar + "===\"symbol\"",
+		c: (inputVar) => `typeof ` + inputVar + "===\"symbol\"",
 		f: failInvalidType
 	}], void 0);
 	else if (inputTagFlag & 16384) return input;
@@ -796,7 +800,7 @@ function symbol() {
 function setHas(has, tag) {
 	has[flags[tag] & 768 ? unknownTag : tag] = true;
 }
-let jsonName = "JSON";
+let jsonName = `JSON`;
 function literalDecoder(input) {
 	let expectedSchema = input.e;
 	if (expectedSchema.noValidation && !input.u) return nextConst(input, expectedSchema, void 0);
@@ -804,18 +808,18 @@ function literalDecoder(input) {
 	else return nextConst(input, expectedSchema, void 0);
 	let schemaTagFlag = flags[expectedSchema.type];
 	if (!(flags[input.s.type] & 2 && schemaTagFlag & 3132)) if (schemaTagFlag & 2048) return refine(input, expectedSchema, [{
-		c: (inputVar) => "Number.isNaN(" + inputVar + ")",
+		c: (inputVar) => `Number.isNaN(` + inputVar + `)`,
 		f: failInvalidType
 	}], void 0);
 	else return refine(input, expectedSchema, [{
-		c: (inputVar) => inputVar + "===" + inlineConst(input, expectedSchema),
+		c: (inputVar) => inputVar + `===` + inlineConst(input, expectedSchema),
 		f: failInvalidType
 	}], void 0);
 	let stringConstSchema = base(stringTag, false);
 	stringConstSchema.const = "" + expectedSchema.const;
 	let stringConstVal = nextConst(input, stringConstSchema, stringConstSchema);
 	stringConstVal.vc = [{
-		c: (inputVar) => inputVar + "===\"" + stringConstSchema.const + "\"",
+		c: (inputVar) => inputVar + `==="` + stringConstSchema.const + `"`,
 		f: failInvalidType
 	}];
 	return nextConst(stringConstVal, expectedSchema, expectedSchema);
@@ -872,7 +876,7 @@ function parse$1(input) {
 			let operationInput = scope(loopInput);
 			let operationOutput = parse$1(operationInput);
 			let operationCode = merge(operationOutput, void 0);
-			valRef = operationInput.i !== operationOutput.i || operationCode !== "" ? next(loopInput, operationInputVar + ".then(" + operationInputVar + "=>{" + operationCode + "return " + operationOutput.i + "})", operationOutput.s, operationOutput.e) : refine(loopInput, operationOutput.s, void 0, operationOutput.e);
+			valRef = operationInput.i !== operationOutput.i || operationCode !== "" ? next(loopInput, operationInputVar + `.then(` + operationInputVar + `=>{` + operationCode + `return ` + operationOutput.i + `})`, operationOutput.s, operationOutput.e) : refine(loopInput, operationOutput.s, void 0, operationOutput.e);
 			valRef.f = valRef.f | 1;
 			valRef.io = true;
 		} else if (loopInput.io) {
@@ -919,10 +923,10 @@ function compileDecoder(schema, expected, flag, defs) {
 	expected.hasTransform = output.t === true;
 	if (code === "" && (output === input || output.i === input.i) && !(flag & 1)) return noopOperation;
 	let inlinedOutput = output.i;
-	if (flag & 1 && !isAsync && !defs) inlinedOutput = "Promise.resolve(" + inlinedOutput + ")";
-	let inlinedFunction = "i=>{" + code + "return " + inlinedOutput + "}";
+	if (flag & 1 && !isAsync && !defs) inlinedOutput = `Promise.resolve(` + inlinedOutput + `)`;
+	let inlinedFunction = "i=>{" + code + `return ` + inlinedOutput + `}`;
 	let ctxVarValue1 = input.g.e;
-	let fn = new Function("e", "s", "return " + inlinedFunction)(ctxVarValue1, s);
+	let fn = new Function("e", "s", `return ` + inlinedFunction)(ctxVarValue1, s);
 	fn.embedded = input.g.e;
 	return fn;
 }
@@ -1012,8 +1016,8 @@ function completeObjectVal(objectVal) {
 		if (val.f & 1) promiseAllContent = promiseAllContent + val.i + ",";
 		if (val.o) {
 			let existingFn = optionalSettingCode;
-			optionalSettingCode = (objectVar) => (existingFn !== void 0 ? existingFn(objectVar) : "") + ("if(" + val.v() + "!==void 0){" + objectVar + "[" + inlineLocation(objectVal.g, key) + "]=" + val.i + "}");
-		} else inline = inline + (isArray ? val.i : inlineLocation(objectVal.g, key) + ":" + val.i) + ",";
+			optionalSettingCode = (objectVar) => (existingFn !== void 0 ? existingFn(objectVar) : "") + (`if(` + val.v() + `!==void 0){` + objectVar + `[` + inlineLocation(objectVal.g, key) + `]=` + val.i + `}`);
+		} else inline = inline + (isArray ? val.i : inlineLocation(objectVal.g, key) + `:` + val.i) + ",";
 	}
 	objectVal.i = isArray ? "[" + inline + "]" : "{" + inline + "}";
 	if (promiseAllContent) {
@@ -1021,8 +1025,8 @@ function completeObjectVal(objectVal) {
 		operationInput.io = true;
 		let operationOutput = parse$1(operationInput);
 		let operationCode = merge(operationOutput, void 0);
-		if (operationCode === "" && promiseAllContent === operationOutput.i + ",") objectVal.i = operationOutput.i;
-		else objectVal.i = "Promise.all([" + promiseAllContent + "]).then(([" + promiseAllContent + "])=>{" + operationCode + "return " + operationOutput.i + "})";
+		if (operationCode === "" && promiseAllContent === operationOutput.i + `,`) objectVal.i = operationOutput.i;
+		else objectVal.i = `Promise.all([` + promiseAllContent + `]).then(([` + promiseAllContent + `])=>{` + operationCode + `return ` + operationOutput.i + `})`;
 		objectVal.f = objectVal.f | 1;
 		objectVal.s = operationOutput.s;
 		objectVal.e = operationOutput.e;
@@ -1055,24 +1059,24 @@ function arrayDecoder(unknownInput) {
 		let schema = isArrayInput ? unknownInput.s : array$2(unknown);
 		let checks = [];
 		if (!isArrayInput) checks.push({
-			c: (inputVar) => "Array.isArray(" + inputVar + ")",
+			c: (inputVar) => `Array.isArray(` + inputVar + `)`,
 			f: failInvalidType
 		});
 		let match = schema.additionalItems;
 		let isExactSize;
-		isExactSize = match === "strip" || match === "strict" ? schema.items.length === expectedLength : false;
+		isExactSize = match === "strip" || match === "strict" ? match === "strip" ? schema.items.length === expectedLength : schema.items.length === expectedLength : false;
 		if (!isExactSize) {
 			let match$1 = expectedSchema.additionalItems;
 			if (match$1 === "strip" || match$1 === "strict") if (match$1 === "strip") checks.push({
-				c: (inputVar) => inputVar + ".length>=" + expectedLength,
+				c: (inputVar) => inputVar + `.length>=` + expectedLength,
 				f: failInvalidType
 			});
 			else checks.push({
-				c: (inputVar) => inputVar + ".length===" + expectedLength,
+				c: (inputVar) => inputVar + `.length===` + expectedLength,
 				f: failInvalidType
 			});
 		}
-		input = checks.length > 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
+		input = checks.length !== 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
 	} else input = unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
 	let itemSchema = expectedSchema.additionalItems;
 	let output;
@@ -1084,10 +1088,10 @@ function arrayDecoder(unknownInput) {
 		let iteratorVar = varWithoutAllocation(input.g);
 		let itemOutput = parseDynamic(dynamicScope(input, iteratorVar));
 		let hasTransform = itemOutput.t;
-		let output$1 = hasTransform ? next(input, "new Array(" + inputVar + ".length)", expectedSchema, void 0) : refine(input, expectedSchema, void 0, void 0);
+		let output$1 = hasTransform ? next(input, `new Array(` + inputVar + `.length)`, expectedSchema, void 0) : refine(input, expectedSchema, void 0, void 0);
 		let itemCode = mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => addKey(output$1, iteratorVar, itemOutput) : void 0);
-		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + ("for(let " + iteratorVar + "=" + expectedLength + ";" + iteratorVar + "<" + inputVar + ".length;++" + iteratorVar + "){" + itemCode + "}");
-		output = itemOutput.f & 1 ? asyncVal(output$1, "Promise.all(" + output$1.i + ")") : output$1;
+		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + (`for(let ` + iteratorVar + `=` + expectedLength + `;` + iteratorVar + `<` + inputVar + `.length;++` + iteratorVar + `){` + itemCode + `}`);
+		output = itemOutput.f & 1 ? asyncVal(output$1, `Promise.all(` + output$1.i + `)`) : output$1;
 	}
 	if (exit === 1) {
 		let objectVal = makeObjectVal(input, expectedSchema);
@@ -1095,7 +1099,7 @@ function arrayDecoder(unknownInput) {
 		let shouldRecreateInput;
 		if (match$2 === "strip" || match$2 === "strict") if (match$2 === "strip") {
 			let match$3 = input.s.additionalItems;
-			shouldRecreateInput = match$3 === "strip" || match$3 === "strict" ? input.s.items.length !== expectedLength : true;
+			shouldRecreateInput = match$3 === "strip" || match$3 === "strict" ? match$3 === "strip" ? input.s.items.length !== expectedLength : input.s.items.length !== expectedLength : true;
 		} else shouldRecreateInput = false;
 		else shouldRecreateInput = true;
 		for (let idx = 0; idx < expectedLength; ++idx) {
@@ -1138,15 +1142,15 @@ function objectDecoder(unknownInput) {
 		let checks = [];
 		if (!isObjectInput) {
 			checks.push({
-				c: (inputVar) => "typeof " + inputVar + "===\"object\"&&" + inputVar,
+				c: (inputVar) => `typeof ` + inputVar + "===\"object\"&&" + inputVar,
 				f: failInvalidType
 			});
 			if (expectedSchema.additionalItems !== "strip") checks.push({
-				c: (inputVar) => "!Array.isArray(" + inputVar + ")",
+				c: (inputVar) => `!Array.isArray(` + inputVar + `)`,
 				f: failInvalidType
 			});
 		}
-		input = checks.length > 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
+		input = checks.length !== 0 ? refine(unknownInput, schema, checks, void 0) : refine(unknownInput, schema, void 0, void 0);
 	} else input = unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
 	let itemSchema = expectedSchema.additionalItems;
 	let output;
@@ -1160,14 +1164,14 @@ function objectDecoder(unknownInput) {
 		let hasTransform = itemOutput.t;
 		let output$1 = hasTransform ? next(input, "{}", expectedSchema, void 0) : refine(input, expectedSchema, void 0, void 0);
 		let itemCode = mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => addKey(output$1, keyVar, itemOutput) : void 0);
-		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + ("for(let " + keyVar + " in " + inputVar + "){" + itemCode + "}");
+		if (hasTransform || itemCode !== "") output$1.cp = output$1.cp + (`for(let ` + keyVar + ` in ` + inputVar + `){` + itemCode + `}`);
 		if (itemOutput.f & 1) {
 			let resolveVar = varWithoutAllocation(output$1.g);
 			let rejectVar = varWithoutAllocation(output$1.g);
 			let asyncParseResultVar = varWithoutAllocation(output$1.g);
 			let counterVar = varWithoutAllocation(output$1.g);
 			let outputVar = output$1.v();
-			output = asyncVal(output$1, "new Promise((" + resolveVar + "," + rejectVar + ")=>{let " + counterVar + "=Object.keys(" + outputVar + ").length;for(let " + keyVar + " in " + outputVar + "){" + outputVar + "[" + keyVar + "].then(" + asyncParseResultVar + "=>{" + outputVar + "[" + keyVar + "]=" + asyncParseResultVar + ";if(" + counterVar + "--===1){" + resolveVar + "(" + outputVar + ")}}," + rejectVar + ")}})");
+			output = asyncVal(output$1, `new Promise((` + resolveVar + `,` + rejectVar + `)=>{let ` + counterVar + `=Object.keys(` + outputVar + `).length;for(let ` + keyVar + ` in ` + outputVar + `){` + outputVar + `[` + keyVar + `].then(` + asyncParseResultVar + `=>{` + outputVar + `[` + keyVar + `]=` + asyncParseResultVar + `;if(` + counterVar + `--===1){` + resolveVar + `(` + outputVar + `)}},` + rejectVar + `)}})`);
 		} else output = output$1;
 	}
 	if (exit === 1) {
@@ -1195,7 +1199,7 @@ function objectDecoder(unknownInput) {
 			itemInput$1.e = schema$1;
 			itemInput$1.io = false;
 			itemInput$1.u = isUnion;
-			if (isJsonParent && schema$1.type === unionTag && schema$1.has[undefinedTag]) itemInput$1.i = "(" + itemInput$1.i + "??null)";
+			if (isJsonParent && schema$1.type === unionTag && schema$1.has[undefinedTag]) itemInput$1.i = `(` + itemInput$1.i + `??null)`;
 			let itemOutput$1 = parse$1(itemInput$1);
 			if (isUnion && constField in schema$1) hoistChildChecks(input, itemOutput$1, key);
 			add(objectVal, key, itemOutput$1);
@@ -1211,19 +1215,19 @@ function objectDecoder(unknownInput) {
 		if (tmp) {
 			let keyVar$1 = varWithoutAllocation(objectVal.g);
 			input.a(keyVar$1);
-			objectVal.cp = objectVal.cp + ("for(" + keyVar$1 + " in " + input.v() + "){if(");
+			objectVal.cp = objectVal.cp + (`for(` + keyVar$1 + ` in ` + input.v() + `){if(`);
 			if (keys.length !== 0) for (let idx$1 = 0, idx_finish = keys.length; idx$1 < idx_finish; ++idx$1) {
 				let key$1 = keys[idx$1];
 				if (idx$1 !== 0) objectVal.cp = objectVal.cp + "&&";
-				objectVal.cp = objectVal.cp + (keyVar$1 + "!==" + inlineLocation(input.g, key$1));
+				objectVal.cp = objectVal.cp + (keyVar$1 + `!==` + inlineLocation(input.g, key$1));
 			}
 			else objectVal.cp = objectVal.cp + "true";
-			objectVal.cp = objectVal.cp + ("){" + failWithArg(input, (exccessFieldName) => ({
+			objectVal.cp = objectVal.cp + (`){` + failWithArg(input, (exccessFieldName) => ({
 				code: "unrecognized_keys",
 				path: objectVal.path,
-				reason: "Unrecognized key \"" + exccessFieldName + "\"",
+				reason: `Unrecognized key "` + exccessFieldName + `"`,
 				keys: [exccessFieldName]
-			}), keyVar$1) + "}}");
+			}), keyVar$1) + `}}`);
 		}
 		if (shouldRecreateInput) output = completeObjectVal(objectVal);
 		else {
@@ -1238,7 +1242,7 @@ function objectDecoder(unknownInput) {
 function instanceDecoder(input) {
 	let inputTagFlag = flags[input.s.type];
 	if (inputTagFlag & 1) return refine(input, input.e, [{
-		c: (inputVar) => inputVar + " instanceof " + embed(input, input.e.class),
+		c: (inputVar) => inputVar + ` instanceof ` + embed(input, input.e.class),
 		f: failInvalidType
 	}], void 0);
 	else if (inputTagFlag & 8192 && input.s.class === input.e.class) return input;
@@ -1357,7 +1361,7 @@ function unionDecoder(input) {
 	let fail = (caught) => embed(input, function() {
 		let args = arguments;
 		throw new SuryError(makeInvalidInputDetails(selfSchema, unknown, input.path, args[0], true, args.length > 1 ? Array.from(args).slice(1) : void 0, void 0));
-	}) + "(" + input.v() + caught + ")";
+	}) + `(` + input.v() + caught + `)`;
 	let output = refine(input, void 0, void 0, void 0);
 	let outputAnyOf = [];
 	let getArrItemsCode = (arr, isDeopt) => {
@@ -1389,7 +1393,7 @@ function unionDecoder(input) {
 				if (itemOutput.t) {
 					output.t = true;
 					if (itemOutput.f & 1) output.f = output.f | 1;
-					itemCode = itemCode + (typeValidationInput.v() + "=" + itemOutput.i);
+					itemCode = itemCode + (typeValidationInput.v() + `=` + itemOutput.i);
 				}
 			} catch (exn) {
 				let errorVar = embed(input, getOrRethrow(exn));
@@ -1397,7 +1401,7 @@ function unionDecoder(input) {
 				let tmp;
 				if (isLast && !isDeopt) {
 					withExhaustiveCheck = false;
-					tmp = fail("," + errorVar);
+					tmp = fail(`,` + errorVar);
 				} else tmp = "throw " + errorVar;
 				itemCode = tmp;
 			}
@@ -1408,21 +1412,21 @@ function unionDecoder(input) {
 				if (match !== void 0) if (typeof match === "string") byDiscriminant[itemCond$1] = [match, itemCode$1];
 				else match.push(itemCode$1);
 				else byDiscriminant[itemCond$1] = itemCode$1;
-			} else itemNoop.contents = itemNoop.contents ? itemNoop.contents + "||" + itemCond$1 : itemCond$1;
+			} else itemNoop.contents = itemNoop.contents ? itemNoop.contents + `||` + itemCond$1 : itemCond$1;
 			if (!itemCond$1 || isLast) {
 				let accedDiscriminants = Object.keys(byDiscriminant);
 				for (let idx = 0, idx_finish = accedDiscriminants.length; idx < idx_finish; ++idx) {
 					let discrim = accedDiscriminants[idx];
-					itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(" + discrim + "){");
+					itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(` + discrim + `){`);
 					let code = byDiscriminant[discrim];
 					if (typeof code === "string") itemStart = itemStart + code + "}";
 					else {
 						let caught$1 = "";
 						for (let idx$1 = 0, idx_finish$1 = code.length; idx$1 < idx_finish$1; ++idx$1) {
 							let code$1 = code[idx$1];
-							let errorVar$1 = "e" + idx$1;
-							itemStart = itemStart + ("try{" + code$1 + "}catch(" + errorVar$1 + "){");
-							caught$1 = caught$1 + "," + errorVar$1;
+							let errorVar$1 = `e` + idx$1;
+							itemStart = itemStart + (`try{` + code$1 + `}catch(` + errorVar$1 + `){`);
+							caught$1 = caught$1 + `,` + errorVar$1;
 						}
 						itemStart = itemStart + fail(caught$1) + "}".repeat(code.length) + "}";
 					}
@@ -1432,7 +1436,7 @@ function unionDecoder(input) {
 			}
 			if (!itemCond$1) if (itemCode$1) {
 				if (itemNoop.contents) {
-					itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){");
+					itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(!(` + itemNoop.contents + `)){`);
 					itemEnd = "}" + itemEnd;
 					itemNoop.contents = "";
 					itemNextElse = false;
@@ -1441,10 +1445,10 @@ function unionDecoder(input) {
 					itemStart = itemStart + ((itemNextElse ? "else{" : "") + itemCode$1);
 					itemEnd = (itemNextElse ? "}" : "") + itemEnd;
 				} else {
-					let errorVar$2 = "e" + (itemIdx - 2 | 0);
-					itemStart = itemStart + ((itemNextElse ? "else{" : "") + "try{" + itemCode$1 + "}catch(" + errorVar$2 + "){");
+					let errorVar$2 = `e` + (itemIdx - 2 | 0);
+					itemStart = itemStart + ((itemNextElse ? "else{" : "") + `try{` + itemCode$1 + `}catch(` + errorVar$2 + `){`);
 					itemEnd = (itemNextElse ? "}" : "") + "}" + itemEnd;
-					caught = caught + "," + errorVar$2;
+					caught = caught + `,` + errorVar$2;
 					itemNextElse = false;
 				}
 			} else {
@@ -1453,14 +1457,14 @@ function unionDecoder(input) {
 				withExhaustiveCheck = false;
 			}
 			if (isLast) {
-				if (itemNoop.contents) if (itemStart) itemStart = itemStart + (itemNextElse ? "else if" : "if") + ("(!(" + itemNoop.contents + ")){" + fail(caught) + "}");
+				if (itemNoop.contents) if (itemStart) itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(!(` + itemNoop.contents + `)){` + fail(caught) + `}`);
 				else pushCheck(typeValidationOutput, {
-					c: (param) => "(" + itemNoop.contents + ")",
+					c: (param) => `(` + itemNoop.contents + `)`,
 					f: failInvalidType
 				});
 				else if (withExhaustiveCheck) {
 					let errorCode = fail(caught);
-					itemStart = itemStart + (itemNextElse ? "else{" + errorCode + "}" : errorCode);
+					itemStart = itemStart + (itemNextElse ? `else{` + errorCode + `}` : errorCode);
 				}
 			}
 			itemIdx = itemIdx + 1;
@@ -1549,10 +1553,10 @@ function unionDecoder(input) {
 							let itemsCode = getArrItemsCode(arr, true);
 							let blockCode = merge(typeValidationOutput$1, void 0) + itemsCode;
 							if (blockCode) {
-								let errorVar = "e" + (idx + keyIdx | 0);
-								start = start + ("try{" + blockCode + "}catch(" + errorVar + "){");
+								let errorVar = `e` + (idx + keyIdx | 0);
+								start = start + (`try{` + blockCode + `}catch(` + errorVar + `){`);
 								end = "}" + end;
-								caught = caught + "," + errorVar;
+								caught = caught + `,` + errorVar;
 							} else exit = true;
 						}
 					}
@@ -1576,19 +1580,19 @@ function unionDecoder(input) {
 			let blockCode$1 = merge(typeValidationOutput$2, blockCond) + itemsCode$1;
 			let blockCond$1 = blockCond.contents;
 			if (blockCode$1 || isPriority(flags[firstSchema.type], byKey$1)) {
-				start = start + (nextElse ? "else if" : "if") + ("(" + blockCond$1 + "){" + blockCode$1 + "}");
+				start = start + (nextElse ? "else if" : "if") + (`(` + blockCond$1 + `){` + blockCode$1 + `}`);
 				nextElse = true;
-			} else noop = noop ? noop + "||" + blockCond$1 : blockCond$1;
+			} else noop = noop ? noop + `||` + blockCond$1 : blockCond$1;
 		}
 		let errorCode = fail(caught);
 		let tmp;
-		if (noop) tmp = (nextElse ? "else if" : "if") + ("(!(" + noop + ")){" + errorCode + "}");
-		else tmp = nextElse ? "else{" + errorCode + "}" : errorCode;
+		if (noop) tmp = (nextElse ? "else if" : "if") + (`(!(` + noop + `)){` + errorCode + `}`);
+		else tmp = nextElse ? `else{` + errorCode + `}` : errorCode;
 		start = start + tmp;
 	}
 	output.cp = output.cp + start + end;
 	if (input.i !== output.i) output.i = input.i;
-	let o = output.f & 1 ? (output.i = "Promise.resolve(" + output.i + ")", output.v = _notVar, output) : output.v === _var && input.cp === "" && output.cp === "" && (output.l === output.i + "=" + initialInline || initialInline === "i") ? (input.l = "", input.a = initialAllocate, input.v = _notVar, input.i = initialInline, input) : output;
+	let o = output.f & 1 ? (output.i = `Promise.resolve(` + output.i + `)`, output.v = _notVar, output) : output.v === _var && input.cp === "" && output.cp === "" && (output.l === output.i + `=` + initialInline || initialInline === "i") ? (input.l = "", input.a = initialAllocate, input.v = _notVar, input.i = initialInline, input) : output;
 	o.s = outputAnyOf.length ? factory$1(outputAnyOf) : never_();
 	o.e = toPerCase !== void 0 ? (o.io = true, getOutputSchema(toPerCase)) : selfSchema;
 	return o;
@@ -1632,14 +1636,14 @@ function url$1() {
 		s.decoder = stringDecoderFn;
 		s.format = "url";
 		s.refiner = (input) => [{
-			c: (inputVar) => embed(input, urlValidator) + "(" + inputVar + ")",
+			c: (inputVar) => embed(input, urlValidator) + `(` + inputVar + `)`,
 			f: failWithErrorMessage("format", void 0)
 		}];
 	});
 }
 function invalidDateRefine(input) {
 	return refine(input, input.e, [{
-		c: (inputVar) => "!Number.isNaN(" + inputVar + ".getTime())",
+		c: (inputVar) => `!Number.isNaN(` + inputVar + `.getTime())`,
 		f: failInvalidType
 	}], void 0);
 }
@@ -1648,7 +1652,7 @@ function date$1() {
 		s.class = Date;
 		s.decoder = (input) => {
 			let inputTagFlag = flags[input.s.type];
-			if (inputTagFlag & 2) return invalidDateRefine(next(input, "new Date(" + input.i + ")", s, void 0));
+			if (inputTagFlag & 2) return invalidDateRefine(next(input, `new Date(` + input.i + `)`, s, void 0));
 			else if (inputTagFlag & 1) return invalidDateRefine(instanceDecoder(input));
 			else if (inputTagFlag & 8192 && input.s.class === s.class) return input;
 			else return unsupportedDecode(input, input.s, input.e);
@@ -1657,7 +1661,7 @@ function date$1() {
 			if (!(flags[target.type] & 2)) return input;
 			let dateTimeString = base(stringTag, false);
 			dateTimeString.format = "date-time";
-			return parse$1(next(input, input.i + ".toISOString()", dateTimeString, target));
+			return parse$1(next(input, input.i + `.toISOString()`, dateTimeString, target));
 		};
 	});
 }
@@ -1705,101 +1709,101 @@ function assertNumber(fnName, n) {
 	throw new SuryError({
 		code: "invalid_operation",
 		path: "",
-		reason: "[S." + fnName + "] Expected number, received " + stringify(n)
+		reason: `[S.` + fnName + `] Expected number, received ` + stringify(n)
 	});
 }
 function intMin(schema, minValue, maybeMessage) {
 	assertNumber("min", minValue);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : `Number must be greater than or equal to ` + minValue;
 	return internalRefine(schema, (mut) => {
 		mut.minimum = minValue;
 		getMutErrorMessage(mut)["minimum"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + ">" + (minValue - 1 | 0),
+			c: (inputVar) => inputVar + `>` + (minValue - 1 | 0),
 			f: failWithErrorMessage("minimum", message)
 		}];
 	});
 }
 function intMax(schema, maxValue, maybeMessage) {
 	assertNumber("max", maxValue);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : `Number must be lower than or equal to ` + maxValue;
 	return internalRefine(schema, (mut) => {
 		mut.maximum = maxValue;
 		getMutErrorMessage(mut)["maximum"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + "<" + (maxValue + 1 | 0),
+			c: (inputVar) => inputVar + `<` + (maxValue + 1 | 0),
 			f: failWithErrorMessage("maximum", message)
 		}];
 	});
 }
 function floatMin(schema, minValue, maybeMessage) {
 	assertNumber("min", minValue);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be greater than or equal to " + minValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : `Number must be greater than or equal to ` + minValue;
 	return internalRefine(schema, (mut) => {
 		mut.minimum = minValue;
 		getMutErrorMessage(mut)["minimum"] = message;
 		return (input) => [{
-			c: (inputVar) => inputVar + ">=" + embed(input, minValue),
+			c: (inputVar) => inputVar + `>=` + embed(input, minValue),
 			f: failWithErrorMessage("minimum", message)
 		}];
 	});
 }
 function floatMax(schema, maxValue, maybeMessage) {
 	assertNumber("max", maxValue);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Number must be lower than or equal to " + maxValue;
+	let message = maybeMessage !== void 0 ? maybeMessage : `Number must be lower than or equal to ` + maxValue;
 	return internalRefine(schema, (mut) => {
 		mut.maximum = maxValue;
 		getMutErrorMessage(mut)["maximum"] = message;
 		return (input) => [{
-			c: (inputVar) => inputVar + "<=" + embed(input, maxValue),
+			c: (inputVar) => inputVar + `<=` + embed(input, maxValue),
 			f: failWithErrorMessage("maximum", message)
 		}];
 	});
 }
 function arrayMinLength(schema, length, maybeMessage) {
 	assertNumber("min", length);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length + " or more items long";
+	let message = maybeMessage !== void 0 ? maybeMessage : `Array must be ` + length + ` or more items long`;
 	return internalRefine(schema, (mut) => {
 		mut.minItems = length;
 		getMutErrorMessage(mut)["minItems"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + ".length>" + (length - 1 | 0),
+			c: (inputVar) => inputVar + `.length>` + (length - 1 | 0),
 			f: failWithErrorMessage("minItems", message)
 		}];
 	});
 }
 function arrayMaxLength(schema, length, maybeMessage) {
 	assertNumber("max", length);
-	let message = maybeMessage !== void 0 ? maybeMessage : "Array must be " + length + " or fewer items long";
+	let message = maybeMessage !== void 0 ? maybeMessage : `Array must be ` + length + ` or fewer items long`;
 	return internalRefine(schema, (mut) => {
 		mut.maxItems = length;
 		getMutErrorMessage(mut)["maxItems"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + ".length<" + (length + 1 | 0),
+			c: (inputVar) => inputVar + `.length<` + (length + 1 | 0),
 			f: failWithErrorMessage("maxItems", message)
 		}];
 	});
 }
 function stringMinLength(schema, length, maybeMessage) {
 	assertNumber("min", length);
-	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length + " or more characters long";
+	let message = maybeMessage !== void 0 ? maybeMessage : `String must be ` + length + ` or more characters long`;
 	return internalRefine(schema, (mut) => {
 		mut.minLength = length;
 		getMutErrorMessage(mut)["minLength"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + ".length>" + (length - 1 | 0),
+			c: (inputVar) => inputVar + `.length>` + (length - 1 | 0),
 			f: failWithErrorMessage("minLength", message)
 		}];
 	});
 }
 function stringMaxLength(schema, length, maybeMessage) {
 	assertNumber("max", length);
-	let message = maybeMessage !== void 0 ? maybeMessage : "String must be " + length + " or fewer characters long";
+	let message = maybeMessage !== void 0 ? maybeMessage : `String must be ` + length + ` or fewer characters long`;
 	return internalRefine(schema, (mut) => {
 		mut.maxLength = length;
 		getMutErrorMessage(mut)["maxLength"] = message;
 		return (param) => [{
-			c: (inputVar) => inputVar + ".length<" + (length + 1 | 0),
+			c: (inputVar) => inputVar + `.length<` + (length + 1 | 0),
 			f: failWithErrorMessage("maxLength", message)
 		}];
 	});
@@ -1815,8 +1819,8 @@ function min$1(schema, minValue, maybeMessage) {
 		else return floatMin(schema, minValue, maybeMessage);
 		case "array": return arrayMinLength(schema, minValue, maybeMessage);
 		default:
-			let message = "S.min is not supported for " + toExpression(schema) + " schema. Coerce the schema to string, number or array using S.to first.";
-			throw new Error("[Sury] " + message);
+			let message = `S.min is not supported for ` + toExpression(schema) + ` schema. Coerce the schema to string, number or array using S.to first.`;
+			throw new Error(`[Sury] ` + message);
 	}
 }
 function max$1(schema, maxValue, maybeMessage) {
@@ -1826,21 +1830,21 @@ function max$1(schema, maxValue, maybeMessage) {
 		else return floatMax(schema, maxValue, maybeMessage);
 		case "array": return arrayMaxLength(schema, maxValue, maybeMessage);
 		default:
-			let message = "S.max is not supported for " + toExpression(schema) + " schema. Coerce the schema to string, number or array using S.to first.";
-			throw new Error("[Sury] " + message);
+			let message = `S.max is not supported for ` + toExpression(schema) + ` schema. Coerce the schema to string, number or array using S.to first.`;
+			throw new Error(`[Sury] ` + message);
 	}
 }
 $$Error.$$class;
-var string = /* @__PURE__ */ string$2();
-var number = /* @__PURE__ */ float();
+var string = /*#__PURE__*/ string$2();
+var number = /*#__PURE__*/ float();
 var array = array$2;
-var date = /* @__PURE__ */ date$1();
+var date = /*#__PURE__*/ date$1();
 var union = js_union;
 var schema = js_schema;
 var parser = js_parser;
 var min = min$1;
 var max = max$1;
-var url = /* @__PURE__ */ url$1();
+var url = /*#__PURE__*/ url$1();
 //#endregion
 //#region ../schemas/libraries/sury/download.ts
 const imageSchema = schema({

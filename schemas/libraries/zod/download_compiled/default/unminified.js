@@ -13,7 +13,7 @@ var __exportAll = (all, no_symbols) => {
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js
 var _a$1;
 /** A special constant with type `never` */
-const NEVER = /* @__PURE__ */ Object.freeze({ status: "aborted" });
+const NEVER = /*@__PURE__*/ Object.freeze({ status: "aborted" });
 function $constructor(name, initializer, params) {
 	function init(inst, def) {
 		if (!inst._zod) Object.defineProperty(inst, "_zod", {
@@ -185,7 +185,7 @@ function floatSafeRemainder(val, step) {
 	if (Math.abs(ratio - roundedRatio) < tolerance) return 0;
 	return ratio - roundedRatio;
 }
-const EVALUATING = /* @__PURE__ */ Symbol("evaluating");
+const EVALUATING = /* @__PURE__*/ Symbol("evaluating");
 function defineLazy(object, key, getter) {
 	let value = void 0;
 	Object.defineProperty(object, key, {
@@ -251,7 +251,7 @@ const captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace
 function isObject(data) {
 	return typeof data === "object" && data !== null && !Array.isArray(data);
 }
-const allowsEval = /* @__PURE__ */ cached(() => {
+const allowsEval = /* @__PURE__*/ cached(() => {
 	if (globalConfig.jitless) return false;
 	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
 	try {
@@ -305,12 +305,12 @@ const getParsedType = (data) => {
 		default: throw new Error(`Unknown data type: ${t}`);
 	}
 };
-const propertyKeyTypes = /* @__PURE__ */ new Set([
+const propertyKeyTypes = /* @__PURE__*/ new Set([
 	"string",
 	"number",
 	"symbol"
 ]);
-const primitiveTypes = /* @__PURE__ */ new Set([
+const primitiveTypes = /* @__PURE__*/ new Set([
 	"string",
 	"number",
 	"bigint",
@@ -392,8 +392,8 @@ const NUMBER_FORMAT_RANGES = {
 	float64: [-Number.MAX_VALUE, Number.MAX_VALUE]
 };
 const BIGINT_FORMAT_RANGES = {
-	int64: [/* @__PURE__ */ BigInt("-9223372036854775808"), /* @__PURE__ */ BigInt("9223372036854775807")],
-	uint64: [/* @__PURE__ */ BigInt(0), /* @__PURE__ */ BigInt("18446744073709551615")]
+	int64: [/* @__PURE__*/ BigInt("-9223372036854775808"), /* @__PURE__*/ BigInt("9223372036854775807")],
+	uint64: [/* @__PURE__*/ BigInt(0), /* @__PURE__*/ BigInt("18446744073709551615")]
 };
 function pick(schema, mask) {
 	const currDef = schema._zod.def;
@@ -786,7 +786,7 @@ const _parse = (_Err) => (schema, value, _ctx, _params) => {
 	}
 	return result.value;
 };
-const parse$1 = /* @__PURE__ */ _parse($ZodRealError);
+const parse$1 = /* @__PURE__*/ _parse($ZodRealError);
 const _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -804,7 +804,7 @@ const _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
 	}
 	return result.value;
 };
-const parseAsync$1 = /* @__PURE__ */ _parseAsync($ZodRealError);
+const parseAsync$1 = /* @__PURE__*/ _parseAsync($ZodRealError);
 const _safeParse = (_Err) => (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -823,7 +823,7 @@ const _safeParse = (_Err) => (schema, value, _ctx) => {
 		data: result.value
 	};
 };
-const safeParse$1 = /* @__PURE__ */ _safeParse($ZodRealError);
+const safeParse$1 = /* @__PURE__*/ _safeParse($ZodRealError);
 const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -842,7 +842,7 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 		data: result.value
 	};
 };
-const safeParseAsync$1 = /* @__PURE__ */ _safeParseAsync($ZodRealError);
+const safeParseAsync$1 = /* @__PURE__*/ _safeParseAsync($ZodRealError);
 const _encode = (_Err) => (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -850,11 +850,11 @@ const _encode = (_Err) => (schema, value, _ctx) => {
 	} : { direction: "backward" };
 	return _parse(_Err)(schema, value, ctx);
 };
-const encode$1 = /* @__PURE__ */ _encode($ZodRealError);
+const encode$1 = /* @__PURE__*/ _encode($ZodRealError);
 const _decode = (_Err) => (schema, value, _ctx) => {
 	return _parse(_Err)(schema, value, _ctx);
 };
-const decode$1 = /* @__PURE__ */ _decode($ZodRealError);
+const decode$1 = /* @__PURE__*/ _decode($ZodRealError);
 const _encodeAsync = (_Err) => async (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -862,11 +862,11 @@ const _encodeAsync = (_Err) => async (schema, value, _ctx) => {
 	} : { direction: "backward" };
 	return _parseAsync(_Err)(schema, value, ctx);
 };
-const encodeAsync$1 = /* @__PURE__ */ _encodeAsync($ZodRealError);
+const encodeAsync$1 = /* @__PURE__*/ _encodeAsync($ZodRealError);
 const _decodeAsync = (_Err) => async (schema, value, _ctx) => {
 	return _parseAsync(_Err)(schema, value, _ctx);
 };
-const decodeAsync$1 = /* @__PURE__ */ _decodeAsync($ZodRealError);
+const decodeAsync$1 = /* @__PURE__*/ _decodeAsync($ZodRealError);
 const _safeEncode = (_Err) => (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -874,11 +874,11 @@ const _safeEncode = (_Err) => (schema, value, _ctx) => {
 	} : { direction: "backward" };
 	return _safeParse(_Err)(schema, value, ctx);
 };
-const safeEncode$1 = /* @__PURE__ */ _safeEncode($ZodRealError);
+const safeEncode$1 = /* @__PURE__*/ _safeEncode($ZodRealError);
 const _safeDecode = (_Err) => (schema, value, _ctx) => {
 	return _safeParse(_Err)(schema, value, _ctx);
 };
-const safeDecode$1 = /* @__PURE__ */ _safeDecode($ZodRealError);
+const safeDecode$1 = /* @__PURE__*/ _safeDecode($ZodRealError);
 const _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -886,11 +886,11 @@ const _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
 	} : { direction: "backward" };
 	return _safeParseAsync(_Err)(schema, value, ctx);
 };
-const safeEncodeAsync$1 = /* @__PURE__ */ _safeEncodeAsync($ZodRealError);
+const safeEncodeAsync$1 = /* @__PURE__*/ _safeEncodeAsync($ZodRealError);
 const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 	return _safeParseAsync(_Err)(schema, value, _ctx);
 };
-const safeDecodeAsync$1 = /* @__PURE__ */ _safeDecodeAsync($ZodRealError);
+const safeDecodeAsync$1 = /* @__PURE__*/ _safeDecodeAsync($ZodRealError);
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/regexes.js
 var regexes_exports = /* @__PURE__ */ __exportAll({
@@ -978,9 +978,9 @@ const uuid$1 = (version) => {
 	if (!version) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
 	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
 };
-const uuid4 = /* @__PURE__ */ uuid$1(4);
-const uuid6 = /* @__PURE__ */ uuid$1(6);
-const uuid7 = /* @__PURE__ */ uuid$1(7);
+const uuid4 = /*@__PURE__*/ uuid$1(4);
+const uuid6 = /*@__PURE__*/ uuid$1(6);
+const uuid7 = /*@__PURE__*/ uuid$1(7);
 /** Practical email validation */
 const email$1 = /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
 /** Equivalent to the HTML5 input[type=email] validation implemented by browsers. Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email */
@@ -1010,7 +1010,7 @@ const domain = /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$
 const httpProtocol = /^https?$/;
 const e164$1 = /^\+[1-9]\d{6,14}$/;
 const dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
-const date$3 = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
+const date$3 = /*@__PURE__*/ new RegExp(`^${dateSource}$`);
 function timeSource(args) {
 	const hhmm = `(?:[01]\\d|2[0-3]):[0-5]\\d`;
 	return typeof args.precision === "number" ? args.precision === -1 ? `${hhmm}` : args.precision === 0 ? `${hhmm}:[0-5]\\d` : `${hhmm}:[0-5]\\d\\.\\d{${args.precision}}` : `${hhmm}(?::[0-5]\\d(?:\\.\\d+)?)?`;
@@ -1046,23 +1046,23 @@ function fixedBase64url(length) {
 	return new RegExp(`^[A-Za-z0-9_-]{${length}}$`);
 }
 const md5_hex = /^[0-9a-fA-F]{32}$/;
-const md5_base64 = /* @__PURE__ */ fixedBase64(22, "==");
-const md5_base64url = /* @__PURE__ */ fixedBase64url(22);
+const md5_base64 = /*@__PURE__*/ fixedBase64(22, "==");
+const md5_base64url = /*@__PURE__*/ fixedBase64url(22);
 const sha1_hex = /^[0-9a-fA-F]{40}$/;
-const sha1_base64 = /* @__PURE__ */ fixedBase64(27, "=");
-const sha1_base64url = /* @__PURE__ */ fixedBase64url(27);
+const sha1_base64 = /*@__PURE__*/ fixedBase64(27, "=");
+const sha1_base64url = /*@__PURE__*/ fixedBase64url(27);
 const sha256_hex = /^[0-9a-fA-F]{64}$/;
-const sha256_base64 = /* @__PURE__ */ fixedBase64(43, "=");
-const sha256_base64url = /* @__PURE__ */ fixedBase64url(43);
+const sha256_base64 = /*@__PURE__*/ fixedBase64(43, "=");
+const sha256_base64url = /*@__PURE__*/ fixedBase64url(43);
 const sha384_hex = /^[0-9a-fA-F]{96}$/;
-const sha384_base64 = /* @__PURE__ */ fixedBase64(64, "");
-const sha384_base64url = /* @__PURE__ */ fixedBase64url(64);
+const sha384_base64 = /*@__PURE__*/ fixedBase64(64, "");
+const sha384_base64url = /*@__PURE__*/ fixedBase64url(64);
 const sha512_hex = /^[0-9a-fA-F]{128}$/;
-const sha512_base64 = /* @__PURE__ */ fixedBase64(86, "==");
-const sha512_base64url = /* @__PURE__ */ fixedBase64url(86);
+const sha512_base64 = /*@__PURE__*/ fixedBase64(86, "==");
+const sha512_base64url = /*@__PURE__*/ fixedBase64url(86);
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js
-const $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
+const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
 	inst._zod.def = def;
@@ -1073,7 +1073,7 @@ const numericOriginMap = {
 	bigint: "bigint",
 	object: "date"
 };
-const $ZodCheckLessThan = /* @__PURE__ */ $constructor("$ZodCheckLessThan", (inst, def) => {
+const $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
 	inst._zod.onattach.push((inst) => {
@@ -1095,7 +1095,7 @@ const $ZodCheckLessThan = /* @__PURE__ */ $constructor("$ZodCheckLessThan", (ins
 		});
 	};
 });
-const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan", (inst, def) => {
+const $ZodCheckGreaterThan = /*@__PURE__*/ $constructor("$ZodCheckGreaterThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
 	inst._zod.onattach.push((inst) => {
@@ -1117,7 +1117,7 @@ const $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan"
 		});
 	};
 });
-const $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", (inst, def) => {
+const $ZodCheckMultipleOf = /*@__PURE__*/ $constructor("$ZodCheckMultipleOf", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	inst._zod.onattach.push((inst) => {
 		var _a;
@@ -1136,7 +1136,7 @@ const $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", 
 		});
 	};
 });
-const $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberFormat", (inst, def) => {
+const $ZodCheckNumberFormat = /*@__PURE__*/ $constructor("$ZodCheckNumberFormat", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	def.format = def.format || "float64";
 	const isInt = def.format?.includes("int");
@@ -1207,7 +1207,7 @@ const $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberForma
 		});
 	};
 });
-const $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntFormat", (inst, def) => {
+const $ZodCheckBigIntFormat = /*@__PURE__*/ $constructor("$ZodCheckBigIntFormat", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const [minimum, maximum] = BIGINT_FORMAT_RANGES[def.format];
 	inst._zod.onattach.push((inst) => {
@@ -1238,7 +1238,7 @@ const $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntForma
 		});
 	};
 });
-const $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, def) => {
+const $ZodCheckMaxSize = /*@__PURE__*/ $constructor("$ZodCheckMaxSize", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1263,7 +1263,7 @@ const $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst,
 		});
 	};
 });
-const $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, def) => {
+const $ZodCheckMinSize = /*@__PURE__*/ $constructor("$ZodCheckMinSize", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1288,7 +1288,7 @@ const $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst,
 		});
 	};
 });
-const $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (inst, def) => {
+const $ZodCheckSizeEquals = /*@__PURE__*/ $constructor("$ZodCheckSizeEquals", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1323,7 +1323,7 @@ const $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", 
 		});
 	};
 });
-const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
+const $ZodCheckMaxLength = /*@__PURE__*/ $constructor("$ZodCheckMaxLength", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1349,7 +1349,7 @@ const $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (i
 		});
 	};
 });
-const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
+const $ZodCheckMinLength = /*@__PURE__*/ $constructor("$ZodCheckMinLength", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1375,7 +1375,7 @@ const $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (i
 		});
 	};
 });
-const $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
+const $ZodCheckLengthEquals = /*@__PURE__*/ $constructor("$ZodCheckLengthEquals", (inst, def) => {
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
@@ -1411,7 +1411,7 @@ const $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEqual
 		});
 	};
 });
-const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
+const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat", (inst, def) => {
 	var _a, _b;
 	$ZodCheck.init(inst, def);
 	inst._zod.onattach.push((inst) => {
@@ -1437,7 +1437,7 @@ const $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringForma
 	});
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
-const $ZodCheckRegex = /* @__PURE__ */ $constructor("$ZodCheckRegex", (inst, def) => {
+const $ZodCheckRegex = /*@__PURE__*/ $constructor("$ZodCheckRegex", (inst, def) => {
 	$ZodCheckStringFormat.init(inst, def);
 	inst._zod.check = (payload) => {
 		def.pattern.lastIndex = 0;
@@ -1453,15 +1453,15 @@ const $ZodCheckRegex = /* @__PURE__ */ $constructor("$ZodCheckRegex", (inst, def
 		});
 	};
 });
-const $ZodCheckLowerCase = /* @__PURE__ */ $constructor("$ZodCheckLowerCase", (inst, def) => {
+const $ZodCheckLowerCase = /*@__PURE__*/ $constructor("$ZodCheckLowerCase", (inst, def) => {
 	def.pattern ?? (def.pattern = lowercase);
 	$ZodCheckStringFormat.init(inst, def);
 });
-const $ZodCheckUpperCase = /* @__PURE__ */ $constructor("$ZodCheckUpperCase", (inst, def) => {
+const $ZodCheckUpperCase = /*@__PURE__*/ $constructor("$ZodCheckUpperCase", (inst, def) => {
 	def.pattern ?? (def.pattern = uppercase);
 	$ZodCheckStringFormat.init(inst, def);
 });
-const $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (inst, def) => {
+const $ZodCheckIncludes = /*@__PURE__*/ $constructor("$ZodCheckIncludes", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const escapedRegex = escapeRegex(def.includes);
 	const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position}}${escapedRegex}` : escapedRegex);
@@ -1484,7 +1484,7 @@ const $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (ins
 		});
 	};
 });
-const $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", (inst, def) => {
+const $ZodCheckStartsWith = /*@__PURE__*/ $constructor("$ZodCheckStartsWith", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const pattern = new RegExp(`^${escapeRegex(def.prefix)}.*`);
 	def.pattern ?? (def.pattern = pattern);
@@ -1506,7 +1506,7 @@ const $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", 
 		});
 	};
 });
-const $ZodCheckEndsWith = /* @__PURE__ */ $constructor("$ZodCheckEndsWith", (inst, def) => {
+const $ZodCheckEndsWith = /*@__PURE__*/ $constructor("$ZodCheckEndsWith", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const pattern = new RegExp(`.*${escapeRegex(def.suffix)}$`);
 	def.pattern ?? (def.pattern = pattern);
@@ -1531,7 +1531,7 @@ const $ZodCheckEndsWith = /* @__PURE__ */ $constructor("$ZodCheckEndsWith", (ins
 function handleCheckPropertyResult(result, payload, property) {
 	if (result.issues.length) payload.issues.push(...prefixIssues(property, result.issues));
 }
-const $ZodCheckProperty = /* @__PURE__ */ $constructor("$ZodCheckProperty", (inst, def) => {
+const $ZodCheckProperty = /*@__PURE__*/ $constructor("$ZodCheckProperty", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	inst._zod.check = (payload) => {
 		const result = def.schema._zod.run({
@@ -1542,7 +1542,7 @@ const $ZodCheckProperty = /* @__PURE__ */ $constructor("$ZodCheckProperty", (ins
 		handleCheckPropertyResult(result, payload, def.property);
 	};
 });
-const $ZodCheckMimeType = /* @__PURE__ */ $constructor("$ZodCheckMimeType", (inst, def) => {
+const $ZodCheckMimeType = /*@__PURE__*/ $constructor("$ZodCheckMimeType", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const mimeSet = new Set(def.mime);
 	inst._zod.onattach.push((inst) => {
@@ -1559,7 +1559,7 @@ const $ZodCheckMimeType = /* @__PURE__ */ $constructor("$ZodCheckMimeType", (ins
 		});
 	};
 });
-const $ZodCheckOverwrite = /* @__PURE__ */ $constructor("$ZodCheckOverwrite", (inst, def) => {
+const $ZodCheckOverwrite = /*@__PURE__*/ $constructor("$ZodCheckOverwrite", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	inst._zod.check = (payload) => {
 		payload.value = def.tx(payload.value);
@@ -1605,7 +1605,7 @@ const version = {
 };
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js
-const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
+const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
 	inst._zod.def = def;
@@ -1694,7 +1694,7 @@ const $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 		version: 1
 	}));
 });
-const $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
+const $ZodString = /*@__PURE__*/ $constructor("$ZodString", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string$2(inst._zod.bag);
 	inst._zod.parse = (payload, _) => {
@@ -1711,15 +1711,15 @@ const $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodStringFormat = /* @__PURE__ */ $constructor("$ZodStringFormat", (inst, def) => {
+const $ZodStringFormat = /*@__PURE__*/ $constructor("$ZodStringFormat", (inst, def) => {
 	$ZodCheckStringFormat.init(inst, def);
 	$ZodString.init(inst, def);
 });
-const $ZodGUID = /* @__PURE__ */ $constructor("$ZodGUID", (inst, def) => {
+const $ZodGUID = /*@__PURE__*/ $constructor("$ZodGUID", (inst, def) => {
 	def.pattern ?? (def.pattern = guid$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodUUID = /* @__PURE__ */ $constructor("$ZodUUID", (inst, def) => {
+const $ZodUUID = /*@__PURE__*/ $constructor("$ZodUUID", (inst, def) => {
 	if (def.version) {
 		const v = {
 			v1: 1,
@@ -1736,11 +1736,11 @@ const $ZodUUID = /* @__PURE__ */ $constructor("$ZodUUID", (inst, def) => {
 	} else def.pattern ?? (def.pattern = uuid$1());
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodEmail = /* @__PURE__ */ $constructor("$ZodEmail", (inst, def) => {
+const $ZodEmail = /*@__PURE__*/ $constructor("$ZodEmail", (inst, def) => {
 	def.pattern ?? (def.pattern = email$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
+const $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 	$ZodStringFormat.init(inst, def);
 	inst._zod.check = (payload) => {
 		try {
@@ -1797,11 +1797,11 @@ const $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
 		}
 	};
 });
-const $ZodEmoji = /* @__PURE__ */ $constructor("$ZodEmoji", (inst, def) => {
+const $ZodEmoji = /*@__PURE__*/ $constructor("$ZodEmoji", (inst, def) => {
 	def.pattern ?? (def.pattern = emoji$1());
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodNanoID = /* @__PURE__ */ $constructor("$ZodNanoID", (inst, def) => {
+const $ZodNanoID = /*@__PURE__*/ $constructor("$ZodNanoID", (inst, def) => {
 	def.pattern ?? (def.pattern = nanoid$1);
 	$ZodStringFormat.init(inst, def);
 });
@@ -1810,48 +1810,48 @@ const $ZodNanoID = /* @__PURE__ */ $constructor("$ZodNanoID", (inst, def) => {
 * (timestamps embedded in the id). Use {@link $ZodCUID2} instead.
 * See https://github.com/paralleldrive/cuid.
 */
-const $ZodCUID = /* @__PURE__ */ $constructor("$ZodCUID", (inst, def) => {
+const $ZodCUID = /*@__PURE__*/ $constructor("$ZodCUID", (inst, def) => {
 	def.pattern ?? (def.pattern = cuid$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodCUID2 = /* @__PURE__ */ $constructor("$ZodCUID2", (inst, def) => {
+const $ZodCUID2 = /*@__PURE__*/ $constructor("$ZodCUID2", (inst, def) => {
 	def.pattern ?? (def.pattern = cuid2$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodULID = /* @__PURE__ */ $constructor("$ZodULID", (inst, def) => {
+const $ZodULID = /*@__PURE__*/ $constructor("$ZodULID", (inst, def) => {
 	def.pattern ?? (def.pattern = ulid$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodXID = /* @__PURE__ */ $constructor("$ZodXID", (inst, def) => {
+const $ZodXID = /*@__PURE__*/ $constructor("$ZodXID", (inst, def) => {
 	def.pattern ?? (def.pattern = xid$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodKSUID = /* @__PURE__ */ $constructor("$ZodKSUID", (inst, def) => {
+const $ZodKSUID = /*@__PURE__*/ $constructor("$ZodKSUID", (inst, def) => {
 	def.pattern ?? (def.pattern = ksuid$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodISODateTime = /* @__PURE__ */ $constructor("$ZodISODateTime", (inst, def) => {
+const $ZodISODateTime = /*@__PURE__*/ $constructor("$ZodISODateTime", (inst, def) => {
 	def.pattern ?? (def.pattern = datetime$1(def));
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodISODate = /* @__PURE__ */ $constructor("$ZodISODate", (inst, def) => {
+const $ZodISODate = /*@__PURE__*/ $constructor("$ZodISODate", (inst, def) => {
 	def.pattern ?? (def.pattern = date$3);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodISOTime = /* @__PURE__ */ $constructor("$ZodISOTime", (inst, def) => {
+const $ZodISOTime = /*@__PURE__*/ $constructor("$ZodISOTime", (inst, def) => {
 	def.pattern ?? (def.pattern = time$1(def));
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodISODuration = /* @__PURE__ */ $constructor("$ZodISODuration", (inst, def) => {
+const $ZodISODuration = /*@__PURE__*/ $constructor("$ZodISODuration", (inst, def) => {
 	def.pattern ?? (def.pattern = duration$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodIPv4 = /* @__PURE__ */ $constructor("$ZodIPv4", (inst, def) => {
+const $ZodIPv4 = /*@__PURE__*/ $constructor("$ZodIPv4", (inst, def) => {
 	def.pattern ?? (def.pattern = ipv4$1);
 	$ZodStringFormat.init(inst, def);
 	inst._zod.bag.format = `ipv4`;
 });
-const $ZodIPv6 = /* @__PURE__ */ $constructor("$ZodIPv6", (inst, def) => {
+const $ZodIPv6 = /*@__PURE__*/ $constructor("$ZodIPv6", (inst, def) => {
 	def.pattern ?? (def.pattern = ipv6$1);
 	$ZodStringFormat.init(inst, def);
 	inst._zod.bag.format = `ipv6`;
@@ -1869,16 +1869,16 @@ const $ZodIPv6 = /* @__PURE__ */ $constructor("$ZodIPv6", (inst, def) => {
 		}
 	};
 });
-const $ZodMAC = /* @__PURE__ */ $constructor("$ZodMAC", (inst, def) => {
+const $ZodMAC = /*@__PURE__*/ $constructor("$ZodMAC", (inst, def) => {
 	def.pattern ?? (def.pattern = mac$1(def.delimiter));
 	$ZodStringFormat.init(inst, def);
 	inst._zod.bag.format = `mac`;
 });
-const $ZodCIDRv4 = /* @__PURE__ */ $constructor("$ZodCIDRv4", (inst, def) => {
+const $ZodCIDRv4 = /*@__PURE__*/ $constructor("$ZodCIDRv4", (inst, def) => {
 	def.pattern ?? (def.pattern = cidrv4$1);
 	$ZodStringFormat.init(inst, def);
 });
-const $ZodCIDRv6 = /* @__PURE__ */ $constructor("$ZodCIDRv6", (inst, def) => {
+const $ZodCIDRv6 = /*@__PURE__*/ $constructor("$ZodCIDRv6", (inst, def) => {
 	def.pattern ?? (def.pattern = cidrv6$1);
 	$ZodStringFormat.init(inst, def);
 	inst._zod.check = (payload) => {
@@ -1913,7 +1913,7 @@ function isValidBase64(data) {
 		return false;
 	}
 }
-const $ZodBase64 = /* @__PURE__ */ $constructor("$ZodBase64", (inst, def) => {
+const $ZodBase64 = /*@__PURE__*/ $constructor("$ZodBase64", (inst, def) => {
 	def.pattern ?? (def.pattern = base64$1);
 	$ZodStringFormat.init(inst, def);
 	inst._zod.bag.contentEncoding = "base64";
@@ -1933,7 +1933,7 @@ function isValidBase64URL(data) {
 	const base64 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
 	return isValidBase64(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
 }
-const $ZodBase64URL = /* @__PURE__ */ $constructor("$ZodBase64URL", (inst, def) => {
+const $ZodBase64URL = /*@__PURE__*/ $constructor("$ZodBase64URL", (inst, def) => {
 	def.pattern ?? (def.pattern = base64url$1);
 	$ZodStringFormat.init(inst, def);
 	inst._zod.bag.contentEncoding = "base64url";
@@ -1948,7 +1948,7 @@ const $ZodBase64URL = /* @__PURE__ */ $constructor("$ZodBase64URL", (inst, def) 
 		});
 	};
 });
-const $ZodE164 = /* @__PURE__ */ $constructor("$ZodE164", (inst, def) => {
+const $ZodE164 = /*@__PURE__*/ $constructor("$ZodE164", (inst, def) => {
 	def.pattern ?? (def.pattern = e164$1);
 	$ZodStringFormat.init(inst, def);
 });
@@ -1967,7 +1967,7 @@ function isValidJWT(token, algorithm = null) {
 		return false;
 	}
 }
-const $ZodJWT = /* @__PURE__ */ $constructor("$ZodJWT", (inst, def) => {
+const $ZodJWT = /*@__PURE__*/ $constructor("$ZodJWT", (inst, def) => {
 	$ZodStringFormat.init(inst, def);
 	inst._zod.check = (payload) => {
 		if (isValidJWT(payload.value, def.alg)) return;
@@ -1980,7 +1980,7 @@ const $ZodJWT = /* @__PURE__ */ $constructor("$ZodJWT", (inst, def) => {
 		});
 	};
 });
-const $ZodCustomStringFormat = /* @__PURE__ */ $constructor("$ZodCustomStringFormat", (inst, def) => {
+const $ZodCustomStringFormat = /*@__PURE__*/ $constructor("$ZodCustomStringFormat", (inst, def) => {
 	$ZodStringFormat.init(inst, def);
 	inst._zod.check = (payload) => {
 		if (def.fn(payload.value)) return;
@@ -1993,7 +1993,7 @@ const $ZodCustomStringFormat = /* @__PURE__ */ $constructor("$ZodCustomStringFor
 		});
 	};
 });
-const $ZodNumber = /* @__PURE__ */ $constructor("$ZodNumber", (inst, def) => {
+const $ZodNumber = /*@__PURE__*/ $constructor("$ZodNumber", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = inst._zod.bag.pattern ?? number$2;
 	inst._zod.parse = (payload, _ctx) => {
@@ -2013,11 +2013,11 @@ const $ZodNumber = /* @__PURE__ */ $constructor("$ZodNumber", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodNumberFormat = /* @__PURE__ */ $constructor("$ZodNumberFormat", (inst, def) => {
+const $ZodNumberFormat = /*@__PURE__*/ $constructor("$ZodNumberFormat", (inst, def) => {
 	$ZodCheckNumberFormat.init(inst, def);
 	$ZodNumber.init(inst, def);
 });
-const $ZodBoolean = /* @__PURE__ */ $constructor("$ZodBoolean", (inst, def) => {
+const $ZodBoolean = /*@__PURE__*/ $constructor("$ZodBoolean", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = boolean$2;
 	inst._zod.parse = (payload, _ctx) => {
@@ -2035,7 +2035,7 @@ const $ZodBoolean = /* @__PURE__ */ $constructor("$ZodBoolean", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodBigInt = /* @__PURE__ */ $constructor("$ZodBigInt", (inst, def) => {
+const $ZodBigInt = /*@__PURE__*/ $constructor("$ZodBigInt", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = bigint$2;
 	inst._zod.parse = (payload, _ctx) => {
@@ -2052,11 +2052,11 @@ const $ZodBigInt = /* @__PURE__ */ $constructor("$ZodBigInt", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodBigIntFormat = /* @__PURE__ */ $constructor("$ZodBigIntFormat", (inst, def) => {
+const $ZodBigIntFormat = /*@__PURE__*/ $constructor("$ZodBigIntFormat", (inst, def) => {
 	$ZodCheckBigIntFormat.init(inst, def);
 	$ZodBigInt.init(inst, def);
 });
-const $ZodSymbol = /* @__PURE__ */ $constructor("$ZodSymbol", (inst, def) => {
+const $ZodSymbol = /*@__PURE__*/ $constructor("$ZodSymbol", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
@@ -2070,7 +2070,7 @@ const $ZodSymbol = /* @__PURE__ */ $constructor("$ZodSymbol", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodUndefined = /* @__PURE__ */ $constructor("$ZodUndefined", (inst, def) => {
+const $ZodUndefined = /*@__PURE__*/ $constructor("$ZodUndefined", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = _undefined$2;
 	inst._zod.values = new Set([void 0]);
@@ -2086,7 +2086,7 @@ const $ZodUndefined = /* @__PURE__ */ $constructor("$ZodUndefined", (inst, def) 
 		return payload;
 	};
 });
-const $ZodNull = /* @__PURE__ */ $constructor("$ZodNull", (inst, def) => {
+const $ZodNull = /*@__PURE__*/ $constructor("$ZodNull", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.pattern = _null$2;
 	inst._zod.values = new Set([null]);
@@ -2102,15 +2102,15 @@ const $ZodNull = /* @__PURE__ */ $constructor("$ZodNull", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodAny = /* @__PURE__ */ $constructor("$ZodAny", (inst, def) => {
+const $ZodAny = /*@__PURE__*/ $constructor("$ZodAny", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload) => payload;
 });
-const $ZodUnknown = /* @__PURE__ */ $constructor("$ZodUnknown", (inst, def) => {
+const $ZodUnknown = /*@__PURE__*/ $constructor("$ZodUnknown", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload) => payload;
 });
-const $ZodNever = /* @__PURE__ */ $constructor("$ZodNever", (inst, def) => {
+const $ZodNever = /*@__PURE__*/ $constructor("$ZodNever", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		payload.issues.push({
@@ -2122,7 +2122,7 @@ const $ZodNever = /* @__PURE__ */ $constructor("$ZodNever", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodVoid = /* @__PURE__ */ $constructor("$ZodVoid", (inst, def) => {
+const $ZodVoid = /*@__PURE__*/ $constructor("$ZodVoid", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
@@ -2136,7 +2136,7 @@ const $ZodVoid = /* @__PURE__ */ $constructor("$ZodVoid", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodDate = /* @__PURE__ */ $constructor("$ZodDate", (inst, def) => {
+const $ZodDate = /*@__PURE__*/ $constructor("$ZodDate", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		if (def.coerce) try {
@@ -2159,7 +2159,7 @@ function handleArrayResult(result, final, index) {
 	if (result.issues.length) final.issues.push(...prefixIssues(index, result.issues));
 	final.value[index] = result.value;
 }
-const $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
+const $ZodArray = /*@__PURE__*/ $constructor("$ZodArray", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2250,7 +2250,7 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 		return payload;
 	});
 }
-const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
+const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 	$ZodType.init(inst, def);
 	if (!Object.getOwnPropertyDescriptor(def, "shape")?.get) {
 		const sh = def.shape;
@@ -2306,7 +2306,7 @@ const $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
 		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
 	};
 });
-const $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) => {
+const $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
 	$ZodObject.init(inst, def);
 	const superParse = inst._zod.parse;
 	const _normalized = cached(() => normalizeDef(def));
@@ -2446,7 +2446,7 @@ function handleUnionResults(results, final, inst, ctx) {
 	});
 	return final;
 }
-const $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
+const $ZodUnion = /*@__PURE__*/ $constructor("$ZodUnion", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "optin", () => def.options.some((o) => o._zod.optin === "optional") ? "optional" : void 0);
 	defineLazy(inst._zod, "optout", () => def.options.some((o) => o._zod.optout === "optional") ? "optional" : void 0);
@@ -2504,7 +2504,7 @@ function handleExclusiveUnionResults(results, final, inst, ctx) {
 	});
 	return final;
 }
-const $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
+const $ZodXor = /*@__PURE__*/ $constructor("$ZodXor", (inst, def) => {
 	$ZodUnion.init(inst, def);
 	def.inclusive = false;
 	const first = def.options.length === 1 ? def.options[0]._zod.run : null;
@@ -2528,7 +2528,7 @@ const $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
 		});
 	};
 });
-const $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUnion", (inst, def) => {
+const $ZodDiscriminatedUnion = /*@__PURE__*/ $constructor("$ZodDiscriminatedUnion", (inst, def) => {
 	def.inclusive = false;
 	$ZodUnion.init(inst, def);
 	const _super = inst._zod.parse;
@@ -2584,7 +2584,7 @@ const $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUn
 		return payload;
 	};
 });
-const $ZodIntersection = /* @__PURE__ */ $constructor("$ZodIntersection", (inst, def) => {
+const $ZodIntersection = /*@__PURE__*/ $constructor("$ZodIntersection", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2683,7 +2683,7 @@ function handleIntersectionResults(result, left, right) {
 	result.value = merged.data;
 	return result;
 }
-const $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
+const $ZodTuple = /*@__PURE__*/ $constructor("$ZodTuple", (inst, def) => {
 	$ZodType.init(inst, def);
 	const items = def.items;
 	inst._zod.parse = (payload, ctx) => {
@@ -2775,7 +2775,7 @@ function handleTupleResults(itemResults, final, items, input, optoutStart) {
 	else break;
 	return final;
 }
-const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
+const $ZodRecord = /*@__PURE__*/ $constructor("$ZodRecord", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2884,7 +2884,7 @@ const $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodMap = /* @__PURE__ */ $constructor("$ZodMap", (inst, def) => {
+const $ZodMap = /*@__PURE__*/ $constructor("$ZodMap", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2937,7 +2937,7 @@ function handleMapResult(keyResult, valueResult, final, key, input, inst, ctx) {
 	});
 	final.value.set(keyResult.value, valueResult.value);
 }
-const $ZodSet = /* @__PURE__ */ $constructor("$ZodSet", (inst, def) => {
+const $ZodSet = /*@__PURE__*/ $constructor("$ZodSet", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
@@ -2968,7 +2968,7 @@ function handleSetResult(result, final) {
 	if (result.issues.length) final.issues.push(...result.issues);
 	final.value.add(result.value);
 }
-const $ZodEnum = /* @__PURE__ */ $constructor("$ZodEnum", (inst, def) => {
+const $ZodEnum = /*@__PURE__*/ $constructor("$ZodEnum", (inst, def) => {
 	$ZodType.init(inst, def);
 	const values = getEnumValues(def.entries);
 	const valuesSet = new Set(values);
@@ -2986,7 +2986,7 @@ const $ZodEnum = /* @__PURE__ */ $constructor("$ZodEnum", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodLiteral = /* @__PURE__ */ $constructor("$ZodLiteral", (inst, def) => {
+const $ZodLiteral = /*@__PURE__*/ $constructor("$ZodLiteral", (inst, def) => {
 	$ZodType.init(inst, def);
 	if (def.values.length === 0) throw new Error("Cannot create literal schema with no valid values");
 	const values = new Set(def.values);
@@ -3004,7 +3004,7 @@ const $ZodLiteral = /* @__PURE__ */ $constructor("$ZodLiteral", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodFile = /* @__PURE__ */ $constructor("$ZodFile", (inst, def) => {
+const $ZodFile = /*@__PURE__*/ $constructor("$ZodFile", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
@@ -3018,7 +3018,7 @@ const $ZodFile = /* @__PURE__ */ $constructor("$ZodFile", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodTransform = /* @__PURE__ */ $constructor("$ZodTransform", (inst, def) => {
+const $ZodTransform = /*@__PURE__*/ $constructor("$ZodTransform", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.optin = "optional";
 	inst._zod.parse = (payload, ctx) => {
@@ -3042,7 +3042,7 @@ function handleOptionalResult(result, input) {
 	};
 	return result;
 }
-const $ZodOptional = /* @__PURE__ */ $constructor("$ZodOptional", (inst, def) => {
+const $ZodOptional = /*@__PURE__*/ $constructor("$ZodOptional", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.optin = "optional";
 	inst._zod.optout = "optional";
@@ -3064,7 +3064,7 @@ const $ZodOptional = /* @__PURE__ */ $constructor("$ZodOptional", (inst, def) =>
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-const $ZodExactOptional = /* @__PURE__ */ $constructor("$ZodExactOptional", (inst, def) => {
+const $ZodExactOptional = /*@__PURE__*/ $constructor("$ZodExactOptional", (inst, def) => {
 	$ZodOptional.init(inst, def);
 	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
 	defineLazy(inst._zod, "pattern", () => def.innerType._zod.pattern);
@@ -3072,7 +3072,7 @@ const $ZodExactOptional = /* @__PURE__ */ $constructor("$ZodExactOptional", (ins
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) => {
+const $ZodNullable = /*@__PURE__*/ $constructor("$ZodNullable", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "optin", () => def.innerType._zod.optin);
 	defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
@@ -3088,7 +3088,7 @@ const $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) =>
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-const $ZodDefault = /* @__PURE__ */ $constructor("$ZodDefault", (inst, def) => {
+const $ZodDefault = /*@__PURE__*/ $constructor("$ZodDefault", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.optin = "optional";
 	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
@@ -3110,7 +3110,7 @@ function handleDefaultResult(payload, def) {
 	if (payload.value === void 0) payload.value = def.defaultValue;
 	return payload;
 }
-const $ZodPrefault = /* @__PURE__ */ $constructor("$ZodPrefault", (inst, def) => {
+const $ZodPrefault = /*@__PURE__*/ $constructor("$ZodPrefault", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.optin = "optional";
 	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
@@ -3120,7 +3120,7 @@ const $ZodPrefault = /* @__PURE__ */ $constructor("$ZodPrefault", (inst, def) =>
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-const $ZodNonOptional = /* @__PURE__ */ $constructor("$ZodNonOptional", (inst, def) => {
+const $ZodNonOptional = /*@__PURE__*/ $constructor("$ZodNonOptional", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "values", () => {
 		const v = def.innerType._zod.values;
@@ -3141,7 +3141,7 @@ function handleNonOptionalResult(payload, inst) {
 	});
 	return payload;
 }
-const $ZodSuccess = /* @__PURE__ */ $constructor("$ZodSuccess", (inst, def) => {
+const $ZodSuccess = /*@__PURE__*/ $constructor("$ZodSuccess", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		if (ctx.direction === "backward") throw new $ZodEncodeError("ZodSuccess");
@@ -3154,7 +3154,7 @@ const $ZodSuccess = /* @__PURE__ */ $constructor("$ZodSuccess", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
+const $ZodCatch = /*@__PURE__*/ $constructor("$ZodCatch", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.optin = "optional";
 	defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
@@ -3188,7 +3188,7 @@ const $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodNaN = /* @__PURE__ */ $constructor("$ZodNaN", (inst, def) => {
+const $ZodNaN = /*@__PURE__*/ $constructor("$ZodNaN", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _ctx) => {
 		if (typeof payload.value !== "number" || !Number.isNaN(payload.value)) {
@@ -3203,7 +3203,7 @@ const $ZodNaN = /* @__PURE__ */ $constructor("$ZodNaN", (inst, def) => {
 		return payload;
 	};
 });
-const $ZodPipe = /* @__PURE__ */ $constructor("$ZodPipe", (inst, def) => {
+const $ZodPipe = /*@__PURE__*/ $constructor("$ZodPipe", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "values", () => def.in._zod.values);
 	defineLazy(inst._zod, "optin", () => def.in._zod.optin);
@@ -3231,7 +3231,7 @@ function handlePipeResult(left, next, ctx) {
 		fallback: left.fallback
 	}, ctx);
 }
-const $ZodCodec = /* @__PURE__ */ $constructor("$ZodCodec", (inst, def) => {
+const $ZodCodec = /*@__PURE__*/ $constructor("$ZodCodec", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "values", () => def.in._zod.values);
 	defineLazy(inst._zod, "optin", () => def.in._zod.optin);
@@ -3274,10 +3274,10 @@ function handleCodecTxResult(left, value, nextSchema, ctx) {
 		issues: left.issues
 	}, ctx);
 }
-const $ZodPreprocess = /* @__PURE__ */ $constructor("$ZodPreprocess", (inst, def) => {
+const $ZodPreprocess = /*@__PURE__*/ $constructor("$ZodPreprocess", (inst, def) => {
 	$ZodPipe.init(inst, def);
 });
-const $ZodReadonly = /* @__PURE__ */ $constructor("$ZodReadonly", (inst, def) => {
+const $ZodReadonly = /*@__PURE__*/ $constructor("$ZodReadonly", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "propValues", () => def.innerType._zod.propValues);
 	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
@@ -3294,7 +3294,7 @@ function handleReadonlyResult(payload) {
 	payload.value = Object.freeze(payload.value);
 	return payload;
 }
-const $ZodTemplateLiteral = /* @__PURE__ */ $constructor("$ZodTemplateLiteral", (inst, def) => {
+const $ZodTemplateLiteral = /*@__PURE__*/ $constructor("$ZodTemplateLiteral", (inst, def) => {
 	$ZodType.init(inst, def);
 	const regexParts = [];
 	for (const part of def.parts) if (typeof part === "object" && part !== null) {
@@ -3331,7 +3331,7 @@ const $ZodTemplateLiteral = /* @__PURE__ */ $constructor("$ZodTemplateLiteral", 
 		return payload;
 	};
 });
-const $ZodFunction = /* @__PURE__ */ $constructor("$ZodFunction", (inst, def) => {
+const $ZodFunction = /*@__PURE__*/ $constructor("$ZodFunction", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._def = def;
 	inst._zod.def = def;
@@ -3394,7 +3394,7 @@ const $ZodFunction = /* @__PURE__ */ $constructor("$ZodFunction", (inst, def) =>
 	};
 	return inst;
 });
-const $ZodPromise = /* @__PURE__ */ $constructor("$ZodPromise", (inst, def) => {
+const $ZodPromise = /*@__PURE__*/ $constructor("$ZodPromise", (inst, def) => {
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, ctx) => {
 		return Promise.resolve(payload.value).then((inner) => def.innerType._zod.run({
@@ -3403,7 +3403,7 @@ const $ZodPromise = /* @__PURE__ */ $constructor("$ZodPromise", (inst, def) => {
 		}, ctx));
 	};
 });
-const $ZodLazy = /* @__PURE__ */ $constructor("$ZodLazy", (inst, def) => {
+const $ZodLazy = /*@__PURE__*/ $constructor("$ZodLazy", (inst, def) => {
 	$ZodType.init(inst, def);
 	defineLazy(inst._zod, "innerType", () => {
 		const d = def;
@@ -3418,7 +3418,7 @@ const $ZodLazy = /* @__PURE__ */ $constructor("$ZodLazy", (inst, def) => {
 		return inst._zod.innerType._zod.run(payload, ctx);
 	};
 });
-const $ZodCustom = /* @__PURE__ */ $constructor("$ZodCustom", (inst, def) => {
+const $ZodCustom = /*@__PURE__*/ $constructor("$ZodCustom", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	$ZodType.init(inst, def);
 	inst._zod.parse = (payload, _) => {
@@ -9176,14 +9176,14 @@ function registry() {
 const globalRegistry = globalThis.__zod_globalRegistry;
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/api.js
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _string(Class, params) {
 	return new Class({
 		type: "string",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _coercedString(Class, params) {
 	return new Class({
 		type: "string",
@@ -9191,7 +9191,7 @@ function _coercedString(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _email(Class, params) {
 	return new Class({
 		type: "string",
@@ -9201,7 +9201,7 @@ function _email(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _guid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9211,7 +9211,7 @@ function _guid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uuid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9221,7 +9221,7 @@ function _uuid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uuidv4(Class, params) {
 	return new Class({
 		type: "string",
@@ -9232,7 +9232,7 @@ function _uuidv4(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uuidv6(Class, params) {
 	return new Class({
 		type: "string",
@@ -9243,7 +9243,7 @@ function _uuidv6(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uuidv7(Class, params) {
 	return new Class({
 		type: "string",
@@ -9254,7 +9254,7 @@ function _uuidv7(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _url(Class, params) {
 	return new Class({
 		type: "string",
@@ -9264,7 +9264,7 @@ function _url(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _emoji(Class, params) {
 	return new Class({
 		type: "string",
@@ -9274,7 +9274,7 @@ function _emoji(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nanoid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9289,7 +9289,7 @@ function _nanoid(Class, params) {
 * (timestamps embedded in the id). Use {@link _cuid2} instead.
 * See https://github.com/paralleldrive/cuid.
 */
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _cuid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9299,7 +9299,7 @@ function _cuid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _cuid2(Class, params) {
 	return new Class({
 		type: "string",
@@ -9309,7 +9309,7 @@ function _cuid2(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _ulid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9319,7 +9319,7 @@ function _ulid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _xid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9329,7 +9329,7 @@ function _xid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _ksuid(Class, params) {
 	return new Class({
 		type: "string",
@@ -9339,7 +9339,7 @@ function _ksuid(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _ipv4(Class, params) {
 	return new Class({
 		type: "string",
@@ -9349,7 +9349,7 @@ function _ipv4(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _ipv6(Class, params) {
 	return new Class({
 		type: "string",
@@ -9359,7 +9359,7 @@ function _ipv6(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _mac(Class, params) {
 	return new Class({
 		type: "string",
@@ -9369,7 +9369,7 @@ function _mac(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _cidrv4(Class, params) {
 	return new Class({
 		type: "string",
@@ -9379,7 +9379,7 @@ function _cidrv4(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _cidrv6(Class, params) {
 	return new Class({
 		type: "string",
@@ -9389,7 +9389,7 @@ function _cidrv6(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _base64(Class, params) {
 	return new Class({
 		type: "string",
@@ -9399,7 +9399,7 @@ function _base64(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _base64url(Class, params) {
 	return new Class({
 		type: "string",
@@ -9409,7 +9409,7 @@ function _base64url(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _e164(Class, params) {
 	return new Class({
 		type: "string",
@@ -9419,7 +9419,7 @@ function _e164(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _jwt(Class, params) {
 	return new Class({
 		type: "string",
@@ -9436,7 +9436,7 @@ const TimePrecision = {
 	Millisecond: 3,
 	Microsecond: 6
 };
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _isoDateTime(Class, params) {
 	return new Class({
 		type: "string",
@@ -9448,7 +9448,7 @@ function _isoDateTime(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _isoDate(Class, params) {
 	return new Class({
 		type: "string",
@@ -9457,7 +9457,7 @@ function _isoDate(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _isoTime(Class, params) {
 	return new Class({
 		type: "string",
@@ -9467,7 +9467,7 @@ function _isoTime(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _isoDuration(Class, params) {
 	return new Class({
 		type: "string",
@@ -9476,7 +9476,7 @@ function _isoDuration(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _number(Class, params) {
 	return new Class({
 		type: "number",
@@ -9484,7 +9484,7 @@ function _number(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _coercedNumber(Class, params) {
 	return new Class({
 		type: "number",
@@ -9493,7 +9493,7 @@ function _coercedNumber(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _int(Class, params) {
 	return new Class({
 		type: "number",
@@ -9503,7 +9503,7 @@ function _int(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _float32(Class, params) {
 	return new Class({
 		type: "number",
@@ -9513,7 +9513,7 @@ function _float32(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _float64(Class, params) {
 	return new Class({
 		type: "number",
@@ -9523,7 +9523,7 @@ function _float64(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _int32(Class, params) {
 	return new Class({
 		type: "number",
@@ -9533,7 +9533,7 @@ function _int32(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uint32(Class, params) {
 	return new Class({
 		type: "number",
@@ -9543,14 +9543,14 @@ function _uint32(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _boolean(Class, params) {
 	return new Class({
 		type: "boolean",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _coercedBoolean(Class, params) {
 	return new Class({
 		type: "boolean",
@@ -9558,14 +9558,14 @@ function _coercedBoolean(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _bigint(Class, params) {
 	return new Class({
 		type: "bigint",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _coercedBigint(Class, params) {
 	return new Class({
 		type: "bigint",
@@ -9573,7 +9573,7 @@ function _coercedBigint(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _int64(Class, params) {
 	return new Class({
 		type: "bigint",
@@ -9583,7 +9583,7 @@ function _int64(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uint64(Class, params) {
 	return new Class({
 		type: "bigint",
@@ -9593,57 +9593,57 @@ function _uint64(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _symbol(Class, params) {
 	return new Class({
 		type: "symbol",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _undefined$1(Class, params) {
 	return new Class({
 		type: "undefined",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _null$1(Class, params) {
 	return new Class({
 		type: "null",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _any(Class) {
 	return new Class({ type: "any" });
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _unknown(Class) {
 	return new Class({ type: "unknown" });
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _never(Class, params) {
 	return new Class({
 		type: "never",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _void$1(Class, params) {
 	return new Class({
 		type: "void",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _date(Class, params) {
 	return new Class({
 		type: "date",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _coercedDate(Class, params) {
 	return new Class({
 		type: "date",
@@ -9651,14 +9651,14 @@ function _coercedDate(Class, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nan(Class, params) {
 	return new Class({
 		type: "nan",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _lt(value, params) {
 	return new $ZodCheckLessThan({
 		check: "less_than",
@@ -9667,7 +9667,7 @@ function _lt(value, params) {
 		inclusive: false
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _lte(value, params) {
 	return new $ZodCheckLessThan({
 		check: "less_than",
@@ -9676,7 +9676,7 @@ function _lte(value, params) {
 		inclusive: true
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _gt(value, params) {
 	return new $ZodCheckGreaterThan({
 		check: "greater_than",
@@ -9685,7 +9685,7 @@ function _gt(value, params) {
 		inclusive: false
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _gte(value, params) {
 	return new $ZodCheckGreaterThan({
 		check: "greater_than",
@@ -9694,23 +9694,23 @@ function _gte(value, params) {
 		inclusive: true
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _positive(params) {
 	return /* @__PURE__ */ _gt(0, params);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _negative(params) {
 	return /* @__PURE__ */ _lt(0, params);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nonpositive(params) {
 	return /* @__PURE__ */ _lte(0, params);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nonnegative(params) {
 	return /* @__PURE__ */ _gte(0, params);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _multipleOf(value, params) {
 	return new $ZodCheckMultipleOf({
 		check: "multiple_of",
@@ -9718,7 +9718,7 @@ function _multipleOf(value, params) {
 		value
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _maxSize(maximum, params) {
 	return new $ZodCheckMaxSize({
 		check: "max_size",
@@ -9726,7 +9726,7 @@ function _maxSize(maximum, params) {
 		maximum
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _minSize(minimum, params) {
 	return new $ZodCheckMinSize({
 		check: "min_size",
@@ -9734,7 +9734,7 @@ function _minSize(minimum, params) {
 		minimum
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _size(size, params) {
 	return new $ZodCheckSizeEquals({
 		check: "size_equals",
@@ -9742,7 +9742,7 @@ function _size(size, params) {
 		size
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _maxLength(maximum, params) {
 	return new $ZodCheckMaxLength({
 		check: "max_length",
@@ -9750,7 +9750,7 @@ function _maxLength(maximum, params) {
 		maximum
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _minLength(minimum, params) {
 	return new $ZodCheckMinLength({
 		check: "min_length",
@@ -9758,7 +9758,7 @@ function _minLength(minimum, params) {
 		minimum
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _length(length, params) {
 	return new $ZodCheckLengthEquals({
 		check: "length_equals",
@@ -9766,7 +9766,7 @@ function _length(length, params) {
 		length
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _regex(pattern, params) {
 	return new $ZodCheckRegex({
 		check: "string_format",
@@ -9775,7 +9775,7 @@ function _regex(pattern, params) {
 		pattern
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _lowercase(params) {
 	return new $ZodCheckLowerCase({
 		check: "string_format",
@@ -9783,7 +9783,7 @@ function _lowercase(params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _uppercase(params) {
 	return new $ZodCheckUpperCase({
 		check: "string_format",
@@ -9791,7 +9791,7 @@ function _uppercase(params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _includes(includes, params) {
 	return new $ZodCheckIncludes({
 		check: "string_format",
@@ -9800,7 +9800,7 @@ function _includes(includes, params) {
 		includes
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _startsWith(prefix, params) {
 	return new $ZodCheckStartsWith({
 		check: "string_format",
@@ -9809,7 +9809,7 @@ function _startsWith(prefix, params) {
 		prefix
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _endsWith(suffix, params) {
 	return new $ZodCheckEndsWith({
 		check: "string_format",
@@ -9818,7 +9818,7 @@ function _endsWith(suffix, params) {
 		suffix
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _property(property, schema, params) {
 	return new $ZodCheckProperty({
 		check: "property",
@@ -9827,7 +9827,7 @@ function _property(property, schema, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _mime(types, params) {
 	return new $ZodCheckMimeType({
 		check: "mime_type",
@@ -9835,34 +9835,34 @@ function _mime(types, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _overwrite(tx) {
 	return new $ZodCheckOverwrite({
 		check: "overwrite",
 		tx
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _normalize(form) {
 	return /* @__PURE__ */ _overwrite((input) => input.normalize(form));
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _trim() {
 	return /* @__PURE__ */ _overwrite((input) => input.trim());
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _toLowerCase() {
 	return /* @__PURE__ */ _overwrite((input) => input.toLowerCase());
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _toUpperCase() {
 	return /* @__PURE__ */ _overwrite((input) => input.toUpperCase());
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _slugify() {
 	return /* @__PURE__ */ _overwrite((input) => slugify(input));
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _array(Class, element, params) {
 	return new Class({
 		type: "array",
@@ -9870,7 +9870,7 @@ function _array(Class, element, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _union(Class, options, params) {
 	return new Class({
 		type: "union",
@@ -9886,7 +9886,7 @@ function _xor(Class, options, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _discriminatedUnion(Class, discriminator, options, params) {
 	return new Class({
 		type: "union",
@@ -9895,7 +9895,7 @@ function _discriminatedUnion(Class, discriminator, options, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _intersection(Class, left, right) {
 	return new Class({
 		type: "intersection",
@@ -9903,7 +9903,7 @@ function _intersection(Class, left, right) {
 		right
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _tuple(Class, items, _paramsOrRest, _params) {
 	const hasRest = _paramsOrRest instanceof $ZodType;
 	return new Class({
@@ -9913,7 +9913,7 @@ function _tuple(Class, items, _paramsOrRest, _params) {
 		...normalizeParams(hasRest ? _params : _paramsOrRest)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _record(Class, keyType, valueType, params) {
 	return new Class({
 		type: "record",
@@ -9922,7 +9922,7 @@ function _record(Class, keyType, valueType, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _map(Class, keyType, valueType, params) {
 	return new Class({
 		type: "map",
@@ -9931,7 +9931,7 @@ function _map(Class, keyType, valueType, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _set(Class, valueType, params) {
 	return new Class({
 		type: "set",
@@ -9939,7 +9939,7 @@ function _set(Class, valueType, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _enum$1(Class, values, params) {
 	return new Class({
 		type: "enum",
@@ -9954,7 +9954,7 @@ function _enum$1(Class, values, params) {
 * z.enum(Colors);
 * ```
 */
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nativeEnum(Class, entries, params) {
 	return new Class({
 		type: "enum",
@@ -9962,7 +9962,7 @@ function _nativeEnum(Class, entries, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _literal(Class, value, params) {
 	return new Class({
 		type: "literal",
@@ -9970,35 +9970,35 @@ function _literal(Class, value, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _file(Class, params) {
 	return new Class({
 		type: "file",
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _transform(Class, fn) {
 	return new Class({
 		type: "transform",
 		transform: fn
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _optional(Class, innerType) {
 	return new Class({
 		type: "optional",
 		innerType
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nullable(Class, innerType) {
 	return new Class({
 		type: "nullable",
 		innerType
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _default$1(Class, innerType, defaultValue) {
 	return new Class({
 		type: "default",
@@ -10008,7 +10008,7 @@ function _default$1(Class, innerType, defaultValue) {
 		}
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _nonoptional(Class, innerType, params) {
 	return new Class({
 		type: "nonoptional",
@@ -10016,14 +10016,14 @@ function _nonoptional(Class, innerType, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _success(Class, innerType) {
 	return new Class({
 		type: "success",
 		innerType
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _catch$1(Class, innerType, catchValue) {
 	return new Class({
 		type: "catch",
@@ -10031,7 +10031,7 @@ function _catch$1(Class, innerType, catchValue) {
 		catchValue: typeof catchValue === "function" ? catchValue : () => catchValue
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _pipe(Class, in_, out) {
 	return new Class({
 		type: "pipe",
@@ -10039,14 +10039,14 @@ function _pipe(Class, in_, out) {
 		out
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _readonly(Class, innerType) {
 	return new Class({
 		type: "readonly",
 		innerType
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _templateLiteral(Class, parts, params) {
 	return new Class({
 		type: "template_literal",
@@ -10054,21 +10054,21 @@ function _templateLiteral(Class, parts, params) {
 		...normalizeParams(params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _lazy(Class, getter) {
 	return new Class({
 		type: "lazy",
 		getter
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _promise(Class, innerType) {
 	return new Class({
 		type: "promise",
 		innerType
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _custom(Class, fn, _params) {
 	const norm = normalizeParams(_params);
 	norm.abort ?? (norm.abort = true);
@@ -10079,7 +10079,7 @@ function _custom(Class, fn, _params) {
 		...norm
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _refine(Class, fn, _params) {
 	return new Class({
 		type: "custom",
@@ -10088,7 +10088,7 @@ function _refine(Class, fn, _params) {
 		...normalizeParams(_params)
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _superRefine(fn, params) {
 	const ch = /* @__PURE__ */ _check((payload) => {
 		payload.addIssue = (issue$2) => {
@@ -10107,7 +10107,7 @@ function _superRefine(fn, params) {
 	}, params);
 	return ch;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _check(fn, params) {
 	const ch = new $ZodCheck({
 		check: "custom",
@@ -10116,7 +10116,7 @@ function _check(fn, params) {
 	ch._zod.check = fn;
 	return ch;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function describe$1(description) {
 	const ch = new $ZodCheck({ check: "describe" });
 	ch._zod.onattach = [(inst) => {
@@ -10129,7 +10129,7 @@ function describe$1(description) {
 	ch._zod.check = () => {};
 	return ch;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function meta$1(metadata) {
 	const ch = new $ZodCheck({ check: "meta" });
 	ch._zod.onattach = [(inst) => {
@@ -10142,7 +10142,7 @@ function meta$1(metadata) {
 	ch._zod.check = () => {};
 	return ch;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _stringbool(Classes, _params) {
 	const params = normalizeParams(_params);
 	let truthyArray = params.truthy ?? [
@@ -10204,7 +10204,7 @@ function _stringbool(Classes, _params) {
 	});
 	return codec;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function _stringFormat(Class, format, fnOrRegex, _params = {}) {
 	const params = normalizeParams(_params);
 	const def = {
@@ -11378,28 +11378,28 @@ var iso_exports = /* @__PURE__ */ __exportAll({
 	duration: () => duration,
 	time: () => time
 });
-const ZodISODateTime = /* @__PURE__ */ $constructor("ZodISODateTime", (inst, def) => {
+const ZodISODateTime = /*@__PURE__*/ $constructor("ZodISODateTime", (inst, def) => {
 	$ZodISODateTime.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function datetime(params) {
 	return /* @__PURE__ */ _isoDateTime(ZodISODateTime, params);
 }
-const ZodISODate = /* @__PURE__ */ $constructor("ZodISODate", (inst, def) => {
+const ZodISODate = /*@__PURE__*/ $constructor("ZodISODate", (inst, def) => {
 	$ZodISODate.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function date$2(params) {
 	return /* @__PURE__ */ _isoDate(ZodISODate, params);
 }
-const ZodISOTime = /* @__PURE__ */ $constructor("ZodISOTime", (inst, def) => {
+const ZodISOTime = /*@__PURE__*/ $constructor("ZodISOTime", (inst, def) => {
 	$ZodISOTime.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function time(params) {
 	return /* @__PURE__ */ _isoTime(ZodISOTime, params);
 }
-const ZodISODuration = /* @__PURE__ */ $constructor("ZodISODuration", (inst, def) => {
+const ZodISODuration = /*@__PURE__*/ $constructor("ZodISODuration", (inst, def) => {
 	$ZodISODuration.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -11427,8 +11427,8 @@ const initializer = (inst, issues) => {
 		} }
 	});
 };
-const ZodError = /* @__PURE__ */ $constructor("ZodError", initializer);
-const ZodRealError = /* @__PURE__ */ $constructor("ZodError", initializer, { Parent: Error });
+const ZodError = /*@__PURE__*/ $constructor("ZodError", initializer);
+const ZodRealError = /*@__PURE__*/ $constructor("ZodError", initializer, { Parent: Error });
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/parse.js
 const parse = /* @__PURE__ */ _parse(ZodRealError);
@@ -11649,7 +11649,7 @@ function _installLazyMethods(inst, group, methods) {
 		});
 	}
 }
-const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
+const ZodType = /*@__PURE__*/ $constructor("ZodType", (inst, def) => {
 	$ZodType.init(inst, def);
 	Object.assign(inst["~standard"], { jsonSchema: {
 		input: createStandardJSONSchemaMethod(inst, "input"),
@@ -11775,7 +11775,7 @@ const ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
 	return inst;
 });
 /** @internal */
-const _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
+const _ZodString = /*@__PURE__*/ $constructor("_ZodString", (inst, def) => {
 	$ZodString.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => stringProcessor(inst, ctx, json, params);
@@ -11831,7 +11831,7 @@ const _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
 		}
 	});
 });
-const ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
+const ZodString = /*@__PURE__*/ $constructor("ZodString", (inst, def) => {
 	$ZodString.init(inst, def);
 	_ZodString.init(inst, def);
 	inst.email = (params) => inst.check(/* @__PURE__ */ _email(ZodEmail, params));
@@ -11865,25 +11865,25 @@ const ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
 function string$1(params) {
 	return /* @__PURE__ */ _string(ZodString, params);
 }
-const ZodStringFormat = /* @__PURE__ */ $constructor("ZodStringFormat", (inst, def) => {
+const ZodStringFormat = /*@__PURE__*/ $constructor("ZodStringFormat", (inst, def) => {
 	$ZodStringFormat.init(inst, def);
 	_ZodString.init(inst, def);
 });
-const ZodEmail = /* @__PURE__ */ $constructor("ZodEmail", (inst, def) => {
+const ZodEmail = /*@__PURE__*/ $constructor("ZodEmail", (inst, def) => {
 	$ZodEmail.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function email(params) {
 	return /* @__PURE__ */ _email(ZodEmail, params);
 }
-const ZodGUID = /* @__PURE__ */ $constructor("ZodGUID", (inst, def) => {
+const ZodGUID = /*@__PURE__*/ $constructor("ZodGUID", (inst, def) => {
 	$ZodGUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function guid(params) {
 	return /* @__PURE__ */ _guid(ZodGUID, params);
 }
-const ZodUUID = /* @__PURE__ */ $constructor("ZodUUID", (inst, def) => {
+const ZodUUID = /*@__PURE__*/ $constructor("ZodUUID", (inst, def) => {
 	$ZodUUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -11899,7 +11899,7 @@ function uuidv6(params) {
 function uuidv7(params) {
 	return /* @__PURE__ */ _uuidv7(ZodUUID, params);
 }
-const ZodURL = /* @__PURE__ */ $constructor("ZodURL", (inst, def) => {
+const ZodURL = /*@__PURE__*/ $constructor("ZodURL", (inst, def) => {
 	$ZodURL.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -11913,14 +11913,14 @@ function httpUrl(params) {
 		...normalizeParams(params)
 	});
 }
-const ZodEmoji = /* @__PURE__ */ $constructor("ZodEmoji", (inst, def) => {
+const ZodEmoji = /*@__PURE__*/ $constructor("ZodEmoji", (inst, def) => {
 	$ZodEmoji.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function emoji(params) {
 	return /* @__PURE__ */ _emoji(ZodEmoji, params);
 }
-const ZodNanoID = /* @__PURE__ */ $constructor("ZodNanoID", (inst, def) => {
+const ZodNanoID = /*@__PURE__*/ $constructor("ZodNanoID", (inst, def) => {
 	$ZodNanoID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -11932,7 +11932,7 @@ function nanoid(params) {
 * (timestamps embedded in the id). Use {@link ZodCUID2} instead.
 * See https://github.com/paralleldrive/cuid.
 */
-const ZodCUID = /* @__PURE__ */ $constructor("ZodCUID", (inst, def) => {
+const ZodCUID = /*@__PURE__*/ $constructor("ZodCUID", (inst, def) => {
 	$ZodCUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -11946,98 +11946,98 @@ const ZodCUID = /* @__PURE__ */ $constructor("ZodCUID", (inst, def) => {
 function cuid(params) {
 	return /* @__PURE__ */ _cuid(ZodCUID, params);
 }
-const ZodCUID2 = /* @__PURE__ */ $constructor("ZodCUID2", (inst, def) => {
+const ZodCUID2 = /*@__PURE__*/ $constructor("ZodCUID2", (inst, def) => {
 	$ZodCUID2.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function cuid2(params) {
 	return /* @__PURE__ */ _cuid2(ZodCUID2, params);
 }
-const ZodULID = /* @__PURE__ */ $constructor("ZodULID", (inst, def) => {
+const ZodULID = /*@__PURE__*/ $constructor("ZodULID", (inst, def) => {
 	$ZodULID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function ulid(params) {
 	return /* @__PURE__ */ _ulid(ZodULID, params);
 }
-const ZodXID = /* @__PURE__ */ $constructor("ZodXID", (inst, def) => {
+const ZodXID = /*@__PURE__*/ $constructor("ZodXID", (inst, def) => {
 	$ZodXID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function xid(params) {
 	return /* @__PURE__ */ _xid(ZodXID, params);
 }
-const ZodKSUID = /* @__PURE__ */ $constructor("ZodKSUID", (inst, def) => {
+const ZodKSUID = /*@__PURE__*/ $constructor("ZodKSUID", (inst, def) => {
 	$ZodKSUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function ksuid(params) {
 	return /* @__PURE__ */ _ksuid(ZodKSUID, params);
 }
-const ZodIPv4 = /* @__PURE__ */ $constructor("ZodIPv4", (inst, def) => {
+const ZodIPv4 = /*@__PURE__*/ $constructor("ZodIPv4", (inst, def) => {
 	$ZodIPv4.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function ipv4(params) {
 	return /* @__PURE__ */ _ipv4(ZodIPv4, params);
 }
-const ZodMAC = /* @__PURE__ */ $constructor("ZodMAC", (inst, def) => {
+const ZodMAC = /*@__PURE__*/ $constructor("ZodMAC", (inst, def) => {
 	$ZodMAC.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function mac(params) {
 	return /* @__PURE__ */ _mac(ZodMAC, params);
 }
-const ZodIPv6 = /* @__PURE__ */ $constructor("ZodIPv6", (inst, def) => {
+const ZodIPv6 = /*@__PURE__*/ $constructor("ZodIPv6", (inst, def) => {
 	$ZodIPv6.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function ipv6(params) {
 	return /* @__PURE__ */ _ipv6(ZodIPv6, params);
 }
-const ZodCIDRv4 = /* @__PURE__ */ $constructor("ZodCIDRv4", (inst, def) => {
+const ZodCIDRv4 = /*@__PURE__*/ $constructor("ZodCIDRv4", (inst, def) => {
 	$ZodCIDRv4.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function cidrv4(params) {
 	return /* @__PURE__ */ _cidrv4(ZodCIDRv4, params);
 }
-const ZodCIDRv6 = /* @__PURE__ */ $constructor("ZodCIDRv6", (inst, def) => {
+const ZodCIDRv6 = /*@__PURE__*/ $constructor("ZodCIDRv6", (inst, def) => {
 	$ZodCIDRv6.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function cidrv6(params) {
 	return /* @__PURE__ */ _cidrv6(ZodCIDRv6, params);
 }
-const ZodBase64 = /* @__PURE__ */ $constructor("ZodBase64", (inst, def) => {
+const ZodBase64 = /*@__PURE__*/ $constructor("ZodBase64", (inst, def) => {
 	$ZodBase64.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function base64(params) {
 	return /* @__PURE__ */ _base64(ZodBase64, params);
 }
-const ZodBase64URL = /* @__PURE__ */ $constructor("ZodBase64URL", (inst, def) => {
+const ZodBase64URL = /*@__PURE__*/ $constructor("ZodBase64URL", (inst, def) => {
 	$ZodBase64URL.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function base64url(params) {
 	return /* @__PURE__ */ _base64url(ZodBase64URL, params);
 }
-const ZodE164 = /* @__PURE__ */ $constructor("ZodE164", (inst, def) => {
+const ZodE164 = /*@__PURE__*/ $constructor("ZodE164", (inst, def) => {
 	$ZodE164.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function e164(params) {
 	return /* @__PURE__ */ _e164(ZodE164, params);
 }
-const ZodJWT = /* @__PURE__ */ $constructor("ZodJWT", (inst, def) => {
+const ZodJWT = /*@__PURE__*/ $constructor("ZodJWT", (inst, def) => {
 	$ZodJWT.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
 function jwt(params) {
 	return /* @__PURE__ */ _jwt(ZodJWT, params);
 }
-const ZodCustomStringFormat = /* @__PURE__ */ $constructor("ZodCustomStringFormat", (inst, def) => {
+const ZodCustomStringFormat = /*@__PURE__*/ $constructor("ZodCustomStringFormat", (inst, def) => {
 	$ZodCustomStringFormat.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
@@ -12056,7 +12056,7 @@ function hash(alg, params) {
 	if (!regex) throw new Error(`Unrecognized hash format: ${format}`);
 	return /* @__PURE__ */ _stringFormat(ZodCustomStringFormat, format, regex, params);
 }
-const ZodNumber = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
+const ZodNumber = /*@__PURE__*/ $constructor("ZodNumber", (inst, def) => {
 	$ZodNumber.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => numberProcessor(inst, ctx, json, params);
@@ -12117,7 +12117,7 @@ const ZodNumber = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
 function number$1(params) {
 	return /* @__PURE__ */ _number(ZodNumber, params);
 }
-const ZodNumberFormat = /* @__PURE__ */ $constructor("ZodNumberFormat", (inst, def) => {
+const ZodNumberFormat = /*@__PURE__*/ $constructor("ZodNumberFormat", (inst, def) => {
 	$ZodNumberFormat.init(inst, def);
 	ZodNumber.init(inst, def);
 });
@@ -12136,7 +12136,7 @@ function int32(params) {
 function uint32(params) {
 	return /* @__PURE__ */ _uint32(ZodNumberFormat, params);
 }
-const ZodBoolean = /* @__PURE__ */ $constructor("ZodBoolean", (inst, def) => {
+const ZodBoolean = /*@__PURE__*/ $constructor("ZodBoolean", (inst, def) => {
 	$ZodBoolean.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => booleanProcessor(inst, ctx, json, params);
@@ -12144,7 +12144,7 @@ const ZodBoolean = /* @__PURE__ */ $constructor("ZodBoolean", (inst, def) => {
 function boolean$1(params) {
 	return /* @__PURE__ */ _boolean(ZodBoolean, params);
 }
-const ZodBigInt = /* @__PURE__ */ $constructor("ZodBigInt", (inst, def) => {
+const ZodBigInt = /*@__PURE__*/ $constructor("ZodBigInt", (inst, def) => {
 	$ZodBigInt.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => bigintProcessor(inst, ctx, json, params);
@@ -12169,7 +12169,7 @@ const ZodBigInt = /* @__PURE__ */ $constructor("ZodBigInt", (inst, def) => {
 function bigint$1(params) {
 	return /* @__PURE__ */ _bigint(ZodBigInt, params);
 }
-const ZodBigIntFormat = /* @__PURE__ */ $constructor("ZodBigIntFormat", (inst, def) => {
+const ZodBigIntFormat = /*@__PURE__*/ $constructor("ZodBigIntFormat", (inst, def) => {
 	$ZodBigIntFormat.init(inst, def);
 	ZodBigInt.init(inst, def);
 });
@@ -12179,7 +12179,7 @@ function int64(params) {
 function uint64(params) {
 	return /* @__PURE__ */ _uint64(ZodBigIntFormat, params);
 }
-const ZodSymbol = /* @__PURE__ */ $constructor("ZodSymbol", (inst, def) => {
+const ZodSymbol = /*@__PURE__*/ $constructor("ZodSymbol", (inst, def) => {
 	$ZodSymbol.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => symbolProcessor(inst, ctx, json, params);
@@ -12187,7 +12187,7 @@ const ZodSymbol = /* @__PURE__ */ $constructor("ZodSymbol", (inst, def) => {
 function symbol(params) {
 	return /* @__PURE__ */ _symbol(ZodSymbol, params);
 }
-const ZodUndefined = /* @__PURE__ */ $constructor("ZodUndefined", (inst, def) => {
+const ZodUndefined = /*@__PURE__*/ $constructor("ZodUndefined", (inst, def) => {
 	$ZodUndefined.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => undefinedProcessor(inst, ctx, json, params);
@@ -12195,7 +12195,7 @@ const ZodUndefined = /* @__PURE__ */ $constructor("ZodUndefined", (inst, def) =>
 function _undefined(params) {
 	return /* @__PURE__ */ _undefined$1(ZodUndefined, params);
 }
-const ZodNull = /* @__PURE__ */ $constructor("ZodNull", (inst, def) => {
+const ZodNull = /*@__PURE__*/ $constructor("ZodNull", (inst, def) => {
 	$ZodNull.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => nullProcessor(inst, ctx, json, params);
@@ -12203,7 +12203,7 @@ const ZodNull = /* @__PURE__ */ $constructor("ZodNull", (inst, def) => {
 function _null(params) {
 	return /* @__PURE__ */ _null$1(ZodNull, params);
 }
-const ZodAny = /* @__PURE__ */ $constructor("ZodAny", (inst, def) => {
+const ZodAny = /*@__PURE__*/ $constructor("ZodAny", (inst, def) => {
 	$ZodAny.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => void 0;
@@ -12211,7 +12211,7 @@ const ZodAny = /* @__PURE__ */ $constructor("ZodAny", (inst, def) => {
 function any() {
 	return /* @__PURE__ */ _any(ZodAny);
 }
-const ZodUnknown = /* @__PURE__ */ $constructor("ZodUnknown", (inst, def) => {
+const ZodUnknown = /*@__PURE__*/ $constructor("ZodUnknown", (inst, def) => {
 	$ZodUnknown.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => void 0;
@@ -12219,7 +12219,7 @@ const ZodUnknown = /* @__PURE__ */ $constructor("ZodUnknown", (inst, def) => {
 function unknown() {
 	return /* @__PURE__ */ _unknown(ZodUnknown);
 }
-const ZodNever = /* @__PURE__ */ $constructor("ZodNever", (inst, def) => {
+const ZodNever = /*@__PURE__*/ $constructor("ZodNever", (inst, def) => {
 	$ZodNever.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => neverProcessor(inst, ctx, json, params);
@@ -12227,7 +12227,7 @@ const ZodNever = /* @__PURE__ */ $constructor("ZodNever", (inst, def) => {
 function never(params) {
 	return /* @__PURE__ */ _never(ZodNever, params);
 }
-const ZodVoid = /* @__PURE__ */ $constructor("ZodVoid", (inst, def) => {
+const ZodVoid = /*@__PURE__*/ $constructor("ZodVoid", (inst, def) => {
 	$ZodVoid.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => voidProcessor(inst, ctx, json, params);
@@ -12235,7 +12235,7 @@ const ZodVoid = /* @__PURE__ */ $constructor("ZodVoid", (inst, def) => {
 function _void(params) {
 	return /* @__PURE__ */ _void$1(ZodVoid, params);
 }
-const ZodDate = /* @__PURE__ */ $constructor("ZodDate", (inst, def) => {
+const ZodDate = /*@__PURE__*/ $constructor("ZodDate", (inst, def) => {
 	$ZodDate.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => dateProcessor(inst, ctx, json, params);
@@ -12248,7 +12248,7 @@ const ZodDate = /* @__PURE__ */ $constructor("ZodDate", (inst, def) => {
 function date$1(params) {
 	return /* @__PURE__ */ _date(ZodDate, params);
 }
-const ZodArray = /* @__PURE__ */ $constructor("ZodArray", (inst, def) => {
+const ZodArray = /*@__PURE__*/ $constructor("ZodArray", (inst, def) => {
 	$ZodArray.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => arrayProcessor(inst, ctx, json, params);
@@ -12278,7 +12278,7 @@ function keyof(schema) {
 	const shape = schema._zod.def.shape;
 	return _enum(Object.keys(shape));
 }
-const ZodObject = /* @__PURE__ */ $constructor("ZodObject", (inst, def) => {
+const ZodObject = /*@__PURE__*/ $constructor("ZodObject", (inst, def) => {
 	$ZodObjectJIT.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => objectProcessor(inst, ctx, json, params);
@@ -12365,7 +12365,7 @@ function looseObject(shape, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodUnion = /* @__PURE__ */ $constructor("ZodUnion", (inst, def) => {
+const ZodUnion = /*@__PURE__*/ $constructor("ZodUnion", (inst, def) => {
 	$ZodUnion.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => unionProcessor(inst, ctx, json, params);
@@ -12378,7 +12378,7 @@ function union(options, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodXor = /* @__PURE__ */ $constructor("ZodXor", (inst, def) => {
+const ZodXor = /*@__PURE__*/ $constructor("ZodXor", (inst, def) => {
 	ZodUnion.init(inst, def);
 	$ZodXor.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => unionProcessor(inst, ctx, json, params);
@@ -12395,7 +12395,7 @@ function xor(options, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("ZodDiscriminatedUnion", (inst, def) => {
+const ZodDiscriminatedUnion = /*@__PURE__*/ $constructor("ZodDiscriminatedUnion", (inst, def) => {
 	ZodUnion.init(inst, def);
 	$ZodDiscriminatedUnion.init(inst, def);
 });
@@ -12407,7 +12407,7 @@ function discriminatedUnion(discriminator, options, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodIntersection = /* @__PURE__ */ $constructor("ZodIntersection", (inst, def) => {
+const ZodIntersection = /*@__PURE__*/ $constructor("ZodIntersection", (inst, def) => {
 	$ZodIntersection.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => intersectionProcessor(inst, ctx, json, params);
@@ -12419,7 +12419,7 @@ function intersection(left, right) {
 		right
 	});
 }
-const ZodTuple = /* @__PURE__ */ $constructor("ZodTuple", (inst, def) => {
+const ZodTuple = /*@__PURE__*/ $constructor("ZodTuple", (inst, def) => {
 	$ZodTuple.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => tupleProcessor(inst, ctx, json, params);
@@ -12437,7 +12437,7 @@ function tuple(items, _paramsOrRest, _params) {
 		...normalizeParams(hasRest ? _params : _paramsOrRest)
 	});
 }
-const ZodRecord = /* @__PURE__ */ $constructor("ZodRecord", (inst, def) => {
+const ZodRecord = /*@__PURE__*/ $constructor("ZodRecord", (inst, def) => {
 	$ZodRecord.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => recordProcessor(inst, ctx, json, params);
@@ -12477,7 +12477,7 @@ function looseRecord(keyType, valueType, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodMap = /* @__PURE__ */ $constructor("ZodMap", (inst, def) => {
+const ZodMap = /*@__PURE__*/ $constructor("ZodMap", (inst, def) => {
 	$ZodMap.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => mapProcessor(inst, ctx, json, params);
@@ -12496,7 +12496,7 @@ function map(keyType, valueType, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodSet = /* @__PURE__ */ $constructor("ZodSet", (inst, def) => {
+const ZodSet = /*@__PURE__*/ $constructor("ZodSet", (inst, def) => {
 	$ZodSet.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => setProcessor(inst, ctx, json, params);
@@ -12512,7 +12512,7 @@ function set(valueType, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodEnum = /* @__PURE__ */ $constructor("ZodEnum", (inst, def) => {
+const ZodEnum = /*@__PURE__*/ $constructor("ZodEnum", (inst, def) => {
 	$ZodEnum.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => enumProcessor(inst, ctx, json, params);
@@ -12563,7 +12563,7 @@ function nativeEnum(entries, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodLiteral = /* @__PURE__ */ $constructor("ZodLiteral", (inst, def) => {
+const ZodLiteral = /*@__PURE__*/ $constructor("ZodLiteral", (inst, def) => {
 	$ZodLiteral.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => literalProcessor(inst, ctx, json, params);
@@ -12580,7 +12580,7 @@ function literal(value, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodFile = /* @__PURE__ */ $constructor("ZodFile", (inst, def) => {
+const ZodFile = /*@__PURE__*/ $constructor("ZodFile", (inst, def) => {
 	$ZodFile.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => fileProcessor(inst, ctx, json, params);
@@ -12591,7 +12591,7 @@ const ZodFile = /* @__PURE__ */ $constructor("ZodFile", (inst, def) => {
 function file(params) {
 	return /* @__PURE__ */ _file(ZodFile, params);
 }
-const ZodTransform = /* @__PURE__ */ $constructor("ZodTransform", (inst, def) => {
+const ZodTransform = /*@__PURE__*/ $constructor("ZodTransform", (inst, def) => {
 	$ZodTransform.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => transformProcessor(inst, ctx, json, params);
@@ -12625,7 +12625,7 @@ function transform(fn) {
 		transform: fn
 	});
 }
-const ZodOptional = /* @__PURE__ */ $constructor("ZodOptional", (inst, def) => {
+const ZodOptional = /*@__PURE__*/ $constructor("ZodOptional", (inst, def) => {
 	$ZodOptional.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor(inst, ctx, json, params);
@@ -12637,7 +12637,7 @@ function optional(innerType) {
 		innerType
 	});
 }
-const ZodExactOptional = /* @__PURE__ */ $constructor("ZodExactOptional", (inst, def) => {
+const ZodExactOptional = /*@__PURE__*/ $constructor("ZodExactOptional", (inst, def) => {
 	$ZodExactOptional.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor(inst, ctx, json, params);
@@ -12649,7 +12649,7 @@ function exactOptional(innerType) {
 		innerType
 	});
 }
-const ZodNullable = /* @__PURE__ */ $constructor("ZodNullable", (inst, def) => {
+const ZodNullable = /*@__PURE__*/ $constructor("ZodNullable", (inst, def) => {
 	$ZodNullable.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => nullableProcessor(inst, ctx, json, params);
@@ -12664,7 +12664,7 @@ function nullable(innerType) {
 function nullish(innerType) {
 	return optional(nullable(innerType));
 }
-const ZodDefault = /* @__PURE__ */ $constructor("ZodDefault", (inst, def) => {
+const ZodDefault = /*@__PURE__*/ $constructor("ZodDefault", (inst, def) => {
 	$ZodDefault.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => defaultProcessor(inst, ctx, json, params);
@@ -12680,7 +12680,7 @@ function _default(innerType, defaultValue) {
 		}
 	});
 }
-const ZodPrefault = /* @__PURE__ */ $constructor("ZodPrefault", (inst, def) => {
+const ZodPrefault = /*@__PURE__*/ $constructor("ZodPrefault", (inst, def) => {
 	$ZodPrefault.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => prefaultProcessor(inst, ctx, json, params);
@@ -12695,7 +12695,7 @@ function prefault(innerType, defaultValue) {
 		}
 	});
 }
-const ZodNonOptional = /* @__PURE__ */ $constructor("ZodNonOptional", (inst, def) => {
+const ZodNonOptional = /*@__PURE__*/ $constructor("ZodNonOptional", (inst, def) => {
 	$ZodNonOptional.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => nonoptionalProcessor(inst, ctx, json, params);
@@ -12708,7 +12708,7 @@ function nonoptional(innerType, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodSuccess = /* @__PURE__ */ $constructor("ZodSuccess", (inst, def) => {
+const ZodSuccess = /*@__PURE__*/ $constructor("ZodSuccess", (inst, def) => {
 	$ZodSuccess.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => successProcessor(inst, ctx, json, params);
@@ -12720,7 +12720,7 @@ function success(innerType) {
 		innerType
 	});
 }
-const ZodCatch = /* @__PURE__ */ $constructor("ZodCatch", (inst, def) => {
+const ZodCatch = /*@__PURE__*/ $constructor("ZodCatch", (inst, def) => {
 	$ZodCatch.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => catchProcessor(inst, ctx, json, params);
@@ -12734,7 +12734,7 @@ function _catch(innerType, catchValue) {
 		catchValue: typeof catchValue === "function" ? catchValue : () => catchValue
 	});
 }
-const ZodNaN = /* @__PURE__ */ $constructor("ZodNaN", (inst, def) => {
+const ZodNaN = /*@__PURE__*/ $constructor("ZodNaN", (inst, def) => {
 	$ZodNaN.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => nanProcessor(inst, ctx, json, params);
@@ -12742,7 +12742,7 @@ const ZodNaN = /* @__PURE__ */ $constructor("ZodNaN", (inst, def) => {
 function nan(params) {
 	return /* @__PURE__ */ _nan(ZodNaN, params);
 }
-const ZodPipe = /* @__PURE__ */ $constructor("ZodPipe", (inst, def) => {
+const ZodPipe = /*@__PURE__*/ $constructor("ZodPipe", (inst, def) => {
 	$ZodPipe.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => pipeProcessor(inst, ctx, json, params);
@@ -12756,7 +12756,7 @@ function pipe(in_, out) {
 		out
 	});
 }
-const ZodCodec = /* @__PURE__ */ $constructor("ZodCodec", (inst, def) => {
+const ZodCodec = /*@__PURE__*/ $constructor("ZodCodec", (inst, def) => {
 	ZodPipe.init(inst, def);
 	$ZodCodec.init(inst, def);
 });
@@ -12779,11 +12779,11 @@ function invertCodec(codec) {
 		reverseTransform: def.transform
 	});
 }
-const ZodPreprocess = /* @__PURE__ */ $constructor("ZodPreprocess", (inst, def) => {
+const ZodPreprocess = /*@__PURE__*/ $constructor("ZodPreprocess", (inst, def) => {
 	ZodPipe.init(inst, def);
 	$ZodPreprocess.init(inst, def);
 });
-const ZodReadonly = /* @__PURE__ */ $constructor("ZodReadonly", (inst, def) => {
+const ZodReadonly = /*@__PURE__*/ $constructor("ZodReadonly", (inst, def) => {
 	$ZodReadonly.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => readonlyProcessor(inst, ctx, json, params);
@@ -12795,7 +12795,7 @@ function readonly(innerType) {
 		innerType
 	});
 }
-const ZodTemplateLiteral = /* @__PURE__ */ $constructor("ZodTemplateLiteral", (inst, def) => {
+const ZodTemplateLiteral = /*@__PURE__*/ $constructor("ZodTemplateLiteral", (inst, def) => {
 	$ZodTemplateLiteral.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => templateLiteralProcessor(inst, ctx, json, params);
@@ -12807,7 +12807,7 @@ function templateLiteral(parts, params) {
 		...normalizeParams(params)
 	});
 }
-const ZodLazy = /* @__PURE__ */ $constructor("ZodLazy", (inst, def) => {
+const ZodLazy = /*@__PURE__*/ $constructor("ZodLazy", (inst, def) => {
 	$ZodLazy.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => lazyProcessor(inst, ctx, json, params);
@@ -12819,7 +12819,7 @@ function lazy(getter) {
 		getter
 	});
 }
-const ZodPromise = /* @__PURE__ */ $constructor("ZodPromise", (inst, def) => {
+const ZodPromise = /*@__PURE__*/ $constructor("ZodPromise", (inst, def) => {
 	$ZodPromise.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => promiseProcessor(inst, ctx, json, params);
@@ -12831,7 +12831,7 @@ function promise(innerType) {
 		innerType
 	});
 }
-const ZodFunction = /* @__PURE__ */ $constructor("ZodFunction", (inst, def) => {
+const ZodFunction = /*@__PURE__*/ $constructor("ZodFunction", (inst, def) => {
 	$ZodFunction.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => functionProcessor(inst, ctx, json, params);
@@ -12843,7 +12843,7 @@ function _function(params) {
 		output: params?.output ?? unknown()
 	});
 }
-const ZodCustom = /* @__PURE__ */ $constructor("ZodCustom", (inst, def) => {
+const ZodCustom = /*@__PURE__*/ $constructor("ZodCustom", (inst, def) => {
 	$ZodCustom.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => customProcessor(inst, ctx, json, params);
@@ -12935,7 +12935,7 @@ function getErrorMap() {
 }
 /** @deprecated Do not use. Stub definition, only included for zod-to-json-schema compatibility. */
 var ZodFirstPartyTypeKind;
-(function(ZodFirstPartyTypeKind) {})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
+ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {});
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/from-json-schema.js
 const z = {
@@ -12943,7 +12943,7 @@ const z = {
 	...checks_exports,
 	iso: iso_exports
 };
-const RECOGNIZED_KEYS = /* @__PURE__ */ new Set([
+const RECOGNIZED_KEYS = /*@__PURE__*/ new Set([
 	"$schema",
 	"$ref",
 	"$defs",
