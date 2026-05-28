@@ -1,5 +1,7 @@
+// oxlint-disable jsx-a11y/control-has-associated-label
 import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
+import { Link } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ToggleButton } from "#/shared/components/button/toggle";
@@ -76,7 +78,9 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
               }}
             >
               <td>
-                <code className="language-text">{result.libraryName}</code>
+                <Link to="/library/$" params={{ _splat: result.libraryName }}>
+                  <code className="language-text">{result.libraryName}</code>
+                </Link>
                 {result.note ? ` (${result.note})` : null}
               </td>
               <td className="action">

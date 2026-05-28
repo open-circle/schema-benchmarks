@@ -1,3 +1,4 @@
+// oxlint-disable jsx-a11y/control-has-associated-label
 import type { BenchResult } from "@schema-benchmarks/bench";
 import {
   type DistributiveArray,
@@ -6,6 +7,7 @@ import {
   getTransitionName,
   numFormatter,
 } from "@schema-benchmarks/utils";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -117,7 +119,9 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                 }}
               >
                 <td>
-                  <code className="language-text">{result.libraryName}</code>
+                  <Link to="/library/$" params={{ _splat: result.libraryName }}>
+                    <code className="language-text">{result.libraryName}</code>
+                  </Link>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="action">
