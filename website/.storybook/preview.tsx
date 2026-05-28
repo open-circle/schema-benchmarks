@@ -9,7 +9,6 @@ import { mocked } from "storybook/test";
 import "../src/shared/styles/index.css";
 import { RouterContext } from "#/routes/__root";
 import { StyleContext, ThemeContext } from "#/shared/components/prefs/context";
-import { clientPreloadImage, preloadImage } from "#/shared/lib/fetch";
 import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#/shared/lib/highlight";
 import { highlightAnsi, highlightCode } from "#/shared/lib/highlight.shared";
 import { styleLabels, styleSchema, themeLabels, themeSchema } from "#/shared/lib/prefs/constants";
@@ -68,7 +67,6 @@ export default definePreview({
     mocked(getHighlightedAnsiFn).mockImplementation(async ({ data }) =>
       highlightAnsi(parseAnsiSequences, data),
     );
-    mocked(preloadImage).mockImplementation(clientPreloadImage);
   },
   parameters: {
     layout: "centered",
