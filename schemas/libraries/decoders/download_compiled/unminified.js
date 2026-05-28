@@ -1,25 +1,25 @@
 //#region ../node_modules/.pnpm/decoders@2.9.3/node_modules/decoders/dist/index.js
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isNumber(value) {
 	return typeof value === "number";
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isString(value) {
 	return typeof value === "string";
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isDate(value) {
 	return !!value && Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isPromiseLike(value) {
 	return typeof value === "object" && value !== null && "then" in value && typeof value.then === "function";
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isPlainObject(value) {
 	return value !== null && typeof value === "object" && Object.prototype.toString.call(value) === "[object Object]";
 }
@@ -104,21 +104,21 @@ function public_annotateObject(obj, text) {
 	return annotateObject(obj, text, /* @__PURE__ */ new WeakSet());
 }
 var INDENT = "  ";
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isMultiline(s) {
 	return s.includes("\n");
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function indent(s, prefix = INDENT) {
 	if (/* @__PURE__ */ isMultiline(s)) return s.split("\n").map((line) => `${prefix}${line}`).join("\n");
 	else return `${prefix}${s}`;
 }
 var quotePattern = /'/g;
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function quote(value) {
 	return typeof value === "string" ? "'" + value.replace(quotePattern, "\\'") + "'" : value === void 0 ? "undefined" : JSON.stringify(value);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function summarize(ann, keypath = []) {
 	const result = [];
 	if (ann.type === "array") {
@@ -234,7 +234,7 @@ function* iterAnnotation(ann, stack) {
 function formatAsIssues(ann) {
 	return Array.from(iterAnnotation(ann, []));
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function ok(value) {
 	return {
 		ok: true,
@@ -242,7 +242,7 @@ function ok(value) {
 		error: void 0
 	};
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function err(error) {
 	return {
 		ok: false,
@@ -268,7 +268,7 @@ ${formatted}`);
 		return err3;
 	} else return formatted;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function define(fn) {
 	function decode(blob) {
 		const makeFlexErr = (msg) => /* @__PURE__ */ err(isAnnotation(msg) ? msg : public_annotate(blob, msg));
@@ -344,7 +344,7 @@ function brand2(decoder) {
 	_register2.add(decoder);
 	return decoder;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function isDecoder(value) {
 	return _register2.has(value);
 }
@@ -352,7 +352,7 @@ var poja = /* @__PURE__ */ define((blob, ok2, err2) => {
 	if (!Array.isArray(blob)) return err2("Must be an array");
 	return ok2(blob);
 });
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function array(decoder) {
 	const decodeFn = decoder.decode;
 	return poja.chain((inputs, ok2, err2) => {
@@ -372,7 +372,7 @@ function array(decoder) {
 		return ok2(results);
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function bySizeOptions(options) {
 	const size = options.size;
 	const min2 = size ?? options.min;
@@ -391,18 +391,18 @@ function bySizeOptions(options) {
 		return null;
 	};
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function sized(decoder, options) {
 	return decoder.reject(/* @__PURE__ */ bySizeOptions(options));
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function difference(xs, ys) {
 	const result = /* @__PURE__ */ new Set();
 	for (const x of xs) if (!ys.has(x)) result.add(x);
 	return result;
 }
 var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function object(decoders) {
 	const knownKeys = new Set(Object.keys(decoders));
 	return pojo.chain((plainObj, ok2, err2) => {
@@ -446,7 +446,7 @@ function itemize(s) {
 function nest(errText) {
 	return errText.startsWith(EITHER_PREFIX) ? errText.substring(EITHER_PREFIX.length) : itemize(errText);
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function either(...decoders) {
 	if (decoders.length === 0) throw new Error("Pass at least one decoder to either()");
 	return /* @__PURE__ */ define((blob, _, err2) => {
@@ -459,7 +459,7 @@ function either(...decoders) {
 		return err2(EITHER_PREFIX + errors.map((err3) => nest((/* @__PURE__ */ summarize(err3)).join("\n"))).join("\n"));
 	});
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function oneOf(constants) {
 	return /* @__PURE__ */ define((blob, ok2, err2) => {
 		const index = constants.indexOf(blob);
@@ -471,18 +471,18 @@ function lazyval(value) {
 	return typeof value === "function" ? value() : value;
 }
 var null_ = /* @__PURE__ */ constant(null);
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function nullable(decoder, defaultValue) {
 	const rv = /* @__PURE__ */ either(null_, decoder);
 	return arguments.length >= 2 ? rv.transform((value) => value ?? lazyval(defaultValue)) : rv;
 }
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function constant(value) {
 	return /* @__PURE__ */ define((blob, ok2, err2) => blob === value ? ok2(value) : err2(`Must be ${typeof value === "symbol" ? String(value) : /* @__PURE__ */ quote(value)}`));
 }
 var url_re = /^([A-Za-z]{2,12}(?:[+][A-Za-z]{2,12})?):\/\/(?:([^@:]*:?(?:[^@]+)?)@)?(?:([A-Za-z0-9.-]+)(?::([0-9]{2,5}))?)(\/(?:[-+~%/.,!$&'()*:;=@\w]*)?(?:\?[-+~%/.,!$&'()*:;=@?\w]*)?)?(?:#[^\s#]*)?$/;
 var string = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isString(blob) ? ok2(blob) : err2("Must be string"));
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function regex(regex2, msg) {
 	return string.refine((s) => regex2.test(s), msg);
 }
@@ -491,7 +491,7 @@ var date = /* @__PURE__ */ define((blob, ok2, err2) => {
 	return /* @__PURE__ */ isDate(blob) ? ok2(blob) : err2("Must be a Date");
 });
 var number = /* @__PURE__ */ (/* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isNumber(blob) ? ok2(blob) : err2("Must be number"))).refine((n) => Number.isFinite(n), "Number must be finite");
-/* @__NO_SIDE_EFFECTS__ */
+// @__NO_SIDE_EFFECTS__
 function between(min2, max2, decoder = number) {
 	return decoder.reject((value) => value < min2 ? `Too low, must be between ${min2} and ${max2}` : value > max2 ? `Too high, must be between ${min2} and ${max2}` : null);
 }
