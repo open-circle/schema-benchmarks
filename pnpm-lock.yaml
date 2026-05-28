@@ -58,6 +58,9 @@ catalogs:
 overrides:
   vite: ^8.0.14
 
+patchedDependencies:
+  react-tweet: acfca5fa2c2add15222b8595be8e359ee25695517655c6c95068d248620748eb
+
 importers:
 
   .:
@@ -345,7 +348,7 @@ importers:
         version: 2.6.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-tweet:
         specifier: ^3.3.0
-        version: 3.3.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 3.3.0(patch_hash=acfca5fa2c2add15222b8595be8e359ee25695517655c6c95068d248620748eb)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       remark-frontmatter:
         specifier: ^5.0.0
         version: 5.0.0
@@ -16297,7 +16300,7 @@ snapshots:
 
   react-is@19.2.6: {}
 
-  react-tweet@3.3.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  react-tweet@3.3.0(patch_hash=acfca5fa2c2add15222b8595be8e359ee25695517655c6c95068d248620748eb)(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       '@swc/helpers': 0.5.21
       clsx: 2.1.1

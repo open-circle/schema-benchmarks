@@ -32,3 +32,5 @@ catalog:
   vitest: ^4.1.7
 overrides:
   vite: "catalog:"
+patchedDependencies:
+  react-tweet: patches/react-tweet.patch
