@@ -1,3 +1,4 @@
+// oxlint-disable jsx-a11y/control-has-associated-label
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import {
   durationFormatter,
@@ -5,6 +6,7 @@ import {
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
+import { Link } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ButtonGroup } from "#/shared/components/button";
@@ -88,7 +90,9 @@ export function DownloadTable({
                 }}
               >
                 <td>
-                  <code className="language-text">{result.libraryName}</code>
+                  <Link to="/library/$" params={{ _splat: result.libraryName }}>
+                    <code className="language-text">{result.libraryName}</code>
+                  </Link>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td>

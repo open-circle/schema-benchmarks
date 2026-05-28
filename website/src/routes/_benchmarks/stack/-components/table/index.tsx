@@ -1,5 +1,7 @@
+// oxlint-disable jsx-a11y/control-has-associated-label
 import type { StackResult } from "@schema-benchmarks/bench";
 import { getTransitionName } from "@schema-benchmarks/utils";
+import { Link } from "@tanstack/react-router";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
 import { Snippet } from "#/routes/_benchmarks/_runtime/-components/table/snippet";
@@ -65,7 +67,9 @@ export function StackTable({ results, frameScale, lineCountScale, ...sortState }
               }}
             >
               <td>
-                <code className="language-text">{result.libraryName}</code>
+                <Link to="/library/$" params={{ _splat: result.libraryName }}>
+                  <code className="language-text">{result.libraryName}</code>
+                </Link>
               </td>
               <td className="action">
                 <Snippet code={result.snippet} />
