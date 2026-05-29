@@ -12,7 +12,7 @@ import { getDownloadResults } from "../../-query";
 
 const getLabel = (d: DownloadResult) => d.libraryName;
 
-const intFormatter = new Intl.NumberFormat(undefined, {
+const intFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 0,
 });
 
