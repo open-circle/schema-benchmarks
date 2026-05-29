@@ -40,4 +40,9 @@
     margin: 0;
     list-style: disc;
   }
+  .package-card__repo-link {
+    margin: -0.5rem;
+    margin-top: auto;
+    align-self: flex-end;
+  }
 }

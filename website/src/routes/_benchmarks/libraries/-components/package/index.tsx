@@ -3,8 +3,11 @@ import { useMemo } from "react";
 import bem from "react-bem-helper";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
-import { getPackageMetadata } from "#/routes/_benchmarks/-query";
+import { getPackageMetadata, getRepoLink } from "#/routes/_benchmarks/-query";
+import { ExternalLinkToggleButton } from "#/shared/components/button/toggle";
+import GithubIcon from "#/shared/components/header/github.svg?react";
 import { MdSymbol } from "#/shared/components/symbol";
+import { trackedLinkProps } from "#/shared/lib/analytics";
 
 export interface PackageCardProps {
   pkgName: string;
@@ -48,6 +51,21 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
         </div>
       </div>
       <p {...cls({ element: "description", extra: "typo-body2" })}>{metadata.description}</p>
+      {metadata.repository && (
+        <ExternalLinkToggleButton
+          tooltip="Repository"
+          {...trackedLinkProps(getRepoLink(metadata.repository))}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...cls({ element: "repo-link" })}
+        >
+          {metadata.repository.type === "git" && metadata.repository.url.includes("github.com") ? (
+            <GithubIcon />
+          ) : (
+            <MdSymbol>code</MdSymbol>
+          )}
+        </ExternalLinkToggleButton>
+      )}
     </li>
   );
 }
