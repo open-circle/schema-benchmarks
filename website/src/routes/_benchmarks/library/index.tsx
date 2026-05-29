@@ -1,5 +1,5 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
-import { collator } from "@schema-benchmarks/utils";
+import { collator, getTransitionName } from "@schema-benchmarks/utils";
 import { useSuspenseQuery, useSuspenseQueries } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -95,7 +95,12 @@ function RouteComponent() {
       </thead>
       <tbody>
         {sortedLibraries.map(({ libraryName, version }, idx) => (
-          <tr key={getPkgSlug({ libraryName, version })}>
+          <tr
+            key={getPkgSlug({ libraryName, version })}
+            style={{
+              viewTransitionName: getTransitionName("library", { libraryName, version }),
+            }}
+          >
             <td>
               <Link to="/library/$" params={{ _splat: libraryName }}>
                 {libraryName}
