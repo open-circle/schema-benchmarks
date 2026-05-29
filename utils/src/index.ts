@@ -10,11 +10,11 @@ export function msToNs(ms: number) {
   return Math.round(ms * 10e6);
 }
 
-export const numFormatter = new Intl.NumberFormat(undefined, {
+export const numFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 2,
 });
 
-export const shortNumFormatter = new Intl.NumberFormat(undefined, {
+export const shortNumFormatter = new Intl.NumberFormat("en", {
   notation: "compact",
   maximumFractionDigits: 2,
 });
@@ -89,11 +89,11 @@ export function formatBytes(bytes: number, formatter = numFormatter) {
   return `${formatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
 }
 
-export const longDateFormatter = new Intl.DateTimeFormat(undefined, {
+export const longDateFormatter = new Intl.DateTimeFormat("en", {
   dateStyle: "long",
 });
 
-export const durationFormatter = new Intl.DurationFormat();
+export const durationFormatter = new Intl.DurationFormat("en");
 
 const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [
   [3_600_000, "hours"],
@@ -322,8 +322,8 @@ export const collator = new Intl.Collator(undefined, {
   sensitivity: "base",
 });
 
-// we use US here, because we only support English (other languages have different types of plural we don't support)
-const pluralRules = new Intl.PluralRules("en-US");
+// we only support English (other languages have different types of plural we don't support)
+const pluralRules = new Intl.PluralRules("en");
 
 type PluralizeTuple = [count: number, singular: string, plural?: string];
 function isPluralizeTuple(value: unknown): value is PluralizeTuple {

@@ -28,7 +28,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
             tickFormat: (bytes: number) =>
               formatBytes(
                 bytes,
-                new Intl.NumberFormat(undefined, {
+                new Intl.NumberFormat("en", {
                   maximumFractionDigits: 0,
                 }),
               ),
