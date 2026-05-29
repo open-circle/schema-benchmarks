@@ -1,5 +1,4 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import bem from "react-bem-helper";
 
@@ -9,20 +8,19 @@ import { MdSymbol } from "#/shared/components/symbol";
 
 export interface PackageCardProps {
   pkgName: string;
-  libraries: Array<{ libraryName: string; version: string }>;
+  versions: Array<string>;
 }
 
 const cls = bem("package-card");
 
-export function PackageCard({ pkgName, libraries }: PackageCardProps) {
-  const version = useMemo(() => {
-    const versionCounts: Record<string, number> = {};
-    for (const { version } of libraries) {
-      versionCounts[version] = (versionCounts[version] ?? 0) + 1;
-    }
-    return Object.entries(versionCounts).sort((a, b) => b[1] - a[1])[0]![0];
-  }, [libraries]);
-  const { data: metadata } = useSuspenseQuery(getPackageMetadata(pkgName, version));
+export function PackageCard({ pkgName, versions }: PackageCardProps) {
+  const mostCommonVersion = useMemo(() => {
+    const versionCounts = new Map<string, number>();
+    for (const version of versions)
+      versionCounts.set(version, (versionCounts.get(version) ?? 0) + 1);
+    return Array.from(versionCounts).sort((a, b) => b[1] - a[1])[0]![0];
+  }, [versions]);
+  const { data: metadata } = useSuspenseQuery(getPackageMetadata(pkgName, mostCommonVersion));
   const heading = (
     <h4>
       <code>{metadata.name}</code>
@@ -31,13 +29,16 @@ export function PackageCard({ pkgName, libraries }: PackageCardProps) {
   return (
     <li {...cls()}>
       <div {...cls("heading")}>
-        {metadata.homepage ? (
-          <a href={metadata.homepage} target="_blank" rel="noopener noreferrer">
-            {heading}
-          </a>
-        ) : (
-          heading
-        )}
+        <hgroup>
+          <p {...cls({ element: "versions", extra: "typo-overline" })}>{versions.join(", ")}</p>
+          {metadata.homepage ? (
+            <a href={metadata.homepage} target="_blank" rel="noopener noreferrer">
+              {heading}
+            </a>
+          ) : (
+            heading
+          )}
+        </hgroup>
         <div {...cls({ element: "downloads", extra: "typo-caption" })}>
           <MdSymbol size={18}>download</MdSymbol>
           <span>
@@ -47,17 +48,6 @@ export function PackageCard({ pkgName, libraries }: PackageCardProps) {
         </div>
       </div>
       <p {...cls({ element: "description", extra: "typo-body2" })}>{metadata.description}</p>
-      <h5>Benchmarks</h5>
-      <ul {...cls("libraries")}>
-        {libraries.map(({ libraryName, version }) => (
-          <li key={libraryName} {...cls("library")}>
-            <Link to="/library/$" params={{ _splat: libraryName }}>
-              <code>{libraryName}</code>
-            </Link>{" "}
-            (v{version})
-          </li>
-        ))}
-      </ul>
     </li>
   );
 }
