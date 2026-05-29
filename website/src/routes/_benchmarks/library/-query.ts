@@ -1,4 +1,4 @@
-import { anyAbortSignal, collator, promiseAllKeyed, uniqueBy } from "@schema-benchmarks/utils";
+import { anyAbortSignal, collator, promiseAllKeyed } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
@@ -37,12 +37,13 @@ export const getAllLibrariesFn = createServerFn().handler(async () => {
     libraryNames.set(libraryName, version);
   }
 
-  return uniqueBy(
-    Array.from(libraryNames)
-      .map(([libraryName, version]) => ({ libraryName, version }))
-      .sort((a, b) => collator.compare(a.libraryName, b.libraryName)),
-    getPkgSlug,
-  );
+  return Array.from(libraryNames)
+    .map(([libraryName, version]) => ({
+      libraryName,
+      packageName: getPackageName(libraryName),
+      version,
+    }))
+    .sort((a, b) => collator.compare(a.libraryName, b.libraryName));
 });
 
 export const getAllLibraries = (signalOpt?: AbortSignal) =>

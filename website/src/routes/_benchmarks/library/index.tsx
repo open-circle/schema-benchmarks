@@ -1,30 +1,19 @@
-// oxlint-disable jsx-a11y/control-has-associated-label
-import { collator, getTransitionName } from "@schema-benchmarks/utils";
 import { useSuspenseQuery, useSuspenseQueries } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import * as v from "valibot";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
-import { RepoLink } from "#/routes/_benchmarks/-components/repo";
-import { useDownloadsByPkgName } from "#/routes/_benchmarks/-hooks";
-import { getPackageMetadata, getPackageName } from "#/routes/_benchmarks/-query";
-import { getAllLibraries, getPkgSlug } from "#/routes/_benchmarks/library/-query";
-import { SortableHeaderLink } from "#/shared/components/table/sort";
+import { getPackageMetadata } from "#/routes/_benchmarks/-query";
+import { getAllLibraries } from "#/routes/_benchmarks/library/-query";
 import { generateMetadata } from "#/shared/data/meta";
-import { applySort, sortParams } from "#/shared/lib/sort";
 
-const searchSchema = v.object({
-  ...sortParams(v.optional(v.picklist(["libraryName", "downloads"]), "libraryName")),
-});
 export const Route = createFileRoute("/_benchmarks/library/")({
-  validateSearch: searchSchema,
   loader: async ({ abortController, context: { queryClient } }) => {
     const libraries = await queryClient.ensureQueryData(getAllLibraries(abortController.signal));
     await Promise.all(
-      libraries.map(({ libraryName, version }) =>
+      libraries.map(({ packageName, version }) =>
         queryClient.ensureQueryData(
-          getPackageMetadata(getPackageName(libraryName), version, abortController.signal),
+          getPackageMetadata(packageName, version, abortController.signal),
         ),
       ),
     );
@@ -40,82 +29,54 @@ export const Route = createFileRoute("/_benchmarks/library/")({
   staticData: { crumb: undefined },
 });
 
+function mostCommonVersion(libraries: Array<{ version: string }>) {
+  const versionCounts: Record<string, number> = {};
+  for (const { version } of libraries) {
+    versionCounts[version] = (versionCounts[version] ?? 0) + 1;
+  }
+  return Object.entries(versionCounts).sort((a, b) => b[1] - a[1])[0]![0];
+}
+
 function RouteComponent() {
-  const { sortBy, sortDir } = Route.useSearch();
   const { data: libraries } = useSuspenseQuery(getAllLibraries());
-  const downloadsByPkg = useDownloadsByPkgName(libraries);
-  const sortedLibraries = useMemo(
-    () =>
-      libraries.toSorted(
-        applySort(
-          (a, b) => {
-            switch (sortBy) {
-              case "downloads":
-                return (
-                  (downloadsByPkg?.[getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkg?.[getPackageName(b.libraryName)] ?? 0)
-                );
-              default:
-                return collator.compare(a.libraryName, b.libraryName);
-            }
-          },
-          { sortDir },
-        ),
-      ),
-    [libraries, sortBy, downloadsByPkg, sortDir],
+  const librariesByPkg = useMemo(
+    () => Object.groupBy(libraries, ({ packageName }) => packageName),
+    [libraries],
   );
-  const libraryMetadata = useSuspenseQueries({
-    queries: sortedLibraries.map(({ libraryName, version }) =>
-      getPackageMetadata(getPackageName(libraryName), version),
+  const metadataByPkg = useSuspenseQueries({
+    queries: Object.entries(librariesByPkg).map(([pkgName, libraries = []]) =>
+      getPackageMetadata(pkgName, mostCommonVersion(libraries)),
     ),
+    combine: (metadatas) => Object.fromEntries(metadatas.map(({ data }) => [data.name, data])),
   });
   return (
-    <table>
-      <thead>
-        <tr>
-          <SortableHeaderLink
-            {...SortableHeaderLink.getProps("libraryName", { sortBy, sortDir }, { to: "/library" })}
-          >
-            Library
-          </SortableHeaderLink>
-          <th className="action"></th>
-          <SortableHeaderLink
-            {...SortableHeaderLink.getProps(
-              "downloads",
-              { sortBy, sortDir },
-              { to: "/library" },
-              "descending",
-            )}
-            className="numeric"
-          >
-            Downloads (/wk)
-          </SortableHeaderLink>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedLibraries.map(({ libraryName, version }, idx) => (
-          <tr
-            key={getPkgSlug({ libraryName, version })}
-            style={{
-              viewTransitionName: getTransitionName("library", { libraryName, version }),
-            }}
-          >
-            <td>
-              <Link to="/library/$" params={{ _splat: libraryName }}>
-                {libraryName}
-              </Link>
-            </td>
-            <td className="action">
-              <RepoLink libraryName={libraryName} version={version} />
-            </td>
-            <td className="numeric">
-              <DownloadCount libraryName={libraryName} />
-            </td>
-            <td>{libraryMetadata[idx]!.data.description}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ul>
+      {Object.entries(librariesByPkg).map(([pkgName, libraries]) => {
+        const metadata = metadataByPkg[pkgName];
+        if (!metadata) return null;
+        return (
+          <li key={pkgName}>
+            <hgroup>
+              <h5>
+                <code>{metadata.name}</code>
+              </h5>
+              <DownloadCount libraryName={metadata.name} />
+            </hgroup>
+            <p>{metadata.description}</p>
+            <h6>Benchmarks</h6>
+            <ul>
+              {libraries?.map(({ libraryName, version }) => (
+                <li key={libraryName}>
+                  <Link to="/library/$" params={{ _splat: libraryName }}>
+                    <code>{libraryName}</code>
+                  </Link>{" "}
+                  (v{version})
+                </li>
+              ))}
+            </ul>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
