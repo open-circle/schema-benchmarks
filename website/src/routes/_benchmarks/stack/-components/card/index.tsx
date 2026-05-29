@@ -1,6 +1,5 @@
 import type { StackResult } from "@schema-benchmarks/bench";
 import { getTransitionName } from "@schema-benchmarks/utils";
-import { Link } from "@tanstack/react-router";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -32,11 +31,9 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
     >
       <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
       <div {...cls({ element: "header-row" })}>
-        <Link to="/library/$" params={{ _splat: result.libraryName }}>
-          <h4 {...cls({ element: "library-name", extra: "typo-headline5" })}>
-            <code className="language-text">{result.libraryName}</code>
-          </h4>
-        </Link>
+        <h4 {...cls({ element: "library-name", extra: "typo-headline5" })}>
+          <code className="language-text">{result.libraryName}</code>
+        </h4>
         <ErrorBoundary fallback={null}>
           <div {...cls({ element: "downloads", extra: "typo-body2" })}>
             <MdSymbol>download</MdSymbol>

@@ -6,7 +6,6 @@ import {
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
-import { Link } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ButtonGroup } from "#/shared/components/button";
@@ -90,9 +89,7 @@ export function DownloadTable({
                 }}
               >
                 <td>
-                  <Link to="/library/$" params={{ _splat: result.libraryName }}>
-                    <code className="language-text">{result.libraryName}</code>
-                  </Link>
+                  <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td>

@@ -5,7 +5,7 @@ import { PackageCard } from ".";
 import "./index.css";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/Library/PackageCard",
+  title: "Features/Benchmark/Libraries/PackageCard",
   component: PackageCard,
 });
 

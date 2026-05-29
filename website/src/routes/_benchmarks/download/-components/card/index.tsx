@@ -5,7 +5,6 @@ import {
   getDuration,
   getTransitionName,
 } from "@schema-benchmarks/utils";
-import { Link } from "@tanstack/react-router";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -41,11 +40,9 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
       <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
       <div {...cls("header-row")}>
         <header {...cls("library-name")}>
-          <Link to="/library/$" params={{ _splat: result.libraryName }}>
-            <h4 className="typo-headline5">
-              <code className="language-text">{result.libraryName}</code>
-            </h4>
-          </Link>
+          <h4 className="typo-headline5">
+            <code className="language-text">{result.libraryName}</code>
+          </h4>
           {result.note && (
             <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
           )}

@@ -7,7 +7,6 @@ import {
   getTransitionName,
   numFormatter,
 } from "@schema-benchmarks/utils";
-import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -119,9 +118,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                 }}
               >
                 <td>
-                  <Link to="/library/$" params={{ _splat: result.libraryName }}>
-                    <code className="language-text">{result.libraryName}</code>
-                  </Link>
+                  <code className="language-text">{result.libraryName}</code>
                   {result.note ? ` (${result.note})` : null}
                 </td>
                 <td className="action">

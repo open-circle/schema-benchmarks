@@ -59,7 +59,7 @@ export const sidebarGroups: Array<SidebarGroup> = [
   },
   {
     key: "library",
-    links: [{ ...linkOptions({ to: "/library" }), name: "Libraries", icon: "deployed_code" }],
+    links: [{ ...linkOptions({ to: "/libraries" }), name: "Libraries", icon: "deployed_code" }],
   },
   {
     key: "blog",
