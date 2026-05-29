@@ -1,4 +1,9 @@
-import { anyAbortSignal, collator, promiseAllKeyed } from "@schema-benchmarks/utils";
+import {
+  anyAbortSignal,
+  collator,
+  getOrInsertComputed,
+  promiseAllKeyed,
+} from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
@@ -11,7 +16,7 @@ import { getStackResultsFn } from "#/routes/_benchmarks/stack/-query";
 export const getPkgSlug = ({ libraryName, version }: { libraryName: string; version: string }) =>
   `${getPackageName(libraryName)}@${version}`;
 
-export const getAllLibrariesFn = createServerFn().handler(async () => {
+export const getAllPackagesFn = createServerFn().handler(async () => {
   const { signal } = getRequest();
   const allResults = await promiseAllKeyed({
     bench: getBenchResultsFn({ signal }),
@@ -32,22 +37,20 @@ export const getAllLibrariesFn = createServerFn().handler(async () => {
     ...allResults.stack,
   ];
 
-  const libraryNames = new Map<string, string>();
-  for (const { libraryName, version } of allItems) {
-    libraryNames.set(libraryName, version);
-  }
+  const packageVersions = new Map<string, Set<string>>();
+  for (const { libraryName, version } of allItems)
+    getOrInsertComputed(packageVersions, getPackageName(libraryName), () => new Set()).add(version);
 
-  return Array.from(libraryNames)
-    .map(([libraryName, version]) => ({
-      libraryName,
-      packageName: getPackageName(libraryName),
-      version,
-    }))
-    .sort((a, b) => collator.compare(a.libraryName, b.libraryName));
+  return Object.fromEntries(
+    Array.from(
+      packageVersions,
+      ([key, versions]) => [key, Array.from(versions).sort(collator.compare)] as const,
+    ).sort(([a], [b]) => collator.compare(a, b)),
+  );
 });
 
-export const getAllLibraries = (signalOpt?: AbortSignal) =>
+export const getAllPackages = (signalOpt?: AbortSignal) =>
   queryOptions({
-    queryKey: ["libraries"],
-    queryFn: ({ signal }) => getAllLibrariesFn({ signal: anyAbortSignal(signal, signalOpt) }),
+    queryKey: ["packages"],
+    queryFn: ({ signal }) => getAllPackagesFn({ signal: anyAbortSignal(signal, signalOpt) }),
   });

@@ -12,6 +12,6 @@ const meta = preview.meta({
 export const Default = meta.story({
   args: {
     pkgName: "valibot",
-    libraries: [{ libraryName: "valibot", version: "1.4.1" }],
+    versions: ["1.4.1"],
   },
 });

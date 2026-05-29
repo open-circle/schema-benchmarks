@@ -1,10 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
 
 import { getPackageMetadata } from "#/routes/_benchmarks/-query";
 import { PackageCard } from "#/routes/_benchmarks/library/-components/package";
-import { getAllLibraries } from "#/routes/_benchmarks/library/-query";
+import { getAllPackages } from "#/routes/_benchmarks/library/-query";
 import { generateMetadata } from "#/shared/data/meta";
 
 import Content from "./content.mdx";
@@ -13,11 +12,13 @@ import libraryCss from "./index.css?url";
 
 export const Route = createFileRoute("/_benchmarks/library/")({
   loader: async ({ abortController, context: { queryClient } }) => {
-    const libraries = await queryClient.ensureQueryData(getAllLibraries(abortController.signal));
+    const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
     await Promise.all(
-      libraries.map(({ packageName, version }) =>
-        queryClient.ensureQueryData(
-          getPackageMetadata(packageName, version, abortController.signal),
+      Object.entries(libraries).flatMap(([packageName, versions]) =>
+        versions.map((version) =>
+          queryClient.ensureQueryData(
+            getPackageMetadata(packageName, version, abortController.signal),
+          ),
         ),
       ),
     );
@@ -34,18 +35,14 @@ export const Route = createFileRoute("/_benchmarks/library/")({
 });
 
 function RouteComponent() {
-  const { data: libraries } = useSuspenseQuery(getAllLibraries());
-  const librariesByPkg = useMemo(
-    () => Object.groupBy(libraries, ({ packageName }) => packageName),
-    [libraries],
-  );
+  const { data: libraries } = useSuspenseQuery(getAllPackages());
   return (
     <>
       <Content components={{ wrapper: "div" }} />
       <ul className="library-list">
-        {Object.entries(librariesByPkg).map(([pkgName, libraries]) => {
+        {Object.entries(libraries).map(([pkgName, versions]) => {
           if (!libraries) return null;
-          return <PackageCard key={pkgName} {...{ pkgName, libraries }} />;
+          return <PackageCard key={pkgName} {...{ pkgName, versions }} />;
         })}
       </ul>
     </>
