@@ -1,14 +1,18 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
+import bem from "react-bem-helper";
 
 import { DownloadCount } from "#/routes/_benchmarks/-components/count";
 import { getPackageMetadata } from "#/routes/_benchmarks/-query";
+import { MdSymbol } from "#/shared/components/symbol";
 
 export interface PackageCardProps {
   pkgName: string;
   libraries: Array<{ libraryName: string; version: string }>;
 }
+
+const cls = bem("package-card");
 
 export function PackageCard({ pkgName, libraries }: PackageCardProps) {
   const version = useMemo(() => {
@@ -20,13 +24,13 @@ export function PackageCard({ pkgName, libraries }: PackageCardProps) {
   }, [libraries]);
   const { data: metadata } = useSuspenseQuery(getPackageMetadata(pkgName, version));
   const heading = (
-    <h5>
+    <h4>
       <code>{metadata.name}</code>
-    </h5>
+    </h4>
   );
   return (
-    <li>
-      <hgroup>
+    <li {...cls()}>
+      <div {...cls("heading")}>
         {metadata.homepage ? (
           <a href={metadata.homepage} target="_blank" rel="noopener noreferrer">
             {heading}
@@ -34,12 +38,19 @@ export function PackageCard({ pkgName, libraries }: PackageCardProps) {
         ) : (
           heading
         )}
-        <DownloadCount libraryName={pkgName} />
-        <p>{metadata.description}</p>
-      </hgroup>
-      <ul>
+        <div {...cls({ element: "downloads", extra: "typo-caption" })}>
+          <MdSymbol size={18}>download</MdSymbol>
+          <span>
+            <DownloadCount libraryName={pkgName} />
+            /wk
+          </span>
+        </div>
+      </div>
+      <p {...cls({ element: "description", extra: "typo-body2" })}>{metadata.description}</p>
+      <h5>Benchmarks</h5>
+      <ul {...cls("libraries")}>
         {libraries.map(({ libraryName, version }) => (
-          <li key={libraryName}>
+          <li key={libraryName} {...cls("library")}>
             <Link to="/library/$" params={{ _splat: libraryName }}>
               <code>{libraryName}</code>
             </Link>{" "}

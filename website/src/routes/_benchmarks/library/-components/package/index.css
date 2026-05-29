@@ -1,0 +1,40 @@
+.package-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--divider);
+  border-radius: var(--shape-medium);
+  .package-card__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    h4 {
+      margin: 0;
+    }
+    .package-card__downloads {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: color(from var(--foreground) srgb r g b / var(--secondary-text));
+    }
+  }
+  .package-card__description {
+    margin: 0;
+    color: color(from var(--foreground) srgb r g b / var(--secondary-text));
+  }
+  h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .package-card__libraries {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 1rem;
+    margin: 0;
+    list-style: disc;
+  }
+}

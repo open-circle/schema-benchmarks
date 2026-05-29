@@ -1,0 +1,10 @@
+@import "./-components/package/index.css";
+
+.library-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
