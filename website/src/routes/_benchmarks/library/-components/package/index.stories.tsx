@@ -2,6 +2,8 @@ import preview from "#storybook/preview";
 
 import { PackageCard } from ".";
 
+import "./index.css";
+
 const meta = preview.meta({
   title: "Features/Benchmark/Library/PackageCard",
   component: PackageCard,

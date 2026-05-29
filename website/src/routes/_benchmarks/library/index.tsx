@@ -7,6 +7,10 @@ import { PackageCard } from "#/routes/_benchmarks/library/-components/package";
 import { getAllLibraries } from "#/routes/_benchmarks/library/-query";
 import { generateMetadata } from "#/shared/data/meta";
 
+import Content from "./content.mdx";
+
+import libraryCss from "./index.css?url";
+
 export const Route = createFileRoute("/_benchmarks/library/")({
   loader: async ({ abortController, context: { queryClient } }) => {
     const libraries = await queryClient.ensureQueryData(getAllLibraries(abortController.signal));
@@ -23,7 +27,7 @@ export const Route = createFileRoute("/_benchmarks/library/")({
       title: "Libraries",
       description: "Libraries included in the benchmarks",
     });
-    return { links, meta };
+    return { links: [...links, { rel: "stylesheet", href: libraryCss }], meta };
   },
   component: RouteComponent,
   staticData: { crumb: undefined },
@@ -36,11 +40,14 @@ function RouteComponent() {
     [libraries],
   );
   return (
-    <ul>
-      {Object.entries(librariesByPkg).map(([pkgName, libraries]) => {
-        if (!libraries) return null;
-        return <PackageCard key={pkgName} {...{ pkgName, libraries }} />;
-      })}
-    </ul>
+    <>
+      <Content components={{ wrapper: "div" }} />
+      <ul className="library-list">
+        {Object.entries(librariesByPkg).map(([pkgName, libraries]) => {
+          if (!libraries) return null;
+          return <PackageCard key={pkgName} {...{ pkgName, libraries }} />;
+        })}
+      </ul>
+    </>
   );
 }
