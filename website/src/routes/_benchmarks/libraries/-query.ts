@@ -13,9 +13,6 @@ import { getBenchResultsFn } from "#/routes/_benchmarks/_runtime/-query";
 import { getDownloadResultsFn } from "#/routes/_benchmarks/download/-query";
 import { getStackResultsFn } from "#/routes/_benchmarks/stack/-query";
 
-export const getPkgSlug = ({ libraryName, version }: { libraryName: string; version: string }) =>
-  `${getPackageName(libraryName)}@${version}`;
-
 export const getAllPackagesFn = createServerFn().handler(async () => {
   const { signal } = getRequest();
   const allResults = await promiseAllKeyed({
