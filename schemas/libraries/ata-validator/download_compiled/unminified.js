@@ -6776,136 +6776,192 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 var import_keywords = require_keywords();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
+//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const OPTIONAL = Symbol.for("ata.t.optional");
+	const { attach: attachRefine } = require_refine();
+	function string(opts) {
+		return Object.assign({ type: "string" }, opts);
+	}
+	function number(opts) {
+		return Object.assign({ type: "number" }, opts);
+	}
+	function integer(opts) {
+		return Object.assign({ type: "integer" }, opts);
+	}
+	function boolean() {
+		return { type: "boolean" };
+	}
+	function nul() {
+		return { type: "null" };
+	}
+	function literal(value) {
+		return { const: value };
+	}
+	function constant(value) {
+		return { const: value };
+	}
+	function enumOf(values) {
+		return { enum: values };
+	}
+	function array(items, opts) {
+		return Object.assign({
+			type: "array",
+			items
+		}, opts);
+	}
+	function tuple(items, opts) {
+		return Object.assign({
+			type: "array",
+			prefixItems: items,
+			items: false,
+			minItems: items.length
+		}, opts);
+	}
+	function record(values, opts) {
+		return Object.assign({
+			type: "object",
+			additionalProperties: values
+		}, opts);
+	}
+	function object(properties, opts) {
+		const props = {};
+		const required = [];
+		const keys = Object.keys(properties);
+		for (const key of keys) {
+			const schema = properties[key];
+			if (schema && schema[OPTIONAL] === true) {
+				const { [OPTIONAL]: _drop, ...rest } = schema;
+				props[key] = rest;
+			} else {
+				props[key] = schema;
+				required.push(key);
+			}
+		}
+		const out = {
+			type: "object",
+			properties: props
+		};
+		if (required.length) out.required = required;
+		return Object.assign(out, opts);
+	}
+	function optional(schema) {
+		return Object.assign({}, schema, { [OPTIONAL]: true });
+	}
+	function union(schemas) {
+		return { anyOf: schemas };
+	}
+	function intersect(schemas) {
+		return { allOf: schemas };
+	}
+	function ref(pointer) {
+		return { $ref: pointer };
+	}
+	function any() {
+		return {};
+	}
+	function unknown() {
+		return {};
+	}
+	function never() {
+		return { not: {} };
+	}
+	function refine(schema, check, opts) {
+		return attachRefine(schema, check, opts);
+	}
+	module.exports = {
+		string,
+		number,
+		integer,
+		boolean,
+		null: nul,
+		literal,
+		const: constant,
+		enum: enumOf,
+		array,
+		tuple,
+		record,
+		object,
+		optional,
+		union,
+		intersect,
+		ref,
+		any,
+		unknown,
+		never,
+		refine,
+		OPTIONAL
+	};
+}));
+const { t, OPTIONAL } = (/* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const t = require_t$1();
+	module.exports = {
+		t,
+		OPTIONAL: t.OPTIONAL
+	};
+})))(), 1)).default;
+//#endregion
 //#region ../schemas/libraries/ata-validator/download.ts
-const dateSchema = {
-	type: "object",
-	instanceof: "Date",
-	required: []
-};
-const imageSchema = {
-	type: "object",
-	properties: {
-		id: { type: "number" },
-		created: dateSchema,
-		title: {
-			type: "string",
-			minLength: 1,
-			maxLength: 100
-		},
-		type: {
-			type: "string",
-			enum: ["jpg", "png"]
-		},
-		size: { type: "number" },
-		url: {
-			type: "string",
-			format: "url"
-		}
-	},
-	required: [
-		"id",
-		"created",
-		"title",
-		"type",
-		"size",
-		"url"
-	]
-};
-(0, import_keywords.withKeywords)(new Validator({
-	type: "object",
-	properties: {
-		id: { type: "number" },
-		created: dateSchema,
-		title: {
-			type: "string",
-			minLength: 1,
-			maxLength: 100
-		},
-		brand: {
-			type: "string",
-			minLength: 1,
-			maxLength: 30
-		},
-		description: {
-			type: "string",
-			minLength: 1,
-			maxLength: 500
-		},
-		price: {
-			type: "number",
-			minimum: 1,
-			maximum: 1e4
-		},
-		discount: { oneOf: [{
-			type: "number",
-			minimum: 1,
-			maximum: 100
-		}, { type: "null" }] },
-		quantity: {
-			type: "number",
-			minimum: 0,
-			maximum: 10
-		},
-		tags: {
-			type: "array",
-			items: {
-				type: "string",
-				minLength: 1,
-				maxLength: 30
-			}
-		},
-		images: {
-			type: "array",
-			items: imageSchema
-		},
-		ratings: {
-			type: "array",
-			items: {
-				type: "object",
-				properties: {
-					id: { type: "number" },
-					stars: {
-						type: "number",
-						minimum: 0,
-						maximum: 5
-					},
-					title: {
-						type: "string",
-						minLength: 1,
-						maxLength: 100
-					},
-					text: {
-						type: "string",
-						minLength: 1,
-						maxLength: 1e3
-					},
-					images: {
-						type: "array",
-						items: imageSchema
-					}
-				},
-				required: [
-					"id",
-					"stars",
-					"title",
-					"text",
-					"images"
-				]
-			}
-		}
-	},
-	required: [
-		"id",
-		"created",
-		"title",
-		"brand",
-		"description",
-		"price",
-		"discount",
-		"quantity",
-		"tags",
-		"images",
-		"ratings"
-	]
-})).validate({});
+const dateSchema = t.object({}, { instanceof: "Date" });
+const imageSchema = t.object({
+	id: t.number(),
+	created: dateSchema,
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	type: t.enum(["jpg", "png"]),
+	size: t.number(),
+	url: t.string({ format: "url" })
+});
+const ratingSchema = t.object({
+	id: t.number(),
+	stars: t.number({
+		minimum: 0,
+		maximum: 5
+	}),
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	text: t.string({
+		minLength: 1,
+		maxLength: 1e3
+	}),
+	images: t.array(imageSchema)
+});
+(0, import_keywords.withKeywords)(new Validator(t.object({
+	id: t.number(),
+	created: dateSchema,
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	brand: t.string({
+		minLength: 1,
+		maxLength: 30
+	}),
+	description: t.string({
+		minLength: 1,
+		maxLength: 500
+	}),
+	price: t.number({
+		minimum: 1,
+		maximum: 1e4
+	}),
+	discount: t.union([t.number({
+		minimum: 1,
+		maximum: 100
+	}), t.null()]),
+	quantity: t.number({
+		minimum: 0,
+		maximum: 10
+	}),
+	tags: t.array(t.string({
+		minLength: 1,
+		maxLength: 30
+	})),
+	images: t.array(imageSchema),
+	ratings: t.array(ratingSchema)
+}))).validate({});
 //#endregion
