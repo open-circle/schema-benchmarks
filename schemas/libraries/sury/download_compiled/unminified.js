@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-alpha.6/node_modules/sury/src/Sury.res.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.7/node_modules/sury/src/Sury.res.mjs
 let idMap = {};
 function create(str) {
 	let v = idMap[str];
@@ -844,17 +844,17 @@ function nan() {
 }
 function parse(value) {
 	if (value === null) return nullLiteral();
-	let $$typeof = typeof value;
-	if ($$typeof === "object") {
+	let tag = typeof value;
+	if (tag === undefinedTag) return unit();
+	if (tag === numberTag && Number.isNaN(value)) return nan();
+	if (tag === objectTag) {
 		let s = base(instanceTag, true);
 		s.class = value.constructor;
 		s.const = value;
 		s.decoder = literalDecoder;
 		return s;
 	}
-	if ($$typeof === "undefined") return unit();
-	if ($$typeof === "number" && Number.isNaN(value)) return nan();
-	let s$1 = base($$typeof, true);
+	let s$1 = base(tag, true);
 	s$1.const = value;
 	s$1.decoder = literalDecoder;
 	return s$1;
@@ -939,7 +939,7 @@ function getDecoder(param, param$1) {
 	let cacheTarget;
 	while (flag === void 0) {
 		let arg = args[idx];
-		if (arg) if (typeof arg === "number") {
+		if (arg) if (typeof arg === numberTag) {
 			let f = arg | globalConfig.f;
 			flag = f;
 			keyRef = keyRef + "-" + f;
@@ -1666,7 +1666,7 @@ function date$1() {
 	});
 }
 function traverseDefinition(definition, onNode) {
-	if (typeof definition !== "object" || definition === null) return parse(definition);
+	if (typeof definition !== objectTag || definition === null) return parse(definition);
 	let s = onNode(definition);
 	if (s !== void 0) return s;
 	if (Array.isArray(definition)) {
@@ -1705,7 +1705,7 @@ function definitionToSchema(definition) {
 }
 let js_schema = definitionToSchema;
 function assertNumber(fnName, n) {
-	if (!(typeof n !== "number" || Number.isNaN(n))) return;
+	if (!(typeof n !== numberTag || Number.isNaN(n))) return;
 	throw new SuryError({
 		code: "invalid_operation",
 		path: "",
