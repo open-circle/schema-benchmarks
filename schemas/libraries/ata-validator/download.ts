@@ -1,71 +1,41 @@
 import { withKeywords } from "@ata-project/keywords";
-import type { JSONSchemaType } from "ajv";
 import { Validator } from "ata-validator";
+import { t } from "ata-validator/t";
 
-import type { ImageData, ProductData, RatingData } from "#src";
-
-const dateSchema: JSONSchemaType<Date> = {
-  type: "object",
+const dateSchema = t.object({}, {
   instanceof: "Date",
-  required: [],
-};
-const imageSchema: JSONSchemaType<ImageData> = {
-  type: "object",
-  properties: {
-    id: { type: "number" },
-    created: dateSchema,
-    title: { type: "string", minLength: 1, maxLength: 100 },
-    type: { type: "string", enum: ["jpg", "png"] },
-    size: { type: "number" },
-    url: { type: "string", format: "url" },
-  },
-  required: ["id", "created", "title", "type", "size", "url"],
-};
-const ratingSchema: JSONSchemaType<RatingData> = {
-  type: "object",
-  properties: {
-    id: { type: "number" },
-    stars: { type: "number", minimum: 0, maximum: 5 },
-    title: { type: "string", minLength: 1, maxLength: 100 },
-    text: { type: "string", minLength: 1, maxLength: 1000 },
-    images: { type: "array", items: imageSchema },
-  },
-  required: ["id", "stars", "title", "text", "images"],
-};
-const productSchema: JSONSchemaType<ProductData> = {
-  type: "object",
-  properties: {
-    id: { type: "number" },
-    created: dateSchema,
-    title: { type: "string", minLength: 1, maxLength: 100 },
-    brand: { type: "string", minLength: 1, maxLength: 30 },
-    description: { type: "string", minLength: 1, maxLength: 500 },
-    price: { type: "number", minimum: 1, maximum: 10000 },
-    discount: {
-      oneOf: [{ type: "number", minimum: 1, maximum: 100 }, { type: "null" }],
-    } as never,
-    quantity: { type: "number", minimum: 0, maximum: 10 },
-    tags: {
-      type: "array",
-      items: { type: "string", minLength: 1, maxLength: 30 },
-    },
-    images: { type: "array", items: imageSchema },
-    ratings: { type: "array", items: ratingSchema },
-  },
-  required: [
-    "id",
-    "created",
-    "title",
-    "brand",
-    "description",
-    "price",
-    "discount",
-    "quantity",
-    "tags",
-    "images",
-    "ratings",
-  ],
-};
+} as never);
+
+const imageSchema = t.object({
+  id: t.number(),
+  created: dateSchema,
+  title: t.string({ minLength: 1, maxLength: 100 }),
+  type: t.enum(["jpg", "png"]),
+  size: t.number(),
+  url: t.string({ format: "url" }),
+});
+
+const ratingSchema = t.object({
+  id: t.number(),
+  stars: t.number({ minimum: 0, maximum: 5 }),
+  title: t.string({ minLength: 1, maxLength: 100 }),
+  text: t.string({ minLength: 1, maxLength: 1000 }),
+  images: t.array(imageSchema),
+});
+
+const productSchema = t.object({
+  id: t.number(),
+  created: dateSchema,
+  title: t.string({ minLength: 1, maxLength: 100 }),
+  brand: t.string({ minLength: 1, maxLength: 30 }),
+  description: t.string({ minLength: 1, maxLength: 500 }),
+  price: t.number({ minimum: 1, maximum: 10000 }),
+  discount: t.union([t.number({ minimum: 1, maximum: 100 }), t.null()]),
+  quantity: t.number({ minimum: 0, maximum: 10 }),
+  tags: t.array(t.string({ minLength: 1, maxLength: 30 })),
+  images: t.array(imageSchema),
+  ratings: t.array(ratingSchema),
+});
 
 const productValidator = withKeywords(new Validator(productSchema));
 
