@@ -339,7 +339,7 @@ function isPluralizeTuple(value: unknown): value is PluralizeTuple {
  */
 export function pluralize(strings: TemplateStringsArray, ...values: Array<unknown>) {
   let result = "";
-  for (const i of range(0, strings.length, { inclusive: true })) {
+  for (const i of range(0, strings.length)) {
     result += strings[i];
     if (i < values.length) {
       const value = values[i];
