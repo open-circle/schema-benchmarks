@@ -42,14 +42,9 @@ export default defineBenchmarks({
       },
       snippet: ts`S.parser(S.schema(...))`,
       note: "parser",
+      optimizeType: "jit",
     },
   ],
-  validation: {
-    run(data) {
-      return S.is(schema, data);
-    },
-    snippet: ts`S.is(S.schema(...), data)`,
-  },
   parsing: {
     allErrors: [
       {
@@ -66,6 +61,7 @@ export default defineBenchmarks({
         // const parser = S.parser(S.schema(...));
         parser(data);
       `,
+        optimizeType: "jit",
         throws: true,
       },
       {
