@@ -14,22 +14,22 @@ allowBuilds:
 
 catalog:
   "@standard-schema/spec": ^1.1.0
-  "@types/node": 25.9.2
+  "@types/node": 26.0.0
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20260605.1
+  "@typescript/native-preview": 7.0.0-dev.20260619.1
   "@typia/unplugin": ^12.1.1
-  "@vitest/browser-playwright": ^4.1.8
-  "@vitest/expect": ^4.1.8
-  "@vitest/pretty-format": ^4.1.8
+  "@vitest/browser-playwright": ^4.1.9
+  "@vitest/expect": ^4.1.9
+  "@vitest/pretty-format": ^4.1.9
   dedent: ^1.7.2
-  "mix-n-matchers": "^2.0.1"
-  playwright: ^1.60.0
+  "mix-n-matchers": "^2.1.1"
+  playwright: ^1.61.0
   react: ^19.2.7
   react-dom: ^19.2.7
   typescript: 6.0.3
   valibot: ^1.4.1
   vite: ^8.0.16
-  vitest: ^4.1.8
+  vitest: ^4.1.9
 overrides:
   vite: "catalog:"
