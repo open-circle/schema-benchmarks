@@ -29,8 +29,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 		var e = {
 			2115(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n, deepEqual: a, merge: i } = r(3115), o = r(2130), l = r(9415), c = r(3541), u = r(8013), f = r(2062), m = r(9017), h = r(6162), p = r(5844), d = r(8529), g = r(125), y = r(1190), b = r(6220), v = {
-					standardTypes: new Set([
+				const { assert: s, clone: n, deepEqual: a, merge: o } = r(3115), i = r(2130), l = r(9415), c = r(3541), u = r(8013), f = r(2062), m = r(9017), h = r(6162), p = r(5844), d = r(8529), g = r(125), y = r(1190), b = r(6220), v = {
+					standardTypes: /* @__PURE__ */ new Set([
 						"string",
 						"number",
 						"integer",
@@ -40,7 +40,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						"null"
 					]),
 					jsonSchemaTarget: "draft-2020-12",
-					primitiveTypes: new Set([
+					primitiveTypes: /* @__PURE__ */ new Set([
 						"string",
 						"number",
 						"boolean"
@@ -63,39 +63,39 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							var r;
 							if (void 0 !== t.target && t.target !== v.jsonSchemaTarget) throw new Error(`Unsupported JSON Schema target: ${t.target}`);
 							const s = !t.$defs, n = null !== (r = t.$defs) && void 0 !== r ? r : {};
-							let i = {};
-							const o = "any" === this.type, c = this._flags.only, u = this._valids && Array.from(this._valids._values).filter((e) => null !== e);
+							let o = {};
+							const i = "any" === this.type, c = this._flags.only, u = this._valids && Array.from(this._valids._values).filter((e) => null !== e);
 							let f = !0;
-							if (u && u.length && c && !o) {
+							if (u && u.length && c && !i) {
 								const e = new Set(u.map((e) => typeof e));
 								f = e.has(this.type) || "date" === this.type && e.has("object");
 							}
-							!o && f && v.standardTypes.has(this.type) && (i.type = this.type), this._flags.description && (i.description = this._flags.description), void 0 !== this._flags.default && "function" != typeof this._flags.default && (i.default = this._flags.default);
+							!i && f && v.standardTypes.has(this.type) && (o.type = this.type), this._flags.description && (o.description = this._flags.description), void 0 !== this._flags.default && "function" != typeof this._flags.default && (o.default = this._flags.default);
 							const m = {
 								...t,
 								$defs: n
 							};
-							this._definition.jsonSchema && f && (i = this._definition.jsonSchema(this, i, e, m));
+							this._definition.jsonSchema && f && (o = this._definition.jsonSchema(this, o, e, m));
 							for (const t of this._rules) {
 								const r = this._definition.rules[t.name];
-								r.jsonSchema && f && (i = r.jsonSchema(t, i, c, e, m));
+								r.jsonSchema && f && !t._resolve.length && (o = r.jsonSchema(t, o, c, e, m));
 							}
 							if (this.$_terms.shared) for (const t of this.$_terms.shared) n[t._flags.id] = t.$_jsonSchema(e, m);
-							if (s && Object.keys(n).length && (i.$defs = n), this._valids) {
+							if (s && Object.keys(n).length && (o.$defs = n), this._valids) {
 								const e = u.filter((e) => "symbol" != typeof e);
 								if (e.length) if (this._flags.only) {
-									i.enum = e;
+									o.enum = e;
 									const t = l.intersect(new Set(e.map((e) => typeof e)), v.primitiveTypes);
 									if (t.size) {
 										const e = [...t];
-										i.type = 1 === e.length ? e[0] : e;
+										o.type = 1 === e.length ? e[0] : e;
 									}
 								} else {
-									const t = e.filter((e) => typeof e !== this.type || o);
-									!t.length || o && !c || (i.anyOf || (i = { anyOf: [i] }), i.anyOf.push({ enum: t }));
+									const t = e.filter((e) => typeof e !== this.type || i);
+									!t.length || i && !c || (o.anyOf || (o = { anyOf: [o] }), o.anyOf.push({ enum: t }));
 								}
 							}
-							if (this._valids && this._valids.has(null) && (!o || c) && (1 === this._valids.length && (o || c) ? i.type = "null" : i.type ? i.type = [i.type, "null"] : i.anyOf ? i.anyOf.unshift(v.nullSchema()) : i = { anyOf: [v.nullSchema(), i] }), this.$_terms.whens) {
+							if (this._valids && this._valids.has(null) && (!i || c) && (1 === this._valids.length && (i || c) ? o.type = "null" : o.type ? o.type = [o.type, "null"] : o.anyOf ? o.anyOf.unshift(v.nullSchema()) : o = { anyOf: [v.nullSchema(), o] }), this.$_terms.whens) {
 								const t = this.clone();
 								t.$_terms.whens = null;
 								const r = [];
@@ -110,7 +110,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								for (const e of r) s.some((t) => a(t, e)) || s.push(e);
 								return { anyOf: s };
 							}
-							return i;
+							return o;
 						}
 						allow(...e) {
 							return l.verifyFlat(e, "allow"), this._values(e, "_valids");
@@ -119,7 +119,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							s(e && "object" == typeof e && !Array.isArray(e), "Invalid targets argument"), s(!this._inRuleset(), "Cannot set alterations inside a ruleset");
 							const t = this.clone();
 							t.$_terms.alterations = t.$_terms.alterations || [];
-							for (const r in e) {
+							for (const r of Object.keys(e)) {
 								const n = e[r];
 								s("function" == typeof n, "Alteration adjuster for", r, "must be a function"), t.$_terms.alterations.push({
 									target: r,
@@ -242,7 +242,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						cache(e) {
 							s(!this._inRuleset(), "Cannot set caching inside a ruleset"), s(!this._cache, "Cannot override schema cache"), s(void 0 === this._flags.artifact, "Cannot cache a rule with an artifact");
 							const t = this.clone();
-							return t._cache = e || o.provider.provision(), t.$_temp.ruleset = !1, t;
+							return t._cache = e || i.provider.provision(), t.$_temp.ruleset = !1, t;
 						}
 						clone() {
 							const e = Object.create(Object.getPrototypeOf(this));
@@ -262,13 +262,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							if (t._flags.empty && e._flags.empty) {
 								t._flags.empty = t._flags.empty.concat(e._flags.empty);
 								const r = Object.assign({}, e._flags);
-								delete r.empty, i(t._flags, r);
+								delete r.empty, o(t._flags, r);
 							} else if (e._flags.empty) {
 								t._flags.empty = e._flags.empty;
 								const r = Object.assign({}, e._flags);
-								delete r.empty, i(t._flags, r);
-							} else i(t._flags, e._flags);
-							for (const r in e.$_terms) {
+								delete r.empty, o(t._flags, r);
+							} else o(t._flags, e._flags);
+							for (const r of Object.keys(e.$_terms)) {
 								const s = e.$_terms[r];
 								s ? t.$_terms[r] ? t.$_terms[r] = t.$_terms[r].concat(s) : t.$_terms[r] = s.slice() : t.$_terms[r] || (t.$_terms[r] = s);
 							}
@@ -307,10 +307,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const r = null === this.$_temp.ruleset ? this._rules.length - 1 : this.$_temp.ruleset;
 							s(r >= 0 && r < this._rules.length, "Cannot apply rules to empty ruleset");
 							const a = this.clone();
-							for (let i = r; i < a._rules.length; ++i) {
-								const r = a._rules[i], o = n(r);
-								for (const n in e) t.modifiers[n](o, e[n]), s(o.name === r.name, "Cannot change rule name");
-								a._rules[i] = o, a._singleRules.get(o.name) === r && a._singleRules.set(o.name, o);
+							for (let o = r; o < a._rules.length; ++o) {
+								const r = a._rules[o], i = n(r);
+								for (const n of Object.keys(e)) t.modifiers[n](i, e[n]), s(i.name === r.name, "Cannot change rule name");
+								a._rules[o] = i, a._singleRules.get(i.name) === r && a._singleRules.set(i.name, i);
 							}
 							return a.$_temp.ruleset = !1, a.$_mutateRebuild();
 						}
@@ -342,7 +342,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 						$_addRule(e) {
 							"string" == typeof e && (e = { name: e }), s(e && "object" == typeof e, "Invalid options"), s(e.name && "string" == typeof e.name, "Invalid rule name");
-							for (const t in e) s("_" !== t[0], "Cannot set private rule properties");
+							for (const t of Object.keys(e)) s("_" !== t[0], "Cannot set private rule properties");
 							const t = Object.assign({}, e);
 							t._resolve = [], t.method = t.method || t.name;
 							const r = this._definition.rules[t.method], n = t.args;
@@ -350,17 +350,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const a = this.clone();
 							if (n) {
 								s(1 === Object.keys(n).length || Object.keys(n).length === this._definition.rules[t.name].args.length, "Invalid rule definition for", this.type, t.name);
-								for (const e in n) {
-									let i = n[e];
+								for (const e of Object.keys(n)) {
+									let o = n[e];
 									if (r.argsByName) {
-										const o = r.argsByName.get(e);
-										if (o.ref && l.isResolvable(i)) t._resolve.push(e), a.$_mutateRegister(i);
-										else if (o.normalize && (i = o.normalize(i), n[e] = i), o.assert) {
-											const t = l.validateArg(i, e, o);
+										const i = r.argsByName.get(e);
+										if (i.ref && l.isResolvable(o)) t._resolve.push(e), a.$_mutateRegister(o);
+										else if (i.normalize && (o = i.normalize(o), n[e] = o), i.assert) {
+											const t = l.validateArg(o, e, i);
 											s(!t, t, "or reference");
 										}
 									}
-									void 0 !== i ? n[e] = i : delete n[e];
+									void 0 !== o ? n[e] = o : delete n[e];
 								}
 							}
 							return r.multi || (a._ruleRemove(t.name, { clone: !1 }), a._singleRules.set(t.name, t)), !1 === a.$_temp.ruleset && (a.$_temp.ruleset = null), r.priority ? a._rules.unshift(t) : a._rules.push(t), a;
@@ -369,8 +369,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							return c.schema(this.$_root, e, t);
 						}
 						$_createError(e, t, r, s, n, a = {}) {
-							const i = !1 !== a.flags ? this._flags : {}, o = a.messages ? h.merge(this._definition.messages, a.messages) : this._definition.messages;
-							return new u.Report(e, t, r, i, o, s, n);
+							const o = !1 !== a.flags ? this._flags : {}, i = a.messages ? h.merge(this._definition.messages, a.messages) : this._definition.messages;
+							return new u.Report(e, t, r, o, i, s, n);
 						}
 						$_getFlag(e) {
 							return this._flags[e];
@@ -419,8 +419,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							s("_" === e[0] || !this._inRuleset(), "Cannot set flag inside a ruleset");
 							const n = this._definition.flags[e] || {};
 							if (a(t, n.default) && (t = void 0), a(t, this._flags[e])) return this;
-							const i = !1 !== r.clone ? this.clone() : this;
-							return void 0 !== t ? (i._flags[e] = t, i.$_mutateRegister(t)) : delete i._flags[e], "_" !== e[0] && (i.$_temp.ruleset = !1), i;
+							const o = !1 !== r.clone ? this.clone() : this;
+							return void 0 !== t ? (o._flags[e] = t, o.$_mutateRegister(t)) : delete o._flags[e], "_" !== e[0] && (o.$_temp.ruleset = !1), o;
 						}
 						$_parent(e, ...t) {
 							return this[e][l.symbols.parent].call(this, ...t);
@@ -430,16 +430,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 						_assign(e) {
 							e.type = this.type, e.$_root = this.$_root, e.$_temp = Object.assign({}, this.$_temp), e.$_temp.whens = {}, e._ids = this._ids.clone(), e._preferences = this._preferences, e._valids = this._valids && this._valids.clone(), e._invalids = this._invalids && this._invalids.clone(), e._rules = this._rules.slice(), e._singleRules = n(this._singleRules, { shallow: !0 }), e._refs = this._refs.clone(), e._flags = Object.assign({}, this._flags), e._cache = null, e.$_terms = {};
-							for (const t in this.$_terms) e.$_terms[t] = this.$_terms[t] ? this.$_terms[t].slice() : null;
-							e.$_super = {};
-							for (const t in this.$_super) e.$_super[t] = this._super[t].bind(e);
+							for (const t of Object.keys(this.$_terms)) e.$_terms[t] = this.$_terms[t] ? this.$_terms[t].slice() : null;
+							if (e.$_super = {}, this.$_super) for (const t of Object.keys(this.$_super)) e.$_super[t] = this._super[t].bind(e);
 							return e;
 						}
 						_bare() {
 							const e = this.clone();
 							e._reset();
 							const t = e._definition.terms;
-							for (const r in t) {
+							for (const r of Object.keys(t)) {
 								const s = t[r];
 								e.$_terms[r] = s.init;
 							}
@@ -455,27 +454,27 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							if (!this.$_terms.whens) return { schema: this };
 							const s = [], n = [];
 							for (let a = 0; a < this.$_terms.whens.length; ++a) {
-								const i = this.$_terms.whens[a];
-								if (i.concat) {
-									s.push(i.concat), n.push(`${a}.concat`);
+								const o = this.$_terms.whens[a];
+								if (o.concat) {
+									s.push(o.concat), n.push(`${a}.concat`);
 									continue;
 								}
-								const o = i.ref ? i.ref.resolve(e, t, r) : e, l = i.is ? [i] : i.switch, c = n.length;
+								const i = o.ref ? o.ref.resolve(e, t, r) : e, l = o.is ? [o] : o.switch, c = n.length;
 								for (let c = 0; c < l.length; ++c) {
-									const { is: u, then: f, otherwise: m } = l[c], h = `${a}${i.switch ? "." + c : ""}`;
-									if (u.$_match(o, t.nest(u, `${h}.is`), r)) {
+									const { is: u, then: f, otherwise: m } = l[c], h = `${a}${o.switch ? "." + c : ""}`;
+									if (u.$_match(i, t.nest(u, `${h}.is`), r)) {
 										if (f) {
-											const a = t.localize([...t.path, `${h}.then`], t.ancestors, t.schemas), { schema: i, id: o } = f._generate(e, a, r);
-											s.push(i), n.push(`${h}.then${o ? `(${o})` : ""}`);
+											const a = t.localize([...t.path, `${h}.then`], t.ancestors, t.schemas), { schema: o, id: i } = f._generate(e, a, r);
+											s.push(o), n.push(`${h}.then${i ? `(${i})` : ""}`);
 											break;
 										}
 									} else if (m) {
-										const a = t.localize([...t.path, `${h}.otherwise`], t.ancestors, t.schemas), { schema: i, id: o } = m._generate(e, a, r);
-										s.push(i), n.push(`${h}.otherwise${o ? `(${o})` : ""}`);
+										const a = t.localize([...t.path, `${h}.otherwise`], t.ancestors, t.schemas), { schema: o, id: i } = m._generate(e, a, r);
+										s.push(o), n.push(`${h}.otherwise${i ? `(${i})` : ""}`);
 										break;
 									}
 								}
-								if (i.break && n.length > c) break;
+								if (o.break && n.length > c) break;
 							}
 							const a = n.join(", ");
 							if (t.mainstay.tracer.debug(t, "rule", "when", a), !a) return { schema: this };
@@ -483,11 +482,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								schema: this.$_temp.whens[a],
 								id: a
 							};
-							let i = this;
-							this._definition.generate && (i = this._definition.generate(this, e, t, r));
-							for (const e of s) i = i.concat(e);
-							return this.$_root._tracer && this.$_root._tracer._combine(i, [this, ...s]), this.$_temp.whens[a] = i, {
-								schema: i,
+							let o = this;
+							this._definition.generate && (o = this._definition.generate(this, e, t, r));
+							for (const e of s) o = o.concat(e);
+							return this.$_root._tracer && this.$_root._tracer._combine(o, [this, ...s]), this.$_temp.whens[a] = o, {
+								schema: o,
 								id: a
 							};
 						}
@@ -553,24 +552,24 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2130(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n } = r(3115), a = r(9415), i = {
+				const { assert: s, clone: n } = r(3115), a = r(9415), o = {
 					max: 1e3,
-					supported: new Set([
+					supported: /* @__PURE__ */ new Set([
 						"undefined",
 						"boolean",
 						"number",
 						"string"
 					])
 				};
-				t.provider = { provision: (e) => new i.Cache(e) }, i.Cache = class {
+				t.provider = { provision: (e) => new o.Cache(e) }, o.Cache = class {
 					constructor(e = {}) {
-						a.assertOptions(e, ["max"]), s(void 0 === e.max || e.max && e.max > 0 && isFinite(e.max), "Invalid max cache size"), this._max = e.max || i.max, this._map = /* @__PURE__ */ new Map(), this._list = new i.List();
+						a.assertOptions(e, ["max"]), s(void 0 === e.max || e.max && e.max > 0 && isFinite(e.max), "Invalid max cache size"), this._max = e.max || o.max, this._map = /* @__PURE__ */ new Map(), this._list = new o.List();
 					}
 					get length() {
 						return this._map.size;
 					}
 					set(e, t) {
-						if (null !== e && !i.supported.has(typeof e)) return;
+						if (null !== e && !o.supported.has(typeof e)) return;
 						let r = this._map.get(e);
 						if (r) return r.value = t, void this._list.first(r);
 						r = this._list.unshift({
@@ -588,7 +587,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							this._map.delete(e.key);
 						}
 					}
-				}, i.List = class {
+				}, o.List = class {
 					constructor() {
 						this.tail = null, this.head = null;
 					}
@@ -610,7 +609,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			9415(e, t, r) {
 				"use strict";
 				const { assert: s, AssertError: n } = r(3115), a = r(6913);
-				let i, o;
+				let o, i;
 				const l = { isoDate: /^(?:[-+]\d{2})?(?:\d{4}(?!\d{2}\b))(?:(-?)(?:(?:0[1-9]|1[0-2])(?:\1(?:[12]\d|0[1-9]|3[01]))?|W(?:[0-4]\d|5[0-2])(?:-?[1-7])?|(?:00[1-9]|0[1-9]\d|[12]\d{2}|3(?:[0-5]\d|6[1-6])))(?![T]$|[T][\d]+Z$)(?:[T\s](?:(?:(?:[01]\d|2[0-3])(?:(:?)[0-5]\d)?|24\:?00)(?:[.,]\d+(?!:))?)(?:\2[0-5]\d(?:[.,]\d+)?)?(?:[Z]|(?:[+-])(?:[01]\d|2[0-3])(?::?[0-5]\d)?)?)?)?$/ };
 				t.version = a.version, t.defaults = {
 					abortEarly: !0,
@@ -656,8 +655,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					const n = Object.keys(e).filter((e) => !t.includes(e));
 					s(0 === n.length, `${r} contain unknown keys: ${n}`);
 				}, t.checkPreferences = function(e) {
-					o = o || r(1688);
-					const t = o.preferences.validate(e);
+					i = i || r(1688);
+					const t = i.preferences.validate(e);
 					if (t.error) throw new n([t.error.details[0].message]);
 				}, t.compare = function(e, t, r) {
 					switch (r) {
@@ -688,9 +687,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}, t.limit = function(e) {
 					return Number.isSafeInteger(e) && e >= 0;
 				}, t.preferences = function(e, s) {
-					i = i || r(6162), e = e || {}, s = s || {};
+					o = o || r(6162), e = e || {}, s = s || {};
 					const n = Object.assign({}, e, s);
-					return s.errors && e.errors && (n.errors = Object.assign({}, e.errors, s.errors), n.errors.wrap = Object.assign({}, e.errors.wrap, s.errors.wrap)), s.messages && (n.messages = i.compile(s.messages, e.messages)), delete n[t.symbols.prefs], n;
+					return s.errors && e.errors && (n.errors = Object.assign({}, e.errors, s.errors), n.errors.wrap = Object.assign({}, e.errors.wrap, s.errors.wrap)), s.messages && (n.messages = o.compile(s.messages, e.messages)), delete n[t.symbols.prefs], n;
 				}, t.tryWithPath = function(e, t, r = {}) {
 					try {
 						return e();
@@ -710,23 +709,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			3541(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(9415), a = r(8529), i = {};
+				const { assert: s } = r(3115), n = r(9415), a = r(8529), o = {};
 				t.schema = function(e, t, r = {}) {
 					n.assertOptions(r, ["appendPath", "override"]);
 					try {
-						return i.schema(e, t, r);
+						return o.schema(e, t, r);
 					} catch (e) {
 						throw r.appendPath && void 0 !== e.path && (e.message = `${e.message} (${e.path})`), e;
 					}
-				}, i.schema = function(e, t, r) {
+				}, o.schema = function(e, t, r) {
 					s(void 0 !== t, "Invalid undefined schema"), Array.isArray(t) && (s(t.length, "Invalid empty array schema"), 1 === t.length && (t = t[0]));
 					const a = (t, ...s) => !1 !== r.override ? t.valid(e.override, ...s) : t.valid(...s);
-					if (i.simple(t)) return a(e, t);
+					if (o.simple(t)) return a(e, t);
 					if ("function" == typeof t) return e.custom(t);
 					if (s("object" == typeof t, "Invalid schema content:", typeof t), n.isResolvable(t)) return a(e, t);
 					if (n.isSchema(t)) return t;
 					if (Array.isArray(t)) {
-						for (const r of t) if (!i.simple(r)) return e.alternatives().try(...t);
+						for (const r of t) if (!o.simple(r)) return e.alternatives().try(...t);
 						return a(e, ...t);
 					}
 					return t instanceof RegExp ? e.string().regex(t) : t instanceof Date ? a(e.date(), t) : (s(Object.getPrototypeOf(t) === Object.getPrototypeOf({}), "Schema can only contain plain objects"), e.object().keys(t));
@@ -734,16 +733,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return a.isRef(e) ? e : a.create(e, t);
 				}, t.compile = function(e, r, a = {}) {
 					n.assertOptions(a, ["legacy"]);
-					const o = r && r[n.symbols.any];
-					if (o) return s(a.legacy || o.version === n.version, "Cannot mix different versions of joi schemas:", o.version, n.version), r;
+					const i = r && r[n.symbols.any];
+					if (i) return s(a.legacy || i.version === n.version, "Cannot mix different versions of joi schemas:", i.version, n.version), r;
 					if ("object" != typeof r || !a.legacy) return t.schema(e, r, { appendPath: !0 });
-					const l = i.walk(r);
+					const l = o.walk(r);
 					return l ? l.compile(l.root, r) : t.schema(e, r, { appendPath: !0 });
-				}, i.walk = function(e) {
+				}, o.walk = function(e) {
 					if ("object" != typeof e) return null;
 					if (Array.isArray(e)) {
 						for (const t of e) {
-							const e = i.walk(t);
+							const e = o.walk(t);
 							if (e) return e;
 						}
 						return null;
@@ -754,41 +753,41 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						compile: t.compile
 					};
 					s(Object.getPrototypeOf(e) === Object.getPrototypeOf({}), "Schema can only contain plain objects");
-					for (const t in e) {
-						const r = i.walk(e[t]);
+					for (const t of Object.keys(e)) {
+						const r = o.walk(e[t]);
 						if (r) return r;
 					}
 					return null;
-				}, i.simple = function(e) {
+				}, o.simple = function(e) {
 					return null === e || [
 						"boolean",
 						"string",
 						"number"
 					].includes(typeof e);
-				}, t.when = function(e, r, o) {
-					if (void 0 === o && (s(r && "object" == typeof r, "Missing options"), o = r, r = a.create(".")), Array.isArray(o) && (o = { switch: o }), n.assertOptions(o, [
+				}, t.when = function(e, r, i) {
+					if (void 0 === i && (s(r && "object" == typeof r, "Missing options"), i = r, r = a.create(".")), Array.isArray(i) && (i = { switch: i }), n.assertOptions(i, [
 						"is",
 						"not",
 						"then",
 						"otherwise",
 						"switch",
 						"break"
-					]), n.isSchema(r)) return s(void 0 === o.is, "\"is\" can not be used with a schema condition"), s(void 0 === o.not, "\"not\" can not be used with a schema condition"), s(void 0 === o.switch, "\"switch\" can not be used with a schema condition"), i.condition(e, {
+					]), n.isSchema(r)) return s(void 0 === i.is, "\"is\" can not be used with a schema condition"), s(void 0 === i.not, "\"not\" can not be used with a schema condition"), s(void 0 === i.switch, "\"switch\" can not be used with a schema condition"), o.condition(e, {
 						is: r,
-						then: o.then,
-						otherwise: o.otherwise,
-						break: o.break
+						then: i.then,
+						otherwise: i.otherwise,
+						break: i.break
 					});
-					if (s(a.isRef(r) || "string" == typeof r, "Invalid condition:", r), s(void 0 === o.not || void 0 === o.is, "Cannot combine \"is\" with \"not\""), void 0 === o.switch) {
-						let l = o;
-						void 0 !== o.not && (l = {
-							is: o.not,
-							then: o.otherwise,
-							otherwise: o.then,
-							break: o.break
+					if (s(a.isRef(r) || "string" == typeof r, "Invalid condition:", r), s(void 0 === i.not || void 0 === i.is, "Cannot combine \"is\" with \"not\""), void 0 === i.switch) {
+						let l = i;
+						void 0 !== i.not && (l = {
+							is: i.not,
+							then: i.otherwise,
+							otherwise: i.then,
+							break: i.break
 						});
 						let c = void 0 !== l.is ? e.$_compile(l.is) : e.$_root.invalid(null, !1, 0, "").required();
-						return s(void 0 !== l.then || void 0 !== l.otherwise, "options must have at least one of \"then\", \"otherwise\", or \"switch\""), s(void 0 === l.break || void 0 === l.then || void 0 === l.otherwise, "Cannot specify then, otherwise, and break all together"), void 0 === o.is || a.isRef(o.is) || n.isSchema(o.is) || (c = c.required()), i.condition(e, {
+						return s(void 0 !== l.then || void 0 !== l.otherwise, "options must have at least one of \"then\", \"otherwise\", or \"switch\""), s(void 0 === l.break || void 0 === l.then || void 0 === l.otherwise, "Cannot specify then, otherwise, and break all together"), void 0 === i.is || a.isRef(i.is) || n.isSchema(i.is) || (c = c.required()), o.condition(e, {
 							ref: t.ref(r),
 							is: c,
 							then: l.then,
@@ -796,15 +795,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							break: l.break
 						});
 					}
-					s(Array.isArray(o.switch), "\"switch\" must be an array"), s(void 0 === o.is, "Cannot combine \"switch\" with \"is\""), s(void 0 === o.not, "Cannot combine \"switch\" with \"not\""), s(void 0 === o.then, "Cannot combine \"switch\" with \"then\"");
+					s(Array.isArray(i.switch), "\"switch\" must be an array"), s(void 0 === i.is, "Cannot combine \"switch\" with \"is\""), s(void 0 === i.not, "Cannot combine \"switch\" with \"not\""), s(void 0 === i.then, "Cannot combine \"switch\" with \"then\"");
 					const l = {
 						ref: t.ref(r),
 						switch: [],
-						break: o.break
+						break: i.break
 					};
-					for (let t = 0; t < o.switch.length; ++t) {
-						const r = o.switch[t], i = t === o.switch.length - 1;
-						n.assertOptions(r, i ? [
+					for (let t = 0; t < i.switch.length; ++t) {
+						const r = i.switch[t], o = t === i.switch.length - 1;
+						n.assertOptions(r, o ? [
 							"is",
 							"then",
 							"otherwise"
@@ -813,15 +812,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							is: e.$_compile(r.is),
 							then: e.$_compile(r.then)
 						};
-						if (a.isRef(r.is) || n.isSchema(r.is) || (c.is = c.is.required()), i) {
-							s(void 0 === o.otherwise || void 0 === r.otherwise, "Cannot specify \"otherwise\" inside and outside a \"switch\"");
-							const t = void 0 !== o.otherwise ? o.otherwise : r.otherwise;
+						if (a.isRef(r.is) || n.isSchema(r.is) || (c.is = c.is.required()), o) {
+							s(void 0 === i.otherwise || void 0 === r.otherwise, "Cannot specify \"otherwise\" inside and outside a \"switch\"");
+							const t = void 0 !== i.otherwise ? i.otherwise : r.otherwise;
 							void 0 !== t && (s(void 0 === l.break, "Cannot specify both otherwise and break"), c.otherwise = e.$_compile(t));
 						}
 						l.switch.push(c);
 					}
 					return l;
-				}, i.condition = function(e, t) {
+				}, o.condition = function(e, t) {
 					for (const r of ["then", "otherwise"]) void 0 === t[r] ? delete t[r] : t[r] = e.$_compile(t[r]);
 					return t;
 				};
@@ -830,8 +829,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				"use strict";
 				const s = r(554), n = r(9415), a = r(1532);
 				t.Report = class {
-					constructor(e, r, s, n, a, i, o) {
-						if (this.code = e, this.flags = n, this.messages = a, this.path = i.path, this.prefs = o, this.state = i, this.value = r, this.message = null, this.template = null, this.local = s || {}, this.local.label = t.label(this.flags, this.state, this.prefs, this.messages), void 0 === this.value || this.local.hasOwnProperty("value") || (this.local.value = this.value), this.path.length) {
+					constructor(e, r, s, n, a, o, i) {
+						if (this.code = e, this.flags = n, this.messages = a, this.path = o.path, this.prefs = i, this.state = o, this.value = r, this.message = null, this.template = null, this.local = s || {}, this.local.label = t.label(this.flags, this.state, this.prefs, this.messages), void 0 === this.value || this.local.hasOwnProperty("value") || (this.local.value = this.value), this.path.length) {
 							const e = this.path[this.path.length - 1];
 							"object" != typeof e && (this.local.key = e);
 						}
@@ -859,13 +858,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					let t = "";
 					for (const r of e) "object" != typeof r && ("string" == typeof r ? (t && (t += "."), t += r) : t += `[${r}]`);
 					return t;
-				}, t.template = function(e, t, r, s, i) {
+				}, t.template = function(e, t, r, s, o) {
 					if (!t) return;
 					if (a.isTemplate(t)) return "root" !== r ? t : null;
-					let o = i.errors.language;
-					if (n.isResolvable(o) && (o = o.resolve(e, s, i)), o && t[o]) {
-						if (void 0 !== t[o][r]) return t[o][r];
-						if (void 0 !== t[o]["*"]) return t[o]["*"];
+					let i = o.errors.language;
+					if (n.isResolvable(i) && (i = i.resolve(e, s, o)), i && t[i]) {
+						if (void 0 !== t[i][r]) return t[i][r];
+						if (void 0 !== t[i]["*"]) return t[i]["*"];
 					}
 					return t[r] ? t[r] : t["*"];
 				}, t.label = function(e, r, s, n) {
@@ -876,13 +875,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return t.path(a) || t.template(null, s.messages, "root", r, s) || n && t.template(null, n, "root", r, s) || "value";
 				}, t.process = function(e, r, s) {
 					if (!e) return null;
-					const { override: n, message: a, details: i } = t.details(e);
+					const { override: n, message: a, details: o } = t.details(e);
 					if (n) return n;
-					if (s.errors.stack) return new t.ValidationError(a, i, r);
-					const o = Error.stackTraceLimit;
+					if (s.errors.stack) return new t.ValidationError(a, o, r);
+					const i = Error.stackTraceLimit;
 					Error.stackTraceLimit = 0;
-					const l = new t.ValidationError(a, i, r);
-					return Error.stackTraceLimit = o, l;
+					const l = new t.ValidationError(a, o, r);
+					return Error.stackTraceLimit = i, l;
 				}, t.details = function(e, t = {}) {
 					let r = [];
 					const s = [];
@@ -920,23 +919,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2062(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n } = r(3115), a = r(9415), i = r(6162), o = {};
+				const { assert: s, clone: n } = r(3115), a = r(9415), o = r(6162), i = {};
 				t.type = function(e, t) {
 					const r = Object.getPrototypeOf(e), l = n(r), c = e._assign(Object.create(l)), u = Object.assign({}, t);
 					delete u.base, l._definition = u;
 					const f = r._definition || {};
-					u.messages = i.merge(f.messages, u.messages), u.properties = Object.assign({}, f.properties, u.properties), c.type = u.type, u.flags = Object.assign({}, f.flags, u.flags);
+					u.messages = o.merge(f.messages, u.messages), u.properties = Object.assign({}, f.properties, u.properties), c.type = u.type, u.flags = Object.assign({}, f.flags, u.flags);
 					const m = Object.assign({}, f.terms);
-					if (u.terms) for (const e in u.terms) {
+					if (u.terms) for (const e of Object.keys(u.terms)) {
 						const t = u.terms[e];
 						s(void 0 === c.$_terms[e], "Invalid term override for", u.type, e), c.$_terms[e] = t.init, m[e] = t;
 					}
-					u.terms = m, u.args || (u.args = f.args), u.prepare = o.prepare(u.prepare, f.prepare), u.coerce && ("function" == typeof u.coerce && (u.coerce = { method: u.coerce }), u.coerce.from && !Array.isArray(u.coerce.from) && (u.coerce = {
+					u.terms = m, u.args || (u.args = f.args), u.prepare = i.prepare(u.prepare, f.prepare), u.coerce && ("function" == typeof u.coerce && (u.coerce = { method: u.coerce }), u.coerce.from && !Array.isArray(u.coerce.from) && (u.coerce = {
 						method: u.coerce.method,
 						from: [].concat(u.coerce.from)
-					})), u.coerce = o.coerce(u.coerce, f.coerce), u.validate = o.validate(u.validate, f.validate);
+					})), u.coerce = i.coerce(u.coerce, f.coerce), u.validate = i.validate(u.validate, f.validate);
 					const h = Object.assign({}, f.rules);
-					if (u.rules) for (const e in u.rules) {
+					if (u.rules) for (const e of Object.keys(u.rules)) {
 						const t = u.rules[e];
 						s("object" == typeof t, "Invalid rule definition for", u.type, e);
 						let r = t.method;
@@ -950,7 +949,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					u.rules = h, u.jsonSchema || (u.jsonSchema = f.jsonSchema);
 					const p = Object.assign({}, f.modifiers);
-					if (u.modifiers) for (const e in u.modifiers) {
+					if (u.modifiers) for (const e of Object.keys(u.modifiers)) {
 						s(!l[e], "Rule conflict in", u.type, e);
 						const t = u.modifiers[e];
 						s("function" == typeof t, "Invalid modifier definition for", u.type, e);
@@ -961,19 +960,19 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					if (u.modifiers = p, u.overrides) {
 						l._super = r, c.$_super = {};
-						for (const e in u.overrides) s(r[e], "Cannot override missing", e), u.overrides[e][a.symbols.parent] = r[e], c.$_super[e] = r[e].bind(c);
+						for (const e of Object.keys(u.overrides)) s(r[e], "Cannot override missing", e), u.overrides[e][a.symbols.parent] = r[e], c.$_super[e] = r[e].bind(c);
 						Object.assign(l, u.overrides);
 					}
 					u.cast = Object.assign({}, f.cast, u.cast);
 					const d = Object.assign({}, f.manifest, u.manifest);
-					return d.build = o.build(u.manifest && u.manifest.build, f.manifest && f.manifest.build), u.manifest = d, u.rebuild = o.rebuild(u.rebuild, f.rebuild), c;
-				}, o.build = function(e, t) {
+					return d.build = i.build(u.manifest && u.manifest.build, f.manifest && f.manifest.build), u.manifest = d, u.rebuild = i.rebuild(u.rebuild, f.rebuild), c;
+				}, i.build = function(e, t) {
 					return e && t ? function(r, s) {
 						return t(e(r, s), s);
 					} : e || t;
-				}, o.coerce = function(e, t) {
+				}, i.coerce = function(e, t) {
 					return e && t ? {
-						from: e.from && t.from ? [...new Set([...e.from, ...t.from])] : null,
+						from: e.from && t.from ? [.../* @__PURE__ */ new Set([...e.from, ...t.from])] : null,
 						method(r, s) {
 							let n;
 							if ((!t.from || t.from.includes(typeof r)) && (n = t.method(r, s), n)) {
@@ -987,7 +986,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							return n;
 						}
 					} : e || t;
-				}, o.prepare = function(e, t) {
+				}, i.prepare = function(e, t) {
 					return e && t ? function(r, s) {
 						const n = e(r, s);
 						if (n) {
@@ -996,11 +995,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 						return t(r, s) || n;
 					} : e || t;
-				}, o.rebuild = function(e, t) {
+				}, i.rebuild = function(e, t) {
 					return e && t ? function(r) {
 						t(r), e(r);
 					} : e || t;
-				}, o.validate = function(e, t) {
+				}, i.validate = function(e, t) {
 					return e && t ? function(r, s) {
 						const n = t(r, s);
 						if (n) {
@@ -1013,7 +1012,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			1100(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n } = r(3115), a = r(2130), i = r(9415), o = r(3541), l = r(8013), c = r(2062), u = r(9017), f = r(8529), m = r(1532), h = r(125);
+				const { assert: s, clone: n } = r(3115), a = r(2130), o = r(9415), i = r(3541), l = r(8013), c = r(2062), u = r(9017), f = r(8529), m = r(1532), h = r(125);
 				let p;
 				const d = {
 					types: {
@@ -1065,13 +1064,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							return this.any()[t](...e);
 						};
 						Object.assign(e, d.methods);
-						for (const t in d.aliases) e[t] = e[d.aliases[t]];
+						for (const t of Object.keys(d.aliases)) e[t] = e[d.aliases[t]];
 						return e.x = e.expression, h.setup && h.setup(e), e;
 					}
 				};
 				d.methods = {
 					ValidationError: l.ValidationError,
-					version: i.version,
+					version: o.version,
 					cache: a.provider,
 					assert(e, t, ...r) {
 						d.assert(e, t, !0, r);
@@ -1081,17 +1080,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						return s("function" == typeof u.build, "Manifest functionality disabled"), u.build(this, e);
 					},
 					checkPreferences(e) {
-						i.checkPreferences(e);
+						o.checkPreferences(e);
 					},
 					compile(e, t) {
-						return o.compile(this, e, t);
+						return i.compile(this, e, t);
 					},
 					defaults(e) {
 						s("function" == typeof e, "modifier must be a function");
 						const t = Object.assign({}, this);
 						for (const r of t._types) {
 							const n = e(t[r]());
-							s(i.isSchema(n), "modifier must return a valid schema object"), t[r] = function(...e) {
+							s(o.isSchema(n), "modifier must return a valid schema object"), t[r] = function(...e) {
 								return d.generate(this, n, e);
 							};
 						}
@@ -1099,7 +1098,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					expression: (...e) => new m(...e),
 					extend(...e) {
-						i.verifyFlat(e, "extend"), p = p || r(1688), s(e.length, "You need to provide at least one extension"), this.assert(e, p.extensions);
+						o.verifyFlat(e, "extend"), p = p || r(1688), s(e.length, "You need to provide at least one extension"), this.assert(e, p.extensions);
 						const t = Object.assign({}, this);
 						t._types = new Set(t._types);
 						for (let r of e) {
@@ -1118,18 +1117,18 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					isError: l.ValidationError.isError,
 					isExpression: m.isTemplate,
 					isRef: f.isRef,
-					isSchema: i.isSchema,
+					isSchema: o.isSchema,
 					in: (...e) => f.in(...e),
-					override: i.symbols.override,
+					override: o.symbols.override,
 					ref: (...e) => f.create(...e),
 					types() {
 						const e = {};
 						for (const t of this._types) e[t] = this[t]();
-						for (const t in d.aliases) e[t] = this[t]();
+						for (const t of Object.keys(d.aliases)) e[t] = this[t]();
 						return e;
 					}
 				}, d.assert = function(e, t, r, s) {
-					const a = s[0] instanceof Error || "string" == typeof s[0] ? s[0] : null, o = null !== a ? s[1] : s[0], c = t.validate(e, i.preferences({ errors: { stack: !0 } }, o || {}));
+					const a = s[0] instanceof Error || "string" == typeof s[0] ? s[0] : null, i = null !== a ? s[1] : s[0], c = t.validate(e, o.preferences({ errors: { stack: !0 } }, i || {}));
 					let u = c.error;
 					if (!u) return c.value;
 					if (a instanceof Error) throw a;
@@ -1154,7 +1153,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if ("string" == typeof e) return s(!t, "Cannot set single message string"), new a(e);
 					if (a.isTemplate(e)) return s(!t, "Cannot set single message template"), e;
 					s("object" == typeof e && !Array.isArray(e), "Invalid message options"), t = t ? n(t) : {};
-					for (let r in e) {
+					for (const r of Object.keys(e)) {
 						const n = e[r];
 						if ("root" === r || a.isTemplate(n)) {
 							t[r] = n;
@@ -1165,16 +1164,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						s("object" == typeof n && !Array.isArray(n), "Invalid message for", r);
-						const i = r;
-						for (r in t[i] = t[i] || {}, n) {
-							const e = n[r];
-							"root" === r || a.isTemplate(e) ? t[i][r] = e : (s("string" == typeof e, "Invalid message for", r, "in", i), t[i][r] = new a(e));
+						const o = r;
+						t[o] = t[o] || {};
+						for (const e of Object.keys(n)) {
+							const r = n[e];
+							"root" === e || a.isTemplate(r) ? t[o][e] = r : (s("string" == typeof r, "Invalid message for", e, "in", o), t[o][e] = new a(r));
 						}
 					}
 					return t;
 				}, t.decompile = function(e) {
 					const t = {};
-					for (let r in e) {
+					for (const r of Object.keys(e)) {
 						const s = e[r];
 						if ("root" === r) {
 							t.root = s;
@@ -1185,9 +1185,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						const n = r;
-						for (r in t[n] = {}, s) {
-							const e = s[r];
-							"root" !== r ? t[n][r] = e.describe({ compact: !0 }) : t[n].root = e;
+						t[n] = {};
+						for (const e of Object.keys(s)) {
+							const r = s[e];
+							"root" !== e ? t[n][e] = r.describe({ compact: !0 }) : t[n].root = r;
 						}
 					}
 					return t;
@@ -1196,36 +1197,37 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if (!r) return e;
 					if ("string" == typeof r) return new a(r);
 					if (a.isTemplate(r)) return r;
-					const i = n(e);
-					for (let e in r) {
+					const o = n(e);
+					for (const e of Object.keys(r)) {
 						const t = r[e];
 						if ("root" === e || a.isTemplate(t)) {
-							i[e] = t;
+							o[e] = t;
 							continue;
 						}
 						if ("string" == typeof t) {
-							i[e] = new a(t);
+							o[e] = new a(t);
 							continue;
 						}
 						s("object" == typeof t && !Array.isArray(t), "Invalid message for", e);
 						const n = e;
-						for (e in i[n] = i[n] || {}, t) {
+						o[n] = o[n] || {};
+						for (const e of Object.keys(t)) {
 							const r = t[e];
-							"root" === e || a.isTemplate(r) ? i[n][e] = r : (s("string" == typeof r, "Invalid message for", e, "in", n), i[n][e] = new a(r));
+							"root" === e || a.isTemplate(r) ? o[n][e] = r : (s("string" == typeof r, "Invalid message for", e, "in", n), o[n][e] = new a(r));
 						}
 					}
-					return i;
+					return o;
 				};
 			},
 			5844(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(9415), a = r(8529), i = {};
-				t.Ids = i.Ids = class {
+				const { assert: s } = r(3115), n = r(9415), a = r(8529), o = {};
+				t.Ids = o.Ids = class {
 					constructor() {
 						this._byId = /* @__PURE__ */ new Map(), this._byKey = /* @__PURE__ */ new Map(), this._schemaChain = !1;
 					}
 					clone() {
-						const e = new i.Ids();
+						const e = new o.Ids();
 						return e._byId = new Map(this._byId), e._byKey = new Map(this._byKey), e._schemaChain = this._schemaChain, e;
 					}
 					concat(e) {
@@ -1236,15 +1238,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					fork(e, t, r) {
 						const a = this._collect(e);
 						a.push({ schema: r });
-						const o = a.shift();
+						const i = a.shift();
 						let l = {
-							id: o.id,
-							schema: t(o.schema)
+							id: i.id,
+							schema: t(i.schema)
 						};
 						s(n.isSchema(l.schema), "adjuster function failed to return a joi schema type");
 						for (const e of a) l = {
 							id: e.id,
-							schema: i.fork(e.schema, l.id, l.schema)
+							schema: o.fork(e.schema, l.id, l.schema)
 						};
 						return l.schema;
 					}
@@ -1282,13 +1284,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					_collect(e, t = [], r = []) {
 						const n = e[0], a = this._get(n);
 						s(a, "Schema does not contain path", [...t, ...e].join(".")), r = [a, ...r];
-						const i = e.slice(1);
-						return i.length ? a.schema._ids._collect(i, [...t, n], r) : r;
+						const o = e.slice(1);
+						return o.length ? a.schema._ids._collect(o, [...t, n], r) : r;
 					}
 					_get(e) {
 						return this._byId.get(e) || this._byKey.get(e);
 					}
-				}, i.fork = function(e, r, s) {
+				}, o.fork = function(e, r, s) {
 					const n = t.schema(e, {
 						each: (e, { key: t }) => {
 							if (r === (e._flags.id || t)) return s;
@@ -1298,16 +1300,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return n ? n.$_mutateRebuild() : e;
 				}, t.schema = function(e, t) {
 					let r;
-					for (const s in e._flags) {
+					for (const s of Object.keys(e._flags)) {
 						if ("_" === s[0]) continue;
-						const n = i.scan(e._flags[s], {
+						const n = o.scan(e._flags[s], {
 							source: "flags",
 							name: s
 						}, t);
 						void 0 !== n && (r = r || e.clone(), r._flags[s] = n);
 					}
 					for (let s = 0; s < e._rules.length; ++s) {
-						const n = e._rules[s], a = i.scan(n.args, {
+						const n = e._rules[s], a = o.scan(n.args, {
 							source: "rules",
 							name: n.name
 						}, t);
@@ -1317,22 +1319,22 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							t.args = a, r._rules[s] = t, r._singleRules.get(n.name) === n && r._singleRules.set(n.name, t);
 						}
 					}
-					for (const s in e.$_terms) {
+					for (const s of Object.keys(e.$_terms)) {
 						if ("_" === s[0]) continue;
-						const n = i.scan(e.$_terms[s], {
+						const n = o.scan(e.$_terms[s], {
 							source: "terms",
 							name: s
 						}, t);
 						void 0 !== n && (r = r || e.clone(), r.$_terms[s] = n);
 					}
 					return r;
-				}, i.scan = function(e, t, r, s, o) {
+				}, o.scan = function(e, t, r, s, i) {
 					const l = s || [];
 					if (null === e || "object" != typeof e) return;
 					let c;
 					if (Array.isArray(e)) {
 						for (let s = 0; s < e.length; ++s) {
-							const n = "terms" === t.source && "keys" === t.name && e[s].key, a = i.scan(e[s], t, r, [s, ...l], n);
+							const n = "terms" === t.source && "keys" === t.name && e[s].key, a = o.scan(e[s], t, r, [s, ...l], n);
 							void 0 !== a && (c = c || e.slice(), c[s] = a);
 						}
 						return c;
@@ -1341,14 +1343,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const s = r.each(e, {
 							...t,
 							path: l,
-							key: o
+							key: i
 						});
 						if (s === e) return;
 						return s;
 					}
-					for (const s in e) {
+					for (const s of Object.keys(e)) {
 						if ("_" === s[0]) continue;
-						const n = i.scan(e[s], t, r, [s, ...l], o);
+						const n = o.scan(e[s], t, r, [s, ...l], i);
 						void 0 !== n && (c = c || Object.assign({}, e), c[s] = n);
 					}
 					return c;
@@ -1356,8 +1358,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			8529(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n, reach: a } = r(3115), i = r(9415);
-				let o;
+				const { assert: s, clone: n, reach: a } = r(3115), o = r(9415);
+				let i;
 				const l = {
 					symbol: Symbol("ref"),
 					defaults: {
@@ -1370,7 +1372,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 				};
 				t.create = function(e, t = {}) {
-					s("string" == typeof e, "Invalid reference key:", e), i.assertOptions(t, [
+					s("string" == typeof e, "Invalid reference key:", e), o.assertOptions(t, [
 						"adjust",
 						"ancestor",
 						"in",
@@ -1396,10 +1398,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						in: !0
 					});
 				}, t.isRef = function(e) {
-					return !!e && !!e[i.symbols.ref];
+					return !!e && !!e[o.symbols.ref];
 				}, l.Ref = class {
 					constructor(e) {
-						s("object" == typeof e, "Invalid reference construction"), i.assertOptions(e, [
+						s("object" == typeof e, "Invalid reference construction"), o.assertOptions(e, [
 							"adjust",
 							"ancestor",
 							"in",
@@ -1458,7 +1460,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const t = new Array(this.ancestor + 1).fill(this.separator).join("");
 						this.display = `ref:${t}${e || ""}`;
 					}
-				}, l.Ref.prototype[i.symbols.ref] = !0, t.build = function(e) {
+				}, l.Ref.prototype[o.symbols.ref] = !0, t.build = function(e) {
 					return "value" === (e = Object.assign({}, l.defaults, e)).type && void 0 === e.ancestor && (e.ancestor = 1), new l.Ref(e);
 				}, l.context = function(e, t, r = {}) {
 					if (e = e.trim(), r) {
@@ -1496,14 +1498,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					register(e, s) {
 						if (e) if (s = void 0 === s ? t.toParent : s, Array.isArray(e)) for (const t of e) this.register(t, s);
-						else if (i.isSchema(e)) for (const t of e._refs.refs) t.ancestor - s >= 0 && this.refs.push({
+						else if (o.isSchema(e)) for (const t of e._refs.refs) t.ancestor - s >= 0 && this.refs.push({
 							ancestor: t.ancestor - s,
 							root: t.root
 						});
 						else t.isRef(e) && "value" === e.type && e.ancestor - s >= 0 && this.refs.push({
 							ancestor: e.ancestor - s,
 							root: e.root
-						}), o = o || r(1532), o.isTemplate(e) && this.register(e.refs(), s);
+						}), i = i || r(1532), i.isTemplate(e) && this.register(e.refs(), s);
 					}
 					get length() {
 						return this.refs.length;
@@ -1727,21 +1729,21 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			4957(e, t, r) {
 				"use strict";
-				const { clone: s, reach: n } = r(3115), a = r(9415), i = { value: Symbol("value") };
-				e.exports = i.State = class {
+				const { clone: s, reach: n } = r(3115), a = r(9415), o = { value: Symbol("value") };
+				e.exports = o.State = class {
 					constructor(e, t, r) {
 						this.path = e, this.ancestors = t, this.mainstay = r.mainstay, this.schemas = r.schemas, this.debug = null;
 					}
 					localize(e, t = null, r = null) {
-						const s = new i.State(e, t, this);
-						return r && s.schemas && (s.schemas = [i.schemas(r), ...s.schemas]), s;
+						const s = new o.State(e, t, this);
+						return r && s.schemas && (s.schemas = [o.schemas(r), ...s.schemas]), s;
 					}
 					nest(e, t) {
-						const r = new i.State(this.path, this.ancestors, this);
-						return r.schemas = r.schemas && [i.schemas(e), ...r.schemas], r.debug = t, r;
+						const r = new o.State(this.path, this.ancestors, this);
+						return r.schemas = r.schemas && [o.schemas(e), ...r.schemas], r.debug = t, r;
 					}
 					shadow(e, t) {
-						this.mainstay.shadow = this.mainstay.shadow || new i.Shadow(), this.mainstay.shadow.set(this.path, e, t);
+						this.mainstay.shadow = this.mainstay.shadow || new o.Shadow(), this.mainstay.shadow.set(this.path, e, t);
 					}
 					snapshot() {
 						this.mainstay.shadow && (this._snapshot = s(this.mainstay.shadow.node(this.path))), this.mainstay.snapshot();
@@ -1752,9 +1754,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					commit() {
 						this.mainstay.shadow && (this.mainstay.shadow.override(this.path, this._snapshot), this._snapshot = void 0), this.mainstay.commit();
 					}
-				}, i.schemas = function(e) {
+				}, o.schemas = function(e) {
 					return a.isSchema(e) ? { schema: e } : e;
-				}, i.Shadow = class {
+				}, o.Shadow = class {
 					constructor() {
 						this._values = null;
 					}
@@ -1768,11 +1770,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							let n = s.get(r);
 							n || (n = /* @__PURE__ */ new Map(), s.set(r, n)), s = n;
 						}
-						s[i.value] = t;
+						s[o.value] = t;
 					}
 					get(e) {
 						const t = this.node(e);
-						if (t) return t[i.value];
+						if (t) return t[o.value];
 					}
 					node(e) {
 						if (this._values) return n(this._values, e, { iterables: !0 });
@@ -1786,7 +1788,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			1532(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n, escapeHtml: a } = r(3115), i = r(679), o = r(9415), l = r(8013), c = r(8529), u = {
+				const { assert: s, clone: n, escapeHtml: a } = r(3115), o = r(679), i = r(9415), l = r(8013), c = r(8529), u = {
 					symbol: Symbol("template"),
 					opens: new Array(1e3).join("\0"),
 					closes: new Array(1e3).join(""),
@@ -1818,12 +1820,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								s.push(`{${u.decode(e)}`);
 								continue;
 							}
-							let i = e.slice(t ? 0 : 1, a);
-							const o = ":" === i[0];
-							o && (i = i.slice(1));
-							const l = this._ref(u.decode(i), {
+							let o = e.slice(t ? 0 : 1, a);
+							const i = ":" === o[0];
+							i && (o = o.slice(1));
+							const l = this._ref(u.decode(o), {
 								raw: t,
-								wrapped: o
+								wrapped: i
 							});
 							s.push(l), "string" != typeof l && (r = !0);
 							const c = e.slice(a + n.length);
@@ -1849,7 +1851,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						return !!this._template;
 					}
 					static isTemplate(e) {
-						return !!e && !!e[o.symbols.template];
+						return !!e && !!e[i.symbols.template];
 					}
 					refs() {
 						if (!this._template) return;
@@ -1865,16 +1867,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					render(e, t, r, s, n = {}) {
 						if (!this.isDynamic()) return this.rendered;
-						const i = [];
-						for (const o of this._template) if ("string" == typeof o) i.push(o);
+						const o = [];
+						for (const i of this._template) if ("string" == typeof i) o.push(i);
 						else {
-							const l = this._part(o, e, t, r, s, n), c = u.stringify(l, e, t, r, s, n);
+							const l = this._part(i, e, t, r, s, n), c = u.stringify(l, e, t, r, s, n);
 							if (void 0 !== c) {
-								const e = o.raw || !1 === (n.errors && n.errors.escapeHtml) ? c : a(c);
-								i.push(u.wrap(e, o.wrapped && r.errors.wrap.label));
+								const e = i.raw || !1 === (n.errors && n.errors.escapeHtml) ? c : a(c);
+								o.push(u.wrap(e, i.wrapped && r.errors.wrap.label));
 							}
 						}
-						return i.join("");
+						return o.join("");
 					}
 					_ref(e, { raw: t, wrapped: r }) {
 						const s = [], n = (e) => {
@@ -1889,7 +1891,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								...u.functions,
 								...this._functions
 							} : u.functions;
-							var a = new i.Parser(e, {
+							var a = new o.Parser(e, {
 								reference: n,
 								functions: t,
 								constants: u.constants
@@ -1918,7 +1920,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					toString() {
 						return this.source;
 					}
-				}, u.Template.prototype[o.symbols.template] = !0, u.Template.prototype.isImmutable = !0, u.encode = function(e) {
+				}, u.Template.prototype[i.symbols.template] = !0, u.Template.prototype.isImmutable = !0, u.encode = function(e) {
 					return e.replace(/\\(\{+)/g, (e, t) => u.opens.slice(0, t.length)).replace(/\\(\}+)/g, (e, t) => u.closes.slice(0, t.length));
 				}, u.decode = function(e) {
 					return e.replace(/\u0000/g, "{").replace(/\u0001/g, "}");
@@ -1937,15 +1939,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}, u.wrap = function(e, t) {
 					return t ? 1 === t.length ? `${t}${e}${t}` : `${t[0]}${e}${t[1]}` : e;
 				}, u.stringify = function(e, t, r, s, n, a = {}) {
-					const i = typeof e, o = s && s.errors && s.errors.wrap || {};
+					const o = typeof e, i = s && s.errors && s.errors.wrap || {};
 					let l = !1;
 					if (c.isRef(e) && e.render && (l = e.in, e = e.resolve(t, r, s, n, {
 						in: e.in,
 						...a
 					})), null === e) return "null";
-					if ("string" === i) return u.wrap(e, a.arrayItems && o.string);
-					if ("number" === i || "function" === i || "symbol" === i) return e.toString();
-					if ("object" !== i) return JSON.stringify(e);
+					if ("string" === o) return u.wrap(e, a.arrayItems && i.string);
+					if ("number" === o || "function" === o || "symbol" === o) return e.toString();
+					if ("object" !== o) return JSON.stringify(e);
 					if (e instanceof Date) return u.Template.date(e, s);
 					if (e instanceof Map) {
 						const t = [];
@@ -1954,11 +1956,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}
 					if (!Array.isArray(e)) return e.toString();
 					const f = [];
-					for (const i of e) f.push(u.stringify(i, t, r, s, n, {
+					for (const o of e) f.push(u.stringify(o, t, r, s, n, {
 						arrayItems: !0,
 						...a
 					}));
-					return u.wrap(f.join(", "), !l && o.array);
+					return u.wrap(f.join(", "), !l && i.array);
 				}, u.constants = {
 					true: !0,
 					false: !1,
@@ -1971,17 +1973,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if: (e, t, r) => e ? t : r,
 					length: (e) => "string" == typeof e ? e.length : e && "object" == typeof e ? Array.isArray(e) ? e.length : Object.keys(e).length : null,
 					msg(e) {
-						const [t, r, s, n, a] = this, i = a.messages;
-						if (!i) return "";
-						const o = l.template(t, i[0], e, r, s) || l.template(t, i[1], e, r, s);
-						return o ? o.render(t, r, s, n, a) : "";
+						const [t, r, s, n, a] = this, o = a.messages;
+						if (!o) return "";
+						const i = l.template(t, o[0], e, r, s) || l.template(t, o[1], e, r, s);
+						return i ? i.render(t, r, s, n, a) : "";
 					},
 					number: (e) => "number" == typeof e ? e : "string" == typeof e ? parseFloat(e) : "boolean" == typeof e ? e ? 1 : 0 : e instanceof Date ? e.getTime() : null
 				};
 			},
 			4972(e, t, r) {
 				"use strict";
-				const { assert: s, merge: n } = r(3115), a = r(680), i = r(9415), o = r(3541), l = r(8013), c = r(8529), u = {};
+				const { assert: s, merge: n } = r(3115), a = r(680), o = r(9415), i = r(3541), l = r(8013), c = r(8529), u = {};
 				e.exports = a.extend({
 					type: "alternatives",
 					flags: { match: { default: "any" } },
@@ -1991,44 +1993,44 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					} },
 					args: (e, ...t) => 1 === t.length && Array.isArray(t[0]) ? e.try(...t[0]) : e.try(...t),
 					validate(e, t) {
-						const { schema: r, error: s, state: a, prefs: i } = t;
+						const { schema: r, error: s, state: a, prefs: o } = t;
 						if (r._flags.match) {
-							const t = [], o = [];
+							const t = [], i = [];
 							for (let s = 0; s < r.$_terms.matches.length; ++s) {
 								const n = r.$_terms.matches[s], l = a.nest(n.schema, `match.${s}`);
 								l.snapshot();
-								const c = n.schema.$_validate(e, l, i);
-								c.errors ? (o.push(c.errors), l.restore()) : (t.push(c.value), l.commit());
+								const c = n.schema.$_validate(e, l, o);
+								c.errors ? (i.push(c.errors), l.restore()) : (t.push(c.value), l.commit());
 							}
-							if (0 === t.length) return { errors: s("alternatives.any", { details: o.map((e) => l.details(e, { override: !1 })) }) };
+							if (0 === t.length) return { errors: s("alternatives.any", { details: i.map((e) => l.details(e, { override: !1 })) }) };
 							if ("one" === r._flags.match) return 1 === t.length ? { value: t[0] } : { errors: s("alternatives.one") };
-							if (t.length !== r.$_terms.matches.length) return { errors: s("alternatives.all", { details: o.map((e) => l.details(e, { override: !1 })) }) };
+							if (t.length !== r.$_terms.matches.length) return { errors: s("alternatives.all", { details: i.map((e) => l.details(e, { override: !1 })) }) };
 							const c = (e) => e.$_terms.matches.some((e) => "object" === e.schema.type || "alternatives" === e.schema.type && c(e.schema));
 							return c(r) ? { value: t.reduce((e, t) => n(e, t, { mergeArrays: !1 })) } : { value: t[t.length - 1] };
 						}
-						const o = [];
+						const i = [];
 						for (let t = 0; t < r.$_terms.matches.length; ++t) {
 							const s = r.$_terms.matches[t];
 							if (s.schema) {
 								const r = a.nest(s.schema, `match.${t}`);
 								r.snapshot();
-								const n = s.schema.$_validate(e, r, i);
+								const n = s.schema.$_validate(e, r, o);
 								if (!n.errors) return r.commit(), n;
-								r.restore(), o.push({
+								r.restore(), i.push({
 									schema: s.schema,
 									reports: n.errors
 								});
 								continue;
 							}
-							const n = s.ref ? s.ref.resolve(e, a, i) : e, l = s.is ? [s] : s.switch;
+							const n = s.ref ? s.ref.resolve(e, a, o) : e, l = s.is ? [s] : s.switch;
 							for (let r = 0; r < l.length; ++r) {
 								const { is: c, then: u, otherwise: f } = l[r], m = `match.${t}${s.switch ? "." + r : ""}`;
-								if (c.$_match(n, a.nest(c, `${m}.is`), i)) {
-									if (u) return u.$_validate(e, a.nest(u, `${m}.then`), i);
-								} else if (f) return f.$_validate(e, a.nest(f, `${m}.otherwise`), i);
+								if (c.$_match(n, a.nest(c, `${m}.is`), o)) {
+									if (u) return u.$_validate(e, a.nest(u, `${m}.then`), o);
+								} else if (f) return f.$_validate(e, a.nest(f, `${m}.otherwise`), o);
 							}
 						}
-						return u.errors(o, t);
+						return u.errors(i, t);
 					},
 					jsonSchema(e, t, r, s) {
 						const n = [];
@@ -2037,14 +2039,18 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const e = t.is ? [t] : t.switch;
 							for (const t of e) t.then && n.push(t.then.$_jsonSchema(r, s)), t.otherwise && n.push(t.otherwise.$_jsonSchema(r, s));
 						}
-						var a;
-						n.length && (delete t.type, "one" === (null !== (a = e._flags.match) && void 0 !== a ? a : "any") ? t.oneOf = n : t.anyOf = n);
+						if (n.length) {
+							var a;
+							delete t.type;
+							const r = null !== (a = e._flags.match) && void 0 !== a ? a : "any";
+							"one" === r ? t.oneOf = n : "all" === r ? t.allOf = n : t.anyOf = n;
+						}
 						return t;
 					},
 					rules: {
 						conditional: { method(e, t) {
 							s(!this._flags._endedSwitch, "Unreachable condition"), s(!this._flags.match, "Cannot combine match mode", this._flags.match, "with conditional rule"), s(void 0 === t.break, "Cannot use break option with alternatives conditional");
-							const r = this.clone(), n = o.when(r, e, t), a = n.is ? [n] : n.switch;
+							const r = this.clone(), n = i.when(r, e, t), a = n.is ? [n] : n.switch;
 							for (const e of a) if (e.then && e.otherwise) {
 								r.$_setFlag("_endedSwitch", !0, { clone: !1 });
 								break;
@@ -2060,7 +2066,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							return this.$_setFlag("match", e);
 						} },
 						try: { method(...e) {
-							s(e.length, "Missing alternative schemas"), i.verifyFlat(e, "try"), s(!this._flags._endedSwitch, "Unreachable condition");
+							s(e.length, "Missing alternative schemas"), o.verifyFlat(e, "try"), s(!this._flags._endedSwitch, "Unreachable condition");
 							const t = this.clone();
 							for (const r of e) t.$_terms.matches.push({ schema: t.$_compile(r) });
 							return t.$_mutateRebuild();
@@ -2087,21 +2093,21 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					rebuild(e) {
 						e.$_modify({ each: (t) => {
-							i.isSchema(t) && "array" === t.type && e.$_setFlag("_arrayItems", !0, { clone: !1 });
+							o.isSchema(t) && "array" === t.type && e.$_setFlag("_arrayItems", !0, { clone: !1 });
 						} });
 					},
 					manifest: { build(e, t) {
 						if (t.matches) for (const r of t.matches) {
-							const { schema: t, ref: s, is: n, not: a, then: i, otherwise: o } = r;
+							const { schema: t, ref: s, is: n, not: a, then: o, otherwise: i } = r;
 							e = t ? e.try(t) : s ? e.conditional(s, {
 								is: n,
-								then: i,
+								then: o,
 								not: a,
-								otherwise: o,
+								otherwise: i,
 								switch: r.switch
 							}) : e.conditional(n, {
-								then: i,
-								otherwise: o
+								then: o,
+								otherwise: i
 							});
 						}
 						return e;
@@ -2117,26 +2123,26 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if (!e.length) return { errors: t("alternatives.any") };
 					if (1 === e.length) return { errors: e[0].reports };
 					const s = /* @__PURE__ */ new Set(), n = [];
-					for (const { reports: a, schema: i } of e) {
+					for (const { reports: a, schema: o } of e) {
 						if (a.length > 1) return u.unmatched(e, t);
-						const o = a[0];
-						if (o instanceof l.Report == 0) return u.unmatched(e, t);
-						if (o.state.path.length !== r.path.length) {
+						const i = a[0];
+						if (i instanceof l.Report == 0) return u.unmatched(e, t);
+						if (i.state.path.length !== r.path.length) {
 							n.push({
-								type: i.type,
-								report: o
+								type: o.type,
+								report: i
 							});
 							continue;
 						}
-						if ("any.only" === o.code) {
-							for (const e of o.local.valids) s.add(e);
+						if ("any.only" === i.code) {
+							for (const e of i.local.valids) s.add(e);
 							continue;
 						}
-						const [c, f] = o.code.split(".");
+						const [c, f] = i.code.split(".");
 						"base" !== f ? n.push({
-							type: i.type,
-							report: o
-						}) : "object.base" === o.code ? s.add(o.local.type) : s.add(c);
+							type: o.type,
+							report: i
+						}) : "object.base" === i.code ? s.add(i.local.type) : s.add(c);
 					}
 					return n.length ? 1 === n.length ? { errors: n[0].report } : u.unmatched(e, t) : { errors: t("alternatives.types", { types: [...s] }) };
 				}, u.unmatched = function(e, t) {
@@ -2147,7 +2153,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			680(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(2115), a = r(9415), i = r(6162);
+				const { assert: s } = r(3115), n = r(2115), a = r(9415), o = r(6162);
 				e.exports = n.extend({
 					type: "any",
 					flags: { only: { default: !1 } },
@@ -2211,14 +2217,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							e.keep = t;
 						},
 						message(e, t) {
-							e.message = i.compile(t);
+							e.message = o.compile(t);
 						},
 						warn(e, t = !0) {
 							e.warn = t;
 						}
 					},
 					manifest: { build(e, t) {
-						for (const r in t) {
+						for (const r of Object.keys(t)) {
 							const s = t[r];
 							if ([
 								"examples",
@@ -2237,17 +2243,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								if ("whens" !== r) {
 									if ("shared" === r) for (const t of s) e = e.shared(t);
 								} else for (const t of s) {
-									const { ref: r, is: s, not: n, then: a, otherwise: i, concat: o } = t;
-									e = o ? e.concat(o) : r ? e.when(r, {
+									const { ref: r, is: s, not: n, then: a, otherwise: o, concat: i } = t;
+									e = i ? e.concat(i) : r ? e.when(r, {
 										is: s,
 										not: n,
 										then: a,
-										otherwise: i,
+										otherwise: o,
 										switch: t.switch,
 										break: t.break
 									}) : e.when(s, {
 										then: a,
-										otherwise: i,
+										otherwise: o,
 										break: t.break
 									});
 								}
@@ -2269,8 +2275,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2591(e, t, r) {
 				"use strict";
-				const { assert: s, deepEqual: n, reach: a } = r(3115), i = r(680), o = r(9415), l = r(3541), c = {};
-				e.exports = i.extend({
+				const { assert: s, deepEqual: n, reach: a } = r(3115), o = r(680), i = r(9415), l = r(3541), c = {};
+				e.exports = o.extend({
 					type: "array",
 					flags: {
 						single: { default: !1 },
@@ -2301,7 +2307,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if (!Array.isArray(e)) {
 							if (t._flags.single) {
 								const t = [e];
-								return t[o.symbols.arraySingle] = !0, { value: t };
+								return t[i.symbols.arraySingle] = !0, { value: t };
 							}
 							return { errors: r("array.base") };
 						}
@@ -2311,10 +2317,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const n = e.$_terms.ordered;
 						if (n.length && (t.prefixItems = n.map((e) => e.$_jsonSchema(r, s))), e.$_terms.items.length) {
 							let a;
-							a = 1 === e.$_terms.items.length ? e.$_terms.items[0].$_jsonSchema(r, s) : { anyOf: e.$_terms.items.map((e) => e.$_jsonSchema(r, s)) }, n.length ? (t.unevaluatedItems = a, t.minItems = n.length) : t.items = a;
-						} else n.length && (t.unevaluatedItems = !1, t.minItems = n.length, t.maxItems = n.length);
+							a = 1 === e.$_terms.items.length ? e.$_terms.items[0].$_jsonSchema(r, s) : { anyOf: e.$_terms.items.map((e) => e.$_jsonSchema(r, s)) }, n.length ? (t.unevaluatedItems = a, c.setOrderedMinItems(t, n)) : t.items = a;
+						} else n.length && (t.unevaluatedItems = !1, c.setOrderedMinItems(t, n), t.maxItems = n.length);
 						const a = [];
-						for (const t of e._rules) "has" === t.name && a.push(t.args.schema.$_jsonSchema(r, s));
+						for (const t of e._rules) "has" !== t.name || t.args.schema._refs.refs.length || a.push(t.args.schema.$_jsonSchema(r, s));
 						if (a.length && (1 === a.length ? t.contains = a[0] : t.allOf = a.map((e) => ({ contains: e }))), e._flags.single && e.$_terms.items.length) {
 							let n;
 							n = 1 === e.$_terms.items.length ? e.$_terms.items[0].$_jsonSchema(r, s) : { anyOf: e.$_terms.items.map((e) => e.$_jsonSchema(r, s)) }, t = { anyOf: [t, n] };
@@ -2334,34 +2340,34 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							validate(e, { state: t, prefs: r, error: s }, { schema: n }) {
 								const a = [e, ...t.ancestors];
 								for (let s = 0; s < e.length; ++s) {
-									const i = t.localize([...t.path, s], a, n);
-									if (n.$_match(e[s], i, r)) return e;
+									const o = t.localize([...t.path, s], a, n);
+									if (n.$_match(e[s], o, r)) return e;
 								}
-								const i = n._flags.label;
-								return i ? s("array.hasKnown", { patternLabel: i }) : s("array.hasUnknown", null);
+								const o = n._flags.label;
+								return o ? s("array.hasKnown", { patternLabel: o }) : s("array.hasUnknown", null);
 							},
 							multi: !0
 						},
 						items: {
 							method(...e) {
-								o.verifyFlat(e, "items");
+								i.verifyFlat(e, "items");
 								const t = this.$_addRule("items");
 								for (let r = 0; r < e.length; ++r) {
-									const s = o.tryWithPath(() => this.$_compile(e[r]), r, { append: !0 });
+									const s = i.tryWithPath(() => this.$_compile(e[r]), r, { append: !0 });
 									t.$_terms.items.push(s);
 								}
 								return t.$_mutateRebuild();
 							},
 							validate(e, { schema: t, error: r, state: s, prefs: n, errorsArray: a }) {
-								const i = t.$_terms._requireds.slice(), l = t.$_terms.ordered.slice(), u = [...t.$_terms._inclusions, ...i], f = !e[o.symbols.arraySingle];
-								delete e[o.symbols.arraySingle];
+								const o = t.$_terms._requireds.slice(), l = t.$_terms.ordered.slice(), u = [...t.$_terms._inclusions, ...o], f = !e[i.symbols.arraySingle];
+								delete e[i.symbols.arraySingle];
 								const m = a();
 								let h = e.length;
 								for (let a = 0; a < h; ++a) {
-									const o = e[a];
+									const i = e[a];
 									let p = !1, d = !1;
 									const g = f ? a : new Number(a), y = [...s.path, g];
-									if (!t._flags.sparse && void 0 === o) {
+									if (!t._flags.sparse && void 0 === i) {
 										if (m.push(r("array.sparse", {
 											key: g,
 											path: y,
@@ -2372,10 +2378,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 										continue;
 									}
 									const b = [e, ...s.ancestors];
-									for (const e of t.$_terms._exclusions) if (e.$_match(o, s.localize(y, b, e), n, { presence: "ignore" })) {
+									for (const e of t.$_terms._exclusions) if (e.$_match(i, s.localize(y, b, e), n, { presence: "ignore" })) {
 										if (m.push(r("array.excludes", {
 											pos: a,
-											value: o
+											value: i
 										}, s.localize(y))), n.abortEarly) return m;
 										p = !0, l.shift();
 										break;
@@ -2383,10 +2389,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									if (p) continue;
 									if (t.$_terms.ordered.length) {
 										if (l.length) {
-											const i = l.shift(), u = i.$_validate(o, s.localize(y, b, i), n);
+											const o = l.shift(), u = o.$_validate(i, s.localize(y, b, o), n);
 											if (u.errors) {
 												if (m.push(...u.errors), n.abortEarly) return m;
-											} else if ("strip" === i._flags.result) c.fastSplice(e, a), --a, --h;
+											} else if ("strip" === o._flags.result) c.fastSplice(e, a), --a, --h;
 											else {
 												if (!t._flags.sparse && void 0 === u.value) {
 													if (m.push(r("array.sparse", {
@@ -2410,13 +2416,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 										}
 									}
 									const v = [];
-									let _ = i.length;
+									let _ = o.length;
 									for (let l = 0; l < _; ++l) {
-										const u = s.localize(y, b, i[l]);
+										const u = s.localize(y, b, o[l]);
 										u.snapshot();
-										const f = i[l].$_validate(o, u, n);
+										const f = o[l].$_validate(i, u, n);
 										if (v[l] = f, !f.errors) {
-											if (u.commit(), e[a] = f.value, d = !0, c.fastSplice(i, l), --l, --_, !t._flags.sparse && void 0 === f.value && (m.push(r("array.sparse", {
+											if (u.commit(), e[a] = f.value, d = !0, c.fastSplice(o, l), --l, --_, !t._flags.sparse && void 0 === f.value && (m.push(r("array.sparse", {
 												key: g,
 												path: y,
 												pos: a,
@@ -2431,12 +2437,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									_ = u.length;
 									for (const l of u) {
 										let u;
-										const f = i.indexOf(l);
+										const f = o.indexOf(l);
 										if (-1 !== f) u = v[f];
 										else {
-											const i = s.localize(y, b, l);
-											if (i.snapshot(), u = l.$_validate(o, i, n), !u.errors) {
-												i.commit(), "strip" === l._flags.result ? (c.fastSplice(e, a), --a, --h) : t._flags.sparse || void 0 !== u.value ? e[a] = u.value : (m.push(r("array.sparse", {
+											const o = s.localize(y, b, l);
+											if (o.snapshot(), u = l.$_validate(i, o, n), !u.errors) {
+												o.commit(), "strip" === l._flags.result ? (c.fastSplice(e, a), --a, --h) : t._flags.sparse || void 0 !== u.value ? e[a] = u.value : (m.push(r("array.sparse", {
 													key: g,
 													path: y,
 													pos: a,
@@ -2444,7 +2450,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 												}, s.localize(y))), p = !0), d = !0;
 												break;
 											}
-											i.restore();
+											o.restore();
 										}
 										if (1 === _) {
 											if (A) {
@@ -2463,11 +2469,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 										}
 										if (m.push(r("array.includes", {
 											pos: a,
-											value: o
+											value: i
 										}, s.localize(y))), n.abortEarly) return m;
 									}
 								}
-								return i.length && c.fillMissedErrors(t, m, i, e, s, n), l.length && (c.fillOrderedErrors(t, m, l, e, s, n), m.length || c.fillDefault(l, e, s, n)), m.length ? m : e;
+								return o.length && c.fillMissedErrors(t, m, o, e, s, n), l.length && (c.fillOrderedErrors(t, m, l, e, s, n), m.length || c.fillDefault(l, e, s, n)), m.length ? m : e;
 							},
 							priority: !0,
 							manifest: !1
@@ -2480,7 +2486,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									operator: "="
 								});
 							},
-							validate: (e, t, { limit: r }, { name: s, operator: n, args: a }) => o.compare(e.length, r, n) ? e : t.error("array." + s, {
+							validate: (e, t, { limit: r }, { name: s, operator: n, args: a }) => i.compare(e.length, r, n) ? e : t.error("array." + s, {
 								limit: a.limit,
 								value: e
 							}),
@@ -2488,7 +2494,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							args: [{
 								name: "limit",
 								ref: !0,
-								assert: o.limit,
+								assert: i.limit,
 								message: "must be a positive integer"
 							}]
 						},
@@ -2515,10 +2521,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							jsonSchema: (e, t) => (t.minItems = e.args.limit, t)
 						},
 						ordered: { method(...e) {
-							o.verifyFlat(e, "ordered");
+							i.verifyFlat(e, "ordered");
 							const t = this.$_addRule("items");
 							for (let r = 0; r < e.length; ++r) {
-								const s = o.tryWithPath(() => this.$_compile(e[r]), r, { append: !0 });
+								const s = i.tryWithPath(() => this.$_compile(e[r]), r, { append: !0 });
 								c.validateSingle(s, t), t.$_mutateRegister(s), t.$_terms.ordered.push(s);
 							}
 							return t.$_mutateRebuild();
@@ -2529,7 +2535,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						} },
 						sort: {
 							method(e = {}) {
-								o.assertOptions(e, ["by", "order"]);
+								i.assertOptions(e, ["by", "order"]);
 								const t = { order: e.order || "ascending" };
 								return e.by && (t.by = l.ref(e.by, { ancestor: 0 }), s(!t.by.ancestor, "Cannot sort by ancestor")), this.$_addRule({
 									name: "sort",
@@ -2537,9 +2543,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								});
 							},
 							validate(e, { error: t, state: r, prefs: s, schema: n }, { options: a }) {
-								const { value: i, errors: o } = c.sort(n, e, a, r, s);
-								if (o) return o;
-								for (let r = 0; r < e.length; ++r) if (e[r] !== i[r]) return t("array.sort", {
+								const { value: o, errors: i } = c.sort(n, e, a, r, s);
+								if (i) return i;
+								for (let r = 0; r < e.length; ++r) if (e[r] !== o[r]) return t("array.sort", {
 									order: a.order,
 									by: a.by ? a.by.key : "value"
 								});
@@ -2553,7 +2559,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						} },
 						unique: {
 							method(e, t = {}) {
-								s(!e || "function" == typeof e || "string" == typeof e, "comparator must be a function or a string"), o.assertOptions(t, ["ignoreUndefined", "separator"]);
+								s(!e || "function" == typeof e || "string" == typeof e, "comparator must be a function or a string"), i.assertOptions(t, ["ignoreUndefined", "separator"]);
 								const r = {
 									name: "unique",
 									args: {
@@ -2562,12 +2568,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									}
 								};
 								if (e) if ("string" == typeof e) {
-									const s = o.default(t.separator, ".");
+									const s = i.default(t.separator, ".");
 									r.path = s ? e.split(s) : [e];
 								} else r.comparator = e;
 								return this.$_addRule(r);
 							},
-							validate(e, { state: t, error: r, schema: i }, { comparator: o, options: l }, { comparator: c, path: u }) {
+							validate(e, { state: t, error: r, schema: o }, { comparator: i, options: l }, { comparator: c, path: u }) {
 								const f = {
 									string: Object.create(null),
 									number: Object.create(null),
@@ -2579,36 +2585,36 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									custom: /* @__PURE__ */ new Map()
 								}, m = c || n, h = l.ignoreUndefined;
 								for (let n = 0; n < e.length; ++n) {
-									const i = u ? a(e[n], u) : e[n], l = c ? f.custom : f[typeof i];
-									if (s(l, "Failed to find unique map container for type", typeof i), l instanceof Map) {
+									const o = u ? a(e[n], u) : e[n], l = c ? f.custom : f[typeof o];
+									if (s(l, "Failed to find unique map container for type", typeof o), l instanceof Map) {
 										const s = l.entries();
 										let a;
-										for (; !(a = s.next()).done;) if (m(a.value[0], i)) {
-											const s = t.localize([...t.path, n], [e, ...t.ancestors]), i = {
+										for (; !(a = s.next()).done;) if (m(a.value[0], o)) {
+											const s = t.localize([...t.path, n], [e, ...t.ancestors]), o = {
 												pos: n,
 												value: e[n],
 												dupePos: a.value[1],
 												dupeValue: e[a.value[1]]
 											};
-											return u && (i.path = o), r("array.unique", i, s);
+											return u && (o.path = i), r("array.unique", o, s);
 										}
-										l.set(i, n);
+										l.set(o, n);
 									} else {
-										if ((!h || void 0 !== i) && void 0 !== l[i]) {
+										if ((!h || void 0 !== o) && void 0 !== l[o]) {
 											const s = {
 												pos: n,
 												value: e[n],
-												dupePos: l[i],
-												dupeValue: e[l[i]]
+												dupePos: l[o],
+												dupeValue: e[l[o]]
 											};
-											return u && (s.path = o), r("array.unique", s, t.localize([...t.path, n], [e, ...t.ancestors]));
+											return u && (s.path = i), r("array.unique", s, t.localize([...t.path, n], [e, ...t.ancestors]));
 										}
-										l[i] = n;
+										l[o] = n;
 									}
 								}
 								return e;
 							},
-							jsonSchema: (e, t) => (t.uniqueItems = !0, t),
+							jsonSchema: (e, t) => (e.args.comparator || (t.uniqueItems = !0), t),
 							args: ["comparator", "options"],
 							multi: !0
 						}
@@ -2649,26 +2655,32 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						"array.sparse": "{{#label}} must not be a sparse array item",
 						"array.unique": "{{#label}} contains a duplicate value"
 					}
-				}), c.fillMissedErrors = function(e, t, r, s, n, a) {
-					const i = [];
-					let o = 0;
+				}), c.setOrderedMinItems = function(e, t) {
+					const r = c.orderedMinItems(t);
+					r && (e.minItems = r);
+				}, c.orderedMinItems = function(e) {
+					for (let t = e.length - 1; t >= 0; --t) if ("required" === e[t]._flags.presence) return t + 1;
+					return 0;
+				}, c.fillMissedErrors = function(e, t, r, s, n, a) {
+					const o = [];
+					let i = 0;
 					for (const e of r) {
 						const t = e._flags.label;
-						t ? i.push(t) : ++o;
+						t ? o.push(t) : ++i;
 					}
-					i.length ? o ? t.push(e.$_createError("array.includesRequiredBoth", s, {
-						knownMisses: i,
-						unknownMisses: o
-					}, n, a)) : t.push(e.$_createError("array.includesRequiredKnowns", s, { knownMisses: i }, n, a)) : t.push(e.$_createError("array.includesRequiredUnknowns", s, { unknownMisses: o }, n, a));
+					o.length ? i ? t.push(e.$_createError("array.includesRequiredBoth", s, {
+						knownMisses: o,
+						unknownMisses: i
+					}, n, a)) : t.push(e.$_createError("array.includesRequiredKnowns", s, { knownMisses: o }, n, a)) : t.push(e.$_createError("array.includesRequiredUnknowns", s, { unknownMisses: i }, n, a));
 				}, c.fillOrderedErrors = function(e, t, r, s, n, a) {
-					const i = [];
-					for (const e of r) "required" === e._flags.presence && i.push(e);
-					i.length && c.fillMissedErrors(e, t, i, s, n, a);
+					const o = [];
+					for (const e of r) "required" === e._flags.presence && o.push(e);
+					o.length && c.fillMissedErrors(e, t, o, s, n, a);
 				}, c.fillDefault = function(e, t, r, s) {
 					const n = [];
 					let a = !0;
-					for (let i = e.length - 1; i >= 0; --i) {
-						const o = e[i], l = [t, ...r.ancestors], c = o.$_validate(void 0, r.localize(r.path, l, o), s).value;
+					for (let o = e.length - 1; o >= 0; --o) {
+						const i = e[o], l = [t, ...r.ancestors], c = i.$_validate(void 0, r.localize(r.path, l, i), s).value;
 						if (a) {
 							if (void 0 === c) continue;
 							a = !1;
@@ -2683,14 +2695,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}, c.validateSingle = function(e, t) {
 					("array" === e.type || e._flags._arrayItems) && (s(!t._flags.single, "Cannot specify array item with single rule enabled"), t.$_setFlag("_arrayItems", !0, { clone: !1 }));
 				}, c.sort = function(e, t, r, s, n) {
-					const a = "ascending" === r.order ? 1 : -1, i = -1 * a, o = a, l = (l, u) => {
-						let f = c.compare(l, u, i, o);
+					const a = "ascending" === r.order ? 1 : -1, o = -1 * a, i = a, l = (l, u) => {
+						let f = c.compare(l, u, o, i);
 						if (null !== f) return f;
-						if (r.by && (l = r.by.resolve(l, s, n), u = r.by.resolve(u, s, n)), f = c.compare(l, u, i, o), null !== f) return f;
+						if (r.by && (l = r.by.resolve(l, s, n), u = r.by.resolve(u, s, n)), f = c.compare(l, u, o, i), null !== f) return f;
 						const m = typeof l;
 						if (m !== typeof u) throw e.$_createError("array.sort.mismatching", t, null, s, n);
 						if ("number" !== m && "string" !== m) throw e.$_createError("array.sort.unsupported", t, { type: m }, s, n);
-						return "number" === m ? (l - u) * a : l < u ? i : o;
+						return "number" === m ? (l - u) * a : l < u ? o : i;
 					};
 					try {
 						return { value: t.slice().sort(l) };
@@ -2703,7 +2715,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6186(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(680), a = r(9415), i = r(6220), o = { isBool: function(e) {
+				const { assert: s } = r(3115), n = r(680), a = r(9415), o = r(6220), i = { isBool: function(e) {
 					return "boolean" == typeof e;
 				} };
 				e.exports = n.extend({
@@ -2738,7 +2750,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						truthy: { method(...e) {
 							a.verifyFlat(e, "truthy");
 							const t = this.clone();
-							t.$_terms.truthy = t.$_terms.truthy || new i();
+							t.$_terms.truthy = t.$_terms.truthy || new o();
 							for (let r = 0; r < e.length; ++r) {
 								const n = e[r];
 								s(void 0 !== n, "Cannot call truthy with undefined"), t.$_terms.truthy.add(n);
@@ -2748,7 +2760,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						falsy: { method(...e) {
 							a.verifyFlat(e, "falsy");
 							const t = this.clone();
-							t.$_terms.falsy = t.$_terms.falsy || new i();
+							t.$_terms.falsy = t.$_terms.falsy || new o();
 							for (let r = 0; r < e.length; ++r) {
 								const n = e[r];
 								s(void 0 !== n, "Cannot call falsy with undefined"), t.$_terms.falsy.add(n);
@@ -2761,11 +2773,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					cast: {
 						number: {
-							from: o.isBool,
+							from: i.isBool,
 							to: (e, t) => e ? 1 : 0
 						},
 						string: {
-							from: o.isBool,
+							from: i.isBool,
 							to: (e, t) => e ? "true" : "false"
 						}
 					},
@@ -2775,7 +2787,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2588(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(680), a = r(9415), i = r(1532), o = {
+				const { assert: s } = r(3115), n = r(680), a = r(9415), o = r(1532), i = {
 					formats: [
 						"iso",
 						"javascript",
@@ -2789,7 +2801,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					type: "date",
 					coerce: {
 						from: ["number", "string"],
-						method: (e, { schema: t }) => ({ value: o.parse(e, t._flags.format) || e })
+						method: (e, { schema: t }) => ({ value: i.parse(e, t._flags.format) || e })
 					},
 					validate(e, { schema: t, error: r, prefs: s }) {
 						if (e instanceof Date && !isNaN(e.getTime())) return;
@@ -2806,23 +2818,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					rules: {
 						compare: {
 							method: !1,
-							validate(e, t, { date: r }, { name: s, operator: n, args: i }) {
-								const o = "now" === r ? Date.now() : r.getTime();
-								return a.compare(e.getTime(), o, n) ? e : t.error("date." + s, {
-									limit: i.date,
+							validate(e, t, { date: r }, { name: s, operator: n, args: o }) {
+								const i = "now" === r ? Date.now() : r.getTime();
+								return a.compare(e.getTime(), i, n) ? e : t.error("date." + s, {
+									limit: o.date,
 									value: e
 								});
 							},
 							args: [{
 								name: "date",
 								ref: !0,
-								normalize: (e) => "now" === e ? e : o.parse(e),
+								normalize: (e) => "now" === e ? e : i.parse(e),
 								assert: (e) => null !== e,
 								message: "must have a valid date format"
 							}]
 						},
 						format: { method(e) {
-							return s(o.formats.includes(e), "Unknown date format", e), this.$_setFlag("format", e);
+							return s(i.formats.includes(e), "Unknown date format", e), this.$_setFlag("format", e);
 						} },
 						greater: {
 							method(e) {
@@ -2901,12 +2913,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					cast: {
 						number: {
-							from: o.isDate,
+							from: i.isDate,
 							to: (e, t) => e.getTime()
 						},
 						string: {
-							from: o.isDate,
-							to: (e, { prefs: t }) => i.date(e, t)
+							from: i.isDate,
+							to: (e, { prefs: t }) => o.date(e, t)
 						}
 					},
 					messages: {
@@ -2920,19 +2932,19 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						"date.format.javascript": "timestamp or number of milliseconds",
 						"date.format.unix": "timestamp or number of seconds"
 					}
-				}), o.parse = function(e, t) {
+				}), i.parse = function(e, t) {
 					if (e instanceof Date) return e;
 					if ("string" != typeof e && (isNaN(e) || !isFinite(e))) return null;
 					if (/^\s*$/.test(e)) return null;
-					if ("iso" === t) return a.isIsoDate(e) ? o.date(e.toString()) : null;
+					if ("iso" === t) return a.isIsoDate(e) ? i.date(e.toString()) : null;
 					const r = e;
 					if ("string" == typeof e && /^[+-]?\d+(\.\d+)?$/.test(e) && (e = parseFloat(e)), t) {
-						if ("javascript" === t) return o.date(1 * e);
-						if ("unix" === t) return o.date(1e3 * e);
+						if ("javascript" === t) return i.date(1 * e);
+						if ("unix" === t) return i.date(1e3 * e);
 						if ("string" == typeof r) return null;
 					}
-					return o.date(e);
-				}, o.date = function(e) {
+					return i.date(e);
+				}, i.date = function(e) {
 					const t = new Date(e);
 					return isNaN(t.getTime()) ? null : t;
 				};
@@ -2988,12 +3000,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2888(e, t, r) {
 				"use strict";
-				const { applyToDefaults: s, assert: n, clone: a } = r(3115), i = r(8248), o = r(680), l = r(9415), c = r(3541), u = r(8013), f = r(8529), m = r(1532), h = { renameDefaults: {
+				const { applyToDefaults: s, assert: n, clone: a } = r(3115), o = r(8248), i = r(680), l = r(9415), c = r(3541), u = r(8013), f = r(8529), m = r(1532), h = { renameDefaults: {
 					alias: !1,
 					multiple: !1,
 					override: !1
 				} };
-				e.exports = o.extend({
+				e.exports = i.extend({
 					type: "_keys",
 					properties: { typeof: "object" },
 					flags: { unknown: { default: void 0 } },
@@ -3016,7 +3028,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const n = [];
 							for (const a of e.$_terms.keys) {
 								const e = a.schema.$_jsonSchema(r, s);
-								t.properties[a.key] = e, ("required" === a.schema._flags.presence || "output" === r && void 0 !== a.schema._flags.default) && n.push(a.key);
+								t.properties[a.key] = e, a.schema._flags.id && (s.$defs[a.schema._flags.id] = e), ("required" === a.schema._flags.presence || "output" === r && void 0 !== a.schema._flags.default) && n.push(a.key);
 							}
 							n.length && (t.required = n.sort());
 						}
@@ -3043,31 +3055,31 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							value: e,
 							errors: a
 						};
-						const i = new Set(Object.keys(e));
+						const o = new Set(Object.keys(e));
 						if (t.$_terms.keys) {
 							const r = [e, ...s.ancestors];
-							for (const o of t.$_terms.keys) {
-								const t = o.key, l = e[t];
-								i.delete(t);
-								const c = s.localize([...s.path, t], r, o), u = o.schema.$_validate(l, c, n);
+							for (const i of t.$_terms.keys) {
+								const t = i.key, l = e[t];
+								o.delete(t);
+								const c = s.localize([...s.path, t], r, i), u = i.schema.$_validate(l, c, n);
 								if (u.errors) {
 									if (n.abortEarly) return {
 										value: e,
 										errors: u.errors
 									};
 									void 0 !== u.value && (e[t] = u.value), a.push(...u.errors);
-								} else "strip" === o.schema._flags.result || void 0 === u.value && void 0 !== l ? delete e[t] : void 0 !== u.value && (e[t] = u.value);
+								} else "strip" === i.schema._flags.result || void 0 === u.value && void 0 !== l ? delete e[t] : void 0 !== u.value && (e[t] = u.value);
 							}
 						}
-						if (i.size || t._flags._hasPatternMatch) {
-							const r = h.unknown(t, e, i, a, s, n);
+						if (o.size || t._flags._hasPatternMatch) {
+							const r = h.unknown(t, e, o, a, s, n);
 							if (r) return r;
 						}
 						if (t.$_terms.dependencies) for (const r of t.$_terms.dependencies) {
 							if (null !== r.key && !1 === h.isPresent(r.options)(r.key.resolve(e, s, n, null, { shadow: !1 }))) continue;
-							const i = h.dependencies[r.rel](t, r, e, s, n);
-							if (i) {
-								const r = t.$_createError(i.code, e, i.context, s, n);
+							const o = h.dependencies[r.rel](t, r, e, s, n);
+							if (o) {
+								const r = t.$_createError(o.code, e, o.context, s, n);
 								if (n.abortEarly) return {
 									value: e,
 									errors: r
@@ -3100,11 +3112,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								});
 								return s.$_mutateRegister(e), s.$_mutateRegister(t), s;
 							},
-							validate(e, { error: t, prefs: r, state: s }, { subject: n, schema: a, message: i }) {
-								const o = n.resolve(e, s, r), l = f.isRef(n) ? n.absolute(s) : [];
-								return a.$_match(o, s.localize(l, [e, ...s.ancestors], a), r) ? e : t("object.assert", {
+							validate(e, { error: t, prefs: r, state: s }, { subject: n, schema: a, message: o }) {
+								const i = n.resolve(e, s, r), l = f.isRef(n) ? n.absolute(s) : [];
+								return a.$_match(i, s.localize(l, [e, ...s.ancestors], a), r) ? e : t("object.assert", {
 									subject: n,
-									message: i
+									message: o
 								});
 							},
 							args: [
@@ -3135,7 +3147,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const t = this.clone();
 							if (e) if (Object.keys(e).length) {
 								t.$_terms.keys = t.$_terms.keys ? t.$_terms.keys.filter((t) => !e.hasOwnProperty(t.key)) : new h.Keys();
-								for (const r in e) l.tryWithPath(() => t.$_terms.keys.push({
+								for (const r of Object.keys(e)) l.tryWithPath(() => t.$_terms.keys.push({
 									key: r,
 									schema: this.$_compile(e[r])
 								}), r);
@@ -3199,11 +3211,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							s || (e = this.$_compile(e, { appendPath: !0 })), n(void 0 !== t, "Invalid rule"), l.assertOptions(r, ["fallthrough", "matches"]), s && n(!e.flags.includes("g") && !e.flags.includes("y"), "pattern should not use global or sticky mode"), t = this.$_compile(t, { appendPath: !0 });
 							const a = this.clone();
 							a.$_terms.patterns = a.$_terms.patterns || [];
-							const i = {
+							const o = {
 								[s ? "regex" : "schema"]: e,
 								rule: t
 							};
-							return r.matches && (i.matches = this.$_compile(r.matches), "array" !== i.matches.type && (i.matches = i.matches.$_root.array().items(i.matches)), a.$_mutateRegister(i.matches), a.$_setFlag("_hasPatternMatch", !0, { clone: !1 })), r.fallthrough && (i.fallthrough = !0), a.$_terms.patterns.push(i), a.$_mutateRegister(t), a;
+							return r.matches && (o.matches = this.$_compile(r.matches), "array" !== o.matches.type && (o.matches = o.matches.$_root.array().items(o.matches)), a.$_mutateRegister(o.matches), a.$_setFlag("_hasPatternMatch", !0, { clone: !1 })), r.fallthrough && (o.fallthrough = !0), a.$_terms.patterns.push(o), a.$_mutateRegister(t), a;
 						} },
 						ref: {
 							method() {
@@ -3273,7 +3285,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					rebuild(e) {
 						if (e.$_terms.keys) {
-							const t = new i.Sorter();
+							const t = new o.Sorter();
 							for (const r of e.$_terms.keys) l.tryWithPath(() => t.add(r, {
 								after: r.schema.$_rootReferences(),
 								group: r.key
@@ -3283,9 +3295,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					manifest: { build(e, t) {
 						if (t.keys && (e = e.keys(t.keys)), t.dependencies) for (const { rel: r, key: s = null, peers: n, options: a } of t.dependencies) e = h.dependency(e, r, s, n, a);
-						if (t.patterns) for (const { regex: r, schema: s, rule: n, fallthrough: a, matches: i } of t.patterns) e = e.pattern(r || s, n, {
+						if (t.patterns) for (const { regex: r, schema: s, rule: n, fallthrough: a, matches: o } of t.patterns) e = e.pattern(r || s, n, {
 							fallthrough: a,
-							matches: i
+							matches: o
 						});
 						if (t.renames) for (const { from: r, to: s, options: n } of t.renames) e = e.rename(r, s, n);
 						return e;
@@ -3315,8 +3327,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}), h.clone = function(e, t) {
 					if ("object" == typeof e) {
 						if (t.nonEnumerables) return a(e, { shallow: !0 });
-						const r = Object.create(Object.getPrototypeOf(e));
-						return Object.assign(r, e), r;
+						const r = Object.getPrototypeOf(e), s = Object.create(r);
+						return Object.assign(s, e), Object.getPrototypeOf(s) !== r && Object.setPrototypeOf(s, r), s;
 					}
 					const r = function(...t) {
 						return e.apply(this, t);
@@ -3330,43 +3342,43 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					}), Object.assign(r, e), r;
 				}, h.dependency = function(e, t, r, s, a) {
 					n(null === r || "string" == typeof r, t, "key must be a strings"), a || (a = s.length > 1 && "object" == typeof s[s.length - 1] ? s.pop() : {}), l.assertOptions(a, ["separator", "isPresent"]), s = [].concat(s);
-					const i = l.default(a.separator, "."), o = [];
-					for (const e of s) n("string" == typeof e, t, "peers must be strings"), o.push(c.ref(e, {
-						separator: i,
+					const o = l.default(a.separator, "."), i = [];
+					for (const e of s) n("string" == typeof e, t, "peers must be strings"), i.push(c.ref(e, {
+						separator: o,
 						ancestor: 0,
 						prefix: !1
 					}));
 					null !== r && (r = c.ref(r, {
-						separator: i,
+						separator: o,
 						ancestor: 0,
 						prefix: !1
 					}));
 					const u = e.clone();
-					return u.$_terms.dependencies = u.$_terms.dependencies || [], u.$_terms.dependencies.push(new h.Dependency(t, r, o, s, a)), u;
+					return u.$_terms.dependencies = u.$_terms.dependencies || [], u.$_terms.dependencies.push(new h.Dependency(t, r, i, s, a)), u;
 				}, h.dependencies = {
 					and(e, t, r, s, n) {
-						const a = [], i = [], o = t.peers.length, l = h.isPresent(t.options);
-						for (const e of t.peers) !1 === l(e.resolve(r, s, n, null, { shadow: !1 })) ? a.push(e.key) : i.push(e.key);
-						if (a.length !== o && i.length !== o) return {
+						const a = [], o = [], i = t.peers.length, l = h.isPresent(t.options);
+						for (const e of t.peers) !1 === l(e.resolve(r, s, n, null, { shadow: !1 })) ? a.push(e.key) : o.push(e.key);
+						if (a.length !== i && o.length !== i) return {
 							code: "object.and",
 							context: {
-								present: i,
-								presentWithLabels: h.keysToLabels(e, i),
+								present: o,
+								presentWithLabels: h.keysToLabels(e, o),
 								missing: a,
 								missingWithLabels: h.keysToLabels(e, a)
 							}
 						};
 					},
 					nand(e, t, r, s, n) {
-						const a = [], i = h.isPresent(t.options);
-						for (const e of t.peers) i(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
+						const a = [], o = h.isPresent(t.options);
+						for (const e of t.peers) o(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
 						if (a.length !== t.peers.length) return;
-						const o = t.paths[0], l = t.paths.slice(1);
+						const i = t.paths[0], l = t.paths.slice(1);
 						return {
 							code: "object.nand",
 							context: {
-								main: o,
-								mainWithLabel: h.keysToLabels(e, o),
+								main: i,
+								mainWithLabel: h.keysToLabels(e, i),
 								peers: l,
 								peersWithLabels: h.keysToLabels(e, l)
 							}
@@ -3384,56 +3396,56 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						};
 					},
 					oxor(e, t, r, s, n) {
-						const a = [], i = h.isPresent(t.options);
-						for (const e of t.peers) i(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
+						const a = [], o = h.isPresent(t.options);
+						for (const e of t.peers) o(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
 						if (!a.length || 1 === a.length) return;
-						const o = {
+						const i = {
 							peers: t.paths,
 							peersWithLabels: h.keysToLabels(e, t.paths)
 						};
-						return o.present = a, o.presentWithLabels = h.keysToLabels(e, a), {
+						return i.present = a, i.presentWithLabels = h.keysToLabels(e, a), {
 							code: "object.oxor",
-							context: o
+							context: i
 						};
 					},
 					with(e, t, r, s, n) {
 						const a = h.isPresent(t.options);
-						for (const i of t.peers) if (!1 === a(i.resolve(r, s, n, null, { shadow: !1 }))) return {
+						for (const o of t.peers) if (!1 === a(o.resolve(r, s, n, null, { shadow: !1 }))) return {
 							code: "object.with",
 							context: {
 								main: t.key.key,
 								mainWithLabel: h.keysToLabels(e, t.key.key),
-								peer: i.key,
-								peerWithLabel: h.keysToLabels(e, i.key)
+								peer: o.key,
+								peerWithLabel: h.keysToLabels(e, o.key)
 							}
 						};
 					},
 					without(e, t, r, s, n) {
 						const a = h.isPresent(t.options);
-						for (const i of t.peers) if (a(i.resolve(r, s, n, null, { shadow: !1 }))) return {
+						for (const o of t.peers) if (a(o.resolve(r, s, n, null, { shadow: !1 }))) return {
 							code: "object.without",
 							context: {
 								main: t.key.key,
 								mainWithLabel: h.keysToLabels(e, t.key.key),
-								peer: i.key,
-								peerWithLabel: h.keysToLabels(e, i.key)
+								peer: o.key,
+								peerWithLabel: h.keysToLabels(e, o.key)
 							}
 						};
 					},
 					xor(e, t, r, s, n) {
-						const a = [], i = h.isPresent(t.options);
-						for (const e of t.peers) i(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
+						const a = [], o = h.isPresent(t.options);
+						for (const e of t.peers) o(e.resolve(r, s, n, null, { shadow: !1 })) && a.push(e.key);
 						if (1 === a.length) return;
-						const o = {
+						const i = {
 							peers: t.paths,
 							peersWithLabels: h.keysToLabels(e, t.paths)
 						};
 						return 0 === a.length ? {
 							code: "object.missing",
-							context: o
-						} : (o.present = a, o.presentWithLabels = h.keysToLabels(e, a), {
+							context: i
+						} : (i.present = a, i.presentWithLabels = h.keysToLabels(e, a), {
 							code: "object.xor",
-							context: o
+							context: i
 						});
 					}
 				}, h.keysToLabels = function(e, t) {
@@ -3442,56 +3454,56 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return "function" == typeof e.isPresent ? e.isPresent : (e) => void 0 !== e;
 				}, h.rename = function(e, t, r, s, n) {
 					const a = {};
-					for (const i of e.$_terms.renames) {
-						const o = [], l = "string" != typeof i.from;
-						if (l) for (const e in t) {
-							if (void 0 === t[e] && i.options.ignoreUndefined) continue;
-							if (e === i.to) continue;
-							const r = i.from.exec(e);
-							r && o.push({
+					for (const o of e.$_terms.renames) {
+						const i = [], l = "string" != typeof o.from;
+						if (l) for (const e of Object.keys(t)) {
+							if (void 0 === t[e] && o.options.ignoreUndefined) continue;
+							if (e === o.to) continue;
+							const r = o.from.exec(e);
+							r && i.push({
 								from: e,
-								to: i.to,
+								to: o.to,
 								match: r
 							});
 						}
-						else !Object.prototype.hasOwnProperty.call(t, i.from) || void 0 === t[i.from] && i.options.ignoreUndefined || o.push(i);
-						for (const c of o) {
-							const o = c.from;
+						else !Object.prototype.hasOwnProperty.call(t, o.from) || void 0 === t[o.from] && o.options.ignoreUndefined || i.push(o);
+						for (const c of i) {
+							const i = c.from;
 							let u = c.to;
-							if (u instanceof m && (u = u.render(t, r, s, c.match)), o !== u) {
-								if (!i.options.multiple && a[u] && (n.push(e.$_createError("object.rename.multiple", t, {
-									from: o,
+							if (u instanceof m && (u = u.render(t, r, s, c.match)), i !== u) {
+								if (!o.options.multiple && a[u] && (n.push(e.$_createError("object.rename.multiple", t, {
+									from: i,
 									to: u,
 									pattern: l
 								}, r, s)), s.abortEarly)) return !1;
-								if (Object.prototype.hasOwnProperty.call(t, u) && !i.options.override && !a[u] && (n.push(e.$_createError("object.rename.override", t, {
-									from: o,
+								if (Object.prototype.hasOwnProperty.call(t, u) && !o.options.override && !a[u] && (n.push(e.$_createError("object.rename.override", t, {
+									from: i,
 									to: u,
 									pattern: l
 								}, r, s)), s.abortEarly)) return !1;
-								void 0 === t[o] ? delete t[u] : t[u] = t[o], a[u] = !0, i.options.alias || delete t[o];
+								void 0 === t[i] ? delete t[u] : t[u] = t[i], a[u] = !0, o.options.alias || delete t[i];
 							}
 						}
 					}
 					return !0;
 				}, h.unknown = function(e, t, r, s, n, a) {
 					if (e.$_terms.patterns) {
-						let i = !1;
-						const o = e.$_terms.patterns.map((e) => {
-							if (e.matches) return i = !0, [];
+						let o = !1;
+						const i = e.$_terms.patterns.map((e) => {
+							if (e.matches) return o = !0, [];
 						}), l = [t, ...n.ancestors];
-						for (const i of r) {
-							const c = t[i], u = [...n.path, i];
+						for (const o of r) {
+							const c = t[o], u = [...n.path, o];
 							for (let f = 0; f < e.$_terms.patterns.length; ++f) {
 								const m = e.$_terms.patterns[f];
 								if (m.regex) {
-									const e = m.regex.test(i);
+									const e = m.regex.test(o);
 									if (n.mainstay.tracer.debug(n, "rule", `pattern.${f}`, e ? "pass" : "error"), !e) continue;
-								} else if (!m.schema.$_match(i, n.nest(m.schema, `pattern.${f}`), a)) continue;
-								r.delete(i);
+								} else if (!m.schema.$_match(o, n.nest(m.schema, `pattern.${f}`), a)) continue;
+								r.delete(o);
 								const h = n.localize(u, l, {
 									schema: m.rule,
-									key: i
+									key: o
 								}), p = m.rule.$_validate(c, h, a);
 								if (p.errors) {
 									if (a.abortEarly) return {
@@ -3500,22 +3512,22 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									};
 									s.push(...p.errors);
 								}
-								if (m.matches && o[f].push(i), t[i] = p.value, !m.fallthrough) break;
+								if (m.matches && i[f].push(o), t[o] = p.value, !m.fallthrough) break;
 							}
 						}
-						if (i) for (let r = 0; r < o.length; ++r) {
-							const i = o[r];
-							if (!i) continue;
-							const c = e.$_terms.patterns[r].matches, f = n.localize(n.path, l, c), m = c.$_validate(i, f, a);
+						if (o) for (let r = 0; r < i.length; ++r) {
+							const o = i[r];
+							if (!o) continue;
+							const c = e.$_terms.patterns[r].matches, f = n.localize(n.path, l, c), m = c.$_validate(o, f, a);
 							if (m.errors) {
 								const r = u.details(m.errors, { override: !1 });
-								r.matches = i;
-								const o = e.$_createError("object.pattern.match", t, r, n, a);
+								r.matches = o;
+								const i = e.$_createError("object.pattern.match", t, r, n, a);
 								if (a.abortEarly) return {
 									value: t,
-									errors: o
+									errors: i
 								};
-								s.push(o);
+								s.push(i);
 							}
 						}
 					}
@@ -3524,13 +3536,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							const e = !(!a.stripUnknown || !0 !== a.stripUnknown && !a.stripUnknown.objects);
 							for (const s of r) e ? (delete t[s], r.delete(s)) : "function" == typeof t[s] && r.delete(s);
 						}
-						if (!l.default(e._flags.unknown, a.allowUnknown)) for (const i of r) {
-							const r = n.localize([...n.path, i], []), o = e.$_createError("object.unknown", t[i], { child: i }, r, a, { flags: !1 });
+						if (!l.default(e._flags.unknown, a.allowUnknown)) for (const o of r) {
+							const r = n.localize([...n.path, o], []), i = e.$_createError("object.unknown", t[o], { child: o }, r, a, { flags: !1 });
 							if (a.abortEarly) return {
 								value: t,
-								errors: o
+								errors: i
 							};
-							s.push(o);
+							s.push(i);
 						}
 					}
 				}, h.Dependency = class {
@@ -3567,7 +3579,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			9556(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(680), a = r(9415), i = r(3541), o = r(8013), l = {};
+				const { assert: s } = r(3115), n = r(680), a = r(9415), o = r(3541), i = r(8013), l = {};
 				e.exports = n.extend({
 					type: "link",
 					properties: { schemaChain: !0 },
@@ -3584,14 +3596,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					},
 					validate(e, { schema: t, state: r, prefs: n, error: a }) {
 						s(t.$_terms.link, "Uninitialized link schema");
-						const i = t._flags.maxRecursion;
-						if (void 0 !== i && r.schemas.filter((e) => e.schema === t).length > i) return {
+						const o = t._flags.maxRecursion;
+						if (void 0 !== o && r.schemas.filter((e) => e.schema === t).length > o) return {
 							value: e,
-							errors: a("link.maxRecursion", { limit: i })
+							errors: a("link.maxRecursion", { limit: o })
 						};
-						const o = l.generate(t, e, r, n), c = t.$_terms.link[0].ref;
+						const i = l.generate(t, e, r, n), c = t.$_terms.link[0].ref;
 						try {
-							return o.$_validate(e, r.nest(o, `link:${c.display}:${o.type}`), n);
+							return i.$_validate(e, r.nest(i, `link:${c.display}:${i.type}`), n);
 						} catch (t) {
 							if (!(t instanceof RangeError)) throw t;
 							return {
@@ -3603,7 +3615,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					generate: (e, t, r, s) => l.generate(e, t, r, s),
 					rules: {
 						ref: { method(e) {
-							s(!this.$_terms.link, "Cannot reinitialize schema"), e = i.ref(e), s("value" === e.type || "local" === e.type, "Invalid reference type:", e.type), s("local" === e.type || "root" === e.ancestor || e.ancestor > 0, "Link cannot reference itself");
+							s(!this.$_terms.link, "Cannot reinitialize schema"), e = o.ref(e), s("value" === e.type || "local" === e.type, "Invalid reference type:", e.type), s("local" === e.type || "root" === e.ancestor || e.ancestor > 0, "Link cannot reference itself");
 							const t = this.clone();
 							return t.$_terms.link = [{ ref: e }], t;
 						} },
@@ -3627,10 +3639,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}), l.generate = function(e, t, r, s) {
 					let n = r.mainstay.links.get(e);
 					if (n) return n._generate(t, r, s).schema;
-					const a = e.$_terms.link[0].ref, { perspective: i, path: o } = l.perspective(a, r);
-					l.assert(i, "which is outside of schema boundaries", a, e, r, s);
+					const a = e.$_terms.link[0].ref, { perspective: o, path: i } = l.perspective(a, r);
+					l.assert(o, "which is outside of schema boundaries", a, e, r, s);
 					try {
-						n = o.length ? i.$_reach(o) : i;
+						n = i.length ? o.$_reach(i) : o;
 					} catch {
 						l.assert(!1, "to non-existing schema", a, e, r, s);
 					}
@@ -3661,13 +3673,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						perspective: t.schemas[e.ancestor] && t.schemas[e.ancestor].schema,
 						path: e.path
 					};
-				}, l.assert = function(e, t, r, n, a, i) {
-					e || s(!1, `"${o.label(n._flags, a, i)}" contains link reference "${r.display}" ${t}`);
+				}, l.assert = function(e, t, r, n, a, o) {
+					e || s(!1, `"${i.label(n._flags, a, o)}" contains link reference "${r.display}" ${t}`);
 				};
 			},
 			4709(e, t, r) {
 				"use strict";
-				const { assert: s } = r(3115), n = r(680), a = r(9415), i = {
+				const { assert: s } = r(3115), n = r(680), a = r(9415), o = {
 					numberRx: /^\s*[+-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))(?:e([+-]?\d+))?\s*$/i,
 					precisionRx: /(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/,
 					exponentialPartRegex: /[eE][+-]?\d+$/,
@@ -3685,15 +3697,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					coerce: {
 						from: "string",
 						method(e, { schema: t, error: r }) {
-							if (!e.match(i.numberRx)) return;
+							if (!e.match(o.numberRx)) return;
 							e = e.trim();
 							const s = { value: parseFloat(e) };
 							if (0 === s.value && (s.value = 0), !t._flags.unsafe) if (e.match(/e/i)) {
-								if (i.extractSignificantDigits(e) !== i.extractSignificantDigits(String(s.value))) return s.errors = r("number.unsafe"), s;
+								if (o.extractSignificantDigits(e) !== o.extractSignificantDigits(String(s.value))) return s.errors = r("number.unsafe"), s;
 							} else {
 								const t = s.value.toString();
 								if (t.match(/e/i)) return s;
-								if (t !== i.normalizeDecimal(e)) return s.errors = r("number.unsafe"), s;
+								if (t !== o.normalizeDecimal(e)) return s.errors = r("number.unsafe"), s;
 							}
 							return s;
 						}
@@ -3720,8 +3732,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					rules: {
 						compare: {
 							method: !1,
-							validate: (e, t, { limit: r }, { name: s, operator: n, args: i }) => a.compare(e, r, n) ? e : t.error("number." + s, {
-								limit: i.limit,
+							validate: (e, t, { limit: r }, { name: s, operator: n, args: o }) => a.compare(e, r, n) ? e : t.error("number." + s, {
+								limit: o.limit,
 								value: e
 							}),
 							args: [{
@@ -3784,7 +3796,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						},
 						multiple: {
 							method(e) {
-								const t = "number" == typeof e ? i.decimalPlaces(e) : null, r = Math.pow(10, t);
+								const t = "number" == typeof e ? o.decimalPlaces(e) : null, r = Math.pow(10, t);
 								return this.$_addRule({
 									name: "multiple",
 									args: {
@@ -3794,7 +3806,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									}
 								});
 							},
-							validate: (e, t, { base: r, baseDecimalPlace: s, pfactor: n }, a) => i.decimalPlaces(e) > s ? t.error("number.multiple", {
+							validate: (e, t, { base: r, baseDecimalPlace: s, pfactor: n }, a) => o.decimalPlaces(e) > s ? t.error("number.multiple", {
 								multiple: a.args.base,
 								value: e
 							}) : Math.round(n * e) % Math.round(n * r) === 0 ? e : t.error("number.multiple", {
@@ -3835,7 +3847,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								});
 							},
 							validate(e, t, { limit: r }) {
-								const s = e.toString().match(i.precisionRx);
+								const s = e.toString().match(o.precisionRx);
 								return Math.max((s[1] ? s[1].length : 0) - (s[2] ? parseInt(s[2], 10) : 0), 0) <= r ? e : t.error("number.precision", {
 									limit: r,
 									value: e
@@ -3876,9 +3888,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						"number.precision": "{{#label}} must have no more than {{#limit}} decimal places",
 						"number.unsafe": "{{#label}} must be a safe number"
 					}
-				}), i.extractSignificantDigits = function(e) {
-					return e.replace(i.exponentialPartRegex, "").replace(i.dotRegex, "").replace(i.trailingZerosRegex, "").replace(i.leadingSignAndZerosRegex, "");
-				}, i.normalizeDecimal = function(e) {
+				}), o.extractSignificantDigits = function(e) {
+					return e.replace(o.exponentialPartRegex, "").replace(o.dotRegex, "").replace(o.trailingZerosRegex, "").replace(o.leadingSignAndZerosRegex, "");
+				}, o.normalizeDecimal = function(e) {
 					return (e = e.replace(/^\+/, "").replace(/\.0*$/, "").replace(/^(-?)\.([^\.]*)$/, "$10.$2").replace(/^(-?)0+([0-9])/, "$1$2")).includes(".") && e.endsWith("0") && (e = e.replace(/0+$/, "")), "-0" === e ? "0" : e;
 				};
 			},
@@ -3894,7 +3906,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			9033(e, t, r) {
 				"use strict";
-				const { assert: s, escapeRegex: n } = r(3115), { isDomainValid: a, isEmailValid: i, ipRegex: o, uriRegex: l } = r(9089), c = r(1339), u = r(680), f = r(9415), m = {
+				const { assert: s, escapeRegex: n } = r(3115), { isDomainValid: a, isEmailValid: o, ipRegex: i, uriRegex: l } = r(9089), c = r(7368), u = r(680), f = r(9415), m = {
 					tlds: c.tlds instanceof Set && { tlds: {
 						allow: c.tlds,
 						deny: null
@@ -3915,7 +3927,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						withOptionalPrefix: /^(?:0x)?[0-9a-f]+$/i,
 						withoutPrefix: /^[0-9a-f]+$/i
 					},
-					ipRegex: o({ cidr: "forbidden" }).regex,
+					ipRegex: i({ cidr: "forbidden" }).regex,
 					isoDurationRegex: /^P(?!$)(\d+Y)?(\d+M)?(\d+W)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?$/,
 					guidBrackets: {
 						"{": "}",
@@ -3933,7 +3945,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						uuidv7: "7",
 						uuidv8: "8"
 					},
-					guidSeparators: new Set([
+					guidSeparators: /* @__PURE__ */ new Set([
 						void 0,
 						!0,
 						!1,
@@ -3961,10 +3973,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							n && (e = e.normalize(n.args.form));
 							const a = t.$_getRule("case");
 							a && (e = "upper" === a.args.direction ? e.toLocaleUpperCase() : e.toLocaleLowerCase());
-							const i = t.$_getRule("trim");
-							if (i && i.args.enabled && (e = e.trim()), t.$_terms.replacements) for (const r of t.$_terms.replacements) e = e.replace(r.pattern, r.replacement);
-							const o = t.$_getRule("hex");
-							if (o && o.args.options.byteAligned && e.length % 2 != 0 && (e = `0${e}`), t.$_getRule("isoDate")) {
+							const o = t.$_getRule("trim");
+							if (o && o.args.enabled && (e = e.trim()), t.$_terms.replacements) for (const r of t.$_terms.replacements) e = e.replace(r.pattern, r.replacement);
+							const i = t.$_getRule("hex");
+							if (i && i.args.options.byteAligned && e.length % 2 != 0 && (e = `0${e}`), t.$_getRule("isoDate")) {
 								const t = m.isoDate(e);
 								t && (e = t);
 							}
@@ -4113,11 +4125,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								});
 							},
 							validate(e, t, { options: r }, { regex: s, address: n }) {
-								const a = r.multiple ? e.split(s) : [e], o = [];
-								for (const e of a) i(e, n) || o.push(e);
-								return o.length ? t.error("string.email", {
+								const a = r.multiple ? e.split(s) : [e], i = [];
+								for (const e of a) o(e, n) || i.push(e);
+								return i.length ? t.error("string.email", {
 									value: e,
-									invalids: o
+									invalids: i
 								}) : e;
 							},
 							jsonSchema: (e, t) => (t.format = "email", t)
@@ -4138,26 +4150,26 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									for (let e = 0; e < r.length; ++e) {
 										const a = r[e];
 										s("string" == typeof a, "version at position " + e + " must be a string");
-										const i = m.guidVersions[a.toLowerCase()];
-										s(i, "version at position " + e + " must be one of " + Object.keys(m.guidVersions).join(", ")), s(!n.has(i), "version at position " + e + " must not be a duplicate"), t += i, n.add(i);
+										const o = m.guidVersions[a.toLowerCase()];
+										s(o, "version at position " + e + " must be one of " + Object.keys(m.guidVersions).join(", ")), s(!n.has(o), "version at position " + e + " must not be a duplicate"), t += o, n.add(o);
 									}
 								}
 								s(m.guidSeparators.has(e.separator), "separator must be one of true, false, \"-\", or \":\"");
 								const r = void 0 === e.separator ? "[:-]?" : !0 === e.separator ? "[:-]" : !1 === e.separator ? "[]?" : `\\${e.separator}`;
-								let a, i;
-								void 0 === e.wrapper ? (a = "[\\[{\\(]?", i = "[\\]}\\)]?") : !0 === e.wrapper ? (a = "[\\[{\\(]", i = "[\\]}\\)]") : !1 === e.wrapper ? (a = "", i = "") : (a = n(e.wrapper), i = n(m.guidBrackets[e.wrapper]));
-								const o = new RegExp(`^(${a})[0-9A-F]{8}(${r})[0-9A-F]{4}\\2?[${t || "0-9A-F"}][0-9A-F]{3}\\2?[${t ? "89AB" : "0-9A-F"}][0-9A-F]{3}\\2?[0-9A-F]{12}(${i})$`, "i");
+								let a, o;
+								void 0 === e.wrapper ? (a = "[\\[{\\(]?", o = "[\\]}\\)]?") : !0 === e.wrapper ? (a = "[\\[{\\(]", o = "[\\]}\\)]") : !1 === e.wrapper ? (a = "", o = "") : (a = n(e.wrapper), o = n(m.guidBrackets[e.wrapper]));
+								const i = new RegExp(`^(${a})[0-9A-F]{8}(${r})[0-9A-F]{4}\\2?[${t || "0-9A-F"}][0-9A-F]{3}\\2?[${t ? "89AB" : "0-9A-F"}][0-9A-F]{3}\\2?[0-9A-F]{12}(${o})$`, "i");
 								return this.$_addRule({
 									name: "guid",
 									args: { options: e },
-									regex: o
+									regex: i
 								});
 							},
 							validate(e, t, r, { regex: s }) {
 								const n = s.exec(e);
 								if (!n) return t.error("string.guid");
-								const a = n[1], i = n[n.length - 1];
-								return (a || i) && m.guidBrackets[a] !== i ? t.error("string.guid") : e;
+								const a = n[1], o = n[n.length - 1];
+								return (a || o) && m.guidBrackets[a] !== o ? t.error("string.guid") : e;
 							},
 							jsonSchema: (e, t) => (t.format = "uuid", t)
 						},
@@ -4188,7 +4200,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						ip: {
 							method(e = {}) {
 								f.assertOptions(e, ["cidr", "version"]);
-								const { cidr: t, versions: r, regex: s } = o(e), n = e.version ? r : void 0;
+								const { cidr: t, versions: r, regex: s } = i(e), n = e.version ? r : void 0;
 								return this.$_addRule({
 									name: "ip",
 									args: { options: {
@@ -4229,10 +4241,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							method(e, t) {
 								return m.length(this, "length", e, "=", t);
 							},
-							validate(e, t, { limit: r, encoding: s }, { name: n, operator: a, args: i }) {
-								const o = !s && e.length;
-								return f.compare(o, r, a) ? e : t.error("string." + n, {
-									limit: i.limit,
+							validate(e, t, { limit: r, encoding: s }, { name: n, operator: a, args: o }) {
+								const i = !s && e.length;
+								return f.compare(i, r, a) ? e : t.error("string." + n, {
+									limit: o.limit,
 									value: e,
 									encoding: s
 								});
@@ -4298,7 +4310,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								regex: r,
 								value: e
 							}),
-							jsonSchema: (e, t) => (t.pattern = e.args.regex.source, t),
+							jsonSchema(e, t) {
+								const r = e.args.regex.source;
+								return t.allOf ? t.allOf.push({ pattern: r }) : void 0 !== t.pattern ? (t.allOf = [{ pattern: t.pattern }, { pattern: r }], delete t.pattern) : t.pattern = r, t;
+							},
 							args: ["regex", "options"],
 							multi: !0
 						},
@@ -4358,19 +4373,19 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									scheme: r
 								});
 							},
-							validate(e, t, { options: r }, { regex: s, domain: n, scheme: i }) {
+							validate(e, t, { options: r }, { regex: s, domain: n, scheme: o }) {
 								if (["http:/", "https:/"].includes(e)) return t.error("string.uri");
-								let o = s.exec(e);
-								if (!o && t.prefs.convert && r.encodeUri) {
+								let i = s.exec(e);
+								if (!i && t.prefs.convert && r.encodeUri) {
 									const t = encodeURI(e);
-									o = s.exec(t), o && (e = t);
+									i = s.exec(t), i && (e = t);
 								}
-								if (o) {
-									const s = o[1] || o[2];
+								if (i) {
+									const s = i[1] || i[2];
 									return !n || r.allowRelative && !s || a(s, n) ? e : t.error("string.domain", { value: s });
 								}
 								return r.relativeOnly ? t.error("string.uriRelativeOnly") : r.scheme ? t.error("string.uriCustomScheme", {
-									scheme: i,
+									scheme: o,
 									value: e
 								}) : t.error("string.uri");
 							},
@@ -4494,17 +4509,17 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			1190(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n, ignore: a, reach: i } = r(3115), o = r(9415), l = r(8013), c = r(4957), u = { result: Symbol("result") };
+				const { assert: s, clone: n, ignore: a, reach: o } = r(3115), i = r(9415), l = r(8013), c = r(4957), u = { result: Symbol("result") };
 				t.entry = function(e, t, r) {
-					let n = o.defaults;
-					r && (s(void 0 === r.warnings, "Cannot override warnings preference in synchronous validation"), s(void 0 === r.artifacts, "Cannot override artifacts preference in synchronous validation"), n = o.preferences(o.defaults, r));
+					let n = i.defaults;
+					r && (s(void 0 === r.warnings, "Cannot override warnings preference in synchronous validation"), s(void 0 === r.artifacts, "Cannot override artifacts preference in synchronous validation"), n = i.preferences(i.defaults, r));
 					const a = u.entry(e, t, n);
 					s(!a.mainstay.externals.length, "Schema with external rules must use validateAsync()");
-					const i = { value: a.value };
-					return a.error && (i.error = a.error), a.mainstay.warnings.length && (i.warning = l.details(a.mainstay.warnings)), a.mainstay.debug && (i.debug = a.mainstay.debug), a.mainstay.artifacts && (i.artifacts = a.mainstay.artifacts), i;
+					const o = { value: a.value };
+					return a.error && (o.error = a.error), a.mainstay.warnings.length && (o.warning = l.details(a.mainstay.warnings)), a.mainstay.debug && (o.debug = a.mainstay.debug), a.mainstay.artifacts && (o.artifacts = a.mainstay.artifacts), o;
 				}, t.entryAsync = async function(e, t, r) {
-					let s = o.defaults;
-					r && (s = o.preferences(o.defaults, r));
+					let s = i.defaults;
+					r && (s = i.preferences(i.defaults, r));
 					const n = u.entry(e, t, s), a = n.mainstay;
 					if (n.error) throw a.debug && (n.error.debug = a.debug), n.error;
 					if (a.externals.length) {
@@ -4513,7 +4528,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						for (const n of a.externals) {
 							const f = n.state.path, m = "link" === n.schema.type ? a.links.get(n.schema) : null;
 							let h, p, d = t;
-							const g = f.length ? [t] : [], y = f.length ? i(e, f) : e;
+							const g = f.length ? [t] : [], y = f.length ? o(e, f) : e;
 							if (f.length) {
 								h = f[f.length - 1];
 								let e = t;
@@ -4521,7 +4536,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								p = g[0], d = p[h];
 							}
 							try {
-								const e = (e, t) => (m || n.schema).$_createError(e, d, t, n.state, s), i = await n.method(d, {
+								const e = (e, t) => (m || n.schema).$_createError(e, d, t, n.state, s), o = await n.method(d, {
 									schema: n.schema,
 									linked: m,
 									state: n.state,
@@ -4532,16 +4547,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									warn: (e, t) => a.warnings.push((m || n.schema).$_createError(e, d, t, n.state, s)),
 									message: (e, t) => (m || n.schema).$_createError("external", d, t, n.state, s, { messages: e })
 								});
-								if (void 0 === i || i === d) continue;
-								if (i instanceof l.Report) {
-									if (a.tracer.log(n.schema, n.state, "rule", "external", "error"), c.push(i), s.abortEarly) break;
+								if (void 0 === o || o === d) continue;
+								if (o instanceof l.Report) {
+									if (a.tracer.log(n.schema, n.state, "rule", "external", "error"), c.push(o), s.abortEarly) break;
 									continue;
 								}
-								if (Array.isArray(i) && i[o.symbols.errors]) {
-									if (a.tracer.log(n.schema, n.state, "rule", "external", "error"), c.push(...i), s.abortEarly) break;
+								if (Array.isArray(o) && o[i.symbols.errors]) {
+									if (a.tracer.log(n.schema, n.state, "rule", "external", "error"), c.push(...o), s.abortEarly) break;
 									continue;
 								}
-								p ? (a.tracer.value(n.state, "rule", d, i, "external"), p[h] = i) : (a.tracer.value(n.state, "rule", t, i, "external"), t = i);
+								p ? (a.tracer.value(n.state, "rule", d, o, "external"), p[h] = o) : (a.tracer.value(n.state, "rule", t, o, "external"), t = o);
 							} catch (e) {
 								throw s.errors.label && (e.message += ` (${n.label})`), e;
 							}
@@ -4572,7 +4587,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						this._snapshots.pop();
 					}
 				}, u.entry = function(e, r, s) {
-					const { tracer: n, cleanup: a } = u.tracer(r, s), i = s.debug ? [] : null, o = r._ids._schemaChain ? /* @__PURE__ */ new Map() : null, f = new u.Mainstay(n, i, o), h = new c([], [], {
+					const { tracer: n, cleanup: a } = u.tracer(r, s), o = s.debug ? [] : null, i = r._ids._schemaChain ? /* @__PURE__ */ new Map() : null, f = new u.Mainstay(n, o, i), h = new c([], [], {
 						mainstay: f,
 						schemas: r._ids._schemaChain ? [{ schema: r }] : null
 					}), p = t.validate(e, r, h, s);
@@ -4593,7 +4608,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const s = t._cache.get(e);
 						if (r.mainstay.tracer.debug(r, "validate", "cached", !!s), s) return s;
 					}
-					const a = (n, a, i) => t.$_createError(n, e, a, i || r, s), i = {
+					const a = (n, a, o) => t.$_createError(n, e, a, o || r, s), o = {
 						original: e,
 						prefs: s,
 						schema: t,
@@ -4606,37 +4621,37 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					r.mainstay.tracer.entry(t, r);
 					const l = t._definition;
 					if (l.prepare && void 0 !== e && s.convert) {
-						const t = l.prepare(e, i);
+						const t = l.prepare(e, o);
 						if (t) {
-							if (r.mainstay.tracer.value(r, "prepare", e, t.value), t.errors) return u.finalize(t.value, [].concat(t.errors), i);
+							if (r.mainstay.tracer.value(r, "prepare", e, t.value), t.errors) return u.finalize(t.value, [].concat(t.errors), o);
 							e = t.value;
 						}
 					}
 					if (l.coerce && void 0 !== e && s.convert && (!l.coerce.from || l.coerce.from.includes(typeof e))) {
-						const t = l.coerce.method(e, i);
+						const t = l.coerce.method(e, o);
 						if (t) {
-							if (r.mainstay.tracer.value(r, "coerced", e, t.value), t.errors) return u.finalize(t.value, [].concat(t.errors), i);
+							if (r.mainstay.tracer.value(r, "coerced", e, t.value), t.errors) return u.finalize(t.value, [].concat(t.errors), o);
 							e = t.value;
 						}
 					}
 					const c = t._flags.empty;
-					c && c.$_match(u.trim(e, t), r.nest(c), o.defaults) && (r.mainstay.tracer.value(r, "empty", e, void 0), e = void 0);
+					c && c.$_match(u.trim(e, t), r.nest(c), i.defaults) && (r.mainstay.tracer.value(r, "empty", e, void 0), e = void 0);
 					const f = n.presence || t._flags.presence || (t._flags._endedSwitch ? null : s.presence);
 					if (void 0 === e) {
-						if ("forbidden" === f) return u.finalize(e, null, i);
-						if ("required" === f) return u.finalize(e, [t.$_createError("any.required", e, null, r, s)], i);
+						if ("forbidden" === f) return u.finalize(e, null, o);
+						if ("required" === f) return u.finalize(e, [t.$_createError("any.required", e, null, r, s)], o);
 						if ("optional" === f) {
-							if (t._flags.default !== o.symbols.deepDefault) return u.finalize(e, null, i);
+							if (t._flags.default !== i.symbols.deepDefault) return u.finalize(e, null, o);
 							r.mainstay.tracer.value(r, "default", e, {}), e = {};
 						}
-					} else if ("forbidden" === f) return u.finalize(e, [t.$_createError("any.unknown", e, null, r, s)], i);
+					} else if ("forbidden" === f) return u.finalize(e, [t.$_createError("any.unknown", e, null, r, s)], o);
 					const m = [];
 					if (t._valids) {
 						const n = t._valids.get(e, r, s, t._flags.insensitive);
-						if (n) return s.convert && (r.mainstay.tracer.value(r, "valids", e, n.value), e = n.value), r.mainstay.tracer.filter(t, r, "valid", n), u.finalize(e, null, i);
+						if (n) return s.convert && (r.mainstay.tracer.value(r, "valids", e, n.value), e = n.value), r.mainstay.tracer.filter(t, r, "valid", n), u.finalize(e, null, o);
 						if (t._flags.only) {
 							const n = t.$_createError("any.only", e, { valids: t._valids.values({ display: !0 }) }, r, s);
-							if (s.abortEarly) return u.finalize(e, [n], i);
+							if (s.abortEarly) return u.finalize(e, [n], o);
 							m.push(n);
 						}
 					}
@@ -4645,33 +4660,33 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if (n) {
 							r.mainstay.tracer.filter(t, r, "invalid", n);
 							const a = t.$_createError("any.invalid", e, { invalids: t._invalids.values({ display: !0 }) }, r, s);
-							if (s.abortEarly) return u.finalize(e, [a], i);
+							if (s.abortEarly) return u.finalize(e, [a], o);
 							m.push(a);
 						}
 					}
 					if (l.validate) {
-						const t = l.validate(e, i);
+						const t = l.validate(e, o);
 						if (t && (r.mainstay.tracer.value(r, "base", e, t.value), e = t.value, t.errors)) {
-							if (!Array.isArray(t.errors)) return m.push(t.errors), u.finalize(e, m, i);
-							if (t.errors.length) return m.push(...t.errors), u.finalize(e, m, i);
+							if (!Array.isArray(t.errors)) return m.push(t.errors), u.finalize(e, m, o);
+							if (t.errors.length) return m.push(...t.errors), u.finalize(e, m, o);
 						}
 					}
-					return t._rules.length ? u.rules(e, m, i) : u.finalize(e, m, i);
+					return t._rules.length ? u.rules(e, m, o) : u.finalize(e, m, o);
 				}, u.rules = function(e, t, r) {
 					const { schema: s, state: n, prefs: a } = r;
-					for (const i of s._rules) {
-						const l = s._definition.rules[i.method];
+					for (const o of s._rules) {
+						const l = s._definition.rules[o.method];
 						if (l.convert && a.convert) {
-							n.mainstay.tracer.log(s, n, "rule", i.name, "full");
+							n.mainstay.tracer.log(s, n, "rule", o.name, "full");
 							continue;
 						}
-						let c, f = i.args;
-						if (i._resolve.length) {
+						let c, f = o.args;
+						if (o._resolve.length) {
 							f = Object.assign({}, f);
-							for (const t of i._resolve) {
-								const r = l.argsByName.get(t), i = f[t].resolve(e, n, a), u = r.normalize ? r.normalize(i) : i, m = o.validateArg(u, null, r);
+							for (const t of o._resolve) {
+								const r = l.argsByName.get(t), o = f[t].resolve(e, n, a), u = r.normalize ? r.normalize(o) : o, m = i.validateArg(u, null, r);
 								if (m) {
-									c = s.$_createError("any.ref", i, {
+									c = s.$_createError("any.ref", o, {
 										arg: t,
 										ref: f[t],
 										reason: m
@@ -4681,23 +4696,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								f[t] = u;
 							}
 						}
-						c = c || l.validate(e, r, f, i);
-						const m = u.rule(c, i);
+						c = c || l.validate(e, r, f, o);
+						const m = u.rule(c, o);
 						if (m.errors) {
-							if (n.mainstay.tracer.log(s, n, "rule", i.name, "error"), i.warn) {
+							if (n.mainstay.tracer.log(s, n, "rule", o.name, "error"), o.warn) {
 								n.mainstay.warnings.push(...m.errors);
 								continue;
 							}
 							if (a.abortEarly) return u.finalize(e, m.errors, r);
 							t.push(...m.errors);
-						} else n.mainstay.tracer.log(s, n, "rule", i.name, "pass"), n.mainstay.tracer.value(n, "rule", e, m.value, i.name), e = m.value;
+						} else n.mainstay.tracer.log(s, n, "rule", o.name, "pass"), n.mainstay.tracer.value(n, "rule", e, m.value, o.name), e = m.value;
 					}
 					return u.finalize(e, t, r);
 				}, u.rule = function(e, t) {
 					return e instanceof l.Report ? (u.error(e, t), {
 						errors: [e],
 						value: null
-					}) : Array.isArray(e) && e[o.symbols.errors] ? (e.forEach((e) => u.error(e, t)), {
+					}) : Array.isArray(e) && e[i.symbols.errors] ? (e.forEach((e) => u.error(e, t)), {
 						errors: e,
 						value: null
 					}) : {
@@ -4708,7 +4723,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return t.message && e._setTemplate(t.message), e;
 				}, u.finalize = function(e, t, r) {
 					t = t || [];
-					const { schema: n, state: a, prefs: i } = r;
+					const { schema: n, state: a, prefs: o } = r;
 					if (t.length) {
 						const s = u.default("failover", void 0, t, r);
 						void 0 !== s && (a.mainstay.tracer.value(a, "failover", e, s), e = s, t = []);
@@ -4728,34 +4743,34 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							a.mainstay.tracer.value(a, "cast", e, s, n._flags.cast), e = s;
 						}
 					}
-					if (n.$_terms.externals && i.externals && !1 !== i._externals) for (const { method: e } of n.$_terms.externals) a.mainstay.externals.push({
+					if (n.$_terms.externals && o.externals && !1 !== o._externals) for (const { method: e } of n.$_terms.externals) a.mainstay.externals.push({
 						method: e,
 						schema: n,
 						state: a,
-						label: l.label(n._flags, a, i)
+						label: l.label(n._flags, a, o)
 					});
-					const o = {
+					const i = {
 						value: e,
 						errors: t.length ? t : null
 					};
-					return n._flags.result && (o.value = "strip" === n._flags.result ? void 0 : r.original, a.mainstay.tracer.value(a, n._flags.result, e, o.value), a.shadow(e, n._flags.result)), n._cache && !1 !== i.cache && !n._refs.length && n._cache.set(r.original, o), void 0 === e || o.errors || void 0 === n._flags.artifact || (a.mainstay.artifacts = a.mainstay.artifacts || /* @__PURE__ */ new Map(), a.mainstay.artifacts.has(n._flags.artifact) || a.mainstay.artifacts.set(n._flags.artifact, []), a.mainstay.artifacts.get(n._flags.artifact).push(a.path)), o;
+					return n._flags.result && (i.value = "strip" === n._flags.result ? void 0 : r.original, a.mainstay.tracer.value(a, n._flags.result, e, i.value), a.shadow(e, n._flags.result)), n._cache && !1 !== o.cache && !n._refs.length && n._cache.set(r.original, i), void 0 === e || i.errors || void 0 === n._flags.artifact || (a.mainstay.artifacts = a.mainstay.artifacts || /* @__PURE__ */ new Map(), a.mainstay.artifacts.has(n._flags.artifact) || a.mainstay.artifacts.set(n._flags.artifact, []), a.mainstay.artifacts.get(n._flags.artifact).push(a.path)), i;
 				}, u.prefs = function(e, t) {
-					const r = t === o.defaults;
-					return r && e._preferences[o.symbols.prefs] ? e._preferences[o.symbols.prefs] : (t = o.preferences(t, e._preferences), r && (e._preferences[o.symbols.prefs] = t), t);
+					const r = t === i.defaults;
+					return r && e._preferences[i.symbols.prefs] ? e._preferences[i.symbols.prefs] : (t = i.preferences(t, e._preferences), r && (e._preferences[i.symbols.prefs] = t), t);
 				}, u.default = function(e, t, r, s) {
-					const { schema: a, state: i, prefs: l } = s, c = a._flags[e];
+					const { schema: a, state: o, prefs: l } = s, c = a._flags[e];
 					if (l.noDefaults || void 0 === c) return t;
-					if (i.mainstay.tracer.log(a, i, "rule", e, "full"), !c) return c;
+					if (o.mainstay.tracer.log(a, o, "rule", e, "full"), !c) return c;
 					if ("function" == typeof c) {
-						const t = c.length ? [n(i.ancestors[0]), s] : [];
+						const t = c.length ? [n(o.ancestors[0]), s] : [];
 						try {
 							return c(...t);
 						} catch (t) {
-							r.push(a.$_createError(`any.${e}`, null, { error: t }, i, l));
+							r.push(a.$_createError(`any.${e}`, null, { error: t }, o, l));
 							return;
 						}
 					}
-					return "object" != typeof c ? c : c[o.symbols.literal] ? c.literal : o.isResolvable(c) ? c.resolve(t, i, l) : n(c);
+					return "object" != typeof c ? c : c[i.symbols.literal] ? c.literal : i.isResolvable(c) ? c.resolve(t, o, l) : n(c);
 				}, u.trim = function(e, t) {
 					if ("string" != typeof e) return e;
 					const r = t.$_getRule("trim");
@@ -4770,15 +4785,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					value: a
 				}, u.errorsArray = function() {
 					const e = [];
-					return e[o.symbols.errors] = !0, e;
+					return e[i.symbols.errors] = !0, e;
 				};
 			},
 			6220(e, t, r) {
 				"use strict";
-				const { assert: s, deepEqual: n } = r(3115), a = r(9415), i = {};
-				e.exports = i.Values = class {
+				const { assert: s, deepEqual: n } = r(3115), a = r(9415), o = {};
+				e.exports = o.Values = class {
 					constructor(e, t) {
-						this._values = new Set(e), this._refs = new Set(t), this._lowercase = i.lowercases(e), this._override = !1;
+						this._values = new Set(e), this._refs = new Set(t), this._lowercase = o.lowercases(e), this._override = !1;
 					}
 					get length() {
 						return this._values.size + this._refs.size;
@@ -4787,7 +4802,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						a.isResolvable(e) ? this._refs.has(e) || (this._refs.add(e), t && t.register(e)) : this.has(e, null, null, !1) || (this._values.add(e), "string" == typeof e && this._lowercase.set(e.toLowerCase(), e));
 					}
 					static merge(e, t, r) {
-						if (e = e || new i.Values(), t) {
+						if (e = e || new o.Values(), t) {
 							if (t._override) return t.clone();
 							for (const r of [...t._values, ...t._refs]) e.add(r);
 						}
@@ -4812,10 +4827,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							for (const t of this._values) if (n(t, e)) return { value: t };
 						}
 						if (t) for (const a of this._refs) {
-							const i = a.resolve(e, t, r, null, { in: !0 });
-							if (void 0 === i) continue;
-							const o = a.in && "object" == typeof i ? Array.isArray(i) ? i : Object.keys(i) : [i];
-							for (const t of o) if (typeof t == typeof e) {
+							const o = a.resolve(e, t, r, null, { in: !0 });
+							if (void 0 === o) continue;
+							const i = a.in && "object" == typeof o ? Array.isArray(o) ? o : Object.keys(o) : [o];
+							for (const t of i) if (typeof t == typeof e) {
 								if (s && e && "string" == typeof e) {
 									if (t.toLowerCase() === e.toLowerCase()) return {
 										value: t,
@@ -4841,12 +4856,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						return Array.from([...this._values, ...this._refs]);
 					}
 					clone() {
-						const e = new i.Values(this._values, this._refs);
+						const e = new o.Values(this._values, this._refs);
 						return e._override = this._override, e;
 					}
 					concat(e) {
 						s(!e._override, "Cannot concat override set of values");
-						const t = new i.Values([...this._values, ...e._values], [...this._refs, ...e._refs]);
+						const t = new o.Values([...this._values, ...e._values], [...this._refs, ...e._refs]);
 						return t._override = this._override, t;
 					}
 					describe() {
@@ -4856,7 +4871,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						for (const t of this._refs.values()) e.push(t.describe());
 						return e;
 					}
-				}, i.Values.prototype[a.symbols.values] = !0, i.Values.prototype.slice = i.Values.prototype.clone, i.lowercases = function(e) {
+				}, o.Values.prototype[a.symbols.values] = !0, o.Values.prototype.slice = o.Values.prototype.clone, o.lowercases = function(e) {
 					const t = /* @__PURE__ */ new Map();
 					if (e) for (const r of e) "string" == typeof r && t.set(r.toLowerCase(), r);
 					return t;
@@ -4898,16 +4913,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						error: n[e]
 					};
 				}
-				const i = /[^\x00-\x7f]/, o = /[\x00-\x20@\:\/\\#!\$&\'\(\)\*\+,;=\?]/, l = /^[a-zA-Z](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, c = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, u = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, f = s.URL || URL;
+				const o = /[^\x00-\x7f]/, i = /[\x00-\x20@\:\/\\#!\$&\'\(\)\*\+,;=\?]/, l = /^[a-zA-Z](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, c = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, u = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/, f = s.URL || URL;
 				function m(e, t = {}) {
 					if (!e) return a("DOMAIN_NON_EMPTY_STRING");
 					if ("string" != typeof e) throw new Error("Invalid input: domain must be a string");
 					if (e.length > 256) return a("DOMAIN_TOO_LONG");
-					if (i.test(e)) {
+					if (o.test(e)) {
 						if (!1 === t.allowUnicode) return a("DOMAIN_INVALID_UNICODE_CHARS");
 						e = e.normalize("NFC");
 					}
-					if (o.test(e)) return a("DOMAIN_INVALID_CHARS");
+					if (i.test(e)) return a("DOMAIN_INVALID_CHARS");
 					e = function(e) {
 						e.includes("%") && (e = e.replace(/%/g, "%25"));
 						try {
@@ -4956,7 +4971,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 						const s = e.split("@");
 						if (2 !== s.length) return s.length > 2 ? a("MULTIPLE_AT_CHAR") : a("MISSING_AT_CHAR");
-						const [n, i] = s;
+						const [n, o] = s;
 						if (!n) return a("EMPTY_LOCAL");
 						if (!t.ignoreLength) {
 							if (e.length > 254) return a("ADDRESS_TOO_LONG");
@@ -4975,7 +4990,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								}
 							}
 							return null;
-						}(n, r) || m(i, t);
+						}(n, r) || m(o, t);
 					}(e, t);
 				}
 				function b(e) {
@@ -4986,23 +5001,23 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					"(?:\\xe0[\\xa0-\\xbf][\\x80-\\xbf])|(?:[\\xe1-\\xec][\\x80-\\xbf]{2})|(?:\\xed[\\x80-\\x9f][\\x80-\\xbf])|(?:[\\xee-\\xef][\\x80-\\xbf]{2})",
 					"(?:\\xf0[\\x90-\\xbf][\\x80-\\xbf]{2})|(?:[\\xf1-\\xf3][\\x80-\\xbf]{3})|(?:\\xf4[\\x80-\\x8f][\\x80-\\xbf]{2})"
 				].join("|"));
-				var A = r(8253), S = r.n(A), E = r(8669), R = r.n(E);
-				const O = function() {
+				var A = r(8253), S = r.n(A), E = r(8669), O = r.n(E);
+				const R = function() {
 					const e = {};
 					e.ipv4address = "(?:(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])";
 					const u = "(?:[\\dA-Fa-f]{1,4}:[\\dA-Fa-f]{1,4}|" + e.ipv4address + ")", f = "(?:[\\dA-Fa-f]{1,4}:){6}" + u, m = "::(?:[\\dA-Fa-f]{1,4}:){5}" + u, h = "(?:[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){4}" + u, p = "(?:(?:[\\dA-Fa-f]{1,4}:){0,1}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){3}" + u, d = "(?:(?:[\\dA-Fa-f]{1,4}:){0,2}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){2}" + u, g = "(?:(?:[\\dA-Fa-f]{1,4}:){0,3}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}:" + u, y = "(?:(?:[\\dA-Fa-f]{1,4}:){0,4}[\\dA-Fa-f]{1,4})?::" + u;
 					e.ipv4Cidr = "(?:\\d|[1-2]\\d|3[0-2])", e.ipv6Cidr = "(?:0{0,2}\\d|0?[1-9]\\d|1[01]\\d|12[0-8])", e.ipv6address = "(?:" + f + "|" + m + "|" + h + "|" + p + "|" + d + "|" + g + "|" + y + "|(?:(?:[\\dA-Fa-f]{1,4}:){0,5}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}|(?:(?:[\\dA-Fa-f]{1,4}:){0,6}[\\dA-Fa-f]{1,4})?::)", e.ipvFuture = "v[\\dA-Fa-f]+\\.[\\w-\\.~!\\$&'\\(\\)\\*\\+,;=:]+", e.scheme = "[a-zA-Z][a-zA-Z\\d+-\\.]*", e.schemeRegex = new RegExp(e.scheme);
-					const S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?" + S + "(?::\\d*)?", R = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?(" + S + ")(?::\\d*)?";
-					return e.hierPart = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|(?:\\/\\/\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*))", e.hierPartCapture = "(?:(?:\\/\\/" + R + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)", e.relativeRef = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.relativeRefCapture = "(?:(?:\\/\\/" + R + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.query = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*", e;
+					const S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?" + S + "(?::\\d*)?", O = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?(" + S + ")(?::\\d*)?";
+					return e.hierPart = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|(?:\\/\\/\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*))", e.hierPartCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)", e.relativeRef = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.relativeRefCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.query = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*", e;
 				}(), w = {
-					v4Cidr: O.ipv4Cidr,
-					v6Cidr: O.ipv6Cidr,
-					ipv4: O.ipv4address,
-					ipv6: O.ipv6address,
-					ipvfuture: O.ipvFuture
+					v4Cidr: R.ipv4Cidr,
+					v6Cidr: R.ipv6Cidr,
+					ipv4: R.ipv4address,
+					ipv6: R.ipv6address,
+					ipvfuture: R.ipvFuture
 				};
 				function N(e) {
-					const t = O, r = "(?:\\?" + (e.allowQuerySquareBrackets ? t.queryWithSquareBrackets : t.query) + ")?(?:#" + t.fragment + ")?", s = e.domain ? t.relativeRefCapture : t.relativeRef;
+					const t = R, r = "(?:\\?" + (e.allowQuerySquareBrackets ? t.queryWithSquareBrackets : t.query) + ")?(?:#" + t.fragment + ")?", s = e.domain ? t.relativeRefCapture : t.relativeRef;
 					if (e.relativeOnly) return I(s + r);
 					let n = "";
 					if (e.scheme) {
@@ -5012,7 +5027,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const s = [];
 						for (let e = 0; e < r.length; ++e) {
 							const n = r[e];
-							S()(n instanceof RegExp || "string" == typeof n, "scheme at position " + e + " must be a RegExp or String"), n instanceof RegExp ? s.push(n.source.toString()) : (S()(t.schemeRegex.test(n), "scheme at position " + e + " must be a valid scheme"), s.push(R()(n)));
+							S()(n instanceof RegExp || "string" == typeof n, "scheme at position " + e + " must be a RegExp or String"), n instanceof RegExp ? s.push(n.source.toString()) : (S()(t.schemeRegex.test(n), "scheme at position " + e + " must be a valid scheme"), s.push(O()(n)));
 						}
 						n = s.join("|");
 					}
@@ -5145,20 +5160,20 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}, t), this.single = null, this._parts = null, this._parse(e);
 					}
 					_parse(e) {
-						let s = [], n = "", a = 0, i = !1;
-						const o = (e) => {
+						let s = [], n = "", a = 0, o = !1;
+						const i = (e) => {
 							if (a) throw new Error("Formula missing closing parenthesis");
-							const o = s.length ? s[s.length - 1] : null;
-							if (i || n || e) {
-								if (o && "reference" === o.type && ")" === e) return o.type = "function", o.value = this._subFormula(n, o.value), void (n = "");
+							const i = s.length ? s[s.length - 1] : null;
+							if (o || n || e) {
+								if (i && "reference" === i.type && ")" === e) return i.type = "function", i.value = this._subFormula(n, i.value), void (n = "");
 								if (")" === e) {
 									const e = new t.Parser(n, this.settings);
 									s.push({
 										type: "segment",
 										value: e
 									});
-								} else if (i) {
-									if ("]" === i) return s.push({
+								} else if (o) {
+									if ("]" === o) return s.push({
 										type: "reference",
 										value: n
 									}), void (n = "");
@@ -5166,7 +5181,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 										type: "literal",
 										value: n
 									});
-								} else if (r.operatorCharacters.includes(n)) o && "operator" === o.type && r.operators.includes(o.value + n) ? o.value += n : s.push({
+								} else if (r.operatorCharacters.includes(n)) i && "operator" === i.type && r.operators.includes(i.value + n) ? i.value += n : s.push({
 									type: "operator",
 									value: n
 								});
@@ -5188,8 +5203,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								n = "";
 							}
 						};
-						for (const t of e) i ? t === i ? (o(), i = !1) : n += t : a ? "(" === t ? (n += t, ++a) : ")" === t ? (--a, a ? n += t : o(t)) : n += t : t in r.literals ? i = r.literals[t] : "(" === t ? (o(), ++a) : r.operatorCharacters.includes(t) ? (o(), n = t, o()) : " " !== t ? n += t : o();
-						o(), s = s.map((e, t) => "operator" !== e.type || "-" !== e.value || t && "operator" !== s[t - 1].type ? e : {
+						for (const t of e) o ? t === o ? (i(), o = !1) : n += t : a ? "(" === t ? (n += t, ++a) : ")" === t ? (--a, a ? n += t : i(t)) : n += t : t in r.literals ? o = r.literals[t] : "(" === t ? (i(), ++a) : r.operatorCharacters.includes(t) ? (i(), n = t, i()) : " " !== t ? n += t : i();
+						i(), s = s.map((e, t) => "operator" !== e.type || "-" !== e.value || t && "operator" !== s[t - 1].type ? e : {
 							type: "operator",
 							value: "n"
 						});
@@ -5222,16 +5237,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if ("function" != typeof n) throw new Error(`Formula contains unknown function ${s}`);
 						let a = [];
 						if (e) {
-							let t = "", n = 0, i = !1;
-							const o = () => {
+							let t = "", n = 0, o = !1;
+							const i = () => {
 								if (!t) throw new Error(`Formula contains function ${s} with invalid arguments ${e}`);
 								a.push(t), t = "";
 							};
 							for (let s = 0; s < e.length; ++s) {
 								const a = e[s];
-								i ? (t += a, a === i && (i = !1)) : a in r.literals && !n ? (t += a, i = r.literals[a]) : "," !== a || n ? (t += a, "(" === a ? ++n : ")" === a && --n) : o();
+								o ? (t += a, a === o && (o = !1)) : a in r.literals && !n ? (t += a, o = r.literals[a]) : "," !== a || n ? (t += a, "(" === a ? ++n : ")" === a && --n) : i();
 							}
-							o();
+							i();
 						}
 						return a = a.map((e) => new t.Parser(e, this.settings)), function(e) {
 							const t = [];
@@ -5246,16 +5261,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							if (n && "operator" === n.type) {
 								const a = t[s + 1];
 								t.splice(s + 1, 1);
-								const i = r.evaluate(a, e);
-								t[s] = r.single(n.value, i);
+								const o = r.evaluate(a, e);
+								t[s] = r.single(n.value, o);
 							}
 						}
 						return r.operatorsOrder.forEach((s) => {
 							for (let n = 1; n < t.length - 1;) if (s.includes(t[n])) {
-								const s = t[n], a = r.evaluate(t[n - 1], e), i = r.evaluate(t[n + 1], e);
+								const s = t[n], a = r.evaluate(t[n - 1], e), o = r.evaluate(t[n + 1], e);
 								t.splice(n, 2);
-								const o = r.calculate(s, a, i);
-								t[n - 1] = 0 === o ? 0 : o;
+								const i = r.calculate(s, a, o);
+								t[n - 1] = 0 === i ? 0 : i;
 							} else n += 2;
 						}), r.evaluate(t[0], e);
 					}
@@ -5298,33 +5313,33 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6084(e, t, r) {
 				"use strict";
-				const s = r(8253), n = r(4126), a = r(9315), i = r(1528), o = {};
+				const s = r(8253), n = r(4126), a = r(9315), o = r(1528), i = {};
 				e.exports = function(e, t, r = {}) {
 					if (s(e && "object" == typeof e, "Invalid defaults value: must be an object"), s(!t || !0 === t || "object" == typeof t, "Invalid source value: must be true, falsy or an object"), s("object" == typeof r, "Invalid options: must be an object"), !t) return null;
-					if (r.shallow) return o.applyToDefaultsWithShallow(e, t, r);
-					const i = n(e);
-					if (!0 === t) return i;
-					return a(i, t, {
+					if (r.shallow) return i.applyToDefaultsWithShallow(e, t, r);
+					const o = n(e);
+					if (!0 === t) return o;
+					return a(o, t, {
 						nullOverride: void 0 !== r.nullOverride && r.nullOverride,
 						mergeArrays: !1
 					});
-				}, o.applyToDefaultsWithShallow = function(e, t, r) {
+				}, i.applyToDefaultsWithShallow = function(e, t, r) {
 					const l = r.shallow;
 					s(Array.isArray(l), "Invalid keys");
 					const c = /* @__PURE__ */ new Map(), u = !0 === t ? null : /* @__PURE__ */ new Set();
 					for (let r of l) {
 						r = Array.isArray(r) ? r : r.split(".");
-						const s = i(e, r);
-						s && "object" == typeof s ? c.set(s, u && i(t, r) || s) : u && u.add(r);
+						const s = o(e, r);
+						s && "object" == typeof s ? c.set(s, u && o(t, r) || s) : u && u.add(r);
 					}
 					const f = n(e, {}, c);
 					if (!u) return f;
-					for (const e of u) o.reachCopy(f, t, e);
+					for (const e of u) i.reachCopy(f, t, e);
 					return a(f, t, {
 						nullOverride: void 0 !== r.nullOverride && r.nullOverride,
 						mergeArrays: !1
 					});
-				}, o.reachCopy = function(e, t, r) {
+				}, i.reachCopy = function(e, t, r) {
 					for (const e of r) {
 						if (!(e in t)) return;
 						const r = t[e];
@@ -5402,8 +5417,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			4126(e, t, r) {
 				"use strict";
-				const s = r(1528), n = r(3738), a = r(86), i = {
-					needsProtoHack: new Set([
+				const s = r(1528), n = r(3738), a = r(86), o = {
+					needsProtoHack: /* @__PURE__ */ new Set([
 						n.set,
 						n.map,
 						n.weakSet,
@@ -5411,16 +5426,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					]),
 					structuredCloneExists: "function" == typeof structuredClone
 				};
-				e.exports = i.clone = function(e, t = {}, r = null) {
+				e.exports = o.clone = function(e, t = {}, r = null) {
 					if ("object" != typeof e || null === e) return e;
-					let s = i.clone, o = r;
+					let s = o.clone, i = r;
 					if (t.shallow) {
-						if (!0 !== t.shallow) return i.cloneWithShallow(e, t);
+						if (!0 !== t.shallow) return o.cloneWithShallow(e, t);
 						s = (e) => e;
-					} else if (o) {
-						const t = o.get(e);
+					} else if (i) {
+						const t = i.get(e);
 						if (t) return t;
-					} else o = /* @__PURE__ */ new Map();
+					} else i = /* @__PURE__ */ new Map();
 					const l = n.getInternalProto(e);
 					switch (l) {
 						case n.buffer: return false.from(e);
@@ -5428,10 +5443,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						case n.regex:
 						case n.url: return new l.constructor(e);
 					}
-					const c = i.base(e, l, t);
+					const c = o.base(e, l, t);
 					if (c === e) return e;
-					if (o && o.set(e, c), l === n.set) for (const r of e) c.add(s(r, t, o));
-					else if (l === n.map) for (const [r, n] of e) c.set(r, s(n, t, o));
+					if (i && i.set(e, c), l === n.set) for (const r of e) c.add(s(r, t, i));
+					else if (l === n.map) for (const [r, n] of e) c.set(r, s(n, t, i));
 					const u = a.keys(e, t);
 					for (const r of u) {
 						if ("__proto__" === r) continue;
@@ -5439,22 +5454,22 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							c.length = e.length;
 							continue;
 						}
-						if (i.structuredCloneExists && l === n.error && "stack" === r) continue;
+						if (o.structuredCloneExists && l === n.error && "stack" === r) continue;
 						const a = Object.getOwnPropertyDescriptor(e, r);
-						a ? a.get || a.set ? Object.defineProperty(c, r, a) : a.enumerable ? c[r] = s(e[r], t, o) : Object.defineProperty(c, r, {
+						a ? a.get || a.set ? Object.defineProperty(c, r, a) : a.enumerable ? c[r] = s(e[r], t, i) : Object.defineProperty(c, r, {
 							enumerable: !1,
 							writable: !0,
 							configurable: !0,
-							value: s(e[r], t, o)
+							value: s(e[r], t, i)
 						}) : Object.defineProperty(c, r, {
 							enumerable: !0,
 							writable: !0,
 							configurable: !0,
-							value: s(e[r], t, o)
+							value: s(e[r], t, i)
 						});
 					}
 					return c;
-				}, i.cloneWithShallow = function(e, t) {
+				}, o.cloneWithShallow = function(e, t) {
 					const r = t.shallow;
 					(t = Object.assign({}, t)).shallow = !1;
 					const n = /* @__PURE__ */ new Map();
@@ -5462,20 +5477,20 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const r = s(e, t);
 						"object" != typeof r && "function" != typeof r || n.set(r, r);
 					}
-					return i.clone(e, t, n);
-				}, i.base = function(e, t, r) {
-					if (!1 === r.prototype) return i.needsProtoHack.has(t) ? new t.constructor() : t === n.array ? [] : {};
+					return o.clone(e, t, n);
+				}, o.base = function(e, t, r) {
+					if (!1 === r.prototype) return o.needsProtoHack.has(t) ? new t.constructor() : t === n.array ? [] : {};
 					const s = Object.getPrototypeOf(e);
 					if (s && s.isImmutable) return e;
 					if (t === n.array) {
 						const e = [];
 						return s !== t && Object.setPrototypeOf(e, s), e;
 					}
-					if (t === n.error && i.structuredCloneExists && (s === t || Error.isPrototypeOf(s.constructor))) {
+					if (t === n.error && o.structuredCloneExists && (s === t || Error.isPrototypeOf(s.constructor))) {
 						const t = structuredClone(e);
 						return Object.getPrototypeOf(t) !== s && Object.setPrototypeOf(t, s), t;
 					}
-					if (i.needsProtoHack.has(t)) {
+					if (o.needsProtoHack.has(t)) {
 						const e = new s.constructor();
 						return s !== t && Object.setPrototypeOf(e, s), e;
 					}
@@ -5484,16 +5499,16 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			2847(e, t, r) {
 				"use strict";
-				const s = r(8253), n = r(7125), a = r(8669), i = r(86), o = {};
+				const s = r(8253), n = r(7125), a = r(8669), o = r(86), i = {};
 				e.exports = function(e, t, r = {}) {
-					return "object" != typeof t && (t = [t]), s(!Array.isArray(t) || t.length, "Values array cannot be empty"), "string" == typeof e ? o.string(e, t, r) : Array.isArray(e) ? o.array(e, t, r) : (s("object" == typeof e, "Reference must be string or an object"), o.object(e, t, r));
-				}, o.array = function(e, t, r) {
+					return "object" != typeof t && (t = [t]), s(!Array.isArray(t) || t.length, "Values array cannot be empty"), "string" == typeof e ? i.string(e, t, r) : Array.isArray(e) ? i.array(e, t, r) : (s("object" == typeof e, "Reference must be string or an object"), i.object(e, t, r));
+				}, i.array = function(e, t, r) {
 					if (Array.isArray(t) || (t = [t]), !e.length) return !1;
 					if (r.only && r.once && e.length !== t.length) return !1;
 					let s;
 					const n = /* @__PURE__ */ new Map();
 					for (const e of t) if (r.deep && e && "object" == typeof e) {
-						s = null != s ? s : o.compare(r);
+						s = null != s ? s : i.compare(r);
 						let t = !1;
 						for (const [r, a] of n.entries()) if (s(r, e)) {
 							++a.allowed, t = !0;
@@ -5514,7 +5529,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					for (const t of e) {
 						let e;
 						if (r.deep && t && "object" == typeof t) {
-							s = null != s ? s : o.compare(r);
+							s = null != s ? s : i.compare(r);
 							for (const [r, a] of n.entries()) if (s(r, t)) {
 								e = a;
 								break;
@@ -5525,29 +5540,29 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if (r.only && a !== e.length) return !1;
 					for (const e of n.values()) if (e.hits !== e.allowed && e.hits < e.allowed && !r.part) return !1;
 					return !!a;
-				}, o.object = function(e, t, r) {
+				}, i.object = function(e, t, r) {
 					s(void 0 === r.once, "Cannot use option once with object");
-					const n = i.keys(e, r);
+					const n = o.keys(e, r);
 					if (!n.length) return !1;
-					if (Array.isArray(t)) return o.array(n, t, r);
-					const a = Object.getOwnPropertySymbols(t).filter((e) => t.propertyIsEnumerable(e)), l = [...Object.keys(t), ...a], c = o.compare(r), u = new Set(l);
+					if (Array.isArray(t)) return i.array(n, t, r);
+					const a = Object.getOwnPropertySymbols(t).filter((e) => t.propertyIsEnumerable(e)), l = [...Object.keys(t), ...a], c = i.compare(r), u = new Set(l);
 					for (const s of n) if (u.has(s)) {
 						if (!c(t[s], e[s])) return !1;
 						u.delete(s);
 					} else if (r.only) return !1;
 					return !u.size || !!r.part && u.size < l.length;
-				}, o.string = function(e, t, r) {
+				}, i.string = function(e, t, r) {
 					if ("" === e) return 1 === t.length && "" === t[0] || !r.once && !t.some((e) => "" !== e);
-					const n = /* @__PURE__ */ new Map(), i = [];
+					const n = /* @__PURE__ */ new Map(), o = [];
 					for (const e of t) if (s("string" == typeof e, "Cannot compare string reference to non-string value"), e) {
 						const t = n.get(e);
 						t ? ++t.allowed : (n.set(e, {
 							allowed: 1,
 							hits: 0
-						}), i.push(a(e)));
+						}), o.push(a(e)));
 					} else if (r.once || r.only) return !1;
-					if (!i.length) return !0;
-					const o = new RegExp(`(${i.join("|")})`, "g"), l = e.replace(o, (e, t) => (++n.get(t).hits, ""));
+					if (!o.length) return !0;
+					const i = new RegExp(`(${o.join("|")})`, "g"), l = e.replace(i, (e, t) => (++n.get(t).hits, ""));
 					if (r.only && l) return !1;
 					let c = !1;
 					for (const e of n.values()) if (e.hits && (c = !0), e.hits !== e.allowed) {
@@ -5555,14 +5570,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if (r.once) return !1;
 					}
 					return !!c;
-				}, o.compare = function(e) {
-					if (!e.deep) return o.shallow;
+				}, i.compare = function(e) {
+					if (!e.deep) return i.shallow;
 					const t = void 0 !== e.only, r = void 0 !== e.part, s = {
 						prototype: t ? e.only : !!r && !e.part,
 						part: t ? !e.only : !!r && e.part
 					};
 					return (e, t) => n(e, t, s);
-				}, o.shallow = function(e, t) {
+				}, i.shallow = function(e, t) {
 					return e === t;
 				};
 			},
@@ -5573,14 +5588,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return r = Object.assign({ prototype: !0 }, r), !!n.isDeepEqual(e, t, r, []);
 				}, n.isDeepEqual = function(e, t, r, a) {
 					if (e === t) return 0 !== e || 1 / e == 1 / t;
-					const i = typeof e;
-					if (i !== typeof t) return !1;
+					const o = typeof e;
+					if (o !== typeof t) return !1;
 					if (null === e || null === t) return !1;
-					if ("function" === i) {
+					if ("function" === o) {
 						if (!r.deepFunction || e.toString() !== t.toString()) return !1;
-					} else if ("object" !== i) return e != e && t != t;
-					const o = n.getSharedType(e, t, !!r.prototype);
-					switch (o) {
+					} else if ("object" !== o) return e != e && t != t;
+					const i = n.getSharedType(e, t, !!r.prototype);
+					switch (i) {
 						case s.buffer: return !1;
 						case s.promise: return e === t;
 						case s.regex:
@@ -5590,7 +5605,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					for (let r = a.length - 1; r >= 0; --r) if (a[r].isSame(e, t)) return !0;
 					a.push(new n.SeenEntry(e, t));
 					try {
-						return !!n.isDeepEqualObj(o, e, t, r, a);
+						return !!n.isDeepEqualObj(i, e, t, r, a);
 					} finally {
 						a.pop();
 					}
@@ -5611,15 +5626,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}, n.isSetSimpleEqual = function(e, t) {
 					for (const r of Set.prototype.values.call(e)) if (!Set.prototype.has.call(t, r)) return !1;
 					return !0;
-				}, n.isDeepEqualObj = function(e, t, r, a, i) {
-					const { isDeepEqual: o, valueOf: l, hasOwnEnumerableProperty: c } = n, { keys: u, getOwnPropertySymbols: f } = Object;
+				}, n.isDeepEqualObj = function(e, t, r, a, o) {
+					const { isDeepEqual: i, valueOf: l, hasOwnEnumerableProperty: c } = n, { keys: u, getOwnPropertySymbols: f } = Object;
 					if (e === s.array) {
 						if (!a.part) {
 							if (t.length !== r.length) return !1;
-							for (let e = 0; e < t.length; ++e) if (!o(t[e], r[e], a, i)) return !1;
+							for (let e = 0; e < t.length; ++e) if (!i(t[e], r[e], a, o)) return !1;
 							return !0;
 						}
-						for (const e of t) for (const t of r) if (o(e, t, a, i)) return !0;
+						for (const e of t) for (const t of r) if (i(e, t, a, o)) return !0;
 					} else if (e === s.set) {
 						if (t.size !== r.size) return !1;
 						if (!n.isSetSimpleEqual(t, r)) {
@@ -5627,7 +5642,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							for (const r of Set.prototype.values.call(t)) {
 								if (e.delete(r)) continue;
 								let t = !1;
-								for (const s of e) if (o(r, s, a, i)) {
+								for (const s of e) if (i(r, s, a, o)) {
 									e.delete(s), t = !0;
 									break;
 								}
@@ -5638,18 +5653,18 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						if (t.size !== r.size) return !1;
 						for (const [e, s] of Map.prototype.entries.call(t)) {
 							if (void 0 === s && !Map.prototype.has.call(r, e)) return !1;
-							if (!o(s, Map.prototype.get.call(r, e), a, i)) return !1;
+							if (!i(s, Map.prototype.get.call(r, e), a, o)) return !1;
 						}
 					} else if (e === s.error && (t.name !== r.name || t.message !== r.message)) return !1;
 					const m = l(t), h = l(r);
-					if ((t !== m || r !== h) && !o(m, h, a, i)) return !1;
+					if ((t !== m || r !== h) && !i(m, h, a, o)) return !1;
 					const p = u(t);
 					if (!a.part && p.length !== u(r).length && !a.skip) return !1;
 					let d = 0;
 					for (const e of p) if (a.skip && a.skip.includes(e)) void 0 === r[e] && ++d;
 					else {
 						if (!c(r, e)) return !1;
-						if (!o(t[e], r[e], a, i)) return !1;
+						if (!i(t[e], r[e], a, o)) return !1;
 					}
 					if (!a.part && p.length - d !== u(r).length) return !1;
 					if (!1 !== a.symbols) {
@@ -5659,7 +5674,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							if (null === (g = a.skip) || void 0 === g || !g.includes(n)) {
 								if (c(t, n)) {
 									if (!c(r, n)) return !1;
-									if (!o(t[n], r[n], a, i)) return !1;
+									if (!i(t[n], r[n], a, o)) return !1;
 								} else if (c(r, n)) return !1;
 							}
 							s.delete(n);
@@ -5698,7 +5713,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return t.namedHtml.get(e) || (e >= 256 ? "&#" + e + ";" : `&#x${e.toString(16).padStart(2, "0")};`);
 				}, t.isSafe = function(e) {
 					return t.safeCharCodes.has(e);
-				}, t.namedHtml = new Map([
+				}, t.namedHtml = /* @__PURE__ */ new Map([
 					[38, "&amp;"],
 					[60, "&lt;"],
 					[62, "&gt;"],
@@ -5722,7 +5737,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					return e ? e.replace(/[<>&\u2028\u2029]/g, t.escape) : "";
 				}, t.escape = function(e) {
 					return t.replacements.get(e);
-				}, t.replacements = new Map([
+				}, t.replacements = /* @__PURE__ */ new Map([
 					["<", "\\u003c"],
 					[">", "\\u003e"],
 					["&", "\\u0026"],
@@ -5758,10 +5773,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				const t = {};
 				e.exports = function(e, r, s = {}) {
 					if (!e || !r) return s.first ? null : [];
-					const n = [], a = Array.isArray(e) ? new Set(e) : e, i = /* @__PURE__ */ new Set();
-					for (const e of r) if (t.has(a, e) && !i.has(e)) {
+					const n = [], a = Array.isArray(e) ? new Set(e) : e, o = /* @__PURE__ */ new Set();
+					for (const e of r) if (t.has(a, e) && !o.has(e)) {
 						if (s.first) return e;
-						n.push(e), i.add(e);
+						n.push(e), o.add(e);
 					}
 					return s.first ? null : n;
 				}, t.has = function(e, t) {
@@ -5776,8 +5791,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			9315(e, t, r) {
 				"use strict";
-				const s = r(8253), n = r(4126), a = r(86), i = {};
-				e.exports = i.merge = function(e, t, r) {
+				const s = r(8253), n = r(4126), a = r(86), o = {};
+				e.exports = o.merge = function(e, t, r) {
 					if (s(e && "object" == typeof e, "Invalid target value: must be an object"), s(null == t || "object" == typeof t, "Invalid source value: must be null, undefined, or an object"), !t) return e;
 					if (r = Object.assign({
 						nullOverride: !0,
@@ -5787,14 +5802,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						for (let s = 0; s < t.length; ++s) e.push(n(t[s], { symbols: r.symbols }));
 						return e;
 					}
-					const o = a.keys(t, r);
-					for (let s = 0; s < o.length; ++s) {
-						const a = o[s];
+					const i = a.keys(t, r);
+					for (let s = 0; s < i.length; ++s) {
+						const a = i[s];
 						if ("__proto__" === a || !Object.prototype.propertyIsEnumerable.call(t, a)) continue;
 						const l = t[a];
 						if (l && "object" == typeof l) {
 							if (e[a] === l) continue;
-							!e[a] || "object" != typeof e[a] || Array.isArray(e[a]) !== Array.isArray(l) || l instanceof Date || l instanceof RegExp ? e[a] = n(l, { symbols: r.symbols }) : i.merge(e[a], l, r);
+							!e[a] || "object" != typeof e[a] || Array.isArray(e[a]) !== Array.isArray(l) || l instanceof Date || l instanceof RegExp ? e[a] = n(l, { symbols: r.symbols }) : o.merge(e[a], l, r);
 						} else (null != l || r.nullOverride) && (e[a] = l);
 					}
 					return e;
@@ -5820,22 +5835,22 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					"string" == typeof (r = r || {}) && (r = { separator: r });
 					const a = Array.isArray(t);
 					s(!a || !r.separator, "Separator option is not valid for array-based chain");
-					const i = a ? t : t.split(r.separator || ".");
-					let o = e;
-					for (let e = 0; e < i.length; ++e) {
-						let a = i[e];
-						const l = r.iterables && n.iterables(o);
-						if (Array.isArray(o) || "set" === l) {
+					const o = a ? t : t.split(r.separator || ".");
+					let i = e;
+					for (let e = 0; e < o.length; ++e) {
+						let a = o[e];
+						const l = r.iterables && n.iterables(i);
+						if (Array.isArray(i) || "set" === l) {
 							const e = Number(a);
-							Number.isInteger(e) && (a = e < 0 ? o.length + e : e);
+							Number.isInteger(e) && (a = e < 0 ? i.length + e : e);
 						}
-						if (!o || "function" == typeof o && !1 === r.functions || !l && void 0 === o[a]) {
-							s(!r.strict || e + 1 === i.length, "Missing segment", a, "in reach path ", t), s("object" == typeof o || !0 === r.functions || "function" != typeof o, "Invalid segment", a, "in reach path ", t), o = r.default;
+						if (!i || "function" == typeof i && !1 === r.functions || !l && void 0 === i[a]) {
+							s(!r.strict || e + 1 === o.length, "Missing segment", a, "in reach path ", t), s("object" == typeof i || !0 === r.functions || "function" != typeof i, "Invalid segment", a, "in reach path ", t), i = r.default;
 							break;
 						}
-						o = l ? "set" === l ? [...o][a] : o.get(a) : o[a];
+						i = l ? "set" === l ? [...i][a] : i.get(a) : i[a];
 					}
-					return o;
+					return i;
 				}, n.iterables = function(e) {
 					return e instanceof Set ? "set" : e instanceof Map ? "map" : void 0;
 				};
@@ -5876,7 +5891,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					url: URL.prototype,
 					weakMap: WeakMap.prototype,
 					weakSet: WeakSet.prototype
-				}, r.typeMap = new Map([
+				}, r.typeMap = /* @__PURE__ */ new Map([
 					["[object Error]", t.error],
 					["[object Map]", t.map],
 					["[object Promise]", t.promise],
@@ -5920,14 +5935,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						this._items = [], this.nodes = [];
 					}
 					add(e, t) {
-						var r, n, a, i;
-						const o = [].concat(null !== (r = (t = null != t ? t : {}).before) && void 0 !== r ? r : []), l = [].concat(null !== (n = t.after) && void 0 !== n ? n : []), c = null !== (a = t.group) && void 0 !== a ? a : "?", u = null !== (i = t.sort) && void 0 !== i ? i : 0;
-						s(!o.includes(c), `Item cannot come before itself: ${c}`), s(!o.includes("?"), "Item cannot come before unassociated items"), s(!l.includes(c), `Item cannot come after itself: ${c}`), s(!l.includes("?"), "Item cannot come after unassociated items"), Array.isArray(e) || (e = [e]);
+						var r, n, a, o;
+						const i = [].concat(null !== (r = (t = null != t ? t : {}).before) && void 0 !== r ? r : []), l = [].concat(null !== (n = t.after) && void 0 !== n ? n : []), c = null !== (a = t.group) && void 0 !== a ? a : "?", u = null !== (o = t.sort) && void 0 !== o ? o : 0;
+						s(!i.includes(c), `Item cannot come before itself: ${c}`), s(!i.includes("?"), "Item cannot come before unassociated items"), s(!l.includes(c), `Item cannot come after itself: ${c}`), s(!l.includes("?"), "Item cannot come after unassociated items"), Array.isArray(e) || (e = [e]);
 						for (const t of e) {
 							const e = {
 								seq: this._items.length,
 								sort: u,
-								before: o,
+								before: i,
 								after: l,
 								group: c,
 								node: t
@@ -5951,42 +5966,42 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const e = {}, t = Object.create(null), r = Object.create(null);
 						for (const a of this._items) {
 							var s;
-							const i = a.seq, o = a.group;
-							r[o] = null !== (s = r[o]) && void 0 !== s ? s : [], r[o].push(i), e[i] = a.before;
+							const o = a.seq, i = a.group;
+							r[i] = null !== (s = r[i]) && void 0 !== s ? s : [], r[i].push(o), e[o] = a.before;
 							for (const e of a.after) {
 								var n;
-								t[e] = null !== (n = t[e]) && void 0 !== n ? n : [], t[e].push(i);
+								t[e] = null !== (n = t[e]) && void 0 !== n ? n : [], t[e].push(o);
 							}
 						}
 						for (const t in e) {
 							const s = [];
 							for (const n in e[t]) {
 								var a;
-								const i = e[t][n];
-								r[i] = null !== (a = r[i]) && void 0 !== a ? a : [], s.push(...r[i]);
+								const o = e[t][n];
+								r[o] = null !== (a = r[o]) && void 0 !== a ? a : [], s.push(...r[o]);
 							}
 							e[t] = s;
 						}
 						for (const s in t) if (r[s]) for (const n of r[s]) e[n].push(...t[s]);
-						const i = {};
+						const o = {};
 						for (const t in e) {
 							const r = e[t];
 							for (const e of r) {
-								var o;
-								i[e] = null !== (o = i[e]) && void 0 !== o ? o : [], i[e].push(t);
+								var i;
+								o[e] = null !== (i = o[e]) && void 0 !== i ? i : [], o[e].push(t);
 							}
 						}
 						const l = {}, c = [];
 						for (let e = 0; e < this._items.length; ++e) {
 							let t = e;
-							if (i[e]) {
+							if (o[e]) {
 								t = null;
 								for (let e = 0; e < this._items.length; ++e) {
 									if (!0 === l[e]) continue;
-									i[e] || (i[e] = []);
-									const r = i[e].length;
+									o[e] || (o[e] = []);
+									const r = o[e].length;
 									let s = 0;
-									for (let t = 0; t < r; ++t) l[i[e][t]] && ++s;
+									for (let t = 0; t < r; ++t) l[o[e][t]] && ++s;
 									if (s === r) {
 										t = e;
 										break;
@@ -6012,15 +6027,15 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			125() {},
 			8663() {},
 			6984() {},
-			1339(e, t, r) {
+			7368(e, t, r) {
 				"use strict";
-				Object.defineProperty(t, "__esModule", { value: !0 }), t.tlds = void 0;
-				const s = r(1838);
+				t.tlds = void 0;
+				const s = r(1044);
 				t.tlds = new Set(s.TLDS.map((e) => e.toLowerCase()));
 			},
-			1838(e, t) {
+			1044(e, t) {
 				"use strict";
-				Object.defineProperty(t, "__esModule", { value: !0 }), t.TLDS = void 0, t.TLDS = [
+				t.TLDS = void 0, t.TLDS = [
 					"AAA",
 					"AARP",
 					"ABB",
@@ -6763,6 +6778,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					"MEMORIAL",
 					"MEN",
 					"MENU",
+					"MERCK",
 					"MERCKMSD",
 					"MG",
 					"MH",
@@ -7461,7 +7477,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.2.1" };
+				e.exports = { version: "18.2.3" };
 			}
 		}, t = {};
 		function r(s) {

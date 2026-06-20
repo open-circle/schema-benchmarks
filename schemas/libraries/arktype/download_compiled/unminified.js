@@ -5726,11 +5726,11 @@ const intrinsic = {
 };
 $ark.intrinsic = { ...intrinsic };
 //#endregion
-//#region ../node_modules/.pnpm/arkregex@0.0.5/node_modules/arkregex/out/regex.js
+//#region ../node_modules/.pnpm/arkregex@0.0.6/node_modules/arkregex/out/regex.js
 const regex$1 = ((src, flags) => new RegExp(src, flags));
 Object.assign(regex$1, { as: regex$1 });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operand/date.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operand/date.js
 const isDateLiteral = (value) => typeof value === "string" && value[0] === "d" && (value[1] === "'" || value[1] === "\"") && value[value.length - 1] === value[1];
 const isValidDate = (d) => d.toString() !== "Invalid Date";
 const extractDateLiteralSource = (literal) => literal.slice(2, -1);
@@ -5747,7 +5747,7 @@ const maybeParseDate = (source, errorOnFail) => {
 	return errorOnFail ? throwParseError(errorOnFail === true ? writeInvalidDateMessage(source) : errorOnFail) : void 0;
 };
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operand/enclosed.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operand/enclosed.js
 const regexExecArray = rootSchema({
 	proto: "Array",
 	sequence: "string",
@@ -5820,12 +5820,12 @@ const enclosingCharDescriptions = {
 };
 const writeUnterminatedEnclosedMessage = (fragment, enclosingStart) => `${enclosingStart}${fragment} requires a closing ${enclosingCharDescriptions[enclosingTokens[enclosingStart]]}`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/ast/validate.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/ast/validate.js
 const writePrefixedPrivateReferenceMessage = (name) => `Private type references should not include '#'. Use '${name}' instead.`;
 const shallowOptionalMessage = "Optional definitions like 'string?' are only valid as properties in an object or tuple";
 const shallowDefaultableMessage = "Defaultable definitions like 'number = 0' are only valid as properties in an object or tuple";
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/tokens.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/tokens.js
 const terminatingChars = {
 	"<": 1,
 	">": 1,
@@ -5843,7 +5843,7 @@ const terminatingChars = {
 };
 const lookaheadIsFinalizing = (lookahead, unscanned) => lookahead === ">" ? unscanned[0] === "=" ? unscanned[1] === "=" : unscanned.trimStart() === "" || isKeyOf(unscanned.trimStart()[0], terminatingChars) : lookahead === "=" ? unscanned[0] !== "=" : lookahead === "," || lookahead === "?";
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operand/genericArgs.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operand/genericArgs.js
 const parseGenericArgs = (name, g, s) => _parseGenericArgs(name, g, s, []);
 const _parseGenericArgs = (name, g, s, argNodes) => {
 	const argState = s.parseUntilFinalizer();
@@ -5857,7 +5857,7 @@ const _parseGenericArgs = (name, g, s, argNodes) => {
 };
 const writeInvalidGenericArgCountMessage = (name, params, argDefs) => `${name}<${params.join(", ")}> requires exactly ${params.length} args (got ${argDefs.length}${argDefs.length === 0 ? "" : `: ${argDefs.join(", ")}`})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operand/unenclosed.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operand/unenclosed.js
 const parseUnenclosed = (s) => {
 	const token = s.scanner.shiftUntilLookahead(terminatingChars);
 	if (token === "keyof") s.addPrefix("keyof");
@@ -5894,10 +5894,10 @@ const writeMissingOperandMessage = (s) => {
 const writeMissingRightOperandMessage = (token, unscanned = "") => `Token '${token}' requires a right operand${unscanned ? ` before '${unscanned}'` : ""}`;
 const writeExpressionExpectedMessage = (unscanned) => `Expected an expression${unscanned ? ` before '${unscanned}'` : ""}`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operand/operand.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operand/operand.js
 const parseOperand = (s) => s.scanner.lookahead === "" ? s.error(writeMissingOperandMessage(s)) : s.scanner.lookahead === "(" ? s.shiftedBy(1).reduceGroupOpen() : s.scanner.lookaheadIsIn(enclosingChar) ? parseEnclosed(s, s.scanner.shift()) : s.scanner.lookaheadIsIn(whitespaceChars) ? parseOperand(s.shiftedBy(1)) : s.scanner.lookahead === "d" ? s.scanner.nextLookahead in enclosingQuote ? parseEnclosed(s, `${s.scanner.shift()}${s.scanner.shift()}`) : parseUnenclosed(s) : s.scanner.lookahead === "x" ? s.scanner.nextLookahead === "/" ? s.shiftedBy(2) && parseEnclosed(s, "x/") : parseUnenclosed(s) : parseUnenclosed(s);
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/reduce/shared.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/reduce/shared.js
 const minComparators = {
 	">": true,
 	">=": true
@@ -5917,7 +5917,7 @@ const writeOpenRangeMessage = (min, comparator) => `Left bounds are only valid w
 const writeUnpairableComparatorMessage = (comparator) => `Left-bounded expressions must specify their limits using < or <= (was ${comparator})`;
 const writeMultipleLeftBoundsMessage = (openLimit, openComparator, limit, comparator) => `An expression may have at most one left bound (parsed ${openLimit}${invertedComparators[openComparator]}, ${limit}${invertedComparators[comparator]})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operator/bounds.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operator/bounds.js
 const parseBound = (s, start) => {
 	const comparator = shiftComparator(s, start);
 	if (s.root.hasKind("unit")) {
@@ -5980,14 +5980,14 @@ const parseRightBound = (s, comparator) => {
 };
 const writeInvalidLimitMessage = (comparator, limit, boundKind) => `Comparator ${boundKind === "left" ? invertedComparators[comparator] : comparator} must be ${boundKind === "left" ? "preceded" : "followed"} by a corresponding literal (was ${limit})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operator/brand.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operator/brand.js
 const parseBrand = (s) => {
 	s.scanner.shiftUntilNonWhitespace();
 	const brandName = s.scanner.shiftUntilLookahead(terminatingChars);
 	s.root = s.root.brand(brandName);
 };
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operator/divisor.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operator/divisor.js
 const parseDivisor = (s) => {
 	s.scanner.shiftUntilNonWhitespace();
 	const divisorToken = s.scanner.shiftUntilLookahead(terminatingChars);
@@ -5997,7 +5997,7 @@ const parseDivisor = (s) => {
 };
 const writeInvalidDivisorMessage = (divisor) => `% operator must be followed by a non-zero integer literal (was ${divisor})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operator/operator.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operator/operator.js
 const parseOperator = (s) => {
 	const lookahead = s.scanner.shift();
 	return lookahead === "" ? s.finalize("") : lookahead === "[" ? s.scanner.shift() === "]" ? s.setRoot(s.root.array()) : s.error(incompleteArrayTokenMessage) : lookahead === "|" ? s.scanner.lookahead === ">" ? s.shiftedBy(1).pushRootToBranch("|>") : s.pushRootToBranch(lookahead) : lookahead === "&" ? s.pushRootToBranch(lookahead) : lookahead === ")" ? s.finalizeGroup() : lookaheadIsFinalizing(lookahead, s.scanner.unscanned) ? s.finalize(lookahead) : isKeyOf(lookahead, comparatorStartChars) ? parseBound(s, lookahead) : lookahead === "%" ? parseDivisor(s) : lookahead === "#" ? parseBrand(s) : lookahead in whitespaceChars ? parseOperator(s) : s.error(writeUnexpectedCharacterMessage(lookahead));
@@ -6005,7 +6005,7 @@ const parseOperator = (s) => {
 const writeUnexpectedCharacterMessage = (char, shouldBe = "") => `'${char}' is not allowed here${shouldBe && ` (should be ${shouldBe})`}`;
 const incompleteArrayTokenMessage = `Missing expected ']'`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/shift/operator/default.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/shift/operator/default.js
 const parseDefault = (s) => {
 	const baseNode = s.unsetRoot();
 	s.parseOperand();
@@ -6019,7 +6019,7 @@ const parseDefault = (s) => {
 };
 const writeNonLiteralDefaultMessage = (defaultDef) => `Default value '${defaultDef}' must be a literal value`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/string.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/string.js
 const parseString = (def, ctx) => {
 	const aliasResolution = ctx.$.maybeResolveRoot(def);
 	if (aliasResolution) return aliasResolution;
@@ -6048,7 +6048,7 @@ const parseUntilFinalizer = (s) => {
 };
 const next = (s) => s.hasRoot() ? s.parseOperator() : s.parseOperand();
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/reduce/dynamic.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/reduce/dynamic.js
 var RuntimeState = class RuntimeState {
 	root;
 	branches = {
@@ -6175,7 +6175,7 @@ var RuntimeState = class RuntimeState {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/generic.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/generic.js
 const emptyGenericParameterMessage = "An empty string is not a valid generic parameter name";
 const parseGenericParamName = (scanner, result, ctx) => {
 	scanner.shiftUntilNonWhitespace();
@@ -6201,7 +6201,7 @@ const _parseOptionalConstraint = (scanner, name, result, ctx) => {
 	return parseGenericParamName(scanner, result, ctx);
 };
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/fn.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/fn.js
 var InternalFnParser = class extends Callable {
 	constructor($) {
 		const attach = {
@@ -6246,7 +6246,7 @@ var InternalTypedFn = class extends Callable {
 const badFnReturnTypeMessage = `":" must be followed by exactly one return type e.g:
 fn("string", ":", "number")(s => s.length)`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/match.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/match.js
 var InternalMatchParser = class extends Callable {
 	$;
 	constructor($) {
@@ -6323,7 +6323,7 @@ const throwOnDefault = (errors) => errors.throw();
 const chainedAtMessage = `A key matcher must be specified before the first case i.e. match.at('foo') or match.in<object>().at('bar')`;
 const doubleAtMessage = `At most one key matcher may be specified per expression`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/property.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/property.js
 const parseProperty = (def, ctx) => {
 	if (isArray(def)) {
 		if (def[1] === "=") return [
@@ -6338,7 +6338,7 @@ const parseProperty = (def, ctx) => {
 const invalidOptionalKeyKindMessage = `Only required keys may make their values optional, e.g. { [mySymbol]: ['number', '?'] }`;
 const invalidDefaultableKeyKindMessage = `Only required keys may specify default values, e.g. { value: 'number = 0' }`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/objectLiteral.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/objectLiteral.js
 const parseObjectLiteral = (def, ctx) => {
 	let spread;
 	const structure = {};
@@ -6422,7 +6422,7 @@ const preparseKey = (key) => typeof key === "symbol" ? {
 };
 const writeInvalidSpreadTypeMessage = (def) => `Spread operand must resolve to an object literal type (was ${def})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/tupleExpressions.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/tupleExpressions.js
 const maybeParseTupleExpression = (def, ctx) => isIndexZeroExpression(def) ? indexZeroParsers[def[0]](def, ctx) : isIndexOneExpression(def) ? indexOneParsers[def[1]](def, ctx) : null;
 const parseKeyOfTuple = (def, ctx) => ctx.$.parseOwnDefinitionFormat(def[1], ctx).keyof();
 const parseBranchTuple = (def, ctx) => {
@@ -6477,7 +6477,7 @@ const indexZeroParsers = defineIndexZeroParsers({
 const isIndexZeroExpression = (def) => indexZeroParsers[def[0]] !== void 0;
 const writeInvalidConstructorMessage = (actual) => `Expected a constructor following 'instanceof' operator (was ${actual})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/tupleLiteral.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/tupleLiteral.js
 const parseTupleLiteral = (def, ctx) => {
 	let sequences = [{}];
 	let i = 0;
@@ -6549,7 +6549,7 @@ const requiredPostOptionalMessage = "A required element may not follow an option
 const optionalOrDefaultableAfterVariadicMessage = "An optional element may not follow a variadic element";
 const defaultablePostOptionalMessage = "A defaultable element may not follow an optional element without a default";
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/parser/definition.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/parser/definition.js
 const parseCache = {};
 const parseInnerDefinition = (def, ctx) => {
 	if (typeof def === "string") {
@@ -6592,7 +6592,7 @@ const parseStandardSchema = (def, ctx) => ctx.$.intrinsic.unknown.pipe((v, ctx) 
 const parseTuple = (def, ctx) => maybeParseTupleExpression(def, ctx) ?? parseTupleLiteral(def, ctx);
 const writeBadDefinitionTypeMessage = (actual) => `Type definitions must be strings or objects (was ${actual})`;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/type.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/type.js
 var InternalTypeParser = class extends Callable {
 	constructor($) {
 		const attach = Object.assign({
@@ -6629,7 +6629,7 @@ var InternalTypeParser = class extends Callable {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/scope.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/scope.js
 const $arkTypeRegistry = $ark;
 var InternalScope = class InternalScope extends BaseScope {
 	get ambientAttachments() {
@@ -6704,7 +6704,7 @@ var InternalScope = class InternalScope extends BaseScope {
 const scope = Object.assign(InternalScope.scope, { define: (def) => def });
 const Scope = InternalScope;
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/builtins.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/builtins.js
 var MergeHkt = class extends Hkt {
 	description = "merge an object's properties onto another like `Merge(User, { isAdmin: \"true\" })`";
 };
@@ -6714,7 +6714,7 @@ const arkBuiltins = Scope.module({
 	Merge
 });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/Array.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/Array.js
 var liftFromHkt = class extends Hkt {};
 const liftFrom = genericNode("element")((args) => {
 	const nonArrayElement = args.element.exclude(intrinsic.Array);
@@ -6728,7 +6728,7 @@ const arkArray = Scope.module({
 	liftFrom
 }, { name: "Array" });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/FormData.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/FormData.js
 const value = rootSchema(["string", registry.FileConstructor]);
 const parsed = rootSchema({
 	meta: "an object representing parsed form data",
@@ -6757,7 +6757,7 @@ const arkFormData = Scope.module({
 	})
 }, { name: "FormData" });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/TypedArray.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/TypedArray.js
 const TypedArray = Scope.module({
 	Int8: ["instanceof", Int8Array],
 	Uint8: ["instanceof", Uint8Array],
@@ -6772,7 +6772,7 @@ const TypedArray = Scope.module({
 	BigUint64: ["instanceof", BigUint64Array]
 }, { name: "TypedArray" });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/constructors.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/constructors.js
 const omittedPrototypes = {
 	Boolean: 1,
 	Number: 1,
@@ -6788,7 +6788,7 @@ const arkPrototypes = Scope.module({
 	FormData: arkFormData
 });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/number.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/number.js
 /**
 * As per the ECMA-262 specification:
 * A time value supports a slightly smaller range of -8,640,000,000,000,000 to 8,640,000,000,000,000 milliseconds.
@@ -6835,7 +6835,7 @@ const number = Scope.module({
 	NegativeInfinity: ["===", Number.NEGATIVE_INFINITY]
 }, { name: "number" });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/string.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/string.js
 const regexStringNode = (regex, description, jsonSchemaFormat) => {
 	const schema = {
 		domain: "string",
@@ -7182,7 +7182,7 @@ const string = Scope.module({
 	uuid
 }, { name: "string" });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/ts.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/ts.js
 const arkTsKeywords = Scope.module({
 	bigint: intrinsic.bigint,
 	boolean: intrinsic.boolean,
@@ -7257,7 +7257,7 @@ const arkTsGenerics = Scope.module({
 	Required
 });
 //#endregion
-//#region ../node_modules/.pnpm/arktype@2.2.0/node_modules/arktype/out/keywords/keywords.js
+//#region ../node_modules/.pnpm/arktype@2.2.1/node_modules/arktype/out/keywords/keywords.js
 const ark = scope({
 	...arkTsKeywords,
 	...arkTsGenerics,
