@@ -7,7 +7,7 @@ import macros from "unplugin-macros/rolldown";
 export default defineConfig({
   entry: ["libraries/index.ts"],
   format: "esm",
-  target: ["node26", "esnext"],
+  target: ["node24", "esnext"],
   sourcemap: true,
   dts: true,
   alias: {
