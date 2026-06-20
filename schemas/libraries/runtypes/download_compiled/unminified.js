@@ -855,7 +855,7 @@ const Object$1 = (fields) => {
 			expected,
 			received: x
 		});
-		const keys = [.../* @__PURE__ */ new Set([...keysOfFields, ...enumerableKeysOf(x)])];
+		const keys = [...new Set([...keysOfFields, ...enumerableKeysOf(x)])];
 		const results = {};
 		const memoParsed = memoParsedInherited ?? /* @__PURE__ */ new WeakMap();
 		const parsed = (() => {

@@ -1269,7 +1269,7 @@ var require_boolSchema = /* @__PURE__ */ __commonJSMin(((exports) => {
 var require_rules = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getRules = exports.isJSONType = void 0;
-	const jsonTypes = /* @__PURE__ */ new Set([
+	const jsonTypes = new Set([
 		"string",
 		"number",
 		"integer",
@@ -1388,7 +1388,7 @@ var require_dataType = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return checkTypes;
 	}
 	exports.coerceAndCheckDataType = coerceAndCheckDataType;
-	const COERCIBLE = /* @__PURE__ */ new Set([
+	const COERCIBLE = new Set([
 		"string",
 		"number",
 		"integer",
@@ -1942,7 +1942,7 @@ var require_resolve = /* @__PURE__ */ __commonJSMin(((exports) => {
 	const util_1 = require_util();
 	const equal = require_fast_deep_equal();
 	const traverse = require_json_schema_traverse();
-	const SIMPLE_INLINED = /* @__PURE__ */ new Set([
+	const SIMPLE_INLINED = new Set([
 		"type",
 		"format",
 		"pattern",
@@ -1967,7 +1967,7 @@ var require_resolve = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return countKeys(schema) <= limit;
 	}
 	exports.inlineRef = inlineRef;
-	const REF_KEYWORDS = /* @__PURE__ */ new Set([
+	const REF_KEYWORDS = new Set([
 		"$ref",
 		"$recursiveRef",
 		"$recursiveAnchor",
@@ -2688,7 +2688,7 @@ var require_compile = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return getJsonPointer.call(this, p, schOrRef);
 	}
 	exports.resolveSchema = resolveSchema;
-	const PREVENT_SCOPE_CHANGE = /* @__PURE__ */ new Set([
+	const PREVENT_SCOPE_CHANGE = new Set([
 		"properties",
 		"patternProperties",
 		"enum",
@@ -3640,7 +3640,7 @@ var require_core$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 		"useDefaults",
 		"coerceTypes"
 	];
-	const EXT_SCOPE_NAMES = /* @__PURE__ */ new Set([
+	const EXT_SCOPE_NAMES = new Set([
 		"validate",
 		"serialize",
 		"parse",

@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-alpha.8/node_modules/sury/src/Sury.res.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.7/node_modules/sury/src/Sury.res.mjs
 let idMap = {};
 function create(str) {
 	let v = idMap[str];
@@ -330,15 +330,6 @@ function operationArg(schema, expected, flag, defs) {
 		}
 	};
 }
-function unsupportedDecode(b, from, target) {
-	throw new SuryError({
-		code: "unsupported_decode",
-		path: b.path,
-		reason: `Can't decode ` + toExpression(from) + ` to ` + toExpression(target) + `. Use S.to to define a custom decoder`,
-		from,
-		to: target
-	});
-}
 function failWithArg(b, fn, arg) {
 	return embed(b, (arg) => {
 		throw new SuryError(fn(arg));
@@ -626,7 +617,10 @@ function get(parent, location) {
 	if (locationSchema !== void 0) schema = locationSchema;
 	else {
 		let s = parent.s.additionalItems;
-		schema = s === "strip" || s === "strict" ? unsupportedDecode(parent, parent.s, parent.e) : s;
+		if (s === "strip" || s === "strict") {
+			if (s === "strip") throw new Error("[Sury] The schema doesn't have additional items");
+			throw new Error("[Sury] The schema doesn't have additional items");
+		} else schema = s;
 	}
 	let pathAppend = `[` + inlineLocation(parent.g, location) + `]`;
 	let item = {
@@ -660,6 +654,15 @@ function mergeWithPathPrepend(val, parent, locationVar, appendSafe) {
 		if (val.f & 1) val.i = val.i + `.catch(` + errorVar + `=>{` + catchCode + `})`;
 		return `try{` + valCode + (appendSafe !== void 0 ? appendSafe() : "") + `}catch(` + errorVar + `){` + catchCode + `}`;
 	}
+}
+function unsupportedDecode(b, from, target) {
+	throw new SuryError({
+		code: "unsupported_decode",
+		path: b.path,
+		reason: `Can't decode ` + toExpression(from) + ` to ` + toExpression(target) + `. Use S.to to define a custom decoder`,
+		from,
+		to: target
+	});
 }
 function noopOperation(i) {
 	return i;
@@ -697,9 +700,9 @@ function numberDecoder(input) {
 	else return input;
 	else return unsupportedDecode(input, input.s, input.e);
 	let outputVar = varWithoutAllocation(input.g);
+	input.a(outputVar + `=+` + input.v());
 	let output = next(input, outputVar, input.e, void 0);
 	output.v = _var;
-	output.cp = `let ` + outputVar + `=+` + input.v() + `;`;
 	output.vc = [{
 		c: (param) => {
 			let match = input.e.format;
@@ -1314,32 +1317,6 @@ function isPriority(tagFlag, byKey) {
 	else if (tagFlag & 2048) return numberTag in byKey;
 	else return false;
 }
-function isSelfDecodeNoop(_schema) {
-	while (true) {
-		let schema = _schema;
-		let tmp = false;
-		let tmp$1 = false;
-		let tmp$2 = false;
-		if (schema.to === void 0 && schema.parser === void 0 && !(flags[schema.type] & 512)) {
-			let anyOf = schema.anyOf;
-			tmp$2 = anyOf !== void 0 ? anyOf.every(isSelfDecodeNoop) : true;
-		}
-		if (tmp$2) {
-			let items = schema.items;
-			tmp$1 = items !== void 0 ? items.every(isSelfDecodeNoop) : true;
-		}
-		if (tmp$1) {
-			let properties = schema.properties;
-			tmp = properties !== void 0 ? Object.values(properties).every(isSelfDecodeNoop) : true;
-		}
-		if (!tmp) return false;
-		let match = schema.additionalItems;
-		if (match === void 0) return true;
-		if (match === "strip" || match === "strict") return true;
-		_schema = match;
-		continue;
-	}
-}
 function isWiderUnionSchema(schemaAnyOf, inputAnyOf) {
 	return inputAnyOf.every((inputSchema, idx) => {
 		let schema = schemaAnyOf[idx];
@@ -1347,35 +1324,19 @@ function isWiderUnionSchema(schemaAnyOf, inputAnyOf) {
 		else return false;
 	});
 }
-function getToPerCase(schema) {
-	if (schema.parser !== void 0) return;
-	let to = schema.to;
-	if (to !== void 0) return to;
-}
-function canDispatchPerVariant(inputAnyOf, target) {
-	if (!(flags[getOutputSchema(target).type] & 512) && !(target.type === unionTag && target.anyOf.some((v) => flags[v.type] & 512))) return !inputAnyOf.some((v) => {
-		if (v.to !== void 0 || v.parser !== void 0) return true;
-		else return flags[v.type] & 512;
-	});
-	else return false;
-}
-function perVariantVal(input, target) {
-	return refine(input, unknown, void 0, updateOutput(input.s, (mut) => {
-		mut.to = target;
-	}));
-}
-function encoder(input, target) {
-	let inputAnyOf = input.s.anyOf;
-	if (target.type === unionTag && getToPerCase(target) === void 0 && isWiderUnionSchema(target.anyOf, inputAnyOf) || !canDispatchPerVariant(inputAnyOf, target)) return input;
-	else return perVariantVal(input, target);
-}
 function unionDecoder(input) {
 	let selfSchema = input.e;
 	let schemas = selfSchema.anyOf;
 	let initialInputTagFlag = flags[input.s.type];
-	let toPerCase = getToPerCase(selfSchema);
-	if (input.s === selfSchema && toPerCase === void 0 && schemas.every(isSelfDecodeNoop) || initialInputTagFlag & 256 && isWiderUnionSchema(schemas, input.s.anyOf) && toPerCase === void 0 || input.io && input.e === input.s) return input;
-	if (initialInputTagFlag & 256 || input.s.encoder === void 0 && initialInputTagFlag & 512) input.s = unknown;
+	let match = selfSchema.parser;
+	let toPerCase;
+	if (match !== void 0) toPerCase = void 0;
+	else {
+		let to = selfSchema.to;
+		toPerCase = to !== void 0 ? to : void 0;
+	}
+	if (initialInputTagFlag & 256 && isWiderUnionSchema(schemas, input.s.anyOf) && toPerCase === void 0 || input.io && input.e === input.s) return input;
+	if (input.s.encoder === void 0 && initialInputTagFlag & 768) input.s = unknown;
 	let activeKey = "";
 	if (!(initialInputTagFlag & 769)) {
 		let sourceKey = toKey(input.s);
@@ -1403,7 +1364,6 @@ function unionDecoder(input) {
 	}) + `(` + input.v() + caught + `)`;
 	let output = refine(input, void 0, void 0, void 0);
 	let outputAnyOf = [];
-	let staticBlockFailure = { contents: "" };
 	let getArrItemsCode = (arr, isDeopt) => {
 		let typeValidationInput = arr[0];
 		let typeValidationOutput = arr[1];
@@ -1423,9 +1383,7 @@ function unionDecoder(input) {
 			input.e = arr[itemIdx];
 			let isLast = itemIdx === lastIdx;
 			let isFirst = itemIdx === 2;
-			let isOnlyCase = isFirst && isLast;
-			let withExhaustiveCheck = !isOnlyCase;
-			let itemSkipped = false;
+			let withExhaustiveCheck = !(isFirst && isLast);
 			let itemCode = "";
 			let itemCond = { contents: "" };
 			try {
@@ -1435,29 +1393,27 @@ function unionDecoder(input) {
 				if (itemOutput.t) {
 					output.t = true;
 					if (itemOutput.f & 1) output.f = output.f | 1;
-					let itemVar = typeValidationInput.v();
-					if (itemOutput.i !== itemVar) itemCode = itemCode + (itemVar + `=` + itemOutput.i);
+					itemCode = itemCode + (typeValidationInput.v() + `=` + itemOutput.i);
 				}
 			} catch (exn) {
 				let errorVar = embed(input, getOrRethrow(exn));
-				caught = caught + `,` + errorVar;
-				if (isDeopt && isOnlyCase) {
-					staticBlockFailure.contents = errorVar;
-					itemSkipped = true;
-				} else if (isLast) {
+				if (isLast) withExhaustiveCheck = false;
+				let tmp;
+				if (isLast && !isDeopt) {
 					withExhaustiveCheck = false;
-					itemCode = isDeopt ? "throw " + errorVar : fail(caught);
-				} else itemSkipped = true;
+					tmp = fail(`,` + errorVar);
+				} else tmp = "throw " + errorVar;
+				itemCode = tmp;
 			}
 			let itemCond$1 = itemCond.contents;
 			let itemCode$1 = itemCode;
-			if (!itemSkipped && itemCond$1) if (itemCode$1) {
+			if (itemCond$1) if (itemCode$1) {
 				let match = byDiscriminant[itemCond$1];
 				if (match !== void 0) if (typeof match === "string") byDiscriminant[itemCond$1] = [match, itemCode$1];
 				else match.push(itemCode$1);
 				else byDiscriminant[itemCond$1] = itemCode$1;
 			} else itemNoop.contents = itemNoop.contents ? itemNoop.contents + `||` + itemCond$1 : itemCond$1;
-			if (!itemSkipped && (!itemCond$1 || isLast)) {
+			if (!itemCond$1 || isLast) {
 				let accedDiscriminants = Object.keys(byDiscriminant);
 				for (let idx = 0, idx_finish = accedDiscriminants.length; idx < idx_finish; ++idx) {
 					let discrim = accedDiscriminants[idx];
@@ -1478,7 +1434,7 @@ function unionDecoder(input) {
 				}
 				byDiscriminant = {};
 			}
-			if (!itemSkipped && !itemCond$1) if (itemCode$1) {
+			if (!itemCond$1) if (itemCode$1) {
 				if (itemNoop.contents) {
 					itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(!(` + itemNoop.contents + `)){`);
 					itemEnd = "}" + itemEnd;
@@ -1501,7 +1457,7 @@ function unionDecoder(input) {
 				withExhaustiveCheck = false;
 			}
 			if (isLast) {
-				if (itemNoop.contents) if (itemStart || caught) itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(!(` + itemNoop.contents + `)){` + fail(caught) + `}`);
+				if (itemNoop.contents) if (itemStart) itemStart = itemStart + (itemNextElse ? "else if" : "if") + (`(!(` + itemNoop.contents + `)){` + fail(caught) + `}`);
 				else pushCheck(typeValidationOutput, {
 					c: (param) => `(` + itemNoop.contents + `)`,
 					f: failInvalidType
@@ -1552,32 +1508,21 @@ function unionDecoder(input) {
 			return;
 		}
 	};
-	let schemas$1;
-	if (constField in input.s) {
-		let matching = [];
-		let rest = [];
-		for (let idx = 0; idx <= lastIdx; ++idx) {
-			let schema = schemas[idx];
-			if (constField in schema && schema.const === input.s.const) matching.push(schema);
-			else rest.push(schema);
-		}
-		schemas$1 = matching.concat(rest);
-	} else schemas$1 = schemas;
-	for (let idx$1 = 0; idx$1 <= lastIdx; ++idx$1) {
-		let schema$1 = toPerCase !== void 0 ? updateOutput(schemas$1[idx$1], (mut) => {
+	for (let idx = 0; idx <= lastIdx; ++idx) {
+		let schema = toPerCase !== void 0 ? updateOutput(schemas[idx], (mut) => {
 			appendUnionRefiners(mut);
 			mut.to = toPerCase;
-		}) : schemas$1[idx$1];
-		let tagFlag = flags[schema$1.type];
-		let key = toKey(schema$1);
+		}) : schemas[idx];
+		let tagFlag = flags[schema.type];
+		let key = toKey(schema);
 		if ((activeKey$1 === "" || activeKey$1 === key) && !(tagFlag & 16 && "fromDefault" in selfSchema)) {
 			let initialArr = byKey[key];
 			if (initialArr !== void 0) {
-				if (tagFlag & 64 && nestedLoc in schema$1.properties) initialArr.splice(initialArr.length - 1 | 0, 0, schema$1);
-				else if (!(tagFlag & 2096)) initialArr.push(schema$1);
+				if (tagFlag & 64 && nestedLoc in schema.properties) initialArr.splice(initialArr.length - 1 | 0, 0, schema);
+				else if (!(tagFlag & 2096)) initialArr.push(schema);
 			} else {
 				let typeValidationInput = scope(input);
-				typeValidationInput.e = tagFlag & 32 ? nullLiteral() : tagFlag & 16 ? unit() : tagFlag & 64 ? factory(unknown) : tagFlag & 128 ? array$2(unknown) : tagFlag & 8192 ? instance(schema$1.class) : tagFlag & 2048 ? nan() : tagFlag & 2 ? string$2() : tagFlag & 4 ? float() : tagFlag & 8 ? bool() : tagFlag & 1024 ? bigint() : tagFlag & 16384 ? symbol() : unknown;
+				typeValidationInput.e = tagFlag & 32 ? nullLiteral() : tagFlag & 16 ? unit() : tagFlag & 64 ? factory(unknown) : tagFlag & 128 ? array$2(unknown) : tagFlag & 8192 ? instance(schema.class) : tagFlag & 2048 ? nan() : tagFlag & 2 ? string$2() : tagFlag & 4 ? float() : tagFlag & 8 ? bool() : tagFlag & 1024 ? bigint() : tagFlag & 16384 ? symbol() : unknown;
 				let typeValidationOutput;
 				try {
 					typeValidationOutput = parse$1(typeValidationInput);
@@ -1590,7 +1535,7 @@ function unionDecoder(input) {
 				byKey[key] = [
 					typeValidationInput,
 					typeValidationOutput,
-					schema$1
+					schema
 				];
 				let shouldDeopt = true;
 				let valRef = typeValidationOutput;
@@ -1607,20 +1552,11 @@ function unionDecoder(input) {
 							let typeValidationOutput$1 = arr[1];
 							let itemsCode = getArrItemsCode(arr, true);
 							let blockCode = merge(typeValidationOutput$1, void 0) + itemsCode;
-							let embeddedError = staticBlockFailure.contents;
-							if (embeddedError) {
-								staticBlockFailure.contents = "";
-								if (blockCode) {
-									let errorVar = `e` + (idx$1 + keyIdx | 0);
-									start = start + (`try{` + blockCode + `throw ` + embeddedError + `}catch(` + errorVar + `){`);
-									end = "}" + end;
-									caught = caught + `,` + errorVar;
-								} else caught = caught + `,` + embeddedError;
-							} else if (blockCode) {
-								let errorVar$1 = `e` + (idx$1 + keyIdx | 0);
-								start = start + (`try{` + blockCode + `}catch(` + errorVar$1 + `){`);
+							if (blockCode) {
+								let errorVar = `e` + (idx + keyIdx | 0);
+								start = start + (`try{` + blockCode + `}catch(` + errorVar + `){`);
 								end = "}" + end;
-								caught = caught + `,` + errorVar$1;
+								caught = caught + `,` + errorVar;
 							} else exit = true;
 						}
 					}
@@ -1635,8 +1571,8 @@ function unionDecoder(input) {
 	if (!exit) {
 		let nextElse = false;
 		let noop = "";
-		for (let idx$2 = 0, idx_finish = keys$1.length; idx$2 < idx_finish; ++idx$2) {
-			let arr$1 = byKey$1[keys$1[idx$2]];
+		for (let idx$1 = 0, idx_finish = keys$1.length; idx$1 < idx_finish; ++idx$1) {
+			let arr$1 = byKey$1[keys$1[idx$1]];
 			let typeValidationOutput$2 = arr$1[1];
 			let firstSchema = arr$1[2];
 			let itemsCode$1 = getArrItemsCode(arr$1, false);
@@ -1651,7 +1587,7 @@ function unionDecoder(input) {
 		let errorCode = fail(caught);
 		let tmp;
 		if (noop) tmp = (nextElse ? "else if" : "if") + (`(!(` + noop + `)){` + errorCode + `}`);
-		else tmp = nextElse ? `else{` + errorCode + `}` : end === "" ? errorCode + ";" : errorCode;
+		else tmp = nextElse ? `else{` + errorCode + `}` : errorCode;
 		start = start + tmp;
 	}
 	output.cp = output.cp + start + end;
@@ -1682,7 +1618,6 @@ function factory$1(schemas) {
 		let mut = base(unionTag, false);
 		mut.anyOf = Array.from(anyOf);
 		mut.decoder = unionDecoder;
-		mut.encoder = encoder;
 		mut.has = has;
 		return mut;
 	}

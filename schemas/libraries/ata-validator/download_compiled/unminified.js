@@ -1421,7 +1421,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		},
 		hostname: (s) => s.length > 0 && s.length <= 253 && /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i.test(s)
 	};
-	const UNSAFE_KEYS = /* @__PURE__ */ new Set([
+	const UNSAFE_KEYS = new Set([
 		"__proto__",
 		"constructor",
 		"toString",
@@ -1499,7 +1499,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (resolvedTarget && JSON.stringify(resolvedTarget).includes("\"$dynamicRef\"")) {
 				if (!(canResolveDynamicRefs(resolvedTarget, schema, schemaMap) && resolvedTarget.additionalProperties === void 0 && !resolvedTarget.patternProperties && !resolvedTarget.dependentSchemas && !resolvedTarget.propertyNames) && schema.unevaluatedProperties === void 0 && schema.unevaluatedItems === void 0) return false;
 			}
-			const SCHEMA_ORG_KEYS = /* @__PURE__ */ new Set([
+			const SCHEMA_ORG_KEYS = new Set([
 				"$ref",
 				"$defs",
 				"definitions",
@@ -2378,12 +2378,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					if (schema.if && schema.if.properties) ifProps.push(...Object.keys(schema.if.properties));
 					const thenEval = schema.then ? collectEvaluated(schema.then, ctx.schemaMap, ctx.rootDefs) : { props: [] };
 					const elseEval = schema.else ? collectEvaluated(schema.else, ctx.schemaMap, ctx.rootDefs) : { props: [] };
-					const uniqueThen = [.../* @__PURE__ */ new Set([
+					const uniqueThen = [...new Set([
 						...baseProps,
 						...ifProps,
 						...thenEval.props || []
 					])];
-					const uniqueElse = [.../* @__PURE__ */ new Set([...baseProps, ...elseEval.props || []])];
+					const uniqueElse = [...new Set([...baseProps, ...elseEval.props || []])];
 					const thenCheck = genCharCodeSwitch(uniqueThen, v);
 					const elseCheck = genCharCodeSwitch(uniqueElse, v);
 					const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
@@ -3915,7 +3915,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
+	const DRAFT7_SCHEMAS = new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
 		return !!(schema && schema.$schema && DRAFT7_SCHEMAS.has(schema.$schema));
 	}
@@ -4025,13 +4025,13 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
+	const PRIMITIVE_TYPES = new Set([
 		"string",
 		"number",
 		"integer",
 		"boolean"
 	]);
-	const META_KEYS = /* @__PURE__ */ new Set([
+	const META_KEYS = new Set([
 		"$schema",
 		"$id",
 		"$comment",
@@ -4043,14 +4043,14 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		"readOnly",
 		"writeOnly"
 	]);
-	const TIER0_OBJECT_ALLOWED = /* @__PURE__ */ new Set([
+	const TIER0_OBJECT_ALLOWED = new Set([
 		"type",
 		"properties",
 		"required",
 		"additionalProperties",
 		...META_KEYS
 	]);
-	const TIER0_PRIMITIVE_ALLOWED = /* @__PURE__ */ new Set([
+	const TIER0_PRIMITIVE_ALLOWED = new Set([
 		"type",
 		"enum",
 		"const",
