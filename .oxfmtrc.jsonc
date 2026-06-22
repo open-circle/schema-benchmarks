@@ -5,6 +5,7 @@
     "bench/download.json",
     "bench/stack.json",
     "schemas/libraries/**/download_compiled/**",
+    "schemas/libraries/**/*.gen.ts",
     "website/**/routeTree.gen.ts",
     "website/src/routes/blog/-content/assets/**/*.json",
   ],

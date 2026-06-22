@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@ata-project/keywords": "^0.1.9",
+    "@paseri/compiler": "jsr:^0.7.0",
+    "@paseri/paseri": "jsr:^1.8.0",
     "@railway-ts/pipelines": "^0.1.29",
     "@sapphire/shapeshift": "^4.0.0",
     "@schema-benchmarks/utils": "workspace:*",

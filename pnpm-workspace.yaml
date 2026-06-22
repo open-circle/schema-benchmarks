@@ -31,6 +31,9 @@ catalog:
   valibot: ^1.4.1
   vite: ^8.0.16
   vitest: ^4.1.9
+minimumReleaseAgeExclude:
+  - "@jsr/paseri__compiler@0.7.0"
+  - "@jsr/paseri__paseri@1.8.0"
 overrides:
   "@types/node": 24.0.0
   vite: "catalog:"
