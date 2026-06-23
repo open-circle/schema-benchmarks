@@ -6,16 +6,19 @@ import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
 import { trackedLinkProps } from "#/shared/lib/analytics";
 import type { PrefetchContext } from "#/shared/lib/fetch";
 
-import { getAllWeeklyDownloads, getPackageName } from "../-query";
+import { getAllWeeklyDownloads, getPackageName, isJsrPackage } from "../-query";
 
 export function DownloadCount({ libraryName }: { libraryName: string }) {
   const { npmSite } = useNpmSite();
   const packageName = getPackageName(libraryName);
   const { data } = useSuspenseQuery(getAllWeeklyDownloads(packageName));
   const formatNumber = useNumberFormatter(shortNumFormatter);
+  const packageUrl = isJsrPackage(packageName)
+    ? `https://jsr.io/${packageName}`
+    : `https://www.${npmSite}/package/${packageName}`;
   return (
     <a
-      {...trackedLinkProps(`https://www.${npmSite}/package/${packageName}`)}
+      {...trackedLinkProps(packageUrl)}
       aria-label={`Download count for ${libraryName}: ${shortNumFormatter.format(data)}`}
     >
       {formatNumber(data)}
