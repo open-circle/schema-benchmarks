@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Pipeable.js
 /**
 * The `Pipeable` module defines the shared interface and implementation helpers
 * for values that support Effect-style method chaining with `.pipe(...)`.
@@ -100,7 +100,7 @@ const Class$1 = /*#__PURE__*/ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be called in data-first style or data-last
 * (`pipe`-friendly) style.
@@ -311,7 +311,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -330,7 +330,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /*#__PURE__*/ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Predicate.js
 /**
 * Defines runtime checks for values.
 *
@@ -532,7 +532,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Hash.js
 /**
 * Computes Effect hash values and defines the interface for objects that want
 * to provide their own hash implementation. Hashes are small numeric
@@ -969,7 +969,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Equal.js
 /**
 * Defines the unique string identifier for the `Equal` interface.
 *
@@ -1202,7 +1202,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 */
 const asEquivalence = () => equals$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1253,14 +1253,14 @@ const asEquivalence = () => equals$1;
 */
 const make$10 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Redactable.js
 /**
 * Defines the symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1374,7 +1374,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Formatter.js
 /**
 * Formats JavaScript values into readable strings.
 *
@@ -1539,7 +1539,7 @@ function safeToString(input) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Inspectable.js
 /**
 * Defines the symbol used by Node.js for custom object inspection.
 *
@@ -1604,7 +1604,7 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Utils.js
 /**
 * Yields its wrapped value exactly once through an `IterableIterator`.
 *
@@ -1695,7 +1695,7 @@ const pickInternalCall = () => {
 /** @internal */
 const internalCall = /*#__PURE__*/ pickInternalCall();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2028,7 +2028,7 @@ const TaggedError$1 = (tag) => {
 };
 TaggedError$1("NoSuchElementError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2098,11 +2098,11 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/result.js
 const TypeId$7 = "~effect/data/Result";
 ({ ...PipeInspectableProto });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Order.js
 /**
 * Defines comparison functions for ordered values.
 *
@@ -2252,7 +2252,7 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2409,7 +2409,7 @@ const isSome = isSome$1;
 */
 const map$3 = /*#__PURE__*/ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Array.js
 /**
 * Works with JavaScript arrays, readonly arrays, and non-empty arrays.
 *
@@ -2763,7 +2763,7 @@ const dedupeWith = /*#__PURE__*/ dual(2, (self, isEquivalent) => {
 	return [];
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/BigDecimal.js
 /**
 * Decimal numbers and arithmetic for cases where JavaScript `number` rounding
 * is not precise enough. A `BigDecimal` stores digits as a `bigint` plus a
@@ -3155,7 +3155,7 @@ const isZero = (n) => n.value === bigint0;
 */
 const isNegative = (n) => n.value < bigint0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Effectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
@@ -3179,7 +3179,42 @@ const Prototype = (options) => makePrimitiveProto({
 	[evaluate]: options.evaluate
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/stackTraceLimit.js
+const ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+const ObjectPrototypeHasOwnProperty = Object.prototype.hasOwnProperty;
+const ObjectIsExtensible = Object.isExtensible;
+/**
+* Check if `Error.stackTraceLimit` is writable.
+* Returns `false` if the property is frozen, non-writable, or `Error` is non-extensible.
+*
+* @internal
+*/
+const isStackTraceLimitWritable = () => {
+	const desc = ObjectGetOwnPropertyDescriptor(Error, "stackTraceLimit");
+	if (desc === void 0) return ObjectIsExtensible(Error);
+	return ObjectPrototypeHasOwnProperty.call(desc, "writable") ? desc.writable === true : desc.set !== void 0;
+};
+const canWriteStackTraceLimit = /*#__PURE__*/ isStackTraceLimitWritable();
+/**
+* Get the current `Error.stackTraceLimit` value.
+* Returns `undefined` if the property doesn't exist.
+*
+* @internal
+*/
+const getStackTraceLimit = () => Error.stackTraceLimit;
+/**
+* Safely set `Error.stackTraceLimit` if possible, otherwise no-op.
+*
+* Accepts `undefined` so a value read via {@link getStackTraceLimit} can be
+* restored faithfully.
+*
+* @internal
+*/
+const setStackTraceLimit = (value) => {
+	if (canWriteStackTraceLimit) Error.stackTraceLimit = value;
+};
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Context.js
 /**
 * Runtime type identifier attached to `Context` service keys and used by
 * `isKey` to recognize them.
@@ -3237,10 +3272,10 @@ const ServiceTypeId = "~effect/Context/Service";
 * @since 4.0.0
 */
 const Service = function() {
-	const prevLimit = Error.stackTraceLimit;
-	Error.stackTraceLimit = 2;
+	const prevLimit = getStackTraceLimit();
+	setStackTraceLimit(2);
 	const err = /* @__PURE__ */ new Error();
-	Error.stackTraceLimit = prevLimit;
+	setStackTraceLimit(prevLimit);
 	function KeyClass() {}
 	const self = KeyClass;
 	Object.setPrototypeOf(self, ServiceProto);
@@ -3616,7 +3651,7 @@ const withMapUnsafe = (self, f) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Scheduler.js
 /**
 * Controls how runnable Effect fiber tasks are dispatched.
 *
@@ -3814,7 +3849,7 @@ const MaxOpsBeforeYield = /*#__PURE__*/ Reference("effect/Scheduler/MaxOpsBefore
 */
 const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Tracer.js
 /**
 * Defines the low-level tracing model used by Effect.
 *
@@ -3861,11 +3896,11 @@ Service()(ParentSpanKey);
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /*#__PURE__*/ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
 /** @internal */
@@ -3873,7 +3908,7 @@ const CurrentLogLevel = /*#__PURE__*/ Reference("effect/References/CurrentLogLev
 /** @internal */
 const MinimumLogLevel = /*#__PURE__*/ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -4500,7 +4535,7 @@ const colors = {
 };
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Cause.js
 /**
 * Records the full reason an `Effect` failed.
 *
@@ -4617,7 +4652,7 @@ Service()("effect/Cause/InterruptorStackTrace");
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Exit.js
 /**
 * Creates a failed Exit from a Cause.
 *
@@ -4708,7 +4743,7 @@ const void_ = exitVoid;
 */
 const isSuccess = exitIsSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$4 = "~effect/time/DateTime";
 /** @internal */
@@ -5177,7 +5212,7 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5195,7 +5230,7 @@ const getExpected = /*#__PURE__*/ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/record.js
 /**
 * @since 4.0.0
 */
@@ -5211,7 +5246,7 @@ function set(self, key, value) {
 	return self;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/SchemaIssue.js
 const TypeId$3 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -5894,7 +5929,7 @@ function formatOption(actual) {
 	return format$1(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/schema/cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/schema/cause.js
 /** @internal */
 function getSchemaIssue(cause) {
 	let issue;
@@ -5910,29 +5945,8 @@ function getSchemaIssueOrThrow(cause, message) {
 	if (issue === void 0) throw new Error(message, { cause });
 	return issue;
 }
-globalThis.RegExp;
-/**
-* Escapes special characters in a regular expression pattern.
-*
-* **When to use**
-*
-* Use to turn literal text into a safe regular expression pattern fragment.
-*
-* **Example** (Escaping a pattern string)
-*
-* ```ts
-* import { RegExp } from "effect"
-* import * as assert from "node:assert"
-*
-* assert.deepStrictEqual(RegExp.escape("a*b"), "a\\*b")
-* ```
-*
-* @category RegExp
-* @since 2.0.0
-*/
-const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/SchemaGetter.js
 /**
 * Builds one-way conversions used by schemas.
 *
@@ -6136,7 +6150,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/SchemaTransformation.js
 const TypeId$2 = "~effect/SchemaTransformation/Transformation";
 /**
 * Represents a bidirectional transformation between a decoded type `T` and an encoded
@@ -6304,7 +6318,7 @@ function passthrough() {
 */
 const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3(), /*#__PURE__*/ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/SchemaAST.js
 /**
 * Represents Effect schemas as runtime trees.
 *
@@ -6391,13 +6405,6 @@ const isArrays = /*#__PURE__*/ makeGuard("Arrays");
 * @since 4.0.0
 */
 const isObjects = /*#__PURE__*/ makeGuard("Objects");
-/**
-* Narrows an {@link AST} to {@link Union}.
-*
-* @category guards
-* @since 3.10.0
-*/
-const isUnion = /*#__PURE__*/ makeGuard("Union");
 /**
 * Represents a single step in an {@link Encoding} chain.
 *
@@ -6536,17 +6543,17 @@ var Declaration = class Declaration extends Base {
 			return mapEager(run(oinput.value, this, options), some);
 		};
 	}
-	rebuild(recur, checks, encodingChecks) {
+	_rebuild(recur, checks, encodingChecks) {
 		const tps = mapOrSame(this.typeParameters, recur);
 		return tps === this.typeParameters ? this : new Declaration(tps, this.run, this.annotations, checks, void 0, this.context, encodingChecks);
 	}
 	/** @internal */
 	recur(recur) {
-		return this.rebuild(recur, this.checks, this.encodingChecks);
+		return this._rebuild(recur, this.checks, this.encodingChecks);
 	}
 	/** @internal */
 	flip(recur) {
-		return this.rebuild(recur, this.encodingChecks, this.checks);
+		return this._rebuild(recur, this.encodingChecks, this.checks);
 	}
 	/** @internal */
 	getExpected() {
@@ -6616,6 +6623,10 @@ var Literal$1 = class extends Base {
 		return fromConst(this, this.literal);
 	}
 	/** @internal */
+	matchPart(s, _options) {
+		return s === globalThis.String(this.literal) ? this.literal : void 0;
+	}
+	/** @internal */
 	toCodecJson() {
 		return typeof this.literal === "bigint" ? literalToString(this) : this;
 	}
@@ -6646,6 +6657,10 @@ var String$2 = class extends Base {
 	/** @internal */
 	getParser() {
 		return fromRefinement(this, isString);
+	}
+	/** @internal */
+	matchPart(s, options) {
+		return applyTemplateLiteralPartChecks(this, s, options);
 	}
 	/** @internal */
 	getExpected() {
@@ -6690,6 +6705,17 @@ var Number$2 = class extends Base {
 	/** @internal */
 	getParser() {
 		return fromRefinement(this, isNumber);
+	}
+	/** @internal */
+	matchKey(s, options) {
+		return this._match(isStringNumberRegExp, s, options);
+	}
+	/** @internal */
+	matchPart(s, options) {
+		return this._match(isStringFiniteRegExp, s, options);
+	}
+	_match(regexp, s, options) {
+		return regexp.test(s) ? applyTemplateLiteralPartChecks(this, globalThis.Number(s), options) : void 0;
 	}
 	/** @internal */
 	toCodecJson() {
@@ -6837,18 +6863,18 @@ var Arrays = class Arrays extends Base {
 			return some(state.output);
 		});
 	}
-	rebuild(recur, checks, encodingChecks) {
+	_rebuild(recur, checks, encodingChecks) {
 		const elements = mapOrSame(this.elements, recur);
 		const rest = mapOrSame(this.rest, recur);
 		return elements === this.elements && rest === this.rest ? this : new Arrays(this.isMutable, elements, rest, this.annotations, checks, void 0, this.context, encodingChecks);
 	}
 	/** @internal */
 	recur(recur) {
-		return this.rebuild(recur, this.checks, this.encodingChecks);
+		return this._rebuild(recur, this.checks, this.encodingChecks);
 	}
 	/** @internal */
 	flip(recur) {
-		return this.rebuild(recur, this.encodingChecks, this.checks);
+		return this._rebuild(recur, this.encodingChecks, this.checks);
 	}
 	/** @internal */
 	getExpected() {
@@ -6894,24 +6920,24 @@ const wrapPropertyKeyIssue = (s, ast, key, exit) => {
 * @internal
 */
 const FINITE_PATTERN = "[+-]?\\d*\\.?\\d+(?:[Ee][+-]?\\d+)?";
-const isNumberStringRegExp = /*#__PURE__*/ new globalThis.RegExp(`(?:${FINITE_PATTERN}|Infinity|-Infinity|NaN)`);
 /**
 * Returns the object keys that match the index signature parameter schema.
 * @internal
 */
-function getIndexSignatureKeys(input, parameter) {
-	const encoded = toEncoded(parameter);
-	switch (encoded._tag) {
-		case "String": return Object.keys(input);
-		case "TemplateLiteral": {
-			const regExp = getTemplateLiteralRegExp(encoded);
-			return Object.keys(input).filter((k) => regExp.test(k));
+function getIndexSignatureKeys(input, parameter, options = defaultParseOptions) {
+	let stringKeys;
+	let symbolKeys;
+	function go(parameter) {
+		switch (parameter._tag) {
+			case "String":
+			case "TemplateLiteral": return (stringKeys ??= Object.keys(input)).filter((k) => parameter.matchPart(k, options) !== void 0);
+			case "Number": return (stringKeys ??= Object.keys(input)).filter((k) => parameter.matchKey(k, options) !== void 0);
+			case "Symbol": return (symbolKeys ??= Object.getOwnPropertySymbols(input)).filter((k) => parameter.matchKey(k, options) !== void 0);
+			case "Union": return [...new Set(parameter.types.flatMap(go))];
+			default: return [];
 		}
-		case "Symbol": return Object.getOwnPropertySymbols(input);
-		case "Number": return Object.keys(input).filter((k) => isNumberStringRegExp.test(k));
-		case "Union": return [...new Set(encoded.types.flatMap((t) => getIndexSignatureKeys(input, t)))];
-		default: return [];
 	}
+	return go(parameterFromPropertyKey(toEncoded(parameter)));
 }
 /**
 * Represents a named property within an {@link Objects} node.
@@ -6934,6 +6960,19 @@ var PropertySignature = class {
 		this.type = type;
 	}
 };
+function isIndexSignatureParameterSide(ast) {
+	switch (ast._tag) {
+		case "String":
+		case "Number":
+		case "Symbol":
+		case "TemplateLiteral": return true;
+		case "Union": return ast.types.every(isIndexSignatureParameterSide);
+		default: return false;
+	}
+}
+function isIndexSignatureParameter(ast) {
+	return isIndexSignatureParameterSide(ast) && isIndexSignatureParameterSide(toEncoded(ast));
+}
 /**
 * Represents an index signature entry within an {@link Objects} node.
 *
@@ -6964,6 +7003,7 @@ var IndexSignature = class {
 	type;
 	merge;
 	constructor(parameter, type, merge) {
+		if (!isIndexSignatureParameter(parameter)) throw new Error(`Invalid index signature parameter ${parameter._tag}`);
 		this.parameter = parameter;
 		this.type = type;
 		this.merge = merge;
@@ -7048,7 +7088,7 @@ var Objects = class Objects extends Base {
 		if (ast.propertySignatures.length === 0 && ast.indexSignatures.length === 0) return fromRefinement(ast, isNotNullish);
 		const parseIndexes = indexCount > 0 ? iterateEager()({
 			onItem: fnUntracedEager(function* (s, [key, is]) {
-				const effKey = recur(indexSignatureParameterFromString(is.parameter))(some(key), s.options);
+				const effKey = recur(parameterFromPropertyKey(is.parameter))(some(key), s.options);
 				const exitKey = effectIsExit(effKey) ? effKey : yield* exit(effKey);
 				if (exitKey._tag === "Failure") {
 					const eff = wrapPropertyKeyIssue(s, ast, key, exitKey);
@@ -7112,7 +7152,7 @@ var Objects = class Objects extends Base {
 				const keyPairs = empty$1();
 				for (let i = 0; i < indexCount; i++) {
 					const is = ast.indexSignatures[i];
-					const keys = getIndexSignatureKeys(input, is.parameter);
+					const keys = getIndexSignatureKeys(input, is.parameter, options);
 					for (let j = 0; j < keys.length; j++) {
 						const key = keys[j];
 						keyPairs.push([key, is]);
@@ -7131,13 +7171,13 @@ var Objects = class Objects extends Base {
 			return some(out);
 		});
 	}
-	rebuild(recur, flipMerge, checks, encodingChecks) {
+	_rebuild(recur, recurParameter, flipMerge, checks, encodingChecks) {
 		const props = mapOrSame(this.propertySignatures, (ps) => {
 			const t = recur(ps.type);
 			return t === ps.type ? ps : new PropertySignature(ps.name, t);
 		});
 		const indexes = mapOrSame(this.indexSignatures, (is) => {
-			const p = recur(is.parameter);
+			const p = recurParameter(is.parameter);
 			const t = recur(is.type);
 			const merge = flipMerge ? is.merge?.flip() : is.merge;
 			return p === is.parameter && t === is.type && merge === is.merge ? is : new IndexSignature(p, t, merge);
@@ -7146,11 +7186,11 @@ var Objects = class Objects extends Base {
 	}
 	/** @internal */
 	flip(recur) {
-		return this.rebuild(recur, true, this.encodingChecks, this.checks);
+		return this._rebuild(recur, recur, true, this.encodingChecks, this.checks);
 	}
 	/** @internal */
-	recur(recur) {
-		return this.rebuild(recur, false, this.checks, this.encodingChecks);
+	recur(recur, recurParameter = recur) {
+		return this._rebuild(recur, recurParameter, false, this.checks, this.encodingChecks);
 	}
 	/** @internal */
 	getExpected() {
@@ -7176,6 +7216,11 @@ const parseProperties = /*#__PURE__*/ iterateEager()({
 		}
 	}
 });
+function combineChecks(a, b) {
+	if (!a) return b;
+	if (!b) return a;
+	return [...a, ...b];
+}
 /** @internal */
 function struct(fields, checks, annotations) {
 	return new Objects(Reflect.ownKeys(fields).map((key) => {
@@ -7383,17 +7428,24 @@ var Union$1 = class Union$1 extends Base {
 			});
 		};
 	}
-	rebuild(recur, checks, encodingChecks) {
+	_rebuild(recur, checks, encodingChecks) {
 		const types = mapOrSame(this.types, recur);
 		return types === this.types ? this : new Union$1(types, this.mode, this.annotations, checks, void 0, this.context, encodingChecks);
 	}
 	/** @internal */
 	recur(recur) {
-		return this.rebuild(recur, this.checks, this.encodingChecks);
+		return this._rebuild(recur, this.checks, this.encodingChecks);
 	}
 	/** @internal */
 	flip(recur) {
-		return this.rebuild(recur, this.encodingChecks, this.checks);
+		return this._rebuild(recur, this.encodingChecks, this.checks);
+	}
+	/** @internal */
+	matchPart(s, options) {
+		for (const type of this.types) {
+			const out = type.matchPart(s, options);
+			if (out !== void 0) return out;
+		}
 	}
 	/** @internal */
 	getExpected(getExpected) {
@@ -7633,7 +7685,7 @@ function replaceChecks(ast, checks) {
 }
 /** @internal */
 function appendChecks(ast, checks) {
-	return replaceChecks(ast, ast.checks ? [...ast.checks, ...checks] : checks);
+	return replaceChecks(ast, combineChecks(ast.checks, checks));
 }
 function updateLastLink(encoding, f) {
 	const links = encoding;
@@ -7804,29 +7856,6 @@ function containsUndefined(ast) {
 		default: return false;
 	}
 }
-function getTemplateLiteralSource(ast, top) {
-	return ast.encodedParts.map((part) => handleTemplateLiteralASTPartParens(part, getTemplateLiteralASTPartPattern(part), top)).join("");
-}
-/** @internal */
-const getTemplateLiteralRegExp = /*#__PURE__*/ memoize((ast) => {
-	return new globalThis.RegExp(`^${getTemplateLiteralSource(ast, true)}$`);
-});
-function getTemplateLiteralASTPartPattern(part) {
-	switch (part._tag) {
-		case "Literal": return escape(globalThis.String(part.literal));
-		case "String": return STRING_PATTERN;
-		case "Number": return FINITE_PATTERN;
-		case "BigInt": return BIGINT_PATTERN;
-		case "TemplateLiteral": return getTemplateLiteralSource(part, false);
-		case "Union": return part.types.map(getTemplateLiteralASTPartPattern).join("|");
-	}
-}
-function handleTemplateLiteralASTPartParens(part, s, top) {
-	if (isUnion(part)) {
-		if (!top) return `(?:${s})`;
-	} else if (!top) return s;
-	return `(${s})`;
-}
 function fromConst(ast, value) {
 	const succeed = succeedSome(value);
 	return (oinput) => {
@@ -7840,6 +7869,12 @@ function fromRefinement(ast, refinement) {
 		return refinement(oinput.value) ? succeed(oinput) : fail(new InvalidType(ast, oinput));
 	};
 }
+function applyTemplateLiteralPartChecks(ast, value, options) {
+	if (options?.disableChecks || ast.checks === void 0) return value;
+	const issues = [];
+	collectIssues(ast.checks, value, issues, ast, options);
+	return issues.length === 0 ? value : void 0;
+}
 /** @internal */
 function toCodec(f) {
 	function out(ast) {
@@ -7847,19 +7882,15 @@ function toCodec(f) {
 	}
 	return memoize(out);
 }
-const indexSignatureParameterFromString = /*#__PURE__*/ toCodec((ast) => {
+const parameterFromPropertyKey = /*#__PURE__*/ toCodec((ast) => {
 	switch (ast._tag) {
 		default: return ast;
 		case "Number": return ast.toCodecStringTree();
-		case "Union": return ast.recur(indexSignatureParameterFromString);
+		case "Union": return ast.recur(parameterFromPropertyKey);
 	}
 });
-/**
-* any string, including newlines
-* @internal
-*/
-const STRING_PATTERN = "[\\s\\S]*?";
 const isStringFiniteRegExp = /*#__PURE__*/ new globalThis.RegExp(`^${FINITE_PATTERN}$`);
+const isStringNumberRegExp = /*#__PURE__*/ new globalThis.RegExp(`(?:${FINITE_PATTERN}|Infinity|-Infinity|NaN)`);
 /** @internal */
 function isStringFinite(annotations) {
 	return isPattern$1(isStringFiniteRegExp, {
@@ -7874,10 +7905,6 @@ function isStringFinite(annotations) {
 const finiteString = /*#__PURE__*/ appendChecks(string, [/*#__PURE__*/ isStringFinite()]);
 const finiteToString = /*#__PURE__*/ new Link(finiteString, numberFromString);
 const numberToString = /*#__PURE__*/ new Link(/*#__PURE__*/ new Union$1([finiteString, nonFiniteLiterals], "anyOf"), numberFromString);
-/**
-* signed integer only (no leading "+" because TypeScript doesn't support it)
-*/
-const BIGINT_PATTERN = "-?\\d+";
 /** @internal */
 function collectIssues(checks, value, issues, ast, options) {
 	for (let i = 0; i < checks.length; i++) {
@@ -7897,7 +7924,7 @@ const ClassTypeId = "~effect/Schema/Class";
 /** @internal */
 const STRUCTURAL_ANNOTATION_KEY = "~structural";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -7936,7 +7963,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/SchemaParser.js
 /**
 * Runs schemas against real values.
 *
@@ -8161,7 +8188,7 @@ const recur = /*#__PURE__*/ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8209,7 +8236,7 @@ function mapSchemaIssueEffect(self) {
 	return catchCause(self, (cause) => failCauseSync(() => map(cause, (issue) => new SchemaError(issue))));
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.84/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.85/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
