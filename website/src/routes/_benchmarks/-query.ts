@@ -11,6 +11,18 @@ const downloadsResponseSchema = v.pipe(
   v.transform(({ downloads }) => downloads),
 );
 
+// Packages hosted on JSR rather than npm — the registry can't be inferred from the name
+// (e.g. `@vinejs/vine` is npm), so metadata/downloads for these resolve from the JSR API.
+const JSR_PACKAGES = new Set(["@paseri/paseri", "@paseri/compiler"]);
+
+export const isJsrPackage = (packageName: string) => JSR_PACKAGES.has(packageName);
+
+// "@scope/name" -> JSR API path segments.
+const jsrScopeAndName = (packageName: string) => {
+  const [scope, name] = packageName.slice(1).split("/");
+  return { scope, name };
+};
+
 export function getPackageName(libraryName: string) {
   // effect/Schema -> effect
   // effect@beta -> effect
@@ -29,8 +41,36 @@ export function getPackageName(libraryName: string) {
   return libraryName;
 }
 
-export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSignal) =>
-  queryOptions({
+const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+
+// JSR reports daily, per-channel buckets (npm_tarball + jsr_meta); sum the last week across both.
+const jsrDownloadsSchema = v.pipe(
+  v.object({
+    total: v.array(v.object({ timeBucket: v.string(), count: v.number() })),
+  }),
+  v.transform(({ total }) => {
+    const cutoff = Date.now() - MS_PER_WEEK;
+    return total.reduce(
+      (sum, { timeBucket, count }) =>
+        new Date(timeBucket).getTime() >= cutoff ? sum + count : sum,
+      0,
+    );
+  }),
+);
+
+export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSignal) => {
+  if (isJsrPackage(packageName)) {
+    const { scope, name } = jsrScopeAndName(packageName);
+    return queryOptions({
+      queryKey: ["jsr", "downloads", "week", packageName],
+      queryFn: ({ signal }) =>
+        upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}/downloads`, {
+          signal: anyAbortSignal(signal, signalOpt),
+          schema: jsrDownloadsSchema,
+        }),
+    });
+  }
+  return queryOptions({
     queryKey: ["npm", "downloads", "week", packageName],
     queryFn: ({ signal }) =>
       upfetch(
@@ -41,6 +81,7 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
         },
       ),
   });
+};
 
 const packageMetadataSchema = v.object({
   name: v.string(),
@@ -62,8 +103,50 @@ export const getRepoLink = (repository: { type: string; url: string }) => {
   return repository.url;
 };
 
-export const getPackageMetadata = (packageName: string, version: string, signalOpt?: AbortSignal) =>
-  queryOptions({
+// Maps the JSR package API onto the same shape as packageMetadataSchema so cards render uniformly.
+type PackageMetadata = v.InferOutput<typeof packageMetadataSchema>;
+
+const jsrMetadataSchema = v.pipe(
+  v.object({
+    scope: v.string(),
+    name: v.string(),
+    description: v.nullish(v.string()),
+    latestVersion: v.nullish(v.string()),
+    githubRepository: v.nullish(v.object({ owner: v.string(), name: v.string() })),
+  }),
+  v.transform(
+    ({ scope, name, description, latestVersion, githubRepository }): PackageMetadata => ({
+      name: `@${scope}/${name}`,
+      version: latestVersion ?? "",
+      description: description ?? "",
+      homepage: `https://jsr.io/@${scope}/${name}`,
+      repository: githubRepository
+        ? {
+            type: "git",
+            url: `https://github.com/${githubRepository.owner}/${githubRepository.name}`,
+          }
+        : undefined,
+    }),
+  ),
+);
+
+export const getPackageMetadata = (
+  packageName: string,
+  version: string,
+  signalOpt?: AbortSignal,
+) => {
+  if (isJsrPackage(packageName)) {
+    const { scope, name } = jsrScopeAndName(packageName);
+    return queryOptions({
+      queryKey: ["jsr", "metadata", packageName],
+      queryFn: ({ signal }) =>
+        upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}`, {
+          signal: anyAbortSignal(signal, signalOpt),
+          schema: jsrMetadataSchema,
+        }),
+    });
+  }
+  return queryOptions({
     queryKey: ["npm", "metadata", packageName, version],
     queryFn: ({ signal }) =>
       upfetch(
@@ -74,6 +157,7 @@ export const getPackageMetadata = (packageName: string, version: string, signalO
         },
       ),
   });
+};
 
 const githubRepoSchema = v.object({
   html_url: v.string(),
