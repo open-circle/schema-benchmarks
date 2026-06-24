@@ -7,5 +7,5 @@ export default defineConfig({
   env: {
     node: true,
   },
-  ignorePatterns: ["**/download_compiled/**", "**/download/**", "**/download.ts"],
+  ignorePatterns: ["**/download_compiled/**", "**/download/**", "**/download.ts", "**/*.gen.ts"],
 });
