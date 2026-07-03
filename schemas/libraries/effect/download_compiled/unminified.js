@@ -1233,8 +1233,12 @@ function formatUnknown(input, options) {
 			if (seen.has(v)) return CIRCULAR;
 			seen.add(v);
 			const keys = ownKeys(v);
-			if (!gap || keys.length <= 1) return wrap(v, `{${keys.map((k) => `${formatPropertyKey$1(k)}:${go(v[k], d)}`).join(",")}}`);
-			return wrap(v, `{\n${keys.map((k) => `${ind(d + 1)}${formatPropertyKey$1(k)}: ${go(v[k], d + 1)}`).join(",\n")}\n${ind(d)}}`);
+			if (!gap || keys.length <= 1) {
+				const body = `{${keys.map((k) => `${formatPropertyKey$1(k)}:${go(v[k], d)}`).join(",")}}`;
+				return wrap(v, body);
+			}
+			const body = `{\n${keys.map((k) => `${ind(d + 1)}${formatPropertyKey$1(k)}: ${go(v[k], d + 1)}`).join(",\n")}\n${ind(d)}}`;
+			return wrap(v, body);
 		}
 		return String(v);
 	}
@@ -3356,7 +3360,9 @@ const normalize = (self) => {
 		for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
 		else break;
 		if (trail === 0) self.normalized = self;
-		self.normalized = unsafeMakeNormalized(BigInt(digits.substring(0, digits.length - trail)), self.scale - trail);
+		const value = BigInt(digits.substring(0, digits.length - trail));
+		const scale = self.scale - trail;
+		self.normalized = unsafeMakeNormalized(value, scale);
 	}
 	return self.normalized;
 };
@@ -4057,41 +4063,51 @@ const appendAll$1 = /*#__PURE__*/ dual(2, (self, that) => {
 				left: self.left,
 				right: nr
 			});
-		} else return makeChunk({
-			_tag: "IConcat",
-			left: makeChunk({
+		} else {
+			const nl = makeChunk({
 				_tag: "IConcat",
 				left: self.left,
 				right: self.right.left
-			}),
-			right: nrr
-		});
+			});
+			return makeChunk({
+				_tag: "IConcat",
+				left: nl,
+				right: nrr
+			});
+		}
 	}
-	else if (that.right.depth >= that.left.depth) return makeChunk({
-		_tag: "IConcat",
-		left: appendAll$1(self, that.left),
-		right: that.right
-	});
-	else {
-		const nll = appendAll$1(self, that.left.left);
-		if (nll.depth === that.depth - 3) return makeChunk({
+	else if (that.right.depth >= that.left.depth) {
+		const nl = appendAll$1(self, that.left);
+		return makeChunk({
 			_tag: "IConcat",
-			left: makeChunk({
+			left: nl,
+			right: that.right
+		});
+	} else {
+		const nll = appendAll$1(self, that.left.left);
+		if (nll.depth === that.depth - 3) {
+			const nl = makeChunk({
 				_tag: "IConcat",
 				left: nll,
 				right: that.left.right
-			}),
-			right: that.right
-		});
-		else return makeChunk({
-			_tag: "IConcat",
-			left: nll,
-			right: makeChunk({
+			});
+			return makeChunk({
+				_tag: "IConcat",
+				left: nl,
+				right: that.right
+			});
+		} else {
+			const nr = makeChunk({
 				_tag: "IConcat",
 				left: that.left.right,
 				right: that.right
-			})
-		});
+			});
+			return makeChunk({
+				_tag: "IConcat",
+				left: nll,
+				right: nr
+			});
+		}
 	}
 });
 /**
@@ -4636,7 +4652,8 @@ const modifyAt$1 = /*#__PURE__*/ dual(3, (self, key, f) => modifyHash(self, key,
 /** @internal */
 const modifyHash = /*#__PURE__*/ dual(4, (self, key, hash, f) => {
 	const size = { value: self._size };
-	return pipe(self, setTree(self._root.modify(self._editable ? self._edit : NaN, 0, f, hash, key, size), size.value));
+	const newRoot = self._root.modify(self._editable ? self._edit : NaN, 0, f, hash, key, size);
+	return pipe(self, setTree(newRoot, size.value));
 });
 /** @internal */
 const remove$2 = /*#__PURE__*/ dual(2, (self, key) => modifyAt$1(self, key, none$4));
@@ -8294,7 +8311,8 @@ const tap = /*#__PURE__*/ dual((args) => args.length === 3 || args.length === 2 
 	return succeed$2(a);
 }));
 const transplant = (f) => withFiberRuntime((state) => {
-	return f(fiberRefLocally(currentForkScopeOverride, some(pipe(state.getFiberRef(currentForkScopeOverride), getOrElse(() => state.scope())))));
+	const scope = pipe(state.getFiberRef(currentForkScopeOverride), getOrElse(() => state.scope()));
+	return f(fiberRefLocally(currentForkScopeOverride, some(scope)));
 });
 const uninterruptible = (self) => {
 	const effect = new EffectPrimitive(OP_UPDATE_RUNTIME_FLAGS);
@@ -8915,7 +8933,8 @@ var ClockImpl = class {
 	}
 	sleep(duration) {
 		return async_((resume) => {
-			return asVoid(sync(globalClockScheduler.unsafeSchedule(() => resume(void_$1), duration)));
+			const canceler = globalClockScheduler.unsafeSchedule(() => resume(void_$1), duration);
+			return asVoid(sync(canceler));
 		});
 	}
 };
@@ -9069,14 +9088,15 @@ const fromEnv = (options) => {
 	};
 	const enumerateChildren = (path) => sync(() => {
 		const current = getEnv();
-		return fromIterable$2(Object.keys(current).map((value) => unmakePathString(value.toUpperCase())).filter((keyPath) => {
+		const filteredKeyPaths = Object.keys(current).map((value) => unmakePathString(value.toUpperCase())).filter((keyPath) => {
 			for (let i = 0; i < path.length; i++) {
 				const pathComponent = pipe(path, unsafeGet$3(i));
 				const currentElement = keyPath[i];
 				if (currentElement === void 0 || pathComponent !== currentElement) return false;
 			}
 			return true;
-		}).flatMap((keyPath) => keyPath.slice(path.length, path.length + 1)));
+		}).flatMap((keyPath) => keyPath.slice(path.length, path.length + 1));
+		return fromIterable$2(filteredKeyPaths);
 	});
 	return fromFlat(makeFlat({
 		load,
@@ -9140,7 +9160,8 @@ const fromFlatLoop = (flat, prefix, config, split) => {
 			if (isLeft(left) && isRight(right$4)) return fail$2(left.left);
 			if (isRight(left) && isLeft(right$4)) return fail$2(right$4.left);
 			if (isRight(left) && isRight(right$4)) {
-				const fail = fromFlatLoopFail(prefix, pipe(prefix, join$1(".")));
+				const path = pipe(prefix, join$1("."));
+				const fail = fromFlatLoopFail(prefix, path);
 				const [lefts, rights] = extend(fail, fail, pipe(left.right, map$5(right)), pipe(right$4.right, map$5(right)));
 				return pipe(lefts, zip$1(rights), forEachSequential(([left, right]) => pipe(zip(left, right), map$2(([left, right]) => op.zip(left, right)))));
 			}
@@ -12042,13 +12063,15 @@ const diff = (oldValue, newValue) => {
 	if (equals$2(oldValue, newValue)) return empty;
 	const oldSupervisors = toSet(oldValue);
 	const newSupervisors = toSet(newValue);
-	return combine(pipe(newSupervisors, difference(oldSupervisors), reduce$3(empty, (patch, supervisor) => combine(patch, {
+	const added = pipe(newSupervisors, difference(oldSupervisors), reduce$3(empty, (patch, supervisor) => combine(patch, {
 		_tag: OP_ADD_SUPERVISOR,
 		supervisor
-	}))), pipe(oldSupervisors, difference(newSupervisors), reduce$3(empty, (patch, supervisor) => combine(patch, {
+	})));
+	const removed = pipe(oldSupervisors, difference(newSupervisors), reduce$3(empty, (patch, supervisor) => combine(patch, {
 		_tag: OP_REMOVE_SUPERVISOR,
 		supervisor
-	}))));
+	})));
+	return combine(added, removed);
 };
 /** @internal */
 const differ = /*#__PURE__*/ make$2({
@@ -12308,9 +12331,12 @@ var FiberRuntime = class extends Class {
 			const parentFiberId = parentFiber.id();
 			const parentFiberRefs = parentFiber.getFiberRefs();
 			const parentRuntimeFlags = parentStatus.runtimeFlags;
-			const updatedFiberRefs = joinAs(parentFiberRefs, parentFiberId, this.getFiberRefs());
+			const childFiberRefs = this.getFiberRefs();
+			const updatedFiberRefs = joinAs(parentFiberRefs, parentFiberId, childFiberRefs);
 			parentFiber.setFiberRefs(updatedFiberRefs);
-			return updateRuntimeFlags(pipe(diff$3(parentRuntimeFlags, parentFiber.getFiberRef(currentRuntimeFlags)), exclude(1), exclude(16)));
+			const updatedRuntimeFlags = parentFiber.getFiberRef(currentRuntimeFlags);
+			const patch = pipe(diff$3(parentRuntimeFlags, updatedRuntimeFlags), exclude(1), exclude(16));
+			return updateRuntimeFlags(patch);
 		});
 	}
 	/**
@@ -12606,7 +12632,8 @@ var FiberRuntime = class extends Class {
 	}
 	log(message, cause, overrideLogLevel) {
 		const logLevel = isSome(overrideLogLevel) ? overrideLogLevel.value : this.getFiberRef(currentLogLevel);
-		if (greaterThan$1(this.getFiberRef(currentMinimumLogLevel), logLevel)) return;
+		const minimumLogLevel = this.getFiberRef(currentMinimumLogLevel);
+		if (greaterThan$1(minimumLogLevel, logLevel)) return;
 		const spans = this.getFiberRef(currentLogSpan);
 		const annotations = this.getFiberRef(currentLogAnnotations);
 		const loggers = this.getLoggers();
@@ -13001,7 +13028,8 @@ var FiberRuntime = class extends Class {
 const currentMinimumLogLevel = /*#__PURE__*/ globalValue("effect/FiberRef/currentMinimumLogLevel", () => fiberRefUnsafeMake(fromLiteral("Info")));
 /** @internal */
 const loggerWithConsoleLog = (self) => makeLogger((opts) => {
-	get$4(getOrDefault(opts.context, currentServices), consoleTag).unsafe.log(self.log(opts));
+	const services = getOrDefault(opts.context, currentServices);
+	get$4(services, consoleTag).unsafe.log(self.log(opts));
 });
 /** @internal */
 const defaultLogger = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/Logger/defaultLogger"), () => loggerWithConsoleLog(stringLogger));
@@ -13098,7 +13126,8 @@ const forEachConcurrentDiscard = (self, f, batching, processAll, n) => uninterru
 					}
 					return succeed$2(res);
 				};
-				const fiber = runFiber(flatMap$3(stepOrExit(restore(f(a, index))), onRes));
+				const todo = flatMap$3(stepOrExit(restore(f(a, index))), onRes);
+				const fiber = runFiber(todo);
 				startOrder.push(fiber);
 				fibers.add(fiber);
 				if (interrupted) fiber.currentScheduler.scheduleTask(() => {
@@ -13114,7 +13143,8 @@ const forEachConcurrentDiscard = (self, f, batching, processAll, n) => uninterru
 					if (results.length === target) resume(succeed$2(getOrElse(exitCollectAll(collectExits(), { parallel: true }), () => exitVoid$1)));
 					else if (residual.length + results.length === target) {
 						const exits = collectExits();
-						resume(succeed$2(blocked(residual.map((blocked) => blocked.effect_instruction_i0).reduce(par), forEachConcurrentDiscard([getOrElse(exitCollectAll(exits, { parallel: true }), () => exitVoid$1), ...residual.map((blocked) => blocked.effect_instruction_i1)], (i) => i, batching, true, n))));
+						const requests = residual.map((blocked) => blocked.effect_instruction_i0).reduce(par);
+						resume(succeed$2(blocked(requests, forEachConcurrentDiscard([getOrElse(exitCollectAll(exits, { parallel: true }), () => exitVoid$1), ...residual.map((blocked) => blocked.effect_instruction_i1)], (i) => i, batching, true, n))));
 					} else next();
 				});
 			}
@@ -13169,7 +13199,8 @@ const unsafeForkUnstarted = (effect, parentFiber, parentRuntimeFlags, overrideSc
 /** @internal */
 const unsafeMakeChildFiber = (effect, parentFiber, parentRuntimeFlags, overrideScope = null) => {
 	const childId = unsafeMake$5();
-	const childFiberRefs = forkAs(parentFiber.getFiberRefs(), childId);
+	const parentFiberRefs = parentFiber.getFiberRefs();
+	const childFiberRefs = forkAs(parentFiberRefs, childId);
 	const childFiber = new FiberRuntime(childId, childFiberRefs, parentRuntimeFlags);
 	const childContext = getOrDefault$1(childFiberRefs, currentContext);
 	const supervisor = childFiber.currentSupervisor;
@@ -13326,10 +13357,11 @@ const invokeWithInterrupt = (self, entries, onInterrupt) => fiberIdWith((id) => 
 		cleanup.forEach((f) => f());
 	});
 })), suspend$2(() => {
-	return forEachSequentialDiscard(entries.flatMap((entry) => {
+	const residual = entries.flatMap((entry) => {
 		if (!entry.state.completed) return [entry];
 		return [];
-	}), (entry) => complete(entry.request, exitInterrupt$1(id)));
+	});
+	return forEachSequentialDiscard(residual, (entry) => complete(entry.request, exitInterrupt$1(id)));
 })));
 //#endregion
 //#region ../node_modules/.pnpm/effect@3.21.4/node_modules/effect/dist/esm/Scope.js
@@ -13653,8 +13685,10 @@ const unsafeMakeZoned$1 = (input, options) => {
 	const self = unsafeMake$1(input);
 	if (self.epochMillis < minEpochMillis || self.epochMillis > maxEpochMillis) throw new RangeError(`Epoch millis out of range: ${self.epochMillis}`);
 	let zone;
-	if (options?.timeZone === void 0) zone = zoneMakeOffset$1(new Date(self.epochMillis).getTimezoneOffset() * -60 * 1e3);
-	else if (isTimeZone(options?.timeZone)) zone = options.timeZone;
+	if (options?.timeZone === void 0) {
+		const offset = new Date(self.epochMillis).getTimezoneOffset() * -60 * 1e3;
+		zone = zoneMakeOffset$1(offset);
+	} else if (isTimeZone(options?.timeZone)) zone = options.timeZone;
 	else if (typeof options?.timeZone === "number") zone = zoneMakeOffset$1(options.timeZone);
 	else {
 		const parsedZone = zoneFromString$1(options.timeZone);
@@ -16598,7 +16632,7 @@ const go = (ast, isDecoding) => {
 			return (i, options) => {
 				options = options ?? defaultParseOption;
 				const allErrors = options?.errors === "all";
-				return handleForbidden(flatMap(orElse(from(i, options), (ef) => {
+				const result = flatMap(orElse(from(i, options), (ef) => {
 					const issue = new Refinement(ast, i, "From", ef);
 					if (allErrors && hasStableFilter(ast) && isComposite(ef)) return match$3(ast.filter(i, options, ast), {
 						onNone: () => left(issue),
@@ -16608,7 +16642,8 @@ const go = (ast, isDecoding) => {
 				}), (a) => match$3(ast.filter(a, options, ast), {
 					onNone: () => right(a),
 					onSome: (ep) => left(new Refinement(ast, i, "Predicate", ep))
-				})), ast, i, options);
+				}));
+				return handleForbidden(result, ast, i, options);
 			};
 		} else {
 			const from = goMemo(typeAST(ast), true);

@@ -6745,7 +6745,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const raw = _walkPointer(data, ptr);
 				if (raw !== void 0 || ptr === "") received = reprValue(raw);
 			}
-			const s = suggestFor(received !== void 0 && e.received === void 0 ? Object.assign({}, e, { received }) : e, data);
+			const probe = received !== void 0 && e.received === void 0 ? Object.assign({}, e, { received }) : e;
+			const s = suggestFor(probe, data);
 			if (s) e.suggestion = s;
 		}
 		return errors;

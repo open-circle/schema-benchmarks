@@ -960,11 +960,12 @@ const ZodMiniObject = /*@__PURE__*/ $constructor("ZodMiniObject", (inst, def) =>
 });
 // @__NO_SIDE_EFFECTS__
 function object(shape, params) {
-	return new ZodMiniObject({
+	const def = {
 		type: "object",
 		shape: shape ?? {},
 		...normalizeParams(params)
-	});
+	};
+	return new ZodMiniObject(def);
 }
 const ZodMiniEnum = /*@__PURE__*/ $constructor("ZodMiniEnum", (inst, def) => {
 	$ZodEnum.init(inst, def);
@@ -973,9 +974,10 @@ const ZodMiniEnum = /*@__PURE__*/ $constructor("ZodMiniEnum", (inst, def) => {
 });
 // @__NO_SIDE_EFFECTS__
 function _enum(values, params) {
+	const entries = Array.isArray(values) ? Object.fromEntries(values.map((v) => [v, v])) : values;
 	return new ZodMiniEnum({
 		type: "enum",
-		entries: Array.isArray(values) ? Object.fromEntries(values.map((v) => [v, v])) : values,
+		entries,
 		...normalizeParams(params)
 	});
 }

@@ -19,7 +19,7 @@ ${`
   ${n.stylize(`|`,`undefined`)} `;return`${`${n.stylize(`CombinedPropertyError`,`special`)} (${n.stylize(this.errors.length.toString(),`number`)})`}
   ${n.stylize(this.message,`regexp`)}
 
-${this.errors.map(([a,o])=>`  input${e.formatProperty(a,n)}${i}${o[I](t-1,r).replace(/\n/g,i)}`).join(`
+${this.errors.map(([a,o])=>{let s=e.formatProperty(a,n),c=o[I](t-1,r).replace(/\n/g,i);return`  input${s}${i}${c}`}).join(`
 
 `)}`}static formatProperty(e,t){return typeof e==`string`?t.stylize(`.${e}`,`symbol`):typeof e==`number`?`[${t.stylize(e.toString(),`number`)}]`:`[${t.stylize(`Symbol`,`symbol`)}(${e.description})]`}};g(Cr,`CombinedPropertyError`);var wr=Cr,Tr=class extends er{constructor(e,t,n){super(t),this.validator=e,this.given=n}toJSON(){return{name:this.name,message:`Unknown validation error occurred.`,validator:this.validator,given:this.given}}[I](e,t){let n=t.stylize(this.validator,`string`);if(e<0)return t.stylize(`[ValidationError: ${n}]`,`special`);let r={...t,depth:t.depth===null?null:t.depth-1,compact:!0},i=`
   ${t.stylize(`|`,`undefined`)} `,a=Zn(this.given,r).replace(/\n/g,i);return`${`${t.stylize(`ValidationError`,`special`)} > ${n}`}

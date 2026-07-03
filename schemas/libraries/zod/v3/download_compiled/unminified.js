@@ -497,11 +497,12 @@ var ZodType = class {
 			data,
 			parsedType: getParsedType(data)
 		};
-		return handleResult(ctx, this._parseSync({
+		const result = this._parseSync({
 			data,
 			path: ctx.path,
 			parent: ctx
-		}));
+		});
+		return handleResult(ctx, result);
 	}
 	"~validate"(data) {
 		const ctx = {
@@ -558,7 +559,8 @@ var ZodType = class {
 			path: ctx.path,
 			parent: ctx
 		});
-		return handleResult(ctx, await (isAsync(maybeAsyncResult) ? maybeAsyncResult : Promise.resolve(maybeAsyncResult)));
+		const result = await (isAsync(maybeAsyncResult) ? maybeAsyncResult : Promise.resolve(maybeAsyncResult));
+		return handleResult(ctx, result);
 	}
 	refine(check, message) {
 		const getIssueProperties = (val) => {
