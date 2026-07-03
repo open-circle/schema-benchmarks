@@ -25,7 +25,7 @@
     "@types/node": "catalog:",
     "knip": "^6.24.0",
     "lefthook": "^2.1.9",
-    "oxfmt": "^0.57.0",
+    "oxfmt": "0.56.0",
     "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.24.0",
     "playwright": "catalog:",
