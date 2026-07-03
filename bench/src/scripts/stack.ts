@@ -15,9 +15,7 @@ const execFile = promisify(child_process.execFile);
 
 // this is probably quite fragile, worth keeping an eye on when we update node
 
-const libDist = import.meta
-  .resolve("@schema-benchmarks/schemas/libraries")
-  .replace("/index.js", "");
+const libDist = path.dirname(import.meta.resolve("@schema-benchmarks/schemas/libraries"));
 
 const search = `    at Object.throw (${libDist}/`;
 
