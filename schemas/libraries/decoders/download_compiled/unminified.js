@@ -406,7 +406,8 @@ var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainOb
 function object(decoders) {
 	const knownKeys = new Set(Object.keys(decoders));
 	return pojo.chain((plainObj, ok2, err2) => {
-		const missingKeys = /* @__PURE__ */ difference(knownKeys, new Set(Object.keys(plainObj)));
+		const actualKeys = new Set(Object.keys(plainObj));
+		const missingKeys = /* @__PURE__ */ difference(knownKeys, actualKeys);
 		const record2 = {};
 		let errors = null;
 		for (const key of Object.keys(decoders)) {

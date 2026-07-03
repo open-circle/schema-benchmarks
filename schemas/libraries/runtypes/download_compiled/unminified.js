@@ -817,17 +817,17 @@ const InstanceOf = (ctor) => Runtype.create(({ received, expected }) => {
 	ctor
 });
 //#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.4/node_modules/runtypes/esm/Number.js
-const Number = Runtype.create(({ received, expected }) => typeof received === "number" ? SUCCESS(received) : FAILURE.TYPE_INCORRECT({
-	expected,
-	received
-}), { tag: "number" });
-//#endregion
 //#region ../node_modules/.pnpm/runtypes@7.0.4/node_modules/runtypes/esm/Never.js
 const Never = Runtype.create(({ received, expected }) => FAILURE.NOTHING_EXPECTED({
 	expected,
 	received
 }), { tag: "never" });
+//#endregion
+//#region ../node_modules/.pnpm/runtypes@7.0.4/node_modules/runtypes/esm/Number.js
+const Number = Runtype.create(({ received, expected }) => typeof received === "number" ? SUCCESS(received) : FAILURE.TYPE_INCORRECT({
+	expected,
+	received
+}), { tag: "number" });
 //#endregion
 //#region ../node_modules/.pnpm/runtypes@7.0.4/node_modules/runtypes/esm/utils-internal/defineProperty.js
 const defineProperty = (target, key, value) => {

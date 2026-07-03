@@ -4587,9 +4587,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						this._snapshots.pop();
 					}
 				}, u.entry = function(e, r, s) {
-					const { tracer: n, cleanup: a } = u.tracer(r, s), o = s.debug ? [] : null, i = r._ids._schemaChain ? /* @__PURE__ */ new Map() : null, f = new u.Mainstay(n, o, i), h = new c([], [], {
+					const { tracer: n, cleanup: a } = u.tracer(r, s), o = s.debug ? [] : null, i = r._ids._schemaChain ? /* @__PURE__ */ new Map() : null, f = new u.Mainstay(n, o, i), m = r._ids._schemaChain ? [{ schema: r }] : null, h = new c([], [], {
 						mainstay: f,
-						schemas: r._ids._schemaChain ? [{ schema: r }] : null
+						schemas: m
 					}), p = t.validate(e, r, h, s);
 					a && r.$_root.untrace();
 					const d = l.process(p.errors, e, s);
@@ -5319,8 +5319,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					if (r.shallow) return i.applyToDefaultsWithShallow(e, t, r);
 					const o = n(e);
 					if (!0 === t) return o;
+					const l = void 0 !== r.nullOverride && r.nullOverride;
 					return a(o, t, {
-						nullOverride: void 0 !== r.nullOverride && r.nullOverride,
+						nullOverride: l,
 						mergeArrays: !1
 					});
 				}, i.applyToDefaultsWithShallow = function(e, t, r) {
@@ -5335,8 +5336,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					const f = n(e, {}, c);
 					if (!u) return f;
 					for (const e of u) i.reachCopy(f, t, e);
+					const m = void 0 !== r.nullOverride && r.nullOverride;
 					return a(f, t, {
-						nullOverride: void 0 !== r.nullOverride && r.nullOverride,
+						nullOverride: m,
 						mergeArrays: !1
 					});
 				}, i.reachCopy = function(e, t, r) {
@@ -5360,7 +5362,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				const s = r(1803), n = r(8314), a = e.exports = function(e, ...t) {
 					if (e) return;
 					if (1 === t.length && t[0] instanceof Error) throw t[0];
-					throw new s(t.filter((e) => "" !== e).map((e) => "string" == typeof e ? e : e instanceof Error ? e.message : n(e)).join(" "), a);
+					const r = t.filter((e) => "" !== e).map((e) => "string" == typeof e ? e : e instanceof Error ? e.message : n(e));
+					throw new s(r.join(" "), a);
 				};
 			},
 			1803(e) {
@@ -5949,7 +5952,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							};
 							this._items.push(e);
 						}
-						if (!t.manual) s(this._sort(), "item", "?" !== c ? `added into group ${c}` : "", "created a dependencies error");
+						if (!t.manual) {
+							const e = this._sort();
+							s(e, "item", "?" !== c ? `added into group ${c}` : "", "created a dependencies error");
+						}
 						return this.nodes;
 					}
 					merge(e) {
@@ -5957,10 +5963,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						for (const t of e) if (t) for (const e of t._items) this._items.push(Object.assign({}, e));
 						this._items.sort(n.mergeSort);
 						for (let e = 0; e < this._items.length; ++e) this._items[e].seq = e;
-						return s(this._sort(), "merge created a dependencies error"), this.nodes;
+						const t = this._sort();
+						return s(t, "merge created a dependencies error"), this.nodes;
 					}
 					sort() {
-						return s(this._sort(), "sort created a dependencies error"), this.nodes;
+						const e = this._sort();
+						return s(e, "sort created a dependencies error"), this.nodes;
 					}
 					_sort() {
 						const e = {}, t = Object.create(null), r = Object.create(null);

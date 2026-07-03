@@ -2568,7 +2568,9 @@ var _CombinedPropertyError = class _CombinedPropertyError extends BaseError {
   ${options.stylize(this.message, "regexp")}
 
 ${this.errors.map(([key, error]) => {
-			return `  input${_CombinedPropertyError.formatProperty(key, options)}${padding}${error[customInspectSymbolStackLess](depth - 1, newOptions).replace(/\n/g, padding)}`;
+			const property = _CombinedPropertyError.formatProperty(key, options);
+			const body = error[customInspectSymbolStackLess](depth - 1, newOptions).replace(/\n/g, padding);
+			return `  input${property}${padding}${body}`;
 		}).join("\n\n")}`;
 	}
 	static formatProperty(key, options) {
