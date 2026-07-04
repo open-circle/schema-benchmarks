@@ -30,6 +30,8 @@ export interface RouterContext {
   queryClient: QueryClient;
 }
 
+const iconSuffixes = process.env.NODE_ENV === "production" ? ["light", "dark"] : ["dev"];
+
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: () =>
     promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn(), npmSite: getNpmSiteFn() }),
@@ -48,28 +50,22 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
       manifest: "/manifest.webmanifest",
       icons: {
-        icon: [
+        icon: iconSuffixes.flatMap((suffix) => [
           {
-            url: "/favicon_dark.ico",
-            media: "(prefers-color-scheme: dark)",
+            url: `/favicon_${suffix}.ico`,
             sizes: "any",
+            ...(suffix === "light" || suffix === "dark"
+              ? { media: `(prefers-color-scheme: ${suffix})` }
+              : {}),
           },
           {
-            url: "/favicon_light.ico",
-            media: "(prefers-color-scheme: light)",
-            sizes: "any",
-          },
-          {
-            url: "/logo_dark.svg",
-            media: "(prefers-color-scheme: dark)",
+            url: `/logo_${suffix}.svg`,
             type: "image/svg+xml",
+            ...(suffix === "light" || suffix === "dark"
+              ? { media: `(prefers-color-scheme: ${suffix})` }
+              : {}),
           },
-          {
-            url: "/logo_light.svg",
-            media: "(prefers-color-scheme: light)",
-            type: "image/svg+xml",
-          },
-        ],
+        ]),
         apple: {
           url: "/apple-touch-icon.png",
           sizes: "180x180",
