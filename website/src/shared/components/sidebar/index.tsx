@@ -15,6 +15,8 @@ import { sidebarGroups } from "./groups";
 const cls = bem("sidebar");
 const backdropCls = bem("sidebar-backdrop");
 
+const iconSuffixes = process.env.NODE_ENV === "production" ? ["light", "dark"] : ["dev"];
+
 function BaseSidebar({
   children,
   open,
@@ -44,8 +46,9 @@ function BaseSidebar({
       <div {...backdropCls({ modifiers: { visible: open } })} onClick={() => setOpen(false)} />
       <aside {...cls({ modifiers: { open } })}>
         <div {...cls("logo")}>
-          <img {...cls("logo-dark")} src="/logo_dark.svg" alt="Logo" />
-          <img {...cls("logo-light")} src="/logo_light.svg" alt="Logo" />
+          {iconSuffixes.map((suffix) => (
+            <img key={suffix} {...cls(`logo-${suffix}`)} src={`/logo_${suffix}.svg`} alt="Logo" />
+          ))}
           <h2 className="typo-subtitle1">Schema Benchmarks</h2>
         </div>
         {children}
