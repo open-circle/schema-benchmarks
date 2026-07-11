@@ -16,10 +16,26 @@ runs:
         registry-url: "https://registry.npmjs.org"
         cache: pnpm
 
+    - name: Restore ttsc native cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ runner.temp }}/ttsc-cache
+          ${{ runner.temp }}/ttsc-go-build
+        key: ${{ runner.os }}-ttsc-native-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-ttsc-native-
+
     - name: Install dependencies
       shell: bash
+      env:
+        TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
+        TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
       run: pnpm install
 
     - name: Build schemas
       shell: bash
+      env:
+        TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
+        TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
       run: pnpm schemas:build
