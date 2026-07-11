@@ -476,7 +476,12 @@ var __classPrivateFieldGet = function(receiver, state, kind, f) {
 	if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
 	return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _a, _Runtype_createInnerValidate, _b, _c, _d, _e;
+var _a;
+var _Runtype_createInnerValidate;
+var _b;
+var _c;
+var _d;
+var _e;
 const RuntypeSymbol = globalThis.Symbol();
 const RuntypeConformance = globalThis.Symbol();
 const RuntypePrivate = globalThis.Symbol();

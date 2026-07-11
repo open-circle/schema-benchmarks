@@ -42,8 +42,15 @@ var require_property_expr = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		if (!(key in this._values)) this._size++;
 		return this._values[key] = value;
 	};
-	var SPLIT_REGEX = /[^.^\]^[]+|(?=\[\]|\.\.)/g, DIGIT_REGEX = /^\d+$/, LEAD_DIGIT_REGEX = /^\d/, SPEC_CHAR_REGEX = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g, CLEAN_QUOTES_REGEX = /^\s*(['"]?)(.*?)(\1)\s*$/, MAX_CACHE_SIZE = 512;
-	var pathCache = new Cache(MAX_CACHE_SIZE), setCache = new Cache(MAX_CACHE_SIZE), getCache = new Cache(MAX_CACHE_SIZE);
+	var SPLIT_REGEX = /[^.^\]^[]+|(?=\[\]|\.\.)/g;
+	var DIGIT_REGEX = /^\d+$/;
+	var LEAD_DIGIT_REGEX = /^\d/;
+	var SPEC_CHAR_REGEX = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g;
+	var CLEAN_QUOTES_REGEX = /^\s*(['"]?)(.*?)(\1)\s*$/;
+	var MAX_CACHE_SIZE = 512;
+	var pathCache = new Cache(MAX_CACHE_SIZE);
+	var setCache = new Cache(MAX_CACHE_SIZE);
+	var getCache = new Cache(MAX_CACHE_SIZE);
 	module.exports = {
 		Cache,
 		split,
@@ -247,7 +254,9 @@ function printValue(value, quoteStrings) {
 function toArray(value) {
 	return value == null ? [] : [].concat(value);
 }
-let _Symbol$toStringTag, _Symbol$hasInstance, _Symbol$toStringTag2;
+let _Symbol$toStringTag;
+let _Symbol$hasInstance;
+let _Symbol$toStringTag2;
 let strReg = /\$\{\s*(\w+)\s*\}/g;
 _Symbol$toStringTag = Symbol.toStringTag;
 var ValidationErrorNoStack = class {

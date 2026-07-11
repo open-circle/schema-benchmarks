@@ -154,7 +154,8 @@ var SuryError = class extends Error {
 		for (let key in params) this[key] = params[key];
 	}
 };
-var d = Object.defineProperty, p = SuryError.prototype;
+var d = Object.defineProperty;
+var p = SuryError.prototype;
 d(p, "message", { get() {
 	return message(this);
 } });
@@ -165,7 +166,8 @@ d(p, "_1", { get() {
 } });
 d(p, "RE_EXN_ID", { value: Exn });
 var seq = 1;
-var Schema = function() {}, sp = Object.create(null);
+var Schema = function() {};
+var sp = Object.create(null);
 d(sp, "with", { get() {
 	return (fn, ...args) => fn(this, ...args);
 } });
