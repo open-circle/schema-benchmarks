@@ -14,11 +14,11 @@ allowBuilds:
 
 catalog:
   "@standard-schema/spec": ^1.1.0
+  "@ttsc/unplugin": "^0.18.4"
   "@types/node": 24.0.0
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
   "@typescript/native-preview": 7.0.0-dev.20260707.2
-  "@typia/unplugin": ^12.1.1
   "@vitest/browser-playwright": ^4.1.10
   "@vitest/expect": ^4.1.10
   "@vitest/pretty-format": ^4.1.10
@@ -27,6 +27,7 @@ catalog:
   playwright: ^1.61.1
   react: ^19.2.7
   react-dom: ^19.2.7
+  ttsc: "^0.18.4"
   typescript: 7.0.2
   valibot: ^1.4.2
   vite: ^8.1.4

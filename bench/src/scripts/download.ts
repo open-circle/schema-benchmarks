@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 import { getSigintSignal, getVersion } from "@schema-benchmarks/utils/node";
-import UnpluginTypia from "@typia/unplugin/rolldown";
+import _ttsc from "@ttsc/unplugin/rolldown";
 import { gzipSize } from "gzip-size";
 import { rolldown } from "rolldown";
 
@@ -12,6 +12,8 @@ import {
   type MinifyType,
   minifyTypeSchema,
 } from "../results/types.ts";
+
+const ttsc = _ttsc.default ? _ttsc.default : (_ttsc as never); // Fix for ESM/CJS interop
 
 const sigintSignal = getSigintSignal();
 
@@ -43,7 +45,7 @@ function getPackageName(libraryName: string) {
 async function measureFile(file: FileDescription, minify: MinifyType): Promise<DownloadResult> {
   const bundle = await rolldown({
     input: file.path,
-    plugins: file.path.includes("typia") ? [UnpluginTypia({ log: false })] : [],
+    plugins: file.path.includes("typia") ? [ttsc()] : [],
     external: [/node:/],
   });
   const output = await bundle.generate({

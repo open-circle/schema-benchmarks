@@ -1,6 +1,6 @@
 import * as path from "node:path";
 
-import UnpluginTypia from "@typia/unplugin/rolldown";
+import ttsc from "@ttsc/unplugin/rolldown";
 import { defineConfig } from "tsdown";
 import macros from "unplugin-macros/rolldown";
 
@@ -13,7 +13,7 @@ export default defineConfig({
   alias: {
     "#src": path.resolve(process.cwd(), "./src/index.ts"),
   },
-  plugins: [UnpluginTypia({ log: false }), macros()],
+  plugins: [ttsc(), macros()],
   deps: {
     neverBundle: [/node:/],
   },
