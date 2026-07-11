@@ -23,13 +23,13 @@
     "@standard-schema/spec": "catalog:",
     "@typia/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
-    "rolldown": "^1.1.4",
+    "rolldown": "^1.1.5",
     "tinybench": "^6.0.2",
     "typescript": "catalog:",
     "valibot": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
+    "@types/node": "26.1.1",
     "@typescript/native-preview": "catalog:"
   }
 }
