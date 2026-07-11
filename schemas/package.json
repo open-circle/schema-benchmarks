@@ -43,10 +43,11 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@ttsc/unplugin": "^0.18.4",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "@typia/unplugin": "catalog:",
     "tsdown": "^0.22.4",
+    "ttsc": "catalog:",
     "typescript": "catalog:",
     "unplugin-macros": "^0.20.2",
     "vite": "catalog:",
