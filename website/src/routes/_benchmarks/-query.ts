@@ -111,13 +111,11 @@ const jsrMetadataSchema = v.pipe(
     scope: v.string(),
     name: v.string(),
     description: v.nullish(v.string()),
-    latestVersion: v.nullish(v.string()),
     githubRepository: v.nullish(v.object({ owner: v.string(), name: v.string() })),
   }),
   v.transform(
-    ({ scope, name, description, latestVersion, githubRepository }): PackageMetadata => ({
+    ({ scope, name, description, githubRepository }): Omit<PackageMetadata, "version"> => ({
       name: `@${scope}/${name}`,
-      version: latestVersion ?? "",
       description: description ?? "",
       homepage: `https://jsr.io/@${scope}/${name}`,
       repository: githubRepository
@@ -138,11 +136,17 @@ export const getPackageMetadata = (
   if (isJsrPackage(packageName)) {
     const { scope, name } = jsrScopeAndName(packageName);
     return queryOptions({
-      queryKey: ["jsr", "metadata", packageName],
-      queryFn: ({ signal }) =>
-        upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}`, {
-          signal: anyAbortSignal(signal, signalOpt),
-          schema: jsrMetadataSchema,
+      queryKey: ["jsr", "metadata", packageName, version],
+      queryFn: async ({ signal }) =>
+        // JSR has version specific metadata (https://api.jsr.io/scopes/paseri/packages/paseri/versions/1.9.5),
+        // but it's missing fields (description, repository, etc.) that are present in the package-level metadata (https://api.jsr.io/scopes/paseri/packages/paseri).
+        // So we fetch the package-level metadata and just add the version to it.
+        ({
+          ...(await upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}`, {
+            signal: anyAbortSignal(signal, signalOpt),
+            schema: jsrMetadataSchema,
+          })),
+          version,
         }),
     });
   }
