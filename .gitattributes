@@ -1,2 +1,3 @@
 schemas/libraries/**/download_compiled/** linguist-generated
+schemas/libraries/**/*.gen.ts linguist-generated
 website/public/mockServiceWorker.js linguist-vendored
