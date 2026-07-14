@@ -3,7 +3,9 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { Product } from "./compiled.gen.ts";
+import { getPaseriSchema } from "./index.gen";
+
+const schema = getPaseriSchema();
 
 export default defineBenchmarks({
   library: {
@@ -13,9 +15,8 @@ export default defineBenchmarks({
   },
   initialization: {
     run() {
-      return Product;
+      return getPaseriSchema();
     },
-    note: "import",
     snippet: ts`
       // const source = toSource(schema.toIR(), { name: "Product" });
       import { Product } from "./product.gen.ts";
@@ -26,7 +27,7 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            Product.parse(data);
+            schema.parse(data);
             return { ok: true };
           } catch {
             return { ok: false };
@@ -39,7 +40,7 @@ export default defineBenchmarks({
       },
       {
         run(data): { ok: boolean } {
-          return Product.safeParse(data);
+          return schema.safeParse(data);
         },
         validateResult: (result) => result.ok,
         snippet: ts`Product.safeParse(data)`,
@@ -48,11 +49,11 @@ export default defineBenchmarks({
     ],
   },
   standard: {
-    allErrors: { schema: Product },
+    allErrors: { schema: schema },
   },
   stack: {
     throw: (data) => {
-      Product.parse(data);
+      schema.parse(data);
       assertNotReached();
     },
     snippet: ts`Product.parse(data)`,

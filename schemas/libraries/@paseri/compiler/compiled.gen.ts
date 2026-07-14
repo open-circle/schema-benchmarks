@@ -12,19 +12,19 @@ import { addIssue, isParseSuccess, issueCodes, ParseErrorResult, PaseriError, ty
 // Mirrors paseri-lib's `utils.ts` isPlainObject exactly — the compiled object/record predicate must accept and reject
 // the same values as the runtime. Keep these in lockstep (the `constructor` and `Array.isArray` branches both matter).
 function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
-    if (typeof value !== "object" || value === null || Array.isArray(value)) {
-        return false;
-    }
-    if (value.constructor === Object) {
-        return true;
-    }
-    if (value.constructor === undefined) {
-        return Object.getPrototypeOf(value) === null;
-    }
-    if (!Object.hasOwn(value, "constructor")) {
-        return false;
-    }
-    return Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null;
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+      return false;
+  }
+  if (value.constructor === Object) {
+      return true;
+  }
+  if (value.constructor === undefined) {
+      return Object.getPrototypeOf(value) === null;
+  }
+  if (!Object.hasOwn(value, "constructor")) {
+      return false;
+  }
+  return Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null;
 }
 
 const _enum20 = new Set<unknown>(["jpg", "png"]);
@@ -32,882 +32,882 @@ const _enum20 = new Set<unknown>(["jpg", "png"]);
 const _regex21 = new RegExp("^(?:(?:(?:https?|ftp|wss?):\\/\\/(?:(?=[a-z\\d\\._\\-]*?[a-z_\\-])(?:(?=([a-z\\d\\._\\-]+))\\1))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\\d\\+\\.\\-]*))\\2):(?!\\/\\/).*))$", "iv");
 
 function _shapeArray15(_arr13: unknown[]): boolean {
-    for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
-        const _el10 = _arr13[_i14];
-        if (!(typeof _el10 === "string" && _el10.length >= 1 && _el10.length <= 30)) {
-            return false;
-        }
-    }
-    return true;
+  for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
+      const _el10 = _arr13[_i14];
+      if (!(typeof _el10 === "string" && _el10.length >= 1 && _el10.length <= 30)) {
+          return false;
+      }
+  }
+  return true;
 }
 
 function _extrasOk25(_obj22: Record<string, unknown>): boolean {
-    let _count23 = 0;
-    for (const _k24 in _obj22) {
-        _count23++;
-    }
-    return _count23 <= 6;
+  let _count23 = 0;
+  for (const _k24 in _obj22) {
+      _count23++;
+  }
+  return _count23 <= 6;
 }
 
 function _shapeArray28(_arr26: unknown[]): boolean {
-    for (let _i27 = 0; _i27 < _arr26.length; _i27++) {
-        const _el17 = _arr26[_i27];
-        if (!(isPlainObject(_el17) && (typeof (_el17 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["id"]))) && ((_el17 as Record<PropertyKey, unknown>)["created"] instanceof Date && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["created"].getTime()))) && (typeof (_el17 as Record<PropertyKey, unknown>)["title"] === "string" && (_el17 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el17 as Record<PropertyKey, unknown>)["title"].length <= 100) && _enum20.has((_el17 as Record<PropertyKey, unknown>)["type"]) && (typeof (_el17 as Record<PropertyKey, unknown>)["size"] === "number" && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["size"]))) && (typeof (_el17 as Record<PropertyKey, unknown>)["url"] === "string" && (_regex21.test((_el17 as Record<PropertyKey, unknown>)["url"]) || URL.canParse((_el17 as Record<PropertyKey, unknown>)["url"]))) && _extrasOk25(_el17 as Record<PropertyKey, unknown>))) {
-            return false;
-        }
-    }
-    return true;
+  for (let _i27 = 0; _i27 < _arr26.length; _i27++) {
+      const _el17 = _arr26[_i27];
+      if (!(isPlainObject(_el17) && (typeof (_el17 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["id"]))) && ((_el17 as Record<PropertyKey, unknown>)["created"] instanceof Date && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["created"].getTime()))) && (typeof (_el17 as Record<PropertyKey, unknown>)["title"] === "string" && (_el17 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el17 as Record<PropertyKey, unknown>)["title"].length <= 100) && _enum20.has((_el17 as Record<PropertyKey, unknown>)["type"]) && (typeof (_el17 as Record<PropertyKey, unknown>)["size"] === "number" && !(Number.isNaN((_el17 as Record<PropertyKey, unknown>)["size"]))) && (typeof (_el17 as Record<PropertyKey, unknown>)["url"] === "string" && (_regex21.test((_el17 as Record<PropertyKey, unknown>)["url"]) || URL.canParse((_el17 as Record<PropertyKey, unknown>)["url"]))) && _extrasOk25(_el17 as Record<PropertyKey, unknown>))) {
+          return false;
+      }
+  }
+  return true;
 }
 
 function _extrasOk46(_obj43: Record<string, unknown>): boolean {
-    let _count44 = 0;
-    for (const _k45 in _obj43) {
-        _count44++;
-    }
-    return _count44 <= 5;
+  let _count44 = 0;
+  for (const _k45 in _obj43) {
+      _count44++;
+  }
+  return _count44 <= 5;
 }
 
 function _shapeArray49(_arr47: unknown[]): boolean {
-    for (let _i48 = 0; _i48 < _arr47.length; _i48++) {
-        const _el30 = _arr47[_i48];
-        if (!(isPlainObject(_el30) && (typeof (_el30 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["id"]))) && (typeof (_el30 as Record<PropertyKey, unknown>)["stars"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["stars"])) && (_el30 as Record<PropertyKey, unknown>)["stars"] >= 0 && (_el30 as Record<PropertyKey, unknown>)["stars"] <= 5) && (typeof (_el30 as Record<PropertyKey, unknown>)["title"] === "string" && (_el30 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["title"].length <= 100) && (typeof (_el30 as Record<PropertyKey, unknown>)["text"] === "string" && (_el30 as Record<PropertyKey, unknown>)["text"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["text"].length <= 1000) && (Array.isArray((_el30 as Record<PropertyKey, unknown>)["images"]) && _shapeArray28((_el30 as Record<PropertyKey, unknown>)["images"])) && _extrasOk46(_el30 as Record<PropertyKey, unknown>))) {
-            return false;
-        }
-    }
-    return true;
+  for (let _i48 = 0; _i48 < _arr47.length; _i48++) {
+      const _el30 = _arr47[_i48];
+      if (!(isPlainObject(_el30) && (typeof (_el30 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["id"]))) && (typeof (_el30 as Record<PropertyKey, unknown>)["stars"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["stars"])) && (_el30 as Record<PropertyKey, unknown>)["stars"] >= 0 && (_el30 as Record<PropertyKey, unknown>)["stars"] <= 5) && (typeof (_el30 as Record<PropertyKey, unknown>)["title"] === "string" && (_el30 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["title"].length <= 100) && (typeof (_el30 as Record<PropertyKey, unknown>)["text"] === "string" && (_el30 as Record<PropertyKey, unknown>)["text"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["text"].length <= 1000) && (Array.isArray((_el30 as Record<PropertyKey, unknown>)["images"]) && _shapeArray28((_el30 as Record<PropertyKey, unknown>)["images"])) && _extrasOk46(_el30 as Record<PropertyKey, unknown>))) {
+          return false;
+      }
+  }
+  return true;
 }
 
 function _objectIssues108(_val87: unknown): TreeNode | undefined {
-    let _issue88: TreeNode | undefined;
-    if (!(isPlainObject(_val87))) {
-        _issue88 = addIssue(_issue88, { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" });
-    }
-    else {
-        let _issue89: TreeNode | undefined;
-        let _value90: unknown;
-        const _has91 = "id" in _val87;
-        if (_has91) {
-            _value90 = (_val87 as Record<PropertyKey, unknown>)["id"];
-            if (!(typeof _value90 === "number" && !(Number.isNaN(_value90)))) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-            }
-            else {
-            }
-        }
-        let _value92: unknown;
-        const _has93 = "created" in _val87;
-        if (_has93) {
-            _value92 = (_val87 as Record<PropertyKey, unknown>)["created"];
-            if (!(_value92 instanceof Date)) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "Date" } });
-            }
-            else {
-                const _time94 = _value92.getTime();
-                if (Number.isNaN(_time94)) {
-                    _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_DATE } });
-                }
-            }
-        }
-        let _value95: unknown;
-        const _has96 = "title" in _val87;
-        if (_has96) {
-            _value95 = (_val87 as Record<PropertyKey, unknown>)["title"];
-            if (!(typeof _value95 === "string")) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-            }
-            else {
-                _labelCheck97: {
-                    if (!(_value95.length >= 1)) {
-                        _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                        break _labelCheck97;
-                    }
-                    if (!(_value95.length <= 100)) {
-                        _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                        break _labelCheck97;
-                    }
-                }
-            }
-        }
-        let _value98: unknown;
-        const _has99 = "type" in _val87;
-        if (_has99) {
-            _value98 = (_val87 as Record<PropertyKey, unknown>)["type"];
-            if (!(_enum20.has(_value98))) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "type", child: { type: "leaf", code: issueCodes.INVALID_ENUM_VALUE, expected: ["'jpg'", "'png'"] } });
-            }
-        }
-        let _value100: unknown;
-        const _has101 = "size" in _val87;
-        if (_has101) {
-            _value100 = (_val87 as Record<PropertyKey, unknown>)["size"];
-            if (!(typeof _value100 === "number" && !(Number.isNaN(_value100)))) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "size", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-            }
-            else {
-            }
-        }
-        let _value102: unknown;
-        const _has103 = "url" in _val87;
-        if (_has103) {
-            _value102 = (_val87 as Record<PropertyKey, unknown>)["url"];
-            if (!(typeof _value102 === "string")) {
-                _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-            }
-            else {
-                _labelCheck104: {
-                    if (!(_regex21.test(_value102) || URL.canParse(_value102))) {
-                        _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.INVALID_URL } });
-                        break _labelCheck104;
-                    }
-                }
-            }
-        }
-        if (!(_has91)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has93)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has96)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has99)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "type", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has101)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "size", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has103)) {
-            _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        let _count106 = 0;
-        for (const _k107 in _val87) {
-            _count106++;
-        }
-        if (_count106 !== 6 || !(_has91) || !(_has93) || !(_has96) || !(_has99) || !(_has101) || !(_has103)) {
-            for (const _key105 in _val87) {
-                if (!(_key105 === "id" || _key105 === "created" || _key105 === "title" || _key105 === "type" || _key105 === "size" || _key105 === "url")) {
-                    _issue89 = addIssue(_issue89, { type: "nest", key: _key105, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
-                }
-            }
-        }
-        if (_issue89 !== undefined) {
-            _issue88 = addIssue(_issue88, _issue89);
-        }
-    }
-    return _issue88;
+  let _issue88: TreeNode | undefined;
+  if (!(isPlainObject(_val87))) {
+      _issue88 = addIssue(_issue88, { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" });
+  }
+  else {
+      let _issue89: TreeNode | undefined;
+      let _value90: unknown;
+      const _has91 = "id" in _val87;
+      if (_has91) {
+          _value90 = (_val87 as Record<PropertyKey, unknown>)["id"];
+          if (!(typeof _value90 === "number" && !(Number.isNaN(_value90)))) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+          }
+          else {
+          }
+      }
+      let _value92: unknown;
+      const _has93 = "created" in _val87;
+      if (_has93) {
+          _value92 = (_val87 as Record<PropertyKey, unknown>)["created"];
+          if (!(_value92 instanceof Date)) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "Date" } });
+          }
+          else {
+              const _time94 = _value92.getTime();
+              if (Number.isNaN(_time94)) {
+                  _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_DATE } });
+              }
+          }
+      }
+      let _value95: unknown;
+      const _has96 = "title" in _val87;
+      if (_has96) {
+          _value95 = (_val87 as Record<PropertyKey, unknown>)["title"];
+          if (!(typeof _value95 === "string")) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+          }
+          else {
+              _labelCheck97: {
+                  if (!(_value95.length >= 1)) {
+                      _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                      break _labelCheck97;
+                  }
+                  if (!(_value95.length <= 100)) {
+                      _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                      break _labelCheck97;
+                  }
+              }
+          }
+      }
+      let _value98: unknown;
+      const _has99 = "type" in _val87;
+      if (_has99) {
+          _value98 = (_val87 as Record<PropertyKey, unknown>)["type"];
+          if (!(_enum20.has(_value98))) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "type", child: { type: "leaf", code: issueCodes.INVALID_ENUM_VALUE, expected: ["'jpg'", "'png'"] } });
+          }
+      }
+      let _value100: unknown;
+      const _has101 = "size" in _val87;
+      if (_has101) {
+          _value100 = (_val87 as Record<PropertyKey, unknown>)["size"];
+          if (!(typeof _value100 === "number" && !(Number.isNaN(_value100)))) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "size", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+          }
+          else {
+          }
+      }
+      let _value102: unknown;
+      const _has103 = "url" in _val87;
+      if (_has103) {
+          _value102 = (_val87 as Record<PropertyKey, unknown>)["url"];
+          if (!(typeof _value102 === "string")) {
+              _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+          }
+          else {
+              _labelCheck104: {
+                  if (!(_regex21.test(_value102) || URL.canParse(_value102))) {
+                      _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.INVALID_URL } });
+                      break _labelCheck104;
+                  }
+              }
+          }
+      }
+      if (!(_has91)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has93)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has96)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has99)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "type", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has101)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "size", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has103)) {
+          _issue89 = addIssue(_issue89, { type: "nest", key: "url", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      let _count106 = 0;
+      for (const _k107 in _val87) {
+          _count106++;
+      }
+      if (_count106 !== 6 || !(_has91) || !(_has93) || !(_has96) || !(_has99) || !(_has101) || !(_has103)) {
+          for (const _key105 in _val87) {
+              if (!(_key105 === "id" || _key105 === "created" || _key105 === "title" || _key105 === "type" || _key105 === "size" || _key105 === "url")) {
+                  _issue89 = addIssue(_issue89, { type: "nest", key: _key105, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
+              }
+          }
+      }
+      if (_issue89 !== undefined) {
+          _issue88 = addIssue(_issue88, _issue89);
+      }
+  }
+  return _issue88;
 }
 
 function _objectIssues160(_val115: unknown): TreeNode | undefined {
-    let _issue116: TreeNode | undefined;
-    if (!(isPlainObject(_val115))) {
-        _issue116 = addIssue(_issue116, { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" });
-    }
-    else {
-        let _issue117: TreeNode | undefined;
-        let _value118: unknown;
-        const _has119 = "id" in _val115;
-        if (_has119) {
-            _value118 = (_val115 as Record<PropertyKey, unknown>)["id"];
-            if (!(typeof _value118 === "number" && !(Number.isNaN(_value118)))) {
-                _issue117 = addIssue(_issue117, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-            }
-            else {
-            }
-        }
-        let _value120: unknown;
-        const _has121 = "stars" in _val115;
-        if (_has121) {
-            _value120 = (_val115 as Record<PropertyKey, unknown>)["stars"];
-            if (!(typeof _value120 === "number" && !(Number.isNaN(_value120)))) {
-                _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-            }
-            else {
-                _labelCheck122: {
-                    if (!(_value120 >= 0)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
-                        break _labelCheck122;
-                    }
-                    if (!(_value120 <= 5)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
-                        break _labelCheck122;
-                    }
-                }
-            }
-        }
-        let _value123: unknown;
-        const _has124 = "title" in _val115;
-        if (_has124) {
-            _value123 = (_val115 as Record<PropertyKey, unknown>)["title"];
-            if (!(typeof _value123 === "string")) {
-                _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-            }
-            else {
-                _labelCheck125: {
-                    if (!(_value123.length >= 1)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                        break _labelCheck125;
-                    }
-                    if (!(_value123.length <= 100)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                        break _labelCheck125;
-                    }
-                }
-            }
-        }
-        let _value126: unknown;
-        const _has127 = "text" in _val115;
-        if (_has127) {
-            _value126 = (_val115 as Record<PropertyKey, unknown>)["text"];
-            if (!(typeof _value126 === "string")) {
-                _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-            }
-            else {
-                _labelCheck128: {
-                    if (!(_value126.length >= 1)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                        break _labelCheck128;
-                    }
-                    if (!(_value126.length <= 1000)) {
-                        _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                        break _labelCheck128;
-                    }
-                }
-            }
-        }
-        let _value129: unknown;
-        const _has130 = "images" in _val115;
-        if (_has130) {
-            _value129 = (_val115 as Record<PropertyKey, unknown>)["images"];
-            if (!(Array.isArray(_value129))) {
-                _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
-            }
-            else {
-                let _issue131: TreeNode | undefined;
-                for (let _index132 = 0; _index132 < _value129.length; _index132++) {
-                    let _element133 = _value129[_index132];
-                    const _childIssue156 = _objectIssues108(_element133);
-                    if (_childIssue156 !== undefined) {
-                        _issue131 = addIssue(_issue131, { type: "nest", key: _index132, child: _childIssue156 });
-                    }
-                }
-                if (_issue131 !== undefined) {
-                    _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: _issue131 });
-                }
-            }
-        }
-        if (!(_has119)) {
-            _issue117 = addIssue(_issue117, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has121)) {
-            _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has124)) {
-            _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has127)) {
-            _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        if (!(_has130)) {
-            _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-        }
-        let _count158 = 0;
-        for (const _k159 in _val115) {
-            _count158++;
-        }
-        if (_count158 !== 5 || !(_has119) || !(_has121) || !(_has124) || !(_has127) || !(_has130)) {
-            for (const _key157 in _val115) {
-                if (!(_key157 === "id" || _key157 === "stars" || _key157 === "title" || _key157 === "text" || _key157 === "images")) {
-                    _issue117 = addIssue(_issue117, { type: "nest", key: _key157, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
-                }
-            }
-        }
-        if (_issue117 !== undefined) {
-            _issue116 = addIssue(_issue116, _issue117);
-        }
-    }
-    return _issue116;
+  let _issue116: TreeNode | undefined;
+  if (!(isPlainObject(_val115))) {
+      _issue116 = addIssue(_issue116, { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" });
+  }
+  else {
+      let _issue117: TreeNode | undefined;
+      let _value118: unknown;
+      const _has119 = "id" in _val115;
+      if (_has119) {
+          _value118 = (_val115 as Record<PropertyKey, unknown>)["id"];
+          if (!(typeof _value118 === "number" && !(Number.isNaN(_value118)))) {
+              _issue117 = addIssue(_issue117, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+          }
+          else {
+          }
+      }
+      let _value120: unknown;
+      const _has121 = "stars" in _val115;
+      if (_has121) {
+          _value120 = (_val115 as Record<PropertyKey, unknown>)["stars"];
+          if (!(typeof _value120 === "number" && !(Number.isNaN(_value120)))) {
+              _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+          }
+          else {
+              _labelCheck122: {
+                  if (!(_value120 >= 0)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
+                      break _labelCheck122;
+                  }
+                  if (!(_value120 <= 5)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
+                      break _labelCheck122;
+                  }
+              }
+          }
+      }
+      let _value123: unknown;
+      const _has124 = "title" in _val115;
+      if (_has124) {
+          _value123 = (_val115 as Record<PropertyKey, unknown>)["title"];
+          if (!(typeof _value123 === "string")) {
+              _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+          }
+          else {
+              _labelCheck125: {
+                  if (!(_value123.length >= 1)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                      break _labelCheck125;
+                  }
+                  if (!(_value123.length <= 100)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                      break _labelCheck125;
+                  }
+              }
+          }
+      }
+      let _value126: unknown;
+      const _has127 = "text" in _val115;
+      if (_has127) {
+          _value126 = (_val115 as Record<PropertyKey, unknown>)["text"];
+          if (!(typeof _value126 === "string")) {
+              _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+          }
+          else {
+              _labelCheck128: {
+                  if (!(_value126.length >= 1)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                      break _labelCheck128;
+                  }
+                  if (!(_value126.length <= 1000)) {
+                      _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                      break _labelCheck128;
+                  }
+              }
+          }
+      }
+      let _value129: unknown;
+      const _has130 = "images" in _val115;
+      if (_has130) {
+          _value129 = (_val115 as Record<PropertyKey, unknown>)["images"];
+          if (!(Array.isArray(_value129))) {
+              _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
+          }
+          else {
+              let _issue131: TreeNode | undefined;
+              for (let _index132 = 0; _index132 < _value129.length; _index132++) {
+                  let _element133 = _value129[_index132];
+                  const _childIssue156 = _objectIssues108(_element133);
+                  if (_childIssue156 !== undefined) {
+                      _issue131 = addIssue(_issue131, { type: "nest", key: _index132, child: _childIssue156 });
+                  }
+              }
+              if (_issue131 !== undefined) {
+                  _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: _issue131 });
+              }
+          }
+      }
+      if (!(_has119)) {
+          _issue117 = addIssue(_issue117, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has121)) {
+          _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has124)) {
+          _issue117 = addIssue(_issue117, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has127)) {
+          _issue117 = addIssue(_issue117, { type: "nest", key: "text", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      if (!(_has130)) {
+          _issue117 = addIssue(_issue117, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+      }
+      let _count158 = 0;
+      for (const _k159 in _val115) {
+          _count158++;
+      }
+      if (_count158 !== 5 || !(_has119) || !(_has121) || !(_has124) || !(_has127) || !(_has130)) {
+          for (const _key157 in _val115) {
+              if (!(_key157 === "id" || _key157 === "stars" || _key157 === "title" || _key157 === "text" || _key157 === "images")) {
+                  _issue117 = addIssue(_issue117, { type: "nest", key: _key157, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
+              }
+          }
+      }
+      if (_issue117 !== undefined) {
+          _issue116 = addIssue(_issue116, _issue117);
+      }
+  }
+  return _issue116;
 }
 
 function _slowProduct(value: unknown, options?: {
-    maxDepth?: number;
+  maxDepth?: number;
 }): InternalParseResult<{
-    "id": number;
-    "created": Date;
-    "title": string;
-    "brand": string;
-    "description": string;
-    "price": number;
-    "discount": number | null;
-    "quantity": number;
-    "tags": string[];
-    "images": {
-        "id": number;
-        "created": Date;
-        "title": string;
-        "type": "jpg" | "png";
-        "size": number;
-        "url": string;
-    }[];
-    "ratings": {
-        "id": number;
-        "stars": number;
-        "title": string;
-        "text": string;
-        "images": {
-            "id": number;
-            "created": Date;
-            "title": string;
-            "type": "jpg" | "png";
-            "size": number;
-            "url": string;
-        }[];
-    }[];
+  "id": number;
+  "created": Date;
+  "title": string;
+  "brand": string;
+  "description": string;
+  "price": number;
+  "discount": number | null;
+  "quantity": number;
+  "tags": string[];
+  "images": {
+      "id": number;
+      "created": Date;
+      "title": string;
+      "type": "jpg" | "png";
+      "size": number;
+      "url": string;
+  }[];
+  "ratings": {
+      "id": number;
+      "stars": number;
+      "title": string;
+      "text": string;
+      "images": {
+          "id": number;
+          "created": Date;
+          "title": string;
+          "type": "jpg" | "png";
+          "size": number;
+          "url": string;
+      }[];
+  }[];
 }> {
-    const maxDepth: number = options?.maxDepth ?? 1000;
-    if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
-        throw new Error("maxDepth must be a positive integer.");
-    }
-    if (!(isPlainObject(value))) {
-        return { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" };
-    }
-    let _issue52: TreeNode | undefined;
-    let _value53: unknown;
-    const _has54 = "id" in value;
-    if (_has54) {
-        _value53 = (value as Record<PropertyKey, unknown>)["id"];
-        if (!(typeof _value53 === "number" && !(Number.isNaN(_value53)))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-        }
-        else {
-        }
-    }
-    let _value55: unknown;
-    const _has56 = "created" in value;
-    if (_has56) {
-        _value55 = (value as Record<PropertyKey, unknown>)["created"];
-        if (!(_value55 instanceof Date)) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "Date" } });
-        }
-        else {
-            const _time57 = _value55.getTime();
-            if (Number.isNaN(_time57)) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_DATE } });
-            }
-        }
-    }
-    let _value58: unknown;
-    const _has59 = "title" in value;
-    if (_has59) {
-        _value58 = (value as Record<PropertyKey, unknown>)["title"];
-        if (!(typeof _value58 === "string")) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-        }
-        else {
-            _labelCheck60: {
-                if (!(_value58.length >= 1)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                    break _labelCheck60;
-                }
-                if (!(_value58.length <= 100)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                    break _labelCheck60;
-                }
-            }
-        }
-    }
-    let _value61: unknown;
-    const _has62 = "brand" in value;
-    if (_has62) {
-        _value61 = (value as Record<PropertyKey, unknown>)["brand"];
-        if (!(typeof _value61 === "string")) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-        }
-        else {
-            _labelCheck63: {
-                if (!(_value61.length >= 1)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                    break _labelCheck63;
-                }
-                if (!(_value61.length <= 30)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                    break _labelCheck63;
-                }
-            }
-        }
-    }
-    let _value64: unknown;
-    const _has65 = "description" in value;
-    if (_has65) {
-        _value64 = (value as Record<PropertyKey, unknown>)["description"];
-        if (!(typeof _value64 === "string")) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-        }
-        else {
-            _labelCheck66: {
-                if (!(_value64.length >= 1)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                    break _labelCheck66;
-                }
-                if (!(_value64.length <= 500)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                    break _labelCheck66;
-                }
-            }
-        }
-    }
-    let _value67: unknown;
-    const _has68 = "price" in value;
-    if (_has68) {
-        _value67 = (value as Record<PropertyKey, unknown>)["price"];
-        if (!(typeof _value67 === "number" && !(Number.isNaN(_value67)))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-        }
-        else {
-            _labelCheck69: {
-                if (!(_value67 >= 1)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
-                    break _labelCheck69;
-                }
-                if (!(_value67 <= 10000)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
-                    break _labelCheck69;
-                }
-            }
-        }
-    }
-    let _value70: unknown;
-    const _has71 = "discount" in value;
-    if (_has71) {
-        _value70 = (value as Record<PropertyKey, unknown>)["discount"];
-        if (_value70 !== null) {
-            if (!(typeof _value70 === "number" && !(Number.isNaN(_value70)))) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-            }
-            else {
-                _labelCheck72: {
-                    if (!(_value70 >= 1)) {
-                        _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
-                        break _labelCheck72;
-                    }
-                    if (!(_value70 <= 100)) {
-                        _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
-                        break _labelCheck72;
-                    }
-                }
-            }
-        }
-        else {
-        }
-    }
-    let _value73: unknown;
-    const _has74 = "quantity" in value;
-    if (_has74) {
-        _value73 = (value as Record<PropertyKey, unknown>)["quantity"];
-        if (!(typeof _value73 === "number" && !(Number.isNaN(_value73)))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
-        }
-        else {
-            _labelCheck75: {
-                if (!(_value73 >= 0)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
-                    break _labelCheck75;
-                }
-                if (!(_value73 <= 10)) {
-                    _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
-                    break _labelCheck75;
-                }
-            }
-        }
-    }
-    let _value76: unknown;
-    const _has77 = "tags" in value;
-    if (_has77) {
-        _value76 = (value as Record<PropertyKey, unknown>)["tags"];
-        if (!(Array.isArray(_value76))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
-        }
-        else {
-            let _issue78: TreeNode | undefined;
-            for (let _index79 = 0; _index79 < _value76.length; _index79++) {
-                let _element80 = _value76[_index79];
-                if (!(typeof _element80 === "string")) {
-                    _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
-                }
-                else {
-                    _labelCheck81: {
-                        if (!(_element80.length >= 1)) {
-                            _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.TOO_SHORT } });
-                            break _labelCheck81;
-                        }
-                        if (!(_element80.length <= 30)) {
-                            _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.TOO_LONG } });
-                            break _labelCheck81;
-                        }
-                    }
-                }
-            }
-            if (_issue78 !== undefined) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: _issue78 });
-            }
-        }
-    }
-    let _value82: unknown;
-    const _has83 = "images" in value;
-    if (_has83) {
-        _value82 = (value as Record<PropertyKey, unknown>)["images"];
-        if (!(Array.isArray(_value82))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
-        }
-        else {
-            let _issue84: TreeNode | undefined;
-            for (let _index85 = 0; _index85 < _value82.length; _index85++) {
-                let _element86 = _value82[_index85];
-                const _childIssue109 = _objectIssues108(_element86);
-                if (_childIssue109 !== undefined) {
-                    _issue84 = addIssue(_issue84, { type: "nest", key: _index85, child: _childIssue109 });
-                }
-            }
-            if (_issue84 !== undefined) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: _issue84 });
-            }
-        }
-    }
-    let _value110: unknown;
-    const _has111 = "ratings" in value;
-    if (_has111) {
-        _value110 = (value as Record<PropertyKey, unknown>)["ratings"];
-        if (!(Array.isArray(_value110))) {
-            _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
-        }
-        else {
-            let _issue112: TreeNode | undefined;
-            for (let _index113 = 0; _index113 < _value110.length; _index113++) {
-                let _element114 = _value110[_index113];
-                const _childIssue161 = _objectIssues160(_element114);
-                if (_childIssue161 !== undefined) {
-                    _issue112 = addIssue(_issue112, { type: "nest", key: _index113, child: _childIssue161 });
-                }
-            }
-            if (_issue112 !== undefined) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: _issue112 });
-            }
-        }
-    }
-    if (!(_has54)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has56)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has59)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has62)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has65)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has68)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has71)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has74)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has77)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has83)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    if (!(_has111)) {
-        _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
-    }
-    let _count163 = 0;
-    for (const _k164 in value) {
-        _count163++;
-    }
-    if (_count163 !== 11 || !(_has54) || !(_has56) || !(_has59) || !(_has62) || !(_has65) || !(_has68) || !(_has71) || !(_has74) || !(_has77) || !(_has83) || !(_has111)) {
-        for (const _key162 in value) {
-            if (!(_key162 === "id" || _key162 === "created" || _key162 === "title" || _key162 === "brand" || _key162 === "description" || _key162 === "price" || _key162 === "discount" || _key162 === "quantity" || _key162 === "tags" || _key162 === "images" || _key162 === "ratings")) {
-                _issue52 = addIssue(_issue52, { type: "nest", key: _key162, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
-            }
-        }
-    }
-    if (_issue52 !== undefined) {
-        return _issue52;
-    }
-    return undefined;
+  const maxDepth: number = options?.maxDepth ?? 1000;
+  if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
+      throw new Error("maxDepth must be a positive integer.");
+  }
+  if (!(isPlainObject(value))) {
+      return { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" };
+  }
+  let _issue52: TreeNode | undefined;
+  let _value53: unknown;
+  const _has54 = "id" in value;
+  if (_has54) {
+      _value53 = (value as Record<PropertyKey, unknown>)["id"];
+      if (!(typeof _value53 === "number" && !(Number.isNaN(_value53)))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+      }
+      else {
+      }
+  }
+  let _value55: unknown;
+  const _has56 = "created" in value;
+  if (_has56) {
+      _value55 = (value as Record<PropertyKey, unknown>)["created"];
+      if (!(_value55 instanceof Date)) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "Date" } });
+      }
+      else {
+          const _time57 = _value55.getTime();
+          if (Number.isNaN(_time57)) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.INVALID_DATE } });
+          }
+      }
+  }
+  let _value58: unknown;
+  const _has59 = "title" in value;
+  if (_has59) {
+      _value58 = (value as Record<PropertyKey, unknown>)["title"];
+      if (!(typeof _value58 === "string")) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+      }
+      else {
+          _labelCheck60: {
+              if (!(_value58.length >= 1)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                  break _labelCheck60;
+              }
+              if (!(_value58.length <= 100)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                  break _labelCheck60;
+              }
+          }
+      }
+  }
+  let _value61: unknown;
+  const _has62 = "brand" in value;
+  if (_has62) {
+      _value61 = (value as Record<PropertyKey, unknown>)["brand"];
+      if (!(typeof _value61 === "string")) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+      }
+      else {
+          _labelCheck63: {
+              if (!(_value61.length >= 1)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                  break _labelCheck63;
+              }
+              if (!(_value61.length <= 30)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                  break _labelCheck63;
+              }
+          }
+      }
+  }
+  let _value64: unknown;
+  const _has65 = "description" in value;
+  if (_has65) {
+      _value64 = (value as Record<PropertyKey, unknown>)["description"];
+      if (!(typeof _value64 === "string")) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+      }
+      else {
+          _labelCheck66: {
+              if (!(_value64.length >= 1)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                  break _labelCheck66;
+              }
+              if (!(_value64.length <= 500)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                  break _labelCheck66;
+              }
+          }
+      }
+  }
+  let _value67: unknown;
+  const _has68 = "price" in value;
+  if (_has68) {
+      _value67 = (value as Record<PropertyKey, unknown>)["price"];
+      if (!(typeof _value67 === "number" && !(Number.isNaN(_value67)))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+      }
+      else {
+          _labelCheck69: {
+              if (!(_value67 >= 1)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
+                  break _labelCheck69;
+              }
+              if (!(_value67 <= 10000)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
+                  break _labelCheck69;
+              }
+          }
+      }
+  }
+  let _value70: unknown;
+  const _has71 = "discount" in value;
+  if (_has71) {
+      _value70 = (value as Record<PropertyKey, unknown>)["discount"];
+      if (_value70 !== null) {
+          if (!(typeof _value70 === "number" && !(Number.isNaN(_value70)))) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+          }
+          else {
+              _labelCheck72: {
+                  if (!(_value70 >= 1)) {
+                      _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
+                      break _labelCheck72;
+                  }
+                  if (!(_value70 <= 100)) {
+                      _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
+                      break _labelCheck72;
+                  }
+              }
+          }
+      }
+      else {
+      }
+  }
+  let _value73: unknown;
+  const _has74 = "quantity" in value;
+  if (_has74) {
+      _value73 = (value as Record<PropertyKey, unknown>)["quantity"];
+      if (!(typeof _value73 === "number" && !(Number.isNaN(_value73)))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "number" } });
+      }
+      else {
+          _labelCheck75: {
+              if (!(_value73 >= 0)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
+                  break _labelCheck75;
+              }
+              if (!(_value73 <= 10)) {
+                  _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.TOO_LARGE } });
+                  break _labelCheck75;
+              }
+          }
+      }
+  }
+  let _value76: unknown;
+  const _has77 = "tags" in value;
+  if (_has77) {
+      _value76 = (value as Record<PropertyKey, unknown>)["tags"];
+      if (!(Array.isArray(_value76))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
+      }
+      else {
+          let _issue78: TreeNode | undefined;
+          for (let _index79 = 0; _index79 < _value76.length; _index79++) {
+              let _element80 = _value76[_index79];
+              if (!(typeof _element80 === "string")) {
+                  _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "string" } });
+              }
+              else {
+                  _labelCheck81: {
+                      if (!(_element80.length >= 1)) {
+                          _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.TOO_SHORT } });
+                          break _labelCheck81;
+                      }
+                      if (!(_element80.length <= 30)) {
+                          _issue78 = addIssue(_issue78, { type: "nest", key: _index79, child: { type: "leaf", code: issueCodes.TOO_LONG } });
+                          break _labelCheck81;
+                      }
+                  }
+              }
+          }
+          if (_issue78 !== undefined) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: _issue78 });
+          }
+      }
+  }
+  let _value82: unknown;
+  const _has83 = "images" in value;
+  if (_has83) {
+      _value82 = (value as Record<PropertyKey, unknown>)["images"];
+      if (!(Array.isArray(_value82))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
+      }
+      else {
+          let _issue84: TreeNode | undefined;
+          for (let _index85 = 0; _index85 < _value82.length; _index85++) {
+              let _element86 = _value82[_index85];
+              const _childIssue109 = _objectIssues108(_element86);
+              if (_childIssue109 !== undefined) {
+                  _issue84 = addIssue(_issue84, { type: "nest", key: _index85, child: _childIssue109 });
+              }
+          }
+          if (_issue84 !== undefined) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: _issue84 });
+          }
+      }
+  }
+  let _value110: unknown;
+  const _has111 = "ratings" in value;
+  if (_has111) {
+      _value110 = (value as Record<PropertyKey, unknown>)["ratings"];
+      if (!(Array.isArray(_value110))) {
+          _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "array" } });
+      }
+      else {
+          let _issue112: TreeNode | undefined;
+          for (let _index113 = 0; _index113 < _value110.length; _index113++) {
+              let _element114 = _value110[_index113];
+              const _childIssue161 = _objectIssues160(_element114);
+              if (_childIssue161 !== undefined) {
+                  _issue112 = addIssue(_issue112, { type: "nest", key: _index113, child: _childIssue161 });
+              }
+          }
+          if (_issue112 !== undefined) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: _issue112 });
+          }
+      }
+  }
+  if (!(_has54)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "id", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has56)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "created", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has59)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "title", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has62)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "brand", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has65)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "description", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has68)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "price", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has71)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "discount", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has74)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "quantity", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has77)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "tags", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has83)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "images", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  if (!(_has111)) {
+      _issue52 = addIssue(_issue52, { type: "nest", key: "ratings", child: { type: "leaf", code: issueCodes.MISSING_VALUE } });
+  }
+  let _count163 = 0;
+  for (const _k164 in value) {
+      _count163++;
+  }
+  if (_count163 !== 11 || !(_has54) || !(_has56) || !(_has59) || !(_has62) || !(_has65) || !(_has68) || !(_has71) || !(_has74) || !(_has77) || !(_has83) || !(_has111)) {
+      for (const _key162 in value) {
+          if (!(_key162 === "id" || _key162 === "created" || _key162 === "title" || _key162 === "brand" || _key162 === "description" || _key162 === "price" || _key162 === "discount" || _key162 === "quantity" || _key162 === "tags" || _key162 === "images" || _key162 === "ratings")) {
+              _issue52 = addIssue(_issue52, { type: "nest", key: _key162, child: { type: "leaf", code: issueCodes.UNRECOGNIZED_KEY } });
+          }
+      }
+  }
+  if (_issue52 !== undefined) {
+      return _issue52;
+  }
+  return undefined;
 }
 
 function _validateProduct(value: unknown, options?: {
-    maxDepth?: number;
+  maxDepth?: number;
 }): InternalParseResult<{
-    "id": number;
-    "created": Date;
-    "title": string;
-    "brand": string;
-    "description": string;
-    "price": number;
-    "discount": number | null;
-    "quantity": number;
-    "tags": string[];
-    "images": {
-        "id": number;
-        "created": Date;
-        "title": string;
-        "type": "jpg" | "png";
-        "size": number;
-        "url": string;
-    }[];
-    "ratings": {
-        "id": number;
-        "stars": number;
-        "title": string;
-        "text": string;
-        "images": {
-            "id": number;
-            "created": Date;
-            "title": string;
-            "type": "jpg" | "png";
-            "size": number;
-            "url": string;
-        }[];
-    }[];
+  "id": number;
+  "created": Date;
+  "title": string;
+  "brand": string;
+  "description": string;
+  "price": number;
+  "discount": number | null;
+  "quantity": number;
+  "tags": string[];
+  "images": {
+      "id": number;
+      "created": Date;
+      "title": string;
+      "type": "jpg" | "png";
+      "size": number;
+      "url": string;
+  }[];
+  "ratings": {
+      "id": number;
+      "stars": number;
+      "title": string;
+      "text": string;
+      "images": {
+          "id": number;
+          "created": Date;
+          "title": string;
+          "type": "jpg" | "png";
+          "size": number;
+          "url": string;
+      }[];
+  }[];
 }> {
-    const maxDepth: number = options?.maxDepth ?? 1000;
-    if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
-        throw new Error("maxDepth must be a positive integer.");
-    }
-    if (!(isPlainObject(value))) {
-        return _slowProduct(value, options);
-    }
-    const _field1 = (value as Record<PropertyKey, unknown>)["id"];
-    if (!(typeof _field1 === "number" && !(Number.isNaN(_field1)))) {
-        return _slowProduct(value, options);
-    }
-    const _field2 = (value as Record<PropertyKey, unknown>)["created"];
-    if (!(_field2 instanceof Date && !(Number.isNaN(_field2.getTime())))) {
-        return _slowProduct(value, options);
-    }
-    const _field3 = (value as Record<PropertyKey, unknown>)["title"];
-    if (!(typeof _field3 === "string" && _field3.length >= 1 && _field3.length <= 100)) {
-        return _slowProduct(value, options);
-    }
-    const _field4 = (value as Record<PropertyKey, unknown>)["brand"];
-    if (!(typeof _field4 === "string" && _field4.length >= 1 && _field4.length <= 30)) {
-        return _slowProduct(value, options);
-    }
-    const _field5 = (value as Record<PropertyKey, unknown>)["description"];
-    if (!(typeof _field5 === "string" && _field5.length >= 1 && _field5.length <= 500)) {
-        return _slowProduct(value, options);
-    }
-    const _field6 = (value as Record<PropertyKey, unknown>)["price"];
-    if (!(typeof _field6 === "number" && !(Number.isNaN(_field6)) && _field6 >= 1 && _field6 <= 10000)) {
-        return _slowProduct(value, options);
-    }
-    const _field7 = (value as Record<PropertyKey, unknown>)["discount"];
-    if (!(_field7 === null || typeof _field7 === "number" && !(Number.isNaN(_field7)) && _field7 >= 1 && _field7 <= 100)) {
-        return _slowProduct(value, options);
-    }
-    const _field8 = (value as Record<PropertyKey, unknown>)["quantity"];
-    if (!(typeof _field8 === "number" && !(Number.isNaN(_field8)) && _field8 >= 0 && _field8 <= 10)) {
-        return _slowProduct(value, options);
-    }
-    const _field9 = (value as Record<PropertyKey, unknown>)["tags"];
-    if (!(Array.isArray(_field9) && _shapeArray15(_field9))) {
-        return _slowProduct(value, options);
-    }
-    const _field16 = (value as Record<PropertyKey, unknown>)["images"];
-    if (!(Array.isArray(_field16) && _shapeArray28(_field16))) {
-        return _slowProduct(value, options);
-    }
-    const _field29 = (value as Record<PropertyKey, unknown>)["ratings"];
-    if (!(Array.isArray(_field29) && _shapeArray49(_field29))) {
-        return _slowProduct(value, options);
-    }
-    let _count50 = 0;
-    for (const _k51 in value) {
-        _count50++;
-    }
-    if (_count50 > 11) {
-        return _slowProduct(value, options);
-    }
-    return undefined;
+  const maxDepth: number = options?.maxDepth ?? 1000;
+  if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
+      throw new Error("maxDepth must be a positive integer.");
+  }
+  if (!(isPlainObject(value))) {
+      return _slowProduct(value, options);
+  }
+  const _field1 = (value as Record<PropertyKey, unknown>)["id"];
+  if (!(typeof _field1 === "number" && !(Number.isNaN(_field1)))) {
+      return _slowProduct(value, options);
+  }
+  const _field2 = (value as Record<PropertyKey, unknown>)["created"];
+  if (!(_field2 instanceof Date && !(Number.isNaN(_field2.getTime())))) {
+      return _slowProduct(value, options);
+  }
+  const _field3 = (value as Record<PropertyKey, unknown>)["title"];
+  if (!(typeof _field3 === "string" && _field3.length >= 1 && _field3.length <= 100)) {
+      return _slowProduct(value, options);
+  }
+  const _field4 = (value as Record<PropertyKey, unknown>)["brand"];
+  if (!(typeof _field4 === "string" && _field4.length >= 1 && _field4.length <= 30)) {
+      return _slowProduct(value, options);
+  }
+  const _field5 = (value as Record<PropertyKey, unknown>)["description"];
+  if (!(typeof _field5 === "string" && _field5.length >= 1 && _field5.length <= 500)) {
+      return _slowProduct(value, options);
+  }
+  const _field6 = (value as Record<PropertyKey, unknown>)["price"];
+  if (!(typeof _field6 === "number" && !(Number.isNaN(_field6)) && _field6 >= 1 && _field6 <= 10000)) {
+      return _slowProduct(value, options);
+  }
+  const _field7 = (value as Record<PropertyKey, unknown>)["discount"];
+  if (!(_field7 === null || typeof _field7 === "number" && !(Number.isNaN(_field7)) && _field7 >= 1 && _field7 <= 100)) {
+      return _slowProduct(value, options);
+  }
+  const _field8 = (value as Record<PropertyKey, unknown>)["quantity"];
+  if (!(typeof _field8 === "number" && !(Number.isNaN(_field8)) && _field8 >= 0 && _field8 <= 10)) {
+      return _slowProduct(value, options);
+  }
+  const _field9 = (value as Record<PropertyKey, unknown>)["tags"];
+  if (!(Array.isArray(_field9) && _shapeArray15(_field9))) {
+      return _slowProduct(value, options);
+  }
+  const _field16 = (value as Record<PropertyKey, unknown>)["images"];
+  if (!(Array.isArray(_field16) && _shapeArray28(_field16))) {
+      return _slowProduct(value, options);
+  }
+  const _field29 = (value as Record<PropertyKey, unknown>)["ratings"];
+  if (!(Array.isArray(_field29) && _shapeArray49(_field29))) {
+      return _slowProduct(value, options);
+  }
+  let _count50 = 0;
+  for (const _k51 in value) {
+      _count50++;
+  }
+  if (_count50 > 11) {
+      return _slowProduct(value, options);
+  }
+  return undefined;
 }
 
 function safeParseProduct(value: unknown, options?: {
-    maxDepth?: number;
+  maxDepth?: number;
 }): ParseResult<{
-    "id": number;
-    "created": Date;
-    "title": string;
-    "brand": string;
-    "description": string;
-    "price": number;
-    "discount": number | null;
-    "quantity": number;
-    "tags": string[];
-    "images": {
-        "id": number;
-        "created": Date;
-        "title": string;
-        "type": "jpg" | "png";
-        "size": number;
-        "url": string;
-    }[];
-    "ratings": {
-        "id": number;
-        "stars": number;
-        "title": string;
-        "text": string;
-        "images": {
-            "id": number;
-            "created": Date;
-            "title": string;
-            "type": "jpg" | "png";
-            "size": number;
-            "url": string;
-        }[];
-    }[];
+  "id": number;
+  "created": Date;
+  "title": string;
+  "brand": string;
+  "description": string;
+  "price": number;
+  "discount": number | null;
+  "quantity": number;
+  "tags": string[];
+  "images": {
+      "id": number;
+      "created": Date;
+      "title": string;
+      "type": "jpg" | "png";
+      "size": number;
+      "url": string;
+  }[];
+  "ratings": {
+      "id": number;
+      "stars": number;
+      "title": string;
+      "text": string;
+      "images": {
+          "id": number;
+          "created": Date;
+          "title": string;
+          "type": "jpg" | "png";
+          "size": number;
+          "url": string;
+      }[];
+  }[];
 }> {
-    const result = _validateProduct(value, options);
-    if (result === undefined) {
-        return { ok: true as const, value: value as {
-                "id": number;
-                "created": Date;
-                "title": string;
-                "brand": string;
-                "description": string;
-                "price": number;
-                "discount": number | null;
-                "quantity": number;
-                "tags": string[];
-                "images": {
-                    "id": number;
-                    "created": Date;
-                    "title": string;
-                    "type": "jpg" | "png";
-                    "size": number;
-                    "url": string;
-                }[];
-                "ratings": {
-                    "id": number;
-                    "stars": number;
-                    "title": string;
-                    "text": string;
-                    "images": {
-                        "id": number;
-                        "created": Date;
-                        "title": string;
-                        "type": "jpg" | "png";
-                        "size": number;
-                        "url": string;
-                    }[];
-                }[];
-            } };
-    }
-    if (isParseSuccess(result)) {
-        return result;
-    }
-    return new ParseErrorResult(result);
+  const result = _validateProduct(value, options);
+  if (result === undefined) {
+      return { ok: true as const, value: value as {
+              "id": number;
+              "created": Date;
+              "title": string;
+              "brand": string;
+              "description": string;
+              "price": number;
+              "discount": number | null;
+              "quantity": number;
+              "tags": string[];
+              "images": {
+                  "id": number;
+                  "created": Date;
+                  "title": string;
+                  "type": "jpg" | "png";
+                  "size": number;
+                  "url": string;
+              }[];
+              "ratings": {
+                  "id": number;
+                  "stars": number;
+                  "title": string;
+                  "text": string;
+                  "images": {
+                      "id": number;
+                      "created": Date;
+                      "title": string;
+                      "type": "jpg" | "png";
+                      "size": number;
+                      "url": string;
+                  }[];
+              }[];
+          } };
+  }
+  if (isParseSuccess(result)) {
+      return result;
+  }
+  return new ParseErrorResult(result);
 }
 
 function parseProduct(value: unknown, options?: {
-    maxDepth?: number;
+  maxDepth?: number;
 }): {
-    "id": number;
-    "created": Date;
-    "title": string;
-    "brand": string;
-    "description": string;
-    "price": number;
-    "discount": number | null;
-    "quantity": number;
-    "tags": string[];
-    "images": {
-        "id": number;
-        "created": Date;
-        "title": string;
-        "type": "jpg" | "png";
-        "size": number;
-        "url": string;
-    }[];
-    "ratings": {
-        "id": number;
-        "stars": number;
-        "title": string;
-        "text": string;
-        "images": {
-            "id": number;
-            "created": Date;
-            "title": string;
-            "type": "jpg" | "png";
-            "size": number;
-            "url": string;
-        }[];
-    }[];
+  "id": number;
+  "created": Date;
+  "title": string;
+  "brand": string;
+  "description": string;
+  "price": number;
+  "discount": number | null;
+  "quantity": number;
+  "tags": string[];
+  "images": {
+      "id": number;
+      "created": Date;
+      "title": string;
+      "type": "jpg" | "png";
+      "size": number;
+      "url": string;
+  }[];
+  "ratings": {
+      "id": number;
+      "stars": number;
+      "title": string;
+      "text": string;
+      "images": {
+          "id": number;
+          "created": Date;
+          "title": string;
+          "type": "jpg" | "png";
+          "size": number;
+          "url": string;
+      }[];
+  }[];
 } {
-    const result = safeParseProduct(value, options);
-    if (result.ok) {
-        return result.value;
-    }
-    throw new PaseriError(result.issue);
+  const result = safeParseProduct(value, options);
+  if (result.ok) {
+      return result.value;
+  }
+  throw new PaseriError(result.issue);
 }
 
 const _schema: StandardSchemaV1<unknown, {
-    "id": number;
-    "created": Date;
-    "title": string;
-    "brand": string;
-    "description": string;
-    "price": number;
-    "discount": number | null;
-    "quantity": number;
-    "tags": string[];
-    "images": {
-        "id": number;
-        "created": Date;
-        "title": string;
-        "type": "jpg" | "png";
-        "size": number;
-        "url": string;
-    }[];
-    "ratings": {
-        "id": number;
-        "stars": number;
-        "title": string;
-        "text": string;
-        "images": {
-            "id": number;
-            "created": Date;
-            "title": string;
-            "type": "jpg" | "png";
-            "size": number;
-            "url": string;
-        }[];
-    }[];
+  "id": number;
+  "created": Date;
+  "title": string;
+  "brand": string;
+  "description": string;
+  "price": number;
+  "discount": number | null;
+  "quantity": number;
+  "tags": string[];
+  "images": {
+      "id": number;
+      "created": Date;
+      "title": string;
+      "type": "jpg" | "png";
+      "size": number;
+      "url": string;
+  }[];
+  "ratings": {
+      "id": number;
+      "stars": number;
+      "title": string;
+      "text": string;
+      "images": {
+          "id": number;
+          "created": Date;
+          "title": string;
+          "type": "jpg" | "png";
+          "size": number;
+          "url": string;
+      }[];
+  }[];
 }> & {
-    safeParse: typeof safeParseProduct;
-    parse: typeof parseProduct;
+  safeParse: typeof safeParseProduct;
+  parse: typeof parseProduct;
 } = {
-    "~standard": {
-        version: 1,
-        vendor: "paseri",
-        validate(value, options?) {
-            const result = safeParseProduct(value);
-            if (result.ok) {
-                return { value: result.value };
-            }
-            return { issues: result.messages(options?.libraryOptions?.locale as Translations | undefined) };
-        }
-    },
-    safeParse: safeParseProduct,
-    parse: parseProduct
+  "~standard": {
+      version: 1,
+      vendor: "paseri",
+      validate(value, options?) {
+          const result = safeParseProduct(value);
+          if (result.ok) {
+              return { value: result.value };
+          }
+          return { issues: result.messages(options?.libraryOptions?.locale as Translations | undefined) };
+      }
+  },
+  safeParse: safeParseProduct,
+  parse: parseProduct
 };
 
 export { _schema as Product };

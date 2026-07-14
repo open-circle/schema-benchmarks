@@ -1,3 +1,3 @@
-import { Product } from "./compiled.gen.ts";
+import { Product } from "./compiled.gen";
 
 Product.safeParse({});
