@@ -31,12 +31,6 @@ export default defineBenchmarks({
     },
     snippet: ts`p.object(...)`,
   },
-  validation: {
-    run(data) {
-      return schema.safeParse(data).ok;
-    },
-    snippet: ts`p.object(...).safeParse(data).ok`,
-  },
   parsing: {
     allErrors: [
       {

@@ -21,12 +21,6 @@ export default defineBenchmarks({
       import { Product } from "./product.gen.ts";
     `,
   },
-  validation: {
-    run(data) {
-      return Product.safeParse(data).ok;
-    },
-    snippet: ts`Product.safeParse(data).ok`,
-  },
   parsing: {
     allErrors: [
       {
@@ -44,8 +38,8 @@ export default defineBenchmarks({
         throws: true,
       },
       {
-        run(data) {
-          return { ok: Product.safeParse(data).ok };
+        run(data): { ok: boolean } {
+          return Product.safeParse(data);
         },
         validateResult: (result) => result.ok,
         snippet: ts`Product.safeParse(data)`,
