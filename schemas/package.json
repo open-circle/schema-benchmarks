@@ -9,6 +9,8 @@
     "./libraries": "./dist/index.mjs"
   },
   "scripts": {
+    "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
+    "prebuild": "pnpm run gen:paseri",
     "build": "tsdown",
     "typecheck": "tsgo",
     "typecheck:tsc": "tsc",

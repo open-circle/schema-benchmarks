@@ -21,7 +21,7 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
     if (value.constructor === undefined) {
         return Object.getPrototypeOf(value) === null;
     }
-    if (value.constructor !== Object && !Object.hasOwn(value, "constructor")) {
+    if (!Object.hasOwn(value, "constructor")) {
         return false;
     }
     return Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null;
@@ -29,7 +29,7 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
 
 const _enum20 = new Set<unknown>(["jpg", "png"]);
 
-const _regex21 = new RegExp("^(?:(?:(?:https?|ftp|wss?):\\/\\/(?:(?:(?=([a-z\\d\\._\\-]+))\\1))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\\d\\+\\.\\-]*))\\2):(?!\\/\\/).*))$", "iv");
+const _regex21 = new RegExp("^(?:(?:(?:https?|ftp|wss?):\\/\\/(?:(?=[a-z\\d\\._\\-]*?[a-z_\\-])(?:(?=([a-z\\d\\._\\-]+))\\1))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\\d\\+\\.\\-]*))\\2):(?!\\/\\/).*))$", "iv");
 
 function _shapeArray15(_arr13: unknown[]): boolean {
     for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
@@ -329,7 +329,9 @@ function _objectIssues160(_val115: unknown): TreeNode | undefined {
     return _issue116;
 }
 
-function _slowProduct(value: unknown): InternalParseResult<{
+function _slowProduct(value: unknown, options?: {
+    maxDepth?: number;
+}): InternalParseResult<{
     "id": number;
     "created": Date;
     "title": string;
@@ -362,6 +364,10 @@ function _slowProduct(value: unknown): InternalParseResult<{
         }[];
     }[];
 }> {
+    const maxDepth: number = options?.maxDepth ?? 1000;
+    if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
+        throw new Error("maxDepth must be a positive integer.");
+    }
     if (!(isPlainObject(value))) {
         return { type: "leaf", code: issueCodes.INVALID_TYPE, expected: "object" };
     }
@@ -638,7 +644,9 @@ function _slowProduct(value: unknown): InternalParseResult<{
     return undefined;
 }
 
-function _validateProduct(value: unknown): InternalParseResult<{
+function _validateProduct(value: unknown, options?: {
+    maxDepth?: number;
+}): InternalParseResult<{
     "id": number;
     "created": Date;
     "title": string;
@@ -671,64 +679,70 @@ function _validateProduct(value: unknown): InternalParseResult<{
         }[];
     }[];
 }> {
+    const maxDepth: number = options?.maxDepth ?? 1000;
+    if (!(Number.isInteger(maxDepth)) || maxDepth < 1) {
+        throw new Error("maxDepth must be a positive integer.");
+    }
     if (!(isPlainObject(value))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field1 = (value as Record<PropertyKey, unknown>)["id"];
     if (!(typeof _field1 === "number" && !(Number.isNaN(_field1)))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field2 = (value as Record<PropertyKey, unknown>)["created"];
     if (!(_field2 instanceof Date && !(Number.isNaN(_field2.getTime())))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field3 = (value as Record<PropertyKey, unknown>)["title"];
     if (!(typeof _field3 === "string" && _field3.length >= 1 && _field3.length <= 100)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field4 = (value as Record<PropertyKey, unknown>)["brand"];
     if (!(typeof _field4 === "string" && _field4.length >= 1 && _field4.length <= 30)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field5 = (value as Record<PropertyKey, unknown>)["description"];
     if (!(typeof _field5 === "string" && _field5.length >= 1 && _field5.length <= 500)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field6 = (value as Record<PropertyKey, unknown>)["price"];
     if (!(typeof _field6 === "number" && !(Number.isNaN(_field6)) && _field6 >= 1 && _field6 <= 10000)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field7 = (value as Record<PropertyKey, unknown>)["discount"];
     if (!(_field7 === null || typeof _field7 === "number" && !(Number.isNaN(_field7)) && _field7 >= 1 && _field7 <= 100)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field8 = (value as Record<PropertyKey, unknown>)["quantity"];
     if (!(typeof _field8 === "number" && !(Number.isNaN(_field8)) && _field8 >= 0 && _field8 <= 10)) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field9 = (value as Record<PropertyKey, unknown>)["tags"];
     if (!(Array.isArray(_field9) && _shapeArray15(_field9))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field16 = (value as Record<PropertyKey, unknown>)["images"];
     if (!(Array.isArray(_field16) && _shapeArray28(_field16))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     const _field29 = (value as Record<PropertyKey, unknown>)["ratings"];
     if (!(Array.isArray(_field29) && _shapeArray49(_field29))) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     let _count50 = 0;
     for (const _k51 in value) {
         _count50++;
     }
     if (_count50 > 11) {
-        return _slowProduct(value);
+        return _slowProduct(value, options);
     }
     return undefined;
 }
 
-function safeParseProduct(value: unknown): ParseResult<{
+function safeParseProduct(value: unknown, options?: {
+    maxDepth?: number;
+}): ParseResult<{
     "id": number;
     "created": Date;
     "title": string;
@@ -761,7 +775,7 @@ function safeParseProduct(value: unknown): ParseResult<{
         }[];
     }[];
 }> {
-    const result = _validateProduct(value);
+    const result = _validateProduct(value, options);
     if (result === undefined) {
         return { ok: true as const, value: value as {
                 "id": number;
@@ -803,7 +817,9 @@ function safeParseProduct(value: unknown): ParseResult<{
     return new ParseErrorResult(result);
 }
 
-function parseProduct(value: unknown): {
+function parseProduct(value: unknown, options?: {
+    maxDepth?: number;
+}): {
     "id": number;
     "created": Date;
     "title": string;
@@ -836,7 +852,7 @@ function parseProduct(value: unknown): {
         }[];
     }[];
 } {
-    const result = safeParseProduct(value);
+    const result = safeParseProduct(value, options);
     if (result.ok) {
         return result.value;
     }
