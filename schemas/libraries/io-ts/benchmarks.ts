@@ -8,14 +8,17 @@ import { defineBenchmarks } from "#src";
 import { getIotsSchema } from ".";
 
 const schema = getIotsSchema();
-const DateFromString = new t.Type<Date, string, string>(
-  "DateFromString",
-  (u) => u instanceof Date,
+const BigIntFromString = new t.Type<bigint, string, string>(
+  "BigIntFromString",
+  (u) => typeof u === "bigint",
   (u, c) => {
-    const d = new Date(u);
-    return isNaN(d.getTime()) ? t.failure(u, c) : t.success(d);
+    try {
+      return t.success(BigInt(u));
+    } catch {
+      return t.failure(u, c);
+    }
   },
-  (a) => a.toISOString(),
+  (a) => a.toString(),
 );
 
 export default defineBenchmarks({
@@ -48,20 +51,20 @@ export default defineBenchmarks({
   codec: {
     encode: {
       run: (data) => {
-        return DateFromString.encode(data);
+        return BigIntFromString.encode(data);
       },
       snippet: ts`
-        // const DateFromString = new t.Type<Date, string, string>(...)
-        DateFromString.encode(data)
+        // const BigIntFromString = new t.Type<bigint, string, string>(...)
+        BigIntFromString.encode(data)
       `,
     },
     decode: {
       run: (data) => {
-        return (DateFromString.decode(data) as unknown as E.Right<Date>).right;
+        return (BigIntFromString.decode(data) as unknown as E.Right<bigint>).right;
       },
       snippet: ts`
-        // const DateFromString = new t.Type<Date, string, string>(...)
-        DateFromString.decode(data)
+        // const BigIntFromString = new t.Type<bigint, string, string>(...)
+        BigIntFromString.decode(data)
       `,
     },
   },

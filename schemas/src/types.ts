@@ -66,8 +66,8 @@ export interface StackBenchmarkConfig {
 }
 
 export interface CodecBenchmarkConfig extends Omit<BaseBenchmarkConfig, "snippet"> {
-  encode: { run: (data: Date) => MaybePromise<string>; snippet: string };
-  decode: { run: (data: string) => MaybePromise<Date>; snippet: string };
+  encode: { run: (data: bigint) => MaybePromise<string>; snippet: string };
+  decode: { run: (data: string) => MaybePromise<bigint>; snippet: string };
   acceptsUnknown?: boolean;
 }
 

@@ -113,29 +113,29 @@ export default defineBenchmarks({
     {
       encode: {
         run: (data) => {
-          return Schema.encodeSync(Schema.Date)(data);
+          return Schema.encodeSync(Schema.BigInt)(data);
         },
-        snippet: ts`Schema.encodeSync(Schema.Date)(data)`,
+        snippet: ts`Schema.encodeSync(Schema.BigInt)(data)`,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeSync(Schema.Date)(data);
+          return Schema.decodeSync(Schema.BigInt)(data);
         },
-        snippet: ts`Schema.decodeSync(Schema.Date)(data)`,
+        snippet: ts`Schema.decodeSync(Schema.BigInt)(data)`,
       },
     },
     {
       encode: {
         run: (data) => {
-          return Schema.encodeUnknownSync(Schema.Date)(data);
+          return Schema.encodeUnknownSync(Schema.BigInt)(data);
         },
-        snippet: ts`Schema.encodeUnknownSync(Schema.Date)(data)`,
+        snippet: ts`Schema.encodeUnknownSync(Schema.BigInt)(data)`,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeUnknownSync(Schema.Date)(data);
+          return Schema.decodeUnknownSync(Schema.BigInt)(data);
         },
-        snippet: ts`Schema.decodeUnknownSync(Schema.Date)(data)`,
+        snippet: ts`Schema.decodeUnknownSync(Schema.BigInt)(data)`,
       },
       acceptsUnknown: true,
       note: "unknown",

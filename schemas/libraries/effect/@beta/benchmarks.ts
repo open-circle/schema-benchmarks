@@ -2,7 +2,6 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
-import * as SchemaGetter from "effect___beta/SchemaGetter";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
@@ -11,12 +10,7 @@ import { getEffectSchema } from ".";
 const schema = getEffectSchema();
 const is = Schema.is(schema);
 const decode = Schema.decodeUnknownOption(schema);
-const DateFromString = Schema.Date.pipe(
-  Schema.encodeTo(Schema.String, {
-    encode: SchemaGetter.String(),
-    decode: SchemaGetter.Date(),
-  }),
-);
+const BigIntFromString = Schema.BigIntFromString;
 
 export default defineBenchmarks({
   library: {
@@ -109,40 +103,40 @@ export default defineBenchmarks({
     {
       encode: {
         run: (data) => {
-          return Schema.encodeSync(DateFromString)(data);
+          return Schema.encodeSync(BigIntFromString)(data);
         },
         snippet: ts`
-        // const DateFromString = Schema.Date.pipe(...);
-        Schema.encodeSync(DateFromString)(data)
+        // const BigIntFromString = Schema.BigIntFromString;
+        Schema.encodeSync(BigIntFromString)(data)
       `,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeSync(DateFromString)(data);
+          return Schema.decodeSync(BigIntFromString)(data);
         },
         snippet: ts`
-        // const DateFromString = Schema.Date.pipe(...);
-        Schema.decodeSync(DateFromString)(data)
+        // const BigIntFromString = Schema.BigIntFromString;
+        Schema.decodeSync(BigIntFromString)(data)
       `,
       },
     },
     {
       encode: {
         run: (data) => {
-          return Schema.encodeUnknownSync(DateFromString)(data);
+          return Schema.encodeUnknownSync(BigIntFromString)(data);
         },
         snippet: ts`
-        // const DateFromString = Schema.Date.pipe(...);
-        Schema.encodeUnknownSync(DateFromString)(data)
+        // const BigIntFromString = Schema.BigIntFromString;
+        Schema.encodeUnknownSync(BigIntFromString)(data)
       `,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeUnknownSync(DateFromString)(data);
+          return Schema.decodeUnknownSync(BigIntFromString)(data);
         },
         snippet: ts`
-        // const DateFromString = Schema.Date.pipe(...);
-        Schema.decodeUnknownSync(DateFromString)(data)
+        // const BigIntFromString = Schema.BigIntFromString;
+        Schema.decodeUnknownSync(BigIntFromString)(data)
       `,
       },
       acceptsUnknown: true,

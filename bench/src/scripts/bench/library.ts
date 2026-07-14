@@ -173,8 +173,8 @@ if (parsing) {
     }
   }
   if (codec) {
-    const date = new Date(0);
-    const str = date.toISOString();
+    const bigint = 1234567890123456789n;
+    const str = bigint.toString();
     for (const benchConfig of ensureArray(codec)) {
       const {
         encode,
@@ -196,7 +196,7 @@ if (parsing) {
           codecId: id,
           acceptsUnknown,
         }),
-        () => encode.run(date),
+        () => encode.run(bigint),
       );
       bench.add(
         caseRegistry.add({

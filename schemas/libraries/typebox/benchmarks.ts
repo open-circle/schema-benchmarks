@@ -21,9 +21,9 @@ const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig => (
 const schema = getTypeboxSchema();
 const compiled = Compile(schema);
 const compiledSchema = Schema.Compile(schema);
-const DateFromString = Type.Codec(Type.String({ format: "date-time" }))
-  .Decode((a) => new Date(a))
-  .Encode((a) => a.toISOString());
+const BigIntFromString = Type.Codec(Type.String())
+  .Decode((a) => BigInt(a))
+  .Encode((a) => a.toString());
 
 const scriptSchema = getTypeboxScriptSchema();
 const compiledScriptSchema = Schema.Compile(scriptSchema);
@@ -218,20 +218,20 @@ export default defineBenchmarks({
   codec: {
     encode: {
       run: (data) => {
-        return Value.Encode(DateFromString, data);
+        return Value.Encode(BigIntFromString, data);
       },
       snippet: ts`
-        // const DateFromString = Type.Codec(...).Decode(...).Encode(...);
-        Value.Encode(DateFromString, data)
+        // const BigIntFromString = Type.Codec(...).Decode(...).Encode(...);
+        Value.Encode(BigIntFromString, data)
       `,
     },
     decode: {
       run: (data) => {
-        return Value.Decode(DateFromString, data);
+        return Value.Decode(BigIntFromString, data);
       },
       snippet: ts`
-        // const DateFromString = Type.Codec(...).Decode(...).Encode(...);
-        Value.Decode(DateFromString, data)
+        // const BigIntFromString = Type.Codec(...).Decode(...).Encode(...);
+        Value.Decode(BigIntFromString, data)
       `,
     },
     acceptsUnknown: true,

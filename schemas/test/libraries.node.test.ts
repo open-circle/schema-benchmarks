@@ -85,21 +85,21 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   describe.runIf(config.stack)("stack", () => {
     it("should throw", async () => {
       const promise = promiseTry(() => config.stack?.throw(errorData));
-      await expect(promise).rejects.toThrow();
-      await expect(promise).rejects.not.toThrowError(ShouldHaveThrownError);
+      await expect(promise).rejects.toThrow(expect.anything());
+      await expect(promise).rejects.not.toThrow(ShouldHaveThrownError);
     });
   });
   describe.runIf(config.codec)("codec", () => {
     describe.each(ensureArray(config.codec ?? []))("config %o", (config) => {
       it("should encode and decode", async () => {
         const { encode, decode } = config;
-        const date = new Date(0);
-        const encoded = await encode.run(date);
+        const bigint = 1234567890123456789n;
+        const encoded = await encode.run(bigint);
         // we don't test for format here - usually it'll be ISO, but no need to require it
         expect(encoded).toBeTypeOf("string");
         const decoded = await decode.run(encoded);
-        // check the date is the same
-        expect(decoded).toEqual(date);
+        // check the bigint is the same
+        expect(decoded).toEqual(bigint);
       });
     });
   });
