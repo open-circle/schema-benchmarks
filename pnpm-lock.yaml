@@ -137,11 +137,11 @@ importers:
         specifier: ^0.1.9
         version: 0.1.9(ata-validator@0.21.0(yaml@2.9.0))
       '@paseri/compiler':
-        specifier: jsr:^0.7.0
-        version: '@jsr/paseri__compiler@0.7.0'
+        specifier: jsr:^0.7.5
+        version: '@jsr/paseri__compiler@0.7.5'
       '@paseri/paseri':
-        specifier: jsr:^1.8.0
-        version: '@jsr/paseri__paseri@1.8.0'
+        specifier: jsr:^1.9.5
+        version: '@jsr/paseri__paseri@1.9.5'
       '@railway-ts/pipelines':
         specifier: ^0.1.29
         version: 0.1.29(typescript@7.0.2)
@@ -1995,11 +1995,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@jsr/paseri__compiler@0.7.0':
-    resolution: {integrity: sha512-lXUISvh37N0/mZGv7S2w6rw6D2vhffrICt7r0M4TZq5CarImhw/q5YM1h28aL5DaoLwNgJk+gRCF6bc2e8xZvQ==, tarball: https://npm.jsr.io/~/11/@jsr/paseri__compiler/0.7.0.tgz}
+  '@jsr/paseri__compiler@0.7.5':
+    resolution: {integrity: sha512-MB5M7lG32Zv7kBNLhSczwJ9IUYV1p9ttnzihdjmmSV/BaO+6rBSkCst2R28UMvAFzo2oArMzAzfLXE08Ayt63g==, tarball: https://npm.jsr.io/~/11/@jsr/paseri__compiler/0.7.5.tgz}
 
-  '@jsr/paseri__paseri@1.8.0':
-    resolution: {integrity: sha512-eYyNLT7IFqFhHOEc29znEfYVmSOQBA7j7UsIwJp9N8025rRfG66ftdpUkpsH1y5s/8EAm3NTa3AC1fJu7e5WbQ==, tarball: https://npm.jsr.io/~/11/@jsr/paseri__paseri/1.8.0.tgz}
+  '@jsr/paseri__paseri@1.9.5':
+    resolution: {integrity: sha512-t2aF6mcj2LKH27qpbGqCBjGnR6MF60yWxhsV6D8C7sgvOPMe2BGJFWzXaIbrd7j4ZthHJ6K0ToM2/xOS09sEtQ==, tarball: https://npm.jsr.io/~/11/@jsr/paseri__paseri/1.9.5.tgz}
 
   '@jsr/standard-schema__spec@1.1.0':
     resolution: {integrity: sha512-mWncLgOE1ZVd/xXG+SPmmDmYPQ9Q3OcIbkCn/3oPpp4WOw3RpbHWdxk/jiG8m4Bd9utE2b1yyfynSStpuhdXew==, tarball: https://npm.jsr.io/~/11/@jsr/standard-schema__spec/1.1.0.tgz}
@@ -8617,6 +8617,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
     engines: {node: '>=16.20.0'}
@@ -10586,15 +10591,15 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@jsr/paseri__compiler@0.7.0':
+  '@jsr/paseri__compiler@0.7.5':
     dependencies:
-      '@jsr/paseri__paseri': 1.8.0
+      '@jsr/paseri__paseri': 1.9.5
       typescript: 6.0.3
 
-  '@jsr/paseri__paseri@1.8.0':
+  '@jsr/paseri__paseri@1.9.5':
     dependencies:
       '@jsr/standard-schema__spec': 1.1.0
-      type-fest: 5.7.0
+      type-fest: 5.8.0
       typescript: 6.0.3
 
   '@jsr/standard-schema__spec@1.1.0': {}
@@ -17744,6 +17749,8 @@ snapshots:
       reflect.getprototypeof: 1.0.10
 
   typescript@5.9.3: {}
+
+  typescript@6.0.3: {}
 
   typescript@7.0.2:
     optionalDependencies:
