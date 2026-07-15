@@ -6,7 +6,7 @@ import { CodecPlot } from "#/routes/_benchmarks/_runtime/codec/-components/plot"
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
-<Admonition type="info">
+<Admonition type="note">
   Graphs show one result per library. Some libraries have multiple benchmarks (e.g. `zod` has both a
   `safeParse` and a `parse` method), and the best result is shown in the graph.
 </Admonition>
@@ -46,10 +46,6 @@ export type Person = v.InferOutput<typeof personSchema>;
 ```
 
 <BenchPlot type="initialization" />
-
-<Admonition type="note">
-  For graphs on this page, the best result for each library is shown.
-</Admonition>
 
 ### <Link to="/validation">Validation</Link>
 
