@@ -192,7 +192,7 @@ Parsing a value to match the schema. This is different to [validation](#validati
 
 <Admonition type="note">
 
-Libraries that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
+Benchmarks of methods that throw an error (instead of returning one) have to be wrapped in a `try`/`catch` for the benchmark to work. This is noted in the graph below with an asterisk (\*), as this may have an unknown performance impact.
 
 Benchmarks that abort early (i.e. return the first error found) are noted in the graph below with a dagger (†) - this is relevant when parsing invalid data, as it will (usually) be faster than libraries that return all errors.
 

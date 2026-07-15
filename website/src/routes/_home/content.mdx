@@ -6,6 +6,11 @@ import { CodecPlot } from "#/routes/_benchmarks/_runtime/codec/-components/plot"
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
+<Admonition type="info">
+  Graphs show one result per library. Some libraries have multiple benchmarks (e.g. `zod` has both a
+  `safeParse` and a `parse` method), and the best result is shown in the graph.
+</Admonition>
+
 ## <Link to="/download">Download</Link>
 
 We first test the bundle size of each library. This is important for browser usage, where this will affect download time.
@@ -85,8 +90,8 @@ const person = v.parse(personSchema, data);
 ```
 
 <Admonition type="info">
-  Libraries with an asterisk (\*) throw an error when parsing invalid data (and have no non-throwing
-  equivalent), so the benchmark includes a try/catch - which may have an unknown performance impact.
+
+Libraries with an asterisk (\*) were benchmarked with a method that throws an error when parsing invalid data, so the benchmark includes a `try`/`catch` - which may have an unknown performance impact.
 
 Results with a dagger (†) abort early when parsing invalid data, so will tend to be faster.
 
