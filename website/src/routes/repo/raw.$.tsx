@@ -1,4 +1,4 @@
-import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound, stripSearchParams } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
 import * as v from "valibot";
@@ -7,7 +7,7 @@ import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { CodeBlock } from "#/shared/components/code";
 import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode, getFormattedCode } from "#/shared/lib/highlight";
+import { getHighlightedCode } from "#/shared/lib/highlight";
 
 import { getRaw } from "./-query";
 
@@ -76,20 +76,12 @@ export const Route = createFileRoute("/repo/raw/$")({
     abortController,
   }) {
     if (!fileName) throw notFound();
-    const isCompiled = fileName.includes("_compiled");
     try {
-      const raw = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
-      let formattedCode: string | undefined;
-      if (formatted && isCompiled) {
-        formattedCode = await queryClient.ensureQueryData(
-          getFormattedCode({ fileName, sourceText: raw }, abortController.signal),
-        );
-      }
+      const code = await queryClient.ensureQueryData(
+        getRaw({ fileName, formatted }, abortController.signal),
+      );
       await queryClient.prefetchQuery(
-        getHighlightedCode(
-          { code: formattedCode ?? raw, language: getLanguage(fileName) },
-          abortController.signal,
-        ),
+        getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
       );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();
@@ -113,12 +105,8 @@ export const Route = createFileRoute("/repo/raw/$")({
 function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
   const { formatted } = Route.useSearch();
-  const { data } = useSuspenseQuery(getRaw({ fileName }));
+  const { data } = useSuspenseQuery(getRaw({ fileName, formatted }));
   const isCompiled = fileName.includes("_compiled");
-  const { data: formattedData } = useQuery({
-    ...getFormattedCode({ fileName, sourceText: data }),
-    enabled: formatted && isCompiled,
-  });
   return (
     <CodeBlock
       title={fileName}
@@ -138,7 +126,7 @@ function RouteComponent() {
         )
       }
     >
-      {formatted ? (formattedData ?? data) : data}
+      {data}
     </CodeBlock>
   );
 }

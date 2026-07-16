@@ -1,13 +1,20 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import * as v from "valibot";
 
 import { upfetch } from "#/shared/lib/fetch";
+import { getFormattedCodeFn } from "#/shared/lib/highlight";
 
-interface RawSpecifier {
-  repo?: string;
-  branch?: string;
-  fileName: string;
-}
+const rawSpecifierSchema = v.object({
+  repo: v.optional(v.string()),
+  branch: v.optional(v.string()),
+  fileName: v.string(),
+  formatted: v.optional(v.boolean(), false),
+});
+
+type RawSpecifier = v.InferInput<typeof rawSpecifierSchema>;
 
 const getRawPath = ({
   repo = "open-circle/schema-benchmarks",
@@ -15,12 +22,26 @@ const getRawPath = ({
   fileName,
 }: RawSpecifier) => `https://raw.githubusercontent.com/${repo}/${branch}/${fileName}`;
 
-export const getRaw = ({ repo, branch, fileName }: RawSpecifier, signalOpt?: AbortSignal) =>
+const getRawFn = createServerFn()
+  .validator(rawSpecifierSchema)
+  .handler(async ({ data: { repo, branch, fileName, formatted } }) => {
+    const { signal } = getRequest();
+    const raw = await upfetch(getRawPath({ repo, branch, fileName }), {
+      signal,
+      parseResponse: (response) => response.text(),
+    });
+    return formatted ? getFormattedCodeFn({ data: { fileName, sourceText: raw }, signal }) : raw;
+  });
+
+export const getRaw = (
+  { repo, branch, fileName, formatted }: RawSpecifier,
+  signalOpt?: AbortSignal,
+) =>
   queryOptions({
-    queryKey: ["raw", repo, branch, fileName],
+    queryKey: ["raw", repo, branch, fileName, formatted],
     queryFn: ({ signal }) =>
-      upfetch(getRawPath({ repo, branch, fileName }), {
+      getRawFn({
+        data: { repo, branch, fileName, formatted },
         signal: anyAbortSignal(signal, signalOpt),
-        parseResponse: (response) => response.text(),
       }),
   });
