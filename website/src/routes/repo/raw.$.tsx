@@ -1,10 +1,13 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
+import { createFileRoute, notFound, stripSearchParams } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
+import * as v from "valibot";
 
+import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
 import { CodeBlock } from "#/shared/components/code";
+import { MdSymbol } from "#/shared/components/symbol";
 import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
+import { getHighlightedCode, getFormattedCode } from "#/shared/lib/highlight";
 
 import { getRaw } from "./-query";
 
@@ -40,15 +43,52 @@ function getLibraryCrumbs(fileName: string) {
   return [`${libraryName}${note ? ` (${note})` : ""}`, fileNameMapped];
 }
 
+const searchSchema = v.object({
+  formatted: v.optional(
+    v.union([
+      v.boolean(),
+      v.pipe(
+        v.picklist(["true", "false"]),
+        v.transform((b) => b === "true"),
+      ),
+    ]),
+    false,
+  ),
+});
+
 export const Route = createFileRoute("/repo/raw/$")({
   component: RouteComponent,
+  validateSearch: searchSchema,
+  search: {
+    middlewares: [
+      stripSearchParams({
+        ...v.getFallbacks(searchSchema),
+        ...v.getDefaults(searchSchema),
+      }),
+    ],
+  },
   staticData: { crumb: undefined },
-  async loader({ context: { queryClient }, params: { _splat: fileName }, abortController }) {
+  loaderDeps: ({ search: { formatted } }) => ({ formatted }),
+  async loader({
+    context: { queryClient },
+    params: { _splat: fileName },
+    deps: { formatted },
+    abortController,
+  }) {
     if (!fileName) throw notFound();
     try {
-      const code = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
+      const raw = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
+      let formattedCode: string | undefined;
+      if (formatted) {
+        formattedCode = await queryClient.ensureQueryData(
+          getFormattedCode({ fileName, sourceText: raw }, abortController.signal),
+        );
+      }
       await queryClient.prefetchQuery(
-        getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
+        getHighlightedCode(
+          { code: formattedCode ?? raw, language: getLanguage(fileName) },
+          abortController.signal,
+        ),
       );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();
@@ -71,10 +111,32 @@ export const Route = createFileRoute("/repo/raw/$")({
 
 function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
+  const { formatted } = Route.useSearch();
   const { data } = useSuspenseQuery(getRaw({ fileName }));
+  const { data: formattedData } = useQuery({
+    ...getFormattedCode({ fileName, sourceText: data }),
+    enabled: formatted,
+  });
   return (
-    <CodeBlock title={fileName} lineNumbers language={getLanguage(fileName)} copy>
-      {data}
+    <CodeBlock
+      title={fileName}
+      lineNumbers
+      language={getLanguage(fileName)}
+      showCopy
+      actions={
+        fileName.includes("_compiled") && (
+          <InternalLinkToggleButton
+            to="/repo/raw/$"
+            params={{ _splat: fileName }}
+            search={({ formatted }) => ({ formatted: !formatted })}
+            tooltip={formatted ? "View Raw" : "View Formatted"}
+          >
+            <MdSymbol>{formatted ? "code_off" : "code"}</MdSymbol>
+          </InternalLinkToggleButton>
+        )
+      }
+    >
+      {formatted ? (formattedData ?? data) : data}
     </CodeBlock>
   );
 }

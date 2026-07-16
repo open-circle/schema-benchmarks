@@ -2,6 +2,7 @@ import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { parseAnsiSequences } from "ansi-sequence-parser";
+import { format } from "oxfmt";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
@@ -139,6 +140,30 @@ export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSi
     queryFn: ({ signal }) =>
       getHighlightedAnsiFn({
         data: { input, lineNumbers },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });
+};
+
+export const getFormattedCodeFn = createServerFn({ method: "POST" })
+  .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
+  .handler(async ({ data: { fileName, sourceText } }) => {
+    const result = await format(fileName, sourceText);
+    if (result.errors.length) {
+      throw new Error(`Failed to format code: ${result.errors.map((e) => e.message).join(", ")}`);
+    }
+    return result.code;
+  });
+
+export const getFormattedCode = (
+  { fileName, sourceText }: { fileName: string; sourceText: string },
+  signalOpt?: AbortSignal,
+) => {
+  return queryOptions({
+    queryKey: ["format-code", fileName, sourceText],
+    queryFn: ({ signal }) =>
+      getFormattedCodeFn({
+        data: { fileName, sourceText },
         signal: anyAbortSignal(signal, signalOpt),
       }),
   });

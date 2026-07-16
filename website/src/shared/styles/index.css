@@ -152,7 +152,7 @@ code[class*="language-"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .code-block__copy {
+    .code-block__actions {
       margin: -0.5rem;
       margin-left: auto;
       &:dir(rtl) {
