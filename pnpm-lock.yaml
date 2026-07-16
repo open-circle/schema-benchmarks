@@ -36,6 +36,9 @@ catalogs:
     mix-n-matchers:
       specifier: ^2.3.0
       version: 2.3.0
+    oxfmt:
+      specifier: ^0.59.0
+      version: 0.59.0
     playwright:
       specifier: ^1.61.1
       version: 1.61.1
@@ -76,7 +79,7 @@ importers:
         specifier: ^2.1.10
         version: 2.1.10
       oxfmt:
-        specifier: ^0.59.0
+        specifier: 'catalog:'
         version: 0.59.0
       oxlint:
         specifier: ^1.74.0
@@ -344,6 +347,9 @@ importers:
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
+      oxfmt:
+        specifier: 'catalog:'
+        version: 0.59.0
       prismjs:
         specifier: ^1.30.0
         version: 1.30.0

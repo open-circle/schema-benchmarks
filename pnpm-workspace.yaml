@@ -24,6 +24,7 @@ catalog:
   "@vitest/pretty-format": ^4.1.10
   dedent: ^1.7.2
   "mix-n-matchers": "^2.3.0"
+  oxfmt: "^0.59.0"
   playwright: ^1.61.1
   react: ^19.2.7
   react-dom: ^19.2.7
