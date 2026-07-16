@@ -104,6 +104,9 @@
     "vitest-browser-react": "^2.2.0",
     "workbox-window": "^7.4.1"
   },
+  "optionalDependencies": {
+    "@oxfmt/binding-linux-x64-gnu": "catalog:"
+  },
   "msw": {
     "workerDirectory": [
       "public"
