@@ -33,6 +33,7 @@ export function trackEventProps(
   return {
     "data-umami-event": name,
     ...Object.fromEntries(
+      // oxlint-disable-next-line typescript/no-unnecessary-type-conversion
       Object.entries(data ?? {}).map(([key, value]) => [`data-umami-event-${key}`, String(value)]),
     ),
   };
