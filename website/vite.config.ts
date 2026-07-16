@@ -53,6 +53,7 @@ const config = defineConfig({
     viteReact(),
     materialSymbols({
       knownSymbols: [
+        "code_off",
         "keyboard_arrow_down",
         ...sidebarGroups.flatMap((group) => group.links.map((link) => link.icon)),
         ...[
