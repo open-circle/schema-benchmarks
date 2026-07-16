@@ -1,6 +1,7 @@
 import * as url from "node:url";
 
 import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { getCyrb53Hash } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { parseAnsiSequences } from "ansi-sequence-parser";
@@ -54,7 +55,7 @@ export const getHighlightedCodeFn = createServerFn({ method: "POST" })
 export const getHighlightedCode = (data: HighlightInput, signalOpt?: AbortSignal) => {
   const { code, language, lineNumbers } = v.parse(highlightInput, data);
   return queryOptions({
-    queryKey: ["highlight-code", language, code, lineNumbers],
+    queryKey: ["highlight-code", language, getCyrb53Hash(code), lineNumbers],
     structuralSharing: false,
     queryFn: ({ signal }) =>
       getHighlightedCodeFn({
@@ -137,7 +138,7 @@ export const getHighlightedAnsiFn = createServerFn({ method: "POST" })
 export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSignal) => {
   const { input, lineNumbers } = v.parse(highlightAnsiInput, data);
   return queryOptions({
-    queryKey: ["highlight-ansi", input, lineNumbers],
+    queryKey: ["highlight-ansi", getCyrb53Hash(input), lineNumbers],
     queryFn: ({ signal }) =>
       getHighlightedAnsiFn({
         data: { input, lineNumbers },
@@ -191,7 +192,7 @@ export const getFormattedCode = (
   signalOpt?: AbortSignal,
 ) => {
   return queryOptions({
-    queryKey: ["format-code", fileName, sourceText],
+    queryKey: ["format-code", fileName, getCyrb53Hash(sourceText)],
     queryFn: ({ signal }) =>
       getFormattedCodeFn({
         data: { fileName, sourceText },

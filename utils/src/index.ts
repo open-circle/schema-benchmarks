@@ -423,3 +423,25 @@ export function* range(
 export function identity<T>(value: T): T {
   return value;
 }
+
+/**
+ * Hash function that returns a 53-bit hash of a string, with an optional prefix (defaulting to the string length).
+ * @remarks Fast and deterministic. Not suitable for cryptographic purposes.
+ */
+export function getCyrb53Hash(str: string, prefix = str.length.toString()): string {
+  let h1 = 0xdeadbeef ^ str.length;
+  let h2 = 0x41c6ce57 ^ str.length;
+
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
+  const hash53 = 4294967296 * (2097151 & h2) + (h1 >>> 0);
+
+  return `${prefix}-${hash53.toString(36)}`;
+}
