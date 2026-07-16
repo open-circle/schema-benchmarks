@@ -9,22 +9,114 @@ published: 2025-07-14
 authors: "EskiMojo14"
 ---
 
+import { Link } from "@tanstack/react-router";
+import { Tweet } from "react-tweet";
+
 ## How Schema Benchmarks has changed
 
 ### New Benchmarks
 
-#### Codec
+We've expanded the scope of our benchmarks to include more libraries and measure more aspects of their performance.
 
-#### Standard Schema
+#### <Link to="/codec">Codec</Link>
 
-#### String
+These benchmarks measure the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
 
-#### Stack
+```ts
+import * as z from "zod";
+
+const bigIntFromString = z.codec(z.string(), z.bigint(), {
+  encode: (bigInt) => bigInt.toString(),
+  decode: (str) => BigInt(str),
+});
+
+bigIntFromString.encode(123n); // "123"
+bigIntFromString.decode("123"); // 123n
+```
+
+#### <Link to="/standard">Standard Schema</Link>
+
+These benchmarks measure the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+
+```ts
+import { personSchema } from "./schemas";
+
+const person = await upfetch(url, { schema: personSchema });
+
+// internally
+
+const result = await personSchema["~standard"].validate(data);
+```
+
+#### <Link to="/string">String</Link>
+
+[Suggested by `sinclairzx81`](https://github.com/open-circle/schema-benchmarks/issues/68) (author of [TypeBox](https://sinclairzx81.github.io/typebox/)), these benchmarks measure the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
+
+```ts
+import * as v from "valibot";
+
+const emailSchema = v.pipe(v.string(), v.email());
+```
+
+#### <Link to="/stack">Stack</Link>
+
+Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
+
+<Tweet apiUrl="/api/tweet/2021374345990574398" />
 
 ## How we've changed the ecosystem
 
-## TypeBox
+### [TypeBox](https://sinclairzx81.github.io/typebox/)
 
-## Decoders
+On initial release of our benchmarks, TypeBox was consistently underperforming in runtime performance.
 
-### Valibot
+After discussion with `sinclairzx81` (author of TypeBox), it emerged that the `v1.x` release had introduced a change in behaviour, specifically that schemas would try to coerce invalid values into valid ones. Understandably, this made the library slower than most other libraries that don't do this.
+
+[A `v1.1.0` release](https://github.com/open-circle/schema-benchmarks/issues/55#issuecomment-3937075290) made this behaviour opt-in, bringing TypeBox's performance back in line with other libraries.
+
+```ts
+// v1.0.x
+const A = Value.Parse(Type.Number(), "12345"); // A = 12345
+
+// v1.1.x
+const A = Value.Parse(Type.Number(), "12345"); // throw! - Expected Number
+```
+
+We were also able to confirm that the new `Schema` interface is both faster and smaller than the classic `Value` interface.
+
+Additionally, using namespace imports instead of default exports assisted with tree shaking (resulting in a smaller bundle size).
+
+```ts title="Value"
+import Type from "typebox";
+import Value from "typebox/value";
+const A = Value.Parse(Type.Number(), 12345); // A = 12345
+```
+
+```ts title="Schema"
+import * as Type from "typebox";
+import * as Schema from "typebox/schema";
+const A = Schema.Parse(Type.Number(), 12345); // A = 12345
+```
+
+### [Decoders](https://decoders.cc/)
+
+Based on our <Link to="/download">download</Link> benchmarking, we were able to identify a tree shaking issue with `decoders`, and [collaborated](https://github.com/nvie/decoders/pull/1290) with the author to get it fixed.
+
+In particular, we found that manually annotating functions with `#__NO_SIDE_EFFECTS__` and function calls with `#__PURE__` allowed bundlers to tree shake the library more effectively, reducing the overall bundle size for users.
+
+The package already had `"sideEffects": false` in its `package.json`, but these annotations allowed for further gains.
+
+```ts
+// #__NO_SIDE_EFFECTS__
+function exampleFunction() {
+  // function implementation
+}
+
+const result = /* #__PURE__ */ anotherFunction();
+```
+
+### [Valibot](https://valibot.dev/)
+
+Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
+
+They are now [investigating](https://github.com/open-circle/valibot/pull/1534) an alternative approach for their Standard Schema support, which was causing the slowdown.
