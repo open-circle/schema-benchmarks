@@ -129,7 +129,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       lang="en"
       data-theme={theme}
       data-style={style}
-      data-ligature={ligature}
+      data-liga={ligature}
       suppressHydrationWarning
     >
       <head>

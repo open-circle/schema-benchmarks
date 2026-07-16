@@ -278,6 +278,10 @@ a > code.language-text.language-text {
   color: inherit;
 }
 
+[data-liga="true"] {
+  --code-ligatures: 1;
+}
+
 [data-liga="false"] {
   --code-ligatures: 0;
 }

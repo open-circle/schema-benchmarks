@@ -76,10 +76,11 @@ export const Route = createFileRoute("/repo/raw/$")({
     abortController,
   }) {
     if (!fileName) throw notFound();
+    const isCompiled = fileName.includes("_compiled");
     try {
       const raw = await queryClient.ensureQueryData(getRaw({ fileName }, abortController.signal));
       let formattedCode: string | undefined;
-      if (formatted) {
+      if (formatted && isCompiled) {
         formattedCode = await queryClient.ensureQueryData(
           getFormattedCode({ fileName, sourceText: raw }, abortController.signal),
         );
@@ -113,9 +114,10 @@ function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
   const { formatted } = Route.useSearch();
   const { data } = useSuspenseQuery(getRaw({ fileName }));
+  const isCompiled = fileName.includes("_compiled");
   const { data: formattedData } = useQuery({
     ...getFormattedCode({ fileName, sourceText: data }),
-    enabled: formatted,
+    enabled: formatted && isCompiled,
   });
   return (
     <CodeBlock
@@ -124,7 +126,7 @@ function RouteComponent() {
       language={getLanguage(fileName)}
       showCopy
       actions={
-        fileName.includes("_compiled") && (
+        isCompiled && (
           <InternalLinkToggleButton
             to="/repo/raw/$"
             params={{ _splat: fileName }}
