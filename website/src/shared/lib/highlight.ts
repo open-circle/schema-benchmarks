@@ -148,7 +148,7 @@ export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSi
 export const getFormattedCodeFn = createServerFn({ method: "POST" })
   .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
   .handler(async ({ data: { fileName, sourceText } }) => {
-    const result = await format(fileName, sourceText);
+    const result = await format(fileName, sourceText, { sortImports: true });
     if (result.errors.length) {
       throw new Error(`Failed to format code: ${result.errors.map((e) => e.message).join(", ")}`);
     }
