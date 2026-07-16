@@ -27,7 +27,8 @@ export function InlineCode({ children, language = defaultLanguage, lineNumbers }
 
 export interface CodeProps extends InlineCodeProps {
   title?: string;
-  copy?: boolean;
+  showCopy?: boolean;
+  actions?: ReactNode;
 }
 
 export function CodeBlockContainer({
@@ -35,28 +36,34 @@ export function CodeBlockContainer({
   title,
   lineNumbers = false,
   language = defaultLanguage,
-  copy,
+  showCopy,
   raw,
+  actions,
 }: Override<CodeProps, { children: ReactNode; raw: string }>) {
   return (
     <pre dir="ltr" className={`language-${language} ${lineNumbers ? "line-numbers" : ""}`}>
-      {(title || copy) && (
+      {(title || showCopy || actions) && (
         <div className="code-block__title">
           {title}
-          {copy && (
-            <ToggleButton
-              className="code-block__copy"
-              tooltip="Copy to clipboard"
-              onClick={() => {
-                navigator.clipboard.writeText(raw).then(
-                  () => toastWithHaptics.success("Copied code to clipboard"),
-                  () => toastWithHaptics.error("Failed to copy"),
-                );
-              }}
-            >
-              <MdSymbol>content_copy</MdSymbol>
-            </ToggleButton>
-          )}
+          {actions || showCopy ? (
+            <div className="code-block__actions">
+              {actions}
+              {showCopy && (
+                <ToggleButton
+                  className="code-block__copy"
+                  tooltip="Copy to clipboard"
+                  onClick={() => {
+                    navigator.clipboard.writeText(raw).then(
+                      () => toastWithHaptics.success("Copied code to clipboard"),
+                      () => toastWithHaptics.error("Failed to copy"),
+                    );
+                  }}
+                >
+                  <MdSymbol>content_copy</MdSymbol>
+                </ToggleButton>
+              )}
+            </div>
+          ) : null}
         </div>
       )}
       {children}
