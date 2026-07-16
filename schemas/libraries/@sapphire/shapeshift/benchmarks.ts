@@ -15,6 +15,7 @@ type FormatMethod = {
 
 const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig => ({
   create() {
+    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion
     const schema = (s.string()[method] as () => StringValidator<string>)();
     return (testString) => schema.is(testString);
   },

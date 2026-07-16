@@ -57,14 +57,14 @@ export const generateMetadata = ({
         description,
         images: image,
         card: "summary",
-        ...(meta.twitter ?? {}),
+        ...meta.twitter,
       },
       openGraph: {
         type: "website",
         title: resolvedTitle,
         description,
         images: image,
-        ...(meta.openGraph ?? {}),
+        ...meta.openGraph,
       },
     }),
     (head) => {

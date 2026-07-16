@@ -1,6 +1,6 @@
-import { IfMaybeUndefined, RemoveIndexSignature } from "@schema-benchmarks/utils";
+import type { IfMaybeUndefined, RemoveIndexSignature } from "@schema-benchmarks/utils";
 
-import { NpmSite, Style, Theme } from "./prefs/constants";
+import type { NpmSite, Style, Theme } from "./prefs/constants";
 
 interface AnalyticEvents {
   [event: string]: object | undefined;

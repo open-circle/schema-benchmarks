@@ -1,6 +1,6 @@
-import { Override } from "@schema-benchmarks/utils";
+import type { Override } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import * as v from "valibot";
 
 import { getHighlightedCode } from "#/shared/lib/highlight";

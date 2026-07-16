@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 export const sortDirectionIcons: Record<
   NonNullable<ComponentPropsWithoutRef<"th">["aria-sort"]>,

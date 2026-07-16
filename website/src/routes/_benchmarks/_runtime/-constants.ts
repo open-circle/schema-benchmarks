@@ -1,10 +1,10 @@
 import { type DataType, dataTypeSchema } from "@schema-benchmarks/bench";
+import type { StringFormat } from "@schema-benchmarks/schemas";
 import {
   type ErrorType,
   errorTypeSchema,
   type OptimizeType,
   optimizeTypeSchema,
-  StringFormat,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
 import * as v from "valibot";

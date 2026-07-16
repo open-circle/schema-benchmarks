@@ -1,10 +1,12 @@
-import { capitalize, Compute } from "@schema-benchmarks/utils";
+import type { Compute } from "@schema-benchmarks/utils";
+import { capitalize } from "@schema-benchmarks/utils";
 import { rootRouteId, useRouter } from "@tanstack/react-router";
 import type { Context, FC, ReactNode } from "react";
 
 import { setNpmSiteFn, setStyleFn, setThemeFn } from "#/shared/lib/prefs";
 
-import { NpmSiteContext, PrefContextValue, StyleContext, ThemeContext } from "./context";
+import type { PrefContextValue } from "./context";
+import { NpmSiteContext, StyleContext, ThemeContext } from "./context";
 
 type PrefProviderProps<Name extends string, Value> = Compute<
   Record<Name, Value> & { children: ReactNode }

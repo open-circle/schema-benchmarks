@@ -1,6 +1,7 @@
-import { capitalize, Compute } from "@schema-benchmarks/utils";
+import type { Compute } from "@schema-benchmarks/utils";
+import { capitalize } from "@schema-benchmarks/utils";
 import { createOptionalContext } from "required-react-context";
-import * as v from "valibot";
+import type * as v from "valibot";
 
 import { npmSiteSchema, styleSchema, themeSchema } from "#/shared/lib/prefs/constants";
 

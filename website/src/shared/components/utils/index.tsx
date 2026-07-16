@@ -1,5 +1,6 @@
-import { clsx, ClassValue } from "clsx";
-import { ComponentPropsWithRef, ElementType, FunctionComponent, JSX } from "react";
+import type { ClassValue } from "clsx";
+import { clsx } from "clsx";
+import type { ComponentPropsWithRef, ElementType, FunctionComponent, JSX } from "react";
 
 type ClassFunction<Props> = (props: Props) => ClassValue;
 

@@ -62,7 +62,7 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (bytes: number) => `${formatBytes(bytes, intFormatter)}`,
+                y: (bytes: number) => formatBytes(bytes, intFormatter),
                 fill: false,
               },
             },

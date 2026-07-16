@@ -58,7 +58,7 @@ export default function materialSymbols({ knownSymbols = [] }: Options = {}): Ar
       apply: "build",
       generateBundle(_opts, bundle) {
         if (!usedSymbols.size) return;
-        const finalUrl = `${symbolsUrl}&icon_names=${[...usedSymbols.values()].sort().join(",")}`;
+        const finalUrl = `${symbolsUrl}&icon_names=${Array.from(usedSymbols).join(",")}`;
         for (const assetOrChunk of Object.values(bundle)) {
           if (assetOrChunk.type === "asset" || !assetOrChunk.code.includes(symbolsUrl)) continue;
           assetOrChunk.code = assetOrChunk.code.replaceAll(symbolsUrl, finalUrl);

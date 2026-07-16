@@ -21,6 +21,9 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
     const versionCounts = new Map<string, number>();
     for (const version of versions)
       versionCounts.set(version, (versionCounts.get(version) ?? 0) + 1);
+
+    // we can mutate this array, we've only just made it
+    // oxlint-disable-next-line unicorn/no-array-sort
     return Array.from(versionCounts).sort((a, b) => b[1] - a[1])[0]![0];
   }, [versions]);
   const { data: metadata } = useSuspenseQuery(getPackageMetadata(pkgName, mostCommonVersion));

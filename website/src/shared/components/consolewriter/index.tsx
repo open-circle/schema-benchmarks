@@ -1,4 +1,5 @@
 import { setAbortableInterval, setAbortableTimeout } from "@schema-benchmarks/utils";
+import { identity } from "@schema-benchmarks/utils";
 import { useEffect, useRef } from "react";
 import bem from "react-bem-helper";
 
@@ -15,7 +16,7 @@ function useConsoleTyper(
 ) {
   const acRef = useRef<AbortController>(undefined);
   const [state, dispatchAction] = useLocalSlice({
-    initialState: { index: 0, state: "initial" as TypeState },
+    initialState: { index: 0, state: identity<TypeState>("initial") },
     reducers: {
       startTyping: (state) => {
         state.index = 0;

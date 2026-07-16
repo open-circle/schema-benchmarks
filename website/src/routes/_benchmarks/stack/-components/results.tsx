@@ -4,9 +4,9 @@ import { useMemo } from "react";
 
 import { Bar } from "#/shared/components/table/bar";
 import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
-import { SortDirection } from "#/shared/lib/sort";
+import type { SortDirection } from "#/shared/lib/sort";
 
-import { SortableKey } from "../-constants";
+import type { SortableKey } from "../-constants";
 import { StackCard } from "./card";
 import { StackTable } from "./table";
 

@@ -1,6 +1,6 @@
 // based on use-local-slice (which uses immer, whereas we use mutative)
 
-import { IfMaybeUndefined } from "@schema-benchmarks/utils";
+import type { IfMaybeUndefined } from "@schema-benchmarks/utils";
 import { create, type Draft } from "mutative";
 import { useDebugValue, useMemo, useReducer } from "react";
 
@@ -26,7 +26,7 @@ export type ReducerMap<State> = {
 
 export type DispatcherMap<Reducers extends ReducerMap<any>> = {
   [T in keyof Reducers]: Reducers[T] extends ReducerWithoutPayload<any>
-    ? PayloadActionDispatch<void>
+    ? PayloadActionDispatch
     : Reducers[T] extends PayloadActionReducer<any, infer P>
       ? PayloadActionDispatch<P>
       : never;

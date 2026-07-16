@@ -1,4 +1,4 @@
-import { StackResult } from "@schema-benchmarks/bench";
+import type { StackResult } from "@schema-benchmarks/bench";
 import { collator } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";

@@ -1,10 +1,11 @@
 import { safeAssign } from "@schema-benchmarks/utils";
 import { toast } from "react-hot-toast";
-import { defaultPatterns, HapticPattern } from "web-haptics";
+import type { HapticPattern } from "web-haptics";
+import { defaultPatterns } from "web-haptics";
 
 import { haptics } from "#/shared/lib/haptics";
 
-function withHaptics<Args extends any[], Return>(
+function withHaptics<Args extends Array<any>, Return>(
   fn: (...args: Args) => Return,
   pattern: HapticPattern,
 ) {

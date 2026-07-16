@@ -419,3 +419,7 @@ export function* range(
     }
   }
 }
+
+export function identity<T>(value: T): T {
+  return value;
+}
