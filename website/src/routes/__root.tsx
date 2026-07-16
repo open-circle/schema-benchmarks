@@ -25,6 +25,7 @@ import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
+import { Providers } from "#/shared/components/utils/provider";
 import { getNpmSiteFn, getStyleFn, getThemeFn, getLigatureFn } from "#/shared/lib/prefs";
 
 import { symbolsUrl } from "../../vite/symbols";
@@ -136,31 +137,31 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <LigatureProvider ligature={ligature}>
-          <ThemeProvider theme={theme}>
-            <StyleProvider style={style}>
-              <NpmSiteProvider npmSite={npmSite}>
-                <MDXProvider components={mdxComponents}>
-                  <div className="sidebar-container">
-                    <SidebarProvider>
-                      <Sidebar />
-                      <div className="header-container" id="scroll-container">
-                        <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
-                        <Banner />
-                        <main>{children}</main>
-                        <Footer />
-                        <ScrollToTop />
-                        <Snackbars />
-                        <ConfirmDialog />
-                        <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />
-                      </div>
-                    </SidebarProvider>
-                  </div>
-                </MDXProvider>
-              </NpmSiteProvider>
-            </StyleProvider>
-          </ThemeProvider>
-        </LigatureProvider>
+        <Providers
+          providers={[
+            [LigatureProvider, { ligature }],
+            [ThemeProvider, { theme }],
+            [StyleProvider, { style }],
+            [NpmSiteProvider, { npmSite }],
+            [MDXProvider, { components: mdxComponents }],
+          ]}
+        >
+          <div className="sidebar-container">
+            <SidebarProvider>
+              <Sidebar />
+              <div className="header-container" id="scroll-container">
+                <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
+                <Banner />
+                <main>{children}</main>
+                <Footer />
+                <ScrollToTop />
+                <Snackbars />
+                <ConfirmDialog />
+                <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />
+              </div>
+            </SidebarProvider>
+          </div>
+        </Providers>
         <TanStackDevtools
           config={{
             triggerHidden: true,
