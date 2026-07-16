@@ -2,7 +2,7 @@ import { createMiddleware, createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import * as v from "valibot";
 
-import { npmSiteSchema, styleSchema, themeSchema } from "./constants";
+import { npmSiteSchema, styleSchema, themeSchema, ligatureSchema } from "./constants";
 
 const themeKey = "benchmarks::theme";
 
@@ -50,3 +50,20 @@ const npmSiteMw = createMiddleware({ type: "function" })
 export const setNpmSiteFn = createServerFn()
   .middleware([npmSiteMw])
   .handler(({ data: npmSite }) => setCookie(npmSiteKey, npmSite));
+
+const ligatureKey = "benchmarks::ligature";
+
+export const getLigatureFn = createServerFn().handler(() =>
+  v.parse(ligatureSchema, getCookie(ligatureKey)),
+);
+
+const ligatureMw = createMiddleware({ type: "function" })
+  .validator(ligatureSchema)
+  .client(({ data: ligature, next }) => {
+    window.umami?.track("change_ligature", { ligature });
+    return next();
+  });
+
+export const setLigatureFn = createServerFn()
+  .middleware([ligatureMw])
+  .handler(({ data: ligature }) => setCookie(ligatureKey, ligature));

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
 import { Button, ButtonGroup } from "#/shared/components/button";
-import { useNpmSite, useStyle, useTheme } from "#/shared/components/prefs/context";
+import { useNpmSite, useStyle, useTheme, useLigature } from "#/shared/components/prefs/context";
 import { MdSymbol } from "#/shared/components/symbol";
 import { useIdDefault } from "#/shared/hooks/use-id-default";
 import {
@@ -27,6 +27,7 @@ export function PreferencesDialog({ open, onClose }: PreferencesDialogProps) {
   const { style, setStyle } = useStyle();
   const { theme, setTheme } = useTheme();
   const { npmSite, setNpmSite } = useNpmSite();
+  const { ligature, setLigature } = useLigature();
   return (
     <Dialog {...{ open, onClose }} aria-labelledby="pref-dialog-title" closedby="any" {...cls()}>
       <DialogContent>
@@ -55,6 +56,30 @@ export function PreferencesDialog({ open, onClose }: PreferencesDialogProps) {
             selected={npmSite}
             onChange={setNpmSite}
           />
+          <PrefGroup
+            options={["true", "false"]}
+            labels={{
+              true: {
+                label: "On",
+                icon: (
+                  <span className="liga-icon" data-liga="true">
+                    =&gt;
+                  </span>
+                ),
+              },
+              false: {
+                label: "Off",
+                icon: (
+                  <span className="liga-icon" data-liga="false">
+                    =&gt;
+                  </span>
+                ),
+              },
+            }}
+            title="Code ligatures"
+            selected={ligature}
+            onChange={setLigature}
+          />
         </div>
       </DialogContent>
     </Dialog>
@@ -65,7 +90,7 @@ interface PrefGroupProps<TOpt extends string> {
   title: ReactNode;
   titleId?: string;
   options: ReadonlyArray<TOpt>;
-  labels: Record<TOpt, { icon: string; label: ReactNode }>;
+  labels: Record<TOpt, { icon: ReactNode; label: ReactNode }>;
   selected: TOpt;
   onChange: (opt: TOpt) => void;
 }
@@ -86,7 +111,13 @@ function PrefGroup<TOpt extends string>({
         {options.map((opt) => (
           <Button
             key={opt}
-            icon={<MdSymbol>{labels[opt].icon}</MdSymbol>}
+            icon={
+              typeof labels[opt].icon === "string" ? (
+                <MdSymbol>{labels[opt].icon}</MdSymbol>
+              ) : (
+                labels[opt].icon
+              )
+            }
             aria-pressed={opt === selected}
             onClick={() => onChange(opt)}
           >

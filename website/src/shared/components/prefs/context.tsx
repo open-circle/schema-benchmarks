@@ -3,7 +3,12 @@ import { capitalize } from "@schema-benchmarks/utils";
 import { createOptionalContext } from "required-react-context";
 import type * as v from "valibot";
 
-import { npmSiteSchema, styleSchema, themeSchema } from "#/shared/lib/prefs/constants";
+import {
+  npmSiteSchema,
+  styleSchema,
+  themeSchema,
+  ligatureSchema,
+} from "#/shared/lib/prefs/constants";
 
 export type PrefContextValue<Name extends string, Value> = Compute<
   Record<Name, Value> & Record<`set${Capitalize<Name>}`, (value: Value) => void>
@@ -24,3 +29,5 @@ export const { ThemeContext, useTheme } = createPrefContext("theme", themeSchema
 export const { StyleContext, useStyle } = createPrefContext("style", styleSchema);
 
 export const { NpmSiteContext, useNpmSite } = createPrefContext("npmSite", npmSiteSchema);
+
+export const { LigatureContext, useLigature } = createPrefContext("ligature", ligatureSchema);

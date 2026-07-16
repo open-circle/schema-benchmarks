@@ -1,12 +1,13 @@
 import type { IfMaybeUndefined, RemoveIndexSignature } from "@schema-benchmarks/utils";
 
-import type { NpmSite, Style, Theme } from "./prefs/constants";
+import type { NpmSite, Style, Theme, Ligature } from "./prefs/constants";
 
 interface AnalyticEvents {
   [event: string]: object | undefined;
   change_theme: { theme: Theme };
   change_style: { style: Style };
   change_npm_site: { npmSite: NpmSite };
+  change_ligature: { ligature: Ligature };
   external_link_click: { url: string };
 }
 

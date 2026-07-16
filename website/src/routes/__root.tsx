@@ -15,12 +15,17 @@ import { PreferencesDialog } from "#/shared/components/dialog/pref";
 import { Footer } from "#/shared/components/footer";
 import { Header } from "#/shared/components/header";
 import * as mdxComponents from "#/shared/components/mdx";
-import { NpmSiteProvider, StyleProvider, ThemeProvider } from "#/shared/components/prefs/provider";
+import {
+  NpmSiteProvider,
+  StyleProvider,
+  ThemeProvider,
+  LigatureProvider,
+} from "#/shared/components/prefs/provider";
 import { ScrollToTop } from "#/shared/components/scroll-to-top";
 import { Sidebar } from "#/shared/components/sidebar";
 import { SidebarProvider } from "#/shared/components/sidebar/context";
 import { Snackbars } from "#/shared/components/snackbar";
-import { getNpmSiteFn, getStyleFn, getThemeFn } from "#/shared/lib/prefs";
+import { getNpmSiteFn, getStyleFn, getThemeFn, getLigatureFn } from "#/shared/lib/prefs";
 
 import { symbolsUrl } from "../../vite/symbols";
 
@@ -34,7 +39,12 @@ const iconSuffixes = process.env.NODE_ENV === "production" ? ["light", "dark"] :
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: () =>
-    promiseAllKeyed({ theme: getThemeFn(), style: getStyleFn(), npmSite: getNpmSiteFn() }),
+    promiseAllKeyed({
+      theme: getThemeFn(),
+      style: getStyleFn(),
+      npmSite: getNpmSiteFn(),
+      ligature: getLigatureFn(),
+    }),
   staticData: { crumb: undefined },
 
   head: () => {
@@ -111,38 +121,46 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { theme, style, npmSite } = Route.useLoaderData();
+  const { theme, style, npmSite, ligature } = Route.useLoaderData();
   useRegisterSW({ immediate: true });
   const [prefsOpen, setPrefsOpen] = useState(false);
   return (
-    <html lang="en" data-theme={theme} data-style={style} suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme={theme}
+      data-style={style}
+      data-ligature={ligature}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider theme={theme}>
-          <StyleProvider style={style}>
-            <NpmSiteProvider npmSite={npmSite}>
-              <MDXProvider components={mdxComponents}>
-                <div className="sidebar-container">
-                  <SidebarProvider>
-                    <Sidebar />
-                    <div className="header-container" id="scroll-container">
-                      <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
-                      <Banner />
-                      <main>{children}</main>
-                      <Footer />
-                      <ScrollToTop />
-                      <Snackbars />
-                      <ConfirmDialog />
-                      <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />
-                    </div>
-                  </SidebarProvider>
-                </div>
-              </MDXProvider>
-            </NpmSiteProvider>
-          </StyleProvider>
-        </ThemeProvider>
+        <LigatureProvider ligature={ligature}>
+          <ThemeProvider theme={theme}>
+            <StyleProvider style={style}>
+              <NpmSiteProvider npmSite={npmSite}>
+                <MDXProvider components={mdxComponents}>
+                  <div className="sidebar-container">
+                    <SidebarProvider>
+                      <Sidebar />
+                      <div className="header-container" id="scroll-container">
+                        <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
+                        <Banner />
+                        <main>{children}</main>
+                        <Footer />
+                        <ScrollToTop />
+                        <Snackbars />
+                        <ConfirmDialog />
+                        <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />
+                      </div>
+                    </SidebarProvider>
+                  </div>
+                </MDXProvider>
+              </NpmSiteProvider>
+            </StyleProvider>
+          </ThemeProvider>
+        </LigatureProvider>
         <TanStackDevtools
           config={{
             triggerHidden: true,

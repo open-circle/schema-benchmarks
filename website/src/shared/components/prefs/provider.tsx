@@ -3,10 +3,10 @@ import { capitalize } from "@schema-benchmarks/utils";
 import { rootRouteId, useRouter } from "@tanstack/react-router";
 import type { Context, FC, ReactNode } from "react";
 
-import { setNpmSiteFn, setStyleFn, setThemeFn } from "#/shared/lib/prefs";
+import { setNpmSiteFn, setStyleFn, setThemeFn, setLigatureFn } from "#/shared/lib/prefs";
 
 import type { PrefContextValue } from "./context";
-import { NpmSiteContext, StyleContext, ThemeContext } from "./context";
+import { NpmSiteContext, StyleContext, ThemeContext, LigatureContext } from "./context";
 
 type PrefProviderProps<Name extends string, Value> = Compute<
   Record<Name, Value> & { children: ReactNode }
@@ -48,3 +48,5 @@ export const ThemeProvider = createPrefProvider("theme", ThemeContext, setThemeF
 export const StyleProvider = createPrefProvider("style", StyleContext, setStyleFn);
 
 export const NpmSiteProvider = createPrefProvider("npmSite", NpmSiteContext, setNpmSiteFn);
+
+export const LigatureProvider = createPrefProvider("ligature", LigatureContext, setLigatureFn);

@@ -17,3 +17,6 @@ export const styleLabels: Record<Style, { label: string; icon: string }> = {
 
 export const npmSiteSchema = v.fallback(v.picklist(["npmx.dev", "npmjs.com"]), "npmx.dev");
 export type NpmSite = v.InferOutput<typeof npmSiteSchema>;
+
+export const ligatureSchema = v.fallback(v.picklist(["true", "false"]), "true");
+export type Ligature = v.InferOutput<typeof ligatureSchema>;

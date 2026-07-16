@@ -49,9 +49,7 @@
 
 body {
   font-family: var(--font-family-body);
-  font-feature-settings:
-    "calt" 1,
-    "liga" 1;
+  font-feature-settings: "calt", "liga";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background);
@@ -124,6 +122,19 @@ code,
 pre[class*="language-"],
 code[class*="language-"] {
   font-family: var(--font-family-code);
+  font-feature-settings:
+    "calt",
+    "liga",
+    "ss01" var(--code-ligatures, 1),
+    "ss02" var(--code-ligatures, 1),
+    "ss03" var(--code-ligatures, 1),
+    "ss04" var(--code-ligatures, 1),
+    "ss05" var(--code-ligatures, 1),
+    "ss06" var(--code-ligatures, 1),
+    "ss07" var(--code-ligatures, 1),
+    "ss08" var(--code-ligatures, 1),
+    "ss09" var(--code-ligatures, 1),
+    "ss10" var(--code-ligatures, 1);
   font-size: var(--body2-size);
   background-color: var(--code-background);
   &:focus-visible {
@@ -265,6 +276,27 @@ main {
 
 a > code.language-text.language-text {
   color: inherit;
+}
+
+[data-liga="false"] {
+  --code-ligatures: 0;
+}
+
+.liga-icon {
+  font-family: var(--font-family-code);
+  font-feature-settings:
+    "calt",
+    "liga",
+    "ss01" var(--code-ligatures, 1),
+    "ss02" var(--code-ligatures, 1),
+    "ss03" var(--code-ligatures, 1),
+    "ss04" var(--code-ligatures, 1),
+    "ss05" var(--code-ligatures, 1),
+    "ss06" var(--code-ligatures, 1),
+    "ss07" var(--code-ligatures, 1),
+    "ss08" var(--code-ligatures, 1),
+    "ss09" var(--code-ligatures, 1),
+    "ss10" var(--code-ligatures, 1);
 }
 
 .language-ansi {
