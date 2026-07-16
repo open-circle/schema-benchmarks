@@ -2,6 +2,17 @@
 command = "pnpm install && cd ./website && pnpm build"
 publish = "website/dist/client"
 
+[functions]
+# oxfmt resolves native bindings dynamically (@oxfmt/binding-*).
+# Keep runtime bindings explicit for Linux glibc targets.
+external_node_modules = ["oxfmt", "@oxfmt/binding-linux-x64-gnu"]
+included_files = [
+  "node_modules/@oxfmt/binding-linux-x64-gnu/**",
+  "node_modules/.pnpm/@oxfmt+binding-linux-x64-gnu@*/node_modules/@oxfmt/binding-linux-x64-gnu/**",
+  "website/node_modules/@oxfmt/binding-linux-x64-gnu/**",
+  "website/node_modules/.pnpm/@oxfmt+binding-linux-x64-gnu@*/node_modules/@oxfmt/binding-linux-x64-gnu/**",
+]
+
 [build.environment]
 NODE_VERSION = "24"
 AWS_LAMBDA_JS_RUNTIME = "nodejs24.x"

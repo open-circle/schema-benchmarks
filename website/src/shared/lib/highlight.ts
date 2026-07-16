@@ -1,8 +1,9 @@
+import * as url from "node:url";
+
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { parseAnsiSequences } from "ansi-sequence-parser";
-import { format } from "oxfmt";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
@@ -148,12 +149,42 @@ export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSi
 export const getFormattedCodeFn = createServerFn({ method: "POST" })
   .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
   .handler(async ({ data: { fileName, sourceText } }) => {
+    const { format } = await getOxfmt();
     const result = await format(fileName, sourceText, { sortImports: true });
     if (result.errors.length) {
-      throw new Error(`Failed to format code: ${result.errors.map((e) => e.message).join(", ")}`);
+      throw new Error(
+        `Failed to format code:\n\n${result.errors.map((e) => "- " + e.message).join("\n")}`,
+      );
     }
     return result.code;
   });
+
+// oxlint-disable-next-line typescript/consistent-type-imports
+type OxfmtMod = typeof import("oxfmt");
+
+let oxfmtPromise: Promise<OxfmtMod> | null = null;
+
+async function getOxfmt(): Promise<OxfmtMod> {
+  if (!oxfmtPromise) {
+    const bindingCandidate = `@oxfmt/binding-linux-${process.arch}-gnu`;
+
+    // Make oxfmt load the exact native binary path instead of relying on optional dependency package metadata.
+    try {
+      process.env.NAPI_RS_NATIVE_LIBRARY_PATH = url.fileURLToPath(
+        import.meta.resolve(bindingCandidate),
+      );
+    } catch {
+      // Ignore if the native library path cannot be resolved.
+      console.log(
+        `Warning: Failed to resolve native library path for ${bindingCandidate}. Falling back to default oxfmt behavior.`,
+      );
+    }
+
+    oxfmtPromise = import("oxfmt");
+  }
+
+  return oxfmtPromise;
+}
 
 export const getFormattedCode = (
   { fileName, sourceText }: { fileName: string; sourceText: string },

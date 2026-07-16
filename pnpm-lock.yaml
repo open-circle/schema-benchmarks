@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@oxfmt/binding-linux-x64-gnu':
+      specifier: ^0.59.0
+      version: 0.59.0
     '@standard-schema/spec':
       specifier: ^1.1.0
       version: 1.1.0
@@ -534,6 +537,10 @@ importers:
       workbox-window:
         specifier: ^7.4.1
         version: 7.4.1
+    optionalDependencies:
+      '@oxfmt/binding-linux-x64-gnu':
+        specifier: 'catalog:'
+        version: 0.59.0
 
 packages:
 
