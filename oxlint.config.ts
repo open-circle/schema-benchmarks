@@ -24,6 +24,14 @@ export const baseConfig = defineConfig({
     {
       files: ["**/*.test.ts", "**/*.test.tsx"],
       plugins: ["vitest"],
+      rules: {
+        "vitest/no-standalone-expect": [
+          "error",
+          {
+            additionalTestBlockFunctions: ["it", "test"],
+          },
+        ],
+      },
     },
   ],
 });
