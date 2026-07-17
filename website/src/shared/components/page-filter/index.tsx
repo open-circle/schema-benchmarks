@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
+import { classed } from "../utils";
+
 const cls = bem("page-filters");
 
-export function PageFilters({ children }: { children: ReactNode }) {
-  return <div {...cls()}>{children}</div>;
-}
+export const PageFilters = classed.div(cls().className);
+
+PageFilters.displayName = "PageFilters";
 
 export interface PageFilterProps {
   title: ReactNode;

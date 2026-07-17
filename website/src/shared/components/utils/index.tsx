@@ -8,14 +8,16 @@ function classedImpl<TComp extends ElementType<{ className: string }>>(
   Component: TComp,
   classes: ClassValue | ClassFunction<ComponentPropsWithRef<TComp>>,
 ): FunctionComponent<ComponentPropsWithRef<TComp>> {
-  return function ClassedComponent(props) {
+  function ClassedComponent(props: ComponentPropsWithRef<TComp>) {
     return (
       <Component
         {...(props as any)}
         className={clsx(typeof classes === "function" ? classes(props) : classes, props.className)}
       />
     );
-  };
+  }
+  ClassedComponent.displayName = `classed(${typeof Component === "string" ? Component : Component.displayName || Component.name})`;
+  return ClassedComponent;
 }
 
 export const classed = new Proxy(

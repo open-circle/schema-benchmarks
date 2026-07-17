@@ -7,6 +7,8 @@ import { useWebHaptics } from "web-haptics/react";
 
 import { useFocusGroup } from "#/shared/hooks/use-focus-group";
 
+import { classed } from "../utils";
+
 const collectionCls = bem("chip-collection");
 
 export function ChipCollection({
@@ -25,15 +27,7 @@ export function ChipCollection({
 
 const cls = bem("chip");
 
-export interface DisplayChip extends ComponentPropsWithRef<"div"> {}
-
-export function DisplayChip({ children, className, ...props }: DisplayChip) {
-  return (
-    <div {...props} {...cls({ modifier: "display", extra: className })}>
-      {children}
-    </div>
-  );
-}
+export const DisplayChip = classed.div(cls({ modifier: "display" }).className);
 
 export interface ChipProps extends ComponentPropsWithRef<"button"> {
   activated?: boolean;
@@ -49,7 +43,7 @@ export function Chip({ children, className, activated, haptic, onClick, ...props
       aria-pressed={activated}
       {...cls({ extra: className })}
       onClick={(event) => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
         onClick?.(event);
       }}
     >
@@ -70,7 +64,7 @@ function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkCh
       {...props}
       {...cls({ extra: className })}
       onClick={(event) => {
-        if (haptic) haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
         onClick?.(event);
       }}
     >

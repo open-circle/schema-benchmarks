@@ -4,6 +4,7 @@ import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
 
 import { Button, ExternalLinkButton } from "../button";
+import { classed } from "../utils";
 
 const listCls = bem("list");
 
@@ -25,29 +26,20 @@ export function List({ ordered, className, ref, ...props }: ListProps) {
 
 const itemCls = bem("list-item");
 
-export interface ListItemProps extends ComponentPropsWithRef<"li"> {}
+export const ListItem = classed.li(itemCls().className);
 
-export function ListItem({ className, ...props }: ListItemProps) {
-  return <li {...props} {...itemCls({ extra: className })} />;
-}
+ListItem.displayName = "ListItem";
 
-export interface ListItemButtonProps extends ComponentPropsWithRef<typeof Button> {}
+export const ListItemButton = classed(Button, itemCls({ element: "button" }).className);
 
-export function ListItemButton({ className, ...props }: ListItemButtonProps) {
-  return <Button {...props} {...itemCls({ element: "button", extra: className })} />;
-}
+ListItemButton.displayName = "ListItemButton";
 
-export interface ListItemExternalLinkProps extends ComponentPropsWithRef<
-  typeof ExternalLinkButton
-> {}
+export const ListItemExternalLink = classed(
+  ExternalLinkButton,
+  itemCls({ element: "button" }).className,
+);
 
-export function ListItemExternalLink({ className, children, ...props }: ListItemExternalLinkProps) {
-  return (
-    <ExternalLinkButton {...props} {...itemCls({ element: "button", extra: className })}>
-      {children}
-    </ExternalLinkButton>
-  );
-}
+ListItemExternalLink.displayName = "ListItemExternalLink";
 
 export const ListItemInternalLink = createLink(ListItemExternalLink);
 

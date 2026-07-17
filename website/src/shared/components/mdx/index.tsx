@@ -7,6 +7,7 @@ import { trackedLinkProps } from "#/shared/lib/analytics";
 import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";
 import { MdSymbol } from "../symbol";
+import { classed } from "../utils";
 
 interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;
@@ -50,16 +51,9 @@ export function pre({ title, children, className, showCopy = true, ref, ...props
   );
 }
 
-export function code({ children, className, ...props }: ComponentPropsWithRef<"code">) {
-  return (
-    <code
-      {...props}
-      className={clsx(className?.includes("language-") ? "" : "language-text", className)}
-    >
-      {children}
-    </code>
-  );
-}
+export const code = classed.code(({ className }) =>
+  className?.includes("language-") ? null : "language-text",
+);
 
 export function a({ href, children, ...props }: ComponentPropsWithRef<"a">) {
   return (
