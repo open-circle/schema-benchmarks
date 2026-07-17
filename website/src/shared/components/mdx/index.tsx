@@ -10,10 +10,10 @@ import { MdSymbol } from "../symbol";
 
 interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;
-  disableCopy?: boolean;
+  showCopy?: boolean;
 }
 
-export function pre({ title, children, className, disableCopy, ref, ...props }: PreProps) {
+export function pre({ title, children, className, showCopy = true, ref, ...props }: PreProps) {
   const innerRef = useRef<HTMLPreElement>(null);
   return (
     <pre
@@ -21,25 +21,27 @@ export function pre({ title, children, className, disableCopy, ref, ...props }: 
       ref={mergeRefs(ref, innerRef)}
       className={clsx(className?.includes("language-") ? "" : "language-text", className)}
     >
-      {(title || !disableCopy) && (
+      {(title || showCopy) && (
         <div className="code-block__title">
           {title}
-          {!disableCopy && (
-            <ToggleButton
-              className="code-block__copy"
-              tooltip="Copy to clipboard"
-              onClick={() => {
-                const text = innerRef.current?.querySelector("code")?.textContent;
-                if (text) {
-                  navigator.clipboard.writeText(text).then(
-                    () => toastWithHaptics.success("Copied code to clipboard"),
-                    () => toastWithHaptics.error("Failed to copy"),
-                  );
-                }
-              }}
-            >
-              <MdSymbol>content_copy</MdSymbol>
-            </ToggleButton>
+          {showCopy && (
+            <div className="code-block__actions">
+              <ToggleButton
+                className="code-block__copy"
+                tooltip="Copy to clipboard"
+                onClick={() => {
+                  const text = innerRef.current?.querySelector("code")?.textContent;
+                  if (text) {
+                    navigator.clipboard.writeText(text).then(
+                      () => toastWithHaptics.success("Copied code to clipboard"),
+                      () => toastWithHaptics.error("Failed to copy"),
+                    );
+                  }
+                }}
+              >
+                <MdSymbol>content_copy</MdSymbol>
+              </ToggleButton>
+            </div>
           )}
         </div>
       )}
