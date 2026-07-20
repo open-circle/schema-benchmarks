@@ -47,9 +47,6 @@
         width: var(--timeline-icon-size);
         top: calc(-0.5 * (var(--timeline-icon-size) - var(--tick-thickness)));
         left: calc(-0.5 * (var(--timeline-icon-size) + var(--tick-thickness)));
-        .md-symbol {
-          --icon-fill: 1;
-        }
       }
     }
     .timeline__header {
