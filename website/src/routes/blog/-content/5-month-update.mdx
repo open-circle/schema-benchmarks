@@ -56,22 +56,6 @@ const A = Value.Parse(Type.Number(), "12345"); // A = 12345
 const A = Value.Parse(Type.Number(), "12345"); // throw! - Expected Number
 ```
 
-We were also able to confirm that the new `Schema` interface is both faster and smaller than the classic `Value` interface.
-
-Additionally, using namespace imports instead of default exports assisted with tree shaking (resulting in a smaller bundle size).
-
-```ts title="Value"
-import Type from "typebox";
-import Value from "typebox/value";
-const A = Value.Parse(Type.Number(), 12345); // A = 12345
-```
-
-```ts title="Schema"
-import * as Type from "typebox";
-import * as Schema from "typebox/schema";
-const A = Schema.Parse(Type.Number(), 12345); // A = 12345
-```
-
   </TimelineItem>
 
   <TimelineItem
