@@ -7,9 +7,9 @@ We benchmark the time taken to encode and decode a `bigint` to and from a string
 ```ts
 import * as z from "zod";
 
-const bigIntFromString = z.codec(z.bigint(), z.string(), {
-  encode: (bigint) => bigint.toString(),
+const bigIntFromString = z.codec(z.string(), z.bigint(), {
   decode: (str) => BigInt(str),
+  encode: (bigint) => bigint.toString(),
 });
 
 bigIntFromString.encode(1234567890123456789n); // "1234567890123456789"

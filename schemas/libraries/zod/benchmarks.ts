@@ -20,8 +20,8 @@ const createStringBenchmark = (
 
 const schema = getZodSchema();
 const codec = z.codec(z.string(), z.bigint(), {
-  encode: (value) => value.toString(),
   decode: (str) => BigInt(str),
+  encode: (value) => value.toString(),
 });
 
 export default defineBenchmarks({

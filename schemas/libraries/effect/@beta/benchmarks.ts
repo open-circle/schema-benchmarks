@@ -10,7 +10,6 @@ import { getEffectSchema } from ".";
 const schema = getEffectSchema();
 const is = Schema.is(schema);
 const decode = Schema.decodeUnknownOption(schema);
-const BigIntFromString = Schema.BigIntFromString;
 
 export default defineBenchmarks({
   library: {
@@ -103,40 +102,36 @@ export default defineBenchmarks({
     {
       encode: {
         run: (data) => {
-          return Schema.encodeSync(BigIntFromString)(data);
+          return Schema.encodeSync(Schema.BigIntFromString)(data);
         },
         snippet: ts`
-        // const BigIntFromString = Schema.BigIntFromString;
-        Schema.encodeSync(BigIntFromString)(data)
+        Schema.encodeSync(Schema.BigIntFromString)(data)
       `,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeSync(BigIntFromString)(data);
+          return Schema.decodeSync(Schema.BigIntFromString)(data);
         },
         snippet: ts`
-        // const BigIntFromString = Schema.BigIntFromString;
-        Schema.decodeSync(BigIntFromString)(data)
+        Schema.decodeSync(Schema.BigIntFromString)(data)
       `,
       },
     },
     {
       encode: {
         run: (data) => {
-          return Schema.encodeUnknownSync(BigIntFromString)(data);
+          return Schema.encodeUnknownSync(Schema.BigIntFromString)(data);
         },
         snippet: ts`
-        // const BigIntFromString = Schema.BigIntFromString;
-        Schema.encodeUnknownSync(BigIntFromString)(data)
+        Schema.encodeUnknownSync(Schema.BigIntFromString)(data)
       `,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeUnknownSync(BigIntFromString)(data);
+          return Schema.decodeUnknownSync(Schema.BigIntFromString)(data);
         },
         snippet: ts`
-        // const BigIntFromString = Schema.BigIntFromString;
-        Schema.decodeUnknownSync(BigIntFromString)(data)
+        Schema.decodeUnknownSync(Schema.BigIntFromString)(data)
       `,
       },
       acceptsUnknown: true,

@@ -152,8 +152,8 @@ We benchmark the time taken to encode and decode a `BigInt` to and from a string
 import * as z from "zod";
 
 const bigIntFromString = z.codec(z.string(), z.bigint(), {
-  encode: (bigInt) => bigInt.toString(),
   decode: (str) => BigInt(str),
+  encode: (bigInt) => bigInt.toString(),
 });
 
 bigIntFromString.encode(123n); // "123"
