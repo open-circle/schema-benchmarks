@@ -19,10 +19,7 @@ const meta = preview.meta({
       <TimelineItem
         date={new Date()}
         title="Timeline Item 2"
-        icon={{
-          children: <MdSymbol>speed</MdSymbol>,
-          color: "info",
-        }}
+        icon={<MdSymbol>speed</MdSymbol>}
         subtitle="Subtitle for timeline item 2"
       >
         Content for timeline item 2
@@ -31,10 +28,7 @@ const meta = preview.meta({
         date={tomorrow}
         title="Timeline Item 3"
         subtitle="Subtitle for timeline item 3"
-        icon={{
-          children: <MdSymbol>check_circle</MdSymbol>,
-          color: "success",
-        }}
+        icon={<MdSymbol>check_circle</MdSymbol>}
       >
         Content for timeline item 3
       </TimelineItem>
