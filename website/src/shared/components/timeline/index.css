@@ -1,0 +1,164 @@
+.timeline {
+  --tick-thickness: 2px;
+  --tick-size: 1.5rem;
+  --padding: 0.5rem;
+  --timeline-icon-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin);
+  list-style: none;
+  position: relative;
+  border-left: 2px solid var(--divider);
+  padding: 0;
+  padding-bottom: var(--margin);
+  &::after {
+    height: var(--tick-thickness);
+    width: calc(var(--tick-size) + var(--tick-thickness));
+    content: "";
+    position: absolute;
+    left: calc(-0.5 * var(--tick-size) - var(--tick-thickness));
+    background-color: var(--divider);
+    bottom: 0;
+  }
+  .timeline__item {
+    position: relative;
+    .timeline__container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-left: calc(var(--tick-size) + var(--padding));
+      &::before {
+        content: "";
+        position: absolute;
+        height: var(--tick-thickness);
+        width: var(--tick-size);
+        left: 0;
+        background-color: var(--divider);
+      }
+      .timeline__icon {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: var(--page-background);
+        height: var(--timeline-icon-size);
+        width: var(--timeline-icon-size);
+        top: calc(-0.5 * (var(--timeline-icon-size) - var(--tick-thickness)));
+        left: calc(-0.5 * (var(--timeline-icon-size) + var(--tick-thickness)));
+        .md-symbol {
+          --icon-fill: 1;
+        }
+      }
+    }
+    .timeline__header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .timeline__date {
+      position: relative;
+      top: -0.5em;
+    }
+    .timeline__date,
+    .timeline__title,
+    .timeline__subtitle {
+      margin: 0;
+    }
+    .timeline__date,
+    .timeline__subtitle {
+      color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+    }
+  }
+
+  &:dir(rtl) {
+    border-left: none;
+    border-right: 2px solid var(--divider);
+
+    &::after {
+      left: auto;
+      right: calc(-0.5 * var(--tick-size) - var(--tick-thickness));
+    }
+
+    .timeline__item .timeline__container {
+      padding-left: 0;
+      padding-right: calc(var(--tick-size) + var(--padding));
+
+      &::before {
+        left: auto;
+        right: 0;
+      }
+
+      .timeline__icon {
+        left: auto;
+        right: calc(-0.5 * (var(--timeline-icon-size) + var(--tick-thickness)));
+      }
+    }
+  }
+
+  @media (--laptop) or (--desktop) {
+    display: grid;
+    gap: var(--margin) 0;
+    border-left: none;
+    grid-template-columns: 1fr 2px 1fr;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 2px;
+      grid-column: 2;
+      background-color: var(--divider);
+    }
+    &::after {
+      grid-column: 2;
+      left: calc(-0.5 * var(--tick-size));
+    }
+    .timeline__item {
+      grid-column: span 3;
+      display: grid;
+      grid-template-columns: subgrid;
+      .timeline__container {
+        grid-column: 3;
+      }
+      &:nth-child(even) .timeline__container {
+        grid-column: 1;
+        align-items: flex-end;
+        padding-left: 0;
+        padding-right: calc(var(--tick-size) + var(--padding));
+        &::before {
+          left: auto;
+          right: 0;
+        }
+        .timeline__icon {
+          left: auto;
+          right: calc(-0.5 * (var(--timeline-icon-size) + var(--tick-thickness)));
+        }
+        .timeline__header {
+          align-items: flex-end;
+          text-align: right;
+        }
+      }
+    }
+
+    &:dir(rtl) {
+      border-right: none;
+      &::after {
+        left: auto;
+        right: calc(-0.5 * var(--tick-size));
+      }
+      .timeline__item:nth-child(even) .timeline__container {
+        padding-left: calc(var(--tick-size) + var(--padding));
+        padding-right: 0;
+        &::before {
+          left: 0;
+          right: auto;
+        }
+        .timeline__icon {
+          left: calc(-0.5 * (var(--timeline-icon-size) + var(--tick-thickness)));
+          right: auto;
+        }
+      }
+    }
+  }
+}
