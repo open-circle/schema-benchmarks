@@ -3,8 +3,10 @@ import { useMemo } from "react";
 
 import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
 
+export type DateInput = Date | string | number;
+
 export interface DateDisplayProps {
-  date: Date | string | number;
+  date: DateInput;
   formatter?: Intl.DateTimeFormat;
 }
 
