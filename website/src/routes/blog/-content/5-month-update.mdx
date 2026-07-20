@@ -11,60 +11,124 @@ authors: "EskiMojo14"
 
 import { Link } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
+import { Timeline, TimelineItem } from "#/shared/components/timeline";
+import { MdSymbol } from "#/shared/components/symbol";
 
 It's been 5 months since the initial release of Schema Benchmarks! We thought it would be interesting to take a look at how it's changed over that time, and whether it's had an effect on the ecosystem it aims to measure.
 
-## How Schema Benchmarks has changed
+<Timeline>
+  <TimelineItem
+    date="2026-02-19"
+    title={
+      <Link to="/blog/$slug" params={{ slug: "welcome" }}>
+        Initial Release
+      </Link>
+    }
+  >
+    Schema Benchmarks was released to the public, with initial benchmarks:
 
-### New Benchmarks
+    - <Link to="/download">Download</Link>
+    - <Link to="/initialization">Initialization</Link>
+    - <Link to="/validation">Validation</Link>
+    - <Link to="/parsing">Parsing</Link>
 
-We've expanded the scope of our benchmarks to include more libraries and measure more aspects of their performance.
+  </TimelineItem>
 
-#### <Link to="/codec">Codec</Link>
+  <TimelineItem
+    date="2026-02-22"
+    title={
+      <Link to="/standard">
+        Standard Schema
+      </Link>
+    }
+    icon={{
+      children: <MdSymbol>speed</MdSymbol>,
+      color: "info",
+    }}
+    >
+    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
 
-These benchmarks measure the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
+    ```ts
+    import { personSchema } from "./schemas";
 
-```ts
-import * as z from "zod";
+    const person = await upfetch(url, { schema: personSchema });
 
-const bigIntFromString = z.codec(z.string(), z.bigint(), {
-  encode: (bigInt) => bigInt.toString(),
-  decode: (str) => BigInt(str),
-});
+    // internally
 
-bigIntFromString.encode(123n); // "123"
-bigIntFromString.decode("123"); // 123n
-```
+    const result = await personSchema["~standard"].validate(data);
+    ```
 
-#### <Link to="/standard">Standard Schema</Link>
+  </TimelineItem>
 
-These benchmarks measure the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+  <TimelineItem
+    date="2026-02-24"
+    title={
+      <Link to="/string">
+        String formats
+      </Link>
+    }
+    icon={{
+      children: <MdSymbol>speed</MdSymbol>,
+      color: "info",
+    }}
+    >
+    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
 
-```ts
-import { personSchema } from "./schemas";
+    ```ts
+    import * as v from "valibot";
 
-const person = await upfetch(url, { schema: personSchema });
+    const emailSchema = v.pipe(v.string(), v.email());
 
-// internally
+    ```
 
-const result = await personSchema["~standard"].validate(data);
-```
+  </TimelineItem>
 
-#### <Link to="/string">String</Link>
+  <TimelineItem
+    date="2026-03-02"
+    title={
+      <Link to="/stack">
+        Stack traces
+      </Link>
+    }
+    icon={{
+      children: <MdSymbol>speed</MdSymbol>,
+      color: "info",
+    }}
+    >
+    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
 
-[Suggested by `sinclairzx81`](https://github.com/open-circle/schema-benchmarks/issues/68) (author of [TypeBox](https://sinclairzx81.github.io/typebox/)), these benchmarks measure the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
+    <Tweet apiUrl="/api/tweet/2021374345990574398" />
 
-```ts
-import * as v from "valibot";
+  </TimelineItem>
 
-const emailSchema = v.pipe(v.string(), v.email());
-```
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <Link to="/codec">
+        Codecs
+      </Link>
+    }
+    icon={{
+      children: <MdSymbol>speed</MdSymbol>,
+      color: "info",
+    }}
+    >
+    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
 
-#### <Link to="/stack">Stack</Link>
+    ```ts
+    import * as z from "zod";
 
-Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
+    const bigIntFromString = z.codec(z.string(), z.bigint(), {
+      encode: (bigInt) => bigInt.toString(),
+      decode: (str) => BigInt(str),
+    });
 
-<Tweet apiUrl="/api/tweet/2021374345990574398" />
+    bigIntFromString.encode(123n); // "123"
+    bigIntFromString.decode("123"); // 123n
+    ```
+
+  </TimelineItem>
+</Timeline>
 
 ## How we've changed the ecosystem
 
