@@ -12,6 +12,7 @@ import { preloadImages } from "#src/shared/lib/fetch";
 
 import { getAvatarUrl, getBlog } from "./-query";
 
+// file level cache means it gets busted by HMR, whereas React Query persists across HMR
 const importCache = new Map<string, Promise<MDXModule>>();
 const importMdx = (filePath: string) =>
   getOrInsertComputed(
