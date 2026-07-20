@@ -13,6 +13,7 @@ import { Link } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
 import { Timeline, TimelineItem } from "#/shared/components/timeline";
 import { MdSymbol } from "#/shared/components/symbol";
+import { trackedLinkProps } from "#/shared/lib/analytics";
 
 It's been 5 months since the initial release of Schema Benchmarks! We thought it would be interesting to take a look at how it's changed over that time, and whether it's had an effect on the ecosystem it aims to measure.
 
@@ -24,10 +25,7 @@ It's been 5 months since the initial release of Schema Benchmarks! We thought it
         Initial Release
       </Link>
     }
-    icon={{
-      children: <MdSymbol>celebration</MdSymbol>,
-      color: "success",
-    }}
+    icon={<MdSymbol style={{ color: "var(--success)" }}>celebration</MdSymbol>}
   >
     Schema Benchmarks was released to the public, with initial benchmarks:
 
@@ -39,104 +37,10 @@ It's been 5 months since the initial release of Schema Benchmarks! We thought it
   </TimelineItem>
 
   <TimelineItem
-    date="2026-02-22"
-    title={
-      <Link to="/standard">
-        Standard Schema
-      </Link>
-    }
-    icon={{
-      children: <MdSymbol>speed</MdSymbol>,
-      color: "info",
-    }}
-    >
-    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
-
-    ```ts
-    import { personSchema } from "./schemas";
-
-    const person = await upfetch(url, { schema: personSchema });
-
-    // internally
-
-    const result = await personSchema["~standard"].validate(data);
-    ```
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-02-24"
-    title={
-      <Link to="/string">
-        String formats
-      </Link>
-    }
-    icon={{
-      children: <MdSymbol>speed</MdSymbol>,
-      color: "info",
-    }}
-    >
-    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
-
-    ```ts
-    import * as v from "valibot";
-
-    const emailSchema = v.pipe(v.string(), v.email());
-
-    ```
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-03-02"
-    title={
-      <Link to="/stack">
-        Stack traces
-      </Link>
-    }
-    icon={{
-      children: <MdSymbol>speed</MdSymbol>,
-      color: "info",
-    }}
-    >
-    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
-
-    <Tweet apiUrl="/api/tweet/2021374345990574398" />
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-03-05"
-    title={
-      <Link to="/codec">
-        Codecs
-      </Link>
-    }
-    icon={{
-      children: <MdSymbol>speed</MdSymbol>,
-      color: "info",
-    }}
-    >
-    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
-
-    ```ts
-    import * as z from "zod";
-
-    const bigIntFromString = z.codec(z.string(), z.bigint(), {
-      encode: (bigInt) => bigInt.toString(),
-      decode: (str) => BigInt(str),
-    });
-
-    bigIntFromString.encode(123n); // "123"
-    bigIntFromString.decode("123"); // 123n
-    ```
-
-  </TimelineItem>
-</Timeline>
-
-## How we've changed the ecosystem
-
-### [TypeBox](https://sinclairzx81.github.io/typebox/)
+    date="2026-02-20"
+    title={<a {...trackedLinkProps("https://sinclairzx81.github.io/typebox/")}>TypeBox</a>}
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+  >
 
 On initial release of our benchmarks, TypeBox was consistently underperforming in runtime performance.
 
@@ -168,9 +72,102 @@ import * as Schema from "typebox/schema";
 const A = Schema.Parse(Type.Number(), 12345); // A = 12345
 ```
 
-### [Decoders](https://decoders.cc/)
+  </TimelineItem>
 
-Based on our <Link to="/download">download</Link> benchmarking, we were able to identify a tree shaking issue with `decoders`, and [collaborated](https://github.com/nvie/decoders/pull/1290) with the author to get it fixed.
+  <TimelineItem
+    date="2026-02-22"
+    title={
+      <Link to="/standard">
+        Standard Schema
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+
+    ```ts
+    import { personSchema } from "./schemas";
+
+    const person = await upfetch(url, { schema: personSchema });
+
+    // internally
+
+    const result = await personSchema["~standard"].validate(data);
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-02-24"
+    title={
+      <Link to="/string">
+        String formats
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
+
+    ```ts
+    import * as v from "valibot";
+
+    const emailSchema = v.pipe(v.string(), v.email());
+
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-02"
+    title={
+      <Link to="/stack">
+        Stack traces
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
+
+    <Tweet apiUrl="/api/tweet/2021374345990574398" />
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <Link to="/codec">
+        Codecs
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
+
+    ```ts
+    import * as z from "zod";
+
+    const bigIntFromString = z.codec(z.string(), z.bigint(), {
+      encode: (bigInt) => bigInt.toString(),
+      decode: (str) => BigInt(str),
+    });
+
+    bigIntFromString.encode(123n); // "123"
+    bigIntFromString.decode("123"); // 123n
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <a {...trackedLinkProps("https://decoders.cc")}>
+        Decoders
+      </a>
+    }
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+    >
+
+    Based on our <Link to="/download">download</Link> benchmarking, we were able to identify a tree shaking issue with `decoders`, and [collaborated](https://github.com/nvie/decoders/pull/1290) with the author to get it fixed.
 
 In particular, we found that manually annotating functions with `#__NO_SIDE_EFFECTS__` and function calls with `#__PURE__` allowed bundlers to tree shake the library more effectively, reducing the overall bundle size for users.
 
@@ -185,8 +182,20 @@ function exampleFunction() {
 const result = /* #__PURE__ */ anotherFunction();
 ```
 
-### [Valibot](https://valibot.dev/)
+  </TimelineItem>
 
-Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
+  <TimelineItem
+    date="2026-07-08"
+    title={
+      <a {...trackedLinkProps("http://valibot.dev")}>
+        Valibot
+      </a>
+    }
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+  >
+  Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
 
 They are now [investigating](https://github.com/open-circle/valibot/pull/1534) an alternative approach for their Standard Schema support, which was causing the slowdown.
+
+  </TimelineItem>
+</Timeline>

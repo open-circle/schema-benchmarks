@@ -11,10 +11,7 @@ export const Timeline = classed.ol(cls().className);
 
 export interface TimelineItemProps {
   date: DateInput;
-  icon?: {
-    children: ReactNode;
-    color: "info" | "success" | "warning" | "error";
-  };
+  icon?: ReactNode;
   title: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
@@ -24,11 +21,7 @@ export function TimelineItem({ date, icon, title, subtitle, children }: Timeline
   return (
     <li {...cls("item")}>
       <div {...cls({ element: "container" })}>
-        {icon && (
-          <div {...cls({ element: "icon" })} style={{ color: `var(--${icon.color})` }}>
-            {icon.children}
-          </div>
-        )}
+        {!!icon && <div {...cls({ element: "icon" })}>{icon}</div>}
         <hgroup {...cls("header")}>
           <p {...cls({ element: "date", extra: "typo-caption" })}>
             <DateDisplay date={date} />
