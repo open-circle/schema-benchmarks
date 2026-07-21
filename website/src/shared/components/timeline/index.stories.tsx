@@ -1,3 +1,5 @@
+import { monthFormatter, monthCodeFormatter } from "@schema-benchmarks/utils";
+
 import { MdSymbol } from "#/shared/components/symbol";
 import preview from "#storybook/preview";
 
@@ -25,7 +27,11 @@ const meta = preview.meta({
         Content for timeline item 2
       </TimelineItem>
       <TimelineItem
-        date={tomorrow}
+        range={[yesterday, tomorrow]}
+        formatters={{
+          normal: monthFormatter,
+          code: monthCodeFormatter,
+        }}
         title="Timeline Item 3"
         subtitle="Subtitle for timeline item 3"
         icon={<MdSymbol>check_circle</MdSymbol>}

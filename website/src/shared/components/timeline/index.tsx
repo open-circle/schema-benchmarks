@@ -4,7 +4,8 @@ import bem from "react-bem-helper";
 import { createRequiredContext } from "required-react-context";
 
 import type { DateInput } from "#/shared/components/date";
-import { DateDisplay } from "#/shared/components/date";
+import { DateDisplay, RangeDisplay } from "#/shared/components/date";
+import type { Formatters } from "#/shared/hooks/format/use-date-formatter";
 
 const cls = bem("timeline");
 
@@ -66,14 +67,24 @@ export function Timeline({ children }: { children: ReactNode }) {
 }
 
 export interface TimelineItemProps {
-  date: DateInput;
+  date?: DateInput;
+  range?: [start: DateInput, end: DateInput];
+  formatters?: Formatters;
   icon?: ReactNode;
   title: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
 }
 
-export function TimelineItem({ date, icon, title, subtitle, children }: TimelineItemProps) {
+export function TimelineItem({
+  date,
+  range,
+  formatters,
+  icon,
+  title,
+  subtitle,
+  children,
+}: TimelineItemProps) {
   const [ref, setRef] = useState<HTMLLIElement | null>(null);
   const { intersectionObserver, mostIntersecting } = useIntersectionObserver();
   useEffect(() => {
@@ -92,7 +103,8 @@ export function TimelineItem({ date, icon, title, subtitle, children }: Timeline
         {!!icon && <div {...cls({ element: "icon" })}>{icon}</div>}
         <hgroup {...cls("header")}>
           <p {...cls({ element: "date", extra: "typo-caption" })}>
-            <DateDisplay date={date} />
+            {date && <DateDisplay {...{ date, formatters }} />}
+            {range && <RangeDisplay startDate={range[0]} endDate={range[1]} {...{ formatters }} />}
           </p>
           <h3 {...cls({ element: "title", extra: "typo-headline5" })}>{title}</h3>
           {!!subtitle && (

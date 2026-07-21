@@ -53,7 +53,7 @@ function RouteComponent() {
       viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
     },
   });
-  const formatDate = useDateFormatter(longDateFormatter);
+  const formatDate = useDateFormatter();
   return (
     <>
       <h1 className="blog-title typo-headline2" {...getTransitionStyle("title")}>
