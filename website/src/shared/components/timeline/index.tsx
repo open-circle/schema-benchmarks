@@ -28,13 +28,18 @@ export function Timeline({ children }: { children: ReactNode }) {
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          entriesByTarget.set(entry.target, entry);
-        }
+        for (const entry of entries) entriesByTarget.set(entry.target, entry);
 
         const mostIntersecting = Array.from(entriesByTarget.values()).reduceRight(
-          (mostIntersecting, entry) =>
-            entry.intersectionRatio > mostIntersecting.intersectionRatio ? entry : mostIntersecting,
+          (mostIntersecting, entry) => {
+            if (!entry.target.isConnected) {
+              entriesByTarget.delete(entry.target);
+              return mostIntersecting;
+            }
+            return entry.intersectionRatio > mostIntersecting.intersectionRatio
+              ? entry
+              : mostIntersecting;
+          },
         );
 
         setMostIntersecting(mostIntersecting);
