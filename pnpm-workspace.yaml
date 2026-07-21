@@ -37,3 +37,6 @@ catalog:
 overrides:
   "@types/node": 24.0.0
   vite: "catalog:"
+updateConfig:
+  ignoreDependencies:
+    - "@types/node"
