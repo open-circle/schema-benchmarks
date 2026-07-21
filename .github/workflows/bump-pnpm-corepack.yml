@@ -1,0 +1,44 @@
+name: Bump pnpm (Corepack)
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-pnpm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Update pnpm pin
+        run: corepack use pnpm@latest
+
+      - name: Refresh lockfile metadata
+        run: pnpm install --lockfile-only
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: bump pnpm via corepack"
+          title: "chore: bump pnpm via corepack"
+          body: |
+            Automated update of the pnpm toolchain pin using Corepack.
+
+            Command run:
+            - corepack use pnpm@latest
+          branch: chore/bump-pnpm
+          delete-branch: true
