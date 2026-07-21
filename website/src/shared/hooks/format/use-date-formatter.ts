@@ -1,4 +1,5 @@
 import { longDateFormatter } from "@schema-benchmarks/utils";
+import { formatISOWithOptions } from "date-fns/fp";
 
 import { useStyle } from "#src/shared/components/prefs/context";
 
@@ -9,7 +10,7 @@ export interface Formatters {
 
 export function useDateFormatter({
   normal: formatter = longDateFormatter,
-  code: codeFormatter = (date) => date.toISOString().split("T")[0]!,
+  code: codeFormatter = formatISOWithOptions({ representation: "date" }),
 }: Formatters = {}) {
   const { style } = useStyle();
   return (date: Date) => {
