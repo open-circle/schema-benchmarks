@@ -14,14 +14,14 @@ export const Route = createFileRoute("/_benchmarks/libraries/")({
   loader: async ({ abortController, context: { queryClient } }) => {
     const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
     await Promise.all(
-      Object.entries(libraries).flatMap(([packageName, versions]) =>
-        versions.flatMap((version) => [
+      Object.entries(libraries).flatMap(([packageName, versions]) => [
+        ...versions.map((version) =>
           queryClient.ensureQueryData(
             getPackageMetadata(packageName, version, abortController.signal),
           ),
-          queryClient.prefetchQuery(getReplacementUrl(packageName, abortController.signal)),
-        ]),
-      ),
+        ),
+        queryClient.prefetchQuery(getReplacementUrl(packageName, abortController.signal)),
+      ]),
     );
   },
   head: () => {
