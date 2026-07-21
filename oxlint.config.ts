@@ -13,6 +13,7 @@ export const baseConfig = defineConfig({
   },
   rules: {
     "eslint/no-shadow": "off",
+    "eslint/no-underscore-dangle": "off",
     "typescript/array-type": ["error", { default: "generic" }],
     "react/react-in-jsx-scope": "off",
     "typescript/no-unsafe-type-assertion": "off",
