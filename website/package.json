@@ -43,6 +43,7 @@
     "ansi-sequence-parser": "^1.1.3",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
+    "date-fns": "^4.4.0",
     "dedent": "catalog:",
     "module-replacements": "^3.0.0",
     "mutative": "^1.3.0",

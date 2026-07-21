@@ -98,9 +98,6 @@ export const monthFormatter = new Intl.DateTimeFormat("en", {
   year: "numeric",
 });
 
-// YYYY-MM
-export const monthCodeFormatter = (date: Date) => date.toISOString().slice(0, 7);
-
 export const durationFormatter = new Intl.DurationFormat("en");
 
 const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [

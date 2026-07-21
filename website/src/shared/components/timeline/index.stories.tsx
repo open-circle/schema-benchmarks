@@ -1,4 +1,5 @@
-import { monthFormatter, monthCodeFormatter } from "@schema-benchmarks/utils";
+import { monthFormatter } from "@schema-benchmarks/utils";
+import { lightFormat } from "date-fns/fp";
 
 import { MdSymbol } from "#/shared/components/symbol";
 import preview from "#storybook/preview";
@@ -30,7 +31,7 @@ const meta = preview.meta({
         range={[yesterday, tomorrow]}
         formatters={{
           normal: monthFormatter,
-          code: monthCodeFormatter,
+          code: lightFormat("yyyy-MM"),
         }}
         title="Timeline Item 3"
         subtitle="Subtitle for timeline item 3"
