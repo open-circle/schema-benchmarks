@@ -13,3 +13,7 @@ updates:
       default-days: 1
     ignore:
       - dependency-name: "@types/node"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
