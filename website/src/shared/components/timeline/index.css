@@ -22,6 +22,9 @@
   }
   .timeline__item {
     position: relative;
+    &.timeline__item--intersecting .timeline__icon .md-symbol {
+      --icon-fill: 1;
+    }
     .timeline__container {
       position: relative;
       display: flex;
@@ -94,7 +97,7 @@
     }
   }
 
-  @media (--laptop) or (--desktop) {
+  @media (--desktop) {
     display: grid;
     gap: var(--margin) 0;
     border-left: none;

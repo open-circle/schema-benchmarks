@@ -50,10 +50,12 @@ After discussion with `sinclairzx81` (author of TypeBox), it emerged that the `v
 
 ```ts
 // v1.0.x
-const A = Value.Parse(Type.Number(), "12345"); // A = 12345
+// A = 12345
+const A = Value.Parse(Type.Number(), "12345");
 
 // v1.1.x
-const A = Value.Parse(Type.Number(), "12345"); // throw! - Expected Number
+// throw! - Expected Number
+const A = Value.Parse(Type.Number(), "12345");
 ```
 
   </TimelineItem>
