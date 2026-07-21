@@ -70,7 +70,9 @@ const getRequestUrl = (input: RequestInfo | URL) => {
 
 const shouldRetryByDefault = (input: RequestInfo | URL) => {
   const url = getRequestUrl(input);
-  const isExternal = url.startsWith("https://") && !url.startsWith(location.origin);
+  const isExternal =
+    url.startsWith("https://") &&
+    (typeof location === "undefined" || !url.startsWith(location.origin));
   return isExternal;
 };
 
