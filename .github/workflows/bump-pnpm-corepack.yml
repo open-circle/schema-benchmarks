@@ -60,10 +60,11 @@ jobs:
             }
 
             process.stdout.write(`Selected pnpm ${selected.version} (published ${selected.publishedAt.toISOString()})\\n`);
-            require("node:fs").appendFileSync(
-              process.env.GITHUB_OUTPUT,
-              `version=${selected.version}\\npublished_at=${selected.publishedAt.toISOString()}\\n`,
-            );
+            require("node:fs").appendFileSync(process.env.GITHUB_OUTPUT, [
+              `version=${selected.version}`,
+              `published_at=${selected.publishedAt.toISOString()}`,
+              "",
+            ].join("\n"));
           '
 
       - name: Update pnpm pin
