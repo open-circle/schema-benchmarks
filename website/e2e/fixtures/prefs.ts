@@ -15,14 +15,19 @@ export class PrefsDialog extends BasePOM {
     public themeOptions = dialog.getByRole("toolbar", { name: "Theme" }),
     public npmSiteOptions = dialog.getByRole("toolbar", { name: "NPM browser" }),
     public ligatureOptions = dialog.getByRole("toolbar", { name: "Code ligatures" }),
+    public documentElement = page.locator("html"),
   ) {
     super(page);
   }
 
   async openDialog() {
     await expect(async () => {
-      await this.openButton.click();
-      await this.dialog.waitFor({ timeout: 1000 });
+      try {
+        await this.dialog.waitFor({ timeout: 1000 });
+      } catch {
+        await this.openButton.click();
+        await this.dialog.waitFor({ timeout: 1000 });
+      }
     }).toPass();
   }
 
