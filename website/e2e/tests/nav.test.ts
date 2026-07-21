@@ -1,6 +1,6 @@
 import { test, expect } from "#e2e/fixtures";
 
-test("homepage is selected", async ({ page, sidebar }) => {
+test("homepage is selected", { tag: "@smoke" }, async ({ page, sidebar }) => {
   await page.goto("/");
 
   await sidebar.open();
@@ -8,7 +8,7 @@ test("homepage is selected", async ({ page, sidebar }) => {
   await expect(sidebar.getLinkByName("Home")).toBeCurrent("page");
 });
 
-test("navigation links work", async ({ page, sidebar }) => {
+test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
   await page.goto("/");
   await sidebar.open();
 
