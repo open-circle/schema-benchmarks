@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import bem from "react-bem-helper";
 import { createRequiredContext } from "required-react-context";
 
@@ -8,25 +8,31 @@ import { DateDisplay } from "#/shared/components/date";
 
 const cls = bem("timeline");
 
-const { useIntersectionObserver, IntersectionObserverProvider } = createRequiredContext<{
+interface IntersectionObserverContext {
   intersectionObserver: IntersectionObserver | null;
   mostIntersecting: IntersectionObserverEntry | null;
-}>().with({ name: "intersectionObserver", providerProp: "value" });
+}
+
+const { useIntersectionObserver, IntersectionObserverProvider } =
+  createRequiredContext<IntersectionObserverContext>().with({
+    name: "intersectionObserver",
+    providerProp: "value",
+  });
 
 export function Timeline({ children }: { children: ReactNode }) {
   const [mostIntersecting, setMostIntersecting] = useState<IntersectionObserverEntry | null>(null);
-  const [entriesByTargetRef] = useState(() => new Map<Element, IntersectionObserverEntry>());
-  const [intersectionObserver] = useState(() => {
-    if (typeof IntersectionObserver === "undefined") {
-      return null;
-    }
-    return new IntersectionObserver(
+  const [entriesByTarget] = useState(() => new Map<Element, IntersectionObserverEntry>());
+  const [intersectionObserver, setIntersectionObserver] = useState<IntersectionObserver | null>(
+    null,
+  );
+  useEffect(() => {
+    const intersectionObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          entriesByTargetRef.set(entry.target, entry);
+          entriesByTarget.set(entry.target, entry);
         }
 
-        const mostIntersecting = Array.from(entriesByTargetRef.values()).reduceRight(
+        const mostIntersecting = Array.from(entriesByTarget.values()).reduceRight(
           (mostIntersecting, entry) =>
             entry.intersectionRatio > mostIntersecting.intersectionRatio ? entry : mostIntersecting,
         );
@@ -38,9 +44,17 @@ export function Timeline({ children }: { children: ReactNode }) {
         threshold: [0, 0.25, 0.5, 0.75, 1],
       },
     );
-  });
+    setIntersectionObserver(intersectionObserver);
+    return () => {
+      intersectionObserver?.disconnect();
+    };
+  }, [entriesByTarget]);
+  const contextValue = useMemo(
+    (): IntersectionObserverContext => ({ intersectionObserver, mostIntersecting }),
+    [intersectionObserver, mostIntersecting],
+  );
   return (
-    <IntersectionObserverProvider value={{ intersectionObserver, mostIntersecting }}>
+    <IntersectionObserverProvider value={contextValue}>
       <ol {...cls()}>{children}</ol>
     </IntersectionObserverProvider>
   );
