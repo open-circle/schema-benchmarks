@@ -1,28 +1,37 @@
-import type { Locator } from "@playwright/test";
+import type { Locator, TestFixture, Page } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
 
-import type { CurrentValue } from "../../test/common/matchers/to-be-current";
+import type { CurrentValue } from "#test/common/matchers/to-be-current";
+
+import { Header } from "./header";
+import { BlogPage } from "./pages/blog";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
 const POMs = {
   sidebar: Sidebar,
   prefs: PrefsDialog,
+  blogPage: BlogPage,
+  header: Header,
 };
 
 type POMFixtures = {
   [K in keyof typeof POMs]: InstanceType<(typeof POMs)[K]>;
 };
 
+const pomFixtures = Object.fromEntries(
+  Object.entries(POMs).map(
+    ([name, POM]): [string, TestFixture<POMFixtures[keyof POMFixtures], { page: Page }>] => [
+      name,
+      async ({ page }, use) => use(new POM(page)),
+    ],
+  ),
+) as {
+  [K in keyof POMFixtures]: TestFixture<POMFixtures[K], { page: Page }>;
+};
+
 export const test = baseTest.extend<POMFixtures>({
-  sidebar: async ({ page }, use) => {
-    const sidebar = new Sidebar(page);
-    await use(sidebar);
-  },
-  prefs: async ({ page }, use) => {
-    const prefs = new PrefsDialog(page);
-    await use(prefs);
-  },
+  ...pomFixtures,
 });
 
 export const expect = baseExpect.extend({
