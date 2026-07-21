@@ -30,17 +30,18 @@ export function Timeline({ children }: { children: ReactNode }) {
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) entriesByTarget.set(entry.target, entry);
+        for (const entry of entriesByTarget.values())
+          if (!entry.target.isConnected) entriesByTarget.delete(entry.target);
 
+        if (!entriesByTarget.size) {
+          setMostIntersecting(null);
+          return;
+        }
+
+        // prefer the last entry in the list if multiple entries have the same intersection ratio
         const mostIntersecting = Array.from(entriesByTarget.values()).reduceRight(
-          (mostIntersecting, entry) => {
-            if (!entry.target.isConnected) {
-              entriesByTarget.delete(entry.target);
-              return mostIntersecting;
-            }
-            return entry.intersectionRatio > mostIntersecting.intersectionRatio
-              ? entry
-              : mostIntersecting;
-          },
+          (mostIntersecting, entry) =>
+            entry.intersectionRatio > mostIntersecting.intersectionRatio ? entry : mostIntersecting,
         );
 
         setMostIntersecting(mostIntersecting);
