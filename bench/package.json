@@ -23,7 +23,7 @@
     "@standard-schema/spec": "catalog:",
     "@ttsc/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
-    "rolldown": "^1.1.5",
+    "rolldown": "^1.2.0",
     "tinybench": "^6.0.2",
     "ttsc": "catalog:",
     "valibot": "catalog:"
