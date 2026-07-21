@@ -167,7 +167,6 @@ function cached(getter) {
 			Object.defineProperty(this, "value", { value });
 			return value;
 		}
-		throw new Error("cached value already set");
 	} };
 }
 function nullish$1(input) {

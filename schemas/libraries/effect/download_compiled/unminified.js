@@ -17624,6 +17624,15 @@ var PropertySignatureDeclaration = class extends OptionalType {
 		return `PropertySignature<${token}, ${type}, never, ${token}, ${type}>`;
 	}
 };
+(class extends OptionalType {
+	isReadonly;
+	fromKey;
+	constructor(type, isOptional, isReadonly, annotations, fromKey) {
+		super(type, isOptional, annotations);
+		this.isReadonly = isReadonly;
+		this.fromKey = fromKey;
+	}
+});
 /**
 * @category PropertySignature
 * @since 3.10.0

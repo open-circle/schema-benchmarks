@@ -471,6 +471,28 @@ function isNotNullish(input) {
 	return input != null;
 }
 /**
+* Type guard that always returns `true`.
+*
+* **When to use**
+*
+* Use when you need a `Predicate` that always accepts, e.g. as a placeholder.
+*
+* **Example** (Matching every value)
+*
+* ```ts
+* import { Predicate } from "effect"
+*
+* console.log(Predicate.isUnknown(123))
+* ```
+*
+* @see {@link isNever}
+* @category guards
+* @since 2.0.0
+*/
+function isUnknown(_) {
+	return true;
+}
+/**
 * Checks whether a value is an `object` in the JavaScript sense (objects, arrays, functions).
 *
 * **When to use**
@@ -4630,6 +4652,12 @@ const isFailReason = isFailReason$1;
 const map = causeMap;
 Service()("effect/Cause/StackTrace");
 Service()("effect/Cause/InterruptorStackTrace");
+(class extends Class$1 {
+	constructor(props) {
+		super();
+		if (props) Object.assign(this, props);
+	}
+});
 /**
 * Creates a tagged error class with a `_tag` discriminator.
 *
@@ -6609,6 +6637,33 @@ var Null$1 = class extends Base {
 	}
 };
 const null_ = /*#__PURE__*/ new Null$1();
+(class extends Base {
+	_tag = "Undefined";
+	/** @internal */
+	getParser() {
+		return fromConst(this, void 0);
+	}
+	/** @internal */
+	toCodecJson() {
+		return replaceEncoding(this, [undefinedToNull]);
+	}
+	/** @internal */
+	getExpected() {
+		return "undefined";
+	}
+});
+const undefinedToNull = /*#__PURE__*/ new Link(null_, /*#__PURE__*/ new Transformation(/*#__PURE__*/ transform$1(() => void 0), /*#__PURE__*/ transform$1(() => null)));
+(class extends Base {
+	_tag = "Unknown";
+	/** @internal */
+	getParser() {
+		return fromRefinement(this, isUnknown);
+	}
+	/** @internal */
+	getExpected() {
+		return "unknown";
+	}
+});
 /**
 * AST node matching an exact primitive value (string, number, boolean, or
 * bigint).
