@@ -2,7 +2,7 @@ name: Bump pnpm (Corepack)
 
 on:
   schedule:
-    - cron: "0 9 * * 1"
+    - cron: "0 9 * * *"
   workflow_dispatch:
 
 permissions:
@@ -24,8 +24,50 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Compute 24h cutoff (UTC)
+        id: cutoff
+        run: |
+          cutoff="$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)"
+          echo "value=$cutoff" >> "$GITHUB_OUTPUT"
+
+      - name: Pick pnpm version older than 24h
+        id: pick
+        env:
+          CUTOFF: ${{ steps.cutoff.outputs.value }}
+        run: |
+          node -e '
+            const { execSync } = require("node:child_process");
+
+            const raw = execSync("npm view pnpm time --json", { encoding: "utf8" });
+            const time = JSON.parse(raw);
+
+            const ignore = new Set(["created", "modified"]);
+            const versions = Object.entries(time)
+              .filter(([version]) => !ignore.has(version))
+              .filter(([version]) => !version.includes("-"))
+              .map(([version, publishedAt]) => ({
+                version,
+                publishedAt: new Date(publishedAt),
+              }))
+              .filter(({ publishedAt }) => !Number.isNaN(publishedAt.getTime()))
+              .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+
+            const cutoff = new Date(process.env.CUTOFF);
+            const selected = versions.find((entry) => entry.publishedAt <= cutoff);
+
+            if (!selected) {
+              throw new Error(`No pnpm version found older than cutoff ${process.env.CUTOFF}`);
+            }
+
+            process.stdout.write(`Selected pnpm ${selected.version} (published ${selected.publishedAt.toISOString()})\\n`);
+            require("node:fs").appendFileSync(
+              process.env.GITHUB_OUTPUT,
+              `version=${selected.version}\\npublished_at=${selected.publishedAt.toISOString()}\\n`,
+            );
+          '
+
       - name: Update pnpm pin
-        run: corepack use pnpm@latest
+        run: corepack use pnpm@${{ steps.pick.outputs.version }}
 
       - name: Refresh lockfile metadata
         run: pnpm install --lockfile-only
@@ -39,6 +81,11 @@ jobs:
             Automated update of the pnpm toolchain pin using Corepack.
 
             Command run:
-            - corepack use pnpm@latest
+            - corepack use pnpm@${{ steps.pick.outputs.version }}
+
+            Version metadata:
+            - Published at: ${{ steps.pick.outputs.published_at }}
+            - Cooldown: at least 24 hours old
+            - Channel: stable only (no prereleases)
           branch: chore/bump-pnpm
           delete-branch: true
