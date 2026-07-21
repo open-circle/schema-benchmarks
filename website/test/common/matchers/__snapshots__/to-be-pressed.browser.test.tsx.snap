@@ -9,9 +9,9 @@ Received:
 <r>  aria-pressed="null"</g>
 `;
 
-exports[`toBePressed (with element) > should fail for non-button 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
+exports[`toBePressed (with element) > should fail for non-button > not pressed 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
 
-exports[`toBePressed (with element) > should fail for non-button 2`] = `Element is not a button or does not have a valid aria-pressed attribute`;
+exports[`toBePressed (with element) > should fail for non-button > pressed 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
 
 exports[`toBePressed (with element) > should fail for unpressed button 1`] = `
 <d>expect(</b><r>element</g><d>).toBePressed()</b>
@@ -31,9 +31,9 @@ Received:
 <r>  aria-pressed="null"</g>
 `;
 
-exports[`toBePressed (with locator) > should fail for non-button 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
+exports[`toBePressed (with locator) > should fail for non-button > not pressed 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
 
-exports[`toBePressed (with locator) > should fail for non-button 2`] = `Element is not a button or does not have a valid aria-pressed attribute`;
+exports[`toBePressed (with locator) > should fail for non-button > pressed 1`] = `Element is not a button or does not have a valid aria-pressed attribute`;
 
 exports[`toBePressed (with locator) > should fail for unpressed button 1`] = `
 <d>expect(</b><r>element</g><d>).toBePressed()</b>
