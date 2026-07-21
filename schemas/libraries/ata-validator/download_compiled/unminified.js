@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.9_ata-validator@0.21.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.9_ata-validator@1.2.1_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -140,14 +140,14 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -416,7 +416,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -904,7 +904,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { codeFor } = require_error_codes();
 	const { compileSafe, patternIsSafe } = require_safe_regex();
@@ -979,7 +979,9 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (typeof schema !== "object" || schema === null) return null;
 		if (!defs && !codegenSafe(schema, schemaMap)) {
 			const str = JSON.stringify(schema);
-			if (!str.includes("\"$dynamicRef\"") && !str.includes("\"$dynamicAnchor\"") && !str.includes("\"$anchor\"")) return null;
+			const hasDynamic = str.includes("\"$dynamicRef\"") || str.includes("\"$dynamicAnchor\"");
+			if (!hasDynamic && !str.includes("\"$anchor\"")) return null;
+			if (!hasDynamic && hasNestedIdScope(schema)) return null;
 		}
 		const rootDefs = defs || collectDefs(schema);
 		if (schema.patternProperties || schema.dependentSchemas || schema.propertyNames) return null;
@@ -1325,6 +1327,14 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		let target = root;
 		for (const p of parts) {
 			if (target == null || typeof target !== "object") return null;
+			if (!(p in target)) {
+				const alt = p === "definitions" ? "$defs" : p === "$defs" ? "definitions" : null;
+				if (alt !== null && alt in target) {
+					target = target[alt];
+					continue;
+				}
+				return null;
+			}
 			target = target[p];
 		}
 		return target == null ? null : target;
@@ -1454,6 +1464,30 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		findDynRefs(target);
 		return refs.every((r) => anchors.has(r));
 	}
+	function subtreeRefersToLocalDef(node, defNames) {
+		if (typeof node !== "object" || node === null) return false;
+		if (node.$ref) {
+			const m = /^#\/(?:\$defs|definitions)\/([^/]+)$/.exec(node.$ref);
+			if (m && defNames.has(m[1])) return true;
+		}
+		for (const val of Object.values(node)) if (typeof val === "object" && val !== null) {
+			if (Array.isArray(val)) {
+				for (const item of val) if (subtreeRefersToLocalDef(item, defNames)) return true;
+			} else if (subtreeRefersToLocalDef(val, defNames)) return true;
+		}
+		return false;
+	}
+	function hasNestedIdScope(node, isRoot = true) {
+		if (typeof node !== "object" || node === null) return false;
+		if (!isRoot && typeof node.$id === "string" && !node.$id.startsWith("#")) return true;
+		for (const val of Object.values(node)) {
+			if (typeof val !== "object" || val === null) continue;
+			if (Array.isArray(val)) {
+				for (const item of val) if (hasNestedIdScope(item, false)) return true;
+			} else if (hasNestedIdScope(val, false)) return true;
+		}
+		return false;
+	}
 	function codegenSafe(schema, schemaMap) {
 		if (typeof schema === "boolean") return true;
 		if (typeof schema !== "object" || schema === null) return true;
@@ -1523,18 +1557,23 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 		if (schema.unevaluatedItems !== void 0) {
+			if (JSON.stringify(schema).includes("\"contains\"")) return false;
 			if (typeof schema.unevaluatedItems === "object" && schema.unevaluatedItems !== null) {
 				if (!codegenSafe(schema.unevaluatedItems, schemaMap)) return false;
 			}
 		}
 		const defs = schema.$defs || schema.definitions;
-		if (defs) for (const [name, def] of Object.entries(defs)) {
-			if (/[~/"']/.test(name)) return false;
-			if (typeof def === "boolean") return false;
-			if (typeof def === "object" && def !== null) {
-				if (def.$id && !def.$id.startsWith("#")) return false;
-				if (def.$ref) return false;
-				if (!codegenSafe(def, schemaMap)) return false;
+		if (defs) {
+			const defNames = new Set(Object.keys(defs));
+			if (Object.values(defs).some((def) => typeof def === "object" && def !== null && subtreeRefersToLocalDef(def, defNames))) return false;
+			for (const [name, def] of Object.entries(defs)) {
+				if (/[~/"']/.test(name)) return false;
+				if (typeof def === "boolean") return false;
+				if (typeof def === "object" && def !== null) {
+					if (def.$id && !def.$id.startsWith("#")) return false;
+					if (def.$ref) return false;
+					if (!codegenSafe(def, schemaMap)) return false;
+				}
 			}
 		}
 		const subs = [
@@ -3913,7 +3952,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -4023,7 +4062,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -4127,7 +4166,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -4325,7 +4364,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -4481,7 +4520,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -4602,7 +4641,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { buildDataPositionMap };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap } = require_data_positions();
 	/**
@@ -4646,7 +4685,690 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileSafe } = require_safe_regex();
+	const SCHEMA_KEYWORDS = {
+		single: [
+			"additionalProperties",
+			"contains",
+			"propertyNames",
+			"if",
+			"then",
+			"else",
+			"not",
+			"items",
+			"unevaluatedItems",
+			"unevaluatedProperties"
+		],
+		maps: [
+			"$defs",
+			"definitions",
+			"properties",
+			"patternProperties",
+			"dependentSchemas"
+		],
+		lists: [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]
+	};
+	const FALLBACK_BASE = "ata://root";
+	function resolveUri(base, ref) {
+		try {
+			return new URL(ref, base || FALLBACK_BASE).href;
+		} catch {
+			return ref;
+		}
+	}
+	function splitFragment(uri) {
+		const hash = uri.indexOf("#");
+		if (hash < 0) return [uri, ""];
+		return [uri.slice(0, hash), decodeURIComponent(uri.slice(hash + 1))];
+	}
+	function indexSchemas(rootSchema, schemaMap) {
+		const state = {
+			resources: /* @__PURE__ */ new Map(),
+			anchors: /* @__PURE__ */ new Map(),
+			dynamicAnchors: /* @__PURE__ */ new Map(),
+			nodeBase: /* @__PURE__ */ new Map(),
+			rootBase: FALLBACK_BASE
+		};
+		const rootBase = typeof rootSchema === "object" && rootSchema !== null && typeof rootSchema.$id === "string" ? resolveUri(FALLBACK_BASE, splitFragment(rootSchema.$id)[0]) : FALLBACK_BASE;
+		state.rootBase = rootBase;
+		indexResource(rootSchema, rootBase, state);
+		if (schemaMap) for (const [id, schema] of schemaMap) {
+			const base = resolveUri(FALLBACK_BASE, splitFragment(id)[0]);
+			if (!state.resources.has(base)) indexResource(schema, base, state);
+			if (!state.resources.has(id)) state.resources.set(id, schema);
+		}
+		return state;
+	}
+	function indexResource(node, baseUri, state) {
+		if (typeof node !== "object" || node === null) return;
+		if (!state.resources.has(baseUri)) state.resources.set(baseUri, node);
+		if (!state.anchors.has(baseUri)) state.anchors.set(baseUri, /* @__PURE__ */ new Map());
+		if (!state.dynamicAnchors.has(baseUri)) state.dynamicAnchors.set(baseUri, /* @__PURE__ */ new Map());
+		walkSchema(node, baseUri, state, true);
+	}
+	function walkSchema(node, baseUri, state, isResourceRoot) {
+		if (typeof node !== "object" || node === null) return;
+		if (state.nodeBase.has(node)) return;
+		state.nodeBase.set(node, baseUri);
+		if (!isResourceRoot && typeof node.$id === "string") {
+			const newBase = splitFragment(resolveUri(baseUri, node.$id))[0];
+			state.nodeBase.delete(node);
+			indexResource(node, newBase, state);
+			return;
+		}
+		if (typeof node.$anchor === "string") state.anchors.get(baseUri).set(node.$anchor, node);
+		if (typeof node.$dynamicAnchor === "string") {
+			state.dynamicAnchors.get(baseUri).set(node.$dynamicAnchor, node);
+			state.anchors.get(baseUri).set(node.$dynamicAnchor, node);
+		}
+		for (const kw of SCHEMA_KEYWORDS.single) if (node[kw] !== void 0) walkSchema(node[kw], baseUri, state, false);
+		for (const kw of SCHEMA_KEYWORDS.maps) {
+			const map = node[kw];
+			if (map && typeof map === "object" && !Array.isArray(map)) for (const key of Object.keys(map)) walkSchema(map[key], baseUri, state, false);
+		}
+		for (const kw of SCHEMA_KEYWORDS.lists) {
+			const list = node[kw];
+			if (Array.isArray(list)) for (const sub of list) walkSchema(sub, baseUri, state, false);
+		}
+	}
+	function walkPointer(root, pointer) {
+		if (pointer === "" || pointer === "/") return root;
+		const parts = pointer.split("/").slice(1).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let node = root;
+		for (const part of parts) {
+			if (node === null || typeof node !== "object") return void 0;
+			if (Array.isArray(node)) node = node[Number(part)];
+			else if (part in node) node = node[part];
+			else if (part === "definitions" && node.$defs) node = node.$defs;
+			else if (part === "$defs" && node.definitions) node = node.definitions;
+			else return;
+		}
+		return node;
+	}
+	function resolveRef(ref, fromBase, state) {
+		const [uri, fragment] = splitFragment(resolveUri(fromBase, ref));
+		let resource = state.resources.get(uri);
+		let resourceBase = uri;
+		if (resource === void 0 && (uri === FALLBACK_BASE || uri === "")) {
+			resource = state.resources.get(state.rootBase);
+			resourceBase = state.rootBase;
+		}
+		if (resource === void 0) {
+			const [rawUri, rawFragment] = splitFragment(ref);
+			if (state.resources.has(rawUri)) {
+				resource = state.resources.get(rawUri);
+				resourceBase = rawUri;
+				if (rawFragment === "") return {
+					node: resource,
+					base: resourceBase
+				};
+				if (rawFragment.startsWith("/")) return {
+					node: walkPointer(resource, rawFragment),
+					base: resourceBase
+				};
+				const anchored = state.anchors.get(resourceBase);
+				return {
+					node: anchored ? anchored.get(rawFragment) : void 0,
+					base: resourceBase
+				};
+			}
+			return {
+				node: void 0,
+				base: resourceBase
+			};
+		}
+		if (fragment === "") return {
+			node: resource,
+			base: resourceBase
+		};
+		if (fragment.startsWith("/")) {
+			const node = walkPointer(resource, fragment);
+			return {
+				node,
+				base: node !== null && typeof node === "object" && state.nodeBase.has(node) ? state.nodeBase.get(node) : resourceBase
+			};
+		}
+		const anchored = state.anchors.get(resourceBase);
+		return {
+			node: anchored ? anchored.get(fragment) : void 0,
+			base: resourceBase
+		};
+	}
+	function deepEqual(a, b) {
+		if (a === b) return true;
+		if (typeof a === "number" && typeof b === "number") return a === b;
+		if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return false;
+		const aArr = Array.isArray(a);
+		if (aArr !== Array.isArray(b)) return false;
+		if (aArr) {
+			if (a.length !== b.length) return false;
+			for (let i = 0; i < a.length; i++) if (!deepEqual(a[i], b[i])) return false;
+			return true;
+		}
+		const ak = Object.keys(a);
+		const bk = Object.keys(b);
+		if (ak.length !== bk.length) return false;
+		for (const k of ak) if (!(k in b) || !deepEqual(a[k], b[k])) return false;
+		return true;
+	}
+	function codePointLength(s) {
+		let n = 0;
+		for (let i = 0; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (c >= 55296 && c <= 56319 && i + 1 < s.length) i++;
+			n++;
+		}
+		return n;
+	}
+	function typeMatches(type, d) {
+		switch (type) {
+			case "string": return typeof d === "string";
+			case "number": return typeof d === "number" && isFinite(d);
+			case "integer": return typeof d === "number" && Number.isInteger(d);
+			case "boolean": return typeof d === "boolean";
+			case "null": return d === null;
+			case "array": return Array.isArray(d);
+			case "object": return typeof d === "object" && d !== null && !Array.isArray(d);
+			default: return true;
+		}
+	}
+	function multipleOfOk(d, m) {
+		if (m === 0) return false;
+		const q = d / m;
+		if (Number.isInteger(q)) return true;
+		return Math.abs(q - Math.round(q)) < 1e-9;
+	}
+	const FORMAT_CHECKS = {
+		email: (s) => {
+			const at = s.indexOf("@");
+			return at > 0 && at < s.length - 1 && s.indexOf(".", at) > at + 1;
+		},
+		date: (s) => {
+			if (s.length !== 10 || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+			const m = +s.slice(5, 7), d = +s.slice(8, 10);
+			return m >= 1 && m <= 12 && d >= 1 && d <= 31;
+		},
+		"date-time": (s) => /^\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$/.test(s) && !isNaN(Date.parse(s)),
+		time: (s) => /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d(\.\d+)?([Zz]|[+-]\d{2}:\d{2})?$/.test(s),
+		duration: (s) => /^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)?)?$/.test(s) && s !== "P" && !s.endsWith("T"),
+		uuid: (s) => s.length === 36 && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s),
+		uri: (s) => /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s),
+		"uri-reference": (s) => s === "" || !/\s/.test(s),
+		ipv4: (s) => {
+			const p = s.split(".");
+			return p.length === 4 && p.every((n) => {
+				const v = +n;
+				return n !== "" && v >= 0 && v <= 255 && String(v) === n;
+			});
+		},
+		ipv6: (s) => s !== "" && /^[0-9a-fA-F:.]+$/.test(s) && s.split(":").length >= 3 && s.split(":").length <= 8,
+		hostname: (s) => s.length > 0 && s.length <= 253 && /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(s),
+		regex: (s) => {
+			try {
+				new RegExp(s, "u");
+				return true;
+			} catch {
+				try {
+					new RegExp(s);
+					return true;
+				} catch {
+					return false;
+				}
+			}
+		},
+		"json-pointer": (s) => s === "" || /^\//.test(s) && !/~(?![01])/.test(s)
+	};
+	function mergeAnnotations(target, from) {
+		if (from.props && from.props.size) {
+			if (!target.props) target.props = /* @__PURE__ */ new Set();
+			for (const p of from.props) target.props.add(p);
+		}
+		if (from.items && from.items.size) {
+			if (!target.items) target.items = /* @__PURE__ */ new Set();
+			for (const i of from.items) target.items.add(i);
+		}
+	}
+	var Interpreter = class {
+		constructor(rootSchema, options) {
+			const opts = options || {};
+			this.root = rootSchema;
+			this.state = indexSchemas(rootSchema, opts.schemaMap);
+			this.userFormats = opts.formats || null;
+			this.patternCache = /* @__PURE__ */ new Map();
+		}
+		pattern(src) {
+			let re = this.patternCache.get(src);
+			if (!re) {
+				if (/\\[pP]\{/.test(src)) try {
+					re = new RegExp(src, "u");
+				} catch {
+					re = new RegExp(src);
+				}
+				else try {
+					re = compileSafe(src);
+				} catch {
+					try {
+						re = new RegExp(src, "u");
+					} catch {
+						re = new RegExp(src);
+					}
+				}
+				this.patternCache.set(src, re);
+			}
+			return re;
+		}
+		validate(data) {
+			const errors = [];
+			const dynScope = [this.state.rootBase];
+			return this.eval(this.root, data, this.state.rootBase, dynScope, errors, "", "#", [], NO_ANNOTATIONS_SINK()) ? {
+				valid: true,
+				data,
+				errors: []
+			} : {
+				valid: false,
+				errors
+			};
+		}
+		eval(schema, data, base, dynScope, errors, instancePath, schemaPath, stack, sink) {
+			if (schema === true) return true;
+			if (schema === false) {
+				errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
+				return false;
+			}
+			if (typeof schema !== "object" || schema === null) return true;
+			for (const frame of stack) if (frame[0] === schema && frame[1] === data) return true;
+			stack = stack.concat([[schema, data]]);
+			const nodeBase = this.state.nodeBase.get(schema);
+			if (nodeBase !== void 0 && nodeBase !== base) base = nodeBase;
+			if (this.state.resources.get(base) === schema && dynScope[dynScope.length - 1] !== base) dynScope = dynScope.concat(base);
+			let valid = true;
+			const local = {
+				props: null,
+				items: null
+			};
+			if (typeof schema.$ref === "string") {
+				const { node, base: refBase } = resolveRef(schema.$ref, base, this.state);
+				if (node === void 0) {
+					errors.push(err("$ref", "$ref", instancePath, schemaPath + "/$ref", { ref: schema.$ref }, `cannot resolve $ref ${schema.$ref}`));
+					valid = false;
+				} else {
+					const sub = {
+						props: null,
+						items: null
+					};
+					if (!this.eval(node, data, refBase, dynScope, errors, instancePath, schemaPath + "/$ref", stack, sub)) valid = false;
+					else mergeAnnotations(local, sub);
+				}
+			}
+			if (typeof schema.$dynamicRef === "string") {
+				const ref = schema.$dynamicRef;
+				let { node, base: refBase } = resolveRef(ref, base, this.state);
+				const [, fragment] = splitFragment(resolveUri(base, ref));
+				if (node !== void 0 && fragment && !fragment.startsWith("/")) {
+					const initialDyn = this.state.dynamicAnchors.get(refBase);
+					if (initialDyn && initialDyn.get(fragment) === node) for (const scopeBase of dynScope) {
+						const dyn = this.state.dynamicAnchors.get(scopeBase);
+						if (dyn && dyn.has(fragment)) {
+							node = dyn.get(fragment);
+							refBase = scopeBase;
+							break;
+						}
+					}
+				}
+				if (node === void 0) {
+					errors.push(err("$dynamicRef", "$dynamicRef", instancePath, schemaPath + "/$dynamicRef", { ref }, `cannot resolve $dynamicRef ${ref}`));
+					valid = false;
+				} else {
+					const sub = {
+						props: null,
+						items: null
+					};
+					if (!this.eval(node, data, refBase, dynScope, errors, instancePath, schemaPath + "/$dynamicRef", stack, sub)) valid = false;
+					else mergeAnnotations(local, sub);
+				}
+			}
+			if (schema.type !== void 0) {
+				const types = Array.isArray(schema.type) ? schema.type : [schema.type];
+				if (!types.some((t) => typeMatches(t, data))) {
+					errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${types.join(" or ")}`));
+					valid = false;
+				}
+			}
+			if (schema.enum !== void 0) {
+				if (!schema.enum.some((v) => deepEqual(v, data))) {
+					errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: schema.enum }, "must be equal to one of the allowed values"));
+					valid = false;
+				}
+			}
+			if (schema.const !== void 0) {
+				if (!deepEqual(schema.const, data)) {
+					errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: schema.const }, "must be equal to constant"));
+					valid = false;
+				}
+			}
+			if (typeof data === "number") {
+				if (typeof schema.minimum === "number" && !(data >= schema.minimum)) {
+					errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
+						comparison: ">=",
+						limit: schema.minimum
+					}, `must be >= ${schema.minimum}`));
+					valid = false;
+				}
+				if (typeof schema.maximum === "number" && !(data <= schema.maximum)) {
+					errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
+						comparison: "<=",
+						limit: schema.maximum
+					}, `must be <= ${schema.maximum}`));
+					valid = false;
+				}
+				if (typeof schema.exclusiveMinimum === "number" && !(data > schema.exclusiveMinimum)) {
+					errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
+						comparison: ">",
+						limit: schema.exclusiveMinimum
+					}, `must be > ${schema.exclusiveMinimum}`));
+					valid = false;
+				}
+				if (typeof schema.exclusiveMaximum === "number" && !(data < schema.exclusiveMaximum)) {
+					errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
+						comparison: "<",
+						limit: schema.exclusiveMaximum
+					}, `must be < ${schema.exclusiveMaximum}`));
+					valid = false;
+				}
+				if (typeof schema.multipleOf === "number" && !multipleOfOk(data, schema.multipleOf)) {
+					errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: schema.multipleOf }, `must be multiple of ${schema.multipleOf}`));
+					valid = false;
+				}
+			}
+			if (typeof data === "string") {
+				if (schema.minLength !== void 0 && codePointLength(data) < schema.minLength) {
+					errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: schema.minLength }, `must NOT have fewer than ${schema.minLength} characters`));
+					valid = false;
+				}
+				if (schema.maxLength !== void 0 && codePointLength(data) > schema.maxLength) {
+					errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: schema.maxLength }, `must NOT have more than ${schema.maxLength} characters`));
+					valid = false;
+				}
+				if (schema.pattern !== void 0 && !this.pattern(schema.pattern).test(data)) {
+					errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: schema.pattern }, `must match pattern "${schema.pattern}"`));
+					valid = false;
+				}
+				if (schema.format !== void 0) {
+					const fc = this.userFormats && typeof this.userFormats[schema.format] === "function" ? this.userFormats[schema.format] : FORMAT_CHECKS[schema.format];
+					if (fc && !fc(data)) {
+						errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: schema.format }, `must match format "${schema.format}"`));
+						valid = false;
+					}
+				}
+			}
+			if (Array.isArray(data)) {
+				if (schema.minItems !== void 0 && data.length < schema.minItems) {
+					errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: schema.minItems }, `must NOT have fewer than ${schema.minItems} items`));
+					valid = false;
+				}
+				if (schema.maxItems !== void 0 && data.length > schema.maxItems) {
+					errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: schema.maxItems }, `must NOT have more than ${schema.maxItems} items`));
+					valid = false;
+				}
+				if (schema.uniqueItems === true) {
+					outer: for (let i = 0; i < data.length; i++) for (let j = i + 1; j < data.length; j++) if (deepEqual(data[i], data[j])) {
+						errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
+							i,
+							j
+						}, "must NOT have duplicate items"));
+						valid = false;
+						break outer;
+					}
+				}
+				const prefix = Array.isArray(schema.prefixItems) ? schema.prefixItems : null;
+				if (prefix) for (let i = 0; i < Math.min(prefix.length, data.length); i++) {
+					if (!this.eval(prefix[i], data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack, {
+						props: null,
+						items: null
+					})) valid = false;
+					if (!local.items) local.items = /* @__PURE__ */ new Set();
+					local.items.add(i);
+				}
+				if (schema.items !== void 0) {
+					const start = prefix ? prefix.length : 0;
+					for (let i = start; i < data.length; i++) {
+						if (!this.eval(schema.items, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/items", stack, {
+							props: null,
+							items: null
+						})) valid = false;
+						if (!local.items) local.items = /* @__PURE__ */ new Set();
+						local.items.add(i);
+					}
+				}
+				if (schema.contains !== void 0) {
+					const matched = [];
+					for (let i = 0; i < data.length; i++) if (this.eval(schema.contains, data[i], base, dynScope, [], instancePath + "/" + i, schemaPath + "/contains", stack, {
+						props: null,
+						items: null
+					})) matched.push(i);
+					const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+					if (matched.length < minC) {
+						errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
+						valid = false;
+					}
+					if (schema.maxContains !== void 0 && matched.length > schema.maxContains) {
+						errors.push(err("maxContains", "maxContains", instancePath, schemaPath + "/maxContains", { limit: schema.maxContains }, `must NOT contain more than ${schema.maxContains} valid item(s)`));
+						valid = false;
+					}
+					if (matched.length) {
+						if (!local.items) local.items = /* @__PURE__ */ new Set();
+						for (const i of matched) local.items.add(i);
+					}
+				}
+			}
+			if (typeof data === "object" && data !== null && !Array.isArray(data)) {
+				const keys = Object.keys(data);
+				if (Array.isArray(schema.required)) {
+					for (const key of schema.required) if (!Object.prototype.hasOwnProperty.call(data, key)) {
+						errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+						valid = false;
+					}
+				}
+				if (schema.minProperties !== void 0 && keys.length < schema.minProperties) {
+					errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: schema.minProperties }, `must NOT have fewer than ${schema.minProperties} properties`));
+					valid = false;
+				}
+				if (schema.maxProperties !== void 0 && keys.length > schema.maxProperties) {
+					errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: schema.maxProperties }, `must NOT have more than ${schema.maxProperties} properties`));
+					valid = false;
+				}
+				if (schema.dependentRequired && typeof schema.dependentRequired === "object") {
+					for (const [key, deps] of Object.entries(schema.dependentRequired)) if (Object.prototype.hasOwnProperty.call(data, key)) {
+						for (const dep of deps) if (!Object.prototype.hasOwnProperty.call(data, dep)) {
+							errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
+							valid = false;
+						}
+					}
+				}
+				if (schema.propertyNames !== void 0) {
+					for (const key of keys) if (!this.eval(schema.propertyNames, key, base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/propertyNames", stack, {
+						props: null,
+						items: null
+					})) valid = false;
+				}
+				const props = schema.properties && typeof schema.properties === "object" ? schema.properties : null;
+				const patterns = schema.patternProperties && typeof schema.patternProperties === "object" ? Object.keys(schema.patternProperties) : null;
+				for (const key of keys) {
+					let evaluated = false;
+					if (props && Object.prototype.hasOwnProperty.call(props, key)) {
+						if (!this.eval(props[key], data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/properties/" + escapePointer(key), stack, {
+							props: null,
+							items: null
+						})) valid = false;
+						evaluated = true;
+					}
+					if (patterns) {
+						for (const src of patterns) if (this.pattern(src).test(key)) {
+							if (!this.eval(schema.patternProperties[src], data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(src), stack, {
+								props: null,
+								items: null
+							})) valid = false;
+							evaluated = true;
+						}
+					}
+					if (!evaluated && schema.additionalProperties !== void 0) {
+						if (!this.eval(schema.additionalProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack, {
+							props: null,
+							items: null
+						})) valid = false;
+						evaluated = true;
+					}
+					if (evaluated) {
+						if (!local.props) local.props = /* @__PURE__ */ new Set();
+						local.props.add(key);
+					}
+				}
+				if (schema.dependentSchemas && typeof schema.dependentSchemas === "object") {
+					for (const [key, dep] of Object.entries(schema.dependentSchemas)) if (Object.prototype.hasOwnProperty.call(data, key)) {
+						const sub = {
+							props: null,
+							items: null
+						};
+						if (!this.eval(dep, data, base, dynScope, errors, instancePath, schemaPath + "/dependentSchemas/" + escapePointer(key), stack, sub)) valid = false;
+						else mergeAnnotations(local, sub);
+					}
+				}
+			}
+			if (Array.isArray(schema.allOf)) for (let i = 0; i < schema.allOf.length; i++) {
+				const sub = {
+					props: null,
+					items: null
+				};
+				if (!this.eval(schema.allOf[i], data, base, dynScope, errors, instancePath, schemaPath + "/allOf/" + i, stack, sub)) valid = false;
+				else mergeAnnotations(local, sub);
+			}
+			if (Array.isArray(schema.anyOf)) {
+				let any = false;
+				const scratch = [];
+				for (let i = 0; i < schema.anyOf.length; i++) {
+					const sub = {
+						props: null,
+						items: null
+					};
+					if (this.eval(schema.anyOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, sub)) {
+						any = true;
+						mergeAnnotations(local, sub);
+					}
+				}
+				if (!any) {
+					for (const e of scratch) errors.push(e);
+					errors.push(err("anyOf", "anyOf", instancePath, schemaPath + "/anyOf", {}, "must match a schema in anyOf"));
+					valid = false;
+				}
+			}
+			if (Array.isArray(schema.oneOf)) {
+				let count = 0;
+				let winner = null;
+				const scratch = [];
+				for (let i = 0; i < schema.oneOf.length; i++) {
+					const sub = {
+						props: null,
+						items: null
+					};
+					if (this.eval(schema.oneOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, sub)) {
+						count++;
+						winner = sub;
+					}
+				}
+				if (count === 1) mergeAnnotations(local, winner);
+				else {
+					if (count === 0) for (const e of scratch) errors.push(e);
+					errors.push(err("oneOf", "oneOf", instancePath, schemaPath + "/oneOf", { passingSchemas: count }, "must match exactly one schema in oneOf"));
+					valid = false;
+				}
+			}
+			if (schema.not !== void 0) {
+				if (this.eval(schema.not, data, base, dynScope, [], instancePath, schemaPath + "/not", stack, {
+					props: null,
+					items: null
+				})) {
+					errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
+					valid = false;
+				}
+			}
+			if (schema.if !== void 0) {
+				const ifSub = {
+					props: null,
+					items: null
+				};
+				if (this.eval(schema.if, data, base, dynScope, [], instancePath, schemaPath + "/if", stack, ifSub)) {
+					mergeAnnotations(local, ifSub);
+					if (schema.then !== void 0) {
+						const sub = {
+							props: null,
+							items: null
+						};
+						if (!this.eval(schema.then, data, base, dynScope, errors, instancePath, schemaPath + "/then", stack, sub)) valid = false;
+						else mergeAnnotations(local, sub);
+					}
+				} else if (schema.else !== void 0) {
+					const sub = {
+						props: null,
+						items: null
+					};
+					if (!this.eval(schema.else, data, base, dynScope, errors, instancePath, schemaPath + "/else", stack, sub)) valid = false;
+					else mergeAnnotations(local, sub);
+				}
+			}
+			if (schema.unevaluatedProperties !== void 0 && typeof data === "object" && data !== null && !Array.isArray(data)) for (const key of Object.keys(data)) {
+				if (local.props && local.props.has(key)) continue;
+				if (!this.eval(schema.unevaluatedProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack, {
+					props: null,
+					items: null
+				})) valid = false;
+				if (!local.props) local.props = /* @__PURE__ */ new Set();
+				local.props.add(key);
+			}
+			if (schema.unevaluatedItems !== void 0 && Array.isArray(data)) for (let i = 0; i < data.length; i++) {
+				if (local.items && local.items.has(i)) continue;
+				if (!this.eval(schema.unevaluatedItems, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack, {
+					props: null,
+					items: null
+				})) valid = false;
+				if (!local.items) local.items = /* @__PURE__ */ new Set();
+				local.items.add(i);
+			}
+			if (valid) mergeAnnotations(sink, local);
+			return valid;
+		}
+	};
+	function NO_ANNOTATIONS_SINK() {
+		return {
+			props: null,
+			items: null
+		};
+	}
+	function escapePointer(s) {
+		return String(s).replace(/~/g, "~0").replace(/\//g, "~1");
+	}
+	function err(code, keyword, instancePath, schemaPath, params, message) {
+		return {
+			keyword,
+			instancePath,
+			schemaPath,
+			params,
+			message
+		};
+	}
+	function createInterpreter(schema, options) {
+		return new Interpreter(schema, options);
+	}
+	module.exports = { createInterpreter };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function levenshtein(a, b, maxDistance) {
 		const max = maxDistance == null ? Infinity : maxDistance;
@@ -4673,7 +5395,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const FORMAT_HINTS = {
@@ -4818,7 +5540,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -4928,7 +5650,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -4986,12 +5708,68 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const REFINE = Symbol.for("ata.t.refine");
+	function getRefinements(schema) {
+		if (!schema || typeof schema !== "object") return null;
+		const r = schema[REFINE];
+		return Array.isArray(r) && r.length ? r : null;
+	}
+	function attach(schema, check, opts) {
+		if (typeof check !== "function") throw new TypeError("t.refine(schema, check, opts?) — check must be a function");
+		const prev = schema && Array.isArray(schema[REFINE]) ? schema[REFINE] : [];
+		const o = opts || {};
+		const entry = {
+			check,
+			message: o.message,
+			path: o.path || ""
+		};
+		return Object.assign({}, schema, { [REFINE]: prev.concat(entry) });
+	}
+	function issue(entry, message) {
+		return {
+			keyword: "refine",
+			instancePath: entry.path || "",
+			path: entry.path || "",
+			schemaPath: "",
+			params: {},
+			message: message != null ? message : entry.message || "value failed refinement"
+		};
+	}
+	async function runRefinements(refinements, data) {
+		const issues = [];
+		await Promise.all(refinements.map(async (entry) => {
+			let passed;
+			try {
+				passed = await entry.check(data);
+			} catch (e) {
+				issues.push(issue(entry, entry.message || e && e.message || "refinement threw"));
+				return;
+			}
+			if (!passed) issues.push(issue(entry));
+		}));
+		return issues;
+	}
+	module.exports = {
+		REFINE,
+		getRefinements,
+		attach,
+		runRefinements
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = "1.2.1";
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
 var require_safe_regex_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = "'use strict'\n\n// Linear-time regex engine for JSON Schema `pattern`, used in place of JS RegExp\n// so an adversarial input cannot trigger catastrophic backtracking (ReDoS).\n//\n// It is a Pike VM: the pattern compiles to a small instruction program, and the\n// VM simulates all NFA threads in lockstep over the input, deduping by program\n// counter. Runtime is O(input * program), with no backtracking.\n//\n// Supported (the RE2 subset, which is what ata's native path also accepts):\n// literals, ., character classes, \\d \\w \\s \\D \\W \\S, anchors ^ $, quantifiers\n// * + ? {n} {n,} {n,m} (greedy or lazy, same language for a boolean test),\n// groups ( ) (?: ), alternation |. Backreferences and lookaround are not\n// supported by linear engines; compileSafe throws on them so the caller can\n// decide (ata's codegen rejects such schemas rather than risk a hang).\n\nconst WS = [[9, 13], [32, 32], [160, 160]]\nconst DIGIT = [[48, 57]]\nconst WORD = [[48, 57], [65, 90], [97, 122], [95, 95]]\n\nfunction parse (src) {\n  let i = 0\n  const len = src.length\n  const peek = () => src[i]\n  const eof = () => i >= len\n\n  function parseAlt () {\n    const opts = [parseConcat()]\n    while (!eof() && peek() === '|') { i++; opts.push(parseConcat()) }\n    return opts.length === 1 ? opts[0] : { t: 'alt', opts }\n  }\n\n  function parseConcat () {\n    const parts = []\n    while (!eof() && peek() !== '|' && peek() !== ')') parts.push(parseRepeat())\n    if (parts.length === 0) return { t: 'empty' }\n    return parts.length === 1 ? parts[0] : { t: 'concat', parts }\n  }\n\n  function parseRepeat () {\n    let node = parseAtom()\n    while (!eof()) {\n      const ch = peek()\n      if (ch === '*') { i++; node = { t: 'star', child: node } }\n      else if (ch === '+') { i++; node = { t: 'plus', child: node } }\n      else if (ch === '?') { i++; node = { t: 'quest', child: node } }\n      else if (ch === '{') {\n        const saved = i\n        const q = tryQuantifier()\n        if (!q) { i = saved; break }\n        node = { t: 'repeat', child: node, min: q.min, max: q.max }\n      } else break\n      // a trailing ? makes the quantifier lazy; same language for a boolean test\n      if (!eof() && peek() === '?') i++\n    }\n    return node\n  }\n\n  function tryQuantifier () {\n    // assumes current char is '{'\n    i++\n    let min = ''\n    while (!eof() && /[0-9]/.test(peek())) { min += peek(); i++ }\n    if (min === '') return null\n    let max\n    if (peek() === '}') { i++; return { min: +min, max: +min } }\n    if (peek() === ',') {\n      i++\n      let m = ''\n      while (!eof() && /[0-9]/.test(peek())) { m += peek(); i++ }\n      if (peek() !== '}') return null\n      i++\n      max = m === '' ? Infinity : +m\n      return { min: +min, max }\n    }\n    return null\n  }\n\n  function parseAtom () {\n    const ch = peek()\n    if (ch === '(') {\n      i++\n      if (src[i] === '?') {\n        if (src[i + 1] === ':') { i += 2 }\n        else throw new Error('unsupported group (lookaround/named) in pattern')\n      }\n      const child = parseAlt()\n      if (peek() !== ')') throw new Error('unbalanced ( in pattern')\n      i++\n      return { t: 'group', child }\n    }\n    if (ch === '[') return parseClass()\n    if (ch === '.') { i++; return { t: 'any' } }\n    if (ch === '^') { i++; return { t: 'bol' } }\n    if (ch === '$') { i++; return { t: 'eol' } }\n    if (ch === '\\\\') return parseEscape(false)\n    if (ch === ')' || ch === '|') return { t: 'empty' }\n    i++\n    return { t: 'char', c: ch.charCodeAt(0) }\n  }\n\n  function parseClass () {\n    i++ // [\n    let neg = false\n    if (peek() === '^') { neg = true; i++ }\n    const ranges = []\n    while (!eof() && peek() !== ']') {\n      let lo\n      if (peek() === '\\\\') {\n        const esc = parseEscape(true)\n        if (esc.t === 'classpart') { for (const r of esc.ranges) ranges.push(r); continue }\n        lo = esc.c\n      } else { lo = peek().charCodeAt(0); i++ }\n      if (peek() === '-' && src[i + 1] !== ']' && i + 1 < len) {\n        i++ // -\n        let hi\n        if (peek() === '\\\\') { const e = parseEscape(true); hi = e.c } else { hi = peek().charCodeAt(0); i++ }\n        ranges.push([lo, hi])\n      } else {\n        ranges.push([lo, lo])\n      }\n    }\n    if (peek() !== ']') throw new Error('unbalanced [ in pattern')\n    i++\n    return { t: 'class', neg, ranges }\n  }\n\n  function parseEscape (inClass) {\n    i++ // backslash\n    if (eof()) throw new Error('trailing backslash in pattern')\n    const ch = peek(); i++\n    switch (ch) {\n      case 'd': return inClass ? { t: 'classpart', ranges: DIGIT } : { t: 'class', neg: false, ranges: DIGIT }\n      case 'w': return inClass ? { t: 'classpart', ranges: WORD } : { t: 'class', neg: false, ranges: WORD }\n      case 's': return inClass ? { t: 'classpart', ranges: WS } : { t: 'class', neg: false, ranges: WS }\n      case 'D': if (inClass) throw new Error('\\\\D inside a class is not supported'); return { t: 'class', neg: true, ranges: DIGIT }\n      case 'W': if (inClass) throw new Error('\\\\W inside a class is not supported'); return { t: 'class', neg: true, ranges: WORD }\n      case 'S': if (inClass) throw new Error('\\\\S inside a class is not supported'); return { t: 'class', neg: true, ranges: WS }\n      case 'n': return { t: 'char', c: 10 }\n      case 'r': return { t: 'char', c: 13 }\n      case 't': return { t: 'char', c: 9 }\n      case 'f': return { t: 'char', c: 12 }\n      case 'v': return { t: 'char', c: 11 }\n      case '0': return { t: 'char', c: 0 }\n      case 'x': { const h = src.slice(i, i + 2); i += 2; return { t: 'char', c: parseInt(h, 16) } }\n      case 'u': { const h = src.slice(i, i + 4); i += 4; return { t: 'char', c: parseInt(h, 16) } }\n      case 'b': if (inClass) return { t: 'char', c: 8 }; throw new Error('\\\\b word boundary is not supported')\n      default:\n        if (/[1-9]/.test(ch)) throw new Error('backreferences are not supported in pattern')\n        return { t: 'char', c: ch.charCodeAt(0) }\n    }\n  }\n\n  const ast = parseAlt()\n  if (!eof()) throw new Error('unexpected \"' + peek() + '\" in pattern')\n  return ast\n}\n\nfunction compileProg (ast) {\n  const prog = []\n  const emit = (op, extra) => { const idx = prog.length; prog.push(Object.assign({ op }, extra)); return idx }\n\n  function rec (n) {\n    switch (n.t) {\n      case 'empty': break\n      case 'char': emit('char', { c: n.c }); break\n      case 'any': emit('any'); break\n      case 'class': emit('class', { neg: n.neg, ranges: n.ranges }); break\n      case 'bol': emit('bol'); break\n      case 'eol': emit('eol'); break\n      case 'group': rec(n.child); break\n      case 'concat': for (const p of n.parts) rec(p); break\n      case 'alt': {\n        const jmps = []\n        for (let k = 0; k < n.opts.length; k++) {\n          if (k < n.opts.length - 1) {\n            const sp = emit('split', { x: 0, y: 0 })\n            prog[sp].x = prog.length\n            rec(n.opts[k])\n            jmps.push(emit('jmp', { x: 0 }))\n            prog[sp].y = prog.length\n          } else {\n            rec(n.opts[k])\n          }\n        }\n        for (const j of jmps) prog[j].x = prog.length\n        break\n      }\n      case 'star': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        emit('jmp', { x: sp })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'plus': {\n        const start = prog.length\n        rec(n.child)\n        const sp = emit('split', { x: start, y: 0 })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'quest': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        prog[sp].y = prog.length\n        break\n      }\n      case 'repeat': {\n        for (let k = 0; k < n.min; k++) rec(n.child)\n        if (n.max === Infinity) {\n          if (n.min === 0) rec({ t: 'star', child: n.child })\n          else rec({ t: 'star', child: n.child })\n        } else {\n          for (let k = 0; k < n.max - n.min; k++) rec({ t: 'quest', child: n.child })\n        }\n        break\n      }\n    }\n  }\n\n  rec(ast)\n  emit('match')\n  return prog\n}\n\nfunction matchClass (instr, c) {\n  let inside = false\n  const r = instr.ranges\n  for (let k = 0; k < r.length; k++) { if (c >= r[k][0] && c <= r[k][1]) { inside = true; break } }\n  return instr.neg ? !inside : inside\n}\n\nfunction makeRunner (prog) {\n  const n = prog.length\n  const lastGen = new Int32Array(n).fill(-1)\n  let gen = 0\n  const stack = []\n\n  function addThread (list, pc, pos, len) {\n    stack.length = 0\n    stack.push(pc)\n    while (stack.length) {\n      const p = stack.pop()\n      if (lastGen[p] === gen) continue\n      lastGen[p] = gen\n      const I = prog[p]\n      switch (I.op) {\n        case 'jmp': stack.push(I.x); break\n        case 'split': stack.push(I.y); stack.push(I.x); break\n        case 'bol': if (pos === 0) stack.push(p + 1); break\n        case 'eol': if (pos === len) stack.push(p + 1); break\n        default: list.push(p)\n      }\n    }\n  }\n\n  return function test (s) {\n    const len = s.length\n    let clist = []\n    let nlist = []\n    gen++\n    addThread(clist, 0, 0, len)\n    for (let pos = 0; pos <= len; pos++) {\n      const c = pos < len ? s.charCodeAt(pos) : -1\n      gen++\n      nlist.length = 0\n      for (let k = 0; k < clist.length; k++) {\n        const pc = clist[k]\n        const I = prog[pc]\n        if (I.op === 'match') return true\n        else if (I.op === 'char') { if (c === I.c) addThread(nlist, pc + 1, pos + 1, len) }\n        else if (I.op === 'any') { if (c !== -1 && c !== 10) addThread(nlist, pc + 1, pos + 1, len) }\n        else if (I.op === 'class') { if (c !== -1 && matchClass(I, c)) addThread(nlist, pc + 1, pos + 1, len) }\n      }\n      if (pos < len) addThread(nlist, 0, pos + 1, len)\n      const tmp = clist; clist = nlist; nlist = tmp\n    }\n    return false\n  }\n}\n\nfunction compileSafe (pattern) {\n  const prog = compileProg(parse(pattern))\n  const runner = makeRunner(prog)\n  // `__ataSafe` brands the result so the standalone serializer can tell a safe\n  // matcher apart from a RegExp and emit `__ataSafeRe(source)` instead.\n  return { test: runner, source: pattern, __ataSafe: true }\n}\n\n// True when the linear engine can represent `src`. Used by the codegen to decide\n// between the safe matcher and a JS RegExp fallback for patterns outside the\n// supported (RE2) subset (backreferences, lookaround, etc.).\nfunction patternIsSafe (src) {\n  try { compileSafe(src); return true } catch { return false }\n}\n\nmodule.exports = { compileSafe, patternIsSafe }\n";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
 var require_aot = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegenWithErrors } = require_js_compiler();
 	const SAFE_REGEX_SOURCE = require_safe_regex_source();
@@ -5231,63 +6009,7 @@ ${exports$1}`;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
-var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const REFINE = Symbol.for("ata.t.refine");
-	function getRefinements(schema) {
-		if (!schema || typeof schema !== "object") return null;
-		const r = schema[REFINE];
-		return Array.isArray(r) && r.length ? r : null;
-	}
-	function attach(schema, check, opts) {
-		if (typeof check !== "function") throw new TypeError("t.refine(schema, check, opts?) — check must be a function");
-		const prev = schema && Array.isArray(schema[REFINE]) ? schema[REFINE] : [];
-		const o = opts || {};
-		const entry = {
-			check,
-			message: o.message,
-			path: o.path || ""
-		};
-		return Object.assign({}, schema, { [REFINE]: prev.concat(entry) });
-	}
-	function issue(entry, message) {
-		return {
-			keyword: "refine",
-			instancePath: entry.path || "",
-			path: entry.path || "",
-			schemaPath: "",
-			params: {},
-			message: message != null ? message : entry.message || "value failed refinement"
-		};
-	}
-	async function runRefinements(refinements, data) {
-		const issues = [];
-		await Promise.all(refinements.map(async (entry) => {
-			let passed;
-			try {
-				passed = await entry.check(data);
-			} catch (e) {
-				issues.push(issue(entry, entry.message || e && e.message || "refinement threw"));
-				return;
-			}
-			if (!passed) issues.push(issue(entry));
-		}));
-		return issues;
-	}
-	module.exports = {
-		REFINE,
-		getRefinements,
-		attach,
-		runRefinements
-	};
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
-var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "0.21.0";
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
@@ -5456,7 +6178,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -5511,7 +6233,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	function caretLine(col, length, gutter) {
@@ -5589,7 +6311,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, pathToDotted, trimCwd } = require_render_shared();
 	function renderCompact(errors, opts) {
@@ -5620,7 +6342,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -5636,7 +6358,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
@@ -5847,6 +6569,41 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		}
 		return target;
 	}
+	function schemaOrderRank(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return null;
+		const parts = schemaPath.slice(1).split("/").filter(Boolean).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		const rank = [];
+		let node = rootSchema;
+		for (const seg of parts) {
+			if (node == null || typeof node !== "object") break;
+			if (Array.isArray(node)) {
+				const idx = Number(seg);
+				if (!Number.isInteger(idx) || idx < 0 || idx >= node.length) break;
+				rank.push(idx);
+				node = node[idx];
+			} else {
+				const idx = Object.keys(node).indexOf(seg);
+				if (idx < 0) break;
+				rank.push(idx);
+				node = node[seg];
+			}
+		}
+		return rank;
+	}
+	function sortErrorsBySchemaOrder(rootSchema, errors) {
+		const ranked = errors.map((e, i) => ({
+			e,
+			i,
+			rank: schemaOrderRank(rootSchema, e.schemaPath)
+		}));
+		ranked.sort((a, b) => {
+			if (!a.rank || !b.rank) return a.i - b.i;
+			const n = Math.min(a.rank.length, b.rank.length);
+			for (let k = 0; k < n; k++) if (a.rank[k] !== b.rank[k]) return a.rank[k] - b.rank[k];
+			return a.i - b.i;
+		});
+		return ranked.map((r) => r.e);
+	}
 	function parsePointerPath(path) {
 		if (!path) return [];
 		return path.split("/").filter(Boolean).map((seg) => {
@@ -5866,20 +6623,44 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			length: jsonBuf.length
 		};
 	}
+	function _deepCloneWithSymbols(v) {
+		if (v === null || typeof v !== "object") return v;
+		if (Array.isArray(v)) {
+			const a = new Array(v.length);
+			for (let i = 0; i < v.length; i++) a[i] = _deepCloneWithSymbols(v[i]);
+			return a;
+		}
+		if (Object.getPrototypeOf(v) !== Object.prototype && Object.getPrototypeOf(v) !== null) return v;
+		const out = Object.create(null);
+		for (const k of Object.keys(v)) Object.defineProperty(out, k, {
+			value: _deepCloneWithSymbols(v[k]),
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+		for (const sym of Object.getOwnPropertySymbols(v)) out[sym] = v[sym];
+		return Object.setPrototypeOf(out, Object.prototype);
+	}
+	function _normalizeCallerSchema(s) {
+		const needsDraft7 = s && s.$schema && (s.$schema === "http://json-schema.org/draft-07/schema#" || s.$schema === "http://json-schema.org/draft-07/schema");
+		const str = JSON.stringify(s);
+		const copy = _deepCloneWithSymbols(s);
+		if (needsDraft7) normalizeDraft7(copy);
+		normalizeNullable(copy);
+		return JSON.stringify(copy) === str ? s : copy;
+	}
 	function buildSchemaMap(schemas) {
 		if (!schemas) return null;
 		const map = /* @__PURE__ */ new Map();
 		if (Array.isArray(schemas)) for (const s of schemas) {
-			normalizeDraft7(s);
-			normalizeNullable(s);
-			const id = s.$id;
+			const normalized = _normalizeCallerSchema(s);
+			const id = normalized.$id;
 			if (!id) throw new Error("Schema in schemas option must have $id");
-			map.set(id, s);
+			map.set(id, normalized);
 		}
 		else for (const [key, s] of Object.entries(schemas)) {
-			normalizeDraft7(s);
-			normalizeNullable(s);
-			map.set(s.$id || key, s);
+			const normalized = _normalizeCallerSchema(s);
+			map.set(normalized.$id || key, normalized);
 		}
 		return map;
 	}
@@ -5941,13 +6722,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	var Validator = class Validator {
 		constructor(schema, opts) {
 			const options = opts || {};
-			const schemaObj = typeof schema === "string" ? JSON.parse(schema) : schema;
 			if (!opts && typeof schema === "object" && schema !== null) {
 				const hit = _identityCache.get(schema);
 				if (hit) return hit;
 			}
-			normalizeDraft7(schemaObj);
-			normalizeNullable(schemaObj);
+			const schemaObj = typeof schema === "string" ? JSON.parse(schema) : _normalizeCallerSchema(schema);
 			this._schemaStr = null;
 			this._schemaObj = schemaObj;
 			this._options = options;
@@ -5987,7 +6766,10 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						} catch {}
 						return r;
 					};
-				} else this._ensureCodegen();
+				} else {
+					this._ensureCodegen();
+					if (!this._jsFn) this._ensureCompiled();
+				}
 				return this.isValidObject(data);
 			};
 			this.validateJSON = (jsonStr) => {
@@ -6098,16 +6880,33 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				} catch {}
 				const hasUnevaluated = schemaObj && (schemaObj.unevaluatedProperties !== void 0 || schemaObj.unevaluatedItems !== void 0 || this._schemaStr.includes("unevaluatedProperties") || this._schemaStr.includes("unevaluatedItems"));
 				const hasDynRef = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
-				const jsOnlyFallback = (d) => ({
-					valid: jsFn(d),
-					errors: jsFn(d) ? [] : [{
-						keyword: "validation",
-						instancePath: "",
-						schemaPath: "",
-						params: {},
-						message: "schema validation failed (detailed errors unavailable without native addon)"
-					}]
-				});
+				let _interp = null;
+				const jsOnlyFallback = (d) => {
+					if (jsFn(d)) return {
+						valid: true,
+						data: d,
+						errors: []
+					};
+					if (!_interp) {
+						const { createInterpreter } = require_interpreter();
+						_interp = createInterpreter(schemaObj, {
+							schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+							formats: this._userFormats
+						});
+					}
+					const r = _interp.validate(d);
+					if (!r.valid) return r;
+					return {
+						valid: false,
+						errors: [{
+							keyword: "validation",
+							instancePath: "",
+							schemaPath: "",
+							params: {},
+							message: "schema validation failed"
+						}]
+					};
+				};
 				const errFn = safeErrFn || (hasUnevaluated ? (d) => ({
 					valid: jsFn(d),
 					errors: jsFn(d) ? [] : [{
@@ -6308,14 +7107,43 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				}
 			} else if (native) {
 				this._ensureNative();
-				const _validate = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"") || this._schemaStr.includes("\"$anchor\"") ? (data) => this._compiled.validateJSON(JSON.stringify(data)) : (data) => this._compiled.validate(data);
+				const _hasDynRef = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
+				const _hasUneval = this._schemaStr.includes("\"unevaluatedProperties\"") || this._schemaStr.includes("\"unevaluatedItems\"");
+				let _validate;
+				if (_hasDynRef && !_hasUneval) {
+					_validate = (data) => this._compiled.validateJSON(JSON.stringify(data));
+					this.validateJSON = (jsonStr) => this._compiled.validateJSON(jsonStr);
+					this.isValidJSON = (jsonStr) => this._compiled.isValidJSON(jsonStr);
+				} else {
+					const { createInterpreter } = require_interpreter();
+					const interp = createInterpreter(schemaObj, {
+						schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+						formats: this._userFormats
+					});
+					_validate = (data) => interp.validate(data);
+					this.validateJSON = (jsonStr) => {
+						try {
+							return _validate(JSON.parse(jsonStr));
+						} catch (e) {
+							return {
+								valid: false,
+								errors: [{
+									keyword: "syntax",
+									instancePath: "",
+									schemaPath: "#",
+									params: {},
+									message: e.message
+								}]
+							};
+						}
+					};
+					this.isValidJSON = (jsonStr) => this.validateJSON(jsonStr).valid;
+				}
 				this.validate = preprocess ? (data) => {
 					preprocess(data);
 					return _validate(data);
 				} : _validate;
 				this.isValidObject = (data) => _validate(data).valid;
-				this.validateJSON = (jsonStr) => this._compiled.validateJSON(jsonStr);
-				this.isValidJSON = (jsonStr) => this._compiled.isValidJSON(jsonStr);
 				this.validateAndParse = (jsonStr) => this._compiled.validateAndParse(jsonStr);
 				{
 					const slot = this._fastSlot;
@@ -6347,6 +7175,47 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						return valid;
 					};
 				}
+			} else {
+				const { createInterpreter } = require_interpreter();
+				const interp = createInterpreter(schemaObj, {
+					schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+					formats: this._userFormats
+				});
+				const run = preprocess ? (data) => {
+					preprocess(data);
+					return interp.validate(data);
+				} : (data) => interp.validate(data);
+				this.validate = run;
+				this.isValidObject = (data) => run(data).valid;
+				this.validateJSON = (jsonStr) => {
+					try {
+						return run(JSON.parse(jsonStr));
+					} catch (e) {
+						return {
+							valid: false,
+							errors: [{
+								keyword: "syntax",
+								instancePath: "",
+								schemaPath: "#",
+								params: {},
+								message: e.message
+							}]
+						};
+					}
+				};
+				this.isValidJSON = (jsonStr) => this.validateJSON(jsonStr).valid;
+			}
+			if (this.validate) {
+				const inner = this.validate;
+				const root = this._schemaObj;
+				this.validate = (data) => {
+					const result = inner(data);
+					if (result && !result.valid && result.errors && result.errors.length > 1 && result !== ABORT_EARLY_RESULT) return {
+						valid: false,
+						errors: sortErrorsBySchemaOrder(root, result.errors)
+					};
+					return result;
+				};
 			}
 			if (this._richErrors && this.validate) {
 				const inner = this.validate;
@@ -6486,9 +7355,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		addSchema(schema) {
 			if (this._initialized) throw new Error("Cannot add schema after compilation — call addSchema() before validate()");
 			if (!schema || !schema.$id) throw new Error("Schema must have $id");
-			normalizeDraft7(schema);
-			normalizeNullable(schema);
-			this._schemaMap.set(schema.$id, schema);
+			const normalized = _normalizeCallerSchema(schema);
+			this._schemaMap.set(normalized.$id, normalized);
 		}
 		_ensureCodegen() {
 			if (this._jsFn) return;
@@ -6514,12 +7382,6 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				});
 				else cached.jsFn = jsFn;
 			}
-		}
-		toStandalone() {
-			return require_aot().toStandalone(this);
-		}
-		toStandaloneModule(opts) {
-			return require_aot().toStandaloneModule(this, opts);
 		}
 		static fromStandalone(mod, schema, opts) {
 			const options = opts || {};
@@ -6773,11 +7635,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@0.21.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.2.1_yaml@2.9.0/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
@@ -6870,6 +7732,74 @@ var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function refine(schema, check, opts) {
 		return attachRefine(schema, check, opts);
 	}
+	function assertObjectSchema(schema, fn) {
+		if (!schema || typeof schema !== "object" || schema.type !== "object" || !schema.properties || typeof schema.properties !== "object") throw new Error(`t.${fn}: expected an object schema with properties`);
+	}
+	function cloneMeta(schema) {
+		const out = {};
+		for (const key of Object.keys(schema)) if (key !== "properties" && key !== "required") out[key] = schema[key];
+		return out;
+	}
+	function pick(schema, keys) {
+		assertObjectSchema(schema, "pick");
+		const keep = new Set(keys);
+		const props = {};
+		for (const key of Object.keys(schema.properties)) if (keep.has(key)) props[key] = schema.properties[key];
+		const required = (schema.required || []).filter((key) => keep.has(key));
+		const out = Object.assign(cloneMeta(schema), { properties: props });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function omit(schema, keys) {
+		assertObjectSchema(schema, "omit");
+		const drop = new Set(keys);
+		const props = {};
+		for (const key of Object.keys(schema.properties)) if (!drop.has(key)) props[key] = schema.properties[key];
+		const required = (schema.required || []).filter((key) => !drop.has(key));
+		const out = Object.assign(cloneMeta(schema), { properties: props });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function partial(schema) {
+		assertObjectSchema(schema, "partial");
+		return Object.assign(cloneMeta(schema), { properties: schema.properties });
+	}
+	function requiredOf(schema, keys) {
+		assertObjectSchema(schema, "required");
+		const propKeys = Object.keys(schema.properties);
+		let required;
+		if (keys === void 0) required = propKeys.slice();
+		else {
+			const known = new Set(propKeys);
+			required = Array.from(/* @__PURE__ */ new Set([...schema.required || [], ...keys])).filter((k) => known.has(k));
+		}
+		const out = Object.assign(cloneMeta(schema), { properties: schema.properties });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function recursive(build, opts) {
+		const body = build({ $ref: "#/$defs/self" });
+		return Object.assign({
+			$ref: "#/$defs/self",
+			$defs: { self: body }
+		}, opts);
+	}
+	function composite(schemas, opts) {
+		const props = {};
+		const requiredSet = /* @__PURE__ */ new Set();
+		for (const schema of schemas) {
+			assertObjectSchema(schema, "composite");
+			for (const key of Object.keys(schema.properties)) props[key] = schema.properties[key];
+			for (const key of schema.required || []) requiredSet.add(key);
+		}
+		const required = Array.from(requiredSet).filter((key) => Object.hasOwn(props, key));
+		const out = {
+			type: "object",
+			properties: props
+		};
+		if (required.length) out.required = required;
+		return Object.assign(out, opts);
+	}
 	module.exports = {
 		string,
 		number,
@@ -6891,7 +7821,13 @@ var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		unknown,
 		never,
 		refine,
-		OPTIONAL
+		OPTIONAL,
+		pick,
+		omit,
+		partial,
+		required: requiredOf,
+		composite,
+		recursive
 	};
 }));
 const { t, OPTIONAL } = (/* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {

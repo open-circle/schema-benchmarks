@@ -6481,6 +6481,16 @@ function FromUnion(direction, context, type, value) {
 function FromType(direction, context, type, value) {
 	return IsArray(type) ? FromArray(direction, context, type, value) : IsCyclic(type) ? FromCyclic(direction, context, type, value) : IsIntersect(type) ? FromIntersect(direction, context, type, value) : IsObject(type) ? FromObject(direction, context, type, value) : IsRecord(type) ? FromRecord(direction, context, type, value) : IsRef$1(type) ? FromRef(direction, context, type, value) : IsTuple(type) ? FromTuple(direction, context, type, value) : IsUnion(type) ? FromUnion(direction, context, type, value) : Callback(direction, context, type, value);
 }
+(class extends AssertError {
+	constructor(value, errors) {
+		super("Decode", value, errors);
+	}
+});
+(class extends AssertError {
+	constructor(value, errors) {
+		super("Encode", value, errors);
+	}
+});
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.3.6/node_modules/typebox/build/value/parse/parse.mjs
 var ParseError = class extends AssertError {

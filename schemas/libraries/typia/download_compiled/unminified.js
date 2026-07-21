@@ -1,13 +1,21 @@
-//#region ../node_modules/.pnpm/typia@13.1.0_@types+node@24.0.0/node_modules/typia/lib/internal/_isFormatUrl.mjs
+//#region ../node_modules/.pnpm/typia@13.1.19_@ttsc+unplugin@0.19.3_ttsc@0.19.3__@types+node@24.0.0_ttsc@0.19.3/node_modules/typia/lib/internal/_isFormatUrl.mjs
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 //#endregion
-//#region ../node_modules/.pnpm/typia@13.1.0_@types+node@24.0.0/node_modules/typia/lib/internal/_validateReport.mjs
+//#region ../node_modules/.pnpm/typia@13.1.19_@ttsc+unplugin@0.19.3_ttsc@0.19.3__@types+node@24.0.0_ttsc@0.19.3/node_modules/typia/lib/internal/_stringLength.mjs
+const _stringLength = (value) => {
+	let count = 0;
+	for (const _ch of value) ++count;
+	return count;
+};
+//#endregion
+//#region ../node_modules/.pnpm/typia@13.1.19_@ttsc+unplugin@0.19.3_ttsc@0.19.3__@types+node@24.0.0_ttsc@0.19.3/node_modules/typia/lib/internal/_validateReport.mjs
 const _validateReport = (array) => {
+	const isAncestor = (ancestor, descendant) => descendant === ancestor || descendant.startsWith(`${ancestor}.`) || descendant.startsWith(`${ancestor}[`);
 	const reportable = (path) => {
 		if (array.length === 0) return true;
 		const last = array[array.length - 1].path;
-		return path.length > last.length || last.substring(0, path.length) !== path;
+		return isAncestor(path, last) === false && isAncestor(last, path) === false;
 	};
 	return (exceptable, error) => {
 		if (exceptable && reportable(error.path)) {
@@ -26,7 +34,7 @@ const _validateReport = (array) => {
 (() => {
 	const _ip0 = (input) => "number" === typeof input["id"];
 	const _ip1 = (input) => input["created"] instanceof Date;
-	const _ip2 = (input) => "string" === typeof input["title"] && 1 <= input["title"].length && input["title"].length <= 100;
+	const _ip2 = (input) => "string" === typeof input["title"] && 1 <= _stringLength(input["title"]) && _stringLength(input["title"]) <= 100;
 	const _ip3 = (input) => Array.isArray(input["images"]) && input["images"].every((elem) => "object" === typeof elem && null !== elem && _io1(elem));
 	const _ve0 = "{ id: number; created: Date; title: string & MinLength<1> & MaxLength<100>; brand: string & MinLength<1> & MaxLength<30>; description: string & ... 1 more ... & MaxLength<...>; ... 5 more ...; ratings: RatingSchema[]; }";
 	const _vp0 = (input, _path, _exceptionable = true) => "number" === typeof input["id"] || _report(_exceptionable, {
@@ -39,11 +47,11 @@ const _validateReport = (array) => {
 		expected: "Date",
 		value: input["created"]
 	});
-	const _vp2 = (input, _path, _exceptionable = true) => "string" === typeof input["title"] && (1 <= input["title"].length || _report(_exceptionable, {
+	const _vp2 = (input, _path, _exceptionable = true) => "string" === typeof input["title"] && (1 <= _stringLength(input["title"]) || _report(_exceptionable, {
 		path: _path + ".title",
 		expected: "string & MinLength<1>",
 		value: input["title"]
-	})) && (input["title"].length <= 100 || _report(_exceptionable, {
+	})) && (_stringLength(input["title"]) <= 100 || _report(_exceptionable, {
 		path: _path + ".title",
 		expected: "string & MaxLength<100>",
 		value: input["title"]
@@ -69,18 +77,18 @@ const _validateReport = (array) => {
 		expected: "Array<ImageSchema>",
 		value: input["images"]
 	});
-	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && 1 <= input.brand.length && input.brand.length <= 30 && "string" === typeof input.description && 1 <= input.description.length && input.description.length <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 1 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && 1 <= input.tags.length && input.tags.length <= 30 && input.tags.every((elem) => "string" === typeof elem) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
+	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && 1 <= _stringLength(input.brand) && _stringLength(input.brand) <= 30 && "string" === typeof input.description && 1 <= _stringLength(input.description) && _stringLength(input.description) <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 1 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && 1 <= input.tags.length && input.tags.length <= 30 && input.tags.every((elem) => "string" === typeof elem) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
 	const _io1 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && ("jpg" === input.type || "png" === input.type) && "number" === typeof input.size && "string" === typeof input.url && _isFormatUrl(input.url);
-	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 1 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && 1 <= input.text.length && input.text.length <= 1e3 && _ip3(input);
+	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 1 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && 1 <= _stringLength(input.text) && _stringLength(input.text) <= 1e3 && _ip3(input);
 	const _vo0 = (input, _path, _exceptionable = true) => [
 		_vp0(input, _path, _exceptionable),
 		_vp1(input, _path, _exceptionable),
 		_vp2(input, _path, _exceptionable),
-		"string" === typeof input.brand && (1 <= input.brand.length || _report(_exceptionable, {
+		"string" === typeof input.brand && (1 <= _stringLength(input.brand) || _report(_exceptionable, {
 			path: _path + ".brand",
 			expected: "string & MinLength<1>",
 			value: input.brand
-		})) && (input.brand.length <= 30 || _report(_exceptionable, {
+		})) && (_stringLength(input.brand) <= 30 || _report(_exceptionable, {
 			path: _path + ".brand",
 			expected: "string & MaxLength<30>",
 			value: input.brand
@@ -89,11 +97,11 @@ const _validateReport = (array) => {
 			expected: "(string & MinLength<1> & MaxLength<30>)",
 			value: input.brand
 		}),
-		"string" === typeof input.description && (1 <= input.description.length || _report(_exceptionable, {
+		"string" === typeof input.description && (1 <= _stringLength(input.description) || _report(_exceptionable, {
 			path: _path + ".description",
 			expected: "string & MinLength<1>",
 			value: input.description
-		})) && (input.description.length <= 500 || _report(_exceptionable, {
+		})) && (_stringLength(input.description) <= 500 || _report(_exceptionable, {
 			path: _path + ".description",
 			expected: "string & MaxLength<500>",
 			value: input.description
@@ -221,11 +229,11 @@ const _validateReport = (array) => {
 			value: input.stars
 		}),
 		_vp2(input, _path, _exceptionable),
-		"string" === typeof input.text && (1 <= input.text.length || _report(_exceptionable, {
+		"string" === typeof input.text && (1 <= _stringLength(input.text) || _report(_exceptionable, {
 			path: _path + ".text",
 			expected: "string & MinLength<1>",
 			value: input.text
-		})) && (input.text.length <= 1e3 || _report(_exceptionable, {
+		})) && (_stringLength(input.text) <= 1e3 || _report(_exceptionable, {
 			path: _path + ".text",
 			expected: "string & MaxLength<1000>",
 			value: input.text
