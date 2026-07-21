@@ -27,24 +27,24 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "Desktop Chrome",
       use: { ...devices["Desktop Chrome"] },
     },
     /*
     {
-      name: "firefox",
+      name: "Desktop Firefox",
       use: { ...devices["Desktop Firefox"] },
     },
-
     {
-      name: "webkit",
+      name: "Desktop Safari",
       use: { ...devices["Desktop Safari"] },
     },
-
+    */
     {
       name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
     },
+    /*
     {
       name: "Mobile Safari",
       use: { ...devices["iPhone 12"] },
