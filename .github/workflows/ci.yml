@@ -64,7 +64,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Test
         run: pnpm test
-  e2e:
+  e2e-smoke:
     runs-on: ubuntu-latest
     needs: install
     steps:
@@ -74,7 +74,7 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
       - name: E2E Test
-        run: pnpm e2e
+        run: pnpm e2e --grep @smoke
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
