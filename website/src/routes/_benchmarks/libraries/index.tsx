@@ -5,7 +5,7 @@ import { getPackageMetadata } from "#/routes/_benchmarks/-query";
 import { generateMetadata } from "#/shared/data/meta";
 
 import { PackageCard } from "./-components/package";
-import { getAllPackages } from "./-query";
+import { getAllPackages, getReplacementUrl } from "./-query";
 import Content from "./content.mdx";
 
 import libraryCss from "./index.css?url";
@@ -15,11 +15,12 @@ export const Route = createFileRoute("/_benchmarks/libraries/")({
     const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
     await Promise.all(
       Object.entries(libraries).flatMap(([packageName, versions]) =>
-        versions.map((version) =>
+        versions.flatMap((version) => [
           queryClient.ensureQueryData(
             getPackageMetadata(packageName, version, abortController.signal),
           ),
-        ),
+          queryClient.prefetchQuery(getReplacementUrl(packageName, abortController.signal)),
+        ]),
       ),
     );
   },
