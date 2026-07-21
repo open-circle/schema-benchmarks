@@ -14,3 +14,10 @@ todos.json
 *storybook.log
 storybook-static
 .netlify
+
+# Playwright
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/playwright/.cache/
+**/playwright/.auth/

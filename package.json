@@ -19,7 +19,8 @@
     "bench:stack": "pnpm run --filter '*/bench' stack",
     "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack",
     "postinstall": "lefthook install",
-    "knip": "knip"
+    "knip": "knip",
+    "e2e": "pnpm run -r e2e"
   },
   "devDependencies": {
     "@types/node": "catalog:",
