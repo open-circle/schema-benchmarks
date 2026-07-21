@@ -27,7 +27,7 @@
     "lefthook": "^2.1.10",
     "oxfmt": "catalog:",
     "oxlint": "^1.74.0",
-    "oxlint-tsgolint": "^0.24.0",
+    "oxlint-tsgolint": "^0.25.0",
     "playwright": "catalog:",
     "typescript": "catalog:"
   },
