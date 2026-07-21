@@ -10,7 +10,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments/website
   lint:
@@ -20,7 +20,7 @@ jobs:
       pull-requests: write
     needs: install
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments/website
       - uses: CatChen/oxlint-suggestion-action@v1
@@ -33,7 +33,7 @@ jobs:
       pull-requests: write
     needs: install
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments/website
       - name: Format
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments/website
       - name: Typecheck
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments/website
 

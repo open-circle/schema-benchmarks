@@ -14,7 +14,7 @@ jobs:
   bench-stack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run stack benchmark
@@ -28,7 +28,7 @@ jobs:
   bench-download:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run download benchmark
@@ -47,7 +47,7 @@ jobs:
   bench-bench:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run bench benchmark
@@ -62,7 +62,7 @@ jobs:
     needs: [bench-stack, bench-download, bench-bench]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download bench results
         uses: actions/download-artifact@v4
         with:
