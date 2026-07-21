@@ -50,7 +50,7 @@
     "@ttsc/unplugin": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "tsdown": "^0.22.8",
+    "tsdown": "^0.22.12",
     "ttsc": "catalog:",
     "typescript": "catalog:",
     "unplugin-macros": "^0.20.2",
