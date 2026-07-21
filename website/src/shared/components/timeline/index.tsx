@@ -26,15 +26,10 @@ export function Timeline({ children }: { children: ReactNode }) {
           entriesByTargetRef.set(entry.target, entry);
         }
 
-        let mostIntersecting: IntersectionObserverEntry | null = null;
-        for (const entry of entriesByTargetRef.values()) {
-          if (!entry.isIntersecting || entry.intersectionRatio === 0) {
-            continue;
-          }
-          if (!mostIntersecting || entry.intersectionRatio > mostIntersecting.intersectionRatio) {
-            mostIntersecting = entry;
-          }
-        }
+        const mostIntersecting = Array.from(entriesByTargetRef.values()).reduceRight(
+          (mostIntersecting, entry) =>
+            entry.intersectionRatio > mostIntersecting.intersectionRatio ? entry : mostIntersecting,
+        );
 
         setMostIntersecting(mostIntersecting);
       },
