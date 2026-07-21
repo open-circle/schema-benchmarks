@@ -4,9 +4,9 @@ import type { Locator } from "vitest/browser";
 
 import { getElementFromUserInput, getMessage } from "./utils";
 
-type CurrentValue =
-  | boolean
-  | Autocomplete.String<"true" | "false" | "page" | "step" | "location" | "date" | "time">;
+export type CurrentValue = Autocomplete.String<
+  "true" | "false" | "page" | "step" | "location" | "date" | "time"
+>;
 const attribute = "aria-current";
 
 export function toBeCurrent(
