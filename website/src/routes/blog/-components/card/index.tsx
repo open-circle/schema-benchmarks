@@ -24,8 +24,14 @@ export function BlogCard({ blog }: BlogCardProps) {
     },
   });
   const formatDate = useDateFormatter(longDateFormatter);
+  const id = `blog-card-${blog.slug}`;
   return (
-    <li className="blog-card">
+    <li
+      className="blog-card"
+      id={id}
+      aria-labelledby={`${id}-title`}
+      aria-describedby={`${id}-description`}
+    >
       <Link to="/blog/$slug" params={{ slug: blog.slug }}>
         <div className="blog-dateline typo-overline">
           <AvatarList
@@ -45,7 +51,7 @@ export function BlogCard({ blog }: BlogCardProps) {
             {formatDate(blog.published)}
           </time>
         </div>
-        <h2 className="typo-headline5" {...getTransitionStyle("title")}>
+        <h2 className="typo-headline5" id={`${id}-title`} {...getTransitionStyle("title")}>
           {blog.title}
         </h2>
         {/* oxlint-disable-next-line jsx-a11y/prefer-tag-over-role */}
@@ -67,7 +73,7 @@ export function BlogCard({ blog }: BlogCardProps) {
             </picture>
           )}
         </div>
-        <p>{blog.description}</p>
+        <p id={`${id}-description`}>{blog.description}</p>
       </Link>
     </li>
   );
