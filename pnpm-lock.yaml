@@ -75,6 +75,9 @@ importers:
       '@types/node':
         specifier: 24.0.0
         version: 24.0.0
+      eslint-plugin-depend:
+        specifier: ^1.5.0
+        version: 1.5.0(eslint@10.5.0(jiti@2.7.0))
       knip:
         specifier: ^6.27.0
         version: 6.27.0
@@ -5952,6 +5955,11 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
+  eslint-plugin-depend@1.5.0:
+    resolution: {integrity: sha512-i3UeLYmclf1Icp35+6W7CR4Bp2PIpDgBuf/mpmXK5UeLkZlvYJ21VuQKKHHAIBKRTPivPGX/gZl5JGno1o9Y0A==}
+    peerDependencies:
+      eslint: '>=8.40.0'
+
   eslint-scope@9.1.2:
     resolution: {integrity: sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
@@ -7327,6 +7335,9 @@ packages:
 
   module-details-from-path@1.0.4:
     resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==}
+
+  module-replacements@2.11.0:
+    resolution: {integrity: sha512-j5sNQm3VCpQQ7nTqGeOZtoJtV3uKERgCBm9QRhmGRiXiqkf7iRFOkfxdJRZWLkqYY8PNf4cDQF/WfXUYLENrRA==}
 
   monocle-ts@2.3.13:
     resolution: {integrity: sha512-D5Ygd3oulEoAm3KuGO0eeJIrhFf1jlQIoEVV2DYsZUMz42j4tGxgct97Aq68+F8w4w4geEnwFa8HayTS/7lpKQ==}
@@ -14597,6 +14608,13 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
+  eslint-plugin-depend@1.5.0(eslint@10.5.0(jiti@2.7.0)):
+    dependencies:
+      empathic: 2.0.1
+      eslint: 10.5.0(jiti@2.7.0)
+      module-replacements: 2.11.0
+      semver: 7.8.5
+
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
@@ -16240,6 +16258,8 @@ snapshots:
       node-source-walk: 7.0.2
 
   module-details-from-path@1.0.4: {}
+
+  module-replacements@2.11.0: {}
 
   monocle-ts@2.3.13(fp-ts@2.16.11):
     dependencies:
