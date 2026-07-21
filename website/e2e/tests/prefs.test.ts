@@ -37,7 +37,7 @@ test.describe("dialog closes", () => {
   });
 });
 
-test("it can pick style options", async ({ page, prefs }) => {
+test("it can pick style options, persisting after refresh", async ({ page, prefs }) => {
   await page.goto("/");
 
   await prefs.openDialog();
@@ -46,10 +46,20 @@ test("it can pick style options", async ({ page, prefs }) => {
     const button = await prefs.getStyleOption(option);
     await button.click();
     await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-style", option);
+
+    await page.reload();
+
+    await prefs.openDialog();
+
+    await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-style", option);
   }
 });
 
-test("it can pick theme options", async ({ page, prefs }) => {
+test("it can pick theme options, persisting after refresh", async ({ page, prefs }) => {
   await page.goto("/");
 
   await prefs.openDialog();
@@ -57,23 +67,60 @@ test("it can pick theme options", async ({ page, prefs }) => {
   for (const option of themeSchema.options) {
     const button = await prefs.getThemeOption(option);
     await button.click();
+
     await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
+
+    await page.reload();
+
+    await prefs.openDialog();
+
+    await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
   }
 });
 
-test("it can pick npm site options", async ({ page, prefs }) => {
+test("it can pick npm site options, persisting after refresh", async ({ page, prefs }) => {
   await page.goto("/");
 
-  await prefs.openDialog();
+  const downloadCount = page.getByRole("link", { name: "Download count for ajv:" }).first();
 
   for (const option of npmSiteSchema.options) {
+    await prefs.openDialog();
+
     const button = await prefs.getNpmSiteOption(option);
+
     await button.click();
+
     await expect(button).toBePressed();
+
+    await page.goto("/libraries");
+
+    await downloadCount.scrollIntoViewIfNeeded({ timeout: 1000 });
+
+    await expect(downloadCount).toBeVisible();
+
+    await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
+
+    await page.reload();
+
+    await prefs.openDialog();
+
+    await expect(button).toBePressed();
+
+    await page.goto("/libraries");
+
+    await downloadCount.scrollIntoViewIfNeeded({ timeout: 1000 });
+
+    await expect(downloadCount).toBeVisible();
+
+    await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
   }
 });
 
-test("it can pick ligature options", async ({ page, prefs }) => {
+test("it can pick ligature options, persisting after refresh", async ({ page, prefs }) => {
   await page.goto("/");
 
   await prefs.openDialog();
@@ -81,6 +128,17 @@ test("it can pick ligature options", async ({ page, prefs }) => {
   for (const option of ligatureSchema.options) {
     const button = await prefs.getLigatureOption(option);
     await button.click();
+
     await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
+
+    await page.reload();
+
+    await prefs.openDialog();
+
+    await expect(button).toBePressed();
+
+    await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
   }
 });
