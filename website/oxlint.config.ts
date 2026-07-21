@@ -26,6 +26,7 @@ const buttonComponents = [
 export default defineConfig({
   extends: [baseConfig],
   jsPlugins: [
+    { name: "depend", specifier: "eslint-plugin-depend" },
     { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
     { name: "@tanstack/query", specifier: "@tanstack/eslint-plugin-query" },
   ],
