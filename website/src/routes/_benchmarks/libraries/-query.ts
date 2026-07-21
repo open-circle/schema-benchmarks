@@ -7,6 +7,8 @@ import {
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
+import { preferredReplacements, resolveDocUrl } from "module-replacements";
+import * as v from "valibot";
 
 import { getPackageName } from "#/routes/_benchmarks/-query";
 import { getBenchResultsFn } from "#/routes/_benchmarks/_runtime/-query";
@@ -52,4 +54,17 @@ export const getAllPackages = (signalOpt?: AbortSignal) =>
   queryOptions({
     queryKey: ["packages"],
     queryFn: ({ signal }) => getAllPackagesFn({ signal: anyAbortSignal(signal, signalOpt) }),
+  });
+
+export const getReplacementUrlFn = createServerFn()
+  .validator(v.object({ pkgName: v.string() }))
+  .handler(async ({ data: { pkgName } }) =>
+    resolveDocUrl(preferredReplacements.mappings[pkgName]?.url),
+  );
+
+export const getReplacementUrl = (pkgName: string, signalOpt?: AbortSignal) =>
+  queryOptions({
+    queryKey: ["replacementUrl", pkgName],
+    queryFn: ({ signal }) =>
+      getReplacementUrlFn({ data: { pkgName }, signal: anyAbortSignal(signal, signalOpt) }),
   });
