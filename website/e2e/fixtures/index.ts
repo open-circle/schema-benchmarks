@@ -2,10 +2,12 @@ import type { Locator } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
 
 import type { CurrentValue } from "../../test/common/matchers/to-be-current";
+import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
 const POMs = {
   sidebar: Sidebar,
+  prefs: PrefsDialog,
 };
 
 type POMFixtures = {
@@ -16,6 +18,10 @@ export const test = baseTest.extend<POMFixtures>({
   sidebar: async ({ page }, use) => {
     const sidebar = new Sidebar(page);
     await use(sidebar);
+  },
+  prefs: async ({ page }, use) => {
+    const prefs = new PrefsDialog(page);
+    await use(prefs);
   },
 });
 
