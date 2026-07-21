@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "#e2e/fixtures";
 
 test("homepage is selected", async ({ page, sidebar }) => {
   await page.goto("/");
@@ -20,9 +20,9 @@ test("navigation links are correct", async ({ page, sidebar }) => {
     ["Stack", "/stack"],
     ["Libraries", "/libraries"],
     ["Blog", "/blog"],
-  ]) {
+  ] as const) {
     const link = sidebar.getLinkByName(name);
-    await link.click();
+    await link.click({ timeout: 5000 });
     await expect(page).toHaveURL((url) => url.pathname === path);
     await expect(link).toBeCurrent("page");
   }

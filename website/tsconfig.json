@@ -8,7 +8,8 @@
     "./src/**/*",
     "./test/**/*",
     "./vite/**/*",
-    "./offline/**/*"
+    "./offline/**/*",
+    "./e2e/**/*"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -26,6 +27,7 @@
       "#/*": ["./src/*"],
       "#test/*": ["./test/*"],
       "#storybook/*": ["./.storybook/*"],
+      "#e2e/*": ["./e2e/*"],
       "content-collections": ["./.content-collections/generated"]
     },
 
