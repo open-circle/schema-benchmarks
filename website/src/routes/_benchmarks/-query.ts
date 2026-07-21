@@ -2,7 +2,7 @@ import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import * as v from "valibot";
 
-import { upfetch } from "#/shared/lib/fetch";
+import { isRetryableUpfetchError, upfetch } from "#/shared/lib/fetch";
 
 const downloadsResponseSchema = v.pipe(
   v.object({
@@ -72,14 +72,20 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
   }
   return queryOptions({
     queryKey: ["npm", "downloads", "week", packageName],
-    queryFn: ({ signal }) =>
-      upfetch(
-        `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`,
-        {
-          signal: anyAbortSignal(signal, signalOpt),
-          schema: downloadsResponseSchema,
-        },
-      ),
+    queryFn: async ({ signal }) => {
+      try {
+        return await upfetch(
+          `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`,
+          {
+            signal: anyAbortSignal(signal, signalOpt),
+            schema: downloadsResponseSchema,
+          },
+        );
+      } catch (error) {
+        if (isRetryableUpfetchError(error)) return 0;
+        throw error;
+      }
+    },
   });
 };
 
@@ -137,29 +143,44 @@ export const getPackageMetadata = (
     const { scope, name } = jsrScopeAndName(packageName);
     return queryOptions({
       queryKey: ["jsr", "metadata", packageName, version],
-      queryFn: async ({ signal }) =>
+      queryFn: async ({ signal }) => {
         // JSR has version specific metadata (https://api.jsr.io/scopes/paseri/packages/paseri/versions/1.9.5),
         // but it's missing fields (description, repository, etc.) that are present in the package-level metadata (https://api.jsr.io/scopes/paseri/packages/paseri).
         // So we fetch the package-level metadata and just add the version to it.
-        ({
-          ...(await upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}`, {
-            signal: anyAbortSignal(signal, signalOpt),
-            schema: jsrMetadataSchema,
-          })),
+        const data = await upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}`, {
+          signal: anyAbortSignal(signal, signalOpt),
+          schema: jsrMetadataSchema,
+        });
+        return {
+          ...data,
           version,
-        }),
+        };
+      },
     });
   }
   return queryOptions({
     queryKey: ["npm", "metadata", packageName, version],
-    queryFn: ({ signal }) =>
-      upfetch(
-        `https://registry.npmjs.org/${encodeURIComponent(packageName)}/${encodeURIComponent(version)}`,
-        {
-          signal: anyAbortSignal(signal, signalOpt),
-          schema: packageMetadataSchema,
-        },
-      ),
+    queryFn: async ({ signal }) => {
+      try {
+        return await upfetch(
+          `https://registry.npmjs.org/${encodeURIComponent(packageName)}/${encodeURIComponent(version)}`,
+          {
+            signal: anyAbortSignal(signal, signalOpt),
+            schema: packageMetadataSchema,
+          },
+        );
+      } catch (error) {
+        if (isRetryableUpfetchError(error)) {
+          return {
+            name: packageName,
+            version,
+            description: "",
+            homepage: `https://www.npmjs.com/package/${packageName}`,
+          };
+        }
+        throw error;
+      }
+    },
   });
 };
 
