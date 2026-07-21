@@ -34,6 +34,11 @@ const config = defineConfig({
   build: {
     sourcemap: true,
   },
+  server: {
+    watch: {
+      ignored: ["**/playwright-report/**", "**/test-results/**"],
+    },
+  },
   plugins: [
     devtools(),
     tanstackStart({
