@@ -3,6 +3,12 @@ import { defineConfig } from "oxlint";
 export const defaultPlugins = ["eslint", "typescript", "unicorn", "oxc"] as const;
 
 export const baseConfig = defineConfig({
+  jsPlugins: [
+    {
+      name: "depend",
+      specifier: "eslint-plugin-depend",
+    },
+  ],
   categories: {
     correctness: "error",
     suspicious: "warn",
@@ -14,6 +20,7 @@ export const baseConfig = defineConfig({
     "typescript/no-unsafe-type-assertion": "off",
     "typescript/consistent-type-imports": "error",
     "typescript/consistent-return": "off",
+    "depend/ban-dependencies": "error",
   },
   settings: {
     vitest: {
