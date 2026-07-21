@@ -11,6 +11,8 @@ authors: "EskiMojo14"
 
 import { Link } from "@tanstack/react-router";
 import { Tweet } from "react-tweet";
+import { lightFormat } from "date-fns/fp";
+import { monthFormatter } from "@schema-benchmarks/utils";
 import { Timeline, TimelineItem } from "#/shared/components/timeline";
 import { MdSymbol } from "#/shared/components/symbol";
 import { trackedLinkProps } from "#/shared/lib/analytics";
@@ -171,6 +173,29 @@ const result = /* #__PURE__ */ anotherFunction();
   </TimelineItem>
 
   <TimelineItem
+    range={["2026-02", "2026-07"]}
+    formatters={{
+      normal: monthFormatter,
+      code: lightFormat("yyyy-MM"),
+    }}
+    title="Upkeep"
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    We continue to maintain and improve Schema Benchmarks, adding new libraries and updating existing ones.
+
+    New libraries added include:
+
+    - [`superstruct`](https://docs.superstructjs.org/)
+    - [`runtypes`](https://github.com/runtypes/runtypes)
+    - [`ata-validator`](https://ata-validator.com/)
+    - [`@sapphire/shapeshift`](https://www.sapphirejs.dev/docs/Documentation/api-shapeshift/)
+    - [`paseri`](https://paseri.dev/)
+
+    For a full list of libraries, see the <Link to="/libraries">Libraries</Link> page.
+
+  </TimelineItem>
+
+  <TimelineItem
     date="2026-07-08"
     title={
       <a {...trackedLinkProps("http://valibot.dev")}>
@@ -179,7 +204,8 @@ const result = /* #__PURE__ */ anotherFunction();
     }
     icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
   >
-  Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
+
+Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
 
 They are now [investigating](https://github.com/open-circle/valibot/pull/1534) an alternative approach for their Standard Schema support, which was causing the slowdown.
 
