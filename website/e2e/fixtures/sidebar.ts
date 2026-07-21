@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 
+import { expect } from ".";
 import { BasePOM } from "./base";
 
 export class Sidebar extends BasePOM {
@@ -13,22 +14,17 @@ export class Sidebar extends BasePOM {
   }
 
   async open() {
-    try {
-      await this.sidebar.waitFor({ timeout: 1000 });
-    } catch {
-      await this.menuButton.click();
-      await this.sidebar.waitFor({ timeout: 1000 });
-    }
+    await expect(async () => {
+      try {
+        await expect(this.sidebar).toBeInViewport({ ratio: 0.1, timeout: 1000 });
+      } catch {
+        await this.menuButton.click();
+        await expect(this.sidebar).toBeInViewport({ ratio: 0.1, timeout: 5000 });
+      }
+    }).toPass();
   }
 
   getLinkByName(name: string) {
     return this.nav.getByRole("link", { name });
-  }
-
-  async selectLinkByName(name: string) {
-    const link = this.getLinkByName(name);
-    await link.scrollIntoViewIfNeeded();
-    await link.click({ timeout: 5000 });
-    return link;
   }
 }

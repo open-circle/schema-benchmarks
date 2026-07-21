@@ -2,8 +2,8 @@ import type { Page } from "@playwright/test";
 
 import type { Style, Theme, NpmSite, Ligature } from "#/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#/shared/lib/prefs/constants";
-import { expect } from "#e2e/fixtures";
 
+import { expect } from ".";
 import { BasePOM } from "./base";
 
 export class PrefsDialog extends BasePOM {
@@ -23,10 +23,10 @@ export class PrefsDialog extends BasePOM {
   async openDialog() {
     await expect(async () => {
       try {
-        await this.dialog.waitFor({ timeout: 1000 });
+        await expect(this.dialog).toBeVisible({ timeout: 1000 });
       } catch {
         await this.openButton.click();
-        await this.dialog.waitFor({ timeout: 1000 });
+        await expect(this.dialog).toBeVisible({ timeout: 5000 });
       }
     }).toPass();
   }

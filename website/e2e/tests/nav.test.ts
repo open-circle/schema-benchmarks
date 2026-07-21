@@ -10,7 +10,6 @@ test("homepage is selected", async ({ page, sidebar }) => {
 
 test("navigation links work", async ({ page, sidebar }) => {
   await page.goto("/");
-
   await sidebar.open();
 
   for (const [name, path] of [
@@ -25,7 +24,9 @@ test("navigation links work", async ({ page, sidebar }) => {
     ["Libraries", "/libraries"],
     ["Blog", "/blog"],
   ] as const) {
-    const link = await sidebar.selectLinkByName(name);
+    const link = sidebar.getLinkByName(name);
+
+    await link.click({ timeout: 5000 });
 
     await expect(page).toHaveURL((url) => url.pathname === path);
 
