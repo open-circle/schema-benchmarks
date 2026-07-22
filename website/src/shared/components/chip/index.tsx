@@ -16,12 +16,12 @@ export function ChipCollection({
   className,
   ref,
   ...props
-}: ComponentPropsWithRef<"div">) {
+}: ComponentPropsWithRef<"ul">) {
   const group = useFocusGroup();
   return (
-    <div {...props} {...collectionCls({ extra: className })} ref={mergeRefs(ref, group)}>
+    <ul {...props} {...collectionCls({ extra: className })} ref={mergeRefs(ref, group)}>
       {children}
-    </div>
+    </ul>
   );
 }
 
@@ -37,18 +37,20 @@ export interface ChipProps extends ComponentPropsWithRef<"button"> {
 export function Chip({ children, className, activated, haptic, onClick, ...props }: ChipProps) {
   const haptics = useWebHaptics();
   return (
-    <button
-      type="button"
-      {...props}
-      aria-pressed={activated}
-      {...cls({ extra: className })}
-      onClick={(event) => {
-        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
-        onClick?.(event);
-      }}
-    >
-      {children}
-    </button>
+    <li {...cls({ extra: className })}>
+      <button
+        type="button"
+        {...props}
+        aria-pressed={activated}
+        {...cls({ element: "button" })}
+        onClick={(event) => {
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
+        }}
+      >
+        {children}
+      </button>
+    </li>
   );
 }
 
@@ -59,17 +61,19 @@ export interface LinkChipProps extends ComponentPropsWithRef<"a"> {
 function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkChipProps) {
   const haptics = useWebHaptics();
   return (
-    // oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions
-    <a
-      {...props}
-      {...cls({ extra: className })}
-      onClick={(event) => {
-        if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
-        onClick?.(event);
-      }}
-    >
-      {children}
-    </a>
+    <li {...cls({ extra: className })}>
+      {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions */}
+      <a
+        {...props}
+        {...cls({ element: "button" })}
+        onClick={(event) => {
+          if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
+          onClick?.(event);
+        }}
+      >
+        {children}
+      </a>
+    </li>
   );
 }
 
