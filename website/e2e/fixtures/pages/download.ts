@@ -20,8 +20,8 @@ export class DownloadPage extends BasePOM {
       table,
       headerRow,
       getCellByColumnName: getCellByColumnName.bind(null, table),
-      getSortLinkByColumnName: (columnName: string | RegExp) =>
-        headerRow.getByRole("link", { name: columnName }),
+      getHeaderCell: (columnName: string | RegExp) =>
+        headerRow.getByRole("columnheader", { name: columnName }),
     };
   }
 
