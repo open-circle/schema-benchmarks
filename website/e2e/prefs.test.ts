@@ -6,9 +6,13 @@ import {
 } from "#/shared/lib/prefs/constants";
 import { test, expect } from "#e2e/fixtures";
 
-test("dialog opens", { tag: "@smoke" }, async ({ page, prefs }) => {
+test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
   await page.goto("/");
 
+  await fontsLoaded();
+});
+
+test("dialog opens", { tag: "@smoke" }, async ({ prefs }) => {
   await prefs.openDialog();
 
   await expect(prefs.dialog).toBeVisible();
@@ -16,8 +20,6 @@ test("dialog opens", { tag: "@smoke" }, async ({ page, prefs }) => {
 
 test.describe("dialog closes", () => {
   test("by clicking the backdrop", async ({ page, prefs }) => {
-    await page.goto("/");
-
     await prefs.openDialog();
 
     await page.mouse.click(0, 0);
@@ -25,9 +27,7 @@ test.describe("dialog closes", () => {
     await expect(prefs.dialog).toBeHidden();
   });
 
-  test("by pressing the escape key", async ({ page, prefs }) => {
-    await page.goto("/");
-
+  test("by pressing the escape key", async ({ prefs }) => {
     await prefs.openDialog();
 
     await expect(async () => {
@@ -39,8 +39,6 @@ test.describe("dialog closes", () => {
 });
 
 test("it can pick style options, persisting after refresh", async ({ page, prefs }) => {
-  await page.goto("/");
-
   await prefs.openDialog();
 
   for (const option of styleSchema.options) {
@@ -61,8 +59,6 @@ test("it can pick style options, persisting after refresh", async ({ page, prefs
 });
 
 test("it can pick theme options, persisting after refresh", async ({ page, prefs }) => {
-  await page.goto("/");
-
   await prefs.openDialog();
 
   for (const option of themeSchema.options) {
@@ -84,8 +80,6 @@ test("it can pick theme options, persisting after refresh", async ({ page, prefs
 });
 
 test("it can pick npm site options, persisting after refresh", async ({ page, prefs }) => {
-  await page.goto("/");
-
   const downloadCount = page.getByRole("link", { name: "Download count for ajv:" }).first();
 
   for (const option of npmSiteSchema.options) {
@@ -122,8 +116,6 @@ test("it can pick npm site options, persisting after refresh", async ({ page, pr
 });
 
 test("it can pick ligature options, persisting after refresh", async ({ page, prefs }) => {
-  await page.goto("/");
-
   await prefs.openDialog();
 
   for (const option of ligatureSchema.options) {

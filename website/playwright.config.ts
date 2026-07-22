@@ -24,6 +24,8 @@ export default defineConfig({
     trace: "on-first-retry",
 
     colorScheme: "dark",
+
+    serviceWorkers: "block",
   },
 
   /* Configure projects for major browsers */

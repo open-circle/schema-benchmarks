@@ -2,6 +2,7 @@ import type { Locator, TestFixture, Page } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
 
 import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
+import { waitForFontsLoaded } from "#e2e/utils";
 import { matchBreakpoints } from "#e2e/utils";
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
@@ -36,12 +37,14 @@ const pomFixtures = Object.fromEntries(
 
 interface UtilFixtures {
   matchBreakpoints: (breakpoints: ReadonlyArray<Breakpoint>) => Promise<boolean>;
+  fontsLoaded: () => Promise<void>;
 }
 
 export const test = baseTest.extend<POMFixtures & UtilFixtures>({
   ...pomFixtures,
   matchBreakpoints: async ({ page }, use) =>
     use((breakpoints) => matchBreakpoints(page, breakpoints)),
+  fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
 });
 
 export const expect = baseExpect.extend({

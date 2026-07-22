@@ -1,15 +1,18 @@
 import { test, expect } from "#e2e/fixtures";
 
-test("homepage is selected", { tag: "@smoke" }, async ({ page, sidebar }) => {
+test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
   await page.goto("/");
 
+  await fontsLoaded();
+});
+
+test("homepage is selected", { tag: "@smoke" }, async ({ sidebar }) => {
   await sidebar.open();
 
   await expect(sidebar.getLinkByName("Home")).toBeCurrent("page");
 });
 
 test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
-  await page.goto("/");
   await sidebar.open();
 
   for (const [name, path] of [

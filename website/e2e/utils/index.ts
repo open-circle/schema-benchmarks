@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
+import { expect } from "@playwright/test";
 
 import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
 import { breakpointQueries } from "#/shared/hooks/use-breakpoints";
@@ -30,4 +31,18 @@ export function matchBreakpoints(page: Page, breakpoints: ReadonlyArray<Breakpoi
   const query = breakpoints.map((breakpoint) => `(${breakpointQueries[breakpoint]})`).join(" or ");
 
   return page.evaluate(([query]): boolean => window.matchMedia(query).matches, [query] as const);
+}
+
+export async function waitForFontsLoaded(page: Page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
+
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => document.fonts.check('24px "Material Symbols Sharp"', "download_2")),
+      { timeout: 5000 },
+    )
+    .toBe(true);
 }
