@@ -1,6 +1,8 @@
 import type { Locator, TestFixture, Page } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
 
+import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
+import { matchBreakpoints } from "#e2e/utils";
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
 import { Header } from "./header";
@@ -32,8 +34,14 @@ const pomFixtures = Object.fromEntries(
   [K in keyof POMFixtures]: TestFixture<POMFixtures[K], { page: Page }>;
 };
 
-export const test = baseTest.extend<POMFixtures>({
+interface UtilFixtures {
+  matchBreakpoints: (breakpoints: Array<Breakpoint>) => Promise<boolean>;
+}
+
+export const test = baseTest.extend<POMFixtures & UtilFixtures>({
   ...pomFixtures,
+  matchBreakpoints: async ({ page }, use) =>
+    use((breakpoints) => matchBreakpoints(page, breakpoints)),
 });
 
 export const expect = baseExpect.extend({

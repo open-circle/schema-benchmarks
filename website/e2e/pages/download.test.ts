@@ -2,11 +2,9 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
 
-test.beforeEach(async ({ page, downloadPage }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto("/download");
   await expect(page).toHaveTitle(/Download/);
-
-  await expect(downloadPage.resultsTable).toBeVisible();
 });
 
 test("it can switch between minified and unminified results", async ({ page, downloadPage }) => {
@@ -47,4 +45,19 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
   // same value, but preset wasn't used, so it shouldn't be current
   await expect(downloadPage.getSpeedPresetButtonByLabel("WiFi")).not.toBeCurrent("page");
+});
+
+test("it displays results table (desktop)", async ({ downloadPage, matchBreakpoints }) => {
+  const isDesktop = await matchBreakpoints(["laptop", "desktop"]);
+  test.skip(!isDesktop, "This test is only for desktop viewports");
+
+  await expect(downloadPage.resultsTable).toBeVisible();
+
+  const superstructRow = downloadPage.resultsTable
+    .getByRole("row")
+    .filter({ hasText: /superstruct/i });
+  const superstructVersion = await downloadPage.getCellByColumnName(superstructRow, "Version");
+
+  // no releases for 2 years, so this shouldn't need changing often
+  await expect(superstructVersion).toHaveText("2.0.2");
 });

@@ -1,4 +1,7 @@
-import type { Locator } from "@playwright/test";
+import type { Page, Locator } from "@playwright/test";
+
+import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
+import { breakpointQueries } from "#/shared/hooks/use-breakpoints";
 
 /**
  * Returns the cell in a given row of a table by the column name.
@@ -21,4 +24,10 @@ export async function getCellByColumnName(
     if (regexp.test(cols[colIdx]!)) return row.getByRole("cell").nth(colIdx);
 
   throw new Error(`Column with name "${columnName}" not found`);
+}
+
+export function matchBreakpoints(page: Page, breakpoints: Array<Breakpoint>) {
+  const query = breakpoints.map((breakpoint) => `(${breakpointQueries[breakpoint]})`).join(" or ");
+
+  return page.evaluate(([query]): boolean => window.matchMedia(query).matches, [query] as const);
 }
