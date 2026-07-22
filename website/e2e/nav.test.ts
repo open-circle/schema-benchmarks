@@ -29,7 +29,7 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
   ] as const) {
     const link = sidebar.getLinkByName(name);
 
-    await link.click({ timeout: 5000 });
+    await link.click();
 
     await expect(page).toHaveURL((url) => url.pathname === path);
 
