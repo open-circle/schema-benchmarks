@@ -1,4 +1,3 @@
-import type { Page } from "@playwright/test";
 import type { Locator } from "@playwright/test";
 import type { MinifyType } from "@schema-benchmarks/bench";
 
@@ -7,21 +6,16 @@ import { BasePOM } from "#e2e/fixtures/base";
 import { getCellByColumnName } from "#e2e/utils";
 
 export class DownloadPage extends BasePOM {
-  constructor(
-    page: Page,
-    public minifyToggle = page.getByRole("list", { name: "Minify" }),
-    public downloadSpeedInput = page.getByRole("spinbutton", { name: "Download speed" }),
-    public speedPresets = page.getByRole("toolbar", { name: "Speed presets" }),
-  ) {
-    super(page);
-  }
+  minifyToggle = this.page.getByRole("list", { name: "Minify" });
+  downloadSpeedInput = this.page.getByRole("spinbutton", { name: "Download speed" });
+  speedPresets = this.page.getByRole("toolbar", { name: "Speed presets" });
 
   breakpoints = {
     desktop: ["laptop", "desktop"] as const,
   };
 
   desktop = {
-    table: this.page.getByRole("table"),
+    table: this.main.getByRole("table"),
     getCellByColumnName: (row: Locator, columnName: string | RegExp) =>
       getCellByColumnName(this.desktop.table, row, columnName),
   };

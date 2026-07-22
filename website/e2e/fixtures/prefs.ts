@@ -1,5 +1,3 @@
-import type { Page } from "@playwright/test";
-
 import type { Style, Theme, NpmSite, Ligature } from "#/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#/shared/lib/prefs/constants";
 import { BasePOM } from "#e2e/fixtures/base";
@@ -7,18 +5,12 @@ import { BasePOM } from "#e2e/fixtures/base";
 import { expect } from ".";
 
 export class PrefsDialog extends BasePOM {
-  constructor(
-    page: Page,
-    public openButton = page.getByRole("button", { name: "Preferences" }),
-    public dialog = page.getByRole("dialog", { name: "Preferences" }),
-    public styleOptions = dialog.getByRole("toolbar", { name: "Style" }),
-    public themeOptions = dialog.getByRole("toolbar", { name: "Theme" }),
-    public npmSiteOptions = dialog.getByRole("toolbar", { name: "NPM browser" }),
-    public ligatureOptions = dialog.getByRole("toolbar", { name: "Code ligatures" }),
-    public documentElement = page.locator("html"),
-  ) {
-    super(page);
-  }
+  openButton = this.page.getByRole("button", { name: "Preferences" });
+  dialog = this.page.getByRole("dialog", { name: "Preferences" });
+  styleOptions = this.dialog.getByRole("toolbar", { name: "Style" });
+  themeOptions = this.dialog.getByRole("toolbar", { name: "Theme" });
+  npmSiteOptions = this.dialog.getByRole("toolbar", { name: "NPM browser" });
+  ligatureOptions = this.dialog.getByRole("toolbar", { name: "Code ligatures" });
 
   async openDialog() {
     await expect(async () => {

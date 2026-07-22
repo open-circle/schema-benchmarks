@@ -1,18 +1,13 @@
-import type { Page } from "@playwright/test";
-
 import { BasePOM } from "#e2e/fixtures/base";
 
 import { expect } from ".";
 
 export class Sidebar extends BasePOM {
-  constructor(
-    page: Page,
-    public sidebar = page.getByRole("complementary"),
-    public nav = sidebar.getByRole("navigation"),
-    public menuButton = page.getByRole("button", { name: "Expand sidebar" }),
-  ) {
-    super(page);
-  }
+  sidebar = this.page.getByRole("complementary");
+
+  nav = this.sidebar.getByRole("navigation");
+
+  menuButton = this.page.getByRole("button", { name: "Expand sidebar" });
 
   async open() {
     await expect(async () => {
