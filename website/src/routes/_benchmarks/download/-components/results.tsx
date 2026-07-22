@@ -43,11 +43,13 @@ export function DownloadResults({ results, mbps, minify, sortBy, sortDir }: Down
       {shouldUseTable ? (
         <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
       ) : (
-        <div className="download-cards">
+        <ul className="download-cards">
           {results.map((result) => (
-            <DownloadCard key={result.fileName} {...{ result, mbps, minify, gzipScaler }} />
+            <li key={result.fileName}>
+              <DownloadCard {...{ result, mbps, minify, gzipScaler }} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

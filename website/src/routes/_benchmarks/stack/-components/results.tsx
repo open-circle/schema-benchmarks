@@ -39,11 +39,13 @@ export function StackResults({ results, ...props }: StackResultsProps) {
       {shouldUseTable ? (
         <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
       ) : (
-        <div className="stack-cards">
+        <ul className="stack-cards">
           {results.map((result) => (
-            <StackCard key={result.libraryName} {...{ result, frameScale, lineCountScale }} />
+            <li key={result.libraryName}>
+              <StackCard {...{ result, frameScale, lineCountScale }} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

@@ -45,11 +45,13 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
       {shouldUseTable ? (
         <BenchTable {...{ results, meanScaler }} {...props} />
       ) : (
-        <div className="bench-cards">
+        <ul className="bench-cards">
           {results.map((result) => (
-            <BenchCard key={result.id} {...{ result, meanScaler: meanScaler }} />
+            <li key={result.id}>
+              <BenchCard {...{ result, meanScaler: meanScaler }} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
