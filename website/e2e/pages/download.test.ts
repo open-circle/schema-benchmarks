@@ -47,20 +47,24 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   await expect(downloadPage.getSpeedPresetButtonByLabel("WiFi")).not.toBeCurrent("page");
 });
 
-test("it displays results table (desktop)", async ({ downloadPage, matchBreakpoints }) => {
-  const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
-  test.skip(!isDesktop, "This test is only for desktop viewports");
+test.describe("desktop view", () => {
+  test.beforeEach(async ({ matchBreakpoints, downloadPage }) => {
+    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
+    test.skip(!isDesktop, "This test is only for desktop viewports");
+  });
 
-  await expect(downloadPage.desktop.table).toBeVisible();
+  test("it displays results table", async ({ downloadPage }) => {
+    await expect(downloadPage.desktop.table).toBeVisible();
 
-  const superstructRow = downloadPage.desktop.table
-    .getByRole("row")
-    .filter({ hasText: /superstruct/i });
-  const superstructVersion = await downloadPage.desktop.getCellByColumnName(
-    superstructRow,
-    "Version",
-  );
+    const superstructRow = downloadPage.desktop.table
+      .getByRole("row")
+      .filter({ hasText: /superstruct/i });
+    const superstructVersion = await downloadPage.desktop.getCellByColumnName(
+      superstructRow,
+      "Version",
+    );
 
-  // no releases for 2 years, so this shouldn't need changing often
-  await expect(superstructVersion).toHaveText("2.0.2");
+    // no releases for 2 years, so this shouldn't need changing often
+    await expect(superstructVersion).toHaveText("2.0.2");
+  });
 });
