@@ -27,7 +27,7 @@ export function ChipCollection({
 
 const cls = bem("chip");
 
-export const DisplayChip = classed.div(cls({ modifier: "display" }).className);
+export const DisplayChip = classed.li(cls({ modifier: "display" }).className);
 
 export interface ChipProps extends ComponentPropsWithRef<"button"> {
   activated?: boolean;
