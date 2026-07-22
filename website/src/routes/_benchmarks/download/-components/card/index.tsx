@@ -27,79 +27,79 @@ interface DownloadCardProps {
 const cls = bem("download-card");
 
 export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardProps) {
+  const id = getTransitionName("download-card", {
+    libraryName: result.libraryName,
+    note: result.note,
+  });
   return (
-    <article
-      {...cls()}
-      style={{
-        viewTransitionName: getTransitionName("download-card", {
-          libraryName: result.libraryName,
-          note: result.note,
-        }),
-      }}
-    >
-      <p {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</p>
-      <div {...cls("header-row")}>
-        <header {...cls("library-name")}>
-          <h4 className="typo-headline5">
-            <code className="language-text">{result.libraryName}</code>
-          </h4>
-          {result.note && (
-            <span {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</span>
-          )}
-        </header>
-        <ErrorBoundary fallback={null}>
-          <div {...cls({ element: "downloads", extra: "typo-body2" })}>
-            <MdSymbol>download</MdSymbol>
-            <DownloadCount libraryName={result.libraryName} />
-            {" / wk"}
+    <li id={id} aria-labelledby={`${id}-header`}>
+      <article {...cls()} style={{ viewTransitionName: id }}>
+        <p {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</p>
+        <div {...cls("header-row")}>
+          <header {...cls("library-name")} id={`${id}-header`}>
+            <h4 className="typo-headline5">
+              <code className="language-text">{result.libraryName}</code>
+            </h4>
+            {result.note && (
+              <span {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</span>
+            )}
+          </header>
+          <ErrorBoundary fallback={null}>
+            <div {...cls({ element: "downloads", extra: "typo-body2" })}>
+              <MdSymbol>download</MdSymbol>
+              <DownloadCount libraryName={result.libraryName} />
+              {" / wk"}
+            </div>
+          </ErrorBoundary>
+        </div>
+        <dl className="minimal">
+          <div>
+            <dt>Uncompressed</dt>
+            <dd>{formatBytes(result.bytes)}</dd>
           </div>
-        </ErrorBoundary>
-      </div>
-      <dl className="minimal">
-        <div>
-          <dt>Uncompressed</dt>
-          <dd>{formatBytes(result.bytes)}</dd>
+          <div>
+            <dt>Gzipped</dt>
+            <dd>{formatBytes(result.gzipBytes)}</dd>
+          </div>
+          <div>
+            <dt>Time</dt>
+            <dd>
+              {durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}
+            </dd>
+          </div>
+        </dl>
+        <div {...cls("bar")}>
+          <Bar {...gzipScaler(result.gzipBytes)} />
         </div>
-        <div>
-          <dt>Gzipped</dt>
-          <dd>{formatBytes(result.gzipBytes)}</dd>
+        <div {...cls("actions")}>
+          <ButtonGroup variant="outlined" className="source-links" ariaLabel="Links to files used">
+            <InternalLinkToggleButton
+              to="/repo/raw/$"
+              params={{
+                _splat: `schemas/libraries/${result.fileName}`,
+              }}
+              target="_blank"
+              preload={false}
+              rel="noreferrer noopener"
+              tooltip="Open source"
+            >
+              <MdSymbol>code</MdSymbol>
+            </InternalLinkToggleButton>
+            <InternalLinkToggleButton
+              to="/repo/raw/$"
+              params={{
+                _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
+              }}
+              preload={false}
+              target="_blank"
+              rel="noreferrer noopener"
+              tooltip="Open compiled"
+            >
+              <MdSymbol>deployed_code</MdSymbol>
+            </InternalLinkToggleButton>
+          </ButtonGroup>
         </div>
-        <div>
-          <dt>Time</dt>
-          <dd>{durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}</dd>
-        </div>
-      </dl>
-      <div {...cls("bar")}>
-        <Bar {...gzipScaler(result.gzipBytes)} />
-      </div>
-      <div {...cls("actions")}>
-        <ButtonGroup variant="outlined" className="source-links" ariaLabel="Links to files used">
-          <InternalLinkToggleButton
-            to="/repo/raw/$"
-            params={{
-              _splat: `schemas/libraries/${result.fileName}`,
-            }}
-            target="_blank"
-            preload={false}
-            rel="noreferrer noopener"
-            tooltip="Open source"
-          >
-            <MdSymbol>code</MdSymbol>
-          </InternalLinkToggleButton>
-          <InternalLinkToggleButton
-            to="/repo/raw/$"
-            params={{
-              _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
-            }}
-            preload={false}
-            target="_blank"
-            rel="noreferrer noopener"
-            tooltip="Open compiled"
-          >
-            <MdSymbol>deployed_code</MdSymbol>
-          </InternalLinkToggleButton>
-        </ButtonGroup>
-      </div>
-    </article>
+      </article>
+    </li>
   );
 }

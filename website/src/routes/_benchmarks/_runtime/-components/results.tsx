@@ -47,9 +47,7 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
       ) : (
         <ul className="bench-cards">
           {results.map((result) => (
-            <li key={result.id}>
-              <BenchCard {...{ result, meanScaler: meanScaler }} />
-            </li>
+            <BenchCard key={result.id} {...{ result, meanScaler: meanScaler }} />
           ))}
         </ul>
       )}

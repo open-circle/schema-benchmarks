@@ -38,7 +38,7 @@ export function DownloadTable({
 }: DownloadTableProps) {
   return (
     <div className="card" style={{ viewTransitionName: "download-table" }}>
-      <table className="download-table">
+      <table className="download-table" aria-label="Results">
         <thead>
           <tr>
             <SortableHeaderLink

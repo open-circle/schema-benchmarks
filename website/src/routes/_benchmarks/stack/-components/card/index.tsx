@@ -20,58 +20,56 @@ interface StackCardProps {
 const cls = bem("stack-card");
 
 export function StackCard({ result, frameScale, lineCountScale }: StackCardProps) {
+  const id = getTransitionName("stack-card", {
+    libraryName: result.libraryName,
+  });
   return (
-    <article
-      {...cls()}
-      style={{
-        viewTransitionName: getTransitionName("stack-card", {
-          libraryName: result.libraryName,
-        }),
-      }}
-    >
-      <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
-      <div {...cls({ element: "header-row" })}>
-        <h4 {...cls({ element: "library-name", extra: "typo-headline5" })}>
-          <code className="language-text">{result.libraryName}</code>
-        </h4>
-        <ErrorBoundary fallback={null}>
-          <div {...cls({ element: "downloads", extra: "typo-body2" })}>
-            <MdSymbol>download</MdSymbol>
-            <DownloadCount libraryName={result.libraryName} />
-          </div>
-        </ErrorBoundary>
-      </div>
-      <dl className="minimal">
-        {typeof result.frame === "number" && (
-          <>
-            <div {...cls({ element: "bar-row" })}>
-              <dt>Frame #</dt>
-              <dd>
-                {result.frame}
-
-                <Bar {...frameScale(result.frame)} />
-              </dd>
+    <li id={id} aria-labelledby={`${id}-header`}>
+      <article {...cls()} style={{ viewTransitionName: id }}>
+        <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
+        <div {...cls({ element: "header-row" })}>
+          <h4 {...cls({ element: "library-name", extra: "typo-headline5" })} id={`${id}-header`}>
+            <code className="language-text">{result.libraryName}</code>
+          </h4>
+          <ErrorBoundary fallback={null}>
+            <div {...cls({ element: "downloads", extra: "typo-body2" })}>
+              <MdSymbol>download</MdSymbol>
+              <DownloadCount libraryName={result.libraryName} />
             </div>
-          </>
-        )}
-        <div {...cls({ element: "bar-row" })}>
-          <dt>Line count</dt>
-          <dd>
-            {result.lineCount}
-            <Bar {...lineCountScale(result.lineCount)} />
-          </dd>
+          </ErrorBoundary>
         </div>
-      </dl>
-      <CodeBlock>{result.snippet}</CodeBlock>
-      <details>
-        <summary>
-          <span>
-            <MdSymbol>terminal</MdSymbol>
-            Output
-          </span>
-        </summary>
-        <AnsiBlock lineNumbers>{highlightFrame(result.output)}</AnsiBlock>
-      </details>
-    </article>
+        <dl className="minimal">
+          {typeof result.frame === "number" && (
+            <>
+              <div {...cls({ element: "bar-row" })}>
+                <dt>Frame #</dt>
+                <dd>
+                  {result.frame}
+
+                  <Bar {...frameScale(result.frame)} />
+                </dd>
+              </div>
+            </>
+          )}
+          <div {...cls({ element: "bar-row" })}>
+            <dt>Line count</dt>
+            <dd>
+              {result.lineCount}
+              <Bar {...lineCountScale(result.lineCount)} />
+            </dd>
+          </div>
+        </dl>
+        <CodeBlock>{result.snippet}</CodeBlock>
+        <details>
+          <summary>
+            <span>
+              <MdSymbol>terminal</MdSymbol>
+              Output
+            </span>
+          </summary>
+          <AnsiBlock lineNumbers>{highlightFrame(result.output)}</AnsiBlock>
+        </details>
+      </article>
+    </li>
   );
 }

@@ -20,74 +20,77 @@ interface BenchCardProps {
 export const cls = bem("bench-card");
 
 export function BenchCard({ result, meanScaler }: BenchCardProps) {
+  const { id } = result;
   return (
-    <div
-      {...cls()}
-      style={{
-        viewTransitionName: getTransitionName("bench-card", {
-          libraryName: result.libraryName,
-          note: result.note,
-          errorType: result.type === "parsing" ? result.errorType : undefined,
-        }),
-      }}
-    >
-      <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
-      <div {...cls("header-row")}>
-        <header {...cls("library-name")}>
-          <h4 className="typo-headline5">
-            <code className="language-text">{result.libraryName}</code>
-          </h4>
-          {result.note && (
-            <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
-          )}
-        </header>
-        <ErrorBoundary fallback={null}>
-          <div {...cls({ element: "downloads", extra: "typo-body2" })}>
-            <MdSymbol>download</MdSymbol>
-            <DownloadCount libraryName={result.libraryName} />
-            {" / wk"}
-          </div>
-        </ErrorBoundary>
-      </div>
-      <CodeBlock>{result.snippet}</CodeBlock>
-      <dl className="minimal">
-        <div>
-          <dt>Mean</dt>
-          <dd>{durationFormatter.format(getDuration(result.mean))}</dd>
+    <li id={id} aria-labelledby={`${id}-header`}>
+      <article
+        {...cls()}
+        style={{
+          viewTransitionName: getTransitionName("bench-card", {
+            libraryName: result.libraryName,
+            note: result.note,
+            errorType: result.type === "parsing" ? result.errorType : undefined,
+          }),
+        }}
+      >
+        <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
+        <div {...cls("header-row")}>
+          <header {...cls("library-name")} id={`${id}-header`}>
+            <h4 className="typo-headline5">
+              <code className="language-text">{result.libraryName}</code>
+            </h4>
+            {result.note && (
+              <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
+            )}
+          </header>
+          <ErrorBoundary fallback={null}>
+            <div {...cls({ element: "downloads", extra: "typo-body2" })}>
+              <MdSymbol>download</MdSymbol>
+              <DownloadCount libraryName={result.libraryName} />
+              {" / wk"}
+            </div>
+          </ErrorBoundary>
         </div>
-      </dl>
-      <div {...cls("bar")}>
-        <Bar {...meanScaler(result.mean)} />
-      </div>
-      <div {...cls("chips")}>
-        <ChipCollection>
-          <DisplayChip>
-            <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
-            {optimizeTypeProps.labels[result.optimizeType].label}
-          </DisplayChip>
-          {(result.type === "parsing" || result.type === "standard") && (
+        <CodeBlock>{result.snippet}</CodeBlock>
+        <dl className="minimal">
+          <div>
+            <dt>Mean</dt>
+            <dd>{durationFormatter.format(getDuration(result.mean))}</dd>
+          </div>
+        </dl>
+        <div {...cls("bar")}>
+          <Bar {...meanScaler(result.mean)} />
+        </div>
+        <div {...cls("chips")}>
+          <ChipCollection>
             <DisplayChip>
-              <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
-              {errorTypeProps.labels[result.errorType].label}
+              <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+              {optimizeTypeProps.labels[result.optimizeType].label}
             </DisplayChip>
+            {(result.type === "parsing" || result.type === "standard") && (
+              <DisplayChip>
+                <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
+                {errorTypeProps.labels[result.errorType].label}
+              </DisplayChip>
+            )}
+          </ChipCollection>
+          {result.throws && (
+            <ToggleButton
+              tooltip={{
+                subhead: "Throws on invalid data",
+                supporting: (
+                  <div style={{ maxWidth: "16rem" }}>
+                    This library throws an error when parsing invalid data (and has no non-throwing
+                    equivalent), so the benchmark includes a try/catch.
+                  </div>
+                ),
+              }}
+            >
+              <MdSymbol>error</MdSymbol>
+            </ToggleButton>
           )}
-        </ChipCollection>
-        {result.throws && (
-          <ToggleButton
-            tooltip={{
-              subhead: "Throws on invalid data",
-              supporting: (
-                <div style={{ maxWidth: "16rem" }}>
-                  This library throws an error when parsing invalid data (and has no non-throwing
-                  equivalent), so the benchmark includes a try/catch.
-                </div>
-              ),
-            }}
-          >
-            <MdSymbol>error</MdSymbol>
-          </ToggleButton>
-        )}
-      </div>
-    </div>
+        </div>
+      </article>
+    </li>
   );
 }

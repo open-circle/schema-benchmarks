@@ -41,9 +41,7 @@ export function StackResults({ results, ...props }: StackResultsProps) {
       ) : (
         <ul className="stack-cards">
           {results.map((result) => (
-            <li key={result.libraryName}>
-              <StackCard {...{ result, frameScale, lineCountScale }} />
-            </li>
+            <StackCard key={result.libraryName} {...{ result, frameScale, lineCountScale }} />
           ))}
         </ul>
       )}

@@ -68,3 +68,20 @@ test.describe("desktop view", () => {
     await expect(superstructVersion).toHaveText("2.0.2");
   });
 });
+
+test.describe("mobile view", () => {
+  test.beforeEach(async ({ matchBreakpoints, downloadPage }) => {
+    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
+    test.skip(isDesktop, "This test is only for mobile viewports");
+  });
+
+  test("it displays results cards", async ({ downloadPage }) => {
+    await expect(downloadPage.mobile.cardList).toBeVisible();
+
+    const superstructCard = downloadPage.mobile.getCardByName(/superstruct/i);
+    await superstructCard.scrollIntoViewIfNeeded();
+
+    const superstructVersion = superstructCard.getByText(/2\.0\.2/i);
+    await expect(superstructVersion).toBeVisible();
+  });
+});
