@@ -31,7 +31,8 @@
 
 .chip {
   list-style: none;
-  .chip__button {
+  .chip__button,
+  &.chip--display {
     text-decoration: none;
     appearance: none;
     border: none;
