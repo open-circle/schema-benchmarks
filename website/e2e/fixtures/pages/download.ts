@@ -1,8 +1,10 @@
 import type { Page } from "@playwright/test";
+import type { Locator } from "@playwright/test";
 import type { MinifyType } from "@schema-benchmarks/bench";
 
 import { minifyTypeProps } from "#/routes/_benchmarks/download/-constants";
 import { BasePOM } from "#e2e/fixtures/base";
+import { getCellByColumnName } from "#e2e/utils";
 
 export class DownloadPage extends BasePOM {
   constructor(
@@ -26,5 +28,9 @@ export class DownloadPage extends BasePOM {
 
   getSpeedPresetButtonByLabel(label: string) {
     return this.speedPresets.getByRole("link", { name: label });
+  }
+
+  getCellByColumnName(row: Locator, columnName: string | RegExp) {
+    return getCellByColumnName(this.resultsTable, row, columnName);
   }
 }
