@@ -6,15 +6,18 @@ test.beforeEach("Go to blog page", async ({ page }) => {
   await expect(page).toHaveTitle(/Blog/);
 });
 
-test("should render blog cards", async ({ blogPage }) => {
-  const card = blogPage.getBlogCardByTitle("Welcome");
-  await expect(card).toBeVisible();
-});
+test(
+  "should navigate to blog post when clicking on card",
+  { tag: "@smoke" },
+  async ({ blogPage, page, header }) => {
+    const card = blogPage.getBlogCardByTitle("Welcome");
 
-test("should navigate to blog post when clicking on card", async ({ blogPage, page, header }) => {
-  const card = blogPage.getBlogCardByTitle("Welcome");
-  await card.click();
-  await expect(page).toHaveURL("/blog/welcome");
+    await expect(card).toBeVisible();
 
-  await expect(header.breadcrumbs.getByText("Welcome").filter({ visible: true })).toBeVisible();
-});
+    await card.click();
+
+    await expect(page).toHaveURL("/blog/welcome");
+
+    await expect(header.breadcrumbs.getByText("Welcome").filter({ visible: true })).toBeVisible();
+  },
+);

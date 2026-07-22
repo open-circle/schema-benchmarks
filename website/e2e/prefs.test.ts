@@ -6,7 +6,7 @@ import {
 } from "#/shared/lib/prefs/constants";
 import { test, expect } from "#e2e/fixtures";
 
-test("dialog opens", async ({ page, prefs }) => {
+test("dialog opens", { tag: "@smoke" }, async ({ page, prefs }) => {
   await page.goto("/");
 
   await prefs.openDialog();

@@ -7,13 +7,17 @@ test.beforeEach("Go to download page", async ({ page }) => {
   await expect(page).toHaveTitle(/Download/);
 });
 
-test("it can switch between minified and unminified results", async ({ page, downloadPage }) => {
-  for (const minifyType of minifyTypeSchema.options) {
-    await downloadPage.selectMinifyType(minifyType);
+test(
+  "it can switch between minified and unminified results",
+  { tag: "@smoke" },
+  async ({ page, downloadPage }) => {
+    for (const minifyType of minifyTypeSchema.options) {
+      await downloadPage.selectMinifyType(minifyType);
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
-  }
-});
+      await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+    }
+  },
+);
 
 test("it can use speed presets", async ({ page, downloadPage }) => {
   const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
