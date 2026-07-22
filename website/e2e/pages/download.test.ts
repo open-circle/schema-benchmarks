@@ -82,10 +82,8 @@ test.describe("desktop view", () => {
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
-    const librarySortLink = downloadPage.desktop.getSortLinkByColumnName("Library");
-    const libraryHeaderCell = downloadPage.desktop.headerRow.getByRole("columnheader", {
-      name: "Library",
-    });
+    const libraryHeaderCell = downloadPage.desktop.getHeaderCell("Library");
+    const librarySortLink = libraryHeaderCell.getByRole("link");
 
     await librarySortLink.click();
 
