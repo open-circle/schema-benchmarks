@@ -72,7 +72,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments/website
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
       - name: E2E Test
         run: pnpm e2e --grep @smoke
       - name: Upload Playwright Report
@@ -80,5 +80,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: "/playwright-report/"
+          path: "*/playwright-report/"
           retention-days: 30
