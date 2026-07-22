@@ -43,11 +43,9 @@ export function DownloadResults({ results, mbps, minify, sortBy, sortDir }: Down
       {shouldUseTable ? (
         <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
       ) : (
-        <ul className="download-cards">
+        <ul className="download-cards" aria-label="Results">
           {results.map((result) => (
-            <li key={result.fileName}>
-              <DownloadCard {...{ result, mbps, minify, gzipScaler }} />
-            </li>
+            <DownloadCard key={result.fileName} {...{ result, mbps, minify, gzipScaler }} />
           ))}
         </ul>
       )}

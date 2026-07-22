@@ -15,9 +15,14 @@ export class DownloadPage extends BasePOM {
   };
 
   desktop = {
-    table: this.main.getByRole("table"),
+    table: this.main.getByRole("table", { name: "Results" }),
     getCellByColumnName: (row: Locator, columnName: string | RegExp) =>
       getCellByColumnName(this.desktop.table, row, columnName),
+  };
+
+  mobile = {
+    cardList: this.main.getByRole("list", { name: "Results" }),
+    getCardByName: (name: string | RegExp) => this.mobile.cardList.getByRole("listitem", { name }),
   };
 
   selectMinifyType(minifyType: MinifyType) {
