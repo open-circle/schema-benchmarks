@@ -6,9 +6,9 @@ import { BasePOM } from "#e2e/fixtures/base";
 import { getCellByColumnName } from "#e2e/utils";
 
 export class DownloadPage extends BasePOM {
-  minifyToggle = this.page.getByRole("list", { name: "Minify" });
-  downloadSpeedInput = this.page.getByRole("spinbutton", { name: "Download speed" });
-  speedPresets = this.page.getByRole("toolbar", { name: "Speed presets" });
+  minifyToggle = this.main.getByRole("list", { name: "Minify" });
+  downloadSpeedInput = this.main.getByRole("spinbutton", { name: "Download speed" });
+  speedPresets = this.main.getByRole("toolbar", { name: "Speed presets" });
 
   breakpoints = {
     desktop: ["laptop", "desktop"] as const,
@@ -25,13 +25,11 @@ export class DownloadPage extends BasePOM {
     getCardByName: (name: string | RegExp) => this.mobile.cardList.getByRole("listitem", { name }),
   };
 
-  selectMinifyType(minifyType: MinifyType) {
-    return this.minifyToggle
-      .getByRole("link", {
-        name: minifyTypeProps.labels[minifyType].label,
-        exact: true,
-      })
-      .click();
+  getMinifyTypeLink(minifyType: MinifyType) {
+    return this.minifyToggle.getByRole("link", {
+      name: minifyTypeProps.labels[minifyType].label,
+      exact: true,
+    });
   }
 
   getSpeedPresetButtonByLabel(label: string) {

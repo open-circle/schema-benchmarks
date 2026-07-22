@@ -2,8 +2,11 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
 
-test.beforeEach("Go to download page", async ({ page }) => {
+test.beforeEach("Go to download page", async ({ page, fontsLoaded }) => {
   await page.goto("/download");
+
+  await fontsLoaded();
+
   await expect(page).toHaveTitle(/Download/);
 });
 
@@ -12,9 +15,13 @@ test(
   { tag: "@smoke" },
   async ({ page, downloadPage }) => {
     for (const minifyType of minifyTypeSchema.options) {
-      await downloadPage.selectMinifyType(minifyType);
+      const link = downloadPage.getMinifyTypeLink(minifyType);
+
+      await link.click();
 
       await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+
+      await expect(link).toBeCurrent("page");
     }
   },
 );

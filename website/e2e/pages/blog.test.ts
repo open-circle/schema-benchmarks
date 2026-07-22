@@ -1,7 +1,9 @@
 import { test, expect } from "#e2e/fixtures";
 
-test.beforeEach("Go to blog page", async ({ page }) => {
+test.beforeEach("Go to blog page", async ({ page, fontsLoaded }) => {
   await page.goto("/blog");
+
+  await fontsLoaded();
 
   await expect(page).toHaveTitle(/Blog/);
 });
