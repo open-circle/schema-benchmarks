@@ -1,4 +1,3 @@
-import type { Locator } from "@playwright/test";
 import type { MinifyType } from "@schema-benchmarks/bench";
 
 import { minifyTypeProps } from "#/routes/_benchmarks/download/-constants";
@@ -14,16 +13,25 @@ export class DownloadPage extends BasePOM {
     desktop: ["laptop", "desktop"] as const,
   };
 
-  desktop = {
-    table: this.main.getByRole("table", { name: "Results" }),
-    getCellByColumnName: (row: Locator, columnName: string | RegExp) =>
-      getCellByColumnName(this.desktop.table, row, columnName),
-  };
+  get desktop() {
+    const table = this.main.getByRole("table", { name: "Results" });
+    const headerRow = table.getByRole("row").first();
+    return {
+      table,
+      headerRow,
+      getCellByColumnName: getCellByColumnName.bind(null, table),
+      getSortLinkByColumnName: (columnName: string | RegExp) =>
+        headerRow.getByRole("link", { name: columnName }),
+    };
+  }
 
-  mobile = {
-    cardList: this.main.getByRole("list", { name: "Results" }),
-    getCardByName: (name: string | RegExp) => this.mobile.cardList.getByRole("listitem", { name }),
-  };
+  get mobile() {
+    const cardList = this.main.getByRole("list", { name: "Results" });
+    return {
+      cardList,
+      getCardByName: (name: string | RegExp) => cardList.getByRole("listitem", { name }),
+    };
+  }
 
   getMinifyTypeLink(minifyType: MinifyType) {
     return this.minifyToggle.getByRole("link", {
