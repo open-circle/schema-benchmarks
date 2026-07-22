@@ -80,6 +80,28 @@ test.describe("desktop view", () => {
 
     await expect(superstructVersionCell).toHaveText(superstructVersion);
   });
+
+  test("table can be sorted by column", async ({ downloadPage }) => {
+    const librarySortLink = downloadPage.desktop.getSortLinkByColumnName("Library");
+    const libraryHeaderCell = downloadPage.desktop.headerRow.getByRole("columnheader", {
+      name: "Library",
+    });
+
+    await librarySortLink.click();
+
+    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+
+    const firstRow = downloadPage.desktop.table.getByRole("row").nth(1);
+    const firstRowLibraryCell = await downloadPage.desktop.getCellByColumnName(firstRow, "Library");
+
+    await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
+
+    await librarySortLink.click();
+
+    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+
+    await expect(firstRowLibraryCell).toHaveText(/zod/i);
+  });
 });
 
 test.describe("mobile view", () => {
