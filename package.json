@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "eslint-plugin-depend": "^1.5.0",
+    "eslint-plugin-playwright": "^2.10.5",
     "knip": "^6.27.0",
     "lefthook": "^2.1.10",
     "oxfmt": "catalog:",

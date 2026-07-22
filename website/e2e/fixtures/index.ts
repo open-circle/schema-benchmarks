@@ -50,6 +50,7 @@ export const expect = baseExpect.extend({
     let pass: boolean;
     let matcherResult: any;
     try {
+      // oxlint-disable-next-line playwright/valid-expect
       const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       const promise = expectedValue
         ? expectation.toHaveAttribute("aria-current", expectedValue)
@@ -89,6 +90,7 @@ export const expect = baseExpect.extend({
     let pass: boolean;
     let matcherResult: any;
     try {
+      // oxlint-disable-next-line playwright/valid-expect
       const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       await expectation.toHaveAttribute("aria-pressed", "true");
       pass = true;

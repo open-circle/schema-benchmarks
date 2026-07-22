@@ -1,14 +1,12 @@
+import playwright from "eslint-plugin-playwright";
 import { defineConfig } from "oxlint";
+
+export const defaultJsPlugins = [{ name: "depend", specifier: "eslint-plugin-depend" }];
 
 export const defaultPlugins = ["eslint", "typescript", "unicorn", "oxc"] as const;
 
 export const baseConfig = defineConfig({
-  jsPlugins: [
-    {
-      name: "depend",
-      specifier: "eslint-plugin-depend",
-    },
-  ],
+  jsPlugins: defaultJsPlugins,
   categories: {
     correctness: "error",
     suspicious: "warn",
@@ -32,7 +30,7 @@ export const baseConfig = defineConfig({
   },
   overrides: [
     {
-      files: ["**/*.test.ts", "**/*.test.tsx"],
+      files: ["**/*.{browser,node}.test.ts", "**/*.{browser,node}.test.tsx"],
       plugins: [...defaultPlugins, "vitest"],
       rules: {
         "vitest/no-standalone-expect": [
@@ -41,6 +39,17 @@ export const baseConfig = defineConfig({
             additionalTestBlockFunctions: ["it", "test"],
           },
         ],
+      },
+    },
+    {
+      files: ["**/e2e/**"],
+      jsPlugins: [
+        ...defaultJsPlugins,
+        { name: "playwright", specifier: "eslint-plugin-playwright" },
+      ],
+      rules: {
+        ...playwright.configs["flat/recommended"].rules,
+        "playwright/no-skipped-test": ["warn", { allowConditional: true }],
       },
     },
   ],

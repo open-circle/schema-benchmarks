@@ -25,7 +25,7 @@ export class PrefsDialog extends BasePOM {
 
   async closeDialog() {
     await this.page.mouse.click(0, 0);
-    await expect(this.dialog).not.toBeVisible();
+    await expect(this.dialog).toBeHidden();
   }
 
   async getStyleOption(style: Style) {
