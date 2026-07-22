@@ -11,16 +11,15 @@
   background-color: var(--sidebar-background);
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   min-width: var(--sidebar-width);
   .sidebar__logo {
     display: flex;
     align-items: center;
     padding: 0 1rem;
     gap: 1rem;
-    margin-bottom: 1rem;
     height: var(--page-header-height);
+    min-height: var(--page-header-height);
     border-bottom: 1px solid var(--divider);
     position: relative;
     img {
@@ -37,6 +36,9 @@
     }
   }
   nav {
+    padding-top: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
     ul {
       list-style: none;
       padding: 0;
