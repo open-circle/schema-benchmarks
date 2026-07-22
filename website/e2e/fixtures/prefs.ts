@@ -2,9 +2,9 @@ import type { Page } from "@playwright/test";
 
 import type { Style, Theme, NpmSite, Ligature } from "#/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#/shared/lib/prefs/constants";
+import { BasePOM } from "#e2e/fixtures/base";
 
 import { expect } from ".";
-import { BasePOM } from "./base";
 
 export class PrefsDialog extends BasePOM {
   constructor(

@@ -1,7 +1,8 @@
 import type { Page } from "@playwright/test";
 
+import { BasePOM } from "#e2e/fixtures/base";
+
 import { expect } from ".";
-import { BasePOM } from "./base";
 
 export class Sidebar extends BasePOM {
   constructor(

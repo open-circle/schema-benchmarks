@@ -5,6 +5,7 @@ import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
 import { Header } from "./header";
 import { BlogPage } from "./pages/blog";
+import { DownloadPage } from "./pages/download";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
@@ -13,7 +14,8 @@ const POMs = {
   prefs: PrefsDialog,
   blogPage: BlogPage,
   header: Header,
-};
+  downloadPage: DownloadPage,
+} satisfies Record<string, new (page: Page) => any>;
 
 type POMFixtures = {
   [K in keyof typeof POMs]: InstanceType<(typeof POMs)[K]>;
