@@ -98,12 +98,14 @@ td {
   }
 }
 
-table.minimal {
-  tr {
-    vertical-align: baseline;
-    border: none;
+dl.minimal {
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 52px;
   }
-  th {
+  dt {
     @extend .typo-caption;
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }

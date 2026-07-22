@@ -50,14 +50,12 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         </ErrorBoundary>
       </div>
       <CodeBlock>{result.snippet}</CodeBlock>
-      <table className="minimal">
-        <tbody>
-          <tr>
-            <th>Mean</th>
-            <td className="numeric">{durationFormatter.format(getDuration(result.mean))}</td>
-          </tr>
-        </tbody>
-      </table>
+      <dl className="minimal">
+        <div>
+          <dt>Mean</dt>
+          <dd>{durationFormatter.format(getDuration(result.mean))}</dd>
+        </div>
+      </dl>
       <div {...cls("bar")}>
         <Bar {...meanScaler(result.mean)} />
       </div>

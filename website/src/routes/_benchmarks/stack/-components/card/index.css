@@ -26,6 +26,22 @@
     gap: 0.5rem;
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
+  .stack-card__bar-row {
+    padding-bottom: 3rem;
+    position: relative;
+    &:last-child {
+      padding-bottom: 2rem;
+      .bar {
+        bottom: 0;
+      }
+    }
+    .bar {
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+      width: 100%;
+    }
+  }
   details {
     width: 100%;
     max-width: 100%;

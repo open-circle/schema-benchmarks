@@ -59,14 +59,12 @@ export function CodecCard({ result, encodeScaler, decodeScaler }: CodecCardProps
               {type === "encode" ? "Encode" : "Decode"}
             </h6>
             <CodeBlock>{snippet}</CodeBlock>
-            <table className="minimal">
-              <tbody>
-                <tr>
-                  <th>Mean</th>
-                  <td className="numeric">{durationFormatter.format(getDuration(mean))}</td>
-                </tr>
-              </tbody>
-            </table>
+            <dl className="minimal">
+              <div>
+                <dt>Mean</dt>
+                <dd>{durationFormatter.format(getDuration(mean))}</dd>
+              </div>
+            </dl>
             <div {...cls("bar")}>
               <Bar {...scaler(mean)} />
             </div>

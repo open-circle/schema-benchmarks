@@ -28,7 +28,7 @@ const cls = bem("download-card");
 
 export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardProps) {
   return (
-    <div
+    <article
       {...cls()}
       style={{
         viewTransitionName: getTransitionName("download-card", {
@@ -37,14 +37,14 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
         }),
       }}
     >
-      <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
+      <p {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</p>
       <div {...cls("header-row")}>
         <header {...cls("library-name")}>
           <h4 className="typo-headline5">
             <code className="language-text">{result.libraryName}</code>
           </h4>
           {result.note && (
-            <p {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</p>
+            <span {...cls({ element: "note", extra: "typo-caption" })}>({result.note})</span>
           )}
         </header>
         <ErrorBoundary fallback={null}>
@@ -55,24 +55,20 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
           </div>
         </ErrorBoundary>
       </div>
-      <table className="minimal">
-        <tbody>
-          <tr>
-            <th>Uncompressed</th>
-            <td className="numeric">{formatBytes(result.bytes)}</td>
-          </tr>
-          <tr>
-            <th>Gzipped</th>
-            <td className="numeric">{formatBytes(result.gzipBytes)}</td>
-          </tr>
-          <tr>
-            <th>Time</th>
-            <td className="numeric">
-              {durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <dl className="minimal">
+        <div>
+          <dt>Uncompressed</dt>
+          <dd>{formatBytes(result.bytes)}</dd>
+        </div>
+        <div>
+          <dt>Gzipped</dt>
+          <dd>{formatBytes(result.gzipBytes)}</dd>
+        </div>
+        <div>
+          <dt>Time</dt>
+          <dd>{durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}</dd>
+        </div>
+      </dl>
       <div {...cls("bar")}>
         <Bar {...gzipScaler(result.gzipBytes)} />
       </div>
@@ -104,6 +100,6 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
           </InternalLinkToggleButton>
         </ButtonGroup>
       </div>
-    </div>
+    </article>
   );
 }

@@ -21,7 +21,7 @@ const cls = bem("stack-card");
 
 export function StackCard({ result, frameScale, lineCountScale }: StackCardProps) {
   return (
-    <div
+    <article
       {...cls()}
       style={{
         viewTransitionName: getTransitionName("stack-card", {
@@ -41,32 +41,27 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
           </div>
         </ErrorBoundary>
       </div>
-      <table className="minimal">
-        <tbody>
-          {typeof result.frame === "number" && (
-            <>
-              <tr>
-                <th>Frame #</th>
-                <td className="numeric">{result.frame}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <Bar {...frameScale(result.frame)} />
-                </td>
-              </tr>
-            </>
-          )}
-          <tr>
-            <th>Line count</th>
-            <td className="numeric">{result.lineCount}</td>
-          </tr>
-          <tr>
-            <td colSpan={2}>
-              <Bar {...lineCountScale(result.lineCount)} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <dl className="minimal">
+        {typeof result.frame === "number" && (
+          <>
+            <div {...cls({ element: "bar-row" })}>
+              <dt>Frame #</dt>
+              <dd>
+                {result.frame}
+
+                <Bar {...frameScale(result.frame)} />
+              </dd>
+            </div>
+          </>
+        )}
+        <div {...cls({ element: "bar-row" })}>
+          <dt>Line count</dt>
+          <dd>
+            {result.lineCount}
+            <Bar {...lineCountScale(result.lineCount)} />
+          </dd>
+        </div>
+      </dl>
       <CodeBlock>{result.snippet}</CodeBlock>
       <details>
         <summary>
@@ -77,6 +72,6 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
         </summary>
         <AnsiBlock lineNumbers>{highlightFrame(result.output)}</AnsiBlock>
       </details>
-    </div>
+    </article>
   );
 }
