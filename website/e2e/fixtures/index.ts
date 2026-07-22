@@ -35,7 +35,7 @@ const pomFixtures = Object.fromEntries(
 };
 
 interface UtilFixtures {
-  matchBreakpoints: (breakpoints: Array<Breakpoint>) => Promise<boolean>;
+  matchBreakpoints: (breakpoints: ReadonlyArray<Breakpoint>) => Promise<boolean>;
 }
 
 export const test = baseTest.extend<POMFixtures & UtilFixtures>({

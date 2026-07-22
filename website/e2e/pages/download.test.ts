@@ -48,15 +48,18 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
 });
 
 test("it displays results table (desktop)", async ({ downloadPage, matchBreakpoints }) => {
-  const isDesktop = await matchBreakpoints(["laptop", "desktop"]);
+  const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
   test.skip(!isDesktop, "This test is only for desktop viewports");
 
-  await expect(downloadPage.resultsTable).toBeVisible();
+  await expect(downloadPage.desktop.table).toBeVisible();
 
-  const superstructRow = downloadPage.resultsTable
+  const superstructRow = downloadPage.desktop.table
     .getByRole("row")
     .filter({ hasText: /superstruct/i });
-  const superstructVersion = await downloadPage.getCellByColumnName(superstructRow, "Version");
+  const superstructVersion = await downloadPage.desktop.getCellByColumnName(
+    superstructRow,
+    "Version",
+  );
 
   // no releases for 2 years, so this shouldn't need changing often
   await expect(superstructVersion).toHaveText("2.0.2");

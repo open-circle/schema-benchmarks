@@ -12,10 +12,19 @@ export class DownloadPage extends BasePOM {
     public minifyToggle = page.getByRole("list", { name: "Minify" }),
     public downloadSpeedInput = page.getByRole("spinbutton", { name: "Download speed" }),
     public speedPresets = page.getByRole("toolbar", { name: "Speed presets" }),
-    public resultsTable = page.getByRole("table"),
   ) {
     super(page);
   }
+
+  breakpoints = {
+    desktop: ["laptop", "desktop"] as const,
+  };
+
+  desktop = {
+    table: this.page.getByRole("table"),
+    getCellByColumnName: (row: Locator, columnName: string | RegExp) =>
+      getCellByColumnName(this.desktop.table, row, columnName),
+  };
 
   selectMinifyType(minifyType: MinifyType) {
     return this.minifyToggle
@@ -28,9 +37,5 @@ export class DownloadPage extends BasePOM {
 
   getSpeedPresetButtonByLabel(label: string) {
     return this.speedPresets.getByRole("link", { name: label });
-  }
-
-  getCellByColumnName(row: Locator, columnName: string | RegExp) {
-    return getCellByColumnName(this.resultsTable, row, columnName);
   }
 }

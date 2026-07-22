@@ -26,7 +26,7 @@ export async function getCellByColumnName(
   throw new Error(`Column with name "${columnName}" not found`);
 }
 
-export function matchBreakpoints(page: Page, breakpoints: Array<Breakpoint>) {
+export function matchBreakpoints(page: Page, breakpoints: ReadonlyArray<Breakpoint>) {
   const query = breakpoints.map((breakpoint) => `(${breakpointQueries[breakpoint]})`).join(" or ");
 
   return page.evaluate(([query]): boolean => window.matchMedia(query).matches, [query] as const);
