@@ -50,7 +50,7 @@ export const expect = baseExpect.extend({
     let pass: boolean;
     let matcherResult: any;
     try {
-      const expectation = this.isNot ? expect(locator).not : expect(locator);
+      const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       const promise = expectedValue
         ? expectation.toHaveAttribute("aria-current", expectedValue)
         : expectation.toHaveAttribute("aria-current");
@@ -89,7 +89,7 @@ export const expect = baseExpect.extend({
     let pass: boolean;
     let matcherResult: any;
     try {
-      const expectation = this.isNot ? expect(locator).not : expect(locator);
+      const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       await expectation.toHaveAttribute("aria-pressed", "true");
       pass = true;
     } catch (e: any) {
