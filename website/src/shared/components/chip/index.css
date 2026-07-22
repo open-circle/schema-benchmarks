@@ -30,61 +30,64 @@
 }
 
 .chip {
-  text-decoration: none;
-  appearance: none;
-  border: none;
-  background-color: var(--chip-background);
-  color: var(--chip-foreground);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--shape-pill);
-  @supports (corner-shape: bevel) {
-    padding: 0.5rem 1rem;
-  }
-  --icon-size: 18;
-  @extend .typo-body2;
-  font-family: var(--font-family-button);
-  transition:
-    background-color 250ms,
-    color 250ms,
-    font-weight 250ms;
-  .md-symbol {
-    margin-left: -0.25rem;
-    &:dir(rtl) {
-      margin-left: 0;
-      margin-right: -0.25rem;
+  list-style: none;
+  .chip__button {
+    text-decoration: none;
+    appearance: none;
+    border: none;
+    background-color: var(--chip-background);
+    color: var(--chip-foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--shape-pill);
+    @supports (corner-shape: bevel) {
+      padding: 0.5rem 1rem;
     }
-  }
-  &:hover {
-    background-color: var(--hovered-chip-background);
-  }
-  &:focus-visible {
-    outline: none;
-    background-color: var(--focused-chip-background);
-  }
-  &[data-status="active"],
-  &[aria-pressed="true"] {
-    background-color: var(--selected-chip-background);
-    color: var(--selected-chip-foreground);
-    --icon-fill: 1;
+    --icon-size: 18;
+    @extend .typo-body2;
+    font-family: var(--font-family-button);
+    transition:
+      background-color 250ms,
+      color 250ms,
+      font-weight 250ms;
+    .md-symbol {
+      margin-left: -0.25rem;
+      &:dir(rtl) {
+        margin-left: 0;
+        margin-right: -0.25rem;
+      }
+    }
     &:hover {
-      background-color: var(--hovered-selected-chip-background);
+      background-color: var(--hovered-chip-background);
     }
     &:focus-visible {
-      background-color: var(--focused-selected-chip-background);
+      outline: none;
+      background-color: var(--focused-chip-background);
     }
-  }
-  &:disabled,
-  &[aria-disabled="true"] {
-    opacity: var(--disabled-text);
-    pointer-events: none;
-  }
-  &.chip--display {
-    border: 1px solid var(--divider);
-    background-color: transparent;
-    color: var(--page-foreground);
+    &[data-status="active"],
+    &[aria-pressed="true"] {
+      background-color: var(--selected-chip-background);
+      color: var(--selected-chip-foreground);
+      --icon-fill: 1;
+      &:hover {
+        background-color: var(--hovered-selected-chip-background);
+      }
+      &:focus-visible {
+        background-color: var(--focused-selected-chip-background);
+      }
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      opacity: var(--disabled-text);
+      pointer-events: none;
+    }
+    &.chip--display {
+      border: 1px solid var(--divider);
+      background-color: transparent;
+      color: var(--page-foreground);
+    }
   }
 }
 
@@ -92,4 +95,7 @@
   display: flex;
   gap: 0.25rem;
   flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
