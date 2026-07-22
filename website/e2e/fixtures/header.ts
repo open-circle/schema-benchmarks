@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-import { BasePOM } from "./base";
+import { BasePOM } from "#e2e/fixtures/base";
 
 export class Header extends BasePOM {
   constructor(

@@ -2,6 +2,8 @@ import { test, expect } from "#e2e/fixtures";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/blog");
+
+  await expect(page).toHaveTitle(/Blog/);
 });
 
 test("should render blog cards", async ({ blogPage }) => {
