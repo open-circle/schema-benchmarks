@@ -22,8 +22,9 @@ test.describe("dialog closes", () => {
 
     await page.mouse.click(0, 0);
 
-    await expect(prefs.dialog).not.toBeVisible();
+    await expect(prefs.dialog).toBeHidden();
   });
+
   test("by pressing the escape key", async ({ page, prefs }) => {
     await page.goto("/");
 
@@ -32,7 +33,7 @@ test.describe("dialog closes", () => {
     await expect(async () => {
       await prefs.dialog.press("Escape");
 
-      await expect(prefs.dialog).not.toBeVisible();
+      await expect(prefs.dialog).toBeHidden();
     }).toPass();
   });
 });
