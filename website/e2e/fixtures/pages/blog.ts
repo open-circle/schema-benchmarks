@@ -1,14 +1,7 @@
-import type { Page } from "@playwright/test";
-
 import { BasePOM } from "#e2e/fixtures/base";
 
 export class BlogPage extends BasePOM {
-  constructor(
-    page: Page,
-    public blogGrid = page.locator("main").getByRole("list"),
-  ) {
-    super(page);
-  }
+  blogGrid = this.main.getByRole("list");
 
   getBlogCardByTitle(title: string) {
     return this.blogGrid.getByRole("listitem", { name: title });
