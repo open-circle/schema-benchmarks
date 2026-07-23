@@ -1,7 +1,7 @@
 import stackResults from "@schema-benchmarks/bench/stack.json";
 import { exclude, filterMap } from "@schema-benchmarks/utils";
 
-import { Bar } from "#/shared/components/table/bar.js";
+import { Bar } from "#src/shared/components/table/bar.js";
 
 import "./index.css";
 import preview from "#storybook/preview";

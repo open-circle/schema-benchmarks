@@ -3,10 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
-import { PageFilters } from "#/shared/components/page-filter";
-import { PageFilterChips } from "#/shared/components/page-filter/chips";
-import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
+import { PageFilters } from "#src/shared/components/page-filter";
+import { PageFilterChips } from "#src/shared/components/page-filter/chips";
+import { generateMetadata } from "#src/shared/data/meta";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { BenchResults } from "../-components/results";
 import {

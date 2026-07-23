@@ -2,6 +2,12 @@
   "name": "@schema-benchmarks/website",
   "private": true,
   "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#test/": "./test/*",
+    "#storybook/": "./.storybook/*",
+    "#e2e/": "./test/e2e/*"
+  },
   "scripts": {
     "build": "vite build",
     "build-storybook": "storybook build",

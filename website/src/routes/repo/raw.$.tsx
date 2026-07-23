@@ -3,11 +3,11 @@ import { createFileRoute, notFound, stripSearchParams } from "@tanstack/react-ro
 import { isResponseError } from "up-fetch";
 import * as v from "valibot";
 
-import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
-import { CodeBlock } from "#/shared/components/code";
-import { MdSymbol } from "#/shared/components/symbol";
-import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
+import { CodeBlock } from "#src/shared/components/code";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { generateMetadata } from "#src/shared/data/meta";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { getRaw } from "./-query";
 

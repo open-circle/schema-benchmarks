@@ -2,7 +2,7 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import clsx from "clsx";
 import { useRef, type ComponentPropsWithRef } from "react";
 
-import { trackedLinkProps } from "#/shared/lib/analytics";
+import { trackedLinkProps } from "#src/shared/lib/analytics";
 
 import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";

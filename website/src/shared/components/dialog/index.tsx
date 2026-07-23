@@ -3,8 +3,8 @@ import { type ComponentPropsWithRef, type ReactNode, useEffect, useRef } from "r
 import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 
-import { classed } from "#/shared/components/utils";
-import { useFocusGroup } from "#/shared/hooks/use-focus-group";
+import { classed } from "#src/shared/components/utils";
+import { useFocusGroup } from "#src/shared/hooks/use-focus-group";
 
 export type CloseDialog = Record<"close" | "requestClose", (returnValue?: string) => void>;
 

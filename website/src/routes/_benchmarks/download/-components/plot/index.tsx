@@ -4,9 +4,9 @@ import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { createPlotComponent } from "#/shared/components/plot";
-import { color } from "#/shared/data/scale";
-import { useElementSize } from "#/shared/hooks/use-content-box-size";
+import { createPlotComponent } from "#src/shared/components/plot";
+import { color } from "#src/shared/data/scale";
+import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 import { getDownloadResults } from "../../-query";
 

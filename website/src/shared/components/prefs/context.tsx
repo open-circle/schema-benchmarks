@@ -8,7 +8,7 @@ import {
   styleSchema,
   themeSchema,
   ligatureSchema,
-} from "#/shared/lib/prefs/constants";
+} from "#src/shared/lib/prefs/constants";
 
 export type PrefContextValue<Name extends string, Value> = Compute<
   Record<Name, Value> & Record<`set${Capitalize<Name>}`, (value: Value) => void>

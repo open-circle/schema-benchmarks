@@ -3,11 +3,11 @@ import { durationFormatter, getDuration, getTransitionName } from "@schema-bench
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { ToggleButton } from "#/shared/components/button/toggle";
-import { ChipCollection, DisplayChip } from "#/shared/components/chip";
-import { CodeBlock } from "#/shared/components/code";
-import { MdSymbol } from "#/shared/components/symbol";
-import { Bar } from "#/shared/components/table/bar";
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
+import { CodeBlock } from "#src/shared/components/code";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { Bar } from "#src/shared/components/table/bar";
 
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";
 import { DownloadCount } from "../../../-components/count";

@@ -2,14 +2,14 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import bem from "react-bem-helper";
 
-import { DownloadCount } from "#/routes/_benchmarks/-components/count";
-import { getPackageMetadata, getRepoLink } from "#/routes/_benchmarks/-query";
-import { getReplacementUrl } from "#/routes/_benchmarks/libraries/-query";
-import { ButtonGroup } from "#/shared/components/button";
-import { ExternalLinkToggleButton } from "#/shared/components/button/toggle";
-import GithubIcon from "#/shared/components/header/github.svg?react";
-import { MdSymbol } from "#/shared/components/symbol";
-import { trackedLinkProps } from "#/shared/lib/analytics";
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { getPackageMetadata, getRepoLink } from "#src/routes/_benchmarks/-query";
+import { getReplacementUrl } from "#src/routes/_benchmarks/libraries/-query";
+import { ButtonGroup } from "#src/shared/components/button";
+import { ExternalLinkToggleButton } from "#src/shared/components/button/toggle";
+import GithubIcon from "#src/shared/components/header/github.svg?react";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { trackedLinkProps } from "#src/shared/lib/analytics";
 
 export interface PackageCardProps {
   pkgName: string;

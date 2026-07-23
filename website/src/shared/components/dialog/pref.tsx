@@ -2,17 +2,17 @@ import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { Button, ButtonGroup } from "#/shared/components/button";
-import { useNpmSite, useStyle, useTheme, useLigature } from "#/shared/components/prefs/context";
-import { MdSymbol } from "#/shared/components/symbol";
-import { useIdDefault } from "#/shared/hooks/use-id-default";
+import { Button, ButtonGroup } from "#src/shared/components/button";
+import { useNpmSite, useStyle, useTheme, useLigature } from "#src/shared/components/prefs/context";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { useIdDefault } from "#src/shared/hooks/use-id-default";
 import {
   npmSiteSchema,
   styleLabels,
   styleSchema,
   themeLabels,
   themeSchema,
-} from "#/shared/lib/prefs/constants";
+} from "#src/shared/lib/prefs/constants";
 
 import { Dialog, DialogContent, DialogTitle } from ".";
 

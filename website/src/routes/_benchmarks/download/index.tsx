@@ -6,14 +6,14 @@ import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { ButtonGroup } from "#/shared/components/button";
-import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
-import { PageFilter, PageFilters } from "#/shared/components/page-filter";
-import { PageFilterChips } from "#/shared/components/page-filter/chips";
-import { PageFilterTextField } from "#/shared/components/page-filter/text-field";
-import { MdSymbol } from "#/shared/components/symbol";
-import { generateMetadata } from "#/shared/data/meta";
-import { sortParams, applySort } from "#/shared/lib/sort";
+import { ButtonGroup } from "#src/shared/components/button";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
+import { PageFilter, PageFilters } from "#src/shared/components/page-filter";
+import { PageFilterChips } from "#src/shared/components/page-filter/chips";
+import { PageFilterTextField } from "#src/shared/components/page-filter/text-field";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { generateMetadata } from "#src/shared/data/meta";
+import { sortParams, applySort } from "#src/shared/lib/sort";
 
 import { DownloadCount } from "../-components/count";
 import { useDownloadsByPkgName } from "../-hooks";

@@ -2,8 +2,8 @@ import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
 
-import { AvatarList } from "#/shared/components/avatar";
-import { useDateFormatter } from "#/shared/hooks/format/use-date-formatter";
+import { AvatarList } from "#src/shared/components/avatar";
+import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
 
 import { getAvatarUrl } from "../../-query";
 

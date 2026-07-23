@@ -1,5 +1,5 @@
-import { EmptyState } from "#/shared/components/empty-state";
-import { MdSymbol } from "#/shared/components/symbol";
+import { EmptyState } from "#src/shared/components/empty-state";
+import { MdSymbol } from "#src/shared/components/symbol";
 
 import WifiOff from "./wifi_off.svg?react";
 

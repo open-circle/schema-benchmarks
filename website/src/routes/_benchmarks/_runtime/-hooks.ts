@@ -2,8 +2,8 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import { collator } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
-import { applySort } from "#/shared/lib/sort";
-import type { SortDirection } from "#/shared/lib/sort";
+import { applySort } from "#src/shared/lib/sort";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";

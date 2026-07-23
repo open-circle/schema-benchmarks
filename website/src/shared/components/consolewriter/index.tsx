@@ -3,8 +3,8 @@ import { identity } from "@schema-benchmarks/utils";
 import { useEffect, useRef } from "react";
 import bem from "react-bem-helper";
 
-import { useLocalSlice } from "#/shared/hooks/use-local-slice";
-import type { Style } from "#/shared/lib/prefs/constants";
+import { useLocalSlice } from "#src/shared/hooks/use-local-slice";
+import type { Style } from "#src/shared/lib/prefs/constants";
 
 import { useStyle } from "../prefs/context";
 

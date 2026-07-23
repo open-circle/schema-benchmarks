@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 import bem from "react-bem-helper";
 
-import * as scales from "#/shared/data/scale";
-import { combineScales, reverseIf } from "#/shared/lib/d3";
+import * as scales from "#src/shared/data/scale";
+import { combineScales, reverseIf } from "#src/shared/lib/d3";
 
 export interface BarProps {
   color: string;

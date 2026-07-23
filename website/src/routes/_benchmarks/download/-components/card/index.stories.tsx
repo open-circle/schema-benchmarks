@@ -1,6 +1,6 @@
 import downloadResults from "@schema-benchmarks/bench/download.json";
 
-import { Bar } from "#/shared/components/table/bar";
+import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import { DownloadCard } from ".";

@@ -3,7 +3,7 @@ import { capitalize } from "@schema-benchmarks/utils";
 import { rootRouteId, useRouter } from "@tanstack/react-router";
 import type { Context, FC, ReactNode } from "react";
 
-import { setNpmSiteFn, setStyleFn, setThemeFn, setLigatureFn } from "#/shared/lib/prefs";
+import { setNpmSiteFn, setStyleFn, setThemeFn, setLigatureFn } from "#src/shared/lib/prefs";
 
 import type { PrefContextValue } from "./context";
 import { NpmSiteContext, StyleContext, ThemeContext, LigatureContext } from "./context";

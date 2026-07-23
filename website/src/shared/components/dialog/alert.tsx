@@ -2,7 +2,7 @@ import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { useIdDefault } from "#/shared/hooks/use-id-default";
+import { useIdDefault } from "#src/shared/hooks/use-id-default";
 
 import {
   type CloseDialog,

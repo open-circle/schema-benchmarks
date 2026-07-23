@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useStyle } from "#/shared/components/prefs/context";
+import { useStyle } from "#src/shared/components/prefs/context";
 
 export function useDateFormatter(formatter: Intl.DateTimeFormat) {
   const { style } = useStyle();

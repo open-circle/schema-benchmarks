@@ -2,7 +2,7 @@ import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import * as v from "valibot";
 
-import { isRetryableUpfetchError, upfetch } from "#/shared/lib/fetch";
+import { isRetryableUpfetchError, upfetch } from "#src/shared/lib/fetch";
 
 const downloadsResponseSchema = v.pipe(
   v.object({

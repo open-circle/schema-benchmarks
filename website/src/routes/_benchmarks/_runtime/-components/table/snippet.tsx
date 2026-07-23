@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 
-import { ToggleButton } from "#/shared/components/button/toggle";
-import { CodeBlock } from "#/shared/components/code";
-import { Spinner } from "#/shared/components/spinner";
-import { MdSymbol } from "#/shared/components/symbol";
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { CodeBlock } from "#src/shared/components/code";
+import { Spinner } from "#src/shared/components/spinner";
+import { MdSymbol } from "#src/shared/components/symbol";
 
 export interface SnippetProps {
   code: string;

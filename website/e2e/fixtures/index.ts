@@ -1,9 +1,9 @@
 import type { Locator, TestFixture, Page } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
 
-import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
 import { waitForFontsLoaded } from "#e2e/utils";
 import { matchBreakpoints } from "#e2e/utils";
+import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
 import { Header } from "./header";

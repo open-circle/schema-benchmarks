@@ -8,12 +8,12 @@ import {
 } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { ButtonGroup } from "#/shared/components/button";
-import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
-import { MdSymbol } from "#/shared/components/symbol";
-import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderLink } from "#/shared/components/table/sort";
-import type { SortDirection } from "#/shared/lib/sort";
+import { ButtonGroup } from "#src/shared/components/button";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { Bar } from "#src/shared/components/table/bar";
+import { SortableHeaderLink } from "#src/shared/components/table/sort";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "../../-constants";
 import { getCompiledPath } from "../../-query";

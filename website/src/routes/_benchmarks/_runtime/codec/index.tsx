@@ -4,11 +4,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { PageFilters } from "#/shared/components/page-filter";
-import { PageFilterChips } from "#/shared/components/page-filter/chips";
-import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
-import { applySort, sortParams } from "#/shared/lib/sort";
+import { PageFilters } from "#src/shared/components/page-filter";
+import { PageFilterChips } from "#src/shared/components/page-filter/chips";
+import { generateMetadata } from "#src/shared/data/meta";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
+import { applySort, sortParams } from "#src/shared/lib/sort";
 
 import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
 import { getBenchResults } from "../-query";

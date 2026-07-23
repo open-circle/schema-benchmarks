@@ -1,4 +1,4 @@
-import "#/shared/styles/index.css";
+import "#src/shared/styles/index.css";
 import { renderHook } from "vitest-browser-react";
 import { page } from "vitest/browser";
 

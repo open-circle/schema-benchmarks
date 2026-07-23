@@ -1,6 +1,6 @@
 @import "normalize.css/normalize.css";
 
-@import "#/shared/styles/index.css";
+@import "#src/shared/styles/index.css";
 
 .offline {
   display: flex;

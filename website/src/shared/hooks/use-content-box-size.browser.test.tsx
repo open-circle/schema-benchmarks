@@ -3,7 +3,7 @@ import type { Ref } from "react";
 import { describe, expect } from "vitest";
 import { page } from "vitest/browser";
 
-import { useElementSize } from "#/shared/hooks/use-content-box-size";
+import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 import { it } from "#test/browser/fixtures";
 
 function Box({

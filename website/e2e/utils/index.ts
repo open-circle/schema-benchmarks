@@ -1,8 +1,8 @@
 import type { Page, Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
-import type { Breakpoint } from "#/shared/hooks/use-breakpoints";
-import { breakpointQueries } from "#/shared/hooks/use-breakpoints";
+import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
+import { breakpointQueries } from "#src/shared/hooks/use-breakpoints";
 
 /**
  * Returns the cell in a given row of a table by the column name.

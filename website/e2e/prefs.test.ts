@@ -1,10 +1,10 @@
+import { test, expect } from "#e2e/fixtures";
 import {
   styleSchema,
   themeSchema,
   npmSiteSchema,
   ligatureSchema,
-} from "#/shared/lib/prefs/constants";
-import { test, expect } from "#e2e/fixtures";
+} from "#src/shared/lib/prefs/constants";
 
 test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
   await page.goto("/");

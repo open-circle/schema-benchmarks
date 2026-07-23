@@ -3,7 +3,7 @@ import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 
-import { upfetch } from "#/shared/lib/fetch";
+import { upfetch } from "#src/shared/lib/fetch";
 
 export function getCompiledPath(fileName: string, minify: MinifyType) {
   return fileName

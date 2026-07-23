@@ -8,8 +8,8 @@ import {
 import { Fragment } from "react";
 import { type RenderOptions, type RenderResult, render } from "vitest-browser-react";
 
-import { getRouter } from "#/router";
-import { makeQueryClient } from "#/shared/data/query";
+import { getRouter } from "#src/router";
+import { makeQueryClient } from "#src/shared/data/query";
 
 export interface RenderWithProviderOptions extends RenderOptions {
   queryClient?: QueryClient;

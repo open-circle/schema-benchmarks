@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import type { HapticPattern } from "web-haptics";
 import { defaultPatterns } from "web-haptics";
 
-import { haptics } from "#/shared/lib/haptics";
+import { haptics } from "#src/shared/lib/haptics";
 
 function withHaptics<Args extends Array<any>, Return>(
   fn: (...args: Args) => Return,

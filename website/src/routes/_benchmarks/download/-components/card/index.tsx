@@ -8,10 +8,10 @@ import {
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { ButtonGroup } from "#/shared/components/button";
-import { InternalLinkToggleButton } from "#/shared/components/button/toggle";
-import { MdSymbol } from "#/shared/components/symbol";
-import { Bar } from "#/shared/components/table/bar";
+import { ButtonGroup } from "#src/shared/components/button";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { Bar } from "#src/shared/components/table/bar";
 
 import { getCompiledPath } from "../../-query";
 import { getDownloadTime } from "../../-speed";

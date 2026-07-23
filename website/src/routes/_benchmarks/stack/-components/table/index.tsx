@@ -2,11 +2,11 @@
 import type { StackResult } from "@schema-benchmarks/bench";
 import { getTransitionName } from "@schema-benchmarks/utils";
 
-import { DownloadCount } from "#/routes/_benchmarks/-components/count";
-import { Snippet } from "#/routes/_benchmarks/_runtime/-components/table/snippet";
-import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderLink } from "#/shared/components/table/sort";
-import type { SortDirection } from "#/shared/lib/sort";
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
+import { Bar } from "#src/shared/components/table/bar";
+import { SortableHeaderLink } from "#src/shared/components/table/sort";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "../../-constants";
 import { Output } from "./output";
