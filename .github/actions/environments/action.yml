@@ -1,5 +1,5 @@
 name: Setup environment
-description: Setup environment with Node.js and pnpm, plus building schemas
+description: Setup environment with Node.js and pnpm
 
 runs:
   using: composite
@@ -32,10 +32,3 @@ runs:
         TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
         TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
       run: pnpm install
-
-    - name: Build schemas
-      shell: bash
-      env:
-        TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
-        TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
-      run: pnpm schemas:build

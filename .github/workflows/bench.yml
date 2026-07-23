@@ -11,10 +11,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  bench-stack:
+  build-schemas:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/environments
+      - name: Build schemas
+        shell: bash
+        env:
+          TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
+          TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
+        run: pnpm schemas:build
+      - name: Upload schemas
+        uses: actions/upload-artifact@v4
+        with:
+          name: schemas-build
+          path: schemas/dist/
+          retention-days: 1
+
+  bench-stack:
+    needs: build-schemas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download schemas
+        uses: actions/download-artifact@v4
+        with:
+          name: schemas-build
+          path: schemas/dist/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run stack benchmark
@@ -26,9 +51,15 @@ jobs:
           path: bench/stack.json
 
   bench-download:
+    needs: build-schemas
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Download schemas
+        uses: actions/download-artifact@v4
+        with:
+          name: schemas-build
+          path: schemas/dist/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run download benchmark
@@ -45,9 +76,15 @@ jobs:
             schemas/libraries/**/download_compiled/**
 
   bench-bench:
+    needs: build-schemas
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Download schemas
+        uses: actions/download-artifact@v4
+        with:
+          name: schemas-build
+          path: schemas/dist/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run bench benchmark
