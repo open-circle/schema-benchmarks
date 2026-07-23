@@ -10,6 +10,7 @@ import { Header } from "./header";
 import { BlogPage } from "./pages/blog";
 import { DownloadPage } from "./pages/download";
 import { InitializationPage } from "./pages/initialization";
+import { ValidationPage } from "./pages/validation";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
@@ -20,6 +21,7 @@ const POMs = {
   header: Header,
   downloadPage: DownloadPage,
   initializationPage: InitializationPage,
+  validationPage: ValidationPage,
 } satisfies Record<string, new (page: Page) => any>;
 
 type POMFixtures = {
@@ -30,7 +32,7 @@ const pomFixtures = Object.fromEntries(
   Object.entries(POMs).map(
     ([name, POM]): [string, TestFixture<POMFixtures[keyof POMFixtures], { page: Page }>] => [
       name,
-      async ({ page }, use) => use(new POM(page)),
+      ({ page }, use) => use(new POM(page)),
     ],
   ),
 ) as {

@@ -14,14 +14,14 @@ import { sortParams } from "#src/shared/lib/sort";
 
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "invalid");
 
-export const dataTypeProps: Pick<PageFilterChipsProps<DataType>, "title" | "labels" | "options"> = {
+export const dataTypeProps = {
   title: "Data",
   options: dataTypeSchema.options,
   labels: {
     valid: { label: "Valid", icon: "check_circle" },
     invalid: { label: "Invalid", icon: "error" },
   },
-};
+} satisfies Pick<PageFilterChipsProps<DataType>, "title" | "labels" | "options">;
 
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema);
 
