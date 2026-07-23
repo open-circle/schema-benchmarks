@@ -25,17 +25,14 @@ export const dataTypeProps = {
 
 export const optionalErrorTypeSchema = v.optional(errorTypeSchema);
 
-export const errorTypeProps: Pick<
-  PageFilterChipsProps<ErrorType>,
-  "title" | "labels" | "options"
-> = {
+export const errorTypeProps = {
   title: "Abort early",
   options: errorTypeSchema.options,
   labels: {
     allErrors: { label: "All errors", icon: "error" },
     abortEarly: { label: "Abort early", icon: "warning" },
   },
-};
+} satisfies Pick<PageFilterChipsProps<ErrorType>, "title" | "labels" | "options">;
 
 export const optionalOptimizeTypeSchema = v.optional(optimizeTypeSchema);
 
@@ -50,10 +47,7 @@ export const optimizeTypeProps = {
 } satisfies Pick<PageFilterChipsProps<OptimizeType>, "title" | "labels" | "options">;
 
 export const optionalStringFormatSchema = v.optional(stringFormatSchema, "email");
-export const stringFormatProps: Pick<
-  PageFilterChipsProps<StringFormat>,
-  "title" | "labels" | "options"
-> = {
+export const stringFormatProps = {
   title: "Format",
   options: stringFormatSchema.options,
   labels: {
@@ -67,7 +61,7 @@ export const stringFormatProps: Pick<
     ipv4: { label: "IPv4", icon: "wifi" },
     ipv6: { label: "IPv6", icon: "wifi" },
   },
-};
+} satisfies Pick<PageFilterChipsProps<StringFormat>, "title" | "labels" | "options">;
 
 export const sortableKeys = ["libraryName", "downloads", "mean"] as const;
 export type SortableKey = (typeof sortableKeys)[number];

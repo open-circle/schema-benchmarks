@@ -7,21 +7,15 @@ import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
 import { Header } from "./header";
-import { BlogPage } from "./pages/blog";
-import { DownloadPage } from "./pages/download";
-import { InitializationPage } from "./pages/initialization";
-import { ValidationPage } from "./pages/validation";
+import * as pages from "./pages";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
 const POMs = {
   sidebar: Sidebar,
-  prefs: PrefsDialog,
-  blogPage: BlogPage,
   header: Header,
-  downloadPage: DownloadPage,
-  initializationPage: InitializationPage,
-  validationPage: ValidationPage,
+  prefs: PrefsDialog,
+  ...pages,
 } satisfies Record<string, new (page: Page) => any>;
 
 type POMFixtures = {
