@@ -1,8 +1,8 @@
 import type { MinifyType } from "@schema-benchmarks/bench";
 
-import { minifyTypeProps } from "#/routes/_benchmarks/download/-constants";
 import { BasePOM } from "#e2e/fixtures/base";
 import { getCellByColumnName } from "#e2e/utils";
+import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
 export class DownloadPage extends BasePOM {
   minifyToggle = this.main.getByRole("list", { name: "Minify" });

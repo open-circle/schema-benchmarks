@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import * as v from "valibot";
 
-import { getHighlightedAnsi } from "#/shared/lib/highlight";
+import { getHighlightedAnsi } from "#src/shared/lib/highlight";
 
 const ansiBlockProps = v.object({ children: v.string(), lineNumbers: v.optional(v.boolean()) });
 

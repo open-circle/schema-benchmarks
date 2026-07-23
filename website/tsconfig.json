@@ -24,7 +24,7 @@
     "allowArbitraryExtensions": true,
 
     "paths": {
-      "#/*": ["./src/*"],
+      "#src/*": ["./src/*"],
       "#test/*": ["./test/*"],
       "#storybook/*": ["./.storybook/*"],
       "#e2e/*": ["./e2e/*"],

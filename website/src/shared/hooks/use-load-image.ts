@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 
-import { preloadImage } from "#/shared/lib/fetch";
+import { preloadImage } from "#src/shared/lib/fetch";
 
 export type ImageLoadState = "unloaded" | "loading" | "loaded" | "error";
 

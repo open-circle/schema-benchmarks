@@ -6,8 +6,8 @@ import bem from "react-bem-helper";
 import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
-import type { SortDirection, SortSearch } from "#/shared/lib/sort";
-import { toggleSort } from "#/shared/lib/sort";
+import type { SortDirection, SortSearch } from "#src/shared/lib/sort";
+import { toggleSort } from "#src/shared/lib/sort";
 
 import { MdSymbol } from "../symbol";
 import { sortDirectionIcons } from "./constants";

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { MdSymbol } from "#/shared/components/symbol";
+import { MdSymbol } from "#src/shared/components/symbol";
 
 import { type AdmonitionType, admonitionDefaults } from "./constants";
 

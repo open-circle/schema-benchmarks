@@ -1,7 +1,7 @@
 import { longDateFormatter } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
-import { useDateFormatter } from "#/shared/hooks/format/use-date-formatter";
+import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
 
 export interface DateDisplayProps {
   date: Date | string | number;

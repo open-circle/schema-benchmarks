@@ -10,10 +10,10 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { createPlotComponent } from "#/shared/components/plot";
-import { color } from "#/shared/data/scale";
-import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
-import { useElementSize } from "#/shared/hooks/use-content-box-size";
+import { createPlotComponent } from "#src/shared/components/plot";
+import { color } from "#src/shared/data/scale";
+import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
+import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 import { getBenchResults } from "../../-query";
 

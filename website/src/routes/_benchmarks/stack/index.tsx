@@ -5,11 +5,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { AnsiBlock } from "#/shared/components/code/ansi";
-import { generateMetadata } from "#/shared/data/meta";
-import { getHighlightedCode } from "#/shared/lib/highlight";
-import { getHighlightedAnsi } from "#/shared/lib/highlight";
-import { applySort, sortParams } from "#/shared/lib/sort";
+import { AnsiBlock } from "#src/shared/components/code/ansi";
+import { generateMetadata } from "#src/shared/data/meta";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
+import { getHighlightedAnsi } from "#src/shared/lib/highlight";
+import { applySort, sortParams } from "#src/shared/lib/sort";
 
 import { useDownloadsByPkgName } from "../-hooks";
 import { getPackageName } from "../-query";

@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getPackageMetadata } from "#/routes/_benchmarks/-query";
-import { generateMetadata } from "#/shared/data/meta";
+import { getPackageMetadata } from "#src/routes/_benchmarks/-query";
+import { generateMetadata } from "#src/shared/data/meta";
 
 import { PackageCard } from "./-components/package";
 import { getAllPackages, getReplacementUrl } from "./-query";

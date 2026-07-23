@@ -5,7 +5,7 @@ import bem from "react-bem-helper";
 import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
-import { useFocusGroup } from "#/shared/hooks/use-focus-group";
+import { useFocusGroup } from "#src/shared/hooks/use-focus-group";
 
 import { classed } from "../utils";
 

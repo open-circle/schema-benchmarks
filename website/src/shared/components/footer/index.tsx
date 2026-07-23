@@ -1,4 +1,4 @@
-import { trackedLinkProps } from "#/shared/lib/analytics";
+import { trackedLinkProps } from "#src/shared/lib/analytics";
 
 export function Footer() {
   return (

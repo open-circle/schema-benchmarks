@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import * as v from "valibot";
 
-import { getHighlightedCode } from "#/shared/lib/highlight";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { ToggleButton } from "../button/toggle";
 import { toastWithHaptics } from "../snackbar/toast";

@@ -1,6 +1,6 @@
-import type { Style, Theme, NpmSite, Ligature } from "#/shared/lib/prefs/constants";
-import { styleLabels, themeLabels } from "#/shared/lib/prefs/constants";
 import { BasePOM } from "#e2e/fixtures/base";
+import type { Style, Theme, NpmSite, Ligature } from "#src/shared/lib/prefs/constants";
+import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 
 import { expect } from ".";
 

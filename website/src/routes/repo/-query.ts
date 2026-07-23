@@ -4,8 +4,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import * as v from "valibot";
 
-import { upfetch } from "#/shared/lib/fetch";
-import { getFormattedCodeFn } from "#/shared/lib/highlight";
+import { upfetch } from "#src/shared/lib/fetch";
+import { getFormattedCodeFn } from "#src/shared/lib/highlight";
 
 const rawSpecifierSchema = v.object({
   repo: v.optional(v.string()),

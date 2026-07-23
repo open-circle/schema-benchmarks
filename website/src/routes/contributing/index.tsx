@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { generateMetadata } from "#/shared/data/meta";
+import { generateMetadata } from "#src/shared/data/meta";
 
 import Content from "./CONTRIBUTING.md";
 

@@ -3,10 +3,10 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
 
-import { AvatarList } from "#/shared/components/avatar";
-import { generateMetadata } from "#/shared/data/meta";
-import { useDateFormatter } from "#/shared/hooks/format/use-date-formatter";
-import { preloadImages } from "#/shared/lib/fetch";
+import { AvatarList } from "#src/shared/components/avatar";
+import { generateMetadata } from "#src/shared/data/meta";
+import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
+import { preloadImages } from "#src/shared/lib/fetch";
 
 import { getAvatarUrl, getBlog } from "./-query";
 

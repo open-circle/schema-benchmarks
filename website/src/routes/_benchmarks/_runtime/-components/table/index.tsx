@@ -10,14 +10,14 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { ToggleButton } from "#/shared/components/button/toggle";
-import { Radio } from "#/shared/components/radio";
-import { Scaler } from "#/shared/components/scaler";
-import { MdSymbol } from "#/shared/components/symbol";
-import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderLink } from "#/shared/components/table/sort";
-import { useNumberFormatter } from "#/shared/hooks/format/use-number-formatter";
-import type { SortDirection } from "#/shared/lib/sort";
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { Radio } from "#src/shared/components/radio";
+import { Scaler } from "#src/shared/components/scaler";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { Bar } from "#src/shared/components/table/bar";
+import { SortableHeaderLink } from "#src/shared/components/table/sort";
+import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "../../-constants";
 import { errorTypeProps, optimizeTypeProps } from "../../-constants";

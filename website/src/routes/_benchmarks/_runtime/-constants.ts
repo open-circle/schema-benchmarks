@@ -9,9 +9,8 @@ import {
 } from "@schema-benchmarks/schemas";
 import * as v from "valibot";
 
-import type { PageFilterChipsProps } from "#/shared/components/page-filter/chips";
-
-import { sortParams } from "../../../shared/lib/sort";
+import type { PageFilterChipsProps } from "#src/shared/components/page-filter/chips";
+import { sortParams } from "#src/shared/lib/sort";
 
 export const optionalDataTypeSchema = v.optional(dataTypeSchema, "invalid");
 

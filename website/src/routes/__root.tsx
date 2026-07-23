@@ -9,28 +9,28 @@ import { useState } from "react";
 import { generateMetadata } from "tanstack-meta";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-import { Banner } from "#/shared/components/banner";
-import { ConfirmDialog } from "#/shared/components/dialog/confirm";
-import { PreferencesDialog } from "#/shared/components/dialog/pref";
-import { Footer } from "#/shared/components/footer";
-import { Header } from "#/shared/components/header";
-import * as mdxComponents from "#/shared/components/mdx";
+import { Banner } from "#src/shared/components/banner";
+import { ConfirmDialog } from "#src/shared/components/dialog/confirm";
+import { PreferencesDialog } from "#src/shared/components/dialog/pref";
+import { Footer } from "#src/shared/components/footer";
+import { Header } from "#src/shared/components/header";
+import * as mdxComponents from "#src/shared/components/mdx";
 import {
   NpmSiteProvider,
   StyleProvider,
   ThemeProvider,
   LigatureProvider,
-} from "#/shared/components/prefs/provider";
-import { ScrollToTop } from "#/shared/components/scroll-to-top";
-import { Sidebar } from "#/shared/components/sidebar";
-import { SidebarProvider } from "#/shared/components/sidebar/context";
-import { Snackbars } from "#/shared/components/snackbar";
-import { Providers } from "#/shared/components/utils/provider";
-import { getNpmSiteFn, getStyleFn, getThemeFn, getLigatureFn } from "#/shared/lib/prefs";
+} from "#src/shared/components/prefs/provider";
+import { ScrollToTop } from "#src/shared/components/scroll-to-top";
+import { Sidebar } from "#src/shared/components/sidebar";
+import { SidebarProvider } from "#src/shared/components/sidebar/context";
+import { Snackbars } from "#src/shared/components/snackbar";
+import { Providers } from "#src/shared/components/utils/provider";
+import { getNpmSiteFn, getStyleFn, getThemeFn, getLigatureFn } from "#src/shared/lib/prefs";
 
 import { symbolsUrl } from "../../vite/symbols";
 
-import appCss from "#/shared/styles/index.css?url";
+import appCss from "#src/shared/styles/index.css?url";
 
 export interface RouterContext {
   queryClient: QueryClient;

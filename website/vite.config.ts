@@ -14,20 +14,21 @@ import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
-import vitePwaOpts from "./offline/opts";
 import {
   dataTypeProps,
   errorTypeProps,
   optimizeTypeProps,
   stringFormatProps,
-} from "./src/routes/_benchmarks/_runtime/-constants";
-import { minifyTypeProps } from "./src/routes/_benchmarks/download/-constants";
-import { speedPresets } from "./src/routes/_benchmarks/download/-speed";
-import { admonitionDefaults } from "./src/shared/components/admonition/constants";
-import { sidebarGroups } from "./src/shared/components/sidebar/groups";
-import { sortDirectionIcons } from "./src/shared/components/table/constants";
-import * as scales from "./src/shared/data/scale";
-import { styleLabels, themeLabels } from "./src/shared/lib/prefs/constants";
+} from "#src/routes/_benchmarks/_runtime/-constants";
+import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
+import { speedPresets } from "#src/routes/_benchmarks/download/-speed";
+import { admonitionDefaults } from "#src/shared/components/admonition/constants";
+import { sidebarGroups } from "#src/shared/components/sidebar/groups";
+import { sortDirectionIcons } from "#src/shared/components/table/constants";
+import * as scales from "#src/shared/data/scale";
+import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
+
+import vitePwaOpts from "./offline/opts";
 import materialSymbols from "./vite/symbols";
 
 const config = defineConfig({
@@ -95,14 +96,6 @@ const config = defineConfig({
       },
     }),
   ],
-  resolve: {
-    alias: {
-      "#test/": "/test/",
-      "#storybook/": "/.storybook/",
-      "#/": "/src/",
-    },
-    tsconfigPaths: true,
-  },
   test: {
     projects: [
       {

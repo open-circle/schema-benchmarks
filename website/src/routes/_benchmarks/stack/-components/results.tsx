@@ -2,9 +2,9 @@ import type { StackResult } from "@schema-benchmarks/bench";
 import { exclude, filterMap } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
-import { Bar } from "#/shared/components/table/bar";
-import { useBreakpoints } from "#/shared/hooks/use-breakpoints";
-import type { SortDirection } from "#/shared/lib/sort";
+import { Bar } from "#src/shared/components/table/bar";
+import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "../-constants";
 import { StackCard } from "./card";

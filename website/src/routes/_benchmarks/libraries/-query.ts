@@ -10,10 +10,10 @@ import { getRequest } from "@tanstack/react-start/server";
 import { preferredReplacements, resolveDocUrl } from "module-replacements";
 import * as v from "valibot";
 
-import { getPackageName } from "#/routes/_benchmarks/-query";
-import { getBenchResultsFn } from "#/routes/_benchmarks/_runtime/-query";
-import { getDownloadResultsFn } from "#/routes/_benchmarks/download/-query";
-import { getStackResultsFn } from "#/routes/_benchmarks/stack/-query";
+import { getPackageName } from "#src/routes/_benchmarks/-query";
+import { getBenchResultsFn } from "#src/routes/_benchmarks/_runtime/-query";
+import { getDownloadResultsFn } from "#src/routes/_benchmarks/download/-query";
+import { getStackResultsFn } from "#src/routes/_benchmarks/stack/-query";
 
 export const getAllPackagesFn = createServerFn().handler(async () => {
   const { signal } = getRequest();

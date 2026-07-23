@@ -4,7 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import * as v from "valibot";
 
-import { upfetch } from "#/shared/lib/fetch";
+import { upfetch } from "#src/shared/lib/fetch";
 
 export const getStackResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>

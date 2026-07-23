@@ -1,6 +1,6 @@
 import benchResults from "@schema-benchmarks/bench/bench.json";
 
-import { Bar } from "#/shared/components/table/bar";
+import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import { CodecCard } from "./index.js";

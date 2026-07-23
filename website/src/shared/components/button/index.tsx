@@ -3,7 +3,7 @@ import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { useFocusGroup } from "#/shared/hooks/use-focus-group";
+import { useFocusGroup } from "#src/shared/hooks/use-focus-group";
 
 import { Spinner } from "../spinner";
 import { withTooltip } from "../tooltip";

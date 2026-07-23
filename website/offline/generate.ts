@@ -4,23 +4,13 @@ import * as path from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { build, createServer } from "vite";
-import type { UserConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 
 import vitePwaOpts from "./opts.ts";
 
-const sharedOpts = {
-  resolve: {
-    alias: {
-      "#/": "/src/",
-    },
-  },
-} satisfies Partial<UserConfig>;
-
 // step 1: create base HTML and service worker
 await build({
-  ...sharedOpts,
   configFile: false,
   build: {
     rolldownOptions: {
@@ -43,7 +33,6 @@ const htmlFile = path.resolve(process.cwd(), "./dist/client/offline/index.html")
 const rootPlaceholder = `<div id="root"></div>`;
 
 const vite = await createServer({
-  ...sharedOpts,
   appType: "custom",
   configFile: false,
   logLevel: "error",

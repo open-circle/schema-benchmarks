@@ -3,11 +3,11 @@ import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { ToggleButton } from "#/shared/components/button/toggle";
-import { MdSymbol } from "#/shared/components/symbol";
-import { Bar } from "#/shared/components/table/bar";
-import { SortableHeaderLink } from "#/shared/components/table/sort";
-import type { SortDirection } from "#/shared/lib/sort";
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { Bar } from "#src/shared/components/table/bar";
+import { SortableHeaderLink } from "#src/shared/components/table/sort";
+import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "../../-constants";
 import { Snippet } from "../../../-components/table/snippet";

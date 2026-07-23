@@ -9,7 +9,7 @@ import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import * as v from "valibot";
 
-import { trackedLinkProps } from "#/shared/lib/analytics";
+import { trackedLinkProps } from "#src/shared/lib/analytics";
 
 import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
 import { ConsoleWriter } from "../consolewriter";

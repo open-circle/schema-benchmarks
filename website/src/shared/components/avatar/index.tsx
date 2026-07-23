@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 import bem from "react-bem-helper";
 
-import { useLoadImage } from "#/shared/hooks/use-load-image";
+import { useLoadImage } from "#src/shared/hooks/use-load-image";
 
 import { withTooltip } from "../tooltip";
 
