@@ -46,3 +46,5 @@ export async function waitForFontsLoaded(page: Page) {
     )
     .toBe(true);
 }
+
+export const substringToRegex = (substring: string) => new RegExp(RegExp.escape(substring), "i");

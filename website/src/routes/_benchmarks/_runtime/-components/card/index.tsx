@@ -21,7 +21,7 @@ export const cls = bem("bench-card");
 export function BenchCard({ result, meanScaler }: BenchCardProps) {
   const { id } = result;
   return (
-    <li id={id} aria-labelledby={`${id}-header`}>
+    <li id={id} aria-labelledby={`${id}-header`} data-testid="bench-card">
       <article
         {...cls()}
         style={{
@@ -61,7 +61,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
           <Bar {...meanScaler(result.mean)} />
         </div>
         <div {...cls("chips")}>
-          <ChipCollection>
+          <ChipCollection data-testid="bench-card-chips">
             <DisplayChip>
               <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
               {optimizeTypeProps.labels[result.optimizeType].label}

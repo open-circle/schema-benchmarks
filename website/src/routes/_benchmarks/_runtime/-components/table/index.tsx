@@ -68,7 +68,7 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
   const benchType = results[0]!.type;
   return (
     <div className="card" style={{ viewTransitionName: "bench-table" }}>
-      <table className="bench-table">
+      <table className="bench-table" aria-label="Results">
         <thead>
           <tr>
             <SortableHeaderLink {...SortableHeaderLink.getProps("libraryName", sortState, { to })}>

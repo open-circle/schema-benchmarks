@@ -1,6 +1,7 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
+import { substringToRegex } from "#e2e/utils";
 
 test.beforeEach("Go to download page", async ({ page, fontsLoaded }) => {
   await page.goto("/download");
@@ -114,9 +115,7 @@ test.describe("mobile view", () => {
     const superstructCard = downloadPage.mobile.getCardByName(/superstruct/i);
     await superstructCard.scrollIntoViewIfNeeded();
 
-    const superstructVersionEl = superstructCard.getByText(
-      new RegExp(RegExp.escape(superstructVersion)),
-    );
+    const superstructVersionEl = superstructCard.getByText(substringToRegex(superstructVersion));
     await expect(superstructVersionEl).toBeVisible();
   });
 });
