@@ -40,6 +40,9 @@ const config = defineConfig({
       ignored: ["**/playwright-report/**", "**/test-results/**"],
     },
   },
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     devtools(),
     tanstackStart({
