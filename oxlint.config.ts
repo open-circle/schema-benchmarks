@@ -50,6 +50,8 @@ export const baseConfig = defineConfig({
       rules: {
         ...playwright.configs["flat/recommended"].rules,
         "playwright/no-skipped-test": ["warn", { allowConditional: true }],
+        // doesn't work with our helper functions
+        "playwright/expect-expect": "off",
       },
     },
   ],

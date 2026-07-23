@@ -1,7 +1,7 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
-import { substringToRegex } from "#e2e/utils";
+import { library } from "#e2e/utils/constants";
 
 test.beforeEach("Go to download page", async ({ page, fontsLoaded }) => {
   await page.goto("/download");
@@ -59,9 +59,6 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   await expect(downloadPage.getSpeedPresetButtonByLabel("WiFi")).not.toBeCurrent("page");
 });
 
-// no releases for 2 years, so this shouldn't need changing often
-const superstructVersion = "2.0.2";
-
 test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, downloadPage }) => {
     const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
@@ -73,13 +70,13 @@ test.describe("desktop view", () => {
 
     const superstructRow = downloadPage.desktop.table
       .getByRole("row")
-      .filter({ hasText: /superstruct/i });
+      .filter({ hasText: library.name });
     const superstructVersionCell = await downloadPage.desktop.getCellByColumnName(
       superstructRow,
       "Version",
     );
 
-    await expect(superstructVersionCell).toHaveText(superstructVersion);
+    await expect(superstructVersionCell).toHaveText(library.version);
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
@@ -115,7 +112,7 @@ test.describe("mobile view", () => {
     const superstructCard = downloadPage.mobile.getCardByName(/superstruct/i);
     await superstructCard.scrollIntoViewIfNeeded();
 
-    const superstructVersionEl = superstructCard.getByText(substringToRegex(superstructVersion));
+    const superstructVersionEl = superstructCard.getByText(library.version);
     await expect(superstructVersionEl).toBeVisible();
   });
 });
