@@ -45,7 +45,7 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
       {shouldUseTable ? (
         <BenchTable {...{ results, meanScaler }} {...props} />
       ) : (
-        <ul className="bench-cards">
+        <ul className="bench-cards" aria-label="Results">
           {results.map((result) => (
             <BenchCard key={result.id} {...{ result, meanScaler: meanScaler }} />
           ))}

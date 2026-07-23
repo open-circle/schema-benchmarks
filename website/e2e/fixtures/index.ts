@@ -9,6 +9,7 @@ import type { CurrentValue } from "#test/common/matchers/to-be-current";
 import { Header } from "./header";
 import { BlogPage } from "./pages/blog";
 import { DownloadPage } from "./pages/download";
+import { InitializationPage } from "./pages/initialization";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
@@ -18,6 +19,7 @@ const POMs = {
   blogPage: BlogPage,
   header: Header,
   downloadPage: DownloadPage,
+  initializationPage: InitializationPage,
 } satisfies Record<string, new (page: Page) => any>;
 
 type POMFixtures = {

@@ -6,12 +6,25 @@ import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
 export class DownloadPage extends BasePOM {
   minifyToggle = this.main.getByRole("list", { name: "Minify" });
+
+  getMinifyTypeLink(minifyType: MinifyType) {
+    return this.minifyToggle.getByRole("link", {
+      name: minifyTypeProps.labels[minifyType].label,
+      exact: true,
+    });
+  }
+
   downloadSpeedInput = this.main.getByRole("spinbutton", { name: "Download speed" });
+
   speedPresets = this.main.getByRole("toolbar", { name: "Speed presets" });
 
-  breakpoints = {
-    desktop: ["laptop", "desktop"] as const,
-  };
+  getSpeedPresetButtonByLabel(label: string) {
+    return this.speedPresets.getByRole("link", { name: label });
+  }
+
+  breakpoints = BasePOM.defineBreakpoints({
+    desktop: ["laptop", "desktop"],
+  });
 
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });
@@ -31,16 +44,5 @@ export class DownloadPage extends BasePOM {
       cardList,
       getCardByName: (name: string | RegExp) => cardList.getByRole("listitem", { name }),
     };
-  }
-
-  getMinifyTypeLink(minifyType: MinifyType) {
-    return this.minifyToggle.getByRole("link", {
-      name: minifyTypeProps.labels[minifyType].label,
-      exact: true,
-    });
-  }
-
-  getSpeedPresetButtonByLabel(label: string) {
-    return this.speedPresets.getByRole("link", { name: label });
   }
 }

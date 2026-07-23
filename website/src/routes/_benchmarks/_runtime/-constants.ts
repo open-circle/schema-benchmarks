@@ -39,10 +39,7 @@ export const errorTypeProps: Pick<
 
 export const optionalOptimizeTypeSchema = v.optional(optimizeTypeSchema);
 
-export const optimizeTypeProps: Pick<
-  PageFilterChipsProps<OptimizeType>,
-  "title" | "labels" | "options"
-> = {
+export const optimizeTypeProps = {
   title: "Optimizations",
   options: optimizeTypeSchema.options,
   labels: {
@@ -50,7 +47,7 @@ export const optimizeTypeProps: Pick<
     jit: { label: "JIT", icon: "code" },
     precompiled: { label: "Precompiled", icon: "build" },
   },
-};
+} satisfies Pick<PageFilterChipsProps<OptimizeType>, "title" | "labels" | "options">;
 
 export const optionalStringFormatSchema = v.optional(stringFormatSchema, "email");
 export const stringFormatProps: Pick<
