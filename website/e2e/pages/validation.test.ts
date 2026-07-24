@@ -1,5 +1,3 @@
-import { dataTypeSchema } from "@schema-benchmarks/bench";
-
 import { test, expect } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 
@@ -12,15 +10,7 @@ test.beforeEach(async ({ page, fontsLoaded }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, validationPage }) => {
-  for (const dataType of dataTypeSchema.options) {
-    const dataTypeLink = validationPage.getDataTypeLink(dataType);
-
-    await dataTypeLink.click();
-
-    await expect(page).toHaveURL((url) => url.searchParams.get("dataType") === dataType);
-
-    await expect(dataTypeLink).toBeCurrent("page");
-  }
+  await runtimeHelpers.testDataTypeToggle(page, validationPage);
 });
 
 test("can be filtered by optimization type", async ({ page, validationPage }) => {
