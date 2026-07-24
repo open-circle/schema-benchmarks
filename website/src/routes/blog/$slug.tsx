@@ -1,7 +1,9 @@
 import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { getOrInsertComputed } from "@schema-benchmarks/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
+import { use } from "react";
 
 import { AvatarList } from "#src/shared/components/avatar";
 import { generateMetadata } from "#src/shared/data/meta";
@@ -10,11 +12,14 @@ import { preloadImages } from "#src/shared/lib/fetch";
 
 import { getAvatarUrl, getBlog } from "./-query";
 
+// file level cache means it gets busted by HMR, whereas React Query persists across HMR
+const importCache = new Map<string, Promise<MDXModule>>();
 const importMdx = (filePath: string) =>
-  queryOptions({
-    queryKey: ["mdx", filePath],
-    queryFn: (): Promise<MDXModule> => import(`./-content/${filePath.replace(/\.mdx$/, "")}.mdx`),
-  });
+  getOrInsertComputed(
+    importCache,
+    filePath,
+    () => import(`./-content/${filePath.replace(/\.mdx$/, "")}.mdx`),
+  );
 
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
@@ -22,10 +27,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const data = await queryClient.ensureQueryData(getBlog(slug, abortController.signal));
     const images = data.authors.map(getAvatarUrl);
     if (typeof data.cover !== "string") images.push(data.cover.src);
-    const [mdxModule] = await Promise.all([
-      queryClient.ensureQueryData(importMdx(data._meta.filePath)),
-      preloadImages(images),
-    ]);
+    const [mdxModule] = await Promise.all([importMdx(data._meta.filePath), preloadImages(images)]);
     if (typeof mdxModule.prefetch === "function") await mdxModule.prefetch({ queryClient });
     return { crumb: data.title, ...data };
   },
@@ -45,15 +47,13 @@ export const Route = createFileRoute("/blog/$slug")({
 function RouteComponent() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(getBlog(slug));
-  const {
-    data: { default: MDXContent },
-  } = useSuspenseQuery(importMdx(data._meta.filePath));
+  const { default: MDXContent } = use(importMdx(data._meta.filePath));
   const getTransitionStyle = (element: string) => ({
     style: {
       viewTransitionName: `${getTransitionName("blog-header", { slug })}-${element}`,
     },
   });
-  const formatDate = useDateFormatter(longDateFormatter);
+  const formatDate = useDateFormatter();
   return (
     <>
       <h1 className="blog-title typo-headline2" {...getTransitionStyle("title")}>

@@ -1,0 +1,218 @@
+---
+cover:
+  src: "/logo512_dev.png"
+  alt: "Schema Benchmarks Logo"
+  fit: "contain"
+title: "5 Month Update"
+description: "An examination of how Schema Benchmarks has evolved (and caused other libraries to evolve) over the past 5 months."
+published: 2026-07-20
+authors: "EskiMojo14"
+---
+
+import { Link } from "@tanstack/react-router";
+import { Tweet } from "react-tweet";
+import { lightFormat } from "date-fns/fp";
+import { monthFormatter } from "@schema-benchmarks/utils";
+import { Timeline, TimelineItem } from "#/shared/components/timeline";
+import { MdSymbol } from "#/shared/components/symbol";
+import { trackedLinkProps } from "#/shared/lib/analytics";
+
+It's been 5 months since the initial release of Schema Benchmarks! Here's a look at how it's changed over that time, and how it's helped the ecosystem of schema validation libraries evolve.
+
+<Timeline>
+  <TimelineItem
+    date="2026-02-19"
+    title={
+      <Link to="/blog/$slug" params={{ slug: "welcome" }}>
+        Initial Release
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--success)" }}>celebration</MdSymbol>}
+  >
+    Schema Benchmarks was released to the public, with initial benchmarks:
+
+    - <Link to="/download">Download</Link>
+    - <Link to="/initialization">Initialization</Link>
+    - <Link to="/validation">Validation</Link>
+    - <Link to="/parsing">Parsing</Link>
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-02-20"
+    title={<a {...trackedLinkProps("https://sinclairzx81.github.io/typebox/")}>TypeBox</a>}
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+  >
+
+    On initial release of our benchmarks, TypeBox was consistently underperforming in runtime performance.
+
+    After discussion with `sinclairzx81` (author of TypeBox), it emerged that the `v1.x` release had introduced a change in behaviour, specifically that schemas would try to coerce invalid values into valid ones. Understandably, this made the library slower than most other libraries that don't do this.
+
+    [A `v1.1.0` release](https://github.com/open-circle/schema-benchmarks/issues/55#issuecomment-3937075290) made this behaviour opt-in, bringing TypeBox's performance back in line with other libraries.
+
+    ```ts
+    // v1.0.x
+    // A = 12345
+    const A = Value.Parse(Type.Number(), "12345");
+
+    // v1.1.x
+    // throw! - Expected Number
+    const A = Value.Parse(Type.Number(), "12345");
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-02-22"
+    title={
+      <Link to="/standard">
+        Standard Schema
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+
+    ```ts
+    import { personSchema } from "./schemas";
+
+    const person = await upfetch(url, { schema: personSchema });
+
+    // internally
+
+    const result = await personSchema["~standard"].validate(data);
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-02-24"
+    title={
+      <Link to="/string">
+        String formats
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
+
+    ```ts
+    import * as v from "valibot";
+
+    const emailSchema = v.pipe(v.string(), v.email());
+
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-02"
+    title={
+      <Link to="/stack">
+        Stack traces
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
+
+    <Tweet apiUrl="/api/tweet/2021374345990574398" />
+
+    This provides a useful comparison of the error messages produced by libraries, and how easy it is to trace back to the source of the error.
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <Link to="/codec">
+        Codecs
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+    >
+    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
+
+    ```ts
+    import * as z from "zod";
+
+    const bigIntFromString = z.codec(z.string(), z.bigint(), {
+      encode: (bigInt) => bigInt.toString(),
+      decode: (str) => BigInt(str),
+    });
+
+    bigIntFromString.encode(123n); // "123"
+    bigIntFromString.decode("123"); // 123n
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <a {...trackedLinkProps("https://decoders.cc")}>
+        Decoders
+      </a>
+    }
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+    >
+
+    Based on our <Link to="/download">download</Link> benchmarking, we were able to identify a tree shaking issue with `decoders`, and [collaborated](https://github.com/nvie/decoders/pull/1290) with the author to get it fixed.
+
+    Despite already having `"sideEffects": false`, we found that manually annotating functions with `#__NO_SIDE_EFFECTS__` and function calls with `#__PURE__` allowed bundlers to tree shake the library more effectively, reducing the overall bundle size for users.
+
+    ```ts
+    // #__NO_SIDE_EFFECTS__
+    function exampleFunction() {
+      // function implementation
+    }
+
+    const result = /* #__PURE__ */ anotherFunction();
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    range={["2026-02", "2026-07"]}
+    formatters={{
+      normal: monthFormatter,
+      code: lightFormat("yyyy-MM"),
+    }}
+    title="Upkeep"
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    We continue to maintain and improve Schema Benchmarks, adding new libraries and updating existing ones.
+
+    New libraries added include:
+
+    - [`superstruct`](https://docs.superstructjs.org/)
+    - [`runtypes`](https://github.com/runtypes/runtypes)
+    - [`ata-validator`](https://ata-validator.com/)
+    - [`@sapphire/shapeshift`](https://www.sapphirejs.dev/docs/Documentation/api-shapeshift/)
+    - [`paseri`](https://paseri.dev/)
+
+    For a full list of libraries, see the <Link to="/libraries">Libraries</Link> page.
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-07-08"
+    title={
+      <a {...trackedLinkProps("http://valibot.dev")}>
+        Valibot
+      </a>
+    }
+    icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
+  >
+
+    Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
+
+    As of publishing, they are still [investigating](https://github.com/open-circle/valibot/pull/1534) an alternative approach for their Standard Schema support, which was causing the slowdown.
+
+  </TimelineItem>
+</Timeline>
+
+Schema Benchmarks now has a wide range of benchmarks (8 different types), and measures the vast majority of notable schema validation libraries (currently <Link to="/libraries">19</Link>). It has helped library authors identify performance regressions,
+and provides a useful resource for developers to compare libraries.
+
+If you have any suggestions for new benchmarks, or would like to see a library added, we'd love to hear from you! Please open an [issue](https://github.com/open-circle/schema-benchmarks/issues) on GitHub.

@@ -22,8 +22,8 @@ export function BlogCard({ blog }: BlogCardProps) {
       })}-${element}`,
     },
   });
-  const formatDate = useDateFormatter(longDateFormatter);
   const id = `blog-card-${blog.slug}`;
+  const formatDate = useDateFormatter();
   return (
     <li
       className="blog-card"
