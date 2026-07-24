@@ -3,7 +3,7 @@ import prismjs from "vite-plugin-prismjs";
 
 export default defineMain({
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-  addons: [],
+  addons: ["msw-storybook-addon"],
   framework: {
     name: "@storybook/tanstack-react",
     options: {},

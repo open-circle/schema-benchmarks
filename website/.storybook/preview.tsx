@@ -2,7 +2,8 @@ import type { Decorator } from "@storybook/tanstack-react";
 import { definePreview } from "@storybook/tanstack-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { parseAnsiSequences } from "ansi-sequence-parser";
-import { initialize, type MswParameters, mswLoader } from "msw-storybook-addon";
+import addonMsw from "msw-storybook-addon";
+import "msw-storybook-addon/types";
 import Prism from "prismjs";
 import { mocked } from "storybook/test";
 
@@ -42,10 +43,6 @@ const styleDecorator: Decorator = (Story, { globals: { style = styleSchema.fallb
   );
 };
 
-declare module "@storybook/tanstack-react" {
-  export interface Parameters extends MswParameters {}
-}
-
 const queryClient = makeQueryClient();
 
 const queryClientDecorator: Decorator = (Story) => {
@@ -59,12 +56,12 @@ const queryClientDecorator: Decorator = (Story) => {
 document.addEventListener("click", (event) => {
   if (event.target instanceof HTMLAnchorElement) {
     event.preventDefault();
+    console.log(`Prevented navigation to ${event.target.href} in Storybook`);
   }
 });
 
-initialize({ onUnhandledRequest: "bypass" });
-
 export default definePreview({
+  addons: [addonMsw()],
   beforeEach: () => {
     queryClient.clear();
     mocked(getHighlightedCodeFn).mockImplementation(async ({ data }) => highlightCode(Prism, data));
@@ -72,6 +69,7 @@ export default definePreview({
       highlightAnsi(parseAnsiSequences, data),
     );
   },
+
   parameters: {
     layout: "centered",
     options: {
@@ -133,6 +131,4 @@ export default definePreview({
   },
 
   decorators: [dirDecorator, themeDecorator, styleDecorator, queryClientDecorator],
-  addons: [],
-  loaders: [mswLoader],
 });
