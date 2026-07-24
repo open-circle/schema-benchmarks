@@ -1,8 +1,8 @@
 import { fn } from "storybook/test";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
-import { MdSymbol } from "../symbol";
 import { FloatingActionButton } from "./floating";
 
 const meta = preview.meta({

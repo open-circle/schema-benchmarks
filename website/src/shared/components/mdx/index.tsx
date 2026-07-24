@@ -2,12 +2,11 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import clsx from "clsx";
 import { useRef, type ComponentPropsWithRef } from "react";
 
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { toastWithHaptics } from "#src/shared/components/snackbar/toast";
+import { MdSymbol } from "#src/shared/components/symbol";
+import { classed } from "#src/shared/components/utils";
 import { trackedLinkProps } from "#src/shared/lib/analytics";
-
-import { ToggleButton } from "../button/toggle";
-import { toastWithHaptics } from "../snackbar/toast";
-import { MdSymbol } from "../symbol";
-import { classed } from "../utils";
 
 interface PreProps extends ComponentPropsWithRef<"pre"> {
   title?: string;

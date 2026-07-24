@@ -1,8 +1,7 @@
+import { Button } from "#src/shared/components/button";
+import { Radio } from "#src/shared/components/radio";
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
-
-import { Button } from "../button";
-import { Radio } from "../radio";
-import { MdSymbol } from "../symbol";
 
 const meta = preview.meta({
   title: "Components/Table",

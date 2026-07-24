@@ -1,9 +1,9 @@
 import { useState } from "react";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { Chip, ChipCollection } from ".";
-import { MdSymbol } from "../symbol";
 
 function ChipDemo() {
   const [selected, setSelected] = useState("foo");

@@ -4,14 +4,13 @@ import { Fragment } from "react";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
-
-import { optimizeTypeProps } from "../../../-constants";
-import { DownloadCount } from "../../../../-components/count";
 
 interface CodecCardProps {
   encodeScaler: ReturnType<typeof Bar.getScale>;

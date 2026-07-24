@@ -2,13 +2,13 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import type { DistributiveArray } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
+import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { EmptyState } from "#src/shared/components/empty-state";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import type { SortableKey } from "../-constants";
 import { BenchCard } from "./card";
 import { BenchTable } from "./table";
 

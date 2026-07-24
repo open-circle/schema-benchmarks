@@ -3,8 +3,8 @@ import { radEventListeners } from "rad-event-listeners";
 import { useEffect, useLayoutEffect, useState } from "react";
 import bem from "react-bem-helper";
 
-import { FloatingActionButton } from "../button/floating";
-import { MdSymbol } from "../symbol";
+import { FloatingActionButton } from "#src/shared/components/button/floating";
+import { MdSymbol } from "#src/shared/components/symbol";
 
 const cls = bem("scroll-to-top");
 

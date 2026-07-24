@@ -4,11 +4,10 @@ import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
-
-import { getDownloadResults } from "../../-query";
 
 const getLabel = (d: DownloadResult) => d.libraryName;
 

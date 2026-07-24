@@ -3,10 +3,9 @@ import { identity } from "@schema-benchmarks/utils";
 import { useEffect, useRef } from "react";
 import bem from "react-bem-helper";
 
+import { useStyle } from "#src/shared/components/prefs/context";
 import { useLocalSlice } from "#src/shared/hooks/use-local-slice";
 import type { Style } from "#src/shared/lib/prefs/constants";
-
-import { useStyle } from "../prefs/context";
 
 type TypeState = "initial" | "typing" | "done";
 

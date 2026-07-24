@@ -1,7 +1,7 @@
+import { Button } from "#src/shared/components/button";
 import preview from "#storybook/preview";
 
 import { Snackbars } from ".";
-import { Button } from "../button";
 import { toastWithHaptics as toast } from "./toast";
 
 function SnackbarsDemo() {

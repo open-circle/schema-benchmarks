@@ -10,12 +10,11 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
-
-import { getBenchResults } from "../../-query";
 
 export type BenchPlotProps =
   | {

@@ -6,10 +6,10 @@ import bem from "react-bem-helper";
 import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import type { SortDirection, SortSearch } from "#src/shared/lib/sort";
 import { toggleSort } from "#src/shared/lib/sort";
 
-import { MdSymbol } from "../symbol";
 import { sortDirectionIcons } from "./constants";
 
 function getSortDirection<T extends PropertyKey>(

@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
 import { generateMetadata } from "#src/shared/data/meta";
 
-import { getBenchResults } from "../_benchmarks/_runtime/-query";
-import { getDownloadResults } from "../_benchmarks/download/-query";
 import Content from "./content.mdx";
 
 export const Route = createFileRoute("/_home/")({

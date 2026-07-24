@@ -2,10 +2,9 @@ import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
 import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
 
+import { getAvatarUrl } from "#src/routes/blog/-query";
 import { AvatarList } from "#src/shared/components/avatar";
 import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
-
-import { getAvatarUrl } from "../../-query";
 
 export interface BlogCardProps {
   blog: Pick<

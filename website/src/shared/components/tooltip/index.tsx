@@ -21,10 +21,9 @@ import {
 } from "react";
 import bem from "react-bem-helper";
 
+import { ButtonGroup } from "#src/shared/components/button";
+import { ConsoleWriter } from "#src/shared/components/consolewriter";
 import { useIdDefault } from "#src/shared/hooks/use-id-default";
-
-import { ButtonGroup } from "../button";
-import { ConsoleWriter } from "../consolewriter";
 
 const cls = bem("tooltip");
 

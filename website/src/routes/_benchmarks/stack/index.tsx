@@ -5,14 +5,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
+import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { getPackageName } from "#src/routes/_benchmarks/-query";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 import { getHighlightedAnsi } from "#src/shared/lib/highlight";
 import { applySort, sortParams } from "#src/shared/lib/sort";
 
-import { useDownloadsByPkgName } from "../-hooks";
-import { getPackageName } from "../-query";
 import { StackResults } from "./-components/results";
 import { highlightFrame, sortableKeys } from "./-constants";
 import Content from "./-content.mdx";

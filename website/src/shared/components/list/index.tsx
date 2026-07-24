@@ -3,8 +3,8 @@ import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { Button, ExternalLinkButton } from "../button";
-import { classed } from "../utils";
+import { Button, ExternalLinkButton } from "#src/shared/components/button";
+import { classed } from "#src/shared/components/utils";
 
 const listCls = bem("list");
 

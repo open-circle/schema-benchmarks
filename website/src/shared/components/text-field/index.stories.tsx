@@ -1,8 +1,8 @@
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { TextField } from ".";
-import { ToggleButton } from "../button/toggle";
-import { MdSymbol } from "../symbol";
 
 const meta = preview.meta({
   title: "Components/Text Field",

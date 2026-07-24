@@ -3,16 +3,15 @@ import type { CodecResult } from "@schema-benchmarks/bench";
 import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
+import { optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
+import type { SortableKey } from "#src/routes/_benchmarks/_runtime/codec/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import type { SortDirection } from "#src/shared/lib/sort";
-
-import type { SortableKey } from "../../-constants";
-import { Snippet } from "../../../-components/table/snippet";
-import { optimizeTypeProps } from "../../../-constants";
-import { DownloadCount } from "../../../../-components/count";
 
 export interface CodecTableProps {
   results: Array<CodecResult>;

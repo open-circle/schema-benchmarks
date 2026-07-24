@@ -8,17 +8,16 @@ import {
 } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import type { SortableKey } from "#src/routes/_benchmarks/download/-constants";
+import { getCompiledPath } from "#src/routes/_benchmarks/download/-query";
+import { getDownloadTime } from "#src/routes/_benchmarks/download/-speed";
 import { ButtonGroup } from "#src/shared/components/button";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import type { SortDirection } from "#src/shared/lib/sort";
-
-import type { SortableKey } from "../../-constants";
-import { getCompiledPath } from "../../-query";
-import { getDownloadTime } from "../../-speed";
-import { DownloadCount } from "../../../-components/count";
 
 export interface DownloadTableProps {
   results: Array<DownloadResult>;

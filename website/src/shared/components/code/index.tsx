@@ -3,11 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import * as v from "valibot";
 
+import { ToggleButton } from "#src/shared/components/button/toggle";
+import { toastWithHaptics } from "#src/shared/components/snackbar/toast";
+import { MdSymbol } from "#src/shared/components/symbol";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
-
-import { ToggleButton } from "../button/toggle";
-import { toastWithHaptics } from "../snackbar/toast";
-import { MdSymbol } from "../symbol";
 
 const defaultLanguage = "typescript";
 
