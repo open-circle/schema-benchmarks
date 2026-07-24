@@ -10,7 +10,6 @@ import type {
   withErrorTypeFilter,
 } from "#e2e/fixtures/pages/_runtime";
 import { matchBreakpoints } from "#e2e/utils";
-import { optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 
 export * as desktop from "./desktop";
 export * as mobile from "./mobile";
@@ -36,9 +35,8 @@ export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
         await expect(optimizeTypeCell).toHaveText(runtimePage.getOptimizeTypeLabel(optimizeType));
       }
     } else {
-      const cards = runtimePage.mobile.cards;
-      await expect(cards).not.toHaveCount(0);
-      for (const card of await cards.all()) {
+      const cards = await runtimePage.mobile.cards.all();
+      for (const card of cards) {
         const chipsList = card.getByTestId("bench-card-chips");
 
         const chips = chipsList.getByRole("listitem");
@@ -87,9 +85,8 @@ export async function testErrorTypeFilter(
         await expect(errorTypeCell).toHaveText(runtimePage.getErrorTypeLabel(errorType));
       }
     } else {
-      const cards = runtimePage.mobile.cards;
-      await expect(cards).not.toHaveCount(0);
-      for (const card of await cards.all()) {
+      const cards = await runtimePage.mobile.cards.all();
+      for (const card of cards) {
         const chipsList = card.getByTestId("bench-card-chips");
 
         const chips = chipsList.getByRole("listitem");

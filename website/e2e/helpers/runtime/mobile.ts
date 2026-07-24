@@ -1,8 +1,8 @@
 import { expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
-import { library as superstruct } from "#e2e/utils/constants";
+import { library } from "#e2e/utils/constants";
 
-export async function testCardDisplay(runtimePage: RuntimePage, library = superstruct) {
+export async function testCardDisplay(runtimePage: RuntimePage) {
   const card = runtimePage.mobile.getCardByLibraryName(library.name).first();
   await card.scrollIntoViewIfNeeded();
 

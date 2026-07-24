@@ -49,11 +49,11 @@ export function CodecResults({ results, sortBy, sortDir }: CodecResultsProps) {
       {shouldUseTable ? (
         <CodecTable {...{ results, encodeScaler, decodeScaler, sortBy, sortDir }} />
       ) : (
-        <div className="bench-cards">
+        <ul className="bench-cards" aria-label="Results">
           {results.map((result) => (
-            <CodecCard key={result.libraryName} {...{ result, encodeScaler, decodeScaler }} />
+            <CodecCard key={result.id} {...{ result, encodeScaler, decodeScaler }} />
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

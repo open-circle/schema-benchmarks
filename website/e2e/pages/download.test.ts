@@ -68,15 +68,15 @@ test.describe("desktop view", () => {
   test("it displays results table", async ({ downloadPage }) => {
     await expect(downloadPage.desktop.table).toBeVisible();
 
-    const superstructRow = downloadPage.desktop.table
+    const libraryRow = downloadPage.desktop.table
       .getByRole("row")
       .filter({ hasText: library.name });
-    const superstructVersionCell = await downloadPage.desktop.getCellByColumnName(
-      superstructRow,
+    const libraryVersionCell = await downloadPage.desktop.getCellByColumnName(
+      libraryRow,
       "Version",
     );
 
-    await expect(superstructVersionCell).toHaveText(library.version);
+    await expect(libraryVersionCell).toHaveText(library.version);
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
@@ -109,10 +109,10 @@ test.describe("mobile view", () => {
   test("it displays results cards", async ({ downloadPage }) => {
     await expect(downloadPage.mobile.cardList).toBeVisible();
 
-    const superstructCard = downloadPage.mobile.getCardByName(/superstruct/i);
-    await superstructCard.scrollIntoViewIfNeeded();
+    const libraryCard = downloadPage.mobile.getCardByName(library.name);
+    await libraryCard.scrollIntoViewIfNeeded();
 
-    const superstructVersionEl = superstructCard.getByText(library.version);
-    await expect(superstructVersionEl).toBeVisible();
+    const libraryVersionEl = libraryCard.getByText(library.version);
+    await expect(libraryVersionEl).toBeVisible();
   });
 });

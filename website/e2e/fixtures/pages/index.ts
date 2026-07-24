@@ -1,4 +1,5 @@
 export { BlogPage as blogPage } from "./blog";
+export { CodecPage as codecPage } from "./codec";
 export { DownloadPage as downloadPage } from "./download";
 export { InitializationPage as initializationPage } from "./initialization";
 export { ParsingPage as parsingPage } from "./parsing";
