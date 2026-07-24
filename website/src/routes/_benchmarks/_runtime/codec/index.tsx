@@ -1,4 +1,10 @@
-import { collator, shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
+import {
+  collator,
+  compareNumbers,
+  compareStrings,
+  shallowFilter,
+  toggleFilter,
+} from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -85,9 +91,10 @@ function RouteComponent() {
           {
             sortDir,
             fallbacks: [
-              (a, b) => collator.compare(a.libraryName, b.libraryName),
-              (a, b) => a.encode.mean - b.encode.mean,
-              (a, b) => a.decode.mean - b.decode.mean,
+              compareDownloadsByPkgName.fallback(downloadsByPkgName),
+              compareStrings((result) => result.libraryName),
+              compareNumbers((result) => result.encode.mean),
+              compareNumbers((result) => result.decode.mean),
             ],
           },
         ),

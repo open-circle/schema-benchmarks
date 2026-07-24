@@ -322,6 +322,16 @@ export const collator = new Intl.Collator(undefined, {
   sensitivity: "base",
 });
 
+export const compareStrings =
+  <T>(derive: (value: T) => string, intlCollator = collator) =>
+  (a: T, b: T) =>
+    intlCollator.compare(derive(a), derive(b));
+
+export const compareNumbers =
+  <T>(derive: (value: T) => number) =>
+  (a: T, b: T) =>
+    derive(a) - derive(b);
+
 // we only support English (other languages have different types of plural we don't support)
 const pluralRules = new Intl.PluralRules("en");
 

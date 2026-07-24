@@ -1,5 +1,5 @@
 import type { StackResult } from "@schema-benchmarks/bench";
-import { collator } from "@schema-benchmarks/utils";
+import { collator, compareStrings } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -95,7 +95,11 @@ function RouteComponent() {
           },
           {
             sortDir,
-            fallbacks: [(a, b) => collator.compare(a.libraryName, b.libraryName), frameSort],
+            fallbacks: [
+              compareDownloadsByPkgName.fallback(downloadsByPkgName),
+              compareStrings((result) => result.libraryName),
+              frameSort,
+            ],
           },
         ),
       ),
