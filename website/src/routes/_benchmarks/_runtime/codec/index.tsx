@@ -5,8 +5,7 @@ import { useMemo } from "react";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
-import { getPackageName } from "#src/routes/_benchmarks/-query";
+import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import {
   optimizeTypeProps,
   optionalOptimizeTypeSchema,
@@ -75,10 +74,7 @@ function RouteComponent() {
           (a, b) => {
             switch (sortBy) {
               case "downloads":
-                return (
-                  (downloadsByPkgName[getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkgName[getPackageName(b.libraryName)] ?? 0)
-                );
+                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
               case "encode":
               case "decode":
                 return a[sortBy].mean - b[sortBy].mean;

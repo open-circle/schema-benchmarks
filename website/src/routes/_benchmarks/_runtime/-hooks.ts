@@ -2,8 +2,7 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import { collator } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
-import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
-import { getPackageName } from "#src/routes/_benchmarks/-query";
+import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import { applySort } from "#src/shared/lib/sort";
 import type { SortDirection } from "#src/shared/lib/sort";
 
@@ -26,10 +25,7 @@ export function useSortedResults<T extends BenchResult>(
           (a, b) => {
             switch (sortBy) {
               case "downloads":
-                return (
-                  (downloadsByPkgName?.[getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkgName?.[getPackageName(b.libraryName)] ?? 0)
-                );
+                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
               case "libraryName":
                 return collator.compare(getLibraryLabel(a), getLibraryLabel(b));
               default:

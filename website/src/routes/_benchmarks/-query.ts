@@ -63,11 +63,17 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
     const { scope, name } = jsrScopeAndName(packageName);
     return queryOptions({
       queryKey: ["jsr", "downloads", "week", packageName],
-      queryFn: ({ signal }) =>
-        upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}/downloads`, {
-          signal: anyAbortSignal(signal, signalOpt),
-          schema: jsrDownloadsSchema,
-        }),
+      queryFn: async ({ signal }) => {
+        try {
+          return await upfetch(`https://api.jsr.io/scopes/${scope}/packages/${name}/downloads`, {
+            signal: anyAbortSignal(signal, signalOpt),
+            schema: jsrDownloadsSchema,
+          });
+        } catch (error) {
+          if (isRetryableUpfetchError(error)) return "n/a" as const;
+          throw error;
+        }
+      },
     });
   }
   return queryOptions({
@@ -82,7 +88,7 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
           },
         );
       } catch (error) {
-        if (isRetryableUpfetchError(error)) return 0;
+        if (isRetryableUpfetchError(error)) return "n/a" as const;
         throw error;
       }
     },

@@ -7,8 +7,7 @@ import { useMemo } from "react";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
-import { getPackageName } from "#src/routes/_benchmarks/-query";
+import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import { ButtonGroup } from "#src/shared/components/button";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { PageFilter, PageFilters } from "#src/shared/components/page-filter";
@@ -91,10 +90,7 @@ function RouteComponent() {
           (a, b) => {
             switch (sortBy) {
               case "downloads":
-                return (
-                  (downloadsByPkgName[getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkgName[getPackageName(b.libraryName)] ?? 0)
-                );
+                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
               case "libraryName":
                 return collator.compare(getLibraryLabel(a), getLibraryLabel(b));
               default:

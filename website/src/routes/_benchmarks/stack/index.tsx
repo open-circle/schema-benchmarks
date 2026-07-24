@@ -5,8 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
-import { getPackageName } from "#src/routes/_benchmarks/-query";
+import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
@@ -85,10 +84,7 @@ function RouteComponent() {
           (a, b) => {
             switch (sortBy) {
               case "downloads":
-                return (
-                  (downloadsByPkgName[getPackageName(a.libraryName)] ?? 0) -
-                  (downloadsByPkgName[getPackageName(b.libraryName)] ?? 0)
-                );
+                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
               case "libraryName":
                 return collator.compare(a[sortBy], b[sortBy]);
               case "lineCount":
