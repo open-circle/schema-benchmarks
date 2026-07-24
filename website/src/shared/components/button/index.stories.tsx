@@ -1,9 +1,9 @@
 import { fn } from "storybook/test";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { Button, ButtonGroup } from ".";
-import { MdSymbol } from "../symbol";
 
 const meta = preview.meta({
   title: "Components/Button",

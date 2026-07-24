@@ -8,14 +8,13 @@ import {
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { getCompiledPath } from "#src/routes/_benchmarks/download/-query";
+import { getDownloadTime } from "#src/routes/_benchmarks/download/-speed";
 import { ButtonGroup } from "#src/shared/components/button";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
-
-import { getCompiledPath } from "../../-query";
-import { getDownloadTime } from "../../-speed";
-import { DownloadCount } from "../../../-components/count";
 
 interface DownloadCardProps {
   result: DownloadResult;

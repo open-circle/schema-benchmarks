@@ -3,10 +3,9 @@ import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
 
+import { Spinner } from "#src/shared/components/spinner";
+import { withTooltip } from "#src/shared/components/tooltip";
 import { useFocusGroup } from "#src/shared/hooks/use-focus-group";
-
-import { Spinner } from "../spinner";
-import { withTooltip } from "../tooltip";
 
 export type ButtonColor = "success" | "error" | "warning" | "info";
 

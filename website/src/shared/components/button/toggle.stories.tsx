@@ -3,10 +3,10 @@ import { type ComponentProps, useState } from "react";
 import { fn } from "storybook/test";
 import { defaultPatterns } from "web-haptics";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { ButtonGroup } from ".";
-import { MdSymbol } from "../symbol";
 import { ToggleButton } from "./toggle";
 
 function ToggleButtonDemo(props: DistributiveOmit<ComponentProps<typeof ToggleButton>, "active">) {

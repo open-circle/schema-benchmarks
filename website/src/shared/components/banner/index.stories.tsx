@@ -1,8 +1,8 @@
+import { Button } from "#src/shared/components/button";
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { Banner, type BannerProps } from ".";
-import { Button } from "../button";
-import { MdSymbol } from "../symbol";
 import { bannerStore } from "./queue";
 
 function BannerDemo(bannerProps: BannerProps) {

@@ -6,6 +6,9 @@ import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { getPackageName } from "#src/routes/_benchmarks/-query";
 import { ButtonGroup } from "#src/shared/components/button";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { PageFilter, PageFilters } from "#src/shared/components/page-filter";
@@ -15,9 +18,6 @@ import { MdSymbol } from "#src/shared/components/symbol";
 import { generateMetadata } from "#src/shared/data/meta";
 import { sortParams, applySort } from "#src/shared/lib/sort";
 
-import { DownloadCount } from "../-components/count";
-import { useDownloadsByPkgName } from "../-hooks";
-import { getPackageName } from "../-query";
 import { DownloadResults } from "./-components/results";
 import { minifyTypeProps, optionalMinifyTypeSchema, sortableKeys } from "./-constants";
 import { getDownloadResults } from "./-query";

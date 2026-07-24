@@ -2,7 +2,7 @@ import type * as Plot from "@observablehq/plot";
 import { ClientOnly } from "@tanstack/react-router";
 import { type FC, useEffect, useRef } from "react";
 
-import { Spinner } from "../spinner";
+import { Spinner } from "#src/shared/components/spinner";
 
 export interface PlotContainerProps {
   plot: ReturnType<typeof Plot.plot>;

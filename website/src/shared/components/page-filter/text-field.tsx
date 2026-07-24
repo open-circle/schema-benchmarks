@@ -6,11 +6,11 @@ import {
 } from "@tanstack/react-router";
 import { type ChangeEvent, useEffect, useState } from "react";
 
+import { TextField, type TextFieldProps } from "#src/shared/components/text-field";
 import { useIdDefault } from "#src/shared/hooks/use-id-default";
 
 import type { PageFilterProps } from ".";
 import { PageFilter } from ".";
-import { TextField, type TextFieldProps } from "../text-field";
 
 export interface PageFilterTextFieldProps<LinkOptions = unknown>
   extends Omit<TextFieldProps, "title" | "defaultValue">, Omit<PageFilterProps, "children"> {

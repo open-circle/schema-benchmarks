@@ -1,7 +1,7 @@
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { List, ListItem, ListItemButton, ListItemContent, ListItemExternalLink } from ".";
-import { MdSymbol } from "../symbol";
 
 import "./index.stories.css";
 

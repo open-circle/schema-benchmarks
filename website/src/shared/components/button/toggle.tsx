@@ -5,9 +5,10 @@ import bem from "react-bem-helper";
 import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
+import { Spinner } from "#src/shared/components/spinner";
+import { withTooltip } from "#src/shared/components/tooltip";
+
 import type { ButtonColor } from ".";
-import { Spinner } from "../spinner";
-import { withTooltip } from "../tooltip";
 
 const cls = bem("button");
 

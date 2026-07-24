@@ -2,11 +2,11 @@ import type { BenchResult } from "@schema-benchmarks/bench";
 import { collator } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
+import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { getPackageName } from "#src/routes/_benchmarks/-query";
 import { applySort } from "#src/shared/lib/sort";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { useDownloadsByPkgName } from "../-hooks";
-import { getPackageName } from "../-query";
 import type { SortableKey } from "./-constants";
 
 function getLibraryLabel({ libraryName, note }: BenchResult) {

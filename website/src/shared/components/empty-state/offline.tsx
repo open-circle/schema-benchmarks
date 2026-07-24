@@ -1,5 +1,6 @@
+import { MdSymbol } from "#src/shared/components/symbol";
+
 import { EmptyState } from ".";
-import { MdSymbol } from "../symbol";
 
 export function isOfflineError(err: Error) {
   return !navigator.onLine || err.message.includes("Failed to fetch") || err.name === "AbortError";

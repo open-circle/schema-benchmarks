@@ -10,6 +10,10 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import type { BenchTo } from "#src/routes/_benchmarks/_runtime/-components/results";
+import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
+import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
@@ -19,10 +23,6 @@ import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import type { SortableKey } from "../../-constants";
-import { errorTypeProps, optimizeTypeProps } from "../../-constants";
-import { DownloadCount } from "../../../-components/count";
-import type { BenchTo } from "../results";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {

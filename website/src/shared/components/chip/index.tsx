@@ -5,9 +5,8 @@ import bem from "react-bem-helper";
 import type { HapticPattern } from "web-haptics";
 import { useWebHaptics } from "web-haptics/react";
 
+import { classed } from "#src/shared/components/utils";
 import { useFocusGroup } from "#src/shared/hooks/use-focus-group";
-
-import { classed } from "../utils";
 
 const collectionCls = bem("chip-collection");
 

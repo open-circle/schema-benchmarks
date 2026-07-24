@@ -4,17 +4,20 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { getPackageName } from "#src/routes/_benchmarks/-query";
+import {
+  optimizeTypeProps,
+  optionalOptimizeTypeSchema,
+} from "#src/routes/_benchmarks/_runtime/-constants";
+import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 import { applySort, sortParams } from "#src/shared/lib/sort";
 
-import { optimizeTypeProps, optionalOptimizeTypeSchema } from "../-constants";
-import { getBenchResults } from "../-query";
-import { DownloadCount } from "../../-components/count";
-import { useDownloadsByPkgName } from "../../-hooks";
-import { getPackageName } from "../../-query";
 import { CodecResults } from "./-components/results";
 import { sortableKeys } from "./-constants";
 import Content from "./content.mdx";

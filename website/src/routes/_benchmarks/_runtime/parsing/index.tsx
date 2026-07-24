@@ -3,12 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
-import { PageFilters } from "#src/shared/components/page-filter";
-import { PageFilterChips } from "#src/shared/components/page-filter/chips";
-import { generateMetadata } from "#src/shared/data/meta";
-import { getHighlightedCode } from "#src/shared/lib/highlight";
-
-import { BenchResults } from "../-components/results";
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { BenchResults } from "#src/routes/_benchmarks/_runtime/-components/results";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -17,10 +13,14 @@ import {
   optionalErrorTypeSchema,
   optionalOptimizeTypeSchema,
   sortParamsEntries,
-} from "../-constants";
-import { useSortedResults } from "../-hooks";
-import { getBenchResults } from "../-query";
-import { DownloadCount } from "../../-components/count";
+} from "#src/routes/_benchmarks/_runtime/-constants";
+import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
+import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { PageFilters } from "#src/shared/components/page-filter";
+import { PageFilterChips } from "#src/shared/components/page-filter/chips";
+import { generateMetadata } from "#src/shared/data/meta";
+import { getHighlightedCode } from "#src/shared/lib/highlight";
+
 import Content from "./content.mdx";
 
 const searchSchema = v.object({

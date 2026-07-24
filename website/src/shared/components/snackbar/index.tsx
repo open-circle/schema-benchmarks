@@ -1,8 +1,8 @@
 import bem from "react-bem-helper";
 import { resolveValue, Toaster } from "react-hot-toast";
 
-import { Spinner } from "../spinner";
-import { MdSymbol } from "../symbol";
+import { Spinner } from "#src/shared/components/spinner";
+import { MdSymbol } from "#src/shared/components/symbol";
 
 const cls = bem("snackbar");
 

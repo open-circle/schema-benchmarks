@@ -29,6 +29,7 @@ export default defineConfig({
     ...defaultJsPlugins,
     { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
     { name: "@tanstack/query", specifier: "@tanstack/eslint-plugin-query" },
+    { name: "no-relative", specifier: "eslint-plugin-no-relative-import-paths" },
   ],
   plugins: [...defaultPlugins, "react", "jsx-a11y"],
   settings: {
@@ -60,5 +61,9 @@ export default defineConfig({
 
     // would be nice to have on, but we get false positives for external abort signals
     "@tanstack/query/exhaustive-deps": "off",
+    "no-relative/no-relative-import-paths": [
+      "error",
+      { allowSameFolder: true, rootDir: "website/src", prefix: "#src" },
+    ],
   },
 });

@@ -1,10 +1,9 @@
 import * as d3 from "d3";
 import type { ReactNode } from "react";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import * as scales from "#src/shared/data/scale";
 import { combineScales, reverseIf } from "#src/shared/lib/d3";
-
-import { MdSymbol } from "../symbol";
 
 interface ScaleOptions {
   type?: "sentiment" | "stat";

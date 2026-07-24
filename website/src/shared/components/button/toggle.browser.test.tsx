@@ -1,9 +1,9 @@
 import { describe, expect } from "vitest";
 import { page } from "vitest/browser";
 
+import { MdSymbol } from "#src/shared/components/symbol";
 import { it } from "#test/browser/fixtures";
 
-import { MdSymbol } from "../symbol";
 import { ToggleButton } from "./toggle";
 
 describe("ToggleButton", () => {

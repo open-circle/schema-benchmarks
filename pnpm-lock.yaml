@@ -78,6 +78,9 @@ importers:
       eslint-plugin-depend:
         specifier: ^1.5.0
         version: 1.5.0(eslint@10.5.0(jiti@2.7.0)(supports-color@7.2.0))
+      eslint-plugin-no-relative-import-paths:
+        specifier: ^1.6.1
+        version: 1.6.1
       eslint-plugin-playwright:
         specifier: ^2.10.5
         version: 2.10.5(eslint@10.5.0(jiti@2.7.0)(supports-color@7.2.0))
@@ -6010,6 +6013,9 @@ packages:
     resolution: {integrity: sha512-i3UeLYmclf1Icp35+6W7CR4Bp2PIpDgBuf/mpmXK5UeLkZlvYJ21VuQKKHHAIBKRTPivPGX/gZl5JGno1o9Y0A==}
     peerDependencies:
       eslint: '>=8.40.0'
+
+  eslint-plugin-no-relative-import-paths@1.6.1:
+    resolution: {integrity: sha512-YZNeOnsOrJcwhFw0X29MXjIzu2P/f5X2BZDPWw1R3VUYBRFxNIh77lyoL/XrMU9ewZNQPcEvAgL/cBOT1P330A==}
 
   eslint-plugin-playwright@2.10.5:
     resolution: {integrity: sha512-4k+ml4cEd55kePUIW1WsCiOLDwZkAdPZPKMFulR83XpplCaVOTKHF6yvXLYixLtdVbkMjmKV5F3BaGuI3aH8aQ==}
@@ -14737,6 +14743,8 @@ snapshots:
       eslint: 10.5.0(jiti@2.7.0)(supports-color@7.2.0)
       module-replacements: 2.11.0
       semver: 7.8.5
+
+  eslint-plugin-no-relative-import-paths@1.6.1: {}
 
   eslint-plugin-playwright@2.10.5(eslint@10.5.0(jiti@2.7.0)(supports-color@7.2.0)):
     dependencies:

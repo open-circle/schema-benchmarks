@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect } from "vitest";
 import { page } from "vitest/browser";
 
+import { Button } from "#src/shared/components/button";
 import { it } from "#test/browser/fixtures";
 
 import { Banner } from ".";
-import { Button } from "../button";
 import { bannerStore } from "./queue";
 
 describe("Banner", () => {

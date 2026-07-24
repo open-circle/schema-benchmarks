@@ -4,12 +4,11 @@ import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { highlightFrame } from "#src/routes/_benchmarks/stack/-constants";
 import { CodeBlock } from "#src/shared/components/code";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
-
-import { highlightFrame } from "../../-constants";
 
 interface StackCardProps {
   result: StackResult;

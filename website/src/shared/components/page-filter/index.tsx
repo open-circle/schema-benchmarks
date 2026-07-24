@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { classed } from "../utils";
+import { classed } from "#src/shared/components/utils";
 
 const cls = bem("page-filters");
 

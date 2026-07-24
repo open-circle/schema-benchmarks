@@ -2,6 +2,7 @@ import type { DistributiveOmit } from "@schema-benchmarks/utils";
 import type { ReactNode } from "react";
 import bem from "react-bem-helper";
 
+import { Button, type ButtonProps } from "#src/shared/components/button";
 import { useIdDefault } from "#src/shared/hooks/use-id-default";
 
 import {
@@ -13,7 +14,6 @@ import {
   type DialogProps,
   DialogTitle,
 } from ".";
-import { Button, type ButtonProps } from "../button";
 
 type ActionProps = DistributiveOmit<ButtonProps, "children" | "onClick">;
 

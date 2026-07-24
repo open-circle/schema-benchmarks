@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 
+import { highlightFrame } from "#src/routes/_benchmarks/stack/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { Spinner } from "#src/shared/components/spinner";
 import { MdSymbol } from "#src/shared/components/symbol";
-
-import { highlightFrame } from "../../-constants";
 
 export interface OutputProps {
   output: string;

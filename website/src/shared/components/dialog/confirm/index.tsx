@@ -3,7 +3,8 @@ import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { useSelector } from "@tanstack/react-store";
 import { useRef } from "react";
 
-import { AlertDialog, type AlertDialogProps } from "../alert.tsx";
+import { AlertDialog, type AlertDialogProps } from "#src/shared/components/dialog/alert.tsx";
+
 import { confirmQueue } from "./queue.ts";
 
 export interface ConfirmDialogProps extends DistributiveOmit<

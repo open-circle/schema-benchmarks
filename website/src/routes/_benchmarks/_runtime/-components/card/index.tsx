@@ -3,14 +3,13 @@ import { durationFormatter, getDuration, getTransitionName } from "@schema-bench
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
-
-import { errorTypeProps, optimizeTypeProps } from "../../-constants";
-import { DownloadCount } from "../../../-components/count";
 
 interface BenchCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;

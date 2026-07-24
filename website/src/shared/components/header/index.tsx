@@ -9,12 +9,12 @@ import { Fragment, useContext } from "react";
 import bem from "react-bem-helper";
 import * as v from "valibot";
 
+import { ExternalLinkToggleButton, ToggleButton } from "#src/shared/components/button/toggle";
+import { ConsoleWriter } from "#src/shared/components/consolewriter";
+import { SidebarOpenContext } from "#src/shared/components/sidebar/context";
+import { MdSymbol } from "#src/shared/components/symbol";
 import { trackedLinkProps } from "#src/shared/lib/analytics";
 
-import { ExternalLinkToggleButton, ToggleButton } from "../button/toggle";
-import { ConsoleWriter } from "../consolewriter";
-import { SidebarOpenContext } from "../sidebar/context";
-import { MdSymbol } from "../symbol";
 import DiscordIcon from "./discord.svg?react";
 import GithubIcon from "./github.svg?react";
 
