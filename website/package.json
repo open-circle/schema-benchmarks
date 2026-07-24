@@ -4,9 +4,9 @@
   "type": "module",
   "imports": {
     "#src/*": "./src/*",
-    "#test/": "./test/*",
-    "#storybook/": "./.storybook/*",
-    "#e2e/": "./test/e2e/*"
+    "#test/*": "./test/*",
+    "#storybook/*": "./.storybook/*",
+    "#e2e/*": "./e2e/*"
   },
   "scripts": {
     "build": "vite build",
