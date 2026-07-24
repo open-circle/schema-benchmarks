@@ -5,15 +5,10 @@ import { library } from "#e2e/utils/constants";
 export async function testTableDisplay(runtimePage: RuntimePage) {
   await expect(runtimePage.desktop.table).toBeVisible();
 
-  const superstructRow = runtimePage.desktop.table
-    .getByRole("row")
-    .filter({ hasText: library.name });
-  const superstructVersionCell = await runtimePage.desktop.getCellByColumnName(
-    superstructRow,
-    "Version",
-  );
+  const libraryRow = runtimePage.desktop.table.getByRole("row").filter({ hasText: library.name });
+  const libraryVersionCell = await runtimePage.desktop.getCellByColumnName(libraryRow, "Version");
 
-  await expect(superstructVersionCell).toHaveText(library.version);
+  await expect(libraryVersionCell).toHaveText(library.version);
 }
 
 export async function testTableSorting(
