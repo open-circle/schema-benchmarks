@@ -5,9 +5,9 @@ import { useCallback, useMemo } from "react";
 
 import { getAllWeeklyDownloads, getPackageName } from "./-query";
 
-export function useDownloadsByPkgName(
-  data: Array<{ libraryName: string; packageName?: string } | string>,
-) {
+type Sortable = { libraryName: string; packageName?: string } | string;
+
+export function useDownloadsByPkgName(data: Array<Sortable>) {
   const pkgNames = useMemo(
     () =>
       uniqueBy(
@@ -31,8 +31,8 @@ export function useDownloadsByPkgName(
 
 export function compareDownloadsByPkgName(
   downloadsByPkgName: Record<string, number | "n/a">,
-  a: { libraryName: string; packageName?: string } | string,
-  b: { libraryName: string; packageName?: string } | string,
+  a: Sortable,
+  b: Sortable,
 ) {
   const aPkgName =
     typeof a === "string" ? getPackageName(a) : (a.packageName ?? getPackageName(a.libraryName));
@@ -43,7 +43,22 @@ export function compareDownloadsByPkgName(
   if (typeof aDownloads === "number" && typeof bDownloads === "number") {
     return aDownloads - bDownloads;
   }
-  if (typeof aDownloads === "number") return -1;
-  if (typeof bDownloads === "number") return 1;
   return 0;
 }
+
+compareDownloadsByPkgName.fallback =
+  (downloadsByPkgName: Record<string, number | "n/a">) => (a: Sortable, b: Sortable) => {
+    const aPkgName =
+      typeof a === "string" ? getPackageName(a) : (a.packageName ?? getPackageName(a.libraryName));
+    const bPkgName =
+      typeof b === "string" ? getPackageName(b) : (b.packageName ?? getPackageName(b.libraryName));
+    const aDownloads = downloadsByPkgName[aPkgName];
+    const bDownloads = downloadsByPkgName[bPkgName];
+    // these will be already sorted
+    if (typeof aDownloads === "number" && typeof bDownloads === "number") return 0;
+
+    if (typeof aDownloads === "number") return -1;
+    if (typeof bDownloads === "number") return 1;
+
+    return 0;
+  };

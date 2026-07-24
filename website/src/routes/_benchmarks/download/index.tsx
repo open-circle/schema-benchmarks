@@ -1,5 +1,12 @@
 import type { DownloadResult } from "@schema-benchmarks/bench";
-import { collator, toggleFilter, unsafeEntries, unsafeKeys } from "@schema-benchmarks/utils";
+import {
+  collator,
+  compareNumbers,
+  compareStrings,
+  toggleFilter,
+  unsafeEntries,
+  unsafeKeys,
+} from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
@@ -100,8 +107,9 @@ function RouteComponent() {
           {
             sortDir,
             fallbacks: [
-              (a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b)),
-              (a, b) => a.gzipBytes - b.gzipBytes,
+              compareDownloadsByPkgName.fallback(downloadsByPkgName),
+              compareStrings(getLibraryLabel),
+              compareNumbers((result) => result.gzipBytes),
             ],
           },
         ),

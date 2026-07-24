@@ -1,5 +1,5 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
-import { collator } from "@schema-benchmarks/utils";
+import { collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
 import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
@@ -35,8 +35,9 @@ export function useSortedResults<T extends BenchResult>(
           {
             sortDir,
             fallbacks: [
-              (a, b) => collator.compare(getLibraryLabel(a), getLibraryLabel(b)),
-              (a, b) => a.mean - b.mean,
+              compareDownloadsByPkgName.fallback(downloadsByPkgName),
+              compareStrings(getLibraryLabel),
+              compareNumbers((result) => result.mean),
             ],
           },
         ),

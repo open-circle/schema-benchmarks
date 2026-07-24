@@ -33,8 +33,11 @@ type Comparator<T> = (a: T, b: T) => number;
 
 export const applySort =
   <T>(
-    comparator: Comparator<T>,
-    { sortDir, fallbacks = [] }: { sortDir?: SortDirection; fallbacks?: Array<Comparator<T>> },
+    comparator: Comparator<NoInfer<T>>,
+    {
+      sortDir,
+      fallbacks = [],
+    }: { sortDir?: SortDirection; fallbacks?: Array<Comparator<NoInfer<T>>> },
   ): Comparator<T> =>
   (a, b) => {
     let c = comparator(a, b);
