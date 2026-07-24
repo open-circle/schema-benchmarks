@@ -24,7 +24,7 @@ export interface CodecTableProps {
 export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }: CodecTableProps) {
   return (
     <div className="card" style={{ viewTransitionName: "bench-table" }}>
-      <table className="bench-table">
+      <table className="bench-table" aria-label="Results">
         <thead>
           <tr>
             <SortableHeaderLink

@@ -28,7 +28,7 @@ export class RuntimePage extends BasePOM {
   }
 
   get desktop() {
-    const table = this.page.getByRole("table", { name: "Results" });
+    const table = this.main.getByRole("table", { name: "Results" });
     const headerRow = table.getByRole("row").first();
     return {
       table,
@@ -40,7 +40,7 @@ export class RuntimePage extends BasePOM {
   }
 
   get mobile() {
-    const cardsList = this.page.getByRole("list", { name: "Results" });
+    const cardsList = this.main.getByRole("list", { name: "Results" });
     const cards = cardsList.getByTestId("bench-card");
     return {
       cardsList,
