@@ -19,6 +19,16 @@ export function DownloadCount({ libraryName }: { libraryName: string }) {
   const packageUrl = isJsrPackage(packageName)
     ? `https://jsr.io/${packageName}`
     : `https://www.${npmSite}/package/${packageName}`;
+  if (data === "n/a") {
+    return (
+      <a
+        {...trackedLinkProps(packageUrl)}
+        aria-label={`Download count for ${libraryName}: not available`}
+      >
+        n/a
+      </a>
+    );
+  }
   return (
     <a
       {...trackedLinkProps(packageUrl)}
