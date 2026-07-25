@@ -18,7 +18,6 @@ catalog:
   "@types/node": 24.0.0
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20260707.2
   "@vitest/browser-playwright": ^4.1.10
   "@vitest/expect": ^4.1.10
   "@vitest/pretty-format": ^4.1.10

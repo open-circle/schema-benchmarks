@@ -12,8 +12,7 @@
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
     "prebuild": "pnpm run gen:paseri",
     "build": "tsdown",
-    "typecheck": "tsgo",
-    "typecheck:tsc": "tsc",
+    "typecheck": "tsc",
     "test": "vitest"
   },
   "dependencies": {
@@ -49,7 +48,6 @@
   "devDependencies": {
     "@ttsc/unplugin": "catalog:",
     "@types/node": "catalog:",
-    "@typescript/native-preview": "catalog:",
     "tsdown": "^0.22.14",
     "ttsc": "catalog:",
     "typescript": "catalog:",
