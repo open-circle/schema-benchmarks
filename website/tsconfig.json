@@ -2,14 +2,14 @@
   "extends": "../tsconfig.base.json",
   "include": [
     ".storybook/**/*",
-    "./vite.config.ts",
-    "./postcss.config.ts",
-    "./preview.ts",
-    "./src/**/*",
-    "./test/**/*",
-    "./vite/**/*",
-    "./offline/**/*",
-    "./e2e/**/*"
+    "vite.config.ts",
+    "postcss.config.ts",
+    "preview.ts",
+    "src/**/*",
+    "test/**/*",
+    "vite/**/*",
+    "offline/**/*",
+    "e2e/**/*"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",

@@ -12,13 +12,11 @@
   },
   "scripts": {
     "test": "vitest",
-    "typecheck": "tsgo",
-    "typecheck:tsc": "tsc"
+    "typecheck": "tsc"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "@typescript/native-preview": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "mix-n-matchers": "catalog:",
     "playwright": "catalog:",
