@@ -33,6 +33,7 @@ catalog:
   vite: ^8.1.5
   vitest: ^4.1.10
 overrides:
+  "@opentelemetry/api": ^1.9.1
   "@types/node": 24.0.0
   vite: "catalog:"
 update:
