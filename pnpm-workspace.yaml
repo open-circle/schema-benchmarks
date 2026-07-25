@@ -11,11 +11,10 @@ allowBuilds:
   msgpackr-extract: false
   msw: false
   sharp: false
-
 catalog:
   "@oxfmt/binding-linux-x64-gnu": ^0.60.0
   "@standard-schema/spec": ^1.1.0
-  "@ttsc/unplugin": "^0.20.0"
+  "@ttsc/unplugin": "^0.21.0"
   "@types/node": 24.0.0
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
@@ -29,7 +28,7 @@ catalog:
   playwright: ^1.61.1
   react: ^19.2.8
   react-dom: ^19.2.8
-  ttsc: "^0.20.0"
+  ttsc: "^0.21.0"
   typescript: 7.0.2
   valibot: ^1.4.2
   vite: ^8.1.5
@@ -37,6 +36,7 @@ catalog:
 overrides:
   "@types/node": 24.0.0
   vite: "catalog:"
-updateConfig:
-  ignoreDependencies:
+update:
+  ignoreDeps:
     - "@types/node"
+  githubActions: true
