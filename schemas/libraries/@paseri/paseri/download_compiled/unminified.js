@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/message.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
 function messageList(node, locale) {
 	const messages = [];
 	const missingCodes = /* @__PURE__ */ new Set();
@@ -41,8 +41,8 @@ function messageList(node, locale) {
 	return messages;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/result.js
-var ParseErrorResult = class {
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
+/** @internal */ var ParseErrorResult = class {
 	ok = false;
 	_issue;
 	constructor(issue) {
@@ -59,7 +59,7 @@ var ParseErrorResult = class {
 * `PaseriError` is thrown from `parse` when the data being validated does not adhere to the expected schema.
 */ var PaseriError = class extends Error {
 	_issue;
-	constructor(issue) {
+	/** @internal */ constructor(issue) {
 		super("Failed to parse. See `e.messages()` for details.");
 		this._issue = issue;
 	}
@@ -70,12 +70,12 @@ var ParseErrorResult = class {
 		return messageList(this._issue, locale);
 	}
 };
-function isParseSuccess(value) {
+/** @internal */ function isParseSuccess(value) {
 	return value.ok === true;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/issue.js
-const issueCodes = {
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
+/** @internal */ const issueCodes = {
 	INVALID_TYPE: "invalid_type",
 	TOO_SHORT: "too_short",
 	TOO_LONG: "too_long",
@@ -109,7 +109,7 @@ const issueCodes = {
 	TOO_RECENT: "too_recent",
 	TOO_DATED: "too_dated"
 };
-function addIssue(node, newNode) {
+/** @internal */ function addIssue(node, newNode) {
 	if (!node) return newNode;
 	return {
 		type: "join",
@@ -118,7 +118,7 @@ function addIssue(node, newNode) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/utils.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/utils.js
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
 	if (value.constructor === Object) return true;
@@ -224,39 +224,59 @@ function deepFreeze(value) {
 	return value;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/schema.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/schema.js
 var _computedKey;
 const DEFAULT_MAX_DEPTH = 1e3;
+const nonExtensibleStandardProps = /* @__PURE__ */ new WeakMap();
 _computedKey = "~standard";
 /**
 * The abstract base class for all schemas, containing the [common](https://paseri.dev/reference/schema/common/)
 * interface.
 */ var Schema = class {
-	get [_computedKey]() {
-		const self = this;
-		return {
-			version: 1,
-			vendor: "paseri",
-			validate(value, options) {
-				const result = self.safeParse(value);
-				if (result.ok) return { value: result.value };
-				return { issues: result.messages(options?.libraryOptions?.locale) };
+	/**
+	* The [Standard Schema](https://standardschema.dev) interface, letting Paseri schemas be consumed by any
+	* Standard Schema-compatible tool.
+	*/ get [_computedKey]() {
+		if (this._standardProps === void 0) {
+			const isExtensible = Object.isExtensible(this);
+			if (!isExtensible) {
+				const cached = nonExtensibleStandardProps.get(this);
+				if (cached !== void 0) return cached;
 			}
-		};
+			const self = this;
+			const frozenProps = Object.freeze({
+				version: 1,
+				vendor: "paseri",
+				validate(value, options) {
+					const issueOrSuccess = self._parse(value, 0, DEFAULT_MAX_DEPTH);
+					if (issueOrSuccess === void 0) return { value };
+					if (isParseSuccess(issueOrSuccess)) return { value: issueOrSuccess.value };
+					return { issues: new ParseErrorResult(issueOrSuccess).messages(options?.libraryOptions?.locale) };
+				}
+			});
+			if (isExtensible) this._standardProps = frozenProps;
+			else nonExtensibleStandardProps.set(this, frozenProps);
+			return frozenProps;
+		}
+		return this._standardProps;
 	}
-	_isOptional() {
+	/** @internal */ _isOptional() {
 		return false;
 	}
-	_hasDefault() {
+	/** @internal */ _hasDefault() {
 		return false;
 	}
-	_unwrapOptional() {
+	/** @internal */ _unwrapOptional() {
 		return this;
 	}
-	_unwrapRefine() {
+	/** @internal */ _unwrapRefine() {
 		return this;
 	}
-	parse(value, options) {
+	/**
+	* Validate `value` and return the typed output, throwing {@link PaseriError} if validation fails.
+	* @param value The value to validate.
+	* @param options Parsing options; `maxDepth` caps the nesting depth of recursive input (default 1000).
+	*/ parse(value, options) {
 		const maxDepth = options?.maxDepth ?? DEFAULT_MAX_DEPTH;
 		if (!Number.isInteger(maxDepth) || maxDepth < 1) throw new Error("maxDepth must be a positive integer.");
 		const issueOrSuccess = this._parse(value, 0, maxDepth);
@@ -264,7 +284,12 @@ _computedKey = "~standard";
 		if (isParseSuccess(issueOrSuccess)) return issueOrSuccess.value;
 		throw new PaseriError(issueOrSuccess);
 	}
-	safeParse(value, options) {
+	/**
+	* Validate `value` and return a result object instead of throwing: `{ ok: true, value }` on success, or
+	* `{ ok: false }` carrying the issue and a `messages()` accessor on failure.
+	* @param value The value to validate.
+	* @param options Parsing options; `maxDepth` caps the nesting depth of recursive input (default 1000).
+	*/ safeParse(value, options) {
 		const maxDepth = options?.maxDepth ?? DEFAULT_MAX_DEPTH;
 		if (!Number.isInteger(maxDepth) || maxDepth < 1) throw new Error("maxDepth must be a positive integer.");
 		const issueOrSuccess = this._parse(value, 0, maxDepth);
@@ -275,20 +300,32 @@ _computedKey = "~standard";
 		if (isParseSuccess(issueOrSuccess)) return issueOrSuccess;
 		return new ParseErrorResult(issueOrSuccess);
 	}
-	optional() {
+	/**
+	* Returns a new schema that also accepts `undefined`. The returned schema also provides a `.default(value)`
+	* method that substitutes `value` when the input is `undefined`.
+	*/ optional() {
 		return new OptionalSchema(this);
 	}
-	nullable() {
+	/** Returns a new schema that also accepts `null`. */ nullable() {
 		return new NullableSchema(this);
 	}
-	chain(schema, transformer) {
+	/**
+	* Transform this schema's output and validate the result against `schema`, producing a schema for the
+	* transformed value.
+	* @param schema The schema validating the transformed value.
+	* @param transformer Maps this schema's output to a result for `schema`.
+	*/ chain(schema, transformer) {
 		return new ChainSchema(this, schema, transformer);
 	}
-	refine(predicate, options) {
+	/**
+	* Add a custom validation check. When `predicate` returns `false`, parsing fails with the given issue `code`.
+	* @param predicate Returns `true` when the value is valid.
+	* @param options The issue `code`, plus optional `path` and `params` describing the failure.
+	*/ refine(predicate, options) {
 		return new RefineSchema(this, predicate, options);
 	}
 };
-var OptionalSchema = class OptionalSchema extends Schema {
+/** @internal */ var OptionalSchema = class OptionalSchema extends Schema {
 	_schema;
 	constructor(schema) {
 		super();
@@ -311,7 +348,7 @@ var OptionalSchema = class OptionalSchema extends Schema {
 		return new DefaultSchema(this._schema, value);
 	}
 };
-var NullableSchema = class NullableSchema extends Schema {
+/** @internal */ var NullableSchema = class NullableSchema extends Schema {
 	_schema;
 	constructor(schema) {
 		super();
@@ -363,7 +400,7 @@ var ChainSchema = class extends Schema {
 		return issueOrSuccessTo;
 	}
 };
-var DefaultSchema = class DefaultSchema extends Schema {
+/** @internal */ var DefaultSchema = class DefaultSchema extends Schema {
 	_schema;
 	_default;
 	constructor(schema, value) {
@@ -388,7 +425,7 @@ var DefaultSchema = class DefaultSchema extends Schema {
 		return true;
 	}
 };
-var RefineSchema = class RefineSchema extends Schema {
+/** @internal */ var RefineSchema = class RefineSchema extends Schema {
 	_base;
 	_predicate;
 	_code;
@@ -443,7 +480,7 @@ var RefineSchema = class RefineSchema extends Schema {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/array.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/array.js
 var ArraySchema = class ArraySchema extends Schema {
 	_element;
 	_minLength = 0;
@@ -534,7 +571,7 @@ var ArraySchema = class ArraySchema extends Schema {
 * [Array](https://paseri.dev/reference/schema/collections/array/) schema.
 */ const array = (...args) => new ArraySchema(...args);
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/bounds.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/bounds.js
 function effectiveLowerBound(checks, gteTag, gtTag) {
 	if (checks === void 0) return;
 	let value;
@@ -566,7 +603,7 @@ function assertUpperWithinLower(lower, value, strict) {
 	if (lower !== void 0 && (value < lower.value || value === lower.value && (strict || lower.strict))) throw new Error("Lower bound must not exceed upper bound.");
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/date.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/date.js
 const TAG_MIN$1 = 0;
 const TAG_MAX$1 = 1;
 const singleton$2 = /* @__PURE__ */ new class DateSchema extends Schema {
@@ -642,7 +679,7 @@ const singleton$2 = /* @__PURE__ */ new class DateSchema extends Schema {
 * [Date](https://paseri.dev/reference/schema/primitives/date/) schema.
 */ const date = () => singleton$2;
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/enum.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/enum.js
 var EnumSchema = class EnumSchema extends Schema {
 	_values;
 	_set;
@@ -678,7 +715,7 @@ var EnumSchema = class EnumSchema extends Schema {
 * [Enum](https://paseri.dev/reference/schema/others/enum/) schema.
 */ const enum_ = (...values) => new EnumSchema(...values);
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/number.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/number.js
 const TAG_GTE = 0;
 const TAG_GT = 1;
 const TAG_LTE = 2;
@@ -835,7 +872,13 @@ const singleton$1 = /* @__PURE__ */ new class NumberSchema extends Schema {
 * [Number](https://paseri.dev/reference/schema/primitives/number/) schema.
 */ const number = () => singleton$1;
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/object.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/object.js
+function mergeShapes(destination, source) {
+	return {
+		...destination,
+		...source
+	};
+}
 var ObjectSchema = class ObjectSchema extends Schema {
 	_shape;
 	_shapeMap;
@@ -1027,10 +1070,7 @@ var ObjectSchema = class ObjectSchema extends Schema {
 		return cloned;
 	}
 	merge(other) {
-		const merged = new ObjectSchema({
-			...this._shape,
-			...other._shape
-		}, true);
+		const merged = new ObjectSchema(mergeShapes(this._shape, other._shape), true);
 		merged._mode = other._mode;
 		return merged;
 	}
@@ -1071,19 +1111,19 @@ var ObjectSchema = class ObjectSchema extends Schema {
 * [Object](https://paseri.dev/reference/schema/collections/object/) schema.
 */ const object = (...args) => new ObjectSchema(...args);
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/regex.gen.js
-const emailRegex = () => /^(?:(?:[a-z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+)(?:\.(?:[a-z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+))*(?:)@(?:(?:[a-z\d](?:[a-z\d\-]*[a-z\d])?\.)+[a-z]{2,}))$/iv;
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/regex.gen.js
+const emailRegex = () => /^(?:(?:[a-zA-Z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+)(?:\.(?:[a-zA-Z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+))*(?:)@(?:(?:[a-zA-Z\d](?:[a-zA-Z\d\-]*[a-zA-Z\d])?\.)+[a-zA-Z]{2,}))$/v;
 const emojiRegex = () => /^\p{RGI_Emoji}+$/v;
 const uuidRegex = () => /^(?:(?:\p{AHex}{8}-\p{AHex}{4}-[1-8]\p{AHex}{3}-[89ab]\p{AHex}{3}-\p{AHex}{12})|(?:00000000-0000-0000-0000-000000000000)|(?:ffffffff-ffff-ffff-ffff-ffffffffffff))$/iv;
-const nanoidRegex = () => /^[a-z\d_-]{21}$/i;
-const urlRegex = () => /^(?:(?:(?:https?|ftp|wss?):\/\/(?:(?=[a-z\d\._\-]*?[a-z_\-])(?:(?=([a-z\d\._\-]+))\1))(?::(?:6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|\d{1,4}))?(?:(?:[\/\?\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\d\+\.\-]*))\2):(?!\/\/).*))$/iv;
-const dateRegex = () => /^(?:(?:(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29)|\d{4}-(?:(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01]))|(?:(?:0[469]|11)-(?:0[1-9]|[12]\d|30))|(?:02-(?:0[1-9]|1\d|2[0-8])))))$/v;
-const timeRegex = (precision, offset, local = true) => new RegExp(`^(?:(?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d):(?:[0-5]\\d)(?:${precision === void 0 ? "(\\.\\d+)?" : precision === 0 ? "" : `\\.\\d{${String(precision)}}`})(?:${offset && local ? "((?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z?)" : offset ? "((?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z)" : local ? "Z?" : "Z"}))$`, "v");
-const datetimeRegex = (precision, offset, local) => new RegExp(`^(?:(?:(?:(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29)|\\d{4}-(?:(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01]))|(?:(?:0[469]|11)-(?:0[1-9]|[12]\\d|30))|(?:02-(?:0[1-9]|1\\d|2[0-8])))))T(?:(?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d):(?:[0-5]\\d)(?:${precision === void 0 ? "(\\.\\d+)?" : precision === 0 ? "" : `\\.\\d{${String(precision)}}`}))(?:${offset && local ? "((?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z?)" : offset ? "((?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z)" : local ? "Z?" : "Z"}))$`, "v");
-const ipRegex = (version) => new RegExp(`^(?:${version === void 0 ? "((?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-z]+)?))" : version === 4 ? "(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))" : "(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-z]+)?)"})$`, "iv");
-const ipCidrRegex = (version) => new RegExp(`^(?:${version === void 0 ? "((?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))|(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2}))))" : version === 4 ? "(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))" : "(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2})))"})$`, "iv");
+const nanoidRegex = () => /^[a-zA-Z\d_-]{21}$/;
+const urlRegex = () => /^(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?):\/\/(?:(?:(?:(?![xX][nN]--)[a-zA-Z\d_\-]+)\.)*(?:(?!(?:\d+|0[xX]\p{AHex}*)(?:[\:\/\?\#]|$))(?:(?![xX][nN]--)[a-zA-Z\d_\-]+)))(?::(?:6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|\d{1,4}))?(?:(?:[\/\?\#].*)?))|(?:(?!(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?)|[fF][iI][lL][eE]):))[a-zA-Z](?:(?=([a-zA-Z\d\+\.\-]*))\1):(?!\/\/).*))$/v;
+const dateRegex = () => /^(?:(?:\d{4}-(?:(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01]))|(?:(?:0[469]|11)-(?:0[1-9]|[12]\d|30))|(?:02-(?:0[1-9]|1\d|2[0-8])))|(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29)))$/v;
+const timeRegex = (precision, offset, local = true) => new RegExp(`^(?:(?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d):(?:[0-5]\\d)(?:${precision === void 0 ? "(?:\\.\\d+)?" : precision === 0 ? "" : `\\.\\d{${String(precision)}}`})(?:${offset && local ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z?)" : offset ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z)" : local ? "Z?" : "Z"}))$`, "v");
+const datetimeRegex = (precision, offset, local) => new RegExp(`^(?:(?:(?:\\d{4}-(?:(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01]))|(?:(?:0[469]|11)-(?:0[1-9]|[12]\\d|30))|(?:02-(?:0[1-9]|1\\d|2[0-8])))|(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29)))T(?:(?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d):(?:[0-5]\\d)(?:${precision === void 0 ? "(?:\\.\\d+)?" : precision === 0 ? "" : `\\.\\d{${String(precision)}}`}))(?:${offset && local ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z?)" : offset ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z)" : local ? "Z?" : "Z"}))$`, "v");
+const ipRegex = (version) => new RegExp(`^(?:${version === void 0 ? "(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?))" : version === 4 ? "(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))" : "(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)"})$`, "v");
+const ipCidrRegex = (version) => new RegExp(`^(?:${version === void 0 ? "(?:(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))|(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2}))))" : version === 4 ? "(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))" : "(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2})))"})$`, "v");
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/schemas/string.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/string.js
 const TAG_MIN = 0;
 const TAG_MAX = 1;
 const TAG_REGEX = 2;

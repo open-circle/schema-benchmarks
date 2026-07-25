@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-alpha.10/node_modules/sury/src/S.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-alpha.11/node_modules/sury/src/S.mjs
 var stringTag = "string";
 var numberTag = "number";
 var bigintTag = "bigint";
@@ -57,10 +57,11 @@ var valFlagAsync = 1;
 var vendor = "sury";
 var s = /* @__PURE__ */ Symbol(vendor);
 vendor + "";
+var U = void 0;
 var immutableEmptyArray = [];
 var immutableEmptyObject = /* @__PURE__ */ Object.create(null);
 var isSchemaObject = (obj) => {
-	return !!obj["~standard"];
+	return typeof obj === objectTag && obj !== null && "~standard" in obj;
 };
 var constField = "const";
 var isLiteral = (schema) => {
@@ -84,24 +85,24 @@ var stringify = (unknown2) => {
 	else return unknown2.toString();
 };
 var toExpression = (schema) => {
-	if (schema.name !== void 0) return schema.name;
-	else if (schema.const !== void 0) return stringify(schema.const);
-	else if (schema.anyOf !== void 0) return schema.anyOf.map(toExpression).join(" | ");
+	if (schema.name !== U) return schema.name;
+	else if (schema.const !== U) return stringify(schema.const);
+	else if (schema.anyOf !== U) return schema.anyOf.map(toExpression).join(" | ");
 	else if (schema.format === "compactColumns") {
 		const to = schema.to;
-		if (to !== void 0) {
+		if (to !== U) {
 			const props = to.properties;
-			if (props !== void 0) return `[${Object.keys(props).map((key) => {
+			if (props !== U) return `[${Object.keys(props).map((key) => {
 				const propSchema = props[key];
 				return `${toExpression(propSchema)}[]`;
 			}).join(", ")}]`;
 			else return "unknown[][]";
 		} else {
 			const additionalItems = schema.additionalItems;
-			if (additionalItems !== void 0 && typeof additionalItems === "object") return `${toExpression(additionalItems)}[]`;
+			if (additionalItems !== U && typeof additionalItems === "object") return `${toExpression(additionalItems)}[]`;
 			else return "unknown[][]";
 		}
-	} else if (schema.format !== void 0) return schema.format;
+	} else if (schema.format !== U) return schema.format;
 	else if (schema.type === objectTag) {
 		const properties = schema.properties;
 		const locations = Object.keys(properties);
@@ -125,8 +126,8 @@ var toExpression = (schema) => {
 };
 function Schema() {}
 var schemaPrototype = /* @__PURE__ */ Object.create(null);
-Object.defineProperty(schemaPrototype, "with", { get() {
-	return (fn, ...args) => fn(this, ...args);
+Object.defineProperty(schemaPrototype, "with", { value(fn, ...args) {
+	return fn(this, ...args);
 } });
 Schema.prototype = schemaPrototype;
 var seq = 1;
@@ -160,7 +161,7 @@ var formatErrorMessage = (error) => {
 };
 var globalConfig = {
 	m: formatErrorMessage,
-	d: void 0,
+	d: U,
 	a: "strip",
 	f: valFlagNone
 };
@@ -184,7 +185,7 @@ var noopDecoder = (input) => {
 var factoryCache = {};
 var cached = (key, tag, init) => {
 	const existing = factoryCache[key];
-	if (existing !== void 0) return existing;
+	if (existing !== U) return existing;
 	else {
 		const schema = baseSchema(tag, true);
 		init(schema);
@@ -202,7 +203,7 @@ var copySchema = (schema) => {
 var updateOutput = (schema, fn) => {
 	const root = copySchema(schema);
 	let mut = root;
-	while (mut.to !== void 0) {
+	while (mut.to !== U) {
 		const next = copySchema(mut.to);
 		mut.to = next;
 		mut = next;
@@ -263,7 +264,7 @@ function _notVar() {
 		return val.i;
 	} else {
 		const v = B_varWithoutAllocation(val.g);
-		if (val.prev !== void 0) if (val.i === "") val.cp = `let ${v};` + val.cp;
+		if (val.prev !== U) if (val.i === "") val.cp = `let ${v};` + val.cp;
 		else val.cp = val.cp + `let ${v}=${val.i};`;
 		else if (val.i === "") B_hoistDecl(val, v);
 		else B_hoistDecl(val, `${v}=${val.i}`);
@@ -275,7 +276,7 @@ function _notVar() {
 var operationArgVar = "i";
 var failInvalidType = (input) => {
 	const em = input.e.errorMessage;
-	return B_invalidInputBuilder(void 0, void 0, em !== void 0 ? em.type !== void 0 ? em.type : em._ : void 0)(input);
+	return B_invalidInputBuilder(U, U, em !== U ? em.type !== U ? em.type : em._ : U)(input);
 };
 var B_embed = (b, value) => {
 	const e = b.g.e;
@@ -292,16 +293,6 @@ var B_inlineConst = (b, schema) => {
 	else if (flagUnsafeHas(tagFlag, 28672)) return B_embed(b, schema.const);
 	else return const_;
 };
-var B_inlineLocation = (global2, location) => {
-	const key = `"${location}"`;
-	const cached2 = global2[key];
-	if (cached2 !== void 0) return cached2;
-	else {
-		const inlinedLocation = inlinedValueFromString(location);
-		global2[key] = inlinedLocation;
-		return inlinedLocation;
-	}
-};
 var B_varWithoutAllocation = (global2) => {
 	const newCounter = global2.v + 1;
 	global2.v = newCounter;
@@ -312,20 +303,31 @@ var B_hoistDecl = (owner, decl) => {
 };
 var B_operationArg = (schema, expected, flag, defs) => {
 	return {
-		cp: "",
-		hd: "",
+		b: U,
+		p: U,
 		v: _var,
 		i: operationArgVar,
-		f: valFlagNone,
 		s: schema,
+		io: U,
 		e: expected,
+		prev: U,
+		f: valFlagNone,
+		d: U,
+		fv: U,
+		cp: "",
+		hd: "",
+		fz: U,
+		vc: U,
+		u: U,
+		t: U,
 		path: pathEmpty,
 		g: {
 			d: defs,
 			o: flag,
 			e: [],
 			v: -1
-		}
+		},
+		o: U
 	};
 };
 var B_throw = (errorDetails) => {
@@ -346,11 +348,11 @@ var B_failWithArg = (b, fn, arg) => {
 	})}(${arg})`;
 };
 var B_receivedSchema = (val) => {
-	return val.prev !== void 0 ? val.prev.s : val.s;
+	return val.prev !== U ? val.prev.s : val.s;
 };
 var B_makeInvalidInputDetails = (expected, received, path, input, includeInput, unionErrors, reasonOverride) => {
-	let reasonRef = reasonOverride !== void 0 ? reasonOverride : `Expected ${toExpression(expected)}, received ${includeInput ? stringify(input) : toExpression(received)}`;
-	if (unionErrors !== void 0) {
+	let reasonRef = reasonOverride !== U ? reasonOverride : `Expected ${toExpression(expected)}, received ${includeInput ? stringify(input) : toExpression(received)}`;
+	if (unionErrors !== U) {
 		const caseErrors = unionErrors;
 		const seenReasons = /* @__PURE__ */ new Set();
 		for (let idx = 0; idx < caseErrors.length; idx++) {
@@ -377,18 +379,18 @@ var B_makeInvalidInputDetails = (expected, received, path, input, includeInput, 
 };
 var B_invalidInputBuilder = (expected, extraPath = pathEmpty, reasonOverride, includeInput = true) => {
 	return (input) => {
-		const expected_ = expected !== void 0 ? expected : input.e;
+		const expected_ = expected !== U ? expected : input.e;
 		const received = B_receivedSchema(input);
 		const path = extraPath === pathEmpty ? input.path : pathConcat(input.path, extraPath);
-		return (value) => B_makeInvalidInputDetails(expected_, received, path, value, includeInput, void 0, reasonOverride);
+		return (value) => B_makeInvalidInputDetails(expected_, received, path, value, includeInput, U, reasonOverride);
 	};
 };
 var B_failWithErrorMessage = (key, defaultMessage) => {
 	return (input) => {
 		const em = input.e.errorMessage;
-		const override = em !== void 0 ? em[key] !== void 0 ? em[key] : em["_"] : void 0;
-		const m = override !== void 0 ? override : defaultMessage;
-		if (m !== void 0) return B_invalidInputBuilder(void 0, void 0, m)(input);
+		const override = em !== U ? em[key] !== U ? em[key] : em["_"] : U;
+		const m = override !== U ? override : defaultMessage;
+		if (m !== U) return B_invalidInputBuilder(U, U, m)(input);
 		else return failInvalidType(input);
 	};
 };
@@ -424,12 +426,12 @@ var B_isHoistable = (val) => {
 var B_merge = (val, hoistCond) => {
 	let current = val;
 	let code = "";
-	while (current !== void 0) {
+	while (current !== U) {
 		const val2 = current;
 		current = val2.prev;
 		let currentCode = "";
 		if (val2.vc) {
-			if (hoistCond !== void 0 && B_isHoistable(val2)) {
+			if (hoistCond !== U && B_isHoistable(val2)) {
 				const inputVar = current.v();
 				const allChecks = val2.vc;
 				let localHoist = "";
@@ -465,95 +467,120 @@ var B_linkVar = (val, nextVal) => {
 };
 var B_next = (prev, initial, schema, expected = prev.e) => {
 	return {
-		prev,
+		b: U,
+		p: U,
 		v: _notVar,
 		i: initial,
-		f: valFlagNone,
 		s: schema,
+		io: U,
 		e: expected,
+		prev,
+		f: valFlagNone,
+		d: prev.d,
+		fv: U,
 		cp: "",
 		hd: "",
+		fz: U,
+		vc: U,
+		u: U,
+		t: true,
 		path: prev.path,
 		g: prev.g,
-		t: true,
-		d: prev.d
+		o: U
 	};
 };
 var B_refine = (val, schema = val.s, checks, expected = val.e) => {
 	const shouldLink = val.v !== _var;
 	const nextVal = {
-		prev: val,
-		i: val.i,
+		b: U,
+		p: U,
 		v: shouldLink ? _prevVar : _var,
-		f: val.f,
+		i: val.i,
 		s: schema,
+		io: U,
 		e: expected,
+		prev: val,
+		f: val.f,
+		d: val.d,
+		fv: U,
 		cp: "",
 		hd: "",
+		fz: U,
 		vc: checks,
+		u: U,
+		t: val.t,
 		path: val.path,
 		g: val.g,
-		t: val.t,
-		d: val.d
+		o: U
 	};
 	if (shouldLink) B_linkVar(val, nextVal);
 	return nextVal;
 };
 var B_pushCheck = (val, check) => {
-	if (val.vc !== void 0) val.vc.push(check);
+	if (val.vc !== U) val.vc.push(check);
 	else val.vc = [check];
 };
 var B_markOutput = (val, valInput) => {
 	let deferredInputChecks;
 	const inputRefiner = valInput.e.inputRefiner;
-	if (inputRefiner !== void 0) {
+	if (inputRefiner !== U) {
 		const checks = inputRefiner(valInput);
-		if (checks.length > 0) if (valInput.prev !== void 0) {
+		if (checks.length > 0) if (valInput.prev !== U) {
 			for (let i = 0; i < checks.length; i++) B_pushCheck(valInput, checks[i]);
-			deferredInputChecks = void 0;
+			deferredInputChecks = U;
 		} else deferredInputChecks = checks;
-		else deferredInputChecks = void 0;
-	} else deferredInputChecks = void 0;
+		else deferredInputChecks = U;
+	} else deferredInputChecks = U;
 	let outputChecks;
 	const refiner = val.e.refiner;
-	if (refiner !== void 0) {
+	if (refiner !== U) {
 		const checks = refiner(val);
-		outputChecks = checks.length > 0 ? checks : void 0;
-	} else outputChecks = void 0;
+		outputChecks = checks.length > 0 ? checks : U;
+	} else outputChecks = U;
 	let result;
-	if (deferredInputChecks !== void 0 && outputChecks !== void 0) result = B_refine(val, void 0, deferredInputChecks.concat(outputChecks));
-	else if (deferredInputChecks !== void 0) result = B_refine(val, void 0, deferredInputChecks);
-	else if (outputChecks !== void 0) result = B_refine(val, void 0, outputChecks);
+	if (deferredInputChecks !== U && outputChecks !== U) result = B_refine(val, U, deferredInputChecks.concat(outputChecks));
+	else if (deferredInputChecks !== U) result = B_refine(val, U, deferredInputChecks);
+	else if (outputChecks !== U) result = B_refine(val, U, outputChecks);
 	else result = val;
 	result.io = true;
 	return result;
 };
 var B_hoistChildChecks = (parent, child, key) => {
 	if (child.vc) {
-		const pathAppend = pathFromInlinedLocation(B_inlineLocation(parent.g, key));
+		const pathAppend = pathFromInlinedLocation(inlinedValueFromString(key));
 		child.vc.forEach((check) => {
 			B_pushCheck(parent, {
 				c: (inputVar) => check.c(inputVar + pathAppend),
 				f: check.f
 			});
 		});
-		child.vc = void 0;
+		child.vc = U;
 	}
 };
 var B_dynamicScope = (from, locationVar) => {
 	const schemaAdditionalItems = from.s.additionalItems;
 	const expectedAdditionalItems = from.e.additionalItems;
 	return {
+		b: U,
+		p: from,
 		v: _notVarBeforeValidation,
 		i: `${from.v()}[${locationVar}]`,
+		s: schemaAdditionalItems !== U && typeof schemaAdditionalItems !== "string" ? schemaAdditionalItems : unknown,
+		io: U,
+		e: expectedAdditionalItems !== U && typeof expectedAdditionalItems !== "string" ? expectedAdditionalItems : unknown,
+		prev: U,
 		f: from.f,
-		s: schemaAdditionalItems !== void 0 && typeof schemaAdditionalItems !== "string" ? schemaAdditionalItems : unknown,
-		e: expectedAdditionalItems !== void 0 && typeof expectedAdditionalItems !== "string" ? expectedAdditionalItems : unknown,
+		d: U,
+		fv: U,
 		cp: "",
 		hd: "",
-		p: from,
+		fz: U,
+		vc: U,
+		u: U,
+		t: U,
 		path: pathEmpty,
-		g: from.g
+		g: from.g,
+		o: U
 	};
 };
 var B_nextConst = (from, schema, expected) => {
@@ -580,37 +607,43 @@ var B_addKey = (objVal, key, value) => {
 var B_scope = (val) => {
 	const shouldLink = val.v !== _var;
 	const nextVal = {
+		b: val,
+		p: U,
+		v: shouldLink ? _bondVar : _var,
 		i: val.i,
 		s: val.s,
+		io: val.io,
 		e: val.e,
+		prev: U,
 		f: flagNone,
-		path: val.path,
-		g: val.g,
-		v: shouldLink ? _bondVar : _var,
-		b: val,
+		d: val.d,
+		fv: U,
 		cp: "",
 		hd: "",
+		fz: U,
+		vc: U,
 		u: false,
 		t: false,
-		io: val.io,
-		d: val.d
+		path: val.path,
+		g: val.g,
+		o: U
 	};
 	if (shouldLink) B_linkVar(val, nextVal);
 	return nextVal;
 };
 var B_mergeWithCatch = (val, catchFn, appendSafe) => {
 	const valCode = B_merge(val);
-	if (valCode === "" && !flagUnsafeHas(val.f, valFlagAsync)) return valCode + (appendSafe !== void 0 ? appendSafe() : "");
+	if (valCode === "" && !flagUnsafeHas(val.f, valFlagAsync)) return valCode + (appendSafe !== U ? appendSafe() : "");
 	else {
 		const errorVar = B_varWithoutAllocation(val.g);
 		const catchCode = `${catchFn(errorVar)};throw ${errorVar}`;
 		if (flagUnsafeHas(val.f, valFlagAsync)) val.i = `${val.i}.catch(${errorVar}=>{${catchCode}})`;
-		return `try{${valCode}${appendSafe !== void 0 ? appendSafe() : ""}}catch(${errorVar}){${catchCode}}`;
+		return `try{${valCode}${appendSafe !== U ? appendSafe() : ""}}catch(${errorVar}){${catchCode}}`;
 	}
 };
 var B_mergeWithPathPrepend = (val, parent, locationVar, appendSafe) => {
-	if (val.path === pathEmpty && locationVar === void 0) return B_merge(val);
-	else return B_mergeWithCatch(val, (errorVar) => `${errorVar}.path=${parent.path === "" ? "" : `${inlinedValueFromString(parent.path)}+`}${locationVar !== void 0 ? `'["'+${locationVar}+'"]'+` : ""}${errorVar}.path`, appendSafe);
+	if (val.path === pathEmpty && locationVar === U) return B_merge(val);
+	else return B_mergeWithCatch(val, (errorVar) => `${errorVar}.path=${parent.path === "" ? "" : `${inlinedValueFromString(parent.path)}+`}${locationVar !== U ? `'["'+${locationVar}+'"]'+` : ""}${errorVar}.path`, appendSafe);
 };
 function noopOperation(i) {
 	return i;
@@ -619,16 +652,31 @@ noopOperation["embedded"] = immutableEmptyArray;
 var int32FormatValidation = (inputVar) => {
 	return `${inputVar}<=2147483647&&${inputVar}>=-2147483648&&${inputVar}%1===0`;
 };
-var typeofCond = (tag) => (inputVar) => `typeof ${inputVar}==="${tag}"`;
+var typeofCondCache = {};
+var typeofCond = (tag) => typeofCondCache[tag] || (typeofCondCache[tag] = (inputVar) => `typeof ${inputVar}==="${tag}"`);
 var nanCond = (inputVar) => `Number.isNaN(${inputVar})`;
 var isArrayCond = (inputVar) => `Array.isArray(${inputVar})`;
 var objectTagCond = (inputVar) => `${typeofCond(objectTag)(inputVar)}&&${inputVar}`;
 var instanceofCond = (b, class_) => (inputVar) => `${inputVar} instanceof ${B_embed(b, class_)}`;
+var typeofCheckCache = {};
+var typeofCheck = (tag) => typeofCheckCache[tag] || (typeofCheckCache[tag] = {
+	c: typeofCond(tag),
+	f: failInvalidType
+});
+var notNanCheck = {
+	c: (inputVar) => `!${nanCond(inputVar)}`,
+	f: failInvalidType
+};
+var int32Check = {
+	c: int32FormatValidation,
+	f: failInvalidType
+};
+var nanCheck = {
+	c: nanCond,
+	f: failInvalidType
+};
 var B_refineTypeofUnknown = (input, tag) => {
-	return B_refine(input, input.e, [{
-		c: typeofCond(tag),
-		f: failInvalidType
-	}]);
+	return B_refine(input, input.e, [typeofCheck(tag)]);
 };
 var B_nextVar = (input, expected) => {
 	const output = B_next(input, B_varWithoutAllocation(input.g), expected);
@@ -638,18 +686,9 @@ var B_nextVar = (input, expected) => {
 var numberDecoder = (input) => {
 	const inputTagFlag = tagFlags[input.s.type];
 	if (flagUnsafeHas(inputTagFlag, tagFlagUnknown)) {
-		const checks = [{
-			c: typeofCond(numberTag),
-			f: failInvalidType
-		}];
-		if (input.e.format === "int32") checks.push({
-			c: int32FormatValidation,
-			f: failInvalidType
-		});
-		else if (!flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) checks.push({
-			c: (inputVar) => `!${nanCond(inputVar)}`,
-			f: failInvalidType
-		});
+		const checks = [typeofCheck(numberTag)];
+		if (input.e.format === "int32") checks.push(int32Check);
+		else if (!flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) checks.push(notNanCheck);
 		return B_refine(input, input.e, checks);
 	} else if (flagUnsafeHas(inputTagFlag, tagFlagString)) {
 		const output = B_nextVar(input, input.e);
@@ -660,10 +699,7 @@ var numberDecoder = (input) => {
 		}];
 		return output;
 	} else if (!flagUnsafeHas(inputTagFlag, tagFlagNumber)) return B_unsupportedDecode(input, input.s, input.e);
-	else if (input.s.format !== input.e.format && input.e.format === "int32") return B_refine(input, input.e, [{
-		c: int32FormatValidation,
-		f: failInvalidType
-	}]);
+	else if (input.s.format !== input.e.format && input.e.format === "int32") return B_refine(input, input.e, [int32Check]);
 	else return input;
 };
 var float = () => cached(numberTag, numberTag, (s2) => {
@@ -709,10 +745,7 @@ var literalDecoder = (input) => {
 				f: failInvalidType
 			}];
 			return B_nextConst(stringConstVal, expectedSchema, expectedSchema);
-		} else if (flagUnsafeHas(schemaTagFlag, tagFlagNaN)) return B_refine(input, expectedSchema, [{
-			c: nanCond,
-			f: failInvalidType
-		}]);
+		} else if (flagUnsafeHas(schemaTagFlag, tagFlagNaN)) return B_refine(input, expectedSchema, [nanCheck]);
 		else return B_refine(input, expectedSchema, [{
 			c: (inputVar) => `${inputVar}===${B_inlineConst(input, expectedSchema)}`,
 			f: failInvalidType
@@ -720,7 +753,7 @@ var literalDecoder = (input) => {
 	}
 };
 var unit = () => cached(undefinedTag, undefinedTag, (s2) => {
-	s2.const = void 0;
+	s2.const = U;
 	s2.decoder = literalDecoder;
 });
 var nullLiteral = () => cached(nullTag, nullTag, (s2) => {
@@ -753,11 +786,11 @@ var Literal_parse = (value) => {
 };
 var parse = (input) => {
 	let result = input;
-	let appliedEncoderRef = void 0;
+	let appliedEncoderRef = U;
 	let loopCount = 0;
 	while (!result.io || result.e.to) {
 		const appliedEncoder = appliedEncoderRef;
-		appliedEncoderRef = void 0;
+		appliedEncoderRef = U;
 		const loopInput = result;
 		loopCount = loopCount + 1;
 		if (loopCount > 50) throw /* @__PURE__ */ new Error("Loop count exceeded 50");
@@ -769,13 +802,13 @@ var parse = (input) => {
 			const operationOutput = parse(operationInput);
 			const operationCode = B_merge(operationOutput);
 			if (operationInput.i !== operationOutput.i || operationCode !== "") result = B_next(loopInput, `${operationInputVar}.then(${operationInputVar}=>{${operationCode}return ${operationOutput.i}})`, operationOutput.s, operationOutput.e);
-			else result = B_refine(loopInput, operationOutput.s, void 0, operationOutput.e);
+			else result = B_refine(loopInput, operationOutput.s, U, operationOutput.e);
 			result.f |= valFlagAsync;
 			result.io = true;
 		} else if (loopInput.io) {
 			const to = loopInput.e.to;
-			if (loopInput.e.parser !== void 0) result = loopInput.e.parser(loopInput);
-			else result = B_refine(result, void 0, void 0, to);
+			if (loopInput.e.parser !== U) result = loopInput.e.parser(loopInput);
+			else result = B_refine(result, U, U, to);
 		} else {
 			const maybeEncoder = loopInput.s.encoder;
 			if (maybeEncoder && maybeEncoder !== appliedEncoder && loopInput.s !== loopInput.e && loopInput.e.type !== unknownTag) result = maybeEncoder(loopInput, loopInput.e);
@@ -793,7 +826,7 @@ var parseDynamic = (input) => {
 		return parse(input);
 	} catch (exn) {
 		const error = getOrRethrow(exn);
-		error.path = pathConcat(input.p !== void 0 ? input.p.path : pathEmpty, pathConcat(pathConcat(input.path, pathDynamic), error.path));
+		error.path = pathConcat(input.p !== U ? input.p.path : pathEmpty, pathConcat(pathConcat(input.path, pathDynamic), error.path));
 		throw error;
 	}
 };
@@ -815,17 +848,17 @@ var compileDecoder = (schema, expected, flag, defs) => {
 	}
 };
 var getOutputSchema = (schema) => {
-	if (schema.to !== void 0) return getOutputSchema(schema.to);
+	if (schema.to !== U) return getOutputSchema(schema.to);
 	else return schema;
 };
 function getDecoder(..._args) {
 	const args = arguments;
 	let idx = 0;
-	let flag = void 0;
+	let flag = U;
 	let keyRef = "";
 	let maxSeq = 0;
-	let cacheTarget = void 0;
-	while (flag === void 0) {
+	let cacheTarget = U;
+	while (flag === U) {
 		const arg = args[idx];
 		if (!arg) {
 			const f = globalConfig.f;
@@ -846,7 +879,7 @@ function getDecoder(..._args) {
 			idx = idx + 1;
 		}
 	}
-	if (cacheTarget === void 0) return panic("No schema provided for decoder.");
+	if (cacheTarget === U) return panic("No schema provided for decoder.");
 	else {
 		const key = keyRef;
 		const cacheTargetRecord = cacheTarget;
@@ -859,7 +892,7 @@ function getDecoder(..._args) {
 					mut.to = to;
 				});
 			}
-			const f = compileDecoder(schema, schema, flag, void 0);
+			const f = compileDecoder(schema, schema, flag, U);
 			valueOptions[valKey] = f;
 			Object.defineProperty(cacheTarget, key, valueOptions);
 			return f;
@@ -868,7 +901,7 @@ function getDecoder(..._args) {
 }
 var nestedLoc = "BS_PRIVATE_NESTED_SOME_NONE";
 var neverBuilderFn = (input) => {
-	const output = B_refine(input, void 0, void 0, never_());
+	const output = B_refine(input, U, U, never_());
 	output.cp = B_embedInvalidInput(input) + ";";
 	return output;
 };
@@ -896,21 +929,21 @@ var typeCheckCond = (input, schema, inputVar) => {
 	else if (flagUnsafeHas(tagFlag, tagFlagArray)) return isArrayCond(inputVar);
 	else if (flagUnsafeHas(tagFlag, tagFlagInstance)) return instanceofCond(input, schema.class)(inputVar);
 	else if (flagUnsafeHas(tagFlag, tagFlagNumber)) {
-		const typeofCheck = typeofCond(numberTag)(inputVar);
-		if (flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) return typeofCheck;
-		else return `${typeofCheck}&&!${nanCond(inputVar)}`;
+		const typeofCheck2 = typeofCond(numberTag)(inputVar);
+		if (flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) return typeofCheck2;
+		else return `${typeofCheck2}&&!${nanCond(inputVar)}`;
 	} else if (flagUnsafeHas(tagFlag, tagFlagNaN)) return nanCond(inputVar);
 	else if (flagUnsafeHas(tagFlag, 48)) return `${inputVar}===${B_inlineConst(input, schema)}`;
 	else if (flagUnsafeHas(tagFlag, 17418)) return typeofCond(schema.type)(inputVar);
 	else return "";
 };
-var isItemSchema = (x) => x !== void 0 && typeof x !== "string";
+var isItemSchema = (x) => x !== U && typeof x !== "string";
 var makeObjectVal = (prev, schema) => {
 	return {
-		prev,
+		b: U,
+		p: U,
 		v: _notVar,
 		i: "",
-		f: valFlagNone,
 		s: schema.type === arrayTag ? {
 			type: arrayTag,
 			items: [],
@@ -923,20 +956,28 @@ var makeObjectVal = (prev, schema) => {
 			additionalItems: "strict",
 			decoder: objectDecoder
 		},
+		io: U,
 		e: prev.e,
+		prev,
+		f: valFlagNone,
 		d: /* @__PURE__ */ Object.create(null),
-		t: true,
+		fv: U,
 		cp: "",
 		hd: "",
+		fz: U,
+		vc: U,
+		u: U,
+		t: true,
 		path: prev.path,
-		g: prev.g
+		g: prev.g,
+		o: U
 	};
 };
 var completeObjectVal = (objectVal) => {
 	const isArray = objectVal.s.type === arrayTag;
 	let inline = "";
 	let promiseAllContent = "";
-	let optionalSettingCode = void 0;
+	let optionalSettingCode = U;
 	const keys = Object.keys(objectVal.d);
 	for (let idx = 0; idx < keys.length; idx++) {
 		const key = keys[idx];
@@ -945,9 +986,9 @@ var completeObjectVal = (objectVal) => {
 		if (val.o) {
 			const existingFn = optionalSettingCode;
 			optionalSettingCode = (objectVar) => {
-				return (existingFn === void 0 ? "" : existingFn(objectVar)) + `if(${val.v()}!==void 0){${objectVar}[${B_inlineLocation(objectVal.g, key)}]=${val.i}}`;
+				return (existingFn === U ? "" : existingFn(objectVar)) + `if(${val.v()}!==void 0){${objectVar}[${inlinedValueFromString(key)}]=${val.i}}`;
 			};
-		} else inline = inline + (isArray ? `${val.i}` : `${B_inlineLocation(objectVal.g, key)}:${val.i}`) + ",";
+		} else inline = inline + (isArray ? `${val.i}` : `${inlinedValueFromString(key)}:${val.i}`) + ",";
 	}
 	objectVal.i = isArray ? "[" + inline + "]" : "{" + inline + "}";
 	const valWithRequired = objectVal;
@@ -963,7 +1004,7 @@ var completeObjectVal = (objectVal) => {
 		valWithRequired.e = operationOutput.e;
 		valWithRequired.io = true;
 		return valWithRequired;
-	} else if (optionalSettingCode === void 0) return valWithRequired;
+	} else if (optionalSettingCode === U) return valWithRequired;
 	else {
 		const code = optionalSettingCode(valWithRequired.v());
 		const output = B_refine(valWithRequired);
@@ -1020,7 +1061,7 @@ var arrayDecoder = (unknownInput) => {
 		const itemOutput = parseDynamic(B_dynamicScope(input, iteratorVar));
 		const hasTransform = itemOutput.t;
 		const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, array(itemOutput.s)) : B_refine(input, expectedSchema);
-		const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : void 0);
+		const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U);
 		if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
 		if (flagUnsafeHas(itemOutput.f, valFlagAsync)) output = B_asyncVal(output2, `Promise.all(${output2.i})`);
 		else output = output2;
@@ -1087,18 +1128,18 @@ var objectDecoder = (unknownInput) => {
 		else input = B_refine(unknownInput, schema);
 	} else input = B_unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
 	const expectedAdditionalItems = expectedSchema.additionalItems;
-	const dictItem = isItemSchema(expectedAdditionalItems) ? expectedAdditionalItems : void 0;
+	const dictItem = isItemSchema(expectedAdditionalItems) ? expectedAdditionalItems : U;
 	const inputAdditionalItems = input.s.additionalItems;
 	const sourceIsDict = isItemSchema(inputAdditionalItems);
 	let output;
-	if (dictItem !== void 0 && dictItem === unknown) output = input;
-	else if (dictItem !== void 0 && sourceIsDict) {
+	if (dictItem !== U && dictItem === unknown) output = input;
+	else if (dictItem !== U && sourceIsDict) {
 		const inputVar = input.v();
 		const keyVar = B_varWithoutAllocation(input.g);
 		const itemOutput = parseDynamic(B_dynamicScope(input, keyVar));
 		const hasTransform = itemOutput.t;
 		const output2 = hasTransform ? B_next(input, "{}", dictFactory(itemOutput.s)) : B_refine(input, expectedSchema);
-		const itemCode = B_mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => B_addKey(output2, keyVar, itemOutput) : void 0);
+		const itemCode = B_mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => B_addKey(output2, keyVar, itemOutput) : U);
 		if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${keyVar} in ${inputVar}){${itemCode}}`;
 		if (flagUnsafeHas(itemOutput.f, valFlagAsync)) {
 			const resolveVar = B_varWithoutAllocation(output2.g);
@@ -1108,7 +1149,7 @@ var objectDecoder = (unknownInput) => {
 			const outputVar = output2.v();
 			output = B_asyncVal(output2, `new Promise((${resolveVar},${rejectVar})=>{let ${counterVar}=Object.keys(${outputVar}).length;for(let ${keyVar} in ${outputVar}){${outputVar}[${keyVar}].then(${asyncParseResultVar}=>{${outputVar}[${keyVar}]=${asyncParseResultVar};if(${counterVar}--===1){${resolveVar}(${outputVar})}},${rejectVar})}})`);
 		} else output = output2;
-	} else if (dictItem !== void 0) {
+	} else if (dictItem !== U) {
 		const itemSchema = dictItem;
 		const objectVal = makeObjectVal(input, expectedSchema);
 		const keys = Object.keys(input.s.properties);
@@ -1155,7 +1196,7 @@ var objectDecoder = (unknownInput) => {
 			else for (let idx = 0; idx < keys.length; idx++) {
 				const key = keys[idx];
 				if (idx !== 0) objectVal.cp = objectVal.cp + "&&";
-				objectVal.cp = objectVal.cp + `${keyVar}!==${B_inlineLocation(input.g, key)}`;
+				objectVal.cp = objectVal.cp + `${keyVar}!==${inlinedValueFromString(key)}`;
 			}
 			objectVal.cp = objectVal.cp + `){${B_failWithArg(input, (excessFieldName) => ({
 				code: "unrecognized_keys",
@@ -1189,29 +1230,29 @@ var unionIsPriority = (tagFlag, byKey) => {
 };
 var unionIsSelfDecodeNoop = (schema) => {
 	const additionalItems = schema.additionalItems;
-	return schema.to === void 0 && schema.parser === void 0 && !flagUnsafeHas(tagFlags[schema.type], tagFlagRef) && (schema.anyOf !== void 0 ? schema.anyOf.every(unionIsSelfDecodeNoop) : true) && (schema.items !== void 0 ? schema.items.every(unionIsSelfDecodeNoop) : true) && (schema.properties !== void 0 ? Object.values(schema.properties).every(unionIsSelfDecodeNoop) : true) && (additionalItems !== void 0 && typeof additionalItems !== "string" ? unionIsSelfDecodeNoop(additionalItems) : true);
+	return schema.to === U && schema.parser === U && !flagUnsafeHas(tagFlags[schema.type], tagFlagRef) && (schema.anyOf !== U ? schema.anyOf.every(unionIsSelfDecodeNoop) : true) && (schema.items !== U ? schema.items.every(unionIsSelfDecodeNoop) : true) && (schema.properties !== U ? Object.values(schema.properties).every(unionIsSelfDecodeNoop) : true) && (additionalItems !== U && typeof additionalItems !== "string" ? unionIsSelfDecodeNoop(additionalItems) : true);
 };
 var unionIsWiderSchema = (schemaAnyOf, inputAnyOf) => {
 	return inputAnyOf.every((inputSchema, idx) => {
 		const schema = schemaAnyOf[idx];
-		if (schema !== void 0) return !flagUnsafeHas(tagFlags[inputSchema.type], 9152) && inputSchema.type === schema.type && inputSchema.const === schema.const && inputSchema.to === void 0;
+		if (schema !== U) return !flagUnsafeHas(tagFlags[inputSchema.type], 9152) && inputSchema.type === schema.type && inputSchema.const === schema.const && inputSchema.to === U && schema.to === U;
 		else return false;
 	});
 };
 var unionGetToPerCase = (schema) => {
-	return schema.parser === void 0 && schema.to !== void 0 ? schema.to : void 0;
+	return schema.parser === U && schema.to !== U ? schema.to : U;
 };
 var unionCanDispatchPerVariant = (inputAnyOf, target) => {
-	return !flagUnsafeHas(tagFlags[getOutputSchema(target).type], tagFlagRef) && !(target.type === unionTag && target.anyOf.some((v) => flagUnsafeHas(tagFlags[v.type], tagFlagRef))) && !inputAnyOf.some((v) => v.to !== void 0 || v.parser !== void 0 || flagUnsafeHas(tagFlags[v.type], tagFlagRef));
+	return !flagUnsafeHas(tagFlags[getOutputSchema(target).type], tagFlagRef) && !(target.type === unionTag && target.anyOf.some((v) => flagUnsafeHas(tagFlags[v.type], tagFlagRef))) && !inputAnyOf.some((v) => v.to !== U || v.parser !== U || flagUnsafeHas(tagFlags[v.type], tagFlagRef));
 };
 var unionPerVariantVal = (input, target) => {
-	return B_refine(input, unknown, void 0, updateOutput(input.s, (mut) => {
+	return B_refine(input, unknown, U, updateOutput(input.s, (mut) => {
 		mut.to = target;
 	}));
 };
 var unionEncoder = (input, target) => {
 	const inputAnyOf = input.s.anyOf;
-	if (target.type === unionTag && unionGetToPerCase(target) === void 0 && unionIsWiderSchema(target.anyOf, inputAnyOf)) return input;
+	if (target.type === unionTag && unionGetToPerCase(target) === U && unionIsWiderSchema(target.anyOf, inputAnyOf)) return input;
 	else if (unionCanDispatchPerVariant(inputAnyOf, target)) return unionPerVariantVal(input, target);
 	else return input;
 };
@@ -1220,9 +1261,9 @@ var unionDecoder = (input) => {
 	let schemas = selfSchema.anyOf;
 	const initialInputTagFlag = tagFlags[input.s.type];
 	const toPerCase = unionGetToPerCase(selfSchema);
-	if (input.s === selfSchema && toPerCase === void 0 && schemas.every(unionIsSelfDecodeNoop) || flagUnsafeHas(initialInputTagFlag, tagFlagUnion) && unionIsWiderSchema(schemas, input.s.anyOf) && toPerCase === void 0 || input.io && input.e === input.s) return input;
+	if (input.s === selfSchema && toPerCase === U && schemas.every(unionIsSelfDecodeNoop) || flagUnsafeHas(initialInputTagFlag, tagFlagUnion) && unionIsWiderSchema(schemas, input.s.anyOf) && toPerCase === U || input.io && input.e === input.s) return input;
 	else {
-		if (flagUnsafeHas(initialInputTagFlag, tagFlagUnion) || input.s.encoder === void 0 && flagUnsafeHas(initialInputTagFlag, tagFlagRef)) input.s = unknown;
+		if (flagUnsafeHas(initialInputTagFlag, tagFlagUnion) || input.s.encoder === U && flagUnsafeHas(initialInputTagFlag, tagFlagRef)) input.s = unknown;
 		let activeKeyRef = "";
 		if (!flagUnsafeHas(initialInputTagFlag, 769)) {
 			const sourceKey = unionToKey(input.s);
@@ -1247,7 +1288,7 @@ var unionDecoder = (input) => {
 		const fail = (caught2) => {
 			return `${B_embed(input, function() {
 				const args = arguments;
-				B_throw(B_makeInvalidInputDetails(selfSchema, unknown, input.path, args[0], true, args.length > 1 ? Array.from(args).slice(1) : void 0));
+				B_throw(B_makeInvalidInputDetails(selfSchema, unknown, input.path, args[0], true, args.length > 1 ? Array.from(args).slice(1) : U));
 			})}(${input.v()}${caught2})`;
 		};
 		const output = B_refine(input);
@@ -1303,7 +1344,7 @@ var unionDecoder = (input) => {
 				const itemCode = itemCodeRef;
 				if (!itemSkipped && itemCond) if (itemCode) {
 					const existing = byDiscriminant[itemCond];
-					if (existing !== void 0) if (Array.isArray(existing)) existing.push(itemCode);
+					if (existing !== U) if (Array.isArray(existing)) existing.push(itemCode);
 					else byDiscriminant[itemCond] = [existing, itemCode];
 					else byDiscriminant[itemCond] = itemCode;
 				} else itemNoop = itemNoop ? `${itemNoop}||${itemCond}` : itemCond;
@@ -1375,21 +1416,21 @@ var unionDecoder = (input) => {
 		const appendUnionRefiners = (() => {
 			const unionRefiner = selfSchema.refiner;
 			const unionInputRefiner = selfSchema.inputRefiner;
-			const cachedRefinerChecks = { contents: void 0 };
-			const cachedInputRefinerChecks = { contents: void 0 };
+			const cachedRefinerChecks = { contents: U };
+			const cachedInputRefinerChecks = { contents: U };
 			const attach = (current, source, cache) => {
-				if (source === void 0) return current;
+				if (source === U) return current;
 				else {
 					const fn = source;
 					const getCached = (input2) => {
-						if (cache.contents !== void 0) return cache.contents;
+						if (cache.contents !== U) return cache.contents;
 						else {
 							const checks = fn(input2);
 							cache.contents = checks;
 							return checks;
 						}
 					};
-					if (current === void 0) return getCached;
+					if (current === U) return getCached;
 					else {
 						const existing = current;
 						return (input2) => {
@@ -1403,9 +1444,9 @@ var unionDecoder = (input) => {
 			};
 			return (mut) => {
 				const r = attach(mut.refiner, unionRefiner, cachedRefinerChecks);
-				if (r !== void 0) mut.refiner = r;
+				if (r !== U) mut.refiner = r;
 				const ir = attach(mut.inputRefiner, unionInputRefiner, cachedInputRefinerChecks);
-				if (ir !== void 0) mut.inputRefiner = ir;
+				if (ir !== U) mut.inputRefiner = ir;
 			};
 		})();
 		if (isLiteral(input.s)) {
@@ -1419,7 +1460,7 @@ var unionDecoder = (input) => {
 			schemas = matching.concat(rest);
 		}
 		for (let idx = 0; idx <= lastIdx; idx++) {
-			const schema = toPerCase !== void 0 ? updateOutput(schemas[idx], (mut) => {
+			const schema = toPerCase !== U ? updateOutput(schemas[idx], (mut) => {
 				appendUnionRefiners(mut);
 				mut.to = toPerCase;
 			}) : schemas[idx];
@@ -1427,7 +1468,7 @@ var unionDecoder = (input) => {
 			const key = unionToKey(schema);
 			if (activeKey !== "" && activeKey !== key) {} else if (flagUnsafeHas(tagFlag, tagFlagUndefined) && "fromDefault" in selfSchema) {} else {
 				const initialArr = byKey[key];
-				if (initialArr !== void 0) {
+				if (initialArr !== U) {
 					const arr = initialArr;
 					if (flagUnsafeHas(tagFlag, tagFlagObject) && nestedLoc in schema.properties) arr.splice(arr.length - 1, 0, schema);
 					else if (!flagUnsafeHas(tagFlag, 2096)) arr.push(schema);
@@ -1458,7 +1499,7 @@ var unionDecoder = (input) => {
 					try {
 						typeValidationOutput = parse(typeValidationInput);
 					} catch (_) {
-						typeValidationInput.vc = void 0;
+						typeValidationInput.vc = U;
 						typeValidationOutput = typeValidationInput;
 					}
 					if (unionIsPriority(tagFlag, byKey)) keys.unshift(key);
@@ -1470,7 +1511,7 @@ var unionDecoder = (input) => {
 					];
 					let shouldDeopt = true;
 					let valRef = typeValidationOutput;
-					while (valRef !== void 0 && shouldDeopt) {
+					while (valRef !== U && shouldDeopt) {
 						const v = valRef;
 						valRef = v.prev;
 						shouldDeopt = !(v.vc && B_isHoistable(v));
@@ -1540,7 +1581,7 @@ var unionDecoder = (input) => {
 		} else o = output;
 		else o = output;
 		o.s = outputAnyOf.length ? unionFactory(outputAnyOf) : never_();
-		if (toPerCase !== void 0) {
+		if (toPerCase !== U) {
 			o.io = true;
 			o.e = getOutputSchema(toPerCase);
 		} else o.e = selfSchema;
@@ -1554,7 +1595,7 @@ var unionFactory = (schemas) => {
 		const has = {};
 		const anyOf = /* @__PURE__ */ new Set();
 		schemas.forEach((schema) => {
-			if (schema.type === unionTag && schema.to === void 0) {
+			if (schema.type === unionTag && schema.to === U) {
 				schema.anyOf.forEach((item) => {
 					anyOf.add(item);
 				});
@@ -1612,9 +1653,9 @@ var optionFactory = (item, unitSchema = unit()) => {
 					mutHas[unitSchema.type] = true;
 					newAnyOf.push(unitSchema);
 					toPush = nestedOption(schema);
-				} else if (schemaOut.properties !== void 0) {
+				} else if (schemaOut.properties !== U) {
 					const nestedSchema = schemaOut.properties[nestedLoc];
-					if (nestedSchema !== void 0) toPush = updateOutput(schema, (mut2) => {
+					if (nestedSchema !== U) toPush = updateOutput(schema, (mut2) => {
 						const properties2 = {};
 						properties2[nestedLoc] = {
 							...nestedSchema,
@@ -1640,20 +1681,20 @@ var option = (item) => {
 };
 var valGet = (parent, location) => {
 	let vals;
-	if (parent.d !== void 0) vals = parent.d;
+	if (parent.d !== U) vals = parent.d;
 	else {
 		const d = /* @__PURE__ */ Object.create(null);
 		parent.d = d;
 		vals = d;
 	}
 	const existing = vals[location];
-	if (existing !== void 0) return B_scope(existing);
+	if (existing !== U) return B_scope(existing);
 	else {
 		let locationSchema;
 		if (parent.s.type === objectTag) locationSchema = parent.s.properties[location];
 		else locationSchema = parent.s.items[Number(location)];
 		let schema;
-		if (locationSchema !== void 0) schema = locationSchema;
+		if (locationSchema !== U) schema = locationSchema;
 		else {
 			const additionalItems = parent.s.additionalItems;
 			if (isItemSchema(additionalItems)) {
@@ -1662,18 +1703,28 @@ var valGet = (parent, location) => {
 				else schema = s2;
 			} else schema = B_unsupportedDecode(parent, parent.s, parent.e);
 		}
-		const pathAppend = pathFromInlinedLocation(B_inlineLocation(parent.g, location));
+		const pathAppend = pathFromInlinedLocation(inlinedValueFromString(location));
 		const item = {
+			b: U,
+			p: parent,
 			v: _notVarAtParent,
 			i: isLiteral(schema) ? B_inlineConst(parent, schema) : `${parent.v()}${pathAppend}`,
-			f: valFlagNone,
 			s: schema,
+			io: U,
 			e: schema,
+			prev: U,
+			f: valFlagNone,
+			d: U,
+			fv: U,
 			cp: "",
 			hd: "",
+			fz: U,
+			vc: U,
+			u: U,
+			t: U,
 			path: pathConcat(parent.path, pathAppend),
 			g: parent.g,
-			p: parent
+			o: U
 		};
 		vals[location] = item;
 		return item;
@@ -1681,7 +1732,7 @@ var valGet = (parent, location) => {
 };
 var standardJSONSchemaConverter;
 var getStandardJSONSchema = (schema, options, isOutput) => {
-	if (standardJSONSchemaConverter !== void 0) return standardJSONSchemaConverter(schema, options, isOutput);
+	if (standardJSONSchemaConverter !== U) return standardJSONSchemaConverter(schema, options, isOutput);
 	else throw new SuryError({
 		code: "invalid_operation",
 		path: pathEmpty,
@@ -1690,7 +1741,7 @@ var getStandardJSONSchema = (schema, options, isOutput) => {
 };
 Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 	const schema = this;
-	return {
+	const standard = {
 		version: 1,
 		vendor,
 		validate: (input) => {
@@ -1700,7 +1751,7 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 				const error = getOrRethrow(exn);
 				return { issues: [{
 					message: error.reason,
-					path: error.path === pathEmpty ? void 0 : pathToArray(error.path)
+					path: error.path === pathEmpty ? U : pathToArray(error.path)
 				}] };
 			}
 		},
@@ -1709,12 +1760,15 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 			output: (options) => getStandardJSONSchema(schema, options, true)
 		}
 	};
+	valueOptions[valKey] = standard;
+	Object.defineProperty(schema, "~standard", valueOptions);
+	return standard;
 } });
 var internalRefine = (schema, makeRefiner) => {
 	return updateOutput(schema, (mut) => {
 		const refiner = makeRefiner(mut);
 		const existingRefiner = mut.refiner;
-		if (existingRefiner !== void 0) mut.refiner = (input) => {
+		if (existingRefiner !== U) mut.refiner = (input) => {
 			const arr = existingRefiner(input);
 			arr.push(...refiner(input));
 			return arr;
@@ -1776,13 +1830,13 @@ var date = () => {
 var definitionToSchema = (definition) => {
 	return traverseDefinition(definition, (node) => {
 		if (isSchemaObject(node)) return node;
-		else return;
+		else return U;
 	});
 };
 var traverseDefinition = (definition, onNode) => {
 	if (typeof definition === objectTag && definition !== null) {
 		const s2 = onNode(definition);
-		if (s2 !== void 0) return s2;
+		if (s2 !== U) return s2;
 		else if (Array.isArray(definition)) {
 			const node = definition;
 			for (let idx = 0; idx < node.length; idx++) node[idx] = traverseDefinition(node[idx], onNode);

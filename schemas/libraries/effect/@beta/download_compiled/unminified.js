@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Pipeable.js
 /**
 * The `Pipeable` module defines the shared interface and implementation helpers
 * for values that support Effect-style method chaining with `.pipe(...)`.
@@ -100,7 +100,7 @@ const Class$1 = /*#__PURE__*/ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be called in data-first style or data-last
 * (`pipe`-friendly) style.
@@ -311,7 +311,7 @@ function memoize(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -330,7 +330,7 @@ const getAllObjectKeys = (obj) => {
 /** @internal */
 const byReferenceInstances = /*#__PURE__*/ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Predicate.js
 /**
 * Defines runtime checks for values.
 *
@@ -554,7 +554,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Hash.js
 /**
 * Computes Effect hash values and defines the interface for objects that want
 * to provide their own hash implementation. Hashes are small numeric
@@ -991,7 +991,7 @@ function withVisitedTracking$1(obj, fn) {
 	return result;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Equal.js
 /**
 * Defines the unique string identifier for the `Equal` interface.
 *
@@ -1224,7 +1224,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 */
 const asEquivalence = () => equals$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Equivalence.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Equivalence.js
 /**
 * Creates a custom equivalence relation with an optimized reference equality check.
 *
@@ -1275,14 +1275,14 @@ const asEquivalence = () => equals$1;
 */
 const make$10 = (isEquivalent) => (self, that) => self === that || isEquivalent(self, that);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Redactable.js
 /**
 * Defines the symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1396,7 +1396,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Formatter.js
 /**
 * Formats JavaScript values into readable strings.
 *
@@ -1565,7 +1565,7 @@ function safeToString(input) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Inspectable.js
 /**
 * Defines the symbol used by Node.js for custom object inspection.
 *
@@ -1630,7 +1630,7 @@ const toJson = (input) => {
 	return redact(input);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Utils.js
 /**
 * Yields its wrapped value exactly once through an `IterableIterator`.
 *
@@ -1721,7 +1721,7 @@ const pickInternalCall = () => {
 /** @internal */
 const internalCall = /*#__PURE__*/ pickInternalCall();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -1983,6 +1983,8 @@ const exitSucceed = /*#__PURE__*/ makeExit({
 /** @internal */
 const StackTraceKey = { key: "effect/Cause/StackTrace" };
 /** @internal */
+const InterruptorStackTrace$1 = { key: "effect/Cause/InterruptorStackTrace" };
+/** @internal */
 const exitFailCause = /*#__PURE__*/ makeExit({
 	op: "Failure",
 	prop: "cause",
@@ -1995,7 +1997,7 @@ const exitFailCause = /*#__PURE__*/ makeExit({
 		}
 		let cont = fiber.getCont(contE);
 		while (fiber.interruptible && fiber._interruptedCause && cont) cont = fiber.getCont(contE);
-		return cont ? cont[contE](cause, fiber, annotated ? void 0 : this) : fiber.yieldWith(annotated ? this : exitFailCause(cause));
+		return cont ? cont[contE](cause, fiber, annotated ? void 0 : this) : fiber.yieldWith(annotated ? exitFailCause(cause) : this);
 	}
 });
 /** @internal */
@@ -2054,7 +2056,7 @@ const TaggedError$1 = (tag) => {
 };
 TaggedError$1("NoSuchElementError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2124,11 +2126,11 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/result.js
 const TypeId$8 = "~effect/data/Result";
 ({ ...PipeInspectableProto });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Order.js
 /**
 * Defines comparison functions for ordered values.
 *
@@ -2278,7 +2280,7 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2435,7 +2437,7 @@ const isSome = isSome$1;
 */
 const map$3 = /*#__PURE__*/ dual(2, (self, f) => isNone(self) ? none() : some(f(self.value)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Array.js
 /**
 * Works with JavaScript arrays, readonly arrays, and non-empty arrays.
 *
@@ -2789,7 +2791,7 @@ const dedupeWith = /*#__PURE__*/ dual(2, (self, isEquivalent) => {
 	return [];
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/BigDecimal.js
 /**
 * Decimal numbers and arithmetic for cases where JavaScript `number` rounding
 * is not precise enough. A `BigDecimal` stores digits as a `bigint` plus a
@@ -3183,7 +3185,7 @@ const isZero = (n) => n.value === bigint0;
 */
 const isNegative = (n) => n.value < bigint0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Effectable.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
@@ -3207,7 +3209,7 @@ const Prototype = (options) => makePrimitiveProto({
 	[evaluate]: options.evaluate
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/stackTraceLimit.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/stackTraceLimit.js
 const ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 const ObjectPrototypeHasOwnProperty = Object.prototype.hasOwnProperty;
 const ObjectIsExtensible = Object.isExtensible;
@@ -3242,7 +3244,7 @@ const setStackTraceLimit = (value) => {
 	if (canWriteStackTraceLimit) Error.stackTraceLimit = value;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Context.js
 /**
 * Runtime type identifier attached to `Context` service keys and used by
 * `isKey` to recognize them.
@@ -3679,7 +3681,7 @@ const withMapUnsafe = (self, f) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Scheduler.js
 /**
 * Controls how runnable Effect fiber tasks are dispatched.
 *
@@ -3877,7 +3879,7 @@ const MaxOpsBeforeYield = /*#__PURE__*/ Reference("effect/Scheduler/MaxOpsBefore
 */
 const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventSchedulerYield", { defaultValue: () => false });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Tracer.js
 /**
 * Defines the low-level tracing model used by Effect.
 *
@@ -3924,11 +3926,11 @@ Service()(ParentSpanKey);
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/observability/Metric/FiberRuntimeMetricsKey";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /*#__PURE__*/ Reference("effect/References/CurrentStackFrame", { defaultValue: constUndefined });
 /** @internal */
@@ -3936,7 +3938,7 @@ const CurrentLogLevel = /*#__PURE__*/ Reference("effect/References/CurrentLogLev
 /** @internal */
 const MinimumLogLevel = /*#__PURE__*/ Reference("effect/References/MinimumLogLevel", { defaultValue: () => "Info" });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	fiberId;
@@ -3999,7 +4001,6 @@ var FiberImpl = class {
 		this.setContext(context);
 		this.id = ++fiberIdStore.id;
 		this.currentOpCount = 0;
-		this.currentLoopCount = 0;
 		this.interruptible = interruptible;
 		this._stack = [];
 		this._observers = [];
@@ -4007,20 +4008,22 @@ var FiberImpl = class {
 		this._children = void 0;
 		this._interruptedCause = void 0;
 		this._yielded = void 0;
+		this._running = false;
+		this._deferredInterrupt = false;
 		this.runtimeMetrics?.recordFiberStart(this.context);
 	}
 	[FiberTypeId];
 	id;
 	interruptible;
 	currentOpCount;
-	currentLoopCount;
 	_stack;
 	_observers;
 	_exit;
-	_currentExit;
 	_children;
 	_interruptedCause;
 	_yielded;
+	_running;
+	_deferredInterrupt;
 	context;
 	currentScheduler;
 	currentTracerContext;
@@ -4055,7 +4058,8 @@ var FiberImpl = class {
 		if (this.currentStackFrame) cause = causeAnnotate(cause, make$7(StackTraceKey, this.currentStackFrame));
 		if (annotations) cause = causeAnnotate(cause, annotations);
 		this._interruptedCause = this._interruptedCause ? causeCombine(this._interruptedCause, cause) : cause;
-		if (this.interruptible) this.evaluate(failCause$1(this._interruptedCause));
+		if (this.interruptible) if (this._running) this._deferredInterrupt = true;
+		else this.evaluate(failCause$1(this._interruptedCause));
 	}
 	pollUnsafe() {
 		return this._exit;
@@ -4075,16 +4079,24 @@ var FiberImpl = class {
 		this.runtimeMetrics?.recordFiberEnd(this.context, this._exit);
 		for (let i = 0; i < this._observers.length; i++) this._observers[i](exit);
 		this._observers.length = 0;
+		this._stack.length = 0;
+		this._children = void 0;
+		this.context = empty();
 	}
 	runLoop(effect) {
 		const prevFiber = globalThis[currentFiberTypeId];
 		globalThis[currentFiberTypeId] = this;
+		const prevRunning = this._running;
+		this._running = true;
 		let yielding = false;
 		let current = effect;
 		this.currentOpCount = 0;
-		const currentLoop = ++this.currentLoopCount;
 		try {
 			while (true) {
+				if (this._deferredInterrupt) {
+					this._deferredInterrupt = false;
+					current = failCause$1(this._interruptedCause);
+				}
 				this.currentOpCount++;
 				if (!yielding && !this.currentPreventYield && this.currentScheduler.shouldYield(this)) {
 					yielding = true;
@@ -4092,12 +4104,16 @@ var FiberImpl = class {
 					current = flatMap$1(yieldNow, () => prev);
 				}
 				current = this.currentTracerContext ? this.currentTracerContext(current, this) : current[evaluate](this);
-				if (currentLoop !== this.currentLoopCount) return Yield;
-				else if (current === Yield) {
+				if (current === Yield) {
 					const yielded = this._yielded;
 					if (ExitTypeId in yielded) {
+						this._deferredInterrupt = false;
 						this._yielded = void 0;
 						return yielded;
+					} else if (this._deferredInterrupt) {
+						this._yielded = void 0;
+						yielded();
+						continue;
 					}
 					return Yield;
 				}
@@ -4106,10 +4122,15 @@ var FiberImpl = class {
 			if (!hasProperty(current, evaluate)) return exitDie(`Fiber.runLoop: Not a valid effect: ${String(current)}`);
 			return this.runLoop(exitDie(error));
 		} finally {
+			this._running = prevRunning;
 			globalThis[currentFiberTypeId] = prevFiber;
 		}
 	}
 	getCont(symbol) {
+		if (this._deferredInterrupt) {
+			this._deferredInterrupt = false;
+			return deferredInterruptCont;
+		}
 		while (true) {
 			const op = this._stack.pop();
 			if (!op) return void 0;
@@ -4152,11 +4173,19 @@ var FiberImpl = class {
 		return this.currentSpan?._tag === "Span" ? this.currentSpan : void 0;
 	}
 };
+const deferredInterruptCont = {
+	[contA](_value, fiber) {
+		return failCause$1(fiber._interruptedCause);
+	},
+	[contE](_cause, fiber) {
+		return failCause$1(fiber._interruptedCause);
+	}
+};
 const fiberMiddleware = { interruptChildren: void 0 };
 const fiberStackAnnotations = (fiber) => {
 	if (!fiber.currentStackFrame) return void 0;
 	const annotations = /* @__PURE__ */ new Map();
-	annotations.set(StackTraceKey.key, fiber.currentStackFrame);
+	annotations.set(InterruptorStackTrace$1.key, fiber.currentStackFrame);
 	return makeUnsafe$1(annotations);
 };
 /** @internal */
@@ -4186,8 +4215,12 @@ const fiberAwaitAll = (self) => callback((resume) => {
 /** @internal */
 const fiberInterruptAll = (fibers) => withFiber((parent) => {
 	const annotations = fiberStackAnnotations(parent);
-	for (const fiber of fibers) fiber.interruptUnsafe(parent.id, annotations);
-	return asVoid(fiberAwaitAll(fibers));
+	let fiberArr = empty$1();
+	for (const fiber of fibers) {
+		fiber.interruptUnsafe(parent.id, annotations);
+		fiberArr.push(fiber);
+	}
+	return asVoid(fiberAwaitAll(fiberArr));
 });
 /** @internal */
 const succeed$1 = exitSucceed;
@@ -4396,6 +4429,13 @@ const exitPrimitive = /*#__PURE__*/ makePrimitive({
 		return succeed$1(exit ?? exitFailCause(cause));
 	}
 });
+/** @internal */
+const uninterruptible = (self) => withFiber((fiber) => {
+	if (!fiber.interruptible) return self;
+	fiber.interruptible = false;
+	fiber._stack.push(setInterruptibleTrue);
+	return self;
+});
 const setInterruptibleTrue = /*#__PURE__*/ (/* @__PURE__ */ makePrimitive({
 	op: "SetInterruptible",
 	[contAll](fiber) {
@@ -4420,6 +4460,13 @@ const iterateEagerImpl = (options) => {
 		let effect;
 		let nextIndex = index;
 		const exits = orderedStep ? new Array(end) : void 0;
+		const failDefect = (error) => {
+			const defect = exitDie(error);
+			terminal = defect;
+			done = true;
+			interrupted = true;
+			return fibers && fibers.size > 0 ? flatMap$1(uninterruptible(fiberInterruptAll(Array.from(fibers))), () => defect) : defect;
+		};
 		const runStep = (item, exit, currentIndex) => {
 			if (!orderedStep) return step(state, item, exit, currentIndex);
 			if (terminal) return terminal;
@@ -4448,9 +4495,15 @@ const iterateEagerImpl = (options) => {
 				});
 				else if (!parentFiber) return callback((cb) => {
 					parentFiber = getCurrentFiber();
+					fibers = /* @__PURE__ */ new Set();
 					effect = eff;
 					resume = cb;
-					const result = go();
+					let result;
+					try {
+						result = go();
+					} catch (error) {
+						return cb(failDefect(error));
+					}
 					if (result) return cb(result);
 					return suspend(() => {
 						terminal = exitVoid;
@@ -4466,26 +4519,29 @@ const iterateEagerImpl = (options) => {
 						if (terminal) break;
 						continue;
 					}
-					if (fibers) fibers.add(fiber);
-					else fibers = /* @__PURE__ */ new Set([fiber]);
+					fibers.add(fiber);
 					const currentIndex = index;
 					fiber.addObserver((exit) => {
 						fibers.delete(fiber);
-						if (terminal) {
-							if (!interrupted && exit._tag === "Failure") for (const reason of exit.cause.reasons) if (reason._tag === "Interrupt") continue;
-							else if (terminal._tag === "Failure") terminal.cause.reasons.push(reason);
-							else terminal = exitFailCause(causeFromReasons([reason]));
-						} else {
-							const result = runStep(item, exit, currentIndex);
-							if (result) {
-								terminal = result._tag === "Failure" ? exitFailCause(causeFromReasons(result.cause.reasons.slice())) : result;
-								go();
+						try {
+							if (terminal) {
+								if (!interrupted && exit._tag === "Failure") for (const reason of exit.cause.reasons) if (reason._tag === "Interrupt") continue;
+								else if (terminal._tag === "Failure") terminal.cause.reasons.push(reason);
+								else terminal = exitFailCause(causeFromReasons([reason]));
+							} else {
+								const result = runStep(item, exit, currentIndex);
+								if (result) {
+									terminal = result._tag === "Failure" ? exitFailCause(causeFromReasons(result.cause.reasons.slice())) : result;
+									go();
+								}
 							}
+							if (paused) {
+								const eff = go();
+								if (eff) resume(eff);
+							} else if (done && fibers.size === 0) resume(terminal ?? void_$1);
+						} catch (error) {
+							resume(failDefect(error));
 						}
-						if (paused) {
-							const eff = go();
-							if (eff) resume(eff);
-						} else if (done && fibers.size === 0) resume(terminal ?? void_$1);
 					});
 					if (fibers.size < concurrency) continue;
 					paused = true;
@@ -4544,7 +4600,7 @@ const runSyncExitWith = (context) => {
 		if (effectIsExit(effect)) return effect;
 		const scheduler = new MixedScheduler("sync");
 		const fiber = runFork(effect, { scheduler });
-		fiber.currentDispatcher?.flush();
+		fiber._dispatcher?.flush();
 		return fiber._exit ?? exitDie(new AsyncFiberError(fiber));
 	};
 };
@@ -4580,7 +4636,7 @@ const colors = {
 };
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Cause.js
 /**
 * Records the full reason an `Effect` failed.
 *
@@ -4703,7 +4759,7 @@ Service()("effect/Cause/InterruptorStackTrace");
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Exit.js
 /**
 * Creates a failed Exit from a Cause.
 *
@@ -4794,7 +4850,7 @@ const void_ = exitVoid;
 */
 const isSuccess = exitIsSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$5 = "~effect/time/DateTime";
 /** @internal */
@@ -5263,7 +5319,23 @@ const fnUntracedEager = fnUntracedEager$1;
 Service()("effect/DateTime/CurrentTimeZone");
 TaggedError("EncodingError");
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/record.js
+/**
+* @since 4.0.0
+*/
+/** @internal */
+function set(self, key, value) {
+	if (key === "__proto__") Object.defineProperty(self, key, {
+		value,
+		writable: true,
+		enumerable: true,
+		configurable: true
+	});
+	else self[key] = value;
+	return self;
+}
+//#endregion
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5281,23 +5353,7 @@ const getExpected = /*#__PURE__*/ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/record.js
-/**
-* @since 4.0.0
-*/
-/** @internal */
-function set(self, key, value) {
-	if (key === "__proto__") Object.defineProperty(self, key, {
-		value,
-		writable: true,
-		enumerable: true,
-		configurable: true
-	});
-	else self[key] = value;
-	return self;
-}
-//#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaIssue.js
 const TypeId$4 = "~effect/SchemaIssue/Issue";
 /**
 * Returns `true` if the given value is an {@link Issue}.
@@ -5980,7 +6036,7 @@ function formatOption(actual) {
 	return format$1(actual.value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/schema/cause.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/schema/cause.js
 /** @internal */
 function getSchemaIssue(cause) {
 	let issue;
@@ -5997,7 +6053,7 @@ function getSchemaIssueOrThrow(cause, message) {
 	return issue;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaGetter.js
 /**
 * Builds one-way conversions used by schemas.
 *
@@ -6201,7 +6257,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaTransformation.js
 const TypeId$3 = "~effect/SchemaTransformation/Transformation";
 /**
 * Represents a bidirectional transformation between a decoded type `T` and an encoded
@@ -6369,7 +6425,7 @@ function passthrough() {
 */
 const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3(), /*#__PURE__*/ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaAST.js
 /**
 * Represents Effect schemas as runtime trees.
 *
@@ -8001,7 +8057,7 @@ const ClassTypeId = "~effect/Schema/Class";
 /** @internal */
 const STRUCTURAL_ANNOTATION_KEY = "~structural";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -8040,7 +8096,7 @@ const STRUCTURAL_ANNOTATION_KEY = "~structural";
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaParser.js
 /**
 * Runs schemas against real values.
 *
@@ -8053,13 +8109,13 @@ const lambda = (f) => f;
 *
 * @since 4.0.0
 */
-const recurDefaults = /*#__PURE__*/ memoize((ast) => {
+const toConstructorAST = /*#__PURE__*/ memoize((ast) => {
 	switch (ast._tag) {
 		case "Declaration": {
 			const getLink = ast.annotations?.[ClassTypeId];
 			if (isFunction(getLink)) {
 				const link = getLink(ast.typeParameters);
-				const to = recurDefaults(link.to);
+				const to = toConstructorAST(link.to);
 				return replaceEncoding(ast, to === link.to ? [link] : [new Link(to, link.transformation)]);
 			}
 			return ast;
@@ -8067,10 +8123,13 @@ const recurDefaults = /*#__PURE__*/ memoize((ast) => {
 		case "Objects":
 		case "Arrays": return ast.recur((ast) => {
 			const defaultValue = ast.context?.defaultValue;
-			if (defaultValue) return replaceEncoding(recurDefaults(ast), defaultValue);
-			return recurDefaults(ast);
+			if (defaultValue) {
+				const out = toConstructorAST(ast);
+				return replaceEncoding(out, out.encoding ? [...out.encoding, ...defaultValue] : defaultValue);
+			}
+			return toConstructorAST(ast);
 		});
-		case "Suspend": return ast.recur(recurDefaults);
+		case "Suspend": return ast.recur(toConstructorAST);
 		default: return ast;
 	}
 });
@@ -8092,7 +8151,7 @@ const recurDefaults = /*#__PURE__*/ memoize((ast) => {
 * @since 4.0.0
 */
 function makeEffect(schema) {
-	const parser = run(recurDefaults(toType(schema.ast)));
+	const parser = run(toConstructorAST(toType(schema.ast)));
 	return (input, options) => {
 		return parser(input, options?.disableChecks ? options?.parseOptions ? {
 			...options.parseOptions,
@@ -8268,7 +8327,7 @@ const recur = /*#__PURE__*/ memoize((ast) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/SchemaError.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/SchemaError.js
 /**
 * @since 4.0.0
 */
@@ -8326,7 +8385,7 @@ function isSchemaError(u) {
 	return hasProperty(u, TypeId$1);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/internal/schema/schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/schema/schema.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const SchemaProto = {
@@ -8361,7 +8420,7 @@ function fromIssueEffect(self) {
 	return catchCause(self, (cause) => failCauseSync(() => map(cause, (issue) => new SchemaError(issue))));
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0-beta.98/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
