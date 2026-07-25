@@ -1,5 +1,5 @@
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/issue.js
-const issueCodes = {
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
+/** @internal */ const issueCodes = {
 	INVALID_TYPE: "invalid_type",
 	TOO_SHORT: "too_short",
 	TOO_LONG: "too_long",
@@ -33,7 +33,7 @@ const issueCodes = {
 	TOO_RECENT: "too_recent",
 	TOO_DATED: "too_dated"
 };
-function addIssue(node, newNode) {
+/** @internal */ function addIssue(node, newNode) {
 	if (!node) return newNode;
 	return {
 		type: "join",
@@ -42,7 +42,7 @@ function addIssue(node, newNode) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/message.js
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
 function messageList(node, locale) {
 	const messages = [];
 	const missingCodes = /* @__PURE__ */ new Set();
@@ -85,8 +85,8 @@ function messageList(node, locale) {
 	return messages;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.5/node_modules/@jsr/paseri__paseri/src/result.js
-var ParseErrorResult = class {
+//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
+/** @internal */ var ParseErrorResult = class {
 	ok = false;
 	_issue;
 	constructor(issue) {
@@ -103,7 +103,7 @@ var ParseErrorResult = class {
 * `PaseriError` is thrown from `parse` when the data being validated does not adhere to the expected schema.
 */ var PaseriError = class extends Error {
 	_issue;
-	constructor(issue) {
+	/** @internal */ constructor(issue) {
 		super("Failed to parse. See `e.messages()` for details.");
 		this._issue = issue;
 	}
@@ -114,7 +114,7 @@ var ParseErrorResult = class {
 		return messageList(this._issue, locale);
 	}
 };
-function isParseSuccess(value) {
+/** @internal */ function isParseSuccess(value) {
 	return value.ok === true;
 }
 //#endregion

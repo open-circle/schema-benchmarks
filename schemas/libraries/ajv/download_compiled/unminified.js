@@ -2737,7 +2737,7 @@ var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.3/node_modules/fast-uri/lib/utils.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.4/node_modules/fast-uri/lib/utils.js
 var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/** @type {(value: string) => boolean} */
 	const isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
@@ -3109,7 +3109,7 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.3/node_modules/fast-uri/lib/schemes.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.4/node_modules/fast-uri/lib/schemes.js
 var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { isUUID } = require_utils();
 	const URN_REG = /([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-.:;=@]|%[\da-f]{2})+)/iu;
@@ -3292,7 +3292,7 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.3/node_modules/fast-uri/index.js
+//#region ../node_modules/.pnpm/fast-uri@3.1.4/node_modules/fast-uri/index.js
 var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, escapePreservingEscapes, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
 	const { SCHEMES, getSchemeHandler } = require_schemes();
@@ -3431,6 +3431,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return uriTokens.join("");
 	}
 	const URI_PARSE = /^(?:([^#/:?]+):)?(?:\/\/((?:([^#/?@]*)@)?(\[[^#/?\]]+\]|[^#/:?]*)(?::(\d*))?))?([^#?]*)(?:\?([^#]*))?(?:#((?:.|[\n\r])*))?/u;
+	const AUTHORITY_PREFIX = /^(?:[^#/:?]+:)?\/\/([^/?#]*)/;
 	/**
 	* @param {import('./types/index').URIComponent} parsed
 	* @param {RegExpMatchArray} matches
@@ -3461,6 +3462,11 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		let isIP = false;
 		if (options.reference === "suffix") if (options.scheme) uri = options.scheme + ":" + uri;
 		else uri = "//" + uri;
+		const authorityMatch = uri.match(AUTHORITY_PREFIX);
+		if (authorityMatch !== null && authorityMatch[1].indexOf("\\") !== -1) {
+			parsed.error = "URI authority must not contain a literal backslash.";
+			malformedAuthorityOrPort = true;
+		}
 		const matches = uri.match(URI_PARSE);
 		if (matches) {
 			parsed.scheme = matches[1];
