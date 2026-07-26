@@ -38,15 +38,9 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.isValidObject(data)`,
   },
-  parsing: {
-    allErrors: {
-      run(data) {
-        return schema.validate(data);
-      },
-      validateResult: (result) => result.valid,
-      snippet: ts`schema.validate(data)`,
-    },
-  },
+  // no parsing benchmark: `schema.validate(data)` returns `{ valid, data, errors }` where `data`
+  // is the input by reference (and typed `unknown`), so it validates without producing a value.
+  // Its only value-producing API is `validateAndParse`, which takes a JSON string.
   standard: {
     allErrors: {
       schema: schema as StandardSchemaV1<unknown, ProductData>, // supports standard schema, but doesn't narrow the type

@@ -7849,7 +7849,7 @@ const imageSchema = t.object({
 	}),
 	type: t.enum(["jpg", "png"]),
 	size: t.number(),
-	url: t.string({ format: "url" })
+	url: t.string({ format: "uri" })
 });
 const ratingSchema = t.object({
 	id: t.number(),
