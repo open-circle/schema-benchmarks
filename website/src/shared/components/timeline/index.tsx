@@ -3,9 +3,9 @@ import { useEffect, useState, useMemo } from "react";
 import bem from "react-bem-helper";
 import { createRequiredContext } from "required-react-context";
 
-import type { DateInput } from "#/shared/components/date";
-import { DateDisplay, RangeDisplay } from "#/shared/components/date";
-import type { Formatters } from "#/shared/hooks/format/use-date-formatter";
+import type { DateInput } from "#src/shared/components/date";
+import { DateDisplay, RangeDisplay } from "#src/shared/components/date";
+import type { Formatters } from "#src/shared/hooks/format/use-date-formatter";
 
 const cls = bem("timeline");
 
