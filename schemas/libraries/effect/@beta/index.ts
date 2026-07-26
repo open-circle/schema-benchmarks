@@ -28,7 +28,7 @@ export function getEffectSchema() {
     discount: Schema.NullOr(
       Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(100)),
     ),
-    quantity: Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(10)),
+    quantity: Schema.Number.check(Schema.isGreaterThanOrEqualTo(0), Schema.isLessThanOrEqualTo(10)),
     tags: Schema.mutable(
       Schema.Array(Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(30))),
     ),

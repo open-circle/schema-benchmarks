@@ -9042,7 +9042,7 @@ const Image = build_default.Object({
 const Rating = build_default.Object({
 	id: build_default.Number(),
 	stars: build_default.Number({
-		minimum: 1,
+		minimum: 0,
 		maximum: 5
 	}),
 	title: build_default.String({
@@ -9079,7 +9079,7 @@ compile_default(build_default.Object({
 		maximum: 100
 	}), build_default.Null()]),
 	quantity: build_default.Number({
-		minimum: 1,
+		minimum: 0,
 		maximum: 10
 	}),
 	tags: build_default.Array(build_default.String({

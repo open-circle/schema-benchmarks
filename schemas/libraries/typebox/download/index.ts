@@ -15,7 +15,7 @@ const Image = Type.Object({
 });
 const Rating = Type.Object({
   id: Type.Number(),
-  stars: Type.Number({ minimum: 1, maximum: 5 }),
+  stars: Type.Number({ minimum: 0, maximum: 5 }),
   title: Type.String({ minLength: 1, maxLength: 100 }),
   text: Type.String({ minLength: 1, maxLength: 1000 }),
   images: Type.Array(Image),
@@ -28,7 +28,7 @@ const Product = Type.Object({
   description: Type.String({ minLength: 1, maxLength: 500 }),
   price: Type.Number({ minimum: 1, maximum: 10000 }),
   discount: Type.Union([Type.Number({ minimum: 1, maximum: 100 }), Type.Null()]),
-  quantity: Type.Number({ minimum: 1, maximum: 10 }),
+  quantity: Type.Number({ minimum: 0, maximum: 10 }),
   tags: Type.Array(Type.String({ minLength: 1, maxLength: 30 })),
   images: Type.Array(Image),
   ratings: Type.Array(Rating),

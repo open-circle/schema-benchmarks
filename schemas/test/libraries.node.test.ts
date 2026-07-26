@@ -1,4 +1,5 @@
 import {
+  constraintBoundaries,
   constraintViolations,
   errorData,
   successData,
@@ -36,7 +37,10 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     gap: gaps[name],
   }));
 
-  /** Every constraint of the specified schema must be checked, unless it's a documented gap. */
+  /**
+   * Every constraint of the specified schema must be checked, unless it's a documented gap, and
+   * no schema may be stricter than specified.
+   */
   function itChecksEveryConstraint(isValid: (data: unknown) => Promise<boolean> | boolean) {
     it.each(violationCases)("should reject $name", async ({ data, gap }) => {
       const accepted = await isValid(data);
@@ -48,6 +52,10 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       } else {
         expect(accepted).toBe(false);
       }
+    });
+
+    it.each(Object.entries(constraintBoundaries))("should accept %s", async (_name, data) => {
+      expect(await isValid(data)).toBe(true);
     });
   }
 

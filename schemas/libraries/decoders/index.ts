@@ -25,7 +25,7 @@ export function getDecoderSchema() {
   });
   const ratingDecoder = object({
     id: number,
-    stars: between(1, 5),
+    stars: between(0, 5),
     title: sized(string, { min: 1, max: 100 }),
     text: sized(string, { min: 1, max: 1000 }),
     images: array(imageDecoder),
@@ -38,7 +38,7 @@ export function getDecoderSchema() {
     description: sized(string, { min: 1, max: 500 }),
     price: between(1, 10000),
     discount: nullable(between(1, 100)),
-    quantity: between(1, 10),
+    quantity: between(0, 10),
     tags: array(sized(string, { min: 1, max: 30 })),
     images: array(imageDecoder),
     ratings: array(ratingDecoder),

@@ -27,7 +27,7 @@ const Product = Schema.Struct({
   discount: Schema.NullOr(
     Schema.Number.pipe(Schema.greaterThanOrEqualTo(1), Schema.lessThanOrEqualTo(100)),
   ),
-  quantity: Schema.Number.pipe(Schema.greaterThanOrEqualTo(1), Schema.lessThanOrEqualTo(10)),
+  quantity: Schema.Number.pipe(Schema.greaterThanOrEqualTo(0), Schema.lessThanOrEqualTo(10)),
   tags: Schema.mutable(Schema.Array(Schema.String.pipe(Schema.minLength(1), Schema.maxLength(30)))),
   images: Schema.mutable(Schema.Array(Image)),
   ratings: Schema.mutable(Schema.Array(Rating)),

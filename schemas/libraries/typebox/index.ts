@@ -15,7 +15,7 @@ export function getTypeboxSchema() {
   });
   const Rating = Type.Object({
     id: Type.Number(),
-    stars: Type.Number({ minimum: 1, maximum: 5 }),
+    stars: Type.Number({ minimum: 0, maximum: 5 }),
     title: Type.String({ minLength: 1, maxLength: 100 }),
     text: Type.String({ minLength: 1, maxLength: 1000 }),
     images: Type.Array(Image),
@@ -28,7 +28,7 @@ export function getTypeboxSchema() {
     description: Type.String({ minLength: 1, maxLength: 500 }),
     price: Type.Number({ minimum: 1, maximum: 10000 }),
     discount: Type.Union([Type.Number({ minimum: 1, maximum: 100 }), Type.Null()]),
-    quantity: Type.Number({ minimum: 1, maximum: 10 }),
+    quantity: Type.Number({ minimum: 0, maximum: 10 }),
     tags: Type.Array(Type.String({ minLength: 1, maxLength: 30 })),
     images: Type.Array(Image),
     ratings: Type.Array(Rating),
@@ -55,7 +55,7 @@ export function getTypeboxScriptSchema() {
     }
     interface Rating {
       id: number;
-      stars: number with { minimum: 1, maximum: 5 };
+      stars: number with { minimum: 0, maximum: 5 };
       title: string with { minLength: 1, maxLength: 100 };
       text: string with { minLength: 1, maxLength: 1000 };
       images: Array<Image>;
@@ -68,7 +68,7 @@ export function getTypeboxScriptSchema() {
       description: string with { minLength: 1, maxLength: 500 };
       price: number with { minimum: 1, maximum: 10000 };
       discount: (number with { minimum: 1, maximum: 100 }) | null;
-      quantity: number with { minimum: 1, maximum: 10 };
+      quantity: number with { minimum: 0, maximum: 10 };
       tags: Array<string with { minLength: 1, maxLength: 30 }>;
       images: Array<Image>;
       ratings: Array<Rating>;

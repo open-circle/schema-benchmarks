@@ -77,9 +77,9 @@ const _validateReport = (array) => {
 		expected: "Array<ImageSchema>",
 		value: input["images"]
 	});
-	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && 1 <= _stringLength(input.brand) && _stringLength(input.brand) <= 30 && "string" === typeof input.description && 1 <= _stringLength(input.description) && _stringLength(input.description) <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 1 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && input.tags.every((elem) => "string" === typeof elem && 1 <= _stringLength(elem) && _stringLength(elem) <= 30) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
+	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && 1 <= _stringLength(input.brand) && _stringLength(input.brand) <= 30 && "string" === typeof input.description && 1 <= _stringLength(input.description) && _stringLength(input.description) <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 0 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && input.tags.every((elem) => "string" === typeof elem && 1 <= _stringLength(elem) && _stringLength(elem) <= 30) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
 	const _io1 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && ("jpg" === input.type || "png" === input.type) && "number" === typeof input.size && "string" === typeof input.url && _isFormatUrl(input.url);
-	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 1 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && 1 <= _stringLength(input.text) && _stringLength(input.text) <= 1e3 && _ip3(input);
+	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 0 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && 1 <= _stringLength(input.text) && _stringLength(input.text) <= 1e3 && _ip3(input);
 	const _vo0 = (input, _path, _exceptionable = true) => [
 		_vp0(input, _path, _exceptionable),
 		_vp1(input, _path, _exceptionable),
@@ -136,9 +136,9 @@ const _validateReport = (array) => {
 			expected: "((number & Minimum<1> & Maximum<100>) | null)",
 			value: input.discount
 		}),
-		"number" === typeof input.quantity && (1 <= input.quantity || _report(_exceptionable, {
+		"number" === typeof input.quantity && (0 <= input.quantity || _report(_exceptionable, {
 			path: _path + ".quantity",
-			expected: "number & Minimum<1>",
+			expected: "number & Minimum<0>",
 			value: input.quantity
 		})) && (input.quantity <= 10 || _report(_exceptionable, {
 			path: _path + ".quantity",
@@ -146,7 +146,7 @@ const _validateReport = (array) => {
 			value: input.quantity
 		})) || _report(_exceptionable, {
 			path: _path + ".quantity",
-			expected: "(number & Minimum<1> & Maximum<10>)",
+			expected: "(number & Minimum<0> & Maximum<10>)",
 			value: input.quantity
 		}),
 		(Array.isArray(input.tags) || _report(_exceptionable, {
@@ -215,9 +215,9 @@ const _validateReport = (array) => {
 	].every((flag) => flag);
 	const _vo2 = (input, _path, _exceptionable = true) => [
 		_vp0(input, _path, _exceptionable),
-		"number" === typeof input.stars && (1 <= input.stars || _report(_exceptionable, {
+		"number" === typeof input.stars && (0 <= input.stars || _report(_exceptionable, {
 			path: _path + ".stars",
-			expected: "number & Minimum<1>",
+			expected: "number & Minimum<0>",
 			value: input.stars
 		})) && (input.stars <= 5 || _report(_exceptionable, {
 			path: _path + ".stars",
@@ -225,7 +225,7 @@ const _validateReport = (array) => {
 			value: input.stars
 		})) || _report(_exceptionable, {
 			path: _path + ".stars",
-			expected: "(number & Minimum<1> & Maximum<5>)",
+			expected: "(number & Minimum<0> & Maximum<5>)",
 			value: input.stars
 		}),
 		_vp2(input, _path, _exceptionable),

@@ -3907,7 +3907,7 @@ const Image = _Object_({
 const Rating = _Object_({
 	id: Number$1(),
 	stars: Number$1({
-		minimum: 1,
+		minimum: 0,
 		maximum: 5
 	}),
 	title: String$1({
@@ -3944,7 +3944,7 @@ Compile(_Object_({
 		maximum: 100
 	}), Null()]),
 	quantity: Number$1({
-		minimum: 1,
+		minimum: 0,
 		maximum: 10
 	}),
 	tags: _Array_(String$1({

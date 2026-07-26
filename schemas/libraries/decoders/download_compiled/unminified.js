@@ -527,7 +527,7 @@ const imageDecoder = /* @__PURE__ */ object({
 	}),
 	price: /* @__PURE__ */ between(1, 1e4),
 	discount: /* @__PURE__ */ nullable(/* @__PURE__ */ between(1, 100)),
-	quantity: /* @__PURE__ */ between(1, 10),
+	quantity: /* @__PURE__ */ between(0, 10),
 	tags: /* @__PURE__ */ array(/* @__PURE__ */ sized(string, {
 		min: 1,
 		max: 30
@@ -535,7 +535,7 @@ const imageDecoder = /* @__PURE__ */ object({
 	images: /* @__PURE__ */ array(imageDecoder),
 	ratings: /* @__PURE__ */ array(/* @__PURE__ */ object({
 		id: number,
-		stars: /* @__PURE__ */ between(1, 5),
+		stars: /* @__PURE__ */ between(0, 5),
 		title: /* @__PURE__ */ sized(string, {
 			min: 1,
 			max: 100
