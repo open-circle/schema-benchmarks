@@ -12,8 +12,7 @@ const createStringBenchmark = (
   snippet: string,
 ): StringBenchmarkConfig => ({
   create() {
-    const parser = S.parser(schema);
-    return (testString) => S.safe(() => parser(testString)).success;
+    return (testString) => S.is(schema, testString);
   },
   snippet,
 });
