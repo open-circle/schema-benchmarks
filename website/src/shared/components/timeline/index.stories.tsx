@@ -1,7 +1,7 @@
 import { monthFormatter } from "@schema-benchmarks/utils";
 import { lightFormat } from "date-fns/fp";
 
-import { MdSymbol } from "#/shared/components/symbol";
+import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
 import { Timeline, TimelineItem } from ".";
