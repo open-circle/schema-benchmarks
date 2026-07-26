@@ -67,7 +67,7 @@ export function getTypeboxScriptSchema() {
       brand: string with { minLength: 1, maxLength: 30 };
       description: string with { minLength: 1, maxLength: 500 };
       price: number with { minimum: 1, maximum: 10000 };
-      discount: number | null with { minimum: 1, maximum: 100 };
+      discount: (number with { minimum: 1, maximum: 100 }) | null;
       quantity: number with { minimum: 1, maximum: 10 };
       tags: Array<string with { minLength: 1, maxLength: 30 }>;
       images: Array<Image>;

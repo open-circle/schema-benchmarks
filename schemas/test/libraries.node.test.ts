@@ -1,4 +1,5 @@
 import {
+  constraintViolations,
   errorData,
   successData,
   validStrings,
@@ -9,8 +10,46 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
 import { assert, describe, expect, it } from "vitest";
 
+/**
+ * Constraints a library provably cannot express, keyed by library name and then by the key in
+ * `constraintViolations`. Everything not listed here must be rejected, so a schema that silently
+ * stops checking something fails the suite instead of quietly winning benchmarks.
+ *
+ * Each entry asserts the deviation still exists - when a library gains the ability to express the
+ * constraint, its test fails and the entry (plus the workaround in its schema) should be removed.
+ */
+const constraintGaps: Record<string, Record<string, string>> = {
+  "ata-validator": {
+    // `instanceof` comes from @ata-project/keywords, which walks nested objects but not arrays,
+    // so `created` is only checked as `{ type: "object" }` inside `images`/`ratings`.
+    "images: created not a Date": "@ata-project/keywords does not recurse into arrays",
+  },
+};
+
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
+
+  const gaps = constraintGaps[config.library.name] ?? {};
+  const violationCases = Object.entries(constraintViolations).map(([name, data]) => ({
+    name,
+    data,
+    gap: gaps[name],
+  }));
+
+  /** Every constraint of the specified schema must be checked, unless it's a documented gap. */
+  function itChecksEveryConstraint(isValid: (data: unknown) => Promise<boolean> | boolean) {
+    it.each(violationCases)("should reject $name", async ({ data, gap }) => {
+      const accepted = await isValid(data);
+      if (gap) {
+        expect(
+          accepted,
+          `documented gap no longer applies, drop it from constraintGaps: ${gap}`,
+        ).toBe(true);
+      } else {
+        expect(accepted).toBe(false);
+      }
+    });
+  }
 
   describe("initialization", () => {
     describe.each(ensureArray(config.initialization))("config %o", (config) => {
@@ -29,6 +68,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
         expect(config.run(data)).toBe(expected);
       });
+
+      itChecksEveryConstraint((data) => config.run(data));
     });
   });
 
@@ -42,6 +83,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           const result = await config.run(data);
           expect(config.validateResult(result)).toBe(expected);
         });
+
+        itChecksEveryConstraint(async (data) => config.validateResult(await config.run(data)));
       });
     });
   });
@@ -66,6 +109,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);
         });
+
+        itChecksEveryConstraint(async (data) => !(await schema["~standard"].validate(data)).issues);
       });
     });
   });

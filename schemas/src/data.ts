@@ -192,6 +192,56 @@ export const errorData: unknown = {
   ],
 };
 
+function violate(mutate: (data: ProductData) => void): unknown {
+  const data = structuredClone(successData);
+  mutate(data);
+  return data;
+}
+
+/**
+ * Copies of `successData` that each break exactly one constraint of the specified schema.
+ *
+ * Every library must reject all of these. A library that accepts one isn't performing a check
+ * the others are, so its results aren't comparable - see `constraintGaps` in
+ * `test/libraries.node.test.ts` for the deviations we know about and can't express.
+ *
+ * Values are chosen so that coercion can't rescue them (e.g. `"abc"`, not `"252"`), and so
+ * they violate every library's version of a constraint (e.g. `-1`, not `0`, for the minimums
+ * some libraries set to 0 and others to 1). That rules out a few checks entirely: `tags: [1]`
+ * is a type violation everywhere except `joi` and `yup`, which cast it to `"1"` by design.
+ */
+export const constraintViolations: Record<string, unknown> = {
+  "id: not a number": violate((data) => ((data as { id: unknown }).id = "abc")),
+  "created: not a Date": violate((data) => ((data as { created: unknown }).created = {})),
+  "title: too short": violate((data) => (data.title = "")),
+  "title: too long": violate((data) => (data.title = "a".repeat(101))),
+  "brand: too long": violate((data) => (data.brand = "a".repeat(31))),
+  "description: too long": violate((data) => (data.description = "a".repeat(501))),
+  "price: too low": violate((data) => (data.price = 0)),
+  "price: too high": violate((data) => (data.price = 10_001)),
+  "discount: too low": violate((data) => (data.discount = 0)),
+  "discount: too high": violate((data) => (data.discount = 101)),
+  "quantity: negative": violate((data) => (data.quantity = -1)),
+  "quantity: too high": violate((data) => (data.quantity = 11)),
+  "tags: item too short": violate((data) => (data.tags[0] = "")),
+  "tags: item too long": violate((data) => (data.tags[0] = "a".repeat(31))),
+  "images: not an array": violate((data) => ((data as { images: unknown }).images = {})),
+  "images: missing property": violate((data) => delete (data.images[0] as Partial<ImageData>).url),
+  "images: unknown enum member": violate(
+    (data) => ((data.images[0] as { type: unknown }).type = "gif"),
+  ),
+  "images: malformed url": violate((data) => (data.images[0]!.url = "nope")),
+  "images: created not a Date": violate(
+    (data) => ((data.images[0] as { created: unknown }).created = {}),
+  ),
+  "ratings: stars negative": violate((data) => (data.ratings[0]!.stars = -1)),
+  "ratings: stars too high": violate((data) => (data.ratings[0]!.stars = 6)),
+  "ratings: text too long": violate((data) => (data.ratings[0]!.text = "a".repeat(1001))),
+  "ratings: nested image malformed url": violate(
+    (data) => (data.ratings[0]!.images[0]!.url = "nope"),
+  ),
+};
+
 export const validStrings: Record<StringFormat, string> = {
   email: "test@example.com",
   url: "https://www.example.com",

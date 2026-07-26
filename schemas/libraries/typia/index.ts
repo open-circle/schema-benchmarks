@@ -30,7 +30,7 @@ export type TypiaSchema = Satisfies<
     price: number & tags.Minimum<1> & tags.Maximum<10000>;
     discount: (number & tags.Minimum<1> & tags.Maximum<100>) | null;
     quantity: number & tags.Minimum<1> & tags.Maximum<10>;
-    tags: Array<string> & tags.MinItems<1> & tags.MaxItems<30>;
+    tags: Array<string & tags.MinLength<1> & tags.MaxLength<30>>;
     images: Array<ImageSchema>;
     ratings: Array<RatingSchema>;
   },

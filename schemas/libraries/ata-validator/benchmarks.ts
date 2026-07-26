@@ -33,10 +33,13 @@ export default defineBenchmarks({
     snippet: ts`new Validator({...})`,
   },
   validation: {
+    // not `isValidObject`, which is faster but skips the `instanceof` keyword that
+    // @ata-project/keywords adds - it only patches `validate`, so the boolean API doesn't
+    // check `created` is a Date at all
     run(data) {
-      return schema.isValidObject(data);
+      return schema.validate(data).valid;
     },
-    snippet: ts`schema.isValidObject(data)`,
+    snippet: ts`schema.validate(data).valid`,
   },
   // no parsing benchmark: `schema.validate(data)` returns `{ valid, data, errors }` where `data`
   // is the input by reference (and typed `unknown`), so it validates without producing a value.
