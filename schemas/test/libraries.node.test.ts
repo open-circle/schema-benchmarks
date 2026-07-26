@@ -148,8 +148,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         const { encode, decode } = config;
         const bigint = 1234567890123456789n;
         const encoded = await encode.run(bigint);
-        // we don't test for format here - usually it'll be ISO, but no need to require it
-        expect(encoded).toBeTypeOf("string");
+        expect(encoded).toBe("1234567890123456789");
         const decoded = await decode.run(encoded);
         // check the bigint is the same
         expect(decoded).toEqual(bigint);
