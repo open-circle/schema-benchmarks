@@ -19,6 +19,8 @@ import { trackedLinkProps } from "#src/shared/lib/analytics";
 
 It's been 5 months since the initial release of Schema Benchmarks! Here's a look at how it's changed over that time, and how it's helped the ecosystem of schema validation libraries evolve.
 
+### Updates to Schema Benchmarks
+
 <Timeline>
   <TimelineItem
     date="2026-02-19"
@@ -38,6 +40,118 @@ It's been 5 months since the initial release of Schema Benchmarks! Here's a look
 
   </TimelineItem>
 
+  <TimelineItem
+    date="2026-02-22"
+    title={
+      <Link to="/standard">
+        Standard Schema
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
+
+    ```ts
+    import { personSchema } from "./schemas";
+
+    const person = await upfetch(url, { schema: personSchema });
+
+    // internally
+
+    const result = await personSchema["~standard"].validate(data);
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-02-24"
+    title={
+      <Link to="/string">
+        String formats
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
+
+    ```ts
+    import * as v from "valibot";
+
+    const emailSchema = v.pipe(v.string(), v.email());
+
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-02"
+    title={
+      <Link to="/stack">
+        Stack traces
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
+
+    <Tweet apiUrl="/api/tweet/2021374345990574398" />
+
+    This provides a useful comparison of the error messages produced by libraries, and how easy it is to trace back to the source of the error.
+
+  </TimelineItem>
+
+  <TimelineItem
+    date="2026-03-05"
+    title={
+      <Link to="/codec">
+        Codecs
+      </Link>
+    }
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
+
+    ```ts
+    import * as z from "zod";
+
+    const bigIntFromString = z.codec(z.string(), z.bigint(), {
+      encode: (bigInt) => bigInt.toString(),
+      decode: (str) => BigInt(str),
+    });
+
+    bigIntFromString.encode(123n); // "123"
+    bigIntFromString.decode("123"); // 123n
+    ```
+
+  </TimelineItem>
+
+  <TimelineItem
+    range={["2026-02", "2026-07"]}
+    formatters={{
+      normal: monthFormatter,
+      code: lightFormat("yyyy-MM"),
+    }}
+    title="Upkeep"
+    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
+  >
+    We continue to maintain and improve Schema Benchmarks, adding new libraries and updating existing ones.
+
+    New libraries added include:
+
+    - [`superstruct`](https://docs.superstructjs.org/)
+    - [`runtypes`](https://github.com/runtypes/runtypes)
+    - [`ata-validator`](https://ata-validator.com/)
+    - [`@sapphire/shapeshift`](https://www.sapphirejs.dev/docs/Documentation/api-shapeshift/)
+    - [`paseri`](https://paseri.dev/)
+
+    For a full list of libraries, see the <Link to="/libraries">Libraries</Link> page.
+
+  </TimelineItem>
+</Timeline>
+
+### Ecosystem Impact
+
+<Timeline>
   <TimelineItem
     date="2026-02-20"
     title={<a {...trackedLinkProps("https://sinclairzx81.github.io/typebox/")}>TypeBox</a>}
@@ -63,91 +177,6 @@ It's been 5 months since the initial release of Schema Benchmarks! Here's a look
   </TimelineItem>
 
   <TimelineItem
-    date="2026-02-22"
-    title={
-      <Link to="/standard">
-        Standard Schema
-      </Link>
-    }
-    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
-    >
-    Measuring the runtime performance of libraries that implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
-
-    ```ts
-    import { personSchema } from "./schemas";
-
-    const person = await upfetch(url, { schema: personSchema });
-
-    // internally
-
-    const result = await personSchema["~standard"].validate(data);
-    ```
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-02-24"
-    title={
-      <Link to="/string">
-        String formats
-      </Link>
-    }
-    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
-    >
-    Measuring the runtime performance of libraries that validate specific string formats, such as email addresses, URLs, and UUIDs.
-
-    ```ts
-    import * as v from "valibot";
-
-    const emailSchema = v.pipe(v.string(), v.email());
-
-    ```
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-03-02"
-    title={
-      <Link to="/stack">
-        Stack traces
-      </Link>
-    }
-    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
-    >
-    Inspired by a tweet from [@trav](https://x.com/techsavvytravvy), these benchmarks capture the error stack traces produced by libraries when validation fails, and measure how many frames it takes to find the current caller.
-
-    <Tweet apiUrl="/api/tweet/2021374345990574398" />
-
-    This provides a useful comparison of the error messages produced by libraries, and how easy it is to trace back to the source of the error.
-
-  </TimelineItem>
-
-  <TimelineItem
-    date="2026-03-05"
-    title={
-      <Link to="/codec">
-        Codecs
-      </Link>
-    }
-    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
-    >
-    Measuring the runtime performance of "codecs", two-way schemas that support both encoding and decoding of data.
-
-    ```ts
-    import * as z from "zod";
-
-    const bigIntFromString = z.codec(z.string(), z.bigint(), {
-      encode: (bigInt) => bigInt.toString(),
-      decode: (str) => BigInt(str),
-    });
-
-    bigIntFromString.encode(123n); // "123"
-    bigIntFromString.decode("123"); // 123n
-    ```
-
-  </TimelineItem>
-
-  <TimelineItem
     date="2026-03-05"
     title={
       <a {...trackedLinkProps("https://decoders.cc")}>
@@ -155,7 +184,7 @@ It's been 5 months since the initial release of Schema Benchmarks! Here's a look
       </a>
     }
     icon={<MdSymbol style={{ color: "var(--warning)" }}>deployed_code</MdSymbol>}
-    >
+  >
 
     Based on our <Link to="/download">download</Link> benchmarking, we were able to identify a tree shaking issue with `decoders`, and [collaborated](https://github.com/nvie/decoders/pull/1290) with the author to get it fixed.
 
@@ -169,29 +198,6 @@ It's been 5 months since the initial release of Schema Benchmarks! Here's a look
 
     const result = /* #__PURE__ */ anotherFunction();
     ```
-
-  </TimelineItem>
-
-  <TimelineItem
-    range={["2026-02", "2026-07"]}
-    formatters={{
-      normal: monthFormatter,
-      code: lightFormat("yyyy-MM"),
-    }}
-    title="Upkeep"
-    icon={<MdSymbol style={{ color: "var(--info)" }}>speed</MdSymbol>}
-  >
-    We continue to maintain and improve Schema Benchmarks, adding new libraries and updating existing ones.
-
-    New libraries added include:
-
-    - [`superstruct`](https://docs.superstructjs.org/)
-    - [`runtypes`](https://github.com/runtypes/runtypes)
-    - [`ata-validator`](https://ata-validator.com/)
-    - [`@sapphire/shapeshift`](https://www.sapphirejs.dev/docs/Documentation/api-shapeshift/)
-    - [`paseri`](https://paseri.dev/)
-
-    For a full list of libraries, see the <Link to="/libraries">Libraries</Link> page.
 
   </TimelineItem>
 
