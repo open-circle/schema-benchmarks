@@ -14,7 +14,7 @@ allowBuilds:
 catalog:
   "@oxfmt/binding-linux-x64-gnu": ^0.60.0
   "@standard-schema/spec": ^1.1.0
-  "@ttsc/unplugin": "^0.21.0"
+  "@ttsc/unplugin": "^0.22.0"
   "@types/node": 24.0.0
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
@@ -24,10 +24,10 @@ catalog:
   dedent: ^1.7.2
   "mix-n-matchers": "^2.4.0"
   oxfmt: "^0.60.0"
-  playwright: ^1.61.1
+  playwright: ^1.62.0
   react: ^19.2.8
   react-dom: ^19.2.8
-  ttsc: "^0.21.0"
+  ttsc: "^0.22.0"
   typescript: 7.0.2
   valibot: ^1.4.2
   vite: ^8.1.5
