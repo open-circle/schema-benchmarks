@@ -14,9 +14,12 @@ updates:
     ignore:
       - dependency-name: "@types/node"
     groups:
-      pnpm:
+      npm:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
