@@ -17,6 +17,10 @@ import { defineConfig } from "vitest/config";
 import {
   dataTypeProps,
   errorTypeProps,
+  jsonSchemaDirectionProps,
+  jsonSchemaSourceProps,
+  standardJsonSchemaProps,
+  jsonSchemaTargetProps,
   optimizeTypeProps,
   stringFormatProps,
 } from "#src/routes/_benchmarks/_runtime/-constants";
@@ -79,6 +83,10 @@ const config = defineConfig({
           minifyTypeProps,
           dataTypeProps,
           stringFormatProps,
+          jsonSchemaTargetProps,
+          jsonSchemaDirectionProps,
+          jsonSchemaSourceProps,
+          standardJsonSchemaProps,
         ].flatMap((props) => Object.values(props.labels).map((label) => label.icon)),
         ...[speedPresets, admonitionDefaults, themeLabels, styleLabels].flatMap((map) =>
           Object.values(map).map((value) => value.icon),

@@ -2,6 +2,10 @@ import type {
   BaseBenchmarkConfig,
   BenchmarksConfig,
   ErrorType,
+  JsonSchemaDirection,
+  JsonSchemaSource,
+  StandardJsonSchemaSupport,
+  JsonSchemaTarget,
   OptimizeType,
   StringFormat,
 } from "@schema-benchmarks/schemas";
@@ -14,17 +18,32 @@ export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library" | "stack">
 interface BaseBenchInfo extends DistributiveOmit<BaseBenchmarkConfig, "optimizeType"> {
   libraryName: string;
   version: string;
+}
+
+/** Every case but the JSON schema one, where how a library validates says nothing. */
+interface OptimizedBenchInfo {
   optimizeType: OptimizeType;
 }
 
 type BenchInfoByType = Satisfies<
   {
-    initialization: unknown;
-    validation: { dataType: DataType };
-    parsing: { dataType: DataType; errorType: ErrorType };
-    standard: { dataType: DataType; errorType: ErrorType };
-    string: { stringFormat: StringFormat; dataType: DataType };
-    codec: { codecType: "encode" | "decode"; codecId: string; acceptsUnknown?: boolean };
+    initialization: OptimizedBenchInfo;
+    validation: OptimizedBenchInfo & { dataType: DataType };
+    parsing: OptimizedBenchInfo & { dataType: DataType; errorType: ErrorType };
+    standard: OptimizedBenchInfo & { dataType: DataType; errorType: ErrorType };
+    jsonSchema: {
+      target: JsonSchemaTarget;
+      direction: JsonSchemaDirection;
+      source: JsonSchemaSource;
+      standardJsonSchema: StandardJsonSchemaSupport;
+      jsonSchema: string;
+    };
+    string: OptimizedBenchInfo & { stringFormat: StringFormat; dataType: DataType };
+    codec: OptimizedBenchInfo & {
+      codecType: "encode" | "decode";
+      codecId: string;
+      acceptsUnknown?: boolean;
+    };
   },
   Record<BenchmarkType, unknown>
 >;

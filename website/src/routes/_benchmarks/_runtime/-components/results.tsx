@@ -12,7 +12,8 @@ import type { SortDirection } from "#src/shared/lib/sort";
 import { BenchCard } from "./card";
 import { BenchTable } from "./table";
 
-export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard" | "string"}`;
+export type BenchTo =
+  `/${"initialization" | "validation" | "parsing" | "standard" | "json-schema" | "string"}`;
 
 export interface BenchResultsProps {
   results: DistributiveArray<BenchResult>;

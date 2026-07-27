@@ -1,5 +1,9 @@
 import {
   errorTypeSchema,
+  jsonSchemaDirectionSchema,
+  jsonSchemaSourceSchema,
+  standardJsonSchemaSupportSchema,
+  jsonSchemaTargetSchema,
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
@@ -48,6 +52,42 @@ const standardResultSchema = v.object({
 });
 export type StandardResult = v.InferOutput<typeof standardResultSchema>;
 
+const jsonSchemaResultSchema = v.object({
+  // no optimizeType - JIT/precompiled describes how a library validates, not how it converts
+  ...v.omit(baseBenchResultSchema, ["optimizeType"]).entries,
+  type: v.literal("jsonSchema"),
+  target: jsonSchemaTargetSchema,
+  direction: jsonSchemaDirectionSchema,
+  source: jsonSchemaSourceSchema,
+  standardJsonSchema: standardJsonSchemaSupportSchema,
+  /** The JSON schema the library generated, so it can be compared with the others. */
+  jsonSchema: v.string(),
+});
+export type JsonSchemaResult = v.InferOutput<typeof jsonSchemaResultSchema>;
+
+export const jsonSchemaCombinationSchema = v.object({
+  target: jsonSchemaTargetSchema,
+  direction: jsonSchemaDirectionSchema,
+});
+export type JsonSchemaCombination = v.InferOutput<typeof jsonSchemaCombinationSchema>;
+
+/** Which targets and directions a library can convert, and why it refuses the rest. */
+export const jsonSchemaSupportResultSchema = v.object({
+  id: v.string(),
+  libraryName: v.string(),
+  version: v.string(),
+  note: v.optional(v.string()),
+  source: jsonSchemaSourceSchema,
+  standardJsonSchema: standardJsonSchemaSupportSchema,
+  unsupported: v.array(
+    v.object({
+      ...jsonSchemaCombinationSchema.entries,
+      reason: v.string(),
+    }),
+  ),
+});
+export type JsonSchemaSupportResult = v.InferOutput<typeof jsonSchemaSupportResultSchema>;
+
 const stringResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("string"),
@@ -71,7 +111,12 @@ export const codecResultSchema = v.object({
 export type CodecResult = v.InferOutput<typeof codecResultSchema>;
 
 export type BenchResult = OneOf<
-  InitializationResult | ValidationResult | ParsingResult | StandardResult | StringResult
+  | InitializationResult
+  | ValidationResult
+  | ParsingResult
+  | StandardResult
+  | JsonSchemaResult
+  | StringResult
 >;
 
 export const benchResultsSchema = v.object({
@@ -79,6 +124,8 @@ export const benchResultsSchema = v.object({
   parsing: v.object(v.entriesFromList(dataTypeSchema.options, v.array(parsingResultSchema))),
   validation: v.object(v.entriesFromList(dataTypeSchema.options, v.array(validationResultSchema))),
   standard: v.object(v.entriesFromList(dataTypeSchema.options, v.array(standardResultSchema))),
+  jsonSchema: v.array(jsonSchemaResultSchema),
+  jsonSchemaSupport: v.array(jsonSchemaSupportResultSchema),
   string: v.object(
     v.entriesFromList(
       stringFormatSchema.options,
@@ -93,6 +140,8 @@ export const getEmptyResults = (): BenchResults => ({
   parsing: { valid: [], invalid: [] },
   validation: { valid: [], invalid: [] },
   standard: { valid: [], invalid: [] },
+  jsonSchema: [],
+  jsonSchemaSupport: [],
   string: unsafeFromEntries(
     stringFormatSchema.options.map((format) => [format, { valid: [], invalid: [] }]),
   ),

@@ -3,11 +3,27 @@ import ts from "dedent";
 import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 
-import { assertNotReached, defineBenchmarks } from "#src";
+import type { JsonSchemaInputData, JsonSchemaOutputData } from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
 const schema = getEffectSchema();
+const jsonSchemaSubject = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String,
+  price: Schema.FiniteFromString,
+}) satisfies Schema.Codec<JsonSchemaOutputData, JsonSchemaInputData>;
+
+// the generated document wraps the JSON schema, so it's unwrapped to match the standard interface
+const toJsonSchema = () => {
+  const { schema: jsonSchema, definitions } = Schema.toJsonSchemaDocument(jsonSchemaSubject);
+  return {
+    $schema: "https://json-schema.org/draft/2020-12/schema",
+    ...jsonSchema,
+    ...(definitions && { $defs: definitions }),
+  };
+};
 const is = Schema.is(schema);
 const decode = Schema.decodeUnknownOption(schema);
 
@@ -88,6 +104,18 @@ export default defineBenchmarks({
         upfetch(url, { schema: standardSchema });
       `,
     },
+  },
+  jsonSchema: {
+    // only the input type, and only draft 2020-12
+    generate: ({ target, direction }) => {
+      assertJsonSchemaTarget(target, ["draft-2020-12"]);
+      if (direction === "output") {
+        throw new Error("No JSON schema can be generated for the output type");
+      }
+      return toJsonSchema();
+    },
+    snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,
+    source: "runtime",
   },
   stack: {
     throw: (data) => {

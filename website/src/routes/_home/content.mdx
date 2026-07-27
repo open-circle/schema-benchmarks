@@ -142,6 +142,34 @@ Parsing invalid data:
 
 <BenchPlot type="standard" dataType="invalid" />
 
+### <Link to="/json-schema">JSON Schema</Link>
+
+Some libraries can convert a schema into a [JSON Schema](https://json-schema.org/), which lets documentation generators, OpenAPI builders and LLM structured outputs consume it.
+
+```ts
+import { personSchema } from "./schemas";
+
+const jsonSchema = z.toJSONSchema(personSchema, { target: "draft-2020-12" });
+```
+
+We benchmark the time taken to generate a JSON schema from a small schema with a codec, for each target and each type (input/output) the library supports. Libraries that implement the [standard JSON schema](https://standardschema.dev/json-schema) interface are marked in the results.
+
+<Admonition type="info">
+
+Libraries only appear for the targets and types they support - a library is expected to throw for anything it can't convert.
+
+Some report `0`: `ajv`, `ata-validator` and `typebox` schemas _are_ JSON Schema, and `typia` generates one at build time, so there's nothing to convert at runtime. The <Link to="/json-schema">JSON Schema</Link> page says which is which.
+
+</Admonition>
+
+Generating a draft 2020-12 JSON schema of the input type:
+
+<BenchPlot type="jsonSchema" target="draft-2020-12" direction="input" />
+
+Generating a draft 2020-12 JSON schema of the output type:
+
+<BenchPlot type="jsonSchema" target="draft-2020-12" direction="output" />
+
 ### <Link to="/codec">Codec</Link>
 
 Some libraries support two way conversion of data, often referred to as "encoding" and "decoding".

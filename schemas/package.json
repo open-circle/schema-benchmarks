@@ -10,6 +10,7 @@
   },
   "scripts": {
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
+    "gen:json-schemas": "node ./scripts/gen-accepted-json-schemas.ts",
     "prebuild": "pnpm run gen:paseri",
     "build": "tsdown",
     "typecheck": "tsc",
@@ -23,6 +24,7 @@
     "@sapphire/shapeshift": "^4.0.0",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
+    "@valibot/to-json-schema": "^1.7.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
@@ -36,6 +38,7 @@
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
     "joi": "^18.2.3",
+    "joi-to-json": "^5.0.5",
     "runtypes": "^7.0.4",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-alpha.11",
@@ -43,7 +46,8 @@
     "typia": "^13.2.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
     "@ttsc/unplugin": "catalog:",
