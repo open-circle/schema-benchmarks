@@ -1,10 +1,18 @@
 import type { BenchResult } from "@schema-benchmarks/bench";
-import { durationFormatter, getDuration, getTransitionName } from "@schema-benchmarks/utils";
+import { formatDuration, getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
+import { GeneratedJsonSchema } from "#src/routes/_benchmarks/_runtime/-components/table/json-schema";
+import {
+  errorTypeProps,
+  jsonSchemaDirectionProps,
+  jsonSchemaSourceProps,
+  standardJsonSchemaProps,
+  jsonSchemaTargetProps,
+  optimizeTypeProps,
+} from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
@@ -29,6 +37,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
             libraryName: result.libraryName,
             note: result.note,
             errorType: result.type === "parsing" ? result.errorType : undefined,
+            direction: result.type === "jsonSchema" ? result.direction : undefined,
           }),
         }}
       >
@@ -54,7 +63,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         <dl className="minimal">
           <div>
             <dt>Mean</dt>
-            <dd>{durationFormatter.format(getDuration(result.mean))}</dd>
+            <dd>{formatDuration(result.mean)}</dd>
           </div>
         </dl>
         <div {...cls("bar")}>
@@ -62,17 +71,42 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         </div>
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
-            <DisplayChip>
-              <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
-              {optimizeTypeProps.labels[result.optimizeType].label}
-            </DisplayChip>
+            {result.type !== "jsonSchema" && (
+              <DisplayChip>
+                <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+                {optimizeTypeProps.labels[result.optimizeType].label}
+              </DisplayChip>
+            )}
             {(result.type === "parsing" || result.type === "standard") && (
               <DisplayChip>
                 <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
                 {errorTypeProps.labels[result.errorType].label}
               </DisplayChip>
             )}
+            {result.type === "jsonSchema" && (
+              <>
+                <DisplayChip>
+                  <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
+                  {jsonSchemaSourceProps.labels[result.source].label}
+                </DisplayChip>
+                <DisplayChip>
+                  <MdSymbol>
+                    {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}
+                  </MdSymbol>
+                  {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
+                </DisplayChip>
+                <DisplayChip>
+                  <MdSymbol>{jsonSchemaTargetProps.labels[result.target].icon}</MdSymbol>
+                  {jsonSchemaTargetProps.labels[result.target].label}
+                </DisplayChip>
+                <DisplayChip>
+                  <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
+                  {jsonSchemaDirectionProps.labels[result.direction].label}
+                </DisplayChip>
+              </>
+            )}
           </ChipCollection>
+          {result.type === "jsonSchema" && <GeneratedJsonSchema jsonSchema={result.jsonSchema} />}
           {result.throws && (
             <ToggleButton
               tooltip={{

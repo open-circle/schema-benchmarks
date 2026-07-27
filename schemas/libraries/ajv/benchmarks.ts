@@ -5,8 +5,8 @@ import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
 import ts from "dedent";
 
-import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import type { JsonSchemaInputData, StringBenchmarkConfig } from "#src";
+import { assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getAjv, getAjvSchema } from ".";
 
@@ -22,6 +22,16 @@ const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
   },
   snippet: ts`{ type: "string", format: "${format}" }`,
 });
+
+const jsonSchemaSubject: JSONSchemaType<JsonSchemaInputData> = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    name: { type: "string" },
+    price: { type: "string" },
+  },
+  required: ["id", "name", "price"],
+};
 
 export default defineBenchmarks({
   library: {
@@ -54,6 +64,19 @@ export default defineBenchmarks({
       `,
     },
   ],
+  jsonSchema: {
+    // ajv consumes JSON Schema, so the schema is the JSON schema - but it can't describe a codec's
+    // output type
+    generate: ({ target, direction }) => {
+      assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
+      if (direction === "output") {
+        throw new Error("No JSON schema can be generated for the output type");
+      }
+      return jsonSchemaSubject;
+    },
+    snippet: () => ts`{ type: "object", properties: { ... } }`,
+    source: "is-json-schema",
+  },
   string: {
     "date-time": createStringBenchmark("date-time"),
     date: createStringBenchmark("date"),

@@ -1,8 +1,9 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
+import { toJsonSchema, toStandardJsonSchema } from "@valibot/to-json-schema";
 import ts from "dedent";
 import * as v from "valibot";
 
-import type { StringBenchmarkConfig } from "#src";
+import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getValibotSchema } from ".";
@@ -19,6 +20,11 @@ const createStringBenchmark = (
 });
 
 const schema = getValibotSchema();
+const jsonSchemaSubject = v.object({
+  id: v.number(),
+  name: v.string(),
+  price: v.pipe(v.string(), v.transform(Number)),
+}) satisfies v.GenericSchema<JsonSchemaInputData, JsonSchemaOutputData>;
 
 export default defineBenchmarks({
   library: {
@@ -66,6 +72,18 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) =>
+      toJsonSchema(jsonSchemaSubject, { target, typeMode: direction }),
+    snippet: ({ target, direction }) =>
+      ts`toJsonSchema(schema, { target: "${target}", typeMode: "${direction}" })`,
+    source: "runtime",
+    // the official companion package implements the standard interface
+    standardJsonSchema: {
+      support: "separate-package",
+      schema: toStandardJsonSchema(jsonSchemaSubject),
+    },
   },
   string: {
     // only allows hh:mm for some reason

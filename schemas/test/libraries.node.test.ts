@@ -1,5 +1,14 @@
+import type {
+  JsonSchemaBenchmarkConfig,
+  JsonSchemaDirection,
+  JsonSchemaTarget,
+} from "@schema-benchmarks/schemas";
 import {
   errorData,
+  jsonSchemaDirectionSchema,
+  jsonSchemaInputData,
+  jsonSchemaOutputData,
+  jsonSchemaTargetSchema,
   successData,
   validStrings,
   invalidStrings,
@@ -7,7 +16,38 @@ import {
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
+import { Ajv } from "ajv";
+import { Ajv2020 } from "ajv/dist/2020.js";
 import { assert, describe, expect, it } from "vitest";
+
+import { acceptedJsonSchemas } from "./accepted-json-schemas.ts";
+
+const jsonSchemaData = {
+  input: jsonSchemaInputData,
+  output: jsonSchemaOutputData,
+} satisfies Record<JsonSchemaDirection, unknown>;
+
+const oppositeDirection = {
+  input: "output",
+  output: "input",
+} satisfies Record<JsonSchemaDirection, JsonSchemaDirection>;
+
+/** Libraries throw for anything they can't convert, which the benchmarks skip. */
+const tryGenerate = (generate: () => object) => {
+  try {
+    return generate();
+  } catch {
+    return undefined;
+  }
+};
+
+/** Compiles a generated JSON schema, so it can be checked against the data it describes. */
+const compileJsonSchema = (target: JsonSchemaTarget, jsonSchema: object) => {
+  // formats are library specific (e.g. `url` vs `uri`), and OpenAPI keywords aren't JSON Schema
+  const options = { strict: false, validateFormats: false };
+  const ajv = target === "draft-2020-12" ? new Ajv2020(options) : new Ajv(options);
+  return ajv.compile(jsonSchema);
+};
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
@@ -68,6 +108,47 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         });
       });
     });
+  });
+  describe.runIf(config.jsonSchema)("JSON schema", () => {
+    // the parameter is typed, so a renamed field fails to compile instead of silently skipping
+    describe.each(ensureArray(config.jsonSchema ?? []))(
+      "config %o",
+      ({ generate, standardJsonSchema }: JsonSchemaBenchmarkConfig) => {
+        describe.each(jsonSchemaTargetSchema.options)("%s", (target) => {
+          describe.each(jsonSchemaDirectionSchema.options)("%s", (direction) => {
+            const generated = tryGenerate(() => generate({ target, direction }));
+
+            it.runIf(generated)("should describe the data of that direction", () => {
+              assert(generated);
+              const validate = compileJsonSchema(target, generated);
+              expect(validate(jsonSchemaData[direction])).toBe(true);
+              // the schema has a codec, so the other direction's data must not match
+              expect(validate(jsonSchemaData[oppositeDirection[direction]])).toBe(false);
+            });
+
+            it.runIf(generated)("should generate an accepted schema", () => {
+              // a new shape isn't necessarily wrong, but it should be looked at and accepted
+              expect(acceptedJsonSchemas[target][direction]).toContainEqual(generated);
+            });
+
+            it.runIf(standardJsonSchema)(
+              "should generate the same through the standard interface",
+              () => {
+                assert(standardJsonSchema);
+                const standardGenerated = tryGenerate(() =>
+                  standardJsonSchema.schema["~standard"].jsonSchema[direction]({ target }),
+                );
+                // the library can't support the combination through one API and not the other
+                expect(Boolean(standardGenerated)).toBe(Boolean(generated));
+                if (standardGenerated && generated) {
+                  expect(standardGenerated).toEqual(generated);
+                }
+              },
+            );
+          });
+        });
+      },
+    );
   });
   describe.runIf(config.string)("string", () => {
     describe.each(unsafeEntries(config.string ?? {}))("%s", (stringType, config) => {

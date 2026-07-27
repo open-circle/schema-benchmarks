@@ -22,6 +22,7 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
     ["Parsing", "/parsing"],
     ["Codec", "/codec"],
     ["Standard Schema", "/standard"],
+    ["JSON Schema", "/json-schema"],
     ["String", "/string"],
     ["Stack", "/stack"],
     ["Libraries", "/libraries"],

@@ -1,13 +1,40 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import { Effect, Either } from "effect";
+import * as JSONSchema from "effect/JSONSchema";
 import * as Schema from "effect/Schema";
 
-import { assertNotReached, defineBenchmarks } from "#src";
+import type {
+  JsonSchemaInputData,
+  JsonSchemaOptions,
+  JsonSchemaOutputData,
+  JsonSchemaTarget,
+} from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
 const schema = getEffectSchema();
+const jsonSchemaSubject = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String,
+  price: Schema.NumberFromString,
+}) satisfies Schema.Schema<JsonSchemaOutputData, JsonSchemaInputData>;
+
+// effect names the targets differently, and only supports these two
+const jsonSchemaTargets = {
+  "draft-07": "jsonSchema7",
+  "draft-2020-12": "jsonSchema2020-12",
+} as const;
+const supportedJsonSchemaTargets = ["draft-2020-12", "draft-07"] as const;
+const getJsonSchemaTarget = (target: JsonSchemaTarget) => {
+  assertJsonSchemaTarget(target, supportedJsonSchemaTargets);
+  return jsonSchemaTargets[target];
+};
+const makeJsonSchema = <Output, Input>(
+  { target }: JsonSchemaOptions,
+  subject: Schema.Schema<Output, Input>,
+) => JSONSchema.make(subject, { target: getJsonSchemaTarget(target) });
 const is = Schema.is(schema);
 const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
 const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
@@ -95,6 +122,15 @@ export default defineBenchmarks({
         upfetch(url, { schema: standardSchema });
       `,
     },
+  },
+  jsonSchema: {
+    generate: (options) =>
+      options.direction === "input"
+        ? makeJsonSchema(options, jsonSchemaSubject)
+        : makeJsonSchema(options, Schema.typeSchema(jsonSchemaSubject)),
+    snippet: ({ target, direction }) =>
+      ts`JSONSchema.make(${direction === "input" ? "schema" : "Schema.typeSchema(schema)"}, { target: "${getJsonSchemaTarget(target)}" })`,
+    source: "runtime",
   },
   stack: {
     throw: (data) => {

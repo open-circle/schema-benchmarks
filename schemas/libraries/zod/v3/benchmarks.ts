@@ -1,9 +1,10 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import * as z from "zod/v3";
 
-import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import type { JsonSchemaInputData, JsonSchemaTarget, StringBenchmarkConfig } from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodSchema } from ".";
 
@@ -24,6 +25,22 @@ const createStringBenchmark = <Method extends FormatMethod>(
 });
 
 const schema = getZodSchema();
+
+const jsonSchemaSubject = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.string().transform(Number),
+}) satisfies z.ZodType<unknown, z.ZodTypeDef, JsonSchemaInputData>;
+
+// zod-to-json-schema names the targets differently, and has no draft 2020-12
+const jsonSchemaTargets = {
+  "draft-07": "jsonSchema7",
+  "openapi-3.0": "openApi3",
+} as const satisfies Partial<Record<JsonSchemaTarget, string>>;
+const getJsonSchemaTarget = (target: JsonSchemaTarget) => {
+  assertJsonSchemaTarget(target, ["draft-07", "openapi-3.0"]);
+  return jsonSchemaTargets[target];
+};
 
 export default defineBenchmarks({
   library: {
@@ -50,6 +67,18 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) => {
+      if (direction === "output") {
+        // transforms are only converted in the input direction
+        throw new Error("No JSON schema can be generated for the output type");
+      }
+      return zodToJsonSchema(jsonSchemaSubject, { target: getJsonSchemaTarget(target) });
+    },
+    snippet: ({ target }) =>
+      ts`zodToJsonSchema(schema, { target: "${getJsonSchemaTarget(target)}" })`,
+    source: "runtime",
   },
   string: {
     "date-time": createStringBenchmark("datetime"),

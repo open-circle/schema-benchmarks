@@ -6,7 +6,7 @@ import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getTypeboxSchema, getTypeboxScriptSchema } from ".";
 
@@ -19,6 +19,13 @@ const createStringBenchmark = (format: Type.TFormat): StringBenchmarkConfig => (
 });
 
 const schema = getTypeboxSchema();
+const jsonSchemaSubject = Type.Object({
+  id: Type.Number(),
+  name: Type.String(),
+  price: Type.Codec(Type.String())
+    .Decode((value) => Number(value))
+    .Encode((value) => String(value)),
+});
 const compiled = Compile(schema);
 const compiledSchema = Schema.Compile(schema);
 const BigIntFromString = Type.Codec(Type.String())
@@ -196,6 +203,19 @@ export default defineBenchmarks({
         throws: true,
       },
     ],
+  },
+  jsonSchema: {
+    // typebox schemas are JSON Schema already, so there's nothing to convert - but a codec's
+    // output type has no representation
+    generate: ({ target, direction }) => {
+      assertJsonSchemaTarget(target, ["draft-2020-12"]);
+      if (direction === "output") {
+        throw new Error("No JSON schema can be generated for the output type");
+      }
+      return jsonSchemaSubject;
+    },
+    snippet: () => ts`Type.Object(...)`,
+    source: "is-json-schema",
   },
   string: {
     "date-time": createStringBenchmark("date-time"),

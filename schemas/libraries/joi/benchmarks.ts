@@ -1,9 +1,10 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import Joi from "joi";
+import parse from "joi-to-json";
 
-import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import type { JsonSchemaTarget, StringBenchmarkConfig } from "#src";
+import { assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getJoiSchema } from ".";
 
@@ -24,6 +25,23 @@ const createStringBenchmark = <Format extends FormatMethod>(
 });
 
 const schema = getJoiSchema();
+
+// joi's keys are optional unless required, and every other library's are required
+const jsonSchemaSubject = Joi.object({
+  id: Joi.number().required(),
+  name: Joi.string().required(),
+  price: Joi.string().required(),
+});
+
+// joi-to-json names the targets differently, and has no draft 2020-12
+const jsonSchemaModes = {
+  "draft-07": "json",
+  "openapi-3.0": "open-api",
+} as const satisfies Partial<Record<JsonSchemaTarget, string>>;
+const getJsonSchemaMode = (target: JsonSchemaTarget) => {
+  assertJsonSchemaTarget(target, ["draft-07", "openapi-3.0"]);
+  return jsonSchemaModes[target];
+};
 
 export default defineBenchmarks({
   library: {
@@ -55,6 +73,16 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) => {
+      if (direction === "output") {
+        throw new Error("No JSON schema can be generated for the output type");
+      }
+      return parse(jsonSchemaSubject, getJsonSchemaMode(target)) as object;
+    },
+    snippet: ({ target }) => ts`parse(schema, "${getJsonSchemaMode(target)}")`,
+    source: "runtime",
   },
   string: {
     "date-time": createStringBenchmark("isoDate"),

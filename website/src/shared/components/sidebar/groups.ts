@@ -46,6 +46,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         icon: "schema",
       },
       {
+        ...linkOptions({ to: "/json-schema" }),
+        name: "JSON Schema",
+        icon: "data_object",
+      },
+      {
         ...linkOptions({ to: "/string" }),
         name: "String",
         icon: "format_quote",

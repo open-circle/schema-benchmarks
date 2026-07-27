@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as z from "zod/mini";
 
-import type { StringBenchmarkConfig } from "#src";
+import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodMiniSchema } from ".";
@@ -19,6 +19,11 @@ const createStringBenchmark = (
 });
 
 const schema = getZodMiniSchema();
+const jsonSchemaSubject = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.codec(z.string(), z.number(), { decode: Number, encode: String }),
+}) satisfies z.ZodMiniType<JsonSchemaOutputData, JsonSchemaInputData>;
 const codec = z.codec(z.string(), z.bigint(), {
   encode: (value) => value.toString(),
   decode: (str) => BigInt(str),
@@ -61,6 +66,14 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) =>
+      z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
+    snippet: ({ target, direction }) =>
+      ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
+    source: "runtime",
+    // unlike zod's, zod/mini schemas don't carry `~standard.jsonSchema`
   },
   string: {
     "date-time": createStringBenchmark(z.iso.datetime, ts`z.iso.datetime()`),
