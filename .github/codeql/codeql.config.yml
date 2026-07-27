@@ -1,0 +1,2 @@
+paths-ignore:
+  - "schemas/libraries/**/download_compiled/**/*.js"
