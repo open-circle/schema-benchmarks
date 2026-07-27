@@ -1,4 +1,4 @@
-import { getTransitionName, longDateFormatter } from "@schema-benchmarks/utils";
+import { getTransitionName, longDateFormatter, promiseAllKeyed } from "@schema-benchmarks/utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
@@ -22,10 +22,10 @@ export const Route = createFileRoute("/blog/$slug")({
     const data = await queryClient.ensureQueryData(getBlog(slug, abortController.signal));
     const images = data.authors.map(getAvatarUrl);
     if (typeof data.cover !== "string") images.push(data.cover.src);
-    const [mdxModule] = await Promise.all([
-      queryClient.ensureQueryData(importMdx(data._meta.filePath)),
-      preloadImages(images),
-    ]);
+    const { mdxModule } = await promiseAllKeyed({
+      mdxModule: queryClient.ensureQueryData(importMdx(data._meta.filePath)),
+      images: preloadImages(images),
+    });
     if (typeof mdxModule.prefetch === "function") await mdxModule.prefetch({ queryClient });
     return { crumb: data.title, ...data };
   },
