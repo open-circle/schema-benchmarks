@@ -31,6 +31,8 @@ import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 import vitePwaOpts from "./offline/opts";
 import materialSymbols from "./vite/symbols";
 
+const isStorybook = !!process.env.STORYBOOK;
+
 const config = defineConfig({
   build: {
     sourcemap: true,
@@ -89,15 +91,16 @@ const config = defineConfig({
     svgr(),
     !process.env.VITEST && contentCollections(),
     // due to a bug, this is only used to generate the manifest - the service worker is written separately in scripts/pwa/generate-sw.ts
-    VitePWA({
-      ...vitePwaOpts,
-      injectRegister: false,
-      devOptions: {
-        enabled: false,
-        type: "module",
-        suppressWarnings: true,
-      },
-    }),
+    !isStorybook &&
+      VitePWA({
+        ...vitePwaOpts,
+        injectRegister: false,
+        devOptions: {
+          enabled: false,
+          type: "module",
+          suppressWarnings: true,
+        },
+      }),
   ],
   test: {
     projects: [
