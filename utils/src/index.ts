@@ -154,6 +154,10 @@ export const getDuration = (
   return result;
 };
 
+/** `Intl.DurationFormat` formats a zero duration as an empty string, which is no use in a table. */
+export const formatDuration = (ms: number, unitCount?: number) =>
+  ms === 0 ? "0" : durationFormatter.format(getDuration(ms, unitCount));
+
 const enumerableKeys = (obj: object) =>
   Reflect.ownKeys(obj).filter((key) => Object.getOwnPropertyDescriptor(obj, key)?.enumerable);
 

@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as S from "sury";
 
-import type { StringBenchmarkConfig } from "#src";
+import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getSurySchema } from ".";
@@ -18,6 +18,14 @@ const createStringBenchmark = (
 });
 
 const schema = getSurySchema();
+
+// `~standard.jsonSchema` throws until this is called
+S.enableStandardJSONSchema();
+const jsonSchemaSubject = S.schema({
+  id: S.number,
+  name: S.string,
+  price: S.to(S.string, S.number, Number, String),
+}) satisfies S.Schema<JsonSchemaInputData, JsonSchemaOutputData>;
 const parser = S.parser(getSurySchema());
 const encoder = S.encoder(S.bigint, S.string);
 const decoder = S.decoder(S.string, S.bigint);
@@ -84,6 +92,17 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) =>
+      direction === "input"
+        ? S.toJSONSchema(jsonSchemaSubject, { target })
+        : S.toJSONSchema(S.reverse(jsonSchemaSubject), { target }),
+    snippet: ({ target, direction }) =>
+      ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
+    source: "runtime",
+    // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
+    standardJsonSchema: { support: "native-opt-in", schema: jsonSchemaSubject },
   },
   string: {
     "date-time": createStringBenchmark(S.isoDateTime, ts`S.isoDateTime`),

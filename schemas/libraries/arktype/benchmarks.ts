@@ -3,7 +3,7 @@ import { type } from "arktype";
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getArkTypeSchema } from ".";
 
@@ -20,6 +20,13 @@ const createStringBenchmark = (format: Format): StringBenchmarkConfig => ({
 });
 
 const schema = getArkTypeSchema();
+const jsonSchemaSubject = type({
+  id: "number",
+  name: "string",
+  // `string.numeric.parse` would also validate the string, which no other subject does. The output
+  // type has to be declared, or it's unknown - and so is the JSON schema of the output
+  price: type("string").pipe((price) => Number(price), type("number")),
+});
 
 export default defineBenchmarks({
   library: {
@@ -50,6 +57,18 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) => {
+      assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
+      return (direction === "input" ? jsonSchemaSubject.in : jsonSchemaSubject.out).toJsonSchema({
+        target,
+      });
+    },
+    snippet: ({ target, direction }) =>
+      ts`schema.${direction === "input" ? "in" : "out"}.toJsonSchema({ target: "${target}" })`,
+    source: "runtime",
+    standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
   },
   string: {
     "date-time": createStringBenchmark("date.iso"),

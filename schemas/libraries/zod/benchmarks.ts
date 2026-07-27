@@ -2,7 +2,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as z from "zod";
 
-import type { StringBenchmarkConfig } from "#src";
+import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodSchema } from ".";
@@ -19,6 +19,11 @@ const createStringBenchmark = (
 });
 
 const schema = getZodSchema();
+const jsonSchemaSubject = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.codec(z.string(), z.number(), { decode: Number, encode: String }),
+}) satisfies z.ZodType<JsonSchemaOutputData, JsonSchemaInputData>;
 const codec = z.codec(z.string(), z.bigint(), {
   decode: (str) => BigInt(str),
   encode: (value) => value.toString(),
@@ -58,6 +63,14 @@ export default defineBenchmarks({
   },
   standard: {
     allErrors: { schema },
+  },
+  jsonSchema: {
+    generate: ({ target, direction }) =>
+      z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
+    snippet: ({ target, direction }) =>
+      ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
+    source: "runtime",
+    standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
   },
   string: {
     "date-time": createStringBenchmark(z.iso.datetime, ts`z.iso.datetime()`),

@@ -31,6 +31,33 @@ export interface ProductData {
   ratings: Array<RatingData>;
 }
 
+/**
+ * The standard JSON schema benchmarks use a small, JSON representable schema with a codec, so the
+ * input and output JSON schemas differ. `Date` is deliberately left out - it has no JSON schema
+ * representation, and several libraries refuse to convert it.
+ */
+export interface JsonSchemaInputData {
+  id: number;
+  name: string;
+  /** encoded as a string */
+  price: string;
+}
+
+export interface JsonSchemaOutputData extends Omit<JsonSchemaInputData, "price"> {
+  price: number;
+}
+
+export const jsonSchemaInputData: JsonSchemaInputData = {
+  id: 252,
+  name: "Apple",
+  price: "89",
+};
+
+export const jsonSchemaOutputData: JsonSchemaOutputData = {
+  ...jsonSchemaInputData,
+  price: Number(jsonSchemaInputData.price),
+};
+
 export const successData: ProductData = {
   id: 252,
   created: new Date(),

@@ -1,12 +1,7 @@
 import * as Plot from "@observablehq/plot";
-import type { BenchResult, DataType } from "@schema-benchmarks/bench";
-import type { ErrorType } from "@schema-benchmarks/schemas";
-import {
-  durationFormatter,
-  getDuration,
-  shortNumFormatter,
-  uniqueBy,
-} from "@schema-benchmarks/utils";
+import type { BenchResult, BenchResults, DataType } from "@schema-benchmarks/bench";
+import type { ErrorType, JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
+import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -19,6 +14,13 @@ import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 export type BenchPlotProps =
   | {
       type: "initialization";
+      dataType?: never;
+      errorType?: never;
+    }
+  | {
+      type: "jsonSchema";
+      target: JsonSchemaTarget;
+      direction: JsonSchemaDirection;
       dataType?: never;
       errorType?: never;
     }
@@ -66,7 +68,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
         y: {
           grid: true,
           label: "Time",
-          tickFormat: (d: number) => durationFormatter.format(getDuration(d, 2)),
+          tickFormat: (d: number) => formatDuration(d, 2),
           nice: true,
         },
         color: {
@@ -86,8 +88,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (d: number) =>
-                  `${formatNumber(d)} ms (${durationFormatter.format(getDuration(d, 2))})`,
+                y: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
                 fill: false,
               },
             },
@@ -101,10 +102,21 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
 
 BaseBenchPlot.displayName = "BaseBenchPlot";
 
-export function BenchPlot({ type, dataType, errorType }: BenchPlotProps) {
+const selectResults = (results: BenchResults, props: BenchPlotProps) => {
+  if (props.type === "initialization") return results[props.type];
+  if (props.type === "jsonSchema") {
+    return results[props.type].filter(
+      (result) => result.target === props.target && result.direction === props.direction,
+    );
+  }
+  return results[props.type][props.dataType];
+};
+
+export function BenchPlot(props: BenchPlotProps) {
+  const { errorType } = props;
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => (type === "initialization" ? results[type] : results[type][dataType]),
+    select: (results) => selectResults(results, props),
   });
   const filteredData = useMemo(() => {
     if (errorType) {
