@@ -29,6 +29,10 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
     return Array.from(versionCounts).sort((a, b) => b[1] - a[1])[0]![0];
   }, [versions]);
   const { data: metadata } = useSuspenseQuery(getPackageMetadata(pkgName, mostCommonVersion));
+  const repositoryUrl = useMemo(() => {
+    if (!metadata.repository) return null;
+    return getRepoLink(metadata.repository);
+  }, [metadata.repository]);
   const { data: replacementUrl } = useSuspenseQuery(getReplacementUrl(pkgName));
   const heading = (
     <h4>
@@ -98,16 +102,16 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
             <MdSymbol>warning</MdSymbol>
           </ExternalLinkToggleButton>
         )}
-        {metadata.repository && (
+        {repositoryUrl && (
           <ExternalLinkToggleButton
             tooltip="Repository"
-            {...trackedLinkProps(getRepoLink(metadata.repository))}
+            {...trackedLinkProps(repositoryUrl)}
             target="_blank"
             rel="noopener noreferrer"
             {...cls({ element: "repo-link" })}
           >
-            {metadata.repository.type === "git" &&
-            new URL(metadata.repository.url).hostname === "github.com" ? (
+            {metadata.repository?.type === "git" &&
+            new URL(repositoryUrl).hostname === "github.com" ? (
               <GithubIcon />
             ) : (
               <MdSymbol>code</MdSymbol>

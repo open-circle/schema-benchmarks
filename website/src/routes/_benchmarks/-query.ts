@@ -1,5 +1,6 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
+import hostedGitInfo from "hosted-git-info";
 import * as v from "valibot";
 
 import { isRetryableUpfetchError, upfetch } from "#src/shared/lib/fetch";
@@ -109,8 +110,9 @@ const packageMetadataSchema = v.object({
 });
 
 export const getRepoLink = (repository: { type: string; url: string }) => {
-  if (repository.type === "git" && repository.url.startsWith("git+")) {
-    return repository.url.slice(4);
+  if (repository.type === "git") {
+    const info = hostedGitInfo.fromUrl(repository.url);
+    if (info) return info.browse();
   }
   return repository.url;
 };
