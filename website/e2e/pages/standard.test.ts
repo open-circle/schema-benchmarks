@@ -6,8 +6,8 @@ const library = {
   version: "1.7.1",
 };
 
-test.beforeEach(async ({ page, fontsLoaded }) => {
-  await page.goto("/standard");
+test.beforeEach(async ({ page, fontsLoaded, standardSchemaPage }) => {
+  await standardSchemaPage.goto();
 
   await fontsLoaded();
 

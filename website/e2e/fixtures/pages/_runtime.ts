@@ -9,7 +9,7 @@ import {
   optimizeTypeProps,
 } from "#src/routes/_benchmarks/_runtime/-constants";
 
-export class RuntimePage extends BasePOM {
+export abstract class RuntimePage extends BasePOM {
   breakpoints = BasePOM.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
@@ -51,10 +51,10 @@ export class RuntimePage extends BasePOM {
   }
 }
 
-export function withDataToggle<Constructor extends new (...args: Array<any>) => RuntimePage>(
-  Base: Constructor,
-) {
-  return class extends Base {
+export function withDataToggle<
+  Constructor extends abstract new (...args: Array<any>) => RuntimePage,
+>(Base: Constructor) {
+  abstract class DataToggleMixin extends Base {
     dataToggle = this.main.getByRole("list", { name: "Data" });
 
     getDataTypeLabel(dataType: DataType) {
@@ -67,13 +67,14 @@ export function withDataToggle<Constructor extends new (...args: Array<any>) => 
         exact: true,
       });
     }
-  };
+  }
+  return DataToggleMixin;
 }
 
-export function withErrorTypeFilter<Constructor extends new (...args: Array<any>) => RuntimePage>(
-  Base: Constructor,
-) {
-  return class extends Base {
+export function withErrorTypeFilter<
+  Constructor extends abstract new (...args: Array<any>) => RuntimePage,
+>(Base: Constructor) {
+  abstract class ErrorTypeFilterMixin extends Base {
     errorTypeFilter = this.main.getByRole("list", { name: "Abort early" });
 
     getErrorTypeLabel(errorType: ErrorType) {
@@ -86,7 +87,8 @@ export function withErrorTypeFilter<Constructor extends new (...args: Array<any>
         exact: true,
       });
     }
-  };
+  }
+  return ErrorTypeFilterMixin;
 }
 
 export type MixinInstanceType<Mixin extends (...args: Array<any>) => any> = InstanceType<

@@ -3,8 +3,8 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 import { test, expect } from "#e2e/fixtures";
 import { library } from "#e2e/utils/constants";
 
-test.beforeEach("Go to download page", async ({ page, fontsLoaded }) => {
-  await page.goto("/download");
+test.beforeEach("Go to download page", async ({ page, fontsLoaded, downloadPage }) => {
+  await downloadPage.goto();
 
   await fontsLoaded();
 

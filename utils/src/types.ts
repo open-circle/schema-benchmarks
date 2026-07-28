@@ -64,3 +64,5 @@ export type IfMaybeUndefined<P, True, False> = [undefined] extends [P] ? True : 
 export type RemoveIndexSignature<T> = {
   [K in keyof T as string extends K ? never : number extends K ? never : K]: T[K];
 };
+
+export type Tail<T extends Array<any>> = T extends [any, ...infer U] ? U : never;

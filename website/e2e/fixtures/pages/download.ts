@@ -5,6 +5,8 @@ import { getCellByColumnName } from "#e2e/utils";
 import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
 export class DownloadPage extends BasePOM {
+  url = "/download";
+
   minifyToggle = this.main.getByRole("list", { name: "Minify" });
 
   getMinifyTypeLink(minifyType: MinifyType) {

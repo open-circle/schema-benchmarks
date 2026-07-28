@@ -1,8 +1,8 @@
 import { test, expect } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 
-test.beforeEach(async ({ page, fontsLoaded }) => {
-  await page.goto("/validation");
+test.beforeEach(async ({ page, fontsLoaded, validationPage }) => {
+  await validationPage.goto();
 
   await fontsLoaded();
 
