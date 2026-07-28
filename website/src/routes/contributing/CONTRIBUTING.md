@@ -33,7 +33,7 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 
 Please open an issue for any bugs you find, or features you would like to see. Opening a PR without confirmation it's desired means it may not be merged.
 
-Make sure any changes meet our coding standards. We lint with [`oxlint`](https://oxc.rs/docs/guide/usage/linter.html) and format with [`oxfmt`](https://oxc.rs/docs/guide/usage/formatter.html), type check using [TypeScript](https://www.typescriptlang.org/) (specifically TS Go) and test using [Vitest](https://vitest.dev/).
+Make sure any changes meet our coding standards. We lint with [`oxlint`](https://oxc.rs/docs/guide/usage/linter.html) and format with [`oxfmt`](https://oxc.rs/docs/guide/usage/formatter.html), type check using [TypeScript](https://www.typescriptlang.org/) and test using [Vitest](https://vitest.dev/) for unit/integration tests and [Playwright](https://playwright.dev/) for end-to-end testing.
 
 Prefer browser tests (`*.browser.test.ts(x)`) for anything needing DOM specific features (e.g. React components), and Node tests (`*.node.test.ts`) for everything else. Include type tests (`*.test-d.ts`) for anything with complex typing.
 
@@ -41,7 +41,8 @@ The following commands will help you check your changes before opening a PR:
 
 - `pnpm check` - runs lint and format checks
 - `pnpm typecheck` - runs type checks
-- `pnpm test` - runs tests
+- `pnpm test` - runs unit and integration tests
+- `pnpm e2e` - runs end-to-end tests
 
 ## PRs written by AI
 
