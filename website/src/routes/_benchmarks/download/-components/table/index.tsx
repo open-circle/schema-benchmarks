@@ -55,7 +55,9 @@ export function DownloadTable({
               )}
               className="numeric"
             >
-              Downloads (/wk)
+              <span className="bench-table__downloads-label">
+                <MdSymbol size={18}>download</MdSymbol>/wk
+              </span>
             </SortableHeaderLink>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("bytes", sortState, { to: "/download" })}

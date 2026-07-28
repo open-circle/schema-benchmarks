@@ -3,3 +3,8 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.bench-table__downloads-label {
+  display: inline-flex;
+  align-items: center;
+}

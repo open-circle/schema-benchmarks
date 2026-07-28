@@ -43,7 +43,9 @@ export function CodecTable({ results, encodeScaler, decodeScaler, ...sortState }
               )}
               className="numeric"
             >
-              Downloads (/wk)
+              <span className="bench-table__downloads-label">
+                <MdSymbol size={18}>download</MdSymbol>/wk
+              </span>
             </SortableHeaderLink>
             <th>Optimizations</th>
             <SortableHeaderLink

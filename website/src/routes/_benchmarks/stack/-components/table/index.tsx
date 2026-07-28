@@ -5,6 +5,7 @@ import { getTransitionName } from "@schema-benchmarks/utils";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/stack/-constants";
+import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import type { SortDirection } from "#src/shared/lib/sort";
@@ -37,7 +38,9 @@ export function StackTable({ results, frameScale, lineCountScale, ...sortState }
               {...SortableHeaderLink.getProps("downloads", sortState, { to: "/stack" })}
               className="numeric"
             >
-              Downloads (/wk)
+              <span className="bench-table__downloads-label">
+                <MdSymbol size={18}>download</MdSymbol>/wk
+              </span>
             </SortableHeaderLink>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("frame", sortState, { to: "/stack" })}

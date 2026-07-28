@@ -75,13 +75,16 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
               Library
             </SortableHeaderLink>
             <th className="action"></th>
-            <th className="action"></th>
+            {benchType !== "standard" && <th className="action"></th>}
             <th>Version</th>
             <SortableHeaderLink
               {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
               className="numeric"
+              aria-label="Downloads per week"
             >
-              Downloads (/wk)
+              <span className="bench-table__downloads-label">
+                <MdSymbol size={18}>download</MdSymbol>/wk
+              </span>
             </SortableHeaderLink>
             <th>Optimizations</th>
             {(benchType === "parsing" || benchType === "standard") && <th>Error type</th>}
@@ -125,23 +128,25 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                 <td className="action">
                   <Snippet code={result.snippet} />
                 </td>
-                <td className="action">
-                  {result.throws && (
-                    <ToggleButton
-                      tooltip={{
-                        subhead: "Throws on invalid data",
-                        supporting: (
-                          <div style={{ maxWidth: "16rem" }}>
-                            This library throws an error when parsing invalid data (and has no
-                            non-throwing equivalent), so the benchmark includes a try/catch.
-                          </div>
-                        ),
-                      }}
-                    >
-                      <MdSymbol>error</MdSymbol>
-                    </ToggleButton>
-                  )}
-                </td>
+                {benchType !== "standard" && (
+                  <td className="action">
+                    {result.throws && (
+                      <ToggleButton
+                        tooltip={{
+                          subhead: "Throws on invalid data",
+                          supporting: (
+                            <div style={{ maxWidth: "16rem" }}>
+                              This library throws an error when parsing invalid data (and has no
+                              non-throwing equivalent), so the benchmark includes a try/catch.
+                            </div>
+                          ),
+                        }}
+                      >
+                        <MdSymbol>error</MdSymbol>
+                      </ToggleButton>
+                    )}
+                  </td>
+                )}
                 <td>
                   <code className="language-text">{result.version}</code>
                 </td>
