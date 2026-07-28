@@ -342,6 +342,9 @@ importers:
       dedent:
         specifier: 'catalog:'
         version: 1.7.2
+      hosted-git-info:
+        specifier: ^10.1.1
+        version: 10.1.1
       module-replacements:
         specifier: ^3.1.0
         version: 3.1.0
@@ -436,6 +439,9 @@ importers:
       '@types/estree':
         specifier: ^1.0.9
         version: 1.0.9
+      '@types/hosted-git-info':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/mdx':
         specifier: ^2.0.14
         version: 2.0.14
@@ -4284,6 +4290,9 @@ packages:
   '@types/hast@3.0.5':
     resolution: {integrity: sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g==}
 
+  '@types/hosted-git-info@3.0.5':
+    resolution: {integrity: sha512-Dmngh7U003cOHPhKGyA7LWqrnvcTyILNgNPmNCxlx7j8MIi54iBliiT8XqVLIQ3GchoOjVAyBzNJVyuaJjqokg==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -6321,6 +6330,10 @@ packages:
 
   hookable@6.1.1:
     resolution: {integrity: sha512-U9LYDy1CwhMCnprUfeAZWZGByVbhd54hwepegYTK7Pi5NvqEj63ifz5z+xukznehT7i6NIZRu89Ay1AZmRsLEQ==}
+
+  hosted-git-info@10.1.1:
+    resolution: {integrity: sha512-DeOnSPAvOndYKfw075gt8yZzQ7S2hNztw34zBTfhIzLhmBTswIBg5/y+pqu/VD5cYWm5goAFTusDmUEmKZ0PEQ==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   hosted-git-info@7.0.2:
     resolution: {integrity: sha512-puUZAUKT5m8Zzvs72XWy3HtvVbTWljRE66cP60bxJzAqf2DgICo7lYTY2IHUmLnNpjYvw5bvmoHvPc0QO2a62w==}
@@ -12812,6 +12825,8 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/hosted-git-info@3.0.5': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/mdast@4.0.4':
@@ -15071,6 +15086,10 @@ snapshots:
       set-cookie-parser: 3.1.2
 
   hookable@6.1.1: {}
+
+  hosted-git-info@10.1.1:
+    dependencies:
+      lru-cache: 11.5.2
 
   hosted-git-info@7.0.2:
     dependencies:
