@@ -127,7 +127,7 @@ function isPlainObject(value) {
 	return Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null;
 }
 const _enum20 = /* @__PURE__ */ new Set(["jpg", "png"]);
-const _regex21 = /* @__PURE__ */ new RegExp("^(?:(?:(?:https?|ftp|wss?):\\/\\/(?:(?=[a-z\\d\\._\\-]*?[a-z_\\-])(?:(?=([a-z\\d\\._\\-]+))\\1))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\\d\\+\\.\\-]*))\\2):(?!\\/\\/).*))$", "iv");
+const _regex21 = /* @__PURE__ */ new RegExp("^(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?):\\/\\/(?:(?:(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)\\.)*(?:(?!(?:\\d+|0[xX]\\p{AHex}*)(?:[\\:\\/\\?\\#]|$))(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?)|[fF][iI][lL][eE]):))[a-zA-Z](?:(?=([a-zA-Z\\d\\+\\.\\-]*))\\1):(?!\\/\\/).*))$", "v");
 function _shapeArray15(_arr13) {
 	for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
 		const _el10 = _arr13[_i14];
@@ -1131,15 +1131,16 @@ function parseProduct(value, options) {
 //#endregion
 //#region ../schemas/libraries/@paseri/compiler/download.ts
 ({
-	"~standard": {
+	"~standard": Object.freeze({
 		version: 1,
 		vendor: "paseri",
 		validate(value, options) {
-			const result = safeParseProduct(value);
-			if (result.ok) return { value: result.value };
-			return { issues: result.messages(options?.libraryOptions?.locale) };
+			const result = _validateProduct(value);
+			if (result === void 0) return { value };
+			if (result.ok === true) return { value: result.value };
+			return { issues: new ParseErrorResult(result).messages(options?.libraryOptions?.locale) };
 		}
-	},
+	}),
 	safeParse: safeParseProduct,
 	parse: parseProduct
 }).safeParse({});
