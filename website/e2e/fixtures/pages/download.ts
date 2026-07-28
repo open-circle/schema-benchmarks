@@ -1,10 +1,10 @@
 import type { MinifyType } from "@schema-benchmarks/bench";
 
-import { BasePOM } from "#e2e/fixtures/base";
+import { BasePage } from "#e2e/fixtures/base";
 import { getCellByColumnName } from "#e2e/utils";
 import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
-export class DownloadPage extends BasePOM {
+export class DownloadPage extends BasePage {
   url = "/download";
 
   minifyToggle = this.main.getByRole("list", { name: "Minify" });
@@ -24,7 +24,7 @@ export class DownloadPage extends BasePOM {
     return this.speedPresets.getByRole("link", { name: label });
   }
 
-  breakpoints = BasePOM.defineBreakpoints({
+  breakpoints = BasePage.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
 

@@ -1,6 +1,6 @@
-import { BasePOM } from "#e2e/fixtures/base";
+import { BasePage } from "#e2e/fixtures/base";
 
-export class BlogPage extends BasePOM {
+export class BlogPage extends BasePage {
   url = "/blog";
 
   blogGrid = this.main.getByRole("list");

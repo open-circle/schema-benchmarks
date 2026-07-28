@@ -1,7 +1,7 @@
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 
-import { BasePOM } from "#e2e/fixtures/base";
+import { BasePage } from "#e2e/fixtures/base";
 import { getCellByColumnName } from "#e2e/utils";
 import {
   dataTypeProps,
@@ -9,8 +9,8 @@ import {
   optimizeTypeProps,
 } from "#src/routes/_benchmarks/_runtime/-constants";
 
-export abstract class RuntimePage extends BasePOM {
-  breakpoints = BasePOM.defineBreakpoints({
+export abstract class RuntimePage extends BasePage {
+  breakpoints = BasePage.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
 
