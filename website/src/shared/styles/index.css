@@ -163,13 +163,13 @@ code[class*="language-"] {
   }
   &.line-numbers {
     padding-left: 3.8em;
+    padding-top: 0;
     > code {
       display: block;
       padding-top: 1em;
     }
     .code-block__title {
-      margin: -1em;
-      margin-bottom: 0;
+      margin: 0 -1em;
       margin-left: -3.8em;
       left: -3.8em;
       &:dir(rtl) {

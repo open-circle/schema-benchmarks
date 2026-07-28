@@ -28,7 +28,7 @@ export const highlightCode = (
   let lineNumbersWrapper = "";
   if (lineNumbers) {
     const match = code.match(NEW_LINE_EXP);
-    const linesNum = match ? match.length + 1 : 1;
+    const linesNum = match ? match.length : 1;
     const lines = Array.from({ length: linesNum + 1 }, () => "<span></span>").join("");
 
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
@@ -90,7 +90,7 @@ export const highlightAnsi = (
   let lineNumbersWrapper = "";
   if (lineNumbers) {
     const match = input.match(NEW_LINE_EXP);
-    const linesNum = match ? match.length + 1 : 1;
+    const linesNum = match ? match.length : 1;
     const lines = Array.from({ length: linesNum + 1 }, () => "<span></span>").join("");
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
