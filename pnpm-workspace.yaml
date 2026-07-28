@@ -35,6 +35,7 @@ catalog:
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": 24.0.0
+  rolldown: 1.2.0
   vite: "catalog:"
 update:
   ignoreDeps:
