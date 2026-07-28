@@ -30,7 +30,7 @@ export function getPaseriSchema() {
 
   const _enum20 = new Set<unknown>(["jpg", "png"]);
 
-  const _regex21 = new RegExp("^(?:(?:(?:https?|ftp|wss?):\\/\\/(?:(?=[a-z\\d\\._\\-]*?[a-z_\\-])(?:(?=([a-z\\d\\._\\-]+))\\1))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:https?|ftp|wss?|file):))[a-z](?:(?=([a-z\\d\\+\\.\\-]*))\\2):(?!\\/\\/).*))$", "iv");
+  const _regex21 = new RegExp("^(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?):\\/\\/(?:(?:(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)\\.)*(?:(?!(?:\\d+|0[xX]\\p{AHex}*)(?:[\\:\\/\\?\\#]|$))(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?)|[fF][iI][lL][eE]):))[a-zA-Z](?:(?=([a-zA-Z\\d\\+\\.\\-]*))\\1):(?!\\/\\/).*))$", "v");
 
   function _shapeArray15(_arr13: unknown[]): boolean {
     for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
@@ -896,17 +896,121 @@ export function getPaseriSchema() {
     safeParse: typeof safeParseProduct;
     parse: typeof parseProduct;
   } = {
-    "~standard": {
+    "~standard": Object.freeze<StandardSchemaV1.Props<unknown, {
+        "id": number;
+        "created": Date;
+        "title": string;
+        "brand": string;
+        "description": string;
+        "price": number;
+        "discount": number | null;
+        "quantity": number;
+        "tags": string[];
+        "images": {
+            "id": number;
+            "created": Date;
+            "title": string;
+            "type": "jpg" | "png";
+            "size": number;
+            "url": string;
+        }[];
+        "ratings": {
+            "id": number;
+            "stars": number;
+            "title": string;
+            "text": string;
+            "images": {
+                "id": number;
+                "created": Date;
+                "title": string;
+                "type": "jpg" | "png";
+                "size": number;
+                "url": string;
+            }[];
+        }[];
+    }>>({
         version: 1,
         vendor: "paseri",
         validate(value, options?) {
-            const result = safeParseProduct(value);
-            if (result.ok) {
-                return { value: result.value };
+            const result = _validateProduct(value);
+            if (result === undefined) {
+                return { value: value as {
+                        "id": number;
+                        "created": Date;
+                        "title": string;
+                        "brand": string;
+                        "description": string;
+                        "price": number;
+                        "discount": number | null;
+                        "quantity": number;
+                        "tags": string[];
+                        "images": {
+                            "id": number;
+                            "created": Date;
+                            "title": string;
+                            "type": "jpg" | "png";
+                            "size": number;
+                            "url": string;
+                        }[];
+                        "ratings": {
+                            "id": number;
+                            "stars": number;
+                            "title": string;
+                            "text": string;
+                            "images": {
+                                "id": number;
+                                "created": Date;
+                                "title": string;
+                                "type": "jpg" | "png";
+                                "size": number;
+                                "url": string;
+                            }[];
+                        }[];
+                    } };
             }
-            return { issues: result.messages(options?.libraryOptions?.locale as Translations | undefined) };
+            if ((result as {
+                ok?: unknown;
+            }).ok === true) {
+                return { value: (result as {
+                        ok: true;
+                        value: {
+                            "id": number;
+                            "created": Date;
+                            "title": string;
+                            "brand": string;
+                            "description": string;
+                            "price": number;
+                            "discount": number | null;
+                            "quantity": number;
+                            "tags": string[];
+                            "images": {
+                                "id": number;
+                                "created": Date;
+                                "title": string;
+                                "type": "jpg" | "png";
+                                "size": number;
+                                "url": string;
+                            }[];
+                            "ratings": {
+                                "id": number;
+                                "stars": number;
+                                "title": string;
+                                "text": string;
+                                "images": {
+                                    "id": number;
+                                    "created": Date;
+                                    "title": string;
+                                    "type": "jpg" | "png";
+                                    "size": number;
+                                    "url": string;
+                                }[];
+                            }[];
+                        };
+                    }).value };
+            }
+            return { issues: new ParseErrorResult(result as TreeNode).messages(options?.libraryOptions?.locale as Translations | undefined) };
         }
-    },
+    }),
     safeParse: safeParseProduct,
     parse: parseProduct
   };
