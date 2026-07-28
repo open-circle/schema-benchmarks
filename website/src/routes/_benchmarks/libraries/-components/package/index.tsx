@@ -107,7 +107,7 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
             {...cls({ element: "repo-link" })}
           >
             {metadata.repository.type === "git" &&
-            metadata.repository.url.includes("github.com") ? (
+            new URL(metadata.repository.url).hostname === "github.com" ? (
               <GithubIcon />
             ) : (
               <MdSymbol>code</MdSymbol>
