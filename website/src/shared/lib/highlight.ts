@@ -29,7 +29,7 @@ export const highlightCode = (
   if (lineNumbers) {
     const match = code.match(NEW_LINE_EXP);
     const linesNum = match ? match.length + 1 : 1;
-    const lines = Array.from({ length: linesNum }, () => "<span></span>").join("");
+    const lines = "<span></span>".repeat(linesNum);
 
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
@@ -91,7 +91,7 @@ export const highlightAnsi = (
   if (lineNumbers) {
     const match = input.match(NEW_LINE_EXP);
     const linesNum = match ? match.length + 1 : 1;
-    const lines = Array.from({ length: linesNum }, () => "<span></span>").join("");
+    const lines = "<span></span>".repeat(linesNum);
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
   return (
