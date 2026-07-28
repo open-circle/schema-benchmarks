@@ -7,6 +7,8 @@ test.beforeEach(async ({ page, fontsLoaded, parsingPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Parsing/);
+
+  await parsingPage.desktop.tableHandle.init();
 });
 
 test("can toggle between valid and invalid results", async ({ page, parsingPage }) => {

@@ -4,6 +4,9 @@ import { expect } from "@playwright/test";
 import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
 import { breakpointQueries } from "#src/shared/hooks/use-breakpoints";
 
+export const trimSortLabels = (text: string) =>
+  text.replace(/[\n\r\s]+(sort|arrow_upward|arrow_downward)$/, "");
+
 /**
  * Returns the cell in a given row of a table by the column name.
  * @param table The table locator

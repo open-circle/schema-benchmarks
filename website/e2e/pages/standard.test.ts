@@ -12,6 +12,8 @@ test.beforeEach(async ({ page, fontsLoaded, standardSchemaPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Standard Schema/);
+
+  await standardSchemaPage.desktop.tableHandle.init();
 });
 
 test("can toggle between valid and invalid results", async ({ page, standardSchemaPage }) => {

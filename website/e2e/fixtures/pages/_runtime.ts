@@ -1,8 +1,10 @@
+import type { TableResult } from "@rickcedwhat/playwright-smart-table";
+import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 
 import { BasePage } from "#e2e/fixtures/base";
-import { getCellByColumnName } from "#e2e/utils";
+import { trimSortLabels } from "#e2e/utils";
 import {
   dataTypeProps,
   errorTypeProps,
@@ -27,15 +29,15 @@ export abstract class RuntimePage extends BasePage {
     });
   }
 
+  #tableHandle: TableResult<unknown> | undefined;
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });
-    const headerRow = table.getByRole("row").first();
+    this.#tableHandle ??= useTable(table, {
+      headerTransformer: ({ text }) => trimSortLabels(text),
+    });
     return {
       table,
-      headerRow,
-      getCellByColumnName: getCellByColumnName.bind(null, table),
-      getHeaderCell: (columnName: string | RegExp) =>
-        headerRow.getByRole("columnheader", { name: columnName }),
+      tableHandle: this.#tableHandle,
     };
   }
 

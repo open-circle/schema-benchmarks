@@ -26,12 +26,8 @@ export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
     await expect(optimizeTypeLink).toBeCurrent("page");
 
     if (isDesktop) {
-      const rows = await runtimePage.desktop.table.locator("tbody").getByRole("row").all();
-      for (const row of rows) {
-        const optimizeTypeCell = await runtimePage.desktop.getCellByColumnName(
-          row,
-          "Optimizations",
-        );
+      for await (const { row } of runtimePage.desktop.tableHandle) {
+        const optimizeTypeCell = row.getCell("optimizations");
         await expect(optimizeTypeCell).toHaveText(runtimePage.getOptimizeTypeLabel(optimizeType));
       }
     } else {
@@ -79,9 +75,8 @@ export async function testErrorTypeFilter(
     await expect(errorTypeLink).toBeCurrent("page");
 
     if (isDesktop) {
-      const rows = await runtimePage.desktop.table.locator("tbody").getByRole("row").all();
-      for (const row of rows) {
-        const errorTypeCell = await runtimePage.desktop.getCellByColumnName(row, "Error type");
+      for await (const { row } of runtimePage.desktop.tableHandle) {
+        const errorTypeCell = row.getCell("error type");
         await expect(errorTypeCell).toHaveText(runtimePage.getErrorTypeLabel(errorType));
       }
     } else {

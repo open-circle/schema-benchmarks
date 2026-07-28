@@ -10,6 +10,8 @@ test.beforeEach(async ({ page, fontsLoaded, stringPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/String/);
+
+  await stringPage.desktop.tableHandle.init();
 });
 
 test("can toggle between string formats", async ({ page, stringPage }) => {

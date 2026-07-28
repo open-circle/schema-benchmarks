@@ -7,6 +7,8 @@ test.beforeEach(async ({ page, fontsLoaded, initializationPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Initialization/);
+
+  await initializationPage.desktop.tableHandle.init();
 });
 
 test("can be filtered by optimization type", async ({ page, initializationPage }) => {

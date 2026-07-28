@@ -3,13 +3,22 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 import { test, expect } from "#e2e/fixtures";
 import { ioTs } from "#e2e/utils/libraries.ts";
 
-test.beforeEach("Go to download page", async ({ page, fontsLoaded, downloadPage }) => {
-  await downloadPage.goto();
+test.beforeEach(
+  "Go to download page",
+  async ({ page, fontsLoaded, matchBreakpoints, downloadPage }) => {
+    await downloadPage.goto();
 
-  await fontsLoaded();
+    await fontsLoaded();
 
-  await expect(page).toHaveTitle(/Download/);
-});
+    await expect(page).toHaveTitle(/Download/);
+
+    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
+    if (isDesktop) {
+      await expect(downloadPage.desktop.table).toBeVisible();
+      await downloadPage.desktop.tableHandle.init();
+    }
+  },
+);
 
 test(
   "it can switch between minified and unminified results",
@@ -68,25 +77,23 @@ test.describe("desktop view", () => {
   test("it displays results table", async ({ downloadPage }) => {
     await expect(downloadPage.desktop.table).toBeVisible();
 
-    const libraryRow = downloadPage.desktop.table.getByRole("row").filter({ hasText: ioTs.name });
-    const libraryVersionCell = await downloadPage.desktop.getCellByColumnName(
-      libraryRow,
-      "Version",
-    );
+    const libraryRow = downloadPage.desktop.tableHandle.getRow({ library: ioTs.name });
 
-    await expect(libraryVersionCell).toHaveText(ioTs.version);
+    await expect(libraryRow.getCell("version")).toHaveText(ioTs.version);
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
-    const libraryHeaderCell = downloadPage.desktop.getHeaderCell("Library");
+    await downloadPage.desktop.tableHandle.init();
+
+    const libraryHeaderCell = await downloadPage.desktop.tableHandle.getHeaderCell("library");
     const librarySortLink = libraryHeaderCell.getByRole("link");
 
     await librarySortLink.click();
 
     await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-    const firstRow = downloadPage.desktop.table.getByRole("row").nth(1);
-    const firstRowLibraryCell = await downloadPage.desktop.getCellByColumnName(firstRow, "Library");
+    const firstRow = downloadPage.desktop.tableHandle.getRowByIndex(0);
+    const firstRowLibraryCell = firstRow.getCell("library");
 
     await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
 

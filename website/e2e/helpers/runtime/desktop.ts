@@ -5,25 +5,24 @@ import { ioTs } from "#e2e/utils/libraries";
 export async function testTableDisplay(runtimePage: RuntimePage, library = ioTs) {
   await expect(runtimePage.desktop.table).toBeVisible();
 
-  const libraryRow = runtimePage.desktop.table.getByRole("row").filter({ hasText: library.name });
-  const libraryVersionCell = await runtimePage.desktop.getCellByColumnName(libraryRow, "Version");
+  const libraryRow = runtimePage.desktop.tableHandle.getRow({ library: library.name });
 
-  await expect(libraryVersionCell).toHaveText(library.version);
+  await expect(libraryRow.getCell("version")).toHaveText(library.version);
 }
 
 export async function testTableSorting(
   runtimePage: RuntimePage,
   patterns: { first: RegExp; last: RegExp },
 ) {
-  const libraryHeaderCell = runtimePage.desktop.getHeaderCell("Library");
+  const libraryHeaderCell = await runtimePage.desktop.tableHandle.getHeaderCell("library");
   const librarySortLink = libraryHeaderCell.getByRole("link");
 
   await librarySortLink.click();
 
   await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-  const firstRow = runtimePage.desktop.table.getByRole("row").nth(1);
-  const firstRowLibraryCell = await runtimePage.desktop.getCellByColumnName(firstRow, "Library");
+  const firstRow = runtimePage.desktop.tableHandle.getRowByIndex(0);
+  const firstRowLibraryCell = firstRow.getCell("library");
 
   await expect(firstRowLibraryCell).toHaveText(patterns.first);
 
