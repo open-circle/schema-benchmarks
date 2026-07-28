@@ -1,7 +1,7 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
-import { library } from "#e2e/utils/constants";
+import { ioTs } from "#e2e/utils/libraries.ts";
 
 test.beforeEach("Go to download page", async ({ page, fontsLoaded, downloadPage }) => {
   await downloadPage.goto();
@@ -68,15 +68,13 @@ test.describe("desktop view", () => {
   test("it displays results table", async ({ downloadPage }) => {
     await expect(downloadPage.desktop.table).toBeVisible();
 
-    const libraryRow = downloadPage.desktop.table
-      .getByRole("row")
-      .filter({ hasText: library.name });
+    const libraryRow = downloadPage.desktop.table.getByRole("row").filter({ hasText: ioTs.name });
     const libraryVersionCell = await downloadPage.desktop.getCellByColumnName(
       libraryRow,
       "Version",
     );
 
-    await expect(libraryVersionCell).toHaveText(library.version);
+    await expect(libraryVersionCell).toHaveText(ioTs.version);
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
@@ -109,10 +107,10 @@ test.describe("mobile view", () => {
   test("it displays results cards", async ({ downloadPage }) => {
     await expect(downloadPage.mobile.cardList).toBeVisible();
 
-    const libraryCard = downloadPage.mobile.getCardByName(library.name);
+    const libraryCard = downloadPage.mobile.getCardByName(ioTs.name);
     await libraryCard.scrollIntoViewIfNeeded();
 
-    const libraryVersionEl = libraryCard.getByText(library.version);
+    const libraryVersionEl = libraryCard.getByText(ioTs.version);
     await expect(libraryVersionEl).toBeVisible();
   });
 });

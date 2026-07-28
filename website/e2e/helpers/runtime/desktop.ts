@@ -1,6 +1,6 @@
 import { expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
-import { library as ioTs } from "#e2e/utils/constants";
+import { ioTs } from "#e2e/utils/libraries";
 
 export async function testTableDisplay(runtimePage: RuntimePage, library = ioTs) {
   await expect(runtimePage.desktop.table).toBeVisible();
