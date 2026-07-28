@@ -1,8 +1,8 @@
 import { expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
-import { library } from "#e2e/utils/constants";
+import { library as ioTs } from "#e2e/utils/constants";
 
-export async function testCardDisplay(runtimePage: RuntimePage) {
+export async function testCardDisplay(runtimePage: RuntimePage, library = ioTs) {
   const card = runtimePage.mobile.getCardByLibraryName(library.name).first();
   await card.scrollIntoViewIfNeeded();
 

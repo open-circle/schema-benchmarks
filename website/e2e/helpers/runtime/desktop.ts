@@ -1,8 +1,8 @@
 import { expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
-import { library } from "#e2e/utils/constants";
+import { library as ioTs } from "#e2e/utils/constants";
 
-export async function testTableDisplay(runtimePage: RuntimePage) {
+export async function testTableDisplay(runtimePage: RuntimePage, library = ioTs) {
   await expect(runtimePage.desktop.table).toBeVisible();
 
   const libraryRow = runtimePage.desktop.table.getByRole("row").filter({ hasText: library.name });
