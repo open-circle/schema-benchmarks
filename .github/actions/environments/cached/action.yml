@@ -1,6 +1,12 @@
 name: Setup environment and TTSC native cache
 description: Setup environment with Node.js and pnpm, and restore TTSC native cache
 
+inputs:
+  cache-prefix:
+    description: Prefix for the TTSC cache key
+    required: false
+    default: ${{ github.workflow }}
+
 runs:
   using: composite
   steps:
@@ -12,6 +18,6 @@ runs:
         path: |
           ${{ runner.temp }}/ttsc-cache
           ${{ runner.temp }}/ttsc-go-build
-        key: ${{ runner.os }}-ttsc-native-${{ github.workflow }}-${{ hashFiles('pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-ttsc-native-${{ inputs.cache-prefix }}-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-ttsc-native-${{ github.workflow }}-
+          ${{ runner.os }}-ttsc-native-${{ inputs.cache-prefix }}-
