@@ -38,7 +38,7 @@ export function StackTable({ results, frameScale, lineCountScale, ...sortState }
               {...SortableHeaderLink.getProps("downloads", sortState, { to: "/stack" })}
               className="numeric"
             >
-              <span className="bench-table__downloads-label">
+              <span className="stack-table__downloads-label">
                 <MdSymbol size={18}>download</MdSymbol>/wk
               </span>
             </SortableHeaderLink>

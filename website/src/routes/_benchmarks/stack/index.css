@@ -19,3 +19,8 @@
   border: 1px solid var(--divider);
   border-radius: var(--shape-medium);
 }
+
+.stack-table__downloads-label {
+  display: inline-flex;
+  align-items: center;
+}

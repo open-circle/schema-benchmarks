@@ -55,7 +55,7 @@ export function DownloadTable({
               )}
               className="numeric"
             >
-              <span className="bench-table__downloads-label">
+              <span className="download-table__downloads-label">
                 <MdSymbol size={18}>download</MdSymbol>/wk
               </span>
             </SortableHeaderLink>
