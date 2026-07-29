@@ -19,12 +19,12 @@ jobs:
       - name: Build schemas
         shell: bash
         env:
-          TTSC_CACHE_DIR: .ttsc-cache
+          TTSC_CACHE_DIR: ${{ github.workspace }}/.ttsc-cache
         run: pnpm schemas:build
       - name: Save ttsc native cache
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: .ttsc-cache
+          path: ${{ github.workspace }}/.ttsc-cache
           key: ${{ runner.os }}-ttsc-native-${{ github.workflow }}-${{ hashFiles('pnpm-lock.yaml', '**/go.mod', '**/go.sum') }}
       - name: Build website
         run: pnpm website:build
