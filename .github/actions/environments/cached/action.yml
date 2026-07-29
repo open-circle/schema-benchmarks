@@ -24,4 +24,4 @@ runs:
       shell: bash
       env:
         TTSC_CACHE_DIR: .ttsc-cache
-      run: npx ttsc prepare
+      run: pnpm -C schemas/ exec ttsc prepare
