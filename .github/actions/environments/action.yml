@@ -15,19 +15,6 @@ runs:
         node-version: 24
         cache: pnpm
 
-    - name: Restore ttsc native cache
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-      with:
-        path: |
-          ${{ runner.temp }}/ttsc-cache
-          ${{ runner.temp }}/ttsc-go-build
-        key: ${{ runner.os }}-ttsc-native-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-ttsc-native-
-
     - name: Install dependencies
       shell: bash
-      env:
-        TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
-        TTSC_GO_CACHE_DIR: ${{ runner.temp }}/ttsc-go-build
       run: pnpm install

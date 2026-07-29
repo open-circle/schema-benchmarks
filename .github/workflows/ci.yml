@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/cached
       - name: Build schemas
         shell: bash
         env:
@@ -28,7 +28,7 @@ jobs:
           path: |
             ${{ runner.temp }}/ttsc-cache
             ${{ runner.temp }}/ttsc-go-build
-          key: ${{ runner.os }}-ttsc-native-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-ttsc-native-${{ github.workflow }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Build website
         run: pnpm website:build
       - name: Upload build artifacts

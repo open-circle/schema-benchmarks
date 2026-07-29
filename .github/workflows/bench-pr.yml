@@ -19,7 +19,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/cached
       - name: Build schemas
         shell: bash
         env:
@@ -32,7 +32,7 @@ jobs:
           path: |
             ${{ runner.temp }}/ttsc-cache
             ${{ runner.temp }}/ttsc-go-build
-          key: ${{ runner.os }}-ttsc-native-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-ttsc-native-${{ github.workflow }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Upload schemas
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -77,7 +77,7 @@ jobs:
           name: schemas-build
           path: schemas/dist/
       - name: Setup environment
-        uses: ./.github/actions/environments
+        uses: ./.github/actions/environments/cached
       - name: Run download benchmark
         env:
           TTSC_CACHE_DIR: ${{ runner.temp }}/ttsc-cache
@@ -89,7 +89,7 @@ jobs:
           path: |
             ${{ runner.temp }}/ttsc-cache
             ${{ runner.temp }}/ttsc-go-build
-          key: ${{ runner.os }}-ttsc-native-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-ttsc-native-${{ github.workflow }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Upload download results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
