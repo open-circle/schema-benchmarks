@@ -12,8 +12,6 @@ test.beforeEach(async ({ page, fontsLoaded, standardSchemaPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Standard Schema/);
-
-  await standardSchemaPage.desktop.tableHandle.init();
 });
 
 test("can toggle between valid and invalid results", async ({ page, standardSchemaPage }) => {
@@ -32,6 +30,8 @@ test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, standardSchemaPage }) => {
     const isDesktop = await matchBreakpoints(standardSchemaPage.breakpoints.desktop);
     test.skip(!isDesktop, "This test is only for desktop viewports");
+
+    await standardSchemaPage.desktop.tableHandle.init();
   });
 
   test("it displays results table", async ({ standardSchemaPage }) => {

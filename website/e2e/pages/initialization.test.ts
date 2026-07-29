@@ -7,8 +7,6 @@ test.beforeEach(async ({ page, fontsLoaded, initializationPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Initialization/);
-
-  await initializationPage.desktop.tableHandle.init();
 });
 
 test("can be filtered by optimization type", async ({ page, initializationPage }) => {
@@ -19,6 +17,8 @@ test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, initializationPage }) => {
     const isDesktop = await matchBreakpoints(initializationPage.breakpoints.desktop);
     test.skip(!isDesktop, "This test is only for desktop viewports");
+
+    await initializationPage.desktop.tableHandle.init();
   });
 
   test("it displays results table", async ({ initializationPage }) => {

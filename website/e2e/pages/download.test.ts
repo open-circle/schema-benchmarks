@@ -3,22 +3,13 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 import { test, expect } from "#e2e/fixtures";
 import { ioTs } from "#e2e/utils/libraries.ts";
 
-test.beforeEach(
-  "Go to download page",
-  async ({ page, fontsLoaded, matchBreakpoints, downloadPage }) => {
-    await downloadPage.goto();
+test.beforeEach("Go to download page", async ({ page, fontsLoaded, downloadPage }) => {
+  await downloadPage.goto();
 
-    await fontsLoaded();
+  await fontsLoaded();
 
-    await expect(page).toHaveTitle(/Download/);
-
-    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
-    if (isDesktop) {
-      await expect(downloadPage.desktop.table).toBeVisible();
-      await downloadPage.desktop.tableHandle.init();
-    }
-  },
-);
+  await expect(page).toHaveTitle(/Download/);
+});
 
 test(
   "it can switch between minified and unminified results",
@@ -80,6 +71,8 @@ test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, downloadPage }) => {
     const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
     test.skip(!isDesktop, "This test is only for desktop viewports");
+
+    await downloadPage.desktop.tableHandle.init();
   });
 
   test("it displays results table", async ({ downloadPage }) => {
@@ -91,8 +84,6 @@ test.describe("desktop view", () => {
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
-    await downloadPage.desktop.tableHandle.init();
-
     const libraryHeaderCell = await downloadPage.desktop.tableHandle.getHeaderCell("library");
     const librarySortLink = libraryHeaderCell.getByRole("link");
 

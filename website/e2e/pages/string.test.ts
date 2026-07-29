@@ -10,8 +10,6 @@ test.beforeEach(async ({ page, fontsLoaded, stringPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/String/);
-
-  await stringPage.desktop.tableHandle.init();
 });
 
 test("can toggle between string formats", async ({ page, stringPage }) => {
@@ -38,6 +36,8 @@ test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, stringPage }) => {
     const isDesktop = await matchBreakpoints(stringPage.breakpoints.desktop);
     test.skip(!isDesktop, "This test is only for desktop viewports");
+
+    await stringPage.desktop.tableHandle.init();
   });
 
   test("it displays results table", async ({ stringPage }) => {

@@ -7,8 +7,6 @@ test.beforeEach(async ({ page, fontsLoaded, validationPage }) => {
   await fontsLoaded();
 
   await expect(page).toHaveTitle(/Validation/);
-
-  await validationPage.desktop.tableHandle.init();
 });
 
 test("can toggle between valid and invalid results", async ({ page, validationPage }) => {
@@ -23,6 +21,8 @@ test.describe("desktop view", () => {
   test.beforeEach("Check desktop view", async ({ matchBreakpoints, validationPage }) => {
     const isDesktop = await matchBreakpoints(validationPage.breakpoints.desktop);
     test.skip(!isDesktop, "This test is only for desktop viewports");
+
+    await validationPage.desktop.tableHandle.init();
   });
 
   test("it displays results table", async ({ validationPage }) => {
