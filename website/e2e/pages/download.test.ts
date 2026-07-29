@@ -60,12 +60,20 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
 });
 
 test("it can set a custom download speed", async ({ page, downloadPage }) => {
-  await downloadPage.downloadSpeedInput.fill("240");
+  const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
 
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "240");
+  await wifiButton.click();
+
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
   await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-  // same value, but preset wasn't used, so it shouldn't be current
-  await expect(downloadPage.getSpeedPresetButtonByLabel("WiFi")).not.toBeCurrent("page");
+  await expect(wifiButton).toBeCurrent("page");
+
+  await downloadPage.downloadSpeedInput.fill("241");
+
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241");
+  // custom value should not keep the preset as current
+  await expect(wifiButton).not.toBeCurrent("page");
 });
 
 test.describe("desktop view", () => {
