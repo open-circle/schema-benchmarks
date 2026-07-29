@@ -96,7 +96,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps --only-shell chromium
       - name: Test
         run: pnpm test
   e2e:
@@ -111,7 +111,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps --no-shell chromium
       - name: E2E Smoke tests
         run: pnpm e2e --workers 50% --grep @smoke
       - name: E2E Full tests
