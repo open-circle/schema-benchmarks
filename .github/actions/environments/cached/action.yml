@@ -15,9 +15,13 @@ runs:
     - name: Restore ttsc native cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
-        path: |
-          ${{ runner.temp }}/ttsc-cache
-          ${{ runner.temp }}/ttsc-go-build
-        key: ${{ runner.os }}-ttsc-native-${{ inputs.cache-prefix }}-${{ hashFiles('pnpm-lock.yaml') }}
+        path: .ttsc-cache
+        key: ${{ runner.os }}-ttsc-native-${{ inputs.cache-prefix }}-${{ hashFiles('pnpm-lock.yaml', '**/go.mod', '**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-ttsc-native-${{ inputs.cache-prefix }}-
+
+    - name: Prepare ttsc cache
+      shell: bash
+      env:
+        TTSC_CACHE_DIR: .ttsc-cache
+      run: npx ttsc prepare
