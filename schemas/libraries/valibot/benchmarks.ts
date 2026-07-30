@@ -81,7 +81,7 @@ export default defineBenchmarks({
     source: "runtime",
     // the official companion package implements the standard interface
     standardJsonSchema: {
-      support: "separate-package",
+      support: "package",
       schema: toStandardJsonSchema(jsonSchemaSubject),
     },
   },
