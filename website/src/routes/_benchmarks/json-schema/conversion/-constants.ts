@@ -42,7 +42,7 @@ export const jsonSchemaSourceProps = {
   labels: {
     runtime: { label: "Runtime", icon: "sync" },
     precompiled: { label: "Precompiled", icon: "build" },
-    "is-json-schema": { label: "Already JSON Schema", icon: "data_object" },
+    "is-json-schema": { label: "JSON Schema", icon: "data_object" },
   },
 } satisfies Pick<PageFilterChipsProps<JsonSchemaSource>, "title" | "labels" | "options">;
 

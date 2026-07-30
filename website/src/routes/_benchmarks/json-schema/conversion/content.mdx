@@ -20,7 +20,7 @@ The **source** column says where the JSON schema comes from - not every library 
 
 - **Runtime** - the library converts the schema when asked, which is what's timed
 - **Precompiled** - generated at build time
-- **Already JSON Schema** - the library's schemas are already JSON Schema
+- **JSON Schema** - the library's schemas are already JSON Schema
 
 Non-runtime sources are constants, so they're not timed - benchmarking a property read would measure the harness, not the library.
 
