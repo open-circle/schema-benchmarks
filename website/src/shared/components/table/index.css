@@ -6,6 +6,9 @@ thead {
   border-bottom: 1px solid var(--divider);
   tr {
     min-height: 56px;
+    &:not(:last-child) {
+      border-bottom: none;
+    }
   }
 }
 

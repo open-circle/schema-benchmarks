@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query.ts";
 import { generateMetadata } from "#src/shared/data/meta";
 
 import Content from "./content.mdx";
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_home/")({
     await Promise.all([
       queryClient.ensureQueryData(getBenchResults(abortController.signal)),
       queryClient.ensureQueryData(getDownloadResults(abortController.signal)),
+      queryClient.ensureQueryData(getJsonSchemaBenchResults(abortController.signal)),
     ]);
   },
   head: () =>
