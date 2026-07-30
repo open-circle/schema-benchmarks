@@ -11,7 +11,7 @@ import {
   standardJsonSchemaProps,
   jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/conversion/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query.ts";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { MdSymbol } from "#src/shared/components/symbol";
 
