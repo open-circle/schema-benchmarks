@@ -4,7 +4,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { BenchResults } from "#src/routes/_benchmarks/_runtime/-components/results";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
@@ -20,7 +19,10 @@ import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { SupportMatrix } from "./-components/matrix";
+import { JsonSchemaResults } from "./-components/results";
 import Content from "./content.mdx";
+
+import jsonSchemaStyles from "./styles.css?url";
 
 const searchSchema = v.object({
   target: optionalJsonSchemaTargetSchema,
@@ -53,6 +55,12 @@ export const Route = createFileRoute("/_benchmarks/json-schema/")({
       openGraph: {
         url: "/json-schema/",
       },
+      links: [
+        {
+          rel: "stylesheet",
+          href: jsonSchemaStyles,
+        },
+      ],
     }),
   staticData: { crumb: "JSON Schema" },
 });
@@ -93,7 +101,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <BenchResults results={sortedData} to="/json-schema" {...{ sortBy, sortDir }} />
+      <JsonSchemaResults results={sortedData} {...{ sortBy, sortDir }} />
     </>
   );
 }

@@ -1,18 +1,18 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
-import type { BenchResult } from "@schema-benchmarks/bench";
-import {
-  type DistributiveArray,
-  formatDuration,
-  getTransitionName,
-  numFormatter,
-} from "@schema-benchmarks/utils";
+import type { JsonSchemaResult } from "@schema-benchmarks/bench";
+import { formatDuration, getTransitionName, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import type { BenchTo } from "#src/routes/_benchmarks/_runtime/-components/results";
+import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
-import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
+import {
+  jsonSchemaDirectionProps,
+  jsonSchemaSourceProps,
+  standardJsonSchemaProps,
+  jsonSchemaTargetProps,
+} from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
@@ -22,12 +22,12 @@ import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { Snippet } from "./snippet";
+import { GeneratedJsonSchema } from "./json-schema";
 
-export interface BenchTableProps {
-  results: DistributiveArray<BenchResult>;
+export interface JsonSchemaBenchTableProps {
+  results: Array<JsonSchemaResult>;
   meanScaler: ReturnType<typeof Bar.getScale>;
-  to: BenchTo;
+  to: "/json-schema";
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
@@ -41,10 +41,10 @@ const getRatio = (a: number, b: number) => {
 };
 
 /** The first row that was actually timed - comparing everything against a constant says nothing. */
-const getDefaultCompareId = (results: Array<BenchResult>) =>
+const getDefaultCompareId = (results: Array<JsonSchemaResult>) =>
   (results.find((result) => result.mean) ?? results[0])?.id;
 
-function useComparison(results: Array<BenchResult>) {
+function useComparison(results: Array<JsonSchemaResult>) {
   const [compareId, setCompareId] = useState(() => getDefaultCompareId(results));
   useEffect(() => {
     setCompareId(getDefaultCompareId(results));
@@ -68,14 +68,18 @@ function useComparison(results: Array<BenchResult>) {
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
 
-export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTableProps) {
+export function JsonSchemaTable({
+  results,
+  meanScaler,
+  to,
+  ...sortState
+}: JsonSchemaBenchTableProps) {
   const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
   const showComparisonColumns = results.length > 1;
-  const benchType = results[0]!.type;
   return (
     <table
-      className="bench-table"
+      className="json-schema-table"
       aria-label="Results"
       style={{ viewTransitionName: "result-table" }}
     >
@@ -85,19 +89,22 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
             Library
           </SortableHeaderLink>
           <th className="action"></th>
-          {benchType !== "standard" && <th className="action"></th>}
+          <th className="action"></th>
+          <th className="action"></th>
           <th>Version</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
             className="numeric"
             aria-label="Downloads per week"
           >
-            <span className="bench-table__downloads-label">
+            <span className="json-schema-table__downloads-label">
               <MdSymbol size={18}>download</MdSymbol>/wk
             </span>
           </SortableHeaderLink>
-          <th>Optimizations</th>
-          {(benchType === "parsing" || benchType === "standard") && <th>Error type</th>}
+          <th>Source</th>
+          <th>Standard JSON Schema</th>
+          <th>Target</th>
+          <th>Type</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("mean", sortState, { to })}
             className="numeric"
@@ -121,13 +128,10 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
             <tr
               key={result.id}
               style={{
-                viewTransitionName: getTransitionName("bench-table-row", {
+                viewTransitionName: getTransitionName("json-schema-table-row", {
                   libraryName: result.libraryName,
                   note: result.note,
-                  errorType:
-                    result.type === "parsing" || result.type === "standard"
-                      ? result.errorType
-                      : undefined,
+                  direction: result.direction,
                 }),
               }}
             >
@@ -138,25 +142,26 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
               <td className="action">
                 <Snippet code={result.snippet} />
               </td>
-              {benchType !== "standard" && (
-                <td className="action">
-                  {result.throws && (
-                    <ToggleButton
-                      tooltip={{
-                        subhead: "Throws on invalid data",
-                        supporting: (
-                          <div style={{ maxWidth: "16rem" }}>
-                            This library throws an error when parsing invalid data (and has no
-                            non-throwing equivalent), so the benchmark includes a try/catch.
-                          </div>
-                        ),
-                      }}
-                    >
-                      <MdSymbol>error</MdSymbol>
-                    </ToggleButton>
-                  )}
-                </td>
-              )}
+              <td className="action">
+                <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
+              </td>
+              <td className="action">
+                {result.throws && (
+                  <ToggleButton
+                    tooltip={{
+                      subhead: "Throws on invalid data",
+                      supporting: (
+                        <div style={{ maxWidth: "16rem" }}>
+                          This library throws an error when parsing invalid data (and has no
+                          non-throwing equivalent), so the benchmark includes a try/catch.
+                        </div>
+                      ),
+                    }}
+                  >
+                    <MdSymbol>error</MdSymbol>
+                  </ToggleButton>
+                )}
+              </td>
               <td>
                 <code className="language-text">{result.version}</code>
               </td>
@@ -165,10 +170,10 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
                   <DownloadCount libraryName={result.libraryName} />
                 </ErrorBoundary>
               </td>
-              <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
-              {(result.type === "parsing" || result.type === "standard") && (
-                <td>{errorTypeProps.labels[result.errorType].label}</td>
-              )}
+              <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
+              <td>{standardJsonSchemaProps.labels[result.standardJsonSchema].label}</td>
+              <td>{jsonSchemaTargetProps.labels[result.target].label}</td>
+              <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
               <td className="numeric">{formatDuration(result.mean)}</td>
               {showComparisonColumns && (
                 <td className="bar-after">

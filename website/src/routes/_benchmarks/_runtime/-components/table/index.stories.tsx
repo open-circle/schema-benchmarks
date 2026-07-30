@@ -58,17 +58,6 @@ export const Standard = meta.story({
   },
 });
 
-export const JsonSchema = meta.story({
-  args: {
-    results: benchResults.jsonSchema,
-    meanScaler: Bar.getScale(
-      benchResults.jsonSchema.map((r) => r.mean),
-      { lowerBetter: true },
-    ),
-    to: "/json-schema",
-  },
-});
-
 export const String = meta.story({
   args: {
     results: benchResults.string["date-time"].valid,
