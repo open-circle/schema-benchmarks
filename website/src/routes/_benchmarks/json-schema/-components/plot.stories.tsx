@@ -1,4 +1,4 @@
-import benchResults from "@schema-benchmarks/bench/bench.json";
+import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 
 import preview from "#storybook/preview";
 
@@ -11,7 +11,7 @@ const meta = preview.meta({
 
 export const JsonSchema = meta.story({
   args: {
-    data: benchResults.jsonSchema.filter(
+    data: jsonSchemaResults.bench.filter(
       (result) => result.target === "draft-2020-12" && result.direction === "input",
     ),
   },

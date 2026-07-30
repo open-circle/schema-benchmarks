@@ -1,4 +1,4 @@
-import benchResults from "@schema-benchmarks/bench/bench.json";
+import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 
 import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
@@ -18,9 +18,9 @@ const meta = preview.meta({
 
 export const JsonSchema = meta.story({
   args: {
-    results: benchResults.jsonSchema,
+    results: jsonSchemaResults.bench,
     meanScaler: Bar.getScale(
-      benchResults.jsonSchema.map((r) => r.mean),
+      jsonSchemaResults.bench.map((r) => r.mean),
       { lowerBetter: true },
     ),
   },

@@ -1,20 +1,12 @@
 import { parseArgs } from "node:util";
 
-import {
-  errorData,
-  invalidStrings,
-  jsonSchemaDirectionSchema,
-  jsonSchemaTargetSchema,
-  successData,
-  validStrings,
-} from "@schema-benchmarks/schemas";
+import { errorData, invalidStrings, successData, validStrings } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
 import { CaseRegistry } from "../../bench/registry.ts";
-import type { JsonSchemaSupportResult } from "../../results/types.ts";
 import { getEmptyResults } from "../../results/types.ts";
 
 const {
@@ -40,16 +32,7 @@ const results = getEmptyResults();
 
 const caseRegistry = new CaseRegistry();
 
-const {
-  library,
-  initialization,
-  validation,
-  parsing,
-  standard,
-  jsonSchema: jsonSchemaConfig,
-  string,
-  codec,
-} = libraryConfig;
+const { library, initialization, validation, parsing, standard, string, codec } = libraryConfig;
 const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;
 
 console.log(`\nBenchmarking: ${libraryName}`);
@@ -233,65 +216,6 @@ if (parsing) {
     }
   }
 }
-if (jsonSchemaConfig) {
-  for (const benchConfig of ensureArray(jsonSchemaConfig)) {
-    const {
-      generate,
-      snippet,
-      source,
-      standardJsonSchema: standardJsonSchemaConfig,
-      note,
-    } = benchConfig;
-    const unsupported: JsonSchemaSupportResult["unsupported"] = [];
-    for (const target of jsonSchemaTargetSchema.options) {
-      for (const direction of jsonSchemaDirectionSchema.options) {
-        const options = { target, direction };
-        let jsonSchema;
-        try {
-          // libraries throw for anything they can't convert, which is recorded instead
-          jsonSchema = generate(options);
-        } catch (error) {
-          const reason = error instanceof Error ? error.message : String(error);
-          console.log(`Skipping ${direction} JSON schema for ${target}:`, reason);
-          unsupported.push({ target, direction, reason });
-          continue;
-        }
-        const entry = {
-          type: "jsonSchema",
-          target,
-          direction,
-          source,
-          standardJsonSchema: standardJsonSchemaConfig?.support ?? "none",
-          jsonSchema: JSON.stringify(jsonSchema, null, 2),
-          libraryName,
-          version,
-          snippet: snippet(options),
-          note,
-        } as const;
-        if (source === "runtime") {
-          bench.add(caseRegistry.add(entry), () => generate(options));
-          continue;
-        }
-        // the schema is a constant, so there's nothing to time - benchmarking it would measure the
-        // harness rather than the library
-        results.jsonSchema.push({
-          ...entry,
-          id: crypto.randomUUID(),
-          mean: 0,
-        });
-      }
-    }
-    results.jsonSchemaSupport.push({
-      id: crypto.randomUUID(),
-      libraryName,
-      version,
-      note,
-      source,
-      standardJsonSchema: standardJsonSchemaConfig?.support ?? "none",
-      unsupported,
-    });
-  }
-}
 
 // Run benchmarks for this library and process results immediately
 const tasks = await bench.run();
@@ -355,23 +279,6 @@ for (const task of successTasks) {
         mean: task.result.latency.mean,
         optimizeType: entry.optimizeType,
         errorType: entry.errorType,
-      });
-      break;
-    }
-    case "jsonSchema": {
-      results.jsonSchema.push({
-        type: "jsonSchema",
-        id: task.name,
-        libraryName,
-        version,
-        snippet,
-        note,
-        mean: task.result.latency.mean,
-        target: entry.target,
-        direction: entry.direction,
-        source: entry.source,
-        standardJsonSchema: entry.standardJsonSchema,
-        jsonSchema: entry.jsonSchema,
       });
       break;
     }

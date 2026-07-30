@@ -92,6 +92,16 @@ export const jsonSchemaSupportResultSchema = v.object({
 });
 export type JsonSchemaSupportResult = v.InferOutput<typeof jsonSchemaSupportResultSchema>;
 
+export const jsonSchemaBenchResultsSchema = v.object({
+  bench: v.array(jsonSchemaResultSchema),
+  support: v.array(jsonSchemaSupportResultSchema),
+});
+export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
+export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
+  bench: [],
+  support: [],
+});
+
 const stringResultSchema = v.object({
   ...runtimeBenchResultSchema.entries,
   type: v.literal("string"),
@@ -123,8 +133,6 @@ export const benchResultsSchema = v.object({
   parsing: v.object(v.entriesFromList(dataTypeSchema.options, v.array(parsingResultSchema))),
   validation: v.object(v.entriesFromList(dataTypeSchema.options, v.array(validationResultSchema))),
   standard: v.object(v.entriesFromList(dataTypeSchema.options, v.array(standardResultSchema))),
-  jsonSchema: v.array(jsonSchemaResultSchema),
-  jsonSchemaSupport: v.array(jsonSchemaSupportResultSchema),
   string: v.object(
     v.entriesFromList(
       stringFormatSchema.options,
@@ -139,8 +147,6 @@ export const getEmptyResults = (): BenchResults => ({
   parsing: { valid: [], invalid: [] },
   validation: { valid: [], invalid: [] },
   standard: { valid: [], invalid: [] },
-  jsonSchema: [],
-  jsonSchemaSupport: [],
   string: unsafeFromEntries(
     stringFormatSchema.options.map((format) => [format, { valid: [], invalid: [] }]),
   ),

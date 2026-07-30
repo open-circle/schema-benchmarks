@@ -15,8 +15,9 @@
     "website:storybook": "pnpm run --filter website storybook",
     "bench:bench": "pnpm run --filter '*/bench' bench",
     "bench:download": "pnpm run --filter '*/bench' download",
+    "bench:json-schema": "pnpm run --filter '*/bench' bench:json-schema",
     "bench:stack": "pnpm run --filter '*/bench' stack",
-    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:stack",
+    "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:json-schema && pnpm bench:stack",
     "postinstall": "lefthook install",
     "knip": "knip",
     "e2e": "pnpm run -r e2e"

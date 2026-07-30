@@ -9,6 +9,7 @@ export default {
   includeAssets: [
     "fonts/*.woff2",
     "bench.json",
+    "json-schema.json",
     "stack.json",
     "download.json",
     "offline/index.html",

@@ -6,7 +6,6 @@ import * as v from "valibot";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
-import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
@@ -20,6 +19,7 @@ import {
   optionalJsonSchemaDirectionSchema,
   optionalJsonSchemaTargetSchema,
 } from "./-constants";
+import { getJsonSchemaBenchResults } from "./-query";
 import Content from "./content.mdx";
 
 import jsonSchemaStyles from "./styles.css?url";
@@ -35,9 +35,11 @@ export const Route = createFileRoute("/_benchmarks/json-schema/")({
   component: RouteComponent,
   loaderDeps: ({ search: { target, direction } }) => ({ target, direction }),
   async loader({ context: { queryClient }, deps: { target, direction }, abortController }) {
-    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
+    const benchResults = await queryClient.ensureQueryData(
+      getJsonSchemaBenchResults(abortController.signal),
+    );
     await Promise.all(
-      Object.values(benchResults.jsonSchema.filter(shallowFilter({ target, direction }))).flatMap(
+      Object.values(benchResults.bench.filter(shallowFilter({ target, direction }))).flatMap(
         ({ snippet, libraryName }) => [
           DownloadCount.prefetch(libraryName, {
             queryClient,
@@ -68,10 +70,10 @@ export const Route = createFileRoute("/_benchmarks/json-schema/")({
 function RouteComponent() {
   const { target, direction, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
-    ...getBenchResults(),
-    select: ({ jsonSchema, jsonSchemaSupport }) => ({
-      results: jsonSchema.filter(shallowFilter({ target, direction })),
-      support: jsonSchemaSupport,
+    ...getJsonSchemaBenchResults(),
+    select: ({ bench, support }) => ({
+      results: bench.filter(shallowFilter({ target, direction })),
+      support,
     }),
   });
   const sortedData = useSortedResults(data.results, sortBy, sortDir);

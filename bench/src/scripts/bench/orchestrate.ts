@@ -43,8 +43,6 @@ for (const results of allResults) {
   for (const [dataType, data] of unsafeEntries(results.standard)) {
     merged.standard[dataType].push(...data);
   }
-  merged.jsonSchema.push(...results.jsonSchema);
-  merged.jsonSchemaSupport.push(...results.jsonSchemaSupport);
   for (const [format, formatResults] of unsafeEntries(results.string)) {
     for (const [dataType, data] of unsafeEntries(formatResults)) {
       merged.string[format][dataType].push(...data);
@@ -58,7 +56,6 @@ for (const array of [
   ...Object.values(merged.validation),
   ...Object.values(merged.parsing),
   ...Object.values(merged.standard),
-  merged.jsonSchema,
   ...Object.values(merged.string).flatMap((formatResults) => Object.values(formatResults)),
 ]) {
   array.sort((a, b) => a.mean - b.mean);
