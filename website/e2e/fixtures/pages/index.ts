@@ -6,3 +6,4 @@ export { ParsingPage as parsingPage } from "./parsing";
 export { ValidationPage as validationPage } from "./validation";
 export { StandardSchemaPage as standardSchemaPage } from "./standard";
 export { StringPage as stringPage } from "./string";
+export { JsonSchemaConversionPage as jsonSchemaConversionPage } from "./json-schema/conversion";
