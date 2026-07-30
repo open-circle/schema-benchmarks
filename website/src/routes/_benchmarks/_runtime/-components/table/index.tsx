@@ -82,173 +82,175 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
   const showComparisonColumns = results.length > 1;
   const benchType = results[0]!.type;
   return (
-    <div className="card" style={{ viewTransitionName: "bench-table" }}>
-      <table className="bench-table" aria-label="Results">
-        <thead>
-          <tr>
-            <SortableHeaderLink {...SortableHeaderLink.getProps("libraryName", sortState, { to })}>
-              Library
-            </SortableHeaderLink>
-            <th className="action"></th>
-            {benchType === "jsonSchema" && <th className="action"></th>}
-            {benchType !== "standard" && <th className="action"></th>}
-            <th>Version</th>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
-              className="numeric"
-              aria-label="Downloads per week"
+    <table
+      className="bench-table"
+      aria-label="Results"
+      style={{ viewTransitionName: "result-table" }}
+    >
+      <thead>
+        <tr>
+          <SortableHeaderLink {...SortableHeaderLink.getProps("libraryName", sortState, { to })}>
+            Library
+          </SortableHeaderLink>
+          <th className="action"></th>
+          {benchType === "jsonSchema" && <th className="action"></th>}
+          {benchType !== "standard" && <th className="action"></th>}
+          <th>Version</th>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
+            className="numeric"
+            aria-label="Downloads per week"
+          >
+            <span className="bench-table__downloads-label">
+              <MdSymbol size={18}>download</MdSymbol>/wk
+            </span>
+          </SortableHeaderLink>
+          {benchType !== "jsonSchema" && <th>Optimizations</th>}
+          {(benchType === "parsing" || benchType === "standard") && <th>Error type</th>}
+          {benchType === "jsonSchema" && (
+            <>
+              <th>Source</th>
+              <th>Standard JSON Schema</th>
+              <th>Target</th>
+              <th>Type</th>
+            </>
+          )}
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("mean", sortState, { to })}
+            className="numeric"
+          >
+            Mean
+          </SortableHeaderLink>
+          {showComparisonColumns && (
+            <>
+              <th className="bar-after"></th>
+              <th className="fit-content action" colSpan={2}>
+                Compare
+              </th>
+            </>
+          )}
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((result) => {
+          const ratio = compareResult && getRatio(result.mean, compareResult.mean);
+          return (
+            <tr
+              key={result.id}
+              style={{
+                viewTransitionName: getTransitionName("bench-table-row", {
+                  libraryName: result.libraryName,
+                  note: result.note,
+                  errorType:
+                    result.type === "parsing" || result.type === "standard"
+                      ? result.errorType
+                      : undefined,
+                  direction: result.type === "jsonSchema" ? result.direction : undefined,
+                }),
+              }}
             >
-              <span className="bench-table__downloads-label">
-                <MdSymbol size={18}>download</MdSymbol>/wk
-              </span>
-            </SortableHeaderLink>
-            {benchType !== "jsonSchema" && <th>Optimizations</th>}
-            {(benchType === "parsing" || benchType === "standard") && <th>Error type</th>}
-            {benchType === "jsonSchema" && (
-              <>
-                <th>Source</th>
-                <th>Standard JSON Schema</th>
-                <th>Target</th>
-                <th>Type</th>
-              </>
-            )}
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("mean", sortState, { to })}
-              className="numeric"
-            >
-              Mean
-            </SortableHeaderLink>
-            {showComparisonColumns && (
-              <>
-                <th className="bar-after"></th>
-                <th className="fit-content action" colSpan={2}>
-                  Compare
-                </th>
-              </>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((result) => {
-            const ratio = compareResult && getRatio(result.mean, compareResult.mean);
-            return (
-              <tr
-                key={result.id}
-                style={{
-                  viewTransitionName: getTransitionName("bench-table-row", {
-                    libraryName: result.libraryName,
-                    note: result.note,
-                    errorType:
-                      result.type === "parsing" || result.type === "standard"
-                        ? result.errorType
-                        : undefined,
-                    direction: result.type === "jsonSchema" ? result.direction : undefined,
-                  }),
-                }}
-              >
-                <td>
-                  <code className="language-text">{result.libraryName}</code>
-                  {result.note ? ` (${result.note})` : null}
-                </td>
+              <td>
+                <code className="language-text">{result.libraryName}</code>
+                {result.note ? ` (${result.note})` : null}
+              </td>
+              <td className="action">
+                <Snippet code={result.snippet} />
+              </td>
+              {result.type === "jsonSchema" && (
                 <td className="action">
-                  <Snippet code={result.snippet} />
+                  <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
                 </td>
-                {result.type === "jsonSchema" && (
-                  <td className="action">
-                    <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
-                  </td>
-                )}
-                {benchType !== "standard" && (
-                  <td className="action">
-                    {result.throws && (
-                      <ToggleButton
-                        tooltip={{
-                          subhead: "Throws on invalid data",
-                          supporting: (
-                            <div style={{ maxWidth: "16rem" }}>
-                              This library throws an error when parsing invalid data (and has no
-                              non-throwing equivalent), so the benchmark includes a try/catch.
-                            </div>
-                          ),
-                        }}
-                      >
-                        <MdSymbol>error</MdSymbol>
-                      </ToggleButton>
-                    )}
-                  </td>
-                )}
-                <td>
-                  <code className="language-text">{result.version}</code>
+              )}
+              {benchType !== "standard" && (
+                <td className="action">
+                  {result.throws && (
+                    <ToggleButton
+                      tooltip={{
+                        subhead: "Throws on invalid data",
+                        supporting: (
+                          <div style={{ maxWidth: "16rem" }}>
+                            This library throws an error when parsing invalid data (and has no
+                            non-throwing equivalent), so the benchmark includes a try/catch.
+                          </div>
+                        ),
+                      }}
+                    >
+                      <MdSymbol>error</MdSymbol>
+                    </ToggleButton>
+                  )}
                 </td>
-                <td className="numeric">
-                  <ErrorBoundary fallback={null}>
-                    <DownloadCount libraryName={result.libraryName} />
-                  </ErrorBoundary>
+              )}
+              <td>
+                <code className="language-text">{result.version}</code>
+              </td>
+              <td className="numeric">
+                <ErrorBoundary fallback={null}>
+                  <DownloadCount libraryName={result.libraryName} />
+                </ErrorBoundary>
+              </td>
+              {result.type !== "jsonSchema" && (
+                <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
+              )}
+              {(result.type === "parsing" || result.type === "standard") && (
+                <td>{errorTypeProps.labels[result.errorType].label}</td>
+              )}
+              {result.type === "jsonSchema" && (
+                <>
+                  <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
+                  <td>{standardJsonSchemaProps.labels[result.standardJsonSchema].label}</td>
+                  <td>{jsonSchemaTargetProps.labels[result.target].label}</td>
+                  <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
+                </>
+              )}
+              <td className="numeric">{formatDuration(result.mean)}</td>
+              {showComparisonColumns && (
+                <td className="bar-after">
+                  <Bar {...meanScaler(result.mean)} />
                 </td>
-                {result.type !== "jsonSchema" && (
-                  <td>{optimizeTypeProps.labels[result.optimizeType].label}</td>
-                )}
-                {(result.type === "parsing" || result.type === "standard") && (
-                  <td>{errorTypeProps.labels[result.errorType].label}</td>
-                )}
-                {result.type === "jsonSchema" && (
-                  <>
-                    <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
-                    <td>{standardJsonSchemaProps.labels[result.standardJsonSchema].label}</td>
-                    <td>{jsonSchemaTargetProps.labels[result.target].label}</td>
-                    <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
-                  </>
-                )}
-                <td className="numeric">{formatDuration(result.mean)}</td>
-                {showComparisonColumns && (
-                  <td className="bar-after">
-                    <Bar {...meanScaler(result.mean)} />
+              )}
+              {showComparisonColumns && (
+                <>
+                  <td className="fit-content action">
+                    <Radio
+                      name="compare"
+                      value={result.id}
+                      checked={compareId === result.id}
+                      onChange={(event) => {
+                        setCompareId(event.target.checked ? result.id : undefined);
+                      }}
+                    />
                   </td>
-                )}
-                {showComparisonColumns && (
-                  <>
-                    <td className="fit-content action">
-                      <Radio
-                        name="compare"
-                        value={result.id}
-                        checked={compareId === result.id}
-                        onChange={(event) => {
-                          setCompareId(event.target.checked ? result.id : undefined);
-                        }}
-                      />
-                    </td>
-                    <td className="numeric bar-after">
-                      {compareResult &&
-                        ratioScaler &&
-                        compareId !== result.id &&
-                        (ratio === undefined ? (
-                          <span aria-label="Not comparable">n/a</span>
-                        ) : ratio ? (
-                          <Scaler
-                            {...ratioScaler(ratio)}
-                            symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
-                          >
-                            <span aria-label={`${numFormatter.format(Math.abs(ratio))}x`}>
-                              {`${formatNumber(Math.abs(ratio))}x`}
-                            </span>
-                          </Scaler>
-                        ) : (
-                          <Scaler
-                            icon={<MdSymbol>stat_0</MdSymbol>}
-                            color="var(--yellow)"
-                            symbolLabel="Equal"
-                          >
-                            1x
-                          </Scaler>
-                        ))}
-                    </td>
-                  </>
-                )}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                  <td className="numeric bar-after">
+                    {compareResult &&
+                      ratioScaler &&
+                      compareId !== result.id &&
+                      (ratio === undefined ? (
+                        <span aria-label="Not comparable">n/a</span>
+                      ) : ratio ? (
+                        <Scaler
+                          {...ratioScaler(ratio)}
+                          symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}
+                        >
+                          <span aria-label={`${numFormatter.format(Math.abs(ratio))}x`}>
+                            {`${formatNumber(Math.abs(ratio))}x`}
+                          </span>
+                        </Scaler>
+                      ) : (
+                        <Scaler
+                          icon={<MdSymbol>stat_0</MdSymbol>}
+                          color="var(--yellow)"
+                          symbolLabel="Equal"
+                        >
+                          1x
+                        </Scaler>
+                      ))}
+                  </td>
+                </>
+              )}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }

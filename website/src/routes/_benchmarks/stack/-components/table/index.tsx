@@ -22,77 +22,75 @@ export interface StackTableProps {
 
 export function StackTable({ results, frameScale, lineCountScale, ...sortState }: StackTableProps) {
   return (
-    <div className="card" style={{ viewTransitionName: "stack-table" }}>
-      <table className="stack-table">
-        <thead>
-          <tr>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("libraryName", sortState, { to: "/stack" })}
-            >
-              Library
-            </SortableHeaderLink>
-            <th className="action"></th>
-            <th className="action"></th>
-            <th>Version</th>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("downloads", sortState, { to: "/stack" })}
-              className="numeric"
-            >
-              <span className="stack-table__downloads-label">
-                <MdSymbol size={18}>download</MdSymbol>/wk
-              </span>
-            </SortableHeaderLink>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("frame", sortState, { to: "/stack" })}
-              className="numeric"
-            >
-              Frame #
-            </SortableHeaderLink>
-            <th className="bar-after"></th>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("lineCount", sortState, { to: "/stack" })}
-              className="numeric"
-            >
-              Line count
-            </SortableHeaderLink>
-            <th className="bar-after"></th>
+    <table className="stack-table" style={{ viewTransitionName: "result-table" }}>
+      <thead>
+        <tr>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("libraryName", sortState, { to: "/stack" })}
+          >
+            Library
+          </SortableHeaderLink>
+          <th className="action"></th>
+          <th className="action"></th>
+          <th>Version</th>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("downloads", sortState, { to: "/stack" })}
+            className="numeric"
+          >
+            <span className="stack-table__downloads-label">
+              <MdSymbol size={18}>download</MdSymbol>/wk
+            </span>
+          </SortableHeaderLink>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("frame", sortState, { to: "/stack" })}
+            className="numeric"
+          >
+            Frame #
+          </SortableHeaderLink>
+          <th className="bar-after"></th>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("lineCount", sortState, { to: "/stack" })}
+            className="numeric"
+          >
+            Line count
+          </SortableHeaderLink>
+          <th className="bar-after"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((result) => (
+          <tr
+            key={result.libraryName}
+            style={{
+              viewTransitionName: getTransitionName("stack-table-row", {
+                libraryName: result.libraryName,
+              }),
+            }}
+          >
+            <td>
+              <code className="language-text">{result.libraryName}</code>
+            </td>
+            <td className="action">
+              <Snippet code={result.snippet} />
+            </td>
+            <td className="action">{result.output && <Output output={result.output} />}</td>
+            <td>
+              <code className="language-text">{result.version}</code>
+            </td>
+            <td className="numeric">
+              <DownloadCount libraryName={result.libraryName} />
+            </td>
+            <td className="numeric">{result.frame}</td>
+            <td className="bar-after">
+              {typeof result.frame === "number" && <Bar {...frameScale(result.frame)} />}
+            </td>
+            <td className="numeric">{result.lineCount}</td>
+            <td className="bar-after">
+              <Bar {...lineCountScale(result.lineCount)} />
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {results.map((result) => (
-            <tr
-              key={result.libraryName}
-              style={{
-                viewTransitionName: getTransitionName("stack-table-row", {
-                  libraryName: result.libraryName,
-                }),
-              }}
-            >
-              <td>
-                <code className="language-text">{result.libraryName}</code>
-              </td>
-              <td className="action">
-                <Snippet code={result.snippet} />
-              </td>
-              <td className="action">{result.output && <Output output={result.output} />}</td>
-              <td>
-                <code className="language-text">{result.version}</code>
-              </td>
-              <td className="numeric">
-                <DownloadCount libraryName={result.libraryName} />
-              </td>
-              <td className="numeric">{result.frame}</td>
-              <td className="bar-after">
-                {typeof result.frame === "number" && <Bar {...frameScale(result.frame)} />}
-              </td>
-              <td className="numeric">{result.lineCount}</td>
-              <td className="bar-after">
-                <Bar {...lineCountScale(result.lineCount)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 }

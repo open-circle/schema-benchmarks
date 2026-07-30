@@ -36,110 +36,112 @@ export function DownloadTable({
   ...sortState
 }: DownloadTableProps) {
   return (
-    <div className="card" style={{ viewTransitionName: "download-table" }}>
-      <table className="download-table" aria-label="Results">
-        <thead>
-          <tr>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("libraryName", sortState, { to: "/download" })}
+    <table
+      className="download-table"
+      aria-label="Results"
+      style={{ viewTransitionName: "result-table" }}
+    >
+      <thead>
+        <tr>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("libraryName", sortState, { to: "/download" })}
+          >
+            Library
+          </SortableHeaderLink>
+          <th>Version</th>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps(
+              "downloads",
+              sortState,
+              { to: "/download" },
+              "descending",
+            )}
+            className="numeric"
+          >
+            <span className="download-table__downloads-label">
+              <MdSymbol size={18}>download</MdSymbol>/wk
+            </span>
+          </SortableHeaderLink>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("bytes", sortState, { to: "/download" })}
+            className="numeric"
+          >
+            Uncompressed
+          </SortableHeaderLink>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("gzipBytes", sortState, { to: "/download" })}
+            className="numeric"
+          >
+            Gzipped
+          </SortableHeaderLink>
+          <th className="bar-after"></th>
+          <th className="numeric">Time</th>
+          <th className="fit-content action"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((result) => {
+          const gzipTime = getDownloadTime(result.gzipBytes, mbps);
+          return (
+            <tr
+              key={result.fileName}
+              style={{
+                viewTransitionName: getTransitionName("download-table-row", {
+                  libraryName: result.libraryName,
+                  note: result.note,
+                }),
+              }}
             >
-              Library
-            </SortableHeaderLink>
-            <th>Version</th>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps(
-                "downloads",
-                sortState,
-                { to: "/download" },
-                "descending",
-              )}
-              className="numeric"
-            >
-              <span className="download-table__downloads-label">
-                <MdSymbol size={18}>download</MdSymbol>/wk
-              </span>
-            </SortableHeaderLink>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("bytes", sortState, { to: "/download" })}
-              className="numeric"
-            >
-              Uncompressed
-            </SortableHeaderLink>
-            <SortableHeaderLink
-              {...SortableHeaderLink.getProps("gzipBytes", sortState, { to: "/download" })}
-              className="numeric"
-            >
-              Gzipped
-            </SortableHeaderLink>
-            <th className="bar-after"></th>
-            <th className="numeric">Time</th>
-            <th className="fit-content action"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((result) => {
-            const gzipTime = getDownloadTime(result.gzipBytes, mbps);
-            return (
-              <tr
-                key={result.fileName}
-                style={{
-                  viewTransitionName: getTransitionName("download-table-row", {
-                    libraryName: result.libraryName,
-                    note: result.note,
-                  }),
-                }}
-              >
-                <td>
-                  <code className="language-text">{result.libraryName}</code>
-                  {result.note ? ` (${result.note})` : null}
-                </td>
-                <td>
-                  <code className="language-text">{result.version}</code>
-                </td>
-                <td className="numeric">
-                  <ErrorBoundary fallback={null}>
-                    <DownloadCount libraryName={result.libraryName} />
-                  </ErrorBoundary>
-                </td>
-                <td className="numeric">{formatBytes(result.bytes)}</td>
-                <td className="numeric">{formatBytes(result.gzipBytes)}</td>
-                <td className="bar-after">
-                  <Bar {...gzipScaler(result.gzipBytes)} />
-                </td>
-                <td className="numeric">{durationFormatter.format(getDuration(gzipTime))}</td>
-                <td className="action fit-content">
-                  <ButtonGroup className="source-links" ariaLabel="Links to files used">
-                    <InternalLinkToggleButton
-                      to="/repo/raw/$"
-                      params={{
-                        _splat: `schemas/libraries/${result.fileName}`,
-                      }}
-                      preload={false}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      tooltip="Open source"
-                    >
-                      <MdSymbol>code</MdSymbol>
-                    </InternalLinkToggleButton>
-                    <InternalLinkToggleButton
-                      to="/repo/raw/$"
-                      params={{
-                        _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
-                      }}
-                      preload={false}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      tooltip="Open compiled"
-                    >
-                      <MdSymbol>deployed_code</MdSymbol>
-                    </InternalLinkToggleButton>
-                  </ButtonGroup>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+              <td>
+                <code className="language-text">{result.libraryName}</code>
+                {result.note ? ` (${result.note})` : null}
+              </td>
+              <td>
+                <code className="language-text">{result.version}</code>
+              </td>
+              <td className="numeric">
+                <ErrorBoundary fallback={null}>
+                  <DownloadCount libraryName={result.libraryName} />
+                </ErrorBoundary>
+              </td>
+              <td className="numeric">{formatBytes(result.bytes)}</td>
+              <td className="numeric">{formatBytes(result.gzipBytes)}</td>
+              <td className="bar-after">
+                <Bar {...gzipScaler(result.gzipBytes)} />
+              </td>
+              <td className="numeric">{durationFormatter.format(getDuration(gzipTime))}</td>
+              <td className="action fit-content">
+                <ButtonGroup className="source-links" ariaLabel="Links to files used">
+                  <InternalLinkToggleButton
+                    to="/repo/raw/$"
+                    params={{
+                      _splat: `schemas/libraries/${result.fileName}`,
+                    }}
+                    preload={false}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    tooltip="Open source"
+                  >
+                    <MdSymbol>code</MdSymbol>
+                  </InternalLinkToggleButton>
+                  <InternalLinkToggleButton
+                    to="/repo/raw/$"
+                    params={{
+                      _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
+                    }}
+                    preload={false}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    tooltip="Open compiled"
+                  >
+                    <MdSymbol>deployed_code</MdSymbol>
+                  </InternalLinkToggleButton>
+                </ButtonGroup>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }

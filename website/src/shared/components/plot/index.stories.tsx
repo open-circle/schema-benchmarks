@@ -59,11 +59,7 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
 const meta = preview.meta({
   title: "Components/createPlotComponent",
   component: PlotComponent,
-  render: () => (
-    <div className="card" style={{ padding: "1rem" }}>
-      <PlotComponent />
-    </div>
-  ),
+  render: () => <PlotComponent />,
 });
 
 export const Default = meta.story();
