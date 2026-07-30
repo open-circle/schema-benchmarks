@@ -5,7 +5,12 @@ import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent";
 import typia, { type tags } from "typia";
 
-import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
+import {
+  assertJsonSchemaDirection,
+  assertJsonSchemaTarget,
+  assertNotReached,
+  defineBenchmarks,
+} from "#src";
 
 import type { TypiaSchema } from ".";
 
@@ -101,9 +106,7 @@ export default defineBenchmarks({
   jsonSchema: {
     generate: ({ target, direction }) => {
       assertJsonSchemaTarget(target, ["draft-2020-12", "openapi-3.0"]);
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return target === "openapi-3.0" ? openApi30 : openApi31;
     },
     snippet: ({ target }) =>

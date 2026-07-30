@@ -4,7 +4,7 @@ import Joi from "joi";
 import parse from "joi-to-json";
 
 import type { JsonSchemaTarget, StringBenchmarkConfig } from "#src";
-import { assertJsonSchemaTarget, defineBenchmarks } from "#src";
+import { assertJsonSchemaDirection, assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getJoiSchema } from ".";
 
@@ -76,9 +76,7 @@ export default defineBenchmarks({
   },
   jsonSchema: {
     generate: ({ target, direction }) => {
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return parse(jsonSchemaSubject, getJsonSchemaMode(target)) as object;
     },
     snippet: ({ target }) => ts`parse(schema, "${getJsonSchemaMode(target)}")`,

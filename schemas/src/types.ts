@@ -118,6 +118,15 @@ export function assertJsonSchemaTarget<Supported extends JsonSchemaTarget>(
   }
 }
 
+export function assertJsonSchemaDirection<Supported extends JsonSchemaDirection>(
+  direction: JsonSchemaDirection,
+  supported: ReadonlyArray<Supported>,
+): asserts direction is Supported {
+  if (!supported.includes(direction as Supported)) {
+    throw new Error(`No JSON schema can be generated for the direction: ${direction}`);
+  }
+}
+
 export const stringFormatSchema = /* @__PURE__ */ v.picklist([
   "date-time",
   "date",

@@ -6,7 +6,7 @@ import addFormats from "ajv-formats";
 import ts from "dedent";
 
 import type { JsonSchemaInputData, StringBenchmarkConfig } from "#src";
-import { assertJsonSchemaTarget, defineBenchmarks } from "#src";
+import { assertJsonSchemaDirection, assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getAjv, getAjvSchema } from ".";
 
@@ -69,9 +69,7 @@ export default defineBenchmarks({
     // output type
     generate: ({ target, direction }) => {
       assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return jsonSchemaSubject;
     },
     snippet: () => ts`{ type: "object", properties: { ... } }`,

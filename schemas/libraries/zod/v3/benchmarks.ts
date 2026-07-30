@@ -4,7 +4,12 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import * as z from "zod/v3";
 
 import type { JsonSchemaInputData, JsonSchemaTarget, StringBenchmarkConfig } from "#src";
-import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
+import {
+  assertJsonSchemaDirection,
+  assertJsonSchemaTarget,
+  assertNotReached,
+  defineBenchmarks,
+} from "#src";
 
 import { getZodSchema } from ".";
 
@@ -70,10 +75,7 @@ export default defineBenchmarks({
   },
   jsonSchema: {
     generate: ({ target, direction }) => {
-      if (direction === "output") {
-        // transforms are only converted in the input direction
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return zodToJsonSchema(jsonSchemaSubject, { target: getJsonSchemaTarget(target) });
     },
     snippet: ({ target }) =>
