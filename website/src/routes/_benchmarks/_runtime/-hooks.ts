@@ -1,4 +1,4 @@
-import type { RuntimeResult } from "@schema-benchmarks/bench";
+import type { BaseBenchResult, RuntimeResult, JsonSchemaResult } from "@schema-benchmarks/bench";
 import { collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
@@ -8,11 +8,11 @@ import type { SortDirection } from "#src/shared/lib/sort";
 
 import type { SortableKey } from "./-constants";
 
-export function getLibraryLabel({ libraryName, note }: RuntimeResult) {
+export function getLibraryLabel({ libraryName, note }: BaseBenchResult) {
   return `${libraryName}${note ? ` (${note})` : ""}`;
 }
 
-export function useSortedResults<T extends RuntimeResult>(
+export function useSortedResults<T extends RuntimeResult | JsonSchemaResult>(
   results: Array<T>,
   sortBy: SortableKey,
   sortDir: SortDirection,
