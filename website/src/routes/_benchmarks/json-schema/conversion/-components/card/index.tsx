@@ -69,32 +69,26 @@ export function ConversionCard({ result, meanScaler }: ConversionCardProps) {
             </div>
           </>
         )}
+        {result.standardJsonSchema && (
+          <dl className="minimal">
+            <div>
+              <dt>Standard JSON Schema</dt>
+              <dd>
+                {typeof result.standardJsonSchema === "string" ? (
+                  standardJsonSchemaProps.labels[result.standardJsonSchema].label
+                ) : (
+                  <code className="language-text">{result.standardJsonSchema.package}</code>
+                )}
+              </dd>
+            </div>
+          </dl>
+        )}
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
             <DisplayChip>
               <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
               {jsonSchemaSourceProps.labels[result.source].label}
             </DisplayChip>
-            {result.standardJsonSchema && (
-              <DisplayChip>
-                {typeof result.standardJsonSchema === "string" ? (
-                  <>
-                    <MdSymbol>
-                      {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}
-                    </MdSymbol>
-                    {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
-                  </>
-                ) : (
-                  <>
-                    <MdSymbol>
-                      {standardJsonSchemaProps.labels[result.standardJsonSchema.support].icon}
-                    </MdSymbol>
-                    {`Standard JSON Schema:`}
-                    <code className="language-text">{result.standardJsonSchema.package}</code>
-                  </>
-                )}
-              </DisplayChip>
-            )}
             <DisplayChip>
               <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
               {jsonSchemaDirectionProps.labels[result.direction].label}
