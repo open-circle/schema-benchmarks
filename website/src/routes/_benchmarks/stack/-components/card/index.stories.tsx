@@ -2,11 +2,11 @@ import stackResults from "@schema-benchmarks/bench/stack.json";
 import { exclude, filterMap } from "@schema-benchmarks/utils";
 
 import { Bar } from "#src/shared/components/table/bar.js";
-
-import "./index.css";
 import preview from "#storybook/preview";
 
-import { StackCard } from "./index.js";
+import { StackCard } from ".";
+
+import "./index.css";
 
 const meta = preview
   .type<{

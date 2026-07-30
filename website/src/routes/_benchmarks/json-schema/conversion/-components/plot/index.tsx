@@ -5,7 +5,7 @@ import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";

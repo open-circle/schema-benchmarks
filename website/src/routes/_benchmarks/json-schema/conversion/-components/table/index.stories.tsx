@@ -4,7 +4,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import "./table.css";
-import { JsonSchemaTable } from "./table";
+import { JsonSchemaTable } from ".";
 
 const meta = preview.meta({
   title: "Features/Benchmark/JsonSchema/Table",

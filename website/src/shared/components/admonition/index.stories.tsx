@@ -1,7 +1,7 @@
 import preview from "#storybook/preview";
 
+import { Admonition } from ".";
 import { admonitionTypes } from "./constants.js";
-import { Admonition } from "./index.js";
 
 import "./index.css";
 

@@ -3,8 +3,8 @@ import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
-import "#src/routes/_benchmarks/json-schema/-components/card.css";
-import { JsonSchemaCard } from "./card";
+import "./index.css";
+import { JsonSchemaCard } from ".";
 
 const meta = preview.meta({
   title: "Features/Benchmark/JsonSchema/Card",

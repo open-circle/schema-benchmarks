@@ -1,6 +1,6 @@
 import preview from "#storybook/preview";
 
-import { CodeBlock, InlineCode } from "./index.js";
+import { CodeBlock, InlineCode } from ".";
 
 const meta = preview.meta({
   title: "Components/Code",
