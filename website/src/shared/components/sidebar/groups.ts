@@ -46,11 +46,6 @@ export const sidebarGroups: Array<SidebarGroup> = [
         icon: "schema",
       },
       {
-        ...linkOptions({ to: "/json-schema" }),
-        name: "JSON Schema",
-        icon: "data_object",
-      },
-      {
         ...linkOptions({ to: "/string" }),
         name: "String",
         icon: "format_quote",
@@ -60,7 +55,14 @@ export const sidebarGroups: Array<SidebarGroup> = [
   },
   {
     key: "post-runtime",
-    links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
+    links: [
+      { ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" },
+      {
+        ...linkOptions({ to: "/json-schema" }),
+        name: "JSON Schema",
+        icon: "data_object",
+      },
+    ],
   },
   {
     key: "library",
