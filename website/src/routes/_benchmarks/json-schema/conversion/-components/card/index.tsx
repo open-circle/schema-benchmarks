@@ -77,10 +77,22 @@ export function ConversionCard({ result, meanScaler }: ConversionCardProps) {
             </DisplayChip>
             {result.standardJsonSchema && (
               <DisplayChip>
-                <MdSymbol>
-                  {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}
-                </MdSymbol>
-                {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
+                {typeof result.standardJsonSchema === "string" ? (
+                  <>
+                    <MdSymbol>
+                      {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}
+                    </MdSymbol>
+                    {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
+                  </>
+                ) : (
+                  <>
+                    <MdSymbol>
+                      {standardJsonSchemaProps.labels[result.standardJsonSchema.support].icon}
+                    </MdSymbol>
+                    {`Standard JSON Schema:`}
+                    <code className="language-text">{result.standardJsonSchema.package}</code>
+                  </>
+                )}
               </DisplayChip>
             )}
             <DisplayChip>

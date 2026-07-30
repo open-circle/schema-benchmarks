@@ -6,6 +6,7 @@ import { ensureArray, partition } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
+import type { BenchmarkConfigEntry } from "../../../bench/registry.ts";
 import { CaseRegistry } from "../../../bench/registry.ts";
 import type { JsonSchemaSupportResult } from "../../../results/types.ts";
 import { getEmptyJsonSchemaResults } from "../../../results/types.ts";
@@ -76,18 +77,24 @@ for (const benchConfig of ensureArray(jsonSchemaConfig)) {
         unsupported.push({ target, direction, reason });
         continue;
       }
-      const entry = {
+      const entry: BenchmarkConfigEntry = {
         type: "jsonSchema",
         target,
         direction,
         source,
-        standardJsonSchema: standardJsonSchemaConfig?.support,
+        standardJsonSchema:
+          standardJsonSchemaConfig?.support === "package"
+            ? {
+                support: standardJsonSchemaConfig.support,
+                package: standardJsonSchemaConfig.package,
+              }
+            : standardJsonSchemaConfig?.support,
         jsonSchema: JSON.stringify(jsonSchema, null, 2),
         libraryName,
         version,
         snippet: snippet(options),
         note,
-      } as const;
+      };
       if (source === "runtime") {
         bench.add(caseRegistry.add(entry), () => generate(options));
         continue;
@@ -106,7 +113,10 @@ for (const benchConfig of ensureArray(jsonSchemaConfig)) {
     version,
     note,
     source,
-    standardJsonSchema: standardJsonSchemaConfig?.support,
+    standardJsonSchema:
+      standardJsonSchemaConfig?.support === "package"
+        ? { support: standardJsonSchemaConfig.support, package: standardJsonSchemaConfig.package }
+        : standardJsonSchemaConfig?.support,
     unsupported,
   });
 }
