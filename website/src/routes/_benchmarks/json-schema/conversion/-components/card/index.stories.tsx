@@ -4,14 +4,14 @@ import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import "./index.css";
-import { JsonSchemaCard } from ".";
+import { ConversionCard } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Card",
-  component: JsonSchemaCard,
+  title: "Features/Benchmark/JsonSchema/Conversion/Card",
+  component: ConversionCard,
 });
 
-export const JsonSchema = meta.story({
+export const Default = meta.story({
   args: {
     result: jsonSchemaResults.bench[0]!,
     meanScaler: Bar.getScale(

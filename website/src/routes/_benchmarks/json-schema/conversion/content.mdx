@@ -10,6 +10,8 @@ const schema = z.object({
   name: z.string(),
   price: z.codec(z.string(), z.number(), { decode: Number, encode: String }),
 });
+
+const jsonSchema = z.toJsonSchema(schema);
 ```
 
 Because of the codec, the **input** and **output** types differ (`price` is a string going in, a number coming out), and so do their JSON schemas.
@@ -17,11 +19,10 @@ Because of the codec, the **input** and **output** types differ (`price` is a st
 The **source** column says where the JSON schema comes from - not every library has to do work for it:
 
 - **Runtime** - the library converts the schema when asked, which is what's timed
-- **Precompiled** - it's generated at build time, so there's nothing left to do at runtime
-- **Already JSON Schema** - the library's schemas are JSON Schema, so there's nothing to convert
+- **Precompiled** - generated at build time
+- **Already JSON Schema** - the library's schemas are already JSON Schema
 
-The last two are constants, so they're reported as `0` rather than timed - benchmarking a property
-read would measure the harness, not the library.
+Non-runtime sources are constants, so they're not timed - benchmarking a property read would measure the harness, not the library.
 
 ### Standard JSON Schema
 

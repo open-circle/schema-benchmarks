@@ -12,9 +12,7 @@ import {
   jsonSchemaDirectionProps,
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
-  jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/conversion/-constants";
-import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -26,7 +24,6 @@ import type { SortDirection } from "#src/shared/lib/sort";
 export interface JsonSchemaBenchTableProps {
   results: Array<JsonSchemaResult>;
   meanScaler: ReturnType<typeof Bar.getScale>;
-  to: "/json-schema/conversion";
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
@@ -67,12 +64,7 @@ function useComparison(results: Array<JsonSchemaResult>) {
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
 
-export function JsonSchemaTable({
-  results,
-  meanScaler,
-  to,
-  ...sortState
-}: JsonSchemaBenchTableProps) {
+export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchemaBenchTableProps) {
   const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
   const showComparisonColumns = results.length > 1;
@@ -84,15 +76,23 @@ export function JsonSchemaTable({
     >
       <thead>
         <tr>
-          <SortableHeaderLink {...SortableHeaderLink.getProps("libraryName", sortState, { to })}>
+          <SortableHeaderLink
+            {...SortableHeaderLink.getProps("libraryName", sortState, {
+              to: "/json-schema/conversion",
+            })}
+          >
             Library
           </SortableHeaderLink>
           <th className="action"></th>
           <th className="action"></th>
-          <th className="action"></th>
           <th>Version</th>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("downloads", sortState, { to }, "descending")}
+            {...SortableHeaderLink.getProps(
+              "downloads",
+              sortState,
+              { to: "/json-schema/conversion" },
+              "descending",
+            )}
             className="numeric"
             aria-label="Downloads per week"
           >
@@ -102,10 +102,9 @@ export function JsonSchemaTable({
           </SortableHeaderLink>
           <th>Source</th>
           <th>Standard JSON Schema</th>
-          <th>Target</th>
           <th>Type</th>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("mean", sortState, { to })}
+            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/conversion" })}
             className="numeric"
           >
             Mean
@@ -122,6 +121,7 @@ export function JsonSchemaTable({
       </thead>
       <tbody>
         {results.map((result) => {
+          const isRuntime = result.source === "runtime";
           const ratio = compareResult && getRatio(result.mean, compareResult.mean);
           return (
             <tr
@@ -144,23 +144,6 @@ export function JsonSchemaTable({
               <td className="action">
                 <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
               </td>
-              <td className="action">
-                {result.throws && (
-                  <ToggleButton
-                    tooltip={{
-                      subhead: "Throws on invalid data",
-                      supporting: (
-                        <div style={{ maxWidth: "16rem" }}>
-                          This library throws an error when parsing invalid data (and has no
-                          non-throwing equivalent), so the benchmark includes a try/catch.
-                        </div>
-                      ),
-                    }}
-                  >
-                    <MdSymbol>error</MdSymbol>
-                  </ToggleButton>
-                )}
-              </td>
               <td>
                 <code className="language-text">{result.version}</code>
               </td>
@@ -170,29 +153,33 @@ export function JsonSchemaTable({
                 </ErrorBoundary>
               </td>
               <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
-              <td>{standardJsonSchemaProps.labels[result.standardJsonSchema].label}</td>
-              <td>{jsonSchemaTargetProps.labels[result.target].label}</td>
+              <td>
+                {isRuntime &&
+                  result.standardJsonSchema !== "none" &&
+                  standardJsonSchemaProps.labels[result.standardJsonSchema].label}
+              </td>
               <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
-              <td className="numeric">{formatDuration(result.mean)}</td>
+              <td className="numeric">{!isRuntime ? "n/a" : formatDuration(result.mean)}</td>
               {showComparisonColumns && (
-                <td className="bar-after">
-                  <Bar {...meanScaler(result.mean)} />
-                </td>
+                <td className="bar-after">{isRuntime && <Bar {...meanScaler(result.mean)} />}</td>
               )}
               {showComparisonColumns && (
                 <>
                   <td className="fit-content action">
-                    <Radio
-                      name="compare"
-                      value={result.id}
-                      checked={compareId === result.id}
-                      onChange={(event) => {
-                        setCompareId(event.target.checked ? result.id : undefined);
-                      }}
-                    />
+                    {isRuntime && (
+                      <Radio
+                        name="compare"
+                        value={result.id}
+                        checked={compareId === result.id}
+                        onChange={(event) => {
+                          setCompareId(event.target.checked ? result.id : undefined);
+                        }}
+                      />
+                    )}
                   </td>
                   <td className="numeric bar-after">
-                    {compareResult &&
+                    {isRuntime &&
+                      compareResult &&
                       ratioScaler &&
                       compareId !== result.id &&
                       (ratio === undefined ? (

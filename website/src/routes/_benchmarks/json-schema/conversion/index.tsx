@@ -12,7 +12,7 @@ import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { SupportMatrix } from "./-components/matrix";
-import { JsonSchemaResults } from "./-components/results";
+import { ConversionResults } from "./-components/results";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
@@ -95,7 +95,7 @@ function RouteComponent() {
           })}
         />
       </PageFilters>
-      <JsonSchemaResults results={sortedData} {...{ sortBy, sortDir }} />
+      <ConversionResults results={sortedData} {...{ sortBy, sortDir }} />
     </>
   );
 }
