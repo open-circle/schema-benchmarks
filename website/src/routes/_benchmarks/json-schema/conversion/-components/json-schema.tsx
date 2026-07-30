@@ -17,7 +17,7 @@ export function GeneratedJsonSchema({ jsonSchema }: GeneratedJsonSchemaProps) {
         subhead: "Generated JSON schema",
         supporting: (
           <Suspense fallback={<Spinner />}>
-            <div className="snippet">
+            <div className="output">
               <CodeBlock language="json">{jsonSchema}</CodeBlock>
             </div>
           </Suspense>
