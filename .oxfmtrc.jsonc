@@ -4,6 +4,7 @@
     "bench/bench.json",
     "bench/download.json",
     "bench/stack.json",
+    "bench/json-schema.json",
     "schemas/libraries/**/download_compiled/**",
     "schemas/libraries/**/compiled/**",
     "schemas/libraries/**/*.gen.ts",
