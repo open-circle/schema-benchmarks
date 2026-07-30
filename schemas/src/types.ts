@@ -79,12 +79,24 @@ export interface JsonSchemaOptions {
   direction: JsonSchemaDirection;
 }
 
-interface StandardJsonSchemaConfig {
+interface NativeStandardJsonSchemaConfig {
   /** Anything but `none` has to come with a schema, so the claim can be checked. */
-  support: Exclude<StandardJsonSchemaSupport, "none">;
+  support: Exclude<StandardJsonSchemaSupport, "package">;
+  /** The schema exposing `~standard.jsonSchema`, which should convert what `generate` converts. */
+  schema: StandardJSONSchemaV1;
+  package?: never;
+}
+
+interface PackageStandardJsonSchemaConfig {
+  /** The library doesn't implement the interface, but a separate package does. */
+  support: "package";
+  /** The package needed. */
+  package: string;
   /** The schema exposing `~standard.jsonSchema`, which should convert what `generate` converts. */
   schema: StandardJSONSchemaV1;
 }
+
+type StandardJsonSchemaConfig = NativeStandardJsonSchemaConfig | PackageStandardJsonSchemaConfig;
 
 export interface JsonSchemaBenchmarkConfig extends Omit<BaseBenchmarkConfig, "throws" | "snippet"> {
   /**

@@ -89,7 +89,11 @@ export function SupportMatrix() {
               <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
               <td>
                 {result.standardJsonSchema &&
-                  standardJsonSchemaProps.labels[result.standardJsonSchema].label}
+                  (typeof result.standardJsonSchema === "string" ? (
+                    standardJsonSchemaProps.labels[result.standardJsonSchema].label
+                  ) : (
+                    <code className="language-text">{result.standardJsonSchema.package}</code>
+                  ))}
               </td>
               {combinations.map(({ target, direction }) => {
                 const unsupported = result.unsupported.find(

@@ -82,6 +82,7 @@ export default defineBenchmarks({
     // the official companion package implements the standard interface
     standardJsonSchema: {
       support: "package",
+      package: "@valibot/to-json-schema",
       schema: toStandardJsonSchema(jsonSchemaSubject),
     },
   },

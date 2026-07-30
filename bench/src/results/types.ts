@@ -2,7 +2,6 @@ import {
   errorTypeSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaSourceSchema,
-  standardJsonSchemaSupportSchema,
   jsonSchemaTargetSchema,
   optimizeTypeSchema,
   stringFormatSchema,
@@ -57,13 +56,21 @@ const standardResultSchema = v.object({
 });
 export type StandardResult = v.InferOutput<typeof standardResultSchema>;
 
+const standardJsonSchemaSupportResultSchema = v.union([
+  v.picklist(["native", "opt-in"]),
+  v.object({
+    support: v.literal("package"),
+    package: v.string(),
+  }),
+]);
+
 const jsonSchemaResultSchema = v.object({
   ...baseBenchResultSchema.entries,
   type: v.literal("jsonSchema"),
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
   source: jsonSchemaSourceSchema,
-  standardJsonSchema: v.optional(standardJsonSchemaSupportSchema),
+  standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
 });
@@ -82,7 +89,7 @@ export const jsonSchemaSupportResultSchema = v.object({
   version: v.string(),
   note: v.optional(v.string()),
   source: jsonSchemaSourceSchema,
-  standardJsonSchema: v.optional(standardJsonSchemaSupportSchema),
+  standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
   unsupported: v.array(
     v.object({
       ...jsonSchemaCombinationSchema.entries,

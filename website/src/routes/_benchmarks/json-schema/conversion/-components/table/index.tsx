@@ -156,7 +156,11 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
               <td>
                 {isRuntime &&
                   result.standardJsonSchema &&
-                  standardJsonSchemaProps.labels[result.standardJsonSchema].label}
+                  (typeof result.standardJsonSchema === "string" ? (
+                    standardJsonSchemaProps.labels[result.standardJsonSchema].label
+                  ) : (
+                    <code className="language-text">{result.standardJsonSchema.package}</code>
+                  ))}
               </td>
               <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
               <td className="numeric">{!isRuntime ? "n/a" : formatDuration(result.mean)}</td>
