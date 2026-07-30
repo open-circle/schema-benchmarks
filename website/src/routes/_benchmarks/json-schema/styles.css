@@ -13,3 +13,7 @@
     grid-template-columns: subgrid;
   }
 }
+
+.support-matrix-container {
+  overflow-x: auto;
+}
