@@ -35,9 +35,9 @@ const jsonSchema = personSchema["~standard"].jsonSchema.input({ target: "draft-2
 The **Standard JSON Schema** column shows how each library supports it:
 
 - **Native** - the library implements it
-- **Native Opt in** - implemented, but it has to be enabled first (`S.enableStandardJSONSchema()`)
-- **Separate package** - a separate package implements it (`@valibot/to-json-schema`)
-- **None** - nothing implements it, so the library's own API is benchmarked
+- **Native Opt in** - implemented, but it has to be enabled first (e.g. `S.enableStandardJSONSchema()`)
+- **Separate package** - a separate package implements it (e.g. `@valibot/to-json-schema`)
+- **None** (blank) - nothing implements it, so only the library's own API is benchmarked
 
 <Admonition type="info" title="Support">
 
