@@ -12,7 +12,7 @@ const meta = preview.meta({
   args: {
     sortBy: "mean",
     sortDir: "ascending",
-    to: "/json-schema",
+    to: "/json-schema/conversion",
   } as const,
 });
 

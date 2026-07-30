@@ -1,8 +1,9 @@
 import { type LinkOptions, linkOptions } from "@tanstack/react-router";
-import type { Key } from "react";
+import type { Key, ReactNode } from "react";
 
 interface SidebarGroup {
   key: Key;
+  subheader?: ReactNode;
   links: Array<LinkOptions & { name: string; icon: string }>;
   inset?: boolean;
 }
@@ -55,11 +56,15 @@ export const sidebarGroups: Array<SidebarGroup> = [
   },
   {
     key: "post-runtime",
+    links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
+  },
+  {
+    key: "json-schema",
+    subheader: "JSON Schema",
     links: [
-      { ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" },
       {
-        ...linkOptions({ to: "/json-schema" }),
-        name: "JSON Schema",
+        ...linkOptions({ to: "/json-schema/conversion" }),
+        name: "Conversion",
         icon: "data_object",
       },
     ],

@@ -83,7 +83,19 @@ export function Sidebar() {
       <nav className="typo-subtitle1">
         <ul {...cls("groups")}>
           {sidebarGroups.map((group, index) => (
-            <li key={group.key} {...cls("group")}>
+            <li
+              key={group.key}
+              {...cls("group")}
+              aria-labelledby={group.subheader ? `${group.key}-subheader` : undefined}
+            >
+              {group.subheader && (
+                <h3
+                  id={`${group.key}-subheader`}
+                  {...cls({ element: "subheader", extra: "typo-body2" })}
+                >
+                  {group.subheader}
+                </h3>
+              )}
               <List>
                 {group.links.map(({ name, icon, ...link }) => (
                   <ListItem key={link.to}>
