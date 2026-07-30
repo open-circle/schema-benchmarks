@@ -10,7 +10,7 @@ import {
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
   jsonSchemaTargetProps,
-} from "#src/routes/_benchmarks/json-schema/conversion/-constants.ts";
+} from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
