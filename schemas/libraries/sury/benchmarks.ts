@@ -102,7 +102,7 @@ export default defineBenchmarks({
       ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
     source: "runtime",
     // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
-    standardJsonSchema: { support: "native-opt-in", schema: jsonSchemaSubject },
+    standardJsonSchema: { support: "opt-in", schema: jsonSchemaSubject },
   },
   string: {
     "date-time": createStringBenchmark(S.isoDateTime, ts`S.isoDateTime`),

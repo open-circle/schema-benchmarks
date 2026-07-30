@@ -69,8 +69,8 @@ export type JsonSchemaSource = v.InferOutput<typeof jsonSchemaSourceSchema>;
  */
 export const standardJsonSchemaSupportSchema = /* @__PURE__ */ v.picklist([
   "native",
-  "native-opt-in",
-  "separate-package",
+  "opt-in",
+  "package",
 ]);
 export type StandardJsonSchemaSupport = v.InferOutput<typeof standardJsonSchemaSupportSchema>;
 

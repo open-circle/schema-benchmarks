@@ -52,7 +52,7 @@ export const standardJsonSchemaProps = {
   options: standardJsonSchemaSupportSchema.options,
   labels: {
     native: { label: "Native", icon: "verified" },
-    "native-opt-in": { label: "Native Opt in", icon: "toggle_on" },
-    "separate-package": { label: "Separate package", icon: "package_2" },
+    "opt-in": { label: "Native Opt in", icon: "toggle_on" },
+    package: { label: "Separate package", icon: "package_2" },
   },
 } satisfies Pick<PageFilterChipsProps<StandardJsonSchemaSupport>, "title" | "labels" | "options">;
