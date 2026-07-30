@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 import { AlertDialog, type AlertDialogProps } from "#src/shared/components/dialog/alert.tsx";
 
-import { confirmQueue } from "./queue.ts";
+import { confirmQueue } from "./queue";
 
 export interface ConfirmDialogProps extends DistributiveOmit<
   AlertDialogProps,

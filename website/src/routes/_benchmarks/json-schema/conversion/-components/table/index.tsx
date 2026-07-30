@@ -13,7 +13,7 @@ import {
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
   jsonSchemaTargetProps,
-} from "#src/routes/_benchmarks/json-schema/conversion/-constants.ts";
+} from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
