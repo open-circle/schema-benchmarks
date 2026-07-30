@@ -2,7 +2,7 @@ import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 
 import preview from "#storybook/preview";
 
-import { BaseJsonSchemaPlot } from "./plot";
+import { BaseJsonSchemaPlot } from ".";
 
 const meta = preview.meta({
   title: "Features/Benchmark/JsonSchema/Plot",

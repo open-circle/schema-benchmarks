@@ -7,6 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
+import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaSourceProps,
@@ -21,8 +22,6 @@ import { Bar } from "#src/shared/components/table/bar";
 import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
-
-import { GeneratedJsonSchema } from "./json-schema";
 
 export interface JsonSchemaBenchTableProps {
   results: Array<JsonSchemaResult>;

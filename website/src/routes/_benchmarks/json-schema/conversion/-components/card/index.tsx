@@ -4,6 +4,7 @@ import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
+import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaSourceProps,
@@ -14,8 +15,6 @@ import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
-
-import { GeneratedJsonSchema } from "./json-schema";
 
 interface JsonSchemaBenchCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;
