@@ -22,9 +22,9 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
     ["Parsing", "/parsing"],
     ["Codec", "/codec"],
     ["Standard Schema", "/standard"],
-    ["JSON Schema", "/json-schema/conversion"],
     ["String", "/string"],
     ["Stack", "/stack"],
+    ["Conversion", "/json-schema/conversion"],
     ["Libraries", "/libraries"],
     ["Blog", "/blog"],
   ] as const) {
