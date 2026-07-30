@@ -7,7 +7,7 @@ import { build, createServer } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 
-import vitePwaOpts from "./opts";
+import vitePwaOpts from "./opts.ts";
 
 // step 1: create base HTML and service worker
 await build({
