@@ -9,22 +9,22 @@ import {
   jsonSchemaDirectionProps,
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
-  jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 
-interface JsonSchemaBenchCardProps {
+interface ConversionCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;
   result: JsonSchemaResult;
 }
 
 export const cls = bem("json-schema-card");
 
-export function JsonSchemaCard({ result, meanScaler }: JsonSchemaBenchCardProps) {
+export function ConversionCard({ result, meanScaler }: ConversionCardProps) {
   const { id } = result;
+  const isRuntime = result.source === "runtime";
   return (
     <li id={id} aria-labelledby={`${id}-header`} data-testid="bench-card">
       <article
@@ -56,29 +56,33 @@ export function JsonSchemaCard({ result, meanScaler }: JsonSchemaBenchCardProps)
           </ErrorBoundary>
         </div>
         <CodeBlock>{result.snippet}</CodeBlock>
-        <dl className="minimal">
-          <div>
-            <dt>Mean</dt>
-            <dd>{formatDuration(result.mean)}</dd>
-          </div>
-        </dl>
-        <div {...cls("bar")}>
-          <Bar {...meanScaler(result.mean)} />
-        </div>
+        {isRuntime && (
+          <>
+            <dl className="minimal">
+              <div>
+                <dt>Mean</dt>
+                <dd>{formatDuration(result.mean)}</dd>
+              </div>
+            </dl>
+            <div {...cls("bar")}>
+              <Bar {...meanScaler(result.mean)} />
+            </div>
+          </>
+        )}
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
             <DisplayChip>
               <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
               {jsonSchemaSourceProps.labels[result.source].label}
             </DisplayChip>
-            <DisplayChip>
-              <MdSymbol>{standardJsonSchemaProps.labels[result.standardJsonSchema].icon}</MdSymbol>
-              {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
-            </DisplayChip>
-            <DisplayChip>
-              <MdSymbol>{jsonSchemaTargetProps.labels[result.target].icon}</MdSymbol>
-              {jsonSchemaTargetProps.labels[result.target].label}
-            </DisplayChip>
+            {result.standardJsonSchema !== "none" && (
+              <DisplayChip>
+                <MdSymbol>
+                  {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}
+                </MdSymbol>
+                {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
+              </DisplayChip>
+            )}
             <DisplayChip>
               <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
               {jsonSchemaDirectionProps.labels[result.direction].label}

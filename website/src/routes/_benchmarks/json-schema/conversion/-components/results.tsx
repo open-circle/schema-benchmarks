@@ -8,8 +8,8 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { JsonSchemaCard } from "./card";
-import { JsonSchemaTable } from "./table";
+import { ConversionCard } from "./card";
+import { ConversionTable } from "./table";
 
 export interface JsonSchemaBenchResultsProps {
   results: Array<JsonSchemaResult>;
@@ -17,7 +17,7 @@ export interface JsonSchemaBenchResultsProps {
   sortDir: SortDirection;
 }
 
-export function JsonSchemaResults({ results, ...props }: JsonSchemaBenchResultsProps) {
+export function ConversionResults({ results, ...props }: JsonSchemaBenchResultsProps) {
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
   const meanScaler = useMemo(
     () =>
@@ -39,11 +39,11 @@ export function JsonSchemaResults({ results, ...props }: JsonSchemaBenchResultsP
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <JsonSchemaTable {...{ results, meanScaler }} to="/json-schema/conversion" {...props} />
+        <ConversionTable {...{ results, meanScaler }} {...props} />
       ) : (
         <ul className="json-schema-cards" aria-label="Results">
           {results.map((result) => (
-            <JsonSchemaCard key={result.id} {...{ result, meanScaler }} />
+            <ConversionCard key={result.id} {...{ result, meanScaler }} />
           ))}
         </ul>
       )}

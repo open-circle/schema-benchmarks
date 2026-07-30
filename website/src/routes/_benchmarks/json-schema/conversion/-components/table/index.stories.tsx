@@ -4,19 +4,18 @@ import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import "./index.css";
-import { JsonSchemaTable } from ".";
+import { ConversionTable } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Table",
-  component: JsonSchemaTable,
+  title: "Features/Benchmark/JsonSchema/Conversion/Table",
+  component: ConversionTable,
   args: {
     sortBy: "mean",
     sortDir: "ascending",
-    to: "/json-schema/conversion",
   } as const,
 });
 
-export const JsonSchema = meta.story({
+export const Default = meta.story({
   args: {
     results: jsonSchemaResults.bench,
     meanScaler: Bar.getScale(
