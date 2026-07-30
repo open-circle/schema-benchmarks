@@ -1,0 +1,10 @@
+.snippet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.json-schema-table__downloads-label {
+  display: inline-flex;
+  align-items: center;
+}

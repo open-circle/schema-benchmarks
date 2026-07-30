@@ -1,5 +1,4 @@
-import type { BenchResult } from "@schema-benchmarks/bench";
-import type { DistributiveArray } from "@schema-benchmarks/utils";
+import type { JsonSchemaResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
 
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
@@ -9,19 +8,16 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { BenchCard } from "./card";
-import { BenchTable } from "./table";
+import { JsonSchemaCard } from "./card";
+import { JsonSchemaTable } from "./table";
 
-export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard" | "string"}`;
-
-export interface BenchResultsProps {
-  results: DistributiveArray<BenchResult>;
-  to: BenchTo;
+export interface JsonSchemaBenchResultsProps {
+  results: Array<JsonSchemaResult>;
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
 
-export function BenchResults({ results, ...props }: BenchResultsProps) {
+export function JsonSchemaResults({ results, ...props }: JsonSchemaBenchResultsProps) {
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
   const meanScaler = useMemo(
     () =>
@@ -43,11 +39,11 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <BenchTable {...{ results, meanScaler }} {...props} />
+        <JsonSchemaTable {...{ results, meanScaler }} to="/json-schema" {...props} />
       ) : (
-        <ul className="bench-cards" aria-label="Results">
+        <ul className="json-schema-cards" aria-label="Results">
           {results.map((result) => (
-            <BenchCard key={result.id} {...{ result, meanScaler: meanScaler }} />
+            <JsonSchemaCard key={result.id} {...{ result, meanScaler }} />
           ))}
         </ul>
       )}

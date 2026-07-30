@@ -34,7 +34,7 @@ export function SupportMatrix({ results }: SupportMatrixProps) {
   );
   return (
     <table
-      className="bench-table"
+      className="json-schema-table"
       aria-label="Support"
       style={{ viewTransitionName: "json-schema-matrix" }}
     >

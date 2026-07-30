@@ -1,34 +1,40 @@
-import type { BenchResult } from "@schema-benchmarks/bench";
+import type { JsonSchemaResult } from "@schema-benchmarks/bench";
 import { formatDuration, getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
-import { ToggleButton } from "#src/shared/components/button/toggle";
+import {
+  jsonSchemaDirectionProps,
+  jsonSchemaSourceProps,
+  standardJsonSchemaProps,
+  jsonSchemaTargetProps,
+} from "#src/routes/_benchmarks/_runtime/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 
-interface BenchCardProps {
+import { GeneratedJsonSchema } from "./json-schema";
+
+interface JsonSchemaBenchCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;
-  result: BenchResult;
+  result: JsonSchemaResult;
 }
 
-export const cls = bem("bench-card");
+export const cls = bem("json-schema-card");
 
-export function BenchCard({ result, meanScaler }: BenchCardProps) {
+export function JsonSchemaCard({ result, meanScaler }: JsonSchemaBenchCardProps) {
   const { id } = result;
   return (
     <li id={id} aria-labelledby={`${id}-header`} data-testid="bench-card">
       <article
         {...cls()}
         style={{
-          viewTransitionName: getTransitionName("bench-card", {
+          viewTransitionName: getTransitionName("json-schema-card", {
             libraryName: result.libraryName,
             note: result.note,
-            errorType: result.type === "parsing" ? result.errorType : undefined,
+            direction: result.direction,
           }),
         }}
       >
@@ -63,31 +69,23 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
             <DisplayChip>
-              <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
-              {optimizeTypeProps.labels[result.optimizeType].label}
+              <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
+              {jsonSchemaSourceProps.labels[result.source].label}
             </DisplayChip>
-            {(result.type === "parsing" || result.type === "standard") && (
-              <DisplayChip>
-                <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
-                {errorTypeProps.labels[result.errorType].label}
-              </DisplayChip>
-            )}
+            <DisplayChip>
+              <MdSymbol>{standardJsonSchemaProps.labels[result.standardJsonSchema].icon}</MdSymbol>
+              {`Standard JSON Schema: ${standardJsonSchemaProps.labels[result.standardJsonSchema].label}`}
+            </DisplayChip>
+            <DisplayChip>
+              <MdSymbol>{jsonSchemaTargetProps.labels[result.target].icon}</MdSymbol>
+              {jsonSchemaTargetProps.labels[result.target].label}
+            </DisplayChip>
+            <DisplayChip>
+              <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
+              {jsonSchemaDirectionProps.labels[result.direction].label}
+            </DisplayChip>
           </ChipCollection>
-          {result.throws && (
-            <ToggleButton
-              tooltip={{
-                subhead: "Throws on invalid data",
-                supporting: (
-                  <div style={{ maxWidth: "16rem" }}>
-                    This library throws an error when parsing invalid data (and has no non-throwing
-                    equivalent), so the benchmark includes a try/catch.
-                  </div>
-                ),
-              }}
-            >
-              <MdSymbol>error</MdSymbol>
-            </ToggleButton>
-          )}
+          <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
         </div>
       </article>
     </li>
