@@ -5,7 +5,7 @@ import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -81,9 +81,9 @@ export interface JsonSchemaPlotProps {
 
 export function JsonSchemaPlot({ target, direction }: JsonSchemaPlotProps) {
   const { data } = useSuspenseQuery({
-    ...getBenchResults(),
+    ...getJsonSchemaBenchResults(),
     select: (results) =>
-      results.jsonSchema.filter((r) => r.target === target && r.direction === direction),
+      results.bench.filter((r) => r.target === target && r.direction === direction),
   });
   return <BaseJsonSchemaPlot data={data} />;
 }

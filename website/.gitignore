@@ -8,4 +8,5 @@ dev-dist/
 # Benchmark results (copied over from bench/)
 public/bench.json
 public/download.json
+public/json-schema.json
 public/stack.json

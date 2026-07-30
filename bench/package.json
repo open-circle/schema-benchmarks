@@ -8,10 +8,12 @@
     ".": "./src/index.ts",
     "./bench.json": "./bench.json",
     "./download.json": "./download.json",
+    "./json-schema.json": "./json-schema.json",
     "./stack.json": "./stack.json"
   },
   "scripts": {
     "bench": "node ./src/scripts/bench/orchestrate.ts",
+    "bench:json-schema": "node ./src/scripts/bench/json-schema/orchestrate.ts",
     "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsc"
