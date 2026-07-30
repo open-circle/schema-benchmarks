@@ -63,16 +63,16 @@ function RouteComponent() {
   const { target, direction, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: ({ bench, support }) => ({
-      results: bench.filter(shallowFilter({ target, direction })),
-      support,
-    }),
+    select: ({ bench }) => bench.filter(shallowFilter({ target, direction })),
   });
-  const sortedData = useSortedResults(data.results, sortBy, sortDir);
+  const sortedData = useSortedResults(data, sortBy, sortDir);
   return (
     <>
       <Content components={{ wrapper: "div" }} />
-      <SupportMatrix results={data.support} />
+      <details>
+        <summary>Support matrix</summary>
+        <SupportMatrix />
+      </details>
       <PageFilters>
         <PageFilterChips
           {...jsonSchemaTargetProps}
