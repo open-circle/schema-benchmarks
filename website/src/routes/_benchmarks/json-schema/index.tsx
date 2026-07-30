@@ -28,7 +28,7 @@ const searchSchema = v.object({
   ...sortParamsEntries,
 });
 
-export const Route = createFileRoute("/_benchmarks/_runtime/json-schema/")({
+export const Route = createFileRoute("/_benchmarks/json-schema/")({
   validateSearch: searchSchema,
   component: RouteComponent,
   loaderDeps: ({ search: { target, direction } }) => ({ target, direction }),

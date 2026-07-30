@@ -18,13 +18,13 @@ import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ContributingIndexRouteImport } from './routes/contributing/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
+import { Route as BenchmarksJsonSchemaIndexRouteImport } from './routes/_benchmarks/json-schema/index'
 import { Route as BenchmarksLibrariesIndexRouteImport } from './routes/_benchmarks/libraries/index'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as BenchmarksRuntimeCodecIndexRouteImport } from './routes/_benchmarks/_runtime/codec/index'
 import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
-import { Route as BenchmarksRuntimeJsonSchemaIndexRouteImport } from './routes/_benchmarks/_runtime/json-schema/index'
 import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_benchmarks/_runtime/parsing/index'
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
 import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benchmarks/_runtime/string/index'
@@ -74,6 +74,12 @@ const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
   path: '/download/',
   getParentRoute: () => BenchmarksRouteRoute,
 } as any)
+const BenchmarksJsonSchemaIndexRoute =
+  BenchmarksJsonSchemaIndexRouteImport.update({
+    id: '/json-schema/',
+    path: '/json-schema/',
+    getParentRoute: () => BenchmarksRouteRoute,
+  } as any)
 const BenchmarksLibrariesIndexRoute =
   BenchmarksLibrariesIndexRouteImport.update({
     id: '/',
@@ -105,12 +111,6 @@ const BenchmarksRuntimeInitializationIndexRoute =
   BenchmarksRuntimeInitializationIndexRouteImport.update({
     id: '/initialization/',
     path: '/initialization/',
-    getParentRoute: () => BenchmarksRuntimeRouteRoute,
-  } as any)
-const BenchmarksRuntimeJsonSchemaIndexRoute =
-  BenchmarksRuntimeJsonSchemaIndexRouteImport.update({
-    id: '/json-schema/',
-    path: '/json-schema/',
     getParentRoute: () => BenchmarksRuntimeRouteRoute,
   } as any)
 const BenchmarksRuntimeParsingIndexRoute =
@@ -148,11 +148,11 @@ export interface FileRoutesByFullPath {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
+  '/json-schema/': typeof BenchmarksJsonSchemaIndexRoute
   '/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
   '/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
-  '/json-schema/': typeof BenchmarksRuntimeJsonSchemaIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/string/': typeof BenchmarksRuntimeStringIndexRoute
@@ -166,11 +166,11 @@ export interface FileRoutesByTo {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
+  '/json-schema': typeof BenchmarksJsonSchemaIndexRoute
   '/libraries': typeof BenchmarksLibrariesIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
   '/codec': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
-  '/json-schema': typeof BenchmarksRuntimeJsonSchemaIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
   '/string': typeof BenchmarksRuntimeStringIndexRoute
@@ -189,11 +189,11 @@ export interface FileRoutesById {
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
+  '/_benchmarks/json-schema/': typeof BenchmarksJsonSchemaIndexRoute
   '/_benchmarks/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
   '/_benchmarks/_runtime/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
-  '/_benchmarks/_runtime/json-schema/': typeof BenchmarksRuntimeJsonSchemaIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/_benchmarks/_runtime/string/': typeof BenchmarksRuntimeStringIndexRoute
@@ -211,11 +211,11 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download/'
+    | '/json-schema/'
     | '/libraries/'
     | '/stack/'
     | '/codec/'
     | '/initialization/'
-    | '/json-schema/'
     | '/parsing/'
     | '/standard/'
     | '/string/'
@@ -229,11 +229,11 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download'
+    | '/json-schema'
     | '/libraries'
     | '/stack'
     | '/codec'
     | '/initialization'
-    | '/json-schema'
     | '/parsing'
     | '/standard'
     | '/string'
@@ -251,11 +251,11 @@ export interface FileRouteTypes {
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
+    | '/_benchmarks/json-schema/'
     | '/_benchmarks/libraries/'
     | '/_benchmarks/stack/'
     | '/_benchmarks/_runtime/codec/'
     | '/_benchmarks/_runtime/initialization/'
-    | '/_benchmarks/_runtime/json-schema/'
     | '/_benchmarks/_runtime/parsing/'
     | '/_benchmarks/_runtime/standard/'
     | '/_benchmarks/_runtime/string/'
@@ -336,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksDownloadIndexRouteImport
       parentRoute: typeof BenchmarksRouteRoute
     }
+    '/_benchmarks/json-schema/': {
+      id: '/_benchmarks/json-schema/'
+      path: '/json-schema'
+      fullPath: '/json-schema/'
+      preLoaderRoute: typeof BenchmarksJsonSchemaIndexRouteImport
+      parentRoute: typeof BenchmarksRouteRoute
+    }
     '/_benchmarks/libraries/': {
       id: '/_benchmarks/libraries/'
       path: '/'
@@ -378,13 +385,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksRuntimeInitializationIndexRouteImport
       parentRoute: typeof BenchmarksRuntimeRouteRoute
     }
-    '/_benchmarks/_runtime/json-schema/': {
-      id: '/_benchmarks/_runtime/json-schema/'
-      path: '/json-schema'
-      fullPath: '/json-schema/'
-      preLoaderRoute: typeof BenchmarksRuntimeJsonSchemaIndexRouteImport
-      parentRoute: typeof BenchmarksRuntimeRouteRoute
-    }
     '/_benchmarks/_runtime/parsing/': {
       id: '/_benchmarks/_runtime/parsing/'
       path: '/parsing'
@@ -419,7 +419,6 @@ declare module '@tanstack/react-router' {
 interface BenchmarksRuntimeRouteRouteChildren {
   BenchmarksRuntimeCodecIndexRoute: typeof BenchmarksRuntimeCodecIndexRoute
   BenchmarksRuntimeInitializationIndexRoute: typeof BenchmarksRuntimeInitializationIndexRoute
-  BenchmarksRuntimeJsonSchemaIndexRoute: typeof BenchmarksRuntimeJsonSchemaIndexRoute
   BenchmarksRuntimeParsingIndexRoute: typeof BenchmarksRuntimeParsingIndexRoute
   BenchmarksRuntimeStandardIndexRoute: typeof BenchmarksRuntimeStandardIndexRoute
   BenchmarksRuntimeStringIndexRoute: typeof BenchmarksRuntimeStringIndexRoute
@@ -431,8 +430,6 @@ const BenchmarksRuntimeRouteRouteChildren: BenchmarksRuntimeRouteRouteChildren =
     BenchmarksRuntimeCodecIndexRoute: BenchmarksRuntimeCodecIndexRoute,
     BenchmarksRuntimeInitializationIndexRoute:
       BenchmarksRuntimeInitializationIndexRoute,
-    BenchmarksRuntimeJsonSchemaIndexRoute:
-      BenchmarksRuntimeJsonSchemaIndexRoute,
     BenchmarksRuntimeParsingIndexRoute: BenchmarksRuntimeParsingIndexRoute,
     BenchmarksRuntimeStandardIndexRoute: BenchmarksRuntimeStandardIndexRoute,
     BenchmarksRuntimeStringIndexRoute: BenchmarksRuntimeStringIndexRoute,
@@ -463,6 +460,7 @@ interface BenchmarksRouteRouteChildren {
   BenchmarksRuntimeRouteRoute: typeof BenchmarksRuntimeRouteRouteWithChildren
   BenchmarksLibrariesRouteRoute: typeof BenchmarksLibrariesRouteRouteWithChildren
   BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
+  BenchmarksJsonSchemaIndexRoute: typeof BenchmarksJsonSchemaIndexRoute
   BenchmarksStackIndexRoute: typeof BenchmarksStackIndexRoute
 }
 
@@ -470,6 +468,7 @@ const BenchmarksRouteRouteChildren: BenchmarksRouteRouteChildren = {
   BenchmarksRuntimeRouteRoute: BenchmarksRuntimeRouteRouteWithChildren,
   BenchmarksLibrariesRouteRoute: BenchmarksLibrariesRouteRouteWithChildren,
   BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
+  BenchmarksJsonSchemaIndexRoute: BenchmarksJsonSchemaIndexRoute,
   BenchmarksStackIndexRoute: BenchmarksStackIndexRoute,
 }
 
