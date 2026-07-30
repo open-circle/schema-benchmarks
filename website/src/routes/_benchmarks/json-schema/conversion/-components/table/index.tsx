@@ -155,7 +155,7 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
               <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
               <td>
                 {isRuntime &&
-                  result.standardJsonSchema !== "none" &&
+                  result.standardJsonSchema &&
                   standardJsonSchemaProps.labels[result.standardJsonSchema].label}
               </td>
               <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>

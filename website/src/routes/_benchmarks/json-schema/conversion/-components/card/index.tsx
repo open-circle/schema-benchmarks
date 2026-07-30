@@ -75,7 +75,7 @@ export function ConversionCard({ result, meanScaler }: ConversionCardProps) {
               <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
               {jsonSchemaSourceProps.labels[result.source].label}
             </DisplayChip>
-            {result.standardJsonSchema !== "none" && (
+            {result.standardJsonSchema && (
               <DisplayChip>
                 <MdSymbol>
                   {standardJsonSchemaProps.labels[result.standardJsonSchema].icon}

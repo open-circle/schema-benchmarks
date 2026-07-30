@@ -63,7 +63,7 @@ const jsonSchemaResultSchema = v.object({
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
   source: jsonSchemaSourceSchema,
-  standardJsonSchema: standardJsonSchemaSupportSchema,
+  standardJsonSchema: v.optional(standardJsonSchemaSupportSchema),
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
 });
@@ -82,7 +82,7 @@ export const jsonSchemaSupportResultSchema = v.object({
   version: v.string(),
   note: v.optional(v.string()),
   source: jsonSchemaSourceSchema,
-  standardJsonSchema: standardJsonSchemaSupportSchema,
+  standardJsonSchema: v.optional(standardJsonSchemaSupportSchema),
   unsupported: v.array(
     v.object({
       ...jsonSchemaCombinationSchema.entries,

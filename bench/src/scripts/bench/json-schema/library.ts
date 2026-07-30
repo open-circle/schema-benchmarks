@@ -81,7 +81,7 @@ for (const benchConfig of ensureArray(jsonSchemaConfig)) {
         target,
         direction,
         source,
-        standardJsonSchema: standardJsonSchemaConfig?.support ?? "none",
+        standardJsonSchema: standardJsonSchemaConfig?.support,
         jsonSchema: JSON.stringify(jsonSchema, null, 2),
         libraryName,
         version,
@@ -106,7 +106,7 @@ for (const benchConfig of ensureArray(jsonSchemaConfig)) {
     version,
     note,
     source,
-    standardJsonSchema: standardJsonSchemaConfig?.support ?? "none",
+    standardJsonSchema: standardJsonSchemaConfig?.support,
     unsupported,
   });
 }
