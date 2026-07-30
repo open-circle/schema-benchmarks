@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BenchmarksRouteRouteImport } from './routes/_benchmarks/route'
 import { Route as BlogRouteRouteImport } from './routes/blog/route'
 import { Route as BenchmarksRuntimeRouteRouteImport } from './routes/_benchmarks/_runtime/route'
+import { Route as BenchmarksJsonSchemaRouteRouteImport } from './routes/_benchmarks/json-schema/route'
 import { Route as BenchmarksLibrariesRouteRouteImport } from './routes/_benchmarks/libraries/route'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -29,6 +30,7 @@ import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_ben
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
 import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benchmarks/_runtime/string/index'
 import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
+import { Route as BenchmarksJsonSchemaConversionIndexRouteImport } from './routes/_benchmarks/json-schema/conversion/index'
 
 const BenchmarksRouteRoute = BenchmarksRouteRouteImport.update({
   id: '/_benchmarks',
@@ -43,6 +45,12 @@ const BenchmarksRuntimeRouteRoute = BenchmarksRuntimeRouteRouteImport.update({
   id: '/_runtime',
   getParentRoute: () => BenchmarksRouteRoute,
 } as any)
+const BenchmarksJsonSchemaRouteRoute =
+  BenchmarksJsonSchemaRouteRouteImport.update({
+    id: '/json-schema',
+    path: '/json-schema',
+    getParentRoute: () => BenchmarksRouteRoute,
+  } as any)
 const BenchmarksLibrariesRouteRoute =
   BenchmarksLibrariesRouteRouteImport.update({
     id: '/libraries',
@@ -76,9 +84,9 @@ const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
 } as any)
 const BenchmarksJsonSchemaIndexRoute =
   BenchmarksJsonSchemaIndexRouteImport.update({
-    id: '/json-schema/',
-    path: '/json-schema/',
-    getParentRoute: () => BenchmarksRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => BenchmarksJsonSchemaRouteRoute,
   } as any)
 const BenchmarksLibrariesIndexRoute =
   BenchmarksLibrariesIndexRouteImport.update({
@@ -137,10 +145,17 @@ const BenchmarksRuntimeValidationIndexRoute =
     path: '/validation/',
     getParentRoute: () => BenchmarksRuntimeRouteRoute,
   } as any)
+const BenchmarksJsonSchemaConversionIndexRoute =
+  BenchmarksJsonSchemaConversionIndexRouteImport.update({
+    id: '/conversion/',
+    path: '/conversion/',
+    getParentRoute: () => BenchmarksJsonSchemaRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/blog': typeof BlogRouteRouteWithChildren
+  '/json-schema': typeof BenchmarksJsonSchemaRouteRouteWithChildren
   '/libraries': typeof BenchmarksLibrariesRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -157,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/validation/': typeof BenchmarksRuntimeValidationIndexRoute
+  '/json-schema/conversion/': typeof BenchmarksJsonSchemaConversionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
@@ -175,12 +191,14 @@ export interface FileRoutesByTo {
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
   '/string': typeof BenchmarksRuntimeStringIndexRoute
   '/validation': typeof BenchmarksRuntimeValidationIndexRoute
+  '/json-schema/conversion': typeof BenchmarksJsonSchemaConversionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_benchmarks': typeof BenchmarksRouteRouteWithChildren
   '/blog': typeof BlogRouteRouteWithChildren
   '/_benchmarks/_runtime': typeof BenchmarksRuntimeRouteRouteWithChildren
+  '/_benchmarks/json-schema': typeof BenchmarksJsonSchemaRouteRouteWithChildren
   '/_benchmarks/libraries': typeof BenchmarksLibrariesRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
@@ -198,12 +216,14 @@ export interface FileRoutesById {
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/_benchmarks/_runtime/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/_benchmarks/_runtime/validation/': typeof BenchmarksRuntimeValidationIndexRoute
+  '/_benchmarks/json-schema/conversion/': typeof BenchmarksJsonSchemaConversionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/blog'
+    | '/json-schema'
     | '/libraries'
     | '/blog/$slug'
     | '/blog/'
@@ -220,6 +240,7 @@ export interface FileRouteTypes {
     | '/standard/'
     | '/string/'
     | '/validation/'
+    | '/json-schema/conversion/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -238,11 +259,13 @@ export interface FileRouteTypes {
     | '/standard'
     | '/string'
     | '/validation'
+    | '/json-schema/conversion'
   id:
     | '__root__'
     | '/_benchmarks'
     | '/blog'
     | '/_benchmarks/_runtime'
+    | '/_benchmarks/json-schema'
     | '/_benchmarks/libraries'
     | '/blog/$slug'
     | '/_home/'
@@ -260,6 +283,7 @@ export interface FileRouteTypes {
     | '/_benchmarks/_runtime/standard/'
     | '/_benchmarks/_runtime/string/'
     | '/_benchmarks/_runtime/validation/'
+    | '/_benchmarks/json-schema/conversion/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -292,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BenchmarksRuntimeRouteRouteImport
+      parentRoute: typeof BenchmarksRouteRoute
+    }
+    '/_benchmarks/json-schema': {
+      id: '/_benchmarks/json-schema'
+      path: '/json-schema'
+      fullPath: '/json-schema'
+      preLoaderRoute: typeof BenchmarksJsonSchemaRouteRouteImport
       parentRoute: typeof BenchmarksRouteRoute
     }
     '/_benchmarks/libraries': {
@@ -338,10 +369,10 @@ declare module '@tanstack/react-router' {
     }
     '/_benchmarks/json-schema/': {
       id: '/_benchmarks/json-schema/'
-      path: '/json-schema'
+      path: '/'
       fullPath: '/json-schema/'
       preLoaderRoute: typeof BenchmarksJsonSchemaIndexRouteImport
-      parentRoute: typeof BenchmarksRouteRoute
+      parentRoute: typeof BenchmarksJsonSchemaRouteRoute
     }
     '/_benchmarks/libraries/': {
       id: '/_benchmarks/libraries/'
@@ -413,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksRuntimeValidationIndexRouteImport
       parentRoute: typeof BenchmarksRuntimeRouteRoute
     }
+    '/_benchmarks/json-schema/conversion/': {
+      id: '/_benchmarks/json-schema/conversion/'
+      path: '/conversion'
+      fullPath: '/json-schema/conversion/'
+      preLoaderRoute: typeof BenchmarksJsonSchemaConversionIndexRouteImport
+      parentRoute: typeof BenchmarksJsonSchemaRouteRoute
+    }
   }
 }
 
@@ -442,6 +480,23 @@ const BenchmarksRuntimeRouteRouteWithChildren =
     BenchmarksRuntimeRouteRouteChildren,
   )
 
+interface BenchmarksJsonSchemaRouteRouteChildren {
+  BenchmarksJsonSchemaIndexRoute: typeof BenchmarksJsonSchemaIndexRoute
+  BenchmarksJsonSchemaConversionIndexRoute: typeof BenchmarksJsonSchemaConversionIndexRoute
+}
+
+const BenchmarksJsonSchemaRouteRouteChildren: BenchmarksJsonSchemaRouteRouteChildren =
+  {
+    BenchmarksJsonSchemaIndexRoute: BenchmarksJsonSchemaIndexRoute,
+    BenchmarksJsonSchemaConversionIndexRoute:
+      BenchmarksJsonSchemaConversionIndexRoute,
+  }
+
+const BenchmarksJsonSchemaRouteRouteWithChildren =
+  BenchmarksJsonSchemaRouteRoute._addFileChildren(
+    BenchmarksJsonSchemaRouteRouteChildren,
+  )
+
 interface BenchmarksLibrariesRouteRouteChildren {
   BenchmarksLibrariesIndexRoute: typeof BenchmarksLibrariesIndexRoute
 }
@@ -458,17 +513,17 @@ const BenchmarksLibrariesRouteRouteWithChildren =
 
 interface BenchmarksRouteRouteChildren {
   BenchmarksRuntimeRouteRoute: typeof BenchmarksRuntimeRouteRouteWithChildren
+  BenchmarksJsonSchemaRouteRoute: typeof BenchmarksJsonSchemaRouteRouteWithChildren
   BenchmarksLibrariesRouteRoute: typeof BenchmarksLibrariesRouteRouteWithChildren
   BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
-  BenchmarksJsonSchemaIndexRoute: typeof BenchmarksJsonSchemaIndexRoute
   BenchmarksStackIndexRoute: typeof BenchmarksStackIndexRoute
 }
 
 const BenchmarksRouteRouteChildren: BenchmarksRouteRouteChildren = {
   BenchmarksRuntimeRouteRoute: BenchmarksRuntimeRouteRouteWithChildren,
+  BenchmarksJsonSchemaRouteRoute: BenchmarksJsonSchemaRouteRouteWithChildren,
   BenchmarksLibrariesRouteRoute: BenchmarksLibrariesRouteRouteWithChildren,
   BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
-  BenchmarksJsonSchemaIndexRoute: BenchmarksJsonSchemaIndexRoute,
   BenchmarksStackIndexRoute: BenchmarksStackIndexRoute,
 }
 

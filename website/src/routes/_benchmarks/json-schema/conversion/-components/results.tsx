@@ -39,7 +39,7 @@ export function JsonSchemaResults({ results, ...props }: JsonSchemaBenchResultsP
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <JsonSchemaTable {...{ results, meanScaler }} to="/json-schema" {...props} />
+        <JsonSchemaTable {...{ results, meanScaler }} to="/json-schema/conversion" {...props} />
       ) : (
         <ul className="json-schema-cards" aria-label="Results">
           {results.map((result) => (

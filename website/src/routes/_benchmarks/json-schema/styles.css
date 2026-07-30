@@ -1,5 +1,5 @@
-@import "./-components/table.css";
-@import "./-components/card.css";
+@import "./conversion/-components/table.css";
+@import "./conversion/-components/card.css";
 
 .json-schema-cards {
   display: grid;

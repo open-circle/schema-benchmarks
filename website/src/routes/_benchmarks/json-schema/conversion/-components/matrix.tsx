@@ -8,7 +8,7 @@ import {
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
   jsonSchemaTargetProps,
-} from "#src/routes/_benchmarks/json-schema/-constants";
+} from "#src/routes/_benchmarks/json-schema/conversion/-constants.ts";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { MdSymbol } from "#src/shared/components/symbol";
 

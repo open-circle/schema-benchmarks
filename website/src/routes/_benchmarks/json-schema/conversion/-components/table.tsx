@@ -12,7 +12,7 @@ import {
   jsonSchemaSourceProps,
   standardJsonSchemaProps,
   jsonSchemaTargetProps,
-} from "#src/routes/_benchmarks/json-schema/-constants";
+} from "#src/routes/_benchmarks/json-schema/conversion/-constants.ts";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
@@ -27,7 +27,7 @@ import { GeneratedJsonSchema } from "./json-schema";
 export interface JsonSchemaBenchTableProps {
   results: Array<JsonSchemaResult>;
   meanScaler: ReturnType<typeof Bar.getScale>;
-  to: "/json-schema";
+  to: "/json-schema/conversion";
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
