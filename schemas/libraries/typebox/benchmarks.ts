@@ -6,7 +6,12 @@ import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
+import {
+  assertJsonSchemaDirection,
+  assertJsonSchemaTarget,
+  assertNotReached,
+  defineBenchmarks,
+} from "#src";
 
 import { getTypeboxSchema, getTypeboxScriptSchema } from ".";
 
@@ -209,9 +214,7 @@ export default defineBenchmarks({
     // output type has no representation
     generate: ({ target, direction }) => {
       assertJsonSchemaTarget(target, ["draft-2020-12"]);
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return jsonSchemaSubject;
     },
     snippet: () => ts`Type.Object(...)`,

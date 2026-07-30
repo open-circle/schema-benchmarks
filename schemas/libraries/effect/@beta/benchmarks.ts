@@ -4,7 +4,12 @@ import { isSome } from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData } from "#src";
-import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
+import {
+  assertJsonSchemaDirection,
+  assertJsonSchemaTarget,
+  assertNotReached,
+  defineBenchmarks,
+} from "#src";
 
 import { getEffectSchema } from ".";
 
@@ -109,9 +114,7 @@ export default defineBenchmarks({
     // only the input type, and only draft 2020-12
     generate: ({ target, direction }) => {
       assertJsonSchemaTarget(target, ["draft-2020-12"]);
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return toJsonSchema();
     },
     snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,

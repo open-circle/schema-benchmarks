@@ -7,7 +7,7 @@ import { t } from "ata-validator/t";
 import ts from "dedent";
 
 import type { ProductData, StringBenchmarkConfig } from "#src";
-import { assertJsonSchemaTarget, defineBenchmarks } from "#src";
+import { assertJsonSchemaDirection, assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getAtaValidatorSchema } from ".";
 
@@ -64,9 +64,7 @@ export default defineBenchmarks({
     // type has no representation
     generate: ({ target, direction }) => {
       assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
-      if (direction === "output") {
-        throw new Error("No JSON schema can be generated for the output type");
-      }
+      assertJsonSchemaDirection(direction, ["input"]);
       return jsonSchemaSubject;
     },
     snippet: () => ts`t.object({ ... })`,
