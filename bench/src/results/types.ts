@@ -22,39 +22,43 @@ export const baseBenchResultSchema = v.object({
   snippet: v.string(),
   throws: v.optional(v.boolean()),
   mean: v.number(),
-  optimizeType: optimizeTypeSchema,
 });
 export type BaseBenchResult = v.InferOutput<typeof baseBenchResultSchema>;
 
-export const initializationResultSchema = v.object({
+export const runtimeBenchResultSchema = v.object({
   ...baseBenchResultSchema.entries,
+  optimizeType: optimizeTypeSchema,
+});
+export type RuntimeBenchResult = v.InferOutput<typeof runtimeBenchResultSchema>;
+
+export const initializationResultSchema = v.object({
+  ...runtimeBenchResultSchema.entries,
   type: v.literal("initialization"),
 });
 export type InitializationResult = v.InferOutput<typeof initializationResultSchema>;
 
 export const validationResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...runtimeBenchResultSchema.entries,
   type: v.literal("validation"),
 });
 export type ValidationResult = v.InferOutput<typeof validationResultSchema>;
 
 export const parsingResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...runtimeBenchResultSchema.entries,
   type: v.literal("parsing"),
   errorType: errorTypeSchema,
 });
 export type ParsingResult = v.InferOutput<typeof parsingResultSchema>;
 
 const standardResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...runtimeBenchResultSchema.entries,
   errorType: errorTypeSchema,
   type: v.literal("standard"),
 });
 export type StandardResult = v.InferOutput<typeof standardResultSchema>;
 
 const jsonSchemaResultSchema = v.object({
-  // no optimizeType - JIT/precompiled describes how a library validates, not how it converts
-  ...v.omit(baseBenchResultSchema, ["optimizeType"]).entries,
+  ...baseBenchResultSchema.entries,
   type: v.literal("jsonSchema"),
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
@@ -89,13 +93,13 @@ export const jsonSchemaSupportResultSchema = v.object({
 export type JsonSchemaSupportResult = v.InferOutput<typeof jsonSchemaSupportResultSchema>;
 
 const stringResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...runtimeBenchResultSchema.entries,
   type: v.literal("string"),
 });
 export type StringResult = v.InferOutput<typeof stringResultSchema>;
 
 export const codecResultSchema = v.object({
-  ...v.omit(baseBenchResultSchema, ["snippet", "mean"]).entries,
+  ...v.omit(runtimeBenchResultSchema, ["snippet", "mean"]).entries,
   encode: v.object({
     snippet: v.string(),
     mean: v.number(),
@@ -110,13 +114,8 @@ export const codecResultSchema = v.object({
 
 export type CodecResult = v.InferOutput<typeof codecResultSchema>;
 
-export type BenchResult = OneOf<
-  | InitializationResult
-  | ValidationResult
-  | ParsingResult
-  | StandardResult
-  | JsonSchemaResult
-  | StringResult
+export type RuntimeResult = OneOf<
+  InitializationResult | ValidationResult | ParsingResult | StandardResult | StringResult
 >;
 
 export const benchResultsSchema = v.object({

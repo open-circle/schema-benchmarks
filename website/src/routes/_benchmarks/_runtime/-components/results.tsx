@@ -1,4 +1,4 @@
-import type { BenchResult } from "@schema-benchmarks/bench";
+import type { RuntimeResult } from "@schema-benchmarks/bench";
 import type { DistributiveArray } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
@@ -15,7 +15,7 @@ import { BenchTable } from "./table";
 export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard" | "string"}`;
 
 export interface BenchResultsProps {
-  results: DistributiveArray<BenchResult>;
+  results: DistributiveArray<RuntimeResult>;
   to: BenchTo;
   sortBy: SortableKey;
   sortDir: SortDirection;

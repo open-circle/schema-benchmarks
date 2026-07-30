@@ -1,6 +1,6 @@
 import * as Plot from "@observablehq/plot";
-import type { RuntimeResult, BenchResults, DataType } from "@schema-benchmarks/bench";
-import type { ErrorType } from "@schema-benchmarks/schemas";
+import type { JsonSchemaResult } from "@schema-benchmarks/bench";
+import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
 import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -11,41 +11,20 @@ import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
-export type BenchPlotProps =
-  | {
-      type: "initialization";
-      dataType?: never;
-      errorType?: never;
-    }
-  | {
-      type: "validation";
-      dataType: DataType;
-      errorType?: never;
-    }
-  | {
-      type: "parsing" | "standard";
-      dataType: DataType;
-      errorType?: ErrorType;
-    };
+const getLabel = (d: JsonSchemaResult) => d.libraryName + (d.throws ? " *" : "");
 
-const getLabel = (d: RuntimeResult) =>
-  d.libraryName +
-  (d.throws ? " *" : "") +
-  ((d.type === "parsing" || d.type === "standard") && d.errorType === "abortEarly" ? " †" : "");
-
-export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
+export const BaseJsonSchemaPlot = createPlotComponent(function useBenchPlot({
   data,
 }: {
-  data: Array<Exclude<RuntimeResult, { type: "codec" }>>;
+  data: Array<JsonSchemaResult>;
 }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
-  const marginLeft = data[0]?.type === "initialization" ? 84 : 48;
   const minWidth = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + marginLeft;
-  }, [values, marginLeft]);
+    return values.length * (getLabel(longestLabel).length * 6) + 48;
+  }, [values]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -53,7 +32,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
-        marginLeft,
+        marginLeft: 48,
         width: Math.max(domRect?.width ?? 0, minWidth),
         x: {
           label: "Library",
@@ -88,31 +67,23 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           }),
         ],
       }),
-    [values, minWidth, marginLeft, domRect?.width, formatNumber],
+    [values, minWidth, domRect?.width, formatNumber],
   );
   return { plot, ref, minWidth };
 });
 
-BaseBenchPlot.displayName = "BaseBenchPlot";
+BaseJsonSchemaPlot.displayName = "BaseJsonSchemaPlot";
 
-const selectResults = (results: BenchResults, props: BenchPlotProps) => {
-  if (props.type === "initialization") return results[props.type];
-  return results[props.type][props.dataType];
-};
+export interface JsonSchemaPlotProps {
+  target: JsonSchemaTarget;
+  direction: JsonSchemaDirection;
+}
 
-export function BenchPlot(props: BenchPlotProps) {
-  const { errorType } = props;
+export function JsonSchemaPlot({ target, direction }: JsonSchemaPlotProps) {
   const { data } = useSuspenseQuery({
     ...getBenchResults(),
-    select: (results) => selectResults(results, props),
+    select: (results) =>
+      results.jsonSchema.filter((r) => r.target === target && r.direction === direction),
   });
-  const filteredData = useMemo(() => {
-    if (errorType) {
-      return data.filter(
-        (d) => (d.type === "parsing" || d.type === "standard") && d.errorType === errorType,
-      );
-    }
-    return data;
-  }, [data, errorType]);
-  return <BaseBenchPlot data={filteredData} />;
+  return <BaseJsonSchemaPlot data={data} />;
 }

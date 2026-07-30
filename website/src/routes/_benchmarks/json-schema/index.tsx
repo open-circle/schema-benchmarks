@@ -4,13 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import {
-  jsonSchemaDirectionProps,
-  jsonSchemaTargetProps,
-  optionalJsonSchemaDirectionSchema,
-  optionalJsonSchemaTargetSchema,
-  sortParamsEntries,
-} from "#src/routes/_benchmarks/_runtime/-constants";
+import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { PageFilters } from "#src/shared/components/page-filter";
@@ -20,6 +14,12 @@ import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { SupportMatrix } from "./-components/matrix";
 import { JsonSchemaResults } from "./-components/results";
+import {
+  jsonSchemaDirectionProps,
+  jsonSchemaTargetProps,
+  optionalJsonSchemaDirectionSchema,
+  optionalJsonSchemaTargetSchema,
+} from "./-constants";
 import Content from "./content.mdx";
 
 import jsonSchemaStyles from "./styles.css?url";

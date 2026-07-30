@@ -32,11 +32,3 @@ export const Standard = meta.story({
     data: benchResults.standard.valid,
   },
 });
-
-export const JsonSchema = meta.story({
-  args: {
-    data: benchResults.jsonSchema.filter(
-      (result) => result.target === "draft-2020-12" && result.direction === "input",
-    ),
-  },
-});
