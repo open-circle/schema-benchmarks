@@ -21,16 +21,16 @@ interface BaseBenchInfo extends DistributiveOmit<BaseBenchmarkConfig, "optimizeT
 }
 
 /** Every case but the JSON schema one, where how a library validates says nothing. */
-interface OptimizedBenchInfo {
+interface RuntimeBenchInfo {
   optimizeType: OptimizeType;
 }
 
 type BenchInfoByType = Satisfies<
   {
-    initialization: OptimizedBenchInfo;
-    validation: OptimizedBenchInfo & { dataType: DataType };
-    parsing: OptimizedBenchInfo & { dataType: DataType; errorType: ErrorType };
-    standard: OptimizedBenchInfo & { dataType: DataType; errorType: ErrorType };
+    initialization: RuntimeBenchInfo;
+    validation: RuntimeBenchInfo & { dataType: DataType };
+    parsing: RuntimeBenchInfo & { dataType: DataType; errorType: ErrorType };
+    standard: RuntimeBenchInfo & { dataType: DataType; errorType: ErrorType };
     jsonSchema: {
       target: JsonSchemaTarget;
       direction: JsonSchemaDirection;
@@ -38,8 +38,8 @@ type BenchInfoByType = Satisfies<
       standardJsonSchema: StandardJsonSchemaSupport;
       jsonSchema: string;
     };
-    string: OptimizedBenchInfo & { stringFormat: StringFormat; dataType: DataType };
-    codec: OptimizedBenchInfo & {
+    string: RuntimeBenchInfo & { stringFormat: StringFormat; dataType: DataType };
+    codec: RuntimeBenchInfo & {
       codecType: "encode" | "decode";
       codecId: string;
       acceptsUnknown?: boolean;

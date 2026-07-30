@@ -1,4 +1,4 @@
-import type { BenchResult } from "@schema-benchmarks/bench";
+import type { RuntimeResult } from "@schema-benchmarks/bench";
 import { formatDuration, getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
@@ -13,7 +13,7 @@ import { Bar } from "#src/shared/components/table/bar";
 
 interface BenchCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;
-  result: BenchResult;
+  result: RuntimeResult;
 }
 
 export const cls = bem("bench-card");

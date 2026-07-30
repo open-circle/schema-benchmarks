@@ -1,5 +1,5 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
-import type { BenchResult } from "@schema-benchmarks/bench";
+import type { RuntimeResult } from "@schema-benchmarks/bench";
 import {
   type DistributiveArray,
   formatDuration,
@@ -25,7 +25,7 @@ import type { SortDirection } from "#src/shared/lib/sort";
 import { Snippet } from "./snippet";
 
 export interface BenchTableProps {
-  results: DistributiveArray<BenchResult>;
+  results: DistributiveArray<RuntimeResult>;
   meanScaler: ReturnType<typeof Bar.getScale>;
   to: BenchTo;
   sortBy: SortableKey;
@@ -41,10 +41,10 @@ const getRatio = (a: number, b: number) => {
 };
 
 /** The first row that was actually timed - comparing everything against a constant says nothing. */
-const getDefaultCompareId = (results: Array<BenchResult>) =>
+const getDefaultCompareId = (results: Array<RuntimeResult>) =>
   (results.find((result) => result.mean) ?? results[0])?.id;
 
-function useComparison(results: Array<BenchResult>) {
+function useComparison(results: Array<RuntimeResult>) {
   const [compareId, setCompareId] = useState(() => getDefaultCompareId(results));
   useEffect(() => {
     setCompareId(getDefaultCompareId(results));
