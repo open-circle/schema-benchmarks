@@ -17,3 +17,10 @@
 .support-matrix-container {
   overflow-x: auto;
 }
+
+.output pre {
+  max-width: 32em;
+  max-height: 16em;
+  border: 1px solid var(--divider);
+  border-radius: var(--shape-medium);
+}
