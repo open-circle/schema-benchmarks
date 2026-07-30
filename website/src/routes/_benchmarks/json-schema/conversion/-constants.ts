@@ -54,6 +54,5 @@ export const standardJsonSchemaProps = {
     native: { label: "Native", icon: "verified" },
     "native-opt-in": { label: "Native Opt in", icon: "toggle_on" },
     "separate-package": { label: "Separate package", icon: "package_2" },
-    none: { label: "None", icon: "block" },
   },
 } satisfies Pick<PageFilterChipsProps<StandardJsonSchemaSupport>, "title" | "labels" | "options">;

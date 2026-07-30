@@ -88,7 +88,7 @@ export function SupportMatrix() {
               </td>
               <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
               <td>
-                {result.standardJsonSchema !== "none" &&
+                {result.standardJsonSchema &&
                   standardJsonSchemaProps.labels[result.standardJsonSchema].label}
               </td>
               {combinations.map(({ target, direction }) => {

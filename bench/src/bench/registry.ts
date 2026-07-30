@@ -35,7 +35,7 @@ type BenchInfoByType = Satisfies<
       target: JsonSchemaTarget;
       direction: JsonSchemaDirection;
       source: JsonSchemaSource;
-      standardJsonSchema: StandardJsonSchemaSupport;
+      standardJsonSchema?: StandardJsonSchemaSupport;
       jsonSchema: string;
     };
     string: RuntimeBenchInfo & { stringFormat: StringFormat; dataType: DataType };
