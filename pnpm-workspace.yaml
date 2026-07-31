@@ -3,6 +3,7 @@ packages:
   - bench
   - utils
   - schemas
+  - json-schema-tests
 allowBuilds:
   "@parcel/watcher": false
   ata-validator: false
