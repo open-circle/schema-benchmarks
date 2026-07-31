@@ -119,7 +119,6 @@ const showStringified = (circular) => (runtype) => {
 		case "constraint": return showStringified(circular)(runtype.underlying);
 		case "union": return runtype.alternatives.map((alternative) => showStringified(circular)(alternative)).join(" | ");
 		case "intersect": return runtype.intersectees.map((alternative) => showStringified(circular)(alternative)).join(" & ");
-		default: break;
 	}
 	return `\`\${${show(false, circular)(runtype)}}\``;
 };
@@ -144,13 +143,10 @@ const showEmbedded = (circular) => (runtype) => {
 				return showEmbedded(circular)(inner);
 			}
 			break;
-		case "intersect":
-			if (runtype.intersectees.length === 1) {
-				const inner = runtype.intersectees[0];
-				return showEmbedded(circular)(inner);
-			}
-			break;
-		default: break;
+		case "intersect": if (runtype.intersectees.length === 1) {
+			const inner = runtype.intersectees[0];
+			return showEmbedded(circular)(inner);
+		}
 	}
 	return `\${${show(false, circular)(runtype)}}`;
 };

@@ -28,9 +28,7 @@ function messageList(node, locale) {
 			case "join":
 				stack.push([currentNode.right, currentPath], [currentNode.left, currentPath]);
 				break;
-			case "nest":
-				stack.push([currentNode.child, [...currentPath, currentNode.key]]);
-				break;
+			case "nest": stack.push([currentNode.child, [...currentPath, currentNode.key]]);
 		}
 		current = stack.pop();
 	}
@@ -643,9 +641,7 @@ const singleton$2 = /* @__PURE__ */ new class DateSchema extends Schema {
 					case TAG_MIN$1:
 						if (value < param) return issue;
 						break;
-					case TAG_MAX$1:
-						if (value > param) return issue;
-						break;
+					case TAG_MAX$1: if (value > param) return issue;
 				}
 			}
 		}
@@ -782,9 +778,7 @@ const singleton$1 = /* @__PURE__ */ new class NumberSchema extends Schema {
 					case TAG_FINITE:
 						if (!Number.isFinite(value)) return issue;
 						break;
-					case TAG_SAFE:
-						if (!Number.isSafeInteger(value)) return issue;
-						break;
+					case TAG_SAFE: if (!Number.isSafeInteger(value)) return issue;
 				}
 			}
 		}
@@ -1238,7 +1232,6 @@ const singleton = /* @__PURE__ */ new class StringSchema extends Schema {
 					case TAG_URL:
 						check.param.lastIndex = 0;
 						if (!check.param.test(value) && !URL.canParse(value)) return check.issue;
-						break;
 				}
 			}
 		}

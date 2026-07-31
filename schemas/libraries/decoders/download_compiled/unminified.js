@@ -220,15 +220,11 @@ function* iterAnnotation(ann, stack) {
 			}
 			break;
 		}
-		case "object":
-			for (const [key, value] of ann.fields) {
-				stack.push(key);
-				yield* iterAnnotation(value, stack);
-				stack.pop();
-			}
-			break;
-		case "scalar":
-		case "opaque": break;
+		case "object": for (const [key, value] of ann.fields) {
+			stack.push(key);
+			yield* iterAnnotation(value, stack);
+			stack.pop();
+		}
 	}
 }
 function formatAsIssues(ann) {

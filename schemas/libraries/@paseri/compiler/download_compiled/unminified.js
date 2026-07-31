@@ -72,9 +72,7 @@ function messageList(node, locale) {
 			case "join":
 				stack.push([currentNode.right, currentPath], [currentNode.left, currentPath]);
 				break;
-			case "nest":
-				stack.push([currentNode.child, [...currentPath, currentNode.key]]);
-				break;
+			case "nest": stack.push([currentNode.child, [...currentPath, currentNode.key]]);
 		}
 		current = stack.pop();
 	}
@@ -127,7 +125,7 @@ function isPlainObject(value) {
 	return Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null;
 }
 const _enum20 = /* @__PURE__ */ new Set(["jpg", "png"]);
-const _regex21 = /* @__PURE__ */ new RegExp("^(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?):\\/\\/(?:(?:(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)\\.)*(?:(?!(?:\\d+|0[xX]\\p{AHex}*)(?:[\\:\\/\\?\\#]|$))(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?)|[fF][iI][lL][eE]):))[a-zA-Z](?:(?=([a-zA-Z\\d\\+\\.\\-]*))\\1):(?!\\/\\/).*))$", "v");
+const _regex21 = new RegExp("^(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?):\\/\\/(?:(?:(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)\\.)*(?:(?!(?:\\d+|0[xX]\\p{AHex}*)(?:[\\:\\/\\?\\#]|$))(?:(?![xX][nN]--)[a-zA-Z\\d_\\-]+)))(?::(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[1-5]\\d{4}|\\d{1,4}))?(?:(?:[\\/\\?\\#].*)?))|(?:(?!(?:(?:(?:[hH][tT][tT][pP][sS]?|[fF][tT][pP]|[wW][sS][sS]?)|[fF][iI][lL][eE]):))[a-zA-Z](?:(?=([a-zA-Z\\d\\+\\.\\-]*))\\1):(?!\\/\\/).*))$", "v");
 function _shapeArray15(_arr13) {
 	for (let _i14 = 0; _i14 < _arr13.length; _i14++) {
 		const _el10 = _arr13[_i14];

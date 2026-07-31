@@ -16,7 +16,7 @@ var __copyProps = (to, from, except, desc) => {
 	}
 	return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp$1(target, "default", {
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp$1(target, "default", {
 	value: mod,
 	enumerable: true
 }) : target, mod));
@@ -3302,9 +3302,7 @@ var _ObjectValidator = class _ObjectValidator extends BaseValidator {
 			case 1:
 				this.handleStrategy = (value) => this.handleStrictStrategy(value);
 				break;
-			case 2:
-				this.handleStrategy = (value) => this.handlePassthroughStrategy(value);
-				break;
+			case 2: this.handleStrategy = (value) => this.handlePassthroughStrategy(value);
 		}
 		const shapeEntries = Object.entries(shape);
 		this.keys = shapeEntries.map(([key]) => key);
