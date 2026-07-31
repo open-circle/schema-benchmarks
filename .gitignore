@@ -22,3 +22,5 @@ storybook-static
 **/playwright/.cache/
 **/playwright/.auth/
 **/.playwright-mcp/
+
+json-schema-tests/tests/
