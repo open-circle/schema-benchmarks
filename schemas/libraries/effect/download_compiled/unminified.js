@@ -3808,7 +3808,6 @@ const makeChunk = (backing) => {
 			chunk.depth = backing.chunk.depth + 1;
 			chunk.left = _empty$6;
 			chunk.right = _empty$6;
-			break;
 	}
 	return chunk;
 };
@@ -5663,7 +5662,6 @@ const find = /*#__PURE__*/ dual(2, (self, pf) => {
 					case OP_PARALLEL$1:
 						stack.push(item.right);
 						stack.push(item.left);
-						break;
 				}
 				break;
 			case "Some": return option;
@@ -5716,13 +5714,11 @@ const evaluateCause = (self) => {
 				default:
 					_sequential = prepend$1(_sequential, cause.right);
 					cause = cause.left;
-					break;
 			}
 			break;
 		case OP_PARALLEL$1:
 			stack.push(cause.right);
 			cause = cause.left;
-			break;
 	}
 	throw new Error(getBugErrorMessage("Cause.evaluateCauseLoop"));
 };
@@ -5765,9 +5761,7 @@ const reduce$2 = /*#__PURE__*/ dual(3, (self, zero, pf) => {
 				causes.push(cause.right);
 				cause = cause.left;
 				break;
-			default:
-				cause = void 0;
-				break;
+			default: cause = void 0;
 		}
 		if (cause === void 0 && causes.length > 0) cause = causes.pop();
 	}
@@ -5801,7 +5795,6 @@ const reduceWithContext = /*#__PURE__*/ dual(3, (self, context, reducer) => {
 				input.push(cause.right);
 				input.push(cause.left);
 				output.push(left({ _tag: OP_PARALLEL_CASE }));
-				break;
 		}
 	}
 	const accumulator = [];
@@ -5826,9 +5819,7 @@ const reduceWithContext = /*#__PURE__*/ dual(3, (self, context, reducer) => {
 					}
 				}
 				break;
-			case "Right":
-				accumulator.push(either.right);
-				break;
+			case "Right": accumulator.push(either.right);
 		}
 	}
 	if (accumulator.length === 0) throw new Error("BUG: Cause.reduceWithContext - please report an issue at https://github.com/Effect-TS/effect/issues");
@@ -7383,7 +7374,6 @@ const patch$7 = /*#__PURE__*/ dual(2, (self, context) => {
 				updatedContext.set(head.key, head.update(updatedContext.get(head.key)));
 				wasServiceUpdated = true;
 				patches = tail;
-				break;
 		}
 	}
 	if (!wasServiceUpdated) return makeContext(updatedContext);
@@ -7562,7 +7552,6 @@ const patch$5 = /*#__PURE__*/ dual(3, (self, oldValue, differ) => {
 			case "Update":
 				readonlyArray[head.index] = differ.patch(head.patch, readonlyArray[head.index]);
 				patches = tail;
-				break;
 		}
 	}
 	return readonlyArray;
@@ -7790,7 +7779,6 @@ const step$1 = (requests) => {
 				case "Single":
 					current = left;
 					sequential = cons(right, sequential);
-					break;
 			}
 			break;
 		}
@@ -7799,7 +7787,6 @@ const step$1 = (requests) => {
 			if (isNil(stack)) return [parallel, sequential];
 			current = stack.head;
 			stack = stack.tail;
-			break;
 	}
 	throw new Error("BUG: BlockedRequests.step - please report an issue at https://github.com/Effect-TS/effect/issues");
 };
@@ -9006,12 +8993,10 @@ const patch$3 = /*#__PURE__*/ dual(2, (path, patch) => {
 				output = prepend$2(output, patch.name);
 				input = input.tail;
 				break;
-			case "Unnested":
-				if (pipe(head(output), contains(patch.name))) {
-					output = tailNonEmpty$1(output);
-					input = input.tail;
-				} else return left(MissingData(output, `Expected ${patch.name} to be in path in ConfigProvider#unnested`));
-				break;
+			case "Unnested": if (pipe(head(output), contains(patch.name))) {
+				output = tailNonEmpty$1(output);
+				input = input.tail;
+			} else return left(MissingData(output, `Expected ${patch.name} to be in path in ConfigProvider#unnested`));
 		}
 	}
 	return right(output);
@@ -9766,9 +9751,7 @@ const patch$2 = /*#__PURE__*/ dual(3, (self, fiberId, oldValue) => {
 				patches = tail;
 				break;
 			}
-			case OP_AND_THEN$1:
-				patches = prepend$2(head.first)(prepend$2(head.second)(tail));
-				break;
+			case OP_AND_THEN$1: patches = prepend$2(head.first)(prepend$2(head.second)(tail));
 		}
 	}
 	return fiberRefs;
@@ -12039,9 +12022,7 @@ const patchLoop = (_supervisor, _patches) => {
 				supervisor = removeSupervisor(supervisor, head.supervisor);
 				patches = tailNonEmpty(patches);
 				break;
-			case OP_AND_THEN:
-				patches = prepend$1(head.first)(prepend$1(head.second)(tailNonEmpty(patches)));
-				break;
+			case OP_AND_THEN: patches = prepend$1(head.first)(prepend$1(head.second)(tailNonEmpty(patches)));
 		}
 	}
 	return supervisor;
@@ -12611,9 +12592,7 @@ var FiberRuntime = class extends Class {
 				case OP_SUCCESS:
 					fiberSuccesses.unsafeUpdate(1, tags);
 					break;
-				case OP_FAILURE:
-					fiberFailures.unsafeUpdate(1, tags);
-					break;
+				case OP_FAILURE: fiberFailures.unsafeUpdate(1, tags);
 			}
 		}
 		if (exit._tag === "Failure") {
@@ -13677,8 +13656,8 @@ const unsafeMake$1 = (input) => {
 	return unsafeFromDate$1(new Date(input));
 };
 const hasZone = (input) => /Z|[+-]\d{2}$|[+-]\d{2}:?\d{2}$|\]$/.test(input);
-const minEpochMillis = -86399999568e5;
-const maxEpochMillis = 864e13 - 840 * 60 * 1e3;
+const minEpochMillis = -864e13 + 432e5;
+const maxEpochMillis = 864e13 - 504e5;
 /** @internal */
 const unsafeMakeZoned$1 = (input, options) => {
 	if (options?.timeZone === void 0 && isDateTime$1(input) && isZoned$1(input)) return input;
@@ -13786,8 +13765,8 @@ const zonedOffset = (self) => {
 };
 const offsetToString = (offset) => {
 	const abs = Math.abs(offset);
-	let hours = Math.floor(abs / (3600 * 1e3));
-	let minutes = Math.round(abs % (3600 * 1e3) / (60 * 1e3));
+	let hours = Math.floor(abs / 36e5);
+	let minutes = Math.round(abs % 36e5 / 6e4);
 	if (minutes === 60) {
 		hours += 1;
 		minutes = 0;
@@ -13811,7 +13790,7 @@ const setPartsDate = (date, parts) => {
 	if (parts.seconds !== void 0) date.setUTCSeconds(parts.seconds);
 	if (parts.millis !== void 0) date.setUTCMilliseconds(parts.millis);
 };
-const constDayMillis = 1440 * 60 * 1e3;
+const constDayMillis = 864e5;
 const makeZonedFromAdjusted = (adjustedMillis, zone, disambiguation) => {
 	if (zone._tag === "Offset") return makeZonedProto(adjustedMillis - zone.offset, zone);
 	const beforeOffset = calculateNamedOffset(adjustedMillis - constDayMillis, adjustedMillis, zone);
@@ -15733,12 +15712,10 @@ const unify = (candidates) => {
 						out.push(ast);
 					}
 					break;
-				case "object":
-					if (!literals.includes(ast.literal)) {
-						literals.push(ast.literal);
-						out.push(ast);
-					}
-					break;
+				case "object": if (!literals.includes(ast.literal)) {
+					literals.push(ast.literal);
+					out.push(ast);
+				}
 			}
 			break;
 		}
@@ -17624,15 +17601,6 @@ var PropertySignatureDeclaration = class extends OptionalType {
 		return `PropertySignature<${token}, ${type}, never, ${token}, ${type}>`;
 	}
 };
-(class extends OptionalType {
-	isReadonly;
-	fromKey;
-	constructor(type, isOptional, isReadonly, annotations, fromKey) {
-		super(type, isOptional, annotations);
-		this.isReadonly = isReadonly;
-		this.fromKey = fromKey;
-	}
-});
 /**
 * @category PropertySignature
 * @since 3.10.0
@@ -18781,8 +18749,8 @@ transformOrFail(String$.annotations({ description: "a string to be decoded into 
 	encode: (a) => succeed(formatIso(a))
 }).annotations({ identifier: "DateTimeUtc" });
 const timeZoneOffsetArbitrary = () => (fc) => fc.integer({
-	min: -720 * 60 * 1e3,
-	max: 840 * 60 * 1e3
+	min: -432e5,
+	max: 504e5
 }).map(zoneMakeOffset);
 /**
 * Describes a schema that represents a `TimeZone.Offset` instance.

@@ -2837,10 +2837,11 @@ const assertDefaultValueAssignability = (node, value, key) => {
 	const out = node.in(wrapped ? value() : value);
 	if (out instanceof ArkErrors) {
 		if (key === null) throwParseError(`Default ${out.summary}`);
-		throwParseError(`Default for ${out.transform((e) => e.transform((input) => ({
+		const atPath = out.transform((e) => e.transform((input) => ({
 			...input,
 			prefixPath: [key]
-		}))).summary}`);
+		})));
+		throwParseError(`Default for ${atPath.summary}`);
 	}
 	return value;
 };
@@ -3242,7 +3243,8 @@ var AliasNode = class extends BaseRoot {
 	_resolve() {
 		if (this.resolve) return this.resolve();
 		if (this.reference[0] === "$") return this.$.resolveRoot(this.reference.slice(1));
-		let resolution = nodesByRegisteredId[this.reference];
+		const id = this.reference;
+		let resolution = nodesByRegisteredId[id];
 		const seen = [];
 		while (hasArkKind(resolution, "context")) {
 			if (seen.includes(resolution.id)) return throwParseError(writeShallowCycleErrorMessage(resolution.id, seen));
@@ -5587,7 +5589,8 @@ var BaseScope = class {
 			}
 			this.resolved = true;
 		}
-		return new RootModule(flatMorph(names.length ? names : this.exportedNames, (_, name) => [name, this._exports[name]]));
+		const namesToExport = names.length ? names : this.exportedNames;
+		return new RootModule(flatMorph(namesToExport, (_, name) => [name, this._exports[name]]));
 	}
 	resolve(name) {
 		return this.export()[name];
@@ -5662,7 +5665,8 @@ const resolutionsOfModule = ($, typeSet) => {
 	for (const k in typeSet) {
 		const v = typeSet[k];
 		if (hasArkKind(v, "module")) {
-			const prefixedResolutions = flatMorph(resolutionsOfModule($, v), (innerK, innerV) => [`${k}.${innerK}`, innerV]);
+			const innerResolutions = resolutionsOfModule($, v);
+			const prefixedResolutions = flatMorph(innerResolutions, (innerK, innerV) => [`${k}.${innerK}`, innerV]);
 			Object.assign(result, prefixedResolutions);
 		} else if (hasArkKind(v, "root") || hasArkKind(v, "generic")) result[k] = v;
 		else throwInternalError(`Unexpected scope resolution ${printable(v)}`);
@@ -6398,7 +6402,8 @@ const parseObjectLiteral = (def, ctx) => {
 			}, ctx);
 			continue;
 		}
-		const normalized = normalizeIndex(ctx.$.parseOwnDefinitionFormat(parsedEntryKey.normalized, ctx), parsedValue, ctx.$);
+		const signature = ctx.$.parseOwnDefinitionFormat(parsedEntryKey.normalized, ctx);
+		const normalized = normalizeIndex(signature, parsedValue, ctx.$);
 		if (normalized.index) structure.index = append(structure.index, normalized.index);
 		if (normalized.required) structure.required = append(structure.required, normalized.required);
 	}
@@ -6665,7 +6670,8 @@ var InternalScope = class InternalScope extends BaseScope {
 		const name = alias.slice(0, firstParamIndex);
 		const paramString = alias.slice(firstParamIndex + 1, -1);
 		return [name, () => {
-			return parseGeneric(this.parseGenericParams(paramString, { alias: name }), def, this);
+			const params = this.parseGenericParams(paramString, { alias: name });
+			return parseGeneric(params, def, this);
 		}];
 	}
 	parseGenericParams(def, opts) {

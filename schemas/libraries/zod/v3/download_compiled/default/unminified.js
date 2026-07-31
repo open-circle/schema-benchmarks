@@ -3132,7 +3132,8 @@ var ZodPromise = class extends ZodType {
 			});
 			return INVALID;
 		}
-		return OK((ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data)).then((data) => {
+		const promisified = ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data);
+		return OK(promisified.then((data) => {
 			return this._def.type.parseAsync(data, {
 				path: ctx.path,
 				errorMap: ctx.common.contextualErrorMap

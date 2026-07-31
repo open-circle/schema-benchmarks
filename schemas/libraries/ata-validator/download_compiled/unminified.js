@@ -16,7 +16,7 @@ var __copyProps = (to, from, except, desc) => {
 	}
 	return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", {
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
 	value: mod,
 	enumerable: true
 }) : target, mod));
@@ -817,7 +817,6 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						t: "quest",
 						child: n.child
 					});
-					break;
 			}
 		}
 		rec(ast);
@@ -1972,9 +1971,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				case "boolean":
 					lines.push(`if(typeof ${v}!=='boolean')return false`);
 					break;
-				case "null":
-					lines.push(`if(${v}!==null)return false`);
-					break;
+				case "null": lines.push(`if(${v}!==null)return false`);
 			}
 			else {
 				const conds = types.map((t) => {
@@ -7878,7 +7875,7 @@ const ratingSchema = t.object({
 	}),
 	images: t.array(imageSchema)
 });
-(0, import_keywords.withKeywords)(new Validator(t.object({
+const productSchema = t.object({
 	id: t.number(),
 	created: dateSchema,
 	title: t.string({
@@ -7911,5 +7908,6 @@ const ratingSchema = t.object({
 	})),
 	images: t.array(imageSchema),
 	ratings: t.array(ratingSchema)
-}))).validate({});
+});
+(0, import_keywords.withKeywords)(new Validator(productSchema)).validate({});
 //#endregion

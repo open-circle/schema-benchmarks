@@ -5677,7 +5677,7 @@ function Adapt(delta, numPoints, firstTime) {
 	delta += Math.floor(delta / numPoints);
 	let k = 0;
 	while (delta > 455) {
-		delta = Math.floor(delta / (PUNYCODE_BASE - PUNYCODE_TMIN));
+		delta = Math.floor(delta / 35);
 		k += PUNYCODE_BASE;
 	}
 	return k + Math.floor(36 * delta / (delta + PUNYCODE_SKEW));
@@ -5836,10 +5836,7 @@ function IsUnicodeLabel(value) {
 			case 8204:
 				if (prev === void 0 || prev < 128 && !IsVirama(prev)) return false;
 				break;
-			case 8205:
-				if (prev === void 0 || !IsVirama(prev)) return false;
-				break;
-			case 12539: break;
+			case 8205: if (prev === void 0 || !IsVirama(prev)) return false;
 		}
 	}
 	if (value.includes("・") && !hasJapanese) return false;
@@ -7637,176 +7634,6 @@ function Pipeline(pipeline) {
 		return pipeline.reduce((result, func) => func(context, type, result), value);
 	};
 }
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/callback.mjs
-function Decode$6(_context, type, value) {
-	return type["~codec"].decode(value);
-}
-function Encode$6(_context, type, value) {
-	return type["~codec"].encode(value);
-}
-function Callback(direction, context, type, value) {
-	if (!IsCodec(type)) return value;
-	return IsEqual(direction, "Decode") ? Decode$6(context, type, value) : Encode$6(context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_array.mjs
-function Decode$5(direction, context, type, value) {
-	if (!IsArray$1(value)) return value;
-	for (let i = 0; i < value.length; i++) value[i] = FromType(direction, context, type.items, value[i]);
-	return Callback(direction, context, type, value);
-}
-function Encode$5(direction, context, type, value) {
-	const exterior = Callback(direction, context, type, value);
-	if (!IsArray$1(exterior)) return exterior;
-	for (let i = 0; i < exterior.length; i++) exterior[i] = FromType(direction, context, type.items, exterior[i]);
-	return exterior;
-}
-function FromArray(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$5(direction, context, type, value) : Encode$5(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_cyclic.mjs
-function FromCyclic(direction, context, type, value) {
-	value = FromType(direction, {
-		...context,
-		...type.$defs
-	}, Ref$1(type.$ref), value);
-	return Callback(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_intersect.mjs
-function MergeInteriors(interiors) {
-	return interiors.reduce((results, interior) => ({
-		...results,
-		...interior
-	}), {});
-}
-function NonMatchingInterior(value, interiors) {
-	for (const interior of interiors) if (!IsDeepEqual(value, interior)) return interior;
-	return value;
-}
-function Decode$4(direction, context, type, value) {
-	if (IsEqual(type.allOf.length, 0)) return Callback(direction, context, type, value);
-	const interiors = type.allOf.map((schema) => FromType(direction, context, schema, Clean(schema, Clone(value))));
-	return Callback(direction, context, type, interiors.every((result) => IsObject$1(result)) ? MergeInteriors(interiors) : NonMatchingInterior(value, interiors));
-}
-function Encode$4(direction, context, type, value) {
-	if (IsEqual(type.allOf.length, 0)) return Callback(direction, context, type, value);
-	const exterior = Callback(direction, context, type, value);
-	const interiors = type.allOf.map((schema) => FromType(direction, context, schema, Clean(schema, Clone(exterior))));
-	if (interiors.every((result) => IsObject$1(result))) return MergeInteriors(interiors);
-	return NonMatchingInterior(exterior, interiors);
-}
-function FromIntersect(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$4(direction, context, type, value) : Encode$4(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_object.mjs
-function Decode$3(direction, context, type, value) {
-	if (!IsObjectNotArray(value)) return value;
-	for (const key of Keys(type.properties)) {
-		if (!HasPropertyKey(value, key) || IsOptionalUndefined(type.properties[key], key, value)) continue;
-		value[key] = FromType(direction, context, type.properties[key], value[key]);
-	}
-	return Callback(direction, context, type, value);
-}
-function Encode$3(direction, context, type, value) {
-	const exterior = Callback(direction, context, type, value);
-	if (!IsObjectNotArray(exterior)) return exterior;
-	for (const key of Keys(type.properties)) {
-		if (!HasPropertyKey(exterior, key) || IsOptionalUndefined(type.properties[key], key, exterior)) continue;
-		exterior[key] = FromType(direction, context, type.properties[key], exterior[key]);
-	}
-	return exterior;
-}
-function FromObject(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$3(direction, context, type, value) : Encode$3(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_record.mjs
-function Decode$2(direction, context, type, value) {
-	if (!IsObjectNotArray(value)) return value;
-	const regexp = new RegExp(RecordPattern(type));
-	for (const key of Keys(value)) {
-		if (!regexp.test(key)) continue;
-		value[key] = FromType(direction, context, RecordValue(type), value[key]);
-	}
-	return Callback(direction, context, type, value);
-}
-function Encode$2(direction, context, type, value) {
-	const exterior = Callback(direction, context, type, value);
-	if (!IsObjectNotArray(exterior)) return exterior;
-	const regexp = new RegExp(RecordPattern(type));
-	for (const key of Keys(exterior)) {
-		if (!regexp.test(key)) continue;
-		exterior[key] = FromType(direction, context, RecordValue(type), exterior[key]);
-	}
-	return exterior;
-}
-function FromRecord(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$2(direction, context, type, value) : Encode$2(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_ref.mjs
-function ResolveRef(direction, context, type, value) {
-	return HasPropertyKey(context, type.$ref) ? FromType(direction, context, context[type.$ref], value) : value;
-}
-function FromRef(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Callback(direction, context, type, ResolveRef(direction, context, type, value)) : ResolveRef(direction, context, type, Callback(direction, context, type, value));
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_tuple.mjs
-function Decode$1(direction, context, type, value) {
-	if (!IsArray$1(value)) return value;
-	for (let i = 0; i < Math.min(type.items.length, value.length); i++) value[i] = FromType(direction, context, type.items[i], value[i]);
-	return Callback(direction, context, type, value);
-}
-function Encode$1(direction, context, type, value) {
-	const exterior = Callback(direction, context, type, value);
-	if (!IsArray$1(exterior)) return value;
-	for (let i = 0; i < Math.min(type.items.length, exterior.length); i++) exterior[i] = FromType(direction, context, type.items[i], exterior[i]);
-	return exterior;
-}
-function FromTuple(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode$1(direction, context, type, value) : Encode$1(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_union.mjs
-function Decode(direction, context, type, value) {
-	for (const schema of type.anyOf) {
-		if (!Check(context, schema, value)) continue;
-		return Callback(direction, context, type, FromType(direction, context, schema, value));
-	}
-	return value;
-}
-function Encode(direction, context, type, value) {
-	const exterior = Callback(direction, context, type, value);
-	for (const schema of type.anyOf) {
-		const variant = FromType(direction, context, schema, Clone(exterior));
-		if (!Check(context, schema, variant)) continue;
-		return variant;
-	}
-	return exterior;
-}
-function FromUnion(direction, context, type, value) {
-	return IsEqual(direction, "Decode") ? Decode(direction, context, type, value) : Encode(direction, context, type, value);
-}
-//#endregion
-//#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/codec/from_type.mjs
-function FromType(direction, context, type, value) {
-	return IsArray(type) ? FromArray(direction, context, type, value) : IsCyclic(type) ? FromCyclic(direction, context, type, value) : IsIntersect(type) ? FromIntersect(direction, context, type, value) : IsObject(type) ? FromObject(direction, context, type, value) : IsRecord(type) ? FromRecord(direction, context, type, value) : IsRef$1(type) ? FromRef(direction, context, type, value) : IsTuple(type) ? FromTuple(direction, context, type, value) : IsUnion(type) ? FromUnion(direction, context, type, value) : Callback(direction, context, type, value);
-}
-(class extends AssertError {
-	constructor(value, errors) {
-		super("Decode", value, errors);
-	}
-});
-(class extends AssertError {
-	constructor(value, errors) {
-		super("Encode", value, errors);
-	}
-});
 //#endregion
 //#region ../node_modules/.pnpm/typebox@1.3.8/node_modules/typebox/build/value/parse/parse.mjs
 var ParseError = class extends AssertError {

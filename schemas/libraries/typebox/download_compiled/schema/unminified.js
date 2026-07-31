@@ -1630,7 +1630,7 @@ function Adapt(delta, numPoints, firstTime) {
 	delta += Math.floor(delta / numPoints);
 	let k = 0;
 	while (delta > 455) {
-		delta = Math.floor(delta / (PUNYCODE_BASE - PUNYCODE_TMIN));
+		delta = Math.floor(delta / 35);
 		k += PUNYCODE_BASE;
 	}
 	return k + Math.floor(36 * delta / (delta + PUNYCODE_SKEW));
@@ -1789,10 +1789,7 @@ function IsUnicodeLabel(value) {
 			case 8204:
 				if (prev === void 0 || prev < 128 && !IsVirama(prev)) return false;
 				break;
-			case 8205:
-				if (prev === void 0 || !IsVirama(prev)) return false;
-				break;
-			case 12539: break;
+			case 8205: if (prev === void 0 || !IsVirama(prev)) return false;
 		}
 	}
 	if (value.includes("・") && !hasJapanese) return false;
