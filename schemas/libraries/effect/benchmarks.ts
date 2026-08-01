@@ -132,7 +132,6 @@ export default defineBenchmarks({
             : makeJsonSchema(options, Schema.typeSchema(jsonSchemaSubject)),
         snippet: ({ target, direction }) =>
           ts`JSONSchema.make(${direction === "input" ? "schema" : "Schema.typeSchema(schema)"}, { target: "${getJsonSchemaTarget(target)}" })`,
-        source: "runtime",
       },
     },
   },

@@ -120,7 +120,6 @@ export default defineBenchmarks({
           return toJsonSchema();
         },
         snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,
-        source: "runtime",
       },
     },
   },

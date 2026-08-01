@@ -3,7 +3,6 @@ import type {
   BenchmarksConfig,
   ErrorType,
   JsonSchemaDirection,
-  JsonSchemaSource,
   StandardJsonSchemaSupport,
   JsonSchemaTarget,
   OptimizeType,
@@ -56,7 +55,6 @@ export type JsonSchemaInfoByType = Satisfies<
           conversionType: "toJson";
           target: JsonSchemaTarget;
           direction: JsonSchemaDirection;
-          source: JsonSchemaSource;
           standardJsonSchema?:
             | Exclude<StandardJsonSchemaSupport, "package">
             | { support: "package"; package: string };

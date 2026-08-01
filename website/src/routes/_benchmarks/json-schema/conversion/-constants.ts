@@ -1,8 +1,6 @@
 import {
   type JsonSchemaDirection,
   jsonSchemaDirectionSchema,
-  type JsonSchemaSource,
-  jsonSchemaSourceSchema,
   type StandardJsonSchemaSupport,
   standardJsonSchemaSupportSchema,
   type JsonSchemaTarget,
@@ -47,16 +45,6 @@ export const jsonSchemaDirectionProps = {
     output: { label: "Output", icon: "logout" },
   },
 } satisfies Pick<PageFilterChipsProps<JsonSchemaDirection>, "title" | "labels" | "options">;
-
-/** Where the JSON schema comes from, which is why some libraries take no time at all. */
-export const jsonSchemaSourceProps = {
-  title: "Source",
-  options: jsonSchemaSourceSchema.options,
-  labels: {
-    runtime: { label: "Runtime", icon: "sync" },
-    precompiled: { label: "Precompiled", icon: "build" },
-  },
-} satisfies Pick<PageFilterChipsProps<JsonSchemaSource>, "title" | "labels" | "options">;
 
 /** How the library supports the Standard JSON Schema interface. */
 export const standardJsonSchemaProps = {

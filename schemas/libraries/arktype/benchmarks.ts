@@ -72,7 +72,6 @@ export default defineBenchmarks({
         },
         snippet: ({ target, direction }) =>
           ts`schema.${direction === "input" ? "in" : "out"}.toJsonSchema({ target: "${target}" })`,
-        source: "runtime",
         standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
       },
       fromJson: {
