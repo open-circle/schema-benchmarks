@@ -197,6 +197,26 @@ export default defineBenchmarks({
       },
     ],
   },
+  jsonSchema: {
+    compliance: {
+      validation: [
+        {
+          run(schema, data) {
+            return Value.Check(schema, data);
+          },
+          snippet: () => ts`Value.Check(schema, data)`,
+          note: "value",
+        },
+        {
+          run(schema, data) {
+            return Schema.Check(schema, data);
+          },
+          snippet: () => ts`Schema.Check(schema, data)`,
+          note: "schema",
+        },
+      ],
+    },
+  },
   string: {
     "date-time": createStringBenchmark("date-time"),
     date: createStringBenchmark("date"),

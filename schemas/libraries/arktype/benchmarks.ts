@@ -80,6 +80,21 @@ export default defineBenchmarks({
         snippet: ts`jsonSchemaToType(jsonSchema)`,
       },
     },
+    compliance: {
+      semantics: {
+        run(schema, data) {
+          return jsonSchemaToType(schema).allows(data);
+        },
+        snippet: () => ts`jsonSchemaToType(schema).allows(data)`,
+      },
+      roundtrip: {
+        run(schema, target) {
+          assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
+          return jsonSchemaToType(schema).toJsonSchema({ target });
+        },
+        snippet: (target) => ts`jsonSchemaToType(schema).toJsonSchema({ target: "${target}" })`,
+      },
+    },
   },
   string: {
     "date-time": createStringBenchmark("date.iso"),

@@ -1,7 +1,7 @@
-import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
+import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
 import {
-  jsonSchemaTargetProps,
+  jsonSchemaConversionTargetProps,
   jsonSchemaDirectionProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 
@@ -22,9 +22,9 @@ export class ToJsonPage extends BaseConversionPage {
     return {
       ...desktop,
       supportMatrixTable,
-      getSupportMatrixTargetHeader: (target: JsonSchemaTarget) =>
+      getSupportMatrixTargetHeader: (target: JsonSchemaConversionTarget) =>
         supportMatrixTable.getByRole("columnheader", {
-          name: jsonSchemaTargetProps.labels[target].label,
+          name: jsonSchemaConversionTargetProps.labels[target].label,
         }),
     };
   }
@@ -44,11 +44,11 @@ export class ToJsonPage extends BaseConversionPage {
 
   targetToggle = this.page.getByRole("list", { name: "Target" });
 
-  getTargetLabel(target: JsonSchemaTarget) {
-    return jsonSchemaTargetProps.labels[target].label;
+  getTargetLabel(target: JsonSchemaConversionTarget) {
+    return jsonSchemaConversionTargetProps.labels[target].label;
   }
 
-  getTargetLink(target: JsonSchemaTarget) {
+  getTargetLink(target: JsonSchemaConversionTarget) {
     return this.targetToggle.getByRole("link", {
       name: this.getTargetLabel(target),
       exact: true,

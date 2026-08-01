@@ -8,7 +8,7 @@ import type {
   JsonSchemaInputData,
   ToJsonSchemaOptions,
   JsonSchemaOutputData,
-  JsonSchemaTarget,
+  JsonSchemaConversionTarget,
 } from "#src";
 import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
@@ -27,7 +27,7 @@ const jsonSchemaTargets = {
   "draft-2020-12": "jsonSchema2020-12",
 } as const;
 const supportedJsonSchemaTargets = ["draft-2020-12", "draft-07"] as const;
-const getJsonSchemaTarget = (target: JsonSchemaTarget) => {
+const getJsonSchemaTarget = (target: JsonSchemaConversionTarget) => {
   assertJsonSchemaTarget(target, supportedJsonSchemaTargets);
   return jsonSchemaTargets[target];
 };

@@ -1,6 +1,6 @@
 import type {
   JsonSchemaDirection,
-  JsonSchemaTarget,
+  JsonSchemaConversionTarget,
   SchemaConversionToJsonConfig,
 } from "@schema-benchmarks/schemas";
 import {
@@ -9,7 +9,7 @@ import {
   jsonSchemaDirectionSchema,
   jsonSchemaInputData,
   jsonSchemaOutputData,
-  jsonSchemaTargetSchema,
+  jsonSchemaConversionTargetSchema,
   successData,
   validStrings,
   invalidStrings,
@@ -43,7 +43,7 @@ const tryGenerate = (generate: () => object) => {
 };
 
 /** Compiles a generated JSON schema, so it can be checked against the data it describes. */
-const compileJsonSchema = (target: JsonSchemaTarget, jsonSchema: object) => {
+const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: object) => {
   // formats are library specific (e.g. `url` vs `uri`), and OpenAPI keywords aren't JSON Schema
   const options = { strict: false, validateFormats: false };
   const ajv = target === "draft-2020-12" ? new Ajv2020(options) : new Ajv(options);
@@ -115,7 +115,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     describe.each(ensureArray(config.jsonSchema?.conversion?.toJson ?? []))(
       "config %o",
       ({ generate, standardJsonSchema }: SchemaConversionToJsonConfig) => {
-        describe.each(jsonSchemaTargetSchema.options)("%s", (target) => {
+        describe.each(jsonSchemaConversionTargetSchema.options)("%s", (target) => {
           describe.each(jsonSchemaDirectionSchema.options)("%s", (direction) => {
             const generated = tryGenerate(() => generate({ target, direction }));
 

@@ -2,7 +2,10 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 // the built libraries, so this needs `pnpm run build` first - same as the benchmarks
-import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
+import {
+  jsonSchemaDirectionSchema,
+  jsonSchemaConversionTargetSchema,
+} from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray } from "@schema-benchmarks/utils";
 import { format } from "oxfmt";
@@ -22,7 +25,7 @@ for (const getConfig of Object.values(libraries)) {
   const toJsonConfigs = config.jsonSchema.conversion?.toJson;
   if (!toJsonConfigs) continue;
   for (const benchConfig of ensureArray(toJsonConfigs)) {
-    for (const target of jsonSchemaTargetSchema.options) {
+    for (const target of jsonSchemaConversionTargetSchema.options) {
       for (const direction of jsonSchemaDirectionSchema.options) {
         let jsonSchema;
         try {
@@ -44,7 +47,7 @@ for (const getConfig of Object.values(libraries)) {
 }
 
 const lines = [
-  'import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";',
+  'import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";',
   "",
   "/**",
   " * Every JSON schema the libraries are allowed to generate for the benchmark subject, listed with",
@@ -59,7 +62,7 @@ const lines = [
   " */",
   "export const acceptedJsonSchemas = {",
 ];
-for (const target of jsonSchemaTargetSchema.options) {
+for (const target of jsonSchemaConversionTargetSchema.options) {
   lines.push(`  "${target}": {`);
   for (const direction of jsonSchemaDirectionSchema.options) {
     lines.push(`    ${direction}: [`);
@@ -71,7 +74,9 @@ for (const target of jsonSchemaTargetSchema.options) {
   }
   lines.push("  },");
 }
-lines.push("} satisfies Record<JsonSchemaTarget, Record<JsonSchemaDirection, Array<object>>>;");
+lines.push(
+  "} satisfies Record<JsonSchemaConversionTarget, Record<JsonSchemaDirection, Array<object>>>;",
+);
 
 await fs.writeFile(
   path.resolve(import.meta.dirname, "../test/accepted-json-schemas.ts"),

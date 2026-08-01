@@ -1,5 +1,8 @@
 import type { JsonSchemaDirection } from "@schema-benchmarks/schemas";
-import { jsonSchemaTargetSchema, jsonSchemaDirectionSchema } from "@schema-benchmarks/schemas";
+import {
+  jsonSchemaConversionTargetSchema,
+  jsonSchemaDirectionSchema,
+} from "@schema-benchmarks/schemas";
 import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { test, expect } from "#e2e/fixtures";
@@ -90,7 +93,7 @@ test.describe("benchmarks tab", () => {
   });
 
   test("can toggle targets", async ({ page, toJsonPage }) => {
-    for (const target of jsonSchemaTargetSchema.options) {
+    for (const target of jsonSchemaConversionTargetSchema.options) {
       const link = toJsonPage.getTargetLink(target);
 
       await link.click();

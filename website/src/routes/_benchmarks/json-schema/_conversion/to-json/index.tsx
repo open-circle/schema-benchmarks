@@ -7,9 +7,9 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
 import {
   jsonSchemaDirectionProps,
-  jsonSchemaTargetProps,
+  jsonSchemaConversionTargetProps,
   optionalJsonSchemaDirectionSchema,
-  optionalJsonSchemaTargetSchema,
+  optionalJsonSchemaConversionTargetSchema,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
 import { SupportMatrix } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix.tsx";
@@ -33,7 +33,7 @@ import Content from "./content.mdx";
 const tabs = ["matrix", "bench"] as const;
 
 const searchSchema = v.object({
-  target: optionalJsonSchemaTargetSchema,
+  target: optionalJsonSchemaConversionTargetSchema,
   direction: optionalJsonSchemaDirectionSchema,
   tab: v.optional(v.picklist(tabs), "matrix"),
   ...sortParamsEntries,
@@ -116,7 +116,7 @@ function RouteComponent() {
         <TabPanel {...getPanelProps("bench")}>
           <PageFilters>
             <PageFilterChips
-              {...jsonSchemaTargetProps}
+              {...jsonSchemaConversionTargetProps}
               getLinkOptions={(option) => ({
                 from: Route.fullPath,
                 to: "/json-schema/to-json",

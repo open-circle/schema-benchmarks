@@ -3,7 +3,7 @@ import ts from "dedent";
 import Joi from "joi";
 import parse from "joi-to-json";
 
-import type { JsonSchemaTarget, StringBenchmarkConfig } from "#src";
+import type { JsonSchemaConversionTarget, StringBenchmarkConfig } from "#src";
 import { assertJsonSchemaDirection, assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getJoiSchema } from ".";
@@ -37,8 +37,8 @@ const jsonSchemaSubject = Joi.object({
 const jsonSchemaModes = {
   "draft-07": "json",
   "openapi-3.0": "open-api",
-} as const satisfies Partial<Record<JsonSchemaTarget, string>>;
-const getJsonSchemaMode = (target: JsonSchemaTarget) => {
+} as const satisfies Partial<Record<JsonSchemaConversionTarget, string>>;
+const getJsonSchemaMode = (target: JsonSchemaConversionTarget) => {
   assertJsonSchemaTarget(target, ["draft-07", "openapi-3.0"]);
   return jsonSchemaModes[target];
 };

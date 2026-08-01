@@ -1,3 +1,4 @@
+import type { ComplianceFn, ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import type { MaybeArray, MaybePromise } from "@schema-benchmarks/utils";
 import type { StandardJSONSchemaV1, StandardSchemaV1 } from "@standard-schema/spec";
 import * as v from "valibot";
@@ -44,12 +45,12 @@ export interface StandardSchemaBenchmarkConfig extends Omit<
 }
 
 /** The JSON schema targets a library can be asked to generate. */
-export const jsonSchemaTargetSchema = /* @__PURE__ */ v.picklist([
+export const jsonSchemaConversionTargetSchema = /* @__PURE__ */ v.picklist([
   "draft-2020-12",
   "draft-07",
   "openapi-3.0",
 ]);
-export type JsonSchemaTarget = v.InferOutput<typeof jsonSchemaTargetSchema>;
+export type JsonSchemaConversionTarget = v.InferOutput<typeof jsonSchemaConversionTargetSchema>;
 
 /** A JSON schema can be generated for the input or the output type of a schema. */
 export const jsonSchemaDirectionSchema = /* @__PURE__ */ v.picklist(["input", "output"]);
@@ -62,7 +63,7 @@ export const jsonSourceSchema = /* @__PURE__ */ v.picklist(["native", "opt-in", 
 export type JsonSource = v.InferOutput<typeof jsonSourceSchema>;
 
 export interface ToJsonSchemaOptions {
-  target: JsonSchemaTarget;
+  target: JsonSchemaConversionTarget;
   direction: JsonSchemaDirection;
 }
 
@@ -101,6 +102,29 @@ export interface SchemaConversionToJsonConfig extends Omit<
   standardJsonSchema?: StandardJsonSourceConfig;
 }
 
+export const complianceTypeSchema = /* @__PURE__ */ v.picklist([
+  "validation",
+  "semantics",
+  "roundtrip",
+]);
+export type ComplianceType = v.InferOutput<typeof complianceTypeSchema>;
+
+export interface BaseComplianceBenchmarkConfig extends Omit<
+  BaseBenchmarkConfig,
+  "throws" | "snippet"
+> {
+  snippet: (target: ComplianceTarget) => string;
+}
+
+export interface ComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig {
+  run: ComplianceFn;
+}
+
+export interface RoundtripComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig {
+  // convert the schema and then back again
+  run: (schema: {} | boolean, target: ComplianceTarget) => MaybePromise<unknown>;
+}
+
 export interface SchemaConversionFromJsonConfig extends Omit<
   BaseBenchmarkConfig,
   "throws" | "snippet"
@@ -115,11 +139,13 @@ export interface SchemaConversionFromJsonConfig extends Omit<
 }
 
 /** Libraries are expected to throw for targets they don't support. */
-export function assertJsonSchemaTarget<Supported extends JsonSchemaTarget>(
-  target: JsonSchemaTarget,
+export function assertJsonSchemaTarget<
+  Supported extends ComplianceTarget | JsonSchemaConversionTarget,
+>(
+  target: ComplianceTarget | JsonSchemaConversionTarget,
   supported: ReadonlyArray<Supported>,
 ): asserts target is Supported {
-  if (!supported.includes(target as Supported)) {
+  if (!supported.includes(target as never)) {
     throw new Error(`Unsupported JSON Schema target: ${target}`);
   }
 }
@@ -177,6 +203,11 @@ export interface BenchmarksConfig<ParseResult = unknown> {
     conversion?: {
       toJson?: SchemaConversionToJsonConfig;
       fromJson?: SchemaConversionFromJsonConfig;
+    };
+    compliance?: {
+      validation?: MaybeArray<ComplianceBenchmarkConfig>;
+      semantics?: MaybeArray<ComplianceBenchmarkConfig>;
+      roundtrip?: MaybeArray<RoundtripComplianceBenchmarkConfig>;
     };
   };
   string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;

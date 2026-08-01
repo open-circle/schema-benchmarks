@@ -4,7 +4,7 @@ import type { SourceConfig } from "@schema-benchmarks/schemas";
 import {
   fromJsonBenchSchema,
   jsonSchemaDirectionSchema,
-  jsonSchemaTargetSchema,
+  jsonSchemaConversionTargetSchema,
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition } from "@schema-benchmarks/utils";
@@ -94,7 +94,7 @@ if (jsonSchemaConfig.conversion?.toJson) {
   results.conversion.toJsonSupport[libraryName].standardJsonSchema =
     standardJsonSchemaConfig && jsonSourceToResult(standardJsonSchemaConfig);
 
-  for (const target of jsonSchemaTargetSchema.options) {
+  for (const target of jsonSchemaConversionTargetSchema.options) {
     for (const direction of jsonSchemaDirectionSchema.options) {
       const options = { target, direction };
       let jsonSchema;

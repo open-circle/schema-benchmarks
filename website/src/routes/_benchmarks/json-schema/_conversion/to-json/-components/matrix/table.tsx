@@ -1,10 +1,13 @@
 import type { JsonSchemaSupportMatrices } from "@schema-benchmarks/bench";
-import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
+import {
+  jsonSchemaDirectionSchema,
+  jsonSchemaConversionTargetSchema,
+} from "@schema-benchmarks/schemas";
 import clsx from "clsx";
 
 import {
   jsonSchemaDirectionProps,
-  jsonSchemaTargetProps,
+  jsonSchemaConversionTargetProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { jsonSourceProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { PackageSource } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix/source.tsx";
@@ -21,13 +24,13 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
       <thead>
         <tr>
           <th colSpan={6} aria-hidden></th>
-          {jsonSchemaTargetSchema.options.map((target) => (
+          {jsonSchemaConversionTargetSchema.options.map((target) => (
             <th
               key={target}
               colSpan={jsonSchemaDirectionSchema.options.length}
               className={clsx("action", "border-before")}
             >
-              {jsonSchemaTargetProps.labels[target].label}
+              {jsonSchemaConversionTargetProps.labels[target].label}
             </th>
           ))}
         </tr>
@@ -38,7 +41,7 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
           <th className="action" aria-label="Source packages"></th>
           <th>Standard JSON Schema</th>
           <th className="action" aria-label="Standard JSON Schema packages"></th>
-          {jsonSchemaTargetSchema.options.flatMap((target) =>
+          {jsonSchemaConversionTargetSchema.options.flatMap((target) =>
             jsonSchemaDirectionSchema.options.map((direction, i) => (
               <th
                 key={`${target}-${direction}`}
@@ -78,7 +81,7 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
                     <PackageSource package={standardJsonSchema.package} />
                   )}
                 </td>
-                {jsonSchemaTargetSchema.options.flatMap((target) =>
+                {jsonSchemaConversionTargetSchema.options.flatMap((target) =>
                   jsonSchemaDirectionSchema.options.map((direction, i) => (
                     <td
                       key={`${library}-${target}-${direction}`}

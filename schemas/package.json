@@ -24,6 +24,7 @@
     "@paseri/paseri": "jsr:^1.9.7",
     "@railway-ts/pipelines": "^0.1.29",
     "@sapphire/shapeshift": "^5.0.0",
+    "@schema-benchmarks/json-schema-tests": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "catalog:",
     "@valibot/to-json-schema": "^1.7.1",

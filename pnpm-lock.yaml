@@ -159,7 +159,7 @@ importers:
         version: 7.0.0
       oxfmt:
         specifier: 'catalog:'
-        version: 0.61.0
+        version: 0.62.0
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -184,6 +184,9 @@ importers:
       '@sapphire/shapeshift':
         specifier: ^5.0.0
         version: 5.0.0
+      '@schema-benchmarks/json-schema-tests':
+        specifier: workspace:*
+        version: link:../json-schema-tests
       '@schema-benchmarks/utils':
         specifier: workspace:*
         version: link:../utils

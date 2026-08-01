@@ -1,6 +1,6 @@
 import * as Plot from "@observablehq/plot";
 import type { JsonSchemaConversionResult } from "@schema-benchmarks/bench";
-import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
+import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import type { OneOf } from "@schema-benchmarks/utils";
 import {
   formatDuration,
@@ -83,7 +83,7 @@ BaseJsonConversionPlot.displayName = "BaseJsonConversionPlot";
 export type JsonConversionPlotProps = OneOf<
   | {
       conversionType: "toJson";
-      target: JsonSchemaTarget;
+      target: JsonSchemaConversionTarget;
       direction: JsonSchemaDirection;
     }
   | {

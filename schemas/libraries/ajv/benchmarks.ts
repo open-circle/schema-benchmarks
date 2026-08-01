@@ -76,4 +76,14 @@ export default defineBenchmarks({
       throw new ValidationError(validate.errors || []);
     `,
   },
+  jsonSchema: {
+    compliance: {
+      validation: {
+        run(schema, data) {
+          return ajv.validate(schema, data);
+        },
+        snippet: () => ts`ajv.validate(schema, data)`,
+      },
+    },
+  },
 });
