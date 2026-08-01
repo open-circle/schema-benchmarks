@@ -63,9 +63,14 @@ export const sidebarGroups: Array<SidebarGroup> = [
     subheader: "JSON Schema",
     links: [
       {
-        ...linkOptions({ to: "/json-schema/conversion" }),
-        name: "Conversion",
-        icon: "data_object",
+        ...linkOptions({ to: "/json-schema/to-json" }),
+        name: "Schema to JSON",
+        icon: "arrow_forward",
+      },
+      {
+        ...linkOptions({ to: "/json-schema/from-json" }),
+        name: "JSON to Schema",
+        icon: "arrow_back",
       },
     ],
   },

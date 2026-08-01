@@ -7,11 +7,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
-import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
+import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/_conversion/-components/json-schema";
 import {
   jsonSchemaDirectionProps,
   standardJsonSchemaProps,
-} from "#src/routes/_benchmarks/json-schema/conversion/-constants";
+} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -77,7 +77,7 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
         <tr>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("libraryName", sortState, {
-              to: "/json-schema/conversion",
+              to: "/json-schema/to-json",
             })}
           >
             Library
@@ -89,7 +89,7 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
             {...SortableHeaderLink.getProps(
               "downloads",
               sortState,
-              { to: "/json-schema/conversion" },
+              { to: "/json-schema/to-json" },
               "descending",
             )}
             className="numeric"
@@ -102,7 +102,7 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
           <th>Standard JSON Schema</th>
           <th>Type</th>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/conversion" })}
+            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/to-json" })}
             className="numeric"
           >
             Mean

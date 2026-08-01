@@ -1,0 +1,13 @@
+Some libraries can convert a [JSON Schema](https://json-schema.org/) back into a library schema at runtime, which is useful when you have an existing JSON Schema and want to validate against it using a typed library.
+
+We benchmark each library against the same input:
+
+```ts
+const jsonSchema = {
+  type: "object",
+  properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
+  required: ["id", "name", "price"],
+};
+
+const schema = z.fromJSONSchema(jsonSchema);
+```

@@ -1,35 +1,28 @@
-import type { SchemaToJsonResult } from "@schema-benchmarks/bench";
-import { shallowFilter } from "@schema-benchmarks/utils";
+import type { SchemaFromJsonResult } from "@schema-benchmarks/bench";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
-import type {
-  JsonSchemaDirection,
-  JsonSchemaTarget,
-} from "#src/routes/_benchmarks/json-schema/conversion/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
 import { EmptyState } from "#src/shared/components/empty-state";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { ToJsonCard } from "./card";
-import { ToJsonTable } from "./table";
+import { FromJsonCard } from "./card";
+import { FromJsonTable } from "./table";
 
-export interface ToJsonResultsProps {
-  target: JsonSchemaTarget;
-  direction?: JsonSchemaDirection;
+export interface FromJsonResultsProps {
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
 
-export function ToJsonResults({ target, direction, sortBy, sortDir }: ToJsonResultsProps) {
+export function FromJsonResults({ sortBy, sortDir }: FromJsonResultsProps) {
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: ({ conversion }) => conversion.toJson.filter(shallowFilter({ target, direction })),
+    select: ({ conversion }) => conversion.fromJson,
   });
   const results = useSortedResults(data, sortBy, sortDir);
   const shouldUseTable = useBreakpoints(["laptop", "desktop"], true);
@@ -46,18 +39,18 @@ export function ToJsonResults({ target, direction, sortBy, sortDir }: ToJsonResu
       <EmptyState
         icon={<MdSymbol>database_off</MdSymbol>}
         title="No results found"
-        subtitle="Try a different combination of filters"
+        subtitle="No libraries support JSON schema import"
       />
     );
   }
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <ToJsonTable {...{ results, meanScaler, sortBy, sortDir }} />
+        <FromJsonTable {...{ results, meanScaler, sortBy, sortDir }} />
       ) : (
         <ul className="json-schema-cards" aria-label="Results">
-          {results.map((result: SchemaToJsonResult) => (
-            <ToJsonCard key={result.id} {...{ result, meanScaler }} />
+          {results.map((result: SchemaFromJsonResult) => (
+            <FromJsonCard key={result.id} {...{ result, meanScaler }} />
           ))}
         </ul>
       )}

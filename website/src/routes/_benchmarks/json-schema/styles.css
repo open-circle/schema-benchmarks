@@ -1,5 +1,5 @@
-@import "./conversion/-components/to-json/table/index.css";
-@import "./conversion/-components/to-json/card/index.css";
+@import "./_conversion/-components/to-json/table/index.css";
+@import "./_conversion/-components/to-json/card/index.css";
 
 .json-schema-cards {
   display: grid;

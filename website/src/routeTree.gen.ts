@@ -20,6 +20,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ContributingIndexRouteImport } from './routes/contributing/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as BenchmarksJsonSchemaIndexRouteImport } from './routes/_benchmarks/json-schema/index'
+import { Route as BenchmarksJsonSchemaConversionRouteImport } from './routes/_benchmarks/json-schema/_conversion'
 import { Route as BenchmarksLibrariesIndexRouteImport } from './routes/_benchmarks/libraries/index'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
@@ -30,7 +31,8 @@ import { Route as BenchmarksRuntimeParsingIndexRouteImport } from './routes/_ben
 import { Route as BenchmarksRuntimeStandardIndexRouteImport } from './routes/_benchmarks/_runtime/standard/index'
 import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benchmarks/_runtime/string/index'
 import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
-import { Route as BenchmarksJsonSchemaConversionIndexRouteImport } from './routes/_benchmarks/json-schema/conversion/index'
+import { Route as BenchmarksJsonSchemaConversionFromJsonIndexRouteImport } from './routes/_benchmarks/json-schema/_conversion/from-json/index'
+import { Route as BenchmarksJsonSchemaConversionToJsonIndexRouteImport } from './routes/_benchmarks/json-schema/_conversion/to-json/index'
 
 const BenchmarksRouteRoute = BenchmarksRouteRouteImport.update({
   id: '/_benchmarks',
@@ -86,6 +88,11 @@ const BenchmarksJsonSchemaIndexRoute =
   BenchmarksJsonSchemaIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => BenchmarksJsonSchemaRouteRoute,
+  } as any)
+const BenchmarksJsonSchemaConversionRoute =
+  BenchmarksJsonSchemaConversionRouteImport.update({
+    id: '/_conversion',
     getParentRoute: () => BenchmarksJsonSchemaRouteRoute,
   } as any)
 const BenchmarksLibrariesIndexRoute =
@@ -145,11 +152,17 @@ const BenchmarksRuntimeValidationIndexRoute =
     path: '/validation/',
     getParentRoute: () => BenchmarksRuntimeRouteRoute,
   } as any)
-const BenchmarksJsonSchemaConversionIndexRoute =
-  BenchmarksJsonSchemaConversionIndexRouteImport.update({
-    id: '/conversion/',
-    path: '/conversion/',
-    getParentRoute: () => BenchmarksJsonSchemaRouteRoute,
+const BenchmarksJsonSchemaConversionFromJsonIndexRoute =
+  BenchmarksJsonSchemaConversionFromJsonIndexRouteImport.update({
+    id: '/from-json/',
+    path: '/from-json/',
+    getParentRoute: () => BenchmarksJsonSchemaConversionRoute,
+  } as any)
+const BenchmarksJsonSchemaConversionToJsonIndexRoute =
+  BenchmarksJsonSchemaConversionToJsonIndexRouteImport.update({
+    id: '/to-json/',
+    path: '/to-json/',
+    getParentRoute: () => BenchmarksJsonSchemaConversionRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -172,17 +185,18 @@ export interface FileRoutesByFullPath {
   '/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/validation/': typeof BenchmarksRuntimeValidationIndexRoute
-  '/json-schema/conversion/': typeof BenchmarksJsonSchemaConversionIndexRoute
+  '/json-schema/from-json/': typeof BenchmarksJsonSchemaConversionFromJsonIndexRoute
+  '/json-schema/to-json/': typeof BenchmarksJsonSchemaConversionToJsonIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
   '/contributing': typeof ContributingIndexRoute
+  '/json-schema': typeof BenchmarksJsonSchemaIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
-  '/json-schema': typeof BenchmarksJsonSchemaIndexRoute
   '/libraries': typeof BenchmarksLibrariesIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
   '/codec': typeof BenchmarksRuntimeCodecIndexRoute
@@ -191,7 +205,8 @@ export interface FileRoutesByTo {
   '/standard': typeof BenchmarksRuntimeStandardIndexRoute
   '/string': typeof BenchmarksRuntimeStringIndexRoute
   '/validation': typeof BenchmarksRuntimeValidationIndexRoute
-  '/json-schema/conversion': typeof BenchmarksJsonSchemaConversionIndexRoute
+  '/json-schema/from-json': typeof BenchmarksJsonSchemaConversionFromJsonIndexRoute
+  '/json-schema/to-json': typeof BenchmarksJsonSchemaConversionToJsonIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -204,6 +219,7 @@ export interface FileRoutesById {
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/contributing/': typeof ContributingIndexRoute
+  '/_benchmarks/json-schema/_conversion': typeof BenchmarksJsonSchemaConversionRouteWithChildren
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
@@ -216,7 +232,8 @@ export interface FileRoutesById {
   '/_benchmarks/_runtime/standard/': typeof BenchmarksRuntimeStandardIndexRoute
   '/_benchmarks/_runtime/string/': typeof BenchmarksRuntimeStringIndexRoute
   '/_benchmarks/_runtime/validation/': typeof BenchmarksRuntimeValidationIndexRoute
-  '/_benchmarks/json-schema/conversion/': typeof BenchmarksJsonSchemaConversionIndexRoute
+  '/_benchmarks/json-schema/_conversion/from-json/': typeof BenchmarksJsonSchemaConversionFromJsonIndexRoute
+  '/_benchmarks/json-schema/_conversion/to-json/': typeof BenchmarksJsonSchemaConversionToJsonIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -240,17 +257,18 @@ export interface FileRouteTypes {
     | '/standard/'
     | '/string/'
     | '/validation/'
-    | '/json-schema/conversion/'
+    | '/json-schema/from-json/'
+    | '/json-schema/to-json/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/blog/$slug'
     | '/blog'
     | '/contributing'
+    | '/json-schema'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/download'
-    | '/json-schema'
     | '/libraries'
     | '/stack'
     | '/codec'
@@ -259,7 +277,8 @@ export interface FileRouteTypes {
     | '/standard'
     | '/string'
     | '/validation'
-    | '/json-schema/conversion'
+    | '/json-schema/from-json'
+    | '/json-schema/to-json'
   id:
     | '__root__'
     | '/_benchmarks'
@@ -271,6 +290,7 @@ export interface FileRouteTypes {
     | '/_home/'
     | '/blog/'
     | '/contributing/'
+    | '/_benchmarks/json-schema/_conversion'
     | '/api/tweet/$id'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
@@ -283,7 +303,8 @@ export interface FileRouteTypes {
     | '/_benchmarks/_runtime/standard/'
     | '/_benchmarks/_runtime/string/'
     | '/_benchmarks/_runtime/validation/'
-    | '/_benchmarks/json-schema/conversion/'
+    | '/_benchmarks/json-schema/_conversion/from-json/'
+    | '/_benchmarks/json-schema/_conversion/to-json/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -374,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksJsonSchemaIndexRouteImport
       parentRoute: typeof BenchmarksJsonSchemaRouteRoute
     }
+    '/_benchmarks/json-schema/_conversion': {
+      id: '/_benchmarks/json-schema/_conversion'
+      path: ''
+      fullPath: '/json-schema'
+      preLoaderRoute: typeof BenchmarksJsonSchemaConversionRouteImport
+      parentRoute: typeof BenchmarksJsonSchemaRouteRoute
+    }
     '/_benchmarks/libraries/': {
       id: '/_benchmarks/libraries/'
       path: '/'
@@ -444,12 +472,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksRuntimeValidationIndexRouteImport
       parentRoute: typeof BenchmarksRuntimeRouteRoute
     }
-    '/_benchmarks/json-schema/conversion/': {
-      id: '/_benchmarks/json-schema/conversion/'
-      path: '/conversion'
-      fullPath: '/json-schema/conversion/'
-      preLoaderRoute: typeof BenchmarksJsonSchemaConversionIndexRouteImport
-      parentRoute: typeof BenchmarksJsonSchemaRouteRoute
+    '/_benchmarks/json-schema/_conversion/from-json/': {
+      id: '/_benchmarks/json-schema/_conversion/from-json/'
+      path: '/from-json'
+      fullPath: '/json-schema/from-json/'
+      preLoaderRoute: typeof BenchmarksJsonSchemaConversionFromJsonIndexRouteImport
+      parentRoute: typeof BenchmarksJsonSchemaConversionRoute
+    }
+    '/_benchmarks/json-schema/_conversion/to-json/': {
+      id: '/_benchmarks/json-schema/_conversion/to-json/'
+      path: '/to-json'
+      fullPath: '/json-schema/to-json/'
+      preLoaderRoute: typeof BenchmarksJsonSchemaConversionToJsonIndexRouteImport
+      parentRoute: typeof BenchmarksJsonSchemaConversionRoute
     }
   }
 }
@@ -480,16 +515,34 @@ const BenchmarksRuntimeRouteRouteWithChildren =
     BenchmarksRuntimeRouteRouteChildren,
   )
 
+interface BenchmarksJsonSchemaConversionRouteChildren {
+  BenchmarksJsonSchemaConversionFromJsonIndexRoute: typeof BenchmarksJsonSchemaConversionFromJsonIndexRoute
+  BenchmarksJsonSchemaConversionToJsonIndexRoute: typeof BenchmarksJsonSchemaConversionToJsonIndexRoute
+}
+
+const BenchmarksJsonSchemaConversionRouteChildren: BenchmarksJsonSchemaConversionRouteChildren =
+  {
+    BenchmarksJsonSchemaConversionFromJsonIndexRoute:
+      BenchmarksJsonSchemaConversionFromJsonIndexRoute,
+    BenchmarksJsonSchemaConversionToJsonIndexRoute:
+      BenchmarksJsonSchemaConversionToJsonIndexRoute,
+  }
+
+const BenchmarksJsonSchemaConversionRouteWithChildren =
+  BenchmarksJsonSchemaConversionRoute._addFileChildren(
+    BenchmarksJsonSchemaConversionRouteChildren,
+  )
+
 interface BenchmarksJsonSchemaRouteRouteChildren {
+  BenchmarksJsonSchemaConversionRoute: typeof BenchmarksJsonSchemaConversionRouteWithChildren
   BenchmarksJsonSchemaIndexRoute: typeof BenchmarksJsonSchemaIndexRoute
-  BenchmarksJsonSchemaConversionIndexRoute: typeof BenchmarksJsonSchemaConversionIndexRoute
 }
 
 const BenchmarksJsonSchemaRouteRouteChildren: BenchmarksJsonSchemaRouteRouteChildren =
   {
+    BenchmarksJsonSchemaConversionRoute:
+      BenchmarksJsonSchemaConversionRouteWithChildren,
     BenchmarksJsonSchemaIndexRoute: BenchmarksJsonSchemaIndexRoute,
-    BenchmarksJsonSchemaConversionIndexRoute:
-      BenchmarksJsonSchemaConversionIndexRoute,
   }
 
 const BenchmarksJsonSchemaRouteRouteWithChildren =

@@ -2,7 +2,7 @@ import { Admonition } from "#src/shared/components/admonition";
 
 Many libraries can convert a schema into a [JSON Schema](https://json-schema.org/), so it can be consumed by anything that speaks JSON Schema - documentation generators, OpenAPI builders, LLM structured outputs.
 
-We benchmark whichever API the library provides for it, using a small schema with a codec:
+We benchmark whichever API the library provides, using a small schema with a codec. Libraries that generate JSON schemas at build time (e.g. typia) are not included — there's nothing to time at runtime.
 
 ```ts
 const schema = z.object({
@@ -11,18 +11,10 @@ const schema = z.object({
   price: z.codec(z.string(), z.number(), { decode: Number, encode: String }),
 });
 
-const jsonSchema = z.toJsonSchema(schema);
+const jsonSchema = z.toJSONSchema(schema);
 ```
 
 Because of the codec, the **input** and **output** types differ (`price` is a string going in, a number coming out), and so do their JSON schemas.
-
-The **source** column says where the JSON schema comes from - not every library has to do work for it:
-
-- **Runtime** - the library converts the schema when asked, which is what's timed
-- **Precompiled** - generated at build time
-- **JSON Schema** - the library's schemas are already JSON Schema
-
-Non-runtime sources are constants, so they're not timed - benchmarking a property read would measure the harness, not the library.
 
 ### Standard JSON Schema
 
@@ -38,13 +30,6 @@ The **Standard JSON Schema** column shows how each library supports it:
 - **Native Opt in** - implemented, but it has to be enabled first (e.g. `S.enableStandardJSONSchema()`)
 - **Separate package** - a separate package implements it (e.g. `@valibot/to-json-schema`)
 - **None** (blank) - nothing implements it, so only the library's own API is benchmarked
-
-<Admonition type="info" title="Support">
-
-A library is expected to throw for anything it can't convert, so a refused combination has no result
-to compare - hover the cross in the matrix to see why the library refused.
-
-</Admonition>
 
 <Admonition type="note" title="Generated schemas">
 

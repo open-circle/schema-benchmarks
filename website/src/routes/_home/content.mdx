@@ -3,7 +3,7 @@ import { BenchPlot } from "#src/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#src/routes/_benchmarks/download/-components/plot";
 import { Admonition } from "#src/shared/components/admonition";
 import { CodecPlot } from "#src/routes/_benchmarks/_runtime/codec/-components/plot";
-import { JsonConversionPlot } from "#src/routes/_benchmarks/json-schema/conversion/-components/plot";
+import { JsonConversionPlot } from "#src/routes/_benchmarks/json-schema/_conversion/-components/plot";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -179,7 +179,7 @@ Decoding (`string → BigInt`):
 
 ## JSON Schema
 
-### <Link to="/json-schema/conversion">Conversion</Link>
+### <Link to="/json-schema/to-json">Schema to JSON</Link>
 
 Some libraries can convert a schema into a [JSON Schema](https://json-schema.org/), which lets documentation generators, OpenAPI builders and LLM structured outputs consume it.
 
@@ -194,3 +194,13 @@ We collect data on which targets and type (input/output) each library supports, 
 With a target of `draft-2020-12` and `input` type:
 
 <JsonConversionPlot conversionType="toJson" target="draft-2020-12" direction="input" />
+
+### <Link to="/json-schema/from-json">JSON to Schema</Link>
+
+Some libraries can also go the other way, converting a [JSON Schema](https://json-schema.org/) into a library schema at runtime.
+
+```ts
+const schema = z.fromJSONSchema(jsonSchema);
+```
+
+<JsonConversionPlot conversionType="fromJson" />

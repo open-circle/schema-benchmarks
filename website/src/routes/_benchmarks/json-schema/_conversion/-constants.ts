@@ -10,19 +10,6 @@ import * as v from "valibot";
 
 import type { PageFilterChipsProps } from "#src/shared/components/page-filter/chips";
 
-export const conversionTypeSchema = v.picklist(["toJson", "fromJson"] as const);
-export type ConversionType = v.InferOutput<typeof conversionTypeSchema>;
-export const optionalConversionTypeSchema = v.optional(conversionTypeSchema, "toJson");
-
-export const conversionTypeProps = {
-  title: "Direction",
-  options: conversionTypeSchema.options,
-  labels: {
-    toJson: { label: "Schema to JSON", icon: "arrow_forward" },
-    fromJson: { label: "JSON to Schema", icon: "arrow_back" },
-  },
-} satisfies Pick<PageFilterChipsProps<ConversionType>, "title" | "labels" | "options">;
-
 export const optionalJsonSchemaTargetSchema = v.optional(jsonSchemaTargetSchema, "draft-2020-12");
 
 export const jsonSchemaTargetProps = {

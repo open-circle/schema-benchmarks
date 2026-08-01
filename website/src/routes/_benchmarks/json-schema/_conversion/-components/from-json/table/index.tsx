@@ -15,7 +15,7 @@ import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import "#src/routes/_benchmarks/json-schema/conversion/-components/to-json/table/index.css";
+import "#src/routes/_benchmarks/json-schema/_conversion/-components/to-json/table/index.css";
 
 export interface FromJsonTableProps {
   results: Array<SchemaFromJsonResult>;
@@ -66,7 +66,7 @@ export function FromJsonTable({ results, meanScaler, ...sortState }: FromJsonTab
         <tr>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("libraryName", sortState, {
-              to: "/json-schema/conversion",
+              to: "/json-schema/from-json",
             })}
           >
             Library
@@ -77,7 +77,7 @@ export function FromJsonTable({ results, meanScaler, ...sortState }: FromJsonTab
             {...SortableHeaderLink.getProps(
               "downloads",
               sortState,
-              { to: "/json-schema/conversion" },
+              { to: "/json-schema/from-json" },
               "descending",
             )}
             className="numeric"
@@ -88,7 +88,7 @@ export function FromJsonTable({ results, meanScaler, ...sortState }: FromJsonTab
             </span>
           </SortableHeaderLink>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/conversion" })}
+            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/from-json" })}
             className="numeric"
           >
             Mean
