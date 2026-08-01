@@ -1,3 +1,4 @@
+import { jsonSchemaToType } from "@ark/json-schema";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import { type } from "arktype";
 import ts from "dedent";
@@ -73,6 +74,10 @@ export default defineBenchmarks({
           ts`schema.${direction === "input" ? "in" : "out"}.toJsonSchema({ target: "${target}" })`,
         source: "runtime",
         standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
+      },
+      fromJson: {
+        generate: (jsonSchema) => jsonSchemaToType(jsonSchema),
+        snippet: ts`jsonSchemaToType(jsonSchema)`,
       },
     },
   },
