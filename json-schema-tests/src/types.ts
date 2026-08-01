@@ -2,9 +2,9 @@ import * as v from "valibot";
 
 import { targets } from "./constants.gen.ts";
 
-const testCaseSchema = v.object({
+export const testCaseSchema = v.object({
   description: v.string(),
-  schema: v.looseObject({}),
+  schema: v.unknown(),
   tests: v.array(
     v.object({
       description: v.string(),
