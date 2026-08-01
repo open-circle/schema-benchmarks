@@ -64,9 +64,8 @@ const standardJsonSchemaSupportResultSchema = v.union([
   }),
 ]);
 
-const jsonSchemaResultSchema = v.object({
+const schemaConversionToJsonResultSchema = v.object({
   ...baseBenchResultSchema.entries,
-  type: v.literal("jsonSchema"),
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
   source: jsonSchemaSourceSchema,
@@ -74,7 +73,7 @@ const jsonSchemaResultSchema = v.object({
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
 });
-export type JsonSchemaResult = v.InferOutput<typeof jsonSchemaResultSchema>;
+export type JsonSchemaResult = v.InferOutput<typeof schemaConversionToJsonResultSchema>;
 
 export const jsonSchemaCombinationSchema = v.object({
   target: jsonSchemaTargetSchema,
@@ -82,31 +81,12 @@ export const jsonSchemaCombinationSchema = v.object({
 });
 export type JsonSchemaCombination = v.InferOutput<typeof jsonSchemaCombinationSchema>;
 
-/** Which targets and directions a library can convert, and why it refuses the rest. */
-export const jsonSchemaSupportResultSchema = v.object({
-  id: v.string(),
-  libraryName: v.string(),
-  version: v.string(),
-  note: v.optional(v.string()),
-  source: jsonSchemaSourceSchema,
-  standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
-  unsupported: v.array(
-    v.object({
-      ...jsonSchemaCombinationSchema.entries,
-      reason: v.string(),
-    }),
-  ),
-});
-export type JsonSchemaSupportResult = v.InferOutput<typeof jsonSchemaSupportResultSchema>;
-
 export const jsonSchemaBenchResultsSchema = v.object({
-  bench: v.array(jsonSchemaResultSchema),
-  support: v.array(jsonSchemaSupportResultSchema),
+  conversion: v.object({ toJson: v.array(schemaConversionToJsonResultSchema) }),
 });
 export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
 export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
-  bench: [],
-  support: [],
+  conversion: { toJson: [] },
 });
 
 const stringResultSchema = v.object({

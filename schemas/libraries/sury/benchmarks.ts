@@ -94,15 +94,19 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) =>
-      direction === "input"
-        ? S.toJSONSchema(jsonSchemaSubject, { target })
-        : S.toJSONSchema(S.reverse(jsonSchemaSubject), { target }),
-    snippet: ({ target, direction }) =>
-      ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
-    source: "runtime",
-    // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
-    standardJsonSchema: { support: "opt-in", schema: jsonSchemaSubject },
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) =>
+          direction === "input"
+            ? S.toJSONSchema(jsonSchemaSubject, { target })
+            : S.toJSONSchema(S.reverse(jsonSchemaSubject), { target }),
+        snippet: ({ target, direction }) =>
+          ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
+        source: "runtime",
+        // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
+        standardJsonSchema: { support: "opt-in", schema: jsonSchemaSubject },
+      },
+    },
   },
   string: {
     "date-time": createStringBenchmark(S.isoDateTime, ts`S.isoDateTime`),

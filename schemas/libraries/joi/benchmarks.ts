@@ -75,12 +75,16 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) => {
-      assertJsonSchemaDirection(direction, ["input"]);
-      return parse(jsonSchemaSubject, getJsonSchemaMode(target)) as object;
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) => {
+          assertJsonSchemaDirection(direction, ["input"]);
+          return parse(jsonSchemaSubject, getJsonSchemaMode(target)) as object;
+        },
+        snippet: ({ target }) => ts`parse(schema, "${getJsonSchemaMode(target)}")`,
+        source: "runtime",
+      },
     },
-    snippet: ({ target }) => ts`parse(schema, "${getJsonSchemaMode(target)}")`,
-    source: "runtime",
   },
   string: {
     "date-time": createStringBenchmark("isoDate"),

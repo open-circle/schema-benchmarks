@@ -74,16 +74,20 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) =>
-      toJsonSchema(jsonSchemaSubject, { target, typeMode: direction }),
-    snippet: ({ target, direction }) =>
-      ts`toJsonSchema(schema, { target: "${target}", typeMode: "${direction}" })`,
-    source: "runtime",
-    // the official companion package implements the standard interface
-    standardJsonSchema: {
-      support: "package",
-      package: "@valibot/to-json-schema",
-      schema: toStandardJsonSchema(jsonSchemaSubject),
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) =>
+          toJsonSchema(jsonSchemaSubject, { target, typeMode: direction }),
+        snippet: ({ target, direction }) =>
+          ts`toJsonSchema(schema, { target: "${target}", typeMode: "${direction}" })`,
+        source: "runtime",
+        // the official companion package implements the standard interface
+        standardJsonSchema: {
+          support: "package",
+          package: "@valibot/to-json-schema",
+          schema: toStandardJsonSchema(jsonSchemaSubject),
+        },
+      },
     },
   },
   string: {

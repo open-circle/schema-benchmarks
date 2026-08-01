@@ -17,9 +17,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   args: {
-    results: jsonSchemaResults.bench,
+    results: jsonSchemaResults.conversion.toJson,
     meanScaler: Bar.getScale(
-      jsonSchemaResults.bench.map((r) => r.mean),
+      jsonSchemaResults.conversion.toJson.map((r) => r.mean),
       { lowerBetter: true },
     ),
   },

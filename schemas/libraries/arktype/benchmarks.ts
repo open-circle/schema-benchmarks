@@ -59,16 +59,22 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) => {
-      assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
-      return (direction === "input" ? jsonSchemaSubject.in : jsonSchemaSubject.out).toJsonSchema({
-        target,
-      });
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) => {
+          assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
+          return (
+            direction === "input" ? jsonSchemaSubject.in : jsonSchemaSubject.out
+          ).toJsonSchema({
+            target,
+          });
+        },
+        snippet: ({ target, direction }) =>
+          ts`schema.${direction === "input" ? "in" : "out"}.toJsonSchema({ target: "${target}" })`,
+        source: "runtime",
+        standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
+      },
     },
-    snippet: ({ target, direction }) =>
-      ts`schema.${direction === "input" ? "in" : "out"}.toJsonSchema({ target: "${target}" })`,
-    source: "runtime",
-    standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
   },
   string: {
     "date-time": createStringBenchmark("date.iso"),

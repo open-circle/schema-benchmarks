@@ -111,14 +111,18 @@ export default defineBenchmarks({
     },
   },
   jsonSchema: {
-    // only the input type, and only draft 2020-12
-    generate: ({ target, direction }) => {
-      assertJsonSchemaTarget(target, ["draft-2020-12"]);
-      assertJsonSchemaDirection(direction, ["input"]);
-      return toJsonSchema();
+    conversion: {
+      toJson: {
+        // only the input type, and only draft 2020-12
+        generate: ({ target, direction }) => {
+          assertJsonSchemaTarget(target, ["draft-2020-12"]);
+          assertJsonSchemaDirection(direction, ["input"]);
+          return toJsonSchema();
+        },
+        snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,
+        source: "runtime",
+      },
     },
-    snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,
-    source: "runtime",
   },
   stack: {
     throw: (data) => {

@@ -68,12 +68,16 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) =>
-      z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
-    snippet: ({ target, direction }) =>
-      ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
-    source: "runtime",
-    // unlike zod's, zod/mini schemas don't carry `~standard.jsonSchema`
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) =>
+          z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
+        snippet: ({ target, direction }) =>
+          ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
+        source: "runtime",
+        // unlike zod's, zod/mini schemas don't carry `~standard.jsonSchema`
+      },
+    },
   },
   string: {
     "date-time": createStringBenchmark(z.iso.datetime, ts`z.iso.datetime()`),

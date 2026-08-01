@@ -11,7 +11,6 @@ import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
-import { SupportMatrix } from "./-components/matrix";
 import { ConversionResults } from "./-components/results";
 import {
   jsonSchemaDirectionProps,
@@ -37,15 +36,15 @@ export const Route = createFileRoute("/_benchmarks/json-schema/conversion/")({
       getJsonSchemaBenchResults(abortController.signal),
     );
     await Promise.all(
-      Object.values(benchResults.bench.filter(shallowFilter({ target, direction }))).flatMap(
-        ({ snippet, libraryName }) => [
-          DownloadCount.prefetch(libraryName, {
-            queryClient,
-            signal: abortController.signal,
-          }),
-          queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
-        ],
-      ),
+      Object.values(
+        benchResults.conversion.toJson.filter(shallowFilter({ target, direction })),
+      ).flatMap(({ snippet, libraryName }) => [
+        DownloadCount.prefetch(libraryName, {
+          queryClient,
+          signal: abortController.signal,
+        }),
+        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
+      ]),
     );
   },
   head: () =>
@@ -63,16 +62,12 @@ function RouteComponent() {
   const { target, direction, sortBy, sortDir } = Route.useSearch();
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: ({ bench }) => bench.filter(shallowFilter({ target, direction })),
+    select: ({ conversion }) => conversion.toJson.filter(shallowFilter({ target, direction })),
   });
   const sortedData = useSortedResults(data, sortBy, sortDir);
   return (
     <>
       <Content components={{ wrapper: "div" }} />
-      <details>
-        <summary>Support matrix</summary>
-        <SupportMatrix />
-      </details>
       <PageFilters>
         <PageFilterChips
           {...jsonSchemaTargetProps}
