@@ -24,7 +24,8 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
     ["Standard Schema", "/standard"],
     ["String", "/string"],
     ["Stack", "/stack"],
-    ["Conversion", "/json-schema/conversion"],
+    ["Schema to Json", "/json-schema/to-json"],
+    ["Json to Schema", "/json-schema/from-json"],
     ["Libraries", "/libraries"],
     ["Blog", "/blog"],
   ] as const) {
