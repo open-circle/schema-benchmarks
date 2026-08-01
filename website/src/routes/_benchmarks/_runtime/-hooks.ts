@@ -1,4 +1,9 @@
-import type { BaseBenchResult, RuntimeResult, JsonSchemaResult } from "@schema-benchmarks/bench";
+import type {
+  BaseBenchResult,
+  RuntimeResult,
+  SchemaFromJsonResult,
+  SchemaToJsonResult,
+} from "@schema-benchmarks/bench";
 import { collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
 import { useMemo } from "react";
 
@@ -12,11 +17,9 @@ export function getLibraryLabel({ libraryName, note }: BaseBenchResult) {
   return `${libraryName}${note ? ` (${note})` : ""}`;
 }
 
-export function useSortedResults<T extends RuntimeResult | JsonSchemaResult>(
-  results: Array<T>,
-  sortBy: SortableKey,
-  sortDir: SortDirection,
-) {
+export function useSortedResults<
+  T extends RuntimeResult | SchemaToJsonResult | SchemaFromJsonResult,
+>(results: Array<T>, sortBy: SortableKey, sortDir: SortDirection) {
   const downloadsByPkgName = useDownloadsByPkgName(results);
   return useMemo(
     () =>

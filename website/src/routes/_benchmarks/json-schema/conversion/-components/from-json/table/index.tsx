@@ -1,5 +1,5 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
-import type { JsonSchemaResult } from "@schema-benchmarks/bench";
+import type { SchemaFromJsonResult } from "@schema-benchmarks/bench";
 import { formatDuration, getTransitionName, numFormatter } from "@schema-benchmarks/utils";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -7,12 +7,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
-import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
-import {
-  jsonSchemaDirectionProps,
-  jsonSchemaSourceProps,
-  standardJsonSchemaProps,
-} from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -21,29 +15,25 @@ import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-export interface JsonSchemaBenchTableProps {
-  results: Array<JsonSchemaResult>;
+import "#src/routes/_benchmarks/json-schema/conversion/-components/to-json/table/index.css";
+
+export interface FromJsonTableProps {
+  results: Array<SchemaFromJsonResult>;
   meanScaler: ReturnType<typeof Bar.getScale>;
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
 
 const getRatio = (a: number, b: number) => {
-  // constants aren't timed, so there's no ratio to show against them
-  if (!a || !b) return a === b ? 0 : undefined;
   if (a === b) return 0;
   if (a < b) return -(b / a);
   return a / b;
 };
 
-/** The first row that was actually timed - comparing everything against a constant says nothing. */
-const getDefaultCompareId = (results: Array<JsonSchemaResult>) =>
-  (results.find((result) => result.mean) ?? results[0])?.id;
-
-function useComparison(results: Array<JsonSchemaResult>) {
-  const [compareId, setCompareId] = useState(() => getDefaultCompareId(results));
+function useComparison(results: Array<SchemaFromJsonResult>) {
+  const [compareId, setCompareId] = useState(() => results[0]?.id);
   useEffect(() => {
-    setCompareId(getDefaultCompareId(results));
+    setCompareId(results[0]?.id);
   }, [results]);
   const resultsById = useMemo(() => {
     return Object.fromEntries(results.map((result) => [result.id, result]));
@@ -51,9 +41,7 @@ function useComparison(results: Array<JsonSchemaResult>) {
   const compareResult = compareId && resultsById[compareId];
   const ratioScaler = useMemo(() => {
     if (!compareResult) return undefined;
-    const ratios = results
-      .map((result) => getRatio(result.mean, compareResult.mean))
-      .filter((ratio) => ratio !== undefined);
+    const ratios = results.map((result) => getRatio(result.mean, compareResult.mean));
     const max = Math.max(...ratios);
     const min = Math.min(...ratios);
     return Scaler.getScale([min, max, -min, -max], {
@@ -64,7 +52,7 @@ function useComparison(results: Array<JsonSchemaResult>) {
   return { compareId, setCompareId, compareResult, ratioScaler };
 }
 
-export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchemaBenchTableProps) {
+export function FromJsonTable({ results, meanScaler, ...sortState }: FromJsonTableProps) {
   const { compareId, setCompareId, compareResult, ratioScaler } = useComparison(results);
   const formatNumber = useNumberFormatter(numFormatter);
   const showComparisonColumns = results.length > 1;
@@ -84,7 +72,6 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
             Library
           </SortableHeaderLink>
           <th className="action"></th>
-          <th className="action"></th>
           <th>Version</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps(
@@ -100,9 +87,6 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
               <MdSymbol size={18}>download</MdSymbol>/wk
             </span>
           </SortableHeaderLink>
-          <th>Source</th>
-          <th>Standard JSON Schema</th>
-          <th>Type</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/conversion" })}
             className="numeric"
@@ -121,7 +105,6 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
       </thead>
       <tbody>
         {results.map((result) => {
-          const isRuntime = result.source === "runtime";
           const ratio = compareResult && getRatio(result.mean, compareResult.mean);
           return (
             <tr
@@ -130,7 +113,6 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
                 viewTransitionName: getTransitionName("json-schema-table-row", {
                   libraryName: result.libraryName,
                   note: result.note,
-                  direction: result.direction,
                 }),
               }}
             >
@@ -141,9 +123,6 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
               <td className="action">
                 <Snippet code={result.snippet} />
               </td>
-              <td className="action">
-                <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
-              </td>
               <td>
                 <code className="language-text">{result.version}</code>
               </td>
@@ -152,43 +131,29 @@ export function ConversionTable({ results, meanScaler, ...sortState }: JsonSchem
                   <DownloadCount libraryName={result.libraryName} />
                 </ErrorBoundary>
               </td>
-              <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
-              <td>
-                {isRuntime &&
-                  result.standardJsonSchema &&
-                  (typeof result.standardJsonSchema === "string" ? (
-                    standardJsonSchemaProps.labels[result.standardJsonSchema].label
-                  ) : (
-                    <code className="language-text">{result.standardJsonSchema.package}</code>
-                  ))}
-              </td>
-              <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
-              <td className="numeric">{!isRuntime ? "n/a" : formatDuration(result.mean)}</td>
+              <td className="numeric">{formatDuration(result.mean)}</td>
               {showComparisonColumns && (
-                <td className="bar-after">{isRuntime && <Bar {...meanScaler(result.mean)} />}</td>
+                <td className="bar-after">
+                  <Bar {...meanScaler(result.mean)} />
+                </td>
               )}
               {showComparisonColumns && (
                 <>
                   <td className="fit-content action">
-                    {isRuntime && (
-                      <Radio
-                        name="compare"
-                        value={result.id}
-                        checked={compareId === result.id}
-                        onChange={(event) => {
-                          setCompareId(event.target.checked ? result.id : undefined);
-                        }}
-                      />
-                    )}
+                    <Radio
+                      name="compare"
+                      value={result.id}
+                      checked={compareId === result.id}
+                      onChange={(event) => {
+                        setCompareId(event.target.checked ? result.id : undefined);
+                      }}
+                    />
                   </td>
                   <td className="numeric bar-after">
-                    {isRuntime &&
-                      compareResult &&
+                    {compareResult &&
                       ratioScaler &&
                       compareId !== result.id &&
-                      (ratio === undefined ? (
-                        <span aria-label="Not comparable">n/a</span>
-                      ) : ratio ? (
+                      (ratio ? (
                         <Scaler
                           {...ratioScaler(ratio)}
                           symbolLabel={`${ratio > 0 ? "Slower" : "Faster"} than ${compareResult.libraryName}${compareResult.note ? ` (${compareResult.note})` : ""}`}

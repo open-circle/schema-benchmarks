@@ -1,4 +1,4 @@
-import type { JsonSchemaResult } from "@schema-benchmarks/bench";
+import type { SchemaToJsonResult } from "@schema-benchmarks/bench";
 import { formatDuration, getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
@@ -15,14 +15,14 @@ import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
 
-interface ConversionCardProps {
+interface ToJsonCardProps {
   meanScaler: ReturnType<typeof Bar.getScale>;
-  result: JsonSchemaResult;
+  result: SchemaToJsonResult;
 }
 
 export const cls = bem("json-schema-card");
 
-export function ConversionCard({ result, meanScaler }: ConversionCardProps) {
+export function ToJsonCard({ result, meanScaler }: ToJsonCardProps) {
   const { id } = result;
   const isRuntime = result.source === "runtime";
   return (
