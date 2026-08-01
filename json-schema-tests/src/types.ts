@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import { targets } from "./constants.ts";
+import { targets } from "./constants.gen.ts";
 
 const testCaseSchema = v.object({
   description: v.string(),
