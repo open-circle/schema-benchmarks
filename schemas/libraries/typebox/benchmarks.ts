@@ -213,7 +213,7 @@ export default defineBenchmarks({
     // typebox schemas are JSON Schema already, so there's nothing to convert - but a codec's
     // output type has no representation
     generate: ({ target, direction }) => {
-      assertJsonSchemaTarget(target, ["draft-2020-12"]);
+      assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
       assertJsonSchemaDirection(direction, ["input"]);
       return jsonSchemaSubject;
     },
