@@ -1,10 +1,11 @@
 import type {
-  JsonSchemaBenchmarkConfig,
   JsonSchemaDirection,
   JsonSchemaTarget,
+  SchemaConversionToJsonConfig,
 } from "@schema-benchmarks/schemas";
 import {
   errorData,
+  fromJsonBenchSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaInputData,
   jsonSchemaOutputData,
@@ -109,11 +110,11 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       });
     });
   });
-  describe.runIf(config.jsonSchema)("JSON schema", () => {
+  describe.runIf(config.jsonSchema?.conversion?.toJson)("JSON schema toJson", () => {
     // the parameter is typed, so a renamed field fails to compile instead of silently skipping
-    describe.each(ensureArray(config.jsonSchema ?? []))(
+    describe.each(ensureArray(config.jsonSchema?.conversion?.toJson ?? []))(
       "config %o",
-      ({ generate, standardJsonSchema }: JsonSchemaBenchmarkConfig) => {
+      ({ generate, standardJsonSchema }: SchemaConversionToJsonConfig) => {
         describe.each(jsonSchemaTargetSchema.options)("%s", (target) => {
           describe.each(jsonSchemaDirectionSchema.options)("%s", (direction) => {
             const generated = tryGenerate(() => generate({ target, direction }));
@@ -146,6 +147,16 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
               },
             );
           });
+        });
+      },
+    );
+  });
+  describe.runIf(config.jsonSchema?.conversion?.fromJson)("JSON schema fromJson", () => {
+    describe.each(ensureArray(config.jsonSchema?.conversion?.fromJson ?? []))(
+      "config %o",
+      ({ generate }) => {
+        it("should return a result", () => {
+          expect(generate(fromJsonBenchSchema)).toBeDefined();
         });
       },
     );
