@@ -56,11 +56,7 @@ export const jsonSchemaDirectionSchema = /* @__PURE__ */ v.picklist(["input", "o
 export type JsonSchemaDirection = v.InferOutput<typeof jsonSchemaDirectionSchema>;
 
 /** Where a library's JSON schema comes from. */
-export const jsonSchemaSourceSchema = /* @__PURE__ */ v.picklist([
-  "runtime",
-  "precompiled",
-  "is-json-schema",
-]);
+export const jsonSchemaSourceSchema = /* @__PURE__ */ v.picklist(["runtime", "precompiled"]);
 export type JsonSchemaSource = v.InferOutput<typeof jsonSchemaSourceSchema>;
 
 /**
@@ -110,7 +106,6 @@ export interface JsonSchemaBenchmarkConfig extends Omit<BaseBenchmarkConfig, "th
    * Where the JSON schema comes from:
    * - `runtime`: the library converts the schema when asked
    * - `precompiled`: it's generated at build time, so there's nothing to do at runtime
-   * - `is-json-schema`: the library's schemas are JSON Schema already, so there's nothing to convert
    *
    * Anything but `runtime` is a constant, and isn't benchmarked.
    */
