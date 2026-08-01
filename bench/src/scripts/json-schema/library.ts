@@ -124,7 +124,7 @@ if (jsonSchemaConfig.conversion?.fromJson) {
       snippet,
       note,
     };
-    bench.add(caseRegistry.add(entry), () => generate(fromJsonBenchSchema));
+    bench.add(caseRegistry.add(entry), () => generate(structuredClone(fromJsonBenchSchema)));
   }
 }
 

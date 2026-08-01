@@ -1,6 +1,7 @@
 import * as Plot from "@observablehq/plot";
-import type { JsonSchemaResult } from "@schema-benchmarks/bench";
+import type { JsonSchemaConversionResult } from "@schema-benchmarks/bench";
 import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
+import type { OneOf } from "@schema-benchmarks/utils";
 import {
   formatDuration,
   shallowFilter,
@@ -16,12 +17,12 @@ import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
-const getLabel = (d: JsonSchemaResult) => d.libraryName + (d.throws ? " *" : "");
+const getLabel = (d: JsonSchemaConversionResult) => d.libraryName;
 
-export const BaseJsonSchemaPlot = createPlotComponent(function useBenchPlot({
+export const BaseJsonConversionPlot = createPlotComponent(function useConversionPlot({
   data,
 }: {
-  data: Array<JsonSchemaResult>;
+  data: Array<JsonSchemaConversionResult>;
 }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
@@ -77,17 +78,28 @@ export const BaseJsonSchemaPlot = createPlotComponent(function useBenchPlot({
   return { plot, ref, minWidth };
 });
 
-BaseJsonSchemaPlot.displayName = "BaseJsonSchemaPlot";
+BaseJsonConversionPlot.displayName = "BaseJsonConversionPlot";
 
-export interface JsonSchemaPlotProps {
-  target: JsonSchemaTarget;
-  direction: JsonSchemaDirection;
-}
+export type JsonConversionPlotProps = OneOf<
+  | {
+      conversionType: "toJson";
+      target: JsonSchemaTarget;
+      direction: JsonSchemaDirection;
+    }
+  | {
+      conversionType: "fromJson";
+    }
+>;
 
-export function JsonSchemaPlot({ target, direction }: JsonSchemaPlotProps) {
+export function JsonConversionPlot({ conversionType, target, direction }: JsonConversionPlotProps) {
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: (results) => results.conversion.toJson.filter(shallowFilter({ target, direction })),
+    select: (results) => {
+      if (conversionType === "toJson") {
+        return results.conversion.toJson.filter(shallowFilter({ target, direction }));
+      }
+      return results.conversion.fromJson;
+    },
   });
-  return <BaseJsonSchemaPlot data={data} />;
+  return <BaseJsonConversionPlot data={data} />;
 }

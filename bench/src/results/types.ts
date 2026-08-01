@@ -65,7 +65,7 @@ const standardJsonSchemaSupportResultSchema = v.union([
 ]);
 
 const schemaConversionToJsonResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...v.omit(baseBenchResultSchema, ["throws"]).entries,
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
   source: jsonSchemaSourceSchema,
@@ -73,12 +73,14 @@ const schemaConversionToJsonResultSchema = v.object({
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
 });
-export type JsonSchemaResult = v.InferOutput<typeof schemaConversionToJsonResultSchema>;
+export type SchemaToJsonResult = v.InferOutput<typeof schemaConversionToJsonResultSchema>;
 
 const schemaConversionFromJsonResultSchema = v.object({
-  ...baseBenchResultSchema.entries,
+  ...v.omit(baseBenchResultSchema, ["throws"]).entries,
 });
-export type JsonSchemaFromJsonResult = v.InferOutput<typeof schemaConversionFromJsonResultSchema>;
+export type SchemaFromJsonResult = v.InferOutput<typeof schemaConversionFromJsonResultSchema>;
+
+export type JsonSchemaConversionResult = OneOf<SchemaToJsonResult | SchemaFromJsonResult>;
 
 export const jsonSchemaCombinationSchema = v.object({
   target: jsonSchemaTargetSchema,

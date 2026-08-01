@@ -301,7 +301,7 @@ export function toggleFilter(key: string, newValue: unknown, defaultValue?: unkn
  * // [{ a: 1, b: 2 }, { a: 2, b: 2 }]
  */
 export function shallowFilter<T>(filter: {
-  [K in keyof T]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
+  [K in keyof NoInfer<T>]?: T[K] | ReadonlyArray<T[K]> | Set<T[K]>;
 }): (item: T) => boolean {
   const entries = unsafeEntries(filter).map(
     ([key, value]) => [key, Array.isArray(value) ? new Set(value) : value] as const,

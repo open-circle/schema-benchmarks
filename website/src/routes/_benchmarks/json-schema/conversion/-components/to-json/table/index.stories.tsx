@@ -4,16 +4,20 @@ import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
 import "./index.css";
-import { ConversionCard } from ".";
+import { ToJsonTable } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/Card",
-  component: ConversionCard,
+  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Table",
+  component: ToJsonTable,
+  args: {
+    sortBy: "mean",
+    sortDir: "ascending",
+  } as const,
 });
 
 export const Default = meta.story({
   args: {
-    result: jsonSchemaResults.conversion.toJson[0]!,
+    results: jsonSchemaResults.conversion.toJson,
     meanScaler: Bar.getScale(
       jsonSchemaResults.conversion.toJson.map((r) => r.mean),
       { lowerBetter: true },

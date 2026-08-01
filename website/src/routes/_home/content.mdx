@@ -3,7 +3,7 @@ import { BenchPlot } from "#src/routes/_benchmarks/_runtime/-components/plot";
 import { DownloadPlot } from "#src/routes/_benchmarks/download/-components/plot";
 import { Admonition } from "#src/shared/components/admonition";
 import { CodecPlot } from "#src/routes/_benchmarks/_runtime/codec/-components/plot";
-import { JsonSchemaPlot } from "#src/routes/_benchmarks/json-schema/conversion/-components/plot";
+import { JsonConversionPlot } from "#src/routes/_benchmarks/json-schema/conversion/-components/plot";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -191,4 +191,6 @@ const jsonSchema = z.toJSONSchema(personSchema, { target: "draft-2020-12" });
 
 We collect data on which targets and type (input/output) each library supports, then benchmark the time taken to generate a JSON schema from a small schema with a codec, for supported combinations. Libraries that implement the [standard JSON schema](https://standardschema.dev/json-schema) interface are marked in the results.
 
-<JsonSchemaPlot direction="toJson" />
+With a target of `draft-2020-12` and `input` type:
+
+<JsonConversionPlot conversionType="toJson" target="draft-2020-12" direction="input" />

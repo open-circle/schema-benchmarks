@@ -76,4 +76,12 @@ export default defineBenchmarks({
       throw new ValidationError(validate.errors || []);
     `,
   },
+  jsonSchema: {
+    conversion: {
+      fromJson: {
+        generate: (jsonSchema) => ajv.compile(jsonSchema),
+        snippet: ts`ajv.compile(jsonSchema)`,
+      },
+    },
+  },
 });

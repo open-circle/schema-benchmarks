@@ -1,27 +1,28 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
-import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
-import { ConversionResults } from "./-components/results";
+import { FromJsonResults } from "./-components/from-json/results";
+import { ToJsonResults } from "./-components/to-json/results";
 import {
+  conversionTypeProps,
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
+  optionalConversionTypeSchema,
   optionalJsonSchemaDirectionSchema,
   optionalJsonSchemaTargetSchema,
 } from "./-constants";
 import { getJsonSchemaBenchResults } from "./-query";
 import Content from "./content.mdx";
-
 const searchSchema = v.object({
+  conversionType: optionalConversionTypeSchema,
   target: optionalJsonSchemaTargetSchema,
   direction: optionalJsonSchemaDirectionSchema,
   ...sortParamsEntries,
@@ -30,15 +31,25 @@ const searchSchema = v.object({
 export const Route = createFileRoute("/_benchmarks/json-schema/conversion/")({
   validateSearch: searchSchema,
   component: RouteComponent,
-  loaderDeps: ({ search: { target, direction } }) => ({ target, direction }),
-  async loader({ context: { queryClient }, deps: { target, direction }, abortController }) {
+  loaderDeps: ({ search: { conversionType, target, direction } }) => ({
+    conversionType,
+    target,
+    direction,
+  }),
+  async loader({
+    context: { queryClient },
+    deps: { conversionType, target, direction },
+    abortController,
+  }) {
     const benchResults = await queryClient.ensureQueryData(
       getJsonSchemaBenchResults(abortController.signal),
     );
+    const results =
+      conversionType === "fromJson"
+        ? benchResults.conversion.fromJson
+        : benchResults.conversion.toJson.filter(shallowFilter({ target, direction }));
     await Promise.all(
-      Object.values(
-        benchResults.conversion.toJson.filter(shallowFilter({ target, direction })),
-      ).flatMap(({ snippet, libraryName }) => [
+      Object.values(results).flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, {
           queryClient,
           signal: abortController.signal,
@@ -59,38 +70,51 @@ export const Route = createFileRoute("/_benchmarks/json-schema/conversion/")({
 });
 
 function RouteComponent() {
-  const { target, direction, sortBy, sortDir } = Route.useSearch();
-  const { data } = useSuspenseQuery({
-    ...getJsonSchemaBenchResults(),
-    select: ({ conversion }) => conversion.toJson.filter(shallowFilter({ target, direction })),
-  });
-  const sortedData = useSortedResults(data, sortBy, sortDir);
+  const { conversionType, target, direction, sortBy, sortDir } = Route.useSearch();
   return (
     <>
       <Content components={{ wrapper: "div" }} />
       <PageFilters>
         <PageFilterChips
-          {...jsonSchemaTargetProps}
+          {...conversionTypeProps}
           getLinkOptions={(option) => ({
             from: Route.fullPath,
             to: "/json-schema/conversion",
-            search: toggleFilter("target", option),
+            search: toggleFilter("conversionType", option),
             replace: true,
             resetScroll: false,
           })}
         />
-        <PageFilterChips
-          {...jsonSchemaDirectionProps}
-          getLinkOptions={(option) => ({
-            from: Route.fullPath,
-            to: "/json-schema/conversion",
-            search: toggleFilter("direction", option),
-            replace: true,
-            resetScroll: false,
-          })}
-        />
+        {conversionType === "toJson" && (
+          <>
+            <PageFilterChips
+              {...jsonSchemaTargetProps}
+              getLinkOptions={(option) => ({
+                from: Route.fullPath,
+                to: "/json-schema/conversion",
+                search: toggleFilter("target", option),
+                replace: true,
+                resetScroll: false,
+              })}
+            />
+            <PageFilterChips
+              {...jsonSchemaDirectionProps}
+              getLinkOptions={(option) => ({
+                from: Route.fullPath,
+                to: "/json-schema/conversion",
+                search: toggleFilter("direction", option),
+                replace: true,
+                resetScroll: false,
+              })}
+            />
+          </>
+        )}
       </PageFilters>
-      <ConversionResults results={sortedData} {...{ sortBy, sortDir }} />
+      {conversionType === "fromJson" ? (
+        <FromJsonResults {...{ sortBy, sortDir }} />
+      ) : (
+        <ToJsonResults {...{ target, direction, sortBy, sortDir }} />
+      )}
     </>
   );
 }
