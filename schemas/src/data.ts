@@ -58,6 +58,17 @@ export const jsonSchemaOutputData: JsonSchemaOutputData = {
   price: Number(jsonSchemaInputData.price),
 };
 
+/** Representative JSON schema used as input for fromJson conversion benchmarks. */
+export const fromJsonBenchSchema = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    name: { type: "string" },
+    price: { type: "string" },
+  },
+  required: ["id", "name", "price"],
+} as const;
+
 export const successData: ProductData = {
   id: 252,
   created: new Date(),

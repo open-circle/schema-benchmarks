@@ -1,6 +1,10 @@
 import { parseArgs } from "node:util";
 
-import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
+import {
+  fromJsonBenchSchema,
+  jsonSchemaDirectionSchema,
+  jsonSchemaTargetSchema,
+} from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
@@ -109,6 +113,21 @@ if (jsonSchemaConfig.conversion?.toJson) {
   }
 }
 
+if (jsonSchemaConfig.conversion?.fromJson) {
+  for (const benchConfig of ensureArray(jsonSchemaConfig.conversion.fromJson)) {
+    const { generate, snippet, note } = benchConfig;
+    const entry: JsonSchemaBenchmarkConfigEntry = {
+      type: "conversion",
+      conversionType: "fromJson",
+      libraryName,
+      version,
+      snippet,
+      note,
+    };
+    bench.add(caseRegistry.add(entry), () => generate(fromJsonBenchSchema));
+  }
+}
+
 const tasks = await bench.run();
 
 const [successTasks, errorTasks] = partition(
@@ -139,6 +158,16 @@ for (const task of successTasks) {
         source: entry.source,
         standardJsonSchema: entry.standardJsonSchema,
         jsonSchema: entry.jsonSchema,
+      });
+      break;
+    case "fromJson":
+      results.conversion[entry.conversionType].push({
+        id: task.name,
+        libraryName: entry.libraryName,
+        version: entry.version,
+        snippet: entry.snippet,
+        note: entry.note,
+        mean: task.result.latency.mean,
       });
   }
 }
