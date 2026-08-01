@@ -7,7 +7,7 @@ import { format } from "oxfmt";
 // oxlint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
 
-const constantsFilePath = path.join(__dirname, "../src/constants.ts");
+const constantsFilePath = path.join(__dirname, "../src/constants.gen.ts");
 
 const testSuitesDir = path.join(__dirname, "../tests");
 
