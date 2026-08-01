@@ -101,6 +101,26 @@ td {
   }
 }
 
+.pie {
+  --pie-size: 1.5rem;
+  height: var(--pie-size);
+  width: var(--pie-size);
+  min-width: var(--pie-size);
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--shape-small);
+  background-color: color(from var(--page-foreground) srgb r g b / var(--disabled-opacity));
+  .pie__fill {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    corner-shape: inherit;
+    transition:
+      background 150ms var(--standard-curve),
+      background-color 150ms linear;
+  }
+}
+
 dl.minimal {
   > div {
     display: flex;
