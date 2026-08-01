@@ -5,30 +5,13 @@ import type { StandardSchemaV1 } from "@standard-schema/spec";
 import ts from "dedent";
 import typia, { type tags } from "typia";
 
-import {
-  assertJsonSchemaDirection,
-  assertJsonSchemaTarget,
-  assertNotReached,
-  defineBenchmarks,
-} from "#src";
+import { assertNotReached, defineBenchmarks } from "#src";
 
 import type { TypiaSchema } from ".";
 
 const validate = typia.createValidate<TypiaSchema>();
 const is = typia.createIs<TypiaSchema>();
 const assert = typia.createAssert<TypiaSchema>();
-
-// typia's transform needs the type locally, so it can't be imported from #src
-interface JsonSchemaSubject {
-  id: number;
-  name: string;
-  price: string;
-}
-
-// generated at build time - OpenAPI 3.1 schemas are JSON Schema 2020-12. `schema` is the JSON
-// schema itself, alongside the named types it can reference
-const openApi30 = typia.json.schema<JsonSchemaSubject, "3.0">().schema;
-const openApi31 = typia.json.schema<JsonSchemaSubject>().schema;
 
 export default defineBenchmarks({
   library: {
@@ -101,20 +84,6 @@ export default defineBenchmarks({
         // const validate = typia.createValidate<TypiaSchema>();
         upfetch(url, { schema: validate })
       `,
-    },
-  },
-  jsonSchema: {
-    conversion: {
-      toJson: {
-        generate: ({ target, direction }) => {
-          assertJsonSchemaTarget(target, ["draft-2020-12", "openapi-3.0"]);
-          assertJsonSchemaDirection(direction, ["input"]);
-          return target === "openapi-3.0" ? openApi30 : openApi31;
-        },
-        snippet: ({ target }) =>
-          ts`typia.json.schema<Schema, "${target === "openapi-3.0" ? "3.0" : "3.1"}">().schema`,
-        source: "precompiled",
-      },
     },
   },
   string: {

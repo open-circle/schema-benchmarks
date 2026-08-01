@@ -60,13 +60,7 @@ bench.addEventListener("complete", () => {
 
 if (jsonSchemaConfig.conversion?.toJson) {
   for (const benchConfig of ensureArray(jsonSchemaConfig.conversion.toJson)) {
-    const {
-      generate,
-      snippet,
-      source,
-      standardJsonSchema: standardJsonSchemaConfig,
-      note,
-    } = benchConfig;
+    const { generate, snippet, standardJsonSchema: standardJsonSchemaConfig, note } = benchConfig;
     for (const target of jsonSchemaTargetSchema.options) {
       for (const direction of jsonSchemaDirectionSchema.options) {
         const options = { target, direction };
@@ -84,7 +78,6 @@ if (jsonSchemaConfig.conversion?.toJson) {
           conversionType: "toJson",
           target,
           direction,
-          source,
           standardJsonSchema:
             standardJsonSchemaConfig?.support === "package"
               ? {
@@ -98,16 +91,7 @@ if (jsonSchemaConfig.conversion?.toJson) {
           snippet: snippet(options),
           note,
         };
-        if (source === "runtime") {
-          bench.add(caseRegistry.add(entry), () => generate(options));
-          continue;
-        }
-        // the schema is a constant, so there's nothing to time
-        results.conversion.toJson.push({
-          ...entry,
-          id: crypto.randomUUID(),
-          mean: 0,
-        });
+        bench.add(caseRegistry.add(entry), () => generate(options));
       }
     }
   }
@@ -155,7 +139,6 @@ for (const task of successTasks) {
         mean: task.result.latency.mean,
         target: entry.target,
         direction: entry.direction,
-        source: entry.source,
         standardJsonSchema: entry.standardJsonSchema,
         jsonSchema: entry.jsonSchema,
       });

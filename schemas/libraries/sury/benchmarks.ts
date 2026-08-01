@@ -102,7 +102,6 @@ export default defineBenchmarks({
             : S.toJSONSchema(S.reverse(jsonSchemaSubject), { target }),
         snippet: ({ target, direction }) =>
           ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
-        source: "runtime",
         // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
         standardJsonSchema: { support: "opt-in", schema: jsonSchemaSubject },
       },

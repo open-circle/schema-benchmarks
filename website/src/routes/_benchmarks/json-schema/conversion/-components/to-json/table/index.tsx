@@ -10,7 +10,6 @@ import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
 import {
   jsonSchemaDirectionProps,
-  jsonSchemaSourceProps,
   standardJsonSchemaProps,
 } from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { Radio } from "#src/shared/components/radio";
@@ -100,7 +99,6 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
               <MdSymbol size={18}>download</MdSymbol>/wk
             </span>
           </SortableHeaderLink>
-          <th>Source</th>
           <th>Standard JSON Schema</th>
           <th>Type</th>
           <SortableHeaderLink
@@ -121,7 +119,6 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
       </thead>
       <tbody>
         {results.map((result) => {
-          const isRuntime = result.source === "runtime";
           const ratio = compareResult && getRatio(result.mean, compareResult.mean);
           return (
             <tr
@@ -152,10 +149,8 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
                   <DownloadCount libraryName={result.libraryName} />
                 </ErrorBoundary>
               </td>
-              <td>{jsonSchemaSourceProps.labels[result.source].label}</td>
               <td>
-                {isRuntime &&
-                  result.standardJsonSchema &&
+                {result.standardJsonSchema &&
                   (typeof result.standardJsonSchema === "string" ? (
                     standardJsonSchemaProps.labels[result.standardJsonSchema].label
                   ) : (
@@ -163,27 +158,26 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
                   ))}
               </td>
               <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
-              <td className="numeric">{!isRuntime ? "n/a" : formatDuration(result.mean)}</td>
+              <td className="numeric">{formatDuration(result.mean)}</td>
               {showComparisonColumns && (
-                <td className="bar-after">{isRuntime && <Bar {...meanScaler(result.mean)} />}</td>
+                <td className="bar-after">
+                  <Bar {...meanScaler(result.mean)} />
+                </td>
               )}
               {showComparisonColumns && (
                 <>
                   <td className="fit-content action">
-                    {isRuntime && (
-                      <Radio
-                        name="compare"
-                        value={result.id}
-                        checked={compareId === result.id}
-                        onChange={(event) => {
-                          setCompareId(event.target.checked ? result.id : undefined);
-                        }}
-                      />
-                    )}
+                    <Radio
+                      name="compare"
+                      value={result.id}
+                      checked={compareId === result.id}
+                      onChange={(event) => {
+                        setCompareId(event.target.checked ? result.id : undefined);
+                      }}
+                    />
                   </td>
                   <td className="numeric bar-after">
-                    {isRuntime &&
-                      compareResult &&
+                    {compareResult &&
                       ratioScaler &&
                       compareId !== result.id &&
                       (ratio === undefined ? (

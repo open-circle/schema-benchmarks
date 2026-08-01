@@ -55,10 +55,6 @@ export type JsonSchemaTarget = v.InferOutput<typeof jsonSchemaTargetSchema>;
 export const jsonSchemaDirectionSchema = /* @__PURE__ */ v.picklist(["input", "output"]);
 export type JsonSchemaDirection = v.InferOutput<typeof jsonSchemaDirectionSchema>;
 
-/** Where a library's JSON schema comes from. */
-export const jsonSchemaSourceSchema = /* @__PURE__ */ v.picklist(["runtime", "precompiled"]);
-export type JsonSchemaSource = v.InferOutput<typeof jsonSchemaSourceSchema>;
-
 /**
  * How a library provides the [Standard JSON Schema](https://standardschema.dev/json-schema)
  * interface, which lets tools generate a JSON schema without specialising for each library.
@@ -104,14 +100,6 @@ export interface SchemaConversionToJsonConfig extends Omit<
   generate: (options: ToJsonSchemaOptions) => object;
   /** The call being benchmarked, which usually depends on the target and direction. */
   snippet: (options: ToJsonSchemaOptions) => string;
-  /**
-   * Where the JSON schema comes from:
-   * - `runtime`: the library converts the schema when asked
-   * - `precompiled`: it's generated at build time, so there's nothing to do at runtime
-   *
-   * Anything but `runtime` is a constant, and isn't benchmarked.
-   */
-  source: JsonSchemaSource;
   /** Provide if the library, or a separate package, implements the Standard JSON Schema interface. */
   standardJsonSchema?: StandardJsonSchemaConfig;
 }

@@ -80,7 +80,6 @@ export default defineBenchmarks({
           toJsonSchema(jsonSchemaSubject, { target, typeMode: direction }),
         snippet: ({ target, direction }) =>
           ts`toJsonSchema(schema, { target: "${target}", typeMode: "${direction}" })`,
-        source: "runtime",
         // the official companion package implements the standard interface
         standardJsonSchema: {
           support: "package",

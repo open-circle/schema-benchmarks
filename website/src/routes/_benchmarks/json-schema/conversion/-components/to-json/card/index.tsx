@@ -7,7 +7,6 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/conversion/-components/json-schema";
 import {
   jsonSchemaDirectionProps,
-  jsonSchemaSourceProps,
   standardJsonSchemaProps,
 } from "#src/routes/_benchmarks/json-schema/conversion/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
@@ -24,7 +23,6 @@ export const cls = bem("json-schema-card");
 
 export function ToJsonCard({ result, meanScaler }: ToJsonCardProps) {
   const { id } = result;
-  const isRuntime = result.source === "runtime";
   return (
     <li id={id} aria-labelledby={`${id}-header`} data-testid="bench-card">
       <article
@@ -56,19 +54,15 @@ export function ToJsonCard({ result, meanScaler }: ToJsonCardProps) {
           </ErrorBoundary>
         </div>
         <CodeBlock>{result.snippet}</CodeBlock>
-        {isRuntime && (
-          <>
-            <dl className="minimal">
-              <div>
-                <dt>Mean</dt>
-                <dd>{formatDuration(result.mean)}</dd>
-              </div>
-            </dl>
-            <div {...cls("bar")}>
-              <Bar {...meanScaler(result.mean)} />
-            </div>
-          </>
-        )}
+        <dl className="minimal">
+          <div>
+            <dt>Mean</dt>
+            <dd>{formatDuration(result.mean)}</dd>
+          </div>
+        </dl>
+        <div {...cls("bar")}>
+          <Bar {...meanScaler(result.mean)} />
+        </div>
         {result.standardJsonSchema && (
           <dl className="minimal">
             <div>
@@ -85,10 +79,6 @@ export function ToJsonCard({ result, meanScaler }: ToJsonCardProps) {
         )}
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
-            <DisplayChip>
-              <MdSymbol>{jsonSchemaSourceProps.labels[result.source].icon}</MdSymbol>
-              {jsonSchemaSourceProps.labels[result.source].label}
-            </DisplayChip>
             <DisplayChip>
               <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
               {jsonSchemaDirectionProps.labels[result.direction].label}

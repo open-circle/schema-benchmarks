@@ -1,7 +1,6 @@
 import {
   errorTypeSchema,
   jsonSchemaDirectionSchema,
-  jsonSchemaSourceSchema,
   jsonSchemaTargetSchema,
   optimizeTypeSchema,
   stringFormatSchema,
@@ -68,7 +67,6 @@ const schemaConversionToJsonResultSchema = v.object({
   ...v.omit(baseBenchResultSchema, ["throws"]).entries,
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
-  source: jsonSchemaSourceSchema,
   standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),

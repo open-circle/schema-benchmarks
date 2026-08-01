@@ -71,7 +71,6 @@ export default defineBenchmarks({
           z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
         snippet: ({ target, direction }) =>
           ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
-        source: "runtime",
         standardJsonSchema: { support: "native", schema: jsonSchemaSubject },
       },
       fromJson: {
