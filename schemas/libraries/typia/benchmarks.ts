@@ -104,14 +104,18 @@ export default defineBenchmarks({
     },
   },
   jsonSchema: {
-    generate: ({ target, direction }) => {
-      assertJsonSchemaTarget(target, ["draft-2020-12", "openapi-3.0"]);
-      assertJsonSchemaDirection(direction, ["input"]);
-      return target === "openapi-3.0" ? openApi30 : openApi31;
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) => {
+          assertJsonSchemaTarget(target, ["draft-2020-12", "openapi-3.0"]);
+          assertJsonSchemaDirection(direction, ["input"]);
+          return target === "openapi-3.0" ? openApi30 : openApi31;
+        },
+        snippet: ({ target }) =>
+          ts`typia.json.schema<Schema, "${target === "openapi-3.0" ? "3.0" : "3.1"}">().schema`,
+        source: "precompiled",
+      },
     },
-    snippet: ({ target }) =>
-      ts`typia.json.schema<Schema, "${target === "openapi-3.0" ? "3.0" : "3.1"}">().schema`,
-    source: "precompiled",
   },
   string: {
     "date-time": {

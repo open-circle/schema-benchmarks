@@ -1,7 +1,12 @@
 import * as Plot from "@observablehq/plot";
 import type { JsonSchemaResult } from "@schema-benchmarks/bench";
 import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
-import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/utils";
+import {
+  formatDuration,
+  shallowFilter,
+  shortNumFormatter,
+  uniqueBy,
+} from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -82,8 +87,7 @@ export interface JsonSchemaPlotProps {
 export function JsonSchemaPlot({ target, direction }: JsonSchemaPlotProps) {
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: (results) =>
-      results.bench.filter((r) => r.target === target && r.direction === direction),
+    select: (results) => results.conversion.toJson.filter(shallowFilter({ target, direction })),
   });
   return <BaseJsonSchemaPlot data={data} />;
 }

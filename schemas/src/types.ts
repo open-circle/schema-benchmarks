@@ -70,15 +70,14 @@ export const standardJsonSchemaSupportSchema = /* @__PURE__ */ v.picklist([
 ]);
 export type StandardJsonSchemaSupport = v.InferOutput<typeof standardJsonSchemaSupportSchema>;
 
-export interface JsonSchemaOptions {
+export interface ToJsonSchemaOptions {
   target: JsonSchemaTarget;
   direction: JsonSchemaDirection;
 }
 
 interface NativeStandardJsonSchemaConfig {
-  /** Anything but `none` has to come with a schema, so the claim can be checked. */
   support: Exclude<StandardJsonSchemaSupport, "package">;
-  /** The schema exposing `~standard.jsonSchema`, which should convert what `generate` converts. */
+  /** The schema exposing `~standard.jsonSchema` */
   schema: StandardJSONSchemaV1;
   package?: never;
 }
@@ -88,20 +87,23 @@ interface PackageStandardJsonSchemaConfig {
   support: "package";
   /** The package needed. */
   package: string;
-  /** The schema exposing `~standard.jsonSchema`, which should convert what `generate` converts. */
+  /** The schema exposing `~standard.jsonSchema` */
   schema: StandardJSONSchemaV1;
 }
 
 type StandardJsonSchemaConfig = NativeStandardJsonSchemaConfig | PackageStandardJsonSchemaConfig;
 
-export interface JsonSchemaBenchmarkConfig extends Omit<BaseBenchmarkConfig, "throws" | "snippet"> {
+export interface SchemaConversionToJsonConfig extends Omit<
+  BaseBenchmarkConfig,
+  "throws" | "snippet"
+> {
   /**
    * Generates a JSON schema of the schema's input or output type, using whichever API the library
    * provides. Throws for anything it can't convert, which is recorded as unsupported.
    */
-  generate: (options: JsonSchemaOptions) => object;
+  generate: (options: ToJsonSchemaOptions) => object;
   /** The call being benchmarked, which usually depends on the target and direction. */
-  snippet: (options: JsonSchemaOptions) => string;
+  snippet: (options: ToJsonSchemaOptions) => string;
   /**
    * Where the JSON schema comes from:
    * - `runtime`: the library converts the schema when asked
@@ -112,6 +114,19 @@ export interface JsonSchemaBenchmarkConfig extends Omit<BaseBenchmarkConfig, "th
   source: JsonSchemaSource;
   /** Provide if the library, or a separate package, implements the Standard JSON Schema interface. */
   standardJsonSchema?: StandardJsonSchemaConfig;
+}
+
+export interface SchemaConversionFromJsonConfig extends Omit<
+  BaseBenchmarkConfig,
+  "throws" | "snippet"
+> {
+  /**
+   * Converts a JSON schema into a library's schema type, using whichever API the library provides.
+   * Throws for anything it can't convert, which is recorded as unsupported.
+   */
+  generate: (jsonSchema: {} | boolean) => unknown;
+  /** The call being benchmarked. */
+  snippet: string;
 }
 
 /** Libraries are expected to throw for targets they don't support. */
@@ -173,7 +188,12 @@ export interface BenchmarksConfig<ParseResult = unknown> {
   validation?: MaybeArray<ValidationBenchmarkConfig>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<ParseResult>>>>;
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig>>>;
-  jsonSchema?: MaybeArray<JsonSchemaBenchmarkConfig>;
+  jsonSchema?: {
+    conversion?: {
+      toJson?: MaybeArray<SchemaConversionToJsonConfig>;
+      fromJson?: MaybeArray<SchemaConversionFromJsonConfig>;
+    };
+  };
   string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;
   stack?: StackBenchmarkConfig;
   codec?: MaybeArray<CodecBenchmarkConfig>;

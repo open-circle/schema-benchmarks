@@ -6,7 +6,8 @@ import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils"
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
-import { CaseRegistry } from "../../bench/registry.ts";
+import type { BenchmarkConfigEntry } from "../../bench/registry.ts";
+import { Registry } from "../../bench/registry.ts";
 import { getEmptyResults } from "../../results/types.ts";
 
 const {
@@ -30,7 +31,7 @@ const sigintSignal = getSigintSignal();
 
 const results = getEmptyResults();
 
-const caseRegistry = new CaseRegistry();
+const caseRegistry = new Registry<BenchmarkConfigEntry>();
 
 const { library, initialization, validation, parsing, standard, string, codec } = libraryConfig;
 const { name: libraryName, optimizeType: libraryOptimizeType, version } = library;

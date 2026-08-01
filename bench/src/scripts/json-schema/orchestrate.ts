@@ -7,7 +7,7 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
-import { getEmptyJsonSchemaResults, jsonSchemaBenchResultsSchema } from "../../../results/types.ts";
+import { getEmptyJsonSchemaResults, jsonSchemaBenchResultsSchema } from "../../results/types.ts";
 
 const sigintSignal = getSigintSignal();
 
@@ -19,7 +19,7 @@ for (const lib of Object.keys(libraries)) {
   const libResult = await forwardStd(
     execFile(
       process.execPath,
-      [path.resolve(process.cwd(), "./src/scripts/bench/json-schema/library.ts"), `--lib=${lib}`],
+      [path.resolve(process.cwd(), "./src/scripts/json-schema/library.ts"), `--lib=${lib}`],
       { signal: sigintSignal },
     ),
   );
@@ -31,10 +31,9 @@ for (const lib of Object.keys(libraries)) {
 const merged = getEmptyJsonSchemaResults();
 
 for (const results of allResults) {
-  merged.bench.push(...results.bench);
-  merged.support.push(...results.support);
+  merged.conversion.toJson.push(...results.conversion.toJson);
 }
 
-merged.bench.sort((a, b) => a.mean - b.mean);
+merged.conversion.toJson.sort((a, b) => a.mean - b.mean);
 
 await fs.writeFile(path.resolve(process.cwd(), "./json-schema.json"), JSON.stringify(merged));

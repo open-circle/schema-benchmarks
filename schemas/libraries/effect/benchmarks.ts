@@ -6,7 +6,7 @@ import * as Schema from "effect/Schema";
 
 import type {
   JsonSchemaInputData,
-  JsonSchemaOptions,
+  ToJsonSchemaOptions,
   JsonSchemaOutputData,
   JsonSchemaTarget,
 } from "#src";
@@ -32,7 +32,7 @@ const getJsonSchemaTarget = (target: JsonSchemaTarget) => {
   return jsonSchemaTargets[target];
 };
 const makeJsonSchema = <Output, Input>(
-  { target }: JsonSchemaOptions,
+  { target }: ToJsonSchemaOptions,
   subject: Schema.Schema<Output, Input>,
 ) => JSONSchema.make(subject, { target: getJsonSchemaTarget(target) });
 const is = Schema.is(schema);
@@ -124,13 +124,17 @@ export default defineBenchmarks({
     },
   },
   jsonSchema: {
-    generate: (options) =>
-      options.direction === "input"
-        ? makeJsonSchema(options, jsonSchemaSubject)
-        : makeJsonSchema(options, Schema.typeSchema(jsonSchemaSubject)),
-    snippet: ({ target, direction }) =>
-      ts`JSONSchema.make(${direction === "input" ? "schema" : "Schema.typeSchema(schema)"}, { target: "${getJsonSchemaTarget(target)}" })`,
-    source: "runtime",
+    conversion: {
+      toJson: {
+        generate: (options) =>
+          options.direction === "input"
+            ? makeJsonSchema(options, jsonSchemaSubject)
+            : makeJsonSchema(options, Schema.typeSchema(jsonSchemaSubject)),
+        snippet: ({ target, direction }) =>
+          ts`JSONSchema.make(${direction === "input" ? "schema" : "Schema.typeSchema(schema)"}, { target: "${getJsonSchemaTarget(target)}" })`,
+        source: "runtime",
+      },
+    },
   },
   stack: {
     throw: (data) => {

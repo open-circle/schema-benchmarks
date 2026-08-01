@@ -74,13 +74,17 @@ export default defineBenchmarks({
     allErrors: { schema },
   },
   jsonSchema: {
-    generate: ({ target, direction }) => {
-      assertJsonSchemaDirection(direction, ["input"]);
-      return zodToJsonSchema(jsonSchemaSubject, { target: getJsonSchemaTarget(target) });
+    conversion: {
+      toJson: {
+        generate: ({ target, direction }) => {
+          assertJsonSchemaDirection(direction, ["input"]);
+          return zodToJsonSchema(jsonSchemaSubject, { target: getJsonSchemaTarget(target) });
+        },
+        snippet: ({ target }) =>
+          ts`zodToJsonSchema(schema, { target: "${getJsonSchemaTarget(target)}" })`,
+        source: "runtime",
+      },
     },
-    snippet: ({ target }) =>
-      ts`zodToJsonSchema(schema, { target: "${getJsonSchemaTarget(target)}" })`,
-    source: "runtime",
   },
   string: {
     "date-time": createStringBenchmark("datetime"),

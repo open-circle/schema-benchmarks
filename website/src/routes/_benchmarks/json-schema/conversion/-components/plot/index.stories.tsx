@@ -11,7 +11,7 @@ const meta = preview.meta({
 
 export const JsonSchema = meta.story({
   args: {
-    data: jsonSchemaResults.bench.filter(
+    data: jsonSchemaResults.conversion.toJson.filter(
       (result) => result.target === "draft-2020-12" && result.direction === "input",
     ),
   },
