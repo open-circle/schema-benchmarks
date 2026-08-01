@@ -65,12 +65,12 @@ export const sidebarGroups: Array<SidebarGroup> = [
       {
         ...linkOptions({ to: "/json-schema/to-json" }),
         name: "Schema to JSON",
-        icon: "arrow_forward",
+        icon: "data_object",
       },
       {
         ...linkOptions({ to: "/json-schema/from-json" }),
         name: "JSON to Schema",
-        icon: "arrow_back",
+        icon: "code",
       },
     ],
   },
