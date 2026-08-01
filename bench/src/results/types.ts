@@ -75,6 +75,11 @@ const schemaConversionToJsonResultSchema = v.object({
 });
 export type JsonSchemaResult = v.InferOutput<typeof schemaConversionToJsonResultSchema>;
 
+const schemaConversionFromJsonResultSchema = v.object({
+  ...baseBenchResultSchema.entries,
+});
+export type JsonSchemaFromJsonResult = v.InferOutput<typeof schemaConversionFromJsonResultSchema>;
+
 export const jsonSchemaCombinationSchema = v.object({
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
@@ -82,11 +87,14 @@ export const jsonSchemaCombinationSchema = v.object({
 export type JsonSchemaCombination = v.InferOutput<typeof jsonSchemaCombinationSchema>;
 
 export const jsonSchemaBenchResultsSchema = v.object({
-  conversion: v.object({ toJson: v.array(schemaConversionToJsonResultSchema) }),
+  conversion: v.object({
+    toJson: v.array(schemaConversionToJsonResultSchema),
+    fromJson: v.array(schemaConversionFromJsonResultSchema),
+  }),
 });
 export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
 export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
-  conversion: { toJson: [] },
+  conversion: { toJson: [], fromJson: [] },
 });
 
 const stringResultSchema = v.object({
