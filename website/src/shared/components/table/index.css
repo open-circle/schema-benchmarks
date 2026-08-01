@@ -102,7 +102,7 @@ td {
 }
 
 .pie {
-  --pie-size: 1.5rem;
+  --pie-size: 1.25rem;
   height: var(--pie-size);
   width: var(--pie-size);
   min-width: var(--pie-size);
@@ -118,6 +118,22 @@ td {
     transition:
       background 150ms var(--standard-curve),
       background-color 150ms linear;
+  }
+  .pie__icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--page-background);
+    pointer-events: none;
+    --icon-size: 20;
+    --icon-weight: 700;
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+  &.pie--complete .pie__icon {
+    opacity: 1;
   }
 }
 
