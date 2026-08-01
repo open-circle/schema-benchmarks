@@ -11,7 +11,7 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
