@@ -1,14 +1,11 @@
 import type { SchemaToJsonResult } from "@schema-benchmarks/bench";
+import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
 import { shallowFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
-import type {
-  JsonSchemaDirection,
-  JsonSchemaTarget,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
 import { EmptyState } from "#src/shared/components/empty-state";
 import { MdSymbol } from "#src/shared/components/symbol";
