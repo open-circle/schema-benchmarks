@@ -62,4 +62,16 @@ export default defineBenchmarks({
     ipv4: createStringBenchmark("ipv4"),
     ipv6: createStringBenchmark("ipv6"),
   },
+  jsonSchema: {
+    compliance: {
+      validation: {
+        run(schema, data) {
+          if (typeof schema === "boolean")
+            throw new Error("ata-validator does not support boolean schemas");
+          return new Validator(schema).isValidObject(data);
+        },
+        snippet: () => ts`new Validator(schema).isValidObject(data)`,
+      },
+    },
+  },
 });

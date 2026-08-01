@@ -1,11 +1,14 @@
 import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "@schema-benchmarks/bench";
-import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
+import {
+  jsonSchemaDirectionSchema,
+  jsonSchemaConversionTargetSchema,
+} from "@schema-benchmarks/schemas";
 import bem from "react-bem-helper";
 
 import { getPkgUrl } from "#src/routes/_benchmarks/-query.ts";
 import {
   jsonSchemaDirectionProps,
-  jsonSchemaTargetProps,
+  jsonSchemaConversionTargetProps,
   jsonSourceProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
@@ -82,7 +85,7 @@ export function SupportMatrixCard({
           </div>
         )}
       </dl>
-      {jsonSchemaTargetSchema.options.map((target) => (
+      {jsonSchemaConversionTargetSchema.options.map((target) => (
         <section
           key={`${library}-${target}`}
           {...cls("section")}
@@ -92,7 +95,7 @@ export function SupportMatrixCard({
             id={`${library}-${target}-subheader`}
             {...cls({ element: "subheader", extra: "typo-body2" })}
           >
-            {jsonSchemaTargetProps.labels[target].label}
+            {jsonSchemaConversionTargetProps.labels[target].label}
           </h3>
           <List {...cls("list")} aria-label={`${library} ${target} support matrix`}>
             {jsonSchemaDirectionSchema.options.map((direction) => (

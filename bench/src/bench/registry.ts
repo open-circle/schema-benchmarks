@@ -3,7 +3,7 @@ import type {
   BenchmarksConfig,
   ErrorType,
   JsonSchemaDirection,
-  JsonSchemaTarget,
+  JsonSchemaConversionTarget,
   OptimizeType,
   StringFormat,
 } from "@schema-benchmarks/schemas";
@@ -52,13 +52,14 @@ export type JsonSchemaInfoByType = Satisfies<
     conversion:
       | {
           conversionType: "toJson";
-          target: JsonSchemaTarget;
+          target: JsonSchemaConversionTarget;
           direction: JsonSchemaDirection;
           jsonSchema: string;
         }
       | {
           conversionType: "fromJson";
         };
+    compliance: {};
   },
   Record<JsonSchemaBenchmarkType, unknown>
 >;

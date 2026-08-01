@@ -3,7 +3,7 @@ import ts from "dedent";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as z from "zod/v3";
 
-import type { JsonSchemaInputData, JsonSchemaTarget, StringBenchmarkConfig } from "#src";
+import type { JsonSchemaInputData, JsonSchemaConversionTarget, StringBenchmarkConfig } from "#src";
 import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodSchema } from ".";
@@ -36,8 +36,8 @@ const jsonSchemaSubject = z.object({
 const jsonSchemaTargets = {
   "draft-07": "jsonSchema7",
   "openapi-3.0": "openApi3",
-} as const satisfies Partial<Record<JsonSchemaTarget, string>>;
-const getJsonSchemaTarget = (target: JsonSchemaTarget) => {
+} as const satisfies Partial<Record<JsonSchemaConversionTarget, string>>;
+const getJsonSchemaTarget = (target: JsonSchemaConversionTarget) => {
   assertJsonSchemaTarget(target, ["draft-07", "openapi-3.0"]);
   return jsonSchemaTargets[target];
 };

@@ -25,7 +25,7 @@ import { speedPresets } from "#src/routes/_benchmarks/download/-speed";
 import {
   jsonSchemaDirectionProps,
   jsonSourceProps,
-  jsonSchemaTargetProps,
+  jsonSchemaConversionTargetProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { admonitionDefaults } from "#src/shared/components/admonition/constants";
 import { sidebarGroups } from "#src/shared/components/sidebar/groups";
@@ -84,7 +84,7 @@ const config = defineConfig({
           minifyTypeProps,
           dataTypeProps,
           stringFormatProps,
-          jsonSchemaTargetProps,
+          jsonSchemaConversionTargetProps,
           jsonSchemaDirectionProps,
           jsonSourceProps,
         ].flatMap((props) => Object.values(props.labels).map((label) => label.icon)),

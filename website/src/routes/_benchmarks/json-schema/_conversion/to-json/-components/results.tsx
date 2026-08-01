@@ -1,5 +1,5 @@
 import type { SchemaToJsonResult } from "@schema-benchmarks/bench";
-import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/schemas";
+import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import { shallowFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -17,7 +17,7 @@ import { ToJsonCard } from "./card";
 import { ToJsonTable } from "./table";
 
 export interface ToJsonResultsProps {
-  target: JsonSchemaTarget;
+  target: JsonSchemaConversionTarget;
   direction?: JsonSchemaDirection;
   sortBy: SortableKey;
   sortDir: SortDirection;

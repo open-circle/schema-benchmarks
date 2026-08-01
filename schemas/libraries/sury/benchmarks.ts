@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as S from "sury";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertNotReached, assertJsonSchemaTarget, defineBenchmarks } from "#src";
 
 import { getSurySchema } from ".";
 
@@ -109,6 +109,23 @@ export default defineBenchmarks({
       fromJson: {
         generate: (jsonSchema) => S.fromJSONSchema(jsonSchema),
         snippet: ts`S.fromJSONSchema(jsonSchema)`,
+      },
+    },
+    compliance: {
+      semantics: {
+        run(schema, data) {
+          if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
+          return S.is(S.fromJSONSchema(schema), data);
+        },
+        snippet: () => ts`S.is(S.fromJSONSchema(schema), data)`,
+      },
+      roundtrip: {
+        run(schema, target) {
+          assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
+          if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
+          return S.toJSONSchema(S.fromJSONSchema(schema), { target });
+        },
+        snippet: (target) => ts`S.toJSONSchema(S.fromJSONSchema(schema), { target: "${target}" })`,
       },
     },
   },

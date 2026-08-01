@@ -1,7 +1,7 @@
 import {
   errorTypeSchema,
   jsonSchemaDirectionSchema,
-  jsonSchemaTargetSchema,
+  jsonSchemaConversionTargetSchema,
   optimizeTypeSchema,
   stringFormatSchema,
 } from "@schema-benchmarks/schemas";
@@ -66,7 +66,8 @@ export type JsonSchemaSourceResult = v.InferOutput<typeof jsonSchemaSourceResult
 
 const schemaConversionToJsonResultSchema = v.object({
   ...v.omit(baseBenchResultSchema, ["throws"]).entries,
-  target: jsonSchemaTargetSchema,
+
+  target: jsonSchemaConversionTargetSchema,
   direction: jsonSchemaDirectionSchema,
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
@@ -82,7 +83,7 @@ export type JsonSchemaConversionResult = OneOf<SchemaToJsonResult | SchemaFromJs
 
 export const jsonSchemaSupportMatrixSchema = v.object(
   v.entriesFromList(
-    jsonSchemaTargetSchema.options,
+    jsonSchemaConversionTargetSchema.options,
     v.optional(
       v.object(v.entriesFromList(jsonSchemaDirectionSchema.options, v.optional(v.string()))),
     ),
