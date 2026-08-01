@@ -16,9 +16,10 @@
   },
   "scripts": {
     "postinstall": "pnpm checkout",
-    "checkout": "del-cli tests && degit github:json-schema-org/json-schema-test-suite/tests tests && del-cli tests/latest",
-    "typecheck": "tsc --noEmit",
-    "gen-constants": "node ./scripts/gen-constants.ts"
+    "precheckout": "del-cli tests",
+    "checkout": "degit github:json-schema-org/json-schema-test-suite/tests tests && del-cli tests/latest",
+    "postcheckout": "node ./scripts/gen-constants.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "valibot": "catalog:"
