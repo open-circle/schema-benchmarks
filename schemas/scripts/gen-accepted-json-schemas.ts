@@ -4,6 +4,8 @@ import * as path from "node:path";
 // the built libraries, so this needs `pnpm run build` first - same as the benchmarks
 import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
+import { ensureArray } from "@schema-benchmarks/utils";
+import { format } from "oxfmt";
 
 /**
  * Regenerates the accepted JSON schemas from what the libraries currently generate, so a library
@@ -17,7 +19,9 @@ const generated: Record<string, Array<{ libraryNames: Array<string>; jsonSchema:
 for (const getConfig of Object.values(libraries)) {
   const config = await getConfig();
   if (!config.jsonSchema) continue;
-  for (const benchConfig of [config.jsonSchema].flat()) {
+  const toJsonConfigs = config.jsonSchema.conversion?.toJson;
+  if (!toJsonConfigs) continue;
+  for (const benchConfig of ensureArray(toJsonConfigs)) {
     for (const target of jsonSchemaTargetSchema.options) {
       for (const direction of jsonSchemaDirectionSchema.options) {
         let jsonSchema;
@@ -71,6 +75,6 @@ lines.push("} satisfies Record<JsonSchemaTarget, Record<JsonSchemaDirection, Arr
 
 await fs.writeFile(
   path.resolve(import.meta.dirname, "../test/accepted-json-schemas.ts"),
-  `${lines.join("\n")}\n`,
+  (await format("accepted-json-schemas.ts", `${lines.join("\n")}\n`)).code,
 );
-console.log("Generated accepted JSON schemas - run `pnpm format` to tidy them up");
+console.log("Generated accepted JSON schemas");

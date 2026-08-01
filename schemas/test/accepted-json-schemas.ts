@@ -14,12 +14,6 @@ import type { JsonSchemaDirection, JsonSchemaTarget } from "@schema-benchmarks/s
 export const acceptedJsonSchemas = {
   "draft-2020-12": {
     input: [
-      // ajv, ata-validator
-      {
-        type: "object",
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
-        required: ["id", "name", "price"],
-      },
       // arktype, zod, zod/mini
       {
         $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -69,19 +63,6 @@ export const acceptedJsonSchemas = {
         required: ["id", "name", "price"],
         $schema: "https://json-schema.org/draft/2020-12/schema",
       },
-      // typebox
-      {
-        type: "object",
-        required: ["id", "name", "price"],
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
-      },
-      // typia
-      {
-        type: "object",
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
-        required: ["id", "name", "price"],
-        additionalProperties: false,
-      },
     ],
     output: [
       // arktype
@@ -118,12 +99,6 @@ export const acceptedJsonSchemas = {
   },
   "draft-07": {
     input: [
-      // ajv, ata-validator
-      {
-        type: "object",
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
-        required: ["id", "name", "price"],
-      },
       // arktype, zod, zod/mini
       {
         $schema: "http://json-schema.org/draft-07/schema#",
@@ -204,7 +179,7 @@ export const acceptedJsonSchemas = {
   },
   "openapi-3.0": {
     input: [
-      // joi, typia, zod/v3
+      // joi, zod/v3
       {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
