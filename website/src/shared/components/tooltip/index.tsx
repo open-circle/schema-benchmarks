@@ -15,6 +15,7 @@ import {
   type HTMLAttributes,
   type JSX,
   type ReactNode,
+  type Ref,
   type RefCallback,
   useEffect,
   useState,
@@ -51,6 +52,7 @@ export interface RichTooltipProps {
 export interface TooltipProps {
   tooltip?: string | RichTooltipProps;
   tooltipOpts?: ComputePositionConfig;
+  popoverRef?: Ref<HTMLElement>;
   id?: string;
 }
 
@@ -75,6 +77,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
     tooltipOpts,
     id: idProp,
     ref,
+    popoverRef: popoverRefProp,
     ...props
   }: Override<ComponentProps<TComp>, TooltipProps>) {
     const id = useIdDefault(idProp);
@@ -174,7 +177,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
         {tooltip && (
           <div
             role="tooltip"
-            ref={mergeRefs(setPopoverRef, refs.setFloating)}
+            ref={mergeRefs(setPopoverRef, refs.setFloating, popoverRefProp)}
             popover="hint"
             id={id}
             style={floatingStyles}

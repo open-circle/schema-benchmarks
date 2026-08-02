@@ -1,12 +1,30 @@
 import type { JsonSchemaSupportMatrices } from "@schema-benchmarks/bench";
 import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
 import clsx from "clsx";
+import { useRef } from "react";
 
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { Checkbox } from "#src/shared/components/checkbox/index.tsx";
+
+function MatrixCheckbox({ reason }: { reason?: string }) {
+  const popoverRef = useRef<HTMLElement>(null);
+  return (
+    <Checkbox
+      checked={!reason}
+      readOnly
+      tooltip={
+        reason && {
+          subhead: "Reason for lack of support",
+          supporting: reason,
+        }
+      }
+      popoverRef={popoverRef}
+    />
+  );
+}
 
 export function SupportMatrix({ matrix }: { matrix: JsonSchemaSupportMatrices }) {
   return (
@@ -54,7 +72,7 @@ export function SupportMatrix({ matrix }: { matrix: JsonSchemaSupportMatrices })
                   key={`${library}-${target}-${direction}`}
                   className={clsx("action", { "border-before": i === 0 })}
                 >
-                  <Checkbox checked={!!supportMatrix?.[target]?.[direction]} readOnly />
+                  <MatrixCheckbox reason={supportMatrix?.[target]?.[direction]} />
                 </td>
               )),
             )}
