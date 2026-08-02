@@ -4,11 +4,15 @@ export type Satisfies<T extends U, U> = T;
 export type NonOptionalKeys<T> = {
   [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
-export type Override<T, U> = Compute<Omit<T, keyof U> & U>;
-export type PickRequired<T, K extends keyof T> = Compute<Omit<T, K> & Required<Pick<T, K>>>;
-export type PickPartial<T, K extends keyof T> = Compute<Omit<T, K> & Partial<Pick<T, K>>>;
+export type Override<T, U> = Compute<DistributiveOmit<T, keyof U> & U>;
+export type PickRequired<T, K extends keyof T> = Compute<
+  DistributiveOmit<T, K> & Required<Pick<T, K>>
+>;
+export type PickPartial<T, K extends keyof T> = Compute<
+  DistributiveOmit<T, K> & Partial<Pick<T, K>>
+>;
 export type PickNonNullable<T, K extends keyof T> = Compute<
-  Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
+  DistributiveOmit<T, K> & { [P in K]-?: NonNullable<T[P]> }
 >;
 
 export namespace Autocomplete {

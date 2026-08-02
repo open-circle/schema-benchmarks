@@ -106,7 +106,8 @@
     }
 
     &[data-status="active"],
-    &[aria-pressed="true"] {
+    &[aria-pressed="true"],
+    &[aria-selected="true"] {
       --button-background: var(--button-selected-background);
       --button-foreground: var(--button-selected);
       --icon-fill: 1;
@@ -164,7 +165,8 @@
       --button-foreground: var(--page-foreground);
     }
     &[data-status="active"],
-    &[aria-pressed="true"] {
+    &[aria-pressed="true"],
+    &[aria-selected="true"] {
       --button-background: var(--button-selected-background);
       --button-foreground: var(--button-selected);
       &:hover {
@@ -191,7 +193,8 @@
       --icon-weight: 600;
     }
     &[data-status="active"],
-    &[aria-pressed="true"] {
+    &[aria-pressed="true"],
+    &[aria-selected="true"] {
       --icon-fill: 1;
       --icon-weight: 600;
       font-weight: var(--weight-bold);
