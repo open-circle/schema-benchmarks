@@ -80,21 +80,30 @@ export type SchemaFromJsonResult = v.InferOutput<typeof schemaConversionFromJson
 
 export type JsonSchemaConversionResult = OneOf<SchemaToJsonResult | SchemaFromJsonResult>;
 
-export const jsonSchemaCombinationSchema = v.object({
-  target: jsonSchemaTargetSchema,
-  direction: jsonSchemaDirectionSchema,
-});
-export type JsonSchemaCombination = v.InferOutput<typeof jsonSchemaCombinationSchema>;
+export const jsonSchemaSupportMatrixSchema = v.object(
+  v.entriesFromList(
+    jsonSchemaTargetSchema.options,
+    v.optional(
+      v.object(v.entriesFromList(jsonSchemaDirectionSchema.options, v.optional(v.literal(true)))),
+    ),
+  ),
+);
+export type JsonSchemaSupportMatrix = v.InferOutput<typeof jsonSchemaSupportMatrixSchema>;
 
 export const jsonSchemaBenchResultsSchema = v.object({
   conversion: v.object({
     toJson: v.array(schemaConversionToJsonResultSchema),
     fromJson: v.array(schemaConversionFromJsonResultSchema),
+    toJsonSupport: v.record(v.string(), jsonSchemaSupportMatrixSchema),
   }),
 });
 export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
 export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
-  conversion: { toJson: [], fromJson: [] },
+  conversion: {
+    toJson: [],
+    fromJson: [],
+    toJsonSupport: {},
+  },
 });
 
 const stringResultSchema = v.object({

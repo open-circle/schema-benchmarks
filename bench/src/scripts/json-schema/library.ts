@@ -14,6 +14,14 @@ import type { JsonSchemaBenchmarkConfigEntry } from "../../bench/registry.ts";
 import { Registry } from "../../bench/registry.ts";
 import { getEmptyJsonSchemaResults } from "../../results/types.ts";
 
+function getOrInsertRecord<K extends string, V>(
+  record: Partial<Record<K, V>>,
+  key: K,
+  defaultValue: NonNullable<NoInfer<V>>,
+): NonNullable<V> {
+  return (record[key] ??= defaultValue);
+}
+
 const {
   values: { lib },
 } = parseArgs({
@@ -68,6 +76,12 @@ if (jsonSchemaConfig.conversion?.toJson) {
         try {
           // libraries throw for anything they can't convert, which is recorded instead
           jsonSchema = generate(options);
+          // if we reached here, the library supports this target/direction, so we record it in the support matrix
+          getOrInsertRecord(
+            getOrInsertRecord(results.conversion.toJsonSupport, libraryName, {}),
+            target,
+            {},
+          )[direction] = true;
         } catch (error) {
           const reason = error instanceof Error ? error.message : String(error);
           console.log(`Skipping ${direction} JSON schema for ${target}:`, reason);
