@@ -1,0 +1,79 @@
+:root {
+  --checkbox-unselected-color: var(--page-foreground);
+  --checkbox-selected-color: var(--button);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem;
+  --checkbox-base-color: var(--checkbox-unselected-color);
+  --checkbox-border-opacity: var(--primary-text);
+  --checkbox-focus-opacity: 0;
+  &:hover:not(:has(input:disabled, input[aria-disabled="true"])) {
+    --checkbox-focus-opacity: var(--hover-opacity);
+  }
+  input {
+    /* visually hidden */
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    &:focus-visible ~ .checkbox__icon {
+      outline-width: 2px;
+      outline-style: solid;
+      outline-offset: 2px;
+      --checkbox-focus-opacity: var(--focus-opacity);
+      --checkbox-focus-scale: 1;
+    }
+    &:checked ~ .checkbox__icon {
+      --checkbox-base-color: var(--checkbox-selected-color);
+      --checkbox-border-opacity: 1;
+      background-color: color(
+        from var(--checkbox-selected-color) srgb r g b / var(--checkbox-border-opacity)
+      );
+      .md-symbol {
+        opacity: 1;
+      }
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      & ~ .checkbox__icon {
+        opacity: var(--disabled-opacity);
+        --checkbox-base-color: var(--page-foreground);
+        --checkbox-selected-color: var(--page-foreground);
+      }
+    }
+  }
+  .checkbox__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--shape-small);
+    border: 2px solid
+      color(from var(--checkbox-base-color) srgb r g b / var(--checkbox-border-opacity));
+    background-color: color(
+      from var(--checkbox-base-color) srgb r g b / var(--checkbox-focus-opacity)
+    );
+    background-color: transparent;
+    outline-color: var(--focus-background);
+    transition:
+      border-color 250ms,
+      background-color 250ms,
+      outline 250ms,
+      opacity 250ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .md-symbol {
+      color: var(--page-background);
+      opacity: 0;
+      transition: opacity 250ms;
+    }
+  }
+}
