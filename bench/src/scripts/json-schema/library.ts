@@ -78,7 +78,10 @@ if (jsonSchemaConfig.conversion?.toJson) {
           jsonSchema = generate(options);
           // if we reached here, the library supports this target/direction, so we record it in the support matrix
           getOrInsertRecord(
-            getOrInsertRecord(results.conversion.toJsonSupport, libraryName, {}),
+            getOrInsertRecord(results.conversion.toJsonSupport, libraryName, {
+              version,
+              matrix: {},
+            }).matrix,
             target,
             {},
           )[direction] = true;

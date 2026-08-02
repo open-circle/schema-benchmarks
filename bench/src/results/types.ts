@@ -90,11 +90,20 @@ export const jsonSchemaSupportMatrixSchema = v.object(
 );
 export type JsonSchemaSupportMatrix = v.InferOutput<typeof jsonSchemaSupportMatrixSchema>;
 
+export const jsonSchemaSupportMatricesSchema = v.record(
+  v.string(),
+  v.object({
+    version: v.string(),
+    matrix: jsonSchemaSupportMatrixSchema,
+  }),
+);
+export type JsonSchemaSupportMatrices = v.InferOutput<typeof jsonSchemaSupportMatricesSchema>;
+
 export const jsonSchemaBenchResultsSchema = v.object({
   conversion: v.object({
     toJson: v.array(schemaConversionToJsonResultSchema),
     fromJson: v.array(schemaConversionFromJsonResultSchema),
-    toJsonSupport: v.record(v.string(), jsonSchemaSupportMatrixSchema),
+    toJsonSupport: jsonSchemaSupportMatricesSchema,
   }),
 });
 export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
