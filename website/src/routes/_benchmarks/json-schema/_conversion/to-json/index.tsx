@@ -4,7 +4,6 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
-import { ToJsonResults } from "#src/routes/_benchmarks/json-schema/_conversion/-components/to-json/results";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
@@ -12,11 +11,13 @@ import {
   optionalJsonSchemaTargetSchema,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
-import Content from "#src/routes/_benchmarks/json-schema/_conversion/to-json/content.mdx";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
+
+import { ToJsonResults } from "./-components/results.tsx";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   target: optionalJsonSchemaTargetSchema,

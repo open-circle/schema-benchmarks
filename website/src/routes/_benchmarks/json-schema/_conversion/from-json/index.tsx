@@ -3,11 +3,12 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
-import { FromJsonResults } from "#src/routes/_benchmarks/json-schema/_conversion/-components/from-json/results";
 import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
-import Content from "#src/routes/_benchmarks/json-schema/_conversion/from-json/content.mdx";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
+
+import { FromJsonResults } from "./-components/results.tsx";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   ...sortParamsEntries,
