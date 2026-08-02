@@ -33,6 +33,10 @@ const merged = getEmptyJsonSchemaResults();
 for (const results of allResults) {
   merged.conversion.toJson.push(...results.conversion.toJson);
   merged.conversion.fromJson.push(...results.conversion.fromJson);
+  merged.conversion.toJsonSupport = {
+    ...merged.conversion.toJsonSupport,
+    ...results.conversion.toJsonSupport,
+  };
 }
 
 merged.conversion.toJson.sort((a, b) => a.mean - b.mean);
