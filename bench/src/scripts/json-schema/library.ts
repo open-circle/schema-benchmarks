@@ -12,6 +12,7 @@ import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
 import type { JsonSchemaBenchmarkConfigEntry } from "../../bench/registry.ts";
 import { Registry } from "../../bench/registry.ts";
+import type { JsonSchemaSupportMatrix } from "../../results/types.ts";
 import { getEmptyJsonSchemaResults } from "../../results/types.ts";
 
 function getOrInsertRecord<K extends string, V>(
@@ -51,6 +52,9 @@ if (!jsonSchemaConfig) {
   process.exit(0);
 }
 
+const matrix: JsonSchemaSupportMatrix = {};
+results.conversion.toJsonSupport[libraryName] = { version, matrix };
+
 console.log(`\nBenchmarking JSON schema: ${libraryName}`);
 
 const bench = new Bench({ signal: sigintSignal });
@@ -76,18 +80,11 @@ if (jsonSchemaConfig.conversion?.toJson) {
         try {
           // libraries throw for anything they can't convert, which is recorded instead
           jsonSchema = generate(options);
-          // if we reached here, the library supports this target/direction, so we record it in the support matrix
-          getOrInsertRecord(
-            getOrInsertRecord(results.conversion.toJsonSupport, libraryName, {
-              version,
-              matrix: {},
-            }).matrix,
-            target,
-            {},
-          )[direction] = true;
         } catch (error) {
           const reason = error instanceof Error ? error.message : String(error);
           console.log(`Skipping ${direction} JSON schema for ${target}:`, reason);
+
+          getOrInsertRecord(matrix, target, {})[direction] = reason;
           continue;
         }
         const entry: JsonSchemaBenchmarkConfigEntry = {

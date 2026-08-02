@@ -84,7 +84,7 @@ export const jsonSchemaSupportMatrixSchema = v.object(
   v.entriesFromList(
     jsonSchemaTargetSchema.options,
     v.optional(
-      v.object(v.entriesFromList(jsonSchemaDirectionSchema.options, v.optional(v.literal(true)))),
+      v.object(v.entriesFromList(jsonSchemaDirectionSchema.options, v.optional(v.string()))),
     ),
   ),
 );
