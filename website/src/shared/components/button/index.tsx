@@ -1,4 +1,6 @@
-import { type DistributiveOmit, nonNullish } from "@schema-benchmarks/utils";
+import type { OneOf, DistributiveOmit } from "@schema-benchmarks/utils";
+import { nonNullish } from "@schema-benchmarks/utils";
+import { mergeRefs } from "@schema-benchmarks/utils/react";
 import { createLink } from "@tanstack/react-router";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
@@ -79,6 +81,12 @@ export const InternalLinkButton = createLink(ExternalLinkButton);
 
 const buttonGroupCls = bem("button-group");
 
+interface ButtonGroupProps extends ComponentPropsWithRef<"div"> {
+  variant?: "text" | "outlined";
+  orientation?: "horizontal" | "vertical";
+  children: ReactNode;
+}
+
 export function ButtonGroup({
   children,
   variant = "text",
@@ -86,26 +94,21 @@ export function ButtonGroup({
   orientation = "horizontal",
   ariaLabel,
   ariaLabelledBy,
-}: {
-  children: React.ReactNode;
-  variant?: "text" | "outlined";
-  className?: string;
-  orientation?: "horizontal" | "vertical";
-} & (
-  | { ariaLabel: string; ariaLabelledBy?: never }
-  | { ariaLabelledBy: string; ariaLabel?: never }
-)) {
+  ref,
+  ...props
+}: ButtonGroupProps & OneOf<{ ariaLabel: string } | { ariaLabelledBy: string }>) {
   const group = useFocusGroup({
     orientation,
   });
   return (
     <div
       {...buttonGroupCls({ modifiers: [variant], extra: className })}
-      ref={group}
+      ref={mergeRefs(ref, group)}
       role="toolbar"
       aria-orientation={orientation}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
+      {...props}
     >
       {children}
     </div>

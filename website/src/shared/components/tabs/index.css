@@ -1,0 +1,160 @@
+.tabs {
+  border-radius: 0;
+  transition: border-color 250ms;
+  .tabs__tab {
+    border-bottom: 2px solid transparent;
+    &[aria-selected="true"] {
+      border-color: var(--button-selected);
+    }
+  }
+  .tabs__tab {
+    border-radius: inherit !important;
+  }
+  &[aria-orientation="horizontal"] {
+    border-bottom: 1px solid var(--divider);
+    &.tabs--fullwidth .tabs__tab {
+      flex-basis: 100%;
+    }
+    &.tabs--responsive .tabs__tab {
+      @media (--phone) or (--tablet-small) {
+        flex-basis: 100%;
+      }
+    }
+  }
+  &[aria-orientation="vertical"] {
+    border-bottom: none;
+  }
+}
+
+.tabs__panels-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.tabs__panels {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  view-transition-class: tab-panel;
+  .tabs__panel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  &::view-transition-group(*) {
+    animation-duration: 250ms;
+    animation-timing-function: var(--standard-curve);
+  }
+  &:active-view-transition-type(forwards) {
+    &::view-transition-old(.tab-panel) {
+      animation-name: slide-out-to-left;
+    }
+    &::view-transition-new(.tab-panel) {
+      animation-name: slide-in-from-right;
+    }
+  }
+  &:active-view-transition-type(backwards) {
+    &::view-transition-old(.tab-panel) {
+      animation-name: slide-out-to-right;
+    }
+    &::view-transition-new(.tab-panel) {
+      animation-name: slide-in-from-left;
+    }
+  }
+  &.tabs__panels--horizontal:dir(rtl) {
+    &:active-view-transition-type(forwards) {
+      &::view-transition-old(.tab-panel) {
+        animation-name: slide-out-to-right;
+      }
+      &::view-transition-new(.tab-panel) {
+        animation-name: slide-in-from-left;
+      }
+    }
+    &:active-view-transition-type(backwards) {
+      &::view-transition-old(.tab-panel) {
+        animation-name: slide-out-to-left;
+      }
+      &::view-transition-new(.tab-panel) {
+        animation-name: slide-in-from-right;
+      }
+    }
+  }
+  &.tabs__panels--vertical {
+    &:active-view-transition-type(forwards) {
+      &::view-transition-old(.tab-panel) {
+        animation-name: slide-out-to-top;
+      }
+      &::view-transition-new(.tab-panel) {
+        animation-name: slide-in-from-bottom;
+      }
+    }
+    &:active-view-transition-type(backwards) {
+      &::view-transition-old(.tab-panel) {
+        animation-name: slide-out-to-bottom;
+      }
+      &::view-transition-new(.tab-panel) {
+        animation-name: slide-in-from-top;
+      }
+    }
+  }
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-to-right {
+  to {
+    transform: translateX(25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-to-left {
+  to {
+    transform: translateX(-25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    transform: translateY(-25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-to-bottom {
+  to {
+    transform: translateY(25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-to-top {
+  to {
+    transform: translateY(-25%);
+    opacity: 0;
+  }
+}
