@@ -19,7 +19,8 @@ export type TestCase = v.InferOutput<typeof testCaseSchema>;
 export const complianceTargetSchema = v.picklist(targets);
 export type ComplianceTarget = v.InferOutput<typeof complianceTargetSchema>;
 
-export interface ComplianceResult {
+export interface FileComplianceResult {
+  description: string;
   count: {
     passed: number;
     failed: number;
@@ -29,6 +30,14 @@ export interface ComplianceResult {
     expected: boolean;
   }>;
 }
+
+export type ComplianceResults = {
+  count: {
+    passed: number;
+    failed: number;
+  };
+  files: Record<string, FileComplianceResult>;
+};
 
 export type ComplianceFn = (
   schema: {} | boolean,
