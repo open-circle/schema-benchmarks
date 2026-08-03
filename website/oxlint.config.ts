@@ -2,7 +2,7 @@ import eslintPluginQuery from "@tanstack/eslint-plugin-query";
 import eslintPluginRouter from "@tanstack/eslint-plugin-router";
 import { defineConfig } from "oxlint";
 
-import { baseConfig, defaultJsPlugins, defaultPlugins } from "../oxlint.config.ts";
+import { baseConfig } from "../oxlint.config.ts";
 
 const linkComponents = [
   // "Link",
@@ -26,12 +26,12 @@ const buttonComponents = [
 export default defineConfig({
   extends: [baseConfig],
   jsPlugins: [
-    ...defaultJsPlugins,
+    ...baseConfig.jsPlugins,
     { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
     { name: "@tanstack/query", specifier: "@tanstack/eslint-plugin-query" },
     { name: "no-relative", specifier: "eslint-plugin-no-relative-import-paths" },
   ],
-  plugins: [...defaultPlugins, "react", "jsx-a11y"],
+  plugins: [...baseConfig.plugins, "react", "jsx-a11y"],
   settings: {
     "jsx-a11y": {
       components: {

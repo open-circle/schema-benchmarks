@@ -11,10 +11,10 @@ import { ensureArray, partition } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
-import type { JsonSchemaBenchmarkConfigEntry } from "../../bench/registry.ts";
-import { Registry } from "../../bench/registry.ts";
-import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "../../results/types.ts";
-import { getEmptyJsonSchemaResults } from "../../results/types.ts";
+import type { JsonSchemaBenchmarkConfigEntry } from "#src/bench/registry.ts";
+import { Registry } from "#src/bench/registry.ts";
+import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "#src/results/types.ts";
+import { getEmptyJsonSchemaResults } from "#src/results/types.ts";
 
 function getOrInsertRecord<K extends string, V>(
   record: Partial<Record<K, V>>,

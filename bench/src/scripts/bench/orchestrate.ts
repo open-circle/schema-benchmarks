@@ -8,8 +8,8 @@ import { unsafeEntries } from "@schema-benchmarks/utils";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
-import type { BenchResults } from "../../results/types.ts";
-import { benchResultsSchema, getEmptyResults } from "../../results/types.ts";
+import type { BenchResults } from "#src/results/types.ts";
+import { benchResultsSchema, getEmptyResults } from "#src/results/types.ts";
 
 const sigintSignal = getSigintSignal();
 
