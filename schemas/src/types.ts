@@ -112,7 +112,7 @@ export interface SchemaConversionFromJsonConfig extends Omit<
    * Converts a JSON schema into a library's schema type, using whichever API the library provides.
    * Throws for anything it can't convert, which is recorded as unsupported.
    */
-  generate: (jsonSchema: {} | boolean) => unknown;
+  generate: (jsonSchema: {}) => unknown;
   /** The call being benchmarked. */
   snippet: string;
 }

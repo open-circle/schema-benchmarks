@@ -106,10 +106,7 @@ export default defineBenchmarks({
         standardJsonSchema: { support: "opt-in", schema: jsonSchemaSubject },
       },
       fromJson: {
-        generate: (jsonSchema) => {
-          if (typeof jsonSchema === "boolean") throw new Error("boolean schemas are not supported");
-          return S.fromJSONSchema(jsonSchema);
-        },
+        generate: (jsonSchema) => S.fromJSONSchema(jsonSchema),
         snippet: ts`S.fromJSONSchema(jsonSchema)`,
       },
     },
