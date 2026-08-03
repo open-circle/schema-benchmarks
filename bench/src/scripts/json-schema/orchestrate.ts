@@ -7,7 +7,7 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
-import { getEmptyJsonSchemaResults, jsonSchemaBenchResultsSchema } from "../../results/types.ts";
+import { getEmptyJsonSchemaResults, jsonSchemaBenchResultsSchema } from "#src/results/types.ts";
 
 const sigintSignal = getSigintSignal();
 

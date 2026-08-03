@@ -11,7 +11,7 @@ import {
   type DownloadResults,
   type MinifyType,
   minifyTypeSchema,
-} from "../results/types.ts";
+} from "#src/results/types.ts";
 
 const ttsc = _ttsc.default ? _ttsc.default : (_ttsc as never); // Fix for ESM/CJS interop
 

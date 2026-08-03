@@ -6,9 +6,9 @@ import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils"
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
-import type { BenchmarkConfigEntry } from "../../bench/registry.ts";
-import { Registry } from "../../bench/registry.ts";
-import { getEmptyResults } from "../../results/types.ts";
+import type { BenchmarkConfigEntry } from "#src/bench/registry.ts";
+import { Registry } from "#src/bench/registry.ts";
+import { getEmptyResults } from "#src/results/types.ts";
 
 const {
   values: { lib },

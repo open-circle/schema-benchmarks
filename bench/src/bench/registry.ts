@@ -9,7 +9,7 @@ import type {
 } from "@schema-benchmarks/schemas";
 import type { Compute, DistributiveOmit, OneOf, Satisfies } from "@schema-benchmarks/utils";
 
-import type { DataType } from "../results/types.ts";
+import type { DataType } from "#src/results/types.ts";
 
 export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library" | "stack" | "jsonSchema">;
 

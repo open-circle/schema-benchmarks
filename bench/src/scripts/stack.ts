@@ -9,7 +9,7 @@ import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd } from "@schema-benchmarks/utils/node";
 
-import type { StackResult } from "../results/types.ts";
+import type { StackResult } from "#src/results/types.ts";
 
 const execFile = promisify(child_process.execFile);
 
