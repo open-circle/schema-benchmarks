@@ -35,7 +35,7 @@ test.describe("desktop view", () => {
     const firstRow = fromJsonPage.desktop.tableHandle.getRowByIndex(0);
     const firstRowLibraryCell = firstRow.getCell("library");
 
-    await expect(firstRowLibraryCell).toHaveText(/ajv/i);
+    await expect(firstRowLibraryCell).toHaveText(/arktype/i);
   });
 });
 

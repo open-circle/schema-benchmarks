@@ -10,6 +10,12 @@ import { BaseConversionPage } from "./_conversion";
 export class ToJsonPage extends BaseConversionPage {
   url = "/json-schema/to-json";
 
+  tabs = this.page.getByRole("tablist");
+
+  getTabLink(tab: "Support Matrix" | "Benchmarks") {
+    return this.tabs.getByRole("tab", { name: tab });
+  }
+
   targetToggle = this.page.getByRole("list", { name: "Target" });
 
   getTargetLabel(target: JsonSchemaTarget) {
