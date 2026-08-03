@@ -35,17 +35,20 @@
     display: flex;
     align-items: center;
   }
-  .list-item__leading:has(.md-symbol) {
+  .list-item__leading:has(.md-symbol, .radio, .checkbox) {
     margin-right: 1rem;
     &:dir(rtl) {
       margin-right: 0;
       margin-left: 1rem;
     }
   }
+  .list-item__text {
+    flex: 1 1 auto;
+  }
   &.list-item__content--single {
     height: 3rem;
     padding: 0.75rem 1rem;
-    &:has(.list-item__leading:has(.md-symbol)) {
+    &:has(.list-item__leading:has(.md-symbol, .radio, .checkbox)) {
       height: 3.5rem;
       padding: 1rem;
     }
@@ -53,8 +56,13 @@
   &.list-item__content--two {
     height: 4rem;
     padding: 1rem;
-    &:has(.list-item__leading:has(.md-symbol)) {
+    &:has(.list-item__leading:has(.md-symbol, .radio, .checkbox)) {
       height: 4.5rem;
+    }
+    .list-item__supporting-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   &.list-item__content--three {
