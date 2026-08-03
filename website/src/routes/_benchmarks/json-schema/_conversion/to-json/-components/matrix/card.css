@@ -1,0 +1,28 @@
+.support-matrix-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--divider);
+  border-radius: var(--shape-medium);
+  min-width: 256px;
+  .support-matrix-card__version {
+    margin: 0;
+    padding: 1rem 1rem 0;
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+  }
+  .support-matrix-card__library {
+    margin: 0;
+    padding: 0 1rem;
+  }
+  .support-matrix-card__subheader {
+    margin: 0;
+    padding: 0 1rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    color: color(from var(--foreground) srgb r g b / var(--secondary-text));
+  }
+  .support-matrix-card__list {
+    padding-top: 0;
+    margin: 0;
+  }
+}

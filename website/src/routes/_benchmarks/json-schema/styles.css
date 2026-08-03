@@ -1,5 +1,6 @@
-@import "./_conversion/to-json/-components//table/index.css";
-@import "./_conversion/to-json/-components//card/index.css";
+@import "./_conversion/to-json/-components/table/index.css";
+@import "./_conversion/to-json/-components/card/index.css";
+@import "./_conversion/to-json/-components/matrix/card.css";
 
 .json-schema-cards {
   display: grid;
@@ -12,10 +13,6 @@
     display: grid;
     grid-template-columns: subgrid;
   }
-}
-
-.support-matrix-container {
-  overflow-x: auto;
 }
 
 .output pre {

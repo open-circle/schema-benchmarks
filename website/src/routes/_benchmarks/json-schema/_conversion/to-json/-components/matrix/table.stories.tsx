@@ -2,11 +2,11 @@ import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 
 import preview from "#storybook/preview";
 
-import { SupportMatrix } from ".";
+import { MatrixTable } from "./table";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Matrix",
-  component: SupportMatrix,
+  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Matrix/Table",
+  component: MatrixTable,
   args: {
     matrix: jsonSchemaResults.conversion.toJsonSupport,
   },
