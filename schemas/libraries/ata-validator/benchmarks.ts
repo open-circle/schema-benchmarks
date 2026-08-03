@@ -62,12 +62,4 @@ export default defineBenchmarks({
     ipv4: createStringBenchmark("ipv4"),
     ipv6: createStringBenchmark("ipv6"),
   },
-  jsonSchema: {
-    conversion: {
-      fromJson: {
-        generate: (jsonSchema) => new Validator(jsonSchema as object),
-        snippet: ts`new Validator(jsonSchema)`,
-      },
-    },
-  },
 });
