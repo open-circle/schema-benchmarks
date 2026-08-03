@@ -6,7 +6,12 @@ import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
 import { targets } from "./constants.gen.ts";
-import type { ComplianceTarget, ComplianceFn, ComplianceResult } from "./types.ts";
+import type {
+  ComplianceTarget,
+  ComplianceFn,
+  FileComplianceResult,
+  ComplianceResults,
+} from "./types.ts";
 import { testCaseSchema } from "./types.ts";
 
 // oxlint-disable-next-line no-underscore-dangle
@@ -29,23 +34,34 @@ export async function* getTestCases(target: ComplianceTarget) {
 export async function getTargetCompliance(
   target: ComplianceTarget,
   complianceFn: ComplianceFn,
-): Promise<ComplianceResult> {
-  const result: ComplianceResult = {
+): Promise<ComplianceResults> {
+  const results: ComplianceResults = {
     count: {
       passed: 0,
       failed: 0,
     },
-    failedTests: [],
+    files: {},
   };
 
   for await (const [file, testCases] of getTestCases(target)) {
+    const result: FileComplianceResult = {
+      description: file,
+      count: {
+        passed: 0,
+        failed: 0,
+      },
+      failedTests: [],
+    };
+    results.files[file] = result;
     for (const { description, schema, tests } of testCases) {
       for (const { description: testDescription, data, valid: expected } of tests) {
         try {
-          const received = await complianceFn(target, schema, data);
+          const received = await complianceFn(schema, data, target);
           if (received === expected) {
+            results.count.passed++;
             result.count.passed++;
           } else {
+            results.count.failed++;
             result.count.failed++;
             result.failedTests.push({
               label: [file, description, testDescription],
@@ -57,6 +73,7 @@ export async function getTargetCompliance(
             `Error running compliance test for ${file} > ${description} > ${testDescription}:`,
             error,
           );
+          results.count.failed++;
           result.count.failed++;
           result.failedTests.push({
             label: [file, description, testDescription],
@@ -67,12 +84,12 @@ export async function getTargetCompliance(
     }
   }
 
-  return result;
+  return results;
 }
 
 export async function getAllTargetsCompliance(
   complianceFn: ComplianceFn,
-): Promise<Record<ComplianceTarget, ComplianceResult>> {
+): Promise<Record<ComplianceTarget, ComplianceResults>> {
   return unsafeFromEntries(
     await Promise.all(
       targets.map(async (target) => [target, await getTargetCompliance(target, complianceFn)]),
