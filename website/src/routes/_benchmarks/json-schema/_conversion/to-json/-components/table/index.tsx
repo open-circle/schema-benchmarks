@@ -65,11 +65,7 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
   const formatNumber = useNumberFormatter(numFormatter);
   const showComparisonColumns = results.length > 1;
   return (
-    <table
-      className="json-schema-table"
-      aria-label="Results"
-      style={{ viewTransitionName: "result-table" }}
-    >
+    <table className="json-schema-table" aria-label="Results">
       <thead>
         <tr>
           <SortableHeaderLink

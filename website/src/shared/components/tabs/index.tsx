@@ -31,8 +31,7 @@ export function useTabs<T extends string>(tabs: ReadonlyArray<T>, initialValue: 
           return;
         }
 
-        const direction =
-          tabs.indexOf(tabId) > tabs.indexOf(selectedTab) ? "forwards" : "backwards";
+        const direction = tabs.indexOf(tabId) > tabs.indexOf(selectedTab) ? "next" : "prev";
         panelsRef.current.startViewTransition({
           update: () => setSelectedTab(tabId),
           types: [direction],
@@ -67,7 +66,7 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
         void doNavigate();
         return;
       }
-      const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "forwards" : "backwards";
+      const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "next" : "prev";
       panelsRef.current.startViewTransition({ update: doNavigate, types: [direction] });
     },
   });

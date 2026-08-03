@@ -4,6 +4,10 @@
   gap: 0.5rem;
 }
 
+.json-schema-table tbody tr {
+  view-transition-class: tab-panel;
+}
+
 .json-schema-table__downloads-label {
   display: inline-flex;
   align-items: center;

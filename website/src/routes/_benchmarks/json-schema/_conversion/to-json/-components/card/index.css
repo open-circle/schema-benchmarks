@@ -1,6 +1,7 @@
 .json-schema-card {
   display: flex;
   flex-direction: column;
+  view-transition-class: tab-panel;
   padding: 1rem;
   gap: 0.5rem;
   min-width: 256px;
