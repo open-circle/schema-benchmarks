@@ -10,106 +10,120 @@ test.beforeEach("Go to JSON schema to-json page", async ({ page, toJsonPage, fon
   await expect(page).toHaveTitle(/Schema to JSON Schema/);
 });
 
-test("can toggle targets", async ({ page, toJsonPage }) => {
-  for (const target of jsonSchemaTargetSchema.options) {
-    const link = toJsonPage.getTargetLink(target);
+test.describe("benchmarks tab", () => {
+  test.beforeEach("switch to benchmarks tab", async ({ page, toJsonPage }) => {
+    const benchmarksTabLink = toJsonPage.getTabLink("Benchmarks");
 
-    await link.click();
+    await benchmarksTabLink.click();
 
-    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect(benchmarksTabLink).toHaveAttribute("aria-current", "page");
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
-  }
-});
+    await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "bench");
+  });
 
-test("can filter by direction", async ({ page, matchBreakpoints, toJsonPage }) => {
-  const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-  for (const direction of jsonSchemaDirectionSchema.options) {
-    const link = toJsonPage.getDirectionLink(direction);
+  test("can toggle targets", async ({ page, toJsonPage }) => {
+    for (const target of jsonSchemaTargetSchema.options) {
+      const link = toJsonPage.getTargetLink(target);
 
-    await link.click();
+      await expect(async () => {
+        await link.click();
 
-    await expect(link).toHaveAttribute("aria-current", "page");
+        await expect(link).toHaveAttribute("aria-current", "page");
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("direction") === direction);
+        await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+      }).toPass();
+    }
+  });
 
-    // oxlint-disable-next-line playwright/no-conditional-in-test
-    if (isDesktop) {
-      for await (const { row } of toJsonPage.desktop.tableHandle) {
-        const directionCell = row.getCell("type");
-        // oxlint-disable-next-line playwright/no-conditional-expect
-        await expect(directionCell).toHaveText(toJsonPage.getDirectionLabel(direction));
-      }
-    } else {
-      const cards = await toJsonPage.mobile.cards.all();
-      for (const card of cards) {
-        const chipsList = card.getByTestId("bench-card-chips");
+  test("can filter by direction", async ({ page, matchBreakpoints, toJsonPage }) => {
+    const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
+    for (const direction of jsonSchemaDirectionSchema.options) {
+      const link = toJsonPage.getDirectionLink(direction);
 
-        const chips = chipsList.getByRole("listitem");
+      await link.click();
 
-        // oxlint-disable-next-line playwright/no-conditional-expect
-        await expect(
-          chips.filter({
-            hasText: toJsonPage.getDirectionLabel(direction),
-          }),
-        ).toHaveCount(1);
+      await expect(link).toHaveAttribute("aria-current", "page");
+
+      await expect(page).toHaveURL((url) => url.searchParams.get("direction") === direction);
+
+      // oxlint-disable-next-line playwright/no-conditional-in-test
+      if (isDesktop) {
+        for await (const { row } of toJsonPage.desktop.tableHandle) {
+          const directionCell = row.getCell("type");
+          // oxlint-disable-next-line playwright/no-conditional-expect
+          await expect(directionCell).toHaveText(toJsonPage.getDirectionLabel(direction));
+        }
+      } else {
+        const cards = await toJsonPage.mobile.cards.all();
+        for (const card of cards) {
+          const chipsList = card.getByTestId("bench-card-chips");
+
+          const chips = chipsList.getByRole("listitem");
+
+          // oxlint-disable-next-line playwright/no-conditional-expect
+          await expect(
+            chips.filter({
+              hasText: toJsonPage.getDirectionLabel(direction),
+            }),
+          ).toHaveCount(1);
+        }
       }
     }
-  }
-});
-
-test.describe("desktop view", () => {
-  test.beforeEach("check desktop view", async ({ matchBreakpoints, toJsonPage }) => {
-    const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
-    await toJsonPage.desktop.tableHandle.init();
   });
 
-  test("it displays results table", async ({ toJsonPage }) => {
-    await expect(toJsonPage.desktop.table).toBeVisible();
+  test.describe("desktop view", () => {
+    test.beforeEach("check desktop view", async ({ matchBreakpoints, toJsonPage }) => {
+      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
+      test.skip(!isDesktop, "This test is only for desktop viewports");
 
-    const zodRow = toJsonPage.desktop.tableHandle.getRow({ library: "zod" });
+      await toJsonPage.desktop.tableHandle.init();
+    });
 
-    await expect(zodRow.getCell("version")).toHaveText(/^\d+\.\d+\.\d+$/);
-  });
+    test("it displays results table", async ({ toJsonPage }) => {
+      await expect(toJsonPage.desktop.table).toBeVisible();
 
-  test("table can be sorted by column", async ({ toJsonPage }) => {
-    const libraryHeaderCell = await toJsonPage.desktop.tableHandle.getHeaderCell("library");
-    const librarySortLink = libraryHeaderCell.getByRole("link");
+      const zodRow = toJsonPage.desktop.tableHandle.getRow({ library: "zod" });
 
-    await librarySortLink.click();
+      await expect(zodRow.getCell("version")).toHaveText(/^\d+\.\d+\.\d+$/);
+    });
 
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+    test("table can be sorted by column", async ({ toJsonPage }) => {
+      const libraryHeaderCell = await toJsonPage.desktop.tableHandle.getHeaderCell("library");
+      const librarySortLink = libraryHeaderCell.getByRole("link");
 
-    const firstRow = toJsonPage.desktop.tableHandle.getRowByIndex(0);
-    const firstRowLibraryCell = firstRow.getCell("library");
-
-    await expect(firstRowLibraryCell).toHaveText(/arktype/i);
-
-    await expect(async () => {
       await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
-    }).toPass();
+      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-    await expect(firstRowLibraryCell).toHaveText(/zod/i);
+      const firstRow = toJsonPage.desktop.tableHandle.getRowByIndex(0);
+      const firstRowLibraryCell = firstRow.getCell("library");
+
+      await expect(firstRowLibraryCell).toHaveText(/arktype/i);
+
+      await expect(async () => {
+        await librarySortLink.click();
+
+        await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+      }).toPass();
+
+      await expect(firstRowLibraryCell).toHaveText(/zod/i);
+    });
   });
-});
 
-test.describe("mobile view", () => {
-  test.beforeEach("check mobile view", async ({ matchBreakpoints, toJsonPage }) => {
-    const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
+  test.describe("mobile view", () => {
+    test.beforeEach("check mobile view", async ({ matchBreakpoints, toJsonPage }) => {
+      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
+      test.skip(isDesktop, "This test is only for mobile viewports");
+    });
 
-  test("it displays results cards", async ({ toJsonPage }) => {
-    const card = toJsonPage.mobile.getCardByLibraryName("zod").first();
+    test("it displays results cards", async ({ toJsonPage }) => {
+      const card = toJsonPage.mobile.getCardByLibraryName("zod").first();
 
-    await expect(card).toBeVisible();
+      await expect(card).toBeVisible();
 
-    const versionEl = card.getByText(/\d+\.\d+\.\d+/);
+      const versionEl = card.getByText(/\d+\.\d+\.\d+/);
 
-    await expect(versionEl).toBeVisible();
+      await expect(versionEl).toBeVisible();
+    });
   });
 });
