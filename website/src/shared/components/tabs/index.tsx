@@ -62,7 +62,7 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
       // let browser handle modifier-key clicks (new tab, etc.)
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();
-      const doNavigate = () => navigate(opts);
+      const doNavigate = () => navigate({ ...opts, viewTransition: false });
       if (!panelsRef.current?.startViewTransition || currentTabId === tabId) {
         void doNavigate();
         return;
