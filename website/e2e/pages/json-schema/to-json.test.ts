@@ -10,6 +10,46 @@ test.beforeEach("Go to JSON schema to-json page", async ({ page, toJsonPage, fon
   await expect(page).toHaveTitle(/Schema to JSON Schema/);
 });
 
+test.describe("support matrix tab", () => {
+  test.beforeEach("switch to support matrix tab", async ({ page, toJsonPage }) => {
+    const supportMatrixTabLink = toJsonPage.getTabLink("Support Matrix");
+
+    await supportMatrixTabLink.click();
+
+    await expect(supportMatrixTabLink).toHaveAttribute("aria-current", "page");
+
+    await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "matrix");
+  });
+
+  test.describe("desktop view", () => {
+    test.beforeEach("check desktop view", async ({ matchBreakpoints, toJsonPage }) => {
+      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
+      test.skip(!isDesktop, "This test is only for desktop viewports");
+    });
+
+    test("it displays support matrix table", async ({ toJsonPage }) => {
+      await expect(toJsonPage.desktop.supportMatrixTable).toBeVisible();
+      await expect(toJsonPage.desktop.getSupportMatrixTargetHeader("draft-2020-12")).toBeVisible();
+    });
+  });
+
+  test.describe("mobile view", () => {
+    test.beforeEach("check mobile view", async ({ matchBreakpoints, toJsonPage }) => {
+      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
+      test.skip(isDesktop, "This test is only for mobile viewports");
+    });
+
+    test("it displays support matrix cards", async ({ toJsonPage }) => {
+      const card = toJsonPage.mobile.getSupportMatrixCardByLibraryName("arktype");
+
+      await card.scrollIntoViewIfNeeded();
+
+      await expect(card).toBeVisible();
+      await expect(card.getByText(/^\d+\.\d+\.\d+$/)).toBeVisible();
+    });
+  });
+});
+
 test.describe("benchmarks tab", () => {
   test.beforeEach("switch to benchmarks tab", async ({ page, toJsonPage }) => {
     const benchmarksTabLink = toJsonPage.getTabLink("Benchmarks");
