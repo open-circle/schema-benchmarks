@@ -12,7 +12,7 @@ import {
   optionalJsonSchemaTargetSchema,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
-import { SupportMatrix } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix/index.tsx";
+import { SupportMatrix } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix.tsx";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
