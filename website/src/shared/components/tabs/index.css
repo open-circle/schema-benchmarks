@@ -27,7 +27,7 @@
 }
 
 .tabs__panels-container {
-  overflow: hidden;
+  overflow: auto;
   width: 100%;
   flex: 1 0 auto;
 }
@@ -38,11 +38,10 @@
   view-transition-class: tab-panel;
   .tabs__panel {
     grid-area: 1 / 1;
-    display: grid;
     width: 100%;
-    visibility: hidden;
+    display: none;
     &.tabs__panel--selected {
-      visibility: visible;
+      display: grid;
     }
 
     .tabs__panel-content {

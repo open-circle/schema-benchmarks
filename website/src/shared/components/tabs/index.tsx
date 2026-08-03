@@ -55,6 +55,8 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
   const navigate = useNavigate();
 
   const getTabLinkProps = <const TOptions extends NavigateOptions>(tabId: T, opts: TOptions) => ({
+    id: tabId,
+    panelId: `${tabId}-panel`,
     ...opts,
     onClick: (e: React.MouseEvent) => {
       // let browser handle modifier-key clicks (new tab, etc.)

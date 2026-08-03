@@ -104,8 +104,6 @@ function DemoLinkTabs({ orientation, variant }: StoryArgs) {
             "invalid",
             linkOptions({ to: "/parsing", search: { dataType: "invalid" } }),
           )}
-          id="invalid"
-          panelId="invalid-panel"
         >
           Invalid
         </InternalTabLink>
@@ -114,8 +112,6 @@ function DemoLinkTabs({ orientation, variant }: StoryArgs) {
             "valid",
             linkOptions({ to: "/parsing", search: { dataType: "valid" } }),
           )}
-          id="valid"
-          panelId="valid-panel"
         >
           Valid
         </InternalTabLink>

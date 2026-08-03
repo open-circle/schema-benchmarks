@@ -225,7 +225,7 @@ pre[class*="language-"] {
   }
 }
 
-main {
+.main {
   padding: var(--margin) 0;
   flex: 1;
   background-color: var(--background);
