@@ -5,10 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/_conversion/-components/json-schema";
-import {
-  jsonSchemaDirectionProps,
-  standardJsonSchemaProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+import { jsonSchemaDirectionProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -63,20 +60,6 @@ export function ToJsonCard({ result, meanScaler }: ToJsonCardProps) {
         <div {...cls("bar")}>
           <Bar {...meanScaler(result.mean)} />
         </div>
-        {result.standardJsonSchema && (
-          <dl className="minimal">
-            <div>
-              <dt>Standard JSON Schema</dt>
-              <dd>
-                {typeof result.standardJsonSchema === "string" ? (
-                  standardJsonSchemaProps.labels[result.standardJsonSchema].label
-                ) : (
-                  <code className="language-text">{result.standardJsonSchema.package}</code>
-                )}
-              </dd>
-            </div>
-          </dl>
-        )}
         <div {...cls("chips")}>
           <ChipCollection data-testid="bench-card-chips">
             <DisplayChip>

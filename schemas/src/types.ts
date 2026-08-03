@@ -178,8 +178,8 @@ export interface BenchmarksConfig<ParseResult = unknown> {
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig>>>;
   jsonSchema?: {
     conversion?: {
-      toJson?: MaybeArray<SchemaConversionToJsonConfig>;
-      fromJson?: MaybeArray<SchemaConversionFromJsonConfig>;
+      toJson?: SchemaConversionToJsonConfig;
+      fromJson?: SchemaConversionFromJsonConfig;
     };
   };
   string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;

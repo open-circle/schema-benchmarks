@@ -9,7 +9,8 @@
     padding: 1rem 1rem 0;
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
-  .support-matrix-card__library {
+  .support-matrix-card__library,
+  .support-matrix-card__standard-json-schema {
     margin: 0;
     padding: 0 1rem;
   }

@@ -12,7 +12,10 @@ import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
 import type { JsonSchemaBenchmarkConfigEntry } from "../../bench/registry.ts";
 import { Registry } from "../../bench/registry.ts";
-import type { JsonSchemaSupportMatrix } from "../../results/types.ts";
+import type {
+  JsonSchemaSupportMatrix,
+  StandardJsonSchemaSupportResult,
+} from "../../results/types.ts";
 import { getEmptyJsonSchemaResults } from "../../results/types.ts";
 
 function getOrInsertRecord<K extends string, V>(
@@ -71,42 +74,47 @@ bench.addEventListener("complete", () => {
 });
 
 if (jsonSchemaConfig.conversion?.toJson) {
-  for (const benchConfig of ensureArray(jsonSchemaConfig.conversion.toJson)) {
-    const { generate, snippet, standardJsonSchema: standardJsonSchemaConfig, note } = benchConfig;
-    for (const target of jsonSchemaTargetSchema.options) {
-      for (const direction of jsonSchemaDirectionSchema.options) {
-        const options = { target, direction };
-        let jsonSchema;
-        try {
-          // libraries throw for anything they can't convert, which is recorded instead
-          jsonSchema = generate(options);
-        } catch (error) {
-          const reason = error instanceof Error ? error.message : String(error);
-          console.log(`Skipping ${direction} JSON schema for ${target}:`, reason);
-
-          getOrInsertRecord(matrix, target, {})[direction] = reason;
-          continue;
+  const {
+    generate,
+    snippet,
+    standardJsonSchema: standardJsonSchemaConfig,
+    note,
+  } = jsonSchemaConfig.conversion.toJson;
+  const standardJsonSchemaSupport: StandardJsonSchemaSupportResult | undefined =
+    standardJsonSchemaConfig?.support === "package"
+      ? {
+          support: standardJsonSchemaConfig.support,
+          package: standardJsonSchemaConfig.package,
         }
-        const entry: JsonSchemaBenchmarkConfigEntry = {
-          type: "conversion",
-          conversionType: "toJson",
-          target,
-          direction,
-          standardJsonSchema:
-            standardJsonSchemaConfig?.support === "package"
-              ? {
-                  support: standardJsonSchemaConfig.support,
-                  package: standardJsonSchemaConfig.package,
-                }
-              : standardJsonSchemaConfig?.support,
-          jsonSchema: JSON.stringify(jsonSchema, null, 2),
-          libraryName,
-          version,
-          snippet: snippet(options),
-          note,
-        };
-        bench.add(caseRegistry.add(entry), () => generate(options));
+      : standardJsonSchemaConfig?.support;
+  results.conversion.toJsonSupport[libraryName].standardJsonSchema = standardJsonSchemaSupport;
+
+  for (const target of jsonSchemaTargetSchema.options) {
+    for (const direction of jsonSchemaDirectionSchema.options) {
+      const options = { target, direction };
+      let jsonSchema;
+      try {
+        // libraries throw for anything they can't convert, which is recorded instead
+        jsonSchema = generate(options);
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : String(error);
+        console.log(`Skipping ${direction} JSON schema for ${target}:`, reason);
+
+        getOrInsertRecord(matrix, target, {})[direction] = reason;
+        continue;
       }
+      const entry: JsonSchemaBenchmarkConfigEntry = {
+        type: "conversion",
+        conversionType: "toJson",
+        target,
+        direction,
+        jsonSchema: JSON.stringify(jsonSchema, null, 2),
+        libraryName,
+        version,
+        snippet: snippet(options),
+        note,
+      };
+      bench.add(caseRegistry.add(entry), () => generate(options));
     }
   }
 }
@@ -153,7 +161,6 @@ for (const task of successTasks) {
         mean: task.result.latency.mean,
         target: entry.target,
         direction: entry.direction,
-        standardJsonSchema: entry.standardJsonSchema,
         jsonSchema: entry.jsonSchema,
       });
       break;

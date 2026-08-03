@@ -8,10 +8,7 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/_conversion/-components/json-schema";
-import {
-  jsonSchemaDirectionProps,
-  standardJsonSchemaProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+import { jsonSchemaDirectionProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -99,7 +96,6 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
               <MdSymbol size={18}>download</MdSymbol>/wk
             </span>
           </SortableHeaderLink>
-          <th>Standard JSON Schema</th>
           <th>Type</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/to-json" })}
@@ -148,14 +144,6 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
                 <ErrorBoundary fallback={null}>
                   <DownloadCount libraryName={result.libraryName} />
                 </ErrorBoundary>
-              </td>
-              <td>
-                {result.standardJsonSchema &&
-                  (typeof result.standardJsonSchema === "string" ? (
-                    standardJsonSchemaProps.labels[result.standardJsonSchema].label
-                  ) : (
-                    <code className="language-text">{result.standardJsonSchema.package}</code>
-                  ))}
               </td>
               <td>{jsonSchemaDirectionProps.labels[result.direction].label}</td>
               <td className="numeric">{formatDuration(result.mean)}</td>

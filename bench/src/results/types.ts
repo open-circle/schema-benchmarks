@@ -62,12 +62,14 @@ const standardJsonSchemaSupportResultSchema = v.union([
     package: v.string(),
   }),
 ]);
+export type StandardJsonSchemaSupportResult = v.InferOutput<
+  typeof standardJsonSchemaSupportResultSchema
+>;
 
 const schemaConversionToJsonResultSchema = v.object({
   ...v.omit(baseBenchResultSchema, ["throws"]).entries,
   target: jsonSchemaTargetSchema,
   direction: jsonSchemaDirectionSchema,
-  standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
   /** The JSON schema the library generated, so it can be compared with the others. */
   jsonSchema: v.string(),
 });
@@ -94,6 +96,7 @@ export const jsonSchemaSupportMatricesSchema = v.record(
   v.string(),
   v.object({
     version: v.string(),
+    standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
     matrix: jsonSchemaSupportMatrixSchema,
   }),
 );

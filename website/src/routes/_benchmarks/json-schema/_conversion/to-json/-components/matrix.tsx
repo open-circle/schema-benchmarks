@@ -18,9 +18,9 @@ export function SupportMatrix({ matrix }: { matrix: JsonSchemaSupportMatrices })
         <MatrixTable matrix={matrix} />
       ) : (
         <ul className="json-schema-cards" aria-label="Support Matrix">
-          {Object.entries(matrix).map(([library, { version, matrix: supportMatrix }]) => (
+          {Object.entries(matrix).map(([library, { matrix: supportMatrix, ...result }]) => (
             <li key={library}>
-              <SupportMatrixCard {...{ library, version, supportMatrix }} />
+              <SupportMatrixCard {...{ library, supportMatrix, ...result }} />
             </li>
           ))}
         </ul>
