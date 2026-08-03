@@ -27,23 +27,27 @@
 }
 
 .tabs__panels-container {
-  position: relative;
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  flex: 1 0 auto;
 }
 
 .tabs__panels {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
   view-transition-class: tab-panel;
   .tabs__panel {
-    position: absolute;
-    inset: 0;
+    grid-area: 1 / 1;
+    display: grid;
     width: 100%;
-    height: 100%;
+    visibility: hidden;
+    &.tabs__panel--selected {
+      visibility: visible;
+    }
+
+    .tabs__panel-content {
+      grid-area: 1 / 1;
+    }
   }
   &::view-transition-group(*) {
     animation-duration: 250ms;

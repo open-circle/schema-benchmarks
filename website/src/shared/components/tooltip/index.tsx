@@ -164,11 +164,11 @@ export function withTooltip<TComp extends TooltipableComponent>(
       <>
         <Component
           // @ts-expect-error union nastiness
-          popoverTargetAction="show"
           {...(props as any)}
           ref={mergeRefs<HTMLElement>(ref, refs.setReference, setTargetRef)}
           {...(tooltip
             ? ({
+                popoverTargetAction: "show",
                 "aria-labelledby": id,
                 popoverTarget: id,
               } satisfies HTMLAttributes<HTMLElement>)
