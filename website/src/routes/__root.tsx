@@ -3,7 +3,12 @@ import { promiseAllKeyed } from "@schema-benchmarks/utils";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
-import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Scripts,
+  useMatches,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useState } from "react";
 import { generateMetadata } from "tanstack-meta";
@@ -121,8 +126,17 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   shellComponent: RootDocument,
 });
 
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteOption {
+    wrapMain?: boolean;
+  }
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { theme, style, npmSite, ligature } = Route.useLoaderData();
+  const wrapMain = useMatches({
+    select: (matches) => matches.every((match) => match.staticData.wrapMain ?? true),
+  });
   useRegisterSW({ immediate: true });
   const [prefsOpen, setPrefsOpen] = useState(false);
   return (
@@ -152,7 +166,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <div className="header-container" id="scroll-container">
                 <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
                 <Banner />
-                <main>{children}</main>
+                {wrapMain ? <main className="main">{children}</main> : children}
                 <Footer />
                 <ScrollToTop />
                 <Snackbars />
