@@ -1,8 +1,10 @@
 import type { Override } from "@schema-benchmarks/utils";
-import { Activity, useRef, useState, type ComponentPropsWithRef, type ReactNode } from "react";
+import { createLink, useNavigate } from "@tanstack/react-router";
+import type { NavigateOptions } from "@tanstack/react-router";
+import { useRef, useState, type ComponentPropsWithRef, type ReactNode } from "react";
 import bem from "react-bem-helper";
 
-import { Button, ButtonGroup } from "#src/shared/components/button";
+import { ExternalLinkButton, Button, ButtonGroup } from "#src/shared/components/button";
 
 export type TabVariant = "fullwidth" | "responsive";
 
@@ -20,6 +22,7 @@ export function useTabs<T extends string>(tabs: ReadonlyArray<T>, initialValue: 
 
   const getTabProps = (tabId: T) =>
     ({
+      id: tabId,
       selected: selectedTab === tabId,
       panelId: `${tabId}-panel`,
       onClick: () => {
@@ -47,6 +50,36 @@ export function useTabs<T extends string>(tabs: ReadonlyArray<T>, initialValue: 
   return { selectedTab, getTabProps, getPanelProps, panelsRef };
 }
 
+export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTabId: T) {
+  const panelsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const getTabLinkProps = <const TOptions extends NavigateOptions>(tabId: T, opts: TOptions) => ({
+    ...opts,
+    onClick: (e: React.MouseEvent) => {
+      // let browser handle modifier-key clicks (new tab, etc.)
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      const doNavigate = () => navigate(opts);
+      if (!panelsRef.current?.startViewTransition || currentTabId === tabId) {
+        void doNavigate();
+        return;
+      }
+      const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "forwards" : "backwards";
+      panelsRef.current.startViewTransition({ update: doNavigate, types: [direction] });
+    },
+  });
+
+  const getPanelProps = (tabId: T) =>
+    ({
+      selected: currentTabId === tabId,
+      id: `${tabId}-panel`,
+      tabId,
+    }) satisfies Partial<TabPanelProps>;
+
+  return { panelsRef, getTabLinkProps, getPanelProps };
+}
+
 const cls = bem("tabs");
 
 type TabsProps = Override<
@@ -67,6 +100,7 @@ export function Tabs({ children, className, variant = "fullwidth", ...props }: T
 export interface TabProps extends ComponentPropsWithRef<typeof Button> {
   children: ReactNode;
   selected?: boolean;
+  id: string;
   panelId: string;
   hasPopup?: "menu" | true;
 }
@@ -92,6 +126,38 @@ export function Tab({
     </Button>
   );
 }
+
+export interface TabLinkProps extends ComponentPropsWithRef<typeof ExternalLinkButton> {
+  children: ReactNode;
+  id: string;
+  panelId: string;
+}
+
+export function ExternalTabLink({ children, panelId, className, ...props }: TabLinkProps) {
+  return (
+    <ExternalLinkButton
+      {...props}
+      role="tab"
+      aria-controls={panelId}
+      {...cls({ element: "tab", extra: className })}
+    >
+      {children}
+    </ExternalLinkButton>
+  );
+}
+
+const InternalTabLinkInner = createLink(ExternalTabLink);
+
+export const InternalTabLink: typeof InternalTabLinkInner = ({ activeProps, ...props }) => (
+  // @ts-expect-error
+  <InternalTabLinkInner
+    {...props}
+    activeProps={() => ({
+      "aria-selected": true,
+      ...(typeof activeProps === "function" ? activeProps() : activeProps),
+    })}
+  />
+);
 
 export interface TabPanelsProps extends ComponentPropsWithRef<"div"> {
   orientation?: "horizontal" | "vertical";
@@ -127,8 +193,10 @@ export interface TabPanelProps extends ComponentPropsWithRef<"div"> {
 
 export function TabPanel({ children, selected = false, tabId, ...props }: TabPanelProps) {
   return (
-    <div {...props} role="tabpanel" aria-labelledby={tabId} {...cls("panel")}>
-      <Activity mode={selected ? "visible" : "hidden"}>{children}</Activity>
+    <div {...props} role="tabpanel" aria-labelledby={tabId} {...cls("panel", { selected })}>
+      <div {...cls("panel-content")} aria-hidden={!selected}>
+        {children}
+      </div>
     </div>
   );
 }

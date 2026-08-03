@@ -54,7 +54,11 @@ const queryClientDecorator: Decorator = (Story) => {
 };
 
 document.addEventListener("click", (event) => {
-  if (event.target instanceof HTMLAnchorElement) {
+  if (
+    event.target instanceof HTMLAnchorElement &&
+    event.target.href.startsWith("http") &&
+    !event.target.href.includes("localhost")
+  ) {
     event.preventDefault();
     console.log(`Prevented navigation to ${event.target.href} in Storybook`);
   }
