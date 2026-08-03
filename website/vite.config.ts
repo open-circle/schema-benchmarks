@@ -33,8 +33,8 @@ import { sortDirectionIcons } from "#src/shared/components/table/constants";
 import * as scales from "#src/shared/data/scale";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 
-import vitePwaOpts from "./offline/opts";
-import materialSymbols from "./vite/symbols";
+import vitePwaOpts from "./offline/opts.ts";
+import materialSymbols from "./vite/symbols.ts";
 
 const isStorybook = !!process.env.STORYBOOK;
 
