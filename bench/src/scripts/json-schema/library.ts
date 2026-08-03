@@ -1,5 +1,6 @@
 import { parseArgs } from "node:util";
 
+import type { SourceConfig } from "@schema-benchmarks/schemas";
 import {
   fromJsonBenchSchema,
   jsonSchemaDirectionSchema,
@@ -12,10 +13,7 @@ import { Bench, type Task, type TaskResultCompleted } from "tinybench";
 
 import type { JsonSchemaBenchmarkConfigEntry } from "../../bench/registry.ts";
 import { Registry } from "../../bench/registry.ts";
-import type {
-  JsonSchemaSupportMatrix,
-  StandardJsonSchemaSupportResult,
-} from "../../results/types.ts";
+import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "../../results/types.ts";
 import { getEmptyJsonSchemaResults } from "../../results/types.ts";
 
 function getOrInsertRecord<K extends string, V>(
@@ -55,8 +53,15 @@ if (!jsonSchemaConfig) {
   process.exit(0);
 }
 
-const matrix: JsonSchemaSupportMatrix = {};
-results.conversion.toJsonSupport[libraryName] = { version, matrix };
+function jsonSourceToResult(source: SourceConfig): JsonSchemaSourceResult {
+  if (source.type === "package") {
+    return {
+      type: source.type,
+      package: source.package,
+    };
+  }
+  return source.type;
+}
 
 console.log(`\nBenchmarking JSON schema: ${libraryName}`);
 
@@ -74,20 +79,20 @@ bench.addEventListener("complete", () => {
 });
 
 if (jsonSchemaConfig.conversion?.toJson) {
+  const matrix: JsonSchemaSupportMatrix = {};
+  results.conversion.toJsonSupport[libraryName] = {
+    version,
+    matrix,
+    source: jsonSourceToResult(jsonSchemaConfig.conversion.toJson.source),
+  };
   const {
     generate,
     snippet,
     standardJsonSchema: standardJsonSchemaConfig,
     note,
   } = jsonSchemaConfig.conversion.toJson;
-  const standardJsonSchemaSupport: StandardJsonSchemaSupportResult | undefined =
-    standardJsonSchemaConfig?.support === "package"
-      ? {
-          support: standardJsonSchemaConfig.support,
-          package: standardJsonSchemaConfig.package,
-        }
-      : standardJsonSchemaConfig?.support;
-  results.conversion.toJsonSupport[libraryName].standardJsonSchema = standardJsonSchemaSupport;
+  results.conversion.toJsonSupport[libraryName].standardJsonSchema =
+    standardJsonSchemaConfig && jsonSourceToResult(standardJsonSchemaConfig);
 
   for (const target of jsonSchemaTargetSchema.options) {
     for (const direction of jsonSchemaDirectionSchema.options) {

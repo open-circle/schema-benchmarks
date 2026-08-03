@@ -82,6 +82,7 @@ export default defineBenchmarks({
         },
         snippet: ({ target }) =>
           ts`zodToJsonSchema(schema, { target: "${getJsonSchemaTarget(target)}" })`,
+        source: { type: "package", package: "zod-to-json-schema" },
       },
     },
   },

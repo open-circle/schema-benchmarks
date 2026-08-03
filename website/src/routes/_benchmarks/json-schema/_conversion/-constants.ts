@@ -1,8 +1,8 @@
 import {
   type JsonSchemaDirection,
   jsonSchemaDirectionSchema,
-  type StandardJsonSchemaSupport,
-  standardJsonSchemaSupportSchema,
+  type JsonSource,
+  jsonSourceSchema,
   type JsonSchemaTarget,
   jsonSchemaTargetSchema,
 } from "@schema-benchmarks/schemas";
@@ -36,10 +36,10 @@ export const jsonSchemaDirectionProps = {
 /** How the library supports the Standard JSON Schema interface. */
 export const standardJsonSchemaProps = {
   title: "Standard JSON Schema",
-  options: standardJsonSchemaSupportSchema.options,
+  options: jsonSourceSchema.options,
   labels: {
     native: { label: "Native", icon: "verified" },
     "opt-in": { label: "Native Opt in", icon: "toggle_on" },
-    package: { label: "Separate package", icon: "package_2" },
+    package: { label: "Package", icon: "package_2" },
   },
-} satisfies Pick<PageFilterChipsProps<StandardJsonSchemaSupport>, "title" | "labels" | "options">;
+} satisfies Pick<PageFilterChipsProps<JsonSource>, "title" | "labels" | "options">;

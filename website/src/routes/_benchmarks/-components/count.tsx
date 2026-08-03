@@ -1,11 +1,7 @@
 import { shortNumFormatter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import {
-  getAllWeeklyDownloads,
-  getPackageName,
-  isJsrPackage,
-} from "#src/routes/_benchmarks/-query";
+import { getAllWeeklyDownloads, getPackageName, getPkgUrl } from "#src/routes/_benchmarks/-query";
 import { useNpmSite } from "#src/shared/components/prefs/context";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { trackedLinkProps } from "#src/shared/lib/analytics";
@@ -16,9 +12,7 @@ export function DownloadCount({ libraryName }: { libraryName: string }) {
   const packageName = getPackageName(libraryName);
   const { data } = useSuspenseQuery(getAllWeeklyDownloads(packageName));
   const formatNumber = useNumberFormatter(shortNumFormatter);
-  const packageUrl = isJsrPackage(packageName)
-    ? `https://jsr.io/${packageName}`
-    : `https://www.${npmSite}/package/${packageName}`;
+  const packageUrl = getPkgUrl(packageName, npmSite);
   if (data === "n/a") {
     return (
       <a

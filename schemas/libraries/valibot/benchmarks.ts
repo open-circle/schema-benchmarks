@@ -81,8 +81,9 @@ export default defineBenchmarks({
         snippet: ({ target, direction }) =>
           ts`toJsonSchema(schema, { target: "${target}", typeMode: "${direction}" })`,
         // the official companion package implements the standard interface
+        source: { type: "package", package: "@valibot/to-json-schema" },
         standardJsonSchema: {
-          support: "package",
+          type: "package",
           package: "@valibot/to-json-schema",
           schema: toStandardJsonSchema(jsonSchemaSubject),
         },
