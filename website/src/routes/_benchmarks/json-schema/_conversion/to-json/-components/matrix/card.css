@@ -10,7 +10,7 @@
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
   }
   .support-matrix-card__library,
-  .support-matrix-card__standard-json-schema {
+  .support-matrix-card__sources {
     margin: 0;
     padding: 0 1rem;
   }

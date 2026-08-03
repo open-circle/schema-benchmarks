@@ -82,6 +82,7 @@ export default defineBenchmarks({
           return parse(jsonSchemaSubject, getJsonSchemaMode(target)) as object;
         },
         snippet: ({ target }) => ts`parse(schema, "${getJsonSchemaMode(target)}")`,
+        source: { type: "package", package: "joi-to-json" },
       },
     },
   },

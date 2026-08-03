@@ -56,38 +56,34 @@ export const jsonSchemaDirectionSchema = /* @__PURE__ */ v.picklist(["input", "o
 export type JsonSchemaDirection = v.InferOutput<typeof jsonSchemaDirectionSchema>;
 
 /**
- * How a library provides the [Standard JSON Schema](https://standardschema.dev/json-schema)
- * interface, which lets tools generate a JSON schema without specialising for each library.
+ * How a library provides the capability to generate a JSON schema of a schema's input or output type.
  */
-export const standardJsonSchemaSupportSchema = /* @__PURE__ */ v.picklist([
-  "native",
-  "opt-in",
-  "package",
-]);
-export type StandardJsonSchemaSupport = v.InferOutput<typeof standardJsonSchemaSupportSchema>;
+export const jsonSourceSchema = /* @__PURE__ */ v.picklist(["native", "opt-in", "package"]);
+export type JsonSource = v.InferOutput<typeof jsonSourceSchema>;
 
 export interface ToJsonSchemaOptions {
   target: JsonSchemaTarget;
   direction: JsonSchemaDirection;
 }
 
-interface NativeStandardJsonSchemaConfig {
-  support: Exclude<StandardJsonSchemaSupport, "package">;
-  /** The schema exposing `~standard.jsonSchema` */
-  schema: StandardJSONSchemaV1;
+interface NativeSourceConfig {
+  type: Exclude<JsonSource, "package">;
   package?: never;
 }
 
-interface PackageStandardJsonSchemaConfig {
+interface PackageSourceConfig {
   /** The library doesn't implement the interface, but a separate package does. */
-  support: "package";
+  type: "package";
   /** The package needed. */
   package: string;
-  /** The schema exposing `~standard.jsonSchema` */
-  schema: StandardJSONSchemaV1;
 }
 
-type StandardJsonSchemaConfig = NativeStandardJsonSchemaConfig | PackageStandardJsonSchemaConfig;
+export type SourceConfig = NativeSourceConfig | PackageSourceConfig;
+
+type StandardJsonSourceConfig = SourceConfig & {
+  /** The schema exposing `~standard.jsonSchema` */
+  schema: StandardJSONSchemaV1;
+};
 
 export interface SchemaConversionToJsonConfig extends Omit<
   BaseBenchmarkConfig,
@@ -100,8 +96,9 @@ export interface SchemaConversionToJsonConfig extends Omit<
   generate: (options: ToJsonSchemaOptions) => object;
   /** The call being benchmarked, which usually depends on the target and direction. */
   snippet: (options: ToJsonSchemaOptions) => string;
+  source: SourceConfig;
   /** Provide if the library, or a separate package, implements the Standard JSON Schema interface. */
-  standardJsonSchema?: StandardJsonSchemaConfig;
+  standardJsonSchema?: StandardJsonSourceConfig;
 }
 
 export interface SchemaConversionFromJsonConfig extends Omit<

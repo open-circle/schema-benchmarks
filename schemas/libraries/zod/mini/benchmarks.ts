@@ -74,6 +74,7 @@ export default defineBenchmarks({
           z.toJSONSchema(jsonSchemaSubject, { target, io: direction }),
         snippet: ({ target, direction }) =>
           ts`z.toJSONSchema(schema, { target: "${target}", io: "${direction}" })`,
+        source: { type: "native" },
         // unlike zod's, zod/mini schemas don't carry `~standard.jsonSchema`
       },
     },

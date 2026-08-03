@@ -1,24 +1,25 @@
-import type {
-  JsonSchemaSupportMatrix,
-  StandardJsonSchemaSupportResult,
-} from "@schema-benchmarks/bench";
+import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "@schema-benchmarks/bench";
 import { jsonSchemaDirectionSchema, jsonSchemaTargetSchema } from "@schema-benchmarks/schemas";
 import bem from "react-bem-helper";
 
+import { getPkgUrl } from "#src/routes/_benchmarks/-query.ts";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
   standardJsonSchemaProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
+import { useNpmSite } from "#src/shared/components/prefs/context.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
+import { trackedLinkProps } from "#src/shared/lib/analytics.ts";
 
 import { MatrixCheckbox } from "./checkbox";
 
 export interface SupportMatrixCardProps {
   library: string;
   version: string;
-  standardJsonSchema?: StandardJsonSchemaSupportResult;
+  source: JsonSchemaSourceResult;
+  standardJsonSchema?: JsonSchemaSourceResult;
   supportMatrix: JsonSchemaSupportMatrix;
 }
 
@@ -27,9 +28,11 @@ export const cls = bem("support-matrix-card");
 export function SupportMatrixCard({
   library,
   version,
+  source,
   standardJsonSchema,
   supportMatrix,
 }: SupportMatrixCardProps) {
+  const { npmSite } = useNpmSite();
   return (
     <article {...cls()} aria-labelledby={`${library}-support-matrix-card`}>
       <h5 {...cls({ element: "version", extra: "typo-overline" })}>{version}</h5>
@@ -39,20 +42,42 @@ export function SupportMatrixCard({
       >
         <code className="language-text">{library}</code>
       </header>
-      {standardJsonSchema && (
-        <dl {...cls({ element: "standard-json-schema", extra: "minimal" })}>
+      <dl {...cls({ element: "sources", extra: "minimal" })}>
+        <div>
+          <dt>Source</dt>
+          <dd>
+            {typeof source === "string" ? (
+              standardJsonSchemaProps.labels[source].label
+            ) : (
+              <a
+                {...trackedLinkProps(getPkgUrl(source.package, npmSite))}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <code className="language-text">{source.package}</code>
+              </a>
+            )}
+          </dd>
+        </div>
+        {standardJsonSchema && (
           <div>
             <dt>Standard JSON Schema</dt>
             <dd>
               {typeof standardJsonSchema === "string" ? (
                 standardJsonSchemaProps.labels[standardJsonSchema].label
               ) : (
-                <code className="language-text">{standardJsonSchema.package}</code>
+                <a
+                  {...trackedLinkProps(getPkgUrl(standardJsonSchema.package, npmSite))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <code className="language-text">{standardJsonSchema.package}</code>
+                </a>
               )}
             </dd>
           </div>
-        </dl>
-      )}
+        )}
+      </dl>
       {jsonSchemaTargetSchema.options.map((target) => (
         <section
           key={`${library}-${target}`}

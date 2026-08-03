@@ -55,16 +55,14 @@ const standardResultSchema = v.object({
 });
 export type StandardResult = v.InferOutput<typeof standardResultSchema>;
 
-const standardJsonSchemaSupportResultSchema = v.union([
+const jsonSchemaSourceResultSchema = v.union([
   v.picklist(["native", "opt-in"]),
   v.object({
-    support: v.literal("package"),
+    type: v.literal("package"),
     package: v.string(),
   }),
 ]);
-export type StandardJsonSchemaSupportResult = v.InferOutput<
-  typeof standardJsonSchemaSupportResultSchema
->;
+export type JsonSchemaSourceResult = v.InferOutput<typeof jsonSchemaSourceResultSchema>;
 
 const schemaConversionToJsonResultSchema = v.object({
   ...v.omit(baseBenchResultSchema, ["throws"]).entries,
@@ -96,7 +94,8 @@ export const jsonSchemaSupportMatricesSchema = v.record(
   v.string(),
   v.object({
     version: v.string(),
-    standardJsonSchema: v.optional(standardJsonSchemaSupportResultSchema),
+    source: jsonSchemaSourceResultSchema,
+    standardJsonSchema: v.optional(jsonSchemaSourceResultSchema),
     matrix: jsonSchemaSupportMatrixSchema,
   }),
 );

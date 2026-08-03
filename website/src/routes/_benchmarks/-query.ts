@@ -4,6 +4,7 @@ import hostedGitInfo from "hosted-git-info";
 import * as v from "valibot";
 
 import { isRetryableUpfetchError, upfetch } from "#src/shared/lib/fetch";
+import type { NpmSite } from "#src/shared/lib/prefs/constants.ts";
 
 const downloadsResponseSchema = v.pipe(
   v.object({
@@ -17,6 +18,10 @@ const downloadsResponseSchema = v.pipe(
 const JSR_PACKAGES = new Set(["@paseri/paseri", "@paseri/compiler"]);
 
 export const isJsrPackage = (packageName: string) => JSR_PACKAGES.has(packageName);
+export const getPkgUrl = (packageName: string, npmSite: NpmSite) =>
+  isJsrPackage(packageName)
+    ? `https://jsr.io/${packageName}`
+    : `https://www.${npmSite}/package/${packageName}`;
 
 // "@scope/name" -> JSR API path segments.
 const jsrScopeAndName = (packageName: string) => {

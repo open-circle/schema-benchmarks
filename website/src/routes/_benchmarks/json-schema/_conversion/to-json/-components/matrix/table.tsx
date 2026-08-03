@@ -7,6 +7,7 @@ import {
   jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { standardJsonSchemaProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+import { PackageSource } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix/source.tsx";
 
 import { MatrixCheckbox } from "./checkbox";
 
@@ -19,7 +20,7 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
     <table aria-label="Support Matrix">
       <thead>
         <tr>
-          <th colSpan={3} aria-hidden></th>
+          <th colSpan={6} aria-hidden></th>
           {jsonSchemaTargetSchema.options.map((target) => (
             <th
               key={target}
@@ -33,7 +34,10 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
         <tr>
           <th>Library</th>
           <th>Version</th>
+          <th>Source</th>
+          <th className="action" aria-label="Source packages"></th>
           <th>Standard JSON Schema</th>
+          <th className="action" aria-label="Standard JSON Schema packages"></th>
           {jsonSchemaTargetSchema.options.flatMap((target) =>
             jsonSchemaDirectionSchema.options.map((direction, i) => (
               <th
@@ -48,34 +52,46 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
       </thead>
       <tbody>
         {Object.entries(matrix).map(
-          ([library, { version, matrix: supportMatrix, standardJsonSchema }]) => (
-            <tr key={library}>
-              <td>
-                <code className="language-text">{library}</code>
-              </td>
-              <td>
-                <code className="language-text">{version}</code>
-              </td>
-              <td>
-                {standardJsonSchema &&
-                  (typeof standardJsonSchema === "string" ? (
-                    standardJsonSchemaProps.labels[standardJsonSchema].label
-                  ) : (
-                    <code className="language-text">{standardJsonSchema.package}</code>
-                  ))}
-              </td>
-              {jsonSchemaTargetSchema.options.flatMap((target) =>
-                jsonSchemaDirectionSchema.options.map((direction, i) => (
-                  <td
-                    key={`${library}-${target}-${direction}`}
-                    className={clsx("action", { "border-before": i === 0 })}
-                  >
-                    <MatrixCheckbox reason={supportMatrix?.[target]?.[direction]} />
-                  </td>
-                )),
-              )}
-            </tr>
-          ),
+          ([library, { version, matrix, standardJsonSchema, source }]) => {
+            const sourceType = typeof source === "string" ? source : source.type;
+            const standardJsonSchemaType =
+              typeof standardJsonSchema === "string"
+                ? standardJsonSchema
+                : standardJsonSchema?.type;
+            return (
+              <tr key={library}>
+                <td>
+                  <code className="language-text">{library}</code>
+                </td>
+                <td>
+                  <code className="language-text">{version}</code>
+                </td>
+                <td>{standardJsonSchemaProps.labels[sourceType].label}</td>
+                <td className="action">
+                  {typeof source === "object" && <PackageSource package={source.package} />}
+                </td>
+                <td>
+                  {!!standardJsonSchemaType &&
+                    standardJsonSchemaProps.labels[standardJsonSchemaType].label}
+                </td>
+                <td className="action">
+                  {typeof standardJsonSchema === "object" && (
+                    <PackageSource package={standardJsonSchema.package} />
+                  )}
+                </td>
+                {jsonSchemaTargetSchema.options.flatMap((target) =>
+                  jsonSchemaDirectionSchema.options.map((direction, i) => (
+                    <td
+                      key={`${library}-${target}-${direction}`}
+                      className={clsx("action", { "border-before": i === 0 })}
+                    >
+                      <MatrixCheckbox reason={matrix?.[target]?.[direction]} />
+                    </td>
+                  )),
+                )}
+              </tr>
+            );
+          },
         )}
       </tbody>
     </table>
