@@ -70,7 +70,9 @@ export namespace ListItemContentProps {
 
 export type ListItemContentProps = OneOf<
   ListItemContentProps.SingleLine | ListItemContentProps.TwoLine | ListItemContentProps.ThreeLine
->;
+> & {
+  as?: "div" | "label";
+};
 
 const num = ["single", "two", "three"] as const;
 
@@ -82,9 +84,10 @@ export function ListItemContent({
   primary,
   supporting,
   children,
+  as: As = "div",
 }: ListItemContentProps) {
   return (
-    <div {...itemCls("content", num[lines - 1], className)}>
+    <As {...itemCls("content", num[lines - 1], className)}>
       {leading && <div {...itemCls("leading")}>{leading}</div>}
       <div {...itemCls({ element: "text", extra: "typo-subtitle1" })}>
         {lines === 1 ? (
@@ -104,6 +107,6 @@ export function ListItemContent({
         )}
       </div>
       {trailing && <div {...itemCls("trailing")}>{trailing}</div>}
-    </div>
+    </As>
   );
 }

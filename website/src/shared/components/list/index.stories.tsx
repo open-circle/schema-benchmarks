@@ -1,3 +1,5 @@
+import { Checkbox } from "#src/shared/components/checkbox";
+import { Radio } from "#src/shared/components/radio";
 import { MdSymbol } from "#src/shared/components/symbol";
 import preview from "#storybook/preview";
 
@@ -118,6 +120,43 @@ export const Link = meta.story({
         <ListItemExternalLink href="https://example.com">
           <ListItemContent leading={<MdSymbol>edit</MdSymbol>}>Link</ListItemContent>
         </ListItemExternalLink>
+      </ListItem>
+    </List>
+  ),
+});
+
+export const LabelControls = meta.story({
+  render: () => (
+    <List className="demo-list">
+      <ListItem>
+        <ListItemContent
+          as="label"
+          leading={<Radio name="benchmark-order" defaultChecked value="fastest" />}
+        >
+          Sort by fastest
+        </ListItemContent>
+      </ListItem>
+      <ListItem>
+        <ListItemContent as="label" trailing={<Radio name="benchmark-order" value="smallest" />}>
+          Sort by smallest
+        </ListItemContent>
+      </ListItem>
+      <ListItem>
+        <ListItemContent
+          as="label"
+          leading={<Checkbox name="filters" defaultChecked value="include-conversion" />}
+        >
+          Include conversion benchmarks
+        </ListItemContent>
+      </ListItem>
+      <ListItem>
+        <ListItemContent
+          as="label"
+          trailing={<Checkbox name="filters" value="show-experimental" />}
+          lines={2}
+          primary="Show experimental libraries"
+          supporting="May include incomplete or unstable results"
+        />
       </ListItem>
     </List>
   ),
