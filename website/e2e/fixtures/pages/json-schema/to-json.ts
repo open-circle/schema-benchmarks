@@ -16,6 +16,32 @@ export class ToJsonPage extends BaseConversionPage {
     return this.tabs.getByRole("tab", { name: tab });
   }
 
+  override get desktop() {
+    const desktop = super.desktop;
+    const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
+    return {
+      ...desktop,
+      supportMatrixTable,
+      getSupportMatrixTargetHeader: (target: JsonSchemaTarget) =>
+        supportMatrixTable.getByRole("columnheader", {
+          name: jsonSchemaTargetProps.labels[target].label,
+        }),
+    };
+  }
+
+  override get mobile() {
+    const mobile = super.mobile;
+    const supportMatrixCardsList = this.page.getByRole("list", { name: "Support Matrix" });
+    const supportMatrixCards = supportMatrixCardsList.getByTestId("support-matrix-card");
+    return {
+      ...mobile,
+      supportMatrixCardsList,
+      supportMatrixCards,
+      getSupportMatrixCardByLibraryName: (libraryName: string | RegExp) =>
+        supportMatrixCards.filter({ hasText: libraryName }),
+    };
+  }
+
   targetToggle = this.page.getByRole("list", { name: "Target" });
 
   getTargetLabel(target: JsonSchemaTarget) {

@@ -34,7 +34,11 @@ export function SupportMatrixCard({
 }: SupportMatrixCardProps) {
   const { npmSite } = useNpmSite();
   return (
-    <article {...cls()} aria-labelledby={`${library}-support-matrix-card`}>
+    <article
+      {...cls()}
+      aria-labelledby={`${library}-support-matrix-card`}
+      data-testid="support-matrix-card"
+    >
       <h5 {...cls({ element: "version", extra: "typo-overline" })}>{version}</h5>
       <header
         id={`${library}-support-matrix-card`}
