@@ -1,9 +1,14 @@
 import {
+  complianceResultsSchema,
+  complianceTargetSchema,
+} from "@schema-benchmarks/json-schema-tests";
+import {
   errorTypeSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaConversionTargetSchema,
   optimizeTypeSchema,
   stringFormatSchema,
+  complianceTypeSchema,
 } from "@schema-benchmarks/schemas";
 import type { OneOf } from "@schema-benchmarks/utils";
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
@@ -102,19 +107,39 @@ export const jsonSchemaSupportMatricesSchema = v.record(
 );
 export type JsonSchemaSupportMatrices = v.InferOutput<typeof jsonSchemaSupportMatricesSchema>;
 
+const jsonComplianceResultSchema = v.object({
+  ...v.omit(baseBenchResultSchema, ["throws", "mean"]).entries,
+  source: jsonSchemaSourceResultSchema,
+  results: complianceResultsSchema,
+});
+export type JsonComplianceResult = v.InferOutput<typeof jsonComplianceResultSchema>;
+
 export const jsonSchemaBenchResultsSchema = v.object({
   conversion: v.object({
     toJson: v.array(schemaConversionToJsonResultSchema),
     fromJson: v.array(schemaConversionFromJsonResultSchema),
     toJsonSupport: jsonSchemaSupportMatricesSchema,
   }),
+  compliance: v.record(
+    complianceTypeSchema,
+    v.object(
+      v.entriesFromList(complianceTargetSchema.options, v.array(jsonComplianceResultSchema)),
+    ),
+  ),
 });
 export type JsonSchemaBenchResults = v.InferOutput<typeof jsonSchemaBenchResultsSchema>;
+export const getEmptyJsonComplianceResults = () =>
+  unsafeFromEntries(complianceTargetSchema.options.map((target) => [target, []]));
 export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
   conversion: {
     toJson: [],
     fromJson: [],
     toJsonSupport: {},
+  },
+  compliance: {
+    validation: getEmptyJsonComplianceResults(),
+    semantics: getEmptyJsonComplianceResults(),
+    roundtrip: getEmptyJsonComplianceResults(),
   },
 });
 

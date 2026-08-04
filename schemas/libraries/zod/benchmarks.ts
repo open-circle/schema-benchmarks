@@ -1,9 +1,10 @@
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import * as z from "zod";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodSchema } from ".";
 
@@ -17,6 +18,12 @@ const createStringBenchmark = (
   },
   snippet,
 });
+
+const zodTargets: Partial<Record<ComplianceTarget, string>> = {
+  "draft2020-12": "draft-2020-12",
+  draft7: "draft-07",
+  draft4: "draft-04",
+};
 
 const schema = getZodSchema();
 const jsonSchemaSubject = z.object({
@@ -77,6 +84,25 @@ export default defineBenchmarks({
       fromJson: {
         generate: (jsonSchema) => z.fromJSONSchema(jsonSchema),
         snippet: ts`z.fromJSONSchema(jsonSchema)`,
+      },
+    },
+    compliance: {
+      semantics: {
+        run(schema, data) {
+          return z.fromJSONSchema(schema).safeParse(data).success;
+        },
+        source: { type: "native" },
+        snippet: () => ts`z.fromJSONSchema(schema).safeParse(data)`,
+      },
+      roundtrip: {
+        run(schema, complianceTarget) {
+          const target = zodTargets[complianceTarget];
+          assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07", "draft-04"]);
+          return z.toJSONSchema(z.fromJSONSchema(schema), { target });
+        },
+        source: { type: "native" },
+        snippet: (complianceTarget) =>
+          ts`z.toJSONSchema(z.fromJSONSchema(schema), { target: "${zodTargets[complianceTarget] ?? complianceTarget}" })`,
       },
     },
   },

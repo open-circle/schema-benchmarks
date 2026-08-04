@@ -1,4 +1,5 @@
 import { jsonSchemaToType } from "@ark/json-schema";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import { type } from "arktype";
 import ts from "dedent";
@@ -28,6 +29,11 @@ const jsonSchemaSubject = type({
   // type has to be declared, or it's unknown - and so is the JSON schema of the output
   price: type("string").pipe(Number, type("number")),
 });
+
+const arktypeTargets: Partial<Record<ComplianceTarget, string>> = {
+  "draft2020-12": "draft-2020-12",
+  draft7: "draft-07",
+};
 
 export default defineBenchmarks({
   library: {
@@ -89,11 +95,13 @@ export default defineBenchmarks({
         source: { type: "package", package: "@ark/json-schema" },
       },
       roundtrip: {
-        run(schema, target) {
+        run(schema, complianceTarget) {
+          const target = arktypeTargets[complianceTarget];
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
           return jsonSchemaToType(schema).toJsonSchema({ target });
         },
-        snippet: (target) => ts`jsonSchemaToType(schema).toJsonSchema({ target: "${target}" })`,
+        snippet: (complianceTarget) =>
+          ts`jsonSchemaToType(schema).toJsonSchema({ target: "${arktypeTargets[complianceTarget] ?? complianceTarget}" })`,
         source: { type: "package", package: "@ark/json-schema" },
       },
     },

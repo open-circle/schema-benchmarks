@@ -1,3 +1,4 @@
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import * as S from "sury";
@@ -18,6 +19,11 @@ const createStringBenchmark = (
 });
 
 const schema = getSurySchema();
+
+const suryTargets: Partial<Record<ComplianceTarget, string>> = {
+  "draft2020-12": "draft-2020-12",
+  draft7: "draft-07",
+};
 
 // `~standard.jsonSchema` throws until this is called
 S.enableStandardJSONSchema();
@@ -121,12 +127,14 @@ export default defineBenchmarks({
         source: { type: "native" },
       },
       roundtrip: {
-        run(schema, target) {
+        run(schema, complianceTarget) {
+          const target = suryTargets[complianceTarget];
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
           if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
           return S.toJSONSchema(S.fromJSONSchema(schema), { target });
         },
-        snippet: (target) => ts`S.toJSONSchema(S.fromJSONSchema(schema), { target: "${target}" })`,
+        snippet: (complianceTarget) =>
+          ts`S.toJSONSchema(S.fromJSONSchema(schema), { target: "${suryTargets[complianceTarget] ?? complianceTarget}" })`,
         source: { type: "native" },
       },
     },

@@ -30,6 +30,7 @@ catalog:
   react-dom: ^19.2.8
   "rolldown": ^1.2.4
   ttsc: "^0.26.2"
+  typebox: ^1.3.13
   typescript: 7.0.2
   valibot: ^1.4.2
   vite: ^8.2.1
