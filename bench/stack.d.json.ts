@@ -1,4 +1,4 @@
-import type { StackResult } from "./src/results/types.ts";
+import type { StackResult } from "#src/index.ts";
 
 declare const results: Array<StackResult>;
 

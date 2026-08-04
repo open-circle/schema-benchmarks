@@ -28,14 +28,14 @@ jobs:
           node -e '
             const fs = require("node:fs");
 
-            const file = "json-schema-tests/scripts/test-suite-ref.ts";
+            const file = "json-schema-tests/constants/sha.gen.ts";
             const content = fs.readFileSync(file, "utf8");
 
-            const shaMatch = content.match(/JSON_SCHEMA_TEST_SUITE_COMMIT\s*=\s*"([0-9a-f]{7,40})"/i);
-            const messageMatch = content.match(/JSON_SCHEMA_TEST_SUITE_COMMIT[^\n]*\/\/\s*(.+)$/m);
+            const shaMatch = content.match(/export\s+default\s+"([0-9a-f]{7,40})"/i);
+            const messageMatch = content.match(/export\s+default[^\n]*\/\/\s*(.+)$/m);
 
             if (!shaMatch) {
-              throw new Error("Could not parse JSON_SCHEMA_TEST_SUITE_COMMIT from test-suite-ref.ts");
+              throw new Error("Could not parse SHA from constants/sha.gen.ts");
             }
 
             const sha = shaMatch[1];
@@ -66,5 +66,4 @@ jobs:
           branch: chore/bump-json-schema-test-suite
           delete-branch: true
           add-paths: |
-            json-schema-tests/scripts/test-suite-ref.ts
-            json-schema-tests/src/constants.gen.ts
+            json-schema-tests/constants/**/*.ts

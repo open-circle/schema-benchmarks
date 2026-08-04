@@ -8,6 +8,7 @@ on:
     paths:
       - "bench/**"
       - "schemas/**"
+      - "json-schema-tests/**"
 
 concurrency:
   group: bench-pr-${{ github.event.pull_request.number }}

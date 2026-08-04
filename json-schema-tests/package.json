@@ -7,7 +7,8 @@
   "types": "./src/index.ts",
   "imports": {
     "#src/*": "./src/*",
-    "#tests/*": "./tests/*"
+    "#tests/*": "./tests/*",
+    "#constants/*": "./constants/*"
   },
   "exports": {
     ".": "./src/index.ts",

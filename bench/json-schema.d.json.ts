@@ -1,4 +1,4 @@
-import type { JsonSchemaBenchResults } from ".";
+import type { JsonSchemaBenchResults } from "#src/index.ts";
 
 declare const results: JsonSchemaBenchResults;
 

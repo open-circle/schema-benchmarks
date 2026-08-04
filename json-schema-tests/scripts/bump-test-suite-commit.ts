@@ -7,7 +7,7 @@ import { format } from "oxfmt";
 import { up } from "up-fetch";
 import * as v from "valibot";
 
-import { JSON_SCHEMA_TEST_SUITE_COMMIT } from "./test-suite-ref.ts";
+import sha from "#constants/sha.gen.ts";
 
 const commitInfoSchema = v.object({
   sha: v.pipe(v.string(), v.minLength(7), v.maxLength(40), v.regex(/^[0-9a-f]+$/i)),
@@ -47,12 +47,10 @@ const {
   schema: commitInfoSchema,
 });
 
-const refFilePath = fileURLToPath(new URL("./test-suite-ref.ts", import.meta.url));
+const refFilePath = fileURLToPath(new URL("../constants/sha.gen.ts", import.meta.url));
 
-const currentCommit = JSON_SCHEMA_TEST_SUITE_COMMIT;
-
-if (currentCommit.toLowerCase() === nextCommit.toLowerCase()) {
-  console.log(`JSON_SCHEMA_TEST_SUITE_COMMIT is already ${nextCommit}`);
+if (sha.toLowerCase() === nextCommit.toLowerCase()) {
+  console.log(`sha is already ${nextCommit}`);
   process.exit(0);
 }
 
@@ -62,10 +60,10 @@ const commitMessage = fullCommitMessage.split("\n", 1)[0]?.replace(/\s+/g, " ").
 const nextContent = ts`
 // Pinned upstream revision for json-schema-org/json-schema-test-suite.
 // Update this with \`pnpm json-schema-tests:bump\`. Optionally provide a commit SHA to set a specific commit, e.g. \`pnpm json-schema-tests:bump -c <sha>\`.
-export const JSON_SCHEMA_TEST_SUITE_COMMIT = "${nextCommit}";${commitMessage ? ` // ${commitMessage}` : ""}
+export default "${nextCommit}";${commitMessage ? ` // ${commitMessage}` : ""}
 `;
 
 const formatted = await format(refFilePath, nextContent, { sortImports: true });
 
 await fs.writeFile(refFilePath, formatted.code, "utf8");
-console.log(`Updated JSON_SCHEMA_TEST_SUITE_COMMIT: ${currentCommit} -> ${nextCommit}`);
+console.log(`Updated sha: ${sha} -> ${nextCommit}`);
