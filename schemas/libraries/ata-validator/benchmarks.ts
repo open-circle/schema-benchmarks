@@ -71,6 +71,7 @@ export default defineBenchmarks({
           return new Validator(schema).isValidObject(data);
         },
         snippet: () => ts`new Validator(schema).isValidObject(data)`,
+        source: { type: "native" },
       },
     },
   },

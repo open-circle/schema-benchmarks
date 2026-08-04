@@ -118,6 +118,7 @@ export default defineBenchmarks({
           return S.is(S.fromJSONSchema(schema), data);
         },
         snippet: () => ts`S.is(S.fromJSONSchema(schema), data)`,
+        source: { type: "native" },
       },
       roundtrip: {
         run(schema, target) {
@@ -126,6 +127,7 @@ export default defineBenchmarks({
           return S.toJSONSchema(S.fromJSONSchema(schema), { target });
         },
         snippet: (target) => ts`S.toJSONSchema(S.fromJSONSchema(schema), { target: "${target}" })`,
+        source: { type: "native" },
       },
     },
   },

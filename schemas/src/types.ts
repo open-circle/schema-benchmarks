@@ -113,6 +113,7 @@ export interface BaseComplianceBenchmarkConfig extends Omit<
   BaseBenchmarkConfig,
   "throws" | "snippet"
 > {
+  source: SourceConfig;
   snippet: (target: ComplianceTarget) => string;
 }
 
