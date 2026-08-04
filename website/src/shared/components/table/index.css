@@ -127,8 +127,6 @@ td {
     justify-content: center;
     color: var(--page-background);
     pointer-events: none;
-    --icon-size: 20;
-    --icon-weight: 700;
     opacity: 0;
     transition: opacity 150ms;
   }
