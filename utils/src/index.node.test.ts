@@ -17,11 +17,27 @@ import {
 } from "./index.ts";
 
 describe("formatBytes", () => {
-  it("should format bytes", () => {
-    expect(formatBytes(1)).toBe("1 B");
-    expect(formatBytes(1024)).toBe("1 KB");
-    expect(formatBytes(1024 * 1024)).toBe("1 MB");
-    expect(formatBytes(1024 * 1024 * 1024)).toBe("1 GB");
+  it.each([
+    [1, "1 byte"],
+    [1024, "1 kB"],
+    [1024 * 1024, "1 MB"],
+    [1024 * 1024 * 1024, "1 GB"],
+  ])("should format bytes: %i", (input, expected) => {
+    expect(formatBytes(input)).toBe(expected);
+  });
+  it.each<[number, Intl.NumberFormatOptions, string]>([
+    [1024, { unitDisplay: "narrow" }, "1kB"],
+    [1024 * 1024, { unitDisplay: "long" }, "1 megabyte"],
+    [1800, { maximumFractionDigits: 1 }, "1.8 kB"],
+    [10, { unit: "megabyte" }, "10 MB"],
+  ])("should accept formatting options: %i %o", (bytes, opts, expected) => {
+    expect(formatBytes(bytes, opts)).toBe(expected);
+  });
+  it.each([
+    [0, "0 byte"],
+    [0.5, "0.5 byte"],
+  ])("should handle small values: %f", (input, expected) => {
+    expect(formatBytes(input)).toBe(expected);
   });
 });
 

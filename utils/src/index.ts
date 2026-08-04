@@ -94,15 +94,25 @@ const byteUnits = [
   "yottabyte",
 ] as const;
 export function formatBytes(bytes: number, formatterOpts?: Intl.NumberFormatOptions) {
-  if (bytes < 1) return "0 B";
-  const unit = Math.floor(Math.log2(bytes) / 10);
-  const n = bytes / 2 ** (10 * unit);
-  return n.toLocaleString("en", {
+  const baseFormatterOpts: Intl.NumberFormatOptions = {
     maximumFractionDigits: 2,
     unitDisplay: "short",
-    ...formatterOpts,
     style: "unit",
-    unit: byteUnits[unit],
+    ...formatterOpts,
+  };
+  // if we've been given a specific unit, use that instead of auto-detecting
+  if (baseFormatterOpts?.unit) {
+    return bytes.toLocaleString("en", baseFormatterOpts);
+  }
+
+  // if the number of bytes is less than 1, we can't use the auto-detected unit, so we just return the number of bytes with the "byte" unit
+  if (bytes < 1) return bytes.toLocaleString("en", { ...baseFormatterOpts, unit: "byte" });
+
+  const autoUnit = Math.floor(Math.log2(bytes) / 10);
+  const n = bytes / 2 ** (10 * autoUnit);
+  return n.toLocaleString("en", {
+    ...baseFormatterOpts,
+    unit: byteUnits[autoUnit],
   });
 }
 
