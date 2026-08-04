@@ -123,7 +123,7 @@ export interface ComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig
 
 export interface RoundtripComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig {
   // convert the schema and then back again
-  run: (schema: {} | boolean, target: ComplianceTarget) => MaybePromise<unknown>;
+  run: (schema: {} | boolean, target: ComplianceTarget) => MaybePromise<{} | boolean>;
 }
 
 export interface SchemaConversionFromJsonConfig extends Omit<
@@ -140,10 +140,8 @@ export interface SchemaConversionFromJsonConfig extends Omit<
 }
 
 /** Libraries are expected to throw for targets they don't support. */
-export function assertJsonSchemaTarget<
-  Supported extends ComplianceTarget | JsonSchemaConversionTarget,
->(
-  target: ComplianceTarget | JsonSchemaConversionTarget,
+export function assertJsonSchemaTarget<Supported extends string>(
+  target: string | undefined,
   supported: ReadonlyArray<Supported>,
 ): asserts target is Supported {
   if (!supported.includes(target as never)) {

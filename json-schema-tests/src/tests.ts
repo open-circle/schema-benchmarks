@@ -2,10 +2,8 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-import { targets } from "./constants.gen.ts";
 import type {
   ComplianceTarget,
   ComplianceFn,
@@ -34,6 +32,7 @@ export async function* getTestCases(target: ComplianceTarget) {
 export async function getTargetCompliance(
   target: ComplianceTarget,
   complianceFn: ComplianceFn,
+  log = false,
 ): Promise<ComplianceResults> {
   const results: ComplianceResults = {
     count: {
@@ -50,11 +49,10 @@ export async function getTargetCompliance(
         passed: 0,
         failed: 0,
       },
-      failedTests: [],
     };
     results.files[file] = result;
-    for (const { description, schema, tests } of testCases) {
-      for (const { description: testDescription, data, valid: expected } of tests) {
+    for (const { schema, tests } of testCases) {
+      for (const { data, valid: expected } of tests) {
         try {
           const received = await complianceFn(schema, data, target);
           if (received === expected) {
@@ -63,36 +61,19 @@ export async function getTargetCompliance(
           } else {
             results.count.failed++;
             result.count.failed++;
-            result.failedTests.push({
-              label: [file, description, testDescription],
-              expected,
-            });
+            // result.failedTests.push([description, testDescription]);
           }
-        } catch (error) {
-          console.warn(
-            `Error running compliance test for ${file} > ${description} > ${testDescription}:`,
-            error,
-          );
+        } catch (err) {
+          if (log) {
+            console.error(`Error running compliance function for ${file}`, err);
+          }
           results.count.failed++;
           result.count.failed++;
-          result.failedTests.push({
-            label: [file, description, testDescription],
-            expected,
-          });
+          // result.failedTests.push([description, testDescription]);
         }
       }
     }
   }
 
   return results;
-}
-
-export async function getAllTargetsCompliance(
-  complianceFn: ComplianceFn,
-): Promise<Record<ComplianceTarget, ComplianceResults>> {
-  return unsafeFromEntries(
-    await Promise.all(
-      targets.map(async (target) => [target, await getTargetCompliance(target, complianceFn)]),
-    ),
-  );
 }

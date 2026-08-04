@@ -19,25 +19,26 @@ export type TestCase = v.InferOutput<typeof testCaseSchema>;
 export const complianceTargetSchema = v.picklist(targets);
 export type ComplianceTarget = v.InferOutput<typeof complianceTargetSchema>;
 
-export interface FileComplianceResult {
-  description: string;
-  count: {
-    passed: number;
-    failed: number;
-  };
-  failedTests: Array<{
-    label: Array<string>;
-    expected: boolean;
-  }>;
-}
+export const fileComplianceResultSchema = v.object({
+  description: v.string(),
+  count: v.object({
+    passed: v.number(),
+    failed: v.number(),
+  }),
+  // disable for now - makes the output about 8x larger
+  // file level granularity is fine
+  // failedTests: v.array(v.array(v.string())),
+});
+export type FileComplianceResult = v.InferOutput<typeof fileComplianceResultSchema>;
 
-export type ComplianceResults = {
-  count: {
-    passed: number;
-    failed: number;
-  };
-  files: Record<string, FileComplianceResult>;
-};
+export const complianceResultsSchema = v.object({
+  count: v.object({
+    passed: v.number(),
+    failed: v.number(),
+  }),
+  files: v.record(v.string(), fileComplianceResultSchema),
+});
+export type ComplianceResults = v.InferOutput<typeof complianceResultsSchema>;
 
 export type ComplianceFn = (
   schema: {} | boolean,

@@ -1,20 +1,23 @@
 import { parseArgs } from "node:util";
 
+import { complianceTargetSchema, getTargetCompliance } from "@schema-benchmarks/json-schema-tests";
 import type { SourceConfig } from "@schema-benchmarks/schemas";
 import {
   fromJsonBenchSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaConversionTargetSchema,
+  complianceTypeSchema,
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
+import * as Schema from "typebox/schema";
 
 import type { JsonSchemaBenchmarkConfigEntry } from "#src/bench/registry.ts";
 import { Registry } from "#src/bench/registry.ts";
 import type { JsonSchemaSupportMatrix, JsonSchemaSourceResult } from "#src/results/types.ts";
-import { getEmptyJsonSchemaResults } from "#src/results/types.ts";
+import { getEmptyJsonComplianceResults, getEmptyJsonSchemaResults } from "#src/results/types.ts";
 
 function getOrInsertRecord<K extends string, V>(
   record: Partial<Record<K, V>>,
@@ -136,6 +139,56 @@ if (jsonSchemaConfig.conversion?.fromJson) {
       note,
     };
     bench.add(caseRegistry.add(entry), () => generate(structuredClone(fromJsonBenchSchema)));
+  }
+}
+
+if (jsonSchemaConfig.compliance) {
+  for (const complianceType of complianceTypeSchema.options) {
+    for (const complianceTarget of complianceTargetSchema.options) {
+      if (complianceType === "roundtrip") {
+        for (const benchConfig of ensureArray(jsonSchemaConfig.compliance[complianceType] ?? [])) {
+          const { run, snippet, note, source } = benchConfig;
+          const complianceResults = await getTargetCompliance(
+            complianceTarget,
+            async (schema, data, target) => {
+              const roundtripped = await run(schema, target);
+              // typebox consistently tests highest for validation compliance
+              // so using it introduces the smallest margin of error
+              return Schema.Check(roundtripped, data);
+            },
+          );
+          if (complianceResults.count.passed === 0) continue;
+          ((results.compliance[complianceType] ??= getEmptyJsonComplianceResults())[
+            complianceTarget
+          ] ??= []).push({
+            id: crypto.randomUUID(),
+            libraryName,
+            version,
+            snippet: snippet(complianceTarget),
+            note,
+            source: jsonSourceToResult(source),
+            results: complianceResults,
+          });
+        }
+      } else {
+        for (const benchConfig of ensureArray(jsonSchemaConfig.compliance[complianceType] ?? [])) {
+          const { run, snippet, note, source } = benchConfig;
+          const complianceResults = await getTargetCompliance(complianceTarget, run);
+          if (complianceResults.count.passed === 0) continue;
+          ((results.compliance[complianceType] ??= getEmptyJsonComplianceResults())[
+            complianceTarget
+          ] ??= []).push({
+            id: crypto.randomUUID(),
+            libraryName,
+            version,
+            snippet: snippet(complianceTarget),
+            note,
+            source: jsonSourceToResult(source),
+            results: complianceResults,
+          });
+        }
+      }
+    }
   }
 }
 

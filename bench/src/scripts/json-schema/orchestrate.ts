@@ -3,11 +3,17 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { promisify } from "node:util";
 
+import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
+import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
-import { getEmptyJsonSchemaResults, jsonSchemaBenchResultsSchema } from "#src/results/types.ts";
+import {
+  getEmptyJsonComplianceResults,
+  getEmptyJsonSchemaResults,
+  jsonSchemaBenchResultsSchema,
+} from "#src/results/types.ts";
 
 const sigintSignal = getSigintSignal();
 
@@ -37,8 +43,34 @@ for (const results of allResults) {
     ...merged.conversion.toJsonSupport,
     ...results.conversion.toJsonSupport,
   };
+  for (const complianceType of complianceTypeSchema.options) {
+    for (const complianceTarget of complianceTargetSchema.options) {
+      const targetResults = results.compliance[complianceType]?.[complianceTarget];
+      if (targetResults) {
+        ((merged.compliance[complianceType] ??= getEmptyJsonComplianceResults())[
+          complianceTarget
+        ] ??= []).push(...targetResults);
+      }
+    }
+  }
 }
 
-merged.conversion.toJson.sort((a, b) => a.mean - b.mean);
+for (const arr of [merged.conversion.toJson, merged.conversion.fromJson]) {
+  arr.sort((a, b) => a.mean - b.mean);
+}
+
+// sort compliance results by highest pass rate
+for (const complianceType of complianceTypeSchema.options) {
+  for (const complianceTarget of complianceTargetSchema.options) {
+    const targetResults = merged.compliance[complianceType]?.[complianceTarget];
+    if (targetResults) {
+      targetResults.sort(({ results: a }, { results: b }) => {
+        const aPassRate = a.count.passed / (a.count.passed + a.count.failed);
+        const bPassRate = b.count.passed / (b.count.passed + b.count.failed);
+        return bPassRate - aPassRate;
+      });
+    }
+  }
+}
 
 await fs.writeFile(path.resolve(process.cwd(), "./json-schema.json"), JSON.stringify(merged));
