@@ -26,7 +26,7 @@ const jsonSchemaSubject = type({
   name: "string",
   // `string.numeric.parse` would also validate the string, which no other subject does. The output
   // type has to be declared, or it's unknown - and so is the JSON schema of the output
-  price: type("string").pipe((price) => Number(price), type("number")),
+  price: type("string").pipe(Number, type("number")),
 });
 
 export default defineBenchmarks({
