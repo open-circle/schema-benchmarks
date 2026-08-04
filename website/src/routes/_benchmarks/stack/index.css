@@ -1,4 +1,5 @@
 @import "./-components/card/index.css";
+@import "./-components/table/index.css";
 
 .stack-cards {
   display: grid;
@@ -18,9 +19,4 @@
   max-height: 16em;
   border: 1px solid var(--divider);
   border-radius: var(--shape-medium);
-}
-
-.stack-table__downloads-label {
-  display: inline-flex;
-  align-items: center;
 }

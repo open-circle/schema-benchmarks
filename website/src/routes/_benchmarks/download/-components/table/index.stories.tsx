@@ -5,6 +5,8 @@ import preview from "#storybook/preview";
 
 import { DownloadTable } from "./index.js";
 
+import "./index.css";
+
 const meta = preview.meta({
   title: "Features/Benchmark/Download/Table",
   component: DownloadTable,
