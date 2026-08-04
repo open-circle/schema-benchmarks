@@ -60,7 +60,7 @@ export const Route = createFileRoute("/_benchmarks/json-schema/_conversion/to-js
     generateMetadata({
       title: "Schema to JSON Schema",
       description: "Benchmark results for converting a schema to JSON schema.",
-      openGraph: { url: "/json-schema/_conversion/to-json" },
+      openGraph: { url: "/json-schema/to-json" },
     }),
   staticData: { crumb: ["JSON Schema", "Schema to JSON"], wrapMain: false },
 });
