@@ -82,11 +82,28 @@ export function getOrInsertComputed<K extends object, V>(
   return map.set(key, compute(key)).get(key) as V;
 }
 
-const byteUnits = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-export function formatBytes(bytes: number, formatter = numFormatter) {
+const byteUnits = [
+  "byte",
+  "kilobyte",
+  "megabyte",
+  "gigabyte",
+  "terabyte",
+  "petabyte",
+  "exabyte",
+  "zettabyte",
+  "yottabyte",
+] as const;
+export function formatBytes(bytes: number, formatterOpts?: Intl.NumberFormatOptions) {
   if (bytes < 1) return "0 B";
   const unit = Math.floor(Math.log2(bytes) / 10);
-  return `${formatter.format(bytes / 2 ** (10 * unit))} ${byteUnits[unit]}`;
+  const n = bytes / 2 ** (10 * unit);
+  return n.toLocaleString("en", {
+    maximumFractionDigits: 2,
+    unitDisplay: "short",
+    ...formatterOpts,
+    style: "unit",
+    unit: byteUnits[unit],
+  });
 }
 
 export const longDateFormatter = new Intl.DateTimeFormat("en", {

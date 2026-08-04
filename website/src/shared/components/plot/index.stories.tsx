@@ -26,12 +26,9 @@ const PlotComponent = createPlotComponent(function usePlotContainer() {
             grid: true,
             label: "Size (gzipped)",
             tickFormat: (bytes: number) =>
-              formatBytes(
-                bytes,
-                new Intl.NumberFormat("en", {
-                  maximumFractionDigits: 0,
-                }),
-              ),
+              formatBytes(bytes, {
+                maximumFractionDigits: 0,
+              }),
           },
           color: {
             type: "quantize",

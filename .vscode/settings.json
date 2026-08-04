@@ -36,5 +36,6 @@
   },
   "[css]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
+  },
+  "autoRestart.monitorFilesForESLint": false
 }

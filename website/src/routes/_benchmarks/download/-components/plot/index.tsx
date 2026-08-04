@@ -11,10 +11,6 @@ import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 const getLabel = (d: DownloadResult) => d.libraryName;
 
-const intFormatter = new Intl.NumberFormat("en", {
-  maximumFractionDigits: 0,
-});
-
 export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
   data,
 }: {
@@ -41,7 +37,7 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
         y: {
           grid: true,
           label: "Size (gzipped)",
-          tickFormat: (bytes: number) => formatBytes(bytes, intFormatter),
+          tickFormat: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
           nice: true,
         },
         color: {
@@ -61,7 +57,7 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (bytes: number) => formatBytes(bytes, intFormatter),
+                y: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
                 fill: false,
               },
             },
