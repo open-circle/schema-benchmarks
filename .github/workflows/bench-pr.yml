@@ -145,9 +145,14 @@ jobs:
               name: download-results
               path: .
 
+      - name: Derive short commit SHA
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: echo "SHORT_SHA=${SOURCE_SHA::7}" >> "$GITHUB_ENV"
+
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
-          message: "Update bench results"
+          message: "Update bench results (${{ env.SHORT_SHA }})"
