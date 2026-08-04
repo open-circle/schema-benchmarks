@@ -1,0 +1,70 @@
+name: Bump JSON Schema Test Suite
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-json-schema-test-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup environment
+        uses: ./.github/actions/environments
+
+      - name: Bump JSON Schema test-suite SHA
+        run: pnpm json-schema-tests:bump
+
+      - name: Extract pinned metadata
+        id: metadata
+        run: |
+          node -e '
+            const fs = require("node:fs");
+
+            const file = "json-schema-tests/scripts/test-suite-ref.ts";
+            const content = fs.readFileSync(file, "utf8");
+
+            const shaMatch = content.match(/JSON_SCHEMA_TEST_SUITE_COMMIT\s*=\s*"([0-9a-f]{7,40})"/i);
+            const messageMatch = content.match(/JSON_SCHEMA_TEST_SUITE_COMMIT[^\n]*\/\/\s*(.+)$/m);
+
+            if (!shaMatch) {
+              throw new Error("Could not parse JSON_SCHEMA_TEST_SUITE_COMMIT from test-suite-ref.ts");
+            }
+
+            const sha = shaMatch[1];
+            const message = (messageMatch?.[1] ?? "(no commit message)").trim();
+
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, [
+              `sha=${sha}`,
+              `message=${message}`,
+              "",
+            ].join("\n"));
+          '
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.BOT_GH_TOKEN }}
+          commit-message: "chore: bump JSON Schema test-suite SHA"
+          title: "chore: bump JSON Schema test-suite SHA"
+          body: |
+            Automated weekly update of the pinned `json-schema-org/json-schema-test-suite` commit.
+
+            New pinned commit:
+            - SHA: ${{ steps.metadata.outputs.sha }}
+            - Message: ${{ steps.metadata.outputs.message }}
+
+            Command run:
+            - `pnpm json-schema-tests:bump`
+          branch: chore/bump-json-schema-test-suite
+          delete-branch: true
+          add-paths: |
+            json-schema-tests/scripts/test-suite-ref.ts
+            json-schema-tests/src/constants.gen.ts
