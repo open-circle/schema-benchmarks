@@ -4,12 +4,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import * as z from "zod/v3";
 
 import type { JsonSchemaInputData, JsonSchemaTarget, StringBenchmarkConfig } from "#src";
-import {
-  assertJsonSchemaDirection,
-  assertJsonSchemaTarget,
-  assertNotReached,
-  defineBenchmarks,
-} from "#src";
+import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodSchema } from ".";
 
@@ -34,7 +29,7 @@ const schema = getZodSchema();
 const jsonSchemaSubject = z.object({
   id: z.number(),
   name: z.string(),
-  price: z.string().transform(Number),
+  price: z.string().transform(Number).pipe(z.number()),
 }) satisfies z.ZodType<unknown, z.ZodTypeDef, JsonSchemaInputData>;
 
 // zod-to-json-schema names the targets differently, and has no draft 2020-12
@@ -77,8 +72,10 @@ export default defineBenchmarks({
     conversion: {
       toJson: {
         generate: ({ target, direction }) => {
-          assertJsonSchemaDirection(direction, ["input"]);
-          return zodToJsonSchema(jsonSchemaSubject, { target: getJsonSchemaTarget(target) });
+          return zodToJsonSchema(jsonSchemaSubject, {
+            target: getJsonSchemaTarget(target),
+            pipeStrategy: direction,
+          });
         },
         snippet: ({ target }) =>
           ts`zodToJsonSchema(schema, { target: "${getJsonSchemaTarget(target)}" })`,

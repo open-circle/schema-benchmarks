@@ -80,7 +80,7 @@ export const acceptedJsonSchemas = {
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         additionalProperties: false,
       },
-      // sury
+      // sury, valibot
       {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
@@ -160,7 +160,7 @@ export const acceptedJsonSchemas = {
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         additionalProperties: false,
       },
-      // sury
+      // sury, valibot
       {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
@@ -174,6 +174,14 @@ export const acceptedJsonSchemas = {
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         required: ["id", "name", "price"],
         additionalProperties: false,
+      },
+      // zod/v3
+      {
+        type: "object",
+        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
+        required: ["id", "name", "price"],
+        additionalProperties: false,
+        $schema: "http://json-schema.org/draft-07/schema#",
       },
     ],
   },
@@ -194,13 +202,13 @@ export const acceptedJsonSchemas = {
       },
     ],
     output: [
-      // sury
+      // sury, valibot
       {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         required: ["id", "name", "price"],
       },
-      // zod, zod/mini
+      // zod, zod/mini, zod/v3
       {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },

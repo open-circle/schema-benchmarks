@@ -23,7 +23,7 @@ const schema = getValibotSchema();
 const jsonSchemaSubject = v.object({
   id: v.number(),
   name: v.string(),
-  price: v.pipe(v.string(), v.transform(Number)),
+  price: v.pipe(v.string(), v.transform(Number), v.number()),
 }) satisfies v.GenericSchema<JsonSchemaInputData, JsonSchemaOutputData>;
 
 export default defineBenchmarks({
