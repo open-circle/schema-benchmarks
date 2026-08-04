@@ -19,6 +19,7 @@
     "bench:stack": "pnpm run --filter '*/bench' stack",
     "bench:all": "pnpm bench:download && pnpm bench:bench && pnpm bench:json-schema && pnpm bench:stack",
     "json-schema-tests:checkout": "pnpm run --filter json-schema-tests checkout",
+    "json-schema-tests:bump": "pnpm run --filter json-schema-tests bump:test-suite-commit",
     "postinstall": "lefthook install",
     "knip": "knip",
     "e2e": "pnpm run -r e2e"

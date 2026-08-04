@@ -60,7 +60,7 @@
     "remark-mdx-frontmatter": "^5.2.0",
     "required-react-context": "^1.4.1",
     "tanstack-meta": "^0.6.1",
-    "up-fetch": "^2.6.0",
+    "up-fetch": "catalog:",
     "valibot": "catalog:",
     "web-haptics": "^0.0.6"
   },

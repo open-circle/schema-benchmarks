@@ -17,8 +17,10 @@
   "scripts": {
     "postinstall": "pnpm checkout",
     "precheckout": "del-cli tests",
-    "checkout": "degit github:json-schema-org/json-schema-test-suite/tests tests && del-cli tests/latest",
+    "checkout": "node ./scripts/checkout.ts",
     "postcheckout": "node ./scripts/gen-constants.ts",
+    "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",
+    "postbump:test-suite-commit": "pnpm checkout",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -29,6 +31,7 @@
     "degit": "^3.6.5",
     "del-cli": "^7.0.0",
     "oxfmt": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "up-fetch": "catalog:"
   }
 }
