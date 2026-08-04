@@ -144,7 +144,9 @@ export const LabelControls = meta.story({
       <ListItem>
         <ListItemContent
           as="label"
-          leading={<Checkbox name="filters" defaultChecked value="include-conversion" />}
+          leading={
+            <Checkbox asLabel={false} name="filters" defaultChecked value="include-conversion" />
+          }
         >
           Include conversion benchmarks
         </ListItemContent>
@@ -152,7 +154,7 @@ export const LabelControls = meta.story({
       <ListItem>
         <ListItemContent
           as="label"
-          trailing={<Checkbox name="filters" value="show-experimental" />}
+          trailing={<Checkbox asLabel={false} name="filters" value="show-experimental" />}
           lines={2}
           primary="Show experimental libraries"
           supporting="May include incomplete or unstable results"

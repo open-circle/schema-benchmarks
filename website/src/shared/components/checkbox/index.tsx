@@ -8,12 +8,22 @@ import { withTooltip } from "#src/shared/components/tooltip/index.tsx";
 
 const cls = bem("checkbox");
 
-export interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
-  ref?: Ref<HTMLLabelElement>;
+type LabelProps =
+  | {
+      asLabel?: true;
+      labelProps?: Omit<ComponentPropsWithoutRef<"label">, "className">;
+      ref?: Ref<HTMLLabelElement>;
+    }
+  | {
+      asLabel?: false;
+      labelProps?: Omit<ComponentPropsWithoutRef<"div">, "className">;
+      ref?: Ref<HTMLDivElement>;
+    };
+
+export type CheckboxProps = ComponentPropsWithoutRef<"input"> & {
   inputRef?: Ref<HTMLInputElement>;
-  labelProps?: Omit<ComponentPropsWithoutRef<"label">, "className">;
   haptic?: boolean | HapticPattern;
-}
+} & LabelProps;
 
 export const Checkbox = withTooltip(function Checkbox({
   className,
@@ -21,24 +31,25 @@ export const Checkbox = withTooltip(function Checkbox({
   labelProps,
   ref,
   inputRef,
+  asLabel = true,
   ...props
 }: CheckboxProps) {
   const haptics = useWebHaptics();
+  const Label = asLabel ? "label" : "div";
   return (
-    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events jsx-a11y/no-noninteractive-element-interactions
-    <label
-      {...labelProps}
+    <Label
+      {...(labelProps as {})}
       {...cls({ extra: className })}
       onClick={(e) => {
         if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
-        labelProps?.onClick?.(e);
+        labelProps?.onClick?.(e as never);
       }}
-      ref={ref}
+      ref={ref as never}
     >
       <input type="checkbox" ref={inputRef} {...props} />
       <div {...cls("icon")}>
         <MdSymbol>check_small</MdSymbol>
       </div>
-    </label>
+    </Label>
   );
 });
