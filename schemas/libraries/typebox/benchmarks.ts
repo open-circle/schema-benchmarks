@@ -206,6 +206,7 @@ export default defineBenchmarks({
           },
           snippet: () => ts`Value.Check(schema, data)`,
           note: "value",
+          source: { type: "native" },
         },
         {
           run(schema, data) {
@@ -213,6 +214,7 @@ export default defineBenchmarks({
           },
           snippet: () => ts`Schema.Check(schema, data)`,
           note: "schema",
+          source: { type: "native" },
         },
       ],
     },

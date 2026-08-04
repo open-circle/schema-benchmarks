@@ -86,6 +86,7 @@ export default defineBenchmarks({
           return jsonSchemaToType(schema).allows(data);
         },
         snippet: () => ts`jsonSchemaToType(schema).allows(data)`,
+        source: { type: "package", package: "@ark/json-schema" },
       },
       roundtrip: {
         run(schema, target) {
@@ -93,6 +94,7 @@ export default defineBenchmarks({
           return jsonSchemaToType(schema).toJsonSchema({ target });
         },
         snippet: (target) => ts`jsonSchemaToType(schema).toJsonSchema({ target: "${target}" })`,
+        source: { type: "package", package: "@ark/json-schema" },
       },
     },
   },

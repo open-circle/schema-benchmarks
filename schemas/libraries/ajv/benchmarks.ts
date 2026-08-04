@@ -83,6 +83,7 @@ export default defineBenchmarks({
           return ajv.validate(schema, data);
         },
         snippet: () => ts`ajv.validate(schema, data)`,
+        source: { type: "native" },
       },
     },
   },
