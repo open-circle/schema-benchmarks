@@ -6,7 +6,7 @@ import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
-import { standardJsonSchemaProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+import { jsonSourceProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { PackageSource } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix/source.tsx";
 
 import { MatrixCheckbox } from "./checkbox";
@@ -66,13 +66,12 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
                 <td>
                   <code className="language-text">{version}</code>
                 </td>
-                <td>{standardJsonSchemaProps.labels[sourceType].label}</td>
+                <td>{jsonSourceProps.labels[sourceType].label}</td>
                 <td className="action">
                   {typeof source === "object" && <PackageSource package={source.package} />}
                 </td>
                 <td>
-                  {!!standardJsonSchemaType &&
-                    standardJsonSchemaProps.labels[standardJsonSchemaType].label}
+                  {!!standardJsonSchemaType && jsonSourceProps.labels[standardJsonSchemaType].label}
                 </td>
                 <td className="action">
                   {typeof standardJsonSchema === "object" && (

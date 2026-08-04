@@ -6,7 +6,7 @@ import { getPkgUrl } from "#src/routes/_benchmarks/-query.ts";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaTargetProps,
-  standardJsonSchemaProps,
+  jsonSourceProps,
 } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { useNpmSite } from "#src/shared/components/prefs/context.tsx";
@@ -51,7 +51,7 @@ export function SupportMatrixCard({
           <dt>Source</dt>
           <dd>
             {typeof source === "string" ? (
-              standardJsonSchemaProps.labels[source].label
+              jsonSourceProps.labels[source].label
             ) : (
               <a
                 {...trackedLinkProps(getPkgUrl(source.package, npmSite))}
@@ -68,7 +68,7 @@ export function SupportMatrixCard({
             <dt>Standard JSON Schema</dt>
             <dd>
               {typeof standardJsonSchema === "string" ? (
-                standardJsonSchemaProps.labels[standardJsonSchema].label
+                jsonSourceProps.labels[standardJsonSchema].label
               ) : (
                 <a
                   {...trackedLinkProps(getPkgUrl(standardJsonSchema.package, npmSite))}

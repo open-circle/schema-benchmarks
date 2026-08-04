@@ -33,8 +33,8 @@ export const jsonSchemaDirectionProps = {
   },
 } satisfies Pick<PageFilterChipsProps<JsonSchemaDirection>, "title" | "labels" | "options">;
 
-/** How the library supports the Standard JSON Schema interface. */
-export const standardJsonSchemaProps = {
+/** How the library supports JSON schema */
+export const jsonSourceProps = {
   title: "Standard JSON Schema",
   options: jsonSourceSchema.options,
   labels: {
