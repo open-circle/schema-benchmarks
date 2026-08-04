@@ -10,6 +10,10 @@ on:
       - "bench/**"
       - "schemas/**"
 
+concurrency:
+  group: bench-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   build-schemas:
     runs-on: ubuntu-latest
@@ -121,7 +125,7 @@ jobs:
 
   collect-results:
     needs: [bench-stack, bench-download, bench-bench]
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

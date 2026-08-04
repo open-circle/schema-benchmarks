@@ -10,6 +10,10 @@ on:
       - "schemas/**"
   workflow_dispatch:
 
+concurrency:
+  group: bench-main-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-schemas:
     runs-on: ubuntu-latest
