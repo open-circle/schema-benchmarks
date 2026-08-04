@@ -3,7 +3,7 @@ import jsonSchemaResults from "@schema-benchmarks/bench/json-schema.json";
 import { Bar } from "#src/shared/components/table/bar";
 import preview from "#storybook/preview";
 
-import "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components//table/index.css";
+import "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/table/index.css";
 import { FromJsonTable } from ".";
 
 const meta = preview.meta({
