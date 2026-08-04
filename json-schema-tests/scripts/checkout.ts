@@ -2,9 +2,9 @@ import * as fs from "node:fs/promises";
 
 import degit from "degit";
 
-import { JSON_SCHEMA_TEST_SUITE_COMMIT } from "./test-suite-ref.ts";
+import sha from "#constants/sha.gen.ts";
 
-const source = `github:json-schema-org/json-schema-test-suite/tests#${JSON_SCHEMA_TEST_SUITE_COMMIT}`;
+const source = `github:json-schema-org/json-schema-test-suite/tests#${sha}`;
 
 const emitter = degit(source, {
   cache: false,

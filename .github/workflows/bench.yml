@@ -8,6 +8,7 @@ on:
     paths:
       - "bench/**"
       - "schemas/**"
+      - "json-schema-tests/**"
   workflow_dispatch:
 
 concurrency:

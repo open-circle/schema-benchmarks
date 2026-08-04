@@ -1,7 +1,7 @@
 import type { MaybePromise } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
-import { targets } from "./constants.gen.ts";
+import targets from "#constants/targets.gen.ts";
 
 export const testCaseSchema = v.object({
   description: v.string(),
