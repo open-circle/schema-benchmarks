@@ -15,7 +15,7 @@ catalog:
   "@oxfmt/binding-linux-x64-gnu": ^0.61.0
   "@standard-schema/spec": ^1.1.0
   "@ttsc/unplugin": "^0.23.0"
-  "@types/node": 24.0.0
+  "@types/node": ^26
   "@types/react": ^19.2.18
   "@types/react-dom": ^19.2.4
   "@vitest/browser-playwright": ^4.1.10
@@ -34,10 +34,8 @@ catalog:
   vitest: ^4.1.10
 overrides:
   "@opentelemetry/api": ^1.9.1
-  "@types/node": 24.0.0
+  "@types/node": ^26
   rolldown: ^1.2.1
   vite: "catalog:"
 update:
-  ignoreDeps:
-    - "@types/node"
   githubActions: true
