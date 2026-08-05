@@ -1,7 +1,3 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
-import { fileURLToPath } from "node:url";
-
 import * as v from "valibot";
 
 import type {
@@ -12,10 +8,14 @@ import type {
 } from "./types.ts";
 import { testCaseSchema } from "./types.ts";
 
-// oxlint-disable-next-line no-underscore-dangle
-const __dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
-
 export async function* getTestCases(target: ComplianceTarget) {
+  // Dynamic imports of Node.js APIs - only loaded when this function runs (Node.js only)
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const { fileURLToPath } = await import("node:url");
+
+  // oxlint-disable-next-line no-underscore-dangle
+  const __dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
   const testCasesDir = path.join(__dirname, "../tests", target);
   const testCaseFiles = fs.readdirSync(testCasesDir).filter((file) => file.endsWith(".json"));
   for (const file of testCaseFiles) {
