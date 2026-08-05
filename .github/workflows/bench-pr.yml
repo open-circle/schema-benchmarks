@@ -15,7 +15,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check_author.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      - id: check_author
+        shell: bash
+        run: |
+          head_commit_author="$(git show -s --format='%an' "${{ github.event.pull_request.head.sha }}")"
+          head_commit_message="$(git show -s --format='%s' "${{ github.event.pull_request.head.sha }}")"
+          if [[ "$head_commit_author" == 'github-actions[bot]' && "$head_commit_message" == Update\ bench\ results* ]]; then
+            echo 'should_run=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'should_run=true' >> "$GITHUB_OUTPUT"
+          fi
+
   build-schemas:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -44,7 +66,8 @@ jobs:
           retention-days: 1
 
   bench-stack:
-    needs: build-schemas
+    needs: [gate, build-schemas]
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -67,7 +90,8 @@ jobs:
           path: bench/stack.json
 
   bench-download:
-    needs: build-schemas
+    needs: [gate, build-schemas]
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -101,7 +125,8 @@ jobs:
             schemas/libraries/**/download_compiled/**
 
   bench-bench:
-    needs: build-schemas
+    needs: [gate, build-schemas]
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -124,8 +149,8 @@ jobs:
           path: bench/bench.json
 
   collect-results:
-    needs: [bench-stack, bench-download, bench-bench]
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'github-actions[bot]'
+    needs: [gate, bench-stack, bench-download, bench-bench]
+    if: needs.gate.outputs.should_run == 'true' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
