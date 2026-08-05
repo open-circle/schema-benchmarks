@@ -30,7 +30,7 @@
     "knip": "^6.31.0",
     "lefthook": "^2.1.10",
     "oxfmt": "catalog:",
-    "oxlint": "^1.76.0",
+    "oxlint": "^1.77.0",
     "oxlint-tsgolint": "^7.0.2001",
     "playwright": "catalog:",
     "typescript": "catalog:"
