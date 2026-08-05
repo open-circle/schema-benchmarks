@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@schema-benchmarks/utils": "workspace:",
-    "degit": "^3.6.5",
     "del-cli": "^7.0.0",
     "oxfmt": "catalog:",
     "typescript": "catalog:",

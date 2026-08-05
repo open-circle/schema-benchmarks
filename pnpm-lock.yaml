@@ -163,9 +163,6 @@ importers:
       '@schema-benchmarks/utils':
         specifier: 'workspace:'
         version: link:../utils
-      degit:
-        specifier: ^3.6.5
-        version: 3.6.5
       del-cli:
         specifier: ^7.0.0
         version: 7.0.0
@@ -5684,11 +5681,6 @@ packages:
 
   defu@6.1.7:
     resolution: {integrity: sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==}
-
-  degit@3.6.5:
-    resolution: {integrity: sha512-fsuox5eN/esXkevzqVpfWBNNMKeWBMBkNUJCtwPhyZZCE8WdaziUXrg3YUpSjDF0885nX27uV1sI+OeA8ddTsg==}
-    engines: {node: '>=20.0.0'}
-    hasBin: true
 
   del-cli@7.0.0:
     resolution: {integrity: sha512-fRl4pWJYu9WFQH8jXdQUYvcD0IMtij9WEc7qmB7xOyJEweNJNuE7iKmqNeoOT1DbBUjtRjxlw8Y63qKBI/NQ1g==}
@@ -14321,8 +14313,6 @@ snapshots:
       object-keys: 1.1.1
 
   defu@6.1.7: {}
-
-  degit@3.6.5: {}
 
   del-cli@7.0.0:
     dependencies:
