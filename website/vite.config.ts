@@ -121,7 +121,11 @@ const config = defineConfig({
           setupFiles: ["./test/common/setup.ts", "./test/browser/setup.ts"],
           browser: {
             enabled: true,
-            provider: playwright(),
+            provider: playwright({
+              launchOptions: {
+                channel: "chromium",
+              },
+            }),
             // https://vitest.dev/guide/browser/playwright
             instances: [{ browser: "chromium" }],
             headless: !!process.env.CI,
