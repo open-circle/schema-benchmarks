@@ -88,10 +88,14 @@ function annotateObject(obj, text, seen) {
 function __annotate(value, text, seen) {
 	if (value === null || value === void 0 || typeof value === "string" || typeof value === "number" || typeof value === "boolean" || typeof value === "symbol" || typeof value === "bigint" || typeof value.getMonth === "function") return makeScalarAnn(value, text);
 	if (isAnnotation(value)) return updateText(value, text);
-	if (Array.isArray(value)) if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
-	else return annotateArray(value, text, seen);
-	if (/* @__PURE__ */ isPlainObject(value)) if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
-	else return annotateObject(value, text, seen);
+	if (Array.isArray(value)) {
+		if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
+		else return annotateArray(value, text, seen);
+	}
+	if (/* @__PURE__ */ isPlainObject(value)) {
+		if (seen.has(value)) return makeOpaqueAnn("<circular ref>", text);
+		else return annotateObject(value, text, seen);
+	}
 	if (typeof value === "function") return makeOpaqueAnn("<function>", text);
 	if (/* @__PURE__ */ isPromiseLike(value)) return makeOpaqueAnn("<Promise>", text);
 	if (value?.constructor?.name) return makeOpaqueAnn(`<${value.constructor.name}>`, text);
@@ -205,11 +209,13 @@ ${annotation}`;
 	else return serialized;
 }
 function* iterAnnotation(ann, stack) {
-	if (ann.text) if (stack.length > 0) yield {
-		message: ann.text,
-		path: [...stack]
-	};
-	else yield { message: ann.text };
+	if (ann.text) {
+		if (stack.length > 0) yield {
+			message: ann.text,
+			path: [...stack]
+		};
+		else yield { message: ann.text };
+	}
 	switch (ann.type) {
 		case "array": {
 			let index = 0;

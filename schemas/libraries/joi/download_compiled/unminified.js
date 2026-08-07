@@ -1652,7 +1652,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					n.desc.template,
 					n.desc.value,
 					s.link("/")
-				]), n.desc.values = s.array().items(null, s.boolean(), s.function(), s.number().allow(Infinity, -Infinity, NaN), s.string().allow(""), s.symbol(), n.desc.buffer, n.desc.func, n.desc.override, n.desc.ref, n.desc.regex, n.desc.template, n.desc.value), n.desc.messages = s.object().pattern(/.+/, [
+				]), n.desc.values = s.array().items(null, s.boolean(), s.function(), s.number().allow(1 / 0, -1 / 0, NaN), s.string().allow(""), s.symbol(), n.desc.buffer, n.desc.func, n.desc.override, n.desc.ref, n.desc.regex, n.desc.template, n.desc.value), n.desc.messages = s.object().pattern(/.+/, [
 					s.string(),
 					n.desc.template,
 					s.object().pattern(/.+/, [s.string(), n.desc.template])
@@ -3711,7 +3711,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 					},
 					validate(e, { schema: t, error: r, prefs: s }) {
-						if (e === Infinity || e === -Infinity) return {
+						if (e === 1 / 0 || e === -1 / 0) return {
 							value: e,
 							errors: r("number.infinity")
 						};
@@ -5920,13 +5920,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			7858(e) {
 				"use strict";
 				e.exports = function(e, t, r) {
-					if ("bigint" == typeof e && (e = Number(e)), e >= Number.MAX_SAFE_INTEGER && (e = Infinity), "number" != typeof e && void 0 !== e) throw new TypeError("Timeout must be a number or bigint");
+					if ("bigint" == typeof e && (e = Number(e)), e >= Number.MAX_SAFE_INTEGER && (e = 1 / 0), "number" != typeof e && void 0 !== e) throw new TypeError("Timeout must be a number or bigint");
 					return new Promise((s) => {
 						const n = r ? r.setTimeout : setTimeout, a = () => {
 							const r = Math.min(e, 2147483647);
 							e -= r, n(() => e > 0 ? a() : s(t), r);
 						};
-						e !== Infinity && a();
+						e !== 1 / 0 && a();
 					});
 				};
 			},

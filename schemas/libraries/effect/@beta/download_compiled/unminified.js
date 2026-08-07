@@ -2905,16 +2905,18 @@ const zero = /*#__PURE__*/ makeNormalizedUnsafe(bigint0, 0);
 * @since 2.0.0
 */
 const normalize = (self) => {
-	if (self.normalized === void 0) if (self.value === bigint0) self.normalized = zero;
-	else {
-		const digits = `${self.value}`;
-		let trail = 0;
-		for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
-		else break;
-		if (trail === 0) self.normalized = self;
-		const value = BigInt(digits.substring(0, digits.length - trail));
-		const scale = self.scale - trail;
-		self.normalized = makeNormalizedUnsafe(value, scale);
+	if (self.normalized === void 0) {
+		if (self.value === bigint0) self.normalized = zero;
+		else {
+			const digits = `${self.value}`;
+			let trail = 0;
+			for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
+			else break;
+			if (trail === 0) self.normalized = self;
+			const value = BigInt(digits.substring(0, digits.length - trail));
+			const scale = self.scale - trail;
+			self.normalized = makeNormalizedUnsafe(value, scale);
+		}
 	}
 	return self.normalized;
 };
@@ -4036,8 +4038,10 @@ var FiberImpl = class {
 		if (this.currentStackFrame) cause = causeAnnotate(cause, make$7(StackTraceKey, this.currentStackFrame));
 		if (annotations) cause = causeAnnotate(cause, annotations);
 		this._interruptedCause = this._interruptedCause ? causeCombine(this._interruptedCause, cause) : cause;
-		if (this.interruptible) if (this._running) this._deferredInterrupt = true;
-		else this.evaluate(failCause$1(this._interruptedCause));
+		if (this.interruptible) {
+			if (this._running) this._deferredInterrupt = true;
+			else this.evaluate(failCause$1(this._interruptedCause));
+		}
 	}
 	pollUnsafe() {
 		return this._exit;
@@ -4562,11 +4566,13 @@ const runForkWith = (context) => (effect, options) => {
 	const fiber = new FiberImpl(options?.scheduler ? add(context, Scheduler, options.scheduler) : context, options?.uninterruptible !== true);
 	fiber.evaluate(effect);
 	if (fiber._exit) return fiber;
-	if (options?.signal) if (options.signal.aborted) fiber.interruptUnsafe();
-	else {
-		const abort = () => fiber.interruptUnsafe();
-		options.signal.addEventListener("abort", abort, { once: true });
-		fiber.addObserver(() => options.signal.removeEventListener("abort", abort));
+	if (options?.signal) {
+		if (options.signal.aborted) fiber.interruptUnsafe();
+		else {
+			const abort = () => fiber.interruptUnsafe();
+			options.signal.addEventListener("abort", abort, { once: true });
+			fiber.addObserver(() => options.signal.removeEventListener("abort", abort));
+		}
 	}
 	if (options?.onFiberStart) options.onFiberStart(fiber);
 	return fiber;
@@ -6935,9 +6941,10 @@ var Arrays = class Arrays extends Base {
 			if (eff) yield* eff;
 			if (ast.rest.length === 0 && len > elementLen) for (let i = elementLen; i <= len - 1; i++) {
 				const issue = new Pointer([i], new UnexpectedKey(ast, input[i]));
-				if (options.errors === "all") if (state.issues) state.issues.push(issue);
-				else state.issues = [issue];
-				else return yield* fail(new Composite(ast, oinput, [issue]));
+				if (options.errors === "all") {
+					if (state.issues) state.issues.push(issue);
+					else state.issues = [issue];
+				} else return yield* fail(new Composite(ast, oinput, [issue]));
 			}
 			if (state.issues) return yield* fail(new Composite(ast, oinput, state.issues));
 			return some(state.output);
@@ -6973,9 +6980,10 @@ const parseArray = /*#__PURE__*/ iterateEager()({
 			const p = s.getParser(s.tailThreshold, i);
 			if (isOptional(p.ast)) return;
 			const issue = new Pointer([i], new MissingKey(p.ast.context?.annotations));
-			if (s.options.errors === "all") if (s.issues) s.issues.push(issue);
-			else s.issues = [issue];
-			else return fail$1(new Composite(s.ast, s.oinput, [issue]));
+			if (s.options.errors === "all") {
+				if (s.issues) s.issues.push(issue);
+				else s.issues = [issue];
+			} else return fail$1(new Composite(s.ast, s.oinput, [issue]));
 		}
 	}
 });
@@ -6991,9 +6999,10 @@ const wrapPropertyKeyIssue = (s, ast, key, exit) => {
 	const issue = getSchemaIssue(exit.cause);
 	if (issue === void 0) return failCause(map(exit.cause, (issue) => new Composite(ast, s.oinput, [new Pointer([key], issue)])));
 	const pointer = new Pointer([key], issue);
-	if (s.options.errors === "all") if (s.issues) s.issues.push(pointer);
-	else s.issues = [pointer];
-	else return fail$1(new Composite(ast, s.oinput, [pointer]));
+	if (s.options.errors === "all") {
+		if (s.issues) s.issues.push(pointer);
+		else s.issues = [pointer];
+	} else return fail$1(new Composite(ast, s.oinput, [pointer]));
 };
 /**
 * floating point or integer, with optional exponent
@@ -7215,14 +7224,16 @@ var Objects = class Objects extends Base {
 				inputKeys = Reflect.ownKeys(input);
 				for (let i = 0; i < inputKeys.length; i++) {
 					const key = inputKeys[i];
-					if (!expectedKeysSet.has(key)) if (onExcessPropertyError) {
-						const issue = new Pointer([key], new UnexpectedKey(ast, input[key]));
-						if (errorsAllOption) {
-							if (state.issues) state.issues.push(issue);
-							else state.issues = [issue];
-							continue;
-						} else return yield* fail(new Composite(ast, oinput, [issue]));
-					} else set(out, key, input[key]);
+					if (!expectedKeysSet.has(key)) {
+						if (onExcessPropertyError) {
+							const issue = new Pointer([key], new UnexpectedKey(ast, input[key]));
+							if (errorsAllOption) {
+								if (state.issues) state.issues.push(issue);
+								else state.issues = [issue];
+								continue;
+							} else return yield* fail(new Composite(ast, oinput, [issue]));
+						} else set(out, key, input[key]);
+					}
 				}
 			}
 			const concurrency = resolveConcurrency(options?.concurrency);
