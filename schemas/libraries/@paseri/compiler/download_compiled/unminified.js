@@ -788,37 +788,39 @@ function _slowProduct(value, options) {
 	const _has71 = "discount" in value;
 	if (_has71) {
 		_value70 = value["discount"];
-		if (_value70 !== null) if (!(typeof _value70 === "number" && !Number.isNaN(_value70))) _issue52 = addIssue(_issue52, {
-			type: "nest",
-			key: "discount",
-			child: {
-				type: "leaf",
-				code: issueCodes.INVALID_TYPE,
-				expected: "number"
-			}
-		});
-		else _labelCheck72: {
-			if (!(_value70 >= 1)) {
-				_issue52 = addIssue(_issue52, {
-					type: "nest",
-					key: "discount",
-					child: {
-						type: "leaf",
-						code: issueCodes.TOO_SMALL
-					}
-				});
-				break _labelCheck72;
-			}
-			if (!(_value70 <= 100)) {
-				_issue52 = addIssue(_issue52, {
-					type: "nest",
-					key: "discount",
-					child: {
-						type: "leaf",
-						code: issueCodes.TOO_LARGE
-					}
-				});
-				break _labelCheck72;
+		if (_value70 !== null) {
+			if (!(typeof _value70 === "number" && !Number.isNaN(_value70))) _issue52 = addIssue(_issue52, {
+				type: "nest",
+				key: "discount",
+				child: {
+					type: "leaf",
+					code: issueCodes.INVALID_TYPE,
+					expected: "number"
+				}
+			});
+			else _labelCheck72: {
+				if (!(_value70 >= 1)) {
+					_issue52 = addIssue(_issue52, {
+						type: "nest",
+						key: "discount",
+						child: {
+							type: "leaf",
+							code: issueCodes.TOO_SMALL
+						}
+					});
+					break _labelCheck72;
+				}
+				if (!(_value70 <= 100)) {
+					_issue52 = addIssue(_issue52, {
+						type: "nest",
+						key: "discount",
+						child: {
+							type: "leaf",
+							code: issueCodes.TOO_LARGE
+						}
+					});
+					break _labelCheck72;
+				}
 			}
 		}
 	}

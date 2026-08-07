@@ -982,15 +982,17 @@ var ObjectSchema = class ObjectSchema extends Schema {
 					if (hiddenOwnKeys === void 0) hiddenOwnKeys = [];
 					hiddenOwnKeys.push(key);
 					const issueOrSuccess = this._shape[key]._parse(value[key], _depth, _maxDepth);
-					if (issueOrSuccess !== void 0) if (isParseSuccess(issueOrSuccess)) {
-						hasModifiedChildValue = true;
-						if (key === "__proto__") defineProtoProperty(modifiedValues, issueOrSuccess.value);
-						else modifiedValues[key] = issueOrSuccess.value;
-					} else issue = addIssue(issue, {
-						type: "nest",
-						key,
-						child: issueOrSuccess
-					});
+					if (issueOrSuccess !== void 0) {
+						if (isParseSuccess(issueOrSuccess)) {
+							hasModifiedChildValue = true;
+							if (key === "__proto__") defineProtoProperty(modifiedValues, issueOrSuccess.value);
+							else modifiedValues[key] = issueOrSuccess.value;
+						} else issue = addIssue(issue, {
+							type: "nest",
+							key,
+							child: issueOrSuccess
+						});
+					}
 				}
 			}
 		}
@@ -1004,14 +1006,17 @@ var ObjectSchema = class ObjectSchema extends Schema {
 			const sanitizedValue = {};
 			for (const key in value) {
 				if (unrecognisedKeys.has(key)) continue;
-				if (hasModifiedChildValue && Object.hasOwn(modifiedValues, key)) if (key === "__proto__") defineProtoProperty(sanitizedValue, modifiedValues[key]);
-				else sanitizedValue[key] = modifiedValues[key];
-				else if (key === "__proto__") defineProtoProperty(sanitizedValue, value[key]);
+				if (hasModifiedChildValue && Object.hasOwn(modifiedValues, key)) {
+					if (key === "__proto__") defineProtoProperty(sanitizedValue, modifiedValues[key]);
+					else sanitizedValue[key] = modifiedValues[key];
+				} else if (key === "__proto__") defineProtoProperty(sanitizedValue, value[key]);
 				else sanitizedValue[key] = value[key];
 			}
 			if (hasModifiedChildValue) {
-				for (const key in modifiedValues) if (!Object.hasOwn(value, key)) if (key === "__proto__") defineProtoProperty(sanitizedValue, modifiedValues[key]);
-				else sanitizedValue[key] = modifiedValues[key];
+				for (const key in modifiedValues) if (!Object.hasOwn(value, key)) {
+					if (key === "__proto__") defineProtoProperty(sanitizedValue, modifiedValues[key]);
+					else sanitizedValue[key] = modifiedValues[key];
+				}
 			}
 			if (hiddenOwnKeys) for (const key of hiddenOwnKeys) {
 				const source = hasModifiedChildValue && Object.hasOwn(modifiedValues, key) ? modifiedValues[key] : value[key];

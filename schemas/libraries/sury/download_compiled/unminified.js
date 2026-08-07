@@ -91,13 +91,14 @@ var isOptional = (schema) => {
 var stringify = (unknown2) => {
 	const tagFlag = tagFlags[typeof unknown2];
 	if (flagUnsafeHas(tagFlag, tagFlagUndefined)) return undefinedTag;
-	else if (flagUnsafeHas(tagFlag, tagFlagObject)) if (unknown2 === null) return nullTag;
-	else if (Array.isArray(unknown2)) return `[${unknown2.map(stringify).join(", ")}]`;
-	else if (unknown2.constructor === Object) {
-		const dict = unknown2;
-		return `{ ${Object.keys(dict).map((key) => `${key}: ${stringify(dict[key])}; `).join("")}}`;
-	} else return Object.prototype.toString.call(unknown2);
-	else if (flagUnsafeHas(tagFlag, tagFlagString)) return `"${unknown2}"`;
+	else if (flagUnsafeHas(tagFlag, tagFlagObject)) {
+		if (unknown2 === null) return nullTag;
+		else if (Array.isArray(unknown2)) return `[${unknown2.map(stringify).join(", ")}]`;
+		else if (unknown2.constructor === Object) {
+			const dict = unknown2;
+			return `{ ${Object.keys(dict).map((key) => `${key}: ${stringify(dict[key])}; `).join("")}}`;
+		} else return Object.prototype.toString.call(unknown2);
+	} else if (flagUnsafeHas(tagFlag, tagFlagString)) return `"${unknown2}"`;
 	else if (flagUnsafeHas(tagFlag, tagFlagBigint)) return `${unknown2}n`;
 	else if (flagUnsafeHas(tagFlag, tagFlagFunction)) return `Function`;
 	else return unknown2.toString();
@@ -124,11 +125,12 @@ var toExpression = /* @__NO_SIDE_EFFECTS__ */ (schema) => {
 	else if (schema.type === objectTag) {
 		const properties = schema.properties;
 		const locations = Object.keys(properties);
-		if (locations.length === 0) if (typeof schema.additionalItems === objectTag) {
-			const additionalItems = schema.additionalItems;
-			return `{ [key: string]: ${/* @__PURE__ */ toExpression(additionalItems)}; }`;
-		} else return `{}`;
-		else return `{ ${locations.map((location) => {
+		if (locations.length === 0) {
+			if (typeof schema.additionalItems === objectTag) {
+				const additionalItems = schema.additionalItems;
+				return `{ [key: string]: ${/* @__PURE__ */ toExpression(additionalItems)}; }`;
+			} else return `{}`;
+		} else return `{ ${locations.map((location) => {
 			return `${location}: ${/* @__PURE__ */ toExpression(properties[location])};`;
 		}).join(" ")} }`;
 	} else if (schema.type === nanTag) return "NaN";
@@ -272,9 +274,10 @@ function _notVar() {
 		return val.i;
 	} else {
 		const v = B_varWithoutAllocation(val.g);
-		if (val.prev !== U) if (val.i === "") val.cp = `let ${v};` + val.cp;
-		else val.cp = val.cp + `let ${v}=${val.i};`;
-		else if (val.i === "") B_hoistDecl(val, v);
+		if (val.prev !== U) {
+			if (val.i === "") val.cp = `let ${v};` + val.cp;
+			else val.cp = val.cp + `let ${v}=${val.i};`;
+		} else if (val.i === "") B_hoistDecl(val, v);
 		else B_hoistDecl(val, `${v}=${val.i}`);
 		val.v = _var;
 		val.i = v;
@@ -540,11 +543,12 @@ var B_markOutput = (val, valInput) => {
 	const inputRefiner = valInput.e.inputRefiner;
 	if (inputRefiner !== U) {
 		const checks = inputRefiner(valInput);
-		if (checks.length > 0) if (valInput.prev !== U) {
-			for (let i = 0; i < checks.length; i++) B_pushCheck(valInput, checks[i]);
-			deferredInputChecks = U;
-		} else deferredInputChecks = checks;
-		else deferredInputChecks = U;
+		if (checks.length > 0) {
+			if (valInput.prev !== U) {
+				for (let i = 0; i < checks.length; i++) B_pushCheck(valInput, checks[i]);
+				deferredInputChecks = U;
+			} else deferredInputChecks = checks;
+		} else deferredInputChecks = U;
 	} else deferredInputChecks = U;
 	let outputChecks;
 	const refiner = val.e.refiner;
@@ -752,9 +756,10 @@ var string = () => {
 var literalDecoder = (input) => {
 	const expectedSchema = input.e;
 	if (expectedSchema.noValidation && !input.u) return B_nextConst(input, expectedSchema);
-	else if (isLiteral(input.s)) if (input.s.const === expectedSchema.const) return input;
-	else return B_nextConst(input, expectedSchema);
-	else {
+	else if (isLiteral(input.s)) {
+		if (input.s.const === expectedSchema.const) return input;
+		else return B_nextConst(input, expectedSchema);
+	} else {
 		const schemaTagFlag = tagFlags[expectedSchema.type];
 		if (flagUnsafeHas(tagFlags[input.s.type], tagFlagString) && flagUnsafeHas(schemaTagFlag, tagFlagBoolean | tagFlagNumber | tagFlagBigint | tagFlagUndefined | tagFlagNull | tagFlagNaN)) {
 			const stringConstSchema = baseSchema(stringTag, false);
@@ -814,8 +819,10 @@ var parse = (input) => {
 		const loopInput = result;
 		loopCount = loopCount + 1;
 		if (loopCount > 50) throw /* @__PURE__ */ new Error("Loop count exceeded 50");
-		if (loopInput.e["$defs"]) if (loopInput.g.d) Object.assign(loopInput.g.d, loopInput.e["$defs"]);
-		else loopInput.g.d = loopInput.e["$defs"];
+		if (loopInput.e["$defs"]) {
+			if (loopInput.g.d) Object.assign(loopInput.g.d, loopInput.e["$defs"]);
+			else loopInput.g.d = loopInput.e["$defs"];
+		}
 		if (flagUnsafeHas(loopInput.f, valFlagAsync)) {
 			const operationInputVar = loopInput.v();
 			const operationInput = B_scope(loopInput);
@@ -983,9 +990,11 @@ var unionTraits = (schema) => {
 	else if (tag & (tagFlagObject | tagFlagArray | tagFlagInstance)) traits |= 2;
 	if (schema.format !== U || isLiteral(schema)) traits |= 1;
 	const to = schema.to;
-	if (to !== U) if (to === schema || to.parser !== U || tagFlags[to.type] & unionBoundaryTags) traits |= 15;
-	else if (!(to.noValidation === true || tagFlags[to.type] & tagFlagUnknown || unionRuntimeSame(schema, to) || to.type === anyOfTag && unionMask(to, 1) & tag)) traits |= 9;
-	else traits |= unionTraits(to);
+	if (to !== U) {
+		if (to === schema || to.parser !== U || tagFlags[to.type] & unionBoundaryTags) traits |= 15;
+		else if (!(to.noValidation === true || tagFlags[to.type] & tagFlagUnknown || unionRuntimeSame(schema, to) || to.type === anyOfTag && unionMask(to, 1) & tag)) traits |= 9;
+		else traits |= unionTraits(to);
+	}
 	const fields = schema.items || schema.properties;
 	for (const key in fields) {
 		const field = fields[key];
@@ -1285,8 +1294,10 @@ var unionPlan = (members) => {
 		if (route !== unionAnyTag && (group.m & ~route) === 0) {
 			if (key === false) later[route] = false;
 			else if (semantic === U) later[route] = [key, values];
-			else if (semantic !== false) if (semantic[0] !== key) later[route] = false;
-			else for (const value of values) semantic[1].add(value);
+			else if (semantic !== false) {
+				if (semantic[0] !== key) later[route] = false;
+				else for (const value of values) semantic[1].add(value);
+			}
 		} else laterBroad |= group.m;
 		laterMask |= group.m;
 	}
@@ -1710,19 +1721,20 @@ var arrayDecoder = (unknownInput) => {
 	} else input = B_unsupportedDecode(unknownInput, unknownInput.s, expectedSchema);
 	let output;
 	const expectedAdditionalItems = expectedSchema.additionalItems;
-	if (isItemSchema(expectedAdditionalItems)) if (expectedAdditionalItems === unknown) output = input;
-	else {
-		const inputVar = input.v();
-		const iteratorVar = B_varWithoutAllocation(input.g);
-		const itemOutput = parseDynamic(B_dynamicScope(input, iteratorVar));
-		const hasTransform = itemOutput.t;
-		const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, /* @__PURE__ */ array(itemOutput.s)) : B_refine(input, expectedSchema);
-		const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U);
-		if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
-		if (flagUnsafeHas(itemOutput.f, valFlagAsync)) output = B_asyncVal(output2, `Promise.all(${output2.i})`);
-		else output = output2;
-	}
-	else {
+	if (isItemSchema(expectedAdditionalItems)) {
+		if (expectedAdditionalItems === unknown) output = input;
+		else {
+			const inputVar = input.v();
+			const iteratorVar = B_varWithoutAllocation(input.g);
+			const itemOutput = parseDynamic(B_dynamicScope(input, iteratorVar));
+			const hasTransform = itemOutput.t;
+			const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, /* @__PURE__ */ array(itemOutput.s)) : B_refine(input, expectedSchema);
+			const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U);
+			if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
+			if (flagUnsafeHas(itemOutput.f, valFlagAsync)) output = B_asyncVal(output2, `Promise.all(${output2.i})`);
+			else output = output2;
+		}
+	} else {
 		const objectVal = makeObjectVal(input, expectedSchema);
 		let shouldRecreateInput;
 		{

@@ -1029,9 +1029,10 @@ var Schema = class {
 	*/
 	test(...args) {
 		let opts;
-		if (args.length === 1) if (typeof args[0] === "function") opts = { test: args[0] };
-		else opts = args[0];
-		else if (args.length === 2) opts = {
+		if (args.length === 1) {
+			if (typeof args[0] === "function") opts = { test: args[0] };
+			else opts = args[0];
+		} else if (args.length === 2) opts = {
 			name: args[0],
 			test: args[1]
 		};
@@ -1393,8 +1394,10 @@ var StringSchema = class extends Schema {
 		let excludeEmptyString = false;
 		let message;
 		let name;
-		if (options) if (typeof options === "object") ({excludeEmptyString = false, message, name} = options);
-		else message = options;
+		if (options) {
+			if (typeof options === "object") ({excludeEmptyString = false, message, name} = options);
+			else message = options;
+		}
 		return this.test({
 			name: name || "matches",
 			message: message || string.matches,
@@ -1428,8 +1431,10 @@ var StringSchema = class extends Schema {
 		let message = "";
 		let allowOffset;
 		let precision;
-		if (options) if (typeof options === "object") ({message = "", allowOffset = false, precision = void 0} = options);
-		else message = options;
+		if (options) {
+			if (typeof options === "object") ({message = "", allowOffset = false, precision = void 0} = options);
+			else message = options;
+		}
 		return this.matches(rIsoDateTime, {
 			name: "datetime",
 			message: message || string.datetime,

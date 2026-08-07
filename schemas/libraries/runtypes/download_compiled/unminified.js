@@ -886,11 +886,12 @@ const Object$1 = (fields) => {
 						memoParsed
 					}));
 					if (results[key].success) defineProperty(parsed, key, results[key].value);
-				} else if (Optional.isOptional(runtype)) if ("default" in runtype) {
-					defineProperty(results, key, SUCCESS(runtype.default));
-					defineProperty(parsed, key, runtype.default);
-				} else defineProperty(results, key, SUCCESS(void 0));
-				else defineProperty(results, key, FAILURE.PROPERTY_MISSING({ expected: runtype }));
+				} else if (Optional.isOptional(runtype)) {
+					if ("default" in runtype) {
+						defineProperty(results, key, SUCCESS(runtype.default));
+						defineProperty(parsed, key, runtype.default);
+					} else defineProperty(results, key, SUCCESS(void 0));
+				} else defineProperty(results, key, FAILURE.PROPERTY_MISSING({ expected: runtype }));
 			} else if (xHasKey) {
 				const received = x[key];
 				if (expected.isExact) defineProperty(results, key, FAILURE.PROPERTY_PRESENT({

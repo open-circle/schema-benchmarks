@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.10_ata-validator@1.4.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.10_ata-validator@1.5.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -151,14 +151,14 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -427,7 +427,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -543,8 +543,10 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const ch = peek();
 			if (ch === "(") {
 				i++;
-				if (src[i] === "?") if (src[i + 1] === ":") i += 2;
-				else throw new Error("unsupported group (lookaround/named) in pattern");
+				if (src[i] === "?") {
+					if (src[i + 1] === ":") i += 2;
+					else throw new Error("unsupported group (lookaround/named) in pattern");
+				}
 				const child = parseAlt();
 				if (peek() !== ")") throw new Error("unbalanced ( in pattern");
 				i++;
@@ -805,15 +807,16 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 				case "repeat":
 					for (let k = 0; k < n.min; k++) rec(n.child);
-					if (n.max === Infinity) if (n.min === 0) rec({
-						t: "star",
-						child: n.child
-					});
-					else rec({
-						t: "star",
-						child: n.child
-					});
-					else for (let k = 0; k < n.max - n.min; k++) rec({
+					if (n.max === Infinity) {
+						if (n.min === 0) rec({
+							t: "star",
+							child: n.child
+						});
+						else rec({
+							t: "star",
+							child: n.child
+						});
+					} else for (let k = 0; k < n.max - n.min; k++) rec({
 						t: "quest",
 						child: n.child
 					});
@@ -914,7 +917,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { codeFor } = require_error_codes();
 	const { compileSafe, patternIsSafe } = require_safe_regex();
@@ -995,7 +998,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		if (!defs && needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
 		const rootDefs = defs || collectDefs(schema);
-		if (schema.patternProperties || schema.dependentSchemas || schema.propertyNames) return null;
+		if (schema.patternProperties || schema.dependentSchemas || schema.propertyDependencies || schema.propertyNames) return null;
 		const checks = [];
 		if (schema.$ref) {
 			const refFn = resolveRef(schema.$ref, rootDefs, schemaMap);
@@ -1502,6 +1505,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function codegenSafe(schema, schemaMap) {
 		if (typeof schema === "boolean") return true;
 		if (typeof schema !== "object" || schema === null) return true;
+		if (schema.propertyDependencies !== void 0) return false;
 		if (schema.$dynamicRef && !schema.$dynamicRef.startsWith("#")) return false;
 		if (schema.items === false) return false;
 		if (schema.items === true && !schema.unevaluatedItems) return false;
@@ -2024,24 +2028,27 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				if (!hasSiblings) return;
 			}
 			const m = schema.$ref !== "#" && schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) if (ctx.refStack.has(schema.$ref)) {
-				if (!hasSiblings) return;
-			} else {
-				ctx.refStack.add(schema.$ref);
-				genCode(ctx.rootDefs[m[1]], v, lines, ctx, knownType);
-				ctx.refStack.delete(schema.$ref);
-				if (!hasSiblings) return;
-			}
-			else if (schema.$ref !== "#" && !m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
-				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
-				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
-				if (anchorTarget) if (ctx.refStack.has(schema.$ref)) {
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				if (ctx.refStack.has(schema.$ref)) {
 					if (!hasSiblings) return;
 				} else {
 					ctx.refStack.add(schema.$ref);
-					genCode(anchorTarget, v, lines, ctx, knownType);
+					genCode(ctx.rootDefs[m[1]], v, lines, ctx, knownType);
 					ctx.refStack.delete(schema.$ref);
 					if (!hasSiblings) return;
+				}
+			} else if (schema.$ref !== "#" && !m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) {
+						if (!hasSiblings) return;
+					} else {
+						ctx.refStack.add(schema.$ref);
+						genCode(anchorTarget, v, lines, ctx, knownType);
+						ctx.refStack.delete(schema.$ref);
+						if (!hasSiblings) return;
+					}
 				}
 			} else if (schema.$ref !== "#" && ctx.schemaMap) {
 				let resolved = ctx.schemaMap.get(schema.$ref);
@@ -2055,15 +2062,16 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
 					if (r) resolved = r.schema;
 				}
-				if (resolved) if (ctx.refStack.has(schema.$ref)) {
-					if (!hasSiblings) return;
-				} else {
-					ctx.refStack.add(schema.$ref);
-					genCode(resolved, v, lines, ctx, knownType);
-					ctx.refStack.delete(schema.$ref);
-					if (!hasSiblings) return;
-				}
-				else if (!hasSiblings) return;
+				if (resolved) {
+					if (ctx.refStack.has(schema.$ref)) {
+						if (!hasSiblings) return;
+					} else {
+						ctx.refStack.add(schema.$ref);
+						genCode(resolved, v, lines, ctx, knownType);
+						ctx.refStack.delete(schema.$ref);
+						if (!hasSiblings) return;
+					}
+				} else if (!hasSiblings) return;
 			} else if (!hasSiblings) return;
 		}
 		if (schema.$dynamicRef) {
@@ -2086,41 +2094,43 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
 		let effectiveType = knownType;
 		if (types) {
-			if (!knownType) if (types.length === 1) switch (types[0]) {
-				case "object":
-					lines.push(`if(typeof ${v}!=='object'||${v}===null||Array.isArray(${v}))return false`);
-					break;
-				case "array":
-					lines.push(`if(!Array.isArray(${v}))return false`);
-					break;
-				case "string":
-					lines.push(`if(typeof ${v}!=='string')return false`);
-					break;
-				case "number":
-					lines.push(`if(typeof ${v}!=='number'||!isFinite(${v}))return false`);
-					break;
-				case "integer":
-					lines.push(`if(!Number.isInteger(${v}))return false`);
-					break;
-				case "boolean":
-					lines.push(`if(typeof ${v}!=='boolean')return false`);
-					break;
-				case "null": lines.push(`if(${v}!==null)return false`);
-			}
-			else {
-				const conds = types.map((t) => {
-					switch (t) {
-						case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-						case "array": return `Array.isArray(${v})`;
-						case "string": return `typeof ${v}==='string'`;
-						case "number": return `(typeof ${v}==='number'&&isFinite(${v}))`;
-						case "integer": return `Number.isInteger(${v})`;
-						case "boolean": return `typeof ${v}==='boolean'`;
-						case "null": return `${v}===null`;
-						default: return "true";
-					}
-				});
-				lines.push(`if(!(${conds.join("||")}))return false`);
+			if (!knownType) {
+				if (types.length === 1) switch (types[0]) {
+					case "object":
+						lines.push(`if(typeof ${v}!=='object'||${v}===null||Array.isArray(${v}))return false`);
+						break;
+					case "array":
+						lines.push(`if(!Array.isArray(${v}))return false`);
+						break;
+					case "string":
+						lines.push(`if(typeof ${v}!=='string')return false`);
+						break;
+					case "number":
+						lines.push(`if(typeof ${v}!=='number'||!isFinite(${v}))return false`);
+						break;
+					case "integer":
+						lines.push(`if(!Number.isInteger(${v}))return false`);
+						break;
+					case "boolean":
+						lines.push(`if(typeof ${v}!=='boolean')return false`);
+						break;
+					case "null": lines.push(`if(${v}!==null)return false`);
+				}
+				else {
+					const conds = types.map((t) => {
+						switch (t) {
+							case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+							case "array": return `Array.isArray(${v})`;
+							case "string": return `typeof ${v}==='string'`;
+							case "number": return `(typeof ${v}==='number'&&isFinite(${v}))`;
+							case "integer": return `Number.isInteger(${v})`;
+							case "boolean": return `typeof ${v}==='boolean'`;
+							case "null": return `${v}===null`;
+							default: return "true";
+						}
+					});
+					lines.push(`if(!(${conds.join("||")}))return false`);
+				}
 			}
 			if (types.length === 1) effectiveType = types[0];
 		}
@@ -2152,10 +2162,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				if (!(prop && (prop.type || prop.enum || prop.const !== void 0))) reqChecks.push(`${v}[${JSON.stringify(key)}]===undefined`);
 			}
 			if (reqChecks.length > 0) lines.push(`if(${reqChecks.join("||")})return false`);
-		} else if (schema.required && schema.required.length > 0) if (isObj) {
-			const checks = schema.required.map((key) => `${v}[${JSON.stringify(key)}]===undefined`);
-			lines.push(`if(${checks.join("||")})return false`);
-		} else for (const key of schema.required) lines.push(`if(typeof ${v}!=='object'||${v}===null||!(${JSON.stringify(key)} in ${v}))return false`);
+		} else if (schema.required && schema.required.length > 0) {
+			if (isObj) {
+				const checks = schema.required.map((key) => `${v}[${JSON.stringify(key)}]===undefined`);
+				lines.push(`if(${checks.join("||")})return false`);
+			} else for (const key of schema.required) lines.push(`if(typeof ${v}!=='object'||${v}===null||!(${JSON.stringify(key)} in ${v}))return false`);
+		}
 		if (schema.unevaluatedProperties === false && schema.properties && schema.required && isObj) {
 			const evalResult = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
 			if (!evalResult.dynamic && !evalResult.allProps) {
@@ -2550,154 +2562,155 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 				const baseProps = baseResult.props;
 				const branchKeyword = schema.anyOf ? "anyOf" : schema.oneOf ? "oneOf" : null;
-				if (schema.unevaluatedProperties === false) if (schema.if && (schema.then || schema.else) && !branchKeyword && !schema.patternProperties && !schema.dependentSchemas) {
-					const ifLines2 = [];
-					genCode(schema.if, "_iv2", ifLines2, ctx);
-					const ufi = ctx.varCounter++;
-					const ifFn2 = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
-					const ifProps = [];
-					if (schema.if && schema.if.properties) ifProps.push(...Object.keys(schema.if.properties));
-					const thenEval = schema.then ? collectEvaluated(schema.then, ctx.schemaMap, ctx.rootDefs) : { props: [] };
-					const elseEval = schema.else ? collectEvaluated(schema.else, ctx.schemaMap, ctx.rootDefs) : { props: [] };
-					const uniqueThen = [.../* @__PURE__ */ new Set([
-						...baseProps,
-						...ifProps,
-						...thenEval.props || []
-					])];
-					const uniqueElse = [.../* @__PURE__ */ new Set([...baseProps, ...elseEval.props || []])];
-					const thenCheck = genCharCodeSwitch(uniqueThen, v);
-					const elseCheck = genCharCodeSwitch(uniqueElse, v);
-					const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-					lines.push(`${guard}{const _uif${ufi}=${ifFn2};if(_uif${ufi}(${v})){${thenCheck}}else{${elseCheck}}}`);
-				} else if (branchKeyword) {
-					const branches = schema[branchKeyword];
-					const branchProps = [];
-					for (const sub of branches) {
-						const subResult = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
-						branchProps.push(subResult.props || []);
-					}
-					const dynamicOnly = [...new Set(branchProps.flat())].filter((k) => !baseProps.includes(k));
-					if (dynamicOnly.length > 0 && dynamicOnly.length <= 32) {
-						const evVar = `_ev${ctx.varCounter++}`;
-						const bitMap = /* @__PURE__ */ new Map();
-						dynamicOnly.forEach((k, i) => bitMap.set(k, i));
-						const branchMasks = branchProps.map((props) => {
-							let mask = 0;
-							for (const p of props) if (bitMap.has(p)) mask |= 1 << bitMap.get(p);
-							return mask;
-						});
-						const bfi = ctx.varCounter++;
-						lines.push(`{let ${evVar}=0`);
-						const fnVars = [];
-						for (let i = 0; i < branches.length; i++) {
-							const subLines2 = [];
-							genCode(branches[i], "_bv", subLines2, ctx);
-							const fnVar = `_bf${bfi}_${i}`;
-							fnVars.push(fnVar);
-							const fnBody = subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`;
-							lines.push(`const ${fnVar}=${fnBody}`);
+				if (schema.unevaluatedProperties === false) {
+					if (schema.if && (schema.then || schema.else) && !branchKeyword && !schema.patternProperties && !schema.dependentSchemas) {
+						const ifLines2 = [];
+						genCode(schema.if, "_iv2", ifLines2, ctx);
+						const ufi = ctx.varCounter++;
+						const ifFn2 = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
+						const ifProps = [];
+						if (schema.if && schema.if.properties) ifProps.push(...Object.keys(schema.if.properties));
+						const thenEval = schema.then ? collectEvaluated(schema.then, ctx.schemaMap, ctx.rootDefs) : { props: [] };
+						const elseEval = schema.else ? collectEvaluated(schema.else, ctx.schemaMap, ctx.rootDefs) : { props: [] };
+						const uniqueThen = [.../* @__PURE__ */ new Set([
+							...baseProps,
+							...ifProps,
+							...thenEval.props || []
+						])];
+						const uniqueElse = [.../* @__PURE__ */ new Set([...baseProps, ...elseEval.props || []])];
+						const thenCheck = genCharCodeSwitch(uniqueThen, v);
+						const elseCheck = genCharCodeSwitch(uniqueElse, v);
+						const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+						lines.push(`${guard}{const _uif${ufi}=${ifFn2};if(_uif${ufi}(${v})){${thenCheck}}else{${elseCheck}}}`);
+					} else if (branchKeyword) {
+						const branches = schema[branchKeyword];
+						const branchProps = [];
+						for (const sub of branches) {
+							const subResult = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+							branchProps.push(subResult.props || []);
 						}
-						if (branchKeyword === "oneOf") {
-							lines.push(`let _oc${bfi}=0`);
-							for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_oc${bfi}++;${evVar}=${branchMasks[i]};if(_oc${bfi}>1)return false}`);
-							lines.push(`if(_oc${bfi}!==1)return false`);
+						const dynamicOnly = [...new Set(branchProps.flat())].filter((k) => !baseProps.includes(k));
+						if (dynamicOnly.length > 0 && dynamicOnly.length <= 32) {
+							const evVar = `_ev${ctx.varCounter++}`;
+							const bitMap = /* @__PURE__ */ new Map();
+							dynamicOnly.forEach((k, i) => bitMap.set(k, i));
+							const branchMasks = branchProps.map((props) => {
+								let mask = 0;
+								for (const p of props) if (bitMap.has(p)) mask |= 1 << bitMap.get(p);
+								return mask;
+							});
+							const bfi = ctx.varCounter++;
+							lines.push(`{let ${evVar}=0`);
+							const fnVars = [];
+							for (let i = 0; i < branches.length; i++) {
+								const subLines2 = [];
+								genCode(branches[i], "_bv", subLines2, ctx);
+								const fnVar = `_bf${bfi}_${i}`;
+								fnVars.push(fnVar);
+								const fnBody = subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`;
+								lines.push(`const ${fnVar}=${fnBody}`);
+							}
+							if (branchKeyword === "oneOf") {
+								lines.push(`let _oc${bfi}=0`);
+								for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_oc${bfi}++;${evVar}=${branchMasks[i]};if(_oc${bfi}>1)return false}`);
+								lines.push(`if(_oc${bfi}!==1)return false`);
+							} else {
+								lines.push(`let _am${bfi}=false`);
+								for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_am${bfi}=true;${evVar}|=${branchMasks[i]}}`);
+								lines.push(`if(!_am${bfi})return false`);
+							}
+							const staticCheck = baseProps.length > 0 ? baseProps.map((k) => `_k===${JSON.stringify(k)}`).join("||") : "";
+							const groups = /* @__PURE__ */ new Map();
+							for (const k of dynamicOnly) {
+								const cc = k.charCodeAt(0);
+								if (!groups.has(cc)) groups.set(cc, []);
+								groups.get(cc).push(k);
+							}
+							let switchCases = "";
+							for (const [cc, groupKeys] of groups) {
+								const cond = groupKeys.map((k) => `_k===${JSON.stringify(k)}&&(${evVar}&${1 << bitMap.get(k)})`).join("||");
+								switchCases += `case ${cc}:if(${cond})continue;break;`;
+							}
+							const dynamicCheck = `switch(_k.charCodeAt(0)){${switchCases}default:break}`;
+							const inner = staticCheck ? `for(var _k in ${v}){if(${staticCheck})continue;${dynamicCheck}return false}` : `for(var _k in ${v}){${dynamicCheck}return false}`;
+							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
 						} else {
-							lines.push(`let _am${bfi}=false`);
-							for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_am${bfi}=true;${evVar}|=${branchMasks[i]}}`);
-							lines.push(`if(!_am${bfi})return false`);
+							const evVar = `_ev${ctx.varCounter++}`;
+							const fns = [];
+							for (let i = 0; i < branches.length; i++) {
+								const subLines2 = [];
+								genCode(branches[i], "_bv", subLines2, ctx);
+								fns.push(subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`);
+							}
+							const bfi = ctx.varCounter++;
+							ctx.closureVars.push(`_bk${bfi}`);
+							ctx.closureVals.push(branchProps);
+							lines.push(`{const ${evVar}={}`);
+							for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+							lines.push(`const _bf${bfi}=[${fns.join(",")}]`);
+							if (branchKeyword === "oneOf") lines.push(`let _oc${bfi}=0;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_oc${bfi}++;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1;if(_oc${bfi}>1)return false}}if(_oc${bfi}!==1)return false`);
+							else lines.push(`let _am${bfi}=false;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_am${bfi}=true;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1}}if(!_am${bfi})return false`);
+							const inner = `for(var _k in ${v}){if(!${evVar}[_k])return false}`;
+							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
 						}
-						const staticCheck = baseProps.length > 0 ? baseProps.map((k) => `_k===${JSON.stringify(k)}`).join("||") : "";
-						const groups = /* @__PURE__ */ new Map();
-						for (const k of dynamicOnly) {
-							const cc = k.charCodeAt(0);
-							if (!groups.has(cc)) groups.set(cc, []);
-							groups.get(cc).push(k);
-						}
-						let switchCases = "";
-						for (const [cc, groupKeys] of groups) {
-							const cond = groupKeys.map((k) => `_k===${JSON.stringify(k)}&&(${evVar}&${1 << bitMap.get(k)})`).join("||");
-							switchCases += `case ${cc}:if(${cond})continue;break;`;
-						}
-						const dynamicCheck = `switch(_k.charCodeAt(0)){${switchCases}default:break}`;
-						const inner = staticCheck ? `for(var _k in ${v}){if(${staticCheck})continue;${dynamicCheck}return false}` : `for(var _k in ${v}){${dynamicCheck}return false}`;
-						_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
-					} else {
+					} else if (schema.dependentSchemas) {
 						const evVar = `_ev${ctx.varCounter++}`;
-						const fns = [];
-						for (let i = 0; i < branches.length; i++) {
-							const subLines2 = [];
-							genCode(branches[i], "_bv", subLines2, ctx);
-							fns.push(subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`);
-						}
-						const bfi = ctx.varCounter++;
-						ctx.closureVars.push(`_bk${bfi}`);
-						ctx.closureVals.push(branchProps);
 						lines.push(`{const ${evVar}={}`);
 						for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
-						lines.push(`const _bf${bfi}=[${fns.join(",")}]`);
-						if (branchKeyword === "oneOf") lines.push(`let _oc${bfi}=0;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_oc${bfi}++;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1;if(_oc${bfi}>1)return false}}if(_oc${bfi}!==1)return false`);
-						else lines.push(`let _am${bfi}=false;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_am${bfi}=true;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1}}if(!_am${bfi})return false`);
+						for (const [trigger, depSchema] of Object.entries(schema.dependentSchemas)) {
+							const depResult = collectEvaluated(depSchema, ctx.schemaMap, ctx.rootDefs);
+							if (depResult.props && depResult.props.length > 0) lines.push(`if(${JSON.stringify(trigger)} in ${v}){${depResult.props.map((k) => `${evVar}[${JSON.stringify(k)}]=1`).join(";")}}`);
+						}
 						const inner = `for(var _k in ${v}){if(!${evVar}[_k])return false}`;
 						_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
-					}
-				} else if (schema.dependentSchemas) {
-					const evVar = `_ev${ctx.varCounter++}`;
-					lines.push(`{const ${evVar}={}`);
-					for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
-					for (const [trigger, depSchema] of Object.entries(schema.dependentSchemas)) {
-						const depResult = collectEvaluated(depSchema, ctx.schemaMap, ctx.rootDefs);
-						if (depResult.props && depResult.props.length > 0) lines.push(`if(${JSON.stringify(trigger)} in ${v}){${depResult.props.map((k) => `${evVar}[${JSON.stringify(k)}]=1`).join(";")}}`);
-					}
-					const inner = `for(var _k in ${v}){if(!${evVar}[_k])return false}`;
-					_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
-				} else {
-					const allPatterns = [];
-					if (schema.patternProperties) allPatterns.push(...Object.keys(schema.patternProperties));
-					if (schema.allOf) {
-						for (const sub of schema.allOf) if (sub && sub.patternProperties) allPatterns.push(...Object.keys(sub.patternProperties));
-					}
-					if (schema.if && !schema.then && !schema.else && schema.if.patternProperties) allPatterns.push(...Object.keys(schema.if.patternProperties));
-					if (allPatterns.length > 0) {
-						const evVar = `_ev${ctx.varCounter++}`;
-						lines.push(`{const ${evVar}={}`);
-						for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
-						const reVars = [];
-						for (const pat of allPatterns) {
-							const ri = ctx.varCounter++;
-							ctx.closureVars.push(`_ure${ri}`);
-							ctx.closureVals.push(safeReClosure(ctx, pat));
-							reVars.push(`_ure${ri}`);
+					} else {
+						const allPatterns = [];
+						if (schema.patternProperties) allPatterns.push(...Object.keys(schema.patternProperties));
+						if (schema.allOf) {
+							for (const sub of schema.allOf) if (sub && sub.patternProperties) allPatterns.push(...Object.keys(sub.patternProperties));
 						}
-						if (schema.if && !schema.then && !schema.else) {
-							const ifLines2 = [];
-							genCode(schema.if, "_iv2", ifLines2, ctx);
-							const ufi = ctx.varCounter++;
-							const ifFn = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
-							const ifPatterns = schema.if.patternProperties ? Object.keys(schema.if.patternProperties) : [];
-							const ifReVars = [];
-							for (const pat of ifPatterns) {
+						if (schema.if && !schema.then && !schema.else && schema.if.patternProperties) allPatterns.push(...Object.keys(schema.if.patternProperties));
+						if (allPatterns.length > 0) {
+							const evVar = `_ev${ctx.varCounter++}`;
+							lines.push(`{const ${evVar}={}`);
+							for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+							const reVars = [];
+							for (const pat of allPatterns) {
 								const ri = ctx.varCounter++;
 								ctx.closureVars.push(`_ure${ri}`);
 								ctx.closureVals.push(safeReClosure(ctx, pat));
-								ifReVars.push(`_ure${ri}`);
+								reVars.push(`_ure${ri}`);
 							}
-							const rootReVars = [];
-							if (schema.patternProperties) for (const pat of Object.keys(schema.patternProperties)) {
-								const ri = ctx.varCounter++;
-								ctx.closureVars.push(`_ure${ri}`);
-								ctx.closureVals.push(safeReClosure(ctx, pat));
-								rootReVars.push(`_ure${ri}`);
+							if (schema.if && !schema.then && !schema.else) {
+								const ifLines2 = [];
+								genCode(schema.if, "_iv2", ifLines2, ctx);
+								const ufi = ctx.varCounter++;
+								const ifFn = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
+								const ifPatterns = schema.if.patternProperties ? Object.keys(schema.if.patternProperties) : [];
+								const ifReVars = [];
+								for (const pat of ifPatterns) {
+									const ri = ctx.varCounter++;
+									ctx.closureVars.push(`_ure${ri}`);
+									ctx.closureVals.push(safeReClosure(ctx, pat));
+									ifReVars.push(`_ure${ri}`);
+								}
+								const rootReVars = [];
+								if (schema.patternProperties) for (const pat of Object.keys(schema.patternProperties)) {
+									const ri = ctx.varCounter++;
+									ctx.closureVars.push(`_ure${ri}`);
+									ctx.closureVals.push(safeReClosure(ctx, pat));
+									rootReVars.push(`_ure${ri}`);
+								}
+								const rootPatCheck = rootReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("");
+								const inner = `const _uif${ufi}=${ifFn};if(_uif${ufi}(${v})){for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}${ifReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("")}return false}}else{for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}return false}}`;
+								_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+							} else {
+								const inner = `for(var _k in ${v}){if(${evVar}[_k])continue;${reVars.map((rv) => `if(${rv}.test(_k)){${evVar}[_k]=1;continue}`).join("")}return false}`;
+								_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
 							}
-							const rootPatCheck = rootReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("");
-							const inner = `const _uif${ufi}=${ifFn};if(_uif${ufi}(${v})){for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}${ifReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("")}return false}}else{for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}return false}}`;
-							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
-						} else {
-							const inner = `for(var _k in ${v}){if(${evVar}[_k])continue;${reVars.map((rv) => `if(${rv}.test(_k)){${evVar}[_k]=1;continue}`).join("")}return false}`;
-							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
 						}
 					}
-				}
-				else if (typeof schema.unevaluatedProperties === "object") {
+				} else if (typeof schema.unevaluatedProperties === "object") {
 					const ei = ctx.varCounter++;
 					const evVar = `_ev${ei}`;
 					const ukVar = `_uk${ei}`;
@@ -4094,7 +4107,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -4163,9 +4176,11 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	function _normalizeNullable(schema) {
 		if (typeof schema !== "object" || schema === null) return;
-		if (schema.nullable === true && schema.type !== void 0) if (Array.isArray(schema.type)) {
-			if (!schema.type.includes("null")) schema.type = schema.type.concat("null");
-		} else schema.type = [schema.type, "null"];
+		if (schema.nullable === true && schema.type !== void 0) {
+			if (Array.isArray(schema.type)) {
+				if (!schema.type.includes("null")) schema.type = schema.type.concat("null");
+			} else schema.type = [schema.type, "null"];
+		}
 		if ("nullable" in schema) delete schema.nullable;
 		for (const key of [
 			"properties",
@@ -4244,7 +4259,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -4348,7 +4363,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -4546,7 +4561,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -4702,7 +4717,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -4823,7 +4838,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { buildDataPositionMap };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap } = require_data_positions();
 	/**
@@ -4867,7 +4882,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileSafe } = require_safe_regex();
 	const SCHEMA_KEYWORDS = {
@@ -4958,6 +4973,10 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		for (const kw of SCHEMA_KEYWORDS.lists) {
 			const list = node[kw];
 			if (Array.isArray(list)) for (const sub of list) walkSchema(sub, baseUri, state, false);
+		}
+		const propDeps = node.propertyDependencies;
+		if (propDeps && typeof propDeps === "object" && !Array.isArray(propDeps)) {
+			for (const choices of Object.values(propDeps)) if (choices && typeof choices === "object" && !Array.isArray(choices)) for (const sub of Object.values(choices)) walkSchema(sub, baseUri, state, false);
 		}
 	}
 	function walkPointer(root, pointer) {
@@ -5422,6 +5441,20 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						else mergeAnnotations(local, sub);
 					}
 				}
+				if (schema.propertyDependencies && typeof schema.propertyDependencies === "object") for (const [key, choices] of Object.entries(schema.propertyDependencies)) {
+					if (!choices || typeof choices !== "object" || Array.isArray(choices)) continue;
+					if (!Object.prototype.hasOwnProperty.call(data, key)) continue;
+					const value = data[key];
+					if (typeof value !== "string") continue;
+					if (!Object.prototype.hasOwnProperty.call(choices, value)) continue;
+					const sub = {
+						props: null,
+						items: null
+					};
+					const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(key) + "/" + escapePointer(value);
+					if (!this.eval(choices[value], data, base, dynScope, errors, instancePath, branchPath, stack, sub)) valid = false;
+					else mergeAnnotations(local, sub);
+				}
 			}
 			if (Array.isArray(schema.allOf)) for (let i = 0; i < schema.allOf.length; i++) {
 				const sub = {
@@ -5550,7 +5583,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { createInterpreter };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function levenshtein(a, b, maxDistance) {
 		const max = maxDistance == null ? Infinity : maxDistance;
@@ -5577,7 +5610,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const FORMAT_HINTS = {
@@ -5722,7 +5755,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -5832,7 +5865,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -5890,7 +5923,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -5941,17 +5974,17 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.4.0";
+	module.exports = "1.5.0";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
 var require_safe_regex_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = "'use strict'\n\n// Linear-time regex engine for JSON Schema `pattern`, used in place of JS RegExp\n// so an adversarial input cannot trigger catastrophic backtracking (ReDoS).\n//\n// It is a Pike VM: the pattern compiles to a small instruction program, and the\n// VM simulates all NFA threads in lockstep over the input, deduping by program\n// counter. Runtime is O(input * program), with no backtracking.\n//\n// Supported (the RE2 subset, which is what ata's native path also accepts):\n// literals, ., character classes, \\d \\w \\s \\D \\W \\S, anchors ^ $, quantifiers\n// * + ? {n} {n,} {n,m} (greedy or lazy, same language for a boolean test),\n// groups ( ) (?: ), alternation |. Backreferences and lookaround are not\n// supported by linear engines; compileSafe throws on them so the caller can\n// decide (ata's codegen rejects such schemas rather than risk a hang).\n\nconst WS = [[9, 13], [32, 32], [160, 160]]\nconst DIGIT = [[48, 57]]\nconst WORD = [[48, 57], [65, 90], [97, 122], [95, 95]]\n\nfunction parse (src) {\n  let i = 0\n  const len = src.length\n  const peek = () => src[i]\n  const eof = () => i >= len\n\n  function parseAlt () {\n    const opts = [parseConcat()]\n    while (!eof() && peek() === '|') { i++; opts.push(parseConcat()) }\n    return opts.length === 1 ? opts[0] : { t: 'alt', opts }\n  }\n\n  function parseConcat () {\n    const parts = []\n    while (!eof() && peek() !== '|' && peek() !== ')') parts.push(parseRepeat())\n    if (parts.length === 0) return { t: 'empty' }\n    return parts.length === 1 ? parts[0] : { t: 'concat', parts }\n  }\n\n  function parseRepeat () {\n    let node = parseAtom()\n    while (!eof()) {\n      const ch = peek()\n      if (ch === '*') { i++; node = { t: 'star', child: node } }\n      else if (ch === '+') { i++; node = { t: 'plus', child: node } }\n      else if (ch === '?') { i++; node = { t: 'quest', child: node } }\n      else if (ch === '{') {\n        const saved = i\n        const q = tryQuantifier()\n        if (!q) { i = saved; break }\n        node = { t: 'repeat', child: node, min: q.min, max: q.max }\n      } else break\n      // a trailing ? makes the quantifier lazy; same language for a boolean test\n      if (!eof() && peek() === '?') i++\n    }\n    return node\n  }\n\n  function tryQuantifier () {\n    // assumes current char is '{'\n    i++\n    let min = ''\n    while (!eof() && /[0-9]/.test(peek())) { min += peek(); i++ }\n    if (min === '') return null\n    let max\n    if (peek() === '}') { i++; return { min: +min, max: +min } }\n    if (peek() === ',') {\n      i++\n      let m = ''\n      while (!eof() && /[0-9]/.test(peek())) { m += peek(); i++ }\n      if (peek() !== '}') return null\n      i++\n      max = m === '' ? Infinity : +m\n      return { min: +min, max }\n    }\n    return null\n  }\n\n  function parseAtom () {\n    const ch = peek()\n    if (ch === '(') {\n      i++\n      if (src[i] === '?') {\n        if (src[i + 1] === ':') { i += 2 }\n        else throw new Error('unsupported group (lookaround/named) in pattern')\n      }\n      const child = parseAlt()\n      if (peek() !== ')') throw new Error('unbalanced ( in pattern')\n      i++\n      return { t: 'group', child }\n    }\n    if (ch === '[') return parseClass()\n    if (ch === '.') { i++; return { t: 'any' } }\n    if (ch === '^') { i++; return { t: 'bol' } }\n    if (ch === '$') { i++; return { t: 'eol' } }\n    if (ch === '\\\\') return parseEscape(false)\n    if (ch === ')' || ch === '|') return { t: 'empty' }\n    i++\n    return { t: 'char', c: ch.charCodeAt(0) }\n  }\n\n  function parseClass () {\n    i++ // [\n    let neg = false\n    if (peek() === '^') { neg = true; i++ }\n    const ranges = []\n    while (!eof() && peek() !== ']') {\n      let lo\n      if (peek() === '\\\\') {\n        const esc = parseEscape(true)\n        if (esc.t === 'classpart') { for (const r of esc.ranges) ranges.push(r); continue }\n        lo = esc.c\n      } else { lo = peek().charCodeAt(0); i++ }\n      if (peek() === '-' && src[i + 1] !== ']' && i + 1 < len) {\n        i++ // -\n        let hi\n        if (peek() === '\\\\') { const e = parseEscape(true); hi = e.c } else { hi = peek().charCodeAt(0); i++ }\n        ranges.push([lo, hi])\n      } else {\n        ranges.push([lo, lo])\n      }\n    }\n    if (peek() !== ']') throw new Error('unbalanced [ in pattern')\n    i++\n    return { t: 'class', neg, ranges }\n  }\n\n  function parseEscape (inClass) {\n    i++ // backslash\n    if (eof()) throw new Error('trailing backslash in pattern')\n    const ch = peek(); i++\n    switch (ch) {\n      case 'd': return inClass ? { t: 'classpart', ranges: DIGIT } : { t: 'class', neg: false, ranges: DIGIT }\n      case 'w': return inClass ? { t: 'classpart', ranges: WORD } : { t: 'class', neg: false, ranges: WORD }\n      case 's': return inClass ? { t: 'classpart', ranges: WS } : { t: 'class', neg: false, ranges: WS }\n      case 'D': if (inClass) throw new Error('\\\\D inside a class is not supported'); return { t: 'class', neg: true, ranges: DIGIT }\n      case 'W': if (inClass) throw new Error('\\\\W inside a class is not supported'); return { t: 'class', neg: true, ranges: WORD }\n      case 'S': if (inClass) throw new Error('\\\\S inside a class is not supported'); return { t: 'class', neg: true, ranges: WS }\n      case 'n': return { t: 'char', c: 10 }\n      case 'r': return { t: 'char', c: 13 }\n      case 't': return { t: 'char', c: 9 }\n      case 'f': return { t: 'char', c: 12 }\n      case 'v': return { t: 'char', c: 11 }\n      case '0': return { t: 'char', c: 0 }\n      case 'x': { const h = src.slice(i, i + 2); i += 2; return { t: 'char', c: parseInt(h, 16) } }\n      case 'u': { const h = src.slice(i, i + 4); i += 4; return { t: 'char', c: parseInt(h, 16) } }\n      case 'b': if (inClass) return { t: 'char', c: 8 }; throw new Error('\\\\b word boundary is not supported')\n      default:\n        if (/[1-9]/.test(ch)) throw new Error('backreferences are not supported in pattern')\n        return { t: 'char', c: ch.charCodeAt(0) }\n    }\n  }\n\n  const ast = parseAlt()\n  if (!eof()) throw new Error('unexpected \"' + peek() + '\" in pattern')\n  return ast\n}\n\nfunction compileProg (ast) {\n  const prog = []\n  const emit = (op, extra) => { const idx = prog.length; prog.push(Object.assign({ op }, extra)); return idx }\n\n  function rec (n) {\n    switch (n.t) {\n      case 'empty': break\n      case 'char': emit('char', { c: n.c }); break\n      case 'any': emit('any'); break\n      case 'class': emit('class', { neg: n.neg, ranges: n.ranges }); break\n      case 'bol': emit('bol'); break\n      case 'eol': emit('eol'); break\n      case 'group': rec(n.child); break\n      case 'concat': for (const p of n.parts) rec(p); break\n      case 'alt': {\n        const jmps = []\n        for (let k = 0; k < n.opts.length; k++) {\n          if (k < n.opts.length - 1) {\n            const sp = emit('split', { x: 0, y: 0 })\n            prog[sp].x = prog.length\n            rec(n.opts[k])\n            jmps.push(emit('jmp', { x: 0 }))\n            prog[sp].y = prog.length\n          } else {\n            rec(n.opts[k])\n          }\n        }\n        for (const j of jmps) prog[j].x = prog.length\n        break\n      }\n      case 'star': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        emit('jmp', { x: sp })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'plus': {\n        const start = prog.length\n        rec(n.child)\n        const sp = emit('split', { x: start, y: 0 })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'quest': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        prog[sp].y = prog.length\n        break\n      }\n      case 'repeat': {\n        for (let k = 0; k < n.min; k++) rec(n.child)\n        if (n.max === Infinity) {\n          if (n.min === 0) rec({ t: 'star', child: n.child })\n          else rec({ t: 'star', child: n.child })\n        } else {\n          for (let k = 0; k < n.max - n.min; k++) rec({ t: 'quest', child: n.child })\n        }\n        break\n      }\n    }\n  }\n\n  rec(ast)\n  emit('match')\n  return prog\n}\n\nfunction matchClass (instr, c) {\n  let inside = false\n  const r = instr.ranges\n  for (let k = 0; k < r.length; k++) { if (c >= r[k][0] && c <= r[k][1]) { inside = true; break } }\n  return instr.neg ? !inside : inside\n}\n\nfunction makeRunner (prog) {\n  const n = prog.length\n  const lastGen = new Int32Array(n).fill(-1)\n  let gen = 0\n  const stack = []\n\n  function addThread (list, pc, pos, len) {\n    stack.length = 0\n    stack.push(pc)\n    while (stack.length) {\n      const p = stack.pop()\n      if (lastGen[p] === gen) continue\n      lastGen[p] = gen\n      const I = prog[p]\n      switch (I.op) {\n        case 'jmp': stack.push(I.x); break\n        case 'split': stack.push(I.y); stack.push(I.x); break\n        case 'bol': if (pos === 0) stack.push(p + 1); break\n        case 'eol': if (pos === len) stack.push(p + 1); break\n        default: list.push(p)\n      }\n    }\n  }\n\n  return function test (s) {\n    const len = s.length\n    let clist = []\n    let nlist = []\n    gen++\n    addThread(clist, 0, 0, len)\n    for (let pos = 0; pos <= len; pos++) {\n      const c = pos < len ? s.charCodeAt(pos) : -1\n      gen++\n      nlist.length = 0\n      for (let k = 0; k < clist.length; k++) {\n        const pc = clist[k]\n        const I = prog[pc]\n        if (I.op === 'match') return true\n        else if (I.op === 'char') { if (c === I.c) addThread(nlist, pc + 1, pos + 1, len) }\n        else if (I.op === 'any') { if (c !== -1 && c !== 10) addThread(nlist, pc + 1, pos + 1, len) }\n        else if (I.op === 'class') { if (c !== -1 && matchClass(I, c)) addThread(nlist, pc + 1, pos + 1, len) }\n      }\n      if (pos < len) addThread(nlist, 0, pos + 1, len)\n      const tmp = clist; clist = nlist; nlist = tmp\n    }\n    return false\n  }\n}\n\nfunction compileSafe (pattern) {\n  const prog = compileProg(parse(pattern))\n  const runner = makeRunner(prog)\n  // `__ataSafe` brands the result so the standalone serializer can tell a safe\n  // matcher apart from a RegExp and emit `__ataSafeRe(source)` instead.\n  return { test: runner, source: pattern, __ataSafe: true }\n}\n\n// True when the linear engine can represent `src`. Used by the codegen to decide\n// between the safe matcher and a JS RegExp fallback for patterns outside the\n// supported (RE2) subset (backreferences, lookaround, etc.).\nfunction patternIsSafe (src) {\n  try { compileSafe(src); return true } catch { return false }\n}\n\nmodule.exports = { compileSafe, patternIsSafe }\n";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
 var require_aot = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegenWithErrors } = require_js_compiler();
 	const SAFE_REGEX_SOURCE = require_safe_regex_source();
@@ -6191,7 +6224,7 @@ ${exports$1}`;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
@@ -6360,7 +6393,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -6415,7 +6448,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	function caretLine(col, length, gutter) {
@@ -6493,7 +6526,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, pathToDotted, trimCwd } = require_render_shared();
 	function renderCompact(errors, opts) {
@@ -6524,7 +6557,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -6540,7 +6573,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
@@ -7308,8 +7341,9 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				this._ensureNative();
 				const _hasDynRef = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
 				const _hasUneval = this._schemaStr.includes("\"unevaluatedProperties\"") || this._schemaStr.includes("\"unevaluatedItems\"");
+				const _hasPropDeps = this._schemaStr.includes("\"propertyDependencies\"");
 				let _validate;
-				if (_hasDynRef && !_hasUneval) {
+				if (_hasDynRef && !_hasUneval && !_hasPropDeps) {
 					_validate = (data) => this._compiled.validateJSON(JSON.stringify(data));
 					this.validateJSON = (jsonStr) => this._compiled.validateJSON(jsonStr);
 					this.isValidJSON = (jsonStr) => this._compiled.isValidJSON(jsonStr);
@@ -7574,12 +7608,14 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			this._jsFn = jsFn;
 			if (jsFn) {
 				this.isValidObject = jsFn;
-				if (!uf) if (!cached) _compileCache.set(mapKey, {
-					jsFn,
-					combined: null,
-					errFn: null
-				});
-				else cached.jsFn = jsFn;
+				if (!uf) {
+					if (!cached) _compileCache.set(mapKey, {
+						jsFn,
+						combined: null,
+						errFn: null
+					});
+					else cached.jsFn = jsFn;
+				}
 			}
 		}
 		static fromStandalone(mod, schema, opts) {
@@ -7834,11 +7870,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.4.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.5.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();

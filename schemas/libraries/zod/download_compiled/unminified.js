@@ -626,8 +626,10 @@ const $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst,
 	inst._zod.onattach.push((inst) => {
 		const bag = inst._zod.bag;
 		const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
-		if (def.value < curr) if (def.inclusive) bag.maximum = def.value;
-		else bag.exclusiveMaximum = def.value;
+		if (def.value < curr) {
+			if (def.inclusive) bag.maximum = def.value;
+			else bag.exclusiveMaximum = def.value;
+		}
 	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value <= def.value : payload.value < def.value) return;
@@ -648,8 +650,10 @@ const $ZodCheckGreaterThan = /*@__PURE__*/ $constructor("$ZodCheckGreaterThan", 
 	inst._zod.onattach.push((inst) => {
 		const bag = inst._zod.bag;
 		const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
-		if (def.value > curr) if (def.inclusive) bag.minimum = def.value;
-		else bag.exclusiveMinimum = def.value;
+		if (def.value > curr) {
+			if (def.inclusive) bag.minimum = def.value;
+			else bag.exclusiveMinimum = def.value;
+		}
 	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value >= def.value : payload.value > def.value) return;
@@ -1552,13 +1556,13 @@ const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 		}
 		return propValues;
 	});
-	const isObject$2 = isObject;
+	const isObject$1 = isObject;
 	const catchall = def.catchall;
 	let value;
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$2(input)) {
+		if (!isObject$1(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -1681,7 +1685,7 @@ const $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) =>
 		return (payload, ctx) => fn(shape, payload, ctx);
 	};
 	let fastpass;
-	const isObject$1 = isObject;
+	const isObject$2 = isObject;
 	const jit = !globalConfig.jitless;
 	const fastEnabled = jit && allowsEval.value;
 	const catchall = def.catchall;
@@ -1689,7 +1693,7 @@ const $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) =>
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$1(input)) {
+		if (!isObject$2(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -2876,8 +2880,10 @@ function finalize(ctx, schema) {
 			defs[seen.defId] = seen.def;
 		}
 	}
-	if (ctx.external) {} else if (Object.keys(defs).length > 0) if (ctx.target === "draft-2020-12") result.$defs = defs;
-	else result.definitions = defs;
+	if (ctx.external) {} else if (Object.keys(defs).length > 0) {
+		if (ctx.target === "draft-2020-12") result.$defs = defs;
+		else result.definitions = defs;
+	}
 	try {
 		const finalized = JSON.parse(JSON.stringify(result));
 		Object.defineProperty(finalized, "~standard", {
@@ -2990,16 +2996,18 @@ const numberProcessor = (schema, ctx, _json, _params) => {
 	const exMin = typeof exclusiveMinimum === "number" && exclusiveMinimum >= (minimum ?? Number.NEGATIVE_INFINITY);
 	const exMax = typeof exclusiveMaximum === "number" && exclusiveMaximum <= (maximum ?? Number.POSITIVE_INFINITY);
 	const legacy = ctx.target === "draft-04" || ctx.target === "openapi-3.0";
-	if (exMin) if (legacy) {
-		json.minimum = exclusiveMinimum;
-		json.exclusiveMinimum = true;
-	} else json.exclusiveMinimum = exclusiveMinimum;
-	else if (typeof minimum === "number") json.minimum = minimum;
-	if (exMax) if (legacy) {
-		json.maximum = exclusiveMaximum;
-		json.exclusiveMaximum = true;
-	} else json.exclusiveMaximum = exclusiveMaximum;
-	else if (typeof maximum === "number") json.maximum = maximum;
+	if (exMin) {
+		if (legacy) {
+			json.minimum = exclusiveMinimum;
+			json.exclusiveMinimum = true;
+		} else json.exclusiveMinimum = exclusiveMinimum;
+	} else if (typeof minimum === "number") json.minimum = minimum;
+	if (exMax) {
+		if (legacy) {
+			json.maximum = exclusiveMaximum;
+			json.exclusiveMaximum = true;
+		} else json.exclusiveMaximum = exclusiveMaximum;
+	} else if (typeof maximum === "number") json.maximum = maximum;
 	if (typeof multipleOf === "number") json.multipleOf = multipleOf;
 };
 const neverProcessor = (_schema, _ctx, json, _params) => {

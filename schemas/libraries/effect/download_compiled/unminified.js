@@ -1116,9 +1116,10 @@ function compareBoth(self, that) {
 	if (selfType !== typeof that) return false;
 	if (selfType === "object" || selfType === "function") {
 		if (self !== null && that !== null) {
-			if (isEqual(self) && isEqual(that)) if (hash(self) === hash(that) && self[symbol](that)) return true;
-			else return structuralRegionState.enabled && structuralRegionState.tester ? structuralRegionState.tester(self, that) : false;
-			else if (self instanceof Date && that instanceof Date) {
+			if (isEqual(self) && isEqual(that)) {
+				if (hash(self) === hash(that) && self[symbol](that)) return true;
+				else return structuralRegionState.enabled && structuralRegionState.tester ? structuralRegionState.tester(self, that) : false;
+			} else if (self instanceof Date && that instanceof Date) {
 				const t1 = self.getTime();
 				const t2 = that.getTime();
 				return t1 === t2 || Number.isNaN(t1) && Number.isNaN(t2);
@@ -3353,16 +3354,18 @@ const zero$1 = /*#__PURE__*/ unsafeMakeNormalized(bigint0$2, 0);
 * @category scaling
 */
 const normalize = (self) => {
-	if (self.normalized === void 0) if (self.value === bigint0$2) self.normalized = zero$1;
-	else {
-		const digits = `${self.value}`;
-		let trail = 0;
-		for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
-		else break;
-		if (trail === 0) self.normalized = self;
-		const value = BigInt(digits.substring(0, digits.length - trail));
-		const scale = self.scale - trail;
-		self.normalized = unsafeMakeNormalized(value, scale);
+	if (self.normalized === void 0) {
+		if (self.value === bigint0$2) self.normalized = zero$1;
+		else {
+			const digits = `${self.value}`;
+			let trail = 0;
+			for (let i = digits.length - 1; i >= 0; i--) if (digits[i] === "0") trail++;
+			else break;
+			if (trail === 0) self.normalized = self;
+			const value = BigInt(digits.substring(0, digits.length - trail));
+			const scale = self.scale - trail;
+			self.normalized = unsafeMakeNormalized(value, scale);
+		}
 	}
 	return self.normalized;
 };
@@ -4042,40 +4045,41 @@ const appendAll$1 = /*#__PURE__*/ dual(2, (self, that) => {
 		left: self,
 		right: that
 	});
-	else if (diff < -1) if (self.left.depth >= self.right.depth) {
-		const nr = appendAll$1(self.right, that);
-		return makeChunk({
-			_tag: "IConcat",
-			left: self.left,
-			right: nr
-		});
-	} else {
-		const nrr = appendAll$1(self.right.right, that);
-		if (nrr.depth === self.depth - 3) {
-			const nr = makeChunk({
-				_tag: "IConcat",
-				left: self.right.left,
-				right: nrr
-			});
+	else if (diff < -1) {
+		if (self.left.depth >= self.right.depth) {
+			const nr = appendAll$1(self.right, that);
 			return makeChunk({
 				_tag: "IConcat",
 				left: self.left,
 				right: nr
 			});
 		} else {
-			const nl = makeChunk({
-				_tag: "IConcat",
-				left: self.left,
-				right: self.right.left
-			});
-			return makeChunk({
-				_tag: "IConcat",
-				left: nl,
-				right: nrr
-			});
+			const nrr = appendAll$1(self.right.right, that);
+			if (nrr.depth === self.depth - 3) {
+				const nr = makeChunk({
+					_tag: "IConcat",
+					left: self.right.left,
+					right: nrr
+				});
+				return makeChunk({
+					_tag: "IConcat",
+					left: self.left,
+					right: nr
+				});
+			} else {
+				const nl = makeChunk({
+					_tag: "IConcat",
+					left: self.left,
+					right: self.right.left
+				});
+				return makeChunk({
+					_tag: "IConcat",
+					left: nl,
+					right: nrr
+				});
+			}
 		}
-	}
-	else if (that.right.depth >= that.left.depth) {
+	} else if (that.right.depth >= that.left.depth) {
 		const nl = appendAll$1(self, that.left);
 		return makeChunk({
 			_tag: "IConcat",
@@ -4674,9 +4678,11 @@ const reduce$5 = /*#__PURE__*/ dual(3, (self, zero, f) => {
 	let children;
 	while (children = toVisit.pop()) for (let i = 0, len = children.length; i < len;) {
 		const child = children[i++];
-		if (child && !isEmptyNode(child)) if (child._tag === "LeafNode") {
-			if (isSome(child.value)) zero = f(zero, child.value.value, child.key);
-		} else toVisit.push(child.children);
+		if (child && !isEmptyNode(child)) {
+			if (child._tag === "LeafNode") {
+				if (isSome(child.value)) zero = f(zero, child.value.value, child.key);
+			} else toVisit.push(child.children);
+		}
 	}
 	return zero;
 });
@@ -6455,17 +6461,18 @@ const DurationProto = {
 };
 const make$15 = (input) => {
 	const duration = Object.create(DurationProto);
-	if (isNumber(input)) if (isNaN(input) || input <= 0) duration.value = zeroValue;
-	else if (!Number.isFinite(input)) duration.value = infinityValue;
-	else if (!Number.isInteger(input)) duration.value = {
-		_tag: "Nanos",
-		nanos: BigInt(Math.round(input * 1e6))
-	};
-	else duration.value = {
-		_tag: "Millis",
-		millis: input
-	};
-	else if (input <= bigint0$1) duration.value = zeroValue;
+	if (isNumber(input)) {
+		if (isNaN(input) || input <= 0) duration.value = zeroValue;
+		else if (!Number.isFinite(input)) duration.value = infinityValue;
+		else if (!Number.isInteger(input)) duration.value = {
+			_tag: "Nanos",
+			nanos: BigInt(Math.round(input * 1e6))
+		};
+		else duration.value = {
+			_tag: "Millis",
+			millis: input
+		};
+	} else if (input <= bigint0$1) duration.value = zeroValue;
 	else duration.value = {
 		_tag: "Nanos",
 		nanos: input
@@ -9630,9 +9637,10 @@ const unsafeUpdateAs = (locals, fiberId, fiberRef, value) => {
 	let newStack;
 	if (isNonEmptyReadonlyArray(oldStack)) {
 		const [currentId, currentValue] = headNonEmpty$1(oldStack);
-		if (currentId[symbol](fiberId)) if (equals$2(currentValue, value)) return;
-		else newStack = [[fiberId, value], ...oldStack.slice(1)];
-		else newStack = [[fiberId, value], ...oldStack];
+		if (currentId[symbol](fiberId)) {
+			if (equals$2(currentValue, value)) return;
+			else newStack = [[fiberId, value], ...oldStack.slice(1)];
+		} else newStack = [[fiberId, value], ...oldStack];
 	} else newStack = [[fiberId, value]];
 	locals.set(fiberRef, newStack);
 };
@@ -10547,11 +10555,13 @@ const uninterruptibleMask = (f) => withMicroFiber((fiber) => {
 const runFork$1 = (effect, options) => {
 	const fiber = new MicroFiberImpl(CurrentScheduler.context(options?.scheduler ?? new MicroSchedulerDefault()));
 	fiber.evaluate(effect);
-	if (options?.signal) if (options.signal.aborted) fiber.unsafeInterrupt();
-	else {
-		const abort = () => fiber.unsafeInterrupt();
-		options.signal.addEventListener("abort", abort, { once: true });
-		fiber.addObserver(() => options.signal.removeEventListener("abort", abort));
+	if (options?.signal) {
+		if (options.signal.aborted) fiber.unsafeInterrupt();
+		else {
+			const abort = () => fiber.unsafeInterrupt();
+			options.signal.addEventListener("abort", abort, { once: true });
+			fiber.addObserver(() => options.signal.removeEventListener("abort", abort));
+		}
 	}
 	return fiber;
 };
@@ -11496,8 +11506,10 @@ const histogram$1 = (key) => {
 			const mid = Math.floor(from + (to - from) / 2);
 			if (value <= boundaries[mid]) to = mid;
 			else from = mid;
-			if (to === from + 1) if (value <= boundaries[from]) to = from;
-			else from = to;
+			if (to === from + 1) {
+				if (value <= boundaries[from]) to = from;
+				else from = to;
+			}
 		}
 		values[from] = values[from] + 1;
 		count = count + 1;
@@ -12677,12 +12689,13 @@ var FiberRuntime = class extends Class {
 				if (exit === YieldedOp) {
 					const op = yieldedOpChannel.currentOp;
 					yieldedOpChannel.currentOp = null;
-					if (op._op === "Yield") if (cooperativeYielding(this.currentRuntimeFlags)) {
-						this.tell(yieldNow());
-						this.tell(resume(exitVoid$1));
-						effect = null;
-					} else effect = exitVoid$1;
-					else if (op._op === "Async") effect = null;
+					if (op._op === "Yield") {
+						if (cooperativeYielding(this.currentRuntimeFlags)) {
+							this.tell(yieldNow());
+							this.tell(resume(exitVoid$1));
+							effect = null;
+						} else effect = exitVoid$1;
+					} else if (op._op === "Async") effect = null;
 				} else {
 					this.currentRuntimeFlags = pipe(this.currentRuntimeFlags, enable$1(16));
 					const interruption = this.interruptAllChildren();
@@ -16722,14 +16735,15 @@ const go = (ast, isDecoding) => {
 					const [head, ...tail] = rest;
 					for (; i < len - tail.length; i++) {
 						const te = head(input[i], options);
-						if (isEither(te)) if (isLeft(te)) {
-							const e = new Pointer(i, input, te.left);
-							if (allErrors) {
-								es.push([stepKey++, e]);
-								continue;
-							} else return left(new Composite(ast, input, e, sortByIndex(output)));
-						} else output.push([stepKey++, te.right]);
-						else {
+						if (isEither(te)) {
+							if (isLeft(te)) {
+								const e = new Pointer(i, input, te.left);
+								if (allErrors) {
+									es.push([stepKey++, e]);
+									continue;
+								} else return left(new Composite(ast, input, e, sortByIndex(output)));
+							} else output.push([stepKey++, te.right]);
+						} else {
 							const nk = stepKey++;
 							const index = i;
 							if (!queue) queue = [];
@@ -16832,13 +16846,15 @@ const go = (ast, isDecoding) => {
 					inputKeys = Reflect.ownKeys(input);
 					for (const key of inputKeys) {
 						const te = expected(key, options);
-						if (isEither(te) && isLeft(te)) if (onExcessPropertyError) {
-							const e = new Pointer(key, input, new Unexpected(input[key], `is unexpected, expected: ${String(expectedAST)}`));
-							if (allErrors) {
-								es.push([stepKey++, e]);
-								continue;
-							} else return left(new Composite(ast, input, e, output));
-						} else output[key] = input[key];
+						if (isEither(te) && isLeft(te)) {
+							if (onExcessPropertyError) {
+								const e = new Pointer(key, input, new Unexpected(input[key], `is unexpected, expected: ${String(expectedAST)}`));
+								if (allErrors) {
+									es.push([stepKey++, e]);
+									continue;
+								} else return left(new Composite(ast, input, e, output));
+							} else output[key] = input[key];
+						}
 					}
 				}
 				let queue = void 0;
@@ -16966,37 +16982,40 @@ const go = (ast, isDecoding) => {
 				const es = [];
 				let stepKey = 0;
 				let candidates = [];
-				if (ownKeysLen > 0) if (isRecordOrArray(input)) for (let i = 0; i < ownKeysLen; i++) {
-					const name = ownKeys[i];
-					const buckets = searchTree.keys[name].buckets;
-					if (Object.prototype.hasOwnProperty.call(input, name)) {
-						const literal = String(input[name]);
-						if (Object.prototype.hasOwnProperty.call(buckets, literal)) candidates = candidates.concat(buckets[literal]);
-						else {
+				if (ownKeysLen > 0) {
+					if (isRecordOrArray(input)) for (let i = 0; i < ownKeysLen; i++) {
+						const name = ownKeys[i];
+						const buckets = searchTree.keys[name].buckets;
+						if (Object.prototype.hasOwnProperty.call(input, name)) {
+							const literal = String(input[name]);
+							if (Object.prototype.hasOwnProperty.call(buckets, literal)) candidates = candidates.concat(buckets[literal]);
+							else {
+								const { candidates, literals } = searchTree.keys[name];
+								const literalsUnion = Union$1.make(literals);
+								const errorAst = candidates.length === astTypesLen ? new TypeLiteral([new PropertySignature(name, literalsUnion, false, true)], []) : Union$1.make(candidates);
+								es.push([stepKey++, new Composite(errorAst, input, new Pointer(name, input, new Type(literalsUnion, input[name])))]);
+							}
+						} else {
 							const { candidates, literals } = searchTree.keys[name];
-							const literalsUnion = Union$1.make(literals);
-							const errorAst = candidates.length === astTypesLen ? new TypeLiteral([new PropertySignature(name, literalsUnion, false, true)], []) : Union$1.make(candidates);
-							es.push([stepKey++, new Composite(errorAst, input, new Pointer(name, input, new Type(literalsUnion, input[name])))]);
+							const fakePropertySignature = new PropertySignature(name, Union$1.make(literals), false, true);
+							const errorAst = candidates.length === astTypesLen ? new TypeLiteral([fakePropertySignature], []) : Union$1.make(candidates);
+							es.push([stepKey++, new Composite(errorAst, input, new Pointer(name, input, new Missing(fakePropertySignature)))]);
 						}
-					} else {
-						const { candidates, literals } = searchTree.keys[name];
-						const fakePropertySignature = new PropertySignature(name, Union$1.make(literals), false, true);
-						const errorAst = candidates.length === astTypesLen ? new TypeLiteral([fakePropertySignature], []) : Union$1.make(candidates);
-						es.push([stepKey++, new Composite(errorAst, input, new Pointer(name, input, new Missing(fakePropertySignature)))]);
 					}
-				}
-				else {
-					const errorAst = searchTree.candidates.length === astTypesLen ? ast : Union$1.make(searchTree.candidates);
-					es.push([stepKey++, new Type(errorAst, input)]);
+					else {
+						const errorAst = searchTree.candidates.length === astTypesLen ? ast : Union$1.make(searchTree.candidates);
+						es.push([stepKey++, new Type(errorAst, input)]);
+					}
 				}
 				if (searchTree.otherwise.length > 0) candidates = candidates.concat(searchTree.otherwise);
 				let queue = void 0;
 				for (let i = 0; i < candidates.length; i++) {
 					const candidate = candidates[i];
 					const pr = map.get(candidate)(input, options);
-					if (isEither(pr) && (!queue || queue.length === 0)) if (isRight(pr)) return pr;
-					else es.push([stepKey++, pr.left]);
-					else {
+					if (isEither(pr) && (!queue || queue.length === 0)) {
+						if (isRight(pr)) return pr;
+						else es.push([stepKey++, pr.left]);
+					} else {
 						const nk = stepKey++;
 						if (!queue) queue = [];
 						queue.push((state) => suspend$1(() => {

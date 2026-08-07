@@ -2038,10 +2038,12 @@ var require_resolve = /* @__PURE__ */ __commonJSMin(((exports) => {
 				let schOrRef = this.refs[ref];
 				if (typeof schOrRef == "string") schOrRef = this.refs[schOrRef];
 				if (typeof schOrRef == "object") checkAmbiguosRef(sch, schOrRef.schema, ref);
-				else if (ref !== normalizeId(fullPath)) if (ref[0] === "#") {
-					checkAmbiguosRef(sch, localRefs[ref], ref);
-					localRefs[ref] = sch;
-				} else this.refs[ref] = fullPath;
+				else if (ref !== normalizeId(fullPath)) {
+					if (ref[0] === "#") {
+						checkAmbiguosRef(sch, localRefs[ref], ref);
+						localRefs[ref] = sch;
+					} else this.refs[ref] = fullPath;
+				}
 				return ref;
 			}
 			function addAnchor(anchor) {
@@ -2847,9 +2849,11 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				continue;
 			}
 		}
-		if (buffer.length) if (consume === consumeIsZone) output.zone = buffer.join("");
-		else if (endIpv6) address.push(buffer.join(""));
-		else address.push(stringArrayToHexStripped(buffer));
+		if (buffer.length) {
+			if (consume === consumeIsZone) output.zone = buffer.join("");
+			else if (endIpv6) address.push(buffer.join(""));
+			else address.push(stringArrayToHexStripped(buffer));
+		}
 		output.address = address.join("");
 		return output;
 	}
@@ -2908,15 +2912,16 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		let nextSlash = -1;
 		let len = 0;
 		while (len = input.length) {
-			if (len === 1) if (input === ".") break;
-			else if (input === "/") {
-				output.push("/");
-				break;
-			} else {
-				output.push(input);
-				break;
-			}
-			else if (len === 2) {
+			if (len === 1) {
+				if (input === ".") break;
+				else if (input === "/") {
+					output.push("/");
+					break;
+				} else {
+					output.push(input);
+					break;
+				}
+			} else if (len === 2) {
 				if (input[0] === ".") {
 					if (input[1] === ".") break;
 					else if (input[1] === "/") {
@@ -3409,10 +3414,12 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const uriTokens = [];
 		const schemeHandler = getSchemeHandler(options.scheme || component.scheme);
 		if (schemeHandler && schemeHandler.serialize) schemeHandler.serialize(component, options);
-		if (component.path !== void 0) if (!options.skipEscape) {
-			component.path = escapePreservingEscapes(component.path);
-			if (component.scheme !== void 0) component.path = component.path.split("%3A").join(":");
-		} else component.path = normalizePercentEncoding(component.path);
+		if (component.path !== void 0) {
+			if (!options.skipEscape) {
+				component.path = escapePreservingEscapes(component.path);
+				if (component.scheme !== void 0) component.path = component.path.split("%3A").join(":");
+			} else component.path = normalizePercentEncoding(component.path);
+		}
 		if (options.reference !== "suffix" && component.scheme) uriTokens.push(component.scheme, ":");
 		const authority = recomposeAuthority(component);
 		if (authority !== void 0) {
@@ -3460,8 +3467,10 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 		let malformedAuthorityOrPort = false;
 		let isIP = false;
-		if (options.reference === "suffix") if (options.scheme) uri = options.scheme + ":" + uri;
-		else uri = "//" + uri;
+		if (options.reference === "suffix") {
+			if (options.scheme) uri = options.scheme + ":" + uri;
+			else uri = "//" + uri;
+		}
 		const authorityMatch = uri.match(AUTHORITY_PREFIX);
 		if (authorityMatch !== null && authorityMatch[1].indexOf("\\") !== -1) {
 			parsed.error = "URI authority must not contain a literal backslash.";
@@ -3482,11 +3491,13 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				parsed.error = parsed.error || parseError;
 				malformedAuthorityOrPort = true;
 			}
-			if (parsed.host) if (isIPv4(parsed.host) === false) {
-				const ipv6result = normalizeIPv6(parsed.host);
-				parsed.host = ipv6result.host.toLowerCase();
-				isIP = ipv6result.isIPV6;
-			} else isIP = true;
+			if (parsed.host) {
+				if (isIPv4(parsed.host) === false) {
+					const ipv6result = normalizeIPv6(parsed.host);
+					parsed.host = ipv6result.host.toLowerCase();
+					isIP = ipv6result.isIPV6;
+				} else isIP = true;
+			}
 			if (parsed.scheme === void 0 && parsed.userinfo === void 0 && parsed.host === void 0 && parsed.port === void 0 && parsed.query === void 0 && !parsed.path) parsed.reference = "same-document";
 			else if (parsed.scheme === void 0) parsed.reference = "relative";
 			else if (parsed.fragment === void 0) parsed.reference = "absolute";
@@ -4246,17 +4257,21 @@ var require_ref = /* @__PURE__ */ __commonJSMin(((exports) => {
 			var _a;
 			if (!it.opts.unevaluated) return;
 			const schEvaluated = (_a = sch === null || sch === void 0 ? void 0 : sch.validate) === null || _a === void 0 ? void 0 : _a.evaluated;
-			if (it.props !== true) if (schEvaluated && !schEvaluated.dynamicProps) {
-				if (schEvaluated.props !== void 0) it.props = util_1.mergeEvaluated.props(gen, schEvaluated.props, it.props);
-			} else {
-				const props = gen.var("props", (0, codegen_1._)`${source}.evaluated.props`);
-				it.props = util_1.mergeEvaluated.props(gen, props, it.props, codegen_1.Name);
+			if (it.props !== true) {
+				if (schEvaluated && !schEvaluated.dynamicProps) {
+					if (schEvaluated.props !== void 0) it.props = util_1.mergeEvaluated.props(gen, schEvaluated.props, it.props);
+				} else {
+					const props = gen.var("props", (0, codegen_1._)`${source}.evaluated.props`);
+					it.props = util_1.mergeEvaluated.props(gen, props, it.props, codegen_1.Name);
+				}
 			}
-			if (it.items !== true) if (schEvaluated && !schEvaluated.dynamicItems) {
-				if (schEvaluated.items !== void 0) it.items = util_1.mergeEvaluated.items(gen, schEvaluated.items, it.items);
-			} else {
-				const items = gen.var("items", (0, codegen_1._)`${source}.evaluated.items`);
-				it.items = util_1.mergeEvaluated.items(gen, items, it.items, codegen_1.Name);
+			if (it.items !== true) {
+				if (schEvaluated && !schEvaluated.dynamicItems) {
+					if (schEvaluated.items !== void 0) it.items = util_1.mergeEvaluated.items(gen, schEvaluated.items, it.items);
+				} else {
+					const items = gen.var("items", (0, codegen_1._)`${source}.evaluated.items`);
+					it.items = util_1.mergeEvaluated.items(gen, items, it.items, codegen_1.Name);
+				}
 			}
 		}
 	}

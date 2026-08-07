@@ -73,8 +73,10 @@ var require__getRawTag = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			var unmasked = true;
 		} catch (e) {}
 		var result = nativeObjectToString.call(value);
-		if (unmasked) if (isOwn) value[symToStringTag] = tag;
-		else delete value[symToStringTag];
+		if (unmasked) {
+			if (isOwn) value[symToStringTag] = tag;
+			else delete value[symToStringTag];
+		}
 		return result;
 	}
 	module.exports = getRawTag;
@@ -1038,7 +1040,7 @@ var require__baseToString = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	var isArray = require_isArray();
 	var isSymbol = require_isSymbol();
 	/** Used as references for various `Number` constants. */
-	var INFINITY = Infinity;
+	var INFINITY = 1 / 0;
 	/** Used to convert symbols to primitives and strings. */
 	var symbolProto = Symbol ? Symbol.prototype : void 0;
 	var symbolToString = symbolProto ? symbolProto.toString : void 0;
@@ -1115,7 +1117,7 @@ var require__castPath = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 var require__toKey = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var isSymbol = require_isSymbol();
 	/** Used as references for various `Number` constants. */
-	var INFINITY = Infinity;
+	var INFINITY = 1 / 0;
 	/**
 	* Converts `value` to a string key if it's not a string or symbol.
 	*
@@ -1471,7 +1473,7 @@ var require__createSet = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var Set = require__Set();
 	var noop = require_noop();
 	var setToArray = require__setToArray();
-	module.exports = !(Set && 1 / setToArray(new Set([, -0]))[1] == Infinity) ? noop : function(values) {
+	module.exports = !(Set && 1 / setToArray(new Set([, -0]))[1] == 1 / 0) ? noop : function(values) {
 		return new Set(values);
 	};
 }));
@@ -2185,20 +2187,22 @@ function dew$2() {
 			if (desc && !desc.configurable) functionLengthIsConfigurable = false;
 			if (desc && !desc.writable) functionLengthIsWritable = false;
 		}
-		if (functionLengthIsConfigurable || functionLengthIsWritable || !loose) if (hasDescriptors) define(
-			/** @type {Parameters<define>[0]} */
-			fn,
-			"length",
-			length,
-			true,
-			true
-		);
-		else define(
-			/** @type {Parameters<define>[0]} */
-			fn,
-			"length",
-			length
-		);
+		if (functionLengthIsConfigurable || functionLengthIsWritable || !loose) {
+			if (hasDescriptors) define(
+				/** @type {Parameters<define>[0]} */
+				fn,
+				"length",
+				length,
+				true,
+				true
+			);
+			else define(
+				/** @type {Parameters<define>[0]} */
+				fn,
+				"length",
+				length
+			);
+		}
 		return fn;
 	}, "setFunctionLength");
 	return exports$2;
@@ -2711,16 +2715,20 @@ function dew$72() {
 	var toStr = Object.prototype.toString;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var forEachArray = /* @__PURE__ */ __name(function forEachArray2(array, iterator, receiver) {
-		for (var i = 0, len = array.length; i < len; i++) if (hasOwnProperty.call(array, i)) if (receiver == null) iterator(array[i], i, array);
-		else iterator.call(receiver, array[i], i, array);
+		for (var i = 0, len = array.length; i < len; i++) if (hasOwnProperty.call(array, i)) {
+			if (receiver == null) iterator(array[i], i, array);
+			else iterator.call(receiver, array[i], i, array);
+		}
 	}, "forEachArray2");
 	var forEachString = /* @__PURE__ */ __name(function forEachString2(string, iterator, receiver) {
 		for (var i = 0, len = string.length; i < len; i++) if (receiver == null) iterator(string.charAt(i), i, string);
 		else iterator.call(receiver, string.charAt(i), i, string);
 	}, "forEachString2");
 	var forEachObject = /* @__PURE__ */ __name(function forEachObject2(object, iterator, receiver) {
-		for (var k in object) if (hasOwnProperty.call(object, k)) if (receiver == null) iterator(object[k], k, object);
-		else iterator.call(receiver, object[k], k, object);
+		for (var k in object) if (hasOwnProperty.call(object, k)) {
+			if (receiver == null) iterator(object[k], k, object);
+			else iterator.call(receiver, object[k], k, object);
+		}
 	}, "forEachObject2");
 	exports$82 = /* @__PURE__ */ __name(function forEach2(list, iterator, thisArg) {
 		if (!isCallable(iterator)) throw new TypeError("iterator must be a function");
@@ -3194,13 +3202,15 @@ function dew3() {
 	}
 	exports$12.debuglog = function(set) {
 		set = set.toUpperCase();
-		if (!debugs[set]) if (debugEnvRegex.test(set)) {
-			var pid2 = process$1.pid;
-			debugs[set] = function() {
-				var msg = exports$12.format.apply(exports$12, arguments);
-				console.error("%s %d: %s", set, pid2, msg);
-			};
-		} else debugs[set] = function() {};
+		if (!debugs[set]) {
+			if (debugEnvRegex.test(set)) {
+				var pid2 = process$1.pid;
+				debugs[set] = function() {
+					var msg = exports$12.format.apply(exports$12, arguments);
+					console.error("%s %d: %s", set, pid2, msg);
+				};
+			} else debugs[set] = function() {};
+		}
 		return debugs[set];
 	};
 	function inspect2(obj, opts) {
@@ -3295,8 +3305,10 @@ function dew3() {
 		if (isDate2(value)) base = " " + Date.prototype.toUTCString.call(value);
 		if (isError2(value)) base = " " + formatError(value);
 		if (keys.length === 0 && (!array || value.length == 0)) return braces[0] + base + braces[1];
-		if (recurseTimes < 0) if (isRegExp2(value)) return ctx.stylize(RegExp.prototype.toString.call(value), "regexp");
-		else return ctx.stylize("[Object]", "special");
+		if (recurseTimes < 0) {
+			if (isRegExp2(value)) return ctx.stylize(RegExp.prototype.toString.call(value), "regexp");
+			else return ctx.stylize("[Object]", "special");
+		}
 		ctx.seen.push(value);
 		var output;
 		if (array) output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
@@ -3334,20 +3346,25 @@ function dew3() {
 	__name(formatArray, "formatArray");
 	function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
 		var name, str, desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
-		if (desc.get) if (desc.set) str = ctx.stylize("[Getter/Setter]", "special");
-		else str = ctx.stylize("[Getter]", "special");
-		else if (desc.set) str = ctx.stylize("[Setter]", "special");
+		if (desc.get) {
+			if (desc.set) str = ctx.stylize("[Getter/Setter]", "special");
+			else str = ctx.stylize("[Getter]", "special");
+		} else if (desc.set) str = ctx.stylize("[Setter]", "special");
 		if (!hasOwnProperty(visibleKeys, key)) name = "[" + key + "]";
-		if (!str) if (ctx.seen.indexOf(desc.value) < 0) {
-			if (isNull2(recurseTimes)) str = formatValue(ctx, desc.value, null);
-			else str = formatValue(ctx, desc.value, recurseTimes - 1);
-			if (str.indexOf("\n") > -1) if (array) str = str.split("\n").map(function(line) {
-				return "  " + line;
-			}).join("\n").slice(2);
-			else str = "\n" + str.split("\n").map(function(line) {
-				return "   " + line;
-			}).join("\n");
-		} else str = ctx.stylize("[Circular]", "special");
+		if (!str) {
+			if (ctx.seen.indexOf(desc.value) < 0) {
+				if (isNull2(recurseTimes)) str = formatValue(ctx, desc.value, null);
+				else str = formatValue(ctx, desc.value, recurseTimes - 1);
+				if (str.indexOf("\n") > -1) {
+					if (array) str = str.split("\n").map(function(line) {
+						return "  " + line;
+					}).join("\n").slice(2);
+					else str = "\n" + str.split("\n").map(function(line) {
+						return "   " + line;
+					}).join("\n");
+				}
+			} else str = ctx.stylize("[Circular]", "special");
+		}
 		if (isUndefined2(name)) {
 			if (array && key.match(/^\d+$/)) return str;
 			name = JSON.stringify("" + key);
@@ -4639,14 +4656,16 @@ var _ObjectValidator = class _ObjectValidator extends BaseValidator {
 		for (const [key, validator] of shapeEntries) if (validator instanceof UnionValidator) {
 			const [possiblyLiteralOrNullishPredicate] = validator["validators"];
 			if (possiblyLiteralOrNullishPredicate instanceof NullishValidator) this.possiblyUndefinedKeys.set(key, validator);
-			else if (possiblyLiteralOrNullishPredicate instanceof LiteralValidator) if (possiblyLiteralOrNullishPredicate.expected === void 0) this.possiblyUndefinedKeys.set(key, validator);
-			else this.requiredKeys.set(key, validator);
-			else if (validator instanceof DefaultValidator) this.possiblyUndefinedKeysWithDefaults.set(key, validator);
+			else if (possiblyLiteralOrNullishPredicate instanceof LiteralValidator) {
+				if (possiblyLiteralOrNullishPredicate.expected === void 0) this.possiblyUndefinedKeys.set(key, validator);
+				else this.requiredKeys.set(key, validator);
+			} else if (validator instanceof DefaultValidator) this.possiblyUndefinedKeysWithDefaults.set(key, validator);
 			else this.requiredKeys.set(key, validator);
 		} else if (validator instanceof NullishValidator) this.possiblyUndefinedKeys.set(key, validator);
-		else if (validator instanceof LiteralValidator) if (validator.expected === void 0) this.possiblyUndefinedKeys.set(key, validator);
-		else this.requiredKeys.set(key, validator);
-		else if (validator instanceof DefaultValidator) this.possiblyUndefinedKeysWithDefaults.set(key, validator);
+		else if (validator instanceof LiteralValidator) {
+			if (validator.expected === void 0) this.possiblyUndefinedKeys.set(key, validator);
+			else this.requiredKeys.set(key, validator);
+		} else if (validator instanceof DefaultValidator) this.possiblyUndefinedKeysWithDefaults.set(key, validator);
 		else this.requiredKeys.set(key, validator);
 	}
 	strict(options = this.validatorOptions) {

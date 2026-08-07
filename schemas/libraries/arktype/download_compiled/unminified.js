@@ -32,9 +32,10 @@ const range = (length, offset = 0) => [...new Array(length)].map((_, i) => i + o
 */
 const append = (to, value, opts) => {
 	if (to === void 0) return value === void 0 ? [] : Array.isArray(value) ? value : [value];
-	if (opts?.prepend) if (Array.isArray(value)) to.unshift(...value);
-	else to.unshift(value);
-	else if (Array.isArray(value)) to.push(...value);
+	if (opts?.prepend) {
+		if (Array.isArray(value)) to.unshift(...value);
+		else to.unshift(value);
+	} else if (Array.isArray(value)) to.push(...value);
 	else to.push(value);
 	return to;
 };
@@ -2715,8 +2716,10 @@ const intersectProps = (l, r, ctx) => {
 	const key = l.key;
 	let value = intersectOrPipeNodes(l.value, r.value, ctx);
 	const kind = l.required || r.required ? "required" : "optional";
-	if (value instanceof Disjoint) if (kind === "optional") value = $ark.intrinsic.never.internal;
-	else return value.withPrefixKey(l.key, l.required && r.required ? "required" : "optional");
+	if (value instanceof Disjoint) {
+		if (kind === "optional") value = $ark.intrinsic.never.internal;
+		else return value.withPrefixKey(l.key, l.required && r.required ? "required" : "optional");
+	}
 	if (kind === "required") return ctx.$.node("required", {
 		key,
 		value
@@ -3960,10 +3963,11 @@ var UnionNode = class extends BaseRoot {
 				const caseCondition = k === "default" ? k : `case ${k}`;
 				let caseResult;
 				if (v === true) caseResult = optimistic ? "data" : "true";
-				else if (optimistic) if (v.rootApplyStrategy === "branchedOptimistic") caseResult = js.invoke(v, { kind: "Optimistic" });
-				else if (v.contextFreeMorph) caseResult = `${js.invoke(v)} ? ${registeredReference(v.contextFreeMorph)}(data) : "${unset}"`;
-				else caseResult = `${js.invoke(v)} ? data : "${unset}"`;
-				else caseResult = js.invoke(v);
+				else if (optimistic) {
+					if (v.rootApplyStrategy === "branchedOptimistic") caseResult = js.invoke(v, { kind: "Optimistic" });
+					else if (v.contextFreeMorph) caseResult = `${js.invoke(v)} ? ${registeredReference(v.contextFreeMorph)}(data) : "${unset}"`;
+					else caseResult = `${js.invoke(v)} ? data : "${unset}"`;
+				} else caseResult = js.invoke(v);
 				js.line(`${caseCondition}: return ${caseResult}`);
 			}
 			return js;
@@ -4730,26 +4734,27 @@ const _intersectSequences = (s) => {
 		if (postfixBranchResult.disjoint.length === 0) s.fixedVariants.push(postfixBranchResult);
 	}
 	const result = intersectOrPipeNodes(lHead.node, rHead.node, s.ctx);
-	if (result instanceof Disjoint) if (kind === "prefix" || kind === "postfix") {
-		s.disjoint.push(...result.withPrefixKey(kind === "prefix" ? s.result.length : `-${lTail.length + 1}`, elementIsRequired(lHead) && elementIsRequired(rHead) ? "required" : "optional"));
-		s.result = [...s.result, {
-			kind,
-			node: $ark.intrinsic.never.internal
-		}];
-	} else if (kind === "optionals" || kind === "defaultables") return s;
-	else return _intersectSequences({
-		...s,
-		fixedVariants: [],
-		l: lTail.map((element) => ({
-			...element,
-			kind: "prefix"
-		})),
-		r: lTail.map((element) => ({
-			...element,
-			kind: "prefix"
-		}))
-	});
-	else if (kind === "defaultables") {
+	if (result instanceof Disjoint) {
+		if (kind === "prefix" || kind === "postfix") {
+			s.disjoint.push(...result.withPrefixKey(kind === "prefix" ? s.result.length : `-${lTail.length + 1}`, elementIsRequired(lHead) && elementIsRequired(rHead) ? "required" : "optional"));
+			s.result = [...s.result, {
+				kind,
+				node: $ark.intrinsic.never.internal
+			}];
+		} else if (kind === "optionals" || kind === "defaultables") return s;
+		else return _intersectSequences({
+			...s,
+			fixedVariants: [],
+			l: lTail.map((element) => ({
+				...element,
+				kind: "prefix"
+			})),
+			r: lTail.map((element) => ({
+				...element,
+				kind: "prefix"
+			}))
+		});
+	} else if (kind === "defaultables") {
 		if (lHead.kind === "defaultables" && rHead.kind === "defaultables" && lHead.default !== rHead.default) throwParseError(writeDefaultIntersectionMessage(lHead.default, rHead.default));
 		s.result = [...s.result, {
 			kind,
@@ -4967,17 +4972,19 @@ var StructureNode = class extends BaseConstraint {
 		if (this.index) {
 			for (const n of this.index) if (typeOrTermExtends(key, n.signature)) value = value?.and(n.value) ?? n.value;
 		}
-		if (this.sequence && typeOrTermExtends(key, $ark.intrinsic.nonNegativeIntegerString)) if (hasArkKind(key, "root")) {
-			if (this.sequence.variadic) value = value?.and(this.sequence.element) ?? this.sequence.element;
-		} else {
-			const index = Number.parseInt(key);
-			if (index < this.sequence.prevariadic.length) {
-				const fixedElement = this.sequence.prevariadic[index].node;
-				value = value?.and(fixedElement) ?? fixedElement;
-				required ||= index < this.sequence.prefixLength;
-			} else if (this.sequence.variadic) {
-				const nonFixedElement = this.$.node("union", this.sequence.variadicOrPostfix);
-				value = value?.and(nonFixedElement) ?? nonFixedElement;
+		if (this.sequence && typeOrTermExtends(key, $ark.intrinsic.nonNegativeIntegerString)) {
+			if (hasArkKind(key, "root")) {
+				if (this.sequence.variadic) value = value?.and(this.sequence.element) ?? this.sequence.element;
+			} else {
+				const index = Number.parseInt(key);
+				if (index < this.sequence.prevariadic.length) {
+					const fixedElement = this.sequence.prevariadic[index].node;
+					value = value?.and(fixedElement) ?? fixedElement;
+					required ||= index < this.sequence.prefixLength;
+				} else if (this.sequence.variadic) {
+					const nonFixedElement = this.$.node("union", this.sequence.variadicOrPostfix);
+					value = value?.and(nonFixedElement) ?? nonFixedElement;
+				}
 			}
 		}
 		if (!value) {
@@ -5043,11 +5050,13 @@ var StructureNode = class extends BaseConstraint {
 			this.props[i].traverseApply(data, ctx);
 			if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
 		}
-		if (this.sequence) if (traversalKind === "Allows") {
-			if (!this.sequence.traverseAllows(data, ctx)) return false;
-		} else {
-			this.sequence.traverseApply(data, ctx);
-			if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
+		if (this.sequence) {
+			if (traversalKind === "Allows") {
+				if (!this.sequence.traverseAllows(data, ctx)) return false;
+			} else {
+				this.sequence.traverseApply(data, ctx);
+				if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
+			}
 		}
 		if (this.index || this.undeclared === "reject") {
 			const keys = Object.keys(data);
@@ -5055,11 +5064,13 @@ var StructureNode = class extends BaseConstraint {
 			for (let i = 0; i < keys.length; i++) {
 				const k = keys[i];
 				if (this.index) {
-					for (const node of this.index) if (node.signature.traverseAllows(k, ctx)) if (traversalKind === "Allows") {
-						if (!traverseKey(k, () => node.value.traverseAllows(data[k], ctx), ctx)) return false;
-					} else {
-						traverseKey(k, () => node.value.traverseApply(data[k], ctx), ctx);
-						if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
+					for (const node of this.index) if (node.signature.traverseAllows(k, ctx)) {
+						if (traversalKind === "Allows") {
+							if (!traverseKey(k, () => node.value.traverseAllows(data[k], ctx), ctx)) return false;
+						} else {
+							traverseKey(k, () => node.value.traverseApply(data[k], ctx), ctx);
+							if (ctx.failFast && ctx.currentErrorCount > errorCount) return false;
+						}
 					}
 				}
 				if (this.undeclared === "reject" && !this.declaresKey(k)) {
@@ -5222,8 +5233,10 @@ const constructStructuralMorphCacheKey = (node) => {
 		if (node.required) for (const n of node.required) cacheKey += n.compiledKey + " | ";
 		if (node.optional) for (const n of node.optional) cacheKey += n.compiledKey + " | ";
 		if (node.index) for (const index of node.index) cacheKey += index.signature.id + " | ";
-		if (node.sequence) if (node.sequence.maxLength === null) cacheKey += intrinsic.nonNegativeIntegerString.id;
-		else for (let i = 0; i < node.sequence.tuple.length; i++) cacheKey += i + " | ";
+		if (node.sequence) {
+			if (node.sequence.maxLength === null) cacheKey += intrinsic.nonNegativeIntegerString.id;
+			else for (let i = 0; i < node.sequence.tuple.length; i++) cacheKey += i + " | ";
+		}
 		cacheKey += ")";
 	}
 	return cacheKey;
@@ -6599,12 +6612,13 @@ const parseObject = (def, ctx) => {
 const parseStandardSchema = (def, ctx) => ctx.$.intrinsic.unknown.pipe((v, ctx) => {
 	const result = def["~standard"].validate(v);
 	if (!result.issues) return result.value;
-	for (const { message, path } of result.issues) if (path) if (path.length) ctx.error({
-		problem: uncapitalize(message),
-		relativePath: path.map((k) => typeof k === "object" ? k.key : k)
-	});
-	else ctx.error({ message });
-	else ctx.error({ message });
+	for (const { message, path } of result.issues) if (path) {
+		if (path.length) ctx.error({
+			problem: uncapitalize(message),
+			relativePath: path.map((k) => typeof k === "object" ? k.key : k)
+		});
+		else ctx.error({ message });
+	} else ctx.error({ message });
 });
 const parseTuple = (def, ctx) => maybeParseTupleExpression(def, ctx) ?? parseTupleLiteral(def, ctx);
 const writeBadDefinitionTypeMessage = (actual) => `Type definitions must be strings or objects (was ${actual})`;
