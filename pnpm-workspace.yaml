@@ -14,7 +14,7 @@ allowBuilds:
 catalog:
   "@oxfmt/binding-linux-x64-gnu": ^0.62.0
   "@standard-schema/spec": ^1.1.0
-  "@ttsc/unplugin": "^0.24.0"
+  "@ttsc/unplugin": "^0.25.0"
   "@types/node": ^26
   "@types/react": ^19.2.18
   "@types/react-dom": ^19.2.4
