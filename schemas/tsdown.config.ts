@@ -4,8 +4,8 @@ import ttsc from "@ttsc/unplugin/rolldown";
 import { defineConfig, type TsdownPlugin } from "tsdown";
 import macros from "unplugin-macros/rolldown";
 
-const typiaPathPattern = /[\\/]libraries[\\/]typia[\\/]/;
-export function typiaOnly<A>(plugin: TsdownPlugin<A>): TsdownPlugin<A> {
+export const typiaPathPattern = /[\\/]libraries[\\/]typia[\\/]/;
+export function filterTransform<A>(plugin: TsdownPlugin<A>, pattern: RegExp): TsdownPlugin<A> {
   const transform = plugin.transform;
 
   if (!transform) {
@@ -21,7 +21,7 @@ export function typiaOnly<A>(plugin: TsdownPlugin<A>): TsdownPlugin<A> {
     ...plugin,
     transform: {
       ...(typeof transform === "function" ? {} : transform),
-      filter: { id: typiaPathPattern },
+      filter: { id: pattern },
       handler,
     },
   };
@@ -36,7 +36,7 @@ export default defineConfig({
   alias: {
     "#src": path.resolve(process.cwd(), "./src/index.ts"),
   },
-  plugins: [typiaOnly(ttsc()), macros()],
+  plugins: [filterTransform(ttsc(), typiaPathPattern), macros()],
   deps: {
     neverBundle: [/node:/],
   },
