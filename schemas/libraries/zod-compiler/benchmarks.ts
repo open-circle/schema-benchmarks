@@ -3,7 +3,9 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { compiledProductSchema } from "./index.gen";
+import { getZodCompilerSchema } from "./index.gen";
+
+const schema = getZodCompilerSchema();
 
 export default defineBenchmarks({
   library: {
@@ -11,18 +13,24 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("zod-compiler"),
   },
+  initialization: {
+    run() {
+      return getZodCompilerSchema();
+    },
+    snippet: ts`compile(schema)`,
+  },
   parsing: {
     allErrors: [
       {
         run(data) {
-          return compiledProductSchema.safeParse(data);
+          return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data)`,
       },
       {
         run(data) {
-          return compiledProductSchema.safeParse(data, { jitless: true });
+          return schema.safeParse(data, { jitless: true });
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data, { jitless: true })`,
@@ -30,11 +38,11 @@ export default defineBenchmarks({
     ],
   },
   standard: {
-    allErrors: { schema: compiledProductSchema },
+    allErrors: { schema: schema },
   },
   stack: {
     throw: (data) => {
-      compiledProductSchema.parse(data);
+      schema.parse(data);
       assertNotReached();
     },
     snippet: ts`schema.parse(data)`,
