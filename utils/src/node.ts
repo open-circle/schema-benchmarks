@@ -10,11 +10,21 @@ const pnpmListSchema = v.pipe(
   v.parseJson(),
   v.array(
     v.object({
-      dependencies: v.record(
-        v.string(),
-        v.object({
-          version: v.string(),
-        }),
+      dependencies: v.optional(
+        v.record(
+          v.string(),
+          v.object({
+            version: v.string(),
+          }),
+        ),
+      ),
+      devDependencies: v.optional(
+        v.record(
+          v.string(),
+          v.object({
+            version: v.string(),
+          }),
+        ),
       ),
     }),
   ),
@@ -26,7 +36,7 @@ export async function getVersion(libraryName: string) {
   if (versionCache.has(libraryName)) return versionCache.get(libraryName)!;
   const { stdout } = await execFile("pnpm", ["--filter", "schemas", "list", libraryName, "--json"]);
   const data = v.parse(pnpmListSchema, stdout);
-  const dep = data[0]?.dependencies[libraryName];
+  const dep = data[0]?.dependencies?.[libraryName] ?? data[0]?.devDependencies?.[libraryName];
   if (!dep) throw new Error(`No version found for ${libraryName}`);
   versionCache.set(libraryName, dep.version);
   return dep.version;
