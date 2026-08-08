@@ -10,6 +10,7 @@
   },
   "scripts": {
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
+    "gen:zod-compiler": "node ./libraries/zod-compiler/generate.ts",
     "prebuild": "pnpm run gen:paseri",
     "build": "tsdown",
     "typecheck": "tsc",
@@ -53,6 +54,7 @@
     "typescript": "catalog:",
     "unplugin-macros": "^0.20.2",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "zod-compiler": "^1.23.8"
   }
 }
