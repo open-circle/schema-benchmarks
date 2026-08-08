@@ -13,8 +13,8 @@ catalogs:
       specifier: ^1.1.0
       version: 1.1.0
     '@ttsc/unplugin':
-      specifier: ^0.24.0
-      version: 0.24.0
+      specifier: ^0.25.0
+      version: 0.25.0
     '@types/react':
       specifier: ^19.2.18
       version: 19.2.18
@@ -118,7 +118,7 @@ importers:
         version: 1.1.0
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.24.0(ttsc@0.24.0)
+        version: 0.25.0(ttsc@0.24.0)
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -231,7 +231,7 @@ importers:
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.24.0(ttsc@0.24.0)
+        version: 0.25.0(ttsc@0.24.0)
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -4147,10 +4147,10 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.24.0':
-    resolution: {integrity: sha512-hUBfcd4D2AH5do/1jJNpO3LxMqn8cfSMKS/0+Hgsmb8F45WI/snojn1Xcj2jxiPk5KZleffRQASKF7vw/h+fjw==}
+  '@ttsc/unplugin@0.25.0':
+    resolution: {integrity: sha512-J9R3jWgafTbadeCupbGArAEnnRLxFgA4Y+g1v3IUjTtAX1Saq3wnjYvbYfyB/gzmAoPuQFb2/tMzIwatEsWQpQ==}
     peerDependencies:
-      ttsc: ^0.24.0
+      ttsc: ^0.25.0
 
   '@ttsc/win32-arm64@0.24.0':
     resolution: {integrity: sha512-ryAIBN0OpD06xiQ15c9+CPwLIjofzmcFNflCmaKuZqBtt5LHcaRv54DU1eu7YQnaIN7WtUxoAXRI0SP2RJJuwQ==}
@@ -12686,7 +12686,7 @@ snapshots:
   '@ttsc/linux-x64@0.24.0':
     optional: true
 
-  '@ttsc/unplugin@0.24.0(ttsc@0.24.0)':
+  '@ttsc/unplugin@0.25.0(ttsc@0.24.0)':
     dependencies:
       ttsc: 0.24.0
       unplugin: 2.3.11
