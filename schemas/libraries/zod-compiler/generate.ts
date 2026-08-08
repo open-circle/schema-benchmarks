@@ -8,6 +8,7 @@ const compiledFile = path.resolve(import.meta.dirname, "./compiled.gen.ts");
 const compiledBag = path.resolve(import.meta.dirname, "./compiled-bag.gen.ts");
 
 const indexGenFile = path.resolve(import.meta.dirname, "./index.gen.ts");
+const bagGenFile = path.resolve(import.meta.dirname, "./bag.gen.ts");
 
 execFileSync("pnpm", ["exec", "zod-compiler", "generate", srcFile, "--output", compiledFile]);
 execFileSync("pnpm", [
@@ -39,35 +40,51 @@ const fixedContent = originalContent.replace(
 
 fs.writeFileSync(compiledFile, `// @ts-nocheck\n${fixedContent}`, "utf-8");
 
-// compiled-bag.gen.ts: add `// @ts-nocheck` and annotate type of variable as `CompiledSchema<output<typeof compiledProductSchema>>` (add imports for `CompiledSchema` and `output`)
+// compiled-bag.gen.ts: add `// @ts-nocheck` and annotate type of variable as `CompiledSchema<ProductData>` (add imports for `CompiledSchema` and `ProductData`)
 
 const bagContent = fs.readFileSync(compiledBag, "utf-8");
 
 const bagFixedContent = bagContent.replace(
   "export const compiledProductSchema =",
-  `export const compiledProductSchema: CompiledSchema<output<typeof ${importAlias}>> =`,
+  `export const compiledProductSchema: CompiledSchema<ProductData> =`,
 );
 
 fs.writeFileSync(
   compiledBag,
-  `// @ts-nocheck\nimport { CompiledSchema } from "zod-compiler";\nimport { output } from "zod";\n${bagFixedContent}`,
+  `// @ts-nocheck\nimport { CompiledSchema } from "zod-compiler";\nimport type { ProductData } from "#src";\n${bagFixedContent}`,
   "utf-8",
 );
 
-// index.gen.ts: add `// @ts-nocheck` and wrap all the generated code in a function so we can measure initialization time
+function factoryify(sourcePath: string, outputPath: string, fnName = "getZodCompilerSchema") {
+  const content = fs.readFileSync(sourcePath, "utf-8");
 
-const getImportRegex = () => /import .* from .*/g;
+  const importStatements = content.match(/import .* from .*/g) || [];
 
-const importStatements = originalContent.match(getImportRegex()) || [];
+  const type = content.match(/export const compiledProductSchema: (.*) = \//)?.[1];
 
-// wrap all the generated code in a function so we can measure initialization time
-const indexContent = `
+  if (!type) {
+    throw new Error("Could not find type for compiledProductSchema");
+  }
+
+  const factoryContent = `
 // @ts-nocheck
 ${importStatements.join("\n")}
 
-export function getZodCompilerSchema(): typeof ${importAlias} {
-${originalContent.replace(getImportRegex(), "").replace(`export const compiledProductSchema: typeof ${importAlias} =`, "return").trim()}
+export function ${fnName}(): ${type} {
+${content
+  .replace(/import .* from .*/g, "")
+  .replace(`export const compiledProductSchema: ${type} =`, "return")
+  .trim()}
 }
 `;
 
-fs.writeFileSync(indexGenFile, indexContent, "utf-8");
+  fs.writeFileSync(outputPath, factoryContent, "utf-8");
+}
+
+// index.gen.ts: add `// @ts-nocheck` and wrap all the generated code in a function so we can measure initialization time
+
+factoryify(compiledFile, indexGenFile);
+
+// bag.gen.ts: add `// @ts-nocheck` and wrap all the generated code in a function so we can measure initialization time
+
+factoryify(compiledBag, bagGenFile, "getZodCompilerBagSchema");
