@@ -3,9 +3,11 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
+import { getZodCompilerBagSchema } from "./bag.gen";
 import { getZodCompilerSchema } from "./index.gen";
 
 const schema = getZodCompilerSchema();
+const bagSchema = getZodCompilerBagSchema();
 
 export default defineBenchmarks({
   library: {
@@ -13,16 +15,25 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("zod-compiler"),
   },
-  initialization: {
-    run() {
-      return getZodCompilerSchema();
+  initialization: [
+    {
+      run() {
+        return getZodCompilerSchema();
+      },
+      snippet: ts`compile(schema)`,
     },
-    snippet: ts`compile(schema)`,
-  },
+    {
+      run() {
+        return getZodCompilerBagSchema();
+      },
+      snippet: ts`compile(schema)`,
+      note: "bag",
+    },
+  ],
   parsing: {
     allErrors: [
       {
-        run(data) {
+        run(data): { success: boolean } {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
@@ -35,10 +46,18 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data, { jitless: true })`,
       },
+      {
+        run(data) {
+          return bagSchema.safeParse(data);
+        },
+        validateResult: (result) => result.success,
+        snippet: ts`bagSchema.safeParse(data)`,
+        note: "bag",
+      },
     ],
   },
   standard: {
-    allErrors: { schema: schema },
+    allErrors: [{ schema }, { schema: bagSchema as never, note: "bag" }],
   },
   stack: {
     throw: (data) => {
