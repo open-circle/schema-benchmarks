@@ -11,12 +11,6 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("zod-compiler"),
   },
-  initialization: {
-    run() {
-      throw new Error("figure this out");
-    },
-    snippet: ts`compile(z.object(...))`,
-  },
   parsing: {
     allErrors: [
       {
