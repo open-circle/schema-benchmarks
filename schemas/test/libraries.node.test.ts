@@ -12,7 +12,7 @@ import { assert, describe, expect, it } from "vitest";
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
 
-  describe("initialization", () => {
+  describe.runIf(config.initialization)("initialization", () => {
     describe.each(ensureArray(config.initialization))("config %o", (config) => {
       it("should initialize", async () => {
         const result = await config.run();

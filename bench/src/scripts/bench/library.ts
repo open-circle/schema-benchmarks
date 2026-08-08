@@ -48,21 +48,22 @@ bench.addEventListener("cycle", (event) => {
 bench.addEventListener("complete", () => {
   console.log("Bench complete");
 });
-
-for (const benchConfig of ensureArray(initialization)) {
-  const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
-  bench.add(
-    caseRegistry.add({
-      type: "initialization",
-      optimizeType,
-      libraryName,
-      version,
-      snippet,
-      note,
-      throws,
-    }),
-    () => run(),
-  );
+if (initialization) {
+  for (const benchConfig of ensureArray(initialization)) {
+    const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
+    bench.add(
+      caseRegistry.add({
+        type: "initialization",
+        optimizeType,
+        libraryName,
+        version,
+        snippet,
+        note,
+        throws,
+      }),
+      () => run(),
+    );
+  }
 }
 if (validation) {
   for (const [dataType, data] of [

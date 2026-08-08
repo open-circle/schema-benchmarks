@@ -79,7 +79,7 @@ export interface LibraryInfo {
 
 export interface BenchmarksConfig<ParseResult = unknown> {
   library: LibraryInfo;
-  initialization: MaybeArray<InitializationBenchmarkConfig>;
+  initialization?: MaybeArray<InitializationBenchmarkConfig>;
   validation?: MaybeArray<ValidationBenchmarkConfig>;
   parsing?: Partial<Record<ErrorType, MaybeArray<ParsingBenchmarkConfig<ParseResult>>>>;
   standard?: Partial<Record<ErrorType, MaybeArray<StandardSchemaBenchmarkConfig>>>;
