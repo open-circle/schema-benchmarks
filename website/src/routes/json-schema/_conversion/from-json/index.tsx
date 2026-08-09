@@ -34,7 +34,7 @@ export const Route = createFileRoute("/json-schema/_conversion/from-json/")({
       description: "Benchmark results for converting a JSON schema to a library schema.",
       openGraph: { url: "/json-schema/from-json" },
     }),
-  staticData: { crumb: ["JSON Schema", "JSON to Schema"] },
+  staticData: { crumb: "JSON to Schema" },
 });
 
 function RouteComponent() {
