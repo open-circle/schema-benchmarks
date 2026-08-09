@@ -26,7 +26,7 @@ import {
   jsonSchemaDirectionProps,
   jsonSourceProps,
   jsonSchemaConversionTargetProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+} from "#src/routes/json-schema/_conversion/-constants";
 import { admonitionDefaults } from "#src/shared/components/admonition/constants";
 import { sidebarGroups } from "#src/shared/components/sidebar/groups";
 import { sortDirectionIcons } from "#src/shared/components/table/constants";

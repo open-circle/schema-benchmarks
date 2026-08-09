@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query.ts";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
 import { generateMetadata } from "#src/shared/data/meta";
 
 import Content from "./content.mdx";

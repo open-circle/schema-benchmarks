@@ -15,7 +15,7 @@ import { SortableHeaderLink } from "#src/shared/components/table/sort";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/table/index.css";
+import "#src/routes/json-schema/_conversion/to-json/-components/table/index.css";
 
 export interface FromJsonTableProps {
   results: Array<SchemaFromJsonResult>;

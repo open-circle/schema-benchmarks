@@ -3,7 +3,7 @@ import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-be
 import {
   jsonSchemaConversionTargetProps,
   jsonSchemaDirectionProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+} from "#src/routes/json-schema/_conversion/-constants";
 
 import { BaseConversionPage } from "./_conversion";
 

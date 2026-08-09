@@ -3,7 +3,7 @@ import { formatDuration, getTransitionName } from "@schema-benchmarks/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { cls } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/card";
+import { cls } from "#src/routes/json-schema/_conversion/to-json/-components/card";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";

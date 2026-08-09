@@ -4,8 +4,8 @@ import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { GeneratedJsonSchema } from "#src/routes/_benchmarks/json-schema/_conversion/-components/json-schema";
-import { jsonSchemaDirectionProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+import { GeneratedJsonSchema } from "#src/routes/json-schema/_conversion/-components/json-schema";
+import { jsonSchemaDirectionProps } from "#src/routes/json-schema/_conversion/-constants";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";

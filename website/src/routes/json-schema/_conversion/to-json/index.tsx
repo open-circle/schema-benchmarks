@@ -10,9 +10,9 @@ import {
   jsonSchemaConversionTargetProps,
   optionalJsonSchemaDirectionSchema,
   optionalJsonSchemaConversionTargetSchema,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
-import { SupportMatrix } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix.tsx";
+} from "#src/routes/json-schema/_conversion/-constants";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
+import { SupportMatrix } from "#src/routes/json-schema/_conversion/to-json/-components/matrix.tsx";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -39,7 +39,7 @@ const searchSchema = v.object({
   ...sortParamsEntries,
 });
 
-export const Route = createFileRoute("/_benchmarks/json-schema/_conversion/to-json/")({
+export const Route = createFileRoute("/json-schema/_conversion/to-json/")({
   validateSearch: searchSchema,
   component: RouteComponent,
   loaderDeps: ({ search: { target, direction } }) => ({ target, direction }),
