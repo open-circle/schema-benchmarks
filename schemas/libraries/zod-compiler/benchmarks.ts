@@ -4,10 +4,12 @@ import ts from "dedent";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getZodCompilerBagSchema } from "./bag.gen";
+import { getZodCompilerCompactSchema } from "./compact.gen";
 import { getZodCompilerSchema } from "./index.gen";
 
 const schema = getZodCompilerSchema();
 const bagSchema = getZodCompilerBagSchema();
+const compactSchema = getZodCompilerCompactSchema();
 
 export default defineBenchmarks({
   library: {
@@ -29,6 +31,13 @@ export default defineBenchmarks({
       snippet: ts`compile(schema)`,
       note: "bag",
     },
+    {
+      run() {
+        return getZodCompilerCompactSchema();
+      },
+      snippet: ts`compile(schema)`,
+      note: "compact",
+    },
   ],
   parsing: {
     allErrors: [
@@ -45,6 +54,7 @@ export default defineBenchmarks({
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data, { jitless: true })`,
+        note: "jitless",
       },
       {
         run(data) {
@@ -54,10 +64,22 @@ export default defineBenchmarks({
         snippet: ts`bagSchema.safeParse(data)`,
         note: "bag",
       },
+      {
+        run(data) {
+          return compactSchema.safeParse(data);
+        },
+        validateResult: (result) => result.success,
+        snippet: ts`compactSchema.safeParse(data)`,
+        note: "compact",
+      },
     ],
   },
   standard: {
-    allErrors: [{ schema }, { schema: bagSchema as never, note: "bag" }],
+    allErrors: [
+      { schema },
+      { schema: bagSchema as never, note: "bag" },
+      { schema: compactSchema, note: "compact" },
+    ],
   },
   stack: {
     throw: (data) => {

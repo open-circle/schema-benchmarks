@@ -6,9 +6,11 @@ const srcFile = path.resolve(import.meta.dirname, "./index.ts");
 
 const compiledFile = path.resolve(import.meta.dirname, "./compiled.gen.ts");
 const compiledBag = path.resolve(import.meta.dirname, "./compiled-bag.gen.ts");
+const compiledCompact = path.resolve(import.meta.dirname, "./compiled-compact.gen.ts");
 
 const indexGenFile = path.resolve(import.meta.dirname, "./index.gen.ts");
 const bagGenFile = path.resolve(import.meta.dirname, "./bag.gen.ts");
+const compactGenFile = path.resolve(import.meta.dirname, "./compact.gen.ts");
 
 execFileSync("pnpm", ["exec", "zod-compiler", "generate", srcFile, "--output", compiledFile]);
 execFileSync("pnpm", [
@@ -21,24 +23,39 @@ execFileSync("pnpm", [
   "--emit",
   "bag",
 ]);
+execFileSync("pnpm", [
+  "exec",
+  "zod-compiler",
+  "generate",
+  srcFile,
+  "--output",
+  compiledCompact,
+  "--emit",
+  "compact",
+]);
 
 // post-processing needed:
 // compiled.gen.ts: add `// @ts-nocheck` and annotate type of variable as `typeof compiledProductSchema`
 
-const originalContent = fs.readFileSync(compiledFile, "utf-8");
+function addTypeAnnotation(filePath: string) {
+  const content = fs.readFileSync(filePath, "utf-8");
 
-const importAlias = originalContent.match(/import { compiledProductSchema as (\w+) } from .*/)?.[1];
+  const importAlias = content.match(/import { compiledProductSchema as (\w+) } from .*/)?.[1];
 
-if (!importAlias) {
-  throw new Error("Could not find import alias for compiledProductSchema");
+  if (!importAlias) {
+    throw new Error("Could not find import alias for compiledProductSchema");
+  }
+
+  const fixedContent = content.replace(
+    "export const compiledProductSchema =",
+    `export const compiledProductSchema: typeof ${importAlias} =`,
+  );
+
+  fs.writeFileSync(filePath, `// @ts-nocheck\n${fixedContent}`, "utf-8");
 }
 
-const fixedContent = originalContent.replace(
-  "export const compiledProductSchema =",
-  `export const compiledProductSchema: typeof ${importAlias} =`,
-);
-
-fs.writeFileSync(compiledFile, `// @ts-nocheck\n${fixedContent}`, "utf-8");
+addTypeAnnotation(compiledFile);
+addTypeAnnotation(compiledCompact);
 
 // compiled-bag.gen.ts: add `// @ts-nocheck` and annotate type of variable as `CompiledSchema<ProductData>` (add imports for `CompiledSchema` and `ProductData`)
 
@@ -88,3 +105,4 @@ factoryify(compiledFile, indexGenFile);
 // bag.gen.ts: add `// @ts-nocheck` and wrap all the generated code in a function so we can measure initialization time
 
 factoryify(compiledBag, bagGenFile, "getZodCompilerBagSchema");
+factoryify(compiledCompact, compactGenFile, "getZodCompilerCompactSchema");
