@@ -10,7 +10,7 @@ import {
   jsonSchemaDirectionProps,
   jsonSchemaConversionTargetProps,
   jsonSourceProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
+} from "#src/routes/json-schema/_conversion/-constants";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { useNpmSite } from "#src/shared/components/prefs/context.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";

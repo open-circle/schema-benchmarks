@@ -8,9 +8,9 @@ import clsx from "clsx";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaConversionTargetProps,
-} from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
-import { jsonSourceProps } from "#src/routes/_benchmarks/json-schema/_conversion/-constants";
-import { PackageSource } from "#src/routes/_benchmarks/json-schema/_conversion/to-json/-components/matrix/source.tsx";
+} from "#src/routes/json-schema/_conversion/-constants";
+import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants";
+import { PackageSource } from "#src/routes/json-schema/_conversion/to-json/-components/matrix/source.tsx";
 
 import { MatrixCheckbox } from "./checkbox";
 

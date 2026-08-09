@@ -3,7 +3,7 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/_benchmarks/json-schema/_conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
@@ -14,7 +14,7 @@ const searchSchema = v.object({
   ...sortParamsEntries,
 });
 
-export const Route = createFileRoute("/_benchmarks/json-schema/_conversion/from-json/")({
+export const Route = createFileRoute("/json-schema/_conversion/from-json/")({
   validateSearch: searchSchema,
   component: RouteComponent,
   async loader({ context: { queryClient }, abortController }) {
