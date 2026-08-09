@@ -32,7 +32,7 @@ test.describe("desktop view", () => {
   test("table can be sorted by column", async ({ validationPage }) => {
     await runtimeHelpers.desktop.testTableSorting(validationPage, {
       first: /@railway-ts/i,
-      last: /yup/i,
+      last: /zod/i,
     });
   });
 });
