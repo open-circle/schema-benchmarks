@@ -16,7 +16,7 @@
   },
   "scripts": {
     "bench": "node ./src/scripts/bench/orchestrate.ts",
-    "bench:json-schema": "node ./src/scripts/json-schema/orchestrate.ts",
+    "json-schema": "node ./src/scripts/json-schema/orchestrate.ts",
     "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsc"
