@@ -44,7 +44,6 @@ export async function getTargetCompliance(
 
   for await (const [file, testCases] of getTestCases(target)) {
     const result: FileComplianceResult = {
-      description: file,
       count: {
         passed: 0,
         failed: 0,

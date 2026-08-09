@@ -20,7 +20,6 @@ export const complianceTargetSchema = v.picklist(targets);
 export type ComplianceTarget = v.InferOutput<typeof complianceTargetSchema>;
 
 export const fileComplianceResultSchema = v.object({
-  description: v.string(),
   count: v.object({
     passed: v.number(),
     failed: v.number(),
