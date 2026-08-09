@@ -1,4 +1,5 @@
 import * as child_process from "node:child_process";
+import * as path from "node:path";
 import { promisify } from "node:util";
 
 import * as v from "valibot";
@@ -32,9 +33,39 @@ const pnpmListSchema = v.pipe(
 
 const versionCache = new Map<string, string>();
 
+const getPnpmExec = () => {
+  const npmExecPath = process.env.npm_execpath;
+  if (npmExecPath && path.basename(npmExecPath).startsWith("pnpm")) {
+    return {
+      command: process.execPath,
+      args: [npmExecPath],
+    };
+  }
+
+  if (process.platform === "win32") {
+    return {
+      command: "cmd.exe",
+      args: ["/d", "/s", "/c", "pnpm"],
+    };
+  }
+
+  return {
+    command: "pnpm",
+    args: [],
+  };
+};
+
 export async function getVersion(libraryName: string) {
   if (versionCache.has(libraryName)) return versionCache.get(libraryName)!;
-  const { stdout } = await execFile("pnpm", ["--filter", "schemas", "list", libraryName, "--json"]);
+  const pnpm = getPnpmExec();
+  const { stdout } = await execFile(pnpm.command, [
+    ...pnpm.args,
+    "--filter",
+    "schemas",
+    "list",
+    libraryName,
+    "--json",
+  ]);
   const data = v.parse(pnpmListSchema, stdout);
   const dep = data[0]?.dependencies?.[libraryName] ?? data[0]?.devDependencies?.[libraryName];
   if (!dep) throw new Error(`No version found for ${libraryName}`);
