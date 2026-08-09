@@ -1,8 +1,9 @@
+import { filterTransform } from "@schema-benchmarks/utils/rolldown";
 import ttsc from "@ttsc/unplugin/vite";
 import macros from "unplugin-macros/vite";
 import { defineConfig } from "vitest/config";
 
-import { filterTransform, typiaPathPattern } from "./tsdown.config";
+import { typiaPathPattern } from "./tsdown.config.ts";
 
 export default defineConfig({
   plugins: [filterTransform(ttsc(), typiaPathPattern), macros()],
