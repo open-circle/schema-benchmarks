@@ -4259,17 +4259,17 @@ function __zcSw_1(input, path, _e) {
 			else __sv_7 = __ut_8;
 		}
 		input = {
-			id: __sv_2,
-			created: __sv_3,
-			title: __sv_4,
-			type: __sv_5,
-			size: __sv_6,
-			url: __sv_7
+			"id": __sv_2,
+			"created": __sv_3,
+			"title": __sv_4,
+			"type": __sv_5,
+			"size": __sv_6,
+			"url": __sv_7
 		};
 	}
 	return input;
 }
-const imageSchema = /* @__PURE__ */ object({
+const imageSchema = object({
 	id: number(),
 	created: date(),
 	title: string().min(1).max(100),
@@ -4277,14 +4277,14 @@ const imageSchema = /* @__PURE__ */ object({
 	size: number(),
 	url: url()
 });
-const ratingSchema = /* @__PURE__ */ object({
+const ratingSchema = object({
 	id: number(),
 	stars: number().min(0).max(5),
 	title: string().min(1).max(100),
 	text: string().min(1).max(1e3),
 	images: array(imageSchema)
 });
-const productSchema = /* @__PURE__ */ object({
+const productSchema = object({
 	id: number(),
 	created: date(),
 	title: string().min(1).max(100),
@@ -4582,26 +4582,26 @@ const productSchema = /* @__PURE__ */ object({
 						"images"
 					], _e);
 					__sv_16[__i_17] = {
-						id: __sv_19,
-						stars: __sv_20,
-						title: __sv_21,
-						text: __sv_22,
-						images: __sv_23
+						"id": __sv_19,
+						"stars": __sv_20,
+						"title": __sv_21,
+						"text": __sv_22,
+						"images": __sv_23
 					};
 				}
 			}
 			_d = {
-				id: __sv_5,
-				created: __sv_6,
-				title: __sv_7,
-				brand: __sv_8,
-				description: __sv_9,
-				price: __sv_10,
-				discount: __sv_11,
-				quantity: __sv_12,
-				tags: __sv_13,
-				images: __sv_15,
-				ratings: __sv_16
+				"id": __sv_5,
+				"created": __sv_6,
+				"title": __sv_7,
+				"brand": __sv_8,
+				"description": __sv_9,
+				"price": __sv_10,
+				"discount": __sv_11,
+				"quantity": __sv_12,
+				"tags": __sv_13,
+				"images": __sv_15,
+				"ratings": __sv_16
 			};
 		}
 		if (_e.length === 0) return {
