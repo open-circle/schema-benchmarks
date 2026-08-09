@@ -1,4 +1,3 @@
 // Pinned upstream revision for json-schema-org/json-schema-test-suite.
-// Update this with \`pnpm --filter @schema-benchmarks/json-schema-tests bump:test-suite-commit <sha>\`.
-// Workflow will bump this automatically every week.
-export default "cf2e5e0ff2e3d90239c3b59e68ac4c080bd4ac92"; // test(idn-email): add a supplementary-plane local part (#1036)
+// Update this with \`pnpm json-schema-tests:bump\`. Optionally provide a commit SHA to set a specific commit, e.g. \`pnpm json-schema-tests:bump -c <sha>\`.
+export default "15fe552d6cf76e29cc8165306fb6a72503fd360b"; // test(uri-template): add literal apostrophe case (#1058)
