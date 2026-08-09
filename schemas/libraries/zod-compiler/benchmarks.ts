@@ -13,6 +13,28 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("zod-compiler"),
   },
+  validation: [
+    {
+      run(data) {
+        return schema.is(data);
+      },
+      snippet: ts`schema.is(data)`,
+    },
+    {
+      run(data) {
+        return bagSchema.is(data);
+      },
+      snippet: ts`bagSchema.is(data)`,
+      note: "bag",
+    },
+    {
+      run(data) {
+        return compactSchema.is(data);
+      },
+      snippet: ts`compactSchema.is(data)`,
+      note: "compact",
+    },
+  ],
   parsing: {
     allErrors: [
       {
@@ -21,14 +43,6 @@ export default defineBenchmarks({
         },
         validateResult: (result) => result.success,
         snippet: ts`schema.safeParse(data)`,
-      },
-      {
-        run(data) {
-          return schema.safeParse(data, { jitless: true });
-        },
-        validateResult: (result) => result.success,
-        snippet: ts`schema.safeParse(data, { jitless: true })`,
-        note: "jitless",
       },
       {
         run(data) {

@@ -11,7 +11,7 @@
   "scripts": {
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
     "gen:zod-compiler": "node ./libraries/zod-compiler/generate.ts",
-    "prebuild": "pnpm run gen:paseri",
+    "prebuild": "pnpm run gen:paseri && pnpm run gen:zod-compiler",
     "build": "tsdown",
     "typecheck": "tsc",
     "test": "vitest"
