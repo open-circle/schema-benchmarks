@@ -4182,7 +4182,7 @@ function __zcIV(values, inp, p, extra, msg) {
 function __zcLo(v) {
 	return Array.isArray(v) ? "array" : typeof v === "string" ? "string" : "unknown";
 }
-const imageSchema = /* @__PURE__ */ object({
+const imageSchema = object({
 	id: number(),
 	created: date(),
 	title: string().min(1).max(100),
@@ -4190,14 +4190,14 @@ const imageSchema = /* @__PURE__ */ object({
 	size: number(),
 	url: url()
 });
-const ratingSchema = /* @__PURE__ */ object({
+const ratingSchema = object({
 	id: number(),
 	stars: number().min(0).max(5),
 	title: string().min(1).max(100),
 	text: string().min(1).max(1e3),
 	images: array(imageSchema)
 });
-const productSchema = /* @__PURE__ */ object({
+const productSchema = object({
 	id: number(),
 	created: date(),
 	title: string().min(1).max(100),
@@ -4486,12 +4486,12 @@ const productSchema = /* @__PURE__ */ object({
 						else __sv_23 = __ut_24;
 					}
 					__sv_15[__i_16] = {
-						id: __sv_18,
-						created: __sv_19,
-						title: __sv_20,
-						type: __sv_21,
-						size: __sv_22,
-						url: __sv_23
+						"id": __sv_18,
+						"created": __sv_19,
+						"title": __sv_20,
+						"type": __sv_21,
+						"size": __sv_22,
+						"url": __sv_23
 					};
 				}
 			}
@@ -4808,36 +4808,36 @@ const productSchema = /* @__PURE__ */ object({
 								else __sv_41 = __ut_42;
 							}
 							__sv_33[__i_34] = {
-								id: __sv_36,
-								created: __sv_37,
-								title: __sv_38,
-								type: __sv_39,
-								size: __sv_40,
-								url: __sv_41
+								"id": __sv_36,
+								"created": __sv_37,
+								"title": __sv_38,
+								"type": __sv_39,
+								"size": __sv_40,
+								"url": __sv_41
 							};
 						}
 					}
 					__sv_26[__i_27] = {
-						id: __sv_29,
-						stars: __sv_30,
-						title: __sv_31,
-						text: __sv_32,
-						images: __sv_33
+						"id": __sv_29,
+						"stars": __sv_30,
+						"title": __sv_31,
+						"text": __sv_32,
+						"images": __sv_33
 					};
 				}
 			}
 			_d = {
-				id: __sv_5,
-				created: __sv_6,
-				title: __sv_7,
-				brand: __sv_8,
-				description: __sv_9,
-				price: __sv_10,
-				discount: __sv_11,
-				quantity: __sv_12,
-				tags: __sv_13,
-				images: __sv_15,
-				ratings: __sv_26
+				"id": __sv_5,
+				"created": __sv_6,
+				"title": __sv_7,
+				"brand": __sv_8,
+				"description": __sv_9,
+				"price": __sv_10,
+				"discount": __sv_11,
+				"quantity": __sv_12,
+				"tags": __sv_13,
+				"images": __sv_15,
+				"ratings": __sv_26
 			};
 		}
 		if (_e.length === 0) return {
