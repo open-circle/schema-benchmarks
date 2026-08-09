@@ -1,16 +1,13 @@
-import { execFile } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { promisify } from "node:util";
 
+import * as tar from "tar";
 import { up } from "up-fetch";
 
 import sha from "#constants/sha.gen.ts";
 
 const upfetch = up(fetch);
-
-const execFileAsync = promisify(execFile);
 
 // degit v3 resolves SHAs by matching branch/tag tips, so pinned commits break
 // once upstream advances. Download the tarball directly instead.
@@ -26,14 +23,12 @@ await fs.writeFile(tarball, buffer);
 await fs.rm("tests", { recursive: true, force: true });
 await fs.mkdir("tests", { recursive: true });
 
-await execFileAsync("tar", [
-  "-xzf",
-  tarball,
-  "-C",
-  "tests",
-  "--strip-components=2",
-  `JSON-Schema-Test-Suite-${sha}/tests`,
-]);
+await tar.extract({
+  file: tarball,
+  cwd: "tests",
+  strip: 2,
+  filter: (p) => p.startsWith(`JSON-Schema-Test-Suite-${sha}/tests`),
+});
 
 await fs.rm(tarball, { force: true });
 await fs.rm("tests/latest", { recursive: true, force: true });
