@@ -62,7 +62,7 @@ export const Route = createFileRoute("/json-schema/_conversion/to-json/")({
       description: "Benchmark results for converting a schema to JSON schema.",
       openGraph: { url: "/json-schema/to-json" },
     }),
-  staticData: { crumb: ["JSON Schema", "Schema to JSON"], wrapMain: false },
+  staticData: { crumb: "Schema to JSON", wrapMain: false },
 });
 
 const wrapper = classed.div("main");

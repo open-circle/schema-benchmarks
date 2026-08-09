@@ -72,6 +72,11 @@ export const sidebarGroups: Array<SidebarGroup> = [
         name: "JSON to Schema",
         icon: "code",
       },
+      {
+        ...linkOptions({ to: "/json-schema/compliance" }),
+        name: "Compliance",
+        icon: "verified",
+      },
     ],
   },
   {

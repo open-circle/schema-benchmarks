@@ -4,7 +4,7 @@ import jsonSchemaStyles from "./styles.css?url";
 
 export const Route = createFileRoute("/json-schema")({
   component: Outlet,
-  staticData: { crumb: undefined },
+  staticData: { crumb: "JSON Schema" },
   head: () => ({
     links: [
       {

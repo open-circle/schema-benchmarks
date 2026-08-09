@@ -23,6 +23,7 @@ import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmark
 import { Route as BenchmarksLibrariesIndexRouteImport } from './routes/_benchmarks/libraries/index'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
+import { Route as JsonSchemaComplianceIndexRouteImport } from './routes/json-schema/compliance/index'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as BenchmarksRuntimeCodecIndexRouteImport } from './routes/_benchmarks/_runtime/codec/index'
 import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
@@ -103,6 +104,12 @@ const ApiTweetIdRoute = ApiTweetIdRouteImport.update({
   path: '/api/tweet/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JsonSchemaComplianceIndexRoute =
+  JsonSchemaComplianceIndexRouteImport.update({
+    id: '/compliance/',
+    path: '/compliance/',
+    getParentRoute: () => JsonSchemaRouteRoute,
+  } as any)
 const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
   id: '/repo/raw/$',
   path: '/repo/raw/$',
@@ -171,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/download/': typeof BenchmarksDownloadIndexRoute
   '/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
+  '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
   '/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesByTo {
   '/download': typeof BenchmarksDownloadIndexRoute
   '/libraries': typeof BenchmarksLibrariesIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
+  '/json-schema/compliance': typeof JsonSchemaComplianceIndexRoute
   '/codec': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
@@ -217,6 +226,7 @@ export interface FileRoutesById {
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
   '/_benchmarks/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
+  '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
   '/_benchmarks/_runtime/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/download/'
     | '/libraries/'
     | '/stack/'
+    | '/json-schema/compliance/'
     | '/codec/'
     | '/initialization/'
     | '/parsing/'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/libraries'
     | '/stack'
+    | '/json-schema/compliance'
     | '/codec'
     | '/initialization'
     | '/parsing'
@@ -287,6 +299,7 @@ export interface FileRouteTypes {
     | '/_benchmarks/download/'
     | '/_benchmarks/libraries/'
     | '/_benchmarks/stack/'
+    | '/json-schema/compliance/'
     | '/_benchmarks/_runtime/codec/'
     | '/_benchmarks/_runtime/initialization/'
     | '/_benchmarks/_runtime/parsing/'
@@ -406,6 +419,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/tweet/$id'
       preLoaderRoute: typeof ApiTweetIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/json-schema/compliance/': {
+      id: '/json-schema/compliance/'
+      path: '/compliance'
+      fullPath: '/json-schema/compliance/'
+      preLoaderRoute: typeof JsonSchemaComplianceIndexRouteImport
+      parentRoute: typeof JsonSchemaRouteRoute
     }
     '/repo/raw/$': {
       id: '/repo/raw/$'
@@ -547,12 +567,14 @@ const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
 
 interface JsonSchemaRouteRouteChildren {
   JsonSchemaIndexRoute: typeof JsonSchemaIndexRoute
+  JsonSchemaComplianceIndexRoute: typeof JsonSchemaComplianceIndexRoute
   JsonSchemaConversionFromJsonIndexRoute: typeof JsonSchemaConversionFromJsonIndexRoute
   JsonSchemaConversionToJsonIndexRoute: typeof JsonSchemaConversionToJsonIndexRoute
 }
 
 const JsonSchemaRouteRouteChildren: JsonSchemaRouteRouteChildren = {
   JsonSchemaIndexRoute: JsonSchemaIndexRoute,
+  JsonSchemaComplianceIndexRoute: JsonSchemaComplianceIndexRoute,
   JsonSchemaConversionFromJsonIndexRoute:
     JsonSchemaConversionFromJsonIndexRoute,
   JsonSchemaConversionToJsonIndexRoute: JsonSchemaConversionToJsonIndexRoute,
