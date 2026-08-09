@@ -1,3 +1,3 @@
-import { compiledProductSchema } from "../compiled.gen";
+import { compiledProductSchema } from "../compiled/index.mjs";
 
 compiledProductSchema.parse({});
