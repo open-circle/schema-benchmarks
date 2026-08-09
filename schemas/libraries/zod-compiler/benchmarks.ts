@@ -3,13 +3,9 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { getZodCompilerBagSchema } from "./bag.gen";
-import { getZodCompilerCompactSchema } from "./compact.gen";
-import { getZodCompilerSchema } from "./index.gen";
-
-const schema = getZodCompilerSchema();
-const bagSchema = getZodCompilerBagSchema();
-const compactSchema = getZodCompilerCompactSchema();
+import { compiledProductSchema as bagSchema } from "./compiled/bag/index.mjs";
+import { compiledProductSchema as compactSchema } from "./compiled/compact/index.mjs";
+import { compiledProductSchema as schema } from "./compiled/index.mjs";
 
 export default defineBenchmarks({
   library: {
@@ -17,28 +13,6 @@ export default defineBenchmarks({
     optimizeType: "precompiled",
     version: await getVersion("zod-compiler"),
   },
-  initialization: [
-    {
-      run() {
-        return getZodCompilerSchema();
-      },
-      snippet: ts`compile(schema)`,
-    },
-    {
-      run() {
-        return getZodCompilerBagSchema();
-      },
-      snippet: ts`compile(schema)`,
-      note: "bag",
-    },
-    {
-      run() {
-        return getZodCompilerCompactSchema();
-      },
-      snippet: ts`compile(schema)`,
-      note: "compact",
-    },
-  ],
   parsing: {
     allErrors: [
       {
@@ -77,7 +51,7 @@ export default defineBenchmarks({
   standard: {
     allErrors: [
       { schema },
-      { schema: bagSchema as never, note: "bag" },
+      { schema: bagSchema, note: "bag" },
       { schema: compactSchema, note: "compact" },
     ],
   },

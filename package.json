@@ -8,7 +8,6 @@
     "check": "oxfmt --check && oxlint",
     "test": "pnpm run -r test",
     "typecheck": "pnpm run -r typecheck",
-    "typecheck:tsc": "pnpm run -r typecheck:tsc",
     "schemas:build": "pnpm run --filter schemas build",
     "website:dev": "pnpm run --filter website dev",
     "website:build": "pnpm run --filter website build",

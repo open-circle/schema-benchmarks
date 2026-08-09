@@ -11,6 +11,7 @@ const imageSchema = z.object({
   size: z.number(),
   url: z.url(),
 });
+
 const ratingSchema = z.object({
   id: z.number(),
   stars: z.number().min(0).max(5),
