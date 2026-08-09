@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./node": "./src/node.ts",
     "./react": "./src/react/index.ts",
-    "./valibot": "./src/valibot.ts"
+    "./valibot": "./src/valibot.ts",
+    "./rolldown": "./src/rolldown.ts"
   },
   "scripts": {
     "test": "vitest",
@@ -21,11 +22,13 @@
     "mix-n-matchers": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
+    "rolldown": "catalog:",
     "typescript": "catalog:",
     "valibot": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "rolldown": "*",
     "valibot": "*"
   }
 }
