@@ -20,12 +20,12 @@ await promiseAllKeyed({
   }),
   bag: build({
     ...sharedConfig,
-    outDir: path.resolve(import.meta.dirname, "./compiled-bag"),
+    outDir: path.resolve(import.meta.dirname, "./compiled/bag"),
     plugins: [zodCompiler({ schemas: "explicit", output: "bag" })],
   }),
   compact: build({
     ...sharedConfig,
-    outDir: path.resolve(import.meta.dirname, "./compiled-compact"),
+    outDir: path.resolve(import.meta.dirname, "./compiled/compact"),
     plugins: [zodCompiler({ schemas: "explicit", output: "compact" })],
   }),
 });

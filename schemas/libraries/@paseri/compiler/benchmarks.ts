@@ -3,9 +3,7 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { getPaseriSchema } from "./index.gen";
-
-const schema = getPaseriSchema();
+import { Product as schema } from "./compiled.gen";
 
 const ok = {
   true: { ok: true },
@@ -17,15 +15,6 @@ export default defineBenchmarks({
     name: "@paseri/compiler",
     optimizeType: "precompiled",
     version: await getVersion("@paseri/compiler"),
-  },
-  initialization: {
-    run() {
-      return getPaseriSchema();
-    },
-    snippet: ts`
-      // const source = toSource(schema.toIR(), { name: "Product" });
-      import { Product } from "./product.gen.ts";
-    `,
   },
   parsing: {
     allErrors: [
@@ -39,7 +28,7 @@ export default defineBenchmarks({
           }
         },
         validateResult: (result) => result.ok,
-        snippet: ts`Product.parse(data)`,
+        snippet: ts`schema.parse(data)`,
         note: "parse",
         throws: true,
       },
@@ -48,7 +37,7 @@ export default defineBenchmarks({
           return schema.safeParse(data);
         },
         validateResult: (result) => result.ok,
-        snippet: ts`Product.safeParse(data)`,
+        snippet: ts`schema.safeParse(data)`,
         note: "safeParse",
       },
     ],
@@ -61,6 +50,6 @@ export default defineBenchmarks({
       schema.parse(data);
       assertNotReached();
     },
-    snippet: ts`Product.parse(data)`,
+    snippet: ts`schema.parse(data)`,
   },
 });
