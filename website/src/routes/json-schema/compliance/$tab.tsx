@@ -36,6 +36,8 @@ import {
   getPctCompliance,
   sortableKeys,
 } from "./-constants.tsx";
+import * as tabContent from "./-content/index.ts";
+import Content from "./content.mdx";
 
 const searchSchema = v.object({
   ...sortParams(v.optional(v.picklist(sortableKeys), "compliance"), "descending"),
@@ -125,13 +127,14 @@ function RouteComponent() {
   return (
     <main>
       <div className="main">
+        <Content components={{ wrapper: "div" }} />
         <PageFilters>
           <PageFilterChips
             {...complianceTargetProps}
             getLinkOptions={(target) => ({
               from: Route.fullPath,
               to: "/json-schema/compliance/$tab",
-              params: ({ tab }) => ({ tab }),
+              params: ({ tab }) => ({ tab }) as never,
               search: (search: {}) => ({ ...search, target }),
               disabled: !data[tab]?.[target].length,
             })}
@@ -164,17 +167,21 @@ function RouteComponent() {
         ))}
       </Tabs>
       <TabPanels ref={panelsRef} className="main">
-        {complianceTypeSchema.options.map((tabId) => (
-          <TabPanel key={tabId} {...getPanelProps(tabId)}>
-            <ComplianceTable
-              results={sortedResults}
-              {...{ sortBy, sortDir }}
-              pieScale={Pie.getScale((data[tabId]?.[target] ?? []).map(getPctCompliance), {
-                max: 1,
-              })}
-            />
-          </TabPanel>
-        ))}
+        {complianceTypeSchema.options.map((tabId) => {
+          const TabContent = tabContent[tabId];
+          return (
+            <TabPanel key={tabId} {...getPanelProps(tabId)}>
+              <TabContent components={{ wrapper: "div" }} />
+              <ComplianceTable
+                results={sortedResults}
+                {...{ sortBy, sortDir }}
+                pieScale={Pie.getScale((data[tabId]?.[target] ?? []).map(getPctCompliance), {
+                  max: 1,
+                })}
+              />
+            </TabPanel>
+          );
+        })}
       </TabPanels>
     </main>
   );
