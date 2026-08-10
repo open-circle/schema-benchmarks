@@ -86,7 +86,7 @@ export function Header({ prefsOpen, onPrefs }: { prefsOpen: boolean; onPrefs: ()
           </Fragment>
         ))}
         {currentCrumbs.map((crumb, index) => (
-          <Fragment key={crumb.to + crumb.name}>
+          <Fragment key={`${index}:${crumb.name}`}>
             <span className="typo-headline6">
               {index === currentCrumbs.length - 1 ? (
                 <ConsoleWriter>{crumb.name}</ConsoleWriter>
