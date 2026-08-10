@@ -136,7 +136,7 @@ function RouteComponent() {
               to: "/json-schema/compliance/$tab",
               params: ({ tab }) => ({ tab }) as never,
               search: (search: {}) => ({ ...search, target }),
-              disabled: !data[tab]?.[target].length,
+              disabled: !data[tab]?.[target]?.length,
             })}
           />
         </PageFilters>
@@ -152,9 +152,9 @@ function RouteComponent() {
                 to: "/json-schema/compliance/$tab",
                 params: { tab: tabId },
                 search: (({ target, ...search }: { target: ComplianceTarget }) => {
-                  const nextTarget = data[tabId]?.[target].length
+                  const nextTarget = data[tabId]?.[target]?.length
                     ? target
-                    : (complianceTargetSchema.options.find((t) => data[tabId]?.[t].length) ??
+                    : (complianceTargetSchema.options.find((t) => data[tabId]?.[t]?.length) ??
                       target);
                   return { ...search, target: nextTarget };
                 }) as never,
