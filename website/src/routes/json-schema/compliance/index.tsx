@@ -108,11 +108,7 @@ function RouteComponent() {
             fallbacks: [
               compareDownloadsByPkgName.fallback(downloadsByPkgName),
               compareStrings(getLibraryLabel),
-              compareNumbers((result) => {
-                const { passed, failed } = result.results.count;
-                const total = passed + failed;
-                return total > 0 ? (passed / total) * 100 : 0;
-              }),
+              compareNumbers(getPctCompliance),
             ],
           },
         ),
@@ -162,13 +158,9 @@ function RouteComponent() {
             <ComplianceTable
               results={sortedResults}
               {...{ sortBy, sortDir }}
-              pieScale={Pie.getScale(
-                (data[tabId]?.[target] ?? []).map((result) => {
-                  const { passed, failed } = result.results.count;
-                  const total = passed + failed;
-                  return total > 0 ? (passed / total) * 100 : 0;
-                }),
-              )}
+              pieScale={Pie.getScale((data[tabId]?.[target] ?? []).map(getPctCompliance), {
+                max: 1,
+              })}
             />
           </TabPanel>
         ))}

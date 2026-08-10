@@ -5,6 +5,7 @@ import { shortNumFormatter, percentFormatter, getTransitionName } from "@schema-
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
+import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { SortableHeaderLink } from "#src/shared/components/table/sort.tsx";
@@ -70,7 +71,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
         {results.map((result) => {
           const { passed, failed } = result.results.count;
           const total = passed + failed;
-          const percentage = total > 0 ? passed / total : 0;
+          const percentage = getPctCompliance(result);
           return (
             <tr
               key={result.id}
@@ -98,7 +99,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
               <th className="action">
-                <Pie {...pieScale(percentage * 100)} />
+                <Pie {...pieScale(percentage)} />
               </th>
             </tr>
           );

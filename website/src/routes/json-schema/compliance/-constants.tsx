@@ -27,6 +27,9 @@ export const complianceTargetProps = {
 export const sortableKeys = ["libraryName", "downloads", "compliance"] as const;
 export type SortableKey = (typeof sortableKeys)[number];
 
+/**
+ * @returns The percentage of passed tests for a given compliance result, as a number between 0 and 1.
+ */
 export function getPctCompliance({
   results: {
     count: { passed, failed },
@@ -35,5 +38,5 @@ export function getPctCompliance({
   results: { count: { passed: number; failed: number } };
 }) {
   const total = passed + failed;
-  return total > 0 ? (passed / total) * 100 : 0;
+  return total > 0 ? passed / total : 0;
 }
