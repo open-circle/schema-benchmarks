@@ -19,7 +19,30 @@ export type HighlightInput = v.InferInput<typeof highlightInput>;
 
 const NEW_LINE_EXP = /\n(?!$)/g;
 
-let hookAdded = false;
+const DOC_COMMENT_WRAP_HOOK_MARKER = "__schemaBenchmarksDocCommentWrapHook";
+
+type WrapHook = (typeof Prism.hooks)["all"]["wrap"][number];
+
+const docCommentWrapHook: WrapHook & { __schemaBenchmarksDocCommentWrapHook?: true } = (env) => {
+  if (env.type !== "comment" || !env.content?.startsWith("/**") || !env.classes) return;
+  if (!env.classes.includes("doc-comment")) {
+    env.classes.push("doc-comment");
+  }
+};
+
+docCommentWrapHook[DOC_COMMENT_WRAP_HOOK_MARKER] = true;
+
+function ensureDocCommentWrapHook(prism: typeof Prism) {
+  const wrapHooks = (prism.hooks.all.wrap ?? []) as Array<
+    WrapHook & {
+      __schemaBenchmarksDocCommentWrapHook?: true;
+    }
+  >;
+
+  if (wrapHooks.some((hook) => hook[DOC_COMMENT_WRAP_HOOK_MARKER])) return;
+  prism.hooks.add("wrap", docCommentWrapHook);
+}
+
 export const highlightCode = (
   // oxlint-disable-next-line typescript/consistent-type-imports
   Prism: typeof import("prismjs"),
@@ -33,14 +56,9 @@ export const highlightCode = (
 
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
-  if (!hookAdded) {
-    Prism.hooks.add("wrap", (env) => {
-      if (env.type === "comment" && env.content.startsWith("/**")) {
-        env.classes.push("doc-comment");
-      }
-    });
-    hookAdded = true;
-  }
+
+  ensureDocCommentWrapHook(Prism);
+
   const formatted = Prism.highlight(code, Prism.languages[language]!, language);
   return formatted + lineNumbersWrapper;
 };
