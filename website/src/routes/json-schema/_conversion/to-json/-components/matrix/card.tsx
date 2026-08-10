@@ -5,16 +5,13 @@ import {
 } from "@schema-benchmarks/schemas";
 import bem from "react-bem-helper";
 
-import { getPkgUrl } from "#src/routes/_benchmarks/-query.ts";
+import { JsonSchemaSourceText } from "#src/routes/json-schema/-components/source.tsx";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaConversionTargetProps,
-  jsonSourceProps,
 } from "#src/routes/json-schema/_conversion/-constants";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
-import { useNpmSite } from "#src/shared/components/prefs/context.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
-import { trackedLinkProps } from "#src/shared/lib/analytics.ts";
 
 import { MatrixCheckbox } from "./checkbox";
 
@@ -35,7 +32,6 @@ export function SupportMatrixCard({
   standardJsonSchema,
   supportMatrix,
 }: SupportMatrixCardProps) {
-  const { npmSite } = useNpmSite();
   return (
     <article
       {...cls()}
@@ -53,34 +49,14 @@ export function SupportMatrixCard({
         <div>
           <dt>Source</dt>
           <dd>
-            {typeof source === "string" ? (
-              jsonSourceProps.labels[source].label
-            ) : (
-              <a
-                {...trackedLinkProps(getPkgUrl(source.package, npmSite))}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <code className="language-text">{source.package}</code>
-              </a>
-            )}
+            <JsonSchemaSourceText source={source} />
           </dd>
         </div>
         {standardJsonSchema && (
           <div>
             <dt>Standard JSON Schema</dt>
             <dd>
-              {typeof standardJsonSchema === "string" ? (
-                jsonSourceProps.labels[standardJsonSchema].label
-              ) : (
-                <a
-                  {...trackedLinkProps(getPkgUrl(standardJsonSchema.package, npmSite))}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <code className="language-text">{standardJsonSchema.package}</code>
-                </a>
-              )}
+              <JsonSchemaSourceText source={standardJsonSchema} />
             </dd>
           </div>
         )}

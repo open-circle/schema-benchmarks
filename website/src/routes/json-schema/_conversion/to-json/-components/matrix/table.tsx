@@ -5,12 +5,12 @@ import {
 } from "@schema-benchmarks/schemas";
 import clsx from "clsx";
 
+import { JsonSchemaPackageButton } from "#src/routes/json-schema/-components/source.tsx";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaConversionTargetProps,
 } from "#src/routes/json-schema/_conversion/-constants";
 import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants";
-import { PackageSource } from "#src/routes/json-schema/_conversion/to-json/-components/matrix/source.tsx";
 
 import { MatrixCheckbox } from "./checkbox";
 
@@ -71,14 +71,14 @@ export function MatrixTable({ matrix }: MatrixTableProps) {
                 </td>
                 <td>{jsonSourceProps.labels[sourceType].label}</td>
                 <td className="action">
-                  {typeof source === "object" && <PackageSource package={source.package} />}
+                  {typeof source === "object" && <JsonSchemaPackageButton {...source} />}
                 </td>
                 <td>
                   {!!standardJsonSchemaType && jsonSourceProps.labels[standardJsonSchemaType].label}
                 </td>
                 <td className="action">
                   {typeof standardJsonSchema === "object" && (
-                    <PackageSource package={standardJsonSchema.package} />
+                    <JsonSchemaPackageButton {...standardJsonSchema} />
                   )}
                 </td>
                 {jsonSchemaConversionTargetSchema.options.flatMap((target) =>

@@ -4,6 +4,8 @@ import { shortNumFormatter, percentFormatter, getTransitionName } from "@schema-
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
+import { JsonSchemaPackageButton } from "#src/routes/json-schema/-components/source.tsx";
+import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.ts";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -37,6 +39,8 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
           </SortableHeaderLink>
           <th className="action"></th>
           <th>Version</th>
+          <th>Source</th>
+          <th className="action" aria-label="Source packages"></th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps(
               "downloads",
@@ -78,6 +82,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
           const { passed, failed } = result.results.count;
           const total = passed + failed;
           const percentage = getPctCompliance(result);
+          const sourceType = typeof result.source === "string" ? result.source : result.source.type;
           return (
             <tr
               key={result.id}
@@ -97,6 +102,12 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               </td>
               <td>
                 <code className="language-text">{result.version}</code>
+              </td>
+              <td>{jsonSourceProps.labels[sourceType].label}</td>
+              <td className="action">
+                {typeof result.source === "object" && (
+                  <JsonSchemaPackageButton {...result.source} />
+                )}
               </td>
               <td className="numeric">
                 <DownloadCount libraryName={result.libraryName} />
