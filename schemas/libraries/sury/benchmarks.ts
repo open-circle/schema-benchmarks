@@ -1,4 +1,4 @@
-import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import * as S from "sury";

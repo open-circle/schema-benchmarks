@@ -3,7 +3,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { promisify } from "node:util";
 
-import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
+import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";

@@ -3,6 +3,9 @@ import * as v from "valibot";
 
 import targets from "#constants/targets.gen.ts";
 
+export { default as targets } from "#constants/targets.gen.ts";
+export { default as sha } from "#constants/sha.gen.ts";
+
 export const testCaseSchema = v.object({
   description: v.string(),
   schema: v.union([v.looseObject({}), v.boolean()]),

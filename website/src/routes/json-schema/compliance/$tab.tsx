@@ -1,6 +1,6 @@
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
-import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
-import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
+import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { assert, collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
