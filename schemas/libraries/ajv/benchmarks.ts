@@ -11,6 +11,7 @@ import { defineBenchmarks } from "#src";
 import { getAjv, getAjvSchema } from ".";
 
 const ajv = getAjv();
+const nonStrictAjv = getAjv({ strict: false });
 
 const schema = getAjvSchema();
 const validate = ajv.compile(schema);
@@ -78,13 +79,27 @@ export default defineBenchmarks({
   },
   jsonSchema: {
     compliance: {
-      validation: {
-        run(schema, data) {
-          return ajv.validate(schema, data);
+      validation: [
+        {
+          run(schema, data) {
+            return ajv.validate(schema, data);
+          },
+          snippet: () => ts`
+          // const ajv = new Ajv();
+          ajv.validate(schema, data)`,
+          source: { type: "native" },
         },
-        snippet: () => ts`ajv.validate(schema, data)`,
-        source: { type: "native" },
-      },
+        {
+          run(schema, data) {
+            return nonStrictAjv.validate(schema, data);
+          },
+          snippet: () => ts`
+          // const ajv = new Ajv({ strict: false });
+          ajv.validate(schema, data)`,
+          source: { type: "native" },
+          note: "non-strict",
+        },
+      ],
     },
   },
 });
