@@ -24,6 +24,7 @@ import { Route as BenchmarksLibrariesIndexRouteImport } from './routes/_benchmar
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
 import { Route as JsonSchemaComplianceIndexRouteImport } from './routes/json-schema/compliance/index'
+import { Route as JsonSchemaComplianceTabRouteImport } from './routes/json-schema/compliance/$tab'
 import { Route as RepoRawSplatRouteImport } from './routes/repo/raw.$'
 import { Route as BenchmarksRuntimeCodecIndexRouteImport } from './routes/_benchmarks/_runtime/codec/index'
 import { Route as BenchmarksRuntimeInitializationIndexRouteImport } from './routes/_benchmarks/_runtime/initialization/index'
@@ -33,6 +34,7 @@ import { Route as BenchmarksRuntimeStringIndexRouteImport } from './routes/_benc
 import { Route as BenchmarksRuntimeValidationIndexRouteImport } from './routes/_benchmarks/_runtime/validation/index'
 import { Route as JsonSchemaConversionFromJsonIndexRouteImport } from './routes/json-schema/_conversion/from-json/index'
 import { Route as JsonSchemaConversionToJsonIndexRouteImport } from './routes/json-schema/_conversion/to-json/index'
+import { Route as JsonSchemaConversionToJsonTabRouteImport } from './routes/json-schema/_conversion/to-json/$tab'
 
 const BenchmarksRouteRoute = BenchmarksRouteRouteImport.update({
   id: '/_benchmarks',
@@ -110,6 +112,11 @@ const JsonSchemaComplianceIndexRoute =
     path: '/compliance/',
     getParentRoute: () => JsonSchemaRouteRoute,
   } as any)
+const JsonSchemaComplianceTabRoute = JsonSchemaComplianceTabRouteImport.update({
+  id: '/compliance/$tab',
+  path: '/compliance/$tab',
+  getParentRoute: () => JsonSchemaRouteRoute,
+} as any)
 const RepoRawSplatRoute = RepoRawSplatRouteImport.update({
   id: '/repo/raw/$',
   path: '/repo/raw/$',
@@ -163,6 +170,12 @@ const JsonSchemaConversionToJsonIndexRoute =
     path: '/to-json/',
     getParentRoute: () => JsonSchemaRouteRoute,
   } as any)
+const JsonSchemaConversionToJsonTabRoute =
+  JsonSchemaConversionToJsonTabRouteImport.update({
+    id: '/_conversion/to-json/$tab',
+    path: '/to-json/$tab',
+    getParentRoute: () => JsonSchemaRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
@@ -174,11 +187,13 @@ export interface FileRoutesByFullPath {
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
+  '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
   '/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
+  '/json-schema/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
   '/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
@@ -195,11 +210,13 @@ export interface FileRoutesByTo {
   '/contributing': typeof ContributingIndexRoute
   '/json-schema': typeof JsonSchemaIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
+  '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
   '/libraries': typeof BenchmarksLibrariesIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance': typeof JsonSchemaComplianceIndexRoute
+  '/json-schema/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
   '/codec': typeof BenchmarksRuntimeCodecIndexRoute
   '/initialization': typeof BenchmarksRuntimeInitializationIndexRoute
   '/parsing': typeof BenchmarksRuntimeParsingIndexRoute
@@ -222,11 +239,13 @@ export interface FileRoutesById {
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
+  '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
   '/_benchmarks/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
+  '/json-schema/_conversion/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
   '/_benchmarks/_runtime/codec/': typeof BenchmarksRuntimeCodecIndexRoute
   '/_benchmarks/_runtime/initialization/': typeof BenchmarksRuntimeInitializationIndexRoute
   '/_benchmarks/_runtime/parsing/': typeof BenchmarksRuntimeParsingIndexRoute
@@ -248,11 +267,13 @@ export interface FileRouteTypes {
     | '/contributing/'
     | '/json-schema/'
     | '/api/tweet/$id'
+    | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/download/'
     | '/libraries/'
     | '/stack/'
     | '/json-schema/compliance/'
+    | '/json-schema/to-json/$tab'
     | '/codec/'
     | '/initialization/'
     | '/parsing/'
@@ -269,11 +290,13 @@ export interface FileRouteTypes {
     | '/contributing'
     | '/json-schema'
     | '/api/tweet/$id'
+    | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/download'
     | '/libraries'
     | '/stack'
     | '/json-schema/compliance'
+    | '/json-schema/to-json/$tab'
     | '/codec'
     | '/initialization'
     | '/parsing'
@@ -295,11 +318,13 @@ export interface FileRouteTypes {
     | '/contributing/'
     | '/json-schema/'
     | '/api/tweet/$id'
+    | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
     | '/_benchmarks/libraries/'
     | '/_benchmarks/stack/'
     | '/json-schema/compliance/'
+    | '/json-schema/_conversion/to-json/$tab'
     | '/_benchmarks/_runtime/codec/'
     | '/_benchmarks/_runtime/initialization/'
     | '/_benchmarks/_runtime/parsing/'
@@ -427,6 +452,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JsonSchemaComplianceIndexRouteImport
       parentRoute: typeof JsonSchemaRouteRoute
     }
+    '/json-schema/compliance/$tab': {
+      id: '/json-schema/compliance/$tab'
+      path: '/compliance/$tab'
+      fullPath: '/json-schema/compliance/$tab'
+      preLoaderRoute: typeof JsonSchemaComplianceTabRouteImport
+      parentRoute: typeof JsonSchemaRouteRoute
+    }
     '/repo/raw/$': {
       id: '/repo/raw/$'
       path: '/repo/raw/$'
@@ -488,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/to-json'
       fullPath: '/json-schema/to-json/'
       preLoaderRoute: typeof JsonSchemaConversionToJsonIndexRouteImport
+      parentRoute: typeof JsonSchemaRouteRoute
+    }
+    '/json-schema/_conversion/to-json/$tab': {
+      id: '/json-schema/_conversion/to-json/$tab'
+      path: '/to-json/$tab'
+      fullPath: '/json-schema/to-json/$tab'
+      preLoaderRoute: typeof JsonSchemaConversionToJsonTabRouteImport
       parentRoute: typeof JsonSchemaRouteRoute
     }
   }
@@ -567,14 +606,18 @@ const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
 
 interface JsonSchemaRouteRouteChildren {
   JsonSchemaIndexRoute: typeof JsonSchemaIndexRoute
+  JsonSchemaComplianceTabRoute: typeof JsonSchemaComplianceTabRoute
   JsonSchemaComplianceIndexRoute: typeof JsonSchemaComplianceIndexRoute
+  JsonSchemaConversionToJsonTabRoute: typeof JsonSchemaConversionToJsonTabRoute
   JsonSchemaConversionFromJsonIndexRoute: typeof JsonSchemaConversionFromJsonIndexRoute
   JsonSchemaConversionToJsonIndexRoute: typeof JsonSchemaConversionToJsonIndexRoute
 }
 
 const JsonSchemaRouteRouteChildren: JsonSchemaRouteRouteChildren = {
   JsonSchemaIndexRoute: JsonSchemaIndexRoute,
+  JsonSchemaComplianceTabRoute: JsonSchemaComplianceTabRoute,
   JsonSchemaComplianceIndexRoute: JsonSchemaComplianceIndexRoute,
+  JsonSchemaConversionToJsonTabRoute: JsonSchemaConversionToJsonTabRoute,
   JsonSchemaConversionFromJsonIndexRoute:
     JsonSchemaConversionFromJsonIndexRoute,
   JsonSchemaConversionToJsonIndexRoute: JsonSchemaConversionToJsonIndexRoute,

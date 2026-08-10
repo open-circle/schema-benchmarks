@@ -63,7 +63,7 @@ export const sidebarGroups: Array<SidebarGroup> = [
     subheader: "JSON Schema",
     links: [
       {
-        ...linkOptions({ to: "/json-schema/to-json" }),
+        ...linkOptions({ to: "/json-schema/to-json/$tab", params: { tab: "matrix" } }),
         name: "Schema to JSON",
         icon: "data_object",
       },
@@ -73,7 +73,7 @@ export const sidebarGroups: Array<SidebarGroup> = [
         icon: "code",
       },
       {
-        ...linkOptions({ to: "/json-schema/compliance" }),
+        ...linkOptions({ to: "/json-schema/compliance/$tab", params: { tab: "validation" } }),
         name: "Compliance",
         icon: "verified",
       },

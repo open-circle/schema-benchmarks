@@ -28,7 +28,9 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
         <tr>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("libraryName", sortState, {
-              to: "/json-schema/compliance",
+              from: "/json-schema/compliance/$tab",
+              to: "/json-schema/compliance/$tab",
+              params: ({ tab }) => ({ tab }) as never,
             })}
           >
             Library
@@ -40,7 +42,9 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               "downloads",
               sortState,
               {
-                to: "/json-schema/compliance",
+                from: "/json-schema/compliance/$tab",
+                to: "/json-schema/compliance/$tab",
+                params: ({ tab }) => ({ tab }) as never,
               },
               "descending",
             )}
@@ -56,7 +60,9 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               "compliance",
               sortState,
               {
-                to: "/json-schema/compliance",
+                from: "/json-schema/compliance/$tab",
+                to: "/json-schema/compliance/$tab",
+                params: ({ tab }) => ({ tab }) as never,
               },
               "descending",
             )}
