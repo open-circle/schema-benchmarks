@@ -61,13 +61,16 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
       // let browser handle modifier-key clicks (new tab, etc.)
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();
-      const doNavigate = () => navigate({ ...opts, viewTransition: false });
+      const doNavigate = (viewTransition = true) => navigate({ ...opts, viewTransition });
       if (!panelsRef.current?.startViewTransition || currentTabId === tabId) {
         void doNavigate();
         return;
       }
       const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "next" : "prev";
-      panelsRef.current.startViewTransition({ update: doNavigate, types: [direction] });
+      panelsRef.current.startViewTransition({
+        update: () => doNavigate(false),
+        types: [direction],
+      });
     },
   });
 
