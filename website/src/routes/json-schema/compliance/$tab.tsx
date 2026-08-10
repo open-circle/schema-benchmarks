@@ -33,6 +33,7 @@ import { applySort, sortParams } from "#src/shared/lib/sort";
 import {
   complianceTargetProps,
   complianceTypeLabels,
+  ensureComplianceTab,
   getPctCompliance,
   sortableKeys,
 } from "./-constants.tsx";
@@ -134,7 +135,7 @@ function RouteComponent() {
             getLinkOptions={(target) => ({
               from: Route.fullPath,
               to: "/json-schema/compliance/$tab",
-              params: ({ tab }) => ({ tab }) as never,
+              params: ({ tab }) => ({ tab: ensureComplianceTab(tab) }),
               search: (search: {}) => ({ ...search, target }),
               disabled: !data[tab]?.[target]?.length,
             })}
