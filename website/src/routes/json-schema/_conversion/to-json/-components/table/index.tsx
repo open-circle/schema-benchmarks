@@ -9,6 +9,7 @@ import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snip
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { GeneratedJsonSchema } from "#src/routes/json-schema/_conversion/-components/json-schema";
 import { jsonSchemaDirectionProps } from "#src/routes/json-schema/_conversion/-constants";
+import { ensureToJsonTab } from "#src/routes/json-schema/_conversion/to-json/-constant.ts";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -70,8 +71,9 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
         <tr>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("libraryName", sortState, {
+              from: "/json-schema/to-json/$tab",
               to: "/json-schema/to-json/$tab",
-              params: ({ tab }) => ({ tab }) as never,
+              params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }) as never,
             })}
           >
             Library
@@ -83,7 +85,11 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
             {...SortableHeaderLink.getProps(
               "downloads",
               sortState,
-              { to: "/json-schema/to-json/$tab", params: ({ tab }) => ({ tab }) as never },
+              {
+                from: "/json-schema/to-json/$tab",
+                to: "/json-schema/to-json/$tab",
+                params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }) as never,
+              },
               "descending",
             )}
             className="numeric"
@@ -96,8 +102,9 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
           <th>Type</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("mean", sortState, {
+              from: "/json-schema/to-json/$tab",
               to: "/json-schema/to-json/$tab",
-              params: ({ tab }) => ({ tab }) as never,
+              params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }) as never,
             })}
             className="numeric"
           >

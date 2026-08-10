@@ -1,6 +1,9 @@
 import { type LinkOptions, linkOptions } from "@tanstack/react-router";
 import type { Key, ReactNode } from "react";
 
+import { ensureToJsonTab } from "#src/routes/json-schema/_conversion/to-json/-constant.ts";
+import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
+
 interface SidebarGroup {
   key: Key;
   subheader?: ReactNode;
@@ -63,7 +66,10 @@ export const sidebarGroups: Array<SidebarGroup> = [
     subheader: "JSON Schema",
     links: [
       {
-        ...linkOptions({ to: "/json-schema/to-json/$tab", params: { tab: "matrix" } }),
+        ...linkOptions({
+          to: "/json-schema/to-json/$tab",
+          params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }),
+        }),
         name: "Schema to JSON",
         icon: "data_object",
       },
@@ -73,7 +79,10 @@ export const sidebarGroups: Array<SidebarGroup> = [
         icon: "code",
       },
       {
-        ...linkOptions({ to: "/json-schema/compliance/$tab", params: { tab: "validation" } }),
+        ...linkOptions({
+          to: "/json-schema/compliance/$tab",
+          params: ({ tab }) => ({ tab: ensureComplianceTab(tab) }),
+        }),
         name: "Compliance",
         icon: "verified",
       },

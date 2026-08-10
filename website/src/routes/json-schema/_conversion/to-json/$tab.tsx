@@ -28,6 +28,7 @@ import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
 import { ToJsonResults } from "./-components/results.tsx";
+import { ensureToJsonTab } from "./-constant.ts";
 import Content from "./content.mdx";
 
 const tabs = ["matrix", "bench"] as const;
@@ -121,7 +122,7 @@ function RouteComponent() {
               getLinkOptions={(option) => ({
                 from: Route.fullPath,
                 to: "/json-schema/to-json/$tab",
-                params: ({ tab }) => ({ tab }) as never,
+                params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }) as never,
                 search: toggleFilter("target", option),
                 replace: true,
                 resetScroll: false,
@@ -132,7 +133,7 @@ function RouteComponent() {
               getLinkOptions={(option) => ({
                 from: Route.fullPath,
                 to: "/json-schema/to-json/$tab",
-                params: ({ tab }) => ({ tab }) as never,
+                params: ({ tab }) => ({ tab: ensureToJsonTab(tab) }) as never,
                 search: toggleFilter("direction", option),
                 replace: true,
                 resetScroll: false,

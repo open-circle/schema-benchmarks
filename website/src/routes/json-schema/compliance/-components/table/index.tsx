@@ -6,6 +6,7 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
 import { JsonSchemaPackageButton } from "#src/routes/json-schema/-components/source.tsx";
 import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.ts";
+import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -32,7 +33,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
             {...SortableHeaderLink.getProps("libraryName", sortState, {
               from: "/json-schema/compliance/$tab",
               to: "/json-schema/compliance/$tab",
-              params: ({ tab }) => ({ tab }) as never,
+              params: ({ tab }) => ({ tab: ensureComplianceTab(tab) }) as never,
             })}
           >
             Library
@@ -48,7 +49,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               {
                 from: "/json-schema/compliance/$tab",
                 to: "/json-schema/compliance/$tab",
-                params: ({ tab }) => ({ tab }) as never,
+                params: ({ tab }) => ({ tab: ensureComplianceTab(tab) }) as never,
               },
               "descending",
             )}
@@ -66,7 +67,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               {
                 from: "/json-schema/compliance/$tab",
                 to: "/json-schema/compliance/$tab",
-                params: ({ tab }) => ({ tab }) as never,
+                params: ({ tab }) => ({ tab: ensureComplianceTab(tab) }) as never,
               },
               "descending",
             )}
