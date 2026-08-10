@@ -1,3 +1,6 @@
+import * as fs from "node:fs";
+import * as path from "node:path";
+
 import * as v from "valibot";
 
 import type {
@@ -9,10 +12,6 @@ import type {
 import { testCaseSchema } from "./types.ts";
 
 export async function* getTestCases(target: ComplianceTarget) {
-  // Dynamic imports of Node.js APIs - only loaded when this function runs (Node.js only)
-  const fs = await import("node:fs");
-  const path = await import("node:path");
-
   const testCasesDir = path.join(import.meta.dirname, "../tests", target);
   const testCaseFiles = fs.readdirSync(testCasesDir).filter((file) => file.endsWith(".json"));
   for (const file of testCaseFiles) {

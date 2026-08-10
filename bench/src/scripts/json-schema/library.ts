@@ -1,6 +1,7 @@
 import { parseArgs } from "node:util";
 
-import { complianceTargetSchema, getTargetCompliance } from "@schema-benchmarks/json-schema-tests";
+import { getTargetCompliance } from "@schema-benchmarks/json-schema-tests";
+import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import type { SourceConfig } from "@schema-benchmarks/schemas";
 import {
   fromJsonBenchSchema,

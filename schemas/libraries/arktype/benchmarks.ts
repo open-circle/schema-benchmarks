@@ -1,5 +1,5 @@
 import { jsonSchemaToType } from "@ark/json-schema";
-import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import { type } from "arktype";
 import ts from "dedent";

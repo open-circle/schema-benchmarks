@@ -1,7 +1,7 @@
 import {
   complianceResultsSchema,
   complianceTargetSchema,
-} from "@schema-benchmarks/json-schema-tests";
+} from "@schema-benchmarks/json-schema-tests/types";
 import {
   errorTypeSchema,
   jsonSchemaDirectionSchema,

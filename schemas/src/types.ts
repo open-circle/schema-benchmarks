@@ -1,4 +1,4 @@
-import type { ComplianceFn, ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
+import type { ComplianceFn, ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { MaybeArray, MaybePromise } from "@schema-benchmarks/utils";
 import type { StandardJSONSchemaV1, StandardSchemaV1 } from "@standard-schema/spec";
 import * as v from "valibot";

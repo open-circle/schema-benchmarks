@@ -1,5 +1,5 @@
-import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
-import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
+import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
 
 import type { PageFilterChipsProps } from "#src/shared/components/page-filter/chips.tsx";
