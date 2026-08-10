@@ -19,8 +19,8 @@ const meta = preview.meta({
   component: ComplianceTable,
   args: {
     results,
-    sortBy: "libraryName",
-    sortDir: "ascending",
+    sortBy: "compliance",
+    sortDir: "descending",
     pieScale,
   } as const,
 });
