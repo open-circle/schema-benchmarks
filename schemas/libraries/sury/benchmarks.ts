@@ -87,9 +87,14 @@ export default defineBenchmarks({
   },
   string: {
     "date-time": createStringBenchmark(S.isoDateTime, ts`S.isoDateTime`),
+    date: createStringBenchmark(S.isoDate, ts`S.isoDate`),
+    time: createStringBenchmark(S.isoTime, ts`S.isoTime`),
+    duration: createStringBenchmark(S.duration, ts`S.duration`),
     email: createStringBenchmark(S.email, ts`S.email`),
-    url: createStringBenchmark(S.url, ts`S.url`),
+    url: createStringBenchmark(S.uri, ts`S.uri`),
     uuid: createStringBenchmark(S.uuid, ts`S.uuid`),
+    ipv4: createStringBenchmark(S.ipv4, ts`S.ipv4`),
+    ipv6: createStringBenchmark(S.ipv6, ts`S.ipv6`),
   },
   stack: {
     throw: (data) => {
