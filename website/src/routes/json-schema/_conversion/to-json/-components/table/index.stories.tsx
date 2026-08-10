@@ -7,7 +7,7 @@ import "./index.css";
 import { ToJsonTable } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Table",
+  title: "Features/JsonSchema/Conversion/ToJson/Table",
   component: ToJsonTable,
   args: {
     sortBy: "mean",

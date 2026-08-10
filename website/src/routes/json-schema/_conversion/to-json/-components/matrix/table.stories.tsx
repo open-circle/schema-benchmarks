@@ -5,7 +5,7 @@ import preview from "#storybook/preview";
 import { MatrixTable } from "./table";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Matrix/Table",
+  title: "Features/JsonSchema/Conversion/ToJson/Matrix/Table",
   component: MatrixTable,
   args: {
     matrix: jsonSchemaResults.conversion.toJsonSupport,

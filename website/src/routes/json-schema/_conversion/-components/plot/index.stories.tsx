@@ -6,7 +6,7 @@ import preview from "#storybook/preview";
 import { BaseJsonConversionPlot } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Plot",
+  title: "Features/JsonSchema/Plot",
   component: BaseJsonConversionPlot,
 });
 

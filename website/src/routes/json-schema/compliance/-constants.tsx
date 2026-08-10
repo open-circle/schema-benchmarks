@@ -23,3 +23,6 @@ export const complianceTargetProps = {
     v1: { label: "V1", icon: "data_object" },
   },
 } satisfies Pick<PageFilterChipsProps<ComplianceTarget>, "title" | "labels" | "options">;
+
+export const sortableKeys = ["libraryName", "downloads", "compliance"] as const;
+export type SortableKey = (typeof sortableKeys)[number];

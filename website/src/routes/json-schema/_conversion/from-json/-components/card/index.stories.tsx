@@ -6,7 +6,7 @@ import preview from "#storybook/preview";
 import { FromJsonCard } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/FromJson/Card",
+  title: "Features/JsonSchema/Conversion/FromJson/Card",
   component: FromJsonCard,
 });
 
