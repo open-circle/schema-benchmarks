@@ -35,9 +35,14 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
           <th className="action"></th>
           <th>Version</th>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("downloads", sortState, {
-              to: "/json-schema/compliance",
-            })}
+            {...SortableHeaderLink.getProps(
+              "downloads",
+              sortState,
+              {
+                to: "/json-schema/compliance",
+              },
+              "descending",
+            )}
             className="numeric"
             aria-label="Downloads per week"
           >
@@ -46,9 +51,14 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
             </span>
           </SortableHeaderLink>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("compliance", sortState, {
-              to: "/json-schema/compliance",
-            })}
+            {...SortableHeaderLink.getProps(
+              "compliance",
+              sortState,
+              {
+                to: "/json-schema/compliance",
+              },
+              "descending",
+            )}
             className="numeric"
             colSpan={2}
           >

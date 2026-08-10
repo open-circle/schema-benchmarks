@@ -26,3 +26,14 @@ export const complianceTargetProps = {
 
 export const sortableKeys = ["libraryName", "downloads", "compliance"] as const;
 export type SortableKey = (typeof sortableKeys)[number];
+
+export function getPctCompliance({
+  results: {
+    count: { passed, failed },
+  },
+}: {
+  results: { count: { passed: number; failed: number } };
+}) {
+  const total = passed + failed;
+  return total > 0 ? (passed / total) * 100 : 0;
+}

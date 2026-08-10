@@ -1,11 +1,18 @@
+import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
+import { collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
+import { useMemo } from "react";
 import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
+import {
+  compareDownloadsByPkgName,
+  useDownloadsByPkgName,
+} from "#src/routes/_benchmarks/-hooks.ts";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
 import { ComplianceTable } from "#src/routes/json-schema/compliance/-components/table/index.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
@@ -21,9 +28,14 @@ import {
 } from "#src/shared/components/tabs/index.tsx";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight.ts";
-import { sortParams } from "#src/shared/lib/sort";
+import { applySort, sortParams } from "#src/shared/lib/sort";
 
-import { complianceTargetProps, complianceTypeIcons, sortableKeys } from "./-constants.tsx";
+import {
+  complianceTargetProps,
+  complianceTypeIcons,
+  getPctCompliance,
+  sortableKeys,
+} from "./-constants.tsx";
 
 const searchSchema = v.object({
   ...sortParams(v.optional(v.picklist(sortableKeys), "compliance"), "descending"),
@@ -60,6 +72,10 @@ export const Route = createFileRoute("/json-schema/compliance/")({
     }),
 });
 
+function getLibraryLabel({ libraryName, note }: JsonComplianceResult) {
+  return `${libraryName}${note ? ` (${note})` : ""}`;
+}
+
 function RouteComponent() {
   const { tab, target, sortBy, sortDir } = Route.useSearch();
   const { panelsRef, getTabLinkProps, getPanelProps } = useTabLinks(
@@ -70,6 +86,39 @@ function RouteComponent() {
     ...getJsonSchemaBenchResults(),
     select: (data) => data.compliance,
   });
+  const downloadsByPkgName = useDownloadsByPkgName(data[tab]?.[target] ?? []);
+  const sortedResults = useMemo(
+    () =>
+      data[tab]?.[target].toSorted(
+        applySort(
+          (a, b) => {
+            switch (sortBy) {
+              case "libraryName":
+                return collator.compare(a.libraryName, b.libraryName);
+              case "downloads":
+                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
+              case "compliance":
+                return getPctCompliance(a) - getPctCompliance(b);
+              default:
+                return 0;
+            }
+          },
+          {
+            sortDir,
+            fallbacks: [
+              compareDownloadsByPkgName.fallback(downloadsByPkgName),
+              compareStrings(getLibraryLabel),
+              compareNumbers((result) => {
+                const { passed, failed } = result.results.count;
+                const total = passed + failed;
+                return total > 0 ? (passed / total) * 100 : 0;
+              }),
+            ],
+          },
+        ),
+      ) ?? [],
+    [data, tab, target, sortBy, sortDir, downloadsByPkgName],
+  );
   return (
     <main>
       <div className="main">
@@ -111,7 +160,7 @@ function RouteComponent() {
         {complianceTypeSchema.options.map((tabId) => (
           <TabPanel key={tabId} {...getPanelProps(tabId)}>
             <ComplianceTable
-              results={data[tabId]?.[target] ?? []}
+              results={sortedResults}
               {...{ sortBy, sortDir }}
               pieScale={Pie.getScale(
                 (data[tabId]?.[target] ?? []).map((result) => {
