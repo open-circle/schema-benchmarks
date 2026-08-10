@@ -1,15 +1,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { format } from "oxfmt";
 
-// oxlint-disable-next-line no-underscore-dangle
-const __dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
+const constantsFilePath = path.join(import.meta.dirname, "../constants/targets.gen.ts");
 
-const constantsFilePath = path.join(__dirname, "../constants/targets.gen.ts");
-
-const testSuitesDir = path.join(__dirname, "../tests");
+const testSuitesDir = path.join(import.meta.dirname, "../tests");
 
 const targets = fs
   .readdirSync(testSuitesDir, { withFileTypes: true })
