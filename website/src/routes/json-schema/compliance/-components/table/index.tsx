@@ -1,10 +1,11 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
-import { shortNumFormatter, percentFormatter } from "@schema-benchmarks/utils";
+import { shortNumFormatter, percentFormatter, getTransitionName } from "@schema-benchmarks/utils";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
+import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { SortableHeaderLink } from "#src/shared/components/table/sort.tsx";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -21,7 +22,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
   const formatPercentage = useNumberFormatter(percentFormatter);
   const formatNumber = useNumberFormatter(shortNumFormatter);
   return (
-    <table aria-label="Compliance Table">
+    <table className="json-schema-table" aria-label="Compliance Table">
       <thead>
         <tr>
           <SortableHeaderLink
@@ -38,8 +39,11 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
               to: "/json-schema/compliance",
             })}
             className="numeric"
+            aria-label="Downloads per week"
           >
-            Downloads
+            <span className="json-schema-table__downloads-label">
+              <MdSymbol size={18}>download</MdSymbol>/wk
+            </span>
           </SortableHeaderLink>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("compliance", sortState, {
@@ -58,7 +62,15 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
           const total = passed + failed;
           const percentage = total > 0 ? passed / total : 0;
           return (
-            <tr key={result.id}>
+            <tr
+              key={result.id}
+              style={{
+                viewTransitionName: getTransitionName("compliance-row", {
+                  libraryName: result.libraryName,
+                  note: result.note,
+                }),
+              }}
+            >
               <td>
                 <code className="language-text">{result.libraryName}</code>
                 {result.note ? ` (${result.note})` : null}

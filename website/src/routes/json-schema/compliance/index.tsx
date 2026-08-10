@@ -1,3 +1,4 @@
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests";
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -6,9 +7,11 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
+import { ComplianceTable } from "#src/routes/json-schema/compliance/-components/table/index.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
 import { PageFilters } from "#src/shared/components/page-filter/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
+import { Pie } from "#src/shared/components/table/pie.tsx";
 import {
   Tabs,
   InternalTabLink,
@@ -58,14 +61,14 @@ export const Route = createFileRoute("/json-schema/compliance/")({
 });
 
 function RouteComponent() {
-  const { tab } = Route.useSearch();
+  const { tab, target, sortBy, sortDir } = Route.useSearch();
   const { panelsRef, getTabLinkProps, getPanelProps } = useTabLinks(
     complianceTypeSchema.options,
     tab,
   );
   const { data } = useSuspenseQuery({
     ...getJsonSchemaBenchResults(),
-    select: (data) => data.compliance[tab],
+    select: (data) => data.compliance,
   });
   return (
     <main>
@@ -76,7 +79,7 @@ function RouteComponent() {
             getLinkOptions={(target) => ({
               to: "/json-schema/compliance",
               search: (search: {}) => ({ ...search, target }),
-              disabled: !data?.[target].length,
+              disabled: !data[tab]?.[target].length,
             })}
           />
         </PageFilters>
@@ -89,7 +92,13 @@ function RouteComponent() {
               tabId,
               linkOptions({
                 to: "/json-schema/compliance",
-                search: (search: {}) => ({ ...search, tab: tabId }),
+                search: (({ target, ...search }: { target: ComplianceTarget }) => {
+                  const nextTarget = data[tabId]?.[target].length
+                    ? target
+                    : (complianceTargetSchema.options.find((t) => data[tabId]?.[t].length) ??
+                      target);
+                  return { ...search, tab: tabId, target: nextTarget };
+                }) as never,
               }),
             )}
           >
@@ -101,7 +110,17 @@ function RouteComponent() {
       <TabPanels ref={panelsRef} className="main">
         {complianceTypeSchema.options.map((tabId) => (
           <TabPanel key={tabId} {...getPanelProps(tabId)}>
-            {tabId}
+            <ComplianceTable
+              results={data[tabId]?.[target] ?? []}
+              {...{ sortBy, sortDir }}
+              pieScale={Pie.getScale(
+                (data[tabId]?.[target] ?? []).map((result) => {
+                  const { passed, failed } = result.results.count;
+                  const total = passed + failed;
+                  return total > 0 ? (passed / total) * 100 : 0;
+                }),
+              )}
+            />
           </TabPanel>
         ))}
       </TabPanels>
