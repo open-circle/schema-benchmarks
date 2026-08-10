@@ -1,13 +1,14 @@
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
+import type { ReactNode } from "react";
 
 import type { PageFilterChipsProps } from "#src/shared/components/page-filter/chips.tsx";
 
-export const complianceTypeIcons: Record<ComplianceType, string> = {
-  validation: "checklist",
-  semantics: "book",
-  roundtrip: "replay",
+export const complianceTypeLabels: Record<ComplianceType, { icon: string; label: ReactNode }> = {
+  validation: { icon: "checklist", label: "Validation" },
+  semantics: { icon: "book", label: "Semantics" },
+  roundtrip: { icon: "replay", label: "Roundtrip" },
 };
 
 export const complianceTargetProps = {

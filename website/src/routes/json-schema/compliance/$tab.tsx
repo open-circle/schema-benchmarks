@@ -32,7 +32,7 @@ import { applySort, sortParams } from "#src/shared/lib/sort";
 
 import {
   complianceTargetProps,
-  complianceTypeIcons,
+  complianceTypeLabels,
   getPctCompliance,
   sortableKeys,
 } from "./-constants.tsx";
@@ -161,8 +161,8 @@ function RouteComponent() {
               }),
             )}
           >
-            <MdSymbol>{complianceTypeIcons[tabId]}</MdSymbol>
-            {tabId}
+            <MdSymbol>{complianceTypeLabels[tabId].icon}</MdSymbol>
+            {complianceTypeLabels[tabId].label}
           </InternalTabLink>
         ))}
       </Tabs>
