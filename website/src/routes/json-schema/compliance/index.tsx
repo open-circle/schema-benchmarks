@@ -20,10 +20,10 @@ import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight.ts";
 import { sortParams } from "#src/shared/lib/sort";
 
-import { complianceTargetProps, complianceTypeIcons } from "./-constants.tsx";
+import { complianceTargetProps, complianceTypeIcons, sortableKeys } from "./-constants.tsx";
 
 const searchSchema = v.object({
-  ...sortParams(v.optional(v.picklist(["libraryName", "passed"]), "libraryName")),
+  ...sortParams(v.optional(v.picklist(sortableKeys), "compliance"), "descending"),
   tab: v.optional(complianceTypeSchema, "validation"),
   target: v.optional(complianceTargetSchema, "draft2020-12"),
 });
