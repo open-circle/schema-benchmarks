@@ -70,7 +70,8 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
         <tr>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("libraryName", sortState, {
-              to: "/json-schema/to-json",
+              to: "/json-schema/to-json/$tab",
+              params: ({ tab }) => ({ tab }) as never,
             })}
           >
             Library
@@ -82,7 +83,7 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
             {...SortableHeaderLink.getProps(
               "downloads",
               sortState,
-              { to: "/json-schema/to-json" },
+              { to: "/json-schema/to-json/$tab", params: ({ tab }) => ({ tab }) as never },
               "descending",
             )}
             className="numeric"
@@ -94,7 +95,10 @@ export function ToJsonTable({ results, meanScaler, ...sortState }: ToJsonTablePr
           </SortableHeaderLink>
           <th>Type</th>
           <SortableHeaderLink
-            {...SortableHeaderLink.getProps("mean", sortState, { to: "/json-schema/to-json" })}
+            {...SortableHeaderLink.getProps("mean", sortState, {
+              to: "/json-schema/to-json/$tab",
+              params: ({ tab }) => ({ tab }) as never,
+            })}
             className="numeric"
           >
             Mean

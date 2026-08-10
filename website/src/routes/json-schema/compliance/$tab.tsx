@@ -70,12 +70,12 @@ export const Route = createFileRoute("/json-schema/compliance/$tab")({
       ]),
     );
   },
-  head: () =>
+  head: ({ params: { tab } }) =>
     generateMetadata({
       title: "Compliance",
       description: "Compliance with JSON Schema standards",
       openGraph: {
-        url: "/json-schema/compliance/",
+        url: `/json-schema/compliance/${tab}`,
       },
     }),
 });

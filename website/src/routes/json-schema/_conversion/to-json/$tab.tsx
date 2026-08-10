@@ -62,11 +62,11 @@ export const Route = createFileRoute("/json-schema/_conversion/to-json/$tab")({
         ]),
     );
   },
-  head: () =>
+  head: ({ params: { tab } }) =>
     generateMetadata({
       title: "Schema to JSON Schema",
       description: "Benchmark results for converting a schema to JSON schema.",
-      openGraph: { url: "/json-schema/to-json" },
+      openGraph: { url: `/json-schema/to-json/${tab}` },
     }),
   staticData: { crumb: "Schema to JSON", wrapMain: false },
 });
