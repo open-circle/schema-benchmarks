@@ -7,7 +7,7 @@ import "#src/routes/json-schema/_conversion/to-json/-components/table/index.css"
 import { FromJsonTable } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/FromJson/Table",
+  title: "Features/JsonSchema/Conversion/FromJson/Table",
   component: FromJsonTable,
   args: {
     sortBy: "mean",

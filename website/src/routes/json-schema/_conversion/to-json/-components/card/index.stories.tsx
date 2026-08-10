@@ -7,7 +7,7 @@ import "./index.css";
 import { ToJsonCard } from ".";
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Card",
+  title: "Features/JsonSchema/Conversion/ToJson/Card",
   component: ToJsonCard,
 });
 

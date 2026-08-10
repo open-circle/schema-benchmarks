@@ -10,7 +10,7 @@ const library = "valibot";
 const { matrix: supportMatrix, ...props } = jsonSchemaResults.conversion.toJsonSupport[library]!;
 
 const meta = preview.meta({
-  title: "Features/Benchmark/JsonSchema/Conversion/ToJson/Matrix/Card",
+  title: "Features/JsonSchema/Conversion/ToJson/Matrix/Card",
   component: SupportMatrixCard,
   args: {
     library,
