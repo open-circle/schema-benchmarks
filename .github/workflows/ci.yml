@@ -49,7 +49,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup environment
         uses: ./.github/actions/environments
-      - uses: CatChen/oxlint-suggestion-action@79370fbca98639c3d2f8e2fc263daf87706ba692 # v1.0.9
+      - uses: CatChen/oxlint-suggestion-action@924491ef956f58558084d86f2eafb21eccc9e207 # v1.0.10
         with:
           fail-check: true
   format:
