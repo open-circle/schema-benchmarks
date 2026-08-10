@@ -2,7 +2,8 @@ Libraries that have their own representations of schemas, but can be created fro
 
 ```ts
 const zodSchema = z.fromJSONSchema(jsonSchema);
-assert(zodSchema.safeParse(input).success === expected);
+const received = zodSchema.safeParse(input).success;
+assert(received === expected);
 ```
 
 Results indicate how closely the library aligns with the formal semantics of JSON Schema.
