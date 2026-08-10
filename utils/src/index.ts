@@ -21,7 +21,7 @@ export const shortNumFormatter = new Intl.NumberFormat("en", {
 
 export const percentFormatter = new Intl.NumberFormat("en", {
   style: "percent",
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 1,
 });
 
 export const unsafeKeys: <T extends object>(obj: T) => Array<keyof T> = Object.keys;

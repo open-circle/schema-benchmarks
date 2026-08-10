@@ -322,3 +322,8 @@ code {
   --caption-size: 0.75rem;
   --caption-transform: none;
 }
+
+em,
+i {
+  --font-slant: -11;
+}
