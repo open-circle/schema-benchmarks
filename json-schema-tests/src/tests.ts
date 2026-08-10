@@ -23,6 +23,7 @@ export async function* getTestCases(target: ComplianceTarget) {
       path.basename(file, ".json"),
       v.parse(
         v.array(testCaseSchema),
+        /* @vite-ignore */
         await import(`#tests/${target}/${file}`, { with: { type: "json" } }).then((m) => m.default),
       ),
     ] as const;
