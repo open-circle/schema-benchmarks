@@ -28,7 +28,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.3",
-    "ata-validator": "^1.5.0",
+    "ata-validator": "^1.6.0",
     "decoders": "^2.9.3",
     "dedent": "catalog:",
     "effect": "^3.22.0",
@@ -40,7 +40,7 @@
     "runtypes": "^7.0.4",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.0",
-    "typebox": "^1.3.10",
+    "typebox": "^1.3.11",
     "typia": "^13.2.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
@@ -52,9 +52,9 @@
     "tsdown": "^0.22.14",
     "ttsc": "catalog:",
     "typescript": "catalog:",
-    "unplugin-macros": "^0.20.2",
+    "unplugin-macros": "^0.23.0",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^1.23.8"
+    "zod-compiler": "^1.26.0"
   }
 }
