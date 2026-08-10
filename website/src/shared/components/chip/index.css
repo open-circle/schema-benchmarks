@@ -52,7 +52,8 @@
     transition:
       background-color 250ms,
       color 250ms,
-      font-weight 250ms;
+      font-weight 250ms,
+      opacity 250ms;
     .md-symbol {
       margin-left: -0.25rem;
       &:dir(rtl) {

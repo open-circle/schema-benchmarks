@@ -356,6 +356,9 @@ importers:
       '@schema-benchmarks/bench':
         specifier: workspace:*
         version: link:../bench
+      '@schema-benchmarks/json-schema-tests':
+        specifier: workspace:*
+        version: link:../json-schema-tests
       '@schema-benchmarks/schemas':
         specifier: workspace:*
         version: link:../schemas

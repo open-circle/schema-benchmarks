@@ -27,6 +27,7 @@ import {
   jsonSourceProps,
   jsonSchemaConversionTargetProps,
 } from "#src/routes/json-schema/_conversion/-constants";
+import { complianceTypeIcons } from "#src/routes/json-schema/compliance/-constants";
 import { admonitionDefaults } from "#src/shared/components/admonition/constants";
 import { sidebarGroups } from "#src/shared/components/sidebar/groups";
 import { sortDirectionIcons } from "#src/shared/components/table/constants";
@@ -93,7 +94,7 @@ const config = defineConfig({
         ...[speedPresets, admonitionDefaults, themeLabels, styleLabels].flatMap((map) =>
           Object.values(map).map((value) => value.icon),
         ),
-        ...Object.values(sortDirectionIcons),
+        ...[sortDirectionIcons, complianceTypeIcons].flatMap((map) => Object.values(map)),
         ...scales.sentiment,
         ...scales.stat,
       ],
