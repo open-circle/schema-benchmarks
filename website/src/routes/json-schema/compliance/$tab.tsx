@@ -36,7 +36,7 @@ import {
   getPctCompliance,
   sortableKeys,
 } from "./-constants.tsx";
-import * as tabContent from "./-content/index.ts";
+import { content as tabContent } from "./-content/index.ts";
 import Content from "./content.mdx";
 
 const searchSchema = v.object({
