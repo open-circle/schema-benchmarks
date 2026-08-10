@@ -15,11 +15,11 @@ export interface PieProps {
 
 const getPieScale = (
   _values: ReadonlyArray<d3.NumberValue>,
-  { lowerBetter = false }: { lowerBetter?: boolean } = {},
+  { lowerBetter = false, max = 100 }: { lowerBetter?: boolean; max?: number } = {},
 ) =>
   combineScales<PieProps>({
-    color: d3.scaleQuantile([0, 100], reverseIf(lowerBetter, scales.color)),
-    percentage: d3.scaleLinear([0, 100], [0, 100]),
+    color: d3.scaleQuantize([0, max], reverseIf(lowerBetter, scales.color)),
+    percentage: d3.scaleLinear([0, max], [0, 100]),
   });
 
 const cls = bem("pie");
