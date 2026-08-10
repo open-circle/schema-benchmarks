@@ -5,7 +5,7 @@ import preview from "#storybook/preview";
 
 import { ComplianceTable } from ".";
 
-const results = jsonSchemaResults.compliance.validation?.["draft2019-09"] ?? [];
+const results = jsonSchemaResults.compliance.validation?.["draft2020-12"] ?? [];
 const pieScale = Pie.getScale(
   results.map((result) => {
     const { passed, failed } = result.results.count;
