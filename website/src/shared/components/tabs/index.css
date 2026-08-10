@@ -1,14 +1,19 @@
 .tabs {
   border-radius: 0;
-  transition: border-color 250ms;
   .tabs__tab {
     border-bottom: 2px solid transparent;
+    border-radius: inherit !important;
+    flex-direction: column;
     &[aria-selected="true"] {
       border-color: var(--button-selected);
     }
-  }
-  .tabs__tab {
-    border-radius: inherit !important;
+    &:has(.md-symbol) {
+      height: 4rem;
+      gap: 0.5rem;
+    }
+    .md-symbol {
+      --icon-size: 24;
+    }
   }
   &[aria-orientation="horizontal"] {
     border-bottom: 1px solid var(--divider);
