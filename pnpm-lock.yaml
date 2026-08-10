@@ -211,8 +211,8 @@ importers:
         specifier: ^2.0.2
         version: 2.0.2
       sury:
-        specifier: 11.0.0-rc.0
-        version: 11.0.0-rc.0
+        specifier: 11.0.0-rc.1
+        version: 11.0.0-rc.1
       typebox:
         specifier: ^1.3.11
         version: 1.3.11
@@ -8492,8 +8492,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  sury@11.0.0-rc.0:
-    resolution: {integrity: sha512-tCRBVO5Uy7N1vMRNoc31+8syeOyNdBU1aRSy7PBLCj/ipxdWZ0LguRUUyP/QGQX/Wc4ASziIo+4I12ZC3ni7rg==}
+  sury@11.0.0-rc.1:
+    resolution: {integrity: sha512-UzxKHMmL2iNdKmbckYDYgaQOnv1l6I+r6orv03P29oAEC9CpzljkpYeIcJ/oAoBc63VSFaCnmoL6gfuhPDTimA==}
     peerDependencies:
       rescript: 12.x
     peerDependenciesMeta:
@@ -17755,7 +17755,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  sury@11.0.0-rc.0: {}
+  sury@11.0.0-rc.1: {}
 
   svg-parser@2.0.4: {}
 
