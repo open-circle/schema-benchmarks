@@ -9,13 +9,20 @@ import {
   complianceTargetProps,
   ensureComplianceTab,
 } from "#src/routes/json-schema/compliance/-constants.tsx";
-import { Dialog, DialogContent, DialogTitle } from "#src/shared/components/dialog/index.tsx";
+import { Button } from "#src/shared/components/button/index.tsx";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "#src/shared/components/dialog/index.tsx";
 import {
   List,
   ListItem,
   ListItemContent,
   ListItemExternalLink,
 } from "#src/shared/components/list/index.tsx";
+import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter.ts";
 import { trackedLinkProps } from "#src/shared/lib/analytics.ts";
@@ -52,46 +59,60 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
       closedby="any"
       {...cls()}
     >
-      {delayedResult && (
-        <DialogContent {...cls("content")}>
-          <hgroup {...cls("header")}>
-            <p {...cls({ element: "version", extra: "typo-overline" })}>
-              <code className="language-text">{delayedResult.version}</code>
-            </p>
-            <DialogTitle>
-              <code className="language-text">{delayedResult.libraryName}</code>
-              {delayedResult.note ? ` (${delayedResult.note})` : null}
-            </DialogTitle>
-            <p {...cls({ element: "target", extra: "typo-caption" })}>
-              {complianceTargetProps.labels[target].label}
-            </p>
-          </hgroup>
-          <List {...cls("files")}>
-            {Object.entries(delayedResult.results.files).map(([file, result]) => {
-              const { passed, failed } = result.count;
-              const total = passed + failed;
-              const percentage = passed / total;
-              return (
-                <ListItem key={file}>
-                  <ListItemExternalLink
-                    {...trackedLinkProps(
-                      `https://github.com/json-schema-org/JSON-Schema-Test-Suite/blob/main/tests/${target}/${file}.json`,
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ListItemContent
-                      lines={2}
-                      primary={<code className="language-text">{file}</code>}
-                      supporting={`${formatPercentage(percentage)} (${formatNumber(passed)}/${formatNumber(total)})`}
-                      leading={<Pie value={percentage} max={1} showIcon />}
-                    />
-                  </ListItemExternalLink>
-                </ListItem>
-              );
-            })}
-          </List>
-        </DialogContent>
+      {({ close }) => (
+        <>
+          {delayedResult && (
+            <DialogContent {...cls("content")}>
+              <hgroup {...cls("header")}>
+                <p {...cls({ element: "version", extra: "typo-overline" })}>
+                  <code className="language-text">{delayedResult.version}</code>
+                </p>
+                <DialogTitle>
+                  <code className="language-text">{delayedResult.libraryName}</code>
+                  {delayedResult.note ? ` (${delayedResult.note})` : null}
+                </DialogTitle>
+                <p {...cls({ element: "target", extra: "typo-caption" })}>
+                  {complianceTargetProps.labels[target].label}
+                </p>
+              </hgroup>
+              <List {...cls("files")}>
+                {Object.entries(delayedResult.results.files).map(([file, result]) => {
+                  const { passed, failed } = result.count;
+                  const total = passed + failed;
+                  const percentage = passed / total;
+                  return (
+                    <ListItem key={file}>
+                      <ListItemExternalLink
+                        {...trackedLinkProps(
+                          `https://github.com/json-schema-org/JSON-Schema-Test-Suite/blob/main/tests/${target}/${file}` +
+                            ".json",
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ListItemContent
+                          lines={1}
+                          leading={<Pie value={percentage} max={1} showIcon />}
+                          trailing={
+                            <span className="typo-caption">{`${formatPercentage(percentage)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
+                          }
+                        >
+                          <code className="language-text">{file}</code>
+                        </ListItemContent>
+                      </ListItemExternalLink>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </DialogContent>
+          )}
+          <DialogActions>
+            <Button onClick={() => close()}>
+              <MdSymbol>close</MdSymbol>
+              Close
+            </Button>
+          </DialogActions>
+        </>
       )}
     </Dialog>
   );
