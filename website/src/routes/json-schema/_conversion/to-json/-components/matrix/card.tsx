@@ -39,12 +39,12 @@ export function SupportMatrixCard({
       data-testid="support-matrix-card"
     >
       <h5 {...cls({ element: "version", extra: "typo-overline" })}>{version}</h5>
-      <header
+      <h4
         id={`${library}-support-matrix-card`}
-        {...cls({ element: "library", extra: "typo-headline5" })}
+        {...cls({ element: "library", extra: "typo-subtitle1" })}
       >
         <code className="language-text">{library}</code>
-      </header>
+      </h4>
       <dl {...cls({ element: "sources" })}>
         <div>
           <dt>Source</dt>

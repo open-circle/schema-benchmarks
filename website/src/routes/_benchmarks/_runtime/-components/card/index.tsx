@@ -35,7 +35,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
         <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
         <div {...cls("header-row")}>
           <header {...cls("library-name")} id={`${id}-header`}>
-            <h4 className="typo-headline5">
+            <h4 className="typo-subtitle1">
               <code className="language-text">{result.libraryName}</code>
             </h4>
             {result.note && (

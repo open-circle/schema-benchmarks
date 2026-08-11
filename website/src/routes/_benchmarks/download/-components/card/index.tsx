@@ -36,7 +36,7 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
         <p {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</p>
         <div {...cls("header-row")}>
           <header {...cls("library-name")} id={`${id}-header`}>
-            <h4 className="typo-headline5">
+            <h4 className="typo-subtitle1">
               <code className="language-text">{result.libraryName}</code>
             </h4>
             {result.note && (

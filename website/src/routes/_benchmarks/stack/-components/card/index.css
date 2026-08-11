@@ -13,6 +13,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
   .stack-card__library-name {
     display: flex;
@@ -25,6 +27,7 @@
     align-items: center;
     gap: 0.5rem;
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+    white-space: nowrap;
   }
   .stack-card__bar-row {
     padding-bottom: 3rem;
