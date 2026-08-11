@@ -59,7 +59,7 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
       closedby="any"
       {...cls()}
     >
-      {({ close }) => (
+      {({ requestClose }) => (
         <>
           {delayedResult && (
             <DialogContent {...cls("content")}>
@@ -107,7 +107,7 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
             </DialogContent>
           )}
           <DialogActions>
-            <Button onClick={() => close()}>
+            <Button onClick={() => requestClose()}>
               <MdSymbol>close</MdSymbol>
               Close
             </Button>
