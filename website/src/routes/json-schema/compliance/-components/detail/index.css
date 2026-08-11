@@ -19,4 +19,7 @@
   .json-schema-compliance-detail__files {
     overflow-x: auto;
   }
+  .dialog__actions {
+    margin: 0;
+  }
 }

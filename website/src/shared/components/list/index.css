@@ -27,13 +27,16 @@
 }
 
 .list-item__content {
+  width: 100%;
   color: var(--list-item-foreground);
   display: flex;
   align-items: center;
   gap: 1rem;
-  .list-item__leading {
+  .list-item__leading,
+  .list-item__trailing {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
   }
   .list-item__leading:has(.md-symbol, .radio, .checkbox) {
     margin-right: 1rem;
