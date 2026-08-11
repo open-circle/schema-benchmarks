@@ -10,7 +10,7 @@ import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.
 import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
-import { InternalLinkButton } from "#src/shared/components/button/index.tsx";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { SortableHeaderLink } from "#src/shared/components/table/sort.tsx";
@@ -79,6 +79,7 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
           >
             Compliance
           </SortableHeaderLink>
+          <th className="action" aria-label="Details"></th>
         </tr>
       </thead>
       <tbody>
@@ -119,8 +120,11 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
               <td className="numeric">
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
+              <th className="fit-content">
+                <Pie value={percentage} max={1} />
+              </th>
               <th className="action">
-                <InternalLinkButton
+                <InternalLinkToggleButton
                   tooltip="Open details"
                   from="/json-schema/compliance/$tab"
                   to="/json-schema/compliance/$tab"
@@ -129,8 +133,8 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                   viewTransition={false}
                   {...cls("details-button")}
                 >
-                  <Pie value={percentage} max={1} />
-                </InternalLinkButton>
+                  <MdSymbol>checklist</MdSymbol>
+                </InternalLinkToggleButton>
               </th>
             </tr>
           );
