@@ -1,9 +1,9 @@
 Libraries that have their own representations of schemas, but can be created from JSON Schema, such as [`zod`](https://zod.dev/) or [`arktype`](https://arktype.io/).
 
 ```ts
-const zodSchema = z.fromJSONSchema(jsonSchema);
-const received = zodSchema.safeParse(input).success;
-assert(received === expected);
+const zodSchema = z.fromJSONSchema(schema);
+const receivedValid = zodSchema.safeParse(data).success;
+assert(receivedValid === expectedValid);
 ```
 
 Results indicate how closely the library aligns with the formal semantics of JSON Schema.

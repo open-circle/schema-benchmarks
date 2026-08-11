@@ -1,10 +1,10 @@
 Libraries that can be converted _from_ and _to_ JSON Schema. The JSON schema is decoded to the library's internal representation, then re-encoded to JSON Schema. The result is fed to [`typebox`](https://sinclairzx81.github.io/typebox/) for final validation (as it scores highest on validation benchmarks, so introduces the smallest amount of margin of error).
 
 ```ts
-const zodSchema = z.fromJSONSchema(jsonSchema);
+const zodSchema = z.fromJSONSchema(schema);
 const roundtripSchema = z.toJSONSchema(zodSchema, { target: "draft-07" });
-const received = Schema.Check(roundtripSchema, input);
-assert(received === expected);
+const receivedValid = Schema.Check(roundtripSchema, data);
+assert(receivedValid === expectedValid);
 ```
 
 Failed tests indicate either lossy translation or a serialization error.
