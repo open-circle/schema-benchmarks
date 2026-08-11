@@ -43,7 +43,9 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <BenchTable {...{ results, meanScaler }} {...props} />
+        <div className="centred-table">
+          <BenchTable {...{ results, meanScaler }} {...props} />
+        </div>
       ) : (
         <ul className="bench-cards" aria-label="Results">
           {results.map((result) => (

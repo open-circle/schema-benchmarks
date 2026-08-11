@@ -178,7 +178,9 @@ function RouteComponent() {
           return (
             <TabPanel key={tabId} {...getPanelProps(tabId)}>
               <TabContent components={{ wrapper: "div" }} />
-              <ComplianceTable results={sortedResults} {...{ sortBy, sortDir }} />
+              <div className="centred-table">
+                <ComplianceTable results={sortedResults} {...{ sortBy, sortDir }} />
+              </div>
             </TabPanel>
           );
         })}

@@ -37,7 +37,9 @@ export function StackResults({ results, ...props }: StackResultsProps) {
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
+        <div className="centred-table">
+          <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
+        </div>
       ) : (
         <ul className="stack-cards">
           {results.map((result) => (

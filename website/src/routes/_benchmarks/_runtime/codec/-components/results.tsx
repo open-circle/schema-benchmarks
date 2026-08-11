@@ -47,7 +47,9 @@ export function CodecResults({ results, sortBy, sortDir }: CodecResultsProps) {
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <CodecTable {...{ results, encodeScaler, decodeScaler, sortBy, sortDir }} />
+        <div className="centred-table">
+          <CodecTable {...{ results, encodeScaler, decodeScaler, sortBy, sortDir }} />
+        </div>
       ) : (
         <ul className="bench-cards" aria-label="Results">
           {results.map((result) => (

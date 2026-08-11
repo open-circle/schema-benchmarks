@@ -445,3 +445,8 @@ a > code.language-text.language-text {
     --ansi-fg: var(--ansi-bright-white);
   }
 }
+
+.centred-table {
+  display: flex;
+  justify-content: center;
+}
