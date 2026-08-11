@@ -18,7 +18,6 @@ import { ComplianceTable } from "#src/routes/json-schema/compliance/-components/
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
 import { PageFilters } from "#src/shared/components/page-filter/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
-import { Pie } from "#src/shared/components/table/pie.tsx";
 import {
   Tabs,
   InternalTabLink,
@@ -173,13 +172,7 @@ function RouteComponent() {
           return (
             <TabPanel key={tabId} {...getPanelProps(tabId)}>
               <TabContent components={{ wrapper: "div" }} />
-              <ComplianceTable
-                results={sortedResults}
-                {...{ sortBy, sortDir }}
-                pieScale={Pie.getScale((data[tabId]?.[target] ?? []).map(getPctCompliance), {
-                  max: 1,
-                })}
-              />
+              <ComplianceTable results={sortedResults} {...{ sortBy, sortDir }} />
             </TabPanel>
           );
         })}

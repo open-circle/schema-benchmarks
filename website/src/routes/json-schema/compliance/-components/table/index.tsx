@@ -17,12 +17,11 @@ import type { SortDirection } from "#src/shared/lib/sort.ts";
 
 export interface ComplianceTableProps {
   results: Array<JsonComplianceResult>;
-  pieScale: ReturnType<typeof Pie.getScale>;
   sortBy: SortableKey;
   sortDir: SortDirection;
 }
 
-export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceTableProps) {
+export function ComplianceTable({ results, ...sortState }: ComplianceTableProps) {
   const formatPercentage = useNumberFormatter(percentFormatter);
   const formatNumber = useNumberFormatter(shortNumFormatter);
   return (
@@ -117,7 +116,7 @@ export function ComplianceTable({ results, pieScale, ...sortState }: ComplianceT
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
               <th className="action">
-                <Pie {...pieScale(percentage)} />
+                <Pie value={percentage} max={1} />
               </th>
             </tr>
           );
