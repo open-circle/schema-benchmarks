@@ -123,6 +123,7 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                   to="/json-schema/compliance/$tab"
                   params={({ tab }) => ({ tab: ensureComplianceTab(tab) })}
                   search={(search) => ({ ...search, detail: result.id })}
+                  viewTransition={false}
                 >
                   <Pie value={percentage} max={1} />
                 </InternalLinkToggleButton>
