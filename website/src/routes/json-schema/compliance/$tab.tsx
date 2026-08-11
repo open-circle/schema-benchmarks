@@ -14,6 +14,7 @@ import {
   useDownloadsByPkgName,
 } from "#src/routes/_benchmarks/-hooks.ts";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
+import { ComplianceDetail } from "#src/routes/json-schema/compliance/-components/detail/index.tsx";
 import { ComplianceTable } from "#src/routes/json-schema/compliance/-components/table/index.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
 import { PageFilters } from "#src/shared/components/page-filter/index.tsx";
@@ -42,6 +43,7 @@ import Content from "./content.mdx";
 const searchSchema = v.object({
   ...sortParams(v.optional(v.picklist(sortableKeys), "compliance"), "descending"),
   target: v.optional(complianceTargetSchema, "draft2020-12"),
+  detail: v.fallback(v.optional(v.pipe(v.string(), v.uuid())), undefined),
 });
 
 export const Route = createFileRoute("/json-schema/compliance/$tab")({
@@ -86,7 +88,7 @@ function getLibraryLabel({ libraryName, note }: JsonComplianceResult) {
 
 function RouteComponent() {
   const { tab } = Route.useParams();
-  const { target, sortBy, sortDir } = Route.useSearch();
+  const { target, sortBy, sortDir, detail } = Route.useSearch();
   const { panelsRef, getTabLinkProps, getPanelProps } = useTabLinks(
     complianceTypeSchema.options,
     tab,
@@ -95,6 +97,10 @@ function RouteComponent() {
     ...getJsonSchemaBenchResults(),
     select: (data) => data.compliance,
   });
+  const detailResult = useMemo(
+    () => data[tab]?.[target]?.find((result) => result.id === detail),
+    [data, tab, target, detail],
+  );
   const downloadsByPkgName = useDownloadsByPkgName(data[tab]?.[target] ?? []);
   const sortedResults = useMemo(
     () =>
@@ -177,6 +183,7 @@ function RouteComponent() {
           );
         })}
       </TabPanels>
+      <ComplianceDetail result={detailResult} {...{ target }} />
     </main>
   );
 }

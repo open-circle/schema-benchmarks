@@ -9,6 +9,7 @@ import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.
 import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { SortableHeaderLink } from "#src/shared/components/table/sort.tsx";
@@ -116,7 +117,15 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
               <th className="action">
-                <Pie value={percentage} max={1} />
+                <InternalLinkToggleButton
+                  tooltip="Open details"
+                  from="/json-schema/compliance/$tab"
+                  to="/json-schema/compliance/$tab"
+                  params={({ tab }) => ({ tab: ensureComplianceTab(tab) })}
+                  search={(search) => ({ ...search, detail: result.id })}
+                >
+                  <Pie value={percentage} max={1} />
+                </InternalLinkToggleButton>
               </th>
             </tr>
           );

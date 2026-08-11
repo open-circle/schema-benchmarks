@@ -16,6 +16,7 @@
     display var(--dialog-exit-time) allow-discrete,
     overlay var(--dialog-exit-time) allow-discrete;
   animation: dialog-fade-out var(--dialog-exit-time) linear;
+  z-index: 1000;
   &::backdrop {
     background-color: color(from var(--page-foreground) srgb r g b / 0.32);
     opacity: 0;

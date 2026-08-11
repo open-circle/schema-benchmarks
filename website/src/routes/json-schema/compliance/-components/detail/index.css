@@ -1,0 +1,22 @@
+.json-schema-compliance-detail {
+  padding: 0;
+  min-width: min(40rem, calc(100vw - 2rem));
+  .json-schema-compliance-detail__header {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.5rem;
+    .dialog__title {
+      display: flex;
+      align-items: baseline;
+    }
+    .dialog__title,
+    .json-schema-compliance-detail__version,
+    .json-schema-compliance-detail__target {
+      margin: 0;
+    }
+  }
+  .json-schema-compliance-detail__files {
+    overflow-x: auto;
+  }
+}

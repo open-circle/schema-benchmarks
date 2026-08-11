@@ -36,8 +36,8 @@
     display: contents;
   }
 
-  .md-symbol,
-  .spinner {
+  > .md-symbol,
+  > .spinner {
     --icon-size: 18;
     margin-left: -0.25rem;
     &:dir(rtl) {
