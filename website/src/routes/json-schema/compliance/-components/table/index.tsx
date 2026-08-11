@@ -1,6 +1,7 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import { shortNumFormatter, percentFormatter, getTransitionName } from "@schema-benchmarks/utils";
+import bem from "react-bem-helper";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
@@ -9,7 +10,7 @@ import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.
 import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
-import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
+import { InternalLinkButton } from "#src/shared/components/button/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
 import { SortableHeaderLink } from "#src/shared/components/table/sort.tsx";
@@ -22,11 +23,13 @@ export interface ComplianceTableProps {
   sortDir: SortDirection;
 }
 
+const cls = bem("json-schema-table");
+
 export function ComplianceTable({ results, ...sortState }: ComplianceTableProps) {
   const formatPercentage = useNumberFormatter(percentFormatter);
   const formatNumber = useNumberFormatter(shortNumFormatter);
   return (
-    <table className="json-schema-table" aria-label="Compliance Table">
+    <table {...cls()} aria-label="Compliance Table">
       <thead>
         <tr>
           <SortableHeaderLink
@@ -117,16 +120,17 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
               <th className="action">
-                <InternalLinkToggleButton
+                <InternalLinkButton
                   tooltip="Open details"
                   from="/json-schema/compliance/$tab"
                   to="/json-schema/compliance/$tab"
                   params={({ tab }) => ({ tab: ensureComplianceTab(tab) })}
                   search={(search) => ({ ...search, detail: result.id })}
                   viewTransition={false}
+                  {...cls("details-button")}
                 >
                   <Pie value={percentage} max={1} />
-                </InternalLinkToggleButton>
+                </InternalLinkButton>
               </th>
             </tr>
           );
