@@ -41,7 +41,9 @@ export function DownloadResults({ results, mbps, minify, sortBy, sortDir }: Down
   return (
     <div suppressHydrationWarning>
       {shouldUseTable ? (
-        <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
+        <div className="centred-table">
+          <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
+        </div>
       ) : (
         <ul className="download-cards" aria-label="Results">
           {results.map((result) => (
