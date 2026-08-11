@@ -1,0 +1,12 @@
+dl {
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    min-height: 52px;
+  }
+  dt {
+    @extend .typo-caption;
+    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+  }
+}

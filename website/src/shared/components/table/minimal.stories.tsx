@@ -3,7 +3,7 @@ import preview from "#storybook/preview";
 const meta = preview.meta({
   title: "Components/Table/Minimal",
   render: () => (
-    <dl className="minimal">
+    <dl>
       <div>
         <dt>Name</dt>
         <dd>John Doe</dd>

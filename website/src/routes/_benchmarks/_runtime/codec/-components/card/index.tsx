@@ -60,7 +60,7 @@ export function CodecCard({ result, encodeScaler, decodeScaler }: CodecCardProps
                 {type === "encode" ? "Encode" : "Decode"}
               </h6>
               <CodeBlock>{snippet}</CodeBlock>
-              <dl className="minimal">
+              <dl>
                 <div>
                   <dt>Mean</dt>
                   <dd>{durationFormatter.format(getDuration(mean))}</dd>

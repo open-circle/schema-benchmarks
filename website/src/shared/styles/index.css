@@ -20,6 +20,7 @@
 @import "../components/consolewriter/index.css";
 @import "../components/details/index.css";
 @import "../components/dialog/index.css";
+@import "../components/dl/index.css";
 @import "../components/empty-state/index.css";
 @import "../components/footer/index.css";
 @import "../components/header/index.css";
@@ -444,9 +445,4 @@ a > code.language-text.language-text {
   .fg-brightWhite {
     --ansi-fg: var(--ansi-bright-white);
   }
-}
-
-.centred-table {
-  display: flex;
-  justify-content: center;
 }
