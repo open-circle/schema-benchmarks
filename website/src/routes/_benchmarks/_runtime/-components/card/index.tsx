@@ -51,7 +51,7 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
           </ErrorBoundary>
         </div>
         <CodeBlock>{result.snippet}</CodeBlock>
-        <dl className="minimal">
+        <dl>
           <div>
             <dt>Mean</dt>
             <dd>{formatDuration(result.mean)}</dd>

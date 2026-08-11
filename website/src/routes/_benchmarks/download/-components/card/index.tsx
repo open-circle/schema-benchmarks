@@ -51,7 +51,7 @@ export function DownloadCard({ result, mbps, minify, gzipScaler }: DownloadCardP
             </div>
           </ErrorBoundary>
         </div>
-        <dl className="minimal">
+        <dl>
           <div>
             <dt>Uncompressed</dt>
             <dd>{formatBytes(result.bytes)}</dd>

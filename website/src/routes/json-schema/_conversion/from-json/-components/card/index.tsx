@@ -45,7 +45,7 @@ export function FromJsonCard({ result, meanScaler }: FromJsonCardProps) {
           </ErrorBoundary>
         </div>
         <CodeBlock>{result.snippet}</CodeBlock>
-        <dl className="minimal">
+        <dl>
           <div>
             <dt>Mean</dt>
             <dd>{formatDuration(result.mean)}</dd>

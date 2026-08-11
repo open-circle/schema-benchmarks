@@ -37,7 +37,7 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
             </div>
           </ErrorBoundary>
         </div>
-        <dl className="minimal">
+        <dl>
           {typeof result.frame === "number" && (
             <>
               <div {...cls({ element: "bar-row" })}>

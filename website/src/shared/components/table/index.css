@@ -135,19 +135,6 @@ td {
   }
 }
 
-dl.minimal {
-  > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 52px;
-  }
-  dt {
-    @extend .typo-caption;
-    color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
-  }
-}
-
 .sort-cell {
   color: var(--button);
   transition: color 250ms;
@@ -220,4 +207,9 @@ dl.minimal {
       background-color: color(from var(--button) srgb r g b / var(--focus-opacity));
     }
   }
+}
+
+.centred-table {
+  display: flex;
+  justify-content: center;
 }

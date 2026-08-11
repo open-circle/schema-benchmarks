@@ -45,7 +45,7 @@ export function SupportMatrixCard({
       >
         <code className="language-text">{library}</code>
       </header>
-      <dl {...cls({ element: "sources", extra: "minimal" })}>
+      <dl {...cls({ element: "sources" })}>
         <div>
           <dt>Source</dt>
           <dd>
