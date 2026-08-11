@@ -1,7 +1,14 @@
 import { Button } from "#src/shared/components/button";
 import preview from "#storybook/preview";
 
-import { type CloseDialog, Dialog, DialogActions } from ".";
+import {
+  type CloseDialog,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogMessage,
+} from ".";
 
 const meta = preview.meta({
   title: "Components/Dialog",
@@ -18,10 +25,10 @@ const meta = preview.meta({
     open: true,
     children: ({ close }: CloseDialog) => (
       <>
-        <div className="dialog__content">
-          <h2 className="dialog__title">Hello world</h2>
-          <p className="dialog__message">This is a dialog</p>
-        </div>
+        <DialogContent className="dialog__content">
+          <DialogTitle className="dialog__title">Hello world</DialogTitle>
+          <DialogMessage className="dialog__message">This is a dialog</DialogMessage>
+        </DialogContent>
         <DialogActions>
           <Button onClick={() => close()}>Close</Button>
         </DialogActions>
