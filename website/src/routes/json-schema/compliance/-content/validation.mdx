@@ -1,8 +1,8 @@
 Libraries that use JSON Schema directly, such as [`typebox`](https://sinclairzx81.github.io/typebox/) or [`ajv`](https://ajv.js.org/).
 
 ```ts
-const received = Schema.Check(jsonSchema, input);
-assert(received === expected);
+const receivedValid = Schema.Check(schema, data);
+assert(receivedValid === expectedValid);
 ```
 
 Results indicate compliance with the JSON Schema test suite.
