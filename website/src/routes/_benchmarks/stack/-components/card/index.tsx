@@ -27,7 +27,7 @@ export function StackCard({ result, frameScale, lineCountScale }: StackCardProps
       <article {...cls()} style={{ viewTransitionName: id }}>
         <h5 {...cls({ element: "version", extra: "typo-overline" })}>{result.version}</h5>
         <div {...cls({ element: "header-row" })}>
-          <h4 {...cls({ element: "library-name", extra: "typo-headline5" })} id={`${id}-header`}>
+          <h4 {...cls({ element: "library-name", extra: "typo-subtitle1" })} id={`${id}-header`}>
             <code className="language-text">{result.libraryName}</code>
           </h4>
           <ErrorBoundary fallback={null}>

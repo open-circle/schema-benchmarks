@@ -1,6 +1,7 @@
 .support-matrix-card {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   border: 1px solid var(--divider);
   border-radius: var(--shape-medium);
   min-width: 256px;
