@@ -111,7 +111,7 @@ jobs:
           name: bench-results
           path: bench/bench.json
 
-  collect-results:
+  push-results:
     needs: [bench-stack, bench-download, bench-bench]
     permissions:
       contents: write
