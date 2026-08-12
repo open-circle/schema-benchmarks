@@ -2,7 +2,7 @@ dl {
   > div {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     min-height: 52px;
   }
   dt {
