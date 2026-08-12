@@ -1,7 +1,6 @@
 name: PR Benchmark Preview
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 on:
   pull_request:
@@ -148,15 +147,18 @@ jobs:
           name: bench-results
           path: bench/bench.json
 
-  collect-results:
+  push-results:
     needs: [gate, bench-stack, bench-download, bench-bench]
-    if: needs.gate.outputs.should_run == 'true'
+    if: >-
+      needs.gate.outputs.should_run == 'true' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.head_ref }}
 
       - parallel:
           - name: Download bench results
