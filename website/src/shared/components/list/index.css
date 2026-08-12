@@ -46,8 +46,26 @@
     }
   }
   .list-item__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
     flex: 1 1 auto;
     min-width: 0;
+  }
+
+  .list-item__overline,
+  .list-item__primary-text,
+  .list-item__supporting-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* these are always single lines - supporting can be 1 or 2 so we set it separately */
+  .list-item__overline,
+  .list-item__primary-text {
+    white-space: nowrap;
   }
   &.list-item__content--single {
     height: 3rem;
@@ -64,8 +82,6 @@
       height: 4.5rem;
     }
     .list-item__supporting-text {
-      overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
@@ -73,10 +89,6 @@
     height: 5.5rem;
     padding: 1rem;
     align-items: flex-start;
-    .list-item__supporting-text {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
     &:not(.list-item__content--overline) .list-item__supporting-text {
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -93,5 +105,11 @@
     color: color(
       from var(--list-item-foreground, var(--page-foreground)) srgb r g b / var(--secondary-text)
     );
+  }
+  > code,
+  .list-item__overline > code,
+  .list-item__primary-text > code,
+  .list-item__supporting-text > code {
+    font-size: inherit;
   }
 }

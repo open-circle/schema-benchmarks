@@ -2,6 +2,7 @@
 @import "./_conversion/to-json/-components/card/index.css";
 @import "./_conversion/to-json/-components/matrix/card.css";
 @import "./compliance/-components/detail/index.css";
+@import "./compliance/-components/list/index.css";
 
 .json-schema-cards {
   display: grid;
