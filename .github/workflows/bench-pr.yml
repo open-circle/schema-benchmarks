@@ -183,7 +183,6 @@ jobs:
         run: echo "SHORT_SHA=${SOURCE_SHA::7}" >> "$GITHUB_ENV"
 
       - name: Commit & Push changes
-        continue-on-error: true
         uses: actions-js/push@968f4695ca558093eadb24ad83cc5891f47e0cdc # v1.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
