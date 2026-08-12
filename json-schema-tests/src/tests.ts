@@ -4,12 +4,41 @@ import * as path from "node:path";
 import * as v from "valibot";
 
 import type {
+  ComplianceContext,
   ComplianceTarget,
   ComplianceFn,
   FileComplianceResult,
   ComplianceResults,
 } from "./types.ts";
 import { testCaseSchema } from "./types.ts";
+
+let remoteSchemasPromise: Promise<ComplianceContext["remotes"]> | undefined;
+
+function getRemoteSchemas(): Promise<ComplianceContext["remotes"]> {
+  remoteSchemasPromise ??= loadRemoteSchemas();
+  return remoteSchemasPromise;
+}
+
+async function loadRemoteSchemas(): Promise<ComplianceContext["remotes"]> {
+  const remotesDir = path.join(import.meta.dirname, "../remotes");
+  const files = fs.readdirSync(remotesDir, { recursive: true, withFileTypes: true });
+
+  const entries = await Promise.all(
+    files
+      .filter((file) => file.isFile() && file.name.endsWith(".json"))
+      .map(async (file) => {
+        const filePath = path.join(file.parentPath, file.name);
+        const relativePath = path.relative(remotesDir, filePath).split(path.sep).join("/");
+        const remoteSchema = await import(/* @vite-ignore */ `#remotes/${relativePath}`, {
+          with: { type: "json" },
+        });
+
+        return [`http://localhost:1234/${relativePath}`, remoteSchema.default] as const;
+      }),
+  );
+
+  return Object.fromEntries(entries);
+}
 
 export async function* getTestCases(target: ComplianceTarget) {
   const testCasesDir = path.join(import.meta.dirname, "../tests", target);
@@ -31,6 +60,7 @@ export async function getTargetCompliance(
   complianceFn: ComplianceFn,
   log = false,
 ): Promise<ComplianceResults> {
+  const context: ComplianceContext = { target, remotes: await getRemoteSchemas() };
   const results: ComplianceResults = {
     count: {
       passed: 0,
@@ -50,7 +80,7 @@ export async function getTargetCompliance(
     for (const { schema, tests } of testCases) {
       for (const { data, valid: expected } of tests) {
         try {
-          const received = await complianceFn(schema, data, target);
+          const received = await complianceFn(schema, data, context);
           if (received === expected) {
             results.count.passed++;
             result.count.passed++;

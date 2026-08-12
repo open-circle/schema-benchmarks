@@ -11,7 +11,6 @@ import { defineBenchmarks } from "#src";
 import { getAjv, getAjvSchema } from ".";
 
 const ajv = getAjv();
-const nonStrictAjv = getAjv({ strict: false });
 
 const schema = getAjvSchema();
 const validate = ajv.compile(schema);
@@ -81,8 +80,12 @@ export default defineBenchmarks({
     compliance: {
       validation: [
         {
-          run(schema, data) {
-            return ajv.validate(schema, data);
+          run(schema, data, { remotes }) {
+            const complianceAjv = getAjv();
+            for (const [uri, remoteSchema] of Object.entries(remotes)) {
+              complianceAjv.addSchema(remoteSchema, uri);
+            }
+            return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
           // const ajv = new Ajv();
@@ -90,8 +93,12 @@ export default defineBenchmarks({
           source: { type: "native" },
         },
         {
-          run(schema, data) {
-            return nonStrictAjv.validate(schema, data);
+          run(schema, data, { remotes }) {
+            const complianceAjv = getAjv({ strict: false });
+            for (const [uri, remoteSchema] of Object.entries(remotes)) {
+              complianceAjv.addSchema(remoteSchema, uri);
+            }
+            return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
           // const ajv = new Ajv({ strict: false });

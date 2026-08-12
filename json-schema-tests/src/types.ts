@@ -22,6 +22,11 @@ export type TestCase = v.InferOutput<typeof testCaseSchema>;
 export const complianceTargetSchema = v.picklist(targets);
 export type ComplianceTarget = v.InferOutput<typeof complianceTargetSchema>;
 
+export interface ComplianceContext {
+  target: ComplianceTarget;
+  remotes: Readonly<Record<string, {} | boolean>>;
+}
+
 export const fileComplianceResultSchema = v.object({
   count: v.object({
     passed: v.number(),
@@ -45,5 +50,5 @@ export type ComplianceResults = v.InferOutput<typeof complianceResultsSchema>;
 export type ComplianceFn = (
   schema: {} | boolean,
   data: unknown,
-  target: ComplianceTarget,
+  context: ComplianceContext,
 ) => MaybePromise<boolean>;

@@ -95,8 +95,8 @@ export default defineBenchmarks({
         source: { type: "package", package: "@ark/json-schema" },
       },
       roundtrip: {
-        run(schema, complianceTarget) {
-          const target = arktypeTargets[complianceTarget];
+        run(schema, { target: complianceTarget }) {
+          const target = arktypeTargets[complianceTarget] ?? complianceTarget;
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
           return jsonSchemaToType(schema).toJsonSchema({ target });
         },

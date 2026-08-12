@@ -127,7 +127,7 @@ export default defineBenchmarks({
         source: { type: "native" },
       },
       roundtrip: {
-        run(schema, complianceTarget) {
+        run(schema, { target: complianceTarget }) {
           const target = suryTargets[complianceTarget];
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
           if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
