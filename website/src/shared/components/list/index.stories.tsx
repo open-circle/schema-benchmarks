@@ -90,6 +90,25 @@ export const ThreeLine = meta.story({
   ),
 });
 
+export const ThreeLineWithOverline = meta.story({
+  render: ({ leading, trailing }) => (
+    <List className="demo-list">
+      {Array.from({ length: 3 }, (_, idx) => (
+        <ListItem key={idx}>
+          <ListItemContent
+            lines={3}
+            overline="Overline text"
+            leading={renderSupporting(leading)}
+            trailing={renderSupporting(trailing, true)}
+            primary="List item title"
+            supporting="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultrices ultrices, nunc nisl ultrices nunc, euismod nisl nisl euismod nisl."
+          />
+        </ListItem>
+      ))}
+    </List>
+  ),
+});
+
 export const Button = meta.story({
   render: () => (
     <List className="demo-list">

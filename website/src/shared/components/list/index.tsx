@@ -63,6 +63,7 @@ export namespace ListItemContentProps {
 
   export interface ThreeLine extends BaseProps {
     lines: 3;
+    overline?: ReactNode;
     primary: ReactNode;
     supporting: ReactNode;
   }
@@ -84,16 +85,20 @@ export function ListItemContent({
   primary,
   supporting,
   children,
+  overline,
   as: As = "div",
 }: ListItemContentProps) {
   return (
-    <As {...itemCls("content", num[lines - 1], className)}>
+    <As {...itemCls("content", { overline: !!overline, [num[lines - 1]!]: true }, className)}>
       {leading && <div {...itemCls("leading")}>{leading}</div>}
       <div {...itemCls({ element: "text", extra: "typo-subtitle1" })}>
         {lines === 1 ? (
           children
         ) : (
           <>
+            {!!overline && (
+              <div {...itemCls({ element: "overline", extra: "typo-overline" })}>{overline}</div>
+            )}
             <div {...itemCls("primary-text")}>{primary}</div>
             <div
               {...itemCls({
