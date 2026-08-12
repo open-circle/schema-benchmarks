@@ -3,9 +3,10 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { MDXModule } from "mdx/types";
 
-import { AvatarList } from "#src/shared/components/avatar";
+import { AvatarLinkList } from "#src/shared/components/avatar";
 import { generateMetadata } from "#src/shared/data/meta";
 import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
+import { trackedLinkProps } from "#src/shared/lib/analytics.ts";
 import { preloadImages } from "#src/shared/lib/fetch";
 
 import { getAvatarUrl, getBlog } from "./-query";
@@ -60,11 +61,14 @@ function RouteComponent() {
         {data.title}
       </h1>
       <div className="blog-dateline typo-subtitle2">
-        <AvatarList
+        <AvatarLinkList
           {...getTransitionStyle("author")}
           items={data.authors.map((author) => ({
-            label: author,
+            tooltip: author,
             src: getAvatarUrl(author),
+            ...trackedLinkProps(`https://github.com/${author}`),
+            rel: "noopener noreferrer",
+            target: "_blank",
           }))}
           size="lg"
         />

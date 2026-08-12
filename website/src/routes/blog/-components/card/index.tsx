@@ -3,8 +3,9 @@ import { Link } from "@tanstack/react-router";
 import type { Blog } from "content-collections";
 
 import { getAvatarUrl } from "#src/routes/blog/-query";
-import { AvatarList } from "#src/shared/components/avatar";
+import { AvatarLinkList } from "#src/shared/components/avatar";
 import { useDateFormatter } from "#src/shared/hooks/format/use-date-formatter";
+import { trackedLinkProps } from "#src/shared/lib/analytics.ts";
 
 export interface BlogCardProps {
   blog: Pick<
@@ -33,11 +34,14 @@ export function BlogCard({ blog }: BlogCardProps) {
     >
       <Link to="/blog/$slug" params={{ slug: blog.slug }}>
         <div className="blog-dateline typo-overline">
-          <AvatarList
+          <AvatarLinkList
             {...getTransitionStyle("author")}
             items={blog.authors.map((author) => ({
-              label: author,
+              tooltip: author,
               src: getAvatarUrl(author),
+              ...trackedLinkProps(`https://github.com/${author}`),
+              rel: "noopener noreferrer",
+              target: "_blank",
             }))}
             size="sm"
           />

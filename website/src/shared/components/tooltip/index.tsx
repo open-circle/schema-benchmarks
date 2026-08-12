@@ -28,11 +28,12 @@ import { useIdDefault } from "#src/shared/hooks/use-id-default";
 
 const cls = bem("tooltip");
 
-type TooltipableComponent = ElementType<
-  { ref: RefCallback<HTMLElement> } & Pick<
-    HTMLAttributes<HTMLElement>,
-    "id" | "popoverTarget" | "popoverTargetAction" | "aria-labelledby"
-  >
+type TooltipableComponentProps = {
+  ref: RefCallback<HTMLElement>;
+  tooltip?: string | RichTooltipProps;
+} & Pick<
+  HTMLAttributes<HTMLElement>,
+  "id" | "popoverTarget" | "popoverTargetAction" | "aria-labelledby"
 >;
 
 export interface TooltipOpts extends ComputePositionConfig {
@@ -60,15 +61,17 @@ let currentId = "";
 
 // https://tkdodo.eu/blog/tooltip-components-should-not-exist
 
-export function withTooltip<TComp extends TooltipableComponent>(
+export function withTooltip<
+  TComp extends ElementType<PickRequired<TooltipableComponentProps, "tooltip">>,
+>(
   Component: TComp,
   opts: Override<TooltipOpts, { required: true }>,
 ): (props: Override<ComponentProps<TComp>, PickRequired<TooltipProps, "tooltip">>) => JSX.Element;
-export function withTooltip<TComp extends TooltipableComponent>(
+export function withTooltip<TComp extends ElementType<TooltipableComponentProps>>(
   Component: TComp,
   opts?: TooltipOpts,
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
-export function withTooltip<TComp extends TooltipableComponent>(
+export function withTooltip<TComp extends ElementType<TooltipableComponentProps>>(
   Component: TComp,
   { delay = 1000, ...opts }: TooltipOpts = {},
 ) {
@@ -165,6 +168,7 @@ export function withTooltip<TComp extends TooltipableComponent>(
         <Component
           // @ts-expect-error union nastiness
           {...(props as any)}
+          tooltip={tooltip}
           ref={mergeRefs<HTMLElement>(ref, refs.setReference, setTargetRef)}
           {...(tooltip
             ? ({
