@@ -20,7 +20,7 @@ Each library is benchmarked against a set of data, both valid and invalid.
 
 ## Structure
 
-This monorepo is split into 4 main parts:
+This monorepo is split into 5 main parts:
 
 ### `schemas`
 
@@ -35,6 +35,10 @@ The website for displaying results, built with [TanStack Start](https://tanstack
 ### `bench`
 
 Node scripts to consume and run the benchmarks, and the results.
+
+### `json-schema-tests`
+
+A wrapper around [JSON Schema Test Suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite) (gitignored, will checkout during postinstall), to allow us to run the tests against each library.
 
 ### `utils`
 
