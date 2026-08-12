@@ -4,6 +4,7 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+    types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
 permissions:
@@ -112,7 +113,10 @@ jobs:
       - name: E2E Smoke tests
         run: pnpm e2e --workers 50% --grep @smoke
       - name: E2E Full tests
-        if: github.event_name == 'push' || github.actor == 'dependabot[bot]'
+        if: >-
+          github.event_name == 'push' ||
+          github.actor == 'dependabot[bot]' ||
+          contains(github.event.pull_request.labels.*.name, 'full e2e')
         run: pnpm e2e --workers 50% --grep-invert @smoke
       - name: Upload Playwright Report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
