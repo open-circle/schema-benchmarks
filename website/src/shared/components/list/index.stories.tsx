@@ -37,6 +37,9 @@ const meta = preview.type<{ args: { leading: Supporting; trailing: Supporting } 
   render: (_props) => <></>,
 });
 
+const loremIpsum =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultrices ultrices, nunc nisl ultrices nunc, euismod nisl nisl euismod nisl.";
+
 export const SingleLine = meta.story({
   render: ({ leading, trailing }) => (
     <List className="demo-list">
@@ -46,7 +49,7 @@ export const SingleLine = meta.story({
             leading={renderSupporting(leading)}
             trailing={renderSupporting(trailing, true)}
           >
-            List item
+            {loremIpsum}
           </ListItemContent>
         </ListItem>
       ))}
@@ -63,8 +66,8 @@ export const TwoLine = meta.story({
             lines={2}
             leading={renderSupporting(leading)}
             trailing={renderSupporting(trailing, true)}
-            primary="List item title"
-            supporting="Secondary text"
+            primary={loremIpsum}
+            supporting={loremIpsum}
           />
         </ListItem>
       ))}
@@ -81,8 +84,8 @@ export const ThreeLine = meta.story({
             lines={3}
             leading={renderSupporting(leading)}
             trailing={renderSupporting(trailing, true)}
-            primary="List item title"
-            supporting="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultrices ultrices, nunc nisl ultrices nunc, euismod nisl nisl euismod nisl."
+            primary={loremIpsum}
+            supporting={loremIpsum}
           />
         </ListItem>
       ))}
@@ -97,11 +100,11 @@ export const ThreeLineWithOverline = meta.story({
         <ListItem key={idx}>
           <ListItemContent
             lines={3}
-            overline="Overline text"
+            overline={loremIpsum}
             leading={renderSupporting(leading)}
             trailing={renderSupporting(trailing, true)}
-            primary="List item title"
-            supporting="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultrices ultrices, nunc nisl ultrices nunc, euismod nisl nisl euismod nisl."
+            primary={loremIpsum}
+            supporting={loremIpsum}
           />
         </ListItem>
       ))}

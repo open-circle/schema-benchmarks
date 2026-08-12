@@ -1,0 +1,11 @@
+.json-schema-compliance-list {
+  .json-schema-compliance-list__downloads {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    .md-symbol {
+      --icon-size: 18;
+      --icon-weight: 400;
+    }
+  }
+}

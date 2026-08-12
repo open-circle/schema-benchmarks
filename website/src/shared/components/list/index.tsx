@@ -93,7 +93,7 @@ export function ListItemContent({
       {leading && <div {...itemCls("leading")}>{leading}</div>}
       <div {...itemCls({ element: "text", extra: "typo-subtitle1" })}>
         {lines === 1 ? (
-          children
+          <div {...itemCls("primary-text")}>{children}</div>
         ) : (
           <>
             {!!overline && (

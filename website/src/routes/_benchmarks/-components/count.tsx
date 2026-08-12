@@ -7,7 +7,14 @@ import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatte
 import { trackedLinkProps } from "#src/shared/lib/analytics";
 import type { PrefetchContext } from "#src/shared/lib/fetch";
 
-export function DownloadCount({ libraryName }: { libraryName: string }) {
+export function DownloadCount({
+  libraryName,
+  useLink = true,
+}: {
+  libraryName: string;
+  useLink?: boolean;
+}) {
+  const El = useLink ? "a" : "span";
   const { npmSite } = useNpmSite();
   const packageName = getPackageName(libraryName);
   const { data } = useSuspenseQuery(getAllWeeklyDownloads(packageName));
@@ -15,21 +22,21 @@ export function DownloadCount({ libraryName }: { libraryName: string }) {
   const packageUrl = getPkgUrl(packageName, npmSite);
   if (data === "n/a") {
     return (
-      <a
-        {...trackedLinkProps(packageUrl)}
+      <El
+        {...(useLink && trackedLinkProps(packageUrl))}
         aria-label={`Download count for ${libraryName}: not available`}
       >
         n/a
-      </a>
+      </El>
     );
   }
   return (
-    <a
-      {...trackedLinkProps(packageUrl)}
+    <El
+      {...(useLink && trackedLinkProps(packageUrl))}
       aria-label={`Download count for ${libraryName}: ${shortNumFormatter.format(data)}`}
     >
       {formatNumber(data)}
-    </a>
+    </El>
   );
 }
 

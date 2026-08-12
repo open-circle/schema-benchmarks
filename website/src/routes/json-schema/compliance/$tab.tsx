@@ -15,7 +15,7 @@ import {
 } from "#src/routes/_benchmarks/-hooks.ts";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
 import { ComplianceDetail } from "#src/routes/json-schema/compliance/-components/detail/index.tsx";
-import { ComplianceTable } from "#src/routes/json-schema/compliance/-components/table/index.tsx";
+import { ComplianceResults } from "#src/routes/json-schema/compliance/-components/results.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
 import { PageFilters } from "#src/shared/components/page-filter/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -172,14 +172,14 @@ function RouteComponent() {
           </InternalTabLink>
         ))}
       </Tabs>
-      <TabPanels ref={panelsRef} className="main">
+      <TabPanels ref={panelsRef}>
         {complianceTypeSchema.options.map((tabId) => {
           const TabContent = tabContent[tabId];
           return (
             <TabPanel key={tabId} {...getPanelProps(tabId)}>
-              <TabContent components={{ wrapper: "div" }} />
-              <div className="centred-table">
-                <ComplianceTable results={sortedResults} {...{ sortBy, sortDir }} />
+              <div className="main">
+                <TabContent components={{ wrapper: "div" }} />
+                <ComplianceResults results={sortedResults} {...{ sortBy, sortDir }} />
               </div>
             </TabPanel>
           );
