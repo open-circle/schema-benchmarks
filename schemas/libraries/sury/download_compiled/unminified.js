@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-rc.0/node_modules/sury/src/S.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-rc.1/node_modules/sury/index.mjs
 var flagNone = 0;
 var flagAsync = 1;
 var flagDisableNanNumberValidation = 2;
@@ -10,8 +10,9 @@ var valFlagNone = 0;
 var valFlagAsync = 1;
 var pathEmpty = "";
 var pathDynamic = "[]";
+var inlineUnsafeRe = /["\\\n\r]/;
 var inlinedValueFromString = (str) => {
-	return str.includes("\"") || str.includes("\n") ? JSON.stringify(str) : `"${str}"`;
+	return inlineUnsafeRe.test(str) ? JSON.stringify(str) : `"${str}"`;
 };
 var pathFromInlinedLocation = (inlinedLocation) => {
 	return `[${inlinedLocation}]`;
@@ -88,60 +89,84 @@ var isLiteral = (schema) => {
 var isOptional = (schema) => {
 	return schema.type === undefinedTag || schema.type === anyOfTag && undefinedTag in schema.has;
 };
-var stringify = (unknown2) => {
+var namedConstructor = (unknown2) => {
+	const ctor = Object.getPrototypeOf(unknown2)?.constructor;
+	return ctor !== Object && ctor?.name;
+};
+var stringifyLeaf = (unknown2) => {
 	const tagFlag = tagFlags[typeof unknown2];
 	if (flagUnsafeHas(tagFlag, tagFlagUndefined)) return undefinedTag;
-	else if (flagUnsafeHas(tagFlag, tagFlagObject)) {
-		if (unknown2 === null) return nullTag;
-		else if (Array.isArray(unknown2)) return `[${unknown2.map(stringify).join(", ")}]`;
-		else if (unknown2.constructor === Object) {
-			const dict = unknown2;
-			return `{ ${Object.keys(dict).map((key) => `${key}: ${stringify(dict[key])}; `).join("")}}`;
-		} else return Object.prototype.toString.call(unknown2);
-	} else if (flagUnsafeHas(tagFlag, tagFlagString)) return `"${unknown2}"`;
+	else if (flagUnsafeHas(tagFlag, tagFlagObject | tagFlagFunction)) return unknown2 === null ? nullTag : Array.isArray(unknown2) ? `Array(${unknown2.length})` : namedConstructor(unknown2) || objectTag;
+	else if (flagUnsafeHas(tagFlag, tagFlagString)) return `"${unknown2}"`;
 	else if (flagUnsafeHas(tagFlag, tagFlagBigint)) return `${unknown2}n`;
-	else if (flagUnsafeHas(tagFlag, tagFlagFunction)) return `Function`;
 	else return unknown2.toString();
 };
-var toExpression = /* @__NO_SIDE_EFFECTS__ */ (schema) => {
-	if (schema.name !== U) return schema.name;
-	else if (schema.const !== U) return stringify(schema.const);
-	else if (schema.anyOf !== U) return [...new Set(schema.anyOf)].map(toExpression).join(" | ");
-	else if (schema.format === "compactColumns") {
-		const to = schema.to;
-		if (to !== U) {
-			const props = to.properties;
-			if (props !== U) return `[${Object.keys(props).map((key) => {
-				const propSchema = props[key];
-				return `${/* @__PURE__ */ toExpression(propSchema)}[]`;
-			}).join(", ")}]`;
-			else return "unknown[][]";
-		} else {
-			const additionalItems = schema.additionalItems;
-			if (additionalItems !== U && typeof additionalItems === "object") return `${/* @__PURE__ */ toExpression(additionalItems)}[]`;
-			else return "unknown[][]";
+var stringify = (unknown2) => {
+	if (unknown2 !== null && typeof unknown2 === objectTag) {
+		if (Array.isArray(unknown2)) {
+			const items = unknown2;
+			let body = "";
+			for (let idx = 0; idx < items.length; idx++) {
+				if (idx === 5) {
+					body = body + ", ...";
+					break;
+				}
+				body = body + (idx ? ", " : "") + stringifyLeaf(items[idx]);
+			}
+			return `[${body}]`;
 		}
-	} else if (schema.format !== U) return schema.format;
-	else if (schema.type === objectTag) {
+		if (!namedConstructor(unknown2)) {
+			const dict2 = unknown2;
+			let body = "";
+			let count = 0;
+			for (const key in dict2) {
+				if (count++ === 5) {
+					body = body + "... ";
+					break;
+				}
+				body = body + key + ": " + stringifyLeaf(dict2[key]) + "; ";
+			}
+			return body ? `{ ${body}}` : "{}";
+		}
+	}
+	return stringifyLeaf(unknown2);
+};
+var inputExpression = /* @__NO_SIDE_EFFECTS__ */ (schema, skipOverride) => {
+	if (schema.name) return schema.name;
+	else if (schema.const !== U) return stringify(schema.const);
+	else if (schema.expression && !skipOverride) return schema.expression(schema);
+	else if (schema.anyOf !== U) {
+		const anyOf = schema.anyOf;
+		const seen = /* @__PURE__ */ new Set();
+		let body = "";
+		for (let idx = 0; idx < anyOf.length; idx++) {
+			const expression = /* @__PURE__ */ inputExpression(anyOf[idx]);
+			if (!seen.has(expression)) {
+				seen.add(expression);
+				body = body + (body ? " | " : "") + expression;
+			}
+		}
+		return body;
+	} else if (schema.type === objectTag) {
 		const properties = schema.properties;
-		const locations = Object.keys(properties);
-		if (locations.length === 0) {
-			if (typeof schema.additionalItems === objectTag) {
-				const additionalItems = schema.additionalItems;
-				return `{ [key: string]: ${/* @__PURE__ */ toExpression(additionalItems)}; }`;
-			} else return `{}`;
-		} else return `{ ${locations.map((location) => {
-			return `${location}: ${/* @__PURE__ */ toExpression(properties[location])};`;
-		}).join(" ")} }`;
-	} else if (schema.type === nanTag) return "NaN";
-	else if (schema.type === arrayTag) {
+		const additionalItems = schema.additionalItems;
+		let body = "";
+		for (const location in properties) body = body + location + ": " + /* @__PURE__ */ inputExpression(properties[location]) + "; ";
+		if (typeof additionalItems === objectTag) body = body + "[key: string]: " + /* @__PURE__ */ inputExpression(additionalItems) + "; ";
+		return body ? `{ ${body}}` : "{}";
+	} else if (schema.type === arrayTag) {
+		const additionalItems = schema.additionalItems;
+		if (typeof additionalItems === objectTag) {
+			const item = additionalItems;
+			const itemName = /* @__PURE__ */ inputExpression(item);
+			return (item.type === anyOfTag || item.bounds !== U || item.multipleOf !== U ? `(${itemName})` : itemName) + "[]";
+		}
 		const items = schema.items;
-		if (typeof schema.additionalItems === objectTag) {
-			const additionalItems = schema.additionalItems;
-			const itemName = /* @__PURE__ */ toExpression(additionalItems);
-			return (additionalItems.type === anyOfTag ? `(${itemName})` : itemName) + "[]";
-		} else return `[${items.map((schema2) => /* @__PURE__ */ toExpression(schema2)).join(", ")}]`;
-	} else if (schema.type === instanceTag) return schema.class.name;
+		let body = "";
+		for (let idx = 0; idx < items.length; idx++) body = body + (idx ? ", " : "") + /* @__PURE__ */ inputExpression(items[idx]);
+		return `[${body}]`;
+	} else if (schema.format) return schema.format;
+	else if (schema.type === instanceTag) return schema.class.name;
 	else return schema.type;
 };
 function Schema() {}
@@ -150,6 +175,14 @@ Object.defineProperty(schemaPrototype, "with", { value(fn, ...args) {
 	return fn(this, ...args);
 } });
 Schema.prototype = schemaPrototype;
+var reversedKey = "r";
+function SelfReverseSchema() {}
+var selfReversePrototype = Object.create(schemaPrototype);
+Object.defineProperty(selfReversePrototype, reversedKey, { get: function() {
+	return this;
+} });
+Object.defineProperty(selfReversePrototype, "sr", { value: true });
+SelfReverseSchema.prototype = selfReversePrototype;
 var seq = 1;
 var exnId = {};
 var SuryError = class extends Error {
@@ -186,37 +219,26 @@ var globalConfig = {
 	f: valFlagNone
 };
 var valueOptions = {};
+var configurableValueOptions = { configurable: true };
 var valKey = "value";
-var reversedKey = "r";
-var SchemaCtor = Schema;
-var baseSchema = (tag, selfReverse) => {
-	const schema = new SchemaCtor();
+var baseSchema = (tag, selfReverse, decoder) => {
+	const schema = new (selfReverse ? SelfReverseSchema : Schema)();
 	schema.type = tag;
 	schema.seq = seq++;
-	if (selfReverse) {
-		valueOptions[valKey] = schema;
-		Object.defineProperty(schema, reversedKey, valueOptions);
-	}
+	schema.decoder = decoder;
 	return schema;
 };
 var noopDecoder = (input) => {
 	return input;
 };
-var factoryCache = {};
-var cached = (key, tag, init) => {
-	const existing = factoryCache[key];
-	if (existing !== U) return existing;
-	else {
-		const schema = baseSchema(tag, true);
-		init(schema);
-		factoryCache[key] = schema;
-		return schema;
-	}
+var initSchema = /* @__NO_SIDE_EFFECTS__ */ (tag, decoder, init) => {
+	const schema = baseSchema(tag, true, decoder);
+	init?.(schema);
+	return schema;
 };
-var unknown = baseSchema(unknownTag, true);
-unknown.decoder = noopDecoder;
+var unknown = baseSchema(unknownTag, true, noopDecoder);
 var copySchema = (schema) => {
-	const c = Object.assign(new SchemaCtor(), schema);
+	const c = Object.assign(new Schema(), schema);
 	c.seq = seq++;
 	return c;
 };
@@ -286,14 +308,18 @@ function _notVar() {
 }
 var operationArgVar = "i";
 var failInvalidType = (input) => {
-	const em = input.e.errorMessage;
-	return B_invalidInputBuilder(U, U, em !== U ? em.type !== U ? em.type : em._ : U)(input);
+	const expected = input.e;
+	const em = expected.errorMessage;
+	return B_invalidInputBuilder(U, U, em !== U ? expected.format !== U && em.format !== U ? em.format : em.type !== U ? em.type : em._ : U)(input);
 };
 var B_embed = (b, value) => {
+	b.g.t++;
+	return B_embedPure(b, value);
+};
+var B_embedPure = (b, value) => {
 	const e = b.g.e;
 	const l = e.length;
 	e[l] = value;
-	b.g.t++;
 	return `e[${l}]`;
 };
 var B_inlineConst = (b, schema) => {
@@ -351,7 +377,7 @@ var B_unsupportedDecode = (b, from, target) => {
 		code: "unsupported_decode",
 		from,
 		to: target,
-		reason: `Can't decode ${/* @__PURE__ */ toExpression(from)} to ${/* @__PURE__ */ toExpression(target)}. Use S.to to define a custom decoder`,
+		reason: `Can't decode ${/* @__PURE__ */ inputExpression(from)} to ${/* @__PURE__ */ inputExpression(target)}. Use S.to to define a custom decoder`,
 		path: b.path
 	});
 };
@@ -366,8 +392,14 @@ var B_markThrow = (b) => {
 var B_receivedSchema = (val) => {
 	return val.prev !== U ? val.prev.s : val.s;
 };
-var B_makeInvalidInputDetails = (expected, received, path, input, includeInput, unionErrors, reasonOverride) => {
-	let reasonRef = reasonOverride !== U ? reasonOverride : `Expected ${/* @__PURE__ */ toExpression(expected)}, received ${includeInput ? stringify(input) : /* @__PURE__ */ toExpression(received)}`;
+var B_makeInvalidInputDetails = (expected, received, path, input, unionErrors, reasonOverride) => {
+	let reasonRef;
+	if (reasonOverride !== U) reasonRef = reasonOverride;
+	else {
+		const expectedExpression = /* @__PURE__ */ inputExpression(expected);
+		const receivedExpression = stringify(input);
+		reasonRef = `Expected ${expectedExpression}, received ${expectedExpression === receivedExpression ? "invalid " : ""}${receivedExpression}`;
+	}
 	if (unionErrors !== U) {
 		const caseErrors = unionErrors;
 		const seenReasons = /* @__PURE__ */ new Set();
@@ -382,23 +414,22 @@ var B_makeInvalidInputDetails = (expected, received, path, input, includeInput, 
 			}
 		}
 	}
-	const details = {
+	return {
 		code: "invalid_input",
 		expected,
 		received,
 		path,
 		reason: reasonRef,
-		unionErrors
+		unionErrors,
+		input
 	};
-	if (includeInput) details.input = input;
-	return details;
 };
-var B_invalidInputBuilder = (expected, extraPath = pathEmpty, reasonOverride, includeInput = true) => {
+var B_invalidInputBuilder = (expected, extraPath = pathEmpty, reasonOverride) => {
 	return (input) => {
 		const expected_ = expected !== U ? expected : input.e;
 		const received = B_receivedSchema(input);
 		const path = extraPath === pathEmpty ? input.path : /* @__PURE__ */ pathConcat(input.path, extraPath);
-		return (value) => B_makeInvalidInputDetails(expected_, received, path, value, includeInput, U, reasonOverride);
+		return (value) => B_makeInvalidInputDetails(expected_, received, path, value, U, reasonOverride);
 	};
 };
 var B_failWithErrorMessage = (key, defaultMessage) => {
@@ -494,7 +525,7 @@ var B_next = (prev, initial, schema, expected = prev.e) => {
 		e: expected,
 		prev,
 		f: valFlagNone,
-		d: prev.d,
+		d: U,
 		fv: U,
 		cp: "",
 		hd: "",
@@ -657,9 +688,10 @@ var B_invalidOperation = (val, description) => {
 		path: val.path
 	});
 };
-var B_mergeWithCatch = (val, catchFn, appendSafe) => {
+var B_mergeWithCatch = (val, catchFn, appendSafe, pureSince) => {
 	const valCode = B_merge(val);
-	if (valCode === "" && !flagUnsafeHas(val.f, valFlagAsync)) return valCode + (appendSafe !== U ? appendSafe() : "");
+	const pure = pureSince !== U && val.g.t === pureSince;
+	if ((valCode === "" || pure) && !flagUnsafeHas(val.f, valFlagAsync)) return appendSafe !== U ? valCode + appendSafe() : pure ? "" : valCode;
 	else {
 		const errorVar = B_varWithoutAllocation(val.g);
 		B_markThrow(val);
@@ -668,9 +700,9 @@ var B_mergeWithCatch = (val, catchFn, appendSafe) => {
 		return `try{${valCode}${appendSafe !== U ? appendSafe() : ""}}catch(${errorVar}){${catchCode}}`;
 	}
 };
-var B_mergeWithPathPrepend = (val, parent, locationVar, appendSafe) => {
+var B_mergeWithPathPrepend = (val, parent, locationVar, appendSafe, pureSince) => {
 	if (val.path === pathEmpty && locationVar === U) return B_merge(val);
-	else return B_mergeWithCatch(val, (errorVar) => `${errorVar}.path=${parent.path === "" ? "" : `${inlinedValueFromString(parent.path)}+`}${locationVar !== U ? `'["'+${locationVar}+'"]'+` : ""}${errorVar}.path`, appendSafe);
+	else return B_mergeWithCatch(val, (errorVar) => `${errorVar}.path=${parent.path === "" ? "" : `${inlinedValueFromString(parent.path)}+`}${locationVar !== U ? `'["'+${locationVar}+'"]'+` : ""}${errorVar}.path`, appendSafe, pureSince);
 };
 function noopOperation(i) {
 	return i;
@@ -678,6 +710,9 @@ function noopOperation(i) {
 noopOperation["embedded"] = immutableEmptyArray;
 var int32FormatValidation = (inputVar) => {
 	return `${inputVar}<=2147483647&&${inputVar}>=-2147483648&&${inputVar}%1===0`;
+};
+var integerFormatValidation = (inputVar) => {
+	return `${inputVar}%1===0`;
 };
 var typeofCondCache = {};
 var typeofCond = (tag) => typeofCondCache[tag] || (typeofCondCache[tag] = (inputVar) => `typeof ${inputVar}==="${tag}"`);
@@ -698,6 +733,14 @@ var int32Check = {
 	c: int32FormatValidation,
 	f: failInvalidType
 };
+var integerCheck = {
+	c: integerFormatValidation,
+	f: failInvalidType
+};
+var int32RangeCheck = {
+	c: (inputVar) => `${inputVar}<=2147483647&&${inputVar}>=-2147483648`,
+	f: failInvalidType
+};
 var nanCheck = {
 	c: nanCond,
 	f: failInvalidType
@@ -712,47 +755,44 @@ var B_nextVar = (input, expected) => {
 };
 var numberDecoder = (input) => {
 	const inputTagFlag = tagFlags[input.s.type];
+	const expectedFormat = input.e.format;
 	if (flagUnsafeHas(inputTagFlag, tagFlagUnknown)) {
 		const checks = [typeofCheck(numberTag)];
-		if (input.e.format === "int32") checks.push(int32Check);
+		if (expectedFormat === "int32") checks.push(int32Check);
+		else if (expectedFormat === "integer") checks.push(integerCheck);
 		else if (!flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) checks.push(notNanCheck);
 		return B_refine(input, input.e, checks);
 	} else if (flagUnsafeHas(inputTagFlag, tagFlagString)) {
 		const output = B_nextVar(input, input.e);
 		output.cp = `let ${output.i}=+${input.v()};`;
 		output.vc = [{
-			c: (_inputVar) => input.e.format === "int32" ? int32FormatValidation(output.i) : `!${nanCond(output.i)}`,
+			c: (_inputVar) => expectedFormat === "int32" ? int32FormatValidation(output.i) : expectedFormat === "integer" ? integerFormatValidation(output.i) : `!${nanCond(output.i)}`,
 			f: failInvalidType
 		}];
 		return output;
-	} else if (flagUnsafeHas(inputTagFlag, tagFlagNaN) && input.e.format !== "int32" && flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) return B_refine(input, input.e);
+	} else if (flagUnsafeHas(inputTagFlag, tagFlagNaN) && expectedFormat !== "int32" && expectedFormat !== "integer" && flagUnsafeHas(input.g.o, flagDisableNanNumberValidation)) return B_refine(input, input.e);
 	else if (!flagUnsafeHas(inputTagFlag, tagFlagNumber)) return B_unsupportedDecode(input, input.s, input.e);
-	else if (input.s.format !== input.e.format && input.e.format === "int32") return B_refine(input, input.e, [int32Check]);
+	else if (input.s.format !== expectedFormat && expectedFormat === "int32") return B_refine(input, input.e, [input.s.format === U ? int32Check : int32RangeCheck]);
+	else if (expectedFormat === "integer" && input.s.format === U) return B_refine(input, input.e, [integerCheck]);
 	else return input;
 };
-var float = () => cached(numberTag, numberTag, (s2) => {
-	s2.decoder = numberDecoder;
-});
+var float = /* @__PURE__ */ initSchema(numberTag, numberDecoder);
 var inputToString = (input) => {
-	return B_next(input, `""+${input.i}`, string());
+	return B_next(input, `""+${input.i}`, string);
 };
 var stringDecoderFn = (input) => {
 	const inputTagFlag = tagFlags[input.s.type];
 	if (flagUnsafeHas(inputTagFlag, tagFlagUnknown)) return B_refineTypeofUnknown(input, stringTag);
 	else if (flagUnsafeHas(inputTagFlag, tagFlagBoolean | tagFlagNumber | tagFlagBigint | tagFlagUndefined | tagFlagNull | tagFlagNaN) && isLiteral(input.s)) {
 		const const_ = "" + input.s.const;
-		const schema = baseSchema(stringTag, false);
+		const schema = baseSchema(stringTag, false, input.s.decoder);
 		schema.const = const_;
 		return B_next(input, `"${const_}"`, schema);
 	} else if (flagUnsafeHas(inputTagFlag, tagFlagBoolean | tagFlagNumber | tagFlagBigint)) return inputToString(input);
 	else if (!flagUnsafeHas(inputTagFlag, tagFlagString)) return B_unsupportedDecode(input, input.s, input.e);
 	else return input;
 };
-var string = () => {
-	return cached(stringTag, stringTag, (s2) => {
-		s2.decoder = stringDecoderFn;
-	});
-};
+var string = /* @__PURE__ */ initSchema(stringTag, stringDecoderFn);
 var literalDecoder = (input) => {
 	const expectedSchema = input.e;
 	if (expectedSchema.noValidation && !input.u) return B_nextConst(input, expectedSchema);
@@ -762,7 +802,7 @@ var literalDecoder = (input) => {
 	} else {
 		const schemaTagFlag = tagFlags[expectedSchema.type];
 		if (flagUnsafeHas(tagFlags[input.s.type], tagFlagString) && flagUnsafeHas(schemaTagFlag, tagFlagBoolean | tagFlagNumber | tagFlagBigint | tagFlagUndefined | tagFlagNull | tagFlagNaN)) {
-			const stringConstSchema = baseSchema(stringTag, false);
+			const stringConstSchema = baseSchema(stringTag, false, literalDecoder);
 			stringConstSchema.const = "" + expectedSchema.const;
 			const stringConstVal = B_nextConst(input, stringConstSchema, stringConstSchema);
 			stringConstVal.vc = [{
@@ -777,34 +817,29 @@ var literalDecoder = (input) => {
 		}]);
 	}
 };
-var unit = () => cached(undefinedTag, undefinedTag, (s2) => {
+var unit = /* @__PURE__ */ initSchema(undefinedTag, literalDecoder, (s2) => {
 	s2.const = U;
-	s2.decoder = literalDecoder;
 });
-var nullLiteral = () => cached(nullTag, nullTag, (s2) => {
+var nullLiteral = /* @__PURE__ */ initSchema(nullTag, literalDecoder, (s2) => {
 	s2.const = null;
-	s2.decoder = literalDecoder;
 });
-var nan = () => cached(nanTag, nanTag, (s2) => {
+var nan = /* @__PURE__ */ initSchema(nanTag, literalDecoder, (s2) => {
 	s2.const = NaN;
-	s2.decoder = literalDecoder;
 });
 var Literal_parse = (value) => {
-	if (value === null) return nullLiteral();
+	if (value === null) return nullLiteral;
 	else {
 		const tag = typeof value;
-		if (tag === undefinedTag) return unit();
-		else if (tag === numberTag && Number.isNaN(value)) return nan();
+		if (tag === undefinedTag) return unit;
+		else if (tag === numberTag && Number.isNaN(value)) return nan;
 		else if (tag === objectTag) {
-			const s2 = baseSchema(instanceTag, true);
+			const s2 = baseSchema(instanceTag, true, literalDecoder);
 			s2.class = value["constructor"];
 			s2.const = value;
-			s2.decoder = literalDecoder;
 			return s2;
 		} else {
-			const s2 = baseSchema(tag, true);
+			const s2 = baseSchema(tag, true, literalDecoder);
 			s2.const = value;
-			s2.decoder = literalDecoder;
 			return s2;
 		}
 	}
@@ -833,9 +868,9 @@ var parse = (input) => {
 			result.f |= valFlagAsync;
 			result.io = true;
 		} else if (loopInput.io) {
-			const to = loopInput.e.to;
+			const to2 = loopInput.e.to;
 			if (loopInput.e.parser !== U) result = loopInput.e.parser(loopInput);
-			else result = B_refine(result, U, U, to);
+			else result = B_refine(result, U, U, to2);
 		} else {
 			const maybeEncoder = loopInput.s.encoder;
 			if (maybeEncoder && maybeEncoder !== appliedEncoder && loopInput.s !== loopInput.e && loopInput.e.type !== unknownTag && !loopInput.e.noValidation) result = maybeEncoder(loopInput, loopInput.e);
@@ -878,66 +913,123 @@ var getOutputSchema = (schema) => {
 	if (schema.to !== U) return getOutputSchema(schema.to);
 	else return schema;
 };
+var reverseSwap = (mut, a, b) => {
+	const previous = mut[a];
+	if (mut[b] !== U) mut[a] = mut[b];
+	else delete mut[a];
+	if (previous !== U) mut[b] = previous;
+	else delete mut[b];
+};
+var reverseDict = (dict2) => {
+	const reversed = /* @__PURE__ */ Object.create(null);
+	for (const key in dict2) reversed[key] = /* @__PURE__ */ reverse(dict2[key]);
+	return reversed;
+};
+Object.defineProperty(schemaPrototype, reversedKey, { get: function() {
+	const schema = this;
+	let reversedHead = U;
+	let current = schema;
+	while (current) {
+		const mut = copySchema(current);
+		const next = mut.to;
+		if (reversedHead === U) delete mut.to;
+		else mut.to = reversedHead;
+		const record = mut;
+		reverseSwap(record, "parser", "serializer");
+		reverseSwap(record, "refiner", "inputRefiner");
+		reverseSwap(record, "fromDefault", "default");
+		if (mut.items !== U) mut.items = mut.items.map(reverse);
+		if (mut.properties !== U) mut.properties = reverseDict(mut.properties);
+		if (typeof mut.additionalItems === objectTag) mut.additionalItems = /* @__PURE__ */ reverse(mut.additionalItems);
+		if (mut.anyOf !== U) {
+			const anyOf = mut.anyOf;
+			const has = {};
+			const newAnyOf = [];
+			for (let idx = 0; idx <= anyOf.length - 1; idx++) {
+				const s2 = anyOf[idx];
+				const reversed = /* @__PURE__ */ reverse(s2);
+				newAnyOf.push(reversed);
+				setHas(has, reversed.type);
+			}
+			mut.has = has;
+			mut.anyOf = newAnyOf;
+		}
+		if (mut["$defs"] !== U) mut["$defs"] = reverseDict(mut["$defs"]);
+		reversedHead = mut;
+		current = next;
+	}
+	const r = reversedHead;
+	valueOptions[valKey] = r;
+	Object.defineProperty(schema, reversedKey, valueOptions);
+	valueOptions[valKey] = schema;
+	Object.defineProperty(r, reversedKey, valueOptions);
+	return r;
+} });
+var reverse = /* @__NO_SIDE_EFFECTS__ */ (schema) => schema.r;
+var memoKey = "c";
+var addOpNode = (schema, a, f, v) => {
+	const created = {
+		a,
+		f,
+		v,
+		n: schema[memoKey]
+	};
+	configurableValueOptions[valKey] = created;
+	Object.defineProperty(schema, memoKey, configurableValueOptions);
+	return created;
+};
 // @__NO_SIDE_EFFECTS__
 function getDecoder(..._args) {
 	const args = arguments;
 	let idx = 0;
 	let flag = U;
-	let keyRef = "";
 	let maxSeq = 0;
 	let cacheTarget = U;
 	while (flag === U) {
 		const arg = args[idx];
-		if (!arg) {
-			const f = globalConfig.f;
-			flag = f;
-			keyRef = keyRef + "-" + f;
-		} else if (typeof arg === numberTag) {
-			const f = arg | globalConfig.f;
-			flag = f;
-			keyRef = keyRef + "-" + f;
-		} else {
+		if (!arg) flag = globalConfig.f;
+		else if (typeof arg === numberTag) flag = arg | globalConfig.f;
+		else {
 			const schema = arg;
 			const seq2 = schema.seq;
 			if (seq2 > maxSeq) {
 				maxSeq = seq2;
 				cacheTarget = schema;
 			}
-			keyRef = keyRef + seq2 + "-";
 			idx = idx + 1;
 		}
 	}
 	if (cacheTarget === U) return panic("No schema provided for decoder.");
 	else {
-		const key = keyRef;
-		const cacheTargetRecord = cacheTarget;
-		if (key in cacheTargetRecord) return cacheTargetRecord[key];
-		else {
-			let schema = args[idx - 1];
-			for (let i = idx - 2; i >= 0; i--) {
-				const to = schema;
-				schema = updateOutput(args[i], (mut) => {
-					mut.to = to;
-				});
+		let node = cacheTarget[memoKey];
+		while (node !== U) {
+			const a = node.a;
+			if (node.f === flag && a.length === idx) {
+				let i = idx;
+				while (i-- !== 0 && a[i] === args[i]);
+				if (i < 0) return node.v;
 			}
-			const f = compileDecoder(schema, schema, flag, U);
-			valueOptions[valKey] = f;
-			Object.defineProperty(cacheTarget, key, valueOptions);
-			return f;
+			node = node.n;
 		}
+		let schema = args[idx - 1];
+		for (let i = idx - 2; i >= 0; i--) {
+			const to2 = schema;
+			schema = updateOutput(args[i], (mut) => {
+				mut.to = to2;
+			});
+		}
+		const f = compileDecoder(schema, schema, flag, U);
+		addOpNode(cacheTarget, immutableEmptyArray.slice.call(args, 0, idx), flag, f);
+		return f;
 	}
 }
 var nestedLoc = "BS_PRIVATE_NESTED_SOME_NONE";
 var neverBuilderFn = (input) => {
-	const output = B_refine(input, never_(), U, never_());
+	const output = B_refine(input, never_, U, never_);
 	output.cp = B_embedInvalidInput(input) + ";";
 	return output;
 };
-var never_ = () => {
-	return cached(neverTag, neverTag, (s2) => {
-		s2.decoder = neverBuilderFn;
-	});
-};
+var never_ = /* @__PURE__ */ initSchema(neverTag, neverBuilderFn);
 var nestedOptionParser = (input) => {
 	const nextSchema = input.e.to;
 	return B_next(input, `{${nestedLoc}:${getOutputSchema(input.e).properties[nestedLoc].const}}`, nextSchema, nextSchema);
@@ -989,11 +1081,11 @@ var unionTraits = (schema) => {
 	if (schema.refiner !== U || schema.inputRefiner !== U) traits |= 3;
 	else if (tag & (tagFlagObject | tagFlagArray | tagFlagInstance)) traits |= 2;
 	if (schema.format !== U || isLiteral(schema)) traits |= 1;
-	const to = schema.to;
-	if (to !== U) {
-		if (to === schema || to.parser !== U || tagFlags[to.type] & unionBoundaryTags) traits |= 15;
-		else if (!(to.noValidation === true || tagFlags[to.type] & tagFlagUnknown || unionRuntimeSame(schema, to) || to.type === anyOfTag && unionMask(to, 1) & tag)) traits |= 9;
-		else traits |= unionTraits(to);
+	const to2 = schema.to;
+	if (to2 !== U) {
+		if (to2 === schema || to2.parser !== U || tagFlags[to2.type] & unionBoundaryTags) traits |= 15;
+		else if (!(to2.noValidation === true || tagFlags[to2.type] & tagFlagUnknown || unionRuntimeSame(schema, to2) || to2.type === anyOfTag && unionMask(to2, 1) & tag)) traits |= 9;
+		else traits |= unionTraits(to2);
 	}
 	const fields = schema.items || schema.properties;
 	for (const key in fields) {
@@ -1013,7 +1105,7 @@ var unionIsWider = (variants, inputVariants) => inputVariants.every((inputSchema
 	const schema = variants[idx];
 	return schema !== U && !(tagFlags[inputSchema.type] & (tagFlagArray | tagFlagInstance | tagFlagRef | tagFlagUnion | tagFlagObject)) && inputSchema.type === schema.type && unionLiteralEqual(inputSchema.const, schema.const) && inputSchema.to === U && schema.to === U;
 });
-var unionFail = (schema, path, input, ...unionErrors) => B_throw(B_makeInvalidInputDetails(schema, unknown, path, input, true, unionErrors.length ? unionErrors : U));
+var unionFail = (schema, path, input, ...unionErrors) => B_throw(B_makeInvalidInputDetails(schema, unknown, path, input, unionErrors.length ? unionErrors : U));
 var unionEmitChain = (cases, ctx) => {
 	if (cases.length === 1) {
 		const c = cases[0];
@@ -1060,7 +1152,14 @@ var unionEmitChain = (cases, ctx) => {
 var unionNarrowSchema = (schema) => {
 	const tagFlag = tagFlags[schema.type];
 	const container = tagFlagObject | tagFlagArray;
-	const narrow = baseSchema(schema.type, false);
+	const narrow = baseSchema(schema.type, false, (input) => {
+		if (tagFlags[input.s.type] & tagFlagUnknown) return B_refine(input, input.e, [{
+			c: (inputVar) => typeCheckCond(input, schema, inputVar),
+			f: failInvalidType
+		}]);
+		if (unionRuntimeSame(input.s, narrow)) return tagFlag & container ? B_refine(input, input.e) : input;
+		return schema.decoder(input);
+	});
 	narrow.encoder = schema.encoder;
 	if (tagFlag & tagFlagInstance) narrow.class = schema.class;
 	else if (tagFlag & container) {
@@ -1068,37 +1167,34 @@ var unionNarrowSchema = (schema) => {
 		if (tagFlag & tagFlagObject) narrow.properties = immutableEmptyObject;
 		else narrow.items = immutableEmptyArray;
 	} else if (tagFlag & (tagFlagNull | tagFlagUndefined | tagFlagNaN)) narrow.const = schema.const;
-	narrow.decoder = (input) => {
-		if (tagFlags[input.s.type] & tagFlagUnknown) return B_refine(input, input.e, [{
-			c: (inputVar) => typeCheckCond(input, schema, inputVar),
-			f: failInvalidType
-		}]);
-		if (unionRuntimeSame(input.s, narrow)) return tagFlag & container ? B_refine(input, input.e) : input;
-		return schema.decoder(input);
-	};
 	return narrow;
 };
 var unionObjectish = tagFlagObject | tagFlagInstance;
 var unionStructured = tagFlagObject | tagFlagArray | tagFlagInstance | tagFlagRef | tagFlagUnion;
-var unionWiden = (tagFlag, nan3) => tagFlag | (tagFlag & unionObjectish ? unionObjectish : tagFlag & tagFlags[numberTag] ? nan3 : 0);
-var unionMask = (schema, mode, nan3 = 0) => {
+var unionWiden = (tagFlag, nan2) => tagFlag | (tagFlag & unionObjectish ? unionObjectish : tagFlag & tagFlags[numberTag] ? nan2 : 0);
+var unionRefDef = (schema) => {
+	const defs = schema["$defs"];
+	const ref = schema["$ref"];
+	if (defs !== U && ref !== U) {
+		const resolved = defs[ref.slice(ref.lastIndexOf("/") + 1)];
+		if (resolved !== U && resolved !== schema) return resolved;
+	}
+	return U;
+};
+var unionMask = (schema, mode, nan2 = 0) => {
 	if (mode === 2) {
-		const defs = schema["$defs"];
-		const ref = schema["$ref"];
-		if (defs !== U && ref !== U) {
-			const resolved = defs[ref.slice(ref.lastIndexOf("/") + 1)];
-			if (resolved !== U && resolved !== schema) return unionMask(resolved, 1, nan3);
-		}
+		const resolved = unionRefDef(schema);
+		if (resolved !== U) return unionMask(resolved, 1, nan2);
 	}
 	const tagFlag = tagFlags[schema.type];
 	if (!mode && tagFlag & tagFlagNever) return 0;
 	if (mode && tagFlag & tagFlagUnion) {
 		let mask = 0;
 		const variants = schema.anyOf;
-		for (let i = 0; i < variants.length; i++) mask |= unionMask(variants[i], 1, nan3);
+		for (let i = 0; i < variants.length; i++) mask |= unionMask(variants[i], 1, nan2);
 		return mask;
 	}
-	return tagFlag & (tagFlagUnknown | tagFlagUnion | tagFlagRef) ? unionAnyTag : unionWiden(tagFlag, nan3);
+	return tagFlag & (tagFlagUnknown | tagFlagUnion | tagFlagRef) ? unionAnyTag : unionWiden(tagFlag, nan2);
 };
 var unionMemberFalls = 8;
 var unionMemberDirect = 16;
@@ -1129,11 +1225,11 @@ var unionCheckPartial = (input, source, target, variants, outputSide) => {
 		if (unionSameType(other, match)) matched || (matched = variant);
 		else unmatched = true;
 	}
-	if (matched !== U && unmatched) unionInvalid(input, source, target, `${/* @__PURE__ */ toExpression(matched)} has the same type as the ${outputSide ? "target" : "source"} and the others don't`);
+	if (matched !== U && unmatched) unionInvalid(input, source, target, `${/* @__PURE__ */ inputExpression(matched)} has the same type as the ${outputSide ? "target" : "source"} and the others don't`);
 };
-var unionUncovered = (input, source, target, variant) => unionInvalid(input, source, target, `${/* @__PURE__ */ toExpression(variant)} has no same-type variant on the other side`);
-var unionInvalid = (input, from, to, why) => B_invalidOperation(input, `Invalid operation: can't convert ${/* @__PURE__ */ toExpression(from)} to ${/* @__PURE__ */ toExpression(to)} \u2014 ${why}. Use S.to to say what you mean, or S.never to mark a variant unreachable`);
-var unionNormalize = (variants, source, skipUndefined, nan3) => {
+var unionUncovered = (input, source, target, variant) => unionInvalid(input, source, target, `${/* @__PURE__ */ inputExpression(variant)} has no same-type variant on the other side`);
+var unionInvalid = (input, from, to2, why) => B_invalidOperation(input, `Invalid operation: can't convert ${/* @__PURE__ */ inputExpression(from)} to ${/* @__PURE__ */ inputExpression(to2)} \u2014 ${why}. Use S.to to say what you mean, or S.never to mark a variant unreachable`);
+var unionNormalize = (variants, source, skipUndefined, nan2) => {
 	let flags = skipUndefined ? tagFlagUndefined : 0;
 	const sourceLiteral = isLiteral(source);
 	for (let i = 0; i < variants.length; i++) {
@@ -1142,12 +1238,12 @@ var unionNormalize = (variants, source, skipUndefined, nan3) => {
 		flags |= tagFlags[member.type] & (tagFlagObject | tagFlags[numberTag]);
 	}
 	return {
-		m: unionMask(source, 2, nan3),
+		m: unionMask(source, 2, nan2),
 		f: flags,
 		t: tagFlags[source.type]
 	};
 };
-var unionAnalyze = (normalized, variants, source, nan3) => {
+var unionAnalyze = (normalized, variants, source, nan2) => {
 	const sourceMask = normalized.m;
 	const normalizedFlags = normalized.f;
 	const out = [];
@@ -1163,7 +1259,7 @@ var unionAnalyze = (normalized, variants, source, nan3) => {
 	for (let i = 0; i < variants.length; i++) {
 		const s2 = variants[i];
 		const tag = tagFlags[s2.type];
-		const inputMask = unionMask(s2, 1, nan3);
+		const inputMask = unionMask(s2, 1, nan2);
 		const d = unionDiscriminator(s2);
 		const same = unionRuntimeSame(source, s2);
 		const discriminatorDisjoint = sourceDiscriminator !== U && d !== U && same && sourceDiscriminator[0] === d[0] && !unionLiteralEqual(sourceDiscriminator[1], d[1]);
@@ -1186,7 +1282,7 @@ var unionAnalyze = (normalized, variants, source, nan3) => {
 			f,
 			p,
 			k: tag & tagFlagInstance ? s2.class : s2.type,
-			r: tag & unionObjectish ? unionObjectish : tag & numberish ? numberish : unionWiden(tag, nan3),
+			r: tag & unionObjectish ? unionObjectish : tag & numberish ? numberish : unionWiden(tag, nan2),
 			d
 		});
 	}
@@ -1269,12 +1365,12 @@ var unionPlan = (members) => {
 		for (let j = group.a.length - 1; j >= 0; j--) {
 			const member = group.a[j];
 			const d = member.d;
-			const conflict = d === U || key === false || key !== U && key !== d[0];
-			if (key !== U && (conflict || values.has(d[1]))) {
+			const conflict2 = d === U || key === false || key !== U && key !== d[0];
+			if (key !== U && (conflict2 || values.has(d[1]))) {
 				member.f |= unionMemberFalls;
 				group.f |= 2;
 			}
-			if (conflict) key = false;
+			if (conflict2) key = false;
 			else {
 				key = d[0];
 				(values || (values = /* @__PURE__ */ new Set())).add(d[1]);
@@ -1303,7 +1399,11 @@ var unionPlan = (members) => {
 	}
 	return plan;
 };
-var unionEmit = (input, self, plan, toPerCase) => {
+var unionBoundaryVariant = (source, tag) => {
+	const resolved = unionRefDef(source);
+	return resolved !== U && resolved.anyOf !== U ? resolved.anyOf.find((v) => v.type === tag) : U;
+};
+var unionEmit = (input, self, plan, toPerCase, trustedSelf) => {
 	const initialInline = input.i;
 	let output = B_refine(input);
 	const awaitAsync = plan.some((group) => group.f & 2);
@@ -1316,6 +1416,15 @@ var unionEmit = (input, self, plan, toPerCase) => {
 		r: () => rethrow || (rethrow = B_embed(input, getOrRethrow)),
 		s: () => expected || (expected = B_embed(input, self))
 	};
+	const unionDTrusted = (member) => {
+		const d = member.d;
+		const tag = tagFlags[member.s.type];
+		for (const group of plan) for (const m of group.a) {
+			if (m === member) continue;
+			if (m.d !== U ? m.d[0] === d[0] && unionLiteralEqual(m.d[1], d[1]) : m.m & tag) return false;
+		}
+		return true;
+	};
 	const compile = (member, source, target = source) => {
 		const mark = input.g.t;
 		const caseInput = B_scope(source);
@@ -1323,6 +1432,8 @@ var unionEmit = (input, self, plan, toPerCase) => {
 		caseInput.t = source.t;
 		caseInput.io = false;
 		caseInput.e = member.s;
+		const trustedD = trustedSelf && member.p === 1 && !(member.f & unionMemberFalls) && member.d[0] !== "" && unionDTrusted(member) ? member.d : U;
+		if (trustedD !== U) caseInput.s = member.s;
 		let caseOut;
 		const options = input.g.o;
 		input.g.o |= flagUnionTransformContext;
@@ -1351,6 +1462,12 @@ var unionEmit = (input, self, plan, toPerCase) => {
 			const itemVar = target.v();
 			if (async || caseOut.i !== itemVar) body += `${itemVar}=${async && awaitAsync ? "await " : ""}${caseOut.i}`;
 		}
+		if (trustedD !== U) {
+			const dSchema = (member.s.properties || member.s.items)[trustedD[0]];
+			const dRead = `${source.v()}[${inlinedValueFromString(trustedD[0])}]`;
+			const dCond = dSchema.type === nanTag ? `Number.isNaN(${dRead})` : `${dRead}===${B_inlineConst(caseInput, dSchema)}`;
+			cond.c = cond.c ? `${dCond}&&${cond.c}` : dCond;
+		}
 		const flags = (body !== "" && input.g.t !== mark ? 1 : 0) | (async && awaitAsync ? 2 : 0) | (falls ? unionMemberFalls : 0);
 		return {
 			c: cond.c,
@@ -1375,6 +1492,10 @@ var unionEmit = (input, self, plan, toPerCase) => {
 		narrowInput.io = false;
 		narrowInput.e = group.n;
 		const narrow = parse(narrowInput);
+		if (tagFlags[group.n.type] & (tagFlagObject | tagFlagArray)) {
+			const sourceVariant = unionBoundaryVariant(input.s, group.n.type);
+			if (sourceVariant !== U) narrow.s = sourceVariant;
+		}
 		const inner = [];
 		for (let j = 0; j < group.a.length; j++) {
 			const c = compile(group.a[j], narrow, narrowInput);
@@ -1449,7 +1570,7 @@ var unionEmit = (input, self, plan, toPerCase) => {
 		out = input;
 	} else out = output;
 	const outputAnyOf = outputBySource.filter(Boolean);
-	out.s = outputAnyOf.length ? unionFactory(outputAnyOf) : never_();
+	out.s = outputAnyOf.length ? unionFactory(outputAnyOf) : never_;
 	if (toPerCase !== U) {
 		out.io = true;
 		out.e = unionOutput(toPerCase);
@@ -1464,26 +1585,27 @@ var unionDecoder = (input) => {
 	let variants = self.anyOf;
 	if (input.io && input.e === input.s || input.s === self && toPerCase === U && variants.every(unionIsNoop) || input.s.type === anyOfTag && toPerCase === U && unionIsWider(variants, input.s.anyOf)) return input;
 	const initialTagFlag = tagFlags[input.s.type];
+	const trustedSelf = input.s === self || self.tr === true;
 	if (initialTagFlag & tagFlagUnion || input.s.encoder === U && initialTagFlag & tagFlagRef) input.s = unknown;
 	const source = input.s;
-	const nan3 = flagUnsafeHas(input.g.o, flagDisableNanNumberValidation) ? tagFlagNaN : 0;
-	const normalized = unionNormalize(variants, source, "fromDefault" in self, nan3);
+	const nan2 = flagUnsafeHas(input.g.o, flagDisableNanNumberValidation) ? tagFlagNaN : 0;
+	const normalized = unionNormalize(variants, source, "fromDefault" in self, nan2);
 	if (!(normalized.t & tagFlagUnknown) && !(normalized.f & tagFlagUnknown)) unionCheckPartial(input, source, self, variants, false);
 	if (toPerCase !== U) {
 		const perCase = unionTargetOwns(toPerCase) ? variants.map((v) => unionOutput(v).type === neverTag ? U : toPerCase) : unionResolve(input, self, variants, toPerCase);
 		const attach = self.refiner !== U || self.inputRefiner !== U ? unionRefinerAttacher(self) : U;
 		variants = variants.map((variant, idx) => {
-			const to = perCase[idx];
-			return to === U && attach === U ? variant : updateOutput(variant, (mut) => {
+			const to2 = perCase[idx];
+			return to2 === U && attach === U ? variant : updateOutput(variant, (mut) => {
 				if (attach !== U) attach(mut);
-				if (to !== U) mut.to = to;
+				if (to2 !== U) mut.to = to2;
 			});
 		});
 	}
-	return unionEmit(input, self, unionPlan(unionAnalyze(normalized, variants, source, nan3)), toPerCase);
+	return unionEmit(input, self, unionPlan(unionAnalyze(normalized, variants, source, nan2)), toPerCase, trustedSelf);
 };
 var unionRefinerAttacher = (self) => {
-	const cached2 = [];
+	const cached = [];
 	return (mut) => {
 		for (let i = 0; i < 2; i++) {
 			const key = i ? "inputRefiner" : "refiner";
@@ -1491,7 +1613,7 @@ var unionRefinerAttacher = (self) => {
 			if (source !== U) {
 				const current = mut[key];
 				mut[key] = (input) => {
-					const shared = cached2[i] || (cached2[i] = source(input));
+					const shared = cached[i] || (cached[i] = source(input));
 					return current === U ? shared : current(input).concat(shared);
 				};
 			}
@@ -1507,12 +1629,12 @@ var unionRewrite = (input, map) => {
 		anyOf.push(rewritten);
 		setHas(has, rewritten.type);
 	}
-	const mut = baseSchema(anyOfTag, false);
+	const mut = baseSchema(anyOfTag, false, unionDecoder);
 	mut.anyOf = anyOf;
 	mut.has = has;
-	mut.decoder = unionDecoder;
 	mut.encoder = unionEncoder;
 	mut.perVariant = input.s.perVariant;
+	mut.tr = true;
 	return B_refine(input, unknown, U, mut);
 };
 var unionTargetOwns = (target) => target.noValidation === true || tagFlags[unionOutput(target).type] & tagFlagRef || target.type === anyOfTag && target.anyOf.some((v) => tagFlags[v.type] & tagFlagRef);
@@ -1524,11 +1646,11 @@ var unionEncoder = (input, target) => {
 		return targets.every((tv, idx) => tv === variants[idx]) ? input : unionRewrite(input, (_variant, idx) => targets[idx]);
 	}
 	const resolved = unionResolve(input, input.s, variants, target);
-	if (resolved.every((to) => to === U)) return input;
+	if (resolved.every((to2) => to2 === U)) return input;
 	return unionRewrite(input, (variant, idx) => {
-		const to = resolved[idx];
-		return to === U ? variant : updateOutput(variant, (mut) => {
-			mut.to = to;
+		const to2 = resolved[idx];
+		return to2 === U ? variant : updateOutput(variant, (mut) => {
+			mut.to = to2;
 		});
 	});
 };
@@ -1580,31 +1702,25 @@ var unionFactory = (schemas) => {
 			setHas(has, member.type);
 		}
 	}
-	const mut = baseSchema(anyOfTag, false);
+	const mut = baseSchema(anyOfTag, false, unionDecoder);
 	mut.anyOf = anyOf;
-	mut.decoder = unionDecoder;
 	mut.encoder = unionEncoder;
 	mut.has = has;
 	return mut;
 };
-var internalRefine = (schema, makeRefiner) => {
-	return updateOutput(schema, (mut) => {
-		const refiner = makeRefiner(mut);
-		const existingRefiner = mut.refiner;
-		if (existingRefiner !== U) mut.refiner = (input) => {
-			const arr = existingRefiner(input);
-			arr.push(...refiner(input));
-			return arr;
-		};
-		else mut.refiner = refiner;
-	});
-};
-var getMutErrorMessage = (mut) => {
-	const em = mut.errorMessage ? { ...mut.errorMessage } : {};
-	mut.errorMessage = em;
-	return em;
-};
 var isItemSchema = (x) => x !== U && typeof x !== "string";
+var B_fuseIntoJsonString = (input, expectedSchema, item, isArr) => {
+	const to2 = expectedSchema.to;
+	if (input.s.additionalItems === unknown && to2 !== U && to2.format === "json" && !to2.space && !flagUnsafeHas(input.g.o, flagAsync) && (isArr || !(item.to === U && flagUnsafeHas(tagFlags[item.type], tagFlagString | tagFlagBoolean | tagFlagNull)))) {
+		const marked = copySchema(expectedSchema);
+		marked.uv = true;
+		return B_refine(input, marked);
+	}
+	return U;
+};
+var B_narrowJsonSourcedJsonString = (itemInput) => {
+	if (itemInput.s.name === jsonName && itemInput.e.format === "json" && itemInput.e.to === U) itemInput.s = unknown;
+};
 var makeObjectVal = (prev, schema) => {
 	return {
 		b: U,
@@ -1679,14 +1795,13 @@ var completeObjectVal = (objectVal) => {
 		return output;
 	}
 };
-var array = /* @__NO_SIDE_EFFECTS__ */ (item) => {
-	const itemInternal = item;
-	const mut = baseSchema(arrayTag, itemInternal.r === itemInternal);
-	mut.additionalItems = itemInternal;
+var arrayFactory = (item) => {
+	const mut = baseSchema(arrayTag, !!item.sr, arrayDecoder);
+	mut.additionalItems = item;
 	mut.items = immutableEmptyArray;
-	mut.decoder = arrayDecoder;
 	return mut;
 };
+var array = /* @__NO_SIDE_EFFECTS__ */ (item) => arrayFactory(definitionToSchema(item));
 var arrayDecoder = (unknownInput) => {
 	const isUnion = unknownInput.u;
 	const expectedSchema = unknownInput.e;
@@ -1697,7 +1812,7 @@ var arrayDecoder = (unknownInput) => {
 	if (flagUnsafeHas(unknownInputTagFlag, tagFlagUnknown | tagFlagArray)) {
 		const isArrayInput = flagUnsafeHas(unknownInputTagFlag, tagFlagArray);
 		let schema;
-		if (!isArrayInput) schema = /* @__PURE__ */ array(unknown);
+		if (!isArrayInput) schema = arrayFactory(unknown);
 		else schema = unknownInput.s;
 		const checks = [];
 		if (!isArrayInput) checks.push({
@@ -1722,14 +1837,22 @@ var arrayDecoder = (unknownInput) => {
 	let output;
 	const expectedAdditionalItems = expectedSchema.additionalItems;
 	if (isItemSchema(expectedAdditionalItems)) {
-		if (expectedAdditionalItems === unknown) output = input;
+		const itemSchema = expectedAdditionalItems;
+		if (itemSchema === unknown) output = input;
 		else {
+			if (expectedLength === 0) {
+				const fused = B_fuseIntoJsonString(input, expectedSchema, itemSchema, true);
+				if (fused !== U) return B_markOutput(fused, input);
+			}
 			const inputVar = input.v();
 			const iteratorVar = B_varWithoutAllocation(input.g);
-			const itemOutput = parseDynamic(B_dynamicScope(input, iteratorVar));
+			const raiseCountBefore = input.g.t;
+			const itemInput = B_dynamicScope(input, iteratorVar);
+			B_narrowJsonSourcedJsonString(itemInput);
+			const itemOutput = parseDynamic(itemInput);
 			const hasTransform = itemOutput.t;
-			const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, /* @__PURE__ */ array(itemOutput.s)) : B_refine(input, expectedSchema);
-			const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U);
+			const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, arrayFactory(itemOutput.s)) : B_refine(input, expectedSchema);
+			const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U, hasTransform ? U : raiseCountBefore);
 			if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
 			if (flagUnsafeHas(itemOutput.f, valFlagAsync)) output = B_asyncVal(output2, `Promise.all(${output2.i})`);
 			else output = output2;
@@ -1752,6 +1875,7 @@ var arrayDecoder = (unknownInput) => {
 			itemInput.e = schema;
 			itemInput.io = false;
 			itemInput.u = isUnion;
+			B_narrowJsonSourcedJsonString(itemInput);
 			const itemOutput = parse(itemInput);
 			if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, itemOutput, key);
 			B_addObjectField(objectVal, key, itemOutput);
@@ -1776,7 +1900,7 @@ var objectDecoder = (unknownInput) => {
 		const isObjectInput = flagUnsafeHas(unknownInputTagFlag, tagFlagObject);
 		let schema;
 		if (!isObjectInput) {
-			const mut = baseSchema(objectTag, false);
+			const mut = baseSchema(objectTag, false, objectDecoder);
 			mut.properties = immutableEmptyObject;
 			mut.additionalItems = unknown;
 			schema = mut;
@@ -1802,12 +1926,17 @@ var objectDecoder = (unknownInput) => {
 	let output;
 	if (dictItem !== U && dictItem === unknown) output = input;
 	else if (dictItem !== U && sourceIsDict) {
+		const fused = B_fuseIntoJsonString(input, expectedSchema, dictItem, false);
+		if (fused !== U) return B_markOutput(fused, input);
 		const inputVar = input.v();
 		const keyVar = B_varWithoutAllocation(input.g);
-		const itemOutput = parseDynamic(B_dynamicScope(input, keyVar));
+		const raiseCountBefore = input.g.t;
+		const itemInput = B_dynamicScope(input, keyVar);
+		B_narrowJsonSourcedJsonString(itemInput);
+		const itemOutput = parseDynamic(itemInput);
 		const hasTransform = itemOutput.t;
-		const output2 = hasTransform ? B_next(input, "{}", /* @__PURE__ */ dictFactory(itemOutput.s)) : B_refine(input, expectedSchema);
-		const itemCode = B_mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => B_addKey(output2, keyVar, itemOutput) : U);
+		const output2 = hasTransform ? B_next(input, "{}", dictFactory(itemOutput.s)) : B_refine(input, expectedSchema);
+		const itemCode = B_mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => B_addKey(output2, keyVar, itemOutput) : U, hasTransform ? U : raiseCountBefore);
 		if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${keyVar} in ${inputVar}){${itemCode}}`;
 		if (flagUnsafeHas(itemOutput.f, valFlagAsync)) {
 			const resolveVar = B_varWithoutAllocation(output2.g);
@@ -1827,6 +1956,7 @@ var objectDecoder = (unknownInput) => {
 			itemInput.e = itemSchema;
 			itemInput.io = false;
 			itemInput.u = isUnion;
+			B_narrowJsonSourcedJsonString(itemInput);
 			B_addObjectField(objectVal, key, parse(itemInput));
 		}
 		output = completeObjectVal(objectVal);
@@ -1851,6 +1981,7 @@ var objectDecoder = (unknownInput) => {
 			itemInput.io = false;
 			itemInput.u = isUnion;
 			if (isJsonParent && schema.type === anyOfTag && schema.has[undefinedTag]) itemInput.i = `(${itemInput.i}??null)`;
+			B_narrowJsonSourcedJsonString(itemInput);
 			const itemOutput = parse(itemInput);
 			if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, itemOutput, key);
 			B_addObjectField(objectVal, key, itemOutput);
@@ -1883,12 +2014,48 @@ var objectDecoder = (unknownInput) => {
 	}
 	return B_markOutput(output, input);
 };
-var dictFactory = /* @__NO_SIDE_EFFECTS__ */ (item) => {
-	const mut = baseSchema(objectTag, item.r === item);
+var dictFactory = (item) => {
+	const mut = baseSchema(objectTag, !!item.sr, objectDecoder);
 	mut.properties = immutableEmptyObject;
 	mut.additionalItems = item;
-	mut.decoder = objectDecoder;
 	return mut;
+};
+var definitionToSchema = (definition) => isSchemaObject(definition) ? definition : traverseDefinition(definition, (node) => isSchemaObject(node) ? node : U);
+var traverseDefinition = (definition, onNode) => {
+	if (typeof definition === objectTag && definition !== null) {
+		const s2 = onNode(definition);
+		if (s2 !== U) return s2;
+		else if (Array.isArray(definition)) {
+			const node = definition;
+			for (let idx = 0; idx < node.length; idx++) node[idx] = traverseDefinition(node[idx], onNode);
+			const items = node;
+			const mut = baseSchema(arrayTag, false, arrayDecoder);
+			mut.items = items;
+			mut.additionalItems = "strict";
+			return mut;
+		} else {
+			const proto = Object.getPrototypeOf(definition);
+			if (proto !== null && proto !== Object.prototype) {
+				const mut = baseSchema(instanceTag, true, literalDecoder);
+				mut.class = definition["constructor"];
+				mut.const = definition;
+				return mut;
+			} else {
+				const node = definition;
+				const fieldNames = Object.keys(node);
+				const length2 = fieldNames.length;
+				for (let idx = 0; idx < length2; idx++) {
+					const location = fieldNames[idx];
+					node[location] = traverseDefinition(node[location], onNode);
+				}
+				const mut = baseSchema(objectTag, false, objectDecoder);
+				mut.required = fieldNames;
+				mut.properties = node;
+				mut.additionalItems = globalConfig.a;
+				return mut;
+			}
+		}
+	} else return Literal_parse(definition);
 };
 var nestedNone = () => {
 	const itemSchema = Literal_parse(0);
@@ -1912,7 +2079,7 @@ var nestedOption = (item) => {
 		mut.parser = nestedOptionParser;
 	});
 };
-var optionFactory = (item, unitSchema = unit()) => {
+var optionFactory = (item, unitSchema = unit) => {
 	const out = getOutputSchema(item);
 	if (out.type === undefinedTag) return unionFactory([unitSchema, nestedOption(item)]);
 	else if (out.type === anyOfTag) {
@@ -1933,11 +2100,10 @@ var optionFactory = (item, unitSchema = unit()) => {
 				} else if (schemaOut.properties !== U) {
 					const nestedSchema = schemaOut.properties[nestedLoc];
 					if (nestedSchema !== U) toPush = updateOutput(schema, (mut2) => {
+						const bumped = copySchema(nestedSchema);
+						bumped.const = nestedSchema.const + 1;
 						const properties2 = {};
-						properties2[nestedLoc] = {
-							...nestedSchema,
-							const: nestedSchema.const + 1
-						};
+						properties2[nestedLoc] = bumped;
 						mut2.properties = properties2;
 					});
 					else toPush = schema;
@@ -1954,7 +2120,7 @@ var optionFactory = (item, unitSchema = unit()) => {
 	} else return unionFactory([item, unitSchema]);
 };
 var option = /* @__NO_SIDE_EFFECTS__ */ (item) => {
-	return optionFactory(item, unit());
+	return optionFactory(item, unit);
 };
 var valGet = (parent, location) => {
 	let vals;
@@ -2009,219 +2175,80 @@ var valGet = (parent, location) => {
 		return item;
 	}
 };
-var invalidDateRefine = (input) => {
-	return B_refine(input, input.e, [{
-		c: (inputVar) => `!Number.isNaN(${inputVar}.getTime())`,
-		f: failInvalidType
-	}]);
-};
-var date = () => {
-	return cached(instanceTag, instanceTag, (s2) => {
-		s2.class = Date;
-		s2.decoder = (input) => {
-			const inputTagFlag = tagFlags[input.s.type];
-			if (flagUnsafeHas(inputTagFlag, tagFlagString)) return invalidDateRefine(B_next(input, `new Date(${input.i})`, s2));
-			else if (flagUnsafeHas(inputTagFlag, tagFlagUnknown)) return invalidDateRefine(instanceDecoder(input));
-			else if (flagUnsafeHas(inputTagFlag, tagFlagInstance) && input.s.class === s2.class) return input;
-			else return B_unsupportedDecode(input, input.s, input.e);
+var internalRefine = (schema, makeRefiner) => {
+	return updateOutput(schema, (mut) => {
+		const refiner = makeRefiner(mut);
+		const existingRefiner = mut.refiner;
+		if (existingRefiner !== U) mut.refiner = (input) => {
+			const arr = existingRefiner(input);
+			arr.push(...refiner(input));
+			return arr;
 		};
-		s2.encoder = (input, target) => {
-			const toTagFlag = tagFlags[target.type];
-			if (flagUnsafeHas(toTagFlag, tagFlagString)) {
-				const dateTimeString = baseSchema(stringTag, false);
-				dateTimeString.format = "date-time";
-				return parse(B_next(input, `${input.i}.toISOString()`, dateTimeString, target));
-			} else return input;
-		};
+		else mut.refiner = refiner;
 	});
 };
-var definitionToSchema = (definition) => {
-	return traverseDefinition(definition, (node) => {
-		if (isSchemaObject(node)) return node;
-		else return U;
-	});
+var getMutErrorMessage = (mut) => {
+	const em = mut.errorMessage ? { ...mut.errorMessage } : {};
+	mut.errorMessage = em;
+	return em;
 };
-var traverseDefinition = (definition, onNode) => {
-	if (typeof definition === objectTag && definition !== null) {
-		const s2 = onNode(definition);
-		if (s2 !== U) return s2;
-		else if (Array.isArray(definition)) {
-			const node = definition;
-			for (let idx = 0; idx < node.length; idx++) node[idx] = traverseDefinition(node[idx], onNode);
-			const items = node;
-			const mut = baseSchema(arrayTag, false);
-			mut.items = items;
-			mut.additionalItems = "strict";
-			mut.decoder = arrayDecoder;
-			return mut;
-		} else {
-			const proto = Object.getPrototypeOf(definition);
-			if (proto !== null && proto !== Object.prototype) {
-				const mut = baseSchema(instanceTag, true);
-				mut.class = definition["constructor"];
-				mut.const = definition;
-				mut.decoder = literalDecoder;
-				return mut;
-			} else {
-				const node = definition;
-				const fieldNames = Object.keys(node);
-				const length2 = fieldNames.length;
-				for (let idx = 0; idx < length2; idx++) {
-					const location = fieldNames[idx];
-					node[location] = traverseDefinition(node[location], onNode);
+var nullAsUnit = /* @__PURE__ */ (() => {
+	const schema = copySchema(nullLiteral);
+	schema.to = unit;
+	return schema;
+})();
+var Option_getWithDefault = (schema, default_) => {
+	return updateOutput(schema, (mut) => {
+		const anyOf = mut.anyOf;
+		if (anyOf !== U) {
+			const outputItems = [];
+			const originalItems = [];
+			for (let idx = 0; idx < anyOf.length; idx++) {
+				const schema2 = anyOf[idx];
+				const outputSchema = getOutputSchema(schema2);
+				if (outputSchema.type !== undefinedTag) {
+					outputItems.push(outputSchema);
+					originalItems.push(schema2);
 				}
-				const mut = baseSchema(objectTag, false);
-				mut.required = fieldNames;
-				mut.properties = node;
-				mut.additionalItems = globalConfig.a;
-				mut.decoder = objectDecoder;
-				return mut;
 			}
-		}
-	} else return Literal_parse(definition);
-};
-var schemaFactory = /* @__NO_SIDE_EFFECTS__ */ (definition) => {
-	return definitionToSchema(definition);
-};
-var assertNumber = (fnName, n) => {
-	if (typeof n !== numberTag || Number.isNaN(n)) throw new SuryError({
-		code: "invalid_operation",
-		path: pathEmpty,
-		reason: `[S.${fnName}] Expected number, received ${stringify(n)}`
-	});
-};
-var intMin = (schema, minValue, maybeMessage) => {
-	assertNumber("min", minValue);
-	const message = maybeMessage ?? `Number must be greater than or equal to ${minValue}`;
-	return internalRefine(schema, (mut) => {
-		mut.minimum = minValue;
-		getMutErrorMessage(mut)["minimum"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}>${minValue - 1}`,
-				f: B_failWithErrorMessage("minimum", message)
-			}];
-		};
-	});
-};
-var intMax = (schema, maxValue, maybeMessage) => {
-	assertNumber("max", maxValue);
-	const message = maybeMessage ?? `Number must be lower than or equal to ${maxValue}`;
-	return internalRefine(schema, (mut) => {
-		mut.maximum = maxValue;
-		getMutErrorMessage(mut)["maximum"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}<${maxValue + 1}`,
-				f: B_failWithErrorMessage("maximum", message)
-			}];
-		};
-	});
-};
-var floatMin = (schema, minValue, maybeMessage) => {
-	assertNumber("min", minValue);
-	const message = maybeMessage ?? `Number must be greater than or equal to ${minValue}`;
-	return internalRefine(schema, (mut) => {
-		mut.minimum = minValue;
-		getMutErrorMessage(mut)["minimum"] = message;
-		return (input) => {
-			return [{
-				c: (inputVar) => `${inputVar}>=${B_embed(input, minValue)}`,
-				f: B_failWithErrorMessage("minimum", message)
-			}];
-		};
-	});
-};
-var floatMax = (schema, maxValue, maybeMessage) => {
-	assertNumber("max", maxValue);
-	const message = maybeMessage ?? `Number must be lower than or equal to ${maxValue}`;
-	return internalRefine(schema, (mut) => {
-		mut.maximum = maxValue;
-		getMutErrorMessage(mut)["maximum"] = message;
-		return (input) => {
-			return [{
-				c: (inputVar) => `${inputVar}<=${B_embed(input, maxValue)}`,
-				f: B_failWithErrorMessage("maximum", message)
-			}];
-		};
-	});
-};
-var arrayMinLength = (schema, length2, maybeMessage) => {
-	assertNumber("min", length2);
-	const message = maybeMessage ?? `Array must be ${length2} or more items long`;
-	return internalRefine(schema, (mut) => {
-		mut.minItems = length2;
-		getMutErrorMessage(mut)["minItems"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}.length>${length2 - 1}`,
-				f: B_failWithErrorMessage("minItems", message)
-			}];
-		};
-	});
-};
-var arrayMaxLength = (schema, length2, maybeMessage) => {
-	assertNumber("max", length2);
-	const message = maybeMessage ?? `Array must be ${length2} or fewer items long`;
-	return internalRefine(schema, (mut) => {
-		mut.maxItems = length2;
-		getMutErrorMessage(mut)["maxItems"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}.length<${length2 + 1}`,
-				f: B_failWithErrorMessage("maxItems", message)
-			}];
-		};
-	});
-};
-var stringMinLength = (schema, length2, maybeMessage) => {
-	assertNumber("min", length2);
-	const message = maybeMessage ?? `String must be ${length2} or more characters long`;
-	return internalRefine(schema, (mut) => {
-		mut.minLength = length2;
-		getMutErrorMessage(mut)["minLength"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}.length>${length2 - 1}`,
-				f: B_failWithErrorMessage("minLength", message)
-			}];
-		};
-	});
-};
-var stringMaxLength = (schema, length2, maybeMessage) => {
-	assertNumber("max", length2);
-	const message = maybeMessage ?? `String must be ${length2} or fewer characters long`;
-	return internalRefine(schema, (mut) => {
-		mut.maxLength = length2;
-		getMutErrorMessage(mut)["maxLength"] = message;
-		return (_input) => {
-			return [{
-				c: (inputVar) => `${inputVar}.length<${length2 + 1}`,
-				f: B_failWithErrorMessage("maxLength", message)
-			}];
-		};
-	});
-};
-var url = () => {
-	return cached("url", stringTag, (s2) => {
-		const urlValidator = (s3) => {
-			try {
-				new URL(s3);
-				return true;
-			} catch {
-				return false;
+			const item = outputItems.length === 0 ? panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`) : outputItems.length === 1 ? outputItems[0] : unionFactory(outputItems);
+			const originalItem = originalItems.length === 1 ? originalItems[0] : unionFactory(originalItems);
+			if (default_.type === "value") {
+				const v = default_.value;
+				try {
+					(/* @__PURE__ */ getDecoder(unknown, item))(v);
+				} catch (exn) {
+					const error = getOrRethrow(exn);
+					panic(`Invalid default for ${/* @__PURE__ */ inputExpression(mut)}: ${error["message"]}`);
+				}
+				try {
+					mut.default = (/* @__PURE__ */ getDecoder(/* @__PURE__ */ reverse(originalItem)))(v);
+				} catch (_exn) {}
 			}
-		};
-		s2.decoder = stringDecoderFn;
-		s2.format = "url";
-		s2.refiner = (input) => {
-			return [{
-				c: (inputVar) => `${B_embed(input, urlValidator)}(${inputVar})`,
-				f: B_failWithErrorMessage("format")
-			}];
-		};
+			mut.parser = (input) => {
+				const nextSchema = input.e.to;
+				const inputVar = input.v();
+				return B_next(input, `${inputVar}===void 0?${default_.type === "value" ? B_inlineConst(input, Literal_parse(default_.value)) : `${B_embed(input, default_.callback)}()`}:${inputVar}`, nextSchema, nextSchema);
+			};
+			const to2 = copySchema(item);
+			const originalDecoder = to2.decoder;
+			to2.serializer = (input) => {
+				const nextSchema = /* @__PURE__ */ reverse(originalItem);
+				return B_refine(originalDecoder(input), nextSchema, U, nextSchema);
+			};
+			to2.decoder = noopDecoder;
+			mut.to = to2;
+		} else panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`);
 	});
 };
+var Option_getOr = /* @__NO_SIDE_EFFECTS__ */ (schema, defaultValue) => Option_getWithDefault(schema, {
+	type: "value",
+	value: defaultValue
+});
+var Option_getOrWith = /* @__NO_SIDE_EFFECTS__ */ (schema, defaultCb) => Option_getWithDefault(schema, {
+	type: "callback",
+	callback: defaultCb
+});
 var standardJSONSchemaConverter;
 var getStandardJSONSchema = (schema, options, isOutput) => {
 	if (standardJSONSchemaConverter !== U) return standardJSONSchemaConverter(schema, options, isOutput);
@@ -2231,14 +2258,25 @@ var getStandardJSONSchema = (schema, options, isOutput) => {
 		reason: "~standard.jsonSchema requires S.enableStandardJSONSchema() to be called first"
 	});
 };
+Object.defineProperty(schemaPrototype, "toString", { value: function() {
+	const input = /* @__PURE__ */ inputExpression(this);
+	const output = /* @__PURE__ */ inputExpression(/* @__PURE__ */ reverse(this));
+	return `Schema<${input === output ? input : `${input}, ${output}`}>`;
+} });
 Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 	const schema = this;
+	let decoderFlag = U;
+	let decoder;
 	const standard = {
 		version: 1,
 		vendor,
 		validate: (input) => {
+			if (decoderFlag !== globalConfig.f) {
+				decoder = /* @__PURE__ */ getDecoder(unknown, schema);
+				decoderFlag = globalConfig.f;
+			}
 			try {
-				return { value: (/* @__PURE__ */ getDecoder(unknown, schema))(input) };
+				return { value: decoder(input) };
 			} catch (exn) {
 				const error = getOrRethrow(exn);
 				return { issues: [{
@@ -2256,54 +2294,308 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 	Object.defineProperty(schema, "~standard", valueOptions);
 	return standard;
 } });
-var js_parser = /* @__NO_SIDE_EFFECTS__ */ (...args) => /* @__PURE__ */ getDecoder(unknown, ...args);
-var js_union = /* @__NO_SIDE_EFFECTS__ */ (values) => unionFactory(values.map(definitionToSchema));
-var min = /* @__NO_SIDE_EFFECTS__ */ (schema, minValue, maybeMessage) => {
-	switch (schema.type) {
-		case stringTag: return stringMinLength(schema, minValue, maybeMessage);
-		case arrayTag: return arrayMinLength(schema, minValue, maybeMessage);
-		case numberTag: return schema.format === "int32" || schema.format === "port" ? intMin(schema, minValue, maybeMessage) : floatMin(schema, minValue, maybeMessage);
-		default: return panic(`S.min is not supported for ${/* @__PURE__ */ toExpression(schema)} schema. Coerce the schema to string, number or array using S.to first.`);
+var invalidDateRefine = (input) => {
+	return B_refine(input, input.e, [{
+		c: (inputVar) => `!Number.isNaN(${inputVar}.getTime())`,
+		f: failInvalidType
+	}]);
+};
+var dateTimeString = /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
+	s2.format = "date-time";
+});
+var date = /* @__PURE__ */ initSchema(instanceTag, (input) => {
+	const inputTagFlag = tagFlags[input.s.type];
+	if (flagUnsafeHas(inputTagFlag, tagFlagString)) return invalidDateRefine(B_next(input, `new Date(${input.i})`, date));
+	else if (flagUnsafeHas(inputTagFlag, tagFlagUnknown)) return invalidDateRefine(instanceDecoder(input));
+	else if (flagUnsafeHas(inputTagFlag, tagFlagInstance) && input.s.class === date.class) return input;
+	else return B_unsupportedDecode(input, input.s, input.e);
+}, (s2) => {
+	s2.class = Date;
+	s2.encoder = (input, target) => {
+		const toTagFlag = tagFlags[target.type];
+		if (flagUnsafeHas(toTagFlag, tagFlagString)) return parse(B_refine(B_next(input, `${input.i}.toISOString()`, dateTimeString, target)));
+		else return input;
+	};
+});
+var schemaFactory = /* @__NO_SIDE_EFFECTS__ */ (definition) => {
+	return definitionToSchema(definition);
+};
+var expects = (fnName, expected, got) => `S.${fnName} expects ${expected}, got ${got}`;
+var assertNumericBound = (fnName, schema, value) => {
+	const tag = schema.type;
+	if (tag !== numberTag && tag !== bigintTag) panic(expects(fnName, "number | bigint schema", /* @__PURE__ */ inputExpression(schema)));
+	if (tag === bigintTag ? typeof value !== bigintTag : typeof value !== numberTag || Number.isNaN(value)) throw new SuryError({
+		code: "invalid_operation",
+		path: pathEmpty,
+		reason: expects(fnName, /* @__PURE__ */ inputExpression(schema), stringify(value))
+	});
+};
+var assertLengthBound = (fnName, schema, value) => {
+	if (schema.type !== stringTag && schema.type !== arrayTag) panic(expects(fnName, "string | array schema", /* @__PURE__ */ inputExpression(schema)));
+	if (typeof value !== numberTag || !Number.isSafeInteger(value) || value < 0) throw new SuryError({
+		code: "invalid_operation",
+		path: pathEmpty,
+		reason: expects(fnName, "integer >= 0", stringify(value))
+	});
+};
+var lit = (value) => typeof value === bigintTag ? `${value}n` : `${value}`;
+var sizeKey = (schema, upper) => schema.type === arrayTag ? upper ? "maxItems" : "minItems" : schema.type === instanceTag ? upper ? "maxSize" : "minSize" : upper ? "maxLength" : "minLength";
+var sizeMember = (schema) => {
+	const tag = schema.type;
+	return tag === instanceTag ? ".size" : tag === stringTag || tag === arrayTag ? ".length" : U;
+};
+var withBounds = (schema, base) => {
+	const written = schema.bounds ?? 0;
+	const member = sizeMember(schema);
+	const sized = member !== U;
+	const minKey = sized ? sizeKey(schema, false) : "minimum";
+	const maxKey = sized ? sizeKey(schema, true) : "maximum";
+	const exMin = written & 4 ? schema.exclusiveMinimum : U;
+	const exMax = written & 8 ? schema.exclusiveMaximum : U;
+	const low = exMin !== U ? exMin : written & 1 ? schema[minKey] : U;
+	const high = exMax !== U ? exMax : written & 2 ? schema[maxKey] : U;
+	const mo = schema.multipleOf;
+	const subject0 = sized ? `${base}${member}` : base;
+	if (low === U && high === U) return `${subject0} % ${lit(mo)}`;
+	const subject = mo !== U ? `(${subject0} % ${lit(mo)})` : subject0;
+	if (low === U) return `${subject} ${exMax !== U ? "<" : "<="} ${lit(high)}`;
+	if (high === U) return `${subject} ${exMin !== U ? ">" : ">="} ${lit(low)}`;
+	return exMin === U && exMax === U && low === high ? `${subject} == ${lit(low)}` : `${lit(low)} ${exMin !== U ? "<" : "<="} ${subject} ${exMax !== U ? "<" : "<="} ${lit(high)}`;
+};
+var setBoundExpression = (mut, schema) => {
+	if (schema.bounds === U && schema.multipleOf === U) {
+		const base = schema.expression;
+		mut.expression = (s2) => withBounds(s2, base !== U ? base(s2) : /* @__PURE__ */ inputExpression(s2, true));
 	}
 };
-var max = /* @__NO_SIDE_EFFECTS__ */ (schema, maxValue, maybeMessage) => {
-	switch (schema.type) {
-		case stringTag: return stringMaxLength(schema, maxValue, maybeMessage);
-		case arrayTag: return arrayMaxLength(schema, maxValue, maybeMessage);
-		case numberTag: return schema.format === "int32" || schema.format === "port" ? intMax(schema, maxValue, maybeMessage) : floatMax(schema, maxValue, maybeMessage);
-		default: return panic(`S.max is not supported for ${/* @__PURE__ */ toExpression(schema)} schema. Coerce the schema to string, number or array using S.to first.`);
-	}
+var exactDivisor = (d) => typeof d === bigintTag || Number.isInteger(d);
+var multipleOfValidator = (d) => (value) => {
+	const ratio = value / d;
+	return Math.abs(ratio - Math.round(ratio)) < Number.EPSILON * Math.max(Math.abs(ratio), 1);
 };
-var string2 = /* @__PURE__ */ string();
-var _number = /* @__PURE__ */ float();
-var date2 = /* @__PURE__ */ date();
+var boundsRefiner = (input) => {
+	const s2 = input.e;
+	const written = s2.bounds ?? 0;
+	const checks = [];
+	const member = sizeMember(s2);
+	if (member !== U) {
+		const minKey = sizeKey(s2, false);
+		const maxKey = sizeKey(s2, true);
+		const min = written & 1 ? s2[minKey] : U;
+		const max = written & 2 ? s2[maxKey] : U;
+		const em = s2.errorMessage;
+		if (min !== U && min === max && (em !== U ? em[minKey] : U) === (em !== U ? em[maxKey] : U)) checks.push({
+			c: (inputVar) => `${inputVar}${member}===${min}`,
+			f: B_failWithErrorMessage(minKey)
+		});
+		else {
+			if (min !== U) checks.push({
+				c: (inputVar) => `${inputVar}${member}>${min - 1}`,
+				f: B_failWithErrorMessage(minKey)
+			});
+			if (max !== U) checks.push({
+				c: (inputVar) => `${inputVar}${member}<${max + 1}`,
+				f: B_failWithErrorMessage(maxKey)
+			});
+		}
+	} else {
+		const exMin = written & 4 ? s2.exclusiveMinimum : U;
+		const min = exMin !== U ? exMin : written & 1 ? s2.minimum : U;
+		if (min !== U) checks.push({
+			c: (inputVar) => `${inputVar}${exMin !== U ? ">" : ">="}${lit(min)}`,
+			f: B_failWithErrorMessage(exMin !== U ? "exclusiveMinimum" : "minimum")
+		});
+		const exMax = written & 8 ? s2.exclusiveMaximum : U;
+		const max = exMax !== U ? exMax : written & 2 ? s2.maximum : U;
+		if (max !== U) checks.push({
+			c: (inputVar) => `${inputVar}${exMax !== U ? "<" : "<="}${lit(max)}`,
+			f: B_failWithErrorMessage(exMax !== U ? "exclusiveMaximum" : "maximum")
+		});
+		const mo = s2.multipleOf;
+		if (mo !== U) {
+			let cond;
+			if (typeof mo === bigintTag) cond = (inputVar) => `!(${inputVar}%${lit(mo)})`;
+			else if (exactDivisor(mo)) cond = (inputVar) => `${inputVar}%${lit(mo)}===0`;
+			else {
+				const embedded = B_embed(input, multipleOfValidator(mo));
+				cond = (inputVar) => `${embedded}(${inputVar})`;
+			}
+			checks.push({
+				c: cond,
+				f: B_failWithErrorMessage("multipleOf")
+			});
+		}
+	}
+	return checks;
+};
+var updateBounds = (schema, update) => schema.bounds !== U || schema.multipleOf !== U ? updateOutput(schema, update) : internalRefine(schema, (mut) => {
+	update(mut);
+	return boundsRefiner;
+});
+var carryMessage = (schema, key, maybeMessage) => maybeMessage === U || key === U ? schema : updateOutput(schema, (mut) => {
+	getMutErrorMessage(mut)[key] = maybeMessage;
+});
+var setBoundMessage = (mut, schema, key, maybeMessage, replaced) => {
+	const existing = schema.errorMessage;
+	if (maybeMessage !== U) getMutErrorMessage(mut)[key] = maybeMessage;
+	else if (existing !== U && existing[key] !== U) getMutErrorMessage(mut)[key] = U;
+	if (replaced !== U && existing !== U && existing[replaced] !== U) getMutErrorMessage(mut)[replaced] = U;
+};
+var narrowsLower = (schema, value, exclusive) => {
+	const bound = value;
+	const inclusive = schema.minimum;
+	const strict2 = schema.exclusiveMinimum;
+	return (inclusive === U || (exclusive ? bound >= inclusive : bound > inclusive)) && (strict2 === U || bound > strict2);
+};
+var narrowsUpper = (schema, value, exclusive) => {
+	const bound = value;
+	const inclusive = schema.maximum;
+	const strict2 = schema.exclusiveMaximum;
+	return (inclusive === U || (exclusive ? bound <= inclusive : bound < inclusive)) && (strict2 === U || bound < strict2);
+};
+var narrowsSize = (current, value, upper) => upper ? current === U || value < current : value > (current ?? 0);
+var conflict = (incoming, existing) => {
+	panic(`${/* @__PURE__ */ inputExpression(incoming)} contradicts ${/* @__PURE__ */ inputExpression(existing)}`);
+};
+var asBound = (schema, key, bit, value) => {
+	const mut = {
+		...schema,
+		bounds: bit
+	};
+	mut[key] = value;
+	setBoundExpression(mut, schema);
+	return mut;
+};
+var assertLower = (schema, value, exclusive) => {
+	const key = exclusive ? "exclusiveMinimum" : "minimum";
+	const bit = exclusive ? 4 : 1;
+	const bound = value;
+	const inclusive = schema.maximum;
+	const strict2 = schema.exclusiveMaximum;
+	if (inclusive !== U && (exclusive ? bound >= inclusive : bound > inclusive)) conflict(asBound(schema, key, bit, value), asBound(schema, "maximum", 2, inclusive));
+	if (strict2 !== U && bound >= strict2) conflict(asBound(schema, key, bit, value), asBound(schema, "exclusiveMaximum", 8, strict2));
+};
+var assertUpper = (schema, value, exclusive) => {
+	const key = exclusive ? "exclusiveMaximum" : "maximum";
+	const bit = exclusive ? 8 : 2;
+	const bound = value;
+	const inclusive = schema.minimum;
+	const strict2 = schema.exclusiveMinimum;
+	if (inclusive !== U && (exclusive ? bound <= inclusive : bound < inclusive)) conflict(asBound(schema, key, bit, value), asBound(schema, "minimum", 1, inclusive));
+	if (strict2 !== U && bound <= strict2) conflict(asBound(schema, key, bit, value), asBound(schema, "exclusiveMinimum", 4, strict2));
+};
+var assertSize = (schema, value, upper) => {
+	const otherKey = sizeKey(schema, !upper);
+	const other = schema[otherKey];
+	if (other !== U && (upper ? value < other : value > other)) conflict(asBound(schema, sizeKey(schema, upper), upper ? 2 : 1, value), asBound(schema, otherKey, upper ? 1 : 2, other));
+};
+var gte = /* @__NO_SIDE_EFFECTS__ */ (schema, minValue, maybeMessage) => {
+	assertNumericBound("gte", schema, minValue);
+	assertLower(schema, minValue, false);
+	if (!narrowsLower(schema, minValue, false)) {
+		const written = schema.bounds ?? 0;
+		return carryMessage(schema, written & 4 ? "exclusiveMinimum" : written & 1 ? "minimum" : U, maybeMessage);
+	}
+	return updateBounds(schema, (mut) => {
+		setBoundExpression(mut, schema);
+		mut.bounds = (schema.bounds ?? 0) & -5 | 1;
+		mut.minimum = minValue;
+		mut.exclusiveMinimum = U;
+		setBoundMessage(mut, schema, "minimum", maybeMessage, "exclusiveMinimum");
+	});
+};
+var lte = /* @__NO_SIDE_EFFECTS__ */ (schema, maxValue, maybeMessage) => {
+	assertNumericBound("lte", schema, maxValue);
+	assertUpper(schema, maxValue, false);
+	if (!narrowsUpper(schema, maxValue, false)) {
+		const written = schema.bounds ?? 0;
+		return carryMessage(schema, written & 8 ? "exclusiveMaximum" : written & 2 ? "maximum" : U, maybeMessage);
+	}
+	return updateBounds(schema, (mut) => {
+		setBoundExpression(mut, schema);
+		mut.bounds = (schema.bounds ?? 0) & -9 | 2;
+		mut.maximum = maxValue;
+		mut.exclusiveMaximum = U;
+		setBoundMessage(mut, schema, "maximum", maybeMessage, "exclusiveMaximum");
+	});
+};
+var minLength = /* @__NO_SIDE_EFFECTS__ */ (schema, length2, maybeMessage) => {
+	assertLengthBound("minLength", schema, length2);
+	assertSize(schema, length2, false);
+	const key = sizeKey(schema, false);
+	if (!narrowsSize(schema[key], length2, false)) return carryMessage(schema, (schema.bounds ?? 0) & 1 ? key : U, maybeMessage);
+	return updateBounds(schema, (mut) => {
+		setBoundExpression(mut, schema);
+		mut.bounds = (schema.bounds ?? 0) | 1;
+		mut[key] = length2;
+		setBoundMessage(mut, schema, key, maybeMessage);
+	});
+};
+var maxLength = /* @__NO_SIDE_EFFECTS__ */ (schema, length2, maybeMessage) => {
+	assertLengthBound("maxLength", schema, length2);
+	assertSize(schema, length2, true);
+	const key = sizeKey(schema, true);
+	if (!narrowsSize(schema[key], length2, true)) return carryMessage(schema, (schema.bounds ?? 0) & 2 ? key : U, maybeMessage);
+	return updateBounds(schema, (mut) => {
+		setBoundExpression(mut, schema);
+		mut.bounds = (schema.bounds ?? 0) | 2;
+		mut[key] = length2;
+		setBoundMessage(mut, schema, key, maybeMessage);
+	});
+};
+var nonEmpty = /* @__NO_SIDE_EFFECTS__ */ (schema, maybeMessage) => /* @__PURE__ */ minLength(schema, 1, maybeMessage);
+var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, message) => /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
+	const re = typeof test === "string" ? new RegExp(test, "i") : test;
+	s2.format = format;
+	s2.refiner = (input) => {
+		return [{
+			c: (inputVar) => `${B_embed(input, re)}${re instanceof RegExp ? ".test" : ""}(${inputVar})`,
+			f: B_failWithErrorMessage("format", message)
+		}];
+	};
+});
+var ipv4Pattern = "(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)";
+var ipv6Pattern = /* @__NO_SIDE_EFFECTS__ */ () => "(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|" + ipv4Pattern + ")|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)";
+var uriPattern = /* @__NO_SIDE_EFFECTS__ */ (schemeOptional) => "^(?:[a-z][a-z0-9+\\-.]*:)" + schemeOptional + "(?:\\/\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:" + /* @__PURE__ */ ipv6Pattern() + "|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|" + ipv4Pattern + "|(?:[a-z0-9\\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\\?(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$";
+var uri = /* @__PURE__ */ stringFormat("uri", /* @__PURE__ */ uriPattern(""));
+var parser = /* @__NO_SIDE_EFFECTS__ */ (...args) => /* @__PURE__ */ getDecoder(unknown, ...args);
+var union = /* @__NO_SIDE_EFFECTS__ */ (values) => unionFactory(values.map(definitionToSchema));
+var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
+	const schema = definitionToSchema(definition);
+	if (maybeOr !== U) {
+		const schema2 = unionFactory([schema, nullAsUnit]);
+		if (typeof maybeOr === functionTag) return /* @__PURE__ */ Option_getOrWith(schema2, maybeOr);
+		else return /* @__PURE__ */ Option_getOr(schema2, maybeOr);
+	} else return unionFactory([schema, nullLiteral]);
+};
 //#endregion
 //#region ../schemas/libraries/sury/download.ts
 const imageSchema = /* @__PURE__ */ schemaFactory({
-	id: _number,
-	created: date2,
-	title: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 100), 1),
-	type: /* @__PURE__ */ js_union(["jpg", "png"]),
-	size: _number,
-	url: /* @__PURE__ */ url()
+	id: float,
+	created: date,
+	title: string.with(nonEmpty).with(maxLength, 100),
+	type: /* @__PURE__ */ union(["jpg", "png"]),
+	size: float,
+	url: uri
 });
-(/* @__PURE__ */ js_parser(/* @__PURE__ */ schemaFactory({
-	id: _number,
-	created: date2,
-	title: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 100), 1),
-	brand: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 30), 1),
-	description: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 500), 1),
-	price: /* @__PURE__ */ min(/* @__PURE__ */ max(_number, 1e4), 1),
-	discount: /* @__PURE__ */ js_union([/* @__PURE__ */ min(/* @__PURE__ */ max(_number, 100), 1), null]),
-	quantity: /* @__PURE__ */ min(/* @__PURE__ */ max(_number, 10), 0),
-	tags: /* @__PURE__ */ array(/* @__PURE__ */ min(/* @__PURE__ */ max(string2, 30), 1)),
+const ratingSchema = /* @__PURE__ */ schemaFactory({
+	id: float,
+	stars: float.with(gte, 0).with(lte, 5),
+	title: string.with(nonEmpty).with(maxLength, 100),
+	text: string.with(nonEmpty).with(maxLength, 1e3),
+	images: /* @__PURE__ */ array(imageSchema)
+});
+(/* @__PURE__ */ parser(/* @__PURE__ */ schemaFactory({
+	id: float,
+	created: date,
+	title: string.with(nonEmpty).with(maxLength, 100),
+	brand: string.with(nonEmpty).with(maxLength, 30),
+	description: string.with(nonEmpty).with(maxLength, 500),
+	price: float.with(gte, 1).with(lte, 1e4),
+	discount: float.with(gte, 1).with(lte, 100).with(nullable2),
+	quantity: float.with(gte, 0).with(lte, 10),
+	tags: /* @__PURE__ */ array(string.with(nonEmpty).with(maxLength, 30)),
 	images: /* @__PURE__ */ array(imageSchema),
-	ratings: /* @__PURE__ */ array(/* @__PURE__ */ schemaFactory({
-		id: _number,
-		stars: /* @__PURE__ */ min(/* @__PURE__ */ max(_number, 5), 0),
-		title: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 100), 1),
-		text: /* @__PURE__ */ min(/* @__PURE__ */ max(string2, 1e3), 1),
-		images: /* @__PURE__ */ array(imageSchema)
-	}))
+	ratings: /* @__PURE__ */ array(ratingSchema)
 })))({});
 //#endregion
