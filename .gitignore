@@ -25,3 +25,4 @@ storybook-static
 
 json-schema-tests/tests/
 json-schema-tests/remotes/
+json-schema-tests/.cache/

@@ -15,6 +15,12 @@ runs:
         node-version-file: .node-version
         cache: pnpm
 
+    - name: Restore JSON Schema test suite
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ github.workspace }}/json-schema-tests/.cache
+        key: ${{ runner.os }}-json-schema-test-suite-${{ hashFiles('json-schema-tests/constants/sha.gen.ts') }}
+
     - name: Install dependencies
       shell: bash
       run: pnpm install
