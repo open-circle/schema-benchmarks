@@ -31,6 +31,7 @@ export async function getTargetCompliance(
   target: ComplianceTarget,
   complianceFn: ComplianceFn,
   log = false,
+  getCases: typeof getTestCases = getTestCases,
 ): Promise<ComplianceResults> {
   const context: ComplianceContext = { target };
   const results: ComplianceResults = {
@@ -41,7 +42,7 @@ export async function getTargetCompliance(
     files: {},
   };
 
-  for await (const [file, testCases] of getTestCases(target)) {
+  for await (const [file, testCases] of getCases(target)) {
     const result: FileComplianceResult = {
       count: {
         passed: 0,
