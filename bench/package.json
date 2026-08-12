@@ -23,7 +23,7 @@
     "@ttsc/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
     "rolldown": "catalog:",
-    "tinybench": "^6.1.2",
+    "tinybench": "^6.1.3",
     "ttsc": "catalog:",
     "valibot": "catalog:"
   },
