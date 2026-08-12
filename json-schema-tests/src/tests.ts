@@ -14,14 +14,19 @@ import { testCaseSchema } from "./types.ts";
 
 export async function* getTestCases(target: ComplianceTarget) {
   const testCasesDir = path.join(import.meta.dirname, "../tests", target);
-  const testCaseFiles = fs.readdirSync(testCasesDir).filter((file) => file.endsWith(".json"));
+  const testCaseFiles = fs
+    .readdirSync(testCasesDir, { recursive: true, withFileTypes: true })
+    .filter((file) => file.isFile() && file.name.endsWith(".json"));
   for (const file of testCaseFiles) {
+    const relativeFile = path.relative(testCasesDir, path.join(file.parentPath, file.name));
     yield [
-      path.basename(file, ".json"),
+      relativeFile.slice(0, -5).split(path.sep).join("/"),
       v.parse(
         v.array(testCaseSchema),
         /* @vite-ignore */
-        await import(`#tests/${target}/${file}`, { with: { type: "json" } }).then((m) => m.default),
+        await import(`#tests/${target}/${relativeFile}`, { with: { type: "json" } }).then(
+          (m) => m.default,
+        ),
       ),
     ] as const;
   }

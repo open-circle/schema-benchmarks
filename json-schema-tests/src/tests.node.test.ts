@@ -14,6 +14,14 @@ describe("JSON Schema Test Suite", () => {
     }
 
     expect(testCaseFiles).toContain("refRemote");
+    expect(testCaseFiles).toContain("optional/non-bmp-regex");
+
+    const nestedTestCaseFiles: Array<string> = [];
+    for await (const [file] of getTestCases("draft2020-12")) {
+      nestedTestCaseFiles.push(file);
+    }
+
+    expect(nestedTestCaseFiles).toContain("optional/format/unknown");
   });
 
   it("provides remote fixtures", () => {
