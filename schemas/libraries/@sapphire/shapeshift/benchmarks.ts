@@ -8,9 +8,9 @@ import { assertNotReached, defineBenchmarks } from "#src";
 import { getShapeshiftSchema } from ".";
 
 type FormatMethod = {
-  [K in keyof StringValidator<string>]-?: StringValidator<string>[K] extends () => StringValidator<string>
-    ? K
-    : never;
+  [
+    K in keyof StringValidator<string>
+  ]-?: StringValidator<string>[K] extends () => StringValidator<string> ? K : never;
 }[keyof StringValidator<string>];
 
 const createStringBenchmark = (method: FormatMethod): StringBenchmarkConfig => ({
