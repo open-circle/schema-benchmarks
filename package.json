@@ -26,10 +26,10 @@
     "eslint-plugin-depend": "^1.5.0",
     "eslint-plugin-no-relative-import-paths": "^1.6.1",
     "eslint-plugin-playwright": "^2.11.0",
-    "knip": "^6.32.0",
+    "knip": "^6.32.1",
     "lefthook": "^2.1.10",
     "oxfmt": "catalog:",
-    "oxlint": "^1.77.0",
+    "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "playwright": "catalog:",
     "typescript": "catalog:"
