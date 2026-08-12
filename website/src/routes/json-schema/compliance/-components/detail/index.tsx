@@ -4,6 +4,8 @@ import { percentFormatter, shortNumFormatter } from "@schema-benchmarks/utils";
 import { useNavigate } from "@tanstack/react-router";
 import bem from "react-bem-helper";
 
+import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
+import { JsonSchemaSourceText } from "#src/routes/json-schema/-components/source.tsx";
 import {
   complianceTargetProps,
   ensureComplianceTab,
@@ -68,6 +70,20 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                   {complianceTargetProps.labels[target].label}
                 </p>
               </hgroup>
+              <dl {...cls("summary")}>
+                <div>
+                  <dt>Downloads per week</dt>
+                  <dd>
+                    <DownloadCount libraryName={result.libraryName} />
+                  </dd>
+                </div>
+                <div>
+                  <dt>Source</dt>
+                  <dd>
+                    <JsonSchemaSourceText source={result.source} />
+                  </dd>
+                </div>
+              </dl>
               <List {...cls("files")}>
                 {Object.entries(result.results.files).map(([file, result]) => {
                   const { passed, failed } = result.count;

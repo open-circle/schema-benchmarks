@@ -16,6 +16,10 @@
       margin: 0;
     }
   }
+  .json-schema-compliance-detail__summary {
+    padding: 0 1rem;
+    margin: 0;
+  }
   .json-schema-compliance-detail__files {
     overflow-x: auto;
   }
