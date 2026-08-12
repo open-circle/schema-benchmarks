@@ -36,16 +36,17 @@ Object.defineProperty(__ZcFail.prototype, "error", {
 		return this._c = new ZodRealError(e);
 	}
 });
-function __ZcFailZ(z, i) {
+function __ZcFailZ(z, r, i) {
 	this.success = false;
 	this._z = z;
+	this._r = r;
 	this._i = i;
 	this._c = void 0;
 }
 Object.defineProperty(__ZcFailZ.prototype, "error", {
 	configurable: true,
 	get: function() {
-		return this._c || (this._c = this._z(this._i).error);
+		return this._c || (this._c = this._z.call(this._r, this._i).error);
 	}
 });
 function __zcMkv(fn, schema, fc, is) {
@@ -93,19 +94,20 @@ function __zcMkv(fn, schema, fc, is) {
 	w.is = is || function(input) {
 		return fn(input).success;
 	};
-	var s = w["~standard"], zv = s && s.validate;
 	Object.defineProperty(w, "~standard", {
 		configurable: true,
 		value: {
 			version: 1,
-			vendor: s && s.vendor || "zod",
+			vendor: "zod",
 			validate: function(input) {
 				var r;
 				try {
 					if (fc && fc(input)) return { value: input };
 					r = fn(input);
 				} catch (e) {
-					if (zv) return zv(input);
+					if (zspa) return zspa(input).then(function(q) {
+						return q.success ? { value: q.data } : { issues: q.error.issues };
+					});
 					throw e;
 				}
 				return r.success ? { value: r.data } : { issues: r.error.issues };

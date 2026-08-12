@@ -1,4 +1,4 @@
-import type { JsonSchemaDirection, jsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
+import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
 /**
  * Every JSON schema the libraries are allowed to generate for the benchmark subject, listed with
@@ -217,4 +217,4 @@ export const acceptedJsonSchemas = {
       },
     ],
   },
-} satisfies Record<jsonSchemaConversionTarget, Record<JsonSchemaDirection, Array<object>>>;
+} satisfies Record<JsonSchemaConversionTarget, Record<JsonSchemaDirection, Array<object>>>;
