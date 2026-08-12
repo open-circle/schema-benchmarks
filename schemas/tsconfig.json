@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
-  "include": ["libraries/**/*", "src/**/*", "tests/**/*", "scripts/**/*"],
+  "include": ["libraries/**/*", "src/**/*", "test/**/*", "scripts/**/*"],
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "bundler",
