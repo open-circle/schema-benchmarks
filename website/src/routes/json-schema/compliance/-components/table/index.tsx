@@ -120,10 +120,10 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
               <td className="numeric">
                 {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
-              <th className="fit-content">
+              <td className="fit-content">
                 <Pie value={percentage} max={1} />
-              </th>
-              <th className="action">
+              </td>
+              <td className="action">
                 <InternalLinkToggleButton
                   tooltip="Open details"
                   from="/json-schema/compliance/$tab"
@@ -135,7 +135,7 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                 >
                   <MdSymbol>checklist</MdSymbol>
                 </InternalLinkToggleButton>
-              </th>
+              </td>
             </tr>
           );
         })}
