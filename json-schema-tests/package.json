@@ -24,6 +24,7 @@
     "postcheckout": "node ./scripts/gen-constants.ts",
     "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",
     "postbump:test-suite-commit": "pnpm checkout",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "oxfmt": "catalog:",
     "tar": "^7.5.22",
     "typescript": "catalog:",
-    "up-fetch": "catalog:"
+    "up-fetch": "catalog:",
+    "vitest": "catalog:"
   }
 }
