@@ -95,7 +95,7 @@ export default defineBenchmarks({
         snippet: () => ts`z.fromJSONSchema(schema).safeParse(data)`,
       },
       roundtrip: {
-        run(schema, complianceTarget) {
+        run(schema, { target: complianceTarget }) {
           const target = zodTargets[complianceTarget];
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07", "draft-04"]);
           return z.toJSONSchema(z.fromJSONSchema(schema), { target });

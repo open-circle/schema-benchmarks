@@ -1,4 +1,8 @@
-import type { ComplianceFn, ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
+import type {
+  ComplianceContext,
+  ComplianceFn,
+  ComplianceTarget,
+} from "@schema-benchmarks/json-schema-tests/types";
 import type { MaybeArray, MaybePromise } from "@schema-benchmarks/utils";
 import type { StandardJSONSchemaV1, StandardSchemaV1 } from "@standard-schema/spec";
 import * as v from "valibot";
@@ -123,7 +127,7 @@ export interface ComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig
 
 export interface RoundtripComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig {
   // convert the schema and then back again
-  run: (schema: {} | boolean, target: ComplianceTarget) => MaybePromise<{} | boolean>;
+  run: (schema: {} | boolean, context: ComplianceContext) => MaybePromise<{} | boolean>;
 }
 
 export interface SchemaConversionFromJsonConfig extends Omit<

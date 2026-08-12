@@ -151,8 +151,8 @@ if (jsonSchemaConfig.compliance) {
           const { run, snippet, note, source } = benchConfig;
           const complianceResults = await getTargetCompliance(
             complianceTarget,
-            async (schema, data, target) => {
-              const roundtripped = await run(schema, target);
+            async (schema, data, context) => {
+              const roundtripped = await run(schema, context);
               // typebox consistently tests highest for validation compliance
               // so using it introduces the smallest margin of error
               return Schema.Check(roundtripped, data);

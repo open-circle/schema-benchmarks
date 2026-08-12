@@ -24,3 +24,4 @@ storybook-static
 **/.playwright-mcp/
 
 json-schema-tests/tests/
+json-schema-tests/remotes/

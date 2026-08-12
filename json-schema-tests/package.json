@@ -8,6 +8,7 @@
   "imports": {
     "#src/*": "./src/*",
     "#tests/*": "./tests/*",
+    "#remotes/*": "./remotes/*",
     "#constants/*": "./constants/*"
   },
   "exports": {
@@ -18,7 +19,7 @@
   },
   "scripts": {
     "postinstall": "pnpm checkout",
-    "precheckout": "del-cli tests",
+    "precheckout": "del-cli tests remotes",
     "checkout": "node ./scripts/checkout.ts",
     "postcheckout": "node ./scripts/gen-constants.ts",
     "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",

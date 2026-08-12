@@ -21,13 +21,15 @@ const buffer = await upfetch(url, {
 await fs.writeFile(tarball, buffer);
 
 await fs.rm("tests", { recursive: true, force: true });
-await fs.mkdir("tests", { recursive: true });
+await fs.rm("remotes", { recursive: true, force: true });
 
 await tar.extract({
   file: tarball,
-  cwd: "tests",
-  strip: 2,
-  filter: (p) => p.startsWith(`JSON-Schema-Test-Suite-${sha}/tests`),
+  cwd: ".",
+  strip: 1,
+  filter: (p) =>
+    p.startsWith(`JSON-Schema-Test-Suite-${sha}/tests`) ||
+    p.startsWith(`JSON-Schema-Test-Suite-${sha}/remotes`),
 });
 
 await fs.rm(tarball, { force: true });
