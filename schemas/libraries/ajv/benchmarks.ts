@@ -1,3 +1,4 @@
+import remotes from "@schema-benchmarks/json-schema-tests/remotes";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import type { JSONSchemaType } from "ajv";
 import { ValidationError } from "ajv";
@@ -80,28 +81,34 @@ export default defineBenchmarks({
     compliance: {
       validation: [
         {
-          run(schema, data, { remotes }) {
-            const complianceAjv = getAjv();
+          run(schema, data) {
+            const complianceAjv = getAjv({ validateSchema: false });
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
             }
             return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
-          // const ajv = new Ajv();
+          // const ajv = new Ajv({ validateSchema: false });
+          // for (const [uri, remoteSchema] of Object.entries(remotes)) {
+          //   ajv.addSchema(remoteSchema, uri);
+          // }
           ajv.validate(schema, data)`,
           source: { type: "native" },
         },
         {
-          run(schema, data, { remotes }) {
-            const complianceAjv = getAjv({ strict: false });
+          run(schema, data) {
+            const complianceAjv = getAjv({ strict: false, validateSchema: false });
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
             }
             return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
-          // const ajv = new Ajv({ strict: false });
+          // const ajv = new Ajv({ strict: false , validateSchema: false });
+          // for (const [uri, remoteSchema] of Object.entries(remotes)) {
+          //   ajv.addSchema(remoteSchema, uri);
+          // }
           ajv.validate(schema, data)`,
           source: { type: "native" },
           note: "non-strict",
