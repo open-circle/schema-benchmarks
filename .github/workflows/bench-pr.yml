@@ -150,12 +150,13 @@ jobs:
 
   collect-results:
     needs: [gate, bench-stack, bench-download, bench-bench]
-    if: needs.gate.outputs.should_run == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - parallel:
           - name: Download bench results
@@ -180,6 +181,7 @@ jobs:
         run: echo "SHORT_SHA=${SOURCE_SHA::7}" >> "$GITHUB_ENV"
 
       - name: Commit & Push changes
+        continue-on-error: true
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
