@@ -27,7 +27,7 @@ export function Pie({ value, max = 100, lowerBetter = false, showIcon = false }:
     [lowerBetter],
   );
   const fillTurn = percentage / 100;
-  const isComplete = Math.round(percentage) >= 100;
+  const isComplete = percentage >= 100;
 
   return (
     <div {...cls({ modifiers: { complete: isComplete } })}>
