@@ -82,7 +82,8 @@ export default defineBenchmarks({
       validation: [
         {
           run(schema, data) {
-            const complianceAjv = getAjv({ validateSchema: false });
+            const complianceAjv = getAjv({ validateSchema: false, logger: false });
+            addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
             }
@@ -90,6 +91,7 @@ export default defineBenchmarks({
           },
           snippet: () => ts`
           // const ajv = new Ajv({ validateSchema: false });
+          // addFormats(ajv);
           // for (const [uri, remoteSchema] of Object.entries(remotes)) {
           //   ajv.addSchema(remoteSchema, uri);
           // }
@@ -98,7 +100,8 @@ export default defineBenchmarks({
         },
         {
           run(schema, data) {
-            const complianceAjv = getAjv({ strict: false, validateSchema: false });
+            const complianceAjv = getAjv({ strict: false, validateSchema: false, logger: false });
+            addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
             }
@@ -106,6 +109,7 @@ export default defineBenchmarks({
           },
           snippet: () => ts`
           // const ajv = new Ajv({ strict: false , validateSchema: false });
+          // addFormats(ajv);
           // for (const [uri, remoteSchema] of Object.entries(remotes)) {
           //   ajv.addSchema(remoteSchema, uri);
           // }
