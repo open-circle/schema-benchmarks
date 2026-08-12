@@ -1,3 +1,4 @@
+import remotes from "@schema-benchmarks/json-schema-tests/remotes";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 import * as Type from "typebox";
@@ -202,17 +203,17 @@ export default defineBenchmarks({
       validation: [
         {
           run(schema, data) {
-            return Value.Check(schema, data);
+            return Value.Check(remotes, schema, data);
           },
-          snippet: () => ts`Value.Check(schema, data)`,
+          snippet: () => ts`Value.Check(remotes, schema, data)`,
           note: "value",
           source: { type: "native" },
         },
         {
           run(schema, data) {
-            return Schema.Check(schema, data);
+            return Schema.Check(remotes, schema, data);
           },
-          snippet: () => ts`Schema.Check(schema, data)`,
+          snippet: () => ts`Schema.Check(remotes, schema, data)`,
           note: "schema",
           source: { type: "native" },
         },

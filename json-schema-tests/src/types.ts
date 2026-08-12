@@ -24,7 +24,6 @@ export type ComplianceTarget = v.InferOutput<typeof complianceTargetSchema>;
 
 export interface ComplianceContext {
   target: ComplianceTarget;
-  remotes: Readonly<Record<string, {} | boolean>>;
 }
 
 export const fileComplianceResultSchema = v.object({
