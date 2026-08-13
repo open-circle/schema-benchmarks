@@ -44,10 +44,21 @@ export async function getTargetCompliance(
       passed: 0,
       failed: 0,
     },
+    byType: {
+      spec: {
+        passed: 0,
+        failed: 0,
+      },
+      optional: {
+        passed: 0,
+        failed: 0,
+      },
+    },
     files: {},
   };
 
   for await (const [file, testCases] of getCases(target)) {
+    const isOptional = file.startsWith("optional/");
     const result: FileComplianceResult = {
       count: {
         passed: 0,
@@ -61,9 +72,11 @@ export async function getTargetCompliance(
           const received = await complianceFn(schema, data, context);
           if (received === expected) {
             results.count.passed++;
+            results.byType[isOptional ? "optional" : "spec"].passed++;
             result.count.passed++;
           } else {
             results.count.failed++;
+            results.byType[isOptional ? "optional" : "spec"].failed++;
             result.count.failed++;
             // result.failedTests.push([description, testDescription]);
           }
@@ -72,6 +85,7 @@ export async function getTargetCompliance(
             console.error(`Error running compliance function for ${file}`, err);
           }
           results.count.failed++;
+          results.byType[isOptional ? "optional" : "spec"].failed++;
           result.count.failed++;
           // result.failedTests.push([description, testDescription]);
         }
