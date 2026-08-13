@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import remotes from "#constants/remotes.gen.ts";
 
 import { getTargetCompliance, getTestCases } from "./tests.ts";
-import type { ComplianceTarget, TestCase } from "./types.ts";
+import type { ComplianceResults } from "./types.ts";
+import { type ComplianceTarget, type TestCase } from "./types.ts";
 
 describe("JSON Schema Test Suite", () => {
   it("discovers the remote reference suite", async () => {
@@ -51,7 +52,7 @@ describe("JSON Schema Test Suite", () => {
         ],
       ],
       [
-        "second",
+        "optional/second",
         [
           {
             description: "validator errors",
@@ -89,11 +90,15 @@ describe("JSON Schema Test Suite", () => {
       getFixtureCases,
     );
 
-    expect(results).toEqual({
+    expect(results).toEqual<ComplianceResults>({
       count: { passed: 2, failed: 3 },
+      byType: {
+        spec: { passed: 2, failed: 1 },
+        optional: { passed: 0, failed: 2 },
+      },
       files: {
         first: { count: { passed: 2, failed: 1 } },
-        second: { count: { passed: 0, failed: 2 } },
+        "optional/second": { count: { passed: 0, failed: 2 } },
       },
     });
   });
