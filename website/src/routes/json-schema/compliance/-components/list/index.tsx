@@ -5,7 +5,7 @@ import bem from "react-bem-helper";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import {
   ensureComplianceTab,
-  getPctCompliance,
+  processCount,
 } from "#src/routes/json-schema/compliance/-constants.tsx";
 import {
   List,
@@ -29,9 +29,7 @@ export function ComplianceList({ results }: ComplianceListProps) {
   return (
     <List aria-label="results" {...cls()}>
       {results.map((result) => {
-        const { passed, failed } = result.results.count;
-        const total = passed + failed;
-        const percentage = getPctCompliance(result);
+        const { passed, total, pct } = processCount(result.results.count);
         return (
           <ListItem key={result.id}>
             <ListItemInternalLink
@@ -43,7 +41,7 @@ export function ComplianceList({ results }: ComplianceListProps) {
             >
               <ListItemContent
                 lines={3}
-                leading={<Pie value={percentage} max={1} />}
+                leading={<Pie value={pct} max={1} />}
                 overline={<code className="language-text">{result.version}</code>}
                 primary={
                   <>
@@ -51,7 +49,7 @@ export function ComplianceList({ results }: ComplianceListProps) {
                     {result.note ? ` (${result.note})` : null}
                   </>
                 }
-                supporting={`${formatPercentage(percentage)} (${formatNumber(passed)} / ${formatNumber(total)})`}
+                supporting={`${formatPercentage(pct)} (${formatNumber(passed)} / ${formatNumber(total)})`}
                 trailing={
                   <div {...cls({ element: "downloads", extra: "typo-caption" })}>
                     <MdSymbol>download</MdSymbol>

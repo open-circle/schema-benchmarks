@@ -1,4 +1,4 @@
-import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
+import type { ComplianceTarget, PassCount } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema, type ComplianceType } from "@schema-benchmarks/schemas";
 import type { ReactNode } from "react";
@@ -34,16 +34,13 @@ export const complianceTargetProps = {
 export const sortableKeys = ["libraryName", "downloads", "compliance"] as const;
 export type SortableKey = (typeof sortableKeys)[number];
 
-/**
- * @returns The percentage of passed tests for a given compliance result, as a number between 0 and 1.
- */
-export function getPctCompliance({
-  results: {
-    count: { passed, failed },
-  },
-}: {
-  results: { count: { passed: number; failed: number } };
-}) {
+export const processCount = ({ passed, failed }: PassCount) => {
   const total = passed + failed;
-  return total > 0 ? passed / total : 0;
-}
+  return {
+    passed,
+    failed,
+    total,
+    /** A percentage, expressed as a number between 0 and 1 */
+    pct: total > 0 ? passed / total : 0,
+  };
+};

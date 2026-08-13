@@ -9,7 +9,7 @@ import { JsonSchemaPackageButton } from "#src/routes/json-schema/-components/sou
 import { jsonSourceProps } from "#src/routes/json-schema/_conversion/-constants.ts";
 import { ensureComplianceTab } from "#src/routes/json-schema/compliance/-constants.tsx";
 import type { SortableKey } from "#src/routes/json-schema/compliance/-constants.tsx";
-import { getPctCompliance } from "#src/routes/json-schema/compliance/-constants.tsx";
+import { processCount } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Pie } from "#src/shared/components/table/pie.tsx";
@@ -84,9 +84,7 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
       </thead>
       <tbody>
         {results.map((result) => {
-          const { passed, failed } = result.results.count;
-          const total = passed + failed;
-          const percentage = getPctCompliance(result);
+          const { passed, total, pct } = processCount(result.results.count);
           const sourceType = typeof result.source === "string" ? result.source : result.source.type;
           return (
             <tr
@@ -118,10 +116,10 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                 <DownloadCount libraryName={result.libraryName} />
               </td>
               <td className="numeric">
-                {formatPercentage(percentage)} ({formatNumber(passed)} / {formatNumber(total)})
+                {formatPercentage(pct)} ({formatNumber(passed)} / {formatNumber(total)})
               </td>
               <td className="fit-content">
-                <Pie value={percentage} max={1} />
+                <Pie value={pct} max={1} />
               </td>
               <td className="action">
                 <InternalLinkToggleButton
