@@ -1,46 +1,17 @@
+import type { TableResult } from "@rickcedwhat/playwright-smart-table";
+import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
+import { PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { trimSortLabels } from "#e2e/utils/index.ts";
 import {
   jsonSchemaConversionTargetProps,
   jsonSchemaDirectionProps,
 } from "#src/routes/json-schema/_conversion/-constants";
 
-import { BaseConversionPage } from "./_conversion";
-
-export class ToJsonPage extends BaseConversionPage {
-  url = "/json-schema/to-json";
-
-  tabs = this.page.getByRole("tablist");
-
-  getTabLink(tab: "Support Matrix" | "Benchmarks") {
-    return this.tabs.getByRole("tab", { name: tab });
-  }
-
-  override get desktop() {
-    const desktop = super.desktop;
-    const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
-    return {
-      ...desktop,
-      supportMatrixTable,
-      getSupportMatrixTargetHeader: (target: JsonSchemaConversionTarget) =>
-        supportMatrixTable.getByRole("columnheader", {
-          name: jsonSchemaConversionTargetProps.labels[target].label,
-        }),
-    };
-  }
-
-  override get mobile() {
-    const mobile = super.mobile;
-    const supportMatrixCardsList = this.page.getByRole("list", { name: "Support Matrix" });
-    const supportMatrixCards = supportMatrixCardsList.getByTestId("support-matrix-card");
-    return {
-      ...mobile,
-      supportMatrixCardsList,
-      supportMatrixCards,
-      getSupportMatrixCardByLibraryName: (libraryName: string | RegExp) =>
-        supportMatrixCards.filter({ hasText: libraryName }),
-    };
-  }
+class BenchmarksTab extends TabObjectModel<ToJsonPage> {
+  url = "/json-schema/to-json/bench";
+  tabName = "Benchmarks";
 
   targetToggle = this.page.getByRole("list", { name: "Target" });
 
@@ -67,4 +38,67 @@ export class ToJsonPage extends BaseConversionPage {
       exact: true,
     });
   }
+
+  #tableHandle: TableResult<unknown> | undefined;
+  get desktop() {
+    const table = this.page.getByRole("table", { name: "Results" });
+    this.#tableHandle ??= useTable(table, {
+      headerTransformer: ({ text }) => trimSortLabels(text),
+    });
+    return {
+      table,
+      tableHandle: this.#tableHandle,
+    };
+  }
+
+  get mobile() {
+    const cardsList = this.page.getByRole("list", { name: "Results" });
+    const cards = cardsList.getByTestId("bench-card");
+    return {
+      cardsList,
+      cards,
+      getCardByLibraryName: (libraryName: string | RegExp) =>
+        cards.filter({ hasText: libraryName }),
+    };
+  }
+}
+
+class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
+  url = "/json-schema/to-json/matrix";
+  tabName = "Support Matrix";
+
+  get desktop() {
+    const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
+    return {
+      supportMatrixTable,
+      getSupportMatrixTargetHeader: (target: JsonSchemaConversionTarget) =>
+        supportMatrixTable.getByRole("columnheader", {
+          name: jsonSchemaConversionTargetProps.labels[target].label,
+        }),
+    };
+  }
+
+  get mobile() {
+    const supportMatrixCardsList = this.page.getByRole("list", { name: "Support Matrix" });
+    const supportMatrixCards = supportMatrixCardsList.getByTestId("support-matrix-card");
+    return {
+      supportMatrixCardsList,
+      supportMatrixCards,
+      getSupportMatrixCardByLibraryName: (libraryName: string | RegExp) =>
+        supportMatrixCards.filter({ hasText: libraryName }),
+    };
+  }
+}
+
+export class ToJsonPage extends PageObjectModel {
+  url = "/json-schema/to-json";
+
+  breakpoints = PageObjectModel.defineBreakpoints({
+    desktop: ["laptop", "desktop"],
+  });
+
+  tabs = this.page.getByRole("tablist");
+
+  benchmarks = new BenchmarksTab(this.page, this);
+  supportMatrix = new SupportMatrixTab(this.page, this);
 }

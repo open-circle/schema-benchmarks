@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
 
 import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
@@ -21,9 +21,40 @@ export abstract class PageObjectModel extends ComponentObjectModel {
     return this.page.goto(this.url, ...args);
   }
 
+  matchesUrl(url: URL) {
+    return url.pathname === this.url;
+  }
+
   static defineBreakpoints<const T extends Record<string, ReadonlyArray<Breakpoint>>>(
     breakpoints: T,
   ) {
     return breakpoints;
+  }
+}
+
+export abstract class TabObjectModel<
+  TParent extends { tabs: Locator },
+> extends ComponentObjectModel {
+  parent: TParent;
+
+  constructor(page: Page, parent: TParent) {
+    super(page);
+    this.parent = parent;
+  }
+
+  abstract url: string;
+
+  matchesUrl(url: URL) {
+    return url.pathname === this.url;
+  }
+
+  abstract tabName: string;
+
+  get tabLink() {
+    return this.parent.tabs.getByRole("tab", { name: this.tabName });
+  }
+
+  async select() {
+    await this.tabLink.click();
   }
 }

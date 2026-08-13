@@ -8,3 +8,4 @@ export { StandardSchemaPage as standardSchemaPage } from "./standard";
 export { StringPage as stringPage } from "./string";
 export { ToJsonPage as toJsonPage } from "./json-schema/to-json";
 export { FromJsonPage as fromJsonPage } from "./json-schema/from-json";
+export { CompliancePage as compliancePage } from "./json-schema/compliance";
