@@ -1,10 +1,10 @@
-import { BasePOM } from "#e2e/fixtures/base";
+import { ComponentObjectModel } from "#e2e/fixtures/base";
 import type { Style, Theme, NpmSite, Ligature } from "#src/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 
 import { expect } from ".";
 
-export class PrefsDialog extends BasePOM {
+export class PrefsDialog extends ComponentObjectModel {
   openButton = this.page.getByRole("button", { name: "Preferences" });
   dialog = this.page.getByRole("dialog", { name: "Preferences" });
   styleOptions = this.dialog.getByRole("toolbar", { name: "Style" });

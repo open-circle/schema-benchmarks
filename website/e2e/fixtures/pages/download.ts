@@ -2,11 +2,11 @@ import type { TableResult } from "@rickcedwhat/playwright-smart-table";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { MinifyType } from "@schema-benchmarks/bench";
 
-import { BasePage } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
-export class DownloadPage extends BasePage {
+export class DownloadPage extends PageObjectModel {
   url = "/download";
 
   minifyToggle = this.main.getByRole("list", { name: "Minify" });
@@ -26,7 +26,7 @@ export class DownloadPage extends BasePage {
     return this.speedPresets.getByRole("link", { name: label });
   }
 
-  breakpoints = BasePage.defineBreakpoints({
+  breakpoints = PageObjectModel.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
 

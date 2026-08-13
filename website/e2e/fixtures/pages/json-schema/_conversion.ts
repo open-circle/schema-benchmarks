@@ -3,10 +3,10 @@ import { useTable } from "@rickcedwhat/playwright-smart-table";
 
 import { trimSortLabels } from "#e2e/utils/index.ts";
 
-import { BasePage } from "../../base";
+import { PageObjectModel } from "../../base";
 
-export abstract class BaseConversionPage extends BasePage {
-  breakpoints = BasePage.defineBreakpoints({
+export abstract class BaseConversionPage extends PageObjectModel {
+  breakpoints = PageObjectModel.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
 

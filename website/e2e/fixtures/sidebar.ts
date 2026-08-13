@@ -1,8 +1,8 @@
-import { BasePOM } from "#e2e/fixtures/base";
+import { ComponentObjectModel } from "#e2e/fixtures/base";
 
 import { expect } from ".";
 
-export class Sidebar extends BasePOM {
+export class Sidebar extends ComponentObjectModel {
   sidebar = this.page.getByRole("complementary");
 
   nav = this.sidebar.getByRole("navigation");

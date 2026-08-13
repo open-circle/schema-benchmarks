@@ -3,7 +3,7 @@ import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 
-import { BasePage } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 import {
   dataTypeProps,
@@ -11,8 +11,8 @@ import {
   optimizeTypeProps,
 } from "#src/routes/_benchmarks/_runtime/-constants";
 
-export abstract class RuntimePage extends BasePage {
-  breakpoints = BasePage.defineBreakpoints({
+export abstract class RuntimePage extends PageObjectModel {
+  breakpoints = PageObjectModel.defineBreakpoints({
     desktop: ["laptop", "desktop"],
   });
 
