@@ -35,6 +35,7 @@ export abstract class PageObjectModel extends ComponentObjectModel {
 export abstract class TabObjectModel<
   TParent extends { tabs: Locator },
 > extends ComponentObjectModel {
+  static readonly transitionDuration = 300;
   parent: TParent;
 
   constructor(page: Page, parent: TParent) {
@@ -56,5 +57,7 @@ export abstract class TabObjectModel<
 
   async select() {
     await this.tabLink.click();
+    // oxlint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(TabObjectModel.transitionDuration);
   }
 }
