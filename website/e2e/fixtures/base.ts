@@ -3,15 +3,19 @@ import type { Tail } from "@schema-benchmarks/utils";
 
 import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
 
-export class BasePOM {
-  constructor(
-    protected page: Page,
-    public main = page.locator("main"),
-    public documentElement = page.locator("html"),
-  ) {}
+class ObjectModel {
+  protected page: Page;
+  constructor(page: Page) {
+    this.page = page;
+  }
 }
 
-export abstract class BasePage extends BasePOM {
+export class ComponentObjectModel extends ObjectModel {
+  main = this.page.locator("main");
+  documentElement = this.page.locator("html");
+}
+
+export abstract class PageObjectModel extends ComponentObjectModel {
   abstract url: string;
   goto(...args: Tail<Parameters<Page["goto"]>>) {
     return this.page.goto(this.url, ...args);

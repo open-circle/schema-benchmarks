@@ -1,6 +1,6 @@
-import { BasePage } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 
-export class BlogPage extends BasePage {
+export class BlogPage extends PageObjectModel {
   url = "/blog";
 
   blogGrid = this.main.getByRole("list");
