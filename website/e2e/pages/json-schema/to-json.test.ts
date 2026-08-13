@@ -49,7 +49,7 @@ test.describe("support matrix tab", () => {
 
     await expect(supportMatrixTabLink).toBeCurrent("page");
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "matrix");
+    await expect(page).toHaveURL(/to-json\/matrix/);
   });
 
   test.describe("desktop view", () => {
@@ -89,7 +89,7 @@ test.describe("benchmarks tab", () => {
 
     await expect(benchmarksTabLink).toBeCurrent("page");
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "bench");
+    await expect(page).toHaveURL(/to-json\/bench/);
   });
 
   test("can toggle targets", async ({ page, toJsonPage }) => {
