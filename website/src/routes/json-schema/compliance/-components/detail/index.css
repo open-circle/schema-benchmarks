@@ -1,11 +1,6 @@
 .json-schema-compliance-detail {
   padding: 0;
   min-width: min(40rem, calc(100vw - 2rem));
-  .dialog__content {
-    flex: 1 1 auto;
-    min-block-size: 0;
-    overflow: hidden;
-  }
   .json-schema-compliance-detail__header {
     display: flex;
     flex-direction: column;
@@ -36,10 +31,10 @@
     overflow-y: auto;
     position: relative;
     border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
   }
   .json-schema-compliance-detail__details {
     overflow: visible;
-    border-bottom: 1px solid var(--divider);
   }
   .json-schema-compliance-detail__details-summary {
     position: sticky;
@@ -50,9 +45,11 @@
       padding: 1rem 0;
     }
   }
-  .json-schema-compliance-detail__files {
+  pre[class*="language-"] {
+    border-radius: 0;
     margin: 0;
   }
+  .json-schema-compliance-detail__files,
   .dialog__actions {
     margin: 0;
   }
