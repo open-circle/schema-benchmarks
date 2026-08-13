@@ -13,17 +13,17 @@ async function expectResultsToMatchDirection(
   direction: JsonSchemaDirection,
   isDesktop: boolean,
 ) {
-  const expectedDirection = toJsonPage.getDirectionLabel(direction);
+  const expectedDirection = toJsonPage.benchmarks.getDirectionLabel(direction);
   if (isDesktop) {
     await expect(async () => {
-      await everyAsync(toJsonPage.desktop.tableHandle, async ({ row }) => {
+      await everyAsync(toJsonPage.benchmarks.desktop.tableHandle, async ({ row }) => {
         await expect(row.getCell("type")).toHaveText(expectedDirection);
       });
     }).toPass();
   } else {
     const expectedDirectionRegex = new RegExp(expectedDirection, "i");
     await expect(async () => {
-      const chips = toJsonPage.mobile.cards.getByTestId("bench-card-chips");
+      const chips = toJsonPage.benchmarks.mobile.cards.getByTestId("bench-card-chips");
       const labels = await chips.allTextContents();
 
       every(labels, (label) => {
@@ -43,13 +43,11 @@ test.beforeEach("Go to JSON schema to-json page", async ({ page, toJsonPage, fon
 
 test.describe("support matrix tab", () => {
   test.beforeEach("switch to support matrix tab", async ({ page, toJsonPage }) => {
-    const supportMatrixTabLink = toJsonPage.getTabLink("Support Matrix");
+    await toJsonPage.supportMatrix.select();
 
-    await supportMatrixTabLink.click();
+    await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page");
 
-    await expect(supportMatrixTabLink).toBeCurrent("page");
-
-    await expect(page).toHaveURL(/to-json\/matrix/);
+    await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url));
   });
 
   test.describe("desktop view", () => {
@@ -59,8 +57,10 @@ test.describe("support matrix tab", () => {
     });
 
     test("it displays support matrix table", async ({ toJsonPage }) => {
-      await expect(toJsonPage.desktop.supportMatrixTable).toBeVisible();
-      await expect(toJsonPage.desktop.getSupportMatrixTargetHeader("draft-2020-12")).toBeVisible();
+      await expect(toJsonPage.supportMatrix.desktop.supportMatrixTable).toBeVisible();
+      await expect(
+        toJsonPage.supportMatrix.desktop.getSupportMatrixTargetHeader("draft-2020-12"),
+      ).toBeVisible();
     });
   });
 
@@ -71,7 +71,7 @@ test.describe("support matrix tab", () => {
     });
 
     test("it displays support matrix cards", async ({ toJsonPage }) => {
-      const card = toJsonPage.mobile.getSupportMatrixCardByLibraryName("arktype");
+      const card = toJsonPage.supportMatrix.mobile.getSupportMatrixCardByLibraryName("arktype");
 
       await card.scrollIntoViewIfNeeded();
 
@@ -83,18 +83,16 @@ test.describe("support matrix tab", () => {
 
 test.describe("benchmarks tab", () => {
   test.beforeEach("switch to benchmarks tab", async ({ page, toJsonPage }) => {
-    const benchmarksTabLink = toJsonPage.getTabLink("Benchmarks");
+    await toJsonPage.benchmarks.select();
 
-    await benchmarksTabLink.click();
+    await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page");
 
-    await expect(benchmarksTabLink).toBeCurrent("page");
-
-    await expect(page).toHaveURL(/to-json\/bench/);
+    await expect(page).toHaveURL((url) => toJsonPage.benchmarks.matchesUrl(url));
   });
 
   test("can toggle targets", async ({ page, toJsonPage }) => {
     for (const target of jsonSchemaConversionTargetSchema.options) {
-      const link = toJsonPage.getTargetLink(target);
+      const link = toJsonPage.benchmarks.getTargetLink(target);
 
       await link.click();
 
@@ -107,7 +105,7 @@ test.describe("benchmarks tab", () => {
   test("can filter by direction", async ({ page, matchBreakpoints, toJsonPage }) => {
     const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
     for (const direction of jsonSchemaDirectionSchema.options) {
-      const link = toJsonPage.getDirectionLink(direction);
+      const link = toJsonPage.benchmarks.getDirectionLink(direction);
 
       await link.click();
 
@@ -124,26 +122,27 @@ test.describe("benchmarks tab", () => {
       const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
       test.skip(!isDesktop, "This test is only for desktop viewports");
 
-      await toJsonPage.desktop.tableHandle.init();
+      await toJsonPage.benchmarks.desktop.tableHandle.init();
     });
 
     test("it displays results table", async ({ toJsonPage }) => {
-      await expect(toJsonPage.desktop.table).toBeVisible();
+      await expect(toJsonPage.benchmarks.desktop.table).toBeVisible();
 
-      const zodRow = toJsonPage.desktop.tableHandle.getRow({ library: "zod" });
+      const zodRow = toJsonPage.benchmarks.desktop.tableHandle.getRow({ library: "zod" });
 
       await expect(zodRow.getCell("version")).toHaveText(/^\d+\.\d+\.\d+$/);
     });
 
     test("table can be sorted by column", async ({ toJsonPage }) => {
-      const libraryHeaderCell = await toJsonPage.desktop.tableHandle.getHeaderCell("library");
+      const libraryHeaderCell =
+        await toJsonPage.benchmarks.desktop.tableHandle.getHeaderCell("library");
       const librarySortLink = libraryHeaderCell.getByRole("link");
 
       await librarySortLink.click();
 
       await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-      const firstRow = toJsonPage.desktop.tableHandle.getRowByIndex(0);
+      const firstRow = toJsonPage.benchmarks.desktop.tableHandle.getRowByIndex(0);
       const firstRowLibraryCell = firstRow.getCell("library");
 
       await expect(firstRowLibraryCell).toHaveText(/arktype/i);
@@ -165,7 +164,7 @@ test.describe("benchmarks tab", () => {
     });
 
     test("it displays results cards", async ({ toJsonPage }) => {
-      const card = toJsonPage.mobile.getCardByLibraryName("zod").first();
+      const card = toJsonPage.benchmarks.mobile.getCardByLibraryName("zod").first();
 
       await expect(card).toBeVisible();
 
