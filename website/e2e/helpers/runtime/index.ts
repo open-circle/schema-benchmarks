@@ -1,6 +1,7 @@
 import type { Page } from "@playwright/test";
 import { dataTypeSchema } from "@schema-benchmarks/bench";
 import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas";
+import { every } from "mix-n-matchers/utilities";
 
 import { expect } from "#e2e/fixtures";
 import type {
@@ -14,10 +15,39 @@ import { matchBreakpoints } from "#e2e/utils";
 export * as desktop from "./desktop";
 export * as mobile from "./mobile";
 
-export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
+async function expectResultsToMatchFilter(
+  page: Page,
+  runtimePage: RuntimePage,
+  cellName: "optimizations" | "error type",
+  expectedLabel: string,
+) {
   const isDesktop = await matchBreakpoints(page, runtimePage.breakpoints.desktop);
+  if (isDesktop) {
+    const expectedLabelRegex = new RegExp(`^${expectedLabel}$`, "i");
+    await expect(async () => {
+      const labels = await runtimePage.desktop.tableHandle.getColumnValues(cellName);
+
+      every(labels, (label) => {
+        expect(label).toMatch(expectedLabelRegex);
+      });
+    }).toPass();
+  } else {
+    const expectedLabelRegex = new RegExp(expectedLabel, "i");
+    await expect(async () => {
+      const chips = runtimePage.mobile.cards.getByTestId("bench-card-chips");
+      const labels = await chips.allTextContents();
+
+      every(labels, (label) => {
+        expect(label).toMatch(expectedLabelRegex);
+      });
+    }).toPass();
+  }
+}
+
+export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
   for (const optimizeType of optimizeTypeSchema.options) {
     const optimizeTypeLink = runtimePage.getOptimizeTypeLink(optimizeType);
+    const optimizeTypeLabel = runtimePage.getOptimizeTypeLabel(optimizeType);
 
     await optimizeTypeLink.click();
 
@@ -25,23 +55,7 @@ export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
 
     await expect(optimizeTypeLink).toBeCurrent("page");
 
-    if (isDesktop) {
-      for await (const { row } of runtimePage.desktop.tableHandle) {
-        const optimizeTypeCell = row.getCell("optimizations");
-        await expect(optimizeTypeCell).toHaveText(runtimePage.getOptimizeTypeLabel(optimizeType));
-      }
-    } else {
-      const cards = await runtimePage.mobile.cards.all();
-      for (const card of cards) {
-        const chipsList = card.getByTestId("bench-card-chips");
-
-        const chips = chipsList.getByRole("listitem");
-
-        await expect(
-          chips.filter({ hasText: runtimePage.getOptimizeTypeLabel(optimizeType) }),
-        ).toHaveCount(1);
-      }
-    }
+    await expectResultsToMatchFilter(page, runtimePage, "optimizations", optimizeTypeLabel);
   }
 }
 
@@ -64,9 +78,9 @@ export async function testErrorTypeFilter(
   page: Page,
   runtimePage: MixinInstanceType<typeof withErrorTypeFilter>,
 ) {
-  const isDesktop = await matchBreakpoints(page, runtimePage.breakpoints.desktop);
   for (const errorType of errorTypeSchema.options) {
     const errorTypeLink = runtimePage.getErrorTypeLink(errorType);
+    const errorTypeLabel = runtimePage.getErrorTypeLabel(errorType);
 
     await errorTypeLink.click();
 
@@ -74,22 +88,6 @@ export async function testErrorTypeFilter(
 
     await expect(errorTypeLink).toBeCurrent("page");
 
-    if (isDesktop) {
-      for await (const { row } of runtimePage.desktop.tableHandle) {
-        const errorTypeCell = row.getCell("error type");
-        await expect(errorTypeCell).toHaveText(runtimePage.getErrorTypeLabel(errorType));
-      }
-    } else {
-      const cards = await runtimePage.mobile.cards.all();
-      for (const card of cards) {
-        const chipsList = card.getByTestId("bench-card-chips");
-
-        const chips = chipsList.getByRole("listitem");
-
-        await expect(
-          chips.filter({ hasText: runtimePage.getErrorTypeLabel(errorType) }),
-        ).toHaveCount(1);
-      }
-    }
+    await expectResultsToMatchFilter(page, runtimePage, "error type", errorTypeLabel);
   }
 }
