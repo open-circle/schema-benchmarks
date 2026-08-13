@@ -1,8 +1,6 @@
 .json-schema-compliance-detail {
   padding: 0;
   min-width: min(40rem, calc(100vw - 2rem));
-  display: flex;
-  flex-direction: column;
   .dialog__content {
     flex: 1 1 auto;
     min-block-size: 0;
