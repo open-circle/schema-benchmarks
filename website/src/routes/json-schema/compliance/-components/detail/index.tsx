@@ -10,6 +10,7 @@ import { JsonSchemaSourceText } from "#src/routes/json-schema/-components/source
 import {
   complianceTargetProps,
   ensureComplianceTab,
+  processCount,
 } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { Button } from "#src/shared/components/button/index.tsx";
 import {
@@ -41,12 +42,11 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const formatPercentage = useNumberFormatter(percentFormatter);
   const [optional, spec] = useMemo(
-    () =>
-      partition(Object.entries(result?.results.files ?? {}), ([file]) =>
-        file.startsWith("optional"),
-      ),
+    () => partition(Object.entries(result?.results.files ?? {}), ([file]) => file.includes("/")),
     [result?.results.files],
   );
+  const processedSpec = result && processCount(result.results.byType.spec);
+  const processedOptional = result && processCount(result.results.byType.optional);
   return (
     <Dialog
       open={open}
@@ -64,7 +64,7 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
     >
       {({ requestClose }) => (
         <>
-          {result && (
+          {result && processedSpec && processedOptional && (
             <DialogContent {...cls("content")}>
               <hgroup {...cls("header")}>
                 <p {...cls({ element: "version", extra: "typo-overline" })}>
@@ -94,12 +94,17 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
               </dl>
               <div {...cls("details-container")}>
                 <details {...cls("details")}>
-                  <summary {...cls("details-summary")}>Specification coverage</summary>
+                  <summary {...cls("details-summary")}>
+                    <ListItemContent
+                      lines={2}
+                      primary="Specification coverage"
+                      supporting={`${formatPercentage(processedSpec.pct)} (${formatNumber(processedSpec.passed)}/${formatNumber(processedSpec.total)})`}
+                      leading={<Pie value={processedSpec.pct} max={1} showIcon />}
+                    />
+                  </summary>
                   <List {...cls("files")}>
                     {spec.map(([file, result]) => {
-                      const { passed, failed } = result.count;
-                      const total = passed + failed;
-                      const percentage = passed / total;
+                      const { passed, total, pct } = processCount(result.count);
                       return (
                         <ListItem key={file}>
                           <ListItemExternalLink
@@ -112,9 +117,9 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                           >
                             <ListItemContent
                               lines={1}
-                              leading={<Pie value={percentage} max={1} showIcon />}
+                              leading={<Pie value={pct} max={1} showIcon />}
                               trailing={
-                                <span className="typo-caption">{`${formatPercentage(percentage)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
+                                <span className="typo-caption">{`${formatPercentage(pct)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
                               }
                             >
                               <code className="language-text">{file}</code>
@@ -127,13 +132,23 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                 </details>
                 {optional.length > 0 && (
                   <details {...cls("details")}>
-                    <summary {...cls("details-summary")}>Optional formats and proposals</summary>
+                    <summary {...cls("details-summary")}>
+                      <ListItemContent
+                        lines={2}
+                        primary="Optional formats and proposals"
+                        supporting={`${formatPercentage(processedOptional.pct)} (${formatNumber(processedOptional.passed)}/${formatNumber(processedOptional.total)})`}
+                        leading={<Pie value={processedOptional.pct} max={1} showIcon />}
+                      />
+                    </summary>
                     <List {...cls("files")}>
                       {optional.map(([file, result]) => {
-                        const { passed, failed } = result.count;
-                        const total = passed + failed;
-                        const percentage = passed / total;
-                        const isFormat = file.startsWith("optional/format/");
+                        const { passed, total, pct } = processCount(result.count);
+                        const pathSegments = file.split("/");
+                        if (pathSegments[0] === "optional") {
+                          pathSegments.shift();
+                        }
+                        const lastSegment = pathSegments.pop();
+                        const hasPath = pathSegments.length > 0;
                         return (
                           <ListItem key={file}>
                             <ListItemExternalLink
@@ -144,31 +159,27 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              {isFormat ? (
+                              {hasPath ? (
                                 <ListItemContent
                                   lines={2}
-                                  overline="Format"
-                                  primary={
-                                    <code className="language-text">
-                                      {file.replace("optional/format/", "")}
-                                    </code>
+                                  overline={
+                                    <code className="language-text">{pathSegments.join("/")}</code>
                                   }
-                                  leading={<Pie value={percentage} max={1} showIcon />}
+                                  primary={<code className="language-text">{lastSegment}</code>}
+                                  leading={<Pie value={pct} max={1} showIcon />}
                                   trailing={
-                                    <span className="typo-caption">{`${formatPercentage(percentage)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
+                                    <span className="typo-caption">{`${formatPercentage(pct)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
                                   }
                                 />
                               ) : (
                                 <ListItemContent
                                   lines={1}
-                                  leading={<Pie value={percentage} max={1} showIcon />}
+                                  leading={<Pie value={pct} max={1} showIcon />}
                                   trailing={
-                                    <span className="typo-caption">{`${formatPercentage(percentage)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
+                                    <span className="typo-caption">{`${formatPercentage(pct)} (${formatNumber(passed)}/${formatNumber(total)})`}</span>
                                   }
                                 >
-                                  <code className="language-text">
-                                    {file.replace("optional/", "")}
-                                  </code>
+                                  <code className="language-text">{lastSegment}</code>
                                 </ListItemContent>
                               )}
                             </ListItemExternalLink>

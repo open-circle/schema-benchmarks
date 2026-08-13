@@ -58,7 +58,7 @@ export async function getTargetCompliance(
   };
 
   for await (const [file, testCases] of getCases(target)) {
-    const isOptional = file.startsWith("optional/");
+    const isOptional = file.includes("/");
     const result: FileComplianceResult = {
       count: {
         passed: 0,

@@ -34,7 +34,7 @@ import {
   complianceTargetProps,
   complianceTypeLabels,
   ensureComplianceTab,
-  getPctCompliance,
+  processCount,
   sortableKeys,
 } from "./-constants.tsx";
 import { content as tabContent } from "./-content/index.ts";
@@ -113,7 +113,7 @@ function RouteComponent() {
               case "downloads":
                 return compareDownloadsByPkgName(downloadsByPkgName, a, b);
               case "compliance":
-                return getPctCompliance(a) - getPctCompliance(b);
+                return processCount(a.results.count).pct - processCount(b.results.count).pct;
               default:
                 return 0;
             }
@@ -123,7 +123,9 @@ function RouteComponent() {
             fallbacks: [
               compareDownloadsByPkgName.fallback(downloadsByPkgName),
               compareStrings(getLibraryLabel),
-              compareNumbers(getPctCompliance),
+              compareNumbers(
+                (result: JsonComplianceResult) => processCount(result.results.count).pct,
+              ),
             ],
           },
         ),
