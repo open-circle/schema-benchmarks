@@ -26,11 +26,14 @@ export interface ComplianceContext {
   target: ComplianceTarget;
 }
 
+const passCountSchema = v.object({
+  passed: v.number(),
+  failed: v.number(),
+});
+export type PassCount = v.InferOutput<typeof passCountSchema>;
+
 export const fileComplianceResultSchema = v.object({
-  count: v.object({
-    passed: v.number(),
-    failed: v.number(),
-  }),
+  count: passCountSchema,
   // disable for now - makes the output about 8x larger
   // file level granularity is fine
   // failedTests: v.array(v.array(v.string())),
@@ -38,10 +41,8 @@ export const fileComplianceResultSchema = v.object({
 export type FileComplianceResult = v.InferOutput<typeof fileComplianceResultSchema>;
 
 export const complianceResultsSchema = v.object({
-  count: v.object({
-    passed: v.number(),
-    failed: v.number(),
-  }),
+  count: passCountSchema,
+  byType: v.object(v.entriesFromList(["spec", "optional"], passCountSchema)),
   files: v.record(v.string(), fileComplianceResultSchema),
 });
 export type ComplianceResults = v.InferOutput<typeof complianceResultsSchema>;
