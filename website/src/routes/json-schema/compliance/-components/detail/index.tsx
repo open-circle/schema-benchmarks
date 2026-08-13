@@ -61,24 +61,30 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
         }, 100);
       }}
       closedby="any"
+      aria-labelledby="json-schema-compliance-detail-title"
       {...cls()}
     >
       {({ requestClose }) => (
         <>
           {result && processedSpec && processedOptional && (
             <DialogContent {...cls("content")}>
-              <hgroup {...cls("header")}>
-                <p {...cls({ element: "version", extra: "typo-overline" })}>
-                  <code className="language-text">{result.version}</code>
-                </p>
-                <DialogTitle>
-                  <code className="language-text">{result.libraryName}</code>
-                  {result.note ? ` (${result.note})` : null}
-                </DialogTitle>
-                <p {...cls({ element: "target", extra: "typo-caption" })}>
-                  {complianceTargetProps.labels[target].label}
-                </p>
-              </hgroup>
+              <div {...cls("header-container")}>
+                <hgroup {...cls("header")}>
+                  <DialogTitle id="json-schema-compliance-detail-title">Compliance</DialogTitle>
+                  <p {...cls({ element: "target", extra: "typo-caption" })}>
+                    {complianceTargetProps.labels[target].label}
+                  </p>
+                </hgroup>
+                <hgroup {...cls("header")}>
+                  <h4 {...cls({ element: "library", extra: "typo-subtitle1" })}>
+                    <code className="language-text">{result.libraryName}</code>
+                    {result.note ? ` (${result.note})` : null}
+                  </h4>
+                  <p {...cls({ element: "version", extra: "typo-caption" })}>
+                    <code className="language-text">{result.version}</code>
+                  </p>
+                </hgroup>
+              </div>
               <dl {...cls("summary")}>
                 <div>
                   <dt>Downloads per week</dt>

@@ -27,7 +27,7 @@ export function ComplianceList({ results }: ComplianceListProps) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const formatPercentage = useNumberFormatter(percentFormatter);
   return (
-    <List aria-label="results" {...cls()}>
+    <List aria-label="Compliance list" {...cls()}>
       {results.map((result) => {
         const { passed, total, pct } = processCount(result.results.count);
         return (

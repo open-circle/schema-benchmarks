@@ -1,7 +1,6 @@
 import type { ComplianceTarget, PassCount } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema, type ComplianceType } from "@schema-benchmarks/schemas";
-import type { ReactNode } from "react";
 import * as v from "valibot";
 
 import type { PageFilterChipsProps } from "#src/shared/components/page-filter/chips.tsx";
@@ -11,7 +10,7 @@ export function ensureComplianceTab(tab: unknown): ComplianceType {
   return v.parse(fallbackComplianceTypeSchema, tab);
 }
 
-export const complianceTypeLabels: Record<ComplianceType, { icon: string; label: ReactNode }> = {
+export const complianceTypeLabels: Record<ComplianceType, { icon: string; label: string }> = {
   validation: { icon: "checklist", label: "Validation" },
   semantics: { icon: "book", label: "Semantics" },
   roundtrip: { icon: "replay", label: "Roundtrip" },
