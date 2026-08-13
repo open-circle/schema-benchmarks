@@ -61,6 +61,12 @@ export namespace ListItemContentProps {
     supporting: ReactNode;
   }
 
+  export interface TwoLineWithOverline extends BaseProps {
+    lines: 2;
+    overline: ReactNode;
+    primary: ReactNode;
+  }
+
   export interface ThreeLine extends BaseProps {
     lines: 3;
     overline?: ReactNode;
@@ -70,7 +76,10 @@ export namespace ListItemContentProps {
 }
 
 export type ListItemContentProps = OneOf<
-  ListItemContentProps.SingleLine | ListItemContentProps.TwoLine | ListItemContentProps.ThreeLine
+  | ListItemContentProps.SingleLine
+  | ListItemContentProps.TwoLine
+  | ListItemContentProps.TwoLineWithOverline
+  | ListItemContentProps.ThreeLine
 > & {
   as?: "div" | "label";
 };
@@ -100,14 +109,16 @@ export function ListItemContent({
               <div {...itemCls({ element: "overline", extra: "typo-overline" })}>{overline}</div>
             )}
             <div {...itemCls("primary-text")}>{primary}</div>
-            <div
-              {...itemCls({
-                element: "supporting-text",
-                extra: "typo-caption",
-              })}
-            >
-              {supporting}
-            </div>
+            {!!supporting && (
+              <div
+                {...itemCls({
+                  element: "supporting-text",
+                  extra: "typo-caption",
+                })}
+              >
+                {supporting}
+              </div>
+            )}
           </>
         )}
       </div>

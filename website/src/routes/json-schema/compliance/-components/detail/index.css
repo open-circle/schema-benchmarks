@@ -1,6 +1,13 @@
 .json-schema-compliance-detail {
   padding: 0;
   min-width: min(40rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  .dialog__content {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow: hidden;
+  }
   .json-schema-compliance-detail__header {
     display: flex;
     flex-direction: column;
@@ -20,8 +27,30 @@
     padding: 0 1rem;
     margin: 0;
   }
+  .json-schema-compliance-detail__details {
+    border: none;
+    border-radius: 0;
+  }
+  .json-schema-compliance-detail__details-container {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    border-top: 1px solid var(--divider);
+  }
+  .json-schema-compliance-detail__details {
+    overflow: visible;
+    border-bottom: 1px solid var(--divider);
+  }
+  .json-schema-compliance-detail__details-summary {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 1rem;
+  }
   .json-schema-compliance-detail__files {
-    overflow-x: auto;
+    margin: 0;
   }
   .dialog__actions {
     margin: 0;
