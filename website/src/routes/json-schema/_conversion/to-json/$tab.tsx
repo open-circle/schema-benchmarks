@@ -5,13 +5,13 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import {
   jsonSchemaDirectionProps,
   jsonSchemaConversionTargetProps,
   optionalJsonSchemaDirectionSchema,
   optionalJsonSchemaConversionTargetSchema,
 } from "#src/routes/json-schema/_conversion/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
 import { SupportMatrix } from "#src/routes/json-schema/_conversion/to-json/-components/matrix.tsx";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";

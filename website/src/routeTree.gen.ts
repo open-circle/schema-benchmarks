@@ -12,15 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BenchmarksRouteRouteImport } from './routes/_benchmarks/route'
 import { Route as BlogRouteRouteImport } from './routes/blog/route'
 import { Route as JsonSchemaRouteRouteImport } from './routes/json-schema/route'
+import { Route as LibrariesRouteRouteImport } from './routes/libraries/route'
 import { Route as BenchmarksRuntimeRouteRouteImport } from './routes/_benchmarks/_runtime/route'
-import { Route as BenchmarksLibrariesRouteRouteImport } from './routes/_benchmarks/libraries/route'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ContributingIndexRouteImport } from './routes/contributing/index'
 import { Route as JsonSchemaIndexRouteImport } from './routes/json-schema/index'
+import { Route as LibrariesIndexRouteImport } from './routes/libraries/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
-import { Route as BenchmarksLibrariesIndexRouteImport } from './routes/_benchmarks/libraries/index'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
 import { Route as JsonSchemaComplianceIndexRouteImport } from './routes/json-schema/compliance/index'
@@ -50,16 +50,15 @@ const JsonSchemaRouteRoute = JsonSchemaRouteRouteImport.update({
   path: '/json-schema',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LibrariesRouteRoute = LibrariesRouteRouteImport.update({
+  id: '/libraries',
+  path: '/libraries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BenchmarksRuntimeRouteRoute = BenchmarksRuntimeRouteRouteImport.update({
   id: '/_runtime',
   getParentRoute: () => BenchmarksRouteRoute,
 } as any)
-const BenchmarksLibrariesRouteRoute =
-  BenchmarksLibrariesRouteRouteImport.update({
-    id: '/libraries',
-    path: '/libraries',
-    getParentRoute: () => BenchmarksRouteRoute,
-  } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/_home/',
   path: '/',
@@ -85,17 +84,16 @@ const JsonSchemaIndexRoute = JsonSchemaIndexRouteImport.update({
   path: '/',
   getParentRoute: () => JsonSchemaRouteRoute,
 } as any)
+const LibrariesIndexRoute = LibrariesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LibrariesRouteRoute,
+} as any)
 const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
   id: '/download/',
   path: '/download/',
   getParentRoute: () => BenchmarksRouteRoute,
 } as any)
-const BenchmarksLibrariesIndexRoute =
-  BenchmarksLibrariesIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => BenchmarksLibrariesRouteRoute,
-  } as any)
 const BenchmarksStackIndexRoute = BenchmarksStackIndexRouteImport.update({
   id: '/stack/',
   path: '/stack/',
@@ -181,16 +179,16 @@ export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/blog': typeof BlogRouteRouteWithChildren
   '/json-schema': typeof JsonSchemaRouteRouteWithChildren
-  '/libraries': typeof BenchmarksLibrariesRouteRouteWithChildren
+  '/libraries': typeof LibrariesRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
+  '/libraries/': typeof LibrariesIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download/': typeof BenchmarksDownloadIndexRoute
-  '/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/stack/': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
   '/json-schema/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
@@ -209,11 +207,11 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/contributing': typeof ContributingIndexRoute
   '/json-schema': typeof JsonSchemaIndexRoute
+  '/libraries': typeof LibrariesIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/download': typeof BenchmarksDownloadIndexRoute
-  '/libraries': typeof BenchmarksLibrariesIndexRoute
   '/stack': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance': typeof JsonSchemaComplianceIndexRoute
   '/json-schema/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
@@ -231,18 +229,18 @@ export interface FileRoutesById {
   '/_benchmarks': typeof BenchmarksRouteRouteWithChildren
   '/blog': typeof BlogRouteRouteWithChildren
   '/json-schema': typeof JsonSchemaRouteRouteWithChildren
+  '/libraries': typeof LibrariesRouteRouteWithChildren
   '/_benchmarks/_runtime': typeof BenchmarksRuntimeRouteRouteWithChildren
-  '/_benchmarks/libraries': typeof BenchmarksLibrariesRouteRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/_home/': typeof HomeIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
+  '/libraries/': typeof LibrariesIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
   '/_benchmarks/download/': typeof BenchmarksDownloadIndexRoute
-  '/_benchmarks/libraries/': typeof BenchmarksLibrariesIndexRoute
   '/_benchmarks/stack/': typeof BenchmarksStackIndexRoute
   '/json-schema/compliance/': typeof JsonSchemaComplianceIndexRoute
   '/json-schema/_conversion/to-json/$tab': typeof JsonSchemaConversionToJsonTabRoute
@@ -266,11 +264,11 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/contributing/'
     | '/json-schema/'
+    | '/libraries/'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/download/'
-    | '/libraries/'
     | '/stack/'
     | '/json-schema/compliance/'
     | '/json-schema/to-json/$tab'
@@ -289,11 +287,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contributing'
     | '/json-schema'
+    | '/libraries'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/download'
-    | '/libraries'
     | '/stack'
     | '/json-schema/compliance'
     | '/json-schema/to-json/$tab'
@@ -310,18 +308,18 @@ export interface FileRouteTypes {
     | '/_benchmarks'
     | '/blog'
     | '/json-schema'
+    | '/libraries'
     | '/_benchmarks/_runtime'
-    | '/_benchmarks/libraries'
     | '/blog/$slug'
     | '/_home/'
     | '/blog/'
     | '/contributing/'
     | '/json-schema/'
+    | '/libraries/'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
     | '/_benchmarks/download/'
-    | '/_benchmarks/libraries/'
     | '/_benchmarks/stack/'
     | '/json-schema/compliance/'
     | '/json-schema/_conversion/to-json/$tab'
@@ -339,6 +337,7 @@ export interface RootRouteChildren {
   BenchmarksRouteRoute: typeof BenchmarksRouteRouteWithChildren
   BlogRouteRoute: typeof BlogRouteRouteWithChildren
   JsonSchemaRouteRoute: typeof JsonSchemaRouteRouteWithChildren
+  LibrariesRouteRoute: typeof LibrariesRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   ContributingIndexRoute: typeof ContributingIndexRoute
   ApiTweetIdRoute: typeof ApiTweetIdRoute
@@ -368,18 +367,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JsonSchemaRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/libraries': {
+      id: '/libraries'
+      path: '/libraries'
+      fullPath: '/libraries'
+      preLoaderRoute: typeof LibrariesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_benchmarks/_runtime': {
       id: '/_benchmarks/_runtime'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BenchmarksRuntimeRouteRouteImport
-      parentRoute: typeof BenchmarksRouteRoute
-    }
-    '/_benchmarks/libraries': {
-      id: '/_benchmarks/libraries'
-      path: '/libraries'
-      fullPath: '/libraries'
-      preLoaderRoute: typeof BenchmarksLibrariesRouteRouteImport
       parentRoute: typeof BenchmarksRouteRoute
     }
     '/_home/': {
@@ -417,19 +416,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JsonSchemaIndexRouteImport
       parentRoute: typeof JsonSchemaRouteRoute
     }
+    '/libraries/': {
+      id: '/libraries/'
+      path: '/'
+      fullPath: '/libraries/'
+      preLoaderRoute: typeof LibrariesIndexRouteImport
+      parentRoute: typeof LibrariesRouteRoute
+    }
     '/_benchmarks/download/': {
       id: '/_benchmarks/download/'
       path: '/download'
       fullPath: '/download/'
       preLoaderRoute: typeof BenchmarksDownloadIndexRouteImport
       parentRoute: typeof BenchmarksRouteRoute
-    }
-    '/_benchmarks/libraries/': {
-      id: '/_benchmarks/libraries/'
-      path: '/'
-      fullPath: '/libraries/'
-      preLoaderRoute: typeof BenchmarksLibrariesIndexRouteImport
-      parentRoute: typeof BenchmarksLibrariesRouteRoute
     }
     '/_benchmarks/stack/': {
       id: '/_benchmarks/stack/'
@@ -558,30 +557,14 @@ const BenchmarksRuntimeRouteRouteWithChildren =
     BenchmarksRuntimeRouteRouteChildren,
   )
 
-interface BenchmarksLibrariesRouteRouteChildren {
-  BenchmarksLibrariesIndexRoute: typeof BenchmarksLibrariesIndexRoute
-}
-
-const BenchmarksLibrariesRouteRouteChildren: BenchmarksLibrariesRouteRouteChildren =
-  {
-    BenchmarksLibrariesIndexRoute: BenchmarksLibrariesIndexRoute,
-  }
-
-const BenchmarksLibrariesRouteRouteWithChildren =
-  BenchmarksLibrariesRouteRoute._addFileChildren(
-    BenchmarksLibrariesRouteRouteChildren,
-  )
-
 interface BenchmarksRouteRouteChildren {
   BenchmarksRuntimeRouteRoute: typeof BenchmarksRuntimeRouteRouteWithChildren
-  BenchmarksLibrariesRouteRoute: typeof BenchmarksLibrariesRouteRouteWithChildren
   BenchmarksDownloadIndexRoute: typeof BenchmarksDownloadIndexRoute
   BenchmarksStackIndexRoute: typeof BenchmarksStackIndexRoute
 }
 
 const BenchmarksRouteRouteChildren: BenchmarksRouteRouteChildren = {
   BenchmarksRuntimeRouteRoute: BenchmarksRuntimeRouteRouteWithChildren,
-  BenchmarksLibrariesRouteRoute: BenchmarksLibrariesRouteRouteWithChildren,
   BenchmarksDownloadIndexRoute: BenchmarksDownloadIndexRoute,
   BenchmarksStackIndexRoute: BenchmarksStackIndexRoute,
 }
@@ -627,10 +610,23 @@ const JsonSchemaRouteRouteWithChildren = JsonSchemaRouteRoute._addFileChildren(
   JsonSchemaRouteRouteChildren,
 )
 
+interface LibrariesRouteRouteChildren {
+  LibrariesIndexRoute: typeof LibrariesIndexRoute
+}
+
+const LibrariesRouteRouteChildren: LibrariesRouteRouteChildren = {
+  LibrariesIndexRoute: LibrariesIndexRoute,
+}
+
+const LibrariesRouteRouteWithChildren = LibrariesRouteRoute._addFileChildren(
+  LibrariesRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   BenchmarksRouteRoute: BenchmarksRouteRouteWithChildren,
   BlogRouteRoute: BlogRouteRouteWithChildren,
   JsonSchemaRouteRoute: JsonSchemaRouteRouteWithChildren,
+  LibrariesRouteRoute: LibrariesRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   ContributingIndexRoute: ContributingIndexRoute,
   ApiTweetIdRoute: ApiTweetIdRoute,

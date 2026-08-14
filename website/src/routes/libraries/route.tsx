@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_benchmarks/libraries")({
+export const Route = createFileRoute("/libraries")({
   component: RouteComponent,
   staticData: { crumb: "Libraries" },
 });

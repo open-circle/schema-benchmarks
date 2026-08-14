@@ -6,7 +6,7 @@ import { percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";

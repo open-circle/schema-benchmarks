@@ -4,7 +4,7 @@ import bem from "react-bem-helper";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { getPackageMetadata, getRepoLink } from "#src/routes/_benchmarks/-query";
-import { getReplacementUrl } from "#src/routes/_benchmarks/libraries/-query";
+import { getReplacementUrl } from "#src/routes/libraries/-query";
 import { ButtonGroup } from "#src/shared/components/button";
 import { ExternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import GithubIcon from "#src/shared/components/header/github.svg?react";

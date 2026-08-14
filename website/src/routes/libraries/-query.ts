@@ -14,6 +14,7 @@ import { getPackageName } from "#src/routes/_benchmarks/-query";
 import { getBenchResultsFn } from "#src/routes/_benchmarks/_runtime/-query";
 import { getDownloadResultsFn } from "#src/routes/_benchmarks/download/-query";
 import { getStackResultsFn } from "#src/routes/_benchmarks/stack/-query";
+import { getJsonSchemaBenchResultsFn } from "#src/routes/json-schema/-query";
 
 export const getAllPackagesFn = createServerFn().handler(async () => {
   const { signal } = getRequest();
@@ -21,6 +22,7 @@ export const getAllPackagesFn = createServerFn().handler(async () => {
     bench: getBenchResultsFn({ signal }),
     download: getDownloadResultsFn({ signal }),
     stack: getStackResultsFn({ signal }),
+    jsonSchema: getJsonSchemaBenchResultsFn({ signal }),
   });
 
   const allItems: Array<{ libraryName: string; version: string }> = [
@@ -34,6 +36,14 @@ export const getAllPackagesFn = createServerFn().handler(async () => {
     ...allResults.bench.codec,
     ...Object.values(allResults.download).flat(),
     ...allResults.stack,
+    ...allResults.jsonSchema.conversion.toJson,
+    ...allResults.jsonSchema.conversion.fromJson,
+    ...Object.entries(allResults.jsonSchema.conversion.toJsonSupport).map(
+      ([libraryName, { version }]) => ({ libraryName, version }),
+    ),
+    ...Object.values(allResults.jsonSchema.compliance)
+      .flatMap((results) => Object.values(results))
+      .flat(),
   ];
 
   const packageVersions = new Map<string, Set<string>>();

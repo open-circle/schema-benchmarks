@@ -9,6 +9,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    flex-wrap: wrap;
     gap: 1rem;
     .package-card__versions {
       margin: 0;
