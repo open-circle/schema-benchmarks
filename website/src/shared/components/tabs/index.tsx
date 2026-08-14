@@ -22,7 +22,7 @@ export function useTabs<T extends string>(tabs: ReadonlyArray<T>, initialValue: 
 
   const getTabProps = (tabId: T) =>
     ({
-      id: tabId,
+      id: `${tabId}-tab`,
       selected: selectedTab === tabId,
       panelId: `${tabId}-panel`,
       onClick: () => {
@@ -43,7 +43,7 @@ export function useTabs<T extends string>(tabs: ReadonlyArray<T>, initialValue: 
     ({
       selected: selectedTab === tabId,
       id: `${tabId}-panel`,
-      tabId,
+      tabId: `${tabId}-tab`,
     }) satisfies Partial<TabPanelProps>;
 
   return { selectedTab, getTabProps, getPanelProps, panelsRef };
@@ -54,7 +54,7 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
   const navigate = useNavigate();
 
   const getTabLinkProps = <const TOptions extends NavigateOptions>(tabId: T, opts: TOptions) => ({
-    id: tabId,
+    id: `${tabId}-tab`,
     panelId: `${tabId}-panel`,
     ...opts,
     onClick: (e: React.MouseEvent) => {
@@ -78,7 +78,7 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
     ({
       selected: currentTabId === tabId,
       id: `${tabId}-panel`,
-      tabId,
+      tabId: `${tabId}-tab`,
     }) satisfies Partial<TabPanelProps>;
 
   return { panelsRef, getTabLinkProps, getPanelProps };
