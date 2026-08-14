@@ -4,6 +4,7 @@ import { DownloadPlot } from "#src/routes/_benchmarks/download/-components/plot"
 import { Admonition } from "#src/shared/components/admonition";
 import { CodecPlot } from "#src/routes/_benchmarks/_runtime/codec/-components/plot";
 import { JsonConversionPlot } from "#src/routes/json-schema/_conversion/-components/plot";
+import { CompliancePlot } from "#src/routes/json-schema/compliance/-components/plot";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -204,3 +205,33 @@ const schema = z.fromJSONSchema(jsonSchema);
 ```
 
 <JsonConversionPlot conversionType="fromJson" />
+
+### <Link to="/json-schema/compliance">Compliance</Link>
+
+We test JSON Schema implementations against the [JSON Schema Test Suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite).
+
+```ts title="Validation"
+assert(Schema.Check(remotes, schema, data) === expected);
+```
+
+The graph shows each library's best validation result for Draft 2020-12.
+
+<CompliancePlot type="validation" target="draft2020-12" />
+
+We also test libraries that allow schemas to be created _from_ JSON Schema, both using their native schema validation ("semantics"), and after converting back into JSON Schema ("roundtrip").
+
+```ts title="Semantics"
+assert(z.fromJSONSchema(schema).safeParse(data).success === expected);
+```
+
+For semantics with Draft 2020-12:
+
+<CompliancePlot type="semantics" target="draft2020-12" />
+
+```ts title="Roundtrip"
+assert(Schema.Check(remotes, z.toJSONSchema(z.fromJSONSchema(schema)), data) === expected);
+```
+
+For roundtrip with Draft 2020-12:
+
+<CompliancePlot type="roundtrip" target="draft2020-12" />
