@@ -22,12 +22,21 @@ const cls = bem("page-header");
 
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
-    crumb: MaybeArray<string> | undefined;
+    crumb: MaybeArray<CrumbItem> | undefined;
   }
 }
 
+const crumbItemSchema = v.union([
+  v.string(),
+  v.object({
+    label: v.string(),
+    interactive: v.boolean(),
+  }),
+]);
+type CrumbItem = v.InferInput<typeof crumbItemSchema>;
+
 const crumbSchema = v.object({
-  crumb: v.union([v.string(), v.array(v.string())]),
+  crumb: v.union([crumbItemSchema, v.array(crumbItemSchema)]),
 });
 
 export function Header({ prefsOpen, onPrefs }: { prefsOpen: boolean; onPrefs: () => void }) {
@@ -72,31 +81,42 @@ export function Header({ prefsOpen, onPrefs }: { prefsOpen: boolean; onPrefs: ()
         <MdSymbol>menu</MdSymbol>
       </ToggleButton>
       <nav className="breadcrumbs">
-        {crumbs.map((crumb) => (
-          <Fragment key={crumb.to + crumb.name}>
-            <Link
-              to={crumb.to}
-              params={crumb.params}
-              search={crumb.search}
-              className="typo-headline6"
-            >
-              {crumb.name}
-            </Link>
-            <span>/</span>
-          </Fragment>
-        ))}
-        {currentCrumbs.map((crumb, index) => (
-          <Fragment key={`${index}:${crumb.name}`}>
-            <span className="typo-headline6">
-              {index === currentCrumbs.length - 1 ? (
-                <ConsoleWriter>{crumb.name}</ConsoleWriter>
+        {crumbs.map((crumb) => {
+          const { label, interactive } =
+            typeof crumb.name === "string" ? { label: crumb.name, interactive: true } : crumb.name;
+          return (
+            <Fragment key={crumb.to + label}>
+              {interactive ? (
+                <Link
+                  to={crumb.to}
+                  params={crumb.params}
+                  search={crumb.search}
+                  className="typo-headline6"
+                >
+                  {label}
+                </Link>
               ) : (
-                crumb.name
+                <span className="typo-headline6">{label}</span>
               )}
-            </span>
-            {index !== currentCrumbs.length - 1 && <span>/</span>}
-          </Fragment>
-        ))}
+              <span>/</span>
+            </Fragment>
+          );
+        })}
+        {currentCrumbs.map((crumb, index) => {
+          const { label } = typeof crumb.name === "string" ? { label: crumb.name } : crumb.name;
+          return (
+            <Fragment key={`${index}:${label}`}>
+              <span className="typo-headline6">
+                {index === currentCrumbs.length - 1 ? (
+                  <ConsoleWriter>{label}</ConsoleWriter>
+                ) : (
+                  label
+                )}
+              </span>
+              {index !== currentCrumbs.length - 1 && <span>/</span>}
+            </Fragment>
+          );
+        })}
       </nav>
       <div {...cls("actions")}>
         <ExternalLinkToggleButton
