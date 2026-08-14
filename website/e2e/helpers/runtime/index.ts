@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { dataTypeSchema } from "@schema-benchmarks/bench";
 import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas";
-import { every } from "mix-n-matchers/utilities";
+import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { expect } from "#e2e/fixtures";
 import type {
@@ -18,17 +18,16 @@ export * as mobile from "./mobile";
 async function expectResultsToMatchFilter(
   page: Page,
   runtimePage: RuntimePage,
-  cellName: "optimizations" | "error type",
+  cellName: string,
   expectedLabel: string,
 ) {
   const isDesktop = await matchBreakpoints(page, runtimePage.breakpoints.desktop);
   if (isDesktop) {
     const expectedLabelRegex = new RegExp(`^${expectedLabel}$`, "i");
     await expect(async () => {
-      const labels = await runtimePage.desktop.tableHandle.getColumnValues(cellName);
-
-      every(labels, (label) => {
-        expect(label).toMatch(expectedLabelRegex);
+      await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
+        const cell = row.getCell(cellName);
+        await expect(cell).toHaveText(expectedLabelRegex);
       });
     }).toPass();
   } else {
