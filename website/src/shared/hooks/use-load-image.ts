@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useDebugValue, useEffect, useReducer } from "react";
 
 import { preloadImage } from "#src/shared/lib/fetch";
 
@@ -22,5 +22,6 @@ export function useLoadImage(src?: string) {
       setState("unloaded");
     }
   }, [src]);
+  useDebugValue(`${state}: ${src}`);
   return state;
 }
