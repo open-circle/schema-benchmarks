@@ -13,7 +13,7 @@ import {
   compareDownloadsByPkgName,
   useDownloadsByPkgName,
 } from "#src/routes/_benchmarks/-hooks.ts";
-import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query.ts";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { ComplianceDetail } from "#src/routes/json-schema/compliance/-components/detail/index.tsx";
 import { ComplianceResults } from "#src/routes/json-schema/compliance/-components/results.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";

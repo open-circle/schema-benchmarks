@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
-import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { EmptyState } from "#src/shared/components/empty-state";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";

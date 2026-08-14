@@ -10,7 +10,7 @@ import Content from "./content.mdx";
 
 import libraryCss from "./index.css?url";
 
-export const Route = createFileRoute("/_benchmarks/libraries/")({
+export const Route = createFileRoute("/libraries/")({
   loader: async ({ abortController, context: { queryClient } }) => {
     const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
     await Promise.all(

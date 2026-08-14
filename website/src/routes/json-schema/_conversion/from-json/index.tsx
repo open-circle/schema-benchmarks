@@ -3,7 +3,7 @@ import * as v from "valibot";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
-import { getJsonSchemaBenchResults } from "#src/routes/json-schema/_conversion/-query";
+import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
