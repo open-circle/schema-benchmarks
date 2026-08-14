@@ -84,6 +84,7 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
     ...props
   }: Override<ComponentProps<TComp>, TooltipProps>) {
     const id = useIdDefault(idProp);
+    const tooltipId = `${id}-tooltip`;
     const [open, setOpen] = useState(false);
     const { refs, floatingStyles, context } = useFloating({
       open,
@@ -168,13 +169,14 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
         <Component
           // @ts-expect-error union nastiness
           {...(props as any)}
+          id={id}
           tooltip={tooltip}
           ref={mergeRefs<HTMLElement>(ref, refs.setReference, setTargetRef)}
           {...(tooltip
             ? ({
                 popoverTargetAction: "show",
-                "aria-labelledby": id,
-                popoverTarget: id,
+                "aria-labelledby": tooltipId,
+                popoverTarget: tooltipId,
               } satisfies HTMLAttributes<HTMLElement>)
             : {})}
         />
@@ -183,7 +185,7 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
             role="tooltip"
             ref={mergeRefs(setPopoverRef, refs.setFloating, popoverRefProp)}
             popover="hint"
-            id={id}
+            id={tooltipId}
             style={floatingStyles}
             {...cls({
               modifiers: { rich: typeof tooltip === "object" },
