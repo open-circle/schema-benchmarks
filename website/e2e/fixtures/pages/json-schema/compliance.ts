@@ -60,8 +60,8 @@ class ValidationTab extends ComplianceTab {
   complianceType = "validation" as const;
 
   libraries = {
-    first: /ajv/i,
-    last: /typebox/i,
+    first: /@cfworker\/json-schema/i,
+    last: /z-schema/i,
   };
 }
 
