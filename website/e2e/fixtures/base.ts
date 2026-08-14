@@ -1,4 +1,4 @@
-import type { Locator, Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
 
 import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
@@ -35,7 +35,6 @@ export abstract class PageObjectModel extends ComponentObjectModel {
 export abstract class TabObjectModel<
   TParent extends { tabs: Locator },
 > extends ComponentObjectModel {
-  static readonly transitionDuration = 300;
   parent: TParent;
 
   constructor(page: Page, parent: TParent) {
@@ -55,9 +54,13 @@ export abstract class TabObjectModel<
     return this.parent.tabs.getByRole("tab", { name: this.tabName });
   }
 
+  get tabPanel() {
+    return this.page.getByRole("tabpanel", { name: this.tabName });
+  }
+
   async select() {
     await this.tabLink.click();
-    // oxlint-disable-next-line playwright/no-wait-for-timeout
-    await this.page.waitForTimeout(TabObjectModel.transitionDuration);
+    await expect(this.tabLink).toHaveAttribute("aria-selected", "true");
+    await expect(this.tabPanel).toBeVisible();
   }
 }
