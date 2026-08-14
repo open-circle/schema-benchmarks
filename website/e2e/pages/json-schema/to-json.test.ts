@@ -95,9 +95,9 @@ test.describe("benchmarks tab", () => {
 
       await link.click();
 
-      await expect(link).toBeCurrent("page");
-
       await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+
+      await expect(link).toBeCurrent("page");
     }
   });
 
