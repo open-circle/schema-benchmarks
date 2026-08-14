@@ -1,6 +1,34 @@
+import type { JsonSchemaDirection } from "@schema-benchmarks/schemas";
 import { jsonSchemaTargetSchema, jsonSchemaDirectionSchema } from "@schema-benchmarks/schemas";
+import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { test, expect } from "#e2e/fixtures";
+import type { ToJsonPage } from "#e2e/fixtures/pages/json-schema/to-json";
+
+async function expectResultsToMatchDirection(
+  toJsonPage: ToJsonPage,
+  direction: JsonSchemaDirection,
+  isDesktop: boolean,
+) {
+  const expectedDirection = toJsonPage.getDirectionLabel(direction);
+  if (isDesktop) {
+    await expect(async () => {
+      await everyAsync(toJsonPage.desktop.tableHandle, async ({ row }) => {
+        await expect(row.getCell("type")).toHaveText(expectedDirection);
+      });
+    }).toPass();
+  } else {
+    const expectedDirectionRegex = new RegExp(expectedDirection, "i");
+    await expect(async () => {
+      const chips = toJsonPage.mobile.cards.getByTestId("bench-card-chips");
+      const labels = await chips.allTextContents();
+
+      every(labels, (label) => {
+        expect(label).toMatch(expectedDirectionRegex);
+      });
+    }).toPass();
+  }
+}
 
 test.beforeEach("Go to JSON schema to-json page", async ({ page, toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();
@@ -16,7 +44,7 @@ test.describe("support matrix tab", () => {
 
     await supportMatrixTabLink.click();
 
-    await expect(supportMatrixTabLink).toHaveAttribute("aria-current", "page");
+    await expect(supportMatrixTabLink).toBeCurrent("page");
 
     await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "matrix");
   });
@@ -56,7 +84,7 @@ test.describe("benchmarks tab", () => {
 
     await benchmarksTabLink.click();
 
-    await expect(benchmarksTabLink).toHaveAttribute("aria-current", "page");
+    await expect(benchmarksTabLink).toBeCurrent("page");
 
     await expect(page).toHaveURL((url) => url.searchParams.get("tab") === "bench");
   });
@@ -65,13 +93,11 @@ test.describe("benchmarks tab", () => {
     for (const target of jsonSchemaTargetSchema.options) {
       const link = toJsonPage.getTargetLink(target);
 
-      await expect(async () => {
-        await link.click();
+      await link.click();
 
-        await expect(link).toHaveAttribute("aria-current", "page");
+      await expect(link).toBeCurrent("page");
 
-        await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
-      }).toPass();
+      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
     }
   });
 
@@ -82,32 +108,11 @@ test.describe("benchmarks tab", () => {
 
       await link.click();
 
-      await expect(link).toHaveAttribute("aria-current", "page");
+      await expect(link).toBeCurrent("page");
 
       await expect(page).toHaveURL((url) => url.searchParams.get("direction") === direction);
 
-      // oxlint-disable-next-line playwright/no-conditional-in-test
-      if (isDesktop) {
-        for await (const { row } of toJsonPage.desktop.tableHandle) {
-          const directionCell = row.getCell("type");
-          // oxlint-disable-next-line playwright/no-conditional-expect
-          await expect(directionCell).toHaveText(toJsonPage.getDirectionLabel(direction));
-        }
-      } else {
-        const cards = await toJsonPage.mobile.cards.all();
-        for (const card of cards) {
-          const chipsList = card.getByTestId("bench-card-chips");
-
-          const chips = chipsList.getByRole("listitem");
-
-          // oxlint-disable-next-line playwright/no-conditional-expect
-          await expect(
-            chips.filter({
-              hasText: toJsonPage.getDirectionLabel(direction),
-            }),
-          ).toHaveCount(1);
-        }
-      }
+      await expectResultsToMatchDirection(toJsonPage, direction, isDesktop);
     }
   });
 
