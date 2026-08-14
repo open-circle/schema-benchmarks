@@ -90,12 +90,12 @@ export default defineBenchmarks({
             return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
-          // const ajv = new Ajv({ validateSchema: false });
-          // addFormats(ajv);
-          // for (const [uri, remoteSchema] of Object.entries(remotes)) {
-          //   ajv.addSchema(remoteSchema, uri);
-          // }
-          ajv.validate(schema, data)`,
+          const ajv = new Ajv({ validateSchema: false });
+          addFormats(ajv);
+          for (const [uri, remoteSchema] of Object.entries(remotes)) {
+            ajv.addSchema(remoteSchema, uri);
+          }
+          return ajv.validate(schema, data)`,
           source: { type: "native" },
         },
         {
@@ -108,12 +108,12 @@ export default defineBenchmarks({
             return complianceAjv.validate(schema, data);
           },
           snippet: () => ts`
-          // const ajv = new Ajv({ strict: false , validateSchema: false });
-          // addFormats(ajv);
-          // for (const [uri, remoteSchema] of Object.entries(remotes)) {
-          //   ajv.addSchema(remoteSchema, uri);
-          // }
-          ajv.validate(schema, data)`,
+          const ajv = new Ajv({ strict: false, validateSchema: false });
+          addFormats(ajv);
+          for (const [uri, remoteSchema] of Object.entries(remotes)) {
+            ajv.addSchema(remoteSchema, uri);
+          }
+          return ajv.validate(schema, data)`,
           source: { type: "native" },
           note: "non-strict",
         },
