@@ -135,8 +135,8 @@ export function Header({ prefsOpen, onPrefs }: { prefsOpen: boolean; onPrefs: ()
         >
           <DiscordIcon height={24} width={24} style={{ padding: 2 }} />
         </ExternalLinkToggleButton>
-        <ToggleButton tooltip="Preferences" onClick={onPrefs}>
-          <MdSymbol fill={prefsOpen}>settings</MdSymbol>
+        <ToggleButton tooltip="Preferences" onClick={onPrefs} active={prefsOpen} {...cls("prefs")}>
+          <MdSymbol>settings</MdSymbol>
         </ToggleButton>
       </div>
     </header>
