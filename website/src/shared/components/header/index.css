@@ -36,6 +36,23 @@
       margin-right: auto;
     }
   }
+  .page-header__prefs {
+    .md-symbol {
+      transition:
+        transform 250ms var(--standard-curve),
+        font-variation-settings 250ms;
+    }
+    &:hover,
+    &:focus-visible {
+      .md-symbol {
+        transform: rotate(60deg);
+      }
+    }
+    &[aria-pressed="true"] .md-symbol {
+      --icon-fill: 1;
+      transform: rotate(120deg);
+    }
+  }
 }
 
 .breadcrumbs {

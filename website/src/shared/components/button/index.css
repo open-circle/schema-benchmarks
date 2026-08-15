@@ -219,6 +219,9 @@
     }
     &:hover {
       background-color: color(from var(--button-base-color) srgb r g b / var(--hover-opacity));
+      .md-symbol {
+        --icon-weight: 600;
+      }
     }
     &:focus-visible {
       background-color: color(from var(--button-base-color) srgb r g b / var(--focus-opacity));
