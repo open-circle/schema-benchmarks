@@ -59,8 +59,10 @@ export abstract class TabObjectModel<
   }
 
   async select() {
-    await this.tabLink.click();
-    await expect(this.tabLink).toHaveAttribute("aria-selected", "true");
-    await expect(this.tabPanel).toBeVisible();
+    await expect(async () => {
+      await this.tabLink.click();
+      await expect(this.tabLink).toHaveAttribute("aria-selected", "true");
+      await expect(this.tabPanel).toBeVisible();
+    }).toPass();
   }
 }
