@@ -94,11 +94,13 @@ test.describe("benchmarks tab", () => {
     for (const target of jsonSchemaConversionTargetSchema.options) {
       const link = toJsonPage.benchmarks.getTargetLink(target);
 
-      await link.click();
+      await expect(async () => {
+        await link.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+        await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
 
-      await expect(link).toBeCurrent("page");
+        await expect(link).toBeCurrent("page");
+      }).toPass();
     }
   });
 
