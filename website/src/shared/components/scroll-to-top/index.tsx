@@ -25,7 +25,7 @@ function useScrolled() {
   return [scrollContainer, scrolled] as const;
 }
 
-function prefersReducedMotion() {
+export function prefersReducedMotion() {
   return !isServer && window.matchMedia("(prefers-reduced-motion)").matches;
 }
 

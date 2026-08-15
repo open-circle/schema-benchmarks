@@ -25,6 +25,7 @@ import bem from "react-bem-helper";
 import { ButtonGroup } from "#src/shared/components/button";
 import { ConsoleWriter } from "#src/shared/components/consolewriter";
 import { useIdDefault } from "#src/shared/hooks/use-id-default";
+import { useMediaQuery } from "#src/shared/hooks/use-media-query.ts";
 
 const cls = bem("tooltip");
 
@@ -93,11 +94,12 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
       ...opts,
       ...tooltipOpts,
     });
+    const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)", false);
     const { styles } = useTransitionStyles(context, {
       duration: 75,
       initial: {
         opacity: 0,
-        transform: "scale(0.8)",
+        transform: prefersReducedMotion ? "scale(1)" : "scale(0.8)",
         transitionTimingFunction: "var(--enter-curve)",
       },
       open: {

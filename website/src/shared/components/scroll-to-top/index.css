@@ -8,6 +8,10 @@
   transition:
     transform 150ms var(--standard-curve),
     opacity 150ms var(--standard-curve);
+  @media (prefers-reduced-motion: reduce) {
+    transform: scale(1);
+    transition: opacity 150ms var(--standard-curve);
+  }
   &.scroll-to-top--scrolled {
     transform: scale(1);
     opacity: 1;

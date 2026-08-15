@@ -145,6 +145,11 @@ td {
       transform 150ms var(--standard-curve),
       color 250ms,
       font-variation-settings 250ms;
+    @media (prefers-reduced-motion: reduce) {
+      transition:
+        color 250ms,
+        font-variation-settings 250ms;
+    }
   }
   &.numeric .sort-cell__label {
     justify-content: flex-end;

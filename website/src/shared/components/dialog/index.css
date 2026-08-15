@@ -30,9 +30,15 @@
       overlay var(--dialog-enter-time) allow-discrete;
     animation:
       dialog-scale-in var(--dialog-enter-time) var(--enter-curve),
-      dialog-fade-in var(--dialog-exit-time) linear;
+      dialog-fade-in var(--dialog-enter-time) linear;
     &::backdrop {
       opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: dialog-fade-out var(--dialog-exit-time) linear;
+    &[open] {
+      animation: dialog-fade-in var(--dialog-enter-time) linear;
     }
   }
   &:focus-visible {

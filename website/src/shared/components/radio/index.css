@@ -85,5 +85,16 @@
         transform 250ms var(--standard-curve),
         opacity 250ms;
     }
+    @media (prefers-reduced-motion: reduce) {
+      transition:
+        border-color 250ms,
+        opacity 250ms;
+      &::before {
+        transition: background-color 250ms;
+      }
+      &::after {
+        transition: opacity 250ms;
+      }
+    }
   }
 }

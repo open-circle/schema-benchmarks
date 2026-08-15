@@ -37,21 +37,25 @@
     }
   }
   .page-header__prefs {
-    .md-symbol {
-      transition:
-        transform 250ms var(--standard-curve),
-        font-variation-settings 250ms;
-    }
-    &:hover,
-    &:focus-visible {
+    @media (prefers-reduced-motion: no-preference) {
       .md-symbol {
-        transform: rotate(60deg);
+        transition:
+          transform 250ms var(--standard-curve),
+          font-variation-settings 250ms;
+      }
+      &:hover,
+      &:focus-visible {
+        .md-symbol {
+          transform: rotate(60deg);
+        }
+      }
+      &[aria-pressed="true"] .md-symbol {
+        transform: rotate(120deg);
       }
     }
-    &[aria-pressed="true"] .md-symbol {
-      --icon-fill: 1;
-      transform: rotate(120deg);
-    }
+  }
+  &[aria-pressed="true"] .md-symbol {
+    --icon-fill: 1;
   }
 }
 
