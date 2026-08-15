@@ -267,14 +267,30 @@ pre[class*="language-"] {
   navigation: auto;
 }
 
+@keyframes reduced-motion-view-transition-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes reduced-motion-view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion) {
   * {
     scroll-behavior: auto;
   }
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
+  ::view-transition-group(*) {
     animation: none !important;
+  }
+  ::view-transition-old(*) {
+    animation: reduced-motion-view-transition-fade-out 150ms linear both !important;
+  }
+  ::view-transition-new(*) {
+    animation: reduced-motion-view-transition-fade-in 150ms linear both !important;
   }
 }
 
