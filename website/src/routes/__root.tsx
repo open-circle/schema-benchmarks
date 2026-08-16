@@ -26,7 +26,7 @@ import {
   ThemeProvider,
   LigatureProvider,
 } from "#src/shared/components/prefs/provider";
-import { ScrollToTop } from "#src/shared/components/scroll-to-top";
+import { ScrollToTop, useScrolled } from "#src/shared/components/scroll-to-top";
 import { Sidebar } from "#src/shared/components/sidebar";
 import { SidebarProvider } from "#src/shared/components/sidebar/context";
 import { Snackbars } from "#src/shared/components/snackbar";
@@ -139,6 +139,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   });
   useRegisterSW({ immediate: true });
   const [prefsOpen, setPrefsOpen] = useState(false);
+  const { scrollHandle, scrolled, setScrollContainer } = useScrolled();
   return (
     <html
       lang="en"
@@ -163,12 +164,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <div className="sidebar-container">
             <SidebarProvider>
               <Sidebar />
-              <div className="header-container" id="scroll-container">
+              <div className="header-container" ref={setScrollContainer}>
                 <Header prefsOpen={prefsOpen} onPrefs={() => setPrefsOpen(true)} />
                 <Banner />
                 {wrapMain ? <main className="main">{children}</main> : children}
                 <Footer />
-                <ScrollToTop />
+                <ScrollToTop {...{ scrollHandle, scrolled }} />
                 <Snackbars />
                 <ConfirmDialog />
                 <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />

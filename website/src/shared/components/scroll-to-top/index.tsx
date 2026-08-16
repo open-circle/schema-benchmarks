@@ -1,6 +1,6 @@
-import { isServer } from "@tanstack/react-query";
+import { environmentManager } from "@tanstack/react-query";
 import { radEventListeners } from "rad-event-listeners";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import bem from "react-bem-helper";
 
 import { FloatingActionButton } from "#src/shared/components/button/floating";
@@ -8,36 +8,51 @@ import { MdSymbol } from "#src/shared/components/symbol";
 
 const cls = bem("scroll-to-top");
 
-function useScrolled() {
-  const [scrollContainer, setScrollContainer] = useState<HTMLElement | null>(null);
-  useLayoutEffect(() => {
-    setScrollContainer(document.getElementById("scroll-container"));
-  }, []);
+export function useScrolled() {
+  const scrollContainerRef = useRef<HTMLElement | null>(null);
+  const scrollHandle = useMemo(
+    () =>
+      new Proxy({} as Pick<HTMLElement, Extract<keyof HTMLElement, `scroll${string}`>>, {
+        get: (_, prop) => {
+          if (!scrollContainerRef.current) return undefined;
+          const value = Reflect.get(scrollContainerRef.current, prop);
+          return typeof value === "function" ? value.bind(scrollContainerRef.current) : value;
+        },
+      }),
+    [],
+  );
   const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    if (!scrollContainer) return;
-    return radEventListeners(scrollContainer, {
+  function setScrollContainer(container: HTMLElement | null) {
+    scrollContainerRef.current = container;
+    if (!container) return;
+    return radEventListeners(container, {
       scroll() {
-        setScrolled(scrollContainer.scrollTop > 100);
+        setScrolled(container.scrollTop > 100);
       },
     });
-  }, [scrollContainer]);
-  return [scrollContainer, scrolled] as const;
+  }
+  return {
+    scrollHandle,
+    scrolled,
+    setScrollContainer,
+  };
 }
 
 export function prefersReducedMotion() {
-  return !isServer && window.matchMedia("(prefers-reduced-motion)").matches;
+  return !environmentManager.isServer() && window.matchMedia("(prefers-reduced-motion)").matches;
 }
 
-export function ScrollToTop() {
-  const [scrollContainer, scrolled] = useScrolled();
+export function ScrollToTop({
+  scrollHandle,
+  scrolled,
+}: Omit<ReturnType<typeof useScrolled>, "setScrollContainer">) {
   return (
     <FloatingActionButton
       {...cls({
         modifiers: { scrolled },
       })}
       onClick={() => {
-        scrollContainer?.scrollTo({
+        scrollHandle.scrollTo({
           top: 0,
           behavior: prefersReducedMotion() ? "auto" : "smooth",
         });
