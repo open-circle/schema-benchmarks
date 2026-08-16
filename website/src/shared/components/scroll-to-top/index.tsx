@@ -14,7 +14,7 @@ export function useScrolled({ threshold = 100 } = {}) {
     () =>
       new Proxy({} as Pick<HTMLElement, Extract<keyof HTMLElement, `scroll${string}`>>, {
         get: (_, prop) => {
-          if (!scrollContainerRef.current) return undefined;
+          if (!scrollContainerRef.current) throw new Error("Scroll container is not set");
           const value = Reflect.get(scrollContainerRef.current, prop);
           return typeof value === "function" ? value.bind(scrollContainerRef.current) : value;
         },
