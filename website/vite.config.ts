@@ -166,7 +166,12 @@ const config = defineConfig({
     ],
   },
   ssr: {
+    // force vite to bundle react-tweet for SSR, so the CSS modules it imports get included
     noExternal: ["react-tweet"],
+  },
+  optimizeDeps: {
+    // make sure deps used by MDX are pre-optimized - dev server will struggle to optimize them later
+    include: ["date-fns/fp", "react-tweet"],
   },
 });
 
