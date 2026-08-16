@@ -10,7 +10,7 @@ test.beforeEach(async ({ page, fontsLoaded, initializationPage }) => {
 });
 
 test("can be filtered by optimization type", async ({ page, initializationPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, initializationPage);
+  await runtimeHelpers.expectOptimizeFilter(page, initializationPage);
 });
 
 test.describe("desktop view", () => {
@@ -22,11 +22,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ initializationPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(initializationPage);
+    await runtimeHelpers.desktop.expectTableDisplay(initializationPage);
   });
 
   test("table can be sorted by column", async ({ initializationPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(initializationPage, {
+    await runtimeHelpers.desktop.expectTableSorting(initializationPage, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -40,6 +40,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ initializationPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(initializationPage);
+    await runtimeHelpers.mobile.expectCardDisplay(initializationPage);
   });
 });

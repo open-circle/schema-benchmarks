@@ -15,15 +15,15 @@ test.beforeEach(async ({ page, fontsLoaded, standardSchemaPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.testDataTypeToggle(page, standardSchemaPage);
+  await runtimeHelpers.expectDataTypeToggle(page, standardSchemaPage);
 });
 
 test("can be filtered by optimization type", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, standardSchemaPage);
+  await runtimeHelpers.expectOptimizeFilter(page, standardSchemaPage);
 });
 
 test("can be filtered by error type", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.testErrorTypeFilter(page, standardSchemaPage);
+  await runtimeHelpers.expectErrorTypeFilter(page, standardSchemaPage);
 });
 
 test.describe("desktop view", () => {
@@ -35,11 +35,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(standardSchemaPage, library);
+    await runtimeHelpers.desktop.expectTableDisplay(standardSchemaPage, library);
   });
 
   test("table can be sorted by column", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(standardSchemaPage, {
+    await runtimeHelpers.desktop.expectTableSorting(standardSchemaPage, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -53,6 +53,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(standardSchemaPage, library);
+    await runtimeHelpers.mobile.expectCardDisplay(standardSchemaPage, library);
   });
 });

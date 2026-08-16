@@ -10,7 +10,7 @@ test.beforeEach(async ({ page, fontsLoaded, codecPage }) => {
 });
 
 test("can be filtered by optimization type", async ({ page, codecPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, codecPage);
+  await runtimeHelpers.expectOptimizeFilter(page, codecPage);
 });
 
 test.describe("desktop view", () => {
@@ -22,11 +22,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ codecPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(codecPage);
+    await runtimeHelpers.desktop.expectTableDisplay(codecPage);
   });
 
   test("table can be sorted by column", async ({ codecPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(codecPage, {
+    await runtimeHelpers.desktop.expectTableSorting(codecPage, {
       first: /effect/i,
       last: /zod/i,
     });
@@ -40,6 +40,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ codecPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(codecPage);
+    await runtimeHelpers.mobile.expectCardDisplay(codecPage);
   });
 });

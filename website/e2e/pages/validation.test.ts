@@ -10,11 +10,11 @@ test.beforeEach(async ({ page, fontsLoaded, validationPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, validationPage }) => {
-  await runtimeHelpers.testDataTypeToggle(page, validationPage);
+  await runtimeHelpers.expectDataTypeToggle(page, validationPage);
 });
 
 test("can be filtered by optimization type", async ({ page, validationPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, validationPage);
+  await runtimeHelpers.expectOptimizeFilter(page, validationPage);
 });
 
 test.describe("desktop view", () => {
@@ -26,11 +26,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ validationPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(validationPage);
+    await runtimeHelpers.desktop.expectTableDisplay(validationPage);
   });
 
   test("table can be sorted by column", async ({ validationPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(validationPage, {
+    await runtimeHelpers.desktop.expectTableSorting(validationPage, {
       first: /@railway-ts/i,
       last: /zod/i,
     });
@@ -44,6 +44,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ validationPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(validationPage);
+    await runtimeHelpers.mobile.expectCardDisplay(validationPage);
   });
 });

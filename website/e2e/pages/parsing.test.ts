@@ -10,15 +10,15 @@ test.beforeEach(async ({ page, fontsLoaded, parsingPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, parsingPage }) => {
-  await runtimeHelpers.testDataTypeToggle(page, parsingPage);
+  await runtimeHelpers.expectDataTypeToggle(page, parsingPage);
 });
 
 test("can be filtered by optimization type", async ({ page, parsingPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, parsingPage);
+  await runtimeHelpers.expectOptimizeFilter(page, parsingPage);
 });
 
 test("can be filtered by error type", async ({ page, parsingPage }) => {
-  await runtimeHelpers.testErrorTypeFilter(page, parsingPage);
+  await runtimeHelpers.expectErrorTypeFilter(page, parsingPage);
 });
 
 test.describe("desktop view", () => {
@@ -30,11 +30,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ parsingPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(parsingPage);
+    await runtimeHelpers.desktop.expectTableDisplay(parsingPage);
   });
 
   test("table can be sorted by column", async ({ parsingPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(parsingPage, {
+    await runtimeHelpers.desktop.expectTableSorting(parsingPage, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -48,6 +48,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ parsingPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(parsingPage);
+    await runtimeHelpers.mobile.expectCardDisplay(parsingPage);
   });
 });

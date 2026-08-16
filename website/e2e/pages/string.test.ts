@@ -25,11 +25,11 @@ test("can toggle between string formats", async ({ page, stringPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, stringPage }) => {
-  await runtimeHelpers.testDataTypeToggle(page, stringPage);
+  await runtimeHelpers.expectDataTypeToggle(page, stringPage);
 });
 
 test("can be filtered by optimization type", async ({ page, stringPage }) => {
-  await runtimeHelpers.testOptimizeFilter(page, stringPage);
+  await runtimeHelpers.expectOptimizeFilter(page, stringPage);
 });
 
 test.describe("desktop view", () => {
@@ -41,11 +41,11 @@ test.describe("desktop view", () => {
   });
 
   test("it displays results table", async ({ stringPage }) => {
-    await runtimeHelpers.desktop.testTableDisplay(stringPage, yup);
+    await runtimeHelpers.desktop.expectTableDisplay(stringPage, yup);
   });
 
   test("table can be sorted by column", async ({ stringPage }) => {
-    await runtimeHelpers.desktop.testTableSorting(stringPage, {
+    await runtimeHelpers.desktop.expectTableSorting(stringPage, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -59,6 +59,6 @@ test.describe("mobile view", () => {
   });
 
   test("it displays results cards", async ({ stringPage }) => {
-    await runtimeHelpers.mobile.testCardDisplay(stringPage, yup);
+    await runtimeHelpers.mobile.expectCardDisplay(stringPage, yup);
   });
 });

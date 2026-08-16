@@ -43,7 +43,7 @@ async function expectResultsToMatchFilter(
   }
 }
 
-export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
+export async function expectOptimizeFilter(page: Page, runtimePage: RuntimePage) {
   for (const optimizeType of optimizeTypeSchema.options) {
     const optimizeTypeLink = runtimePage.getOptimizeTypeLink(optimizeType);
     const optimizeTypeLabel = runtimePage.getOptimizeTypeLabel(optimizeType);
@@ -58,7 +58,7 @@ export async function testOptimizeFilter(page: Page, runtimePage: RuntimePage) {
   }
 }
 
-export async function testDataTypeToggle(
+export async function expectDataTypeToggle(
   page: Page,
   runtimePage: MixinInstanceType<typeof withDataToggle>,
 ) {
@@ -73,7 +73,7 @@ export async function testDataTypeToggle(
   }
 }
 
-export async function testErrorTypeFilter(
+export async function expectErrorTypeFilter(
   page: Page,
   runtimePage: MixinInstanceType<typeof withErrorTypeFilter>,
 ) {

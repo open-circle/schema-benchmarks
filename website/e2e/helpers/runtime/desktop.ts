@@ -2,7 +2,7 @@ import { expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
 import { ioTs } from "#e2e/utils/libraries";
 
-export async function testTableDisplay(runtimePage: RuntimePage, library = ioTs) {
+export async function expectTableDisplay(runtimePage: RuntimePage, library = ioTs) {
   await expect(runtimePage.desktop.table).toBeVisible();
 
   const libraryRow = runtimePage.desktop.tableHandle.getRow({ library: library.name });
@@ -10,7 +10,7 @@ export async function testTableDisplay(runtimePage: RuntimePage, library = ioTs)
   await expect(libraryRow.getCell("version")).toHaveText(library.version);
 }
 
-export async function testTableSorting(
+export async function expectTableSorting(
   runtimePage: RuntimePage,
   patterns: { first: RegExp; last: RegExp },
 ) {

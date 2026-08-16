@@ -16,7 +16,10 @@ test.beforeEach(
   },
 );
 
-async function testDetailsDialog(compliancePage: CompliancePage, libraryName: string | RegExp) {
+async function expectDetailsDialogToBeOpen(
+  compliancePage: CompliancePage,
+  libraryName: string | RegExp,
+) {
   await expect(compliancePage.details.dialog).toBeVisible();
 
   await expect(
@@ -103,7 +106,7 @@ for (const complianceType of complianceTypeSchema.options) {
         const libraryName = await firstRow.getCell("library").innerText();
         await firstRow.getByRole("link", { name: "Open details" }).click();
 
-        await testDetailsDialog(compliancePage, libraryName);
+        await expectDetailsDialogToBeOpen(compliancePage, libraryName);
       });
     });
 
@@ -121,7 +124,7 @@ for (const complianceType of complianceTypeSchema.options) {
 
         await listItem.getByRole("link").click();
 
-        await testDetailsDialog(compliancePage, tab.libraries.first);
+        await expectDetailsDialogToBeOpen(compliancePage, tab.libraries.first);
       });
     });
   });

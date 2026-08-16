@@ -1,3 +1,4 @@
+import { configs as eslintDependConfigs } from "eslint-plugin-depend";
 import playwright from "eslint-plugin-playwright";
 import type { OxlintConfig } from "oxlint";
 import { defineConfig } from "oxlint";
@@ -20,7 +21,7 @@ export const baseConfig = defineConfig({
     "typescript/no-unsafe-type-assertion": "off",
     "typescript/consistent-type-imports": "error",
     "typescript/consistent-return": "off",
-    "depend/ban-dependencies": "error",
+    ...eslintDependConfigs["flat/recommended"].rules,
   },
   settings: {
     vitest: {
@@ -49,8 +50,7 @@ export const baseConfig = defineConfig({
       rules: {
         ...playwright.configs["flat/recommended"].rules,
         "playwright/no-skipped-test": ["warn", { allowConditional: true }],
-        // doesn't work with our helper functions
-        "playwright/expect-expect": "off",
+        "playwright/expect-expect": ["error", { assertFunctionPatterns: ["^expect.*"] }],
       },
     },
   ],
