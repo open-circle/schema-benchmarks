@@ -109,7 +109,7 @@
       border-radius: var(--shape-large) 0 0 var(--shape-large);
       transform: translateX(100%);
     }
-    @media (prefers-reduced-motion) {
+    @media (prefers-reduced-motion: reduce) {
       transition: none;
     }
 

@@ -39,7 +39,9 @@ export function useScrolled() {
 }
 
 export function prefersReducedMotion() {
-  return !environmentManager.isServer() && window.matchMedia("(prefers-reduced-motion)").matches;
+  return (
+    !environmentManager.isServer() && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 export function ScrollToTop({

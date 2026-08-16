@@ -33,7 +33,7 @@
     animation:
       snackbar-enter var(--snackbar-enter-duration) var(--enter-curve),
       snackbar-fade-in var(--snackbar-enter-duration) linear;
-    @media (prefers-reduced-motion) {
+    @media (prefers-reduced-motion: reduce) {
       animation: snackbar-fade-in var(--snackbar-enter-duration) linear;
     }
   }

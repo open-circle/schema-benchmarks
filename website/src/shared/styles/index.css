@@ -279,7 +279,7 @@ pre[class*="language-"] {
   }
 }
 
-@media (prefers-reduced-motion) {
+@media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto;
   }

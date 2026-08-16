@@ -25,7 +25,7 @@
   }
 }
 
-@media (prefers-reduced-motion) {
+@media (prefers-reduced-motion: reduce) {
   .console-writer {
     &.console-writer--initial {
       .console-writer__cursor::before {
