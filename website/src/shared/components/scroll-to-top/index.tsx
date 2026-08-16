@@ -8,7 +8,7 @@ import { MdSymbol } from "#src/shared/components/symbol";
 
 const cls = bem("scroll-to-top");
 
-export function useScrolled() {
+export function useScrolled({ threshold = 100 } = {}) {
   const scrollContainerRef = useRef<HTMLElement | null>(null);
   const scrollHandle = useMemo(
     () =>
@@ -27,7 +27,7 @@ export function useScrolled() {
     if (!container) return;
     return radEventListeners(container, {
       scroll() {
-        setScrolled(container.scrollTop > 100);
+        setScrolled(container.scrollTop > threshold);
       },
     });
   }
