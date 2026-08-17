@@ -1,3 +1,6 @@
+import { assert } from "@schema-benchmarks/utils";
+import { create, type Draft } from "mutative";
+
 import type { StringFormat } from "./types.ts";
 
 export interface ImageData {
@@ -240,6 +243,187 @@ export const errorData: unknown = {
       ],
     },
   ],
+};
+
+const variant = (mutate: (draft: Draft<ProductData>) => void) => {
+  const [draft, finalize] = create(successData);
+  mutate(draft);
+  return finalize();
+};
+
+function getFirst<T>(array: Array<T>): T {
+  const first = array[0];
+  assert(first !== undefined, "Array is empty");
+  return first;
+}
+
+/**
+ * A specific case for each type of failure that schemas should catch:
+ * - type errors
+ * - string length errors
+ * - numeric range errors
+ */
+export const failureCases: Record<string, unknown> = {
+  // Type errors
+  "id: not a number": variant((data) => {
+    // @ts-expect-error
+    data.id = "abc";
+  }),
+  "created: not a date": variant((data) => {
+    // @ts-expect-error
+    data.created = {};
+  }),
+  "title: not a string": variant((data) => {
+    // @ts-expect-error
+    data.title = 123;
+  }),
+  "price: not a number": variant((data) => {
+    // @ts-expect-error
+    data.price = "89";
+  }),
+  "quantity: not a number": variant((data) => {
+    // @ts-expect-error
+    data.quantity = "5";
+  }),
+  "stars: not a number": variant((data) => {
+    // @ts-expect-error
+    getFirst(data.ratings).stars = "4";
+  }),
+  "image.type: invalid enum": variant((data) => {
+    // @ts-expect-error
+    getFirst(data.images).type = "gif";
+  }),
+  "image.url: invalid format": variant((data) => {
+    getFirst(data.images).url = "not a url";
+  }),
+
+  // String length errors
+  "title: too short": variant((data) => {
+    data.title = "";
+  }),
+  "title: too long": variant((data) => {
+    data.title = "a".repeat(101);
+  }),
+  "brand: too short": variant((data) => {
+    data.brand = "";
+  }),
+  "brand: too long": variant((data) => {
+    data.brand = "a".repeat(31);
+  }),
+  "description: too short": variant((data) => {
+    data.description = "";
+  }),
+  "description: too long": variant((data) => {
+    data.description = "a".repeat(501);
+  }),
+  "image.title: too short": variant((data) => {
+    getFirst(data.images).title = "";
+  }),
+  "image.title: too long": variant((data) => {
+    getFirst(data.images).title = "a".repeat(101);
+  }),
+  "rating.title: too short": variant((data) => {
+    getFirst(data.ratings).title = "";
+  }),
+  "rating.title: too long": variant((data) => {
+    getFirst(data.ratings).title = "a".repeat(101);
+  }),
+  "rating.text: too short": variant((data) => {
+    getFirst(data.ratings).text = "";
+  }),
+  "rating.text: too long": variant((data) => {
+    getFirst(data.ratings).text = "a".repeat(1001);
+  }),
+  "tags: item too short": variant((data) => {
+    data.tags[0] = "";
+  }),
+  "tags: item too long": variant((data) => {
+    data.tags[0] = "a".repeat(31);
+  }),
+
+  // Numeric range errors
+  "stars: too small": variant((data) => {
+    getFirst(data.ratings).stars = 0;
+  }),
+  "stars: too big": variant((data) => {
+    getFirst(data.ratings).stars = 6;
+  }),
+  "price: too small": variant((data) => {
+    data.price = 0;
+  }),
+  "price: too big": variant((data) => {
+    data.price = 10001;
+  }),
+  "discount: too small": variant((data) => {
+    data.discount = 0;
+  }),
+  "discount: too big": variant((data) => {
+    data.discount = 101;
+  }),
+  "quantity: too small": variant((data) => {
+    data.quantity = -1;
+  }),
+  "quantity: too big": variant((data) => {
+    data.quantity = 11;
+  }),
+};
+
+/**
+ * Cases that should be accepted, but lie on the boundaries of a refinement (e.g. minLength 1 -> 1 char string)
+ * Should help catch typos and inconsistencies
+ */
+export const successCases: Record<string, ProductData> = {
+  "title: shortest": variant((data) => {
+    data.title = "a";
+  }),
+  "title: longest": variant((data) => {
+    data.title = "a".repeat(100);
+  }),
+  "brand: longest": variant((data) => {
+    data.brand = "a".repeat(30);
+  }),
+  "description: longest": variant((data) => {
+    data.description = "a".repeat(500);
+  }),
+  "price: lowest": variant((data) => {
+    data.price = 1;
+  }),
+  "price: highest": variant((data) => {
+    data.price = 10_000;
+  }),
+  "discount: lowest": variant((data) => {
+    data.discount = 1;
+  }),
+  "discount: highest": variant((data) => {
+    data.discount = 100;
+  }),
+  "quantity: none left": variant((data) => {
+    data.quantity = 0;
+  }),
+  "quantity: highest": variant((data) => {
+    data.quantity = 10;
+  }),
+  "tags: empty": variant((data) => {
+    data.tags = [];
+  }),
+  "tags: item longest": variant((data) => {
+    data.tags[0] = "a".repeat(30);
+  }),
+  "images: empty": variant((data) => {
+    data.images = [];
+  }),
+  "ratings: empty": variant((data) => {
+    data.ratings = [];
+  }),
+  "ratings: one star": variant((data) => {
+    getFirst(data.ratings).stars = 1;
+  }),
+  "ratings: all stars": variant((data) => {
+    getFirst(data.ratings).stars = 5;
+  }),
+  "ratings: text longest": variant((data) => {
+    getFirst(data.ratings).text = "a".repeat(1000);
+  }),
 };
 
 export const validStrings: Record<StringFormat, string> = {
