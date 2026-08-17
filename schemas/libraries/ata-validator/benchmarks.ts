@@ -49,6 +49,7 @@ export default defineBenchmarks({
         return schema.validate(data);
       },
       validateResult: (result) => result.valid,
+      getData: (result) => result.data,
       snippet: ts`schema.validate(data)`,
     },
   },

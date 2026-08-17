@@ -59,6 +59,7 @@ export default defineBenchmarks({
         return schema(data);
       },
       validateResult: (result) => !(result instanceof type.errors),
+      getData: (result) => (result instanceof type.errors ? undefined : result),
       snippet: ts`schema(data)`,
     },
   },

@@ -7,7 +7,7 @@ import * as Schema from "typebox/schema";
 import * as Value from "typebox/value";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks, success } from "#src";
 
 import { getTypeboxSchema, getTypeboxScriptSchema } from ".";
 
@@ -121,26 +121,26 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            Value.Parse(schema, data);
-            return true;
+            return success.true(Value.Parse(schema, data));
           } catch {
-            return false;
+            return success.false;
           }
         },
-        validateResult: (result) => result,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`Value.Parse(schema, data)`,
         throws: true,
       },
       {
         run(data) {
           try {
-            compiled.Parse(data);
-            return true;
+            return success.true(compiled.Parse(data));
           } catch {
-            return false;
+            return success.false;
           }
         },
-        validateResult: (result) => result,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`
           // const compiled = Compile(schema);
           compiled.Parse(data);
@@ -151,13 +151,13 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            Schema.Parse(schema, data);
-            return true;
+            return success.true(Schema.Parse(schema, data));
           } catch {
-            return false;
+            return success.false;
           }
         },
-        validateResult: (result) => result,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`Schema.Parse(schema, data)`,
         note: "schema",
         throws: true,
@@ -165,13 +165,13 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            compiledSchema.Parse(data);
-            return true;
+            return success.true(compiledSchema.Parse(data));
           } catch {
-            return false;
+            return success.false;
           }
         },
-        validateResult: (result) => result,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`
           // const compiledSchema = Schema.Compile(schema);
           compiledSchema.Parse(data);
@@ -182,13 +182,13 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            compiledScriptSchema.Parse(data);
-            return true;
+            return success.true(compiledScriptSchema.Parse(data));
           } catch {
-            return false;
+            return success.false;
           }
         },
-        validateResult: (result) => result,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`
           // const compiledScriptSchema = Schema.Compile(scriptSchema);
           compiledScriptSchema.Parse(data);

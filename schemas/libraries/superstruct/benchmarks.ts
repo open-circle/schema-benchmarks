@@ -39,16 +39,18 @@ export default defineBenchmarks({
     abortEarly: [
       {
         run(data) {
-          return validate(data, schema)[0];
+          return validate(data, schema);
         },
-        validateResult: (error) => !error,
+        validateResult: ([error]) => !error,
+        getData: ([, data]) => data,
         snippet: ts`validate(data, schema)`,
       },
       {
         run(data) {
-          return schema.validate(data)[0];
+          return schema.validate(data);
         },
-        validateResult: (error) => !error,
+        validateResult: ([error]) => !error,
+        getData: ([, data]) => data,
         snippet: ts`schema.validate(data)`,
         note: "schema.validate",
       },
@@ -56,13 +58,14 @@ export default defineBenchmarks({
     allErrors: [
       {
         run(data) {
-          const [error] = validate(data, schema);
-          for (const _failure of error?.failures() ?? []) {
+          const result = validate(data, schema);
+          for (const _failure of result[0]?.failures() ?? []) {
             // force iteration
           }
-          return error;
+          return result;
         },
-        validateResult: (result) => !result,
+        validateResult: ([error]) => !error,
+        getData: ([, data]) => data,
         snippet: ts`
           const [error] = validate(data, schema);
           for (const failure of error.failures()) {
@@ -72,13 +75,14 @@ export default defineBenchmarks({
       },
       {
         run(data) {
-          const [error] = schema.validate(data);
-          for (const _failure of error?.failures() ?? []) {
+          const result = schema.validate(data);
+          for (const _failure of result[0]?.failures() ?? []) {
             // force iteration
           }
-          return error;
+          return result;
         },
-        validateResult: (result) => !result,
+        validateResult: ([error]) => !error,
+        getData: ([, data]) => data,
         snippet: ts`
           const [error] = schema.validate(data);
           for (const failure of error.failures()) {

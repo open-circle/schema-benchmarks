@@ -38,10 +38,11 @@ export default defineBenchmarks({
   parsing: {
     allErrors: [
       {
-        run(data): { success: boolean } {
+        run(data) {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`schema.safeParse(data)`,
       },
       {
@@ -49,6 +50,7 @@ export default defineBenchmarks({
           return bagSchema.safeParse(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`bagSchema.safeParse(data)`,
         note: "bag",
       },
@@ -57,6 +59,7 @@ export default defineBenchmarks({
           return compactSchema.safeParse(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`compactSchema.safeParse(data)`,
         note: "compact",
       },

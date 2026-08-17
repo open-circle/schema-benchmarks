@@ -2,13 +2,9 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
+import { ok } from "#src";
 
 import { Product as schema } from "./compiled";
-
-const ok = {
-  true: { ok: true },
-  false: { ok: false },
-};
 
 export default defineBenchmarks({
   library: {
@@ -21,22 +17,23 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            schema.parse(data);
-            return ok.true;
+            return ok.true(schema.parse(data));
           } catch {
             return ok.false;
           }
         },
         validateResult: (result) => result.ok,
+        getData: (result) => result.value,
         snippet: ts`schema.parse(data)`,
         note: "parse",
         throws: true,
       },
       {
-        run(data): { ok: boolean } {
+        run(data) {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.ok,
+        getData: (result) => result.value,
         snippet: ts`schema.safeParse(data)`,
         note: "safeParse",
       },

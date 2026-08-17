@@ -2,7 +2,9 @@ import { withKeywords } from "@ata-project/keywords";
 import { Validator } from "ata-validator";
 import { t } from "ata-validator/t";
 
-export function getAtaValidatorSchema() {
+import type { ProductData } from "#src";
+
+export function getAtaValidatorSchema(): Validator<ProductData> {
   const dateSchema = t.object({}, {
     instanceof: "Date",
   } as never);
@@ -38,5 +40,5 @@ export function getAtaValidatorSchema() {
     ratings: t.array(ratingSchema),
   });
 
-  return withKeywords(new Validator(productSchema));
+  return withKeywords(new Validator(productSchema)) as never;
 }

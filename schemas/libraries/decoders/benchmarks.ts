@@ -1,6 +1,7 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
 
+import type { ProductData } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
 import { getDecoderSchema } from ".";
@@ -22,10 +23,11 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       // manually annotate return type, as inferred return type is not portable
-      run(data): { ok: boolean } {
+      run(data): { ok: boolean; value?: ProductData } {
         return schema.decode(data);
       },
       validateResult: (result) => result.ok,
+      getData: (result) => result.value,
       snippet: ts`schema.decode(data)`,
     },
   },

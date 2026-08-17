@@ -45,6 +45,7 @@ export default defineBenchmarks({
         return schema.decode(data);
       },
       validateResult: E.isRight,
+      getData: (result) => (E.isRight(result) ? result.right : undefined),
       snippet: ts`schema.decode(data)`,
     },
   },
