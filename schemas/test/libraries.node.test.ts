@@ -53,26 +53,25 @@ const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: objec
   return ajv.compile(jsonSchema);
 };
 
-const knownFailures: Record<
-  string,
-  {
-    success?: Partial<Record<keyof typeof successCases, string>>;
-    failure?: Partial<Record<keyof typeof failureCases, string>>;
-  }
-> = {
+type KnownOutcomes = {
+  success?: Partial<Record<keyof typeof successCases, string>>;
+  failure?: Partial<Record<keyof typeof failureCases, string>>;
+};
+
+const knownOutcomes: Record<string, KnownOutcomes> = {
   yup: {
     failure: {
-      "title: not a string": "yup coerces to string",
-      "price: not a number": "yup coerces to number",
-      "quantity: not a number": "yup coerces to number",
-      "stars: not a number": "yup coerces to number",
+      "title: not a string": "coerces to string",
+      "price: not a number": "coerces to number",
+      "quantity: not a number": "coerces to number",
+      "stars: not a number": "coerces to number",
     },
   },
   joi: {
     failure: {
-      "price: not a number": "joi coerces to number",
-      "quantity: not a number": "joi coerces to number",
-      "stars: not a number": "joi coerces to number",
+      "price: not a number": "coerces to number",
+      "quantity: not a number": "coerces to number",
+      "stars: not a number": "coerces to number",
     },
   },
 };
@@ -82,17 +81,21 @@ const itChecksAllRefinements = (
   validate: (data: unknown) => MaybePromise<boolean>,
 ) => {
   for (const [caseName, data] of unsafeEntries(successCases)) {
-    const knownFailure = knownFailures[libraryName]?.success?.[caseName];
-    const test = knownFailure ? it.fails : it;
-    test(knownFailure ? `${caseName} (${knownFailure})` : caseName, async () => {
-      await expect(promiseTry(() => validate(data))).resolves.toBe(true);
+    const knownOutcome = knownOutcomes[libraryName]?.success?.[caseName];
+    const expected = !knownOutcome;
+    const suffix = knownOutcome ? ` (${knownOutcome})` : "";
+
+    it(`${caseName}${suffix}`, async () => {
+      await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
     });
   }
   for (const [caseName, data] of unsafeEntries(failureCases)) {
-    const knownFailure = knownFailures[libraryName]?.failure?.[caseName];
-    const test = knownFailure ? it.fails : it;
-    test(knownFailure ? `${caseName} (${knownFailure})` : caseName, async () => {
-      await expect(promiseTry(() => validate(data))).resolves.toBe(false);
+    const knownOutcome = knownOutcomes[libraryName]?.failure?.[caseName];
+    const expected = !!knownOutcome;
+    const suffix = knownOutcome ? ` (${knownOutcome})` : "";
+
+    it(`${caseName}${suffix}`, async () => {
+      await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
     });
   }
 };
