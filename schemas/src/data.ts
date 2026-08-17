@@ -263,7 +263,7 @@ function getFirst<T>(array: Array<T>): T {
  * - string length errors
  * - numeric range errors
  */
-export const failureCases: Record<string, unknown> = {
+export const failureCases = {
   // Type errors
   "id: not a number": variant((data) => {
     // @ts-expect-error
@@ -288,6 +288,10 @@ export const failureCases: Record<string, unknown> = {
   "stars: not a number": variant((data) => {
     // @ts-expect-error
     getFirst(data.ratings).stars = "4";
+  }),
+  "image.created: not a date": variant((data) => {
+    // @ts-expect-error
+    getFirst(data.images).created = {};
   }),
   "image.type: invalid enum": variant((data) => {
     // @ts-expect-error
@@ -372,7 +376,7 @@ export const failureCases: Record<string, unknown> = {
  * Cases that should be accepted, but lie on the boundaries of a refinement (e.g. minLength 1 -> 1 char string)
  * Should help catch typos and inconsistencies
  */
-export const successCases: Record<string, ProductData> = {
+export const successCases = {
   "title: shortest": variant((data) => {
     data.title = "a";
   }),

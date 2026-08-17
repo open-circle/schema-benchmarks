@@ -18,6 +18,7 @@ import {
   ShouldHaveThrownError,
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
+import type { MaybePromise } from "@schema-benchmarks/utils";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
 import { Ajv } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
@@ -52,8 +53,53 @@ const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: objec
   return ajv.compile(jsonSchema);
 };
 
+const knownFailures: Record<
+  string,
+  {
+    success?: Partial<Record<keyof typeof successCases, string>>;
+    failure?: Partial<Record<keyof typeof failureCases, string>>;
+  }
+> = {
+  yup: {
+    failure: {
+      "title: not a string": "yup coerces to string",
+      "price: not a number": "yup coerces to number",
+      "quantity: not a number": "yup coerces to number",
+      "stars: not a number": "yup coerces to number",
+    },
+  },
+  joi: {
+    failure: {
+      "price: not a number": "joi coerces to number",
+      "quantity: not a number": "joi coerces to number",
+      "stars: not a number": "joi coerces to number",
+    },
+  },
+};
+
+const itChecksAllRefinements = (
+  libraryName: string,
+  validate: (data: unknown) => MaybePromise<boolean>,
+) => {
+  for (const [caseName, data] of unsafeEntries(successCases)) {
+    const knownFailure = knownFailures[libraryName]?.success?.[caseName];
+    const test = knownFailure ? it.fails : it;
+    test(knownFailure ? `${caseName} (${knownFailure})` : caseName, async () => {
+      await expect(promiseTry(() => validate(data))).resolves.toBe(true);
+    });
+  }
+  for (const [caseName, data] of unsafeEntries(failureCases)) {
+    const knownFailure = knownFailures[libraryName]?.failure?.[caseName];
+    const test = knownFailure ? it.fails : it;
+    test(knownFailure ? `${caseName} (${knownFailure})` : caseName, async () => {
+      await expect(promiseTry(() => validate(data))).resolves.toBe(false);
+    });
+  }
+};
+
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
+  const { name } = config.library;
 
   describe.runIf(config.initialization)("initialization", () => {
     describe.each(ensureArray(config.initialization ?? []))("config %#", (config) => {
@@ -72,16 +118,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
         expect(config.run(data)).toBe(expected);
       });
-      describe("failure cases", () => {
-        it.each(Object.entries(failureCases))("%s", (_, data) => {
-          expect(config.run(data)).toBe(false);
-        });
-      });
-      describe("success cases", () => {
-        it.each(Object.entries(successCases))("%s", (_, data) => {
-          expect(config.run(data)).toBe(true);
-        });
-      });
+
+      itChecksAllRefinements(name, config.run);
     });
   });
 
@@ -95,17 +133,10 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           const result = await config.run(data);
           expect(config.validateResult(result)).toBe(expected);
         });
-        describe("failure cases", () => {
-          it.each(Object.entries(failureCases))("%s", async (_, data) => {
-            const result = await config.run(data);
-            expect(config.validateResult(result)).toBe(false);
-          });
-        });
-        describe("success cases", () => {
-          it.each(Object.entries(successCases))("%s", async (_, data) => {
-            const result = await config.run(data);
-            expect(config.validateResult(result)).toBe(true);
-          });
+
+        itChecksAllRefinements(name, async (data) => {
+          const result = await config.run(data);
+          return config.validateResult(result);
         });
       });
     });
@@ -131,18 +162,9 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);
         });
-        describe("success cases", () => {
-          it.each(Object.entries(successCases))("%s", async (_, data) => {
-            const result = await schema["~standard"].validate(data);
-            expect(result.issues).toBeUndefined();
-          });
-        });
-        describe("failure cases", () => {
-          it.each(Object.entries(failureCases))("%s", async (_, data) => {
-            const result = await schema["~standard"].validate(data);
-            expect(result.issues).toBeDefined();
-            expect(result.issues?.length).toBeGreaterThan(0);
-          });
+        itChecksAllRefinements(name, async (data) => {
+          const result = await schema["~standard"].validate(data);
+          return !result.issues?.length;
         });
       });
     });
