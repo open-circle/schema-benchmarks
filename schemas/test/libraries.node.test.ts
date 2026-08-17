@@ -126,14 +126,15 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   describe.runIf(config.parsing)("parsing", () => {
     describe.each(Object.entries(config.parsing ?? {}))("%s", (_errorType, configs) => {
       describe.each(ensureArray(configs))("config %#", (config) => {
-        it.each([
-          [true, "valid", successData],
-          [false, "invalid", errorData],
-        ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
-          const result = await config.run(data);
-          expect(config.validateResult(result)).toBe(expected);
+        it("should return true for valid data", async () => {
+          const result = await config.run(successData);
+          expect(config.validateResult(result)).toBe(true);
+          expect(config.getData(result)).toEqual(successData);
         });
-
+        it("should return false for invalid data", async () => {
+          const result = await config.run(errorData);
+          expect(config.validateResult(result)).toBe(false);
+        });
         itChecksAllRefinements(name, async (data) => {
           const result = await config.run(data);
           return config.validateResult(result);
