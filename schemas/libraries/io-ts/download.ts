@@ -30,7 +30,7 @@ const ImageData = t.type({
 
 const RatingData = t.type({
   id: t.number,
-  stars: numberInRange(0, 5),
+  stars: numberInRange(1, 5),
   title: stringWithLength(1, 100),
   text: stringWithLength(1, 1000),
   images: t.array(ImageData),

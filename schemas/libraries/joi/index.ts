@@ -13,7 +13,7 @@ export function getJoiSchema() {
   });
   const ratingSchema = Joi.object({
     id: Joi.number().required(),
-    stars: Joi.number().min(0).max(5).required(),
+    stars: Joi.number().min(1).max(5).required(),
     title: Joi.string().min(1).max(100).required(),
     text: Joi.string().min(1).max(1000).required(),
     images: Joi.array().items(imageSchema).required(),

@@ -28,7 +28,7 @@ const imageSchema = object({
 
 const ratingSchema = object({
   id: required(number()),
-  stars: required(chain(number(), min(0), max(5))),
+  stars: required(chain(number(), min(1), max(5))),
   title: required(chain(string(), minLength(1), maxLength(100))),
   text: required(chain(string(), minLength(1), maxLength(1000))),
   images: required(array(imageSchema)),

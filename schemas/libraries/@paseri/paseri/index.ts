@@ -13,7 +13,7 @@ export function getPaseriSchema(): p.Schema<ProductData> {
   });
   const ratingSchema = p.object({
     id: p.number(),
-    stars: p.number().gte(0).lte(5),
+    stars: p.number().gte(1).lte(5),
     title: p.string().min(1).max(100),
     text: p.string().min(1).max(1000),
     images: p.array(imageSchema),

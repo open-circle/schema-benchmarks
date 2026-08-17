@@ -33,7 +33,7 @@ export function getAjvSchema(): JSONSchemaType<ProductData> {
     type: "object",
     properties: {
       id: { type: "number" },
-      stars: { type: "number", minimum: 0, maximum: 5 },
+      stars: { type: "number", minimum: 1, maximum: 5 },
       title: { type: "string", minLength: 1, maxLength: 100 },
       text: { type: "string", minLength: 1, maxLength: 1000 },
       images: { type: "array", items: imageSchema },
