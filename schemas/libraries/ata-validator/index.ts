@@ -13,7 +13,7 @@ export function getAtaValidatorSchema() {
     title: t.string({ minLength: 1, maxLength: 100 }),
     type: t.enum(["jpg", "png"]),
     size: t.number(),
-    url: t.string({ format: "url" }),
+    url: t.string({ format: "uri" }),
   });
 
   const ratingSchema = t.object({
