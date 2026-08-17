@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks, success } from "#src";
 
 import { getShapeshiftSchema } from ".";
 
@@ -46,24 +46,25 @@ export default defineBenchmarks({
     allErrors: [
       {
         run(data) {
-          return schema.run(data).success;
+          try {
+            return success.true(schema.parse(data));
+          } catch {
+            return success.false;
+          }
         },
-        validateResult: (result) => result,
-        snippet: ts`schema.run(data)`,
-        note: "run",
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.parse(data)`,
+        throws: true,
       },
       {
         run(data) {
-          try {
-            schema.parse(data);
-            return true;
-          } catch {
-            return false;
-          }
+          return schema.run(data);
         },
-        validateResult: (result) => result,
-        snippet: ts`schema.parse(data)`,
-        throws: true,
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.run(data)`,
+        note: "run",
       },
     ],
   },

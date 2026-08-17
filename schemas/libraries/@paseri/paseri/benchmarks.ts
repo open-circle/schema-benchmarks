@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks, ok } from "#src";
 
 import { getPaseriSchema } from ".";
 
@@ -16,11 +16,6 @@ const createStringBenchmark = (
   },
   snippet,
 });
-
-const ok = {
-  true: { ok: true },
-  false: { ok: false },
-};
 
 const schema = getPaseriSchema();
 
@@ -41,22 +36,23 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            schema.parse(data);
-            return ok.true;
+            return ok.true(schema.parse(data));
           } catch {
             return ok.false;
           }
         },
         validateResult: (result) => result.ok,
+        getData: (result) => result.value,
         snippet: ts`p.object(...).parse(data)`,
         note: "parse",
         throws: true,
       },
       {
-        run(data): { ok: boolean } {
+        run(data) {
           return schema.safeParse(data);
         },
         validateResult: (result) => result.ok,
+        getData: (result) => result.value,
         snippet: ts`p.object(...).safeParse(data)`,
         note: "safeParse",
       },

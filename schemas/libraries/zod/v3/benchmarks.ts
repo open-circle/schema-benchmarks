@@ -61,6 +61,7 @@ export default defineBenchmarks({
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`schema.safeParse(data)`,
       },
     ],

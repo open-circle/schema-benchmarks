@@ -61,6 +61,7 @@ export default defineBenchmarks({
           return typia.validate<TypiaSchema>(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => (result.success ? result.data : undefined),
         note: "validate",
         snippet: ts`typia.validate<TypiaSchema>(data)`,
       },
@@ -69,6 +70,7 @@ export default defineBenchmarks({
           return validate(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => (result.success ? result.data : undefined),
         note: "createValidate",
         snippet: ts`
           // const validate = typia.createValidate<TypiaSchema>();

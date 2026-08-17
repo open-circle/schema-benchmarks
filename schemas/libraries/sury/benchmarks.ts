@@ -4,7 +4,7 @@ import ts from "dedent";
 import * as S from "sury";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
-import { assertNotReached, assertJsonSchemaTarget, defineBenchmarks } from "#src";
+import { assertNotReached, assertJsonSchemaTarget, defineBenchmarks, success } from "#src";
 
 import { getSurySchema } from ".";
 
@@ -35,11 +35,6 @@ const jsonSchemaSubject = S.schema({
 const parser = S.parser(getSurySchema());
 const encoder = S.encoder(S.bigint, S.string);
 const decoder = S.decoder(S.string, S.bigint);
-
-const success = {
-  true: { success: true },
-  false: { success: false },
-};
 
 export default defineBenchmarks({
   library: {
@@ -73,13 +68,13 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            parser(data);
-            return success.true;
+            return success.true(parser(data));
           } catch {
             return success.false;
           }
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`
         // const parser = S.parser(S.schema(...));
         parser(data);
@@ -91,6 +86,7 @@ export default defineBenchmarks({
           return S.safe(() => parser(data));
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.value,
         snippet: ts`S.safe(() => parser(data))`,
         note: "safe",
       },

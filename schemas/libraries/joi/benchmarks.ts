@@ -61,6 +61,7 @@ export default defineBenchmarks({
         return schema.validate(data, { abortEarly: false });
       },
       validateResult: (result) => !result.error,
+      getData: (result) => (result.error ? undefined : result.value),
       snippet: ts`schema.validate(data, { abortEarly: false })`,
     },
     abortEarly: {
@@ -68,6 +69,7 @@ export default defineBenchmarks({
         return schema.validate(data, { abortEarly: true });
       },
       validateResult: (result) => !result.error,
+      getData: (result) => (result.error ? undefined : result.value),
       snippet: ts`schema.validate(data, { abortEarly: true })`,
     },
   },

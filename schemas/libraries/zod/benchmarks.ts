@@ -55,6 +55,7 @@ export default defineBenchmarks({
           return schema.safeParse(data);
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`schema.safeParse(data)`,
       },
       {
@@ -62,6 +63,7 @@ export default defineBenchmarks({
           return schema.safeParse(data, { jitless: true });
         },
         validateResult: (result) => result.success,
+        getData: (result) => result.data,
         snippet: ts`schema.safeParse(data, { jitless: true })`,
         note: "jitless",
         optimizeType: "none",

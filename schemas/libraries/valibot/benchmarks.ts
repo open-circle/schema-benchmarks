@@ -50,6 +50,7 @@ export default defineBenchmarks({
         return v.safeParse(schema, data);
       },
       validateResult: (result) => result.success,
+      getData: (result) => (result.success ? result.output : undefined),
       snippet: ts`v.safeParse(schema, data)`,
     },
     abortEarly: [
@@ -58,6 +59,7 @@ export default defineBenchmarks({
           return v.safeParse(schema, data, { abortEarly: true });
         },
         validateResult: (result) => result.success,
+        getData: (result) => (result.success ? result.output : undefined),
         snippet: ts`v.safeParse(schema, data, { abortEarly: true })`,
       },
       {
@@ -65,6 +67,7 @@ export default defineBenchmarks({
           return v.safeParse(schema, data, { abortPipeEarly: true });
         },
         validateResult: (result) => result.success,
+        getData: (result) => (result.success ? result.output : undefined),
         snippet: ts`v.safeParse(schema, data, { abortPipeEarly: true })`,
         note: "abortPipeEarly only",
       },

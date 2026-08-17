@@ -33,6 +33,7 @@ export type ErrorType = v.InferOutput<typeof errorTypeSchema>;
 export interface ParsingBenchmarkConfig<ParseResult = unknown> extends BaseBenchmarkConfig {
   run: (data: unknown) => MaybePromise<ParseResult>;
   validateResult: (result: NoInfer<ParseResult>) => boolean;
+  getData: (result: NoInfer<ParseResult>) => ProductData | undefined;
 }
 
 export interface StandardSchemaBenchmarkConfig extends Omit<

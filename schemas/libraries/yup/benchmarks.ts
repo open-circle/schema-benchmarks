@@ -3,7 +3,7 @@ import ts from "dedent";
 import * as yup from "yup";
 
 import type { StringBenchmarkConfig } from "#src";
-import { assertNotReached, defineBenchmarks } from "#src";
+import { assertNotReached, defineBenchmarks, success } from "#src";
 
 import { getYupSchema } from ".";
 
@@ -43,25 +43,26 @@ export default defineBenchmarks({
     allErrors: {
       run(data) {
         try {
-          schema.validateSync(data, { abortEarly: false });
-          return true;
+          return success.true(schema.validateSync(data, { abortEarly: false }));
         } catch {
-          return false;
+          return success.false;
         }
       },
-      validateResult: (result) => result,
+      validateResult: (result) => result.success,
+      getData: (result) => result.value,
       snippet: ts`schema.validateSync(data, { abortEarly: false })`,
       throws: true,
     },
     abortEarly: {
       run(data) {
         try {
-          schema.validateSync(data, { abortEarly: true });
-          return true;
-        } catch {}
-        return false;
+          return success.true(schema.validateSync(data, { abortEarly: true }));
+        } catch {
+          return success.false;
+        }
       },
-      validateResult: (result) => result,
+      validateResult: (result) => result.success,
+      getData: (result) => result.value,
       snippet: ts`schema.validateSync(data, { abortEarly: true })`,
       throws: true,
     },

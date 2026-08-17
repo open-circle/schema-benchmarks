@@ -72,6 +72,7 @@ export default defineBenchmarks({
         return decode(data, { errors: "all" });
       },
       validateResult: isSome,
+      getData: (result) => result.valueOrUndefined,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "all" })
@@ -82,6 +83,7 @@ export default defineBenchmarks({
         return decode(data, { errors: "first" });
       },
       validateResult: isSome,
+      getData: (result) => result.valueOrUndefined,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "first" })
