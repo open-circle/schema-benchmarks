@@ -44,14 +44,14 @@
     "joi": "^18.2.3",
     "joi-to-json": "^5.0.5",
     "jsonschema": "^1.5.0",
-    "runtypes": "^7.0.4",
+    "runtypes": "^7.0.5",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.1",
     "typebox": "catalog:",
-    "typia": "^13.2.0",
+    "typia": "^13.3.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "z-schema": "^12.4.1",
+    "z-schema": "^12.4.2",
     "zod": "^4.4.3",
     "zod-to-json-schema": "^3.25.2"
   },
@@ -61,9 +61,9 @@
     "tsdown": "^0.22.14",
     "ttsc": "catalog:",
     "typescript": "catalog:",
-    "unplugin-macros": "^0.23.1",
+    "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^1.26.2"
+    "zod-compiler": "^1.27.0"
   }
 }
