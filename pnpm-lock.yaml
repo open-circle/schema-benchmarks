@@ -36,6 +36,9 @@ catalogs:
     mix-n-matchers:
       specifier: ^2.4.0
       version: 2.4.0
+    mutative:
+      specifier: ^1.3.0
+      version: 1.3.0
     oxfmt:
       specifier: ^0.64.0
       version: 0.64.0
@@ -268,6 +271,9 @@ importers:
       jsonschema:
         specifier: ^1.5.0
         version: 1.5.0
+      mutative:
+        specifier: 'catalog:'
+        version: 1.3.0
       runtypes:
         specifier: ^7.0.5
         version: 7.0.5
@@ -429,7 +435,7 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       mutative:
-        specifier: ^1.3.0
+        specifier: 'catalog:'
         version: 1.3.0
       normalize.css:
         specifier: ^8.0.1

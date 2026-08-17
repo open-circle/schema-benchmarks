@@ -45,6 +45,7 @@
     "joi": "^18.2.3",
     "joi-to-json": "^5.0.5",
     "jsonschema": "^1.5.0",
+    "mutative": "catalog:",
     "runtypes": "^7.0.5",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.1",
