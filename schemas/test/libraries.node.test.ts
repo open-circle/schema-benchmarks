@@ -131,6 +131,19 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);
         });
+        describe("success cases", () => {
+          it.each(Object.entries(successCases))("%s", async (_, data) => {
+            const result = await schema["~standard"].validate(data);
+            expect(result.issues).toBeUndefined();
+          });
+        });
+        describe("failure cases", () => {
+          it.each(Object.entries(failureCases))("%s", async (_, data) => {
+            const result = await schema["~standard"].validate(data);
+            expect(result.issues).toBeDefined();
+            expect(result.issues?.length).toBeGreaterThan(0);
+          });
+        });
       });
     });
   });
