@@ -277,6 +277,10 @@ export const failureCases = {
     // @ts-expect-error
     data.title = 123;
   }),
+  "discount: not a number": variant((data) => {
+    // @ts-expect-error
+    data.discount = {};
+  }),
   "price: not a number": variant((data) => {
     // @ts-expect-error
     data.price = "89";
@@ -292,6 +296,10 @@ export const failureCases = {
   "image.created: not a date": variant((data) => {
     // @ts-expect-error
     getFirst(data.images).created = {};
+  }),
+  "image.size: not a number": variant((data) => {
+    // @ts-expect-error
+    getFirst(data.images).size = {};
   }),
   "image.type: invalid enum": variant((data) => {
     // @ts-expect-error
@@ -383,8 +391,14 @@ export const successCases = {
   "title: longest": variant((data) => {
     data.title = "a".repeat(100);
   }),
+  "brand: shortest": variant((data) => {
+    data.brand = "a";
+  }),
   "brand: longest": variant((data) => {
     data.brand = "a".repeat(30);
+  }),
+  "description: shortest": variant((data) => {
+    data.description = "a";
   }),
   "description: longest": variant((data) => {
     data.description = "a".repeat(500);
@@ -401,6 +415,9 @@ export const successCases = {
   "discount: highest": variant((data) => {
     data.discount = 100;
   }),
+  "discount: null": variant((data) => {
+    data.discount = null;
+  }),
   "quantity: none left": variant((data) => {
     data.quantity = 0;
   }),
@@ -412,6 +429,9 @@ export const successCases = {
   }),
   "tags: item longest": variant((data) => {
     data.tags[0] = "a".repeat(30);
+  }),
+  "tags: item shortest": variant((data) => {
+    data.tags[0] = "a";
   }),
   "images: empty": variant((data) => {
     data.images = [];
@@ -425,8 +445,20 @@ export const successCases = {
   "ratings: all stars": variant((data) => {
     getFirst(data.ratings).stars = 5;
   }),
+  "rating.title: shortest": variant((data) => {
+    getFirst(data.ratings).title = "a";
+  }),
+  "rating.text: shortest": variant((data) => {
+    getFirst(data.ratings).text = "a";
+  }),
   "ratings: text longest": variant((data) => {
     getFirst(data.ratings).text = "a".repeat(1000);
+  }),
+  "image.title: shortest": variant((data) => {
+    getFirst(data.images).title = "a";
+  }),
+  "image.type: png": variant((data) => {
+    getFirst(data.images).type = "png";
   }),
 };
 
