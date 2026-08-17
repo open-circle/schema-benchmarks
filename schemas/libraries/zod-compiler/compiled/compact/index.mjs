@@ -196,7 +196,7 @@ const imageSchema = z.object({
 });
 const ratingSchema = z.object({
 	id: z.number(),
-	stars: z.number().min(0).max(5),
+	stars: z.number().min(1).max(5),
 	title: z.string().min(1).max(100),
 	text: z.string().min(1).max(1e3),
 	images: z.array(imageSchema)
@@ -560,7 +560,7 @@ const compiledProductSchema = /* @__PURE__ */ (() => {
 						]
 					});
 					else {
-						if (__sv_30 < 0) _e.push(__zcTS(0, "number", true, __sv_30, [
+						if (__sv_30 < 1) _e.push(__zcTS(1, "number", true, __sv_30, [
 							"ratings",
 							__i_27,
 							"stars"
