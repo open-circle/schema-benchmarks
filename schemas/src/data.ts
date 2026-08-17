@@ -3,16 +3,21 @@ import type { StringFormat } from "./types.ts";
 export interface ImageData {
   id: number;
   created: Date;
+  /** 1-100 characters */
   title: string;
   type: "jpg" | "png";
   size: number;
+  /** URL format */
   url: string;
 }
 
 export interface RatingData {
   id: number;
+  /** 1-5 */
   stars: number;
+  /** 1-100 characters */
   title: string;
+  /** 1-1000 characters */
   text: string;
   images: Array<ImageData>;
 }
@@ -20,12 +25,19 @@ export interface RatingData {
 export interface ProductData {
   id: number;
   created: Date;
+  /** 1-100 characters */
   title: string;
+  /** 1-30 characters */
   brand: string;
+  /** 1-500 characters */
   description: string;
+  /** 1-10000 */
   price: number;
+  /** 1-100, nullable */
   discount: number | null;
+  /** 0-10 */
   quantity: number;
+  /** Each 1-30 characters */
   tags: Array<string>;
   images: Array<ImageData>;
   ratings: Array<RatingData>;
