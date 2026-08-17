@@ -20,7 +20,7 @@ export function getRuntypesSchema() {
 
   const Rating = Object({
     id: Number,
-    stars: NumberInRange(0, 5),
+    stars: NumberInRange(1, 5),
     title: StringWithLength(1, 100),
     text: StringWithLength(1, 1000),
     images: Array(Image),

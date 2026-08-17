@@ -13,7 +13,7 @@ export function getZodMiniSchema() {
   });
   const ratingSchema = z.object({
     id: z.number(),
-    stars: z.number().check(z.minimum(0), z.maximum(5)),
+    stars: z.number().check(z.minimum(1), z.maximum(5)),
     title: z.string().check(z.minLength(1), z.maxLength(100)),
     text: z.string().check(z.minLength(1), z.maxLength(1000)),
     images: z.array(imageSchema),

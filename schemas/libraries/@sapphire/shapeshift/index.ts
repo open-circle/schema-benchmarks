@@ -15,7 +15,7 @@ export function getShapeshiftSchema() {
 
   const ratingSchema = s.object({
     id: s.number(),
-    stars: s.number().greaterThanOrEqual(0).lessThanOrEqual(5),
+    stars: s.number().greaterThanOrEqual(1).lessThanOrEqual(5),
     title: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100),
     text: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(1000),
     images: s.array(imageSchema),

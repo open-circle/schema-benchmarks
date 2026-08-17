@@ -27,7 +27,7 @@ const productSchema = v.object({
   description: v.pipe(v.string(), v.minLength(1), v.maxLength(500)),
   price: v.pipe(v.number(), v.minValue(1), v.maxValue(10000)),
   discount: v.nullable(v.pipe(v.number(), v.minValue(1), v.maxValue(100))),
-  quantity: v.pipe(v.number(), v.minValue(1), v.maxValue(10)),
+  quantity: v.pipe(v.number(), v.minValue(0), v.maxValue(10)),
   tags: v.array(v.pipe(v.string(), v.minLength(1), v.maxLength(30))),
   images: v.array(imageSchema),
   ratings: v.array(ratingSchema),

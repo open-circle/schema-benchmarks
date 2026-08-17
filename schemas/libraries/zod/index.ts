@@ -13,7 +13,7 @@ export function getZodSchema() {
   });
   const ratingSchema = z.object({
     id: z.number(),
-    stars: z.number().min(0).max(5),
+    stars: z.number().min(1).max(5),
     title: z.string().min(1).max(100),
     text: z.string().min(1).max(1000),
     images: z.array(imageSchema),

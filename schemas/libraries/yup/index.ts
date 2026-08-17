@@ -13,7 +13,7 @@ export function getYupSchema() {
   });
   const ratingSchema = yup.object({
     id: yup.number().required(),
-    stars: yup.number().min(0).max(5).required(),
+    stars: yup.number().min(1).max(5).required(),
     title: yup.string().min(1).max(100).required(),
     text: yup.string().min(1).max(1000).required(),
     images: yup.array(imageSchema).required(),

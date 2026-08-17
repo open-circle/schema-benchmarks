@@ -12,7 +12,7 @@ const imageSchema = S.schema({
 });
 const ratingSchema = S.schema({
   id: S.number,
-  stars: S.number.with(S.gte, 0).with(S.lte, 5),
+  stars: S.number.with(S.gte, 1).with(S.lte, 5),
   title: S.string.with(S.nonEmpty).with(S.maxLength, 100),
   text: S.string.with(S.nonEmpty).with(S.maxLength, 1000),
   images: S.array(imageSchema),

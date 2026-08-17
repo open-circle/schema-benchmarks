@@ -18,7 +18,7 @@ export function getAtaValidatorSchema() {
 
   const ratingSchema = t.object({
     id: t.number(),
-    stars: t.number({ minimum: 0, maximum: 5 }),
+    stars: t.number({ minimum: 1, maximum: 5 }),
     title: t.string({ minLength: 1, maxLength: 100 }),
     text: t.string({ minLength: 1, maxLength: 1000 }),
     images: t.array(imageSchema),

@@ -13,7 +13,7 @@ export function getEffectSchema() {
   });
   const Rating = Schema.Struct({
     id: Schema.Number,
-    stars: Schema.Number.check(Schema.isGreaterThanOrEqualTo(0), Schema.isLessThanOrEqualTo(5)),
+    stars: Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(5)),
     title: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(100)),
     text: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(1000)),
     images: Schema.mutable(Schema.Array(Image)),
@@ -28,7 +28,7 @@ export function getEffectSchema() {
     discount: Schema.NullOr(
       Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(100)),
     ),
-    quantity: Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(10)),
+    quantity: Schema.Number.check(Schema.isGreaterThanOrEqualTo(0), Schema.isLessThanOrEqualTo(10)),
     tags: Schema.mutable(
       Schema.Array(Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(30))),
     ),
