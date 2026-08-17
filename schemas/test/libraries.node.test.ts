@@ -5,6 +5,8 @@ import type {
 } from "@schema-benchmarks/schemas";
 import {
   errorData,
+  failureCases,
+  successCases,
   fromJsonBenchSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaInputData,
@@ -54,7 +56,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const config = await getConfig();
 
   describe.runIf(config.initialization)("initialization", () => {
-    describe.each(ensureArray(config.initialization ?? []))("config %o", (config) => {
+    describe.each(ensureArray(config.initialization ?? []))("config %#", (config) => {
       it("should initialize", async () => {
         const result = await config.run();
         expect(result).toBeDefined();
@@ -63,19 +65,29 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   });
 
   describe.runIf(config.validation)("validation", () => {
-    describe.each(ensureArray(config.validation ?? []))("config %o", (config) => {
+    describe.each(ensureArray(config.validation ?? []))("config %#", (config) => {
       it.each([
         [true, "valid", successData],
         [false, "invalid", errorData],
       ] as const)("should return %s for %s data", async (expected, _dataType, data) => {
         expect(config.run(data)).toBe(expected);
       });
+      describe("failure cases", () => {
+        it.each(Object.entries(failureCases))("%s", (_, data) => {
+          expect(config.run(data)).toBe(false);
+        });
+      });
+      describe("success cases", () => {
+        it.each(Object.entries(successCases))("%s", (_, data) => {
+          expect(config.run(data)).toBe(true);
+        });
+      });
     });
   });
 
   describe.runIf(config.parsing)("parsing", () => {
     describe.each(Object.entries(config.parsing ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %o", (config) => {
+      describe.each(ensureArray(configs))("config %#", (config) => {
         it.each([
           [true, "valid", successData],
           [false, "invalid", errorData],
@@ -83,13 +95,25 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           const result = await config.run(data);
           expect(config.validateResult(result)).toBe(expected);
         });
+        describe("failure cases", () => {
+          it.each(Object.entries(failureCases))("%s", async (_, data) => {
+            const result = await config.run(data);
+            expect(config.validateResult(result)).toBe(false);
+          });
+        });
+        describe("success cases", () => {
+          it.each(Object.entries(successCases))("%s", async (_, data) => {
+            const result = await config.run(data);
+            expect(config.validateResult(result)).toBe(true);
+          });
+        });
       });
     });
   });
 
   describe.runIf(config.standard)("standard", () => {
     describe.each(Object.entries(config.standard ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %o", ({ schema }) => {
+      describe.each(ensureArray(configs))("config %#", ({ schema }) => {
         it("should have a schema", async () => {
           expect(schema["~standard"]).toBeDefined();
           expect(schema["~standard"]).toHaveProperty("version", expect.any(Number));
@@ -113,7 +137,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   describe.runIf(config.jsonSchema?.conversion?.toJson)("JSON schema toJson", () => {
     // the parameter is typed, so a renamed field fails to compile instead of silently skipping
     describe.each(ensureArray(config.jsonSchema?.conversion?.toJson ?? []))(
-      "config %o",
+      "config %#",
       ({ generate, standardJsonSchema }: SchemaConversionToJsonConfig) => {
         describe.each(jsonSchemaConversionTargetSchema.options)("%s", (target) => {
           describe.each(jsonSchemaDirectionSchema.options)("%s", (direction) => {
@@ -153,7 +177,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   });
   describe.runIf(config.jsonSchema?.conversion?.fromJson)("JSON schema fromJson", () => {
     describe.each(ensureArray(config.jsonSchema?.conversion?.fromJson ?? []))(
-      "config %o",
+      "config %#",
       ({ generate }) => {
         it("should return a result", () => {
           expect(generate(fromJsonBenchSchema)).toBeDefined();
@@ -182,7 +206,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     });
   });
   describe.runIf(config.codec)("codec", () => {
-    describe.each(ensureArray(config.codec ?? []))("config %o", (config) => {
+    describe.each(ensureArray(config.codec ?? []))("config %#", (config) => {
       it("should encode and decode", async () => {
         const { encode, decode } = config;
         const bigint = 1234567890123456789n;
