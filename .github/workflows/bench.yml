@@ -39,7 +39,9 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: schemas-build
-          path: schemas/dist/
+          path: |
+            schemas/dist/
+            schemas/**/compiled/**
           retention-days: 1
 
   bench-stack:
@@ -51,7 +53,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: schemas-build
-          path: schemas/dist/
+          path: schemas/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run stack benchmark
@@ -71,7 +73,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: schemas-build
-          path: schemas/dist/
+          path: schemas/
       - name: Setup environment
         uses: ./.github/actions/environments/cached
         with:
@@ -102,7 +104,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: schemas-build
-          path: schemas/dist/
+          path: schemas/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run bench benchmark
@@ -122,7 +124,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: schemas-build
-          path: schemas/dist/
+          path: schemas/
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run JSON schema benchmark
@@ -141,6 +143,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - parallel:
+          - name: Download schemas
+            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            with:
+              name: schemas-build
+              path: schemas/
           - name: Download bench results
             uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
             with:
