@@ -50,6 +50,7 @@ export const parsingResultSchema = v.object({
   ...runtimeBenchResultSchema.entries,
   type: v.literal("parsing"),
   errorType: errorTypeSchema,
+  sameObj: v.optional(v.boolean()),
 });
 export type ParsingResult = v.InferOutput<typeof parsingResultSchema>;
 
