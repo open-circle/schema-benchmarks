@@ -1,9 +1,13 @@
 import remotes from "@schema-benchmarks/json-schema-tests/remotes";
+import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import type { JSONSchemaType } from "ajv";
-import { ValidationError } from "ajv";
+import { Ajv, ValidationError } from "ajv";
+import Ajv4 from "ajv-draft-04";
 import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
+import Ajv2019 from "ajv/dist/2019";
+import Ajv2020 from "ajv/dist/2020";
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
@@ -23,6 +27,20 @@ const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
   },
   snippet: ts`{ type: "string", format: "${format}" }`,
 });
+
+function getComplianceAjv(strict: boolean, target: ComplianceTarget) {
+  const sharedOpts = { strict, validateSchema: false, logger: false as const };
+  switch (target) {
+    case "draft4":
+      return new Ajv4(sharedOpts);
+    case "draft2019-09":
+      return new Ajv2019(sharedOpts);
+    case "draft2020-12":
+      return new Ajv2020(sharedOpts);
+    default:
+      return new Ajv(sharedOpts);
+  }
+}
 
 export default defineBenchmarks({
   library: {
@@ -81,8 +99,8 @@ export default defineBenchmarks({
     compliance: {
       validation: [
         {
-          run(schema, data) {
-            const complianceAjv = getAjv({ validateSchema: false, logger: false });
+          run(schema, data, { target }) {
+            const complianceAjv = getComplianceAjv(false, target);
             addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
@@ -99,8 +117,8 @@ export default defineBenchmarks({
           source: { type: "native" },
         },
         {
-          run(schema, data) {
-            const complianceAjv = getAjv({ strict: false, validateSchema: false, logger: false });
+          run(schema, data, { target }) {
+            const complianceAjv = getComplianceAjv(false, target);
             addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
