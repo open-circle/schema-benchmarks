@@ -66,4 +66,4 @@ jobs:
           branch: chore/bump-json-schema-test-suite
           delete-branch: true
           add-paths: |
-            json-schema-tests/constants/**/*.ts
+            json-schema-tests/constants/*.ts
