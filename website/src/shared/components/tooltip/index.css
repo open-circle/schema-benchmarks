@@ -27,6 +27,7 @@
       text-align: left;
       border-radius: var(--shape-medium);
       padding: 0.75rem 1rem 0.5rem;
+      border: 1px solid var(--divider);
       .tooltip__subhead {
         margin: 0;
         margin-bottom: 0.25rem;
