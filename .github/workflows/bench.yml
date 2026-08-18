@@ -9,6 +9,7 @@ on:
       - "bench/**"
       - "schemas/**"
       - "json-schema-tests/**"
+      - "pnpm-workspace.yaml"
   workflow_dispatch:
 
 concurrency:
