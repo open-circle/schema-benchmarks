@@ -4,7 +4,7 @@ import { t } from "ata-validator/t";
 
 import type { ProductData } from "#src";
 
-export function getAtaValidatorSchema(): Validator<ProductData> {
+export function getAtaValidatorSchema() {
   const dateSchema = t.object({}, {
     instanceof: "Date",
   } as never);
@@ -40,5 +40,5 @@ export function getAtaValidatorSchema(): Validator<ProductData> {
     ratings: t.array(ratingSchema),
   });
 
-  return withKeywords(new Validator(productSchema)) as never;
+  return withKeywords(new Validator(productSchema)) as Validator<ProductData>;
 }
