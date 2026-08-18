@@ -40,32 +40,64 @@ export default defineBenchmarks({
     snippet: ts`schema.isValidSync(data)`,
   },
   parsing: {
-    allErrors: {
-      run(data) {
-        try {
-          return success.true(schema.validateSync(data, { abortEarly: false }));
-        } catch {
-          return success.false;
-        }
+    allErrors: [
+      {
+        run(data) {
+          try {
+            return success.true(schema.validateSync(data, { abortEarly: false }));
+          } catch {
+            return success.false;
+          }
+        },
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.validateSync(data, { abortEarly: false })`,
+        throws: true,
       },
-      validateResult: (result) => result.success,
-      getData: (result) => result.value,
-      snippet: ts`schema.validateSync(data, { abortEarly: false })`,
-      throws: true,
-    },
-    abortEarly: {
-      run(data) {
-        try {
-          return success.true(schema.validateSync(data, { abortEarly: true }));
-        } catch {
-          return success.false;
-        }
+      {
+        run(data) {
+          try {
+            return success.true(schema.validateSync(data, { abortEarly: false, strict: true }));
+          } catch {
+            return success.false;
+          }
+        },
+        note: "strict",
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.validateSync(data, { abortEarly: false, strict: true })`,
+        throws: true,
       },
-      validateResult: (result) => result.success,
-      getData: (result) => result.value,
-      snippet: ts`schema.validateSync(data, { abortEarly: true })`,
-      throws: true,
-    },
+    ],
+    abortEarly: [
+      {
+        run(data) {
+          try {
+            return success.true(schema.validateSync(data, { abortEarly: true }));
+          } catch {
+            return success.false;
+          }
+        },
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.validateSync(data, { abortEarly: true })`,
+        throws: true,
+      },
+      {
+        run(data) {
+          try {
+            return success.true(schema.validateSync(data, { abortEarly: true, strict: true }));
+          } catch {
+            return success.false;
+          }
+        },
+        note: "strict",
+        validateResult: (result) => result.success,
+        getData: (result) => result.value,
+        snippet: ts`schema.validateSync(data, { abortEarly: true, strict: true })`,
+        throws: true,
+      },
+    ],
   },
   standard: {
     allErrors: { schema },
