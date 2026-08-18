@@ -62,6 +62,8 @@ export function getOrInsert<K extends object, V>(
   key: NoInfer<K>,
   value: NoInfer<V>,
 ): NoInfer<V> {
+  if (map.getOrInsert) return map.getOrInsert(key, value);
+
   if (map.has(key)) return map.get(key) as V;
 
   return map.set(key, value).get(key) as V;
@@ -70,21 +72,23 @@ export function getOrInsert<K extends object, V>(
 export function getOrInsertComputed<K extends object, V>(
   map: WeakMap<K, V>,
   key: NoInfer<K>,
-  compute: (key: K) => NoInfer<V>,
+  callback: (key: K) => NoInfer<V>,
 ): NoInfer<V>;
 export function getOrInsertComputed<K, V>(
   map: Map<K, V>,
   key: NoInfer<K>,
-  compute: (key: K) => NoInfer<V>,
+  callback: (key: K) => NoInfer<V>,
 ): NoInfer<V>;
 export function getOrInsertComputed<K extends object, V>(
   map: Map<K, V> | WeakMap<K, V>,
   key: NoInfer<K>,
-  compute: (key: K) => NoInfer<V>,
+  callback: (key: K) => NoInfer<V>,
 ): NoInfer<V> {
+  if (map.getOrInsertComputed) return map.getOrInsertComputed(key, callback);
+
   if (map.has(key)) return map.get(key) as V;
 
-  return map.set(key, compute(key)).get(key) as V;
+  return map.set(key, callback(key)).get(key) as V;
 }
 
 const byteUnits = [
