@@ -3,7 +3,7 @@ import ts from "dedent";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { Product as schema } from "./compiled.gen";
+import { Product as schema } from "./compiled";
 
 const ok = {
   true: { ok: true },

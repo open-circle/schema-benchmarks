@@ -21,4 +21,4 @@ const baseSource = dedent`
   })}
 `;
 
-fs.writeFileSync(path.join(import.meta.dirname, "compiled.gen.ts"), baseSource);
+fs.writeFileSync(path.join(import.meta.dirname, "compiled/index.ts"), baseSource);
