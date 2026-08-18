@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { getPackageMetadata } from "#src/routes/_benchmarks/-query";
+import { getMostCommonVersion } from "#src/routes/libraries/-query";
 import { generateMetadata } from "#src/shared/data/meta";
 
 import { PackageCard } from "./-components/package";
@@ -15,10 +16,8 @@ export const Route = createFileRoute("/libraries/")({
     const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
     await Promise.all(
       Object.entries(libraries).flatMap(([packageName, versions]) => [
-        ...versions.map((version) =>
-          queryClient.ensureQueryData(
-            getPackageMetadata(packageName, version, abortController.signal),
-          ),
+        queryClient.prefetchQuery(
+          getPackageMetadata(packageName, getMostCommonVersion(versions), abortController.signal),
         ),
         queryClient.prefetchQuery(getReplacementUrl(packageName, abortController.signal)),
       ]),
