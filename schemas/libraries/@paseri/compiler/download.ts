@@ -1,3 +1,3 @@
-import { Product } from "./compiled.gen";
+import { Product } from "./compiled";
 
 Product.safeParse({});
