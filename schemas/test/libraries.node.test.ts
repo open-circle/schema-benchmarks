@@ -62,16 +62,6 @@ const knownOutcomes: Record<string, KnownOutcomes> = {
   yup: {
     failure: {
       "title: not a string": "coerces to string",
-      "price: not a number": "coerces to number",
-      "quantity: not a number": "coerces to number",
-      "stars: not a number": "coerces to number",
-    },
-  },
-  joi: {
-    failure: {
-      "price: not a number": "coerces to number",
-      "quantity: not a number": "coerces to number",
-      "stars: not a number": "coerces to number",
     },
   },
 };
