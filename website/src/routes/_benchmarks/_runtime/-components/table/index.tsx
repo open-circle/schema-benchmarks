@@ -13,6 +13,7 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import type { BenchTo } from "#src/routes/_benchmarks/_runtime/-components/results";
 import type { SortableKey } from "#src/routes/_benchmarks/_runtime/-constants";
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
+import { ButtonGroup } from "#src/shared/components/button/index.tsx";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { Radio } from "#src/shared/components/radio";
 import { Scaler } from "#src/shared/components/scaler";
@@ -140,21 +141,38 @@ export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTable
               </td>
               {benchType !== "standard" && (
                 <td className="action">
-                  {result.throws && (
-                    <ToggleButton
-                      tooltip={{
-                        subhead: "Throws on invalid data",
-                        supporting: (
-                          <div style={{ maxWidth: "16rem" }}>
-                            This library throws an error when parsing invalid data (and has no
-                            non-throwing equivalent), so the benchmark includes a try/catch.
-                          </div>
-                        ),
-                      }}
-                    >
-                      <MdSymbol>error</MdSymbol>
-                    </ToggleButton>
-                  )}
+                  <ButtonGroup ariaLabel="Library behavior">
+                    {result.throws && (
+                      <ToggleButton
+                        tooltip={{
+                          subhead: "Throws on invalid data",
+                          supporting: (
+                            <div style={{ maxWidth: "16rem" }}>
+                              This library throws an error when parsing invalid data (and has no
+                              non-throwing equivalent), so the benchmark includes a try/catch.
+                            </div>
+                          ),
+                        }}
+                      >
+                        <MdSymbol>error</MdSymbol>
+                      </ToggleButton>
+                    )}
+                    {result.sameObj && (
+                      <ToggleButton
+                        tooltip={{
+                          subhead: "Returns the same object",
+                          supporting: (
+                            <div style={{ maxWidth: "16rem" }}>
+                              This library returned the same object when parsing, instead of
+                              creating a new object.
+                            </div>
+                          ),
+                        }}
+                      >
+                        <MdSymbol>equal</MdSymbol>
+                      </ToggleButton>
+                    )}
+                  </ButtonGroup>
                 </td>
               )}
               <td>

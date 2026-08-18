@@ -31,7 +31,8 @@ export type BenchPlotProps =
 const getLabel = (d: RuntimeResult) =>
   d.libraryName +
   (d.throws ? " *" : "") +
-  ((d.type === "parsing" || d.type === "standard") && d.errorType === "abortEarly" ? " †" : "");
+  (d.errorType === "abortEarly" ? " †" : "") +
+  (d.sameObj ? " ‡" : "");
 
 export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
   data,

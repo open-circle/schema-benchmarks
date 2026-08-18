@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
+import { ButtonGroup } from "#src/shared/components/button/index.tsx";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { ChipCollection, DisplayChip } from "#src/shared/components/chip";
 import { CodeBlock } from "#src/shared/components/code";
@@ -73,21 +74,38 @@ export function BenchCard({ result, meanScaler }: BenchCardProps) {
               </DisplayChip>
             )}
           </ChipCollection>
-          {result.throws && (
-            <ToggleButton
-              tooltip={{
-                subhead: "Throws on invalid data",
-                supporting: (
-                  <div style={{ maxWidth: "16rem" }}>
-                    This library throws an error when parsing invalid data (and has no non-throwing
-                    equivalent), so the benchmark includes a try/catch.
-                  </div>
-                ),
-              }}
-            >
-              <MdSymbol>error</MdSymbol>
-            </ToggleButton>
-          )}
+          <ButtonGroup ariaLabel="Library behavior">
+            {result.throws && (
+              <ToggleButton
+                tooltip={{
+                  subhead: "Throws on invalid data",
+                  supporting: (
+                    <div style={{ maxWidth: "16rem" }}>
+                      This library throws an error when parsing invalid data (and has no
+                      non-throwing equivalent), so the benchmark includes a try/catch.
+                    </div>
+                  ),
+                }}
+              >
+                <MdSymbol>error</MdSymbol>
+              </ToggleButton>
+            )}
+            {result.sameObj && (
+              <ToggleButton
+                tooltip={{
+                  subhead: "Returns the same object",
+                  supporting: (
+                    <div style={{ maxWidth: "16rem" }}>
+                      This library returned the same object when parsing, instead of creating a new
+                      object.
+                    </div>
+                  ),
+                }}
+              >
+                <MdSymbol>equal</MdSymbol>
+              </ToggleButton>
+            )}
+          </ButtonGroup>
         </div>
       </article>
     </li>
