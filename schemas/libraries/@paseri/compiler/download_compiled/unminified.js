@@ -116,7 +116,7 @@ function messageList(node, locale) {
 	return value.ok === true;
 }
 //#endregion
-//#region ../schemas/libraries/@paseri/compiler/compiled.gen.ts
+//#region ../schemas/libraries/@paseri/compiler/compiled/index.ts
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
 	if (value.constructor === Object) return true;

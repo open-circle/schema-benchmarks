@@ -70,7 +70,7 @@ function _extrasOk46(_obj43: Record<string, unknown>): boolean {
 function _shapeArray49(_arr47: unknown[]): boolean {
   for (let _i48 = 0; _i48 < _arr47.length; _i48++) {
       const _el30 = _arr47[_i48];
-      if (!(isPlainObject(_el30) && (typeof (_el30 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["id"]))) && (typeof (_el30 as Record<PropertyKey, unknown>)["stars"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["stars"])) && (_el30 as Record<PropertyKey, unknown>)["stars"] >= 1 && (_el30 as Record<PropertyKey, unknown>)["stars"] <= 5) && (typeof (_el30 as Record<PropertyKey, unknown>)["title"] === "string" && (_el30 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["title"].length <= 100) && (typeof (_el30 as Record<PropertyKey, unknown>)["text"] === "string" && (_el30 as Record<PropertyKey, unknown>)["text"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["text"].length <= 1000) && (Array.isArray((_el30 as Record<PropertyKey, unknown>)["images"]) && _shapeArray28((_el30 as Record<PropertyKey, unknown>)["images"])) && _extrasOk46(_el30 as Record<PropertyKey, unknown>))) {
+      if (!(isPlainObject(_el30) && (typeof (_el30 as Record<PropertyKey, unknown>)["id"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["id"]))) && (typeof (_el30 as Record<PropertyKey, unknown>)["stars"] === "number" && !(Number.isNaN((_el30 as Record<PropertyKey, unknown>)["stars"])) && (_el30 as Record<PropertyKey, unknown>)["stars"] >= 0 && (_el30 as Record<PropertyKey, unknown>)["stars"] <= 5) && (typeof (_el30 as Record<PropertyKey, unknown>)["title"] === "string" && (_el30 as Record<PropertyKey, unknown>)["title"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["title"].length <= 100) && (typeof (_el30 as Record<PropertyKey, unknown>)["text"] === "string" && (_el30 as Record<PropertyKey, unknown>)["text"].length >= 1 && (_el30 as Record<PropertyKey, unknown>)["text"].length <= 1000) && (Array.isArray((_el30 as Record<PropertyKey, unknown>)["images"]) && _shapeArray28((_el30 as Record<PropertyKey, unknown>)["images"])) && _extrasOk46(_el30 as Record<PropertyKey, unknown>))) {
           return false;
       }
   }
@@ -224,7 +224,7 @@ function _objectIssues160(_val115: unknown): TreeNode | undefined {
           }
           else {
               _labelCheck122: {
-                  if (!(_value120 >= 1)) {
+                  if (!(_value120 >= 0)) {
                       _issue117 = addIssue(_issue117, { type: "nest", key: "stars", child: { type: "leaf", code: issueCodes.TOO_SMALL } });
                       break _labelCheck122;
                   }
