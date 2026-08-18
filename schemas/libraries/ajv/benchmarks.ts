@@ -28,7 +28,7 @@ const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
   snippet: ts`{ type: "string", format: "${format}" }`,
 });
 
-function getComplianceAjv(strict: boolean, target: ComplianceTarget) {
+function getComplianceAjv({ strict, target }: { strict: boolean; target: ComplianceTarget }) {
   const sharedOpts = { strict, validateSchema: false, logger: false as const };
   switch (target) {
     case "draft4":
@@ -100,7 +100,7 @@ export default defineBenchmarks({
       validation: [
         {
           run(schema, data, { target }) {
-            const complianceAjv = getComplianceAjv(false, target);
+            const complianceAjv = getComplianceAjv({ strict: true, target });
             addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
@@ -118,7 +118,7 @@ export default defineBenchmarks({
         },
         {
           run(schema, data, { target }) {
-            const complianceAjv = getComplianceAjv(false, target);
+            const complianceAjv = getComplianceAjv({ strict: false, target });
             addFormats(complianceAjv);
             for (const [uri, remoteSchema] of Object.entries(remotes)) {
               complianceAjv.addSchema(remoteSchema, uri);
