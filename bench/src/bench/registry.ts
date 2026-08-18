@@ -27,7 +27,7 @@ type BenchInfoByType = Satisfies<
   {
     initialization: RuntimeBenchInfo;
     validation: RuntimeBenchInfo & { dataType: DataType };
-    parsing: RuntimeBenchInfo & { dataType: DataType; errorType: ErrorType };
+    parsing: RuntimeBenchInfo & { dataType: DataType; errorType: ErrorType; sameObj?: boolean };
     standard: RuntimeBenchInfo & { dataType: DataType; errorType: ErrorType };
     string: RuntimeBenchInfo & { stringFormat: StringFormat; dataType: DataType };
     codec: RuntimeBenchInfo & {

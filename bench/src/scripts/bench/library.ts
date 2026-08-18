@@ -97,7 +97,15 @@ if (parsing) {
     for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
       if (!benchConfigs) continue;
       for (const benchConfig of ensureArray(benchConfigs)) {
-        const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
+        const {
+          run,
+          snippet,
+          note,
+          optimizeType = libraryOptimizeType,
+          throws,
+          getData,
+        } = benchConfig;
+        const sameObj = getData(await run(successData)) === successData;
         bench.add(
           caseRegistry.add({
             type: "parsing",
@@ -107,6 +115,7 @@ if (parsing) {
             libraryName,
             version,
             snippet,
+            sameObj,
             note,
             throws,
           }),
@@ -280,6 +289,7 @@ for (const task of successTasks) {
         mean: task.result.latency.mean,
         optimizeType: entry.optimizeType,
         errorType: entry.errorType,
+        sameObj: entry.sameObj,
       });
       break;
     }
