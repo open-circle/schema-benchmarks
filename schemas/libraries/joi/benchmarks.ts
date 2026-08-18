@@ -56,22 +56,44 @@ export default defineBenchmarks({
     snippet: ts`object(...)`,
   },
   parsing: {
-    allErrors: {
-      run(data) {
-        return schema.validate(data, { abortEarly: false });
+    allErrors: [
+      {
+        run(data) {
+          return schema.validate(data, { abortEarly: false });
+        },
+        validateResult: (result) => !result.error,
+        getData: (result) => (result.error ? undefined : result.value),
+        snippet: ts`schema.validate(data, { abortEarly: false })`,
       },
-      validateResult: (result) => !result.error,
-      getData: (result) => (result.error ? undefined : result.value),
-      snippet: ts`schema.validate(data, { abortEarly: false })`,
-    },
-    abortEarly: {
-      run(data) {
-        return schema.validate(data, { abortEarly: true });
+      {
+        run(data) {
+          return schema.validate(data, { abortEarly: false, convert: false });
+        },
+        note: "no convert",
+        validateResult: (result) => !result.error,
+        getData: (result) => (result.error ? undefined : result.value),
+        snippet: ts`schema.validate(data, { abortEarly: false, convert: false })`,
       },
-      validateResult: (result) => !result.error,
-      getData: (result) => (result.error ? undefined : result.value),
-      snippet: ts`schema.validate(data, { abortEarly: true })`,
-    },
+    ],
+    abortEarly: [
+      {
+        run(data) {
+          return schema.validate(data, { abortEarly: true });
+        },
+        validateResult: (result) => !result.error,
+        getData: (result) => (result.error ? undefined : result.value),
+        snippet: ts`schema.validate(data, { abortEarly: true })`,
+      },
+      {
+        run(data) {
+          return schema.validate(data, { abortEarly: true, convert: false });
+        },
+        note: "no convert",
+        validateResult: (result) => !result.error,
+        getData: (result) => (result.error ? undefined : result.value),
+        snippet: ts`schema.validate(data, { abortEarly: true, convert: false })`,
+      },
+    ],
   },
   standard: {
     allErrors: { schema },
