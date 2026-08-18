@@ -225,7 +225,7 @@ export const errorData: unknown = {
       text: "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.",
       images: [
         {
-          id: "352", // 352
+          id: "abc", // 352
           created: undefined, // new Date()
           title: "The fruit salad in a bowl",
           type: "jpg",
@@ -279,19 +279,19 @@ export const failureCases = {
   }),
   "discount: not a number": variant((data) => {
     // @ts-expect-error
-    data.discount = {};
+    data.discount = "abc";
   }),
   "price: not a number": variant((data) => {
     // @ts-expect-error
-    data.price = "89";
+    data.price = "abc";
   }),
   "quantity: not a number": variant((data) => {
     // @ts-expect-error
-    data.quantity = "5";
+    data.quantity = "abc";
   }),
   "stars: not a number": variant((data) => {
     // @ts-expect-error
-    getFirst(data.ratings).stars = "4";
+    getFirst(data.ratings).stars = "abc";
   }),
   "image.created: not a date": variant((data) => {
     // @ts-expect-error
