@@ -1,4 +1,4 @@
-import { ComponentObjectModel } from "#e2e/fixtures/base";
+import { ComponentObjectModel, step } from "#e2e/fixtures/base";
 import type { Style, Theme, NpmSite, Ligature } from "#src/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 
@@ -12,6 +12,7 @@ export class PrefsDialog extends ComponentObjectModel {
   npmSiteOptions = this.dialog.getByRole("toolbar", { name: "NPM browser" });
   ligatureOptions = this.dialog.getByRole("toolbar", { name: "Code ligatures" });
 
+  @step("Open preferences dialog")
   async openDialog() {
     await expect(async () => {
       try {
@@ -23,6 +24,7 @@ export class PrefsDialog extends ComponentObjectModel {
     }).toPass();
   }
 
+  @step("Close preferences dialog")
   async closeDialog() {
     await this.page.mouse.click(0, 0);
     await expect(this.dialog).toBeHidden();

@@ -16,55 +16,67 @@ test(
   { tag: "@smoke" },
   async ({ page, downloadPage }) => {
     for (const minifyType of minifyTypeSchema.options) {
-      const link = downloadPage.getMinifyTypeLink(minifyType);
+      await test.step(`Select ${minifyType} results`, async () => {
+        const link = downloadPage.getMinifyTypeLink(minifyType);
 
-      await link.click();
+        await link.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+        await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
 
-      await expect(link).toBeCurrent("page");
+        await expect(link).toBeCurrent("page");
+      });
     }
   },
 );
 
 test("it can use speed presets", async ({ page, downloadPage }) => {
-  const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
-  await threeGButton.click();
+  await test.step("Select 3G preset", async () => {
+    const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
+    await threeGButton.click();
 
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g");
-  await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
-  await expect(threeGButton).toBeCurrent("page");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g");
+    await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
+    await expect(threeGButton).toBeCurrent("page");
+  });
 
-  const fourGButton = downloadPage.getSpeedPresetButtonByLabel("4G");
-  await fourGButton.click();
+  await test.step("Select 4G preset", async () => {
+    const fourGButton = downloadPage.getSpeedPresetButtonByLabel("4G");
+    await fourGButton.click();
 
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g");
-  await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
-  await expect(fourGButton).toBeCurrent("page");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g");
+    await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
+    await expect(fourGButton).toBeCurrent("page");
+  });
 
-  const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
-  await wifiButton.click();
+  await test.step("Select WiFi preset", async () => {
+    const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
+    await wifiButton.click();
 
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
-  await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-  await expect(wifiButton).toBeCurrent("page");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
+    await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
+    await expect(wifiButton).toBeCurrent("page");
+  });
 });
 
 test("it can set a custom download speed", async ({ page, downloadPage }) => {
   const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
 
-  await wifiButton.click();
+  await test.step("Start from the WiFi preset", async () => {
+    await wifiButton.click();
 
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
-  await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-  await expect(wifiButton).toBeCurrent("page");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
+    await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
+    await expect(wifiButton).toBeCurrent("page");
+  });
 
-  await downloadPage.downloadSpeedInput.fill("241");
+  await test.step("Enter a custom speed", async () => {
+    await downloadPage.downloadSpeedInput.fill("241");
 
-  await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
-  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241");
-  // custom value should not keep the preset as current
-  await expect(wifiButton).not.toBeCurrent("page");
+    await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241");
+    // custom value should not keep the preset as current
+    await expect(wifiButton).not.toBeCurrent("page");
+  });
 });
 
 test.describe("desktop view", () => {
@@ -87,20 +99,24 @@ test.describe("desktop view", () => {
     const libraryHeaderCell = await downloadPage.desktop.tableHandle.getHeaderCell("library");
     const librarySortLink = libraryHeaderCell.getByRole("link");
 
-    await librarySortLink.click();
-
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
-
     const firstRow = downloadPage.desktop.tableHandle.getRowByIndex(0);
     const firstRowLibraryCell = firstRow.getCell("library");
 
-    await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
+    await test.step("Sort libraries ascending", async () => {
+      await librarySortLink.click();
 
-    await librarySortLink.click();
+      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+      await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
+    });
 
-    await expect(firstRowLibraryCell).toHaveText(/zod/i);
+    await test.step("Sort libraries descending", async () => {
+      await librarySortLink.click();
+
+      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+
+      await expect(firstRowLibraryCell).toHaveText(/zod/i);
+    });
   });
 });
 
