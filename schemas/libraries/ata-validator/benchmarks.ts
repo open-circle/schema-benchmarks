@@ -1,12 +1,11 @@
 import remotes from "@schema-benchmarks/json-schema-tests/remotes";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
-import type { StandardSchemaV1 } from "@standard-schema/spec";
 import type { JSONSchemaType } from "ajv";
 import type { FormatName } from "ajv-formats";
 import { Validator } from "ata-validator";
 import ts from "dedent";
 
-import type { ProductData, StringBenchmarkConfig } from "#src";
+import type { StringBenchmarkConfig } from "#src";
 import { defineBenchmarks } from "#src";
 
 import { getAtaValidatorSchema } from ".";
@@ -59,9 +58,7 @@ export default defineBenchmarks({
     },
   },
   standard: {
-    allErrors: {
-      schema: schema as StandardSchemaV1<unknown, ProductData>, // supports standard schema, but doesn't narrow the type
-    },
+    allErrors: { schema },
   },
   string: {
     "date-time": createStringBenchmark("date-time"),
@@ -78,8 +75,6 @@ export default defineBenchmarks({
       validation: [
         {
           run(schema, data) {
-            if (typeof schema === "boolean")
-              throw new Error("ata-validator does not support boolean schemas");
             return new Validator(schema, { schemas: remotesWithIds }).isValidObject(data);
           },
           snippet: () => ts`new Validator(schema, { schemas }).isValidObject(data)`,

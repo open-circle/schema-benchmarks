@@ -5,9 +5,7 @@ import { t } from "ata-validator/t";
 import type { ProductData } from "#src";
 
 export function getAtaValidatorSchema() {
-  const dateSchema = t.object({}, {
-    instanceof: "Date",
-  } as never);
+  const dateSchema = t.object({}, { instanceof: "Date" });
 
   const imageSchema = t.object({
     id: t.number(),
