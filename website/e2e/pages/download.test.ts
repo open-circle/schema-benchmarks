@@ -77,11 +77,8 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   });
 });
 
-test.describe("desktop view", () => {
-  test.beforeEach("Check desktop view", async ({ matchBreakpoints, downloadPage }) => {
-    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
+test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.beforeEach(async ({ downloadPage }) => {
     await downloadPage.desktop.tableHandle.init();
   });
 
@@ -118,12 +115,7 @@ test.describe("desktop view", () => {
   });
 });
 
-test.describe("mobile view", () => {
-  test.beforeEach("Check mobile view", async ({ matchBreakpoints, downloadPage }) => {
-    const isDesktop = await matchBreakpoints(downloadPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
-
+test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ downloadPage }) => {
     await expect(downloadPage.mobile.cardList).toBeVisible();
 

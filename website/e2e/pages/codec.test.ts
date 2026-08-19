@@ -7,15 +7,22 @@ test.beforeEach(async ({ fontsLoaded, codecPage }) => {
   await fontsLoaded();
 });
 
-test("can be filtered by optimization type", async ({ page, codecPage }) => {
-  await runtimeHelpers.expectOptimizeFilter(page, codecPage);
+test.describe("optimization filter", () => {
+  test.describe("desktop", { tag: "@desktop" }, () => {
+    test("can be filtered by optimization type", async ({ codecPage }) => {
+      await runtimeHelpers.desktop.expectOptimizeFilter(codecPage);
+    });
+  });
+
+  test.describe("mobile", { tag: "@mobile" }, () => {
+    test("can be filtered by optimization type", async ({ codecPage }) => {
+      await runtimeHelpers.mobile.expectOptimizeFilter(codecPage);
+    });
+  });
 });
 
-test.describe("desktop view", () => {
-  test.beforeEach("Check desktop view", async ({ matchBreakpoints, codecPage }) => {
-    const isDesktop = await matchBreakpoints(codecPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
+test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.beforeEach(async ({ codecPage }) => {
     await codecPage.desktop.tableHandle.init();
   });
 
@@ -31,12 +38,7 @@ test.describe("desktop view", () => {
   });
 });
 
-test.describe("mobile view", () => {
-  test.beforeEach("Check mobile view", async ({ matchBreakpoints, codecPage }) => {
-    const isDesktop = await matchBreakpoints(codecPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
-
+test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ codecPage }) => {
     await runtimeHelpers.mobile.expectCardDisplay(codecPage);
   });

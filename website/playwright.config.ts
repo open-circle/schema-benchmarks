@@ -33,25 +33,30 @@ export default defineConfig({
   projects: [
     {
       name: "Desktop Chrome",
+      grepInvert: /@mobile/,
       use: { ...devices["Desktop Chrome"], channel: "chromium" },
     },
     /*
     {
       name: "Desktop Firefox",
+      grepInvert: /@mobile/,
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "Desktop Safari",
+      grepInvert: /@mobile/,
       use: { ...devices["Desktop Safari"] },
     },
     */
     {
       name: "Mobile Chrome",
+      grepInvert: /@desktop/,
       use: { ...devices["Pixel 5"], channel: "chromium" },
     },
     /*
     {
       name: "Mobile Safari",
+      grepInvert: /@desktop/,
       use: { ...devices["iPhone 12"] },
     },
     */

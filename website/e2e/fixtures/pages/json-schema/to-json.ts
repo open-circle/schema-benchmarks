@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
@@ -36,6 +37,16 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
       name: this.getDirectionLabel(direction),
       exact: true,
     });
+  }
+
+  async selectDirection(direction: JsonSchemaDirection) {
+    const link = this.getDirectionLink(direction);
+
+    await link.click();
+
+    await expect(link).toHaveAttribute("aria-current", "page");
+
+    await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction);
   }
 
   @cache()
@@ -95,10 +106,6 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
 export class ToJsonPage extends PageObjectModel {
   url = "/json-schema/to-json";
   title = /Schema to JSON Schema/;
-
-  breakpoints = PageObjectModel.defineBreakpoints({
-    desktop: ["laptop", "desktop"],
-  });
 
   tabs = this.page.getByRole("tablist");
 

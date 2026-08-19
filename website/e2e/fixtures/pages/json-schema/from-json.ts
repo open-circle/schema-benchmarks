@@ -7,10 +7,6 @@ export class FromJsonPage extends PageObjectModel {
   url = "/json-schema/from-json";
   title = /JSON Schema to Schema/;
 
-  breakpoints = PageObjectModel.defineBreakpoints({
-    desktop: ["laptop", "desktop"],
-  });
-
   @cache()
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });

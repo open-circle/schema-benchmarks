@@ -1,8 +1,5 @@
-import type { Page, Locator } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect } from "@playwright/test";
-
-import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
-import { breakpointQueries } from "#src/shared/hooks/use-breakpoints";
 
 export const trimSortLabels = (text: string) =>
   text.replace(/[\n\r\s]+(sort|arrow_upward|arrow_downward)$/, "");
@@ -28,12 +25,6 @@ export async function getCellByColumnName(
     if (regexp.test(cols[colIdx]!)) return row.getByRole("cell").nth(colIdx);
 
   throw new Error(`Column with name "${columnName}" not found`);
-}
-
-export function matchBreakpoints(page: Page, breakpoints: ReadonlyArray<Breakpoint>) {
-  const query = breakpoints.map((breakpoint) => `(${breakpointQueries[breakpoint]})`).join(" or ");
-
-  return page.evaluate(([query]): boolean => window.matchMedia(query).matches, [query] as const);
 }
 
 export async function waitForFontsLoaded(page: Page) {

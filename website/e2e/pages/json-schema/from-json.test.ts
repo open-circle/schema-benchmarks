@@ -6,11 +6,8 @@ test.beforeEach("Go to JSON schema from-json page", async ({ fromJsonPage, fonts
   await fontsLoaded();
 });
 
-test.describe("desktop view", () => {
-  test.beforeEach("check desktop view", async ({ matchBreakpoints, fromJsonPage }) => {
-    const isDesktop = await matchBreakpoints(fromJsonPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
+test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.beforeEach(async ({ fromJsonPage }) => {
     await fromJsonPage.desktop.tableHandle.init();
   });
 
@@ -37,12 +34,7 @@ test.describe("desktop view", () => {
   });
 });
 
-test.describe("mobile view", () => {
-  test.beforeEach("check mobile view", async ({ matchBreakpoints, fromJsonPage }) => {
-    const isDesktop = await matchBreakpoints(fromJsonPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
-
+test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ fromJsonPage }) => {
     const card = fromJsonPage.mobile.getCardByLibraryName("zod");
 

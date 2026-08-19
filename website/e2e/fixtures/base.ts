@@ -2,8 +2,6 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 import type { MaybePromise, Tail } from "@schema-benchmarks/utils";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 
-import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
-
 class ObjectModel {
   protected page: Page;
   constructor(page: Page) {
@@ -29,12 +27,6 @@ export abstract class PageObjectModel extends ComponentObjectModel {
 
   matchesUrl(url: URL) {
     return url.pathname === this.url;
-  }
-
-  static defineBreakpoints<const T extends Record<string, ReadonlyArray<Breakpoint>>>(
-    breakpoints: T,
-  ) {
-    return breakpoints;
   }
 }
 

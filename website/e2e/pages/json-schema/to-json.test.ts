@@ -1,4 +1,3 @@
-import type { JsonSchemaDirection } from "@schema-benchmarks/schemas";
 import {
   jsonSchemaConversionTargetSchema,
   jsonSchemaDirectionSchema,
@@ -6,32 +5,6 @@ import {
 import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { test, expect } from "#e2e/fixtures";
-import type { ToJsonPage } from "#e2e/fixtures/pages/json-schema/to-json";
-
-async function expectResultsToMatchDirection(
-  toJsonPage: ToJsonPage,
-  direction: JsonSchemaDirection,
-  isDesktop: boolean,
-) {
-  const expectedDirection = toJsonPage.benchmarks.getDirectionLabel(direction);
-  if (isDesktop) {
-    await expect(async () => {
-      await everyAsync(toJsonPage.benchmarks.desktop.tableHandle, async ({ row }) => {
-        await expect(row.getCell("type")).toHaveText(expectedDirection);
-      });
-    }).toPass();
-  } else {
-    const expectedDirectionRegex = new RegExp(expectedDirection, "i");
-    await expect(async () => {
-      const chips = toJsonPage.benchmarks.mobile.cards.getByTestId("bench-card-chips");
-      const labels = await chips.allTextContents();
-
-      every(labels, (label) => {
-        expect(label).toMatch(expectedDirectionRegex);
-      });
-    }).toPass();
-  }
-}
 
 test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();
@@ -48,12 +21,7 @@ test.describe("support matrix tab", () => {
     await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url));
   });
 
-  test.describe("desktop view", () => {
-    test.beforeEach("check desktop view", async ({ matchBreakpoints, toJsonPage }) => {
-      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-      test.skip(!isDesktop, "This test is only for desktop viewports");
-    });
-
+  test.describe("desktop view", { tag: "@desktop" }, () => {
     test("it displays support matrix table", async ({ toJsonPage }) => {
       await expect(toJsonPage.supportMatrix.desktop.supportMatrixTable).toBeVisible();
       await expect(
@@ -62,12 +30,7 @@ test.describe("support matrix tab", () => {
     });
   });
 
-  test.describe("mobile view", () => {
-    test.beforeEach("check mobile view", async ({ matchBreakpoints, toJsonPage }) => {
-      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-      test.skip(isDesktop, "This test is only for mobile viewports");
-    });
-
+  test.describe("mobile view", { tag: "@mobile" }, () => {
     test("it displays support matrix cards", async ({ toJsonPage }) => {
       const card = toJsonPage.supportMatrix.mobile.getSupportMatrixCardByLibraryName("arktype");
 
@@ -102,26 +65,44 @@ test.describe("benchmarks tab", () => {
     }
   });
 
-  test("can filter by direction", async ({ page, matchBreakpoints, toJsonPage }) => {
-    const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-    for (const direction of jsonSchemaDirectionSchema.options) {
-      const link = toJsonPage.benchmarks.getDirectionLink(direction);
+  test.describe("desktop direction filtering", { tag: "@desktop" }, () => {
+    test("shows matching table rows", async ({ toJsonPage }) => {
+      for (const direction of jsonSchemaDirectionSchema.options) {
+        await toJsonPage.benchmarks.selectDirection(direction);
 
-      await link.click();
-
-      await expect(link).toBeCurrent("page");
-
-      await expect(page).toHaveURL((url) => url.searchParams.get("direction") === direction);
-
-      await expectResultsToMatchDirection(toJsonPage, direction, isDesktop);
-    }
+        const expectedDirection = toJsonPage.benchmarks.getDirectionLabel(direction);
+        await expect(async () => {
+          await everyAsync(toJsonPage.benchmarks.desktop.tableHandle, async ({ row }) => {
+            await expect(row.getCell("type")).toHaveText(expectedDirection);
+          });
+        }).toPass();
+      }
+    });
   });
 
-  test.describe("desktop view", () => {
-    test.beforeEach("check desktop view", async ({ matchBreakpoints, toJsonPage }) => {
-      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-      test.skip(!isDesktop, "This test is only for desktop viewports");
+  test.describe("mobile direction filtering", { tag: "@mobile" }, () => {
+    test("shows matching card chips", async ({ toJsonPage }) => {
+      for (const direction of jsonSchemaDirectionSchema.options) {
+        await toJsonPage.benchmarks.selectDirection(direction);
 
+        const expectedDirectionRegex = new RegExp(
+          toJsonPage.benchmarks.getDirectionLabel(direction),
+          "i",
+        );
+        await expect(async () => {
+          const chips = toJsonPage.benchmarks.mobile.cards.getByTestId("bench-card-chips");
+          const labels = await chips.allTextContents();
+
+          every(labels, (label) => {
+            expect(label).toMatch(expectedDirectionRegex);
+          });
+        }).toPass();
+      }
+    });
+  });
+
+  test.describe("desktop view", { tag: "@desktop" }, () => {
+    test.beforeEach(async ({ toJsonPage }) => {
       await toJsonPage.benchmarks.desktop.tableHandle.init();
     });
 
@@ -157,12 +138,7 @@ test.describe("benchmarks tab", () => {
     });
   });
 
-  test.describe("mobile view", () => {
-    test.beforeEach("check mobile view", async ({ matchBreakpoints, toJsonPage }) => {
-      const isDesktop = await matchBreakpoints(toJsonPage.breakpoints.desktop);
-      test.skip(isDesktop, "This test is only for mobile viewports");
-    });
-
+  test.describe("mobile view", { tag: "@mobile" }, () => {
     test("it displays results cards", async ({ toJsonPage }) => {
       const card = toJsonPage.benchmarks.mobile.getCardByLibraryName("zod").first();
 

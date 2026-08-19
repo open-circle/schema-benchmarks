@@ -95,10 +95,6 @@ export class CompliancePage extends PageObjectModel {
   url = "/json-schema/compliance";
   title = /Compliance/;
 
-  breakpoints = PageObjectModel.defineBreakpoints({
-    desktop: ["laptop", "desktop"],
-  });
-
   targetToggle = this.page.getByRole("list", { name: "Target" });
 
   getTargetLabel(target: ComplianceTarget) {
