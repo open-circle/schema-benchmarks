@@ -5,6 +5,7 @@ import {
 import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { test, expect } from "#e2e/fixtures";
+import * as helpers from "#e2e/helpers";
 
 test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();
@@ -115,26 +116,10 @@ test.describe("benchmarks tab", () => {
     });
 
     test("table can be sorted by column", async ({ toJsonPage }) => {
-      const libraryHeaderCell =
-        await toJsonPage.benchmarks.desktop.tableHandle.getHeaderCell("library");
-      const librarySortLink = libraryHeaderCell.getByRole("link");
-
-      await librarySortLink.click();
-
-      await expect(libraryHeaderCell).toHaveSort("ascending");
-
-      const firstRow = toJsonPage.benchmarks.desktop.tableHandle.getRowByIndex(0);
-      const firstRowLibraryCell = firstRow.getCell("library");
-
-      await expect(firstRowLibraryCell).toHaveText(/arktype/i);
-
-      await expect(async () => {
-        await librarySortLink.click();
-
-        await expect(libraryHeaderCell).toHaveSort("descending");
-      }).toPass();
-
-      await expect(firstRowLibraryCell).toHaveText(/zod/i);
+      await helpers.desktop.expectTableSorting(toJsonPage.benchmarks.desktop.tableHandle, {
+        first: /arktype/i,
+        last: /zod/i,
+      });
     });
   });
 

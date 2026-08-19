@@ -1,5 +1,5 @@
 import { test } from "#e2e/fixtures";
-import * as runtimeHelpers from "#e2e/helpers/runtime";
+import * as helpers from "#e2e/helpers";
 
 test.beforeEach(async ({ fontsLoaded, codecPage }) => {
   await codecPage.goto();
@@ -10,13 +10,13 @@ test.beforeEach(async ({ fontsLoaded, codecPage }) => {
 test.describe("optimization filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by optimization type", async ({ codecPage }) => {
-      await runtimeHelpers.desktop.expectOptimizeFilter(codecPage);
+      await helpers.runtime.desktop.expectOptimizeFilter(codecPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by optimization type", async ({ codecPage }) => {
-      await runtimeHelpers.mobile.expectOptimizeFilter(codecPage);
+      await helpers.runtime.mobile.expectOptimizeFilter(codecPage);
     });
   });
 });
@@ -27,11 +27,11 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ codecPage }) => {
-    await runtimeHelpers.desktop.expectTableDisplay(codecPage);
+    await helpers.runtime.desktop.expectTableDisplay(codecPage);
   });
 
   test("table can be sorted by column", async ({ codecPage }) => {
-    await runtimeHelpers.desktop.expectTableSorting(codecPage, {
+    await helpers.desktop.expectTableSorting(codecPage.desktop.tableHandle, {
       first: /effect/i,
       last: /zod/i,
     });
@@ -40,6 +40,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ codecPage }) => {
-    await runtimeHelpers.mobile.expectCardDisplay(codecPage);
+    await helpers.runtime.mobile.expectCardDisplay(codecPage);
   });
 });

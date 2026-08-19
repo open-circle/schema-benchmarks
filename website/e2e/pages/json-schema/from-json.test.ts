@@ -1,4 +1,5 @@
 import { test, expect } from "#e2e/fixtures";
+import * as helpers from "#e2e/helpers";
 
 test.beforeEach("Go to JSON schema from-json page", async ({ fromJsonPage, fontsLoaded }) => {
   await fromJsonPage.goto();
@@ -20,17 +21,10 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("table can be sorted by column", async ({ fromJsonPage }) => {
-    const libraryHeaderCell = await fromJsonPage.desktop.tableHandle.getHeaderCell("library");
-    const librarySortLink = libraryHeaderCell.getByRole("link");
-
-    await librarySortLink.click();
-
-    await expect(libraryHeaderCell).toHaveSort("ascending");
-
-    const firstRow = fromJsonPage.desktop.tableHandle.getRowByIndex(0);
-    const firstRowLibraryCell = firstRow.getCell("library");
-
-    await expect(firstRowLibraryCell).toHaveText(/arktype/i);
+    await helpers.desktop.expectTableSorting(fromJsonPage.desktop.tableHandle, {
+      first: /arktype/i,
+      last: /zod/i,
+    });
   });
 });
 

@@ -1,5 +1,5 @@
 import { test } from "#e2e/fixtures";
-import * as runtimeHelpers from "#e2e/helpers/runtime";
+import * as helpers from "#e2e/helpers";
 
 test.beforeEach(async ({ fontsLoaded, validationPage }) => {
   await validationPage.goto();
@@ -8,19 +8,19 @@ test.beforeEach(async ({ fontsLoaded, validationPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, validationPage }) => {
-  await runtimeHelpers.expectDataTypeToggle(page, validationPage);
+  await helpers.runtime.expectDataTypeToggle(page, validationPage);
 });
 
 test.describe("optimization filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by optimization type", async ({ validationPage }) => {
-      await runtimeHelpers.desktop.expectOptimizeFilter(validationPage);
+      await helpers.runtime.desktop.expectOptimizeFilter(validationPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by optimization type", async ({ validationPage }) => {
-      await runtimeHelpers.mobile.expectOptimizeFilter(validationPage);
+      await helpers.runtime.mobile.expectOptimizeFilter(validationPage);
     });
   });
 });
@@ -31,11 +31,11 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ validationPage }) => {
-    await runtimeHelpers.desktop.expectTableDisplay(validationPage);
+    await helpers.runtime.desktop.expectTableDisplay(validationPage);
   });
 
   test("table can be sorted by column", async ({ validationPage }) => {
-    await runtimeHelpers.desktop.expectTableSorting(validationPage, {
+    await helpers.desktop.expectTableSorting(validationPage.desktop.tableHandle, {
       first: /@railway-ts/i,
       last: /zod/i,
     });
@@ -44,6 +44,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ validationPage }) => {
-    await runtimeHelpers.mobile.expectCardDisplay(validationPage);
+    await helpers.runtime.mobile.expectCardDisplay(validationPage);
   });
 });

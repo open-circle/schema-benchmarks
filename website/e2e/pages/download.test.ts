@@ -1,6 +1,7 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
+import * as helpers from "#e2e/helpers";
 import { ioTs } from "#e2e/utils/libraries.ts";
 
 test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => {
@@ -91,26 +92,9 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
-    const libraryHeaderCell = await downloadPage.desktop.tableHandle.getHeaderCell("library");
-    const librarySortLink = libraryHeaderCell.getByRole("link");
-
-    const firstRow = downloadPage.desktop.tableHandle.getRowByIndex(0);
-    const firstRowLibraryCell = firstRow.getCell("library");
-
-    await test.step("Sort libraries ascending", async () => {
-      await librarySortLink.click();
-
-      await expect(libraryHeaderCell).toHaveSort("ascending");
-
-      await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
-    });
-
-    await test.step("Sort libraries descending", async () => {
-      await librarySortLink.click();
-
-      await expect(libraryHeaderCell).toHaveSort("descending");
-
-      await expect(firstRowLibraryCell).toHaveText(/zod/i);
+    await helpers.desktop.expectTableSorting(downloadPage.desktop.tableHandle, {
+      first: /@paseri/i,
+      last: /zod/i,
     });
   });
 });
