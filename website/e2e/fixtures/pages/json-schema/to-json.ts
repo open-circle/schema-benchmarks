@@ -52,12 +52,11 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
   @cache()
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });
-    const tableHandle = useTable(table, {
-      headerTransformer: ({ text }) => trimSortLabels(text),
-    });
     return {
       table,
-      tableHandle,
+      tableHandle: useTable(table, {
+        headerTransformer: ({ text }) => trimSortLabels(text),
+      }),
     };
   }
 
