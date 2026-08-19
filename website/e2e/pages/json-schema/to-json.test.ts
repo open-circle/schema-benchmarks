@@ -142,7 +142,7 @@ test.describe("benchmarks tab", () => {
 
       await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+      await expect(libraryHeaderCell).toHaveSort("ascending");
 
       const firstRow = toJsonPage.benchmarks.desktop.tableHandle.getRowByIndex(0);
       const firstRowLibraryCell = firstRow.getCell("library");
@@ -152,7 +152,7 @@ test.describe("benchmarks tab", () => {
       await expect(async () => {
         await librarySortLink.click();
 
-        await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+        await expect(libraryHeaderCell).toHaveSort("descending");
       }).toPass();
 
       await expect(firstRowLibraryCell).toHaveText(/zod/i);

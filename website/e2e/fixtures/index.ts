@@ -1,5 +1,6 @@
-import type { Locator, TestFixture, Page } from "@playwright/test";
+import type { Locator, TestFixture, Page, ExpectMatcherState } from "@playwright/test";
 import { test as baseTest, expect as baseExpect } from "@playwright/test";
+import type { Autocomplete, IfMaybeUndefined } from "@schema-benchmarks/utils";
 
 import { waitForFontsLoaded } from "#e2e/utils";
 import { matchBreakpoints } from "#e2e/utils";
@@ -45,17 +46,27 @@ export const test = baseTest.extend<POMFixtures & UtilFixtures>({
   fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
 });
 
-export const expect = baseExpect.extend({
-  async toBeCurrent(locator: Locator, expectedValue?: CurrentValue) {
-    const assertionName = "toBeCurrent";
+function createAttributeMatcher<ExpectedValue extends string | undefined>(
+  assertionName: string,
+  attributeName: string,
+) {
+  return async function toHaveAttribute(
+    this: ExpectMatcherState,
+    locator: Locator,
+    ...[expectedValue]: IfMaybeUndefined<
+      ExpectedValue,
+      [expectedValue?: ExpectedValue],
+      [expectedValue: ExpectedValue]
+    >
+  ) {
     let pass: boolean;
     let matcherResult: any;
     try {
       // oxlint-disable-next-line playwright/valid-expect
       const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       const promise = expectedValue
-        ? expectation.toHaveAttribute("aria-current", expectedValue)
-        : expectation.toHaveAttribute("aria-current");
+        ? expectation.toHaveAttribute(attributeName, expectedValue)
+        : expectation.toHaveAttribute(attributeName);
       await promise;
       pass = true;
     } catch (e: any) {
@@ -70,7 +81,7 @@ export const expect = baseExpect.extend({
       this.utils.matcherHint(assertionName, undefined, undefined, { isNot: this.isNot }) +
       "\n\n" +
       `Expected the element ${this.isNot ? "not " : ""}to have attribute "${this.utils.printExpected(
-        "aria-current",
+        attributeName,
       )}"` +
       (expectedValue !== undefined
         ? ` with value ${this.utils.printExpected(expectedValue)}`
@@ -85,39 +96,14 @@ export const expect = baseExpect.extend({
       expected: expectedValue,
       actual: matcherResult?.actual,
     };
-  },
-  async toBePressed(locator: Locator) {
-    const assertionName = "toBePressed";
-    let pass: boolean;
-    let matcherResult: any;
-    try {
-      // oxlint-disable-next-line playwright/valid-expect
-      const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
-      await expectation.toHaveAttribute("aria-pressed", "true");
-      pass = true;
-    } catch (e: any) {
-      ({ matcherResult } = e);
-      pass = false;
-    }
-    if (this.isNot) {
-      pass = !pass;
-    }
+  };
+}
 
-    const message = () =>
-      this.utils.matcherHint(assertionName, undefined, undefined, { isNot: this.isNot }) +
-      "\n\n" +
-      `Expected the element ${this.isNot ? "not " : ""}to have attribute "${this.utils.printExpected(
-        "aria-pressed",
-      )}" with value ${this.utils.printExpected("true")}` +
-      `\n` +
-      (matcherResult?.message ? `Received: ${matcherResult.message}` : "");
+type PressedValue = Autocomplete.String<"true" | "false" | "mixed">;
+type SortValue = Autocomplete.String<"ascending" | "descending" | "none" | "other">;
 
-    return {
-      pass,
-      message,
-      name: assertionName,
-      expected: "true",
-      actual: matcherResult?.actual,
-    };
-  },
+export const expect = baseExpect.extend({
+  toBeCurrent: createAttributeMatcher<CurrentValue | undefined>("toBeCurrent", "aria-current"),
+  toBePressed: createAttributeMatcher<PressedValue | undefined>("toBePressed", "aria-pressed"),
+  toHaveSort: createAttributeMatcher<SortValue | undefined>("toHaveSort", "aria-sort"),
 });

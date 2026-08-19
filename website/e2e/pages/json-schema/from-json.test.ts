@@ -30,7 +30,7 @@ test.describe("desktop view", () => {
 
     await librarySortLink.click();
 
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+    await expect(libraryHeaderCell).toHaveSort("ascending");
 
     const firstRow = fromJsonPage.desktop.tableHandle.getRowByIndex(0);
     const firstRowLibraryCell = firstRow.getCell("library");

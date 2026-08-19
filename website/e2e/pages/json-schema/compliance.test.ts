@@ -94,7 +94,7 @@ for (const complianceType of complianceTypeSchema.options) {
         await test.step("Sort libraries ascending", async () => {
           await librarySortLink.click();
 
-          await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+          await expect(libraryHeaderCell).toHaveSort("ascending");
 
           await expect(firstRowLibraryCell).toHaveText(tab.libraries.first);
         });
@@ -102,7 +102,7 @@ for (const complianceType of complianceTypeSchema.options) {
         await test.step("Sort libraries descending", async () => {
           await librarySortLink.click();
 
-          await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+          await expect(libraryHeaderCell).toHaveSort("descending");
 
           await expect(firstRowLibraryCell).toHaveText(tab.libraries.last);
         });
