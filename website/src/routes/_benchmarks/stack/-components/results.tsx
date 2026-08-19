@@ -41,7 +41,7 @@ export function StackResults({ results, ...props }: StackResultsProps) {
           <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
         </div>
       ) : (
-        <ul className="stack-cards">
+        <ul className="stack-cards" aria-label="Results">
           {results.map((result) => (
             <StackCard key={result.libraryName} {...{ result, frameScale, lineCountScale }} />
           ))}
