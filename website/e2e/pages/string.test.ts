@@ -2,7 +2,6 @@ import { stringFormatSchema } from "@schema-benchmarks/schemas";
 
 import { test, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
-import { yup } from "#e2e/utils/libraries";
 
 test.beforeEach(async ({ fontsLoaded, stringPage }) => {
   await stringPage.goto();
@@ -46,7 +45,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ stringPage }) => {
-    await helpers.runtime.desktop.expectTableDisplay(stringPage, yup);
+    await helpers.runtime.desktop.expectTableDisplay(stringPage);
   });
 
   test("table can be sorted by column", async ({ stringPage }) => {
@@ -59,6 +58,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ stringPage }) => {
-    await helpers.runtime.mobile.expectCardDisplay(stringPage, yup);
+    await helpers.runtime.mobile.expectCardDisplay(stringPage);
   });
 });

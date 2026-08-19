@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@schema-benchmarks/utils": "workspace:",
+    "dedent": "catalog:",
     "del-cli": "^7.0.0",
     "oxfmt": "catalog:",
     "tar": "^7.5.22",

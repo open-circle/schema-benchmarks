@@ -2,7 +2,7 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
 import { test, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
-import { ioTs } from "#e2e/utils/libraries.ts";
+import { libraryVersions } from "#e2e/utils/library-versions.gen.ts";
 
 test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => {
   await downloadPage.goto();
@@ -86,9 +86,9 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   test("it displays results table", async ({ downloadPage }) => {
     await expect(downloadPage.desktop.table).toBeVisible();
 
-    const libraryRow = downloadPage.desktop.tableHandle.getRow({ library: ioTs.name });
+    const libraryRow = downloadPage.desktop.tableHandle.getRow({ library: "io-ts" });
 
-    await expect(libraryRow.getCell("version")).toHaveText(ioTs.version);
+    await expect(libraryRow.getCell("version")).toHaveText(libraryVersions["io-ts"]);
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
@@ -103,10 +103,10 @@ test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ downloadPage }) => {
     await expect(downloadPage.mobile.cardList).toBeVisible();
 
-    const libraryCard = downloadPage.mobile.getCardByName(ioTs.name);
+    const libraryCard = downloadPage.mobile.getCardByName("io-ts");
     await libraryCard.scrollIntoViewIfNeeded();
 
-    const libraryVersionEl = libraryCard.getByText(ioTs.version);
+    const libraryVersionEl = libraryCard.getByText(libraryVersions["io-ts"]);
     await expect(libraryVersionEl).toBeVisible();
   });
 });

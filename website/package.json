@@ -18,9 +18,11 @@
     "typecheck": "tsc",
     "copy-results": "cp ../bench/bench.json ../bench/download.json ../bench/json-schema.json ../bench/stack.json ./public/",
     "gen-offline": "node offline/generate.ts",
+    "e2e:gen-versions": "node ./e2e/scripts/gen-library-versions.ts",
     "prebuild": "pnpm copy-results",
     "predev": "pnpm copy-results",
     "postbuild": "pnpm gen-offline",
+    "pree2e": "pnpm run e2e:gen-versions",
     "e2e": "playwright test"
   },
   "dependencies": {
