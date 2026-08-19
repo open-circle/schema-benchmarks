@@ -2,6 +2,7 @@ import { PageObjectModel } from "#e2e/fixtures/base";
 
 export class BlogPage extends PageObjectModel {
   url = "/blog";
+  title = /Blog/;
 
   blogGrid = this.main.getByRole("list");
 

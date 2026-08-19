@@ -7,6 +7,7 @@ import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
 
 export class DownloadPage extends PageObjectModel {
   url = "/download";
+  title = /Download/;
 
   minifyToggle = this.main.getByRole("list", { name: "Minify" });
 

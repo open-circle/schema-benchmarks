@@ -1,12 +1,10 @@
-import { test, expect } from "#e2e/fixtures";
+import { test } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 
-test.beforeEach(async ({ page, fontsLoaded, initializationPage }) => {
+test.beforeEach(async ({ fontsLoaded, initializationPage }) => {
   await initializationPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/Initialization/);
 });
 
 test("can be filtered by optimization type", async ({ page, initializationPage }) => {

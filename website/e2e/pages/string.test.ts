@@ -4,12 +4,10 @@ import { test, expect } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 import { yup } from "#e2e/utils/libraries";
 
-test.beforeEach(async ({ page, fontsLoaded, stringPage }) => {
+test.beforeEach(async ({ fontsLoaded, stringPage }) => {
   await stringPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/String/);
 });
 
 test("can toggle between string formats", async ({ page, stringPage }) => {

@@ -5,6 +5,7 @@ import { trimSortLabels } from "#e2e/utils/index.ts";
 
 export class FromJsonPage extends PageObjectModel {
   url = "/json-schema/from-json";
+  title = /JSON Schema to Schema/;
 
   breakpoints = PageObjectModel.defineBreakpoints({
     desktop: ["laptop", "desktop"],

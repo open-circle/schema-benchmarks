@@ -1,11 +1,9 @@
 import { test, expect } from "#e2e/fixtures";
 
-test.beforeEach("Go to JSON schema from-json page", async ({ page, fromJsonPage, fontsLoaded }) => {
+test.beforeEach("Go to JSON schema from-json page", async ({ fromJsonPage, fontsLoaded }) => {
   await fromJsonPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/JSON Schema to Schema/);
 });
 
 test.describe("desktop view", () => {
