@@ -2,4 +2,5 @@ import { RuntimePage, withDataToggle, withErrorTypeFilter } from "#e2e/fixtures/
 
 export class ParsingPage extends withErrorTypeFilter(withDataToggle(RuntimePage)) {
   url = "/parsing";
+  title = /Parsing/;
 }

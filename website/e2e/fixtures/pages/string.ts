@@ -6,6 +6,7 @@ import { RuntimePage, withDataToggle } from "./_runtime";
 
 export class StringPage extends withDataToggle(RuntimePage) {
   url = "/string";
+  title = /String/;
 
   formatOptions = this.page.getByRole("list", { name: "Format" });
 

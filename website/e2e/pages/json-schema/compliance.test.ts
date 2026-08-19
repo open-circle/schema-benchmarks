@@ -5,16 +5,11 @@ import { test, expect } from "#e2e/fixtures";
 import type { CompliancePage } from "#e2e/fixtures/pages/json-schema/compliance.ts";
 import { complianceTypeLabels } from "#src/routes/json-schema/compliance/-constants";
 
-test.beforeEach(
-  "Go to JSON schema compliance page",
-  async ({ page, compliancePage, fontsLoaded }) => {
-    await compliancePage.goto();
+test.beforeEach("Go to JSON schema compliance page", async ({ compliancePage, fontsLoaded }) => {
+  await compliancePage.goto();
 
-    await fontsLoaded();
-
-    await expect(page).toHaveTitle(/Compliance/);
-  },
-);
+  await fontsLoaded();
+});
 
 async function expectDetailsDialogToBeOpen(
   compliancePage: CompliancePage,
@@ -65,12 +60,10 @@ test("can toggle targets", async ({ page, compliancePage }) => {
 
 for (const complianceType of complianceTypeSchema.options) {
   test.describe(`${complianceTypeLabels[complianceType].label} tab`, () => {
-    test.beforeEach("switch to tab", async ({ page, compliancePage, fontsLoaded }) => {
+    test.beforeEach("switch to tab", async ({ compliancePage, fontsLoaded }) => {
       await compliancePage[complianceType].select();
 
       await fontsLoaded();
-
-      await expect(page).toHaveTitle(/Compliance/);
     });
 
     test.describe("Desktop view", () => {

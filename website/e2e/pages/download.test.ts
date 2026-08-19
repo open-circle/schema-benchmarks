@@ -3,12 +3,10 @@ import { minifyTypeSchema } from "@schema-benchmarks/bench";
 import { test, expect } from "#e2e/fixtures";
 import { ioTs } from "#e2e/utils/libraries.ts";
 
-test.beforeEach("Go to download page", async ({ page, fontsLoaded, downloadPage }) => {
+test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => {
   await downloadPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/Download/);
 });
 
 test(

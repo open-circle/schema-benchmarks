@@ -94,6 +94,7 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
 
 export class ToJsonPage extends PageObjectModel {
   url = "/json-schema/to-json";
+  title = /Schema to JSON Schema/;
 
   breakpoints = PageObjectModel.defineBreakpoints({
     desktop: ["laptop", "desktop"],

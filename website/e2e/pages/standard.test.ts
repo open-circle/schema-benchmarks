@@ -1,4 +1,4 @@
-import { test, expect } from "#e2e/fixtures";
+import { test } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 
 const library = {
@@ -6,12 +6,10 @@ const library = {
   version: "1.7.1",
 };
 
-test.beforeEach(async ({ page, fontsLoaded, standardSchemaPage }) => {
+test.beforeEach(async ({ fontsLoaded, standardSchemaPage }) => {
   await standardSchemaPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/Standard Schema/);
 });
 
 test("can toggle between valid and invalid results", async ({ page, standardSchemaPage }) => {

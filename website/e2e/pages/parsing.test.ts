@@ -1,12 +1,10 @@
-import { test, expect } from "#e2e/fixtures";
+import { test } from "#e2e/fixtures";
 import * as runtimeHelpers from "#e2e/helpers/runtime";
 
-test.beforeEach(async ({ page, fontsLoaded, parsingPage }) => {
+test.beforeEach(async ({ fontsLoaded, parsingPage }) => {
   await parsingPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/Parsing/);
 });
 
 test("can toggle between valid and invalid results", async ({ page, parsingPage }) => {

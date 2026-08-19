@@ -33,12 +33,10 @@ async function expectResultsToMatchDirection(
   }
 }
 
-test.beforeEach("Go to JSON schema to-json page", async ({ page, toJsonPage, fontsLoaded }) => {
+test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();
 
   await fontsLoaded();
-
-  await expect(page).toHaveTitle(/Schema to JSON Schema/);
 });
 
 test.describe("support matrix tab", () => {

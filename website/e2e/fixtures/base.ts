@@ -18,8 +18,13 @@ export class ComponentObjectModel extends ObjectModel {
 
 export abstract class PageObjectModel extends ComponentObjectModel {
   abstract url: string;
-  goto(...args: Tail<Parameters<Page["goto"]>>) {
-    return this.page.goto(this.url, ...args);
+  abstract title: string | RegExp;
+  async goto(...args: Tail<Parameters<Page["goto"]>>) {
+    const response = await this.page.goto(this.url, ...args);
+
+    await expect(this.page).toHaveTitle(this.title);
+
+    return response;
   }
 
   matchesUrl(url: URL) {
