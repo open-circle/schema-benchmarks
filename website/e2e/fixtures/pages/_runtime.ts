@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
@@ -11,10 +12,6 @@ import {
 } from "#src/routes/_benchmarks/_runtime/-constants";
 
 export abstract class RuntimePage extends PageObjectModel {
-  breakpoints = PageObjectModel.defineBreakpoints({
-    desktop: ["laptop", "desktop"],
-  });
-
   optimizeFilter = this.main.getByRole("list", { name: "Optimizations" });
 
   getOptimizeTypeLabel(type: OptimizeType) {
@@ -26,6 +23,16 @@ export abstract class RuntimePage extends PageObjectModel {
       name: this.getOptimizeTypeLabel(type),
       exact: true,
     });
+  }
+
+  async selectOptimizeType(type: OptimizeType) {
+    const link = this.getOptimizeTypeLink(type);
+
+    await link.click();
+
+    await expect(this.page).toHaveURL((url) => url.searchParams.get("optimizeType") === type);
+
+    await expect(link).toHaveAttribute("aria-current", "page");
   }
 
   @cache()
@@ -87,6 +94,16 @@ export function withErrorTypeFilter<
         name: this.getErrorTypeLabel(errorType),
         exact: true,
       });
+    }
+
+    async selectErrorType(errorType: ErrorType) {
+      const link = this.getErrorTypeLink(errorType);
+
+      await link.click();
+
+      await expect(this.page).toHaveURL((url) => url.searchParams.get("errorType") === errorType);
+
+      await expect(link).toHaveAttribute("aria-current", "page");
     }
   }
   return ErrorTypeFilterMixin;

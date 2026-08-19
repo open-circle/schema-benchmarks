@@ -26,10 +26,6 @@ export class DownloadPage extends PageObjectModel {
     return this.speedPresets.getByRole("link", { name: label });
   }
 
-  breakpoints = PageObjectModel.defineBreakpoints({
-    desktop: ["laptop", "desktop"],
-  });
-
   @cache()
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });

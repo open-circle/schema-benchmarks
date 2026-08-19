@@ -16,19 +16,36 @@ test("can toggle between valid and invalid results", async ({ page, standardSche
   await runtimeHelpers.expectDataTypeToggle(page, standardSchemaPage);
 });
 
-test("can be filtered by optimization type", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.expectOptimizeFilter(page, standardSchemaPage);
+test.describe("optimization filter", () => {
+  test.describe("desktop", { tag: "@desktop" }, () => {
+    test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
+      await runtimeHelpers.desktop.expectOptimizeFilter(standardSchemaPage);
+    });
+  });
+
+  test.describe("mobile", { tag: "@mobile" }, () => {
+    test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
+      await runtimeHelpers.mobile.expectOptimizeFilter(standardSchemaPage);
+    });
+  });
 });
 
-test("can be filtered by error type", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.expectErrorTypeFilter(page, standardSchemaPage);
+test.describe("error type filter", () => {
+  test.describe("desktop", { tag: "@desktop" }, () => {
+    test("can be filtered by error type", async ({ standardSchemaPage }) => {
+      await runtimeHelpers.desktop.expectErrorTypeFilter(standardSchemaPage);
+    });
+  });
+
+  test.describe("mobile", { tag: "@mobile" }, () => {
+    test("can be filtered by error type", async ({ standardSchemaPage }) => {
+      await runtimeHelpers.mobile.expectErrorTypeFilter(standardSchemaPage);
+    });
+  });
 });
 
-test.describe("desktop view", () => {
-  test.beforeEach("Check desktop view", async ({ matchBreakpoints, standardSchemaPage }) => {
-    const isDesktop = await matchBreakpoints(standardSchemaPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
+test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.beforeEach(async ({ standardSchemaPage }) => {
     await standardSchemaPage.desktop.tableHandle.init();
   });
 
@@ -44,12 +61,7 @@ test.describe("desktop view", () => {
   });
 });
 
-test.describe("mobile view", () => {
-  test.beforeEach("Check mobile view", async ({ matchBreakpoints, standardSchemaPage }) => {
-    const isDesktop = await matchBreakpoints(standardSchemaPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
-
+test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ standardSchemaPage }) => {
     await runtimeHelpers.mobile.expectCardDisplay(standardSchemaPage, library);
   });

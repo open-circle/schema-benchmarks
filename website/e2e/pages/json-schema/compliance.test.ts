@@ -66,11 +66,8 @@ for (const complianceType of complianceTypeSchema.options) {
       await fontsLoaded();
     });
 
-    test.describe("Desktop view", () => {
-      test.beforeEach(async ({ matchBreakpoints, compliancePage }) => {
-        const isDesktop = await matchBreakpoints(compliancePage.breakpoints.desktop);
-        test.skip(!isDesktop, "This test is only for desktop viewports");
-
+    test.describe("Desktop view", { tag: "@desktop" }, () => {
+      test.beforeEach(async ({ compliancePage }) => {
         await compliancePage[complianceType].desktop.tableHandle.init();
       });
 
@@ -119,12 +116,7 @@ for (const complianceType of complianceTypeSchema.options) {
       });
     });
 
-    test.describe("Mobile view", () => {
-      test.beforeEach(async ({ matchBreakpoints, compliancePage }) => {
-        const isDesktop = await matchBreakpoints(compliancePage.breakpoints.desktop);
-        test.skip(isDesktop, "This test is only for mobile viewports");
-      });
-
+    test.describe("Mobile view", { tag: "@mobile" }, () => {
       test("can open details dialog", async ({ compliancePage }) => {
         const tab = compliancePage[complianceType];
         const listItem = tab.mobile.getListItem(tab.libraries.first).first();

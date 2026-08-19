@@ -3,8 +3,6 @@ import { test as baseTest, expect as baseExpect } from "@playwright/test";
 import type { Autocomplete, IfMaybeUndefined } from "@schema-benchmarks/utils";
 
 import { waitForFontsLoaded } from "#e2e/utils";
-import { matchBreakpoints } from "#e2e/utils";
-import type { Breakpoint } from "#src/shared/hooks/use-breakpoints";
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
 import { Header } from "./header";
@@ -35,14 +33,11 @@ const pomFixtures = Object.fromEntries(
 };
 
 interface UtilFixtures {
-  matchBreakpoints: (breakpoints: ReadonlyArray<Breakpoint>) => Promise<boolean>;
   fontsLoaded: () => Promise<void>;
 }
 
 export const test = baseTest.extend<POMFixtures & UtilFixtures>({
   ...pomFixtures,
-  matchBreakpoints: async ({ page }, use) =>
-    use((breakpoints) => matchBreakpoints(page, breakpoints)),
   fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
 });
 

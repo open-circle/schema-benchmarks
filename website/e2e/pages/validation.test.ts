@@ -11,15 +11,22 @@ test("can toggle between valid and invalid results", async ({ page, validationPa
   await runtimeHelpers.expectDataTypeToggle(page, validationPage);
 });
 
-test("can be filtered by optimization type", async ({ page, validationPage }) => {
-  await runtimeHelpers.expectOptimizeFilter(page, validationPage);
+test.describe("optimization filter", () => {
+  test.describe("desktop", { tag: "@desktop" }, () => {
+    test("can be filtered by optimization type", async ({ validationPage }) => {
+      await runtimeHelpers.desktop.expectOptimizeFilter(validationPage);
+    });
+  });
+
+  test.describe("mobile", { tag: "@mobile" }, () => {
+    test("can be filtered by optimization type", async ({ validationPage }) => {
+      await runtimeHelpers.mobile.expectOptimizeFilter(validationPage);
+    });
+  });
 });
 
-test.describe("desktop view", () => {
-  test.beforeEach("Check desktop view", async ({ matchBreakpoints, validationPage }) => {
-    const isDesktop = await matchBreakpoints(validationPage.breakpoints.desktop);
-    test.skip(!isDesktop, "This test is only for desktop viewports");
-
+test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.beforeEach(async ({ validationPage }) => {
     await validationPage.desktop.tableHandle.init();
   });
 
@@ -35,12 +42,7 @@ test.describe("desktop view", () => {
   });
 });
 
-test.describe("mobile view", () => {
-  test.beforeEach("Check mobile view", async ({ matchBreakpoints, validationPage }) => {
-    const isDesktop = await matchBreakpoints(validationPage.breakpoints.desktop);
-    test.skip(isDesktop, "This test is only for mobile viewports");
-  });
-
+test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ validationPage }) => {
     await runtimeHelpers.mobile.expectCardDisplay(validationPage);
   });
