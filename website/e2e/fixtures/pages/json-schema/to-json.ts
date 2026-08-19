@@ -1,8 +1,7 @@
-import type { TableResult } from "@rickcedwhat/playwright-smart-table";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
-import { PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { cache, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { trimSortLabels } from "#e2e/utils/index.ts";
 import {
   jsonSchemaConversionTargetProps,
@@ -39,18 +38,19 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     });
   }
 
-  #tableHandle: TableResult<unknown> | undefined;
+  @cache()
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });
-    this.#tableHandle ??= useTable(table, {
+    const tableHandle = useTable(table, {
       headerTransformer: ({ text }) => trimSortLabels(text),
     });
     return {
       table,
-      tableHandle: this.#tableHandle,
+      tableHandle,
     };
   }
 
+  @cache()
   get mobile() {
     const cardsList = this.page.getByRole("list", { name: "Results" });
     const cards = cardsList.getByTestId("bench-card");
@@ -67,6 +67,7 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
   url = "/json-schema/to-json/matrix";
   tabName = "Support Matrix";
 
+  @cache()
   get desktop() {
     const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
     return {
@@ -78,6 +79,7 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
     };
   }
 
+  @cache()
   get mobile() {
     const supportMatrixCardsList = this.page.getByRole("list", { name: "Support Matrix" });
     const supportMatrixCards = supportMatrixCardsList.getByTestId("support-matrix-card");
