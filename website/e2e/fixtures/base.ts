@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import type { MaybePromise, Tail } from "@schema-benchmarks/utils";
+import type { Tail } from "@schema-benchmarks/utils";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
 
 class ObjectModel {
@@ -73,11 +73,8 @@ type StepOptions = Parameters<typeof test.step>[2];
 
 export function step(title: string, options?: StepOptions) {
   return function decorator<TThis, TArgs extends Array<any>, TReturn>(
-    target: (this: TThis, ...args: TArgs) => MaybePromise<TReturn>,
-    _context: ClassMethodDecoratorContext<
-      TThis,
-      (this: TThis, ...args: TArgs) => MaybePromise<TReturn>
-    >,
+    target: (this: TThis, ...args: TArgs) => Promise<TReturn>,
+    _context: ClassMethodDecoratorContext<TThis, (this: TThis, ...args: TArgs) => Promise<TReturn>>,
   ) {
     return function decoratedFunction(this: TThis, ...args: TArgs): Promise<TReturn> {
       return test.step(title, () => target.apply(this, args), options);
