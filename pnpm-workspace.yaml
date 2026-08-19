@@ -37,6 +37,8 @@ catalog:
   valibot: ^1.4.2
   vite: ^8.2.1
   vitest: ^4.1.11
+minimumReleaseAgeExclude:
+  - "@ata-project/keywords@0.1.11"
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26

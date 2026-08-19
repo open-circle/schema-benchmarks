@@ -36,17 +36,12 @@ export default defineBenchmarks({
     },
     snippet: ts`new Validator({...})`,
   },
-  /*
-  
-  withKeywords only extends validate, not isValidObject, so this doesn't check Date instances correctly.
-
   validation: {
     run(data) {
       return schema.isValidObject(data);
     },
     snippet: ts`schema.isValidObject(data)`,
   },
-  */
   parsing: {
     allErrors: {
       run(data) {

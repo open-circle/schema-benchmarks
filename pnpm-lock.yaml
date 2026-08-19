@@ -194,8 +194,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7
       '@ata-project/keywords':
-        specifier: ^0.1.10
-        version: 0.1.10(ata-validator@1.6.2(yaml@2.9.0))
+        specifier: ^0.1.11
+        version: 0.1.11(ata-validator@1.6.2(yaml@2.9.0))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -658,8 +658,8 @@ packages:
   '@ark/util@0.56.2':
     resolution: {integrity: sha512-9kU2sUE38FZEGG7l3hamYMBieLYEJh2L1mrYD2eXpT+78EnQSV1bhjxJhnxGBMSTbtwpBSDNSK+K60WvaI/DTQ==}
 
-  '@ata-project/keywords@0.1.10':
-    resolution: {integrity: sha512-dikQS/NGuKtXU6YjUHHSOrdHxVRhGL310mH8J6ooswegTpGRYZWv3+hmfjC44yWLg2Axxy1gD+uCKLsLBnsxcw==}
+  '@ata-project/keywords@0.1.11':
+    resolution: {integrity: sha512-3hMD/Six3H5vS9daDkXajUoICvuNPuxKnCQYPBJqenkCZ/LX1gr2TpmcvA9kgR4ubyadZhlBcYdFLHTcTQ19TQ==}
     peerDependencies:
       ata-validator: '>=0.9.3'
 
@@ -9473,7 +9473,7 @@ snapshots:
 
   '@ark/util@0.56.2': {}
 
-  '@ata-project/keywords@0.1.10(ata-validator@1.6.2(yaml@2.9.0))':
+  '@ata-project/keywords@0.1.11(ata-validator@1.6.2(yaml@2.9.0))':
     dependencies:
       ata-validator: 1.6.2(yaml@2.9.0)
 
