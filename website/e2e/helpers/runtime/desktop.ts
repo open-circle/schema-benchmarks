@@ -25,7 +25,7 @@ export async function expectTableSorting(
   await test.step("Sort libraries ascending", async () => {
     await librarySortLink.click();
 
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+    await expect(libraryHeaderCell).toHaveSort("ascending");
 
     await expect(firstRowLibraryCell).toHaveText(patterns.first);
   });
@@ -34,7 +34,7 @@ export async function expectTableSorting(
     await expect(async () => {
       await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+      await expect(libraryHeaderCell).toHaveSort("descending");
     }).toPass();
     await expect(firstRowLibraryCell).toHaveText(patterns.last);
   });

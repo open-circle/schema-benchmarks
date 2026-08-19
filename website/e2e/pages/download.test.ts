@@ -105,7 +105,7 @@ test.describe("desktop view", () => {
     await test.step("Sort libraries ascending", async () => {
       await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
+      await expect(libraryHeaderCell).toHaveSort("ascending");
 
       await expect(firstRowLibraryCell).toHaveText(/@paseri/i);
     });
@@ -113,7 +113,7 @@ test.describe("desktop view", () => {
     await test.step("Sort libraries descending", async () => {
       await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+      await expect(libraryHeaderCell).toHaveSort("descending");
 
       await expect(firstRowLibraryCell).toHaveText(/zod/i);
     });
