@@ -3,6 +3,7 @@ import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 
 import { test, expect } from "#e2e/fixtures";
 import type { CompliancePage } from "#e2e/fixtures/pages/json-schema/compliance.ts";
+import * as helpers from "#e2e/helpers";
 import { complianceTypeLabels } from "#src/routes/json-schema/compliance/-constants";
 
 test.beforeEach("Go to JSON schema compliance page", async ({ compliancePage, fontsLoaded }) => {
@@ -73,28 +74,9 @@ for (const complianceType of complianceTypeSchema.options) {
 
       test("can be sorted by column", async ({ compliancePage }) => {
         const tab = compliancePage[complianceType];
-        const { tableHandle } = tab.desktop;
-
-        const libraryHeaderCell = await tableHandle.getHeaderCell("library");
-        const librarySortLink = libraryHeaderCell.getByRole("link");
-
-        const firstRow = tableHandle.getRowByIndex(0);
-        const firstRowLibraryCell = firstRow.getCell("library");
-
-        await test.step("Sort libraries ascending", async () => {
-          await librarySortLink.click();
-
-          await expect(libraryHeaderCell).toHaveSort("ascending");
-
-          await expect(firstRowLibraryCell).toHaveText(tab.libraries.first);
-        });
-
-        await test.step("Sort libraries descending", async () => {
-          await librarySortLink.click();
-
-          await expect(libraryHeaderCell).toHaveSort("descending");
-
-          await expect(firstRowLibraryCell).toHaveText(tab.libraries.last);
+        await helpers.desktop.expectTableSorting(tab.desktop.tableHandle, {
+          first: tab.libraries.first,
+          last: tab.libraries.last,
         });
       });
 

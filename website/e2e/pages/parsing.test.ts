@@ -1,5 +1,5 @@
 import { test } from "#e2e/fixtures";
-import * as runtimeHelpers from "#e2e/helpers/runtime";
+import * as helpers from "#e2e/helpers";
 
 test.beforeEach(async ({ fontsLoaded, parsingPage }) => {
   await parsingPage.goto();
@@ -8,19 +8,19 @@ test.beforeEach(async ({ fontsLoaded, parsingPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, parsingPage }) => {
-  await runtimeHelpers.expectDataTypeToggle(page, parsingPage);
+  await helpers.runtime.expectDataTypeToggle(page, parsingPage);
 });
 
 test.describe("optimization filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by optimization type", async ({ parsingPage }) => {
-      await runtimeHelpers.desktop.expectOptimizeFilter(parsingPage);
+      await helpers.runtime.desktop.expectOptimizeFilter(parsingPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by optimization type", async ({ parsingPage }) => {
-      await runtimeHelpers.mobile.expectOptimizeFilter(parsingPage);
+      await helpers.runtime.mobile.expectOptimizeFilter(parsingPage);
     });
   });
 });
@@ -28,13 +28,13 @@ test.describe("optimization filter", () => {
 test.describe("error type filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by error type", async ({ parsingPage }) => {
-      await runtimeHelpers.desktop.expectErrorTypeFilter(parsingPage);
+      await helpers.runtime.desktop.expectErrorTypeFilter(parsingPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by error type", async ({ parsingPage }) => {
-      await runtimeHelpers.mobile.expectErrorTypeFilter(parsingPage);
+      await helpers.runtime.mobile.expectErrorTypeFilter(parsingPage);
     });
   });
 });
@@ -45,11 +45,11 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ parsingPage }) => {
-    await runtimeHelpers.desktop.expectTableDisplay(parsingPage);
+    await helpers.runtime.desktop.expectTableDisplay(parsingPage);
   });
 
   test("table can be sorted by column", async ({ parsingPage }) => {
-    await runtimeHelpers.desktop.expectTableSorting(parsingPage, {
+    await helpers.desktop.expectTableSorting(parsingPage.desktop.tableHandle, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -58,6 +58,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ parsingPage }) => {
-    await runtimeHelpers.mobile.expectCardDisplay(parsingPage);
+    await helpers.runtime.mobile.expectCardDisplay(parsingPage);
   });
 });

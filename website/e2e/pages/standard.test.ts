@@ -1,5 +1,5 @@
 import { test } from "#e2e/fixtures";
-import * as runtimeHelpers from "#e2e/helpers/runtime";
+import * as helpers from "#e2e/helpers";
 
 const library = {
   name: "yup",
@@ -13,19 +13,19 @@ test.beforeEach(async ({ fontsLoaded, standardSchemaPage }) => {
 });
 
 test("can toggle between valid and invalid results", async ({ page, standardSchemaPage }) => {
-  await runtimeHelpers.expectDataTypeToggle(page, standardSchemaPage);
+  await helpers.runtime.expectDataTypeToggle(page, standardSchemaPage);
 });
 
 test.describe("optimization filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
-      await runtimeHelpers.desktop.expectOptimizeFilter(standardSchemaPage);
+      await helpers.runtime.desktop.expectOptimizeFilter(standardSchemaPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
-      await runtimeHelpers.mobile.expectOptimizeFilter(standardSchemaPage);
+      await helpers.runtime.mobile.expectOptimizeFilter(standardSchemaPage);
     });
   });
 });
@@ -33,13 +33,13 @@ test.describe("optimization filter", () => {
 test.describe("error type filter", () => {
   test.describe("desktop", { tag: "@desktop" }, () => {
     test("can be filtered by error type", async ({ standardSchemaPage }) => {
-      await runtimeHelpers.desktop.expectErrorTypeFilter(standardSchemaPage);
+      await helpers.runtime.desktop.expectErrorTypeFilter(standardSchemaPage);
     });
   });
 
   test.describe("mobile", { tag: "@mobile" }, () => {
     test("can be filtered by error type", async ({ standardSchemaPage }) => {
-      await runtimeHelpers.mobile.expectErrorTypeFilter(standardSchemaPage);
+      await helpers.runtime.mobile.expectErrorTypeFilter(standardSchemaPage);
     });
   });
 });
@@ -50,11 +50,11 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.desktop.expectTableDisplay(standardSchemaPage, library);
+    await helpers.runtime.desktop.expectTableDisplay(standardSchemaPage, library);
   });
 
   test("table can be sorted by column", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.desktop.expectTableSorting(standardSchemaPage, {
+    await helpers.desktop.expectTableSorting(standardSchemaPage.desktop.tableHandle, {
       first: /@paseri/i,
       last: /zod/i,
     });
@@ -63,6 +63,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ standardSchemaPage }) => {
-    await runtimeHelpers.mobile.expectCardDisplay(standardSchemaPage, library);
+    await helpers.runtime.mobile.expectCardDisplay(standardSchemaPage, library);
   });
 });

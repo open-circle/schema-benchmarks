@@ -19,34 +19,6 @@ export async function expectTableDisplay(runtimePage: RuntimePage, library = ioT
   });
 }
 
-export async function expectTableSorting(
-  runtimePage: RuntimePage,
-  patterns: { first: RegExp; last: RegExp },
-) {
-  const libraryHeaderCell = await runtimePage.desktop.tableHandle.getHeaderCell("library");
-  const librarySortLink = libraryHeaderCell.getByRole("link");
-
-  const firstRow = runtimePage.desktop.tableHandle.getRowByIndex(0);
-  const firstRowLibraryCell = firstRow.getCell("library");
-
-  await test.step("Sort libraries ascending", async () => {
-    await librarySortLink.click();
-
-    await expect(libraryHeaderCell).toHaveSort("ascending");
-
-    await expect(firstRowLibraryCell).toHaveText(patterns.first);
-  });
-
-  await test.step("Sort libraries descending", async () => {
-    await expect(async () => {
-      await librarySortLink.click();
-
-      await expect(libraryHeaderCell).toHaveSort("descending");
-    }).toPass();
-    await expect(firstRowLibraryCell).toHaveText(patterns.last);
-  });
-}
-
 export async function expectOptimizeFilter(runtimePage: RuntimePage) {
   for (const optimizeType of optimizeTypeSchema.options) {
     await test.step(`Filter desktop rows by ${runtimePage.getOptimizeTypeLabel(optimizeType)} optimization`, async () => {
