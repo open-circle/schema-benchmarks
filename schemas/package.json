@@ -12,6 +12,7 @@
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
     "gen:zod-compiler": "node ./libraries/zod-compiler/generate.ts",
     "prebuild": "pnpm run gen:paseri && pnpm run gen:zod-compiler",
+    "postbuild": "pnpm run gen:json-schemas",
     "gen:json-schemas": "node ./scripts/gen-accepted-json-schemas.ts",
     "build": "tsdown",
     "typecheck": "tsc",
