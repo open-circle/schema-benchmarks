@@ -1,13 +1,15 @@
-import { expect } from "#e2e/fixtures";
+import { test, expect } from "#e2e/fixtures";
 import type { RuntimePage } from "#e2e/fixtures/pages/_runtime";
 import { ioTs } from "#e2e/utils/libraries";
 
 export async function expectTableDisplay(runtimePage: RuntimePage, library = ioTs) {
-  await expect(runtimePage.desktop.table).toBeVisible();
+  await test.step(`Verify ${library.name} is shown in the desktop table`, async () => {
+    await expect(runtimePage.desktop.table).toBeVisible();
 
-  const libraryRow = runtimePage.desktop.tableHandle.getRow({ library: library.name });
+    const libraryRow = runtimePage.desktop.tableHandle.getRow({ library: library.name });
 
-  await expect(libraryRow.getCell("version")).toHaveText(library.version);
+    await expect(libraryRow.getCell("version")).toHaveText(library.version);
+  });
 }
 
 export async function expectTableSorting(
@@ -17,20 +19,23 @@ export async function expectTableSorting(
   const libraryHeaderCell = await runtimePage.desktop.tableHandle.getHeaderCell("library");
   const librarySortLink = libraryHeaderCell.getByRole("link");
 
-  await librarySortLink.click();
-
-  await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
-
   const firstRow = runtimePage.desktop.tableHandle.getRowByIndex(0);
   const firstRowLibraryCell = firstRow.getCell("library");
 
-  await expect(firstRowLibraryCell).toHaveText(patterns.first);
-
-  await expect(async () => {
+  await test.step("Sort libraries ascending", async () => {
     await librarySortLink.click();
 
-    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
-  }).toPass();
+    await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "ascending");
 
-  await expect(firstRowLibraryCell).toHaveText(patterns.last);
+    await expect(firstRowLibraryCell).toHaveText(patterns.first);
+  });
+
+  await test.step("Sort libraries descending", async () => {
+    await expect(async () => {
+      await librarySortLink.click();
+
+      await expect(libraryHeaderCell).toHaveAttribute("aria-sort", "descending");
+    }).toPass();
+    await expect(firstRowLibraryCell).toHaveText(patterns.last);
+  });
 }
