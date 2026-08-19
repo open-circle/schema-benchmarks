@@ -2,6 +2,11 @@ import type {
   JsonSchemaDirection,
   JsonSchemaConversionTarget,
   SchemaConversionToJsonConfig,
+  LibraryInfo,
+  InitializationBenchmarkConfig,
+  ValidationBenchmarkConfig,
+  ParsingBenchmarkConfig,
+  StandardSchemaBenchmarkConfig,
 } from "@schema-benchmarks/schemas";
 import {
   errorData,
@@ -18,7 +23,7 @@ import {
   ShouldHaveThrownError,
 } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
-import type { MaybePromise } from "@schema-benchmarks/utils";
+import type { MaybeArray, MaybePromise, OneOf } from "@schema-benchmarks/utils";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
 import { Ajv } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
@@ -53,25 +58,60 @@ const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: objec
   return ajv.compile(jsonSchema);
 };
 
+type KnownOutcomeConfig = OneOf<
+  | InitializationBenchmarkConfig
+  | ValidationBenchmarkConfig
+  | ParsingBenchmarkConfig
+  | StandardSchemaBenchmarkConfig
+>;
+
+type KnownOutcome =
+  | string
+  | MaybeArray<{
+      when: (libraryInfo: LibraryInfo, config: KnownOutcomeConfig) => boolean;
+      reason: string;
+    }>;
+
 type KnownOutcomes = {
-  success?: Partial<Record<keyof typeof successCases, string>>;
-  failure?: Partial<Record<keyof typeof failureCases, string>>;
+  success?: Partial<Record<keyof typeof successCases, KnownOutcome>>;
+  failure?: Partial<Record<keyof typeof failureCases, KnownOutcome>>;
 };
 
 const knownOutcomes: Record<string, KnownOutcomes> = {
   yup: {
     failure: {
-      "title: not a string": "coerces to string",
+      "title: not a string": {
+        when: (_, config) => config.note !== "strict",
+        reason: "coerces to string",
+      },
     },
   },
 };
 
+function resolveKnownOutcome<Type extends keyof KnownOutcomes>(
+  libraryInfo: LibraryInfo,
+  config: KnownOutcomeConfig,
+  type: Type,
+  caseName: keyof NonNullable<KnownOutcomes[Type]>,
+): string | undefined {
+  const knownOutcome: KnownOutcome | undefined =
+    // @ts-expect-error
+    knownOutcomes[libraryInfo.name]?.[type]?.[caseName];
+  if (!knownOutcome) return undefined;
+  if (typeof knownOutcome === "string") return knownOutcome;
+  for (const { when, reason } of ensureArray(knownOutcome)) {
+    if (when(libraryInfo, config)) return reason;
+  }
+  return undefined;
+}
+
 const itChecksAllRefinements = (
-  libraryName: string,
+  libraryInfo: LibraryInfo,
+  config: KnownOutcomeConfig,
   validate: (data: unknown) => MaybePromise<boolean>,
 ) => {
   for (const [caseName, data] of unsafeEntries(successCases)) {
-    const knownOutcome = knownOutcomes[libraryName]?.success?.[caseName];
+    const knownOutcome = resolveKnownOutcome(libraryInfo, config, "success", caseName);
     const expected = !knownOutcome;
     const suffix = knownOutcome ? ` (${knownOutcome})` : "";
 
@@ -80,7 +120,7 @@ const itChecksAllRefinements = (
     });
   }
   for (const [caseName, data] of unsafeEntries(failureCases)) {
-    const knownOutcome = knownOutcomes[libraryName]?.failure?.[caseName];
+    const knownOutcome = resolveKnownOutcome(libraryInfo, config, "failure", caseName);
     const expected = !!knownOutcome;
     const suffix = knownOutcome ? ` (${knownOutcome})` : "";
 
@@ -91,11 +131,11 @@ const itChecksAllRefinements = (
 };
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
-  const config = await getConfig();
-  const { name } = config.library;
+  const libConfig = await getConfig();
+  const { library } = libConfig;
 
-  describe.runIf(config.initialization)("initialization", () => {
-    describe.each(ensureArray(config.initialization ?? []))("config %#", (config) => {
+  describe.runIf(libConfig.initialization)("initialization", () => {
+    describe.each(ensureArray(libConfig.initialization ?? []))("config %#", (config) => {
       it("should initialize", async () => {
         const result = await config.run();
         expect(result).toBeDefined();
@@ -103,8 +143,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     });
   });
 
-  describe.runIf(config.validation)("validation", () => {
-    describe.each(ensureArray(config.validation ?? []))("config %#", (config) => {
+  describe.runIf(libConfig.validation)("validation", () => {
+    describe.each(ensureArray(libConfig.validation ?? []))("config %#", (config) => {
       it.each([
         [true, "valid", successData],
         [false, "invalid", errorData],
@@ -112,12 +152,12 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         expect(config.run(data)).toBe(expected);
       });
 
-      itChecksAllRefinements(name, config.run);
+      itChecksAllRefinements(library, config, config.run);
     });
   });
 
-  describe.runIf(config.parsing)("parsing", () => {
-    describe.each(Object.entries(config.parsing ?? {}))("%s", (_errorType, configs) => {
+  describe.runIf(libConfig.parsing)("parsing", () => {
+    describe.each(Object.entries(libConfig.parsing ?? {}))("%s", (_errorType, configs) => {
       describe.each(ensureArray(configs))("config %#", (config) => {
         it("should return true for valid data", async () => {
           const result = await config.run(successData);
@@ -128,7 +168,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           const result = await config.run(errorData);
           expect(config.validateResult(result)).toBe(false);
         });
-        itChecksAllRefinements(name, async (data) => {
+        itChecksAllRefinements(library, config, async (data) => {
           const result = await config.run(data);
           return config.validateResult(result);
         });
@@ -136,9 +176,10 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     });
   });
 
-  describe.runIf(config.standard)("standard", () => {
-    describe.each(Object.entries(config.standard ?? {}))("%s", (_errorType, configs) => {
-      describe.each(ensureArray(configs))("config %#", ({ schema }) => {
+  describe.runIf(libConfig.standard)("standard", () => {
+    describe.each(Object.entries(libConfig.standard ?? {}))("%s", (_errorType, configs) => {
+      describe.each(ensureArray(configs))("config %#", (config) => {
+        const { schema } = config;
         it("should have a schema", async () => {
           expect(schema["~standard"]).toBeDefined();
           expect(schema["~standard"]).toHaveProperty("version", expect.any(Number));
@@ -156,16 +197,16 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
           expect(result.issues).toBeDefined();
           expect(result.issues?.length).toBeGreaterThan(0);
         });
-        itChecksAllRefinements(name, async (data) => {
+        itChecksAllRefinements(library, config, async (data) => {
           const result = await schema["~standard"].validate(data);
           return !result.issues?.length;
         });
       });
     });
   });
-  describe.runIf(config.jsonSchema?.conversion?.toJson)("JSON schema toJson", () => {
+  describe.runIf(libConfig.jsonSchema?.conversion?.toJson)("JSON schema toJson", () => {
     // the parameter is typed, so a renamed field fails to compile instead of silently skipping
-    describe.each(ensureArray(config.jsonSchema?.conversion?.toJson ?? []))(
+    describe.each(ensureArray(libConfig.jsonSchema?.conversion?.toJson ?? []))(
       "config %#",
       ({ generate, standardJsonSchema }: SchemaConversionToJsonConfig) => {
         describe.each(jsonSchemaConversionTargetSchema.options)("%s", (target) => {
@@ -204,8 +245,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       },
     );
   });
-  describe.runIf(config.jsonSchema?.conversion?.fromJson)("JSON schema fromJson", () => {
-    describe.each(ensureArray(config.jsonSchema?.conversion?.fromJson ?? []))(
+  describe.runIf(libConfig.jsonSchema?.conversion?.fromJson)("JSON schema fromJson", () => {
+    describe.each(ensureArray(libConfig.jsonSchema?.conversion?.fromJson ?? []))(
       "config %#",
       ({ generate }) => {
         it("should return a result", () => {
@@ -214,8 +255,8 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       },
     );
   });
-  describe.runIf(config.string)("string", () => {
-    describe.each(unsafeEntries(config.string ?? {}))("%s", (stringType, config) => {
+  describe.runIf(libConfig.string)("string", () => {
+    describe.each(unsafeEntries(libConfig.string ?? {}))("%s", (stringType, config) => {
       assert(config);
       it.each([
         [true, "valid", validStrings],
@@ -227,15 +268,15 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
       });
     });
   });
-  describe.runIf(config.stack)("stack", () => {
+  describe.runIf(libConfig.stack)("stack", () => {
     it("should throw", async () => {
-      const promise = promiseTry(() => config.stack?.throw(errorData));
+      const promise = promiseTry(() => libConfig.stack?.throw(errorData));
       await expect(promise).rejects.toThrow(expect.anything());
       await expect(promise).rejects.not.toThrow(ShouldHaveThrownError);
     });
   });
-  describe.runIf(config.codec)("codec", () => {
-    describe.each(ensureArray(config.codec ?? []))("config %#", (config) => {
+  describe.runIf(libConfig.codec)("codec", () => {
+    describe.each(ensureArray(libConfig.codec ?? []))("config %#", (config) => {
       it("should encode and decode", async () => {
         const { encode, decode } = config;
         const bigint = 1234567890123456789n;
