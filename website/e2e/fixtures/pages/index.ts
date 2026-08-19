@@ -3,6 +3,7 @@ export { CodecPage as codecPage } from "./codec";
 export { DownloadPage as downloadPage } from "./download";
 export { InitializationPage as initializationPage } from "./initialization";
 export { ParsingPage as parsingPage } from "./parsing";
+export { StackPage as stackPage } from "./stack";
 export { ValidationPage as validationPage } from "./validation";
 export { StandardSchemaPage as standardSchemaPage } from "./standard";
 export { StringPage as stringPage } from "./string";

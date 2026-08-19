@@ -22,7 +22,11 @@ export interface StackTableProps {
 
 export function StackTable({ results, frameScale, lineCountScale, ...sortState }: StackTableProps) {
   return (
-    <table className="stack-table" style={{ viewTransitionName: "result-table" }}>
+    <table
+      aria-label="Results"
+      className="stack-table"
+      style={{ viewTransitionName: "result-table" }}
+    >
       <thead>
         <tr>
           <SortableHeaderLink
