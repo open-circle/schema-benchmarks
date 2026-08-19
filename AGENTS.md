@@ -44,6 +44,8 @@ Use existing library folders as templates and preserve the library's idiomatic A
 
 Prefer focused tests for the changed package before running the repository-wide checks. Update tests when changing behavior or public contracts.
 
+When available, prefer using VSCode's built-in test runner instead of CLI commands.
+
 ## Generated Files and External Data
 
 Do not edit generated files manually when a repository command can regenerate them. Check the owning package scripts and nearby documentation for the generation command.
