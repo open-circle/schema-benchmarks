@@ -7,9 +7,15 @@ import type {
   MixinInstanceType,
   withErrorTypeFilter,
 } from "#e2e/fixtures/pages/_runtime";
-import { ioTs } from "#e2e/utils/libraries";
+import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
-export async function expectCardDisplay(runtimePage: RuntimePage, library = ioTs) {
+// covers every runtime benchmark type, so it works as the shared default across all pages
+const defaultLibrary = { name: "sury", version: libraryVersions.sury };
+
+export async function expectCardDisplay(
+  runtimePage: RuntimePage,
+  library: { name: string; version: string } = defaultLibrary,
+) {
   await test.step(`Verify ${library.name} is shown in the mobile cards`, async () => {
     const card = runtimePage.mobile.getCardByLibraryName(library.name).first();
     await card.scrollIntoViewIfNeeded();

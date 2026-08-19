@@ -54,6 +54,9 @@ jobs:
         env:
           TTSC_CACHE_DIR: ${{ github.workspace }}/.ttsc-cache
         run: pnpm schemas:build
+      - name: Generate E2E library versions
+        shell: bash
+        run: pnpm --filter @schema-benchmarks/website run e2e:gen-versions
       - name: Save ttsc native cache
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -66,6 +69,12 @@ jobs:
           path: |
             schemas/dist/
             schemas/**/compiled/**
+          retention-days: 1
+      - name: Upload E2E library versions
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: e2e-library-versions
+          path: website/e2e/utils/library-versions.gen.ts
           retention-days: 1
 
   bench-stack:
@@ -214,6 +223,11 @@ jobs:
             with:
               name: json-schema-results
               path: bench
+          - name: Download E2E library versions
+            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            with:
+              name: e2e-library-versions
+              path: website/e2e/utils/
 
       - name: Derive short commit SHA
         env:

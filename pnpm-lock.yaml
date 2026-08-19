@@ -163,6 +163,9 @@ importers:
       '@schema-benchmarks/utils':
         specifier: 'workspace:'
         version: link:../utils
+      dedent:
+        specifier: 'catalog:'
+        version: 1.7.2
       del-cli:
         specifier: ^7.0.0
         version: 7.0.0

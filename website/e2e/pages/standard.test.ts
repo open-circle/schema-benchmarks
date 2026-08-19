@@ -1,11 +1,6 @@
 import { test } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
 
-const library = {
-  name: "yup",
-  version: "1.7.1",
-};
-
 test.beforeEach(async ({ fontsLoaded, standardSchemaPage }) => {
   await standardSchemaPage.goto();
 
@@ -50,7 +45,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("it displays results table", async ({ standardSchemaPage }) => {
-    await helpers.runtime.desktop.expectTableDisplay(standardSchemaPage, library);
+    await helpers.runtime.desktop.expectTableDisplay(standardSchemaPage);
   });
 
   test("table can be sorted by column", async ({ standardSchemaPage }) => {
@@ -63,6 +58,6 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results cards", async ({ standardSchemaPage }) => {
-    await helpers.runtime.mobile.expectCardDisplay(standardSchemaPage, library);
+    await helpers.runtime.mobile.expectCardDisplay(standardSchemaPage);
   });
 });
