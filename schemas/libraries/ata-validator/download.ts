@@ -2,9 +2,7 @@ import { withKeywords } from "@ata-project/keywords";
 import { Validator } from "ata-validator";
 import { t } from "ata-validator/t";
 
-const dateSchema = t.object({}, {
-  instanceof: "Date",
-} as never);
+const dateSchema = t.object({}, { instanceof: "Date" });
 
 const imageSchema = t.object({
   id: t.number(),
