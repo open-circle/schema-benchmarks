@@ -90,37 +90,44 @@ if (validation) {
   }
 }
 if (parsing) {
-  for (const [dataType, data] of [
-    ["valid", successData],
-    ["invalid", errorData],
-  ] as const) {
-    for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
-      if (!benchConfigs) continue;
-      for (const benchConfig of ensureArray(benchConfigs)) {
-        const {
-          run,
+  for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
+    if (!benchConfigs) continue;
+    for (const benchConfig of ensureArray(benchConfigs)) {
+      const {
+        run,
+        snippet,
+        note,
+        optimizeType = libraryOptimizeType,
+        throws,
+        getData,
+      } = benchConfig;
+      for (const [dataType, data] of [
+        ["valid", successData],
+        ["invalid", errorData],
+      ] as const) {
+        const id = caseRegistry.add({
+          type: "parsing",
+          optimizeType,
+          dataType,
+          errorType,
+          libraryName,
+          version,
           snippet,
           note,
-          optimizeType = libraryOptimizeType,
           throws,
-          getData,
-        } = benchConfig;
-        const sameObj = getData(await run(successData)) === successData;
-        bench.add(
-          caseRegistry.add({
-            type: "parsing",
-            optimizeType,
-            dataType,
-            errorType,
-            libraryName,
-            version,
-            snippet,
-            sameObj,
-            note,
-            throws,
-          }),
-          () => run(data),
-        );
+        });
+        bench.add(id, () => run(data), {
+          // Run after this task's own iterations so it can't skew its timing.
+          afterAll:
+            dataType === "valid"
+              ? async () => {
+                  const entry = caseRegistry.get(id);
+                  if (entry?.type === "parsing") {
+                    entry.sameObj = getData(await run(successData)) === successData;
+                  }
+                }
+              : undefined,
+        });
       }
     }
   }
