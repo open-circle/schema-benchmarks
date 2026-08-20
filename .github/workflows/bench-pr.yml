@@ -241,3 +241,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
           message: "Update bench results (${{ env.SHORT_SHA }})"
+          rebase: true
