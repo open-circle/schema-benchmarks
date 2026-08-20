@@ -10,34 +10,34 @@ import * as pages from "./pages";
 import { PrefsDialog } from "./prefs";
 import { Sidebar } from "./sidebar";
 
-const POMs = {
+const objectModels = {
   sidebar: Sidebar,
   header: Header,
   prefs: PrefsDialog,
   ...pages,
-} satisfies Record<string, new (page: Page) => any>;
+} satisfies Record<string, new (page: Page) => unknown>;
 
-type POMFixtures = {
-  [K in keyof typeof POMs]: InstanceType<(typeof POMs)[K]>;
+type ObjectModelFixtures = {
+  [K in keyof typeof objectModels]: InstanceType<(typeof objectModels)[K]>;
 };
 
-const pomFixtures = Object.fromEntries(
-  Object.entries(POMs).map(
-    ([name, POM]): [string, TestFixture<POMFixtures[keyof POMFixtures], { page: Page }>] => [
-      name,
-      ({ page }, use) => use(new POM(page)),
-    ],
+const objectModelFixtures = Object.fromEntries(
+  Object.entries(objectModels).map(
+    ([name, POM]): [
+      string,
+      TestFixture<ObjectModelFixtures[keyof ObjectModelFixtures], { page: Page }>,
+    ] => [name, ({ page }, use) => use(new POM(page))],
   ),
 ) as {
-  [K in keyof POMFixtures]: TestFixture<POMFixtures[K], { page: Page }>;
+  [K in keyof ObjectModelFixtures]: TestFixture<ObjectModelFixtures[K], { page: Page }>;
 };
 
 interface UtilFixtures {
   fontsLoaded: () => Promise<void>;
 }
 
-export const test = baseTest.extend<POMFixtures & UtilFixtures>({
-  ...pomFixtures,
+export const test = baseTest.extend<ObjectModelFixtures & UtilFixtures>({
+  ...objectModelFixtures,
   fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
 });
 
