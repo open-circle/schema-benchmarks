@@ -4,13 +4,11 @@ import {
   useNavigate,
   type ValidateLinkOptions,
 } from "@tanstack/react-router";
-import { castDraft } from "mutative";
 import { type ChangeEvent } from "react";
 
 import { TextField, type TextFieldProps } from "#src/shared/components/text-field";
 import { useIdDefault } from "#src/shared/hooks/use-id-default";
-import type { PayloadAction } from "#src/shared/hooks/use-local-slice";
-import { useLocalSlice } from "#src/shared/hooks/use-local-slice";
+import { useIncomingState } from "#src/shared/hooks/use-incoming-state";
 
 import type { PageFilterProps } from ".";
 import { PageFilter } from ".";
@@ -32,21 +30,7 @@ export function PageFilterTextField<LinkOptions>({
   value: searchValue,
   ...props
 }: PageFilterTextFieldProps<LinkOptions>) {
-  const [{ local, snapshot }, dispatchAction] = useLocalSlice({
-    initialState: { snapshot: searchValue, local: searchValue },
-    reducers: {
-      resync: (state, { payload }: PayloadAction<typeof searchValue>) => {
-        state.snapshot = castDraft(payload);
-        state.local = castDraft(payload);
-      },
-      setLocal: (state, { payload }: PayloadAction<typeof searchValue>) => {
-        state.local = castDraft(payload);
-      },
-    },
-  });
-  if (!Object.is(searchValue, snapshot)) {
-    dispatchAction.resync(searchValue);
-  }
+  const [local, setLocal] = useIncomingState(searchValue);
   const titleId = useIdDefault(titleIdProp);
   const navigate = useNavigate();
   const debouncedOnChange = useDebouncedCallback(
@@ -63,7 +47,7 @@ export function PageFilterTextField<LinkOptions>({
         value={local}
         onChange={(event) => {
           debouncedOnChange(event);
-          dispatchAction.setLocal(
+          setLocal(
             typeof searchValue === "number" ? event.target.valueAsNumber : event.target.value,
           );
         }}
