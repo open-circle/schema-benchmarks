@@ -21,7 +21,7 @@ catalog:
   "@types/react-dom": ^19.2.4
   "@vitest/browser-playwright": ^4.1.10
   "@vitest/expect": ^4.1.10
-  "@vitest/pretty-format": ^4.1.10
+  "@vitest/pretty-format": ^4.1.11
   dedent: ^1.7.2
   "mix-n-matchers": "^2.4.0"
   oxfmt: "^0.63.0"
