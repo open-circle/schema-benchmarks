@@ -9,7 +9,7 @@ import {
 } from "@schema-benchmarks/utils";
 import * as vUtils from "@schema-benchmarks/utils/valibot";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, linkOptions } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
@@ -83,6 +83,7 @@ function getLibraryLabel({ libraryName, note }: DownloadResult) {
 }
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
   const { minifyType, mbps, sortBy, sortDir } = Route.useSearch();
   const mbpsAsNumber = typeof mbps === "string" ? speedPresets[mbps].mbps : mbps;
   const { data } = useSuspenseQuery({
@@ -141,18 +142,14 @@ function RouteComponent() {
           startIcon={<MdSymbol>speed</MdSymbol>}
           suffix="Mbps"
           style={{ "--text-field-min-width": "10rem" }}
-          getLinkOptions={(event) =>
-            linkOptions({
-              from: Route.fullPath,
+          onChange={(mbps) =>
+            navigate({
               to: "/download",
-              search: ({ minifyType, ...rest }) => {
-                const mbps = event.target.valueAsNumber;
-                return {
-                  ...(rest as {}),
-                  minifyType,
-                  mbps: Number.isNaN(mbps) || mbps <= 0 ? ("4g" as const) : mbps,
-                };
-              },
+              search: ({ minifyType, ...rest }) => ({
+                ...rest,
+                minifyType,
+                mbps: Number.isNaN(mbps) || mbps <= 0 ? ("4g" as const) : mbps,
+              }),
               replace: true,
               resetScroll: false,
             })
