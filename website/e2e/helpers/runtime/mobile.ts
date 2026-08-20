@@ -26,7 +26,7 @@ export async function expectCardDisplay(
 }
 
 async function expectFilterCards(runtimePage: RuntimePage, expectedLabel: string) {
-  const expectedLabelRegex = new RegExp(expectedLabel, "i");
+  const expectedLabelRegex = new RegExp(RegExp.escape(expectedLabel), "i");
 
   await expect(async () => {
     const chips = runtimePage.mobile.cards.getByTestId("bench-card-chips");

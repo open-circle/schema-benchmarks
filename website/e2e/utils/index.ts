@@ -16,8 +16,7 @@ export async function getCellByColumnName(
   row: Locator,
   columnName: string | RegExp,
 ): Promise<Locator> {
-  const regexp =
-    typeof columnName === "string" ? new RegExp(RegExp.escape(columnName), "i") : columnName;
+  const regexp = typeof columnName === "string" ? substringToRegex(columnName) : columnName;
 
   const cols = await table.getByRole("columnheader").allTextContents();
 
