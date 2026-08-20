@@ -3746,7 +3746,7 @@ const imageSchema = v3_default.object({
 });
 const ratingSchema = v3_default.object({
 	id: v3_default.number(),
-	stars: v3_default.number().min(0).max(5),
+	stars: v3_default.number().min(1).max(5),
 	title: v3_default.string().min(1).max(100),
 	text: v3_default.string().min(1).max(1e3),
 	images: v3_default.array(imageSchema)

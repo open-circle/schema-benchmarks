@@ -153,7 +153,7 @@ function _extrasOk46(_obj43) {
 function _shapeArray49(_arr47) {
 	for (let _i48 = 0; _i48 < _arr47.length; _i48++) {
 		const _el30 = _arr47[_i48];
-		if (!(isPlainObject(_el30) && typeof _el30["id"] === "number" && !Number.isNaN(_el30["id"]) && typeof _el30["stars"] === "number" && !Number.isNaN(_el30["stars"]) && _el30["stars"] >= 0 && _el30["stars"] <= 5 && typeof _el30["title"] === "string" && _el30["title"].length >= 1 && _el30["title"].length <= 100 && typeof _el30["text"] === "string" && _el30["text"].length >= 1 && _el30["text"].length <= 1e3 && Array.isArray(_el30["images"]) && _shapeArray28(_el30["images"]) && _extrasOk46(_el30))) return false;
+		if (!(isPlainObject(_el30) && typeof _el30["id"] === "number" && !Number.isNaN(_el30["id"]) && typeof _el30["stars"] === "number" && !Number.isNaN(_el30["stars"]) && _el30["stars"] >= 1 && _el30["stars"] <= 5 && typeof _el30["title"] === "string" && _el30["title"].length >= 1 && _el30["title"].length <= 100 && typeof _el30["text"] === "string" && _el30["text"].length >= 1 && _el30["text"].length <= 1e3 && Array.isArray(_el30["images"]) && _shapeArray28(_el30["images"]) && _extrasOk46(_el30))) return false;
 	}
 	return true;
 }
@@ -397,7 +397,7 @@ function _objectIssues160(_val115) {
 				}
 			});
 			else _labelCheck122: {
-				if (!(_value120 >= 0)) {
+				if (!(_value120 >= 1)) {
 					_issue117 = addIssue(_issue117, {
 						type: "nest",
 						key: "stars",

@@ -4281,7 +4281,7 @@ const imageSchema = object({
 });
 const ratingSchema = object({
 	id: number(),
-	stars: number().min(0).max(5),
+	stars: number().min(1).max(5),
 	title: string().min(1).max(100),
 	text: string().min(1).max(1e3),
 	images: array(imageSchema)
@@ -4504,7 +4504,7 @@ const productSchema = object({
 						]
 					});
 					else {
-						if (__sv_20 < 0) _e.push(__zcTS(0, "number", true, __sv_20, [
+						if (__sv_20 < 1) _e.push(__zcTS(1, "number", true, __sv_20, [
 							"ratings",
 							__i_17,
 							"stars"

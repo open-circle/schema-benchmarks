@@ -1007,7 +1007,7 @@ const imageSchema = /* @__PURE__ */ object({
 });
 const ratingSchema = /* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
-	stars: (/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(0), /* @__PURE__ */ _lte(5)),
+	stars: (/* @__PURE__ */ number()).check(/* @__PURE__ */ _gte(1), /* @__PURE__ */ _lte(5)),
 	title: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(100)),
 	text: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(1e3)),
 	images: /* @__PURE__ */ array(imageSchema)

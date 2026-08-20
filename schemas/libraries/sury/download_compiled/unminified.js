@@ -2580,7 +2580,7 @@ const imageSchema = /* @__PURE__ */ schemaFactory({
 });
 const ratingSchema = /* @__PURE__ */ schemaFactory({
 	id: float,
-	stars: float.with(gte, 0).with(lte, 5),
+	stars: float.with(gte, 1).with(lte, 5),
 	title: string.with(nonEmpty).with(maxLength, 100),
 	text: string.with(nonEmpty).with(maxLength, 1e3),
 	images: /* @__PURE__ */ array(imageSchema)

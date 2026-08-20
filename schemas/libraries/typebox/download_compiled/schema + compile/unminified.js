@@ -3860,7 +3860,7 @@ Compile(_Object_({
 		maximum: 100
 	}), Null()]),
 	quantity: Number$1({
-		minimum: 1,
+		minimum: 0,
 		maximum: 10
 	}),
 	tags: _Array_(String$1({

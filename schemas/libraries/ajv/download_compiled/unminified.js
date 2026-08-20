@@ -7324,7 +7324,7 @@ const productSchema = {
 					id: { type: "number" },
 					stars: {
 						type: "number",
-						minimum: 0,
+						minimum: 1,
 						maximum: 5
 					},
 					title: {

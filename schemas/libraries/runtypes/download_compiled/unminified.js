@@ -987,7 +987,7 @@ const Image = Object$1({
 });
 const Rating = Object$1({
 	id: Number,
-	stars: NumberInRange(0, 5),
+	stars: NumberInRange(1, 5),
 	title: StringWithLength(1, 100),
 	text: StringWithLength(1, 1e3),
 	images: Array$1(Image)

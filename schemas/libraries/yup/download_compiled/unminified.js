@@ -2223,7 +2223,7 @@ const imageSchema = create$3({
 });
 const ratingSchema = create$3({
 	id: create$5().required(),
-	stars: create$5().min(0).max(5).required(),
+	stars: create$5().min(1).max(5).required(),
 	title: create$6().min(1).max(100).required(),
 	text: create$6().min(1).max(1e3).required(),
 	images: create$2(imageSchema).required()

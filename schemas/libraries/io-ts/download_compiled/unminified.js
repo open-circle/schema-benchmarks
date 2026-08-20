@@ -1090,7 +1090,7 @@ const ImageData = type({
 });
 const RatingData = type({
 	id: number,
-	stars: numberInRange(0, 5),
+	stars: numberInRange(1, 5),
 	title: stringWithLength(1, 100),
 	text: stringWithLength(1, 1e3),
 	images: array(ImageData)

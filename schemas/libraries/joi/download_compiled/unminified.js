@@ -7515,7 +7515,7 @@ const imageSchema = import_joi_browser_min.default.object({
 });
 const ratingSchema = import_joi_browser_min.default.object({
 	id: import_joi_browser_min.default.number().required(),
-	stars: import_joi_browser_min.default.number().min(0).max(5).required(),
+	stars: import_joi_browser_min.default.number().min(1).max(5).required(),
 	title: import_joi_browser_min.default.string().min(1).max(100).required(),
 	text: import_joi_browser_min.default.string().min(1).max(1e3).required(),
 	images: import_joi_browser_min.default.array().items(imageSchema).required()
