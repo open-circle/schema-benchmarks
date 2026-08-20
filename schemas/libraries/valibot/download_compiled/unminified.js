@@ -509,7 +509,7 @@ parse(/* @__PURE__ */ object({
 	description: /* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(500)),
 	price: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(1e4)),
 	discount: /* @__PURE__ */ nullable(/* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(100))),
-	quantity: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(1), /* @__PURE__ */ maxValue(10)),
+	quantity: /* @__PURE__ */ pipe(/* @__PURE__ */ number(), /* @__PURE__ */ minValue(0), /* @__PURE__ */ maxValue(10)),
 	tags: /* @__PURE__ */ array(/* @__PURE__ */ pipe(/* @__PURE__ */ string(), /* @__PURE__ */ minLength(1), /* @__PURE__ */ maxLength(30))),
 	images: /* @__PURE__ */ array(imageSchema),
 	ratings: /* @__PURE__ */ array(/* @__PURE__ */ object({

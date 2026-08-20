@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.10_ata-validator@1.6.2_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.11_ata-validator@1.6.2_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -128,19 +128,75 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function withKeywords(validator) {
 		const schema = validator._schemaObj;
 		const ops = compileNode(schema);
-		validator.validate({});
-		const compiledValidate = validator.validate;
 		if (ops.length === 0) return validator;
-		validator.validate = function(data) {
-			if (data !== null && typeof data === "object") {
-				const errors = [];
-				runOps(data, ops, "", errors);
-				if (errors.length > 0) return {
-					valid: false,
-					errors
-				};
+		const inner = {};
+		for (const name of [
+			"validate",
+			"isValidObject",
+			"validateJSON",
+			"isValidJSON",
+			"validateAndParse"
+		]) {
+			if (typeof validator[name] !== "function") continue;
+			try {
+				validator[name](name === "validate" || name === "isValidObject" ? {} : "{}");
+			} catch {
+				continue;
 			}
-			return compiledValidate(data);
+			inner[name] = validator[name];
+		}
+		function keywordErrors(data) {
+			if (data === null || typeof data !== "object") return null;
+			const errors = [];
+			runOps(data, ops, "", errors);
+			return errors.length > 0 ? errors : null;
+		}
+		validator.validate = function(data) {
+			const errors = keywordErrors(data);
+			if (errors) return {
+				valid: false,
+				errors
+			};
+			return inner.validate(data);
+		};
+		if (inner.isValidObject) validator.isValidObject = function(data) {
+			if (keywordErrors(data)) return false;
+			return inner.isValidObject(data);
+		};
+		if (inner.validateJSON) validator.validateJSON = function(jsonStr) {
+			const res = inner.validateJSON(jsonStr);
+			if (!res.valid) return res;
+			let data;
+			try {
+				data = JSON.parse(jsonStr);
+			} catch {
+				return res;
+			}
+			const errors = keywordErrors(data);
+			return errors ? {
+				valid: false,
+				errors
+			} : res;
+		};
+		if (inner.isValidJSON) validator.isValidJSON = function(jsonStr) {
+			if (!inner.isValidJSON(jsonStr)) return false;
+			let data;
+			try {
+				data = JSON.parse(jsonStr);
+			} catch {
+				return true;
+			}
+			return !keywordErrors(data);
+		};
+		if (inner.validateAndParse) validator.validateAndParse = function(jsonStr) {
+			const res = inner.validateAndParse(jsonStr);
+			if (!res.valid) return res;
+			const errors = keywordErrors(res.value);
+			return errors ? {
+				valid: false,
+				value: res.value,
+				errors
+			} : res;
 		};
 		return validator;
 	}
@@ -8157,7 +8213,7 @@ const imageSchema = t.object({
 const ratingSchema = t.object({
 	id: t.number(),
 	stars: t.number({
-		minimum: 0,
+		minimum: 1,
 		maximum: 5
 	}),
 	title: t.string({

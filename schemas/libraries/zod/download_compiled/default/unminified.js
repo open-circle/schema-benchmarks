@@ -13572,7 +13572,7 @@ const imageSchema = zod_default.object({
 });
 const ratingSchema = zod_default.object({
 	id: zod_default.number(),
-	stars: zod_default.number().min(0).max(5),
+	stars: zod_default.number().min(1).max(5),
 	title: zod_default.string().min(1).max(100),
 	text: zod_default.string().min(1).max(1e3),
 	images: zod_default.array(imageSchema)

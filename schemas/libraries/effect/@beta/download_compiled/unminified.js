@@ -9055,7 +9055,7 @@ const Image = Struct({
 });
 const Rating = Struct({
 	id: Number$1,
-	stars: Number$1.check(isGreaterThanOrEqualTo(0), isLessThanOrEqualTo(5)),
+	stars: Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(5)),
 	title: String$1.check(isMinLength(1), isMaxLength(100)),
 	text: String$1.check(isMinLength(1), isMaxLength(1e3)),
 	images: mutable(ArraySchema(Image))
@@ -9068,7 +9068,7 @@ decodeUnknownSync(Struct({
 	description: String$1.check(isMinLength(1), isMaxLength(500)),
 	price: Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(1e4)),
 	discount: NullOr(Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(100))),
-	quantity: Number$1.check(isGreaterThanOrEqualTo(1), isLessThanOrEqualTo(10)),
+	quantity: Number$1.check(isGreaterThanOrEqualTo(0), isLessThanOrEqualTo(10)),
 	tags: mutable(ArraySchema(String$1.check(isMinLength(1), isMaxLength(30)))),
 	images: mutable(ArraySchema(Image)),
 	ratings: mutable(ArraySchema(Rating))

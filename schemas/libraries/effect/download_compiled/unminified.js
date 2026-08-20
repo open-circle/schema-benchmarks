@@ -19039,7 +19039,7 @@ const Image = Struct({
 });
 const Rating = Struct({
 	id: Number$,
-	stars: Number$.pipe(greaterThanOrEqualTo(0), lessThanOrEqualTo(5)),
+	stars: Number$.pipe(greaterThanOrEqualTo(1), lessThanOrEqualTo(5)),
 	title: String$.pipe(minLength(1), maxLength(100)),
 	text: String$.pipe(minLength(1), maxLength(1e3)),
 	images: mutable(Array$(Image))
@@ -19052,7 +19052,7 @@ decodeUnknownEither(Struct({
 	description: String$.pipe(minLength(1), maxLength(500)),
 	price: Number$.pipe(greaterThanOrEqualTo(1), lessThanOrEqualTo(1e4)),
 	discount: NullOr(Number$.pipe(greaterThanOrEqualTo(1), lessThanOrEqualTo(100))),
-	quantity: Number$.pipe(greaterThanOrEqualTo(1), lessThanOrEqualTo(10)),
+	quantity: Number$.pipe(greaterThanOrEqualTo(0), lessThanOrEqualTo(10)),
 	tags: mutable(Array$(String$.pipe(minLength(1), maxLength(30)))),
 	images: mutable(Array$(Image)),
 	ratings: mutable(Array$(Rating))

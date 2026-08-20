@@ -3558,7 +3558,7 @@ const imageSchema = objectType({
 });
 const ratingSchema = objectType({
 	id: numberType(),
-	stars: numberType().min(0).max(5),
+	stars: numberType().min(1).max(5),
 	title: stringType().min(1).max(100),
 	text: stringType().min(1).max(1e3),
 	images: arrayType(imageSchema)
