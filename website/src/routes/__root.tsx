@@ -139,7 +139,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   });
   useRegisterSW({ immediate: true });
   const [prefsOpen, setPrefsOpen] = useState(false);
-  const { scrollHandle, scrolled, setScrollContainer } = useScrolled();
+  const { scrollToTop, scrolled, setScrollContainer } = useScrolled();
   return (
     <html
       lang="en"
@@ -169,7 +169,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <Banner />
                 {wrapMain ? <main className="main">{children}</main> : children}
                 <Footer />
-                <ScrollToTop {...{ scrollHandle, scrolled }} />
+                <ScrollToTop {...{ scrollToTop, scrolled }} />
                 <Snackbars />
                 <ConfirmDialog />
                 <PreferencesDialog open={prefsOpen} onClose={() => setPrefsOpen(false)} />

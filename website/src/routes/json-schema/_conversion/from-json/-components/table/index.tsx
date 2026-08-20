@@ -1,7 +1,7 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
 import type { SchemaFromJsonResult } from "@schema-benchmarks/bench";
 import { formatDuration, getTransitionName, numFormatter } from "@schema-benchmarks/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
@@ -30,14 +30,16 @@ const getRatio = (a: number, b: number) => {
   return a / b;
 };
 
+const getDefaultCompareId = (results: Array<SchemaFromJsonResult>) => results[0]?.id;
+
 function useComparison(results: Array<SchemaFromJsonResult>) {
-  const [compareId, setCompareId] = useState(() => results[0]?.id);
-  useEffect(() => {
-    setCompareId(results[0]?.id);
-  }, [results]);
+  const [selectedCompareId, setSelectedCompareId] = useState<string | undefined>(undefined);
   const resultsById = useMemo(() => {
     return Object.fromEntries(results.map((result) => [result.id, result]));
   }, [results]);
+  const defaultCompareId = getDefaultCompareId(results);
+  const compareId =
+    selectedCompareId && resultsById[selectedCompareId] ? selectedCompareId : defaultCompareId;
   const compareResult = compareId && resultsById[compareId];
   const ratioScaler = useMemo(() => {
     if (!compareResult) return undefined;
@@ -49,7 +51,7 @@ function useComparison(results: Array<SchemaFromJsonResult>) {
       lowerBetter: true,
     });
   }, [results, compareResult]);
-  return { compareId, setCompareId, compareResult, ratioScaler };
+  return { compareId, setCompareId: setSelectedCompareId, compareResult, ratioScaler };
 }
 
 export function FromJsonTable({ results, meanScaler, ...sortState }: FromJsonTableProps) {
