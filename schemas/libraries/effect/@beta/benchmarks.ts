@@ -1,6 +1,6 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
-import { isSome } from "effect___beta/Option";
+import * as Option from "effect___beta/Option";
 import * as Schema from "effect___beta/Schema";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData } from "#src";
@@ -71,8 +71,8 @@ export default defineBenchmarks({
       run(data) {
         return decode(data, { errors: "all" });
       },
-      validateResult: isSome,
-      getData: (result) => result.valueOrUndefined,
+      validateResult: Option.isSome,
+      getData: Option.getOrUndefined,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "all" })
@@ -82,8 +82,8 @@ export default defineBenchmarks({
       run(data) {
         return decode(data, { errors: "first" });
       },
-      validateResult: isSome,
-      getData: (result) => result.valueOrUndefined,
+      validateResult: Option.isSome,
+      getData: Option.getOrUndefined,
       snippet: ts`
         // const decode = Schema.decodeUnknownOption(schema);
         decode(data, { errors: "first" })

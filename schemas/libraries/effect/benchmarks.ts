@@ -79,7 +79,7 @@ export default defineBenchmarks({
         return decodeAll(data);
       },
       validateResult: Either.isRight,
-      getData: (result) => (Either.isRight(result) ? result.right : undefined),
+      getData: Either.getOrUndefined,
       snippet: ts`
         // const decodeAll = Schema.decodeUnknownEither(
         //  schema, 
@@ -93,7 +93,7 @@ export default defineBenchmarks({
         return decodeFirst(data);
       },
       validateResult: Either.isRight,
-      getData: (result) => (Either.isRight(result) ? result.right : undefined),
+      getData: Either.getOrUndefined,
       snippet: ts`
         // const decodeFirst = Schema.decodeUnknownEither(
         //  schema, 
