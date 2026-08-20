@@ -1,9 +1,9 @@
-import { isServer } from "@tanstack/react-query";
+import { environmentManager } from "@tanstack/react-query";
 import { useCallback, useDebugValue, useMemo, useSyncExternalStore } from "react";
 
 export function useMediaQuery(query: string, serverValue = false) {
   const mediaQuery = useMemo(() => {
-    if (isServer) return null;
+    if (environmentManager.isServer()) return null;
     return window.matchMedia(query);
   }, [query]);
   const matches = useSyncExternalStore(
