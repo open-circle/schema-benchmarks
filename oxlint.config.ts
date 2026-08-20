@@ -23,6 +23,7 @@ export const baseConfig = defineConfig({
     "typescript/consistent-type-imports": "error",
     "typescript/consistent-return": "off",
     "typescript/no-deprecated": "error",
+    "oxc/no-this-in-exported-function": "off",
     ...eslintDependConfigs["flat/recommended"].rules,
   },
   settings: {
