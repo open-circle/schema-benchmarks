@@ -9,7 +9,7 @@ export const libraryVersions = {
   "@sapphire/shapeshift": "5.0.0",
   ajv: "8.20.0",
   arktype: "2.2.3",
-  "ata-validator": "1.6.1",
+  "ata-validator": "1.6.2",
   decoders: "2.9.3",
   "effect@beta": "4.0.0-beta.101",
   effect: "3.22.0",
