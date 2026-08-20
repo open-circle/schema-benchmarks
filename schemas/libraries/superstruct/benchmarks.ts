@@ -59,7 +59,6 @@ export default defineBenchmarks({
       {
         run(data) {
           const result = validate(data, schema);
-          // oxlint-disable-next-line no-underscore-dangle
           for (const _failure of result[0]?.failures() ?? []) {
             // force iteration
           }
@@ -77,7 +76,6 @@ export default defineBenchmarks({
       {
         run(data) {
           const result = schema.validate(data);
-          // oxlint-disable-next-line no-underscore-dangle
           for (const _failure of result[0]?.failures() ?? []) {
             // force iteration
           }
