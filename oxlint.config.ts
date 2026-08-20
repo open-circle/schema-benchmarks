@@ -22,6 +22,7 @@ export const baseConfig = defineConfig({
     "typescript/no-unsafe-type-assertion": "off",
     "typescript/consistent-type-imports": "error",
     "typescript/consistent-return": "off",
+    "oxc/no-this-in-exported-function": "off",
     ...eslintDependConfigs["flat/recommended"].rules,
   },
   settings: {
