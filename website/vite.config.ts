@@ -73,7 +73,7 @@ const config = defineConfig({
       providerImportSource: "@mdx-js/react",
     }),
     netlify(),
-    viteReact(),
+    viteReact({ compiler: true }),
     materialSymbols({
       knownSymbols: [
         "check_small",
