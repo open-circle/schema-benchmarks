@@ -6,6 +6,7 @@ import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { test, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
+import { substringToRegex } from "#e2e/utils/index.ts";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
 test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
@@ -87,9 +88,8 @@ test.describe("benchmarks tab", () => {
       for (const direction of jsonSchemaDirectionSchema.options) {
         await toJsonPage.benchmarks.selectDirection(direction);
 
-        const expectedDirectionRegex = new RegExp(
+        const expectedDirectionRegex = substringToRegex(
           toJsonPage.benchmarks.getDirectionLabel(direction),
-          "i",
         );
         await expect(async () => {
           const chips = toJsonPage.benchmarks.mobile.cards.getByTestId("bench-card-chips");

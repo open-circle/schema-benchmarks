@@ -30,7 +30,10 @@ export async function expectOptimizeFilter(runtimePage: RuntimePage) {
     await test.step(`Filter desktop rows by ${runtimePage.getOptimizeTypeLabel(optimizeType)} optimization`, async () => {
       await runtimePage.selectOptimizeType(optimizeType);
 
-      const expectedLabel = new RegExp(`^${runtimePage.getOptimizeTypeLabel(optimizeType)}$`, "i");
+      const expectedLabel = new RegExp(
+        `^${RegExp.escape(runtimePage.getOptimizeTypeLabel(optimizeType))}$`,
+        "i",
+      );
       await expect(async () => {
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("optimizations")).toHaveText(expectedLabel);
@@ -47,7 +50,10 @@ export async function expectErrorTypeFilter(
     await test.step(`Filter desktop rows by ${runtimePage.getErrorTypeLabel(errorType)} errors`, async () => {
       await runtimePage.selectErrorType(errorType);
 
-      const expectedLabel = new RegExp(`^${runtimePage.getErrorTypeLabel(errorType)}$`, "i");
+      const expectedLabel = new RegExp(
+        `^${RegExp.escape(runtimePage.getErrorTypeLabel(errorType))}$`,
+        "i",
+      );
       await expect(async () => {
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("error type")).toHaveText(expectedLabel);
