@@ -1,5 +1,5 @@
 import { mergeRefs } from "@schema-benchmarks/utils/react";
-import { type ComponentPropsWithRef, type ReactNode, useEffect, useRef } from "react";
+import { type ComponentPropsWithRef, type ReactNode, useEffect, useRef, useState } from "react";
 import bem from "react-bem-helper";
 import { resolveValue, type ValueOrFunction } from "react-hot-toast";
 
@@ -16,6 +16,7 @@ const cls = bem("dialog");
 
 export function Dialog({ open, children, ref, className, ...props }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [dialogElement, setDialogElement] = useState<HTMLDialogElement | null>(null);
   useEffect(() => {
     if (open) {
       dialogRef.current?.showModal();
@@ -24,13 +25,17 @@ export function Dialog({ open, children, ref, className, ...props }: DialogProps
     }
   }, [open]);
   return (
-    <dialog {...props} {...cls({ extra: className })} ref={mergeRefs(ref, dialogRef)}>
+    <dialog
+      {...props}
+      {...cls({ extra: className })}
+      ref={mergeRefs(ref, dialogRef, setDialogElement)}
+    >
       {resolveValue(children, {
         close(returnValue) {
-          return dialogRef.current?.close(returnValue);
+          return dialogElement?.close(returnValue);
         },
         requestClose(returnValue) {
-          return dialogRef.current?.requestClose(returnValue);
+          return dialogElement?.requestClose(returnValue);
         },
       })}
     </dialog>

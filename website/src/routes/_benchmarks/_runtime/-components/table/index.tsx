@@ -6,7 +6,7 @@ import {
   getTransitionName,
   numFormatter,
 } from "@schema-benchmarks/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
@@ -46,13 +46,13 @@ const getDefaultCompareId = (results: Array<RuntimeResult>) =>
   (results.find((result) => result.mean) ?? results[0])?.id;
 
 function useComparison(results: Array<RuntimeResult>) {
-  const [compareId, setCompareId] = useState(() => getDefaultCompareId(results));
-  useEffect(() => {
-    setCompareId(getDefaultCompareId(results));
-  }, [results]);
+  const [selectedCompareId, setSelectedCompareId] = useState<string | undefined>(undefined);
   const resultsById = useMemo(() => {
     return Object.fromEntries(results.map((result) => [result.id, result]));
   }, [results]);
+  const defaultCompareId = getDefaultCompareId(results);
+  const compareId =
+    selectedCompareId && resultsById[selectedCompareId] ? selectedCompareId : defaultCompareId;
   const compareResult = compareId && resultsById[compareId];
   const ratioScaler = useMemo(() => {
     if (!compareResult) return undefined;
@@ -66,7 +66,7 @@ function useComparison(results: Array<RuntimeResult>) {
       lowerBetter: true,
     });
   }, [results, compareResult]);
-  return { compareId, setCompareId, compareResult, ratioScaler };
+  return { compareId, setCompareId: setSelectedCompareId, compareResult, ratioScaler };
 }
 
 export function BenchTable({ results, meanScaler, to, ...sortState }: BenchTableProps) {

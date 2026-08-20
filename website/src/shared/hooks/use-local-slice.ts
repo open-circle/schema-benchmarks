@@ -51,14 +51,16 @@ export function useLocalSlice<State, Reducers extends ReducerMap<State>>({
     return create(state, (draft) => reducer(draft, action) as never);
   }, initialState);
 
-  const actionTypes = Object.keys(reducers);
+  // oxlint-disable-next-line unicorn/no-array-sort
+  const reducerKeys = Object.keys(reducers).sort();
+  const reducerKeySignature = reducerKeys.join("\u0000");
 
   const dispatchAction = useMemo(() => {
-    const map: Record<string, PayloadActionDispatch<NonNullable<unknown>>> = {};
-    for (const type of actionTypes) map[type] = (payload) => dispatch({ type, payload });
-    return map as DispatcherMap<Reducers>;
-    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
-  }, [dispatch, JSON.stringify(actionTypes)]);
+    const keys = reducerKeySignature ? reducerKeySignature.split("\u0000") : [];
+    return Object.fromEntries(
+      keys.map((type) => [type, (payload?: unknown) => dispatch({ type, payload })]),
+    ) as DispatcherMap<Reducers>;
+  }, [dispatch, reducerKeySignature]);
 
   return [state, dispatchAction];
 }
