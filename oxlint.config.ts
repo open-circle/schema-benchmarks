@@ -24,6 +24,7 @@ export const baseConfig = defineConfig({
     "typescript/consistent-return": "off",
     "typescript/no-deprecated": "error",
     "no-underscore-dangle": "off",
+    "oxc/no-this-in-exported-function": "off",
     ...eslintDependConfigs["flat/recommended"].rules,
   },
   settings: {
