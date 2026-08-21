@@ -1,7 +1,8 @@
 import type { Page } from "@playwright/test";
+import { test } from "@playwright/test";
 import { dataTypeSchema } from "@schema-benchmarks/bench";
 
-import { test, expect } from "#e2e/fixtures";
+import { expect } from "#e2e/fixtures";
 import type { MixinInstanceType, withDataToggle } from "#e2e/fixtures/pages/_runtime";
 
 export * as desktop from "./desktop";

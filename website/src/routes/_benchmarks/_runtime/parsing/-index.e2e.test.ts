@@ -1,6 +1,7 @@
 import { createTest } from "#e2e/fixtures";
-import { ParsingPage } from "#e2e/fixtures/pages/parsing.ts";
 import * as helpers from "#e2e/helpers";
+
+import { ParsingPage } from "./-index.e2e.model";
 
 const test = createTest({ parsingPage: ParsingPage });
 

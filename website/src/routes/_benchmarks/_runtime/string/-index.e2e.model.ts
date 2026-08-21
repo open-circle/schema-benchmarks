@@ -1,8 +1,7 @@
 import type { StringFormat } from "@schema-benchmarks/schemas";
 
+import { RuntimePage, withDataToggle } from "#e2e/fixtures/pages/_runtime";
 import { stringFormatProps } from "#src/routes/_benchmarks/_runtime/-constants";
-
-import { RuntimePage, withDataToggle } from "./_runtime";
 
 export class StringPage extends withDataToggle(RuntimePage) {
   url = "/string";

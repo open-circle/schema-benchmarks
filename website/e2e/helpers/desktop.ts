@@ -1,6 +1,7 @@
+import { test } from "@playwright/test";
 import type { TableResult } from "@rickcedwhat/playwright-smart-table";
 
-import { test, expect } from "#e2e/fixtures";
+import { expect } from "#e2e/fixtures";
 
 export async function expectTableSorting(
   tableHandle: TableResult,

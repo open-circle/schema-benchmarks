@@ -1,11 +1,12 @@
 import { createTest, expect } from "#e2e/fixtures";
-import { PrefsDialog } from "#e2e/fixtures/components/prefs.ts";
 import {
   styleSchema,
   themeSchema,
   npmSiteSchema,
   ligatureSchema,
 } from "#src/shared/lib/prefs/constants";
+
+import { PrefsDialog } from "./pref.e2e.model";
 
 const test = createTest({ prefs: PrefsDialog });
 
