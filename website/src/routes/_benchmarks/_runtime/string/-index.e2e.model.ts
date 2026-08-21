@@ -1,6 +1,6 @@
 import type { StringFormat } from "@schema-benchmarks/schemas";
 
-import { RuntimePage, withDataToggle } from "#e2e/fixtures/pages/_runtime";
+import { RuntimePage, withDataToggle } from "#e2e/fixtures/runtime.ts";
 import { stringFormatProps } from "#src/routes/_benchmarks/_runtime/-constants";
 
 export class StringPage extends withDataToggle(RuntimePage) {

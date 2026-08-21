@@ -3,11 +3,7 @@ import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas"
 import { everyAsync } from "mix-n-matchers/utilities";
 
 import { expect } from "#e2e/fixtures";
-import type {
-  RuntimePage,
-  MixinInstanceType,
-  withErrorTypeFilter,
-} from "#e2e/fixtures/pages/_runtime";
+import type { RuntimePage, MixinInstanceType, withErrorTypeFilter } from "#e2e/fixtures/runtime.ts";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
 // covers every runtime benchmark type, so it works as the shared default across all pages

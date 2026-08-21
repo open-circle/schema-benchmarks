@@ -3,7 +3,7 @@ import { test } from "@playwright/test";
 import { dataTypeSchema } from "@schema-benchmarks/bench";
 
 import { expect } from "#e2e/fixtures";
-import type { MixinInstanceType, withDataToggle } from "#e2e/fixtures/pages/_runtime";
+import type { MixinInstanceType, withDataToggle } from "#e2e/fixtures/runtime.ts";
 
 export * as desktop from "./desktop";
 export * as mobile from "./mobile";
