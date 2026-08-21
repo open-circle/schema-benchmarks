@@ -140,6 +140,9 @@ const config = defineConfig({
               launchOptions: {
                 channel: "chromium",
               },
+              contextOptions: {
+                permissions: ["clipboard-read", "clipboard-write"],
+              },
             }),
             // https://vitest.dev/guide/browser/playwright
             instances: [{ browser: "chromium" }],
