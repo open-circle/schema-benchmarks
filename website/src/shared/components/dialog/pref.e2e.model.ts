@@ -14,12 +14,10 @@ export class PrefsDialog extends ComponentObjectModel {
   @step("Open preferences dialog")
   async openDialog() {
     await expect(async () => {
-      try {
-        await expect(this.dialog).toBeVisible({ timeout: 1000 });
-      } catch {
+      if (!(await this.dialog.isVisible())) {
         await this.openButton.click();
-        await expect(this.dialog).toBeVisible({ timeout: 5000 });
       }
+      await expect(this.dialog).toBeVisible({ timeout: 5000 });
     }).toPass();
   }
 
