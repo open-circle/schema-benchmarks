@@ -14,6 +14,9 @@ import {
   filterMap,
   exclude,
   range,
+  getOrInsert,
+  getOrInsertComputed,
+  getOrInsertComputedAsync,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -206,5 +209,58 @@ describe("range", () => {
     expect(range(0, 5, { step: 2 })).toEqualSequence(0, 2, 4);
     expect(range(0, 5, { inclusive: true })).toEqualSequence(0, 1, 2, 3, 4, 5);
     expect(range(5, 0)).toEqualSequence(5, 4, 3, 2, 1);
+  });
+});
+
+describe("getOrInsert", () => {
+  describe("getOrInsert", () => {
+    it("should return the existing value if present", () => {
+      const map = new Map([["a", 1]]);
+      const result = getOrInsert(map, "a", 2);
+      expect(result).toBe(1);
+      expect(map.get("a")).toBe(1);
+    });
+    it("should insert and return the new value if not present", () => {
+      const map = new Map<string, number>();
+      const result = getOrInsert(map, "a", 2);
+      expect(result).toBe(2);
+      expect(map.get("a")).toBe(2);
+    });
+  });
+
+  describe("getOrInsertComputed", () => {
+    it("should return the existing value if present", () => {
+      const map = new Map([["a", 1]]);
+      const result = getOrInsertComputed(map, "a", () => 2);
+      expect(result).toBe(1);
+      expect(map.get("a")).toBe(1);
+    });
+    it("should compute, insert and return the new value if not present", () => {
+      const fn = vi.fn(() => 2);
+      const map = new Map<string, number>();
+      const result = getOrInsertComputed(map, "a", fn);
+      expect(result).toBe(2);
+      expect(map.get("a")).toBe(2);
+      expect(fn).toHaveBeenCalledOnce();
+      expect(fn).toHaveBeenCalledWith("a");
+    });
+  });
+
+  describe("getOrInsertComputedAsync", () => {
+    it("should return the existing value if present", async () => {
+      const map = new Map([["a", 1]]);
+      const result = await getOrInsertComputedAsync(map, "a", async () => 2);
+      expect(result).toBe(1);
+      expect(map.get("a")).toBe(1);
+    });
+    it("should compute, insert and return the new value if not present", async () => {
+      const fn = vi.fn(async () => 2);
+      const map = new Map<string, number>();
+      const result = await getOrInsertComputedAsync(map, "a", fn);
+      expect(result).toBe(2);
+      expect(map.get("a")).toBe(2);
+      expect(fn).toHaveBeenCalledOnce();
+      expect(fn).toHaveBeenCalledWith("a");
+    });
   });
 });
