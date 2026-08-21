@@ -41,11 +41,13 @@ function BaseSidebar({
     return;
   }, [setOpen, isModal]);
 
+  const isHidden = isModal ? !open : false;
+
   return (
     <>
       {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions */}
       <div {...backdropCls({ modifiers: { visible: open } })} onClick={() => setOpen(false)} />
-      <aside {...cls({ modifiers: { open } })} aria-hidden={isModal ? !open : undefined}>
+      <aside {...cls({ modifiers: { open } })} aria-hidden={isHidden} inert={isHidden}>
         <div {...cls("logo")}>
           {iconSuffixes.map((suffix) => (
             <img key={suffix} {...cls(`logo-${suffix}`)} src={`/logo_${suffix}.svg`} alt="Logo" />
