@@ -124,7 +124,7 @@ const config = defineConfig({
         test: {
           name: "node",
           include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
-          setupFiles: ["./test/common/setup.ts"],
+          setupFiles: ["./test/common/setup.ts", "./test/node/setup.ts"],
         },
       },
       {
