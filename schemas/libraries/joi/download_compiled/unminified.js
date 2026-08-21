@@ -1164,11 +1164,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						s("object" == typeof n && !Array.isArray(n), "Invalid message for", r);
-						const o = r;
-						t[o] = t[o] || {};
+						const o = r, i = Object.hasOwn(t, o) ? t[o] : {};
+						t[o] = i;
 						for (const e of Object.keys(n)) {
-							const r = n[e];
-							"root" === e || a.isTemplate(r) ? t[o][e] = r : (s("string" == typeof r, "Invalid message for", e, "in", o), t[o][e] = new a(r));
+							const t = n[e];
+							"root" === e || a.isTemplate(t) ? i[e] = t : (s("string" == typeof t, "Invalid message for", e, "in", o), i[e] = new a(t));
 						}
 					}
 					return t;
@@ -1209,11 +1209,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						s("object" == typeof t && !Array.isArray(t), "Invalid message for", e);
-						const n = e;
-						o[n] = o[n] || {};
+						const n = e, i = Object.hasOwn(o, n) ? o[n] : {};
+						o[n] = i;
 						for (const e of Object.keys(t)) {
 							const r = t[e];
-							"root" === e || a.isTemplate(r) ? o[n][e] = r : (s("string" == typeof r, "Invalid message for", e, "in", n), o[n][e] = new a(r));
+							"root" === e || a.isTemplate(r) ? i[e] = r : (s("string" == typeof r, "Invalid message for", e, "in", n), i[e] = new a(r));
 						}
 					}
 					return o;
@@ -3318,6 +3318,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						"object.regex": "{{#label}} must be a RegExp object",
 						"object.rename.multiple": "{{#label}} cannot rename {{:#from}} because multiple renames are disabled and another key was already renamed to {{:#to}}",
 						"object.rename.override": "{{#label}} cannot rename {{:#from}} because override is disabled and target {{:#to}} exists",
+						"object.rename.proto": "{{#label}} cannot rename {{:#from}} because target {{:#to}} is a reserved key",
 						"object.schema": "{{#label}} must be a Joi schema of {{#type}} type",
 						"object.unknown": "{{#label}} is not allowed",
 						"object.with": "{{:#mainWithLabel}} missing required peer {{:#peerWithLabel}}",
@@ -3481,7 +3482,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									to: u,
 									pattern: l
 								}, r, s)), s.abortEarly)) return !1;
-								void 0 === t[i] ? delete t[u] : t[u] = t[i], a[u] = !0, o.options.alias || delete t[i];
+								if ("__proto__" !== u) void 0 === t[i] ? delete t[u] : t[u] = t[i], a[u] = !0, o.options.alias || delete t[i];
+								else if (n.push(e.$_createError("object.rename.proto", t, {
+									from: i,
+									to: u,
+									pattern: l
+								}, r, s)), s.abortEarly) return !1;
 							}
 						}
 					}
@@ -4109,6 +4115,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								f.assertOptions(e, [
 									"allowFullyQualified",
 									"allowUnicode",
+									"allowUnderscore",
 									"ignoreLength",
 									"maxDomainSegments",
 									"minDomainSegments",
@@ -5003,12 +5010,12 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				].join("|"));
 				var A = r(8253), S = r.n(A), E = r(8669), O = r.n(E);
 				const R = function() {
-					const e = {};
-					e.ipv4address = "(?:(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])";
-					const u = "(?:[\\dA-Fa-f]{1,4}:[\\dA-Fa-f]{1,4}|" + e.ipv4address + ")", f = "(?:[\\dA-Fa-f]{1,4}:){6}" + u, m = "::(?:[\\dA-Fa-f]{1,4}:){5}" + u, h = "(?:[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){4}" + u, p = "(?:(?:[\\dA-Fa-f]{1,4}:){0,1}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){3}" + u, d = "(?:(?:[\\dA-Fa-f]{1,4}:){0,2}[\\dA-Fa-f]{1,4})?::(?:[\\dA-Fa-f]{1,4}:){2}" + u, g = "(?:(?:[\\dA-Fa-f]{1,4}:){0,3}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}:" + u, y = "(?:(?:[\\dA-Fa-f]{1,4}:){0,4}[\\dA-Fa-f]{1,4})?::" + u;
-					e.ipv4Cidr = "(?:\\d|[1-2]\\d|3[0-2])", e.ipv6Cidr = "(?:0{0,2}\\d|0?[1-9]\\d|1[01]\\d|12[0-8])", e.ipv6address = "(?:" + f + "|" + m + "|" + h + "|" + p + "|" + d + "|" + g + "|" + y + "|(?:(?:[\\dA-Fa-f]{1,4}:){0,5}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}|(?:(?:[\\dA-Fa-f]{1,4}:){0,6}[\\dA-Fa-f]{1,4})?::)", e.ipvFuture = "v[\\dA-Fa-f]+\\.[\\w-\\.~!\\$&'\\(\\)\\*\\+,;=:]+", e.scheme = "[a-zA-Z][a-zA-Z\\d+-\\.]*", e.schemeRegex = new RegExp(e.scheme);
-					const S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?" + S + "(?::\\d*)?", O = "(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:]*@)?(" + S + ")(?::\\d*)?";
-					return e.hierPart = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|(?:\\/\\/\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*))", e.hierPartCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)", e.relativeRef = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.relativeRefCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.query = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@\\/\\?]*", e;
+					const e = {}, t = "\\dA-Fa-f", r = "[" + t + "]", s = "\\w-\\.~", n = "!\\$&'\\(\\)\\*\\+,;=", a = "%" + t, o = s + a + n + ":@", l = "(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])";
+					e.ipv4address = "(?:" + l + "\\.){3}" + l;
+					const c = r + "{1,4}", u = "(?:" + c + ":" + c + "|" + e.ipv4address + ")", f = "(?:" + c + ":){6}" + u, m = "::(?:" + c + ":){5}" + u, h = "(?:" + c + ")?::(?:" + c + ":){4}" + u, p = "(?:(?:" + c + ":){0,1}" + c + ")?::(?:" + c + ":){3}" + u, d = "(?:(?:" + c + ":){0,2}" + c + ")?::(?:" + c + ":){2}" + u, g = "(?:(?:" + c + ":){0,3}" + c + ")?::" + c + ":" + u, y = "(?:(?:" + c + ":){0,4}" + c + ")?::" + u;
+					e.ipv4Cidr = "(?:\\d|[1-2]\\d|3[0-2])", e.ipv6Cidr = "(?:0{0,2}\\d|0?[1-9]\\d|1[01]\\d|12[0-8])", e.ipv6address = "(?:" + f + "|" + m + "|" + h + "|" + p + "|" + d + "|" + g + "|" + y + "|(?:(?:[\\dA-Fa-f]{1,4}:){0,5}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}|(?:(?:[\\dA-Fa-f]{1,4}:){0,6}[\\dA-Fa-f]{1,4})?::)", e.ipvFuture = "v" + r + "+\\.[" + s + n + ":]+", e.scheme = "[a-zA-Z][a-zA-Z\\d+-\\.]*", e.schemeRegex = new RegExp(e.scheme);
+					const _ = "[" + s + a + n + ":]*", S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:" + _ + "@)?" + S + "(?::\\d*)?", O = "(?:" + _ + "@)?(" + S + ")(?::\\d*)?";
+					return e.hierPart = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|(?:\\/\\/\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*))", e.hierPartCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)", e.relativeRef = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.relativeRefCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.query = "[" + o + "\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[" + o + "\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[" + o + "\\/\\?]*", e;
 				}(), w = {
 					v4Cidr: R.ipv4Cidr,
 					v6Cidr: R.ipv6Cidr,
@@ -7485,22 +7492,33 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.2.3" };
+				e.exports = { version: "18.2.5" };
 			}
-		}, t = {};
+		};
+		const t = {};
 		function r(s) {
-			var n = t[s];
+			const n = t[s];
 			if (void 0 !== n) return n.exports;
-			var a = t[s] = { exports: {} };
+			const a = t[s] = { exports: {} };
 			return e[s](a, a.exports, r), a.exports;
 		}
 		return r.n = (e) => {
-			var t = e && e.__esModule ? () => e.default : () => e;
+			const t = e && e.__esModule ? () => e.default : () => e;
 			return r.d(t, { a: t }), t;
 		}, r.d = (e, t) => {
-			for (var s in t) r.o(t, s) && !r.o(e, s) && Object.defineProperty(e, s, {
+			if (Array.isArray(t)) for (var s = 0; s < t.length;) {
+				var n = t[s++], a = t[s++];
+				r.o(e, n) ? 0 === a && s++ : 0 === a ? Object.defineProperty(e, n, {
+					enumerable: !0,
+					value: t[s++]
+				}) : Object.defineProperty(e, n, {
+					enumerable: !0,
+					get: a
+				});
+			}
+			else for (var n in t) r.o(t, n) && !r.o(e, n) && Object.defineProperty(e, n, {
 				enumerable: !0,
-				get: t[s]
+				get: t[n]
 			});
 		}, r.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t), r(1100);
 	})());
