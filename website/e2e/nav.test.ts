@@ -1,4 +1,7 @@
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { Sidebar } from "#e2e/fixtures/components/sidebar.ts";
+
+const test = createTest({ sidebar: Sidebar });
 
 test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
   await page.goto("/");

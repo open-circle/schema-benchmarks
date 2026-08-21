@@ -1,5 +1,8 @@
-import { test } from "#e2e/fixtures";
+import { createTest } from "#e2e/fixtures";
+import { ValidationPage } from "#e2e/fixtures/pages/validation.ts";
 import * as helpers from "#e2e/helpers";
+
+const test = createTest({ validationPage: ValidationPage });
 
 test.beforeEach(async ({ fontsLoaded, validationPage }) => {
   await validationPage.goto();

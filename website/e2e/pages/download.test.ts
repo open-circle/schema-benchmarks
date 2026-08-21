@@ -1,8 +1,11 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { DownloadPage } from "#e2e/fixtures/pages/download.ts";
 import * as helpers from "#e2e/helpers";
 import { libraryVersions } from "#e2e/utils/library-versions.gen.ts";
+
+const test = createTest({ downloadPage: DownloadPage });
 
 test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => {
   await downloadPage.goto();

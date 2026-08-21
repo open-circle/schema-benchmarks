@@ -1,10 +1,12 @@
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 
-import { test, expect } from "#e2e/fixtures";
-import type { CompliancePage } from "#e2e/fixtures/pages/json-schema/compliance.ts";
+import { createTest, expect } from "#e2e/fixtures";
+import { CompliancePage } from "#e2e/fixtures/pages/json-schema/compliance.ts";
 import * as helpers from "#e2e/helpers";
 import { complianceTypeLabels } from "#src/routes/json-schema/compliance/-constants";
+
+const test = createTest({ compliancePage: CompliancePage });
 
 test.beforeEach("Go to JSON schema compliance page", async ({ compliancePage, fontsLoaded }) => {
   await compliancePage.goto();
