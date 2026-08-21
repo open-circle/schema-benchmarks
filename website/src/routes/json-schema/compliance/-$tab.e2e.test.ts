@@ -4,8 +4,8 @@ import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { createTest, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
 
+import { CompliancePage } from "./-$tab.e2e.model";
 import { complianceTypeLabels } from "./-constants";
-import { CompliancePage } from "./-index.e2e.model";
 
 const test = createTest({ compliancePage: CompliancePage });
 
