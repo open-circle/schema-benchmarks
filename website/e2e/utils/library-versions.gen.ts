@@ -14,7 +14,7 @@ export const libraryVersions = {
   "effect@beta": "4.0.0-beta.101",
   effect: "3.22.0",
   "io-ts": "2.2.22",
-  joi: "18.2.3",
+  joi: "18.2.5",
   jsonschema: "1.5.0",
   runtypes: "7.0.5",
   superstruct: "2.0.2",
