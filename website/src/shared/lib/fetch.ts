@@ -13,7 +13,9 @@ const MAX_FETCH_RETRIES = 4;
 const INITIAL_RETRY_DELAY_MS = 300;
 const MAX_RETRY_DELAY_MS = 10_000;
 
-const parseRetryAfterMs = (response: Response): number | undefined => {
+export const isRetryableStatusCode = (status: number) => RETRYABLE_STATUS_CODES.has(status);
+
+export const parseRetryAfterMs = (response: Response): number | undefined => {
   const value = response.headers.get("retry-after");
   if (!value) return undefined;
 
@@ -25,13 +27,13 @@ const parseRetryAfterMs = (response: Response): number | undefined => {
   return Math.max(0, asDate - Date.now());
 };
 
-const isAbortError = (error: unknown) =>
+export const isAbortError = (error: unknown) =>
   (error instanceof DOMException && error.name === "AbortError") ||
   (typeof error === "object" &&
     error !== null &&
     (error as { name?: unknown }).name === "AbortError");
 
-const isRetryableNetworkError = (error: unknown) =>
+export const isRetryableNetworkError = (error: unknown) =>
   error instanceof TypeError ||
   (typeof error === "object" &&
     error !== null &&
@@ -39,36 +41,46 @@ const isRetryableNetworkError = (error: unknown) =>
 
 export const isRetryableUpfetchError = (error: unknown) => {
   if (isAbortError(error)) return false;
-  if (isResponseError(error)) return RETRYABLE_STATUS_CODES.has(error.status);
+  if (isResponseError(error)) return isRetryableStatusCode(error.status);
   return isRetryableNetworkError(error);
 };
 
-const externalApiRetryOptions: RetryOptions = {
-  attempts: MAX_FETCH_RETRIES,
-  when: ({ response, error }) => {
-    if (response) return RETRYABLE_STATUS_CODES.has(response.status);
-    if (isAbortError(error)) return false;
-    return isRetryableNetworkError(error);
-  },
-  delay: ({ attempt, response }) => {
-    if (response) {
-      const retryAfterMs = parseRetryAfterMs(response);
-      if (retryAfterMs !== undefined) return Math.min(retryAfterMs, MAX_RETRY_DELAY_MS);
-    }
-
-    const exponential = INITIAL_RETRY_DELAY_MS * 2 ** (attempt - 1);
-    return Math.min(exponential, MAX_RETRY_DELAY_MS);
-  },
+export const shouldRetryRequest = ({
+  response,
+  error,
+}: {
+  response?: Response;
+  error: unknown;
+}) => {
+  if (response) return isRetryableStatusCode(response.status);
+  if (isAbortError(error)) return false;
+  return isRetryableNetworkError(error);
 };
 
-const getRequestUrl = (input: RequestInfo | URL) => {
+export const getRetryDelay = ({ attempt, response }: { attempt: number; response?: Response }) => {
+  if (response) {
+    const retryAfterMs = parseRetryAfterMs(response);
+    if (retryAfterMs !== undefined) return Math.min(retryAfterMs, MAX_RETRY_DELAY_MS);
+  }
+
+  const exponential = INITIAL_RETRY_DELAY_MS * 2 ** (attempt - 1);
+  return Math.min(exponential, MAX_RETRY_DELAY_MS);
+};
+
+export const externalApiRetryOptions: RetryOptions = {
+  attempts: MAX_FETCH_RETRIES,
+  when: shouldRetryRequest,
+  delay: getRetryDelay,
+};
+
+export const getRequestUrl = (input: RequestInfo | URL) => {
   if (typeof input === "string") return input;
   if (input instanceof URL) return input.toString();
   if (input instanceof Request) return input.url;
   return String(input);
 };
 
-const shouldRetryByDefault = (input: RequestInfo | URL) => {
+export const shouldRetryByDefault = (input: RequestInfo | URL) => {
   const url = getRequestUrl(input);
   const isExternal =
     url.startsWith("https://") &&
