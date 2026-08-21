@@ -17,6 +17,8 @@ import {
   getOrInsert,
   getOrInsertComputed,
   getOrInsertComputedAsync,
+  getCyrb53Hash,
+  isPlainObject,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -262,5 +264,26 @@ describe("getOrInsert", () => {
       expect(fn).toHaveBeenCalledOnce();
       expect(fn).toHaveBeenCalledWith("a");
     });
+  });
+});
+
+describe("isPlainObject", () => {
+  it.each([
+    [{}, true],
+    [Object.create(null), true],
+    [[], false],
+    [new Date(), false],
+    [null, false],
+    [undefined, false],
+  ])("classifies values correctly", (value, expected) => {
+    expect(isPlainObject(value)).toBe(expected);
+  });
+});
+
+describe("getCyrb53Hash", () => {
+  it("is deterministic and supports a custom prefix", () => {
+    expect(getCyrb53Hash("schema")).toBe(getCyrb53Hash("schema"));
+    expect(getCyrb53Hash("schema", "custom")).toMatch(/^custom-/);
+    expect(getCyrb53Hash("schema")).not.toBe(getCyrb53Hash("schemas"));
   });
 });
