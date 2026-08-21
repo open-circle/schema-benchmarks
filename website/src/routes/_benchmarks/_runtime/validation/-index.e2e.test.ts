@@ -1,6 +1,7 @@
 import { createTest } from "#e2e/fixtures";
-import { ValidationPage } from "#e2e/fixtures/pages/validation.ts";
 import * as helpers from "#e2e/helpers";
+
+import { ValidationPage } from "./-index.e2e.model";
 
 const test = createTest({ validationPage: ValidationPage });
 

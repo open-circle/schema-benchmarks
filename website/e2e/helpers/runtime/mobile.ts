@@ -1,7 +1,8 @@
+import { test } from "@playwright/test";
 import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas";
 import { every } from "mix-n-matchers/utilities";
 
-import { test, expect } from "#e2e/fixtures";
+import { expect } from "#e2e/fixtures";
 import type {
   RuntimePage,
   MixinInstanceType,

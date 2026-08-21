@@ -1,5 +1,6 @@
 import { createTest, expect } from "#e2e/fixtures";
-import { Sidebar } from "#e2e/fixtures/components/sidebar.ts";
+
+import { Sidebar } from "./index.e2e.model";
 
 const test = createTest({ sidebar: Sidebar });
 

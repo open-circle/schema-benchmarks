@@ -3,7 +3,8 @@ import type { MinifyType } from "@schema-benchmarks/bench";
 
 import { cache, PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
-import { minifyTypeProps } from "#src/routes/_benchmarks/download/-constants";
+
+import { minifyTypeProps } from "./-constants";
 
 export class DownloadPage extends PageObjectModel {
   url = "/download";

@@ -45,7 +45,7 @@ export const baseConfig = defineConfig({
       },
     },
     {
-      files: ["**/e2e/**"],
+      files: ["**/e2e/**", "**/*.e2e.*.ts"],
       jsPlugins: [...jsPlugins, { name: "playwright", specifier: "eslint-plugin-playwright" }],
       rules: {
         ...playwright.configs["flat/recommended"].rules,

@@ -1,6 +1,7 @@
 import { createTest } from "#e2e/fixtures";
-import { InitializationPage } from "#e2e/fixtures/pages/initialization.ts";
 import * as helpers from "#e2e/helpers";
+
+import { InitializationPage } from "./-index.e2e.model";
 
 const test = createTest({ initializationPage: InitializationPage });
 

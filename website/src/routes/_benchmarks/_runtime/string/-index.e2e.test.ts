@@ -1,8 +1,9 @@
 import { stringFormatSchema } from "@schema-benchmarks/schemas";
 
 import { createTest, expect } from "#e2e/fixtures";
-import { StringPage } from "#e2e/fixtures/pages/string.ts";
 import * as helpers from "#e2e/helpers";
+
+import { StringPage } from "./-index.e2e.model";
 
 const test = createTest({ stringPage: StringPage });
 

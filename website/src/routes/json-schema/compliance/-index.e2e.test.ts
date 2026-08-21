@@ -2,9 +2,10 @@ import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/typ
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 
 import { createTest, expect } from "#e2e/fixtures";
-import { CompliancePage } from "#e2e/fixtures/pages/json-schema/compliance.ts";
 import * as helpers from "#e2e/helpers";
-import { complianceTypeLabels } from "#src/routes/json-schema/compliance/-constants";
+
+import { complianceTypeLabels } from "./-constants";
+import { CompliancePage } from "./-index.e2e.model";
 
 const test = createTest({ compliancePage: CompliancePage });
 

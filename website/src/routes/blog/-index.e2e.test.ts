@@ -1,6 +1,7 @@
 import { createTest, expect } from "#e2e/fixtures";
-import { Header } from "#e2e/fixtures/components/header.ts";
-import { BlogPage } from "#e2e/fixtures/pages/blog.ts";
+import { Header } from "#src/shared/components/header/index.e2e.model";
+
+import { BlogPage } from "./-index.e2e.model";
 
 const test = createTest({ blogPage: BlogPage, header: Header });
 

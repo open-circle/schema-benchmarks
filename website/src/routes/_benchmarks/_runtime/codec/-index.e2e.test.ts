@@ -1,6 +1,7 @@
 import { createTest } from "#e2e/fixtures";
-import { CodecPage } from "#e2e/fixtures/pages/codec.ts";
 import * as helpers from "#e2e/helpers";
+
+import { CodecPage } from "./-index.e2e.model";
 
 const test = createTest({ codecPage: CodecPage });
 
