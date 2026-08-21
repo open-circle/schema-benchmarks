@@ -1,7 +1,7 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 
 import { cache, PageObjectModel } from "#e2e/fixtures/base.ts";
-import { trimSortLabels } from "#e2e/utils/index.ts";
+import { trimSortLabels } from "#e2e/utils";
 
 export class FromJsonPage extends PageObjectModel {
   url = "/json-schema/from-json";

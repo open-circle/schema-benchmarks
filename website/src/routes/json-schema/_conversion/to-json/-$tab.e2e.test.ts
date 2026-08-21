@@ -6,7 +6,7 @@ import { every, everyAsync } from "mix-n-matchers/utilities";
 
 import { createTest, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
-import { substringToRegex } from "#e2e/utils/index.ts";
+import { substringToRegex } from "#e2e/utils";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
 import { ToJsonPage } from "./-$tab.e2e.model";

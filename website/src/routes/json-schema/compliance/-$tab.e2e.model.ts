@@ -8,7 +8,7 @@ import {
   PageObjectModel,
   TabObjectModel,
 } from "#e2e/fixtures/base.ts";
-import { trimSortLabels } from "#e2e/utils/index.ts";
+import { trimSortLabels } from "#e2e/utils";
 import {
   complianceTargetProps,
   complianceTypeLabels,
