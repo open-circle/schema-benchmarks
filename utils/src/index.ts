@@ -91,6 +91,26 @@ export function getOrInsertComputed<K extends object, V>(
   return map.set(key, callback(key)).get(key) as V;
 }
 
+export function getOrInsertComputedAsync<K extends object, V>(
+  map: WeakMap<K, V>,
+  key: NoInfer<K>,
+  callback: (key: K) => Promise<NoInfer<V>>,
+): Promise<NoInfer<V>>;
+export function getOrInsertComputedAsync<K, V>(
+  map: Map<K, V>,
+  key: NoInfer<K>,
+  callback: (key: K) => Promise<NoInfer<V>>,
+): Promise<NoInfer<V>>;
+export async function getOrInsertComputedAsync<K extends object, V>(
+  map: Map<K, V> | WeakMap<K, V>,
+  key: NoInfer<K>,
+  callback: (key: K) => Promise<NoInfer<V>>,
+): Promise<NoInfer<V>> {
+  if (map.has(key)) return map.get(key) as V;
+
+  return map.set(key, await callback(key)).get(key) as V;
+}
+
 const byteUnits = [
   "byte",
   "kilobyte",
