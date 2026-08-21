@@ -6,9 +6,9 @@ import { allBlogs } from "content-collections";
 import * as v from "valibot";
 
 export const getBlogsFn = createServerFn().handler(() =>
-  allBlogs
-    .slice()
-    .sort((a, b) => b.published.getTime() - a.published.getTime() || a.slug.localeCompare(b.slug)),
+  allBlogs.toSorted(
+    (a, b) => b.published.getTime() - a.published.getTime() || a.slug.localeCompare(b.slug),
+  ),
 );
 
 export const getBlogs = (signalOpt?: AbortSignal) =>
