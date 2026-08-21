@@ -45,7 +45,7 @@ function BaseSidebar({
     <>
       {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions */}
       <div {...backdropCls({ modifiers: { visible: open } })} onClick={() => setOpen(false)} />
-      <aside {...cls({ modifiers: { open } })}>
+      <aside {...cls({ modifiers: { open } })} aria-hidden={isModal ? !open : undefined}>
         <div {...cls("logo")}>
           {iconSuffixes.map((suffix) => (
             <img key={suffix} {...cls(`logo-${suffix}`)} src={`/logo_${suffix}.svg`} alt="Logo" />
