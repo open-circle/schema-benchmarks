@@ -1,4 +1,4 @@
-import type { TestFixture, Page } from "@playwright/test";
+import type { TestFixture, Page, PlaywrightTestArgs } from "@playwright/test";
 import { test as pwTest } from "@playwright/test";
 
 import { waitForFontsLoaded } from "#e2e/utils";
@@ -21,21 +21,17 @@ baseTest.beforeEach("Mock external download APIs", async ({ context }) => {
   );
 });
 
-export function createTest<ObjectModels extends Record<string, new (page: Page) => any>>(
-  objectModels: ObjectModels,
-) {
-  const objectModelFixtures = Object.fromEntries(
-    Object.entries(objectModels).map(
-      ([name, POM]): [
-        string,
-        TestFixture<InstanceType<(typeof objectModels)[keyof typeof objectModels]>, { page: Page }>,
-      ] => [name, ({ page }, use) => use(new POM(page))],
-    ),
-  ) as {
-    [K in keyof ObjectModels]: TestFixture<InstanceType<ObjectModels[K]>, { page: Page }>;
-  };
-
-  return baseTest.extend<{ [K in keyof ObjectModels]: InstanceType<ObjectModels[K]> }>(
-    objectModelFixtures,
+export function createTest<Instances extends {}>(objectModels: {
+  [K in keyof Instances]: new (page: Page) => Instances[K];
+}) {
+  return baseTest.extend<Instances>(
+    Object.fromEntries(
+      Object.entries<new (page: Page) => unknown>(objectModels).map(
+        ([name, POM]): [string, TestFixture<unknown, PlaywrightTestArgs>] => [
+          name,
+          ({ page }, use) => use(new POM(page)),
+        ],
+      ),
+    ) as never,
   );
 }
