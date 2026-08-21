@@ -41,19 +41,3 @@ export async function waitForFontsLoaded(page: Page) {
 }
 
 export const substringToRegex = (substring: string) => new RegExp(RegExp.escape(substring), "i");
-
-// https://github.com/microsoft/playwright/blob/main/packages/injected/src/injectedScript.ts#L609
-export async function getViewportRatio(locator: Locator): Promise<number> {
-  return locator.evaluate((element: Element) => {
-    return new Promise<number>((resolve) => {
-      const observer = new IntersectionObserver((entries) => {
-        resolve(entries[0]!.intersectionRatio);
-        observer.disconnect();
-      });
-      observer.observe(element);
-      // Firefox doesn't call IntersectionObserver callback unless
-      // there are rafs.
-      requestAnimationFrame(() => {});
-    });
-  });
-}

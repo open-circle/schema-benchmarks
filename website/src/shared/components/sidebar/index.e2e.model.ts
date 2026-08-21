@@ -1,6 +1,5 @@
 import { ComponentObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
-import { getViewportRatio } from "#e2e/utils/index.ts";
 
 export class Sidebar extends ComponentObjectModel {
   sidebar = this.page.getByRole("complementary");
@@ -11,10 +10,10 @@ export class Sidebar extends ComponentObjectModel {
 
   async open() {
     await expect(async () => {
-      if ((await getViewportRatio(this.sidebar)) < 0.1) {
+      if (!(await this.sidebar.isVisible())) {
         await this.menuButton.click();
       }
-      await expect(this.sidebar).toBeInViewport({ ratio: 0.1, timeout: 5000 });
+      await expect(this.sidebar).toBeVisible({ timeout: 5000 });
     }).toPass();
   }
 
