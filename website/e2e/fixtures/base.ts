@@ -1,6 +1,8 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { test, type Locator, type Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
+
+import { expect } from "#e2e/fixtures/expect";
 
 class ObjectModel {
   protected page: Page;
@@ -62,7 +64,7 @@ export abstract class TabObjectModel<
     await test.step(`Select ${this.tabName} tab`, async () => {
       await expect(async () => {
         await this.tabLink.click();
-        await expect(this.tabLink).toHaveAttribute("aria-selected", "true");
+        await expect(this.tabLink).toBeSelected();
         await expect(this.tabPanel).toBeVisible();
       }).toPass();
     });

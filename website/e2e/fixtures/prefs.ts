@@ -1,8 +1,7 @@
 import { ComponentObjectModel, step } from "#e2e/fixtures/base";
+import { expect } from "#e2e/fixtures/expect";
 import type { Style, Theme, NpmSite, Ligature } from "#src/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
-
-import { expect } from ".";
 
 export class PrefsDialog extends ComponentObjectModel {
   openButton = this.page.getByRole("button", { name: "Preferences" });

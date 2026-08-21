@@ -1,9 +1,9 @@
-import { expect } from "@playwright/test";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 
 import { cache, PageObjectModel } from "#e2e/fixtures/base";
+import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {
   dataTypeProps,
@@ -32,7 +32,7 @@ export abstract class RuntimePage extends PageObjectModel {
 
     await expect(this.page).toHaveURL((url) => url.searchParams.get("optimizeType") === type);
 
-    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect(link).toBeCurrent("page");
   }
 
   @cache()
@@ -103,7 +103,7 @@ export function withErrorTypeFilter<
 
       await expect(this.page).toHaveURL((url) => url.searchParams.get("errorType") === errorType);
 
-      await expect(link).toHaveAttribute("aria-current", "page");
+      await expect(link).toBeCurrent("page");
     }
   }
   return ErrorTypeFilterMixin;

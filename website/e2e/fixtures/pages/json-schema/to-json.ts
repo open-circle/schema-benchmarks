@@ -1,8 +1,8 @@
-import { expect } from "@playwright/test";
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
 import { cache, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils/index.ts";
 import {
   jsonSchemaConversionTargetProps,
@@ -44,7 +44,7 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
 
     await link.click();
 
-    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect(link).toBeCurrent("page");
 
     await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction);
   }

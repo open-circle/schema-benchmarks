@@ -1,6 +1,5 @@
 import { ComponentObjectModel } from "#e2e/fixtures/base";
-
-import { expect } from ".";
+import { expect } from "#e2e/fixtures/expect";
 
 export class Sidebar extends ComponentObjectModel {
   sidebar = this.page.getByRole("complementary");
