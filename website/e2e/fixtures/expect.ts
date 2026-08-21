@@ -63,7 +63,11 @@ type SortValue = Autocomplete.String<"ascending" | "descending" | "none" | "othe
 
 export const expect = baseExpect.extend({
   toBeCurrent: createAttributeMatcher<CurrentValue | undefined>("toBeCurrent", "aria-current"),
-  toBePressed: createAttributeMatcher<MixedBooleanValue | undefined>("toBePressed", "aria-pressed"),
+  toBePressed: createAttributeMatcher<MixedBooleanValue | undefined>(
+    "toBePressed",
+    "aria-pressed",
+    "true",
+  ),
   toHaveSort: createAttributeMatcher<SortValue | undefined>("toHaveSort", "aria-sort"),
   toBeSelected: createAttributeMatcher<MixedBooleanValue | undefined>(
     "toBeSelected",
