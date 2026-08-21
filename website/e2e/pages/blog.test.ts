@@ -1,4 +1,8 @@
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { Header } from "#e2e/fixtures/components/header.ts";
+import { BlogPage } from "#e2e/fixtures/pages/blog.ts";
+
+const test = createTest({ blogPage: BlogPage, header: Header });
 
 test.beforeEach("Go to blog page", async ({ blogPage, fontsLoaded }) => {
   await blogPage.goto();

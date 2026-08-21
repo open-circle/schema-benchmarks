@@ -1,5 +1,8 @@
-import { test } from "#e2e/fixtures";
+import { createTest } from "#e2e/fixtures";
+import { StandardSchemaPage } from "#e2e/fixtures/pages/standard.ts";
 import * as helpers from "#e2e/helpers";
+
+const test = createTest({ standardSchemaPage: StandardSchemaPage });
 
 test.beforeEach(async ({ fontsLoaded, standardSchemaPage }) => {
   await standardSchemaPage.goto();

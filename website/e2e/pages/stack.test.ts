@@ -1,5 +1,8 @@
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { StackPage } from "#e2e/fixtures/pages/stack.ts";
 import * as helpers from "#e2e/helpers";
+
+const test = createTest({ stackPage: StackPage });
 
 test.beforeEach("Go to stack page", async ({ fontsLoaded, stackPage }) => {
   await stackPage.goto();

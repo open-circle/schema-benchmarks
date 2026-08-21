@@ -1,5 +1,8 @@
-import { test } from "#e2e/fixtures";
+import { createTest } from "#e2e/fixtures";
+import { InitializationPage } from "#e2e/fixtures/pages/initialization.ts";
 import * as helpers from "#e2e/helpers";
+
+const test = createTest({ initializationPage: InitializationPage });
 
 test.beforeEach(async ({ fontsLoaded, initializationPage }) => {
   await initializationPage.goto();

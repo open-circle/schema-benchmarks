@@ -1,7 +1,10 @@
 import { stringFormatSchema } from "@schema-benchmarks/schemas";
 
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { StringPage } from "#e2e/fixtures/pages/string.ts";
 import * as helpers from "#e2e/helpers";
+
+const test = createTest({ stringPage: StringPage });
 
 test.beforeEach(async ({ fontsLoaded, stringPage }) => {
   await stringPage.goto();

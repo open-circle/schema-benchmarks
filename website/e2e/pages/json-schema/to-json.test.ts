@@ -4,10 +4,13 @@ import {
 } from "@schema-benchmarks/schemas";
 import { every, everyAsync } from "mix-n-matchers/utilities";
 
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { ToJsonPage } from "#e2e/fixtures/pages/json-schema/to-json.ts";
 import * as helpers from "#e2e/helpers";
 import { substringToRegex } from "#e2e/utils/index.ts";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
+
+const test = createTest({ toJsonPage: ToJsonPage });
 
 test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();

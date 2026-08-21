@@ -1,10 +1,13 @@
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { PrefsDialog } from "#e2e/fixtures/components/prefs.ts";
 import {
   styleSchema,
   themeSchema,
   npmSiteSchema,
   ligatureSchema,
 } from "#src/shared/lib/prefs/constants";
+
+const test = createTest({ prefs: PrefsDialog });
 
 test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
   await page.goto("/");

@@ -1,6 +1,9 @@
-import { test, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
+import { FromJsonPage } from "#e2e/fixtures/pages/json-schema/from-json.ts";
 import * as helpers from "#e2e/helpers";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
+
+const test = createTest({ fromJsonPage: FromJsonPage });
 
 test.beforeEach("Go to JSON schema from-json page", async ({ fromJsonPage, fontsLoaded }) => {
   await fromJsonPage.goto();
