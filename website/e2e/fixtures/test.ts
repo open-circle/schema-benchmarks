@@ -3,15 +3,11 @@ import { test as baseTest } from "@playwright/test";
 
 import { waitForFontsLoaded } from "#e2e/utils";
 
-import { Header } from "./header";
+import * as components from "./components";
 import * as pages from "./pages";
-import { PrefsDialog } from "./prefs";
-import { Sidebar } from "./sidebar";
 
 const objectModels = {
-  sidebar: Sidebar,
-  header: Header,
-  prefs: PrefsDialog,
+  ...components,
   ...pages,
 } satisfies Record<string, new (page: Page) => unknown>;
 
