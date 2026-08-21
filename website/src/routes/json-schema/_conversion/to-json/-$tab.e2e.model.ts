@@ -3,7 +3,7 @@ import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-be
 
 import { cache, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { expect } from "#e2e/fixtures/expect";
-import { trimSortLabels } from "#e2e/utils/index.ts";
+import { trimSortLabels } from "#e2e/utils";
 import {
   jsonSchemaConversionTargetProps,
   jsonSchemaDirectionProps,
