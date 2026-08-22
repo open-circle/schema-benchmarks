@@ -2,7 +2,7 @@ import { createTest, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
-import { FromJsonPage } from "./-index.e2e.model";
+import { FromJsonPage } from "./index.e2e.model";
 
 const test = createTest({ fromJsonPage: FromJsonPage });
 

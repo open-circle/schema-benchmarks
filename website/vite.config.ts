@@ -54,6 +54,9 @@ const config = defineConfig({
   plugins: [
     devtools(),
     tanstackStart({
+      router: {
+        routeFileIgnorePattern: "\\.(e2e|browser|node)\\.(test|model|spec)\\.[jt]sx?$",
+      },
       importProtection: {
         client: {
           // disallow importing these on the client, for bundle size reasons

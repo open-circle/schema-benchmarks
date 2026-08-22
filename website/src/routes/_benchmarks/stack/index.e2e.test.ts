@@ -1,7 +1,7 @@
 import { createTest, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
 
-import { StackPage } from "./-index.e2e.model";
+import { StackPage } from "./index.e2e.model";
 
 const test = createTest({ stackPage: StackPage });
 

@@ -1,7 +1,7 @@
 import { createTest, expect } from "#e2e/fixtures";
 import { Header } from "#src/shared/components/header/index.e2e.model";
 
-import { BlogPage } from "./-index.e2e.model";
+import { BlogPage } from "./index.e2e.model";
 
 const test = createTest({ blogPage: BlogPage, header: Header });
 

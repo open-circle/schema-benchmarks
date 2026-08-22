@@ -9,7 +9,7 @@ import * as helpers from "#e2e/helpers";
 import { substringToRegex } from "#e2e/utils";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 
-import { ToJsonPage } from "./-$tab.e2e.model";
+import { ToJsonPage } from "./$tab.e2e.model";
 
 const test = createTest({ toJsonPage: ToJsonPage });
 
