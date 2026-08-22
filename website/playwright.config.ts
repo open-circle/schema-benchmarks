@@ -37,7 +37,6 @@ export default defineConfig({
       grepInvert: /@mobile/,
       use: { ...devices["Desktop Chrome"], channel: "chromium" },
     },
-    /*
     {
       name: "Desktop Firefox",
       grepInvert: /@mobile/,
@@ -48,19 +47,16 @@ export default defineConfig({
       grepInvert: /@mobile/,
       use: { ...devices["Desktop Safari"] },
     },
-    */
     {
       name: "Mobile Chrome",
       grepInvert: /@desktop/,
       use: { ...devices["Pixel 5"], channel: "chromium" },
     },
-    /*
     {
       name: "Mobile Safari",
       grepInvert: /@desktop/,
       use: { ...devices["iPhone 12"] },
     },
-    */
   ],
 
   /* Run your local dev server before starting the tests */

@@ -98,7 +98,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-chromium-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Install Playwright system dependencies
         run: pnpm exec playwright install-deps chromium
       - name: Install Playwright browsers
@@ -120,11 +120,11 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-chromium-firefox-webkit-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Install Playwright system dependencies
-        run: pnpm exec playwright install-deps chromium
+        run: pnpm exec playwright install-deps chromium firefox webkit
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --no-shell chromium
+        run: pnpm exec playwright install --no-shell chromium firefox webkit
       - name: E2E Smoke tests
         run: pnpm e2e --workers 50% --grep @smoke
       - name: E2E Full tests
