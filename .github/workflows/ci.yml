@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup environment
         uses: ./.github/actions/environments
-      - uses: CatChen/oxlint-suggestion-action@dc539cb60f7eea545f47495c279379dc55cfe1d7 # v1.0.11
+      - uses: CatChen/oxlint-suggestion-action@68e54ed88612f0bdfe2170a027eb379cb3b54365 # v1.0.12
         with:
           fail-check: true
   format:
