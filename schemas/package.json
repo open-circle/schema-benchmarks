@@ -51,10 +51,10 @@
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.1",
     "typebox": "catalog:",
-    "typia": "^14.0.0",
+    "typia": "^14.0.2",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "z-schema": "^12.4.2",
+    "z-schema": "^12.4.3",
     "zod": "^4.4.3",
     "zod-to-json-schema": "^3.25.2"
   },
@@ -67,6 +67,6 @@
     "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^1.27.0"
+    "zod-compiler": "^1.28.0"
   }
 }
