@@ -18,7 +18,7 @@ export const libraryVersions = {
   jsonschema: "1.5.0",
   runtypes: "7.0.5",
   superstruct: "2.0.2",
-  sury: "11.0.0-rc.1",
+  sury: "11.0.0-rc.2",
   typebox: "1.3.17",
   typia: "14.0.2",
   valibot: "1.4.2",

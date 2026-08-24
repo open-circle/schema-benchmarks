@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0-rc.1/node_modules/sury/index.mjs
+//#region ../node_modules/.pnpm/sury@11.0.0-rc.2/node_modules/sury/index.mjs
 var flagNone = 0;
 var flagAsync = 1;
 var flagDisableNanNumberValidation = 2;
@@ -681,6 +681,7 @@ var B_scope = (val) => {
 	if (shouldLink) B_linkVar(val, nextVal);
 	return nextVal;
 };
+var B_neverSlot = (input) => B_invalidOperation(input, `Can't decode ${/* @__PURE__ */ inputExpression(input.e)} to ${/* @__PURE__ */ inputExpression(input.e.to)}. The conversion is marked as never`);
 var B_invalidOperation = (val, description) => {
 	return B_throw({
 		code: "invalid_operation",
@@ -896,13 +897,13 @@ var compileDecoder = (schema, expected, flag, defs) => {
 	const input = B_operationArg(isLiteral(schema) ? unknown : schema, expected, flag, defs);
 	const output = parse(input);
 	const code = B_merge(output);
-	const isAsync2 = flagUnsafeHas(output.f, valFlagAsync);
-	expected.isAsync = isAsync2;
+	const isAsync = flagUnsafeHas(output.f, valFlagAsync);
+	expected.isAsync = isAsync;
 	expected.hasTransform = output.t === true;
 	if (code === "" && (output === input || output.i === input.i) && !flagUnsafeHas(flag, flagAsync)) return noopOperation;
 	else {
 		let inlinedOutput = output.i;
-		if (flagUnsafeHas(flag, flagAsync) && !isAsync2 && !defs) inlinedOutput = `Promise.resolve(${inlinedOutput})`;
+		if (flagUnsafeHas(flag, flagAsync) && !isAsync && !defs) inlinedOutput = `Promise.resolve(${inlinedOutput})`;
 		const inlinedFunction = `${operationArgVar}=>{${code}return ${inlinedOutput}}`;
 		const fn = new Function("e", "s", `return ${inlinedFunction}`)(input.g.e, s);
 		fn.embedded = input.g.e;
@@ -937,7 +938,7 @@ Object.defineProperty(schemaPrototype, reversedKey, { get: function() {
 		const record = mut;
 		reverseSwap(record, "parser", "serializer");
 		reverseSwap(record, "refiner", "inputRefiner");
-		reverseSwap(record, "fromDefault", "default");
+		delete record["default"];
 		if (mut.items !== U) mut.items = mut.items.map(reverse);
 		if (mut.properties !== U) mut.properties = reverseDict(mut.properties);
 		if (typeof mut.additionalItems === objectTag) mut.additionalItems = /* @__PURE__ */ reverse(mut.additionalItems);
@@ -1065,8 +1066,15 @@ var unionSameType = (a, b) => a === b || unionRuntimeSame(a, b) && !(tagFlags[a.
 var unionLiteralEqual = (a, b) => a === b || a !== a && b !== b;
 var unionOutput = (schema) => {
 	let output = schema;
-	while (output.type !== neverTag && output.to !== U) output = output.to;
+	while (output.type !== neverTag && output.to !== U) {
+		if (output.parser === B_neverSlot) return never_;
+		output = output.to;
+	}
 	return output;
+};
+var unionNeverLink = (schema) => {
+	for (let node = schema; node !== U && node.type !== neverTag; node = node.to) if (node.parser === B_neverSlot) return true;
+	return false;
 };
 var unionIsTransparent = (schema) => {
 	if (schema.type !== anyOfTag) return false;
@@ -1221,7 +1229,7 @@ var unionCheckPartial = (input, source, target, variants, outputSide) => {
 	for (let idx = 0; idx < variants.length; idx++) {
 		const variant = variants[idx];
 		const match = outputSide ? unionOutput(variant) : variant;
-		if (variant.type === neverTag || outputSide && match.type === neverTag) continue;
+		if (variant.type === neverTag || (outputSide ? match.type === neverTag : unionNeverLink(variant))) continue;
 		if (unionSameType(other, match)) matched || (matched = variant);
 		else unmatched = true;
 	}
@@ -1229,8 +1237,8 @@ var unionCheckPartial = (input, source, target, variants, outputSide) => {
 };
 var unionUncovered = (input, source, target, variant) => unionInvalid(input, source, target, `${/* @__PURE__ */ inputExpression(variant)} has no same-type variant on the other side`);
 var unionInvalid = (input, from, to2, why) => B_invalidOperation(input, `Invalid operation: can't convert ${/* @__PURE__ */ inputExpression(from)} to ${/* @__PURE__ */ inputExpression(to2)} \u2014 ${why}. Use S.to to say what you mean, or S.never to mark a variant unreachable`);
-var unionNormalize = (variants, source, skipUndefined, nan2) => {
-	let flags = skipUndefined ? tagFlagUndefined : 0;
+var unionNormalize = (variants, source, nan2) => {
+	let flags = 0;
 	const sourceLiteral = isLiteral(source);
 	for (let i = 0; i < variants.length; i++) {
 		const member = variants[i];
@@ -1263,7 +1271,7 @@ var unionAnalyze = (normalized, variants, source, nan2) => {
 		const d = unionDiscriminator(s2);
 		const same = unionRuntimeSame(source, s2);
 		const discriminatorDisjoint = sourceDiscriminator !== U && d !== U && same && sourceDiscriminator[0] === d[0] && !unionLiteralEqual(sourceDiscriminator[1], d[1]);
-		const accepts = !(tag & tagFlagNever) && !(normalizedFlags & tagFlagUndefined && tag & tagFlagUndefined) && !discriminatorDisjoint && (!exact || (isLiteral(s2) ? unionLiteralEqual(s2.const, source.const) : sourceMask & inputMask));
+		const accepts = !(tag & tagFlagNever) && !unionNeverLink(s2) && !discriminatorDisjoint && (!exact || (isLiteral(s2) ? unionLiteralEqual(s2.const, source.const) : sourceMask & inputMask));
 		const native = sourceMask & tag;
 		const coerces = accepts && !unknownSource && !(unionSource ? native : same);
 		const output = unionOutput(s2);
@@ -1304,7 +1312,7 @@ var unionPlan = (members) => {
 		const member = members[i];
 		if (member.m === 0 || member.e === 1 && !(member.f & 2) && !(member.m & (effects | ~total))) continue;
 		const bucketed = member.r !== unionAnyTag && (member.m & ~member.r) === 0;
-		const compatible = member.e < 2 || member.e === 4 && member.d?.[0] === "";
+		const compatible = member.e < 2 || member.d !== U && (member.e === 4 || member.d[0] !== "");
 		let bucket = bucketed ? member.p === 0 ? priority[member.r] || active[member.r] : active[member.r] : U;
 		let open = U;
 		let broad = false;
@@ -1312,7 +1320,7 @@ var unionPlan = (members) => {
 			const group = bucket.t[j];
 			const first = group.a[0];
 			broad || (broad = group.p === 2);
-			if (open === U && compatible && group.o && first.k === member.k && first.e < 2 === member.e < 2 && group.p === 0 === (member.p === 0)) open = group;
+			if (open === U && compatible && group.o && first.k === member.k && (first.e < 2 === member.e < 2 || first.d !== U && first.d[0] === member.d?.[0]) && group.p === 0 === (member.p === 0)) open = group;
 			else if (group.o && group.m & member.m) group.o = false;
 		}
 		for (const key in active) {
@@ -1386,7 +1394,15 @@ var unionPlan = (members) => {
 			}
 		}
 		if (overlaps || laterMask && tagFlags[group.a[0].s.type] & unionOpaqueTags && (group.a[0].s.to !== U || group.a[0].s.parser !== U)) group.f |= unionMemberFalls | 2;
-		if (group.a.length !== 1 || !(group.f & unionMemberDirect)) group.n = unionNarrowSchema(group.a[0].s);
+		if (group.a.length !== 1 || !(group.f & unionMemberDirect)) {
+			group.n = unionNarrowSchema(group.a[0].s);
+			const single = group.a[0].s;
+			if (group.a.length === 1 && single.format !== U && single.format !== "json" && group.n.type === stringTag) {
+				group.n.format = single.format;
+				group.n.escapeFree = single.escapeFree;
+				group.n.noValidation = single.noValidation;
+			}
+		}
 		if (route !== unionAnyTag && (group.m & ~route) === 0) {
 			if (key === false) later[route] = false;
 			else if (semantic === U) later[route] = [key, values];
@@ -1395,6 +1411,7 @@ var unionPlan = (members) => {
 				else for (const value of values) semantic[1].add(value);
 			}
 		} else laterBroad |= group.m;
+		if (laterMask & group.m) group.f |= 32;
 		laterMask |= group.m;
 	}
 	return plan;
@@ -1528,6 +1545,10 @@ var unionEmit = (input, self, plan, toPerCase, trustedSelf) => {
 				if (only.c !== "") cond.c = cond.c ? `${cond.c}&&${only.c}` : only.c;
 				body = only.b;
 			} else {
+				if (inner.length > 1 && group.f & 32 && inner.every((c) => c.c)) {
+					const fused = `(${inner.map((c) => c.c).join("||")})`;
+					cond.c = cond.c ? `${cond.c}&&${fused}` : fused;
+				}
 				body = narrowCode + unionEmitChain(inner, ctx);
 				grouped = inner.length > 1;
 			}
@@ -1540,8 +1561,8 @@ var unionEmit = (input, self, plan, toPerCase, trustedSelf) => {
 		});
 		if (body === "" && cond.c === "") break;
 	}
-	const noop2 = cases.length > 0 && cases.every((c) => c.b === "") && cases.some((c) => c.c === "");
-	const pure = !noop2 && cases.length > 0 && cases.every((c) => c.c !== "" && c.b === "");
+	const noop = cases.length > 0 && cases.every((c) => c.b === "") && cases.some((c) => c.c === "");
+	const pure = !noop && cases.length > 0 && cases.every((c) => c.c !== "" && c.b === "");
 	const asyncDispatch = cases.some((c) => c.f & 2);
 	if (pure) {
 		let fused = cases.map((c) => c.c).join("||");
@@ -1550,7 +1571,7 @@ var unionEmit = (input, self, plan, toPerCase, trustedSelf) => {
 			c: () => fused,
 			f: failInvalidType
 		}], self));
-	} else if (!noop2) {
+	} else if (!noop) {
 		const dispatch = unionEmitChain(cases, ctx);
 		if (asyncDispatch) {
 			const itemVar = input.v();
@@ -1587,9 +1608,10 @@ var unionDecoder = (input) => {
 	const initialTagFlag = tagFlags[input.s.type];
 	const trustedSelf = input.s === self || self.tr === true;
 	if (initialTagFlag & tagFlagUnion || input.s.encoder === U && initialTagFlag & tagFlagRef) input.s = unknown;
+	if (variants.every(unionNeverLink)) B_invalidOperation(input, `Every variant of ${/* @__PURE__ */ inputExpression(self)} is marked as never`);
 	const source = input.s;
 	const nan2 = flagUnsafeHas(input.g.o, flagDisableNanNumberValidation) ? tagFlagNaN : 0;
-	const normalized = unionNormalize(variants, source, "fromDefault" in self, nan2);
+	const normalized = unionNormalize(variants, source, nan2);
 	if (!(normalized.t & tagFlagUnknown) && !(normalized.f & tagFlagUnknown)) unionCheckPartial(input, source, self, variants, false);
 	if (toPerCase !== U) {
 		const perCase = unionTargetOwns(toPerCase) ? variants.map((v) => unionOutput(v).type === neverTag ? U : toPerCase) : unionResolve(input, self, variants, toPerCase);
@@ -1671,19 +1693,23 @@ var unionResolveToUnion = (input, source, variants, target) => {
 		const sourceVariant = variants[s2];
 		const sourceOut = unionOutput(sourceVariant);
 		if (!(sourceVariant.type !== neverTag && sourceOut.type !== neverTag)) continue;
-		const sameTyped = targets.filter((targetVariant, t) => targetVariant.type !== neverTag && unionSameType(sourceOut, targetVariant) && (covered[t] = true));
+		if (sourceOut === target || target.anyOf !== U && sourceOut.anyOf === target.anyOf) {
+			for (let t = 0; t < targets.length; t++) covered[t] = true;
+			continue;
+		}
+		const sameTyped = targets.filter((targetVariant, t) => targetVariant.type !== neverTag && !unionNeverLink(targetVariant) && unionSameType(sourceOut, targetVariant) && (covered[t] = true));
 		sourceNullish |= tagFlags[sourceOut.type] & unionNullish;
 		if (sameTyped.length === 1) matches[s2] = sameTyped[0];
 		else if (sameTyped.length > 1) matches[s2] = tagFlags[sourceOut.type] & unionStructured && sameTyped.includes(sourceOut) ? sourceOut : unionFactory(sameTyped);
 		if (matches[s2] !== U) continue;
 		const opposite = unionOpposite(sourceOut);
-		if (opposite !== U) matches[s2] = targets.find((candidate) => candidate.type === opposite && unionOutput(candidate).type !== neverTag);
+		if (opposite !== U) matches[s2] = targets.find((candidate) => candidate.type === opposite && !unionNeverLink(candidate) && unionOutput(candidate).type !== neverTag);
 		if (matches[s2] === U) unionUncovered(input, source, target, sourceOut);
 	}
 	for (let t = 0; t < targets.length; t++) {
 		const targetVariant = targets[t];
 		const opposite = unionOpposite(targetVariant);
-		if (targetVariant.type !== neverTag && !covered[t] && (opposite === U || unionOutput(targetVariant).type === neverTag || !(sourceNullish & tagFlags[opposite]))) unionUncovered(input, source, target, targetVariant);
+		if (targetVariant.type !== neverTag && !unionNeverLink(targetVariant) && !covered[t] && (opposite === U || unionOutput(targetVariant).type === neverTag || !(sourceNullish & tagFlags[opposite]))) unionUncovered(input, source, target, targetVariant);
 	}
 	return matches.map((matched, idx) => matched !== U && unionAddsNothing(matched, unionOutput(variants[idx])) ? U : matched);
 };
@@ -1709,9 +1735,9 @@ var unionFactory = (schemas) => {
 	return mut;
 };
 var isItemSchema = (x) => x !== U && typeof x !== "string";
-var B_fuseIntoJsonString = (input, expectedSchema, item, isArr) => {
+var B_fuseIntoJsonString = (input, expectedSchema, item) => {
 	const to2 = expectedSchema.to;
-	if (input.s.additionalItems === unknown && to2 !== U && to2.format === "json" && !to2.space && !flagUnsafeHas(input.g.o, flagAsync) && (isArr || !(item.to === U && flagUnsafeHas(tagFlags[item.type], tagFlagString | tagFlagBoolean | tagFlagNull)))) {
+	if (input.s.additionalItems === unknown && to2 !== U && to2.format === "json" && !to2.space && !flagUnsafeHas(input.g.o, flagAsync) && !(item.to === U && flagUnsafeHas(tagFlags[item.type], tagFlagString | tagFlagBoolean | tagFlagNull))) {
 		const marked = copySchema(expectedSchema);
 		marked.uv = true;
 		return B_refine(input, marked);
@@ -1769,9 +1795,9 @@ var completeObjectVal = (objectVal) => {
 		if (val.o) {
 			const existingFn = optionalSettingCode;
 			optionalSettingCode = (objectVar) => {
-				return (existingFn === U ? "" : existingFn(objectVar)) + `if(${val.v()}!==void 0){${objectVar}[${inlinedValueFromString(key)}]=${val.i}}`;
+				return (existingFn === U ? "" : existingFn(objectVar)) + (key === "__proto__" ? `if(${val.v()}!==void 0){${objectVar}={...${objectVar},["__proto__"]:${val.i}}}` : `if(${val.v()}!==void 0){${objectVar}[${inlinedValueFromString(key)}]=${val.i}}`);
 			};
-		} else inline = inline + (isArray ? `${val.i}` : `${inlinedValueFromString(key)}:${val.i}`) + ",";
+		} else inline = inline + (isArray ? `${val.i}` : `${key === "__proto__" ? "[\"__proto__\"]" : inlinedValueFromString(key)}:${val.i}`) + ",";
 	}
 	objectVal.i = isArray ? "[" + inline + "]" : "{" + inline + "}";
 	const valWithRequired = objectVal;
@@ -1841,7 +1867,7 @@ var arrayDecoder = (unknownInput) => {
 		if (itemSchema === unknown) output = input;
 		else {
 			if (expectedLength === 0) {
-				const fused = B_fuseIntoJsonString(input, expectedSchema, itemSchema, true);
+				const fused = B_fuseIntoJsonString(input, expectedSchema, itemSchema);
 				if (fused !== U) return B_markOutput(fused, input);
 			}
 			const inputVar = input.v();
@@ -1926,7 +1952,7 @@ var objectDecoder = (unknownInput) => {
 	let output;
 	if (dictItem !== U && dictItem === unknown) output = input;
 	else if (dictItem !== U && sourceIsDict) {
-		const fused = B_fuseIntoJsonString(input, expectedSchema, dictItem, false);
+		const fused = B_fuseIntoJsonString(input, expectedSchema, dictItem);
 		if (fused !== U) return B_markOutput(fused, input);
 		const inputVar = input.v();
 		const keyVar = B_varWithoutAllocation(input.g);
@@ -2061,17 +2087,15 @@ var nestedNone = () => {
 	const itemSchema = Literal_parse(0);
 	const properties = {};
 	properties[nestedLoc] = itemSchema;
-	return {
-		type: objectTag,
-		required: [nestedLoc],
-		properties,
-		additionalItems: "strip",
-		decoder: objectDecoder,
-		serializer: (input) => {
-			const nextSchema = input.e.to;
-			return B_nextConst(input, nextSchema, nextSchema);
-		}
+	const mut = baseSchema(objectTag, false, objectDecoder);
+	mut.required = [nestedLoc];
+	mut.properties = properties;
+	mut.additionalItems = "strip";
+	mut.serializer = (input) => {
+		const nextSchema = input.e.to;
+		return B_nextConst(input, nextSchema, nextSchema);
 	};
+	return mut;
 };
 var nestedOption = (item) => {
 	return updateOutput(item, (mut) => {
@@ -2153,7 +2177,7 @@ var valGet = (parent, location) => {
 			b: U,
 			p: parent,
 			v: _notVarAtParent,
-			i: isLiteral(schema) ? B_inlineConst(parent, schema) : `${parent.v()}${pathAppend}`,
+			i: isLiteral(schema) ? B_inlineConst(parent, schema) : parent.s.type === objectTag && location in Object.prototype ? `(Object.hasOwn(${parent.v()},${inlinedValueFromString(location)})?${parent.v()}${pathAppend}:void 0)` : `${parent.v()}${pathAppend}`,
 			s: schema,
 			io: U,
 			e: schema,
@@ -2192,6 +2216,21 @@ var getMutErrorMessage = (mut) => {
 	mut.errorMessage = em;
 	return em;
 };
+var codecTo = (schema, target, parserB, serializerB) => {
+	const root = updateOutput(schema, (mut) => {
+		if (serializerB !== U) {
+			const targetMut = copySchema(target);
+			targetMut.serializer = serializerB;
+			mut.to = targetMut;
+		} else mut.to = target;
+		if (parserB !== U) mut.parser = parserB;
+	});
+	if (parserB !== U || serializerB !== U) {
+		delete root.isAsync;
+		delete root.hasTransform;
+	}
+	return root;
+};
 var nullAsUnit = /* @__PURE__ */ (() => {
 	const schema = copySchema(nullLiteral);
 	schema.to = unit;
@@ -2200,45 +2239,38 @@ var nullAsUnit = /* @__PURE__ */ (() => {
 var Option_getWithDefault = (schema, default_) => {
 	return updateOutput(schema, (mut) => {
 		const anyOf = mut.anyOf;
-		if (anyOf !== U) {
-			const outputItems = [];
-			const originalItems = [];
-			for (let idx = 0; idx < anyOf.length; idx++) {
-				const schema2 = anyOf[idx];
-				const outputSchema = getOutputSchema(schema2);
-				if (outputSchema.type !== undefinedTag) {
-					outputItems.push(outputSchema);
-					originalItems.push(schema2);
-				}
+		if (anyOf === U) return panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`);
+		const outputItems = [];
+		const originalItems = [];
+		for (let idx = 0; idx < anyOf.length; idx++) {
+			const variant = anyOf[idx];
+			const outputSchema = getOutputSchema(variant);
+			if (outputSchema.type !== undefinedTag) {
+				if (!outputItems.includes(outputSchema)) outputItems.push(outputSchema);
+				originalItems.push(variant);
 			}
-			const item = outputItems.length === 0 ? panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`) : outputItems.length === 1 ? outputItems[0] : unionFactory(outputItems);
+		}
+		const item = outputItems.length === 0 ? panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`) : outputItems.length === 1 ? outputItems[0] : unionFactory(outputItems);
+		if (default_.type === "value") {
+			const v = default_.value;
+			try {
+				(/* @__PURE__ */ getDecoder(unknown, item))(v);
+			} catch (exn) {
+				const error = getOrRethrow(exn);
+				panic(`Invalid default for ${/* @__PURE__ */ inputExpression(mut)}: ${error["message"]}`);
+			}
 			const originalItem = originalItems.length === 1 ? originalItems[0] : unionFactory(originalItems);
-			if (default_.type === "value") {
-				const v = default_.value;
-				try {
-					(/* @__PURE__ */ getDecoder(unknown, item))(v);
-				} catch (exn) {
-					const error = getOrRethrow(exn);
-					panic(`Invalid default for ${/* @__PURE__ */ inputExpression(mut)}: ${error["message"]}`);
-				}
-				try {
-					mut.default = (/* @__PURE__ */ getDecoder(/* @__PURE__ */ reverse(originalItem)))(v);
-				} catch (_exn) {}
-			}
-			mut.parser = (input) => {
-				const nextSchema = input.e.to;
-				const inputVar = input.v();
-				return B_next(input, `${inputVar}===void 0?${default_.type === "value" ? B_inlineConst(input, Literal_parse(default_.value)) : `${B_embed(input, default_.callback)}()`}:${inputVar}`, nextSchema, nextSchema);
-			};
-			const to2 = copySchema(item);
-			const originalDecoder = to2.decoder;
-			to2.serializer = (input) => {
-				const nextSchema = /* @__PURE__ */ reverse(originalItem);
-				return B_refine(originalDecoder(input), nextSchema, U, nextSchema);
-			};
-			to2.decoder = noopDecoder;
-			mut.to = to2;
-		} else panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`);
+			try {
+				mut.default = (/* @__PURE__ */ getDecoder(/* @__PURE__ */ reverse(originalItem)))(v);
+			} catch (_exn) {}
+		}
+		const decodeB = (input) => {
+			const target = input.e.to;
+			const output = B_next(input, default_.type === "value" ? B_inlineConst(input, Literal_parse(default_.value)) : `${B_embed(input, default_.callback)}()`, target, target);
+			if (default_.type === "value") output.v = _var;
+			return output;
+		};
+		mut.anyOf = anyOf.map((variant) => getOutputSchema(variant).type === undefinedTag ? codecTo(variant, item, decodeB, B_neverSlot) : variant);
 	});
 };
 var Option_getOr = /* @__NO_SIDE_EFFECTS__ */ (schema, defaultValue) => Option_getWithDefault(schema, {
@@ -2302,6 +2334,7 @@ var invalidDateRefine = (input) => {
 };
 var dateTimeString = /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
 	s2.format = "date-time";
+	s2.escapeFree = true;
 });
 var date = /* @__PURE__ */ initSchema(instanceTag, (input) => {
 	const inputTagFlag = tagFlags[input.s.type];
@@ -2544,9 +2577,10 @@ var maxLength = /* @__NO_SIDE_EFFECTS__ */ (schema, length2, maybeMessage) => {
 	});
 };
 var nonEmpty = /* @__NO_SIDE_EFFECTS__ */ (schema, maybeMessage) => /* @__PURE__ */ minLength(schema, 1, maybeMessage);
-var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, message) => /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
+var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, escFree, message) => /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
 	const re = typeof test === "string" ? new RegExp(test, "i") : test;
 	s2.format = format;
+	if (escFree) s2.escapeFree = escFree;
 	s2.refiner = (input) => {
 		return [{
 			c: (inputVar) => `${B_embed(input, re)}${re instanceof RegExp ? ".test" : ""}(${inputVar})`,
@@ -2557,7 +2591,7 @@ var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, message) => /* @__P
 var ipv4Pattern = "(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)";
 var ipv6Pattern = /* @__NO_SIDE_EFFECTS__ */ () => "(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|" + ipv4Pattern + ")|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)";
 var uriPattern = /* @__NO_SIDE_EFFECTS__ */ (schemeOptional) => "^(?:[a-z][a-z0-9+\\-.]*:)" + schemeOptional + "(?:\\/\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:" + /* @__PURE__ */ ipv6Pattern() + "|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|" + ipv4Pattern + "|(?:[a-z0-9\\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\\?(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$";
-var uri = /* @__PURE__ */ stringFormat("uri", /* @__PURE__ */ uriPattern(""));
+var uri = /* @__PURE__ */ stringFormat("uri", /* @__PURE__ */ uriPattern(""), true);
 var parser = /* @__NO_SIDE_EFFECTS__ */ (...args) => /* @__PURE__ */ getDecoder(unknown, ...args);
 var union = /* @__NO_SIDE_EFFECTS__ */ (values) => unionFactory(values.map(definitionToSchema));
 var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
