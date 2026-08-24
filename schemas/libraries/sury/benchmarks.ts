@@ -30,7 +30,10 @@ S.enableStandardJSONSchema();
 const jsonSchemaSubject = S.schema({
   id: S.number,
   name: S.string,
-  price: S.to(S.string, S.number, Number, String),
+  price: S.to(S.string, S.number, {
+    decode: Number,
+    encode: String,
+  }),
 }) satisfies S.Schema<JsonSchemaInputData, JsonSchemaOutputData>;
 const parser = S.parser(getSurySchema());
 const encoder = S.encoder(S.bigint, S.string);
