@@ -49,7 +49,7 @@
     "mutative": "catalog:",
     "runtypes": "^7.0.5",
     "superstruct": "^2.0.2",
-    "sury": "11.0.0-rc.1",
+    "sury": "11.0.0-rc.2",
     "typebox": "catalog:",
     "typia": "^14.0.2",
     "valibot": "catalog:",
