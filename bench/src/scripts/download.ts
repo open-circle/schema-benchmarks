@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 import { getSigintSignal, getVersion } from "@schema-benchmarks/utils/node";
-import _ttsc from "@ttsc/unplugin/rolldown";
+import ttsc from "@ttsc/unplugin/rolldown";
 import { gzipSize } from "gzip-size";
 import { rolldown } from "rolldown";
 
@@ -12,8 +12,6 @@ import {
   type MinifyType,
   minifyTypeSchema,
 } from "#src/results/types.ts";
-
-const ttsc = _ttsc.default ? _ttsc.default : (_ttsc as never); // Fix for ESM/CJS interop
 
 const sigintSignal = getSigintSignal();
 
