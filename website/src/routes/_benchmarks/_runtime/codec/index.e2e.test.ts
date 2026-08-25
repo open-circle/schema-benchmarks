@@ -44,7 +44,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays results list", async ({ codecPage }) => {
-    await helpers.runtime.mobile.expectCardDisplay(codecPage);
+    await helpers.runtime.mobile.expectListDisplay(codecPage);
   });
 
   test("it can expand a result for codec details", async ({ codecPage }) => {

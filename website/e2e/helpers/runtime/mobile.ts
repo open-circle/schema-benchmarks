@@ -9,7 +9,7 @@ import { libraryVersions } from "#e2e/utils/library-versions.gen";
 // covers every runtime benchmark type, so it works as the shared default across all pages
 const defaultLibrary = { name: "sury", version: libraryVersions.sury };
 
-export async function expectCardDisplay(
+export async function expectListDisplay(
   runtimePage: RuntimePage,
   library: { name: string; version: string } = defaultLibrary,
 ) {
@@ -22,7 +22,7 @@ export async function expectCardDisplay(
   });
 }
 
-async function expectFilterCards(runtimePage: RuntimePage, expectedLabel: string) {
+async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string) {
   const expectedLabelRegex = new RegExp(RegExp.escape(expectedLabel), "i");
 
   await expect(async () => {
@@ -36,9 +36,9 @@ async function expectFilterCards(runtimePage: RuntimePage, expectedLabel: string
 
 export async function expectOptimizeFilter(runtimePage: RuntimePage) {
   for (const optimizeType of optimizeTypeSchema.options) {
-    await test.step(`Filter mobile cards by ${runtimePage.getOptimizeTypeLabel(optimizeType)} optimization`, async () => {
+    await test.step(`Filter mobile list items by ${runtimePage.getOptimizeTypeLabel(optimizeType)} optimization`, async () => {
       await runtimePage.selectOptimizeType(optimizeType);
-      await expectFilterCards(runtimePage, runtimePage.getOptimizeTypeLabel(optimizeType));
+      await expectFilterItems(runtimePage, runtimePage.getOptimizeTypeLabel(optimizeType));
     });
   }
 }
@@ -47,9 +47,9 @@ export async function expectErrorTypeFilter(
   runtimePage: MixinInstanceType<typeof withErrorTypeFilter>,
 ) {
   for (const errorType of errorTypeSchema.options) {
-    await test.step(`Filter mobile cards by ${runtimePage.getErrorTypeLabel(errorType)} errors`, async () => {
+    await test.step(`Filter mobile list items by ${runtimePage.getErrorTypeLabel(errorType)} errors`, async () => {
       await runtimePage.selectErrorType(errorType);
-      await expectFilterCards(runtimePage, runtimePage.getErrorTypeLabel(errorType));
+      await expectFilterItems(runtimePage, runtimePage.getErrorTypeLabel(errorType));
     });
   }
 }
