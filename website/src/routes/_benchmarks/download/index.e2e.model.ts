@@ -45,6 +45,8 @@ export class DownloadPage extends PageObjectModel {
       list,
       getListItem: (libraryName: string | RegExp) =>
         list.getByRole("listitem").filter({ hasText: libraryName }),
+      getDetailsByLibrary: (libraryName: string | RegExp) =>
+        list.getByRole("listitem").filter({ hasText: libraryName }).locator("details"),
     };
   }
 }
