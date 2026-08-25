@@ -5,6 +5,7 @@ import { Admonition } from "#src/shared/components/admonition";
 import { CodecPlot } from "#src/routes/_benchmarks/_runtime/codec/-components/plot";
 import { JsonConversionPlot } from "#src/routes/json-schema/_conversion/-components/plot";
 import { CompliancePlot } from "#src/routes/json-schema/compliance/-components/plot";
+import { ColorDisplay } from "#src/shared/components/color";
 
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
@@ -172,13 +173,9 @@ Codecs that _do_ accept unknown input are marked with an asterisk (\*), as they 
 
 </Admonition>
 
-Encoding (`BigInt → string`):
+Encode (<ColorDisplay color="var(--link)" size="small" />) and decode (<ColorDisplay color="var(--button)" size="small" />):
 
-<CodecPlot encodeDir="encode" />
-
-Decoding (`string → BigInt`):
-
-<CodecPlot encodeDir="decode" />
+<CodecPlot />
 
 ## JSON Schema
 

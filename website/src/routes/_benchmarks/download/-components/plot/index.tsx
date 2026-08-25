@@ -18,9 +18,12 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
 }) {
   const values = useMemo(() => uniqueBy(data, getLabel), [data]);
   const [domRect, ref] = useElementSize();
-  const minWidth = useMemo(() => {
+  const { height, marginLeft } = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + 48;
+    return {
+      height: Math.max(176, values.length * 28 + 52),
+      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
+    };
   }, [values]);
   const plot = useMemo(
     () =>
@@ -29,16 +32,18 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
           fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
-        marginLeft: 48,
-        width: Math.max(domRect?.width ?? 0, minWidth),
+        marginLeft,
+        width: domRect?.width ?? 0,
+        height,
         x: {
-          label: "Library",
-        },
-        y: {
           grid: true,
           label: "Size (gzipped)",
           tickFormat: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
           nice: true,
+        },
+        y: {
+          label: "Library",
+          tickSize: 0,
         },
         color: {
           type: "quantize",
@@ -46,27 +51,28 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
           range: color,
         },
         marks: [
-          Plot.ruleY([0]),
-          Plot.barY(values, {
-            x: getLabel,
-            y: "gzipBytes",
+          Plot.ruleX([0]),
+          Plot.barX(values, {
+            x: "gzipBytes",
+            y: getLabel,
             fill: "gzipBytes",
-            sort: { x: "y" },
+            sort: { y: "x" },
             tip: {
-              pointer: "x",
+              pointer: "y",
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
+                x: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
+                y: (d: string) => d,
                 fill: false,
               },
             },
           }),
         ],
       }),
-    [values, domRect?.width, minWidth],
+    [values, domRect?.width, height, marginLeft],
   );
-  return { plot, ref, minWidth };
+  return { plot, ref };
 });
 
 BaseDownloadPlot.displayName = "BaseDownloadPlot";

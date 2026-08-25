@@ -42,11 +42,13 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
-  const marginLeft = data[0]?.type === "initialization" ? 84 : 48;
-  const minWidth = useMemo(() => {
+  const { height, marginLeft } = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + marginLeft;
-  }, [values, marginLeft]);
+    return {
+      height: Math.max(176, values.length * 28 + 52),
+      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
+    };
+  }, [values]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -55,15 +57,17 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           textTransform: "none",
         },
         marginLeft,
-        width: Math.max(domRect?.width ?? 0, minWidth),
+        width: domRect?.width ?? 0,
+        height,
         x: {
-          label: "Library",
-        },
-        y: {
           grid: true,
           label: "Time",
           tickFormat: (d: number) => formatDuration(d, 2),
           nice: true,
+        },
+        y: {
+          label: "Library",
+          tickSize: 0,
         },
         color: {
           type: "quantize",
@@ -71,27 +75,30 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           range: color,
         },
         marks: [
-          Plot.ruleY([0]),
-          Plot.barY(values, {
-            x: getLabel,
-            y: "mean",
+          Plot.ruleX([0]),
+          Plot.dotX(values, {
+            x: "mean",
+            y: { value: getLabel, label: "Library" },
             fill: "mean",
-            sort: { x: "y" },
+            r: 5,
+            symbol: "diamond2",
+            sort: { y: "x" },
             tip: {
-              pointer: "x",
+              pointer: "y",
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
+                x: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
+                y: (d: string) => d,
                 fill: false,
               },
             },
           }),
         ],
       }),
-    [values, minWidth, marginLeft, domRect?.width, formatNumber],
+    [values, height, marginLeft, domRect?.width, formatNumber],
   );
-  return { plot, ref, minWidth };
+  return { plot, ref };
 });
 
 BaseBenchPlot.displayName = "BaseBenchPlot";
