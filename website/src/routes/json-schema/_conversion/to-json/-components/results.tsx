@@ -1,4 +1,3 @@
-import type { SchemaToJsonResult } from "@schema-benchmarks/bench";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import { shallowFilter } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -13,7 +12,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { ToJsonCard } from "./card";
+import { ToJsonList } from "./list";
 import { ToJsonTable } from "./table";
 
 export interface ToJsonResultsProps {
@@ -52,11 +51,7 @@ export function ToJsonResults({ target, direction, sortBy, sortDir }: ToJsonResu
       {shouldUseTable ? (
         <ToJsonTable {...{ results, meanScaler, sortBy, sortDir }} />
       ) : (
-        <ul className="json-schema-cards" aria-label="Results">
-          {results.map((result: SchemaToJsonResult) => (
-            <ToJsonCard key={result.id} {...{ result, meanScaler }} />
-          ))}
-        </ul>
+        <ToJsonList {...{ results, meanScaler }} />
       )}
     </div>
   );

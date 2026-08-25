@@ -47,4 +47,9 @@
       margin: 0;
     }
   }
+  .json-schema-list__actions {
+    display: flex;
+    justify-content: flex-end;
+    min-height: 2.25rem;
+  }
 }
