@@ -7,7 +7,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { StackCard } from "./card";
+import { StackList } from "./list";
 import { StackTable } from "./table";
 
 export interface StackResultsProps {
@@ -41,11 +41,7 @@ export function StackResults({ results, ...props }: StackResultsProps) {
           <StackTable {...{ results, frameScale, lineCountScale }} {...props} />
         </div>
       ) : (
-        <ul className="stack-cards" aria-label="Results">
-          {results.map((result) => (
-            <StackCard key={result.libraryName} {...{ result, frameScale, lineCountScale }} />
-          ))}
-        </ul>
+        <StackList {...{ results, frameScale, lineCountScale, sortBy: props.sortBy }} />
       )}
     </div>
   );

@@ -52,10 +52,8 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
                   }
                   supporting={`${formatBytes(result.gzipBytes)} gzip | ${downloadTime}`}
                   trailing={
-                    <span {...cls("summary-trailing")}>
-                      <span {...cls("bar")}>
-                        <Bar {...gzipScaler(result.gzipBytes)} />
-                      </span>
+                    <span {...cls("bar")}>
+                      <Bar {...gzipScaler(result.gzipBytes)} />
                     </span>
                   }
                 />

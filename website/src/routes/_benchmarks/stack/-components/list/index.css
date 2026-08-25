@@ -1,8 +1,8 @@
-.download-list {
-  .download-list__item {
+.stack-list {
+  .stack-list__item {
     border-bottom: 1px solid var(--divider);
   }
-  .download-list__summary {
+  .stack-list__summary {
     padding: 0;
     &::after {
       margin: 0 1rem;
@@ -11,44 +11,44 @@
       align-items: center;
     }
   }
-  .list-item__overline {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .download-list__downloads {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    white-space: nowrap;
-    .md-symbol {
-      --icon-size: 18;
-      --icon-weight: 400;
-    }
-  }
-  .download-list__bar {
+  .stack-list__bar {
     flex: 0 0 auto;
-    width: 7rem;
+    width: 6.5rem;
     .bar {
-      height: 0.5rem;
+      height: 0.4rem;
       min-width: unset;
       border-radius: var(--shape-small);
     }
     @media (--phone) {
-      width: 5.5rem;
+      width: 5rem;
     }
   }
-  .download-list__details {
+  .stack-list__details {
     padding: 1rem 1rem 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  .download-list__metrics {
+  .stack-list__code {
+    h6 {
+      margin: 0 0 0.25rem;
+    }
+    pre[class*="language-"] {
+      border-radius: 0;
+      margin: 0;
+      overflow: auto;
+      max-height: 16rem;
+    }
+  }
+  .stack-list__downloads {
+    white-space: nowrap;
+  }
+  .stack-list__metrics {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.75rem;
     margin: 0;
+    padding-bottom: 1rem;
     > div {
       display: flex;
       flex-direction: column;
@@ -63,10 +63,9 @@
     }
     @media (--phone) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      > div:last-child {
+        grid-column: 1 / -1;
+      }
     }
-  }
-  .download-list__actions {
-    display: flex;
-    justify-content: flex-end;
   }
 }

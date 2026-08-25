@@ -50,10 +50,8 @@ export function BenchList({ results, meanScaler }: BenchListProps) {
                     .filter(Boolean)
                     .join(" | ")}
                   trailing={
-                    <span {...cls("summary-trailing")}>
-                      <span {...cls("bar")}>
-                        <Bar {...meanScaler(result.mean)} />
-                      </span>
+                    <span {...cls("bar")}>
+                      <Bar {...meanScaler(result.mean)} />
                     </span>
                   }
                 />
