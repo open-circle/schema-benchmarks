@@ -1,5 +1,4 @@
 .color-display {
-  display: inline-block;
   border-radius: 50%;
   width: var(--color-display-size);
   height: var(--color-display-size);
