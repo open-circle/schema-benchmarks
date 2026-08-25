@@ -34,14 +34,14 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 });
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
-  test("it displays results cards", async ({ fromJsonPage }) => {
-    const card = fromJsonPage.mobile.getCardByLibraryName("zod");
+  test("it displays results list", async ({ fromJsonPage }) => {
+    const item = fromJsonPage.mobile.getListItemByLibraryName("zod");
 
-    await card.scrollIntoViewIfNeeded();
+    await item.scrollIntoViewIfNeeded();
 
-    await expect(card).toBeVisible();
+    await expect(item).toBeVisible();
 
-    const versionEl = card.getByText(libraryVersions.zod);
+    const versionEl = item.getByText(libraryVersions.zod);
 
     await expect(versionEl).toBeVisible();
   });

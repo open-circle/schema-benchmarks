@@ -1,4 +1,3 @@
-import type { SchemaFromJsonResult } from "@schema-benchmarks/bench";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -11,7 +10,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { FromJsonCard } from "./card";
+import { FromJsonList } from "./list";
 import { FromJsonTable } from "./table";
 
 export interface FromJsonResultsProps {
@@ -48,11 +47,7 @@ export function FromJsonResults({ sortBy, sortDir }: FromJsonResultsProps) {
       {shouldUseTable ? (
         <FromJsonTable {...{ results, meanScaler, sortBy, sortDir }} />
       ) : (
-        <ul className="json-schema-cards" aria-label="Results">
-          {results.map((result: SchemaFromJsonResult) => (
-            <FromJsonCard key={result.id} {...{ result, meanScaler }} />
-          ))}
-        </ul>
+        <FromJsonList {...{ results, meanScaler }} />
       )}
     </div>
   );

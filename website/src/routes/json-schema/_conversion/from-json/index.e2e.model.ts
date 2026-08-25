@@ -20,13 +20,11 @@ export class FromJsonPage extends PageObjectModel {
 
   @cache()
   get mobile() {
-    const cardsList = this.page.getByRole("list", { name: "Results" });
-    const cards = cardsList.getByTestId("bench-card");
+    const items = this.page.getByRole("list", { name: "Results" }).getByRole("listitem");
     return {
-      cardsList,
-      cards,
-      getCardByLibraryName: (libraryName: string | RegExp) =>
-        cards.filter({ hasText: libraryName }),
+      items,
+      getListItemByLibraryName: (libraryName: string | RegExp) =>
+        items.filter({ hasText: libraryName }),
     };
   }
 }
