@@ -8,7 +8,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { DownloadCard } from "./card";
+import { DownloadList } from "./list";
 import { DownloadTable } from "./table";
 
 export interface DownloadResultsProps {
@@ -45,11 +45,7 @@ export function DownloadResults({ results, mbps, minify, sortBy, sortDir }: Down
           <DownloadTable {...{ results, gzipScaler, mbps, minify, sortBy, sortDir }} />
         </div>
       ) : (
-        <ul className="download-cards" aria-label="Results">
-          {results.map((result) => (
-            <DownloadCard key={result.fileName} {...{ result, mbps, minify, gzipScaler }} />
-          ))}
-        </ul>
+        <DownloadList {...{ results, gzipScaler, mbps, minify }} />
       )}
     </div>
   );
