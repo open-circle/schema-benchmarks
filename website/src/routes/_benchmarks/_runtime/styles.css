@@ -1,5 +1,8 @@
+@import "#src/shared/styles/layout";
+
 @import "./-components/table/index.css";
 @import "./-components/card/index.css";
+@import "./-components/list/index.css";
 
 .bench-cards {
   display: grid;

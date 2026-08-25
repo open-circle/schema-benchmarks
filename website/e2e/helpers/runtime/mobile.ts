@@ -13,11 +13,11 @@ export async function expectCardDisplay(
   runtimePage: RuntimePage,
   library: { name: string; version: string } = defaultLibrary,
 ) {
-  await test.step(`Verify ${library.name} is shown in the mobile cards`, async () => {
-    const card = runtimePage.mobile.getCardByLibraryName(library.name).first();
-    await card.scrollIntoViewIfNeeded();
+  await test.step(`Verify ${library.name} is shown in the mobile results`, async () => {
+    const item = runtimePage.mobile.getListItemByLibraryName(library.name).first();
+    await item.scrollIntoViewIfNeeded();
 
-    const versionEl = card.getByText(library.version);
+    const versionEl = item.getByText(library.version);
     await expect(versionEl).toBeVisible();
   });
 }
@@ -26,8 +26,7 @@ async function expectFilterCards(runtimePage: RuntimePage, expectedLabel: string
   const expectedLabelRegex = new RegExp(RegExp.escape(expectedLabel), "i");
 
   await expect(async () => {
-    const chips = runtimePage.mobile.cards.getByTestId("bench-card-chips");
-    const labels = await chips.allTextContents();
+    const labels = await runtimePage.mobile.items.allInnerTexts();
 
     every(labels, (label) => {
       expect(label).toMatch(expectedLabelRegex);

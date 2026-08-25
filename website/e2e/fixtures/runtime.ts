@@ -48,13 +48,13 @@ export abstract class RuntimePage extends PageObjectModel {
 
   @cache()
   get mobile() {
-    const cardsList = this.main.getByRole("list", { name: "Results" });
-    const cards = cardsList.getByTestId("bench-card");
+    const list = this.main.getByRole("list", { name: "Results" });
+    const items = list.getByRole("listitem");
     return {
-      cardsList,
-      cards,
-      getCardByLibraryName: (libraryName: string | RegExp) =>
-        cards.filter({ hasText: libraryName }),
+      list,
+      items,
+      getListItemByLibraryName: (libraryName: string | RegExp) =>
+        items.filter({ hasText: libraryName }),
     };
   }
 }

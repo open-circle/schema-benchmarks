@@ -9,7 +9,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { BenchCard } from "./card";
+import { BenchList } from "./list";
 import { BenchTable } from "./table";
 
 export type BenchTo = `/${"initialization" | "validation" | "parsing" | "standard" | "string"}`;
@@ -47,11 +47,7 @@ export function BenchResults({ results, ...props }: BenchResultsProps) {
           <BenchTable {...{ results, meanScaler }} {...props} />
         </div>
       ) : (
-        <ul className="bench-cards" aria-label="Results">
-          {results.map((result) => (
-            <BenchCard key={result.id} {...{ result, meanScaler: meanScaler }} />
-          ))}
-        </ul>
+        <BenchList {...{ results, meanScaler }} />
       )}
     </div>
   );
