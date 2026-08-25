@@ -4,7 +4,6 @@ import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { GeneratedJsonSchema } from "#src/routes/json-schema/_conversion/-components/json-schema";
 import { jsonSchemaDirectionProps } from "#src/routes/json-schema/_conversion/-constants";
 import { CodeBlock } from "#src/shared/components/code";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
@@ -60,6 +59,9 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
               <div {...cls("details")}>
                 <div {...cls("code")}>
                   <CodeBlock>{result.snippet}</CodeBlock>
+                  <CodeBlock language="json" title="Generated JSON schema">
+                    {result.jsonSchema}
+                  </CodeBlock>
                 </div>
                 <dl {...cls("metrics")}>
                   <div>
@@ -79,9 +81,6 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
                     <dd>{directionLabel}</dd>
                   </div>
                 </dl>
-                <div {...cls("actions")}>
-                  <GeneratedJsonSchema jsonSchema={result.jsonSchema} />
-                </div>
               </div>
             </details>
           </ListItem>
