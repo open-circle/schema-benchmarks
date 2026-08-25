@@ -40,10 +40,11 @@ export class DownloadPage extends PageObjectModel {
 
   @cache()
   get mobile() {
-    const cardList = this.main.getByRole("list", { name: "Results" });
+    const list = this.main.getByRole("list", { name: "Results" });
     return {
-      cardList,
-      getCardByName: (name: string | RegExp) => cardList.getByRole("listitem", { name }),
+      list,
+      getListItem: (libraryName: string | RegExp) =>
+        list.getByRole("listitem").filter({ hasText: libraryName }),
     };
   }
 }

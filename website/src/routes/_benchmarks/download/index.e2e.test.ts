@@ -104,13 +104,13 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 });
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
-  test("it displays results cards", async ({ downloadPage }) => {
-    await expect(downloadPage.mobile.cardList).toBeVisible();
+  test("it displays results list", async ({ downloadPage }) => {
+    await expect(downloadPage.mobile.list).toBeVisible();
 
-    const libraryCard = downloadPage.mobile.getCardByName("io-ts");
-    await libraryCard.scrollIntoViewIfNeeded();
+    const libraryItem = downloadPage.mobile.getListItem("io-ts").first();
+    await libraryItem.scrollIntoViewIfNeeded();
 
-    const libraryVersionEl = libraryCard.getByText(libraryVersions["io-ts"]);
+    const libraryVersionEl = libraryItem.getByText(libraryVersions["io-ts"]);
     await expect(libraryVersionEl).toBeVisible();
   });
 });
