@@ -5,7 +5,6 @@ import {
   shallowFilter,
   toggleFilter,
 } from "@schema-benchmarks/utils";
-import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -49,12 +48,8 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
             queryClient,
             signal: abortController.signal,
           }),
-          queryClient
-            .query(getHighlightedCode({ code: encode.snippet }, abortController.signal))
-            .catch(noop),
-          queryClient
-            .query(getHighlightedCode({ code: decode.snippet }, abortController.signal))
-            .catch(noop),
+          queryClient.query(getHighlightedCode({ code: encode.snippet }, abortController.signal)),
+          queryClient.query(getHighlightedCode({ code: decode.snippet }, abortController.signal)),
         ],
       ),
     );

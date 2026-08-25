@@ -1,5 +1,4 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
-import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -57,9 +56,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/standard/")({
           queryClient,
           signal: abortController.signal,
         }),
-        queryClient
-          .query(getHighlightedCode({ code: snippet }, abortController.signal))
-          .catch(noop),
+        queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
       ]),
     );
   },

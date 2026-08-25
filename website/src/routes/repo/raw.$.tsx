@@ -1,4 +1,3 @@
-import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound, stripSearchParams } from "@tanstack/react-router";
 import { isResponseError } from "up-fetch";
@@ -82,11 +81,9 @@ export const Route = createFileRoute("/repo/raw/$")({
         ...getRaw({ fileName, formatted }, abortController.signal),
         staleTime: "static",
       });
-      await queryClient
-        .query(
-          getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
-        )
-        .catch(noop);
+      await queryClient.query(
+        getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
+      );
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();
       throw e;

@@ -1,4 +1,3 @@
-import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -23,7 +22,7 @@ export const Route = createFileRoute("/libraries/")({
         queryClient.query(
           getPackageMetadata(packageName, getMostCommonVersion(versions), abortController.signal),
         ),
-        queryClient.query(getReplacementUrl(packageName, abortController.signal)).catch(noop),
+        queryClient.query(getReplacementUrl(packageName, abortController.signal)),
       ]),
     );
   },

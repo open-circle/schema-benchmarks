@@ -1,6 +1,5 @@
 import type { StackResult } from "@schema-benchmarks/bench";
 import { collator, compareStrings } from "@schema-benchmarks/utils";
-import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -49,9 +48,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
               abortController.signal,
             ),
           ),
-        queryClient
-          .query(getHighlightedCode({ code: snippet }, abortController.signal))
-          .catch(noop),
+        queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
       ]),
     ]);
   },

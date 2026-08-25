@@ -1,4 +1,3 @@
-import { noop } from "@schema-benchmarks/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
@@ -26,9 +25,7 @@ export const Route = createFileRoute("/json-schema/_conversion/from-json/")({
     await Promise.all(
       benchResults.conversion.fromJson.flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, { queryClient, signal: abortController.signal }),
-        queryClient
-          .query(getHighlightedCode({ code: snippet }, abortController.signal))
-          .catch(noop),
+        queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
       ]),
     );
   },
