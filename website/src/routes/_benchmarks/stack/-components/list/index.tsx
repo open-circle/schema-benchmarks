@@ -85,7 +85,7 @@ export function StackList({ results, frameScale, lineCountScale, sortBy }: Stack
                     <dd>
                       <ErrorBoundary fallback={null}>
                         <span {...cls("downloads")}>
-                          <DownloadCount libraryName={result.libraryName} useLink={false} />
+                          <DownloadCount libraryName={result.libraryName} />
                         </span>
                       </ErrorBoundary>
                     </dd>
