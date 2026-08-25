@@ -88,7 +88,7 @@ test.describe("benchmarks tab", () => {
   });
 
   test.describe("mobile direction filtering", { tag: "@mobile" }, () => {
-    test("shows matching card chips", async ({ toJsonPage }) => {
+    test("shows matching list labels", async ({ toJsonPage }) => {
       for (const direction of jsonSchemaDirectionSchema.options) {
         await toJsonPage.benchmarks.selectDirection(direction);
 
@@ -96,8 +96,7 @@ test.describe("benchmarks tab", () => {
           toJsonPage.benchmarks.getDirectionLabel(direction),
         );
         await expect(async () => {
-          const chips = toJsonPage.benchmarks.mobile.cards.getByTestId("bench-card-chips");
-          const labels = await chips.allTextContents();
+          const labels = await toJsonPage.benchmarks.mobile.items.allTextContents();
 
           every(labels, (label) => {
             expect(label).toMatch(expectedDirectionRegex);
@@ -129,12 +128,12 @@ test.describe("benchmarks tab", () => {
   });
 
   test.describe("mobile view", { tag: "@mobile" }, () => {
-    test("it displays results cards", async ({ toJsonPage }) => {
-      const card = toJsonPage.benchmarks.mobile.getCardByLibraryName("zod").first();
+    test("it displays results list", async ({ toJsonPage }) => {
+      const item = toJsonPage.benchmarks.mobile.getListItemByLibraryName("zod").first();
 
-      await expect(card).toBeVisible();
+      await expect(item).toBeVisible();
 
-      const versionEl = card.getByText(libraryVersions.zod);
+      const versionEl = item.getByText(libraryVersions.zod);
 
       await expect(versionEl).toBeVisible();
     });
