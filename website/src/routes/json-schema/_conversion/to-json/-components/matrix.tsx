@@ -4,7 +4,7 @@ import { EmptyState } from "#src/shared/components/empty-state/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 
-import { SupportMatrixCard } from "./matrix/card";
+import { SupportMatrixList } from "./matrix/list";
 import { MatrixTable } from "./matrix/table";
 
 export function SupportMatrix({ matrix }: { matrix: JsonSchemaSupportMatrices }) {
@@ -14,17 +14,7 @@ export function SupportMatrix({ matrix }: { matrix: JsonSchemaSupportMatrices })
   }
   return (
     <div suppressHydrationWarning>
-      {shouldUseTable ? (
-        <MatrixTable matrix={matrix} />
-      ) : (
-        <ul className="json-schema-cards" aria-label="Support Matrix">
-          {Object.entries(matrix).map(([library, { matrix: supportMatrix, ...result }]) => (
-            <li key={library}>
-              <SupportMatrixCard {...{ library, supportMatrix, ...result }} />
-            </li>
-          ))}
-        </ul>
-      )}
+      {shouldUseTable ? <MatrixTable matrix={matrix} /> : <SupportMatrixList matrix={matrix} />}
     </div>
   );
 }

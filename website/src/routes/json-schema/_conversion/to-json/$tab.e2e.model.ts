@@ -89,13 +89,11 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
 
   @cache()
   get mobile() {
-    const supportMatrixCardsList = this.page.getByRole("list", { name: "Support Matrix" });
-    const supportMatrixCards = supportMatrixCardsList.getByTestId("support-matrix-card");
+    const items = this.page.getByRole("list", { name: "Support Matrix" }).getByRole("listitem");
     return {
-      supportMatrixCardsList,
-      supportMatrixCards,
-      getSupportMatrixCardByLibraryName: (libraryName: string | RegExp) =>
-        supportMatrixCards.filter({ hasText: libraryName }),
+      items,
+      getItemByLibraryName: (libraryName: string | RegExp) =>
+        items.filter({ hasText: libraryName }),
     };
   }
 }

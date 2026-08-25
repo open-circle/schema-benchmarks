@@ -30,7 +30,11 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
         });
 
         return (
-          <ListItem key={result.id} id={id} style={{ viewTransitionName: id }}>
+          <ListItem
+            key={result.id}
+            id={id}
+            style={{ viewTransitionName: id, viewTransitionClass: "tab-panel" }}
+          >
             <details {...cls("item")}>
               <summary {...cls("summary")}>
                 <ListItemContent
@@ -45,7 +49,7 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
                   leading={
                     <MdSymbol>{jsonSchemaDirectionProps.labels[result.direction].icon}</MdSymbol>
                   }
-                  supporting={`${formatDuration(result.mean)} | ${directionLabel}`}
+                  supporting={formatDuration(result.mean)}
                   trailing={
                     <span {...cls("bar")}>
                       <Bar {...meanScaler(result.mean)} />

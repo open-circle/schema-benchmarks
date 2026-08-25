@@ -38,13 +38,13 @@ test.describe("support matrix tab", () => {
   });
 
   test.describe("mobile view", { tag: "@mobile" }, () => {
-    test("it displays support matrix cards", async ({ toJsonPage }) => {
-      const card = toJsonPage.supportMatrix.mobile.getSupportMatrixCardByLibraryName("arktype");
+    test("it displays support matrix list", async ({ toJsonPage }) => {
+      const item = toJsonPage.supportMatrix.mobile.getItemByLibraryName("arktype");
 
-      await card.scrollIntoViewIfNeeded();
+      await item.scrollIntoViewIfNeeded();
 
-      await expect(card).toBeVisible();
-      await expect(card.getByText(libraryVersions.arktype)).toBeVisible();
+      await expect(item).toBeVisible();
+      await expect(item.getByText(libraryVersions.arktype)).toBeVisible();
     });
   });
 });
