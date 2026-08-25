@@ -25,8 +25,9 @@
       min-width: unset;
       border-radius: var(--shape-small);
     }
+    /* the supporting text needs the full row width on phones */
     @media (--phone) {
-      width: 5rem;
+      display: none;
     }
   }
   .codec-list__details {
