@@ -58,7 +58,7 @@ export function FromJsonList({ results, meanScaler }: FromJsonListProps) {
                     <dt>Downloads / wk</dt>
                     <dd>
                       <ErrorBoundary fallback={null}>
-                        <DownloadCount libraryName={result.libraryName} useLink={false} />
+                        <DownloadCount libraryName={result.libraryName} />
                       </ErrorBoundary>
                     </dd>
                   </div>

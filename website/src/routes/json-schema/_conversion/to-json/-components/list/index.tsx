@@ -72,13 +72,20 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
                     <dt>Downloads / wk</dt>
                     <dd>
                       <ErrorBoundary fallback={null}>
-                        <DownloadCount libraryName={result.libraryName} useLink={false} />
+                        <DownloadCount libraryName={result.libraryName} />
                       </ErrorBoundary>
                     </dd>
                   </div>
                   <div>
                     <dt>Type</dt>
-                    <dd>{directionLabel}</dd>
+                    <dd>
+                      <span {...cls("group")}>
+                        <MdSymbol>
+                          {jsonSchemaDirectionProps.labels[result.direction].icon}
+                        </MdSymbol>
+                        {directionLabel}
+                      </span>
+                    </dd>
                   </div>
                 </dl>
               </div>

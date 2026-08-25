@@ -49,6 +49,9 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
                     </>
                   }
                   supporting={`${encodeMean} enc | ${decodeMean} dec | ${optimizeLabel}`}
+                  leading={
+                    <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+                  }
                   trailing={
                     <span {...cls("summary-trailing")}>
                       <span {...cls("bar")}>
@@ -93,14 +96,19 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
                     <dd>
                       <ErrorBoundary fallback={null}>
                         <span {...cls("downloads")}>
-                          <DownloadCount libraryName={result.libraryName} useLink={false} />
+                          <DownloadCount libraryName={result.libraryName} />
                         </span>
                       </ErrorBoundary>
                     </dd>
                   </div>
                   <div>
                     <dt>Optimizations</dt>
-                    <dd>{optimizeLabel}</dd>
+                    <dd>
+                      <span {...cls("group")}>
+                        <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+                        {optimizeLabel}
+                      </span>
+                    </dd>
                   </div>
                 </dl>
 

@@ -46,9 +46,10 @@ export function BenchList({ results, meanScaler }: BenchListProps) {
                       {result.note ? ` (${result.note})` : null}
                     </>
                   }
-                  supporting={[formatDuration(result.mean), optimizeLabel, errorLabel]
-                    .filter(Boolean)
-                    .join(" | ")}
+                  supporting={formatDuration(result.mean)}
+                  leading={
+                    <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+                  }
                   trailing={
                     <span {...cls("bar")}>
                       <Bar {...meanScaler(result.mean)} />
@@ -74,19 +75,29 @@ export function BenchList({ results, meanScaler }: BenchListProps) {
                     <dd>
                       <ErrorBoundary fallback={null}>
                         <span {...cls("downloads")}>
-                          <DownloadCount libraryName={result.libraryName} useLink={false} />
+                          <DownloadCount libraryName={result.libraryName} />
                         </span>
                       </ErrorBoundary>
                     </dd>
                   </div>
                   <div>
                     <dt>Optimizations</dt>
-                    <dd>{optimizeLabel}</dd>
+                    <dd>
+                      <span {...cls("group")}>
+                        <MdSymbol>{optimizeTypeProps.labels[result.optimizeType].icon}</MdSymbol>
+                        {optimizeLabel}
+                      </span>
+                    </dd>
                   </div>
                   {hasErrorType && (
                     <div>
                       <dt>Error type</dt>
-                      <dd>{errorLabel}</dd>
+                      <dd>
+                        <span {...cls("group")}>
+                          <MdSymbol>{errorTypeProps.labels[result.errorType].icon}</MdSymbol>
+                          {errorLabel}
+                        </span>
+                      </dd>
                     </div>
                   )}
                 </dl>

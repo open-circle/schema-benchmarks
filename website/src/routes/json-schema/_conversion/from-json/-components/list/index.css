@@ -52,4 +52,13 @@
     justify-content: flex-end;
     min-height: 2.25rem;
   }
+  .json-schema-list__group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    .md-symbol {
+      --icon-size: 18;
+      color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+    }
+  }
 }
