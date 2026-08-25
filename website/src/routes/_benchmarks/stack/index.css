@@ -1,18 +1,7 @@
-@import "./-components/card/index.css";
-@import "./-components/table/index.css";
+@import "#src/shared/styles/layout";
 
-.stack-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  > li {
-    display: grid;
-    grid-template-columns: subgrid;
-  }
-}
+@import "./-components/list/index.css";
+@import "./-components/table/index.css";
 
 .output pre {
   max-width: 32em;

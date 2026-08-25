@@ -11,11 +11,6 @@
       align-items: center;
     }
   }
-  .bench-list__summary-trailing {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
   .bench-list__bar {
     flex: 0 0 auto;
     width: 7rem;

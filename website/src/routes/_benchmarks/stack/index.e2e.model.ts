@@ -20,11 +20,11 @@ export class StackPage extends PageObjectModel {
 
   @cache()
   get mobile() {
-    const cardList = this.main.getByRole("list", { name: "Results" });
+    const list = this.main.getByRole("list", { name: "Results" });
     return {
-      cardList,
-      getCardByLibraryName: (libraryName: string | RegExp) =>
-        cardList.getByRole("listitem", { name: libraryName }),
+      list,
+      getListItemByLibraryName: (libraryName: string | RegExp) =>
+        list.getByRole("listitem").filter({ hasText: libraryName }),
     };
   }
 }

@@ -33,14 +33,15 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 });
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
-  test("it displays result cards and expands output", async ({ stackPage }) => {
-    const card = stackPage.mobile.getCardByLibraryName("@paseri/compiler");
-    const output = card.locator("details");
+  test("it displays result list and expands details", async ({ stackPage }) => {
+    const item = stackPage.mobile.getListItemByLibraryName("@paseri/compiler").first();
+    const details = item.locator("details");
 
-    await card.scrollIntoViewIfNeeded();
-    await expect(card).toBeVisible();
+    await item.scrollIntoViewIfNeeded();
+    await expect(item).toBeVisible();
 
-    await card.getByText("Output").click();
-    await expect(output).toHaveAttribute("open", "");
+    await details.locator("summary").click();
+    await expect(details).toHaveAttribute("open", "");
+    await expect(details.getByText("Output", { exact: true })).toBeVisible();
   });
 });
