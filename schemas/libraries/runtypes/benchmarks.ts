@@ -47,6 +47,7 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`schema.inspect(data)`,
+        note: "inspect",
       },
     ],
   },

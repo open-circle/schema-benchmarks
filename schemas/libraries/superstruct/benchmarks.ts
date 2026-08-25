@@ -91,6 +91,7 @@ export default defineBenchmarks({
             // ...
           }
         `,
+        note: "schema.validate",
       },
     ],
   },

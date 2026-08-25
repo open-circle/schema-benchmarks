@@ -50,6 +50,11 @@ const tryGenerate = (generate: () => object) => {
   }
 };
 
+const expectUniqueNotes = (configs: ReadonlyArray<{ note?: string }>) => {
+  const notes = configs.map(({ note }) => note);
+  expect(new Set(notes).size).toBe(notes.length);
+};
+
 /** Compiles a generated JSON schema, so it can be checked against the data it describes. */
 const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: object) => {
   // formats are library specific (e.g. `url` vs `uri`), and OpenAPI keywords aren't JSON Schema
@@ -133,6 +138,31 @@ const itChecksAllRefinements = (
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   const libConfig = await getConfig();
   const { library } = libConfig;
+
+  const configArrays = [
+    ["initialization", libConfig.initialization],
+    ["validation", libConfig.validation],
+    ...Object.entries(libConfig.parsing ?? {}).map(
+      ([errorType, configs]) => [`parsing ${errorType}`, configs] as const,
+    ),
+    ...Object.entries(libConfig.standard ?? {}).map(
+      ([errorType, configs]) => [`standard ${errorType}`, configs] as const,
+    ),
+    ["JSON schema toJson", libConfig.jsonSchema?.conversion?.toJson],
+    ["JSON schema fromJson", libConfig.jsonSchema?.conversion?.fromJson],
+    ["JSON schema compliance validation", libConfig.jsonSchema?.compliance?.validation],
+    ["JSON schema compliance semantics", libConfig.jsonSchema?.compliance?.semantics],
+    ["JSON schema compliance roundtrip", libConfig.jsonSchema?.compliance?.roundtrip],
+    ["codec", libConfig.codec],
+  ] as const;
+
+  for (const [name, configs] of configArrays) {
+    if (Array.isArray(configs)) {
+      it(`${name} configs should have unique notes`, () => {
+        expectUniqueNotes(configs);
+      });
+    }
+  }
 
   describe.runIf(libConfig.initialization)("initialization", () => {
     describe.each(ensureArray(libConfig.initialization ?? []))("config %#", (config) => {
