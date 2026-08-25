@@ -8,7 +8,7 @@ import { Bar } from "#src/shared/components/table/bar";
 import { useBreakpoints } from "#src/shared/hooks/use-breakpoints";
 import type { SortDirection } from "#src/shared/lib/sort";
 
-import { CodecCard } from "./card";
+import { CodecList } from "./list";
 import { CodecTable } from "./table";
 
 export interface CodecResultsProps {
@@ -51,11 +51,7 @@ export function CodecResults({ results, sortBy, sortDir }: CodecResultsProps) {
           <CodecTable {...{ results, encodeScaler, decodeScaler, sortBy, sortDir }} />
         </div>
       ) : (
-        <ul className="bench-cards" aria-label="Results">
-          {results.map((result) => (
-            <CodecCard key={result.id} {...{ result, encodeScaler, decodeScaler }} />
-          ))}
-        </ul>
+        <CodecList {...{ results, encodeScaler, decodeScaler }} />
       )}
     </div>
   );
