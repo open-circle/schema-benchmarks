@@ -346,12 +346,13 @@ export function shallowFilter<T>(filter: {
   };
 }
 
-export function getTransitionName(prefix: string, values: Record<string, unknown>) {
+export function getTransitionName(prefix: string, values: Record<string, unknown>, hash = false) {
   let name = prefix;
   for (const [key, value] of Object.entries(values)) {
     name += `-${key}-${String(value)}`;
   }
-  return name.replace(/[^a-zA-Z0-9]/g, "-");
+  const finalName = name.replace(/[^a-zA-Z0-9]/g, "-");
+  return hash ? getCyrb53Hash(finalName) : finalName;
 }
 
 export function uniqueBy<T>(
