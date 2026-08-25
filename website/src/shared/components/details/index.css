@@ -1,7 +1,5 @@
 details {
   overflow: hidden;
-  border-radius: var(--shape-medium);
-  border: 1px solid var(--divider);
   --reveal-duration: 250ms;
 
   @media (prefers-reduced-motion: no-preference) {

@@ -50,7 +50,7 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
                       {result.note ? ` (${result.note})` : null}
                     </>
                   }
-                  supporting={`${formatBytes(result.gzipBytes)} gzip · ${downloadTime}`}
+                  supporting={`${formatBytes(result.gzipBytes)} gzip | ${downloadTime}`}
                   trailing={
                     <span {...cls("summary-trailing")}>
                       <span {...cls("bar")}>
@@ -79,7 +79,6 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
                     <dd>
                       <ErrorBoundary fallback={null}>
                         <span {...cls("downloads")}>
-                          <MdSymbol>download</MdSymbol>
                           <DownloadCount libraryName={result.libraryName} />
                         </span>
                       </ErrorBoundary>

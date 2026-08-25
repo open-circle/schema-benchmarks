@@ -1,8 +1,8 @@
-.download-list {
-  .download-list__item {
+.bench-list {
+  .bench-list__item {
     border-bottom: 1px solid var(--divider);
   }
-  .download-list__summary {
+  .bench-list__summary {
     padding: 0;
     &::after {
       margin: 0 1rem;
@@ -11,27 +11,12 @@
       align-items: center;
     }
   }
-  .list-item__overline {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .download-list__downloads {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    white-space: nowrap;
-    .md-symbol {
-      --icon-size: 18;
-      --icon-weight: 400;
-    }
-  }
-  .download-list__summary-trailing {
+  .bench-list__summary-trailing {
     display: flex;
     align-items: center;
     gap: 0.25rem;
   }
-  .download-list__bar {
+  .bench-list__bar {
     flex: 0 0 auto;
     width: 7rem;
     .bar {
@@ -43,13 +28,23 @@
       width: 5.5rem;
     }
   }
-  .download-list__details {
+  .bench-list__details {
     padding: 1rem 1rem 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  .download-list__metrics {
+  .bench-list__downloads {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+    .md-symbol {
+      --icon-size: 18;
+      --icon-weight: 400;
+    }
+  }
+  .bench-list__metrics {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
@@ -70,8 +65,15 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-  .download-list__actions {
+  .bench-list__code {
+    > p {
+      margin: 0.25rem 0 0;
+      color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
+    }
+  }
+  .bench-list__actions {
     display: flex;
     justify-content: flex-end;
+    min-height: 2.25rem;
   }
 }
