@@ -32,9 +32,12 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
     [data],
   );
   const [domRect, ref] = useElementSize();
-  const minWidth = useMemo(() => {
+  const { height, marginLeft } = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + 48;
+    return {
+      height: Math.max(176, values.length * 28 + 52),
+      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
+    };
   }, [values]);
   const plot = useMemo(
     () =>
@@ -43,16 +46,18 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
           fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
-        marginLeft: 48,
-        width: Math.max(domRect?.width ?? 0, minWidth),
+        marginLeft,
+        width: domRect?.width ?? 0,
+        height,
         x: {
-          label: "Library",
-        },
-        y: {
           domain: [0, 1],
           grid: true,
           label: "Compliance",
           tickFormat: formatPercentage,
+        },
+        y: {
+          label: "Library",
+          tickSize: 0,
         },
         color: {
           domain: [0, 1],
@@ -60,27 +65,30 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
           range: color,
         },
         marks: [
-          Plot.ruleY([0]),
-          Plot.barY(values, {
-            x: getLabel,
-            y: (result) => processCount(result.results.count).pct,
+          Plot.ruleX([1], { stroke: "currentColor", strokeDasharray: "4,2" }),
+          Plot.dotX(values, {
+            x: (result) => processCount(result.results.count).pct,
+            y: { value: getLabel, label: "Library" },
             fill: (result) => processCount(result.results.count).pct,
-            sort: { x: "y" },
+            r: 5,
+            symbol: "diamond2",
+            sort: { y: "x", reverse: true },
             tip: {
-              pointer: "x",
+              pointer: "y",
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: formatPercentage,
+                x: formatPercentage,
+                y: (d: string) => d,
                 fill: false,
               },
             },
           }),
         ],
       }),
-    [values, domRect?.width, minWidth, formatPercentage],
+    [values, domRect?.width, formatPercentage, height, marginLeft],
   );
-  return { plot, ref, minWidth };
+  return { plot, ref };
 });
 
 BaseCompliancePlot.displayName = "BaseCompliancePlot";

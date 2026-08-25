@@ -1,0 +1,15 @@
+.color-display {
+  display: inline-block;
+  border-radius: 50%;
+  width: var(--color-display-size);
+  height: var(--color-display-size);
+  &.color-display--small {
+    --color-display-size: 0.75rem;
+  }
+  &.color-display--medium {
+    --color-display-size: 1rem;
+  }
+  &.color-display--large {
+    --color-display-size: 1.5rem;
+  }
+}

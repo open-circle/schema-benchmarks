@@ -27,9 +27,12 @@ export const BaseJsonConversionPlot = createPlotComponent(function useConversion
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
-  const minWidth = useMemo(() => {
+  const { height, marginLeft } = useMemo(() => {
     const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return values.length * (getLabel(longestLabel).length * 6) + 48;
+    return {
+      height: Math.max(176, values.length * 28 + 52),
+      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
+    };
   }, [values]);
   const plot = useMemo(
     () =>
@@ -38,16 +41,18 @@ export const BaseJsonConversionPlot = createPlotComponent(function useConversion
           fontFamily: "var(--font-family-body)",
           textTransform: "none",
         },
-        marginLeft: 48,
-        width: Math.max(domRect?.width ?? 0, minWidth),
+        marginLeft,
+        width: domRect?.width ?? 0,
+        height,
         x: {
-          label: "Library",
-        },
-        y: {
           grid: true,
           label: "Time",
           tickFormat: (d: number) => formatDuration(d, 2),
           nice: true,
+        },
+        y: {
+          label: "Library",
+          tickSize: 0,
         },
         color: {
           type: "quantize",
@@ -55,27 +60,30 @@ export const BaseJsonConversionPlot = createPlotComponent(function useConversion
           range: color,
         },
         marks: [
-          Plot.ruleY([0]),
-          Plot.barY(values, {
-            x: getLabel,
-            y: "mean",
+          Plot.ruleX([0]),
+          Plot.dotX(values, {
+            x: "mean",
+            y: { value: getLabel, label: "Library" },
             fill: "mean",
-            sort: { x: "y" },
+            r: 5,
+            symbol: "diamond2",
+            sort: { y: "x" },
             tip: {
-              pointer: "x",
+              pointer: "y",
               className: "plot__tooltip",
               pathFilter: "",
               format: {
-                y: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
+                x: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
+                y: (d: string) => d,
                 fill: false,
               },
             },
           }),
         ],
       }),
-    [values, minWidth, domRect?.width, formatNumber],
+    [values, domRect?.width, formatNumber, height, marginLeft],
   );
-  return { plot, ref, minWidth };
+  return { plot, ref };
 });
 
 BaseJsonConversionPlot.displayName = "BaseJsonConversionPlot";
