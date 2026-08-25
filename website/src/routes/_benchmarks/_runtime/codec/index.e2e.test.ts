@@ -1,4 +1,4 @@
-import { createTest } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures";
 import * as helpers from "#e2e/helpers";
 
 import { CodecPage } from "./index.e2e.model";
@@ -43,7 +43,17 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 });
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
-  test("it displays results cards", async ({ codecPage }) => {
+  test("it displays results list", async ({ codecPage }) => {
     await helpers.runtime.mobile.expectCardDisplay(codecPage);
+  });
+
+  test("it can expand a result for codec details", async ({ codecPage }) => {
+    const details = codecPage.mobile.getDetailsByLibraryName("sury").first();
+    await details.scrollIntoViewIfNeeded();
+
+    await details.locator("summary").click();
+
+    await expect(details.getByText("Encode", { exact: true }).first()).toBeVisible();
+    await expect(details.getByText("Decode", { exact: true }).first()).toBeVisible();
   });
 });

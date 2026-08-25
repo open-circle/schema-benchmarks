@@ -55,6 +55,8 @@ export abstract class RuntimePage extends PageObjectModel {
       items,
       getListItemByLibraryName: (libraryName: string | RegExp) =>
         items.filter({ hasText: libraryName }),
+      getDetailsByLibraryName: (libraryName: string | RegExp) =>
+        items.filter({ hasText: libraryName }).locator("details"),
     };
   }
 }
