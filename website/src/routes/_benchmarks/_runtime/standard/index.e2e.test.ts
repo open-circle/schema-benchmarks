@@ -61,7 +61,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 });
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
-  test("it displays results cards", async ({ standardSchemaPage }) => {
-    await helpers.runtime.mobile.expectCardDisplay(standardSchemaPage);
+  test("it displays results list items", async ({ standardSchemaPage }) => {
+    await helpers.runtime.mobile.expectListDisplay(standardSchemaPage);
   });
 });
