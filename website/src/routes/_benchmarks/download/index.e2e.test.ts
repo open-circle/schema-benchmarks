@@ -113,4 +113,15 @@ test.describe("mobile view", { tag: "@mobile" }, () => {
     const libraryVersionEl = libraryItem.getByText(libraryVersions["io-ts"]);
     await expect(libraryVersionEl).toBeVisible();
   });
+
+  test("it can expand a result for secondary metrics", async ({ downloadPage }) => {
+    const details = downloadPage.mobile.getDetailsByLibrary("io-ts").first();
+    await details.scrollIntoViewIfNeeded();
+
+    await details.locator("summary").click();
+
+    await expect(details).toHaveAttribute("open", "");
+    await expect(details.getByText("Uncompressed", { exact: true })).toBeVisible();
+    await expect(details.getByText("Time", { exact: true })).toBeVisible();
+  });
 });

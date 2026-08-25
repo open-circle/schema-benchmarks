@@ -30,38 +30,63 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
   return (
     <List aria-label="Results" {...cls()}>
       {results.map((result) => {
+        const downloadTime = durationFormatter.format(
+          getDuration(getDownloadTime(result.gzipBytes, mbps)),
+        );
         const id = getTransitionName("download-list-item", {
           libraryName: result.libraryName,
           note: result.note,
         });
         return (
           <ListItem key={result.fileName} id={id} style={{ viewTransitionName: id }}>
-            <ListItemContent
-              lines={3}
-              overline={
-                <>
-                  <code className="language-text">{result.version}</code>
-                  <ErrorBoundary fallback={null}>
-                    <span {...cls("downloads")}>
-                      <MdSymbol>download</MdSymbol>
-                      <DownloadCount libraryName={result.libraryName} />
-                      {" / wk"}
+            <details {...cls("item")}>
+              <summary {...cls("summary")}>
+                <ListItemContent
+                  lines={3}
+                  overline={<code className="language-text">{result.version}</code>}
+                  primary={
+                    <>
+                      <code className="language-text">{result.libraryName}</code>
+                      {result.note ? ` (${result.note})` : null}
+                    </>
+                  }
+                  supporting={`${formatBytes(result.gzipBytes)} gzip · ${downloadTime}`}
+                  trailing={
+                    <span {...cls("summary-trailing")}>
+                      <span {...cls("bar")}>
+                        <Bar {...gzipScaler(result.gzipBytes)} />
+                      </span>
                     </span>
-                  </ErrorBoundary>
-                </>
-              }
-              primary={
-                <>
-                  <code className="language-text">{result.libraryName}</code>
-                  {result.note ? ` (${result.note})` : null}
-                </>
-              }
-              supporting={`${formatBytes(result.bytes)} · ${formatBytes(result.gzipBytes)} gzip · ${durationFormatter.format(getDuration(getDownloadTime(result.gzipBytes, mbps)))}`}
-              trailing={
-                <div {...cls("trailing")}>
-                  <div {...cls("bar")}>
-                    <Bar {...gzipScaler(result.gzipBytes)} />
+                  }
+                />
+              </summary>
+              <div {...cls("details")}>
+                <dl {...cls("metrics")}>
+                  <div>
+                    <dt>Uncompressed</dt>
+                    <dd>{formatBytes(result.bytes)}</dd>
                   </div>
+                  <div>
+                    <dt>Gzipped</dt>
+                    <dd>{formatBytes(result.gzipBytes)}</dd>
+                  </div>
+                  <div>
+                    <dt>Time</dt>
+                    <dd>{downloadTime}</dd>
+                  </div>
+                  <div>
+                    <dt>Downloads / week</dt>
+                    <dd>
+                      <ErrorBoundary fallback={null}>
+                        <span {...cls("downloads")}>
+                          <MdSymbol>download</MdSymbol>
+                          <DownloadCount libraryName={result.libraryName} />
+                        </span>
+                      </ErrorBoundary>
+                    </dd>
+                  </div>
+                </dl>
+                <div {...cls("actions")}>
                   <ButtonGroup className="source-links" ariaLabel="Links to files used">
                     <InternalLinkToggleButton
                       to="/repo/raw/$"
@@ -89,8 +114,8 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
                     </InternalLinkToggleButton>
                   </ButtonGroup>
                 </div>
-              }
-            />
+              </div>
+            </details>
           </ListItem>
         );
       })}
