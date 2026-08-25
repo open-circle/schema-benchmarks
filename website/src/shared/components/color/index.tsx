@@ -9,7 +9,7 @@ const cls = bem("color-display");
 
 export function ColorDisplay({ color, size = "medium" }: ColorDisplayProps) {
   return (
-    <div
+    <span
       {...cls({ modifier: size })}
       style={{
         backgroundColor: color,
