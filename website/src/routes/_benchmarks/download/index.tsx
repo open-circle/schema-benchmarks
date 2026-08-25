@@ -48,7 +48,10 @@ export const Route = createFileRoute("/_benchmarks/download/")({
   validateSearch: searchSchema,
   loaderDeps: ({ search: { minifyType } }) => ({ minifyType }),
   async loader({ context: { queryClient }, deps: { minifyType }, abortController }) {
-    const results = await queryClient.ensureQueryData(getDownloadResults(abortController.signal));
+    const results = await queryClient.query({
+      ...getDownloadResults(abortController.signal),
+      staleTime: "static",
+    });
     const downloadPromises = [];
     for (const { libraryName } of results[minifyType]) {
       downloadPromises.push(

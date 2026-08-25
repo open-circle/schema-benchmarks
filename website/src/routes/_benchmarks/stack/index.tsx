@@ -1,5 +1,6 @@
 import type { StackResult } from "@schema-benchmarks/bench";
 import { collator, compareStrings } from "@schema-benchmarks/utils";
+import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -32,20 +33,25 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
   component: RouteComponent,
   validateSearch: searchSchema,
   loader: async ({ context: { queryClient }, abortController }) => {
-    const results = await queryClient.ensureQueryData(getStackResults(abortController.signal));
+    const results = await queryClient.query({
+      ...getStackResults(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all([
-      queryClient.prefetchQuery(
+      queryClient.query(
         getHighlightedAnsi({ input: exampleStack, lineNumbers: true }, abortController.signal),
       ),
       ...results.flatMap(({ output, snippet }) => [
         output &&
-          queryClient.prefetchQuery(
+          queryClient.query(
             getHighlightedAnsi(
               { input: highlightFrame(output), lineNumbers: true },
               abortController.signal,
             ),
           ),
-        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
+        queryClient
+          .query(getHighlightedCode({ code: snippet }, abortController.signal))
+          .catch(noop),
       ]),
     ]);
   },

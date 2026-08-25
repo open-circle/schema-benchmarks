@@ -11,9 +11,12 @@ export const Route = createFileRoute("/_home/")({
   component: App,
   loader: async ({ context: { queryClient }, abortController }) => {
     await Promise.all([
-      queryClient.ensureQueryData(getBenchResults(abortController.signal)),
-      queryClient.ensureQueryData(getDownloadResults(abortController.signal)),
-      queryClient.ensureQueryData(getJsonSchemaBenchResults(abortController.signal)),
+      queryClient.query({ ...getBenchResults(abortController.signal), staleTime: "static" }),
+      queryClient.query({ ...getDownloadResults(abortController.signal), staleTime: "static" }),
+      queryClient.query({
+        ...getJsonSchemaBenchResults(abortController.signal),
+        staleTime: "static",
+      }),
     ]);
   },
   head: () =>

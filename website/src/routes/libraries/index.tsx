@@ -1,3 +1,4 @@
+import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -13,13 +14,16 @@ import libraryCss from "./index.css?url";
 
 export const Route = createFileRoute("/libraries/")({
   loader: async ({ abortController, context: { queryClient } }) => {
-    const libraries = await queryClient.ensureQueryData(getAllPackages(abortController.signal));
+    const libraries = await queryClient.query({
+      ...getAllPackages(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all(
       Object.entries(libraries).flatMap(([packageName, versions]) => [
-        queryClient.prefetchQuery(
+        queryClient.query(
           getPackageMetadata(packageName, getMostCommonVersion(versions), abortController.signal),
         ),
-        queryClient.prefetchQuery(getReplacementUrl(packageName, abortController.signal)),
+        queryClient.query(getReplacementUrl(packageName, abortController.signal)).catch(noop),
       ]),
     );
   },

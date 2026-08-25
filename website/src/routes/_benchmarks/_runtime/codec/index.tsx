@@ -5,6 +5,7 @@ import {
   shallowFilter,
   toggleFilter,
 } from "@schema-benchmarks/utils";
+import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -37,7 +38,10 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
   validateSearch: searchSchema,
   loaderDeps: ({ search: { optimizeType } }) => ({ optimizeType }),
   async loader({ context: { queryClient }, deps: { optimizeType }, abortController }) {
-    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
+    const benchResults = await queryClient.query({
+      ...getBenchResults(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all(
       Object.values(benchResults.codec.filter(shallowFilter({ optimizeType }))).flatMap(
         ({ encode, decode, libraryName }) => [
@@ -45,12 +49,12 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
             queryClient,
             signal: abortController.signal,
           }),
-          queryClient.prefetchQuery(
-            getHighlightedCode({ code: encode.snippet }, abortController.signal),
-          ),
-          queryClient.prefetchQuery(
-            getHighlightedCode({ code: decode.snippet }, abortController.signal),
-          ),
+          queryClient
+            .query(getHighlightedCode({ code: encode.snippet }, abortController.signal))
+            .catch(noop),
+          queryClient
+            .query(getHighlightedCode({ code: decode.snippet }, abortController.signal))
+            .catch(noop),
         ],
       ),
     );

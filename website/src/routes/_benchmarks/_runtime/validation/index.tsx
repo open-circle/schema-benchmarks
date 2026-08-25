@@ -1,4 +1,5 @@
 import { shallowFilter, toggleFilter } from "@schema-benchmarks/utils";
+import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
@@ -35,7 +36,10 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
     dataType,
   }),
   async loader({ context: { queryClient }, deps: { optimizeType, dataType }, abortController }) {
-    const benchResults = await queryClient.ensureQueryData(getBenchResults(abortController.signal));
+    const benchResults = await queryClient.query({
+      ...getBenchResults(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all(
       Object.values(
         benchResults.validation[dataType].filter(shallowFilter({ optimizeType })),
@@ -44,7 +48,9 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
           queryClient,
           signal: abortController.signal,
         }),
-        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
+        queryClient
+          .query(getHighlightedCode({ code: snippet }, abortController.signal))
+          .catch(noop),
       ]),
     );
   },

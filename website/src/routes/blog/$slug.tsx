@@ -20,11 +20,14 @@ const importMdx = (filePath: string) =>
 export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
   async loader({ context: { queryClient }, params: { slug }, abortController }) {
-    const data = await queryClient.ensureQueryData(getBlog(slug, abortController.signal));
+    const data = await queryClient.query({
+      ...getBlog(slug, abortController.signal),
+      staleTime: "static",
+    });
     const images = data.authors.map(getAvatarUrl);
     if (typeof data.cover !== "string") images.push(data.cover.src);
     const { mdxModule } = await promiseAllKeyed({
-      mdxModule: queryClient.ensureQueryData(importMdx(data._meta.filePath)),
+      mdxModule: queryClient.query({ ...importMdx(data._meta.filePath), staleTime: "static" }),
       images: preloadImages(images),
     });
     if (typeof mdxModule.prefetch === "function") await mdxModule.prefetch({ queryClient });

@@ -3,6 +3,7 @@ import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/type
 import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/types";
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { assert, collator, compareNumbers, compareStrings } from "@schema-benchmarks/utils";
+import { noop } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, linkOptions } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -59,16 +60,19 @@ export const Route = createFileRoute("/json-schema/compliance/$tab")({
   loaderDeps: ({ search: { target } }) => ({ target }),
   async loader({ context: { queryClient }, params: { tab }, deps: { target }, abortController }) {
     assert(tab, "Tab is required");
-    const { compliance } = await queryClient.ensureQueryData(
-      getJsonSchemaBenchResults(abortController.signal),
-    );
+    const { compliance } = await queryClient.query({
+      ...getJsonSchemaBenchResults(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all(
       (compliance[tab]?.[target] ?? []).flatMap(({ libraryName, snippet }) => [
         DownloadCount.prefetch(libraryName, {
           queryClient,
           signal: abortController.signal,
         }),
-        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
+        queryClient
+          .query(getHighlightedCode({ code: snippet }, abortController.signal))
+          .catch(noop),
       ]),
     );
   },

@@ -1,3 +1,4 @@
+import { noop } from "@schema-benchmarks/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import * as v from "valibot";
 
@@ -18,13 +19,16 @@ export const Route = createFileRoute("/json-schema/_conversion/from-json/")({
   validateSearch: searchSchema,
   component: RouteComponent,
   async loader({ context: { queryClient }, abortController }) {
-    const benchResults = await queryClient.ensureQueryData(
-      getJsonSchemaBenchResults(abortController.signal),
-    );
+    const benchResults = await queryClient.query({
+      ...getJsonSchemaBenchResults(abortController.signal),
+      staleTime: "static",
+    });
     await Promise.all(
       benchResults.conversion.fromJson.flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, { queryClient, signal: abortController.signal }),
-        queryClient.prefetchQuery(getHighlightedCode({ code: snippet }, abortController.signal)),
+        queryClient
+          .query(getHighlightedCode({ code: snippet }, abortController.signal))
+          .catch(noop),
       ]),
     );
   },

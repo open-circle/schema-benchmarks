@@ -41,4 +41,7 @@ export function DownloadCount({
 }
 
 DownloadCount.prefetch = (libraryName: string, { queryClient, signal }: PrefetchContext) =>
-  queryClient.ensureQueryData(getAllWeeklyDownloads(getPackageName(libraryName), signal));
+  queryClient.query({
+    ...getAllWeeklyDownloads(getPackageName(libraryName), signal),
+    staleTime: "static",
+  });
