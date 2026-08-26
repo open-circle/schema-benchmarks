@@ -17,8 +17,6 @@ test("homepage is selected", { tag: "@smoke" }, async ({ sidebar }) => {
 });
 
 test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
-  await sidebar.open();
-
   for (const [name, path] of [
     ["Download", "/download"],
     ["Initialization", "/initialization"],
@@ -35,15 +33,15 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
     ["Blog", "/blog"],
   ] as const) {
     await test.step(`Navigate to ${name}`, async () => {
+      await sidebar.open();
+
       const link = sidebar.getLinkByName(name);
 
-      await expect(async () => {
-        await link.click();
+      await link.click();
 
-        await expect(page).toHaveURL((url) => url.pathname === path);
+      await expect(page).toHaveURL((url) => url.pathname === path);
 
-        await expect(link).toBeCurrent("page");
-      }).toPass();
+      await expect(link).toBeCurrent("page");
     });
   }
 });
