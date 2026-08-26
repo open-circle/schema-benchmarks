@@ -39,9 +39,11 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
 
       await link.click();
 
-      await expect(page).toHaveURL((url) => url.pathname === path);
+      await expect(async () => {
+        await expect(page).toHaveURL((url) => url.pathname === path);
 
-      await expect(link).toBeCurrent("page");
+        await expect(link).toBeCurrent("page");
+      }).toPass();
     });
   }
 });
