@@ -37,9 +37,9 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
     await test.step(`Navigate to ${name}`, async () => {
       const link = sidebar.getLinkByName(name);
 
-      await link.click();
-
       await expect(async () => {
+        await link.click();
+
         await expect(page).toHaveURL((url) => url.pathname === path);
 
         await expect(link).toBeCurrent("page");
