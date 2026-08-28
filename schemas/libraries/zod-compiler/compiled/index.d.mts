@@ -1,5 +1,5 @@
 import * as z from "zod";
-//#region ../node_modules/.pnpm/zod-compiler@1.28.0_esbuild@0.28.2_rolldown@1.2.5_rollup@4.62.2_vite@8.2.2_@types+node@_c59640090ddbc70bfbc5660f19260d62/node_modules/zod-compiler/dist/core/types.d.ts
+//#region ../node_modules/.pnpm/zod-compiler@1.28.0_esbuild@0.28.2_rolldown@1.2.6_rollup@4.62.2_vite@8.2.2_@types+node@_08554873f7bd19f08849ba7b063b4644/node_modules/zod-compiler/dist/core/types.d.ts
 interface SafeParseSuccess<T> {
   success: true;
   data: T;
