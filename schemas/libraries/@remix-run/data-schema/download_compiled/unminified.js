@@ -409,7 +409,7 @@ function max(limit) {
 	};
 }
 //#endregion
-//#region ../schemas/libraries/remix/data-schema/download.ts
+//#region ../schemas/libraries/@remix-run/data-schema/download.ts
 const imageSchema = object({
 	id: number(),
 	created: instanceof_(Date),

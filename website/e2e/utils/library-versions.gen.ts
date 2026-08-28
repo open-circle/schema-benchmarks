@@ -6,6 +6,7 @@ export const libraryVersions = {
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
   "@railway-ts/pipelines": "0.1.29",
+  "@remix-run/data-schema": "0.3.0",
   "@sapphire/shapeshift": "5.0.0",
   ajv: "8.20.0",
   arktype: "2.2.3",
