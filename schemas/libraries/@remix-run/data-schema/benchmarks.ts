@@ -1,6 +1,6 @@
+import { parse, parseSafe } from "@remix-run/data-schema";
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
-import { parse, parseSafe } from "remix/data-schema";
 
 import { assertNotReached, defineBenchmarks } from "#src";
 
@@ -10,9 +10,9 @@ const schema = getRemixSchema();
 
 export default defineBenchmarks({
   library: {
-    name: "remix/data-schema",
+    name: "@remix-run/data-schema",
     optimizeType: "none",
-    version: await getVersion("remix"),
+    version: await getVersion("@remix-run/data-schema"),
   },
   initialization: {
     run() {
