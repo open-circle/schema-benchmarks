@@ -7,8 +7,8 @@ import {
   object,
   string,
   type Schema,
-} from "remix/data-schema";
-import { max, maxLength, min, minLength, url } from "remix/data-schema/checks";
+} from "@remix-run/data-schema";
+import { max, maxLength, min, minLength, url } from "@remix-run/data-schema/checks";
 
 import type { ProductData } from "#src";
 
