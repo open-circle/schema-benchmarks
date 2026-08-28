@@ -47,6 +47,7 @@
     "joi-to-json": "^5.0.5",
     "jsonschema": "^1.5.0",
     "mutative": "catalog:",
+    "remix": "3.0.0-beta.10",
     "runtypes": "^7.0.5",
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.2",
