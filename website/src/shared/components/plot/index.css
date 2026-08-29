@@ -3,6 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .ts-chart__text {
+    user-select: none;
+  }
 }
 
 .plot-scroll-container {
@@ -40,6 +44,19 @@
   .chart-tooltip__supporting {
     min-inline-size: 0;
     max-inline-size: 100%;
+
+    dl > div {
+      min-block-size: 0;
+    }
+  }
+
+  .chart-tooltip__actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
   }
 
   pre {

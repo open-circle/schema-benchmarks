@@ -12,5 +12,6 @@ const meta = preview.meta({
 export const Default = meta.story({
   args: {
     data: downloadResults.minified,
+    minify: "minified",
   },
 });
