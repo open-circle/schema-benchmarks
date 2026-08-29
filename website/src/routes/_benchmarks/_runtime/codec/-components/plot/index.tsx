@@ -5,7 +5,7 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
-import { defineChart, ruleX, text } from "@tanstack/charts";
+import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
@@ -74,12 +74,22 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         x: "mean",
         y: "library",
         color: "operation",
-        text: () => "\u25A0",
-        rotate: 45,
+        text: () => "stat_0",
         anchor: "middle",
         fontSize: 18,
-        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
+      whenFocused(
+        text(points, {
+          id: "codec-focus",
+          key: (point) => `${point.library}:${point.note ?? ""}:${point.operation}`,
+          x: "mean",
+          y: "library",
+          fill: "currentColor",
+          text: () => "nearby",
+          anchor: "middle",
+          fontSize: 18,
+        }),
+      ),
     ] as const;
     const spec = {
       marks,
@@ -97,7 +107,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         },
         y: {
           scale: scaleBand().domain(libraries).padding(0.2),
-          axis: { label: "Library", ticks: { size: 0 } },
+          axis: { label: "Library", ticks: { size: 0, padding: 8 } },
         },
       },
       color: { domain: ["Encode", "Decode"], range: ["var(--link)", "var(--button)"] },

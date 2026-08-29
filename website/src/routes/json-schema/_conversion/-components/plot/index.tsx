@@ -7,7 +7,7 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
-import { defineChart, ruleX, text } from "@tanstack/charts";
+import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
@@ -38,12 +38,22 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         x: "mean",
         y: getLabel,
         color: "mean",
-        text: () => "\u25A0",
-        rotate: 45,
+        text: () => "stat_0",
         anchor: "middle",
         fontSize: 18,
-        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
+      whenFocused(
+        text(values, {
+          id: "conversion-focus",
+          key: (result) => `${result.libraryName}:${result.mean}`,
+          x: "mean",
+          y: getLabel,
+          fill: "currentColor",
+          text: () => "nearby",
+          anchor: "middle",
+          fontSize: 18,
+        }),
+      ),
     ] as const;
     const spec = {
       marks,
@@ -62,7 +72,7 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         },
         y: {
           scale: () => scaleBand().padding(0.2),
-          axis: { label: "Library", ticks: { size: 0 } },
+          axis: { label: "Library", ticks: { size: 0, padding: 8 } },
         },
       },
       color: {
