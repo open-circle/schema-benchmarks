@@ -4,8 +4,20 @@
   align-items: center;
   justify-content: center;
 
-  .ts-chart__text {
+  .ts-chart__text > text {
     user-select: none;
+    font-family: "Material Symbols Sharp";
+    --icon-fill: 1;
+    font-variation-settings:
+      "FILL" var(--icon-fill, 0),
+      "wght" clamp(100, var(--icon-weight, 400), 700),
+      "GRAD" clamp(-25, var(--icon-grade, var(--default-icon-grade)), 200),
+      "opsz" clamp(20, var(--icon-optical-size, 24), 48);
+    transition: font-variation-settings 250ms;
+    &[font-weight="700"] {
+      --icon-fill: 0;
+      --icon-weight: 700;
+    }
   }
 }
 
