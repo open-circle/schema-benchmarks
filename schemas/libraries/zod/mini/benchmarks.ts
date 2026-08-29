@@ -46,9 +46,9 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return z.compile(schema, { strict: true });
+        return z.compile(getZodMiniSchema(), { strict: true });
       },
-      snippet: ts`z.compile(schema, { strict: true })`,
+      snippet: ts`z.compile(z.object(...), { strict: true })`,
       note: "compile",
     },
   ],
