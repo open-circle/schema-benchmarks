@@ -1,65 +1,13 @@
-import * as Plot from "@observablehq/plot";
 import downloadResults from "@schema-benchmarks/bench/download.json";
-import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
-import { useMemo } from "react";
 
-import { color } from "#src/shared/data/scale";
+import { BaseDownloadPlot } from "#src/routes/_benchmarks/download/-components/plot";
 import preview from "#storybook/preview";
 
-import { createPlotComponent } from ".";
-
-const PlotComponent = createPlotComponent(function usePlotContainer() {
-  return {
-    plot: useMemo(
-      () =>
-        Plot.plot({
-          style: {
-            fontFamily: "var(--font-family-body)",
-            textTransform: "none",
-          },
-          marginLeft: 48,
-          marginBottom: 64,
-          x: {
-            tickRotate: -45,
-          },
-          y: {
-            grid: true,
-            label: "Size (gzipped)",
-            tickFormat: (bytes: number) =>
-              formatBytes(bytes, {
-                maximumFractionDigits: 0,
-              }),
-          },
-          color: {
-            type: "quantize",
-            reverse: true,
-            range: color,
-          },
-          marks: [
-            Plot.ruleY([0]),
-            Plot.barY(
-              uniqueBy(
-                downloadResults.minified.toSorted((a, b) => a.gzipBytes - b.gzipBytes),
-                (d) => d.libraryName,
-              ),
-              {
-                x: (d) => d.libraryName,
-                y: "gzipBytes",
-                fill: "gzipBytes",
-                sort: { x: "y" },
-              },
-            ),
-          ],
-        }),
-      [],
-    ),
-  };
-});
-
 const meta = preview.meta({
-  title: "Components/createPlotComponent",
-  component: PlotComponent,
-  render: () => <PlotComponent />,
+  title: "Components/Plot",
+  component: BaseDownloadPlot,
 });
 
-export const Default = meta.story();
+export const Default = meta.story({
+  args: { data: downloadResults.minified },
+});

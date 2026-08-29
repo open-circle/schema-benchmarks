@@ -13,9 +13,3 @@
 .plot-controls {
   padding: 8px 12px;
 }
-
-.plot__tooltip {
-  fill: var(--tooltip-background);
-  color: var(--tooltip-foreground);
-  stroke: var(--divider);
-}

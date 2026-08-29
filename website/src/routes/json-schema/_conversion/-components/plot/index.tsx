@@ -1,4 +1,3 @@
-import * as Plot from "@observablehq/plot";
 import type { JsonSchemaConversionResult } from "@schema-benchmarks/bench";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import type { OneOf } from "@schema-benchmarks/utils";
@@ -8,85 +7,90 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
+import { defineChart, ruleX, text } from "@tanstack/charts";
+import type { ChartSpec } from "@tanstack/charts";
+import { Chart } from "@tanstack/charts/react";
+import { scaleBand } from "@tanstack/charts/scales/band";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { tooltip } from "@tanstack/charts/tooltip";
+import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { scaleQuantize } from "d3";
 import { useMemo } from "react";
 
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
-import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
-import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 const getLabel = (d: JsonSchemaConversionResult) => d.libraryName;
 
-export const BaseJsonConversionPlot = createPlotComponent(function useConversionPlot({
-  data,
-}: {
-  data: Array<JsonSchemaConversionResult>;
-}) {
+export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConversionResult> }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
-  const [domRect, ref] = useElementSize();
-  const { height, marginLeft } = useMemo(() => {
-    const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
-    return {
-      height: Math.max(176, values.length * 28 + 52),
-      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
-    };
-  }, [values]);
-  const plot = useMemo(
-    () =>
-      Plot.plot({
-        style: {
-          fontFamily: "var(--font-family-body)",
-          textTransform: "none",
-        },
-        marginLeft,
-        width: domRect?.width ?? 0,
-        height,
+  const height = Math.max(176, values.length * 28 + 52);
+  const definition = useMemo(() => {
+    const marks = [
+      ruleX([0], { stroke: "currentColor" }),
+      text(values, {
+        id: "conversion-results",
+        key: (result) => `${result.libraryName}:${result.mean}`,
+        x: "mean",
+        y: getLabel,
+        color: "mean",
+        text: () => "\u25A0",
+        rotate: 45,
+        anchor: "middle",
+        fontSize: 14,
+        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
+      }),
+    ] as const;
+    const spec = {
+      marks,
+      scales: {
         x: {
+          scale: scaleLinear,
           grid: true,
-          label: "Time",
-          tickFormat: (d: number) => formatDuration(d, 2),
           nice: true,
+          axis: {
+            label: "Time",
+            ticks: {
+              format: (duration: number) =>
+                `${formatNumber(duration)} ms (${formatDuration(duration, 2)})`,
+            },
+          },
         },
         y: {
-          label: "Library",
-          tickSize: 0,
+          scale: () => scaleBand().padding(0.2),
+          axis: { label: "Library", ticks: false },
         },
-        color: {
-          type: "quantize",
-          reverse: true,
-          range: color,
-        },
-        marks: [
-          Plot.ruleX([0]),
-          Plot.dotX(values, {
-            x: "mean",
-            y: { value: getLabel, label: "Library" },
-            fill: "mean",
-            r: 5,
-            symbol: "diamond2",
-            sort: { y: "x" },
-            tip: {
-              pointer: "y",
-              className: "plot__tooltip",
-              pathFilter: "",
-              format: {
-                x: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
-                y: (d: string) => d,
-                fill: false,
-              },
-            },
-          }),
-        ],
-      }),
-    [values, domRect?.width, formatNumber, height, marginLeft],
-  );
-  return { plot, ref };
-});
+      },
+      color: {
+        scale: () => scaleQuantize(color),
+      },
+    } satisfies ChartSpec<typeof marks>;
 
-BaseJsonConversionPlot.displayName = "BaseJsonConversionPlot";
+    return defineChart(() => spec, {
+      focusRing: false,
+      svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
+      focus: "nearest-y",
+      tooltip: {
+        use: tooltip,
+        portal,
+        items: ["y", "x", { field: "note", label: "Note" }],
+        placement: ["right", "left", "bottom", "top"],
+      },
+    });
+  }, [formatNumber, values]);
+
+  return (
+    <Chart
+      ariaLabel="JSON Schema conversion benchmark results"
+      className="plot-container"
+      definition={definition}
+      height={height}
+    />
+  );
+}
 
 export type JsonConversionPlotProps = OneOf<
   | {
