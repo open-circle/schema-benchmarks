@@ -108,6 +108,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
       tooltip: {
         use: tooltip,
         portal,
+        className: "chart-tooltip",
         placement: ["right", "left", "bottom", "top"],
       },
     });
