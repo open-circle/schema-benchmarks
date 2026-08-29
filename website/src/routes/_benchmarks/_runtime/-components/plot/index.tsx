@@ -6,7 +6,7 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
-import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
+import { defineChart, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
@@ -14,7 +14,7 @@ import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
 import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { scaleQuantize } from "d3";
+import { scaleLog, scaleQuantize } from "d3";
 import { Suspense, useMemo, useState } from "react";
 
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
@@ -22,6 +22,7 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color/index.tsx";
+import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner/index.tsx";
 import { color } from "#src/shared/data/scale";
@@ -60,6 +61,7 @@ const getBehavior = (d: BenchResult) => {
 
 export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
+  const [scale, setScale] = useState<PlotScale>("linear");
   const formatNumber = useNumberFormatter(shortNumFormatter);
 
   // When collapsed, show only the best variant per library
@@ -67,6 +69,8 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
   const collapsedData = useMemo(() => uniqueBy(sortedData, (d) => d.libraryName), [sortedData]);
   const displayData = showAllVariants ? sortedData : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
+  const canUseLogScale = displayData.length > 0 && displayData.every((result) => result.mean > 0);
+  const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
@@ -77,7 +81,6 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
   const height = Math.max(176, libraries.length * 28 + 52);
   const definition = useMemo(() => {
     const marks = [
-      ruleX([0], { stroke: "currentColor" }),
       text(displayData, {
         id: "runtime-results",
         key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.mean}`,
@@ -105,7 +108,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
       marks,
       scales: {
         x: {
-          scale: scaleLinear,
+          scale: activeScale === "log" ? scaleLog : scaleLinear,
           grid: true,
           nice: true,
           axis: {
@@ -131,18 +134,21 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [displayData, libraries]);
+  }, [activeScale, displayData, libraries]);
 
   const controls = (
-    <ControlLabel>
-      <Checkbox
-        asLabel={false}
-        checked={showAllVariants}
-        onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
-        disabled={isCheckboxDisabled}
-      />
-      Show all variants
-    </ControlLabel>
+    <>
+      <ControlLabel>
+        <Checkbox
+          asLabel={false}
+          checked={showAllVariants}
+          onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
+          disabled={isCheckboxDisabled}
+        />
+        Show all variants
+      </ControlLabel>
+      <PlotScaleToggle value={activeScale} onChange={setScale} logDisabled={!canUseLogScale} />
+    </>
   );
 
   return (
