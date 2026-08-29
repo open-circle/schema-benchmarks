@@ -16,6 +16,7 @@ import { useMemo, useState } from "react";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
+import { ColorDisplay } from "#src/shared/components/color";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -128,14 +129,19 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
         definition={definition}
         height={height}
         renderTooltipBody={({ points }) => {
-          const result = points[0]?.datum;
+          const point = points[0];
+          if (!point) return null;
+          const result = point.datum;
           if (!result) return null;
           return (
             <ChartTooltipBody subhead={result.libraryName}>
               <dl>
                 <div>
                   <dt>Compliance</dt>
-                  <dd>{formatPercentage(result.compliance)}</dd>
+                  <dd>
+                    <ColorDisplay color={point.color} size="small" />
+                    {formatPercentage(result.compliance)}
+                  </dd>
                 </div>
                 {result.note && (
                   <div>

@@ -18,6 +18,7 @@ import { Suspense, useMemo, useState } from "react";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
+import { ColorDisplay } from "#src/shared/components/color";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -147,14 +148,19 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         definition={definition}
         height={height}
         renderTooltipBody={({ points: focusedPoints }) => {
-          const point = focusedPoints[0]?.datum;
+          const focusedPoint = focusedPoints[0];
+          if (!focusedPoint) return null;
+          const point = focusedPoint.datum;
           if (!point) return null;
           return (
             <ChartTooltipBody subhead={point.library}>
               <dl>
                 <div>
                   <dt>{point.operation}</dt>
-                  <dd>{`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}</dd>
+                  <dd>
+                    <ColorDisplay color={focusedPoint.color} size="small" />
+                    {`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}
+                  </dd>
                 </div>
                 {point.note && (
                   <div>

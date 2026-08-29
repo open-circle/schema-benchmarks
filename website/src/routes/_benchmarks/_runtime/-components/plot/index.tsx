@@ -16,6 +16,7 @@ import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runt
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
+import { ColorDisplay } from "#src/shared/components/color/index.tsx";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner/index.tsx";
 import { color } from "#src/shared/data/scale";
@@ -147,14 +148,18 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         definition={definition}
         height={height}
         renderTooltipBody={({ points }) => {
-          const result = points[0]?.datum;
-          if (!result) return null;
+          const point = points[0];
+          if (!point) return null;
+          const result = point.datum;
           return (
             <ChartTooltipBody subhead={result.libraryName}>
               <dl>
                 <div>
                   <dt>Time</dt>
-                  <dd>{`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}</dd>
+                  <dd>
+                    <ColorDisplay color={point.color} size="small" />
+                    {`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}
+                  </dd>
                 </div>
                 {result.note && (
                   <div>
