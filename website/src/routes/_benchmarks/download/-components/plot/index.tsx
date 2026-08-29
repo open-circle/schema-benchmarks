@@ -74,6 +74,7 @@ export function BaseDownloadPlot({ data }: { data: Array<DownloadResult> }) {
       tooltip: {
         use: tooltip,
         portal,
+        className: "chart-tooltip",
         items: ["y", "x", { field: "note", label: "Note" }],
         placement: ["right", "left", "bottom", "top"],
       },

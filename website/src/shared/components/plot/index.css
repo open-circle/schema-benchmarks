@@ -13,3 +13,23 @@
 .plot-controls {
   padding: 8px 12px;
 }
+
+.ts-chart-tooltip.chart-tooltip {
+  --ts-chart-tooltip-background: var(--tooltip-background);
+  --ts-chart-tooltip-color: var(--tooltip-foreground);
+  --ts-chart-tooltip-border: 1px solid var(--divider);
+  --ts-chart-tooltip-border-radius: var(--shape-medium);
+  --ts-chart-tooltip-shadow: none;
+  --ts-chart-tooltip-max-width: min(32rem, calc(100vw - 2rem));
+  --ts-chart-tooltip-padding: 0.75rem 1rem 0.5rem;
+  --ts-chart-tooltip-font: var(--font-family-body);
+
+  dl {
+    margin: 0;
+  }
+
+  pre {
+    max-height: min(18rem, 45vh);
+    overflow: auto;
+  }
+}

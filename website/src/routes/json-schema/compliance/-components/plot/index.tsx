@@ -88,6 +88,7 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
       tooltip: {
         use: tooltip,
         portal,
+        className: "chart-tooltip",
         items: ["y", "x", { field: "note", label: "Note" }],
         placement: ["right", "left", "bottom", "top"],
       },

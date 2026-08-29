@@ -109,6 +109,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
       tooltip: {
         use: tooltip,
         portal,
+        className: "chart-tooltip",
         placement: ["right", "left", "bottom", "top"],
       },
     });
