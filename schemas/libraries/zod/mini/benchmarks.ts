@@ -79,7 +79,7 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.data,
         snippet: ts`compiledSchema.safeParse(data)`,
-        note: "compiled",
+        note: "compile",
       },
     ],
   },
@@ -92,7 +92,7 @@ export default defineBenchmarks({
           // const compiledSchema = z.compile(schema)
           upfetch(url, { schema: compiledSchema })
         `,
-        note: "compiled",
+        note: "compile",
       },
     ],
   },
@@ -155,7 +155,7 @@ export default defineBenchmarks({
         },
         snippet: ts`z.decode(compiledCodec, data)`,
       },
-      note: "compiled",
+      note: "compile",
     },
   ],
 });
