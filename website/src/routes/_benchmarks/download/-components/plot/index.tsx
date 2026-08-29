@@ -11,12 +11,20 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { scaleQuantize } from "d3";
 import { useMemo, useState } from "react";
 
-import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
+import { getCompiledPath, getDownloadResults } from "#src/routes/_benchmarks/download/-query";
+import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { MdSymbol } from "#src/shared/components/symbol";
 import { color } from "#src/shared/data/scale";
 
-export function BaseDownloadPlot({ data }: { data: Array<DownloadResult> }) {
+export function BaseDownloadPlot({
+  data,
+  minify,
+}: {
+  data: Array<DownloadResult>;
+  minify: MinifyType;
+}) {
   const [showAllVariants, setShowAllVariants] = useState(false);
 
   // When collapsed, show only the best variant per library
@@ -100,11 +108,42 @@ export function BaseDownloadPlot({ data }: { data: Array<DownloadResult> }) {
         className="plot-container"
         definition={definition}
         height={height}
-        renderTooltipBody={({ points }) => {
+        renderTooltipBody={({ pinned, points }) => {
           const result = points[0]?.datum;
           if (!result) return null;
           return (
-            <ChartTooltipBody subhead={result.libraryName}>
+            <ChartTooltipBody
+              subhead={result.libraryName}
+              actionsLabel="Links to files used"
+              actions={
+                pinned && (
+                  <>
+                    <InternalLinkToggleButton
+                      to="/repo/raw/$"
+                      params={{ _splat: `schemas/libraries/${result.fileName}` }}
+                      preload={false}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      tooltip="Open source"
+                    >
+                      <MdSymbol>code</MdSymbol>
+                    </InternalLinkToggleButton>
+                    <InternalLinkToggleButton
+                      to="/repo/raw/$"
+                      params={{
+                        _splat: `schemas/libraries/${getCompiledPath(result.fileName, minify)}`,
+                      }}
+                      preload={false}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      tooltip="Open compiled"
+                    >
+                      <MdSymbol>deployed_code</MdSymbol>
+                    </InternalLinkToggleButton>
+                  </>
+                )
+              }
+            >
               <dl>
                 <div>
                   <dt>Size (gzipped)</dt>
@@ -130,5 +169,5 @@ export function DownloadPlot({ minify }: { minify: MinifyType }) {
     ...getDownloadResults(),
     select: (results) => results[minify],
   });
-  return <BaseDownloadPlot data={data} />;
+  return <BaseDownloadPlot data={data} minify={minify} />;
 }
