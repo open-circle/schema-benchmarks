@@ -5,6 +5,7 @@ import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
@@ -28,27 +29,38 @@ export type BenchPlotProps =
       errorType?: ErrorType;
     };
 
-const getLabel = (d: RuntimeResult) =>
-  d.libraryName +
-  (d.throws ? " *" : "") +
-  (d.errorType === "abortEarly" ? " †" : "") +
-  (d.sameObj ? " ‡" : "");
+type BenchResult = Exclude<RuntimeResult, { type: "codec" }>;
+
+const getOptimizations = (d: BenchResult) => optimizeTypeProps.labels[d.optimizeType].label;
+
+const getErrorHandling = (d: BenchResult) =>
+  d.errorType ? errorTypeProps.labels[d.errorType].label : undefined;
+
+const getBehavior = (d: BenchResult) => {
+  const behaviors = [d.throws && "Throws", d.sameObj && "Returns the same object"].filter(
+    (behavior) => behavior !== false && behavior !== undefined,
+  );
+  return behaviors.length > 0 ? behaviors.join(", ") : undefined;
+};
 
 export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
   data,
 }: {
-  data: Array<Exclude<RuntimeResult, { type: "codec" }>>;
+  data: Array<BenchResult>;
 }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
-  const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  // Every benchmark variant for a library is shown, not just the first one.
+  const libraries = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
   const { height, marginLeft } = useMemo(() => {
-    const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
+    const longestLabel = libraries.reduce((a, b) =>
+      a.libraryName.length > b.libraryName.length ? a : b,
+    );
     return {
-      height: Math.max(176, values.length * 28 + 52),
-      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
+      height: Math.max(176, libraries.length * 28 + 52),
+      marginLeft: Math.max(84, longestLabel.libraryName.length * 7 + 24),
     };
-  }, [values]);
+  }, [libraries]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -76,13 +88,19 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
         },
         marks: [
           Plot.ruleX([0]),
-          Plot.dotX(values, {
+          Plot.dotX(data, {
             x: "mean",
-            y: { value: getLabel, label: "Library" },
+            y: { value: "libraryName", label: "Library" },
             fill: "mean",
             r: 5,
             symbol: "diamond2",
-            sort: { y: "x" },
+            sort: { y: "x", reduce: "min" },
+            channels: {
+              Note: (d: BenchResult) => d.note,
+              Optimizations: getOptimizations,
+              "Error handling": getErrorHandling,
+              Behavior: getBehavior,
+            },
             tip: {
               pointer: "y",
               className: "plot__tooltip",
@@ -96,7 +114,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           }),
         ],
       }),
-    [values, height, marginLeft, domRect?.width, formatNumber],
+    [data, height, marginLeft, domRect?.width, formatNumber],
   );
   return { plot, ref };
 });

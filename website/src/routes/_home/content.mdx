@@ -10,8 +10,9 @@ import { ColorDisplay } from "#src/shared/components/color";
 Welcome to the Schema Benchmarks project. This aims to compare the performance of different schema validation libraries in detail, including separating each step of the process.
 
 <Admonition type="note">
-  Graphs show one result per library. Some libraries have multiple benchmarks (e.g. `zod` has both a
-  `safeParse` and a `parse` method), and the best result is shown in the graph.
+  Some libraries have multiple benchmarks for the same thing (e.g. `zod` has both a `safeParse` and
+  a `parse` method). Where that's the case, every variant is plotted in the same row - hover over a
+  point for details about that specific benchmark.
 </Admonition>
 
 ## <Link to="/download">Download</Link>
@@ -90,11 +91,11 @@ const person = v.parse(personSchema, data);
 
 <Admonition type="info">
 
-Libraries with an asterisk (\*) were benchmarked with a method that throws an error when parsing invalid data, so the benchmark includes a `try`/`catch` - which may have an unknown performance impact.
+Some libraries were benchmarked with a method that throws an error when parsing invalid data, so the benchmark includes a `try`/`catch` - which may have an unknown performance impact.
 
-Results with a dagger (†) abort early when parsing invalid data, so will tend to be faster.
+Some libraries abort early when parsing invalid data, so will tend to be faster than those that collect every error.
 
-Results with a double dagger (‡) return the same object when parsing, instead of creating a new value, so will tend to be faster.
+Some libraries return the same object when parsing, instead of creating a new value, so will tend to be faster.
 
 </Admonition>
 
@@ -169,7 +170,7 @@ bigIntFromString.decode("123"); // 123n
   
 We don't benchmark codecs with invalid data, as many libraries require the input to be correctly typed *before* passing it to the codec.
 
-Codecs that _do_ accept unknown input are marked with an asterisk (\*), as they may be slower.
+Codecs that _do_ accept unknown input may be slower - hover over a point in the chart below for details, including whether the library was benchmarked in more than one way.
 
 </Admonition>
 
@@ -213,7 +214,7 @@ We test JSON Schema implementations against the [JSON Schema Test Suite](https:/
 assert(Schema.Check(remotes, schema, data) === expected);
 ```
 
-The graph shows each library's best validation result for Draft 2020-12.
+The graph shows each library's validation results for Draft 2020-12.
 
 <CompliancePlot type="validation" target="draft2020-12" />
 

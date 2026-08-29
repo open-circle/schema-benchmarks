@@ -21,24 +21,18 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
   data: Array<JsonComplianceResult>;
 }) {
   const formatPercentage = useNumberFormatter(percentFormatter);
-  const values = useMemo(
-    () =>
-      uniqueBy(
-        data.toSorted(
-          (a, b) => processCount(b.results.count).pct - processCount(a.results.count).pct,
-        ),
-        getLabel,
-      ),
-    [data],
-  );
+  // Every benchmark variant for a library is shown, not just the first one.
+  const libraries = useMemo(() => uniqueBy(data, getLabel), [data]);
   const [domRect, ref] = useElementSize();
   const { height, marginLeft } = useMemo(() => {
-    const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
+    const longestLabel = libraries.reduce((a, b) =>
+      getLabel(a).length > getLabel(b).length ? a : b,
+    );
     return {
-      height: Math.max(176, values.length * 28 + 52),
+      height: Math.max(176, libraries.length * 28 + 52),
       marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
     };
-  }, [values]);
+  }, [libraries]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -66,13 +60,16 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
         },
         marks: [
           Plot.ruleX([1], { stroke: "currentColor", strokeDasharray: "4,2" }),
-          Plot.dotX(values, {
+          Plot.dotX(data, {
             x: (result) => processCount(result.results.count).pct,
             y: { value: getLabel, label: "Library" },
             fill: (result) => processCount(result.results.count).pct,
             r: 5,
             symbol: "diamond2",
-            sort: { y: "x", reverse: true },
+            sort: { y: "x", reduce: "max", reverse: true },
+            channels: {
+              Note: (result: JsonComplianceResult) => result.note,
+            },
             tip: {
               pointer: "y",
               className: "plot__tooltip",
@@ -86,7 +83,7 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
           }),
         ],
       }),
-    [values, domRect?.width, formatPercentage, height, marginLeft],
+    [data, domRect?.width, formatPercentage, height, marginLeft],
   );
   return { plot, ref };
 });
