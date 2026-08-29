@@ -68,7 +68,7 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
         },
         marks: [
           Plot.ruleX([1], { stroke: "currentColor", strokeDasharray: "4,2" }),
-          Plot.dotX(data, {
+          Plot.dotX(displayData, {
             x: (result) => processCount(result.results.count).pct,
             y: { value: getLabel, label: "Library" },
             fill: (result) => processCount(result.results.count).pct,
@@ -91,7 +91,7 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
           }),
         ],
       }),
-    [data, domRect?.width, formatPercentage, height, marginLeft],
+    [displayData, domRect?.width, formatPercentage, height, marginLeft],
   );
 
   const controls = (
