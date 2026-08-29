@@ -52,12 +52,21 @@ export default defineBenchmarks({
       note: "compile",
     },
   ],
-  validation: {
-    run(data) {
-      return z.validate(schema, data);
+  validation: [
+    {
+      run(data) {
+        return z.validate(schema, data);
+      },
+      snippet: ts`z.validate(schema, data)`,
     },
-    snippet: ts`z.validate(schema, data)`,
-  },
+    {
+      run(data) {
+        return z.validate(compiledSchema, data);
+      },
+      snippet: ts`z.validate(compiledSchema, data)`,
+      note: "compile",
+    },
+  ],
   parsing: {
     allErrors: [
       {
