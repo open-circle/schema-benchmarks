@@ -1,6 +1,6 @@
 import preview from "#storybook/preview";
 
-import { Checkbox } from ".";
+import { Checkbox, ControlLabel } from ".";
 
 const meta = preview.meta({
   title: "Components/Checkbox",
@@ -17,3 +17,12 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story();
+
+export const Label = meta.story({
+  render: (args) => (
+    <ControlLabel>
+      <Checkbox name="group" defaultChecked value="foo" {...args} />
+      Label
+    </ControlLabel>
+  ),
+});

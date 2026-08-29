@@ -7,9 +7,10 @@ import {
   uniqueBy,
 } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
@@ -21,11 +22,18 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
 }: {
   data: Array<CodecResult>;
 }) {
+  const [showAllVariants, setShowAllVariants] = useState(false);
   const formatNumber = useNumberFormatter(shortNumFormatter);
+
+  // When collapsed, show only the best variant per library
+  const collapsedData = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  const displayData = showAllVariants ? data : collapsedData;
+  const isCheckboxDisabled = data.length === collapsedData.length;
+
   // Every codec benchmark variant for a library is shown, not just the first one.
   const points = useMemo(
     () =>
-      data.flatMap((result) => [
+      displayData.flatMap((result) => [
         {
           library: result.libraryName,
           operation: "Encode",
@@ -41,9 +49,9 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
           behavior: getBehavior(result),
         },
       ]),
-    [data],
+    [displayData],
   );
-  const libraries = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  const libraries = useMemo(() => uniqueBy(displayData, (d) => d.libraryName), [displayData]);
   const [domRect, ref] = useElementSize();
   const { height, marginLeft } = useMemo(() => {
     const longestLabel = libraries.reduce((a, b) =>
@@ -107,7 +115,20 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
       }),
     [domRect?.width, formatNumber, height, marginLeft, points],
   );
-  return { plot, ref };
+
+  const controls = (
+    <ControlLabel>
+      <Checkbox
+        asLabel={false}
+        checked={showAllVariants}
+        onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
+        disabled={isCheckboxDisabled}
+      />
+      Show all variants
+    </ControlLabel>
+  );
+
+  return { plot, ref, controls };
 });
 
 BaseCodecPlot.displayName = "BaseCodecPlot";

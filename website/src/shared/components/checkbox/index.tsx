@@ -53,3 +53,11 @@ export const Checkbox = withTooltip(function Checkbox({
     </Label>
   );
 });
+
+export function ControlLabel({ children, ...props }: ComponentPropsWithoutRef<"label">) {
+  return (
+    <label {...cls({ element: "control-label", extra: "typo-subtitle2" })} {...props}>
+      {children}
+    </label>
+  );
+}

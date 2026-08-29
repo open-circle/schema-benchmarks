@@ -3,10 +3,11 @@ import type { RuntimeResult, BenchResults, DataType } from "@schema-benchmarks/b
 import type { ErrorType } from "@schema-benchmarks/schemas";
 import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -48,9 +49,16 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
 }: {
   data: Array<BenchResult>;
 }) {
+  const [showAllVariants, setShowAllVariants] = useState(false);
   const formatNumber = useNumberFormatter(shortNumFormatter);
+
+  // When collapsed, show only the best variant per library
+  const collapsedData = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  const displayData = showAllVariants ? data : collapsedData;
+  const isCheckboxDisabled = data.length === collapsedData.length;
+
   // Every benchmark variant for a library is shown, not just the first one.
-  const libraries = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  const libraries = useMemo(() => uniqueBy(displayData, (d) => d.libraryName), [displayData]);
   const [domRect, ref] = useElementSize();
   const { height, marginLeft } = useMemo(() => {
     const longestLabel = libraries.reduce((a, b) =>
@@ -88,7 +96,7 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
         },
         marks: [
           Plot.ruleX([0]),
-          Plot.dotX(data, {
+          Plot.dotX(displayData, {
             x: "mean",
             y: { value: "libraryName", label: "Library" },
             fill: "mean",
@@ -114,9 +122,22 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
           }),
         ],
       }),
-    [data, height, marginLeft, domRect?.width, formatNumber],
+    [displayData, height, marginLeft, domRect?.width, formatNumber],
   );
-  return { plot, ref };
+
+  const controls = (
+    <ControlLabel>
+      <Checkbox
+        asLabel={false}
+        checked={showAllVariants}
+        onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
+        disabled={isCheckboxDisabled}
+      />
+      Show all variants
+    </ControlLabel>
+  );
+
+  return { plot, ref, controls };
 });
 
 BaseBenchPlot.displayName = "BaseBenchPlot";

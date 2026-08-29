@@ -65,5 +65,12 @@ export default defineConfig({
       "error",
       { allowSameFolder: true, rootDir: "website/src", prefix: "#src" },
     ],
+    "jsx-a11y/label-has-associated-control": [
+      "warn",
+      {
+        controlComponents: ["Checkbox", "Radio"],
+        labelComponents: ["ControlLabel"],
+      },
+    ],
   },
 });
