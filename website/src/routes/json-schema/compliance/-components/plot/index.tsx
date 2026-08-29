@@ -33,10 +33,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
 
   const values = useMemo(
     () =>
-      displayData.map((result) => ({
-        ...result,
-        compliance: processCount(result.results.count).pct,
-      })),
+      displayData.map((result) => {
+        const compliance = processCount(result.results.count).pct;
+        return { ...result, compliance };
+      }),
     [displayData],
   );
   const libraries = useMemo(
@@ -89,7 +89,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
           axis: { label: "Library", ticks: { size: 0, padding: 8 } },
         },
       },
-      color: { scale: () => scaleQuantize(color).domain([0, 1]) },
+      color: {
+        scale: () => scaleQuantize(color),
+        domain: [0, 1],
+      },
     } satisfies ChartSpec<typeof marks>;
 
     return defineChart(() => spec, {
