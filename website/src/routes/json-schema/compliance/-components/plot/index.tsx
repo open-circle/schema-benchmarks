@@ -4,7 +4,7 @@ import type { ComplianceType } from "@schema-benchmarks/schemas";
 import { percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
-import { Chart } from "@tanstack/charts/react";
+import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
 import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
@@ -16,6 +16,7 @@ import { useMemo, useState } from "react";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
+import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -58,7 +59,7 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
         text: () => "\u25A0",
         rotate: 45,
         anchor: "middle",
-        fontSize: 14,
+        fontSize: 18,
         states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
     ] as const;
@@ -75,7 +76,7 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
         },
         y: {
           scale: scaleBand().domain(libraries).padding(0.2),
-          axis: { label: "Library", ticks: false },
+          axis: { label: "Library", ticks: { size: 0 } },
         },
       },
       color: { scale: () => scaleQuantize(color).domain([0, 1]) },
@@ -84,12 +85,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
     return defineChart(() => spec, {
       focusRing: false,
       svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
-      focus: "nearest-y",
       tooltip: {
         use: tooltip,
         portal,
         className: "chart-tooltip",
-        items: ["y", "x", { field: "note", label: "Note" }],
         placement: ["right", "left", "bottom", "top"],
       },
     });
@@ -115,6 +114,26 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
         className="plot-container"
         definition={definition}
         height={height}
+        renderTooltipBody={({ points }) => {
+          const result = points[0]?.datum;
+          if (!result) return null;
+          return (
+            <ChartTooltipBody subhead={result.libraryName}>
+              <dl>
+                <div>
+                  <dt>Compliance</dt>
+                  <dd>{formatPercentage(result.compliance)}</dd>
+                </div>
+                {result.note && (
+                  <div>
+                    <dt>Note</dt>
+                    <dd>{result.note}</dd>
+                  </div>
+                )}
+              </dl>
+            </ChartTooltipBody>
+          );
+        }}
       />
     </div>
   );

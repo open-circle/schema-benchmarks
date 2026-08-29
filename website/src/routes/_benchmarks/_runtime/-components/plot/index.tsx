@@ -16,6 +16,8 @@ import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runt
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
+import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { Spinner } from "#src/shared/components/spinner/index.tsx";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -78,7 +80,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         text: () => "\u25A0",
         rotate: 45,
         anchor: "middle",
-        fontSize: 14,
+        fontSize: 18,
         states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
     ] as const;
@@ -96,7 +98,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         },
         y: {
           scale: scaleBand().domain(libraries).padding(0.2),
-          axis: { label: "Library", ticks: false },
+          axis: { label: "Library", ticks: { size: 0 } },
         },
       },
       color: { scale: () => scaleQuantize(color) },
@@ -105,7 +107,6 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
     return defineChart(() => spec, {
       focusRing: false,
       svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
-      focus: "nearest-y",
       tooltip: {
         use: tooltip,
         portal,
@@ -135,47 +136,45 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         className="plot-container"
         definition={definition}
         height={height}
-        renderTooltipBody={({ defaultBody, points }) => {
+        renderTooltipBody={({ points }) => {
           const result = points[0]?.datum;
+          if (!result) return null;
           return (
-            <>
-              {defaultBody}
-              {result && (
-                <dl>
+            <ChartTooltipBody subhead={result.libraryName}>
+              <dl>
+                <div>
+                  <dt>Time</dt>
+                  <dd>{`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}</dd>
+                </div>
+                {result.note && (
                   <div>
-                    <dt>Time</dt>
-                    <dd>{`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}</dd>
+                    <dt>Note</dt>
+                    <dd>{result.note}</dd>
                   </div>
-                  {result.note && (
-                    <div>
-                      <dt>Note</dt>
-                      <dd>{result.note}</dd>
-                    </div>
-                  )}
+                )}
+                <div>
+                  <dt>Optimizations</dt>
+                  <dd>{getOptimizations(result)}</dd>
+                </div>
+                {getErrorHandling(result) && (
                   <div>
-                    <dt>Optimizations</dt>
-                    <dd>{getOptimizations(result)}</dd>
+                    <dt>Error handling</dt>
+                    <dd>{getErrorHandling(result)}</dd>
                   </div>
-                  {getErrorHandling(result) && (
-                    <div>
-                      <dt>Error handling</dt>
-                      <dd>{getErrorHandling(result)}</dd>
-                    </div>
-                  )}
-                  {getBehavior(result) && (
-                    <div>
-                      <dt>Behavior</dt>
-                      <dd>{getBehavior(result)}</dd>
-                    </div>
-                  )}
-                </dl>
-              )}
-              {result?.snippet && (
-                <Suspense fallback={null}>
+                )}
+                {getBehavior(result) && (
+                  <div>
+                    <dt>Behavior</dt>
+                    <dd>{getBehavior(result)}</dd>
+                  </div>
+                )}
+              </dl>
+              {result.snippet && (
+                <Suspense fallback={<Spinner />}>
                   <CodeBlock>{result.snippet}</CodeBlock>
                 </Suspense>
               )}
-            </>
+            </ChartTooltipBody>
           );
         }}
       />

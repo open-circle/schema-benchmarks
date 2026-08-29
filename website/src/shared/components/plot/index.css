@@ -24,12 +24,30 @@
   --ts-chart-tooltip-padding: 0.75rem 1rem 0.5rem;
   --ts-chart-tooltip-font: var(--font-family-body);
 
-  dl {
-    margin: 0;
+  .chart-tooltip__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .chart-tooltip__subhead {
+    margin: 0 0 0.25rem;
+    color: color(from var(--tooltip-foreground) srgb r g b / var(--secondary-text));
+  }
+
+  .chart-tooltip__supporting {
+    min-inline-size: 0;
+    max-inline-size: 100%;
   }
 
   pre {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 100%;
     max-height: min(18rem, 45vh);
     overflow: auto;
+    border: 1px solid var(--divider);
   }
 }
