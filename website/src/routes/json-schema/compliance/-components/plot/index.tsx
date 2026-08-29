@@ -1,7 +1,7 @@
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
-import { percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
+import { compareNumbers, percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
@@ -28,8 +28,12 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
   const formatPercentage = useNumberFormatter(percentFormatter);
 
   // When collapsed, show only the best variant per library
-  const collapsedData = useMemo(() => uniqueBy(data, getLabel), [data]);
-  const displayData = showAllVariants ? data : collapsedData;
+  const sortedData = useMemo(
+    () => data.toSorted(compareNumbers((result) => -processCount(result.results.count).pct)),
+    [data],
+  );
+  const collapsedData = useMemo(() => uniqueBy(sortedData, getLabel), [sortedData]);
+  const displayData = showAllVariants ? sortedData : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
 
   const values = useMemo(
@@ -43,7 +47,7 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
   const libraries = useMemo(
     () =>
       uniqueBy(values, getLabel)
-        .toSorted((a, b) => b.compliance - a.compliance)
+        .toSorted(compareNumbers((result) => -result.compliance))
         .map(getLabel),
     [values],
   );

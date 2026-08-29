@@ -1,5 +1,5 @@
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
-import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
+import { compareNumbers, formatBytes, uniqueBy } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
@@ -29,14 +29,18 @@ export function BaseDownloadPlot({
   const [showAllVariants, setShowAllVariants] = useState(false);
 
   // When collapsed, show only the best variant per library
-  const collapsedData = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
-  const displayData = showAllVariants ? data : collapsedData;
+  const sortedData = useMemo(
+    () => data.toSorted(compareNumbers((result) => result.gzipBytes)),
+    [data],
+  );
+  const collapsedData = useMemo(() => uniqueBy(sortedData, (d) => d.libraryName), [sortedData]);
+  const displayData = showAllVariants ? sortedData : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
 
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
-        .toSorted((a, b) => a.gzipBytes - b.gzipBytes)
+        .toSorted(compareNumbers((result) => result.gzipBytes))
         .map((d) => d.libraryName),
     [displayData],
   );
