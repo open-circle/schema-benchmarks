@@ -26,7 +26,7 @@ const zodTargets: Partial<Record<ComplianceTarget, string>> = {
 };
 
 const schema = getZodSchema();
-const compiledSchema = z.compile(schema);
+const compiledSchema = z.compile(schema, { strict: true });
 const jsonSchemaSubject = z.object({
   id: z.number(),
   name: z.string(),
@@ -36,7 +36,7 @@ const codec = z.codec(z.string(), z.bigint(), {
   decode: (str) => BigInt(str),
   encode: (value) => value.toString(),
 });
-const compiledCodec = z.compile(codec);
+const compiledCodec = z.compile(codec, { strict: true });
 
 export default defineBenchmarks({
   library: {
@@ -53,9 +53,9 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return z.compile(schema);
+        return z.compile(schema, { strict: true });
       },
-      snippet: ts`z.compile(schema)`,
+      snippet: ts`z.compile(schema, { strict: true })`,
       note: "compile",
     },
   ],
@@ -111,7 +111,7 @@ export default defineBenchmarks({
       {
         schema: compiledSchema,
         snippet: ts`
-          // const compiledSchema = z.compile(schema)
+          // const compiledSchema = z.compile(schema, { strict: true })
           upfetch(url, { schema: compiledSchema })
         `,
         note: "compile",
@@ -192,13 +192,19 @@ export default defineBenchmarks({
         run: (data) => {
           return compiledCodec.encode(data);
         },
-        snippet: ts`compiledCodec.encode(data)`,
+        snippet: ts`
+          // const compiledCodec = z.compile(codec, { strict: true })
+          compiledCodec.encode(data)
+        `,
       },
       decode: {
         run: (data) => {
           return compiledCodec.decode(data);
         },
-        snippet: ts`compiledCodec.decode(data)`,
+        snippet: ts`
+          // const compiledCodec = z.compile(codec, { strict: true })
+          compiledCodec.decode(data)
+        `,
       },
       note: "compile",
     },

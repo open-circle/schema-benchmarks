@@ -33,6 +33,6 @@ const productSchema = z.object({
   ratings: z.array(ratingSchema),
 }) satisfies z.ZodMiniType<ProductData>;
 
-const compiledProductSchema = z.compile(productSchema);
+const compiledProductSchema = z.compile(productSchema, { strict: true });
 
 compiledProductSchema.parse({});
