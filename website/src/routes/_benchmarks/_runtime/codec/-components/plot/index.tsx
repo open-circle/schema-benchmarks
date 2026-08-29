@@ -6,7 +6,7 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
-import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
+import { defineChart, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
@@ -14,12 +14,14 @@ import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
 import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { scaleLog } from "d3";
 import { Suspense, useMemo, useState } from "react";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color";
+import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -28,6 +30,7 @@ const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown inp
 
 export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
+  const [scale, setScale] = useState<PlotScale>("linear");
   const formatNumber = useNumberFormatter(shortNumFormatter);
 
   // When collapsed, show only the best variant per library
@@ -62,6 +65,8 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
       ]),
     [displayData],
   );
+  const canUseLogScale = points.length > 0 && points.every((point) => point.mean > 0);
+  const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
@@ -72,7 +77,6 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const height = Math.max(176, libraries.length * 28 + 52);
   const definition = useMemo(() => {
     const marks = [
-      ruleX([0], { stroke: "currentColor" }),
       text(points, {
         id: "codec-results",
         key: (point) => `${point.library}:${point.note ?? ""}:${point.operation}`,
@@ -100,7 +104,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
       marks,
       scales: {
         x: {
-          scale: scaleLinear,
+          scale: activeScale === "log" ? scaleLog : scaleLinear,
           grid: true,
           nice: true,
           axis: {
@@ -128,18 +132,21 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [libraries, points]);
+  }, [activeScale, libraries, points]);
 
   const controls = (
-    <ControlLabel>
-      <Checkbox
-        asLabel={false}
-        checked={showAllVariants}
-        onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
-        disabled={isCheckboxDisabled}
-      />
-      Show all variants
-    </ControlLabel>
+    <>
+      <ControlLabel>
+        <Checkbox
+          asLabel={false}
+          checked={showAllVariants}
+          onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
+          disabled={isCheckboxDisabled}
+        />
+        Show all variants
+      </ControlLabel>
+      <PlotScaleToggle value={activeScale} onChange={setScale} logDisabled={!canUseLogScale} />
+    </>
   );
 
   return (

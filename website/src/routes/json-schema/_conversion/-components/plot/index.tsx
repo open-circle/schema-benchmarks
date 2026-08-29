@@ -7,7 +7,7 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
-import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
+import { defineChart, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
@@ -15,11 +15,12 @@ import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
 import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { scaleQuantize } from "d3";
-import { useMemo } from "react";
+import { scaleLog, scaleQuantize } from "d3";
+import { useMemo, useState } from "react";
 
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { ColorDisplay } from "#src/shared/components/color";
+import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -27,12 +28,14 @@ import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatte
 const getLabel = (d: JsonSchemaConversionResult) => d.libraryName;
 
 export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConversionResult> }) {
+  const [scale, setScale] = useState<PlotScale>("linear");
   const formatNumber = useNumberFormatter(shortNumFormatter);
   const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  const canUseLogScale = values.length > 0 && values.every((result) => result.mean > 0);
+  const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
   const height = Math.max(176, values.length * 28 + 52);
   const definition = useMemo(() => {
     const marks = [
-      ruleX([0], { stroke: "currentColor" }),
       text(values, {
         id: "conversion-results",
         key: (result) => `${result.libraryName}:${result.mean}`,
@@ -60,7 +63,7 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
       marks,
       scales: {
         x: {
-          scale: scaleLinear,
+          scale: activeScale === "log" ? scaleLog : scaleLinear,
           grid: true,
           nice: true,
           axis: {
@@ -91,47 +94,52 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [formatNumber, values]);
+  }, [activeScale, formatNumber, values]);
 
   return (
-    <Chart
-      ariaLabel="JSON Schema conversion benchmark results"
-      className="plot-container"
-      definition={definition}
-      height={height}
-      renderTooltipBody={({ points }) => {
-        const point = points[0];
-        if (!point) return null;
-        const result = point.datum;
-        if (!result) return null;
-        return (
-          <ChartTooltipBody subhead={result.libraryName}>
-            <dl>
-              <div>
-                <dt>Time</dt>
-                <dd>
-                  <ColorDisplay color={point.color} size="small" />
-                  {`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}
-                </dd>
-              </div>
-              <div>
-                <dt>Rank</dt>
-                <dd>
-                  {formatNumber(getRank(values, result, (candidate) => candidate.mean, true))} /{" "}
-                  {formatNumber(values.length)}
-                </dd>
-              </div>
-              {result.note && (
+    <div className="plot-scroll-container">
+      <div className="plot-controls">
+        <PlotScaleToggle value={activeScale} onChange={setScale} logDisabled={!canUseLogScale} />
+      </div>
+      <Chart
+        ariaLabel="JSON Schema conversion benchmark results"
+        className="plot-container"
+        definition={definition}
+        height={height}
+        renderTooltipBody={({ points }) => {
+          const point = points[0];
+          if (!point) return null;
+          const result = point.datum;
+          if (!result) return null;
+          return (
+            <ChartTooltipBody subhead={result.libraryName}>
+              <dl>
                 <div>
-                  <dt>Note</dt>
-                  <dd>{result.note}</dd>
+                  <dt>Time</dt>
+                  <dd>
+                    <ColorDisplay color={point.color} size="small" />
+                    {`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}
+                  </dd>
                 </div>
-              )}
-            </dl>
-          </ChartTooltipBody>
-        );
-      }}
-    />
+                <div>
+                  <dt>Rank</dt>
+                  <dd>
+                    {formatNumber(getRank(values, result, (candidate) => candidate.mean, true))} /{" "}
+                    {formatNumber(values.length)}
+                  </dd>
+                </div>
+                {result.note && (
+                  <div>
+                    <dt>Note</dt>
+                    <dd>{result.note}</dd>
+                  </div>
+                )}
+              </dl>
+            </ChartTooltipBody>
+          );
+        }}
+      />
+    </div>
   );
 }
 
