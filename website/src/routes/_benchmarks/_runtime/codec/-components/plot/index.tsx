@@ -18,6 +18,7 @@ import { Suspense, useMemo, useState } from "react";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
+import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
 const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown input" : undefined);
@@ -76,7 +77,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         text: () => "\u25A0",
         rotate: 45,
         anchor: "middle",
-        fontSize: 14,
+        fontSize: 18,
         states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
     ] as const;
@@ -96,7 +97,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         },
         y: {
           scale: scaleBand().domain(libraries).padding(0.2),
-          axis: { label: "Library", ticks: false },
+          axis: { label: "Library", ticks: { size: 0 } },
         },
       },
       color: { domain: ["Encode", "Decode"], range: ["var(--link)", "var(--button)"] },
@@ -134,37 +135,35 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         className="plot-container"
         definition={definition}
         height={height}
-        renderTooltipBody={({ defaultBody, points: focusedPoints }) => {
+        renderTooltipBody={({ points: focusedPoints }) => {
           const point = focusedPoints[0]?.datum;
+          if (!point) return null;
           return (
-            <>
-              {defaultBody}
-              {point && (
-                <dl>
+            <ChartTooltipBody subhead={point.library}>
+              <dl>
+                <div>
+                  <dt>{point.operation}</dt>
+                  <dd>{`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}</dd>
+                </div>
+                {point.note && (
                   <div>
-                    <dt>{point.operation}</dt>
-                    <dd>{`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}</dd>
+                    <dt>Note</dt>
+                    <dd>{point.note}</dd>
                   </div>
-                  {point.note && (
-                    <div>
-                      <dt>Note</dt>
-                      <dd>{point.note}</dd>
-                    </div>
-                  )}
-                  {point.behavior && (
-                    <div>
-                      <dt>Behavior</dt>
-                      <dd>{point.behavior}</dd>
-                    </div>
-                  )}
-                </dl>
-              )}
-              {point?.snippet && (
+                )}
+                {point.behavior && (
+                  <div>
+                    <dt>Behavior</dt>
+                    <dd>{point.behavior}</dd>
+                  </div>
+                )}
+              </dl>
+              {point.snippet && (
                 <Suspense fallback={null}>
                   <CodeBlock>{point.snippet}</CodeBlock>
                 </Suspense>
               )}
-            </>
+            </ChartTooltipBody>
           );
         }}
       />

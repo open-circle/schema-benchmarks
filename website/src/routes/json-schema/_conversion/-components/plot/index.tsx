@@ -9,7 +9,7 @@ import {
 } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
-import { Chart } from "@tanstack/charts/react";
+import { Chart } from "@tanstack/charts/react/tooltip";
 import { scaleBand } from "@tanstack/charts/scales/band";
 import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
@@ -19,6 +19,7 @@ import { scaleQuantize } from "d3";
 import { useMemo } from "react";
 
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
+import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -40,7 +41,7 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         text: () => "\u25A0",
         rotate: 45,
         anchor: "middle",
-        fontSize: 14,
+        fontSize: 18,
         states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
       }),
     ] as const;
@@ -61,7 +62,7 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         },
         y: {
           scale: () => scaleBand().padding(0.2),
-          axis: { label: "Library", ticks: false },
+          axis: { label: "Library", ticks: { size: 0 } },
         },
       },
       color: {
@@ -72,12 +73,10 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
     return defineChart(() => spec, {
       focusRing: false,
       svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
-      focus: "nearest-y",
       tooltip: {
         use: tooltip,
         portal,
         className: "chart-tooltip",
-        items: ["y", "x", { field: "note", label: "Note" }],
         placement: ["right", "left", "bottom", "top"],
       },
     });
@@ -89,6 +88,26 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
       className="plot-container"
       definition={definition}
       height={height}
+      renderTooltipBody={({ points }) => {
+        const result = points[0]?.datum;
+        if (!result) return null;
+        return (
+          <ChartTooltipBody subhead={result.libraryName}>
+            <dl>
+              <div>
+                <dt>Time</dt>
+                <dd>{`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}</dd>
+              </div>
+              {result.note && (
+                <div>
+                  <dt>Note</dt>
+                  <dd>{result.note}</dd>
+                </div>
+              )}
+            </dl>
+          </ChartTooltipBody>
+        );
+      }}
     />
   );
 }
