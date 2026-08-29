@@ -19,19 +19,21 @@ const ratingSchema = z.object({
   images: z.array(imageSchema),
 });
 
-const productSchema = z.object({
-  id: z.number(),
-  created: z.date(),
-  title: z.string().check(z.minLength(1), z.maxLength(100)),
-  brand: z.string().check(z.minLength(1), z.maxLength(30)),
-  description: z.string().check(z.minLength(1), z.maxLength(500)),
-  price: z.number().check(z.minimum(1), z.maximum(10000)),
-  discount: z.nullable(z.number().check(z.minimum(1), z.maximum(100))),
-  quantity: z.number().check(z.minimum(0), z.maximum(10)),
-  tags: z.array(z.string().check(z.minLength(1), z.maxLength(30))),
-  images: z.array(imageSchema),
-  ratings: z.array(ratingSchema),
-}) satisfies z.ZodMiniType<ProductData>;
+const productSchema = z.toZod<ProductData>()(
+  z.object({
+    id: z.number(),
+    created: z.date(),
+    title: z.string().check(z.minLength(1), z.maxLength(100)),
+    brand: z.string().check(z.minLength(1), z.maxLength(30)),
+    description: z.string().check(z.minLength(1), z.maxLength(500)),
+    price: z.number().check(z.minimum(1), z.maximum(10000)),
+    discount: z.nullable(z.number().check(z.minimum(1), z.maximum(100))),
+    quantity: z.number().check(z.minimum(0), z.maximum(10)),
+    tags: z.array(z.string().check(z.minLength(1), z.maxLength(30))),
+    images: z.array(imageSchema),
+    ratings: z.array(ratingSchema),
+  }),
+);
 
 const compiledProductSchema = z.compile(productSchema, { strict: true });
 

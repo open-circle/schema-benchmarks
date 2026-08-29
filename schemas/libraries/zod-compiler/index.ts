@@ -20,18 +20,20 @@ const ratingSchema = z.object({
   images: z.array(imageSchema),
 });
 
-const productSchema = z.object({
-  id: z.number(),
-  created: z.date(),
-  title: z.string().min(1).max(100),
-  brand: z.string().min(1).max(30),
-  description: z.string().min(1).max(500),
-  price: z.number().min(1).max(10000),
-  discount: z.number().min(1).max(100).nullable(),
-  quantity: z.number().min(0).max(10),
-  tags: z.array(z.string().min(1).max(30)),
-  images: z.array(imageSchema),
-  ratings: z.array(ratingSchema),
-}) satisfies z.ZodType<ProductData>;
+const productSchema = z.toZod<ProductData>()(
+  z.object({
+    id: z.number(),
+    created: z.date(),
+    title: z.string().min(1).max(100),
+    brand: z.string().min(1).max(30),
+    description: z.string().min(1).max(500),
+    price: z.number().min(1).max(10000),
+    discount: z.number().min(1).max(100).nullable(),
+    quantity: z.number().min(0).max(10),
+    tags: z.array(z.string().min(1).max(30)),
+    images: z.array(imageSchema),
+    ratings: z.array(ratingSchema),
+  }),
+);
 
 export const compiledProductSchema = compile(productSchema);
