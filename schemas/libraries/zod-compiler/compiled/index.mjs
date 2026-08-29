@@ -288,7 +288,7 @@ const ratingSchema = z.object({
 	text: z.string().min(1).max(1e3),
 	images: z.array(imageSchema)
 });
-const productSchema = z.object({
+const productSchema = z.toZod()(z.object({
 	id: z.number(),
 	created: z.date(),
 	title: z.string().min(1).max(100),
@@ -300,7 +300,7 @@ const productSchema = z.object({
 	tags: z.array(z.string().min(1).max(30)),
 	images: z.array(imageSchema),
 	ratings: z.array(ratingSchema)
-});
+}));
 const compiledProductSchema = /* @__PURE__ */ (() => {
 	function safeParse_compiledProductSchema(input) {
 		var _e = [];
