@@ -1,4 +1,7 @@
 //#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/util.js
+function toZod() {
+	return (schema) => schema;
+}
 function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -2984,7 +2987,7 @@ const ratingSchema = /* @__PURE__ */ object({
 	text: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(1e3)),
 	images: /* @__PURE__ */ array(imageSchema)
 });
-compile(/* @__PURE__ */ object({
+compile(toZod()(/* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
 	created: /* @__PURE__ */ date(),
 	title: (/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(100)),
@@ -2996,5 +2999,5 @@ compile(/* @__PURE__ */ object({
 	tags: /* @__PURE__ */ array((/* @__PURE__ */ string()).check(/* @__PURE__ */ _minLength(1), /* @__PURE__ */ _maxLength(30))),
 	images: /* @__PURE__ */ array(imageSchema),
 	ratings: /* @__PURE__ */ array(ratingSchema)
-})).parse({});
+})), { strict: true }).parse({});
 //#endregion
