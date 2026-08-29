@@ -1,7 +1,7 @@
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
-import { compareNumbers, percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
+import { compareNumbers, numFormatter, percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
@@ -17,7 +17,7 @@ import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { ColorDisplay } from "#src/shared/components/color";
-import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -26,6 +26,7 @@ const getLabel = ({ libraryName }: JsonComplianceResult) => libraryName;
 export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
   const formatPercentage = useNumberFormatter(percentFormatter);
+  const formatNumber = useNumberFormatter(numFormatter);
 
   // When collapsed, show only the best variant per library
   const sortedData = useMemo(
@@ -136,7 +137,6 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
           const point = points[0];
           if (!point) return null;
           const result = point.datum;
-          if (!result) return null;
           return (
             <ChartTooltipBody subhead={result.libraryName}>
               <dl>
@@ -145,6 +145,15 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
                   <dd>
                     <ColorDisplay color={point.color} size="small" />
                     {formatPercentage(result.compliance)}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rank</dt>
+                  <dd>
+                    {formatNumber(
+                      getRank(values, result, (candidate) => candidate.compliance, false),
+                    )}{" "}
+                    / {formatNumber(values.length)}
                   </dd>
                 </div>
                 {result.note && (

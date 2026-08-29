@@ -1,5 +1,5 @@
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
-import { compareNumbers, formatBytes, uniqueBy } from "@schema-benchmarks/utils";
+import { compareNumbers, formatBytes, numFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { defineChart, ruleX, text, whenFocused } from "@tanstack/charts";
 import type { ChartSpec } from "@tanstack/charts";
 import { Chart } from "@tanstack/charts/react/tooltip";
@@ -15,9 +15,10 @@ import { getCompiledPath, getDownloadResults } from "#src/routes/_benchmarks/dow
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { ColorDisplay } from "#src/shared/components/color";
-import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { color } from "#src/shared/data/scale";
+import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
 export function BaseDownloadPlot({
   data,
@@ -27,6 +28,7 @@ export function BaseDownloadPlot({
   minify: MinifyType;
 }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
+  const formatNumber = useNumberFormatter(numFormatter);
 
   // When collapsed, show only the best variant per library
   const sortedData = useMemo(
@@ -167,6 +169,15 @@ export function BaseDownloadPlot({
                   <dd>
                     <ColorDisplay color={point.color} size="small" />
                     {formatBytes(result.gzipBytes, { maximumFractionDigits: 0 })}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rank</dt>
+                  <dd>
+                    {formatNumber(
+                      getRank(displayData, result, (candidate) => candidate.gzipBytes, true),
+                    )}{" "}
+                    / {formatNumber(displayData.length)}
                   </dd>
                 </div>
                 {result.note && (
