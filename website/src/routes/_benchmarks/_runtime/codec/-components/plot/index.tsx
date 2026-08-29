@@ -1,6 +1,7 @@
 import type { CodecResult } from "@schema-benchmarks/bench";
 import {
   durationFormatter,
+  compareNumbers,
   getDuration,
   shortNumFormatter,
   uniqueBy,
@@ -30,8 +31,12 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
 
   // When collapsed, show only the best variant per library
-  const collapsedData = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
-  const displayData = showAllVariants ? data : collapsedData;
+  const sortedData = useMemo(
+    () => data.toSorted(compareNumbers((result) => result.encode.mean + result.decode.mean)),
+    [data],
+  );
+  const collapsedData = useMemo(() => uniqueBy(sortedData, (d) => d.libraryName), [sortedData]);
+  const displayData = showAllVariants ? sortedData : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
 
   // Every codec benchmark variant for a library is shown, not just the first one.
@@ -60,9 +65,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
-        .toSorted(
-          (a, b) => Math.min(a.encode.mean, a.decode.mean) - Math.min(b.encode.mean, b.decode.mean),
-        )
+        .toSorted(compareNumbers((result) => Math.min(result.encode.mean, result.decode.mean)))
         .map((d) => d.libraryName),
     [displayData],
   );
