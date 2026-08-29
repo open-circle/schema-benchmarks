@@ -25,8 +25,8 @@ export const libraryVersions = {
   valibot: "1.4.2",
   yup: "1.7.1",
   "z-schema": "12.4.3",
-  zod: "4.4.3",
-  "zod/mini": "4.4.3",
-  "zod/v3": "4.4.3",
+  zod: "4.5.0",
+  "zod/mini": "4.5.0",
+  "zod/v3": "4.5.0",
   "zod-compiler": "1.28.0",
 } as const satisfies Record<string, string>;
