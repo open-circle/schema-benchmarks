@@ -59,6 +59,9 @@
 
     dl > div {
       min-block-size: 0;
+      .color-display {
+        margin: 0 0.5rem;
+      }
     }
   }
 

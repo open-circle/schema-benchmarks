@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 import { getCompiledPath, getDownloadResults } from "#src/routes/_benchmarks/download/-query";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
+import { ColorDisplay } from "#src/shared/components/color";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { color } from "#src/shared/data/scale";
@@ -119,7 +120,9 @@ export function BaseDownloadPlot({
         definition={definition}
         height={height}
         renderTooltipBody={({ pinned, points }) => {
-          const result = points[0]?.datum;
+          const point = points[0];
+          if (!point) return null;
+          const result = point.datum;
           if (!result) return null;
           return (
             <ChartTooltipBody
@@ -157,7 +160,10 @@ export function BaseDownloadPlot({
               <dl>
                 <div>
                   <dt>Size (gzipped)</dt>
-                  <dd>{formatBytes(result.gzipBytes, { maximumFractionDigits: 0 })}</dd>
+                  <dd>
+                    <ColorDisplay color={point.color} size="small" />
+                    {formatBytes(result.gzipBytes, { maximumFractionDigits: 0 })}
+                  </dd>
                 </div>
                 {result.note && (
                   <div>
