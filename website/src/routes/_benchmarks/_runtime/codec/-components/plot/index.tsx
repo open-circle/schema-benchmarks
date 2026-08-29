@@ -19,6 +19,7 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { Spinner } from "#src/shared/components/spinner";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
 const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown input" : undefined);
@@ -169,7 +170,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
                 )}
               </dl>
               {point.snippet && (
-                <Suspense fallback={null}>
+                <Suspense fallback={<Spinner />}>
                   <CodeBlock>{point.snippet}</CodeBlock>
                 </Suspense>
               )}
