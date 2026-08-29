@@ -10,7 +10,7 @@ var __exportAll = (all, no_symbols) => {
 	return target;
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/helpers/util.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util) {
 	util.assertEqual = (_) => {};
@@ -106,7 +106,7 @@ const getParsedType = (data) => {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/ZodError.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/ZodError.js
 const ZodIssueCode = util.arrayToEnum([
 	"invalid_type",
 	"invalid_literal",
@@ -162,12 +162,23 @@ var ZodError = class ZodError extends Error {
 				let i = 0;
 				while (i < issue.path.length) {
 					const el = issue.path[i];
-					if (!(i === issue.path.length - 1)) curr[el] = curr[el] || { _errors: [] };
-					else {
-						curr[el] = curr[el] || { _errors: [] };
-						curr[el]._errors.push(mapper(issue));
+					const terminal = i === issue.path.length - 1;
+					if (el === "_errors") {
+						if (terminal) curr._errors.push(mapper(issue));
+						i++;
+						continue;
+					}
+					if (!Object.prototype.hasOwnProperty.call(curr, el)) {
+						if (el === "__proto__") Object.defineProperty(curr, el, {
+							value: { _errors: [] },
+							writable: true,
+							enumerable: true,
+							configurable: true
+						});
+						else curr[el] = { _errors: [] };
 					}
 					curr = curr[el];
+					if (terminal) curr._errors.push(mapper(issue));
 					i++;
 				}
 			}
@@ -208,7 +219,7 @@ ZodError.create = (issues) => {
 	return new ZodError(issues);
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/locales/en.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/locales/en.js
 const errorMap = (issue, _ctx) => {
 	let message;
 	switch (issue.code) {
@@ -286,7 +297,7 @@ const errorMap = (issue, _ctx) => {
 	return { message };
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/errors.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/errors.js
 let overrideErrorMap = errorMap;
 function setErrorMap(map) {
 	overrideErrorMap = map;
@@ -295,7 +306,7 @@ function getErrorMap() {
 	return overrideErrorMap;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/helpers/parseUtil.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/helpers/parseUtil.js
 const makeIssue = (params) => {
 	const { data, path, errorMaps, issueData } = params;
 	const fullPath = [...path, ...issueData.path || []];
@@ -400,14 +411,14 @@ const isDirty = (x) => x.status === "dirty";
 const isValid = (x) => x.status === "valid";
 const isAsync = (x) => typeof Promise !== "undefined" && x instanceof Promise;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/helpers/errorUtil.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
 (function(errorUtil) {
 	errorUtil.errToObj = (message) => typeof message === "string" ? { message } : message || {};
 	errorUtil.toString = (message) => typeof message === "string" ? message : message?.message;
 })(errorUtil || (errorUtil = {}));
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/types.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/types.js
 var ParseInputLazyPath = class {
 	constructor(parent, value, path, key) {
 		this._cachedPath = [];
@@ -748,7 +759,7 @@ const nanoidRegex = /^[a-z0-9_-]{21}$/i;
 const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/;
 const durationRegex = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/;
 const emailRegex = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i;
-const _emojiRegex = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$`;
+const _emojiRegex = `^[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$`;
 let emojiRegex;
 const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
 const ipv4CidrRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/(3[0-2]|[12]?[0-9])$/;
@@ -2534,7 +2545,9 @@ function mergeValues(a, b) {
 			...a,
 			...b
 		};
+		if (Object.prototype.hasOwnProperty.call(newObj, "__proto__")) delete newObj.__proto__;
 		for (const key of sharedKeys) {
+			if (key === "__proto__") continue;
 			const sharedValue = mergeValues(a[key], b[key]);
 			if (!sharedValue.valid) return { valid: false };
 			newObj[key] = sharedValue.data;
@@ -3624,7 +3637,7 @@ const coerce = {
 };
 const NEVER = INVALID;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/index.js
+//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v3/index.js
 var v3_default = /* @__PURE__ */ __exportAll({
 	BRAND: () => BRAND,
 	DIRTY: () => DIRTY,
