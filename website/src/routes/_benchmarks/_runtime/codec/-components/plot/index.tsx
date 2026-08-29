@@ -14,7 +14,7 @@ import { createPlotComponent } from "#src/shared/components/plot";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
-const getLabel = (d: CodecResult) => d.libraryName + (d.acceptsUnknown ? " *" : "");
+const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown input" : undefined);
 
 export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
   data,
@@ -22,34 +22,38 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
   data: Array<CodecResult>;
 }) {
   const formatNumber = useNumberFormatter(shortNumFormatter);
-  const values = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
+  // Every codec benchmark variant for a library is shown, not just the first one.
   const points = useMemo(
     () =>
-      values.flatMap((result) => [
+      data.flatMap((result) => [
         {
-          library: getLabel(result),
+          library: result.libraryName,
           operation: "Encode",
           mean: result.encode.mean,
+          note: result.note,
+          behavior: getBehavior(result),
         },
         {
-          library: getLabel(result),
+          library: result.libraryName,
           operation: "Decode",
           mean: result.decode.mean,
+          note: result.note,
+          behavior: getBehavior(result),
         },
       ]),
-    [values],
+    [data],
   );
+  const libraries = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const [domRect, ref] = useElementSize();
-  const { height, marginLeft, yDomain } = useMemo(() => {
-    const longestLabel = values.reduce((a, b) => (getLabel(a).length > getLabel(b).length ? a : b));
+  const { height, marginLeft } = useMemo(() => {
+    const longestLabel = libraries.reduce((a, b) =>
+      a.libraryName.length > b.libraryName.length ? a : b,
+    );
     return {
-      height: Math.max(176, values.length * 28 + 52),
-      marginLeft: Math.max(84, getLabel(longestLabel).length * 7 + 24),
-      yDomain: values
-        .toSorted((a, b) => a.encode.mean + a.decode.mean - (b.encode.mean + b.decode.mean))
-        .map(getLabel),
+      height: Math.max(176, libraries.length * 28 + 52),
+      marginLeft: Math.max(84, longestLabel.libraryName.length * 7 + 24),
     };
-  }, [values]);
+  }, [libraries]);
   const plot = useMemo(
     () =>
       Plot.plot({
@@ -67,7 +71,6 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
           nice: true,
         },
         y: {
-          domain: yDomain,
           label: "Library",
           tickSize: 0,
         },
@@ -83,6 +86,11 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
             fill: { value: "operation", label: "Operation" },
             r: 5,
             symbol: "diamond2",
+            sort: { y: "x", reduce: "min" },
+            channels: {
+              Note: (d: (typeof points)[number]) => d.note,
+              Behavior: (d: (typeof points)[number]) => d.behavior,
+            },
             tip: {
               pointer: "xy",
               className: "plot__tooltip",
@@ -97,7 +105,7 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
           }),
         ],
       }),
-    [domRect?.width, formatNumber, height, marginLeft, points, yDomain],
+    [domRect?.width, formatNumber, height, marginLeft, points],
   );
   return { plot, ref };
 });
