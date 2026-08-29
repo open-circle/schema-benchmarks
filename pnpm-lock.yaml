@@ -302,11 +302,11 @@ importers:
         specifier: ^12.4.3
         version: 12.4.3
       zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       zod-to-json-schema:
         specifier: ^3.25.2
-        version: 3.25.2(zod@4.4.3)
+        version: 3.25.2(zod@4.5.0)
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
@@ -334,7 +334,7 @@ importers:
         version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(@vitest/browser-playwright@4.1.11)(msw@2.15.0(@types/node@26.1.2)(typescript@7.0.2))(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))
       zod-compiler:
         specifier: ^1.28.0
-        version: 1.28.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))(zod@4.4.3)
+        version: 1.28.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))(zod@4.5.0)
 
   utils:
     devDependencies:
@@ -9729,6 +9729,9 @@ packages:
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
+  zod@4.5.0:
+    resolution: {integrity: sha512-FSVkRSv3SBc0aefry5kxuD46ExRwtWWyUPjyXHZt00YRF81+MX8rdQm8aJwlL4NLMqcJABseHr66OJuc+0LkDw==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -19120,7 +19123,7 @@ snapshots:
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
-  zod-compiler@1.28.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))(zod@4.4.3):
+  zod-compiler@1.28.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))(zod@4.5.0):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       acorn: 8.18.0
@@ -19130,7 +19133,7 @@ snapshots:
       magic-string: 0.30.21
       picomatch: 4.0.5
       unplugin: 3.3.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))
-      zod: 4.4.3
+      zod: 4.5.0
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -19142,10 +19145,12 @@ snapshots:
       - vite
       - webpack
 
-  zod-to-json-schema@3.25.2(zod@4.4.3):
+  zod-to-json-schema@3.25.2(zod@4.5.0):
     dependencies:
-      zod: 4.4.3
+      zod: 4.5.0
 
   zod@4.4.3: {}
+
+  zod@4.5.0: {}
 
   zwitch@2.0.4: {}

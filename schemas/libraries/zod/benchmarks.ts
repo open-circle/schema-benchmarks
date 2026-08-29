@@ -26,6 +26,7 @@ const zodTargets: Partial<Record<ComplianceTarget, string>> = {
 };
 
 const schema = getZodSchema();
+const compiledSchema = z.compile(schema);
 const jsonSchemaSubject = z.object({
   id: z.number(),
   name: z.string(),
@@ -35,6 +36,7 @@ const codec = z.codec(z.string(), z.bigint(), {
   decode: (str) => BigInt(str),
   encode: (value) => value.toString(),
 });
+const compiledCodec = z.compile(codec);
 
 export default defineBenchmarks({
   library: {
@@ -42,12 +44,21 @@ export default defineBenchmarks({
     optimizeType: "jit",
     version: await getVersion("zod"),
   },
-  initialization: {
-    run() {
-      return getZodSchema();
+  initialization: [
+    {
+      run() {
+        return getZodSchema();
+      },
+      snippet: ts`z.object(...)`,
     },
-    snippet: ts`z.object(...)`,
-  },
+    {
+      run() {
+        return z.compile(schema);
+      },
+      snippet: ts`z.compile(schema)`,
+      note: "compile",
+    },
+  ],
   parsing: {
     allErrors: [
       {
@@ -68,10 +79,29 @@ export default defineBenchmarks({
         note: "jitless",
         optimizeType: "none",
       },
+      {
+        run(data) {
+          return compiledSchema.safeParse(data);
+        },
+        validateResult: (result) => result.success,
+        getData: (result) => result.data,
+        snippet: ts`compiledSchema.safeParse(data)`,
+        note: "compile",
+      },
     ],
   },
   standard: {
-    allErrors: { schema },
+    allErrors: [
+      { schema },
+      {
+        schema: compiledSchema,
+        snippet: ts`
+          // const compiledSchema = z.compile(schema)
+          upfetch(url, { schema: compiledSchema })
+        `,
+        note: "compile",
+      },
+    ],
   },
   jsonSchema: {
     conversion: {
@@ -127,18 +157,35 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.parse(data)`,
   },
-  codec: {
-    encode: {
-      run: (data) => {
-        return codec.encode(data);
+  codec: [
+    {
+      encode: {
+        run: (data) => {
+          return codec.encode(data);
+        },
+        snippet: ts`z.codec(...).encode(data)`,
       },
-      snippet: ts`z.codec(...).encode(data)`,
-    },
-    decode: {
-      run: (data) => {
-        return codec.decode(data);
+      decode: {
+        run: (data) => {
+          return codec.decode(data);
+        },
+        snippet: ts`z.codec(...).decode(data)`,
       },
-      snippet: ts`z.codec(...).decode(data)`,
     },
-  },
+    {
+      encode: {
+        run: (data) => {
+          return compiledCodec.encode(data);
+        },
+        snippet: ts`compiledCodec.encode(data)`,
+      },
+      decode: {
+        run: (data) => {
+          return compiledCodec.decode(data);
+        },
+        snippet: ts`compiledCodec.decode(data)`,
+      },
+      note: "compile",
+    },
+  ],
 });
