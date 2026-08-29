@@ -83,7 +83,7 @@ export function BaseDownloadPlot({
           axis: { label: "Library", ticks: { size: 0, padding: 8 } },
         },
       },
-      color: { scale: () => scaleQuantize(color) },
+      color: { scale: () => scaleQuantize(color.toReversed()) },
     } satisfies ChartSpec<typeof marks>;
 
     return defineChart(() => spec, {

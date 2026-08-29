@@ -76,7 +76,7 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
         },
       },
       color: {
-        scale: () => scaleQuantize(color),
+        scale: () => scaleQuantize(color.toReversed()),
       },
     } satisfies ChartSpec<typeof marks>;
 
