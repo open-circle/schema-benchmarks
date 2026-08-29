@@ -19,7 +19,7 @@ const createStringBenchmark = (
 });
 
 const schema = getZodMiniSchema();
-const compiledSchema = z.compile(schema);
+const compiledSchema = z.compile(schema, { strict: true });
 const jsonSchemaSubject = z.object({
   id: z.number(),
   name: z.string(),
@@ -29,7 +29,7 @@ const codec = z.codec(z.string(), z.bigint(), {
   encode: (value) => value.toString(),
   decode: (str) => BigInt(str),
 });
-const compiledCodec = z.compile(codec);
+const compiledCodec = z.compile(codec, { strict: true });
 
 export default defineBenchmarks({
   library: {
@@ -46,9 +46,9 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return z.compile(schema);
+        return z.compile(schema, { strict: true });
       },
-      snippet: ts`z.compile(schema)`,
+      snippet: ts`z.compile(schema, { strict: true })`,
       note: "compile",
     },
   ],
@@ -104,7 +104,7 @@ export default defineBenchmarks({
       {
         schema: compiledSchema,
         snippet: ts`
-          // const compiledSchema = z.compile(schema)
+          // const compiledSchema = z.compile(schema, { strict: true })
           upfetch(url, { schema: compiledSchema })
         `,
         note: "compile",
