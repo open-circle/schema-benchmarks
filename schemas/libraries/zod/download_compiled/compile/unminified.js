@@ -6384,5 +6384,5 @@ compile(toZod()(object({
 	tags: array(string().min(1).max(30)),
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
-}))).parse({});
+})), { strict: true }).parse({});
 //#endregion
