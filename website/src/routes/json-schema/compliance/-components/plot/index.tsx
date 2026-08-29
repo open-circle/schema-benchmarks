@@ -4,10 +4,11 @@ import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/type
 import type { ComplianceType } from "@schema-benchmarks/schemas";
 import { percentFormatter, uniqueBy } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
+import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -20,9 +21,16 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
 }: {
   data: Array<JsonComplianceResult>;
 }) {
+  const [showAllVariants, setShowAllVariants] = useState(false);
   const formatPercentage = useNumberFormatter(percentFormatter);
+
+  // When collapsed, show only the best variant per library
+  const collapsedData = useMemo(() => uniqueBy(data, getLabel), [data]);
+  const displayData = showAllVariants ? data : collapsedData;
+  const isCheckboxDisabled = data.length === collapsedData.length;
+
   // Every benchmark variant for a library is shown, not just the first one.
-  const libraries = useMemo(() => uniqueBy(data, getLabel), [data]);
+  const libraries = useMemo(() => uniqueBy(displayData, getLabel), [displayData]);
   const [domRect, ref] = useElementSize();
   const { height, marginLeft } = useMemo(() => {
     const longestLabel = libraries.reduce((a, b) =>
@@ -85,7 +93,20 @@ export const BaseCompliancePlot = createPlotComponent(function useCompliancePlot
       }),
     [data, domRect?.width, formatPercentage, height, marginLeft],
   );
-  return { plot, ref };
+
+  const controls = (
+    <ControlLabel>
+      <Checkbox
+        asLabel={false}
+        checked={showAllVariants}
+        onChange={(e) => setShowAllVariants(e.currentTarget.checked)}
+        disabled={isCheckboxDisabled}
+      />
+      Show all variants
+    </ControlLabel>
+  );
+
+  return { plot, ref, controls };
 });
 
 BaseCompliancePlot.displayName = "BaseCompliancePlot";

@@ -77,3 +77,12 @@
     }
   }
 }
+
+.checkbox__control-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  &:has(input:disabled, input[aria-disabled="true"]) {
+    color: color(from var(--page-foreground) srgb r g b / var(--disabled-opacity));
+  }
+}

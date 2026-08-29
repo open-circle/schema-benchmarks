@@ -1,22 +1,27 @@
 import type * as Plot from "@observablehq/plot";
 import { ClientOnly } from "@tanstack/react-router";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
+import React from "react";
 
 import { Spinner } from "#src/shared/components/spinner";
+
+import "./index.css";
 
 export interface PlotContainerProps {
   plot: ReturnType<typeof Plot.plot>;
   minWidth?: number;
   ref?: React.Ref<HTMLDivElement>;
+  controls?: ReactNode;
 }
 
 export function createPlotComponent<TProps extends object>(
   useProps: (props: TProps) => PlotContainerProps,
 ): FC<TProps> {
   function PlotComponent(props: TProps) {
-    const { plot, ref, minWidth } = useProps(props);
+    const { plot, ref, minWidth, controls } = useProps(props);
     return (
       <div className="plot-scroll-container" ref={ref}>
+        {controls && <div className="plot-controls">{controls}</div>}
         <div
           dir="ltr"
           className="plot-container"
