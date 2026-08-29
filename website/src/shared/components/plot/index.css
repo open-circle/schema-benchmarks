@@ -19,6 +19,17 @@
       --icon-weight: 700;
     }
   }
+
+  .ts-chart {
+    &:focus {
+      outline: none;
+    }
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 1px
+        color(from var(--focus-background) srgb r g b / var(--focus-opacity));
+    }
+  }
 }
 
 .plot-scroll-container {
