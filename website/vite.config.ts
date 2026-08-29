@@ -79,6 +79,7 @@ const config = defineConfig({
     viteReact({ compiler: true }),
     materialSymbols({
       knownSymbols: [
+        "nearby",
         "check_small",
         "close_small",
         "code_off",
