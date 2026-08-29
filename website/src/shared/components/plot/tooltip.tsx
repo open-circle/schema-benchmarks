@@ -7,6 +7,20 @@ export interface ChartTooltipBodyProps {
   actionsLabel?: string;
 }
 
+export function getRank<T>(
+  data: ReadonlyArray<T>,
+  datum: T,
+  getValue: (datum: T) => number,
+  lowerBetter = false,
+) {
+  const value = getValue(datum);
+  return (
+    data.filter((candidate) =>
+      lowerBetter ? getValue(candidate) < value : getValue(candidate) > value,
+    ).length + 1
+  );
+}
+
 export function ChartTooltipBody({
   subhead,
   children,

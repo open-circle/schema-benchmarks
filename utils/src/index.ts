@@ -395,6 +395,19 @@ export const compareNumbers =
 
 // we only support English (other languages have different types of plural we don't support)
 const pluralRules = new Intl.PluralRules("en");
+export const ordinalRules = new Intl.PluralRules("en", { type: "ordinal" });
+export const ordinalSuffixes: Record<Intl.LDMLPluralRule, string> = {
+  zero: "th",
+  one: "st",
+  two: "nd",
+  few: "rd",
+  many: "th",
+  other: "th",
+};
+
+export function getOrdinalSuffix(count: number) {
+  return ordinalSuffixes[ordinalRules.select(count)];
+}
 
 type PluralizeTuple = [count: number, singular: string, plural?: string];
 function isPluralizeTuple(value: unknown): value is PluralizeTuple {

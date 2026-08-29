@@ -22,7 +22,7 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color/index.tsx";
-import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner/index.tsx";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
@@ -165,6 +165,15 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
                   <dd>
                     <ColorDisplay color={point.color} size="small" />
                     {`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rank</dt>
+                  <dd>
+                    {formatNumber(
+                      getRank(displayData, result, (candidate) => candidate.mean, true),
+                    )}{" "}
+                    / {formatNumber(displayData.length)}
                   </dd>
                 </div>
                 {result.note && (

@@ -20,7 +20,7 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color";
-import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -155,6 +155,9 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
           if (!focusedPoint) return null;
           const point = focusedPoint.datum;
           if (!point) return null;
+          const operationPoints = points.filter(
+            (candidate) => candidate.operation === point.operation,
+          );
           return (
             <ChartTooltipBody subhead={point.library}>
               <dl>
@@ -163,6 +166,15 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
                   <dd>
                     <ColorDisplay color={focusedPoint.color} size="small" />
                     {`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rank</dt>
+                  <dd>
+                    {formatNumber(
+                      getRank(operationPoints, point, (candidate) => candidate.mean, true),
+                    )}{" "}
+                    / {formatNumber(operationPoints.length)}
                   </dd>
                 </div>
                 {point.note && (

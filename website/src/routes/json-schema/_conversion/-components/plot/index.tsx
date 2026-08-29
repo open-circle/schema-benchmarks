@@ -20,7 +20,7 @@ import { useMemo } from "react";
 
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { ColorDisplay } from "#src/shared/components/color";
-import { ChartTooltipBody } from "#src/shared/components/plot/tooltip";
+import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
@@ -112,6 +112,13 @@ export function BaseJsonConversionPlot({ data }: { data: Array<JsonSchemaConvers
                 <dd>
                   <ColorDisplay color={point.color} size="small" />
                   {`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}
+                </dd>
+              </div>
+              <div>
+                <dt>Rank</dt>
+                <dd>
+                  {formatNumber(getRank(values, result, (candidate) => candidate.mean, true))} /{" "}
+                  {formatNumber(values.length)}
                 </dd>
               </div>
               {result.note && (
