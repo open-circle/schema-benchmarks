@@ -1,17 +1,23 @@
-import * as Plot from "@observablehq/plot";
 import type { RuntimeResult, BenchResults, DataType } from "@schema-benchmarks/bench";
 import type { ErrorType } from "@schema-benchmarks/schemas";
 import { formatDuration, shortNumFormatter, uniqueBy } from "@schema-benchmarks/utils";
+import { defineChart, ruleX, text } from "@tanstack/charts";
+import type { ChartSpec } from "@tanstack/charts";
+import { Chart } from "@tanstack/charts/react/tooltip";
+import { scaleBand } from "@tanstack/charts/scales/band";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { tooltip } from "@tanstack/charts/tooltip";
+import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { scaleQuantize } from "d3";
+import { Suspense, useMemo, useState } from "react";
 
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
-import { createPlotComponent } from "#src/shared/components/plot";
+import { CodeBlock } from "#src/shared/components/code";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
-import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 export type BenchPlotProps =
   | {
@@ -44,11 +50,7 @@ const getBehavior = (d: BenchResult) => {
   return behaviors.length > 0 ? behaviors.join(", ") : undefined;
 };
 
-export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
-  data,
-}: {
-  data: Array<BenchResult>;
-}) {
+export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
   const formatNumber = useNumberFormatter(shortNumFormatter);
 
@@ -56,74 +58,61 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
   const collapsedData = useMemo(() => uniqueBy(data, (d) => d.libraryName), [data]);
   const displayData = showAllVariants ? data : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
-
-  // Every benchmark variant for a library is shown, not just the first one.
-  const libraries = useMemo(() => uniqueBy(displayData, (d) => d.libraryName), [displayData]);
-  const [domRect, ref] = useElementSize();
-  const { height, marginLeft } = useMemo(() => {
-    const longestLabel = libraries.reduce((a, b) =>
-      a.libraryName.length > b.libraryName.length ? a : b,
-    );
-    return {
-      height: Math.max(176, libraries.length * 28 + 52),
-      marginLeft: Math.max(84, longestLabel.libraryName.length * 7 + 24),
-    };
-  }, [libraries]);
-  const plot = useMemo(
+  const libraries = useMemo(
     () =>
-      Plot.plot({
-        style: {
-          fontFamily: "var(--font-family-body)",
-          textTransform: "none",
-        },
-        marginLeft,
-        width: domRect?.width ?? 0,
-        height,
+      uniqueBy(displayData, (d) => d.libraryName)
+        .toSorted((a, b) => a.mean - b.mean)
+        .map((d) => d.libraryName),
+    [displayData],
+  );
+  const height = Math.max(176, libraries.length * 28 + 52);
+  const definition = useMemo(() => {
+    const marks = [
+      ruleX([0], { stroke: "currentColor" }),
+      text(displayData, {
+        id: "runtime-results",
+        key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.mean}`,
+        x: "mean",
+        y: "libraryName",
+        color: "mean",
+        text: () => "\u25A0",
+        rotate: 45,
+        anchor: "middle",
+        fontSize: 14,
+        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
+      }),
+    ] as const;
+    const spec = {
+      marks,
+      scales: {
         x: {
+          scale: scaleLinear,
           grid: true,
-          label: "Time",
-          tickFormat: (d: number) => formatDuration(d, 2),
           nice: true,
+          axis: {
+            label: "Time",
+            ticks: { format: (duration: number) => formatDuration(duration, 2) },
+          },
         },
         y: {
-          label: "Library",
-          tickSize: 0,
+          scale: scaleBand().domain(libraries).padding(0.2),
+          axis: { label: "Library", ticks: false },
         },
-        color: {
-          type: "quantize",
-          reverse: true,
-          range: color,
-        },
-        marks: [
-          Plot.ruleX([0]),
-          Plot.dotX(displayData, {
-            x: "mean",
-            y: { value: "libraryName", label: "Library" },
-            fill: "mean",
-            r: 5,
-            symbol: "diamond2",
-            sort: { y: "x", reduce: "min" },
-            channels: {
-              Note: (d: BenchResult) => d.note,
-              Optimizations: getOptimizations,
-              "Error handling": getErrorHandling,
-              Behavior: getBehavior,
-            },
-            tip: {
-              pointer: "y",
-              className: "plot__tooltip",
-              pathFilter: "",
-              format: {
-                x: (d: number) => `${formatNumber(d)} ms (${formatDuration(d, 2)})`,
-                y: (d: string) => d,
-                fill: false,
-              },
-            },
-          }),
-        ],
-      }),
-    [displayData, height, marginLeft, domRect?.width, formatNumber],
-  );
+      },
+      color: { scale: () => scaleQuantize(color) },
+    } satisfies ChartSpec<typeof marks>;
+
+    return defineChart(() => spec, {
+      focusRing: false,
+      svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
+      focus: "nearest-y",
+      tooltip: {
+        use: tooltip,
+        portal,
+        placement: ["right", "left", "bottom", "top"],
+      },
+    });
+  }, [displayData, libraries]);
 
   const controls = (
     <ControlLabel>
@@ -137,10 +126,61 @@ export const BaseBenchPlot = createPlotComponent(function useBenchPlot({
     </ControlLabel>
   );
 
-  return { plot, ref, controls };
-});
-
-BaseBenchPlot.displayName = "BaseBenchPlot";
+  return (
+    <div className="plot-scroll-container">
+      <div className="plot-controls">{controls}</div>
+      <Chart
+        ariaLabel="Runtime benchmark results"
+        className="plot-container"
+        definition={definition}
+        height={height}
+        renderTooltipBody={({ defaultBody, points }) => {
+          const result = points[0]?.datum;
+          return (
+            <>
+              {defaultBody}
+              {result && (
+                <dl>
+                  <div>
+                    <dt>Time</dt>
+                    <dd>{`${formatNumber(result.mean)} ms (${formatDuration(result.mean, 2)})`}</dd>
+                  </div>
+                  {result.note && (
+                    <div>
+                      <dt>Note</dt>
+                      <dd>{result.note}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt>Optimizations</dt>
+                    <dd>{getOptimizations(result)}</dd>
+                  </div>
+                  {getErrorHandling(result) && (
+                    <div>
+                      <dt>Error handling</dt>
+                      <dd>{getErrorHandling(result)}</dd>
+                    </div>
+                  )}
+                  {getBehavior(result) && (
+                    <div>
+                      <dt>Behavior</dt>
+                      <dd>{getBehavior(result)}</dd>
+                    </div>
+                  )}
+                </dl>
+              )}
+              {result?.snippet && (
+                <Suspense fallback={null}>
+                  <CodeBlock>{result.snippet}</CodeBlock>
+                </Suspense>
+              )}
+            </>
+          );
+        }}
+      />
+    </div>
+  );
+}
 
 const selectResults = (results: BenchResults, props: BenchPlotProps) => {
   if (props.type === "initialization") return results[props.type];

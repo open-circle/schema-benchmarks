@@ -1,20 +1,21 @@
-import * as Plot from "@observablehq/plot";
 import type { DownloadResult, MinifyType } from "@schema-benchmarks/bench";
 import { formatBytes, uniqueBy } from "@schema-benchmarks/utils";
+import { defineChart, ruleX, text } from "@tanstack/charts";
+import type { ChartSpec } from "@tanstack/charts";
+import { Chart } from "@tanstack/charts/react";
+import { scaleBand } from "@tanstack/charts/scales/band";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { tooltip } from "@tanstack/charts/tooltip";
+import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { scaleQuantize } from "d3";
 import { useMemo, useState } from "react";
 
 import { getDownloadResults } from "#src/routes/_benchmarks/download/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
-import { createPlotComponent } from "#src/shared/components/plot";
 import { color } from "#src/shared/data/scale";
-import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
-export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
-  data,
-}: {
-  data: Array<DownloadResult>;
-}) {
+export function BaseDownloadPlot({ data }: { data: Array<DownloadResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
 
   // When collapsed, show only the best variant per library
@@ -22,70 +23,62 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
   const displayData = showAllVariants ? data : collapsedData;
   const isCheckboxDisabled = data.length === collapsedData.length;
 
-  // Every download benchmark variant for a library is shown, not just the first one.
-  const libraries = useMemo(() => uniqueBy(displayData, (d) => d.libraryName), [displayData]);
-  const [domRect, ref] = useElementSize();
-  const { height, marginLeft } = useMemo(() => {
-    const longestLabel = libraries.reduce((a, b) =>
-      a.libraryName.length > b.libraryName.length ? a : b,
-    );
-    return {
-      height: Math.max(176, libraries.length * 28 + 52),
-      marginLeft: Math.max(84, longestLabel.libraryName.length * 7 + 24),
-    };
-  }, [libraries]);
-  const plot = useMemo(
+  const libraries = useMemo(
     () =>
-      Plot.plot({
-        style: {
-          fontFamily: "var(--font-family-body)",
-          textTransform: "none",
-        },
-        marginLeft,
-        width: domRect?.width ?? 0,
-        height,
+      uniqueBy(displayData, (d) => d.libraryName)
+        .toSorted((a, b) => a.gzipBytes - b.gzipBytes)
+        .map((d) => d.libraryName),
+    [displayData],
+  );
+  const height = Math.max(176, libraries.length * 28 + 52);
+  const definition = useMemo(() => {
+    const marks = [
+      ruleX([0], { stroke: "currentColor" }),
+      text(displayData, {
+        id: "download-results",
+        key: (result) => `${result.libraryName}:${result.fileName}`,
+        x: "gzipBytes",
+        y: "libraryName",
+        color: "gzipBytes",
+        text: () => "\u25A0",
+        rotate: 45,
+        anchor: "middle",
+        fontSize: 14,
+        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
+      }),
+    ] as const;
+    const spec = {
+      marks,
+      scales: {
         x: {
+          scale: scaleLinear,
           grid: true,
-          label: "Size (gzipped)",
-          tickFormat: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
           nice: true,
+          axis: {
+            label: "Size (gzipped)",
+            ticks: { format: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }) },
+          },
         },
         y: {
-          label: "Library",
-          tickSize: 0,
+          scale: scaleBand().domain(libraries).padding(0.2),
+          axis: { label: "Library", ticks: false },
         },
-        color: {
-          type: "quantize",
-          reverse: true,
-          range: color,
-        },
-        marks: [
-          Plot.ruleX([0]),
-          Plot.dotX(displayData, {
-            x: "gzipBytes",
-            y: { value: "libraryName", label: "Library" },
-            fill: "gzipBytes",
-            r: 5,
-            symbol: "diamond2",
-            sort: { y: "x", reduce: "min" },
-            channels: {
-              Note: (d: DownloadResult) => d.note,
-            },
-            tip: {
-              pointer: "y",
-              className: "plot__tooltip",
-              pathFilter: "",
-              format: {
-                x: (bytes: number) => formatBytes(bytes, { maximumFractionDigits: 0 }),
-                y: (d: string) => d,
-                fill: false,
-              },
-            },
-          }),
-        ],
-      }),
-    [displayData, domRect?.width, height, marginLeft],
-  );
+      },
+      color: { scale: () => scaleQuantize(color) },
+    } satisfies ChartSpec<typeof marks>;
+
+    return defineChart(() => spec, {
+      focusRing: false,
+      svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
+      focus: "nearest-y",
+      tooltip: {
+        use: tooltip,
+        portal,
+        items: ["y", "x", { field: "note", label: "Note" }],
+        placement: ["right", "left", "bottom", "top"],
+      },
+    });
+  }, [displayData, libraries]);
 
   const controls = (
     <ControlLabel>
@@ -99,10 +92,18 @@ export const BaseDownloadPlot = createPlotComponent(function useDownloadPlot({
     </ControlLabel>
   );
 
-  return { plot, ref, controls };
-});
-
-BaseDownloadPlot.displayName = "BaseDownloadPlot";
+  return (
+    <div className="plot-scroll-container">
+      <div className="plot-controls">{controls}</div>
+      <Chart
+        ariaLabel="Download benchmark results"
+        className="plot-container"
+        definition={definition}
+        height={height}
+      />
+    </div>
+  );
+}
 
 export function DownloadPlot({ minify }: { minify: MinifyType }) {
   const { data } = useSuspenseQuery({

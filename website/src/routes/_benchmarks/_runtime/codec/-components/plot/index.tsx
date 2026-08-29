@@ -1,4 +1,3 @@
-import * as Plot from "@observablehq/plot";
 import type { CodecResult } from "@schema-benchmarks/bench";
 import {
   durationFormatter,
@@ -6,22 +5,24 @@ import {
   shortNumFormatter,
   uniqueBy,
 } from "@schema-benchmarks/utils";
+import { defineChart, ruleX, text } from "@tanstack/charts";
+import type { ChartSpec } from "@tanstack/charts";
+import { Chart } from "@tanstack/charts/react/tooltip";
+import { scaleBand } from "@tanstack/charts/scales/band";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { tooltip } from "@tanstack/charts/tooltip";
+import { portal } from "@tanstack/charts/tooltip/portal";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
-import { createPlotComponent } from "#src/shared/components/plot";
+import { CodeBlock } from "#src/shared/components/code";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
-import { useElementSize } from "#src/shared/hooks/use-content-box-size";
 
 const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown input" : undefined);
 
-export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
-  data,
-}: {
-  data: Array<CodecResult>;
-}) {
+export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
   const formatNumber = useNumberFormatter(shortNumFormatter);
 
@@ -40,6 +41,7 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
           mean: result.encode.mean,
           note: result.note,
           behavior: getBehavior(result),
+          snippet: result.encode.snippet,
         },
         {
           library: result.libraryName,
@@ -47,74 +49,69 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
           mean: result.decode.mean,
           note: result.note,
           behavior: getBehavior(result),
+          snippet: result.decode.snippet,
         },
       ]),
     [displayData],
   );
-  const libraries = useMemo(() => uniqueBy(displayData, (d) => d.libraryName), [displayData]);
-  const [domRect, ref] = useElementSize();
-  const { height, marginLeft } = useMemo(() => {
-    const longestLabel = libraries.reduce((a, b) =>
-      a.libraryName.length > b.libraryName.length ? a : b,
-    );
-    return {
-      height: Math.max(176, libraries.length * 28 + 52),
-      marginLeft: Math.max(84, longestLabel.libraryName.length * 7 + 24),
-    };
-  }, [libraries]);
-  const plot = useMemo(
+  const libraries = useMemo(
     () =>
-      Plot.plot({
-        style: {
-          fontFamily: "var(--font-family-body)",
-          textTransform: "none",
-        },
-        marginLeft,
-        width: domRect?.width ?? 0,
-        height,
+      uniqueBy(displayData, (d) => d.libraryName)
+        .toSorted(
+          (a, b) => Math.min(a.encode.mean, a.decode.mean) - Math.min(b.encode.mean, b.decode.mean),
+        )
+        .map((d) => d.libraryName),
+    [displayData],
+  );
+  const height = Math.max(176, libraries.length * 28 + 52);
+  const definition = useMemo(() => {
+    const marks = [
+      ruleX([0], { stroke: "currentColor" }),
+      text(points, {
+        id: "codec-results",
+        key: (point) => `${point.library}:${point.note ?? ""}:${point.operation}`,
+        x: "mean",
+        y: "library",
+        color: "operation",
+        text: () => "\u25A0",
+        rotate: 45,
+        anchor: "middle",
+        fontSize: 14,
+        states: [{ when: { focus: "primary" }, style: { stroke: "currentColor", strokeWidth: 2 } }],
+      }),
+    ] as const;
+    const spec = {
+      marks,
+      scales: {
         x: {
+          scale: scaleLinear,
           grid: true,
-          label: "Time",
-          tickFormat: (d: number) => durationFormatter.format(getDuration(d)),
           nice: true,
+          axis: {
+            label: "Time",
+            ticks: {
+              format: (duration: number) => durationFormatter.format(getDuration(duration)),
+            },
+          },
         },
         y: {
-          label: "Library",
-          tickSize: 0,
+          scale: scaleBand().domain(libraries).padding(0.2),
+          axis: { label: "Library", ticks: false },
         },
-        color: {
-          domain: ["Encode", "Decode"],
-          range: ["var(--link)", "var(--button)"],
-        },
-        marks: [
-          Plot.ruleX([0]),
-          Plot.dotX(points, {
-            x: "mean",
-            y: { value: "library", label: "Library" },
-            fill: { value: "operation", label: "Operation" },
-            r: 5,
-            symbol: "diamond2",
-            sort: { y: "x", reduce: "min" },
-            channels: {
-              Note: (d: (typeof points)[number]) => d.note,
-              Behavior: (d: (typeof points)[number]) => d.behavior,
-            },
-            tip: {
-              pointer: "xy",
-              className: "plot__tooltip",
-              pathFilter: "",
-              format: {
-                x: (d: number) =>
-                  `${formatNumber(d)} ms (${durationFormatter.format(getDuration(d, 2))})`,
-                y: (d: string) => d,
-                fill: (d: string) => d,
-              },
-            },
-          }),
-        ],
-      }),
-    [domRect?.width, formatNumber, height, marginLeft, points],
-  );
+      },
+      color: { domain: ["Encode", "Decode"], range: ["var(--link)", "var(--button)"] },
+    } satisfies ChartSpec<typeof marks>;
+
+    return defineChart(() => spec, {
+      focusRing: false,
+      svgAnimation: { duration: 200, easing: "ease-out", respectReducedMotion: true },
+      tooltip: {
+        use: tooltip,
+        portal,
+        placement: ["right", "left", "bottom", "top"],
+      },
+    });
+  }, [libraries, points]);
 
   const controls = (
     <ControlLabel>
@@ -128,10 +125,51 @@ export const BaseCodecPlot = createPlotComponent(function useBenchPlot({
     </ControlLabel>
   );
 
-  return { plot, ref, controls };
-});
-
-BaseCodecPlot.displayName = "BaseCodecPlot";
+  return (
+    <div className="plot-scroll-container">
+      <div className="plot-controls">{controls}</div>
+      <Chart
+        ariaLabel="Codec benchmark results"
+        className="plot-container"
+        definition={definition}
+        height={height}
+        renderTooltipBody={({ defaultBody, points: focusedPoints }) => {
+          const point = focusedPoints[0]?.datum;
+          return (
+            <>
+              {defaultBody}
+              {point && (
+                <dl>
+                  <div>
+                    <dt>{point.operation}</dt>
+                    <dd>{`${formatNumber(point.mean)} ms (${durationFormatter.format(getDuration(point.mean, 2))})`}</dd>
+                  </div>
+                  {point.note && (
+                    <div>
+                      <dt>Note</dt>
+                      <dd>{point.note}</dd>
+                    </div>
+                  )}
+                  {point.behavior && (
+                    <div>
+                      <dt>Behavior</dt>
+                      <dd>{point.behavior}</dd>
+                    </div>
+                  )}
+                </dl>
+              )}
+              {point?.snippet && (
+                <Suspense fallback={null}>
+                  <CodeBlock>{point.snippet}</CodeBlock>
+                </Suspense>
+              )}
+            </>
+          );
+        }}
+      />
+    </div>
+  );
+}
 
 export function CodecPlot() {
   const { data } = useSuspenseQuery({
