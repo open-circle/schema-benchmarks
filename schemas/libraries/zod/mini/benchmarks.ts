@@ -52,6 +52,12 @@ export default defineBenchmarks({
       note: "compile",
     },
   ],
+  validation: {
+    run(data) {
+      return z.validate(schema, data);
+    },
+    snippet: ts`z.validate(schema, data)`,
+  },
   parsing: {
     allErrors: [
       {
