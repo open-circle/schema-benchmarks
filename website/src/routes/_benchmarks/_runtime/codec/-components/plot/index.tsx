@@ -21,12 +21,16 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color";
+import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
 const getBehavior = (d: CodecResult) => (d.acceptsUnknown ? "Accepts unknown input" : undefined);
+
+const getPointKey = (point: { library: string; note?: string; operation: string }) =>
+  `${point.library}:${point.note ?? ""}:${point.operation}`;
 
 export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
@@ -67,6 +71,10 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
   );
   const canUseLogScale = points.length > 0 && points.every((point) => point.mean > 0);
   const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
+  const verticalOffsets = useMemo(
+    () => getVerticalOffsets(points, (point) => point.library, getPointKey),
+    [points],
+  );
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
@@ -79,9 +87,10 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
     const marks = [
       text(points, {
         id: "codec-results",
-        key: (point) => `${point.library}:${point.note ?? ""}:${point.operation}`,
+        key: getPointKey,
         x: "mean",
         y: "library",
+        dy: (point) => verticalOffsets.get(getPointKey(point)) ?? 0,
         color: "operation",
         text: () => "stat_0",
         anchor: "middle",
@@ -90,9 +99,10 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
       whenFocused(
         text(points, {
           id: "codec-focus",
-          key: (point) => `${point.library}:${point.note ?? ""}:${point.operation}`,
+          key: getPointKey,
           x: "mean",
           y: "library",
+          dy: (point) => verticalOffsets.get(getPointKey(point)) ?? 0,
           fill: "currentColor",
           text: () => "nearby",
           anchor: "middle",
@@ -132,7 +142,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [activeScale, libraries, points]);
+  }, [activeScale, libraries, points, verticalOffsets]);
 
   const controls = (
     <>

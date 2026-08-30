@@ -22,6 +22,7 @@ import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { CodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color/index.tsx";
+import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { Spinner } from "#src/shared/components/spinner/index.tsx";
@@ -52,6 +53,9 @@ const getOptimizations = (d: BenchResult) => optimizeTypeProps.labels[d.optimize
 const getErrorHandling = (d: BenchResult) =>
   d.errorType ? errorTypeProps.labels[d.errorType].label : undefined;
 
+const getResultKey = (result: BenchResult) =>
+  `${result.libraryName}:${result.note ?? ""}:${result.mean}`;
+
 const getBehavior = (d: BenchResult) => {
   const behaviors = [d.throws && "Throws", d.sameObj && "Returns the same object"].filter(
     (behavior) => behavior !== false && behavior !== undefined,
@@ -71,6 +75,10 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
   const isCheckboxDisabled = data.length === collapsedData.length;
   const canUseLogScale = displayData.length > 0 && displayData.every((result) => result.mean > 0);
   const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
+  const verticalOffsets = useMemo(
+    () => getVerticalOffsets(displayData, (result) => result.libraryName, getResultKey),
+    [displayData],
+  );
   const libraries = useMemo(
     () =>
       uniqueBy(displayData, (d) => d.libraryName)
@@ -83,9 +91,10 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
     const marks = [
       text(displayData, {
         id: "runtime-results",
-        key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.mean}`,
+        key: getResultKey,
         x: "mean",
         y: "libraryName",
+        dy: (result) => verticalOffsets.get(getResultKey(result)) ?? 0,
         color: "mean",
         text: () => "stat_0",
         anchor: "middle",
@@ -94,9 +103,10 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
       whenFocused(
         text(displayData, {
           id: "runtime-focus",
-          key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.mean}`,
+          key: getResultKey,
           x: "mean",
           y: "libraryName",
+          dy: (result) => verticalOffsets.get(getResultKey(result)) ?? 0,
           fill: "currentColor",
           text: () => "nearby",
           anchor: "middle",
@@ -134,7 +144,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [activeScale, displayData, libraries]);
+  }, [activeScale, displayData, libraries, verticalOffsets]);
 
   const controls = (
     <>
