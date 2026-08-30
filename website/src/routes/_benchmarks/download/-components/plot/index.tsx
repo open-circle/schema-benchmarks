@@ -15,6 +15,7 @@ import { getCompiledPath, getDownloadResults } from "#src/routes/_benchmarks/dow
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { ColorDisplay } from "#src/shared/components/color";
+import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { MdSymbol } from "#src/shared/components/symbol";
@@ -43,6 +44,15 @@ export function BaseDownloadPlot({
   const canUseLogScale =
     displayData.length > 0 && displayData.every((result) => result.gzipBytes > 0);
   const activeScale = scale === "log" && canUseLogScale ? "log" : "linear";
+  const verticalOffsets = useMemo(
+    () =>
+      getVerticalOffsets(
+        displayData,
+        (result) => result.libraryName,
+        (result) => result.fileName,
+      ),
+    [displayData],
+  );
 
   const libraries = useMemo(
     () =>
@@ -59,6 +69,7 @@ export function BaseDownloadPlot({
         key: (result) => `${result.libraryName}:${result.fileName}`,
         x: "gzipBytes",
         y: "libraryName",
+        dy: (result) => verticalOffsets.get(result.fileName) ?? 0,
         color: "gzipBytes",
         text: () => "stat_0",
         anchor: "middle",
@@ -70,6 +81,7 @@ export function BaseDownloadPlot({
           key: (result) => `${result.libraryName}:${result.fileName}`,
           x: "gzipBytes",
           y: "libraryName",
+          dy: (result) => verticalOffsets.get(result.fileName) ?? 0,
           fill: "currentColor",
           text: () => "nearby",
           anchor: "middle",
@@ -107,7 +119,7 @@ export function BaseDownloadPlot({
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [activeScale, displayData, libraries]);
+  }, [activeScale, displayData, libraries, verticalOffsets]);
 
   const controls = (
     <>

@@ -17,11 +17,14 @@ import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { processCount } from "#src/routes/json-schema/compliance/-constants";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
 import { ColorDisplay } from "#src/shared/components/color";
+import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { ChartTooltipBody, getRank } from "#src/shared/components/plot/tooltip";
 import { color } from "#src/shared/data/scale";
 import { useNumberFormatter } from "#src/shared/hooks/format/use-number-formatter";
 
 const getLabel = ({ libraryName }: JsonComplianceResult) => libraryName;
+const getResultKey = (result: JsonComplianceResult) =>
+  `${result.libraryName}:${result.note ?? ""}:${result.results.count.passed}`;
 
 export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult> }) {
   const [showAllVariants, setShowAllVariants] = useState(false);
@@ -45,6 +48,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
       }),
     [displayData],
   );
+  const verticalOffsets = useMemo(
+    () => getVerticalOffsets(values, (result) => result.libraryName, getResultKey),
+    [values],
+  );
   const libraries = useMemo(
     () =>
       uniqueBy(values, getLabel)
@@ -58,9 +65,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
       ruleX([1], { stroke: "currentColor", strokeDasharray: "4,2" }),
       text(values, {
         id: "compliance-results",
-        key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.compliance}`,
+        key: getResultKey,
         x: "compliance",
         y: "libraryName",
+        dy: (result) => verticalOffsets.get(getResultKey(result)) ?? 0,
         color: "compliance",
         text: () => "stat_0",
         anchor: "middle",
@@ -69,9 +77,10 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
       whenFocused(
         text(values, {
           id: "compliance-focus",
-          key: (result) => `${result.libraryName}:${result.note ?? ""}:${result.compliance}`,
+          key: getResultKey,
           x: "compliance",
           y: "libraryName",
+          dy: (result) => verticalOffsets.get(getResultKey(result)) ?? 0,
           fill: "currentColor",
           text: () => "nearby",
           anchor: "middle",
@@ -111,7 +120,7 @@ export function BaseCompliancePlot({ data }: { data: Array<JsonComplianceResult>
         placement: ["right", "left", "bottom", "top"],
       },
     });
-  }, [formatPercentage, libraries, values]);
+  }, [formatPercentage, libraries, values, verticalOffsets]);
 
   const controls = (
     <ControlLabel>
