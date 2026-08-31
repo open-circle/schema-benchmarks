@@ -65,7 +65,7 @@ async function measureFile(file: FileDescription, minify: MinifyType): Promise<D
   }
   await fs.writeFile(file.compiledPath, code);
 
-  const fileName = file.path.split("schemas/libraries/")[1];
+  const fileName = file.path.replace(/\\/g, "/").split("schemas/libraries/")[1];
   if (!fileName) throw new Error(`Invalid file path: ${file.path}`);
 
   return {
@@ -90,6 +90,7 @@ async function download() {
     )) {
       sigintSignal.throwIfAborted();
       const libraryName = filePath
+        .replace(/\\/g, "/")
         .split("schemas/libraries/")[1]
         ?.split("/download.ts")[0]
         ?.replace("/@", "@");
@@ -111,6 +112,7 @@ async function download() {
     )) {
       sigintSignal.throwIfAborted();
       const libraryName = filePath
+        .replace(/\\/g, "/")
         .split("schemas/libraries/")[1]
         ?.split("/download/")[0]
         ?.replace("/@", "@");
