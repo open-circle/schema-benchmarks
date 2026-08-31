@@ -26,10 +26,13 @@ async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string
   const expectedLabelRegex = new RegExp(RegExp.escape(expectedLabel), "i");
 
   await expect(async () => {
-    const labels = await runtimePage.mobile.items.allInnerTexts();
-
-    every(labels, (label) => {
-      expect(label).toMatch(expectedLabelRegex);
+    await every(await runtimePage.mobile.items.all(), async (item) => {
+      const details = item.locator("details");
+      const detailsIsOpen = await details.getAttribute("open");
+      if (!detailsIsOpen) {
+        await details.click();
+      }
+      await expect(item).toContainText(expectedLabelRegex);
     });
   }).toPass();
 }
