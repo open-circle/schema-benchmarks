@@ -1,7 +1,8 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
+import { lazy } from "@schema-benchmarks/utils";
 
-import { lazy, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {

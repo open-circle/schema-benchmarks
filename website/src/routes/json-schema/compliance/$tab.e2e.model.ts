@@ -1,8 +1,9 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
+import { lazy } from "@schema-benchmarks/utils";
 
-import { lazy, ComponentObjectModel, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { ComponentObjectModel, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { trimSortLabels } from "#e2e/utils";
 import {
   complianceTargetProps,

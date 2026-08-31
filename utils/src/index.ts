@@ -111,6 +111,57 @@ export async function getOrInsertComputedAsync<K extends object, V>(
   return map.set(key, await callback(key)).get(key) as V;
 }
 
+/** Caches a getter's result on each instance after its first access. */
+export function lazy<T extends object, R>(
+  get: (this: T) => R,
+  { name }: ClassGetterDecoratorContext<T, R>,
+) {
+  return function decoratedGetter(this: T) {
+    const result = get.call(this);
+    Object.defineProperty(this, name, {
+      value: result,
+      configurable: true,
+      enumerable: false,
+      writable: false,
+    });
+    return result;
+  };
+}
+
+/** Compares two arrays by length and the reference equality of corresponding values. */
+export function shallowEqualArrays<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>) {
+  return a.length === b.length && a.every((value, index) => value === b[index]);
+}
+
+/**
+ * Caches a getter's result until its dependencies change.
+ *
+ * Dependencies are evaluated on every access and compared by reference by default.
+ */
+export function cache<T extends object, TDeps extends Array<unknown>>(
+  getDeps: (target: T) => TDeps,
+  areDepsEqual: (a: TDeps, b: TDeps) => boolean = shallowEqualArrays,
+) {
+  return function decorate<R>(get: (this: T) => R, _context: ClassGetterDecoratorContext<T, R>) {
+    const cached = new WeakMap<
+      T,
+      {
+        deps: TDeps;
+        result: R;
+      }
+    >();
+
+    return function decoratedGetter(this: T) {
+      const deps = getDeps(this);
+      const previous = cached.get(this);
+      if (previous && !areDepsEqual(previous.deps, deps)) {
+        cached.delete(this);
+      }
+      return getOrInsertComputed(cached, this, () => ({ deps, result: get.call(this) })).result;
+    };
+  };
+}
+
 const byteUnits = [
   "byte",
   "kilobyte",

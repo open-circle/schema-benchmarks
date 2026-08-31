@@ -1,8 +1,9 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
+import { lazy } from "@schema-benchmarks/utils";
 
-import { lazy, PageObjectModel } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {

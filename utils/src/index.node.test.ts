@@ -19,6 +19,9 @@ import {
   getOrInsertComputedAsync,
   getCyrb53Hash,
   isPlainObject,
+  lazy,
+  cache,
+  shallowEqualArrays,
 } from "./index.ts";
 
 describe("formatBytes", () => {
@@ -264,6 +267,99 @@ describe("getOrInsert", () => {
       expect(fn).toHaveBeenCalledOnce();
       expect(fn).toHaveBeenCalledWith("a");
     });
+  });
+});
+
+describe("lazy", () => {
+  it("caches each instance's getter result after its first access", () => {
+    class LazyValue {
+      calls = 0;
+
+      declare readonly value: number;
+    }
+    Object.defineProperty(LazyValue.prototype, "value", {
+      get: lazy(
+        function () {
+          return ++this.calls;
+        },
+        { name: "value" } as ClassGetterDecoratorContext<LazyValue, number>,
+      ),
+    });
+
+    const first = new LazyValue();
+    const second = new LazyValue();
+
+    expect(first.value).toBe(1);
+    expect(first.value).toBe(1);
+    expect(first.calls).toBe(1);
+    expect(second.value).toBe(1);
+    expect(second.calls).toBe(1);
+  });
+});
+
+describe("shallowEqualArrays", () => {
+  it("compares array length, order, and corresponding value references", () => {
+    const shared = {};
+
+    expect(shallowEqualArrays([1, shared], [1, shared])).toBe(true);
+    expect(shallowEqualArrays([1], [1, 2])).toBe(false);
+    expect(shallowEqualArrays([1, 2], [2, 1])).toBe(false);
+    expect(shallowEqualArrays([{}], [{}])).toBe(false);
+  });
+});
+
+describe("cache", () => {
+  it("reuses the result until dependencies change", () => {
+    class CachedValue {
+      dependency = 0;
+      calls = 0;
+
+      declare readonly value: number;
+    }
+    Object.defineProperty(CachedValue.prototype, "value", {
+      get: cache((instance: CachedValue) => [instance.dependency])(
+        function () {
+          return ++this.calls;
+        },
+        { name: "value" } as ClassGetterDecoratorContext<CachedValue, number>,
+      ),
+    });
+
+    const instance = new CachedValue();
+
+    expect(instance.value).toBe(1);
+    expect(instance.value).toBe(1);
+    instance.dependency++;
+    expect(instance.value).toBe(2);
+    expect(instance.calls).toBe(2);
+  });
+
+  it("uses a custom dependency comparator when provided", () => {
+    class CachedValue {
+      dependency = 0;
+      calls = 0;
+
+      declare readonly value: number;
+    }
+    Object.defineProperty(CachedValue.prototype, "value", {
+      get: cache(
+        (instance: CachedValue) => [instance.dependency],
+        (previous, next) => Math.floor(previous[0]!) === Math.floor(next[0]!),
+      )(
+        function () {
+          return ++this.calls;
+        },
+        { name: "value" } as ClassGetterDecoratorContext<CachedValue, number>,
+      ),
+    });
+
+    const instance = new CachedValue();
+
+    expect(instance.value).toBe(1);
+    instance.dependency = 0.5;
+    expect(instance.value).toBe(1);
+    instance.dependency = 1;
+    expect(instance.value).toBe(2);
   });
 });
 

@@ -1,6 +1,6 @@
 import { test, type Locator, type Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
-import { getOrInsertComputed } from "@schema-benchmarks/utils";
+import { lazy } from "@schema-benchmarks/utils";
 
 import { expect } from "#e2e/fixtures/expect";
 
@@ -86,54 +86,6 @@ export function step<TThis>(
         () => target.apply(this, args),
         options,
       );
-    };
-  };
-}
-
-function shallowEqualArrays<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>) {
-  return a.length === b.length && a.every((v, i) => v === b[i]);
-}
-
-export function lazy<T extends object, R>(
-  get: (this: T) => R,
-  { name }: ClassGetterDecoratorContext<T, R>,
-) {
-  return function decoratedGetter(this: T) {
-    const result = get.call(this);
-    Object.defineProperty(this, name, {
-      value: result,
-      configurable: true,
-      enumerable: false,
-      writable: false,
-    });
-    return result;
-  };
-}
-
-/**
- * Caches the result of a getter based on the values returned by a function.
- * Each value is compared by reference.
- */
-export function cache<T extends object, TDeps extends Array<unknown>>(
-  getDeps: (target: T) => TDeps,
-  areDepsEqual: (a: TDeps, b: TDeps) => boolean = shallowEqualArrays,
-) {
-  return function decorate<R>(get: (this: T) => R, _context: ClassGetterDecoratorContext<T, R>) {
-    const cached = new WeakMap<
-      T,
-      {
-        deps: TDeps;
-        result: R;
-      }
-    >();
-
-    return function decoratedGetter(this: T) {
-      const deps = getDeps(this);
-      const previous = cached.get(this);
-      if (previous && !areDepsEqual(previous.deps, deps)) {
-        cached.delete(this);
-      }
-      return getOrInsertComputed(cached, this, () => ({ deps, result: get.call(this) })).result;
     };
   };
 }

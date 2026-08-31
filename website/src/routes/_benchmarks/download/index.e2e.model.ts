@@ -1,7 +1,8 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { MinifyType } from "@schema-benchmarks/bench";
+import { lazy } from "@schema-benchmarks/utils";
 
-import { lazy, PageObjectModel } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 
 import { minifyTypeProps } from "./-constants";

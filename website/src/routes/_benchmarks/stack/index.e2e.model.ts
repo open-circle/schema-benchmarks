@@ -1,6 +1,7 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
+import { lazy } from "@schema-benchmarks/utils";
 
-import { lazy, PageObjectModel } from "#e2e/fixtures/base";
+import { PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 
 export class StackPage extends PageObjectModel {
