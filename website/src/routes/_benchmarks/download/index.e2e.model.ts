@@ -1,7 +1,7 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { MinifyType } from "@schema-benchmarks/bench";
 
-import { cache, PageObjectModel } from "#e2e/fixtures/base";
+import { lazy, PageObjectModel } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 
 import { minifyTypeProps } from "./-constants";
@@ -27,7 +27,7 @@ export class DownloadPage extends PageObjectModel {
     return this.speedPresets.getByRole("link", { name: label });
   }
 
-  @cache()
+  @lazy
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });
     return {
@@ -38,7 +38,7 @@ export class DownloadPage extends PageObjectModel {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const list = this.main.getByRole("list", { name: "Results" });
     return {

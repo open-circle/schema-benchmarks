@@ -2,12 +2,7 @@ import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
 
-import {
-  cache,
-  ComponentObjectModel,
-  PageObjectModel,
-  TabObjectModel,
-} from "#e2e/fixtures/base.ts";
+import { lazy, ComponentObjectModel, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { trimSortLabels } from "#e2e/utils";
 import {
   complianceTargetProps,
@@ -26,7 +21,7 @@ class ComplianceDetailsDialog extends ComponentObjectModel {
 
 abstract class ComplianceTab extends TabObjectModel<CompliancePage> {
   abstract complianceType: ComplianceType;
-  @cache()
+  @lazy
   get tabName() {
     return complianceTypeLabels[this.complianceType].label;
   }
@@ -38,7 +33,7 @@ abstract class ComplianceTab extends TabObjectModel<CompliancePage> {
     last: string | RegExp;
   };
 
-  @cache()
+  @lazy
   get desktop() {
     const table = this.page.getByRole("table", { name: "Compliance Table" });
 
@@ -50,7 +45,7 @@ abstract class ComplianceTab extends TabObjectModel<CompliancePage> {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const list = this.page.getByRole("list", { name: "Compliance List" });
     return {

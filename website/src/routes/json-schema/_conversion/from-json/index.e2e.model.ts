@@ -1,13 +1,13 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 
-import { cache, PageObjectModel } from "#e2e/fixtures/base.ts";
+import { lazy, PageObjectModel } from "#e2e/fixtures/base.ts";
 import { trimSortLabels } from "#e2e/utils";
 
 export class FromJsonPage extends PageObjectModel {
   url = "/json-schema/from-json";
   title = /JSON Schema to Schema/;
 
-  @cache()
+  @lazy
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });
     return {
@@ -18,7 +18,7 @@ export class FromJsonPage extends PageObjectModel {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const items = this.page.getByRole("list", { name: "Results" }).getByRole("listitem");
     return {

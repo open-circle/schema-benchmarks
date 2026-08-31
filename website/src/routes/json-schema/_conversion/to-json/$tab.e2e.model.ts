@@ -1,7 +1,7 @@
 import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 
-import { cache, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { lazy, PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {
@@ -49,7 +49,7 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction);
   }
 
-  @cache()
+  @lazy
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });
     return {
@@ -60,7 +60,7 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const items = this.page.getByRole("list", { name: "Results" }).getByRole("listitem");
     return {
@@ -75,7 +75,7 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
   url = "/json-schema/to-json/matrix";
   tabName = "Support Matrix";
 
-  @cache()
+  @lazy
   get desktop() {
     const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
     return {
@@ -87,7 +87,7 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const items = this.page.getByRole("list", { name: "Support Matrix" }).getByRole("listitem");
     return {

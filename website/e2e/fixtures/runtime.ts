@@ -2,7 +2,7 @@ import { useTable } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 
-import { cache, PageObjectModel } from "#e2e/fixtures/base";
+import { lazy, PageObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {
@@ -35,7 +35,7 @@ export abstract class RuntimePage extends PageObjectModel {
     await expect(link).toBeCurrent("page");
   }
 
-  @cache()
+  @lazy
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });
     return {
@@ -46,7 +46,7 @@ export abstract class RuntimePage extends PageObjectModel {
     };
   }
 
-  @cache()
+  @lazy
   get mobile() {
     const list = this.main.getByRole("list", { name: "Results" });
     const items = list.getByRole("listitem");
