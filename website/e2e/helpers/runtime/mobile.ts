@@ -23,8 +23,6 @@ export async function expectListDisplay(
 }
 
 async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string) {
-  const expectedLabelRegex = new RegExp(RegExp.escape(expectedLabel), "i");
-
   await expect(async () => {
     await every(await runtimePage.mobile.items.all(), async (item) => {
       const details = item.locator("details");
@@ -32,7 +30,7 @@ async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string
       if (!detailsIsOpen) {
         await details.click();
       }
-      await expect(item).toContainText(expectedLabelRegex);
+      await expect(item).toContainText(expectedLabel);
     });
   }).toPass();
 }
