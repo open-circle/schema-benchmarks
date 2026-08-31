@@ -5151,6 +5151,17 @@ function __zcIV(values, inp, p, extra, msg) {
 function __zcLo(v) {
 	return Array.isArray(v) ? "array" : typeof v === "string" ? "string" : "unknown";
 }
+function __zcCpl(s) {
+	var n = s.length;
+	if (!/[\uD800-\uDBFF]/.test(s)) return n;
+	var c = n;
+	for (var i = 0; i < n - 1; i++) if ((s.charCodeAt(i) & 64512) === 55296 && (s.charCodeAt(i + 1) & 64512) === 56320) {
+		c--;
+		i++;
+	}
+	return c;
+}
+var __re_tnl_10 = /* @__PURE__ */ new RegExp("[\\t\\n\\r]", "g");
 function __zcSw_0(input, path, _e) {
 	if (!Array.isArray(input)) _e.push(__zcIT("array", input, path));
 	else {
@@ -5174,7 +5185,7 @@ function __zcSw_1(input, path, _e) {
 		else if (!Number.isFinite(__sv_2)) _e.push({
 			expected: "number",
 			code: "invalid_type",
-			received: "Infinity",
+			received: String(__sv_2),
 			input: __sv_2,
 			path: path.concat("id")
 		});
@@ -5196,7 +5207,7 @@ function __zcSw_1(input, path, _e) {
 			}
 		} else {
 			if (__sv_4.length < 1) _e.push(__zcTS(1, "string", true, __sv_4, path.concat("title")));
-			if (__sv_4.length > 100) _e.push(__zcTB(100, "string", true, __sv_4, path.concat("title")));
+			if (__sv_4.length > 100 && (__sv_4.length > 200 || __zcCpl(__sv_4) > 100)) _e.push(__zcTB(100, "string", true, __sv_4, path.concat("title")));
 		}
 		var __sv_5 = input["type"];
 		if (__sv_5 !== "jpg" && __sv_5 !== "png") _e.push(__zcIV(["jpg", "png"], __sv_5, path.concat("type")));
@@ -5212,7 +5223,7 @@ function __zcSw_1(input, path, _e) {
 		else if (!Number.isFinite(__sv_6)) _e.push({
 			expected: "number",
 			code: "invalid_type",
-			received: "Infinity",
+			received: String(__sv_6),
 			input: __sv_6,
 			path: path.concat("size")
 		});
@@ -5225,7 +5236,7 @@ function __zcSw_1(input, path, _e) {
 				__u_9 = new URL(__ut_8);
 			} catch (_) {}
 			if (__u_9 === null) _e.push(__zcIF(void 0, "url", __sv_7, path.concat("url")));
-			else __sv_7 = __ut_8;
+			else __sv_7 = __ut_8.replace(__re_tnl_10, "");
 		}
 		input = {
 			"id": __sv_2,
@@ -5286,7 +5297,7 @@ const productSchema = toZod()(object({
 			else if (!Number.isFinite(__sv_5)) _e.push({
 				expected: "number",
 				code: "invalid_type",
-				received: "Infinity",
+				received: String(__sv_5),
 				input: __sv_5,
 				path: ["id"]
 			});
@@ -5308,7 +5319,7 @@ const productSchema = toZod()(object({
 				}
 			} else {
 				if (__sv_7.length < 1) _e.push(__zcTS(1, "string", true, __sv_7, ["title"]));
-				if (__sv_7.length > 100) _e.push(__zcTB(100, "string", true, __sv_7, ["title"]));
+				if (__sv_7.length > 100 && (__sv_7.length > 200 || __zcCpl(__sv_7) > 100)) _e.push(__zcTB(100, "string", true, __sv_7, ["title"]));
 			}
 			var __sv_8 = _d["brand"];
 			if (typeof __sv_8 !== "string") {
@@ -5319,7 +5330,7 @@ const productSchema = toZod()(object({
 				}
 			} else {
 				if (__sv_8.length < 1) _e.push(__zcTS(1, "string", true, __sv_8, ["brand"]));
-				if (__sv_8.length > 30) _e.push(__zcTB(30, "string", true, __sv_8, ["brand"]));
+				if (__sv_8.length > 30 && (__sv_8.length > 60 || __zcCpl(__sv_8) > 30)) _e.push(__zcTB(30, "string", true, __sv_8, ["brand"]));
 			}
 			var __sv_9 = _d["description"];
 			if (typeof __sv_9 !== "string") {
@@ -5330,7 +5341,7 @@ const productSchema = toZod()(object({
 				}
 			} else {
 				if (__sv_9.length < 1) _e.push(__zcTS(1, "string", true, __sv_9, ["description"]));
-				if (__sv_9.length > 500) _e.push(__zcTB(500, "string", true, __sv_9, ["description"]));
+				if (__sv_9.length > 500 && (__sv_9.length > 1e3 || __zcCpl(__sv_9) > 500)) _e.push(__zcTB(500, "string", true, __sv_9, ["description"]));
 			}
 			var __sv_10 = _d["price"];
 			if (typeof __sv_10 !== "number") _e.push(__zcIT("number", __sv_10, ["price"]));
@@ -5344,7 +5355,7 @@ const productSchema = toZod()(object({
 			else if (!Number.isFinite(__sv_10)) _e.push({
 				expected: "number",
 				code: "invalid_type",
-				received: "Infinity",
+				received: String(__sv_10),
 				input: __sv_10,
 				path: ["price"]
 			});
@@ -5365,7 +5376,7 @@ const productSchema = toZod()(object({
 				else if (!Number.isFinite(__sv_11)) _e.push({
 					expected: "number",
 					code: "invalid_type",
-					received: "Infinity",
+					received: String(__sv_11),
 					input: __sv_11,
 					path: ["discount"]
 				});
@@ -5386,7 +5397,7 @@ const productSchema = toZod()(object({
 			else if (!Number.isFinite(__sv_12)) _e.push({
 				expected: "number",
 				code: "invalid_type",
-				received: "Infinity",
+				received: String(__sv_12),
 				input: __sv_12,
 				path: ["quantity"]
 			});
@@ -5404,7 +5415,7 @@ const productSchema = toZod()(object({
 				}
 			} else {
 				if (__sv_13[__i_14].length < 1) _e.push(__zcTS(1, "string", true, __sv_13[__i_14], ["tags", __i_14]));
-				if (__sv_13[__i_14].length > 30) _e.push(__zcTB(30, "string", true, __sv_13[__i_14], ["tags", __i_14]));
+				if (__sv_13[__i_14].length > 30 && (__sv_13[__i_14].length > 60 || __zcCpl(__sv_13[__i_14]) > 30)) _e.push(__zcTB(30, "string", true, __sv_13[__i_14], ["tags", __i_14]));
 			}
 			var __sv_15 = _d["images"];
 			__sv_15 = __zcSw_0(__sv_15, ["images"], _e);
@@ -5434,7 +5445,7 @@ const productSchema = toZod()(object({
 					else if (!Number.isFinite(__sv_19)) _e.push({
 						expected: "number",
 						code: "invalid_type",
-						received: "Infinity",
+						received: String(__sv_19),
 						input: __sv_19,
 						path: [
 							"ratings",
@@ -5462,7 +5473,7 @@ const productSchema = toZod()(object({
 					else if (!Number.isFinite(__sv_20)) _e.push({
 						expected: "number",
 						code: "invalid_type",
-						received: "Infinity",
+						received: String(__sv_20),
 						input: __sv_20,
 						path: [
 							"ratings",
@@ -5507,7 +5518,7 @@ const productSchema = toZod()(object({
 							__i_17,
 							"title"
 						]));
-						if (__sv_21.length > 100) _e.push(__zcTB(100, "string", true, __sv_21, [
+						if (__sv_21.length > 100 && (__sv_21.length > 200 || __zcCpl(__sv_21) > 100)) _e.push(__zcTB(100, "string", true, __sv_21, [
 							"ratings",
 							__i_17,
 							"title"
@@ -5538,7 +5549,7 @@ const productSchema = toZod()(object({
 							__i_17,
 							"text"
 						]));
-						if (__sv_22.length > 1e3) _e.push(__zcTB(1e3, "string", true, __sv_22, [
+						if (__sv_22.length > 1e3 && (__sv_22.length > 2e3 || __zcCpl(__sv_22) > 1e3)) _e.push(__zcTB(1e3, "string", true, __sv_22, [
 							"ratings",
 							__i_17,
 							"text"
