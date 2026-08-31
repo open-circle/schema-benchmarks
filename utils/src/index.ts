@@ -117,14 +117,9 @@ export function lazy<T extends object, R>(
   { name }: ClassGetterDecoratorContext<T, R>,
 ) {
   return function decoratedGetter(this: T) {
-    const result = get.call(this);
-    Object.defineProperty(this, name, {
-      value: result,
-      configurable: true,
-      enumerable: false,
-      writable: false,
-    });
-    return result;
+    const value = get.call(this);
+    Object.defineProperty(this, name, { value });
+    return value;
   };
 }
 
