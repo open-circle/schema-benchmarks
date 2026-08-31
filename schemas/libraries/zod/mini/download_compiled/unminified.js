@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/util.js
 function toZod() {
 	return (schema) => schema;
 }
@@ -161,7 +161,7 @@ function defineBound(proto, key, fn) {
 	Object.defineProperty(proto, key, {
 		configurable: true,
 		get() {
-			return own(this, key, fn.bind(this));
+			return this == null ? fn : own(this, key, fn.bind(this));
 		},
 		set(value) {
 			own(this, key, value);
@@ -257,7 +257,7 @@ function installLazyProp(inst, key, make, enumerable) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/core.js
 var _a;
 const _zodDesc$1 = {
 	value: void 0,
@@ -358,7 +358,7 @@ function config(newConfig) {
 	return globalConfig;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -419,7 +419,7 @@ const initializer = (inst, def) => {
 const $ZodError = $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, void 0, { Parent: Error });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => {
 	const fn = (schema, value, _ctx, _params) => {
 		const ctx = _ctx ? {
@@ -501,7 +501,7 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 };
 const safeParseAsync = /* @__PURE__*/ _safeParseAsync($ZodRealError);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/regexes.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/regexes.js
 const httpProtocol = /^https?$/;
 const string$1 = (params) => {
 	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
@@ -509,7 +509,7 @@ const string$1 = (params) => {
 };
 const number$1 = /^-?\d+(?:\.\d+)?$/;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -649,14 +649,14 @@ const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat"
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 5,
-	patch: 0
+	patch: 4
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/schemas.js
 const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -1106,7 +1106,7 @@ const $ZodNullable = /*@__PURE__*/ $constructor("$ZodNullable", (inst, def) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/api.js
 // @__NO_SIDE_EFFECTS__
 function _string(Class, params) {
 	return new Class({
@@ -1174,7 +1174,7 @@ function _minLength(minimum, params) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.0/node_modules/zod/v4/mini/schemas.js
+//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /*@__PURE__*/ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
