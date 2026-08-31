@@ -13,7 +13,7 @@ const createStringBenchmark = (
 ): StringBenchmarkConfig => ({
   create() {
     const schema = factory();
-    return (testString) => schema.safeParse(testString).success;
+    return (testString) => z.validate(schema, testString);
   },
   snippet,
 });
