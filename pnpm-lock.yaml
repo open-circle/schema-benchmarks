@@ -13,8 +13,8 @@ catalogs:
       specifier: ^1.1.0
       version: 1.1.0
     '@ttsc/unplugin':
-      specifier: ^0.28.3
-      version: 0.28.3
+      specifier: ^0.28.4
+      version: 0.28.4
     '@types/react':
       specifier: ^19.2.18
       version: 19.2.18
@@ -52,11 +52,11 @@ catalogs:
       specifier: ^19.2.8
       version: 19.2.8
     ttsc:
-      specifier: ^0.28.3
-      version: 0.28.3
+      specifier: ^0.28.4
+      version: 0.28.4
     typebox:
-      specifier: ^1.3.22
-      version: 1.3.22
+      specifier: ^1.3.23
+      version: 1.3.23
     typescript:
       specifier: 7.0.2
       version: 7.0.2
@@ -130,7 +130,7 @@ importers:
         version: 1.1.0
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.28.3(ttsc@0.28.3)
+        version: 0.28.4(ttsc@0.28.4)
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -145,10 +145,10 @@ importers:
         version: 6.1.4
       ttsc:
         specifier: 'catalog:'
-        version: 0.28.3
+        version: 0.28.4
       typebox:
         specifier: 'catalog:'
-        version: 1.3.22
+        version: 1.3.23
       valibot:
         specifier: 'catalog:'
         version: 1.4.2(typescript@7.0.2)
@@ -198,7 +198,7 @@ importers:
         version: 0.0.7
       '@ata-project/keywords':
         specifier: ^0.1.14
-        version: 0.1.14(ata-validator@1.9.0(yaml@2.9.0))
+        version: 0.1.14(ata-validator@1.10.0(yaml@2.9.0))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -245,8 +245,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       ata-validator:
-        specifier: ^1.9.0
-        version: 1.9.0(yaml@2.9.0)
+        specifier: ^1.10.0
+        version: 1.10.0(yaml@2.9.0)
       decoders:
         specifier: ^2.9.3
         version: 2.9.3
@@ -291,10 +291,10 @@ importers:
         version: 11.0.0-rc.2
       typebox:
         specifier: 'catalog:'
-        version: 1.3.22
+        version: 1.3.23
       typia:
         specifier: ^14.0.4
-        version: 14.0.4(ttsc@0.28.3)
+        version: 14.0.4(ttsc@0.28.4)
       valibot:
         specifier: 'catalog:'
         version: 1.4.2(typescript@7.0.2)
@@ -313,7 +313,7 @@ importers:
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.28.3(ttsc@0.28.3)
+        version: 0.28.4(ttsc@0.28.4)
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -322,7 +322,7 @@ importers:
         version: 0.22.14(oxc-resolver@11.24.2)(typescript@7.0.2)
       ttsc:
         specifier: 'catalog:'
-        version: 0.28.3
+        version: 0.28.4
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -465,8 +465,8 @@ importers:
         specifier: 'catalog:'
         version: 19.2.8(react@19.2.8)
       react-error-boundary:
-        specifier: ^6.1.3
-        version: 6.1.3(@types/react@19.2.18)(react@19.2.8)
+        specifier: ^6.1.4
+        version: 6.1.4(@types/react@19.2.18)(react@19.2.8)
       react-hot-toast:
         specifier: ^2.6.0
         version: 2.6.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -672,42 +672,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.9.0':
-    resolution: {integrity: sha512-2Hj+rn0QSCvMdR/L3b/IZ1xosAE7wkaRsGeBI0FMWoivD4L6Ijse44jy+CzZ9CIUgWxmoK1YAFYiJzIL7tl8bw==}
+  '@ata-validator/native-darwin-arm64@1.10.0':
+    resolution: {integrity: sha512-ji72AWqJnnTGjT1GFGTCBJIndclKWko+r4gdwzyuSsm5AR61hDYVQDmYxzmI1yXxKRGabKqlMsqXwH34OhMZ7Q==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.9.0':
-    resolution: {integrity: sha512-O5Xu/V1TbKtOXT6hvUDcFZFYTbAZ2SYoN2k3d3ulcX892zD0ko1lnwEirTx09OYEiLooSggyVaKWx4fYsV/N/g==}
+  '@ata-validator/native-darwin-x64@1.10.0':
+    resolution: {integrity: sha512-0pICN5GGpHhuTvhHJRR9IgigSl30zbzsIuDBTjKWZKoyQGcPZY1VSS29hZSVmYmVWdPoEZvDDGYRFdqjq/TSEw==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.9.0':
-    resolution: {integrity: sha512-SUbtdGfTBPnQeLwbZW9RfqqwNcg+pUMrZ7gBJshrYfqte6Em7D+q0WWghJRwi1R7HrNeRWethe5igrnvH6/uOg==}
+  '@ata-validator/native-linux-arm64-gnu@1.10.0':
+    resolution: {integrity: sha512-n8oyif9KEUGLgWfCcaDiJNn8YnB4bNQsCpjr/fDA8bpD8HpgsfxkBAgtDKoAxQnQWZVuzgU++bcwRu04sDi2Vg==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.9.0':
-    resolution: {integrity: sha512-I3LODeX+B/y0S6/8DdiGxMbw/9NmcBzu91JXqA37oI8MI9YwQzD2yi3YxUeKPaD64LWxovK6xG4OixYY+02MHw==}
+  '@ata-validator/native-linux-arm64-musl@1.10.0':
+    resolution: {integrity: sha512-mkSQgkJGdotzf41mSVMnhZ+p5ecPcUBqHGBlx+vIidtvN4pXR1bhUKFaxT8JUU2hVyQy3onHeQfiI5hS/Gnewg==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.9.0':
-    resolution: {integrity: sha512-L9MKRrx5c00IaOBYxfsHWFDTiND8DqGY9NSIy0/+wBjLDOVJ5g4zV9o6jdt0tJSjzrLeM/Ei9eMhIQcqmVghGQ==}
+  '@ata-validator/native-linux-x64-gnu@1.10.0':
+    resolution: {integrity: sha512-TGWjqqwtB1LPwl08SOmK0Z7VDLYF9he1ETYREYBEEwFCEwGd8XuFz/jgRGbk5mQC1NJDaqtLNtu+RLTmgqaRzg==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.9.0':
-    resolution: {integrity: sha512-r9ahMuMH3ZNnb7HfspAySXcWNv+8GTNhkogew7zSlIJS8mAg20avE/xnxT5RNta78cWjb9Up4+sBFbA6aNNvUA==}
+  '@ata-validator/native-linux-x64-musl@1.10.0':
+    resolution: {integrity: sha512-05gTYrbKTIvKLgWjHLjZvlDCbSWoPZZhEmaFsgtsX4OdEASlCK+EmkVfwmD+oTvkvh6ASwvZ9bgpADwtgKCKvw==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.9.0':
-    resolution: {integrity: sha512-FqxUsgte/mwWqR9GS9pickIARY3h9qVxAjsRmleV+OQHHHM0X3Q9BfWgp0RzkmtXIJpT3nNFOs/MP0zrbRkgNg==}
+  '@ata-validator/native-win32-x64@1.10.0':
+    resolution: {integrity: sha512-VQfGFGJBwrMRcpYk0u1y2KOQkaz3G8Hftw6eapUa7I7R6zdbZkWrNij93B+n9jVsQr48nVHzIlfI/PZq9pDoAw==}
     cpu: [x64]
     os: [win32]
 
@@ -4378,43 +4378,43 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@ttsc/darwin-arm64@0.28.3':
-    resolution: {integrity: sha512-ZdsiVD1OWfecgnBJkF11NX+C5iqLJ6XtEF4pr7nQW806hygSkK8DmMeWuRFerSqID6PQ4AzIhvpPeUKpMFsr0Q==}
+  '@ttsc/darwin-arm64@0.28.4':
+    resolution: {integrity: sha512-UFfKbAkQ7C1ZZBptxJIuypu6NQHpVBi9z0kNyHZ6KAmCk3QXmyrXMbqhipk7XrGnGV6Zz39WKlfnM64efvD1Iw==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.28.3':
-    resolution: {integrity: sha512-PubVbhvqJnk028bH9QTjas7u0PU2fMFwMezu96pkKC7zVTLekTVyZPOD1wKqN1/eaLvLagZygsGa98k+OlFQVQ==}
+  '@ttsc/darwin-x64@0.28.4':
+    resolution: {integrity: sha512-nr9pEd89VZAcaufIZcH3NGFAu+wBp4QPcapIN+rHO/8c8aBK5i8Be4MSzQ2RHp0kFg7oGSA5c1aRJPiTMSP53A==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.28.3':
-    resolution: {integrity: sha512-F4Kfr+xDOD+t+6MdiSi/u6ESsFdn76i/ErCg0nOmDFqG+l2Tm+9tJL66gw83f7/YBo/Ah8GxsyUBDW7/oFN61A==}
+  '@ttsc/linux-arm64@0.28.4':
+    resolution: {integrity: sha512-7utuxzrvbRYLxHEYyFv75aaGFPK+Me/DV/OfymXNy/Rpezb6gVFIeC8wjqjLD7lC6S96CGGgZtPm+1dI63t7sA==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.28.3':
-    resolution: {integrity: sha512-46JdDKxBQPSQHeYQlFGPjnhBd96dH1JXhj+fODQGh0NAGcVoVNHr6WvWElL2YkyUbkjwkbdVKsMzprWwR0TeXQ==}
+  '@ttsc/linux-arm@0.28.4':
+    resolution: {integrity: sha512-VpvvrcvjuhIh/GExdufaqil6X+tMuCNr+U7SNz0m1sSlU81FoOKLEUNw8fwkKcaLNXqFQ8W6dusqrwY7NlvoNg==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.28.3':
-    resolution: {integrity: sha512-m5VLPOkPWZjrl11/BajN/rD4Np5knVK2Y9nHrt6j0LhIU8m6CAmfPyHGcd7Nw/W26SYvhh9SaHEQ799TjXZBoQ==}
+  '@ttsc/linux-x64@0.28.4':
+    resolution: {integrity: sha512-5U/1r9xvcarDl77B8Fq9kz1JitBAOwuRCw06bbv3kDR0sswH6tRMrzaUczw93is2b6j62lI+WDbgFaBMQ8/byA==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.28.3':
-    resolution: {integrity: sha512-ctXXqshYGKts9Fpbxg1OPZ2ZhVwsBGFixNhX8CVuoFYWjIdmg0sgDVZQe97OvgI0SM3YngmBzQc8cNtM32ZW0Q==}
+  '@ttsc/unplugin@0.28.4':
+    resolution: {integrity: sha512-qGaM61wUIkKB/2jFeN1EJtaDhrpr0MjNV0kRqA67Hf5KtTYGIWktOuVvP3NsgcNfnBsN7FhU+r5xw1TPAnXApw==}
     peerDependencies:
-      ttsc: ^0.28.3
+      ttsc: ^0.28.4
 
-  '@ttsc/win32-arm64@0.28.3':
-    resolution: {integrity: sha512-hmXyPEr+JCoO2y4voD2zlhcoL+Ejk3+lp25nnuAN/zuusE959ahcDogFGXT3iEYhB6uVEffg3/wttbvTG7zb/Q==}
+  '@ttsc/win32-arm64@0.28.4':
+    resolution: {integrity: sha512-LEbmIMCNgiJKirvQtBY8OzdB/2vHx3wlUILao2atajRk3g4oE0YWFGZpWvIxHEdwLoP4qwM6+Sd2MiPDEGGHiw==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.28.3':
-    resolution: {integrity: sha512-SpjgxyckQDMXnMkUMHFGTQTvVunOhYQ3iotG+gQfd+hAysWa01Z4UA0SxEQhVDnBsn67NVZ/KaL4fXSRJ1WnsA==}
+  '@ttsc/win32-x64@0.28.4':
+    resolution: {integrity: sha512-PzJkyC1yNp8FF7YzHBp8vkmi7y8IiGsRZXpz4PK4aOYKIaKjy0Wdl3UwHksHNkliLiqrzDq4WMXmx3Lewzvmfg==}
     cpu: [x64]
     os: [win32]
 
@@ -5368,8 +5368,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.9.0:
-    resolution: {integrity: sha512-I4T2fBSkx2DhtAoxNgL36qYrX+21hTAyJli8CYNQKoDHWxMpBEASw/KwONR62efvdECezeIjlsRVO2G8kU5rOA==}
+  ata-validator@1.10.0:
+    resolution: {integrity: sha512-BhL2sUy1P9OCwzc6BKFOX4RbExz2h8cUS37vyaa5n3M8n8nC1zk5G6+0h2bp5UiPQNiKs5q7+vGr3G6HVx5Tyg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -8253,8 +8253,8 @@ packages:
     peerDependencies:
       react: ^19.2.8
 
-  react-error-boundary@6.1.3:
-    resolution: {integrity: sha512-GnSKpCohFi2nQmJCWwP8O8wub7zexlePvpsejvQr35vS5RTouS1+utTNOmyc540yw5vyOXnSL1rBWsCQDmkyUA==}
+  react-error-boundary@6.1.4:
+    resolution: {integrity: sha512-7FgvbyjCFhu4dtKSZu807cW1MWG2nWAM4bwGqUByAtHVJXtlzoCJX0SSyZRyFrb+aBd7wtJkcOR4DsxXVEuDsA==}
     peerDependencies:
       '@types/react': ^18.0.0 || ^19.0.0
       react: ^18.0.0 || ^19.0.0
@@ -9070,8 +9070,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.28.3:
-    resolution: {integrity: sha512-9+vVmqg08fMhX8mR7/ARYx/Qca+/uOOIQc7CAXVE5ccrXhL4YpXwVBWW3JPISjuAw3Dxwed03e8/rAZzE2uGrQ==}
+  ttsc@0.28.4:
+    resolution: {integrity: sha512-TmA5/YZSghGhIKgnCs8PAt3exjzgqOb+nEroqGsxEBSAIdIUwOXSn44AenJ0iJ1QMCIdb57KbNWBC5ODLyKN/g==}
     engines: {node: '>=22.15.0'}
     hasBin: true
 
@@ -9095,8 +9095,8 @@ packages:
     resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
     engines: {node: '>=20'}
 
-  typebox@1.3.22:
-    resolution: {integrity: sha512-YoX6QdtuJR/+YpP/qXf9gJXTxvSuiUlKYgW3AilsOSLlsZe/VH6ILR5vhoJM5QXY//uzIRE7NYij3h2+nG9vRQ==}
+  typebox@1.3.23:
+    resolution: {integrity: sha512-eMDZIb3EhHxm/tQ+xfbb++B+1KMpquxYoRQ0nHWukMmNxrYHsbRQwW15chb2doi0FdJ/MxDXpgZRFJUyizMkkw==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -9814,29 +9814,29 @@ snapshots:
 
   '@ark/util@0.56.2': {}
 
-  '@ata-project/keywords@0.1.14(ata-validator@1.9.0(yaml@2.9.0))':
+  '@ata-project/keywords@0.1.14(ata-validator@1.10.0(yaml@2.9.0))':
     dependencies:
-      ata-validator: 1.9.0(yaml@2.9.0)
+      ata-validator: 1.10.0(yaml@2.9.0)
 
-  '@ata-validator/native-darwin-arm64@1.9.0':
+  '@ata-validator/native-darwin-arm64@1.10.0':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.9.0':
+  '@ata-validator/native-darwin-x64@1.10.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.9.0':
+  '@ata-validator/native-linux-arm64-gnu@1.10.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.9.0':
+  '@ata-validator/native-linux-arm64-musl@1.10.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.9.0':
+  '@ata-validator/native-linux-x64-gnu@1.10.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.9.0':
+  '@ata-validator/native-linux-x64-musl@1.10.0':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.9.0':
+  '@ata-validator/native-win32-x64@1.10.0':
     optional: true
 
   '@babel/code-frame@7.27.1':
@@ -13151,30 +13151,30 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.0.12
 
-  '@ttsc/darwin-arm64@0.28.3':
+  '@ttsc/darwin-arm64@0.28.4':
     optional: true
 
-  '@ttsc/darwin-x64@0.28.3':
+  '@ttsc/darwin-x64@0.28.4':
     optional: true
 
-  '@ttsc/linux-arm64@0.28.3':
+  '@ttsc/linux-arm64@0.28.4':
     optional: true
 
-  '@ttsc/linux-arm@0.28.3':
+  '@ttsc/linux-arm@0.28.4':
     optional: true
 
-  '@ttsc/linux-x64@0.28.3':
+  '@ttsc/linux-x64@0.28.4':
     optional: true
 
-  '@ttsc/unplugin@0.28.3(ttsc@0.28.3)':
+  '@ttsc/unplugin@0.28.4(ttsc@0.28.4)':
     dependencies:
-      ttsc: 0.28.3
+      ttsc: 0.28.4
       unplugin: 2.3.11
 
-  '@ttsc/win32-arm64@0.28.3':
+  '@ttsc/win32-arm64@0.28.4':
     optional: true
 
-  '@ttsc/win32-x64@0.28.3':
+  '@ttsc/win32-x64@0.28.4':
     optional: true
 
   '@tybys/wasm-util@0.10.3':
@@ -14093,15 +14093,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.9.0(yaml@2.9.0):
+  ata-validator@1.10.0(yaml@2.9.0):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.9.0
-      '@ata-validator/native-darwin-x64': 1.9.0
-      '@ata-validator/native-linux-arm64-gnu': 1.9.0
-      '@ata-validator/native-linux-arm64-musl': 1.9.0
-      '@ata-validator/native-linux-x64-gnu': 1.9.0
-      '@ata-validator/native-linux-x64-musl': 1.9.0
-      '@ata-validator/native-win32-x64': 1.9.0
+      '@ata-validator/native-darwin-arm64': 1.10.0
+      '@ata-validator/native-darwin-x64': 1.10.0
+      '@ata-validator/native-linux-arm64-gnu': 1.10.0
+      '@ata-validator/native-linux-arm64-musl': 1.10.0
+      '@ata-validator/native-linux-x64-gnu': 1.10.0
+      '@ata-validator/native-linux-x64-musl': 1.10.0
+      '@ata-validator/native-win32-x64': 1.10.0
       yaml: 2.9.0
 
   atomically@2.1.1:
@@ -17491,7 +17491,7 @@ snapshots:
       react: 19.2.8
       scheduler: 0.27.0
 
-  react-error-boundary@6.1.3(@types/react@19.2.18)(react@19.2.8):
+  react-error-boundary@6.1.4(@types/react@19.2.18)(react@19.2.8):
     dependencies:
       react: 19.2.8
     optionalDependencies:
@@ -18460,15 +18460,15 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.28.3:
+  ttsc@0.28.4:
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.28.3
-      '@ttsc/darwin-x64': 0.28.3
-      '@ttsc/linux-arm': 0.28.3
-      '@ttsc/linux-arm64': 0.28.3
-      '@ttsc/linux-x64': 0.28.3
-      '@ttsc/win32-arm64': 0.28.3
-      '@ttsc/win32-x64': 0.28.3
+      '@ttsc/darwin-arm64': 0.28.4
+      '@ttsc/darwin-x64': 0.28.4
+      '@ttsc/linux-arm': 0.28.4
+      '@ttsc/linux-arm64': 0.28.4
+      '@ttsc/linux-x64': 0.28.4
+      '@ttsc/win32-arm64': 0.28.4
+      '@ttsc/win32-x64': 0.28.4
 
   type-check@0.4.0:
     dependencies:
@@ -18484,7 +18484,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typebox@1.3.22: {}
+  typebox@1.3.23: {}
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -18546,13 +18546,13 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@14.0.4(ttsc@0.28.3):
+  typia@14.0.4(ttsc@0.28.4):
     dependencies:
       '@typia/interface': 14.0.4
       '@typia/utils': 14.0.4
       randexp: 0.5.3
     optionalDependencies:
-      ttsc: 0.28.3
+      ttsc: 0.28.4
 
   ufo@1.6.4: {}
 
