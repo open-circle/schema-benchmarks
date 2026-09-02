@@ -34,8 +34,8 @@ catalogs:
       specifier: ^1.7.2
       version: 1.7.2
     mix-n-matchers:
-      specifier: ^2.4.0
-      version: 2.4.0
+      specifier: ^2.5.0
+      version: 2.5.0
     mutative:
       specifier: ^1.3.0
       version: 1.3.0
@@ -93,8 +93,8 @@ importers:
         specifier: ^2.11.0
         version: 2.11.0(eslint@10.5.0(jiti@2.7.0)(supports-color@7.2.0))
       knip:
-        specifier: ^6.33.0
-        version: 6.33.0
+        specifier: ^6.34.0
+        version: 6.34.0
       lefthook:
         specifier: ^2.1.12
         version: 2.1.12
@@ -135,8 +135,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       p-limit:
-        specifier: ^7.3.1
-        version: 7.3.1
+        specifier: ^7.3.2
+        version: 7.3.2
       rolldown:
         specifier: ^1.2.6
         version: 1.2.6
@@ -198,7 +198,7 @@ importers:
         version: 0.0.7
       '@ata-project/keywords':
         specifier: ^0.1.14
-        version: 0.1.14(ata-validator@1.10.0(yaml@2.9.0))
+        version: 0.1.14(ata-validator@1.11.0(yaml@2.9.0))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -245,8 +245,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       ata-validator:
-        specifier: ^1.10.0
-        version: 1.10.0(yaml@2.9.0)
+        specifier: ^1.11.0
+        version: 1.11.0(yaml@2.9.0)
       decoders:
         specifier: ^2.9.3
         version: 2.9.3
@@ -352,7 +352,7 @@ importers:
         version: 4.1.11(msw@2.15.0(@types/node@26.1.2)(typescript@7.0.2))(playwright@1.62.1)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))(vitest@4.1.11)
       mix-n-matchers:
         specifier: 'catalog:'
-        version: 2.4.0(vitest@4.1.11)
+        version: 2.5.0(vitest@4.1.11)
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -578,7 +578,7 @@ importers:
         version: 2.7.0
       mix-n-matchers:
         specifier: 'catalog:'
-        version: 2.4.0(vitest@4.1.11)
+        version: 2.5.0(vitest@4.1.11)
       msw:
         specifier: ^2.15.0
         version: 2.15.0(@types/node@26.1.2)(typescript@7.0.2)
@@ -672,42 +672,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.10.0':
-    resolution: {integrity: sha512-ji72AWqJnnTGjT1GFGTCBJIndclKWko+r4gdwzyuSsm5AR61hDYVQDmYxzmI1yXxKRGabKqlMsqXwH34OhMZ7Q==}
+  '@ata-validator/native-darwin-arm64@1.11.0':
+    resolution: {integrity: sha512-+HobRSImy/Y5EKYFQ0nTrCuMKNfUQScTV0NvPK/zP+eKPKss3gfwhI8rpB7xp4F7bi5v1i8mXFfJv4daBL0xUQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.10.0':
-    resolution: {integrity: sha512-0pICN5GGpHhuTvhHJRR9IgigSl30zbzsIuDBTjKWZKoyQGcPZY1VSS29hZSVmYmVWdPoEZvDDGYRFdqjq/TSEw==}
+  '@ata-validator/native-darwin-x64@1.11.0':
+    resolution: {integrity: sha512-MCMxSb/jB1bZZMKxavq2Wmel/74j7Voaub4PRllrcCKB44AbNBqZ2XoTmol5B/eUoph5Foq8okjl7Z9a9hT0lQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.10.0':
-    resolution: {integrity: sha512-n8oyif9KEUGLgWfCcaDiJNn8YnB4bNQsCpjr/fDA8bpD8HpgsfxkBAgtDKoAxQnQWZVuzgU++bcwRu04sDi2Vg==}
+  '@ata-validator/native-linux-arm64-gnu@1.11.0':
+    resolution: {integrity: sha512-AD/40oB5pnUPWThlUF1tI1VYv8L68INnew0QINX5buqjj3gTOqxdqp84dAo2QoLbSPBi6IwtnG9hPIBlSAx0zw==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.10.0':
-    resolution: {integrity: sha512-mkSQgkJGdotzf41mSVMnhZ+p5ecPcUBqHGBlx+vIidtvN4pXR1bhUKFaxT8JUU2hVyQy3onHeQfiI5hS/Gnewg==}
+  '@ata-validator/native-linux-arm64-musl@1.11.0':
+    resolution: {integrity: sha512-IfLu4x5HR/lDx5D9V0c+lae3jphcFeYDbJVUbFDuN4EoX0yXWZqSXUInZQbFi8D0b24RrEV7zOhfuIK9Q7QMRA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.10.0':
-    resolution: {integrity: sha512-TGWjqqwtB1LPwl08SOmK0Z7VDLYF9he1ETYREYBEEwFCEwGd8XuFz/jgRGbk5mQC1NJDaqtLNtu+RLTmgqaRzg==}
+  '@ata-validator/native-linux-x64-gnu@1.11.0':
+    resolution: {integrity: sha512-peYMDMUBEIrayizj0iysrfR812+INonSLr5dzmgtX6EyAGBlWJl4tLiJAIDpGlCdmkmKBE8Oq7ftOTrO8NKZHg==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.10.0':
-    resolution: {integrity: sha512-05gTYrbKTIvKLgWjHLjZvlDCbSWoPZZhEmaFsgtsX4OdEASlCK+EmkVfwmD+oTvkvh6ASwvZ9bgpADwtgKCKvw==}
+  '@ata-validator/native-linux-x64-musl@1.11.0':
+    resolution: {integrity: sha512-nYlFq2YygNNkTK7LJSHc0BI9XWbQxqBuFlSIuKtn2mbqka3cfXExOegsJODdb5pTTfbiOEAJD/zELjfT+ihpJA==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.10.0':
-    resolution: {integrity: sha512-VQfGFGJBwrMRcpYk0u1y2KOQkaz3G8Hftw6eapUa7I7R6zdbZkWrNij93B+n9jVsQr48nVHzIlfI/PZq9pDoAw==}
+  '@ata-validator/native-win32-x64@1.11.0':
+    resolution: {integrity: sha512-cciWbeMbivrEqyU5+jUC2VlAkUKb8OakVgyXW9xpVzIzClcYWVr12B8XTE4ceI07cEQjfD8Ijl1FzKai3Arapg==}
     cpu: [x64]
     os: [win32]
 
@@ -5368,8 +5368,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.10.0:
-    resolution: {integrity: sha512-BhL2sUy1P9OCwzc6BKFOX4RbExz2h8cUS37vyaa5n3M8n8nC1zk5G6+0h2bp5UiPQNiKs5q7+vGr3G6HVx5Tyg==}
+  ata-validator@1.11.0:
+    resolution: {integrity: sha512-mnLyQ84wsUHq1XMnSEupI0EBJHkk/2BLkqozexvtvdejKypMfWfRblJ9bzLU5kqztzgNZGh1E1xHGD1gi798qg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -7203,8 +7203,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  knip@6.33.0:
-    resolution: {integrity: sha512-gMXWV2bqgJcdZKsaRgl1oH5V2J0VumhJ2ujfP4M6b9ftpca2BNpvlX3Dq++vVtEey7sU67EXCvZGNkQfG2w1RQ==}
+  knip@6.34.0:
+    resolution: {integrity: sha512-bbHIrnGspYwe4EBPjjx+lvkUor0F2qfKQc5BPzPI4SOAImYA+k2ueVpIcF7d/W1LEVT7XoJUPt6zELeGZhXBgA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -7651,8 +7651,8 @@ packages:
     resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
     engines: {node: '>= 18'}
 
-  mix-n-matchers@2.4.0:
-    resolution: {integrity: sha512-LfIOJ0k8LGSVgbkhXZvUcM7Az/1WW/COP93PYGKM+VG3TwmIqaRtwbiUC9FxjZixPA6iVdOEghmWO4WhmbABYQ==}
+  mix-n-matchers@2.5.0:
+    resolution: {integrity: sha512-r8YIDeffLP2LmYSqejZlndJz4u2p1MDFWpPnKibnm+jBRsRfVqHr2BcMIVkpgPQV57FyM34W3rJU+U9JQMUrvA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
       '@rstest/core': '>=0.11.2'
@@ -7953,8 +7953,8 @@ packages:
     resolution: {integrity: sha512-kuUqqHNUqoIWp/c467RI4X6mmyuojY5jGutNU0wVTmEOOfcuwLqyMVoAi9MKi2Ak+5i9+nhmrK4ufZE8069kHA==}
     engines: {node: '>=18'}
 
-  p-limit@7.3.1:
-    resolution: {integrity: sha512-0trZaiG7Y7kN/Egy9a8j47t9osC0Tch4PaIWd9yGF6bvmlk7muExRvGNYb8sXBwEKMoNKsbNN9P8EefuQekE4Q==}
+  p-limit@7.3.2:
+    resolution: {integrity: sha512-Ll0w3fU24vYpXoZmjjZIee6bJQDgG0oAyo1PdmFYI8UDwJJddaHAypxIH9avUu+t+lSsAwKVsb1jDCMIIChliw==}
     engines: {node: '>=20'}
 
   p-locate@5.0.0:
@@ -9814,29 +9814,29 @@ snapshots:
 
   '@ark/util@0.56.2': {}
 
-  '@ata-project/keywords@0.1.14(ata-validator@1.10.0(yaml@2.9.0))':
+  '@ata-project/keywords@0.1.14(ata-validator@1.11.0(yaml@2.9.0))':
     dependencies:
-      ata-validator: 1.10.0(yaml@2.9.0)
+      ata-validator: 1.11.0(yaml@2.9.0)
 
-  '@ata-validator/native-darwin-arm64@1.10.0':
+  '@ata-validator/native-darwin-arm64@1.11.0':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.10.0':
+  '@ata-validator/native-darwin-x64@1.11.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.10.0':
+  '@ata-validator/native-linux-arm64-gnu@1.11.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.10.0':
+  '@ata-validator/native-linux-arm64-musl@1.11.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.10.0':
+  '@ata-validator/native-linux-x64-gnu@1.11.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.10.0':
+  '@ata-validator/native-linux-x64-musl@1.11.0':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.10.0':
+  '@ata-validator/native-win32-x64@1.11.0':
     optional: true
 
   '@babel/code-frame@7.27.1':
@@ -14093,15 +14093,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.10.0(yaml@2.9.0):
+  ata-validator@1.11.0(yaml@2.9.0):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.10.0
-      '@ata-validator/native-darwin-x64': 1.10.0
-      '@ata-validator/native-linux-arm64-gnu': 1.10.0
-      '@ata-validator/native-linux-arm64-musl': 1.10.0
-      '@ata-validator/native-linux-x64-gnu': 1.10.0
-      '@ata-validator/native-linux-x64-musl': 1.10.0
-      '@ata-validator/native-win32-x64': 1.10.0
+      '@ata-validator/native-darwin-arm64': 1.11.0
+      '@ata-validator/native-darwin-x64': 1.11.0
+      '@ata-validator/native-linux-arm64-gnu': 1.11.0
+      '@ata-validator/native-linux-arm64-musl': 1.11.0
+      '@ata-validator/native-linux-x64-gnu': 1.11.0
+      '@ata-validator/native-linux-x64-musl': 1.11.0
+      '@ata-validator/native-win32-x64': 1.11.0
       yaml: 2.9.0
 
   atomically@2.1.1:
@@ -15344,10 +15344,6 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fdir@6.5.0(picomatch@4.0.5):
-    optionalDependencies:
-      picomatch: 4.0.5
-
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
       picomatch: 4.0.7
@@ -16155,7 +16151,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  knip@6.33.0:
+  knip@6.34.0:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.7)
       formatly: 0.7.0
@@ -16765,7 +16761,7 @@ snapshots:
     dependencies:
       minipass: 7.1.3
 
-  mix-n-matchers@2.4.0(vitest@4.1.11):
+  mix-n-matchers@2.5.0(vitest@4.1.11):
     dependencies:
       '@jest/expect-utils': 30.4.1
       jest-matcher-utils: 30.4.1
@@ -17215,7 +17211,7 @@ snapshots:
     dependencies:
       yocto-queue: 1.2.2
 
-  p-limit@7.3.1:
+  p-limit@7.3.2:
     dependencies:
       yocto-queue: 1.2.2
 
@@ -18366,8 +18362,8 @@ snapshots:
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
 
   tinypool@2.1.0: {}
 
@@ -18686,7 +18682,7 @@ snapshots:
   unplugin@3.3.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0)):
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      picomatch: 4.0.5
+      picomatch: 4.0.7
       webpack-virtual-modules: 0.6.2
     optionalDependencies:
       esbuild: 0.28.2

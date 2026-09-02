@@ -28,7 +28,7 @@
     "@standard-schema/spec": "catalog:",
     "@ttsc/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
-    "p-limit": "^7.3.1",
+    "p-limit": "^7.3.2",
     "rolldown": "catalog:",
     "tinybench": "^6.1.4",
     "ttsc": "catalog:",
