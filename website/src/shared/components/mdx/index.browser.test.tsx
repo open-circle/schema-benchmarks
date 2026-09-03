@@ -16,10 +16,10 @@ describe("mdx", () => {
           </mdx.pre>
         </>,
       );
-      const button = page.getByRole("button", { name: "Copy to clipboard" });
+      const button = page.getByRole("button", { name: /Copy to clipboard/ });
       await button.click();
       await expect(navigator.clipboard.readText()).resolves.toBe('console.log("Hello, world!");');
-      await expect.element(page.getByText("Copied code to clipboard")).toBeVisible();
+      await expect.element(page.getByText(/Copied code to clipboard/)).toBeVisible();
     });
 
     it("shows an error when copying fails", async () => {
@@ -35,10 +35,10 @@ describe("mdx", () => {
           </mdx.pre>
         </>,
       );
-      await page.getByRole("button", { name: "Copy to clipboard" }).click();
+      await page.getByRole("button", { name: /Copy to clipboard/ }).click();
 
       await expect.poll(() => writeText).toHaveBeenCalledOnce();
-      await expect.element(page.getByText("Failed to copy")).toBeVisible();
+      await expect.element(page.getByText(/Failed to copy/)).toBeVisible();
     });
   });
   describe("a", () => {

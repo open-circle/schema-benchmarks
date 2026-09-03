@@ -61,7 +61,7 @@ function getAttributeComment(stringify: (obj: unknown) => string, name: string, 
 }
 
 declare module "vitest" {
-  interface Assertion<T> {
+  interface Assertion<R, T> {
     toBeCurrent: {
       /**
        * @description
@@ -72,7 +72,7 @@ declare module "vitest" {
        *
        * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent();
        */
-      (): void;
+      (): R;
       /**
        * @description
        * Asserts that the element has the `aria-current` attribute with the given value.
@@ -82,7 +82,7 @@ declare module "vitest" {
        *
        * await expect.element(page.getByRole("link", { name: "About" })).toBeCurrent("page");
        */
-      (value: CurrentValue): void;
+      (value: CurrentValue): R;
     };
   }
 }

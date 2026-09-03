@@ -13,7 +13,7 @@ describe("ToggleButton", () => {
         <MdSymbol>edit</MdSymbol>
       </ToggleButton>,
     );
-    await expect.element(page.getByRole("button", { name: "Edit" })).toBePressed();
+    await expect.element(page.getByRole("button", { name: /Edit/ })).toBePressed();
   });
   it("should not be active", async () => {
     await page.render(
@@ -21,6 +21,6 @@ describe("ToggleButton", () => {
         <MdSymbol>edit</MdSymbol>
       </ToggleButton>,
     );
-    await expect.element(page.getByRole("button", { name: "Edit" })).not.toBePressed();
+    await expect.element(page.getByRole("button", { name: /Edit/ })).not.toBePressed();
   });
 });
