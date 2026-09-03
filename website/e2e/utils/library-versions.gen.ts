@@ -20,7 +20,7 @@ export const libraryVersions = {
   runtypes: "7.0.5",
   superstruct: "2.0.2",
   sury: "11.0.0-rc.2",
-  typebox: "1.3.23",
+  typebox: "1.3.25",
   typia: "14.0.4",
   valibot: "1.4.2",
   yup: "1.7.1",
@@ -28,5 +28,5 @@ export const libraryVersions = {
   zod: "4.5.4",
   "zod/mini": "4.5.4",
   "zod/v3": "4.5.4",
-  "zod-compiler": "2.0.0",
+  "zod-compiler": "2.0.2",
 } as const satisfies Record<string, string>;
