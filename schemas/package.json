@@ -68,6 +68,6 @@
     "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^2.0.0"
+    "zod-compiler": "^2.0.2"
   }
 }

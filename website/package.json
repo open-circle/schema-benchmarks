@@ -98,7 +98,7 @@
     "mix-n-matchers": "catalog:",
     "msw": "^2.15.0",
     "msw-storybook-addon": "^3.0.0",
-    "oxc-transform-react": "^0.147.0",
+    "oxc-transform-react": "^0.148.0",
     "playwright": "catalog:",
     "postcss-custom-media": "^12.0.1",
     "postcss-extend-rule": "^4.0.0",
