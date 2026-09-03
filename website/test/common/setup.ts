@@ -1,4 +1,4 @@
-import { type ExpectPollOptions, expect } from "vitest";
+import { expect } from "vitest";
 import "mix-n-matchers/vitest";
 
 import { toBeCurrent } from "./matchers/to-be-current";

@@ -124,7 +124,6 @@ const config = defineConfig({
   test: {
     projects: [
       {
-        extends: true,
         test: {
           name: "node",
           include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
@@ -132,7 +131,6 @@ const config = defineConfig({
         },
       },
       {
-        extends: true,
         test: {
           retry: 3,
           name: "browser",
@@ -140,6 +138,7 @@ const config = defineConfig({
           setupFiles: ["./test/common/setup.ts", "./test/browser/setup.ts"],
           browser: {
             enabled: true,
+            traceView: true,
             provider: playwright({
               launchOptions: {
                 channel: "chromium",

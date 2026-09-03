@@ -48,7 +48,7 @@ export function toBePressed(this: MatcherState, actual: Element | Locator): Expe
 }
 
 declare module "vitest" {
-  interface Assertion<T> {
+  interface Assertion<R, T> {
     /**
      * @description
      * Asserts that the element is a button or has a role of button and that it is pressed.
@@ -58,6 +58,6 @@ declare module "vitest" {
      *
      * await expect.element(page.getByRole("button", { name: "Pressed" })).toBePressed();
      */
-    toBePressed: () => void;
+    toBePressed: () => R;
   }
 }
