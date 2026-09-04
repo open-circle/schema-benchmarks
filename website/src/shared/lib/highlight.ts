@@ -1,10 +1,11 @@
 import * as url from "node:url";
 
-import { anyAbortSignal } from "@schema-benchmarks/utils";
+import { anyAbortSignal, getOrInsertComputed } from "@schema-benchmarks/utils";
 import { getCyrb53Hash } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { parseAnsiSequences } from "ansi-sequence-parser";
+import type { format } from "oxfmt";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
@@ -165,19 +166,6 @@ export const getHighlightedAnsi = (data: HighlightAnsiInput, signalOpt?: AbortSi
   });
 };
 
-export const getFormattedCodeFn = createServerFn({ method: "POST" })
-  .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
-  .handler(async ({ data: { fileName, sourceText } }) => {
-    const { format } = await getOxfmt();
-    const result = await format(fileName, sourceText, { sortImports: true });
-    if (result.errors.length) {
-      throw new Error(
-        `Failed to format code:\n\n${result.errors.map((e) => "- " + e.message).join("\n")}`,
-      );
-    }
-    return result.code;
-  });
-
 // oxlint-disable-next-line typescript/consistent-type-imports
 type OxfmtMod = typeof import("oxfmt");
 
@@ -205,6 +193,20 @@ async function getOxfmt(): Promise<OxfmtMod> {
   return oxfmtPromise;
 }
 
+const aggregateFormatErrors = (errors: Awaited<ReturnType<typeof format>>["errors"]) =>
+  new Error("Failed to format code", { cause: errors });
+
+export const getFormattedCodeFn = createServerFn({ method: "POST" })
+  .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
+  .handler(async ({ data: { fileName, sourceText } }) => {
+    const { format } = await getOxfmt();
+    const result = await format(fileName, sourceText, { sortImports: true });
+    if (result.errors.length) {
+      throw aggregateFormatErrors(result.errors);
+    }
+    return result.code;
+  });
+
 export const getFormattedCode = (
   { fileName, sourceText }: { fileName: string; sourceText: string },
   signalOpt?: AbortSignal,
@@ -213,6 +215,49 @@ export const getFormattedCode = (
     queryKey: ["format-code", fileName, getCyrb53Hash(sourceText)],
     queryFn: ({ signal }) =>
       getFormattedCodeFn({
+        data: { fileName, sourceText },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });
+};
+
+export const printWidths = [40, 60, 80, 100] as const;
+type PrintWidth = (typeof printWidths)[number];
+
+export interface ResponsiveFormattedCodeGroup {
+  widths: Array<PrintWidth>;
+  code: string;
+}
+
+export const getResponsiveFormattedCodeFn = createServerFn({ method: "POST" })
+  .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
+  .handler(async ({ data: { fileName, sourceText } }) => {
+    const { format } = await getOxfmt();
+    const formatted = await Promise.all(
+      printWidths.map((width) =>
+        format(fileName, sourceText, { sortImports: true, printWidth: width }).then((result) => {
+          if (result.errors.length) {
+            throw aggregateFormatErrors(result.errors);
+          }
+          return { width, code: result.code };
+        }),
+      ),
+    );
+    const groups = new Map<string, ResponsiveFormattedCodeGroup>();
+    for (const { width, code } of formatted) {
+      getOrInsertComputed(groups, code, () => ({ widths: [], code })).widths.push(width);
+    }
+    return Array.from(groups.values());
+  });
+
+export const getResponsiveFormattedCode = (
+  { fileName, sourceText }: { fileName: string; sourceText: string },
+  signalOpt?: AbortSignal,
+) => {
+  return queryOptions({
+    queryKey: ["responsive-format-code", fileName, getCyrb53Hash(sourceText)],
+    queryFn: ({ signal }) =>
+      getResponsiveFormattedCodeFn({
         data: { fileName, sourceText },
         signal: anyAbortSignal(signal, signalOpt),
       }),
