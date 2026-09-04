@@ -26,6 +26,7 @@
     "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",
     "postbump:test-suite-commit": "pnpm checkout",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@schema-benchmarks/utils": "workspace:",
+    "@vitest/coverage-v8": "catalog:",
     "dedent": "catalog:",
     "del-cli": "^7.0.0",
     "oxfmt": "catalog:",

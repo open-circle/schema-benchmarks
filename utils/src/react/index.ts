@@ -1,8 +1,8 @@
-import type { Ref, RefCallback } from "react";
+import type { Ref } from "react";
 
 export const mergeRefs =
-  <T>(...refs: Array<Ref<T> | undefined>): RefCallback<T> =>
-  (value) => {
+  <T>(...refs: Array<Ref<T> | undefined>) =>
+  (value: T | null) => {
     const cleanups: Array<() => void> = [];
     for (const ref of refs) {
       if (typeof ref === "function") {

@@ -8,6 +8,12 @@ import { typiaPathPattern } from "./tsdown.config.ts";
 export default defineConfig({
   plugins: [filterTransform(ttsc(), typiaPathPattern), macros()],
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "lcov"],
+      reportsDirectory: "./coverage",
+      include: ["src/**/*.ts", "libraries/**/*.ts"],
+    },
     projects: [
       {
         test: {

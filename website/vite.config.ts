@@ -122,6 +122,12 @@ const config = defineConfig({
       }),
   ],
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "lcov"],
+      reportsDirectory: "./coverage",
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+    },
     projects: [
       {
         test: {
