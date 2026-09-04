@@ -58,9 +58,7 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                   <CodeBlock language="json" title="Generated JSON schema">
                     {result.jsonSchema}
                   </CodeBlock>

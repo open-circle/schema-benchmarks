@@ -61,9 +61,7 @@ export function StackList({ results, frameScale, lineCountScale, sortBy }: Stack
               <div {...cls("details")}>
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Snippet</h6>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 </div>
 
                 {!!result.output && (

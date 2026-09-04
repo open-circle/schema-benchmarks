@@ -59,9 +59,7 @@ export function BenchList({ results, meanScaler }: BenchListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                   {(result.snippet.startsWith("//") || result.snippet.startsWith("/*")) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}

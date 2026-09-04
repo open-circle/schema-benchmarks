@@ -63,7 +63,7 @@ export const Route = createFileRoute("/json-schema/_conversion/to-json/$tab")({
           DownloadCount.prefetch(libraryName, { queryClient, signal: abortController.signal }),
           queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
           ResponsiveCodeBlock.prefetch(
-            { fileName: `${libraryName}.ts`, sourceText: snippet },
+            { sourceText: snippet },
             { queryClient, signal: abortController.signal },
           ),
         ]),

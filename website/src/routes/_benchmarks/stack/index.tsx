@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
       queryClient.query(
         getHighlightedAnsi({ input: exampleStack, lineNumbers: true }, abortController.signal),
       ),
-      ...results.flatMap(({ output, snippet, libraryName }) => [
+      ...results.flatMap(({ output, snippet }) => [
         output &&
           queryClient.query(
             getHighlightedAnsi(
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
           ),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
         ResponsiveCodeBlock.prefetch(
-          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { sourceText: snippet },
           { queryClient, signal: abortController.signal },
         ),
       ]),

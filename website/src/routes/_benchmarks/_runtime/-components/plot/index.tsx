@@ -217,9 +217,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
               </dl>
               {result.snippet && (
                 <Suspense fallback={<Spinner />}>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 </Suspense>
               )}
             </ChartTooltipBody>

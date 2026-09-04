@@ -209,9 +209,7 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
               </dl>
               {point.snippet && (
                 <Suspense fallback={<Spinner />}>
-                  <ResponsiveCodeBlock fileName={`${point.library}.ts`}>
-                    {point.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{point.snippet}</ResponsiveCodeBlock>
                 </Suspense>
               )}
             </ChartTooltipBody>

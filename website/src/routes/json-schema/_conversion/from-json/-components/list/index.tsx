@@ -47,9 +47,7 @@ export function FromJsonList({ results, meanScaler }: FromJsonListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 </div>
                 <dl {...cls("metrics")}>
                   <div>

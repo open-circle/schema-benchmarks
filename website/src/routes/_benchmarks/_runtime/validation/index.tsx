@@ -50,7 +50,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
         }),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
         ResponsiveCodeBlock.prefetch(
-          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { sourceText: snippet },
           { queryClient, signal: abortController.signal },
         ),
       ]),

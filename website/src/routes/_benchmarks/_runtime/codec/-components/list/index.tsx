@@ -68,9 +68,7 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
               <div {...cls("details")}>
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Encode</h6>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.encode.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.encode.snippet}</ResponsiveCodeBlock>
                   {isCommented(result.encode.snippet) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}
@@ -78,9 +76,7 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
 
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Decode</h6>
-                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                    {result.decode.snippet}
-                  </ResponsiveCodeBlock>
+                  <ResponsiveCodeBlock>{result.decode.snippet}</ResponsiveCodeBlock>
                   {isCommented(result.decode.snippet) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}

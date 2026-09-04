@@ -100,9 +100,7 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                 </div>
               </dl>
               <div {...cls("details-container")}>
-                <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
-                  {result.snippet}
-                </ResponsiveCodeBlock>
+                <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 <details {...cls("details")}>
                   <summary {...cls("details-summary")}>
                     <ListItemContent

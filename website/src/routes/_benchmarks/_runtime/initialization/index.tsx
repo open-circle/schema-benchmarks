@@ -43,7 +43,7 @@ export const Route = createFileRoute("/_benchmarks/_runtime/initialization/")({
           }),
           queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
           ResponsiveCodeBlock.prefetch(
-            { fileName: `${libraryName}.ts`, sourceText: snippet },
+            { sourceText: snippet },
             { queryClient, signal: abortController.signal },
           ),
         ],

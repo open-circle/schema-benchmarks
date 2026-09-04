@@ -52,11 +52,11 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
           queryClient.query(getHighlightedCode({ code: encode.snippet }, abortController.signal)),
           queryClient.query(getHighlightedCode({ code: decode.snippet }, abortController.signal)),
           ResponsiveCodeBlock.prefetch(
-            { fileName: `${libraryName}.ts`, sourceText: encode.snippet },
+            { sourceText: encode.snippet },
             { queryClient, signal: abortController.signal },
           ),
           ResponsiveCodeBlock.prefetch(
-            { fileName: `${libraryName}.ts`, sourceText: decode.snippet },
+            { sourceText: decode.snippet },
             { queryClient, signal: abortController.signal },
           ),
         ],

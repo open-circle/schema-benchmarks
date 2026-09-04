@@ -12,6 +12,16 @@ import { getHighlightedCode, getResponsiveFormattedCode } from "#src/shared/lib/
 
 const defaultLanguage = "typescript";
 
+// oxfmt picks its parser from the file extension, which doesn't always match the Prism language id
+const languageExtensions: Record<string, string> = {
+  typescript: "ts",
+  javascript: "js",
+};
+
+function getDefaultFileName(language: string) {
+  return `code.${languageExtensions[language] ?? language}`;
+}
+
 interface InlineCodeProps {
   children: string;
   language?: string;
@@ -94,7 +104,7 @@ export function CodeBlock({ children, ...props }: CodeProps) {
 }
 
 export interface ResponsiveCodeBlockProps extends CodeProps {
-  fileName: string;
+  fileName?: string;
 }
 
 const cls = bem("responsive-code-block");
@@ -105,7 +115,10 @@ export function ResponsiveCodeBlock({
   className,
   ...props
 }: ResponsiveCodeBlockProps) {
-  const { data } = useSuspenseQuery(getResponsiveFormattedCode({ fileName, sourceText: children }));
+  const resolvedFileName = fileName ?? getDefaultFileName(props.language ?? defaultLanguage);
+  const { data } = useSuspenseQuery(
+    getResponsiveFormattedCode({ fileName: resolvedFileName, sourceText: children }),
+  );
   return (
     <div {...cls()}>
       {data.map(({ code, widths }) => (
@@ -126,7 +139,7 @@ export function ResponsiveCodeBlock({
 }
 
 export interface ResponsiveCodeBlockPrefetchParams {
-  fileName: string;
+  fileName?: string;
   sourceText: string;
   language?: string;
   lineNumbers?: boolean;
@@ -142,7 +155,12 @@ ResponsiveCodeBlock.prefetch = (
   { queryClient, signal }: PrefetchContext,
 ) =>
   queryClient
-    .query(getResponsiveFormattedCode({ fileName, sourceText }, signal))
+    .query(
+      getResponsiveFormattedCode(
+        { fileName: fileName ?? getDefaultFileName(language), sourceText },
+        signal,
+      ),
+    )
     .then((groups) =>
       Promise.all(
         groups.map(({ code }) =>
