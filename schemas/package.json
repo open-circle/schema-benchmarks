@@ -15,6 +15,7 @@
     "postbuild": "pnpm run gen:json-schemas",
     "gen:json-schemas": "node ./scripts/gen-accepted-json-schemas.ts",
     "build": "tsdown",
+    "coverage": "vitest run --coverage",
     "typecheck": "tsc",
     "test": "vitest"
   },
@@ -62,6 +63,7 @@
   "devDependencies": {
     "@ttsc/unplugin": "catalog:",
     "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "tsdown": "^0.22.14",
     "ttsc": "catalog:",
     "typescript": "catalog:",

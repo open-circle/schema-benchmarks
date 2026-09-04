@@ -20,6 +20,7 @@ catalog:
   "@types/react": ^19.2.18
   "@types/react-dom": ^19.2.5
   "@vitest/browser-playwright": ^5.0.0
+  "@vitest/coverage-v8": ^5.0.0
   "@vitest/expect": ^5.0.0
   "@vitest/pretty-format": ^5.0.0
   dedent: ^1.7.2
@@ -48,6 +49,7 @@ minimumReleaseAgeExclude:
   - "@vitest/ui@5.0.0"
   - "@vitest/utils@5.0.0"
   - mix-n-matchers@3.0.0
+  - "@vitest/coverage-v8@5.0.0"
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26

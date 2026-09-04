@@ -13,12 +13,14 @@
   },
   "scripts": {
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "typecheck": "tsc"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "mix-n-matchers": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
