@@ -1,3 +1,6 @@
+import { getTargetCompliance } from "@schema-benchmarks/json-schema-tests";
+import type { TestCase } from "@schema-benchmarks/json-schema-tests/types";
+import { targets } from "@schema-benchmarks/json-schema-tests/types";
 import type {
   JsonSchemaDirection,
   JsonSchemaConversionTarget,
@@ -27,6 +30,7 @@ import type { MaybeArray, MaybePromise, OneOf } from "@schema-benchmarks/utils";
 import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils";
 import { Ajv } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
+import * as Schema from "typebox/schema";
 import { assert, describe, expect, it } from "vitest";
 
 import { acceptedJsonSchemas } from "./accepted-json-schemas.ts";
@@ -92,6 +96,24 @@ const knownOutcomes: Record<string, KnownOutcomes> = {
     },
   },
 };
+
+async function* getMinimalCases(): AsyncGenerator<[string, Array<TestCase>]> {
+  yield [
+    "minimal",
+    [
+      {
+        description: "object schema",
+        schema: {},
+        tests: [{ description: "null data", data: null, valid: true }],
+      },
+      {
+        description: "boolean schema",
+        schema: true,
+        tests: [{ description: "null data", data: null, valid: true }],
+      },
+    ],
+  ];
+}
 
 function resolveKnownOutcome<Type extends keyof KnownOutcomes>(
   libraryInfo: LibraryInfo,
@@ -284,6 +306,35 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
         });
       },
     );
+  });
+
+  describe.runIf(libConfig.jsonSchema?.compliance)("JSON Schema compliance", () => {
+    it("executes JSON Schema compliance callbacks for each target", async () => {
+      for (const type of ["validation", "semantics"] as const) {
+        for (const config of ensureArray(libConfig.jsonSchema?.compliance?.[type] ?? [])) {
+          for (const target of targets) {
+            const results = await getTargetCompliance(target, config.run, false, getMinimalCases);
+            expect(results.count.passed + results.count.failed).toBe(2);
+          }
+        }
+      }
+      for (const config of ensureArray(libConfig.jsonSchema?.compliance?.roundtrip ?? [])) {
+        for (const target of targets) {
+          const results = await getTargetCompliance(
+            target,
+            async (schema, data, context) => {
+              const roundtripped = await config.run(schema, context);
+              // typebox consistently tests highest for validation compliance
+              // so using it introduces the smallest margin of error
+              return Schema.Check(roundtripped, data);
+            },
+            false,
+            getMinimalCases,
+          );
+          expect(results.count.passed + results.count.failed).toBe(2);
+        }
+      }
+    });
   });
   describe.runIf(libConfig.string)("string", () => {
     describe.each(unsafeEntries(libConfig.string ?? {}))("%s", (stringType, config) => {
