@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import remotes from "#constants/remotes.gen.ts";
 
@@ -64,6 +64,21 @@ describe("JSON Schema Test Suite", () => {
             schema: { outcome: "reject" },
             tests: [{ description: "rejected validator", data: null, valid: true }],
           },
+          {
+            description: "matching optional validator",
+            schema: { outcome: "true" },
+            tests: [{ description: "matching optional validator", data: null, valid: true }],
+          },
+          {
+            description: "mismatching optional validator",
+            schema: { outcome: "true" },
+            tests: [{ description: "mismatching optional validator", data: null, valid: false }],
+          },
+          {
+            description: "empty test group",
+            schema: { outcome: "true" },
+            tests: [],
+          },
         ],
       ],
     ];
@@ -91,15 +106,44 @@ describe("JSON Schema Test Suite", () => {
     );
 
     expect(results).toEqual<ComplianceResults>({
-      count: { passed: 2, failed: 3 },
+      count: { passed: 3, failed: 4 },
       byType: {
         spec: { passed: 2, failed: 1 },
-        optional: { passed: 0, failed: 2 },
+        optional: { passed: 1, failed: 3 },
       },
       files: {
         first: { count: { passed: 2, failed: 1 } },
-        "optional/second": { count: { passed: 0, failed: 2 } },
+        "optional/second": { count: { passed: 1, failed: 3 } },
       },
     });
+  });
+
+  it("logs validator errors when logging is enabled", async () => {
+    using consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const results = await getTargetCompliance(
+      "draft3",
+      async () => {
+        throw new Error("validator failure");
+      },
+      true,
+      async function* () {
+        yield [
+          "logged",
+          [
+            {
+              description: "logged failure",
+              schema: true,
+              tests: [{ description: "logged failure", data: null, valid: true }],
+            },
+          ],
+        ] as const;
+      },
+    );
+
+    expect(results.count.failed).toBe(1);
+    expect(consoleError).toHaveBeenCalledWith(
+      "Error running compliance function for logged",
+      expect.any(Error),
+    );
   });
 });
