@@ -1961,7 +1961,7 @@ const exitSucceed = /*#__PURE__*/ makeExit({
 /** @internal */
 const StackTraceKey = { key: "effect/Cause/StackTrace" };
 /** @internal */
-const InterruptorStackTrace$1 = { key: "effect/Cause/InterruptorStackTrace" };
+const InterruptorStackTrace = { key: "effect/Cause/InterruptorStackTrace" };
 /** @internal */
 const exitFailCause = /*#__PURE__*/ makeExit({
 	op: "Failure",
@@ -2032,7 +2032,6 @@ const TaggedError$1 = (tag) => {
 	Base.prototype.name = tag;
 	return Base;
 };
-TaggedError$1("NoSuchElementError");
 //#endregion
 //#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/option.js
 /**
@@ -3861,17 +3860,6 @@ const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventS
 //#endregion
 //#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Tracer.js
 /**
-* Defines the low-level tracing model used by Effect.
-*
-* A span records the lifetime of an operation, including its name, parent,
-* attributes, links, annotations, sampling decision, kind, and completion
-* status. The module also defines the tracer service, parent-span context,
-* external span support, trace propagation settings, and the default in-memory
-* span implementation.
-*
-* @since 2.0.0
-*/
-/**
 * Defines the string key for the parent-span context service.
 *
 * **When to use**
@@ -3892,7 +3880,6 @@ const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventS
 * @since 4.0.0
 */
 const ParentSpanKey = "effect/Tracer/ParentSpan";
-Service()(ParentSpanKey);
 /**
 * Defines the string key for the active tracer context reference.
 *
@@ -4167,7 +4154,7 @@ const fiberMiddleware = { interruptChildren: void 0 };
 const fiberStackAnnotations = (fiber) => {
 	if (!fiber.currentStackFrame) return void 0;
 	const annotations = /* @__PURE__ */ new Map();
-	annotations.set(InterruptorStackTrace$1.key, fiber.currentStackFrame);
+	annotations.set(InterruptorStackTrace.key, fiber.currentStackFrame);
 	return makeUnsafe$1(annotations);
 };
 /** @internal */
@@ -4590,13 +4577,10 @@ const runSyncExitWith = (context) => {
 };
 /** @internal */
 const runSyncExit$1 = /*#__PURE__*/ runSyncExitWith(/*#__PURE__*/ empty());
-TaggedError$1("TimeoutError");
-TaggedError$1("IllegalArgumentError");
-TaggedError$1("ExceededCapacityError");
 /** @internal */
 const AsyncFiberErrorTypeId = "~effect/Cause/AsyncFiberError";
 /** @internal */
-var AsyncFiberError = class extends TaggedError$1("AsyncFiberError") {
+var AsyncFiberError = class extends (/*#__PURE__*/ TaggedError$1("AsyncFiberError")) {
 	[AsyncFiberErrorTypeId] = AsyncFiberErrorTypeId;
 	constructor(fiber) {
 		super({
@@ -4605,7 +4589,6 @@ var AsyncFiberError = class extends TaggedError$1("AsyncFiberError") {
 		});
 	}
 };
-TaggedError$1("UnknownError");
 const colors = {
 	bold: "1",
 	red: "31",
@@ -4621,17 +4604,6 @@ const colors = {
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
 //#endregion
 //#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/Cause.js
-/**
-* Records the full reason an `Effect` failed.
-*
-* A `Cause<E>` can contain typed failures, unexpected defects, interruptions,
-* and annotations. Keeping those details together lets code inspect or format
-* failures without first collapsing them to a single error value. This module
-* includes the `Cause` and `Reason` data types, helpers for building and
-* checking causes, and small error types used by several Effect APIs.
-*
-* @since 2.0.0
-*/
 /**
 * Narrows a `Reason` to `Fail`.
 *
@@ -4690,8 +4662,6 @@ const isFailReason = isFailReason$1;
 * @since 2.0.0
 */
 const map = causeMap;
-Service()("effect/Cause/StackTrace");
-Service()("effect/Cause/InterruptorStackTrace");
 /**
 * Creates a tagged error class with a `_tag` discriminator.
 *
@@ -5201,7 +5171,6 @@ const catchCause = catchCause$1;
 * @since 2.0.0
 */
 const runSyncExit = runSyncExit$1;
-Service()("effect/Effect/Transaction");
 /**
 * Applies `map` eagerly when an effect is already resolved.
 *
@@ -5294,8 +5263,6 @@ const flatMapEager = flatMapEager$1;
 * @since 4.0.0
 */
 const fnUntracedEager = fnUntracedEager$1;
-Service()("effect/DateTime/CurrentTimeZone");
-TaggedError("EncodingError");
 //#endregion
 //#region ../node_modules/.pnpm/effect@4.0.0-beta.101/node_modules/effect/dist/internal/record.js
 /**
@@ -8315,7 +8282,7 @@ const TypeId$1 = "~effect/SchemaError/SchemaError";
 * @category errors
 * @since 4.0.0
 */
-var SchemaError = class extends TaggedError("SchemaError") {
+var SchemaError = class extends (/*#__PURE__*/ TaggedError("SchemaError")) {
 	[TypeId$1] = TypeId$1;
 	constructor(issue) {
 		super({ issue });

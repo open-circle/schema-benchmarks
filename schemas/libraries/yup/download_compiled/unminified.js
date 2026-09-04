@@ -96,8 +96,8 @@ var require_property_expr = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		return path.match(SPLIT_REGEX) || [""];
 	}
 	function forEach(parts, iter, thisArg) {
-		var len = parts.length, part, idx, isArray, isBracket;
-		for (idx = 0; idx < len; idx++) {
+		var len = parts.length, part, idx = 0, isArray, isBracket;
+		for (; idx < len; idx++) {
 			part = parts[idx];
 			if (part) {
 				if (shouldBeQuoted(part)) part = "\"" + part + "\"";
