@@ -35,6 +35,7 @@ import * as scales from "#src/shared/data/scale";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
 
 import vitePwaOpts from "./offline/opts.ts";
+import rehypeResponsiveCode from "./vite/rehype-responsive-code.ts";
 import materialSymbols from "./vite/symbols.ts";
 
 const isStorybook = !!process.env.STORYBOOK;
@@ -71,7 +72,8 @@ const config = defineConfig({
       },
     }),
     mdx({
-      rehypePlugins: [rehypePrism, rehypeCodeProps, rehypeSlug],
+      // rehypeResponsiveCode must run before rehypePrism so the generated blocks get highlighted
+      rehypePlugins: [rehypeResponsiveCode, rehypePrism, rehypeCodeProps, rehypeSlug],
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
       providerImportSource: "@mdx-js/react",
     }),

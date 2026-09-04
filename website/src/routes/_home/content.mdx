@@ -39,7 +39,7 @@ Steps benchmarked include:
 
 Creating the schema itself. This is usually a one time cost.
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 
 export const personSchema = v.object({
@@ -55,7 +55,7 @@ export type Person = v.InferOutput<typeof personSchema>;
 
 Checking if a given value matches the schema. Crucially, this is different to <Link to="#parsing">parsing</Link> because it doesn't return a new value.
 
-```ts
+```ts responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -81,7 +81,7 @@ Validating invalid data:
 
 Checking if a given value matches the schema, **and** returning a new value. This will include any transformations.
 
-```ts
+```ts responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -127,7 +127,7 @@ Some libraries support different error handling strategies. We specifically trac
 
 Many libraries implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
 
-```ts
+```ts responsive
 import { personSchema } from "./schemas";
 
 const person = await upfetch(url, { schema: personSchema });
@@ -154,7 +154,7 @@ Some libraries support two way conversion of data, often referred to as "encodin
 
 We benchmark the time taken to encode and decode a `BigInt` to and from a string.
 
-```ts
+```ts responsive
 import * as z from "zod";
 
 const bigIntFromString = z.codec(z.string(), z.bigint(), {
@@ -184,7 +184,7 @@ Encode (<ColorDisplay color="var(--link)" size="small" />) and decode (<ColorDis
 
 Some libraries can convert a schema into a [JSON Schema](https://json-schema.org/), which lets documentation generators, OpenAPI builders and LLM structured outputs consume it.
 
-```ts
+```ts responsive
 import { personSchema } from "./schemas";
 
 const jsonSchema = z.toJSONSchema(personSchema, { target: "draft-2020-12" });
@@ -200,7 +200,7 @@ With a target of `draft-2020-12` and `input` type:
 
 Some libraries can also go the other way, converting a [JSON Schema](https://json-schema.org/) into a library schema at runtime.
 
-```ts
+```ts responsive
 const schema = z.fromJSONSchema(jsonSchema);
 ```
 
@@ -210,7 +210,7 @@ const schema = z.fromJSONSchema(jsonSchema);
 
 We test JSON Schema implementations against the [JSON Schema Test Suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite).
 
-```ts title="Validation"
+```ts title="Validation" responsive
 assert(Schema.Check(remotes, schema, data) === expected);
 ```
 
@@ -220,7 +220,7 @@ The graph shows each library's validation results for Draft 2020-12.
 
 We also test libraries that allow schemas to be created _from_ JSON Schema, both using their native schema validation ("semantics"), and after converting back into JSON Schema ("roundtrip").
 
-```ts title="Semantics"
+```ts title="Semantics" responsive
 assert(z.fromJSONSchema(schema).safeParse(data).success === expected);
 ```
 
@@ -228,7 +228,7 @@ For semantics with Draft 2020-12:
 
 <CompliancePlot type="semantics" target="draft2020-12" />
 
-```ts title="Roundtrip"
+```ts title="Roundtrip" responsive
 assert(Schema.Check(remotes, z.toJSONSchema(z.fromJSONSchema(schema)), data) === expected);
 ```
 

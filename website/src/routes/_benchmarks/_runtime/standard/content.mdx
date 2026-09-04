@@ -3,7 +3,7 @@ import { Admonition } from "#src/shared/components/admonition";
 
 Many libraries implement the [Standard Schema](https://standardschema.dev) interface, which allows many other libraries to accept them without needing to specialise for each library.
 
-```ts
+```ts responsive
 import { personSchema } from "./schemas";
 
 const person = await upfetch(url, { schema: personSchema });

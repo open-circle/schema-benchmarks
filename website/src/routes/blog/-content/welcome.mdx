@@ -112,7 +112,7 @@ On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the
 
 After a closer review, we noticed a discrepancy between our example file for `zod` and its [docs](https://zod.dev), namely that our benchmark was using a _default_ import, and the docs show a _namespace_ import.
 
-```ts
+```ts responsive
 // before
 import z from "zod";
 // after
@@ -125,7 +125,7 @@ With this simple change, `zod`'s bundle size plummets to a much more reasonable 
 
 ### <Link to="/initialization">Initialization</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 
 export const personSchema = v.object({
@@ -148,7 +148,7 @@ A clear outlier here is [`ajv`](https://ajv.js.org), taking 4ms to initialize (r
 
 ### <Link to="/validation">Validation</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -183,7 +183,7 @@ As to be expected, the libraries that use optimizations like precompilation ([`t
 
 ### <Link to="/parsing">Parsing</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -226,7 +226,7 @@ two of these involve a `try`/`catch` wrapper, which may be slowing them down.
 
 In version 1.1, this was [changed](https://github.com/sinclairzx81/typebox/pull/1532) to be an opt-in feature.
 
-```ts
+```ts responsive
 // 1.0
 const A = Value.Parse(Type.Number(), "12345"); // A = 12345
 

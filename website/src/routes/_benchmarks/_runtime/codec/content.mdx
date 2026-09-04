@@ -4,7 +4,7 @@ Some schema libraries support two way conversion of data, often referred to as "
 
 We benchmark the time taken to encode and decode a `bigint` to and from a string.
 
-```ts
+```ts responsive
 import * as z from "zod";
 
 const bigIntFromString = z.codec(z.string(), z.bigint(), {
