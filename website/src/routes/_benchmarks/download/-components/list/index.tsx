@@ -90,6 +90,7 @@ export function DownloadList({ results, mbps, minify, gzipScaler }: DownloadList
                       params={{
                         _splat: `schemas/libraries/${result.fileName}`,
                       }}
+                      search={{ formatted: true }}
                       target="_blank"
                       preload={false}
                       rel="noreferrer noopener"

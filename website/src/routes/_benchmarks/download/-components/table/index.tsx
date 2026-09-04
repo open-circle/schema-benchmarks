@@ -117,6 +117,7 @@ export function DownloadTable({
                     params={{
                       _splat: `schemas/libraries/${result.fileName}`,
                     }}
+                    search={{ formatted: true }}
                     preload={false}
                     target="_blank"
                     rel="noreferrer noopener"
