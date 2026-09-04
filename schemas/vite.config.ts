@@ -13,13 +13,13 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
       reportsDirectory: "./coverage",
       include: ["src/**/*.ts", "libraries/**/*.ts", "dist/*.mjs"],
-      exclude: ["**/*.test.ts", "**/*.test.tsx", "**/*.test-d.ts", "**/*.test-d.tsx"],
+      exclude: ["**/*.test.ts", "**/*.test-d.ts", "**/download.ts", "**/download/**/*.ts"],
     },
     projects: [
       {
         test: {
           name: "node",
-          include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
+          include: ["**/*.node.test.ts"],
         },
       },
       {
