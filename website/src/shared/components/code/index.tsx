@@ -7,6 +7,7 @@ import bem from "react-bem-helper";
 import { ToggleButton } from "#src/shared/components/button/toggle";
 import { toastWithHaptics } from "#src/shared/components/snackbar/toast";
 import { MdSymbol } from "#src/shared/components/symbol";
+import type { PrefetchContext } from "#src/shared/lib/fetch";
 import { getHighlightedCode, getResponsiveFormattedCode } from "#src/shared/lib/highlight";
 
 const defaultLanguage = "typescript";
@@ -123,3 +124,29 @@ export function ResponsiveCodeBlock({
     </div>
   );
 }
+
+export interface ResponsiveCodeBlockPrefetchParams {
+  fileName: string;
+  sourceText: string;
+  language?: string;
+  lineNumbers?: boolean;
+}
+
+ResponsiveCodeBlock.prefetch = (
+  {
+    fileName,
+    sourceText,
+    language = defaultLanguage,
+    lineNumbers = false,
+  }: ResponsiveCodeBlockPrefetchParams,
+  { queryClient, signal }: PrefetchContext,
+) =>
+  queryClient
+    .query(getResponsiveFormattedCode({ fileName, sourceText }, signal))
+    .then((groups) =>
+      Promise.all(
+        groups.map(({ code }) =>
+          queryClient.query(getHighlightedCode({ code, language, lineNumbers }, signal)),
+        ),
+      ),
+    );

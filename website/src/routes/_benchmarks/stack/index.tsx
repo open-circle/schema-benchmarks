@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import * as v from "valibot";
 
 import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
@@ -40,7 +41,7 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
       queryClient.query(
         getHighlightedAnsi({ input: exampleStack, lineNumbers: true }, abortController.signal),
       ),
-      ...results.flatMap(({ output, snippet }) => [
+      ...results.flatMap(({ output, snippet, libraryName }) => [
         output &&
           queryClient.query(
             getHighlightedAnsi(
@@ -49,6 +50,10 @@ export const Route = createFileRoute("/_benchmarks/stack/")({
             ),
           ),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
+        ResponsiveCodeBlock.prefetch(
+          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { queryClient, signal: abortController.signal },
+        ),
       ]),
     ]);
   },

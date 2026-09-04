@@ -5,7 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { jsonSchemaDirectionProps } from "#src/routes/json-schema/_conversion/-constants";
-import { CodeBlock } from "#src/shared/components/code";
+import { CodeBlock, ResponsiveCodeBlock } from "#src/shared/components/code";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Bar } from "#src/shared/components/table/bar";
@@ -58,7 +58,9 @@ export function ToJsonList({ results, meanScaler }: ToJsonListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <CodeBlock>{result.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
+                    {result.snippet}
+                  </ResponsiveCodeBlock>
                   <CodeBlock language="json" title="Generated JSON schema">
                     {result.jsonSchema}
                   </CodeBlock>

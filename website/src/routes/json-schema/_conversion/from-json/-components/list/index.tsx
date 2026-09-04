@@ -4,7 +4,7 @@ import bem from "react-bem-helper";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { Bar } from "#src/shared/components/table/bar";
 
@@ -47,7 +47,9 @@ export function FromJsonList({ results, meanScaler }: FromJsonListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <CodeBlock>{result.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
+                    {result.snippet}
+                  </ResponsiveCodeBlock>
                 </div>
                 <dl {...cls("metrics")}>
                   <div>

@@ -1,7 +1,6 @@
 import * as url from "node:url";
 
 import { getOrInsertComputed } from "@schema-benchmarks/utils";
-import type { format } from "oxfmt";
 
 // oxlint-disable-next-line typescript/consistent-type-imports
 type OxfmtMod = typeof import("oxfmt");
@@ -30,9 +29,6 @@ export async function getOxfmt(): Promise<OxfmtMod> {
   return oxfmtPromise;
 }
 
-export const aggregateFormatErrors = (errors: Awaited<ReturnType<typeof format>>["errors"]) =>
-  new Error("Failed to format code", { cause: errors });
-
 export const printWidths = [40, 60, 80, 100] as const;
 export type PrintWidth = (typeof printWidths)[number];
 
@@ -50,7 +46,8 @@ export async function formatResponsiveCode(
     printWidths.map((width) =>
       format(fileName, sourceText, { sortImports: true, printWidth: width }).then((result) => {
         if (result.errors.length) {
-          throw aggregateFormatErrors(result.errors);
+          console.warn(result.errors);
+          return { width, code: sourceText };
         }
         return { width, code: result.code };
       }),

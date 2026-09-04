@@ -6,7 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { ToggleButton } from "#src/shared/components/button/toggle";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
@@ -68,7 +68,9 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
               <div {...cls("details")}>
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Encode</h6>
-                  <CodeBlock>{result.encode.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
+                    {result.encode.snippet}
+                  </ResponsiveCodeBlock>
                   {isCommented(result.encode.snippet) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}
@@ -76,7 +78,9 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
 
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Decode</h6>
-                  <CodeBlock>{result.decode.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock fileName={`${result.libraryName}.ts`}>
+                    {result.decode.snippet}
+                  </ResponsiveCodeBlock>
                   {isCommented(result.decode.snippet) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}

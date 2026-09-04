@@ -13,6 +13,7 @@ import {
   optionalJsonSchemaConversionTargetSchema,
 } from "#src/routes/json-schema/_conversion/-constants";
 import { SupportMatrix } from "#src/routes/json-schema/_conversion/to-json/-components/matrix.tsx";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -61,6 +62,10 @@ export const Route = createFileRoute("/json-schema/_conversion/to-json/$tab")({
         .flatMap(({ snippet, libraryName }) => [
           DownloadCount.prefetch(libraryName, { queryClient, signal: abortController.signal }),
           queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
+          ResponsiveCodeBlock.prefetch(
+            { fileName: `${libraryName}.ts`, sourceText: snippet },
+            { queryClient, signal: abortController.signal },
+          ),
         ]),
     );
   },

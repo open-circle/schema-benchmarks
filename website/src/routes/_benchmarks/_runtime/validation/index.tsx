@@ -14,6 +14,7 @@ import {
 } from "#src/routes/_benchmarks/_runtime/-constants";
 import { useSortedResults } from "#src/routes/_benchmarks/_runtime/-hooks";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
@@ -48,6 +49,10 @@ export const Route = createFileRoute("/_benchmarks/_runtime/validation/")({
           signal: abortController.signal,
         }),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
+        ResponsiveCodeBlock.prefetch(
+          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { queryClient, signal: abortController.signal },
+        ),
       ]),
     );
   },

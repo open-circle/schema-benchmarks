@@ -7,7 +7,7 @@ import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
 
-import { aggregateFormatErrors, formatResponsiveCode, getOxfmt } from "#src/shared/lib/oxfmt";
+import { formatResponsiveCode, getOxfmt } from "#src/shared/lib/oxfmt";
 
 export const highlightInput = v.object({
   code: v.string(),
@@ -171,7 +171,8 @@ export const getFormattedCodeFn = createServerFn({ method: "POST" })
     const { format } = await getOxfmt();
     const result = await format(fileName, sourceText, { sortImports: true });
     if (result.errors.length) {
-      throw aggregateFormatErrors(result.errors);
+      console.warn(result.errors);
+      return sourceText;
     }
     return result.code;
   });

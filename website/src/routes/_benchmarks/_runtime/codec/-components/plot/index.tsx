@@ -19,7 +19,7 @@ import { Suspense, useMemo, useState } from "react";
 
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color";
 import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
@@ -209,7 +209,9 @@ export function BaseCodecPlot({ data }: { data: Array<CodecResult> }) {
               </dl>
               {point.snippet && (
                 <Suspense fallback={<Spinner />}>
-                  <CodeBlock>{point.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock fileName={`${point.library}.ts`}>
+                    {point.snippet}
+                  </ResponsiveCodeBlock>
                 </Suspense>
               )}
             </ChartTooltipBody>

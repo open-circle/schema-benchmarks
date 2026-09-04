@@ -16,6 +16,7 @@ import {
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
 import { ComplianceDetail } from "#src/routes/json-schema/compliance/-components/detail/index.tsx";
 import { ComplianceResults } from "#src/routes/json-schema/compliance/-components/results.tsx";
+import { ResponsiveCodeBlock } from "#src/shared/components/code/index.tsx";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips.tsx";
 import { PageFilters } from "#src/shared/components/page-filter/index.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
@@ -70,6 +71,10 @@ export const Route = createFileRoute("/json-schema/compliance/$tab")({
           signal: abortController.signal,
         }),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
+        ResponsiveCodeBlock.prefetch(
+          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { queryClient, signal: abortController.signal },
+        ),
       ]),
     );
   },

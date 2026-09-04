@@ -4,6 +4,7 @@ import * as v from "valibot";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { sortParamsEntries } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getJsonSchemaBenchResults } from "#src/routes/json-schema/-query.ts";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { generateMetadata } from "#src/shared/data/meta";
 import { getHighlightedCode } from "#src/shared/lib/highlight";
 
@@ -26,6 +27,10 @@ export const Route = createFileRoute("/json-schema/_conversion/from-json/")({
       benchResults.conversion.fromJson.flatMap(({ snippet, libraryName }) => [
         DownloadCount.prefetch(libraryName, { queryClient, signal: abortController.signal }),
         queryClient.query(getHighlightedCode({ code: snippet }, abortController.signal)),
+        ResponsiveCodeBlock.prefetch(
+          { fileName: `${libraryName}.ts`, sourceText: snippet },
+          { queryClient, signal: abortController.signal },
+        ),
       ]),
     );
   },
