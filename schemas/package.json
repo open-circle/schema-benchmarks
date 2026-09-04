@@ -44,7 +44,7 @@
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.22",
     "io-ts-types": "^0.5.19",
-    "joi": "^18.2.5",
+    "joi": "^18.2.8",
     "joi-to-json": "^5.0.5",
     "jsonschema": "^1.5.0",
     "mutative": "catalog:",
@@ -68,6 +68,6 @@
     "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^2.0.2"
+    "zod-compiler": "^2.0.3"
   }
 }
