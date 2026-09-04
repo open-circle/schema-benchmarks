@@ -12,17 +12,19 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "html", "lcov"],
       reportsDirectory: "./coverage",
-      include: ["src/**/*.ts", "libraries/**/*.ts"],
+      include: ["src/**/*.ts", "libraries/**/*.ts", "dist/*.mjs"],
       exclude: ["**/*.test.ts", "**/*.test.tsx", "**/*.test-d.ts", "**/*.test-d.tsx"],
     },
     projects: [
       {
         test: {
+          name: "node",
           include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
         },
       },
       {
         test: {
+          name: "typecheck",
           typecheck: {
             enabled: true,
             only: true,
