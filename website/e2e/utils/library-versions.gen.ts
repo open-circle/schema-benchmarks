@@ -15,7 +15,7 @@ export const libraryVersions = {
   "effect@beta": "4.0.0-beta.101",
   effect: "3.22.0",
   "io-ts": "2.2.22",
-  joi: "18.2.5",
+  joi: "18.2.8",
   jsonschema: "1.5.0",
   runtypes: "7.0.5",
   superstruct: "2.0.2",
@@ -28,5 +28,5 @@ export const libraryVersions = {
   zod: "4.5.4",
   "zod/mini": "4.5.4",
   "zod/v3": "4.5.4",
-  "zod-compiler": "2.0.2",
+  "zod-compiler": "2.0.3",
 } as const satisfies Record<string, string>;
