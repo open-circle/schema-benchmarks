@@ -8,7 +8,7 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { ButtonGroup } from "#src/shared/components/button";
 import { ToggleButton } from "#src/shared/components/button/toggle";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar";
@@ -59,7 +59,7 @@ export function BenchList({ results, meanScaler }: BenchListProps) {
               </summary>
               <div {...cls("details")}>
                 <div {...cls("code")}>
-                  <CodeBlock>{result.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                   {(result.snippet.startsWith("//") || result.snippet.startsWith("/*")) && (
                     <p className="typo-caption">(Commented code is not benchmarked)</p>
                   )}

@@ -93,7 +93,7 @@ We run these benchmarks in a GitHub action, using [`rolldown`](https://rolldown.
 
 For schema libraries used on the client, bundle size can matter a lot, as it has an effect on how long it takes for your website to load. On the server, it may matter less.
 
-In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download.ts" }} target="\_blank" rel="noreferrer noopener">example usage files</Link> for each library, and measure the size of the compiled output (both <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/minified.js" }} target="\_blank" rel="noreferrer noopener">minified</Link> and <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/unminified.js" }} target="\_blank" rel="noreferrer noopener">unminified</Link>).
+In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download.ts" }} search={{ formatted: true }} target="\_blank" rel="noreferrer noopener">example usage files</Link> for each library, and measure the size of the compiled output (both <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/minified.js" }} target="\_blank" rel="noreferrer noopener">minified</Link> and <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/unminified.js" }} target="\_blank" rel="noreferrer noopener">unminified</Link>).
 
 Here are the results for minified and gzipped bundle size:
 
@@ -112,7 +112,7 @@ On the opposite end, [`zod`](https://zod.dev)'s "classic" API clocks in with the
 
 After a closer review, we noticed a discrepancy between our example file for `zod` and its [docs](https://zod.dev), namely that our benchmark was using a _default_ import, and the docs show a _namespace_ import.
 
-```ts
+```ts responsive
 // before
 import z from "zod";
 // after
@@ -125,7 +125,7 @@ With this simple change, `zod`'s bundle size plummets to a much more reasonable 
 
 ### <Link to="/initialization">Initialization</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 
 export const personSchema = v.object({
@@ -136,7 +136,7 @@ export const personSchema = v.object({
 
 Creating a schema can be a one time cost, but it depends on usage. Servers that are long lasting probably don't care, but short lived processes like CLI tools or browser extensions would want to avoid doing too much work at startup.
 
-For each library, we create a <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/index.ts" }} target="\_blank" rel="noreferrer noopener">`getSchema`</Link> function that returns a schema (with the same validations as the other libraries, to keep the comparison fair). We then benchmark how long it takes to call this function.
+For each library, we create a <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/index.ts" }} search={{ formatted: true }} target="\_blank" rel="noreferrer noopener">`getSchema`</Link> function that returns a schema (with the same validations as the other libraries, to keep the comparison fair). We then benchmark how long it takes to call this function.
 
 Here are the results:
 
@@ -148,7 +148,7 @@ A clear outlier here is [`ajv`](https://ajv.js.org), taking 4ms to initialize (r
 
 ### <Link to="/validation">Validation</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -183,7 +183,7 @@ As to be expected, the libraries that use optimizations like precompilation ([`t
 
 ### <Link to="/parsing">Parsing</Link>
 
-```ts title="schemas.ts"
+```ts title="schemas.ts" responsive
 import * as v from "valibot";
 import { personSchema } from "./schemas";
 
@@ -226,7 +226,7 @@ two of these involve a `try`/`catch` wrapper, which may be slowing them down.
 
 In version 1.1, this was [changed](https://github.com/sinclairzx81/typebox/pull/1532) to be an opt-in feature.
 
-```ts
+```ts responsive
 // 1.0
 const A = Value.Parse(Type.Number(), "12345"); // A = 12345
 

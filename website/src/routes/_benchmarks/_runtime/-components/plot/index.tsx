@@ -20,7 +20,7 @@ import { Suspense, useMemo, useState } from "react";
 import { errorTypeProps, optimizeTypeProps } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
 import { Checkbox, ControlLabel } from "#src/shared/components/checkbox";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { ColorDisplay } from "#src/shared/components/color/index.tsx";
 import { getVerticalOffsets } from "#src/shared/components/plot/offset";
 import { type PlotScale, PlotScaleToggle } from "#src/shared/components/plot/scale-toggle";
@@ -217,7 +217,7 @@ export function BaseBenchPlot({ data }: { data: Array<BenchResult> }) {
               </dl>
               {result.snippet && (
                 <Suspense fallback={<Spinner />}>
-                  <CodeBlock>{result.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 </Suspense>
               )}
             </ChartTooltipBody>

@@ -4,7 +4,7 @@ Many libraries can convert a schema into a [JSON Schema](https://json-schema.org
 
 We benchmark whichever API the library provides, using a small schema with a codec. Libraries that generate JSON schemas at build time (e.g. typia) are not included — there's nothing to time at runtime.
 
-```ts
+```ts responsive
 const schema = z.object({
   id: z.number(),
   name: z.string(),
@@ -20,7 +20,7 @@ Because of the codec, the **input** and **output** types differ (`price` is a st
 
 Some libraries also implement the [Standard JSON Schema](https://standardschema.dev/json-schema) interface, which lets a tool generate a JSON schema without specialising for each library:
 
-```ts
+```ts responsive
 const jsonSchema = personSchema["~standard"].jsonSchema.input({ target: "draft-2020-12" });
 ```
 

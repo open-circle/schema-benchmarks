@@ -1,5 +1,3 @@
-import * as url from "node:url";
-
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { getCyrb53Hash } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
@@ -8,6 +6,8 @@ import { parseAnsiSequences } from "ansi-sequence-parser";
 import Prism from "prismjs";
 import loadLanguages from "prismjs/components/index";
 import * as v from "valibot";
+
+import { formatResponsiveCode, getOxfmt } from "#src/shared/lib/oxfmt";
 
 export const highlightInput = v.object({
   code: v.string(),
@@ -171,39 +171,11 @@ export const getFormattedCodeFn = createServerFn({ method: "POST" })
     const { format } = await getOxfmt();
     const result = await format(fileName, sourceText, { sortImports: true });
     if (result.errors.length) {
-      throw new Error(
-        `Failed to format code:\n\n${result.errors.map((e) => "- " + e.message).join("\n")}`,
-      );
+      console.warn(result.errors);
+      return sourceText;
     }
     return result.code;
   });
-
-// oxlint-disable-next-line typescript/consistent-type-imports
-type OxfmtMod = typeof import("oxfmt");
-
-let oxfmtPromise: Promise<OxfmtMod> | null = null;
-
-async function getOxfmt(): Promise<OxfmtMod> {
-  if (!oxfmtPromise) {
-    const bindingCandidate = `@oxfmt/binding-linux-${process.arch}-gnu`;
-
-    // Make oxfmt load the exact native binary path instead of relying on optional dependency package metadata.
-    try {
-      process.env.NAPI_RS_NATIVE_LIBRARY_PATH = url.fileURLToPath(
-        import.meta.resolve(bindingCandidate),
-      );
-    } catch {
-      // Ignore if the native library path cannot be resolved.
-      console.log(
-        `Warning: Failed to resolve native library path for ${bindingCandidate}. Falling back to default oxfmt behavior.`,
-      );
-    }
-
-    oxfmtPromise = import("oxfmt");
-  }
-
-  return oxfmtPromise;
-}
 
 export const getFormattedCode = (
   { fileName, sourceText }: { fileName: string; sourceText: string },
@@ -213,6 +185,24 @@ export const getFormattedCode = (
     queryKey: ["format-code", fileName, getCyrb53Hash(sourceText)],
     queryFn: ({ signal }) =>
       getFormattedCodeFn({
+        data: { fileName, sourceText },
+        signal: anyAbortSignal(signal, signalOpt),
+      }),
+  });
+};
+
+export const getResponsiveFormattedCodeFn = createServerFn({ method: "POST" })
+  .validator(v.object({ fileName: v.string(), sourceText: v.string() }))
+  .handler(({ data: { fileName, sourceText } }) => formatResponsiveCode(fileName, sourceText));
+
+export const getResponsiveFormattedCode = (
+  { fileName, sourceText }: { fileName: string; sourceText: string },
+  signalOpt?: AbortSignal,
+) => {
+  return queryOptions({
+    queryKey: ["responsive-format-code", fileName, getCyrb53Hash(sourceText)],
+    queryFn: ({ signal }) =>
+      getResponsiveFormattedCodeFn({
         data: { fileName, sourceText },
         signal: anyAbortSignal(signal, signalOpt),
       }),

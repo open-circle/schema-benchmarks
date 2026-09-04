@@ -17,6 +17,7 @@
 @import "../components/button/index.css";
 @import "../components/checkbox/index.css";
 @import "../components/chip/index.css";
+@import "../components/code/index.css";
 @import "../components/color/index.css";
 @import "../components/consolewriter/index.css";
 @import "../components/details/index.css";
@@ -145,43 +146,12 @@ code[class*="language-"] {
     outline: none;
     box-shadow: 0 0 0 2px var(--focus-background);
   }
-  .code-block__title {
-    position: sticky;
-    left: -1em;
-    right: -1em;
-    padding: 0.5rem 1rem;
-    margin: -1em -1em 1rem;
-    border-bottom: 1px solid var(--divider);
-    font: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .code-block__actions {
-      margin: -0.5rem;
-      margin-left: auto;
-      &:dir(rtl) {
-        margin-left: -0.5rem;
-        margin-right: auto;
-      }
-    }
-  }
   &.line-numbers {
     padding-left: 3.8em;
     padding-top: 0;
     > code {
       display: block;
       padding-top: 1em;
-    }
-    .code-block__title {
-      margin: 0 -1em;
-      margin-left: -3.8em;
-      left: -3.8em;
-      &:dir(rtl) {
-        margin-left: -1em;
-        margin-right: -3.8em;
-        right: -3.8em;
-        left: -1em;
-      }
     }
     .line-numbers-rows {
       padding: 1em 0;
@@ -250,6 +220,9 @@ pre[class*="language-"] {
   flex-direction: column;
   gap: var(--margin);
 
+  @media (--tablet) or (--tablet-large) or (--desktop) {
+    width: 100%;
+  }
   @media (--tablet-large) {
     max-width: 56.5rem; /* 840px + 4rem */
     margin: 0 auto;

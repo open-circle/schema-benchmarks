@@ -17,6 +17,7 @@ import {
   optionalOptimizeTypeSchema,
 } from "#src/routes/_benchmarks/_runtime/-constants";
 import { getBenchResults } from "#src/routes/_benchmarks/_runtime/-query";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { PageFilters } from "#src/shared/components/page-filter";
 import { PageFilterChips } from "#src/shared/components/page-filter/chips";
 import { generateMetadata } from "#src/shared/data/meta";
@@ -50,6 +51,14 @@ export const Route = createFileRoute("/_benchmarks/_runtime/codec/")({
           }),
           queryClient.query(getHighlightedCode({ code: encode.snippet }, abortController.signal)),
           queryClient.query(getHighlightedCode({ code: decode.snippet }, abortController.signal)),
+          ResponsiveCodeBlock.prefetch(
+            { sourceText: encode.snippet },
+            { queryClient, signal: abortController.signal },
+          ),
+          ResponsiveCodeBlock.prefetch(
+            { sourceText: decode.snippet },
+            { queryClient, signal: abortController.signal },
+          ),
         ],
       ),
     );

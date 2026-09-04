@@ -4,10 +4,10 @@ import { isResponseError } from "up-fetch";
 import * as v from "valibot";
 
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle";
-import { CodeBlock } from "#src/shared/components/code";
+import { CodeBlock, ResponsiveCodeBlock } from "#src/shared/components/code";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { generateMetadata } from "#src/shared/data/meta";
-import { getHighlightedCode } from "#src/shared/lib/highlight";
+import { getHighlightedCode, getResponsiveFormattedCode } from "#src/shared/lib/highlight";
 
 import { getRaw } from "./-query";
 
@@ -78,12 +78,25 @@ export const Route = createFileRoute("/repo/raw/$")({
     if (!fileName) throw notFound();
     try {
       const code = await queryClient.query({
-        ...getRaw({ fileName, formatted }, abortController.signal),
+        ...getRaw({ fileName }, abortController.signal),
         staleTime: "static",
       });
-      await queryClient.query(
-        getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
-      );
+      if (formatted) {
+        const groups = await queryClient.query(
+          getResponsiveFormattedCode({ fileName, sourceText: code }, abortController.signal),
+        );
+        await Promise.all(
+          groups.map(({ code }) =>
+            queryClient.query(
+              getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
+            ),
+          ),
+        );
+      } else {
+        await queryClient.query(
+          getHighlightedCode({ code, language: getLanguage(fileName) }, abortController.signal),
+        );
+      }
     } catch (e) {
       if (isResponseError(e) && e.status === 404) throw notFound();
       throw e;
@@ -106,11 +119,13 @@ export const Route = createFileRoute("/repo/raw/$")({
 function RouteComponent() {
   const { _splat: fileName = "" } = Route.useParams();
   const { formatted } = Route.useSearch();
-  const { data } = useSuspenseQuery(getRaw({ fileName, formatted }));
+  const { data } = useSuspenseQuery(getRaw({ fileName }));
   const isCompiled = fileName.includes("_compiled");
+  const CodeComponent = formatted ? ResponsiveCodeBlock : CodeBlock;
   return (
-    <CodeBlock
+    <CodeComponent
       title={fileName}
+      fileName={fileName}
       lineNumbers
       language={getLanguage(fileName)}
       showCopy
@@ -128,6 +143,6 @@ function RouteComponent() {
       }
     >
       {data}
-    </CodeBlock>
+    </CodeComponent>
   );
 }

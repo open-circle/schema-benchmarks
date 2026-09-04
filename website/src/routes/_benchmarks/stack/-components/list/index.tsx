@@ -6,7 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import type { SortableKey } from "#src/routes/_benchmarks/stack/-constants";
 import { highlightFrame } from "#src/routes/_benchmarks/stack/-constants";
-import { CodeBlock } from "#src/shared/components/code";
+import { ResponsiveCodeBlock } from "#src/shared/components/code";
 import { AnsiBlock } from "#src/shared/components/code/ansi";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list";
 import type { BarProps } from "#src/shared/components/table/bar";
@@ -61,7 +61,7 @@ export function StackList({ results, frameScale, lineCountScale, sortBy }: Stack
               <div {...cls("details")}>
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Snippet</h6>
-                  <CodeBlock>{result.snippet}</CodeBlock>
+                  <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 </div>
 
                 {!!result.output && (

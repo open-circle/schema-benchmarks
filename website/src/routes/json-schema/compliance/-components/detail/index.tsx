@@ -13,7 +13,7 @@ import {
   processCount,
 } from "#src/routes/json-schema/compliance/-constants.tsx";
 import { Button } from "#src/shared/components/button/index.tsx";
-import { CodeBlock } from "#src/shared/components/code/index.tsx";
+import { ResponsiveCodeBlock } from "#src/shared/components/code/index.tsx";
 import {
   Dialog,
   DialogActions,
@@ -100,7 +100,7 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                 </div>
               </dl>
               <div {...cls("details-container")}>
-                <CodeBlock>{result.snippet}</CodeBlock>
+                <ResponsiveCodeBlock>{result.snippet}</ResponsiveCodeBlock>
                 <details {...cls("details")}>
                   <summary {...cls("details-summary")}>
                     <ListItemContent

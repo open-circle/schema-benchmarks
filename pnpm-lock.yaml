@@ -513,6 +513,9 @@ importers:
       '@content-collections/vite':
         specifier: ^0.3.0
         version: 0.3.0(@content-collections/core@0.15.2(typescript@7.0.2))(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0))
+      '@mdx-js/mdx':
+        specifier: 3.1.1
+        version: 3.1.1(supports-color@7.2.0)
       '@mdx-js/rollup':
         specifier: ^3.1.1
         version: 3.1.1(rollup@4.62.2)(supports-color@7.2.0)
@@ -546,6 +549,9 @@ importers:
       '@types/estree':
         specifier: ^1.0.9
         version: 1.0.9
+      '@types/hast':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/hosted-git-info':
         specifier: ^3.0.5
         version: 3.0.5
@@ -636,6 +642,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+      unist-util-visit:
+        specifier: ^5.1.0
+        version: 5.1.0
       vite:
         specifier: ^8.2.2
         version: 8.2.2(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(yaml@2.9.0)
