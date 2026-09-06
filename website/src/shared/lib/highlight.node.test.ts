@@ -27,6 +27,25 @@ describe("highlightCode", () => {
     expect(afterFirst).toBeLessThanOrEqual(before + 1);
     expect(afterSecond).toBe(afterFirst);
   });
+
+  it("wraps the setup block between markers in a dedicated class", () => {
+    const result = highlightCode(Prism, {
+      code: [
+        "const schema = {};",
+        "// setup-start",
+        "const validate = compile(schema);",
+        "// example usage",
+        "// setup-end",
+        "validate(data);",
+      ].join("\n"),
+      language: "javascript",
+    });
+
+    expect(result).toContain('<span class="setup-code"><span');
+    expect(result).not.toContain("setup-start");
+    expect(result).not.toContain("setup-end");
+    expect(result).not.toContain('<span class="setup-code">\n');
+  });
 });
 
 describe("highlightAnsi", () => {

@@ -177,6 +177,12 @@ p {
   }
 }
 
+.setup-code {
+  font-family: var(--font-family-comment);
+  opacity: 0.75;
+  filter: saturate(0.5);
+}
+
 pre[class*="language-"] {
   border-radius: var(--shape-medium);
 }

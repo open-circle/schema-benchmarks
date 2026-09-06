@@ -43,9 +43,37 @@ function ensureDocCommentWrapHook(prism: typeof Prism) {
   prism.hooks.add("wrap", docCommentWrapHook);
 }
 
+function wrapSetupBlock(prism: typeof Prism, code: string, language: string) {
+  const grammar = prism.languages[language]!;
+  const setupStart = "// setup-start";
+  const setupEnd = "// setup-end";
+  const startIndex = code.indexOf(setupStart);
+  const endIndex = code.indexOf(setupEnd, startIndex + setupStart.length);
+  if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+    return prism.highlight(code, grammar, language);
+  }
+
+  const startLineStart = code.lastIndexOf("\n", startIndex - 1) + 1;
+  const startLineEnd = code.indexOf("\n", startIndex);
+  const endLineStart = code.lastIndexOf("\n", endIndex - 1) + 1;
+  const endLineEnd = code.indexOf("\n", endIndex);
+
+  const before = code.slice(0, startLineStart);
+  const setup = code.slice(
+    startLineEnd === -1 ? startIndex + setupStart.length : startLineEnd + 1,
+    endLineStart,
+  );
+  const after = code.slice(endLineEnd === -1 ? code.length : endLineEnd + 1);
+
+  return [
+    prism.highlight(before, grammar, language),
+    `<span class="setup-code">${prism.highlight(setup, grammar, language)}</span>`,
+    prism.highlight(after, grammar, language),
+  ].join("");
+}
+
 export const highlightCode = (
-  // oxlint-disable-next-line typescript/consistent-type-imports
-  Prism: typeof import("prismjs"),
+  prism: typeof Prism,
   { code, language = "typescript", lineNumbers }: HighlightInput,
 ) => {
   let lineNumbersWrapper = "";
@@ -57,10 +85,9 @@ export const highlightCode = (
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
 
-  ensureDocCommentWrapHook(Prism);
+  ensureDocCommentWrapHook(prism);
 
-  const formatted = Prism.highlight(code, Prism.languages[language]!, language);
-  return formatted + lineNumbersWrapper;
+  return wrapSetupBlock(prism, code, language) + lineNumbersWrapper;
 };
 
 export const getHighlightedCodeFn = createServerFn({ method: "POST" })
