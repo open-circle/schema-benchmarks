@@ -178,13 +178,13 @@ export default defineBenchmarks({
         run: (data) => {
           return codec.encode(data);
         },
-        snippet: ts`z.codec(in_, out).encode(data)`,
+        snippet: ts`z.codec(in_, out, { decode, encode }).encode(data)`,
       },
       decode: {
         run: (data) => {
           return codec.decode(data);
         },
-        snippet: ts`z.codec(in_, out).decode(data)`,
+        snippet: ts`z.codec(in_, out, { decode, encode }).decode(data)`,
       },
     },
     {

@@ -60,14 +60,14 @@ export default defineBenchmarks({
       run() {
         return getTypeboxScriptSchema();
       },
-      snippet: ts`Type.Script(schema)`,
+      snippet: ts`Type.Script(context, input)`,
       note: "script",
     },
     {
       run() {
         return Schema.Compile(getTypeboxScriptSchema());
       },
-      snippet: ts`Schema.Compile(Type.Script(schema))`,
+      snippet: ts`Schema.Compile(Type.Script(context, input))`,
       note: "script compile",
     },
   ],
