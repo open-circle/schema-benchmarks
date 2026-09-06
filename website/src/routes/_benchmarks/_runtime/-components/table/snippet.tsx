@@ -18,7 +18,7 @@ export function Snippet({ code }: SnippetProps) {
           <Suspense fallback={<Spinner />}>
             <div className="snippet">
               <CodeBlock>{code}</CodeBlock>
-              {code.startsWith("// setup-start") && <p>(Setup code is not benchmarked)</p>}
+              {code.includes("// setup-start") && <p>(Setup code is not benchmarked)</p>}
             </div>
           </Suspense>
         ),

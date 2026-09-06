@@ -20,7 +20,7 @@ export interface CodecListProps {
 const cls = bem("codec-list");
 
 function hasSetup(code: string) {
-  return code.startsWith("// setup-start");
+  return code.includes("// setup-start");
 }
 
 export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProps) {
