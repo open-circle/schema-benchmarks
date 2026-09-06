@@ -1,6 +1,6 @@
 import * as url from "node:url";
 
-import { getOrInsertComputed } from "@schema-benchmarks/utils";
+import { getOrInsertComputed, partition } from "@schema-benchmarks/utils";
 
 // oxlint-disable-next-line typescript/consistent-type-imports
 type OxfmtMod = typeof import("oxfmt");
@@ -42,19 +42,29 @@ export async function formatResponsiveCode(
   sourceText: string,
 ): Promise<Array<ResponsiveFormattedCodeGroup>> {
   const { format } = await getOxfmt();
-  const formatted = await Promise.all(
+  const formatted = await Promise.allSettled(
     printWidths.map((width) =>
       format(fileName, sourceText, { sortImports: true, printWidth: width }).then((result) => {
         if (result.errors.length) {
-          console.warn(result.errors);
-          return { width, code: sourceText };
+          throw result;
         }
         return { width, code: result.code };
       }),
     ),
   );
+  const [fulfilled, rejected] = partition(formatted, (result) => result.status === "fulfilled");
+  if (rejected.length) {
+    console.warn(
+      `Warning: Some formatting operations failed for file ${fileName}:\n${(
+        rejected[0]!.reason as Awaited<ReturnType<typeof format>>
+      ).errors
+        .map((e) => `- ${e.message}`)
+        .join("\n")}\nSource text:\n${sourceText}`,
+    );
+  }
   const groups = new Map<string, ResponsiveFormattedCodeGroup>();
-  for (const { width, code } of formatted) {
+  for (const result of fulfilled) {
+    const { width, code } = result.value;
     getOrInsertComputed(groups, code, () => ({ widths: [], code })).widths.push(width);
   }
   return Array.from(groups.values());
