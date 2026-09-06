@@ -46,6 +46,23 @@ describe("highlightCode", () => {
     expect(result).not.toContain("setup-end");
     expect(result).not.toContain('<span class="setup-code">\n');
   });
+
+  it("computes line numbers based on code with setup marker lines removed", () => {
+    const result = highlightCode(Prism, {
+      code: [
+        "const schema = {};",
+        "// setup-start",
+        "const validate = compile(schema);",
+        "// example usage",
+        "// setup-end",
+        "validate(data);",
+      ].join("\n"),
+      language: "javascript",
+      lineNumbers: true,
+    });
+
+    expect(result.match(/<span><\/span>/g)).toHaveLength(4);
+  });
 });
 
 describe("highlightAnsi", () => {

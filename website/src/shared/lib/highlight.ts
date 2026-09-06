@@ -43,12 +43,14 @@ function ensureDocCommentWrapHook(prism: typeof Prism) {
   prism.hooks.add("wrap", docCommentWrapHook);
 }
 
-function wrapSetupBlock(prism: typeof Prism, code: string, language: string) {
+function wrapSetupBlock(prism: typeof Prism, code: string, language: string): string {
   const grammar = prism.languages[language]!;
   const setupStart = "// setup-start";
   const setupEnd = "// setup-end";
+
   const startIndex = code.indexOf(setupStart);
-  const endIndex = code.indexOf(setupEnd, startIndex + setupStart.length);
+  const endIndex = startIndex !== -1 ? code.indexOf(setupEnd, startIndex + setupStart.length) : -1;
+
   if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
     return prism.highlight(code, grammar, language);
   }
@@ -66,9 +68,9 @@ function wrapSetupBlock(prism: typeof Prism, code: string, language: string) {
   const after = code.slice(endLineEnd === -1 ? code.length : endLineEnd + 1);
 
   return [
-    prism.highlight(before, grammar, language),
+    before && prism.highlight(before, grammar, language),
     `<span class="setup-code">${prism.highlight(setup, grammar, language)}</span>`,
-    prism.highlight(after, grammar, language),
+    after && wrapSetupBlock(prism, after, language),
   ].join("");
 }
 
@@ -76,16 +78,20 @@ export const highlightCode = (
   prism: typeof Prism,
   { code, language = "typescript", lineNumbers }: HighlightInput,
 ) => {
+  ensureDocCommentWrapHook(prism);
+
   let lineNumbersWrapper = "";
   if (lineNumbers) {
-    const match = code.match(NEW_LINE_EXP);
+    const cleanCode = code
+      .split("\n")
+      .filter((line) => !/^\s*\/\/\s*setup-(start|end)\b/.test(line))
+      .join("\n");
+    const match = cleanCode.match(NEW_LINE_EXP);
     const linesNum = match ? match.length + 1 : 1;
     const lines = "<span></span>".repeat(linesNum);
 
     lineNumbersWrapper = `<span aria-hidden="true" class="line-numbers-rows">${lines}</span>`;
   }
-
-  ensureDocCommentWrapHook(prism);
 
   return wrapSetupBlock(prism, code, language) + lineNumbersWrapper;
 };
