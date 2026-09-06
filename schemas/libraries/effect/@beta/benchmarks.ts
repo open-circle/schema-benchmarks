@@ -43,7 +43,7 @@ export default defineBenchmarks({
       run() {
         return getEffectSchema();
       },
-      snippet: ts`Schema.struct(...)`,
+      snippet: ts`Schema.Struct(fields)`,
     },
     {
       run() {
@@ -52,7 +52,7 @@ export default defineBenchmarks({
       note: "decodeUnknownOption",
       snippet: ts`
         Schema.decodeUnknownOption(
-          Schema.struct(...)
+          Schema.Struct(fields)
         )
       `,
     },

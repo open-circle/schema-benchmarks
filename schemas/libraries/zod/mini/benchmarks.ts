@@ -42,13 +42,13 @@ export default defineBenchmarks({
       run() {
         return getZodMiniSchema();
       },
-      snippet: ts`z.object(...)`,
+      snippet: ts`z.object(shape)`,
     },
     {
       run() {
         return z.compile(getZodMiniSchema(), { strict: true });
       },
-      snippet: ts`z.compile(z.object(...), { strict: true })`,
+      snippet: ts`z.compile(z.object(shape), { strict: true })`,
       note: "compile",
     },
   ],

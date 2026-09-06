@@ -50,13 +50,13 @@ export default defineBenchmarks({
       run() {
         return getSurySchema();
       },
-      snippet: ts`S.schema(...)`,
+      snippet: ts`S.schema(value)`,
     },
     {
       run() {
         return S.parser(getSurySchema());
       },
-      snippet: ts`S.parser(S.schema(...))`,
+      snippet: ts`S.parser(S.schema(value))`,
       note: "parser",
     },
   ],
@@ -64,7 +64,7 @@ export default defineBenchmarks({
     run(data) {
       return S.is(schema, data);
     },
-    snippet: ts`S.is(S.schema(...), data)`,
+    snippet: ts`S.is(S.schema(value), data)`,
   },
   parsing: {
     allErrors: [

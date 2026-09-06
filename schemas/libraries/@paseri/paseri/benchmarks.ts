@@ -29,7 +29,7 @@ export default defineBenchmarks({
     run() {
       return getPaseriSchema();
     },
-    snippet: ts`p.object(...)`,
+    snippet: ts`p.object(shape)`,
   },
   parsing: {
     allErrors: [
@@ -43,7 +43,7 @@ export default defineBenchmarks({
         },
         validateResult: (result) => result.ok,
         getData: (result) => result.value,
-        snippet: ts`p.object(...).parse(data)`,
+        snippet: ts`p.object(shape).parse(data)`,
         note: "parse",
         throws: true,
       },
@@ -53,7 +53,7 @@ export default defineBenchmarks({
         },
         validateResult: (result) => result.ok,
         getData: (result) => result.value,
-        snippet: ts`p.object(...).safeParse(data)`,
+        snippet: ts`p.object(shape).safeParse(data)`,
         note: "safeParse",
       },
     ],
@@ -76,6 +76,6 @@ export default defineBenchmarks({
       schema.parse(data);
       assertNotReached();
     },
-    snippet: ts`p.object(...).parse(data)`,
+    snippet: ts`p.object(shape).parse(data)`,
   },
 });

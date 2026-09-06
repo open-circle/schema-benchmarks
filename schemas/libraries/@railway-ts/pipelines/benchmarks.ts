@@ -44,7 +44,7 @@ export default defineBenchmarks({
     run() {
       return getRailwayTsSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(schema)`,
   },
   validation: {
     run(data) {

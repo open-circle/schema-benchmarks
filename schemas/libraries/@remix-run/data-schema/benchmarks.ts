@@ -18,7 +18,7 @@ export default defineBenchmarks({
     run() {
       return getRemixSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(shape)`,
   },
   parsing: {
     allErrors: {

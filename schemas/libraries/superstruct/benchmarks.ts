@@ -18,7 +18,7 @@ export default defineBenchmarks({
     run() {
       return getSuperstructSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(schema)`,
   },
   validation: [
     {

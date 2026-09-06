@@ -49,13 +49,13 @@ export default defineBenchmarks({
       run() {
         return getZodSchema();
       },
-      snippet: ts`z.object(...)`,
+      snippet: ts`z.object(shape)`,
     },
     {
       run() {
         return z.compile(getZodSchema(), { strict: true });
       },
-      snippet: ts`z.compile(z.object(...), { strict: true })`,
+      snippet: ts`z.compile(z.object(shape), { strict: true })`,
       note: "compile",
     },
   ],
@@ -178,13 +178,13 @@ export default defineBenchmarks({
         run: (data) => {
           return codec.encode(data);
         },
-        snippet: ts`z.codec(...).encode(data)`,
+        snippet: ts`z.codec(in_, out).encode(data)`,
       },
       decode: {
         run: (data) => {
           return codec.decode(data);
         },
-        snippet: ts`z.codec(...).decode(data)`,
+        snippet: ts`z.codec(in_, out).decode(data)`,
       },
     },
     {

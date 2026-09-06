@@ -31,7 +31,7 @@ export default defineBenchmarks({
     run() {
       return getYupSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(spec)`,
   },
   validation: {
     run(data) {

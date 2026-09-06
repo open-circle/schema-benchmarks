@@ -53,7 +53,7 @@ export default defineBenchmarks({
     run() {
       return getJoiSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(schema)`,
   },
   parsing: {
     allErrors: [

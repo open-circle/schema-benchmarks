@@ -36,7 +36,7 @@ export default defineBenchmarks({
     run() {
       return getValibotSchema();
     },
-    snippet: ts`v.object(...)`,
+    snippet: ts`v.object(entries)`,
   },
   validation: {
     run(data) {

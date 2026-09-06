@@ -34,7 +34,7 @@ export default defineBenchmarks({
     run() {
       return getShapeshiftSchema();
     },
-    snippet: ts`s.object(...)`,
+    snippet: ts`s.object(shape)`,
   },
   validation: {
     run(data) {

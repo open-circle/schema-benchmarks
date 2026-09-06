@@ -40,34 +40,34 @@ export default defineBenchmarks({
       run() {
         return getTypeboxSchema();
       },
-      snippet: ts`Type.Object(...)`,
+      snippet: ts`Type.Object(properties)`,
     },
     {
       run() {
         return Compile(getTypeboxSchema());
       },
-      snippet: ts`Compile(Type.Object(...))`,
+      snippet: ts`Compile(Type.Object(properties))`,
       note: "compile",
     },
     {
       run() {
         return Schema.Compile(getTypeboxSchema());
       },
-      snippet: ts`Schema.Compile(Type.Object(...))`,
+      snippet: ts`Schema.Compile(Type.Object(properties))`,
       note: "schema compile",
     },
     {
       run() {
         return getTypeboxScriptSchema();
       },
-      snippet: ts`Type.Script(...)`,
+      snippet: ts`Type.Script(schema)`,
       note: "script",
     },
     {
       run() {
         return Schema.Compile(getTypeboxScriptSchema());
       },
-      snippet: ts`Schema.Compile(Type.Script(...))`,
+      snippet: ts`Schema.Compile(Type.Script(schema))`,
       note: "script compile",
     },
   ],

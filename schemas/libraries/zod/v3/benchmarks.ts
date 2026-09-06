@@ -52,7 +52,7 @@ export default defineBenchmarks({
     run() {
       return getZodSchema();
     },
-    snippet: ts`z.object(...)`,
+    snippet: ts`z.object(shape)`,
   },
   parsing: {
     allErrors: [

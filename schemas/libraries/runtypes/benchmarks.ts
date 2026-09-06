@@ -17,7 +17,7 @@ export default defineBenchmarks({
     run() {
       return getRuntypesSchema();
     },
-    snippet: ts`Object({...})`,
+    snippet: ts`Object(fields)`,
   },
   validation: {
     run(data) {

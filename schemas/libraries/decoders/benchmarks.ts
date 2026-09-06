@@ -18,7 +18,7 @@ export default defineBenchmarks({
     run() {
       return getDecoderSchema();
     },
-    snippet: ts`object(...)`,
+    snippet: ts`object(decoders)`,
   },
   parsing: {
     allErrors: {
