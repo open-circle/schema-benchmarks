@@ -79,7 +79,9 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`
-        // const parser = S.parser(S.schema(value));
+        // setup-start
+        const parser = S.parser(S.schema(value));
+        // setup-end
         parser(data);
       `,
         throws: true,
@@ -155,7 +157,9 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`
-    // const parser = S.parser(S.schema(value));
+    // setup-start
+    const parser = S.parser(S.schema(value));
+    // setup-end
     parser(data)
     `,
   },
@@ -165,7 +169,9 @@ export default defineBenchmarks({
         return encoder(data);
       },
       snippet: ts`
-      // const encoder = S.encoder(S.bigint, S.string);
+      // setup-start
+      const encoder = S.encoder(S.bigint, S.string);
+      // setup-end
       encoder(data)
       `,
     },
@@ -174,7 +180,9 @@ export default defineBenchmarks({
         return decoder(data);
       },
       snippet: ts`
-      // const decoder = S.decoder(S.string, S.bigint);
+      // setup-start
+      const decoder = S.decoder(S.string, S.bigint);
+      // setup-end
       decoder(data)
       `,
     },

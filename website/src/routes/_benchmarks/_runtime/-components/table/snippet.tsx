@@ -18,9 +18,7 @@ export function Snippet({ code }: SnippetProps) {
           <Suspense fallback={<Spinner />}>
             <div className="snippet">
               <CodeBlock>{code}</CodeBlock>
-              {(code.startsWith("//") || code.startsWith("/*")) && (
-                <p>(Commented code is not benchmarked)</p>
-              )}
+              {code.startsWith("// setup-start") && <p>(Setup code is not benchmarked)</p>}
             </div>
           </Suspense>
         ),

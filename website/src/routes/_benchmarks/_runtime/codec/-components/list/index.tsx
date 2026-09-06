@@ -19,8 +19,8 @@ export interface CodecListProps {
 
 const cls = bem("codec-list");
 
-function isCommented(code: string) {
-  return code.startsWith("//") || code.startsWith("/*");
+function hasSetup(code: string) {
+  return code.startsWith("// setup-start");
 }
 
 export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProps) {
@@ -69,16 +69,16 @@ export function CodecList({ results, encodeScaler, decodeScaler }: CodecListProp
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Encode</h6>
                   <ResponsiveCodeBlock>{result.encode.snippet}</ResponsiveCodeBlock>
-                  {isCommented(result.encode.snippet) && (
-                    <p className="typo-caption">(Commented code is not benchmarked)</p>
+                  {hasSetup(result.encode.snippet) && (
+                    <p className="typo-caption">(Setup code is not benchmarked)</p>
                   )}
                 </div>
 
                 <div {...cls("code")}>
                   <h6 className="typo-subtitle2">Decode</h6>
                   <ResponsiveCodeBlock>{result.decode.snippet}</ResponsiveCodeBlock>
-                  {isCommented(result.decode.snippet) && (
-                    <p className="typo-caption">(Commented code is not benchmarked)</p>
+                  {hasSetup(result.decode.snippet) && (
+                    <p className="typo-caption">(Setup code is not benchmarked)</p>
                   )}
                 </div>
 

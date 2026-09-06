@@ -104,7 +104,9 @@ export default defineBenchmarks({
       {
         schema: compiledSchema,
         snippet: ts`
-          // const compiledSchema = z.compile(schema, { strict: true })
+          // setup-start
+          const compiledSchema = z.compile(schema, { strict: true });
+          // setup-end
           upfetch(url, { schema: compiledSchema })
         `,
         note: "compile",

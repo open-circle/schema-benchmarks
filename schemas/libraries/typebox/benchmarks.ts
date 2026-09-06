@@ -83,7 +83,9 @@ export default defineBenchmarks({
         return compiled.Check(data);
       },
       snippet: ts`
-        // const compiled = Compile(schema);
+        // setup-start
+        const compiled = Compile(schema);
+        // setup-end
         compiled.Check(data);
       `,
       note: "compile",
@@ -100,7 +102,9 @@ export default defineBenchmarks({
         return compiledSchema.Check(data);
       },
       snippet: ts`
-        // const compiledSchema = Schema.Compile(schema);
+        // setup-start
+        const compiledSchema = Schema.Compile(schema);
+        // setup-end
         compiledSchema.Check(data);
       `,
       note: "schema compile",
@@ -110,7 +114,9 @@ export default defineBenchmarks({
         return compiledScriptSchema.Check(data);
       },
       snippet: ts`
-        // const compiledScriptSchema = Schema.Compile(scriptSchema);
+        // setup-start
+        const compiledScriptSchema = Schema.Compile(scriptSchema);
+        // setup-end
         compiledScriptSchema.Check(data);
       `,
       note: "script compile",
@@ -142,7 +148,9 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`
-          // const compiled = Compile(schema);
+          // setup-start
+          const compiled = Compile(schema);
+          // setup-end
           compiled.Parse(data);
         `,
         note: "compile",
@@ -173,7 +181,9 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`
-          // const compiledSchema = Schema.Compile(schema);
+          // setup-start
+          const compiledSchema = Schema.Compile(schema);
+          // setup-end
           compiledSchema.Parse(data);
         `,
         note: "schema compile",
@@ -190,7 +200,9 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`
-          // const compiledScriptSchema = Schema.Compile(scriptSchema);
+          // setup-start
+          const compiledScriptSchema = Schema.Compile(scriptSchema);
+          // setup-end
           compiledScriptSchema.Parse(data);
         `,
         note: "script compile",
@@ -244,7 +256,9 @@ export default defineBenchmarks({
         return Value.Encode(BigIntFromString, data);
       },
       snippet: ts`
-        // const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
+        // setup-start
+        const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
+        // setup-end
         Value.Encode(BigIntFromString, data)
       `,
     },
@@ -253,7 +267,9 @@ export default defineBenchmarks({
         return Value.Decode(BigIntFromString, data);
       },
       snippet: ts`
-        // const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
+        // setup-start
+        const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
+        // setup-end
         Value.Decode(BigIntFromString, data)
       `,
     },

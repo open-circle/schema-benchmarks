@@ -69,7 +69,9 @@ export default defineBenchmarks({
       return is(data);
     },
     snippet: ts`
-      // const is = Schema.is(schema);
+      // setup-start
+      const is = Schema.is(schema);
+      // setup-end
       is(data);
     `,
   },
@@ -81,10 +83,12 @@ export default defineBenchmarks({
       validateResult: Either.isRight,
       getData: Either.getOrUndefined,
       snippet: ts`
-        // const decodeAll = Schema.decodeUnknownEither(
-        //  schema, 
-        //  { errors: "all" }
-        // );
+        // setup-start
+        const decodeAll = Schema.decodeUnknownEither(
+          schema,
+          { errors: "all" }
+        );
+        // setup-end
         decodeAll(data)
       `,
     },
@@ -95,10 +99,12 @@ export default defineBenchmarks({
       validateResult: Either.isRight,
       getData: Either.getOrUndefined,
       snippet: ts`
-        // const decodeFirst = Schema.decodeUnknownEither(
-        //  schema, 
-        //  { errors: "first" }
-        // );
+        // setup-start
+        const decodeFirst = Schema.decodeUnknownEither(
+          schema,
+          { errors: "first" }
+        );
+        // setup-end
         decodeFirst(data)
       `,
     },
@@ -107,20 +113,24 @@ export default defineBenchmarks({
     allErrors: {
       schema: Schema.standardSchemaV1(schema, { errors: "all" }),
       snippet: ts`
-        // const standardSchema = Schema.standardSchemaV1(
-        //   schema, 
-        //   { errors: "all" }
-        // );
+        // setup-start
+        const standardSchema = Schema.standardSchemaV1(
+          schema,
+          { errors: "all" }
+        );
+        // setup-end
         upfetch(url, { schema: standardSchema });
       `,
     },
     abortEarly: {
       schema: Schema.standardSchemaV1(schema, { errors: "first" }),
       snippet: ts`
-        // const standardSchema = Schema.standardSchemaV1(
-        //   schema, 
-        //   { errors: "first" }
-        // );
+        // setup-start
+        const standardSchema = Schema.standardSchemaV1(
+          schema,
+          { errors: "first" }
+        );
+        // setup-end
         upfetch(url, { schema: standardSchema });
       `,
     },
@@ -144,10 +154,12 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`
-      // const decodeAll = Schema.decodeUnknownEither(
-      //  schema, 
-      //  { errors: "all" }
-      // );
+      // setup-start
+      const decodeAll = Schema.decodeUnknownEither(
+        schema,
+        { errors: "all" }
+      );
+      // setup-end
       Effect.runSync(decodeAll(data));
     `,
   },

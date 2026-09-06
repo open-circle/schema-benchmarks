@@ -49,7 +49,9 @@ export default defineBenchmarks({
       },
       note: "createIs",
       snippet: ts`
-        // const is = typia.createIs<TypiaSchema>();
+        // setup-start
+        const is = typia.createIs<TypiaSchema>();
+        // setup-end
         is(data);
       `,
     },
@@ -73,7 +75,9 @@ export default defineBenchmarks({
         getData: (result) => (result.success ? result.data : undefined),
         note: "createValidate",
         snippet: ts`
-          // const validate = typia.createValidate<TypiaSchema>();
+          // setup-start
+          const validate = typia.createValidate<TypiaSchema>();
+          // setup-end
           validate(data);
         `,
       },
@@ -83,7 +87,9 @@ export default defineBenchmarks({
     allErrors: {
       schema: validate,
       snippet: ts`
-        // const validate = typia.createValidate<TypiaSchema>();
+        // setup-start
+        const validate = typia.createValidate<TypiaSchema>();
+        // setup-end
         upfetch(url, { schema: validate })
       `,
     },
@@ -150,7 +156,9 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`
-      // const assert = typia.createAssert<TypiaSchema>();
+      // setup-start
+      const assert = typia.createAssert<TypiaSchema>();
+      // setup-end
       assert(data);
     `,
   },

@@ -111,7 +111,9 @@ export default defineBenchmarks({
       {
         schema: compiledSchema,
         snippet: ts`
-          // const compiledSchema = z.compile(schema, { strict: true })
+          // setup-start
+          const compiledSchema = z.compile(schema, { strict: true });
+          // setup-end
           upfetch(url, { schema: compiledSchema })
         `,
         note: "compile",
@@ -193,7 +195,9 @@ export default defineBenchmarks({
           return compiledCodec.encode(data);
         },
         snippet: ts`
-          // const compiledCodec = z.compile(codec, { strict: true })
+          // setup-start
+          const compiledCodec = z.compile(codec, { strict: true });
+          // setup-end
           compiledCodec.encode(data)
         `,
       },
@@ -202,7 +206,9 @@ export default defineBenchmarks({
           return compiledCodec.decode(data);
         },
         snippet: ts`
-          // const compiledCodec = z.compile(codec, { strict: true })
+          // setup-start
+          const compiledCodec = z.compile(codec, { strict: true });
+          // setup-end
           compiledCodec.decode(data)
         `,
       },

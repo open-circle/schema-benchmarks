@@ -55,7 +55,9 @@ export default defineBenchmarks({
         return BigIntFromString.encode(data);
       },
       snippet: ts`
-        // const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode)
+        // setup-start
+        const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode);
+        // setup-end
         BigIntFromString.encode(data)
       `,
     },
@@ -64,7 +66,9 @@ export default defineBenchmarks({
         return (BigIntFromString.decode(data) as unknown as E.Right<bigint>).right;
       },
       snippet: ts`
-        // const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode)
+        // setup-start
+        const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode);
+        // setup-end
         BigIntFromString.decode(data)
       `,
     },

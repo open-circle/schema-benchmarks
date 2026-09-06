@@ -68,7 +68,9 @@ export default defineBenchmarks({
       },
       note: "compile",
       snippet: ts`
-        // const validate = ajv.compile(schema);
+        // setup-start
+        const validate = ajv.compile(schema);
+        // setup-end
         validate(data);
       `,
     },
@@ -90,7 +92,9 @@ export default defineBenchmarks({
       throw new ValidationError(validate.errors || []);
     },
     snippet: ts`
-      // const validate = ajv.compile(schema);
+      // setup-start
+      const validate = ajv.compile(schema);
+      // setup-end
       validate(data);
       throw new ValidationError(validate.errors || []);
     `,

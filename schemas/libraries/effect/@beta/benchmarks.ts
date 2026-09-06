@@ -62,7 +62,9 @@ export default defineBenchmarks({
       return is(data);
     },
     snippet: ts`
-      // const is = Schema.is(schema);
+      // setup-start
+      const is = Schema.is(schema);
+      // setup-end
       is(data);
     `,
   },
@@ -74,7 +76,9 @@ export default defineBenchmarks({
       validateResult: Option.isSome,
       getData: Option.getOrUndefined,
       snippet: ts`
-        // const decode = Schema.decodeUnknownOption(schema);
+        // setup-start
+        const decode = Schema.decodeUnknownOption(schema);
+        // setup-end
         decode(data, { errors: "all" })
       `,
     },
@@ -85,7 +89,9 @@ export default defineBenchmarks({
       validateResult: Option.isSome,
       getData: Option.getOrUndefined,
       snippet: ts`
-        // const decode = Schema.decodeUnknownOption(schema);
+        // setup-start
+        const decode = Schema.decodeUnknownOption(schema);
+        // setup-end
         decode(data, { errors: "first" })
       `,
     },
@@ -94,20 +100,24 @@ export default defineBenchmarks({
     allErrors: {
       schema: Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
       snippet: ts`
-        // const standardSchema = Schema.toStandardSchemaV1(
-        //   schema, 
-        //   { parseOptions: { errors: "all" } }
-        // );
+        // setup-start
+        const standardSchema = Schema.toStandardSchemaV1(
+          schema,
+          { parseOptions: { errors: "all" } }
+        );
+        // setup-end
         upfetch(url, { schema: standardSchema });
       `,
     },
     abortEarly: {
       schema: Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
       snippet: ts`
-        // const standardSchema = Schema.toStandardSchemaV1(
-        //   schema, 
-        //   { parseOptions: { errors: "first" } }
-        // );
+        // setup-start
+        const standardSchema = Schema.toStandardSchemaV1(
+          schema,
+          { parseOptions: { errors: "first" } }
+        );
+        // setup-end
         upfetch(url, { schema: standardSchema });
       `,
     },
