@@ -52,7 +52,7 @@ export default defineBenchmarks({
     run() {
       return ajv.compile(getAjvSchema());
     },
-    snippet: ts`ajv.compile({...})`,
+    snippet: ts`ajv.compile(schema)`,
   },
   validation: [
     {

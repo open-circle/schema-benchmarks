@@ -79,7 +79,7 @@ export default defineBenchmarks({
         validateResult: (result) => result.success,
         getData: (result) => result.value,
         snippet: ts`
-        // const parser = S.parser(S.schema(...));
+        // const parser = S.parser(S.schema(value));
         parser(data);
       `,
         throws: true,
@@ -155,7 +155,7 @@ export default defineBenchmarks({
       assertNotReached();
     },
     snippet: ts`
-    // const parser = S.parser(S.schema(...));
+    // const parser = S.parser(S.schema(value));
     parser(data)
     `,
   },

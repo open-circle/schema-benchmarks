@@ -244,7 +244,7 @@ export default defineBenchmarks({
         return Value.Encode(BigIntFromString, data);
       },
       snippet: ts`
-        // const BigIntFromString = Type.Codec(...).Decode(...).Encode(...);
+        // const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
         Value.Encode(BigIntFromString, data)
       `,
     },
@@ -253,7 +253,7 @@ export default defineBenchmarks({
         return Value.Decode(BigIntFromString, data);
       },
       snippet: ts`
-        // const BigIntFromString = Type.Codec(...).Decode(...).Encode(...);
+        // const BigIntFromString = Type.Codec(type).Decode(callback).Encode(callback);
         Value.Decode(BigIntFromString, data)
       `,
     },

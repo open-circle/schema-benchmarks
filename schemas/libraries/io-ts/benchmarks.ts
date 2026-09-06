@@ -31,7 +31,7 @@ export default defineBenchmarks({
     run() {
       return getIotsSchema();
     },
-    snippet: ts`t.type(...)`,
+    snippet: ts`t.type(props)`,
   },
   validation: {
     run(data) {
@@ -55,7 +55,7 @@ export default defineBenchmarks({
         return BigIntFromString.encode(data);
       },
       snippet: ts`
-        // const BigIntFromString = new t.Type<bigint, string, string>(...)
+        // const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode)
         BigIntFromString.encode(data)
       `,
     },
@@ -64,7 +64,7 @@ export default defineBenchmarks({
         return (BigIntFromString.decode(data) as unknown as E.Right<bigint>).right;
       },
       snippet: ts`
-        // const BigIntFromString = new t.Type<bigint, string, string>(...)
+        // const BigIntFromString = new t.Type<bigint, string, string>(name, is, validate, encode)
         BigIntFromString.decode(data)
       `,
     },

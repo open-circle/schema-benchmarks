@@ -45,7 +45,7 @@ export default defineBenchmarks({
     run() {
       return getArkTypeSchema();
     },
-    snippet: ts`type(...)`,
+    snippet: ts`type(def)`,
   },
   validation: {
     run(data) {

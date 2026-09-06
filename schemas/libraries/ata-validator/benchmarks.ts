@@ -34,7 +34,7 @@ export default defineBenchmarks({
     run() {
       return getAtaValidatorSchema();
     },
-    snippet: ts`new Validator({...})`,
+    snippet: ts`new Validator(schema)`,
   },
   validation: {
     run(data) {
