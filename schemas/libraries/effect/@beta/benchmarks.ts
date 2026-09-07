@@ -50,11 +50,7 @@ export default defineBenchmarks({
         return Schema.decodeUnknownOption(getEffectSchema());
       },
       note: "decodeUnknownOption",
-      snippet: ts`
-        Schema.decodeUnknownOption(
-          Schema.Struct(fields)
-        )
-      `,
+      snippet: ts`Schema.decodeUnknownOption(Schema.Struct(fields))`,
     },
   ],
   validation: {
@@ -113,10 +109,7 @@ export default defineBenchmarks({
       schema: Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
       snippet: ts`
         // setup-start
-        const standardSchema = Schema.toStandardSchemaV1(
-          schema,
-          { parseOptions: { errors: "first" } }
-        );
+        const standardSchema = Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } });
         // setup-end
         upfetch(url, { schema: standardSchema });
       `,
@@ -141,9 +134,7 @@ export default defineBenchmarks({
       Schema.decodeUnknownSync(schema)(data, { errors: "first" });
       assertNotReached();
     },
-    snippet: ts`
-      Schema.decodeUnknownSync(schema)(data, { errors: "first" })
-    `,
+    snippet: ts`Schema.decodeUnknownSync(schema)(data, { errors: "first" })`,
   },
   codec: [
     {
@@ -151,17 +142,13 @@ export default defineBenchmarks({
         run: (data) => {
           return Schema.encodeSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`
-        Schema.encodeSync(Schema.BigIntFromString)(data)
-      `,
+        snippet: ts`Schema.encodeSync(Schema.BigIntFromString)(data)`,
       },
       decode: {
         run: (data) => {
           return Schema.decodeSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`
-        Schema.decodeSync(Schema.BigIntFromString)(data)
-      `,
+        snippet: ts`Schema.decodeSync(Schema.BigIntFromString)(data)`,
       },
     },
     {
@@ -169,17 +156,13 @@ export default defineBenchmarks({
         run: (data) => {
           return Schema.encodeUnknownSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`
-        Schema.encodeUnknownSync(Schema.BigIntFromString)(data)
-      `,
+        snippet: ts`Schema.encodeUnknownSync(Schema.BigIntFromString)(data)`,
       },
       decode: {
         run: (data) => {
           return Schema.decodeUnknownSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`
-        Schema.decodeUnknownSync(Schema.BigIntFromString)(data)
-      `,
+        snippet: ts`Schema.decodeUnknownSync(Schema.BigIntFromString)(data)`,
       },
       acceptsUnknown: true,
       note: "unknown",

@@ -25,7 +25,7 @@ const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
     addFormats(ajv, { formats: [format] });
     return ajv.compile({ type: "string", format } satisfies JSONSchemaType<string>);
   },
-  snippet: ts`{ type: "string", format: "${format}" }`,
+  snippet: ts`ajv.compile({ type: "string", format: "${format}" })`,
 });
 
 function getComplianceAjv({ strict, target }: { strict: boolean; target: ComplianceTarget }) {

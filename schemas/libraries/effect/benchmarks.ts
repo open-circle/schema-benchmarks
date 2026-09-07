@@ -57,11 +57,7 @@ export default defineBenchmarks({
         return Schema.decodeUnknownEither(getEffectSchema());
       },
       note: "decodeUnknownEither",
-      snippet: ts`
-        Schema.decodeUnknownEither(
-          Schema.Struct(fields)
-        )
-      `,
+      snippet: ts`Schema.decodeUnknownEither(Schema.Struct(fields))`,
     },
   ],
   validation: {
@@ -84,10 +80,7 @@ export default defineBenchmarks({
       getData: Either.getOrUndefined,
       snippet: ts`
         // setup-start
-        const decodeAll = Schema.decodeUnknownEither(
-          schema,
-          { errors: "all" }
-        );
+        const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
         // setup-end
         decodeAll(data)
       `,
@@ -100,10 +93,7 @@ export default defineBenchmarks({
       getData: Either.getOrUndefined,
       snippet: ts`
         // setup-start
-        const decodeFirst = Schema.decodeUnknownEither(
-          schema,
-          { errors: "first" }
-        );
+        const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
         // setup-end
         decodeFirst(data)
       `,
@@ -114,10 +104,7 @@ export default defineBenchmarks({
       schema: Schema.standardSchemaV1(schema, { errors: "all" }),
       snippet: ts`
         // setup-start
-        const standardSchema = Schema.standardSchemaV1(
-          schema,
-          { errors: "all" }
-        );
+        const standardSchema = Schema.standardSchemaV1(schema, { errors: "all" });
         // setup-end
         upfetch(url, { schema: standardSchema });
       `,
@@ -126,10 +113,7 @@ export default defineBenchmarks({
       schema: Schema.standardSchemaV1(schema, { errors: "first" }),
       snippet: ts`
         // setup-start
-        const standardSchema = Schema.standardSchemaV1(
-          schema,
-          { errors: "first" }
-        );
+        const standardSchema = Schema.standardSchemaV1(schema, { errors: "first" });
         // setup-end
         upfetch(url, { schema: standardSchema });
       `,
@@ -155,10 +139,7 @@ export default defineBenchmarks({
     },
     snippet: ts`
       // setup-start
-      const decodeAll = Schema.decodeUnknownEither(
-        schema,
-        { errors: "all" }
-      );
+      const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
       // setup-end
       Effect.runSync(decodeAll(data));
     `,

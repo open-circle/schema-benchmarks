@@ -15,7 +15,7 @@ const createStringBenchmark = (format: FormatName): StringBenchmarkConfig => ({
     const schema = new Validator({ type: "string", format } satisfies JSONSchemaType<string>);
     return (testString) => schema.isValidObject(testString);
   },
-  snippet: ts`{ type: "string", format: "${format}" }`,
+  snippet: ts`new Validator({ type: "string", format: "${format}" })`,
 });
 
 const schema = getAtaValidatorSchema();
