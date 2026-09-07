@@ -111,7 +111,7 @@ importers:
         specifier: ^7.0.2001
         version: 7.0.2001
       playwright:
-        specifier: 1.63.0
+        specifier: 'catalog:'
         version: 1.63.0
       typescript:
         specifier: 'catalog:'
