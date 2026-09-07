@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.1.14_ata-validator@1.11.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.2.0_ata-validator@1.12.1_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -125,79 +125,266 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 	}
+	function buildCheck(ops) {
+		const checks = [];
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if (op.type === "instanceof") {
+				const ctors = op.ctors;
+				if (ctors.length === 1) {
+					const C = ctors[0];
+					checks.push((v) => v instanceof C);
+				} else checks.push((v) => {
+					for (let j = 0; j < ctors.length; j++) if (v instanceof ctors[j]) return true;
+					return false;
+				});
+			} else if (op.type === "typeof") {
+				const types = op.types;
+				if (types.length === 1) {
+					const t = types[0];
+					checks.push((v) => typeof v === t);
+				} else checks.push((v) => {
+					for (let j = 0; j < types.length; j++) if (typeof v === types[j]) return true;
+					return false;
+				});
+			} else if (op.type === "prop") {
+				const key = op.key;
+				const child = buildCheck(op.ops);
+				checks.push((v) => {
+					if (v === null || typeof v !== "object") return true;
+					const inner = v[key];
+					return inner === void 0 ? true : child(inner);
+				});
+			} else if (op.type === "items") {
+				const child = buildCheck(op.ops);
+				checks.push((v) => {
+					if (!Array.isArray(v)) return true;
+					for (let k = 0; k < v.length; k++) if (!child(v[k])) return false;
+					return true;
+				});
+			} else if (op.type === "prefixItems") {
+				const tuple = op.tuple.map((o) => o.length > 0 ? buildCheck(o) : null);
+				checks.push((v) => {
+					if (!Array.isArray(v)) return true;
+					const n = tuple.length < v.length ? tuple.length : v.length;
+					for (let k = 0; k < n; k++) {
+						const c = tuple[k];
+						if (c !== null && !c(v[k])) return false;
+					}
+					return true;
+				});
+			}
+		}
+		if (checks.length === 1) return checks[0];
+		return (v) => {
+			for (let i = 0; i < checks.length; i++) if (!checks[i](v)) return false;
+			return true;
+		};
+	}
+	function buildSource(ops) {
+		const ctors = [];
+		let n = 0;
+		const name = () => "_" + n++;
+		const ctorRef = (C) => {
+			let i = ctors.indexOf(C);
+			if (i === -1) i = ctors.push(C) - 1;
+			return "c" + i;
+		};
+		const emit = (list, expr) => {
+			let out = "";
+			for (let i = 0; i < list.length; i++) {
+				const op = list[i];
+				if (op.type === "instanceof") {
+					const test = op.ctors.map((C) => expr + " instanceof " + ctorRef(C)).join("||");
+					out += "if(!(" + test + "))return false\n";
+				} else if (op.type === "typeof") {
+					const test = op.types.map((t) => "typeof " + expr + "===" + JSON.stringify(t)).join("||");
+					out += "if(!(" + test + "))return false\n";
+				} else if (op.type === "prop") {
+					const v = name();
+					out += "if(" + expr + "!==null&&typeof " + expr + "==='object'){";
+					out += "const " + v + "=" + expr + "[" + JSON.stringify(op.key) + "]\n";
+					out += "if(" + v + "!==undefined){\n" + emit(op.ops, v) + "}}\n";
+				} else if (op.type === "items") {
+					const k = name();
+					const e = name();
+					out += "if(Array.isArray(" + expr + ")){";
+					out += "for(let " + k + "=0;" + k + "<" + expr + ".length;" + k + "++){";
+					out += "const " + e + "=" + expr + "[" + k + "]\n" + emit(op.ops, e) + "}}\n";
+				} else if (op.type === "prefixItems") for (let j = 0; j < op.tuple.length; j++) {
+					if (op.tuple[j].length === 0) continue;
+					const e = name();
+					out += "if(Array.isArray(" + expr + ")&&" + expr + ".length>" + j + "){";
+					out += "const " + e + "=" + expr + "[" + j + "]\n" + emit(op.tuple[j], e) + "}\n";
+				}
+			}
+			return out;
+		};
+		const body = emit(ops, "d");
+		const head = ctors.map((_, i) => "const c" + i + "=C[" + i + "]").join("\n");
+		try {
+			return new Function("C", head + "\nreturn function(d){\n" + body + "return true\n}")(ctors);
+		} catch {
+			return null;
+		}
+	}
+	const ENTRIES = [
+		["validate", {}],
+		["isValidObject", {}],
+		["validateJSON", "{}"],
+		["isValidJSON", "{}"],
+		["validateAndParse", "{}"]
+	];
+	function installEntries(validator, make) {
+		const slots = /* @__PURE__ */ new Map();
+		const state = {
+			depth: 0,
+			settled: false
+		};
+		const proto = Object.getPrototypeOf(validator);
+		for (let i = 0; i < ENTRIES.length; i++) {
+			const name = ENTRIES[i][0];
+			const desc = Object.getOwnPropertyDescriptor(validator, name) || (proto ? Object.getOwnPropertyDescriptor(proto, name) : void 0);
+			if (!desc) continue;
+			const value = "value" in desc ? desc.value : void 0;
+			if (value !== void 0 && typeof value !== "function") continue;
+			slots.set(name, {
+				probe: ENTRIES[i][1],
+				impl: value,
+				call: null
+			});
+		}
+		function define(name) {
+			const slot = slots.get(name);
+			Object.defineProperty(validator, name, {
+				configurable: true,
+				enumerable: true,
+				get() {
+					if (!state.settled) settle();
+					return slot.call;
+				},
+				set(fn) {
+					slot.impl = fn;
+				}
+			});
+		}
+		function settle() {
+			state.settled = true;
+			for (const [name, slot] of slots) {
+				delete validator[name];
+				if (slot.impl !== void 0) validator[name] = slot.impl;
+			}
+			for (const [name, slot] of slots) {
+				try {
+					validator[name](slot.probe);
+				} catch {}
+				slot.impl = validator[name];
+			}
+			for (const name of slots.keys()) {
+				delete validator[name];
+				define(name);
+			}
+		}
+		for (const [name, slot] of slots) {
+			const wrapper = make(name, (data) => slot.impl(data));
+			slot.call = function(data) {
+				if (state.depth > 0) return slot.impl(data);
+				state.depth++;
+				try {
+					return wrapper(data);
+				} finally {
+					state.depth--;
+				}
+			};
+			define(name);
+		}
+	}
+	function KeywordResult(inner, data, collect) {
+		this.valid = false;
+		this._inner = inner;
+		this._data = data;
+		this._collect = collect;
+		this._errors = null;
+	}
+	Object.defineProperty(KeywordResult.prototype, "errors", {
+		configurable: true,
+		get() {
+			if (this._errors === null) {
+				const errors = this._collect(this._data) || [];
+				const inner = this._inner;
+				this._errors = inner.valid ? errors : inner.errors.concat(errors);
+			}
+			return this._errors;
+		}
+	});
+	KeywordResult.prototype.toJSON = function() {
+		return {
+			valid: false,
+			errors: this.errors
+		};
+	};
+	KeywordResult.prototype._ataRaw = function() {
+		const inner = this._inner;
+		const kw = this._collect(this._data) || [];
+		if (inner.valid) return kw;
+		return (typeof inner._ataRaw === "function" ? inner._ataRaw() : inner.errors).concat(kw);
+	};
 	function withKeywords(validator) {
 		const schema = validator._schemaObj;
 		const ops = compileNode(schema);
 		if (ops.length === 0) return validator;
-		const inner = {};
-		for (const name of [
-			"validate",
-			"isValidObject",
-			"validateJSON",
-			"isValidJSON",
-			"validateAndParse"
-		]) {
-			if (typeof validator[name] !== "function") continue;
-			try {
-				validator[name](name === "validate" || name === "isValidObject" ? {} : "{}");
-			} catch {
-				continue;
-			}
-			inner[name] = validator[name];
-		}
+		const check = buildSource(ops) || buildCheck(ops);
 		function keywordErrors(data) {
-			if (data === null || typeof data !== "object") return null;
 			const errors = [];
 			runOps(data, ops, "", errors);
 			return errors.length > 0 ? errors : null;
 		}
-		validator.validate = function(data) {
-			const errors = keywordErrors(data);
-			if (errors) return {
-				valid: false,
-				errors
-			};
-			return inner.validate(data);
-		};
-		if (inner.isValidObject) validator.isValidObject = function(data) {
-			if (keywordErrors(data)) return false;
-			return inner.isValidObject(data);
-		};
-		if (inner.validateJSON) validator.validateJSON = function(jsonStr) {
-			const res = inner.validateJSON(jsonStr);
-			if (!res.valid) return res;
-			let data;
-			try {
-				data = JSON.parse(jsonStr);
-			} catch {
-				return res;
+		const wrappers = {
+			validate: (inner) => (data) => {
+				const res = inner(data);
+				if (res.valid && check(data)) return res;
+				return new KeywordResult(res, data, keywordErrors);
+			},
+			isValidObject: (inner) => (data) => inner(data) && check(data),
+			validateJSON: (inner) => (jsonStr) => {
+				const res = inner(jsonStr);
+				if (!res.valid) return res;
+				let data;
+				try {
+					data = JSON.parse(jsonStr);
+				} catch {
+					return res;
+				}
+				if (check(data)) return res;
+				const errors = keywordErrors(data);
+				return errors ? {
+					valid: false,
+					errors
+				} : res;
+			},
+			isValidJSON: (inner) => (jsonStr) => {
+				if (!inner(jsonStr)) return false;
+				let data;
+				try {
+					data = JSON.parse(jsonStr);
+				} catch {
+					return true;
+				}
+				return check(data);
+			},
+			validateAndParse: (inner) => (jsonStr) => {
+				const res = inner(jsonStr);
+				if (!res.valid) return res;
+				if (check(res.value)) return res;
+				const errors = keywordErrors(res.value);
+				return errors ? {
+					valid: false,
+					value: res.value,
+					errors
+				} : res;
 			}
-			const errors = keywordErrors(data);
-			return errors ? {
-				valid: false,
-				errors
-			} : res;
 		};
-		if (inner.isValidJSON) validator.isValidJSON = function(jsonStr) {
-			if (!inner.isValidJSON(jsonStr)) return false;
-			let data;
-			try {
-				data = JSON.parse(jsonStr);
-			} catch {
-				return true;
-			}
-			return !keywordErrors(data);
-		};
-		if (inner.validateAndParse) validator.validateAndParse = function(jsonStr) {
-			const res = inner.validateAndParse(jsonStr);
-			if (!res.valid) return res;
-			const errors = keywordErrors(res.value);
-			return errors ? {
-				valid: false,
-				value: res.value,
-				errors
-			} : res;
-		};
+		installEntries(validator, (name, inner) => wrappers[name](inner));
 		return validator;
 	}
 	withKeywords.CONSTRUCTORS = CONSTRUCTORS;
@@ -207,14 +394,14 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -528,7 +715,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -1210,7 +1397,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -1237,30 +1424,28 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function dateTime(s) {
 		const n = s.length;
 		if (n < 20) return false;
-		for (let i = 0; i < 19; i++) {
-			const c = s.charCodeAt(i);
-			if (i === 4 || i === 7) {
-				if (c !== 45) return false;
-				continue;
-			}
-			if (i === 10) {
-				if (c !== 84 && c !== 116) return false;
-				continue;
-			}
-			if (i === 13 || i === 16) {
-				if (c !== 58) return false;
-				continue;
-			}
-			if (c < 48 || c > 57) return false;
-		}
-		const year = (s.charCodeAt(0) - 48) * 1e3 + (s.charCodeAt(1) - 48) * 100 + (s.charCodeAt(2) - 48) * 10 + (s.charCodeAt(3) - 48);
-		const month = twoDigits(s, 5);
+		if (s.charCodeAt(4) !== 45 || s.charCodeAt(7) !== 45) return false;
+		const sep = s.charCodeAt(10);
+		if (sep !== 84 && sep !== 116) return false;
+		if (s.charCodeAt(13) !== 58 || s.charCodeAt(16) !== 58) return false;
+		const y0 = s.charCodeAt(0) - 48, y1 = s.charCodeAt(1) - 48;
+		const y2 = s.charCodeAt(2) - 48, y3 = s.charCodeAt(3) - 48;
+		if (y0 >>> 0 > 9 || y1 >>> 0 > 9 || y2 >>> 0 > 9 || y3 >>> 0 > 9) return false;
+		const year = y0 * 1e3 + y1 * 100 + y2 * 10 + y3;
+		const mo0 = s.charCodeAt(5) - 48, mo1 = s.charCodeAt(6) - 48;
+		if (mo0 >>> 0 > 9 || mo1 >>> 0 > 9) return false;
+		const month = mo0 * 10 + mo1;
 		if (month < 1 || month > 12) return false;
-		const day = twoDigits(s, 8);
+		const d0 = s.charCodeAt(8) - 48, d1 = s.charCodeAt(9) - 48;
+		if (d0 >>> 0 > 9 || d1 >>> 0 > 9) return false;
+		const day = d0 * 10 + d1;
 		if (day < 1 || day > daysInMonth(year, month)) return false;
-		if (twoDigits(s, 11) > 23) return false;
-		if (twoDigits(s, 14) > 59) return false;
-		if (twoDigits(s, 17) > 59) return false;
+		const h0 = s.charCodeAt(11) - 48, h1 = s.charCodeAt(12) - 48;
+		if (h0 >>> 0 > 9 || h1 >>> 0 > 9 || h0 * 10 + h1 > 23) return false;
+		const mi0 = s.charCodeAt(14) - 48, mi1 = s.charCodeAt(15) - 48;
+		if (mi0 >>> 0 > 5 || mi1 >>> 0 > 9) return false;
+		const se0 = s.charCodeAt(17) - 48, se1 = s.charCodeAt(18) - 48;
+		if (se0 >>> 0 > 5 || se1 >>> 0 > 9) return false;
 		let i = 19;
 		if (s.charCodeAt(i) === 46) {
 			i++;
@@ -1373,6 +1558,84 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return labelLength !== 0 && previous !== 45;
 	}
+	function uri(s) {
+		const n = s.length;
+		if (n === 0) return false;
+		const first = s.charCodeAt(0);
+		if (!(first >= 97 && first <= 122 || first >= 65 && first <= 90)) return false;
+		let colon = -1;
+		for (let i = 1; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 58) {
+				colon = i;
+				break;
+			}
+			if (!(isDigit(c) || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 43 || c === 45 || c === 46)) return false;
+		}
+		if (colon === -1) return false;
+		return noReserved(s, colon + 1);
+	}
+	const NON_PRINTABLE = /[^\u0021-\u007e]/;
+	function noReserved(s, from) {
+		if (!NON_PRINTABLE.test(s)) return true;
+		const n = s.length;
+		for (let i = from; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c > 32 && c < 127) continue;
+			if (c <= 32 || c === 127) return false;
+			if (c === 160 || c === 5760 || c >= 8192 && c <= 8202 || c === 8232 || c === 8233 || c === 8239 || c === 8287 || c === 12288 || c === 65279) return false;
+		}
+		return true;
+	}
+	function noReservedSource(v, from) {
+		return `if(/[^\\u0021-\\u007e]/.test(${v})){for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc>32&&_rc<127)continue;if(_rc<=32||_rc===127)return false;if(_rc===160||_rc===5760||(_rc>=8192&&_rc<=8202)||_rc===8232||_rc===8233||_rc===8239||_rc===8287||_rc===12288||_rc===65279)return false}}`;
+	}
+	function hexRun(s, from, to) {
+		for (let i = from; i < to; i++) {
+			const c = s.charCodeAt(i);
+			if (!(c - 48 >>> 0 < 10 || (c | 32) - 97 >>> 0 < 6)) return false;
+		}
+		return true;
+	}
+	function uuid(s) {
+		if (s.length !== 36) return false;
+		if (s.charCodeAt(8) !== 45 || s.charCodeAt(13) !== 45 || s.charCodeAt(18) !== 45 || s.charCodeAt(23) !== 45) return false;
+		return hexRun(s, 0, 8) && hexRun(s, 9, 13) && hexRun(s, 14, 18) && hexRun(s, 19, 23) && hexRun(s, 24, 36);
+	}
+	function time(s) {
+		const n = s.length;
+		if (n < 8) return false;
+		const h1 = s.charCodeAt(0) - 48, h2 = s.charCodeAt(1) - 48;
+		if (h1 >>> 0 > 9 || h2 >>> 0 > 9 || h1 * 10 + h2 > 23) return false;
+		if (s.charCodeAt(2) !== 58 || s.charCodeAt(5) !== 58) return false;
+		const m1 = s.charCodeAt(3) - 48, m2 = s.charCodeAt(4) - 48;
+		if (m1 >>> 0 > 5 || m2 >>> 0 > 9) return false;
+		const c1 = s.charCodeAt(6) - 48, c2 = s.charCodeAt(7) - 48;
+		if (c1 >>> 0 > 5 || c2 >>> 0 > 9) return false;
+		let i = 8;
+		if (i < n && s.charCodeAt(i) === 46) {
+			i++;
+			const start = i;
+			while (i < n) {
+				if (s.charCodeAt(i) - 48 >>> 0 > 9) break;
+				i++;
+			}
+			if (i === start) return false;
+		}
+		if (i === n) return true;
+		const z = s.charCodeAt(i);
+		if (z === 90 || z === 122) return i === n - 1;
+		if (z !== 43 && z !== 45) return false;
+		if (n - i !== 6 || s.charCodeAt(i + 3) !== 58) return false;
+		for (let k = 1; k <= 5; k++) {
+			if (k === 3) continue;
+			if (s.charCodeAt(i + k) - 48 >>> 0 > 9) return false;
+		}
+		return true;
+	}
+	function uriReference(s) {
+		return noReserved(s, 0);
+	}
 	function guard(v, isStr, body) {
 		return isStr ? `{${body}}` : `if(typeof ${v}==='string'){${body}}`;
 	}
@@ -1380,10 +1643,20 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return guard(v, isStr, `if(${v}.length!==10)return false;for(let _i=0;_i<10;_i++){const _c=${v}.charCodeAt(_i);if(_i===4||_i===7){if(_c!==45)return false}else if(_c<48||_c>57)return false}const _m=(${v}.charCodeAt(5)-48)*10+(${v}.charCodeAt(6)-48),_d=(${v}.charCodeAt(8)-48)*10+(${v}.charCodeAt(9)-48);if(_m<1||_m>12||_d<1||_d>31)return false`);
 	}
 	function dateTimeSource(v, isStr) {
-		return guard(v, isStr, `const _n=${v}.length;if(_n<20)return false;for(let _i=0;_i<19;_i++){const _c=${v}.charCodeAt(_i);if(_i===4||_i===7){if(_c!==45)return false;continue}if(_i===10){if(_c!==84&&_c!==116)return false;continue}if(_i===13||_i===16){if(_c!==58)return false;continue}if(_c<48||_c>57)return false}const _y=(${v}.charCodeAt(0)-48)*1000+(${v}.charCodeAt(1)-48)*100+(${v}.charCodeAt(2)-48)*10+(${v}.charCodeAt(3)-48);const _mo=(${v}.charCodeAt(5)-48)*10+(${v}.charCodeAt(6)-48);if(_mo<1||_mo>12)return false;const _dm=_mo===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):(_mo===4||_mo===6||_mo===9||_mo===11?30:31);const _d=(${v}.charCodeAt(8)-48)*10+(${v}.charCodeAt(9)-48);if(_d<1||_d>_dm)return false;if((${v}.charCodeAt(11)-48)*10+(${v}.charCodeAt(12)-48)>23)return false;if((${v}.charCodeAt(14)-48)*10+(${v}.charCodeAt(15)-48)>59)return false;if((${v}.charCodeAt(17)-48)*10+(${v}.charCodeAt(18)-48)>59)return false;let _i2=19;if(${v}.charCodeAt(19)===46){_i2=20;const _st=_i2;while(_i2<_n){const _c2=${v}.charCodeAt(_i2);if(_c2<48||_c2>57)break;_i2++}if(_i2===_st)return false}const _tz=${v}.charCodeAt(_i2);if(_tz===90||_tz===122){if(_i2!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_i2!==6)return false;const _oh=${v}.charCodeAt(_i2+1),_oh2=${v}.charCodeAt(_i2+2),_om=${v}.charCodeAt(_i2+4),_om2=${v}.charCodeAt(_i2+5);if(_oh<48||_oh>57||_oh2<48||_oh2>57||_om<48||_om>57||_om2<48||_om2>57)return false;if(${v}.charCodeAt(_i2+3)!==58)return false;if((_oh-48)*10+(_oh2-48)>23)return false;if((_om-48)*10+(_om2-48)>59)return false}`);
+		return guard(v, isStr, `const _n=${v}.length;if(_n<20)return false;if(${v}.charCodeAt(4)!==45||${v}.charCodeAt(7)!==45)return false;const _sep=${v}.charCodeAt(10);if(_sep!==84&&_sep!==116)return false;if(${v}.charCodeAt(13)!==58||${v}.charCodeAt(16)!==58)return false;const _y0=${v}.charCodeAt(0)-48,_y1=${v}.charCodeAt(1)-48,_y2=${v}.charCodeAt(2)-48,_y3=${v}.charCodeAt(3)-48;if((_y0>>>0)>9||(_y1>>>0)>9||(_y2>>>0)>9||(_y3>>>0)>9)return false;const _y=_y0*1000+_y1*100+_y2*10+_y3;const _mo0=${v}.charCodeAt(5)-48,_mo1=${v}.charCodeAt(6)-48;if((_mo0>>>0)>9||(_mo1>>>0)>9)return false;const _mo=_mo0*10+_mo1;if(_mo<1||_mo>12)return false;const _dm=_mo===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):(_mo===4||_mo===6||_mo===9||_mo===11?30:31);const _d0=${v}.charCodeAt(8)-48,_d1=${v}.charCodeAt(9)-48;if((_d0>>>0)>9||(_d1>>>0)>9)return false;const _d=_d0*10+_d1;if(_d<1||_d>_dm)return false;const _h0=${v}.charCodeAt(11)-48,_h1=${v}.charCodeAt(12)-48;if((_h0>>>0)>9||(_h1>>>0)>9||_h0*10+_h1>23)return false;const _mi0=${v}.charCodeAt(14)-48,_mi1=${v}.charCodeAt(15)-48;if((_mi0>>>0)>5||(_mi1>>>0)>9)return false;const _se0=${v}.charCodeAt(17)-48,_se1=${v}.charCodeAt(18)-48;if((_se0>>>0)>5||(_se1>>>0)>9)return false;let _i2=19;if(${v}.charCodeAt(19)===46){_i2=20;const _st=_i2;while(_i2<_n){const _c2=${v}.charCodeAt(_i2);if(_c2<48||_c2>57)break;_i2++}if(_i2===_st)return false}const _tz=${v}.charCodeAt(_i2);if(_tz===90||_tz===122){if(_i2!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_i2!==6)return false;const _oh=${v}.charCodeAt(_i2+1),_oh2=${v}.charCodeAt(_i2+2),_om=${v}.charCodeAt(_i2+4),_om2=${v}.charCodeAt(_i2+5);if(_oh<48||_oh>57||_oh2<48||_oh2>57||_om<48||_om>57||_om2<48||_om2>57)return false;if(${v}.charCodeAt(_i2+3)!==58)return false;if((_oh-48)*10+(_oh2-48)>23)return false;if((_om-48)*10+(_om2-48)>59)return false}`);
 	}
 	function hostnameSource(v, isStr) {
 		return guard(v, isStr, `const _n=${v}.length;if(_n===0||_n>253)return false;let _ll=0,_pv=46;for(let _i=0;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===46){if(_ll===0||_pv===45)return false;_ll=0;_pv=_c;continue}const _an=(_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90);if(!_an&&_c!==45)return false;if(_c===45&&_pv===46)return false;if(++_ll>63)return false;_pv=_c}if(_ll===0||_pv===45)return false`);
+	}
+	function uuidSource(v, isStr) {
+		const run = (from, to) => `for(let _ui=${from};_ui<${to};_ui++){const _uc=${v}.charCodeAt(_ui);if(!((_uc-48>>>0)<10||((_uc|32)-97>>>0)<6))return false}`;
+		return guard(v, isStr, `if(${v}.length!==36)return false;if(${v}.charCodeAt(8)!==45||${v}.charCodeAt(13)!==45||${v}.charCodeAt(18)!==45||${v}.charCodeAt(23)!==45)return false;` + run(0, 8) + run(9, 13) + run(14, 18) + run(19, 23) + run(24, 36));
+	}
+	function timeSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n<8)return false;const _h1=${v}.charCodeAt(0)-48,_h2=${v}.charCodeAt(1)-48;if((_h1>>>0)>9||(_h2>>>0)>9||_h1*10+_h2>23)return false;if(${v}.charCodeAt(2)!==58||${v}.charCodeAt(5)!==58)return false;const _m1=${v}.charCodeAt(3)-48,_m2=${v}.charCodeAt(4)-48;if((_m1>>>0)>5||(_m2>>>0)>9)return false;const _s1=${v}.charCodeAt(6)-48,_s2=${v}.charCodeAt(7)-48;if((_s1>>>0)>5||(_s2>>>0)>9)return false;let _ti=8;if(_ti<_n&&${v}.charCodeAt(_ti)===46){_ti++;const _tf=_ti;while(_ti<_n){const _tc=${v}.charCodeAt(_ti)-48;if((_tc>>>0)>9)break;_ti++}if(_ti===_tf)return false}if(_ti!==_n){const _tz=${v}.charCodeAt(_ti);if(_tz===90||_tz===122){if(_ti!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_ti!==6||${v}.charCodeAt(_ti+3)!==58)return false;if((${v}.charCodeAt(_ti+1)-48>>>0)>9||(${v}.charCodeAt(_ti+2)-48>>>0)>9||(${v}.charCodeAt(_ti+4)-48>>>0)>9||(${v}.charCodeAt(_ti+5)-48>>>0)>9)return false}}`);
+	}
+	function uriSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + noReservedSource(v, "_co+1"));
 	}
 	function ipv6Source(v, isStr) {
 		return guard(v, isStr, `const _n=${v}.length;if(_n<2||_n>45)return false;let _end=_n,_g=0;const _dot=${v}.indexOf('.');if(_dot!==-1){const _lc=${v}.lastIndexOf(':',_dot);if(_lc===-1)return false;{const _f=_lc+1,_t=_n,_ln=_t-_f;if(_ln<7||_ln>15)return false;let _o=0,_val=0,_dg=0;for(let _i=_f;_i<=_t;_i++){const _c=_i<_t?${v}.charCodeAt(_i):46;if(_c===46){if(_dg===0||_val>255)return false;_o++;_val=0;_dg=0;if(_o>4)return false}else if(_c>=48&&_c<=57){if(_dg===1&&_val===0)return false;_val=_val*10+(_c-48);_dg++;if(_dg>3)return false}else return false}if(_o!==4)return false}_end=_lc+1;_g=2}let _cp=false,_dg2=0,_i2=0;if(${v}.charCodeAt(0)===58&&${v}.charCodeAt(1)!==58)return false;while(_i2<_end){const _c2=${v}.charCodeAt(_i2);if(_c2===58){if(_dg2>0){_g++;_dg2=0}if(_i2+1<_n&&${v}.charCodeAt(_i2+1)===58){if(_cp)return false;_cp=true;_i2+=2;if(_i2<_n&&${v}.charCodeAt(_i2)===58)return false;continue}_i2++;if(_i2===_end&&_end===_n)return false;continue}if((_c2>=48&&_c2<=57)||(_c2>=97&&_c2<=102)||(_c2>=65&&_c2<=70)){if(++_dg2>4)return false;_i2++;continue}return false}if(_dg2>0)_g++;if(_g>8)return false;if(_cp){if(_g>=8)return false}else if(_g!==8)return false`);
@@ -1397,15 +1670,24 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		dateTime,
 		ipv6,
 		hostname,
+		uri,
+		uriReference,
+		uuid,
+		time,
+		noReserved,
 		dateSource,
 		ipv4Source,
 		dateTimeSource,
 		ipv6Source,
-		hostnameSource
+		hostnameSource,
+		uriSource,
+		uuidSource,
+		timeSource,
+		noReservedSource
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	const UQ_HELPERS = "function _cn(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn(x[k])}).join(',')+'}'}function _uq(a){var n=a.length,i,k;if(n<2)return true;if(n<=12){for(i=1;i<n;i++)for(k=0;k<i;k++)if(_deq(a[i],a[k]))return false;return true}var s=new Set();for(i=0;i<n;i++){var x=a[i];if(x!==null&&typeof x==='object')break;if(s.has(x))return false;s.add(x)}if(i===n)return true;s=new Set();for(i=0;i<n;i++){var c=_cn(a[i]);if(s.has(c))return false;s.add(c)}return true}";
@@ -1977,7 +2259,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return at > 0 && at < s.length - 1 && s.indexOf(".", at) > at + 1;
 		},
 		date: _formats.date,
-		uuid: (s) => s.length === 36 && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s),
+		uuid: _formats.uuid,
 		ipv4: _formats.ipv4,
 		hostname: _formats.hostname
 	};
@@ -3554,12 +3836,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return isStr ? `{const _at=${v}.indexOf('@');if(_at<=0||_at>=${v}.length-1||${v}.indexOf('.',_at)<=_at+1)return false}` : `if(typeof ${v}==='string'){const _at=${v}.indexOf('@');if(_at<=0||_at>=${v}.length-1||${v}.indexOf('.',_at)<=_at+1)return false}`;
 		},
 		date: _formats.dateSource,
-		uuid: (v, isStr) => isStr ? `if(${v}.length!==36||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(${v}))return false` : `if(typeof ${v}==='string'&&(${v}.length!==36||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(${v})))return false`,
+		uuid: _formats.uuidSource,
 		"date-time": _formats.dateTimeSource,
-		time: (v, isStr) => isStr ? `if(!/^([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$/.test(${v}))return false` : `if(typeof ${v}==='string'&&!/^([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$/.test(${v}))return false`,
+		time: _formats.timeSource,
 		duration: (v, isStr) => isStr ? `if(!/^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$/.test(${v})||${v}==='P'||${v}.endsWith('T'))return false` : `if(typeof ${v}==='string'&&(!/^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$/.test(${v})||${v}==='P'||${v}.endsWith('T')))return false`,
-		uri: (v, isStr) => isStr ? `if(!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(${v})||/[\\s\\u0000-\\u001f\\u007f]/.test(${v}))return false` : `if(typeof ${v}==='string'&&(!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(${v})||/[\\s\\u0000-\\u001f\\u007f]/.test(${v})))return false`,
-		"uri-reference": (v, isStr) => isStr ? `if(/[\\s\\u0000-\\u001f\\u007f]/.test(${v}))return false` : `if(typeof ${v}==='string'&&/[\\s\\u0000-\\u001f\\u007f]/.test(${v}))return false`,
+		uri: _formats.uriSource,
+		"uri-reference": (v, isStr) => isStr ? `{${_formats.noReservedSource(v, "0")}}` : `if(typeof ${v}==='string'){${_formats.noReservedSource(v, "0")}}`,
 		ipv4: _formats.ipv4Source,
 		ipv6: _formats.ipv6Source,
 		hostname: _formats.hostnameSource
@@ -3974,11 +4256,9 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			});
 			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}',params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
 			if (fc) {
-				ctx.varCounter++;
-				const boolLines = [];
-				boolLines.push(fc(v, isStr));
-				const fmtCode = boolLines.join(";").replace(/return false/g, `{${failPush}}`);
-				lines.push(fmtCode);
+				const ri = ctx.varCounter++;
+				const fmtCode = fc(v, isStr).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${fmtCode}}`);
 			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
 				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
 				const guard = `typeof ${v}==='string'&&`;
@@ -4476,8 +4756,9 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.format) {
 			const fc = FORMAT_CODEGEN[schema.format];
 			if (fc) {
-				const code = fc(v, isStr).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)}}`);
-				lines.push(code);
+				const ri = ctx.varCounter++;
+				const code = fc(v, isStr).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${code}}`);
 			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
 				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
 				if (!ctx.closureVars.includes(closureName)) {
@@ -4844,7 +5125,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -5016,7 +5297,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -5433,7 +5714,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	]) };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
@@ -5538,7 +5819,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -5612,7 +5893,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -5632,7 +5913,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -5736,7 +6017,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -5934,7 +6215,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -6090,7 +6371,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -6225,7 +6506,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { buildDataPositionMap };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap } = require_data_positions();
 	/**
@@ -6269,7 +6550,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function install(deps) {
 		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, dataBits, escapePointer, deepEqual, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
@@ -7185,7 +7466,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileSafe } = require_safe_regex();
 	const SCHEMA_KEYWORDS = {
@@ -7395,11 +7676,11 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		},
 		date: _formats.date,
 		"date-time": _formats.dateTime,
-		time: (s) => /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d(\.\d+)?([Zz]|[+-]\d{2}:\d{2})?$/.test(s),
+		time: _formats.time,
 		duration: (s) => /^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)?)?$/.test(s) && s !== "P" && !s.endsWith("T"),
-		uuid: (s) => s.length === 36 && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s),
-		uri: (s) => /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s) && !/[\s\u0000-\u001f\u007f]/.test(s),
-		"uri-reference": (s) => !/[\s\u0000-\u001f\u007f]/.test(s),
+		uuid: _formats.uuid,
+		uri: _formats.uri,
+		"uri-reference": _formats.uriReference,
 		ipv4: _formats.ipv4,
 		ipv6: _formats.ipv6,
 		hostname: _formats.hostname,
@@ -8291,7 +8572,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { createInterpreter };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -8324,7 +8605,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const FORMAT_HINTS = {
@@ -8469,7 +8750,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -8654,7 +8935,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -8712,7 +8993,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.js
 var require_buffer_gate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const UNSUPPORTED_KEYWORDS = /* @__PURE__ */ new Set([
 		"contains",
@@ -8841,7 +9122,7 @@ var require_buffer_gate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -8892,17 +9173,17 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.11.0";
+	module.exports = "1.12.1";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex-source.js
 var require_safe_regex_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = "'use strict'\n\n// Linear-time regex engine for JSON Schema `pattern`, used in place of JS RegExp\n// so an adversarial input cannot trigger catastrophic backtracking (ReDoS).\n//\n// It is a Pike VM: the pattern compiles to a small instruction program, and the\n// VM simulates all NFA threads in lockstep over the input, deduping by program\n// counter. Runtime is O(input * program), with no backtracking.\n//\n// Supported (the RE2 subset, which is what ata's native path also accepts):\n// literals, ., character classes, \\d \\w \\s \\D \\W \\S, anchors ^ $, quantifiers\n// * + ? {n} {n,} {n,m} (greedy or lazy, same language for a boolean test),\n// groups ( ) (?: ), alternation |. Backreferences and lookaround are not\n// supported by linear engines; compileSafe throws on them so the caller can\n// decide (ata's codegen rejects such schemas rather than risk a hang).\n\nconst WS = [[9, 13], [32, 32], [160, 160]]\nconst DIGIT = [[48, 57]]\nconst WORD = [[48, 57], [65, 90], [97, 122], [95, 95]]\n\nfunction parse (src) {\n  let i = 0\n  const len = src.length\n  const peek = () => src[i]\n  const eof = () => i >= len\n\n  function parseAlt () {\n    const opts = [parseConcat()]\n    while (!eof() && peek() === '|') { i++; opts.push(parseConcat()) }\n    return opts.length === 1 ? opts[0] : { t: 'alt', opts }\n  }\n\n  function parseConcat () {\n    const parts = []\n    while (!eof() && peek() !== '|' && peek() !== ')') parts.push(parseRepeat())\n    if (parts.length === 0) return { t: 'empty' }\n    return parts.length === 1 ? parts[0] : { t: 'concat', parts }\n  }\n\n  function parseRepeat () {\n    let node = parseAtom()\n    while (!eof()) {\n      const ch = peek()\n      if (ch === '*') { i++; node = { t: 'star', child: node } }\n      else if (ch === '+') { i++; node = { t: 'plus', child: node } }\n      else if (ch === '?') { i++; node = { t: 'quest', child: node } }\n      else if (ch === '{') {\n        const saved = i\n        const q = tryQuantifier()\n        if (!q) { i = saved; break }\n        node = { t: 'repeat', child: node, min: q.min, max: q.max }\n      } else break\n      // a trailing ? makes the quantifier lazy; same language for a boolean test\n      if (!eof() && peek() === '?') i++\n    }\n    return node\n  }\n\n  function tryQuantifier () {\n    // assumes current char is '{'\n    i++\n    let min = ''\n    while (!eof() && /[0-9]/.test(peek())) { min += peek(); i++ }\n    if (min === '') return null\n    let max\n    if (peek() === '}') { i++; return { min: +min, max: +min } }\n    if (peek() === ',') {\n      i++\n      let m = ''\n      while (!eof() && /[0-9]/.test(peek())) { m += peek(); i++ }\n      if (peek() !== '}') return null\n      i++\n      max = m === '' ? Infinity : +m\n      return { min: +min, max }\n    }\n    return null\n  }\n\n  function parseAtom () {\n    const ch = peek()\n    if (ch === '(') {\n      i++\n      if (src[i] === '?') {\n        if (src[i + 1] === ':') { i += 2 }\n        else throw new Error('unsupported group (lookaround/named) in pattern')\n      }\n      const child = parseAlt()\n      if (peek() !== ')') throw new Error('unbalanced ( in pattern')\n      i++\n      return { t: 'group', child }\n    }\n    if (ch === '[') return parseClass()\n    if (ch === '.') { i++; return { t: 'any' } }\n    if (ch === '^') { i++; return { t: 'bol' } }\n    if (ch === '$') { i++; return { t: 'eol' } }\n    if (ch === '\\\\') return parseEscape(false)\n    if (ch === ')' || ch === '|') return { t: 'empty' }\n    i++\n    return { t: 'char', c: ch.charCodeAt(0) }\n  }\n\n  function parseClass () {\n    i++ // [\n    let neg = false\n    if (peek() === '^') { neg = true; i++ }\n    const ranges = []\n    while (!eof() && peek() !== ']') {\n      let lo\n      if (peek() === '\\\\') {\n        const esc = parseEscape(true)\n        if (esc.t === 'classpart') { for (const r of esc.ranges) ranges.push(r); continue }\n        lo = esc.c\n      } else { lo = peek().charCodeAt(0); i++ }\n      if (peek() === '-' && src[i + 1] !== ']' && i + 1 < len) {\n        i++ // -\n        let hi\n        if (peek() === '\\\\') { const e = parseEscape(true); hi = e.c } else { hi = peek().charCodeAt(0); i++ }\n        ranges.push([lo, hi])\n      } else {\n        ranges.push([lo, lo])\n      }\n    }\n    if (peek() !== ']') throw new Error('unbalanced [ in pattern')\n    i++\n    return { t: 'class', neg, ranges }\n  }\n\n  function parseEscape (inClass) {\n    i++ // backslash\n    if (eof()) throw new Error('trailing backslash in pattern')\n    const ch = peek(); i++\n    switch (ch) {\n      case 'd': return inClass ? { t: 'classpart', ranges: DIGIT } : { t: 'class', neg: false, ranges: DIGIT }\n      case 'w': return inClass ? { t: 'classpart', ranges: WORD } : { t: 'class', neg: false, ranges: WORD }\n      case 's': return inClass ? { t: 'classpart', ranges: WS } : { t: 'class', neg: false, ranges: WS }\n      case 'D': if (inClass) throw new Error('\\\\D inside a class is not supported'); return { t: 'class', neg: true, ranges: DIGIT }\n      case 'W': if (inClass) throw new Error('\\\\W inside a class is not supported'); return { t: 'class', neg: true, ranges: WORD }\n      case 'S': if (inClass) throw new Error('\\\\S inside a class is not supported'); return { t: 'class', neg: true, ranges: WS }\n      case 'n': return { t: 'char', c: 10 }\n      case 'r': return { t: 'char', c: 13 }\n      case 't': return { t: 'char', c: 9 }\n      case 'f': return { t: 'char', c: 12 }\n      case 'v': return { t: 'char', c: 11 }\n      case '0': return { t: 'char', c: 0 }\n      case 'x': { const h = src.slice(i, i + 2); i += 2; return { t: 'char', c: parseInt(h, 16) } }\n      case 'u': { const h = src.slice(i, i + 4); i += 4; return { t: 'char', c: parseInt(h, 16) } }\n      case 'b': if (inClass) return { t: 'char', c: 8 }; throw new Error('\\\\b word boundary is not supported')\n      default:\n        if (/[1-9]/.test(ch)) throw new Error('backreferences are not supported in pattern')\n        return { t: 'char', c: ch.charCodeAt(0) }\n    }\n  }\n\n  const ast = parseAlt()\n  if (!eof()) throw new Error('unexpected \"' + peek() + '\" in pattern')\n  return ast\n}\n\nfunction compileProg (ast) {\n  const prog = []\n  const emit = (op, extra) => { const idx = prog.length; prog.push(Object.assign({ op }, extra)); return idx }\n\n  function rec (n) {\n    switch (n.t) {\n      case 'empty': break\n      case 'char': emit('char', { c: n.c }); break\n      case 'any': emit('any'); break\n      case 'class': emit('class', { neg: n.neg, ranges: n.ranges }); break\n      case 'bol': emit('bol'); break\n      case 'eol': emit('eol'); break\n      case 'group': rec(n.child); break\n      case 'concat': for (const p of n.parts) rec(p); break\n      case 'alt': {\n        const jmps = []\n        for (let k = 0; k < n.opts.length; k++) {\n          if (k < n.opts.length - 1) {\n            const sp = emit('split', { x: 0, y: 0 })\n            prog[sp].x = prog.length\n            rec(n.opts[k])\n            jmps.push(emit('jmp', { x: 0 }))\n            prog[sp].y = prog.length\n          } else {\n            rec(n.opts[k])\n          }\n        }\n        for (const j of jmps) prog[j].x = prog.length\n        break\n      }\n      case 'star': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        emit('jmp', { x: sp })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'plus': {\n        const start = prog.length\n        rec(n.child)\n        const sp = emit('split', { x: start, y: 0 })\n        prog[sp].y = prog.length\n        break\n      }\n      case 'quest': {\n        const sp = emit('split', { x: 0, y: 0 })\n        prog[sp].x = prog.length\n        rec(n.child)\n        prog[sp].y = prog.length\n        break\n      }\n      case 'repeat': {\n        for (let k = 0; k < n.min; k++) rec(n.child)\n        if (n.max === Infinity) {\n          if (n.min === 0) rec({ t: 'star', child: n.child })\n          else rec({ t: 'star', child: n.child })\n        } else {\n          for (let k = 0; k < n.max - n.min; k++) rec({ t: 'quest', child: n.child })\n        }\n        break\n      }\n    }\n  }\n\n  rec(ast)\n  emit('match')\n  return prog\n}\n\n// Numeric opcodes for the runner. The program is compiled once into flat\n// typed arrays so the inner loop does no property lookups or string compares.\nconst OP_CHAR = 0\nconst OP_ANY = 1\nconst OP_CLASS = 2\nconst OP_SPLIT = 3\nconst OP_JMP = 4\nconst OP_BOL = 5\nconst OP_EOL = 6\nconst OP_MATCH = 7\n\nfunction classMatcher (instr) {\n  // ASCII is answered from a bitmap; anything above 0x7f walks the ranges.\n  const bits = new Uint8Array(128)\n  const r = instr.ranges\n  for (let k = 0; k < r.length; k++) {\n    const hi = Math.min(r[k][1], 127)\n    for (let c = r[k][0]; c <= hi; c++) bits[c] = 1\n  }\n  return { bits, ranges: r, neg: instr.neg }\n}\n\nfunction matchClass (cls, c) {\n  let inside\n  if (c < 128) {\n    inside = cls.bits[c] === 1\n  } else {\n    inside = false\n    const r = cls.ranges\n    for (let k = 0; k < r.length; k++) { if (c >= r[k][0] && c <= r[k][1]) { inside = true; break } }\n  }\n  return cls.neg ? !inside : inside\n}\n\nfunction makeRunner (prog) {\n  const n = prog.length\n  const ops = new Uint8Array(n)\n  const xs = new Int32Array(n)\n  const ys = new Int32Array(n)\n  const cs = new Int32Array(n)\n  const classes = new Array(n)\n  for (let i = 0; i < n; i++) {\n    const I = prog[i]\n    switch (I.op) {\n      case 'char': ops[i] = OP_CHAR; cs[i] = I.c; break\n      case 'any': ops[i] = OP_ANY; break\n      case 'class': ops[i] = OP_CLASS; classes[i] = classMatcher(I); break\n      case 'split': ops[i] = OP_SPLIT; xs[i] = I.x; ys[i] = I.y; break\n      case 'jmp': ops[i] = OP_JMP; xs[i] = I.x; break\n      case 'bol': ops[i] = OP_BOL; break\n      case 'eol': ops[i] = OP_EOL; break\n      case 'match': ops[i] = OP_MATCH; break\n    }\n  }\n\n  const lastGen = new Int32Array(n).fill(-1)\n  let gen = 0\n  // Each unvisited instruction is popped once and pushes at most two, so the\n  // stack never holds more than 2n + 1 entries.\n  const stack = new Int32Array(2 * n + 2)\n  // Thread lists hold at most one entry per instruction per step.\n  let clist = new Int32Array(n)\n  let nlist = new Int32Array(n)\n  let clen = 0\n  let nlen = 0\n\n  // Follows epsilon edges from `pc` and records every consuming instruction\n  // (or match) reached in `list`. `lastGen` dedupes per step.\n  function addThread (list, len0, pc, pos, len) {\n    // Most transitions land directly on a consuming instruction; skip the\n    // stack walk for those.\n    if (ops[pc] <= OP_CLASS || ops[pc] === OP_MATCH) {\n      if (lastGen[pc] === gen) return len0\n      lastGen[pc] = gen\n      list[len0] = pc\n      return len0 + 1\n    }\n    let sp = 0\n    stack[sp++] = pc\n    let count = len0\n    while (sp > 0) {\n      const p = stack[--sp]\n      if (lastGen[p] === gen) continue\n      lastGen[p] = gen\n      switch (ops[p]) {\n        case OP_JMP: stack[sp++] = xs[p]; break\n        case OP_SPLIT: stack[sp++] = ys[p]; stack[sp++] = xs[p]; break\n        case OP_BOL: if (pos === 0) stack[sp++] = p + 1; break\n        case OP_EOL: if (pos === len) stack[sp++] = p + 1; break\n        default: list[count++] = p\n      }\n    }\n    return count\n  }\n\n  // A pattern is anchored when starting it anywhere but position 0 yields no\n  // thread, which is the case for `^...` and its alternations. The probe sits\n  // at position 1 of a length-1 string so that only `^` can fail. For anchored\n  // patterns the per-position restart below is skipped, and an empty thread\n  // list means the match has already failed.\n  gen++\n  const anchored = addThread(nlist, 0, 0, 1, 1) === 0\n\n  function testNFA (s) {\n    const len = s.length\n    gen++\n    clen = addThread(clist, 0, 0, 0, len)\n    for (let pos = 0; pos <= len; pos++) {\n      const c = pos < len ? s.charCodeAt(pos) : -1\n      gen++\n      nlen = 0\n      for (let k = 0; k < clen; k++) {\n        const pc = clist[k]\n        switch (ops[pc]) {\n          case OP_MATCH: return true\n          case OP_CHAR: if (c === cs[pc]) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len); break\n          case OP_ANY: if (c !== -1 && c !== 10) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len); break\n          case OP_CLASS: if (c !== -1 && matchClass(classes[pc], c)) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len); break\n        }\n      }\n      if (pos < len) {\n        if (!anchored) nlen = addThread(nlist, nlen, 0, pos + 1, len)\n        else if (nlen === 0) return false\n      }\n      const tmp = clist; clist = nlist; nlist = tmp\n      clen = nlen\n    }\n    return false\n  }\n\n  // Lazy DFA on top of the NFA. A DFA state is the set of consuming\n  // instructions live at a position; transitions are computed on first use\n  // and cached per ASCII character. `^` and `$` depend on position, so the\n  // closure is taken with flags for \"at start\" and \"at end\", which gives two\n  // start states and two transition tables per state. The state count is\n  // capped; past the cap the matcher falls back to the NFA walk above, so the\n  // time bound stays linear either way.\n  const MAX_STATES = 256\n  const states = []\n  const stateIds = new Map()\n  let overflow = false\n\n  function closure (list, count, pc, atStart, atEnd) {\n    // Same walk as addThread, with the position replaced by the two flags.\n    let sp = 0\n    stack[sp++] = pc\n    while (sp > 0) {\n      const p = stack[--sp]\n      if (lastGen[p] === gen) continue\n      lastGen[p] = gen\n      switch (ops[p]) {\n        case OP_JMP: stack[sp++] = xs[p]; break\n        case OP_SPLIT: stack[sp++] = ys[p]; stack[sp++] = xs[p]; break\n        case OP_BOL: if (atStart) stack[sp++] = p + 1; break\n        case OP_EOL: if (atEnd) stack[sp++] = p + 1; break\n        default: list[count++] = p\n      }\n    }\n    return count\n  }\n\n  function internState (list, count) {\n    const pcs = Array.from(list.subarray(0, count)).sort((a, b) => a - b)\n    const key = pcs.join(',')\n    let id = stateIds.get(key)\n    if (id !== undefined) return id\n    if (states.length >= MAX_STATES) { overflow = true; return -1 }\n    id = states.length\n    let isMatch = false\n    for (let k = 0; k < pcs.length; k++) if (ops[pcs[k]] === OP_MATCH) { isMatch = true; break }\n    states.push({ pcs: Int32Array.from(pcs), isMatch, next: new Int32Array(128).fill(-2), nextEnd: new Int32Array(128).fill(-2) })\n    stateIds.set(key, id)\n    return id\n  }\n\n  function step (state, c, atEnd) {\n    gen++\n    let count = 0\n    const pcs = state.pcs\n    for (let k = 0; k < pcs.length; k++) {\n      const pc = pcs[k]\n      switch (ops[pc]) {\n        case OP_CHAR: if (c === cs[pc]) count = closure(nlist, count, pc + 1, false, atEnd); break\n        case OP_ANY: if (c !== 10) count = closure(nlist, count, pc + 1, false, atEnd); break\n        case OP_CLASS: if (matchClass(classes[pc], c)) count = closure(nlist, count, pc + 1, false, atEnd); break\n      }\n    }\n    if (!anchored) count = closure(nlist, count, 0, false, atEnd)\n    return internState(nlist, count)\n  }\n\n  let startEmpty = -2\n  let startNonEmpty = -2\n\n  function startState (atEnd) {\n    gen++\n    const count = closure(nlist, 0, 0, true, atEnd)\n    return internState(nlist, count)\n  }\n\n  function testDFA (s) {\n    const len = s.length\n    let id\n    if (len === 0) {\n      if (startEmpty === -2) startEmpty = startState(true)\n      id = startEmpty\n    } else {\n      if (startNonEmpty === -2) startNonEmpty = startState(false)\n      id = startNonEmpty\n    }\n    if (id < 0) return testNFA(s)\n    let state = states[id]\n    for (let pos = 0; pos < len; pos++) {\n      if (state.isMatch) return true\n      const c = s.charCodeAt(pos)\n      const atEnd = pos + 1 === len\n      let nid\n      if (c < 128) {\n        const table = atEnd ? state.nextEnd : state.next\n        nid = table[c]\n        if (nid === -2) { nid = step(state, c, atEnd); table[c] = nid }\n      } else {\n        nid = step(state, c, atEnd)\n      }\n      if (nid < 0) return testNFA(s)\n      state = states[nid]\n      if (anchored && state.pcs.length === 0) return false\n    }\n    return state.isMatch\n  }\n\n  return function test (s) {\n    return overflow ? testNFA(s) : testDFA(s)\n  }\n}\n\nfunction compileSafe (pattern) {\n  const prog = compileProg(parse(pattern))\n  const runner = makeRunner(prog)\n  // `__ataSafe` brands the result so the standalone serializer can tell a safe\n  // matcher apart from a RegExp and emit `__ataSafeRe(source)` instead.\n  return { test: runner, source: pattern, __ataSafe: true }\n}\n\n// True when the linear engine can represent `src`. Used by the codegen to decide\n// between the safe matcher and a JS RegExp fallback for patterns outside the\n// supported (RE2) subset (backreferences, lookaround, etc.).\nfunction patternIsSafe (src) {\n  try { compileSafe(src); return true } catch { return false }\n}\n\nmodule.exports = { compileSafe, patternIsSafe }\n";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/aot.js
 var require_aot = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegenWithErrors } = require_js_compiler();
 	const SAFE_REGEX_SOURCE = require_safe_regex_source();
@@ -9190,7 +9471,7 @@ ${exports$1}`;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
@@ -9359,7 +9640,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -9414,7 +9695,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -9519,7 +9800,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
 var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { correlateTypos } = require_correlate();
 	const { buildDataPositionMap } = require_data_positions();
@@ -9791,7 +10072,7 @@ var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { toDiagnostics };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -9824,7 +10105,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -9932,7 +10213,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -9972,7 +10253,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -9988,7 +10269,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
@@ -10202,17 +10483,21 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		})])
 	});
 	var LazyRejection = class {
-		constructor(build, data) {
+		constructor(build, data, buildRaw) {
 			this.valid = false;
 			this._build = build;
 			this._data = data;
 			this._errors = null;
+			this._buildRaw = buildRaw;
 		}
 		toJSON() {
 			return {
 				valid: false,
 				errors: this.errors
 			};
+		}
+		_ataRaw() {
+			return this._buildRaw ? this._buildRaw(this._data) : this.errors;
 		}
 	};
 	Object.defineProperty(LazyRejection.prototype, "errors", {
@@ -10310,11 +10595,28 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	}
 	function parsePointerPath(path) {
 		if (!path) return [];
-		return path.split("/").filter(Boolean).map((seg) => {
-			const decoded = seg.replace(/~1/g, "/").replace(/~0/g, "~");
-			if (/^(0|[1-9][0-9]*)$/.test(decoded)) return { key: Number(decoded) };
-			return { key: decoded };
-		});
+		const out = [];
+		const n = path.length;
+		let start = 1;
+		for (let i = 1; i <= n; i++) {
+			if (i !== n && path.charCodeAt(i) !== 47) continue;
+			if (i > start) {
+				let seg = path.slice(start, i);
+				if (seg.indexOf("~") >= 0) seg = seg.replace(/~1/g, "/").replace(/~0/g, "~");
+				const c0 = seg.charCodeAt(0);
+				let numeric = c0 >= 48 && c0 <= 57 && (seg.length === 1 || c0 !== 48);
+				if (numeric) for (let k = 1; k < seg.length; k++) {
+					const c = seg.charCodeAt(k);
+					if (c < 48 || c > 57) {
+						numeric = false;
+						break;
+					}
+				}
+				out.push({ key: numeric ? Number(seg) : seg });
+			}
+			start = i + 1;
+		}
+		return out;
 	}
 	function createPaddedBuffer(jsonStr) {
 		if (typeof Buffer === "undefined") throw new Error("createPaddedBuffer requires Node.js Buffer");
@@ -10958,6 +11260,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						let cached = null;
 						return {
 							valid: false,
+							_ataRaw() {
+								let raw = result.errors || [];
+								if (raw.length > 1) raw = sortErrorsBySchemaOrder(root, raw);
+								return raw;
+							},
 							get errors() {
 								if (cached === null) {
 									let raw = result.errors || [];
@@ -11092,15 +11399,22 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const _full = this.validate;
 				const _fast = this._fastVerdict;
 				const EMPTY_ERRORS = Object.freeze([]);
+				const _verdictFallback = [{
+					keyword: "validation",
+					instancePath: "",
+					schemaPath: "#",
+					params: {},
+					message: "schema validation failed"
+				}];
 				const _buildErrors = (data) => {
 					const r = _full(data);
-					return r && r.valid === false && r.errors && r.errors.length ? r.errors : [{
-						keyword: "validation",
-						instancePath: "",
-						schemaPath: "#",
-						params: {},
-						message: "schema validation failed"
-					}];
+					return r && r.valid === false && r.errors && r.errors.length ? r.errors : _verdictFallback;
+				};
+				const _buildRawErrors = (data) => {
+					const r = _full(data);
+					if (!r || r.valid !== false) return _verdictFallback;
+					const raw = typeof r._ataRaw === "function" ? r._ataRaw() : r.errors;
+					return raw && raw.length ? raw : _verdictFallback;
 				};
 				this.validate = (data) => {
 					if (_fast(data)) return {
@@ -11108,7 +11422,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						data,
 						errors: EMPTY_ERRORS
 					};
-					return new LazyRejection(_buildErrors, data);
+					return new LazyRejection(_buildErrors, data, _buildRawErrors);
 				};
 			}
 			if (native) {
@@ -11443,10 +11757,19 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				validate(value) {
 					const result = self.validate(value);
 					if (result.valid) return { value };
-					return { issues: result.errors.map((err) => ({
-						message: err.message,
-						path: parsePointerPath(err.instancePath)
-					})) };
+					const raw = typeof result._ataRaw === "function" ? result._ataRaw() : result.errors;
+					const issues = new Array(raw.length);
+					for (let i = 0; i < raw.length; i++) {
+						const err = raw[i];
+						const path = err.instancePath != null ? err.instancePath : err.path || "";
+						let message = err.message;
+						if (!message) message = require_enrich_error().enrich(err, {}).message;
+						issues[i] = {
+							message,
+							path: parsePointerPath(path)
+						};
+					}
+					return { issues };
 				}
 			});
 			Object.defineProperty(this, "~standard", {
@@ -11553,11 +11876,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.11.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.12.1_yaml@2.9.0/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();

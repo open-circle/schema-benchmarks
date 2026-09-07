@@ -36,7 +36,7 @@ interface CompiledSchema<T> {
 }
 //#endregion
 //#region libraries/zod-compiler/index.d.ts
-declare const compiledProductSchema: z.ZodObject<{
+export declare const compiledProductSchema: z.ZodObject<{
   id: z.ZodNumber;
   created: z.ZodDate;
   title: z.ZodString;
@@ -108,5 +108,4 @@ declare const compiledProductSchema: z.ZodObject<{
   }[];
 }>;
 //#endregion
-export { compiledProductSchema };
 //# sourceMappingURL=index.d.mts.map
