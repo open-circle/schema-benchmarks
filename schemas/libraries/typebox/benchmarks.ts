@@ -215,17 +215,31 @@ export default defineBenchmarks({
       validation: [
         {
           run(schema, data) {
-            return Value.Check(remotes, schema, data);
+            return Value.Check(
+              {
+                ...Schema.Meta,
+                ...remotes,
+              },
+              schema,
+              data,
+            );
           },
-          snippet: () => ts`Value.Check(remotes, schema, data)`,
+          snippet: () => ts`Value.Check({ ...Schema.Meta, ...remotes }, schema, data)`,
           note: "value",
           source: { type: "native" },
         },
         {
           run(schema, data) {
-            return Schema.Check(remotes, schema, data);
+            return Schema.Check(
+              {
+                ...Schema.Meta,
+                ...remotes,
+              },
+              schema,
+              data,
+            );
           },
-          snippet: () => ts`Schema.Check(remotes, schema, data)`,
+          snippet: () => ts`Schema.Check({ ...Schema.Meta, ...remotes }, schema, data)`,
           note: "schema",
           source: { type: "native" },
         },
