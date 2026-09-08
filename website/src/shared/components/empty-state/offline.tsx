@@ -1,3 +1,5 @@
+import { isError } from "@schema-benchmarks/utils";
+
 import { MdSymbol } from "#src/shared/components/symbol";
 
 import { EmptyState } from ".";
@@ -5,7 +7,7 @@ import { EmptyState } from ".";
 export function isOfflineError(err: unknown) {
   return (
     !navigator.onLine ||
-    (Error.isError(err) && (err.message.includes("Failed to fetch") || err.name === "AbortError"))
+    (isError(err) && (err.message.includes("Failed to fetch") || err.name === "AbortError"))
   );
 }
 

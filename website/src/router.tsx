@@ -1,3 +1,4 @@
+import { isError } from "@schema-benchmarks/utils";
 import type { QueryClient } from "@tanstack/react-query";
 import { createRouter, Link, type RouterHistory } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
@@ -36,7 +37,7 @@ export const getRouter = ({
         <EmptyState
           icon={<MdSymbol>error</MdSymbol>}
           title="Error"
-          subtitle={Error.isError(error) ? error.message : "An error occurred."}
+          subtitle={isError(error) ? error.message : "An error occurred."}
         >
           <Button onClick={reset}>Retry</Button>
         </EmptyState>

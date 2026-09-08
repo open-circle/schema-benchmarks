@@ -575,3 +575,8 @@ export function getCyrb53Hash(str: string, prefix = str.length.toString()): stri
 
   return `${prefix}-${hash53.toString(36)}`;
 }
+
+export const isError = (value: unknown): value is Error => {
+  if (Error.isError) return Error.isError(value);
+  return value instanceof Error;
+};
