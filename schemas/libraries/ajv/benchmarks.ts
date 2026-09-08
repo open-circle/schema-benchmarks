@@ -8,6 +8,7 @@ import type { FormatName } from "ajv-formats";
 import addFormats from "ajv-formats";
 import Ajv2019 from "ajv/dist/2019.js";
 import Ajv2020 from "ajv/dist/2020.js";
+import draft6MetaSchema from "ajv/dist/refs/json-schema-draft-06.json" with { type: "json" };
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
@@ -37,8 +38,13 @@ function getComplianceAjv({ strict, target }: { strict: boolean; target: Complia
       return new Ajv2019(sharedOpts);
     case "draft2020-12":
       return new Ajv2020(sharedOpts);
-    default:
-      return new Ajv(sharedOpts);
+    default: {
+      const ajv = new Ajv(sharedOpts);
+      if (target === "draft6") {
+        ajv.addMetaSchema(draft6MetaSchema);
+      }
+      return ajv;
+    }
   }
 }
 
