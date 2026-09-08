@@ -77,7 +77,7 @@ const config = defineConfig({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
       providerImportSource: "@mdx-js/react",
     }),
-    netlify(),
+    !process.env.VITEST && netlify(),
     viteReact({ compiler: true }),
     materialSymbols({
       knownSymbols: [
