@@ -36,7 +36,7 @@ export const getRouter = ({
         <EmptyState
           icon={<MdSymbol>error</MdSymbol>}
           title="Error"
-          subtitle={error.message || "An error occurred."}
+          subtitle={Error.isError(error) ? error.message : "An error occurred."}
         >
           <Button onClick={reset}>Retry</Button>
         </EmptyState>

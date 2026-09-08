@@ -2,8 +2,11 @@ import { MdSymbol } from "#src/shared/components/symbol";
 
 import { EmptyState } from ".";
 
-export function isOfflineError(err: Error) {
-  return !navigator.onLine || err.message.includes("Failed to fetch") || err.name === "AbortError";
+export function isOfflineError(err: unknown) {
+  return (
+    !navigator.onLine ||
+    (Error.isError(err) && (err.message.includes("Failed to fetch") || err.name === "AbortError"))
+  );
 }
 
 export function Offline() {
