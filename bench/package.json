@@ -16,6 +16,7 @@
   },
   "scripts": {
     "bench": "node ./src/scripts/bench/orchestrate.ts",
+    "bench:merge": "node ./src/scripts/bench/merge.ts",
     "json-schema": "node ./src/scripts/json-schema/orchestrate.ts",
     "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",

@@ -5,18 +5,23 @@ import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { ensureArray, partition, unsafeEntries } from "@schema-benchmarks/utils";
 import { getSigintSignal } from "@schema-benchmarks/utils/node";
 import { Bench, type Task, type TaskResultCompleted } from "tinybench";
+import * as v from "valibot";
 
-import type { BenchmarkConfigEntry } from "#src/bench/registry.ts";
-import { Registry } from "#src/bench/registry.ts";
+import type { BenchmarkConfigEntry, BenchmarkType } from "#src/bench/registry.ts";
+import { optionalBenchmarkTypeSchema, Registry } from "#src/bench/registry.ts";
 import { getEmptyResults } from "#src/results/types.ts";
 
 const {
-  values: { lib },
+  values: { lib, type },
 } = parseArgs({
   options: {
     lib: {
       type: "string",
       short: "l",
+    },
+    type: {
+      type: "string",
+      short: "t",
     },
   },
 });
@@ -24,6 +29,11 @@ const {
 if (!lib || !libraries[lib]) {
   throw new Error(`Library not found: ${lib}`);
 }
+if (!v.is(optionalBenchmarkTypeSchema, type)) {
+  throw new Error(`Benchmark type not found: ${type}`);
+}
+
+const shouldRun = (candidate: BenchmarkType) => !type || type === candidate;
 
 const libraryConfig = await libraries[lib]();
 
@@ -49,7 +59,7 @@ bench.addEventListener("cycle", (event) => {
 bench.addEventListener("complete", () => {
   console.log("Bench complete");
 });
-if (initialization) {
+if (shouldRun("initialization") && initialization) {
   for (const benchConfig of ensureArray(initialization)) {
     const { run, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
     bench.add(
@@ -66,7 +76,7 @@ if (initialization) {
     );
   }
 }
-if (validation) {
+if (shouldRun("validation") && validation) {
   for (const [dataType, data] of [
     ["valid", successData],
     ["invalid", errorData],
@@ -89,7 +99,7 @@ if (validation) {
     }
   }
 }
-if (parsing) {
+if (shouldRun("parsing") && parsing) {
   for (const [errorType, benchConfigs] of unsafeEntries(parsing)) {
     if (!benchConfigs) continue;
     for (const benchConfig of ensureArray(benchConfigs)) {
@@ -131,106 +141,106 @@ if (parsing) {
       }
     }
   }
-  if (standard) {
-    for (const [dataType, data] of [
-      ["valid", successData],
-      ["invalid", errorData],
-    ] as const) {
-      for (const [errorType, benchConfigs] of unsafeEntries(standard)) {
-        if (!benchConfigs) continue;
-        for (const benchConfig of ensureArray(benchConfigs)) {
-          const {
-            schema,
-            snippet = "upfetch(url, { schema })",
+}
+if (shouldRun("standard") && standard) {
+  for (const [dataType, data] of [
+    ["valid", successData],
+    ["invalid", errorData],
+  ] as const) {
+    for (const [errorType, benchConfigs] of unsafeEntries(standard)) {
+      if (!benchConfigs) continue;
+      for (const benchConfig of ensureArray(benchConfigs)) {
+        const {
+          schema,
+          snippet = "upfetch(url, { schema })",
+          note,
+          optimizeType = libraryOptimizeType,
+        } = benchConfig;
+        bench.add(
+          caseRegistry.add({
+            type: "standard",
+            optimizeType,
+            errorType,
+            dataType,
+            libraryName,
+            version,
+            snippet,
             note,
-            optimizeType = libraryOptimizeType,
-          } = benchConfig;
-          bench.add(
-            caseRegistry.add({
-              type: "standard",
-              optimizeType,
-              errorType,
-              dataType,
-              libraryName,
-              version,
-              snippet,
-              note,
-            }),
-            () => schema["~standard"].validate(data),
-          );
-        }
+          }),
+          () => schema["~standard"].validate(data),
+        );
       }
     }
   }
-  if (string) {
-    for (const [dataType, data] of [
-      ["valid", validStrings],
-      ["invalid", invalidStrings],
-    ] as const) {
-      for (const [stringFormat, benchConfigs] of unsafeEntries(string)) {
-        if (!benchConfigs) continue;
-        for (const benchConfig of ensureArray(benchConfigs)) {
-          const { create, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
-          const run = await create();
-          bench.add(
-            caseRegistry.add({
-              type: "string",
-              optimizeType,
-              dataType,
-              stringFormat,
-              libraryName,
-              version,
-              snippet,
-              note,
-              throws,
-            }),
-            () => run(data[stringFormat]),
-          );
-        }
+}
+if (shouldRun("string") && string) {
+  for (const [dataType, data] of [
+    ["valid", validStrings],
+    ["invalid", invalidStrings],
+  ] as const) {
+    for (const [stringFormat, benchConfigs] of unsafeEntries(string)) {
+      if (!benchConfigs) continue;
+      for (const benchConfig of ensureArray(benchConfigs)) {
+        const { create, snippet, note, optimizeType = libraryOptimizeType, throws } = benchConfig;
+        const run = await create();
+        bench.add(
+          caseRegistry.add({
+            type: "string",
+            optimizeType,
+            dataType,
+            stringFormat,
+            libraryName,
+            version,
+            snippet,
+            note,
+            throws,
+          }),
+          () => run(data[stringFormat]),
+        );
       }
     }
   }
-  if (codec) {
-    const bigint = 1234567890123456789n;
-    const str = bigint.toString();
-    for (const benchConfig of ensureArray(codec)) {
-      const {
-        encode,
-        decode,
+}
+if (shouldRun("codec") && codec) {
+  const bigint = 1234567890123456789n;
+  const str = bigint.toString();
+  for (const benchConfig of ensureArray(codec)) {
+    const {
+      encode,
+      decode,
+      note,
+      optimizeType = libraryOptimizeType,
+      acceptsUnknown,
+    } = benchConfig;
+    const id = crypto.randomUUID();
+    bench.add(
+      caseRegistry.add({
+        type: "codec",
+        optimizeType,
+        libraryName,
+        version,
         note,
-        optimizeType = libraryOptimizeType,
+        snippet: encode.snippet,
+        codecType: "encode",
+        codecId: id,
         acceptsUnknown,
-      } = benchConfig;
-      const id = crypto.randomUUID();
-      bench.add(
-        caseRegistry.add({
-          type: "codec",
-          optimizeType,
-          libraryName,
-          version,
-          note,
-          snippet: encode.snippet,
-          codecType: "encode",
-          codecId: id,
-          acceptsUnknown,
-        }),
-        () => encode.run(bigint),
-      );
-      bench.add(
-        caseRegistry.add({
-          type: "codec",
-          optimizeType,
-          libraryName,
-          version,
-          note,
-          snippet: decode.snippet,
-          codecType: "decode",
-          codecId: id,
-          acceptsUnknown,
-        }),
-        () => decode.run(str),
-      );
-    }
+      }),
+      () => encode.run(bigint),
+    );
+    bench.add(
+      caseRegistry.add({
+        type: "codec",
+        optimizeType,
+        libraryName,
+        version,
+        note,
+        snippet: decode.snippet,
+        codecType: "decode",
+        codecId: id,
+        acceptsUnknown,
+      }),
+      () => decode.run(str),
+    );
   }
 }
 

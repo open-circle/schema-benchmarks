@@ -28,3 +28,6 @@ json-schema-tests/remotes/
 json-schema-tests/.cache/
 
 coverage
+
+# Intermediate benchmark shards
+bench/results/

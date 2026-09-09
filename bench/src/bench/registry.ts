@@ -8,10 +8,21 @@ import type {
   StringFormat,
 } from "@schema-benchmarks/schemas";
 import type { Compute, DistributiveOmit, OneOf, Satisfies } from "@schema-benchmarks/utils";
+import * as v from "valibot";
 
 import type { DataType } from "#src/results/types.ts";
 
-export type BenchmarkType = Exclude<keyof BenchmarksConfig, "library" | "stack" | "jsonSchema">;
+export const benchmarkTypeSchema = v.picklist([
+  "initialization",
+  "validation",
+  "parsing",
+  "standard",
+  "string",
+  "codec",
+] satisfies ReadonlyArray<Exclude<keyof BenchmarksConfig, "library" | "stack" | "jsonSchema">>);
+export type BenchmarkType = v.InferOutput<typeof benchmarkTypeSchema>;
+
+export const optionalBenchmarkTypeSchema = v.optional(benchmarkTypeSchema);
 
 interface BaseBenchInfo extends DistributiveOmit<BaseBenchmarkConfig, "optimizeType"> {
   libraryName: string;

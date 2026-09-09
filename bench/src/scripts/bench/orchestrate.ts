@@ -1,15 +1,31 @@
 import * as child_process from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { promisify } from "node:util";
+import { parseArgs, promisify } from "node:util";
 
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { unsafeEntries } from "@schema-benchmarks/utils";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
 import * as v from "valibot";
 
+import { optionalBenchmarkTypeSchema } from "#src/bench/registry.ts";
 import type { BenchResults } from "#src/results/types.ts";
 import { benchResultsSchema, getEmptyResults } from "#src/results/types.ts";
+
+const {
+  values: { type },
+} = parseArgs({
+  options: {
+    type: {
+      type: "string",
+      short: "t",
+    },
+  },
+});
+
+if (!v.is(optionalBenchmarkTypeSchema, type)) {
+  throw new Error(`Benchmark type not found: ${type}`);
+}
 
 const sigintSignal = getSigintSignal();
 
@@ -21,7 +37,11 @@ for (const lib of Object.keys(libraries)) {
   const libResult = await forwardStd(
     execFile(
       process.execPath,
-      [path.resolve(process.cwd(), "./src/scripts/bench/library.ts"), `--lib=${lib}`],
+      [
+        path.resolve(process.cwd(), "./src/scripts/bench/library.ts"),
+        `--lib=${lib}`,
+        ...(type ? [`--type=${type}`] : []),
+      ],
       { signal: sigintSignal },
     ),
   );
@@ -63,4 +83,8 @@ for (const array of [
 
 merged.codec.sort((a, b) => a.encode.mean - b.encode.mean);
 
-await fs.writeFile(path.resolve(process.cwd(), "./bench.json"), JSON.stringify(merged));
+const outputPath = type
+  ? path.resolve(process.cwd(), `./results/bench-${type}.json`)
+  : path.resolve(process.cwd(), "./bench.json");
+await fs.mkdir(path.dirname(outputPath), { recursive: true });
+await fs.writeFile(outputPath, JSON.stringify(merged));
