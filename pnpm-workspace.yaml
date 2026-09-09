@@ -13,7 +13,7 @@ allowBuilds:
   msw: false
   sharp: false
 catalog:
-  "@oxfmt/binding-linux-x64-gnu": ^0.66.0
+  "@oxfmt/binding-linux-x64-gnu": ^0.67.0
   "@standard-schema/spec": ^1.1.0
   "@ttsc/unplugin": "0.29.0"
   "@types/node": ^26
@@ -26,7 +26,7 @@ catalog:
   dedent: ^1.7.2
   "mix-n-matchers": "^3.0.0"
   mutative: "^1.3.0"
-  oxfmt: "^0.66.0"
+  oxfmt: "^0.67.0"
   playwright: ^1.63.0
   react: ^19.2.8
   react-dom: ^19.2.8
