@@ -1,5 +1,6 @@
 import * as child_process from "node:child_process";
 import * as fs from "node:fs/promises";
+import * as os from "node:os";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as url from "node:url";
@@ -8,6 +9,7 @@ import { promisify } from "node:util";
 import { assertNotReached, errorData } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd } from "@schema-benchmarks/utils/node";
+import pLimit from "p-limit";
 
 import type { StackResult } from "#src/results/types.ts";
 
@@ -39,8 +41,6 @@ async function getLoggedOutput(lib: string) {
   return { output, lineCount };
 }
 
-const results: Array<StackResult> = [];
-
 function getScriptLineNumber(stack?: string) {
   if (!stack) return undefined;
   const lines = stack.split("\n");
@@ -52,54 +52,59 @@ function getScriptLineNumber(stack?: string) {
   return undefined;
 }
 
-for (const [lib, getConfig] of Object.entries(libraries)) {
-  const {
-    library: { name: libraryName, version },
-    stack,
-  } = await getConfig();
-  if (stack) {
-    const { snippet } = stack;
-    try {
-      await stack.throw(errorData);
-      assertNotReached();
-    } catch (e) {
-      const output = await getLoggedOutput(lib);
-      if (Error.isError(e)) {
-        if (e.name === "ShouldHaveThrownError") throw e;
-        const hasFrames = e.stack?.includes("    at ");
-        if (!hasFrames) {
-          results.push({
-            type: "no stack",
+const limit = pLimit(os.availableParallelism());
+const results = (
+  await Promise.all(
+    Object.entries(libraries).map(([lib, getConfig]) =>
+      limit(async (): Promise<StackResult | undefined> => {
+        const {
+          library: { name: libraryName, version },
+          stack,
+        } = await getConfig();
+        if (!stack) return undefined;
+
+        const { snippet } = stack;
+        try {
+          await stack.throw(errorData);
+          assertNotReached();
+        } catch (error) {
+          const output = await getLoggedOutput(lib);
+          if (!Error.isError(error)) {
+            return {
+              type: "not an error",
+              libraryName,
+              version,
+              snippet,
+              ...output,
+            };
+          }
+          if (error.name === "ShouldHaveThrownError") throw error;
+          const hasFrames = error.stack?.includes("    at ");
+          if (!hasFrames) {
+            return {
+              type: "no stack",
+              libraryName,
+              version,
+              snippet,
+              ...output,
+            };
+          }
+          const frames = error.stack?.slice(error.stack.indexOf("    at "));
+          return {
+            type: "success",
             libraryName,
             version,
             snippet,
+            frame: getScriptLineNumber(frames),
             ...output,
-          });
-          continue;
+          };
         }
-        const frames = e.stack?.slice(e.stack.indexOf("    at "));
-        const frame = getScriptLineNumber(frames);
-        results.push({
-          type: "success",
-          libraryName,
-          version,
-          snippet,
-          frame,
-          ...output,
-        });
-      } else {
-        results.push({
-          type: "not an error",
-          libraryName,
-          version,
-          snippet,
-          ...output,
-        });
-      }
-    }
-  }
-  global.gc?.();
-}
+      }).finally(() => {
+        global.gc?.();
+      }),
+    ),
+  )
+).filter((result) => !!result);
 
 await fs.writeFile(
   path.join(process.cwd(), "stack.json"),
