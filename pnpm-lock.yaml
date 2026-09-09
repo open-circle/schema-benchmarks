@@ -102,7 +102,7 @@ importers:
         specifier: ^2.1.12
         version: 2.1.12
       oxfmt:
-        specifier: 0.67.0
+        specifier: 'catalog:'
         version: 0.67.0
       oxlint:
         specifier: ^1.82.0
