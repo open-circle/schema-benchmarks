@@ -14,14 +14,15 @@ const merged = getEmptyResults();
 function mergeResult<Type extends BenchmarkType>(type: Type, results: Pick<BenchResults, Type>) {
   merged[type] = results[type];
 }
+const resultsDir = path.resolve(process.cwd(), "./results");
+const resultFiles = await fs.readdir(resultsDir);
 
 for (const type of benchmarkTypeSchema.options) {
-  const resultsDir = path.resolve(process.cwd(), "./results");
-  const resultFiles = await fs.readdir(resultsDir);
   const inputPaths =
     type === "string"
       ? resultFiles
           .filter((fileName) => /^bench-string-\d+\.json$/.test(fileName))
+          // oxlint-disable-next-line unicorn/no-array-sort
           .sort()
           .map((fileName) => path.join(resultsDir, fileName))
       : [path.join(resultsDir, `bench-${type}.json`)];
