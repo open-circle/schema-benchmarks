@@ -13,27 +13,45 @@ import type { BenchResults } from "#src/results/types.ts";
 import { benchResultsSchema, getEmptyResults } from "#src/results/types.ts";
 
 const {
-  values: { type },
+  values: { type, shard: shardValue },
 } = parseArgs({
   options: {
     type: {
       type: "string",
       short: "t",
     },
+    shard: {
+      type: "string",
+    },
   },
 });
+
+function parseShard(value: string) {
+  const match = /^(\d+)\/(\d+)$/.exec(value);
+  const index = Number(match?.[1]);
+  const count = Number(match?.[2]);
+  if (!match || count === 0 || index >= count) {
+    throw new Error(`Invalid shard: ${value}`);
+  }
+  return { index, count };
+}
 
 if (!v.is(optionalBenchmarkTypeSchema, type)) {
   throw new Error(`Benchmark type not found: ${type}`);
 }
+
+const shard = type === "string" && shardValue ? parseShard(shardValue) : undefined;
 
 const sigintSignal = getSigintSignal();
 
 const execFile = promisify(child_process.execFile);
 
 const allResults: Array<BenchResults> = [];
+const libraryEntries = Object.entries(libraries).filter(
+  (_, index) => !shard || index % shard.count === shard.index,
+);
 
-for (const lib of Object.keys(libraries)) {
+for (const [lib] of libraryEntries) {
   const libResult = await forwardStd(
     execFile(
       process.execPath,
@@ -83,8 +101,10 @@ for (const array of [
 
 merged.codec.sort((a, b) => a.encode.mean - b.encode.mean);
 
+const outputName =
+  type === "string" && shard ? `bench-string-${shard.index}.json` : `bench-${type}.json`;
 const outputPath = type
-  ? path.resolve(process.cwd(), `./results/bench-${type}.json`)
+  ? path.resolve(process.cwd(), `./results/${outputName}`)
   : path.resolve(process.cwd(), "./bench.json");
 await fs.mkdir(path.dirname(outputPath), { recursive: true });
 await fs.writeFile(outputPath, JSON.stringify(merged));
