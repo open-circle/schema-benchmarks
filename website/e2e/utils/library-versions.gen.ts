@@ -22,7 +22,7 @@ export const libraryVersions = {
   sury: "11.0.0-rc.2",
   typebox: "1.3.28",
   typia: "14.0.5",
-  valibot: "1.4.2",
+  valibot: "1.5.0",
   yup: "1.7.1",
   "z-schema": "12.4.5",
   zod: "4.5.4",

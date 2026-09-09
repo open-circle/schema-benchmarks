@@ -74,29 +74,6 @@ function _addIssue(context, label, dataset, config$1, other) {
 	if (dataset.issues) dataset.issues.push(issue);
 	else dataset.issues = [issue];
 }
-const _standardCache = /* @__PURE__ */ new WeakMap();
-/**
-* Returns the Standard Schema properties.
-*
-* @param context The schema context.
-*
-* @returns The Standard Schema properties.
-*/
-/* @__NO_SIDE_EFFECTS__ */
-function _getStandardProps(context) {
-	let cached = _standardCache.get(context);
-	if (!cached) {
-		cached = {
-			version: 1,
-			vendor: "valibot",
-			validate(value$1) {
-				return context["~run"]({ value: value$1 }, /* @__PURE__ */ getGlobalConfig());
-			}
-		};
-		_standardCache.set(context, cached);
-	}
-	return cached;
-}
 /**
 * Joins multiple `expects` values with the given separator.
 *
@@ -112,6 +89,26 @@ function _joinExpects(values$1, separator) {
 	const list = [...new Set(values$1)];
 	if (list.length > 1) return `(${list.join(` ${separator} `)})`;
 	return list[0] ?? "never";
+}
+/**
+* Eagerly creates and attaches the Standard Schema properties of a schema.
+*
+* Hint: The contextual `this` type includes the standard properties that are
+* attached before the schema is returned.
+*
+* @param schema The schema to attach standard properties to.
+*
+* @returns The schema with standard properties attached.
+*
+* @internal
+*/
+function _standardSchema(schema) {
+	schema["~standard"] = {
+		version: 1,
+		vendor: "valibot",
+		validate: (value$1) => schema["~run"]({ value: value$1 }, /* @__PURE__ */ getGlobalConfig())
+	};
+	return schema;
 }
 /**
 * A Valibot error with useful information.
@@ -202,6 +199,7 @@ function url(message$1) {
 		expects: null,
 		requirement(input) {
 			try {
+				if (URL.canParse) return URL.canParse(input);
 				new URL(input);
 				return true;
 			} catch {
@@ -243,7 +241,7 @@ function getDefault(schema, dataset, config$1) {
 }
 /* @__NO_SIDE_EFFECTS__ */
 function array(item, message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "array",
 		reference: array,
@@ -251,9 +249,6 @@ function array(item, message$1) {
 		async: false,
 		item,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			const input = dataset.value;
 			if (Array.isArray(input)) {
@@ -287,31 +282,28 @@ function array(item, message$1) {
 			} else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function date(message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "date",
 		reference: date,
 		expects: "Date",
 		async: false,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			if (dataset.value instanceof Date) if (!isNaN(dataset.value)) dataset.typed = true;
 			else _addIssue(this, "type", dataset, config$1, { received: "\"Invalid Date\"" });
 			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function nullable(wrapped, default_) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "nullable",
 		reference: nullable,
@@ -319,9 +311,6 @@ function nullable(wrapped, default_) {
 		async: false,
 		wrapped,
 		default: default_,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			if (dataset.value === null) {
 				if (this.default !== void 0) dataset.value = /* @__PURE__ */ getDefault(this, dataset, config$1);
@@ -332,30 +321,27 @@ function nullable(wrapped, default_) {
 			}
 			return this.wrapped["~run"](dataset, config$1);
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function number(message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "number",
 		reference: number,
 		expects: "number",
 		async: false,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			if (typeof dataset.value === "number" && !isNaN(dataset.value)) dataset.typed = true;
 			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function object(entries$1, message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "object",
 		reference: object,
@@ -363,9 +349,6 @@ function object(entries$1, message$1) {
 		async: false,
 		entries: entries$1,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			const input = dataset.value;
 			if (input && typeof input === "object") {
@@ -416,11 +399,11 @@ function object(entries$1, message$1) {
 			} else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function picklist(options, message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "picklist",
 		reference: picklist,
@@ -428,34 +411,28 @@ function picklist(options, message$1) {
 		async: false,
 		options,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			if (this.options.includes(dataset.value)) dataset.typed = true;
 			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /* @__NO_SIDE_EFFECTS__ */
 function string(message$1) {
-	return {
+	return _standardSchema({
 		kind: "schema",
 		type: "string",
 		reference: string,
 		expects: "string",
 		async: false,
 		message: message$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			if (typeof dataset.value === "string") dataset.typed = true;
 			else _addIssue(this, "type", dataset, config$1);
 			return dataset;
 		}
-	};
+	});
 }
 /**
 * Parses an unknown input based on a schema.
@@ -473,12 +450,9 @@ function parse(schema, input, config$1) {
 }
 /* @__NO_SIDE_EFFECTS__ */
 function pipe(...pipe$1) {
-	return {
+	return _standardSchema({
 		...pipe$1[0],
 		pipe: pipe$1,
-		get "~standard"() {
-			return /* @__PURE__ */ _getStandardProps(this);
-		},
 		"~run"(dataset, config$1) {
 			for (const item of pipe$1) if (item.kind !== "metadata") {
 				if (dataset.issues && (item.kind === "schema" || item.kind === "transformation")) {
@@ -489,7 +463,7 @@ function pipe(...pipe$1) {
 			}
 			return dataset;
 		}
-	};
+	});
 }
 //#endregion
 //#region ../schemas/libraries/valibot/download.ts
