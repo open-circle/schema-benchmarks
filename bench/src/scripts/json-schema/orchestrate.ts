@@ -1,5 +1,6 @@
 import * as child_process from "node:child_process";
 import * as fs from "node:fs/promises";
+import * as os from "node:os";
 import * as path from "node:path";
 import { promisify } from "node:util";
 
@@ -7,6 +8,7 @@ import { complianceTargetSchema } from "@schema-benchmarks/json-schema-tests/typ
 import { complianceTypeSchema } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import { forwardStd, getSigintSignal } from "@schema-benchmarks/utils/node";
+import pLimit from "p-limit";
 import * as v from "valibot";
 
 import {
@@ -19,20 +21,33 @@ const sigintSignal = getSigintSignal();
 
 const execFile = promisify(child_process.execFile);
 
-const allResults = [];
-
-for (const lib of Object.keys(libraries)) {
+async function runLibrary(lib: string, script: "conversion" | "compliance") {
   const libResult = await forwardStd(
     execFile(
       process.execPath,
-      [path.resolve(process.cwd(), "./src/scripts/json-schema/library.ts"), `--lib=${lib}`],
+      [path.resolve(process.cwd(), `./src/scripts/json-schema/${script}.ts`), `--lib=${lib}`],
       { signal: sigintSignal },
     ),
   );
   const results = libResult.stdout.split("\n").slice(-3).findLast(Boolean);
   if (!results) throw new Error(`No results for ${lib}`);
-  allResults.push(v.parse(jsonSchemaBenchResultsSchema, JSON.parse(results)));
+  return v.parse(jsonSchemaBenchResultsSchema, JSON.parse(results));
 }
+
+const allResults = [];
+const libraryNames = Object.keys(libraries);
+
+// run time-sensitive conversion benchmarks in sequence
+for (const lib of libraryNames) {
+  allResults.push(await runLibrary(lib, "conversion"));
+}
+
+// then compliance benchmarks can be run in parallel
+const limit = pLimit(Math.min(4, os.availableParallelism()));
+const complianceResults = await Promise.all(
+  libraryNames.map((lib) => limit(() => runLibrary(lib, "compliance"))),
+);
+allResults.push(...complianceResults);
 
 const merged = getEmptyJsonSchemaResults();
 
