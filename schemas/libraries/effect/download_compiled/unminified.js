@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Function.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Function.js
 /**
 * Tests if a value is a `function`.
 *
@@ -229,7 +229,7 @@ function pipe(a, ab, bc, cd, de, ef, fg, gh, hi) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Equivalence.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Equivalence.js
 /**
 * This module provides an implementation of the `Equivalence` type class, which defines a binary relation
 * that is reflexive, symmetric, and transitive. In other words, it defines a notion of equivalence between values of a certain type.
@@ -259,7 +259,7 @@ const array$1 = (item) => make$25((self, that) => {
 	return true;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/GlobalValue.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/GlobalValue.js
 /**
 * The `GlobalValue` module ensures that a single instance of a value is created globally,
 * even when modules are imported multiple times (e.g., due to mixing CommonJS and ESM builds)
@@ -308,7 +308,7 @@ const globalValue = (id, compute) => {
 	return globalStore.get(id);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Predicate.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Predicate.js
 /**
 * This module provides a collection of functions for working with predicates and refinements.
 *
@@ -677,14 +677,14 @@ const isRecord = (input) => isRecordOrArray(input) && !Array.isArray(input);
 */
 const isPromiseLike = (input) => hasProperty(input, "then") && isFunction(input.then);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/errors.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/errors.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const getBugErrorMessage = (message) => `BUG: ${message} - please report an issue at https://github.com/Effect-TS/effect/issues`;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Utils.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Utils.js
 /**
 * @category constructors
 * @since 2.0.0
@@ -912,7 +912,7 @@ const internalCall = /*#__PURE__*/ standard.effect_internal_function(() => (/* @
 } }.effect_internal_function;
 (function* () {}).constructor;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Hash.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Hash.js
 /**
 * @since 2.0.0
 */
@@ -1041,7 +1041,7 @@ const cached = function() {
 	return hash;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Equal.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Equal.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -1093,7 +1093,7 @@ const isEqual = (u) => hasProperty(u, symbol);
 */
 const equivalence = () => equals$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Inspectable.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Inspectable.js
 /**
 * @since 2.0.0
 * @category symbols
@@ -1243,7 +1243,7 @@ const redact = (u) => {
 	return u;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Pipeable.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Pipeable.js
 /**
 * @since 2.0.0
 */
@@ -1270,7 +1270,7 @@ const pipeArguments = (self, args) => {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/opCodes/effect.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/opCodes/effect.js
 /** @internal */
 const OP_ASYNC = "Async";
 /** @internal */
@@ -1300,11 +1300,11 @@ const OP_YIELD = "Yield";
 /** @internal */
 const OP_REVERT_FLAGS = "RevertFlags";
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/version.js
-let moduleVersion = "3.22.0";
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/version.js
+let moduleVersion = "3.22.2";
 const getCurrentVersion = () => moduleVersion;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/effectable.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/effectable.js
 /** @internal */
 const EffectTypeId$1 = /*#__PURE__*/ Symbol.for("effect/Effect");
 /** @internal */
@@ -1400,7 +1400,7 @@ const Base$1 = /*#__PURE__*/ function() {
 	return Base;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/option.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -1464,7 +1464,7 @@ const some$1 = (value) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/either.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/either.js
 /**
 * @since 2.0.0
 */
@@ -1535,7 +1535,7 @@ const right$1 = (right) => {
 	return a;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Either.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Either.js
 /**
 * Constructs a new `Either` holding a `Right` value. This usually represents a successful value due to the right bias
 * of this structure.
@@ -1692,14 +1692,14 @@ const getOrThrowWith = /*#__PURE__*/ dual(2, (self, onLeft) => {
 */
 const getOrThrow = /*#__PURE__*/ getOrThrowWith(() => /* @__PURE__ */ new Error("getOrThrow called on a Left"));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/array.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isNonEmptyArray$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Order.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Order.js
 /**
 * This module provides an implementation of the `Order` type class which is used to define a total ordering on some type `A`.
 * An order is defined by a relation `<=`, which obeys the following laws:
@@ -1740,7 +1740,7 @@ const mapInput = /*#__PURE__*/ dual(2, (self, f) => make$24((b1, b2) => self(f(b
 */
 const greaterThan$1 = (O) => dual(2, (self, that) => O(self, that) === 1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Option.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Option.js
 /**
 * Represents the absence of a value by creating an empty `Option`.
 *
@@ -2301,7 +2301,7 @@ const contains = /*#__PURE__*/ containsWith(/* @__PURE__ */ equivalence());
 */
 const exists = /*#__PURE__*/ dual(2, (self, refinement) => isNone(self) ? false : refinement(self.value));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Tuple.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Tuple.js
 /**
 * Constructs a new tuple from the provided values.
 *
@@ -2318,7 +2318,7 @@ const exists = /*#__PURE__*/ dual(2, (self, refinement) => isNone(self) ? false 
 */
 const make$23 = (...elements) => elements;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Array.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Array.js
 /**
 * Creates a new `Array` of the specified length.
 *
@@ -3007,7 +3007,7 @@ const dedupe = (self) => dedupeWith(self, equivalence());
 */
 const join$1 = /*#__PURE__*/ dual(2, (self, sep) => fromIterable$6(self).join(sep));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/BigDecimal.js
 /**
 * This module provides utility functions and type class instances for working with the `BigDecimal` type in TypeScript.
 * It includes functions for basic arithmetic operations, as well as type class instances for `Equivalence` and `Order`.
@@ -3271,7 +3271,7 @@ const isZero$1 = (n) => n.value === bigint0$2;
 */
 const isNegative = (n) => n.value < bigint0$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Chunk.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Chunk.js
 /**
 * @since 2.0.0
 */
@@ -3701,7 +3701,7 @@ const MAX_INDEX_NODE = BUCKET_SIZE / 2;
 /** @internal */
 const MIN_ARRAY_NODE = BUCKET_SIZE / 4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/hashMap/bitwise.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/hashMap/bitwise.js
 /**
 * Hamming weight.
 *
@@ -3730,13 +3730,13 @@ function fromBitmap(bitmap, bit) {
 	return popcount(bitmap & bit - 1);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/stack.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/stack.js
 const make$20 = (value, previous) => ({
 	value,
 	previous
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/hashMap/array.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/hashMap/array.js
 /** @internal */
 function arrayUpdate(mutate, at, v, arr) {
 	let out = arr;
@@ -3781,7 +3781,7 @@ function arraySpliceIn(mutate, at, v, arr) {
 	return out;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/hashMap/node.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/hashMap/node.js
 /** @internal */
 var EmptyNode = class EmptyNode {
 	_tag = "EmptyNode";
@@ -4013,7 +4013,7 @@ function mergeLeaves(edit, shift, h1, n1, h2, n2) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/hashMap.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/hashMap.js
 const HashMapSymbolKey = "effect/HashMap";
 /** @internal */
 const HashMapTypeId = /*#__PURE__*/ Symbol.for(HashMapSymbolKey);
@@ -4229,7 +4229,7 @@ const reduce$5 = /*#__PURE__*/ dual(3, (self, zero, f) => {
 	return zero;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/hashSet.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/hashSet.js
 const HashSetSymbolKey = "effect/HashSet";
 /** @internal */
 const HashSetTypeId = /*#__PURE__*/ Symbol.for(HashSetSymbolKey);
@@ -4319,7 +4319,7 @@ const forEach$2 = /*#__PURE__*/ dual(2, (self, f) => forEach$3(self._keyMap, (_,
 /** @internal */
 const reduce$4 = /*#__PURE__*/ dual(3, (self, zero, f) => reduce$5(self._keyMap, zero, (z, _, a) => f(z, a)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/HashSet.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/HashSet.js
 /**
 * # HashSet
 *
@@ -4995,7 +4995,7 @@ const OP_PARALLEL$1 = "Parallel";
 /** @internal */
 const OP_SEQUENTIAL$1 = "Sequential";
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/cause.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/cause.js
 /** @internal */
 const CauseSymbolKey = "effect/Cause";
 /** @internal */
@@ -5117,7 +5117,7 @@ const isEmpty$1 = (self) => {
 /** @internal */
 const isInterrupted = (self) => isSome(interruptOption(self));
 /** @internal */
-const isInterruptedOnly = (self) => reduceWithContext(void 0, IsInterruptedOnlyCauseReducer)(self);
+const isInterruptedOnly = (self) => reduceWithContext$1(void 0, IsInterruptedOnlyCauseReducer)(self);
 /** @internal */
 const failures = (self) => reverse$1(reduce$2(self, empty$18(), (list, cause) => cause._tag === "Fail" ? some(pipe(list, prepend$1(cause.error))) : none$4()));
 /** @internal */
@@ -5283,7 +5283,7 @@ const OP_SEQUENTIAL_CASE = "SequentialCase";
 const OP_PARALLEL_CASE = "ParallelCase";
 /** @internal */
 const match$2 = /*#__PURE__*/ dual(2, (self, { onDie, onEmpty, onFail, onInterrupt, onParallel, onSequential }) => {
-	return reduceWithContext(self, void 0, {
+	return reduceWithContext$1(self, void 0, {
 		emptyCase: () => onEmpty,
 		failCase: (_, error) => onFail(error),
 		dieCase: (_, defect) => onDie(defect),
@@ -5316,7 +5316,7 @@ const reduce$2 = /*#__PURE__*/ dual(3, (self, zero, pf) => {
 	return accumulator;
 });
 /** @internal */
-const reduceWithContext = /*#__PURE__*/ dual(3, (self, context, reducer) => {
+const reduceWithContext$1 = /*#__PURE__*/ dual(3, (self, context, reducer) => {
 	const input = [self];
 	const output = [];
 	while (input.length > 0) {
@@ -5469,7 +5469,7 @@ const prettyErrorStack = (message, stack, span) => {
 /** @internal */
 const spanSymbol = /*#__PURE__*/ Symbol.for("effect/SpanAnnotation");
 /** @internal */
-const prettyErrors = (cause) => reduceWithContext(cause, void 0, {
+const prettyErrors = (cause) => reduceWithContext$1(cause, void 0, {
 	emptyCase: () => [],
 	dieCase: (_, unknownError) => {
 		return [makePrettyError(unknownError)];
@@ -5482,7 +5482,7 @@ const prettyErrors = (cause) => reduceWithContext(cause, void 0, {
 	sequentialCase: (_, l, r) => [...l, ...r]
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/context.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/context.js
 /** @internal */
 const TagTypeId = /*#__PURE__*/ Symbol.for("effect/Context/Tag");
 /** @internal */
@@ -5653,9 +5653,9 @@ const merge$2 = /*#__PURE__*/ dual(2, (self, that) => {
 	return makeContext(map);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Context.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Context.js
 /**
-* Creates a new `Tag` instance with an optional key parameter.
+* Creates a new `Tag` instance with the specified key.
 *
 * @example
 * ```ts
@@ -5878,7 +5878,7 @@ const merge$1 = merge$2;
 */
 const Reference = Reference$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Duration.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Duration.js
 /**
 * @since 2.0.0
 */
@@ -6206,7 +6206,7 @@ const format$1 = (self) => {
 	return pieces.join(" ");
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/MutableRef.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/MutableRef.js
 const TypeId$6 = /*#__PURE__*/ Symbol.for("effect/MutableRef");
 const MutableRefProto = {
 	[TypeId$6]: TypeId$6,
@@ -6249,7 +6249,7 @@ const set$2 = /*#__PURE__*/ dual(2, (self, value) => {
 	return self;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberId.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberId.js
 /** @internal */
 const FiberIdSymbolKey = "effect/FiberId";
 /** @internal */
@@ -6341,7 +6341,7 @@ const unsafeMake$4 = () => {
 	return new Runtime(id, Date.now());
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/FiberId.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/FiberId.js
 /**
 * @since 2.0.0
 * @category constructors
@@ -6363,7 +6363,7 @@ const threadName = threadName$1;
 */
 const unsafeMake$3 = unsafeMake$4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/HashMap.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/HashMap.js
 /**
 * @since 2.0.0
 */
@@ -6436,7 +6436,7 @@ const map$3 = map$4;
 */
 const reduce$1 = reduce$5;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/List.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/List.js
 /**
 * A data type for immutable linked lists representing ordered collections of elements of type `A`.
 *
@@ -6721,7 +6721,7 @@ const Structural = /*#__PURE__*/ function() {
 	return Structural;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/differ/contextPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/differ/contextPatch.js
 /** @internal */
 const ContextPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferContextPatch");
 function variance$3(a) {
@@ -6824,7 +6824,7 @@ const patch$7 = /*#__PURE__*/ dual(2, (self, context) => {
 	return makeContext(map);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/differ/hashSetPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/differ/hashSetPatch.js
 /** @internal */
 const HashSetPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferHashSetPatch");
 function variance$2(a) {
@@ -6901,7 +6901,7 @@ const patch$6 = /*#__PURE__*/ dual(2, (self, oldValue) => {
 	return set;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/differ/readonlyArrayPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/differ/readonlyArrayPatch.js
 /** @internal */
 const ReadonlyArrayPatchTypeId = /*#__PURE__*/ Symbol.for("effect/DifferReadonlyArrayPatch");
 function variance$1(a) {
@@ -7055,7 +7055,7 @@ const updateWith = (f) => make$13({
 	patch: (patch, oldValue) => f(oldValue, patch(oldValue))
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/runtimeFlagsPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/runtimeFlagsPatch.js
 /** @internal */
 const BIT_MASK = 255;
 /** @internal */
@@ -7107,7 +7107,7 @@ const differ$1 = /*#__PURE__*/ make$13({
 	patch: (_patch, oldValue) => patch$4(oldValue, _patch)
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/RuntimeFlagsPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/RuntimeFlagsPatch.js
 /**
 * Creates a `RuntimeFlagsPatch` describing enabling the provided `RuntimeFlag`.
 *
@@ -7131,7 +7131,7 @@ const disable = disable$1;
 */
 const exclude = exclude$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/blockedRequests.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/blockedRequests.js
 /**
 * Combines this collection of blocked requests with the specified collection
 * of blocked requests, in parallel.
@@ -7293,7 +7293,7 @@ const sequentialCollectionKeys = (self) => Array.from(keys(self.map));
 /** @internal */
 const sequentialCollectionToChunk = (self) => Array.from(self.map);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/opCodes/deferred.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/opCodes/deferred.js
 /** @internal */
 const OP_STATE_PENDING = "Pending";
 /** @internal */
@@ -7322,7 +7322,7 @@ const done$2 = (effect) => {
 	};
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/singleShotGen.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/singleShotGen.js
 /** @internal */
 var SingleShotGen = class SingleShotGen {
 	self;
@@ -7353,7 +7353,7 @@ var SingleShotGen = class SingleShotGen {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/core.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/core.js
 /**
 * @internal
 */
@@ -8138,7 +8138,7 @@ const currentSpanFromFiber = (fiber) => {
 	return span !== void 0 && span._tag === "Span" ? some(span) : none$4();
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Cause.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Cause.js
 /**
 * Checks if a `Cause` is a `Fail` type.
 *
@@ -8291,6 +8291,63 @@ const prefixed = /*#__PURE__*/ dual(2, (self, prefix) => {
 	}
 });
 /** @internal */
+const reduceWithContext = /*#__PURE__*/ dual(3, (self, context, reducer) => {
+	const input = [self];
+	const output = [];
+	while (input.length > 0) {
+		const error = input.pop();
+		switch (error._op) {
+			case "And":
+				input.push(error.right);
+				input.push(error.left);
+				output.push(left({ _op: "AndCase" }));
+				break;
+			case "Or":
+				input.push(error.right);
+				input.push(error.left);
+				output.push(left({ _op: "OrCase" }));
+				break;
+			case OP_INVALID_DATA:
+				output.push(right(reducer.invalidDataCase(context, error.path, error.message)));
+				break;
+			case OP_MISSING_DATA:
+				output.push(right(reducer.missingDataCase(context, error.path, error.message)));
+				break;
+			case OP_SOURCE_UNAVAILABLE:
+				output.push(right(reducer.sourceUnavailableCase(context, error.path, error.message, error.cause)));
+				break;
+			case OP_UNSUPPORTED: output.push(right(reducer.unsupportedCase(context, error.path, error.message)));
+		}
+	}
+	const accumulator = [];
+	while (output.length > 0) {
+		const either = output.pop();
+		switch (either._op) {
+			case "Left":
+				switch (either.left._op) {
+					case "AndCase": {
+						const left = accumulator.pop();
+						const right = accumulator.pop();
+						const value = reducer.andCase(context, left, right);
+						accumulator.push(value);
+						break;
+					}
+					case "OrCase": {
+						const left = accumulator.pop();
+						const right = accumulator.pop();
+						const value = reducer.orCase(context, left, right);
+						accumulator.push(value);
+						break;
+					}
+				}
+				break;
+			case "Right": accumulator.push(either.right);
+		}
+	}
+	if (accumulator.length === 0) throw new Error("BUG: ConfigError.reduceWithContext - please report an issue at https://github.com/Effect-TS/effect/issues");
+	return accumulator.pop();
+});
+/** @internal */
 const ClockTypeId = /*#__PURE__*/ Symbol.for("effect/Clock");
 /** @internal */
 const clockTag = /*#__PURE__*/ GenericTag("effect/Clock");
@@ -8349,7 +8406,7 @@ var ClockImpl = class {
 /** @internal */
 const make$10 = () => new ClockImpl();
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Number.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Number.js
 /**
 * @memberof Number
 * @since 2.0.0
@@ -8357,7 +8414,7 @@ const make$10 = () => new ClockImpl();
 */
 const Order$1 = number;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/RegExp.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/RegExp.js
 /**
 * Escapes special characters in a regular expression pattern.
 *
@@ -8373,7 +8430,7 @@ const Order$1 = number;
 */
 const escape = (string) => string.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/configProvider/pathPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/configProvider/pathPatch.js
 /** @internal */
 const empty$5 = { _tag: "Empty" };
 /** @internal */
@@ -8406,7 +8463,7 @@ const patch$3 = /*#__PURE__*/ dual(2, (path, patch) => {
 	return right(output);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/opCodes/config.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/opCodes/config.js
 /** @internal */
 const OP_CONSTANT = "Constant";
 /** @internal */
@@ -8424,13 +8481,15 @@ const OP_NESTED = "Nested";
 /** @internal */
 const OP_PRIMITIVE = "Primitive";
 /** @internal */
+const OP_REDACTED = "Redacted";
+/** @internal */
 const OP_SEQUENCE = "Sequence";
 /** @internal */
 const OP_HASHMAP = "HashMap";
 /** @internal */
 const OP_ZIP_WITH = "ZipWith";
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/configProvider.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/configProvider.js
 const concat = (l, r) => [...l, ...r];
 /** @internal */
 const ConfigProviderTypeId = /*#__PURE__*/ Symbol.for("effect/ConfigProvider");
@@ -8510,6 +8569,15 @@ const appendConfigPath = (path, config) => {
 	}
 	return path;
 };
+const RedactedConfigErrorReducer = {
+	andCase: (_, left, right) => And(left, right),
+	orCase: (_, left, right) => Or(left, right),
+	invalidDataCase: (_, path) => InvalidData(path, "<redacted>"),
+	missingDataCase: (_, path) => MissingData(path, "<redacted>"),
+	sourceUnavailableCase: (_, path, _message, cause) => SourceUnavailable(path, "<redacted>", cause),
+	unsupportedCase: (_, path) => Unsupported(path, "<redacted>")
+};
+const redactConfigError = (error) => reduceWithContext(error, void 0, RedactedConfigErrorReducer);
 const fromFlatLoop = (flat, prefix, config, split) => {
 	const op = config;
 	switch (op._tag) {
@@ -8530,6 +8598,7 @@ const fromFlatLoop = (flat, prefix, config, split) => {
 			}
 			return succeed$2(values);
 		}))));
+		case OP_REDACTED: return suspend$1(() => pipe(fromFlatLoop(flat, prefix, op.original, split), mapError$2(redactConfigError), map$2(map$5(op.redact))));
 		case OP_SEQUENCE: return pipe(patch$3(prefix, flat.patch), flatMap$3((patchedPrefix) => pipe(flat.enumerateChildren(patchedPrefix), flatMap$3(indicesFrom), flatMap$3((indices) => {
 			if (indices.length === 0) return suspend$1(() => map$2(fromFlatLoop(flat, prefix, op.config, true), of$2));
 			return pipe(forEachSequential(indices, (index) => fromFlatLoop(flat, append$1(prefix, `[${index}]`), op.config, true)), map$2((chunkChunk) => {
@@ -8590,7 +8659,7 @@ const parseInteger = (str) => {
 	return Number.isNaN(parsedIndex) ? none$4() : some(parsedIndex);
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/defaultServices/console.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/defaultServices/console.js
 /** @internal */
 const TypeId$4 = /*#__PURE__*/ Symbol.for("effect/Console");
 /** @internal */
@@ -8727,7 +8796,7 @@ const swap = (buffer, index1, index2) => {
 };
 const make$8 = (seed) => new RandomImpl(hash(seed));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/tracer.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/tracer.js
 /**
 * @since 2.0.0
 */
@@ -8811,7 +8880,7 @@ const nativeTracer = /*#__PURE__*/ make$7({
 /** @internal */
 const DisablePropagation = /*#__PURE__*/ Reference()("effect/Tracer/DisablePropagation", { defaultValue: constFalse });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/defaultServices.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/defaultServices.js
 /** @internal */
 const liveServices = /*#__PURE__*/ pipe(/*#__PURE__*/ empty$12(), /*#__PURE__*/ add(clockTag, /*#__PURE__*/ make$10()), /*#__PURE__*/ add(consoleTag, defaultConsole), /*#__PURE__*/ add(randomTag, /*#__PURE__*/ make$8(/*#__PURE__*/ Math.random())), /*#__PURE__*/ add(configProviderTag, /*#__PURE__*/ fromEnv()), /*#__PURE__*/ add(tracerTag, nativeTracer));
 /**
@@ -8822,7 +8891,7 @@ const liveServices = /*#__PURE__*/ pipe(/*#__PURE__*/ empty$12(), /*#__PURE__*/ 
 */
 const currentServices = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/DefaultServices/currentServices"), () => fiberRefUnsafeMakeContext(liveServices));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Data.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Data.js
 /**
 * Provides a constructor for a Case Class.
 *
@@ -8862,7 +8931,7 @@ const TaggedError = (tag) => {
 	return O.BaseEffectError;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Effectable.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Effectable.js
 /**
 * @since 2.0.0
 * @category prototypes
@@ -8875,7 +8944,7 @@ const Base = Base$1;
 */
 var Class = class extends Base {};
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/executionStrategy.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/executionStrategy.js
 /** @internal */
 const OP_SEQUENTIAL = "Sequential";
 /** @internal */
@@ -8896,7 +8965,7 @@ const isSequential = (self) => self._tag === OP_SEQUENTIAL;
 /** @internal */
 const isParallel = (self) => self._tag === OP_PARALLEL;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/ExecutionStrategy.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/ExecutionStrategy.js
 /**
 * Execute effects sequentially.
 *
@@ -8919,7 +8988,7 @@ const parallel = parallel$1;
 */
 const parallelN = parallelN$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberRefs.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberRefs.js
 /** @internal */
 function unsafeMake$2(fiberRefLocals) {
 	return new FiberRefsImpl(fiberRefLocals);
@@ -9055,7 +9124,7 @@ const updateManyAs$1 = /*#__PURE__*/ dual(2, (self, { entries, forkAs }) => {
 	return new FiberRefsImpl(locals);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/FiberRefs.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/FiberRefs.js
 /**
 * Gets the value of the specified `FiberRef` in this collection of `FiberRef`
 * values if it exists or the `initial` value of the `FiberRef` otherwise.
@@ -9079,7 +9148,7 @@ const updateManyAs = updateManyAs$1;
 */
 const empty$3 = empty$4;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberRefs/patch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberRefs/patch.js
 /** @internal */
 const OP_EMPTY$1 = "Empty";
 /** @internal */
@@ -9162,7 +9231,7 @@ const patch$2 = /*#__PURE__*/ dual(3, (self, fiberId, oldValue) => {
 	return fiberRefs;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/FiberRefsPatch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/FiberRefsPatch.js
 /**
 * Constructs a patch that describes the changes between the specified
 * collections of `FiberRef`
@@ -9180,7 +9249,7 @@ const diff$1 = diff$2;
 */
 const patch$1 = patch$2;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberStatus.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberStatus.js
 const FiberStatusSymbolKey = "effect/FiberStatus";
 /** @internal */
 const FiberStatusTypeId = /*#__PURE__*/ Symbol.for(FiberStatusSymbolKey);
@@ -9245,7 +9314,7 @@ const isFiberStatus = (u) => hasProperty(u, FiberStatusTypeId);
 /** @internal */
 const isDone$1 = (self) => self._tag === OP_DONE;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/FiberStatus.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/FiberStatus.js
 /**
 * @since 2.0.0
 * @category constructors
@@ -9269,7 +9338,7 @@ const suspended = suspended$1;
 */
 const isDone = isDone$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/LogLevel.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/LogLevel.js
 /**
 * @since 2.0.0
 * @category constructors
@@ -9332,7 +9401,7 @@ const fromLiteral = (literal) => {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Micro.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Micro.js
 /**
 * @since 3.4.0
 * @experimental
@@ -9938,7 +10007,7 @@ const runFork$1 = (effect, options) => {
 	return fiber;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Scheduler.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Scheduler.js
 /**
 * @since 3.20.0
 * @category models
@@ -10080,11 +10149,11 @@ var SyncScheduler = class {
 /** @internal */
 const currentScheduler = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentScheduler"), () => fiberRefUnsafeMake(defaultScheduler));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/completedRequestMap.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/completedRequestMap.js
 /** @internal */
 const currentRequestMap = /*#__PURE__*/ globalValue(/*#__PURE__*/ Symbol.for("effect/FiberRef/currentRequestMap"), () => fiberRefUnsafeMake(/* @__PURE__ */ new Map()));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/concurrency.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/concurrency.js
 /** @internal */
 const match = (concurrency, sequential, unbounded, bounded) => {
 	switch (concurrency) {
@@ -10095,7 +10164,7 @@ const match = (concurrency, sequential, unbounded, bounded) => {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/logSpan.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/logSpan.js
 /**
 * Sanitize a given string by replacing spaces, equal signs, and double quotes with underscores.
 *
@@ -10107,7 +10176,7 @@ const render = (now) => (self) => {
 	return `${formatLabel(self.label)}=${now - self.startTime}ms`;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/metric/label.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/metric/label.js
 /** @internal */
 const MetricLabelSymbolKey = "effect/MetricLabel";
 /** @internal */
@@ -10140,10 +10209,10 @@ const make$6 = (key, value) => {
 /** @internal */
 const isMetricLabel = (u) => hasProperty(u, MetricLabelTypeId);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/core-effect.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/core-effect.js
 const filterDisablePropagation = /*#__PURE__*/ flatMap$5((span) => get$4(span.context, DisablePropagation) ? span._tag === "Span" ? filterDisablePropagation(span.parent) : none$4() : some(span));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Exit.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Exit.js
 /**
 * Returns `true` if the specified `Exit` is a `Success`, `false` otherwise.
 *
@@ -10152,7 +10221,7 @@ const filterDisablePropagation = /*#__PURE__*/ flatMap$5((span) => get$4(span.co
 */
 const isSuccess = exitIsSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberMessage.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberMessage.js
 /** @internal */
 const OP_INTERRUPT_SIGNAL = "InterruptSignal";
 /** @internal */
@@ -10303,7 +10372,7 @@ const hasProcessStdout = typeof process === "object" && process !== null && type
 hasProcessStdout && process.stdout.isTTY;
 hasProcessStdout || "Deno" in globalThis;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/metric/boundaries.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/metric/boundaries.js
 /** @internal */
 const MetricBoundariesSymbolKey = "effect/MetricBoundaries";
 /** @internal */
@@ -10455,7 +10524,7 @@ const histogram$3 = (name, boundaries, description) => new MetricKeyImpl(name, h
 /** @internal */
 const taggedWithLabels$1 = /*#__PURE__*/ dual(2, (self, extraTags) => extraTags.length === 0 ? self : new MetricKeyImpl(self.name, self.keyType, self.description, union$2(self.tags, extraTags)));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/MutableHashMap.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/MutableHashMap.js
 const TypeId$2 = /*#__PURE__*/ Symbol.for("effect/MutableHashMap");
 const MutableHashMapProto = {
 	[TypeId$2]: TypeId$2,
@@ -11295,7 +11364,7 @@ const fromEffect = (effect) => {
 /** @internal */
 const none = /*#__PURE__*/ globalValue("effect/Supervisor/none", () => fromEffect(void_$1));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Differ.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Differ.js
 /**
 * Constructs a new `Differ`.
 *
@@ -11304,7 +11373,7 @@ const none = /*#__PURE__*/ globalValue("effect/Supervisor/none", () => fromEffec
 */
 const make$2 = make$13;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/supervisor/patch.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/supervisor/patch.js
 /** @internal */
 const OP_EMPTY = "Empty";
 /** @internal */
@@ -11398,7 +11467,7 @@ const differ = /*#__PURE__*/ make$2({
 	diff
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/fiberRuntime.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/fiberRuntime.js
 /** @internal */
 const fiberStarted = /*#__PURE__*/ counter("effect_fiber_started", { incremental: true });
 /** @internal */
@@ -12680,7 +12749,7 @@ const invokeWithInterrupt = (self, entries, onInterrupt) => fiberIdWith((id) => 
 	return forEachSequentialDiscard(residual, (entry) => complete(entry.request, exitInterrupt$1(id)));
 })));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Scope.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Scope.js
 /**
 * @since 2.0.0
 */
@@ -12701,7 +12770,7 @@ const close = scopeClose;
 */
 const fork = scopeFork;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/runtime.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/runtime.js
 const makeDual = (f) => function() {
 	if (arguments.length === 1) {
 		const runtime = arguments[0];
@@ -12840,7 +12909,7 @@ const unsafeForkEffect = /*#__PURE__*/ unsafeFork(defaultRuntime);
 /** @internal */
 const unsafeRunSyncEffect = /*#__PURE__*/ unsafeRunSync(defaultRuntime);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/dateTime.js
 /** @internal */
 const TypeId$1 = /*#__PURE__*/ Symbol.for("effect/DateTime");
 /** @internal */
@@ -12870,7 +12939,7 @@ const ProtoTimeZone = {
 /** @internal */
 const toDateUtc = (self) => new Date(self.epochMillis);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Effect.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Effect.js
 /**
 * Checks if a given value is an `Effect` value.
 *
@@ -13461,7 +13530,7 @@ const runFork = unsafeForkEffect;
 */
 const runSync = unsafeRunSyncEffect;
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/schema/util.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/schema/util.js
 /** @internal */
 const getKeysForIndexSignature = (input, parameter) => {
 	switch (parameter._tag) {
@@ -13491,7 +13560,7 @@ const formatPathKey = (key) => `[${formatPropertyKey(key)}]`;
 /** @internal */
 const formatPath = (path) => isNonEmpty(path) ? path.map(formatPathKey).join("") : formatPathKey(path);
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/internal/schema/errors.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/internal/schema/errors.js
 const getErrorMessage = (reason, details, path, ast) => {
 	let out = reason;
 	if (path && isNonEmptyReadonlyArray(path)) out += `\nat path: ${formatPath(path)}`;
@@ -13522,7 +13591,7 @@ const MinLengthSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/MinLength"
 /** @internal */
 const MaxLengthSchemaId$1 = /*#__PURE__*/ Symbol.for("effect/SchemaId/MaxLength");
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/SchemaAST.js
 /**
 * @since 3.10.0
 */
@@ -14874,7 +14943,7 @@ function getBrands(ast) {
 const getOrElseExpected = (ast) => getTitleAnnotation(ast).pipe(orElse$1(() => getDescriptionAnnotation(ast)), orElse$1(() => getAutoTitleAnnotation(ast)), map$6((s) => s + getBrands(ast)));
 const getExpected = (ast) => orElse$1(getIdentifierAnnotation(ast), () => getOrElseExpected(ast));
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/ParseResult.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/ParseResult.js
 /**
 * @since 3.10.0
 */
@@ -15225,6 +15294,18 @@ const go = (ast, isDecoding) => {
 		case "ObjectKeyword": return fromRefinement(ast, isObject);
 		case "Enums": return fromRefinement(ast, (u) => ast.enums.some(([_, value]) => value === u));
 		case "TemplateLiteral": {
+			if (ast.spans.every((span) => isStringKeyword(span.type))) return fromRefinement(ast, (u) => {
+				if (!isString(u) || !u.startsWith(ast.head)) return false;
+				let position = ast.head.length;
+				for (let i = 0; i < ast.spans.length - 1; i++) {
+					const literal = ast.spans[i].literal;
+					const index = u.indexOf(literal, position);
+					if (index === -1) return false;
+					position = index + literal.length;
+				}
+				const literal = ast.spans[ast.spans.length - 1].literal;
+				return u.endsWith(literal) && u.length - literal.length >= position;
+			});
 			const regex = getTemplateLiteralRegExp(ast);
 			return fromRefinement(ast, (u) => isString(u) && regex.test(u));
 		}
@@ -15867,7 +15948,7 @@ const formatTree = (issue) => {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Struct.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Struct.js
 /**
 * Create a new object by picking properties of an existing object.
 *
@@ -15907,7 +15988,7 @@ const omit = /*#__PURE__*/ dual((args) => isObject(args[0]), (s, ...keys) => {
 	return out;
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@3.22.0/node_modules/effect/dist/esm/Schema.js
+//#region ../node_modules/.pnpm/effect@3.22.2/node_modules/effect/dist/esm/Schema.js
 /**
 * @since 3.10.0
 */
@@ -15978,7 +16059,7 @@ const toASTAnnotations = (annotations) => {
 	}
 	return out;
 };
-const mergeSchemaAnnotations = (ast, annotations$1) => annotations(ast, toASTAnnotations(annotations$1));
+const mergeSchemaAnnotations = (ast, annotations$3) => annotations(ast, toASTAnnotations(annotations$3));
 /**
 * @category decoding
 * @since 3.10.0
