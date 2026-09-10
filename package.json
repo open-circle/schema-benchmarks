@@ -30,7 +30,7 @@
     "eslint-plugin-depend": "^1.5.0",
     "eslint-plugin-no-relative-import-paths": "^1.6.1",
     "eslint-plugin-playwright": "^2.11.0",
-    "knip": "^6.34.0",
+    "knip": "^6.35.1",
     "lefthook": "^2.1.12",
     "oxfmt": "catalog:",
     "oxlint": "^1.82.0",
