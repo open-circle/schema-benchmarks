@@ -1,4 +1,4 @@
-import * as Schema from "effect___beta/Schema";
+import * as Schema from "effect___rc/Schema";
 
 import type { ProductData } from "#src";
 

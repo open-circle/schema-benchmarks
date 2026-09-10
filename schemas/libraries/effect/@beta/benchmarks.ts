@@ -1,7 +1,7 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
-import * as Option from "effect___beta/Option";
-import * as Schema from "effect___beta/Schema";
+import * as Option from "effect___rc/Option";
+import * as Schema from "effect___rc/Schema";
 
 import type { JsonSchemaInputData, JsonSchemaOutputData } from "#src";
 import {
@@ -34,9 +34,9 @@ const decode = Schema.decodeUnknownOption(schema);
 
 export default defineBenchmarks({
   library: {
-    name: "effect@beta",
+    name: "effect@rc",
     optimizeType: "none",
-    version: await getVersion("effect___beta"),
+    version: await getVersion("effect___rc"),
   },
   initialization: [
     {

@@ -21,18 +21,13 @@ export const acceptedJsonSchemas = {
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
         required: ["id", "name", "price"],
       },
-      // effect@beta
+      // effect@rc
       {
         $schema: "https://json-schema.org/draft/2020-12/schema",
         type: "object",
         properties: {
           id: {
-            anyOf: [
-              { type: "number" },
-              { type: "string", enum: ["NaN"] },
-              { type: "string", enum: ["Infinity"] },
-              { type: "string", enum: ["-Infinity"] },
-            ],
+            anyOf: [{ type: "number" }, { type: "string", enum: ["Infinity", "-Infinity", "NaN"] }],
           },
           name: { type: "string" },
           price: { type: "string" },
