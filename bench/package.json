@@ -31,7 +31,7 @@
     "gzip-size": "^7.0.0",
     "p-limit": "^7.3.2",
     "rolldown": "catalog:",
-    "tinybench": "^6.1.6",
+    "tinybench": "^6.2.0",
     "ttsc": "catalog:",
     "typebox": "catalog:",
     "valibot": "catalog:"

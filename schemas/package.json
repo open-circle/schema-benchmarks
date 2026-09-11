@@ -37,7 +37,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.3",
-    "ata-validator": "^1.13.2",
+    "ata-validator": "^1.14.1",
     "decoders": "^2.9.3",
     "dedent": "catalog:",
     "effect": "^3.22.0",
@@ -53,11 +53,11 @@
     "superstruct": "^2.0.2",
     "sury": "11.0.0-rc.2",
     "typebox": "catalog:",
-    "typia": "^14.0.5",
+    "typia": "^14.0.6",
     "valibot": "catalog:",
     "yup": "^1.7.1",
     "z-schema": "^12.4.5",
-    "zod": "^4.5.4",
+    "zod": "^4.6.1",
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
@@ -70,6 +70,6 @@
     "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^2.0.3"
+    "zod-compiler": "^2.0.4"
   }
 }
