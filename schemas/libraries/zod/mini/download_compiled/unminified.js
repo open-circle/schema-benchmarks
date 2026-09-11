@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/util.js
 function toZod() {
 	return (schema) => schema;
 }
@@ -10,14 +10,22 @@ function jsonStringifyReplacer(_, value) {
 	if (typeof value === "bigint") return value.toString();
 	return value;
 }
-function cached(getter) {
-	return { get value() {
-		{
-			const value = getter();
-			Object.defineProperty(this, "value", { value });
-			return value;
+var Cached = class {
+	constructor(getter) {
+		this._getter = getter;
+		this._value = void 0;
+	}
+	get value() {
+		const getter = this._getter;
+		if (getter !== void 0) {
+			this._value = getter();
+			this._getter = void 0;
 		}
-	} };
+		return this._value;
+	}
+};
+function cached(getter) {
+	return new Cached(getter);
 }
 function nullish(input) {
 	return input === null || input === void 0;
@@ -106,11 +114,15 @@ function finalizeIssue(iss, ctx, config) {
 	}
 	const schemaError = iss.schema !== iss.inst ? iss.schema?._zod.def?.error : void 0;
 	const message = iss.message ? iss.message : unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(schemaError?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
-	const { inst: _inst, schema: _schema, continue: _continue, input: _input, ...rest } = iss;
-	rest.path ?? (rest.path = []);
-	rest.message = message;
-	if (ctx?.reportInput) rest.input = _input;
-	return rest;
+	const full = {};
+	for (const k of Object.keys(iss)) {
+		if (k === "inst" || k === "schema" || k === "continue" || k === "input" || k === "__proto__") continue;
+		full[k] = iss[k];
+	}
+	full.path ?? (full.path = []);
+	full.message = message;
+	if (ctx?.reportInput) full.input = iss.input;
+	return full;
 }
 const highSurrogate = /[\uD800-\uDBFF]/;
 function codePointLength(str) {
@@ -142,6 +154,7 @@ function members(proto, table) {
 		});
 		else defineBound(proto, key, desc.value);
 	}
+	for (const sym of Object.getOwnPropertySymbols(table)) defineBound(proto, sym, table[sym]);
 }
 /** Shadows a prototype member with an own value, so a getter that builds from the instance runs once. */
 function own(inst, key, value, enumerable = true) {
@@ -257,9 +270,9 @@ function installLazyProp(inst, key, make, enumerable) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/core.js
 var _a;
-const _zodDesc$1 = {
+const _zodDesc = {
 	value: void 0,
 	enumerable: false
 };
@@ -296,11 +309,11 @@ function $constructor(name, initializer, proto, params) {
 	const initialized = protoMembers && /* @__PURE__ */ new WeakSet();
 	function init(inst, def) {
 		if (!inst._zod) {
-			_zodDesc$1.value = new Internals(def);
+			_zodDesc.value = new Internals(def);
 			try {
-				Object.defineProperty(inst, "_zod", _zodDesc$1);
+				Object.defineProperty(inst, "_zod", _zodDesc);
 			} finally {
-				_zodDesc$1.value = void 0;
+				_zodDesc.value = void 0;
 			}
 		}
 		if (inst._zod.traits.has(name)) return;
@@ -358,7 +371,7 @@ function config(newConfig) {
 	return globalConfig;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -373,10 +386,6 @@ const _messageDesc = {
 	enumerable: true,
 	configurable: true
 };
-const _zodDesc = {
-	value: void 0,
-	enumerable: false
-};
 const _issuesDesc = {
 	value: void 0,
 	enumerable: false
@@ -384,11 +393,8 @@ const _issuesDesc = {
 const _installedToString = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
 const initializer = (inst, def) => {
 	inst.name = "$ZodError";
-	_zodDesc.value = inst._zod;
-	Object.defineProperty(inst, "_zod", _zodDesc);
 	_issuesDesc.value = def;
 	Object.defineProperty(inst, "issues", _issuesDesc);
-	_zodDesc.value = void 0;
 	_issuesDesc.value = void 0;
 	Object.defineProperty(inst, "message", _messageDesc);
 	const proto = Object.getPrototypeOf(inst);
@@ -416,10 +422,10 @@ const initializer = (inst, def) => {
 		});
 	}
 };
-const $ZodError = $constructor("$ZodError", initializer);
+$constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, void 0, { Parent: Error });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => {
 	const fn = (schema, value, _ctx, _params) => {
 		const ctx = _ctx ? {
@@ -472,15 +478,31 @@ const _safeParse = (_Err) => (schema, value, _ctx) => {
 		issues: []
 	}, ctx);
 	if (result instanceof Promise) throw new $ZodAsyncError();
-	return result.issues.length ? {
-		success: false,
-		error: new (_Err ?? $ZodError)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
-	} : {
+	return result.issues.length ? failure(_Err, result.issues, ctx) : {
 		success: true,
 		data: result.value
 	};
 };
 const safeParse = /* @__PURE__*/ _safeParse($ZodRealError);
+function failure(Err, issues, ctx) {
+	let error;
+	return {
+		success: false,
+		get error() {
+			if (!error) {
+				error = new Err(issues.map((iss) => finalizeIssue(iss, ctx, config())));
+				issues = void 0;
+				ctx = void 0;
+			}
+			return error;
+		},
+		set error(e) {
+			error = e;
+			issues = void 0;
+			ctx = void 0;
+		}
+	};
+}
 const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -491,25 +513,19 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 		issues: []
 	}, ctx);
 	if (result instanceof Promise) result = await result;
-	return result.issues.length ? {
-		success: false,
-		error: new _Err(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
-	} : {
+	return result.issues.length ? failure(_Err, result.issues, ctx) : {
 		success: true,
 		data: result.value
 	};
 };
 const safeParseAsync = /* @__PURE__*/ _safeParseAsync($ZodRealError);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/regexes.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/regexes.js
 const httpProtocol = /^https?$/;
-const string$1 = (params) => {
-	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
-	return new RegExp(`^${regex}$`);
-};
+const anyString = /^[\s\S]{0,}$/;
 const number$1 = /^-?\d+(?:\.\d+)?$/;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -529,14 +545,6 @@ const numericOriginMap = {
 const $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
-		if (def.value < curr) {
-			if (def.inclusive) bag.maximum = def.value;
-			else bag.exclusiveMaximum = def.value;
-		}
-	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value <= def.value : payload.value < def.value) return;
 		payload.issues.push({
@@ -553,14 +561,6 @@ const $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst,
 const $ZodCheckGreaterThan = /*@__PURE__*/ $constructor("$ZodCheckGreaterThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
-		if (def.value > curr) {
-			if (def.inclusive) bag.minimum = def.value;
-			else bag.exclusiveMinimum = def.value;
-		}
-	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value >= def.value : payload.value > def.value) return;
 		payload.issues.push({
@@ -578,10 +578,6 @@ const $ZodCheckMaxLength = /*@__PURE__*/ $constructor("$ZodCheckMaxLength", (ins
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength);
-	inst._zod.onattach.push((inst) => {
-		const curr = inst._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
-		if (def.maximum < curr) inst._zod.bag.maximum = def.maximum;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const units = input.length;
@@ -602,10 +598,6 @@ const $ZodCheckMinLength = /*@__PURE__*/ $constructor("$ZodCheckMinLength", (ins
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength);
-	inst._zod.onattach.push((inst) => {
-		const curr = inst._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
-		if (def.minimum > curr) inst._zod.bag.minimum = def.minimum;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const units = input.length;
@@ -625,14 +617,6 @@ const $ZodCheckMinLength = /*@__PURE__*/ $constructor("$ZodCheckMinLength", (ins
 const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat", (inst, def) => {
 	var _a, _b;
 	$ZodCheck.init(inst, def);
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.format = def.format;
-		if (def.pattern) {
-			bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
-			bag.patterns.add(def.pattern);
-		}
-	});
 	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
 		def.pattern.lastIndex = 0;
 		if (def.pattern.test(payload.value)) return;
@@ -649,14 +633,14 @@ const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat"
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
-	minor: 5,
-	patch: 4
+	minor: 6,
+	patch: 1
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/schemas.js
 const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -745,15 +729,26 @@ const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	}
 });
 /** The Standard Schema surface for `inst`. Shared so wrappers can extend it without forcing it. */
-const toStandardResult = (r) => r.success ? { value: r.data } : { issues: r.error?.issues };
+const toStandardResult = (r, ctx) => r.issues.length ? { issues: r.issues.map((iss) => finalizeIssue(iss, ctx, config())) } : { value: r.value };
+async function validateAsync(inst, value) {
+	const ctx = { async: true };
+	return toStandardResult(await inst._zod.run({
+		value,
+		issues: []
+	}, ctx), ctx);
+}
 function standardProps(inst) {
 	return {
 		validate: (value) => {
+			const ctx = { async: false };
 			try {
-				return toStandardResult(safeParse(inst, value));
-			} catch (_) {
-				return safeParseAsync(inst, value).then(toStandardResult);
-			}
+				const r = inst._zod.run({
+					value,
+					issues: []
+				}, ctx);
+				if (!(r instanceof Promise)) return toStandardResult(r, ctx);
+			} catch (_) {}
+			return validateAsync(inst, value);
 		},
 		vendor: "zod",
 		version: 1
@@ -761,7 +756,7 @@ function standardProps(inst) {
 }
 const $ZodString = /*@__PURE__*/ $constructor("$ZodString", (inst, def) => {
 	$ZodType.init(inst, def);
-	inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string$1(inst._zod.bag);
+	inst._zod.pattern = def.pattern ?? anyString;
 	inst._zod.parse = (payload, _) => {
 		if (def.coerce) try {
 			payload.value = String(payload.value);
@@ -862,7 +857,7 @@ const $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 });
 const $ZodNumber = /*@__PURE__*/ $constructor("$ZodNumber", (inst, def) => {
 	$ZodType.init(inst, def);
-	inst._zod.pattern = inst._zod.bag.pattern ?? number$1;
+	inst._zod.pattern = number$1;
 	inst._zod.parse = (payload, _ctx) => {
 		if (def.coerce) try {
 			payload.value = Number(payload.value);
@@ -920,6 +915,7 @@ const $ZodArray = /*@__PURE__*/ $constructor("$ZodArray", (inst, def) => {
 		}
 		payload.value = memo ? memo.alloc(inst, payload, Array(input.length), ctx) : Array(input.length);
 		const proms = [];
+		const abortEarly = ctx?.abortEarly;
 		for (let i = 0; i < input.length; i++) {
 			const item = input[i];
 			const result = def.element._zod.run({
@@ -927,7 +923,10 @@ const $ZodArray = /*@__PURE__*/ $constructor("$ZodArray", (inst, def) => {
 				issues: []
 			}, ctx);
 			if (result instanceof Promise) proms.push(result.then((result) => handleArrayResult(result, payload, i)));
-			else handleArrayResult(result, payload, i);
+			else {
+				handleArrayResult(result, payload, i);
+				if (abortEarly && result.issues.length !== 0 && aborted(result)) break;
+			}
 		}
 		if (proms.length) return Promise.all(proms).then(() => payload);
 		return payload;
@@ -971,14 +970,19 @@ function normalizeDef(def) {
 		optionalKeys: new Set(okeys)
 	};
 }
-function handleCatchall(proms, input, payload, ctx, def, inst) {
+function handleCatchall(proms, input, payload, ctx, def, inst, abortEarly) {
 	const unrecognized = [];
 	const keySet = def.keySet;
 	const _catchall = def.catchall._zod;
 	const t = _catchall.def.type;
 	const optin = _catchall.optin;
 	const optout = _catchall.optout;
+	let seen = 0;
 	for (const key in input) {
+		if (abortEarly && payload.issues.length !== seen) {
+			if (aborted(payload, seen)) break;
+			seen = payload.issues.length;
+		}
 		if (keySet.has(key)) continue;
 		if (key === "__proto__") {
 			if (t === "never") unrecognized.push(key);
@@ -1007,18 +1011,19 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 		return payload;
 	});
 }
-const propShapes = /* @__PURE__ */ new WeakMap();
 const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 	$ZodType.init(inst, def);
-	if (!Object.getOwnPropertyDescriptor(def, "shape")?.get) {
-		const sh = def.shape;
-		propShapes.set(def, sh);
-		Object.defineProperty(def, "shape", { get: () => {
+	const desc = Object.getOwnPropertyDescriptor(def, "shape");
+	const sh = desc?.get ? desc.get.raw : def.shape ?? {};
+	if (sh) {
+		const get = () => {
 			const newSh = { ...sh };
 			Object.defineProperty(def, "shape", { value: newSh });
-			propShapes.set(def, newSh);
+			get.raw = newSh;
 			return newSh;
-		} });
+		};
+		get.raw = sh;
+		Object.defineProperty(def, "shape", { get });
 	}
 	const _normalized = cached(() => normalizeDef(def));
 	defineLazyInternal(inst, "propValues", (zod) => {
@@ -1054,7 +1059,13 @@ const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 		payload.value = memo ? memo.alloc(inst, payload, {}, ctx) : {};
 		const proms = [];
 		const shape = value.shape;
+		const abortEarly = ctx?.abortEarly;
+		let seen = payload.issues.length;
 		for (const key of value.allKeys) {
+			if (abortEarly && payload.issues.length !== seen) {
+				if (aborted(payload, seen)) break;
+				seen = payload.issues.length;
+			}
 			if (key === "__proto__") continue;
 			const el = shape[key];
 			const optin = el._zod.optin;
@@ -1067,7 +1078,7 @@ const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 			else handlePropertyResult(r, payload, key, input, optin, optout);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
-		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
+		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst, abortEarly === true);
 	};
 });
 const $ZodEnum = /*@__PURE__*/ $constructor("$ZodEnum", (inst, def) => {
@@ -1075,8 +1086,10 @@ const $ZodEnum = /*@__PURE__*/ $constructor("$ZodEnum", (inst, def) => {
 	const values = getEnumValues(def.entries);
 	const valuesSet = new Set(values);
 	inst._zod.values = valuesSet;
-	const patternValues = values.filter((k) => propertyKeyTypes.has(typeof k));
-	inst._zod.pattern = new RegExp(patternValues.length ? `^(${patternValues.map((o) => escapeRegex(o.toString())).join("|")})$` : "^[^\\s\\S]$");
+	defineLazyInternal(inst, "pattern", (zod) => {
+		const patternValues = getEnumValues(zod.def.entries).filter((k) => propertyKeyTypes.has(typeof k));
+		return new RegExp(patternValues.length ? `^(${patternValues.map((o) => escapeRegex(o.toString())).join("|")})$` : "^[^\\s\\S]$");
+	});
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (valuesSet.has(input)) return payload;
@@ -1106,7 +1119,7 @@ const $ZodNullable = /*@__PURE__*/ $constructor("$ZodNullable", (inst, def) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/api.js
 // @__NO_SIDE_EFFECTS__
 function _string(Class, params) {
 	return new Class({
@@ -1174,7 +1187,7 @@ function _minLength(minimum, params) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/mini/schemas.js
+//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /*@__PURE__*/ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
@@ -1289,7 +1302,7 @@ function object(shape, params) {
 const ZodMiniEnum = /*@__PURE__*/ $constructor("ZodMiniEnum", (inst, def) => {
 	$ZodEnum.init(inst, def);
 	ZodMiniType.init(inst, def);
-	inst.options = Object.values(def.entries);
+	inst.options = [...inst._zod.values];
 });
 // @__NO_SIDE_EFFECTS__
 function _enum(values, params) {
