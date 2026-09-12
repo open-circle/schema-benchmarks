@@ -112,4 +112,13 @@ export default defineBenchmarks({
     },
     snippet: ts`v.parse(schema, data)`,
   },
+  types: {
+    imports: ts`
+      import * as v from "valibot";
+      import { getValibotSchema } from ".";
+    `,
+    schema: "getValibotSchema()",
+    input: "v.InferInput<typeof probeSchema>",
+    output: "v.InferOutput<typeof probeSchema>",
+  },
 });

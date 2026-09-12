@@ -12,6 +12,7 @@ export default {
     "json-schema.json",
     "stack.json",
     "download.json",
+    "types.json",
     "offline/index.html",
     "offline/index.css",
     "*.svg",

@@ -84,4 +84,13 @@ export default defineBenchmarks({
     url: createStringBenchmark(url, "url()"),
     uuid: createStringBenchmark(uuid, "uuid()"),
   },
+  types: {
+    imports: ts`
+      import type { InferSchemaType } from "@railway-ts/pipelines/schema";
+      import { getRailwayTsSchema } from ".";
+    `,
+    schema: "getRailwayTsSchema()",
+    input: "InferSchemaType<typeof probeSchema>",
+    output: "InferSchemaType<typeof probeSchema>",
+  },
 });

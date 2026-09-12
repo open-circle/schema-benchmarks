@@ -235,4 +235,13 @@ export default defineBenchmarks({
       `,
     },
   },
+  types: {
+    imports: ts`
+      import * as S from "sury";
+      import { getSurySchema } from ".";
+    `,
+    schema: "getSurySchema()",
+    input: "S.Input<typeof probeSchema>",
+    output: "S.Output<typeof probeSchema>",
+  },
 });

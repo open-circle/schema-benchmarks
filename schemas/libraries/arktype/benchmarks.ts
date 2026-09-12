@@ -122,4 +122,12 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.assert(data)`,
   },
+  types: {
+    imports: ts`
+      import { getArkTypeSchema } from ".";
+    `,
+    schema: "getArkTypeSchema()",
+    input: `(typeof probeSchema)["inferIn"]`,
+    output: `(typeof probeSchema)["infer"]`,
+  },
 });

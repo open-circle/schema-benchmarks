@@ -103,4 +103,13 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.parse(data)`,
   },
+  types: {
+    imports: ts`
+      import * as z from "zod/v3";
+      import { getZodSchema } from ".";
+    `,
+    schema: "getZodSchema()",
+    input: "z.input<typeof probeSchema>",
+    output: "z.output<typeof probeSchema>",
+  },
 });

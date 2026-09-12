@@ -89,6 +89,16 @@ export const sidebarGroups: Array<SidebarGroup> = [
     ],
   },
   {
+    key: "typescript",
+    links: [
+      {
+        ...linkOptions({ to: "/typescript" }),
+        name: "TypeScript",
+        icon: "code_blocks",
+      },
+    ],
+  },
+  {
     key: "library",
     links: [{ ...linkOptions({ to: "/libraries" }), name: "Libraries", icon: "deployed_code" }],
   },
