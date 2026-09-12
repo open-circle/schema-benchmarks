@@ -1,0 +1,30 @@
+Most of these libraries exist to give you a schema and a TypeScript type from the same declaration.
+This page compares what the type actually is, and what asking for it costs the compiler.
+
+Every library declares the same product schema used by the other benchmarks, and the type is read
+with whatever the library provides:
+
+```ts responsive
+const schema = z.object({ id: z.number(), title: z.string(), tags: z.array(z.string()) });
+
+type Output = z.output<typeof schema>;
+type Input = z.input<typeof schema>;
+```
+
+**Input** and **Output** are checked against the data type the schema describes, and only pass when
+the two describe each other exactly. A type that allows more (`unknown`, or `any`, which type
+checks nothing at all) leaves the work to runtime; a type that allows less rejects values the
+schema accepts.
+
+**Instantiations** is how many type instantiations the compiler performs to declare the schema and
+read both types out of it, measured with `getInstantiationCount()` on a program containing nothing
+else. It is the number that grows into slow editor feedback and slow builds as a codebase adds
+schemas.
+
+**Type on hover** is the type of the schema value itself, as an editor shows it, and the number is
+its length in characters. A short one is a tooltip you can read; a long one is a wall of generics
+you scroll past, and the same text ends up in every error message that mentions the schema.
+
+Open a row to read all three types in full.
+
+Libraries with no type inference at all, such as the JSON Schema validators, are not listed.

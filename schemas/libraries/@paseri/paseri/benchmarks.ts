@@ -78,4 +78,14 @@ export default defineBenchmarks({
     },
     snippet: ts`p.object(shape).parse(data)`,
   },
+  types: {
+    imports: ts`
+      import * as p from "@paseri/paseri";
+      import { getPaseriSchema } from ".";
+    `,
+    schema: "getPaseriSchema()",
+    input: "p.Infer<typeof probeSchema>",
+    output: "p.Infer<typeof probeSchema>",
+    note: "schema annotated as p.Schema<ProductData>",
+  },
 });

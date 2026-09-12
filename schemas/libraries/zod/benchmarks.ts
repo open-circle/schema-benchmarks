@@ -237,4 +237,13 @@ export default defineBenchmarks({
       note: "compile",
     },
   ],
+  types: {
+    imports: ts`
+      import * as z from "zod";
+      import { getZodSchema } from ".";
+    `,
+    schema: "getZodSchema()",
+    input: "z.input<typeof probeSchema>",
+    output: "z.output<typeof probeSchema>",
+  },
 });

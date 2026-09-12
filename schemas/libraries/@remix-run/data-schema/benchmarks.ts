@@ -48,4 +48,13 @@ export default defineBenchmarks({
     },
     snippet: ts`parse(schema, data)`,
   },
+  types: {
+    imports: ts`
+      import type { InferInput, InferOutput } from "@remix-run/data-schema";
+      import { getRemixSchema } from ".";
+    `,
+    schema: "getRemixSchema()",
+    input: "InferInput<typeof probeSchema>",
+    output: "InferOutput<typeof probeSchema>",
+  },
 });

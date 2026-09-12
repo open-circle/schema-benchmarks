@@ -20,6 +20,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ContributingIndexRouteImport } from './routes/contributing/index'
 import { Route as JsonSchemaIndexRouteImport } from './routes/json-schema/index'
 import { Route as LibrariesIndexRouteImport } from './routes/libraries/index'
+import { Route as TypescriptIndexRouteImport } from './routes/typescript/index'
 import { Route as BenchmarksDownloadIndexRouteImport } from './routes/_benchmarks/download/index'
 import { Route as BenchmarksStackIndexRouteImport } from './routes/_benchmarks/stack/index'
 import { Route as ApiTweetIdRouteImport } from './routes/api/tweet.$id'
@@ -88,6 +89,11 @@ const LibrariesIndexRoute = LibrariesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LibrariesRouteRoute,
+} as any)
+const TypescriptIndexRoute = TypescriptIndexRouteImport.update({
+  id: '/typescript/',
+  path: '/typescript/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BenchmarksDownloadIndexRoute = BenchmarksDownloadIndexRouteImport.update({
   id: '/download/',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
   '/libraries/': typeof LibrariesIndexRoute
+  '/typescript/': typeof TypescriptIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/contributing': typeof ContributingIndexRoute
   '/json-schema': typeof JsonSchemaIndexRoute
   '/libraries': typeof LibrariesIndexRoute
+  '/typescript': typeof TypescriptIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/contributing/': typeof ContributingIndexRoute
   '/json-schema/': typeof JsonSchemaIndexRoute
   '/libraries/': typeof LibrariesIndexRoute
+  '/typescript/': typeof TypescriptIndexRoute
   '/api/tweet/$id': typeof ApiTweetIdRoute
   '/json-schema/compliance/$tab': typeof JsonSchemaComplianceTabRoute
   '/repo/raw/$': typeof RepoRawSplatRoute
@@ -265,6 +274,7 @@ export interface FileRouteTypes {
     | '/contributing/'
     | '/json-schema/'
     | '/libraries/'
+    | '/typescript/'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/contributing'
     | '/json-schema'
     | '/libraries'
+    | '/typescript'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/contributing/'
     | '/json-schema/'
     | '/libraries/'
+    | '/typescript/'
     | '/api/tweet/$id'
     | '/json-schema/compliance/$tab'
     | '/repo/raw/$'
@@ -340,6 +352,7 @@ export interface RootRouteChildren {
   LibrariesRouteRoute: typeof LibrariesRouteRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
   ContributingIndexRoute: typeof ContributingIndexRoute
+  TypescriptIndexRoute: typeof TypescriptIndexRoute
   ApiTweetIdRoute: typeof ApiTweetIdRoute
   RepoRawSplatRoute: typeof RepoRawSplatRoute
 }
@@ -422,6 +435,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/libraries/'
       preLoaderRoute: typeof LibrariesIndexRouteImport
       parentRoute: typeof LibrariesRouteRoute
+    }
+    '/typescript/': {
+      id: '/typescript/'
+      path: '/typescript'
+      fullPath: '/typescript/'
+      preLoaderRoute: typeof TypescriptIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_benchmarks/download/': {
       id: '/_benchmarks/download/'
@@ -629,6 +649,7 @@ const rootRouteChildren: RootRouteChildren = {
   LibrariesRouteRoute: LibrariesRouteRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
   ContributingIndexRoute: ContributingIndexRoute,
+  TypescriptIndexRoute: TypescriptIndexRoute,
   ApiTweetIdRoute: ApiTweetIdRoute,
   RepoRawSplatRoute: RepoRawSplatRoute,
 }

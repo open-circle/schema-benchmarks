@@ -200,4 +200,13 @@ export default defineBenchmarks({
       note: "compile",
     },
   ],
+  types: {
+    imports: ts`
+      import * as z from "zod/mini";
+      import { getZodMiniSchema } from ".";
+    `,
+    schema: "getZodMiniSchema()",
+    input: "z.input<typeof probeSchema>",
+    output: "z.output<typeof probeSchema>",
+  },
 });

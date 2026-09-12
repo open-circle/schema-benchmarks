@@ -289,4 +289,13 @@ export default defineBenchmarks({
     },
     acceptsUnknown: true,
   },
+  types: {
+    imports: ts`
+      import * as Type from "typebox";
+      import { getTypeboxSchema } from ".";
+    `,
+    schema: "getTypeboxSchema()",
+    input: "Type.StaticEncode<typeof probeSchema>",
+    output: "Type.StaticDecode<typeof probeSchema>",
+  },
 });

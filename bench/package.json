@@ -12,12 +12,14 @@
     "./bench.json": "./bench.json",
     "./download.json": "./download.json",
     "./json-schema.json": "./json-schema.json",
+    "./types.json": "./types.json",
     "./stack.json": "./stack.json"
   },
   "scripts": {
     "bench": "node ./src/scripts/bench/orchestrate.ts",
     "bench:merge": "node ./src/scripts/bench/merge.ts",
     "json-schema": "node ./src/scripts/json-schema/orchestrate.ts",
+    "types": "node ./src/scripts/types/orchestrate.ts",
     "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsc"
@@ -38,6 +40,7 @@
   },
   "devDependencies": {
     "@types/node": "26.1.1",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "typescript-5": "npm:typescript@5.9.3"
   }
 }

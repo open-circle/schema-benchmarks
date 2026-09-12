@@ -41,4 +41,13 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.verify(data)`,
   },
+  types: {
+    imports: ts`
+      import type { DecoderType } from "decoders";
+      import { getDecoderSchema } from ".";
+    `,
+    schema: "getDecoderSchema()",
+    input: "DecoderType<typeof probeSchema>",
+    output: "DecoderType<typeof probeSchema>",
+  },
 });

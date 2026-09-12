@@ -18,6 +18,8 @@ Each library is benchmarked against a set of data, both valid and invalid.
 
 **Download** benchmarks are created by compiling example usage files with [Rolldown](https://rolldown.rs/), and measuring the size of the output, both minified and unminified.
 
+**TypeScript inference** is measured with the TypeScript compiler API: whether the inferred input and output types describe the benchmark data exactly, how many type instantiations declaring the schema and reading both types costs, and the type an editor shows on hover.
+
 ## Structure
 
 This monorepo is split into 5 main parts:

@@ -162,6 +162,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+      typescript-5:
+        specifier: npm:typescript@5.9.3
+        version: typescript@5.9.3
 
   json-schema-tests:
     dependencies:

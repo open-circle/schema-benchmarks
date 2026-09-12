@@ -191,6 +191,33 @@ export interface CodecBenchmarkConfig extends Omit<BaseBenchmarkConfig, "snippet
   acceptsUnknown?: boolean;
 }
 
+/**
+ * How a library's inferred types are read, for the TypeScript inference benchmarks.
+ *
+ * The probe is written into the library's own folder, so `imports` can reach the schema module
+ * relatively, and the schema it declares is called `probeSchema` - the type expressions below are
+ * written in terms of it.
+ *
+ * @example
+ * {
+ *   imports: `import * as z from "zod";\nimport { getZodSchema } from "./index.ts";`,
+ *   schema: "getZodSchema()",
+ *   input: "z.input<typeof probeSchema>",
+ *   output: "z.output<typeof probeSchema>",
+ * }
+ */
+export interface TypeInferenceBenchmarkConfig {
+  /** Everything the probe needs in scope, including the module the schema comes from. */
+  imports: string;
+  /** Expression producing the schema, assigned to `probeSchema`. */
+  schema: string;
+  /** Type expression for the type the schema accepts. */
+  input: string;
+  /** Type expression for the type the schema produces. */
+  output: string;
+  note?: string;
+}
+
 export interface LibraryInfo {
   name: string;
   optimizeType: OptimizeType;
@@ -217,6 +244,7 @@ export interface BenchmarksConfig<ParseResult = unknown> {
   string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;
   stack?: StackBenchmarkConfig;
   codec?: MaybeArray<CodecBenchmarkConfig>;
+  types?: TypeInferenceBenchmarkConfig;
 }
 
 /* @__NO_SIDE_EFFECTS__ */

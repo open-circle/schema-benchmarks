@@ -58,4 +58,13 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.check(data)`,
   },
+  types: {
+    imports: ts`
+      import type { Static } from "runtypes";
+      import { getRuntypesSchema } from ".";
+    `,
+    schema: "getRuntypesSchema()",
+    input: "Static<typeof probeSchema>",
+    output: "Static<typeof probeSchema>",
+  },
 });

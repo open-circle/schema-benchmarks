@@ -102,4 +102,13 @@ export default defineBenchmarks({
     },
     snippet: ts`assert(data, schema)`,
   },
+  types: {
+    imports: ts`
+      import type { Infer } from "superstruct";
+      import { getSuperstructSchema } from ".";
+    `,
+    schema: "getSuperstructSchema()",
+    input: "Infer<typeof probeSchema>",
+    output: "Infer<typeof probeSchema>",
+  },
 });

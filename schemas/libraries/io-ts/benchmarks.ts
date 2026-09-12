@@ -73,4 +73,13 @@ export default defineBenchmarks({
       `,
     },
   },
+  types: {
+    imports: ts`
+      import * as t from "io-ts";
+      import { getIotsSchema } from ".";
+    `,
+    schema: "getIotsSchema()",
+    input: "t.OutputOf<typeof probeSchema>",
+    output: "t.TypeOf<typeof probeSchema>",
+  },
 });

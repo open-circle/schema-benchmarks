@@ -83,4 +83,13 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.parse(data)`,
   },
+  types: {
+    imports: ts`
+      import type { InferType } from "@sapphire/shapeshift";
+      import { getShapeshiftSchema } from ".";
+    `,
+    schema: "getShapeshiftSchema()",
+    input: "InferType<typeof probeSchema>",
+    output: "InferType<typeof probeSchema>",
+  },
 });
