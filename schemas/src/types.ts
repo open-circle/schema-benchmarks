@@ -191,6 +191,75 @@ export interface CodecBenchmarkConfig extends Omit<BaseBenchmarkConfig, "snippet
   acceptsUnknown?: boolean;
 }
 
+/**
+ * How a library takes an existing type: `builder` is an API the type is passed to; `annotation` is
+ * the library's schema type on the declaration, which reports whatever assignability reports.
+ */
+export const fromTypeStyleSchema = /* @__PURE__ */ v.picklist(["builder", "annotation"]);
+export type FromTypeStyle = v.InferOutput<typeof fromTypeStyleSchema>;
+
+/**
+ * The ways a schema can disagree with the type it is built for. Each one is compiled against a
+ * schema for `{ id: number; name: string; price: number }`, and a library only catches the mistake
+ * if the compiler rejects it.
+ */
+export const fromTypeCaseSchema = /* @__PURE__ */ v.picklist([
+  "wrongType",
+  "missingField",
+  "optionalField",
+  "extraField",
+]);
+export type FromTypeCase = v.InferOutput<typeof fromTypeCaseSchema>;
+
+/**
+ * How a library's types are read, for the TypeScript inference benchmarks.
+ *
+ * The probe is written into the library's own folder, so `imports` can reach the schema module
+ * relatively, and the schema it declares is called `probeSchema` - the type expressions below are
+ * written in terms of it.
+ *
+ * @example
+ * {
+ *   imports: `import * as z from "zod";\nimport { getZodSchema } from "./index.ts";`,
+ *   schema: "getZodSchema()",
+ *   input: "z.input<typeof probeSchema>",
+ *   output: "z.output<typeof probeSchema>",
+ * }
+ */
+export interface TypeInferenceBenchmarkConfig {
+  /** Everything the probe needs in scope, including the module the schema comes from. */
+  imports: string;
+  /** Expression producing the schema, assigned to `probeSchema`. */
+  schema: string;
+  /** Type expression for the type the schema accepts. Leave out along with `output`. */
+  input?: string;
+  /** Type expression for the type the schema produces. Leave out along with `input`. */
+  output?: string;
+  /** Why the library infers nothing from a schema. Give it instead of `input` and `output`. */
+  noInference?: string;
+  note?: string;
+  /**
+   * How a schema is built from a type that already exists, with the construction type checked -
+   * the reverse of inferring a type from a schema. Both entries are statements, and both are
+   * compiled: `valid` has to type check, and `invalid` has to fail, which is what shows the
+   * construction is checked rather than merely annotated.
+   *
+   * Leave it out when the library has no way to do it.
+   */
+  fromType?: {
+    style: FromTypeStyle;
+    /**
+     * Declares a schema for the type `Product`, which the probe defines. It is compiled once
+     * against the type the schema describes, and once against each way a schema can disagree
+     * with it.
+     */
+    schema: string;
+    /** The schema is generated from the type, so the two cannot disagree. */
+    derived?: boolean;
+    note?: string;
+  };
+}
+
 export interface LibraryInfo {
   name: string;
   optimizeType: OptimizeType;
@@ -217,6 +286,7 @@ export interface BenchmarksConfig<ParseResult = unknown> {
   string?: Partial<Record<StringFormat, StringBenchmarkConfig>>;
   stack?: StackBenchmarkConfig;
   codec?: MaybeArray<CodecBenchmarkConfig>;
+  types?: TypeInferenceBenchmarkConfig;
 }
 
 /* @__NO_SIDE_EFFECTS__ */

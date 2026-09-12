@@ -1,4 +1,5 @@
-import { Object, String, Number, Array, Literal, Union, InstanceOf } from "runtypes";
+import type { Satisfies } from "@schema-benchmarks/utils";
+import { Object, String, Number, Array, Literal, Union, InstanceOf, type Static } from "runtypes";
 
 import type { ProductData } from "#src";
 
@@ -40,8 +41,7 @@ export function getRuntypesSchema() {
     ratings: Array(Rating),
   });
 
-  // returning this has type portability issues
-  schema.conform<ProductData>();
-
   return schema;
 }
+
+export type SatisfiesTest = Satisfies<Static<ReturnType<typeof getRuntypesSchema>>, ProductData>;

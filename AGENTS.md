@@ -32,7 +32,8 @@ When adding a validation library:
 2. Add a library folder under `schemas/libraries/`.
 3. Add its schema definition and benchmark definitions.
 4. Add download benchmarks matching typical library usage.
-5. Run `pnpm schemas:build` and the relevant benchmark commands.
+5. Add a `types` config to the benchmark definitions when the library infers TypeScript types.
+6. Run `pnpm schemas:build` and the relevant benchmark commands.
 
 Use existing library folders as templates and preserve the library's idiomatic API in the adapter.
 

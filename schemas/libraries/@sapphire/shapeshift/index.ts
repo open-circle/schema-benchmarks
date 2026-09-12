@@ -1,5 +1,6 @@
-import type { BaseValidator } from "@sapphire/shapeshift";
+import type { InferType } from "@sapphire/shapeshift";
 import { s } from "@sapphire/shapeshift";
+import type { Satisfies } from "@schema-benchmarks/utils";
 
 import type { ProductData } from "#src";
 
@@ -33,5 +34,10 @@ export function getShapeshiftSchema() {
     tags: s.array(s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(30)),
     images: s.array(imageSchema),
     ratings: s.array(ratingSchema),
-  }) satisfies BaseValidator<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<
+  InferType<ReturnType<typeof getShapeshiftSchema>>,
+  ProductData
+>;

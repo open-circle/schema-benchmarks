@@ -1,0 +1,10 @@
+.types-list {
+  .types-list__matches {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .types-list__bar {
+    display: block;
+    padding: 0 1rem 0.5rem;
+  }
+}

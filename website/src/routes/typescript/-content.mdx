@@ -1,0 +1,31 @@
+Most of these libraries exist to give you a schema and a TypeScript type from the same declaration.
+This page compares the types themselves: whether they describe your data, what they cost the
+compiler, and how they read.
+
+Every library declares the same product schema, and its type is read with whatever the library
+provides:
+
+```ts responsive
+const schema = z.object({ id: z.number(), title: z.string(), tags: z.array(z.string()) });
+
+type Output = z.output<typeof schema>;
+type Input = z.input<typeof schema>;
+```
+
+**Input** and **Output** pass only when the inferred type and the data type describe each other
+exactly. A type that allows more (`unknown`, or `any`, which checks nothing) leaves the work to
+runtime; one that allows less rejects values the schema accepts.
+
+**From type** is the other direction: building a schema for a type you already have. It is `Exact`
+only when the compiler rejects every way the two can disagree - a field of the wrong type, a field
+left out, a field required where the type makes it optional, and a field the type never declared.
+`Unsafe` means some of those compile, and the schema they build disagrees with the type it was
+written for.
+
+**Instantiations** is the work the compiler does to declare the schema and read its output type.
+It is what grows into slow editor feedback and slow builds as a codebase adds schemas.
+
+**Type on hover** is the type an editor shows for the schema, and its length in characters. The
+same text appears in every error message that mentions it.
+
+Open a row to read the types in full.

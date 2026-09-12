@@ -78,4 +78,19 @@ export default defineBenchmarks({
     },
     snippet: ts`p.object(shape).parse(data)`,
   },
+  types: {
+    imports: ts`
+      import * as p from "@paseri/paseri";
+      import { getPaseriSchema } from ".";
+    `,
+    schema: "getPaseriSchema()",
+    noInference:
+      "The inferred type of a paseri schema cannot be named or serialized (TS2883, TS7056), so a schema has to be annotated with the type it describes.",
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: p.Schema<Product> = p.object({ id: p.number(), name: p.string(), price: p.number() });
+      `,
+    },
+  },
 });

@@ -4,6 +4,8 @@ import {
 } from "@schema-benchmarks/json-schema-tests/types";
 import {
   errorTypeSchema,
+  fromTypeCaseSchema,
+  fromTypeStyleSchema,
   jsonSchemaDirectionSchema,
   jsonSchemaConversionTargetSchema,
   optimizeTypeSchema,
@@ -143,6 +145,76 @@ export const getEmptyJsonSchemaResults = (): JsonSchemaBenchResults => ({
     roundtrip: getEmptyJsonComplianceResults(),
   },
 });
+
+/** How an inferred type relates to the data the shared product schema describes. */
+export const typeMatchSchema = v.picklist(["exact", "narrower", "wider", "any", "mismatch"]);
+export type TypeMatch = v.InferOutput<typeof typeMatchSchema>;
+
+/**
+ * `text` is what an editor shows on hover, and `chars` its length - which is the point of
+ * recording it, so it stays the true length even when `text` had to be truncated to keep the
+ * results file readable.
+ */
+const inferredTypeSchema = v.object({
+  text: v.string(),
+  chars: v.number(),
+  truncated: v.optional(v.boolean()),
+  instantiations: v.number(),
+});
+export type InferredType = v.InferOutput<typeof inferredTypeSchema>;
+
+const inferredDirectionSchema = v.object({
+  ...inferredTypeSchema.entries,
+  /** The expression the type is read with, e.g. `z.output<typeof schema>`. */
+  snippet: v.string(),
+  match: typeMatchSchema,
+});
+export type InferredDirection = v.InferOutput<typeof inferredDirectionSchema>;
+
+const inferenceSchema = v.object({
+  /** The type of the schema value itself, as an editor shows it. */
+  schema: inferredTypeSchema,
+  input: inferredDirectionSchema,
+  output: inferredDirectionSchema,
+  /** Declaring the schema and reading its output type. */
+  instantiations: v.number(),
+});
+export type Inference = v.InferOutput<typeof inferenceSchema>;
+
+/**
+ * Building a schema from a type that already exists. `cases` says which ways of disagreeing with
+ * the type the compiler rejects: a library that checks only assignability accepts a schema that
+ * requires a field the type makes optional, or declares one the type never had.
+ */
+const fromTypeSchema = v.object({
+  style: fromTypeStyleSchema,
+  snippet: v.string(),
+  cases: v.object(v.entriesFromList(fromTypeCaseSchema.options, v.boolean())),
+  /** The schema is generated from the type, so the two cannot disagree. */
+  derived: v.optional(v.boolean()),
+  note: v.optional(v.string()),
+});
+export type FromTypeResult = v.InferOutput<typeof fromTypeSchema>;
+
+export const typesResultSchema = v.object({
+  id: v.string(),
+  libraryName: v.string(),
+  version: v.string(),
+  note: v.optional(v.string()),
+  /** Absent when the library infers nothing from a schema, and `noInference` says why. */
+  inference: v.optional(inferenceSchema),
+  noInference: v.optional(v.string()),
+  /** Absent when the library has no way to build a schema from an existing type. */
+  fromType: v.optional(fromTypeSchema),
+});
+export type TypesResult = v.InferOutput<typeof typesResultSchema>;
+
+export const typesBenchResultsSchema = v.object({
+  /** A count only means something next to the compiler that produced it. */
+  typescriptVersion: v.string(),
+  results: v.array(typesResultSchema),
+});
+export type TypesBenchResults = v.InferOutput<typeof typesBenchResultsSchema>;
 
 const stringResultSchema = v.object({
   ...runtimeBenchResultSchema.entries,

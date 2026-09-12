@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as Schema from "effect/Schema";
 
 import type { ProductData } from "#src";
@@ -34,5 +35,10 @@ export function getEffectSchema() {
     ),
     images: Schema.mutable(Schema.Array(Image)),
     ratings: Schema.mutable(Schema.Array(Rating)),
-  }) satisfies Schema.Schema<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<
+  Schema.Schema.Type<ReturnType<typeof getEffectSchema>>,
+  ProductData
+>;

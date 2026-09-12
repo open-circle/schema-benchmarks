@@ -3,7 +3,7 @@ import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" 
 import ts from "dedent";
 import * as S from "sury";
 
-import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
+import type { JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, assertJsonSchemaTarget, defineBenchmarks, success } from "#src";
 
 import { getSurySchema } from ".";
@@ -13,7 +13,7 @@ const createStringBenchmark = (
   snippet: string,
 ): StringBenchmarkConfig => ({
   create() {
-    return (testString) => S.is(schema, testString);
+    return S.isInput(schema);
   },
   snippet,
 });
@@ -27,17 +27,16 @@ const suryTargets: Partial<Record<ComplianceTarget, string>> = {
 
 // `~standard.jsonSchema` throws until this is called
 S.enableStandardJSONSchema();
-const jsonSchemaSubject = S.schema({
+const jsonSchemaSubject = S.schemaOf<JsonSchemaOutputData>()({
   id: S.number,
   name: S.string,
-  price: S.to(S.string, S.number, {
-    decode: Number,
-    encode: String,
-  }),
-}) satisfies S.Schema<JsonSchemaInputData, JsonSchemaOutputData>;
-const parser = S.parser(getSurySchema());
-const encoder = S.encoder(S.bigint, S.string);
-const decoder = S.decoder(S.string, S.bigint);
+  price: S.string.with(S.to, S.number),
+});
+const isValid = S.isInput(schema);
+const parse = S.parseOrThrow(getSurySchema());
+const parseAsResult = S.parseAsResult(getSurySchema());
+const encode = S.encodeOrThrow(S.bigint, S.string);
+const decode = S.decodeOrThrow(S.string, S.bigint);
 
 export default defineBenchmarks({
   library: {
@@ -54,24 +53,38 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return S.parser(getSurySchema());
+        return S.parseOrThrow(getSurySchema());
       },
-      snippet: ts`S.parser(S.schema(value))`,
-      note: "parser",
+      snippet: ts`S.parseOrThrow(S.schema(value))`,
+      note: "compiled",
     },
   ],
-  validation: {
-    run(data) {
-      return S.is(schema, data);
+  validation: [
+    {
+      run(data) {
+        return S.isInput(schema, data);
+      },
+      snippet: ts`S.isInput(S.schema(value), data)`,
     },
-    snippet: ts`S.is(S.schema(value), data)`,
-  },
+    {
+      run(data) {
+        return isValid(data);
+      },
+      snippet: ts`
+        // setup-start
+        const isValid = S.isInput(S.schema(value));
+        // setup-end
+        isValid(data);
+      `,
+      note: "compiled",
+    },
+  ],
   parsing: {
     allErrors: [
       {
         run(data) {
           try {
-            return success.true(parser(data));
+            return success.true(parse(data));
           } catch {
             return success.false;
           }
@@ -80,20 +93,25 @@ export default defineBenchmarks({
         getData: (result) => result.value,
         snippet: ts`
         // setup-start
-        const parser = S.parser(S.schema(value));
+        const parse = S.parseOrThrow(S.schema(value));
         // setup-end
-        parser(data);
+        parse(data);
       `,
         throws: true,
       },
       {
         run(data) {
-          return S.safe(() => parser(data));
+          return parseAsResult(data);
         },
         validateResult: (result) => result.success,
         getData: (result) => result.value,
-        snippet: ts`S.safe(() => parser(data))`,
-        note: "safe",
+        snippet: ts`
+        // setup-start
+        const parseAsResult = S.parseAsResult(S.schema(value));
+        // setup-end
+        parseAsResult(data);
+      `,
+        note: "asResult",
       },
     ],
   },
@@ -105,26 +123,26 @@ export default defineBenchmarks({
       toJson: {
         generate: ({ target, direction }) =>
           direction === "input"
-            ? S.toJSONSchema(jsonSchemaSubject, { target })
-            : S.toJSONSchema(S.reverse(jsonSchemaSubject), { target }),
+            ? S.toInputJSONSchemaOrThrow(jsonSchemaSubject, { target })
+            : S.toOutputJSONSchemaOrThrow(jsonSchemaSubject, { target }),
         snippet: ({ target, direction }) =>
-          ts`S.toJSONSchema(${direction === "input" ? "schema" : "S.reverse(schema)"}, { target: "${target}" })`,
+          ts`S.to${direction === "input" ? "Input" : "Output"}JSONSchemaOrThrow(schema, { target: "${target}" })`,
         source: { type: "native" },
         // `~standard.jsonSchema` works after S.enableStandardJSONSchema()
         standardJsonSchema: { type: "opt-in", schema: jsonSchemaSubject },
       },
       fromJson: {
-        generate: (jsonSchema) => S.fromJSONSchema(jsonSchema),
-        snippet: ts`S.fromJSONSchema(jsonSchema)`,
+        generate: (jsonSchema) => S.fromJSONSchemaOrThrow(jsonSchema),
+        snippet: ts`S.fromJSONSchemaOrThrow(jsonSchema)`,
       },
     },
     compliance: {
       semantics: {
         run(schema, data) {
           if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
-          return S.is(S.fromJSONSchema(schema), data);
+          return S.isInput(S.fromJSONSchemaOrThrow(schema), data);
         },
-        snippet: () => ts`S.is(S.fromJSONSchema(schema), data)`,
+        snippet: () => ts`S.isInput(S.fromJSONSchemaOrThrow(schema), data)`,
         source: { type: "native" },
       },
       roundtrip: {
@@ -132,10 +150,10 @@ export default defineBenchmarks({
           const target = suryTargets[complianceTarget];
           assertJsonSchemaTarget(target, ["draft-2020-12", "draft-07"]);
           if (typeof schema === "boolean") throw new Error("sury does not support boolean schemas");
-          return S.toJSONSchema(S.fromJSONSchema(schema), { target });
+          return S.toInputJSONSchemaOrThrow(S.fromJSONSchemaOrThrow(schema), { target });
         },
         snippet: (complianceTarget) =>
-          ts`S.toJSONSchema(S.fromJSONSchema(schema), { target: "${suryTargets[complianceTarget] ?? complianceTarget}" })`,
+          ts`S.toInputJSONSchemaOrThrow(S.fromJSONSchemaOrThrow(schema), { target: "${suryTargets[complianceTarget] ?? complianceTarget}" })`,
         source: { type: "native" },
       },
     },
@@ -153,37 +171,52 @@ export default defineBenchmarks({
   },
   stack: {
     throw: (data) => {
-      parser(data);
+      parse(data);
       assertNotReached();
     },
     snippet: ts`
     // setup-start
-    const parser = S.parser(S.schema(value));
+    const parse = S.parseOrThrow(S.schema(value));
     // setup-end
-    parser(data)
+    parse(data)
     `,
   },
   codec: {
     encode: {
       run(data) {
-        return encoder(data);
+        return encode(data);
       },
       snippet: ts`
       // setup-start
-      const encoder = S.encoder(S.bigint, S.string);
+      const encode = S.encodeOrThrow(S.bigint, S.string);
       // setup-end
       encoder(data)
       `,
     },
     decode: {
       run(data) {
-        return decoder(data);
+        return decode(data);
       },
       snippet: ts`
       // setup-start
-      const decoder = S.decoder(S.string, S.bigint);
+      const decode = S.decodeOrThrow(S.string, S.bigint);
       // setup-end
       decoder(data)
+      `,
+    },
+  },
+  types: {
+    imports: ts`
+      import * as S from "sury";
+      import { getSurySchema } from ".";
+    `,
+    schema: "getSurySchema()",
+    input: "S.Input<typeof probeSchema>",
+    output: "S.Output<typeof probeSchema>",
+    fromType: {
+      style: "builder",
+      schema: ts`
+        const probeSchema = S.schemaOf<Product>()({ id: S.number, name: S.string, price: S.number });
       `,
     },
   },

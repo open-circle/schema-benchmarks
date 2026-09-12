@@ -73,4 +73,19 @@ export default defineBenchmarks({
       `,
     },
   },
+  types: {
+    imports: ts`
+      import * as t from "io-ts";
+      import { getIotsSchema } from ".";
+    `,
+    schema: "getIotsSchema()",
+    input: "t.OutputOf<typeof probeSchema>",
+    output: "t.TypeOf<typeof probeSchema>",
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: t.Type<Product> = t.type({ id: t.number, name: t.string, price: t.number });
+      `,
+    },
+  },
 });

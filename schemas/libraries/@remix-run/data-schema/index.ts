@@ -6,9 +6,10 @@ import {
   number,
   object,
   string,
-  type Schema,
+  type InferOutput,
 } from "@remix-run/data-schema";
 import { max, maxLength, min, minLength, url } from "@remix-run/data-schema/checks";
+import type { Satisfies } from "@schema-benchmarks/utils";
 
 import type { ProductData } from "#src";
 
@@ -40,5 +41,7 @@ export function getRemixSchema() {
     tags: array(string().pipe(minLength(1), maxLength(30))),
     images: array(imageSchema),
     ratings: array(ratingSchema),
-  }) satisfies Schema<unknown, ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<InferOutput<ReturnType<typeof getRemixSchema>>, ProductData>;

@@ -103,4 +103,19 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.parse(data)`,
   },
+  types: {
+    imports: ts`
+      import * as z from "zod/v3";
+      import { getZodSchema } from ".";
+    `,
+    schema: "getZodSchema()",
+    input: "z.input<typeof probeSchema>",
+    output: "z.output<typeof probeSchema>",
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: z.ZodType<Product> = z.object({ id: z.number(), name: z.string(), price: z.number() });
+      `,
+    },
+  },
 });

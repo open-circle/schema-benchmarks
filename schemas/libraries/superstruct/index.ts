@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import {
   object,
   number,
@@ -9,7 +10,7 @@ import {
   refine,
   min,
   max,
-  type Struct,
+  type Infer,
 } from "superstruct";
 
 import type { ProductData } from "#src";
@@ -54,5 +55,7 @@ export function getSuperstructSchema() {
     tags: array(stringWithLength(1, 30)),
     images: array(imageSchema),
     ratings: array(ratingSchema),
-  }) satisfies Struct<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<Infer<ReturnType<typeof getSuperstructSchema>>, ProductData>;

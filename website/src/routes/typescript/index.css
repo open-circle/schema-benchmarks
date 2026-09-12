@@ -1,0 +1,5 @@
+@import "#src/shared/styles/layout";
+
+@import "./-components/table/index.css";
+@import "./-components/list/index.css";
+@import "./-components/detail/index.css";

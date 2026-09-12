@@ -1,0 +1,53 @@
+.types-detail {
+  padding: 0;
+  min-width: min(48rem, calc(100vw - 2rem));
+  max-width: min(64rem, calc(100vw - 2rem));
+  .types-detail__header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .types-detail__header {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.5rem;
+    > * {
+      margin: 0;
+    }
+  }
+  .types-detail__summary {
+    padding: 0 1rem;
+    margin: 0;
+  }
+  .types-detail__sections {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .types-detail__section-header {
+    padding: 1rem 1rem 0;
+    > * {
+      margin: 0;
+    }
+  }
+  pre[class*="language-"] {
+    border-radius: 0;
+    margin: 0;
+    max-height: 24em;
+  }
+  /* An inferred type is one very long line, and the highlighter sets `white-space: pre` on both
+     the block and the code inside it. Wrapping keeps the type inside the dialog, where a
+     horizontal scrollbar per block would make it unreadable. */
+  pre[class*="language-"],
+  pre[class*="language-"] code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .dialog__actions {
+    margin: 0;
+  }
+}

@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as v from "valibot";
 
 import type { ProductData } from "#src";
@@ -30,5 +31,10 @@ export function getValibotSchema() {
     tags: v.array(v.pipe(v.string(), v.minLength(1), v.maxLength(30))),
     images: v.array(imageSchema),
     ratings: v.array(ratingSchema),
-  }) satisfies v.GenericSchema<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<
+  v.InferOutput<ReturnType<typeof getValibotSchema>>,
+  ProductData
+>;
