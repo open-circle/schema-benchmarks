@@ -31,4 +31,4 @@ const productSchema = S.schema({
   ratings: S.array(ratingSchema),
 }) satisfies S.Schema<ProductData>;
 
-S.parseOrThrow(productSchema, {});
+S.parseOrThrow(productSchema)({});

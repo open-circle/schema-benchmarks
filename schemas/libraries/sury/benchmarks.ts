@@ -33,8 +33,8 @@ const jsonSchemaSubject = S.schemaOf<JsonSchemaOutputData>()({
   price: S.string.with(S.to, S.number),
 });
 const isValid = S.isInput(schema);
-const parse = S.parseOrThrow(schema);
-const parseAsResult = S.parseAsResult(schema);
+const parse = S.parseOrThrow(getSurySchema());
+const parseAsResult = S.parseAsResult(getSurySchema());
 const encode = S.encodeOrThrow(S.bigint, S.string);
 const decode = S.decodeOrThrow(S.string, S.bigint);
 
@@ -91,19 +91,6 @@ export default defineBenchmarks({
       {
         run(data) {
           try {
-            return success.true(S.parseOrThrow(schema, data));
-          } catch {
-            return success.false;
-          }
-        },
-        validateResult: (result) => result.success,
-        getData: (result) => result.value,
-        snippet: ts`S.parseOrThrow(schema, data)`,
-        throws: true,
-      },
-      {
-        run(data) {
-          try {
             return success.true(parse(data));
           } catch {
             return success.false;
@@ -132,15 +119,6 @@ export default defineBenchmarks({
           // setup-end
           parseAsResult(data);
         `,
-        note: "asResult + compiled",
-      },
-      {
-        run(data) {
-          return S.parseAsResult(schema, data);
-        },
-        validateResult: (result) => result.success,
-        getData: (result) => result.value,
-        snippet: ts`S.parseAsResult(schema, data)`,
         note: "asResult",
       },
     ],
