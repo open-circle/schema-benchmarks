@@ -117,8 +117,14 @@ export default defineBenchmarks({
       import * as v from "valibot";
       import { getValibotSchema } from ".";
     `,
-    schema: "getValibotSchema()",
-    input: "v.InferInput<typeof probeSchema>",
-    output: "v.InferOutput<typeof probeSchema>",
+    schema: ts`getValibotSchema()`,
+    input: ts`v.InferInput<typeof probeSchema>`,
+    output: ts`v.InferOutput<typeof probeSchema>`,
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: v.GenericSchema<Product> = v.object({ id: v.number(), name: v.string(), price: v.number() });
+      `,
+    },
   },
 });

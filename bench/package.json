@@ -20,6 +20,8 @@
     "bench:merge": "node ./src/scripts/bench/merge.ts",
     "json-schema": "node ./src/scripts/json-schema/orchestrate.ts",
     "types": "node ./src/scripts/types/orchestrate.ts",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsc"
@@ -40,7 +42,9 @@
   },
   "devDependencies": {
     "@types/node": "26.1.1",
+    "@vitest/coverage-v8": "catalog:",
     "typescript": "catalog:",
-    "typescript-5": "npm:typescript@5.9.3"
+    "typescript-5": "npm:typescript@5.9.3",
+    "vitest": "catalog:"
   }
 }

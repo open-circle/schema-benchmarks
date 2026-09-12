@@ -60,11 +60,18 @@ export default defineBenchmarks({
   },
   types: {
     imports: ts`
+      import { Object as RtObject, String as RtString, Number as RtNumber, type Runtype } from "runtypes";
       import type { Static } from "runtypes";
       import { getRuntypesSchema } from ".";
     `,
-    schema: "getRuntypesSchema()",
-    input: "Static<typeof probeSchema>",
-    output: "Static<typeof probeSchema>",
+    schema: ts`getRuntypesSchema()`,
+    input: ts`Static<typeof probeSchema>`,
+    output: ts`Static<typeof probeSchema>`,
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: Runtype.Core<Product> = RtObject({ id: RtNumber, name: RtString, price: RtNumber });
+      `,
+    },
   },
 });

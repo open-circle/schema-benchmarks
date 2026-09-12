@@ -4,6 +4,7 @@ import { getTransitionName, numFormatter, shortNumFormatter } from "@schema-benc
 import bem from "react-bem-helper";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
+import { FromTypeText } from "#src/routes/typescript/-components/from-type.tsx";
 import { MatchCheckbox } from "#src/routes/typescript/-components/match.tsx";
 import type { SortableKey } from "#src/routes/typescript/-constants.ts";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
@@ -54,6 +55,7 @@ export function TypesTable({
           </SortableHeaderLink>
           <th className="action">Input</th>
           <th className="action">Output</th>
+          <th>From type</th>
           <SortableHeaderLink
             {...SortableHeaderLink.getProps("instantiations", sortState, linkOptions)}
             className="numeric"
@@ -72,7 +74,7 @@ export function TypesTable({
         </tr>
       </thead>
       <tbody>
-        {results.map((result) => (
+        {results.map(({ inference, ...result }) => (
           <tr
             key={result.id}
             style={{
@@ -93,18 +95,21 @@ export function TypesTable({
               <DownloadCount libraryName={result.libraryName} />
             </td>
             <td className="action">
-              <MatchCheckbox match={result.input.match} />
+              {inference ? <MatchCheckbox match={inference.input.match} /> : "No"}
             </td>
             <td className="action">
-              <MatchCheckbox match={result.output.match} />
+              {inference ? <MatchCheckbox match={inference.output.match} /> : "No"}
             </td>
-            <td className="numeric">{formatCount(result.instantiations)}</td>
-            <td className="fit-content">
-              <Bar {...instantiationScaler(result.instantiations)} />
+            <td>
+              <FromTypeText fromType={result.fromType} />
             </td>
-            <td className="numeric">{formatChars(result.schema.chars)}</td>
+            <td className="numeric">{inference ? formatCount(inference.instantiations) : "-"}</td>
             <td className="fit-content">
-              <Bar {...charsScaler(result.schema.chars)} />
+              {inference && <Bar {...instantiationScaler(inference.instantiations)} />}
+            </td>
+            <td className="numeric">{inference ? formatChars(inference.schema.chars) : "-"}</td>
+            <td className="fit-content">
+              {inference && <Bar {...charsScaler(inference.schema.chars)} />}
             </td>
             <td className="action">
               <InternalLinkToggleButton
