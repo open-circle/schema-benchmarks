@@ -86,6 +86,6 @@ export default defineBenchmarks({
     schema: "getPaseriSchema()",
     input: "p.Infer<typeof probeSchema>",
     output: "p.Infer<typeof probeSchema>",
-    note: "schema annotated as p.Schema<ProductData>",
+    note: "its schema type cannot be inferred, so the schema is annotated as p.Schema<ProductData>",
   },
 });

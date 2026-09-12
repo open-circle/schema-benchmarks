@@ -14,8 +14,9 @@ import {
   min,
   max,
   url,
-  type Validator,
+  type InferSchemaType,
 } from "@railway-ts/pipelines/schema";
+import type { Satisfies } from "@schema-benchmarks/utils";
 
 import type { ProductData } from "#src";
 
@@ -49,5 +50,10 @@ export function getRailwayTsSchema() {
     tags: required(array(chain(string(), minLength(1), maxLength(30)))),
     images: required(array(imageSchema)),
     ratings: required(array(ratingSchema)),
-  }) satisfies Validator<unknown, ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<
+  InferSchemaType<ReturnType<typeof getRailwayTsSchema>>,
+  ProductData
+>;

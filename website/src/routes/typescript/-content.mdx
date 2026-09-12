@@ -11,6 +11,11 @@ type Output = z.output<typeof schema>;
 type Input = z.input<typeof schema>;
 ```
 
+Each library also asserts, somewhere in its definition, that its schema really models the data.
+Those assertions cost the compiler as much as the schema does, so they are kept out of what is
+measured here. `@paseri/paseri` is the exception: its schema type cannot be inferred at all, so the
+schema carries an annotation and the numbers below include it.
+
 **Input** and **Output** are checked against the data type the schema describes, and only pass when
 the two describe each other exactly. A type that allows more (`unknown`, or `any`, which type
 checks nothing at all) leaves the work to runtime; a type that allows less rejects values the
