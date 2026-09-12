@@ -1,18 +1,18 @@
-import { collator, compareStrings } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import * as v from "valibot";
 
-import { compareDownloadsByPkgName, useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
+import { useDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import { generateMetadata } from "#src/shared/data/meta";
-import { applySort, sortParams } from "#src/shared/lib/sort";
+import { sortParams } from "#src/shared/lib/sort";
 
 import { TypesDetail } from "./-components/detail";
 import { TypesResults } from "./-components/results";
 import { sortableKeys } from "./-constants.ts";
 import Content from "./-content.mdx";
 import { getTypesBenchResults } from "./-query.ts";
+import { compareResults } from "./-sort.ts";
 
 import styles from "./index.css?url";
 
@@ -46,30 +46,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery(getTypesBenchResults());
   const downloadsByPkgName = useDownloadsByPkgName(data.results);
   const sortedResults = useMemo(
-    () =>
-      data.results.toSorted(
-        applySort(
-          (a, b) => {
-            switch (sortBy) {
-              case "libraryName":
-                return collator.compare(a.libraryName, b.libraryName);
-              case "downloads":
-                return compareDownloadsByPkgName(downloadsByPkgName, a, b);
-              case "chars":
-                return a.schema.chars - b.schema.chars;
-              default:
-                return a.instantiations - b.instantiations;
-            }
-          },
-          {
-            sortDir,
-            fallbacks: [
-              compareDownloadsByPkgName.fallback(downloadsByPkgName),
-              compareStrings((result) => result.libraryName),
-            ],
-          },
-        ),
-      ),
+    () => data.results.toSorted(compareResults({ sortBy, sortDir }, downloadsByPkgName)),
     [data.results, downloadsByPkgName, sortBy, sortDir],
   );
   const detailResult = useMemo(

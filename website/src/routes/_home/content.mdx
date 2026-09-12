@@ -178,6 +178,18 @@ Encode (<ColorDisplay color="var(--link)" size="small" />) and decode (<ColorDis
 
 <CodecPlot />
 
+## <Link to="/typescript">TypeScript</Link>
+
+Most of these libraries exist to give you a schema and a TypeScript type from the same declaration, so we also compare the types themselves.
+
+```ts responsive
+const schema = z.object({ id: z.number(), title: z.string() });
+
+type Output = z.output<typeof schema>;
+```
+
+For each library we check whether the inferred input and output types describe the benchmark data exactly, whether a schema can be built from a type you already have with the construction type checked, the type instantiations the compiler performs to declare the schema and read its output type, and the type an editor shows on hover, along with how long it is.
+
 ## JSON Schema
 
 ### <Link to="/json-schema/to-json">Schema to JSON</Link>
@@ -235,15 +247,3 @@ assert(Schema.Check(remotes, z.toJSONSchema(z.fromJSONSchema(schema)), data) ===
 For roundtrip with Draft 2020-12:
 
 <CompliancePlot type="roundtrip" target="draft2020-12" />
-
-## <Link to="/typescript">TypeScript</Link>
-
-Most of these libraries exist to give you a schema and a TypeScript type from the same declaration, so we also compare the types themselves.
-
-```ts responsive
-const schema = z.object({ id: z.number(), title: z.string() });
-
-type Output = z.output<typeof schema>;
-```
-
-For each library we check whether the inferred input and output types describe the benchmark data exactly, count the type instantiations the compiler performs to declare the schema and read both types, and record the type an editor shows on hover, along with how long it is.

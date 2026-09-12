@@ -124,10 +124,17 @@ export default defineBenchmarks({
   },
   types: {
     imports: ts`
+      import { type Type, type } from "arktype";
       import { getArkTypeSchema } from ".";
     `,
-    schema: "getArkTypeSchema()",
-    input: `(typeof probeSchema)["inferIn"]`,
-    output: `(typeof probeSchema)["infer"]`,
+    schema: ts`getArkTypeSchema()`,
+    input: ts`(typeof probeSchema)["inferIn"]`,
+    output: ts`(typeof probeSchema)["infer"]`,
+    fromType: {
+      style: "annotation",
+      schema: ts`
+        const probeSchema: Type<Product> = type({ id: "number", name: "string", price: "number" });
+      `,
+    },
   },
 });

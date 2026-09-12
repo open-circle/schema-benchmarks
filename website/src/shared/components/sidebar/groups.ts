@@ -59,7 +59,10 @@ export const sidebarGroups: Array<SidebarGroup> = [
   },
   {
     key: "post-runtime",
-    links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
+    links: [
+      { ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" },
+      { ...linkOptions({ to: "/typescript" }), name: "TypeScript", icon: "code_blocks" },
+    ],
   },
   {
     key: "json-schema",
@@ -85,16 +88,6 @@ export const sidebarGroups: Array<SidebarGroup> = [
         }),
         name: "Compliance",
         icon: "verified",
-      },
-    ],
-  },
-  {
-    key: "typescript",
-    links: [
-      {
-        ...linkOptions({ to: "/typescript" }),
-        name: "TypeScript",
-        icon: "code_blocks",
       },
     ],
   },

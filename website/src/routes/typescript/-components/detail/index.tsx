@@ -1,10 +1,11 @@
-import type { InferredDirection, TypesResult } from "@schema-benchmarks/bench";
+import type { InferredDirection, InferredType, TypesResult } from "@schema-benchmarks/bench";
 import { numFormatter } from "@schema-benchmarks/utils";
 import { useNavigate } from "@tanstack/react-router";
 import bem from "react-bem-helper";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
-import { typeMatchLabels } from "#src/routes/typescript/-constants.ts";
+import { FromTypeCases } from "#src/routes/typescript/-components/from-type.tsx";
+import { fromTypeStyleLabels, typeMatchLabels } from "#src/routes/typescript/-constants.ts";
 import { Button } from "#src/shared/components/button/index.tsx";
 import { CodeBlock } from "#src/shared/components/code/index.tsx";
 import {
@@ -22,6 +23,33 @@ export interface TypesDetailProps {
 
 const cls = bem("types-detail");
 
+function Section({
+  title,
+  supporting,
+  children,
+}: {
+  title: string;
+  supporting: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <section {...cls("section")} aria-label={title}>
+      <hgroup {...cls("section-header")}>
+        <h4 className="typo-subtitle1">{title}</h4>
+        <p className="typo-caption">{supporting}</p>
+      </hgroup>
+      {children}
+    </section>
+  );
+}
+
+/**
+ * `chars` is the length of the type the compiler printed; a type past the results file's cap is
+ * stored as a prefix, so the text below is not all of it and has to say so.
+ */
+const charsLabel = ({ chars, truncated }: InferredType, formatCount: (value: number) => string) =>
+  `${formatCount(chars)} characters${truncated ? " · shown truncated" : ""}`;
+
 function Direction({
   title,
   direction,
@@ -32,17 +60,13 @@ function Direction({
   formatCount: (value: number) => string;
 }) {
   return (
-    <section {...cls("section")} aria-label={title}>
-      <hgroup {...cls("section-header")}>
-        <h4 className="typo-subtitle1">{title}</h4>
-        <p className="typo-caption">
-          {typeMatchLabels[direction.match].label} · {formatCount(direction.instantiations)}{" "}
-          instantiations · {formatCount(direction.chars)} characters
-        </p>
-      </hgroup>
+    <Section
+      title={title}
+      supporting={`${typeMatchLabels[direction.match].label} · ${formatCount(direction.instantiations)} instantiations · ${charsLabel(direction, formatCount)}`}
+    >
       <CodeBlock>{direction.snippet}</CodeBlock>
       <CodeBlock showCopy>{direction.text}</CodeBlock>
-    </section>
+    </Section>
   );
 }
 
@@ -72,7 +96,9 @@ export function TypesDetail({ result }: TypesDetailProps) {
                 <hgroup {...cls("header")}>
                   <DialogTitle id="types-detail-title">Inferred types</DialogTitle>
                   <p className="typo-caption">
-                    {formatCount(result.instantiations)} instantiations
+                    {result.inference
+                      ? `${formatCount(result.inference.instantiations)} instantiations`
+                      : "No inference"}
                   </p>
                 </hgroup>
                 <hgroup {...cls("header")}>
@@ -94,18 +120,46 @@ export function TypesDetail({ result }: TypesDetailProps) {
                 </div>
               </dl>
               <div {...cls("sections")}>
-                <section {...cls("section")} aria-label="Type on hover">
-                  <hgroup {...cls("section-header")}>
-                    <h4 className="typo-subtitle1">Type on hover</h4>
-                    <p className="typo-caption">
-                      {formatCount(result.schema.instantiations)} instantiations ·{" "}
-                      {formatCount(result.schema.chars)} characters
-                    </p>
-                  </hgroup>
-                  <CodeBlock showCopy>{result.schema.text}</CodeBlock>
-                </section>
-                <Direction title="Input" direction={result.input} formatCount={formatCount} />
-                <Direction title="Output" direction={result.output} formatCount={formatCount} />
+                {result.inference ? (
+                  <>
+                    <Section
+                      title="Type on hover"
+                      supporting={`${formatCount(result.inference.schema.instantiations)} instantiations · ${charsLabel(result.inference.schema, formatCount)}`}
+                    >
+                      <CodeBlock showCopy>{result.inference.schema.text}</CodeBlock>
+                    </Section>
+                    <Direction
+                      title="Input"
+                      direction={result.inference.input}
+                      formatCount={formatCount}
+                    />
+                    <Direction
+                      title="Output"
+                      direction={result.inference.output}
+                      formatCount={formatCount}
+                    />
+                  </>
+                ) : (
+                  <Section
+                    title="Inference"
+                    supporting={result.noInference ?? "The library infers no type from a schema."}
+                  />
+                )}
+                <Section
+                  title="From an existing type"
+                  supporting={
+                    result.fromType
+                      ? `${fromTypeStyleLabels[result.fromType.style].label}${result.fromType.derived ? " · the schema is generated from the type" : ""}${result.fromType.note ? ` · ${result.fromType.note}` : ""}`
+                      : "The library has no way to build a schema from a type that already exists."
+                  }
+                >
+                  {result.fromType && (
+                    <>
+                      <CodeBlock showCopy>{result.fromType.snippet}</CodeBlock>
+                      <FromTypeCases fromType={result.fromType} />
+                    </>
+                  )}
+                </Section>
               </div>
             </DialogContent>
           )}

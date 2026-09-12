@@ -22,7 +22,7 @@ export function TypesResults({ results, ...sortState }: TypesResultsProps) {
   const instantiationScaler = useMemo(
     () =>
       Bar.getScale(
-        results.map((result) => result.instantiations),
+        results.flatMap((result) => result.inference?.instantiations ?? []),
         { lowerBetter: true },
       ),
     [results],
@@ -30,7 +30,7 @@ export function TypesResults({ results, ...sortState }: TypesResultsProps) {
   const charsScaler = useMemo(
     () =>
       Bar.getScale(
-        results.map((result) => result.schema.chars),
+        results.flatMap((result) => result.inference?.schema.chars ?? []),
         { lowerBetter: true },
       ),
     [results],

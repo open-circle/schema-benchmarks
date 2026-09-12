@@ -2,6 +2,7 @@ import type { TypesResult } from "@schema-benchmarks/bench";
 import { getTransitionName, numFormatter } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
 
+import { FromTypeText } from "#src/routes/typescript/-components/from-type.tsx";
 import { MatchCheckbox } from "#src/routes/typescript/-components/match.tsx";
 import { List, ListItem, ListItemContent, ListItemInternalLink } from "#src/shared/components/list";
 import { Bar } from "#src/shared/components/table/bar.tsx";
@@ -18,7 +19,7 @@ export function TypesList({ results, instantiationScaler }: TypesListProps) {
   const formatCount = useNumberFormatter(numFormatter);
   return (
     <List aria-label="Results" {...cls()}>
-      {results.map((result) => {
+      {results.map(({ inference, ...result }) => {
         const id = getTransitionName("types-list-item", {
           libraryName: result.libraryName,
           note: result.note,
@@ -40,18 +41,25 @@ export function TypesList({ results, instantiationScaler }: TypesListProps) {
                     {result.note ? ` (${result.note})` : null}
                   </>
                 }
-                supporting={`${formatCount(result.instantiations)} instantiations, ${formatCount(result.schema.chars)} characters on hover`}
+                supporting={
+                  inference
+                    ? `${formatCount(inference.instantiations)} instantiations, ${formatCount(inference.schema.chars)} characters on hover`
+                    : "Infers no type from a schema"
+                }
                 trailing={
                   <span {...cls("matches")}>
-                    <MatchCheckbox match={result.input.match} />
-                    <MatchCheckbox match={result.output.match} />
+                    {inference && <MatchCheckbox match={inference.input.match} />}
+                    {inference && <MatchCheckbox match={inference.output.match} />}
+                    <FromTypeText fromType={result.fromType} />
                   </span>
                 }
               />
             </ListItemInternalLink>
-            <span {...cls("bar")}>
-              <Bar {...instantiationScaler(result.instantiations)} />
-            </span>
+            {inference && (
+              <span {...cls("bar")}>
+                <Bar {...instantiationScaler(inference.instantiations)} />
+              </span>
+            )}
           </ListItem>
         );
       })}
