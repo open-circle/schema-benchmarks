@@ -1,4 +1,5 @@
-import { type Type, type } from "arktype";
+import type { Satisfies } from "@schema-benchmarks/utils";
+import { type } from "arktype";
 
 import type { ProductData } from "#src";
 
@@ -30,5 +31,7 @@ export function getArkTypeSchema() {
     tags: "(1<=string<=30)[]",
     images: image.array(),
     ratings: rating.array(),
-  }) satisfies Type<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<ReturnType<typeof getArkTypeSchema>["infer"], ProductData>;

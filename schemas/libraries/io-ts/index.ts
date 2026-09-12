@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as t from "io-ts";
 import * as td from "io-ts-types";
 
@@ -50,5 +51,7 @@ export function getIotsSchema() {
       ratings: t.array(RatingData),
     },
     "ProductData",
-  ) satisfies t.Type<ProductData>;
+  );
 }
+
+export type SatisfiesTest = Satisfies<t.TypeOf<ReturnType<typeof getIotsSchema>>, ProductData>;

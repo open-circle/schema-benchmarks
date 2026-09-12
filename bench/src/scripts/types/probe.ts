@@ -111,6 +111,28 @@ const readAliases = (program: ts.Program, file: ts.SourceFile) => {
   return aliases;
 };
 
+/**
+ * Prints the type of the schema itself, exactly as an editor shows it on hover. Read off the
+ * declaration rather than a type alias: in an alias, TypeScript expands a type that is itself an
+ * alias (sury's `Schema<Input, Output>` becomes its whole structural body), which is not what a
+ * reader of the site would see.
+ */
+const readSchemaType = (program: ts.Program, file: ts.SourceFile) => {
+  const checker = program.getTypeChecker();
+  for (const node of file.statements) {
+    if (!ts.isVariableStatement(node)) continue;
+    const declaration = node.declarationList.declarations[0];
+    if (declaration?.name.getText(file) !== "probeSchema") continue;
+    return checker.typeToString(
+      checker.getTypeAtLocation(declaration.name),
+      undefined,
+      // The length of the type is a result, so it must not be truncated.
+      ts.TypeFormatFlags.NoTruncation,
+    );
+  }
+  return "";
+};
+
 /** How an inferred type relates to the data the schema is meant to describe. */
 export type TypeMatch = "exact" | "narrower" | "wider" | "any" | "mismatch";
 
@@ -129,7 +151,7 @@ export interface TypeProbeResult {
 
 const PRELUDE = `import type { ProductData } from "#src";\n`;
 const SCHEMA_DECL = (config: TypeInferenceBenchmarkConfig) =>
-  `const probeSchema = ${config.schema};\ntype ProbeSchema = typeof probeSchema;\n`;
+  `const probeSchema = ${config.schema};\n`;
 const INPUT_DECL = (config: TypeInferenceBenchmarkConfig) => `type ProbeInput = ${config.input};\n`;
 const OUTPUT_DECL = (config: TypeInferenceBenchmarkConfig) =>
   `type ProbeOutput = ${config.output};\n`;
@@ -196,7 +218,7 @@ export const probeTypes = (
     const isTrue = (name: string) => matches[name] === "true";
     return {
       schema: {
-        text: types.ProbeSchema ?? "",
+        text: readSchemaType(withBoth.program, withBoth.file),
         instantiations: schemaOnly.instantiations - baseline.instantiations,
       },
       input: {

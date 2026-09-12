@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as yup from "yup";
 
 import type { ProductData } from "#src";
@@ -30,5 +31,7 @@ export function getYupSchema() {
     tags: yup.array(yup.string().min(1).max(30).required()).required(),
     images: yup.array(imageSchema).required(),
     ratings: yup.array(ratingSchema).required(),
-  }) satisfies yup.Schema<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<yup.InferType<ReturnType<typeof getYupSchema>>, ProductData>;
