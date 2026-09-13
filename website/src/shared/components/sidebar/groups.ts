@@ -59,7 +59,10 @@ export const sidebarGroups: Array<SidebarGroup> = [
   },
   {
     key: "post-runtime",
-    links: [{ ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" }],
+    links: [
+      { ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" },
+      { ...linkOptions({ to: "/typescript" }), name: "TypeScript", icon: "code_blocks" },
+    ],
   },
   {
     key: "json-schema",

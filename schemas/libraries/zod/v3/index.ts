@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as z from "zod/v3";
 
 import type { ProductData } from "#src";
@@ -30,5 +31,7 @@ export function getZodSchema() {
     tags: z.array(z.string().min(1).max(30)),
     images: z.array(imageSchema),
     ratings: z.array(ratingSchema),
-  }) satisfies z.ZodType<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<z.output<ReturnType<typeof getZodSchema>>, ProductData>;

@@ -162,4 +162,21 @@ export default defineBenchmarks({
       assert(data);
     `,
   },
+  types: {
+    imports: ts`
+      import typia from "typia";
+      import type { TypiaSchema } from ".";
+    `,
+    schema: "null as unknown as TypiaSchema",
+    input: "typeof probeSchema",
+    output: "typeof probeSchema",
+    note: "the schema is a TypeScript type",
+    fromType: {
+      style: "builder",
+      schema: ts`
+        const probeSchema = typia.createAssert<Product>();
+      `,
+      derived: true,
+    },
+  },
 });

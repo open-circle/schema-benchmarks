@@ -17,7 +17,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "typecheck": "tsc",
-    "copy-results": "cp ../bench/bench.json ../bench/download.json ../bench/json-schema.json ../bench/stack.json ./public/",
+    "copy-results": "cp ../bench/bench.json ../bench/download.json ../bench/json-schema.json ../bench/stack.json ../bench/types.json ./public/",
     "gen-offline": "node offline/generate.ts",
     "e2e:gen-versions": "node ./e2e/scripts/gen-library-versions.ts",
     "prebuild": "pnpm copy-results",

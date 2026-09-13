@@ -49,6 +49,7 @@ minimumReleaseAgeExclude:
   - "@ttsc/unplugin@0.30.0"
   - "@ttsc/win32-arm64@0.30.0"
   - "@ttsc/win32-x64@0.30.0"
+  - sury@11.0.0
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
