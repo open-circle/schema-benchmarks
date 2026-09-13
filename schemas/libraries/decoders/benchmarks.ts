@@ -47,9 +47,9 @@ export default defineBenchmarks({
       import type { DecoderType } from "decoders";
       import { getDecoderSchema } from ".";
     `,
-    schema: "getDecoderSchema()",
-    input: "DecoderType<typeof probeSchema>",
-    output: "DecoderType<typeof probeSchema>",
+    schema: ts`getDecoderSchema()`,
+    input: ts`DecoderType<typeof probeSchema>`,
+    output: ts`DecoderType<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

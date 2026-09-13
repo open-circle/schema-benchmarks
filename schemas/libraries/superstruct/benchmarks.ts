@@ -108,9 +108,9 @@ export default defineBenchmarks({
       import type { Infer } from "superstruct";
       import { getSuperstructSchema } from ".";
     `,
-    schema: "getSuperstructSchema()",
-    input: "Infer<typeof probeSchema>",
-    output: "Infer<typeof probeSchema>",
+    schema: ts`getSuperstructSchema()`,
+    input: ts`Infer<typeof probeSchema>`,
+    output: ts`Infer<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

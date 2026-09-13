@@ -181,9 +181,9 @@ export default defineBenchmarks({
       import * as Schema from "effect/Schema";
       import { getEffectSchema } from ".";
     `,
-    schema: "getEffectSchema()",
-    input: "Schema.Schema.Encoded<typeof probeSchema>",
-    output: "Schema.Schema.Type<typeof probeSchema>",
+    schema: ts`getEffectSchema()`,
+    input: ts`Schema.Schema.Encoded<typeof probeSchema>`,
+    output: ts`Schema.Schema.Type<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

@@ -54,9 +54,9 @@ export default defineBenchmarks({
       import type { InferInput, InferOutput } from "@remix-run/data-schema";
       import { getRemixSchema } from ".";
     `,
-    schema: "getRemixSchema()",
-    input: "InferInput<typeof probeSchema>",
-    output: "InferOutput<typeof probeSchema>",
+    schema: ts`getRemixSchema()`,
+    input: ts`InferInput<typeof probeSchema>`,
+    output: ts`InferOutput<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

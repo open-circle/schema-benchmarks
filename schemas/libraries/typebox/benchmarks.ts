@@ -295,9 +295,9 @@ export default defineBenchmarks({
       import * as Type from "typebox";
       import { getTypeboxSchema } from ".";
     `,
-    schema: "getTypeboxSchema()",
-    input: "Type.StaticEncode<typeof probeSchema>",
-    output: "Type.StaticDecode<typeof probeSchema>",
+    schema: ts`getTypeboxSchema()`,
+    input: ts`Type.StaticEncode<typeof probeSchema>`,
+    output: ts`Type.StaticDecode<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

@@ -64,9 +64,9 @@ export default defineBenchmarks({
       import type { Static } from "runtypes";
       import { getRuntypesSchema } from ".";
     `,
-    schema: "getRuntypesSchema()",
-    input: "Static<typeof probeSchema>",
-    output: "Static<typeof probeSchema>",
+    schema: ts`getRuntypesSchema()`,
+    input: ts`Static<typeof probeSchema>`,
+    output: ts`Static<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

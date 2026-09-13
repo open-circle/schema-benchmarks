@@ -78,11 +78,11 @@ export default defineBenchmarks({
       import * as t from "io-ts";
       import { getIotsSchema } from ".";
     `,
-    schema: "getIotsSchema()",
+    schema: ts`getIotsSchema()`,
     // `OutputOf` is what `encode` returns; what `decode` accepts is `InputOf`, and for `t.type`
     // that is `unknown`.
-    input: "t.InputOf<typeof probeSchema>",
-    output: "t.TypeOf<typeof probeSchema>",
+    input: ts`t.InputOf<typeof probeSchema>`,
+    output: ts`t.TypeOf<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

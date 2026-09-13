@@ -89,9 +89,9 @@ export default defineBenchmarks({
       import type { InferType } from "@sapphire/shapeshift";
       import { getShapeshiftSchema } from ".";
     `,
-    schema: "getShapeshiftSchema()",
-    input: "InferType<typeof probeSchema>",
-    output: "InferType<typeof probeSchema>",
+    schema: ts`getShapeshiftSchema()`,
+    input: ts`InferType<typeof probeSchema>`,
+    output: ts`InferType<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

@@ -220,9 +220,9 @@ export default defineBenchmarks({
       import * as z from "zod";
       import { getZodSchema } from ".";
     `,
-    schema: "getZodSchema()",
-    input: "z.input<typeof probeSchema>",
-    output: "z.output<typeof probeSchema>",
+    schema: ts`getZodSchema()`,
+    input: ts`z.input<typeof probeSchema>`,
+    output: ts`z.output<typeof probeSchema>`,
     fromType: {
       style: "builder",
       schema: ts`

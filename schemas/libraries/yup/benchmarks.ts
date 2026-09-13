@@ -120,9 +120,9 @@ export default defineBenchmarks({
       import * as yup from "yup";
       import { getYupSchema } from ".";
     `,
-    schema: "getYupSchema()",
-    input: "yup.InferType<typeof probeSchema>",
-    output: "yup.InferType<typeof probeSchema>",
+    schema: ts`getYupSchema()`,
+    input: ts`yup.InferType<typeof probeSchema>`,
+    output: ts`yup.InferType<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`

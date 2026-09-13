@@ -90,9 +90,9 @@ export default defineBenchmarks({
       import type { InferSchemaType } from "@railway-ts/pipelines/schema";
       import { getRailwayTsSchema } from ".";
     `,
-    schema: "getRailwayTsSchema()",
-    input: "InferSchemaType<typeof probeSchema>",
-    output: "InferSchemaType<typeof probeSchema>",
+    schema: ts`getRailwayTsSchema()`,
+    input: ts`InferSchemaType<typeof probeSchema>`,
+    output: ts`InferSchemaType<typeof probeSchema>`,
     fromType: {
       style: "annotation",
       schema: ts`
