@@ -57,7 +57,7 @@
     "valibot": "catalog:",
     "yup": "^1.7.1",
     "z-schema": "^12.4.5",
-    "zod": "^4.6.1",
+    "zod": "^4.6.4",
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {

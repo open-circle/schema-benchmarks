@@ -14,7 +14,7 @@ const createStringBenchmark = (
 ): StringBenchmarkConfig => ({
   create() {
     const schema = factory();
-    return (testString) => z.validate(schema, testString);
+    return (testString) => schema.validate(testString);
   },
   snippet,
 });
@@ -62,15 +62,15 @@ export default defineBenchmarks({
   validation: [
     {
       run(data) {
-        return z.validate(schema, data);
+        return schema.validate(data);
       },
-      snippet: ts`z.validate(schema, data)`,
+      snippet: ts`schema.validate(data)`,
     },
     {
       run(data) {
-        return z.validate(compiledSchema, data);
+        return compiledSchema.validate(data);
       },
-      snippet: ts`z.validate(compiledSchema, data)`,
+      snippet: ts`compiledSchema.validate(data)`,
       note: "compile",
     },
   ],
