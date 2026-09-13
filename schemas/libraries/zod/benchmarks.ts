@@ -6,7 +6,7 @@ import * as z from "zod";
 import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
-import { getZodSchema } from ".";
+import { getZodSchema, getZodFactorySchema } from ".";
 
 const createStringBenchmark = (
   factory: () => z.ZodType<string>,
@@ -49,7 +49,29 @@ export default defineBenchmarks({
       run() {
         return getZodSchema();
       },
-      snippet: ts`z.object(shape)`,
+      snippet: ts`
+        z.object({
+          title: z.string().min(1).max(100),
+          ...shape
+        })
+      `,
+    },
+    {
+      run() {
+        return getZodFactorySchema();
+      },
+      note: "factory",
+      snippet: ts`
+        z.object({
+          title: z.string({ 
+            checks: [
+              z.minLength(1), 
+              z.maxLength(100)
+            ],
+          }),
+          ...shape
+        })
+      `,
     },
     {
       run() {

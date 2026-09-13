@@ -5,7 +5,7 @@ import * as z from "zod/mini";
 import type { JsonSchemaInputData, JsonSchemaOutputData, StringBenchmarkConfig } from "#src";
 import { assertNotReached, defineBenchmarks } from "#src";
 
-import { getZodMiniSchema } from ".";
+import { getZodMiniSchema, getZodMiniFactorySchema } from ".";
 
 const createStringBenchmark = (
   factory: () => z.ZodMiniType<string>,
@@ -42,7 +42,32 @@ export default defineBenchmarks({
       run() {
         return getZodMiniSchema();
       },
-      snippet: ts`z.object(shape)`,
+      snippet: ts`
+        z.object({
+          title: z.string().check(
+            z.minLength(1), 
+            z.maxLength(100),
+          ),
+          ...shape
+        })
+      `,
+    },
+    {
+      run() {
+        return getZodMiniFactorySchema();
+      },
+      note: "factory",
+      snippet: ts`
+        z.object({
+          title: z.string({ 
+            checks: [
+              z.minLength(1), 
+              z.maxLength(100),
+            ],
+          }),
+          ...shape
+        })
+      `,
     },
     {
       run() {
