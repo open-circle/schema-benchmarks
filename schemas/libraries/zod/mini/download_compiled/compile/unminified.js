@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/util.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/util.js
 function toZod() {
 	return (schema) => schema;
 }
@@ -190,7 +190,6 @@ function members(proto, table) {
 		});
 		else defineBound(proto, key, desc.value);
 	}
-	for (const sym of Object.getOwnPropertySymbols(table)) defineBound(proto, sym, table[sym]);
 }
 /** Shadows a prototype member with an own value, so a getter that builds from the instance runs once. */
 function own(inst, key, value, enumerable = true) {
@@ -306,7 +305,7 @@ function installLazyProp(inst, key, make, enumerable) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/core.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/core.js
 var _a;
 const _zodDesc = {
 	value: void 0,
@@ -351,8 +350,7 @@ function $constructor(name, initializer, proto, params) {
 			} finally {
 				_zodDesc.value = void 0;
 			}
-		}
-		if (inst._zod.traits.has(name)) return;
+		} else if (inst._zod.traits.has(name)) return;
 		inst._zod.traits.add(name);
 		initializer(inst, def);
 		if (initialized) {
@@ -407,7 +405,7 @@ function config(newConfig) {
 	return globalConfig;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/errors.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -461,7 +459,7 @@ const initializer = (inst, def) => {
 $constructor("$ZodError", initializer);
 const $ZodRealError = $constructor("$ZodError", initializer, void 0, { Parent: Error });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/parse.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => {
 	const fn = (schema, value, _ctx, _params) => {
 		const ctx = _ctx ? {
@@ -556,14 +554,14 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 };
 const safeParseAsync = /* @__PURE__*/ _safeParseAsync($ZodRealError);
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/regexes.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/regexes.js
 const httpProtocol = /^https?$/;
 const creditCard = /^\d(?:[ -]?\d){11,18}$/;
 const iban = /^[A-Z]{2}(?!00|01|99)\d{2}[A-Z0-9]{11,30}$/;
 const anyString = /^[\s\S]{0,}$/;
 const number$1 = /^-?\d+(?:\.\d+)?$/;
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/checks.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -671,7 +669,7 @@ const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat"
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/doc.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = [], closed = {}) {
 		this.content = [];
@@ -705,14 +703,14 @@ var Doc = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/versions.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 6,
-	patch: 1
+	patch: 4
 };
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/schemas.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/schemas.js
 const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -847,10 +845,27 @@ const $ZodStringFormat = /*@__PURE__*/ $constructor("$ZodStringFormat", (inst, d
 	$ZodCheckStringFormat.init(inst, def);
 	$ZodString.init(inst, def);
 });
-/** Parses a URL for `$ZodURL`, applying the one guard the URL constructor cannot express. Returns the parsed URL, or a code naming the stage that rejected it — the runtime needs that distinction to pick an issue note, and compiled code only needs to know it is not a URL. */
+function canParseURL(input) {
+	try {
+		if (typeof URL !== "undefined" && typeof URL.canParse === "function") return URL.canParse(input);
+		new URL(input);
+		return true;
+	} catch {
+		return false;
+	}
+}
+function validateURL(trimmed, def) {
+	if (!("normalize" in def) && !("hostname" in def) && !("protocol" in def)) return canParseURL(trimmed) || 2;
+	return parseURLObject(trimmed, def);
+}
+/** Parses a URL while preserving the non-normalizing HTTP guard. */
 function parseURLObject(trimmed, def) {
 	if (!def.normalize && def.protocol?.source === httpProtocol.source && !/^https?:\/\//i.test(trimmed)) return 1;
 	try {
+		if (typeof URL !== "undefined") {
+			const URLStatic = URL;
+			if (typeof URLStatic.parse === "function") return URLStatic.parse(trimmed) ?? 2;
+		}
 		return new URL(trimmed);
 	} catch {
 		return 2;
@@ -874,7 +889,7 @@ const $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 	inst._zod.check = (payload) => {
 		try {
 			const trimmed = payload.value.trim();
-			const url = parseURLObject(trimmed, def);
+			const url = validateURL(trimmed, def);
 			if (url === 1) {
 				payload.issues.push({
 					code: "invalid_format",
@@ -894,6 +909,10 @@ const $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 					inst,
 					continue: !def.abort
 				});
+				return;
+			}
+			if (url === true) {
+				payload.value = stripTabAndNewline(trimmed);
 				return;
 			}
 			if (def.hostname && !urlHostnameOk(url, def.hostname)) payload.issues.push({
@@ -931,12 +950,7 @@ const $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 const ipv6Alphabet = /^[0-9a-fA-F:.]+$/;
 function isValidIPv6(value) {
 	if (!ipv6Alphabet.test(value)) return false;
-	try {
-		new URL(`http://[${value}]`);
-		return true;
-	} catch {
-		return false;
-	}
+	return canParseURL(`http://[${value}]`);
 }
 function isValidCIDRv6(value) {
 	const parts = value.split("/");
@@ -1120,7 +1134,7 @@ function handlePropertyResult(result, final, key, input, optin, optout) {
 		return;
 	}
 	if (result.value === void 0) {
-		if (isPresent) final.value[key] = void 0;
+		if (isPresent || optin === "defaulted" && !isOptionalOut) final.value[key] = void 0;
 	} else final.value[key] = result.value;
 }
 const NO_SYMBOL_KEYS = [];
@@ -1209,7 +1223,7 @@ const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 		}
 		return propValues;
 	});
-	const isObject$1 = isObject;
+	const isObject$2 = isObject;
 	const catchall = def.catchall;
 	let value;
 	const memo = globalConfig.memoizer;
@@ -1217,7 +1231,7 @@ const $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$1(input)) {
+		if (!isObject$2(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -1346,11 +1360,11 @@ const $ZodNullable = /*@__PURE__*/ $constructor("$ZodNullable", (inst, def) => {
 	};
 });
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/memoizer.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/memoizer.js
 /** Keyed off the context object every schema in one parse call already shares. */
 const STATE = "~memo";
 function isRef(value) {
-	return value !== null && (typeof value === "object" || typeof value === "function");
+	return value !== null && typeof value === "object";
 }
 const recursive = /*@__PURE__*/ new WeakMap();
 /** What the walk established, in order of certainty: ordered so the strongest answer among children wins. */
@@ -1391,9 +1405,6 @@ function isRecursive(inst, stack, resolve) {
 			check(def.catchall);
 			break;
 		}
-		case "properties":
-			merge(shape(def.shape, false));
-			break;
 		case "array":
 			check(def.element);
 			break;
@@ -1492,7 +1503,7 @@ function isBackEdge(ctx, value) {
 	return backEdges !== void 0 && isRef(value) && backEdges.has(value);
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/compile.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/compile.js
 /** @internal Sentinel the compiled fast path returns when validation fails. */
 const INVALID = Symbol.for("zod.compile.invalid");
 const FALLBACK_FLAG = Symbol.for("zod.compile.fallback");
@@ -1764,7 +1775,7 @@ function generateChecks(doc, ctx, schema, accessor) {
 				generatePropertyCheck(doc, ctx, def, currentAccessor);
 				break;
 			case "properties":
-				generatePropertiesChecks(doc, ctx, def, currentAccessor, false);
+				generatePropertiesChecks(doc, ctx, def, currentAccessor);
 				break;
 			case "overwrite": {
 				const newAccessor = newVar(ctx);
@@ -1864,9 +1875,9 @@ function generateMimeTypeCheck(doc, ctx, def, accessor) {
 		doc.write(`if (!${mimeSet}.has(${accessor}.type)) return INVALID;`);
 	}
 }
-function generatePropertiesChecks(doc, ctx, def, accessor, schemaRole) {
+function generatePropertiesChecks(doc, ctx, def, accessor) {
 	if (def.when) throw new ZodCompileUnsupportedError(`check with a custom "when" condition`);
-	doc.write(schemaRole ? `if (${accessor} === null || (typeof ${accessor} !== "object" && typeof ${accessor} !== "function")) return INVALID;` : `if (${accessor} == null) return INVALID;`);
+	doc.write(`if (${accessor} == null) return INVALID;`);
 	const shape = def.shape;
 	for (const key of Reflect.ownKeys(shape)) {
 		const keyExpr = typeof key === "symbol" ? addConstant(ctx, key) : esc(key);
@@ -1960,7 +1971,7 @@ const PATTERN_IS_COMPLETE = /* @__PURE__ */ new Set([
 	"uuid",
 	"xid"
 ]);
-function generateStringFormatCheck(doc, ctx, def, accessor) {
+function generateStringFormatCheck(doc, ctx, def, accessor, needsValue = true) {
 	const fmt = def.format;
 	if (fmt === "base64") {
 		const validator = addConstant(ctx, isValidBase64);
@@ -2000,7 +2011,7 @@ function generateStringFormatCheck(doc, ctx, def, accessor) {
 	}
 	const formatDef = def;
 	if (fmt === "url" || fmt === "httpurl" || formatDef.normalize || formatDef.hostname !== void 0 || formatDef.protocol !== void 0) {
-		const parseConst = addConstant(ctx, parseURLObject);
+		const parseConst = addConstant(ctx, validateURL);
 		const defConst = addConstant(ctx, def);
 		const trimVar = newVar(ctx);
 		const urlVar = newVar(ctx);
@@ -2015,6 +2026,7 @@ function generateStringFormatCheck(doc, ctx, def, accessor) {
 			const protocolConst = addConstant(ctx, urlProtocolOk);
 			doc.write(`if (!${protocolConst}(${urlVar}, ${defConst}.protocol)) return INVALID;`);
 		}
+		if (!needsValue) return null;
 		const outputVar = newVar(ctx);
 		const outputExpr = formatDef.normalize ? `${urlVar}.href` : `${addConstant(ctx, stripTabAndNewline)}(${trimVar})`;
 		doc.write(`const ${outputVar} = ${outputExpr};`);
@@ -2067,7 +2079,7 @@ function generateCheck(doc, ctx, schema, accessor, needsValue = true) {
 	let typeAccessor;
 	switch (type) {
 		case "string":
-			typeAccessor = generateStringCheck(doc, ctx, schema, accessor);
+			typeAccessor = generateStringCheck(doc, ctx, schema, accessor, buildsValue);
 			break;
 		case "number":
 			typeAccessor = generateNumberCheck(doc, schema, accessor);
@@ -2173,10 +2185,6 @@ function generateCheck(doc, ctx, schema, accessor, needsValue = true) {
 		case "custom":
 			typeAccessor = generateCustomCheck(doc, ctx, schema, accessor);
 			break;
-		case "properties":
-			generatePropertiesChecks(doc, ctx, schema._zod.def, accessor, true);
-			typeAccessor = accessor;
-			break;
 		case "transform":
 			typeAccessor = generateTransformCheck(doc, ctx, schema, accessor);
 			break;
@@ -2188,11 +2196,11 @@ function generateCheck(doc, ctx, schema, accessor, needsValue = true) {
 	if (typeAccessor === null) return null;
 	return generateChecks(doc, ctx, schema, typeAccessor);
 }
-function generateStringCheck(doc, ctx, schema, accessor) {
+function generateStringCheck(doc, ctx, schema, accessor, needsValue = true) {
 	doc.write(`if (typeof ${accessor} !== "string") return INVALID;`);
 	const def = schema._zod.def;
 	if (def.format === void 0) return accessor;
-	return generateStringFormatCheck(doc, ctx, def, accessor);
+	return generateStringFormatCheck(doc, ctx, def, accessor, needsValue);
 }
 function generateNumberCheck(doc, schema, accessor) {
 	doc.write(`if (typeof ${accessor} !== "number" || !Number.isFinite(${accessor})) return INVALID;`);
@@ -2294,7 +2302,7 @@ function generateObjectCheck(doc, ctx, schema, accessor, buildsValue = true) {
 		else unknownKeysMode = "schema";
 	}
 	const outputVar = newVar(ctx);
-	const hasConditionalKeys = allKeys.some((k) => mayOutputUndefined(propShape[k]) || dropsWhenAbsent(propShape[k]));
+	const hasConditionalKeys = allKeys.some((k) => mayOmitUndefined(propShape[k]) || dropsWhenAbsent(propShape[k]));
 	if (!buildsValue) {
 		if (unknownKeysMode === "schema") {
 			const knownSet = keys.length > 0 ? addConstant(ctx, new Set(keys)) : null;
@@ -2319,7 +2327,7 @@ function generateObjectCheck(doc, ctx, schema, accessor, buildsValue = true) {
 			const kx = keyExpr(k);
 			const out = propOutputs.get(k);
 			if (dropsWhenAbsent(propShape[k])) doc.write(`if (${kx} in ${accessor}) ${outputVar}[${kx}] = ${out};`);
-			else if (mayOutputUndefined(propShape[k])) doc.write(`if (${out} !== undefined || ${kx} in ${accessor}) ${outputVar}[${kx}] = ${out};`);
+			else if (mayOmitUndefined(propShape[k])) doc.write(`if (${out} !== undefined || ${kx} in ${accessor}) ${outputVar}[${kx}] = ${out};`);
 			else doc.write(`${outputVar}[${kx}] = ${out};`);
 		}
 	}
@@ -2431,6 +2439,9 @@ function fastPathAcceptsAbsence(schema) {
 /** The middle rung permits absence without supplying anything in its place, so an absent key contributes nothing — mirrors the leading gate in `handlePropertyResult`. */
 function dropsWhenAbsent(schema) {
 	return schema._zod.optin === "optional" && schema._zod.optout === "optional";
+}
+function mayOmitUndefined(schema) {
+	return (schema._zod.optin !== "defaulted" || schema._zod.optout === "optional") && mayOutputUndefined(schema);
 }
 function mayOutputUndefined(schema) {
 	const def = schema._zod.def;
@@ -2971,13 +2982,17 @@ function generateTransformCheck(doc, ctx, schema, accessor) {
 	return accessor;
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/core/api.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/core/api.js
+function snapshotChecks(def) {
+	if (def.checks) def.checks = [...def.checks];
+	return def;
+}
 // @__NO_SIDE_EFFECTS__
 function _string(Class, params) {
-	return new Class({
+	return new Class(snapshotChecks({
 		type: "string",
 		...normalizeParams(params)
-	});
+	}));
 }
 // @__NO_SIDE_EFFECTS__
 function _url(Class, params) {
@@ -2991,11 +3006,11 @@ function _url(Class, params) {
 }
 // @__NO_SIDE_EFFECTS__
 function _number(Class, params) {
-	return new Class({
+	return new Class(snapshotChecks({
 		type: "number",
 		checks: [],
 		...normalizeParams(params)
-	});
+	}));
 }
 // @__NO_SIDE_EFFECTS__
 function _date(Class, params) {
@@ -3039,7 +3054,7 @@ function _minLength(minimum, params) {
 	});
 }
 //#endregion
-//#region ../node_modules/.pnpm/zod@4.6.1/node_modules/zod/v4/mini/schemas.js
+//#region ../node_modules/.pnpm/zod@4.6.4/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /*@__PURE__*/ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
