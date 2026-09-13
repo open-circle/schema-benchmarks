@@ -31,7 +31,10 @@ const getCompilerOptions = () => {
   if (error) throw new Error(ts.flattenDiagnosticMessageText(error.messageText, "\n"));
   const { options, errors } = ts.parseJsonConfigFileContent(config, ts.sys, SCHEMAS_DIR);
   if (errors.length) {
-    throw new Error(errors.map((e) => ts.flattenDiagnosticMessageText(e.messageText, "\n")).join());
+    throw new AggregateError(
+      errors,
+      errors.map((e) => ts.flattenDiagnosticMessageText(e.messageText, "\n")).join(),
+    );
   }
   // A probe declares more than it uses - every alias below the one being read is dead code.
   return { ...options, noUnusedLocals: false, noUnusedParameters: false };
