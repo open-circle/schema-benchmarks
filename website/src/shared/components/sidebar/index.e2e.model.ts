@@ -9,12 +9,12 @@ export class Sidebar extends ComponentObjectModel {
   menuButton = this.page.getByRole("button", { name: "Expand sidebar" });
 
   async open() {
-    await expect(async () => {
-      if (!(await this.sidebar.isVisible())) {
-        await this.menuButton.click();
-      }
-      await expect(this.sidebar).toBeVisible({ timeout: 5000 });
-    }).toPass();
+    if ((await this.sidebar.getAttribute("aria-hidden")) === "true") {
+      await this.menuButton.click();
+    }
+
+    await expect(this.sidebar).not.toHaveAttribute("aria-hidden", "true");
+    await expect(this.sidebar).toBeInViewport();
   }
 
   getLinkByName(name: string) {
