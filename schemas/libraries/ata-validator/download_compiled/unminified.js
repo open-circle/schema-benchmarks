@@ -21,8 +21,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.2.0_ata-validator@1.14.1_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
-var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.0_ata-validator@1.17.1_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
 		Array,
@@ -235,7 +235,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		["isValidJSON", "{}"],
 		["validateAndParse", "{}"]
 	];
-	function installEntries(validator, make) {
+	function installEntries(validator, make, shouldWrap) {
 		const slots = /* @__PURE__ */ new Map();
 		const state = {
 			depth: 0,
@@ -279,6 +279,14 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					validator[name](slot.probe);
 				} catch {}
 				slot.impl = validator[name];
+			}
+			if (shouldWrap && !shouldWrap()) {
+				for (const [name, slot] of slots) {
+					delete validator[name];
+					if (slot.impl !== void 0) validator[name] = slot.impl;
+					slot.call = slot.impl;
+				}
+				return;
 			}
 			for (const name of slots.keys()) {
 				delete validator[name];
@@ -331,14 +339,23 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	function withKeywords(validator) {
 		const schema = validator._schemaObj;
-		const ops = compileNode(schema);
-		if (ops.length === 0) return validator;
-		const check = buildSource(ops) || buildCheck(ops);
+		let compiled = null;
+		const compile = () => {
+			if (compiled === null) {
+				const ops = compileNode(schema);
+				compiled = ops.length === 0 ? false : {
+					ops,
+					check: buildSource(ops) || buildCheck(ops)
+				};
+			}
+			return compiled;
+		};
 		function keywordErrors(data) {
 			const errors = [];
-			runOps(data, ops, "", errors);
+			runOps(data, compile().ops, "", errors);
 			return errors.length > 0 ? errors : null;
 		}
+		const check = (data) => compile().check(data);
 		const wrappers = {
 			validate: (inner) => (data) => {
 				const res = inner(data);
@@ -384,7 +401,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				} : res;
 			}
 		};
-		installEntries(validator, (name, inner) => wrappers[name](inner));
+		installEntries(validator, (name, inner) => wrappers[name](inner), () => compile() !== false);
 		return validator;
 	}
 	withKeywords.CONSTRUCTORS = CONSTRUCTORS;
@@ -394,14 +411,136 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/keywords.js
+var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const RESERVED = /* @__PURE__ */ new Set([
+		"$id",
+		"$schema",
+		"$ref",
+		"$defs",
+		"$anchor",
+		"$dynamicRef",
+		"$dynamicAnchor",
+		"$vocabulary",
+		"$comment",
+		"definitions",
+		"type",
+		"enum",
+		"const",
+		"properties",
+		"patternProperties",
+		"additionalProperties",
+		"required",
+		"items",
+		"prefixItems",
+		"additionalItems",
+		"contains",
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"not",
+		"if",
+		"then",
+		"else",
+		"format",
+		"pattern",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"dependentSchemas",
+		"dependentRequired",
+		"dependencies",
+		"propertyNames",
+		"propertyDependencies",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf",
+		"minLength",
+		"maxLength",
+		"minItems",
+		"maxItems",
+		"uniqueItems",
+		"minContains",
+		"maxContains",
+		"minProperties",
+		"maxProperties"
+	]);
+	function normalizeKeywords(defs) {
+		if (!defs || typeof defs !== "object") return null;
+		const names = Object.keys(defs);
+		if (names.length === 0) return null;
+		const out = Object.create(null);
+		for (const name of names) {
+			const raw = defs[name];
+			const def = typeof raw === "function" ? { validate: raw } : raw;
+			if (!def || typeof def !== "object") throw new Error(`keyword "${name}": definition must be a function or an object`);
+			if (RESERVED.has(name)) throw new Error(`keyword "${name}" is a JSON Schema keyword and cannot be redefined`);
+			const hasValidate = typeof def.validate === "function";
+			const hasCompile = typeof def.compile === "function";
+			const hasMacro = typeof def.macro === "function";
+			if (!hasValidate && !hasCompile && !hasMacro) throw new Error(`keyword "${name}": definition needs validate, compile or macro` + (typeof def.code === "function" ? " (code-generating keywords are not supported)" : ""));
+			let types = null;
+			if (def.type !== void 0) {
+				types = Array.isArray(def.type) ? def.type.slice() : [def.type];
+				for (const t of types) if (typeof t !== "string") throw new Error(`keyword "${name}": type must be a string or a list of strings`);
+			}
+			out[name] = {
+				name,
+				types,
+				validate: hasValidate ? def.validate : null,
+				compile: hasCompile ? def.compile : null,
+				macro: hasMacro ? def.macro : null
+			};
+		}
+		return out;
+	}
+	function schemaUsesKeywords(schema, keywords) {
+		if (!keywords) return false;
+		const seen = /* @__PURE__ */ new Set();
+		const walk = (node, keysAreNames) => {
+			if (node === null || typeof node !== "object") return false;
+			if (seen.has(node)) return false;
+			seen.add(node);
+			if (Array.isArray(node)) {
+				for (const item of node) if (walk(item, false)) return true;
+				return false;
+			}
+			for (const key of Object.keys(node)) {
+				if (!keysAreNames && keywords[key] !== void 0) return true;
+				const v = node[key];
+				if (v !== null && typeof v === "object") {
+					if (walk(v, !keysAreNames && NAME_MAPS.has(key))) return true;
+				}
+			}
+			return false;
+		};
+		return walk(schema, false);
+	}
+	const NAME_MAPS = /* @__PURE__ */ new Set([
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas",
+		"dependentRequired",
+		"dependencies",
+		"propertyDependencies"
+	]);
+	module.exports = {
+		normalizeKeywords,
+		schemaUsesKeywords
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -715,7 +854,111 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-order.js
+var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
+	const _rankCache = /* @__PURE__ */ new WeakMap();
+	const _ordinalCache = /* @__PURE__ */ new WeakMap();
+	function keyIndex(node, seg) {
+		let index = _keyIndexCache.get(node);
+		if (index === void 0) {
+			index = /* @__PURE__ */ new Map();
+			const keys = Object.keys(node);
+			for (let i = 0; i < keys.length; i++) index.set(keys[i], i);
+			_keyIndexCache.set(node, index);
+		}
+		const at = index.get(seg);
+		return at === void 0 ? -1 : at;
+	}
+	function unescapePointerSegment(seg) {
+		return seg.indexOf("~") < 0 ? seg : seg.replace(/~1/g, "/").replace(/~0/g, "~");
+	}
+	function escapePointerSegment(seg) {
+		return seg.indexOf("~") < 0 && seg.indexOf("/") < 0 ? seg : seg.replace(/~/g, "~0").replace(/\//g, "~1");
+	}
+	function rankFor(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return null;
+		if (rootSchema === null || typeof rootSchema !== "object") return null;
+		let byPath = _rankCache.get(rootSchema);
+		if (byPath === void 0) {
+			byPath = /* @__PURE__ */ new Map();
+			_rankCache.set(rootSchema, byPath);
+		}
+		const hit = byPath.get(schemaPath);
+		if (hit !== void 0) return hit;
+		const rank = computeRank(rootSchema, schemaPath);
+		byPath.set(schemaPath, rank);
+		return rank;
+	}
+	function computeRank(rootSchema, schemaPath) {
+		const rank = [];
+		let node = rootSchema;
+		let start = 1;
+		while (start <= schemaPath.length) {
+			let end = schemaPath.indexOf("/", start);
+			if (end < 0) end = schemaPath.length;
+			if (end === start) {
+				start = end + 1;
+				continue;
+			}
+			const seg = unescapePointerSegment(schemaPath.slice(start, end));
+			start = end + 1;
+			if (node == null || typeof node !== "object") break;
+			if (Array.isArray(node)) {
+				const idx = Number(seg);
+				if (!Number.isInteger(idx) || idx < 0 || idx >= node.length) break;
+				rank.push(idx);
+				node = node[idx];
+			} else {
+				const idx = keyIndex(node, seg);
+				if (idx < 0) break;
+				rank.push(idx);
+				node = node[seg];
+			}
+		}
+		return rank;
+	}
+	function ordinals(rootSchema) {
+		let map = _ordinalCache.get(rootSchema);
+		if (map !== void 0) return map;
+		map = /* @__PURE__ */ new Map();
+		const seen = /* @__PURE__ */ new Set();
+		let next = 0;
+		const walk = (node, pointer) => {
+			map.set(pointer, next++);
+			if (node === null || typeof node !== "object") return;
+			if (seen.has(node)) return;
+			seen.add(node);
+			if (Array.isArray(node)) for (let i = 0; i < node.length; i++) walk(node[i], pointer + "/" + i);
+			else for (const key of Object.keys(node)) walk(node[key], pointer + "/" + escapePointerSegment(key));
+		};
+		walk(rootSchema, "#");
+		_ordinalCache.set(rootSchema, map);
+		return map;
+	}
+	function ordinalFor(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || schemaPath.charCodeAt(0) !== 35) return null;
+		if (rootSchema === null || typeof rootSchema !== "object") return null;
+		const map = ordinals(rootSchema);
+		const hit = map.get(schemaPath);
+		if (hit !== void 0) return hit;
+		let p = schemaPath;
+		while (true) {
+			const cut = p.lastIndexOf("/");
+			if (cut < 0) return 0;
+			p = p.slice(0, cut);
+			const o = map.get(p);
+			if (o !== void 0) return o;
+		}
+	}
+	module.exports = {
+		rankFor,
+		ordinalFor,
+		unescapePointerSegment
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -1397,7 +1640,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -1412,7 +1655,8 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		const m = (s.charCodeAt(5) - 48) * 10 + (s.charCodeAt(6) - 48);
 		const d = (s.charCodeAt(8) - 48) * 10 + (s.charCodeAt(9) - 48);
-		return m >= 1 && m <= 12 && d >= 1 && d <= 31;
+		if (m < 1 || m > 12 || d < 1) return false;
+		return d <= daysInMonth((s.charCodeAt(0) - 48) * 1e3 + (s.charCodeAt(1) - 48) * 100 + (s.charCodeAt(2) - 48) * 10 + (s.charCodeAt(3) - 48), m);
 	}
 	function daysInMonth(year, month) {
 		if (month === 2) return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0 ? 29 : 28;
@@ -1445,7 +1689,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const mi0 = s.charCodeAt(14) - 48, mi1 = s.charCodeAt(15) - 48;
 		if (mi0 >>> 0 > 5 || mi1 >>> 0 > 9) return false;
 		const se0 = s.charCodeAt(17) - 48, se1 = s.charCodeAt(18) - 48;
-		if (se0 >>> 0 > 5 || se1 >>> 0 > 9) return false;
+		if (se0 >>> 0 > 6 || se1 >>> 0 > 9 || se0 * 10 + se1 > 60) return false;
 		let i = 19;
 		if (s.charCodeAt(i) === 46) {
 			i++;
@@ -1458,14 +1702,24 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (i === start) return false;
 		}
 		const c = s.charCodeAt(i);
-		if (c === 90 || c === 122) return i === n - 1;
-		if (c !== 43 && c !== 45) return false;
-		if (n - i !== 6) return false;
-		if (!isDigit(s.charCodeAt(i + 1)) || !isDigit(s.charCodeAt(i + 2))) return false;
-		if (s.charCodeAt(i + 3) !== 58) return false;
-		if (!isDigit(s.charCodeAt(i + 4)) || !isDigit(s.charCodeAt(i + 5))) return false;
-		if (twoDigits(s, i + 1) > 23) return false;
-		if (twoDigits(s, i + 4) > 59) return false;
+		const sec = se0 * 10 + se1;
+		const hh = h0 * 10 + h1, mi = mi0 * 10 + mi1;
+		let offMin = 0;
+		if (c === 90 || c === 122) {
+			if (i !== n - 1) return false;
+		} else {
+			if (c !== 43 && c !== 45) return false;
+			if (n - i !== 6) return false;
+			if (!isDigit(s.charCodeAt(i + 1)) || !isDigit(s.charCodeAt(i + 2))) return false;
+			if (s.charCodeAt(i + 3) !== 58) return false;
+			if (!isDigit(s.charCodeAt(i + 4)) || !isDigit(s.charCodeAt(i + 5))) return false;
+			const oh = twoDigits(s, i + 1), om = twoDigits(s, i + 4);
+			if (oh > 23 || om > 59) return false;
+			offMin = (c === 43 ? 1 : -1) * (oh * 60 + om);
+		}
+		if (sec === 60) {
+			if (((hh * 60 + mi - offMin) % 1440 + 1440) % 1440 !== 1439) return false;
+		}
 		return true;
 	}
 	function ipv4(s) {
@@ -1573,9 +1827,118 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (!(isDigit(c) || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 43 || c === 45 || c === 46)) return false;
 		}
 		if (colon === -1) return false;
-		return noReserved(s, colon + 1);
+		return uriChars(s, colon + 1) && uriAuthority(s, colon + 1);
 	}
 	const NON_PRINTABLE = /[^\u0021-\u007e]/;
+	function uriChar(c) {
+		if (c < 33 || c > 126) return false;
+		return !(c === 34 || c === 60 || c === 62 || c === 92 || c === 94 || c === 96 || c === 123 || c === 124 || c === 125);
+	}
+	function isHex(c) {
+		return c >= 48 && c <= 57 || c >= 97 && c <= 102 || c >= 65 && c <= 70;
+	}
+	function uriChars(s, from) {
+		for (let i = from; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (!uriChar(c)) return false;
+			if (c === 37) {
+				if (!isHex(s.charCodeAt(i + 1)) || !isHex(s.charCodeAt(i + 2))) return false;
+				i += 2;
+			}
+		}
+		return true;
+	}
+	const uriCharsSource = (v, from) => `for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc<33||_rc>126||_rc===34||_rc===60||_rc===62||_rc===92||_rc===94||_rc===96||_rc===123||_rc===124||_rc===125)return false;if(_rc===37){const _h1=${v}.charCodeAt(_ri+1),_h2=${v}.charCodeAt(_ri+2);if(!((_h1>=48&&_h1<=57)||(_h1>=97&&_h1<=102)||(_h1>=65&&_h1<=70))||!((_h2>=48&&_h2<=57)||(_h2>=97&&_h2<=102)||(_h2>=65&&_h2<=70)))return false;_ri+=2}}`;
+	function uriAuthority(s, start) {
+		if (s.charCodeAt(start) !== 47 || s.charCodeAt(start + 1) !== 47) return true;
+		let end = s.length;
+		for (let i = start + 2; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 47 || c === 63 || c === 35) {
+				end = i;
+				break;
+			}
+		}
+		const auth = s.slice(start + 2, end);
+		const at = auth.lastIndexOf("@");
+		if (at !== -1 && /[[\]]/.test(auth.slice(0, at))) return false;
+		const hostPort = at === -1 ? auth : auth.slice(at + 1);
+		if (hostPort.charCodeAt(0) === 91) {
+			const close = hostPort.indexOf("]");
+			if (close === -1) return false;
+			const rest = hostPort.slice(close + 1);
+			if (rest === "") return true;
+			if (rest.charCodeAt(0) !== 58) return false;
+			return /^[0-9]*$/.test(rest.slice(1));
+		}
+		const colon = hostPort.lastIndexOf(":");
+		if (colon === -1) return true;
+		if (hostPort.indexOf(":") !== colon) return false;
+		return /^[0-9]*$/.test(hostPort.slice(colon + 1));
+	}
+	const uriAuthoritySource = (v, start) => `if(${v}.charCodeAt(${start})===47&&${v}.charCodeAt(${start}+1)===47){let _ae=${v}.length;for(let _ai=${start}+2;_ai<${v}.length;_ai++){const _ac=${v}.charCodeAt(_ai);if(_ac===47||_ac===63||_ac===35){_ae=_ai;break}}const _au=${v}.slice(${start}+2,_ae);const _aat=_au.lastIndexOf('@');if(_aat!==-1&&/[[\\]]/.test(_au.slice(0,_aat)))return false;const _hp=_aat===-1?_au:_au.slice(_aat+1);if(_hp.charCodeAt(0)===91){const _cl=_hp.indexOf("]");if(_cl===-1)return false;const _rs=_hp.slice(_cl+1);if(_rs!==""){if(_rs.charCodeAt(0)!==58||!/^[0-9]*\$/.test(_rs.slice(1)))return false}}else{const _co=_hp.lastIndexOf(":");if(_co!==-1){if(_hp.indexOf(":")!==_co)return false;if(!/^[0-9]*\$/.test(_hp.slice(_co+1)))return false}}}`;
+	function iriChar(c) {
+		return c > 126 ? c !== 127 : uriChar(c);
+	}
+	function iriChars(s, from) {
+		for (let i = from; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (!iriChar(c)) return false;
+			if (c === 37) {
+				if (!isHex(s.charCodeAt(i + 1)) || !isHex(s.charCodeAt(i + 2))) return false;
+				i += 2;
+			}
+		}
+		return true;
+	}
+	const iriCharsSource = (v, from) => `for(let _ii=${from};_ii<${v}.length;_ii++){const _ic=${v}.charCodeAt(_ii);if(_ic===127||(_ic<127&&(_ic<33||_ic===34||_ic===60||_ic===62||_ic===92||_ic===94||_ic===96||_ic===123||_ic===124||_ic===125)))return false;if(_ic===37){const _j1=${v}.charCodeAt(_ii+1),_j2=${v}.charCodeAt(_ii+2);if(!((_j1>=48&&_j1<=57)||(_j1>=97&&_j1<=102)||(_j1>=65&&_j1<=70))||!((_j2>=48&&_j2<=57)||(_j2>=97&&_j2<=102)||(_j2>=65&&_j2<=70)))return false;_ii+=2}}`;
+	function iri(s) {
+		const n = s.length;
+		if (n === 0) return false;
+		const first = s.charCodeAt(0);
+		if (!(first >= 97 && first <= 122 || first >= 65 && first <= 90)) return false;
+		let colon = -1;
+		for (let i = 1; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 58) {
+				colon = i;
+				break;
+			}
+			if (!(isDigit(c) || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 43 || c === 45 || c === 46)) return false;
+		}
+		if (colon === -1) return false;
+		return iriChars(s, colon + 1) && uriAuthority(s, colon + 1);
+	}
+	function iriSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + iriCharsSource(v, "_co+1") + uriAuthoritySource(v, "_co+1"));
+	}
+	function iriReference(s) {
+		return iriChars(s, 0);
+	}
+	function iriReferenceSource(v, isStr) {
+		return guard(v, isStr, iriCharsSource(v, "0"));
+	}
+	function idnEmail(s) {
+		const at = s.lastIndexOf("@");
+		if (at <= 0 || at === s.length - 1) return false;
+		const local = s.slice(0, at);
+		const domain = s.slice(at + 1);
+		if (local.charCodeAt(0) === 34) return local.length >= 2 && local.charCodeAt(local.length - 1) === 34 && domain.length > 0;
+		if (local.charCodeAt(0) === 46 || local.charCodeAt(local.length - 1) === 46) return false;
+		if (local.indexOf("..") !== -1) return false;
+		if (domain.charCodeAt(0) === 91) return domain.charCodeAt(domain.length - 1) === 93 && domain.length > 2;
+		if (domain.charCodeAt(0) === 46 || domain.charCodeAt(domain.length - 1) === 46) return false;
+		if (domain.indexOf("..") !== -1) return false;
+		for (let i = 0; i < domain.length; i++) {
+			const c = domain.charCodeAt(i);
+			if (c <= 32 || c === 127 || c === 64) return false;
+		}
+		return true;
+	}
+	function idnEmailSource(v, isStr) {
+		const inner = `const _at=${v}.lastIndexOf('@');if(_at<=0||_at===${v}.length-1)return false;const _lp=${v}.slice(0,_at),_dm=${v}.slice(_at+1);if(_lp.charCodeAt(0)===34){if(_lp.length<2||_lp.charCodeAt(_lp.length-1)!==34||_dm.length===0)return false}else{if(_lp.charCodeAt(0)===46||_lp.charCodeAt(_lp.length-1)===46)return false;if(_lp.indexOf('..')!==-1)return false;if(_dm.charCodeAt(0)===91){if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false}else{if(_dm.charCodeAt(0)===46||_dm.charCodeAt(_dm.length-1)===46)return false;if(_dm.indexOf('..')!==-1)return false;for(let _di=0;_di<_dm.length;_di++){const _dc=_dm.charCodeAt(_di);if(_dc<=32||_dc===127||_dc===64)return false}}}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
 	function noReserved(s, from) {
 		if (!NON_PRINTABLE.test(s)) return true;
 		const n = s.length;
@@ -1611,7 +1974,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const m1 = s.charCodeAt(3) - 48, m2 = s.charCodeAt(4) - 48;
 		if (m1 >>> 0 > 5 || m2 >>> 0 > 9) return false;
 		const c1 = s.charCodeAt(6) - 48, c2 = s.charCodeAt(7) - 48;
-		if (c1 >>> 0 > 5 || c2 >>> 0 > 9) return false;
+		if (c1 >>> 0 > 6 || c2 >>> 0 > 9 || c1 * 10 + c2 > 60) return false;
 		let i = 8;
 		if (i < n && s.charCodeAt(i) === 46) {
 			i++;
@@ -1622,28 +1985,40 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 			if (i === start) return false;
 		}
-		if (i === n) return true;
+		if (i === n) return false;
+		const hh = h1 * 10 + h2, mm = m1 * 10 + m2, ss = c1 * 10 + c2;
 		const z = s.charCodeAt(i);
-		if (z === 90 || z === 122) return i === n - 1;
-		if (z !== 43 && z !== 45) return false;
-		if (n - i !== 6 || s.charCodeAt(i + 3) !== 58) return false;
-		for (let k = 1; k <= 5; k++) {
-			if (k === 3) continue;
-			if (s.charCodeAt(i + k) - 48 >>> 0 > 9) return false;
+		let offMin = 0;
+		if (z === 90 || z === 122) {
+			if (i !== n - 1) return false;
+		} else {
+			if (z !== 43 && z !== 45) return false;
+			if (n - i !== 6 || s.charCodeAt(i + 3) !== 58) return false;
+			for (let k = 1; k <= 5; k++) {
+				if (k === 3) continue;
+				if (s.charCodeAt(i + k) - 48 >>> 0 > 9) return false;
+			}
+			const oh = (s.charCodeAt(i + 1) - 48) * 10 + (s.charCodeAt(i + 2) - 48);
+			const om = (s.charCodeAt(i + 4) - 48) * 10 + (s.charCodeAt(i + 5) - 48);
+			if (oh > 23 || om > 59) return false;
+			offMin = (z === 43 ? 1 : -1) * (oh * 60 + om);
+		}
+		if (ss === 60) {
+			if (((hh * 60 + mm - offMin) % 1440 + 1440) % 1440 !== 1439) return false;
 		}
 		return true;
 	}
 	function uriReference(s) {
-		return noReserved(s, 0);
+		return uriChars(s, 0);
 	}
 	function guard(v, isStr, body) {
 		return isStr ? `{${body}}` : `if(typeof ${v}==='string'){${body}}`;
 	}
 	function dateSource(v, isStr) {
-		return guard(v, isStr, `if(${v}.length!==10)return false;for(let _i=0;_i<10;_i++){const _c=${v}.charCodeAt(_i);if(_i===4||_i===7){if(_c!==45)return false}else if(_c<48||_c>57)return false}const _m=(${v}.charCodeAt(5)-48)*10+(${v}.charCodeAt(6)-48),_d=(${v}.charCodeAt(8)-48)*10+(${v}.charCodeAt(9)-48);if(_m<1||_m>12||_d<1||_d>31)return false`);
+		return guard(v, isStr, `if(${v}.length!==10)return false;for(let _i=0;_i<10;_i++){const _c=${v}.charCodeAt(_i);if(_i===4||_i===7){if(_c!==45)return false}else if(_c<48||_c>57)return false}const _m=(${v}.charCodeAt(5)-48)*10+(${v}.charCodeAt(6)-48),_d=(${v}.charCodeAt(8)-48)*10+(${v}.charCodeAt(9)-48);if(_m<1||_m>12||_d<1)return false;const _y=(${v}.charCodeAt(0)-48)*1000+(${v}.charCodeAt(1)-48)*100+(${v}.charCodeAt(2)-48)*10+(${v}.charCodeAt(3)-48);const _dim=_m===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):((_m===4||_m===6||_m===9||_m===11)?30:31);if(_d>_dim)return false`);
 	}
 	function dateTimeSource(v, isStr) {
-		return guard(v, isStr, `const _n=${v}.length;if(_n<20)return false;if(${v}.charCodeAt(4)!==45||${v}.charCodeAt(7)!==45)return false;const _sep=${v}.charCodeAt(10);if(_sep!==84&&_sep!==116)return false;if(${v}.charCodeAt(13)!==58||${v}.charCodeAt(16)!==58)return false;const _y0=${v}.charCodeAt(0)-48,_y1=${v}.charCodeAt(1)-48,_y2=${v}.charCodeAt(2)-48,_y3=${v}.charCodeAt(3)-48;if((_y0>>>0)>9||(_y1>>>0)>9||(_y2>>>0)>9||(_y3>>>0)>9)return false;const _y=_y0*1000+_y1*100+_y2*10+_y3;const _mo0=${v}.charCodeAt(5)-48,_mo1=${v}.charCodeAt(6)-48;if((_mo0>>>0)>9||(_mo1>>>0)>9)return false;const _mo=_mo0*10+_mo1;if(_mo<1||_mo>12)return false;const _dm=_mo===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):(_mo===4||_mo===6||_mo===9||_mo===11?30:31);const _d0=${v}.charCodeAt(8)-48,_d1=${v}.charCodeAt(9)-48;if((_d0>>>0)>9||(_d1>>>0)>9)return false;const _d=_d0*10+_d1;if(_d<1||_d>_dm)return false;const _h0=${v}.charCodeAt(11)-48,_h1=${v}.charCodeAt(12)-48;if((_h0>>>0)>9||(_h1>>>0)>9||_h0*10+_h1>23)return false;const _mi0=${v}.charCodeAt(14)-48,_mi1=${v}.charCodeAt(15)-48;if((_mi0>>>0)>5||(_mi1>>>0)>9)return false;const _se0=${v}.charCodeAt(17)-48,_se1=${v}.charCodeAt(18)-48;if((_se0>>>0)>5||(_se1>>>0)>9)return false;let _i2=19;if(${v}.charCodeAt(19)===46){_i2=20;const _st=_i2;while(_i2<_n){const _c2=${v}.charCodeAt(_i2);if(_c2<48||_c2>57)break;_i2++}if(_i2===_st)return false}const _tz=${v}.charCodeAt(_i2);if(_tz===90||_tz===122){if(_i2!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_i2!==6)return false;const _oh=${v}.charCodeAt(_i2+1),_oh2=${v}.charCodeAt(_i2+2),_om=${v}.charCodeAt(_i2+4),_om2=${v}.charCodeAt(_i2+5);if(_oh<48||_oh>57||_oh2<48||_oh2>57||_om<48||_om>57||_om2<48||_om2>57)return false;if(${v}.charCodeAt(_i2+3)!==58)return false;if((_oh-48)*10+(_oh2-48)>23)return false;if((_om-48)*10+(_om2-48)>59)return false}`);
+		return guard(v, isStr, `const _n=${v}.length;if(_n<20)return false;if(${v}.charCodeAt(4)!==45||${v}.charCodeAt(7)!==45)return false;const _sep=${v}.charCodeAt(10);if(_sep!==84&&_sep!==116)return false;if(${v}.charCodeAt(13)!==58||${v}.charCodeAt(16)!==58)return false;const _y0=${v}.charCodeAt(0)-48,_y1=${v}.charCodeAt(1)-48,_y2=${v}.charCodeAt(2)-48,_y3=${v}.charCodeAt(3)-48;if((_y0>>>0)>9||(_y1>>>0)>9||(_y2>>>0)>9||(_y3>>>0)>9)return false;const _y=_y0*1000+_y1*100+_y2*10+_y3;const _mo0=${v}.charCodeAt(5)-48,_mo1=${v}.charCodeAt(6)-48;if((_mo0>>>0)>9||(_mo1>>>0)>9)return false;const _mo=_mo0*10+_mo1;if(_mo<1||_mo>12)return false;const _dm=_mo===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):(_mo===4||_mo===6||_mo===9||_mo===11?30:31);const _d0=${v}.charCodeAt(8)-48,_d1=${v}.charCodeAt(9)-48;if((_d0>>>0)>9||(_d1>>>0)>9)return false;const _d=_d0*10+_d1;if(_d<1||_d>_dm)return false;const _h0=${v}.charCodeAt(11)-48,_h1=${v}.charCodeAt(12)-48;if((_h0>>>0)>9||(_h1>>>0)>9||_h0*10+_h1>23)return false;const _mi0=${v}.charCodeAt(14)-48,_mi1=${v}.charCodeAt(15)-48;if((_mi0>>>0)>5||(_mi1>>>0)>9)return false;const _se0=${v}.charCodeAt(17)-48,_se1=${v}.charCodeAt(18)-48;if((_se0>>>0)>6||(_se1>>>0)>9||_se0*10+_se1>60)return false;let _i2=19;if(${v}.charCodeAt(19)===46){_i2=20;const _st=_i2;while(_i2<_n){const _c2=${v}.charCodeAt(_i2);if(_c2<48||_c2>57)break;_i2++}if(_i2===_st)return false}const _tz=${v}.charCodeAt(_i2);let _dtoff=0;if(_tz===90||_tz===122){if(_i2!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_i2!==6)return false;const _oh=${v}.charCodeAt(_i2+1),_oh2=${v}.charCodeAt(_i2+2),_om=${v}.charCodeAt(_i2+4),_om2=${v}.charCodeAt(_i2+5);if(_oh<48||_oh>57||_oh2<48||_oh2>57||_om<48||_om>57||_om2<48||_om2>57)return false;if(${v}.charCodeAt(_i2+3)!==58)return false;const _ohv=(_oh-48)*10+(_oh2-48),_omv=(_om-48)*10+(_om2-48);if(_ohv>23||_omv>59)return false;_dtoff=(_tz===43?1:-1)*(_ohv*60+_omv)}if(_se0*10+_se1===60){const _dtu=(((_h0*10+_h1)*60+(_mi0*10+_mi1)-_dtoff)%1440+1440)%1440;if(_dtu!==1439)return false}`);
 	}
 	function hostnameSource(v, isStr) {
 		return guard(v, isStr, `const _n=${v}.length;if(_n===0||_n>253)return false;let _ll=0,_pv=46;for(let _i=0;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===46){if(_ll===0||_pv===45)return false;_ll=0;_pv=_c;continue}const _an=(_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90);if(!_an&&_c!==45)return false;if(_c===45&&_pv===46)return false;if(++_ll>63)return false;_pv=_c}if(_ll===0||_pv===45)return false`);
@@ -1653,16 +2028,108 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return guard(v, isStr, `if(${v}.length!==36)return false;if(${v}.charCodeAt(8)!==45||${v}.charCodeAt(13)!==45||${v}.charCodeAt(18)!==45||${v}.charCodeAt(23)!==45)return false;` + run(0, 8) + run(9, 13) + run(14, 18) + run(19, 23) + run(24, 36));
 	}
 	function timeSource(v, isStr) {
-		return guard(v, isStr, `const _n=${v}.length;if(_n<8)return false;const _h1=${v}.charCodeAt(0)-48,_h2=${v}.charCodeAt(1)-48;if((_h1>>>0)>9||(_h2>>>0)>9||_h1*10+_h2>23)return false;if(${v}.charCodeAt(2)!==58||${v}.charCodeAt(5)!==58)return false;const _m1=${v}.charCodeAt(3)-48,_m2=${v}.charCodeAt(4)-48;if((_m1>>>0)>5||(_m2>>>0)>9)return false;const _s1=${v}.charCodeAt(6)-48,_s2=${v}.charCodeAt(7)-48;if((_s1>>>0)>5||(_s2>>>0)>9)return false;let _ti=8;if(_ti<_n&&${v}.charCodeAt(_ti)===46){_ti++;const _tf=_ti;while(_ti<_n){const _tc=${v}.charCodeAt(_ti)-48;if((_tc>>>0)>9)break;_ti++}if(_ti===_tf)return false}if(_ti!==_n){const _tz=${v}.charCodeAt(_ti);if(_tz===90||_tz===122){if(_ti!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_ti!==6||${v}.charCodeAt(_ti+3)!==58)return false;if((${v}.charCodeAt(_ti+1)-48>>>0)>9||(${v}.charCodeAt(_ti+2)-48>>>0)>9||(${v}.charCodeAt(_ti+4)-48>>>0)>9||(${v}.charCodeAt(_ti+5)-48>>>0)>9)return false}}`);
+		return guard(v, isStr, `const _n=${v}.length;if(_n<8)return false;const _h1=${v}.charCodeAt(0)-48,_h2=${v}.charCodeAt(1)-48;if((_h1>>>0)>9||(_h2>>>0)>9||_h1*10+_h2>23)return false;if(${v}.charCodeAt(2)!==58||${v}.charCodeAt(5)!==58)return false;const _m1=${v}.charCodeAt(3)-48,_m2=${v}.charCodeAt(4)-48;if((_m1>>>0)>5||(_m2>>>0)>9)return false;const _s1=${v}.charCodeAt(6)-48,_s2=${v}.charCodeAt(7)-48;if((_s1>>>0)>6||(_s2>>>0)>9||_s1*10+_s2>60)return false;let _ti=8;if(_ti<_n&&${v}.charCodeAt(_ti)===46){_ti++;const _tf=_ti;while(_ti<_n){const _tc=${v}.charCodeAt(_ti)-48;if((_tc>>>0)>9)break;_ti++}if(_ti===_tf)return false}if(_ti===_n)return false;const _tz=${v}.charCodeAt(_ti);let _off=0;if(_tz===90||_tz===122){if(_ti!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_ti!==6||${v}.charCodeAt(_ti+3)!==58)return false;if((${v}.charCodeAt(_ti+1)-48>>>0)>9||(${v}.charCodeAt(_ti+2)-48>>>0)>9||(${v}.charCodeAt(_ti+4)-48>>>0)>9||(${v}.charCodeAt(_ti+5)-48>>>0)>9)return false;const _oh=(${v}.charCodeAt(_ti+1)-48)*10+(${v}.charCodeAt(_ti+2)-48),_om=(${v}.charCodeAt(_ti+4)-48)*10+(${v}.charCodeAt(_ti+5)-48);if(_oh>23||_om>59)return false;_off=(_tz===43?1:-1)*(_oh*60+_om)}if(_s1*10+_s2===60){const _u=(((_h1*10+_h2)*60+(_m1*10+_m2)-_off)%1440+1440)%1440;if(_u!==1439)return false}`);
 	}
 	function uriSource(v, isStr) {
-		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + noReservedSource(v, "_co+1"));
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + uriCharsSource(v, "_co+1") + uriAuthoritySource(v, "_co+1"));
 	}
 	function ipv6Source(v, isStr) {
 		return guard(v, isStr, `const _n=${v}.length;if(_n<2||_n>45)return false;let _end=_n,_g=0;const _dot=${v}.indexOf('.');if(_dot!==-1){const _lc=${v}.lastIndexOf(':',_dot);if(_lc===-1)return false;{const _f=_lc+1,_t=_n,_ln=_t-_f;if(_ln<7||_ln>15)return false;let _o=0,_val=0,_dg=0;for(let _i=_f;_i<=_t;_i++){const _c=_i<_t?${v}.charCodeAt(_i):46;if(_c===46){if(_dg===0||_val>255)return false;_o++;_val=0;_dg=0;if(_o>4)return false}else if(_c>=48&&_c<=57){if(_dg===1&&_val===0)return false;_val=_val*10+(_c-48);_dg++;if(_dg>3)return false}else return false}if(_o!==4)return false}_end=_lc+1;_g=2}let _cp=false,_dg2=0,_i2=0;if(${v}.charCodeAt(0)===58&&${v}.charCodeAt(1)!==58)return false;while(_i2<_end){const _c2=${v}.charCodeAt(_i2);if(_c2===58){if(_dg2>0){_g++;_dg2=0}if(_i2+1<_n&&${v}.charCodeAt(_i2+1)===58){if(_cp)return false;_cp=true;_i2+=2;if(_i2<_n&&${v}.charCodeAt(_i2)===58)return false;continue}_i2++;if(_i2===_end&&_end===_n)return false;continue}if((_c2>=48&&_c2<=57)||(_c2>=97&&_c2<=102)||(_c2>=65&&_c2<=70)){if(++_dg2>4)return false;_i2++;continue}return false}if(_dg2>0)_g++;if(_g>8)return false;if(_cp){if(_g>=8)return false}else if(_g!==8)return false`);
 	}
 	function ipv4Source(v, isStr) {
 		return guard(v, isStr, `const _n=${v}.length;if(_n<7||_n>15)return false;let _o=0,_val=0,_dg=0;for(let _i=0;_i<=_n;_i++){const _c=_i<_n?${v}.charCodeAt(_i):46;if(_c===46){if(_dg===0||_val>255)return false;_o++;_val=0;_dg=0;if(_o>4)return false}else if(_c>=48&&_c<=57){if(_dg===1&&_val===0)return false;_val=_val*10+(_c-48);_dg++;if(_dg>3)return false}else return false}if(_o!==4)return false`);
+	}
+	function jsonPointer(s) {
+		if (s === "") return true;
+		if (s.charCodeAt(0) !== 47) return false;
+		for (let i = 0; i < s.length; i++) {
+			if (s.charCodeAt(i) !== 126) continue;
+			const n = s.charCodeAt(i + 1);
+			if (n !== 48 && n !== 49) return false;
+		}
+		return true;
+	}
+	function jsonPointerSource(v, isStr) {
+		const body = `{let _ok=${v}==='';if(!_ok&&${v}.charCodeAt(0)===47){_ok=true;for(let _i=0;_i<${v}.length;_i++){if(${v}.charCodeAt(_i)!==126)continue;const _n=${v}.charCodeAt(_i+1);if(_n!==48&&_n!==49){_ok=false;break}}}if(!_ok)return false}`;
+		return isStr ? body : `if(typeof ${v}==='string')${body}`;
+	}
+	function relativeJsonPointer(s) {
+		let i = 0;
+		while (i < s.length) {
+			const c = s.charCodeAt(i);
+			if (c < 48 || c > 57) break;
+			i++;
+		}
+		if (i === 0) return false;
+		if (i > 1 && s.charCodeAt(0) === 48) return false;
+		const rest = s.slice(i);
+		if (rest === "#") return true;
+		return jsonPointer(rest);
+	}
+	function relativeJsonPointerSource(v, isStr) {
+		const body = `{let _i=0;while(_i<${v}.length){const _c=${v}.charCodeAt(_i);if(_c<48||_c>57)break;_i++}let _ok=_i>0&&!(_i>1&&${v}.charCodeAt(0)===48);if(_ok){const _r=${v}.slice(_i);if(_r!=='#'){_ok=_r==='';if(!_ok&&_r.charCodeAt(0)===47){_ok=true;for(let _j=0;_j<_r.length;_j++){if(_r.charCodeAt(_j)!==126)continue;const _n=_r.charCodeAt(_j+1);if(_n!==48&&_n!==49){_ok=false;break}}}}}if(!_ok)return false}`;
+		return isStr ? body : `if(typeof ${v}==='string')${body}`;
+	}
+	const URI_TEMPLATE_EXPR = /^(?:[+#./;?&=,!@|]?)(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+(?:\.(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+)*(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+(?:\.(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+)*(?::[1-9][0-9]{0,3}|\*)?)*$/;
+	function uriTemplate(s) {
+		let i = 0;
+		while (i < s.length) {
+			const c = s.charCodeAt(i);
+			if (c === 125) return false;
+			if (c !== 123 && (c <= 32 || c === 127)) return false;
+			if (c !== 123) {
+				i++;
+				continue;
+			}
+			const end = s.indexOf("}", i + 1);
+			if (end === -1) return false;
+			const expr = s.slice(i + 1, end);
+			if (expr === "" || expr.indexOf("{") !== -1) return false;
+			if (!URI_TEMPLATE_EXPR.test(expr)) return false;
+			i = end + 1;
+		}
+		return true;
+	}
+	function uriTemplateSource(v, isStr) {
+		const inner = `let _i=0;while(_i<${v}.length){const _c=${v}.charCodeAt(_i);if(_c===125)return false;if(_c!==123&&(_c<=32||_c===127))return false;if(_c!==123){_i++;continue}const _e=${v}.indexOf('}',_i+1);if(_e===-1)return false;const _x=${v}.slice(_i+1,_e);if(_x===''||_x.indexOf('{')!==-1)return false;if(!${URI_TEMPLATE_EXPR.toString()}.test(_x))return false;_i=_e+1}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
+	function isEmailLocalChar(c) {
+		return c >= 48 && c <= 57 || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 46 || c === 33 || c >= 35 && c <= 39 || c === 42 || c === 43 || c === 45 || c === 47 || c === 61 || c === 63 || c >= 94 && c <= 96 || c >= 123 && c <= 126;
+	}
+	const EMAIL_LOCAL_SRC = (v) => `((${v}>=48&&${v}<=57)||(${v}>=97&&${v}<=122)||(${v}>=65&&${v}<=90)||${v}===46||${v}===33||(${v}>=35&&${v}<=39)||${v}===42||${v}===43||${v}===45||${v}===47||${v}===61||${v}===63||(${v}>=94&&${v}<=96)||(${v}>=123&&${v}<=126))`;
+	function email(s) {
+		const at = s.lastIndexOf("@");
+		if (at <= 0 || at === s.length - 1) return false;
+		const local = s.slice(0, at);
+		const domain = s.slice(at + 1);
+		if (local.length > 64) return false;
+		if (local.charCodeAt(0) === 34) {
+			if (local.charCodeAt(local.length - 1) !== 34 || local.length < 2) return false;
+		} else {
+			if (local.charCodeAt(0) === 46 || local.charCodeAt(local.length - 1) === 46) return false;
+			if (local.indexOf("..") !== -1) return false;
+			for (let i = 0; i < local.length; i++) if (!isEmailLocalChar(local.charCodeAt(i))) return false;
+		}
+		if (domain.charCodeAt(0) === 91) {
+			if (domain.charCodeAt(domain.length - 1) !== 93 || domain.length <= 2) return false;
+			const inner = domain.slice(1, -1);
+			if (inner.startsWith("IPv6:")) return ipv6(inner.slice(5));
+			return ipv4(inner);
+		}
+		return hostname(domain);
+	}
+	function emailSource(v, isStr) {
+		const inner = `const _at=${v}.lastIndexOf('@');if(_at<=0||_at===${v}.length-1)return false;const _lp=${v}.slice(0,_at);const _dm=${v}.slice(_at+1);if(_lp.length>64)return false;if(_lp.charCodeAt(0)===34){if(_lp.length<2||_lp.charCodeAt(_lp.length-1)!==34)return false}else{if(_lp.charCodeAt(0)===46||_lp.charCodeAt(_lp.length-1)===46)return false;if(_lp.indexOf('..')!==-1)return false;for(let _i=0;_i<_lp.length;_i++){const _lc=_lp.charCodeAt(_i);if(!${EMAIL_LOCAL_SRC("_lc")})return false}}if(_dm.charCodeAt(0)===91){if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false;const _in=_dm.slice(1,-1);if(_in.startsWith('IPv6:')){const _i6=_in.slice(5);${ipv6Source("_i6", true)}}else{${ipv4Source("_in", true)}}}else{${hostnameSource("_dm", true)}}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
+	const DURATION_RE = /^P(?:\d+W|(?:\d+Y(?:\d+M(?:\d+D)?)?|\d+M(?:\d+D)?|\d+D)(?:T(?:\d+H(?:\d+M(?:\d+S)?)?|\d+M(?:\d+S)?|\d+S))?|T(?:\d+H(?:\d+M(?:\d+S)?)?|\d+M(?:\d+S)?|\d+S))$/;
+	function duration(s) {
+		return DURATION_RE.test(s);
+	}
+	function durationSource(v, isStr) {
+		const inner = `if(!${DURATION_RE.toString()}.test(${v}))return false`;
+		return isStr ? inner : `if(typeof ${v}==='string'&&${inner.slice(3)}`;
 	}
 	module.exports = {
 		date,
@@ -1675,6 +2142,21 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		uuid,
 		time,
 		noReserved,
+		jsonPointer,
+		relativeJsonPointer,
+		uriTemplate,
+		email,
+		duration,
+		uriChars,
+		uriAuthority,
+		uriCharsSource,
+		uriAuthoritySource,
+		iri,
+		iriReference,
+		idnEmail,
+		iriSource,
+		iriReferenceSource,
+		idnEmailSource,
 		dateSource,
 		ipv4Source,
 		dateTimeSource,
@@ -1683,11 +2165,16 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		uriSource,
 		uuidSource,
 		timeSource,
-		noReservedSource
+		noReservedSource,
+		jsonPointerSource,
+		relativeJsonPointerSource,
+		uriTemplateSource,
+		emailSource,
+		durationSource
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	const UQ_HELPERS = "function _cn(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn(x[k])}).join(',')+'}'}function _uq(a){var n=a.length,i,k;if(n<2)return true;if(n<=12){for(i=1;i<n;i++)for(k=0;k<i;k++)if(_deq(a[i],a[k]))return false;return true}var s=new Set();for(i=0;i<n;i++){var x=a[i];if(x!==null&&typeof x==='object')break;if(s.has(x))return false;s.add(x)}if(i===n)return true;s=new Set();for(i=0;i<n;i++){var c=_cn(a[i]);if(s.has(c))return false;s.add(c)}return true}";
@@ -1731,6 +2218,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return parts.filter(Boolean).join("||") || "false";
 	}
 	const { codeFor } = require_error_codes();
+	const { ordinalFor } = require_schema_order();
 	const { compileSafe, patternIsSafe } = require_safe_regex();
 	function safeReClosure(ctx, src) {
 		if (patternIsSafe(src)) {
@@ -1740,6 +2228,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return new RegExp(src);
 	}
 	const DOC_BASE = "https://ata-validator.com/e/";
+	function ordinalField(ctx, schemaPath) {
+		const o = ctx && ctx.rootSchema ? ordinalFor(ctx.rootSchema, schemaPath) : null;
+		return o === null ? "" : `,_o:${o}`;
+	}
 	function buildErrorLiteral(opts) {
 		const { keyword, format, schemaPath, sourceMap } = opts;
 		let code = keyword === "format" && format ? codeFor("format", format) : codeFor(keyword);
@@ -3172,7 +3664,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		if (schema.format) {
 			const fc = FORMAT_CODEGEN[schema.format];
-			if (fc) lines.push(fc(v, isStr));
+			if (fc) lines.push(fc(v, isStr, ctx));
 			else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
 				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
 				if (!ctx.closureVars.includes(closureName)) {
@@ -3830,18 +4322,30 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 	}
+	const EMAIL_HELPER = `function _em(_s){${_formats.emailSource("_s", true)}return true}`;
 	const FORMAT_CODEGEN = {
-		email: (v, isStr) => {
-			isStr || `${v}`;
-			return isStr ? `{const _at=${v}.indexOf('@');if(_at<=0||_at>=${v}.length-1||${v}.indexOf('.',_at)<=_at+1)return false}` : `if(typeof ${v}==='string'){const _at=${v}.indexOf('@');if(_at<=0||_at>=${v}.length-1||${v}.indexOf('.',_at)<=_at+1)return false}`;
+		email: (v, isStr, ctx) => {
+			if (!ctx) return _formats.emailSource(v, isStr);
+			hoistOnce(ctx, "_emHoisted", EMAIL_HELPER);
+			return isStr ? `if(!_em(${v}))return false` : `if(typeof ${v}==='string'&&!_em(${v}))return false`;
+		},
+		"json-pointer": _formats.jsonPointerSource,
+		"relative-json-pointer": _formats.relativeJsonPointerSource,
+		"uri-template": _formats.uriTemplateSource,
+		iri: _formats.iriSource,
+		"iri-reference": _formats.iriReferenceSource,
+		"idn-email": _formats.idnEmailSource,
+		regex: (v, isStr) => {
+			const inner = `try{new RegExp(${v},'u')}catch(_er){return false}`;
+			return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
 		},
 		date: _formats.dateSource,
 		uuid: _formats.uuidSource,
 		"date-time": _formats.dateTimeSource,
 		time: _formats.timeSource,
-		duration: (v, isStr) => isStr ? `if(!/^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$/.test(${v})||${v}==='P'||${v}.endsWith('T'))return false` : `if(typeof ${v}==='string'&&(!/^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$/.test(${v})||${v}==='P'||${v}.endsWith('T')))return false`,
+		duration: _formats.durationSource,
 		uri: _formats.uriSource,
-		"uri-reference": (v, isStr) => isStr ? `{${_formats.noReservedSource(v, "0")}}` : `if(typeof ${v}==='string'){${_formats.noReservedSource(v, "0")}}`,
+		"uri-reference": (v, isStr) => isStr ? `{${_formats.uriCharsSource(v, "0")}}` : `if(typeof ${v}==='string'){${_formats.uriCharsSource(v, "0")}}`,
 		ipv4: _formats.ipv4Source,
 		ipv6: _formats.ipv6Source,
 		hostname: _formats.hostnameSource
@@ -3999,6 +4503,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			anchors: eAnchors,
 			rootSchema: schema,
 			userFormats: userFormats || null,
+			closureVars: [],
+			closureVals: [],
 			sourceMap: sourceOpts && sourceOpts.sourceMap && sourceOpts.schemaFile ? {
 				file: sourceOpts.schemaFile,
 				map: sourceOpts.sourceMap
@@ -4012,7 +4518,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (e === DECLINE) return null;
 			throw e;
 		}
-		if (ctx.usesBranchCollapse) ctx.helperCode.push("const __ATA_SEVERITY={type:10,const:8,enum:8,required:5,format:3,minLength:3,maxLength:3,minimum:3,maximum:3,pattern:3,additionalProperties:2,unevaluatedProperties:2,unevaluatedItems:2};function __ataScore(errs){if(!errs||!errs.length)return 0;let s=0;for(const e of errs)s+=__ATA_SEVERITY[e.keyword]||4;return errs.length*100+s}function __ataCollapse(kw,br,pp,sp){const pass=br.filter(b=>b.valid);if(kw==='oneOf'){if(pass.length===1)return null;if(pass.length>1)return{code:'ATA4002',keyword:'oneOf',instancePath:pp||'',path:pp||'',schemaPath:sp,message:'value matched '+pass.length+' of '+br.length+' oneOf variants, expected exactly one',params:{matched:pass.length,total:br.length}}}else{if(pass.length>=1)return null}let bi=0,bs=Infinity;for(let i=0;i<br.length;i++){const s=__ataScore(br[i].errors);if(s<bs){bs=s;bi=i}}const code=kw==='oneOf'?'ATA4001':'ATA4003';const best=br[bi];return{code,keyword:kw,instancePath:pp||'',path:pp||'',schemaPath:sp,message:'value matched 0 of '+br.length+' '+kw+' variants',params:{variants:br.length,closest:bi,closestName:best.title||('variant '+(bi+1))},branchErrors:best.errors}}");
+		if (ctx.usesBranchCollapse) ctx.helperCode.push("const __ATA_SEVERITY={type:10,const:8,enum:8,required:5,format:3,minLength:3,maxLength:3,minimum:3,maximum:3,pattern:3,additionalProperties:2,unevaluatedProperties:2,unevaluatedItems:2};function __ataScore(errs){if(!errs||!errs.length)return 0;let s=0;for(const e of errs)s+=__ATA_SEVERITY[e.keyword]||4;return errs.length*100+s}function __ataCollapse(kw,br,pp,sp,o){const pass=br.filter(b=>b.valid);if(kw==='oneOf'){if(pass.length===1)return null;if(pass.length>1)return{code:'ATA4002',keyword:'oneOf',instancePath:pp||'',path:pp||'',schemaPath:sp,_o:o,message:'value matched '+pass.length+' of '+br.length+' oneOf variants, expected exactly one',params:{matched:pass.length,total:br.length}}}else{if(pass.length>=1)return null}let bi=0,bs=Infinity;for(let i=0;i<br.length;i++){const s=__ataScore(br[i].errors);if(s<bs){bs=s;bi=i}}const code=kw==='oneOf'?'ATA4001':'ATA4003';const best=br[bi];return{code,keyword:kw,instancePath:pp||'',path:pp||'',schemaPath:sp,_o:o,message:'value matched 0 of '+br.length+' '+kw+' variants',params:{variants:br.length,closest:bi,closestName:best.title||('variant '+(bi+1))},branchErrors:best.errors}}");
 		if (lines.length === 0) return (d) => ({
 			valid: true,
 			errors: []
@@ -4027,12 +4533,29 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		else body = `const _e=[];\n  ` + helpersE + checkStr + `\n  return{valid:_e.length===0,errors:_e}`;
 		try {
 			let fn;
+			const cvars = ctx.closureVars;
+			const cvals = ctx.closureVals;
 			if (ctx.usesSafeRe) {
-				const built = new Function("__ataSafeRe", "d", "_all", body);
-				fn = (d, _all) => built(compileSafe, d, _all);
+				const built = new Function(...cvars, "__ataSafeRe", "d", "_all", body);
+				fn = cvars.length ? (d, _all) => built(...cvals, compileSafe, d, _all) : (d, _all) => built(compileSafe, d, _all);
+			} else if (cvars.length) {
+				const built = new Function(...cvars, "d", "_all", body);
+				fn = (d, _all) => built(...cvals, d, _all);
 			} else fn = new Function("d", "_all", body);
 			fn._errSource = body;
 			fn._usesSafeRe = !!ctx.usesSafeRe;
+			if (cvars.length) fn._formatClosures = cvars.map((name, i) => {
+				let format = null;
+				for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === cvals[i]) {
+					format = key;
+					break;
+				}
+				return {
+					name,
+					fn: cvals[i],
+					format
+				};
+			});
 			return fn;
 		} catch {
 			return null;
@@ -4050,7 +4573,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const subLines = [];
 			const subSp = branchSp + "/" + i;
 			if (typeof sub === "object" && sub !== null) genCodeE(sub, "_bv", pathExpr, subLines, ctx, subSp);
-			else if (sub === false) subLines.push(`_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${subSp}',params:{},message:'boolean schema is false'})`);
+			else if (sub === false) subLines.push(`_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${subSp}'${ordinalField(ctx, `${subSp}`)},params:{},message:'boolean schema is false'})`);
 			const title = sub && typeof sub === "object" && typeof sub.title === "string" ? sub.title : "";
 			titles.push(title);
 			const body = subLines.length === 0 ? `function(_bv){return{valid:true,errors:[]}}` : `function(_bv){const _e=[];${subLines.join(";")};return{valid:_e.length===0,errors:_e}}`;
@@ -4061,12 +4584,15 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const titleArr = JSON.stringify(titles);
 		const collapsed = `_brc${fi}`;
 		const pp = pathExpr || "\"\"";
-		lines.push(`{const ${fnArr}=[${fns.join(",")}];const _bt${fi}=${titleArr};const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${fnArr}[_bi](${v});${resArr}.push({valid:_br.valid,errors:_br.errors,title:_bt${fi}[_bi]})}const ${collapsed}=__ataCollapse('${branchKw}',${resArr},${pp},'${branchSp}');if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}}`);
+		lines.push(`{const ${fnArr}=[${fns.join(",")}];const _bt${fi}=${titleArr};const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${fnArr}[_bi](${v});${resArr}.push({valid:_br.valid,errors:_br.errors,title:_bt${fi}[_bi]})}const ${collapsed}=__ataCollapse('${branchKw}',${resArr},${pp},'${branchSp}',${(() => {
+			const o = ordinalFor(ctx.rootSchema, branchSp);
+			return o === null ? "null" : o;
+		})()});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}}`);
 	}
 	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
 		if (!schemaPrefix) schemaPrefix = "#";
 		if (schema === false) {
-			lines.push(`;_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}',params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}`);
+			lines.push(`;_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}`);
 			return;
 		}
 		if (schema === true) return;
@@ -4165,7 +4691,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					schemaPath: typeSp,
 					sourceMap: ctx.sourceMap
 				});
-				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}',params:{type:'${expected}'},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:'${expected}'},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
 			}
 		}
 		const isStr = false;
@@ -4177,7 +4703,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				schemaPath: sp,
 				sourceMap: ctx.sourceMap
 			});
-			return `_e.push({code:'${lit.codeStr}',keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode},docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}`;
+			return `_e.push({code:'${lit.codeStr}',keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode},docUrl:'${lit.docUrl}'${lit.frame}${ordinalField(ctx, sp)}});if(!_all)return{valid:false,errors:_e}`;
 		};
 		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
 		if (schema.const !== void 0) {
@@ -4193,7 +4719,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				schemaPath: reqSp,
 				sourceMap: ctx.sourceMap
 			});
-			for (const key of schema.required) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){_e.push({code:'${reqLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${reqSp}',params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'",docUrl:'${reqLit.docUrl}'${reqLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			for (const key of schema.required) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){_e.push({code:'${reqLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${reqSp}'${ordinalField(ctx, `${reqSp}`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'",docUrl:'${reqLit.docUrl}'${reqLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
 		}
 		if (schema.minimum !== void 0) {
 			const c = `typeof ${v}==='number'&&${v}<${schema.minimum}`;
@@ -4254,13 +4780,17 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				schemaPath: fmtSp,
 				sourceMap: ctx.sourceMap
 			});
-			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}',params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
+			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}'${ordinalField(ctx, `${fmtSp}`)},params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
 			if (fc) {
 				const ri = ctx.varCounter++;
-				const fmtCode = fc(v, isStr).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
+				const fmtCode = fc(v, isStr, ctx).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
 				lines.push(`_fmt${ri}:{${fmtCode}}`);
 			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
 				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (ctx.closureVars && !ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
 				const guard = `typeof ${v}==='string'&&`;
 				lines.push(`if(${guard}!${closureName}(${v})){${failPush}}`);
 			}
@@ -4309,7 +4839,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 				patChecks.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ci}[_i])`);
 			}
-			const inner = `const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++){if(${patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}',params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+			const inner = `const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++){if(${patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 		}
 		if (schema.dependentRequired) {
@@ -4319,7 +4849,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				schemaPath: drSp,
 				sourceMap: ctx.sourceMap
 			});
-			for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){_e.push({code:'${drLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${drSp}',params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'",docUrl:'${drLit.docUrl}'${drLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){_e.push({code:'${drLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${drSp}'${ordinalField(ctx, `${drSp}`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'",docUrl:'${drLit.docUrl}'${drLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
 		}
 		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
 			const childPath = childPathExpr(pathExpr, esc(key));
@@ -4378,7 +4908,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.propertyNames === false) {
 			const ki = ctx.varCounter++;
 			const p = pathExpr ? `${pathExpr}+'/'+_k${ki}` : `'/'+_k${ki}`;
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){_e.push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames',params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}}}`);
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){_e.push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}}}`);
 		}
 		if (schema.propertyNames && typeof schema.propertyNames === "object") {
 			const pn = schema.propertyNames;
@@ -4552,7 +5082,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function genCodeC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
 		if (!schemaPrefix) schemaPrefix = "#";
 		if (schema === false) {
-			lines.push(`;(_e||(_e=[])).push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}',params:{},message:'boolean schema is false'})`);
+			lines.push(`;(_e||(_e=[])).push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'})`);
 			return;
 		}
 		if (schema === true) return;
@@ -4625,17 +5155,20 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
 					const msgVal = msgCode.slice(1, -1);
 					ctx.closureVars.push(errVar);
-					ctx.closureVals.push(Object.freeze({
+					const o = ordinalFor(ctx.rootSchema, sp);
+					const lit = {
 						keyword,
 						instancePath: pathVal,
 						schemaPath: sp,
 						params: Object.freeze(paramsVal),
 						message: msgVal
-					}));
+					};
+					if (o !== null) lit._o = o;
+					ctx.closureVals.push(Object.freeze(lit));
 					return `(_e||(_e=[])).push(${errVar})`;
 				}
 			}
-			return `(_e||(_e=[])).push({keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}})`;
+			return `(_e||(_e=[])).push({keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}})`;
 		};
 		if (types) {
 			const conds = types.map((t) => {
@@ -4692,7 +5225,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						message: `must have required property '${key}'`
 					}));
 					lines.push(`if(${check}){(_e||(_e=[])).push(${errVar})}`);
-				} else lines.push(`if(${check}){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required',params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
+				} else lines.push(`if(${check}){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
 			}
 		} else if (schema.required) for (const key of schema.required) if (!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) {
 			const errVar = `_E${ctx.varCounter++}`;
@@ -4706,7 +5239,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				message: `must have required property '${key}'`
 			}));
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){(_e||(_e=[])).push(${errVar})}`);
-		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required',params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
 		if (schema.minimum !== void 0) {
 			const c = isNum ? `${v}<${schema.minimum}` : `typeof ${v}==='number'&&${v}<${schema.minimum}`;
 			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
@@ -4757,7 +5290,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const fc = FORMAT_CODEGEN[schema.format];
 			if (fc) {
 				const ri = ctx.varCounter++;
-				const code = fc(v, isStr).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
+				const code = fc(v, isStr, ctx).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
 				lines.push(`_fmt${ri}:{${code}}`);
 			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
 				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
@@ -4814,7 +5347,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				message: `must have required property '${dep}'`
 			}));
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){(_e||(_e=[])).push(${errVar})}`);
-		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired',params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"})}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired'${ordinalField(ctx, `${schemaPrefix}/dependentRequired`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"})}`);
 		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
 			const pv = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
 			const childPath = childPathExpr(pathExpr, esc(key));
@@ -4930,7 +5463,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.propertyNames === false) {
 			const ki = ctx.varCounter++;
 			const p = pathExpr ? `${pathExpr}+'/'+_k${ki}` : `'/'+_k${ki}`;
-			lines.push(`;if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){(_e||(_e=[])).push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames',params:{},message:'boolean schema is false'})}}`);
+			lines.push(`;if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){(_e||(_e=[])).push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'})}}`);
 		}
 		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ctx._ppHandledPropertyNamesC) {
 			const pn = schema.propertyNames;
@@ -5125,7 +5658,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -5297,7 +5830,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -5714,7 +6247,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	]) };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
@@ -5819,7 +6352,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -5893,7 +6426,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -5913,7 +6446,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -6017,7 +6550,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -6215,7 +6748,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -6371,7 +6904,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -6506,7 +7039,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { buildDataPositionMap };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap } = require_data_positions();
 	/**
@@ -6550,10 +7083,10 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function install(deps) {
-		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, dataBits, escapePointer, deepEqual, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
+		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, runCustomV, dataBits, escapePointer, deepEqual, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
 		const TRUE_FN = () => true;
 		const TRUE_PAIR = {
 			v: TRUE_FN,
@@ -6781,6 +7314,10 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					checks.push((data, bits) => bits !== T_OBJECT || run(data));
 				}
 			}
+			if (P.hasCustom) {
+				needsBits = true;
+				checks.push((data, bits) => runCustomV(P, data, bits));
+			}
 			if (checks.length === 0) return TRUE_FN;
 			if (!needsBits) {
 				if (checks.length === 1) {
@@ -6911,7 +7448,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				steps.push(cstep);
 				vsteps.push(vstep);
 			}
-			if (P.hasType || P.enum !== null || P.hasConst || P.hasNumber || P.hasString || P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems || P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null) {
+			if (P.hasType || P.enum !== null || P.hasConst || P.hasNumber || P.hasString || P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems || P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null || P.hasCustom) {
 				steps.push((data, errors, instancePath, schemaPath) => evalLeaf(P, data, errors, instancePath, schemaPath));
 				vsteps.push(compileLeafV(P));
 			}
@@ -7195,6 +7732,35 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					return true;
 				});
 			}
+			if (P.macros !== null) {
+				const ms = P.macros.map((m) => ({
+					keyword: m.keyword,
+					fn: inPlace(m.node, base)
+				}));
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let ok = true;
+					for (let i = 0; i < ms.length; i++) {
+						const m = ms[i];
+						const sp = schemaPath + "/" + m.keyword;
+						let passed;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							passed = m.fn.c(data, errors, instancePath, sp, stack, rec);
+							if (!passed) undo(rec, pl, n0, xl);
+						} else passed = m.fn.c(data, errors, instancePath, sp, stack);
+						if (!passed) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+							errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					for (let i = 0; i < ms.length; i++) if (!ms[i].fn.v(data, stack, rec)) return false;
+					return true;
+				});
+			}
 			if (P.anyOf !== null) {
 				const fns = P.anyOf.map((v) => inPlace(v, base));
 				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
@@ -7466,7 +8032,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileSafe } = require_safe_regex();
 	const SCHEMA_KEYWORDS = {
@@ -7670,14 +8236,11 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	const _formats = require_formats();
 	const FORMAT_CHECKS = {
-		email: (s) => {
-			const at = s.indexOf("@");
-			return at > 0 && at < s.length - 1 && s.indexOf(".", at) > at + 1;
-		},
+		email: _formats.email,
 		date: _formats.date,
 		"date-time": _formats.dateTime,
 		time: _formats.time,
-		duration: (s) => /^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)?)?$/.test(s) && s !== "P" && !s.endsWith("T"),
+		duration: _formats.duration,
 		uuid: _formats.uuid,
 		uri: _formats.uri,
 		"uri-reference": _formats.uriReference,
@@ -7689,15 +8252,15 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				new RegExp(s, "u");
 				return true;
 			} catch {
-				try {
-					new RegExp(s);
-					return true;
-				} catch {
-					return false;
-				}
+				return false;
 			}
 		},
-		"json-pointer": (s) => s === "" || /^\//.test(s) && !/~(?![01])/.test(s)
+		"json-pointer": _formats.jsonPointer,
+		"relative-json-pointer": _formats.relativeJsonPointer,
+		"uri-template": _formats.uriTemplate,
+		iri: _formats.iri,
+		"iri-reference": _formats.iriReference,
+		"idn-email": _formats.idnEmail
 	};
 	const DISCARD = {
 		props: null,
@@ -7839,10 +8402,49 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			this.if = schema.if !== void 0 ? child(schema.if) : void 0;
 			this.then = schema.then !== void 0 ? child(schema.then) : void 0;
 			this.else = schema.else !== void 0 ? child(schema.else) : void 0;
-			this.hasApplicators = this.allOf !== null || this.anyOf !== null || this.oneOf !== null || this.not !== void 0 || this.if !== void 0;
+			this.macros = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro === null) continue;
+				const expanded = def.macro(schema[key], schema);
+				if (expanded === void 0) continue;
+				if (this.macros === null) this.macros = [];
+				this.macros.push({
+					keyword: key,
+					node: child(expanded)
+				});
+			}
+			this.hasApplicators = this.allOf !== null || this.anyOf !== null || this.oneOf !== null || this.not !== void 0 || this.if !== void 0 || this.macros !== null;
 			this.unevaluatedProperties = schema.unevaluatedProperties !== void 0 ? child(schema.unevaluatedProperties) : void 0;
 			this.unevaluatedItems = schema.unevaluatedItems !== void 0 ? child(schema.unevaluatedItems) : void 0;
 			this.hasUnevaluated = this.unevaluatedProperties !== void 0 || this.unevaluatedItems !== void 0;
+			this.custom = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro !== null) continue;
+				const value = schema[key];
+				let mask = T_ANY;
+				if (def.types !== null) {
+					mask = 0;
+					for (const t of def.types) mask |= typeBit(t);
+				}
+				let fn;
+				if (def.compile !== null) {
+					fn = def.compile(value, schema);
+					if (typeof fn !== "function") throw new Error(`keyword "${key}": compile must return a function`);
+				} else {
+					const validate = def.validate;
+					fn = (data) => validate(value, data, schema);
+					fn.source = validate;
+				}
+				if (this.custom === null) this.custom = [];
+				this.custom.push({
+					keyword: key,
+					fn,
+					mask
+				});
+			}
+			this.hasCustom = this.custom !== null;
 			const nodeBase = interp.state.nodeBase.get(schema);
 			this.nodeBase = nodeBase !== void 0 ? nodeBase : null;
 			this.isResourceRoot = nodeBase !== void 0 && interp.state.resources.get(nodeBase) === schema;
@@ -7894,7 +8496,44 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 			}
 		}
+		if (P.hasCustom && !runCustomV(P, data, bits)) return false;
 		return true;
+	}
+	function runCustomV(P, data, bits) {
+		const ops = P.custom;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			if (holder.errors) holder.errors = null;
+			if (!ok) return false;
+		}
+		return true;
+	}
+	function runCustom(P, data, bits, errors, instancePath, schemaPath) {
+		const ops = P.custom;
+		let valid = true;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			const own = holder.errors;
+			if (own) holder.errors = null;
+			if (ok) continue;
+			valid = false;
+			if (errors === NOERRORS) return false;
+			const kwPath = schemaPath + "/" + op.keyword;
+			if (Array.isArray(own) && own.length > 0) for (let j = 0; j < own.length; j++) {
+				const e = own[j];
+				errors.push(err(op.keyword, e.keyword || op.keyword, e.instancePath !== void 0 ? instancePath + e.instancePath : instancePath, e.schemaPath !== void 0 ? e.schemaPath : kwPath, e.params !== void 0 ? e.params : {}, e.message !== void 0 ? e.message : `must pass "${op.keyword}" keyword validation`));
+			}
+			else errors.push(err(op.keyword, op.keyword, instancePath, kwPath, { keyword: op.keyword }, `must pass "${op.keyword}" keyword validation`));
+		}
+		return valid;
 	}
 	function evalLeaf(P, data, errors, instancePath, schemaPath) {
 		let valid = true;
@@ -8020,6 +8659,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 			}
 		}
+		if (P.hasCustom && !runCustom(P, data, bits, errors, instancePath, schemaPath)) valid = false;
 		return valid;
 	}
 	var Interpreter = class {
@@ -8028,6 +8668,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			this.root = rootSchema;
 			this.state = indexSchemas(rootSchema, opts.schemaMap);
 			this.userFormats = opts.formats || null;
+			this.keywords = opts.keywords || null;
 			this.bookending = !opts.v1;
 			this.patternCache = /* @__PURE__ */ new Map();
 			this.plans = /* @__PURE__ */ new Map();
@@ -8436,6 +9077,18 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					if (!this.eval(P.allOf[i], data, base, dynScope, errors, instancePath, schemaPath + "/allOf/" + i, stack, sub)) valid = false;
 					else if (collect) mergeAnnotations(local, sub);
 				}
+				if (P.macros !== null) for (let i = 0; i < P.macros.length; i++) {
+					const m = P.macros[i];
+					const sp = schemaPath + "/" + m.keyword;
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(m.node, data, base, dynScope, errors, instancePath, sp, stack, sub)) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+					} else if (collect) mergeAnnotations(local, sub);
+				}
 				if (P.anyOf !== null) {
 					let any = false;
 					const scratch = errors === NOERRORS ? NOERRORS : [];
@@ -8553,6 +9206,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		err,
 		evalLeaf,
 		evalLeafV,
+		runCustomV,
 		dataBits,
 		escapePointer,
 		deepEqual,
@@ -8572,7 +9226,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { createInterpreter };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -8605,7 +9259,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const FORMAT_HINTS = {
@@ -8750,7 +9404,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -8935,7 +9589,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -8993,7 +9647,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -9001,7 +9655,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -9052,12 +9706,12 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.14.1";
+	module.exports = "1.17.1";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -9080,7 +9734,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
@@ -9249,7 +9903,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -9304,7 +9958,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -9409,7 +10063,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
 var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { correlateTypos } = require_correlate();
 	const { buildDataPositionMap } = require_data_positions();
@@ -9681,7 +10335,7 @@ var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { toDiagnostics };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -9714,7 +10368,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -9822,7 +10476,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -9862,7 +10516,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -9878,9 +10532,10 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
+	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
 	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
 	const { normalizeDraft7, normalizeNullable, stripFormatAssertions } = require_draft7();
 	const { enabledKeywords, stripDisabledKeywords } = require_vocabularies();
@@ -10144,80 +10799,99 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		}
 		return target;
 	}
-	const _rankCache = /* @__PURE__ */ new WeakMap();
-	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
-	function keyIndex(node, seg) {
-		let index = _keyIndexCache.get(node);
-		if (index === void 0) {
-			index = /* @__PURE__ */ new Map();
-			const keys = Object.keys(node);
-			for (let i = 0; i < keys.length; i++) index.set(keys[i], i);
-			_keyIndexCache.set(node, index);
+	const { rankFor: schemaOrderRank, ordinalFor: schemaOrdinal } = require_schema_order();
+	var RichRejection = class {
+		constructor(result, data, positions, self, root, enrich) {
+			this.valid = false;
+			this._result = result;
+			this._data = data;
+			this._positions = positions;
+			this._self = self;
+			this._root = root;
+			this._enrich = enrich;
+			this._cached = null;
 		}
-		const at = index.get(seg);
-		return at === void 0 ? -1 : at;
-	}
-	function unescapePointerSegment(seg) {
-		return seg.indexOf("~") < 0 ? seg : seg.replace(/~1/g, "/").replace(/~0/g, "~");
-	}
-	function schemaOrderRank(rootSchema, schemaPath) {
-		if (!schemaPath || typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return null;
-		if (rootSchema === null || typeof rootSchema !== "object") return null;
-		let byPath = _rankCache.get(rootSchema);
-		if (byPath === void 0) {
-			byPath = /* @__PURE__ */ new Map();
-			_rankCache.set(rootSchema, byPath);
+		toJSON() {
+			return {
+				valid: false,
+				errors: this.errors
+			};
 		}
-		const hit = byPath.get(schemaPath);
-		if (hit !== void 0) return hit;
-		const rank = _computeRank(rootSchema, schemaPath);
-		byPath.set(schemaPath, rank);
-		return rank;
-	}
-	function _computeRank(rootSchema, schemaPath) {
-		const rank = [];
-		let node = rootSchema;
-		let start = 1;
-		while (start <= schemaPath.length) {
-			let end = schemaPath.indexOf("/", start);
-			if (end < 0) end = schemaPath.length;
-			if (end === start) {
-				start = end + 1;
-				continue;
+		_ataRaw() {
+			let raw = this._result.errors || [];
+			if (raw.length > 1) raw = sortErrorsBySchemaOrder(this._root, raw);
+			return raw;
+		}
+	};
+	Object.defineProperty(RichRejection.prototype, "errors", {
+		enumerable: true,
+		configurable: true,
+		get() {
+			if (this._cached === null) {
+				const self = this._self;
+				const enrich = this._enrich;
+				let raw = this._result.errors || [];
+				if (raw.length > 1) raw = sortErrorsBySchemaOrder(this._root, raw);
+				const cached = enrich && raw.length ? raw.map((e) => enrich(e, {
+					data: this._data,
+					positions: this._positions,
+					schemaPositions: self._schemaPositions,
+					schemaFile: self._source ? self._source.path : void 0
+				})) : raw.map(stripOrdinal);
+				if (enrich && cached.length > 1) attachRelated(cached);
+				this._cached = cached;
 			}
-			const seg = unescapePointerSegment(schemaPath.slice(start, end));
-			start = end + 1;
-			if (node == null || typeof node !== "object") break;
-			if (Array.isArray(node)) {
-				const idx = Number(seg);
-				if (!Number.isInteger(idx) || idx < 0 || idx >= node.length) break;
-				rank.push(idx);
-				node = node[idx];
-			} else {
-				const idx = keyIndex(node, seg);
-				if (idx < 0) break;
-				rank.push(idx);
-				node = node[seg];
-			}
+			return this._cached;
 		}
-		return rank;
+	});
+	function stripOrdinal(e) {
+		if (e === null || typeof e !== "object" || e._o === void 0) return e;
+		const out = {};
+		for (const k in e) if (k !== "_o") out[k] = e[k];
+		return out;
 	}
 	function sortErrorsBySchemaOrder(rootSchema, errors) {
-		const ranked = errors.map((e, i) => ({
-			e,
-			i,
-			rank: schemaOrderRank(rootSchema, e.schemaPath)
-		}));
-		ranked.sort((a, b) => {
-			if (!a.rank || !b.rank) return a.i - b.i;
-			const n = Math.min(a.rank.length, b.rank.length);
-			for (let k = 0; k < n; k++) if (a.rank[k] !== b.rank[k]) return a.rank[k] - b.rank[k];
-			return a.i - b.i;
-		});
-		return ranked.map((r) => r.e);
+		const n = errors.length;
+		const keys = new Array(n);
+		let sorted = true;
+		let prev = -1;
+		for (let i = 0; i < n; i++) {
+			const e = errors[i];
+			let o = typeof e._o === "number" ? e._o : schemaOrdinal(rootSchema, e.schemaPath);
+			if (o === null) o = prev < 0 ? 0 : prev;
+			keys[i] = o;
+			if (o < prev) sorted = false;
+			prev = o;
+		}
+		if (sorted) return errors;
+		const out = errors.slice();
+		for (let i = 1; i < n; i++) {
+			const k = keys[i];
+			const e = out[i];
+			let j = i - 1;
+			while (j >= 0 && keys[j] > k) {
+				keys[j + 1] = keys[j];
+				out[j + 1] = out[j];
+				j--;
+			}
+			keys[j + 1] = k;
+			out[j + 1] = e;
+		}
+		return out;
 	}
+	const _pathCache = /* @__PURE__ */ new Map();
+	const PATH_CACHE_MAX = 4096;
 	function parsePointerPath(path) {
-		if (!path) return [];
+		if (!path) return EMPTY_PATH;
+		const hit = _pathCache.get(path);
+		if (hit !== void 0) return hit;
+		const segs = Object.freeze(parsePointerPathUncached(path));
+		if (_pathCache.size >= PATH_CACHE_MAX) _pathCache.clear();
+		_pathCache.set(path, segs);
+		return segs;
+	}
+	const EMPTY_PATH = Object.freeze([]);
+	function parsePointerPathUncached(path) {
 		const out = [];
 		const n = path.length;
 		let start = 1;
@@ -10394,9 +11068,13 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			this._schemaMapShared = shared !== null;
 			this._schemaIsCallers = schemaObj === schema;
 			this._vocabulariesApplied = false;
+			this._keywords = normalizeKeywords(options.keywords);
+			this._usesKeywords = false;
+			if (this._keywords !== null && schemaUsesKeywords(schemaObj, this._keywords)) this._usesKeywords = true;
 			this._schemaStr = null;
 			this._schemaObj = schemaObj;
 			this._options = options;
+			this._noOpts = !opts;
 			this._initialized = false;
 			this._nativeReady = false;
 			this._compiled = null;
@@ -10463,11 +11141,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			}
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
-			const cached = this._userFormats ? null : _compileCache.get(mapKey);
+			const cached = this._userFormats || this._usesKeywords ? null : _compileCache.get(mapKey);
 			let jsFn, jsCombinedFn, jsErrFn, _isCodegen = false;
 			var _forceNapi = typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
 			this._v1Dynamic = isV1Dialect(schemaObj) && (this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\""));
-			if (this._v1Dynamic || !codegenAvailable()) {
+			if (this._v1Dynamic || this._usesKeywords || !codegenAvailable()) {
 				jsFn = null;
 				jsCombinedFn = null;
 				jsErrFn = null;
@@ -10535,7 +11213,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						_interp = createInterpreter(schemaObj, {
 							schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 							formats: this._userFormats,
-							v1: isV1Dialect(schemaObj)
+							v1: isV1Dialect(schemaObj),
+							keywords: this._keywords
 						});
 					}
 					const r = _interp.validate(d);
@@ -10551,14 +11230,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						}]
 					};
 				};
-				const errFn = safeErrFn || (hasUnevaluated ? (d) => ({
-					valid: jsFn(d),
-					errors: jsFn(d) ? [] : [{
-						code: "unevaluated",
-						path: "",
-						message: "unevaluated property or item"
-					}]
-				}) : !native ? jsOnlyFallback : hasDynRef ? (d) => {
+				const errFn = safeErrFn || (hasUnevaluated || !native ? jsOnlyFallback : hasDynRef ? (d) => {
 					this._ensureNative();
 					return this._compiled.validateJSON(JSON.stringify(d));
 				} : (d) => {
@@ -10595,7 +11267,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						_interp = createInterpreter(schemaObj, {
 							schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 							formats: this._userFormats,
-							v1: isV1Dialect(schemaObj)
+							v1: isV1Dialect(schemaObj),
+							keywords: this._keywords
 						});
 					}
 					const interp = _interp;
@@ -10778,7 +11451,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					const interp = createInterpreter(schemaObj, {
 						schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 						formats: this._userFormats,
-						v1: isV1Dialect(schemaObj)
+						v1: isV1Dialect(schemaObj),
+						keywords: this._keywords
 					});
 					this._engine = "interpreter";
 					_validate = (data) => interp.validate(data);
@@ -10842,7 +11516,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const interp = createInterpreter(schemaObj, {
 					schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 					formats: this._userFormats,
-					v1: isV1Dialect(schemaObj)
+					v1: isV1Dialect(schemaObj),
+					keywords: this._keywords
 				});
 				this._engine = "interpreter";
 				if (!preprocess) this._fastVerdict = (d) => interp.isValid(d);
@@ -10880,29 +11555,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					if (result && result.valid === false && result !== ABORT_EARLY_RESULT) {
 						const positions = enrich && self._lastRawInput != null ? self._pos().get(self._lastRawInput) : null;
 						if (positions) self._posCache.reset();
-						let cached = null;
-						return {
-							valid: false,
-							_ataRaw() {
-								let raw = result.errors || [];
-								if (raw.length > 1) raw = sortErrorsBySchemaOrder(root, raw);
-								return raw;
-							},
-							get errors() {
-								if (cached === null) {
-									let raw = result.errors || [];
-									if (raw.length > 1) raw = sortErrorsBySchemaOrder(root, raw);
-									cached = enrich && raw.length ? raw.map((e) => enrich(e, {
-										data,
-										positions,
-										schemaPositions: self._schemaPositions,
-										schemaFile: self._source ? self._source.path : void 0
-									})) : raw;
-									if (enrich && cached.length > 1) attachRelated(cached);
-								}
-								return cached;
-							}
-						};
+						return new RichRejection(result, data, positions, self, root, enrich);
 					}
 					return result;
 				};
@@ -10924,7 +11577,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 							}
 							if (!first || !first.docUrl) {
 								const positions = this._lastRawInput != null ? this._pos().get(this._lastRawInput) : null;
-								const enriched = result.errors.map((e) => enrich(e, {
+								const enriched = (result.errors.length > 1 ? sortErrorsBySchemaOrder(this._schemaObj, result.errors) : result.errors).map((e) => enrich(e, {
 									data: parsedData,
 									positions,
 									schemaPositions: this._schemaPositions,
@@ -11050,9 +11703,9 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			}
 			if (native) {
 				const { bufferNeedsSlowPath, installSlowBufferApis } = require_buffer_gate_browser();
-				if (bufferNeedsSlowPath(schemaObj, this._schemaMap)) installSlowBufferApis(this);
+				if (bufferNeedsSlowPath(schemaObj, this._schemaMap, this._keywords)) installSlowBufferApis(this);
 			}
-			if (this._schemaObj && typeof this._schemaObj === "object") _identityCache.set(this._schemaObj, this);
+			if (this._noOpts && this._schemaObj && typeof this._schemaObj === "object") _identityCache.set(this._schemaObj, this);
 		}
 		engine() {
 			this._ensureCompiled();
@@ -11087,7 +11740,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		}
 		_ensureCodegen() {
 			if (this._jsFn) return;
-			if (this._needsPreprocess()) {
+			if (this._needsPreprocess() || this._usesKeywords) {
 				this._ensureCompiled();
 				return;
 			}
@@ -11096,7 +11749,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			if (!this._schemaStr) this._schemaStr = JSON.stringify(this._schemaObj);
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
-			const cached = this._userFormats ? null : _compileCache.get(mapKey);
+			const cached = this._userFormats || this._usesKeywords ? null : _compileCache.get(mapKey);
 			if (cached && cached.jsFn) {
 				this._jsFn = cached.jsFn;
 				this.isValidObject = cached.jsFn;
@@ -11432,7 +12085,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		return self.validate(data);
 	});
 	_defineLazyMethod("isValidObject", (self) => (data) => {
-		if (self._needsPreprocess()) {
+		if (self._needsPreprocess() || self._usesKeywords) {
 			self._ensureCompiled();
 			return self.isValidObject(data);
 		}
@@ -11499,11 +12152,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
-var import_keywords = require_keywords();
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+var import_keywords = require_keywords$1();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.14.1_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.17.1_yaml@2.9.0/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
