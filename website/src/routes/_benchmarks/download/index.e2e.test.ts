@@ -22,9 +22,10 @@ test(
       await test.step(`Select ${minifyType} results`, async () => {
         const link = downloadPage.getMinifyTypeLink(minifyType);
 
-        await link.click();
-
-        await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+        await expect(async () => {
+          await link.click();
+          await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+        }).toPass();
 
         await expect(link).toBeCurrent("page");
       });

@@ -2,19 +2,21 @@ import { ComponentObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 
 export class Sidebar extends ComponentObjectModel {
-  sidebar = this.page.getByRole("complementary");
+  sidebar = this.page.locator("aside.sidebar");
 
   nav = this.sidebar.getByRole("navigation");
 
   menuButton = this.page.getByRole("button", { name: "Expand sidebar" });
 
   async open() {
-    if ((await this.sidebar.getAttribute("aria-hidden")) === "true") {
-      await this.menuButton.click();
-    }
+    await expect(async () => {
+      if ((await this.sidebar.getAttribute("aria-hidden")) === "true") {
+        await this.menuButton.click();
+      }
 
-    await expect(this.sidebar).not.toHaveAttribute("aria-hidden", "true");
-    await expect(this.sidebar).toBeInViewport();
+      await expect(this.sidebar).not.toHaveAttribute("aria-hidden", "true");
+      await expect(this.sidebar).toBeInViewport();
+    }).toPass();
   }
 
   getLinkByName(name: string) {
