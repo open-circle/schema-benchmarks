@@ -2,7 +2,7 @@ import { ComponentObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 
 export class Sidebar extends ComponentObjectModel {
-  sidebar = this.page.getByRole("complementary");
+  sidebar = this.page.locator("aside.sidebar");
 
   nav = this.sidebar.getByRole("navigation");
 
@@ -10,10 +10,12 @@ export class Sidebar extends ComponentObjectModel {
 
   async open() {
     await expect(async () => {
-      if (!(await this.sidebar.isVisible())) {
+      if ((await this.sidebar.getAttribute("aria-hidden")) === "true") {
         await this.menuButton.click();
       }
-      await expect(this.sidebar).toBeVisible({ timeout: 5000 });
+
+      await expect(this.sidebar).not.toHaveAttribute("aria-hidden", "true");
+      await expect(this.sidebar).toBeInViewport();
     }).toPass();
   }
 

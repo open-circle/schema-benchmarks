@@ -37,6 +37,8 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
 
       const link = sidebar.getLinkByName(name);
 
+      await link.scrollIntoViewIfNeeded();
+      await expect(link).toBeInViewport();
       await link.click();
 
       await expect(page).toHaveURL((url) => url.pathname === path);
