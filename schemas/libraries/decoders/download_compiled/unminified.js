@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/decoders@2.9.3/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.10.1/node_modules/decoders/dist/index.js
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
@@ -405,7 +405,7 @@ function difference(xs, ys) {
 }
 var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
 // @__NO_SIDE_EFFECTS__
-function object(decoders) {
+function buildObject(decoders) {
 	const knownKeys = new Set(Object.keys(decoders));
 	return pojo.chain((plainObj, ok2, err2) => {
 		const actualKeys = new Set(Object.keys(plainObj));
@@ -441,6 +441,10 @@ function object(decoders) {
 		}
 		return ok2(record2);
 	});
+}
+// @__NO_SIDE_EFFECTS__
+function object(decoders) {
+	return /* @__PURE__ */ buildObject(decoders);
 }
 var EITHER_PREFIX = "Either:\n";
 function itemize(s) {
@@ -483,7 +487,7 @@ function nullable(decoder, defaultValue) {
 function constant(value) {
 	return /* @__PURE__ */ define((blob, ok2, err2) => blob === value ? ok2(value) : err2(`Must be ${typeof value === "symbol" ? String(value) : /* @__PURE__ */ quote(value)}`));
 }
-var url_re = /^([A-Za-z]{2,12}(?:[+][A-Za-z]{2,12})?):\/\/(?:([^@:]*:?(?:[^@]+)?)@)?(?:([A-Za-z0-9.-]+)(?::([0-9]{2,5}))?)(\/(?:[-+~%/.,!$&'()*:;=@\w]*)?(?:\?[-+~%/.,!$&'()*:;=@?\w]*)?)?(?:#[^\s#]*)?$/;
+var url_re = /^[A-Za-z]{2,12}(?:[+][A-Za-z]{2,12})?:\/\/(?:[^@]*@)?[A-Za-z0-9.-]+(?::[0-9]{2,5})?(?:\/[-+~%/.,!$&'()*:;=@\w]*(?:\?[-+~%/.,!$&'()*:;=@?\w]*)?)?(?:#[^\s#]*)?$/;
 var string = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isString(blob) ? ok2(blob) : err2("Must be string"));
 // @__NO_SIDE_EFFECTS__
 function regex(regex2, msg) {
