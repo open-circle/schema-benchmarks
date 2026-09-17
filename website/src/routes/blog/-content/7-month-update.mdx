@@ -3,9 +3,9 @@ cover:
   src: "/logo512_dev.png"
   alt: "Schema Benchmarks Logo"
   fit: "contain"
-title: "6 Month Update"
-description: "An examination of how Schema Benchmarks has evolved (and caused other libraries to evolve) over the past 6 months."
-published: 2026-08-20
+title: "7 Month Update"
+description: "An examination of how Schema Benchmarks has evolved (and caused other libraries to evolve) over the past 7 months."
+published: 2026-09-19
 authors: "EskiMojo14"
 ---
 
@@ -17,7 +17,7 @@ import { Timeline, TimelineItem } from "#src/shared/components/timeline";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { trackedLinkProps } from "#src/shared/lib/analytics";
 
-It's been 6 months since the initial release of Schema Benchmarks! We now have a wide range of benchmarks (11 different types), and measure the vast majority of notable schema validation libraries (currently <Link to="/libraries">23</Link>). Schema Benchmarks has helped library authors identify performance regressions, and provides a useful resource for developers to compare libraries.
+It's been 7 months since the initial release of Schema Benchmarks! We now have a wide range of benchmarks (11 different types), and measure the vast majority of notable schema validation libraries (currently <Link to="/libraries">24</Link>). Schema Benchmarks has helped library authors identify performance regressions, and provides a useful resource for developers to compare libraries.
 
 ### Updates to Schema Benchmarks
 
@@ -230,9 +230,19 @@ It's been 6 months since the initial release of Schema Benchmarks! We now have a
 
     Using our <Link to="/initialization">initialization</Link> benchmarking, the `valibot` team were able to identify a performance regression in their `v1.x` release.
 
-    As of publishing, they are still [investigating](https://github.com/open-circle/valibot/pull/1534) an alternative approach for their Standard Schema support, which was causing the slowdown.
+    This has been fixed as of [`v1.5.0`](https://github.com/open-circle/valibot/releases/tag/v1.5.0), resulting in a significant speed up of schema initialisation.
 
   </TimelineItem>
 </Timeline>
 
+### New Benchmark Ideas
+
 If you have any suggestions for new benchmarks, or would like to see a library added, we'd love to hear from you! Please open an [issue](https://github.com/open-circle/schema-benchmarks/issues) on GitHub.
+
+Some current ones that have been suggested include:
+
+- [Typescript performance](https://github.com/open-circle/schema-benchmarks/pull/293) (inferring input/output types from a schema)
+- [Memory usage](https://github.com/open-circle/schema-benchmarks/issues/209)
+- [Schema compilation (JIT)](https://github.com/open-circle/schema-benchmarks/issues/226)
+
+If you think you could contribute to any of these, or offer opinions, please do! Be aware of our <Link to="/contributing" target="_blank" rel="noopener noreferrer">contributing</Link> guidelines.
