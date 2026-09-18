@@ -48,7 +48,7 @@ function Section({
  * stored as a prefix, so the text below is not all of it and has to say so.
  */
 const charsLabel = ({ chars, truncated }: InferredType, formatCount: (value: number) => string) =>
-  `${formatCount(chars)} characters${truncated ? " · shown truncated" : ""}`;
+  `${formatCount(chars)} characters${truncated ? " | shown truncated" : ""}`;
 
 function Direction({
   title,
@@ -62,7 +62,7 @@ function Direction({
   return (
     <Section
       title={title}
-      supporting={`${typeMatchLabels[direction.match].label} · ${formatCount(direction.instantiations)} instantiations · ${charsLabel(direction, formatCount)}`}
+      supporting={`${typeMatchLabels[direction.match].label} | ${formatCount(direction.instantiations)} instantiations | ${charsLabel(direction, formatCount)}`}
     >
       <CodeBlock showCopy>{direction.snippet}</CodeBlock>
       <CodeBlock>{direction.text}</CodeBlock>
@@ -124,7 +124,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                   <>
                     <Section
                       title="Type on hover"
-                      supporting={`${formatCount(result.inference.schema.instantiations)} instantiations · ${charsLabel(result.inference.schema, formatCount)}`}
+                      supporting={`${formatCount(result.inference.schema.instantiations)} instantiations | ${charsLabel(result.inference.schema, formatCount)}`}
                     >
                       <CodeBlock>{result.inference.schema.text}</CodeBlock>
                     </Section>
@@ -149,7 +149,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                   title="From an existing type"
                   supporting={
                     result.fromType
-                      ? `${fromTypeStyleLabels[result.fromType.style]}${result.fromType.derived ? " · the schema is generated from the type" : ""}${result.fromType.note ? ` · ${result.fromType.note}` : ""}`
+                      ? `${fromTypeStyleLabels[result.fromType.style]}${result.fromType.derived ? " | the schema is generated from the type" : ""}${result.fromType.note ? ` | ${result.fromType.note}` : ""}`
                       : "The library has no way to build a schema from a type that already exists."
                   }
                 >
