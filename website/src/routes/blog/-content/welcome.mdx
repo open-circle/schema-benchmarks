@@ -93,7 +93,7 @@ We run these benchmarks in a GitHub action, using [`rolldown`](https://rolldown.
 
 For schema libraries used on the client, bundle size can matter a lot, as it has an effect on how long it takes for your website to load. On the server, it may matter less.
 
-In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download.ts" }} search={{ formatted: true }} target="\_blank" rel="noreferrer noopener">example usage files</Link> for each library, and measure the size of the compiled output (both <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/minified.js" }} target="\_blank" rel="noreferrer noopener">minified</Link> and <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/unminified.js" }} target="\_blank" rel="noreferrer noopener">unminified</Link>).
+In order to measure these, we create <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download/index.ts" }} search={{ formatted: true }} target="\_blank" rel="noreferrer noopener">example usage files</Link> for each library, and measure the size of the compiled output (both <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/index/minified.js" }} target="\_blank" rel="noreferrer noopener">minified</Link> and <Link to="/repo/raw/$" params={{ _splat: "schemas/libraries/valibot/download_compiled/index/unminified.js" }} target="\_blank" rel="noreferrer noopener">unminified</Link>).
 
 Here are the results for minified and gzipped bundle size:
 
