@@ -61,7 +61,7 @@ export const sidebarGroups: Array<SidebarGroup> = [
     key: "post-runtime",
     links: [
       { ...linkOptions({ to: "/stack" }), name: "Stack", icon: "error" },
-      { ...linkOptions({ to: "/typescript" }), name: "TypeScript", icon: "code_blocks" },
+      { ...linkOptions({ to: "/typescript" }), name: "TypeScript", icon: "assignment_turned_in" },
     ],
   },
   {
