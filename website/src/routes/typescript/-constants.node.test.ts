@@ -1,7 +1,7 @@
 import type { FromTypeResult } from "@schema-benchmarks/bench";
 import { describe, expect, it } from "vitest";
 
-import { fromTypeVerdict, missedFromTypeCases } from "./-constants.ts";
+import { fromTypeVerdict, missedFromTypeCases } from "./-constants.tsx";
 
 const fromType = (cases: Partial<FromTypeResult["cases"]>): FromTypeResult => ({
   style: "annotation",

@@ -1,7 +1,7 @@
 import type { InferredDirection } from "@schema-benchmarks/bench";
 import { useRef } from "react";
 
-import { typeMatchLabels } from "#src/routes/typescript/-constants.ts";
+import { typeMatchLabels } from "#src/routes/typescript/-constants.tsx";
 import { Checkbox } from "#src/shared/components/checkbox/index.tsx";
 
 export function MatchCheckbox({ match }: { match: InferredDirection["match"] }) {

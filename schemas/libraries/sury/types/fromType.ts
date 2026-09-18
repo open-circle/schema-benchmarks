@@ -1,10 +1,10 @@
 import * as S from "sury";
 
-import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData as Product } from "#src";
 
 export const style: FromTypeStyle = "builder";
 
-export const schema = S.schemaOf<JsonSchemaOutputData>()({
+export const schema = S.schemaOf<Product>()({
   id: S.number,
   name: S.string,
   price: S.number,

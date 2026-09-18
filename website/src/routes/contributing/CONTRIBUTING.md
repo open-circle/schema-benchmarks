@@ -26,6 +26,7 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 4. Add a `benchmarks.ts` file with the benchmark definitions. Use other benchmarks as a reference.
 5. Create download benchmarks (usually just a single `download/index.ts` file, but can be a `download/` folder with multiple files). This should match how the library would typically be used, matching the specified data type.
 6. Add a `types` config to the benchmark definitions if the library infers TypeScript types from its schemas, naming the imports the type probe needs and the expressions its input and output types are read with.
+	Add a `types/index.ts` file if the library infers TypeScript types from its schemas - export the schema plus `Input`/`Output` type aliases read from it, or a `noInference` string explaining why it can't. Add a `types/fromType.ts` file if the library can build a schema from an existing type - export a `style` (`"annotation"` or `"builder"`) plus a schema built against the shared `Product` type. Use existing `types/` folders as a reference.
 7. Build the schema package with `pnpm schemas:build`
 8. Run the benchmarks with `pnpm bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
 9. Open a PR with your changes.

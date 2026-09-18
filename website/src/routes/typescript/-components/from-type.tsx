@@ -9,9 +9,9 @@ import {
   fromTypeVerdict,
   fromTypeVerdictLabels,
   missedFromTypeCases,
-} from "#src/routes/typescript/-constants.ts";
+} from "#src/routes/typescript/-constants.tsx";
+import { Checkbox } from "#src/shared/components/checkbox/index.tsx";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list/index.tsx";
-import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { withTooltip } from "#src/shared/components/tooltip/index.tsx";
 
 const VerdictText = withTooltip(function VerdictText(props: ComponentPropsWithRef<"span">) {
@@ -46,10 +46,7 @@ export function FromTypeCases({ fromType }: { fromType: FromTypeResult }) {
         <ListItem key={name}>
           <ListItemContent
             lines={2}
-            leading={
-              // written out rather than picked, so the build sees both symbols and subsets them
-              fromType.cases[name] ? <MdSymbol>check_circle</MdSymbol> : <MdSymbol>cancel</MdSymbol>
-            }
+            leading={<Checkbox checked={fromType.cases[name]} readOnly />}
             primary={fromTypeCaseLabels[name].label}
             supporting={`A schema with ${fromTypeCaseLabels[name].supporting} is ${fromType.cases[name] ? "rejected" : "accepted"}.`}
           />

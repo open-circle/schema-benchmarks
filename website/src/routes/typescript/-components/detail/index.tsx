@@ -5,7 +5,7 @@ import bem from "react-bem-helper";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { FromTypeCases } from "#src/routes/typescript/-components/from-type.tsx";
-import { fromTypeStyleLabels, typeMatchLabels } from "#src/routes/typescript/-constants.ts";
+import { fromTypeStyleLabels, typeMatchLabels } from "#src/routes/typescript/-constants.tsx";
 import { Button } from "#src/shared/components/button/index.tsx";
 import { CodeBlock } from "#src/shared/components/code/index.tsx";
 import {
@@ -64,8 +64,8 @@ function Direction({
       title={title}
       supporting={`${typeMatchLabels[direction.match].label} · ${formatCount(direction.instantiations)} instantiations · ${charsLabel(direction, formatCount)}`}
     >
-      <CodeBlock>{direction.snippet}</CodeBlock>
-      <CodeBlock showCopy>{direction.text}</CodeBlock>
+      <CodeBlock showCopy>{direction.snippet}</CodeBlock>
+      <CodeBlock>{direction.text}</CodeBlock>
     </Section>
   );
 }
@@ -126,7 +126,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                       title="Type on hover"
                       supporting={`${formatCount(result.inference.schema.instantiations)} instantiations · ${charsLabel(result.inference.schema, formatCount)}`}
                     >
-                      <CodeBlock showCopy>{result.inference.schema.text}</CodeBlock>
+                      <CodeBlock>{result.inference.schema.text}</CodeBlock>
                     </Section>
                     <Direction
                       title="Input"

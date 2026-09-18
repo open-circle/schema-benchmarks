@@ -26,12 +26,12 @@ describe("building a schema from an existing type", () => {
     expect(
       probeFromType(
         "sury",
-        `import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+        `import type { FromTypeStyle, JsonSchemaOutputData as Product } from "#src";
 import * as S from "sury";
 
 export const style: FromTypeStyle = "builder";
 
-export const schema = S.schemaOf<JsonSchemaOutputData>()({ id: S.number, name: S.string, price: S.number });
+export const schema = S.schemaOf<Product>()({ id: S.number, name: S.string, price: S.number });
 `,
       ).cases,
     ).toEqual({
@@ -46,12 +46,12 @@ export const schema = S.schemaOf<JsonSchemaOutputData>()({ id: S.number, name: S
     expect(
       probeFromType(
         "valibot",
-        `import type { JsonSchemaOutputData } from "#src";
+        `import type { JsonSchemaOutputData as Product } from "#src";
 import * as v from "valibot";
 
 export const style = "annotation";
 
-export const schema: v.GenericSchema<JsonSchemaOutputData> = v.object({ id: v.number(), name: v.string(), price: v.number() });
+export const schema: v.GenericSchema<Product> = v.object({ id: v.number(), name: v.string(), price: v.number() });
 `,
       ).cases,
     ).toEqual({
@@ -68,14 +68,14 @@ export const schema: v.GenericSchema<JsonSchemaOutputData> = v.object({ id: v.nu
     expect(
       probeFromType(
         "typia",
-        `import type { JsonSchemaOutputData } from "#src";
+        `import type { JsonSchemaOutputData as Product } from "#src";
 import typia from "typia";
 
 export const style = "builder";
 
 export const derived = true;
 
-export const schema = typia.createAssert<JsonSchemaOutputData>();
+export const schema = typia.createAssert<Product>();
 `,
       ).cases,
     ).toEqual({
@@ -90,12 +90,12 @@ export const schema = typia.createAssert<JsonSchemaOutputData>();
     expect(() =>
       probeFromType(
         "sury",
-        `import type { JsonSchemaOutputData } from "#src";
+        `import type { JsonSchemaOutputData as Product } from "#src";
 import * as S from "sury";
 
 export const style = "builder";
 
-export const schema = S.schemaOf<JsonSchemaOutputData>()({ id: S.number, name: S.string });
+export const schema = S.schemaOf<Product>()({ id: S.number, name: S.string });
 `,
       ),
     ).toThrow(/from-type probe does not type check/);

@@ -5,7 +5,7 @@ import { compareDownloadsByPkgName } from "#src/routes/_benchmarks/-hooks";
 import type { SortSearch } from "#src/shared/lib/sort";
 import { applySort } from "#src/shared/lib/sort";
 
-import type { SortableKey } from "./-constants.ts";
+import type { SortableKey } from "./-constants.tsx";
 
 const compareInference = (
   a: TypesResult,

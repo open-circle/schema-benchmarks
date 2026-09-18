@@ -1,9 +1,9 @@
 import * as z from "zod/mini";
 
-import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData as Product } from "#src";
 
 export const style: FromTypeStyle = "builder";
 
-export const schema = z.toZod<JsonSchemaOutputData>()(
+export const schema = z.toZod<Product>()(
   z.object({ id: z.number(), name: z.string(), price: z.number() }),
 );

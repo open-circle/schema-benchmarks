@@ -9,7 +9,7 @@ import { sortParams } from "#src/shared/lib/sort";
 
 import { TypesDetail } from "./-components/detail";
 import { TypesResults } from "./-components/results";
-import { sortableKeys } from "./-constants.ts";
+import { sortableKeys } from "./-constants.tsx";
 import Content from "./-content.mdx";
 import { getTypesBenchResults } from "./-query.ts";
 import { compareResults } from "./-sort.ts";
