@@ -1,6 +1,8 @@
 import * as z from "zod/v3";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: z.ZodType<JsonSchemaOutputData> = z.object({
   id: z.number(),

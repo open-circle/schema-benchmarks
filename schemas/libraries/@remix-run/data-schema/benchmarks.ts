@@ -48,20 +48,4 @@ export default defineBenchmarks({
     },
     snippet: ts`parse(schema, data)`,
   },
-  types: {
-    imports: ts`
-      import { object, number, string, type Schema } from "@remix-run/data-schema";
-      import type { InferInput, InferOutput } from "@remix-run/data-schema";
-      import { getRemixSchema } from ".";
-    `,
-    schema: ts`getRemixSchema()`,
-    input: ts`InferInput<typeof probeSchema>`,
-    output: ts`InferOutput<typeof probeSchema>`,
-    fromType: {
-      style: "annotation",
-      schema: ts`
-        const probeSchema: Schema<unknown, Product> = object({ id: number(), name: string(), price: number() });
-      `,
-    },
-  },
 });

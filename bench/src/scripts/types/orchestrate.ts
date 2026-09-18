@@ -1,4 +1,5 @@
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
+import * as fsp from "node:fs/promises";
 import * as path from "node:path";
 
 import { libraries } from "@schema-benchmarks/schemas/libraries";
@@ -23,12 +24,6 @@ function toInferredType(text: string, instantiations: number): InferredType {
   };
 }
 
-/**
- * The probe prefixes its own declarations to stay clear of whatever a library exports, and names
- * the target type after the benchmark data. Neither reads well on the site.
- */
-const toSnippet = (source: string) => source.replaceAll("probeSchema", "schema");
-
 const describeFromType = (fromType: TypesResult["fromType"]) =>
   fromType
     ? `${fromType.style} (${Object.values(fromType.cases).filter(Boolean).length}/4 caught)`
@@ -37,23 +32,24 @@ const describeFromType = (fromType: TypesResult["fromType"]) =>
 const results: Array<TypesResult> = [];
 
 for (const [libraryPath, getConfig] of Object.entries(libraries)) {
-  const { library, types } = await getConfig();
-  if (!types) continue;
-
+  const { library } = await getConfig();
   const directory = path.resolve(SCHEMAS_DIR, "libraries", path.dirname(libraryPath));
+  // a library opts into the benchmark just by having this folder
+  if (!fs.existsSync(path.join(directory, "types", "index.ts"))) continue;
+
   console.log(`Probing types: ${library.name}`);
-  const probed = probeTypes(directory, types);
+  const probed = probeTypes(directory);
 
   const inference = probed.inference && {
     schema: toInferredType(probed.inference.schema.text, probed.inference.schema.instantiations),
     input: {
       ...toInferredType(probed.inference.input.text, probed.inference.input.instantiations),
-      snippet: toSnippet(types.input ?? ""),
+      snippet: probed.inference.input.snippet,
       match: probed.inference.input.match,
     },
     output: {
       ...toInferredType(probed.inference.output.text, probed.inference.output.instantiations),
-      snippet: toSnippet(types.output ?? ""),
+      snippet: probed.inference.output.snippet,
       match: probed.inference.output.match,
     },
     instantiations: probed.inference.instantiations,
@@ -63,17 +59,16 @@ for (const [libraryPath, getConfig] of Object.entries(libraries)) {
     id: library.name,
     libraryName: library.name,
     version: library.version,
-    note: types.note,
+    note: probed.note,
     inference,
-    noInference: types.noInference,
-    fromType: types.fromType &&
-      probed.fromType && {
-        style: types.fromType.style,
-        snippet: toSnippet(types.fromType.schema),
-        cases: probed.fromType.cases,
-        derived: types.fromType.derived,
-        note: types.fromType.note,
-      },
+    noInference: probed.noInference,
+    fromType: probed.fromType && {
+      style: probed.fromType.style,
+      snippet: probed.fromType.snippet,
+      cases: probed.fromType.cases,
+      derived: probed.fromType.derived,
+      note: probed.fromType.note,
+    },
   });
   const { inference: probedInference, fromType } = results.at(-1)!;
   console.log(
@@ -93,4 +88,4 @@ results.sort(
 
 const benchResults: TypesBenchResults = { typescriptVersion, results };
 
-await fs.writeFile(path.resolve(process.cwd(), "./types.json"), JSON.stringify(benchResults));
+await fsp.writeFile(path.resolve(process.cwd(), "./types.json"), JSON.stringify(benchResults));

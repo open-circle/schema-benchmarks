@@ -83,20 +83,4 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.parse(data)`,
   },
-  types: {
-    imports: ts`
-      import { s, type BaseValidator } from "@sapphire/shapeshift";
-      import type { InferType } from "@sapphire/shapeshift";
-      import { getShapeshiftSchema } from ".";
-    `,
-    schema: ts`getShapeshiftSchema()`,
-    input: ts`InferType<typeof probeSchema>`,
-    output: ts`InferType<typeof probeSchema>`,
-    fromType: {
-      style: "annotation",
-      schema: ts`
-        const probeSchema: BaseValidator<Product> = s.object({ id: s.number(), name: s.string(), price: s.number() });
-      `,
-    },
-  },
 });

@@ -1,12 +1,9 @@
-import type { MatchAssertions } from "#src";
-
 import type { TypiaSchema } from "..";
 
 // the schema is a TypeScript type
 export const schema = null as unknown as TypiaSchema;
 
-export type Input = typeof schema;
+export const note = "the schema is a TypeScript type";
 
-export type Output = typeof schema;
-
-export type Assertions = MatchAssertions<Input, Output>;
+export const noInference =
+  "typia has no runtime schema value to read a type from - `Input`/`Output` would just be the type this file already stands in for, not something inferred from it.";

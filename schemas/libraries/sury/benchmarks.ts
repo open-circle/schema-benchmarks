@@ -213,19 +213,4 @@ export default defineBenchmarks({
       `,
     },
   },
-  types: {
-    imports: ts`
-      import * as S from "sury";
-      import { getSurySchema } from ".";
-    `,
-    schema: ts`getSurySchema()`,
-    input: ts`S.Input<typeof probeSchema>`,
-    output: ts`S.Output<typeof probeSchema>`,
-    fromType: {
-      style: "builder",
-      schema: ts`
-        const probeSchema = S.schemaOf<Product>()({ id: S.number, name: S.string, price: S.number });
-      `,
-    },
-  },
 });

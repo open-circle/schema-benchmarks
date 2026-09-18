@@ -1,6 +1,8 @@
 import * as p from "@paseri/paseri";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: p.Schema<JsonSchemaOutputData> = p.object({
   id: p.number(),

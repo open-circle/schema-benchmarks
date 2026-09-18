@@ -1,6 +1,8 @@
 import { type Type, type } from "arktype";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: Type<JsonSchemaOutputData> = type({
   id: "number",

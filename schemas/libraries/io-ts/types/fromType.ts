@@ -1,6 +1,8 @@
 import * as t from "io-ts";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: t.Type<JsonSchemaOutputData> = t.type({
   id: t.number,

@@ -1,6 +1,8 @@
 import * as v from "valibot";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: v.GenericSchema<JsonSchemaOutputData> = v.object({
   id: v.number(),

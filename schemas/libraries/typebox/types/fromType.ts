@@ -1,7 +1,9 @@
 import type { Satisfies } from "@schema-benchmarks/utils";
 import * as Type from "typebox";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema = Type.Object({
   id: Type.Number(),
