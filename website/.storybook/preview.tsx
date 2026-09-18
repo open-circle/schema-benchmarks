@@ -3,7 +3,6 @@ import { definePreview } from "@storybook/tanstack-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { parseAnsiSequences } from "ansi-sequence-parser";
 import addonMsw from "msw-storybook-addon";
-import "msw-storybook-addon/types";
 import Prism from "prismjs";
 import { mocked } from "storybook/test";
 

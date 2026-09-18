@@ -31,6 +31,12 @@
       "content-collections": ["./.content-collections/generated"]
     },
 
-    "types": ["node", "vite/client", "vite-plugin-svgr/client", "vite-plugin-pwa/client"]
+    "types": [
+      "node",
+      "vite/client",
+      "vite-plugin-svgr/client",
+      "vite-plugin-pwa/client",
+      "msw-storybook-addon/types"
+    ]
   }
 }
