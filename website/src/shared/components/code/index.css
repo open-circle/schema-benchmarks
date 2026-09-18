@@ -36,13 +36,33 @@
   }
 }
 
+pre[class*="language-"].code-block--wrap,
+code[class*="language-"].code-block--wrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .code-block__skeleton-line {
   display: block;
-  height: 1em;
+  min-height: 1em;
   margin-bottom: 0.25em;
   border-radius: var(--shape-small);
-  background: color-mix(in srgb, currentColor 18%, transparent);
+  background: color-mix(in srgb, var(--foreground) 18%, transparent);
+  width: fit-content;
+  min-width: 8%;
+  line-height: inherit;
   animation: code-block-skeleton 1.5s ease-in-out infinite;
+
+  &::after {
+    content: attr(data-content);
+    color: transparent;
+  }
+}
+
+code.code-block--wrap .code-block__skeleton-line {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 @keyframes code-block-skeleton {

@@ -126,7 +126,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                       title="Type on hover"
                       supporting={`${formatCount(result.inference.schema.instantiations)} instantiations | ${charsLabel(result.inference.schema, formatCount)}`}
                     >
-                      <CodeBlock>{result.inference.schema.text}</CodeBlock>
+                      <CodeBlock wrap>{result.inference.schema.text}</CodeBlock>
                     </Section>
                     <Direction
                       title="Input"
