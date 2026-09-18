@@ -11,12 +11,7 @@ export default {
       ignoreFiles: ["*.d.json.ts"],
     },
     schemas: {
-      entry: [
-        "src/index.ts",
-        "libraries/**/benchmarks.ts",
-        "libraries/**/download.ts",
-        "libraries/**/download/*.ts",
-      ],
+      entry: ["src/index.ts", "libraries/**/benchmarks.ts", "libraries/**/download/*.ts"],
       ignoreFiles: ["libraries/**/download_compiled/**/*.js"],
     },
     utils: {},

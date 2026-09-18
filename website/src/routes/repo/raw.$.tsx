@@ -23,14 +23,15 @@ const libraryNameRegex = /^schemas\/libraries\/(.*)\/(download|benchmarks)/;
 
 const fileNameMap: Record<string, string> = {
   "benchmarks.ts": "Benchmarks",
-  "download.ts": "Source",
+  "index.ts": "Source",
   "minified.js": "Compiled (minified)",
   "unminified.js": "Compiled (unminified)",
 };
-// schemas/libraries/<libraryName>/download.ts -> <libraryName> / Source
+// schemas/libraries/<libraryName>/download/index.ts -> <libraryName> / Source
 // schemas/libraries/<libraryName>/download/[<note>].ts -> <libraryName> (<note>) / Source
-// schemas/libraries/<libraryName>/download_compiled/[<note>/]<minify>.js -> <libraryName> / Compiled ([minify])
-const noteRegex = /download\/([^/]+).ts|download_compiled\/([^/]+)\//;
+// schemas/libraries/<libraryName>/download_compiled/[<note>/]<minify>.js -> <libraryName> (<note>) / Compiled ([minify])
+// schemas/libraries/<libraryName>/download_compiled/index/<minify>.js -> <libraryName> / Compiled ([minify])
+const noteRegex = /download\/(?!index\.ts$)([^/]+)\.ts|download_compiled\/(?!index\/)([^/]+)\//;
 function getLibraryCrumbs(fileName: string) {
   const libraryName = fileName.match(libraryNameRegex)![1];
   const fileNamePart = fileName?.split("/").pop() ?? "Unknown";
@@ -38,7 +39,7 @@ function getLibraryCrumbs(fileName: string) {
   const note = noteMatch?.[1] ?? noteMatch?.[2];
   const fileNameMapped =
     fileNamePart === `${note}.ts`
-      ? fileNameMap["download.ts"]
+      ? fileNameMap["index.ts"]
       : (fileNameMap[fileNamePart] ?? fileNamePart);
   return [`${libraryName}${note ? ` (${note})` : ""}`, fileNameMapped];
 }

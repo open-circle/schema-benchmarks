@@ -6,11 +6,7 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import { upfetch } from "#src/shared/lib/fetch";
 
 export function getCompiledPath(fileName: string, minify: MinifyType) {
-  return fileName
-    .replace("download.ts", `download_compiled/${minify}.js`)
-    .replace("download/index.ts", `download_compiled/${minify}.js`)
-    .replace("download/", `download_compiled/`)
-    .replace(".ts", `/${minify}.js`);
+  return fileName.replace("download/", `download_compiled/`).replace(".ts", `/${minify}.js`);
 }
 
 export const getDownloadResultsFn = createIsomorphicFn()

@@ -24,7 +24,7 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 2. Create a new folder in `schemas/libraries` named after the library.
 3. Add a `index.ts` file with the schema definition. Usually this should be a single function that creates and returns the schema - any other values and types can be exported as well. The schema should match as much of the validation specified as possible. Use existing library schema factories as a reference.
 4. Add a `benchmarks.ts` file with the benchmark definitions. Use other benchmarks as a reference.
-5. Create download benchmarks (usually just a single `download.ts` file, but can be a `download/` folder with multiple files). This should match how the library would typically be used, matching the specified data type.
+5. Create download benchmarks (usually just a single `download/index.ts` file, but can be a `download/` folder with multiple files). This should match how the library would typically be used, matching the specified data type.
 6. Build the schema package with `pnpm schemas:build`
 7. Run the benchmarks with `pnpm bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
 8. Open a PR with your changes.
