@@ -36,6 +36,21 @@
   }
 }
 
+.code-block__skeleton-line {
+  display: block;
+  height: 1em;
+  margin-bottom: 0.25em;
+  border-radius: var(--shape-small);
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  animation: code-block-skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes code-block-skeleton {
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .responsive-code-block {
   container: code / inline-size;
   > .responsive-code-block__block {

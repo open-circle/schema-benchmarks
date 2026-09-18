@@ -1,7 +1,7 @@
 import type { Override } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import bem from "react-bem-helper";
 
 import { ToggleButton } from "#src/shared/components/button/toggle";
@@ -97,8 +97,35 @@ export function CodeBlockContainer({
 
 export function CodeBlock({ children, ...props }: CodeProps) {
   return (
+    <Suspense fallback={<CodeBlockSkeleton {...props}>{children}</CodeBlockSkeleton>}>
+      <CodeBlockContainer {...props} raw={children}>
+        <InlineCode {...props}>{children}</InlineCode>
+      </CodeBlockContainer>
+    </Suspense>
+  );
+}
+
+export function CodeBlockSkeleton({ children, ...props }: CodeProps) {
+  const lines = children.split("\n");
+
+  return (
     <CodeBlockContainer {...props} raw={children}>
-      <InlineCode {...props}>{children}</InlineCode>
+      <code aria-hidden="true" className={clsx(`language-${props.language ?? defaultLanguage}`)}>
+        {lines.map((line, index) => (
+          <span
+            className="code-block__skeleton-line"
+            key={index}
+            style={{ width: `${Math.max(8, Math.min(100, line.trim().length * 1.2))}%` }}
+          />
+        ))}
+      </code>
+      {props.lineNumbers && (
+        <span className="line-numbers-rows" aria-hidden="true">
+          {lines.map((_, index) => (
+            <span key={index} />
+          ))}
+        </span>
+      )}
     </CodeBlockContainer>
   );
 }
