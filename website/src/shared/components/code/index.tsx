@@ -49,6 +49,7 @@ export interface CodeProps extends InlineCodeProps {
   title?: string;
   showCopy?: boolean;
   actions?: ReactNode;
+  wrap?: boolean;
 }
 
 export function CodeBlockContainer({
@@ -59,12 +60,18 @@ export function CodeBlockContainer({
   showCopy,
   raw,
   actions,
+  wrap,
   className,
 }: Override<CodeProps, { children: ReactNode; raw: string }>) {
   return (
     <pre
       dir="ltr"
-      className={clsx(`language-${language}`, lineNumbers && "line-numbers", className)}
+      className={clsx(
+        `language-${language}`,
+        lineNumbers && "line-numbers",
+        wrap && "code-block--wrap",
+        className,
+      )}
     >
       {(title || showCopy || actions) && (
         <div className="code-block__title">
@@ -99,7 +106,9 @@ export function CodeBlock({ children, ...props }: CodeProps) {
   return (
     <Suspense fallback={<CodeBlockSkeleton {...props}>{children}</CodeBlockSkeleton>}>
       <CodeBlockContainer {...props} raw={children}>
-        <InlineCode {...props}>{children}</InlineCode>
+        <InlineCode {...props} className={clsx(props.className, props.wrap && "code-block--wrap")}>
+          {children}
+        </InlineCode>
       </CodeBlockContainer>
     </Suspense>
   );
@@ -110,13 +119,15 @@ export function CodeBlockSkeleton({ children, ...props }: CodeProps) {
 
   return (
     <CodeBlockContainer {...props} raw={children}>
-      <code aria-hidden="true" className={clsx(`language-${props.language ?? defaultLanguage}`)}>
+      <code
+        aria-hidden="true"
+        className={clsx(
+          `language-${props.language ?? defaultLanguage}`,
+          props.wrap && "code-block--wrap",
+        )}
+      >
         {lines.map((line, index) => (
-          <span
-            className="code-block__skeleton-line"
-            key={index}
-            style={{ width: `${Math.max(8, Math.min(100, line.trim().length * 1.2))}%` }}
-          />
+          <span className="code-block__skeleton-line" data-content={line || " "} key={index} />
         ))}
       </code>
       {props.lineNumbers && (
