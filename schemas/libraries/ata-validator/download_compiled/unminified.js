@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.1_ata-validator@1.22.1_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.2_ata-validator@1.25.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -401,6 +401,10 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		};
 		installEntries(validator, (name, inner) => wrappers[name](inner), () => compile() !== false);
+		Object.defineProperty(validator, "_externalChecks", {
+			get: () => compile() !== false,
+			configurable: true
+		});
 		return validator;
 	}
 	withKeywords.CONSTRUCTORS = CONSTRUCTORS;
@@ -410,14 +414,14 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/keywords.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -539,7 +543,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -853,7 +857,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-order.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -957,7 +961,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -1639,7 +1643,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -2281,7 +2285,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/branch-collapse.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -2363,7 +2367,7 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	const UQ_HELPERS = "function _cn(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn(x[k])}).join(',')+'}'}function _uq(a){var n=a.length,i,k;if(n<2)return true;if(n<=12){for(i=1;i<n;i++)for(k=0;k<i;k++)if(_deq(a[i],a[k]))return false;return true}var s=new Set();for(i=0;i<n;i++){var x=a[i];if(x!==null&&typeof x==='object')break;if(s.has(x))return false;s.add(x)}if(i===n)return true;s=new Set();for(i=0;i<n;i++){var c=_cn(a[i]);if(s.has(c))return false;s.add(c)}return true}";
@@ -3518,7 +3522,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				const hybridFactory = new Function(...closureNames, "R", "E", `${preambleStr}return function(d){${hybridBody}}`);
 				boolFn._hybridFactory = (R, E) => hybridFactory(...closureValues, R, E);
 			} catch {}
-			const helperStr = ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "";
+			const emitHelpers = ctx.helperCode.filter((c) => !/^const _re\d+=(?:__ataSafeRe|new RegExp)\(/.test(c));
+			const helperStr = emitHelpers.length ? emitHelpers.join("\n  ") + "\n  " : "";
 			boolFn._source = helperStr + body;
 			boolFn._preambleSource = preambleStr;
 			boolFn._preambleGuard = guardStr;
@@ -4226,7 +4231,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 							_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 						}
 					} else if (propCount > 0) {
-						inner = genCharCodeSwitch(knownKeys, v);
+						inner = propCount >= AP_LOOKUP_MIN ? apMembershipCheck(ctx, knownKeys, v) : genCharCodeSwitch(knownKeys, v);
 						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 					} else {
 						inner = `for(var _k in ${v})return false`;
@@ -4238,8 +4243,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					genCode(schema.unevaluatedProperties, `${v}[${ukVar}]`, subLines, ctx);
 					if (subLines.length > 0) {
 						const check = subLines.join(";");
-						const keyChecks = knownKeys.map((k) => `${ukVar}===${JSON.stringify(k)}`).join("||");
-						const inner = `for(var ${ukVar} in ${v}){${knownKeys.length > 0 ? `if(${keyChecks})continue;` : ""}${check}}`;
+						let skipKnown = "";
+						if (knownKeys.length >= AP_LOOKUP_MIN) {
+							const id = emitNameLookup(ctx, knownKeys);
+							skipKnown = id !== null ? `if(${id}[${ukVar}]!==undefined)continue;` : `if(${knownKeys.map((k) => `${ukVar}===${JSON.stringify(k)}`).join("||")})continue;`;
+						} else if (knownKeys.length > 0) skipKnown = `if(${knownKeys.map((k) => `${ukVar}===${JSON.stringify(k)}`).join("||")})continue;`;
+						const inner = `for(var ${ukVar} in ${v}){${skipKnown}${check}}`;
 						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 					}
 				}
@@ -4657,6 +4666,86 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (!parentExpr) return `'/'+${indexExpr}`;
 		return `${parentExpr}+'/'+${indexExpr}`;
 	}
+	function unevalContributions(sub, kind, names, state, depth) {
+		if (depth > 24) return false;
+		if (sub === true || sub === false) return true;
+		if (typeof sub !== "object" || sub === null) return false;
+		if (kind === "props") {
+			if (sub.patternProperties !== void 0 || sub.additionalProperties !== void 0 || sub.unevaluatedProperties !== void 0) return false;
+			if (sub.properties !== void 0) {
+				if (typeof sub.properties !== "object" || sub.properties === null) return false;
+				for (const k of Object.keys(sub.properties)) names.add(k);
+			}
+		} else {
+			if (sub.items !== void 0 || sub.additionalItems !== void 0 || sub.contains !== void 0 || sub.unevaluatedItems !== void 0) return false;
+			if (sub.prefixItems !== void 0) {
+				if (!Array.isArray(sub.prefixItems)) return false;
+				if (sub.prefixItems.length > state.prefix) state.prefix = sub.prefixItems.length;
+			}
+		}
+		if (sub.$ref !== void 0 || sub.$dynamicRef !== void 0 || sub.$recursiveRef !== void 0) return false;
+		if (sub.dependentSchemas !== void 0 || sub.dependencies !== void 0) return false;
+		for (const k of [
+			"allOf",
+			"anyOf",
+			"oneOf"
+		]) if (sub[k] !== void 0) {
+			if (!Array.isArray(sub[k])) return false;
+			for (const b of sub[k]) if (!unevalContributions(b, kind, names, state, depth + 1)) return false;
+		}
+		for (const k of [
+			"if",
+			"then",
+			"else"
+		]) if (sub[k] !== void 0 && !unevalContributions(sub[k], kind, names, state, depth + 1)) return false;
+		return true;
+	}
+	function unevalLocalOk(node, key) {
+		if (node[key] !== false) return false;
+		if (node.$ref !== void 0 || node.$dynamicRef !== void 0 || node.$recursiveRef !== void 0) return false;
+		if (node.dependentSchemas !== void 0 || node.dependencies !== void 0) return false;
+		const kind = key === "unevaluatedProperties" ? "props" : "items";
+		if (kind === "props" && node.patternProperties !== void 0) return false;
+		if (kind === "items" && node.contains !== void 0) return false;
+		const names = /* @__PURE__ */ new Set();
+		const state = { prefix: 0 };
+		for (const k of [
+			"allOf",
+			"anyOf",
+			"oneOf"
+		]) if (node[k] !== void 0) {
+			if (!Array.isArray(node[k])) return false;
+			for (const b of node[k]) if (!unevalContributions(b, kind, names, state, 0)) return false;
+		}
+		for (const k of [
+			"if",
+			"then",
+			"else"
+		]) if (node[k] !== void 0 && !unevalContributions(node[k], kind, names, state, 0)) return false;
+		if (kind === "props") {
+			const own = node.properties && typeof node.properties === "object" ? node.properties : {};
+			for (const n of names) if (!Object.prototype.hasOwnProperty.call(own, n)) return false;
+		} else {
+			const ownPrefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : Array.isArray(node.items) ? node.items.length : 0;
+			if (node.items !== void 0 && !Array.isArray(node.items)) {} else if (state.prefix > ownPrefix) return false;
+		}
+		return true;
+	}
+	function unevalAllProvablyLocal(root) {
+		const seen = /* @__PURE__ */ new Set();
+		const stack = [root];
+		while (stack.length) {
+			const n = stack.pop();
+			if (n === null || typeof n !== "object" || seen.has(n)) continue;
+			seen.add(n);
+			if (!Array.isArray(n)) {
+				if (n.unevaluatedProperties !== void 0 && !unevalLocalOk(n, "unevaluatedProperties")) return false;
+				if (n.unevaluatedItems !== void 0 && !unevalLocalOk(n, "unevaluatedItems")) return false;
+			}
+			for (const k of Array.isArray(n) ? n : Object.values(n)) stack.push(k);
+		}
+		return true;
+	}
 	function fastPrefixCheck(pattern, keyVar) {
 		const m = pattern.match(/^\^([a-zA-Z0-9_\-./]+)$/);
 		if (!m) return null;
@@ -4685,7 +4774,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts) {
 		if (typeof schema === "object" && schema !== null) {
 			const s = JSON.stringify(schema);
-			if (s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) return null;
+			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
 		}
 		if (typeof schema === "boolean") return schema ? () => ({
 			valid: true,
@@ -4806,7 +4895,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				};
 			});
 			return fn;
-		} catch {
+		} catch (e) {
+			if (process.env.ATA_DEBUG_ERRGEN) console.error("error codegen declined:", e.message);
 			return null;
 		}
 	}
@@ -5092,6 +5182,44 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const inner = `const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++){if(${patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 		}
+		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0) {
+			const allowedU = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
+			const ui = ctx.varCounter++;
+			const upSp = `${schemaPrefix}/unevaluatedProperties`;
+			const upLit = buildErrorLiteral({
+				keyword: "unevaluatedProperties",
+				schemaPath: upSp,
+				sourceMap: ctx.sourceMap
+			});
+			const patChecksU = [];
+			for (const pat of Object.keys(schema.patternProperties || {})) {
+				const pattern = JSON.stringify(pat);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(pat)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				patChecksU.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ui}[_i])`);
+			}
+			const innerU = `const _k${ui}=Object.keys(${v});const _a${ui}=new Set([${allowedU}]);for(let _i=0;_i<_k${ui}.length;_i++){if(${patChecksU.length ? `!_a${ui}.has(_k${ui}[_i])&&!(${patChecksU.join("||")})` : `!_a${ui}.has(_k${ui}[_i])`}){_e.push({code:'${upLit.codeStr}',keyword:'unevaluatedProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${upSp}'${ordinalField(ctx, `${upSp}`)},params:{unevaluatedProperty:_k${ui}[_i]},message:'must NOT have unevaluated properties',docUrl:'${upLit.docUrl}'${upLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+		}
+		if (schema.unevaluatedItems === false) {
+			const itemsIsPrefix = Array.isArray(schema.items);
+			if (!(schema.items !== void 0 && !itemsIsPrefix)) {
+				const plen = itemsIsPrefix ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+				const uiSp = `${schemaPrefix}/unevaluatedItems`;
+				const uiLit = buildErrorLiteral({
+					keyword: "unevaluatedItems",
+					schemaPath: uiSp,
+					sourceMap: ctx.sourceMap
+				});
+				lines.push(`if(Array.isArray(${v})&&${v}.length>${plen}){_e.push({code:'${uiLit.codeStr}',keyword:'unevaluatedItems',instancePath:${pathExpr || "\"\""},schemaPath:'${uiSp}'${ordinalField(ctx, `${uiSp}`)},params:{limit:${plen}},message:'must NOT have more than ${plen} items',docUrl:'${uiLit.docUrl}'${uiLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			}
+		}
 		if (schema.dependentRequired) {
 			const drSp = `${schemaPrefix}/dependentRequired`;
 			const drLit = buildErrorLiteral({
@@ -5249,7 +5377,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats) {
 		if (typeof schema === "object" && schema !== null) {
 			const s = JSON.stringify(schema);
-			if (s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) return null;
+			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
 			if (s.includes("\"$ref\":\"#\"")) return null;
 			if (cyclicDefNames(schema.$defs || schema.definitions).size) return null;
 			if (hasAdditionalPropertiesSchema(schema)) return null;
@@ -5589,6 +5717,24 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				lines.push(isObj ? `{const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++)if(!_a${ci}.has(_k${ci}[_i])){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++)if(!_a${ci}.has(_k${ci}[_i])){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}`);
 			}
 		}
+		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0 && !schema.patternProperties) {
+			const propKeysU = Object.keys(schema.properties || {});
+			const ui = ctx.varCounter++;
+			const failU = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:_k${ui}[_i]}`, "'must NOT have unevaluated properties'");
+			let innerU;
+			if (propKeysU.length === 0) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){${failU}}`;
+			else if (propKeysU.length <= 8) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(${propKeysU.map((k) => `_k${ui}[_i]!==${JSON.stringify(k)}`).join("&&")}){${failU}}`;
+			else innerU = `const _k${ui}=Object.keys(${v});const _a${ui}=new Set([${propKeysU.map((k) => JSON.stringify(k)).join(",")}]);for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
+			lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+		}
+		if (schema.unevaluatedItems === false) {
+			const itemsIsPrefixC = Array.isArray(schema.items);
+			if (!(schema.items !== void 0 && !itemsIsPrefixC)) {
+				const plenC = itemsIsPrefixC ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+				const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${plenC}}`, `'must NOT have more than ${plenC} items'`);
+				lines.push(`if(Array.isArray(${v})&&${v}.length>${plenC}){${failI}}`);
+			}
+		}
 		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) if (!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) {
 			const errVar = `_E${ctx.varCounter++}`;
 			const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
@@ -5908,11 +6054,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		compileToJSCodegenWithErrors,
 		compileToJSCombined,
 		collectEvaluated,
+		unevalContributions,
 		AJV_MESSAGES
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -6111,7 +6258,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -6528,7 +6675,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	]) };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
@@ -6633,7 +6780,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -6711,7 +6858,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -6731,7 +6878,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -6835,7 +6982,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -7038,7 +7185,429 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	/**
+	* Build pointer → { byteOffset, length, line, col, text } from a JSON
+	* input buffer. Called only when validation fails AND richErrors is on
+	* AND abortEarly is off. Zero cost on the valid path.
+	*/
+	function buildDataPositionMap(input) {
+		const escapePtr = (s) => s.replace(/~/g, "~0").replace(/\//g, "~1");
+		const text = typeof Buffer !== "undefined" && Buffer.isBuffer(input) ? input.toString("utf8") : String(input);
+		const map = Object.create(null);
+		const lines = text.split("\n");
+		const lineStart = new Array(lines.length + 1);
+		lineStart[0] = 0;
+		for (let i = 0; i < lines.length; i++) lineStart[i + 1] = lineStart[i] + lines[i].length + 1;
+		function offsetToLineCol(off) {
+			let lo = 0, hi = lineStart.length - 1;
+			while (lo < hi) {
+				const mid = lo + hi + 1 >> 1;
+				if (lineStart[mid] <= off) lo = mid;
+				else hi = mid - 1;
+			}
+			return {
+				line: lo + 1,
+				col: off - lineStart[lo] + 1,
+				text: lines[lo] || ""
+			};
+		}
+		let i = 0;
+		const n = text.length;
+		function skipWs() {
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 32 || ch === 9 || ch === 10 || ch === 13) i++;
+				else break;
+			}
+		}
+		function readString() {
+			const start = i;
+			i++;
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 92) {
+					i += 2;
+					continue;
+				}
+				if (ch === 34) {
+					i++;
+					return JSON.parse(text.slice(start, i));
+				}
+				i++;
+			}
+			throw new Error("unterminated string at offset " + start);
+		}
+		function pointerOf(path) {
+			if (path.length === 0) return "";
+			return "/" + path.map(escapePtr).join("/");
+		}
+		function walk(path, keySpan) {
+			skipWs();
+			if (i >= n) return;
+			const start = i;
+			const pos = offsetToLineCol(start);
+			const ch = text.charCodeAt(i);
+			if (ch === 123) {
+				i++;
+				while (true) {
+					skipWs();
+					if (i >= n) break;
+					if (text.charCodeAt(i) === 125) {
+						i++;
+						break;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					skipWs();
+					const keyStart = i;
+					const keyPos = offsetToLineCol(keyStart);
+					const key = readString();
+					const span = {
+						keyOffset: keyStart,
+						keyLength: i - keyStart,
+						keyLine: keyPos.line,
+						keyCol: keyPos.col
+					};
+					skipWs();
+					if (text.charCodeAt(i) !== 58) throw new Error("expected \":\" at offset " + i);
+					i++;
+					walk(path.concat([key]), span);
+				}
+			} else if (ch === 91) {
+				i++;
+				let idx = 0;
+				while (true) {
+					skipWs();
+					if (i >= n) break;
+					if (text.charCodeAt(i) === 93) {
+						i++;
+						break;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					const before = i;
+					walk(path.concat([String(idx)]));
+					if (i === before) break;
+					idx++;
+				}
+			} else if (ch === 34) readString();
+			else while (i < n) {
+				const c = text.charCodeAt(i);
+				if (c === 44 || c === 125 || c === 93 || c === 32 || c === 9 || c === 10 || c === 13) break;
+				i++;
+			}
+			const entry = {
+				byteOffset: start,
+				length: i - start,
+				line: pos.line,
+				col: pos.col,
+				text: pos.text
+			};
+			if (keySpan) {
+				entry.keyOffset = keySpan.keyOffset;
+				entry.keyLength = keySpan.keyLength;
+				entry.keyLine = keySpan.keyLine;
+				entry.keyCol = keySpan.keyCol;
+			}
+			map[pointerOf(path)] = entry;
+		}
+		if (text.charCodeAt(0) === 65279) i = 1;
+		walk([]);
+		return map;
+	}
+	module.exports = { buildDataPositionMap };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { buildDataPositionMap } = require_data_positions();
+	/**
+	* Memoize the position map for the duration of a single validate() call.
+	* Caller passes the original buffer/string. Identity-keyed: same reference
+	* == same map. No global state, caller holds the cache instance.
+	*/
+	function createCache() {
+		const wm = /* @__PURE__ */ new WeakMap();
+		const sm = /* @__PURE__ */ new Map();
+		return {
+			get(input) {
+				if (input == null) return null;
+				if (typeof input === "string") {
+					if (sm.has(input)) return sm.get(input);
+					try {
+						const m = buildDataPositionMap(input);
+						sm.set(input, m);
+						return m;
+					} catch {
+						return null;
+					}
+				}
+				if (Buffer.isBuffer(input)) {
+					if (wm.has(input)) return wm.get(input);
+					try {
+						const m = buildDataPositionMap(input);
+						wm.set(input, m);
+						return m;
+					} catch {
+						return null;
+					}
+				}
+				return null;
+			},
+			reset() {
+				sm.clear();
+			}
+		};
+	}
+	module.exports = { createCache };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	let scratchA = /* @__PURE__ */ new Int32Array(64);
+	let scratchB = /* @__PURE__ */ new Int32Array(64);
+	function levenshtein(a, b, maxDistance) {
+		const max = maxDistance == null ? Infinity : maxDistance;
+		if (a === b) return 0;
+		if (Math.abs(a.length - b.length) > max) return Infinity;
+		if (a.length === 0) return b.length;
+		if (b.length === 0) return a.length;
+		if (scratchA.length < b.length + 1) {
+			scratchA = new Int32Array(b.length + 1);
+			scratchB = new Int32Array(b.length + 1);
+		}
+		let prev = scratchA;
+		let curr = scratchB;
+		const bn = b.length;
+		for (let j = 0; j <= bn; j++) prev[j] = j;
+		for (let i = 1; i <= a.length; i++) {
+			curr[0] = i;
+			let rowMin = i;
+			const ca = a.charCodeAt(i - 1);
+			for (let j = 1; j <= bn; j++) {
+				const cost = ca === b.charCodeAt(j - 1) ? 0 : 1;
+				let m = prev[j - 1] + cost;
+				const del = curr[j - 1] + 1;
+				if (del < m) m = del;
+				const ins = prev[j] + 1;
+				if (ins < m) m = ins;
+				curr[j] = m;
+				if (m < rowMin) rowMin = m;
+			}
+			if (rowMin > max) return Infinity;
+			const t = prev;
+			prev = curr;
+			curr = t;
+		}
+		return prev[bn];
+	}
+	module.exports = { levenshtein };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/strict-check.js
+var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { METASCHEMAS } = require_metaschemas();
+	const { levenshtein } = require_levenshtein();
+	const ATA_KEYWORDS = [
+		"nullable",
+		"errorMessage",
+		"propertyDependencies",
+		"discriminator"
+	];
+	let SPEC_KEYWORDS = null;
+	function specKeywords() {
+		if (SPEC_KEYWORDS === null) {
+			SPEC_KEYWORDS = new Set(ATA_KEYWORDS);
+			for (const doc of METASCHEMAS.values()) if (doc && doc.properties) for (const k of Object.keys(doc.properties)) SPEC_KEYWORDS.add(k);
+		}
+		return SPEC_KEYWORDS;
+	}
+	const KEYWORD_TYPES = new Map(Object.entries({
+		minLength: ["string"],
+		maxLength: ["string"],
+		pattern: ["string"],
+		minimum: ["number"],
+		maximum: ["number"],
+		exclusiveMinimum: ["number"],
+		exclusiveMaximum: ["number"],
+		multipleOf: ["number"],
+		items: ["array"],
+		prefixItems: ["array"],
+		additionalItems: ["array"],
+		minItems: ["array"],
+		maxItems: ["array"],
+		uniqueItems: ["array"],
+		contains: ["array"],
+		minContains: ["array"],
+		maxContains: ["array"],
+		unevaluatedItems: ["array"],
+		properties: ["object"],
+		patternProperties: ["object"],
+		additionalProperties: ["object"],
+		required: ["object"],
+		minProperties: ["object"],
+		maxProperties: ["object"],
+		propertyNames: ["object"],
+		dependentRequired: ["object"],
+		dependentSchemas: ["object"],
+		unevaluatedProperties: ["object"]
+	}));
+	function typeAllows(declared, wanted) {
+		const list = Array.isArray(declared) ? declared : [declared];
+		for (const t of list) {
+			if (t === wanted) return true;
+			if (wanted === "number" && t === "integer") return true;
+		}
+		return false;
+	}
+	const SCHEMA_MAPS = /* @__PURE__ */ new Set([
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas"
+	]);
+	const SCHEMA_LISTS = /* @__PURE__ */ new Set([
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"prefixItems"
+	]);
+	const SCHEMA_SINGLE = /* @__PURE__ */ new Set([
+		"items",
+		"additionalItems",
+		"additionalProperties",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"contains",
+		"propertyNames",
+		"not",
+		"if",
+		"then",
+		"else",
+		"contentSchema"
+	]);
+	const DATA_VALUED = /* @__PURE__ */ new Set([
+		"enum",
+		"const",
+		"default",
+		"examples",
+		"required",
+		"type",
+		"$vocabulary"
+	]);
+	function nearest(word, known) {
+		let best = null;
+		let bestD = Infinity;
+		for (const k of known) {
+			const d = levenshtein(word, k);
+			if (d < bestD) {
+				bestD = d;
+				best = k;
+			}
+		}
+		return bestD > 0 && bestD <= 2 && best !== null ? best : null;
+	}
+	function resolveLocalPointer(root, ref) {
+		let node = root;
+		for (const raw of ref.slice(2).split("/")) {
+			const token = raw.replace(/~1/g, "/").replace(/~0/g, "~");
+			if (node === null || typeof node !== "object") return false;
+			if (Array.isArray(node)) {
+				if (!/^\d+$/.test(token) || Number(token) >= node.length) return false;
+				node = node[Number(token)];
+			} else {
+				if (!Object.prototype.hasOwnProperty.call(node, token)) return false;
+				node = node[token];
+			}
+		}
+		return node !== void 0;
+	}
+	/**
+	* Walks a schema and reports the authoring mistakes the validator would
+	* otherwise ignore. Returns an array of { path, message }, empty when clean.
+	*
+	* `userKeywords` are names registered through the `keywords` option, and
+	* `x-` prefixed names pass without comment: they are the conventional
+	* extension namespace and rejecting them would flag real documents.
+	*/
+	function checkSchemaStrict(root, options) {
+		const known = specKeywords();
+		const user = options && options.userKeywords ? options.userKeywords : null;
+		const problems = [];
+		const seen = /* @__PURE__ */ new Set();
+		function isKnown(key) {
+			if (known.has(key)) return true;
+			if (user && (Array.isArray(user) ? user.includes(key) : Object.prototype.hasOwnProperty.call(user, key))) return true;
+			if (key.startsWith("x-")) return true;
+			return false;
+		}
+		function walkSchema(node, path) {
+			if (node === null || typeof node !== "object" || Array.isArray(node)) return;
+			if (seen.has(node)) return;
+			seen.add(node);
+			for (const key of Object.keys(node)) {
+				const value = node[key];
+				const at = path + "/" + key;
+				if (!isKnown(key)) {
+					const hint = nearest(key, known);
+					problems.push({
+						path: at,
+						message: hint ? `unknown keyword "${key}" (did you mean "${hint}"?)` : `unknown keyword "${key}"`
+					});
+					continue;
+				}
+				if (key === "$ref" && typeof value === "string" && value.startsWith("#/") && !resolveLocalPointer(root, value)) {
+					problems.push({
+						path: at,
+						message: `$ref "${value}" does not resolve in this document`
+					});
+					continue;
+				}
+				if (typeof node.type === "string" || Array.isArray(node.type)) {
+					const acts = KEYWORD_TYPES.get(key);
+					if (acts && !acts.some((t) => typeAllows(node.type, t))) {
+						problems.push({
+							path: at,
+							message: `"${key}" has no effect here: it applies to ${acts.join("/")} and this node's type is ${JSON.stringify(node.type)}`
+						});
+						continue;
+					}
+				}
+				if (key === "required" && Array.isArray(value) && node.properties && typeof node.properties === "object" && node.additionalProperties === false && !node.patternProperties) {
+					for (const name of value) if (typeof name === "string" && !Object.prototype.hasOwnProperty.call(node.properties, name)) problems.push({
+						path: at,
+						message: `required property "${name}" is not defined in properties and additionalProperties is false, so nothing can satisfy this schema`
+					});
+				}
+				if (DATA_VALUED.has(key)) continue;
+				if (SCHEMA_MAPS.has(key)) {
+					if (value !== null && typeof value === "object" && !Array.isArray(value)) for (const name of Object.keys(value)) walkSchema(value[name], at + "/" + name.replace(/~/g, "~0").replace(/\//g, "~1"));
+				} else if (SCHEMA_LISTS.has(key)) {
+					if (Array.isArray(value)) for (let i = 0; i < value.length; i++) walkSchema(value[i], at + "/" + i);
+				} else if (SCHEMA_SINGLE.has(key)) {
+					if (Array.isArray(value)) for (let i = 0; i < value.length; i++) walkSchema(value[i], at + "/" + i);
+					else walkSchema(value, at);
+				} else if (key === "dependencies") {
+					if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+						for (const name of Object.keys(value)) if (!Array.isArray(value[name])) walkSchema(value[name], at + "/" + name);
+					}
+				}
+			}
+		}
+		walkSchema(root, "#");
+		return problems;
+	}
+	module.exports = { checkSchemaStrict };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -7194,190 +7763,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
-var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	/**
-	* Build pointer → { byteOffset, length, line, col, text } from a JSON
-	* input buffer. Called only when validation fails AND richErrors is on
-	* AND abortEarly is off. Zero cost on the valid path.
-	*/
-	const { escapePtr } = require_source_positions();
-	function buildDataPositionMap(input) {
-		const text = Buffer.isBuffer(input) ? input.toString("utf8") : String(input);
-		const map = Object.create(null);
-		const lines = text.split("\n");
-		const lineStart = new Array(lines.length + 1);
-		lineStart[0] = 0;
-		for (let i = 0; i < lines.length; i++) lineStart[i + 1] = lineStart[i] + lines[i].length + 1;
-		function offsetToLineCol(off) {
-			let lo = 0, hi = lineStart.length - 1;
-			while (lo < hi) {
-				const mid = lo + hi + 1 >> 1;
-				if (lineStart[mid] <= off) lo = mid;
-				else hi = mid - 1;
-			}
-			return {
-				line: lo + 1,
-				col: off - lineStart[lo] + 1,
-				text: lines[lo] || ""
-			};
-		}
-		let i = 0;
-		const n = text.length;
-		function skipWs() {
-			while (i < n) {
-				const ch = text.charCodeAt(i);
-				if (ch === 32 || ch === 9 || ch === 10 || ch === 13) i++;
-				else break;
-			}
-		}
-		function readString() {
-			const start = i;
-			i++;
-			while (i < n) {
-				const ch = text.charCodeAt(i);
-				if (ch === 92) {
-					i += 2;
-					continue;
-				}
-				if (ch === 34) {
-					i++;
-					return JSON.parse(text.slice(start, i));
-				}
-				i++;
-			}
-			throw new Error("unterminated string at offset " + start);
-		}
-		function pointerOf(path) {
-			if (path.length === 0) return "";
-			return "/" + path.map(escapePtr).join("/");
-		}
-		function walk(path, keySpan) {
-			skipWs();
-			if (i >= n) return;
-			const start = i;
-			const pos = offsetToLineCol(start);
-			const ch = text.charCodeAt(i);
-			if (ch === 123) {
-				i++;
-				while (true) {
-					skipWs();
-					if (i >= n) break;
-					if (text.charCodeAt(i) === 125) {
-						i++;
-						break;
-					}
-					if (text.charCodeAt(i) === 44) {
-						i++;
-						continue;
-					}
-					skipWs();
-					const keyStart = i;
-					const keyPos = offsetToLineCol(keyStart);
-					const key = readString();
-					const span = {
-						keyOffset: keyStart,
-						keyLength: i - keyStart,
-						keyLine: keyPos.line,
-						keyCol: keyPos.col
-					};
-					skipWs();
-					if (text.charCodeAt(i) !== 58) throw new Error("expected \":\" at offset " + i);
-					i++;
-					walk(path.concat([key]), span);
-				}
-			} else if (ch === 91) {
-				i++;
-				let idx = 0;
-				while (true) {
-					skipWs();
-					if (i >= n) break;
-					if (text.charCodeAt(i) === 93) {
-						i++;
-						break;
-					}
-					if (text.charCodeAt(i) === 44) {
-						i++;
-						continue;
-					}
-					const before = i;
-					walk(path.concat([String(idx)]));
-					if (i === before) break;
-					idx++;
-				}
-			} else if (ch === 34) readString();
-			else while (i < n) {
-				const c = text.charCodeAt(i);
-				if (c === 44 || c === 125 || c === 93 || c === 32 || c === 9 || c === 10 || c === 13) break;
-				i++;
-			}
-			const entry = {
-				byteOffset: start,
-				length: i - start,
-				line: pos.line,
-				col: pos.col,
-				text: pos.text
-			};
-			if (keySpan) {
-				entry.keyOffset = keySpan.keyOffset;
-				entry.keyLength = keySpan.keyLength;
-				entry.keyLine = keySpan.keyLine;
-				entry.keyCol = keySpan.keyCol;
-			}
-			map[pointerOf(path)] = entry;
-		}
-		if (text.charCodeAt(0) === 65279) i = 1;
-		walk([]);
-		return map;
-	}
-	module.exports = { buildDataPositionMap };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
-var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { buildDataPositionMap } = require_data_positions();
-	/**
-	* Memoize the position map for the duration of a single validate() call.
-	* Caller passes the original buffer/string. Identity-keyed: same reference
-	* == same map. No global state, caller holds the cache instance.
-	*/
-	function createCache() {
-		const wm = /* @__PURE__ */ new WeakMap();
-		const sm = /* @__PURE__ */ new Map();
-		return {
-			get(input) {
-				if (input == null) return null;
-				if (typeof input === "string") {
-					if (sm.has(input)) return sm.get(input);
-					try {
-						const m = buildDataPositionMap(input);
-						sm.set(input, m);
-						return m;
-					} catch {
-						return null;
-					}
-				}
-				if (Buffer.isBuffer(input)) {
-					if (wm.has(input)) return wm.get(input);
-					try {
-						const m = buildDataPositionMap(input);
-						wm.set(input, m);
-						return m;
-					} catch {
-						return null;
-					}
-				}
-				return null;
-			},
-			reset() {
-				sm.clear();
-			}
-		};
-	}
-	module.exports = { createCache };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
@@ -8401,7 +8787,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const { compileSafe } = require_safe_regex();
@@ -9645,7 +10031,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { createInterpreter };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/pointer.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -9690,49 +10076,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
-var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	let scratchA = /* @__PURE__ */ new Int32Array(64);
-	let scratchB = /* @__PURE__ */ new Int32Array(64);
-	function levenshtein(a, b, maxDistance) {
-		const max = maxDistance == null ? Infinity : maxDistance;
-		if (a === b) return 0;
-		if (Math.abs(a.length - b.length) > max) return Infinity;
-		if (a.length === 0) return b.length;
-		if (b.length === 0) return a.length;
-		if (scratchA.length < b.length + 1) {
-			scratchA = new Int32Array(b.length + 1);
-			scratchB = new Int32Array(b.length + 1);
-		}
-		let prev = scratchA;
-		let curr = scratchB;
-		const bn = b.length;
-		for (let j = 0; j <= bn; j++) prev[j] = j;
-		for (let i = 1; i <= a.length; i++) {
-			curr[0] = i;
-			let rowMin = i;
-			const ca = a.charCodeAt(i - 1);
-			for (let j = 1; j <= bn; j++) {
-				const cost = ca === b.charCodeAt(j - 1) ? 0 : 1;
-				let m = prev[j - 1] + cost;
-				const del = curr[j - 1] + 1;
-				if (del < m) m = del;
-				const ins = prev[j] + 1;
-				if (ins < m) m = ins;
-				curr[j] = m;
-				if (m < rowMin) rowMin = m;
-			}
-			if (rowMin > max) return Infinity;
-			const t = prev;
-			prev = curr;
-			curr = t;
-		}
-		return prev[bn];
-	}
-	module.exports = { levenshtein };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -9863,7 +10207,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -10086,7 +10430,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -10144,7 +10488,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -10152,7 +10496,989 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/scan-runtime.js
+var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function hex4(s, i) {
+		for (let k = i; k < i + 4; k++) {
+			const c = s.charCodeAt(k);
+			if (c >= 48 && c <= 57) continue;
+			if (c >= 97 && c <= 102) continue;
+			if (c >= 65 && c <= 70) continue;
+			return false;
+		}
+		return true;
+	}
+	const MAX_SKIP_DEPTH = 512;
+	const MALFORMED = -1;
+	const TOO_DEEP = -2;
+	function skipValue(s, i) {
+		const len = s.length;
+		const stack = [];
+		let depth = 0;
+		for (;;) {
+			let c = s.charCodeAt(i);
+			while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+			if (c === 34) {
+				i = skipString(s, i);
+				if (i < 0) return MALFORMED;
+			} else if (c === 123 || c === 91) {
+				if (depth >= MAX_SKIP_DEPTH) return TOO_DEEP;
+				stack[depth++] = c === 123 ? 0 : 1;
+				i++;
+				c = s.charCodeAt(i);
+				while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+				if (c === (stack[depth - 1] === 0 ? 125 : 93)) {
+					depth--;
+					i++;
+				} else if (stack[depth - 1] === 0) {
+					if (c !== 34) return MALFORMED;
+					i = skipString(s, i);
+					if (i < 0) return MALFORMED;
+					c = s.charCodeAt(i);
+					while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+					if (c !== 58) return MALFORMED;
+					i++;
+					continue;
+				} else continue;
+			} else if (c === 116) {
+				if (s.charCodeAt(i + 1) !== 114 || s.charCodeAt(i + 2) !== 117 || s.charCodeAt(i + 3) !== 101) return MALFORMED;
+				i += 4;
+			} else if (c === 102) {
+				if (s.charCodeAt(i + 1) !== 97 || s.charCodeAt(i + 2) !== 108 || s.charCodeAt(i + 3) !== 115 || s.charCodeAt(i + 4) !== 101) return MALFORMED;
+				i += 5;
+			} else if (c === 110) {
+				if (s.charCodeAt(i + 1) !== 117 || s.charCodeAt(i + 2) !== 108 || s.charCodeAt(i + 3) !== 108) return MALFORMED;
+				i += 4;
+			} else {
+				i = skipNumber(s, i);
+				if (i < 0) return MALFORMED;
+			}
+			for (;;) {
+				if (depth === 0) return i;
+				let c2 = s.charCodeAt(i);
+				while (c2 === 32 || c2 === 10 || c2 === 9 || c2 === 13) c2 = s.charCodeAt(++i);
+				const inObject = stack[depth - 1] === 0;
+				if (c2 === 44) {
+					i++;
+					if (inObject) {
+						let c3 = s.charCodeAt(i);
+						while (c3 === 32 || c3 === 10 || c3 === 9 || c3 === 13) c3 = s.charCodeAt(++i);
+						if (c3 !== 34) return MALFORMED;
+						i = skipString(s, i);
+						if (i < 0) return MALFORMED;
+						c3 = s.charCodeAt(i);
+						while (c3 === 32 || c3 === 10 || c3 === 9 || c3 === 13) c3 = s.charCodeAt(++i);
+						if (c3 !== 58) return MALFORMED;
+						i++;
+					}
+					break;
+				}
+				if (c2 === (inObject ? 125 : 93)) {
+					depth--;
+					i++;
+					continue;
+				}
+				return MALFORMED;
+			}
+			if (i > len) return MALFORMED;
+		}
+	}
+	function skipString(s, i) {
+		i++;
+		for (;;) {
+			const c = s.charCodeAt(i);
+			if (c === 34) return i + 1;
+			if (c === 92) {
+				const e = s.charCodeAt(i + 1);
+				if (e === 117) {
+					if (!hex4(s, i + 2)) return -1;
+					i += 6;
+					continue;
+				}
+				if (e === 34 || e === 92 || e === 47 || e === 98 || e === 102 || e === 110 || e === 114 || e === 116) {
+					i += 2;
+					continue;
+				}
+				return -1;
+			}
+			if (!(c >= 32)) return -1;
+			i++;
+		}
+	}
+	function skipNumber(s, i) {
+		let c = s.charCodeAt(i);
+		if (c === 45) c = s.charCodeAt(++i);
+		if (c === 48) c = s.charCodeAt(++i);
+		else if (c >= 49 && c <= 57) do
+			c = s.charCodeAt(++i);
+		while (c >= 48 && c <= 57);
+		else return -1;
+		if (c === 46) {
+			c = s.charCodeAt(++i);
+			if (!(c >= 48 && c <= 57)) return -1;
+			do
+				c = s.charCodeAt(++i);
+			while (c >= 48 && c <= 57);
+		}
+		if (c === 101 || c === 69) {
+			c = s.charCodeAt(++i);
+			if (c === 43 || c === 45) c = s.charCodeAt(++i);
+			if (!(c >= 48 && c <= 57)) return -1;
+			do
+				c = s.charCodeAt(++i);
+			while (c >= 48 && c <= 57);
+		}
+		return i;
+	}
+	function span(s, p, e, escaped) {
+		if (!escaped) return s.slice(p, e);
+		return JSON.parse(s.slice(p - 1, e + 1));
+	}
+	module.exports = {
+		hex4,
+		skipValue,
+		skipString,
+		skipNumber,
+		span,
+		MALFORMED,
+		TOO_DEEP,
+		MAX_SKIP_DEPTH
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/scan-compiler.js
+var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileToJSCodegen } = require_js_compiler();
+	const VALID = 1;
+	const INVALID = 0;
+	const BAIL = -1;
+	const MAX_SCHEMA_DEPTH = 12;
+	const MAX_PROPS = 4096;
+	const TIGHTEN_MAX = [
+		"minLength",
+		"minItems",
+		"minProperties",
+		"minimum",
+		"exclusiveMinimum"
+	];
+	const TIGHTEN_MIN = [
+		"maxLength",
+		"maxItems",
+		"maxProperties",
+		"maximum",
+		"exclusiveMaximum"
+	];
+	const SAME_OR_NOTHING = [
+		"pattern",
+		"format",
+		"const",
+		"enum",
+		"multipleOf"
+	];
+	const STRUCTURAL = /* @__PURE__ */ new Set([
+		"type",
+		"properties",
+		"required",
+		"additionalProperties",
+		"minProperties",
+		"maxProperties",
+		"items",
+		"prefixItems",
+		"minItems",
+		"maxItems",
+		"unevaluatedProperties",
+		"unevaluatedItems"
+	]);
+	const LEAF = /* @__PURE__ */ new Set([
+		"minLength",
+		"maxLength",
+		"pattern",
+		"format",
+		"const",
+		"enum",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf"
+	]);
+	const IGNORED = /* @__PURE__ */ new Set([
+		"title",
+		"description",
+		"$comment",
+		"examples",
+		"deprecated",
+		"readOnly",
+		"writeOnly",
+		"$schema",
+		"$defs",
+		"definitions",
+		"$vocabulary"
+	]);
+	const BASE_CHANGING = /* @__PURE__ */ new Set([
+		"$id",
+		"$anchor",
+		"$dynamicAnchor",
+		"$dynamicRef"
+	]);
+	const MAX_NODES = 8192;
+	const MAX_PREFIX_ITEMS = 24;
+	const KINDS = [
+		"object",
+		"array",
+		"string",
+		"number",
+		"integer",
+		"boolean",
+		"null"
+	];
+	const DECLINE = Symbol("decline");
+	let declineReason = null;
+	function decline(reason) {
+		declineReason = reason || "unknown";
+		throw DECLINE;
+	}
+	const WS = "if(c<=32){while(c===32||c===10||c===9||c===13){c=s.charCodeAt(++i);}}";
+	function isPlainObject(v) {
+		return v !== null && typeof v === "object" && !Array.isArray(v);
+	}
+	function typeSet(schema) {
+		const t = schema.type;
+		if (t === void 0) return null;
+		const list = Array.isArray(t) ? t : [t];
+		const out = /* @__PURE__ */ new Set();
+		for (const name of list) {
+			if (typeof name !== "string" || !KINDS.includes(name)) decline("type:" + String(name));
+			out.add(name);
+		}
+		if (out.size === 0) decline("type:empty");
+		return out;
+	}
+	function allows(types, kind) {
+		if (types === null) return true;
+		if (kind === "number") return types.has("number") || types.has("integer");
+		return types.has(kind);
+	}
+	function integerOnly(types) {
+		return types !== null && types.has("integer") && !types.has("number");
+	}
+	function compileLeaf(keys, schema, ctx) {
+		const sub = {};
+		for (const k of keys) sub[k] = schema[k];
+		const fn = compileToJSCodegen(sub, null, ctx.userFormats);
+		if (typeof fn !== "function") decline("leaf:" + keys.join("+"));
+		ctx.helpers.push(fn);
+		return "_h[" + (ctx.helpers.length - 1) + "]";
+	}
+	function resolveLocalRef(root, ref) {
+		if (typeof ref !== "string") decline("$ref:not-string");
+		if (ref === "#") return root;
+		if (!ref.startsWith("#/")) decline("$ref:not-local");
+		let node = root;
+		for (const rawToken of ref.slice(2).split("/")) {
+			const token = decodeURIComponent(rawToken).split("~1").join("/").split("~0").join("~");
+			if (node === null || typeof node !== "object") decline("$ref:unresolved");
+			if (Array.isArray(node)) {
+				if (!/^\d+$/.test(token)) decline("$ref:unresolved");
+				node = node[Number(token)];
+			} else {
+				if (!Object.prototype.hasOwnProperty.call(node, token)) decline("$ref:unresolved");
+				node = node[token];
+			}
+			if (node === void 0) decline("$ref:unresolved");
+		}
+		return node;
+	}
+	function collectLayers(node, ctx, out, depth) {
+		if (depth > MAX_SCHEMA_DEPTH) decline("allOf:too-deep");
+		if (node === true) return;
+		if (node === false) {
+			out.unsatisfiable = true;
+			return;
+		}
+		if (!isPlainObject(node)) decline("allOf:branch-not-object");
+		for (const k of Object.keys(node)) if (BASE_CHANGING.has(k)) decline("allOf:base-changing:" + k);
+		if (node.$ref !== void 0) {
+			for (const k of Object.keys(node)) if (k !== "$ref" && !IGNORED.has(k)) decline("allOf:$ref-sibling:" + k);
+			if (ctx.refStack.includes(node.$ref)) decline("$ref:recursive");
+			const target = resolveLocalRef(ctx.root, node.$ref);
+			ctx.refStack.push(node.$ref);
+			collectLayers(target, ctx, out, depth + 1);
+			ctx.refStack.pop();
+			return;
+		}
+		const own = {};
+		for (const k of Object.keys(node)) {
+			if (k === "allOf" || IGNORED.has(k)) continue;
+			own[k] = node[k];
+		}
+		if (Object.keys(own).length > 0) out.push(own);
+		if (node.allOf !== void 0) {
+			if (!Array.isArray(node.allOf)) decline("allOf:not-array");
+			for (const branch of node.allOf) collectLayers(branch, ctx, out, depth + 1);
+		}
+	}
+	function combine(parts) {
+		const real = parts.filter((p) => p !== true && p !== void 0);
+		if (real.some((p) => p === false)) return false;
+		if (real.length === 0) return true;
+		if (real.length === 1) return real[0];
+		return { allOf: real };
+	}
+	function mergeAllOf(schema, ctx) {
+		const layers = [];
+		collectLayers(schema, ctx, layers, 0);
+		if (layers.unsatisfiable) return false;
+		if (layers.length === 0) return true;
+		if (layers.length === 1) return layers[0];
+		for (const L of layers) if (L.unevaluatedProperties !== void 0 || L.unevaluatedItems !== void 0) decline("allOf:unevaluated");
+		const out = {};
+		let types = null;
+		for (const L of layers) {
+			const t = typeSet(L);
+			if (t === null) continue;
+			if (types === null) {
+				types = t;
+				continue;
+			}
+			const both = /* @__PURE__ */ new Set();
+			for (const name of types) if (t.has(name)) both.add(name);
+			else if (name === "number" && t.has("integer") || name === "integer" && t.has("number")) both.add("integer");
+			types = both;
+		}
+		if (types !== null) {
+			if (types.size === 0) return false;
+			out.type = [...types];
+		}
+		for (const key of TIGHTEN_MAX) {
+			let v;
+			for (const L of layers) if (typeof L[key] === "number") v = v === void 0 ? L[key] : Math.max(v, L[key]);
+			if (v !== void 0) out[key] = v;
+		}
+		for (const key of TIGHTEN_MIN) {
+			let v;
+			for (const L of layers) if (typeof L[key] === "number") v = v === void 0 ? L[key] : Math.min(v, L[key]);
+			if (v !== void 0) out[key] = v;
+		}
+		for (const key of TIGHTEN_MAX.concat(TIGHTEN_MIN)) for (const L of layers) if (L[key] !== void 0 && typeof L[key] !== "number") decline("allOf:" + key + ":not-number");
+		for (const key of SAME_OR_NOTHING) {
+			let seen, has = false;
+			for (const L of layers) {
+				if (L[key] === void 0) continue;
+				const rendered = JSON.stringify(L[key]);
+				if (!has) {
+					seen = rendered;
+					out[key] = L[key];
+					has = true;
+					continue;
+				}
+				if (rendered !== seen) decline("allOf:conflicting:" + key);
+			}
+		}
+		const required = [];
+		for (const L of layers) {
+			if (L.required === void 0) continue;
+			if (!Array.isArray(L.required)) decline("required:not-array");
+			for (const name of L.required) if (!required.includes(name)) required.push(name);
+		}
+		if (required.length > 0) out.required = required;
+		const names = [];
+		for (const L of layers) {
+			if (L.properties === void 0) continue;
+			if (!isPlainObject(L.properties)) decline("properties:not-object");
+			for (const k of Object.keys(L.properties)) if (!names.includes(k)) names.push(k);
+		}
+		if (names.length > 0) {
+			out.properties = {};
+			for (const name of names) {
+				const parts = [];
+				for (const L of layers) if (L.properties && Object.prototype.hasOwnProperty.call(L.properties, name)) parts.push(L.properties[name]);
+				else if (L.additionalProperties !== void 0) parts.push(L.additionalProperties);
+				out.properties[name] = combine(parts);
+			}
+		}
+		{
+			const parts = [];
+			for (const L of layers) if (L.additionalProperties !== void 0) parts.push(L.additionalProperties);
+			if (parts.length > 0) {
+				const merged = combine(parts);
+				if (merged !== true) out.additionalProperties = merged;
+			}
+		}
+		{
+			const parts = [];
+			for (const L of layers) if (L.items !== void 0) parts.push(L.items);
+			if (parts.length > 0) {
+				const merged = combine(parts);
+				if (merged !== true) out.items = merged;
+			}
+		}
+		{
+			let longest = -1;
+			for (const L of layers) {
+				if (L.prefixItems === void 0) continue;
+				if (!Array.isArray(L.prefixItems)) decline("prefixItems:not-array");
+				if (L.prefixItems.length > longest) longest = L.prefixItems.length;
+			}
+			if (longest >= 0) {
+				const tuple = [];
+				for (let k = 0; k < longest; k++) {
+					const parts = [];
+					for (const L of layers) if (L.prefixItems !== void 0 && k < L.prefixItems.length) parts.push(L.prefixItems[k]);
+					else if (L.items !== void 0) parts.push(L.items);
+					tuple.push(combine(parts));
+				}
+				out.prefixItems = tuple;
+			}
+		}
+		const HANDLED = new Set([
+			"type",
+			"required",
+			"properties",
+			"additionalProperties",
+			"items",
+			"prefixItems"
+		].concat(TIGHTEN_MAX, TIGHTEN_MIN, SAME_OR_NOTHING));
+		for (const L of layers) for (const k of Object.keys(L)) {
+			if (HANDLED.has(k)) continue;
+			if (out[k] === void 0) out[k] = L[k];
+			else if (JSON.stringify(out[k]) !== JSON.stringify(L[k])) decline("allOf:conflicting:" + k);
+		}
+		return out;
+	}
+	function spanHash(name) {
+		let h = 5381;
+		for (let i = 0; i < name.length; i++) h = Math.imul(h, 33) + name.charCodeAt(i) | 0;
+		return h;
+	}
+	const HASH_DISPATCH_MIN = 48;
+	function compileScanner(schema, options) {
+		const opts = options || {};
+		const ctx = {
+			uid: 0,
+			helpers: [],
+			userFormats: opts.userFormats || null,
+			root: schema,
+			refStack: [],
+			nodes: 0
+		};
+		declineReason = null;
+		let body;
+		try {
+			const out = [];
+			out.push("var len=s.length,i=0,c=s.charCodeAt(0);");
+			out.push(WS);
+			emitValue(schema, ctx, out, 0);
+			out.push(WS);
+			out.push("if(i<len)return 0;");
+			out.push("return 1;");
+			body = out.join("\n");
+		} catch (e) {
+			if (e === DECLINE) {
+				if (opts.onDecline) opts.onDecline(declineReason);
+				return null;
+			}
+			throw e;
+		}
+		let fn;
+		try {
+			fn = new Function("_h", "_r", "return function scan(s){\n" + body + "\n}")(ctx.helpers, require_scan_runtime());
+		} catch {
+			return null;
+		}
+		return {
+			scan: fn,
+			source: body,
+			helpers: ctx.helpers.length
+		};
+	}
+	function emitValue(schema, ctx, out, depth) {
+		if (depth > MAX_SCHEMA_DEPTH) decline("depth");
+		if (schema === true) {
+			emitSkip(out);
+			return;
+		}
+		if (schema === false) {
+			out.push("return 0;");
+			return;
+		}
+		if (!isPlainObject(schema)) decline("schema-not-object");
+		if (++ctx.nodes > MAX_NODES) decline("too-many-nodes");
+		for (const k of Object.keys(schema)) if (BASE_CHANGING.has(k) && !(k === "$id" && depth === 0)) decline("base-changing:" + k);
+		if (schema.$ref !== void 0) {
+			for (const k of Object.keys(schema)) if (k !== "$ref" && !IGNORED.has(k)) decline("$ref:sibling:" + k);
+			const ref = schema.$ref;
+			if (ctx.refStack.includes(ref)) decline("$ref:recursive");
+			const target = resolveLocalRef(ctx.root, ref);
+			ctx.refStack.push(ref);
+			emitValue(target, ctx, out, depth);
+			ctx.refStack.pop();
+			return;
+		}
+		if (schema.allOf !== void 0) {
+			emitValue(mergeAllOf(schema, ctx), ctx, out, depth);
+			return;
+		}
+		const present = [];
+		for (const k of Object.keys(schema)) {
+			if (k === "$id" && depth === 0) continue;
+			if (IGNORED.has(k)) continue;
+			if (STRUCTURAL.has(k) || LEAF.has(k)) {
+				present.push(k);
+				continue;
+			}
+			decline("keyword:" + k);
+		}
+		const types = typeSet(schema);
+		const has = (k) => present.includes(k);
+		let compositeAllowed = true;
+		let compositeDelegate = null;
+		if (has("const") || has("enum")) {
+			compositeAllowed = false;
+			const listed = [];
+			if (has("const")) listed.push(schema.const);
+			if (has("enum")) {
+				if (!Array.isArray(schema.enum)) decline("enum:not-array");
+				for (const v of schema.enum) listed.push(v);
+			}
+			if (listed.some((v) => v !== null && typeof v === "object")) {
+				const fn = compileToJSCodegen(schema, null, ctx.userFormats);
+				if (typeof fn !== "function") decline("const/enum:composite");
+				ctx.helpers.push(fn);
+				compositeDelegate = "_h[" + (ctx.helpers.length - 1) + "]";
+			}
+		}
+		const branches = [];
+		const compositeBranch = () => {
+			const k = ctx.uid++;
+			return ["var _cs" + k + "=i;var _ce" + k + "=_r.skipValue(s,i);if(_ce" + k + "===-2)return -1;if(_ce" + k + "<0)return 0;var _cv" + k + ";try{_cv" + k + "=JSON.parse(s.slice(_cs" + k + ",_ce" + k + "))}catch(_ce_){return 0}if(!" + compositeDelegate + "(_cv" + k + "))return 0;i=_ce" + k + ";c=s.charCodeAt(i);"];
+		};
+		if (allows(types, "object")) {
+			if (compositeDelegate) branches.push(["c===123", compositeBranch()]);
+			else if (!compositeAllowed) branches.push(["c===123", ["return 0;"]]);
+			else {
+				const b = [];
+				emitObject(schema, ctx, b, depth);
+				branches.push(["c===123", b]);
+			}
+		}
+		if (allows(types, "array")) {
+			if (compositeDelegate) branches.push(["c===91", compositeBranch()]);
+			else if (!compositeAllowed) branches.push(["c===91", ["return 0;"]]);
+			else {
+				const b = [];
+				emitArray(schema, ctx, b, depth);
+				branches.push(["c===91", b]);
+			}
+		}
+		if (allows(types, "string")) {
+			const b = [];
+			emitString(schema, ctx, b);
+			branches.push(["c===34", b]);
+		}
+		if (allows(types, "number")) {
+			const b = [];
+			emitNumber(schema, ctx, b, types);
+			branches.push(["c===45||(c>=48&&c<=57)", b]);
+		}
+		if (allows(types, "boolean")) {
+			const b = [];
+			emitLiteral(schema, ctx, b, "boolean");
+			branches.push(["c===116||c===102", b]);
+		}
+		if (allows(types, "null")) {
+			const b = [];
+			emitLiteral(schema, ctx, b, "null");
+			branches.push(["c===110", b]);
+		}
+		if (branches.length === 0) {
+			out.push("return 0;");
+			return;
+		}
+		const parts = [];
+		for (let k = 0; k < branches.length; k++) {
+			parts.push((k === 0 ? "if(" : "else if(") + branches[k][0] + "){");
+			parts.push(branches[k][1].join("\n"));
+			parts.push("}");
+		}
+		parts.push("else return 0;");
+		out.push(parts.join("\n"));
+	}
+	function emitSkip(out) {
+		out.push("{var _j=_r.skipValue(s,i);if(_j===-2)return -1;if(_j<0)return 0;i=_j;c=s.charCodeAt(i);}");
+	}
+	function emitStringSpan(ctx, out, n, wantLen, wantHash) {
+		out.push("var _p" + n + "=++i,_x" + n + "=0" + (wantLen ? ",_u" + n + "=0,_hs" + n + "=0" : "") + (wantHash ? ",_h" + n + "=5381" : "") + ";");
+		out.push("for(;;){c=s.charCodeAt(i);");
+		out.push("if(c===34)break;");
+		out.push("if(c===92){var _q" + n + "=s.charCodeAt(i+1);");
+		out.push("if(_q" + n + "===117){if(!_r.hex4(s,i+2))return 0;i+=6;_x" + n + "=1;" + (wantLen ? "_u" + n + "++;" : "") + "continue;}");
+		out.push("if(_q" + n + "===34||_q" + n + "===92||_q" + n + "===47||_q" + n + "===98||_q" + n + "===102||_q" + n + "===110||_q" + n + "===114||_q" + n + "===116){i+=2;_x" + n + "=1;" + (wantLen ? "_u" + n + "++;" : "") + "continue;}");
+		out.push("return 0;}");
+		out.push("if(!(c>=32))return 0;");
+		out.push("i++;" + (wantLen ? "_u" + n + "++;if(((c-55296)>>>0)<1024)_hs" + n + "=1;" : "") + (wantHash ? "_h" + n + "=(Math.imul(_h" + n + ",33)+c)|0;" : ""));
+		out.push("}");
+		out.push("var _e" + n + "=i;c=s.charCodeAt(++i);");
+	}
+	function emitString(schema, ctx, out) {
+		const n = ctx.uid++;
+		const inlineLen = schema.minLength !== void 0 || schema.maxLength !== void 0;
+		if (schema.minLength !== void 0 && typeof schema.minLength !== "number") decline("minLength:not-number");
+		if (schema.maxLength !== void 0 && typeof schema.maxLength !== "number") decline("maxLength:not-number");
+		const delegated = [];
+		for (const k of [
+			"pattern",
+			"format",
+			"const",
+			"enum"
+		]) if (schema[k] !== void 0) delegated.push(k);
+		emitStringSpan(ctx, out, n, inlineLen);
+		if (inlineLen) {
+			const lenKeys = [];
+			if (schema.minLength !== void 0) lenKeys.push("minLength");
+			if (schema.maxLength !== void 0) lenKeys.push("maxLength");
+			const lf = compileLeaf(lenKeys, schema, ctx);
+			out.push("if(_x" + n + "||_hs" + n + "){if(!" + lf + "(_r.span(s,_p" + n + ",_e" + n + ",_x" + n + ")))return 0;}");
+			out.push("else{");
+			if (schema.minLength !== void 0) out.push("if(_u" + n + "<" + schema.minLength + ")return 0;");
+			if (schema.maxLength !== void 0) out.push("if(_u" + n + ">" + schema.maxLength + ")return 0;");
+			out.push("}");
+		}
+		if (delegated.length > 0) {
+			const f = compileLeaf(delegated, schema, ctx);
+			out.push("if(!" + f + "(_r.span(s,_p" + n + ",_e" + n + ",_x" + n + ")))return 0;");
+		}
+	}
+	function emitNumber(schema, ctx, out, types) {
+		const n = ctx.uid++;
+		for (const k of [
+			"minimum",
+			"maximum",
+			"exclusiveMinimum",
+			"exclusiveMaximum"
+		]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("bound:" + k + ":not-number");
+		const delegated = [];
+		for (const k of [
+			"multipleOf",
+			"const",
+			"enum"
+		]) if (schema[k] !== void 0) delegated.push(k);
+		const intOnly = integerOnly(types);
+		const wantValue = delegated.length > 0 || schema.minimum !== void 0 || schema.maximum !== void 0 || schema.exclusiveMinimum !== void 0 || schema.exclusiveMaximum !== void 0 || types !== null;
+		out.push("var _np" + n + "=i,_v" + n + "=0,_ng" + n + "=0,_nd" + n + "=0,_pl" + n + "=1;");
+		out.push("if(c===45){_ng" + n + "=1;c=s.charCodeAt(++i);}");
+		out.push("if(c===48){_nd" + n + "=1;c=s.charCodeAt(++i);}");
+		out.push("else if(c>=49&&c<=57){do{_v" + n + "=_v" + n + "*10+(c-48);_nd" + n + "++;c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		out.push("else return 0;");
+		out.push("if(c===46){_pl" + n + "=0;c=s.charCodeAt(++i);if(!(c>=48&&c<=57))return 0;do{c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		out.push("if(c===101||c===69){_pl" + n + "=0;c=s.charCodeAt(++i);if(c===43||c===45)c=s.charCodeAt(++i);if(!(c>=48&&c<=57))return 0;do{c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		if (wantValue) out.push("if(_pl" + n + "===0||_nd" + n + ">15){_v" + n + "=+s.slice(_np" + n + ",i);}else if(_ng" + n + "){_v" + n + "=-_v" + n + ";}");
+		if (intOnly) out.push("if(_pl" + n + "===0&&!Number.isInteger(_v" + n + "))return 0;");
+		if (types !== null) out.push("if(!isFinite(_v" + n + "))return 0;");
+		if (schema.minimum !== void 0) out.push("if(!(_v" + n + ">=" + schema.minimum + "))return 0;");
+		if (schema.maximum !== void 0) out.push("if(!(_v" + n + "<=" + schema.maximum + "))return 0;");
+		if (schema.exclusiveMinimum !== void 0) out.push("if(!(_v" + n + ">" + schema.exclusiveMinimum + "))return 0;");
+		if (schema.exclusiveMaximum !== void 0) out.push("if(!(_v" + n + "<" + schema.exclusiveMaximum + "))return 0;");
+		if (delegated.length > 0) {
+			const f = compileLeaf(delegated, schema, ctx);
+			out.push("if(!" + f + "(_v" + n + "))return 0;");
+		}
+	}
+	function emitLiteral(schema, ctx, out, kind) {
+		const delegated = [];
+		for (const k of ["const", "enum"]) if (schema[k] !== void 0) delegated.push(k);
+		let allowTrue = true, allowFalse = true, allowNull = true;
+		if (delegated.length > 0) {
+			const sub = {};
+			for (const k of delegated) sub[k] = schema[k];
+			const fn = compileToJSCodegen(sub, null, ctx.userFormats);
+			if (typeof fn !== "function") decline("literal-leaf");
+			allowTrue = fn(true) === true;
+			allowFalse = fn(false) === true;
+			allowNull = fn(null) === true;
+		}
+		if (kind === "null") {
+			if (!allowNull) {
+				out.push("return 0;");
+				return;
+			}
+			out.push("if(s.charCodeAt(i+1)!==117||s.charCodeAt(i+2)!==108||s.charCodeAt(i+3)!==108)return 0;");
+			out.push("i+=4;c=s.charCodeAt(i);");
+			return;
+		}
+		out.push("if(c===116){" + (allowTrue ? "" : "return 0;") + "if(s.charCodeAt(i+1)!==114||s.charCodeAt(i+2)!==117||s.charCodeAt(i+3)!==101)return 0;i+=4;}");
+		out.push("else{" + (allowFalse ? "" : "return 0;") + "if(s.charCodeAt(i+1)!==97||s.charCodeAt(i+2)!==108||s.charCodeAt(i+3)!==115||s.charCodeAt(i+4)!==101)return 0;i+=5;}");
+		out.push("c=s.charCodeAt(i);");
+	}
+	function emitArray(schema, ctx, out, depth) {
+		const n = ctx.uid++;
+		for (const k of ["minItems", "maxItems"]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("itemsCount:" + k + ":not-number");
+		const items = schema.items !== void 0 ? schema.items : schema.unevaluatedItems;
+		if (items !== void 0 && !isPlainObject(items) && typeof items !== "boolean") decline("items:tuple");
+		const prefix = schema.prefixItems;
+		if (prefix !== void 0) {
+			if (!Array.isArray(prefix)) decline("prefixItems:not-array");
+			if (prefix.length > MAX_PREFIX_ITEMS) decline("prefixItems:too-long");
+		}
+		const wantCount = schema.minItems !== void 0 || schema.maxItems !== void 0 || prefix !== void 0;
+		const emitRest = (into) => {
+			if (items === void 0 || items === true) emitSkip(into);
+			else emitValue(items, ctx, into, depth + 1);
+		};
+		out.push("c=s.charCodeAt(++i);");
+		if (wantCount) out.push("var _n" + n + "=0;");
+		out.push(WS);
+		out.push("if(c!==93){for(;;){");
+		if (prefix === void 0) emitRest(out);
+		else {
+			for (let k = 0; k < prefix.length; k++) {
+				out.push((k === 0 ? "if(" : "else if(") + "_n" + n + "===" + k + "){");
+				emitValue(prefix[k], ctx, out, depth + 1);
+				out.push("}");
+			}
+			out.push("else{");
+			emitRest(out);
+			out.push("}");
+		}
+		if (wantCount) {
+			out.push("_n" + n + "++;");
+			if (schema.maxItems !== void 0) out.push("if(_n" + n + ">" + schema.maxItems + ")return 0;");
+		}
+		out.push(WS);
+		out.push("if(c===44){c=s.charCodeAt(++i);" + WS + "continue;}");
+		out.push("if(c===93)break;");
+		out.push("return 0;}}");
+		out.push("c=s.charCodeAt(++i);");
+		if (schema.minItems !== void 0) {
+			if (wantCount) out.push("if(_n" + n + "<" + schema.minItems + ")return 0;");
+		}
+	}
+	function emitMember(sub, ctx, out, depth, objId) {
+		const lines = [];
+		emitValue(sub, ctx, lines, depth + 1);
+		const body = lines.join("\n");
+		if (!body.includes("return 0;")) {
+			out.push(body);
+			return;
+		}
+		const label = "_mb" + ctx.uid++;
+		out.push("var _vs" + label + "=i;");
+		out.push(label + ":{");
+		out.push(body.split("return 0;").join("{_f" + objId + "=2;break " + label + ";}"));
+		out.push("}");
+		out.push("if(_f" + objId + "===2){_f" + objId + "=1;i=_r.skipValue(s,_vs" + label + ");if(i<0)return 0;c=s.charCodeAt(i);}");
+	}
+	function emitObject(schema, ctx, out, depth) {
+		const n = ctx.uid++;
+		const props = schema.properties;
+		if (props !== void 0 && !isPlainObject(props)) decline("properties:not-object");
+		const required = schema.required;
+		if (required !== void 0 && !Array.isArray(required)) decline("required:not-array");
+		const ap = schema.additionalProperties !== void 0 ? schema.additionalProperties : schema.unevaluatedProperties;
+		if (ap !== void 0 && !isPlainObject(ap) && typeof ap !== "boolean") decline("additionalProperties:shape");
+		for (const k of ["minProperties", "maxProperties"]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("propCount:" + k + ":not-number");
+		const counting = schema.minProperties !== void 0 || schema.maxProperties !== void 0;
+		if (counting && ap !== false) decline("min/maxProperties:open-object");
+		const names = [];
+		if (props) for (const k of Object.keys(props)) names.push(k);
+		if (required) for (const k of required) {
+			if (typeof k !== "string") decline("required:not-string");
+			if (!names.includes(k)) names.push(k);
+		}
+		if (names.length > MAX_PROPS) decline("too-many-properties");
+		const words = Math.max(1, Math.ceil(names.length / 31));
+		const bit = /* @__PURE__ */ new Map();
+		names.forEach((k, idx) => bit.set(k, {
+			w: idx / 31 | 0,
+			b: 1 << idx % 31
+		}));
+		const reqMasks = new Array(words).fill(0);
+		if (required) for (const k of required) {
+			const x = bit.get(k);
+			reqMasks[x.w] |= x.b;
+		}
+		out.push("c=s.charCodeAt(++i);");
+		if (names.length >= HASH_DISPATCH_MIN) out.push("var _sa" + n + "=new Int32Array(" + (Math.ceil(names.length / 32) || 1) + "),_nx" + n + "=0,_f" + n + "=0" + (counting ? ",_c" + n + "=0" : "") + ";");
+		else {
+			const seenDecl = [];
+			for (let w = 0; w < words; w++) seenDecl.push("_s" + n + "_" + w + "=0");
+			out.push("var " + seenDecl.join(",") + ",_f" + n + "=0" + (counting ? ",_c" + n + "=0" : "") + ";");
+		}
+		out.push(WS);
+		out.push("if(c!==125){for(;;){");
+		out.push(WS);
+		out.push("if(c!==34)return 0;");
+		const kn = ctx.uid++;
+		let hashById = null;
+		if (names.length >= HASH_DISPATCH_MIN) {
+			const table = /* @__PURE__ */ new Map();
+			let collision = false;
+			names.forEach((nm, id) => {
+				const h = spanHash(nm);
+				if (table.has(h)) collision = true;
+				table.set(h, id);
+			});
+			if (!collision) {
+				ctx.helpers.push(table);
+				hashById = "_h[" + (ctx.helpers.length - 1) + "]";
+			}
+		}
+		emitStringSpan(ctx, out, kn, false, hashById !== null);
+		out.push("if(_x" + kn + ")return -1;");
+		out.push(WS);
+		out.push("if(c!==58)return 0;");
+		out.push("c=s.charCodeAt(++i);");
+		out.push(WS);
+		if (counting) out.push("_c" + n + "++;");
+		out.push("var _kl" + kn + "=_e" + kn + "-_p" + kn + ";");
+		if (hashById !== null) {
+			const addH = (() => {
+				const a = [];
+				if (ap === false) a.push("return 0;");
+				else if (ap === void 0 || ap === true) emitSkip(a);
+				else {
+					const l = [];
+					emitValue(ap, ctx, l, depth + 1);
+					a.push(l.join("\n").split("return 0;").join("return -1;"));
+				}
+				return a.join("\n");
+			})();
+			const groups = /* @__PURE__ */ new Map();
+			for (const name of names) {
+				const sub = props && Object.prototype.hasOwnProperty.call(props, name) ? props[name] : void 0;
+				const key = sub === void 0 ? "\0additional" : JSON.stringify(sub);
+				if (!groups.has(key)) groups.set(key, {
+					sub,
+					members: []
+				});
+				groups.get(key).members.push(name);
+			}
+			const ordered = [];
+			const bounds = [];
+			for (const g of groups.values()) {
+				for (const nm of g.members) ordered.push(nm);
+				bounds.push({
+					end: ordered.length,
+					sub: g.sub
+				});
+			}
+			const table = /* @__PURE__ */ new Map();
+			ordered.forEach((nm, id) => {
+				table.set(spanHash(nm), id);
+			});
+			ctx.helpers.push(table);
+			const tbl = "_h[" + (ctx.helpers.length - 1) + "]";
+			ctx.helpers.push(ordered.slice());
+			const nmArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const wordCount = Math.ceil(ordered.length / 32) || 1;
+			const rq = new Int32Array(wordCount);
+			if (required) for (const k of required) {
+				const id = ordered.indexOf(k);
+				rq[id >> 5] |= 1 << (id & 31);
+			}
+			ctx.helpers.push(rq);
+			const rqArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const eids = new Int32Array(names.length);
+			names.forEach((nm, si) => {
+				eids[si] = ordered.indexOf(nm);
+			});
+			ctx.helpers.push(eids);
+			const eidArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const sids = new Int32Array(ordered.length);
+			eids.forEach((id, si) => {
+				sids[id] = si;
+			});
+			ctx.helpers.push(sids);
+			const sidArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			out.push("var _kid" + kn + "=-1;");
+			out.push("if(_nx" + n + "<" + names.length + "){var _ec" + kn + "=" + eidArr + "[_nx" + n + "],_en" + kn + "=" + nmArr + "[_ec" + kn + "];");
+			out.push("if(_kl" + kn + "===_en" + kn + ".length&&s.startsWith(_en" + kn + ",_p" + kn + ")){_kid" + kn + "=_ec" + kn + ";_nx" + n + "++;}}");
+			out.push("if(_kid" + kn + "<0){var _tg" + kn + "=" + tbl + ".get(_h" + kn + ");");
+			out.push("if(_tg" + kn + "===undefined){" + addH + "}");
+			out.push("else{var _nv" + kn + "=" + nmArr + "[_tg" + kn + "];");
+			out.push("if(_kl" + kn + "!==_nv" + kn + ".length||!s.startsWith(_nv" + kn + ",_p" + kn + ")){" + addH + "}");
+			out.push("else{_kid" + kn + "=_tg" + kn + ";_nx" + n + "=" + sidArr + "[_kid" + kn + "]+1;}}}");
+			out.push("if(_kid" + kn + ">=0){");
+			out.push("var _wd" + kn + "=_kid" + kn + ">>5,_bt" + kn + "=1<<(_kid" + kn + "&31);");
+			out.push("if(_sa" + n + "[_wd" + kn + "]&_bt" + kn + ")return -1;");
+			out.push("_sa" + n + "[_wd" + kn + "]|=_bt" + kn + ";");
+			bounds.forEach((g, gi) => {
+				const cond = gi === bounds.length - 1 ? "" : "if(_kid" + kn + "<" + g.end + ")";
+				out.push((gi === 0 ? "" : "else ") + cond + "{");
+				if (g.sub === void 0) out.push(addH);
+				else emitMember(g.sub, ctx, out, depth, n);
+				out.push("}");
+				g.end;
+			});
+			out.push("}");
+			ctx._saState = ctx._saState || {};
+			ctx._saState[n] = {
+				words: wordCount,
+				rqArr,
+				hasReq: rq.some ? Array.from(rq).some((x) => x !== 0) : false
+			};
+		} else {
+			const byLen = /* @__PURE__ */ new Map();
+			for (const name of names) {
+				const len = name.length;
+				if (!byLen.has(len)) byLen.set(len, []);
+				byLen.get(len).push(name);
+			}
+			const additional = [];
+			if (ap === false) additional.push("return 0;");
+			else if (ap === void 0 || ap === true) emitSkip(additional);
+			else {
+				const lines = [];
+				emitValue(ap, ctx, lines, depth + 1);
+				additional.push(lines.join("\n").split("return 0;").join("return -1;"));
+			}
+			out.push("switch(_kl" + kn + "){");
+			for (const [len, group] of byLen) {
+				out.push("case " + len + ":{");
+				let first = true;
+				for (const name of group) {
+					const tests = [];
+					for (let k = 0; k < name.length; k++) tests.push("s.charCodeAt(_p" + kn + (k === 0 ? "" : "+" + k) + ")===" + name.charCodeAt(k));
+					out.push((first ? "if(" : "else if(") + (tests.length ? tests.join("&&") : "true") + "){");
+					first = false;
+					const slot = bit.get(name);
+					out.push("if(_s" + n + "_" + slot.w + "&" + slot.b + ")return -1;");
+					out.push("_s" + n + "_" + slot.w + "|=" + slot.b + ";");
+					const sub = props && Object.prototype.hasOwnProperty.call(props, name) ? props[name] : void 0;
+					if (sub === void 0) out.push(additional.join("\n"));
+					else emitMember(sub, ctx, out, depth, n);
+					out.push("}");
+				}
+				out.push("else{" + additional.join("\n") + "}");
+				out.push("break;}");
+			}
+			out.push("default:{" + additional.join("\n") + "}}");
+		}
+		out.push(WS);
+		out.push("if(c===44){c=s.charCodeAt(++i);" + WS + "continue;}");
+		out.push("if(c===125)break;");
+		out.push("return 0;}}");
+		out.push("c=s.charCodeAt(++i);");
+		out.push("if(_f" + n + ")return 0;");
+		if (ctx._saState && ctx._saState[n]) {
+			const st = ctx._saState[n];
+			if (st.hasReq) {
+				const wv = "_rw" + n;
+				out.push("for(var " + wv + "=0;" + wv + "<" + st.words + ";" + wv + "++)if((_sa" + n + "[" + wv + "]&" + st.rqArr + "[" + wv + "])!==" + st.rqArr + "[" + wv + "])return 0;");
+			}
+		} else for (let w = 0; w < words; w++) if (reqMasks[w] !== 0) out.push("if((_s" + n + "_" + w + "&" + reqMasks[w] + ")!==" + reqMasks[w] + ")return 0;");
+		if (schema.minProperties !== void 0) out.push("if(_c" + n + "<" + schema.minProperties + ")return 0;");
+		if (schema.maxProperties !== void 0) out.push("if(_c" + n + ">" + schema.maxProperties + ")return 0;");
+	}
+	module.exports = {
+		compileScanner,
+		VALID,
+		INVALID,
+		BAIL
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -10203,12 +11529,12 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.22.1";
+	module.exports = "1.25.0";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -10231,7 +11557,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
@@ -10400,7 +11726,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -10455,7 +11781,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -10560,7 +11886,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
 var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { correlateTypos } = require_correlate();
 	const { buildDataPositionMap } = require_data_positions();
@@ -10832,7 +12158,7 @@ var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { toDiagnostics };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -10865,7 +12191,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -10973,7 +12299,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -11013,7 +12339,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/output-format.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/output-format.js
 var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METADATA_KEYWORDS = [
 		"title",
@@ -11109,7 +12435,7 @@ var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/retry-message.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/retry-message.js
 var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function phrase(error) {
 		const p = error.params || {};
@@ -11143,7 +12469,7 @@ var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { toRetryMessage };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/describe-schema.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/describe-schema.js
 var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const MAX_DEPTH = 12;
 	function lit(v) {
@@ -11274,7 +12600,7 @@ var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	module.exports = { describeSchema };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -11290,7 +12616,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
 	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
@@ -11870,6 +13196,16 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			this._schemaMap = schemaMap;
 			this._userFormats = options.formats || null;
 			this._verbose = !!options.verbose;
+			if (options.strictSchema === true || options.strictSchema === "log") {
+				const { checkSchemaStrict } = require_strict_check();
+				const problems = checkSchemaStrict(schema, { userKeywords: options.keywords || null });
+				if (problems.length > 0) {
+					const text = problems.map((x) => `strict mode: ${x.message} at ${x.path}`).join("\n");
+					if (options.strictSchema === true) throw new Error(text);
+					const logger = options.logger;
+					if (logger !== false) (logger && typeof logger.warn === "function" ? logger.warn.bind(logger) : console.warn)(text);
+				}
+			}
 			this._richErrors = options && options.richErrors === false ? false : true;
 			this._source = options && options.source && typeof options.source === "object" ? {
 				path: String(options.source.path || ""),
@@ -11881,6 +13217,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			} else this._schemaPositions = null;
 			this._posCache = null;
 			this._lastRawInput = null;
+			this._scanner = void 0;
 			if (!opts && typeof schema === "object" && schema !== null) _identityCache.set(schema, this);
 		}
 		_needsPreprocess() {
@@ -11933,25 +13270,26 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				jsFn = null;
 				jsCombinedFn = null;
 				jsErrFn = null;
-			} else if (cached && cached.full && !_forceNapi) {
+			} else if (cached && cached.jsFn !== void 0 && !_forceNapi) {
 				jsFn = cached.jsFn;
 				jsCombinedFn = cached.combined;
 				jsErrFn = cached.errFn;
 				_isCodegen = !!cached.isCodegen;
+				this._engine = _isCodegen ? "codegen" : jsFn ? "closure" : null;
 			} else if (!_forceNapi) {
 				const uf = this._userFormats;
 				const _cgFn = compileToJSCodegen(schemaObj, sm, uf);
 				jsFn = _cgFn || compileToJS(schemaObj, null, sm);
-				jsCombinedFn = compileToJSCombined(schemaObj, VALID_RESULT, sm, uf);
-				jsErrFn = compileToJSCodegenWithErrors(schemaObj, sm, uf);
+				jsCombinedFn = void 0;
+				jsErrFn = void 0;
 				_isCodegen = !!_cgFn;
 				this._engine = _cgFn ? "codegen" : jsFn ? "closure" : null;
 				if (!uf) _compileCache.set(mapKey, {
 					jsFn,
-					combined: jsCombinedFn,
-					errFn: jsErrFn,
+					combined: void 0,
+					errFn: void 0,
 					isCodegen: _isCodegen,
-					full: true
+					full: false
 				});
 			} else {
 				jsFn = null;
@@ -11959,7 +13297,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				jsErrFn = null;
 			}
 			this._jsFn = jsFn;
-			if (this._engine === void 0) this._engine = cached && cached.full ? cached.isCodegen ? "codegen" : jsFn ? "closure" : null : null;
+			if (this._engine === void 0) this._engine = null;
 			const preprocessSchema = resolveSchemaForPreprocess(schemaObj, this._schemaMap);
 			let preprocess = buildPreprocessCodegen(preprocessSchema, options);
 			if (!preprocess) {
@@ -11978,12 +13316,21 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			this._mutatesInput = !!(preprocess || options.coerceTypes || options.removeAdditional);
 			this._preprocess = preprocess;
 			const useSimdjsonForLarge = !(schemaObj && (schemaObj.items || schemaObj.prefixItems || schemaObj.contains || schemaObj.properties && Object.values(schemaObj.properties).some((p) => p && (p.items || p.prefixItems || p.contains))));
+			const _buildDeferred = () => {
+				if (jsCombinedFn !== void 0 && jsErrFn !== void 0) return;
+				const uf2 = this._userFormats;
+				if (jsCombinedFn === void 0) jsCombinedFn = compileToJSCombined(schemaObj, VALID_RESULT, sm, uf2) || null;
+				if (jsErrFn === void 0) jsErrFn = compileToJSCodegenWithErrors(schemaObj, sm, uf2) || null;
+				if (!uf2) {
+					const entry = _compileCache.get(mapKey);
+					if (entry && entry.jsFn === jsFn) {
+						entry.combined = jsCombinedFn;
+						entry.errFn = jsErrFn;
+						entry.full = true;
+					}
+				}
+			};
 			if (jsFn) {
-				let safeErrFn = null;
-				if (jsErrFn) try {
-					jsErrFn({}, true);
-					safeErrFn = (d) => jsErrFn(d, true);
-				} catch {}
 				const hasUnevaluated = schemaObj && (schemaObj.unevaluatedProperties !== void 0 || schemaObj.unevaluatedItems !== void 0 || this._schemaStr.includes("unevaluatedProperties") || this._schemaStr.includes("unevaluatedItems"));
 				const hasDynRef = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
 				let _interp = null;
@@ -12015,24 +13362,48 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						}]
 					};
 				};
-				const errFn = safeErrFn || (hasUnevaluated || !native ? jsOnlyFallback : hasDynRef ? (d) => {
-					this._ensureNative();
-					return this._compiled.validateJSON(JSON.stringify(d));
-				} : (d) => {
-					this._ensureNative();
-					return this._compiled.validate(d);
-				});
-				let safeCombinedFn = null;
-				if (jsCombinedFn) try {
-					const probe = {};
-					if (schemaObj && schemaObj.properties) for (const k of Object.keys(schemaObj.properties)) probe[k] = "";
-					if (schemaObj && schemaObj.if && schemaObj.if.properties) for (const k of Object.keys(schemaObj.if.properties)) probe[k] = "";
-					jsCombinedFn(probe);
-					jsCombinedFn({});
-					jsCombinedFn(null);
-					jsCombinedFn(0);
-					safeCombinedFn = jsCombinedFn;
-				} catch {}
+				let _errOnlyImpl = null;
+				const errOnly = (d) => {
+					if (_errOnlyImpl === null) {
+						_buildDeferred();
+						let safe = null;
+						if (jsErrFn) try {
+							jsErrFn({}, true);
+							safe = (x) => jsErrFn(x, true);
+						} catch {}
+						_errOnlyImpl = safe || (hasUnevaluated || !native ? jsOnlyFallback : hasDynRef ? (x) => {
+							this._ensureNative();
+							return this._compiled.validateJSON(JSON.stringify(x));
+						} : (x) => {
+							this._ensureNative();
+							return this._compiled.validate(x);
+						});
+					}
+					return _errOnlyImpl(d);
+				};
+				let _combinedProbed = false;
+				let _safeCombined = null;
+				const combinedIfSafe = () => {
+					if (_combinedProbed) return _safeCombined;
+					_combinedProbed = true;
+					_buildDeferred();
+					if (jsCombinedFn) try {
+						const probe = {};
+						if (schemaObj && schemaObj.properties) for (const k of Object.keys(schemaObj.properties)) probe[k] = "";
+						if (schemaObj && schemaObj.if && schemaObj.if.properties) for (const k of Object.keys(schemaObj.if.properties)) probe[k] = "";
+						jsCombinedFn(probe);
+						jsCombinedFn({});
+						jsCombinedFn(null);
+						jsCombinedFn(0);
+						_safeCombined = jsCombinedFn;
+					} catch {}
+					return _safeCombined;
+				};
+				let _errPreferredImpl = null;
+				const errPreferCombined = (d) => {
+					if (_errPreferredImpl === null) _errPreferredImpl = combinedIfSafe() || errOnly;
+					return _errPreferredImpl(d);
+				};
 				if (!hasDynRef || _isCodegen) this._fastVerdict = preprocess ? null : jsFn;
 				if (options.abortEarly && jsFn && !hasDynRef) {
 					const _fn = jsFn;
@@ -12041,7 +13412,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						return _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
 					} : (data) => _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
 				} else if (hasDynRef && _isCodegen && jsFn) {
-					const _fn = jsFn, _efn = safeErrFn || errFn, _R = VALID_RESULT;
+					const _fn = jsFn, _efn = errOnly, _R = VALID_RESULT;
 					this.validate = preprocess ? (data) => {
 						preprocess(data);
 						return _fn(data) ? _R : _efn(data);
@@ -12063,24 +13434,21 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						return interp.validate(data);
 					} : (data) => interp.validate(data);
 				} else if (jsFn && jsFn._hybridFactory) {
-					const hybridFn = jsFn._hybridFactory(VALID_RESULT, safeCombinedFn || errFn);
+					const hybridFn = jsFn._hybridFactory(VALID_RESULT, errPreferCombined);
 					this.validate = preprocess ? (data) => {
 						preprocess(data);
 						return hybridFn(data);
 					} : hybridFn;
-				} else if (safeCombinedFn) this.validate = preprocess ? (data) => {
-					preprocess(data);
-					return safeCombinedFn(data);
-				} : safeCombinedFn;
-				else {
-					const hybridFn = jsFn && jsFn._hybridFactory ? jsFn._hybridFactory(VALID_RESULT, errFn) : null;
-					this.validate = hybridFn ? preprocess ? (data) => {
+				} else {
+					const safeCombinedFn = combinedIfSafe();
+					if (safeCombinedFn) this.validate = preprocess ? (data) => {
 						preprocess(data);
-						return hybridFn(data);
-					} : hybridFn : preprocess ? (data) => {
+						return safeCombinedFn(data);
+					} : safeCombinedFn;
+					else this.validate = preprocess ? (data) => {
 						preprocess(data);
-						return jsFn(data) ? VALID_RESULT : errFn(data);
-					} : (data) => jsFn(data) ? VALID_RESULT : errFn(data);
+						return jsFn(data) ? VALID_RESULT : errOnly(data);
+					} : (data) => jsFn(data) ? VALID_RESULT : errOnly(data);
 				}
 				if (this._verbose) {
 					const inner = this.validate;
@@ -12111,8 +13479,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					preprocess(data);
 					return jsFn(data);
 				} : jsFn;
-				const hybridFn = jsFn._hybridFactory ? jsFn._hybridFactory(VALID_RESULT, errFn) : null;
-				const jsonValidateInner = safeCombinedFn || hybridFn || ((obj) => jsFn(obj) ? VALID_RESULT : errFn(obj));
+				const jsonValidateInner = (jsFn._hybridFactory ? jsFn._hybridFactory(VALID_RESULT, errPreferCombined) : null) || ((obj) => jsFn(obj) ? VALID_RESULT : errPreferCombined(obj));
 				const jsonValidateFn = preprocess ? (obj) => {
 					preprocess(obj);
 					return jsonValidateInner(obj);
@@ -12505,6 +13872,66 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const { bufferNeedsSlowPath, installSlowBufferApis } = require_buffer_gate_browser();
 				if (bufferNeedsSlowPath(schemaObj, this._schemaMap, this._keywords)) installSlowBufferApis(this);
 			}
+			if (this._jsFn && !this._preprocess) {
+				const self = this;
+				const SCAN_AFTER = 64;
+				let calls = 0;
+				this._ensureScanner = (now) => {
+					if (self._scanner === void 0) {
+						if (!now && ++calls < SCAN_AFTER) return void 0;
+						const built = require_scan_compiler().compileScanner(schemaObj, { userFormats: self._userFormats });
+						self._scanner = built ? built.scan : null;
+					}
+					return self._scanner;
+				};
+				const byParsing = this.isValidJSON;
+				const memoizable = !self._userFormats && !self._usesKeywords;
+				let _memoText = null;
+				let _memoVerdict = false;
+				this.isValidJSON = (jsonStr) => {
+					const scan = self._ensureScanner();
+					if (scan === void 0) return byParsing(jsonStr);
+					if (scan === null) {
+						self.isValidJSON = byParsing;
+						return byParsing(jsonStr);
+					}
+					self.isValidJSON = memoizable ? (text) => {
+						if (typeof text !== "string") return byParsing(text);
+						if (text === _memoText) return _memoVerdict;
+						const r = scan(text);
+						const verdict = r === -1 ? byParsing(text) : r === 1;
+						_memoText = text;
+						_memoVerdict = verdict;
+						return verdict;
+					} : (text) => {
+						if (typeof text !== "string") return byParsing(text);
+						const r = scan(text);
+						if (r === -1) return byParsing(text);
+						return r === 1;
+					};
+					return self.isValidJSON(jsonStr);
+				};
+				if (options.abortEarly) {
+					const validateByParsing = this.validateJSON;
+					this.validateJSON = (jsonStr) => {
+						const scan = self._ensureScanner();
+						if (scan === void 0) return validateByParsing(jsonStr);
+						if (scan === null) {
+							self.validateJSON = validateByParsing;
+							return validateByParsing(jsonStr);
+						}
+						self.validateJSON = (text) => {
+							if (typeof text === "string") {
+								const r = scan(text);
+								if (r === 1) return VALID_RESULT;
+								if (r === 0) return ABORT_EARLY_RESULT;
+							}
+							return validateByParsing(text);
+						};
+						return self.validateJSON(jsonStr);
+					};
+				}
+			}
 			if (this._noOpts && this._schemaObj && typeof this._schemaObj === "object") _identityCache.set(this._schemaObj, this);
 		}
 		engine() {
@@ -12556,15 +13983,17 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				return;
 			}
 			const uf = this._userFormats;
-			const jsFn = compileToJSCodegen(this._schemaObj, sm, uf) || compileToJS(this._schemaObj, null, sm);
+			const _cg = compileToJSCodegen(this._schemaObj, sm, uf);
+			const jsFn = _cg || compileToJS(this._schemaObj, null, sm);
 			this._jsFn = jsFn;
 			if (jsFn) {
 				this.isValidObject = jsFn;
 				if (!uf) {
 					if (!cached) _compileCache.set(mapKey, {
 						jsFn,
-						combined: null,
-						errFn: null,
+						combined: void 0,
+						errFn: void 0,
+						isCodegen: !!_cg,
 						full: false
 					});
 					else cached.jsFn = jsFn;
@@ -12985,11 +14414,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.22.1_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
