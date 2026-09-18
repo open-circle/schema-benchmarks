@@ -485,3 +485,10 @@ export const invalidStrings: Record<StringFormat, string> = {
   time: "invalid",
   duration: "invalid",
 };
+
+export type MatchAssertions<TInput, TOutput> = {
+  inputToData: [TInput] extends [ProductData] ? true : false;
+  dataToInput: [ProductData] extends [TInput] ? true : false;
+  outputToData: [TOutput] extends [ProductData] ? true : false;
+  dataToOutput: [ProductData] extends [TOutput] ? true : false;
+};
