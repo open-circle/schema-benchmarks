@@ -95,10 +95,10 @@ export function TypesTable({
               <DownloadCount libraryName={result.libraryName} />
             </td>
             <td className="action">
-              {inference ? <MatchCheckbox match={inference.input.match} /> : "No"}
+              {inference ? <MatchCheckbox match={inference.input.match} /> : null}
             </td>
             <td className="action">
-              {inference ? <MatchCheckbox match={inference.output.match} /> : "No"}
+              {inference ? <MatchCheckbox match={inference.output.match} /> : null}
             </td>
             <td>
               <FromTypeText fromType={result.fromType} />
