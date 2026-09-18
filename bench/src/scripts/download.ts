@@ -92,10 +92,10 @@ async function download() {
   const allResults: DownloadResults = unsafeFromEntries(
     await Promise.all(
       minifyTypeSchema.options.map(async (minify) => {
-        const paths = Array.fromAsync(
+        const paths = await Array.fromAsync(
           fs.glob(path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts")),
         );
-        const files: Array<FileDescription> = (await paths).map((filePath) => {
+        const files: Array<FileDescription> = paths.map((filePath) => {
           const libraryName = filePath
             .replace(/\\/g, "/")
             .split("schemas/libraries/")[1]
