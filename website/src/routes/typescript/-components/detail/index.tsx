@@ -149,7 +149,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                   title="From an existing type"
                   supporting={
                     result.fromType
-                      ? `${fromTypeStyleLabels[result.fromType.style].label}${result.fromType.derived ? " · the schema is generated from the type" : ""}${result.fromType.note ? ` · ${result.fromType.note}` : ""}`
+                      ? `${fromTypeStyleLabels[result.fromType.style]}${result.fromType.derived ? " · the schema is generated from the type" : ""}${result.fromType.note ? ` · ${result.fromType.note}` : ""}`
                       : "The library has no way to build a schema from a type that already exists."
                   }
                 >

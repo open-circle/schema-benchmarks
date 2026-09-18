@@ -1,40 +1,37 @@
 import type { FromTypeResult } from "@schema-benchmarks/bench";
 import { fromTypeCaseSchema } from "@schema-benchmarks/schemas";
-import type { ComponentPropsWithRef } from "react";
-import { useRef } from "react";
 
 import {
   fromTypeCaseLabels,
   fromTypeStyleLabels,
-  fromTypeVerdict,
-  fromTypeVerdictLabels,
   missedFromTypeCases,
 } from "#src/routes/typescript/-constants.tsx";
 import { Checkbox } from "#src/shared/components/checkbox/index.tsx";
 import { List, ListItem, ListItemContent } from "#src/shared/components/list/index.tsx";
-import { withTooltip } from "#src/shared/components/tooltip/index.tsx";
-
-const VerdictText = withTooltip(function VerdictText(props: ComponentPropsWithRef<"span">) {
-  return <span {...props} />;
-});
 
 export function FromTypeText({ fromType }: { fromType: FromTypeResult | undefined }) {
-  const popoverRef = useRef<HTMLElement>(null);
-  const label = fromTypeVerdictLabels[fromTypeVerdict(fromType)];
-  if (!fromType) return label;
+  if (!fromType) return null;
   const missed = missedFromTypeCases(fromType);
   return (
-    <VerdictText
+    <Checkbox
+      checked={!missed.length}
+      readOnly
       tooltip={{
-        subhead: `${fromTypeStyleLabels[fromType.style].label}${fromType.derived ? ", generated from the type" : ""}`,
-        supporting: missed.length
-          ? `Accepts a schema with ${missed.map((name) => fromTypeCaseLabels[name].supporting).join(", ")}.`
-          : "Rejects every way a schema can disagree with the type.",
+        subhead: `${fromTypeStyleLabels[fromType.style]}${fromType.derived ? ", generated from the type" : ""}`,
+        supporting: missed.length ? (
+          <>
+            Accepts a schema with:
+            <ul>
+              {missed.map((name) => (
+                <li key={name}>{fromTypeCaseLabels[name].supporting}</li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          "Rejects every way a schema can disagree with the type."
+        ),
       }}
-      popoverRef={popoverRef}
-    >
-      {label}
-    </VerdictText>
+    />
   );
 }
 
