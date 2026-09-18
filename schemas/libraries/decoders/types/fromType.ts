@@ -1,6 +1,8 @@
 import { object, number, string, type Decoder } from "decoders";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: Decoder<JsonSchemaOutputData> = object({
   id: number,

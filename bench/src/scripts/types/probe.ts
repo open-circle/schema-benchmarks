@@ -2,8 +2,13 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
 
-import type { FromTypeCase, TypeInferenceBenchmarkConfig } from "@schema-benchmarks/schemas";
+import {
+  fromTypeStyleSchema,
+  type FromTypeCase,
+  type FromTypeStyle,
+} from "@schema-benchmarks/schemas";
 import ts from "typescript-5";
+import * as v from "valibot";
 
 /**
  * Reads the types a library infers for the shared product schema, using the TypeScript compiler
@@ -14,8 +19,12 @@ import ts from "typescript-5";
  * own TypeScript 5 - `typescriptVersion` is reported alongside the results, since a count only
  * means anything next to the compiler that produced it.
  *
- * The probe file is written into the library's folder so that relative imports and the `schemas`
- * package's own dependencies resolve exactly as they do for the rest of its sources.
+ * Both halves of the probe are real, type-checked files in the library's own folder rather than
+ * hand-written strings: `types/index.ts` (the inference case) exports the schema plus `Input`/
+ * `Output` aliases derived from it, and `types/fromType.ts` (the from-type case) builds a schema
+ * from the shared `JsonSchemaOutputData` type. `pnpm typecheck` already catches a broken one; this
+ * module reads each with the TypeScript AST and recombines the pieces - imports, the `schema`
+ * declaration, and the `Input`/`Output` aliases - into the overlay variants below.
  */
 
 /** The `schemas` package root: its entry is `<root>/src/index.ts`. */
@@ -128,7 +137,7 @@ const readSchemaType = (program: ts.Program, file: ts.SourceFile) => {
   for (const node of file.statements) {
     if (!ts.isVariableStatement(node)) continue;
     const declaration = node.declarationList.declarations[0];
-    if (declaration?.name.getText(file) !== "probeSchema") continue;
+    if (declaration?.name.getText(file) !== "schema") continue;
     return checker.typeToString(
       checker.getTypeAtLocation(declaration.name),
       undefined,
@@ -183,6 +192,8 @@ export type TypeMatch = "exact" | "narrower" | "wider" | "any" | "mismatch";
 
 export interface DirectionProbeResult {
   text: string;
+  /** The expression the type is read with, e.g. `z.output<typeof schema>`, as written. */
+  snippet: string;
   match: TypeMatch;
   instantiations: number;
 }
@@ -196,26 +207,31 @@ export interface InferenceProbeResult {
 }
 
 export interface FromTypeProbeResult {
+  style: FromTypeStyle;
+  /** The schema is generated from the type, so the two cannot disagree. */
+  derived?: boolean;
+  note?: string;
+  /** The `schema` declaration in `types/fromType.ts`, for display. */
+  snippet: string;
   /** Whether the compiler rejected each way a schema can disagree with the type. */
   cases: Record<FromTypeCase, boolean>;
 }
 
 export interface TypeProbeResult {
+  note?: string;
   inference?: InferenceProbeResult;
+  /** Why the library infers nothing from a schema; absent when `inference` is given. */
+  noInference?: string;
   fromType?: FromTypeProbeResult;
 }
 
-const PRELUDE = `import type { JsonSchemaOutputData, ProductData } from "#src";\n`;
-const SCHEMA_DECL = (config: TypeInferenceBenchmarkConfig) =>
-  `const probeSchema = ${config.schema};\n`;
-const INPUT_DECL = (config: TypeInferenceBenchmarkConfig) => `type ProbeInput = ${config.input};\n`;
-const OUTPUT_DECL = (config: TypeInferenceBenchmarkConfig) =>
-  `type ProbeOutput = ${config.output};\n`;
+/** Only needed for the match comparison below - production `types/index.ts` files don't use it. */
+const PRELUDE = `import type { ProductData } from "#src";\n`;
 
-const MATCH_DECLS = `type ProbeInputToData = [ProbeInput] extends [ProductData] ? true : false;
-type ProbeDataToInput = [ProductData] extends [ProbeInput] ? true : false;
-type ProbeOutputToData = [ProbeOutput] extends [ProductData] ? true : false;
-type ProbeDataToOutput = [ProductData] extends [ProbeOutput] ? true : false;
+const MATCH_DECLS = `type ProbeInputToData = [Input] extends [ProductData] ? true : false;
+type ProbeDataToInput = [ProductData] extends [Input] ? true : false;
+type ProbeOutputToData = [Output] extends [ProductData] ? true : false;
+type ProbeDataToOutput = [ProductData] extends [Output] ? true : false;
 `;
 
 const toMatch = (hasAny: boolean, toData: boolean, fromData: boolean): TypeMatch => {
@@ -232,94 +248,266 @@ const assertChecks = (label: string, { diagnostics }: Checked) => {
   }
 };
 
-// The schema always describes `{ id: number; name: string; price: number }`; each case changes the
-// type it is checked against. A library that only checks assignability accepts a schema that
-// requires a field the type makes optional, or declares one the type doesn't have - both build a
-// schema that disagrees with the type it was written for.
-const FROM_TYPE_CASES: Record<FromTypeCase | "matching", string> = {
-  matching: "{ id: number; name: string; price: number }",
+/** The pieces of `types/index.ts` the inference probe recombines into each overlay variant. */
+interface InferenceSource {
+  imports: string;
+  schema: string;
+  input: string;
+  output: string;
+  inputSnippet: string;
+  outputSnippet: string;
+}
+
+/** `types/index.ts`, parsed: either something to probe, or why there's nothing to. */
+interface IndexSource {
+  note?: string;
+  noInference?: string;
+  inference?: InferenceSource;
+}
+
+const findDeclarationText = (file: ts.SourceFile, name: string) => {
+  for (const statement of file.statements) {
+    if (
+      ts.isVariableStatement(statement) &&
+      statement.declarationList.declarations[0]?.name.getText(file) === name
+    ) {
+      return statement.getText(file);
+    }
+  }
+  return undefined;
+};
+
+const findTypeAlias = (file: ts.SourceFile, name: string) =>
+  file.statements.find(
+    (statement): statement is ts.TypeAliasDeclaration =>
+      ts.isTypeAliasDeclaration(statement) && statement.name.text === name,
+  );
+
+/** Reads a top-level `export const <name> = "...";`, the metadata a library's files export. */
+const readStringConst = (file: ts.SourceFile, name: string): string | undefined => {
+  for (const statement of file.statements) {
+    if (
+      ts.isVariableStatement(statement) &&
+      statement.declarationList.declarations[0]?.name.getText(file) === name
+    ) {
+      const initializer = statement.declarationList.declarations[0].initializer;
+      if (initializer && ts.isStringLiteralLike(initializer)) return initializer.text;
+    }
+  }
+  return undefined;
+};
+
+/** Reads a top-level `export const <name> = true;`/`= false;`. */
+const readBooleanConst = (file: ts.SourceFile, name: string): boolean | undefined => {
+  for (const statement of file.statements) {
+    if (
+      ts.isVariableStatement(statement) &&
+      statement.declarationList.declarations[0]?.name.getText(file) === name
+    ) {
+      const initializer = statement.declarationList.declarations[0].initializer;
+      if (initializer?.kind === ts.SyntaxKind.TrueKeyword) return true;
+      if (initializer?.kind === ts.SyntaxKind.FalseKeyword) return false;
+    }
+  }
+  return undefined;
+};
+
+/** Parses `types/index.ts`, read off the TypeScript AST rather than hand-typed. */
+const parseIndexSource = (fileName: string, text: string): IndexSource => {
+  const file = ts.createSourceFile(fileName, text, ts.ScriptTarget.Latest, true);
+  const imports = file.statements.filter(ts.isImportDeclaration).map((s) => s.getText(file));
+  const schema = findDeclarationText(file, "schema");
+  const input = findTypeAlias(file, "Input");
+  const output = findTypeAlias(file, "Output");
+  if (!schema) throw new Error(`${fileName} does not export a \`schema\``);
+  if ((input === undefined) !== (output === undefined)) {
+    throw new Error(`${fileName} exports only one of \`Input\`/\`Output\``);
+  }
+  const note = readStringConst(file, "note");
+  const noInference = readStringConst(file, "noInference");
+  if (!input && !noInference) {
+    throw new Error(`${fileName} exports neither \`Input\`/\`Output\` nor \`noInference\``);
+  }
+  return {
+    note,
+    noInference,
+    inference:
+      input && output
+        ? {
+            imports: imports.join("\n"),
+            schema,
+            input: input.getText(file),
+            output: output.getText(file),
+            inputSnippet: input.type.getText(file),
+            outputSnippet: output.type.getText(file),
+          }
+        : undefined,
+  };
+};
+
+const readIndexSource = (fileName: string) =>
+  parseIndexSource(fileName, fs.readFileSync(fileName, "utf8"));
+
+const probeInference = (fileName: string, source: InferenceSource): InferenceProbeResult => {
+  try {
+    const imports = `${PRELUDE}${source.imports}\n`;
+    const baseline = check(fileName, imports);
+    assertChecks("imports", baseline);
+    const schema = `${imports}${source.schema}\n`;
+    const schemaOnly = check(fileName, schema);
+    assertChecks("schema", schemaOnly);
+    const withInput = check(fileName, `${schema}${source.input}\n`);
+    assertChecks("input", withInput);
+    const withOutput = check(fileName, `${schema}${source.output}\n`);
+    assertChecks("output", withOutput);
+
+    const both = `${schema}${source.input}\n${source.output}\n`;
+    const withBoth = check(fileName, both);
+    assertChecks("combined", withBoth);
+    const types = readAliases(withBoth.program, withBoth.file);
+
+    // The comparisons are checked on their own: they are how the result is judged, not part of
+    // what a user pays to infer the types.
+    const withMatches = check(fileName, `${both}${MATCH_DECLS}`);
+    assertChecks("match", withMatches);
+    const matches = readAliases(withMatches.program, withMatches.file);
+
+    const isTrue = (name: string) => matches[name] === "true";
+    return {
+      schema: {
+        text: readSchemaType(withBoth.program, withBoth.file),
+        instantiations: schemaOnly.instantiations - baseline.instantiations,
+      },
+      input: {
+        text: types.Input ?? "",
+        snippet: source.inputSnippet,
+        match: toMatch(
+          aliasContainsAny(withBoth.program, withBoth.file, "Input"),
+          isTrue("ProbeInputToData"),
+          isTrue("ProbeDataToInput"),
+        ),
+        instantiations: withInput.instantiations - schemaOnly.instantiations,
+      },
+      output: {
+        text: types.Output ?? "",
+        snippet: source.outputSnippet,
+        match: toMatch(
+          aliasContainsAny(withBoth.program, withBoth.file, "Output"),
+          isTrue("ProbeOutputToData"),
+          isTrue("ProbeDataToOutput"),
+        ),
+        instantiations: withOutput.instantiations - schemaOnly.instantiations,
+      },
+      instantiations: withOutput.instantiations - baseline.instantiations,
+    };
+  } finally {
+    probe = undefined;
+    fs.rmSync(fileName, { force: true });
+  }
+};
+
+// The schema always describes `{ id: number; name: string; price: number }`; each case redeclares
+// the shared `JsonSchemaOutputData` type locally with a different shape. A library that only
+// checks assignability accepts a schema that requires a field the type makes optional, or declares
+// one the type doesn't have - both build a schema that disagrees with the type it was written for.
+const FROM_TYPE_CASES: Record<FromTypeCase, string> = {
   wrongType: "{ id: number; name: string; price: string }",
   missingField: "{ id: number; name: string; price: number; extra: boolean }",
   optionalField: "{ id: number; name: string; price?: number }",
   extraField: "{ id: number; name: string }",
 };
 
-const probeFromType = (
-  fileName: string,
-  imports: string,
-  fromType: NonNullable<TypeInferenceBenchmarkConfig["fromType"]>,
-): FromTypeProbeResult => {
-  const compile = (type: string) =>
-    check(fileName, `${imports}type Product = ${type};\n${fromType.schema}\n`);
+/** The pieces of `types/fromType.ts` the from-type probe recombines into each overlay variant. */
+interface FromTypeSource {
+  style: FromTypeStyle;
+  derived?: boolean;
+  note?: string;
+  /** The file, unmodified: it already imports the real `JsonSchemaOutputData`, so this is the
+   *  "matching" case. */
+  text: string;
+  /** Redeclares `JsonSchemaOutputData` locally with a disagreeing shape, in place of the import. */
+  withProductType: (shape: string) => string;
+  /** The `schema` declaration, for display. */
+  snippet: string;
+}
 
-  assertChecks("from-type", compile(FROM_TYPE_CASES.matching));
+/** Parses `types/fromType.ts`, read off the TypeScript AST rather than hand-typed. */
+const parseFromTypeSource = (fileName: string, text: string): FromTypeSource => {
+  const file = ts.createSourceFile(fileName, text, ts.ScriptTarget.Latest, true);
+  let sharedImport: ts.ImportDeclaration | undefined;
+  let sharedSpecifier: ts.ImportSpecifier | undefined;
+  for (const statement of file.statements) {
+    if (!ts.isImportDeclaration(statement)) continue;
+    const namedBindings = statement.importClause?.namedBindings;
+    if (!namedBindings || !ts.isNamedImports(namedBindings)) continue;
+    const specifier = namedBindings.elements.find(
+      (element) => element.name.text === "JsonSchemaOutputData",
+    );
+    if (specifier) {
+      sharedImport = statement;
+      sharedSpecifier = specifier;
+      break;
+    }
+  }
+  const schema = findDeclarationText(file, "schema");
+  const style = readStringConst(file, "style");
+  if (!sharedImport || !sharedSpecifier) {
+    throw new Error(`${fileName} does not import \`JsonSchemaOutputData\` from #src`);
+  }
+  if (!schema) throw new Error(`${fileName} does not export a \`schema\``);
+  if (!style) throw new Error(`${fileName} does not export a \`style\``);
 
-  // A schema generated from the type cannot disagree with it, so there is nothing to reject.
-  const rejected = (name: FromTypeCase) =>
-    fromType.derived || compile(FROM_TYPE_CASES[name]).diagnostics.length > 0;
+  // Other names sharing the import (e.g. `FromTypeStyle`) still need to resolve for every case.
+  const namedBindings = sharedImport.importClause!.namedBindings as ts.NamedImports;
+  const otherSpecifiers = namedBindings.elements.filter((element) => element !== sharedSpecifier);
+  const remainingImport = otherSpecifiers.length
+    ? `import ${sharedImport.importClause?.phaseModifier === ts.SyntaxKind.TypeKeyword ? "type " : ""}{ ${otherSpecifiers
+        .map((element) => element.getText(file))
+        .join(", ")} } from ${sharedImport.moduleSpecifier.getText(file)};\n`
+    : "";
 
+  const before = text.slice(0, sharedImport.getFullStart());
+  const after = text.slice(sharedImport.getEnd());
   return {
-    cases: {
-      wrongType: rejected("wrongType"),
-      missingField: rejected("missingField"),
-      optionalField: rejected("optionalField"),
-      extraField: rejected("extraField"),
-    },
+    style: v.parse(fromTypeStyleSchema, style),
+    derived: readBooleanConst(file, "derived"),
+    note: readStringConst(file, "note"),
+    text,
+    withProductType: (shape) =>
+      `${before}${remainingImport}type JsonSchemaOutputData = ${shape};${after}`,
+    // shown as a reader would write it, not as the harness's stand-in for the shared data type
+    snippet: schema.replace(/^export /, "").replaceAll("JsonSchemaOutputData", "Product"),
   };
 };
 
-const probeInference = (
-  fileName: string,
-  imports: string,
-  config: TypeInferenceBenchmarkConfig,
-): InferenceProbeResult => {
-  const schema = `${imports}${SCHEMA_DECL(config)}`;
-  const baseline = check(fileName, imports);
-  assertChecks("imports", baseline);
-  const schemaOnly = check(fileName, schema);
-  assertChecks("schema", schemaOnly);
-  const withInput = check(fileName, `${schema}${INPUT_DECL(config)}`);
-  assertChecks("input", withInput);
-  const withOutput = check(fileName, `${schema}${OUTPUT_DECL(config)}`);
-  assertChecks("output", withOutput);
+const readFromTypeSource = (fileName: string) =>
+  parseFromTypeSource(fileName, fs.readFileSync(fileName, "utf8"));
 
-  const both = `${schema}${INPUT_DECL(config)}${OUTPUT_DECL(config)}`;
-  const withBoth = check(fileName, both);
-  assertChecks("combined", withBoth);
-  const types = readAliases(withBoth.program, withBoth.file);
+const probeFromType = (fileName: string, source: FromTypeSource): FromTypeProbeResult => {
+  try {
+    assertChecks("from-type", check(fileName, source.text));
 
-  // The comparisons are checked on their own: they are how the result is judged, not part of
-  // what a user pays to infer the types.
-  const withMatches = check(fileName, `${both}${MATCH_DECLS}`);
-  assertChecks("match", withMatches);
-  const matches = readAliases(withMatches.program, withMatches.file);
+    // A schema generated from the type cannot disagree with it, so there is nothing to reject.
+    const rejected = (name: FromTypeCase) =>
+      source.derived ||
+      check(fileName, source.withProductType(FROM_TYPE_CASES[name])).diagnostics.length > 0;
 
-  const isTrue = (name: string) => matches[name] === "true";
-  return {
-    schema: {
-      text: readSchemaType(withBoth.program, withBoth.file),
-      instantiations: schemaOnly.instantiations - baseline.instantiations,
-    },
-    input: {
-      text: types.ProbeInput ?? "",
-      match: toMatch(
-        aliasContainsAny(withBoth.program, withBoth.file, "ProbeInput"),
-        isTrue("ProbeInputToData"),
-        isTrue("ProbeDataToInput"),
-      ),
-      instantiations: withInput.instantiations - schemaOnly.instantiations,
-    },
-    output: {
-      text: types.ProbeOutput ?? "",
-      match: toMatch(
-        aliasContainsAny(withBoth.program, withBoth.file, "ProbeOutput"),
-        isTrue("ProbeOutputToData"),
-        isTrue("ProbeDataToOutput"),
-      ),
-      instantiations: withOutput.instantiations - schemaOnly.instantiations,
-    },
-    instantiations: withOutput.instantiations - baseline.instantiations,
-  };
+    return {
+      style: source.style,
+      derived: source.derived,
+      note: source.note,
+      snippet: source.snippet,
+      cases: {
+        wrongType: rejected("wrongType"),
+        missingField: rejected("missingField"),
+        optionalField: rejected("optionalField"),
+        extraField: rejected("extraField"),
+      },
+    };
+  } finally {
+    probe = undefined;
+    fs.rmSync(fileName, { force: true });
+  }
 };
 
 /**
@@ -330,21 +518,30 @@ const probeInference = (
  * added. The headline `instantiations` is what a consumer pays for a schema and the type it
  * produces - declaring the schema and reading its output type.
  */
-export const probeTypes = (
-  directory: string,
-  config: TypeInferenceBenchmarkConfig,
-): TypeProbeResult => {
-  const fileName = path.join(directory, PROBE_FILE_NAME);
-  const imports = `${PRELUDE}${config.imports}\n`;
-  try {
-    return {
-      inference: config.noInference ? undefined : probeInference(fileName, imports, config),
-      fromType: config.fromType && probeFromType(fileName, imports, config.fromType),
-    };
-  } finally {
-    probe = undefined;
-    fs.rmSync(fileName, { force: true });
-  }
+export const probeTypes = (directory: string): TypeProbeResult => {
+  const typesDir = path.join(directory, "types");
+  const fileName = path.join(typesDir, PROBE_FILE_NAME);
+  const index = readIndexSource(path.join(typesDir, "index.ts"));
+  const fromTypeFile = path.join(typesDir, "fromType.ts");
+  return {
+    note: index.note,
+    noInference: index.noInference,
+    inference: index.inference && probeInference(fileName, index.inference),
+    fromType: fs.existsSync(fromTypeFile)
+      ? probeFromType(fileName, readFromTypeSource(fromTypeFile))
+      : undefined,
+  };
 };
+
+/** Exposed for tests: probes inference against fabricated `types/index.ts` text. */
+export const probeInferenceText = (fileName: string, text: string): InferenceProbeResult => {
+  const index = parseIndexSource(fileName, text);
+  if (!index.inference) throw new Error(`${fileName} exports no \`Input\`/\`Output\` to probe`);
+  return probeInference(fileName, index.inference);
+};
+
+/** Exposed for tests: probes from-type against fabricated `types/fromType.ts` text. */
+export const probeFromTypeText = (fileName: string, text: string): FromTypeProbeResult =>
+  probeFromType(fileName, parseFromTypeSource(fileName, text));
 
 export const typescriptVersion = ts.version;

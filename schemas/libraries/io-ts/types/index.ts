@@ -1,7 +1,5 @@
 import type * as t from "io-ts";
 
-import type { MatchAssertions } from "#src";
-
 import { getIotsSchema } from "..";
 
 export const schema = getIotsSchema();
@@ -11,5 +9,3 @@ export const schema = getIotsSchema();
 export type Input = t.InputOf<typeof schema>;
 
 export type Output = t.TypeOf<typeof schema>;
-
-export type Assertions = MatchAssertions<Input, Output>;

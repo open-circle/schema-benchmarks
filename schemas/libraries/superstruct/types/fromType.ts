@@ -1,6 +1,8 @@
 import { object, number, string, type Describe } from "superstruct";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: Describe<JsonSchemaOutputData> = object({
   id: number(),

@@ -1,6 +1,8 @@
 import { object, number, string, required, type Validator } from "@railway-ts/pipelines/schema";
 
-import type { JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+
+export const style: FromTypeStyle = "annotation";
 
 export const schema: Validator<unknown, JsonSchemaOutputData> = object({
   id: required(number()),

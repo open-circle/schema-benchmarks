@@ -1,36 +1,39 @@
 import * as path from "node:path";
 
-import type { TypeInferenceBenchmarkConfig } from "@schema-benchmarks/schemas";
 import { describe, expect, it } from "vitest";
 
-import { probeTypes, SCHEMAS_DIR } from "#src/scripts/types/probe.ts";
+import { probeFromTypeText, probeInferenceText, SCHEMAS_DIR } from "#src/scripts/types/probe.ts";
 
-const probeMatches = (schema: string) => {
-  const inference = probeTypes(path.join(SCHEMAS_DIR, "libraries", "sury"), {
-    imports: "",
-    schema: `0 as unknown as ${schema}`,
-    input: "typeof probeSchema",
-    output: "typeof probeSchema",
-  }).inference;
-  return { input: inference?.input.match, output: inference?.output.match };
+const probeFile = (library: string) =>
+  path.join(SCHEMAS_DIR, "libraries", library, "types", ".probe-test.ts");
+
+const probeMatches = (shape: string) => {
+  const inference = probeInferenceText(
+    probeFile("sury"),
+    `export const schema = 0 as unknown as ${shape};
+export type Input = typeof schema;
+export type Output = typeof schema;
+`,
+  );
+  return { input: inference.input.match, output: inference.output.match };
 };
 
-const probe = (library: string, fromType: TypeInferenceBenchmarkConfig["fromType"]) =>
-  probeTypes(path.join(SCHEMAS_DIR, "libraries", library), {
-    imports: "",
-    schema: "",
-    noInference: "measuring the from-type cases only",
-    fromType,
-  }).fromType;
+const probeFromType = (library: string, text: string) =>
+  probeFromTypeText(probeFile(library), text);
 
 describe("building a schema from an existing type", () => {
   it("rejects every disagreement when the type is checked for equality", () => {
     expect(
-      probe("sury", {
-        style: "builder",
-        schema: `import * as S from "sury";
-const probeSchema = S.schemaOf<Product>()({ id: S.number, name: S.string, price: S.number });`,
-      })?.cases,
+      probeFromType(
+        "sury",
+        `import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+import * as S from "sury";
+
+export const style: FromTypeStyle = "builder";
+
+export const schema = S.schemaOf<JsonSchemaOutputData>()({ id: S.number, name: S.string, price: S.number });
+`,
+      ).cases,
     ).toEqual({
       wrongType: true,
       missingField: true,
@@ -41,11 +44,16 @@ const probeSchema = S.schemaOf<Product>()({ id: S.number, name: S.string, price:
 
   it("takes a schema the type never described when the check is assignability", () => {
     expect(
-      probe("valibot", {
-        style: "annotation",
-        schema: `import * as v from "valibot";
-const probeSchema: v.GenericSchema<Product> = v.object({ id: v.number(), name: v.string(), price: v.number() });`,
-      })?.cases,
+      probeFromType(
+        "valibot",
+        `import type { JsonSchemaOutputData } from "#src";
+import * as v from "valibot";
+
+export const style = "annotation";
+
+export const schema: v.GenericSchema<JsonSchemaOutputData> = v.object({ id: v.number(), name: v.string(), price: v.number() });
+`,
+      ).cases,
     ).toEqual({
       wrongType: true,
       missingField: true,
@@ -58,12 +66,18 @@ const probeSchema: v.GenericSchema<Product> = v.object({ id: v.number(), name: v
 
   it("counts a schema generated from the type as rejecting all of them", () => {
     expect(
-      probe("typia", {
-        style: "builder",
-        schema: `import typia from "typia";
-const probeSchema = typia.createAssert<Product>();`,
-        derived: true,
-      })?.cases,
+      probeFromType(
+        "typia",
+        `import type { JsonSchemaOutputData } from "#src";
+import typia from "typia";
+
+export const style = "builder";
+
+export const derived = true;
+
+export const schema = typia.createAssert<JsonSchemaOutputData>();
+`,
+      ).cases,
     ).toEqual({
       wrongType: true,
       missingField: true,
@@ -74,11 +88,16 @@ const probeSchema = typia.createAssert<Product>();`,
 
   it("fails loudly when the schema itself doesn't compile", () => {
     expect(() =>
-      probe("sury", {
-        style: "builder",
-        schema: `import * as S from "sury";
-const probeSchema = S.schemaOf<Product>()({ id: S.number, name: S.string });`,
-      }),
+      probeFromType(
+        "sury",
+        `import type { JsonSchemaOutputData } from "#src";
+import * as S from "sury";
+
+export const style = "builder";
+
+export const schema = S.schemaOf<JsonSchemaOutputData>()({ id: S.number, name: S.string });
+`,
+      ),
     ).toThrow(/from-type probe does not type check/);
   });
 });

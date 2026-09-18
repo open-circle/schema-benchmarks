@@ -237,19 +237,4 @@ export default defineBenchmarks({
       note: "compile",
     },
   ],
-  types: {
-    imports: ts`
-      import * as z from "zod";
-      import { getZodSchema } from ".";
-    `,
-    schema: ts`getZodSchema()`,
-    input: ts`z.input<typeof probeSchema>`,
-    output: ts`z.output<typeof probeSchema>`,
-    fromType: {
-      style: "builder",
-      schema: ts`
-        const probeSchema = z.toZod<Product>()(z.object({ id: z.number(), name: z.string(), price: z.number() }));
-      `,
-    },
-  },
 });

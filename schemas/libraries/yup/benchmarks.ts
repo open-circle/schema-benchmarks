@@ -115,19 +115,4 @@ export default defineBenchmarks({
     },
     snippet: ts`schema.validateSync(data)`,
   },
-  types: {
-    imports: ts`
-      import * as yup from "yup";
-      import { getYupSchema } from ".";
-    `,
-    schema: ts`getYupSchema()`,
-    input: ts`yup.InferType<typeof probeSchema>`,
-    output: ts`yup.InferType<typeof probeSchema>`,
-    fromType: {
-      style: "annotation",
-      schema: ts`
-        const probeSchema: yup.ObjectSchema<Product> = yup.object({ id: yup.number().required(), name: yup.string().required(), price: yup.number().required() });
-      `,
-    },
-  },
 });
