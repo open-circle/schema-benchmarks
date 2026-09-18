@@ -16,10 +16,10 @@ type Input = z.input<typeof schema>;
 exactly. A type that allows more (`unknown`, or `any`, which checks nothing) leaves the work to
 runtime; one that allows less rejects values the schema accepts.
 
-**From type** is the other direction: building a schema for a type you already have. It is `Exact`
+**From type** is the other direction: building a schema for a type you already have. It is checked
 only when the compiler rejects every way the two can disagree - a field of the wrong type, a field
 left out, a field required where the type makes it optional, and a field the type never declared.
-`Unsafe` means some of those compile, and the schema they build disagrees with the type it was
+Unchecked means some of those compile, and the schema they build disagrees with the type it was
 written for.
 
 **Instantiations** is the work the compiler does to declare the schema and read its output type.

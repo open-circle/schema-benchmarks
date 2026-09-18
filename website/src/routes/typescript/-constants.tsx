@@ -39,9 +39,9 @@ export const typeMatchLabels: Record<TypeMatch, { label: string; supporting: Rea
 };
 
 /** How a library takes a type that already exists and checks a schema against it. */
-export const fromTypeStyleLabels: Record<FromTypeStyle, { label: string }> = {
-  builder: { label: "Builder" },
-  annotation: { label: "Annotation" },
+export const fromTypeStyleLabels: Record<FromTypeStyle, string> = {
+  builder: "Builder",
+  annotation: "Annotation",
 };
 
 /** The ways a schema can disagree with the type it was built for. */
@@ -58,20 +58,3 @@ export const fromTypeCaseLabels: Record<FromTypeCase, { label: string; supportin
 /** The ways a schema built from a type can disagree with it, that a library lets through. */
 export const missedFromTypeCases = (fromType: FromTypeResult) =>
   fromTypeCaseSchema.options.filter((name) => !fromType.cases[name]);
-
-/**
- * What a library rejects matters more than whether it has the API at all: one that checks only
- * assignability takes a schema requiring a field the type makes optional, and that schema then
- * rejects data the type calls valid. A schema generated from the type cannot disagree with it, so
- * it is exact by construction.
- */
-export const fromTypeVerdict = (fromType: FromTypeResult | undefined) => {
-  if (!fromType) return "no";
-  return missedFromTypeCases(fromType).length ? "unsafe" : "exact";
-};
-
-export const fromTypeVerdictLabels: Record<ReturnType<typeof fromTypeVerdict>, string> = {
-  exact: "Exact",
-  unsafe: "Unsafe",
-  no: "No",
-};

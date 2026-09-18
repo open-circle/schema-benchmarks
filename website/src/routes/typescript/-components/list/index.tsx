@@ -54,12 +54,12 @@ export function TypesList({ results, instantiationScaler }: TypesListProps) {
                   </span>
                 }
               />
+              {inference && (
+                <span {...cls("bar")}>
+                  <Bar {...instantiationScaler(inference.instantiations)} />
+                </span>
+              )}
             </ListItemInternalLink>
-            {inference && (
-              <span {...cls("bar")}>
-                <Bar {...instantiationScaler(inference.instantiations)} />
-              </span>
-            )}
           </ListItem>
         );
       })}
