@@ -38,8 +38,6 @@ catalog:
   valibot: ^1.5.0
   vite: ^8.3.0
   vitest: ^5.0.1
-minimumReleaseAgeExclude:
-  - zod@4.6.4
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26

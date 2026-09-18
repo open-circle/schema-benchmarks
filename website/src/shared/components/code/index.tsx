@@ -1,7 +1,7 @@
 import type { Override } from "@schema-benchmarks/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import bem from "react-bem-helper";
 
 import { ToggleButton } from "#src/shared/components/button/toggle";
@@ -49,6 +49,7 @@ export interface CodeProps extends InlineCodeProps {
   title?: string;
   showCopy?: boolean;
   actions?: ReactNode;
+  wrap?: boolean;
 }
 
 export function CodeBlockContainer({
@@ -59,12 +60,18 @@ export function CodeBlockContainer({
   showCopy,
   raw,
   actions,
+  wrap,
   className,
 }: Override<CodeProps, { children: ReactNode; raw: string }>) {
   return (
     <pre
       dir="ltr"
-      className={clsx(`language-${language}`, lineNumbers && "line-numbers", className)}
+      className={clsx(
+        `language-${language}`,
+        lineNumbers && "line-numbers",
+        wrap && "code-block--wrap",
+        className,
+      )}
     >
       {(title || showCopy || actions) && (
         <div className="code-block__title">
@@ -97,8 +104,39 @@ export function CodeBlockContainer({
 
 export function CodeBlock({ children, ...props }: CodeProps) {
   return (
+    <Suspense fallback={<CodeBlockSkeleton {...props}>{children}</CodeBlockSkeleton>}>
+      <CodeBlockContainer {...props} raw={children}>
+        <InlineCode {...props} className={clsx(props.className, props.wrap && "code-block--wrap")}>
+          {children}
+        </InlineCode>
+      </CodeBlockContainer>
+    </Suspense>
+  );
+}
+
+export function CodeBlockSkeleton({ children, ...props }: CodeProps) {
+  const lines = children.split("\n");
+
+  return (
     <CodeBlockContainer {...props} raw={children}>
-      <InlineCode {...props}>{children}</InlineCode>
+      <code
+        aria-hidden="true"
+        className={clsx(
+          `language-${props.language ?? defaultLanguage}`,
+          props.wrap && "code-block--wrap",
+        )}
+      >
+        {lines.map((line, index) => (
+          <span className="code-block__skeleton-line" data-content={line || " "} key={index} />
+        ))}
+      </code>
+      {props.lineNumbers && (
+        <span className="line-numbers-rows" aria-hidden="true">
+          {lines.map((_, index) => (
+            <span key={index} />
+          ))}
+        </span>
+      )}
     </CodeBlockContainer>
   );
 }

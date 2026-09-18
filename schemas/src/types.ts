@@ -191,6 +191,26 @@ export interface CodecBenchmarkConfig extends Omit<BaseBenchmarkConfig, "snippet
   acceptsUnknown?: boolean;
 }
 
+/**
+ * How a library takes an existing type: `builder` is an API the type is passed to; `annotation` is
+ * the library's schema type on the declaration, which reports whatever assignability reports.
+ */
+export const fromTypeStyleSchema = /* @__PURE__ */ v.picklist(["builder", "annotation"]);
+export type FromTypeStyle = v.InferOutput<typeof fromTypeStyleSchema>;
+
+/**
+ * The ways a schema can disagree with the type it is built for. Each one is compiled against a
+ * schema for `{ id: number; name: string; price: number }`, and a library only catches the mistake
+ * if the compiler rejects it.
+ */
+export const fromTypeCaseSchema = /* @__PURE__ */ v.picklist([
+  "wrongType",
+  "missingField",
+  "optionalField",
+  "extraField",
+]);
+export type FromTypeCase = v.InferOutput<typeof fromTypeCaseSchema>;
+
 export interface LibraryInfo {
   name: string;
   optimizeType: OptimizeType;

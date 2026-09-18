@@ -152,6 +152,11 @@ Object.defineProperty(selfReversePrototype, reversedKey, { get() {
 } });
 Object.defineProperty(selfReversePrototype, "sr", { value: true });
 SelfReverseSchema.prototype = selfReversePrototype;
+var isOwnSchema = (value) => {
+	const proto = typeof value === objectTag && value && Object.getPrototypeOf(value);
+	return proto === schemaPrototype || proto === selfReversePrototype;
+};
+var panicNotSchema = () => panic("Expected a Sury schema");
 var seq = 1;
 var exnId = {};
 var SuryError = class extends Error {
@@ -1080,6 +1085,7 @@ var arrayFactory = (item) => {
 	mut.items = immutableEmptyArray;
 	return mut;
 };
+var array = /* @__NO_SIDE_EFFECTS__ */ (item) => arrayFactory(/* @__PURE__ */ definitionToSchema(item));
 var arrayDecoder = (unknownInput) => {
 	const isUnion = unknownInput.u;
 	const expectedSchema = unknownInput.e;
@@ -2372,6 +2378,22 @@ var maxLength = /* @__NO_SIDE_EFFECTS__ */ (root, length2, maybeMessage) => {
 	});
 };
 var nonEmpty = /* @__NO_SIDE_EFFECTS__ */ (schema, maybeMessage) => /* @__PURE__ */ minLength(schema, 1, maybeMessage);
+var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, flag, expression) => /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
+	const re = typeof test === "string" ? new RegExp(test, "i") : test;
+	s2.format = format;
+	if (expression) s2.expression = () => expression;
+	if (flag) s2.formatFlag = flag;
+	s2.refiner = (input) => {
+		return [{
+			c: (inputVar) => `${B_embed(input, re)}${re instanceof RegExp ? ".test" : ""}(${inputVar})`,
+			f: B_failWithErrorMessage("format")
+		}];
+	};
+});
+var ipv4Pattern = "(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)";
+var ipv6Pattern = /* @__NO_SIDE_EFFECTS__ */ () => "(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|" + ipv4Pattern + ")|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)";
+var uriPattern = /* @__NO_SIDE_EFFECTS__ */ (schemeOptional, scheme) => "^(?:" + (scheme || "[a-z][a-z0-9+\\-.]*") + ":)" + schemeOptional + "(?:\\/\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:" + /* @__PURE__ */ ipv6Pattern() + "|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|" + ipv4Pattern + "|(?:[a-z0-9\\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\\?(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$";
+var uri = /* @__PURE__ */ stringFormat("uri", /* @__PURE__ */ uriPattern(""), 1);
 var invalidDateRefine = (input) => {
 	return B_refine(input, input.e, [{
 		c: (inputVar) => `!Number.isNaN(${inputVar}.getTime())`,
@@ -2399,6 +2421,29 @@ var date = /* @__PURE__ */ initSchema(instanceTag, (input) => {
 		} else return input;
 	};
 });
+var panicArity = () => panic("Expected at most 3 schemas and a value. Use .with(S.to, ...) for a longer chain");
+var dispatch = (n, a, b, c, d, tail, rev, flag) => {
+	if (n > 4) panicArity();
+	let data = U;
+	let immediate = !isOwnSchema(a);
+	if (immediate) {
+		data = a, a = b, b = c, c = d, n--;
+		if (n < 1 || !isOwnSchema(a)) panicNotSchema();
+	}
+	const k = n > 1 && isOwnSchema(b) ? n > 2 && isOwnSchema(c) ? 3 : 2 : 1;
+	if (n > k) {
+		if (immediate || n > k + 1) panic("Expected a Sury schema. The data goes first or last");
+		data = k > 2 ? isOwnSchema(d) ? panicArity() : d : k > 1 ? c : b;
+		immediate = true;
+	}
+	const first = rev ? /* @__PURE__ */ reverse(a) : a;
+	const op = k > 2 ? /* @__PURE__ */ getOp(flag, tail ? 4 : 3, first, b, c, tail) : k > 1 ? /* @__PURE__ */ getOp(flag, tail ? 3 : 2, first, b, tail) : /* @__PURE__ */ getOp(flag, tail ? 2 : 1, first, tail);
+	return immediate ? op(data) : op;
+};
+// @__NO_SIDE_EFFECTS__
+function parseOrThrow(a, b, c, d) {
+	return dispatch(arguments.length, a, b, c, d, U, false, 8);
+}
 var getStandardJSONSchema = (schema, options, isOutput2) => {
 	throw new SuryError({
 		code: "invalid_operation",
@@ -2434,6 +2479,7 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 	Object.defineProperty(schema, "~standard", valueOptions);
 	return standard;
 } });
+var union = /* @__NO_SIDE_EFFECTS__ */ (values) => unionFactory(values.map(definitionToSchema));
 var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
 	const schema = /* @__PURE__ */ definitionToSchema(definition);
 	if (maybeOr !== U) {
@@ -2442,7 +2488,34 @@ var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
 		else return /* @__PURE__ */ Option_getOr(schema2, maybeOr);
 	} else return unionFactory([schema, nullLiteral]);
 };
-string.with(nonEmpty).with(maxLength, 100);
-float.with(gte, 1).with(lte, 5), string.with(nonEmpty).with(maxLength, 100), string.with(nonEmpty).with(maxLength, 1e3);
-string.with(nonEmpty).with(maxLength, 100), string.with(nonEmpty).with(maxLength, 30), string.with(nonEmpty).with(maxLength, 500), float.with(gte, 1).with(lte, 1e4), float.with(gte, 1).with(lte, 100).with(nullable2), float.with(gte, 0).with(lte, 10), string.with(nonEmpty).with(maxLength, 30);
+//#endregion
+//#region ../schemas/libraries/sury/download/index.ts
+const imageSchema = /* @__PURE__ */ definitionToSchema({
+	id: float,
+	created: date,
+	title: string.with(nonEmpty).with(maxLength, 100),
+	type: /* @__PURE__ */ union(["jpg", "png"]),
+	size: float,
+	url: uri
+});
+const ratingSchema = /* @__PURE__ */ definitionToSchema({
+	id: float,
+	stars: float.with(gte, 1).with(lte, 5),
+	title: string.with(nonEmpty).with(maxLength, 100),
+	text: string.with(nonEmpty).with(maxLength, 1e3),
+	images: /* @__PURE__ */ array(imageSchema)
+});
+(/* @__PURE__ */ parseOrThrow(/* @__PURE__ */ definitionToSchema({
+	id: float,
+	created: date,
+	title: string.with(nonEmpty).with(maxLength, 100),
+	brand: string.with(nonEmpty).with(maxLength, 30),
+	description: string.with(nonEmpty).with(maxLength, 500),
+	price: float.with(gte, 1).with(lte, 1e4),
+	discount: float.with(gte, 1).with(lte, 100).with(nullable2),
+	quantity: float.with(gte, 0).with(lte, 10),
+	tags: /* @__PURE__ */ array(string.with(nonEmpty).with(maxLength, 30)),
+	images: /* @__PURE__ */ array(imageSchema),
+	ratings: /* @__PURE__ */ array(ratingSchema)
+})))({});
 //#endregion

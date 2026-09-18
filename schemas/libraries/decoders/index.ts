@@ -1,4 +1,5 @@
-import type { Decoder } from "decoders";
+import type { Satisfies } from "@schema-benchmarks/utils";
+import type { DecoderType } from "decoders";
 import {
   object,
   number,
@@ -42,5 +43,10 @@ export function getDecoderSchema() {
     tags: array(sized(string, { min: 1, max: 30 })),
     images: array(imageDecoder),
     ratings: array(ratingDecoder),
-  }) satisfies Decoder<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<
+  DecoderType<ReturnType<typeof getDecoderSchema>>,
+  ProductData
+>;

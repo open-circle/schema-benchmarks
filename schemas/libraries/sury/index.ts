@@ -1,3 +1,4 @@
+import type { Satisfies } from "@schema-benchmarks/utils";
 import * as S from "sury";
 
 import type { ProductData } from "#src";
@@ -30,5 +31,7 @@ export function getSurySchema() {
     tags: S.array(S.string.with(S.nonEmpty).with(S.maxLength, 30)),
     images: S.array(imageSchema),
     ratings: S.array(ratingSchema),
-  }) satisfies S.Schema<ProductData>;
+  });
 }
+
+export type SatisfiesTest = Satisfies<S.Output<ReturnType<typeof getSurySchema>>, ProductData>;
