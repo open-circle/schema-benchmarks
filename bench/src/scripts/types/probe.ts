@@ -398,7 +398,7 @@ const probeInference = (fileName: string, source: InferenceSource): InferencePro
         ),
         instantiations: withOutput.instantiations - schemaOnly.instantiations,
       },
-      instantiations: withOutput.instantiations - baseline.instantiations,
+      instantiations: withBoth.instantiations - baseline.instantiations,
     };
   } finally {
     probe = undefined;
@@ -513,8 +513,8 @@ const probeFromType = (fileName: string, source: FromTypeSource): FromTypeProbeR
  *
  * Every count is a delta: the bare imports are subtracted from the schema declaration, and the
  * schema declaration from each type extraction, so a number covers only the work its own line
- * added. The headline `instantiations` is what a consumer pays for a schema and the type it
- * produces - declaring the schema and reading its output type.
+ * added. The headline `instantiations` is what a consumer pays for a schema and the types it
+ * produces - declaring the schema and reading both input and output types.
  */
 export const probeTypes = (directory: string): TypeProbeResult => {
   const typesDir = path.join(directory, "types");
