@@ -92,52 +92,28 @@ async function download() {
   const allResults: DownloadResults = unsafeFromEntries(
     await Promise.all(
       minifyTypeSchema.options.map(async (minify) => {
-        const [topLevelPaths, nestedPaths] = await Promise.all([
-          Array.fromAsync(
-            fs.glob(path.resolve(process.cwd(), "../schemas/libraries/**/download.ts")),
-          ),
-          Array.fromAsync(
-            fs.glob(path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts")),
-          ),
-        ]);
-        const files: Array<FileDescription> = [
-          ...topLevelPaths.map((filePath) => {
-            const libraryName = filePath
-              .replace(/\\/g, "/")
-              .split("schemas/libraries/")[1]
-              ?.split("/download.ts")[0]
-              ?.replace("/@", "@");
-            if (!libraryName) throw new Error(`Invalid file path: ${filePath}`);
-            const compiledPath = path.resolve(
-              path.dirname(filePath),
-              `./download_compiled/${minify}.js`,
-            );
-            return {
-              path: filePath,
-              compiledPath,
-              libraryName,
-            };
-          }),
-          ...nestedPaths.map((filePath) => {
-            const libraryName = filePath
-              .replace(/\\/g, "/")
-              .split("schemas/libraries/")[1]
-              ?.split("/download/")[0]
-              ?.replace("/@", "@");
-            if (!libraryName) throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
-            const note = path.basename(filePath).replace("index.ts", "").replace(".ts", "");
-            const compiledPath = path.resolve(
-              path.dirname(filePath),
-              `../download_compiled/${note}/${minify}.js`,
-            );
-            return {
-              path: filePath,
-              compiledPath,
-              libraryName,
-              note: note || undefined,
-            };
-          }),
-        ];
+        const paths = Array.fromAsync(
+          fs.glob(path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts")),
+        );
+        const files: Array<FileDescription> = (await paths).map((filePath) => {
+          const libraryName = filePath
+            .replace(/\\/g, "/")
+            .split("schemas/libraries/")[1]
+            ?.split("/download/")[0]
+            ?.replace("/@", "@");
+          if (!libraryName) throw new Error(`Invalid file path: ${filePath} ${libraryName}`);
+          const entryName = path.basename(filePath, ".ts");
+          const compiledPath = path.resolve(
+            path.dirname(filePath),
+            `../download_compiled/${entryName}/${minify}.js`,
+          );
+          return {
+            path: filePath,
+            compiledPath,
+            libraryName,
+            note: entryName === "index" ? undefined : entryName,
+          };
+        });
         const results = await Promise.all(
           files.map((file) =>
             limit(() => {

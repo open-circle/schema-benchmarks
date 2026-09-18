@@ -1,0 +1,14684 @@
+//#region \0rolldown/runtime.js
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
+//#endregion
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.2_ata-validator@1.25.0_yaml@2.9.0_/node_modules/@ata-project/keywords/index.js
+var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const CONSTRUCTORS = {
+		Object,
+		Array,
+		Function,
+		Number,
+		String,
+		Date,
+		RegExp,
+		Promise,
+		Map,
+		Set,
+		WeakMap,
+		WeakSet,
+		Buffer: typeof Buffer !== "undefined" ? Buffer : void 0,
+		Uint8Array,
+		ArrayBuffer
+	};
+	function compileNode(schema) {
+		const ops = [];
+		if (!schema || typeof schema !== "object") return ops;
+		if (schema.instanceof) {
+			const types = Array.isArray(schema.instanceof) ? schema.instanceof : [schema.instanceof];
+			const ctors = types.map((t) => CONSTRUCTORS[t]).filter(Boolean);
+			if (ctors.length > 0) ops.push({
+				type: "instanceof",
+				ctors,
+				types
+			});
+		}
+		if (schema.typeof) {
+			const types = Array.isArray(schema.typeof) ? schema.typeof : [schema.typeof];
+			ops.push({
+				type: "typeof",
+				types
+			});
+		}
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const child = compileNode(prop);
+			if (child.length > 0) ops.push({
+				type: "prop",
+				key,
+				ops: child
+			});
+		}
+		if (schema.items && typeof schema.items === "object" && !Array.isArray(schema.items)) {
+			const item = compileNode(schema.items);
+			if (item.length > 0) ops.push({
+				type: "items",
+				ops: item
+			});
+		}
+		if (Array.isArray(schema.prefixItems)) {
+			const tuple = schema.prefixItems.map(compileNode);
+			if (tuple.some((o) => o.length > 0)) ops.push({
+				type: "prefixItems",
+				tuple
+			});
+		}
+		return ops;
+	}
+	function makeError(keyword, path, types) {
+		const expected = types.join(" | ");
+		return {
+			keyword,
+			instancePath: path,
+			schemaPath: "",
+			params: { expected },
+			message: "expected " + keyword + " " + expected
+		};
+	}
+	function runOps(value, ops, path, errors) {
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if (op.type === "instanceof") {
+				let match = false;
+				for (let j = 0; j < op.ctors.length; j++) if (value instanceof op.ctors[j]) {
+					match = true;
+					break;
+				}
+				if (!match) errors.push(makeError("instanceof", path, op.types));
+			} else if (op.type === "typeof") {
+				let match = false;
+				for (let j = 0; j < op.types.length; j++) if (typeof value === op.types[j]) {
+					match = true;
+					break;
+				}
+				if (!match) errors.push(makeError("typeof", path, op.types));
+			} else if (op.type === "prop") {
+				if (value && typeof value === "object") {
+					const v = value[op.key];
+					if (v !== void 0) runOps(v, op.ops, path + "/" + op.key, errors);
+				}
+			} else if (op.type === "items") {
+				if (Array.isArray(value)) for (let k = 0; k < value.length; k++) runOps(value[k], op.ops, path + "/" + k, errors);
+			} else if (op.type === "prefixItems") {
+				if (Array.isArray(value)) {
+					const n = op.tuple.length < value.length ? op.tuple.length : value.length;
+					for (let k = 0; k < n; k++) if (op.tuple[k].length > 0) runOps(value[k], op.tuple[k], path + "/" + k, errors);
+				}
+			}
+		}
+	}
+	function buildCheck(ops) {
+		const checks = [];
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if (op.type === "instanceof") {
+				const ctors = op.ctors;
+				if (ctors.length === 1) {
+					const C = ctors[0];
+					checks.push((v) => v instanceof C);
+				} else checks.push((v) => {
+					for (let j = 0; j < ctors.length; j++) if (v instanceof ctors[j]) return true;
+					return false;
+				});
+			} else if (op.type === "typeof") {
+				const types = op.types;
+				if (types.length === 1) {
+					const t = types[0];
+					checks.push((v) => typeof v === t);
+				} else checks.push((v) => {
+					for (let j = 0; j < types.length; j++) if (typeof v === types[j]) return true;
+					return false;
+				});
+			} else if (op.type === "prop") {
+				const key = op.key;
+				const child = buildCheck(op.ops);
+				checks.push((v) => {
+					if (v === null || typeof v !== "object") return true;
+					const inner = v[key];
+					return inner === void 0 ? true : child(inner);
+				});
+			} else if (op.type === "items") {
+				const child = buildCheck(op.ops);
+				checks.push((v) => {
+					if (!Array.isArray(v)) return true;
+					for (let k = 0; k < v.length; k++) if (!child(v[k])) return false;
+					return true;
+				});
+			} else if (op.type === "prefixItems") {
+				const tuple = op.tuple.map((o) => o.length > 0 ? buildCheck(o) : null);
+				checks.push((v) => {
+					if (!Array.isArray(v)) return true;
+					const n = tuple.length < v.length ? tuple.length : v.length;
+					for (let k = 0; k < n; k++) {
+						const c = tuple[k];
+						if (c !== null && !c(v[k])) return false;
+					}
+					return true;
+				});
+			}
+		}
+		if (checks.length === 1) return checks[0];
+		return (v) => {
+			for (let i = 0; i < checks.length; i++) if (!checks[i](v)) return false;
+			return true;
+		};
+	}
+	function buildSource(ops) {
+		const ctors = [];
+		let n = 0;
+		const name = () => "_" + n++;
+		const ctorRef = (C) => {
+			let i = ctors.indexOf(C);
+			if (i === -1) i = ctors.push(C) - 1;
+			return "c" + i;
+		};
+		const emit = (list, expr) => {
+			let out = "";
+			for (let i = 0; i < list.length; i++) {
+				const op = list[i];
+				if (op.type === "instanceof") {
+					const test = op.ctors.map((C) => expr + " instanceof " + ctorRef(C)).join("||");
+					out += "if(!(" + test + "))return false\n";
+				} else if (op.type === "typeof") {
+					const test = op.types.map((t) => "typeof " + expr + "===" + JSON.stringify(t)).join("||");
+					out += "if(!(" + test + "))return false\n";
+				} else if (op.type === "prop") {
+					const v = name();
+					out += "if(" + expr + "!==null&&typeof " + expr + "==='object'){";
+					out += "const " + v + "=" + expr + "[" + JSON.stringify(op.key) + "]\n";
+					out += "if(" + v + "!==undefined){\n" + emit(op.ops, v) + "}}\n";
+				} else if (op.type === "items") {
+					const k = name();
+					const e = name();
+					out += "if(Array.isArray(" + expr + ")){";
+					out += "for(let " + k + "=0;" + k + "<" + expr + ".length;" + k + "++){";
+					out += "const " + e + "=" + expr + "[" + k + "]\n" + emit(op.ops, e) + "}}\n";
+				} else if (op.type === "prefixItems") for (let j = 0; j < op.tuple.length; j++) {
+					if (op.tuple[j].length === 0) continue;
+					const e = name();
+					out += "if(Array.isArray(" + expr + ")&&" + expr + ".length>" + j + "){";
+					out += "const " + e + "=" + expr + "[" + j + "]\n" + emit(op.tuple[j], e) + "}\n";
+				}
+			}
+			return out;
+		};
+		const body = emit(ops, "d");
+		const head = ctors.map((_, i) => "const c" + i + "=C[" + i + "]").join("\n");
+		try {
+			return new Function("C", head + "\nreturn function(d){\n" + body + "return true\n}")(ctors);
+		} catch {
+			return null;
+		}
+	}
+	const ENTRIES = [
+		["validate", {}],
+		["isValidObject", {}],
+		["validateJSON", "{}"],
+		["isValidJSON", "{}"],
+		["validateAndParse", "{}"]
+	];
+	function installEntries(validator, make, shouldWrap) {
+		const slots = /* @__PURE__ */ new Map();
+		const state = {
+			depth: 0,
+			settled: false
+		};
+		const proto = Object.getPrototypeOf(validator);
+		for (let i = 0; i < ENTRIES.length; i++) {
+			const name = ENTRIES[i][0];
+			const desc = Object.getOwnPropertyDescriptor(validator, name) || (proto ? Object.getOwnPropertyDescriptor(proto, name) : void 0);
+			if (!desc) continue;
+			const value = "value" in desc ? desc.value : void 0;
+			if (value !== void 0 && typeof value !== "function") continue;
+			slots.set(name, {
+				probe: ENTRIES[i][1],
+				impl: value,
+				call: null
+			});
+		}
+		function define(name) {
+			const slot = slots.get(name);
+			Object.defineProperty(validator, name, {
+				configurable: true,
+				enumerable: true,
+				get() {
+					if (!state.settled) settle();
+					return slot.call;
+				},
+				set(fn) {
+					slot.impl = fn;
+				}
+			});
+		}
+		function settle() {
+			state.settled = true;
+			for (const [name, slot] of slots) {
+				delete validator[name];
+				if (slot.impl !== void 0) validator[name] = slot.impl;
+			}
+			for (const [name, slot] of slots) {
+				try {
+					validator[name](slot.probe);
+				} catch {}
+				slot.impl = validator[name];
+			}
+			if (shouldWrap && !shouldWrap()) {
+				for (const [name, slot] of slots) {
+					delete validator[name];
+					if (slot.impl !== void 0) validator[name] = slot.impl;
+					slot.call = slot.impl;
+				}
+				return;
+			}
+			for (const name of slots.keys()) {
+				delete validator[name];
+				define(name);
+			}
+		}
+		for (const [name, slot] of slots) {
+			const wrapper = make(name, (data) => slot.impl(data));
+			slot.call = function(data) {
+				if (state.depth > 0) return slot.impl(data);
+				state.depth++;
+				try {
+					return wrapper(data);
+				} finally {
+					state.depth--;
+				}
+			};
+			define(name);
+		}
+	}
+	function KeywordResult(inner, data, collect) {
+		this.valid = false;
+		this._inner = inner;
+		this._data = data;
+		this._collect = collect;
+		this._errors = null;
+	}
+	Object.defineProperty(KeywordResult.prototype, "errors", {
+		configurable: true,
+		get() {
+			if (this._errors === null) {
+				const errors = this._collect(this._data) || [];
+				const inner = this._inner;
+				this._errors = inner.valid ? errors : inner.errors.concat(errors);
+			}
+			return this._errors;
+		}
+	});
+	KeywordResult.prototype.toJSON = function() {
+		return {
+			valid: false,
+			errors: this.errors
+		};
+	};
+	KeywordResult.prototype._ataRaw = function() {
+		const inner = this._inner;
+		const kw = this._collect(this._data) || [];
+		if (inner.valid) return kw;
+		return (typeof inner._ataRaw === "function" ? inner._ataRaw() : inner.errors).concat(kw);
+	};
+	function withKeywords(validator) {
+		let compiled = null;
+		const compile = () => {
+			if (compiled === null) {
+				const ops = compileNode(validator._schemaObj);
+				compiled = ops.length === 0 ? false : {
+					ops,
+					check: buildSource(ops) || buildCheck(ops)
+				};
+			}
+			return compiled;
+		};
+		function keywordErrors(data) {
+			const errors = [];
+			runOps(data, compile().ops, "", errors);
+			return errors.length > 0 ? errors : null;
+		}
+		const check = (data) => compile().check(data);
+		const wrappers = {
+			validate: (inner) => (data) => {
+				const res = inner(data);
+				if (res.valid && check(data)) return res;
+				return new KeywordResult(res, data, keywordErrors);
+			},
+			isValidObject: (inner) => (data) => inner(data) && check(data),
+			validateJSON: (inner) => (jsonStr) => {
+				const res = inner(jsonStr);
+				if (!res.valid) return res;
+				let data;
+				try {
+					data = JSON.parse(jsonStr);
+				} catch {
+					return res;
+				}
+				if (check(data)) return res;
+				const errors = keywordErrors(data);
+				return errors ? {
+					valid: false,
+					errors
+				} : res;
+			},
+			isValidJSON: (inner) => (jsonStr) => {
+				if (!inner(jsonStr)) return false;
+				let data;
+				try {
+					data = JSON.parse(jsonStr);
+				} catch {
+					return true;
+				}
+				return check(data);
+			},
+			validateAndParse: (inner) => (jsonStr) => {
+				const res = inner(jsonStr);
+				if (!res.valid) return res;
+				if (check(res.value)) return res;
+				const errors = keywordErrors(res.value);
+				return errors ? {
+					valid: false,
+					value: res.value,
+					errors
+				} : res;
+			}
+		};
+		installEntries(validator, (name, inner) => wrappers[name](inner), () => compile() !== false);
+		Object.defineProperty(validator, "_externalChecks", {
+			get: () => compile() !== false,
+			configurable: true
+		});
+		return validator;
+	}
+	withKeywords.CONSTRUCTORS = CONSTRUCTORS;
+	module.exports = {
+		withKeywords,
+		CONSTRUCTORS
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/native-load.browser.js
+var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = function loadNative() {
+		return null;
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/keywords.js
+var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const RESERVED = /* @__PURE__ */ new Set([
+		"$id",
+		"$schema",
+		"$ref",
+		"$defs",
+		"$anchor",
+		"$dynamicRef",
+		"$dynamicAnchor",
+		"$vocabulary",
+		"$comment",
+		"definitions",
+		"type",
+		"enum",
+		"const",
+		"properties",
+		"patternProperties",
+		"additionalProperties",
+		"required",
+		"items",
+		"prefixItems",
+		"additionalItems",
+		"contains",
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"not",
+		"if",
+		"then",
+		"else",
+		"format",
+		"pattern",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"dependentSchemas",
+		"dependentRequired",
+		"dependencies",
+		"propertyNames",
+		"propertyDependencies",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf",
+		"minLength",
+		"maxLength",
+		"minItems",
+		"maxItems",
+		"uniqueItems",
+		"minContains",
+		"maxContains",
+		"minProperties",
+		"maxProperties"
+	]);
+	function normalizeKeywords(defs) {
+		if (!defs || typeof defs !== "object") return null;
+		const names = Object.keys(defs);
+		if (names.length === 0) return null;
+		const out = Object.create(null);
+		for (const name of names) {
+			const raw = defs[name];
+			const def = typeof raw === "function" ? { validate: raw } : raw;
+			if (!def || typeof def !== "object") throw new Error(`keyword "${name}": definition must be a function or an object`);
+			if (RESERVED.has(name)) throw new Error(`keyword "${name}" is a JSON Schema keyword and cannot be redefined`);
+			const hasValidate = typeof def.validate === "function";
+			const hasCompile = typeof def.compile === "function";
+			const hasMacro = typeof def.macro === "function";
+			if (!hasValidate && !hasCompile && !hasMacro) throw new Error(`keyword "${name}": definition needs validate, compile or macro` + (typeof def.code === "function" ? " (code-generating keywords are not supported)" : ""));
+			let types = null;
+			if (def.type !== void 0) {
+				types = Array.isArray(def.type) ? def.type.slice() : [def.type];
+				for (const t of types) if (typeof t !== "string") throw new Error(`keyword "${name}": type must be a string or a list of strings`);
+			}
+			out[name] = {
+				name,
+				types,
+				validate: hasValidate ? def.validate : null,
+				compile: hasCompile ? def.compile : null,
+				macro: hasMacro ? def.macro : null
+			};
+		}
+		return out;
+	}
+	function schemaUsesKeywords(schema, keywords) {
+		if (!keywords) return false;
+		const seen = /* @__PURE__ */ new Set();
+		const walk = (node, keysAreNames) => {
+			if (node === null || typeof node !== "object") return false;
+			if (seen.has(node)) return false;
+			seen.add(node);
+			if (Array.isArray(node)) {
+				for (const item of node) if (walk(item, false)) return true;
+				return false;
+			}
+			for (const key of Object.keys(node)) {
+				if (!keysAreNames && keywords[key] !== void 0) return true;
+				const v = node[key];
+				if (v !== null && typeof v === "object") {
+					if (walk(v, !keysAreNames && NAME_MAPS.has(key))) return true;
+				}
+			}
+			return false;
+		};
+		return walk(schema, false);
+	}
+	const NAME_MAPS = /* @__PURE__ */ new Set([
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas",
+		"dependentRequired",
+		"dependencies",
+		"propertyDependencies"
+	]);
+	module.exports = {
+		normalizeKeywords,
+		schemaUsesKeywords
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/error-codes.js
+var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const CODES = Object.freeze({
+		ATA1001: {
+			keyword: "type",
+			category: "type",
+			headline: "value has wrong type"
+		},
+		ATA1002: {
+			keyword: "type",
+			category: "type",
+			headline: "value is not an object"
+		},
+		ATA2001: {
+			keyword: "minLength",
+			category: "constraint",
+			headline: "string shorter than minLength"
+		},
+		ATA2002: {
+			keyword: "maxLength",
+			category: "constraint",
+			headline: "string longer than maxLength"
+		},
+		ATA2003: {
+			keyword: "minimum",
+			category: "constraint",
+			headline: "number below minimum"
+		},
+		ATA2004: {
+			keyword: "maximum",
+			category: "constraint",
+			headline: "number above maximum"
+		},
+		ATA2005: {
+			keyword: "exclusiveMinimum",
+			category: "constraint",
+			headline: "number not above exclusiveMinimum"
+		},
+		ATA2006: {
+			keyword: "exclusiveMaximum",
+			category: "constraint",
+			headline: "number not below exclusiveMaximum"
+		},
+		ATA2007: {
+			keyword: "multipleOf",
+			category: "constraint",
+			headline: "number not a multiple of expected divisor"
+		},
+		ATA2008: {
+			keyword: "minItems",
+			category: "constraint",
+			headline: "array shorter than minItems"
+		},
+		ATA2009: {
+			keyword: "maxItems",
+			category: "constraint",
+			headline: "array longer than maxItems"
+		},
+		ATA2010: {
+			keyword: "minProperties",
+			category: "constraint",
+			headline: "object has fewer than minProperties"
+		},
+		ATA2011: {
+			keyword: "maxProperties",
+			category: "constraint",
+			headline: "object has more than maxProperties"
+		},
+		ATA2012: {
+			keyword: "uniqueItems",
+			category: "constraint",
+			headline: "array has duplicate items"
+		},
+		ATA2013: {
+			keyword: "pattern",
+			category: "constraint",
+			headline: "string does not match pattern"
+		},
+		ATA3001: {
+			keyword: "format",
+			format: "email",
+			category: "format",
+			headline: "value does not match format \"email\""
+		},
+		ATA3002: {
+			keyword: "format",
+			format: "date",
+			category: "format",
+			headline: "value does not match format \"date\""
+		},
+		ATA3003: {
+			keyword: "format",
+			format: "date-time",
+			category: "format",
+			headline: "value does not match format \"date-time\""
+		},
+		ATA3004: {
+			keyword: "format",
+			format: "time",
+			category: "format",
+			headline: "value does not match format \"time\""
+		},
+		ATA3005: {
+			keyword: "format",
+			format: "uri",
+			category: "format",
+			headline: "value does not match format \"uri\""
+		},
+		ATA3006: {
+			keyword: "format",
+			format: "uri-reference",
+			category: "format",
+			headline: "value does not match format \"uri-reference\""
+		},
+		ATA3007: {
+			keyword: "format",
+			format: "ipv4",
+			category: "format",
+			headline: "value does not match format \"ipv4\""
+		},
+		ATA3008: {
+			keyword: "format",
+			format: "ipv6",
+			category: "format",
+			headline: "value does not match format \"ipv6\""
+		},
+		ATA3009: {
+			keyword: "format",
+			format: "uuid",
+			category: "format",
+			headline: "value does not match format \"uuid\""
+		},
+		ATA3010: {
+			keyword: "format",
+			format: "hostname",
+			category: "format",
+			headline: "value does not match format \"hostname\""
+		},
+		ATA3099: {
+			keyword: "format",
+			category: "format",
+			headline: "value does not match user-defined format"
+		},
+		ATA4001: {
+			keyword: "oneOf",
+			category: "composition",
+			headline: "value matched 0 of N oneOf variants"
+		},
+		ATA4002: {
+			keyword: "oneOf",
+			category: "composition",
+			headline: "value matched more than one oneOf variant"
+		},
+		ATA4003: {
+			keyword: "anyOf",
+			category: "composition",
+			headline: "value matched none of the anyOf variants"
+		},
+		ATA4004: {
+			keyword: "allOf",
+			category: "composition",
+			headline: "value failed one or more allOf branches"
+		},
+		ATA4005: {
+			keyword: "not",
+			category: "composition",
+			headline: "value matched a forbidden schema"
+		},
+		ATA4006: {
+			keyword: "if",
+			category: "composition",
+			headline: "value violated then/else branch"
+		},
+		ATA5001: {
+			keyword: "$ref",
+			category: "ref",
+			headline: "$ref could not be resolved"
+		},
+		ATA5002: {
+			keyword: "$ref",
+			category: "ref",
+			headline: "recursive $ref cycle detected at validate time"
+		},
+		ATA6001: {
+			keyword: "enum",
+			category: "enum",
+			headline: "value is not one of the allowed enum values"
+		},
+		ATA6002: {
+			keyword: "const",
+			category: "enum",
+			headline: "value does not equal const"
+		},
+		ATA7001: {
+			keyword: "required",
+			category: "shape",
+			headline: "object missing required property"
+		},
+		ATA7002: {
+			keyword: "additionalProperties",
+			category: "shape",
+			headline: "object has property not allowed by schema"
+		},
+		ATA7003: {
+			keyword: "unevaluatedProperties",
+			category: "shape",
+			headline: "object has unevaluated property"
+		},
+		ATA7004: {
+			keyword: "unevaluatedItems",
+			category: "shape",
+			headline: "array has unevaluated items"
+		},
+		ATA7005: {
+			keyword: "dependentRequired",
+			category: "shape",
+			headline: "dependentRequired property missing"
+		},
+		ATA7006: {
+			keyword: "propertyNames",
+			category: "shape",
+			headline: "property name violates schema"
+		},
+		ATA7007: {
+			keyword: "contains",
+			category: "shape",
+			headline: "array does not contain a matching item"
+		},
+		ATA9000: {
+			keyword: "__abort_early__",
+			category: "system",
+			headline: "validation failed (abortEarly)"
+		},
+		ATA9001: {
+			keyword: "__parse__",
+			category: "system",
+			headline: "input is not valid JSON"
+		},
+		ATA9002: {
+			keyword: "__compile__",
+			category: "system",
+			headline: "schema failed to compile"
+		}
+	});
+	function get(code) {
+		return CODES[code];
+	}
+	function all() {
+		return Object.keys(CODES).sort();
+	}
+	const BY_KEYWORD = /* @__PURE__ */ new Map();
+	const BY_FORMAT = /* @__PURE__ */ new Map();
+	for (const c of Object.keys(CODES).sort()) {
+		const meta = CODES[c];
+		if (!BY_KEYWORD.has(meta.keyword)) BY_KEYWORD.set(meta.keyword, c);
+		if (meta.keyword === "format" && meta.format && !BY_FORMAT.has(meta.format)) BY_FORMAT.set(meta.format, c);
+	}
+	function codeFor(keyword, format) {
+		if (keyword === "format" && format) {
+			const hit = BY_FORMAT.get(format);
+			return hit === void 0 ? "ATA3099" : hit;
+		}
+		const hit = BY_KEYWORD.get(keyword);
+		return hit === void 0 ? null : hit;
+	}
+	const NATIVE_KEYWORDS = [
+		null,
+		"__parse__",
+		"__compile__",
+		"type",
+		"required",
+		"additionalProperties",
+		"enum",
+		"const",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"minLength",
+		"maxLength",
+		"pattern",
+		"format",
+		"minItems",
+		"maxItems",
+		"uniqueItems",
+		"minProperties",
+		"maxProperties",
+		"multipleOf",
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"not",
+		"$ref",
+		"if"
+	];
+	function fromNative(ordinal, format) {
+		if (typeof ordinal !== "number" || !Number.isInteger(ordinal)) return null;
+		const keyword = NATIVE_KEYWORDS[ordinal];
+		if (!keyword) return null;
+		return {
+			keyword,
+			code: keyword === "format" ? format ? codeFor("format", format) || "ATA3099" : "ATA3099" : codeFor(keyword) || "ATA9001"
+		};
+	}
+	module.exports = {
+		CODES,
+		get,
+		all,
+		codeFor,
+		fromNative,
+		NATIVE_KEYWORDS
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/schema-order.js
+var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
+	const _rankCache = /* @__PURE__ */ new WeakMap();
+	const _ordinalCache = /* @__PURE__ */ new WeakMap();
+	function keyIndex(node, seg) {
+		let index = _keyIndexCache.get(node);
+		if (index === void 0) {
+			index = /* @__PURE__ */ new Map();
+			const keys = Object.keys(node);
+			for (let i = 0; i < keys.length; i++) index.set(keys[i], i);
+			_keyIndexCache.set(node, index);
+		}
+		const at = index.get(seg);
+		return at === void 0 ? -1 : at;
+	}
+	function unescapePointerSegment(seg) {
+		return seg.indexOf("~") < 0 ? seg : seg.replace(/~1/g, "/").replace(/~0/g, "~");
+	}
+	function escapePointerSegment(seg) {
+		return seg.indexOf("~") < 0 && seg.indexOf("/") < 0 ? seg : seg.replace(/~/g, "~0").replace(/\//g, "~1");
+	}
+	function rankFor(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return null;
+		if (rootSchema === null || typeof rootSchema !== "object") return null;
+		let byPath = _rankCache.get(rootSchema);
+		if (byPath === void 0) {
+			byPath = /* @__PURE__ */ new Map();
+			_rankCache.set(rootSchema, byPath);
+		}
+		const hit = byPath.get(schemaPath);
+		if (hit !== void 0) return hit;
+		const rank = computeRank(rootSchema, schemaPath);
+		byPath.set(schemaPath, rank);
+		return rank;
+	}
+	function computeRank(rootSchema, schemaPath) {
+		const rank = [];
+		let node = rootSchema;
+		let start = 1;
+		while (start <= schemaPath.length) {
+			let end = schemaPath.indexOf("/", start);
+			if (end < 0) end = schemaPath.length;
+			if (end === start) {
+				start = end + 1;
+				continue;
+			}
+			const seg = unescapePointerSegment(schemaPath.slice(start, end));
+			start = end + 1;
+			if (node == null || typeof node !== "object") break;
+			if (Array.isArray(node)) {
+				const idx = Number(seg);
+				if (!Number.isInteger(idx) || idx < 0 || idx >= node.length) break;
+				rank.push(idx);
+				node = node[idx];
+			} else {
+				const idx = keyIndex(node, seg);
+				if (idx < 0) break;
+				rank.push(idx);
+				node = node[seg];
+			}
+		}
+		return rank;
+	}
+	function ordinals(rootSchema) {
+		let map = _ordinalCache.get(rootSchema);
+		if (map !== void 0) return map;
+		map = /* @__PURE__ */ new Map();
+		const seen = /* @__PURE__ */ new Set();
+		let next = 0;
+		const walk = (node, pointer) => {
+			map.set(pointer, next++);
+			if (node === null || typeof node !== "object") return;
+			if (seen.has(node)) return;
+			seen.add(node);
+			if (Array.isArray(node)) for (let i = 0; i < node.length; i++) walk(node[i], pointer + "/" + i);
+			else for (const key of Object.keys(node)) walk(node[key], pointer + "/" + escapePointerSegment(key));
+		};
+		walk(rootSchema, "#");
+		_ordinalCache.set(rootSchema, map);
+		return map;
+	}
+	function ordinalFor(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || schemaPath.charCodeAt(0) !== 35) return null;
+		if (rootSchema === null || typeof rootSchema !== "object") return null;
+		const map = ordinals(rootSchema);
+		const hit = map.get(schemaPath);
+		if (hit !== void 0) return hit;
+		let p = schemaPath;
+		while (true) {
+			const cut = p.lastIndexOf("/");
+			if (cut < 0) return 0;
+			p = p.slice(0, cut);
+			const o = map.get(p);
+			if (o !== void 0) return o;
+		}
+	}
+	module.exports = {
+		rankFor,
+		ordinalFor,
+		unescapePointerSegment
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/safe-regex.js
+var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const WS = [
+		[9, 13],
+		[32, 32],
+		[160, 160]
+	];
+	const DIGIT = [[48, 57]];
+	const WORD = [
+		[48, 57],
+		[65, 90],
+		[97, 122],
+		[95, 95]
+	];
+	function parse(src) {
+		let i = 0;
+		const len = src.length;
+		const peek = () => src[i];
+		const eof = () => i >= len;
+		function parseAlt() {
+			const opts = [parseConcat()];
+			while (!eof() && peek() === "|") {
+				i++;
+				opts.push(parseConcat());
+			}
+			return opts.length === 1 ? opts[0] : {
+				t: "alt",
+				opts
+			};
+		}
+		function parseConcat() {
+			const parts = [];
+			while (!eof() && peek() !== "|" && peek() !== ")") parts.push(parseRepeat());
+			if (parts.length === 0) return { t: "empty" };
+			return parts.length === 1 ? parts[0] : {
+				t: "concat",
+				parts
+			};
+		}
+		function parseRepeat() {
+			let node = parseAtom();
+			while (!eof()) {
+				const ch = peek();
+				if (ch === "*") {
+					i++;
+					node = {
+						t: "star",
+						child: node
+					};
+				} else if (ch === "+") {
+					i++;
+					node = {
+						t: "plus",
+						child: node
+					};
+				} else if (ch === "?") {
+					i++;
+					node = {
+						t: "quest",
+						child: node
+					};
+				} else if (ch === "{") {
+					const saved = i;
+					const q = tryQuantifier();
+					if (!q) {
+						i = saved;
+						break;
+					}
+					node = {
+						t: "repeat",
+						child: node,
+						min: q.min,
+						max: q.max
+					};
+				} else break;
+				if (!eof() && peek() === "?") i++;
+			}
+			return node;
+		}
+		function tryQuantifier() {
+			i++;
+			let min = "";
+			while (!eof() && /[0-9]/.test(peek())) {
+				min += peek();
+				i++;
+			}
+			if (min === "") return null;
+			let max;
+			if (peek() === "}") {
+				i++;
+				return {
+					min: +min,
+					max: +min
+				};
+			}
+			if (peek() === ",") {
+				i++;
+				let m = "";
+				while (!eof() && /[0-9]/.test(peek())) {
+					m += peek();
+					i++;
+				}
+				if (peek() !== "}") return null;
+				i++;
+				max = m === "" ? Infinity : +m;
+				return {
+					min: +min,
+					max
+				};
+			}
+			return null;
+		}
+		function parseAtom() {
+			const ch = peek();
+			if (ch === "(") {
+				i++;
+				if (src[i] === "?") {
+					if (src[i + 1] === ":") i += 2;
+					else throw new Error("unsupported group (lookaround/named) in pattern");
+				}
+				const child = parseAlt();
+				if (peek() !== ")") throw new Error("unbalanced ( in pattern");
+				i++;
+				return {
+					t: "group",
+					child
+				};
+			}
+			if (ch === "[") return parseClass();
+			if (ch === ".") {
+				i++;
+				return { t: "any" };
+			}
+			if (ch === "^") {
+				i++;
+				return { t: "bol" };
+			}
+			if (ch === "$") {
+				i++;
+				return { t: "eol" };
+			}
+			if (ch === "\\") return parseEscape(false);
+			if (ch === ")" || ch === "|") return { t: "empty" };
+			i++;
+			return {
+				t: "char",
+				c: ch.charCodeAt(0)
+			};
+		}
+		function parseClass() {
+			i++;
+			let neg = false;
+			if (peek() === "^") {
+				neg = true;
+				i++;
+			}
+			const ranges = [];
+			while (!eof() && peek() !== "]") {
+				let lo;
+				if (peek() === "\\") {
+					const esc = parseEscape(true);
+					if (esc.t === "classpart") {
+						for (const r of esc.ranges) ranges.push(r);
+						continue;
+					}
+					lo = esc.c;
+				} else {
+					lo = peek().charCodeAt(0);
+					i++;
+				}
+				if (peek() === "-" && src[i + 1] !== "]" && i + 1 < len) {
+					i++;
+					let hi;
+					if (peek() === "\\") hi = parseEscape(true).c;
+					else {
+						hi = peek().charCodeAt(0);
+						i++;
+					}
+					ranges.push([lo, hi]);
+				} else ranges.push([lo, lo]);
+			}
+			if (peek() !== "]") throw new Error("unbalanced [ in pattern");
+			i++;
+			return {
+				t: "class",
+				neg,
+				ranges
+			};
+		}
+		function parseEscape(inClass) {
+			i++;
+			if (eof()) throw new Error("trailing backslash in pattern");
+			const ch = peek();
+			i++;
+			switch (ch) {
+				case "d": return inClass ? {
+					t: "classpart",
+					ranges: DIGIT
+				} : {
+					t: "class",
+					neg: false,
+					ranges: DIGIT
+				};
+				case "w": return inClass ? {
+					t: "classpart",
+					ranges: WORD
+				} : {
+					t: "class",
+					neg: false,
+					ranges: WORD
+				};
+				case "s": return inClass ? {
+					t: "classpart",
+					ranges: WS
+				} : {
+					t: "class",
+					neg: false,
+					ranges: WS
+				};
+				case "D":
+					if (inClass) throw new Error("\\D inside a class is not supported");
+					return {
+						t: "class",
+						neg: true,
+						ranges: DIGIT
+					};
+				case "W":
+					if (inClass) throw new Error("\\W inside a class is not supported");
+					return {
+						t: "class",
+						neg: true,
+						ranges: WORD
+					};
+				case "S":
+					if (inClass) throw new Error("\\S inside a class is not supported");
+					return {
+						t: "class",
+						neg: true,
+						ranges: WS
+					};
+				case "n": return {
+					t: "char",
+					c: 10
+				};
+				case "r": return {
+					t: "char",
+					c: 13
+				};
+				case "t": return {
+					t: "char",
+					c: 9
+				};
+				case "f": return {
+					t: "char",
+					c: 12
+				};
+				case "v": return {
+					t: "char",
+					c: 11
+				};
+				case "0": return {
+					t: "char",
+					c: 0
+				};
+				case "x": {
+					const h = src.slice(i, i + 2);
+					i += 2;
+					return {
+						t: "char",
+						c: parseInt(h, 16)
+					};
+				}
+				case "u": {
+					const h = src.slice(i, i + 4);
+					i += 4;
+					return {
+						t: "char",
+						c: parseInt(h, 16)
+					};
+				}
+				case "b":
+					if (inClass) return {
+						t: "char",
+						c: 8
+					};
+					throw new Error("\\b word boundary is not supported");
+				default:
+					if (/[1-9]/.test(ch)) throw new Error("backreferences are not supported in pattern");
+					return {
+						t: "char",
+						c: ch.charCodeAt(0)
+					};
+			}
+		}
+		const ast = parseAlt();
+		if (!eof()) throw new Error("unexpected \"" + peek() + "\" in pattern");
+		return ast;
+	}
+	function compileProg(ast) {
+		const prog = [];
+		const emit = (op, extra) => {
+			const idx = prog.length;
+			prog.push(Object.assign({ op }, extra));
+			return idx;
+		};
+		function rec(n) {
+			switch (n.t) {
+				case "empty": break;
+				case "char":
+					emit("char", { c: n.c });
+					break;
+				case "any":
+					emit("any");
+					break;
+				case "class":
+					emit("class", {
+						neg: n.neg,
+						ranges: n.ranges
+					});
+					break;
+				case "bol":
+					emit("bol");
+					break;
+				case "eol":
+					emit("eol");
+					break;
+				case "group":
+					rec(n.child);
+					break;
+				case "concat":
+					for (const p of n.parts) rec(p);
+					break;
+				case "alt": {
+					const jmps = [];
+					for (let k = 0; k < n.opts.length; k++) if (k < n.opts.length - 1) {
+						const sp = emit("split", {
+							x: 0,
+							y: 0
+						});
+						prog[sp].x = prog.length;
+						rec(n.opts[k]);
+						jmps.push(emit("jmp", { x: 0 }));
+						prog[sp].y = prog.length;
+					} else rec(n.opts[k]);
+					for (const j of jmps) prog[j].x = prog.length;
+					break;
+				}
+				case "star": {
+					const sp = emit("split", {
+						x: 0,
+						y: 0
+					});
+					prog[sp].x = prog.length;
+					rec(n.child);
+					emit("jmp", { x: sp });
+					prog[sp].y = prog.length;
+					break;
+				}
+				case "plus": {
+					const start = prog.length;
+					rec(n.child);
+					const sp = emit("split", {
+						x: start,
+						y: 0
+					});
+					prog[sp].y = prog.length;
+					break;
+				}
+				case "quest": {
+					const sp = emit("split", {
+						x: 0,
+						y: 0
+					});
+					prog[sp].x = prog.length;
+					rec(n.child);
+					prog[sp].y = prog.length;
+					break;
+				}
+				case "repeat":
+					for (let k = 0; k < n.min; k++) rec(n.child);
+					if (n.max === Infinity) {
+						if (n.min === 0) rec({
+							t: "star",
+							child: n.child
+						});
+						else rec({
+							t: "star",
+							child: n.child
+						});
+					} else for (let k = 0; k < n.max - n.min; k++) rec({
+						t: "quest",
+						child: n.child
+					});
+			}
+		}
+		rec(ast);
+		emit("match");
+		return prog;
+	}
+	const OP_CHAR = 0;
+	const OP_ANY = 1;
+	const OP_CLASS = 2;
+	const OP_SPLIT = 3;
+	const OP_JMP = 4;
+	const OP_BOL = 5;
+	const OP_EOL = 6;
+	const OP_MATCH = 7;
+	function classMatcher(instr) {
+		const bits = /* @__PURE__ */ new Uint8Array(128);
+		const r = instr.ranges;
+		for (let k = 0; k < r.length; k++) {
+			const hi = Math.min(r[k][1], 127);
+			for (let c = r[k][0]; c <= hi; c++) bits[c] = 1;
+		}
+		return {
+			bits,
+			ranges: r,
+			neg: instr.neg
+		};
+	}
+	function matchClass(cls, c) {
+		let inside;
+		if (c < 128) inside = cls.bits[c] === 1;
+		else {
+			inside = false;
+			const r = cls.ranges;
+			for (let k = 0; k < r.length; k++) if (c >= r[k][0] && c <= r[k][1]) {
+				inside = true;
+				break;
+			}
+		}
+		return cls.neg ? !inside : inside;
+	}
+	function makeRunner(prog) {
+		const n = prog.length;
+		const ops = new Uint8Array(n);
+		const xs = new Int32Array(n);
+		const ys = new Int32Array(n);
+		const cs = new Int32Array(n);
+		const classes = new Array(n);
+		for (let i = 0; i < n; i++) {
+			const I = prog[i];
+			switch (I.op) {
+				case "char":
+					ops[i] = OP_CHAR;
+					cs[i] = I.c;
+					break;
+				case "any":
+					ops[i] = OP_ANY;
+					break;
+				case "class":
+					ops[i] = OP_CLASS;
+					classes[i] = classMatcher(I);
+					break;
+				case "split":
+					ops[i] = OP_SPLIT;
+					xs[i] = I.x;
+					ys[i] = I.y;
+					break;
+				case "jmp":
+					ops[i] = OP_JMP;
+					xs[i] = I.x;
+					break;
+				case "bol":
+					ops[i] = OP_BOL;
+					break;
+				case "eol":
+					ops[i] = OP_EOL;
+					break;
+				case "match": ops[i] = OP_MATCH;
+			}
+		}
+		const lastGen = new Int32Array(n).fill(-1);
+		let gen = 0;
+		const stack = new Int32Array(2 * n + 2);
+		let clist = new Int32Array(n);
+		let nlist = new Int32Array(n);
+		let clen = 0;
+		let nlen = 0;
+		function addThread(list, len0, pc, pos, len) {
+			if (ops[pc] <= OP_CLASS || ops[pc] === OP_MATCH) {
+				if (lastGen[pc] === gen) return len0;
+				lastGen[pc] = gen;
+				list[len0] = pc;
+				return len0 + 1;
+			}
+			let sp = 0;
+			stack[sp++] = pc;
+			let count = len0;
+			while (sp > 0) {
+				const p = stack[--sp];
+				if (lastGen[p] === gen) continue;
+				lastGen[p] = gen;
+				switch (ops[p]) {
+					case OP_JMP:
+						stack[sp++] = xs[p];
+						break;
+					case OP_SPLIT:
+						stack[sp++] = ys[p];
+						stack[sp++] = xs[p];
+						break;
+					case OP_BOL:
+						if (pos === 0) stack[sp++] = p + 1;
+						break;
+					case OP_EOL:
+						if (pos === len) stack[sp++] = p + 1;
+						break;
+					default: list[count++] = p;
+				}
+			}
+			return count;
+		}
+		gen++;
+		const anchored = addThread(nlist, 0, 0, 1, 1) === 0;
+		function testNFA(s) {
+			const len = s.length;
+			gen++;
+			clen = addThread(clist, 0, 0, 0, len);
+			for (let pos = 0; pos <= len; pos++) {
+				const c = pos < len ? s.charCodeAt(pos) : -1;
+				gen++;
+				nlen = 0;
+				for (let k = 0; k < clen; k++) {
+					const pc = clist[k];
+					switch (ops[pc]) {
+						case OP_MATCH: return true;
+						case OP_CHAR:
+							if (c === cs[pc]) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len);
+							break;
+						case OP_ANY:
+							if (c !== -1 && c !== 10) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len);
+							break;
+						case OP_CLASS: if (c !== -1 && matchClass(classes[pc], c)) nlen = addThread(nlist, nlen, pc + 1, pos + 1, len);
+					}
+				}
+				if (pos < len) {
+					if (!anchored) nlen = addThread(nlist, nlen, 0, pos + 1, len);
+					else if (nlen === 0) return false;
+				}
+				const tmp = clist;
+				clist = nlist;
+				nlist = tmp;
+				clen = nlen;
+			}
+			return false;
+		}
+		const MAX_STATES = 256;
+		const states = [];
+		const stateIds = /* @__PURE__ */ new Map();
+		let overflow = false;
+		function closure(list, count, pc, atStart, atEnd) {
+			let sp = 0;
+			stack[sp++] = pc;
+			while (sp > 0) {
+				const p = stack[--sp];
+				if (lastGen[p] === gen) continue;
+				lastGen[p] = gen;
+				switch (ops[p]) {
+					case OP_JMP:
+						stack[sp++] = xs[p];
+						break;
+					case OP_SPLIT:
+						stack[sp++] = ys[p];
+						stack[sp++] = xs[p];
+						break;
+					case OP_BOL:
+						if (atStart) stack[sp++] = p + 1;
+						break;
+					case OP_EOL:
+						if (atEnd) stack[sp++] = p + 1;
+						break;
+					default: list[count++] = p;
+				}
+			}
+			return count;
+		}
+		function internState(list, count) {
+			const pcs = Array.from(list.subarray(0, count)).sort((a, b) => a - b);
+			const key = pcs.join(",");
+			let id = stateIds.get(key);
+			if (id !== void 0) return id;
+			if (states.length >= MAX_STATES) {
+				overflow = true;
+				return -1;
+			}
+			id = states.length;
+			let isMatch = false;
+			for (let k = 0; k < pcs.length; k++) if (ops[pcs[k]] === OP_MATCH) {
+				isMatch = true;
+				break;
+			}
+			states.push({
+				pcs: Int32Array.from(pcs),
+				isMatch,
+				next: (/* @__PURE__ */ new Int32Array(128)).fill(-2),
+				nextEnd: (/* @__PURE__ */ new Int32Array(128)).fill(-2)
+			});
+			stateIds.set(key, id);
+			return id;
+		}
+		function step(state, c, atEnd) {
+			gen++;
+			let count = 0;
+			const pcs = state.pcs;
+			for (let k = 0; k < pcs.length; k++) {
+				const pc = pcs[k];
+				switch (ops[pc]) {
+					case OP_CHAR:
+						if (c === cs[pc]) count = closure(nlist, count, pc + 1, false, atEnd);
+						break;
+					case OP_ANY:
+						if (c !== 10) count = closure(nlist, count, pc + 1, false, atEnd);
+						break;
+					case OP_CLASS: if (matchClass(classes[pc], c)) count = closure(nlist, count, pc + 1, false, atEnd);
+				}
+			}
+			if (!anchored) count = closure(nlist, count, 0, false, atEnd);
+			return internState(nlist, count);
+		}
+		let startEmpty = -2;
+		let startNonEmpty = -2;
+		function startState(atEnd) {
+			gen++;
+			const count = closure(nlist, 0, 0, true, atEnd);
+			return internState(nlist, count);
+		}
+		function testDFA(s) {
+			const len = s.length;
+			let id;
+			if (len === 0) {
+				if (startEmpty === -2) startEmpty = startState(true);
+				id = startEmpty;
+			} else {
+				if (startNonEmpty === -2) startNonEmpty = startState(false);
+				id = startNonEmpty;
+			}
+			if (id < 0) return testNFA(s);
+			let state = states[id];
+			for (let pos = 0; pos < len; pos++) {
+				if (state.isMatch) return true;
+				const c = s.charCodeAt(pos);
+				const atEnd = pos + 1 === len;
+				let nid;
+				if (c < 128) {
+					const table = atEnd ? state.nextEnd : state.next;
+					nid = table[c];
+					if (nid === -2) {
+						nid = step(state, c, atEnd);
+						table[c] = nid;
+					}
+				} else nid = step(state, c, atEnd);
+				if (nid < 0) return testNFA(s);
+				state = states[nid];
+				if (anchored && state.pcs.length === 0) return false;
+			}
+			return state.isMatch;
+		}
+		return function test(s) {
+			return overflow ? testNFA(s) : testDFA(s);
+		};
+	}
+	function compileSafe(pattern) {
+		return {
+			test: makeRunner(compileProg(parse(pattern))),
+			source: pattern,
+			__ataSafe: true
+		};
+	}
+	function patternIsSafe(src) {
+		try {
+			compileSafe(src);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+	module.exports = {
+		compileSafe,
+		patternIsSafe
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/formats.js
+var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function isDigit(c) {
+		return c >= 48 && c <= 57;
+	}
+	function date(s) {
+		if (s.length !== 10) return false;
+		for (let i = 0; i < 10; i++) {
+			const c = s.charCodeAt(i);
+			if (i === 4 || i === 7) {
+				if (c !== 45) return false;
+			} else if (!isDigit(c)) return false;
+		}
+		const m = (s.charCodeAt(5) - 48) * 10 + (s.charCodeAt(6) - 48);
+		const d = (s.charCodeAt(8) - 48) * 10 + (s.charCodeAt(9) - 48);
+		if (m < 1 || m > 12 || d < 1) return false;
+		return d <= daysInMonth((s.charCodeAt(0) - 48) * 1e3 + (s.charCodeAt(1) - 48) * 100 + (s.charCodeAt(2) - 48) * 10 + (s.charCodeAt(3) - 48), m);
+	}
+	function daysInMonth(year, month) {
+		if (month === 2) return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0 ? 29 : 28;
+		return month === 4 || month === 6 || month === 9 || month === 11 ? 30 : 31;
+	}
+	function twoDigits(s, i) {
+		return (s.charCodeAt(i) - 48) * 10 + (s.charCodeAt(i + 1) - 48);
+	}
+	function dateTime(s) {
+		const n = s.length;
+		if (n < 20) return false;
+		if (s.charCodeAt(4) !== 45 || s.charCodeAt(7) !== 45) return false;
+		const sep = s.charCodeAt(10);
+		if (sep !== 84 && sep !== 116) return false;
+		if (s.charCodeAt(13) !== 58 || s.charCodeAt(16) !== 58) return false;
+		const y0 = s.charCodeAt(0) - 48, y1 = s.charCodeAt(1) - 48;
+		const y2 = s.charCodeAt(2) - 48, y3 = s.charCodeAt(3) - 48;
+		if (y0 >>> 0 > 9 || y1 >>> 0 > 9 || y2 >>> 0 > 9 || y3 >>> 0 > 9) return false;
+		const year = y0 * 1e3 + y1 * 100 + y2 * 10 + y3;
+		const mo0 = s.charCodeAt(5) - 48, mo1 = s.charCodeAt(6) - 48;
+		if (mo0 >>> 0 > 9 || mo1 >>> 0 > 9) return false;
+		const month = mo0 * 10 + mo1;
+		if (month < 1 || month > 12) return false;
+		const d0 = s.charCodeAt(8) - 48, d1 = s.charCodeAt(9) - 48;
+		if (d0 >>> 0 > 9 || d1 >>> 0 > 9) return false;
+		const day = d0 * 10 + d1;
+		if (day < 1 || day > daysInMonth(year, month)) return false;
+		const h0 = s.charCodeAt(11) - 48, h1 = s.charCodeAt(12) - 48;
+		if (h0 >>> 0 > 9 || h1 >>> 0 > 9 || h0 * 10 + h1 > 23) return false;
+		const mi0 = s.charCodeAt(14) - 48, mi1 = s.charCodeAt(15) - 48;
+		if (mi0 >>> 0 > 5 || mi1 >>> 0 > 9) return false;
+		const se0 = s.charCodeAt(17) - 48, se1 = s.charCodeAt(18) - 48;
+		if (se0 >>> 0 > 6 || se1 >>> 0 > 9 || se0 * 10 + se1 > 60) return false;
+		let i = 19;
+		if (s.charCodeAt(i) === 46) {
+			i++;
+			const start = i;
+			while (i < n) {
+				const c = s.charCodeAt(i);
+				if (c < 48 || c > 57) break;
+				i++;
+			}
+			if (i === start) return false;
+		}
+		const c = s.charCodeAt(i);
+		const sec = se0 * 10 + se1;
+		const hh = h0 * 10 + h1, mi = mi0 * 10 + mi1;
+		let offMin = 0;
+		if (c === 90 || c === 122) {
+			if (i !== n - 1) return false;
+		} else {
+			if (c !== 43 && c !== 45) return false;
+			if (n - i !== 6) return false;
+			if (!isDigit(s.charCodeAt(i + 1)) || !isDigit(s.charCodeAt(i + 2))) return false;
+			if (s.charCodeAt(i + 3) !== 58) return false;
+			if (!isDigit(s.charCodeAt(i + 4)) || !isDigit(s.charCodeAt(i + 5))) return false;
+			const oh = twoDigits(s, i + 1), om = twoDigits(s, i + 4);
+			if (oh > 23 || om > 59) return false;
+			offMin = (c === 43 ? 1 : -1) * (oh * 60 + om);
+		}
+		if (sec === 60) {
+			if (((hh * 60 + mi - offMin) % 1440 + 1440) % 1440 !== 1439) return false;
+		}
+		return true;
+	}
+	function ipv4(s) {
+		return ipv4Range(s, 0, s.length);
+	}
+	function ipv4Range(s, from, to) {
+		const n = to - from;
+		if (n < 7 || n > 15) return false;
+		let octets = 0, value = 0, digits = 0;
+		for (let i = from; i <= to; i++) {
+			const c = i < to ? s.charCodeAt(i) : 46;
+			if (c === 46) {
+				if (digits === 0 || value > 255) return false;
+				octets++;
+				value = 0;
+				digits = 0;
+				if (octets > 4) return false;
+			} else if (isDigit(c)) {
+				if (digits === 1 && value === 0) return false;
+				value = value * 10 + (c - 48);
+				digits++;
+				if (digits > 3) return false;
+			} else return false;
+		}
+		return octets === 4;
+	}
+	function ipv6(s) {
+		const n = s.length;
+		if (n < 2 || n > 45) return false;
+		let end = n;
+		let groups = 0;
+		const dot = s.indexOf(".");
+		if (dot !== -1) {
+			const lastColon = s.lastIndexOf(":", dot);
+			if (lastColon === -1) return false;
+			if (!ipv4Range(s, lastColon + 1, n)) return false;
+			end = lastColon + 1;
+			groups = 2;
+		}
+		let compressed = false;
+		let digits = 0;
+		let i = 0;
+		if (s.charCodeAt(0) === 58 && s.charCodeAt(1) !== 58) return false;
+		while (i < end) {
+			const c = s.charCodeAt(i);
+			if (c === 58) {
+				if (digits > 0) {
+					groups++;
+					digits = 0;
+				}
+				if (i + 1 < n && s.charCodeAt(i + 1) === 58) {
+					if (compressed) return false;
+					compressed = true;
+					i += 2;
+					if (i < n && s.charCodeAt(i) === 58) return false;
+					continue;
+				}
+				i++;
+				if (i === end && end === n) return false;
+				continue;
+			}
+			if (isDigit(c) || c >= 97 && c <= 102 || c >= 65 && c <= 70) {
+				if (++digits > 4) return false;
+				i++;
+				continue;
+			}
+			return false;
+		}
+		if (digits > 0) groups++;
+		if (groups > 8) return false;
+		return compressed ? groups < 8 : groups === 8;
+	}
+	function hostname(s) {
+		const n = s.length;
+		if (n === 0 || n > 253) return false;
+		let labelLength = 0;
+		let previous = 46;
+		for (let i = 0; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 46) {
+				if (labelLength === 0 || previous === 45) return false;
+				labelLength = 0;
+				previous = c;
+				continue;
+			}
+			if (!(isDigit(c) || c >= 97 && c <= 122 || c >= 65 && c <= 90) && c !== 45) return false;
+			if (c === 45 && previous === 46) return false;
+			if (++labelLength > 63) return false;
+			previous = c;
+		}
+		return labelLength !== 0 && previous !== 45;
+	}
+	const URI_CHAR = /* @__PURE__ */ new Uint8Array(128);
+	for (let i = 33; i < 127; i++) URI_CHAR[i] = 1;
+	for (const c of [
+		34,
+		60,
+		62,
+		92,
+		94,
+		96,
+		123,
+		124,
+		125
+	]) URI_CHAR[c] = 0;
+	const HEX_CHAR = /* @__PURE__ */ new Uint8Array(128);
+	for (let i = 48; i < 58; i++) HEX_CHAR[i] = 1;
+	for (let i = 97; i < 103; i++) HEX_CHAR[i] = 1;
+	for (let i = 65; i < 71; i++) HEX_CHAR[i] = 1;
+	const SCHEME_CHAR = /* @__PURE__ */ new Uint8Array(128);
+	for (let i = 48; i < 58; i++) SCHEME_CHAR[i] = 1;
+	for (let i = 97; i < 123; i++) SCHEME_CHAR[i] = 1;
+	for (let i = 65; i < 91; i++) SCHEME_CHAR[i] = 1;
+	SCHEME_CHAR[43] = 1;
+	SCHEME_CHAR[45] = 1;
+	SCHEME_CHAR[46] = 1;
+	function uri(s) {
+		const n = s.length;
+		if (n === 0) return false;
+		let c = s.charCodeAt(0);
+		if (c > 127 || SCHEME_CHAR[c] === 0 || c >= 48 && c <= 57 || c === 43 || c === 45 || c === 46) return false;
+		let colon = -1;
+		for (let i = 1; i < n; i++) {
+			c = s.charCodeAt(i);
+			if (c === 58) {
+				colon = i;
+				break;
+			}
+			if (c > 127 || SCHEME_CHAR[c] === 0) return false;
+		}
+		if (colon === -1) return false;
+		let i = colon + 1;
+		let authEnd = n;
+		if (s.charCodeAt(i) === 47 && s.charCodeAt(i + 1) === 47) {
+			const authStart = i + 2;
+			let at = -1, firstColon = -1, lastColon = -1, sawBracket = 0, bracketBeforeAt = 0;
+			let hostStart = authStart;
+			authEnd = -1;
+			for (i = authStart; i < n; i++) {
+				c = s.charCodeAt(i);
+				if (c > 127 || URI_CHAR[c] === 0) return false;
+				if (c === 47 || c === 63 || c === 35) {
+					authEnd = i;
+					break;
+				}
+				if (c === 37) {
+					const h1 = s.charCodeAt(i + 1), h2 = s.charCodeAt(i + 2);
+					if (!(h1 <= 127) || !(h2 <= 127) || HEX_CHAR[h1] === 0 || HEX_CHAR[h2] === 0) return false;
+					i += 2;
+					continue;
+				}
+				if (c === 64) {
+					bracketBeforeAt = sawBracket;
+					at = i;
+					firstColon = -1;
+					lastColon = -1;
+					hostStart = i + 1;
+				} else if (c === 58) {
+					if (firstColon === -1) firstColon = i;
+					lastColon = i;
+				} else if (c === 91 || c === 93) sawBracket = 1;
+			}
+			if (authEnd === -1) authEnd = n;
+			if (at !== -1 && bracketBeforeAt) return false;
+			if (s.charCodeAt(hostStart) === 91) {
+				let close = -1;
+				for (let j = hostStart + 1; j < authEnd; j++) if (s.charCodeAt(j) === 93) {
+					close = j;
+					break;
+				}
+				if (close === -1) return false;
+				if (close + 1 !== authEnd) {
+					if (s.charCodeAt(close + 1) !== 58) return false;
+					if (!allDigits(s, close + 2, authEnd)) return false;
+				}
+			} else if (lastColon !== -1) {
+				if (firstColon !== lastColon) return false;
+				if (!allDigits(s, lastColon + 1, authEnd)) return false;
+			}
+			i = authEnd;
+		}
+		for (; i < n; i++) {
+			c = s.charCodeAt(i);
+			if (c > 127 || URI_CHAR[c] === 0) return false;
+			if (c === 37) {
+				const h1 = s.charCodeAt(i + 1), h2 = s.charCodeAt(i + 2);
+				if (!(h1 <= 127) || !(h2 <= 127) || HEX_CHAR[h1] === 0 || HEX_CHAR[h2] === 0) return false;
+				i += 2;
+			}
+		}
+		return true;
+	}
+	const NON_PRINTABLE = /[^\u0021-\u007e]/;
+	function uriChar(c) {
+		if (c < 33 || c > 126) return false;
+		return !(c === 34 || c === 60 || c === 62 || c === 92 || c === 94 || c === 96 || c === 123 || c === 124 || c === 125);
+	}
+	function isHex(c) {
+		return c >= 48 && c <= 57 || c >= 97 && c <= 102 || c >= 65 && c <= 70;
+	}
+	function uriChars(s, from) {
+		for (let i = from; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (!uriChar(c)) return false;
+			if (c === 37) {
+				if (!isHex(s.charCodeAt(i + 1)) || !isHex(s.charCodeAt(i + 2))) return false;
+				i += 2;
+			}
+		}
+		return true;
+	}
+	const uriCharsSource = (v, from) => `for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc<33||_rc>126||_rc===34||_rc===60||_rc===62||_rc===92||_rc===94||_rc===96||_rc===123||_rc===124||_rc===125)return false;if(_rc===37){const _h1=${v}.charCodeAt(_ri+1),_h2=${v}.charCodeAt(_ri+2);if(!((_h1>=48&&_h1<=57)||(_h1>=97&&_h1<=102)||(_h1>=65&&_h1<=70))||!((_h2>=48&&_h2<=57)||(_h2>=97&&_h2<=102)||(_h2>=65&&_h2<=70)))return false;_ri+=2}}`;
+	function allDigits(s, from, to) {
+		for (let i = from; i < to; i++) {
+			const c = s.charCodeAt(i);
+			if (c < 48 || c > 57) return false;
+		}
+		return true;
+	}
+	function uriAuthority(s, start) {
+		if (s.charCodeAt(start) !== 47 || s.charCodeAt(start + 1) !== 47) return true;
+		const n = s.length;
+		const authStart = start + 2;
+		let authEnd = n;
+		for (let i = authStart; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 47 || c === 63 || c === 35) {
+				authEnd = i;
+				break;
+			}
+		}
+		let at = -1;
+		for (let i = authEnd - 1; i >= authStart; i--) if (s.charCodeAt(i) === 64) {
+			at = i;
+			break;
+		}
+		if (at !== -1) for (let i = authStart; i < at; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 91 || c === 93) return false;
+		}
+		const hpStart = at === -1 ? authStart : at + 1;
+		if (s.charCodeAt(hpStart) === 91) {
+			let close = -1;
+			for (let i = hpStart + 1; i < authEnd; i++) if (s.charCodeAt(i) === 93) {
+				close = i;
+				break;
+			}
+			if (close === -1) return false;
+			if (close + 1 === authEnd) return true;
+			if (s.charCodeAt(close + 1) !== 58) return false;
+			return allDigits(s, close + 2, authEnd);
+		}
+		let firstColon = -1;
+		let lastColon = -1;
+		for (let i = hpStart; i < authEnd; i++) if (s.charCodeAt(i) === 58) {
+			if (firstColon === -1) firstColon = i;
+			lastColon = i;
+		}
+		if (lastColon === -1) return true;
+		if (firstColon !== lastColon) return false;
+		return allDigits(s, lastColon + 1, authEnd);
+	}
+	const uriAuthoritySource = (v, start) => `if(${v}.charCodeAt(${start})===47&&${v}.charCodeAt(${start}+1)===47){let _ae=${v}.length;for(let _ai=${start}+2;_ai<${v}.length;_ai++){const _ac=${v}.charCodeAt(_ai);if(_ac===47||_ac===63||_ac===35){_ae=_ai;break}}const _au=${v}.slice(${start}+2,_ae);const _aat=_au.lastIndexOf('@');if(_aat!==-1&&/[[\\]]/.test(_au.slice(0,_aat)))return false;const _hp=_aat===-1?_au:_au.slice(_aat+1);if(_hp.charCodeAt(0)===91){const _cl=_hp.indexOf("]");if(_cl===-1)return false;const _rs=_hp.slice(_cl+1);if(_rs!==""){if(_rs.charCodeAt(0)!==58||!/^[0-9]*\$/.test(_rs.slice(1)))return false}}else{const _co=_hp.lastIndexOf(":");if(_co!==-1){if(_hp.indexOf(":")!==_co)return false;if(!/^[0-9]*\$/.test(_hp.slice(_co+1)))return false}}}`;
+	function iriChar(c) {
+		return c > 126 ? c !== 127 : uriChar(c);
+	}
+	function iriChars(s, from) {
+		for (let i = from; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (!iriChar(c)) return false;
+			if (c === 37) {
+				if (!isHex(s.charCodeAt(i + 1)) || !isHex(s.charCodeAt(i + 2))) return false;
+				i += 2;
+			}
+		}
+		return true;
+	}
+	const iriCharsSource = (v, from) => `for(let _ii=${from};_ii<${v}.length;_ii++){const _ic=${v}.charCodeAt(_ii);if(_ic===127||(_ic<127&&(_ic<33||_ic===34||_ic===60||_ic===62||_ic===92||_ic===94||_ic===96||_ic===123||_ic===124||_ic===125)))return false;if(_ic===37){const _j1=${v}.charCodeAt(_ii+1),_j2=${v}.charCodeAt(_ii+2);if(!((_j1>=48&&_j1<=57)||(_j1>=97&&_j1<=102)||(_j1>=65&&_j1<=70))||!((_j2>=48&&_j2<=57)||(_j2>=97&&_j2<=102)||(_j2>=65&&_j2<=70)))return false;_ii+=2}}`;
+	function iri(s) {
+		const n = s.length;
+		if (n === 0) return false;
+		const first = s.charCodeAt(0);
+		if (!(first >= 97 && first <= 122 || first >= 65 && first <= 90)) return false;
+		let colon = -1;
+		for (let i = 1; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 58) {
+				colon = i;
+				break;
+			}
+			if (!(isDigit(c) || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 43 || c === 45 || c === 46)) return false;
+		}
+		if (colon === -1) return false;
+		return iriChars(s, colon + 1) && uriAuthority(s, colon + 1);
+	}
+	function iriSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + iriCharsSource(v, "_co+1") + uriAuthoritySource(v, "_co+1"));
+	}
+	function iriReference(s) {
+		return iriChars(s, 0);
+	}
+	function iriReferenceSource(v, isStr) {
+		return guard(v, isStr, iriCharsSource(v, "0"));
+	}
+	function idnEmail(s) {
+		const at = s.lastIndexOf("@");
+		if (at <= 0 || at === s.length - 1) return false;
+		const local = s.slice(0, at);
+		const domain = s.slice(at + 1);
+		if (local.charCodeAt(0) === 34) return local.length >= 2 && local.charCodeAt(local.length - 1) === 34 && domain.length > 0;
+		if (local.charCodeAt(0) === 46 || local.charCodeAt(local.length - 1) === 46) return false;
+		if (local.indexOf("..") !== -1) return false;
+		if (domain.charCodeAt(0) === 91) return domain.charCodeAt(domain.length - 1) === 93 && domain.length > 2;
+		if (domain.charCodeAt(0) === 46 || domain.charCodeAt(domain.length - 1) === 46) return false;
+		if (domain.indexOf("..") !== -1) return false;
+		for (let i = 0; i < domain.length; i++) {
+			const c = domain.charCodeAt(i);
+			if (c <= 32 || c === 127 || c === 64) return false;
+		}
+		return true;
+	}
+	function idnEmailSource(v, isStr) {
+		const inner = `const _at=${v}.lastIndexOf('@');if(_at<=0||_at===${v}.length-1)return false;const _lp=${v}.slice(0,_at),_dm=${v}.slice(_at+1);if(_lp.charCodeAt(0)===34){if(_lp.length<2||_lp.charCodeAt(_lp.length-1)!==34||_dm.length===0)return false}else{if(_lp.charCodeAt(0)===46||_lp.charCodeAt(_lp.length-1)===46)return false;if(_lp.indexOf('..')!==-1)return false;if(_dm.charCodeAt(0)===91){if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false}else{if(_dm.charCodeAt(0)===46||_dm.charCodeAt(_dm.length-1)===46)return false;if(_dm.indexOf('..')!==-1)return false;for(let _di=0;_di<_dm.length;_di++){const _dc=_dm.charCodeAt(_di);if(_dc<=32||_dc===127||_dc===64)return false}}}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
+	function noReserved(s, from) {
+		if (!NON_PRINTABLE.test(s)) return true;
+		const n = s.length;
+		for (let i = from; i < n; i++) {
+			const c = s.charCodeAt(i);
+			if (c > 32 && c < 127) continue;
+			if (c <= 32 || c === 127) return false;
+			if (c === 160 || c === 5760 || c >= 8192 && c <= 8202 || c === 8232 || c === 8233 || c === 8239 || c === 8287 || c === 12288 || c === 65279) return false;
+		}
+		return true;
+	}
+	function noReservedSource(v, from) {
+		return `if(/[^\\u0021-\\u007e]/.test(${v})){for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc>32&&_rc<127)continue;if(_rc<=32||_rc===127)return false;if(_rc===160||_rc===5760||(_rc>=8192&&_rc<=8202)||_rc===8232||_rc===8233||_rc===8239||_rc===8287||_rc===12288||_rc===65279)return false}}`;
+	}
+	function hexRun(s, from, to) {
+		for (let i = from; i < to; i++) {
+			const c = s.charCodeAt(i);
+			if (!(c - 48 >>> 0 < 10 || (c | 32) - 97 >>> 0 < 6)) return false;
+		}
+		return true;
+	}
+	function uuid(s) {
+		if (s.length !== 36) return false;
+		if (s.charCodeAt(8) !== 45 || s.charCodeAt(13) !== 45 || s.charCodeAt(18) !== 45 || s.charCodeAt(23) !== 45) return false;
+		return hexRun(s, 0, 8) && hexRun(s, 9, 13) && hexRun(s, 14, 18) && hexRun(s, 19, 23) && hexRun(s, 24, 36);
+	}
+	function time(s) {
+		const n = s.length;
+		if (n < 8) return false;
+		const h1 = s.charCodeAt(0) - 48, h2 = s.charCodeAt(1) - 48;
+		if (h1 >>> 0 > 9 || h2 >>> 0 > 9 || h1 * 10 + h2 > 23) return false;
+		if (s.charCodeAt(2) !== 58 || s.charCodeAt(5) !== 58) return false;
+		const m1 = s.charCodeAt(3) - 48, m2 = s.charCodeAt(4) - 48;
+		if (m1 >>> 0 > 5 || m2 >>> 0 > 9) return false;
+		const c1 = s.charCodeAt(6) - 48, c2 = s.charCodeAt(7) - 48;
+		if (c1 >>> 0 > 6 || c2 >>> 0 > 9 || c1 * 10 + c2 > 60) return false;
+		let i = 8;
+		if (i < n && s.charCodeAt(i) === 46) {
+			i++;
+			const start = i;
+			while (i < n) {
+				if (s.charCodeAt(i) - 48 >>> 0 > 9) break;
+				i++;
+			}
+			if (i === start) return false;
+		}
+		if (i === n) return false;
+		const hh = h1 * 10 + h2, mm = m1 * 10 + m2, ss = c1 * 10 + c2;
+		const z = s.charCodeAt(i);
+		let offMin = 0;
+		if (z === 90 || z === 122) {
+			if (i !== n - 1) return false;
+		} else {
+			if (z !== 43 && z !== 45) return false;
+			if (n - i !== 6 || s.charCodeAt(i + 3) !== 58) return false;
+			for (let k = 1; k <= 5; k++) {
+				if (k === 3) continue;
+				if (s.charCodeAt(i + k) - 48 >>> 0 > 9) return false;
+			}
+			const oh = (s.charCodeAt(i + 1) - 48) * 10 + (s.charCodeAt(i + 2) - 48);
+			const om = (s.charCodeAt(i + 4) - 48) * 10 + (s.charCodeAt(i + 5) - 48);
+			if (oh > 23 || om > 59) return false;
+			offMin = (z === 43 ? 1 : -1) * (oh * 60 + om);
+		}
+		if (ss === 60) {
+			if (((hh * 60 + mm - offMin) % 1440 + 1440) % 1440 !== 1439) return false;
+		}
+		return true;
+	}
+	function uriReference(s) {
+		return uriChars(s, 0);
+	}
+	function guard(v, isStr, body) {
+		return isStr ? `{${body}}` : `if(typeof ${v}==='string'){${body}}`;
+	}
+	function dateSource(v, isStr) {
+		return guard(v, isStr, `if(${v}.length!==10)return false;for(let _i=0;_i<10;_i++){const _c=${v}.charCodeAt(_i);if(_i===4||_i===7){if(_c!==45)return false}else if(_c<48||_c>57)return false}const _m=(${v}.charCodeAt(5)-48)*10+(${v}.charCodeAt(6)-48),_d=(${v}.charCodeAt(8)-48)*10+(${v}.charCodeAt(9)-48);if(_m<1||_m>12||_d<1)return false;const _y=(${v}.charCodeAt(0)-48)*1000+(${v}.charCodeAt(1)-48)*100+(${v}.charCodeAt(2)-48)*10+(${v}.charCodeAt(3)-48);const _dim=_m===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):((_m===4||_m===6||_m===9||_m===11)?30:31);if(_d>_dim)return false`);
+	}
+	function dateTimeSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n<20)return false;if(${v}.charCodeAt(4)!==45||${v}.charCodeAt(7)!==45)return false;const _sep=${v}.charCodeAt(10);if(_sep!==84&&_sep!==116)return false;if(${v}.charCodeAt(13)!==58||${v}.charCodeAt(16)!==58)return false;const _y0=${v}.charCodeAt(0)-48,_y1=${v}.charCodeAt(1)-48,_y2=${v}.charCodeAt(2)-48,_y3=${v}.charCodeAt(3)-48;if((_y0>>>0)>9||(_y1>>>0)>9||(_y2>>>0)>9||(_y3>>>0)>9)return false;const _y=_y0*1000+_y1*100+_y2*10+_y3;const _mo0=${v}.charCodeAt(5)-48,_mo1=${v}.charCodeAt(6)-48;if((_mo0>>>0)>9||(_mo1>>>0)>9)return false;const _mo=_mo0*10+_mo1;if(_mo<1||_mo>12)return false;const _dm=_mo===2?(((_y%4===0&&_y%100!==0)||_y%400===0)?29:28):(_mo===4||_mo===6||_mo===9||_mo===11?30:31);const _d0=${v}.charCodeAt(8)-48,_d1=${v}.charCodeAt(9)-48;if((_d0>>>0)>9||(_d1>>>0)>9)return false;const _d=_d0*10+_d1;if(_d<1||_d>_dm)return false;const _h0=${v}.charCodeAt(11)-48,_h1=${v}.charCodeAt(12)-48;if((_h0>>>0)>9||(_h1>>>0)>9||_h0*10+_h1>23)return false;const _mi0=${v}.charCodeAt(14)-48,_mi1=${v}.charCodeAt(15)-48;if((_mi0>>>0)>5||(_mi1>>>0)>9)return false;const _se0=${v}.charCodeAt(17)-48,_se1=${v}.charCodeAt(18)-48;if((_se0>>>0)>6||(_se1>>>0)>9||_se0*10+_se1>60)return false;let _i2=19;if(${v}.charCodeAt(19)===46){_i2=20;const _st=_i2;while(_i2<_n){const _c2=${v}.charCodeAt(_i2);if(_c2<48||_c2>57)break;_i2++}if(_i2===_st)return false}const _tz=${v}.charCodeAt(_i2);let _dtoff=0;if(_tz===90||_tz===122){if(_i2!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_i2!==6)return false;const _oh=${v}.charCodeAt(_i2+1),_oh2=${v}.charCodeAt(_i2+2),_om=${v}.charCodeAt(_i2+4),_om2=${v}.charCodeAt(_i2+5);if(_oh<48||_oh>57||_oh2<48||_oh2>57||_om<48||_om>57||_om2<48||_om2>57)return false;if(${v}.charCodeAt(_i2+3)!==58)return false;const _ohv=(_oh-48)*10+(_oh2-48),_omv=(_om-48)*10+(_om2-48);if(_ohv>23||_omv>59)return false;_dtoff=(_tz===43?1:-1)*(_ohv*60+_omv)}if(_se0*10+_se1===60){const _dtu=(((_h0*10+_h1)*60+(_mi0*10+_mi1)-_dtoff)%1440+1440)%1440;if(_dtu!==1439)return false}`);
+	}
+	function hostnameSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0||_n>253)return false;let _ll=0,_pv=46;for(let _i=0;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===46){if(_ll===0||_pv===45)return false;_ll=0;_pv=_c;continue}const _an=(_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90);if(!_an&&_c!==45)return false;if(_c===45&&_pv===46)return false;if(++_ll>63)return false;_pv=_c}if(_ll===0||_pv===45)return false`);
+	}
+	function uuidSource(v, isStr) {
+		const run = (from, to) => `for(let _ui=${from};_ui<${to};_ui++){const _uc=${v}.charCodeAt(_ui);if(!((_uc-48>>>0)<10||((_uc|32)-97>>>0)<6))return false}`;
+		return guard(v, isStr, `if(${v}.length!==36)return false;if(${v}.charCodeAt(8)!==45||${v}.charCodeAt(13)!==45||${v}.charCodeAt(18)!==45||${v}.charCodeAt(23)!==45)return false;` + run(0, 8) + run(9, 13) + run(14, 18) + run(19, 23) + run(24, 36));
+	}
+	function timeSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n<8)return false;const _h1=${v}.charCodeAt(0)-48,_h2=${v}.charCodeAt(1)-48;if((_h1>>>0)>9||(_h2>>>0)>9||_h1*10+_h2>23)return false;if(${v}.charCodeAt(2)!==58||${v}.charCodeAt(5)!==58)return false;const _m1=${v}.charCodeAt(3)-48,_m2=${v}.charCodeAt(4)-48;if((_m1>>>0)>5||(_m2>>>0)>9)return false;const _s1=${v}.charCodeAt(6)-48,_s2=${v}.charCodeAt(7)-48;if((_s1>>>0)>6||(_s2>>>0)>9||_s1*10+_s2>60)return false;let _ti=8;if(_ti<_n&&${v}.charCodeAt(_ti)===46){_ti++;const _tf=_ti;while(_ti<_n){const _tc=${v}.charCodeAt(_ti)-48;if((_tc>>>0)>9)break;_ti++}if(_ti===_tf)return false}if(_ti===_n)return false;const _tz=${v}.charCodeAt(_ti);let _off=0;if(_tz===90||_tz===122){if(_ti!==_n-1)return false}else{if(_tz!==43&&_tz!==45)return false;if(_n-_ti!==6||${v}.charCodeAt(_ti+3)!==58)return false;if((${v}.charCodeAt(_ti+1)-48>>>0)>9||(${v}.charCodeAt(_ti+2)-48>>>0)>9||(${v}.charCodeAt(_ti+4)-48>>>0)>9||(${v}.charCodeAt(_ti+5)-48>>>0)>9)return false;const _oh=(${v}.charCodeAt(_ti+1)-48)*10+(${v}.charCodeAt(_ti+2)-48),_om=(${v}.charCodeAt(_ti+4)-48)*10+(${v}.charCodeAt(_ti+5)-48);if(_oh>23||_om>59)return false;_off=(_tz===43?1:-1)*(_oh*60+_om)}if(_s1*10+_s2===60){const _u=(((_h1*10+_h2)*60+(_m1*10+_m2)-_off)%1440+1440)%1440;if(_u!==1439)return false}`);
+	}
+	const uriHelperSource = (name) => "const _uct=new Uint8Array(128);for(let _i=33;_i<127;_i++)_uct[_i]=1;_uct[34]=_uct[60]=_uct[62]=_uct[92]=_uct[94]=_uct[96]=_uct[123]=_uct[124]=_uct[125]=0;const _uch=new Uint8Array(128);for(let _i=48;_i<58;_i++)_uch[_i]=1;for(let _i=97;_i<103;_i++)_uch[_i]=1;for(let _i=65;_i<71;_i++)_uch[_i]=1;const _ucs=new Uint8Array(128);for(let _i=48;_i<58;_i++)_ucs[_i]=1;for(let _i=97;_i<123;_i++)_ucs[_i]=1;for(let _i=65;_i<91;_i++)_ucs[_i]=1;_ucs[43]=1;_ucs[45]=1;_ucs[46]=1;function " + name + "(_s){const _n=_s.length;if(_n===0)return false;let _c=_s.charCodeAt(0);if(_c>127||_ucs[_c]===0||(_c>=48&&_c<=57)||_c===43||_c===45||_c===46)return false;let _co=-1;for(let _i=1;_i<_n;_i++){_c=_s.charCodeAt(_i);if(_c===58){_co=_i;break}if(_c>127||_ucs[_c]===0)return false}if(_co===-1)return false;let _i=_co+1;let _ae=_n;if(_s.charCodeAt(_i)===47&&_s.charCodeAt(_i+1)===47){const _as=_i+2;let _at=-1,_fc=-1,_lc=-1,_br=0,_ba=0,_hs=_as;_ae=-1;for(_i=_as;_i<_n;_i++){_c=_s.charCodeAt(_i);if(_c>127||_uct[_c]===0)return false;if(_c===47||_c===63||_c===35){_ae=_i;break}if(_c===37){const _h1=_s.charCodeAt(_i+1),_h2=_s.charCodeAt(_i+2);if(!(_h1<=127)||!(_h2<=127)||_uch[_h1]===0||_uch[_h2]===0)return false;_i+=2;continue}if(_c===64){_ba=_br;_at=_i;_fc=-1;_lc=-1;_hs=_i+1}else if(_c===58){if(_fc===-1)_fc=_i;_lc=_i}else if(_c===91||_c===93){_br=1}}if(_ae===-1)_ae=_n;if(_at!==-1&&_ba)return false;if(_s.charCodeAt(_hs)===91){let _cl=-1;for(let _j=_hs+1;_j<_ae;_j++){if(_s.charCodeAt(_j)===93){_cl=_j;break}}if(_cl===-1)return false;if(_cl+1!==_ae){if(_s.charCodeAt(_cl+1)!==58)return false;for(let _j=_cl+2;_j<_ae;_j++){const _d=_s.charCodeAt(_j);if(_d<48||_d>57)return false}}}else if(_lc!==-1){if(_fc!==_lc)return false;for(let _j=_lc+1;_j<_ae;_j++){const _d=_s.charCodeAt(_j);if(_d<48||_d>57)return false}}_i=_ae}for(;_i<_n;_i++){_c=_s.charCodeAt(_i);if(_c>127||_uct[_c]===0)return false;if(_c===37){const _h1=_s.charCodeAt(_i+1),_h2=_s.charCodeAt(_i+2);if(!(_h1<=127)||!(_h2<=127)||_uch[_h1]===0||_uch[_h2]===0)return false;_i+=2}}return true;}";
+	function uriSource(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n===0)return false;const _f=${v}.charCodeAt(0);if(!((_f>=97&&_f<=122)||(_f>=65&&_f<=90)))return false;let _co=-1;for(let _i=1;_i<_n;_i++){const _c=${v}.charCodeAt(_i);if(_c===58){_co=_i;break}if(!((_c>=48&&_c<=57)||(_c>=97&&_c<=122)||(_c>=65&&_c<=90)||_c===43||_c===45||_c===46))return false}if(_co===-1)return false;` + uriCharsSource(v, "_co+1") + uriAuthoritySource(v, "_co+1"));
+	}
+	function ipv6Source(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n<2||_n>45)return false;let _end=_n,_g=0;const _dot=${v}.indexOf('.');if(_dot!==-1){const _lc=${v}.lastIndexOf(':',_dot);if(_lc===-1)return false;{const _f=_lc+1,_t=_n,_ln=_t-_f;if(_ln<7||_ln>15)return false;let _o=0,_val=0,_dg=0;for(let _i=_f;_i<=_t;_i++){const _c=_i<_t?${v}.charCodeAt(_i):46;if(_c===46){if(_dg===0||_val>255)return false;_o++;_val=0;_dg=0;if(_o>4)return false}else if(_c>=48&&_c<=57){if(_dg===1&&_val===0)return false;_val=_val*10+(_c-48);_dg++;if(_dg>3)return false}else return false}if(_o!==4)return false}_end=_lc+1;_g=2}let _cp=false,_dg2=0,_i2=0;if(${v}.charCodeAt(0)===58&&${v}.charCodeAt(1)!==58)return false;while(_i2<_end){const _c2=${v}.charCodeAt(_i2);if(_c2===58){if(_dg2>0){_g++;_dg2=0}if(_i2+1<_n&&${v}.charCodeAt(_i2+1)===58){if(_cp)return false;_cp=true;_i2+=2;if(_i2<_n&&${v}.charCodeAt(_i2)===58)return false;continue}_i2++;if(_i2===_end&&_end===_n)return false;continue}if((_c2>=48&&_c2<=57)||(_c2>=97&&_c2<=102)||(_c2>=65&&_c2<=70)){if(++_dg2>4)return false;_i2++;continue}return false}if(_dg2>0)_g++;if(_g>8)return false;if(_cp){if(_g>=8)return false}else if(_g!==8)return false`);
+	}
+	function ipv4Source(v, isStr) {
+		return guard(v, isStr, `const _n=${v}.length;if(_n<7||_n>15)return false;let _o=0,_val=0,_dg=0;for(let _i=0;_i<=_n;_i++){const _c=_i<_n?${v}.charCodeAt(_i):46;if(_c===46){if(_dg===0||_val>255)return false;_o++;_val=0;_dg=0;if(_o>4)return false}else if(_c>=48&&_c<=57){if(_dg===1&&_val===0)return false;_val=_val*10+(_c-48);_dg++;if(_dg>3)return false}else return false}if(_o!==4)return false`);
+	}
+	function jsonPointer(s) {
+		if (s === "") return true;
+		if (s.charCodeAt(0) !== 47) return false;
+		for (let i = 0; i < s.length; i++) {
+			if (s.charCodeAt(i) !== 126) continue;
+			const n = s.charCodeAt(i + 1);
+			if (n !== 48 && n !== 49) return false;
+		}
+		return true;
+	}
+	function jsonPointerSource(v, isStr) {
+		const body = `{let _ok=${v}==='';if(!_ok&&${v}.charCodeAt(0)===47){_ok=true;for(let _i=0;_i<${v}.length;_i++){if(${v}.charCodeAt(_i)!==126)continue;const _n=${v}.charCodeAt(_i+1);if(_n!==48&&_n!==49){_ok=false;break}}}if(!_ok)return false}`;
+		return isStr ? body : `if(typeof ${v}==='string')${body}`;
+	}
+	function relativeJsonPointer(s) {
+		let i = 0;
+		while (i < s.length) {
+			const c = s.charCodeAt(i);
+			if (c < 48 || c > 57) break;
+			i++;
+		}
+		if (i === 0) return false;
+		if (i > 1 && s.charCodeAt(0) === 48) return false;
+		const rest = s.slice(i);
+		if (rest === "#") return true;
+		return jsonPointer(rest);
+	}
+	function relativeJsonPointerSource(v, isStr) {
+		const body = `{let _i=0;while(_i<${v}.length){const _c=${v}.charCodeAt(_i);if(_c<48||_c>57)break;_i++}let _ok=_i>0&&!(_i>1&&${v}.charCodeAt(0)===48);if(_ok){const _r=${v}.slice(_i);if(_r!=='#'){_ok=_r==='';if(!_ok&&_r.charCodeAt(0)===47){_ok=true;for(let _j=0;_j<_r.length;_j++){if(_r.charCodeAt(_j)!==126)continue;const _n=_r.charCodeAt(_j+1);if(_n!==48&&_n!==49){_ok=false;break}}}}}if(!_ok)return false}`;
+		return isStr ? body : `if(typeof ${v}==='string')${body}`;
+	}
+	const URI_TEMPLATE_EXPR = /^(?:[+#./;?&=,!@|]?)(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+(?:\.(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+)*(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+(?:\.(?:[A-Za-z0-9_%]|%[0-9A-Fa-f]{2})+)*(?::[1-9][0-9]{0,3}|\*)?)*$/;
+	function uriTemplate(s) {
+		let i = 0;
+		while (i < s.length) {
+			const c = s.charCodeAt(i);
+			if (c === 125) return false;
+			if (c !== 123 && (c <= 32 || c === 127)) return false;
+			if (c !== 123) {
+				i++;
+				continue;
+			}
+			const end = s.indexOf("}", i + 1);
+			if (end === -1) return false;
+			const expr = s.slice(i + 1, end);
+			if (expr === "" || expr.indexOf("{") !== -1) return false;
+			if (!URI_TEMPLATE_EXPR.test(expr)) return false;
+			i = end + 1;
+		}
+		return true;
+	}
+	function uriTemplateSource(v, isStr) {
+		const inner = `let _i=0;while(_i<${v}.length){const _c=${v}.charCodeAt(_i);if(_c===125)return false;if(_c!==123&&(_c<=32||_c===127))return false;if(_c!==123){_i++;continue}const _e=${v}.indexOf('}',_i+1);if(_e===-1)return false;const _x=${v}.slice(_i+1,_e);if(_x===''||_x.indexOf('{')!==-1)return false;if(!${URI_TEMPLATE_EXPR.toString()}.test(_x))return false;_i=_e+1}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
+	function isEmailLocalChar(c) {
+		return c >= 48 && c <= 57 || c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 46 || c === 33 || c >= 35 && c <= 39 || c === 42 || c === 43 || c === 45 || c === 47 || c === 61 || c === 63 || c >= 94 && c <= 96 || c >= 123 && c <= 126;
+	}
+	const EMAIL_LOCAL_SRC = (v) => `((${v}>=48&&${v}<=57)||(${v}>=97&&${v}<=122)||(${v}>=65&&${v}<=90)||${v}===46||${v}===33||(${v}>=35&&${v}<=39)||${v}===42||${v}===43||${v}===45||${v}===47||${v}===61||${v}===63||(${v}>=94&&${v}<=96)||(${v}>=123&&${v}<=126))`;
+	function email(s) {
+		const at = s.lastIndexOf("@");
+		if (at <= 0 || at === s.length - 1) return false;
+		const local = s.slice(0, at);
+		const domain = s.slice(at + 1);
+		if (local.length > 64) return false;
+		if (local.charCodeAt(0) === 34) {
+			if (local.charCodeAt(local.length - 1) !== 34 || local.length < 2) return false;
+		} else {
+			if (local.charCodeAt(0) === 46 || local.charCodeAt(local.length - 1) === 46) return false;
+			if (local.indexOf("..") !== -1) return false;
+			for (let i = 0; i < local.length; i++) if (!isEmailLocalChar(local.charCodeAt(i))) return false;
+		}
+		if (domain.charCodeAt(0) === 91) {
+			if (domain.charCodeAt(domain.length - 1) !== 93 || domain.length <= 2) return false;
+			const inner = domain.slice(1, -1);
+			if (inner.startsWith("IPv6:")) return ipv6(inner.slice(5));
+			return ipv4(inner);
+		}
+		return hostname(domain);
+	}
+	function emailSource(v, isStr) {
+		const inner = `const _at=${v}.lastIndexOf('@');if(_at<=0||_at===${v}.length-1)return false;const _lp=${v}.slice(0,_at);const _dm=${v}.slice(_at+1);if(_lp.length>64)return false;if(_lp.charCodeAt(0)===34){if(_lp.length<2||_lp.charCodeAt(_lp.length-1)!==34)return false}else{if(_lp.charCodeAt(0)===46||_lp.charCodeAt(_lp.length-1)===46)return false;if(_lp.indexOf('..')!==-1)return false;for(let _i=0;_i<_lp.length;_i++){const _lc=_lp.charCodeAt(_i);if(!${EMAIL_LOCAL_SRC("_lc")})return false}}if(_dm.charCodeAt(0)===91){if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false;const _in=_dm.slice(1,-1);if(_in.startsWith('IPv6:')){const _i6=_in.slice(5);${ipv6Source("_i6", true)}}else{${ipv4Source("_in", true)}}}else{${hostnameSource("_dm", true)}}`;
+		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+	}
+	const DURATION_RE = /^P(?:\d+W|(?:\d+Y(?:\d+M(?:\d+D)?)?|\d+M(?:\d+D)?|\d+D)(?:T(?:\d+H(?:\d+M(?:\d+S)?)?|\d+M(?:\d+S)?|\d+S))?|T(?:\d+H(?:\d+M(?:\d+S)?)?|\d+M(?:\d+S)?|\d+S))$/;
+	function duration(s) {
+		return DURATION_RE.test(s);
+	}
+	function durationSource(v, isStr) {
+		const inner = `if(!${DURATION_RE.toString()}.test(${v}))return false`;
+		return isStr ? inner : `if(typeof ${v}==='string'&&${inner.slice(3)}`;
+	}
+	module.exports = {
+		uriHelperSource,
+		date,
+		ipv4,
+		dateTime,
+		ipv6,
+		hostname,
+		uri,
+		uriReference,
+		uuid,
+		time,
+		noReserved,
+		jsonPointer,
+		relativeJsonPointer,
+		uriTemplate,
+		email,
+		duration,
+		uriChars,
+		uriAuthority,
+		uriCharsSource,
+		uriAuthoritySource,
+		iri,
+		iriReference,
+		idnEmail,
+		iriSource,
+		iriReferenceSource,
+		idnEmailSource,
+		dateSource,
+		ipv4Source,
+		dateTimeSource,
+		ipv6Source,
+		hostnameSource,
+		uriSource,
+		uuidSource,
+		timeSource,
+		noReservedSource,
+		jsonPointerSource,
+		relativeJsonPointerSource,
+		uriTemplateSource,
+		emailSource,
+		durationSource
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/branch-collapse.js
+var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const __ATA_SEVERITY = {
+		type: 10,
+		const: 8,
+		enum: 8,
+		required: 5,
+		format: 3,
+		minLength: 3,
+		maxLength: 3,
+		minimum: 3,
+		maximum: 3,
+		pattern: 3,
+		additionalProperties: 2,
+		unevaluatedProperties: 2,
+		unevaluatedItems: 2
+	};
+	function __ataScore(errs) {
+		if (!errs || !errs.length) return 0;
+		let s = 0;
+		for (const e of errs) s += __ATA_SEVERITY[e.keyword] || 4;
+		return errs.length * 100 + s;
+	}
+	function __ataCollapse(kw, br, pp, sp, o) {
+		const pass = br.filter((b) => b.valid);
+		if (kw === "oneOf") {
+			if (pass.length === 1) return null;
+			if (pass.length > 1) {
+				const passIdx = [];
+				for (let i = 0; i < br.length; i++) if (br[i].valid) passIdx.push(i);
+				return {
+					code: "ATA4002",
+					keyword: "oneOf",
+					instancePath: pp || "",
+					path: pp || "",
+					schemaPath: sp,
+					_o: o,
+					message: "value matched " + pass.length + " of " + br.length + " oneOf variants, expected exactly one",
+					params: { passingSchemas: passIdx }
+				};
+			}
+		} else if (pass.length >= 1) return null;
+		let bi = 0;
+		let bs = Infinity;
+		for (let i = 0; i < br.length; i++) {
+			const s = __ataScore(br[i].errors);
+			if (s < bs) {
+				bs = s;
+				bi = i;
+			}
+		}
+		const best = br[bi];
+		return {
+			code: kw === "oneOf" ? "ATA4001" : "ATA4003",
+			keyword: kw,
+			instancePath: pp || "",
+			path: pp || "",
+			schemaPath: sp,
+			_o: o,
+			message: "value matched 0 of " + br.length + " " + kw + " variants",
+			params: {
+				variants: br.length,
+				closest: bi,
+				closestName: best.title || "variant " + (bi + 1)
+			},
+			branchErrors: best.errors
+		};
+	}
+	function collapseBranches({ keyword, branchResults, parentPath, parentSchemaPath, ordinal }) {
+		return __ataCollapse(keyword, branchResults, parentPath, parentSchemaPath, ordinal === void 0 ? null : ordinal);
+	}
+	function embedSource() {
+		return "const __ATA_SEVERITY=" + JSON.stringify(__ATA_SEVERITY) + ";const __ataScore=" + __ataScore.toString() + ";const __ataCollapse=" + __ataCollapse.toString() + ";";
+	}
+	module.exports = {
+		collapseBranches,
+		scoreBranch: __ataScore,
+		SEVERITY: __ATA_SEVERITY,
+		embedSource
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/js-compiler.js
+var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
+	const UQ_HELPERS = "function _cn(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn(x[k])}).join(',')+'}'}function _uq(a){var n=a.length,i,k;if(n<2)return true;if(n<=12){for(i=1;i<n;i++)for(k=0;k<i;k++)if(_deq(a[i],a[k]))return false;return true}var s=new Set();for(i=0;i<n;i++){var x=a[i];if(x!==null&&typeof x==='object')break;if(s.has(x))return false;s.add(x)}if(i===n)return true;s=new Set();for(i=0;i<n;i++){var c=_cn(a[i]);if(s.has(c))return false;s.add(c)}return true}";
+	function hoistOnce(ctx, key, code) {
+		if (ctx[key]) return;
+		ctx[key] = true;
+		if (ctx.shared) ctx.shared.push(code);
+		if (ctx.preamble) ctx.preamble.push(code);
+		else if (ctx.helperCode) ctx.helperCode.push(code);
+	}
+	const AP_LOOKUP_MIN = 128;
+	function emitNameLookup(ctx, names) {
+		const id = `_apn${ctx.varCounter++}`;
+		const decl = `const ${id}=Object.create(null);for(const _apx of [${names.map((n) => JSON.stringify(n)).join(",")}])${id}[_apx]=1`;
+		if (ctx.preamble) ctx.preamble.push(decl);
+		else if (ctx.helperCode) ctx.helperCode.push(decl);
+		else return null;
+		return id;
+	}
+	function apMembershipCheck(ctx, names, v) {
+		if (names.length >= AP_LOOKUP_MIN) {
+			const id = emitNameLookup(ctx, names);
+			if (id !== null) {
+				const i = ctx.varCounter++;
+				return `var _apk${i}=Object.keys(${v});for(var _api${i}=0;_api${i}<_apk${i}.length;_api${i}++)if(${id}[_apk${i}[_api${i}]]===undefined)return false`;
+			}
+		}
+		return `for(var _k in ${v})if(${names.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")})return false`;
+	}
+	function emitDeq(ctx) {
+		hoistOnce(ctx, "_deqHoisted", DEQ_HELPER);
+		return "_deq";
+	}
+	const PTR_ESC_HELPER = "function _pe(s){for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);if(c===126||c===47)return s.replace(/~/g,'~0').replace(/\\//g,'~1')}return s}";
+	function emitPtrEsc(ctx) {
+		hoistOnce(ctx, "_peHoisted", PTR_ESC_HELPER);
+		return "_pe";
+	}
+	function emitUq(ctx) {
+		emitDeq(ctx);
+		hoistOnce(ctx, "_uqHoisted", UQ_HELPERS);
+		return "_uq";
+	}
+	function emitConstant(ctx, value) {
+		if (!ctx._constPool) ctx._constPool = /* @__PURE__ */ new Map();
+		const json = JSON.stringify(value);
+		let name = ctx._constPool.get(json);
+		if (name === void 0) {
+			name = "_kv" + ctx._constPool.size;
+			ctx._constPool.set(json, name);
+			const decl = `const ${name}=JSON.parse(${JSON.stringify(json)})`;
+			if (ctx.preamble) ctx.preamble.push(decl);
+			else if (ctx.helperCode) ctx.helperCode.push(decl);
+		}
+		return name;
+	}
+	function enumCondition(ctx, vals, v) {
+		const parts = [];
+		const prims = vals.filter((x) => x === null || typeof x !== "object");
+		const objs = vals.filter((x) => x !== null && typeof x === "object");
+		if (prims.length) parts.push(prims.map((x) => `${v}===${JSON.stringify(x)}`).join("||"));
+		if (objs.length) {
+			const deq = emitDeq(ctx);
+			parts.push(objs.map((o) => `${deq}(${v},${emitConstant(ctx, o)})`).join("||"));
+		}
+		return parts.filter(Boolean).join("||") || "false";
+	}
+	const { codeFor } = require_error_codes();
+	const { ordinalFor } = require_schema_order();
+	const { compileSafe, patternIsSafe } = require_safe_regex();
+	function safeReClosure(ctx, src) {
+		if (patternIsSafe(src)) {
+			ctx.usesSafeRe = true;
+			return compileSafe(src);
+		}
+		return new RegExp(src);
+	}
+	const DOC_BASE = "https://ata-validator.com/e/";
+	function ordinalField(ctx, schemaPath) {
+		const o = ctx && ctx.rootSchema ? ordinalFor(ctx.rootSchema, schemaPath) : null;
+		return o === null ? "" : `,_o:${o}`;
+	}
+	function buildErrorLiteral(opts) {
+		const { keyword, format, schemaPath, sourceMap } = opts;
+		let code = keyword === "format" && format ? codeFor("format", format) : codeFor(keyword);
+		if (!code) code = "ATA9001";
+		const docUrl = DOC_BASE + code;
+		let frame = "";
+		if (sourceMap && sourceMap.file && sourceMap.map) {
+			const ptr = schemaPath && schemaPath.charAt(0) === "#" ? schemaPath.slice(1) : schemaPath || "";
+			let hit = sourceMap.map[ptr + "#key"];
+			if (!hit) hit = sourceMap.map[ptr];
+			if (hit) {
+				const line = Array.isArray(hit) ? hit[0] : hit.line;
+				const col = Array.isArray(hit) ? hit[1] : hit.col;
+				const text = Array.isArray(hit) ? hit[2] : hit.text;
+				frame = ",schemaSource:Object.freeze({file:" + JSON.stringify(sourceMap.file) + ",line:" + line + ",col:" + col + ",text:" + JSON.stringify(text) + "})";
+			}
+		}
+		return {
+			codeStr: code,
+			docUrl,
+			frame
+		};
+	}
+	function _cpLen(s) {
+		const len = s.length;
+		for (let i = 0; i < len; i++) if (s.charCodeAt(i) - 55296 >>> 0 < 1024) {
+			let n = 0;
+			for (const _ of s) n++;
+			return n;
+		}
+		return len;
+	}
+	const AJV_MESSAGES = {
+		type: (p) => `must be ${p.type}`,
+		required: (p) => `must have required property '${p.missingProperty}'`,
+		additionalProperties: () => "must NOT have additional properties",
+		enum: () => "must be equal to one of the allowed values",
+		const: () => "must be equal to constant",
+		minimum: (p) => `must be >= ${p.limit}`,
+		maximum: (p) => `must be <= ${p.limit}`,
+		exclusiveMinimum: (p) => `must be > ${p.limit}`,
+		exclusiveMaximum: (p) => `must be < ${p.limit}`,
+		minLength: (p) => `must NOT have fewer than ${p.limit} characters`,
+		maxLength: (p) => `must NOT have more than ${p.limit} characters`,
+		pattern: (p) => `must match pattern "${p.pattern}"`,
+		format: (p) => `must match format "${p.format}"`,
+		minItems: (p) => `must NOT have fewer than ${p.limit} items`,
+		maxItems: (p) => `must NOT have more than ${p.limit} items`,
+		uniqueItems: (p) => `must NOT have duplicate items (items ## ${p.j} and ${p.i} are identical)`,
+		minProperties: (p) => `must NOT have fewer than ${p.limit} properties`,
+		maxProperties: (p) => `must NOT have more than ${p.limit} properties`,
+		multipleOf: (p) => `must be multiple of ${p.multipleOf}`,
+		oneOf: () => "must match exactly one schema in oneOf",
+		anyOf: () => "must match a schema in anyOf",
+		allOf: () => "must match all schemas in allOf",
+		not: () => "must NOT be valid",
+		if: (p) => `must match "${p.failingKeyword}" schema`
+	};
+	function compileToJS(schema, defs, schemaMap) {
+		if (typeof schema === "boolean") return schema ? () => true : () => false;
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!defs && !codegenSafe(schema, schemaMap)) {
+			const str = JSON.stringify(schema);
+			const hasDynamic = str.includes("\"$dynamicRef\"") || str.includes("\"$dynamicAnchor\"");
+			if (!hasDynamic && !str.includes("\"$anchor\"")) return null;
+			if (!hasDynamic && hasNestedIdScope(schema)) return null;
+		}
+		if (!defs && needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (!defs && externalDocsNeedInterpreter(schema, schemaMap)) return null;
+		if (!defs) {
+			const str = JSON.stringify(schema);
+			if (str.includes("\"unevaluatedProperties\"") || str.includes("\"unevaluatedItems\"")) return null;
+		}
+		const rootDefs = defs || collectDefs(schema);
+		if (schema.patternProperties !== void 0 || schema.dependentSchemas !== void 0 || schema.propertyDependencies !== void 0 || schema.propertyNames !== void 0) return null;
+		const checks = [];
+		if (schema.$ref) {
+			const refFn = resolveRef(schema.$ref, rootDefs, schemaMap);
+			if (!refFn) return null;
+			checks.push(refFn);
+		}
+		if (schema.$dynamicRef) {
+			const ref = schema.$dynamicRef;
+			const anchorName = ref.startsWith("#") ? ref : "#" + ref;
+			if (rootDefs && rootDefs[anchorName]) {
+				const entry = rootDefs[anchorName];
+				checks.push((d) => {
+					const fn = entry.fn;
+					return fn ? fn(d) : true;
+				});
+			} else {
+				const m = ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+				if (m && rootDefs && rootDefs[m[1]]) {
+					const entry = rootDefs[m[1]];
+					checks.push((d) => {
+						const fn = entry.fn;
+						return fn ? fn(d) : true;
+					});
+				}
+			}
+		}
+		if (schema.type) {
+			const types = Array.isArray(schema.type) ? schema.type : [schema.type];
+			checks.push(buildTypeCheck(types));
+		}
+		if (schema.enum) {
+			const vals = schema.enum;
+			const primitives = vals.filter((v) => v === null || typeof v !== "object");
+			const objects = vals.filter((v) => v !== null && typeof v === "object");
+			const primSet = new Set(primitives.map((v) => v === null ? "null" : typeof v === "string" ? "s:" + v : "n:" + v));
+			const objStrs = objects.map((v) => _canonical(v));
+			checks.push((d) => {
+				const key = d === null ? "null" : typeof d === "string" ? "s:" + d : typeof d === "number" || typeof d === "boolean" ? "n:" + d : null;
+				if (key !== null && primSet.has(key)) return true;
+				const ds = _canonical(d);
+				for (let i = 0; i < objStrs.length; i++) if (ds === objStrs[i]) return true;
+				for (let i = 0; i < primitives.length; i++) if (d === primitives[i]) return true;
+				return false;
+			});
+		}
+		if (schema.const !== void 0) {
+			const cv = schema.const;
+			if (cv === null || typeof cv !== "object") checks.push((d) => d === cv);
+			else {
+				const cs = _canonical(cv);
+				checks.push((d) => _canonical(d) === cs);
+			}
+		}
+		if (schema.required && Array.isArray(schema.required)) for (const key of schema.required) checks.push((d) => typeof d !== "object" || d === null || Array.isArray(d) || d[key] !== void 0);
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const propCheck = compileToJS(prop, rootDefs);
+			if (!propCheck) return null;
+			checks.push((d) => {
+				if (typeof d !== "object" || d === null || !(key in d)) return true;
+				return propCheck(d[key]);
+			});
+		}
+		if (schema.additionalProperties !== void 0) {
+			if (schema.additionalProperties === false) {
+				const allowed = new Set(Object.keys(schema.properties || {}));
+				checks.push((d) => {
+					if (typeof d !== "object" || d === null || Array.isArray(d)) return true;
+					const keys = Object.keys(d);
+					for (let i = 0; i < keys.length; i++) if (!allowed.has(keys[i])) return false;
+					return true;
+				});
+			} else if (typeof schema.additionalProperties === "object") {
+				const apCheck = compileToJS(schema.additionalProperties, rootDefs);
+				if (!apCheck) return null;
+				const known = new Set(Object.keys(schema.properties || {}));
+				checks.push((d) => {
+					if (typeof d !== "object" || d === null || Array.isArray(d)) return true;
+					const keys = Object.keys(d);
+					for (let i = 0; i < keys.length; i++) if (!known.has(keys[i]) && !apCheck(d[keys[i]])) return false;
+					return true;
+				});
+			}
+		}
+		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) checks.push((d) => {
+			if (typeof d !== "object" || d === null || !(key in d)) return true;
+			for (let i = 0; i < deps.length; i++) if (!(deps[i] in d)) return false;
+			return true;
+		});
+		if (schema.items !== void 0 && schema.items !== true) {
+			const itemCheck = compileToJS(schema.items, rootDefs);
+			if (!itemCheck) return null;
+			const start = Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+			checks.push((d) => {
+				if (!Array.isArray(d)) return true;
+				for (let i = start; i < d.length; i++) if (!itemCheck(d[i])) return false;
+				return true;
+			});
+		}
+		if (schema.prefixItems) {
+			const prefixChecks = [];
+			for (const ps of schema.prefixItems) {
+				const pc = compileToJS(ps, rootDefs);
+				if (!pc) return null;
+				prefixChecks.push(pc);
+			}
+			checks.push((d) => {
+				if (!Array.isArray(d)) return true;
+				for (let i = 0; i < prefixChecks.length && i < d.length; i++) if (!prefixChecks[i](d[i])) return false;
+				return true;
+			});
+		}
+		if (schema.contains !== void 0) {
+			const containsCheck = compileToJS(schema.contains, rootDefs);
+			if (!containsCheck) return null;
+			const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+			const maxC = schema.maxContains !== void 0 ? schema.maxContains : Infinity;
+			checks.push((d) => {
+				if (!Array.isArray(d)) return true;
+				let count = 0;
+				for (let i = 0; i < d.length; i++) if (containsCheck(d[i])) count++;
+				return count >= minC && count <= maxC;
+			});
+		}
+		if (schema.uniqueItems) {
+			const canonical = (x) => {
+				if (x === null || typeof x !== "object") return typeof x + ":" + x;
+				if (Array.isArray(x)) return "[" + x.map(canonical).join(",") + "]";
+				return "{" + Object.keys(x).sort().map((k) => JSON.stringify(k) + ":" + canonical(x[k])).join(",") + "}";
+			};
+			checks.push((d) => {
+				if (!Array.isArray(d)) return true;
+				const seen = /* @__PURE__ */ new Set();
+				for (let i = 0; i < d.length; i++) {
+					const key = canonical(d[i]);
+					if (seen.has(key)) return false;
+					seen.add(key);
+				}
+				return true;
+			});
+		}
+		if (schema.minimum !== void 0) {
+			const min = schema.minimum;
+			checks.push((d) => typeof d !== "number" || !isFinite(d) || d >= min);
+		}
+		if (schema.maximum !== void 0) {
+			const max = schema.maximum;
+			checks.push((d) => typeof d !== "number" || !isFinite(d) || d <= max);
+		}
+		if (schema.exclusiveMinimum !== void 0) {
+			const min = schema.exclusiveMinimum;
+			checks.push((d) => typeof d !== "number" || !isFinite(d) || d > min);
+		}
+		if (schema.exclusiveMaximum !== void 0) {
+			const max = schema.exclusiveMaximum;
+			checks.push((d) => typeof d !== "number" || !isFinite(d) || d < max);
+		}
+		if (schema.multipleOf !== void 0) {
+			const div = schema.multipleOf;
+			checks.push((d) => {
+				if (typeof d !== "number" || !isFinite(d)) return true;
+				if (div === 0) return false;
+				const q = d / div;
+				return Number.isInteger(q) || Math.abs(q - Math.round(q)) < 1e-9;
+			});
+		}
+		if (schema.minLength !== void 0) {
+			const min = schema.minLength;
+			const min2 = min * 2;
+			checks.push((d) => typeof d !== "string" || d.length >= min2 || d.length >= min && _cpLen(d) >= min);
+		}
+		if (schema.maxLength !== void 0) {
+			const max = schema.maxLength;
+			checks.push((d) => typeof d !== "string" || d.length <= max || d.length <= 2 * max + 1 && _cpLen(d) <= max);
+		}
+		if (schema.pattern) try {
+			const re = patternIsSafe(schema.pattern) ? compileSafe(schema.pattern) : new RegExp(schema.pattern);
+			checks.push((d) => typeof d !== "string" || re.test(d));
+		} catch {
+			return null;
+		}
+		if (schema.format) {
+			const fc = FORMAT_CHECKS[schema.format];
+			if (fc) checks.push((d) => typeof d !== "string" || fc(d));
+			else if (FORMAT_CODEGEN[schema.format]) return null;
+		}
+		if (schema.minItems !== void 0) {
+			const min = schema.minItems;
+			checks.push((d) => !Array.isArray(d) || d.length >= min);
+		}
+		if (schema.maxItems !== void 0) {
+			const max = schema.maxItems;
+			checks.push((d) => !Array.isArray(d) || d.length <= max);
+		}
+		if (schema.minProperties !== void 0) {
+			const min = schema.minProperties;
+			checks.push((d) => typeof d !== "object" || d === null || Array.isArray(d) || Object.keys(d).length >= min);
+		}
+		if (schema.maxProperties !== void 0) {
+			const max = schema.maxProperties;
+			checks.push((d) => typeof d !== "object" || d === null || Array.isArray(d) || Object.keys(d).length <= max);
+		}
+		if (schema.allOf) {
+			const subs = [];
+			for (const s of schema.allOf) {
+				const fn = compileToJS(s, rootDefs);
+				if (!fn) return null;
+				subs.push(fn);
+			}
+			checks.push((d) => {
+				for (let i = 0; i < subs.length; i++) if (!subs[i](d)) return false;
+				return true;
+			});
+		}
+		if (schema.anyOf) {
+			const subs = [];
+			for (const s of schema.anyOf) {
+				const fn = compileToJS(s, rootDefs);
+				if (!fn) return null;
+				subs.push(fn);
+			}
+			checks.push((d) => {
+				for (let i = 0; i < subs.length; i++) if (subs[i](d)) return true;
+				return false;
+			});
+		}
+		if (schema.oneOf) {
+			const subs = [];
+			for (const s of schema.oneOf) {
+				const fn = compileToJS(s, rootDefs);
+				if (!fn) return null;
+				subs.push(fn);
+			}
+			checks.push((d) => {
+				let count = 0;
+				for (let i = 0; i < subs.length; i++) {
+					if (subs[i](d)) count++;
+					if (count > 1) return false;
+				}
+				return count === 1;
+			});
+		}
+		if (schema.not !== void 0) {
+			const notFn = compileToJS(schema.not, rootDefs);
+			if (!notFn) return null;
+			checks.push((d) => !notFn(d));
+		}
+		if (schema.if !== void 0) {
+			const ifFn = compileToJS(schema.if, rootDefs);
+			if (!ifFn) return null;
+			const thenFn = schema.then !== void 0 ? compileToJS(schema.then, rootDefs) : null;
+			const elseFn = schema.else !== void 0 ? compileToJS(schema.else, rootDefs) : null;
+			if (schema.then !== void 0 && !thenFn) return null;
+			if (schema.else !== void 0 && !elseFn) return null;
+			checks.push((d) => {
+				if (ifFn(d)) return thenFn ? thenFn(d) : true;
+				else return elseFn ? elseFn(d) : true;
+			});
+		}
+		if (checks.length === 0) return () => true;
+		if (checks.length === 1) return checks[0];
+		return (data) => {
+			for (let i = 0; i < checks.length; i++) if (!checks[i](data)) return false;
+			return true;
+		};
+	}
+	function collectDefs(schema) {
+		const defs = {};
+		const raw = schema.$defs || schema.definitions;
+		if (raw && typeof raw === "object") for (const [name, def] of Object.entries(raw)) {
+			let cached = void 0;
+			defs[name] = {
+				get fn() {
+					if (cached === void 0) {
+						cached = null;
+						cached = compileToJS(def, defs);
+					}
+					return cached || (() => true);
+				},
+				raw: def
+			};
+			if (def && typeof def === "object") {
+				if (def.$anchor) {
+					const anchorDef = def;
+					let anchorCached = void 0;
+					defs["#" + def.$anchor] = {
+						get fn() {
+							if (anchorCached === void 0) {
+								anchorCached = null;
+								anchorCached = compileToJS(anchorDef, defs);
+							}
+							return anchorCached || (() => true);
+						},
+						raw: anchorDef
+					};
+				}
+				if (def.$dynamicAnchor) {
+					const daDef = def;
+					let daCached = void 0;
+					defs["#" + def.$dynamicAnchor] = {
+						get fn() {
+							if (daCached === void 0) {
+								daCached = null;
+								daCached = compileToJS(daDef, defs);
+							}
+							return daCached || (() => true);
+						},
+						raw: daDef
+					};
+				}
+			}
+		}
+		if (schema.$anchor && !defs["#" + schema.$anchor]) {
+			const rootAnchorSchema = schema;
+			let rootACached = void 0;
+			defs["#" + schema.$anchor] = {
+				get fn() {
+					if (rootACached === void 0) {
+						rootACached = null;
+						rootACached = compileToJS(rootAnchorSchema, defs);
+					}
+					return rootACached || (() => true);
+				},
+				raw: rootAnchorSchema
+			};
+		}
+		if (schema.$dynamicAnchor && !defs["#" + schema.$dynamicAnchor]) {
+			const rootDASchema = schema;
+			let rootDACached = void 0;
+			defs["#" + schema.$dynamicAnchor] = {
+				get fn() {
+					if (rootDACached === void 0) {
+						rootDACached = null;
+						rootDACached = compileToJS(rootDASchema, defs);
+					}
+					return rootDACached || (() => true);
+				},
+				raw: rootDASchema
+			};
+		}
+		return defs;
+	}
+	function walkJsonPointer(root, fragment) {
+		if (!fragment || fragment === "/" || fragment === "#") return root;
+		const path = fragment.startsWith("#") ? fragment.slice(1) : fragment;
+		if (!path.startsWith("/")) return null;
+		const parts = path.split("/").slice(1).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let target = root;
+		for (const p of parts) {
+			if (target == null || typeof target !== "object") return null;
+			if (!(p in target)) {
+				const alt = p === "definitions" ? "$defs" : p === "$defs" ? "definitions" : p === "items" && Array.isArray(target.prefixItems) ? "prefixItems" : null;
+				if (alt !== null && alt in target) {
+					target = target[alt];
+					continue;
+				}
+				return null;
+			}
+			target = target[p];
+		}
+		return target == null ? null : target;
+	}
+	function resolveCrossSchemaRef(ref, schemaMap) {
+		if (!schemaMap) return null;
+		const hashIdx = ref.indexOf("#");
+		const baseId = hashIdx >= 0 ? ref.slice(0, hashIdx) : ref;
+		const fragment = hashIdx >= 0 ? ref.slice(hashIdx) : "";
+		if (!baseId) return null;
+		let baseSchema = null;
+		let fullId = null;
+		if (schemaMap.has(baseId)) {
+			baseSchema = schemaMap.get(baseId);
+			fullId = baseId;
+		} else if (!ref.includes("://")) {
+			for (const [id] of schemaMap) if (id.endsWith("/" + baseId)) {
+				baseSchema = schemaMap.get(id);
+				fullId = id;
+				break;
+			}
+		}
+		if (!baseSchema) return null;
+		const target = fragment ? walkJsonPointer(baseSchema, fragment) : baseSchema;
+		if (target == null) return null;
+		return {
+			schema: target,
+			fullId
+		};
+	}
+	function resolveRef(ref, defs, schemaMap) {
+		if (ref === "#") return null;
+		if (defs) {
+			const m = ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m) {
+				const entry = defs[m[1]];
+				if (entry) return (d) => {
+					const fn = entry.fn;
+					return fn ? fn(d) : true;
+				};
+			}
+			if (ref.startsWith("#") && !ref.startsWith("#/")) {
+				const entry = defs[ref];
+				if (entry) return (d) => {
+					const fn = entry.fn;
+					return fn ? fn(d) : true;
+				};
+			}
+		}
+		if (schemaMap && schemaMap.has(ref)) return compileToJS(schemaMap.get(ref), null, schemaMap);
+		if (schemaMap && ref.includes("#")) {
+			const r = resolveCrossSchemaRef(ref, schemaMap);
+			if (r) return compileToJS(r.schema, null, schemaMap);
+		}
+		if (schemaMap && !ref.includes("://") && !ref.startsWith("#")) {
+			for (const [id] of schemaMap) if (id.endsWith("/" + ref)) return compileToJS(schemaMap.get(id), null, schemaMap);
+		}
+		return null;
+	}
+	function buildTypeCheck(types) {
+		if (types.length === 1) return TYPE_CHECKS[types[0]] || (() => true);
+		const fns = types.map((t) => TYPE_CHECKS[t]).filter(Boolean);
+		return (d) => {
+			for (let i = 0; i < fns.length; i++) if (fns[i](d)) return true;
+			return false;
+		};
+	}
+	function multipleOfBad(v, m) {
+		if (m === 0) return "true";
+		return `!(Number.isInteger(${v}/${m})||Math.abs(${v}/${m}-Math.round(${v}/${m}))<1e-9)`;
+	}
+	const TYPE_CHECKS = {
+		string: (d) => typeof d === "string",
+		number: (d) => typeof d === "number" && isFinite(d),
+		integer: (d) => Number.isInteger(d),
+		boolean: (d) => typeof d === "boolean",
+		null: (d) => d === null,
+		array: (d) => Array.isArray(d),
+		object: (d) => typeof d === "object" && d !== null && !Array.isArray(d)
+	};
+	function _canonical(x) {
+		if (x === null || typeof x !== "object") return JSON.stringify(x);
+		if (Array.isArray(x)) return "[" + x.map(_canonical).join(",") + "]";
+		return "{" + Object.keys(x).sort().map((k) => JSON.stringify(k) + ":" + _canonical(x[k])).join(",") + "}";
+	}
+	const _formats = require_formats();
+	const FORMAT_CHECKS = {
+		email: _formats.email,
+		"idn-email": _formats.idnEmail,
+		date: _formats.date,
+		"date-time": _formats.dateTime,
+		time: _formats.time,
+		duration: _formats.duration,
+		uuid: _formats.uuid,
+		uri: _formats.uri,
+		"uri-reference": _formats.uriReference,
+		"uri-template": _formats.uriTemplate,
+		iri: _formats.iri,
+		"iri-reference": _formats.iriReference,
+		ipv4: _formats.ipv4,
+		ipv6: _formats.ipv6,
+		hostname: _formats.hostname,
+		"json-pointer": _formats.jsonPointer,
+		"relative-json-pointer": _formats.relativeJsonPointer,
+		regex: (s) => {
+			try {
+				new RegExp(s, "u");
+				return true;
+			} catch {
+				return false;
+			}
+		}
+	};
+	const UNSAFE_KEYS = /* @__PURE__ */ new Set([
+		"__proto__",
+		"constructor",
+		"toString",
+		"valueOf",
+		"hasOwnProperty",
+		"isPrototypeOf",
+		"propertyIsEnumerable",
+		"toLocaleString"
+	]);
+	function canResolveDynamicRefs(target, callingSchema, schemaMap) {
+		const anchors = /* @__PURE__ */ new Set();
+		if (callingSchema.$dynamicAnchor) anchors.add(callingSchema.$dynamicAnchor);
+		const defs = callingSchema.$defs || callingSchema.definitions;
+		if (defs) {
+			for (const def of Object.values(defs)) if (def && typeof def === "object" && def.$dynamicAnchor) anchors.add(def.$dynamicAnchor);
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object" && ext.$dynamicAnchor) anchors.add(ext.$dynamicAnchor);
+		}
+		const refs = [];
+		const findDynRefs = (s) => {
+			if (typeof s !== "object" || s === null) return;
+			if (s.$dynamicRef) {
+				const name = s.$dynamicRef.startsWith("#") ? s.$dynamicRef.slice(1) : s.$dynamicRef;
+				refs.push(name);
+			}
+			for (const v of Object.values(s)) if (Array.isArray(v)) v.forEach(findDynRefs);
+			else if (typeof v === "object" && v !== null) findDynRefs(v);
+		};
+		findDynRefs(target);
+		return refs.every((r) => anchors.has(r));
+	}
+	function hasNestedIdScope(node, isRoot = true) {
+		if (typeof node !== "object" || node === null) return false;
+		if (!isRoot && typeof node.$id === "string" && !node.$id.startsWith("#")) return true;
+		for (const val of Object.values(node)) {
+			if (typeof val !== "object" || val === null) continue;
+			if (Array.isArray(val)) {
+				for (const item of val) if (hasNestedIdScope(item, false)) return true;
+			} else if (hasNestedIdScope(val, false)) return true;
+		}
+		return false;
+	}
+	const DECLINE = Symbol("ata.decline");
+	const CYCLE_DEPTH = 512;
+	function emitGuardState() {
+		return "const _CYC={};const _stk=new Set();let _sd=0,_sg=false\n  ";
+	}
+	function emitRootGuard(name, args, onRepeat) {
+		const call = `${name}_b(${args})`;
+		return `function ${name}(${args}){\n  if(_sg){if(typeof d!=='object'||d===null)return ${call};if(_stk.has(d))return ${onRepeat};_stk.add(d);try{return ${call}}finally{_stk.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${call}\n  _sd--\n  return _r\n  }\n  `;
+	}
+	function emitGuardedRun(attempt, reset, defSets) {
+		return `_sd=0\n  try{${attempt}}catch(_err){\n  if(_err!==_CYC)throw _err\n  ${reset}_sg=true;${["_stk.clear()"].concat(defSets.map((n) => `${n}_s.clear()`)).join(";")}\n  try{${attempt}}finally{_sg=false}\n  }\n  `;
+	}
+	function cyclicDefNames(defs) {
+		const out = /* @__PURE__ */ new Set();
+		if (!defs || typeof defs !== "object") return out;
+		const defNames = new Set(Object.keys(defs));
+		const defRefs = {};
+		for (const [name, def] of Object.entries(defs)) {
+			const refs = [];
+			const seen = /* @__PURE__ */ new WeakSet();
+			const collectRefs = (node) => {
+				if (typeof node !== "object" || node === null) return;
+				if (seen.has(node)) return;
+				seen.add(node);
+				if (node.$ref) {
+					const m = /^#\/(?:\$defs|definitions)\/([^/]+)$/.exec(node.$ref);
+					if (m && defNames.has(m[1])) refs.push(m[1]);
+				}
+				for (const val of Object.values(node)) if (typeof val === "object" && val !== null) {
+					if (Array.isArray(val)) for (const item of val) collectRefs(item);
+					else collectRefs(val);
+				}
+			};
+			collectRefs(def);
+			defRefs[name] = refs;
+		}
+		const visited = /* @__PURE__ */ new Set();
+		const inStack = [];
+		const dfs = (node) => {
+			const at = inStack.indexOf(node);
+			if (at !== -1) {
+				for (let i = at; i < inStack.length; i++) out.add(inStack[i]);
+				return;
+			}
+			if (visited.has(node)) return;
+			visited.add(node);
+			inStack.push(node);
+			for (const neighbor of defRefs[node] || []) dfs(neighbor);
+			inStack.pop();
+		};
+		for (const name of Object.keys(defRefs)) dfs(name);
+		return out;
+	}
+	function codegenSafe(schema, schemaMap) {
+		if (typeof schema === "boolean") return true;
+		if (typeof schema !== "object" || schema === null) return true;
+		if (schema.propertyDependencies !== void 0) return false;
+		if (schema.$dynamicRef && !schema.$dynamicRef.startsWith("#")) return false;
+		if (schema.additionalProperties === true) return true;
+		if (schema.properties) for (const v of Object.values(schema.properties)) {
+			if (typeof v === "boolean") continue;
+			if (!codegenSafe(v, schemaMap)) return false;
+		}
+		if (schema.required) {
+			for (const k of schema.required) if (UNSAFE_KEYS.has(k)) return false;
+		}
+		if (schema.properties) for (const k of Object.keys(schema.properties)) {
+			if (UNSAFE_KEYS.has(k)) return false;
+			if (k === "$ref") return false;
+		}
+		if (schema.pattern && /\\[pP]\{/.test(schema.pattern)) return false;
+		if (schema.$ref) {
+			if (schema.$ref === "#") return true;
+			const isLocal = /^#\/(?:\$defs|definitions)\/[^/]+$/.test(schema.$ref);
+			let isResolvable = !isLocal && schemaMap && schemaMap.has(schema.$ref);
+			let resolvedTarget = null;
+			if (!isLocal && !isResolvable && schemaMap && !schema.$ref.includes("://") && !schema.$ref.startsWith("#")) {
+				for (const [id] of schemaMap) if (id.endsWith("/" + schema.$ref)) {
+					isResolvable = true;
+					resolvedTarget = schemaMap.get(id);
+					break;
+				}
+			}
+			if (!isLocal && !isResolvable && schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+				const r = resolveCrossSchemaRef(schema.$ref, schemaMap);
+				if (r) {
+					isResolvable = true;
+					resolvedTarget = r.schema;
+				}
+			}
+			const isAnchorRef = !isLocal && !isResolvable && schema.$ref.length > 1 && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/");
+			if (!isLocal && !isResolvable && !isAnchorRef) return false;
+			if (!resolvedTarget && isResolvable) resolvedTarget = schemaMap.get(schema.$ref);
+			if (resolvedTarget && JSON.stringify(resolvedTarget).includes("\"$dynamicRef\"")) {
+				if (!(canResolveDynamicRefs(resolvedTarget, schema, schemaMap) && resolvedTarget.additionalProperties === void 0 && !resolvedTarget.patternProperties && !resolvedTarget.dependentSchemas && !resolvedTarget.propertyNames) && schema.unevaluatedProperties === void 0 && schema.unevaluatedItems === void 0) return false;
+			}
+			const SCHEMA_ORG_KEYS = /* @__PURE__ */ new Set([
+				"$ref",
+				"$defs",
+				"definitions",
+				"$schema",
+				"$id",
+				"$dynamicAnchor",
+				"$anchor"
+			]);
+			if (Object.keys(schema).filter((k) => !SCHEMA_ORG_KEYS.has(k)).length > 0 && schema.unevaluatedProperties === void 0 && schema.unevaluatedItems === void 0) return false;
+		}
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) {
+			if (!codegenSafe(schema.additionalProperties, schemaMap)) return false;
+		}
+		if (schema.additionalProperties === false && !schema.properties) return false;
+		if (schema.unevaluatedProperties !== void 0) {
+			if (typeof schema.unevaluatedProperties === "object" && schema.unevaluatedProperties !== null) {
+				if (!codegenSafe(schema.unevaluatedProperties, schemaMap)) return false;
+			}
+			if (schema.unevaluatedProperties === false || typeof schema.unevaluatedProperties === "object" && schema.unevaluatedProperties !== null) {
+				const evalResult = collectEvaluated(schema, schemaMap);
+				if (evalResult.dynamic && evalResult.allProps) return false;
+			}
+		}
+		if (schema.unevaluatedItems !== void 0) {
+			if (JSON.stringify(schema).includes("\"contains\"")) return false;
+			if (typeof schema.unevaluatedItems === "object" && schema.unevaluatedItems !== null) {
+				if (!codegenSafe(schema.unevaluatedItems, schemaMap)) return false;
+			}
+		}
+		const defs = schema.$defs || schema.definitions;
+		if (defs) {
+			new Set(Object.keys(defs));
+			for (const [name, def] of Object.entries(defs)) {
+				if (/[~/"']/.test(name)) return false;
+				if (typeof def === "boolean") return false;
+				if (typeof def === "object" && def !== null) {
+					if (def.$id && !def.$id.startsWith("#")) return false;
+					if (def.$ref) return false;
+					if (!codegenSafe(def, schemaMap)) return false;
+				}
+			}
+		}
+		const subs = [
+			schema.items,
+			schema.contains,
+			schema.not,
+			schema.if,
+			schema.then,
+			schema.else,
+			...schema.prefixItems || [],
+			...schema.allOf || [],
+			...schema.anyOf || [],
+			...schema.oneOf || []
+		];
+		if (typeof schema.additionalProperties === "object") subs.push(schema.additionalProperties);
+		for (const s of subs) {
+			if (s === void 0 || s === null || typeof s === "boolean") continue;
+			if (!codegenSafe(s, schemaMap)) return false;
+		}
+		return true;
+	}
+	function hasAdditionalPropertiesSchema(schema) {
+		if (typeof schema !== "object" || schema === null) return false;
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) return true;
+		for (const key of [
+			"properties",
+			"patternProperties",
+			"$defs",
+			"definitions",
+			"dependentSchemas"
+		]) if (schema[key] && typeof schema[key] === "object") {
+			for (const v of Object.values(schema[key])) if (hasAdditionalPropertiesSchema(v)) return true;
+		}
+		for (const key of [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]) if (Array.isArray(schema[key])) {
+			for (const s of schema[key]) if (hasAdditionalPropertiesSchema(s)) return true;
+		}
+		for (const key of [
+			"items",
+			"contains",
+			"not",
+			"if",
+			"then",
+			"else",
+			"propertyNames"
+		]) if (typeof schema[key] === "object" && schema[key] !== null) {
+			if (hasAdditionalPropertiesSchema(schema[key])) return true;
+		}
+		return false;
+	}
+	const SUBSCHEMA_MAPS = [
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas"
+	];
+	const SUBSCHEMA_LISTS = [
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"prefixItems"
+	];
+	const SUBSCHEMA_SINGLES = [
+		"items",
+		"additionalItems",
+		"contains",
+		"not",
+		"if",
+		"then",
+		"else",
+		"additionalProperties",
+		"propertyNames",
+		"unevaluatedItems",
+		"unevaluatedProperties",
+		"contentSchema"
+	];
+	function refResolves(ref, rootDefs, anchors, schemaMap) {
+		if (ref === "#") return true;
+		const local = ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+		if (local) return !!(rootDefs && rootDefs[local[1]]);
+		if (ref.startsWith("#") && !ref.startsWith("#/")) {
+			const entry = rootDefs && rootDefs[ref];
+			return !!(entry && entry.raw || anchors && anchors[ref]);
+		}
+		if (ref.startsWith("#")) return false;
+		if (!schemaMap) return false;
+		if (schemaMap.has(ref)) return true;
+		if (!ref.includes("://")) {
+			for (const [id] of schemaMap) if (id.endsWith("/" + ref)) return true;
+		}
+		if (ref.includes("#")) return !!resolveCrossSchemaRef(ref, schemaMap);
+		return false;
+	}
+	function crossDocTarget(ref, schemaMap) {
+		if (!schemaMap || ref.startsWith("#")) return null;
+		if (schemaMap.has(ref)) return schemaMap.get(ref);
+		if (!ref.includes("://")) {
+			for (const [id, s] of schemaMap) if (id.endsWith("/" + ref)) return s;
+		}
+		if (ref.includes("#")) {
+			const r = resolveCrossSchemaRef(ref, schemaMap);
+			if (r) return r.schema;
+		}
+		return null;
+	}
+	function subtreeHasLocalRef(node, seen) {
+		if (typeof node !== "object" || node === null || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		if (typeof node.$ref === "string" && node.$ref.startsWith("#")) return true;
+		for (const key of SUBSCHEMA_MAPS) {
+			const group = node[key];
+			if (group && typeof group === "object" && !Array.isArray(group)) {
+				for (const sub of Object.values(group)) if (subtreeHasLocalRef(sub, seen)) return true;
+			}
+		}
+		for (const key of SUBSCHEMA_LISTS) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (subtreeHasLocalRef(sub, seen)) return true;
+		}
+		for (const key of SUBSCHEMA_SINGLES) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (subtreeHasLocalRef(sub, seen)) return true;
+		} else if (subtreeHasLocalRef(node[key], seen)) return true;
+		return false;
+	}
+	function needsBaseTracking(schema, schemaMap, seen) {
+		if (!schemaMap || schemaMap.size === 0) return false;
+		if (hasNestedIdScope(schema)) return true;
+		return refsAreScopeSensitive(schema, schemaMap, seen);
+	}
+	function refsAreScopeSensitive(node, schemaMap, seen) {
+		if (typeof node !== "object" || node === null || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		const ref = node.$ref;
+		if (typeof ref === "string" && !ref.startsWith("#")) {
+			const key = ref.split("#")[0];
+			if (!schemaMap.has(key) && !ref.includes("://")) return true;
+			const target = crossDocTarget(ref, schemaMap);
+			if (target && typeof target === "object") {
+				if (typeof target.$id === "string" && target.$id !== key) return true;
+				if (subtreeHasLocalRef(target, /* @__PURE__ */ new Set()) && refsAreScopeSensitive(target, schemaMap, seen)) return true;
+			}
+		}
+		for (const key of SUBSCHEMA_MAPS) {
+			const group = node[key];
+			if (group && typeof group === "object" && !Array.isArray(group)) {
+				for (const sub of Object.values(group)) if (refsAreScopeSensitive(sub, schemaMap, seen)) return true;
+			}
+		}
+		for (const key of SUBSCHEMA_LISTS) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (refsAreScopeSensitive(sub, schemaMap, seen)) return true;
+		}
+		for (const key of SUBSCHEMA_SINGLES) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (refsAreScopeSensitive(sub, schemaMap, seen)) return true;
+		} else if (refsAreScopeSensitive(node[key], schemaMap, seen)) return true;
+		return false;
+	}
+	function hasUnresolvableRef(node, rootDefs, anchors, schemaMap, seen) {
+		if (typeof node !== "object" || node === null || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		if (typeof node.$ref === "string") {
+			if (!refResolves(node.$ref, rootDefs, anchors, schemaMap)) return true;
+			const target = crossDocTarget(node.$ref, schemaMap);
+			if (target && subtreeHasLocalRef(target, /* @__PURE__ */ new Set())) return true;
+		}
+		for (const key of SUBSCHEMA_MAPS) {
+			const group = node[key];
+			if (group && typeof group === "object" && !Array.isArray(group)) {
+				for (const sub of Object.values(group)) if (hasUnresolvableRef(sub, rootDefs, anchors, schemaMap, seen)) return true;
+			}
+		}
+		for (const key of SUBSCHEMA_LISTS) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (hasUnresolvableRef(sub, rootDefs, anchors, schemaMap, seen)) return true;
+		}
+		for (const key of SUBSCHEMA_SINGLES) if (Array.isArray(node[key])) {
+			for (const sub of node[key]) if (hasUnresolvableRef(sub, rootDefs, anchors, schemaMap, seen)) return true;
+		} else if (hasUnresolvableRef(node[key], rootDefs, anchors, schemaMap, seen)) return true;
+		return false;
+	}
+	function collectExternalRefKeys(node, out, seen) {
+		if (typeof node !== "object" || node === null) return;
+		if (seen.has(node)) return;
+		seen.add(node);
+		if (Array.isArray(node)) {
+			for (const n of node) collectExternalRefKeys(n, out, seen);
+			return;
+		}
+		for (const key of Object.keys(node)) {
+			const v = node[key];
+			if ((key === "$ref" || key === "$dynamicRef") && typeof v === "string" && !v.startsWith("#")) out.add(v.split("#")[0]);
+			else if (typeof v === "object" && v !== null && key !== "enum" && key !== "const" && key !== "default" && key !== "examples") collectExternalRefKeys(v, out, seen);
+		}
+	}
+	function lookupExternal(key, schemaMap) {
+		if (schemaMap.has(key)) return schemaMap.get(key);
+		if (!key.includes("://")) {
+			for (const [id, doc] of schemaMap) if (id.endsWith("/" + key)) return doc;
+		}
+		return null;
+	}
+	function reachableExternalDocs(schema, schemaMap) {
+		const docs = /* @__PURE__ */ new Set();
+		if (!schemaMap || schemaMap.size === 0) return docs;
+		const queue = [schema];
+		const seenDocs = /* @__PURE__ */ new Set([schema]);
+		while (queue.length) {
+			const doc = queue.shift();
+			const keys = /* @__PURE__ */ new Set();
+			collectExternalRefKeys(doc, keys, /* @__PURE__ */ new Set());
+			for (const key of keys) {
+				const target = lookupExternal(key, schemaMap);
+				if (target && !seenDocs.has(target)) {
+					seenDocs.add(target);
+					docs.add(target);
+					queue.push(target);
+				}
+			}
+		}
+		return docs;
+	}
+	function externalDocsNeedInterpreter(schema, schemaMap) {
+		for (const doc of reachableExternalDocs(schema, schemaMap)) {
+			const str = JSON.stringify(doc);
+			if (str.includes("\"$dynamicRef\"") || str.includes("\"$dynamicAnchor\"") || str.includes("\"unevaluatedProperties\"") || str.includes("\"unevaluatedItems\"")) return true;
+			if (typeof doc === "object" && doc !== null && hasNestedIdScope(doc)) return true;
+		}
+		return false;
+	}
+	function sharedCodegenGate(schema, schemaMap) {
+		if (typeof schema !== "object" || schema === null) return true;
+		if (!codegenSafe(schema, schemaMap)) return false;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return false;
+		if (externalDocsNeedInterpreter(schema, schemaMap)) return false;
+		return true;
+	}
+	function compileToJSCodegen(schema, schemaMap, userFormats) {
+		if (typeof schema === "boolean") return schema ? () => true : () => false;
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!sharedCodegenGate(schema, schemaMap)) return null;
+		const rootDefs = schema.$defs || schema.definitions || null;
+		if (schema.patternProperties) for (const [pat, sub] of Object.entries(schema.patternProperties)) {
+			if (/\\[pP]\{/.test(pat)) return null;
+			if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.dependentSchemas) {
+			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.propertyNames) {
+			const pn = schema.propertyNames;
+			const supported = [
+				"maxLength",
+				"minLength",
+				"pattern",
+				"const",
+				"enum"
+			];
+			if (Object.keys(pn).filter((k) => k !== "$schema").some((k) => !supported.includes(k))) return null;
+		}
+		const anchors = {};
+		if (schema.$dynamicAnchor) anchors["#" + schema.$dynamicAnchor] = schema;
+		if (schema.$anchor) anchors["#" + schema.$anchor] = schema;
+		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) anchors[schema.$id] = schema;
+		if (rootDefs) {
+			for (const def of Object.values(rootDefs)) if (def && typeof def === "object") {
+				if (def.$dynamicAnchor) anchors["#" + def.$dynamicAnchor] = def;
+				if (def.$anchor) anchors["#" + def.$anchor] = def;
+				if (typeof def.$id === "string" && def.$id.startsWith("#")) anchors[def.$id] = def;
+			}
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
+				if (ext.$dynamicAnchor && !anchors["#" + ext.$dynamicAnchor]) anchors["#" + ext.$dynamicAnchor] = ext;
+				if (ext.$anchor && !anchors["#" + ext.$anchor]) anchors["#" + ext.$anchor] = ext;
+				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !anchors[ext.$id]) anchors[ext.$id] = ext;
+			}
+		}
+		if (hasUnresolvableRef(schema, rootDefs, anchors, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		const ctx = {
+			varCounter: 0,
+			helpers: [],
+			helperCode: [],
+			preamble: [],
+			shared: [],
+			closureVars: ["_cpLen"],
+			closureVals: [_cpLen],
+			rootDefs,
+			refStack: /* @__PURE__ */ new Set(),
+			schemaMap: schemaMap || null,
+			anchors,
+			rootSchema: schema,
+			userFormats: userFormats || null
+		};
+		const lines = [];
+		genCode(schema, "d", lines, ctx);
+		if (ctx.deferredChecks) for (const dc of ctx.deferredChecks) lines.push(dc);
+		if (lines.length === 0) return () => true;
+		const checkStr = lines.join("\n  ");
+		const closureNames = ctx.closureVars;
+		const closureValues = ctx.closureVals;
+		for (const code of ctx.helperCode) {
+			const safeMatch = code.match(/^const (_re\d+)=__ataSafeRe\((.+)\)$/);
+			if (safeMatch) {
+				closureNames.push(safeMatch[1]);
+				closureValues.push(compileSafe(JSON.parse(safeMatch[2])));
+				continue;
+			}
+			const match = code.match(/^const (_re\d+)=new RegExp\((.+)\)$/);
+			if (match) {
+				closureNames.push(match[1]);
+				closureValues.push(new RegExp(JSON.parse(match[2])));
+			}
+		}
+		const defSets = ctx.defFns ? Array.from(ctx.defFns.values()) : [];
+		const needsGuard = ctx.usesRecursion || defSets.length > 0;
+		let body, hybridBody;
+		if (ctx.usesRecursion) {
+			const decl = emitRootGuard("_validate", "d", "true") + `function _validate_b(d){\n  ${checkStr}\n  return true\n  }\n  `;
+			const run = emitGuardedRun("return _validate(d)", "", defSets);
+			body = `${decl}function _run(d){\n  ${run}\n  }\n  return _run(d)`;
+			hybridBody = `${decl}function _run(d){\n  ${run}\n  }\n  return _run(d)?R:E(d)`;
+		} else if (defSets.length > 0) {
+			const run = emitGuardedRun(`return _body(d)`, "", defSets);
+			body = `function _body(d){\n  ${checkStr}\n  return true\n  }\n  function _run(d){\n  ${run}\n  }\n  return _run(d)`;
+			hybridBody = `function _body(d){\n  ${checkStr}\n  return true\n  }\n  function _run(d){\n  ${run}\n  }\n  return _run(d)?R:E(d)`;
+		} else {
+			body = checkStr + "\n  return true";
+			hybridBody = replaceTopLevel(checkStr + "\n  return R");
+		}
+		const guardStr = needsGuard ? emitGuardState() : "";
+		const preambleStr = guardStr + (ctx.preamble && ctx.preamble.length ? ctx.preamble.join("\n  ") + "\n  " : "");
+		try {
+			let boolFn;
+			if (closureNames.length > 0) boolFn = new Function(...closureNames, `${preambleStr}return function(d){${body}}`)(...closureValues);
+			else if (preambleStr) boolFn = new Function(`${preambleStr}return function(d){${body}}`)();
+			else boolFn = new Function("d", body);
+			try {
+				const hybridFactory = new Function(...closureNames, "R", "E", `${preambleStr}return function(d){${hybridBody}}`);
+				boolFn._hybridFactory = (R, E) => hybridFactory(...closureValues, R, E);
+			} catch {}
+			const emitHelpers = ctx.helperCode.filter((c) => !/^const _re\d+=(?:__ataSafeRe|new RegExp)\(/.test(c));
+			const helperStr = emitHelpers.length ? emitHelpers.join("\n  ") + "\n  " : "";
+			boolFn._source = helperStr + body;
+			boolFn._preambleSource = preambleStr;
+			boolFn._preambleGuard = guardStr;
+			boolFn._preambleParts = ctx.preamble ? ctx.preamble.slice() : [];
+			boolFn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
+			boolFn._hybridSource = helperStr + hybridBody;
+			boolFn._usesSafeRe = !!ctx.usesSafeRe;
+			if (ctx.userFormats) {
+				const fmtEntries = [];
+				for (let i = 0; i < closureNames.length; i++) if (closureNames[i].startsWith("_uf_")) {
+					let format = null;
+					for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === closureValues[i]) {
+						format = key;
+						break;
+					}
+					fmtEntries.push({
+						name: closureNames[i],
+						fn: closureValues[i],
+						format
+					});
+				}
+				if (fmtEntries.length) boolFn._formatClosures = fmtEntries;
+			}
+			{
+				const entries = [];
+				for (let i = 0; i < closureNames.length; i++) {
+					const name = closureNames[i];
+					if (name === "_cpLen" || name.startsWith("_uf_")) continue;
+					entries.push({
+						name,
+						val: closureValues[i]
+					});
+				}
+				if (entries.length) boolFn._closures = entries;
+			}
+			return boolFn;
+		} catch {
+			return null;
+		}
+	}
+	function replaceTopLevel(code) {
+		let result = "", i = 0;
+		while (i < code.length) {
+			const isFunctionKw = code.startsWith("function", i) && (i === 0 || /[^a-zA-Z_$]/.test(code[i - 1]));
+			const isArrowBlock = code.startsWith("=>{", i);
+			if (isFunctionKw || isArrowBlock) {
+				let j = isArrowBlock ? i + 2 : i + 8;
+				while (j < code.length && code[j] !== "{") j++;
+				result += code.slice(i, j + 1);
+				i = j + 1;
+				let braceDepth = 1;
+				while (i < code.length && braceDepth > 0) {
+					if (code[i] === "{") braceDepth++;
+					else if (code[i] === "}") braceDepth--;
+					if (braceDepth > 0) result += code[i];
+					else result += "}";
+					i++;
+				}
+			} else if (code.startsWith("return false", i)) {
+				result += "return E(d)";
+				i += 12;
+			} else if (code.startsWith("return true", i) && (i + 11 >= code.length || !/[a-zA-Z_$]/.test(code[i + 11]))) {
+				result += "return R";
+				i += 11;
+			} else {
+				result += code[i];
+				i++;
+			}
+		}
+		return result;
+	}
+	function needsLocal(schema) {
+		if (typeof schema !== "object" || schema === null) return false;
+		if (schema.$ref || schema.allOf || schema.anyOf || schema.oneOf || schema.if) return false;
+		if (schema.properties || schema.items || schema.prefixItems) return false;
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		if (!types || types.length !== 1) return false;
+		const t = types[0];
+		let checkCount = 1;
+		if (t === "string") {
+			if (schema.minLength !== void 0) checkCount++;
+			if (schema.maxLength !== void 0) checkCount++;
+			if (schema.pattern) checkCount++;
+			if (schema.format) checkCount++;
+		} else if (t === "integer" || t === "number") {
+			if (schema.minimum !== void 0) checkCount++;
+			if (schema.maximum !== void 0) checkCount++;
+			if (schema.exclusiveMinimum !== void 0) checkCount++;
+			if (schema.exclusiveMaximum !== void 0) checkCount++;
+			if (schema.multipleOf !== void 0) checkCount++;
+		}
+		return checkCount >= 2;
+	}
+	function tryGenCombined(schema, access, ctx) {
+		if (typeof schema !== "object" || schema === null) return null;
+		if (schema.$ref || schema.allOf || schema.anyOf || schema.oneOf || schema.if) return null;
+		if (schema.properties || schema.items || schema.prefixItems || schema.patternProperties) return null;
+		if (schema.enum || schema.const !== void 0) return null;
+		if (schema.not || schema.dependentRequired || schema.dependentSchemas) return null;
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		if (!types || types.length !== 1) return null;
+		const t = types[0];
+		const isIdent = /^_[a-zA-Z]\w*$/.test(access);
+		const bind = (conds) => isIdent ? `if(${conds.join("||").replace(/\b_v\b/g, access)})return false` : `{const _v=${access};if(${conds.join("||")})return false}`;
+		if (t === "string") {
+			if (schema.pattern || schema.format) return null;
+			if (schema.minLength !== void 0 && schema.maxLength !== void 0) {
+				const M = schema.minLength;
+				const X = schema.maxLength;
+				const v2 = isIdent ? access : "_v";
+				return `{${isIdent ? "" : `const _v=${access};`}if(typeof ${v2}!=='string')return false;const _lv=${v2}.length;if(_lv<${M}||_lv>${X * 2})return false;if(_lv<${M * 2}||_lv>${X}){const _cp=_cpLen(${v2});if(_cp<${M}||_cp>${X})return false}}`;
+			}
+			const conds = [`typeof _v!=='string'`];
+			if (schema.minLength !== void 0 && schema.minLength > 0) {
+				const M = schema.minLength;
+				conds.push(`_v.length<${M}`);
+				if (M > 1) conds.push(`_v.length<${M * 2}&&_cpLen(_v)<${M}`);
+			}
+			if (schema.maxLength !== void 0) {
+				const X = schema.maxLength;
+				if (X === 0) conds.push(`_v.length>0`);
+				else {
+					conds.push(`_v.length>${X * 2}`);
+					conds.push(`_v.length>${X}&&_cpLen(_v)>${X}`);
+				}
+			}
+			if (conds.length < 2) return null;
+			return bind(conds);
+		}
+		if (t === "integer") {
+			const conds = [`!Number.isInteger(_v)`];
+			if (schema.minimum !== void 0) conds.push(`_v<${schema.minimum}`);
+			if (schema.maximum !== void 0) conds.push(`_v>${schema.maximum}`);
+			if (schema.exclusiveMinimum !== void 0) conds.push(`_v<=${schema.exclusiveMinimum}`);
+			if (schema.exclusiveMaximum !== void 0) conds.push(`_v>=${schema.exclusiveMaximum}`);
+			if (schema.multipleOf !== void 0) conds.push(`(${multipleOfBad("_v", schema.multipleOf)})`);
+			if (conds.length < 2) return null;
+			return bind(conds);
+		}
+		if (t === "number") {
+			const conds = [`typeof _v!=='number'||!isFinite(_v)`];
+			if (schema.minimum !== void 0) conds.push(`_v<${schema.minimum}`);
+			if (schema.maximum !== void 0) conds.push(`_v>${schema.maximum}`);
+			if (schema.exclusiveMinimum !== void 0) conds.push(`_v<=${schema.exclusiveMinimum}`);
+			if (schema.exclusiveMaximum !== void 0) conds.push(`_v>=${schema.exclusiveMaximum}`);
+			if (schema.multipleOf !== void 0) conds.push(`(${multipleOfBad("_v", schema.multipleOf)})`);
+			if (conds.length < 2) return null;
+			return bind(conds);
+		}
+		return null;
+	}
+	function _deferOrInline(ctx, lines, v, check) {
+		if (v === "d" && !ctx.condDepth) {
+			if (!ctx.deferredChecks) ctx.deferredChecks = [];
+			ctx.deferredChecks.push(check);
+		} else lines.push(check);
+	}
+	function genCode(schema, v, lines, ctx, knownType) {
+		if (schema === false) {
+			lines.push("return false");
+			return;
+		}
+		if (schema === true) return;
+		if (typeof schema !== "object" || schema === null) return;
+		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
+		const hasSiblings = schema.$ref && (schema.unevaluatedProperties !== void 0 || schema.unevaluatedItems !== void 0);
+		if (schema.$ref) {
+			if (schema.$ref === "#") {
+				ctx.usesRecursion = true;
+				lines.push(`if(!_validate(${v}))return false`);
+				if (!hasSiblings) return;
+			}
+			const m = schema.$ref !== "#" && schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				const defName = m[1];
+				if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
+				if (ctx.cyclicDefs.has(defName) && ctx.preamble) {
+					if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
+					let fnName = ctx.defFns.get(defName);
+					if (!fnName) {
+						fnName = "_def" + ctx.defFns.size + "_" + defName.replace(/[^A-Za-z0-9_]/g, "_");
+						ctx.defFns.set(defName, fnName);
+						const bodyLines = [];
+						genCode(ctx.rootDefs[defName], "d", bodyLines, ctx);
+						ctx.preamble.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d);if(${fnName}_s.has(d))return true;${fnName}_s.add(d);try{return ${fnName}_b(d)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d){${bodyLines.join("\n  ")}\n  return true}`);
+					}
+					lines.push(`if(!${fnName}(${v}))return false`);
+					if (!hasSiblings) return;
+				} else if (ctx.refStack.has(schema.$ref)) {
+					if (!hasSiblings) return;
+				} else {
+					ctx.refStack.add(schema.$ref);
+					genCode(ctx.rootDefs[defName], v, lines, ctx, knownType);
+					ctx.refStack.delete(schema.$ref);
+					if (!hasSiblings) return;
+				}
+			} else if (schema.$ref !== "#" && !m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) {
+						if (!hasSiblings) return;
+					} else {
+						ctx.refStack.add(schema.$ref);
+						genCode(anchorTarget, v, lines, ctx, knownType);
+						ctx.refStack.delete(schema.$ref);
+						if (!hasSiblings) return;
+					}
+				}
+			} else if (schema.$ref !== "#" && ctx.schemaMap) {
+				let resolved = ctx.schemaMap.get(schema.$ref);
+				if (!resolved && !schema.$ref.includes("://") && !schema.$ref.startsWith("#")) {
+					for (const [id, s] of ctx.schemaMap) if (id.endsWith("/" + schema.$ref)) {
+						resolved = s;
+						break;
+					}
+				}
+				if (!resolved && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+					const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
+					if (r) resolved = r.schema;
+				}
+				if (resolved) {
+					if (ctx.refStack.has(schema.$ref)) {
+						if (!hasSiblings) return;
+					} else {
+						ctx.refStack.add(schema.$ref);
+						genCode(resolved, v, lines, ctx, knownType);
+						ctx.refStack.delete(schema.$ref);
+						if (!hasSiblings) return;
+					}
+				} else if (!hasSiblings) return;
+			} else if (!hasSiblings) return;
+		}
+		if (schema.$dynamicRef) {
+			const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
+			if (ctx.anchors && ctx.anchors[anchorKey]) {
+				const target = ctx.anchors[anchorKey];
+				if (target === ctx.rootSchema) {
+					ctx.usesRecursion = true;
+					lines.push(`if(!_validate(${v}))return false`);
+				} else {
+					const refKey = "$dynamicRef:" + anchorKey;
+					if (!ctx.refStack.has(refKey)) {
+						ctx.refStack.add(refKey);
+						genCode(target, v, lines, ctx, knownType);
+						ctx.refStack.delete(refKey);
+					}
+				}
+			}
+		}
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		let effectiveType = knownType;
+		if (types) {
+			if (!knownType) {
+				if (types.length === 1) switch (types[0]) {
+					case "object":
+						lines.push(`if(typeof ${v}!=='object'||${v}===null||Array.isArray(${v}))return false`);
+						break;
+					case "array":
+						lines.push(`if(!Array.isArray(${v}))return false`);
+						break;
+					case "string":
+						lines.push(`if(typeof ${v}!=='string')return false`);
+						break;
+					case "number":
+						lines.push(`if(typeof ${v}!=='number'||!isFinite(${v}))return false`);
+						break;
+					case "integer":
+						lines.push(`if(!Number.isInteger(${v}))return false`);
+						break;
+					case "boolean":
+						lines.push(`if(typeof ${v}!=='boolean')return false`);
+						break;
+					case "null": lines.push(`if(${v}!==null)return false`);
+				}
+				else {
+					const conds = types.map((t) => {
+						switch (t) {
+							case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+							case "array": return `Array.isArray(${v})`;
+							case "string": return `typeof ${v}==='string'`;
+							case "number": return `(typeof ${v}==='number'&&isFinite(${v}))`;
+							case "integer": return `Number.isInteger(${v})`;
+							case "boolean": return `typeof ${v}==='boolean'`;
+							case "null": return `${v}===null`;
+							default: return "true";
+						}
+					});
+					lines.push(`if(!(${conds.join("||")}))return false`);
+				}
+			}
+			if (types.length === 1) effectiveType = types[0];
+		}
+		const isObj = effectiveType === "object";
+		const isArr = effectiveType === "array";
+		const isStr = effectiveType === "string";
+		const isNum = effectiveType === "number" || effectiveType === "integer";
+		const objGuard = isObj ? "" : `typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&`;
+		isObj || `${v}${v}`;
+		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)}))return false`);
+		if (schema.const !== void 0) {
+			const cv = schema.const;
+			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)})return false`);
+			else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)}))return false`);
+		}
+		const requiredSet = new Set(schema.required || []);
+		const hoisted = {};
+		if (schema.required && schema.properties && isObj) {
+			const reqChecks = [];
+			for (const key of schema.required) {
+				hoisted[key] = `${v}[${JSON.stringify(key)}]`;
+				const prop = schema.properties[key];
+				if (!(prop && (prop.type || prop.enum || prop.const !== void 0))) reqChecks.push(`${v}[${JSON.stringify(key)}]===undefined`);
+			}
+			if (reqChecks.length > 0) lines.push(`if(${reqChecks.join("||")})return false`);
+		} else if (schema.required && schema.required.length > 0) {
+			if (isObj) {
+				const checks = schema.required.map((key) => `${v}[${JSON.stringify(key)}]===undefined`);
+				lines.push(`if(${checks.join("||")})return false`);
+			} else {
+				const checks = schema.required.map((key) => `${v}[${JSON.stringify(key)}]===undefined`);
+				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&(${checks.join("||")}))return false`);
+			}
+		}
+		if (schema.unevaluatedProperties === false && schema.properties && schema.required && isObj) {
+			const evalResult = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
+			if (!evalResult.dynamic && !evalResult.allProps) {
+				const knownKeys = evalResult.props;
+				const propCount = knownKeys.length;
+				if (schema.required.length >= propCount && knownKeys.every((k) => schema.required.includes(k)) && propCount > 0) {
+					if (propCount <= 15) lines.push(`var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount})return false`);
+					else lines.push(`if(Object.keys(${v}).length!==${propCount})return false`);
+					ctx._earlyKeyCount = true;
+				}
+			}
+		}
+		const numGuard = isNum ? "" : `typeof ${v}==='number'&&isFinite(${v})&&`;
+		if (schema.minimum !== void 0) lines.push(`if(${numGuard}${v}<${schema.minimum})return false`);
+		if (schema.maximum !== void 0) lines.push(`if(${numGuard}${v}>${schema.maximum})return false`);
+		if (schema.exclusiveMinimum !== void 0) lines.push(`if(${numGuard}${v}<=${schema.exclusiveMinimum})return false`);
+		if (schema.exclusiveMaximum !== void 0) lines.push(`if(${numGuard}${v}>=${schema.exclusiveMaximum})return false`);
+		if (schema.multipleOf !== void 0) {
+			const m = schema.multipleOf;
+			const bad = `(${multipleOfBad(v, m)})`;
+			lines.push(`if(${numGuard}${bad})return false`);
+		}
+		if (schema.minLength !== void 0 && schema.maxLength !== void 0) {
+			const M = schema.minLength;
+			const X = schema.maxLength;
+			const lv = `_l${ctx.varCounter++}`;
+			const body = `{const ${lv}=${v}.length;if(${lv}<${M}||${lv}>${X * 2})return false;if(${lv}<${M * 2}||${lv}>${X}){const _cp=_cpLen(${v});if(_cp<${M}||_cp>${X})return false}}`;
+			lines.push(isStr ? body : `if(typeof ${v}==='string')${body}`);
+		} else {
+			if (schema.minLength !== void 0 && schema.minLength > 0) {
+				const M = schema.minLength;
+				const body = M === 1 ? `if(${v}.length<1)return false` : `if(${v}.length<${M})return false;if(${v}.length<${M * 2}&&_cpLen(${v})<${M})return false`;
+				lines.push(isStr ? body : `if(typeof ${v}==='string'){${body}}`);
+			}
+			if (schema.maxLength !== void 0) {
+				const X = schema.maxLength;
+				const body = X === 0 ? `if(${v}.length>0)return false` : `if(${v}.length>${X * 2})return false;if(${v}.length>${X}&&_cpLen(${v})>${X})return false`;
+				lines.push(isStr ? body : `if(typeof ${v}==='string'){${body}}`);
+			}
+		}
+		if (schema.minItems !== void 0) lines.push(isArr ? `if(${v}.length<${schema.minItems})return false` : `if(Array.isArray(${v})&&${v}.length<${schema.minItems})return false`);
+		if (schema.maxItems !== void 0) lines.push(isArr ? `if(${v}.length>${schema.maxItems})return false` : `if(Array.isArray(${v})&&${v}.length>${schema.maxItems})return false`);
+		if (schema.minProperties !== void 0) lines.push(`if(${objGuard}Object.keys(${v}).length<${schema.minProperties})return false`);
+		if (schema.maxProperties !== void 0) lines.push(`if(${objGuard}Object.keys(${v}).length>${schema.maxProperties})return false`);
+		if (schema.pattern) {
+			const inlineCheck = compilePatternInline(schema.pattern, v);
+			if (inlineCheck) lines.push(isStr ? `if(!(${inlineCheck}))return false` : `if(typeof ${v}==='string'&&!(${inlineCheck}))return false`);
+			else {
+				const pattern = JSON.stringify(schema.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(schema.pattern)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const ri = ctx.regExpMap.get(pattern);
+				lines.push(isStr ? `if(!_re${ri}.test(${v}))return false` : `if(typeof ${v}==='string'&&!_re${ri}.test(${v}))return false`);
+			}
+		}
+		if (schema.format) {
+			const fc = FORMAT_CODEGEN[schema.format];
+			if (fc) lines.push(fc(v, isStr, ctx));
+			else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
+				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (!ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
+				const guard = isStr ? "" : `typeof ${v}==='string'&&`;
+				lines.push(`if(${guard}!${closureName}(${v}))return false`);
+			}
+		}
+		if (schema.uniqueItems) {
+			const si = ctx.varCounter++;
+			const itemType = schema.items && typeof schema.items === "object" && schema.items.type;
+			const isPrimItems = itemType === "string" || itemType === "number" || itemType === "integer";
+			const maxItems = schema.maxItems;
+			let inner;
+			if (isPrimItems && maxItems && maxItems <= 16) inner = `for(let _i=1;_i<${v}.length;_i++){for(let _k=0;_k<_i;_k++){if(${v}[_i]===${v}[_k])return false}}`;
+			else if (isPrimItems) inner = `const _s${si}=new Set();for(let _i=0;_i<${v}.length;_i++){if(_s${si}.has(${v}[_i]))return false;_s${si}.add(${v}[_i])}`;
+			else if (ctx.preamble) inner = `if(!${emitUq(ctx)}(${v}))return false`;
+			else inner = `const _cn${si}=function(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn${si}).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn${si}(x[k])}).join(',')+'}'};const _s${si}=new Set();for(let _i=0;_i<${v}.length;_i++){const _k=_cn${si}(${v}[_i]);if(_s${si}.has(_k))return false;_s${si}.add(_k)}`;
+			lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
+		}
+		if (schema.additionalProperties === false && schema.properties && !schema.patternProperties) {
+			const propCount = Object.keys(schema.properties).length;
+			const inner = schema.required && schema.required.length === propCount ? propCount <= 15 ? `var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount})return false` : `if(Object.keys(${v}).length!==${propCount})return false` : apMembershipCheck(ctx, Object.keys(schema.properties), v);
+			_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+		}
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null && !schema.patternProperties) {
+			const declared = schema.properties ? Object.keys(schema.properties) : [];
+			const skipCheck = declared.length === 0 ? null : declared.map((k) => `_k===${JSON.stringify(k)}`).join("||");
+			const subLines = [];
+			genCode(schema.additionalProperties, "_av", subLines, ctx);
+			if (subLines.length > 0) {
+				const body = subLines.join(";");
+				const loop = skipCheck ? `for(var _k in ${v}){if(${skipCheck})continue;const _av=${v}[_k];${body}}` : `for(var _k in ${v}){const _av=${v}[_k];${body}}`;
+				_deferOrInline(ctx, lines, v, isObj ? loop : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${loop}}`);
+			}
+		}
+		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) {
+			const depChecks = deps.map((d) => `!('${esc(d)}' in ${v})`).join("||");
+			lines.push(`if(${objGuard}'${esc(key)}' in ${v}&&(${depChecks}))return false`);
+		}
+		if (schema.patternProperties) {
+			const ppEntries = Object.entries(schema.patternProperties);
+			const pn = schema.propertyNames && typeof schema.propertyNames === "object" ? schema.propertyNames : null;
+			const pi = ctx.varCounter++;
+			const kVar = `_ppk${pi}`;
+			const matchers = [];
+			for (const [pat] of ppEntries) {
+				const fast = fastPrefixCheck(pat, kVar);
+				if (fast) matchers.push({ check: fast });
+				else {
+					const ri = ctx.varCounter++;
+					ctx.closureVars.push(`_re${ri}`);
+					ctx.closureVals.push(safeReClosure(ctx, pat));
+					matchers.push({ check: `_re${ri}.test(${kVar})` });
+				}
+			}
+			for (let i = 0; i < ppEntries.length; i++) {
+				const [, sub] = ppEntries[i];
+				const subLines = [];
+				genCode(sub, `_ppv`, subLines, ctx);
+				const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+				const fnVar = `_ppf${pi}_${i}`;
+				ctx.closureVars.push(fnVar);
+				ctx.closureVals.push(new Function("_ppv", fnBody));
+			}
+			const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+			const apSchema = typeof schema.additionalProperties === "object" && schema.additionalProperties !== null ? schema.additionalProperties : null;
+			if (schema.additionalProperties === false && schema.properties || apSchema) {
+				ctx._ppHandledAdditional = true;
+				ctx._ppHandledPropertyNames = !!pn;
+				const propKeys = Object.keys(schema.properties || {});
+				let apFn = null;
+				if (apSchema) {
+					const apLines = [];
+					genCode(apSchema, "_apv", apLines, ctx);
+					apFn = `_apf${pi}`;
+					ctx.closureVars.push(apFn);
+					ctx.closureVals.push(new Function("_apv", apLines.length === 0 ? "return true" : `${apLines.join(";")};return true`));
+				}
+				lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+				if (pn) {
+					if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength})return false`);
+					if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength})return false`);
+					if (pn.pattern) {
+						const fast = fastPrefixCheck(pn.pattern, kVar);
+						if (fast) lines.push(`if(!(${fast}))return false`);
+						else {
+							const ri = ctx.varCounter++;
+							ctx.closureVars.push(`_re${ri}`);
+							ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+							lines.push(`if(!_re${ri}.test(${kVar}))return false`);
+						}
+					}
+					if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)})return false`);
+					if (pn.enum) {
+						const ei = ctx.varCounter++;
+						ctx.closureVars.push(`_es${ei}`);
+						ctx.closureVals.push(new Set(pn.enum));
+						lines.push(`if(!_es${ei}.has(${kVar}))return false`);
+					}
+				}
+				if (ppEntries.length > 0) {
+					lines.push(`let _pm${pi}=false`);
+					for (let i = 0; i < ppEntries.length; i++) lines.push(`if(${matchers[i].check}){_pm${pi}=true;if(!_ppf${pi}_${i}(${v}[${kVar}]))return false}`);
+				}
+				const additional = apFn ? `if(!${apFn}(${v}[${kVar}]))return false` : `return false`;
+				const notMatched = ppEntries.length > 0 ? `if(!_pm${pi}){${additional}}` : additional;
+				if (propKeys.length) {
+					const switchCases = propKeys.map((k) => `case ${JSON.stringify(k)}:`).join("");
+					lines.push(`switch(${kVar}){${switchCases}break;default:{${notMatched}}}`);
+				} else lines.push(notMatched);
+				lines.push(`}}`);
+			} else {
+				ctx._ppHandledPropertyNames = !!pn;
+				lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+				if (pn) {
+					if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength})return false`);
+					if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength})return false`);
+					if (pn.pattern) {
+						const fast = fastPrefixCheck(pn.pattern, kVar);
+						if (fast) lines.push(`if(!(${fast}))return false`);
+						else {
+							const ri = ctx.varCounter++;
+							ctx.closureVars.push(`_re${ri}`);
+							ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+							lines.push(`if(!_re${ri}.test(${kVar}))return false`);
+						}
+					}
+					if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)})return false`);
+					if (pn.enum) {
+						const ei = ctx.varCounter++;
+						ctx.closureVars.push(`_es${ei}`);
+						ctx.closureVals.push(new Set(pn.enum));
+						lines.push(`if(!_es${ei}.has(${kVar}))return false`);
+					}
+				}
+				for (let i = 0; i < ppEntries.length; i++) lines.push(`if(${matchers[i].check}&&!_ppf${pi}_${i}(${v}[${kVar}]))return false`);
+				lines.push(`}}`);
+			}
+		}
+		if (schema.dependentSchemas) for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
+			const guard = isObj ? "" : `typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&`;
+			lines.push(`if(${guard}${JSON.stringify(key)} in ${v}){`);
+			ctx.condDepth = (ctx.condDepth || 0) + 1;
+			genCode(depSchema, v, lines, ctx, effectiveType);
+			ctx.condDepth--;
+			lines.push(`}`);
+		}
+		if (schema.propertyNames === false) lines.push(isObj ? `for(const _k in ${v})return false` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k in ${v})return false}`);
+		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ctx._ppHandledPropertyNames) {
+			const pn = schema.propertyNames;
+			const ki = ctx.varCounter++;
+			const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+			lines.push(`${guard}{for(const _k${ki} in ${v}){`);
+			if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength})return false`);
+			if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength})return false`);
+			if (pn.pattern) {
+				const fast = fastPrefixCheck(pn.pattern, `_k${ki}`);
+				if (fast) lines.push(`if(!(${fast}))return false`);
+				else {
+					const ri = ctx.varCounter++;
+					ctx.closureVars.push(`_re${ri}`);
+					ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+					lines.push(`if(!_re${ri}.test(_k${ki}))return false`);
+				}
+			}
+			if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)})return false`);
+			if (pn.enum) {
+				const ei = ctx.varCounter++;
+				ctx.closureVars.push(`_es${ei}`);
+				ctx.closureVals.push(new Set(pn.enum));
+				lines.push(`if(!_es${ei}.has(_k${ki}))return false`);
+			}
+			lines.push(`}}`);
+		}
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) if (requiredSet.has(key) && isObj) {
+			const access = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
+			const combined = tryGenCombined(prop, access, ctx);
+			if (combined) lines.push(combined);
+			else if (needsLocal(prop)) {
+				const local = `_r${ctx.varCounter++}`;
+				lines.push(`{const ${local}=${access}`);
+				genCode(prop, local, lines, ctx);
+				lines.push(`}`);
+			} else genCode(prop, access, lines, ctx);
+		} else if (isObj) {
+			const local = `_o${ctx.varCounter++}`;
+			lines.push(`{const ${local}=${v}[${JSON.stringify(key)}];if(${local}!==undefined){`);
+			const combined = tryGenCombined(prop, local, ctx);
+			if (combined) lines.push(combined);
+			else genCode(prop, local, lines, ctx);
+			lines.push(`}}`);
+		} else {
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}){`);
+			genCode(prop, `${v}[${JSON.stringify(key)}]`, lines, ctx);
+			lines.push(`}`);
+		}
+		if (schema.items !== void 0 && schema.items !== true) {
+			const idx = `_j${ctx.varCounter}`;
+			const elem = `_e${ctx.varCounter}`;
+			ctx.varCounter++;
+			const start = Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+			lines.push(isArr ? `for(let ${idx}=${start};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]` : `if(Array.isArray(${v})){for(let ${idx}=${start};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
+			genCode(schema.items, elem, lines, ctx);
+			lines.push(isArr ? `}` : `}}`);
+		}
+		if (schema.prefixItems) {
+			const pfxVar = ctx.varCounter++;
+			for (let i = 0; i < schema.prefixItems.length; i++) {
+				const elem = `_p${pfxVar}_${i}`;
+				lines.push(isArr ? `if(${v}.length>${i}){const ${elem}=${v}[${i}]` : `if(Array.isArray(${v})&&${v}.length>${i}){const ${elem}=${v}[${i}]`);
+				genCode(schema.prefixItems[i], elem, lines, ctx);
+				lines.push(`}`);
+			}
+		}
+		if (schema.contains !== void 0) {
+			const ci = ctx.varCounter++;
+			const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+			const maxC = schema.maxContains !== void 0 ? schema.maxContains : Infinity;
+			const subLines = [];
+			genCode(schema.contains, `_cv`, subLines, ctx);
+			const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+			const guard = isArr ? "" : `if(!Array.isArray(${v})){}else `;
+			lines.push(`${guard}{const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0`);
+			lines.push(`for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
+			if (maxC === Infinity) lines.push(`if(_cc${ci}<${minC})return false}`);
+			else lines.push(`if(_cc${ci}<${minC}||_cc${ci}>${maxC})return false}`);
+		}
+		if (schema.allOf) for (const sub of schema.allOf) genCode(sub, v, lines, ctx, effectiveType);
+		if (schema.anyOf && schema.unevaluatedProperties === void 0) {
+			const fi = ctx.varCounter++;
+			const branchBodies = [];
+			let canHoist = !!ctx.preamble;
+			for (let i = 0; i < schema.anyOf.length; i++) {
+				const subLines = [];
+				genCode(schema.anyOf[i], "_av", subLines, ctx);
+				const body = subLines.length === 0 ? "return true" : `${subLines.join(";")};return true`;
+				if (/\b_validate\b/.test(body)) canHoist = false;
+				branchBodies.push(body);
+			}
+			if (canHoist) {
+				const checks = branchBodies.map((body, i) => {
+					const name = `_af${fi}_b${i}`;
+					ctx.preamble.push(`function ${name}(_av){${body}}`);
+					return name;
+				}).map((n) => `${n}(${v})`).join("||");
+				lines.push(`if(!(${checks}))return false`);
+			} else {
+				const fns = branchBodies.map((body) => `function(_av){${body}}`);
+				lines.push(`{const _af${fi}=[${fns.join(",")}];let _am${fi}=false;for(let _ai=0;_ai<_af${fi}.length;_ai++){if(_af${fi}[_ai](${v})){_am${fi}=true;break}}if(!_am${fi})return false}`);
+			}
+		}
+		if (schema.oneOf) {
+			const fi = ctx.varCounter++;
+			const branchBodies = [];
+			let canHoist = !!ctx.preamble;
+			for (let i = 0; i < schema.oneOf.length; i++) {
+				const subLines = [];
+				genCode(schema.oneOf[i], "_ov", subLines, ctx);
+				const body = subLines.length === 0 ? "return true" : `${subLines.join(";")};return true`;
+				if (/\b_validate\b/.test(body)) canHoist = false;
+				branchBodies.push(body);
+			}
+			if (canHoist) {
+				const calls = branchBodies.map((body, i) => {
+					const name = `_of${fi}_b${i}`;
+					ctx.preamble.push(`function ${name}(_ov){${body}}`);
+					return name;
+				}).map((n) => `if(${n}(${v})){_oc${fi}++;if(_oc${fi}>1)return false}`).join(";");
+				lines.push(`{let _oc${fi}=0;${calls};if(_oc${fi}!==1)return false}`);
+			} else {
+				const fns = branchBodies.map((body) => `function(_ov){${body}}`);
+				lines.push(`{const _of${fi}=[${fns.join(",")}];let _oc${fi}=0;for(let _oi=0;_oi<_of${fi}.length;_oi++){if(_of${fi}[_oi](${v}))_oc${fi}++;if(_oc${fi}>1)return false}if(_oc${fi}!==1)return false}`);
+			}
+		}
+		if (schema.not !== void 0) {
+			const subLines = [];
+			genCode(schema.not, "_nv", subLines, ctx);
+			if (subLines.length === 0) lines.push(`return false`);
+			else {
+				const fi = ctx.varCounter++;
+				lines.push(`{const _nf${fi}=(function(_nv){${subLines.join(";")};return true});if(_nf${fi}(${v}))return false}`);
+			}
+		}
+		if (schema.if !== void 0) {
+			const ifLines = [];
+			genCode(schema.if, "_iv", ifLines, ctx);
+			const fi = ctx.varCounter++;
+			const ifFn = ifLines.length === 0 ? `function(_iv){return true}` : `function(_iv){${ifLines.join(";")};return true}`;
+			let thenFn = "null", elseFn = "null";
+			if (schema.then !== void 0) {
+				const thenLines = [];
+				genCode(schema.then, "_tv", thenLines, ctx);
+				thenFn = thenLines.length === 0 ? `function(_tv){return true}` : `function(_tv){${thenLines.join(";")};return true}`;
+			}
+			if (schema.else !== void 0) {
+				const elseLines = [];
+				genCode(schema.else, "_ev", elseLines, ctx);
+				elseFn = elseLines.length === 0 ? `function(_ev){return true}` : `function(_ev){${elseLines.join(";")};return true}`;
+			}
+			lines.push(`{const _if${fi}=${ifFn};const _th${fi}=${thenFn};const _el${fi}=${elseFn}`);
+			lines.push(`if(_if${fi}(${v})){if(_th${fi}&&!_th${fi}(${v}))return false}else{if(_el${fi}&&!_el${fi}(${v}))return false}}`);
+		}
+		if (schema.unevaluatedProperties !== void 0) {
+			const evalResult = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
+			if (evalResult.allProps || schema.unevaluatedProperties === true) {} else if (!evalResult.dynamic) {
+				const knownKeys = evalResult.props;
+				const propCount = knownKeys.length;
+				if (schema.unevaluatedProperties === false) {
+					const allRequired = schema.required && schema.required.length >= propCount && knownKeys.every((k) => schema.required.includes(k));
+					let inner;
+					if (allRequired && propCount > 0) {
+						if (!ctx._earlyKeyCount) {
+							inner = propCount <= 15 ? `var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount})return false` : `if(Object.keys(${v}).length!==${propCount})return false`;
+							_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+						}
+					} else if (propCount > 0) {
+						inner = propCount >= AP_LOOKUP_MIN ? apMembershipCheck(ctx, knownKeys, v) : genCharCodeSwitch(knownKeys, v);
+						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+					} else {
+						inner = `for(var _k in ${v})return false`;
+						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+					}
+				} else if (typeof schema.unevaluatedProperties === "object") {
+					const ukVar = `_uk${ctx.varCounter++}`;
+					const subLines = [];
+					genCode(schema.unevaluatedProperties, `${v}[${ukVar}]`, subLines, ctx);
+					if (subLines.length > 0) {
+						const check = subLines.join(";");
+						let skipKnown = "";
+						if (knownKeys.length >= AP_LOOKUP_MIN) {
+							const id = emitNameLookup(ctx, knownKeys);
+							skipKnown = id !== null ? `if(${id}[${ukVar}]!==undefined)continue;` : `if(${knownKeys.map((k) => `${ukVar}===${JSON.stringify(k)}`).join("||")})continue;`;
+						} else if (knownKeys.length > 0) skipKnown = `if(${knownKeys.map((k) => `${ukVar}===${JSON.stringify(k)}`).join("||")})continue;`;
+						const inner = `for(var ${ukVar} in ${v}){${skipKnown}${check}}`;
+						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+					}
+				}
+			} else {
+				const baseResult = {
+					props: [],
+					items: null,
+					allProps: false,
+					allItems: false,
+					dynamic: false
+				};
+				if (schema.properties) {
+					for (const k of Object.keys(schema.properties)) if (!baseResult.props.includes(k)) baseResult.props.push(k);
+				}
+				if (schema.allOf) for (const sub of schema.allOf) {
+					const subR = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+					if (!subR.dynamic && subR.props) {
+						for (const k of subR.props) if (!baseResult.props.includes(k)) baseResult.props.push(k);
+					}
+				}
+				const baseProps = baseResult.props;
+				const branchKeyword = schema.anyOf ? "anyOf" : schema.oneOf ? "oneOf" : null;
+				if (schema.unevaluatedProperties === false) {
+					if (schema.if && (schema.then || schema.else) && !branchKeyword && !schema.patternProperties && !schema.dependentSchemas) {
+						const ifLines2 = [];
+						genCode(schema.if, "_iv2", ifLines2, ctx);
+						const ufi = ctx.varCounter++;
+						const ifFn2 = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
+						const ifProps = [];
+						if (schema.if && schema.if.properties) ifProps.push(...Object.keys(schema.if.properties));
+						const thenEval = schema.then ? collectEvaluated(schema.then, ctx.schemaMap, ctx.rootDefs) : { props: [] };
+						const elseEval = schema.else ? collectEvaluated(schema.else, ctx.schemaMap, ctx.rootDefs) : { props: [] };
+						const uniqueThen = [.../* @__PURE__ */ new Set([
+							...baseProps,
+							...ifProps,
+							...thenEval.props || []
+						])];
+						const uniqueElse = [.../* @__PURE__ */ new Set([...baseProps, ...elseEval.props || []])];
+						const thenCheck = genCharCodeSwitch(uniqueThen, v);
+						const elseCheck = genCharCodeSwitch(uniqueElse, v);
+						const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+						lines.push(`${guard}{const _uif${ufi}=${ifFn2};if(_uif${ufi}(${v})){${thenCheck}}else{${elseCheck}}}`);
+					} else if (branchKeyword) {
+						const branches = schema[branchKeyword];
+						const branchProps = [];
+						for (const sub of branches) {
+							const subResult = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+							branchProps.push(subResult.props || []);
+						}
+						const dynamicOnly = [...new Set(branchProps.flat())].filter((k) => !baseProps.includes(k));
+						if (dynamicOnly.length > 0 && dynamicOnly.length <= 32) {
+							const evVar = `_ev${ctx.varCounter++}`;
+							const bitMap = /* @__PURE__ */ new Map();
+							dynamicOnly.forEach((k, i) => bitMap.set(k, i));
+							const branchMasks = branchProps.map((props) => {
+								let mask = 0;
+								for (const p of props) if (bitMap.has(p)) mask |= 1 << bitMap.get(p);
+								return mask;
+							});
+							const bfi = ctx.varCounter++;
+							lines.push(`{let ${evVar}=0`);
+							const fnVars = [];
+							for (let i = 0; i < branches.length; i++) {
+								const subLines2 = [];
+								genCode(branches[i], "_bv", subLines2, ctx);
+								const fnVar = `_bf${bfi}_${i}`;
+								fnVars.push(fnVar);
+								const fnBody = subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`;
+								lines.push(`const ${fnVar}=${fnBody}`);
+							}
+							if (branchKeyword === "oneOf") {
+								lines.push(`let _oc${bfi}=0`);
+								for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_oc${bfi}++;${evVar}=${branchMasks[i]};if(_oc${bfi}>1)return false}`);
+								lines.push(`if(_oc${bfi}!==1)return false`);
+							} else {
+								lines.push(`let _am${bfi}=false`);
+								for (let i = 0; i < branches.length; i++) lines.push(`if(${fnVars[i]}(${v})){_am${bfi}=true;${evVar}|=${branchMasks[i]}}`);
+								lines.push(`if(!_am${bfi})return false`);
+							}
+							const staticCheck = baseProps.length > 0 ? baseProps.map((k) => `_k===${JSON.stringify(k)}`).join("||") : "";
+							const groups = /* @__PURE__ */ new Map();
+							for (const k of dynamicOnly) {
+								const cc = k.charCodeAt(0);
+								if (!groups.has(cc)) groups.set(cc, []);
+								groups.get(cc).push(k);
+							}
+							let switchCases = "";
+							for (const [cc, groupKeys] of groups) {
+								const cond = groupKeys.map((k) => `_k===${JSON.stringify(k)}&&(${evVar}&${1 << bitMap.get(k)})`).join("||");
+								switchCases += `case ${cc}:if(${cond})continue;break;`;
+							}
+							const dynamicCheck = `switch(_k.charCodeAt(0)){${switchCases}default:break}`;
+							const inner = staticCheck ? `for(var _k in ${v}){if(${staticCheck})continue;${dynamicCheck}return false}` : `for(var _k in ${v}){${dynamicCheck}return false}`;
+							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+						} else {
+							const evVar = `_ev${ctx.varCounter++}`;
+							const fns = [];
+							for (let i = 0; i < branches.length; i++) {
+								const subLines2 = [];
+								genCode(branches[i], "_bv", subLines2, ctx);
+								fns.push(subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`);
+							}
+							const bfi = ctx.varCounter++;
+							ctx.closureVars.push(`_bk${bfi}`);
+							ctx.closureVals.push(branchProps);
+							lines.push(`{const ${evVar}={}`);
+							for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+							lines.push(`const _bf${bfi}=[${fns.join(",")}]`);
+							if (branchKeyword === "oneOf") lines.push(`let _oc${bfi}=0;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_oc${bfi}++;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1;if(_oc${bfi}>1)return false}}if(_oc${bfi}!==1)return false`);
+							else lines.push(`let _am${bfi}=false;for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){_am${bfi}=true;for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1}}if(!_am${bfi})return false`);
+							const inner = `for(var _k in ${v}){if(!${evVar}[_k])return false}`;
+							_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+						}
+					} else if (schema.dependentSchemas) {
+						const evVar = `_ev${ctx.varCounter++}`;
+						lines.push(`{const ${evVar}={}`);
+						for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+						for (const [trigger, depSchema] of Object.entries(schema.dependentSchemas)) {
+							const depResult = collectEvaluated(depSchema, ctx.schemaMap, ctx.rootDefs);
+							if (depResult.props && depResult.props.length > 0) lines.push(`if(${JSON.stringify(trigger)} in ${v}){${depResult.props.map((k) => `${evVar}[${JSON.stringify(k)}]=1`).join(";")}}`);
+						}
+						const inner = `for(var _k in ${v}){if(!${evVar}[_k])return false}`;
+						_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+					} else {
+						const allPatterns = [];
+						if (schema.patternProperties) allPatterns.push(...Object.keys(schema.patternProperties));
+						if (schema.allOf) {
+							for (const sub of schema.allOf) if (sub && sub.patternProperties) allPatterns.push(...Object.keys(sub.patternProperties));
+						}
+						if (schema.if && !schema.then && !schema.else && schema.if.patternProperties) allPatterns.push(...Object.keys(schema.if.patternProperties));
+						if (allPatterns.length > 0) {
+							const evVar = `_ev${ctx.varCounter++}`;
+							lines.push(`{const ${evVar}={}`);
+							for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+							const reVars = [];
+							for (const pat of allPatterns) {
+								const ri = ctx.varCounter++;
+								ctx.closureVars.push(`_ure${ri}`);
+								ctx.closureVals.push(safeReClosure(ctx, pat));
+								reVars.push(`_ure${ri}`);
+							}
+							if (schema.if && !schema.then && !schema.else) {
+								const ifLines2 = [];
+								genCode(schema.if, "_iv2", ifLines2, ctx);
+								const ufi = ctx.varCounter++;
+								const ifFn = ifLines2.length === 0 ? `function(_iv2){return true}` : `function(_iv2){${ifLines2.join(";")};return true}`;
+								const ifPatterns = schema.if.patternProperties ? Object.keys(schema.if.patternProperties) : [];
+								const ifReVars = [];
+								for (const pat of ifPatterns) {
+									const ri = ctx.varCounter++;
+									ctx.closureVars.push(`_ure${ri}`);
+									ctx.closureVals.push(safeReClosure(ctx, pat));
+									ifReVars.push(`_ure${ri}`);
+								}
+								const rootReVars = [];
+								if (schema.patternProperties) for (const pat of Object.keys(schema.patternProperties)) {
+									const ri = ctx.varCounter++;
+									ctx.closureVars.push(`_ure${ri}`);
+									ctx.closureVals.push(safeReClosure(ctx, pat));
+									rootReVars.push(`_ure${ri}`);
+								}
+								const rootPatCheck = rootReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("");
+								const inner = `const _uif${ufi}=${ifFn};if(_uif${ufi}(${v})){for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}${ifReVars.map((rv) => `if(${rv}.test(_k))continue;`).join("")}return false}}else{for(var _k in ${v}){if(${evVar}[_k])continue;${rootPatCheck}return false}}`;
+								_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+							} else {
+								const inner = `for(var _k in ${v}){if(${evVar}[_k])continue;${reVars.map((rv) => `if(${rv}.test(_k)){${evVar}[_k]=1;continue}`).join("")}return false}`;
+								_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+							}
+						}
+					}
+				} else if (typeof schema.unevaluatedProperties === "object") {
+					const ei = ctx.varCounter++;
+					const evVar = `_ev${ei}`;
+					const ukVar = `_uk${ei}`;
+					lines.push(`{const ${evVar}={}`);
+					for (const k of baseProps) lines.push(`${evVar}[${JSON.stringify(k)}]=1`);
+					if (branchKeyword) {
+						const branches = schema[branchKeyword];
+						const branchProps = [];
+						for (const sub of branches) {
+							const subResult = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+							branchProps.push(subResult.props || []);
+						}
+						const fns = [];
+						for (let i = 0; i < branches.length; i++) {
+							const subLines2 = [];
+							genCode(branches[i], "_bv", subLines2, ctx);
+							fns.push(subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`);
+						}
+						const bfi = ctx.varCounter++;
+						ctx.closureVars.push(`_bk${bfi}`);
+						ctx.closureVals.push(branchProps);
+						lines.push(`const _bf${bfi}=[${fns.join(",")}]`);
+						if (branchKeyword === "oneOf") lines.push(`for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1;break}}`);
+						else lines.push(`for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){for(const _p of _bk${bfi}[_bi])${evVar}[_p]=1}}`);
+					}
+					const subLines2 = [];
+					genCode(schema.unevaluatedProperties, `${v}[${ukVar}]`, subLines2, ctx);
+					if (subLines2.length > 0) {
+						const inner = `for(var ${ukVar} in ${v}){if(${evVar}[${ukVar}])continue;${subLines2.join(";")}}`;
+						_deferOrInline(ctx, lines, v, isObj ? inner + "}" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}}`);
+					} else lines.push("}");
+				}
+			}
+		}
+		if (schema.unevaluatedItems !== void 0) {
+			const evalResult = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
+			const branchKw = schema.anyOf ? "anyOf" : schema.oneOf ? "oneOf" : null;
+			const hasConditionalItems = evalResult.allItems && evalResult.dynamic && branchKw && schema[branchKw].some((sub) => sub && typeof sub === "object" && (sub.items && typeof sub.items === "object" || sub.items === true));
+			if (schema.unevaluatedItems === true || evalResult.allItems && !hasConditionalItems) {} else if (!evalResult.dynamic) {
+				if (schema.unevaluatedItems === false) {
+					const inner = `if(${v}.length>${evalResult.items || 0})return false`;
+					_deferOrInline(ctx, lines, v, isArr ? inner : `if(Array.isArray(${v})){${inner}}`);
+				} else if (typeof schema.unevaluatedItems === "object") {
+					const maxIdx = evalResult.items || 0;
+					const ui = ctx.varCounter++;
+					const elemVar = `_ue${ui}`;
+					const idxVar = `_ui${ui}`;
+					const subLines = [];
+					genCode(schema.unevaluatedItems, elemVar, subLines, ctx);
+					if (subLines.length > 0) {
+						const inner = `for(let ${idxVar}=${maxIdx};${idxVar}<${v}.length;${idxVar}++){const ${elemVar}=${v}[${idxVar}];${subLines.join(";")}}`;
+						_deferOrInline(ctx, lines, v, isArr ? inner : `if(Array.isArray(${v})){${inner}}`);
+					}
+				}
+			} else {
+				let baseIdx = 0;
+				if (schema.prefixItems) baseIdx = Math.max(baseIdx, schema.prefixItems.length);
+				if (schema.items && typeof schema.items === "object") baseIdx = Infinity;
+				if (schema.allOf) for (const sub of schema.allOf) {
+					const subR = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+					if (subR.items !== null) baseIdx = Math.max(baseIdx, subR.items);
+					if (subR.allItems) baseIdx = Infinity;
+				}
+				if (baseIdx === Infinity) baseIdx = 0;
+				const branchKeyword = schema.anyOf ? "anyOf" : schema.oneOf ? "oneOf" : null;
+				if (branchKeyword && (schema.unevaluatedItems === false || typeof schema.unevaluatedItems === "object")) {
+					const branches = schema[branchKeyword];
+					const branchMaxIdx = [];
+					const branchAllItems = [];
+					for (const sub of branches) {
+						const subR = collectEvaluated(sub, ctx.schemaMap, ctx.rootDefs);
+						branchMaxIdx.push(subR.items || 0);
+						branchAllItems.push(subR.allItems);
+					}
+					const fns = [];
+					for (let i = 0; i < branches.length; i++) {
+						const subLines2 = [];
+						genCode(branches[i], "_bv", subLines2, ctx);
+						fns.push(subLines2.length === 0 ? `function(_bv){return true}` : `function(_bv){${subLines2.join(";")};return true}`);
+					}
+					const bfi = ctx.varCounter++;
+					const evVar = `_eidx${ctx.varCounter++}`;
+					lines.push(`{let ${evVar}=${baseIdx}`);
+					lines.push(`const _bf${bfi}=[${fns.join(",")}]`);
+					const maxExprs = branchMaxIdx.map((m, i) => {
+						if (branchAllItems[i]) return `_bi===${i}?${v}.length`;
+						return `_bi===${i}?${Math.max(m, baseIdx)}`;
+					}).join(":") + `:${baseIdx}`;
+					if (branchKeyword === "oneOf") lines.push(`for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){${evVar}=${maxExprs};break}}`);
+					else lines.push(`for(let _bi=0;_bi<_bf${bfi}.length;_bi++){if(_bf${bfi}[_bi](${v})){const _m=${maxExprs};if(_m>${evVar})${evVar}=_m}}`);
+					if (schema.unevaluatedItems === false) {
+						const inner = `if(${v}.length>${evVar})return false`;
+						_deferOrInline(ctx, lines, v, isArr ? inner + "}" : `if(Array.isArray(${v})){${inner}}}`);
+					} else {
+						const ui = ctx.varCounter++;
+						const elemVar = `_ue${ui}`;
+						const idxVar = `_ui${ui}`;
+						const subLines = [];
+						genCode(schema.unevaluatedItems, elemVar, subLines, ctx);
+						if (subLines.length > 0) {
+							const inner = `for(let ${idxVar}=${evVar};${idxVar}<${v}.length;${idxVar}++){const ${elemVar}=${v}[${idxVar}];${subLines.join(";")}}`;
+							_deferOrInline(ctx, lines, v, isArr ? inner + "}" : `if(Array.isArray(${v})){${inner}}}`);
+						} else lines.push("}");
+					}
+				} else if (schema.if && (schema.unevaluatedItems === false || typeof schema.unevaluatedItems === "object")) {
+					const ifEval = collectEvaluated(schema.if, ctx.schemaMap, ctx.rootDefs);
+					const thenEval = schema.then ? collectEvaluated(schema.then, ctx.schemaMap, ctx.rootDefs) : { items: null };
+					const elseEval = schema.else ? collectEvaluated(schema.else, ctx.schemaMap, ctx.rootDefs) : { items: null };
+					const ifIdx = ifEval.items || 0;
+					const thenIdx = Math.max(baseIdx, ifIdx, thenEval.items || 0);
+					const elseIdx = Math.max(baseIdx, elseEval.items || 0);
+					const ifLines2 = [];
+					genCode(schema.if, "_iv3", ifLines2, ctx);
+					const ufi = ctx.varCounter++;
+					const ifFn3 = ifLines2.length === 0 ? `function(_iv3){return true}` : `function(_iv3){${ifLines2.join(";")};return true}`;
+					if (schema.unevaluatedItems === false) {
+						const guard = isArr ? "" : `if(Array.isArray(${v}))`;
+						lines.push(`${guard}{const _uif${ufi}=${ifFn3};if(_uif${ufi}(${v})){if(${v}.length>${thenIdx})return false}else{if(${v}.length>${elseIdx})return false}}`);
+					}
+				} else if ((schema.contains || schema.allOf && schema.allOf.some((s) => s && s.contains)) && (schema.unevaluatedItems === false || typeof schema.unevaluatedItems === "object")) {
+					const allContains = [];
+					if (schema.contains) allContains.push(schema.contains);
+					if (schema.allOf) {
+						for (const sub of schema.allOf) if (sub && sub.contains) allContains.push(sub.contains);
+					}
+					const ci = ctx.varCounter++;
+					const evArr = `_cev${ci}`;
+					const containsFns = [];
+					for (const c of allContains) {
+						const cLines = [];
+						genCode(c, "_cv", cLines, ctx);
+						containsFns.push(cLines.length === 0 ? `function(_cv){return true}` : `function(_cv){${cLines.join(";")};return true}`);
+					}
+					const cfnArr = `_cfn${ci}`;
+					lines.push(`{const ${cfnArr}=[${containsFns.join(",")}]`);
+					lines.push(`const ${evArr}=[]`);
+					if (baseIdx > 0) lines.push(`for(let _i=0;_i<${Math.min(baseIdx, 1e3)};_i++)${evArr}[_i]=true`);
+					lines.push(`if(Array.isArray(${v})){for(let _ci=0;_ci<${v}.length;_ci++){for(let _cj=0;_cj<${cfnArr}.length;_cj++){if(${cfnArr}[_cj](${v}[_ci])){${evArr}[_ci]=true;break}}}}`);
+					if (schema.unevaluatedItems === false) _deferOrInline(ctx, lines, v, `if(Array.isArray(${v})){for(let _ci=0;_ci<${v}.length;_ci++){if(!${evArr}[_ci])return false}}}`);
+					else {
+						const elemVar = `_ue${ctx.varCounter++}`;
+						const subLines = [];
+						genCode(schema.unevaluatedItems, elemVar, subLines, ctx);
+						if (subLines.length > 0) _deferOrInline(ctx, lines, v, `if(Array.isArray(${v})){for(let _ci=0;_ci<${v}.length;_ci++){if(!${evArr}[_ci]){const ${elemVar}=${v}[_ci];${subLines.join(";")}}}}}`);
+						else lines.push("}");
+					}
+				} else if (schema.unevaluatedItems === false) {
+					const inner = `if(${v}.length>${evalResult.items || 0})return false`;
+					_deferOrInline(ctx, lines, v, isArr ? inner : `if(Array.isArray(${v})){${inner}}`);
+				}
+			}
+		}
+	}
+	const EMAIL_HELPER = `function _em(_s){${_formats.emailSource("_s", true)}return true}`;
+	const URI_HELPER = _formats.uriHelperSource("_uri");
+	const FORMAT_CODEGEN = {
+		email: (v, isStr, ctx) => {
+			if (!ctx) return _formats.emailSource(v, isStr);
+			hoistOnce(ctx, "_emHoisted", EMAIL_HELPER);
+			return isStr ? `if(!_em(${v}))return false` : `if(typeof ${v}==='string'&&!_em(${v}))return false`;
+		},
+		"json-pointer": _formats.jsonPointerSource,
+		"relative-json-pointer": _formats.relativeJsonPointerSource,
+		"uri-template": _formats.uriTemplateSource,
+		iri: _formats.iriSource,
+		"iri-reference": _formats.iriReferenceSource,
+		"idn-email": _formats.idnEmailSource,
+		regex: (v, isStr) => {
+			const inner = `try{new RegExp(${v},'u')}catch(_er){return false}`;
+			return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
+		},
+		date: _formats.dateSource,
+		uuid: _formats.uuidSource,
+		"date-time": _formats.dateTimeSource,
+		time: _formats.timeSource,
+		duration: _formats.durationSource,
+		uri: (v, isStr, ctx) => {
+			if (!ctx) return _formats.uriSource(v, isStr);
+			hoistOnce(ctx, "_uriHoisted", URI_HELPER);
+			return isStr ? `if(!_uri(${v}))return false` : `if(typeof ${v}==='string'&&!_uri(${v}))return false`;
+		},
+		"uri-reference": (v, isStr) => isStr ? `{${_formats.uriCharsSource(v, "0")}}` : `if(typeof ${v}==='string'){${_formats.uriCharsSource(v, "0")}}`,
+		ipv4: _formats.ipv4Source,
+		ipv6: _formats.ipv6Source,
+		hostname: _formats.hostnameSource
+	};
+	function esc(s) {
+		return JSON.stringify(s).slice(1, -1);
+	}
+	function ptrSeg(s) {
+		return s.replace(/~/g, "~0").replace(/\//g, "~1").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+	}
+	function childPathExpr(parentExpr, suffix) {
+		if (!parentExpr) return `'/${suffix}'`;
+		if (parentExpr.startsWith("'") && !parentExpr.includes("+")) return `'${parentExpr.slice(1, -1)}/${suffix}'`;
+		return `${parentExpr}+'/${suffix}'`;
+	}
+	function compilePatternInline(pattern, varName) {
+		let m = pattern.match(/^\^(\[[\w\-]+\])\{(\d+)\}\$$/);
+		if (m) {
+			const len = parseInt(m[2]);
+			if (len <= 16) {
+				const checks = [];
+				for (let i = 0; i < len; i++) {
+					const ck = charClassToCheck(m[1], `${varName}.charCodeAt(${i})`);
+					if (!ck) return null;
+					checks.push(ck);
+				}
+				return `${varName}.length===${len}&&${checks.join("&&")}`;
+			}
+			const rangeCheck = charClassToCheck(m[1], `${varName}.charCodeAt(_pi)`);
+			if (!rangeCheck) return null;
+			return `${varName}.length===${len}&&(()=>{for(let _pi=0;_pi<${len};_pi++){if(!(${rangeCheck}))return false}return true})()`;
+		}
+		m = pattern.match(/^\^(\[[\w\-]+\])\+\$$/);
+		if (m) {
+			const rangeCheck = charClassToCheck(m[1], `${varName}.charCodeAt(_pi)`);
+			if (!rangeCheck) return null;
+			return `${varName}.length>0&&(()=>{for(let _pi=0;_pi<${varName}.length;_pi++){if(!(${rangeCheck}))return false}return true})()`;
+		}
+		m = pattern.match(/^\^(\[[\w\-]+\])\{(\d+),(\d+)\}\$$/);
+		if (m) {
+			const rangeCheck = charClassToCheck(m[1], `${varName}.charCodeAt(_pi)`);
+			if (!rangeCheck) return null;
+			return `${varName}.length>=${parseInt(m[2])}&&${varName}.length<=${parseInt(m[3])}&&(()=>{for(let _pi=0;_pi<${varName}.length;_pi++){if(!(${rangeCheck}))return false}return true})()`;
+		}
+		return null;
+	}
+	function charClassToCheck(charClass, codeExpr) {
+		const inner = charClass.slice(1, -1);
+		const ranges = [];
+		let i = 0;
+		while (i < inner.length) if (i + 2 < inner.length && inner[i + 1] === "-") {
+			ranges.push([inner.charCodeAt(i), inner.charCodeAt(i + 2)]);
+			i += 3;
+		} else {
+			ranges.push([inner.charCodeAt(i), inner.charCodeAt(i)]);
+			i++;
+		}
+		if (ranges.length === 0) return null;
+		return ranges.map(([lo, hi]) => lo === hi ? `${codeExpr}===${lo}` : `(${codeExpr}>=${lo}&&${codeExpr}<=${hi})`).join("||");
+	}
+	function childPathDynExpr(parentExpr, indexExpr) {
+		if (!parentExpr) return `'/'+${indexExpr}`;
+		return `${parentExpr}+'/'+${indexExpr}`;
+	}
+	function unevalContributions(sub, kind, names, state, depth) {
+		if (depth > 24) return false;
+		if (sub === true || sub === false) return true;
+		if (typeof sub !== "object" || sub === null) return false;
+		if (kind === "props") {
+			if (sub.patternProperties !== void 0 || sub.additionalProperties !== void 0 || sub.unevaluatedProperties !== void 0) return false;
+			if (sub.properties !== void 0) {
+				if (typeof sub.properties !== "object" || sub.properties === null) return false;
+				for (const k of Object.keys(sub.properties)) names.add(k);
+			}
+		} else {
+			if (sub.items !== void 0 || sub.additionalItems !== void 0 || sub.contains !== void 0 || sub.unevaluatedItems !== void 0) return false;
+			if (sub.prefixItems !== void 0) {
+				if (!Array.isArray(sub.prefixItems)) return false;
+				if (sub.prefixItems.length > state.prefix) state.prefix = sub.prefixItems.length;
+			}
+		}
+		if (sub.$ref !== void 0 || sub.$dynamicRef !== void 0 || sub.$recursiveRef !== void 0) return false;
+		if (sub.dependentSchemas !== void 0 || sub.dependencies !== void 0) return false;
+		for (const k of [
+			"allOf",
+			"anyOf",
+			"oneOf"
+		]) if (sub[k] !== void 0) {
+			if (!Array.isArray(sub[k])) return false;
+			for (const b of sub[k]) if (!unevalContributions(b, kind, names, state, depth + 1)) return false;
+		}
+		for (const k of [
+			"if",
+			"then",
+			"else"
+		]) if (sub[k] !== void 0 && !unevalContributions(sub[k], kind, names, state, depth + 1)) return false;
+		return true;
+	}
+	function unevalLocalOk(node, key) {
+		if (node[key] !== false) return false;
+		if (node.$ref !== void 0 || node.$dynamicRef !== void 0 || node.$recursiveRef !== void 0) return false;
+		if (node.dependentSchemas !== void 0 || node.dependencies !== void 0) return false;
+		const kind = key === "unevaluatedProperties" ? "props" : "items";
+		if (kind === "props" && node.patternProperties !== void 0) return false;
+		if (kind === "items" && node.contains !== void 0) return false;
+		const names = /* @__PURE__ */ new Set();
+		const state = { prefix: 0 };
+		for (const k of [
+			"allOf",
+			"anyOf",
+			"oneOf"
+		]) if (node[k] !== void 0) {
+			if (!Array.isArray(node[k])) return false;
+			for (const b of node[k]) if (!unevalContributions(b, kind, names, state, 0)) return false;
+		}
+		for (const k of [
+			"if",
+			"then",
+			"else"
+		]) if (node[k] !== void 0 && !unevalContributions(node[k], kind, names, state, 0)) return false;
+		if (kind === "props") {
+			const own = node.properties && typeof node.properties === "object" ? node.properties : {};
+			for (const n of names) if (!Object.prototype.hasOwnProperty.call(own, n)) return false;
+		} else {
+			const ownPrefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : Array.isArray(node.items) ? node.items.length : 0;
+			if (node.items !== void 0 && !Array.isArray(node.items)) {} else if (state.prefix > ownPrefix) return false;
+		}
+		return true;
+	}
+	function unevalAllProvablyLocal(root) {
+		const seen = /* @__PURE__ */ new Set();
+		const stack = [root];
+		while (stack.length) {
+			const n = stack.pop();
+			if (n === null || typeof n !== "object" || seen.has(n)) continue;
+			seen.add(n);
+			if (!Array.isArray(n)) {
+				if (n.unevaluatedProperties !== void 0 && !unevalLocalOk(n, "unevaluatedProperties")) return false;
+				if (n.unevaluatedItems !== void 0 && !unevalLocalOk(n, "unevaluatedItems")) return false;
+			}
+			for (const k of Array.isArray(n) ? n : Object.values(n)) stack.push(k);
+		}
+		return true;
+	}
+	function fastPrefixCheck(pattern, keyVar) {
+		const m = pattern.match(/^\^([a-zA-Z0-9_\-./]+)$/);
+		if (!m) return null;
+		const prefix = m[1];
+		if (prefix.length === 0 || prefix.length > 8) return null;
+		if (prefix.length === 1) return `${keyVar}.charCodeAt(0)===${prefix.charCodeAt(0)}`;
+		if (prefix.length === 2) return `${keyVar}.charCodeAt(0)===${prefix.charCodeAt(0)}&&${keyVar}.charCodeAt(1)===${prefix.charCodeAt(1)}`;
+		return `${keyVar}.startsWith(${JSON.stringify(prefix)})`;
+	}
+	function genCharCodeSwitch(keys, v) {
+		if (keys.length === 0) return `for(var _k in ${v})return false`;
+		if (keys.length <= 3) return `for(var _k in ${v})if(${keys.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")})return false`;
+		const groups = /* @__PURE__ */ new Map();
+		for (const k of keys) {
+			const cc = k.charCodeAt(0);
+			if (!groups.has(cc)) groups.set(cc, []);
+			groups.get(cc).push(k);
+		}
+		let cases = "";
+		for (const [cc, groupKeys] of groups) {
+			const cond = groupKeys.map((k) => `_k===${JSON.stringify(k)}`).join("||");
+			cases += `case ${cc}:if(${cond})continue;break;`;
+		}
+		return `for(var _k in ${v}){switch(_k.charCodeAt(0)){${cases}default:break}return false}`;
+	}
+	function compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts) {
+		if (typeof schema === "object" && schema !== null) {
+			const s = JSON.stringify(schema);
+			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
+		}
+		if (typeof schema === "boolean") return schema ? () => ({
+			valid: true,
+			errors: []
+		}) : () => ({
+			valid: false,
+			errors: [{
+				keyword: "false schema",
+				instancePath: "",
+				schemaPath: "#",
+				params: {},
+				message: "boolean schema is false"
+			}]
+		});
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!sharedCodegenGate(schema, schemaMap)) return null;
+		if (schema.patternProperties) for (const [pat, sub] of Object.entries(schema.patternProperties)) {
+			if (/\\[pP]\{/.test(pat)) return null;
+			if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.dependentSchemas) {
+			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.propertyNames) {
+			const pn = schema.propertyNames;
+			const supported = [
+				"maxLength",
+				"minLength",
+				"pattern",
+				"const",
+				"enum"
+			];
+			if (Object.keys(pn).filter((k) => k !== "$schema").some((k) => !supported.includes(k))) return null;
+		}
+		const eRootDefs = schema.$defs || schema.definitions || null;
+		const eAnchors = {};
+		if (schema.$dynamicAnchor) eAnchors["#" + schema.$dynamicAnchor] = schema;
+		if (schema.$anchor) eAnchors["#" + schema.$anchor] = schema;
+		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) eAnchors[schema.$id] = schema;
+		if (eRootDefs) {
+			for (const def of Object.values(eRootDefs)) if (def && typeof def === "object") {
+				if (def.$dynamicAnchor) eAnchors["#" + def.$dynamicAnchor] = def;
+				if (def.$anchor) eAnchors["#" + def.$anchor] = def;
+				if (typeof def.$id === "string" && def.$id.startsWith("#")) eAnchors[def.$id] = def;
+			}
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
+				if (ext.$dynamicAnchor && !eAnchors["#" + ext.$dynamicAnchor]) eAnchors["#" + ext.$dynamicAnchor] = ext;
+				if (ext.$anchor && !eAnchors["#" + ext.$anchor]) eAnchors["#" + ext.$anchor] = ext;
+				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !eAnchors[ext.$id]) eAnchors[ext.$id] = ext;
+			}
+		}
+		if (hasUnresolvableRef(schema, eRootDefs, eAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		const ctx = {
+			varCounter: 0,
+			helperCode: [],
+			rootDefs: eRootDefs,
+			shared: [],
+			refStack: /* @__PURE__ */ new Set(),
+			schemaMap: schemaMap || null,
+			anchors: eAnchors,
+			rootSchema: schema,
+			userFormats: userFormats || null,
+			closureVars: [],
+			closureVals: [],
+			sourceMap: sourceOpts && sourceOpts.sourceMap && sourceOpts.schemaFile ? {
+				file: sourceOpts.schemaFile,
+				map: sourceOpts.sourceMap
+			} : null
+		};
+		ctx.helperCode.push("const _cpLen=s=>{let n=0;for(const _ of s)n++;return n}");
+		const lines = [];
+		try {
+			genCodeE(schema, "d", "", lines, ctx, "#");
+		} catch (e) {
+			if (e === DECLINE) return null;
+			throw e;
+		}
+		if (ctx.usesBranchCollapse) ctx.helperCode.push(require_branch_collapse().embedSource());
+		if (lines.length === 0) return (d) => ({
+			valid: true,
+			errors: []
+		});
+		const checkStr = lines.join("\n  ");
+		const defSetsE = ctx.defFns ? Array.from(ctx.defFns.values()) : [];
+		const guardStrE = ctx.usesRecursion || defSetsE.length > 0 ? emitGuardState() : "";
+		const helpersE = ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "";
+		let body;
+		if (ctx.usesRecursion) body = `const _e=[];\n  ` + guardStrE + helpersE + emitRootGuard("_validateE", "d,_all,_e", "") + `function _validateE_b(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_validateE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
+		else if (defSetsE.length > 0) body = `const _e=[];\n  ` + guardStrE + helpersE + `function _bodyE(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_bodyE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
+		else body = `const _e=[];\n  ` + helpersE + checkStr + `\n  return{valid:_e.length===0,errors:_e}`;
+		try {
+			let fn;
+			const cvars = ctx.closureVars;
+			const cvals = ctx.closureVals;
+			if (ctx.usesSafeRe) {
+				const built = new Function(...cvars, "__ataSafeRe", "d", "_all", body);
+				fn = cvars.length ? (d, _all) => built(...cvals, compileSafe, d, _all) : (d, _all) => built(compileSafe, d, _all);
+			} else if (cvars.length) {
+				const built = new Function(...cvars, "d", "_all", body);
+				fn = (d, _all) => built(...cvals, d, _all);
+			} else fn = new Function("d", "_all", body);
+			fn._errSource = body;
+			fn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
+			fn._usesSafeRe = !!ctx.usesSafeRe;
+			if (cvars.length) fn._formatClosures = cvars.map((name, i) => {
+				let format = null;
+				for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === cvals[i]) {
+					format = key;
+					break;
+				}
+				return {
+					name,
+					fn: cvals[i],
+					format
+				};
+			});
+			return fn;
+		} catch (e) {
+			if (process.env.ATA_DEBUG_ERRGEN) console.error("error codegen declined:", e.message);
+			return null;
+		}
+	}
+	function emitBranchCollapse(branches, keyword, v, pathExpr, lines, ctx, schemaPrefix) {
+		ctx.usesBranchCollapse = true;
+		const fi = ctx.varCounter++;
+		const branchKw = keyword;
+		const branchSp = schemaPrefix + "/" + branchKw;
+		const fns = [];
+		const titles = [];
+		for (let i = 0; i < branches.length; i++) {
+			const sub = branches[i];
+			const subLines = [];
+			const subSp = branchSp + "/" + i;
+			if (typeof sub === "object" && sub !== null) genCodeE(sub, "_bv", pathExpr, subLines, ctx, subSp);
+			else if (sub === false) subLines.push(`_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${subSp}'${ordinalField(ctx, `${subSp}`)},params:{},message:'boolean schema is false'})`);
+			const title = sub && typeof sub === "object" && typeof sub.title === "string" ? sub.title : "";
+			titles.push(title);
+			const body = subLines.length === 0 ? `function(_bv){return{valid:true,errors:[]}}` : `function(_bv){const _e=[];${subLines.join(";")};return{valid:_e.length===0,errors:_e}}`;
+			fns.push(body);
+		}
+		const fnArr = `_brf${fi}`;
+		const resArr = `_brr${fi}`;
+		const titleArr = JSON.stringify(titles);
+		const collapsed = `_brc${fi}`;
+		const pp = pathExpr || "\"\"";
+		lines.push(`{const ${fnArr}=[${fns.join(",")}];const _bt${fi}=${titleArr};const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${fnArr}[_bi](${v});${resArr}.push({valid:_br.valid,errors:_br.errors,title:_bt${fi}[_bi]})}const ${collapsed}=__ataCollapse('${branchKw}',${resArr},${pp},'${branchSp}',${(() => {
+			const o = ordinalFor(ctx.rootSchema, branchSp);
+			return o === null ? "null" : o;
+		})()});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}}`);
+	}
+	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!schemaPrefix) schemaPrefix = "#";
+		if (schema === false) {
+			lines.push(`;_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}`);
+			return;
+		}
+		if (schema === true) return;
+		if (typeof schema !== "object" || schema === null) return;
+		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
+		if (schema.$ref) {
+			if (schema.$ref === "#") throw DECLINE;
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				const defName = m[1];
+				if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
+				if (ctx.cyclicDefs.has(defName)) {
+					if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
+					let fnName = ctx.defFns.get(defName);
+					if (!fnName) {
+						fnName = "_defE" + ctx.defFns.size + "_" + defName.replace(/[^A-Za-z0-9_]/g, "_");
+						ctx.defFns.set(defName, fnName);
+						const bodyLines = [];
+						genCodeE(ctx.rootDefs[defName], "d", "_p", bodyLines, ctx, "#/$defs/" + defName);
+						ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e){${bodyLines.join("\n  ")}}`);
+					}
+					lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e);if(!_all&&_e.length)return{valid:false,errors:_e}`);
+					return;
+				}
+				if (ctx.refStack.has(schema.$ref)) return;
+				ctx.refStack.add(schema.$ref);
+				genCodeE(ctx.rootDefs[defName], v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) return;
+					ctx.refStack.add(schema.$ref);
+					genCodeE(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
+				if (ctx.refStack.has(schema.$ref)) return;
+				ctx.refStack.add(schema.$ref);
+				genCodeE(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
+				if (r) {
+					if (ctx.refStack.has(schema.$ref)) return;
+					ctx.refStack.add(schema.$ref);
+					genCodeE(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+		}
+		if (schema.$dynamicRef) {
+			const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
+			if (ctx.anchors && ctx.anchors[anchorKey]) {
+				const target = ctx.anchors[anchorKey];
+				if (target === ctx.rootSchema) {
+					ctx.usesRecursion = true;
+					lines.push(`_validateE(${v},_all,_e)`);
+				} else {
+					const refKey = "$dynamicRef:" + anchorKey;
+					if (!ctx.refStack.has(refKey)) {
+						ctx.refStack.add(refKey);
+						genCodeE(target, v, pathExpr, lines, ctx, schemaPrefix);
+						ctx.refStack.delete(refKey);
+					}
+				}
+			}
+		}
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		if (types) {
+			const conds = types.map((t) => {
+				switch (t) {
+					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+					case "array": return `Array.isArray(${v})`;
+					case "string": return `typeof ${v}==='string'`;
+					case "number": return `(typeof ${v}==='number'&&isFinite(${v}))`;
+					case "integer": return `Number.isInteger(${v})`;
+					case "boolean": return `typeof ${v}==='boolean'`;
+					case "null": return `${v}===null`;
+					default: return "true";
+				}
+			});
+			const expected = types.join(", ");
+			const expectedParam = types.length === 1 ? `'${types[0]}'` : JSON.stringify(types);
+			{
+				const typeSp = `${schemaPrefix}/type`;
+				const lit = buildErrorLiteral({
+					keyword: "type",
+					schemaPath: typeSp,
+					sourceMap: ctx.sourceMap
+				});
+				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:${expectedParam}},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			}
+		}
+		const isStr = false;
+		const fail = (keyword, schemaSuffix, paramsCode, msgCode, fmt) => {
+			const sp = schemaPrefix + "/" + schemaSuffix;
+			const lit = buildErrorLiteral({
+				keyword,
+				format: fmt,
+				schemaPath: sp,
+				sourceMap: ctx.sourceMap
+			});
+			return `_e.push({code:'${lit.codeStr}',keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode},docUrl:'${lit.docUrl}'${lit.frame}${ordinalField(ctx, sp)}});if(!_all)return{valid:false,errors:_e}`;
+		};
+		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+		if (schema.const !== void 0) {
+			const cv = schema.const;
+			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
+			else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:JSON.parse(${JSON.stringify(JSON.stringify(schema.const))})}`, "'must be equal to constant'")}}`);
+		}
+		new Set(schema.required || []);
+		if (schema.required) {
+			const reqSp = `${schemaPrefix}/required`;
+			const reqLit = buildErrorLiteral({
+				keyword: "required",
+				schemaPath: reqSp,
+				sourceMap: ctx.sourceMap
+			});
+			for (const key of schema.required) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){_e.push({code:'${reqLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${reqSp}'${ordinalField(ctx, `${reqSp}`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'",docUrl:'${reqLit.docUrl}'${reqLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+		}
+		if (schema.minimum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}<${schema.minimum}`;
+			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
+		}
+		if (schema.maximum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}>${schema.maximum}`;
+			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
+		}
+		if (schema.exclusiveMinimum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
+			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
+		}
+		if (schema.exclusiveMaximum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
+			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
+		}
+		if (schema.multipleOf !== void 0) {
+			const m = schema.multipleOf;
+			ctx.varCounter++;
+			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
+		}
+		if (schema.minLength !== void 0) {
+			const M = schema.minLength;
+			const c = `typeof ${v}==='string'&&(${`${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`})`;
+			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
+		}
+		if (schema.maxLength !== void 0) {
+			const X = schema.maxLength;
+			const c = `typeof ${v}==='string'&&(${`${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`})`;
+			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
+		}
+		if (schema.pattern) {
+			const inlineCheck = compilePatternInline(schema.pattern, v);
+			if (inlineCheck) {
+				const c = `typeof ${v}==='string'&&!(${inlineCheck})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
+			} else {
+				const pattern = JSON.stringify(schema.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(schema.pattern)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const c = `typeof ${v}==='string'&&!_re${ctx.regExpMap.get(pattern)}.test(${v})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
+			}
+		}
+		if (schema.format) {
+			const fc = FORMAT_CODEGEN[schema.format];
+			const fmtSp = `${schemaPrefix}/format`;
+			const fmtLit = buildErrorLiteral({
+				keyword: "format",
+				format: schema.format,
+				schemaPath: fmtSp,
+				sourceMap: ctx.sourceMap
+			});
+			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}'${ordinalField(ctx, `${fmtSp}`)},params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
+			if (fc) {
+				const ri = ctx.varCounter++;
+				const fmtCode = fc(v, isStr, ctx).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${fmtCode}}`);
+			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
+				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (ctx.closureVars && !ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
+				const guard = `typeof ${v}==='string'&&`;
+				lines.push(`if(${guard}!${closureName}(${v})){${failPush}}`);
+			}
+		}
+		if (schema.minItems !== void 0) {
+			const c = `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
+			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
+		}
+		if (schema.maxItems !== void 0) {
+			const c = `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
+			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
+		}
+		if (schema.uniqueItems) {
+			const si = ctx.varCounter++;
+			const itemType = schema.items && typeof schema.items === "object" && schema.items.type;
+			const isPrim = itemType === "string" || itemType === "number" || itemType === "integer";
+			const maxItems = schema.maxItems;
+			const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
+			let inner;
+			if (isPrim && maxItems && maxItems <= 16) inner = `for(let _i=1;_i<${v}.length;_i++){for(let _k=0;_k<_i;_k++){if(${v}[_i]===${v}[_k]){${failExpr("_k", "_i")};break}}}`;
+			else if (isPrim) inner = `const _s${si}=new Map();for(let _i=0;_i<${v}.length;_i++){const _prev=_s${si}.get(${v}[_i]);if(_prev!==undefined){${failExpr("_prev", "_i")};break};_s${si}.set(${v}[_i],_i)}`;
+			else inner = `const _cn${si}=function(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn${si}).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn${si}(x[k])}).join(',')+'}'};const _s${si}=new Map();for(let _i=0;_i<${v}.length;_i++){const _k=_cn${si}(${v}[_i]);const _prev=_s${si}.get(_k);if(_prev!==undefined){${failExpr("_prev", "_i")};break};_s${si}.set(_k,_i)}`;
+			lines.push(`if(Array.isArray(${v})){${inner}}`);
+		}
+		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
+		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
+		if (schema.additionalProperties === false && (schema.properties || schema.patternProperties)) {
+			const allowed = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
+			const ci = ctx.varCounter++;
+			const apSp = `${schemaPrefix}/additionalProperties`;
+			const apLit = buildErrorLiteral({
+				keyword: "additionalProperties",
+				schemaPath: apSp,
+				sourceMap: ctx.sourceMap
+			});
+			const patChecks = [];
+			for (const pat of Object.keys(schema.patternProperties || {})) {
+				const pattern = JSON.stringify(pat);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(pat)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				patChecks.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ci}[_i])`);
+			}
+			const inner = `const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++){if(${patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+		}
+		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0) {
+			const allowedU = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
+			const ui = ctx.varCounter++;
+			const upSp = `${schemaPrefix}/unevaluatedProperties`;
+			const upLit = buildErrorLiteral({
+				keyword: "unevaluatedProperties",
+				schemaPath: upSp,
+				sourceMap: ctx.sourceMap
+			});
+			const patChecksU = [];
+			for (const pat of Object.keys(schema.patternProperties || {})) {
+				const pattern = JSON.stringify(pat);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(pat)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				patChecksU.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ui}[_i])`);
+			}
+			const innerU = `const _k${ui}=Object.keys(${v});const _a${ui}=new Set([${allowedU}]);for(let _i=0;_i<_k${ui}.length;_i++){if(${patChecksU.length ? `!_a${ui}.has(_k${ui}[_i])&&!(${patChecksU.join("||")})` : `!_a${ui}.has(_k${ui}[_i])`}){_e.push({code:'${upLit.codeStr}',keyword:'unevaluatedProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${upSp}'${ordinalField(ctx, `${upSp}`)},params:{unevaluatedProperty:_k${ui}[_i]},message:'must NOT have unevaluated properties',docUrl:'${upLit.docUrl}'${upLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+		}
+		if (schema.unevaluatedItems === false) {
+			const itemsIsPrefix = Array.isArray(schema.items);
+			if (!(schema.items !== void 0 && !itemsIsPrefix)) {
+				const plen = itemsIsPrefix ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+				const uiSp = `${schemaPrefix}/unevaluatedItems`;
+				const uiLit = buildErrorLiteral({
+					keyword: "unevaluatedItems",
+					schemaPath: uiSp,
+					sourceMap: ctx.sourceMap
+				});
+				lines.push(`if(Array.isArray(${v})&&${v}.length>${plen}){_e.push({code:'${uiLit.codeStr}',keyword:'unevaluatedItems',instancePath:${pathExpr || "\"\""},schemaPath:'${uiSp}'${ordinalField(ctx, `${uiSp}`)},params:{limit:${plen}},message:'must NOT have more than ${plen} items',docUrl:'${uiLit.docUrl}'${uiLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			}
+		}
+		if (schema.dependentRequired) {
+			const drSp = `${schemaPrefix}/dependentRequired`;
+			const drLit = buildErrorLiteral({
+				keyword: "dependentRequired",
+				schemaPath: drSp,
+				sourceMap: ctx.sourceMap
+			});
+			for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){_e.push({code:'${drLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${drSp}'${ordinalField(ctx, `${drSp}`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'",docUrl:'${drLit.docUrl}'${drLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+		}
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const childPath = childPathExpr(pathExpr, ptrSeg(key));
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${JSON.stringify(key)} in ${v}){`);
+			genCodeE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+			lines.push(`}`);
+		}
+		if (schema.patternProperties) for (const [pat, sub] of Object.entries(schema.patternProperties)) {
+			const pattern = JSON.stringify(pat);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				if (patternIsSafe(pat)) {
+					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+					ctx.usesSafeRe = true;
+				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+			}
+			const ri = ctx.regExpMap.get(pattern);
+			const ki = ctx.varCounter++;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){if(_re${ri}.test(_k${ki})){`);
+			const _peFn = emitPtrEsc(ctx);
+			const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
+			genCodeE(sub, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/patternProperties/" + pat.replace(/~/g, "~0").replace(/\//g, "~1"));
+			lines.push(`}}}`);
+		}
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) {
+			const ki = ctx.varCounter++;
+			const known = Object.keys(schema.properties || {});
+			const guard = known.length ? `const _ak${ki}=new Set([${known.map((k) => JSON.stringify(k)).join(",")}]);` : "";
+			const patTests = [];
+			for (const pat of Object.keys(schema.patternProperties || {})) {
+				const pattern = JSON.stringify(pat);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(pat)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				patTests.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ki})`);
+			}
+			const conds = [];
+			if (known.length) conds.push(`!_ak${ki}.has(_k${ki})`);
+			if (patTests.length) conds.push(`!(${patTests.join("||")})`);
+			const keep = conds.length ? `if(${conds.join("&&")}){` : `{`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${guard}for(const _k${ki} in ${v}){${keep}`);
+			const _peFn = emitPtrEsc(ctx);
+			const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
+			genCodeE(schema.additionalProperties, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/additionalProperties");
+			lines.push(`}}}`);
+		}
+		if (schema.dependentSchemas) for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${JSON.stringify(key)} in ${v}){`);
+			genCodeE(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
+			lines.push(`}`);
+		}
+		if (schema.propertyNames === false) {
+			const ki = ctx.varCounter++;
+			const p = pathExpr || "\"\"";
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){_e.push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}}}`);
+		}
+		if (schema.propertyNames && typeof schema.propertyNames === "object") {
+			const pn = schema.propertyNames;
+			const ki = ctx.varCounter++;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
+			if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+			if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+			if (pn.pattern) {
+				const pattern = JSON.stringify(pn.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (patternIsSafe(pn.pattern)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern})`);
+				}
+				const ri = ctx.regExpMap.get(pattern);
+				lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+			}
+			if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+			if (pn.enum) {
+				const ei = ctx.varCounter++;
+				ctx.helperCode.push(`const _es${ei}=new Set(${JSON.stringify(pn.enum)})`);
+				lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+			}
+			lines.push(`}}`);
+		}
+		if (schema.items !== void 0 && schema.items !== true) {
+			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
+			const idx = `_j${ctx.varCounter}`;
+			const elem = `_ei${ctx.varCounter}`;
+			ctx.varCounter++;
+			const childPath = childPathDynExpr(pathExpr, idx);
+			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
+			genCodeE(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
+			lines.push(`}}`);
+		}
+		if (schema.prefixItems) for (let i = 0; i < schema.prefixItems.length; i++) {
+			const childPath = childPathExpr(pathExpr, String(i));
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
+			genCodeE(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
+			lines.push(`}`);
+		}
+		if (schema.contains !== void 0) {
+			const ci = ctx.varCounter++;
+			const subLines = [];
+			genCode(schema.contains, `_cv`, subLines, ctx);
+			const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+			const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+			const maxC = schema.maxContains;
+			lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
+			lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'contains: need at least ${minC} match(es)'`)}}`);
+			if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'contains: at most ${maxC} match(es)'`)}}`);
+			lines.push(`}`);
+		}
+		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeE(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
+		if (schema.anyOf) emitBranchCollapse(schema.anyOf, "anyOf", v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.oneOf) emitBranchCollapse(schema.oneOf, "oneOf", v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.not !== void 0) {
+			const subLines = [];
+			genCode(schema.not, "_nv", subLines, ctx);
+			const nfn = subLines.length === 0 ? `function(_nv){return true}` : `function(_nv){${subLines.join(";")};return true}`;
+			const fi = ctx.varCounter++;
+			lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
+		}
+		if (schema.if !== void 0) {
+			const ifLines = [];
+			genCode(schema.if, "_iv", ifLines, ctx);
+			const fi = ctx.varCounter++;
+			const ifFn = ifLines.length === 0 ? `function(_iv){return true}` : `function(_iv){${ifLines.join(";")};return true}`;
+			lines.push(`{const _if${fi}=${ifFn}`);
+			if (schema.then !== void 0) {
+				lines.push(`if(_if${fi}(${v})){`);
+				genCodeE(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
+				lines.push(`}`);
+			}
+			if (schema.else !== void 0) {
+				lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
+				genCodeE(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
+				lines.push(`}`);
+			}
+			lines.push(`}`);
+		}
+	}
+	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats) {
+		if (typeof schema === "object" && schema !== null) {
+			const s = JSON.stringify(schema);
+			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
+			if (s.includes("\"$ref\":\"#\"")) return null;
+			if (cyclicDefNames(schema.$defs || schema.definitions).size) return null;
+			if (hasAdditionalPropertiesSchema(schema)) return null;
+			if (s.includes("\"oneOf\"") || s.includes("\"anyOf\"")) return null;
+		}
+		if (typeof schema === "boolean") return schema ? () => VALID_RESULT : () => ({
+			valid: false,
+			errors: [{
+				keyword: "false schema",
+				instancePath: "",
+				schemaPath: "#",
+				params: {},
+				message: "boolean schema is false"
+			}]
+		});
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!sharedCodegenGate(schema, schemaMap)) return null;
+		if (schema.patternProperties) for (const [pat, sub] of Object.entries(schema.patternProperties)) {
+			if (/\\[pP]\{/.test(pat)) return null;
+			if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.dependentSchemas) {
+			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.propertyNames) {
+			const pn = schema.propertyNames;
+			const supported = [
+				"maxLength",
+				"minLength",
+				"pattern",
+				"const",
+				"enum"
+			];
+			if (Object.keys(pn).filter((k) => k !== "$schema").some((k) => !supported.includes(k))) return null;
+		}
+		const cRootDefs = schema.$defs || schema.definitions || null;
+		const cAnchors = {};
+		if (schema.$dynamicAnchor) cAnchors["#" + schema.$dynamicAnchor] = schema;
+		if (schema.$anchor) cAnchors["#" + schema.$anchor] = schema;
+		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) cAnchors[schema.$id] = schema;
+		if (cRootDefs) {
+			for (const def of Object.values(cRootDefs)) if (def && typeof def === "object") {
+				if (def.$dynamicAnchor) cAnchors["#" + def.$dynamicAnchor] = def;
+				if (def.$anchor) cAnchors["#" + def.$anchor] = def;
+				if (typeof def.$id === "string" && def.$id.startsWith("#")) cAnchors[def.$id] = def;
+			}
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
+				if (ext.$dynamicAnchor && !cAnchors["#" + ext.$dynamicAnchor]) cAnchors["#" + ext.$dynamicAnchor] = ext;
+				if (ext.$anchor && !cAnchors["#" + ext.$anchor]) cAnchors["#" + ext.$anchor] = ext;
+				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !cAnchors[ext.$id]) cAnchors[ext.$id] = ext;
+			}
+		}
+		if (hasUnresolvableRef(schema, cRootDefs, cAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		const ctx = {
+			varCounter: 0,
+			helperCode: [],
+			shared: [],
+			closureVars: ["_cpLen"],
+			closureVals: [_cpLen],
+			rootDefs: cRootDefs,
+			refStack: /* @__PURE__ */ new Set(),
+			schemaMap: schemaMap || null,
+			anchors: cAnchors,
+			rootSchema: schema,
+			userFormats: userFormats || null
+		};
+		const lines = [];
+		genCodeC(schema, "d", "", lines, ctx, "#");
+		if (lines.length === 0) return () => VALID_RESULT;
+		const closureParams = ctx.closureVars.join(",");
+		const inner = `let _e;\n  ` + (ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "") + lines.join("\n  ") + `\n  return _e?{valid:false,errors:_e}:R`;
+		try {
+			if (typeof process !== "undefined" && process.env && process.env.ATA_DUMP_CODEGEN) console.log("=== COMBINED CODEGEN ===\n" + inner + "\n=== CLOSURE VARS: " + ctx.closureVars.length + " ===");
+			return new Function("R" + (closureParams ? "," + closureParams : ""), `return function(d){${inner}}`)(VALID_RESULT, ...ctx.closureVals);
+		} catch (e) {
+			if (typeof process !== "undefined" && process.env && process.env.ATA_DEBUG) console.error("compileToJSCombined error:", e.message, "\n", inner.slice(0, 500));
+			return null;
+		}
+	}
+	function genCodeC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!schemaPrefix) schemaPrefix = "#";
+		if (schema === false) {
+			lines.push(`;(_e||(_e=[])).push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'})`);
+			return;
+		}
+		if (schema === true) return;
+		if (typeof schema !== "object" || schema === null) return;
+		if (schema.$ref) {
+			if (schema.$ref === "#") return;
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				if (ctx.refStack.has(schema.$ref)) return;
+				ctx.refStack.add(schema.$ref);
+				genCodeC(ctx.rootDefs[m[1]], v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) return;
+					ctx.refStack.add(schema.$ref);
+					genCodeC(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
+				if (ctx.refStack.has(schema.$ref)) return;
+				ctx.refStack.add(schema.$ref);
+				genCodeC(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
+				if (r) {
+					if (ctx.refStack.has(schema.$ref)) return;
+					ctx.refStack.add(schema.$ref);
+					genCodeC(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+		}
+		if (schema.$dynamicRef) {
+			const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
+			if (ctx.anchors && ctx.anchors[anchorKey]) {
+				const target = ctx.anchors[anchorKey];
+				if (target === ctx.rootSchema) {} else {
+					const refKey = "$dynamicRef:" + anchorKey;
+					if (!ctx.refStack.has(refKey)) {
+						ctx.refStack.add(refKey);
+						genCodeC(target, v, pathExpr, lines, ctx, schemaPrefix);
+						ctx.refStack.delete(refKey);
+					}
+				}
+			}
+		}
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		let isObj = false, isArr = false, isStr = false, isNum = false;
+		const isStaticPath = !pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+");
+		const fail = (keyword, schemaSuffix, paramsCode, msgCode) => {
+			const sp = schemaPrefix + "/" + schemaSuffix;
+			if (isStaticPath && msgCode.startsWith("'") && !msgCode.includes("+")) {
+				let paramsVal;
+				try {
+					paramsVal = Function("return " + paramsCode)();
+				} catch {}
+				if (paramsVal !== void 0) {
+					const errVar = `_E${ctx.varCounter++}`;
+					const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
+					const msgVal = msgCode.slice(1, -1);
+					ctx.closureVars.push(errVar);
+					const o = ordinalFor(ctx.rootSchema, sp);
+					const lit = {
+						keyword,
+						instancePath: pathVal,
+						schemaPath: sp,
+						params: Object.freeze(paramsVal),
+						message: msgVal
+					};
+					if (o !== null) lit._o = o;
+					ctx.closureVals.push(Object.freeze(lit));
+					return `(_e||(_e=[])).push(${errVar})`;
+				}
+			}
+			return `(_e||(_e=[])).push({keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}})`;
+		};
+		if (types) {
+			const conds = types.map((t) => {
+				switch (t) {
+					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+					case "array": return `Array.isArray(${v})`;
+					case "string": return `typeof ${v}==='string'`;
+					case "number": return `(typeof ${v}==='number'&&isFinite(${v}))`;
+					case "integer": return `Number.isInteger(${v})`;
+					case "boolean": return `typeof ${v}==='boolean'`;
+					case "null": return `${v}===null`;
+					default: return "true";
+				}
+			});
+			const expected = types.join(", ");
+			const expectedParam = types.length === 1 ? `'${types[0]}'` : JSON.stringify(types);
+			const typeOk = `_tok${ctx.varCounter++}`;
+			lines.push(`const ${typeOk}=${conds.join("||")}`);
+			lines.push(`if(!${typeOk}){${fail("type", "type", `{type:${expectedParam}}`, `'must be ${expected}'`)}}`);
+			if (types.length === 1) {
+				isObj = types[0] === "object";
+				isArr = types[0] === "array";
+				isStr = types[0] === "string";
+				isNum = types[0] === "number" || types[0] === "integer";
+			}
+			lines.push(`if(${typeOk}){`);
+		}
+		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+		if (schema.const !== void 0) {
+			const cv = schema.const;
+			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
+			else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:JSON.parse(${JSON.stringify(JSON.stringify(schema.const))})}`, "'must be equal to constant'")}}`);
+		}
+		const requiredSet = new Set(schema.required || []);
+		const hoisted = {};
+		if (schema.required && schema.properties && isObj) {
+			const destructKeys = [];
+			for (const key of schema.required) if (schema.properties[key]) {
+				const lv = `_h${ctx.varCounter++}`;
+				hoisted[key] = lv;
+				destructKeys.push(`${JSON.stringify(key)}:${lv}`);
+			}
+			if (destructKeys.length > 0) lines.push(`const{${destructKeys.join(",")}}=${v}`);
+			for (const key of schema.required) {
+				const check = hoisted[key] ? `${hoisted[key]}===undefined` : `${v}[${JSON.stringify(key)}]===undefined`;
+				if (isStaticPath) {
+					const errVar = `_E${ctx.varCounter++}`;
+					const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
+					ctx.closureVars.push(errVar);
+					ctx.closureVals.push(Object.freeze({
+						keyword: "required",
+						instancePath: pathVal,
+						schemaPath: `${schemaPrefix}/required`,
+						params: Object.freeze({ missingProperty: key }),
+						message: `must have required property '${key}'`
+					}));
+					lines.push(`if(${check}){(_e||(_e=[])).push(${errVar})}`);
+				} else lines.push(`if(${check}){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
+			}
+		} else if (schema.required) for (const key of schema.required) if (!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) {
+			const errVar = `_E${ctx.varCounter++}`;
+			const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
+			ctx.closureVars.push(errVar);
+			ctx.closureVals.push(Object.freeze({
+				keyword: "required",
+				instancePath: pathVal,
+				schemaPath: `${schemaPrefix}/required`,
+				params: Object.freeze({ missingProperty: key }),
+				message: `must have required property '${key}'`
+			}));
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){(_e||(_e=[])).push(${errVar})}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!(${JSON.stringify(key)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"})}`);
+		if (schema.minimum !== void 0) {
+			const c = isNum ? `${v}<${schema.minimum}` : `typeof ${v}==='number'&&${v}<${schema.minimum}`;
+			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
+		}
+		if (schema.maximum !== void 0) {
+			const c = isNum ? `${v}>${schema.maximum}` : `typeof ${v}==='number'&&${v}>${schema.maximum}`;
+			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
+		}
+		if (schema.exclusiveMinimum !== void 0) {
+			const c = isNum ? `${v}<=${schema.exclusiveMinimum}` : `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
+			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
+		}
+		if (schema.exclusiveMaximum !== void 0) {
+			const c = isNum ? `${v}>=${schema.exclusiveMaximum}` : `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
+			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
+		}
+		if (schema.multipleOf !== void 0) {
+			const m = schema.multipleOf;
+			ctx.varCounter++;
+			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
+		}
+		if (schema.minLength !== void 0) {
+			const M = schema.minLength;
+			const inner = `${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`;
+			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
+			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
+		}
+		if (schema.maxLength !== void 0) {
+			const X = schema.maxLength;
+			const inner = `${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`;
+			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
+			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
+		}
+		if (schema.pattern) {
+			const inlineCheck = compilePatternInline(schema.pattern, v);
+			if (inlineCheck) {
+				const c = isStr ? `!(${inlineCheck})` : `typeof ${v}==='string'&&!(${inlineCheck})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
+			} else {
+				const reVar = `_re${ctx.varCounter++}`;
+				ctx.closureVars.push(reVar);
+				ctx.closureVals.push(patternIsSafe(schema.pattern) ? compileSafe(schema.pattern) : new RegExp(schema.pattern));
+				const c = isStr ? `!${reVar}.test(${v})` : `typeof ${v}==='string'&&!${reVar}.test(${v})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, `'must match pattern "${schema.pattern}"'`)}}`);
+			}
+		}
+		if (schema.format) {
+			const fc = FORMAT_CODEGEN[schema.format];
+			if (fc) {
+				const ri = ctx.varCounter++;
+				const code = fc(v, isStr, ctx).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${code}}`);
+			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
+				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (!ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
+				const guard = isStr ? "" : `typeof ${v}==='string'&&`;
+				lines.push(`if(${guard}!${closureName}(${v})){${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)}}`);
+			}
+		}
+		if (schema.minItems !== void 0) {
+			const c = isArr ? `${v}.length<${schema.minItems}` : `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
+			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
+		}
+		if (schema.maxItems !== void 0) {
+			const c = isArr ? `${v}.length>${schema.maxItems}` : `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
+			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
+		}
+		if (schema.uniqueItems) {
+			const si = ctx.varCounter++;
+			const itemType = schema.items && typeof schema.items === "object" && schema.items.type;
+			const isPrim = itemType === "string" || itemType === "number" || itemType === "integer";
+			const maxItems = schema.maxItems;
+			const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
+			let inner;
+			if (isPrim && maxItems && maxItems <= 16) inner = `for(let _i=1;_i<${v}.length;_i++){for(let _k=0;_k<_i;_k++){if(${v}[_i]===${v}[_k]){${failExpr("_k", "_i")};break}}}`;
+			else if (isPrim) inner = `const _s${si}=new Map();for(let _i=0;_i<${v}.length;_i++){const _prev=_s${si}.get(${v}[_i]);if(_prev!==undefined){${failExpr("_prev", "_i")};break};_s${si}.set(${v}[_i],_i)}`;
+			else inner = `const _cn${si}=function(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn${si}).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn${si}(x[k])}).join(',')+'}'};const _s${si}=new Map();for(let _i=0;_i<${v}.length;_i++){const _k=_cn${si}(${v}[_i]);const _prev=_s${si}.get(_k);if(_prev!==undefined){${failExpr("_prev", "_i")};break};_s${si}.set(_k,_i)}`;
+			lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
+		}
+		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
+		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
+		if (schema.additionalProperties === false && schema.properties && !schema.patternProperties) {
+			const propKeys = Object.keys(schema.properties);
+			const ci = ctx.varCounter++;
+			if (propKeys.length <= 8) {
+				const checks = propKeys.map((k) => `_k${ci}[_i]!==${JSON.stringify(k)}`).join("&&");
+				lines.push(isObj ? `{const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++)if(${checks}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++)if(${checks}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}`);
+			} else {
+				const allowed = propKeys.map((k) => JSON.stringify(k)).join(",");
+				lines.push(isObj ? `{const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++)if(!_a${ci}.has(_k${ci}[_i])){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){const _k${ci}=Object.keys(${v});const _a${ci}=new Set([${allowed}]);for(let _i=0;_i<_k${ci}.length;_i++)if(!_a${ci}.has(_k${ci}[_i])){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}}`);
+			}
+		}
+		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0 && !schema.patternProperties) {
+			const propKeysU = Object.keys(schema.properties || {});
+			const ui = ctx.varCounter++;
+			const failU = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:_k${ui}[_i]}`, "'must NOT have unevaluated properties'");
+			let innerU;
+			if (propKeysU.length === 0) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){${failU}}`;
+			else if (propKeysU.length <= 8) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(${propKeysU.map((k) => `_k${ui}[_i]!==${JSON.stringify(k)}`).join("&&")}){${failU}}`;
+			else innerU = `const _k${ui}=Object.keys(${v});const _a${ui}=new Set([${propKeysU.map((k) => JSON.stringify(k)).join(",")}]);for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
+			lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+		}
+		if (schema.unevaluatedItems === false) {
+			const itemsIsPrefixC = Array.isArray(schema.items);
+			if (!(schema.items !== void 0 && !itemsIsPrefixC)) {
+				const plenC = itemsIsPrefixC ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+				const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${plenC}}`, `'must NOT have more than ${plenC} items'`);
+				lines.push(`if(Array.isArray(${v})&&${v}.length>${plenC}){${failI}}`);
+			}
+		}
+		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) if (!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) {
+			const errVar = `_E${ctx.varCounter++}`;
+			const pathVal = pathExpr ? pathExpr.slice(1, -1) : "";
+			ctx.closureVars.push(errVar);
+			ctx.closureVals.push(Object.freeze({
+				keyword: "required",
+				instancePath: pathVal,
+				schemaPath: `${schemaPrefix}/dependentRequired`,
+				params: Object.freeze({ missingProperty: dep }),
+				message: `must have required property '${dep}'`
+			}));
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){(_e||(_e=[])).push(${errVar})}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${JSON.stringify(key)} in ${v}&&!(${JSON.stringify(dep)} in ${v})){(_e||(_e=[])).push({keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired'${ordinalField(ctx, `${schemaPrefix}/dependentRequired`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"})}`);
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const pv = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
+			const childPath = childPathExpr(pathExpr, ptrSeg(key));
+			if (requiredSet.has(key) && isObj) {
+				lines.push(`if(${pv}!==undefined){`);
+				genCodeC(prop, pv, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				lines.push(`}`);
+			} else if (isObj) {
+				const oi = ctx.varCounter++;
+				lines.push(`{const _o${oi}=${v}[${JSON.stringify(key)}];if(_o${oi}!==undefined){`);
+				genCodeC(prop, `_o${oi}`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				lines.push(`}}`);
+			} else {
+				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${JSON.stringify(key)} in ${v}){`);
+				genCodeC(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				lines.push(`}`);
+			}
+		}
+		if (schema.patternProperties) {
+			const ppEntries = Object.entries(schema.patternProperties);
+			const pn = schema.propertyNames && typeof schema.propertyNames === "object" ? schema.propertyNames : null;
+			const pi = ctx.varCounter++;
+			const matchers = [];
+			for (const [pat] of ppEntries) {
+				const fast = fastPrefixCheck(pat, `_k${pi}`);
+				if (fast) matchers.push({ check: fast });
+				else {
+					const ri = ctx.varCounter++;
+					ctx.closureVars.push(`_re${ri}`);
+					ctx.closureVals.push(safeReClosure(ctx, pat));
+					matchers.push({ check: `_re${ri}.test(_k${pi})` });
+				}
+			}
+			const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+			const kVar = `_k${pi}`;
+			if (schema.additionalProperties === false && schema.properties) {
+				ctx._ppHandledPropertyNamesC = !!pn;
+				const propKeys = Object.keys(schema.properties);
+				const keyCheck = propKeys.length <= 8 ? propKeys.map((k) => `${kVar}===${JSON.stringify(k)}`).join("||") : null;
+				if (!keyCheck) {
+					const allowedSet = `_as${pi}`;
+					ctx.closureVars.push(allowedSet);
+					ctx.closureVals.push(new Set(propKeys));
+				}
+				lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+				if (pn) {
+					if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+					if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+					if (pn.pattern) {
+						const fast = fastPrefixCheck(pn.pattern, kVar);
+						if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+						else {
+							const ri = ctx.varCounter++;
+							ctx.closureVars.push(`_re${ri}`);
+							ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+							lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+						}
+					}
+					if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+					if (pn.enum) {
+						const ei = ctx.varCounter++;
+						ctx.closureVars.push(`_es${ei}`);
+						ctx.closureVals.push(new Set(pn.enum));
+						lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+					}
+				}
+				const matchExpr = keyCheck || `_as${pi}.has(${kVar})`;
+				lines.push(`let _m${pi}=${matchExpr}`);
+				for (let i = 0; i < ppEntries.length; i++) {
+					lines.push(`if(${matchers[i].check}){_m${pi}=true;{const _ppv${pi}_${i}=${v}[${kVar}]`);
+					genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
+					lines.push(`}}`);
+				}
+				lines.push(`if(!_m${pi}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:${kVar}}`, "'must NOT have additional properties'")}}`);
+				lines.push(`}}`);
+			} else {
+				ctx._ppHandledPropertyNamesC = !!pn;
+				lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+				if (pn) {
+					if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+					if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+					if (pn.pattern) {
+						const fast = fastPrefixCheck(pn.pattern, kVar);
+						if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+						else {
+							const ri = ctx.varCounter++;
+							ctx.closureVars.push(`_re${ri}`);
+							ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+							lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+						}
+					}
+					if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+					if (pn.enum) {
+						const ei = ctx.varCounter++;
+						ctx.closureVars.push(`_es${ei}`);
+						ctx.closureVals.push(new Set(pn.enum));
+						lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+					}
+				}
+				for (let i = 0; i < ppEntries.length; i++) {
+					lines.push(`if(${matchers[i].check}){const _ppv${pi}_${i}=${v}[${kVar}]`);
+					genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
+					lines.push(`}`);
+				}
+				lines.push(`}}`);
+			}
+		}
+		if (schema.dependentSchemas) for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${JSON.stringify(key)} in ${v}){`);
+			genCodeC(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
+			lines.push(`}`);
+		}
+		if (schema.propertyNames === false) {
+			const ki = ctx.varCounter++;
+			const p = pathExpr || "\"\"";
+			lines.push(`;if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){(_e||(_e=[])).push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'})}}`);
+		}
+		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ctx._ppHandledPropertyNamesC) {
+			const pn = schema.propertyNames;
+			const ki = ctx.varCounter++;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
+			if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+			if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+			if (pn.pattern) {
+				const ri = ctx.varCounter++;
+				ctx.closureVars.push(`_re${ri}`);
+				ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+				lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, `'must match pattern "${pn.pattern}"'`)}}`);
+			}
+			if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+			if (pn.enum) {
+				const ei = ctx.varCounter++;
+				ctx.closureVars.push(`_es${ei}`);
+				ctx.closureVals.push(new Set(pn.enum));
+				lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+			}
+			lines.push(`}}`);
+		}
+		if (schema.items !== void 0 && schema.items !== true) {
+			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
+			const idx = `_j${ctx.varCounter}`, elem = `_ei${ctx.varCounter}`;
+			ctx.varCounter++;
+			const childPath = childPathDynExpr(pathExpr, idx);
+			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
+			genCodeC(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
+			lines.push(`}}`);
+		}
+		if (schema.prefixItems) for (let i = 0; i < schema.prefixItems.length; i++) {
+			const childPath = childPathExpr(pathExpr, String(i));
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
+			genCodeC(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
+			lines.push(`}`);
+		}
+		if (schema.contains !== void 0) {
+			const ci = ctx.varCounter++;
+			const subLines = [];
+			genCode(schema.contains, `_cv`, subLines, ctx);
+			const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+			const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+			const maxC = schema.maxContains;
+			lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
+			lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'contains: need at least ${minC} match(es)'`)}}`);
+			if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'contains: at most ${maxC} match(es)'`)}}`);
+			lines.push(`}`);
+		}
+		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeC(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
+		if (schema.anyOf) {
+			const fi = ctx.varCounter++;
+			const fns = schema.anyOf.map((sub) => {
+				const sl = [];
+				genCode(sub, "_av", sl, ctx);
+				return sl.length === 0 ? `function(_av){return true}` : `function(_av){${sl.join(";")};return true}`;
+			});
+			lines.push(`{const _af${fi}=[${fns.join(",")}];let _am=false;for(let _ai=0;_ai<_af${fi}.length;_ai++){if(_af${fi}[_ai](${v})){_am=true;break}}if(!_am){${fail("anyOf", "anyOf", "{}", "'must match a schema in anyOf'")}}}`);
+		}
+		if (schema.oneOf) {
+			const fi = ctx.varCounter++;
+			const fns = schema.oneOf.map((sub) => {
+				const sl = [];
+				genCode(sub, "_ov", sl, ctx);
+				return sl.length === 0 ? `function(_ov){return true}` : `function(_ov){${sl.join(";")};return true}`;
+			});
+			lines.push(`{const _of${fi}=[${fns.join(",")}];let _oc=0;for(let _oi=0;_oi<_of${fi}.length;_oi++){if(_of${fi}[_oi](${v}))_oc++;if(_oc>1)break}if(_oc!==1){${fail("oneOf", "oneOf", "{}", "'must match exactly one schema in oneOf'")}}}`);
+		}
+		if (schema.not !== void 0) {
+			const sl = [];
+			genCode(schema.not, "_nv", sl, ctx);
+			const nfn = sl.length === 0 ? `function(_nv){return true}` : `function(_nv){${sl.join(";")};return true}`;
+			const fi = ctx.varCounter++;
+			lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
+		}
+		if (schema.if !== void 0) {
+			const sl = [];
+			genCode(schema.if, "_iv", sl, ctx);
+			const fi = ctx.varCounter++;
+			const ifFn = sl.length === 0 ? `function(_iv){return true}` : `function(_iv){${sl.join(";")};return true}`;
+			lines.push(`{const _if${fi}=${ifFn}`);
+			if (schema.then !== void 0) {
+				lines.push(`if(_if${fi}(${v})){`);
+				genCodeC(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
+				lines.push(`}`);
+			}
+			if (schema.else !== void 0) {
+				lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
+				genCodeC(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
+				lines.push(`}`);
+			}
+			lines.push(`}`);
+		}
+		if (types) lines.push(`}`);
+	}
+	function collectEvaluated(schema, schemaMap, rootDefs) {
+		if (typeof schema !== "object" || schema === null) return {
+			props: [],
+			items: null,
+			allProps: false,
+			allItems: false,
+			dynamic: false
+		};
+		const defs = rootDefs || schema.$defs || schema.definitions || null;
+		const result = {
+			props: [],
+			items: null,
+			allProps: false,
+			allItems: false,
+			dynamic: false
+		};
+		_collectEval(schema, result, defs, schemaMap, /* @__PURE__ */ new Set(), true);
+		return result;
+	}
+	function _collectEval(schema, result, defs, schemaMap, refStack, isRoot) {
+		if (typeof schema !== "object" || schema === null) return;
+		if (result.allProps && result.allItems) return;
+		if (schema.$ref) {
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && defs && defs[m[1]]) {
+				if (refStack.has(schema.$ref)) {
+					result.dynamic = true;
+					return;
+				}
+				refStack.add(schema.$ref);
+				_collectEval(defs[m[1]], result, defs, schemaMap, refStack);
+				refStack.delete(schema.$ref);
+			} else if (schemaMap && typeof schemaMap.get === "function") {
+				let resolved = schemaMap.has(schema.$ref) ? schemaMap.get(schema.$ref) : null;
+				if (!resolved && !schema.$ref.includes("://") && !schema.$ref.startsWith("#")) {
+					for (const [id, s] of schemaMap) if (id.endsWith("/" + schema.$ref)) {
+						resolved = s;
+						break;
+					}
+				}
+				if (resolved) {
+					if (refStack.has(schema.$ref)) {
+						result.dynamic = true;
+						return;
+					}
+					refStack.add(schema.$ref);
+					_collectEval(resolved, result, defs, schemaMap, refStack);
+					refStack.delete(schema.$ref);
+				}
+			}
+			if (!Object.keys(schema).some((k) => k !== "$ref" && k !== "$defs" && k !== "definitions" && k !== "$schema" && k !== "$id")) return;
+		}
+		if (schema.properties) {
+			for (const k of Object.keys(schema.properties)) if (!result.props.includes(k)) result.props.push(k);
+		}
+		if (schema.additionalProperties !== void 0 && schema.additionalProperties !== false) result.allProps = true;
+		if (schema.patternProperties) result.dynamic = true;
+		if (schema.prefixItems) {
+			const count = schema.prefixItems.length;
+			result.items = result.items === null ? count : Math.max(result.items, count);
+		}
+		if (schema.items && typeof schema.items === "object") result.allItems = true;
+		if (schema.items === true) result.allItems = true;
+		if (schema.contains !== void 0) result.dynamic = true;
+		if (!isRoot && (schema.unevaluatedProperties === true || typeof schema.unevaluatedProperties === "object" && schema.unevaluatedProperties !== null)) result.allProps = true;
+		if (!isRoot && (schema.unevaluatedItems === true || typeof schema.unevaluatedItems === "object" && schema.unevaluatedItems !== null)) result.allItems = true;
+		if (schema.allOf) for (const sub of schema.allOf) _collectEval(sub, result, defs, schemaMap, refStack);
+		if (schema.anyOf || schema.oneOf) {
+			result.dynamic = true;
+			const branches = schema.anyOf || schema.oneOf;
+			for (const sub of branches) _collectEval(sub, result, defs, schemaMap, refStack);
+		}
+		if (schema.if && (schema.then || schema.else)) {
+			result.dynamic = true;
+			_collectEval(schema.if, result, defs, schemaMap, refStack);
+			if (schema.then) _collectEval(schema.then, result, defs, schemaMap, refStack);
+			if (schema.else) _collectEval(schema.else, result, defs, schemaMap, refStack);
+		} else if (schema.if) {
+			result.dynamic = true;
+			if (schema.if.properties) {
+				for (const k of Object.keys(schema.if.properties)) if (!result.props.includes(k)) result.props.push(k);
+			}
+			if (schema.if.patternProperties) {}
+		}
+		if (schema.dependentSchemas) {
+			result.dynamic = true;
+			for (const sub of Object.values(schema.dependentSchemas)) _collectEval(sub, result, defs, schemaMap, refStack);
+		}
+	}
+	module.exports = {
+		compileToJS,
+		compileToJSCodegen,
+		compileToJSCodegenWithErrors,
+		compileToJSCombined,
+		collectEvaluated,
+		unevalContributions,
+		AJV_MESSAGES
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/draft7.js
+var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
+	function isDraft7(schema) {
+		return !!(schema && schema.$schema && DRAFT7_SCHEMAS.has(schema.$schema));
+	}
+	function normalizeDraft7(schema, force) {
+		if (!force && !isDraft7(schema)) return schema;
+		_normalize(schema);
+		return schema;
+	}
+	const REF_SIBLINGS_KEPT = /* @__PURE__ */ new Set([
+		"$ref",
+		"$defs",
+		"definitions",
+		"$schema",
+		"$comment",
+		"title",
+		"description",
+		"examples",
+		"default",
+		"readOnly",
+		"writeOnly"
+	]);
+	function _normalize(schema) {
+		if (typeof schema !== "object" || schema === null) return;
+		if (typeof schema.$ref === "string") {
+			for (const key of Object.keys(schema)) if (!REF_SIBLINGS_KEPT.has(key)) delete schema[key];
+		}
+		if (typeof schema.$id === "string" && /^#[A-Za-z][A-Za-z0-9_.:-]*$/.test(schema.$id)) {
+			if (schema.$anchor === void 0) schema.$anchor = schema.$id.slice(1);
+			delete schema.$id;
+		}
+		if (schema.definitions && !schema.$defs) {
+			schema.$defs = schema.definitions;
+			delete schema.definitions;
+		}
+		if (schema.dependencies) {
+			for (const [key, value] of Object.entries(schema.dependencies)) if (Array.isArray(value)) {
+				if (!schema.dependentRequired) schema.dependentRequired = {};
+				schema.dependentRequired[key] = value;
+			} else {
+				if (!schema.dependentSchemas) schema.dependentSchemas = {};
+				schema.dependentSchemas[key] = value;
+			}
+			delete schema.dependencies;
+		}
+		if (Array.isArray(schema.items)) {
+			schema.prefixItems = schema.items;
+			if (schema.additionalItems !== void 0) {
+				schema.items = schema.additionalItems;
+				delete schema.additionalItems;
+			} else delete schema.items;
+		}
+		for (const key of [
+			"properties",
+			"patternProperties",
+			"$defs",
+			"definitions",
+			"dependentSchemas"
+		]) if (schema[key] && typeof schema[key] === "object") {
+			for (const v of Object.values(schema[key])) if (typeof v === "object" && v !== null) _normalize(v);
+		}
+		for (const key of [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]) if (Array.isArray(schema[key])) {
+			for (const s of schema[key]) if (typeof s === "object" && s !== null) _normalize(s);
+		}
+		for (const key of [
+			"items",
+			"contains",
+			"not",
+			"if",
+			"then",
+			"else",
+			"additionalProperties",
+			"propertyNames"
+		]) if (typeof schema[key] === "object" && schema[key] !== null) _normalize(schema[key]);
+	}
+	function normalizeExclusiveBounds(schema) {
+		_walkExclusive(schema, /* @__PURE__ */ new Set());
+		return schema;
+	}
+	function _walkExclusive(node, seen) {
+		if (typeof node !== "object" || node === null) return;
+		if (Array.isArray(node)) {
+			for (const item of node) _walkExclusive(item, seen);
+			return;
+		}
+		if (seen.has(node)) return;
+		seen.add(node);
+		if (typeof node.exclusiveMinimum === "boolean") {
+			if (node.exclusiveMinimum === true && typeof node.minimum === "number") {
+				node.exclusiveMinimum = node.minimum;
+				delete node.minimum;
+			} else delete node.exclusiveMinimum;
+		}
+		if (typeof node.exclusiveMaximum === "boolean") {
+			if (node.exclusiveMaximum === true && typeof node.maximum === "number") {
+				node.exclusiveMaximum = node.maximum;
+				delete node.maximum;
+			} else delete node.exclusiveMaximum;
+		}
+		for (const key of Object.keys(node)) _walkExclusive(node[key], seen);
+	}
+	function normalizeNullable(schema) {
+		if (typeof schema !== "object" || schema === null) return schema;
+		_normalizeNullable(schema);
+		return schema;
+	}
+	function _normalizeNullable(schema) {
+		if (typeof schema !== "object" || schema === null) return;
+		if (schema.nullable === true && schema.type !== void 0) {
+			if (Array.isArray(schema.type)) {
+				if (!schema.type.includes("null")) schema.type = schema.type.concat("null");
+			} else schema.type = [schema.type, "null"];
+		}
+		if ("nullable" in schema) delete schema.nullable;
+		for (const key of [
+			"properties",
+			"patternProperties",
+			"$defs",
+			"definitions",
+			"dependentSchemas"
+		]) if (schema[key] && typeof schema[key] === "object") {
+			for (const v of Object.values(schema[key])) if (typeof v === "object" && v !== null) _normalizeNullable(v);
+		}
+		for (const key of [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]) if (Array.isArray(schema[key])) {
+			for (const s of schema[key]) if (typeof s === "object" && s !== null) _normalizeNullable(s);
+		}
+		for (const key of [
+			"items",
+			"contains",
+			"not",
+			"if",
+			"then",
+			"else",
+			"additionalProperties",
+			"propertyNames",
+			"unevaluatedItems",
+			"unevaluatedProperties"
+		]) if (typeof schema[key] === "object" && schema[key] !== null) _normalizeNullable(schema[key]);
+	}
+	function stripFormatAssertions(schema) {
+		if (typeof schema !== "object" || schema === null) return schema;
+		_stripFormat(schema, /* @__PURE__ */ new Set());
+		return schema;
+	}
+	function _stripFormat(schema, seen) {
+		if (typeof schema !== "object" || schema === null || Array.isArray(schema)) return;
+		if (seen.has(schema)) return;
+		seen.add(schema);
+		if (typeof schema.format === "string") delete schema.format;
+		for (const key of [
+			"properties",
+			"patternProperties",
+			"$defs",
+			"definitions",
+			"dependentSchemas"
+		]) if (schema[key] && typeof schema[key] === "object" && !Array.isArray(schema[key])) for (const v of Object.values(schema[key])) _stripFormat(v, seen);
+		for (const key of [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]) if (Array.isArray(schema[key])) for (const s of schema[key]) _stripFormat(s, seen);
+		for (const key of [
+			"items",
+			"additionalItems",
+			"contains",
+			"not",
+			"if",
+			"then",
+			"else",
+			"additionalProperties",
+			"propertyNames",
+			"unevaluatedItems",
+			"unevaluatedProperties",
+			"contentSchema"
+		]) if (Array.isArray(schema[key])) for (const s of schema[key]) _stripFormat(s, seen);
+		else _stripFormat(schema[key], seen);
+	}
+	module.exports = {
+		isDraft7,
+		normalizeDraft7,
+		normalizeNullable,
+		normalizeExclusiveBounds,
+		stripFormatAssertions
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/metaschemas.js
+var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
+		["https://json-schema.org/draft/2020-12/schema", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/schema",
+			"$vocabulary": {
+				"https://json-schema.org/draft/2020-12/vocab/core": true,
+				"https://json-schema.org/draft/2020-12/vocab/applicator": true,
+				"https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
+				"https://json-schema.org/draft/2020-12/vocab/validation": true,
+				"https://json-schema.org/draft/2020-12/vocab/meta-data": true,
+				"https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
+				"https://json-schema.org/draft/2020-12/vocab/content": true
+			},
+			"$dynamicAnchor": "meta",
+			"title": "Core and Validation specifications meta-schema",
+			"allOf": [
+				{ "$ref": "meta/core" },
+				{ "$ref": "meta/applicator" },
+				{ "$ref": "meta/unevaluated" },
+				{ "$ref": "meta/validation" },
+				{ "$ref": "meta/meta-data" },
+				{ "$ref": "meta/format-annotation" },
+				{ "$ref": "meta/content" }
+			],
+			"type": ["object", "boolean"],
+			"$comment": "This meta-schema also defines keywords that have appeared in previous drafts in order to prevent incompatible extensions as they remain in common use.",
+			"properties": {
+				"definitions": {
+					"$comment": "\"definitions\" has been replaced by \"$defs\".",
+					"type": "object",
+					"additionalProperties": { "$dynamicRef": "#meta" },
+					"deprecated": true,
+					"default": {}
+				},
+				"dependencies": {
+					"$comment": "\"dependencies\" has been split and replaced by \"dependentSchemas\" and \"dependentRequired\" in order to serve their differing semantics.",
+					"type": "object",
+					"additionalProperties": { "anyOf": [{ "$dynamicRef": "#meta" }, { "$ref": "meta/validation#/$defs/stringArray" }] },
+					"deprecated": true,
+					"default": {}
+				},
+				"$recursiveAnchor": {
+					"$comment": "\"$recursiveAnchor\" has been replaced by \"$dynamicAnchor\".",
+					"$ref": "meta/core#/$defs/anchorString",
+					"deprecated": true
+				},
+				"$recursiveRef": {
+					"$comment": "\"$recursiveRef\" has been replaced by \"$dynamicRef\".",
+					"$ref": "meta/core#/$defs/uriReferenceString",
+					"deprecated": true
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2020-12/meta/core", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/core",
+			"$dynamicAnchor": "meta",
+			"title": "Core vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"$id": {
+					"$ref": "#/$defs/uriReferenceString",
+					"$comment": "Non-empty fragments not allowed.",
+					"pattern": "^[^#]*#?$"
+				},
+				"$schema": { "$ref": "#/$defs/uriString" },
+				"$ref": { "$ref": "#/$defs/uriReferenceString" },
+				"$anchor": { "$ref": "#/$defs/anchorString" },
+				"$dynamicRef": { "$ref": "#/$defs/uriReferenceString" },
+				"$dynamicAnchor": { "$ref": "#/$defs/anchorString" },
+				"$vocabulary": {
+					"type": "object",
+					"propertyNames": { "$ref": "#/$defs/uriString" },
+					"additionalProperties": { "type": "boolean" }
+				},
+				"$comment": { "type": "string" },
+				"$defs": {
+					"type": "object",
+					"additionalProperties": { "$dynamicRef": "#meta" }
+				}
+			},
+			"$defs": {
+				"anchorString": {
+					"type": "string",
+					"pattern": "^[A-Za-z_][-A-Za-z0-9._]*$"
+				},
+				"uriString": {
+					"type": "string",
+					"format": "uri"
+				},
+				"uriReferenceString": {
+					"type": "string",
+					"format": "uri-reference"
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2020-12/meta/applicator", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/applicator",
+			"$dynamicAnchor": "meta",
+			"title": "Applicator vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"prefixItems": { "$ref": "#/$defs/schemaArray" },
+				"items": { "$dynamicRef": "#meta" },
+				"contains": { "$dynamicRef": "#meta" },
+				"additionalProperties": { "$dynamicRef": "#meta" },
+				"properties": {
+					"type": "object",
+					"additionalProperties": { "$dynamicRef": "#meta" },
+					"default": {}
+				},
+				"patternProperties": {
+					"type": "object",
+					"additionalProperties": { "$dynamicRef": "#meta" },
+					"propertyNames": { "format": "regex" },
+					"default": {}
+				},
+				"dependentSchemas": {
+					"type": "object",
+					"additionalProperties": { "$dynamicRef": "#meta" },
+					"default": {}
+				},
+				"propertyNames": { "$dynamicRef": "#meta" },
+				"if": { "$dynamicRef": "#meta" },
+				"then": { "$dynamicRef": "#meta" },
+				"else": { "$dynamicRef": "#meta" },
+				"allOf": { "$ref": "#/$defs/schemaArray" },
+				"anyOf": { "$ref": "#/$defs/schemaArray" },
+				"oneOf": { "$ref": "#/$defs/schemaArray" },
+				"not": { "$dynamicRef": "#meta" }
+			},
+			"$defs": { "schemaArray": {
+				"type": "array",
+				"minItems": 1,
+				"items": { "$dynamicRef": "#meta" }
+			} }
+		}],
+		["https://json-schema.org/draft/2020-12/meta/validation", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/validation",
+			"$dynamicAnchor": "meta",
+			"title": "Validation vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"type": { "anyOf": [{ "$ref": "#/$defs/simpleTypes" }, {
+					"type": "array",
+					"items": { "$ref": "#/$defs/simpleTypes" },
+					"minItems": 1,
+					"uniqueItems": true
+				}] },
+				"const": true,
+				"enum": {
+					"type": "array",
+					"items": true
+				},
+				"multipleOf": {
+					"type": "number",
+					"exclusiveMinimum": 0
+				},
+				"maximum": { "type": "number" },
+				"exclusiveMaximum": { "type": "number" },
+				"minimum": { "type": "number" },
+				"exclusiveMinimum": { "type": "number" },
+				"maxLength": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minLength": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"pattern": {
+					"type": "string",
+					"format": "regex"
+				},
+				"maxItems": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minItems": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"uniqueItems": {
+					"type": "boolean",
+					"default": false
+				},
+				"maxContains": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minContains": {
+					"$ref": "#/$defs/nonNegativeInteger",
+					"default": 1
+				},
+				"maxProperties": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minProperties": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"required": { "$ref": "#/$defs/stringArray" },
+				"dependentRequired": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#/$defs/stringArray" }
+				}
+			},
+			"$defs": {
+				"nonNegativeInteger": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"nonNegativeIntegerDefault0": {
+					"$ref": "#/$defs/nonNegativeInteger",
+					"default": 0
+				},
+				"simpleTypes": { "enum": [
+					"array",
+					"boolean",
+					"integer",
+					"null",
+					"number",
+					"object",
+					"string"
+				] },
+				"stringArray": {
+					"type": "array",
+					"items": { "type": "string" },
+					"uniqueItems": true,
+					"default": []
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2020-12/meta/meta-data", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/meta-data",
+			"$dynamicAnchor": "meta",
+			"title": "Meta-data vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"title": { "type": "string" },
+				"description": { "type": "string" },
+				"default": true,
+				"deprecated": {
+					"type": "boolean",
+					"default": false
+				},
+				"readOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"writeOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"examples": {
+					"type": "array",
+					"items": true
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2020-12/meta/format-annotation", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/format-annotation",
+			"$dynamicAnchor": "meta",
+			"title": "Format vocabulary meta-schema for annotation results",
+			"type": ["object", "boolean"],
+			"properties": { "format": { "type": "string" } }
+		}],
+		["https://json-schema.org/draft/2020-12/meta/content", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/content",
+			"$dynamicAnchor": "meta",
+			"title": "Content vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"contentEncoding": { "type": "string" },
+				"contentMediaType": { "type": "string" },
+				"contentSchema": { "$dynamicRef": "#meta" }
+			}
+		}],
+		["https://json-schema.org/draft/2020-12/meta/unevaluated", {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://json-schema.org/draft/2020-12/meta/unevaluated",
+			"$dynamicAnchor": "meta",
+			"title": "Unevaluated applicator vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"unevaluatedItems": { "$dynamicRef": "#meta" },
+				"unevaluatedProperties": { "$dynamicRef": "#meta" }
+			}
+		}],
+		["http://json-schema.org/draft-07/schema#", {
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"$id": "http://json-schema.org/draft-07/schema#",
+			"title": "Core schema meta-schema",
+			"definitions": {
+				"schemaArray": {
+					"type": "array",
+					"minItems": 1,
+					"items": { "$ref": "#" }
+				},
+				"nonNegativeInteger": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"nonNegativeIntegerDefault0": { "allOf": [{ "$ref": "#/definitions/nonNegativeInteger" }, { "default": 0 }] },
+				"simpleTypes": { "enum": [
+					"array",
+					"boolean",
+					"integer",
+					"null",
+					"number",
+					"object",
+					"string"
+				] },
+				"stringArray": {
+					"type": "array",
+					"items": { "type": "string" },
+					"uniqueItems": true,
+					"default": []
+				}
+			},
+			"type": ["object", "boolean"],
+			"properties": {
+				"$id": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"$schema": {
+					"type": "string",
+					"format": "uri"
+				},
+				"$ref": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"$comment": { "type": "string" },
+				"title": { "type": "string" },
+				"description": { "type": "string" },
+				"default": true,
+				"readOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"writeOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"examples": {
+					"type": "array",
+					"items": true
+				},
+				"multipleOf": {
+					"type": "number",
+					"exclusiveMinimum": 0
+				},
+				"maximum": { "type": "number" },
+				"exclusiveMaximum": { "type": "number" },
+				"minimum": { "type": "number" },
+				"exclusiveMinimum": { "type": "number" },
+				"maxLength": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minLength": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"pattern": {
+					"type": "string",
+					"format": "regex"
+				},
+				"additionalItems": { "$ref": "#" },
+				"items": {
+					"anyOf": [{ "$ref": "#" }, { "$ref": "#/definitions/schemaArray" }],
+					"default": true
+				},
+				"maxItems": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minItems": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"uniqueItems": {
+					"type": "boolean",
+					"default": false
+				},
+				"contains": { "$ref": "#" },
+				"maxProperties": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minProperties": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"required": { "$ref": "#/definitions/stringArray" },
+				"additionalProperties": { "$ref": "#" },
+				"definitions": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"default": {}
+				},
+				"properties": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"default": {}
+				},
+				"patternProperties": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"propertyNames": { "format": "regex" },
+					"default": {}
+				},
+				"dependencies": {
+					"type": "object",
+					"additionalProperties": { "anyOf": [{ "$ref": "#" }, { "$ref": "#/definitions/stringArray" }] }
+				},
+				"propertyNames": { "$ref": "#" },
+				"const": true,
+				"enum": {
+					"type": "array",
+					"items": true,
+					"minItems": 1,
+					"uniqueItems": true
+				},
+				"type": { "anyOf": [{ "$ref": "#/definitions/simpleTypes" }, {
+					"type": "array",
+					"items": { "$ref": "#/definitions/simpleTypes" },
+					"minItems": 1,
+					"uniqueItems": true
+				}] },
+				"format": { "type": "string" },
+				"contentMediaType": { "type": "string" },
+				"contentEncoding": { "type": "string" },
+				"if": { "$ref": "#" },
+				"then": { "$ref": "#" },
+				"else": { "$ref": "#" },
+				"allOf": { "$ref": "#/definitions/schemaArray" },
+				"anyOf": { "$ref": "#/definitions/schemaArray" },
+				"oneOf": { "$ref": "#/definitions/schemaArray" },
+				"not": { "$ref": "#" }
+			},
+			"default": true
+		}]
+	]) };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/vocabularies.js
+var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { METASCHEMAS } = require_metaschemas();
+	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
+	let KEYWORDS_BY_VOCABULARY = null;
+	function keywordsByVocabulary() {
+		if (KEYWORDS_BY_VOCABULARY) return KEYWORDS_BY_VOCABULARY;
+		const byVocabulary = /* @__PURE__ */ new Map();
+		for (const name of [
+			"core",
+			"applicator",
+			"unevaluated",
+			"validation",
+			"meta-data",
+			"format-annotation",
+			"content"
+		]) {
+			const meta = METASCHEMAS.get(`https://json-schema.org/draft/2020-12/meta/${name}`);
+			if (!meta || !meta.properties) continue;
+			byVocabulary.set(`https://json-schema.org/draft/2020-12/vocab/${name}`, new Set(Object.keys(meta.properties)));
+		}
+		byVocabulary.set("https://json-schema.org/draft/2020-12/vocab/format-assertion", /* @__PURE__ */ new Set(["format"]));
+		KEYWORDS_BY_VOCABULARY = byVocabulary;
+		return byVocabulary;
+	}
+	function allVocabularyKeywords() {
+		const all = /* @__PURE__ */ new Set();
+		for (const keywords of keywordsByVocabulary().values()) for (const keyword of keywords) all.add(keyword);
+		return all;
+	}
+	function enabledKeywords(metaschema) {
+		if (!metaschema || typeof metaschema !== "object") return null;
+		const vocabularies = metaschema.$vocabulary;
+		if (!vocabularies || typeof vocabularies !== "object") return null;
+		const known = keywordsByVocabulary();
+		const enabled = /* @__PURE__ */ new Set();
+		for (const [uri, required] of Object.entries(vocabularies)) {
+			const keywords = known.get(uri);
+			if (keywords) for (const keyword of keywords) enabled.add(keyword);
+			else if (required === true) return null;
+		}
+		for (const keyword of known.get(CORE_VOCABULARY) || []) enabled.add(keyword);
+		for (const keyword of allVocabularyKeywords()) if (!enabled.has(keyword)) return enabled;
+		return null;
+	}
+	function stripDisabledKeywords(schema, enabled) {
+		const removable = allVocabularyKeywords();
+		const disabled = /* @__PURE__ */ new Set();
+		for (const keyword of removable) if (!enabled.has(keyword)) disabled.add(keyword);
+		if (disabled.size === 0) return schema;
+		_strip(schema, disabled, /* @__PURE__ */ new Set(), true);
+		return schema;
+	}
+	function _strip(schema, disabled, seen, isRoot) {
+		if (typeof schema !== "object" || schema === null) return;
+		if (Array.isArray(schema)) {
+			for (const each of schema) _strip(each, disabled, seen, false);
+			return;
+		}
+		if (seen.has(schema)) return;
+		seen.add(schema);
+		if (!isRoot && typeof schema.$schema === "string") return;
+		for (const keyword of disabled) if (keyword in schema) delete schema[keyword];
+		for (const key of [
+			"properties",
+			"patternProperties",
+			"$defs",
+			"definitions",
+			"dependentSchemas"
+		]) {
+			const box = schema[key];
+			if (box && typeof box === "object" && !Array.isArray(box)) for (const each of Object.values(box)) _strip(each, disabled, seen, false);
+		}
+		for (const key of [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]) if (Array.isArray(schema[key])) for (const each of schema[key]) _strip(each, disabled, seen, false);
+		for (const key of [
+			"items",
+			"additionalItems",
+			"contains",
+			"not",
+			"if",
+			"then",
+			"else",
+			"additionalProperties",
+			"propertyNames",
+			"unevaluatedItems",
+			"unevaluatedProperties",
+			"contentSchema"
+		]) {
+			const sub = schema[key];
+			if (Array.isArray(sub)) for (const each of sub) _strip(each, disabled, seen, false);
+			else _strip(sub, disabled, seen, false);
+		}
+	}
+	module.exports = {
+		enabledKeywords,
+		stripDisabledKeywords,
+		keywordsByVocabulary
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/schema-scan.js
+var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const NULLABLE = 1;
+	const REF_SIBLINGS = 2;
+	const ANCHOR_ID = 4;
+	const DEFINITIONS = 8;
+	const DEPENDENCIES = 16;
+	const TUPLE_ITEMS = 32;
+	const EXCLUSIVE_BOOL = 64;
+	const DRAFT7_WORK = 62;
+	const REF_SIBLINGS_KEPT = /* @__PURE__ */ new Set([
+		"$ref",
+		"$defs",
+		"definitions",
+		"$schema",
+		"$comment",
+		"title",
+		"description",
+		"examples",
+		"default",
+		"readOnly",
+		"writeOnly"
+	]);
+	const ANCHOR_ID_RE = /^#[A-Za-z][A-Za-z0-9_.:-]*$/;
+	const CACHE = /* @__PURE__ */ new WeakMap();
+	function scan(schema) {
+		if (typeof schema !== "object" || schema === null) return 0;
+		const hit = CACHE.get(schema);
+		if (hit !== void 0) return hit;
+		let bits = 0;
+		const seen = /* @__PURE__ */ new Set();
+		const walk = (node) => {
+			if (typeof node !== "object" || node === null) return;
+			if (Array.isArray(node)) {
+				for (let i = 0; i < node.length; i++) walk(node[i]);
+				return;
+			}
+			if (seen.has(node)) return;
+			seen.add(node);
+			if ("nullable" in node) bits |= NULLABLE;
+			if (node.definitions !== void 0 && node.$defs === void 0) bits |= DEFINITIONS;
+			if (node.dependencies !== void 0) bits |= DEPENDENCIES;
+			if (Array.isArray(node.items)) bits |= TUPLE_ITEMS;
+			if (typeof node.exclusiveMinimum === "boolean" || typeof node.exclusiveMaximum === "boolean") bits |= EXCLUSIVE_BOOL;
+			if (typeof node.$id === "string" && ANCHOR_ID_RE.test(node.$id)) bits |= ANCHOR_ID;
+			const keys = Object.keys(node);
+			if (typeof node.$ref === "string") {
+				for (let i = 0; i < keys.length; i++) if (!REF_SIBLINGS_KEPT.has(keys[i])) {
+					bits |= REF_SIBLINGS;
+					break;
+				}
+			}
+			for (let i = 0; i < keys.length; i++) walk(node[keys[i]]);
+		};
+		walk(schema);
+		CACHE.set(schema, bits);
+		return bits;
+	}
+	function needsNormalization(schema, isDraft7) {
+		const bits = scan(schema);
+		if (bits & NULLABLE) return true;
+		if (bits & EXCLUSIVE_BOOL) return true;
+		return isDraft7 ? (bits & DRAFT7_WORK) !== 0 : false;
+	}
+	module.exports = {
+		scan,
+		needsNormalization,
+		NULLABLE,
+		REF_SIBLINGS,
+		ANCHOR_ID,
+		DEFINITIONS,
+		DEPENDENCIES,
+		TUPLE_ITEMS,
+		EXCLUSIVE_BOOL,
+		DRAFT7_WORK
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/dialect.js
+var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const V1_DIALECTS = /* @__PURE__ */ new Set([
+		"https://json-schema.org/v1",
+		"https://json-schema.org/v1/schema",
+		"https://json-schema.org/v1/2026",
+		"https://json-schema.org/draft/next/schema"
+	]);
+	function isV1Dialect(schema) {
+		if (typeof schema !== "object" || schema === null) return false;
+		if (typeof schema.$schema !== "string") return false;
+		const uri = schema.$schema.endsWith("#") ? schema.$schema.slice(0, -1) : schema.$schema;
+		return V1_DIALECTS.has(uri);
+	}
+	module.exports = {
+		isV1Dialect,
+		V1_DIALECTS
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/shape-classifier.js
+var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
+		"string",
+		"number",
+		"integer",
+		"boolean"
+	]);
+	const META_KEYS = /* @__PURE__ */ new Set([
+		"$schema",
+		"$id",
+		"$comment",
+		"title",
+		"description",
+		"default",
+		"examples",
+		"deprecated",
+		"readOnly",
+		"writeOnly"
+	]);
+	const TIER0_OBJECT_ALLOWED = /* @__PURE__ */ new Set([
+		"type",
+		"properties",
+		"required",
+		"additionalProperties",
+		...META_KEYS
+	]);
+	const TIER0_PRIMITIVE_ALLOWED = /* @__PURE__ */ new Set([
+		"type",
+		"enum",
+		"const",
+		"minLength",
+		"maxLength",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf",
+		...META_KEYS
+	]);
+	const MAX_TIER0_PROPS = 10;
+	const MAX_TIER0_ENUM = 256;
+	function isPrimitiveType(t) {
+		return typeof t === "string" && PRIMITIVE_TYPES.has(t);
+	}
+	function isPrimitiveEnumValue(v) {
+		const t = typeof v;
+		return v === null || t === "string" || t === "number" || t === "boolean";
+	}
+	function isTier0Primitive(schema) {
+		if (typeof schema !== "object" || schema === null || Array.isArray(schema)) return false;
+		if (!isPrimitiveType(schema.type)) return false;
+		for (const k of Object.keys(schema)) if (!TIER0_PRIMITIVE_ALLOWED.has(k)) return false;
+		if (schema.enum !== void 0) {
+			if (!Array.isArray(schema.enum)) return false;
+			if (schema.enum.length === 0 || schema.enum.length > MAX_TIER0_ENUM) return false;
+			for (const v of schema.enum) if (!isPrimitiveEnumValue(v)) return false;
+		}
+		if (schema.const !== void 0 && !isPrimitiveEnumValue(schema.const)) return false;
+		return true;
+	}
+	function isTier0Object(schema) {
+		if (schema.type !== "object") return false;
+		for (const k of Object.keys(schema)) if (!TIER0_OBJECT_ALLOWED.has(k)) return false;
+		const ap = schema.additionalProperties;
+		if (ap !== void 0 && ap !== true && ap !== false) return false;
+		if (schema.required !== void 0) {
+			if (!Array.isArray(schema.required)) return false;
+			for (const r of schema.required) if (typeof r !== "string") return false;
+		}
+		const props = schema.properties;
+		if (props === void 0) return true;
+		if (typeof props !== "object" || props === null || Array.isArray(props)) return false;
+		const keys = Object.keys(props);
+		if (keys.length > MAX_TIER0_PROPS) return false;
+		for (const k of keys) if (!isTier0Primitive(props[k])) return false;
+		return true;
+	}
+	function classify(schema) {
+		if (typeof schema !== "object" || schema === null || Array.isArray(schema)) return {
+			tier: 2,
+			plan: null
+		};
+		if (isTier0Primitive(schema)) return {
+			tier: 0,
+			plan: null
+		};
+		if (isTier0Object(schema)) return {
+			tier: 0,
+			plan: null
+		};
+		return {
+			tier: 2,
+			plan: null
+		};
+	}
+	module.exports = {
+		classify,
+		MAX_TIER0_PROPS,
+		MAX_TIER0_ENUM,
+		PRIMITIVE_TYPES
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/tier0.js
+var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const TYPE_MASK = {
+		string: 1,
+		number: 2,
+		integer: 4,
+		boolean: 8
+	};
+	const T_STRING = TYPE_MASK.string;
+	const T_NUMBER = TYPE_MASK.number;
+	const T_INTEGER = TYPE_MASK.integer;
+	const T_BOOLEAN = TYPE_MASK.boolean;
+	function codePointLength(s) {
+		const len = s.length;
+		for (let i = 0; i < len; i++) if (s.charCodeAt(i) >= 55296 && s.charCodeAt(i) <= 56319) {
+			let n = 0;
+			for (const _ of s) n++;
+			return n;
+		}
+		return len;
+	}
+	const F_MIN = 1;
+	const F_MAX = 2;
+	const F_EXCL_MIN = 4;
+	const F_EXCL_MAX = 8;
+	const F_MULT = 16;
+	function primConstraint(key, propSchema) {
+		const t = propSchema.type;
+		const hasEnum = Array.isArray(propSchema.enum);
+		const hasConst = propSchema.const !== void 0;
+		let numFlags = 0;
+		if (typeof propSchema.minimum === "number") numFlags |= F_MIN;
+		if (typeof propSchema.maximum === "number") numFlags |= F_MAX;
+		if (typeof propSchema.exclusiveMinimum === "number") numFlags |= F_EXCL_MIN;
+		if (typeof propSchema.exclusiveMaximum === "number") numFlags |= F_EXCL_MAX;
+		if (typeof propSchema.multipleOf === "number") numFlags |= F_MULT;
+		return {
+			key,
+			typeMask: TYPE_MASK[t] | 0,
+			numFlags,
+			hasEnum,
+			hasConst,
+			enumSet: hasEnum ? new Set(propSchema.enum) : null,
+			constVal: hasConst ? propSchema.const : void 0,
+			minLen: typeof propSchema.minLength === "number" ? propSchema.minLength : -1,
+			maxLen: typeof propSchema.maxLength === "number" ? propSchema.maxLength : -1,
+			min: typeof propSchema.minimum === "number" ? propSchema.minimum : 0,
+			max: typeof propSchema.maximum === "number" ? propSchema.maximum : 0,
+			exclMin: typeof propSchema.exclusiveMinimum === "number" ? propSchema.exclusiveMinimum : 0,
+			exclMax: typeof propSchema.exclusiveMaximum === "number" ? propSchema.exclusiveMaximum : 0,
+			multipleOf: typeof propSchema.multipleOf === "number" ? propSchema.multipleOf : 0
+		};
+	}
+	function buildTier0Plan(schema) {
+		if (schema.type !== "object") return {
+			isPrimitive: true,
+			constraints: [primConstraint("__root__", schema)],
+			requiredMask: 0,
+			additionalAllowed: true,
+			knownKeys: null
+		};
+		const props = schema.properties || {};
+		const keys = Object.keys(props);
+		const required = schema.required ? new Set(schema.required) : null;
+		const constraints = new Array(keys.length);
+		const knownKeys = /* @__PURE__ */ new Set();
+		let requiredMask = 0;
+		for (let i = 0; i < keys.length; i++) {
+			const k = keys[i];
+			constraints[i] = primConstraint(k, props[k]);
+			knownKeys.add(k);
+			if (required && required.has(k)) requiredMask |= 1 << i;
+		}
+		return {
+			isPrimitive: false,
+			constraints,
+			requiredMask,
+			additionalAllowed: schema.additionalProperties !== false,
+			knownKeys
+		};
+	}
+	function _multipleOk(v, m) {
+		if (m === 0) return false;
+		const q = v / m;
+		return Number.isInteger(q) || Math.abs(q - Math.round(q)) < 1e-9;
+	}
+	function checkPrimitive(c, v) {
+		const m = c.typeMask;
+		if (m === T_STRING) {
+			if (typeof v !== "string") return false;
+			const minLen = c.minLen;
+			const maxLen = c.maxLen;
+			if (minLen >= 0) {
+				const l = v.length;
+				if (l < minLen) return false;
+				if (l < minLen * 2 && codePointLength(v) < minLen) return false;
+			}
+			if (maxLen >= 0) {
+				if (v.length > maxLen && codePointLength(v) > maxLen) return false;
+			}
+		} else if (m === T_INTEGER) {
+			if (typeof v !== "number" || !Number.isInteger(v)) return false;
+			const f = c.numFlags;
+			if (f !== 0) {
+				if (f & F_MIN && v < c.min) return false;
+				if (f & F_MAX && v > c.max) return false;
+				if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+				if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+				if (f & F_MULT && !_multipleOk(v, c.multipleOf)) return false;
+			}
+		} else if (m === T_NUMBER) {
+			if (typeof v !== "number" || !isFinite(v)) return false;
+			const f = c.numFlags;
+			if (f !== 0) {
+				if (f & F_MIN && v < c.min) return false;
+				if (f & F_MAX && v > c.max) return false;
+				if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+				if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+				if (f & F_MULT && !_multipleOk(v, c.multipleOf)) return false;
+			}
+		} else if (m === T_BOOLEAN) {
+			if (typeof v !== "boolean") return false;
+		} else return false;
+		if (c.hasEnum && !c.enumSet.has(v)) return false;
+		if (c.hasConst && v !== c.constVal) return false;
+		return true;
+	}
+	function tier0ValidateObject(plan, data) {
+		if (typeof data !== "object" || data === null || Array.isArray(data)) return false;
+		const cs = plan.constraints;
+		const n = cs.length;
+		const reqMask = plan.requiredMask;
+		let seenMask = 0;
+		for (let i = 0; i < n; i++) {
+			const c = cs[i];
+			const v = data[c.key];
+			if (v === void 0) {
+				if (reqMask & 1 << i) return false;
+				continue;
+			}
+			seenMask |= 1 << i;
+			const m = c.typeMask;
+			if (m === T_STRING) {
+				if (typeof v !== "string") return false;
+				const minLen = c.minLen;
+				const maxLen = c.maxLen;
+				if (minLen >= 0) {
+					const l = v.length;
+					if (l < minLen) return false;
+					if (l < minLen * 2 && codePointLength(v) < minLen) return false;
+				}
+				if (maxLen >= 0) {
+					if (v.length > maxLen && codePointLength(v) > maxLen) return false;
+				}
+			} else if (m === T_INTEGER) {
+				if (typeof v !== "number" || !Number.isInteger(v)) return false;
+				const f = c.numFlags;
+				if (f !== 0) {
+					if (f & F_MIN && v < c.min) return false;
+					if (f & F_MAX && v > c.max) return false;
+					if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+					if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+					if (f & F_MULT && !_multipleOk(v, c.multipleOf)) return false;
+				}
+			} else if (m === T_NUMBER) {
+				if (typeof v !== "number" || !isFinite(v)) return false;
+				const f = c.numFlags;
+				if (f !== 0) {
+					if (f & F_MIN && v < c.min) return false;
+					if (f & F_MAX && v > c.max) return false;
+					if (f & F_EXCL_MIN && v <= c.exclMin) return false;
+					if (f & F_EXCL_MAX && v >= c.exclMax) return false;
+					if (f & F_MULT && !_multipleOk(v, c.multipleOf)) return false;
+				}
+			} else if (m === T_BOOLEAN) {
+				if (typeof v !== "boolean") return false;
+			} else return false;
+			if (c.hasEnum && !c.enumSet.has(v)) return false;
+			if (c.hasConst && v !== c.constVal) return false;
+		}
+		if ((seenMask & reqMask) !== reqMask) return false;
+		if (!plan.additionalAllowed) {
+			const known = plan.knownKeys;
+			for (const k in data) {
+				if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+				if (!known.has(k)) return false;
+			}
+		}
+		return true;
+	}
+	function tier0Validate(plan, data) {
+		if (plan.isPrimitive) return checkPrimitive(plan.constraints[0], data);
+		return tier0ValidateObject(plan, data);
+	}
+	module.exports = {
+		buildTier0Plan,
+		tier0Validate,
+		tier0ValidateObject,
+		checkPrimitive,
+		TYPE_MASK
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/data-positions.js
+var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	/**
+	* Build pointer → { byteOffset, length, line, col, text } from a JSON
+	* input buffer. Called only when validation fails AND richErrors is on
+	* AND abortEarly is off. Zero cost on the valid path.
+	*/
+	function buildDataPositionMap(input) {
+		const escapePtr = (s) => s.replace(/~/g, "~0").replace(/\//g, "~1");
+		const text = typeof Buffer !== "undefined" && Buffer.isBuffer(input) ? input.toString("utf8") : String(input);
+		const map = Object.create(null);
+		const lines = text.split("\n");
+		const lineStart = new Array(lines.length + 1);
+		lineStart[0] = 0;
+		for (let i = 0; i < lines.length; i++) lineStart[i + 1] = lineStart[i] + lines[i].length + 1;
+		function offsetToLineCol(off) {
+			let lo = 0, hi = lineStart.length - 1;
+			while (lo < hi) {
+				const mid = lo + hi + 1 >> 1;
+				if (lineStart[mid] <= off) lo = mid;
+				else hi = mid - 1;
+			}
+			return {
+				line: lo + 1,
+				col: off - lineStart[lo] + 1,
+				text: lines[lo] || ""
+			};
+		}
+		let i = 0;
+		const n = text.length;
+		function skipWs() {
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 32 || ch === 9 || ch === 10 || ch === 13) i++;
+				else break;
+			}
+		}
+		function readString() {
+			const start = i;
+			i++;
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 92) {
+					i += 2;
+					continue;
+				}
+				if (ch === 34) {
+					i++;
+					return JSON.parse(text.slice(start, i));
+				}
+				i++;
+			}
+			throw new Error("unterminated string at offset " + start);
+		}
+		function pointerOf(path) {
+			if (path.length === 0) return "";
+			return "/" + path.map(escapePtr).join("/");
+		}
+		function walk(path, keySpan) {
+			skipWs();
+			if (i >= n) return;
+			const start = i;
+			const pos = offsetToLineCol(start);
+			const ch = text.charCodeAt(i);
+			if (ch === 123) {
+				i++;
+				while (true) {
+					skipWs();
+					if (i >= n) break;
+					if (text.charCodeAt(i) === 125) {
+						i++;
+						break;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					skipWs();
+					const keyStart = i;
+					const keyPos = offsetToLineCol(keyStart);
+					const key = readString();
+					const span = {
+						keyOffset: keyStart,
+						keyLength: i - keyStart,
+						keyLine: keyPos.line,
+						keyCol: keyPos.col
+					};
+					skipWs();
+					if (text.charCodeAt(i) !== 58) throw new Error("expected \":\" at offset " + i);
+					i++;
+					walk(path.concat([key]), span);
+				}
+			} else if (ch === 91) {
+				i++;
+				let idx = 0;
+				while (true) {
+					skipWs();
+					if (i >= n) break;
+					if (text.charCodeAt(i) === 93) {
+						i++;
+						break;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					const before = i;
+					walk(path.concat([String(idx)]));
+					if (i === before) break;
+					idx++;
+				}
+			} else if (ch === 34) readString();
+			else while (i < n) {
+				const c = text.charCodeAt(i);
+				if (c === 44 || c === 125 || c === 93 || c === 32 || c === 9 || c === 10 || c === 13) break;
+				i++;
+			}
+			const entry = {
+				byteOffset: start,
+				length: i - start,
+				line: pos.line,
+				col: pos.col,
+				text: pos.text
+			};
+			if (keySpan) {
+				entry.keyOffset = keySpan.keyOffset;
+				entry.keyLength = keySpan.keyLength;
+				entry.keyLine = keySpan.keyLine;
+				entry.keyCol = keySpan.keyCol;
+			}
+			map[pointerOf(path)] = entry;
+		}
+		if (text.charCodeAt(0) === 65279) i = 1;
+		walk([]);
+		return map;
+	}
+	module.exports = { buildDataPositionMap };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/data-position-cache.js
+var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { buildDataPositionMap } = require_data_positions();
+	/**
+	* Memoize the position map for the duration of a single validate() call.
+	* Caller passes the original buffer/string. Identity-keyed: same reference
+	* == same map. No global state, caller holds the cache instance.
+	*/
+	function createCache() {
+		const wm = /* @__PURE__ */ new WeakMap();
+		const sm = /* @__PURE__ */ new Map();
+		return {
+			get(input) {
+				if (input == null) return null;
+				if (typeof input === "string") {
+					if (sm.has(input)) return sm.get(input);
+					try {
+						const m = buildDataPositionMap(input);
+						sm.set(input, m);
+						return m;
+					} catch {
+						return null;
+					}
+				}
+				if (Buffer.isBuffer(input)) {
+					if (wm.has(input)) return wm.get(input);
+					try {
+						const m = buildDataPositionMap(input);
+						wm.set(input, m);
+						return m;
+					} catch {
+						return null;
+					}
+				}
+				return null;
+			},
+			reset() {
+				sm.clear();
+			}
+		};
+	}
+	module.exports = { createCache };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/levenshtein.js
+var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	let scratchA = /* @__PURE__ */ new Int32Array(64);
+	let scratchB = /* @__PURE__ */ new Int32Array(64);
+	function levenshtein(a, b, maxDistance) {
+		const max = maxDistance == null ? Infinity : maxDistance;
+		if (a === b) return 0;
+		if (Math.abs(a.length - b.length) > max) return Infinity;
+		if (a.length === 0) return b.length;
+		if (b.length === 0) return a.length;
+		if (scratchA.length < b.length + 1) {
+			scratchA = new Int32Array(b.length + 1);
+			scratchB = new Int32Array(b.length + 1);
+		}
+		let prev = scratchA;
+		let curr = scratchB;
+		const bn = b.length;
+		for (let j = 0; j <= bn; j++) prev[j] = j;
+		for (let i = 1; i <= a.length; i++) {
+			curr[0] = i;
+			let rowMin = i;
+			const ca = a.charCodeAt(i - 1);
+			for (let j = 1; j <= bn; j++) {
+				const cost = ca === b.charCodeAt(j - 1) ? 0 : 1;
+				let m = prev[j - 1] + cost;
+				const del = curr[j - 1] + 1;
+				if (del < m) m = del;
+				const ins = prev[j] + 1;
+				if (ins < m) m = ins;
+				curr[j] = m;
+				if (m < rowMin) rowMin = m;
+			}
+			if (rowMin > max) return Infinity;
+			const t = prev;
+			prev = curr;
+			curr = t;
+		}
+		return prev[bn];
+	}
+	module.exports = { levenshtein };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/strict-check.js
+var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { METASCHEMAS } = require_metaschemas();
+	const { levenshtein } = require_levenshtein();
+	const ATA_KEYWORDS = [
+		"nullable",
+		"errorMessage",
+		"propertyDependencies",
+		"discriminator"
+	];
+	let SPEC_KEYWORDS = null;
+	function specKeywords() {
+		if (SPEC_KEYWORDS === null) {
+			SPEC_KEYWORDS = new Set(ATA_KEYWORDS);
+			for (const doc of METASCHEMAS.values()) if (doc && doc.properties) for (const k of Object.keys(doc.properties)) SPEC_KEYWORDS.add(k);
+		}
+		return SPEC_KEYWORDS;
+	}
+	const KEYWORD_TYPES = new Map(Object.entries({
+		minLength: ["string"],
+		maxLength: ["string"],
+		pattern: ["string"],
+		minimum: ["number"],
+		maximum: ["number"],
+		exclusiveMinimum: ["number"],
+		exclusiveMaximum: ["number"],
+		multipleOf: ["number"],
+		items: ["array"],
+		prefixItems: ["array"],
+		additionalItems: ["array"],
+		minItems: ["array"],
+		maxItems: ["array"],
+		uniqueItems: ["array"],
+		contains: ["array"],
+		minContains: ["array"],
+		maxContains: ["array"],
+		unevaluatedItems: ["array"],
+		properties: ["object"],
+		patternProperties: ["object"],
+		additionalProperties: ["object"],
+		required: ["object"],
+		minProperties: ["object"],
+		maxProperties: ["object"],
+		propertyNames: ["object"],
+		dependentRequired: ["object"],
+		dependentSchemas: ["object"],
+		unevaluatedProperties: ["object"]
+	}));
+	function typeAllows(declared, wanted) {
+		const list = Array.isArray(declared) ? declared : [declared];
+		for (const t of list) {
+			if (t === wanted) return true;
+			if (wanted === "number" && t === "integer") return true;
+		}
+		return false;
+	}
+	const SCHEMA_MAPS = /* @__PURE__ */ new Set([
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas"
+	]);
+	const SCHEMA_LISTS = /* @__PURE__ */ new Set([
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"prefixItems"
+	]);
+	const SCHEMA_SINGLE = /* @__PURE__ */ new Set([
+		"items",
+		"additionalItems",
+		"additionalProperties",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"contains",
+		"propertyNames",
+		"not",
+		"if",
+		"then",
+		"else",
+		"contentSchema"
+	]);
+	const DATA_VALUED = /* @__PURE__ */ new Set([
+		"enum",
+		"const",
+		"default",
+		"examples",
+		"required",
+		"type",
+		"$vocabulary"
+	]);
+	function nearest(word, known) {
+		let best = null;
+		let bestD = Infinity;
+		for (const k of known) {
+			const d = levenshtein(word, k);
+			if (d < bestD) {
+				bestD = d;
+				best = k;
+			}
+		}
+		return bestD > 0 && bestD <= 2 && best !== null ? best : null;
+	}
+	function resolveLocalPointer(root, ref) {
+		let node = root;
+		for (const raw of ref.slice(2).split("/")) {
+			const token = raw.replace(/~1/g, "/").replace(/~0/g, "~");
+			if (node === null || typeof node !== "object") return false;
+			if (Array.isArray(node)) {
+				if (!/^\d+$/.test(token) || Number(token) >= node.length) return false;
+				node = node[Number(token)];
+			} else {
+				if (!Object.prototype.hasOwnProperty.call(node, token)) return false;
+				node = node[token];
+			}
+		}
+		return node !== void 0;
+	}
+	/**
+	* Walks a schema and reports the authoring mistakes the validator would
+	* otherwise ignore. Returns an array of { path, message }, empty when clean.
+	*
+	* `userKeywords` are names registered through the `keywords` option, and
+	* `x-` prefixed names pass without comment: they are the conventional
+	* extension namespace and rejecting them would flag real documents.
+	*/
+	function checkSchemaStrict(root, options) {
+		const known = specKeywords();
+		const user = options && options.userKeywords ? options.userKeywords : null;
+		const problems = [];
+		const seen = /* @__PURE__ */ new Set();
+		function isKnown(key) {
+			if (known.has(key)) return true;
+			if (user && (Array.isArray(user) ? user.includes(key) : Object.prototype.hasOwnProperty.call(user, key))) return true;
+			if (key.startsWith("x-")) return true;
+			return false;
+		}
+		function walkSchema(node, path) {
+			if (node === null || typeof node !== "object" || Array.isArray(node)) return;
+			if (seen.has(node)) return;
+			seen.add(node);
+			for (const key of Object.keys(node)) {
+				const value = node[key];
+				const at = path + "/" + key;
+				if (!isKnown(key)) {
+					const hint = nearest(key, known);
+					problems.push({
+						path: at,
+						message: hint ? `unknown keyword "${key}" (did you mean "${hint}"?)` : `unknown keyword "${key}"`
+					});
+					continue;
+				}
+				if (key === "$ref" && typeof value === "string" && value.startsWith("#/") && !resolveLocalPointer(root, value)) {
+					problems.push({
+						path: at,
+						message: `$ref "${value}" does not resolve in this document`
+					});
+					continue;
+				}
+				if (typeof node.type === "string" || Array.isArray(node.type)) {
+					const acts = KEYWORD_TYPES.get(key);
+					if (acts && !acts.some((t) => typeAllows(node.type, t))) {
+						problems.push({
+							path: at,
+							message: `"${key}" has no effect here: it applies to ${acts.join("/")} and this node's type is ${JSON.stringify(node.type)}`
+						});
+						continue;
+					}
+				}
+				if (key === "required" && Array.isArray(value) && node.properties && typeof node.properties === "object" && node.additionalProperties === false && !node.patternProperties) {
+					for (const name of value) if (typeof name === "string" && !Object.prototype.hasOwnProperty.call(node.properties, name)) problems.push({
+						path: at,
+						message: `required property "${name}" is not defined in properties and additionalProperties is false, so nothing can satisfy this schema`
+					});
+				}
+				if (DATA_VALUED.has(key)) continue;
+				if (SCHEMA_MAPS.has(key)) {
+					if (value !== null && typeof value === "object" && !Array.isArray(value)) for (const name of Object.keys(value)) walkSchema(value[name], at + "/" + name.replace(/~/g, "~0").replace(/\//g, "~1"));
+				} else if (SCHEMA_LISTS.has(key)) {
+					if (Array.isArray(value)) for (let i = 0; i < value.length; i++) walkSchema(value[i], at + "/" + i);
+				} else if (SCHEMA_SINGLE.has(key)) {
+					if (Array.isArray(value)) for (let i = 0; i < value.length; i++) walkSchema(value[i], at + "/" + i);
+					else walkSchema(value, at);
+				} else if (key === "dependencies") {
+					if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+						for (const name of Object.keys(value)) if (!Array.isArray(value[name])) walkSchema(value[name], at + "/" + name);
+					}
+				}
+			}
+		}
+		walkSchema(root, "#");
+		return problems;
+	}
+	module.exports = { checkSchemaStrict };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/source-positions.js
+var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	/**
+	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
+	*
+	* Approach: use JSON.parse for correctness, then do one structural scan
+	* tracking bracket depth and key positions. This avoids hand-rolling a
+	* full JSON parser while delivering keyword-level positions sufficient
+	* for source frames.
+	*
+	* Limitations (acceptable for source frames):
+	*  - Duplicate keys: last wins.
+	*  - Whitespace inside string values does not affect tracking (strings
+	*    are skipped over wholesale).
+	*  - Comments / trailing commas: JSON only, no JSON5.
+	*/
+	function escapePtr(s) {
+		return s.replace(/~/g, "~0").replace(/\//g, "~1");
+	}
+	function buildPositionMap(text) {
+		const map = Object.create(null);
+		const lines = text.split("\n");
+		const lineStart = new Array(lines.length + 1);
+		lineStart[0] = 0;
+		for (let i = 0; i < lines.length; i++) lineStart[i + 1] = lineStart[i] + lines[i].length + 1;
+		function offsetToLineCol(off) {
+			let lo = 0, hi = lineStart.length - 1;
+			while (lo < hi) {
+				const mid = lo + hi + 1 >> 1;
+				if (lineStart[mid] <= off) lo = mid;
+				else hi = mid - 1;
+			}
+			return {
+				line: lo + 1,
+				col: off - lineStart[lo] + 1,
+				text: lines[lo] || ""
+			};
+		}
+		let i = 0;
+		const n = text.length;
+		function skipWs() {
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 32 || ch === 9 || ch === 10 || ch === 13) i++;
+				else break;
+			}
+		}
+		function readString() {
+			const start = i;
+			i++;
+			while (i < n) {
+				const ch = text.charCodeAt(i);
+				if (ch === 92) {
+					i += 2;
+					continue;
+				}
+				if (ch === 34) {
+					i++;
+					return JSON.parse(text.slice(start, i));
+				}
+				i++;
+			}
+			throw new Error("unterminated string at offset " + start);
+		}
+		function skipValue() {
+			skipWs();
+			if (i >= n) return;
+			const ch = text.charCodeAt(i);
+			if (ch === 34) {
+				readString();
+				return;
+			}
+			if (ch === 123 || ch === 91) {
+				const open = ch;
+				const close = open === 123 ? 125 : 93;
+				let depth = 1;
+				i++;
+				while (i < n && depth > 0) {
+					const c = text.charCodeAt(i);
+					if (c === 34) {
+						readString();
+						continue;
+					}
+					if (c === open) depth++;
+					else if (c === close) depth--;
+					i++;
+				}
+				return;
+			}
+			while (i < n) {
+				const c = text.charCodeAt(i);
+				if (c === 44 || c === 125 || c === 93 || c === 32 || c === 9 || c === 10 || c === 13) return;
+				i++;
+			}
+		}
+		function pointerOf(path) {
+			if (path.length === 0) return "";
+			return "/" + path.map(escapePtr).join("/");
+		}
+		function walk(path) {
+			skipWs();
+			if (i >= n) return;
+			const pos = offsetToLineCol(i);
+			map[pointerOf(path)] = pos;
+			const ch = text.charCodeAt(i);
+			if (ch === 123) {
+				i++;
+				while (true) {
+					skipWs();
+					if (text.charCodeAt(i) === 125) {
+						i++;
+						return;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					skipWs();
+					const keyStart = i;
+					const key = readString();
+					const keyPos = offsetToLineCol(keyStart);
+					skipWs();
+					if (text.charCodeAt(i) !== 58) throw new Error("expected \":\" at offset " + i);
+					i++;
+					const childPath = path.concat([key]);
+					map[pointerOf(childPath) + "#key"] = keyPos;
+					walk(childPath);
+				}
+			} else if (ch === 91) {
+				i++;
+				let idx = 0;
+				while (true) {
+					skipWs();
+					if (text.charCodeAt(i) === 93) {
+						i++;
+						return;
+					}
+					if (text.charCodeAt(i) === 44) {
+						i++;
+						continue;
+					}
+					walk(path.concat([String(idx)]));
+					idx++;
+				}
+			} else skipValue();
+		}
+		if (text.charCodeAt(0) === 65279) i = 1;
+		walk([]);
+		return map;
+	}
+	module.exports = {
+		buildPositionMap,
+		escapePtr
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/plan-compiler.js
+var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { collapseBranches } = require_branch_collapse();
+	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
+	function install(deps) {
+		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, runCustomV, dataBits, escapePointer, deepEqual, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
+		const TRUE_FN = () => true;
+		const TRUE_PAIR = {
+			v: TRUE_FN,
+			c: TRUE_FN
+		};
+		const FALSE_PAIR = {
+			v: () => false,
+			c: (data, errors, instancePath, schemaPath) => {
+				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
+				return false;
+			}
+		};
+		function dynTarget(interp, ref, base, chain) {
+			const state = interp.state;
+			let { node, base: refBase } = resolveRef(ref, base, state);
+			const [, fragment] = splitFragment(resolveUri(base, ref));
+			if (fragment && !fragment.startsWith("/")) {
+				const initialDyn = state.dynamicAnchors.get(refBase);
+				if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !interp.bookending) for (let i = 0; i < chain.length; i++) {
+					const dyn = state.dynamicAnchors.get(chain[i]);
+					if (dyn && dyn.has(fragment)) {
+						node = dyn.get(fragment);
+						refBase = chain[i];
+						break;
+					}
+				}
+			}
+			return {
+				node,
+				base: refBase
+			};
+		}
+		function fresh() {
+			return {
+				props: null,
+				n: 0,
+				x: null,
+				keys: null
+			};
+		}
+		function keysOf(rec, data) {
+			if (rec.keys === null) rec.keys = Object.keys(data);
+			return rec.keys;
+		}
+		function hasProp(rec, key) {
+			const p = rec.props;
+			if (p === null) return false;
+			for (let i = 0; i < p.length; i++) if (p[i] === key) return true;
+			return false;
+		}
+		function addProp(rec, key) {
+			if (rec.props === null) rec.props = [key];
+			else rec.props.push(key);
+		}
+		function hasItem(rec, i) {
+			if (i < rec.n) return true;
+			const x = rec.x;
+			if (x === null) return false;
+			for (let j = 0; j < x.length; j++) if (x[j] === i) return true;
+			return false;
+		}
+		function addItem(rec, i) {
+			if (i < rec.n) return;
+			if (i === rec.n) {
+				rec.n = i + 1;
+				return;
+			}
+			if (rec.x === null) rec.x = [i];
+			else rec.x.push(i);
+		}
+		function markRange(rec, from, to) {
+			if (from >= to) return;
+			if (from <= rec.n) {
+				if (to > rec.n) rec.n = to;
+				return;
+			}
+			if (rec.x === null) rec.x = [];
+			for (let i = from; i < to; i++) rec.x.push(i);
+		}
+		function mergeRec(target, from) {
+			if (from.props !== null) {
+				if (target.props === null) target.props = from.props;
+				else for (let i = 0; i < from.props.length; i++) target.props.push(from.props[i]);
+			}
+			if (from.n > target.n) target.n = from.n;
+			if (from.x !== null) {
+				if (target.x === null) target.x = from.x;
+				else for (let i = 0; i < from.x.length; i++) target.x.push(from.x[i]);
+			}
+		}
+		function pLen(rec) {
+			return rec.props === null ? 0 : rec.props.length;
+		}
+		function xLen(rec) {
+			return rec.x === null ? 0 : rec.x.length;
+		}
+		function undo(rec, pl, n0, xl) {
+			if (rec.props !== null) rec.props.length = pl;
+			rec.n = n0;
+			if (rec.x !== null) rec.x.length = xl;
+		}
+		function compileLeafV(P) {
+			const checks = [];
+			let needsBits = false;
+			if (P.hasType) {
+				const mask = P.typeMask;
+				needsBits = true;
+				checks.push((data, bits) => (bits & mask) !== 0);
+			}
+			if (P.enum !== null) {
+				const vals = P.enum;
+				if (vals.length === 0) checks.push(() => false);
+				else checks.push((data) => {
+					for (let i = 0; i < vals.length; i++) if (deepEqual(vals[i], data)) return true;
+					return false;
+				});
+			}
+			if (P.hasConst) {
+				const c = P.const;
+				checks.push((data) => deepEqual(c, data));
+			}
+			if (P.hasNumber) {
+				const nums = [];
+				if (P.minimum !== void 0) {
+					const m = P.minimum;
+					nums.push((d) => d >= m);
+				}
+				if (P.maximum !== void 0) {
+					const m = P.maximum;
+					nums.push((d) => d <= m);
+				}
+				if (P.exclusiveMinimum !== void 0) {
+					const m = P.exclusiveMinimum;
+					nums.push((d) => d > m);
+				}
+				if (P.exclusiveMaximum !== void 0) {
+					const m = P.exclusiveMaximum;
+					nums.push((d) => d < m);
+				}
+				if (P.multipleOf !== void 0) {
+					const m = P.multipleOf;
+					nums.push((d) => multipleOfOk(d, m));
+				}
+				const run = combineValue(nums);
+				if (run !== null) checks.push((data) => typeof data !== "number" || !isFinite(data) || run(data));
+			}
+			if (P.hasString) {
+				const strs = [];
+				if (P.minLength !== void 0) {
+					const m = P.minLength;
+					strs.push((d) => cpAtLeast(d, m));
+				}
+				if (P.maxLength !== void 0) {
+					const m = P.maxLength;
+					strs.push((d) => cpAtMost(d, m));
+				}
+				if (P.pattern !== null) {
+					const re = P.pattern;
+					strs.push((d) => re.test(d));
+				}
+				if (P.formatFn !== null) {
+					const f = P.formatFn;
+					strs.push((d) => f(d));
+				}
+				const run = combineValue(strs);
+				if (run !== null) {
+					needsBits = true;
+					checks.push((data, bits) => bits !== T_STRING || run(data));
+				}
+			}
+			if (P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems) {
+				const arrs = [];
+				if (P.minItems !== void 0) {
+					const m = P.minItems;
+					arrs.push((d) => d.length >= m);
+				}
+				if (P.maxItems !== void 0) {
+					const m = P.maxItems;
+					arrs.push((d) => d.length <= m);
+				}
+				if (P.uniqueItems) arrs.push((d) => {
+					for (let i = 0; i < d.length; i++) for (let j = i + 1; j < d.length; j++) if (deepEqual(d[i], d[j])) return false;
+					return true;
+				});
+				const run = combineValue(arrs);
+				if (run !== null) {
+					needsBits = true;
+					checks.push((data, bits) => bits !== T_ARRAY || run(data));
+				}
+			}
+			if (P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null) {
+				const objs = [];
+				if (P.required !== null) {
+					const req = P.required;
+					if (req.length === 1) {
+						const k = req[0];
+						objs.push((d) => Object.hasOwn(d, k));
+					} else objs.push((d) => {
+						for (let i = 0; i < req.length; i++) if (!Object.hasOwn(d, req[i])) return false;
+						return true;
+					});
+				}
+				if (P.minProperties !== void 0) {
+					const m = P.minProperties;
+					objs.push((d) => Object.keys(d).length >= m);
+				}
+				if (P.maxProperties !== void 0) {
+					const m = P.maxProperties;
+					objs.push((d) => Object.keys(d).length <= m);
+				}
+				if (P.dependentRequired !== null) {
+					const entries = P.dependentRequired;
+					objs.push((d) => {
+						for (let i = 0; i < entries.length; i++) {
+							const [key, deps] = entries[i];
+							if (!Object.hasOwn(d, key)) continue;
+							for (let j = 0; j < deps.length; j++) if (!Object.hasOwn(d, deps[j])) return false;
+						}
+						return true;
+					});
+				}
+				const run = combineValue(objs);
+				if (run !== null) {
+					needsBits = true;
+					checks.push((data, bits) => bits !== T_OBJECT || run(data));
+				}
+			}
+			if (P.hasCustom) {
+				needsBits = true;
+				checks.push((data, bits) => runCustomV(P, data, bits));
+			}
+			if (checks.length === 0) return TRUE_FN;
+			if (!needsBits) {
+				if (checks.length === 1) {
+					const a = checks[0];
+					return (data) => a(data, 0);
+				}
+				return (data) => {
+					for (let i = 0; i < checks.length; i++) if (!checks[i](data, 0)) return false;
+					return true;
+				};
+			}
+			if (checks.length === 1) {
+				const a = checks[0];
+				return (data) => a(data, dataBits(data));
+			}
+			if (checks.length === 2) {
+				const [a, b] = checks;
+				return (data) => {
+					const bits = dataBits(data);
+					return a(data, bits) && b(data, bits);
+				};
+			}
+			return (data) => {
+				const bits = dataBits(data);
+				for (let i = 0; i < checks.length; i++) if (!checks[i](data, bits)) return false;
+				return true;
+			};
+		}
+		function combineValue(fns) {
+			if (fns.length === 0) return null;
+			if (fns.length === 1) return fns[0];
+			if (fns.length === 2) {
+				const [a, b] = fns;
+				return (d) => a(d) && b(d);
+			}
+			return (d) => {
+				for (let i = 0; i < fns.length; i++) if (!fns[i](d)) return false;
+				return true;
+			};
+		}
+		function compileNode(ctx, node, base, chain, ann) {
+			if (node === true) return TRUE_PAIR;
+			if (node === false) return FALSE_PAIR;
+			if (!(node instanceof Plan)) return TRUE_PAIR;
+			const interp = ctx.interp;
+			const P = node;
+			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
+			if (chain.indexOf(base) === -1) chain = chain.concat(base);
+			const collect = ann || P.hasUnevaluated;
+			let perKey = ctx.memo.get(P);
+			if (perKey === void 0) {
+				perKey = /* @__PURE__ */ new Map();
+				ctx.memo.set(P, perKey);
+			}
+			const key = (ann ? "a " : "p ") + base + " " + chain.join(" ");
+			const cached = perKey.get(key);
+			if (cached !== void 0) {
+				if (cached.open) ctx.cyclic = true;
+				return cached;
+			}
+			const box = {
+				v: null,
+				c: null
+			};
+			const pair = {
+				open: true,
+				v: (d, st, rec) => box.v(d, st, rec),
+				c: (d, e, ip, sp, st, rec) => box.c(d, e, ip, sp, st, rec)
+			};
+			perKey.set(key, pair);
+			const inPlace = (n, b) => compileNode(ctx, n, b, chain, collect);
+			const child = (n) => compileNode(ctx, n, base, chain, false);
+			const steps = [];
+			const vsteps = [];
+			for (let which = 0; which < 2; which++) {
+				let t, seg;
+				if (which === 0) {
+					if (P.ref === null) continue;
+					t = resolveRef(P.ref, base, interp.state);
+					seg = "/$ref";
+				} else {
+					if (P.dynamicRef === null) continue;
+					t = dynTarget(interp, P.dynamicRef, base, chain);
+					seg = "/$dynamicRef";
+				}
+				if (t.node === void 0) {
+					const ref = which === 0 ? P.ref : P.dynamicRef;
+					const kw = which === 0 ? "$ref" : "$dynamicRef";
+					steps.push((data, errors, instancePath, schemaPath) => {
+						if (errors !== NOERRORS) errors.push(err(kw, kw, instancePath, schemaPath + seg, { ref }, `cannot resolve ${kw} ${ref}`));
+						return false;
+					});
+					vsteps.push(() => false);
+					continue;
+				}
+				const target = inPlace(interp.node(t.node), t.base);
+				let cstep, vstep;
+				if (collect) {
+					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						const ok = target.c(data, errors, instancePath, schemaPath, stack, rec);
+						if (!ok) undo(rec, pl, n0, xl);
+						return ok;
+					};
+					vstep = (data, stack, rec) => target.v(data, stack, rec);
+				} else {
+					cstep = (data, errors, instancePath, schemaPath, stack) => target.c(data, errors, instancePath, schemaPath, stack);
+					vstep = target.v;
+				}
+				if (ctx.guard) {
+					const schema = P.schema;
+					const ic = cstep, iv = vstep;
+					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
+						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+						stack.push(schema, data);
+						const ok = ic(data, errors, instancePath, schemaPath, stack, rec);
+						stack.length -= 2;
+						return ok;
+					};
+					vstep = (data, stack, rec) => {
+						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+						stack.push(schema, data);
+						const ok = iv(data, stack, rec);
+						stack.length -= 2;
+						return ok;
+					};
+				}
+				steps.push(cstep);
+				vsteps.push(vstep);
+			}
+			if (P.hasType || P.enum !== null || P.hasConst || P.hasNumber || P.hasString || P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems || P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null || P.hasCustom) {
+				steps.push((data, errors, instancePath, schemaPath) => evalLeaf(P, data, errors, instancePath, schemaPath));
+				vsteps.push(compileLeafV(P));
+			}
+			if (P.prefixItems !== null) {
+				const fns = P.prefixItems.map(child);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					const n = Math.min(fns.length, data.length);
+					for (let i = 0; i < n; i++) if (!fns[i].c(data[i], errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack)) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					if (collect) markRange(rec, 0, n);
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					const n = Math.min(fns.length, data.length);
+					for (let i = 0; i < n; i++) if (!fns[i].v(data[i], stack)) return false;
+					if (collect) markRange(rec, 0, n);
+					return true;
+				});
+			}
+			if (P.items !== void 0) {
+				const fn = child(P.items);
+				const start = P.prefixItems !== null ? P.prefixItems.length : 0;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					for (let i = start; i < data.length; i++) if (!fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/items", stack)) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					if (collect) markRange(rec, start, data.length);
+					return ok;
+				});
+				const fv = fn.v;
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = start; i < data.length; i++) if (!fv(data[i], stack)) return false;
+					if (collect) markRange(rec, start, data.length);
+					return true;
+				});
+			}
+			if (P.contains !== void 0) {
+				const fn = child(P.contains);
+				const minC = P.minContains !== void 0 ? P.minContains : 1;
+				const maxC = P.maxContains;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						if (collect) addItem(rec, i);
+					}
+					let ok = true;
+					if (matched < minC) {
+						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
+						ok = false;
+					}
+					if (maxC !== void 0 && matched > maxC) {
+						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
+							minContains: minC,
+							maxContains: maxC
+						}, `must NOT contain more than ${maxC} valid item(s)`));
+						ok = false;
+					}
+					return ok;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						addItem(rec, i);
+					}
+					return matched >= minC && (maxC === void 0 || matched <= maxC);
+				});
+				else vsteps.push((data, stack) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						if (maxC === void 0 && matched >= minC) return true;
+					}
+					return matched >= minC && (maxC === void 0 || matched <= maxC);
+				});
+			}
+			if (P.properties !== null || P.patternProperties !== null || P.additionalProperties !== void 0 || P.propertyNames !== void 0) {
+				const props = P.properties;
+				const propKeys = props !== null ? [...props.keys()] : null;
+				const propList = props !== null ? [...props.values()].map((entry) => ({
+					fn: child(entry.node),
+					seg: entry.seg,
+					schemaSeg: entry.schemaSeg
+				})) : null;
+				const propMap = props !== null && props.size > 8 ? new Map(propKeys.map((k, i) => [k, propList[i]])) : null;
+				const lookup = propMap !== null ? (key) => propMap.get(key) : propKeys !== null ? (key) => {
+					for (let i = 0; i < propKeys.length; i++) if (propKeys[i] === key) return propList[i];
+				} : null;
+				const patterns = P.patternProperties !== null ? P.patternProperties.map((e) => ({
+					re: e.re,
+					src: e.src,
+					fn: child(e.node)
+				})) : null;
+				const apFn = P.additionalProperties !== void 0 ? child(P.additionalProperties) : null;
+				const apFalse = P.additionalProperties === false;
+				const pnFn = P.propertyNames !== void 0 ? child(P.propertyNames) : null;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = collect ? keysOf(rec, data) : Object.keys(data);
+					if (pnFn !== null) {
+						for (const k of keys) if (!pnFn.c(k, errors, instancePath, schemaPath + "/propertyNames", stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						let evaluated = false;
+						const prop = lookup !== null ? lookup(key) : void 0;
+						if (prop !== void 0) {
+							if (!prop.fn.c(data[key], errors, instancePath + prop.seg, schemaPath + prop.schemaSeg, stack)) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+							evaluated = true;
+						}
+						if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+							const pp = patterns[pi];
+							if (pp.re.test(key)) {
+								if (!pp.fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(pp.src), stack)) {
+									ok = false;
+									if (errors === NOERRORS) return false;
+								}
+								evaluated = true;
+							}
+						}
+						if (!evaluated && apFn !== null) {
+							if (apFalse) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+								errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
+							} else if (!apFn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack)) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+							evaluated = true;
+						}
+						if (evaluated && collect) addProp(rec, key);
+					}
+					return ok;
+				});
+				if (patterns === null && apFn === null && pnFn === null && propKeys.length <= 8) {
+					const n = propKeys.length;
+					vsteps.push((data, stack, rec) => {
+						if (dataBits(data) !== T_OBJECT) return true;
+						for (let i = 0; i < n; i++) {
+							const key = propKeys[i];
+							if (!Object.hasOwn(data, key)) continue;
+							if (!propList[i].fn.v(data[key], stack)) return false;
+							if (collect) addProp(rec, key);
+						}
+						return true;
+					});
+				} else vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					const keys = collect ? keysOf(rec, data) : Object.keys(data);
+					if (pnFn !== null) {
+						for (const k of keys) if (!pnFn.v(k, stack)) return false;
+					}
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						let evaluated = false;
+						const prop = lookup !== null ? lookup(key) : void 0;
+						if (prop !== void 0) {
+							if (!prop.fn.v(data[key], stack)) return false;
+							evaluated = true;
+						}
+						if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+							const pp = patterns[pi];
+							if (pp.re.test(key)) {
+								if (!pp.fn.v(data[key], stack)) return false;
+								evaluated = true;
+							}
+						}
+						if (!evaluated && apFn !== null) {
+							if (!apFn.v(data[key], stack)) return false;
+							evaluated = true;
+						}
+						if (evaluated && collect) addProp(rec, key);
+					}
+					return true;
+				});
+			}
+			if (P.dependentSchemas !== null) {
+				const entries = P.dependentSchemas.map(([k, v]) => [
+					k,
+					inPlace(v, base),
+					escapePointer(k)
+				]);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					for (const [k, fn, ek] of entries) if (Object.hasOwn(data, k)) {
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack, rec)) {
+								undo(rec, pl, n0, xl);
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+						} else if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					for (const [k, fn] of entries) if (Object.hasOwn(data, k) && !fn.v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.propertyDependencies !== null) {
+				const entries = P.propertyDependencies.map(([k, choices]) => {
+					const m = /* @__PURE__ */ new Map();
+					for (const [value, v] of choices) m.set(value, inPlace(v, base));
+					return [k, m];
+				});
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					for (const [k, choices] of entries) {
+						if (!Object.hasOwn(data, k)) continue;
+						const value = data[k];
+						if (typeof value !== "string") continue;
+						const fn = choices.get(value);
+						if (fn === void 0) continue;
+						const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(k) + "/" + escapePointer(value);
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							if (!fn.c(data, errors, instancePath, branchPath, stack, rec)) {
+								undo(rec, pl, n0, xl);
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+						} else if (!fn.c(data, errors, instancePath, branchPath, stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					for (const [k, choices] of entries) {
+						if (!Object.hasOwn(data, k)) continue;
+						const value = data[k];
+						if (typeof value !== "string") continue;
+						const fn = choices.get(value);
+						if (fn !== void 0 && !fn.v(data, stack, rec)) return false;
+					}
+					return true;
+				});
+			}
+			if (P.allOf !== null) {
+				const fns = P.allOf.map((v) => inPlace(v, base));
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let ok = true;
+					for (let i = 0; i < fns.length; i++) if (collect) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack, rec)) {
+							undo(rec, pl, n0, xl);
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					} else if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack)) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					for (let i = 0; i < fns.length; i++) if (!fns[i].v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.macros !== null) {
+				const ms = P.macros.map((m) => ({
+					keyword: m.keyword,
+					fn: inPlace(m.node, base)
+				}));
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let ok = true;
+					for (let i = 0; i < ms.length; i++) {
+						const m = ms[i];
+						const sp = schemaPath + "/" + m.keyword;
+						let passed;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							passed = m.fn.c(data, errors, instancePath, sp, stack, rec);
+							if (!passed) undo(rec, pl, n0, xl);
+						} else passed = m.fn.c(data, errors, instancePath, sp, stack);
+						if (!passed) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+							errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					for (let i = 0; i < ms.length; i++) if (!ms[i].fn.v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.anyOf !== null) {
+				const fns = P.anyOf.map((v) => inPlace(v, base));
+				const titles = P.anyOf.map(branchTitle);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					let any = false;
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < fns.length; i++) {
+						const mark = branches === null ? 0 : scratch.length;
+						let ok;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, rec);
+							if (ok) any = true;
+							else undo(rec, pl, n0, xl);
+						} else {
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack);
+							if (ok) any = true;
+						}
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: titles[i]
+						});
+					}
+					if (!any) {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "anyOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/anyOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						return false;
+					}
+					return true;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					let any = false;
+					for (let i = 0; i < fns.length; i++) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (fns[i].v(data, stack, rec)) any = true;
+						else undo(rec, pl, n0, xl);
+					}
+					return any;
+				});
+				else vsteps.push((data, stack) => {
+					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) return true;
+					return false;
+				});
+			}
+			if (P.oneOf !== null) {
+				const fns = P.oneOf.map((v) => inPlace(v, base));
+				const titles = P.oneOf.map(branchTitle);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					let count = 0;
+					const branches = errors === NOERRORS ? null : [];
+					const pl0 = collect ? pLen(rec) : 0, n00 = collect ? rec.n : 0, xl0 = collect ? xLen(rec) : 0;
+					for (let i = 0; i < fns.length; i++) {
+						const mark = branches === null ? 0 : scratch.length;
+						let ok;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, rec);
+							if (ok) count++;
+							else undo(rec, pl, n0, xl);
+						} else {
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack);
+							if (ok) count++;
+						}
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: titles[i]
+						});
+					}
+					if (count !== 1) {
+						if (collect) undo(rec, pl0, n00, xl0);
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "oneOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/oneOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						return false;
+					}
+					return true;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					let count = 0;
+					for (let i = 0; i < fns.length; i++) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (fns[i].v(data, stack, rec)) {
+							count++;
+							if (count > 1) return false;
+						} else undo(rec, pl, n0, xl);
+					}
+					return count === 1;
+				});
+				else vsteps.push((data, stack) => {
+					let count = 0;
+					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) {
+						count++;
+						if (count > 1) return false;
+					}
+					return count === 1;
+				});
+			}
+			if (P.not !== void 0) {
+				const fn = child(P.not);
+				steps.push((data, errors, instancePath, schemaPath, stack) => {
+					if (fn.v(data, stack)) {
+						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
+						return false;
+					}
+					return true;
+				});
+				vsteps.push((data, stack) => !fn.v(data, stack));
+			}
+			if (P.if !== void 0) {
+				const ifFn = inPlace(P.if, base);
+				const thenFn = P.then !== void 0 ? inPlace(P.then, base) : null;
+				const elseFn = P.else !== void 0 ? inPlace(P.else, base) : null;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
+					let ok;
+					if (ifFn.v(data, stack, rec)) {
+						if (thenFn === null) return true;
+						if (collect) {
+							pl = pLen(rec);
+							n0 = rec.n;
+							xl = xLen(rec);
+						}
+						ok = thenFn.c(data, errors, instancePath, schemaPath + "/then", stack, rec);
+					} else {
+						if (collect) undo(rec, pl, n0, xl);
+						if (elseFn === null) return true;
+						ok = elseFn.c(data, errors, instancePath, schemaPath + "/else", stack, rec);
+					}
+					if (!ok && collect) undo(rec, pl, n0, xl);
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					const pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
+					if (ifFn.v(data, stack, rec)) {
+						if (thenFn !== null) return thenFn.v(data, stack, rec);
+						return true;
+					}
+					if (collect) undo(rec, pl, n0, xl);
+					if (elseFn !== null) return elseFn.v(data, stack, rec);
+					return true;
+				});
+			}
+			if (P.unevaluatedProperties !== void 0) {
+				const fn = child(P.unevaluatedProperties);
+				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						ok = false;
+						if (errors === NOERRORS) return false;
+						errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
+						addProp(rec, key);
+					}
+					return ok;
+				});
+				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						if (!fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+						addProp(rec, key);
+					}
+					return ok;
+				});
+				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					const keys = keysOf(rec, data);
+					if (keys.length === 0) return true;
+					if (rec.props === null) return false;
+					for (let k = 0; k < keys.length; k++) if (!hasProp(rec, keys[k])) return false;
+					return true;
+				});
+				else vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						if (!fn.v(data[key], stack)) return false;
+						addProp(rec, key);
+					}
+					return true;
+				});
+			}
+			if (P.unevaluatedItems !== void 0) {
+				const fn = child(P.unevaluatedItems);
+				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
+						if (data.length > rec.n) rec.n = data.length;
+						return false;
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return true;
+				});
+				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (!fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return ok;
+				});
+				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = rec.n; i < data.length; i++) if (!hasItem(rec, i)) return false;
+					return true;
+				});
+				else vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (!fn.v(data[i], stack)) return false;
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return true;
+				});
+			}
+			let cfn;
+			if (steps.length === 0) cfn = TRUE_FN;
+			else if (steps.length === 1) cfn = steps[0];
+			else {
+				const arr = steps;
+				cfn = (d, e, ip, sp, st, rec) => {
+					let ok = true;
+					for (let i = 0; i < arr.length; i++) if (!arr[i](d, e, ip, sp, st, rec)) {
+						if (e === NOERRORS) return false;
+						ok = false;
+					}
+					return ok;
+				};
+			}
+			let vfn;
+			if (vsteps.length === 0) vfn = TRUE_FN;
+			else if (vsteps.length === 1) vfn = vsteps[0];
+			else if (vsteps.length === 2) {
+				const [a, b] = vsteps;
+				vfn = (d, st, rec) => a(d, st, rec) && b(d, st, rec);
+			} else {
+				const arr = vsteps;
+				vfn = (d, st, rec) => {
+					for (let i = 0; i < arr.length; i++) if (!arr[i](d, st, rec)) return false;
+					return true;
+				};
+			}
+			if (P.hasUnevaluated) {
+				const inner = cfn;
+				const innerV = vfn;
+				if (ann) {
+					cfn = (d, e, ip, sp, st, rec) => {
+						const own = fresh();
+						const ok = inner(d, e, ip, sp, st, own);
+						if (ok) mergeRec(rec, own);
+						return ok;
+					};
+					vfn = (d, st, rec) => {
+						const own = fresh();
+						const ok = innerV(d, st, own);
+						if (ok) mergeRec(rec, own);
+						return ok;
+					};
+				} else {
+					cfn = (d, e, ip, sp, st) => inner(d, e, ip, sp, st, fresh());
+					vfn = (d, st) => innerV(d, st, fresh());
+				}
+			}
+			box.c = cfn;
+			box.v = vfn;
+			pair.c = cfn;
+			pair.v = vfn;
+			pair.open = false;
+			return pair;
+		}
+		function compileInterpreter(interp) {
+			const root = interp.rootNode;
+			const base = interp.state.rootBase;
+			let ctx = {
+				interp,
+				memo: /* @__PURE__ */ new Map(),
+				guard: true,
+				cyclic: false
+			};
+			let pair = compileNode(ctx, root, base, [base], false);
+			if (!ctx.cyclic) {
+				ctx = {
+					interp,
+					memo: /* @__PURE__ */ new Map(),
+					guard: false,
+					cyclic: false
+				};
+				pair = compileNode(ctx, root, base, [base], false);
+			}
+			return {
+				v: pair.v,
+				c: pair.c,
+				cyclic: ctx.guard
+			};
+		}
+		return { compileInterpreter };
+	}
+	module.exports = { install };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/interpreter.js
+var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { collapseBranches } = require_branch_collapse();
+	const { compileSafe } = require_safe_regex();
+	const SCHEMA_KEYWORDS = {
+		single: [
+			"additionalProperties",
+			"contains",
+			"propertyNames",
+			"if",
+			"then",
+			"else",
+			"not",
+			"items",
+			"unevaluatedItems",
+			"unevaluatedProperties"
+		],
+		maps: [
+			"$defs",
+			"definitions",
+			"properties",
+			"patternProperties",
+			"dependentSchemas"
+		],
+		lists: [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]
+	};
+	const FALLBACK_BASE = "ata://root";
+	function resolveUri(base, ref) {
+		try {
+			return new URL(ref, base || FALLBACK_BASE).href;
+		} catch {
+			return ref;
+		}
+	}
+	function splitFragment(uri) {
+		const hash = uri.indexOf("#");
+		if (hash < 0) return [uri, ""];
+		return [uri.slice(0, hash), decodeURIComponent(uri.slice(hash + 1))];
+	}
+	function indexSchemas(rootSchema, schemaMap) {
+		const state = {
+			resources: /* @__PURE__ */ new Map(),
+			anchors: /* @__PURE__ */ new Map(),
+			dynamicAnchors: /* @__PURE__ */ new Map(),
+			nodeBase: /* @__PURE__ */ new Map(),
+			rootBase: FALLBACK_BASE
+		};
+		const rootBase = typeof rootSchema === "object" && rootSchema !== null && typeof rootSchema.$id === "string" ? resolveUri(FALLBACK_BASE, splitFragment(rootSchema.$id)[0]) : FALLBACK_BASE;
+		state.rootBase = rootBase;
+		indexResource(rootSchema, rootBase, state);
+		if (schemaMap) for (const [id, schema] of schemaMap) {
+			const base = resolveUri(FALLBACK_BASE, splitFragment(id)[0]);
+			if (!state.resources.has(base)) indexResource(schema, base, state);
+			if (!state.resources.has(id)) state.resources.set(id, schema);
+		}
+		return state;
+	}
+	function indexResource(node, baseUri, state) {
+		if (typeof node !== "object" || node === null) return;
+		if (!state.resources.has(baseUri)) state.resources.set(baseUri, node);
+		if (!state.anchors.has(baseUri)) state.anchors.set(baseUri, /* @__PURE__ */ new Map());
+		if (!state.dynamicAnchors.has(baseUri)) state.dynamicAnchors.set(baseUri, /* @__PURE__ */ new Map());
+		walkSchema(node, baseUri, state, true);
+	}
+	function walkSchema(node, baseUri, state, isResourceRoot) {
+		if (typeof node !== "object" || node === null) return;
+		if (state.nodeBase.has(node)) return;
+		state.nodeBase.set(node, baseUri);
+		if (!isResourceRoot && typeof node.$id === "string") {
+			const newBase = splitFragment(resolveUri(baseUri, node.$id))[0];
+			state.nodeBase.delete(node);
+			indexResource(node, newBase, state);
+			return;
+		}
+		if (typeof node.$anchor === "string") state.anchors.get(baseUri).set(node.$anchor, node);
+		if (typeof node.$dynamicAnchor === "string") {
+			state.dynamicAnchors.get(baseUri).set(node.$dynamicAnchor, node);
+			state.anchors.get(baseUri).set(node.$dynamicAnchor, node);
+		}
+		for (const kw of SCHEMA_KEYWORDS.single) if (node[kw] !== void 0) walkSchema(node[kw], baseUri, state, false);
+		for (const kw of SCHEMA_KEYWORDS.maps) {
+			const map = node[kw];
+			if (map && typeof map === "object" && !Array.isArray(map)) for (const key of Object.keys(map)) walkSchema(map[key], baseUri, state, false);
+		}
+		for (const kw of SCHEMA_KEYWORDS.lists) {
+			const list = node[kw];
+			if (Array.isArray(list)) for (const sub of list) walkSchema(sub, baseUri, state, false);
+		}
+		const propDeps = node.propertyDependencies;
+		if (propDeps && typeof propDeps === "object" && !Array.isArray(propDeps)) {
+			for (const choices of Object.values(propDeps)) if (choices && typeof choices === "object" && !Array.isArray(choices)) for (const sub of Object.values(choices)) walkSchema(sub, baseUri, state, false);
+		}
+	}
+	function walkPointer(root, pointer) {
+		if (pointer === "" || pointer === "/") return root;
+		const parts = pointer.split("/").slice(1).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let node = root;
+		for (const part of parts) {
+			if (node === null || typeof node !== "object") return void 0;
+			if (Array.isArray(node)) node = node[Number(part)];
+			else if (part in node) node = node[part];
+			else if (part === "definitions" && node.$defs) node = node.$defs;
+			else if (part === "$defs" && node.definitions) node = node.definitions;
+			else if (part === "items" && Array.isArray(node.prefixItems)) node = node.prefixItems;
+			else return;
+		}
+		return node;
+	}
+	function resolveRef(ref, fromBase, state) {
+		const [uri, fragment] = splitFragment(resolveUri(fromBase, ref));
+		let resource = state.resources.get(uri);
+		let resourceBase = uri;
+		if (resource === void 0 && (uri === FALLBACK_BASE || uri === "")) {
+			resource = state.resources.get(state.rootBase);
+			resourceBase = state.rootBase;
+		}
+		if (resource === void 0) {
+			const [rawUri, rawFragment] = splitFragment(ref);
+			if (state.resources.has(rawUri)) {
+				resource = state.resources.get(rawUri);
+				resourceBase = rawUri;
+				if (rawFragment === "") return {
+					node: resource,
+					base: resourceBase
+				};
+				if (rawFragment.startsWith("/")) return {
+					node: walkPointer(resource, rawFragment),
+					base: resourceBase
+				};
+				const anchored = state.anchors.get(resourceBase);
+				return {
+					node: anchored ? anchored.get(rawFragment) : void 0,
+					base: resourceBase
+				};
+			}
+			return {
+				node: void 0,
+				base: resourceBase
+			};
+		}
+		if (fragment === "") return {
+			node: resource,
+			base: resourceBase
+		};
+		if (fragment.startsWith("/")) {
+			const node = walkPointer(resource, fragment);
+			return {
+				node,
+				base: node !== null && typeof node === "object" && state.nodeBase.has(node) ? state.nodeBase.get(node) : resourceBase
+			};
+		}
+		const anchored = state.anchors.get(resourceBase);
+		return {
+			node: anchored ? anchored.get(fragment) : void 0,
+			base: resourceBase
+		};
+	}
+	function deepEqual(a, b) {
+		if (a === b) return true;
+		if (typeof a === "number" && typeof b === "number") return a === b;
+		if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return false;
+		const aArr = Array.isArray(a);
+		if (aArr !== Array.isArray(b)) return false;
+		if (aArr) {
+			if (a.length !== b.length) return false;
+			for (let i = 0; i < a.length; i++) if (!deepEqual(a[i], b[i])) return false;
+			return true;
+		}
+		const ak = Object.keys(a);
+		const bk = Object.keys(b);
+		if (ak.length !== bk.length) return false;
+		for (const k of ak) if (!(k in b) || !deepEqual(a[k], b[k])) return false;
+		return true;
+	}
+	function codePointLength(s) {
+		let n = 0;
+		for (let i = 0; i < s.length; i++) {
+			if (s.charCodeAt(i) - 55296 >>> 0 < 1024 && i + 1 < s.length) i++;
+			n++;
+		}
+		return n;
+	}
+	function cpAtLeast(s, min) {
+		if (s.length >= 2 * min) return true;
+		if (s.length < min) return false;
+		return codePointLength(s) >= min;
+	}
+	function cpAtMost(s, max) {
+		if (s.length <= max) return true;
+		if (s.length > 2 * max + 1) return false;
+		return codePointLength(s) <= max;
+	}
+	function multipleOfOk(d, m) {
+		if (m === 0) return false;
+		const q = d / m;
+		if (Number.isInteger(q)) return true;
+		return Math.abs(q - Math.round(q)) < 1e-9;
+	}
+	const _formats = require_formats();
+	const FORMAT_CHECKS = {
+		email: _formats.email,
+		date: _formats.date,
+		"date-time": _formats.dateTime,
+		time: _formats.time,
+		duration: _formats.duration,
+		uuid: _formats.uuid,
+		uri: _formats.uri,
+		"uri-reference": _formats.uriReference,
+		ipv4: _formats.ipv4,
+		ipv6: _formats.ipv6,
+		hostname: _formats.hostname,
+		regex: (s) => {
+			try {
+				new RegExp(s, "u");
+				return true;
+			} catch {
+				return false;
+			}
+		},
+		"json-pointer": _formats.jsonPointer,
+		"relative-json-pointer": _formats.relativeJsonPointer,
+		"uri-template": _formats.uriTemplate,
+		iri: _formats.iri,
+		"iri-reference": _formats.iriReference,
+		"idn-email": _formats.idnEmail
+	};
+	const DISCARD = {
+		props: null,
+		items: null
+	};
+	const NOERRORS = Object.freeze([]);
+	function mergeAnnotations(target, from) {
+		if (from.props && from.props.size) {
+			if (!target.props) target.props = /* @__PURE__ */ new Set();
+			for (const p of from.props) target.props.add(p);
+		}
+		if (from.items && from.items.size) {
+			if (!target.items) target.items = /* @__PURE__ */ new Set();
+			for (const i of from.items) target.items.add(i);
+		}
+	}
+	const T_STRING = 1;
+	const T_NUMBER = 2;
+	const T_INTEGER = 4;
+	const T_BOOLEAN = 8;
+	const T_NULL = 16;
+	const T_OBJECT = 32;
+	const T_ARRAY = 64;
+	const T_ANY = 127;
+	function typeBit(name) {
+		switch (name) {
+			case "string": return T_STRING;
+			case "number": return T_NUMBER;
+			case "integer": return T_INTEGER;
+			case "boolean": return T_BOOLEAN;
+			case "null": return T_NULL;
+			case "object": return T_OBJECT;
+			case "array": return T_ARRAY;
+			default: return T_ANY;
+		}
+	}
+	function dataBits(d) {
+		switch (typeof d) {
+			case "string": return T_STRING;
+			case "number":
+				if (!isFinite(d)) return 0;
+				return Number.isInteger(d) ? 6 : T_NUMBER;
+			case "boolean": return T_BOOLEAN;
+			case "object":
+				if (d === null) return T_NULL;
+				return Array.isArray(d) ? T_ARRAY : T_OBJECT;
+			default: return 0;
+		}
+	}
+	function isObjectMap(v) {
+		return v !== null && typeof v === "object" && !Array.isArray(v);
+	}
+	var Plan = class {
+		constructor(schema) {
+			this.schema = schema;
+		}
+		link(interp) {
+			const schema = this.schema;
+			const child = (sub) => interp.node(sub);
+			this.refCache = null;
+			this.refBase0 = void 0;
+			this.refRes0 = null;
+			this.dynCache = null;
+			this.ref = typeof schema.$ref === "string" ? schema.$ref : null;
+			this.dynamicRef = typeof schema.$dynamicRef === "string" ? schema.$dynamicRef : null;
+			this.tracked = this.ref !== null || this.dynamicRef !== null;
+			this.typeMask = 0;
+			this.typeNames = null;
+			if (schema.type !== void 0) {
+				const types = Array.isArray(schema.type) ? schema.type : [schema.type];
+				let mask = 0;
+				for (const t of types) mask |= typeBit(t);
+				this.typeMask = mask;
+				this.typeNames = types;
+			}
+			this.hasType = schema.type !== void 0;
+			this.enum = schema.enum !== void 0 ? schema.enum : null;
+			this.hasConst = schema.const !== void 0;
+			this.const = schema.const;
+			this.minimum = typeof schema.minimum === "number" ? schema.minimum : void 0;
+			this.maximum = typeof schema.maximum === "number" ? schema.maximum : void 0;
+			this.exclusiveMinimum = typeof schema.exclusiveMinimum === "number" ? schema.exclusiveMinimum : void 0;
+			this.exclusiveMaximum = typeof schema.exclusiveMaximum === "number" ? schema.exclusiveMaximum : void 0;
+			this.multipleOf = typeof schema.multipleOf === "number" ? schema.multipleOf : void 0;
+			this.hasNumber = this.minimum !== void 0 || this.maximum !== void 0 || this.exclusiveMinimum !== void 0 || this.exclusiveMaximum !== void 0 || this.multipleOf !== void 0;
+			this.minLength = schema.minLength;
+			this.maxLength = schema.maxLength;
+			this.pattern = schema.pattern !== void 0 ? interp.pattern(schema.pattern) : null;
+			this.patternSource = schema.pattern;
+			this.format = schema.format;
+			this.formatFn = null;
+			if (schema.format !== void 0) {
+				const uf = interp.userFormats;
+				const fc = uf && typeof uf[schema.format] === "function" ? uf[schema.format] : FORMAT_CHECKS[schema.format];
+				this.formatFn = fc || null;
+			}
+			this.hasString = this.minLength !== void 0 || this.maxLength !== void 0 || this.pattern !== null || this.formatFn !== null;
+			this.minItems = schema.minItems;
+			this.maxItems = schema.maxItems;
+			this.uniqueItems = schema.uniqueItems === true;
+			this.prefixItems = Array.isArray(schema.prefixItems) ? schema.prefixItems.map(child) : null;
+			this.items = schema.items !== void 0 ? child(schema.items) : void 0;
+			this.contains = schema.contains !== void 0 ? child(schema.contains) : void 0;
+			this.minContains = schema.minContains;
+			this.maxContains = schema.maxContains;
+			this.hasArray = this.minItems !== void 0 || this.maxItems !== void 0 || this.uniqueItems || this.prefixItems !== null || this.items !== void 0 || this.contains !== void 0;
+			this.required = Array.isArray(schema.required) ? schema.required : null;
+			this.minProperties = schema.minProperties;
+			this.maxProperties = schema.maxProperties;
+			this.dependentRequired = isObjectMap(schema.dependentRequired) ? Object.entries(schema.dependentRequired) : null;
+			this.propertyNames = schema.propertyNames !== void 0 ? child(schema.propertyNames) : void 0;
+			this.properties = null;
+			if (isObjectMap(schema.properties)) {
+				this.properties = /* @__PURE__ */ new Map();
+				for (const key of Object.keys(schema.properties)) {
+					const ek = escapePointer(key);
+					this.properties.set(key, {
+						node: child(schema.properties[key]),
+						seg: "/" + ek,
+						schemaSeg: "/properties/" + ek
+					});
+				}
+			}
+			this.patternProperties = null;
+			if (isObjectMap(schema.patternProperties)) this.patternProperties = Object.keys(schema.patternProperties).map((src) => ({
+				src,
+				re: interp.pattern(src),
+				node: child(schema.patternProperties[src])
+			}));
+			this.additionalProperties = schema.additionalProperties !== void 0 ? child(schema.additionalProperties) : void 0;
+			this.dependentSchemas = isObjectMap(schema.dependentSchemas) ? Object.entries(schema.dependentSchemas).map(([k, v]) => [k, child(v)]) : null;
+			this.propertyDependencies = null;
+			if (isObjectMap(schema.propertyDependencies)) this.propertyDependencies = Object.entries(schema.propertyDependencies).filter(([, choices]) => isObjectMap(choices)).map(([k, choices]) => [k, new Map(Object.keys(choices).map((v) => [v, child(choices[v])]))]);
+			this.hasObject = this.required !== null || this.minProperties !== void 0 || this.maxProperties !== void 0 || this.dependentRequired !== null || this.propertyNames !== void 0 || this.properties !== null || this.patternProperties !== null || this.additionalProperties !== void 0 || this.dependentSchemas !== null || this.propertyDependencies !== null;
+			this.allOf = Array.isArray(schema.allOf) ? schema.allOf.map(child) : null;
+			this.anyOf = Array.isArray(schema.anyOf) ? schema.anyOf.map(child) : null;
+			this.oneOf = Array.isArray(schema.oneOf) ? schema.oneOf.map(child) : null;
+			this.not = schema.not !== void 0 ? child(schema.not) : void 0;
+			this.if = schema.if !== void 0 ? child(schema.if) : void 0;
+			this.then = schema.then !== void 0 ? child(schema.then) : void 0;
+			this.else = schema.else !== void 0 ? child(schema.else) : void 0;
+			this.macros = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro === null) continue;
+				const expanded = def.macro(schema[key], schema);
+				if (expanded === void 0) continue;
+				if (this.macros === null) this.macros = [];
+				this.macros.push({
+					keyword: key,
+					node: child(expanded)
+				});
+			}
+			this.hasApplicators = this.allOf !== null || this.anyOf !== null || this.oneOf !== null || this.not !== void 0 || this.if !== void 0 || this.macros !== null;
+			this.unevaluatedProperties = schema.unevaluatedProperties !== void 0 ? child(schema.unevaluatedProperties) : void 0;
+			this.unevaluatedItems = schema.unevaluatedItems !== void 0 ? child(schema.unevaluatedItems) : void 0;
+			this.unevaluatedPropertiesFalse = schema.unevaluatedProperties === false;
+			this.unevaluatedItemsFalse = schema.unevaluatedItems === false;
+			this.hasUnevaluated = this.unevaluatedProperties !== void 0 || this.unevaluatedItems !== void 0;
+			this.custom = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro !== null) continue;
+				const value = schema[key];
+				let mask = T_ANY;
+				if (def.types !== null) {
+					mask = 0;
+					for (const t of def.types) mask |= typeBit(t);
+				}
+				let fn;
+				if (def.compile !== null) {
+					fn = def.compile(value, schema);
+					if (typeof fn !== "function") throw new Error(`keyword "${key}": compile must return a function`);
+				} else {
+					const validate = def.validate;
+					fn = (data) => validate(value, data, schema);
+					fn.source = validate;
+				}
+				if (this.custom === null) this.custom = [];
+				this.custom.push({
+					keyword: key,
+					fn,
+					mask
+				});
+			}
+			this.hasCustom = this.custom !== null;
+			const nodeBase = interp.state.nodeBase.get(schema);
+			this.nodeBase = nodeBase !== void 0 ? nodeBase : null;
+			this.isResourceRoot = nodeBase !== void 0 && interp.state.resources.get(nodeBase) === schema;
+			this.leaf = !this.tracked && !this.hasApplicators && !this.hasUnevaluated && this.properties === null && this.patternProperties === null && this.additionalProperties === void 0 && this.propertyNames === void 0 && this.dependentSchemas === null && this.propertyDependencies === null && this.prefixItems === null && this.items === void 0 && this.contains === void 0 && this.nodeBase === null;
+		}
+	};
+	function evalLeafV(P, data) {
+		const bits = dataBits(data);
+		if (P.hasType && (bits & P.typeMask) === 0) return false;
+		if (P.enum !== null) {
+			let found = false;
+			for (let i = 0; i < P.enum.length; i++) if (deepEqual(P.enum[i], data)) {
+				found = true;
+				break;
+			}
+			if (!found) return false;
+		}
+		if (P.hasConst && !deepEqual(P.const, data)) return false;
+		if (P.hasNumber && typeof data === "number" && isFinite(data)) {
+			if (P.minimum !== void 0 && !(data >= P.minimum)) return false;
+			if (P.maximum !== void 0 && !(data <= P.maximum)) return false;
+			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) return false;
+			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) return false;
+			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) return false;
+		}
+		if (P.hasString && bits === T_STRING) {
+			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) return false;
+			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) return false;
+			if (P.pattern !== null && !P.pattern.test(data)) return false;
+			if (P.formatFn !== null && !P.formatFn(data)) return false;
+		}
+		if (P.hasArray && bits === T_ARRAY) {
+			if (P.minItems !== void 0 && data.length < P.minItems) return false;
+			if (P.maxItems !== void 0 && data.length > P.maxItems) return false;
+			if (P.uniqueItems) {
+				for (let i = 0; i < data.length; i++) for (let j = i + 1; j < data.length; j++) if (deepEqual(data[i], data[j])) return false;
+			}
+		}
+		if (P.hasObject && bits === T_OBJECT) {
+			if (P.required !== null) {
+				const req = P.required;
+				for (let i = 0; i < req.length; i++) if (!Object.hasOwn(data, req[i])) return false;
+			}
+			if (P.minProperties !== void 0 && Object.keys(data).length < P.minProperties) return false;
+			if (P.maxProperties !== void 0 && Object.keys(data).length > P.maxProperties) return false;
+			if (P.dependentRequired !== null) {
+				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+					for (const dep of deps) if (!Object.hasOwn(data, dep)) return false;
+				}
+			}
+		}
+		if (P.hasCustom && !runCustomV(P, data, bits)) return false;
+		return true;
+	}
+	function runCustomV(P, data, bits) {
+		const ops = P.custom;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			if (holder.errors) holder.errors = null;
+			if (!ok) return false;
+		}
+		return true;
+	}
+	function runCustom(P, data, bits, errors, instancePath, schemaPath) {
+		const ops = P.custom;
+		let valid = true;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			const own = holder.errors;
+			if (own) holder.errors = null;
+			if (ok) continue;
+			valid = false;
+			if (errors === NOERRORS) return false;
+			const kwPath = schemaPath + "/" + op.keyword;
+			if (Array.isArray(own) && own.length > 0) for (let j = 0; j < own.length; j++) {
+				const e = own[j];
+				errors.push(err(op.keyword, e.keyword || op.keyword, e.instancePath !== void 0 ? instancePath + e.instancePath : instancePath, e.schemaPath !== void 0 ? e.schemaPath : kwPath, e.params !== void 0 ? e.params : {}, e.message !== void 0 ? e.message : `must pass "${op.keyword}" keyword validation`));
+			}
+			else errors.push(err(op.keyword, op.keyword, instancePath, kwPath, { keyword: op.keyword }, `must pass "${op.keyword}" keyword validation`));
+		}
+		return valid;
+	}
+	function evalLeaf(P, data, errors, instancePath, schemaPath) {
+		let valid = true;
+		const schema = P.schema;
+		const bits = dataBits(data);
+		if (P.hasType && (bits & P.typeMask) === 0) {
+			if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(" or ")}`));
+			valid = false;
+		}
+		if (P.enum !== null) {
+			let found = false;
+			for (let i = 0; i < P.enum.length; i++) if (deepEqual(P.enum[i], data)) {
+				found = true;
+				break;
+			}
+			if (!found) {
+				if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
+				valid = false;
+			}
+		}
+		if (P.hasConst && !deepEqual(P.const, data)) {
+			if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
+			valid = false;
+		}
+		if (P.hasNumber && typeof data === "number" && isFinite(data)) {
+			if (P.minimum !== void 0 && !(data >= P.minimum)) {
+				errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
+					comparison: ">=",
+					limit: P.minimum
+				}, `must be >= ${P.minimum}`));
+				valid = false;
+			}
+			if (P.maximum !== void 0 && !(data <= P.maximum)) {
+				errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
+					comparison: "<=",
+					limit: P.maximum
+				}, `must be <= ${P.maximum}`));
+				valid = false;
+			}
+			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
+				errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
+					comparison: ">",
+					limit: P.exclusiveMinimum
+				}, `must be > ${P.exclusiveMinimum}`));
+				valid = false;
+			}
+			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
+				errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
+					comparison: "<",
+					limit: P.exclusiveMaximum
+				}, `must be < ${P.exclusiveMaximum}`));
+				valid = false;
+			}
+			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
+				errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
+				valid = false;
+			}
+		}
+		if (P.hasString && bits === T_STRING) {
+			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
+				errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
+				valid = false;
+			}
+			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
+				errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
+				valid = false;
+			}
+			if (P.pattern !== null && !P.pattern.test(data)) {
+				errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
+				valid = false;
+			}
+			if (P.formatFn !== null && !P.formatFn(data)) {
+				errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
+				valid = false;
+			}
+		}
+		if (P.hasArray && bits === T_ARRAY) {
+			if (P.minItems !== void 0 && data.length < P.minItems) {
+				errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
+				valid = false;
+			}
+			if (P.maxItems !== void 0 && data.length > P.maxItems) {
+				errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
+				valid = false;
+			}
+			if (P.uniqueItems) {
+				outer: for (let i = 0; i < data.length; i++) for (let j = i + 1; j < data.length; j++) if (deepEqual(data[i], data[j])) {
+					if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
+						i,
+						j
+					}, "must NOT have duplicate items"));
+					valid = false;
+					break outer;
+				}
+			}
+		}
+		if (P.hasObject && bits === T_OBJECT) {
+			const keys = Object.keys(data);
+			if (P.required !== null) {
+				const req = P.required;
+				for (let i = 0; i < req.length; i++) {
+					const key = req[i];
+					if (!Object.hasOwn(data, key)) {
+						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+						valid = false;
+					}
+				}
+			}
+			if (P.minProperties !== void 0 && keys.length < P.minProperties) {
+				errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
+				valid = false;
+			}
+			if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
+				errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
+				valid = false;
+			}
+			if (P.dependentRequired !== null) {
+				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+					for (const dep of deps) if (!Object.hasOwn(data, dep)) {
+						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
+						valid = false;
+					}
+				}
+			}
+		}
+		if (P.hasCustom && !runCustom(P, data, bits, errors, instancePath, schemaPath)) valid = false;
+		return valid;
+	}
+	var Interpreter = class {
+		constructor(rootSchema, options) {
+			const opts = options || {};
+			this.root = rootSchema;
+			this.state = indexSchemas(rootSchema, opts.schemaMap);
+			this.userFormats = opts.formats || null;
+			this.keywords = opts.keywords || null;
+			this.bookending = !opts.v1;
+			this.patternCache = /* @__PURE__ */ new Map();
+			this.plans = /* @__PURE__ */ new Map();
+			this.rootNode = this.node(rootSchema);
+			this._fast = void 0;
+		}
+		_fastRoot() {
+			if (this._fast === void 0) try {
+				this._fast = compileInterpreter(this);
+			} catch {
+				this._fast = null;
+			}
+			return this._fast;
+		}
+		pattern(src) {
+			let re = this.patternCache.get(src);
+			if (!re) {
+				if (/\\[pP]\{/.test(src)) try {
+					re = new RegExp(src, "u");
+				} catch {
+					re = new RegExp(src);
+				}
+				else try {
+					re = compileSafe(src);
+				} catch {
+					try {
+						re = new RegExp(src, "u");
+					} catch {
+						re = new RegExp(src);
+					}
+				}
+				this.patternCache.set(src, re);
+			}
+			return re;
+		}
+		plan(schema) {
+			let p = this.plans.get(schema);
+			if (p === void 0) {
+				p = new Plan(schema);
+				this.plans.set(schema, p);
+				p.link(this);
+			}
+			return p;
+		}
+		resolveRefCached(P, base) {
+			if (P.refBase0 === base) return P.refRes0;
+			let cache = P.refCache;
+			let r = cache !== null ? cache.get(base) : void 0;
+			if (r === void 0) {
+				const raw = resolveRef(P.ref, base, this.state);
+				r = {
+					child: raw.node === void 0 ? void 0 : this.node(raw.node),
+					base: raw.base
+				};
+				if (P.refBase0 === void 0) {
+					P.refBase0 = base;
+					P.refRes0 = r;
+				} else {
+					if (cache === null) cache = P.refCache = /* @__PURE__ */ new Map();
+					cache.set(base, r);
+				}
+			}
+			return r;
+		}
+		resolveDynamicRefCached(P, base) {
+			let cache = P.dynCache;
+			if (cache === null) cache = P.dynCache = /* @__PURE__ */ new Map();
+			let r = cache.get(base);
+			if (r === void 0) {
+				const { node, base: refBase } = resolveRef(P.dynamicRef, base, this.state);
+				const [, fragment] = splitFragment(resolveUri(base, P.dynamicRef));
+				r = {
+					node,
+					base: refBase,
+					fragment,
+					byAnchor: Boolean(fragment) && !fragment.startsWith("/")
+				};
+				cache.set(base, r);
+			}
+			return r;
+		}
+		node(schema) {
+			if (schema === true || schema === false) return schema;
+			if (typeof schema !== "object" || schema === null) return true;
+			return this.plan(schema);
+		}
+		isValid(data) {
+			const fast = this._fastRoot();
+			if (fast !== null) return fast.v(data, fast.cyclic ? [] : null);
+			const dynScope = [this.state.rootBase];
+			return this.eval(this.rootNode, data, this.state.rootBase, dynScope, NOERRORS, "", "#", [], DISCARD);
+		}
+		validate(data) {
+			const fast = this._fastRoot();
+			if (fast !== null) {
+				const errors = [];
+				return fast.c(data, errors, "", "#", fast.cyclic ? [] : null) ? {
+					valid: true,
+					data,
+					errors: []
+				} : {
+					valid: false,
+					errors
+				};
+			}
+			const errors = [];
+			const dynScope = [this.state.rootBase];
+			return this.eval(this.rootNode, data, this.state.rootBase, dynScope, errors, "", "#", [], DISCARD) ? {
+				valid: true,
+				data,
+				errors: []
+			} : {
+				valid: false,
+				errors
+			};
+		}
+		eval(P, data, base, dynScope, errors, instancePath, schemaPath, stack, sink) {
+			if (P === true) return true;
+			if (P === false) {
+				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
+				return false;
+			}
+			if (P.leaf) return evalLeaf(P, data, errors, instancePath, schemaPath);
+			const schema = P.schema;
+			const tracked = P.tracked;
+			if (tracked) {
+				for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+				stack.push(schema, data);
+			}
+			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
+			let scopePushed = false;
+			if (dynScope[dynScope.length - 1] !== base) {
+				dynScope.push(base);
+				scopePushed = true;
+			}
+			let valid = true;
+			const collect = sink !== DISCARD || P.hasUnevaluated;
+			const local = collect ? {
+				props: null,
+				items: null
+			} : DISCARD;
+			if (P.ref !== null) {
+				const { child, base: refBase } = this.resolveRefCached(P, base);
+				if (child === void 0) {
+					if (errors !== NOERRORS) errors.push(err("$ref", "$ref", instancePath, schemaPath + "/$ref", { ref: P.ref }, `cannot resolve $ref ${P.ref}`));
+					valid = false;
+				} else {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(child, data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			if (P.dynamicRef !== null) {
+				const ref = P.dynamicRef;
+				const initial = this.resolveDynamicRefCached(P, base);
+				let node = initial.node;
+				let refBase = initial.base;
+				const fragment = initial.fragment;
+				if (initial.byAnchor) {
+					const initialDyn = this.state.dynamicAnchors.get(refBase);
+					if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !this.bookending) for (const scopeBase of dynScope) {
+						const dyn = this.state.dynamicAnchors.get(scopeBase);
+						if (dyn && dyn.has(fragment)) {
+							node = dyn.get(fragment);
+							refBase = scopeBase;
+							break;
+						}
+					}
+				}
+				if (node === void 0) {
+					if (errors !== NOERRORS) errors.push(err("$dynamicRef", "$dynamicRef", instancePath, schemaPath + "/$dynamicRef", { ref }, `cannot resolve $dynamicRef ${ref}`));
+					valid = false;
+				} else {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(this.node(node), data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			const bits = dataBits(data);
+			if (P.hasType && (bits & P.typeMask) === 0) {
+				if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(" or ")}`));
+				valid = false;
+			}
+			if (P.enum !== null) {
+				let found = false;
+				for (let i = 0; i < P.enum.length; i++) if (deepEqual(P.enum[i], data)) {
+					found = true;
+					break;
+				}
+				if (!found) {
+					if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
+					valid = false;
+				}
+			}
+			if (P.hasConst && !deepEqual(P.const, data)) {
+				if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
+				valid = false;
+			}
+			if (P.hasNumber && typeof data === "number" && isFinite(data)) {
+				if (P.minimum !== void 0 && !(data >= P.minimum)) {
+					errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
+						comparison: ">=",
+						limit: P.minimum
+					}, `must be >= ${P.minimum}`));
+					valid = false;
+				}
+				if (P.maximum !== void 0 && !(data <= P.maximum)) {
+					errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
+						comparison: "<=",
+						limit: P.maximum
+					}, `must be <= ${P.maximum}`));
+					valid = false;
+				}
+				if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
+					errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
+						comparison: ">",
+						limit: P.exclusiveMinimum
+					}, `must be > ${P.exclusiveMinimum}`));
+					valid = false;
+				}
+				if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
+					errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
+						comparison: "<",
+						limit: P.exclusiveMaximum
+					}, `must be < ${P.exclusiveMaximum}`));
+					valid = false;
+				}
+				if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
+					errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
+					valid = false;
+				}
+			}
+			if (P.hasString && bits === T_STRING) {
+				if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
+					errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
+					valid = false;
+				}
+				if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
+					errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
+					valid = false;
+				}
+				if (P.pattern !== null && !P.pattern.test(data)) {
+					errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
+					valid = false;
+				}
+				if (P.formatFn !== null && !P.formatFn(data)) {
+					errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
+					valid = false;
+				}
+			}
+			if (P.hasArray && bits === T_ARRAY) {
+				if (P.minItems !== void 0 && data.length < P.minItems) {
+					errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
+					valid = false;
+				}
+				if (P.maxItems !== void 0 && data.length > P.maxItems) {
+					errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
+					valid = false;
+				}
+				if (P.uniqueItems) {
+					outer: for (let i = 0; i < data.length; i++) for (let j = i + 1; j < data.length; j++) if (deepEqual(data[i], data[j])) {
+						if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
+							i,
+							j
+						}, "must NOT have duplicate items"));
+						valid = false;
+						break outer;
+					}
+				}
+				const prefix = P.prefixItems;
+				if (prefix !== null) {
+					const n = Math.min(prefix.length, data.length);
+					for (let i = 0; i < n; i++) {
+						if (!this.eval(prefix[i], data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack, DISCARD)) valid = false;
+						if (collect) {
+							if (!local.items) local.items = /* @__PURE__ */ new Set();
+							local.items.add(i);
+						}
+					}
+				}
+				if (P.items !== void 0) {
+					const start = prefix !== null ? prefix.length : 0;
+					for (let i = start; i < data.length; i++) {
+						if (!this.eval(P.items, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/items", stack, DISCARD)) valid = false;
+						if (collect) {
+							if (!local.items) local.items = /* @__PURE__ */ new Set();
+							local.items.add(i);
+						}
+					}
+				}
+				if (P.contains !== void 0) {
+					const matched = [];
+					for (let i = 0; i < data.length; i++) {
+						const scratch = errors === NOERRORS ? NOERRORS : [];
+						if (this.eval(P.contains, data[i], base, dynScope, scratch, instancePath + "/" + i, schemaPath + "/contains", stack, DISCARD)) matched.push(i);
+					}
+					const minC = P.minContains !== void 0 ? P.minContains : 1;
+					if (matched.length < minC) {
+						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
+						valid = false;
+					}
+					if (P.maxContains !== void 0 && matched.length > P.maxContains) {
+						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
+							minContains: minC,
+							maxContains: P.maxContains
+						}, `must NOT contain more than ${P.maxContains} valid item(s)`));
+						valid = false;
+					}
+					if (collect && matched.length) {
+						if (!local.items) local.items = /* @__PURE__ */ new Set();
+						for (const i of matched) local.items.add(i);
+					}
+				}
+			}
+			if (P.hasObject && bits === T_OBJECT) {
+				const keys = Object.keys(data);
+				if (P.required !== null) {
+					const req = P.required;
+					for (let i = 0; i < req.length; i++) {
+						const key = req[i];
+						if (!Object.hasOwn(data, key)) {
+							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+							valid = false;
+						}
+					}
+				}
+				if (P.minProperties !== void 0 && keys.length < P.minProperties) {
+					errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
+					valid = false;
+				}
+				if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
+					errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
+					valid = false;
+				}
+				if (P.dependentRequired !== null) {
+					for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+						for (const dep of deps) if (!Object.hasOwn(data, dep)) {
+							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
+							valid = false;
+						}
+					}
+				}
+				if (P.propertyNames !== void 0) {
+					for (const key of keys) if (!this.eval(P.propertyNames, key, base, dynScope, errors, instancePath, schemaPath + "/propertyNames", stack, DISCARD)) valid = false;
+				}
+				const props = P.properties;
+				const patterns = P.patternProperties;
+				for (let k = 0; k < keys.length; k++) {
+					const key = keys[k];
+					let evaluated = false;
+					const prop = props !== null ? props.get(key) : void 0;
+					if (prop !== void 0) {
+						if (!this.eval(prop.node, data[key], base, dynScope, errors, instancePath + prop.seg, schemaPath + prop.schemaSeg, stack, DISCARD)) valid = false;
+						evaluated = true;
+					}
+					if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+						const pp = patterns[pi];
+						if (pp.re.test(key)) {
+							if (!this.eval(pp.node, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(pp.src), stack, DISCARD)) valid = false;
+							evaluated = true;
+						}
+					}
+					if (!evaluated && P.additionalProperties !== void 0) {
+						if (P.additionalProperties === false) {
+							valid = false;
+							if (errors !== NOERRORS) errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
+						} else if (!this.eval(P.additionalProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack, DISCARD)) valid = false;
+						evaluated = true;
+					}
+					if (evaluated && collect) {
+						if (!local.props) local.props = /* @__PURE__ */ new Set();
+						local.props.add(key);
+					}
+				}
+				if (P.dependentSchemas !== null) {
+					for (const [key, dep] of P.dependentSchemas) if (Object.hasOwn(data, key)) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						if (!this.eval(dep, data, base, dynScope, errors, instancePath, schemaPath + "/dependentSchemas/" + escapePointer(key), stack, sub)) valid = false;
+						else if (collect) mergeAnnotations(local, sub);
+					}
+				}
+				if (P.propertyDependencies !== null) for (const [key, choices] of P.propertyDependencies) {
+					if (!Object.hasOwn(data, key)) continue;
+					const value = data[key];
+					if (typeof value !== "string") continue;
+					const choice = choices.get(value);
+					if (choice === void 0) continue;
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(key) + "/" + escapePointer(value);
+					if (!this.eval(choice, data, base, dynScope, errors, instancePath, branchPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			if (P.hasApplicators) {
+				if (P.allOf !== null) for (let i = 0; i < P.allOf.length; i++) {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(P.allOf[i], data, base, dynScope, errors, instancePath, schemaPath + "/allOf/" + i, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+				if (P.macros !== null) for (let i = 0; i < P.macros.length; i++) {
+					const m = P.macros[i];
+					const sp = schemaPath + "/" + m.keyword;
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(m.node, data, base, dynScope, errors, instancePath, sp, stack, sub)) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+					} else if (collect) mergeAnnotations(local, sub);
+				}
+				if (P.anyOf !== null) {
+					let any = false;
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < P.anyOf.length; i++) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						const mark = branches === null ? 0 : scratch.length;
+						const ok = this.eval(P.anyOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, sub);
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: branchTitle(P.anyOf[i])
+						});
+						if (ok) {
+							any = true;
+							if (collect) mergeAnnotations(local, sub);
+						}
+					}
+					if (!any) {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "anyOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/anyOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						valid = false;
+					}
+				}
+				if (P.oneOf !== null) {
+					let count = 0;
+					let winner = null;
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < P.oneOf.length; i++) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						const mark = branches === null ? 0 : scratch.length;
+						const ok = this.eval(P.oneOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, sub);
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: branchTitle(P.oneOf[i])
+						});
+						if (ok) {
+							count++;
+							winner = sub;
+						}
+					}
+					if (count === 1) {
+						if (collect) mergeAnnotations(local, winner);
+					} else {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "oneOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/oneOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						valid = false;
+					}
+				}
+				if (P.not !== void 0) {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					if (this.eval(P.not, data, base, dynScope, scratch, instancePath, schemaPath + "/not", stack, DISCARD)) {
+						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
+						valid = false;
+					}
+				}
+				if (P.if !== void 0) {
+					const ifSub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					const ifScratch = errors === NOERRORS ? NOERRORS : [];
+					if (this.eval(P.if, data, base, dynScope, ifScratch, instancePath, schemaPath + "/if", stack, ifSub)) {
+						if (collect) mergeAnnotations(local, ifSub);
+						if (P.then !== void 0) {
+							const sub = collect ? {
+								props: null,
+								items: null
+							} : DISCARD;
+							if (!this.eval(P.then, data, base, dynScope, errors, instancePath, schemaPath + "/then", stack, sub)) valid = false;
+							else if (collect) mergeAnnotations(local, sub);
+						}
+					} else if (P.else !== void 0) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						if (!this.eval(P.else, data, base, dynScope, errors, instancePath, schemaPath + "/else", stack, sub)) valid = false;
+						else if (collect) mergeAnnotations(local, sub);
+					}
+				}
+			}
+			if (P.hasUnevaluated) {
+				if (P.unevaluatedProperties !== void 0 && bits === T_OBJECT) for (const key of Object.keys(data)) {
+					if (local.props && local.props.has(key)) continue;
+					if (P.unevaluatedPropertiesFalse) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
+					} else if (!this.eval(P.unevaluatedProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack, DISCARD)) valid = false;
+					if (!local.props) local.props = /* @__PURE__ */ new Set();
+					local.props.add(key);
+				}
+				if (P.unevaluatedItems !== void 0 && bits === T_ARRAY) for (let i = 0; i < data.length; i++) {
+					if (local.items && local.items.has(i)) continue;
+					if (P.unevaluatedItemsFalse) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
+						break;
+					}
+					if (!this.eval(P.unevaluatedItems, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack, DISCARD)) valid = false;
+					if (!local.items) local.items = /* @__PURE__ */ new Set();
+					local.items.add(i);
+				}
+			}
+			if (scopePushed) dynScope.pop();
+			if (tracked) stack.length -= 2;
+			if (valid && collect && sink !== DISCARD) mergeAnnotations(sink, local);
+			return valid;
+		}
+	};
+	function branchTitle(node) {
+		return node && node.schema && typeof node.schema.title === "string" ? node.schema.title : "";
+	}
+	function escapePointer(s) {
+		if (typeof s !== "string") s = String(s);
+		for (let i = 0; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 126 || c === 47) return s.replace(/~/g, "~0").replace(/\//g, "~1");
+		}
+		return s;
+	}
+	function err(code, keyword, instancePath, schemaPath, params, message) {
+		return {
+			keyword,
+			instancePath,
+			schemaPath,
+			params,
+			message
+		};
+	}
+	const { compileInterpreter } = require_plan_compiler().install({
+		Plan,
+		NOERRORS,
+		err,
+		evalLeaf,
+		evalLeafV,
+		runCustomV,
+		dataBits,
+		escapePointer,
+		deepEqual,
+		multipleOfOk,
+		cpAtLeast,
+		cpAtMost,
+		T_STRING,
+		T_ARRAY,
+		T_OBJECT,
+		resolveRef,
+		splitFragment,
+		resolveUri
+	});
+	function createInterpreter(schema, options) {
+		return new Interpreter(schema, options);
+	}
+	module.exports = { createInterpreter };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/pointer.js
+var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	/**
+	* Resolve a JSON pointer against a document, for the diagnostic paths that run
+	* once per error on a rejected payload.
+	*
+	* Segments are read straight out of the pointer string: no leading-slash
+	* regex, no parts array, and no unescape pass on the segments that carry no
+	* `~`. A pointer that leaves the document returns rather than throwing,
+	* because a diagnostic must not fail where validation succeeded.
+	*
+	* `missing` separates the two ways a pointer yields nothing: a key that is
+	* absent from a container that exists resolves to undefined, while a pointer
+	* that walks through a null or a primitive returns `missing`. Callers that
+	* format the value need that apart, since the first is a value worth printing
+	* and the second is a path that was never in the document.
+	*
+	* @param {*} data the document the pointer is read against
+	* @param {string} pointer an RFC 6901 pointer, '' for the document itself
+	* @param {*} [missing] returned when the walk leaves the document
+	* @returns {*} the value at the pointer, `missing` if the walk broke
+	*/
+	function resolvePointer(data, pointer, missing) {
+		if (!pointer) return data;
+		const len = pointer.length;
+		let cur = data;
+		let i = pointer.charCodeAt(0) === 47 ? 1 : 0;
+		for (;;) {
+			let j = pointer.indexOf("/", i);
+			if (j === -1) j = len;
+			let seg = pointer.slice(i, j);
+			if (seg.indexOf("~") !== -1) seg = seg.replace(/~1/g, "/").replace(/~0/g, "~");
+			if (cur == null) return missing;
+			cur = cur[seg];
+			if (j === len) break;
+			i = j + 1;
+		}
+		return cur;
+	}
+	module.exports = {
+		resolvePointer,
+		UNRESOLVED: Symbol("ata.pointer.unresolved")
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/suggestions.js
+var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { levenshtein } = require_levenshtein();
+	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
+	const FORMAT_HINTS = {
+		email: (val) => {
+			if (typeof val !== "string") return null;
+			if (!val.includes("@")) return "missing '@' and domain part";
+			if (val.split("@").length > 2) return "multiple '@' characters";
+			const [, dom] = val.split("@");
+			if (!dom || !dom.includes(".")) return "domain part missing dot";
+			return null;
+		},
+		date: (val) => {
+			if (typeof val !== "string") return null;
+			const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(val);
+			if (!m) return "expected YYYY-MM-DD layout";
+			const mo = +m[2];
+			if (mo < 1 || mo > 12) return "month must be 01-12";
+			const d = +m[3];
+			if (d < 1 || d > 31) return "day must be 01-31";
+			return null;
+		},
+		uuid: (val) => {
+			if (typeof val !== "string") return null;
+			if (!/^[0-9a-fA-F-]+$/.test(val)) return "expected hex digits and dashes";
+			return "expected 8-4-4-4-12 hex layout";
+		},
+		ipv4: (val) => typeof val === "string" ? "expected four 0-255 octets separated by dots" : null
+	};
+	function suggestEnumTypo(received, enumValues) {
+		if (typeof received !== "string") return null;
+		if (!Array.isArray(enumValues) || enumValues.length === 0 || enumValues.length > 30) return null;
+		let best = null;
+		let bestDist = Infinity;
+		let tied = false;
+		for (const v of enumValues) {
+			if (typeof v !== "string") continue;
+			const d = levenshtein(received, v, 2);
+			if (d < bestDist) {
+				best = v;
+				bestDist = d;
+				tied = false;
+			} else if (d === bestDist) tied = true;
+		}
+		if (best && bestDist <= 2 && !tied) return {
+			text: `did you mean \`${best}\`?`,
+			kind: "typo"
+		};
+		return null;
+	}
+	const MAX_TYPO_CANDIDATES = 64;
+	function suggestRequiredTypo(missing, presentKeys) {
+		if (!missing || !Array.isArray(presentKeys)) return null;
+		if (presentKeys.length > MAX_TYPO_CANDIDATES) return null;
+		for (const k of presentKeys) {
+			if (typeof k !== "string") continue;
+			const d = levenshtein(missing, k, 2);
+			if (d <= 2 && d > 0) return {
+				text: `did you mean \`${missing}\` instead of \`${k}\`?`,
+				kind: "similar-key"
+			};
+		}
+		return null;
+	}
+	function suggestFormat(format, raw) {
+		const fn = FORMAT_HINTS[format];
+		if (!fn) return null;
+		const text = fn(raw);
+		return text ? {
+			text,
+			kind: "format"
+		} : null;
+	}
+	function suggestCoercion(expectedType, raw) {
+		if (typeof raw !== "string") return null;
+		if (expectedType === "integer" && /^-?\d+$/.test(raw)) return {
+			text: "value would coerce; enable `coerceTypes` or pass an integer",
+			kind: "coercion"
+		};
+		if (expectedType === "number" && /^-?\d+(\.\d+)?$/.test(raw)) return {
+			text: "value would coerce; enable `coerceTypes` or pass a number",
+			kind: "coercion"
+		};
+		if (expectedType === "boolean" && (raw === "true" || raw === "false")) return {
+			text: "value would coerce; enable `coerceTypes` or pass a boolean",
+			kind: "coercion"
+		};
+		return null;
+	}
+	/**
+	* Apply suggestion sources in priority order. Returns the first hit, or null.
+	* @param err Enriched ValidationError (with `received`, `params`, `keyword`)
+	* @param data The full input data (for required-typo)
+	* @param at The value at `err.path`, already resolved by the caller, or
+	*   UNRESOLVED when the caller has none to offer
+	*/
+	function suggestFor(err, data, at = UNRESOLVED) {
+		const raw = at !== UNRESOLVED ? at : parseReceived(err.received);
+		if (err.keyword === "enum") return suggestEnumTypo(raw, err.params && err.params.allowedValues);
+		if (err.keyword === "required") {
+			const missing = err.params && err.params.missingProperty;
+			const path = err.path || "";
+			let parentPath = path;
+			if (parentPath.endsWith("/" + missing)) parentPath = parentPath.slice(0, -missing.length - 1);
+			const parent = parentPath === path && at !== UNRESOLVED ? at : walk(data, parentPath);
+			if (parent && typeof parent === "object") return suggestRequiredTypo(missing, Object.keys(parent));
+			return null;
+		}
+		if (err.keyword === "format") return suggestFormat(err.params && err.params.format, raw);
+		if (err.keyword === "type") return suggestCoercion(err.params && err.params.type, raw);
+		return null;
+	}
+	function parseReceived(r) {
+		if (typeof r !== "string") return r;
+		if (r.startsWith("\"") && r.endsWith("\"")) try {
+			return JSON.parse(r);
+		} catch {
+			return r;
+		}
+		return r;
+	}
+	module.exports = {
+		suggestFor,
+		suggestEnumTypo,
+		suggestRequiredTypo,
+		suggestFormat,
+		suggestCoercion
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/enrich-error.js
+var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { CODES, codeFor, fromNative } = require_error_codes();
+	const { suggestFor } = require_suggestions();
+	const { resolvePointer } = require_pointer();
+	const MISSING = Symbol("ata.received.missing");
+	const DOC_BASE = "https://ata-validator.com/e/";
+	function jsonSizeWithin(v, budget) {
+		if (budget < 0) return -1;
+		if (v === null) return 4;
+		const t = typeof v;
+		if (t === "number") return Number.isFinite(v) ? String(v).length : 4;
+		if (t === "boolean") return v ? 4 : 5;
+		if (t === "string") return v.length + 2 > budget ? -1 : v.length + 2;
+		if (t !== "object") return -1;
+		if (typeof v.toJSON === "function") return 2;
+		if (Array.isArray(v)) {
+			let n = 2;
+			for (let i = 0; i < v.length; i++) {
+				n += i === 0 ? 0 : 1;
+				if (n > budget) return -1;
+				const c = jsonSizeWithin(v[i], budget - n);
+				if (c < 0) return -1;
+				n += c;
+				if (n > budget) return -1;
+			}
+			return n;
+		}
+		const proto = Object.getPrototypeOf(v);
+		if (proto !== Object.prototype && proto !== null) return -1;
+		let n = 2;
+		let first = true;
+		for (const k in v) {
+			const val = v[k];
+			if (val === void 0 || typeof val === "function" || typeof val === "symbol") continue;
+			n += k.length + 3 + (first ? 0 : 1);
+			if (n > budget) return -1;
+			first = false;
+			const c = jsonSizeWithin(val, budget - n);
+			if (c < 0) return -1;
+			n += c;
+			if (n > budget) return -1;
+		}
+		return n;
+	}
+	function reprValue(v) {
+		if (v === void 0) return "undefined";
+		if (v === null) return "null";
+		const t = typeof v;
+		if (t === "string") {
+			const s = JSON.stringify(v);
+			return s.length > 60 ? s.slice(0, 57) + "...\"" : s;
+		}
+		if (t === "number" || t === "boolean") return String(v);
+		if (Array.isArray(v)) return `[array, ${v.length} items]`;
+		if (t === "object") {
+			if (jsonSizeWithin(v, 60) >= 0) try {
+				const s = JSON.stringify(v);
+				if (s !== void 0 && s.length <= 60) return s;
+			} catch {
+				return "[object, unserializable]";
+			}
+			let n;
+			try {
+				n = Object.keys(v).length;
+			} catch {
+				return "[object, unserializable]";
+			}
+			return `[object, ${n} ${n === 1 ? "key" : "keys"}]`;
+		}
+		return `[${t}]`;
+	}
+	function expectedFor(err) {
+		switch (err.keyword) {
+			case "type": return err.params && err.params.type ? String(err.params.type) : void 0;
+			case "minLength": return err.params && err.params.limit != null ? `string with ≥${err.params.limit} chars` : void 0;
+			case "maxLength": return err.params && err.params.limit != null ? `string with ≤${err.params.limit} chars` : void 0;
+			case "minimum": return err.params && err.params.limit != null ? `≥${err.params.limit}` : void 0;
+			case "maximum": return err.params && err.params.limit != null ? `≤${err.params.limit}` : void 0;
+			case "format": return err.params && err.params.format ? `format '${err.params.format}'` : void 0;
+			case "pattern": return err.params && err.params.pattern ? `string matching /${err.params.pattern}/` : void 0;
+			case "enum": return err.params && err.params.allowedValues ? `one of [${err.params.allowedValues.map(reprValue).join(", ")}]` : void 0;
+			case "const": return err.params && "allowedValue" in err.params ? reprValue(err.params.allowedValue) : void 0;
+			case "required": return err.params && err.params.missingProperty ? `property '${err.params.missingProperty}'` : void 0;
+			default: return;
+		}
+	}
+	function resolveAt(err, data) {
+		if (!data && data !== 0 && data !== false) return MISSING;
+		const p = err.instancePath || err.path || "";
+		if (!p) return data;
+		return resolvePointer(data, p, MISSING);
+	}
+	/**
+	* Enrich a raw codegen error with code/path/expected/received/docUrl.
+	* Pure: returns a new object. Source frames and suggestions are added by
+	* other helpers later in the pipeline.
+	*/
+	function detailFor(err, out) {
+		const p = err.params || {};
+		switch (err.keyword) {
+			case "type": return `expected ${p.type}, found ${typeNameOf(out.received)}`;
+			case "required": return `missing required property "${p.missingProperty}"`;
+			case "additionalProperties": return `unknown property "${p.additionalProperty}"`;
+			case "unevaluatedProperties": return `unevaluated property "${p.unevaluatedProperty}"`;
+			case "enum": return out.expected ? `expected ${out.expected}, found ${out.received}` : void 0;
+			case "const": return out.expected ? `expected ${out.expected}, found ${out.received}` : void 0;
+			case "format": return `not a valid ${p.format}: ${out.received}`;
+			case "minimum":
+			case "maximum":
+			case "exclusiveMinimum":
+			case "exclusiveMaximum": return `expected ${out.expected}, found ${out.received}`;
+			case "minLength":
+			case "maxLength": return `expected ${out.expected}, found ${out.received}`;
+			default: return out.expected ? `expected ${out.expected}, found ${out.received}` : void 0;
+		}
+	}
+	function typeNameOf(received) {
+		if (received === void 0) return "nothing";
+		if (received === "null") return "null";
+		if (received === "true" || received === "false") return "boolean";
+		if (received.startsWith("\"")) return "string";
+		if (received.startsWith("[array")) return "array";
+		if (received.startsWith("{") || received.startsWith("[object")) return "object";
+		if (/^-?\d/.test(received)) return "number";
+		return "value";
+	}
+	const RANK = {
+		required: 0,
+		additionalProperties: 0,
+		unevaluatedProperties: 0,
+		unevaluatedItems: 0,
+		dependentRequired: 0,
+		propertyNames: 0,
+		type: 1,
+		oneOf: 3,
+		anyOf: 3,
+		allOf: 3,
+		not: 3
+	};
+	function rankFor(keyword) {
+		const r = RANK[keyword];
+		return r === void 0 ? 2 : r;
+	}
+	function enrich(rawErr, opts) {
+		const data = opts && opts.data;
+		const positions = opts && opts.positions;
+		const format = rawErr.params && rawErr.params.format;
+		const fromAddon = typeof rawErr.code === "number" ? fromNative(rawErr.code, format) : null;
+		const keyword = rawErr.keyword || fromAddon && fromAddon.keyword;
+		const code = fromAddon && fromAddon.code || typeof rawErr.code === "string" && rawErr.code || codeFor(keyword, format) || "ATA9001";
+		const meta = CODES[code];
+		const path = rawErr.instancePath != null ? rawErr.instancePath : rawErr.path || "";
+		const at = data !== void 0 ? resolveAt(rawErr, data) : MISSING;
+		const out = {
+			code,
+			message: rawErr.message || meta && meta.headline || "validation failed",
+			keyword,
+			path,
+			expected: expectedFor(rawErr),
+			received: at === MISSING ? void 0 : reprValue(at),
+			schemaPath: rawErr.schemaPath,
+			docUrl: DOC_BASE + code,
+			instancePath: path,
+			dataPath: path,
+			params: rawErr.params,
+			parentSchema: rawErr.parentSchema
+		};
+		if ("data" in rawErr) out.data = rawErr.data;
+		if ("schema" in rawErr) out.schema = rawErr.schema;
+		if (rawErr.branchErrors) out.branchErrors = rawErr.branchErrors;
+		if (positions && positions[path]) {
+			const p = positions[path];
+			out.dataFrame = {
+				byteOffset: p.byteOffset,
+				length: p.length,
+				line: p.line,
+				col: p.col,
+				text: p.text
+			};
+		}
+		if (opts && opts.schemaPositions && rawErr.schemaPath) {
+			const sp = rawErr.schemaPath;
+			const ptr = sp.startsWith("#") ? sp.slice(1) : sp;
+			const hit = opts.schemaPositions[ptr] || opts.schemaPositions[ptr + "#key"];
+			if (hit) out.schemaSource = {
+				file: opts.schemaFile,
+				line: hit.line,
+				col: hit.col,
+				text: hit.text
+			};
+		}
+		const sugg = suggestFor(out, data, at === MISSING ? void 0 : at);
+		if (sugg) out.suggestion = sugg;
+		const detail = detailFor(rawErr, out);
+		if (detail !== void 0) out.detail = detail;
+		out.rank = rankFor(keyword);
+		if (opts && opts.positions) {
+			const named = rawErr.params && (rawErr.params.additionalProperty || rawErr.params.unevaluatedProperty) || null;
+			const own = opts.positions[path];
+			const src = (named ? opts.positions[(path === "" ? "" : path) + "/" + named] : null) || own;
+			if (src) {
+				out.anchor = {
+					line: src.line,
+					col: src.col,
+					length: src.length
+				};
+				if (src.keyOffset !== void 0) {
+					out.anchor.keyLine = src.keyLine;
+					out.anchor.keyCol = src.keyCol;
+					out.anchor.keyLength = src.keyLength;
+				}
+			}
+		}
+		return out;
+	}
+	module.exports = {
+		enrich,
+		reprValue,
+		expectedFor
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/error-messages.js
+var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function resolveOwner(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
+		const stripped = schemaPath.slice(1);
+		if (!stripped || stripped === "/") return rootSchema;
+		const parts = stripped.split("/").filter(Boolean).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let target = rootSchema;
+		for (let i = 0; i < parts.length - 1; i++) {
+			if (target == null || typeof target !== "object") return void 0;
+			target = target[parts[i]];
+		}
+		return target;
+	}
+	function pickMessage(em, err) {
+		if (em == null) return void 0;
+		if (typeof em === "string") return em;
+		if (typeof em !== "object") return void 0;
+		const kw = err.keyword;
+		if (kw === "required") {
+			const r = em.required;
+			if (typeof r === "string") return r;
+			if (r && typeof r === "object") {
+				const prop = err.params && err.params.missingProperty;
+				if (prop != null && typeof r[prop] === "string") return r[prop];
+			}
+		}
+		if (kw != null && typeof em[kw] === "string") return em[kw];
+		if (typeof em._ === "string") return em._;
+	}
+	function schemaHasErrorMessages(schemaStr) {
+		return typeof schemaStr === "string" && schemaStr.indexOf("\"errorMessage\"") !== -1;
+	}
+	function applyErrorMessages(errors, rootSchema) {
+		if (!errors || !errors.length) return errors;
+		let changed = false;
+		const out = new Array(errors.length);
+		for (let i = 0; i < errors.length; i++) {
+			const err = errors[i];
+			out[i] = err;
+			if (!err || typeof err.schemaPath !== "string") continue;
+			const owner = resolveOwner(rootSchema, err.schemaPath);
+			if (!owner || typeof owner !== "object") continue;
+			const msg = pickMessage(owner.errorMessage, err);
+			if (msg == null) continue;
+			out[i] = Object.assign({}, err, { message: msg });
+			changed = true;
+		}
+		return changed ? out : errors;
+	}
+	module.exports = {
+		schemaHasErrorMessages,
+		applyErrorMessages,
+		resolveOwner,
+		pickMessage
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/buffer-gate.browser.js
+var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = {
+		bufferNeedsSlowPath: () => false,
+		installSlowBufferApis() {}
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/scan-runtime.js
+var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function hex4(s, i) {
+		for (let k = i; k < i + 4; k++) {
+			const c = s.charCodeAt(k);
+			if (c >= 48 && c <= 57) continue;
+			if (c >= 97 && c <= 102) continue;
+			if (c >= 65 && c <= 70) continue;
+			return false;
+		}
+		return true;
+	}
+	const MAX_SKIP_DEPTH = 512;
+	const MALFORMED = -1;
+	const TOO_DEEP = -2;
+	function skipValue(s, i) {
+		const len = s.length;
+		const stack = [];
+		let depth = 0;
+		for (;;) {
+			let c = s.charCodeAt(i);
+			while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+			if (c === 34) {
+				i = skipString(s, i);
+				if (i < 0) return MALFORMED;
+			} else if (c === 123 || c === 91) {
+				if (depth >= MAX_SKIP_DEPTH) return TOO_DEEP;
+				stack[depth++] = c === 123 ? 0 : 1;
+				i++;
+				c = s.charCodeAt(i);
+				while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+				if (c === (stack[depth - 1] === 0 ? 125 : 93)) {
+					depth--;
+					i++;
+				} else if (stack[depth - 1] === 0) {
+					if (c !== 34) return MALFORMED;
+					i = skipString(s, i);
+					if (i < 0) return MALFORMED;
+					c = s.charCodeAt(i);
+					while (c === 32 || c === 10 || c === 9 || c === 13) c = s.charCodeAt(++i);
+					if (c !== 58) return MALFORMED;
+					i++;
+					continue;
+				} else continue;
+			} else if (c === 116) {
+				if (s.charCodeAt(i + 1) !== 114 || s.charCodeAt(i + 2) !== 117 || s.charCodeAt(i + 3) !== 101) return MALFORMED;
+				i += 4;
+			} else if (c === 102) {
+				if (s.charCodeAt(i + 1) !== 97 || s.charCodeAt(i + 2) !== 108 || s.charCodeAt(i + 3) !== 115 || s.charCodeAt(i + 4) !== 101) return MALFORMED;
+				i += 5;
+			} else if (c === 110) {
+				if (s.charCodeAt(i + 1) !== 117 || s.charCodeAt(i + 2) !== 108 || s.charCodeAt(i + 3) !== 108) return MALFORMED;
+				i += 4;
+			} else {
+				i = skipNumber(s, i);
+				if (i < 0) return MALFORMED;
+			}
+			for (;;) {
+				if (depth === 0) return i;
+				let c2 = s.charCodeAt(i);
+				while (c2 === 32 || c2 === 10 || c2 === 9 || c2 === 13) c2 = s.charCodeAt(++i);
+				const inObject = stack[depth - 1] === 0;
+				if (c2 === 44) {
+					i++;
+					if (inObject) {
+						let c3 = s.charCodeAt(i);
+						while (c3 === 32 || c3 === 10 || c3 === 9 || c3 === 13) c3 = s.charCodeAt(++i);
+						if (c3 !== 34) return MALFORMED;
+						i = skipString(s, i);
+						if (i < 0) return MALFORMED;
+						c3 = s.charCodeAt(i);
+						while (c3 === 32 || c3 === 10 || c3 === 9 || c3 === 13) c3 = s.charCodeAt(++i);
+						if (c3 !== 58) return MALFORMED;
+						i++;
+					}
+					break;
+				}
+				if (c2 === (inObject ? 125 : 93)) {
+					depth--;
+					i++;
+					continue;
+				}
+				return MALFORMED;
+			}
+			if (i > len) return MALFORMED;
+		}
+	}
+	function skipString(s, i) {
+		i++;
+		for (;;) {
+			const c = s.charCodeAt(i);
+			if (c === 34) return i + 1;
+			if (c === 92) {
+				const e = s.charCodeAt(i + 1);
+				if (e === 117) {
+					if (!hex4(s, i + 2)) return -1;
+					i += 6;
+					continue;
+				}
+				if (e === 34 || e === 92 || e === 47 || e === 98 || e === 102 || e === 110 || e === 114 || e === 116) {
+					i += 2;
+					continue;
+				}
+				return -1;
+			}
+			if (!(c >= 32)) return -1;
+			i++;
+		}
+	}
+	function skipNumber(s, i) {
+		let c = s.charCodeAt(i);
+		if (c === 45) c = s.charCodeAt(++i);
+		if (c === 48) c = s.charCodeAt(++i);
+		else if (c >= 49 && c <= 57) do
+			c = s.charCodeAt(++i);
+		while (c >= 48 && c <= 57);
+		else return -1;
+		if (c === 46) {
+			c = s.charCodeAt(++i);
+			if (!(c >= 48 && c <= 57)) return -1;
+			do
+				c = s.charCodeAt(++i);
+			while (c >= 48 && c <= 57);
+		}
+		if (c === 101 || c === 69) {
+			c = s.charCodeAt(++i);
+			if (c === 43 || c === 45) c = s.charCodeAt(++i);
+			if (!(c >= 48 && c <= 57)) return -1;
+			do
+				c = s.charCodeAt(++i);
+			while (c >= 48 && c <= 57);
+		}
+		return i;
+	}
+	function span(s, p, e, escaped) {
+		if (!escaped) return s.slice(p, e);
+		return JSON.parse(s.slice(p - 1, e + 1));
+	}
+	module.exports = {
+		hex4,
+		skipValue,
+		skipString,
+		skipNumber,
+		span,
+		MALFORMED,
+		TOO_DEEP,
+		MAX_SKIP_DEPTH
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/scan-compiler.js
+var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileToJSCodegen } = require_js_compiler();
+	const VALID = 1;
+	const INVALID = 0;
+	const BAIL = -1;
+	const MAX_SCHEMA_DEPTH = 12;
+	const MAX_PROPS = 4096;
+	const TIGHTEN_MAX = [
+		"minLength",
+		"minItems",
+		"minProperties",
+		"minimum",
+		"exclusiveMinimum"
+	];
+	const TIGHTEN_MIN = [
+		"maxLength",
+		"maxItems",
+		"maxProperties",
+		"maximum",
+		"exclusiveMaximum"
+	];
+	const SAME_OR_NOTHING = [
+		"pattern",
+		"format",
+		"const",
+		"enum",
+		"multipleOf"
+	];
+	const STRUCTURAL = /* @__PURE__ */ new Set([
+		"type",
+		"properties",
+		"required",
+		"additionalProperties",
+		"minProperties",
+		"maxProperties",
+		"items",
+		"prefixItems",
+		"minItems",
+		"maxItems",
+		"unevaluatedProperties",
+		"unevaluatedItems"
+	]);
+	const LEAF = /* @__PURE__ */ new Set([
+		"minLength",
+		"maxLength",
+		"pattern",
+		"format",
+		"const",
+		"enum",
+		"minimum",
+		"maximum",
+		"exclusiveMinimum",
+		"exclusiveMaximum",
+		"multipleOf"
+	]);
+	const IGNORED = /* @__PURE__ */ new Set([
+		"title",
+		"description",
+		"$comment",
+		"examples",
+		"deprecated",
+		"readOnly",
+		"writeOnly",
+		"$schema",
+		"$defs",
+		"definitions",
+		"$vocabulary"
+	]);
+	const BASE_CHANGING = /* @__PURE__ */ new Set([
+		"$id",
+		"$anchor",
+		"$dynamicAnchor",
+		"$dynamicRef"
+	]);
+	const MAX_NODES = 8192;
+	const MAX_PREFIX_ITEMS = 24;
+	const KINDS = [
+		"object",
+		"array",
+		"string",
+		"number",
+		"integer",
+		"boolean",
+		"null"
+	];
+	const DECLINE = Symbol("decline");
+	let declineReason = null;
+	function decline(reason) {
+		declineReason = reason || "unknown";
+		throw DECLINE;
+	}
+	const WS = "if(c<=32){while(c===32||c===10||c===9||c===13){c=s.charCodeAt(++i);}}";
+	function isPlainObject(v) {
+		return v !== null && typeof v === "object" && !Array.isArray(v);
+	}
+	function typeSet(schema) {
+		const t = schema.type;
+		if (t === void 0) return null;
+		const list = Array.isArray(t) ? t : [t];
+		const out = /* @__PURE__ */ new Set();
+		for (const name of list) {
+			if (typeof name !== "string" || !KINDS.includes(name)) decline("type:" + String(name));
+			out.add(name);
+		}
+		if (out.size === 0) decline("type:empty");
+		return out;
+	}
+	function allows(types, kind) {
+		if (types === null) return true;
+		if (kind === "number") return types.has("number") || types.has("integer");
+		return types.has(kind);
+	}
+	function integerOnly(types) {
+		return types !== null && types.has("integer") && !types.has("number");
+	}
+	function compileLeaf(keys, schema, ctx) {
+		const sub = {};
+		for (const k of keys) sub[k] = schema[k];
+		const fn = compileToJSCodegen(sub, null, ctx.userFormats);
+		if (typeof fn !== "function") decline("leaf:" + keys.join("+"));
+		ctx.helpers.push(fn);
+		return "_h[" + (ctx.helpers.length - 1) + "]";
+	}
+	function resolveLocalRef(root, ref) {
+		if (typeof ref !== "string") decline("$ref:not-string");
+		if (ref === "#") return root;
+		if (!ref.startsWith("#/")) decline("$ref:not-local");
+		let node = root;
+		for (const rawToken of ref.slice(2).split("/")) {
+			const token = decodeURIComponent(rawToken).split("~1").join("/").split("~0").join("~");
+			if (node === null || typeof node !== "object") decline("$ref:unresolved");
+			if (Array.isArray(node)) {
+				if (!/^\d+$/.test(token)) decline("$ref:unresolved");
+				node = node[Number(token)];
+			} else {
+				if (!Object.prototype.hasOwnProperty.call(node, token)) decline("$ref:unresolved");
+				node = node[token];
+			}
+			if (node === void 0) decline("$ref:unresolved");
+		}
+		return node;
+	}
+	function collectLayers(node, ctx, out, depth) {
+		if (depth > MAX_SCHEMA_DEPTH) decline("allOf:too-deep");
+		if (node === true) return;
+		if (node === false) {
+			out.unsatisfiable = true;
+			return;
+		}
+		if (!isPlainObject(node)) decline("allOf:branch-not-object");
+		for (const k of Object.keys(node)) if (BASE_CHANGING.has(k)) decline("allOf:base-changing:" + k);
+		if (node.$ref !== void 0) {
+			for (const k of Object.keys(node)) if (k !== "$ref" && !IGNORED.has(k)) decline("allOf:$ref-sibling:" + k);
+			if (ctx.refStack.includes(node.$ref)) decline("$ref:recursive");
+			const target = resolveLocalRef(ctx.root, node.$ref);
+			ctx.refStack.push(node.$ref);
+			collectLayers(target, ctx, out, depth + 1);
+			ctx.refStack.pop();
+			return;
+		}
+		const own = {};
+		for (const k of Object.keys(node)) {
+			if (k === "allOf" || IGNORED.has(k)) continue;
+			own[k] = node[k];
+		}
+		if (Object.keys(own).length > 0) out.push(own);
+		if (node.allOf !== void 0) {
+			if (!Array.isArray(node.allOf)) decline("allOf:not-array");
+			for (const branch of node.allOf) collectLayers(branch, ctx, out, depth + 1);
+		}
+	}
+	function combine(parts) {
+		const real = parts.filter((p) => p !== true && p !== void 0);
+		if (real.some((p) => p === false)) return false;
+		if (real.length === 0) return true;
+		if (real.length === 1) return real[0];
+		return { allOf: real };
+	}
+	function mergeAllOf(schema, ctx) {
+		const layers = [];
+		collectLayers(schema, ctx, layers, 0);
+		if (layers.unsatisfiable) return false;
+		if (layers.length === 0) return true;
+		if (layers.length === 1) return layers[0];
+		for (const L of layers) if (L.unevaluatedProperties !== void 0 || L.unevaluatedItems !== void 0) decline("allOf:unevaluated");
+		const out = {};
+		let types = null;
+		for (const L of layers) {
+			const t = typeSet(L);
+			if (t === null) continue;
+			if (types === null) {
+				types = t;
+				continue;
+			}
+			const both = /* @__PURE__ */ new Set();
+			for (const name of types) if (t.has(name)) both.add(name);
+			else if (name === "number" && t.has("integer") || name === "integer" && t.has("number")) both.add("integer");
+			types = both;
+		}
+		if (types !== null) {
+			if (types.size === 0) return false;
+			out.type = [...types];
+		}
+		for (const key of TIGHTEN_MAX) {
+			let v;
+			for (const L of layers) if (typeof L[key] === "number") v = v === void 0 ? L[key] : Math.max(v, L[key]);
+			if (v !== void 0) out[key] = v;
+		}
+		for (const key of TIGHTEN_MIN) {
+			let v;
+			for (const L of layers) if (typeof L[key] === "number") v = v === void 0 ? L[key] : Math.min(v, L[key]);
+			if (v !== void 0) out[key] = v;
+		}
+		for (const key of TIGHTEN_MAX.concat(TIGHTEN_MIN)) for (const L of layers) if (L[key] !== void 0 && typeof L[key] !== "number") decline("allOf:" + key + ":not-number");
+		for (const key of SAME_OR_NOTHING) {
+			let seen, has = false;
+			for (const L of layers) {
+				if (L[key] === void 0) continue;
+				const rendered = JSON.stringify(L[key]);
+				if (!has) {
+					seen = rendered;
+					out[key] = L[key];
+					has = true;
+					continue;
+				}
+				if (rendered !== seen) decline("allOf:conflicting:" + key);
+			}
+		}
+		const required = [];
+		for (const L of layers) {
+			if (L.required === void 0) continue;
+			if (!Array.isArray(L.required)) decline("required:not-array");
+			for (const name of L.required) if (!required.includes(name)) required.push(name);
+		}
+		if (required.length > 0) out.required = required;
+		const names = [];
+		for (const L of layers) {
+			if (L.properties === void 0) continue;
+			if (!isPlainObject(L.properties)) decline("properties:not-object");
+			for (const k of Object.keys(L.properties)) if (!names.includes(k)) names.push(k);
+		}
+		if (names.length > 0) {
+			out.properties = {};
+			for (const name of names) {
+				const parts = [];
+				for (const L of layers) if (L.properties && Object.prototype.hasOwnProperty.call(L.properties, name)) parts.push(L.properties[name]);
+				else if (L.additionalProperties !== void 0) parts.push(L.additionalProperties);
+				out.properties[name] = combine(parts);
+			}
+		}
+		{
+			const parts = [];
+			for (const L of layers) if (L.additionalProperties !== void 0) parts.push(L.additionalProperties);
+			if (parts.length > 0) {
+				const merged = combine(parts);
+				if (merged !== true) out.additionalProperties = merged;
+			}
+		}
+		{
+			const parts = [];
+			for (const L of layers) if (L.items !== void 0) parts.push(L.items);
+			if (parts.length > 0) {
+				const merged = combine(parts);
+				if (merged !== true) out.items = merged;
+			}
+		}
+		{
+			let longest = -1;
+			for (const L of layers) {
+				if (L.prefixItems === void 0) continue;
+				if (!Array.isArray(L.prefixItems)) decline("prefixItems:not-array");
+				if (L.prefixItems.length > longest) longest = L.prefixItems.length;
+			}
+			if (longest >= 0) {
+				const tuple = [];
+				for (let k = 0; k < longest; k++) {
+					const parts = [];
+					for (const L of layers) if (L.prefixItems !== void 0 && k < L.prefixItems.length) parts.push(L.prefixItems[k]);
+					else if (L.items !== void 0) parts.push(L.items);
+					tuple.push(combine(parts));
+				}
+				out.prefixItems = tuple;
+			}
+		}
+		const HANDLED = new Set([
+			"type",
+			"required",
+			"properties",
+			"additionalProperties",
+			"items",
+			"prefixItems"
+		].concat(TIGHTEN_MAX, TIGHTEN_MIN, SAME_OR_NOTHING));
+		for (const L of layers) for (const k of Object.keys(L)) {
+			if (HANDLED.has(k)) continue;
+			if (out[k] === void 0) out[k] = L[k];
+			else if (JSON.stringify(out[k]) !== JSON.stringify(L[k])) decline("allOf:conflicting:" + k);
+		}
+		return out;
+	}
+	function spanHash(name) {
+		let h = 5381;
+		for (let i = 0; i < name.length; i++) h = Math.imul(h, 33) + name.charCodeAt(i) | 0;
+		return h;
+	}
+	const HASH_DISPATCH_MIN = 48;
+	function compileScanner(schema, options) {
+		const opts = options || {};
+		const ctx = {
+			uid: 0,
+			helpers: [],
+			userFormats: opts.userFormats || null,
+			root: schema,
+			refStack: [],
+			nodes: 0
+		};
+		declineReason = null;
+		let body;
+		try {
+			const out = [];
+			out.push("var len=s.length,i=0,c=s.charCodeAt(0);");
+			out.push(WS);
+			emitValue(schema, ctx, out, 0);
+			out.push(WS);
+			out.push("if(i<len)return 0;");
+			out.push("return 1;");
+			body = out.join("\n");
+		} catch (e) {
+			if (e === DECLINE) {
+				if (opts.onDecline) opts.onDecline(declineReason);
+				return null;
+			}
+			throw e;
+		}
+		let fn;
+		try {
+			fn = new Function("_h", "_r", "return function scan(s){\n" + body + "\n}")(ctx.helpers, require_scan_runtime());
+		} catch {
+			return null;
+		}
+		return {
+			scan: fn,
+			source: body,
+			helpers: ctx.helpers.length
+		};
+	}
+	function emitValue(schema, ctx, out, depth) {
+		if (depth > MAX_SCHEMA_DEPTH) decline("depth");
+		if (schema === true) {
+			emitSkip(out);
+			return;
+		}
+		if (schema === false) {
+			out.push("return 0;");
+			return;
+		}
+		if (!isPlainObject(schema)) decline("schema-not-object");
+		if (++ctx.nodes > MAX_NODES) decline("too-many-nodes");
+		for (const k of Object.keys(schema)) if (BASE_CHANGING.has(k) && !(k === "$id" && depth === 0)) decline("base-changing:" + k);
+		if (schema.$ref !== void 0) {
+			for (const k of Object.keys(schema)) if (k !== "$ref" && !IGNORED.has(k)) decline("$ref:sibling:" + k);
+			const ref = schema.$ref;
+			if (ctx.refStack.includes(ref)) decline("$ref:recursive");
+			const target = resolveLocalRef(ctx.root, ref);
+			ctx.refStack.push(ref);
+			emitValue(target, ctx, out, depth);
+			ctx.refStack.pop();
+			return;
+		}
+		if (schema.allOf !== void 0) {
+			emitValue(mergeAllOf(schema, ctx), ctx, out, depth);
+			return;
+		}
+		const present = [];
+		for (const k of Object.keys(schema)) {
+			if (k === "$id" && depth === 0) continue;
+			if (IGNORED.has(k)) continue;
+			if (STRUCTURAL.has(k) || LEAF.has(k)) {
+				present.push(k);
+				continue;
+			}
+			decline("keyword:" + k);
+		}
+		const types = typeSet(schema);
+		const has = (k) => present.includes(k);
+		let compositeAllowed = true;
+		let compositeDelegate = null;
+		if (has("const") || has("enum")) {
+			compositeAllowed = false;
+			const listed = [];
+			if (has("const")) listed.push(schema.const);
+			if (has("enum")) {
+				if (!Array.isArray(schema.enum)) decline("enum:not-array");
+				for (const v of schema.enum) listed.push(v);
+			}
+			if (listed.some((v) => v !== null && typeof v === "object")) {
+				const fn = compileToJSCodegen(schema, null, ctx.userFormats);
+				if (typeof fn !== "function") decline("const/enum:composite");
+				ctx.helpers.push(fn);
+				compositeDelegate = "_h[" + (ctx.helpers.length - 1) + "]";
+			}
+		}
+		const branches = [];
+		const compositeBranch = () => {
+			const k = ctx.uid++;
+			return ["var _cs" + k + "=i;var _ce" + k + "=_r.skipValue(s,i);if(_ce" + k + "===-2)return -1;if(_ce" + k + "<0)return 0;var _cv" + k + ";try{_cv" + k + "=JSON.parse(s.slice(_cs" + k + ",_ce" + k + "))}catch(_ce_){return 0}if(!" + compositeDelegate + "(_cv" + k + "))return 0;i=_ce" + k + ";c=s.charCodeAt(i);"];
+		};
+		if (allows(types, "object")) {
+			if (compositeDelegate) branches.push(["c===123", compositeBranch()]);
+			else if (!compositeAllowed) branches.push(["c===123", ["return 0;"]]);
+			else {
+				const b = [];
+				emitObject(schema, ctx, b, depth);
+				branches.push(["c===123", b]);
+			}
+		}
+		if (allows(types, "array")) {
+			if (compositeDelegate) branches.push(["c===91", compositeBranch()]);
+			else if (!compositeAllowed) branches.push(["c===91", ["return 0;"]]);
+			else {
+				const b = [];
+				emitArray(schema, ctx, b, depth);
+				branches.push(["c===91", b]);
+			}
+		}
+		if (allows(types, "string")) {
+			const b = [];
+			emitString(schema, ctx, b);
+			branches.push(["c===34", b]);
+		}
+		if (allows(types, "number")) {
+			const b = [];
+			emitNumber(schema, ctx, b, types);
+			branches.push(["c===45||(c>=48&&c<=57)", b]);
+		}
+		if (allows(types, "boolean")) {
+			const b = [];
+			emitLiteral(schema, ctx, b, "boolean");
+			branches.push(["c===116||c===102", b]);
+		}
+		if (allows(types, "null")) {
+			const b = [];
+			emitLiteral(schema, ctx, b, "null");
+			branches.push(["c===110", b]);
+		}
+		if (branches.length === 0) {
+			out.push("return 0;");
+			return;
+		}
+		const parts = [];
+		for (let k = 0; k < branches.length; k++) {
+			parts.push((k === 0 ? "if(" : "else if(") + branches[k][0] + "){");
+			parts.push(branches[k][1].join("\n"));
+			parts.push("}");
+		}
+		parts.push("else return 0;");
+		out.push(parts.join("\n"));
+	}
+	function emitSkip(out) {
+		out.push("{var _j=_r.skipValue(s,i);if(_j===-2)return -1;if(_j<0)return 0;i=_j;c=s.charCodeAt(i);}");
+	}
+	function emitStringSpan(ctx, out, n, wantLen, wantHash) {
+		out.push("var _p" + n + "=++i,_x" + n + "=0" + (wantLen ? ",_u" + n + "=0,_hs" + n + "=0" : "") + (wantHash ? ",_h" + n + "=5381" : "") + ";");
+		out.push("for(;;){c=s.charCodeAt(i);");
+		out.push("if(c===34)break;");
+		out.push("if(c===92){var _q" + n + "=s.charCodeAt(i+1);");
+		out.push("if(_q" + n + "===117){if(!_r.hex4(s,i+2))return 0;i+=6;_x" + n + "=1;" + (wantLen ? "_u" + n + "++;" : "") + "continue;}");
+		out.push("if(_q" + n + "===34||_q" + n + "===92||_q" + n + "===47||_q" + n + "===98||_q" + n + "===102||_q" + n + "===110||_q" + n + "===114||_q" + n + "===116){i+=2;_x" + n + "=1;" + (wantLen ? "_u" + n + "++;" : "") + "continue;}");
+		out.push("return 0;}");
+		out.push("if(!(c>=32))return 0;");
+		out.push("i++;" + (wantLen ? "_u" + n + "++;if(((c-55296)>>>0)<1024)_hs" + n + "=1;" : "") + (wantHash ? "_h" + n + "=(Math.imul(_h" + n + ",33)+c)|0;" : ""));
+		out.push("}");
+		out.push("var _e" + n + "=i;c=s.charCodeAt(++i);");
+	}
+	function emitString(schema, ctx, out) {
+		const n = ctx.uid++;
+		const inlineLen = schema.minLength !== void 0 || schema.maxLength !== void 0;
+		if (schema.minLength !== void 0 && typeof schema.minLength !== "number") decline("minLength:not-number");
+		if (schema.maxLength !== void 0 && typeof schema.maxLength !== "number") decline("maxLength:not-number");
+		const delegated = [];
+		for (const k of [
+			"pattern",
+			"format",
+			"const",
+			"enum"
+		]) if (schema[k] !== void 0) delegated.push(k);
+		emitStringSpan(ctx, out, n, inlineLen);
+		if (inlineLen) {
+			const lenKeys = [];
+			if (schema.minLength !== void 0) lenKeys.push("minLength");
+			if (schema.maxLength !== void 0) lenKeys.push("maxLength");
+			const lf = compileLeaf(lenKeys, schema, ctx);
+			out.push("if(_x" + n + "||_hs" + n + "){if(!" + lf + "(_r.span(s,_p" + n + ",_e" + n + ",_x" + n + ")))return 0;}");
+			out.push("else{");
+			if (schema.minLength !== void 0) out.push("if(_u" + n + "<" + schema.minLength + ")return 0;");
+			if (schema.maxLength !== void 0) out.push("if(_u" + n + ">" + schema.maxLength + ")return 0;");
+			out.push("}");
+		}
+		if (delegated.length > 0) {
+			const f = compileLeaf(delegated, schema, ctx);
+			out.push("if(!" + f + "(_r.span(s,_p" + n + ",_e" + n + ",_x" + n + ")))return 0;");
+		}
+	}
+	function emitNumber(schema, ctx, out, types) {
+		const n = ctx.uid++;
+		for (const k of [
+			"minimum",
+			"maximum",
+			"exclusiveMinimum",
+			"exclusiveMaximum"
+		]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("bound:" + k + ":not-number");
+		const delegated = [];
+		for (const k of [
+			"multipleOf",
+			"const",
+			"enum"
+		]) if (schema[k] !== void 0) delegated.push(k);
+		const intOnly = integerOnly(types);
+		const wantValue = delegated.length > 0 || schema.minimum !== void 0 || schema.maximum !== void 0 || schema.exclusiveMinimum !== void 0 || schema.exclusiveMaximum !== void 0 || types !== null;
+		out.push("var _np" + n + "=i,_v" + n + "=0,_ng" + n + "=0,_nd" + n + "=0,_pl" + n + "=1;");
+		out.push("if(c===45){_ng" + n + "=1;c=s.charCodeAt(++i);}");
+		out.push("if(c===48){_nd" + n + "=1;c=s.charCodeAt(++i);}");
+		out.push("else if(c>=49&&c<=57){do{_v" + n + "=_v" + n + "*10+(c-48);_nd" + n + "++;c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		out.push("else return 0;");
+		out.push("if(c===46){_pl" + n + "=0;c=s.charCodeAt(++i);if(!(c>=48&&c<=57))return 0;do{c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		out.push("if(c===101||c===69){_pl" + n + "=0;c=s.charCodeAt(++i);if(c===43||c===45)c=s.charCodeAt(++i);if(!(c>=48&&c<=57))return 0;do{c=s.charCodeAt(++i);}while(c>=48&&c<=57);}");
+		if (wantValue) out.push("if(_pl" + n + "===0||_nd" + n + ">15){_v" + n + "=+s.slice(_np" + n + ",i);}else if(_ng" + n + "){_v" + n + "=-_v" + n + ";}");
+		if (intOnly) out.push("if(_pl" + n + "===0&&!Number.isInteger(_v" + n + "))return 0;");
+		if (types !== null) out.push("if(!isFinite(_v" + n + "))return 0;");
+		if (schema.minimum !== void 0) out.push("if(!(_v" + n + ">=" + schema.minimum + "))return 0;");
+		if (schema.maximum !== void 0) out.push("if(!(_v" + n + "<=" + schema.maximum + "))return 0;");
+		if (schema.exclusiveMinimum !== void 0) out.push("if(!(_v" + n + ">" + schema.exclusiveMinimum + "))return 0;");
+		if (schema.exclusiveMaximum !== void 0) out.push("if(!(_v" + n + "<" + schema.exclusiveMaximum + "))return 0;");
+		if (delegated.length > 0) {
+			const f = compileLeaf(delegated, schema, ctx);
+			out.push("if(!" + f + "(_v" + n + "))return 0;");
+		}
+	}
+	function emitLiteral(schema, ctx, out, kind) {
+		const delegated = [];
+		for (const k of ["const", "enum"]) if (schema[k] !== void 0) delegated.push(k);
+		let allowTrue = true, allowFalse = true, allowNull = true;
+		if (delegated.length > 0) {
+			const sub = {};
+			for (const k of delegated) sub[k] = schema[k];
+			const fn = compileToJSCodegen(sub, null, ctx.userFormats);
+			if (typeof fn !== "function") decline("literal-leaf");
+			allowTrue = fn(true) === true;
+			allowFalse = fn(false) === true;
+			allowNull = fn(null) === true;
+		}
+		if (kind === "null") {
+			if (!allowNull) {
+				out.push("return 0;");
+				return;
+			}
+			out.push("if(s.charCodeAt(i+1)!==117||s.charCodeAt(i+2)!==108||s.charCodeAt(i+3)!==108)return 0;");
+			out.push("i+=4;c=s.charCodeAt(i);");
+			return;
+		}
+		out.push("if(c===116){" + (allowTrue ? "" : "return 0;") + "if(s.charCodeAt(i+1)!==114||s.charCodeAt(i+2)!==117||s.charCodeAt(i+3)!==101)return 0;i+=4;}");
+		out.push("else{" + (allowFalse ? "" : "return 0;") + "if(s.charCodeAt(i+1)!==97||s.charCodeAt(i+2)!==108||s.charCodeAt(i+3)!==115||s.charCodeAt(i+4)!==101)return 0;i+=5;}");
+		out.push("c=s.charCodeAt(i);");
+	}
+	function emitArray(schema, ctx, out, depth) {
+		const n = ctx.uid++;
+		for (const k of ["minItems", "maxItems"]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("itemsCount:" + k + ":not-number");
+		const items = schema.items !== void 0 ? schema.items : schema.unevaluatedItems;
+		if (items !== void 0 && !isPlainObject(items) && typeof items !== "boolean") decline("items:tuple");
+		const prefix = schema.prefixItems;
+		if (prefix !== void 0) {
+			if (!Array.isArray(prefix)) decline("prefixItems:not-array");
+			if (prefix.length > MAX_PREFIX_ITEMS) decline("prefixItems:too-long");
+		}
+		const wantCount = schema.minItems !== void 0 || schema.maxItems !== void 0 || prefix !== void 0;
+		const emitRest = (into) => {
+			if (items === void 0 || items === true) emitSkip(into);
+			else emitValue(items, ctx, into, depth + 1);
+		};
+		out.push("c=s.charCodeAt(++i);");
+		if (wantCount) out.push("var _n" + n + "=0;");
+		out.push(WS);
+		out.push("if(c!==93){for(;;){");
+		if (prefix === void 0) emitRest(out);
+		else {
+			for (let k = 0; k < prefix.length; k++) {
+				out.push((k === 0 ? "if(" : "else if(") + "_n" + n + "===" + k + "){");
+				emitValue(prefix[k], ctx, out, depth + 1);
+				out.push("}");
+			}
+			out.push("else{");
+			emitRest(out);
+			out.push("}");
+		}
+		if (wantCount) {
+			out.push("_n" + n + "++;");
+			if (schema.maxItems !== void 0) out.push("if(_n" + n + ">" + schema.maxItems + ")return 0;");
+		}
+		out.push(WS);
+		out.push("if(c===44){c=s.charCodeAt(++i);" + WS + "continue;}");
+		out.push("if(c===93)break;");
+		out.push("return 0;}}");
+		out.push("c=s.charCodeAt(++i);");
+		if (schema.minItems !== void 0) {
+			if (wantCount) out.push("if(_n" + n + "<" + schema.minItems + ")return 0;");
+		}
+	}
+	function emitMember(sub, ctx, out, depth, objId) {
+		const lines = [];
+		emitValue(sub, ctx, lines, depth + 1);
+		const body = lines.join("\n");
+		if (!body.includes("return 0;")) {
+			out.push(body);
+			return;
+		}
+		const label = "_mb" + ctx.uid++;
+		out.push("var _vs" + label + "=i;");
+		out.push(label + ":{");
+		out.push(body.split("return 0;").join("{_f" + objId + "=2;break " + label + ";}"));
+		out.push("}");
+		out.push("if(_f" + objId + "===2){_f" + objId + "=1;i=_r.skipValue(s,_vs" + label + ");if(i<0)return 0;c=s.charCodeAt(i);}");
+	}
+	function emitObject(schema, ctx, out, depth) {
+		const n = ctx.uid++;
+		const props = schema.properties;
+		if (props !== void 0 && !isPlainObject(props)) decline("properties:not-object");
+		const required = schema.required;
+		if (required !== void 0 && !Array.isArray(required)) decline("required:not-array");
+		const ap = schema.additionalProperties !== void 0 ? schema.additionalProperties : schema.unevaluatedProperties;
+		if (ap !== void 0 && !isPlainObject(ap) && typeof ap !== "boolean") decline("additionalProperties:shape");
+		for (const k of ["minProperties", "maxProperties"]) if (schema[k] !== void 0 && typeof schema[k] !== "number") decline("propCount:" + k + ":not-number");
+		const counting = schema.minProperties !== void 0 || schema.maxProperties !== void 0;
+		if (counting && ap !== false) decline("min/maxProperties:open-object");
+		const names = [];
+		if (props) for (const k of Object.keys(props)) names.push(k);
+		if (required) for (const k of required) {
+			if (typeof k !== "string") decline("required:not-string");
+			if (!names.includes(k)) names.push(k);
+		}
+		if (names.length > MAX_PROPS) decline("too-many-properties");
+		const words = Math.max(1, Math.ceil(names.length / 31));
+		const bit = /* @__PURE__ */ new Map();
+		names.forEach((k, idx) => bit.set(k, {
+			w: idx / 31 | 0,
+			b: 1 << idx % 31
+		}));
+		const reqMasks = new Array(words).fill(0);
+		if (required) for (const k of required) {
+			const x = bit.get(k);
+			reqMasks[x.w] |= x.b;
+		}
+		out.push("c=s.charCodeAt(++i);");
+		if (names.length >= HASH_DISPATCH_MIN) out.push("var _sa" + n + "=new Int32Array(" + (Math.ceil(names.length / 32) || 1) + "),_nx" + n + "=0,_f" + n + "=0" + (counting ? ",_c" + n + "=0" : "") + ";");
+		else {
+			const seenDecl = [];
+			for (let w = 0; w < words; w++) seenDecl.push("_s" + n + "_" + w + "=0");
+			out.push("var " + seenDecl.join(",") + ",_f" + n + "=0" + (counting ? ",_c" + n + "=0" : "") + ";");
+		}
+		out.push(WS);
+		out.push("if(c!==125){for(;;){");
+		out.push(WS);
+		out.push("if(c!==34)return 0;");
+		const kn = ctx.uid++;
+		let hashById = null;
+		if (names.length >= HASH_DISPATCH_MIN) {
+			const table = /* @__PURE__ */ new Map();
+			let collision = false;
+			names.forEach((nm, id) => {
+				const h = spanHash(nm);
+				if (table.has(h)) collision = true;
+				table.set(h, id);
+			});
+			if (!collision) {
+				ctx.helpers.push(table);
+				hashById = "_h[" + (ctx.helpers.length - 1) + "]";
+			}
+		}
+		emitStringSpan(ctx, out, kn, false, hashById !== null);
+		out.push("if(_x" + kn + ")return -1;");
+		out.push(WS);
+		out.push("if(c!==58)return 0;");
+		out.push("c=s.charCodeAt(++i);");
+		out.push(WS);
+		if (counting) out.push("_c" + n + "++;");
+		out.push("var _kl" + kn + "=_e" + kn + "-_p" + kn + ";");
+		if (hashById !== null) {
+			const addH = (() => {
+				const a = [];
+				if (ap === false) a.push("return 0;");
+				else if (ap === void 0 || ap === true) emitSkip(a);
+				else {
+					const l = [];
+					emitValue(ap, ctx, l, depth + 1);
+					a.push(l.join("\n").split("return 0;").join("return -1;"));
+				}
+				return a.join("\n");
+			})();
+			const groups = /* @__PURE__ */ new Map();
+			for (const name of names) {
+				const sub = props && Object.prototype.hasOwnProperty.call(props, name) ? props[name] : void 0;
+				const key = sub === void 0 ? "\0additional" : JSON.stringify(sub);
+				if (!groups.has(key)) groups.set(key, {
+					sub,
+					members: []
+				});
+				groups.get(key).members.push(name);
+			}
+			const ordered = [];
+			const bounds = [];
+			for (const g of groups.values()) {
+				for (const nm of g.members) ordered.push(nm);
+				bounds.push({
+					end: ordered.length,
+					sub: g.sub
+				});
+			}
+			const table = /* @__PURE__ */ new Map();
+			ordered.forEach((nm, id) => {
+				table.set(spanHash(nm), id);
+			});
+			ctx.helpers.push(table);
+			const tbl = "_h[" + (ctx.helpers.length - 1) + "]";
+			ctx.helpers.push(ordered.slice());
+			const nmArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const wordCount = Math.ceil(ordered.length / 32) || 1;
+			const rq = new Int32Array(wordCount);
+			if (required) for (const k of required) {
+				const id = ordered.indexOf(k);
+				rq[id >> 5] |= 1 << (id & 31);
+			}
+			ctx.helpers.push(rq);
+			const rqArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const eids = new Int32Array(names.length);
+			names.forEach((nm, si) => {
+				eids[si] = ordered.indexOf(nm);
+			});
+			ctx.helpers.push(eids);
+			const eidArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			const sids = new Int32Array(ordered.length);
+			eids.forEach((id, si) => {
+				sids[id] = si;
+			});
+			ctx.helpers.push(sids);
+			const sidArr = "_h[" + (ctx.helpers.length - 1) + "]";
+			out.push("var _kid" + kn + "=-1;");
+			out.push("if(_nx" + n + "<" + names.length + "){var _ec" + kn + "=" + eidArr + "[_nx" + n + "],_en" + kn + "=" + nmArr + "[_ec" + kn + "];");
+			out.push("if(_kl" + kn + "===_en" + kn + ".length&&s.startsWith(_en" + kn + ",_p" + kn + ")){_kid" + kn + "=_ec" + kn + ";_nx" + n + "++;}}");
+			out.push("if(_kid" + kn + "<0){var _tg" + kn + "=" + tbl + ".get(_h" + kn + ");");
+			out.push("if(_tg" + kn + "===undefined){" + addH + "}");
+			out.push("else{var _nv" + kn + "=" + nmArr + "[_tg" + kn + "];");
+			out.push("if(_kl" + kn + "!==_nv" + kn + ".length||!s.startsWith(_nv" + kn + ",_p" + kn + ")){" + addH + "}");
+			out.push("else{_kid" + kn + "=_tg" + kn + ";_nx" + n + "=" + sidArr + "[_kid" + kn + "]+1;}}}");
+			out.push("if(_kid" + kn + ">=0){");
+			out.push("var _wd" + kn + "=_kid" + kn + ">>5,_bt" + kn + "=1<<(_kid" + kn + "&31);");
+			out.push("if(_sa" + n + "[_wd" + kn + "]&_bt" + kn + ")return -1;");
+			out.push("_sa" + n + "[_wd" + kn + "]|=_bt" + kn + ";");
+			bounds.forEach((g, gi) => {
+				const cond = gi === bounds.length - 1 ? "" : "if(_kid" + kn + "<" + g.end + ")";
+				out.push((gi === 0 ? "" : "else ") + cond + "{");
+				if (g.sub === void 0) out.push(addH);
+				else emitMember(g.sub, ctx, out, depth, n);
+				out.push("}");
+				g.end;
+			});
+			out.push("}");
+			ctx._saState = ctx._saState || {};
+			ctx._saState[n] = {
+				words: wordCount,
+				rqArr,
+				hasReq: rq.some ? Array.from(rq).some((x) => x !== 0) : false
+			};
+		} else {
+			const byLen = /* @__PURE__ */ new Map();
+			for (const name of names) {
+				const len = name.length;
+				if (!byLen.has(len)) byLen.set(len, []);
+				byLen.get(len).push(name);
+			}
+			const additional = [];
+			if (ap === false) additional.push("return 0;");
+			else if (ap === void 0 || ap === true) emitSkip(additional);
+			else {
+				const lines = [];
+				emitValue(ap, ctx, lines, depth + 1);
+				additional.push(lines.join("\n").split("return 0;").join("return -1;"));
+			}
+			out.push("switch(_kl" + kn + "){");
+			for (const [len, group] of byLen) {
+				out.push("case " + len + ":{");
+				let first = true;
+				for (const name of group) {
+					const tests = [];
+					for (let k = 0; k < name.length; k++) tests.push("s.charCodeAt(_p" + kn + (k === 0 ? "" : "+" + k) + ")===" + name.charCodeAt(k));
+					out.push((first ? "if(" : "else if(") + (tests.length ? tests.join("&&") : "true") + "){");
+					first = false;
+					const slot = bit.get(name);
+					out.push("if(_s" + n + "_" + slot.w + "&" + slot.b + ")return -1;");
+					out.push("_s" + n + "_" + slot.w + "|=" + slot.b + ";");
+					const sub = props && Object.prototype.hasOwnProperty.call(props, name) ? props[name] : void 0;
+					if (sub === void 0) out.push(additional.join("\n"));
+					else emitMember(sub, ctx, out, depth, n);
+					out.push("}");
+				}
+				out.push("else{" + additional.join("\n") + "}");
+				out.push("break;}");
+			}
+			out.push("default:{" + additional.join("\n") + "}}");
+		}
+		out.push(WS);
+		out.push("if(c===44){c=s.charCodeAt(++i);" + WS + "continue;}");
+		out.push("if(c===125)break;");
+		out.push("return 0;}}");
+		out.push("c=s.charCodeAt(++i);");
+		out.push("if(_f" + n + ")return 0;");
+		if (ctx._saState && ctx._saState[n]) {
+			const st = ctx._saState[n];
+			if (st.hasReq) {
+				const wv = "_rw" + n;
+				out.push("for(var " + wv + "=0;" + wv + "<" + st.words + ";" + wv + "++)if((_sa" + n + "[" + wv + "]&" + st.rqArr + "[" + wv + "])!==" + st.rqArr + "[" + wv + "])return 0;");
+			}
+		} else for (let w = 0; w < words; w++) if (reqMasks[w] !== 0) out.push("if((_s" + n + "_" + w + "&" + reqMasks[w] + ")!==" + reqMasks[w] + ")return 0;");
+		if (schema.minProperties !== void 0) out.push("if(_c" + n + "<" + schema.minProperties + ")return 0;");
+		if (schema.maxProperties !== void 0) out.push("if(_c" + n + ">" + schema.maxProperties + ")return 0;");
+	}
+	module.exports = {
+		compileScanner,
+		VALID,
+		INVALID,
+		BAIL
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/refine.js
+var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const REFINE = Symbol.for("ata.t.refine");
+	function getRefinements(schema) {
+		if (!schema || typeof schema !== "object") return null;
+		const r = schema[REFINE];
+		return Array.isArray(r) && r.length ? r : null;
+	}
+	function attach(schema, check, opts) {
+		if (typeof check !== "function") throw new TypeError("t.refine(schema, check, opts?) — check must be a function");
+		const prev = schema && Array.isArray(schema[REFINE]) ? schema[REFINE] : [];
+		const o = opts || {};
+		const entry = {
+			check,
+			message: o.message,
+			path: o.path || ""
+		};
+		return Object.assign({}, schema, { [REFINE]: prev.concat(entry) });
+	}
+	function issue(entry, message) {
+		return {
+			keyword: "refine",
+			instancePath: entry.path || "",
+			path: entry.path || "",
+			schemaPath: "",
+			params: {},
+			message: message != null ? message : entry.message || "value failed refinement"
+		};
+	}
+	async function runRefinements(refinements, data) {
+		const issues = [];
+		await Promise.all(refinements.map(async (entry) => {
+			let passed;
+			try {
+				passed = await entry.check(data);
+			} catch (e) {
+				issues.push(issue(entry, entry.message || e && e.message || "refinement threw"));
+				return;
+			}
+			if (!passed) issues.push(issue(entry));
+		}));
+		return issues;
+	}
+	module.exports = {
+		REFINE,
+		getRefinements,
+		attach,
+		runRefinements
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/version.js
+var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = "1.25.0";
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/aot.browser.js
+var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function unavailable(name) {
+		return function() {
+			throw new Error(name + "() is not in the default browser bundle. Import it from 'ata-validator/aot', which works in the browser too; pages that never emit code stay free of the emitters this way.");
+		};
+	}
+	function loadBundle(Validator, mods, schemas, opts) {
+		return schemas.map((schema, i) => {
+			if (mods[i]) return Validator.fromStandalone(mods[i], schema, opts);
+			return new Validator(schema, opts);
+		});
+	}
+	module.exports = {
+		toStandalone: unavailable("toStandalone"),
+		toStandaloneModule: unavailable("toStandaloneModule"),
+		bundle: unavailable("bundle"),
+		bundleStandalone: unavailable("bundleStandalone"),
+		bundleCompact: unavailable("bundleCompact"),
+		loadBundle
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/ts-gen.js
+var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function renderValueType(schema, defs, depth = 0) {
+		if (depth > 32) return "unknown";
+		if (schema === true) return "unknown";
+		if (schema === false) return "never";
+		if (typeof schema !== "object" || schema === null) return "unknown";
+		if (schema.$ref) {
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && defs && defs[m[1]]) return toTypeName(m[1]);
+			return "unknown";
+		}
+		if (schema.const !== void 0) return renderLiteral(schema.const);
+		if (Array.isArray(schema.enum)) return schema.enum.map(renderLiteral).join(" | ") || "never";
+		if (Array.isArray(schema.oneOf)) return schema.oneOf.map((s) => renderValueType(s, defs, depth + 1)).join(" | ") || "unknown";
+		if (Array.isArray(schema.anyOf)) return schema.anyOf.map((s) => renderValueType(s, defs, depth + 1)).join(" | ") || "unknown";
+		const t = schema.type;
+		if (Array.isArray(t)) return t.map((tt) => renderValueType({
+			...schema,
+			type: tt
+		}, defs, depth + 1)).join(" | ");
+		if (t === "string") return "string";
+		if (t === "number" || t === "integer") return "number";
+		if (t === "boolean") return "boolean";
+		if (t === "null") return "null";
+		if (t === "array") {
+			const items = schema.items;
+			const prefix = Array.isArray(schema.prefixItems) ? schema.prefixItems : null;
+			if (prefix) {
+				const prefixTypes = prefix.map((s) => renderValueType(s, defs, depth + 1));
+				const minItems = typeof schema.minItems === "number" ? schema.minItems : 0;
+				const elements = prefixTypes.map((t, i) => i < minItems ? t : `${t}?`);
+				if (items === false) return `[${elements.join(", ")}]`;
+				if (items === void 0 || items === true) return `[${elements.join(", ")}, ...unknown[]]`;
+				if (typeof items === "object" && items !== null) {
+					const rest = renderValueType(items, defs, depth + 1);
+					const restType = rest.includes(" | ") ? `(${rest})` : rest;
+					return `[${elements.join(", ")}, ...${restType}[]]`;
+				}
+			}
+			if (items === false) return "never[]";
+			if (items === void 0 || items === true) return "unknown[]";
+			const inner = renderValueType(items, defs, depth + 1);
+			return inner.includes(" | ") ? `Array<${inner}>` : `${inner}[]`;
+		}
+		if (t === "object" || !t && schema.properties) return renderObject(schema, defs, depth + 1);
+		return "unknown";
+	}
+	function renderObject(schema, defs, depth) {
+		const props = schema.properties || {};
+		const required = new Set(schema.required || []);
+		const keys = Object.keys(props);
+		if (keys.length === 0) {
+			if (schema.additionalProperties === false) return "Record<string, never>";
+			const ap = schema.additionalProperties;
+			if (ap && typeof ap === "object") return `Record<string, ${renderValueType(ap, defs, depth + 1)}>`;
+			return "Record<string, unknown>";
+		}
+		const lines = keys.map((k) => {
+			const t = renderValueType(props[k], defs, depth + 1);
+			const opt = required.has(k) ? "" : "?";
+			const safeKey = /^[A-Za-z_$][\w$]*$/.test(k) ? k : JSON.stringify(k);
+			return `${renderJsDoc(props[k], "  ")}  ${safeKey}${opt}: ${t};`;
+		});
+		const extra = schema.additionalProperties;
+		if (extra && typeof extra === "object") {
+			const widen = /* @__PURE__ */ new Set();
+			widen.add(renderValueType(extra, defs, depth + 1));
+			let hasOptional = false;
+			for (const k of keys) {
+				widen.add(renderValueType(props[k], defs, depth + 1));
+				if (!required.has(k)) hasOptional = true;
+			}
+			if (hasOptional) widen.add("undefined");
+			const indexType = widen.has("unknown") ? "unknown" : Array.from(widen).join(" | ");
+			lines.push(`  [key: string]: ${indexType};`);
+		} else if (extra !== false) lines.push(`  [key: string]: unknown;`);
+		return `{\n${lines.join("\n")}\n}`;
+	}
+	function renderLiteral(v) {
+		if (v === null) return "null";
+		if (typeof v === "string") return JSON.stringify(v);
+		if (typeof v === "number" || typeof v === "boolean") return String(v);
+		return "unknown";
+	}
+	function toTypeName(name) {
+		const cleaned = String(name).replace(/[^A-Za-z0-9_]/g, "_");
+		if (cleaned === "") return "_Anon";
+		if (/^[0-9]/.test(cleaned)) return `_${cleaned}`;
+		return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+	}
+	function renderJsDoc(schema, indent) {
+		if (!schema || typeof schema !== "object") return "";
+		let description = "";
+		if (typeof schema.description === "string" && schema.description.length > 0) description = schema.description.replace(/\*\//g, "* /");
+		const tags = [];
+		for (const k of [
+			"minLength",
+			"maxLength",
+			"minItems",
+			"maxItems",
+			"minProperties",
+			"maxProperties",
+			"minimum",
+			"maximum",
+			"exclusiveMinimum",
+			"exclusiveMaximum",
+			"multipleOf"
+		]) if (typeof schema[k] === "number") tags.push(`@${k} ${schema[k]}`);
+		if (typeof schema.pattern === "string") tags.push(`@pattern ${schema.pattern}`);
+		if (typeof schema.format === "string") tags.push(`@format ${schema.format}`);
+		if (schema.uniqueItems === true) tags.push("@uniqueItems");
+		if (schema.deprecated === true) tags.push("@deprecated");
+		if (schema.default !== void 0) try {
+			tags.push(`@default ${JSON.stringify(schema.default)}`);
+		} catch (_) {}
+		if (Array.isArray(schema.examples) && schema.examples.length > 0) try {
+			tags.push(`@example ${JSON.stringify(schema.examples[0])}`);
+		} catch (_) {}
+		if (description === "" && tags.length === 0) return "";
+		if (description !== "" && tags.length === 0) return `${indent}/** ${description} */\n`;
+		const lines = [`${indent}/**`];
+		if (description !== "") lines.push(`${indent} * ${description}`);
+		if (description !== "" && tags.length > 0) lines.push(`${indent} *`);
+		for (const t of tags) lines.push(`${indent} * ${t}`);
+		lines.push(`${indent} */`);
+		return lines.join("\n") + "\n";
+	}
+	function toTypeScript(schema, opts) {
+		const rootName = toTypeName((opts || {}).name || "Data");
+		const defs = schema && (schema.$defs || schema.definitions);
+		const defLines = [];
+		if (defs && typeof defs === "object") for (const [defName, defSchema] of Object.entries(defs)) {
+			const body = renderValueType(defSchema, defs, 0);
+			defLines.push(`export type ${toTypeName(defName)} = ${body};`);
+		}
+		const rootType = renderValueType(schema, defs, 0);
+		const rootDoc = renderJsDoc(schema, "");
+		const rootDecl = rootType.startsWith("{") && rootType.endsWith("}") && !rootType.includes(" | ") ? `${rootDoc}export interface ${rootName} ${rootType}` : `${rootDoc}export type ${rootName} = ${rootType};`;
+		return `// Auto-generated by ata-validator — do not edit.
+${defLines.length ? defLines.join("\n\n") + "\n\n" : ""}${rootDecl}
+
+export interface ValidationError {
+  keyword?: string;
+  instancePath?: string;
+  schemaPath?: string;
+  params?: Record<string, unknown>;
+  message?: string;
+}
+
+export interface ValidResult {
+  valid: true;
+  errors: readonly never[];
+}
+export interface InvalidResult {
+  valid: false;
+  errors: readonly ValidationError[];
+}
+export type Result = ValidResult | InvalidResult;
+
+export declare function isValid(data: unknown): data is ${rootName};
+export declare function validate(data: unknown): Result;
+declare const _default: { validate: typeof validate; isValid: typeof isValid };
+export default _default;
+`;
+	}
+	module.exports = { toTypeScript };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-shared.js
+var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const ANSI = {
+		reset: "\x1B[0m",
+		bold: "\x1B[1m",
+		dim: "\x1B[2m",
+		red: "\x1B[31m",
+		yellow: "\x1B[33m",
+		cyan: "\x1B[36m"
+	};
+	function resolveColor(opt) {
+		if (opt === "never") return false;
+		if (opt === "always") return true;
+		if (process.env.NO_COLOR != null && process.env.NO_COLOR !== "") return false;
+		const fc = process.env.FORCE_COLOR;
+		if (fc === "1" || fc === "2" || fc === "3" || fc === "true") return true;
+		return !!(process.stdout && process.stdout.isTTY);
+	}
+	function color(enabled, code, s) {
+		return enabled ? code + s + ANSI.reset : s;
+	}
+	function pathToDotted(jsonPointer) {
+		if (!jsonPointer || jsonPointer === "/") return "body";
+		const parts = jsonPointer.replace(/^\//, "").split("/").map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let out = "body";
+		for (const p of parts) if (/^[0-9]+$/.test(p)) out += "[" + p + "]";
+		else if (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(p)) out += "." + p;
+		else out += "[" + JSON.stringify(p) + "]";
+		return out;
+	}
+	function trimCwd(file, cwd) {
+		if (!file) return file;
+		const c = cwd || process.cwd();
+		if (file.startsWith(c + "/")) return file.slice(c.length + 1);
+		return file;
+	}
+	function truncateLine(text, maxWidth) {
+		if (!text || text.length <= maxWidth) return text;
+		return text.slice(0, maxWidth - 1) + "…";
+	}
+	function terminalWidth() {
+		const w = process.stdout && process.stdout.columns;
+		return typeof w === "number" && w > 0 ? w : 100;
+	}
+	module.exports = {
+		ANSI,
+		resolveColor,
+		color,
+		pathToDotted,
+		trimCwd,
+		truncateLine,
+		terminalWidth
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/correlate.js
+var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { levenshtein } = require_levenshtein();
+	const MAX_DISTANCE = 2;
+	/**
+	* Pair a `required` error naming a missing property with an
+	* `additionalProperties` error naming an extra property, when the two names
+	* are close enough to be one typo and nothing else in the same container is
+	* equally close.
+	*
+	* The tie checks are the point. `suggestRequiredTypo` in lib/suggestions.js
+	* takes the first key within distance 2 and does not check for ties, which is
+	* fine for a hint appended to an error that stands on its own. It is not fine
+	* as a reason to present two errors as one problem: an ambiguous pairing would
+	* tell the reader a confident story about the wrong key.
+	*
+	* Nothing is deleted. The result is a symmetric index map that callers may use
+	* to group; every error stays in the array.
+	*
+	* @param {Array} errors enriched or raw validation errors
+	* @returns {Map<number, number>|null} symmetric index pairs, null when there are none
+	*/
+	function correlateTypos(errors) {
+		if (!Array.isArray(errors) || errors.length < 2) return null;
+		let sawMissing = false;
+		let sawExtra = false;
+		for (let i = 0; i < errors.length; i++) {
+			const e = errors[i];
+			if (!e) continue;
+			if (e.keyword === "required") sawMissing = true;
+			else if (e.keyword === "additionalProperties") sawExtra = true;
+			if (sawMissing && sawExtra) break;
+		}
+		if (!sawMissing || !sawExtra) return null;
+		const out = /* @__PURE__ */ new Map();
+		const byContainer = /* @__PURE__ */ new Map();
+		for (let i = 0; i < errors.length; i++) {
+			const e = errors[i];
+			if (!e || !e.params) continue;
+			const missing = e.keyword === "required" ? e.params.missingProperty : void 0;
+			const additional = e.keyword === "additionalProperties" ? e.params.additionalProperty : void 0;
+			if (typeof missing !== "string" && typeof additional !== "string") continue;
+			const key = e.instancePath != null ? e.instancePath : e.path || "";
+			let bucket = byContainer.get(key);
+			if (!bucket) {
+				bucket = {
+					missing: [],
+					extra: []
+				};
+				byContainer.set(key, bucket);
+			}
+			if (typeof missing === "string") bucket.missing.push({
+				index: i,
+				name: missing
+			});
+			else bucket.extra.push({
+				index: i,
+				name: additional
+			});
+		}
+		for (const bucket of byContainer.values()) {
+			if (bucket.missing.length === 0 || bucket.extra.length === 0) continue;
+			const dist = [];
+			for (let m = 0; m < bucket.missing.length; m++) {
+				dist.push([]);
+				for (let x = 0; x < bucket.extra.length; x++) {
+					const d = levenshtein(bucket.missing[m].name, bucket.extra[x].name, MAX_DISTANCE);
+					dist[m].push(d);
+				}
+			}
+			for (let m = 0; m < bucket.missing.length; m++) {
+				let bestX = -1;
+				let bestD = Infinity;
+				let tied = false;
+				for (let x = 0; x < bucket.extra.length; x++) {
+					const d = dist[m][x];
+					if (d < bestD) {
+						bestD = d;
+						bestX = x;
+						tied = false;
+					} else if (d === bestD && d !== Infinity) tied = true;
+				}
+				if (bestX === -1 || tied) continue;
+				if (!(bestD > 0 && bestD <= MAX_DISTANCE)) continue;
+				let backM = -1;
+				let backD = Infinity;
+				let backTied = false;
+				for (let m2 = 0; m2 < bucket.missing.length; m2++) {
+					const d = dist[m2][bestX];
+					if (d < backD) {
+						backD = d;
+						backM = m2;
+						backTied = false;
+					} else if (d === backD && d !== Infinity) backTied = true;
+				}
+				if (backTied || backM !== m) continue;
+				out.set(bucket.missing[m].index, bucket.extra[bestX].index);
+				out.set(bucket.extra[bestX].index, bucket.missing[m].index);
+			}
+		}
+		return out.size === 0 ? null : out;
+	}
+	module.exports = { correlateTypos };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnose.js
+var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { correlateTypos } = require_correlate();
+	const { buildDataPositionMap } = require_data_positions();
+	const { pathToDotted } = require_render_shared();
+	const { reprValue, expectedFor } = require_enrich_error();
+	const MAX_SYNTHESIZED_BYTES = 262144;
+	/**
+	* Turn a validation error array into presentation-ready diagnostics.
+	*
+	* Pure: no I/O, no ANSI, no terminal width, deterministic for a given input.
+	* That is deliberate. The merge below is the one place in this library that
+	* can present two problems as one, so it has to be provable as data rather
+	* than by grepping terminal output.
+	*
+	* @param {Array} errors validation errors, enriched or raw
+	* @param {{text?: string, data?: any, positions?: object, schema?: object, mutatesInput?: boolean}} [source]
+	* @returns {Array} diagnostics
+	*/
+	function toDiagnostics(errors, source) {
+		if (!Array.isArray(errors) || errors.length === 0) return [];
+		const src = source || {};
+		const resolved = resolveFrames(src);
+		const pairs = correlateTypos(errors);
+		const diagnostics = [];
+		const consumed = /* @__PURE__ */ new Set();
+		for (let i = 0; i < errors.length; i++) {
+			if (consumed.has(i)) continue;
+			const e = errors[i];
+			if (!e) continue;
+			const partner = pairs === null ? void 0 : pairs.get(i);
+			if (partner !== void 0 && !consumed.has(partner)) {
+				consumed.add(i);
+				consumed.add(partner);
+				diagnostics.push(mergedDiagnostic(errors, i, partner, resolved, src));
+				continue;
+			}
+			diagnostics.push(singleDiagnostic(e, i, resolved, src));
+		}
+		diagnostics.sort((a, b) => {
+			if (a.sortPos !== b.sortPos) return a.sortPos - b.sortPos;
+			if (a.rank !== b.rank) return a.rank - b.rank;
+			return a.pointer < b.pointer ? -1 : a.pointer > b.pointer ? 1 : 0;
+		});
+		for (const d of diagnostics) delete d.sortPos;
+		return diagnostics;
+	}
+	function resolveFrames(src) {
+		const none = {
+			positions: null,
+			synthesized: false,
+			refusal: null
+		};
+		if (src.positions) return {
+			positions: src.positions,
+			synthesized: false,
+			refusal: null
+		};
+		if (src.text != null) try {
+			return {
+				positions: buildDataPositionMap(src.text),
+				synthesized: false,
+				refusal: null
+			};
+		} catch {
+			return none;
+		}
+		if (src.data === void 0) return none;
+		if (src.mutatesInput) return {
+			positions: null,
+			synthesized: false,
+			refusal: "no frame; the value was modified in place before validation (coerceTypes, useDefaults or removeAdditional)"
+		};
+		let text;
+		try {
+			text = JSON.stringify(src.data, null, 2);
+		} catch {
+			return none;
+		}
+		if (typeof text !== "string") return none;
+		if (text.length > MAX_SYNTHESIZED_BYTES) return {
+			positions: null,
+			synthesized: false,
+			refusal: "no frame; the value is larger than 256 KB"
+		};
+		try {
+			return {
+				positions: buildDataPositionMap(text),
+				synthesized: true,
+				refusal: null
+			};
+		} catch {
+			return none;
+		}
+	}
+	function frameFor(err, resolved) {
+		if (!resolved.positions) return frameFromError(err);
+		const path = err.instancePath != null ? err.instancePath : err.path || "";
+		const named = err.params && (err.params.additionalProperty || err.params.unevaluatedProperty) || null;
+		const hit = named && resolved.positions[path + "/" + named] || resolved.positions[path];
+		if (!hit) return null;
+		const useKey = named != null && hit.keyOffset !== void 0;
+		const col = useKey ? hit.keyCol : hit.col;
+		const rawLen = useKey ? hit.keyLength : hit.length;
+		const lineLen = (hit.text || "").length;
+		const length = Math.max(1, Math.min(rawLen || 1, Math.max(1, lineLen - col + 1)));
+		return {
+			line: useKey ? hit.keyLine : hit.line,
+			col,
+			length,
+			text: hit.text,
+			spans: rawLen > length,
+			synthesized: resolved.synthesized
+		};
+	}
+	function frameFromError(err) {
+		const df = err.dataFrame;
+		if (!df || typeof df.line !== "number") return null;
+		const a = err.anchor;
+		const useKey = (err.params && (err.params.additionalProperty || err.params.unevaluatedProperty) || null) != null && a && a.keyLine !== void 0;
+		const col = useKey ? a.keyCol : df.col;
+		const rawLen = useKey ? a.keyLength : df.length;
+		const lineLen = (df.text || "").length;
+		const length = Math.max(1, Math.min(rawLen || 1, Math.max(1, lineLen - col + 1)));
+		return {
+			line: useKey ? a.keyLine : df.line,
+			col,
+			length,
+			text: df.text,
+			spans: rawLen > length,
+			synthesized: false
+		};
+	}
+	function headlineFor(err, src) {
+		const p = err.params || {};
+		switch (err.keyword) {
+			case "additionalProperties": return `unknown property "${p.additionalProperty}"`;
+			case "unevaluatedProperties": return `unevaluated property "${p.unevaluatedProperty}"`;
+			case "required": return `missing required property "${p.missingProperty}"`;
+			case "oneOf":
+			case "anyOf": {
+				const disc = discriminatorFor(err, src);
+				if (disc) return `no variant matches ${disc.key} ${JSON.stringify(disc.value)}`;
+				return err.detail || err.message || "no variant matched";
+			}
+			default: return err.detail || err.message || "validation failed";
+		}
+	}
+	function discriminatorFor(err, src) {
+		const schema = src.schema;
+		const data = src.data;
+		if (!schema || !data || typeof data !== "object") return null;
+		const branches = branchesAt(schema, err.schemaPath, err.keyword);
+		if (!Array.isArray(branches) || branches.length < 2) return null;
+		const first = branches[0] && branches[0].properties;
+		if (!first) return null;
+		for (const key of Object.keys(first)) {
+			const values = [];
+			let ok = true;
+			for (const b of branches) {
+				const prop = b && b.properties && b.properties[key];
+				if (!prop || prop.const === void 0) {
+					ok = false;
+					break;
+				}
+				if (values.includes(prop.const)) {
+					ok = false;
+					break;
+				}
+				values.push(prop.const);
+			}
+			if (!ok) continue;
+			const actual = data[key];
+			if (actual === void 0) continue;
+			return {
+				key,
+				value: actual
+			};
+		}
+		return null;
+	}
+	function decorateBranches(subs, src) {
+		return subs.map((sub) => {
+			if (!sub || typeof sub !== "object") return sub;
+			const copy = Object.assign({}, sub);
+			const exp = expectedFor(sub);
+			if (exp !== void 0) copy.expected = exp;
+			if (copy.received === void 0) {
+				const got = valueAt(src.data, sub.instancePath);
+				if (got !== null) copy.received = got;
+			}
+			if (Array.isArray(sub.branchErrors)) copy.branchErrors = decorateBranches(sub.branchErrors, src);
+			return copy;
+		});
+	}
+	function valueAt(data, pointer) {
+		if (data === void 0 || typeof pointer !== "string") return null;
+		if (pointer === "") return reprValue(data);
+		let cur = data;
+		for (const seg of pointer.split("/").slice(1)) {
+			if (cur == null || typeof cur !== "object") return null;
+			cur = cur[seg.replace(/~1/g, "/").replace(/~0/g, "~")];
+		}
+		return cur === void 0 ? null : reprValue(cur);
+	}
+	function branchesAt(schema, schemaPath, keyword) {
+		if (typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return schema[keyword];
+		const parts = schemaPath.slice(1).split("/").filter(Boolean).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let cur = schema;
+		for (const part of parts) {
+			if (cur == null || typeof cur !== "object") return null;
+			cur = cur[part];
+		}
+		return Array.isArray(cur) ? cur : null;
+	}
+	function singleDiagnostic(e, index, resolved, src) {
+		const pointer = e.instancePath != null ? e.instancePath : e.path || "";
+		const closest = e.branchErrors && e.branchErrors.length ? e.branchErrors[0] : null;
+		const anchorErr = closest && closest.instancePath ? closest : e;
+		const frame = frameFor(anchorErr, resolved);
+		let found = e.received != null ? e.received : null;
+		if (anchorErr !== e) found = closest.received != null ? closest.received : valueAt(src.data, closest.instancePath);
+		const notes = [];
+		if (!frame && resolved.refusal) notes.push(resolved.refusal);
+		if (frame && frame.spans) notes.push("value continues past the end of this line");
+		if (e.docUrl) notes.push("see " + e.docUrl);
+		return {
+			code: e.code,
+			headline: headlineFor(e, src),
+			pointer,
+			dotted: pathToDotted(anchorErr.instancePath != null ? anchorErr.instancePath : pointer),
+			frame,
+			found,
+			help: e.suggestion ? e.suggestion.text : null,
+			notes,
+			branchErrors: e.branchErrors ? decorateBranches(e.branchErrors, src) : null,
+			mergedFrom: [e],
+			rank: typeof e.rank === "number" ? e.rank : 2,
+			sortPos: frame ? frame.line * 1e5 + frame.col : index
+		};
+	}
+	function mergedDiagnostic(errors, i, j, resolved, src) {
+		const a = errors[i];
+		const b = errors[j];
+		const missing = a.keyword === "required" ? a : b;
+		const extra = a.keyword === "required" ? b : a;
+		const missingName = missing.params.missingProperty;
+		const extraName = extra.params.additionalProperty;
+		const frame = frameFor(extra, resolved);
+		const notes = [];
+		if (!frame && resolved.refusal) notes.push(resolved.refusal);
+		const docUrl = missing.docUrl || extra.docUrl;
+		if (docUrl) notes.push("see " + docUrl);
+		const pointer = missing.instancePath != null ? missing.instancePath : missing.path || "";
+		return {
+			code: missing.code,
+			headline: `unknown property "${extraName}"`,
+			pointer,
+			dotted: pathToDotted(pointer),
+			frame,
+			found: null,
+			help: `did you mean "${missingName}"?`,
+			notes,
+			branchErrors: null,
+			mergedFrom: [missing, extra],
+			rank: 0,
+			sortPos: frame ? frame.line * 1e5 + frame.col : Math.min(i, j)
+		};
+	}
+	module.exports = { toDiagnostics };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/diagnostic-source.js
+var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const KEY = Symbol.for("ata.diagnosticSource");
+	const DESCRIPTOR = {
+		value: null,
+		enumerable: false,
+		configurable: true,
+		writable: true
+	};
+	function setDiagnosticSource(errors, payload) {
+		if (!Array.isArray(errors) || !payload || !Object.isExtensible(errors)) return errors;
+		const prev = errors[KEY];
+		let value = payload;
+		if (prev) {
+			value = Object.assign({}, prev);
+			for (const k of Object.keys(payload)) if (payload[k] !== void 0) value[k] = payload[k];
+		}
+		try {
+			DESCRIPTOR.value = value;
+			Object.defineProperty(errors, KEY, DESCRIPTOR);
+			DESCRIPTOR.value = null;
+		} catch {}
+		return errors;
+	}
+	function getDiagnosticSource(errors) {
+		return Array.isArray(errors) && errors[KEY] || null;
+	}
+	module.exports = {
+		setDiagnosticSource,
+		getDiagnosticSource
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-pretty.js
+var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
+	const { toDiagnostics } = require_diagnose();
+	const { getDiagnosticSource } = require_diagnostic_source();
+	function sourceFor(errors, opts) {
+		const carried = getDiagnosticSource(errors) || {};
+		if (opts.data !== void 0) return Object.assign({}, carried, { data: opts.data });
+		return carried;
+	}
+	function caretLine(col, length, gutter) {
+		const pad = " ".repeat(gutter);
+		const lead = " ".repeat(Math.max(0, col - 1));
+		const carets = "^".repeat(Math.max(1, Math.min(length || 1, terminalWidth())));
+		return pad + "| " + lead + carets;
+	}
+	const NO_SUFFIX = /* @__PURE__ */ new Set([
+		"additionalProperties",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"dependentRequired",
+		"propertyNames",
+		"oneOf",
+		"anyOf",
+		"allOf",
+		"not"
+	]);
+	function caretSuffix(d, raw, useColor) {
+		if (!raw) return "";
+		if (raw.keyword === "required") return raw.expected ? "  " + color(useColor, ANSI.dim, `expected ${raw.expected}`) : "";
+		if (d.found != null && (raw.keyword === "oneOf" || raw.keyword === "anyOf")) return "  " + color(useColor, ANSI.dim, `found ${d.found}`);
+		if (NO_SUFFIX.has(raw.keyword)) return "";
+		return d.found != null ? "  " + color(useColor, ANSI.dim, `found ${d.found}`) : "";
+	}
+	function renderOne(d, useColor, opts) {
+		const lines = [];
+		const width = terminalWidth();
+		const gutter = 3;
+		const label = d.code ? `error[${d.code}]: ` : "error: ";
+		lines.push(color(useColor, ANSI.red + ANSI.bold, label) + d.headline);
+		const raw = d.mergedFrom[0];
+		if (raw && raw.schemaSource) {
+			const f = trimCwd(raw.schemaSource.file, opts.cwd);
+			lines.push(`  --> ${color(useColor, ANSI.cyan, `${f}:${raw.schemaSource.line}:${raw.schemaSource.col}`)}`);
+			lines.push("   |");
+			const sln = String(raw.schemaSource.line).padStart(2, " ");
+			lines.push(` ${sln} | ${truncateLine(raw.schemaSource.text, width - 8)}`);
+			const inlineHint = raw.expected ? "  " + color(useColor, ANSI.dim, `expected ${raw.expected}`) : "";
+			lines.push(caretLine(raw.schemaSource.col, 1, gutter) + inlineHint);
+			lines.push("   |");
+		}
+		if (d.frame) {
+			const where = `input:${d.frame.line}:${d.frame.col}`;
+			lines.push(`  --> ${color(useColor, ANSI.cyan, where)}  ${color(useColor, ANSI.dim, "(" + d.dotted + ")")}`);
+			lines.push("   |");
+			const ln = String(d.frame.line).padStart(2, " ");
+			lines.push(` ${ln} | ${truncateLine(d.frame.text, width - 8)}`);
+			lines.push(caretLine(d.frame.col, d.frame.length, gutter) + caretSuffix(d, raw, useColor));
+			lines.push("   |");
+		} else lines.push(`  --> ${color(useColor, ANSI.cyan, "at " + d.dotted)}`);
+		if (d.help) lines.push("   = " + color(useColor, ANSI.yellow, "help: ") + d.help);
+		if (d.branchErrors && d.branchErrors.length) {
+			const variant = raw && raw.params && raw.params.closestName || "closest variant";
+			const n = d.branchErrors.length;
+			lines.push("   = " + color(useColor, ANSI.dim, "note: ") + `closest match was ${variant} with ${n} error${n === 1 ? "" : "s"}:`);
+			renderBranchErrors(d.branchErrors, 1, lines, useColor);
+		}
+		for (const note of d.notes) lines.push("   = " + color(useColor, ANSI.dim, "note: ") + note);
+		return lines.join("\n");
+	}
+	function renderBranchErrors(subs, depth, lines, useColor) {
+		if (depth >= 3) {
+			lines.push("       " + color(useColor, ANSI.dim, "... deeper branch errors omitted, see structured output"));
+			return;
+		}
+		const max = 3;
+		const shown = subs.slice(0, max);
+		for (const sub of shown) {
+			let text = sub.message || "";
+			if (sub.expected !== void 0) text = `expected ${sub.expected}` + (sub.received !== void 0 ? `, found ${sub.received}` : "");
+			lines.push("       " + color(useColor, ANSI.dim, `${sub.keyword}: ${text}`));
+			if (sub.branchErrors && sub.branchErrors.length) renderBranchErrors(sub.branchErrors, depth + 1, lines, useColor);
+		}
+		if (subs.length > max) lines.push("       " + color(useColor, ANSI.dim, `... and ${subs.length - max} more`));
+	}
+	function renderPretty(errors, opts) {
+		if (!Array.isArray(errors) || errors.length === 0) return "";
+		opts = opts || {};
+		const useColor = resolveColor(opts.color || "auto");
+		const maxErrors = opts.maxErrors != null ? opts.maxErrors : 20;
+		const context = opts.context || "input";
+		const diags = toDiagnostics(errors, sourceFor(errors, opts));
+		const blocks = [];
+		const limit = maxErrors === 0 ? diags.length : Math.min(maxErrors, diags.length);
+		for (let i = 0; i < limit; i++) blocks.push(renderOne(diags[i], useColor, opts));
+		let out = blocks.join("\n\n");
+		if (limit < diags.length) out += `\n\n... and ${diags.length - limit} more errors (run with --pretty --max-errors=0 to see all)`;
+		const n = errors.length;
+		const shown = diags.length;
+		let summary = `${n} schema violation${n === 1 ? "" : "s"} in ${context}`;
+		if (shown !== n) summary += `, shown as ${shown} diagnostic${shown === 1 ? "" : "s"}`;
+		out += "\n\n" + color(useColor, ANSI.red + ANSI.bold, "error: ") + summary;
+		if (diags.some((d) => d.frame && d.frame.synthesized)) out += "\n" + color(useColor, ANSI.dim, "note: frames were reconstructed from the value, not from your input text; line numbers refer to that reconstruction");
+		return out;
+	}
+	module.exports = { renderPretty };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-compact.js
+var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
+	const { toDiagnostics } = require_diagnose();
+	const { getDiagnosticSource } = require_diagnostic_source();
+	function renderCompact(errors, opts) {
+		if (!Array.isArray(errors) || errors.length === 0) return "";
+		opts = opts || {};
+		const useColor = resolveColor(opts.color || "auto");
+		const cwd = opts.cwd;
+		const carried = getDiagnosticSource(errors) || {};
+		const source = opts.data !== void 0 ? Object.assign({}, carried, { data: opts.data }) : carried;
+		const diags = toDiagnostics(errors, source);
+		const lines = [];
+		for (const d of diags) {
+			let prefix = "";
+			const raw = d.mergedFrom[0];
+			if (raw && raw.schemaSource) {
+				const f = trimCwd(raw.schemaSource.file, cwd);
+				prefix = color(useColor, ANSI.cyan, `${f}:${raw.schemaSource.line}:${raw.schemaSource.col}`) + " - ";
+			}
+			const codeStr = color(useColor, ANSI.red + ANSI.bold, d.code ? `error ${d.code}` : "error");
+			const pathStr = color(useColor, ANSI.cyan, d.dotted);
+			const got = raw && raw.received != null ? `got ${raw.received}` : "";
+			const sugg = d.help ? color(useColor, ANSI.yellow, `, ${d.help}`) : "";
+			const tail = got || sugg ? ` (${got}${sugg})` : "";
+			lines.push(`${prefix}${codeStr}: ${pathStr} ${d.headline}${tail}`);
+		}
+		const n = errors.length;
+		const shown = diags.length;
+		lines.push("");
+		let summary = `Found ${n} error${n === 1 ? "" : "s"} in ${opts.context || "input"}`;
+		if (shown !== n) summary += `, shown as ${shown} diagnostic${shown === 1 ? "" : "s"}`;
+		lines.push(summary + ".");
+		if (!(process.stdout && process.stdout.isTTY)) lines.push("(run with --pretty for source frames)");
+		return lines.join("\n");
+	}
+	module.exports = { renderCompact };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/output-format.js
+var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const METADATA_KEYWORDS = [
+		"title",
+		"description",
+		"default",
+		"deprecated",
+		"readOnly",
+		"writeOnly",
+		"examples",
+		"format",
+		"contentEncoding",
+		"contentMediaType",
+		"contentSchema"
+	];
+	function pointerSegment(s) {
+		return String(s).replace(/~/g, "~0").replace(/\//g, "~1");
+	}
+	function baseUri(schema) {
+		if (schema && typeof schema === "object" && typeof schema.$id === "string") return schema.$id.split("#")[0];
+		return null;
+	}
+	function unitFor(error, base) {
+		const keywordLocation = typeof error.schemaPath === "string" && error.schemaPath.charAt(0) === "#" ? error.schemaPath.slice(1) : error.schemaPath || "";
+		const unit = {
+			valid: false,
+			keywordLocation,
+			instanceLocation: error.instancePath || ""
+		};
+		if (base) unit.absoluteKeywordLocation = base + "#" + keywordLocation;
+		if (typeof error.message === "string") unit.error = error.message;
+		return unit;
+	}
+	function collectAnnotations(schema, data, keywordLocation, instanceLocation, base, out, isValid, depth) {
+		if (schema === true || schema === false || schema === null || typeof schema !== "object" || depth > 64) return;
+		for (const kw of METADATA_KEYWORDS) if (Object.prototype.hasOwnProperty.call(schema, kw)) {
+			const unit = {
+				valid: true,
+				keywordLocation: keywordLocation + "/" + kw,
+				instanceLocation,
+				annotation: schema[kw]
+			};
+			if (base) unit.absoluteKeywordLocation = base + "#" + keywordLocation + "/" + kw;
+			out.push(unit);
+		}
+		const down = (sub, kwSeg, value, instSeg) => collectAnnotations(sub, value, keywordLocation + kwSeg, instanceLocation + (instSeg || ""), base, out, isValid, depth + 1);
+		if (schema.properties && data !== null && typeof data === "object" && !Array.isArray(data)) {
+			for (const key of Object.keys(schema.properties)) if (Object.prototype.hasOwnProperty.call(data, key)) down(schema.properties[key], "/properties/" + pointerSegment(key), data[key], "/" + pointerSegment(key));
+		}
+		if (Array.isArray(schema.prefixItems) && Array.isArray(data)) for (let i = 0; i < schema.prefixItems.length && i < data.length; i++) down(schema.prefixItems[i], "/prefixItems/" + i, data[i], "/" + i);
+		if (schema.items && typeof schema.items === "object" && Array.isArray(data)) {
+			const start = Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+			for (let i = start; i < data.length; i++) down(schema.items, "/items", data[i], "/" + i);
+		}
+		if (Array.isArray(schema.allOf)) for (let i = 0; i < schema.allOf.length; i++) down(schema.allOf[i], "/allOf/" + i, data, "");
+		for (const kw of ["anyOf", "oneOf"]) if (Array.isArray(schema[kw])) {
+			for (let i = 0; i < schema[kw].length; i++) if (isValid(schema[kw][i], data)) down(schema[kw][i], "/" + kw + "/" + i, data, "");
+		}
+		if (schema.if !== void 0) {
+			const taken = isValid(schema.if, data);
+			if (taken && schema.then !== void 0) down(schema.then, "/then", data, "");
+			if (!taken && schema.else !== void 0) down(schema.else, "/else", data, "");
+		}
+	}
+	function toOutput(validator, data, opts) {
+		const format = opts && opts.format || "basic";
+		const result = validator.validate(data);
+		if (format === "flag") return { valid: result.valid };
+		if (format !== "basic") throw new Error(`toOutput: unsupported format "${format}". Supported: "flag", "basic".`);
+		const schema = validator._schemaObj !== void 0 ? validator._schemaObj : validator._rawSchema;
+		const base = baseUri(schema);
+		const out = { valid: result.valid };
+		if (!result.valid) {
+			const errors = [];
+			for (const e of result.errors) errors.push(unitFor(e, base));
+			out.errors = errors;
+			return out;
+		}
+		const annotations = [];
+		const isValid = (sub, value) => {
+			try {
+				return new validator.constructor(sub).isValidObject(value);
+			} catch {
+				return false;
+			}
+		};
+		collectAnnotations(schema, data, "", "", base, annotations, isValid, 0);
+		if (annotations.length) out.annotations = annotations;
+		return out;
+	}
+	module.exports = {
+		toOutput,
+		METADATA_KEYWORDS
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/retry-message.js
+var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function phrase(error) {
+		const p = error.params || {};
+		if (error.keyword === "multipleOf" && typeof p.multipleOf === "number") {
+			const m = p.multipleOf;
+			if (m > 0 && m < 1) {
+				const places = Math.round(Math.log10(1 / m));
+				if (Math.abs(Math.pow(10, -places) - m) < Number.EPSILON * 8) return `must be rounded to ${places} decimal place${places === 1 ? "" : "s"}`;
+			}
+		}
+		return null;
+	}
+	function line(error) {
+		const where = error.instancePath || error.path || "";
+		const body = phrase(error) || (typeof error.detail === "string" && error.detail ? error.detail : error.message);
+		const raw = error.received === void 0 || error.received === null ? "" : String(error.received);
+		const head = raw.charAt(0);
+		const received = head === "[" && /^\[(object|array)\b/.test(raw) || head === "{" || head === "[" && raw.charAt(raw.length - 1) === "]" ? "" : raw;
+		const got = received && body && !body.includes(received) ? `, got ${received}` : "";
+		return `${where || "/"}: ${body}${got}`;
+	}
+	function toRetryMessage(errors, opts) {
+		if (!errors || typeof errors.length !== "number" || errors.length === 0) return "";
+		const limit = opts && typeof opts.limit === "number" ? opts.limit : 20;
+		const shown = errors.length > limit ? Array.prototype.slice.call(errors, 0, limit) : errors;
+		const lines = [];
+		for (let i = 0; i < shown.length; i++) lines.push(line(shown[i]));
+		if (errors.length > shown.length) lines.push(`and ${errors.length - shown.length} more`);
+		return lines.join("\n");
+	}
+	module.exports = { toRetryMessage };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/describe-schema.js
+var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const MAX_DEPTH = 12;
+	function lit(v) {
+		try {
+			return JSON.stringify(v);
+		} catch (_) {
+			return String(v);
+		}
+	}
+	function resolveRef(schema, defs) {
+		const m = typeof schema.$ref === "string" && schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+		if (m && defs && defs[m[1]]) return defs[m[1]];
+		return null;
+	}
+	function constraintsOf(s) {
+		const out = [];
+		if (Array.isArray(s.enum)) out.push("one of " + s.enum.map(lit).join(", "));
+		else if (s.const !== void 0) out.push("exactly " + lit(s.const));
+		else if (s.type) out.push(Array.isArray(s.type) ? s.type.join(" or ") : s.type);
+		if (typeof s.format === "string") out.push(s.format + " format");
+		if (typeof s.pattern === "string") out.push("matching " + s.pattern);
+		const range = (min, max, unit) => {
+			if (min !== void 0 && max !== void 0) out.push(`${min} to ${max}${unit}`);
+			else if (min !== void 0) out.push(`at least ${min}${unit}`);
+			else if (max !== void 0) out.push(`at most ${max}${unit}`);
+		};
+		range(s.minLength, s.maxLength, " characters");
+		range(s.minimum, s.maximum, "");
+		range(s.minItems, s.maxItems, " items");
+		if (s.exclusiveMinimum !== void 0) out.push("greater than " + s.exclusiveMinimum);
+		if (s.exclusiveMaximum !== void 0) out.push("less than " + s.exclusiveMaximum);
+		if (typeof s.multipleOf === "number") out.push(multipleOfPhrase(s.multipleOf));
+		if (s.uniqueItems === true) out.push("all items different");
+		if (typeof s.description === "string" && s.description) out.push(s.description);
+		return out;
+	}
+	function multipleOfPhrase(m) {
+		if (m > 0 && m < 1) {
+			const places = Math.round(Math.log10(1 / m));
+			if (Math.abs(Math.pow(10, -places) - m) < Number.EPSILON * 8) return `rounded to ${places} decimal place${places === 1 ? "" : "s"}`;
+		}
+		return "a multiple of " + m;
+	}
+	function isObjectSchema(s) {
+		return s && typeof s === "object" && s.properties && typeof s.properties === "object";
+	}
+	function describeObjectBody(schema, depth, defs, lines) {
+		const pad = "  ".repeat(depth);
+		const required = new Set(Array.isArray(schema.required) ? schema.required : []);
+		for (const [key, sub] of Object.entries(schema.properties)) describeNode(sub, key + (required.has(key) ? "" : " (optional)"), depth, defs, lines);
+		for (const key of required) if (!(key in schema.properties)) lines.push(`${pad}${key}: required, any`);
+		if (schema.additionalProperties === false) lines.push(`${pad}no other fields`);
+	}
+	function describeNode(schema, label, depth, defs, lines) {
+		const pad = "  ".repeat(depth);
+		if (schema === true || schema === void 0) {
+			lines.push(`${pad}${label}: any`);
+			return;
+		}
+		if (schema === false) {
+			lines.push(`${pad}${label}: nothing is allowed here`);
+			return;
+		}
+		if (typeof schema !== "object" || schema === null || depth > MAX_DEPTH) {
+			lines.push(`${pad}${label}: any`);
+			return;
+		}
+		const target = schema.$ref ? resolveRef(schema, defs) : null;
+		if (target) {
+			describeNode(target, label, depth, defs, lines);
+			return;
+		}
+		if (Array.isArray(schema.allOf) && schema.allOf.length) {
+			const merged = Object.assign({}, schema);
+			delete merged.allOf;
+			for (const part of schema.allOf) {
+				const resolved = part && part.$ref ? resolveRef(part, defs) || part : part;
+				if (resolved && typeof resolved === "object") Object.assign(merged, resolved, {
+					properties: Object.assign({}, merged.properties, resolved.properties),
+					required: [].concat(merged.required || [], resolved.required || [])
+				});
+			}
+			if (!merged.properties) delete merged.properties;
+			if (!merged.required || !merged.required.length) delete merged.required;
+			describeNode(merged, label, depth, defs, lines);
+			return;
+		}
+		const alternatives = schema.oneOf || schema.anyOf;
+		if (Array.isArray(alternatives) && alternatives.length) {
+			lines.push(`${pad}${label}: one of the following shapes`);
+			alternatives.forEach((alt, i) => describeNode(alt, `option ${i + 1}`, depth + 1, defs, lines));
+			return;
+		}
+		if (isObjectSchema(schema)) {
+			const own = constraintsOf(schema).filter((c) => c !== "object");
+			lines.push(`${pad}${label}: object${own.length ? ` (${own.join(", ")})` : ""}`);
+			describeObjectBody(schema, depth + 1, defs, lines);
+			return;
+		}
+		const rawItems = schema.items;
+		if (schema.type === "array" && rawItems && typeof rawItems === "object") {
+			const items = rawItems.$ref ? resolveRef(rawItems, defs) || rawItems : rawItems;
+			const own = constraintsOf(schema).filter((c) => c !== "array");
+			const bounds = own.length ? ` (${own.join(", ")})` : "";
+			if (isObjectSchema(items)) {
+				lines.push(`${pad}${label}: array${bounds}, each item is an object:`);
+				describeObjectBody(items, depth + 1, defs, lines);
+				return;
+			}
+			if (items.oneOf || items.anyOf || items.allOf) {
+				lines.push(`${pad}${label}: array${bounds}, each item is:`);
+				describeNode(items, "item", depth + 1, defs, lines);
+				return;
+			}
+			const inner = constraintsOf(items).join(", ") || "any";
+			lines.push(`${pad}${label}: array${bounds} of ${inner}`);
+			return;
+		}
+		lines.push(`${pad}${label}: ${constraintsOf(schema).join(", ") || "any"}`);
+	}
+	function describeSchema(schema, opts) {
+		const name = opts && opts.name || "output";
+		const defs = schema && (schema.$defs || schema.definitions) || null;
+		const lines = [];
+		describeNode(schema, name, 0, defs, lines);
+		return lines.join("\n");
+	}
+	module.exports = { describeSchema };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/render-json.js
+var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function renderJSON(errors, opts) {
+		opts = opts || {};
+		const payload = {
+			errors: Array.isArray(errors) ? errors : [],
+			summary: {
+				count: Array.isArray(errors) ? errors.length : 0,
+				context: opts.context || "input"
+			}
+		};
+		return opts.pretty ? JSON.stringify(payload, null, 2) : JSON.stringify(payload);
+	}
+	module.exports = { renderJSON };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/index.js
+var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const native = require_native_load_browser()();
+	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
+	const { compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined } = require_js_compiler();
+	const { normalizeDraft7, normalizeNullable, normalizeExclusiveBounds, stripFormatAssertions } = require_draft7();
+	const { enabledKeywords, stripDisabledKeywords } = require_vocabularies();
+	const { needsNormalization } = require_schema_scan();
+	const { isV1Dialect } = require_dialect();
+	const { classify } = require_shape_classifier();
+	const { buildTier0Plan, tier0Validate } = require_tier0();
+	const { createCache: _createPosCache } = require_data_position_cache();
+	function buildDefaultsApplier(schema) {
+		if (typeof schema !== "object" || schema === null) return null;
+		const actions = [];
+		collectDefaults(schema, actions);
+		if (actions.length === 0) return null;
+		return (data) => {
+			for (let i = 0; i < actions.length; i++) actions[i](data);
+		};
+	}
+	function collectDefaults(schema, actions, path) {
+		if (typeof schema !== "object" || schema === null) return;
+		const props = schema.properties;
+		if (!props) return;
+		for (const [key, prop] of Object.entries(props)) {
+			if (prop && typeof prop === "object" && prop.default !== void 0) {
+				const defaultVal = prop.default;
+				if (!path) actions.push((data) => {
+					if (typeof data === "object" && data !== null && !(key in data)) data[key] = typeof defaultVal === "object" && defaultVal !== null ? JSON.parse(JSON.stringify(defaultVal)) : defaultVal;
+				});
+				else {
+					const parentPath = path;
+					actions.push((data) => {
+						let target = data;
+						for (let j = 0; j < parentPath.length; j++) {
+							if (typeof target !== "object" || target === null) return;
+							target = target[parentPath[j]];
+						}
+						if (typeof target === "object" && target !== null && !(key in target)) target[key] = typeof defaultVal === "object" && defaultVal !== null ? JSON.parse(JSON.stringify(defaultVal)) : defaultVal;
+					});
+				}
+			}
+			if (prop && typeof prop === "object" && prop.properties) collectDefaults(prop, actions, (path || []).concat(key));
+		}
+	}
+	function buildCoercer(schema) {
+		if (typeof schema !== "object" || schema === null) return null;
+		const actions = [];
+		collectCoercions(schema, actions);
+		if (actions.length === 0) return null;
+		return (data) => {
+			for (let i = 0; i < actions.length; i++) actions[i](data);
+		};
+	}
+	function collectCoercions(schema, actions, path) {
+		if (typeof schema !== "object" || schema === null) return;
+		const props = schema.properties;
+		if (!props) return;
+		for (const [key, prop] of Object.entries(props)) {
+			if (!prop || typeof prop !== "object" || !prop.type) continue;
+			const targetType = Array.isArray(prop.type) ? null : prop.type;
+			if (!targetType) continue;
+			const coerce = buildSingleCoercion(targetType);
+			if (!coerce) continue;
+			if (!path) actions.push((data) => {
+				if (typeof data === "object" && data !== null && key in data) {
+					const coerced = coerce(data[key]);
+					if (coerced !== void 0) data[key] = coerced;
+				}
+			});
+			else {
+				const parentPath = path;
+				actions.push((data) => {
+					let target = data;
+					for (let j = 0; j < parentPath.length; j++) {
+						if (typeof target !== "object" || target === null) return;
+						target = target[parentPath[j]];
+					}
+					if (typeof target === "object" && target !== null && key in target) {
+						const coerced = coerce(target[key]);
+						if (coerced !== void 0) target[key] = coerced;
+					}
+				});
+			}
+			if (prop.properties) collectCoercions(prop, actions, (path || []).concat(key));
+		}
+	}
+	function buildSingleCoercion(targetType) {
+		switch (targetType) {
+			case "number": return (v) => {
+				if (typeof v === "string") {
+					const n = Number(v);
+					if (v !== "" && !isNaN(n)) return n;
+				}
+				if (typeof v === "boolean") return v ? 1 : 0;
+			};
+			case "integer": return (v) => {
+				if (typeof v === "string") {
+					const n = Number(v);
+					if (v !== "" && Number.isInteger(n)) return n;
+				}
+				if (typeof v === "boolean") return v ? 1 : 0;
+			};
+			case "string": return (v) => {
+				if (typeof v === "number" || typeof v === "boolean") return String(v);
+			};
+			case "boolean": return (v) => {
+				if (v === "true" || v === "1") return true;
+				if (v === "false" || v === "0") return false;
+			};
+			default: return null;
+		}
+	}
+	function buildRemover(schema) {
+		if (typeof schema !== "object" || schema === null) return null;
+		const actions = [];
+		collectRemovals(schema, actions);
+		if (actions.length === 0) return null;
+		return (data) => {
+			for (let i = 0; i < actions.length; i++) actions[i](data);
+		};
+	}
+	function collectRemovals(schema, actions, path) {
+		if (typeof schema !== "object" || schema === null || !schema.properties) return;
+		if (schema.additionalProperties === false) {
+			const allowed = new Set(Object.keys(schema.properties));
+			if (!path) actions.push((data) => {
+				if (typeof data !== "object" || data === null || Array.isArray(data)) return;
+				const keys = Object.keys(data);
+				for (let i = 0; i < keys.length; i++) if (!allowed.has(keys[i])) delete data[keys[i]];
+			});
+			else {
+				const parentPath = path;
+				actions.push((data) => {
+					let target = data;
+					for (let j = 0; j < parentPath.length; j++) {
+						if (typeof target !== "object" || target === null) return;
+						target = target[parentPath[j]];
+					}
+					if (typeof target !== "object" || target === null || Array.isArray(target)) return;
+					const keys = Object.keys(target);
+					for (let i = 0; i < keys.length; i++) if (!allowed.has(keys[i])) delete target[keys[i]];
+				});
+			}
+		}
+		for (const [key, prop] of Object.entries(schema.properties)) if (prop && typeof prop === "object" && prop.properties) collectRemovals(prop, actions, (path || []).concat(key));
+	}
+	function emitRemovals(node, access, lines, depth, seen) {
+		if (!node || typeof node !== "object" || !node.properties) return;
+		if (seen.has(node)) return;
+		seen.add(node);
+		const keys = Object.keys(node.properties);
+		if (node.additionalProperties === false && keys.length > 0) {
+			const kv = "_k" + depth;
+			const checks = keys.map((k) => `${kv}!==${JSON.stringify(k)}`).join("&&");
+			const guard = depth === 0 ? "" : `if(${access}!==null&&typeof ${access}==='object'&&!Array.isArray(${access}))`;
+			lines.push(`${guard}for(var ${kv} in ${access})if(${checks})delete ${access}[${kv}]`);
+		}
+		for (const key of keys) {
+			const prop = node.properties[key];
+			if (prop && typeof prop === "object" && prop.properties) emitRemovals(prop, `${access}[${JSON.stringify(key)}]`, lines, depth + 1, seen);
+		}
+		seen.delete(node);
+	}
+	function buildPreprocessCodegen(schema, options) {
+		if (typeof schema !== "object" || schema === null || !schema.properties) return null;
+		const lines = [];
+		const props = schema.properties;
+		Object.keys(props);
+		if (options.removeAdditional) emitRemovals(schema, "d", lines, 0, /* @__PURE__ */ new Set());
+		if (options.coerceTypes) for (const [key, prop] of Object.entries(props)) {
+			if (!prop || typeof prop !== "object" || !prop.type) continue;
+			const t = Array.isArray(prop.type) ? null : prop.type;
+			if (!t) continue;
+			const k = JSON.stringify(key);
+			if (t === "integer") {
+				lines.push(`if(typeof d[${k}]==='string'){var _n=Number(d[${k}]);if(d[${k}]!==''&&Number.isInteger(_n))d[${k}]=_n}`);
+				lines.push(`if(typeof d[${k}]==='boolean')d[${k}]=d[${k}]?1:0`);
+			} else if (t === "number") {
+				lines.push(`if(typeof d[${k}]==='string'){var _n=Number(d[${k}]);if(d[${k}]!==''&&!isNaN(_n))d[${k}]=_n}`);
+				lines.push(`if(typeof d[${k}]==='boolean')d[${k}]=d[${k}]?1:0`);
+			} else if (t === "string") lines.push(`if(typeof d[${k}]==='number'||typeof d[${k}]==='boolean')d[${k}]=String(d[${k}])`);
+			else if (t === "boolean") {
+				lines.push(`if(d[${k}]==='true'||d[${k}]==='1')d[${k}]=true`);
+				lines.push(`if(d[${k}]==='false'||d[${k}]==='0')d[${k}]=false`);
+			} else if (t === "array" && options.coerceTypes === "array") lines.push(`if(${k} in d&&d[${k}]!==undefined&&!Array.isArray(d[${k}]))d[${k}]=[d[${k}]]`);
+		}
+		if (options.useDefaults !== false) {
+			for (const [key, prop] of Object.entries(props)) if (prop && typeof prop === "object" && prop.default !== void 0) {
+				const k = JSON.stringify(key);
+				const def = JSON.stringify(prop.default);
+				lines.push(`if(!(${k} in d))d[${k}]=${def}`);
+			}
+		}
+		if (lines.length === 0) return null;
+		lines.unshift(`if(d===null||typeof d!=='object')return`);
+		try {
+			return new Function("d", lines.join("\n"));
+		} catch {
+			return null;
+		}
+	}
+	let _codegenAvailable = null;
+	function codegenAvailable() {
+		if (_codegenAvailable === null) try {
+			_codegenAvailable = new Function("return 1")() === 1;
+		} catch {
+			_codegenAvailable = false;
+		}
+		return _codegenAvailable;
+	}
+	const _compileCache = /* @__PURE__ */ new Map();
+	const _identityCache = /* @__PURE__ */ new WeakMap();
+	const SIMDJSON_PADDING = 64;
+	const VALID_RESULT = Object.freeze({
+		valid: true,
+		errors: Object.freeze([])
+	});
+	const ABORT_EARLY_RESULT = Object.freeze({
+		valid: false,
+		errors: Object.freeze([Object.freeze({
+			code: "ATA9000",
+			message: "validation failed",
+			keyword: "__abort_early__",
+			path: ""
+		})])
+	});
+	var LazyRejection = class {
+		constructor(build, data, buildRaw) {
+			this.valid = false;
+			this._build = build;
+			this._data = data;
+			this._errors = null;
+			this._buildRaw = buildRaw;
+		}
+		toJSON() {
+			return {
+				valid: false,
+				errors: this.errors
+			};
+		}
+		_ataRaw() {
+			return this._buildRaw ? this._buildRaw(this._data) : this.errors;
+		}
+	};
+	Object.defineProperty(LazyRejection.prototype, "errors", {
+		enumerable: true,
+		configurable: true,
+		get() {
+			if (this._errors === null) this._errors = this._build(this._data);
+			return this._errors;
+		}
+	});
+	const SIMDJSON_THRESHOLD = 8192;
+	function resolveSchemaByPath(rootSchema, schemaPath) {
+		if (!schemaPath || typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return;
+		const stripped = schemaPath.slice(1);
+		if (!stripped || stripped === "/") return rootSchema;
+		const parts = stripped.split("/").filter(Boolean).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let target = rootSchema;
+		for (let i = 0; i < parts.length - 1; i++) {
+			if (target == null || typeof target !== "object") return void 0;
+			target = target[parts[i]];
+		}
+		return target;
+	}
+	const { rankFor: schemaOrderRank, ordinalFor: schemaOrdinal } = require_schema_order();
+	var RichRejection = class {
+		constructor(result, data, positions, self, root, enrich) {
+			this.valid = false;
+			this._result = result;
+			this._data = data;
+			this._positions = positions;
+			this._self = self;
+			this._root = root;
+			this._enrich = enrich;
+			this._cached = null;
+		}
+		toJSON() {
+			return {
+				valid: false,
+				errors: this.errors
+			};
+		}
+		_ataRaw() {
+			let raw = this._result.errors || [];
+			if (raw.length > 1) raw = sortErrorsBySchemaOrder(this._root, raw);
+			return raw;
+		}
+	};
+	Object.defineProperty(RichRejection.prototype, "errors", {
+		enumerable: true,
+		configurable: true,
+		get() {
+			if (this._cached === null) {
+				const self = this._self;
+				const enrich = this._enrich;
+				let raw = this._result.errors || [];
+				if (raw.length > 1) raw = sortErrorsBySchemaOrder(this._root, raw);
+				const opts = enrich && raw.length ? {
+					data: this._data,
+					positions: this._positions,
+					schemaPositions: self._schemaPositions,
+					schemaFile: self._source ? self._source.path : void 0
+				} : null;
+				const cached = opts ? raw.map((e) => enrich(e, opts)) : raw.map(stripOrdinal);
+				if (enrich && cached.length > 1) attachRelated(cached);
+				this._cached = cached;
+			}
+			return this._cached;
+		}
+	});
+	function stripOrdinal(e) {
+		if (e === null || typeof e !== "object" || e._o === void 0) return e;
+		const out = {};
+		for (const k in e) if (k !== "_o") out[k] = e[k];
+		return out;
+	}
+	function sortErrorsBySchemaOrder(rootSchema, errors) {
+		const n = errors.length;
+		const keys = new Array(n);
+		let sorted = true;
+		let prev = -1;
+		for (let i = 0; i < n; i++) {
+			const e = errors[i];
+			let o = typeof e._o === "number" ? e._o : schemaOrdinal(rootSchema, e.schemaPath);
+			if (o === null) o = prev < 0 ? 0 : prev;
+			keys[i] = o;
+			if (o < prev) sorted = false;
+			prev = o;
+		}
+		if (sorted) return errors;
+		const out = errors.slice();
+		for (let i = 1; i < n; i++) {
+			const k = keys[i];
+			const e = out[i];
+			let j = i - 1;
+			while (j >= 0 && keys[j] > k) {
+				keys[j + 1] = keys[j];
+				out[j + 1] = out[j];
+				j--;
+			}
+			keys[j + 1] = k;
+			out[j + 1] = e;
+		}
+		return out;
+	}
+	const _pathCache = /* @__PURE__ */ new Map();
+	const PATH_CACHE_MAX = 4096;
+	function parsePointerPath(path) {
+		if (!path) return EMPTY_PATH;
+		const hit = _pathCache.get(path);
+		if (hit !== void 0) return hit;
+		const segs = Object.freeze(parsePointerPathUncached(path));
+		if (_pathCache.size >= PATH_CACHE_MAX) _pathCache.clear();
+		_pathCache.set(path, segs);
+		return segs;
+	}
+	const EMPTY_PATH = Object.freeze([]);
+	function parsePointerPathUncached(path) {
+		const out = [];
+		const n = path.length;
+		let start = 1;
+		for (let i = 1; i <= n; i++) {
+			if (i !== n && path.charCodeAt(i) !== 47) continue;
+			if (i > start) {
+				let seg = path.slice(start, i);
+				if (seg.indexOf("~") >= 0) seg = seg.replace(/~1/g, "/").replace(/~0/g, "~");
+				const c0 = seg.charCodeAt(0);
+				let numeric = c0 >= 48 && c0 <= 57 && (seg.length === 1 || c0 !== 48);
+				if (numeric) for (let k = 1; k < seg.length; k++) {
+					const c = seg.charCodeAt(k);
+					if (c < 48 || c > 57) {
+						numeric = false;
+						break;
+					}
+				}
+				out.push({ key: numeric ? Number(seg) : seg });
+			}
+			start = i + 1;
+		}
+		return out;
+	}
+	function createPaddedBuffer(jsonStr) {
+		if (typeof Buffer === "undefined") throw new Error("createPaddedBuffer requires Node.js Buffer");
+		const jsonBuf = Buffer.from(jsonStr);
+		const padded = Buffer.allocUnsafe(jsonBuf.length + SIMDJSON_PADDING);
+		jsonBuf.copy(padded);
+		padded.fill(0, jsonBuf.length);
+		return {
+			buffer: padded,
+			length: jsonBuf.length
+		};
+	}
+	function _deepCloneWithSymbols(v) {
+		if (v === null || typeof v !== "object") return v;
+		if (Array.isArray(v)) {
+			const a = new Array(v.length);
+			for (let i = 0; i < v.length; i++) a[i] = _deepCloneWithSymbols(v[i]);
+			return a;
+		}
+		if (Object.getPrototypeOf(v) !== Object.prototype && Object.getPrototypeOf(v) !== null) return v;
+		const out = Object.create(null);
+		for (const k of Object.keys(v)) Object.defineProperty(out, k, {
+			value: _deepCloneWithSymbols(v[k]),
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+		for (const sym of Object.getOwnPropertySymbols(v)) out[sym] = v[sym];
+		return Object.setPrototypeOf(out, Object.prototype);
+	}
+	function _normalizeCallerSchema(s, inheritDraft7) {
+		const needsDraft7 = s && typeof s === "object" && s.$schema !== void 0 ? s.$schema === "http://json-schema.org/draft-07/schema#" || s.$schema === "http://json-schema.org/draft-07/schema" : !!inheritDraft7;
+		if (!needsNormalization(s, needsDraft7)) return s;
+		const str = JSON.stringify(s);
+		const copy = _deepCloneWithSymbols(s);
+		if (needsDraft7) normalizeDraft7(copy, true);
+		normalizeNullable(copy);
+		normalizeExclusiveBounds(copy);
+		return JSON.stringify(copy) === str ? s : copy;
+	}
+	function declaredId(original, normalized) {
+		const n = normalized && typeof normalized === "object" ? normalized.$id : void 0;
+		if (typeof n === "string" && n !== "") return n;
+		const o = original && typeof original === "object" ? original.$id : void 0;
+		if (typeof o === "string" && o !== "" && o[0] !== "#") return o;
+	}
+	const _schemaMapCache = /* @__PURE__ */ new WeakMap();
+	function buildSchemaMap(schemas, inheritDraft7) {
+		if (!schemas) return null;
+		const byDraft = _schemaMapCache.get(schemas);
+		if (byDraft) {
+			const hit = byDraft[inheritDraft7 ? 1 : 0];
+			if (hit) return hit;
+		}
+		const map = _buildSchemaMap(schemas, inheritDraft7);
+		const slot = byDraft || [null, null];
+		slot[inheritDraft7 ? 1 : 0] = map;
+		if (!byDraft) _schemaMapCache.set(schemas, slot);
+		return map;
+	}
+	function _buildSchemaMap(schemas, inheritDraft7) {
+		const map = /* @__PURE__ */ new Map();
+		if (Array.isArray(schemas)) for (const s of schemas) {
+			const normalized = _normalizeCallerSchema(s, inheritDraft7);
+			const id = declaredId(s, normalized);
+			if (!id) throw new Error("Schema in schemas option must have $id");
+			map.set(id, normalized);
+		}
+		else for (const [key, s] of Object.entries(schemas)) {
+			const normalized = _normalizeCallerSchema(s, inheritDraft7);
+			map.set(key, normalized);
+			const id = declaredId(s, normalized);
+			if (id && id !== key) map.set(id, normalized);
+		}
+		return map;
+	}
+	function _applyVocabularies(schemaObj, original, schemaMap) {
+		if (!schemaObj || typeof schemaObj !== "object") return schemaObj;
+		const declared = schemaObj.$schema;
+		if (typeof declared !== "string") return schemaObj;
+		const enabled = enabledKeywords(schemaMap.get(declared));
+		if (!enabled) return schemaObj;
+		const copy = schemaObj === original ? _deepCloneWithSymbols(schemaObj) : schemaObj;
+		return stripDisabledKeywords(copy, enabled);
+	}
+	function compileCacheKey(schemaStr, schemaMap) {
+		if (!schemaMap || schemaMap.size === 0) return schemaStr;
+		const parts = [];
+		for (const [id, s] of schemaMap) parts.push(id + "=" + JSON.stringify(s));
+		parts.sort();
+		return schemaStr + "\0" + parts.join("\0");
+	}
+	function resolveRefForPreprocess(ref, schemaMap) {
+		if (!schemaMap || schemaMap.size === 0 || typeof ref !== "string") return null;
+		const hashIdx = ref.indexOf("#");
+		const baseId = hashIdx >= 0 ? ref.slice(0, hashIdx) : ref;
+		const fragment = hashIdx >= 0 ? ref.slice(hashIdx + 1) : "";
+		if (!baseId) return null;
+		let base = null;
+		if (schemaMap.has(baseId)) base = schemaMap.get(baseId);
+		else if (!ref.includes("://")) {
+			for (const [id, s] of schemaMap) if (id.endsWith("/" + baseId)) {
+				base = s;
+				break;
+			}
+		}
+		if (!base) return null;
+		if (!fragment) return base;
+		let target = base;
+		for (const part of fragment.split("/")) {
+			if (part === "") continue;
+			if (target == null || typeof target !== "object") return null;
+			target = target[part.replace(/~1/g, "/").replace(/~0/g, "~")];
+		}
+		return target == null ? null : target;
+	}
+	function resolveSchemaForPreprocess(schema, schemaMap) {
+		if (!schema || typeof schema !== "object" || !schemaMap || schemaMap.size === 0) return schema;
+		let s = schema;
+		if (s.$ref && !s.properties) {
+			const t = resolveRefForPreprocess(s.$ref, schemaMap);
+			if (t && typeof t === "object") s = t;
+		}
+		if (!s.properties) return s;
+		let cloned = null;
+		for (const key of Object.keys(s.properties)) {
+			const p = s.properties[key];
+			if (p && typeof p === "object" && p.$ref && !p.type) {
+				const t = resolveRefForPreprocess(p.$ref, schemaMap);
+				if (t && typeof t === "object") {
+					if (!cloned) {
+						cloned = Object.assign({}, s);
+						cloned.properties = Object.assign({}, s.properties);
+					}
+					cloned.properties[key] = t;
+				}
+			}
+		}
+		return cloned || s;
+	}
+	function _materializeSchema(self) {
+		const raw = self._rawSchema;
+		const options = self._options;
+		let schemaObj = _normalizeCallerSchema(raw);
+		const isCallers = self._rawIsCallers && schemaObj === raw;
+		if (options.assertFormat === false) schemaObj = stripFormatAssertions(isCallers ? _deepCloneWithSymbols(schemaObj) : schemaObj);
+		const usesKeywords = self._keywords !== null && schemaUsesKeywords(schemaObj, self._keywords);
+		Object.defineProperty(self, "_schemaObj", {
+			value: schemaObj,
+			writable: true,
+			configurable: true,
+			enumerable: true
+		});
+		Object.defineProperty(self, "_usesKeywords", {
+			value: usesKeywords,
+			writable: true,
+			configurable: true,
+			enumerable: true
+		});
+		Object.defineProperty(self, "_schemaIsCallers", {
+			value: isCallers && schemaObj === raw,
+			writable: true,
+			configurable: true,
+			enumerable: true
+		});
+		return schemaObj;
+	}
+	var Validator = class Validator {
+		constructor(schema, opts) {
+			const options = opts || {};
+			if (!opts && typeof schema === "object" && schema !== null) {
+				const hit = _identityCache.get(schema);
+				if (hit) return hit;
+			}
+			const raw = typeof schema === "string" ? JSON.parse(schema) : schema;
+			const rootIsDraft7 = !!(raw && typeof raw === "object" && typeof raw.$schema === "string" && (raw.$schema === "http://json-schema.org/draft-07/schema#" || raw.$schema === "http://json-schema.org/draft-07/schema"));
+			const shared = buildSchemaMap(options.schemas, rootIsDraft7);
+			const schemaMap = shared || /* @__PURE__ */ new Map();
+			this._schemaMapShared = shared !== null;
+			this._vocabulariesApplied = false;
+			this._keywords = normalizeKeywords(options.keywords);
+			this._schemaStr = null;
+			this._rawSchema = raw;
+			this._rawIsCallers = typeof schema !== "string";
+			this._options = options;
+			this._noOpts = !opts;
+			this._initialized = false;
+			this._nativeReady = false;
+			this._compiled = null;
+			this._fastSlot = -1;
+			this._jsFn = null;
+			this._engine = void 0;
+			this._preprocess = null;
+			this._applyDefaults = null;
+			this._schemaMap = schemaMap;
+			this._userFormats = options.formats || null;
+			this._verbose = !!options.verbose;
+			if (options.strictSchema === true || options.strictSchema === "log") {
+				const { checkSchemaStrict } = require_strict_check();
+				const problems = checkSchemaStrict(schema, { userKeywords: options.keywords || null });
+				if (problems.length > 0) {
+					const text = problems.map((x) => `strict mode: ${x.message} at ${x.path}`).join("\n");
+					if (options.strictSchema === true) throw new Error(text);
+					const logger = options.logger;
+					if (logger !== false) (logger && typeof logger.warn === "function" ? logger.warn.bind(logger) : console.warn)(text);
+				}
+			}
+			this._richErrors = options && options.richErrors === false ? false : true;
+			this._source = options && options.source && typeof options.source === "object" ? {
+				path: String(options.source.path || ""),
+				content: String(options.source.content || "")
+			} : null;
+			if (this._source) {
+				const { buildPositionMap } = require_source_positions();
+				this._schemaPositions = buildPositionMap(this._source.content);
+			} else this._schemaPositions = null;
+			this._posCache = null;
+			this._lastRawInput = null;
+			this._scanner = void 0;
+			if (!opts && typeof schema === "object" && schema !== null) _identityCache.set(schema, this);
+		}
+		_needsPreprocess() {
+			const o = this._options;
+			if (o.coerceTypes || o.removeAdditional) return true;
+			if (o.useDefaults === false) return false;
+			if (!this._schemaStr) this._schemaStr = JSON.stringify(this._schemaObj);
+			return this._schemaStr.includes("\"default\"");
+		}
+		_pos() {
+			return this._posCache || (this._posCache = _createPosCache());
+		}
+		_ensureVocabularies() {
+			if (this._vocabulariesApplied) return;
+			this._vocabulariesApplied = true;
+			const stripped = _applyVocabularies(this._schemaObj, this._schemaIsCallers ? this._schemaObj : null, this._schemaMap);
+			if (stripped !== this._schemaObj) {
+				this._schemaObj = stripped;
+				this._schemaStr = null;
+			}
+		}
+		_ensureCompiled() {
+			if (this._initialized) return;
+			this._ensureVocabularies();
+			this._initialized = true;
+			const schemaObj = this._schemaObj;
+			const options = this._options;
+			if (!this._schemaStr) this._schemaStr = JSON.stringify(schemaObj);
+			if (this._schemaStr.includes("json-schema.org/draft")) {
+				const { METASCHEMAS } = require_metaschemas();
+				this._ownSchemaMap();
+				for (const [id, meta] of METASCHEMAS) {
+					const bare = id.replace(/#$/, "");
+					for (const key of [
+						id,
+						bare,
+						bare + "#",
+						bare.replace(/^https:/, "http:"),
+						bare.replace(/^http:/, "https:")
+					]) if (!this._schemaMap.has(key)) this._schemaMap.set(key, meta);
+				}
+			}
+			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
+			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
+			const cached = this._userFormats || this._usesKeywords ? null : _compileCache.get(mapKey);
+			let jsFn, jsCombinedFn, jsErrFn, _isCodegen = false;
+			var _forceNapi = typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
+			this._v1Dynamic = isV1Dialect(schemaObj) && (this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\""));
+			if (this._v1Dynamic || this._usesKeywords || !codegenAvailable()) {
+				jsFn = null;
+				jsCombinedFn = null;
+				jsErrFn = null;
+			} else if (cached && cached.jsFn !== void 0 && !_forceNapi) {
+				jsFn = cached.jsFn;
+				jsCombinedFn = cached.combined;
+				jsErrFn = cached.errFn;
+				_isCodegen = !!cached.isCodegen;
+				this._engine = _isCodegen ? "codegen" : jsFn ? "closure" : null;
+			} else if (!_forceNapi) {
+				const uf = this._userFormats;
+				const _cgFn = compileToJSCodegen(schemaObj, sm, uf);
+				jsFn = _cgFn || compileToJS(schemaObj, null, sm);
+				jsCombinedFn = void 0;
+				jsErrFn = void 0;
+				_isCodegen = !!_cgFn;
+				this._engine = _cgFn ? "codegen" : jsFn ? "closure" : null;
+				if (!uf) _compileCache.set(mapKey, {
+					jsFn,
+					combined: void 0,
+					errFn: void 0,
+					isCodegen: _isCodegen,
+					full: false
+				});
+			} else {
+				jsFn = null;
+				jsCombinedFn = null;
+				jsErrFn = null;
+			}
+			this._jsFn = jsFn;
+			if (this._engine === void 0) this._engine = null;
+			const preprocessSchema = resolveSchemaForPreprocess(schemaObj, this._schemaMap);
+			let preprocess = buildPreprocessCodegen(preprocessSchema, options);
+			if (!preprocess) {
+				const applyDefaults = options.useDefaults === false ? null : buildDefaultsApplier(preprocessSchema);
+				const applyCoerce = options.coerceTypes ? buildCoercer(preprocessSchema) : null;
+				const mutators = [
+					options.removeAdditional ? buildRemover(preprocessSchema) : null,
+					applyCoerce,
+					applyDefaults
+				].filter(Boolean);
+				preprocess = mutators.length === 0 ? null : mutators.length === 1 ? mutators[0] : (data) => {
+					for (let i = 0; i < mutators.length; i++) mutators[i](data);
+				};
+			}
+			this._applyDefaults = preprocess;
+			this._mutatesInput = !!(preprocess || options.coerceTypes || options.removeAdditional);
+			this._preprocess = preprocess;
+			const useSimdjsonForLarge = !(schemaObj && (schemaObj.items || schemaObj.prefixItems || schemaObj.contains || schemaObj.properties && Object.values(schemaObj.properties).some((p) => p && (p.items || p.prefixItems || p.contains))));
+			const _buildDeferred = () => {
+				if (jsCombinedFn !== void 0 && jsErrFn !== void 0) return;
+				const uf2 = this._userFormats;
+				if (jsCombinedFn === void 0) jsCombinedFn = compileToJSCombined(schemaObj, VALID_RESULT, sm, uf2) || null;
+				if (jsErrFn === void 0) jsErrFn = compileToJSCodegenWithErrors(schemaObj, sm, uf2) || null;
+				if (!uf2) {
+					const entry = _compileCache.get(mapKey);
+					if (entry && entry.jsFn === jsFn) {
+						entry.combined = jsCombinedFn;
+						entry.errFn = jsErrFn;
+						entry.full = true;
+					}
+				}
+			};
+			if (jsFn) {
+				const hasUnevaluated = schemaObj && (schemaObj.unevaluatedProperties !== void 0 || schemaObj.unevaluatedItems !== void 0 || this._schemaStr.includes("unevaluatedProperties") || this._schemaStr.includes("unevaluatedItems"));
+				const hasDynRef = this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
+				let _interp = null;
+				const jsOnlyFallback = (d) => {
+					if (jsFn(d)) return {
+						valid: true,
+						data: d,
+						errors: []
+					};
+					if (!_interp) {
+						const { createInterpreter } = require_interpreter();
+						_interp = createInterpreter(schemaObj, {
+							schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+							formats: this._userFormats,
+							v1: isV1Dialect(schemaObj),
+							keywords: this._keywords
+						});
+					}
+					const r = _interp.validate(d);
+					if (!r.valid) return r;
+					return {
+						valid: false,
+						errors: [{
+							keyword: "validation",
+							instancePath: "",
+							schemaPath: "",
+							params: {},
+							message: "schema validation failed"
+						}]
+					};
+				};
+				let _errOnlyImpl = null;
+				const errOnly = (d) => {
+					if (_errOnlyImpl === null) {
+						_buildDeferred();
+						let safe = null;
+						if (jsErrFn) try {
+							jsErrFn({}, true);
+							safe = (x) => jsErrFn(x, true);
+						} catch {}
+						_errOnlyImpl = safe || (hasUnevaluated || !native ? jsOnlyFallback : hasDynRef ? (x) => {
+							this._ensureNative();
+							return this._compiled.validateJSON(JSON.stringify(x));
+						} : (x) => {
+							this._ensureNative();
+							return this._compiled.validate(x);
+						});
+					}
+					return _errOnlyImpl(d);
+				};
+				let _combinedProbed = false;
+				let _safeCombined = null;
+				const combinedIfSafe = () => {
+					if (_combinedProbed) return _safeCombined;
+					_combinedProbed = true;
+					_buildDeferred();
+					if (jsCombinedFn) try {
+						const probe = {};
+						if (schemaObj && schemaObj.properties) for (const k of Object.keys(schemaObj.properties)) probe[k] = "";
+						if (schemaObj && schemaObj.if && schemaObj.if.properties) for (const k of Object.keys(schemaObj.if.properties)) probe[k] = "";
+						jsCombinedFn(probe);
+						jsCombinedFn({});
+						jsCombinedFn(null);
+						jsCombinedFn(0);
+						_safeCombined = jsCombinedFn;
+					} catch {}
+					return _safeCombined;
+				};
+				let _errPreferredImpl = null;
+				const errPreferCombined = (d) => {
+					if (_errPreferredImpl === null) _errPreferredImpl = combinedIfSafe() || errOnly;
+					return _errPreferredImpl(d);
+				};
+				if (!hasDynRef || _isCodegen) this._fastVerdict = preprocess ? null : jsFn;
+				if (options.abortEarly && jsFn && !hasDynRef) {
+					const _fn = jsFn;
+					this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
+					} : (data) => _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
+				} else if (hasDynRef && _isCodegen && jsFn) {
+					const _fn = jsFn, _efn = errOnly, _R = VALID_RESULT;
+					this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return _fn(data) ? _R : _efn(data);
+					} : (data) => _fn(data) ? _R : _efn(data);
+				} else if (hasDynRef) {
+					if (!_interp) {
+						const { createInterpreter } = require_interpreter();
+						_interp = createInterpreter(schemaObj, {
+							schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+							formats: this._userFormats,
+							v1: isV1Dialect(schemaObj),
+							keywords: this._keywords
+						});
+					}
+					const interp = _interp;
+					this._fastVerdict = preprocess ? null : (d) => interp.isValid(d);
+					this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return interp.validate(data);
+					} : (data) => interp.validate(data);
+				} else if (jsFn && jsFn._hybridFactory) {
+					const hybridFn = jsFn._hybridFactory(VALID_RESULT, errPreferCombined);
+					this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return hybridFn(data);
+					} : hybridFn;
+				} else {
+					const safeCombinedFn = combinedIfSafe();
+					if (safeCombinedFn) this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return safeCombinedFn(data);
+					} : safeCombinedFn;
+					else this.validate = preprocess ? (data) => {
+						preprocess(data);
+						return jsFn(data) ? VALID_RESULT : errOnly(data);
+					} : (data) => jsFn(data) ? VALID_RESULT : errOnly(data);
+				}
+				if (this._verbose) {
+					const inner = this.validate;
+					const root = this._schemaObj;
+					const { resolvePointer } = require_pointer();
+					this.validate = (data) => {
+						const result = inner(data);
+						if (result && !result.valid && result.errors) return {
+							valid: false,
+							errors: result.errors.map((err) => {
+								if (!err || err.parentSchema !== void 0) return err;
+								const parentSchema = resolveSchemaByPath(root, err.schemaPath);
+								const sp = typeof err.schemaPath === "string" ? err.schemaPath : "";
+								const last = sp.slice(sp.lastIndexOf("/") + 1).replace(/~1/g, "/").replace(/~0/g, "~");
+								const keywordSchema = parentSchema !== null && typeof parentSchema === "object" && last ? parentSchema[last] : void 0;
+								return {
+									...err,
+									parentSchema,
+									schema: keywordSchema,
+									data: resolvePointer(data, err.instancePath, void 0)
+								};
+							})
+						};
+						return result;
+					};
+				}
+				this.isValidObject = preprocess ? (data) => {
+					preprocess(data);
+					return jsFn(data);
+				} : jsFn;
+				const jsonValidateInner = (jsFn._hybridFactory ? jsFn._hybridFactory(VALID_RESULT, errPreferCombined) : null) || ((obj) => jsFn(obj) ? VALID_RESULT : errPreferCombined(obj));
+				const jsonValidateFn = preprocess ? (obj) => {
+					preprocess(obj);
+					return jsonValidateInner(obj);
+				} : jsonValidateInner;
+				this.validateJSON = useSimdjsonForLarge && native && !preprocess ? (jsonStr) => {
+					if (jsonStr.length >= SIMDJSON_THRESHOLD) {
+						this._ensureNative();
+						const buf = Buffer.from(jsonStr);
+						if (native.rawFastValidate(this._fastSlot, buf)) return VALID_RESULT;
+						return this._compiled.validateJSON(jsonStr);
+					}
+					try {
+						return jsonValidateFn(JSON.parse(jsonStr));
+					} catch (e) {
+						if (!(e instanceof SyntaxError)) throw e;
+					}
+					this._ensureNative();
+					return this._compiled.validateJSON(jsonStr);
+				} : (jsonStr) => {
+					try {
+						return jsonValidateFn(JSON.parse(jsonStr));
+					} catch (e) {
+						if (!(e instanceof SyntaxError)) throw e;
+						if (!native) return {
+							valid: false,
+							errors: [{
+								keyword: "syntax",
+								instancePath: "",
+								schemaPath: "#",
+								params: {},
+								message: e.message
+							}]
+						};
+					}
+					this._ensureNative();
+					return this._compiled.validateJSON(jsonStr);
+				};
+				const verdictFromText = (jsonStr) => {
+					let parsed;
+					try {
+						parsed = JSON.parse(jsonStr);
+					} catch (e) {
+						if (!(e instanceof SyntaxError)) throw e;
+						return false;
+					}
+					if (preprocess) preprocess(parsed);
+					return jsFn(parsed);
+				};
+				this.isValidJSON = useSimdjsonForLarge && native && !preprocess ? (jsonStr) => {
+					if (jsonStr.length >= SIMDJSON_THRESHOLD) {
+						this._ensureNative();
+						return native.rawFastValidate(this._fastSlot, Buffer.from(jsonStr));
+					}
+					return verdictFromText(jsonStr);
+				} : verdictFromText;
+				{
+					const self = this;
+					this.validateAndParse = (jsonStr) => {
+						let value;
+						try {
+							value = JSON.parse(typeof jsonStr === "string" ? jsonStr : new TextDecoder().decode(jsonStr));
+						} catch (e) {
+							return {
+								valid: false,
+								value: void 0,
+								errors: [{
+									code: "ATA9001",
+									message: "invalid JSON: " + e.message,
+									keyword: "__parse__",
+									instancePath: "",
+									schemaPath: "",
+									params: {}
+								}]
+							};
+						}
+						const r = self.validate(value);
+						return {
+							valid: r.valid,
+							value,
+							errors: r.errors
+						};
+					};
+				}
+				if (native) {
+					const self = this;
+					this.isValid = (buf) => {
+						self._ensureNative();
+						const slot = self._fastSlot;
+						self.isValid = (b) => {
+							if (typeof b === "string") b = Buffer.from(b);
+							else if (!(b instanceof Uint8Array)) throw new TypeError("isValid() requires a Buffer, Uint8Array, or string. For parsed objects, use isValidObject().");
+							return native.rawFastValidate(slot, b);
+						};
+						return self.isValid(buf);
+					};
+					this.countValid = (ndjsonBuf) => {
+						self._ensureNative();
+						const slot = self._fastSlot;
+						self.countValid = (b) => {
+							if (typeof b === "string") b = Buffer.from(b);
+							else if (!(b instanceof Uint8Array)) throw new TypeError("countValid() requires a Buffer, Uint8Array, or string");
+							const r = native.rawNDJSONValidate(slot, b);
+							let c = 0;
+							for (let i = 0; i < r.length; i++) if (r[i]) c++;
+							return c;
+						};
+						return self.countValid(ndjsonBuf);
+					};
+					this.batchIsValid = (buffers) => {
+						self._ensureNative();
+						const slot = self._fastSlot;
+						self.batchIsValid = (bufs) => {
+							let v = 0;
+							for (const b of bufs) {
+								if (!(b instanceof Uint8Array)) throw new TypeError("batchIsValid() requires Buffer or Uint8Array elements");
+								if (native.rawFastValidate(slot, b)) v++;
+							}
+							return v;
+						};
+						return self.batchIsValid(buffers);
+					};
+				}
+			} else if (native) {
+				this._ensureNative();
+				this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\"");
+				this._schemaStr.includes("\"unevaluatedProperties\"") || this._schemaStr.includes("\"unevaluatedItems\"");
+				this._schemaStr.includes("\"propertyDependencies\"");
+				let _validate;
+				{
+					const { createInterpreter } = require_interpreter();
+					const interp = createInterpreter(schemaObj, {
+						schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+						formats: this._userFormats,
+						v1: isV1Dialect(schemaObj),
+						keywords: this._keywords
+					});
+					this._engine = "interpreter";
+					_validate = (data) => interp.validate(data);
+					this._fastVerdict = preprocess ? null : (d) => interp.isValid(d);
+					this.validateJSON = (jsonStr) => {
+						try {
+							return _validate(JSON.parse(jsonStr));
+						} catch (e) {
+							return {
+								valid: false,
+								errors: [{
+									keyword: "syntax",
+									instancePath: "",
+									schemaPath: "#",
+									params: {},
+									message: e.message
+								}]
+							};
+						}
+					};
+					this.isValidJSON = (jsonStr) => this.validateJSON(jsonStr).valid;
+				}
+				this.validate = preprocess ? (data) => {
+					preprocess(data);
+					return _validate(data);
+				} : _validate;
+				this.isValidObject = this._fastVerdict ? this._fastVerdict : (data) => _validate(data).valid;
+				this.validateAndParse = (jsonStr) => this._compiled.validateAndParse(jsonStr);
+				{
+					const slot = this._fastSlot;
+					this.isValid = (buf) => {
+						if (typeof buf === "string") buf = Buffer.from(buf);
+						else if (!(buf instanceof Uint8Array)) throw new TypeError("isValid() requires a Buffer, Uint8Array, or string. For parsed objects, use isValidObject().");
+						return native.rawFastValidate(slot, buf);
+					};
+				}
+				{
+					const slot = this._fastSlot;
+					this.countValid = (ndjsonBuf) => {
+						if (typeof ndjsonBuf === "string") ndjsonBuf = Buffer.from(ndjsonBuf);
+						else if (!(ndjsonBuf instanceof Uint8Array)) throw new TypeError("countValid() requires a Buffer, Uint8Array, or string");
+						const results = native.rawNDJSONValidate(slot, ndjsonBuf);
+						let count = 0;
+						for (let i = 0; i < results.length; i++) if (results[i]) count++;
+						return count;
+					};
+				}
+				{
+					const slot = this._fastSlot;
+					this.batchIsValid = (buffers) => {
+						let valid = 0;
+						for (const buf of buffers) {
+							if (!(buf instanceof Uint8Array)) throw new TypeError("batchIsValid() requires Buffer or Uint8Array elements");
+							if (native.rawFastValidate(slot, buf)) valid++;
+						}
+						return valid;
+					};
+				}
+			} else {
+				const { createInterpreter } = require_interpreter();
+				const interp = createInterpreter(schemaObj, {
+					schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
+					formats: this._userFormats,
+					v1: isV1Dialect(schemaObj),
+					keywords: this._keywords
+				});
+				this._engine = "interpreter";
+				if (!preprocess) this._fastVerdict = (d) => interp.isValid(d);
+				const run = options.abortEarly ? preprocess ? (data) => {
+					preprocess(data);
+					return interp.isValid(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
+				} : (data) => interp.isValid(data) ? VALID_RESULT : ABORT_EARLY_RESULT : preprocess ? (data) => {
+					preprocess(data);
+					return interp.validate(data);
+				} : (data) => interp.validate(data);
+				this.validate = run;
+				this.isValidObject = this._fastVerdict ? this._fastVerdict : (data) => run(data).valid;
+				this.validateJSON = (jsonStr) => {
+					try {
+						return run(JSON.parse(jsonStr));
+					} catch (e) {
+						return {
+							valid: false,
+							errors: [{
+								keyword: "syntax",
+								instancePath: "",
+								schemaPath: "#",
+								params: {},
+								message: e.message
+							}]
+						};
+					}
+				};
+				this.isValidJSON = (jsonStr) => this.validateJSON(jsonStr).valid;
+			}
+			if (this.validate) {
+				const inner = this.validate;
+				const enrich = this._richErrors ? require_enrich_error().enrich : null;
+				const root = this._schemaObj;
+				const self = this;
+				this.validate = (data) => {
+					const result = inner(data);
+					if (result && result.valid === false && result !== ABORT_EARLY_RESULT) {
+						const positions = enrich && self._lastRawInput != null ? self._pos().get(self._lastRawInput) : null;
+						if (positions) self._posCache.reset();
+						return new RichRejection(result, data, positions, self, root, enrich);
+					}
+					return result;
+				};
+				if (this._richErrors && this.validateJSON) {
+					const innerJson = this.validateJSON;
+					this.validateJSON = (jsonStr) => {
+						this._lastRawInput = jsonStr;
+						let result;
+						try {
+							result = innerJson(jsonStr);
+						} finally {}
+						if (result && !result.valid && result.errors && result.errors.length) {
+							const first = result.errors[0];
+							let parsedData;
+							try {
+								parsedData = JSON.parse(jsonStr);
+							} catch {
+								parsedData = void 0;
+							}
+							if (!first || !first.docUrl) {
+								const positions = this._lastRawInput != null ? this._pos().get(this._lastRawInput) : null;
+								const ordered = result.errors.length > 1 ? sortErrorsBySchemaOrder(this._schemaObj, result.errors) : result.errors;
+								const enrichOpts = {
+									data: parsedData,
+									positions,
+									schemaPositions: this._schemaPositions,
+									schemaFile: this._source ? this._source.path : void 0
+								};
+								const enriched = ordered.map((e) => enrich(e, enrichOpts));
+								if (enriched.length > 1) attachRelated(enriched);
+								attachDiagnosticSource(enriched, {
+									data: parsedData,
+									text: jsonStr,
+									positions,
+									schema: this._schemaObj,
+									mutatesInput: this._mutatesInput === true
+								});
+								if (positions) this._posCache.reset();
+								this._lastRawInput = null;
+								return {
+									valid: false,
+									errors: enriched
+								};
+							}
+							const positions = this._lastRawInput != null ? this._pos().get(this._lastRawInput) : null;
+							if (positions) {
+								for (const e of result.errors) if (e && !e.dataFrame) {
+									const p = positions[e.path != null ? e.path : e.instancePath || ""];
+									if (p) e.dataFrame = {
+										byteOffset: p.byteOffset,
+										length: p.length,
+										line: p.line,
+										col: p.col,
+										text: p.text
+									};
+								}
+								this._posCache.reset();
+							}
+							if (result.errors.length > 1) attachRelated(result.errors);
+							attachDiagnosticSource(result.errors, {
+								data: parsedData,
+								text: jsonStr,
+								schema: this._schemaObj,
+								mutatesInput: this._mutatesInput === true
+							});
+						}
+						this._lastRawInput = null;
+						return result;
+					};
+				}
+			}
+			if (this.validate) {
+				const _bare = this.validate;
+				this.validate = (data) => {
+					const r = _bare(data);
+					return r.valid === true && r.data === void 0 ? {
+						valid: true,
+						data,
+						errors: r.errors
+					} : r;
+				};
+			}
+			{
+				const emLib = require_error_messages();
+				const schemaStr = this._schemaStr || (this._schemaObj ? JSON.stringify(this._schemaObj) : "");
+				if (emLib.schemaHasErrorMessages(schemaStr)) {
+					const root = this._schemaObj;
+					const wrap = (inner) => (arg) => {
+						const result = inner(arg);
+						if (result && result.valid === false && result.errors && result.errors.length && result !== ABORT_EARLY_RESULT) {
+							const overridden = emLib.applyErrorMessages(result.errors, root);
+							if (overridden !== result.errors) return {
+								valid: false,
+								errors: overridden
+							};
+						}
+						return result;
+					};
+					if (this.validate) this.validate = wrap(this.validate);
+					if (this.validateJSON) this.validateJSON = wrap(this.validateJSON);
+					if (this.validateAndParse) {
+						const innerVP = this.validateAndParse;
+						this.validateAndParse = (arg) => {
+							const result = innerVP(arg);
+							if (result && result.valid === false && result.errors && result.errors.length) {
+								const overridden = emLib.applyErrorMessages(result.errors, root);
+								if (overridden !== result.errors) return {
+									valid: false,
+									value: result.value,
+									errors: overridden
+								};
+							}
+							return result;
+						};
+					}
+				}
+			}
+			if (this._fastVerdict && !preprocess && !options.abortEarly && this.validate) {
+				const _full = this.validate;
+				const _fast = this._fastVerdict;
+				const EMPTY_ERRORS = Object.freeze([]);
+				const _verdictFallback = [{
+					keyword: "validation",
+					instancePath: "",
+					schemaPath: "#",
+					params: {},
+					message: "schema validation failed"
+				}];
+				const _buildErrors = (data) => {
+					const r = _full(data);
+					return r && r.valid === false && r.errors && r.errors.length ? r.errors : _verdictFallback;
+				};
+				const _buildRawErrors = (data) => {
+					const r = _full(data);
+					if (!r || r.valid !== false) return _verdictFallback;
+					const raw = typeof r._ataRaw === "function" ? r._ataRaw() : r.errors;
+					return raw && raw.length ? raw : _verdictFallback;
+				};
+				this.validate = (data) => {
+					if (_fast(data)) return {
+						valid: true,
+						data,
+						errors: EMPTY_ERRORS
+					};
+					return new LazyRejection(_buildErrors, data, _buildRawErrors);
+				};
+			}
+			if (native) {
+				const { bufferNeedsSlowPath, installSlowBufferApis } = require_buffer_gate_browser();
+				if (bufferNeedsSlowPath(schemaObj, this._schemaMap, this._keywords)) installSlowBufferApis(this);
+			}
+			if (this._jsFn && !this._preprocess) {
+				const self = this;
+				const SCAN_AFTER = 64;
+				let calls = 0;
+				this._ensureScanner = (now) => {
+					if (self._scanner === void 0) {
+						if (!now && ++calls < SCAN_AFTER) return void 0;
+						const built = require_scan_compiler().compileScanner(schemaObj, { userFormats: self._userFormats });
+						self._scanner = built ? built.scan : null;
+					}
+					return self._scanner;
+				};
+				const byParsing = this.isValidJSON;
+				const memoizable = !self._userFormats && !self._usesKeywords;
+				let _memoText = null;
+				let _memoVerdict = false;
+				this.isValidJSON = (jsonStr) => {
+					const scan = self._ensureScanner();
+					if (scan === void 0) return byParsing(jsonStr);
+					if (scan === null) {
+						self.isValidJSON = byParsing;
+						return byParsing(jsonStr);
+					}
+					self.isValidJSON = memoizable ? (text) => {
+						if (typeof text !== "string") return byParsing(text);
+						if (text === _memoText) return _memoVerdict;
+						const r = scan(text);
+						const verdict = r === -1 ? byParsing(text) : r === 1;
+						_memoText = text;
+						_memoVerdict = verdict;
+						return verdict;
+					} : (text) => {
+						if (typeof text !== "string") return byParsing(text);
+						const r = scan(text);
+						if (r === -1) return byParsing(text);
+						return r === 1;
+					};
+					return self.isValidJSON(jsonStr);
+				};
+				if (options.abortEarly) {
+					const validateByParsing = this.validateJSON;
+					this.validateJSON = (jsonStr) => {
+						const scan = self._ensureScanner();
+						if (scan === void 0) return validateByParsing(jsonStr);
+						if (scan === null) {
+							self.validateJSON = validateByParsing;
+							return validateByParsing(jsonStr);
+						}
+						self.validateJSON = (text) => {
+							if (typeof text === "string") {
+								const r = scan(text);
+								if (r === 1) return VALID_RESULT;
+								if (r === 0) return ABORT_EARLY_RESULT;
+							}
+							return validateByParsing(text);
+						};
+						return self.validateJSON(jsonStr);
+					};
+				}
+			}
+			if (this._noOpts && this._schemaObj && typeof this._schemaObj === "object") _identityCache.set(this._schemaObj, this);
+		}
+		engine() {
+			this._ensureCompiled();
+			return this._engine || "interpreter";
+		}
+		_ensureNative() {
+			if (this._nativeReady) return;
+			this._nativeReady = true;
+			if (!native) return;
+			let nativeSchemaStr = this._schemaStr;
+			if (this._schemaMap.size > 0) {
+				const merged = JSON.parse(this._schemaStr);
+				if (!merged.$defs) merged.$defs = {};
+				for (const [id, s] of this._schemaMap) merged.$defs["__ext_" + id.replace(/[^a-zA-Z0-9]/g, "_")] = s;
+				nativeSchemaStr = JSON.stringify(merged);
+			}
+			this._compiled = new native.CompiledSchema(nativeSchemaStr);
+			this._fastSlot = native.fastRegister(nativeSchemaStr);
+		}
+		addSchema(schema) {
+			if (this._initialized) throw new Error("Cannot add schema after compilation — call addSchema() before validate()");
+			if (!schema || !schema.$id) throw new Error("Schema must have $id");
+			const root = this._schemaObj;
+			const normalized = _normalizeCallerSchema(schema, !!(root && typeof root === "object" && typeof root.$schema === "string" && (root.$schema === "http://json-schema.org/draft-07/schema#" || root.$schema === "http://json-schema.org/draft-07/schema")));
+			this._ownSchemaMap();
+			this._schemaMap.set(normalized.$id, normalized);
+		}
+		_ownSchemaMap() {
+			if (!this._schemaMapShared) return;
+			this._schemaMap = new Map(this._schemaMap);
+			this._schemaMapShared = false;
+		}
+		_ensureCodegen() {
+			if (this._jsFn) return;
+			if (this._needsPreprocess() || this._usesKeywords) {
+				this._ensureCompiled();
+				return;
+			}
+			this._ensureVocabularies();
+			if (typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI) return;
+			if (!this._schemaStr) this._schemaStr = JSON.stringify(this._schemaObj);
+			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
+			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
+			const cached = this._userFormats || this._usesKeywords ? null : _compileCache.get(mapKey);
+			if (cached && cached.jsFn) {
+				this._jsFn = cached.jsFn;
+				this.isValidObject = cached.jsFn;
+				return;
+			}
+			const uf = this._userFormats;
+			const _cg = compileToJSCodegen(this._schemaObj, sm, uf);
+			const jsFn = _cg || compileToJS(this._schemaObj, null, sm);
+			this._jsFn = jsFn;
+			if (jsFn) {
+				this.isValidObject = jsFn;
+				if (!uf) {
+					if (!cached) _compileCache.set(mapKey, {
+						jsFn,
+						combined: void 0,
+						errFn: void 0,
+						isCodegen: !!_cg,
+						full: false
+					});
+					else cached.jsFn = jsFn;
+				}
+			}
+		}
+		static fromStandalone(mod, schema, opts) {
+			const options = opts || {};
+			const schemaObj = typeof schema === "string" ? JSON.parse(schema) : schema;
+			const v = Object.create(Validator.prototype);
+			v._jsFn = mod.boolFn;
+			v._compiled = null;
+			v._fastSlot = -1;
+			const applyDefaults = buildDefaultsApplier(schemaObj);
+			const applyCoerce = options.coerceTypes ? buildCoercer(schemaObj) : null;
+			const mutators = [
+				options.removeAdditional ? buildRemover(schemaObj) : null,
+				applyCoerce,
+				applyDefaults
+			].filter(Boolean);
+			const preprocess = mutators.length === 0 ? null : mutators.length === 1 ? mutators[0] : (data) => {
+				for (let i = 0; i < mutators.length; i++) mutators[i](data);
+			};
+			v._preprocess = preprocess;
+			let errFn = (d) => ({
+				valid: false,
+				errors: [{
+					code: "validation_failed",
+					path: "",
+					message: "validation failed"
+				}]
+			});
+			if (mod.errFn) errFn = (d) => mod.errFn(d, true);
+			else {
+				const jsErrFn = compileToJSCodegenWithErrors(schemaObj);
+				if (jsErrFn) try {
+					jsErrFn({}, true);
+					errFn = (d) => jsErrFn(d, true);
+				} catch {}
+			}
+			const hybridFn = mod.hybridFactory ? mod.hybridFactory(VALID_RESULT, errFn) : null;
+			v.validate = hybridFn ? preprocess ? (data) => {
+				preprocess(data);
+				return hybridFn(data);
+			} : hybridFn : preprocess ? (data) => {
+				preprocess(data);
+				return mod.boolFn(data) ? VALID_RESULT : errFn(data);
+			} : (data) => mod.boolFn(data) ? VALID_RESULT : errFn(data);
+			{
+				const _bare = v.validate;
+				v.validate = (data) => {
+					const r = _bare(data);
+					return r.valid === true && r.data === void 0 ? {
+						valid: true,
+						data,
+						errors: r.errors
+					} : r;
+				};
+			}
+			v.isValidObject = mod.boolFn;
+			v.isValidJSON = (jsonStr) => {
+				try {
+					return mod.boolFn(JSON.parse(jsonStr));
+				} catch {
+					return false;
+				}
+			};
+			v.validateJSON = (jsonStr) => {
+				try {
+					const obj = JSON.parse(jsonStr);
+					return hybridFn ? hybridFn(obj) : mod.boolFn(obj) ? VALID_RESULT : errFn(obj);
+				} catch {
+					return {
+						valid: false,
+						errors: [{
+							code: "invalid_json",
+							path: "",
+							message: "invalid JSON"
+						}]
+					};
+				}
+			};
+			v.validateAndParse = native ? (jsonStr) => {
+				v._ensureNative();
+				v.validateAndParse = (s) => v._compiled.validateAndParse(s);
+				return v.validateAndParse(jsonStr);
+			} : () => {
+				throw new Error("Native addon required for validateAndParse()");
+			};
+			Object.defineProperty(v, "~standard", {
+				value: Object.freeze({
+					version: 1,
+					vendor: "ata-validator",
+					validate(value) {
+						const result = v.validate(value);
+						if (result.valid) return { value };
+						return { issues: result.errors.map((e) => ({
+							message: e.message,
+							path: parsePointerPath(e.instancePath)
+						})) };
+					}
+				}),
+				writable: false,
+				enumerable: false,
+				configurable: false
+			});
+			return v;
+		}
+		isValid(input) {
+			if (!native) throw new Error("Native addon required for isValid() — install build tools or use validate() instead");
+			if (typeof input === "string") input = Buffer.from(input);
+			else if (!(input instanceof Uint8Array)) throw new TypeError("isValid() requires a Buffer, Uint8Array, or string. For parsed objects, use isValidObject().");
+			this._ensureNative();
+			return native.rawFastValidate(this._fastSlot, input);
+		}
+		isValidPrepadded(paddedBuffer, jsonLength) {
+			if (!native) throw new Error("Native addon required for isValidPrepadded()");
+			this._ensureNative();
+			return native.rawFastValidate(this._fastSlot, paddedBuffer, jsonLength);
+		}
+		isValidParallel(buffer) {
+			if (!native) throw new Error("Native addon required for isValidParallel()");
+			this._ensureNative();
+			return native.rawParallelValidate(this._fastSlot, buffer);
+		}
+		countValid(buffer) {
+			if (!native) throw new Error("Native addon required for countValid()");
+			this._ensureNative();
+			return native.rawParallelCount(this._fastSlot, buffer);
+		}
+		isValidNDJSON(buffer) {
+			if (!native) throw new Error("Native addon required for isValidNDJSON()");
+			this._ensureNative();
+			return native.rawNDJSONValidate(this._fastSlot, buffer);
+		}
+	};
+	function validate(schema, data) {
+		if (native) {
+			const schemaStr = typeof schema === "string" ? schema : JSON.stringify(schema);
+			return native.validate(schemaStr, data);
+		}
+		return new Validator(typeof schema === "string" ? JSON.parse(schema) : schema).validate(data);
+	}
+	async function validateAsync(schemaOrValidator, data) {
+		const refineLib = require_refine();
+		let validator, schema;
+		if (schemaOrValidator instanceof Validator) {
+			validator = schemaOrValidator;
+			schema = validator._schemaObj;
+		} else {
+			schema = schemaOrValidator;
+			validator = new Validator(schema);
+		}
+		const structural = validator.validate(data);
+		if (!structural.valid) return structural;
+		const refinements = refineLib.getRefinements(schema);
+		if (!refinements) return structural;
+		const issues = await refineLib.runRefinements(refinements, structural.data !== void 0 ? structural.data : data);
+		if (issues.length) return {
+			valid: false,
+			errors: issues
+		};
+		return structural;
+	}
+	async function parseAsync(schemaOrValidator, data) {
+		const result = await validateAsync(schemaOrValidator, data);
+		if (result.valid) return result.data !== void 0 ? result.data : data;
+		const err = /* @__PURE__ */ new Error("ata: async validation failed");
+		err.errors = result.errors;
+		throw err;
+	}
+	function version() {
+		if (native) return native.version();
+		try {
+			return require_version();
+		} catch {
+			return "unknown";
+		}
+	}
+	Validator.bundle = function(schemas, opts) {
+		return require_aot_browser().bundle(Validator, schemas, opts);
+	};
+	Validator.bundleStandalone = function(schemas, opts) {
+		return require_aot_browser().bundleStandalone(Validator, schemas, opts);
+	};
+	Validator.bundleCompact = function(schemas, opts) {
+		return require_aot_browser().bundleCompact(Validator, schemas, opts);
+	};
+	Validator.loadBundle = function(mods, schemas, opts) {
+		return require_aot_browser().loadBundle(Validator, mods, schemas, opts);
+	};
+	const parseJSON = native ? native.parseJSON : JSON.parse;
+	const _compileFnCache = /* @__PURE__ */ new WeakMap();
+	function compile(schema, opts) {
+		if (!opts && typeof schema === "object" && schema !== null) {
+			const hit = _compileFnCache.get(schema);
+			if (hit) return hit;
+		}
+		const v = new Validator(schema, opts);
+		v._ensureCompiled();
+		const fn = v.validate;
+		if (!opts && typeof schema === "object" && schema !== null) _compileFnCache.set(schema, fn);
+		return fn;
+	}
+	const { toTypeScript } = require_ts_gen();
+	const { renderPretty } = require_render_pretty();
+	const { renderCompact } = require_render_compact();
+	const { toOutput } = require_output_format();
+	const { toRetryMessage } = require_retry_message();
+	const { describeSchema } = require_describe_schema();
+	const { renderJSON } = require_render_json();
+	const { suggestFor } = require_suggestions();
+	const { reprValue } = require_enrich_error();
+	function _walkPointer(root, pointer) {
+		if (!pointer) return root;
+		const parts = pointer.replace(/^\//, "").split("/").map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let cur = root;
+		for (const p of parts) {
+			if (cur == null) return void 0;
+			cur = cur[p];
+		}
+		return cur;
+	}
+	const { setDiagnosticSource } = require_diagnostic_source();
+	const attachDiagnosticSource = setDiagnosticSource;
+	let _correlateTypos = null;
+	function attachRelated(errors) {
+		if (_correlateTypos === null) _correlateTypos = require_correlate().correlateTypos;
+		const pairs = _correlateTypos(errors);
+		if (pairs === null) return errors;
+		for (const [from, to] of pairs) {
+			const e = errors[from];
+			if (!e) continue;
+			if (e.related) {
+				if (!e.related.includes(to)) e.related.push(to);
+			} else e.related = [to];
+		}
+		return errors;
+	}
+	function attachSuggestions(errors, data) {
+		if (!errors) return errors;
+		for (const e of errors) {
+			if (!e || e.suggestion) continue;
+			let received = e.received;
+			if (received === void 0 && data !== void 0) {
+				const ptr = e.instancePath != null ? e.instancePath : e.path || "";
+				const raw = _walkPointer(data, ptr);
+				if (raw !== void 0 || ptr === "") received = reprValue(raw);
+			}
+			const probe = received !== void 0 && e.received === void 0 ? Object.assign({}, e, { received }) : e;
+			const s = suggestFor(probe, data);
+			if (s) e.suggestion = s;
+		}
+		attachDiagnosticSource(errors, {
+			data,
+			mutatesInput: false
+		});
+		return errors;
+	}
+	function defineSchema(schema) {
+		return schema;
+	}
+	Object.defineProperty(Validator.prototype, "~standard", {
+		configurable: true,
+		get() {
+			const self = this;
+			const std = Object.freeze({
+				version: 1,
+				vendor: "ata-validator",
+				validate(value) {
+					const result = self.validate(value);
+					if (result.valid) return { value };
+					const raw = typeof result._ataRaw === "function" ? result._ataRaw() : result.errors;
+					const issues = new Array(raw.length);
+					for (let i = 0; i < raw.length; i++) {
+						const err = raw[i];
+						const path = err.instancePath != null ? err.instancePath : err.path || "";
+						let message = err.message;
+						if (!message) message = require_enrich_error().enrich(err, {}).message;
+						issues[i] = {
+							message,
+							path: parsePointerPath(path)
+						};
+					}
+					return { issues };
+				}
+			});
+			Object.defineProperty(this, "~standard", {
+				value: std,
+				writable: false,
+				enumerable: false,
+				configurable: false
+			});
+			return std;
+		}
+	});
+	function _defineLazyMethod(name, maker) {
+		Object.defineProperty(Validator.prototype, name, {
+			configurable: true,
+			get() {
+				const fn = maker(this);
+				Object.defineProperty(this, name, {
+					value: fn,
+					writable: true,
+					configurable: true,
+					enumerable: true
+				});
+				return fn;
+			},
+			set(fn) {
+				Object.defineProperty(this, name, {
+					value: fn,
+					writable: true,
+					configurable: true,
+					enumerable: true
+				});
+			}
+		});
+	}
+	for (const [name, pick] of [
+		["_schemaObj", (self) => _materializeSchema(self)],
+		["_usesKeywords", (self) => {
+			_materializeSchema(self);
+			return self._usesKeywords;
+		}],
+		["_schemaIsCallers", (self) => {
+			_materializeSchema(self);
+			return self._schemaIsCallers;
+		}]
+	]) Object.defineProperty(Validator.prototype, name, {
+		configurable: true,
+		get() {
+			return pick(this);
+		},
+		set(v) {
+			Object.defineProperty(this, name, {
+				value: v,
+				writable: true,
+				configurable: true,
+				enumerable: true
+			});
+		}
+	});
+	_defineLazyMethod("validate", (self) => (data) => {
+		self._ensureCompiled();
+		return self.validate(data);
+	});
+	_defineLazyMethod("isValidObject", (self) => (data) => {
+		if (self._needsPreprocess() || self._usesKeywords) {
+			self._ensureCompiled();
+			return self.isValidObject(data);
+		}
+		if (classify(self._schemaObj).tier === 0) {
+			const _plan = buildTier0Plan(self._schemaObj);
+			let _n = 0;
+			self.isValidObject = (d) => {
+				const r = tier0Validate(_plan, d);
+				if (++_n === 2) try {
+					self._ensureCodegen();
+				} catch {}
+				return r;
+			};
+		} else {
+			try {
+				self._ensureCodegen();
+			} catch {}
+			if (!self._jsFn) self._ensureCompiled();
+		}
+		return self.isValidObject(data);
+	});
+	_defineLazyMethod("validateJSON", (self) => (jsonStr) => {
+		self._ensureCompiled();
+		return self.validateJSON(jsonStr);
+	});
+	_defineLazyMethod("isValidJSON", (self) => (jsonStr) => {
+		self._ensureCompiled();
+		return self.isValidJSON(jsonStr);
+	});
+	_defineLazyMethod("validateAndParse", (self) => (jsonStr) => {
+		if (!native) throw new Error("Native addon required for validateAndParse()");
+		self._ensureCompiled();
+		return self.validateAndParse(jsonStr);
+	});
+	_defineLazyMethod("isValid", (self) => (buf) => {
+		if (!native) throw new Error("Native addon required for isValid() — use validate() or isValidObject() instead");
+		self._ensureCompiled();
+		return self.isValid(buf);
+	});
+	_defineLazyMethod("countValid", (self) => (ndjsonBuf) => {
+		if (!native) throw new Error("Native addon required for countValid()");
+		self._ensureCompiled();
+		return self.countValid(ndjsonBuf);
+	});
+	_defineLazyMethod("batchIsValid", (self) => (buffers) => {
+		if (!native) throw new Error("Native addon required for batchIsValid()");
+		self._ensureCompiled();
+		return self.batchIsValid(buffers);
+	});
+	module.exports = {
+		Validator,
+		compile,
+		validate,
+		validateAsync,
+		parseAsync,
+		version,
+		createPaddedBuffer,
+		SIMDJSON_PADDING,
+		parseJSON,
+		toTypeScript,
+		defineSchema,
+		renderPretty,
+		renderCompact,
+		toOutput,
+		toRetryMessage,
+		describeSchema,
+		renderJSON,
+		attachSuggestions
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/index.browser.mjs
+var import_keywords = require_keywords$1();
+const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.25.0_yaml@2.9.0/node_modules/ata-validator/lib/t.js
+var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const OPTIONAL = Symbol.for("ata.t.optional");
+	const { attach: attachRefine } = require_refine();
+	function string(opts) {
+		return Object.assign({ type: "string" }, opts);
+	}
+	function number(opts) {
+		return Object.assign({ type: "number" }, opts);
+	}
+	function integer(opts) {
+		return Object.assign({ type: "integer" }, opts);
+	}
+	function boolean() {
+		return { type: "boolean" };
+	}
+	function nul() {
+		return { type: "null" };
+	}
+	function literal(value) {
+		return { const: value };
+	}
+	function constant(value) {
+		return { const: value };
+	}
+	function enumOf(values) {
+		return { enum: values };
+	}
+	function array(items, opts) {
+		return Object.assign({
+			type: "array",
+			items
+		}, opts);
+	}
+	function tuple(items, opts) {
+		return Object.assign({
+			type: "array",
+			prefixItems: items,
+			items: false,
+			minItems: items.length
+		}, opts);
+	}
+	function record(values, opts) {
+		return Object.assign({
+			type: "object",
+			additionalProperties: values
+		}, opts);
+	}
+	function object(properties, opts) {
+		const props = {};
+		const required = [];
+		const keys = Object.keys(properties);
+		for (const key of keys) {
+			const schema = properties[key];
+			if (schema && schema[OPTIONAL] === true) {
+				const { [OPTIONAL]: _drop, ...rest } = schema;
+				props[key] = rest;
+			} else {
+				props[key] = schema;
+				required.push(key);
+			}
+		}
+		const out = {
+			type: "object",
+			properties: props
+		};
+		if (required.length) out.required = required;
+		return Object.assign(out, opts);
+	}
+	function optional(schema) {
+		return Object.assign({}, schema, { [OPTIONAL]: true });
+	}
+	function union(schemas) {
+		return { anyOf: schemas };
+	}
+	function intersect(schemas) {
+		return { allOf: schemas };
+	}
+	function ref(pointer) {
+		return { $ref: pointer };
+	}
+	function any() {
+		return {};
+	}
+	function unknown() {
+		return {};
+	}
+	function never() {
+		return { not: {} };
+	}
+	function refine(schema, check, opts) {
+		return attachRefine(schema, check, opts);
+	}
+	function assertObjectSchema(schema, fn) {
+		if (!schema || typeof schema !== "object" || schema.type !== "object" || !schema.properties || typeof schema.properties !== "object") throw new Error(`t.${fn}: expected an object schema with properties`);
+	}
+	function cloneMeta(schema) {
+		const out = {};
+		for (const key of Object.keys(schema)) if (key !== "properties" && key !== "required") out[key] = schema[key];
+		return out;
+	}
+	function pick(schema, keys) {
+		assertObjectSchema(schema, "pick");
+		const keep = new Set(keys);
+		const props = {};
+		for (const key of Object.keys(schema.properties)) if (keep.has(key)) props[key] = schema.properties[key];
+		const required = (schema.required || []).filter((key) => keep.has(key));
+		const out = Object.assign(cloneMeta(schema), { properties: props });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function omit(schema, keys) {
+		assertObjectSchema(schema, "omit");
+		const drop = new Set(keys);
+		const props = {};
+		for (const key of Object.keys(schema.properties)) if (!drop.has(key)) props[key] = schema.properties[key];
+		const required = (schema.required || []).filter((key) => !drop.has(key));
+		const out = Object.assign(cloneMeta(schema), { properties: props });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function partial(schema) {
+		assertObjectSchema(schema, "partial");
+		return Object.assign(cloneMeta(schema), { properties: schema.properties });
+	}
+	function requiredOf(schema, keys) {
+		assertObjectSchema(schema, "required");
+		const propKeys = Object.keys(schema.properties);
+		let required;
+		if (keys === void 0) required = propKeys.slice();
+		else {
+			const known = new Set(propKeys);
+			required = Array.from(/* @__PURE__ */ new Set([...schema.required || [], ...keys])).filter((k) => known.has(k));
+		}
+		const out = Object.assign(cloneMeta(schema), { properties: schema.properties });
+		if (required.length) out.required = required;
+		return out;
+	}
+	function recursive(build, opts) {
+		const body = build({ $ref: "#/$defs/self" });
+		return Object.assign({
+			$ref: "#/$defs/self",
+			$defs: { self: body }
+		}, opts);
+	}
+	function composite(schemas, opts) {
+		const props = {};
+		const requiredSet = /* @__PURE__ */ new Set();
+		for (const schema of schemas) {
+			assertObjectSchema(schema, "composite");
+			for (const key of Object.keys(schema.properties)) props[key] = schema.properties[key];
+			for (const key of schema.required || []) requiredSet.add(key);
+		}
+		const required = Array.from(requiredSet).filter((key) => Object.hasOwn(props, key));
+		const out = {
+			type: "object",
+			properties: props
+		};
+		if (required.length) out.required = required;
+		return Object.assign(out, opts);
+	}
+	module.exports = {
+		string,
+		number,
+		integer,
+		boolean,
+		null: nul,
+		literal,
+		const: constant,
+		enum: enumOf,
+		array,
+		tuple,
+		record,
+		object,
+		optional,
+		union,
+		intersect,
+		ref,
+		any,
+		unknown,
+		never,
+		refine,
+		OPTIONAL,
+		pick,
+		omit,
+		partial,
+		required: requiredOf,
+		composite,
+		recursive
+	};
+}));
+const { t, OPTIONAL } = (/* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const t = require_t$1();
+	module.exports = {
+		t,
+		OPTIONAL: t.OPTIONAL
+	};
+})))(), 1)).default;
+//#endregion
+//#region ../schemas/libraries/ata-validator/download/index.ts
+const dateSchema = t.object({}, { instanceof: "Date" });
+const imageSchema = t.object({
+	id: t.number(),
+	created: dateSchema,
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	type: t.enum(["jpg", "png"]),
+	size: t.number(),
+	url: t.string({ format: "url" })
+});
+const ratingSchema = t.object({
+	id: t.number(),
+	stars: t.number({
+		minimum: 1,
+		maximum: 5
+	}),
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	text: t.string({
+		minLength: 1,
+		maxLength: 1e3
+	}),
+	images: t.array(imageSchema)
+});
+const productSchema = t.object({
+	id: t.number(),
+	created: dateSchema,
+	title: t.string({
+		minLength: 1,
+		maxLength: 100
+	}),
+	brand: t.string({
+		minLength: 1,
+		maxLength: 30
+	}),
+	description: t.string({
+		minLength: 1,
+		maxLength: 500
+	}),
+	price: t.number({
+		minimum: 1,
+		maximum: 1e4
+	}),
+	discount: t.union([t.number({
+		minimum: 1,
+		maximum: 100
+	}), t.null()]),
+	quantity: t.number({
+		minimum: 0,
+		maximum: 10
+	}),
+	tags: t.array(t.string({
+		minLength: 1,
+		maxLength: 30
+	})),
+	images: t.array(imageSchema),
+	ratings: t.array(ratingSchema)
+});
+(0, import_keywords.withKeywords)(new Validator(productSchema)).validate({});
+//#endregion
