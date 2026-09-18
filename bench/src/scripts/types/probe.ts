@@ -7,7 +7,7 @@ import {
   type FromTypeCase,
   type FromTypeStyle,
 } from "@schema-benchmarks/schemas";
-import ts from "typescript-5";
+import ts from "typescript-6";
 import * as v from "valibot";
 
 /**
@@ -16,7 +16,7 @@ import * as v from "valibot";
  * `checker.typeToString()` for the type an editor shows on hover.
  *
  * The repository type checks with TypeScript 7, which ships no compiler API, so the probe pins its
- * own TypeScript 5 - `typescriptVersion` is reported alongside the results, since a count only
+ * own TypeScript 6 - `typescriptVersion` is reported alongside the results, since a count only
  * means anything next to the compiler that produced it.
  *
  * Both halves of the probe are real, type-checked files in the library's own folder rather than
