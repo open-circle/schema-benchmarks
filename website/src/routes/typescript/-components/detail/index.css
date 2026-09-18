@@ -2,6 +2,7 @@
   padding: 0;
   min-width: min(48rem, calc(100vw - 2rem));
   max-width: min(64rem, calc(100vw - 2rem));
+  overflow: hidden;
   .types-detail__header-container {
     display: flex;
     justify-content: space-between;
@@ -32,6 +33,9 @@
     padding: 1rem 1rem 0;
     > * {
       margin: 0;
+    }
+    p {
+      color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
     }
   }
   pre[class*="language-"] {

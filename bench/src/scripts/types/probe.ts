@@ -422,10 +422,9 @@ interface FromTypeSource {
   style: FromTypeStyle;
   derived?: boolean;
   note?: string;
-  /** The file, unmodified: it already imports the real `JsonSchemaOutputData`, so this is the
-   *  "matching" case. */
+  /** The file, unmodified: it already imports the real `Product`, so this is the "matching" case. */
   text: string;
-  /** Redeclares `JsonSchemaOutputData` locally with a disagreeing shape, in place of the import. */
+  /** Redeclares `Product` locally with a disagreeing shape, in place of the import. */
   withProductType: (shape: string) => string;
   /** The `schema` declaration, for display. */
   snippet: string;
@@ -441,7 +440,7 @@ const parseFromTypeSource = (fileName: string, text: string): FromTypeSource => 
     const namedBindings = statement.importClause?.namedBindings;
     if (!namedBindings || !ts.isNamedImports(namedBindings)) continue;
     const specifier = namedBindings.elements.find(
-      (element) => element.name.text === "JsonSchemaOutputData",
+      (element) => (element.propertyName ?? element.name).text === "JsonSchemaOutputData",
     );
     if (specifier) {
       sharedImport = statement;
@@ -474,9 +473,8 @@ const parseFromTypeSource = (fileName: string, text: string): FromTypeSource => 
     note: readStringConst(file, "note"),
     text,
     withProductType: (shape) =>
-      `${before}${remainingImport}type JsonSchemaOutputData = ${shape};${after}`,
-    // shown as a reader would write it, not as the harness's stand-in for the shared data type
-    snippet: schema.replace(/^export /, "").replaceAll("JsonSchemaOutputData", "Product"),
+      `${before}${remainingImport}type ${sharedSpecifier.name.text} = ${shape};${after}`,
+    snippet: schema.replace(/^export /, ""),
   };
 };
 

@@ -6,7 +6,7 @@ import bem from "react-bem-helper";
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { FromTypeText } from "#src/routes/typescript/-components/from-type.tsx";
 import { MatchCheckbox } from "#src/routes/typescript/-components/match.tsx";
-import type { SortableKey } from "#src/routes/typescript/-constants.ts";
+import type { SortableKey } from "#src/routes/typescript/-constants.tsx";
 import { InternalLinkToggleButton } from "#src/shared/components/button/toggle.tsx";
 import { MdSymbol } from "#src/shared/components/symbol/index.tsx";
 import { Bar } from "#src/shared/components/table/bar.tsx";

@@ -1,7 +1,7 @@
 import type { TypesResult } from "@schema-benchmarks/bench";
 import { useMemo } from "react";
 
-import type { SortableKey } from "#src/routes/typescript/-constants.ts";
+import type { SortableKey } from "#src/routes/typescript/-constants.tsx";
 import { EmptyState } from "#src/shared/components/empty-state";
 import { MdSymbol } from "#src/shared/components/symbol";
 import { Bar } from "#src/shared/components/table/bar.tsx";

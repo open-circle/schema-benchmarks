@@ -1,10 +1,10 @@
 import * as yup from "yup";
 
-import type { FromTypeStyle, JsonSchemaOutputData } from "#src";
+import type { FromTypeStyle, JsonSchemaOutputData as Product } from "#src";
 
 export const style: FromTypeStyle = "annotation";
 
-export const schema: yup.ObjectSchema<JsonSchemaOutputData> = yup.object({
+export const schema: yup.ObjectSchema<Product> = yup.object({
   id: yup.number().required(),
   name: yup.string().required(),
   price: yup.number().required(),
