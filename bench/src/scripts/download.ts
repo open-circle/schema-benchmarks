@@ -95,7 +95,7 @@ async function download() {
         const paths = await Array.fromAsync(
           fs.glob(path.resolve(process.cwd(), "../schemas/libraries/**/download/*.ts")),
         );
-        const files: Array<FileDescription> = paths.map((filePath) => {
+        const files = paths.map((filePath: string): FileDescription => {
           const libraryName = filePath
             .replace(/\\/g, "/")
             .split("schemas/libraries/")[1]
