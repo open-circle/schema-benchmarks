@@ -30,7 +30,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("it opens the inferred types of a library", async ({ typescriptPage }) => {
     await typescriptPage.desktop.tableHandle
-      .getRow({ library: "typia" })
+      .getRow({ library: "zod" })
       .getByRole("link", { name: "Open details" })
       .click();
 
@@ -44,7 +44,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
 test.describe("mobile view", { tag: "@mobile" }, () => {
   test("it displays the result list", async ({ typescriptPage }) => {
-    const item = typescriptPage.mobile.getListItemByLibraryName("typia").first();
+    const item = typescriptPage.mobile.getListItemByLibraryName("zod").first();
 
     await item.scrollIntoViewIfNeeded();
     await expect(item).toBeVisible();
