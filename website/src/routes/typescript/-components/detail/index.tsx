@@ -7,7 +7,7 @@ import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { FromTypeCases } from "#src/routes/typescript/-components/from-type.tsx";
 import { fromTypeStyleLabels, typeMatchLabels } from "#src/routes/typescript/-constants.tsx";
 import { Button } from "#src/shared/components/button/index.tsx";
-import { CodeBlock } from "#src/shared/components/code/index.tsx";
+import { CodeBlock, ResponsiveCodeBlock } from "#src/shared/components/code/index.tsx";
 import {
   Dialog,
   DialogActions,
@@ -64,8 +64,8 @@ function Direction({
       title={title}
       supporting={`${typeMatchLabels[direction.match].label} | ${formatCount(direction.instantiations)} instantiations | ${charsLabel(direction, formatCount)}`}
     >
-      <CodeBlock showCopy>{direction.snippet}</CodeBlock>
-      <CodeBlock>{direction.text}</CodeBlock>
+      <ResponsiveCodeBlock showCopy>{direction.snippet}</ResponsiveCodeBlock>
+      <CodeBlock wrap>{direction.text}</CodeBlock>
     </Section>
   );
 }
@@ -155,7 +155,7 @@ export function TypesDetail({ result }: TypesDetailProps) {
                 >
                   {result.fromType && (
                     <>
-                      <CodeBlock showCopy>{result.fromType.snippet}</CodeBlock>
+                      <ResponsiveCodeBlock showCopy>{result.fromType.snippet}</ResponsiveCodeBlock>
                       <FromTypeCases fromType={result.fromType} />
                     </>
                   )}

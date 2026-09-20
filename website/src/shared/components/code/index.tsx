@@ -147,7 +147,7 @@ export interface ResponsiveCodeBlockProps extends CodeProps {
 
 const cls = bem("responsive-code-block");
 
-export function ResponsiveCodeBlock({
+function ResponsiveCodeBlockInner({
   children,
   fileName,
   className,
@@ -173,6 +173,14 @@ export function ResponsiveCodeBlock({
         </CodeBlock>
       ))}
     </div>
+  );
+}
+
+export function ResponsiveCodeBlock(props: ResponsiveCodeBlockProps) {
+  return (
+    <Suspense fallback={<CodeBlockSkeleton {...props}>{props.children}</CodeBlockSkeleton>}>
+      <ResponsiveCodeBlockInner {...props} />
+    </Suspense>
   );
 }
 
