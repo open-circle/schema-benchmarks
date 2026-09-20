@@ -23,14 +23,15 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("table can be sorted by column", async ({ typescriptPage }) => {
     await helpers.desktop.expectTableSorting(typescriptPage.desktop.tableHandle, {
-      first: /@paseri\/paseri/i,
-      last: /zod\/v3/i,
+      first: /@paseri/i,
+      last: /zod/i,
     });
   });
 
   test("it opens the inferred types of a library", async ({ typescriptPage }) => {
     await typescriptPage.desktop.tableHandle
       .getRow({ library: "zod" })
+      .first()
       .getByRole("link", { name: "Open details" })
       .click();
 
