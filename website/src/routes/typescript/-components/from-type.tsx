@@ -42,8 +42,9 @@ export function FromTypeCases({ fromType }: { fromType: FromTypeResult }) {
       {fromTypeCaseSchema.options.map((name) => (
         <ListItem key={name}>
           <ListItemContent
+            as="label"
             lines={2}
-            leading={<Checkbox checked={fromType.cases[name]} readOnly />}
+            leading={<Checkbox checked={fromType.cases[name]} readOnly asLabel={false} />}
             primary={fromTypeCaseLabels[name].label}
             supporting={`A schema with ${fromTypeCaseLabels[name].supporting} is ${fromType.cases[name] ? "rejected" : "accepted"}.`}
           />

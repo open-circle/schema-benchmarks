@@ -5,6 +5,7 @@ export function MatrixCheckbox({ reason }: { reason?: string }) {
     <Checkbox
       checked={!reason}
       readOnly
+      aria-label="Supported"
       tooltip={
         reason && {
           subhead: "Reason for lack of support",
