@@ -1,4 +1,5 @@
-//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.0/node_modules/@remix-run/data-schema/dist/lib/schema.js
+//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.1/node_modules/@remix-run/data-schema/dist/lib/schema.js
+const builtinSchemas = /* @__PURE__ */ new WeakSet();
 /**
 * Creates a sync Standard Schema-compatible schema from a validation function.
 *
@@ -13,20 +14,25 @@ function createSchema(validator) {
 			validate(value, options) {
 				return validator(value, {
 					path: [],
-					options
+					options,
+					mutablePath: isBuiltinSchema(schema)
 				});
 			}
 		},
 		"~run"(value, context) {
+			if (context.mutablePath) return validator(value, {
+				path: [...context.path],
+				options: context.options
+			});
 			return validator(value, context);
 		},
 		pipe(...checks) {
 			if (checks.length === 0) return schema;
-			return createSchema(function validate(value, context) {
+			return createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				for (let check of checks) if (!check.check(result.value)) {
-					if (!check.code) return { issues: [createIssue(check.message ?? "Check failed", context.path)] };
+					if (!check.code) return { issues: [createIssue(check.message ?? "Check failed", [...context.path])] };
 					return { issues: [createIssueFromContext(context, {
 						code: check.code,
 						defaultMessage: check.message ?? "Check failed",
@@ -38,11 +44,11 @@ function createSchema(validator) {
 			});
 		},
 		refine(predicate, message) {
-			return createSchema(function validate(value, context) {
+			return createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				if (!predicate(result.value)) {
-					if (message !== void 0) return { issues: [createIssue(message, context.path)] };
+					if (message !== void 0) return { issues: [createIssue(message, [...context.path])] };
 					return { issues: [createIssueFromContext(context, {
 						code: "refine.failed",
 						defaultMessage: "Refinement failed",
@@ -53,7 +59,7 @@ function createSchema(validator) {
 			});
 		},
 		transform(transformer) {
-			return createSchema(function validate(value, context) {
+			return createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				return { value: transformer(result.value) };
@@ -61,6 +67,34 @@ function createSchema(validator) {
 		}
 	};
 	return schema;
+}
+function isBuiltinSchema(schema) {
+	return builtinSchemas.has(schema);
+}
+function createBuiltinSchema(validator) {
+	let schema = createSchema(validator);
+	schema["~run"] = validator;
+	builtinSchemas.add(schema);
+	return schema;
+}
+function createDerivedSchema(source, validator) {
+	return isBuiltinSchema(source) ? createBuiltinSchema(validator) : createSchema(validator);
+}
+function runAtPath(schema, value, context, key) {
+	if (context.mutablePath !== true || !Array.isArray(context.path)) {
+		let childContext = {
+			path: withPath(context.path, key),
+			options: context.options,
+			mutablePath: false
+		};
+		return schema["~run"](value, childContext);
+	}
+	context.path.push(key);
+	try {
+		return schema["~run"](value, context);
+	} finally {
+		context.path.pop();
+	}
 }
 function shouldAbortEarly(options) {
 	let libraryAbortEarly = options?.libraryOptions?.abortEarly;
@@ -86,7 +120,7 @@ function resolveIssueMessage(options, context) {
 	return errorMap(context) ?? context.defaultMessage;
 }
 function createIssueFromContext(context, descriptor) {
-	let path = descriptor.path ?? context.path;
+	let path = [...descriptor.path ?? context.path];
 	return createIssue(resolveIssueMessage(context.options, {
 		code: descriptor.code,
 		defaultMessage: descriptor.defaultMessage,
@@ -123,6 +157,7 @@ function createIssue(message, path) {
 */
 function fail(message, path, options) {
 	if (!options?.code) return { issues: [createIssue(message, path)] };
+	path = path && [...path];
 	return { issues: [createIssue(resolveIssueMessage(options.parseOptions, {
 		code: options.code,
 		defaultMessage: message,
@@ -139,7 +174,7 @@ function fail(message, path, options) {
 * @returns A schema that produces an array of validated outputs
 */
 function array(elementSchema) {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (!Array.isArray(value)) return fail("Expected array", context.path, {
 			code: "type.array",
 			input: value,
@@ -147,20 +182,18 @@ function array(elementSchema) {
 		});
 		let abortEarly = shouldAbortEarly(context.options);
 		let issues = [];
-		let outputValues = [];
+		let outputValues = new Array(value.length);
 		let index = 0;
 		for (let item of value) {
-			let result = elementSchema["~run"](item, {
-				path: withPath(context.path, index),
-				options: context.options
-			});
+			let result = runAtPath(elementSchema, item, context, index);
 			if (result.issues) {
 				if (abortEarly) return result;
 				issues.push(...result.issues);
-			} else outputValues.push(result.value);
+			} else outputValues[index] = result.value;
 			index += 1;
 		}
 		if (issues.length > 0) return { issues };
+		outputValues.length = index;
 		return { value: outputValues };
 	});
 }
@@ -171,7 +204,7 @@ function array(elementSchema) {
 * @returns A schema that produces the union of allowed value types
 */
 function enum_(values) {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		for (let allowed of values) if (value === allowed) return { value };
 		return fail("Expected one of: " + values.map(String).join(", "), context.path, {
 			code: "enum.invalid_value",
@@ -188,7 +221,7 @@ function enum_(values) {
 * @returns A schema that produces the instance type
 */
 function instanceof_(constructor) {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (!(value instanceof constructor)) return fail("Expected instance of " + constructor.name, context.path, {
 			code: "instanceof.invalid_type",
 			input: value,
@@ -205,7 +238,7 @@ function instanceof_(constructor) {
 * @returns A schema that accepts `null` in addition to the wrapped schema
 */
 function nullable(schema) {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (value === null) return { value: null };
 		return schema["~run"](value, context);
 	});
@@ -216,7 +249,7 @@ function nullable(schema) {
 * @returns A schema that produces a `number`
 */
 function number() {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (typeof value !== "number" || !Number.isFinite(value)) return fail("Expected number", context.path, {
 			code: "type.number",
 			input: value,
@@ -235,7 +268,7 @@ function number() {
 * @returns A schema that produces a typed object matching the shape
 */
 function object(shape, options) {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (typeof value !== "object" || value === null || Array.isArray(value)) return fail("Expected object", context.path, {
 			code: "type.object",
 			input: value,
@@ -247,10 +280,7 @@ function object(shape, options) {
 		let input = value;
 		let unknownKeys = options?.unknownKeys ?? "strip";
 		for (let key of Object.keys(shape)) {
-			let result = shape[key]["~run"](input[key], {
-				path: withPath(context.path, key),
-				options: context.options
-			});
+			let result = runAtPath(shape[key], input[key], context, key);
 			if (result.issues) {
 				if (abortEarly) return result;
 				issues.push(...result.issues);
@@ -282,7 +312,7 @@ function object(shape, options) {
 * @returns A schema that produces a `string`
 */
 function string() {
-	return createSchema(function validate(value, context) {
+	return createBuiltinSchema(function validate(value, context) {
 		if (typeof value !== "string") return fail("Expected string", context.path, {
 			code: "type.string",
 			input: value,
@@ -324,7 +354,7 @@ function parse(schema, value, options) {
 	return result.value;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.0/node_modules/@remix-run/data-schema/dist/lib/checks.js
+//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.1/node_modules/@remix-run/data-schema/dist/lib/checks.js
 /**
 * Require a string to be at least `length` characters long.
 *
