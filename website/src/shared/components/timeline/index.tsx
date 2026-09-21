@@ -25,37 +25,39 @@ export function Timeline({ children }: { children: ReactNode }) {
   const [entriesByTarget] = useState(() => new Map<Element, IntersectionObserverEntry>());
   const intersectionObserver = useMemo(
     () =>
-      new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) entriesByTarget.set(entry.target, entry);
-          for (const entry of entriesByTarget.values())
-            if (!entry.target.isConnected) entriesByTarget.delete(entry.target);
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) entriesByTarget.set(entry.target, entry);
+              for (const entry of entriesByTarget.values())
+                if (!entry.target.isConnected) entriesByTarget.delete(entry.target);
 
-          if (!entriesByTarget.size) {
-            setMostIntersecting(null);
-            return;
-          }
+              if (!entriesByTarget.size) {
+                setMostIntersecting(null);
+                return;
+              }
 
-          // prefer the last entry in the list if multiple entries have the same intersection ratio
-          const mostIntersecting = Array.from(entriesByTarget.values()).reduceRight(
-            (mostIntersecting, entry) =>
-              entry.intersectionRatio > mostIntersecting.intersectionRatio
-                ? entry
-                : mostIntersecting,
-          );
+              // prefer the last entry in the list if multiple entries have the same intersection ratio
+              const mostIntersecting = Array.from(entriesByTarget.values()).reduceRight(
+                (mostIntersecting, entry) =>
+                  entry.intersectionRatio > mostIntersecting.intersectionRatio
+                    ? entry
+                    : mostIntersecting,
+              );
 
-          setMostIntersecting(mostIntersecting);
-        },
-        {
-          root: document.getElementById("scroll-container"),
-          threshold: [0, 0.25, 0.5, 0.75, 1],
-        },
-      ),
+              setMostIntersecting(mostIntersecting);
+            },
+            {
+              root: document.getElementById("scroll-container"),
+              threshold: [0, 0.25, 0.5, 0.75, 1],
+            },
+          )
+        : null,
     [entriesByTarget],
   );
   useEffect(
     () => () => {
-      intersectionObserver.disconnect();
+      intersectionObserver?.disconnect();
     },
     [intersectionObserver],
   );
