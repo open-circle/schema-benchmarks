@@ -27,7 +27,7 @@
     "postbump:test-suite-commit": "pnpm checkout",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "valibot": "catalog:"
