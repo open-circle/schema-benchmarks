@@ -1,15 +1,24 @@
-//#region ../node_modules/.pnpm/typia@14.0.6_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
+//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 //#endregion
-//#region ../node_modules/.pnpm/typia@14.0.6_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLength.mjs
-const _stringLength = (value) => {
+//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthGte.mjs
+const _stringLengthGte = (value, length) => {
 	let count = 0;
-	for (const _ch of value) ++count;
-	return count;
+	if (length <= count) return true;
+	for (const _ch of value) if (length <= ++count) return true;
+	return false;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typia@14.0.6_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
+//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthLte.mjs
+const _stringLengthLte = (value, length) => {
+	let count = 0;
+	if (!(count <= length)) return false;
+	for (const _ch of value) if (!(++count <= length)) return false;
+	return true;
+};
+//#endregion
+//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
 const _validateReport = (array) => {
 	const isAncestor = (ancestor, descendant) => descendant === ancestor || descendant.startsWith(`${ancestor}.`) || descendant.startsWith(`${ancestor}[`);
 	const reportable = (path) => {
@@ -34,7 +43,7 @@ const _validateReport = (array) => {
 (() => {
 	const _ip0 = (input) => "number" === typeof input["id"];
 	const _ip1 = (input) => input["created"] instanceof Date;
-	const _ip2 = (input) => "string" === typeof input["title"] && 1 <= _stringLength(input["title"]) && _stringLength(input["title"]) <= 100;
+	const _ip2 = (input) => "string" === typeof input["title"] && _stringLengthGte(input["title"], 1) && _stringLengthLte(input["title"], 100);
 	const _ip3 = (input) => Array.isArray(input["images"]) && input["images"].every((elem) => "object" === typeof elem && null !== elem && _io1(elem));
 	const _ve0 = "{ id: number; created: Date; title: string & MinLength<1> & MaxLength<100>; brand: string & MinLength<1> & MaxLength<30>; description: string & ... 1 more ... & MaxLength<...>; ... 5 more ...; ratings: RatingSchema[]; }";
 	const _vp0 = (input, _path, _exceptionable = true) => "number" === typeof input["id"] || _report(_exceptionable, {
@@ -47,11 +56,11 @@ const _validateReport = (array) => {
 		expected: "Date",
 		value: input["created"]
 	});
-	const _vp2 = (input, _path, _exceptionable = true) => "string" === typeof input["title"] && (1 <= _stringLength(input["title"]) || _report(_exceptionable, {
+	const _vp2 = (input, _path, _exceptionable = true) => "string" === typeof input["title"] && (_stringLengthGte(input["title"], 1) || _report(_exceptionable, {
 		path: _path + ".title",
 		expected: "string & MinLength<1>",
 		value: input["title"]
-	})) && (_stringLength(input["title"]) <= 100 || _report(_exceptionable, {
+	})) && (_stringLengthLte(input["title"], 100) || _report(_exceptionable, {
 		path: _path + ".title",
 		expected: "string & MaxLength<100>",
 		value: input["title"]
@@ -77,18 +86,18 @@ const _validateReport = (array) => {
 		expected: "Array<ImageSchema>",
 		value: input["images"]
 	});
-	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && 1 <= _stringLength(input.brand) && _stringLength(input.brand) <= 30 && "string" === typeof input.description && 1 <= _stringLength(input.description) && _stringLength(input.description) <= 500 && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 0 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && input.tags.every((elem) => "string" === typeof elem && 1 <= _stringLength(elem) && _stringLength(elem) <= 30) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
+	const _io0 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && "string" === typeof input.brand && _stringLengthGte(input.brand, 1) && _stringLengthLte(input.brand, 30) && "string" === typeof input.description && _stringLengthGte(input.description, 1) && _stringLengthLte(input.description, 500) && "number" === typeof input.price && 1 <= input.price && input.price <= 1e4 && (null === input.discount || "number" === typeof input.discount && 1 <= input.discount && input.discount <= 100) && "number" === typeof input.quantity && 0 <= input.quantity && input.quantity <= 10 && Array.isArray(input.tags) && input.tags.every((elem) => "string" === typeof elem && _stringLengthGte(elem, 1) && _stringLengthLte(elem, 30)) && _ip3(input) && Array.isArray(input.ratings) && input.ratings.every((elem) => "object" === typeof elem && null !== elem && _io2(elem));
 	const _io1 = (input) => _ip0(input) && _ip1(input) && _ip2(input) && ("jpg" === input.type || "png" === input.type) && "number" === typeof input.size && "string" === typeof input.url && _isFormatUrl(input.url);
-	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 1 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && 1 <= _stringLength(input.text) && _stringLength(input.text) <= 1e3 && _ip3(input);
+	const _io2 = (input) => _ip0(input) && "number" === typeof input.stars && 1 <= input.stars && input.stars <= 5 && _ip2(input) && "string" === typeof input.text && _stringLengthGte(input.text, 1) && _stringLengthLte(input.text, 1e3) && _ip3(input);
 	const _vo0 = (input, _path, _exceptionable = true) => [
 		_vp0(input, _path, _exceptionable),
 		_vp1(input, _path, _exceptionable),
 		_vp2(input, _path, _exceptionable),
-		"string" === typeof input.brand && (1 <= _stringLength(input.brand) || _report(_exceptionable, {
+		"string" === typeof input.brand && (_stringLengthGte(input.brand, 1) || _report(_exceptionable, {
 			path: _path + ".brand",
 			expected: "string & MinLength<1>",
 			value: input.brand
-		})) && (_stringLength(input.brand) <= 30 || _report(_exceptionable, {
+		})) && (_stringLengthLte(input.brand, 30) || _report(_exceptionable, {
 			path: _path + ".brand",
 			expected: "string & MaxLength<30>",
 			value: input.brand
@@ -97,11 +106,11 @@ const _validateReport = (array) => {
 			expected: "(string & MinLength<1> & MaxLength<30>)",
 			value: input.brand
 		}),
-		"string" === typeof input.description && (1 <= _stringLength(input.description) || _report(_exceptionable, {
+		"string" === typeof input.description && (_stringLengthGte(input.description, 1) || _report(_exceptionable, {
 			path: _path + ".description",
 			expected: "string & MinLength<1>",
 			value: input.description
-		})) && (_stringLength(input.description) <= 500 || _report(_exceptionable, {
+		})) && (_stringLengthLte(input.description, 500) || _report(_exceptionable, {
 			path: _path + ".description",
 			expected: "string & MaxLength<500>",
 			value: input.description
@@ -153,11 +162,11 @@ const _validateReport = (array) => {
 			path: _path + ".tags",
 			expected: "Array<string & MinLength<1> & MaxLength<30>>",
 			value: input.tags
-		})) && input.tags.map((elem, _index4) => "string" === typeof elem && (1 <= _stringLength(elem) || _report(_exceptionable, {
+		})) && input.tags.map((elem, _index4) => "string" === typeof elem && (_stringLengthGte(elem, 1) || _report(_exceptionable, {
 			path: _path + ".tags[" + _index4 + "]",
 			expected: "string & MinLength<1>",
 			value: elem
-		})) && (_stringLength(elem) <= 30 || _report(_exceptionable, {
+		})) && (_stringLengthLte(elem, 30) || _report(_exceptionable, {
 			path: _path + ".tags[" + _index4 + "]",
 			expected: "string & MaxLength<30>",
 			value: elem
@@ -229,11 +238,11 @@ const _validateReport = (array) => {
 			value: input.stars
 		}),
 		_vp2(input, _path, _exceptionable),
-		"string" === typeof input.text && (1 <= _stringLength(input.text) || _report(_exceptionable, {
+		"string" === typeof input.text && (_stringLengthGte(input.text, 1) || _report(_exceptionable, {
 			path: _path + ".text",
 			expected: "string & MinLength<1>",
 			value: input.text
-		})) && (_stringLength(input.text) <= 1e3 || _report(_exceptionable, {
+		})) && (_stringLengthLte(input.text, 1e3) || _report(_exceptionable, {
 			path: _path + ".text",
 			expected: "string & MaxLength<1000>",
 			value: input.text
