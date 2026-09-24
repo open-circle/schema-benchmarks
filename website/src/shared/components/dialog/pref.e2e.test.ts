@@ -38,7 +38,7 @@ test.describe("dialog closes", () => {
       await prefs.dialog.press("Escape");
 
       await expect(prefs.dialog).toBeHidden();
-    }).toPass();
+    }).toPass({ timeout: 5000 });
   });
 });
 

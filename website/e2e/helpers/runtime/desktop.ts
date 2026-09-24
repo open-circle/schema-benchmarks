@@ -35,7 +35,7 @@ export async function expectOptimizeFilter(runtimePage: RuntimePage) {
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("optimizations")).toHaveText(expectedLabel);
         });
-      }).toPass();
+      }).toPass({ timeout: 5000 });
     });
   }
 }
@@ -55,7 +55,7 @@ export async function expectErrorTypeFilter(
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("error type")).toHaveText(expectedLabel);
         });
-      }).toPass();
+      }).toPass({ timeout: 5000 });
     });
   }
 }

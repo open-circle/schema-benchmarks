@@ -66,7 +66,7 @@ export abstract class TabObjectModel<
       await this.tabLink.click();
       await expect(this.tabLink).toBeSelected();
       await expect(this.tabPanel).toBeVisible();
-    }).toPass();
+    }).toPass({ timeout: 5000 });
   }
 }
 

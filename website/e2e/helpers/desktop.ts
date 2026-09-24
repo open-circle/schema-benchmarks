@@ -26,7 +26,7 @@ export async function expectTableSorting(
       await librarySortLink.click();
 
       await expect(libraryHeaderCell).toHaveSort("descending");
-    }).toPass();
+    }).toPass({ timeout: 5000 });
     await expect(firstRowLibraryCell).toHaveText(patterns.last);
   });
 }

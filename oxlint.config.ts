@@ -53,6 +53,7 @@ export const baseConfig = defineConfig({
         ...playwright.configs["flat/recommended"].rules,
         "playwright/no-skipped-test": ["warn", { allowConditional: true }],
         "playwright/expect-expect": ["error", { assertFunctionPatterns: ["^expect.*"] }],
+        "playwright/require-to-pass-timeout": "error",
       },
     },
   ],

@@ -10,11 +10,12 @@ export class Sidebar extends ComponentObjectModel {
 
   async open() {
     await expect(async () => {
-      if (!(await this.sidebar.isVisible())) {
+      if ((await this.sidebar.getAttribute("aria-hidden")) === "true") {
         await this.menuButton.click();
       }
       await expect(this.sidebar).toBeVisible({ timeout: 5000 });
-    }).toPass();
+      await expect(this.sidebar).not.toHaveAttribute("aria-hidden", "true");
+    }).toPass({ timeout: 5000 });
   }
 
   getLinkByName(name: string) {

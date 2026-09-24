@@ -32,7 +32,7 @@ async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string
       }
       await expect(item).toContainText(expectedLabel);
     });
-  }).toPass();
+  }).toPass({ timeout: 5000 });
 }
 
 export async function expectOptimizeFilter(runtimePage: RuntimePage) {

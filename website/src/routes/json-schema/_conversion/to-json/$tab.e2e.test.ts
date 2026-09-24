@@ -68,7 +68,7 @@ test.describe("benchmarks tab", () => {
         await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
 
         await expect(link).toBeCurrent("page");
-      }).toPass();
+      }).toPass({ timeout: 5000 });
     }
   });
 
@@ -82,7 +82,7 @@ test.describe("benchmarks tab", () => {
           await everyAsync(toJsonPage.benchmarks.desktop.tableHandle, async ({ row }) => {
             await expect(row.getCell("type")).toHaveText(expectedDirection);
           });
-        }).toPass();
+        }).toPass({ timeout: 5000 });
       }
     });
   });
@@ -101,7 +101,7 @@ test.describe("benchmarks tab", () => {
           every(labels, (label) => {
             expect(label).toMatch(expectedDirectionRegex);
           });
-        }).toPass();
+        }).toPass({ timeout: 5000 });
       }
     });
   });

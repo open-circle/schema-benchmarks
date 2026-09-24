@@ -57,7 +57,7 @@ test("can toggle targets", async ({ page, compliancePage }) => {
         await expect(link).toBeCurrent("page");
 
         await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
-      }).toPass();
+      }).toPass({ timeout: 5000 });
     });
   }
 });
