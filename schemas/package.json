@@ -53,7 +53,7 @@
     "superstruct": "^2.0.2",
     "sury": "11.0.0",
     "typebox": "catalog:",
-    "typia": "^14.0.6",
+    "typia": "^15.0.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
     "z-schema": "^12.4.6",
