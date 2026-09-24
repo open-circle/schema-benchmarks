@@ -2,7 +2,9 @@ import { ComponentObjectModel } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 
 export class Sidebar extends ComponentObjectModel {
-  sidebar = this.page.getByRole("complementary", { includeHidden: true });
+  sidebar = this.page
+    .getByRole("dialog", { name: "Site navigation", includeHidden: true })
+    .or(this.page.getByRole("complementary", { name: "Site navigation", includeHidden: true }));
 
   nav = this.sidebar.getByRole("navigation");
 
