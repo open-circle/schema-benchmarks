@@ -21,7 +21,7 @@ export const libraryVersions = {
   superstruct: "2.0.2",
   sury: "11.0.0",
   typebox: "1.3.34",
-  typia: "14.0.6",
+  typia: "15.0.0",
   valibot: "1.5.0",
   yup: "1.7.1",
   "z-schema": "12.4.6",
