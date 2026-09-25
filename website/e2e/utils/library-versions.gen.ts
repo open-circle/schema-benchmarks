@@ -10,8 +10,8 @@ export const libraryVersions = {
   "@sapphire/shapeshift": "5.0.0",
   ajv: "8.20.0",
   arktype: "2.2.3",
-  "ata-validator": "1.27.1",
-  decoders: "2.10.1",
+  "ata-validator": "1.29.0",
+  decoders: "2.11.0",
   "effect@rc": "4.0.0-rc.112",
   effect: "3.22.2",
   "io-ts": "2.2.22",
@@ -28,5 +28,5 @@ export const libraryVersions = {
   zod: "4.6.5",
   "zod/mini": "4.6.5",
   "zod/v3": "4.6.5",
-  "zod-compiler": "2.0.5",
+  "zod-compiler": "2.0.7",
 } as const satisfies Record<string, string>;
