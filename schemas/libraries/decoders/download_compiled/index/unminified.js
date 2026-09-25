@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/decoders@2.10.1/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.11.0/node_modules/decoders/dist/index.js
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
@@ -23,67 +23,80 @@ function isPromiseLike(value) {
 function isPlainObject(value) {
 	return value !== null && typeof value === "object" && Object.prototype.toString.call(value) === "[object Object]";
 }
+function assertNever(_value, msg = "Unhandled case") {
+	throw new Error(msg);
+}
 var kAnnotationRegistry = /* @__PURE__ */ Symbol.for("decoders.kAnnotationRegistry");
-var _register = globalThis[kAnnotationRegistry] ??= /* @__PURE__ */ new WeakSet();
-function brand(ann) {
-	_register.add(ann);
+var _stamped = globalThis[kAnnotationRegistry] ??= /* @__PURE__ */ new WeakSet();
+function stamp(ann) {
+	_stamped.add(ann);
 	return ann;
 }
-function makeObjectAnn(fields, text) {
-	return brand({
+function makeObjectAnn(getFields, text) {
+	let fields;
+	return stamp({
 		type: "object",
-		fields,
+		get fields() {
+			return fields ??= getFields();
+		},
 		text
 	});
 }
-function makeArrayAnn(items, text) {
-	return brand({
+function makeArrayAnn(getItems, text) {
+	let items;
+	return stamp({
 		type: "array",
-		items,
+		get items() {
+			return items ??= getItems();
+		},
 		text
 	});
 }
 function makeOpaqueAnn(value, text) {
-	return brand({
+	return stamp({
 		type: "opaque",
 		value,
 		text
 	});
 }
 function makeScalarAnn(value, text) {
-	return brand({
+	return stamp({
 		type: "scalar",
 		value,
 		text
 	});
 }
 function updateText(annotation, text) {
-	if (text !== void 0) return brand({
-		...annotation,
-		text
-	});
-	else return annotation;
+	if (text === void 0) return annotation;
+	switch (annotation.type) {
+		case "object": return makeObjectAnn(() => annotation.fields, text);
+		case "array": return makeArrayAnn(() => annotation.items, text);
+		case "scalar": return makeScalarAnn(annotation.value, text);
+		case "opaque": return makeOpaqueAnn(annotation.value, text);
+		// istanbul ignore next -- @preserve
+		default: return assertNever(annotation, "Unknown annotation type");
+	}
 }
 function merge(objAnnotation, fields) {
-	return makeObjectAnn(new Map([...objAnnotation.fields, ...fields]), objAnnotation.text);
+	return makeObjectAnn(() => new Map([...objAnnotation.fields, ...fields]), objAnnotation.text);
 }
 function isAnnotation(thing) {
-	return _register.has(thing);
+	return _stamped.has(thing);
 }
 function annotateArray(arr, text, seen) {
 	seen.add(arr);
-	const items = [];
-	for (const value of arr) items.push(__annotate(value, void 0, seen));
-	return makeArrayAnn(items, text);
+	return makeArrayAnn(() => Array.from(arr, (value) => __annotate(value, void 0, seen)), text);
 }
 function annotateObject(obj, text, seen) {
 	seen.add(obj);
-	const fields = /* @__PURE__ */ new Map();
-	for (const key of Object.keys(obj)) {
-		const value = obj[key];
-		fields.set(key, __annotate(value, void 0, seen));
-	}
-	return makeObjectAnn(fields, text);
+	return makeObjectAnn(() => {
+		const fields = /* @__PURE__ */ new Map();
+		for (const key of Object.keys(obj)) {
+			const value = obj[key];
+			fields.set(key, __annotate(value, void 0, seen));
+		}
+		return fields;
+	}, text);
 }
 function __annotate(value, text, seen) {
 	if (value === null || value === void 0 || typeof value === "string" || typeof value === "number" || typeof value === "boolean" || typeof value === "symbol" || typeof value === "bigint" || typeof value.getMonth === "function") return makeScalarAnn(value, text);
@@ -226,11 +239,17 @@ function* iterAnnotation(ann, stack) {
 			}
 			break;
 		}
-		case "object": for (const [key, value] of ann.fields) {
-			stack.push(key);
-			yield* iterAnnotation(value, stack);
-			stack.pop();
-		}
+		case "object":
+			for (const [key, value] of ann.fields) {
+				stack.push(key);
+				yield* iterAnnotation(value, stack);
+				stack.pop();
+			}
+			break;
+		case "scalar":
+		case "opaque": break;
+		// istanbul ignore next -- @preserve
+		default: assertNever(ann, "Unknown annotation type");
 	}
 }
 function formatAsIssues(ann) {
@@ -317,7 +336,7 @@ function define(fn) {
 			else return err2(public_annotate(result.error, message));
 		});
 	}
-	const self = brand2({
+	const self = stamp2({
 		verify,
 		value,
 		decode,
@@ -341,38 +360,14 @@ function define(fn) {
 	return self;
 }
 var kDecoderRegistry = /* @__PURE__ */ Symbol.for("decoders.kDecoderRegistry");
-var _register2 = globalThis[kDecoderRegistry] ??= /* @__PURE__ */ new WeakSet();
-function brand2(decoder) {
-	_register2.add(decoder);
+var _stamped2 = globalThis[kDecoderRegistry] ??= /* @__PURE__ */ new WeakSet();
+function stamp2(decoder) {
+	_stamped2.add(decoder);
 	return decoder;
 }
 // @__NO_SIDE_EFFECTS__
 function isDecoder(value) {
-	return _register2.has(value);
-}
-var poja = /* @__PURE__ */ define((blob, ok2, err2) => {
-	if (!Array.isArray(blob)) return err2("Must be an array");
-	return ok2(blob);
-});
-// @__NO_SIDE_EFFECTS__
-function array(decoder) {
-	const decodeFn = decoder.decode;
-	return poja.chain((inputs, ok2, err2) => {
-		const results = [];
-		for (let i = 0; i < inputs.length; ++i) {
-			const blob = inputs[i];
-			const result = decodeFn(blob);
-			if (result.ok) results.push(result.value);
-			else {
-				results.length = 0;
-				const ann = result.error;
-				const clone = inputs.slice();
-				clone.splice(i, 1, public_annotate(ann, ann.text ? `${ann.text} (at index ${i})` : `index ${i}`));
-				return err2(public_annotate(clone));
-			}
-		}
-		return ok2(results);
-	});
+	return _stamped2.has(value);
 }
 // @__NO_SIDE_EFFECTS__
 function bySizeOptions(options) {
@@ -396,6 +391,30 @@ function bySizeOptions(options) {
 // @__NO_SIDE_EFFECTS__
 function sized(decoder, options) {
 	return decoder.reject(/* @__PURE__ */ bySizeOptions(options));
+}
+var poja = /* @__PURE__ */ define((blob, ok2, err2) => {
+	if (!Array.isArray(blob)) return err2("Must be an array");
+	return ok2(blob);
+});
+// @__NO_SIDE_EFFECTS__
+function array(decoder, options) {
+	const decodeFn = decoder.decode;
+	return (options !== void 0 ? /* @__PURE__ */ sized(poja, options) : poja).chain((inputs, ok2, err2) => {
+		const results = [];
+		for (let i = 0; i < inputs.length; ++i) {
+			const blob = inputs[i];
+			const result = decodeFn(blob);
+			if (result.ok) results.push(result.value);
+			else {
+				results.length = 0;
+				const ann = result.error;
+				const clone = inputs.slice();
+				clone.splice(i, 1, public_annotate(ann, ann.text ? `${ann.text} (at index ${i})` : `index ${i}`));
+				return err2(public_annotate(clone));
+			}
+		}
+		return ok2(results);
+	});
 }
 // @__NO_SIDE_EFFECTS__
 function difference(xs, ys) {
@@ -502,6 +521,7 @@ var number = /* @__PURE__ */ (/* @__PURE__ */ define((blob, ok2, err2) => /* @__
 function between(min2, max2, decoder = number) {
 	return decoder.reject((value) => value < min2 ? `Too low, must be between ${min2} and ${max2}` : value > max2 ? `Too high, must be between ${min2} and ${max2}` : null);
 }
+// istanbul ignore next -- @preserve
 // istanbul ignore else -- @preserve
 //#endregion
 //#region ../schemas/libraries/decoders/download/index.ts

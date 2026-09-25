@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.2_ata-validator@1.27.1_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.2_ata-validator@1.29.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -414,14 +414,14 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -543,7 +543,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -857,7 +857,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -961,7 +961,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const WS = [
 		[9, 13],
@@ -1643,7 +1643,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -2285,7 +2285,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -2367,7 +2367,7 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	const UQ_HELPERS = "function _cn(x){if(x===null||typeof x!=='object')return typeof x+':'+x;if(Array.isArray(x))return'['+x.map(_cn).join(',')+']';return'{'+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+':'+_cn(x[k])}).join(',')+'}'}function _uq(a){var n=a.length,i,k;if(n<2)return true;if(n<=12){for(i=1;i<n;i++)for(k=0;k<i;k++)if(_deq(a[i],a[k]))return false;return true}var s=new Set();for(i=0;i<n;i++){var x=a[i];if(x!==null&&typeof x==='object')break;if(s.has(x))return false;s.add(x)}if(i===n)return true;s=new Set();for(i=0;i<n;i++){var c=_cn(a[i]);if(s.has(c))return false;s.add(c)}return true}";
@@ -6058,7 +6058,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -6257,7 +6257,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -6674,7 +6674,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	]) };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
@@ -6779,7 +6779,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -6857,7 +6857,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -6877,7 +6877,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -6981,7 +6981,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -7184,7 +7184,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -7192,28 +7192,15 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	* AND abortEarly is off. Zero cost on the valid path.
 	*/
 	function buildDataPositionMap(input) {
-		const escapePtr = (s) => s.replace(/~/g, "~0").replace(/\//g, "~1");
 		const text = typeof Buffer !== "undefined" && Buffer.isBuffer(input) ? input.toString("utf8") : String(input);
 		const map = Object.create(null);
-		const lines = text.split("\n");
-		const lineStart = new Array(lines.length + 1);
-		lineStart[0] = 0;
-		for (let i = 0; i < lines.length; i++) lineStart[i + 1] = lineStart[i] + lines[i].length + 1;
-		function offsetToLineCol(off) {
-			let lo = 0, hi = lineStart.length - 1;
-			while (lo < hi) {
-				const mid = lo + hi + 1 >> 1;
-				if (lineStart[mid] <= off) lo = mid;
-				else hi = mid - 1;
-			}
-			return {
-				line: lo + 1,
-				col: off - lineStart[lo] + 1,
-				text: lines[lo] || ""
-			};
-		}
-		let i = 0;
 		const n = text.length;
+		const ptrs = [];
+		const starts = [];
+		const lens = [];
+		const keyStarts = [];
+		const keyLens = [];
+		let i = 0;
 		function skipWs() {
 			while (i < n) {
 				const ch = text.charCodeAt(i);
@@ -7221,32 +7208,35 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				else break;
 			}
 		}
-		function readString() {
+		function readString(decode) {
 			const start = i;
+			let simple = text.charCodeAt(i) === 34;
 			i++;
+			let closed = false;
 			while (i < n) {
 				const ch = text.charCodeAt(i);
 				if (ch === 92) {
+					simple = false;
 					i += 2;
 					continue;
 				}
 				if (ch === 34) {
 					i++;
-					return JSON.parse(text.slice(start, i));
+					closed = true;
+					break;
 				}
+				if (ch < 32) simple = false;
 				i++;
 			}
-			throw new Error("unterminated string at offset " + start);
+			if (!closed) throw new Error("unterminated string at offset " + start);
+			if (simple) return decode ? text.slice(start + 1, i - 1) : null;
+			const decoded = JSON.parse(text.slice(start, i));
+			return decode ? decoded : null;
 		}
-		function pointerOf(path) {
-			if (path.length === 0) return "";
-			return "/" + path.map(escapePtr).join("/");
-		}
-		function walk(path, keySpan) {
+		function walk(ptr, keyStart, keyLen) {
 			skipWs();
 			if (i >= n) return;
 			const start = i;
-			const pos = offsetToLineCol(start);
 			const ch = text.charCodeAt(i);
 			if (ch === 123) {
 				i++;
@@ -7262,19 +7252,14 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 						continue;
 					}
 					skipWs();
-					const keyStart = i;
-					const keyPos = offsetToLineCol(keyStart);
-					const key = readString();
-					const span = {
-						keyOffset: keyStart,
-						keyLength: i - keyStart,
-						keyLine: keyPos.line,
-						keyCol: keyPos.col
-					};
+					const memberKeyStart = i;
+					const key = readString(true);
+					const memberKeyLen = i - memberKeyStart;
 					skipWs();
 					if (text.charCodeAt(i) !== 58) throw new Error("expected \":\" at offset " + i);
 					i++;
-					walk(path.concat([key]), span);
+					const seg = key.indexOf("~") === -1 && key.indexOf("/") === -1 ? key : key.replace(/~/g, "~0").replace(/\//g, "~1");
+					walk(ptr + "/" + seg, memberKeyStart, memberKeyLen);
 				}
 			} else if (ch === 91) {
 				i++;
@@ -7291,39 +7276,63 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 						continue;
 					}
 					const before = i;
-					walk(path.concat([String(idx)]));
+					walk(ptr + "/" + idx, -1, 0);
 					if (i === before) break;
 					idx++;
 				}
-			} else if (ch === 34) readString();
+			} else if (ch === 34) readString(false);
 			else while (i < n) {
 				const c = text.charCodeAt(i);
 				if (c === 44 || c === 125 || c === 93 || c === 32 || c === 9 || c === 10 || c === 13) break;
 				i++;
 			}
-			const entry = {
-				byteOffset: start,
-				length: i - start,
-				line: pos.line,
-				col: pos.col,
-				text: pos.text
-			};
-			if (keySpan) {
-				entry.keyOffset = keySpan.keyOffset;
-				entry.keyLength = keySpan.keyLength;
-				entry.keyLine = keySpan.keyLine;
-				entry.keyCol = keySpan.keyCol;
-			}
-			map[pointerOf(path)] = entry;
+			ptrs.push(ptr);
+			starts.push(start);
+			lens.push(i - start);
+			keyStarts.push(keyStart);
+			keyLens.push(keyLen);
 		}
 		if (text.charCodeAt(0) === 65279) i = 1;
-		walk([]);
+		walk("", -1, 0);
+		if (ptrs.length === 0) return map;
+		const lines = text.split("\n");
+		const lineStart = new Array(lines.length + 1);
+		lineStart[0] = 0;
+		for (let k = 0; k < lines.length; k++) lineStart[k + 1] = lineStart[k] + lines[k].length + 1;
+		function lineOf(off) {
+			let lo = 0, hi = lineStart.length - 1;
+			while (lo < hi) {
+				const mid = lo + hi + 1 >> 1;
+				if (lineStart[mid] <= off) lo = mid;
+				else hi = mid - 1;
+			}
+			return lo;
+		}
+		for (let k = 0; k < ptrs.length; k++) {
+			const off = starts[k];
+			const line = lineOf(off);
+			const entry = {
+				byteOffset: off,
+				length: lens[k],
+				line: line + 1,
+				col: off - lineStart[line] + 1,
+				text: lines[line] || ""
+			};
+			if (keyStarts[k] >= 0) {
+				const keyLine = lineOf(keyStarts[k]);
+				entry.keyOffset = keyStarts[k];
+				entry.keyLength = keyLens[k];
+				entry.keyLine = keyLine + 1;
+				entry.keyCol = keyStarts[k] - lineStart[keyLine] + 1;
+			}
+			map[ptrs[k]] = entry;
+		}
 		return map;
 	}
 	module.exports = { buildDataPositionMap };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap } = require_data_positions();
 	/**
@@ -7367,7 +7376,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -7409,7 +7418,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -7606,7 +7615,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { checkSchemaStrict };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -7762,7 +7771,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
@@ -8786,7 +8795,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const { compileSafe } = require_safe_regex();
@@ -10030,7 +10039,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { createInterpreter };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -10075,7 +10084,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -10206,7 +10215,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -10429,7 +10438,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -10487,7 +10496,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -10495,7 +10504,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -10645,7 +10654,7 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen } = require_js_compiler();
 	const VALID = 1;
@@ -11477,7 +11486,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -11528,12 +11537,12 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.27.1";
+	module.exports = "1.29.0";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -11556,8 +11565,9 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const ATA_VERSION = require_version();
 	function renderValueType(schema, defs, depth = 0) {
 		if (depth > 32) return "unknown";
 		if (schema === true) return "unknown";
@@ -11695,7 +11705,7 @@ var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const rootType = renderValueType(schema, defs, 0);
 		const rootDoc = renderJsDoc(schema, "");
 		const rootDecl = rootType.startsWith("{") && rootType.endsWith("}") && !rootType.includes(" | ") ? `${rootDoc}export interface ${rootName} ${rootType}` : `${rootDoc}export type ${rootName} = ${rootType};`;
-		return `// Auto-generated by ata-validator — do not edit.
+		return `// Auto-generated by ata-validator ${ATA_VERSION}, do not edit.
 ${defLines.length ? defLines.join("\n\n") + "\n\n" : ""}${rootDecl}
 
 export interface ValidationError {
@@ -11719,14 +11729,15 @@ export type Result = ValidResult | InvalidResult;
 export declare function isValid(data: unknown): data is ${rootName};
 export declare function validate(data: unknown): Result;
 export declare const schemaHash: string;
-declare const _default: { validate: typeof validate; isValid: typeof isValid; schemaHash: typeof schemaHash };
+export declare const ataVersion: string;
+declare const _default: { validate: typeof validate; isValid: typeof isValid; schemaHash: typeof schemaHash; ataVersion: typeof ataVersion };
 export default _default;
 `;
 	}
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -11781,7 +11792,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -11886,7 +11897,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnose.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnose.js
 var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { correlateTypos } = require_correlate();
 	const { buildDataPositionMap } = require_data_positions();
@@ -12158,7 +12169,7 @@ var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { toDiagnostics };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -12191,7 +12202,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -12299,7 +12310,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -12339,7 +12350,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/output-format.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/output-format.js
 var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METADATA_KEYWORDS = [
 		"title",
@@ -12435,7 +12446,7 @@ var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/retry-message.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/retry-message.js
 var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function phrase(error) {
 		const p = error.params || {};
@@ -12469,7 +12480,7 @@ var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { toRetryMessage };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/describe-schema.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/describe-schema.js
 var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const MAX_DEPTH = 12;
 	function lit(v) {
@@ -12600,7 +12611,7 @@ var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	module.exports = { describeSchema };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -12616,7 +12627,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const native = require_native_load_browser()();
 	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
@@ -12896,11 +12907,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	}
 	const { rankFor: schemaOrderRank, ordinalFor: schemaOrdinal } = require_schema_order();
 	var RichRejection = class {
-		constructor(result, data, positions, self, root, enrich) {
+		constructor(result, data, rawInput, self, root, enrich) {
 			this.valid = false;
 			this._result = result;
 			this._data = data;
-			this._positions = positions;
+			this._rawInput = rawInput;
 			this._self = self;
 			this._root = root;
 			this._enrich = enrich;
@@ -12927,9 +12938,14 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const enrich = this._enrich;
 				let raw = this._result.errors || [];
 				if (raw.length > 1) raw = sortErrorsBySchemaOrder(this._root, raw);
+				let positions = null;
+				if (enrich && raw.length && this._rawInput != null) {
+					positions = self._pos().get(this._rawInput);
+					if (positions) self._posCache.reset();
+				}
 				const opts = enrich && raw.length ? {
 					data: this._data,
-					positions: this._positions,
+					positions,
 					schemaPositions: self._schemaPositions,
 					schemaFile: self._source ? self._source.path : void 0
 				} : null;
@@ -12938,6 +12954,90 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				this._cached = cached;
 			}
 			return this._cached;
+		}
+	});
+	var LazyJsonRejection = class {
+		constructor(result, jsonStr, self, enrich) {
+			this.valid = false;
+			this._result = result;
+			this._jsonStr = jsonStr;
+			this._self = self;
+			this._enrich = enrich;
+			this._cached = null;
+		}
+		toJSON() {
+			return {
+				valid: false,
+				errors: this.errors
+			};
+		}
+	};
+	Object.defineProperty(LazyJsonRejection.prototype, "errors", {
+		enumerable: true,
+		configurable: true,
+		get() {
+			if (this._cached !== null) return this._cached;
+			const self = this._self;
+			const enrich = this._enrich;
+			const jsonStr = this._jsonStr;
+			const raw = this._result.errors || [];
+			if (!raw.length) {
+				this._cached = raw;
+				return raw;
+			}
+			let parsedData;
+			try {
+				parsedData = JSON.parse(jsonStr);
+			} catch {
+				parsedData = void 0;
+			}
+			if (!raw[0] || !raw[0].docUrl) {
+				const positions = self._pos().get(jsonStr);
+				const ordered = raw.length > 1 ? sortErrorsBySchemaOrder(self._schemaObj, raw) : raw;
+				const enrichOpts = {
+					data: parsedData,
+					positions,
+					schemaPositions: self._schemaPositions,
+					schemaFile: self._source ? self._source.path : void 0
+				};
+				const enriched = ordered.map((e) => enrich(e, enrichOpts));
+				if (enriched.length > 1) attachRelated(enriched);
+				attachDiagnosticSource(enriched, {
+					data: parsedData,
+					text: jsonStr,
+					positions,
+					schema: self._schemaObj,
+					mutatesInput: self._mutatesInput === true
+				});
+				if (positions) self._posCache.reset();
+				this._cached = enriched;
+				return enriched;
+			}
+			if (raw.some((e) => e && !e.dataFrame)) {
+				const positions = self._pos().get(jsonStr);
+				if (positions) {
+					for (const e of raw) if (e && !e.dataFrame) {
+						const p = positions[e.path != null ? e.path : e.instancePath || ""];
+						if (p) e.dataFrame = {
+							byteOffset: p.byteOffset,
+							length: p.length,
+							line: p.line,
+							col: p.col,
+							text: p.text
+						};
+					}
+					self._posCache.reset();
+				}
+			}
+			if (raw.length > 1) attachRelated(raw);
+			attachDiagnosticSource(raw, {
+				data: parsedData,
+				text: jsonStr,
+				schema: self._schemaObj,
+				mutatesInput: self._mutatesInput === true
+			});
+			this._cached = raw;
+			return raw;
 		}
 	});
 	function stripOrdinal(e) {
@@ -13196,6 +13296,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			this._rawIsCallers = typeof schema !== "string";
 			this._options = options;
 			this._noOpts = !opts;
+			if (options.engine !== void 0 && options.engine !== "auto" && options.engine !== "interpreter") throw new TypeError("engine must be 'auto' or 'interpreter', got " + JSON.stringify(options.engine));
+			this._interpretOnly = options.engine === "interpreter";
 			this._initialized = false;
 			this._nativeReady = false;
 			this._compiled = null;
@@ -13273,21 +13375,21 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			}
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
-			const cached = this._userFormats || this._usesKeywords ? null : _compileCache.get(mapKey);
+			var _forceNapi = this._interpretOnly || typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
+			const cached = this._userFormats || this._usesKeywords || _forceNapi ? null : _compileCache.get(mapKey);
 			let jsFn, jsCombinedFn, jsErrFn, _isCodegen = false;
-			var _forceNapi = typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
 			this._v1Dynamic = isV1Dialect(schemaObj) && (this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\""));
-			if (this._v1Dynamic || this._usesKeywords || !codegenAvailable()) {
+			if (_forceNapi || this._v1Dynamic || this._usesKeywords || !codegenAvailable()) {
 				jsFn = null;
 				jsCombinedFn = null;
 				jsErrFn = null;
-			} else if (cached && cached.jsFn !== void 0 && !_forceNapi) {
+			} else if (cached && cached.jsFn !== void 0) {
 				jsFn = cached.jsFn;
 				jsCombinedFn = cached.combined;
 				jsErrFn = cached.errFn;
 				_isCodegen = !!cached.isCodegen;
 				this._engine = _isCodegen ? "codegen" : jsFn ? "closure" : null;
-			} else if (!_forceNapi) {
+			} else {
 				const uf = this._userFormats;
 				const _cgFn = compileToJSCodegen(schemaObj, sm, uf);
 				jsFn = _cgFn || compileToJS(schemaObj, null, sm);
@@ -13302,15 +13404,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					isCodegen: _isCodegen,
 					full: false
 				});
-			} else {
-				jsFn = null;
-				jsCombinedFn = null;
-				jsErrFn = null;
 			}
 			this._jsFn = jsFn;
 			if (this._engine === void 0) this._engine = null;
 			const preprocessSchema = resolveSchemaForPreprocess(schemaObj, this._schemaMap);
-			let preprocess = buildPreprocessCodegen(preprocessSchema, options);
+			let preprocess = this._interpretOnly ? null : buildPreprocessCodegen(preprocessSchema, options);
 			if (!preprocess) {
 				const applyDefaults = options.useDefaults === false ? null : buildDefaultsApplier(preprocessSchema);
 				const applyCoerce = options.coerceTypes ? buildCoercer(preprocessSchema) : null;
@@ -13728,11 +13826,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const self = this;
 				this.validate = (data) => {
 					const result = inner(data);
-					if (result && result.valid === false && result !== ABORT_EARLY_RESULT) {
-						const positions = enrich && self._lastRawInput != null ? self._pos().get(self._lastRawInput) : null;
-						if (positions) self._posCache.reset();
-						return new RichRejection(result, data, positions, self, root, enrich);
-					}
+					if (result && result.valid === false && result !== ABORT_EARLY_RESULT) return new RichRejection(result, data, enrich ? self._lastRawInput : null, self, root, enrich);
 					return result;
 				};
 				if (this._richErrors && this.validateJSON) {
@@ -13742,63 +13836,10 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 						let result;
 						try {
 							result = innerJson(jsonStr);
-						} finally {}
-						if (result && !result.valid && result.errors && result.errors.length) {
-							const first = result.errors[0];
-							let parsedData;
-							try {
-								parsedData = JSON.parse(jsonStr);
-							} catch {
-								parsedData = void 0;
-							}
-							if (!first || !first.docUrl) {
-								const positions = this._lastRawInput != null ? this._pos().get(this._lastRawInput) : null;
-								const ordered = result.errors.length > 1 ? sortErrorsBySchemaOrder(this._schemaObj, result.errors) : result.errors;
-								const enrichOpts = {
-									data: parsedData,
-									positions,
-									schemaPositions: this._schemaPositions,
-									schemaFile: this._source ? this._source.path : void 0
-								};
-								const enriched = ordered.map((e) => enrich(e, enrichOpts));
-								if (enriched.length > 1) attachRelated(enriched);
-								attachDiagnosticSource(enriched, {
-									data: parsedData,
-									text: jsonStr,
-									positions,
-									schema: this._schemaObj,
-									mutatesInput: this._mutatesInput === true
-								});
-								if (positions) this._posCache.reset();
-								this._lastRawInput = null;
-								return {
-									valid: false,
-									errors: enriched
-								};
-							}
-							const positions = this._lastRawInput != null ? this._pos().get(this._lastRawInput) : null;
-							if (positions) {
-								for (const e of result.errors) if (e && !e.dataFrame) {
-									const p = positions[e.path != null ? e.path : e.instancePath || ""];
-									if (p) e.dataFrame = {
-										byteOffset: p.byteOffset,
-										length: p.length,
-										line: p.line,
-										col: p.col,
-										text: p.text
-									};
-								}
-								this._posCache.reset();
-							}
-							if (result.errors.length > 1) attachRelated(result.errors);
-							attachDiagnosticSource(result.errors, {
-								data: parsedData,
-								text: jsonStr,
-								schema: this._schemaObj,
-								mutatesInput: this._mutatesInput === true
-							});
+						} finally {
+							this._lastRawInput = null;
 						}
-						this._lastRawInput = null;
+						if (result && result.valid === false) return new LazyJsonRejection(result, jsonStr, this, enrich);
 						return result;
 					};
 				}
@@ -13983,7 +14024,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				return;
 			}
 			this._ensureVocabularies();
-			if (typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI) return;
+			if (this._interpretOnly || typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI) return;
 			if (!this._schemaStr) this._schemaStr = JSON.stringify(this._schemaObj);
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
@@ -14425,11 +14466,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 const { Validator, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, renderPretty, renderCompact, renderJSON, toTypeScript } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.27.1_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.29.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
