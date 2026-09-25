@@ -12,7 +12,6 @@ updates:
     cooldown:
       default-days: 1
     ignore:
-      - dependency-name: "@types/node"
       # JSR deps don't seem to work properly with dependabot
       - dependency-name: "@paseri/compiler"
       - dependency-name: "@paseri/paseri"
