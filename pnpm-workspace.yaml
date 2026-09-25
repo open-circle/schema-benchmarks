@@ -30,7 +30,7 @@ catalog:
   playwright: ^1.63.0
   react: ^19.3.0
   react-dom: ^19.3.0
-  "rolldown": ^1.2.9
+  "rolldown": ^1.2.10
   ttsc: "0.30.4"
   typebox: ^1.3.34
   typescript: 7.0.2
@@ -41,7 +41,7 @@ catalog:
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
-  rolldown: ^1.2.9
+  rolldown: ^1.2.10
   vite: "catalog:"
 update:
   githubActions: true
