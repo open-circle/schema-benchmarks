@@ -1,8 +1,8 @@
-//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
+//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthGte.mjs
+//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthGte.mjs
 const _stringLengthGte = (value, length) => {
 	let count = 0;
 	if (length <= count) return true;
@@ -10,7 +10,7 @@ const _stringLengthGte = (value, length) => {
 	return false;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthLte.mjs
+//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthLte.mjs
 const _stringLengthLte = (value, length) => {
 	let count = 0;
 	if (!(count <= length)) return false;
@@ -18,7 +18,7 @@ const _stringLengthLte = (value, length) => {
 	return true;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.0_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
+//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
 const _validateReport = (array) => {
 	const isAncestor = (ancestor, descendant) => descendant === ancestor || descendant.startsWith(`${ancestor}.`) || descendant.startsWith(`${ancestor}[`);
 	const reportable = (path) => {

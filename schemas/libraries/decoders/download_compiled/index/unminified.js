@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/decoders@2.11.0/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.12.1/node_modules/decoders/dist/index.js
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
@@ -289,30 +289,79 @@ ${formatted}`);
 		return err3;
 	} else return formatted;
 }
-// @__NO_SIDE_EFFECTS__
-function define(fn) {
-	function decode(blob) {
-		const makeFlexErr = (msg) => /* @__PURE__ */ err(isAnnotation(msg) ? msg : public_annotate(blob, msg));
-		return fn(blob, ok, makeFlexErr);
+var DecoderImpl = class {
+	/**
+	* Verifies the untrusted/unknown input and either accepts or rejects it.
+	*
+	* Contrasted with `.verify()`, calls to `.decode()` will never fail and
+	* instead return a result type.
+	*/
+	decode;
+	/**
+	* Verifies the untrusted/unknown input and either accepts or rejects it.
+	* When accepted, returns a value of type `T`. Otherwise fail with
+	* a runtime error.
+	*/
+	verify;
+	/**
+	* Verifies the untrusted/unknown input and either accepts or rejects it.
+	* When accepted, returns the decoded `T` value directly. Otherwise returns
+	* `undefined`.
+	*
+	* Use this when you're not interested in programmatically handling the
+	* error message.
+	*/
+	value;
+	/**
+	* Memoized `~standard` props, built on first access.
+	*/
+	#standard;
+	constructor(fn) {
+		const decode = (blob) => {
+			const makeFlexErr = (msg) => /* @__PURE__ */ err(isAnnotation(msg) ? msg : public_annotate(blob, msg));
+			return fn(blob, ok, makeFlexErr);
+		};
+		const verify = (blob, formatter = formatInline) => {
+			const result = decode(blob);
+			if (result.ok) return result.value;
+			else throw format(result.error, formatter);
+		};
+		const value = (blob) => decode(blob).value;
+		this.decode = decode;
+		this.verify = verify;
+		this.value = value;
 	}
-	function verify(blob, formatter = formatInline) {
-		const result = decode(blob);
-		if (result.ok) return result.value;
-		else throw format(result.error, formatter);
+	/**
+	* Accepts any value the given decoder accepts, and on success, will call
+	* the given function **on the decoded result**. If the transformation
+	* function throws an error, the whole decoder will fail using the error
+	* message as the failure reason.
+	*/
+	transform(transformFn) {
+		return this.chain(noThrow(transformFn));
 	}
-	function value(blob) {
-		return decode(blob).value;
+	refine(predicateFn, errmsg) {
+		return this.reject((value) => predicateFn(value) ? null : errmsg);
 	}
-	function transform(transformFn) {
-		return chain(noThrow(transformFn));
+	/**
+	* Cast the return type of this read-only decoder to a narrower type. This is
+	* useful to return "branded" types. This method has no runtime effect.
+	*/
+	refineType() {
+		return this;
 	}
-	function refine(predicateFn, errmsg) {
-		return reject((value2) => predicateFn(value2) ? null : errmsg);
-	}
-	function refineType() {
-		return self;
-	}
-	function chain(next) {
+	/**
+	* Send the output of the current decoder into another decoder or acceptance
+	* function. The given acceptance function will receive the output of the
+	* current decoder as its input.
+	*
+	* > _**NOTE:** This is an advanced, low-level, API. It's not recommended
+	* > to reach for this construct unless there is no other way. Most cases can
+	* > be covered more elegantly by `.transform()`, `.refine()`, or `.pipe()`
+	* > instead._
+	*/
+	chain(next) {
+		const decode = this.decode;
 		return /* @__PURE__ */ define((blob, ok2, err2) => {
 			const r1 = decode(blob);
 			if (!r1.ok) return r1;
@@ -320,34 +369,58 @@ function define(fn) {
 			return /* @__PURE__ */ isDecoder(r2) ? r2.decode(r1.value) : r2;
 		});
 	}
-	function pipe(next) {
-		return chain(next);
+	/**
+	* Send the output of this decoder as input to another decoder.
+	*
+	* This can be useful to validate the results of a transform, i.e.:
+	*
+	*   string
+	*     .transform((s) => s.split(','))
+	*     .pipe(array(nonEmptyString))
+	*
+	* You can also conditionally pipe:
+	*
+	*   string.pipe((s) => s.startsWith('@') ? username : email)
+	*/
+	pipe(next) {
+		return this.chain(next);
 	}
-	function reject(rejectFn) {
-		return chain((blob, ok2, err2) => {
+	/**
+	* Adds an extra predicate to a decoder. The new decoder is like the
+	* original decoder, but only accepts values that aren't rejected by the
+	* given function.
+	*
+	* The given function can return `null` to accept the decoded value, or
+	* return a specific error message to reject.
+	*
+	* Unlike `.refine()`, you can use this function to return a dynamic error
+	* message.
+	*/
+	reject(rejectFn) {
+		return this.chain((blob, ok2, err2) => {
 			const errmsg = rejectFn(blob);
 			return errmsg === null ? ok2(blob) : err2(typeof errmsg === "string" ? public_annotate(blob, errmsg) : errmsg);
 		});
 	}
-	function describe(message) {
+	/**
+	* Uses the given decoder, but will use an alternative error message in
+	* case it rejects. This can be used to simplify or shorten otherwise
+	* long or low-level/technical errors.
+	*/
+	describe(message) {
+		const decode = this.decode;
 		return /* @__PURE__ */ define((blob, _, err2) => {
 			const result = decode(blob);
 			if (result.ok) return result;
 			else return err2(public_annotate(result.error, message));
 		});
 	}
-	const self = stamp2({
-		verify,
-		value,
-		decode,
-		transform,
-		refine,
-		refineType,
-		reject,
-		describe,
-		chain,
-		pipe,
-		"~standard": {
+	/**
+	* The Standard Schema interface for this decoder.
+	*/
+	get "~standard"() {
+		const decode = this.decode;
+		return this.#standard ??= {
 			version: 1,
 			vendor: "decoders",
 			validate: (blob) => {
@@ -355,9 +428,13 @@ function define(fn) {
 				if (result.ok) return { value: result.value };
 				else return { issues: formatAsIssues(result.error) };
 			}
-		}
-	});
-	return self;
+		};
+	}
+};
+Object.defineProperty(DecoderImpl, "name", { value: "Decoder" });
+// @__NO_SIDE_EFFECTS__
+function define(fn) {
+	return stamp2(new DecoderImpl(fn));
 }
 var kDecoderRegistry = /* @__PURE__ */ Symbol.for("decoders.kDecoderRegistry");
 var _stamped2 = globalThis[kDecoderRegistry] ??= /* @__PURE__ */ new WeakSet();
