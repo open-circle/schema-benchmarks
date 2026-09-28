@@ -137,24 +137,28 @@ const itChecksAllRefinements = (
   config: KnownOutcomeConfig,
   validate: (data: unknown) => MaybePromise<boolean>,
 ) => {
-  for (const [caseName, data] of unsafeEntries(successCases)) {
-    const knownOutcome = resolveKnownOutcome(libraryInfo, config, "success", caseName);
-    const expected = !knownOutcome;
-    const suffix = knownOutcome ? ` (${knownOutcome})` : "";
+  describe("expect success", () => {
+    for (const [caseName, data] of unsafeEntries(successCases)) {
+      const knownOutcome = resolveKnownOutcome(libraryInfo, config, "success", caseName);
+      const expected = !knownOutcome;
+      const suffix = knownOutcome ? ` (${knownOutcome})` : "";
 
-    it(`${caseName}${suffix}`, async () => {
-      await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
-    });
-  }
-  for (const [caseName, data] of unsafeEntries(failureCases)) {
-    const knownOutcome = resolveKnownOutcome(libraryInfo, config, "failure", caseName);
-    const expected = !!knownOutcome;
-    const suffix = knownOutcome ? ` (${knownOutcome})` : "";
+      it(`${caseName}${suffix}`, async () => {
+        await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
+      });
+    }
+  });
+  describe("expect failure", () => {
+    for (const [caseName, data] of unsafeEntries(failureCases)) {
+      const knownOutcome = resolveKnownOutcome(libraryInfo, config, "failure", caseName);
+      const expected = !!knownOutcome;
+      const suffix = knownOutcome ? ` (${knownOutcome})` : "";
 
-    it(`${caseName}${suffix}`, async () => {
-      await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
-    });
-  }
+      it(`${caseName}${suffix}`, async () => {
+        await expect(promiseTry(() => validate(data))).resolves.toBe(expected);
+      });
+    }
+  });
 };
 
 describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
