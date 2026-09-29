@@ -47,6 +47,7 @@ minimumReleaseAgeExclude:
   - "@ata-validator/native-linux-x64-musl@1.38.0"
   - "@ata-validator/native-win32-x64@1.38.0"
   - ata-validator@1.38.0
+minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
