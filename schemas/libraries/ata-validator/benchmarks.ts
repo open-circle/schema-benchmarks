@@ -6,7 +6,7 @@ import { Validator } from "ata-validator";
 import ts from "dedent";
 
 import type { StringBenchmarkConfig } from "#src";
-import { defineBenchmarks } from "#src";
+import { defineBenchmarks, makeResultEnum } from "#src";
 
 import { getAtaValidatorSchema } from ".";
 
@@ -23,6 +23,8 @@ const schema = getAtaValidatorSchema();
 const remotesWithIds = Object.entries(remotes).flatMap(([uri, s]) =>
   typeof s === "object" ? [{ ...s, $id: uri }] : [],
 );
+
+const valid = makeResultEnum({ valid: false }, (data) => ({ valid: true, data }));
 
 export default defineBenchmarks({
   library: {
@@ -43,14 +45,30 @@ export default defineBenchmarks({
     snippet: ts`schema.isValidObject(data)`,
   },
   parsing: {
-    allErrors: {
-      run(data) {
-        return schema.validate(data);
+    allErrors: [
+      {
+        run(data) {
+          try {
+            return valid.true(schema.parse(data));
+          } catch {
+            return valid.false;
+          }
+        },
+        snippet: ts`schema.parse(data)`,
+        validateResult: (result) => result.valid,
+        getData: (result) => result.data,
+        note: "parse",
+        throws: true,
       },
-      validateResult: (result) => result.valid,
-      getData: (result) => result.data,
-      snippet: ts`schema.validate(data)`,
-    },
+      {
+        run(data) {
+          return schema.validate(data);
+        },
+        validateResult: (result) => result.valid,
+        getData: (result) => result.data,
+        snippet: ts`schema.validate(data)`,
+      },
+    ],
   },
   standard: {
     allErrors: { schema },
