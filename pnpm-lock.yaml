@@ -213,7 +213,7 @@ importers:
         version: 0.0.9
       '@ata-project/keywords':
         specifier: ^0.3.3
-        version: 0.3.3(ata-validator@1.32.3(yaml@2.9.1))
+        version: 0.3.3(ata-validator@1.38.0(yaml@2.9.1))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -260,8 +260,8 @@ importers:
         specifier: ^2.2.5
         version: 2.2.5
       ata-validator:
-        specifier: ^1.32.3
-        version: 1.32.3(yaml@2.9.1)
+        specifier: ^1.38.0
+        version: 1.38.0(yaml@2.9.1)
       decoders:
         specifier: ^2.12.1
         version: 2.12.1
@@ -712,42 +712,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.32.3':
-    resolution: {integrity: sha512-CEwJ6votVjjCxbzMFMIO/Nk/rNWIdC/pO+zozr6P+zmEne+qWyaML2FaMrj3KAUKr27Y6TWkwzLY2sbzCU6Cqw==}
+  '@ata-validator/native-darwin-arm64@1.38.0':
+    resolution: {integrity: sha512-I0f1muI4B05krmqBrJeyYf9sF7FMKJ+R8eoJGe0jC3z8lF1zZMT9IW0ZoLeQMJGH4s/S5VYbtVi29RhP+mLgEA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.32.3':
-    resolution: {integrity: sha512-qi/rNnr+xiTOTi+rmQ5h8B4m1m6Sm6ouB/wxaEiimjxER9lJkxPWa7PtxB2iep+LrrqberHIjbE+8v5cVVcCyw==}
+  '@ata-validator/native-darwin-x64@1.38.0':
+    resolution: {integrity: sha512-QojxRnRQDYURTlFCcocgCOJkXAINtfmNsVn3C+W0HZiZh1Iw7ZAD6hMSOrUzD78W6Pd2fWp4VlABcXG+WY5+/Q==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.32.3':
-    resolution: {integrity: sha512-YC9zUMhRvr7F10nfM3iAAQ/hHce6uVkROkpP+B4hH2HPkbYIIrLkmsNYoPNUJoAnXwMYkIuZkvkBCMYnyhI9dA==}
+  '@ata-validator/native-linux-arm64-gnu@1.38.0':
+    resolution: {integrity: sha512-IA8a6AnYu5mZP7F8CgTzIdgPeuuu0vzQA9nH2HQxJrSapbprtk8Q7NE8/SVK/AyzcCcve4jsEiFW06TTD+YguQ==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.32.3':
-    resolution: {integrity: sha512-LMROyF86qdt7r+f4BeoJtxxEYQc2q67U2AZqxJkfl9Hv7v2+p9LhnwMADAv0bTwomWsX3GI9ED389juja34kDw==}
+  '@ata-validator/native-linux-arm64-musl@1.38.0':
+    resolution: {integrity: sha512-gp+wGgVnl+GtN4vcXHz8EGNNZRupo+WQA757Z1YdQVKTvlHTpfev1boNXWRrQ9T04lpAlZ3U3u7qvORNNQWJDQ==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.32.3':
-    resolution: {integrity: sha512-bipw3qCl3mV287hUXZnf6T4OqI4As6O86AQ4+oilKjumjumI/lbbHR7faA6OU/NzhO2eCkbTQSnFtOsCoCYChA==}
+  '@ata-validator/native-linux-x64-gnu@1.38.0':
+    resolution: {integrity: sha512-8wfws32EtKkVXq57jQ2nsJVhpJimyoHSl0qOSki8vd982aIKGDXvz0M4Y6UCXJu8E1g9WX/CFQMdObC5FjUJSw==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.32.3':
-    resolution: {integrity: sha512-JkJ7MMydctgh2xJtXj1fW8136kOL8/tgZYs/1Gcw/JLvCY7Kee2v4oWxhmnhrE9/ONBkn95ORhAfmVh8KwxMaQ==}
+  '@ata-validator/native-linux-x64-musl@1.38.0':
+    resolution: {integrity: sha512-xdKVCJcOziDwtpqgXa/V+A266cdShWrAqczc1wqdt71EA6jHWbKzFOJv1p8d03InrALY/uO1pOnPTWE1NXg16w==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.32.3':
-    resolution: {integrity: sha512-kbwPwgvIRzY8LD0gmlknKhTbxsQq46GtB2Ia618u1ByGXrHYAwKrON7xzJgBf9PjL9R/wEf80JrWKkGN7PeiGQ==}
+  '@ata-validator/native-win32-x64@1.38.0':
+    resolution: {integrity: sha512-6/Kn/xlrF54txLkpxRS/984znhA7DheoLzWcASu35oGEqO66uyy4iqwqr+Ftw6zJOtOkKF4xi/IdITVxLiQ0ig==}
     cpu: [x64]
     os: [win32]
 
@@ -5479,8 +5479,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.32.3:
-    resolution: {integrity: sha512-PRDppndA1YpOyk81Y0pXBkIjJdPp80v8rjufBsMucRczOdRROk802c5vfzV9u8d9+Ar3dlZjhqNnHLx4kXSSJA==}
+  ata-validator@1.38.0:
+    resolution: {integrity: sha512-Nq1WoQU0eDE2JrQqCwZWbtr3fxfNYFhQSZP+6fvaB8iBSQZwZmAhgFNHbTkLdAfObmknGNCaYkl//VoHWymu3A==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -9911,29 +9911,29 @@ snapshots:
 
   '@ark/util@0.56.4': {}
 
-  '@ata-project/keywords@0.3.3(ata-validator@1.32.3(yaml@2.9.1))':
+  '@ata-project/keywords@0.3.3(ata-validator@1.38.0(yaml@2.9.1))':
     dependencies:
-      ata-validator: 1.32.3(yaml@2.9.1)
+      ata-validator: 1.38.0(yaml@2.9.1)
 
-  '@ata-validator/native-darwin-arm64@1.32.3':
+  '@ata-validator/native-darwin-arm64@1.38.0':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.32.3':
+  '@ata-validator/native-darwin-x64@1.38.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.32.3':
+  '@ata-validator/native-linux-arm64-gnu@1.38.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.32.3':
+  '@ata-validator/native-linux-arm64-musl@1.38.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.32.3':
+  '@ata-validator/native-linux-x64-gnu@1.38.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.32.3':
+  '@ata-validator/native-linux-x64-musl@1.38.0':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.32.3':
+  '@ata-validator/native-win32-x64@1.38.0':
     optional: true
 
   '@babel/code-frame@7.29.7':
@@ -14285,15 +14285,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.32.3(yaml@2.9.1):
+  ata-validator@1.38.0(yaml@2.9.1):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.32.3
-      '@ata-validator/native-darwin-x64': 1.32.3
-      '@ata-validator/native-linux-arm64-gnu': 1.32.3
-      '@ata-validator/native-linux-arm64-musl': 1.32.3
-      '@ata-validator/native-linux-x64-gnu': 1.32.3
-      '@ata-validator/native-linux-x64-musl': 1.32.3
-      '@ata-validator/native-win32-x64': 1.32.3
+      '@ata-validator/native-darwin-arm64': 1.38.0
+      '@ata-validator/native-darwin-x64': 1.38.0
+      '@ata-validator/native-linux-arm64-gnu': 1.38.0
+      '@ata-validator/native-linux-arm64-musl': 1.38.0
+      '@ata-validator/native-linux-x64-gnu': 1.38.0
+      '@ata-validator/native-linux-x64-musl': 1.38.0
+      '@ata-validator/native-win32-x64': 1.38.0
       yaml: 2.9.1
 
   atomically@2.1.1:
