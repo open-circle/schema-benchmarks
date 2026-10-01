@@ -2,15 +2,17 @@
 
 ## Project Commands
 
-Use `pnpm` and the version specified by the repository's `packageManager` field.
+Use Vite+ (`vp`) for project commands and package management. Use `vpr <script-or-task>` for package scripts and Vite Tasks. If you do not have the global CLI, invoke the project-local CLI with `pnpm exec vp`.
 
-- `pnpm check` runs formatting and lint checks.
-- `pnpm typecheck` runs all TypeScript checks.
-- `pnpm test` runs unit and integration tests.
-- `pnpm e2e` runs Playwright end-to-end tests.
-- `pnpm schemas:build` builds the schemas package.
-- `pnpm bench:all` runs all benchmark suites.
-- `pnpm website:dev` starts the website locally.
+- `vp check` runs formatting, lint, and type checks; use `vp lint --format=github` for GitHub Actions annotations.
+- `vpr typecheck` runs the workspace TypeScript checks.
+- `vpr test` runs unit and integration tests.
+- `vpr e2e` runs Playwright end-to-end tests.
+- `vpr schemas:build` builds the schemas package.
+- `vpr bench:all` runs all benchmark suites through Vite Task.
+- `vpr website:dev` starts the website locally.
+
+Use `vp run <task>` (or its `vpr <task>` shorthand) for tasks configured in `vite.config.ts` or package scripts. `vp dev`, `vp build`, `vp test`, and `vp pack` are built-in Vite+ commands; use `vp run <name>` when you intend to run a package script or Vite Task with that name. Without global Vite+, use `pnpm exec vp run <task>`.
 
 Run the narrowest relevant command first, then broaden validation when the change warrants it.
 
@@ -33,7 +35,7 @@ When adding a validation library:
 3. Add its schema definition and benchmark definitions.
 4. Add download benchmarks matching typical library usage.
 5. Add a `types/index.ts` (schema plus `Input`/`Output` aliases, or a `noInference` reason) and a `types/fromType.ts` (a `style` plus a schema built against the shared `Product` type) when applicable.
-6. Run `pnpm schemas:build` and the relevant benchmark commands.
+6. Run `vpr schemas:build` and the relevant benchmark commands (for example, `vpr bench:all`).
 
 Use existing library folders as templates and preserve the library's idiomatic API in the adapter.
 
@@ -66,3 +68,31 @@ Benchmark output and external API data can be regenerated or refreshed by script
 Read `CONTRIBUTING.md` for setup, Git etiquette, library contribution details, and pull request expectations. In particular, prefer a linear history without merge commits.
 
 AI assistance is welcome for speeding up work, but every change must be reviewed and tested by a human before submission.
+
+<!--VITE PLUS START-->
+
+# Using Vite+, the Unified Toolchain for the Web
+
+This project is using Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called `vp`. Vite+ is distinct from Vite, and it invokes Vite through `vp dev` and `vp build`. Run `vp help` to print a list of commands and `vp <command> --help` for information about a specific command.
+
+Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.dev/guide/.
+
+## Built-in Commands vs Scripts
+
+`vp <name>` runs a built-in command. `vp run <name>` runs a `package.json` script or a `vite.config.ts` task. Scripts cannot overwrite built-ins, so `vp dev` and `vp run dev` may do different things. Check `package.json` and `vite.config.ts` first, and run `vp run <name>` when the project defines a script or task with that name.
+
+## Tool Versions
+
+Run `vp toolchain` to show versions and relationships in the active Vite+
+release. Add a tool name to select part of the graph. For example, run
+`vp toolchain vite`. Use `--global` to ignore the local `vite-plus` package. Use
+`vp why <package>` to show the package-manager dependency graph.
+
+## Review Checklist
+
+- [ ] Run `vp install` after pulling remote changes and before getting started.
+- [ ] Run `vp check` and `vp test` to format, lint, type check and test changes.
+- [ ] Check if there are `vite.config.ts` tasks or `package.json` scripts necessary for validation, run via `vp run <script>`.
+- [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
+
+<!--VITE PLUS END-->

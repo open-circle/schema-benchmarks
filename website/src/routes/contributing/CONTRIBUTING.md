@@ -6,11 +6,11 @@ Firstly, thank you for wanting to contribute! Ideas for improvements are always 
 
 1. Fork the repository
 2. Clone your fork
-3. Install pnpm with `corepack enable` (or a method of your choice)
-4. Install dependencies with `pnpm install`
-5. Install Playwright with `pnpm exec playwright install --with-deps chromium` (needed for browser tests)
-6. Build the schemas with `pnpm schemas:build`
-7. Run the website with `pnpm website:dev`
+3. Use Node.js from `.node-version` and install the global Vite+ CLI, or use the project-local CLI after dependencies are installed.
+4. Install dependencies with `vp install`. If you do not have global `vp` yet, bootstrap with `pnpm install` and then run Vite+ locally with `pnpm exec vp`.
+5. Install Playwright with `vp exec playwright install --with-deps chromium` (needed for browser tests)
+6. Build the schemas with `vpr schemas:build`
+7. Run the website with `vpr website:dev`
 
 ## Git Etiquette
 
@@ -20,14 +20,14 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 
 ## Adding a new library
 
-1. Add the library to the dependencies of the `schemas` package. (`pnpm --filter schemas add <library>`)
+1. Add the library to the dependencies of the `schemas` package (`vp add --filter schemas <library>`; without global Vite+, use `pnpm exec vp add --filter schemas <library>`).
 2. Create a new folder in `schemas/libraries` named after the library.
 3. Add a `index.ts` file with the schema definition. Usually this should be a single function that creates and returns the schema - any other values and types can be exported as well. The schema should match as much of the validation specified as possible. Use existing library schema factories as a reference.
 4. Add a `benchmarks.ts` file with the benchmark definitions. Use other benchmarks as a reference.
 5. Create download benchmarks (usually just a single `download/index.ts` file, but can be a `download/` folder with multiple files). This should match how the library would typically be used, matching the specified data type.
 6. Add a `types/index.ts` file if the library infers TypeScript types from its schemas - export the schema plus `Input`/`Output` type aliases read from it, or a `noInference` string explaining why it can't. Add a `types/fromType.ts` file if the library can build a schema from an existing type - export a `style` (`"annotation"` or `"builder"`) plus a schema built against the shared `Product` type. Use existing `types/` folders as a reference.
-7. Build the schema package with `pnpm schemas:build`
-8. Run the benchmarks with `pnpm bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
+7. Build the schema package with `vpr schemas:build`
+8. Run the benchmarks with `vpr bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
 9. Open a PR with your changes.
 
 ## Bug reports/feature requests
@@ -38,12 +38,13 @@ Make sure any changes meet our coding standards. We lint and format with [Vite+]
 
 Prefer browser tests (`*.browser.test.ts(x)`) for anything needing DOM specific features (e.g. React components), and Node tests (`*.node.test.ts`) for everything else. Include type tests (`*.test-d.ts`) for anything with complex typing.
 
-The following commands will help you check your changes before opening a PR:
+The following commands will help you check your changes before opening a PR. With only the project-local CLI, prefix built-in `vp` commands with `pnpm exec`.
 
-- `pnpm check` - runs lint and format checks
-- `pnpm typecheck` - runs type checks
-- `pnpm test` - runs unit and integration tests
-- `pnpm e2e` - runs end-to-end tests
+- `vp check` - runs formatting, lint, and type checks
+- `vpr typecheck` - runs TypeScript project checks
+- `vpr test` - runs unit and integration tests
+- `vpr e2e` - runs end-to-end tests
+- `vpr bench:all` - runs all benchmark suites
 
 ## PRs written by AI
 
