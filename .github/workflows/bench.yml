@@ -29,10 +29,10 @@ jobs:
         shell: bash
         env:
           TTSC_CACHE_DIR: ${{ github.workspace }}/.ttsc-cache
-        run: pnpm schemas:build
+        run: vpr schemas:build
       - name: Generate E2E library versions
         shell: bash
-        run: pnpm --filter @schema-benchmarks/website run e2e:gen-versions
+        run: vpr --filter @schema-benchmarks/website e2e:gen-versions
       - name: Save ttsc native cache
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -67,7 +67,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run stack benchmark
-        run: pnpm bench:stack
+        run: vpr bench:stack
       - name: Upload stack results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -91,7 +91,7 @@ jobs:
       - name: Run download benchmark
         env:
           TTSC_CACHE_DIR: ${{ github.workspace }}/.ttsc-cache
-        run: pnpm bench:download
+        run: vpr bench:download
       - name: Save ttsc native cache
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -122,7 +122,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run ${{ matrix.type }} benchmark
-        run: pnpm --filter @schema-benchmarks/bench bench --type=${{ matrix.type }}
+        run: vpr --filter @schema-benchmarks/bench bench --type=${{ matrix.type }}
       - name: Upload bench results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -146,7 +146,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run string benchmark shard
-        run: pnpm --filter @schema-benchmarks/bench bench --type=string --shard=${{ matrix.shard }}/3
+        run: vpr --filter @schema-benchmarks/bench bench --type=string --shard=${{ matrix.shard }}/3
       - name: Upload string benchmark shard
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -167,7 +167,7 @@ jobs:
           path: bench/results
           merge-multiple: true
       - name: Merge benchmark shards
-        run: pnpm --filter @schema-benchmarks/bench bench:merge
+        run: vpr --filter @schema-benchmarks/bench bench:merge
       - name: Upload bench results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -187,7 +187,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run JSON schema benchmark
-        run: pnpm bench:json-schema
+        run: vpr bench:json-schema
       - name: Upload JSON schema results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -207,7 +207,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Run TypeScript inference benchmark
-        run: pnpm bench:types
+        run: vpr bench:types
       - name: Upload TypeScript inference results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

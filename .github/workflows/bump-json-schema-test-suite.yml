@@ -20,7 +20,7 @@ jobs:
         uses: ./.github/actions/environments
 
       - name: Bump JSON Schema test-suite SHA
-        run: pnpm json-schema-tests:bump
+        run: vpr json-schema-tests:bump
 
       - name: Extract pinned metadata
         id: metadata
@@ -62,7 +62,7 @@ jobs:
             - Message: ${{ steps.metadata.outputs.message }}
 
             Command run:
-            - `pnpm json-schema-tests:bump`
+            - `vpr json-schema-tests:bump`
           branch: chore/bump-json-schema-test-suite
           delete-branch: true
           add-paths: |
