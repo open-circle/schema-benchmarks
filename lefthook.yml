@@ -1,8 +1,0 @@
-pre-commit:
-  commands:
-    lint:
-      run: vpr lint --fix --no-error-on-unmatched-pattern {staged_files}
-      stage_fixed: true
-    format:
-      run: vpr format --no-error-on-unmatched-pattern {staged_files}
-      stage_fixed: true

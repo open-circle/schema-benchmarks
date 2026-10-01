@@ -21,7 +21,7 @@
     "bench:types": "vpr --filter @schema-benchmarks/bench types",
     "json-schema-tests:checkout": "vpr --filter json-schema-tests checkout",
     "json-schema-tests:bump": "vpr --filter json-schema-tests bump:test-suite-commit",
-    "postinstall": "lefthook install",
+    "postinstall": "vp config --no-agent",
     "knip": "knip",
     "e2e": "vpr -r e2e"
   },
@@ -33,7 +33,6 @@
     "eslint-plugin-no-relative-import-paths": "^1.7.3",
     "eslint-plugin-playwright": "^2.12.0",
     "knip": "^6.38.0",
-    "lefthook": "^2.1.15",
     "playwright": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
