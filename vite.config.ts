@@ -106,6 +106,9 @@ export default defineConfig({
     ],
     sortImports: {},
   },
+  staged: {
+    "*": "vp check --fix --no-error-on-unmatched-pattern",
+  },
   run: {
     tasks: {
       // Replaces the previous `&&`-chained script so each benchmark suite is its own cached step.

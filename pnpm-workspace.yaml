@@ -8,7 +8,6 @@ allowBuilds:
   "@parcel/watcher": false
   ata-validator: false
   esbuild: false
-  lefthook: false
   msgpackr-extract: false
   msw: false
   sharp: false
