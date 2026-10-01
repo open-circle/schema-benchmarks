@@ -111,6 +111,18 @@ export default defineConfig({
   },
   run: {
     tasks: {
+      "schemas:build": {
+        command: "vpr --filter @schema-benchmarks/schemas build",
+        cache: {
+          untrackedEnv: ["TTSC_CACHE_DIR"],
+        },
+      },
+      "bench:download": {
+        command: "vpr --filter @schema-benchmarks/bench download",
+        cache: {
+          untrackedEnv: ["TTSC_CACHE_DIR"],
+        },
+      },
       // Replaces the previous `&&`-chained script so each benchmark suite is its own cached step.
       "bench:all": {
         command: [
@@ -120,6 +132,9 @@ export default defineConfig({
           "vpr bench:stack",
           "vpr bench:types",
         ],
+        cache: {
+          untrackedEnv: ["TTSC_CACHE_DIR"],
+        },
       },
     },
   },

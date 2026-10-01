@@ -14,7 +14,7 @@ export default defineConfig({
       {
         test: {
           name: "node",
-          include: ["**/*.node.test.ts"], // not tsx - if you're using React, test in the browser
+          include: ["**/*.node.test.ts"],
           setupFiles: ["./test/common/setup.ts"],
         },
       },

@@ -14,10 +14,20 @@ export default defineConfig({
         test: {
           name: "node",
           include: ["**/*.node.test.ts"],
-          // each case is a TypeScript program checked against a library's declarations
+          // Each case is a TypeScript program checked against a library's declarations.
           testTimeout: 120_000,
         },
       },
     ],
+  },
+  run: {
+    tasks: {
+      download: {
+        command: "node ./src/scripts/download.ts",
+        cache: {
+          untrackedEnv: ["TTSC_CACHE_DIR"],
+        },
+      },
+    },
   },
 });

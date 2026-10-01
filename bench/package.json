@@ -22,7 +22,6 @@
     "types": "node ./src/scripts/types/orchestrate.ts",
     "test": "vp test",
     "coverage": "vp test run --coverage",
-    "download": "node ./src/scripts/download.ts",
     "stack": "node ./src/scripts/stack.ts",
     "typecheck": "tsc"
   },
