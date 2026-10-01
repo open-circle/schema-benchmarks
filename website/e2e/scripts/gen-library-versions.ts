@@ -10,7 +10,7 @@ import { format } from "vite-plus/fmt";
  * Reads the installed version of every benchmarked library from the built benchmark configs, so
  * E2E tests can assert against real versions instead of hand-maintained strings that go stale.
  *
- * Run it with `vpr e2e:gen-versions` (or `pnpm pree2e`), after building `schemas`.
+ * Run it with `vpr e2e:gen-versions`, after building `schemas`. (also runs automatically as part of the E2E setup)
  */
 const versions: Record<string, string> = {};
 
