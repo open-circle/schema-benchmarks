@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
-  "include": ["./vitest.config.ts", "./src/**/*", "./test/**/*"],
+  "include": ["./vite.config.ts", "./src/**/*", "./test/**/*"],
   "compilerOptions": {
     "module": "nodenext",
     "allowImportingTsExtensions": true,
