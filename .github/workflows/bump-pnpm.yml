@@ -1,4 +1,4 @@
-name: Bump pnpm (Corepack)
+name: Bump pnpm (Vite+)
 
 on:
   schedule:
@@ -15,13 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
           node-version-file: .node-version
-
-      - name: Enable Corepack
-        run: corepack enable
+          run-install: false
 
       - name: Compute 24h cutoff (UTC)
         id: cutoff
@@ -66,22 +64,22 @@ jobs:
           '
 
       - name: Update pnpm pin
-        run: corepack use pnpm@${{ steps.pick.outputs.version }}
+        run: vp env pin --target package-manager --force pnpm@${{ steps.pick.outputs.version }}
 
       - name: Refresh lockfile metadata
-        run: pnpm install --lockfile-only
+        run: vp install --lockfile-only
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.BOT_GH_TOKEN }}
-          commit-message: "chore: bump pnpm via corepack"
-          title: "chore: bump pnpm via corepack"
+          commit-message: "chore: bump pnpm via Vite+"
+          title: "chore: bump pnpm via Vite+"
           body: |
-            Automated update of the pnpm toolchain pin using Corepack.
+            Automated update of the pnpm toolchain pin using Vite+.
 
             Command run:
-            - corepack use pnpm@${{ steps.pick.outputs.version }}
+            - vp env pin --target package-manager --force pnpm@${{ steps.pick.outputs.version }}
 
             Version metadata:
             - Published at: ${{ steps.pick.outputs.published_at }}
