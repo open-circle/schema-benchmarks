@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import * as vUtils from "./valibot.ts";
 

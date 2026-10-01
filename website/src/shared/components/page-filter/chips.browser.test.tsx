@@ -1,6 +1,6 @@
 import { unsafeEntries, unsafeFromEntries } from "@schema-benchmarks/utils";
-import { describe, expect } from "vitest";
-import { page } from "vitest/browser";
+import { describe, expect } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 

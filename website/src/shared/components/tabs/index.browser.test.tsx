@@ -1,7 +1,7 @@
 import { mergeRefs } from "@schema-benchmarks/utils/react";
 import type { Ref } from "react";
-import { assert, describe, expect, vi } from "vitest";
-import { page } from "vitest/browser";
+import { assert, describe, expect, vi } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 

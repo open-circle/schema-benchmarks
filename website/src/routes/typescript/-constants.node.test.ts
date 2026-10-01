@@ -1,5 +1,5 @@
 import type { FromTypeResult } from "@schema-benchmarks/bench";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import { missedFromTypeCases } from "./-constants.tsx";
 

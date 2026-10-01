@@ -53,7 +53,7 @@ export const getAllPackagesFn = createServerFn().handler(async () => {
   return Object.fromEntries(
     Array.from(
       packageVersions,
-      // oxlint-disable-next-line unicorn/no-array-sort typescript/unbound-method
+      // oxlint-disable-next-line unicorn/no-array-sort
       ([key, versions]) => [key, Array.from(versions).sort(collator.compare)] as const,
       // oxlint-disable-next-line unicorn/no-array-sort
     ).sort(([a], [b]) => collator.compare(a, b)),

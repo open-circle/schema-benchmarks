@@ -1,5 +1,5 @@
-import { describe, expect } from "vitest";
-import { type Locator, page } from "vitest/browser";
+import { describe, expect } from "vite-plus/test";
+import { type Locator, page } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 

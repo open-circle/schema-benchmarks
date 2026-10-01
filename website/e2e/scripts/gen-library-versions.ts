@@ -1,16 +1,16 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
-// the built libraries, so this needs `pnpm run --filter schemas build` first
+// the built libraries, so this needs `vpr --filter schemas build` first
 import { libraries } from "@schema-benchmarks/schemas/libraries";
 import ts from "dedent";
-import { format } from "oxfmt";
+import { format } from "vite-plus/fmt";
 
 /**
  * Reads the installed version of every benchmarked library from the built benchmark configs, so
  * E2E tests can assert against real versions instead of hand-maintained strings that go stale.
  *
- * Run it with `pnpm run e2e:gen-versions` (or `pnpm pree2e`), after building `schemas`.
+ * Run it with `vpr e2e:gen-versions` (or `pnpm pree2e`), after building `schemas`.
  */
 const versions: Record<string, string> = {};
 

@@ -1,4 +1,4 @@
-import { expect } from "vitest";
+import { expect } from "vite-plus/test";
 import "mix-n-matchers/vitest";
 
 import { toBeCurrent } from "./matchers/to-be-current";

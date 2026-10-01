@@ -1,5 +1,5 @@
 import type { TypesResult } from "@schema-benchmarks/bench";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import { compareResults } from "./-sort.ts";
 

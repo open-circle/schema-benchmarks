@@ -3,9 +3,9 @@ import * as process from "node:process";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-import { format } from "oxfmt";
 import { up } from "up-fetch";
 import * as v from "valibot";
+import { format } from "vite-plus/fmt";
 
 import sha from "#constants/sha.gen.ts";
 

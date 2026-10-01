@@ -56,7 +56,7 @@ Benchmark output and external API data can be regenerated or refreshed by script
 ## Style and Scope
 
 - Follow the existing TypeScript, React, and package-local patterns.
-- Use `oxfmt` for formatting and `oxlint` for linting.
+- Use Vite+ for linting and formatting.
 - Avoid unrelated refactors, dependency upgrades, and formatting churn.
 - Preserve existing public APIs unless the task explicitly requires a breaking change.
 - Do not add inline comments unless they clarify non-obvious behavior.

@@ -1,5 +1,5 @@
-import { describe, expect } from "vitest";
-import { page, userEvent } from "vitest/browser";
+import { describe, expect } from "vite-plus/test";
+import { page, userEvent } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 

@@ -8,7 +8,7 @@ import dedent from "dedent";
 import { getPaseriSchema } from "../paseri/index.ts";
 
 // Ahead-of-time compile the shared paseri schema into a standalone parser module.
-// Re-run with `pnpm run gen:paseri` whenever the schema changes.
+// Re-run with `vpr gen:paseri` whenever the schema changes.
 
 // The compiler emits runtime-optimised TypeScript that is bundled (type-stripped), not type-checked
 // as authored source. `@ts-nocheck` keeps the generated module out of the repo's strict typecheck;

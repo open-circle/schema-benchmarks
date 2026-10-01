@@ -11,3 +11,4 @@ public/download.json
 public/json-schema.json
 public/stack.json
 public/types.json
+.vitest/

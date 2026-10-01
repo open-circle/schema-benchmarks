@@ -31,7 +31,7 @@ import { ensureArray, promiseTry, unsafeEntries } from "@schema-benchmarks/utils
 import { Ajv } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import * as Schema from "typebox/schema";
-import { assert, describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vite-plus/test";
 
 import { acceptedJsonSchemas } from "./accepted-json-schemas.ts";
 
