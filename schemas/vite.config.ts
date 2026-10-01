@@ -39,4 +39,12 @@ export default defineConfig({
       },
     ],
   },
+  run: {
+    tasks: {
+      // Replaces the implicit prebuild/postbuild scripts with one explicit, cached pipeline.
+      build: {
+        command: ["vpr gen:paseri", "vpr gen:zod-compiler", "vp pack", "vpr gen:json-schemas"],
+      },
+    },
+  },
 });

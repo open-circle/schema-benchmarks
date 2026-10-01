@@ -106,4 +106,18 @@ export default defineConfig({
     ],
     sortImports: {},
   },
+  run: {
+    tasks: {
+      // Replaces the previous `&&`-chained script so each benchmark suite is its own cached step.
+      "bench:all": {
+        command: [
+          "vpr bench:download",
+          "vpr bench:bench",
+          "vpr bench:json-schema",
+          "vpr bench:stack",
+          "vpr bench:types",
+        ],
+      },
+    },
+  },
 });

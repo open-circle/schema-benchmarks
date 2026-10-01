@@ -17,4 +17,16 @@ export default defineConfig({
       },
     ],
   },
+  run: {
+    tasks: {
+      // Replaces the implicit precheckout/postcheckout scripts with one explicit, cached pipeline.
+      checkout: {
+        command: [
+          "del-cli tests remotes",
+          "node ./scripts/checkout.ts",
+          "node ./scripts/gen-constants.ts",
+        ],
+      },
+    },
+  },
 });
