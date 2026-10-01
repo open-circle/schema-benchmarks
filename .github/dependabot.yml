@@ -16,6 +16,15 @@ updates:
       # JSR deps don't seem to work properly with dependabot
       - dependency-name: "@paseri/compiler"
       - dependency-name: "@paseri/paseri"
+      # Keep the Vite+ package, Vite core alias, and Vitest ecosystem pins aligned via vp migrate.
+      - dependency-name: "vite-plus"
+      - dependency-name: "vite"
+      - dependency-name: "@voidzero-dev/vite-plus-core"
+      - dependency-name: "vitest"
+      - dependency-name: "@vitest/browser-playwright"
+      - dependency-name: "@vitest/coverage-v8"
+      - dependency-name: "@vitest/expect"
+      - dependency-name: "@vitest/pretty-format"
     groups:
       npm:
         patterns:

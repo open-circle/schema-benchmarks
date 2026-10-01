@@ -1,0 +1,108 @@
+name: Bump Vite+
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-vite-plus:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+        with:
+          node-version-file: .node-version
+          run-install: false
+
+      - name: Compute 24h cutoff (UTC)
+        id: cutoff
+        run: |
+          cutoff="$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)"
+          echo "value=$cutoff" >> "$GITHUB_OUTPUT"
+
+      - name: Pick latest stable Vite+ release older than 24h
+        id: pick
+        env:
+          CUTOFF: ${{ steps.cutoff.outputs.value }}
+        run: |
+          node -e '
+            const { execFileSync } = require("node:child_process");
+            const fs = require("node:fs");
+
+            const toolchain = JSON.parse(execFileSync("vp", ["toolchain", "--json"], { encoding: "utf8" }));
+            const currentVersion = toolchain.source?.vitePlusVersion;
+            if (!currentVersion) throw new Error("Could not determine the current Vite+ version");
+
+            const publishedVersions = new Set(JSON.parse(execFileSync("npm", ["view", "vite-plus", "versions", "--json"], { encoding: "utf8" })));
+            const times = JSON.parse(execFileSync("npm", ["view", "vite-plus", "time", "--json"], { encoding: "utf8" }));
+            const parseVersion = (version) => /^\d+\.\d+\.\d+$/.test(version) ? version.split(".").map(Number) : null;
+            const compareVersions = (left, right) => {
+              const a = parseVersion(left);
+              const b = parseVersion(right);
+              for (let index = 0; index < 3; index += 1) {
+                if (a[index] !== b[index]) return a[index] - b[index];
+              }
+              return 0;
+            };
+
+            const cutoff = new Date(process.env.CUTOFF);
+            const eligible = Object.entries(times)
+              .filter(([version, publishedAt]) => publishedVersions.has(version)
+                && parseVersion(version)
+                && compareVersions(version, currentVersion) > 0
+                && !Number.isNaN(new Date(publishedAt).getTime())
+                && new Date(publishedAt) <= cutoff)
+              .sort(([left], [right]) => compareVersions(right, left));
+
+            const selected = eligible[0];
+            if (!selected) {
+              process.stdout.write(`No stable Vite+ release newer than ${currentVersion} is at least 24 hours old.\n`);
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, "version=\n\n");
+              process.exit(0);
+            }
+
+            const [version, publishedAt] = selected;
+            process.stdout.write(`Selected Vite+ ${version} (published ${publishedAt}) over ${currentVersion}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, [`version=${version}`, `published_at=${publishedAt}`, `current_version=${currentVersion}`, ""].join("\n"));
+          '
+
+      - name: Upgrade global Vite+
+        if: steps.pick.outputs.version != ''
+        run: vp upgrade "${{ steps.pick.outputs.version }}"
+
+      - name: Migrate project toolchain
+        if: steps.pick.outputs.version != ''
+        run: vp migrate --no-interactive
+
+      - name: Install migrated dependencies
+        if: steps.pick.outputs.version != ''
+        run: vp install
+
+      - name: Create Pull Request
+        if: steps.pick.outputs.version != ''
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.BOT_GH_TOKEN }}
+          commit-message: "chore: bump Vite+ to ${{ steps.pick.outputs.version }}"
+          title: "chore: bump Vite+ to ${{ steps.pick.outputs.version }}"
+          body: |
+            Automated Vite+ toolchain update.
+
+            Version metadata:
+            - Previous: ${{ steps.pick.outputs.current_version }}
+            - New: ${{ steps.pick.outputs.version }}
+            - Published at: ${{ steps.pick.outputs.published_at }}
+            - Cooldown: at least 24 hours old
+            - Channel: stable releases only
+
+            The workflow ran `vp upgrade`, `vp migrate --no-interactive`, and `vp install`. The pull request's CI runs the project builds, checks, and tests.
+          branch: chore/bump-vite-plus
+          delete-branch: true
