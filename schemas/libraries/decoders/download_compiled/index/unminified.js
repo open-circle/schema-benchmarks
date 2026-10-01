@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/decoders@2.12.1/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.12.2/node_modules/decoders/dist/index.js
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
@@ -493,44 +493,33 @@ function array(decoder, options) {
 		return ok2(results);
 	});
 }
-// @__NO_SIDE_EFFECTS__
-function difference(xs, ys) {
-	const result = /* @__PURE__ */ new Set();
-	for (const x of xs) if (!ys.has(x)) result.add(x);
-	return result;
-}
 var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
 // @__NO_SIDE_EFFECTS__
 function buildObject(decoders) {
-	const knownKeys = new Set(Object.keys(decoders));
+	const knownKeys = Object.keys(decoders);
 	return pojo.chain((plainObj, ok2, err2) => {
-		const actualKeys = new Set(Object.keys(plainObj));
-		const missingKeys = /* @__PURE__ */ difference(knownKeys, actualKeys);
 		const record2 = {};
 		let errors = null;
-		for (const key of Object.keys(decoders)) {
+		let missingKeys = null;
+		for (const key of knownKeys) {
 			const decoder = decoders[key];
 			const rawValue = plainObj[key];
 			const result = decoder.decode(rawValue);
 			if (result.ok) {
 				const value = result.value;
 				if (value !== void 0) record2[key] = value;
-				missingKeys.delete(key);
 			} else {
 				const ann = result.error;
-				if (rawValue === void 0) missingKeys.add(key);
-				else {
-					errors ??= /* @__PURE__ */ new Map();
-					errors.set(key, ann);
-				}
+				if (rawValue === void 0) (missingKeys ??= []).push(key);
+				else (errors ??= /* @__PURE__ */ new Map()).set(key, ann);
 			}
 		}
-		if (errors || missingKeys.size > 0) {
+		if (errors || missingKeys) {
 			let objAnn = public_annotateObject(plainObj);
 			if (errors) objAnn = merge(objAnn, errors);
-			if (missingKeys.size > 0) {
-				const errMsg = Array.from(missingKeys).map(quote).join(", ");
-				const pluralized = missingKeys.size > 1 ? "keys" : "key";
+			if (missingKeys) {
+				const errMsg = missingKeys.map(quote).join(", ");
+				const pluralized = missingKeys.length > 1 ? "keys" : "key";
 				objAnn = updateText(objAnn, `Missing ${pluralized}: ${errMsg}`);
 			}
 			return err2(objAnn);
