@@ -1,5 +1,5 @@
 [build]
-command = "pnpm install && cd ./website && pnpm build"
+command = "pnpm install && pnpm exec vp run --filter @schema-benchmarks/website build"
 publish = "website/dist/client"
 
 [functions]
