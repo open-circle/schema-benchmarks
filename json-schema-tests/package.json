@@ -20,9 +20,6 @@
   },
   "scripts": {
     "postinstall": "vpr checkout",
-    "precheckout": "del-cli tests remotes",
-    "checkout": "node ./scripts/checkout.ts",
-    "postcheckout": "node ./scripts/gen-constants.ts",
     "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",
     "postbump:test-suite-commit": "vpr checkout",
     "test": "vp test",

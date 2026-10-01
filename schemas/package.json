@@ -11,10 +11,7 @@
   "scripts": {
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
     "gen:zod-compiler": "node ./libraries/zod-compiler/generate.ts",
-    "prebuild": "vpr gen:paseri && vpr gen:zod-compiler",
-    "postbuild": "vpr gen:json-schemas",
     "gen:json-schemas": "node ./scripts/gen-accepted-json-schemas.ts",
-    "build": "vp pack",
     "coverage": "vp test run --coverage",
     "typecheck": "tsc",
     "test": "vp test"

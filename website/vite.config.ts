@@ -181,6 +181,22 @@ const config = defineConfig({
     // make sure deps used by MDX are pre-optimized - dev server will struggle to optimize them later
     include: ["date-fns/fp", "react-tweet"],
   },
+  run: {
+    tasks: {
+      // Each replaces an implicit pre/post script with one explicit, cached pipeline.
+      build: {
+        command: ["vpr copy-results", "vp build", "vpr gen-offline"],
+      },
+      dev: {
+        command: ["vpr copy-results", "vp dev --port 3000"],
+        cache: false,
+      },
+      e2e: {
+        command: ["vpr e2e:gen-versions", "playwright test"],
+        cache: false,
+      },
+    },
+  },
 });
 
 export default config;

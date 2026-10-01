@@ -19,7 +19,6 @@
     "bench:json-schema": "vpr --filter @schema-benchmarks/bench json-schema",
     "bench:stack": "vpr --filter @schema-benchmarks/bench stack",
     "bench:types": "vpr --filter @schema-benchmarks/bench types",
-    "bench:all": "vpr bench:download && vpr bench:bench && vpr bench:json-schema && vpr bench:stack && vpr bench:types",
     "json-schema-tests:checkout": "vpr --filter json-schema-tests checkout",
     "json-schema-tests:bump": "vpr --filter json-schema-tests bump:test-suite-commit",
     "postinstall": "lefthook install",

@@ -9,8 +9,6 @@
     "#e2e/*": "./e2e/*"
   },
   "scripts": {
-    "build": "vp build",
-    "dev": "vp dev --port 3000",
     "serve": "node preview.ts",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
@@ -19,12 +17,7 @@
     "typecheck": "tsc",
     "copy-results": "cp ../bench/bench.json ../bench/download.json ../bench/json-schema.json ../bench/stack.json ../bench/types.json ./public/",
     "gen-offline": "node offline/generate.ts",
-    "e2e:gen-versions": "node ./e2e/scripts/gen-library-versions.ts",
-    "prebuild": "vpr copy-results",
-    "predev": "vpr copy-results",
-    "postbuild": "vpr gen-offline",
-    "pree2e": "vpr e2e:gen-versions",
-    "e2e": "playwright test"
+    "e2e:gen-versions": "node ./e2e/scripts/gen-library-versions.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.20",
