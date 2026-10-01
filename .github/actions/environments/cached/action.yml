@@ -1,5 +1,5 @@
 name: Setup environment and TTSC native cache
-description: Setup environment with Node.js and pnpm, and restore TTSC native cache
+description: Setup environment with Vite+, Node.js, and pnpm, and restore TTSC native cache
 
 inputs:
   cache-prefix:
@@ -24,4 +24,4 @@ runs:
       shell: bash
       env:
         TTSC_CACHE_DIR: ${{ github.workspace }}/.ttsc-cache
-      run: pnpm -C schemas/ exec ttsc prepare
+      run: vp -C schemas/ exec ttsc prepare

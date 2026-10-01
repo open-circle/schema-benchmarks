@@ -12,8 +12,8 @@
     "./rolldown": "./src/rolldown.ts"
   },
   "scripts": {
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "test": "vp test",
+    "coverage": "vp test run --coverage",
     "typecheck": "tsc"
   },
   "devDependencies": {
@@ -27,6 +27,7 @@
     "rolldown": "catalog:",
     "typescript": "catalog:",
     "valibot": "catalog:",
+    "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {

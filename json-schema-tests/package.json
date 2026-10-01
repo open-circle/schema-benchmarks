@@ -19,14 +19,14 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "postinstall": "pnpm checkout",
+    "postinstall": "vpr checkout",
     "precheckout": "del-cli tests remotes",
     "checkout": "node ./scripts/checkout.ts",
     "postcheckout": "node ./scripts/gen-constants.ts",
     "bump:test-suite-commit": "node ./scripts/bump-test-suite-commit.ts",
-    "postbump:test-suite-commit": "pnpm checkout",
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "postbump:test-suite-commit": "vpr checkout",
+    "test": "vp test",
+    "coverage": "vp test run --coverage",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -37,10 +37,10 @@
     "@vitest/coverage-v8": "catalog:",
     "dedent": "catalog:",
     "del-cli": "^7.0.0",
-    "oxfmt": "catalog:",
     "tar": "^7.5.22",
     "typescript": "catalog:",
     "up-fetch": "catalog:",
+    "vite-plus": "catalog:",
     "vitest": "catalog:"
   }
 }

@@ -11,13 +11,13 @@
   "scripts": {
     "gen:paseri": "node ./libraries/@paseri/compiler/generate.ts",
     "gen:zod-compiler": "node ./libraries/zod-compiler/generate.ts",
-    "prebuild": "pnpm run gen:paseri && pnpm run gen:zod-compiler",
-    "postbuild": "pnpm run gen:json-schemas",
+    "prebuild": "vpr gen:paseri && vpr gen:zod-compiler",
+    "postbuild": "vpr gen:json-schemas",
     "gen:json-schemas": "node ./scripts/gen-accepted-json-schemas.ts",
-    "build": "tsdown",
-    "coverage": "vitest run --coverage",
+    "build": "vp pack",
+    "coverage": "vp test run --coverage",
     "typecheck": "tsc",
-    "test": "vitest"
+    "test": "vp test"
   },
   "dependencies": {
     "@ark/json-schema": "^0.0.9",
@@ -63,11 +63,11 @@
     "@ttsc/unplugin": "catalog:",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "tsdown": "^0.23.0",
     "ttsc": "catalog:",
     "typescript": "catalog:",
     "unplugin-macros": "^0.23.2",
     "vite": "catalog:",
+    "vite-plus": "catalog:",
     "vitest": "catalog:",
     "zod-compiler": "^2.0.7"
   }

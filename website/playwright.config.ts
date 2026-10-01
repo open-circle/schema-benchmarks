@@ -61,7 +61,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "pnpm run serve",
+    command: "vpr serve",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },

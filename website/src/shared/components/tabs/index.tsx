@@ -53,26 +53,28 @@ export function useTabLinks<T extends string>(tabs: ReadonlyArray<T>, currentTab
   const panelsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const getTabLinkProps = <const TOptions extends NavigateOptions>(tabId: T, opts: TOptions) => ({
-    id: `${tabId}-tab`,
-    panelId: `${tabId}-panel`,
-    ...opts,
-    onClick: (e: React.MouseEvent) => {
-      // let browser handle modifier-key clicks (new tab, etc.)
-      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      e.preventDefault();
-      const doNavigate = (viewTransition = true) => navigate({ ...opts, viewTransition });
-      if (!panelsRef.current?.startViewTransition || currentTabId === tabId) {
-        void doNavigate();
-        return;
-      }
-      const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "next" : "prev";
-      panelsRef.current.startViewTransition({
-        update: () => doNavigate(false),
-        types: [direction],
-      });
-    },
-  });
+  const getTabLinkProps = <const TOptions extends NavigateOptions>(tabId: T, opts: TOptions) => {
+    const doNavigate = (viewTransition = true) => navigate({ ...opts, viewTransition });
+    return {
+      id: `${tabId}-tab`,
+      panelId: `${tabId}-panel`,
+      ...opts,
+      onClick: (e: React.MouseEvent) => {
+        // let browser handle modifier-key clicks (new tab, etc.)
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        if (!panelsRef.current?.startViewTransition || currentTabId === tabId) {
+          void doNavigate();
+          return;
+        }
+        const direction = tabs.indexOf(tabId) > tabs.indexOf(currentTabId) ? "next" : "prev";
+        panelsRef.current.startViewTransition({
+          update: () => doNavigate(false),
+          types: [direction],
+        });
+      },
+    };
+  };
 
   const getPanelProps = (tabId: T) =>
     ({

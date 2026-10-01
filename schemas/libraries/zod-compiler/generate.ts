@@ -1,8 +1,8 @@
 import * as path from "path";
 
 import { promiseAllKeyed } from "@schema-benchmarks/utils";
-import type { UserConfig } from "tsdown";
-import { build } from "tsdown";
+import type { UserConfig } from "vite-plus/pack";
+import { build } from "vite-plus/pack";
 import zodCompiler from "zod-compiler/rolldown";
 
 import baseTsdownConfig from "../../tsdown.config.ts";

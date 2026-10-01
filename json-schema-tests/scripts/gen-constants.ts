@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 import ts from "dedent";
-import { format } from "oxfmt";
+import { format } from "vite-plus/fmt";
 
 const targetsFilePath = path.join(import.meta.dirname, "../constants/targets.gen.ts");
 const testSuitesDir = path.join(import.meta.dirname, "../tests");

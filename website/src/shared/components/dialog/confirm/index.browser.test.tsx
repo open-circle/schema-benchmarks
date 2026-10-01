@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect } from "vitest";
-import { page } from "vitest/browser";
+import { beforeEach, describe, expect } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 

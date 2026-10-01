@@ -3,7 +3,7 @@ import * as path from "node:path";
 
 import { fromTypeCaseSchema } from "@schema-benchmarks/schemas";
 import { libraries } from "@schema-benchmarks/schemas/libraries";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import { probeTypes, SCHEMAS_DIR } from "#src/scripts/types/probe.ts";
 

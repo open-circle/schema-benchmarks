@@ -1,6 +1,6 @@
 import { compile } from "@mdx-js/mdx";
 import rehypeCodeProps from "rehype-mdx-code-props";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import rehypeResponsiveCode from "./rehype-responsive-code.ts";
 

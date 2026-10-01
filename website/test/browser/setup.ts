@@ -1,5 +1,5 @@
 import "#src/shared/styles/index.css";
-import { page } from "vitest/browser";
+import { page } from "vite-plus/test/browser";
 
 import { renderWithProviders } from "./render";
 

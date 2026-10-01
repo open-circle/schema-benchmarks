@@ -1,20 +1,17 @@
-import { defineConfig } from "oxlint";
+import type { OxlintOverride } from "vite-plus/lint";
 
-import { baseConfig } from "../oxlint.config.ts";
+import { baseJsPlugins } from "../lint.common.ts";
 
-export default defineConfig({
-  extends: [baseConfig],
+export const benchLint = {
   jsPlugins: [
-    ...baseConfig.jsPlugins,
+    ...baseJsPlugins,
     { name: "no-relative", specifier: "eslint-plugin-no-relative-import-paths" },
   ],
-  env: {
-    node: true,
-  },
+  env: { node: true },
   rules: {
     "no-relative/no-relative-import-paths": [
       "error",
       { allowSameFolder: true, rootDir: "bench/src", prefix: "#src" },
     ],
   },
-});
+} satisfies Omit<OxlintOverride, "files">;

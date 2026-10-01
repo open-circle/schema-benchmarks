@@ -1,6 +1,6 @@
 import { parseAnsiSequences } from "ansi-sequence-parser";
 import Prism from "prismjs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 import { highlightAnsi, highlightCode } from "./highlight";
 

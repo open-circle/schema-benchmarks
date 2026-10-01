@@ -4,7 +4,6 @@ import netlify from "@netlify/vite-plugin-tanstack-start";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { playwright } from "@vitest/browser-playwright";
 import rehypeCodeProps from "rehype-mdx-code-props";
 import rehypePrism from "rehype-prism-plus";
 import rehypeSlug from "rehype-slug";
@@ -12,7 +11,8 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
-import { defineConfig } from "vitest/config";
+import { defineConfig, lazyPlugins } from "vite-plus";
+import { playwright } from "vite-plus/test/browser-playwright";
 
 import {
   dataTypeProps,
@@ -52,7 +52,7 @@ const config = defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
-  plugins: [
+  plugins: lazyPlugins(() => [
     devtools(),
     tanstackStart({
       router: {
@@ -122,7 +122,7 @@ const config = defineConfig({
           suppressWarnings: true,
         },
       }),
-  ],
+  ]),
   test: {
     coverage: {
       provider: "v8",

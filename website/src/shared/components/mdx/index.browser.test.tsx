@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
-import { page } from "vitest/browser";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { page } from "vite-plus/test/browser";
 
 import { Snackbars } from "#src/shared/components/snackbar";
 

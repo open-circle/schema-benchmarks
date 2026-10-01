@@ -9,7 +9,7 @@
     "paths": {
       "#src": ["./src/index.ts"]
     },
-    "types": ["node", "tsdown/client"],
+    "types": ["node", "vite-plus/pack/client"],
     "declaration": true,
     "declarationMap": true
   }

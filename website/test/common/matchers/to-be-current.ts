@@ -1,6 +1,7 @@
 import type { Autocomplete } from "@schema-benchmarks/utils";
-import type { ExpectationResult, MatcherState } from "@vitest/expect";
-import type { Locator } from "vitest/browser";
+import type { ExpectationResult } from "@vitest/expect";
+import { type MatcherState } from "vite-plus/test";
+import type { Locator } from "vite-plus/test/browser";
 
 import { getElementFromUserInput, getMessage } from "./utils";
 
