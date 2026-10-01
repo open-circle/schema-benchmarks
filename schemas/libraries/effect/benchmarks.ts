@@ -1,16 +1,15 @@
 import { getVersion } from "@schema-benchmarks/utils/node" with { type: "macro" };
 import ts from "dedent";
-import { Effect, Either } from "effect";
-import * as JSONSchema from "effect/JSONSchema";
+import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 
-import type {
-  JsonSchemaInputData,
-  ToJsonSchemaOptions,
-  JsonSchemaOutputData,
-  JsonSchemaConversionTarget,
+import type { JsonSchemaInputData, JsonSchemaOutputData } from "#src";
+import {
+  assertJsonSchemaDirection,
+  assertJsonSchemaTarget,
+  assertNotReached,
+  defineBenchmarks,
 } from "#src";
-import { assertJsonSchemaTarget, assertNotReached, defineBenchmarks } from "#src";
 
 import { getEffectSchema } from ".";
 
@@ -18,26 +17,19 @@ const schema = getEffectSchema();
 const jsonSchemaSubject = Schema.Struct({
   id: Schema.Number,
   name: Schema.String,
-  price: Schema.NumberFromString,
-}) satisfies Schema.Schema<JsonSchemaOutputData, JsonSchemaInputData>;
+  price: Schema.FiniteFromString,
+}) satisfies Schema.Codec<JsonSchemaOutputData, JsonSchemaInputData>;
 
-// effect names the targets differently, and only supports these two
-const jsonSchemaTargets = {
-  "draft-07": "jsonSchema7",
-  "draft-2020-12": "jsonSchema2020-12",
-} as const;
-const supportedJsonSchemaTargets = ["draft-2020-12", "draft-07"] as const;
-const getJsonSchemaTarget = (target: JsonSchemaConversionTarget) => {
-  assertJsonSchemaTarget(target, supportedJsonSchemaTargets);
-  return jsonSchemaTargets[target];
+const toJsonSchema = () => {
+  const { schema: jsonSchema, definitions } = Schema.toJsonSchemaDocument(jsonSchemaSubject);
+  return {
+    $schema: "https://json-schema.org/draft/2020-12/schema",
+    ...jsonSchema,
+    ...(definitions && { $defs: definitions }),
+  };
 };
-const makeJsonSchema = <Output, Input>(
-  { target }: ToJsonSchemaOptions,
-  subject: Schema.Schema<Output, Input>,
-) => JSONSchema.make(subject, { target: getJsonSchemaTarget(target) });
 const is = Schema.is(schema);
-const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
-const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
+const decode = Schema.decodeUnknownOption(schema);
 
 export default defineBenchmarks({
   library: {
@@ -54,10 +46,10 @@ export default defineBenchmarks({
     },
     {
       run() {
-        return Schema.decodeUnknownEither(getEffectSchema());
+        return Schema.decodeUnknownOption(getEffectSchema());
       },
-      note: "decodeUnknownEither",
-      snippet: ts`Schema.decodeUnknownEither(Schema.Struct(fields))`,
+      note: "decodeUnknownOption",
+      snippet: ts`Schema.decodeUnknownOption(Schema.Struct(fields))`,
     },
   ],
   validation: {
@@ -74,46 +66,49 @@ export default defineBenchmarks({
   parsing: {
     allErrors: {
       run(data) {
-        return decodeAll(data);
+        return decode(data, { errors: "all" });
       },
-      validateResult: Either.isRight,
-      getData: Either.getOrUndefined,
+      validateResult: Option.isSome,
+      getData: Option.getOrUndefined,
       snippet: ts`
         // setup-start
-        const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
+        const decode = Schema.decodeUnknownOption(schema);
         // setup-end
-        decodeAll(data)
+        decode(data, { errors: "all" })
       `,
     },
     abortEarly: {
       run(data) {
-        return decodeFirst(data);
+        return decode(data, { errors: "first" });
       },
-      validateResult: Either.isRight,
-      getData: Either.getOrUndefined,
+      validateResult: Option.isSome,
+      getData: Option.getOrUndefined,
       snippet: ts`
         // setup-start
-        const decodeFirst = Schema.decodeUnknownEither(schema, { errors: "first" });
+        const decode = Schema.decodeUnknownOption(schema);
         // setup-end
-        decodeFirst(data)
+        decode(data, { errors: "first" })
       `,
     },
   },
   standard: {
     allErrors: {
-      schema: Schema.standardSchemaV1(schema, { errors: "all" }),
+      schema: Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "all" } }),
       snippet: ts`
         // setup-start
-        const standardSchema = Schema.standardSchemaV1(schema, { errors: "all" });
+        const standardSchema = Schema.toStandardSchemaV1(
+          schema,
+          { parseOptions: { errors: "all" } }
+        );
         // setup-end
         upfetch(url, { schema: standardSchema });
       `,
     },
     abortEarly: {
-      schema: Schema.standardSchemaV1(schema, { errors: "first" }),
+      schema: Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } }),
       snippet: ts`
         // setup-start
-        const standardSchema = Schema.standardSchemaV1(schema, { errors: "first" });
+        const standardSchema = Schema.toStandardSchemaV1(schema, { parseOptions: { errors: "first" } });
         // setup-end
         upfetch(url, { schema: standardSchema });
       `,
@@ -122,55 +117,50 @@ export default defineBenchmarks({
   jsonSchema: {
     conversion: {
       toJson: {
-        generate: (options) =>
-          options.direction === "input"
-            ? makeJsonSchema(options, jsonSchemaSubject)
-            : makeJsonSchema(options, Schema.typeSchema(jsonSchemaSubject)),
-        snippet: ({ target, direction }) =>
-          ts`JSONSchema.make(${direction === "input" ? "schema" : "Schema.typeSchema(schema)"}, { target: "${getJsonSchemaTarget(target)}" })`,
+        generate: ({ target, direction }) => {
+          assertJsonSchemaTarget(target, ["draft-2020-12"]);
+          assertJsonSchemaDirection(direction, ["input"]);
+          return toJsonSchema();
+        },
+        snippet: () => ts`Schema.toJsonSchemaDocument(schema)`,
         source: { type: "native" },
       },
     },
   },
   stack: {
     throw: (data) => {
-      Effect.runSync(decodeAll(data));
+      Schema.decodeUnknownSync(schema)(data, { errors: "first" });
       assertNotReached();
     },
-    snippet: ts`
-      // setup-start
-      const decodeAll = Schema.decodeUnknownEither(schema, { errors: "all" });
-      // setup-end
-      Effect.runSync(decodeAll(data));
-    `,
+    snippet: ts`Schema.decodeUnknownSync(schema)(data, { errors: "first" })`,
   },
   codec: [
     {
       encode: {
         run: (data) => {
-          return Schema.encodeSync(Schema.BigInt)(data);
+          return Schema.encodeSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`Schema.encodeSync(Schema.BigInt)(data)`,
+        snippet: ts`Schema.encodeSync(Schema.BigIntFromString)(data)`,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeSync(Schema.BigInt)(data);
+          return Schema.decodeSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`Schema.decodeSync(Schema.BigInt)(data)`,
+        snippet: ts`Schema.decodeSync(Schema.BigIntFromString)(data)`,
       },
     },
     {
       encode: {
         run: (data) => {
-          return Schema.encodeUnknownSync(Schema.BigInt)(data);
+          return Schema.encodeUnknownSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`Schema.encodeUnknownSync(Schema.BigInt)(data)`,
+        snippet: ts`Schema.encodeUnknownSync(Schema.BigIntFromString)(data)`,
       },
       decode: {
         run: (data) => {
-          return Schema.decodeUnknownSync(Schema.BigInt)(data);
+          return Schema.decodeUnknownSync(Schema.BigIntFromString)(data);
         },
-        snippet: ts`Schema.decodeUnknownSync(Schema.BigInt)(data)`,
+        snippet: ts`Schema.decodeUnknownSync(Schema.BigIntFromString)(data)`,
       },
       acceptsUnknown: true,
       note: "unknown",
