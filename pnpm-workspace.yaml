@@ -39,14 +39,7 @@ catalog:
   vite: ^8.3.1
   vitest: ^5.0.2
 minimumReleaseAgeExclude:
-  - "@ata-validator/native-darwin-arm64@1.38.0"
-  - "@ata-validator/native-darwin-x64@1.38.0"
-  - "@ata-validator/native-linux-arm64-gnu@1.38.0"
-  - "@ata-validator/native-linux-arm64-musl@1.38.0"
-  - "@ata-validator/native-linux-x64-gnu@1.38.0"
-  - "@ata-validator/native-linux-x64-musl@1.38.0"
-  - "@ata-validator/native-win32-x64@1.38.0"
-  - ata-validator@1.38.0
+  - effect@4.0.0
 minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1

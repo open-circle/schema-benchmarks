@@ -21,7 +21,7 @@ export const acceptedJsonSchemas = {
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
         required: ["id", "name", "price"],
       },
-      // effect@rc
+      // effect
       {
         $schema: "https://json-schema.org/draft/2020-12/schema",
         type: "object",
@@ -33,23 +33,8 @@ export const acceptedJsonSchemas = {
           price: { type: "string" },
         },
         required: ["id", "name", "price"],
-        additionalProperties: false,
+        additionalProperties: true,
         $defs: {},
-      },
-      // effect
-      {
-        $schema: "https://json-schema.org/draft/2020-12/schema",
-        $defs: {
-          NumberFromString: { type: "string", description: "a string to be decoded into a number" },
-        },
-        type: "object",
-        required: ["id", "name", "price"],
-        properties: {
-          id: { type: "number" },
-          name: { type: "string" },
-          price: { $ref: "#/$defs/NumberFromString" },
-        },
-        additionalProperties: false,
       },
       // sury, valibot
       {
@@ -66,14 +51,6 @@ export const acceptedJsonSchemas = {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         required: ["id", "name", "price"],
-      },
-      // effect
-      {
-        $schema: "https://json-schema.org/draft/2020-12/schema",
-        type: "object",
-        required: ["id", "name", "price"],
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
-        additionalProperties: false,
       },
       // sury, valibot
       {
@@ -100,21 +77,6 @@ export const acceptedJsonSchemas = {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
         required: ["id", "name", "price"],
-      },
-      // effect
-      {
-        $schema: "http://json-schema.org/draft-07/schema#",
-        $defs: {
-          NumberFromString: { type: "string", description: "a string to be decoded into a number" },
-        },
-        type: "object",
-        required: ["id", "name", "price"],
-        properties: {
-          id: { type: "number" },
-          name: { type: "string" },
-          price: { $ref: "#/$defs/NumberFromString" },
-        },
-        additionalProperties: false,
       },
       // joi
       {
@@ -146,14 +108,6 @@ export const acceptedJsonSchemas = {
         type: "object",
         properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
         required: ["id", "name", "price"],
-      },
-      // effect
-      {
-        $schema: "http://json-schema.org/draft-07/schema#",
-        type: "object",
-        required: ["id", "name", "price"],
-        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "number" } },
-        additionalProperties: false,
       },
       // sury, valibot
       {

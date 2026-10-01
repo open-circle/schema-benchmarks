@@ -4,6 +4,6 @@ import { getEffectSchema } from "..";
 
 export const schema = getEffectSchema();
 
-export type Input = Schema.Schema.Encoded<typeof schema>;
+export type Input = Schema.Codec.Encoded<typeof schema>;
 
 export type Output = Schema.Schema.Type<typeof schema>;
