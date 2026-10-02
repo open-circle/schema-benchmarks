@@ -30,7 +30,7 @@
     "eslint-plugin-depend": "^1.5.0",
     "eslint-plugin-no-relative-import-paths": "^1.7.3",
     "eslint-plugin-playwright": "^2.12.0",
-    "knip": "^6.38.0",
+    "knip": "^6.39.0",
     "playwright": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
