@@ -8,10 +8,7 @@ import { typiaPathPattern } from "./tsdown.config.ts";
 
 export default defineConfig({
   pack: tsdownConfig,
-  // @ttsc/unplugin's vite plugin is typed against vite's own Plugin type, which
-  // isn't structurally assignable to the raw rolldown Plugin type filterTransform
-  // (and lazyPlugins) expect here.
-  plugins: lazyPlugins(() => [filterTransform(ttsc() as any, typiaPathPattern), macros()]),
+  plugins: lazyPlugins(() => [filterTransform(ttsc(), typiaPathPattern), macros()]),
   test: {
     coverage: {
       provider: "v8",
