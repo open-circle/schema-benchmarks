@@ -1,6 +1,9 @@
-import type { Plugin } from "rolldown";
+import type { TsdownPlugin } from "vite-plus/pack";
 
-export function filterTransform<TPlugin extends Plugin>(plugin: TPlugin, pattern: RegExp): TPlugin {
+export function filterTransform<TPlugin extends TsdownPlugin>(
+  plugin: TPlugin,
+  pattern: RegExp,
+): TPlugin {
   const transform = plugin.transform;
 
   if (!transform) {
