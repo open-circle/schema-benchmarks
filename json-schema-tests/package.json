@@ -30,7 +30,7 @@
     "valibot": "catalog:"
   },
   "devDependencies": {
-    "@schema-benchmarks/utils": "workspace:",
+    "@schema-benchmarks/utils": "workspace:*",
     "@vitest/coverage-v8": "catalog:",
     "dedent": "catalog:",
     "del-cli": "^7.0.0",
