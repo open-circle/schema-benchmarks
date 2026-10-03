@@ -244,7 +244,10 @@ const toMatch = (hasAny: boolean, toData: boolean, fromData: boolean): TypeMatch
 
 const assertChecks = (label: string, { diagnostics }: Checked) => {
   if (diagnostics.length) {
-    throw new Error(`The ${label} probe does not type check:\n${diagnosticsText(diagnostics)}`);
+    throw new AggregateError(
+      diagnostics,
+      `The ${label} probe does not type check:\n${diagnosticsText(diagnostics)}`,
+    );
   }
 };
 
