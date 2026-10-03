@@ -69,6 +69,19 @@ Read `CONTRIBUTING.md` for setup, Git etiquette, library contribution details, a
 
 AI assistance is welcome for speeding up work, but every change must be reviewed and tested by a human before submission.
 
+## Aggregate Errors
+
+When presented with the potential for multiple errors (e.g. an `.errors` array from a parsing result), prefer throwing an AggregateError that encapsulates all individual errors, instead of only throwing the first one.
+
+```ts
+// bad
+if (workspace.errors.length) throw workspace.errors[0];
+
+// good
+if (workspace.errors.length)
+  throw new AggregateError(workspace.errors, "Failed to parse pnpm-workspace.yaml");
+```
+
 <!--VITE PLUS START-->
 
 # Using Vite+, the Unified Toolchain for the Web

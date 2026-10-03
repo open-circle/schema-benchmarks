@@ -33,7 +33,6 @@
     "@ttsc/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
     "p-limit": "^7.3.3",
-    "rolldown": "catalog:",
     "tinybench": "^6.2.0",
     "ttsc": "catalog:",
     "typebox": "catalog:",

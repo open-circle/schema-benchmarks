@@ -86,6 +86,12 @@ jobs:
         if: steps.pick.outputs.version != ''
         run: vp install
 
+      - name: Align Rolldown override with Vite+
+        if: steps.pick.outputs.version != ''
+        run: |
+          node .github/scripts/align-rolldown.ts
+          vp install --lockfile-only --no-frozen-lockfile
+
       - name: Create Pull Request
         if: steps.pick.outputs.version != ''
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -103,6 +109,6 @@ jobs:
             - Cooldown: at least 24 hours old
             - Channel: stable releases only
 
-            The workflow ran `vp upgrade`, `vp migrate --no-interactive`, and `vp install`. The pull request's CI runs the project builds, checks, and tests.
+            The workflow ran `vp upgrade`, `vp migrate --no-interactive`, and `vp install`, then aligned the Rolldown override with Vite+'s bundled version and refreshed the lockfile. The pull request's CI runs the project builds, checks, and tests.
           branch: chore/bump-vite-plus
           delete-branch: true

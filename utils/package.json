@@ -24,14 +24,13 @@
     "mix-n-matchers": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
-    "rolldown": "catalog:",
     "typescript": "catalog:",
     "valibot": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "rolldown": "*",
-    "valibot": "*"
+    "valibot": "*",
+    "vite-plus": "*"
   }
 }

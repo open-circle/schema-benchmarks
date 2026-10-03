@@ -6,7 +6,7 @@ import { getSigintSignal, getVersion } from "@schema-benchmarks/utils/node";
 import ttsc from "@ttsc/unplugin/rolldown";
 import { gzipSize } from "gzip-size";
 import pLimit from "p-limit";
-import { rolldown } from "rolldown";
+import { Rolldown } from "vite-plus/pack";
 
 import {
   type DownloadResult,
@@ -43,7 +43,7 @@ function getPackageName(libraryName: string) {
 }
 
 async function measureFile(file: FileDescription, minify: MinifyType): Promise<DownloadResult> {
-  const bundle = await rolldown({
+  const bundle = await Rolldown.rolldown({
     input: file.path,
     plugins: file.path.includes("typia") ? [ttsc()] : [],
     external: [/node:/],
