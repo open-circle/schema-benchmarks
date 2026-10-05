@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.1/node_modules/@remix-run/data-schema/dist/lib/schema.js
+//#region ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/schema.js
 const builtinSchemas = /* @__PURE__ */ new WeakSet();
 /**
 * Creates a sync Standard Schema-compatible schema from a validation function.
@@ -354,7 +354,7 @@ function parse(schema, value, options) {
 	return result.value;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@remix-run+data-schema@0.3.1/node_modules/@remix-run/data-schema/dist/lib/checks.js
+//#region ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/checks.js
 /**
 * Require a string to be at least `length` characters long.
 *
