@@ -234,8 +234,8 @@ importers:
         specifier: ^0.1.29
         version: 0.1.29(typescript@7.0.2)
       '@remix-run/data-schema':
-        specifier: ^0.3.1
-        version: 0.3.1
+        specifier: ^1.0.0
+        version: 1.0.0
       '@sapphire/shapeshift':
         specifier: ^5.0.0
         version: 5.0.0
@@ -3694,8 +3694,8 @@ packages:
     peerDependencies:
       typescript: '>=5.0'
 
-  '@remix-run/data-schema@0.3.1':
-    resolution: {integrity: sha512-Gr3Idi5e0L3zULGXpShq3RCcwbvKq1paSN2jhPd7zI4Z8H64a4SAwr3xyEV1z+jbT6EeCnSRB+dZDHN4wuC42w==}
+  '@remix-run/data-schema@1.0.0':
+    resolution: {integrity: sha512-xuJlVJiVLHLLb5eBUZjG3+Xb7F/DSYcTBFGdGvaqJ1HJTIxlthD2xXyfLTq1Y4pTWm7N7Vasq7p5Y+v7n/jzSQ==}
 
   '@rickcedwhat/playwright-smart-table@6.23.1':
     resolution: {integrity: sha512-zCs+N3degCoEAKPLmiiC5+hROqwqz/7BfD8enTSqwvmvllsFN+y6oFAecB973giT6tSF8ZJEkOD+/0txlUo7pg==}
@@ -12435,7 +12435,7 @@ snapshots:
     dependencies:
       typescript: 7.0.2
 
-  '@remix-run/data-schema@0.3.1':
+  '@remix-run/data-schema@1.0.0':
     dependencies:
       '@standard-schema/spec': 1.1.0
 
