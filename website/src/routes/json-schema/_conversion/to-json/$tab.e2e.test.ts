@@ -62,13 +62,11 @@ test.describe("benchmarks tab", () => {
     for (const target of jsonSchemaConversionTargetSchema.options) {
       const link = toJsonPage.benchmarks.getTargetLink(target);
 
-      await expect(async () => {
-        await link.click();
+      await link.click();
 
-        await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
 
-        await expect(link).toBeCurrent("page");
-      }).toPass({ timeout: 5000 });
+      await expect(link).toBeCurrent("page");
     }
   });
 

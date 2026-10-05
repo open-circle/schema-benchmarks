@@ -31,14 +31,12 @@ test.describe("dialog closes", () => {
     await expect(prefs.dialog).toBeHidden();
   });
 
-  test("by pressing the escape key", async ({ prefs }) => {
+  test("by pressing the escape key", async ({ page, prefs }) => {
     await prefs.openDialog();
 
-    await expect(async () => {
-      await prefs.dialog.press("Escape");
+    await page.keyboard.press("Escape");
 
-      await expect(prefs.dialog).toBeHidden();
-    }).toPass({ timeout: 5000 });
+    await expect(prefs.dialog).toBeHidden();
   });
 });
 
