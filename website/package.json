@@ -93,7 +93,7 @@
     "esquery": "^1.7.0",
     "jiti": "^2.7.0",
     "mix-n-matchers": "catalog:",
-    "msw": "^2.15.0",
+    "msw": "^3.0.2",
     "msw-storybook-addon": "^3.0.3",
     "oxc-transform-react": "^0.153.0",
     "playwright": "catalog:",
