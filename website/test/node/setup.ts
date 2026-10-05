@@ -1,7 +1,6 @@
+import { network } from "virtual:msw";
 import { beforeAll, afterEach, afterAll } from "vite-plus/test";
 
-import { server } from "./mocks.ts";
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+beforeAll(() => network.enable());
+afterEach(() => network.resetHandlers());
+afterAll(() => network.disable());
