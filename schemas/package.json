@@ -17,7 +17,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@ark/json-schema": "^0.0.10",
+    "@ark/json-schema": "^0.0.11",
     "@ata-project/keywords": "^0.3.3",
     "@cfworker/json-schema": "^4.1.1",
     "@paseri/compiler": "jsr:^0.7.7",
@@ -33,7 +33,7 @@
     "ajv-draft-04": "^1.0.0",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
-    "arktype": "^2.2.6",
+    "arktype": "^2.2.7",
     "ata-validator": "^1.40.1",
     "decoders": "^2.12.2",
     "dedent": "catalog:",
@@ -49,7 +49,7 @@
     "superstruct": "^2.0.2",
     "sury": "11.0.0",
     "typebox": "catalog:",
-    "typia": "^15.0.1",
+    "typia": "^15.1.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
     "z-schema": "^12.4.6",

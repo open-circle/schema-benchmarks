@@ -24,7 +24,7 @@
     "e2e": "vpr -r e2e"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.104.0",
+    "@tanstack/eslint-plugin-query": "^5.104.1",
     "@tanstack/eslint-plugin-router": "^1.162.0",
     "@types/node": "catalog:",
     "eslint-plugin-depend": "^1.5.0",
