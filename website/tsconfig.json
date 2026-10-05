@@ -39,7 +39,8 @@
       "vite/client",
       "vite-plugin-svgr/client",
       "vite-plugin-pwa/client",
-      "msw-storybook-addon/types"
+      "msw-storybook-addon/types",
+      "msw/vite/client"
     ]
   }
 }

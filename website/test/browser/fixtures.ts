@@ -2,12 +2,7 @@
 // oxlint-disable-next-line no-unused-vars
 import type { TestContext } from "vite-plus/test";
 import { test as testBase } from "vite-plus/test";
-
-import { worker } from "./mocks";
-
 interface Fixtures {
-  worker: typeof worker;
-
   /**
    * An {@link AsyncDisposableStack} instance for managing disposable resources within the test.
    *
@@ -24,23 +19,6 @@ interface Fixtures {
 }
 
 export const test = testBase.extend<Fixtures>({
-  worker: [
-    async ({}, provide) => {
-      // Start the worker before the test.
-      await worker.start();
-
-      // Expose the worker object on the test's context.
-      await provide(worker);
-
-      // Remove any request handlers added in individual test cases.
-      // This prevents them from affecting unrelated tests.
-      worker.resetHandlers();
-
-      // Stop the worker after the test.
-      await worker.stop();
-    },
-    { auto: true },
-  ],
   testStack: async ({}, provide) => {
     await using stack = new AsyncDisposableStack();
     await provide(stack);
