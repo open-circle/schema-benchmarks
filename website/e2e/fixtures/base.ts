@@ -63,6 +63,7 @@ export abstract class TabObjectModel<
   @step(({ tabName }) => `Select ${tabName} tab`)
   async select() {
     await this.tabLink.click();
+    await expect(this.page).toHaveURL((url) => this.matchesUrl(url));
     await expect(this.tabLink).toBeSelected();
     await expect(this.tabPanel).toBeVisible();
   }

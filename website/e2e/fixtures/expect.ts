@@ -4,18 +4,20 @@ import type { Autocomplete, IfMaybeUndefined } from "@schema-benchmarks/utils";
 
 import type { CurrentValue } from "#test/common/matchers/to-be-current";
 
+type AttributeMatcherOptions = { timeout?: number; ignoreCase?: boolean };
+
 function createAttributeMatcher<ExpectedValue extends string | undefined>(
   assertionName: string,
   attributeName: string,
   defaultExpectedValue?: ExpectedValue,
 ) {
-  return async function toHaveAttribute(
+  async function toHaveAttribute(
     this: ExpectMatcherState,
     locator: Locator,
-    ...[expectedValue = defaultExpectedValue]: IfMaybeUndefined<
+    ...[expectedValue = defaultExpectedValue, options]: IfMaybeUndefined<
       ExpectedValue,
-      [expectedValue?: ExpectedValue],
-      [expectedValue: ExpectedValue]
+      [expectedValue?: ExpectedValue, options?: AttributeMatcherOptions],
+      [expectedValue: ExpectedValue, options?: AttributeMatcherOptions]
     >
   ) {
     let pass: boolean;
@@ -24,8 +26,8 @@ function createAttributeMatcher<ExpectedValue extends string | undefined>(
       // oxlint-disable-next-line playwright/valid-expect
       const expectation = this.isNot ? baseExpect(locator).not : baseExpect(locator);
       const promise = expectedValue
-        ? expectation.toHaveAttribute(attributeName, expectedValue)
-        : expectation.toHaveAttribute(attributeName);
+        ? expectation.toHaveAttribute(attributeName, expectedValue, options)
+        : expectation.toHaveAttribute(attributeName, options);
       await promise;
       pass = true;
     } catch (e: any) {
@@ -55,7 +57,8 @@ function createAttributeMatcher<ExpectedValue extends string | undefined>(
       expected: expectedValue,
       actual: matcherResult?.actual,
     };
-  };
+  }
+  return toHaveAttribute;
 }
 
 type MixedBooleanValue = Autocomplete.String<"true" | "false" | "mixed">;

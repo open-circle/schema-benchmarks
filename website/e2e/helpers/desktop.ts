@@ -22,9 +22,13 @@ export async function expectTableSorting(
   });
 
   await test.step("Sort libraries descending", async () => {
-    await librarySortLink.click();
+    await expect(async () => {
+      if ((await libraryHeaderCell.getAttribute("aria-sort")) !== "descending") {
+        await librarySortLink.click();
+      }
 
-    await expect(libraryHeaderCell).toHaveSort("descending");
+      await expect(libraryHeaderCell).toHaveSort("descending", { timeout: 500 });
+    }).toPass({ timeout: 5000 });
     await expect(firstRowLibraryCell).toHaveText(patterns.last);
   });
 }
