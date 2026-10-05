@@ -57,7 +57,7 @@ export abstract class TabObjectModel<
 
   @lazy
   get tabPanel() {
-    return this.page.getByRole("tabpanel", { name: this.tabName });
+    return this.page.getByRole("tabpanel", { name: this.tabName, includeHidden: true });
   }
 
   @step(({ tabName }) => `Select ${tabName} tab`)

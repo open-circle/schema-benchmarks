@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { describe, expect, it } from "vite-plus/test";
-import { page } from "vite-plus/test/browser";
+import { page, userEvent } from "vite-plus/test/browser";
 
 import { Dialog } from ".";
 
@@ -35,5 +35,15 @@ describe("Dialog", () => {
     await page.getByRole("button", { name: "Confirm" }).click();
     await expect.element(dialog).not.toHaveAttribute("open");
     await expect.element(page.getByRole("status")).toHaveTextContent("confirmed");
+  });
+
+  it("closes on Escape", async () => {
+    await page.render(<DialogFixture />);
+    const dialog = page.getByRole("dialog");
+
+    await page.getByRole("button", { name: "Open dialog" }).click();
+    await expect.element(dialog).toHaveAttribute("open");
+    await userEvent.keyboard("[Escape]");
+    await expect.element(dialog).not.toHaveAttribute("open");
   });
 });
