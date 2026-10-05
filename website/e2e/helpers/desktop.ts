@@ -22,11 +22,9 @@ export async function expectTableSorting(
   });
 
   await test.step("Sort libraries descending", async () => {
-    await expect(async () => {
-      await librarySortLink.click();
+    await librarySortLink.click();
 
-      await expect(libraryHeaderCell).toHaveSort("descending");
-    }).toPass({ timeout: 5000 });
+    await expect(libraryHeaderCell).toHaveSort("descending");
     await expect(firstRowLibraryCell).toHaveText(patterns.last);
   });
 }

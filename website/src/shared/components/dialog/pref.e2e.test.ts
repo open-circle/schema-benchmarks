@@ -31,10 +31,10 @@ test.describe("dialog closes", () => {
     await expect(prefs.dialog).toBeHidden();
   });
 
-  test("by pressing the escape key", async ({ page, prefs }) => {
+  test("by pressing the escape key", async ({ prefs }) => {
     await prefs.openDialog();
 
-    await page.keyboard.press("Escape");
+    await prefs.dialog.press("Escape");
 
     await expect(prefs.dialog).toBeHidden();
   });
