@@ -1,8 +1,34 @@
-//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
+//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.30.4/node_modules/typia/lib/internal/_isFormatUrl.mjs
+/**
+* Checks the `url` format, which is stricter than a generic URI.
+*
+* Accepts only the `http`, `https` and `ftp` schemes, an optional user and
+* password, a host that is a public IPv4 address or a dotted domain name with a
+* top-level label, an optional port of two to five digits and an optional path.
+* Hosts without a dot, such as `localhost`, private, loopback and link-local
+* IPv4 addresses, addresses whose last octet is 0 or 255, and IPv6 literals are
+* rejected.
+*
+* @evidence contracts/common.md#principled-implementation The expression is a public-web URL grammar, not the generic URI one: the schemes are limited to http, https and ftp, the host is a public IPv4 address (private, loopback, link-local and last-octet 0 or 255 addresses are excluded) or a dotted domain with a top-level label starting with a letter or a permitted Unicode character and allowing subsequent digits and hyphens, the port has two to five digits and the path has no spaces. The `url` format is a public-web extension alongside the generic `uri` format; its documented grammar rejects hosts without a dot, such as `localhost`, and IPv6 literals.
+* @evidence contracts/common.md#clear-and-simple-design One predicate and one private pattern, identical to the copy in @typia/utils.
+* @evidence contracts/common.md#prohibited-implementation-shortcuts The limits are stated and no host is special-cased.
+* @evidence contracts/common.md#meaningful-documentation The doc lists the accepted schemes and hosts and the rejected local addresses.
+*/
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthGte.mjs
+//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthGte.mjs
+/**
+* Test whether a string has at least the given number of code points.
+*
+* Iteration stops as soon as the count is reached, so a long string is not
+* scanned to its end.
+*
+* @evidence contracts/common.md#principled-implementation The iterator is consumed only until the count reaches the requested minimum, which decides the lower bound without scanning the whole string; a minimum of zero is true at once.
+* @evidence contracts/common.md#clear-and-simple-design One loop with an early return.
+* @evidence contracts/common.md#prohibited-implementation-shortcuts The unit is code points.
+* @evidence contracts/common.md#meaningful-documentation The doc states the early return and the code point unit.
+*/
 const _stringLengthGte = (value, length) => {
 	let count = 0;
 	if (length <= count) return true;
@@ -10,7 +36,18 @@ const _stringLengthGte = (value, length) => {
 	return false;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthLte.mjs
+//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.30.4/node_modules/typia/lib/internal/_stringLengthLte.mjs
+/**
+* Test whether a string has at most the given number of code points.
+*
+* Iteration stops as soon as the count is exceeded, so a long string is not
+* scanned to its end.
+*
+* @evidence contracts/common.md#principled-implementation The iterator is consumed until the count exceeds the maximum, which decides the upper bound without scanning past it; a negative maximum is false at once.
+* @evidence contracts/common.md#clear-and-simple-design One loop with an early return.
+* @evidence contracts/common.md#prohibited-implementation-shortcuts The unit is code points.
+* @evidence contracts/common.md#meaningful-documentation The doc states the early return and the code point unit.
+*/
 const _stringLengthLte = (value, length) => {
 	let count = 0;
 	if (!(count <= length)) return false;
@@ -18,7 +55,22 @@ const _stringLengthLte = (value, length) => {
 	return true;
 };
 //#endregion
-//#region ../node_modules/.pnpm/typia@15.0.1_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
+//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.30.4/node_modules/typia/lib/internal/_validateReport.mjs
+/**
+* Create the reporter that validation functions use to collect errors.
+*
+* The returned function keeps an error only when it is exceptionable and its
+* path is neither an ancestor nor a descendant of the last kept path, so a
+* failing leaf is not also reported as every enclosing value. An undefined
+* value gets a default description when none was supplied. Kept errors retain
+* their original references, and filling that description updates the error. It
+* always returns false so emitted code can return it directly.
+*
+* @evidence contracts/common.md#principled-implementation The reporter pushes the original error onto the list only when it is exceptionable and its path is neither an ancestor nor a descendant of the last pushed one, so a failing leaf is not also reported as every enclosing value. For an undefined value it fills a missing description while preserving supplied text; it always returns false so emitted code can return it directly.
+* @evidence contracts/common.md#clear-and-simple-design One closure with two private predicates.
+* @evidence contracts/common.md#prohibited-implementation-shortcuts The suppression is path-based and general.
+* @evidence contracts/common.md#meaningful-documentation A comment states the suppression and the false result.
+*/
 const _validateReport = (array) => {
 	const isAncestor = (ancestor, descendant) => descendant === ancestor || descendant.startsWith(`${ancestor}.`) || descendant.startsWith(`${ancestor}[`);
 	const reportable = (path) => {
