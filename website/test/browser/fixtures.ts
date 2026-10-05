@@ -37,7 +37,7 @@ export const test = testBase.extend<Fixtures>({
       worker.resetHandlers();
 
       // Stop the worker after the test.
-      worker.stop();
+      await worker.stop();
     },
     { auto: true },
   ],
