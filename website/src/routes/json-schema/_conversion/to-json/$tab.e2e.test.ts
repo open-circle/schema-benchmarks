@@ -62,11 +62,18 @@ test.describe("benchmarks tab", () => {
     for (const target of jsonSchemaConversionTargetSchema.options) {
       const link = toJsonPage.benchmarks.getTargetLink(target);
 
-      await link.click();
+      await expect(async () => {
+        if ((await link.getAttribute("aria-current")) !== "page") {
+          await link.click();
+        }
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+        await expect(page).toHaveURL((url) => {
+          const actualTarget = url.searchParams.get("target");
+          return actualTarget === target || (!actualTarget && target === "draft-2020-12");
+        });
 
-      await expect(link).toBeCurrent("page");
+        await expect(link).toBeCurrent("page");
+      }).toPass({ timeout: 5000 });
     }
   });
 

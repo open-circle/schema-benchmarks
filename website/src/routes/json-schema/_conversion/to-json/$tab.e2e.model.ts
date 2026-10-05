@@ -24,7 +24,6 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     return this.targetToggle.getByRole("link", {
       name: this.getTargetLabel(target),
       exact: true,
-      includeHidden: true,
     });
   }
 
