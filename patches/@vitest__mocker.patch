@@ -1,0 +1,16 @@
+diff --git a/dist/browser.js b/dist/browser.js
+index 178839c2494f6c1671c927ffee0ae38e685fd49d..98e4890ee792693e7ee23c5170f4132e1ec43191 100644
+--- a/dist/browser.js
++++ b/dist/browser.js
+@@ -44,7 +44,10 @@ class ModuleMockerMSWInterceptor {
+ 		this.startPromise = Promise.all([worker ? { setupWorker(handler) {
+ 			worker.use(handler);
+ 			return worker;
+-		} } : import('msw/browser'), import('msw/core/http')]).then(([{ setupWorker }, { http }]) => {
++		} } : import('msw/browser'), Promise.any([
++			import(/* @vite-ignore */ "msw/core/http"), 
++			import(/* @vite-ignore */ "msw/http")
++		])]).then(([{ setupWorker }, { http }]) => {
+ 			const worker = setupWorker(http.get(/.+/, async ({ request }) => {
+ 				const path = cleanQuery(request.url.slice(location.origin.length));
+ 				if (!this.mocks.has(path)) {
