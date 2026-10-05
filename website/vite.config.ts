@@ -4,6 +4,7 @@ import netlify from "@netlify/vite-plugin-tanstack-start";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import { msw } from "msw/vite";
 import rehypeCodeProps from "rehype-mdx-code-props";
 import rehypePrism from "rehype-prism-plus";
 import rehypeSlug from "rehype-slug";
@@ -123,6 +124,7 @@ const config = defineConfig({
           suppressWarnings: true,
         },
       }),
+    msw(),
   ]),
   test: {
     coverage: {
