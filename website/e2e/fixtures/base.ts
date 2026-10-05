@@ -62,11 +62,9 @@ export abstract class TabObjectModel<
 
   @step(({ tabName }) => `Select ${tabName} tab`)
   async select() {
-    await expect(async () => {
-      await this.tabLink.click();
-      await expect(this.tabLink).toBeSelected();
-      await expect(this.tabPanel).toBeVisible();
-    }).toPass({ timeout: 5000 });
+    await this.tabLink.click();
+    await expect(this.tabLink).toBeSelected();
+    await expect(this.tabPanel).toBeVisible();
   }
 }
 
