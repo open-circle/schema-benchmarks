@@ -14,7 +14,14 @@ export interface DialogProps extends Omit<ComponentPropsWithRef<"dialog">, "chil
 
 const cls = bem("dialog");
 
-export function Dialog({ open, children, ref, className, ...props }: DialogProps) {
+export function Dialog({
+  open,
+  children,
+  ref,
+  className,
+  onKeyDownCapture,
+  ...props
+}: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [dialogElement, setDialogElement] = useState<HTMLDialogElement | null>(null);
   useEffect(() => {
@@ -29,6 +36,12 @@ export function Dialog({ open, children, ref, className, ...props }: DialogProps
       {...props}
       {...cls({ extra: className })}
       ref={mergeRefs(ref, dialogRef, setDialogElement)}
+      onKeyDownCapture={(event) => {
+        onKeyDownCapture?.(event);
+        if (event.key === "Escape" && !event.defaultPrevented) {
+          event.stopPropagation();
+        }
+      }}
     >
       {resolveValue(children, {
         close(returnValue) {
