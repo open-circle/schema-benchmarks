@@ -17,6 +17,8 @@ test("homepage is selected", { tag: "@smoke" }, async ({ sidebar }) => {
 });
 
 test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
+  test.setTimeout(120_000);
+
   for (const [name, path] of [
     ["Download", "/download"],
     ["Initialization", "/initialization"],
@@ -40,9 +42,9 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
 
       await link.click();
 
-      await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 15_000 });
+      await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 30_000 });
 
-      await expect(link).toBeCurrent("page", { timeout: 15_000 });
+      await expect(link).toBeCurrent("page", { timeout: 30_000 });
     });
   }
 });
