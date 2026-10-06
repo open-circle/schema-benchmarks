@@ -46,4 +46,22 @@ describe("Dialog", () => {
     await userEvent.keyboard("[Escape]");
     await expect.element(dialog).not.toHaveAttribute("open");
   });
+
+  it("closes on Escape before a window handler can prevent it", async ({ signal }) => {
+    await page.render(<DialogFixture />);
+    const dialog = page.getByRole("dialog");
+
+    window.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape") event.preventDefault();
+      },
+      { signal },
+    );
+
+    await page.getByRole("button", { name: "Open dialog" }).click();
+    await expect.element(dialog).toHaveAttribute("open");
+    await userEvent.keyboard("[Escape]");
+    await expect.element(dialog).not.toHaveAttribute("open");
+  });
 });

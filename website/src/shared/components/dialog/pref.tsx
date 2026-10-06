@@ -29,16 +29,7 @@ export function PreferencesDialog({ open, onClose }: PreferencesDialogProps) {
   const { npmSite, setNpmSite } = useNpmSite();
   const { ligature, setLigature } = useLigature();
   return (
-    <Dialog
-      {...{ open, onClose }}
-      aria-labelledby="pref-dialog-title"
-      closedby="any"
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose?.();
-      }}
-      {...cls()}
-    >
+    <Dialog {...{ open, onClose }} aria-labelledby="pref-dialog-title" closedby="any" {...cls()}>
       <DialogContent>
         <DialogTitle id="pref-dialog-title">Preferences</DialogTitle>
         <div {...cls("prefs")}>
