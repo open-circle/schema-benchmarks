@@ -49,6 +49,36 @@ describe("Dialog", () => {
     await expect.element(dialog).not.toHaveAttribute("open");
   });
 
+  it("runs descendant and dialog keydown handlers before stopping Escape", async () => {
+    let descendantHandledEscape = false;
+    let dialogHandledEscape = false;
+
+    await page.render(
+      <Dialog
+        open
+        onKeyDown={(event) => {
+          if (event.key === "Escape") dialogHandledEscape = true;
+        }}
+      >
+        {() => (
+          <button
+            onKeyDown={(event) => {
+              if (event.key === "Escape") descendantHandledEscape = true;
+            }}
+          >
+            Confirm
+          </button>
+        )}
+      </Dialog>,
+    );
+
+    await page.getByRole("button", { name: "Confirm" }).click();
+    await userEvent.keyboard("[Escape]");
+
+    expect(descendantHandledEscape).toBe(true);
+    expect(dialogHandledEscape).toBe(true);
+  });
+
   it("closes on Escape before a window handler can prevent it", async ({ testSignal }) => {
     await page.render(<DialogFixture />);
     const dialog = page.getByRole("dialog");
