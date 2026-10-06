@@ -23,18 +23,10 @@ export async function expectListDisplay(
 }
 
 async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string) {
-  const items = await runtimePage.mobile.items.all();
-
-  await every(items, async (item) => {
-    const details = item.locator("details");
-    if ((await details.getAttribute("open")) === null) {
-      await details.locator("summary").click();
-    }
-  });
-
   await expect(async () => {
-    await every(items, async (item) => {
-      await expect(item).toContainText(expectedLabel);
+    const itemTexts = await runtimePage.mobile.items.allTextContents();
+    every(itemTexts, (text) => {
+      expect(text).toContain(expectedLabel);
     });
   }).toPass({ timeout: 5000 });
 }
