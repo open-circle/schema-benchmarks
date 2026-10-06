@@ -5,10 +5,15 @@ import { waitForFontsLoaded } from "#e2e/utils";
 
 interface UtilFixtures {
   fontsLoaded: () => Promise<void>;
+  testStack: AsyncDisposableStack;
 }
 
 const baseTest = pwTest.extend<UtilFixtures>({
   fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
+  testStack: async ({}, use) => {
+    await using stack = new AsyncDisposableStack();
+    await use(stack);
+  },
 });
 
 baseTest.beforeEach("Mock external download APIs", async ({ context }) => {
