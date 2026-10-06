@@ -76,9 +76,14 @@ export default defineConfig({
         jsPlugins: [
           ...baseJsPlugins,
           { name: "playwright", specifier: "eslint-plugin-playwright" },
+          {
+            name: "website-lint",
+            specifier: "./website/lint/plugin.js",
+          },
         ],
         rules: {
           ...playwright.configs["flat/recommended"].rules,
+          "website-lint/require-to-have-url-timeout": "error",
           "playwright/no-skipped-test": ["warn", { allowConditional: true }],
           "playwright/expect-expect": ["error", { assertFunctionPatterns: ["^expect.*"] }],
           "playwright/require-to-pass-timeout": "error",

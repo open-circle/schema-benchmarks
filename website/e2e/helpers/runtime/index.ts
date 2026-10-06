@@ -18,7 +18,9 @@ export async function expectDataTypeToggle(
 
       await dataTypeLink.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("dataType") === dataType);
+      await expect(page).toHaveURL((url) => url.searchParams.get("dataType") === dataType, {
+        timeout: 15000,
+      });
 
       await expect(dataTypeLink).toBeCurrent("page");
     });

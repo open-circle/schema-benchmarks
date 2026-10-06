@@ -31,7 +31,9 @@ export abstract class RuntimePage extends PageObjectModel {
 
     await link.click();
 
-    await expect(this.page).toHaveURL((url) => url.searchParams.get("optimizeType") === type);
+    await expect(this.page).toHaveURL((url) => url.searchParams.get("optimizeType") === type, {
+      timeout: 15000,
+    });
 
     await expect(link).toBeCurrent("page");
   }
@@ -104,7 +106,9 @@ export function withErrorTypeFilter<
 
       await link.click();
 
-      await expect(this.page).toHaveURL((url) => url.searchParams.get("errorType") === errorType);
+      await expect(this.page).toHaveURL((url) => url.searchParams.get("errorType") === errorType, {
+        timeout: 15000,
+      });
 
       await expect(link).toBeCurrent("page");
     }

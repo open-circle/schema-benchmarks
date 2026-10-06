@@ -9,9 +9,11 @@
     "test/**/*",
     "vite/**/*",
     "offline/**/*",
+    "lint/**/*.js",
     "e2e/**/*"
   ],
   "compilerOptions": {
+    "allowJs": true,
     "jsx": "react-jsx",
     "module": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],

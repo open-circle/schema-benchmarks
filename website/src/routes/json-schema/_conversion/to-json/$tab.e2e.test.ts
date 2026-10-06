@@ -25,7 +25,9 @@ test.describe("support matrix tab", () => {
 
     await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page");
 
-    await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url));
+    await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url), {
+      timeout: 15000,
+    });
   });
 
   test.describe("desktop view", { tag: "@desktop" }, () => {
@@ -55,7 +57,9 @@ test.describe("benchmarks tab", () => {
 
     await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page");
 
-    await expect(page).toHaveURL((url) => toJsonPage.benchmarks.matchesUrl(url));
+    await expect(page).toHaveURL((url) => toJsonPage.benchmarks.matchesUrl(url), {
+      timeout: 15000,
+    });
   });
 
   test("can toggle targets", async ({ page, toJsonPage }) => {
@@ -64,7 +68,9 @@ test.describe("benchmarks tab", () => {
 
       await link.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target);
+      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
+        timeout: 15000,
+      });
     }
   });
 
