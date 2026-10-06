@@ -31,8 +31,11 @@ test.describe("dialog closes", () => {
     await expect(prefs.dialog).toBeHidden();
   });
 
-  test("by pressing the escape key", async ({ prefs }) => {
+  test("by pressing the escape key", async ({ page, prefs }) => {
     await prefs.openDialog();
+
+    await page.mouse.move(0, 0);
+    await expect(page.getByRole("tooltip", { name: "Preferences" })).toBeHidden();
 
     await prefs.dialog.press("Escape");
 
