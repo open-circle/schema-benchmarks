@@ -10,6 +10,7 @@
     "vite/**/*",
     "offline/**/*",
     "lint/**/*.js",
+    "lint/**/*.ts",
     "e2e/**/*"
   ],
   "compilerOptions": {

@@ -23,7 +23,7 @@ test("can toggle between string formats", async ({ page, stringPage }) => {
       timeout: 15000,
     });
 
-    await expect(formatLink).toBeCurrent("page");
+    await expect(formatLink).toBeCurrent("page", { timeout: 15_000 });
   }
 });
 

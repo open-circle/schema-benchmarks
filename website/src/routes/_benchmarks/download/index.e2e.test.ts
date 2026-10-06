@@ -28,7 +28,7 @@ test(
           timeout: 15000,
         });
 
-        await expect(link).toBeCurrent("page");
+        await expect(link).toBeCurrent("page", { timeout: 15_000 });
       });
     }
   },
@@ -43,7 +43,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
       timeout: 15000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
-    await expect(threeGButton).toBeCurrent("page");
+    await expect(threeGButton).toBeCurrent("page", { timeout: 15_000 });
   });
 
   await test.step("Select 4G preset", async () => {
@@ -54,7 +54,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
       timeout: 15000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
-    await expect(fourGButton).toBeCurrent("page");
+    await expect(fourGButton).toBeCurrent("page", { timeout: 15_000 });
   });
 
   await test.step("Select WiFi preset", async () => {
@@ -65,7 +65,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
       timeout: 15000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-    await expect(wifiButton).toBeCurrent("page");
+    await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
   });
 });
 
@@ -79,7 +79,7 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
       timeout: 15000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-    await expect(wifiButton).toBeCurrent("page");
+    await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
   });
 
   await test.step("Enter a custom speed", async () => {
@@ -90,7 +90,7 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
       timeout: 15000,
     });
     // custom value should not keep the preset as current
-    await expect(wifiButton).not.toBeCurrent("page");
+    await expect(wifiButton).not.toBeCurrent("page", { timeout: 15_000 });
   });
 });
 

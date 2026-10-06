@@ -1,6 +1,6 @@
 // @ts-check
 
-const minimumTimeout = 15_000;
+const defaultMinimumTimeout = 15_000;
 
 /**
  * @param {import("estree").ObjectExpression["properties"][number]} property
@@ -16,32 +16,51 @@ function isTimeoutProperty(property) {
 }
 
 /** @type {import("eslint").Rule.RuleModule} */
-export const requireToHaveUrlTimeout = {
+export const requireNavigationAssertionTimeout = {
   meta: {
     type: "problem",
     fixable: "code",
     docs: {
-      description: "require an explicit timeout of at least 15 seconds for toHaveURL assertions",
+      description: "require explicit timeouts for configured assertions",
     },
-    schema: [],
+    schema: [
+      {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["name", "index"],
+          properties: {
+            name: { type: "string" },
+            index: { type: "integer", minimum: 0 },
+            timeout: { type: "number", minimum: 1 },
+          },
+          additionalProperties: false,
+        },
+      },
+    ],
     messages: {
-      timeout: "toHaveURL assertions must set a timeout of at least {{ minimumTimeout }}ms.",
+      timeout: "{{ assertion }} assertions must set a timeout of at least {{ minimumTimeout }}ms.",
     },
   },
   create(context) {
+    /** @type {import("../oxlint").NavigationAssertionTimeoutConfig} */
+    const assertions = context.options[0] ?? [];
+
     return {
       CallExpression(node) {
         const { callee } = node;
-        if (
-          callee.type !== "MemberExpression" ||
-          callee.computed ||
-          callee.property.type !== "Identifier" ||
-          callee.property.name !== "toHaveURL"
-        ) {
+        if (callee.type !== "MemberExpression" || callee.computed) {
           return;
         }
 
-        const options = node.arguments[1];
+        const propertyName =
+          callee.property.type === "Identifier" ? callee.property.name : undefined;
+        const assertion = assertions.find(({ name }) => name === propertyName);
+        if (!assertion) return;
+
+        const minimumTimeout = assertion.timeout ?? defaultMinimumTimeout;
+        const optionsIndex = assertion.index;
+        const options = node.arguments[optionsIndex];
         const timeoutProperties =
           options?.type === "ObjectExpression" ? options.properties.filter(isTimeoutProperty) : [];
         const timeout = timeoutProperties[timeoutProperties.length - 1];
@@ -57,7 +76,7 @@ export const requireToHaveUrlTimeout = {
         context.report({
           node,
           messageId: "timeout",
-          data: { minimumTimeout },
+          data: { assertion: assertion.name, minimumTimeout },
           fix(fixer) {
             if (timeout) {
               return value?.type === "Literal" && typeof value.value === "number"
@@ -66,9 +85,9 @@ export const requireToHaveUrlTimeout = {
             }
 
             if (options?.type !== "ObjectExpression") {
-              const expected = node.arguments[0];
-              return expected
-                ? fixer.insertTextAfter(expected, `, { timeout: ${minimumTimeout} }`)
+              const previousArgument = node.arguments[optionsIndex - 1];
+              return optionsIndex === node.arguments.length && previousArgument
+                ? fixer.insertTextAfter(previousArgument, `, { timeout: ${minimumTimeout} }`)
                 : null;
             }
 

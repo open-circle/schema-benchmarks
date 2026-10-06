@@ -51,15 +51,13 @@ test("can toggle targets", async ({ page, compliancePage }) => {
     await test.step(`Select ${compliancePage.getTargetLabel(target)} target`, async () => {
       const link = compliancePage.getTargetLink(target);
 
-      await expect(async () => {
-        await link.click();
+      await link.click();
 
-        await expect(link).toBeCurrent("page");
+      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
+        timeout: 15_000,
+      });
 
-        await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
-          timeout: 15000,
-        });
-      }).toPass({ timeout: 5000 });
+      await expect(link).toBeCurrent("page", { timeout: 15_000 });
     });
   }
 });
