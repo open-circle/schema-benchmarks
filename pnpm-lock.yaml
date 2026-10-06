@@ -220,7 +220,7 @@ importers:
         version: 0.0.11
       '@ata-project/keywords':
         specifier: ^0.3.3
-        version: 0.3.3(ata-validator@1.40.1(yaml@2.9.1))
+        version: 0.3.3(ata-validator@1.42.0(yaml@2.9.1))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -267,8 +267,8 @@ importers:
         specifier: ^2.2.7
         version: 2.2.7
       ata-validator:
-        specifier: ^1.40.1
-        version: 1.40.1(yaml@2.9.1)
+        specifier: ^1.42.0
+        version: 1.42.0(yaml@2.9.1)
       decoders:
         specifier: ^2.12.2
         version: 2.12.2
@@ -276,8 +276,8 @@ importers:
         specifier: 'catalog:'
         version: 1.7.2
       effect:
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.0.1
+        version: 4.0.1
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -542,8 +542,8 @@ importers:
         specifier: ^1.63.0
         version: 1.63.0
       '@rickcedwhat/playwright-smart-table':
-        specifier: ^6.23.1
-        version: 6.23.1(@playwright/test@1.63.0)
+        specifier: ^6.24.0
+        version: 6.24.0(@playwright/test@1.63.0)
       '@storybook/tanstack-react':
         specifier: ^10.6.1
         version: 10.6.1(c242f67b902f417d5293fae5cf257198)
@@ -713,42 +713,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.40.1':
-    resolution: {integrity: sha512-BC/+S6kAoGEk2wplX4vJ/6u2yhsMg5Ga7CweHTUPkFyhxSgizMxE6BlBLfwydBhMfiPiwHMv+Cu90Ts663UHqg==}
+  '@ata-validator/native-darwin-arm64@1.42.0':
+    resolution: {integrity: sha512-ZT+tNyXmsP2K7oIkXl625YXIY/d6Qu5p3khOLD0X0CVYIYmxnmlfyuFlxLWEsaZtcGBnovRuifCbxjDSSl7d6w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.40.1':
-    resolution: {integrity: sha512-lQDjYKqn/fErf+SMMqyJitHoS+5S4zFJZsHtsCcgC/U/2tILRT9f+ry7Vc2k7Ztw4jOk2EfLBoEGkDwYOftvZw==}
+  '@ata-validator/native-darwin-x64@1.42.0':
+    resolution: {integrity: sha512-RzdCfprNdwV+PBsm9uHRk0WOy3GwPCbG155BxIQsbywNRKaWazhBZlilLN4r/rPevJQKMv+ibm0im7jKyQO9Fg==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.40.1':
-    resolution: {integrity: sha512-y4aoVdloxPgqXkBXO/1EMEryoowwFVAr8IH/hWnCOINJkscqqd+14T2jyh0JHra9SZvIMMJpIZiG+9DxU19iFA==}
+  '@ata-validator/native-linux-arm64-gnu@1.42.0':
+    resolution: {integrity: sha512-d1LWufMWfsuIbt4arrWj7om63VcMA3vDCW/HGOQ6kihVNuMu3BLus4ZRRYmP3sdX4qDoeEjY4osn1tpXuoKumg==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.40.1':
-    resolution: {integrity: sha512-WKN25ByK3LDIlJCpuAv+U6bRKftCFGUYYE0fyBHMuBsuwPSVxoNXq6mPJN+DP9k58/HH2wTFyistobTviAeC5A==}
+  '@ata-validator/native-linux-arm64-musl@1.42.0':
+    resolution: {integrity: sha512-JoKY6GIO928QJyGNbToRqzl5B2QzrqpBxKQwce9QQQEtj3cduAso58LsTEUCEthLmwe89l+exdzJTj+j/RyeSg==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.40.1':
-    resolution: {integrity: sha512-4yVyG02SzVd0Jbqb2rKb1oXmGQgbpgYA++p3act7Gt1NX7/avXtueG2atHJrAchgM83gPr31y9IF6JgM2loPrw==}
+  '@ata-validator/native-linux-x64-gnu@1.42.0':
+    resolution: {integrity: sha512-5828569wvKfiwWCe4UVG8Wc0Oo41MnX+BKAp0UJetzg/SYCfVIr+wWFBNjUw6NK/pfDCMWOVpyHmsEXSFZraRw==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.40.1':
-    resolution: {integrity: sha512-xLeIjiG59cCXWXaUCe6ef6SwgmWKZ/VSm6KoZCSjbVlZ6kUZOo9Bi6zT9rW5EM0hraIy46YTNvUJYyAh6cnroA==}
+  '@ata-validator/native-linux-x64-musl@1.42.0':
+    resolution: {integrity: sha512-+621+AxkK639thENjceH9Ltm6LKjg2MuGL2r7DGKu+OMwHrxFQEU56pFp/O5kCOKHou+g/mDzSxFVk2wcTwKrw==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.40.1':
-    resolution: {integrity: sha512-oKTU8F+0OSThXd080MWivzUhHbRuFJSz3JCZl+vJQipTcD4AWj9WOUNO2zkYVCXJD4DrdgklnBSwD6u3oVn0ug==}
+  '@ata-validator/native-win32-x64@1.42.0':
+    resolution: {integrity: sha512-stXuasvVS7bGS8EC3N4Zqr1zg+gw+gd5tekudN3zsnu0RohI/9jgi/yI2l6UZA+ZTW1/May2dM2inybWi7U/Pw==}
     cpu: [x64]
     os: [win32]
 
@@ -3697,8 +3697,8 @@ packages:
   '@remix-run/data-schema@1.0.0':
     resolution: {integrity: sha512-xuJlVJiVLHLLb5eBUZjG3+Xb7F/DSYcTBFGdGvaqJ1HJTIxlthD2xXyfLTq1Y4pTWm7N7Vasq7p5Y+v7n/jzSQ==}
 
-  '@rickcedwhat/playwright-smart-table@6.23.1':
-    resolution: {integrity: sha512-zCs+N3degCoEAKPLmiiC5+hROqwqz/7BfD8enTSqwvmvllsFN+y6oFAecB973giT6tSF8ZJEkOD+/0txlUo7pg==}
+  '@rickcedwhat/playwright-smart-table@6.24.0':
+    resolution: {integrity: sha512-x1Bsz4OqElpWd0yo8HGkvjnEefqo00n+QK94ATxz98yABbrcLPgC1+75vSFIBhr44DiFm/Mrr/vqNUxe34DPkg==}
     peerDependencies:
       '@playwright/test': ^1.40.0
     peerDependenciesMeta:
@@ -5617,8 +5617,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.40.1:
-    resolution: {integrity: sha512-gC96qkcWoDQZD7ZWNIY3WnnCN9Mg752jTdTtjniCcHNCJUpm5XWeMfYTCkBHdM8o068ioRxwgpvFdnGPGDr6hQ==}
+  ata-validator@1.42.0:
+    resolution: {integrity: sha512-1jfoIHY8r10jpMZ6gwyyjJ7k7BjOAmYhfqm8r7OB3s337zVX8NfXcXivPl/faDZCSlG7+zX3Fif1+y7u6jVy8g==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -6392,8 +6392,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect@4.0.0:
-    resolution: {integrity: sha512-ooc1TG5t+FfzgYnFz2ff6BBKyZ7EwBRVXC7c4RhQUAD6/TZ2gTXXMeb4WX7a19ozQo4J73/QW+S00YAIresoMQ==}
+  effect@4.0.1:
+    resolution: {integrity: sha512-b1VlQG9g8fwxE5QnIZuPoOP/0MsqHJSRKxUijjoM80E5q95FXrX5yWtY5XI8G+GJsBQAVSDbLS458z9a++uVvw==}
 
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
@@ -9872,29 +9872,29 @@ snapshots:
 
   '@ark/util@0.56.6': {}
 
-  '@ata-project/keywords@0.3.3(ata-validator@1.40.1(yaml@2.9.1))':
+  '@ata-project/keywords@0.3.3(ata-validator@1.42.0(yaml@2.9.1))':
     dependencies:
-      ata-validator: 1.40.1(yaml@2.9.1)
+      ata-validator: 1.42.0(yaml@2.9.1)
 
-  '@ata-validator/native-darwin-arm64@1.40.1':
+  '@ata-validator/native-darwin-arm64@1.42.0':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.40.1':
+  '@ata-validator/native-darwin-x64@1.42.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.40.1':
+  '@ata-validator/native-linux-arm64-gnu@1.42.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.40.1':
+  '@ata-validator/native-linux-arm64-musl@1.42.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.40.1':
+  '@ata-validator/native-linux-x64-gnu@1.42.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.40.1':
+  '@ata-validator/native-linux-x64-musl@1.42.0':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.40.1':
+  '@ata-validator/native-win32-x64@1.42.0':
     optional: true
 
   '@babel/code-frame@7.29.7':
@@ -12439,7 +12439,7 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.1.0
 
-  '@rickcedwhat/playwright-smart-table@6.23.1(@playwright/test@1.63.0)':
+  '@rickcedwhat/playwright-smart-table@6.24.0(@playwright/test@1.63.0)':
     optionalDependencies:
       '@playwright/test': 1.63.0
 
@@ -14267,15 +14267,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.40.1(yaml@2.9.1):
+  ata-validator@1.42.0(yaml@2.9.1):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.40.1
-      '@ata-validator/native-darwin-x64': 1.40.1
-      '@ata-validator/native-linux-arm64-gnu': 1.40.1
-      '@ata-validator/native-linux-arm64-musl': 1.40.1
-      '@ata-validator/native-linux-x64-gnu': 1.40.1
-      '@ata-validator/native-linux-x64-musl': 1.40.1
-      '@ata-validator/native-win32-x64': 1.40.1
+      '@ata-validator/native-darwin-arm64': 1.42.0
+      '@ata-validator/native-darwin-x64': 1.42.0
+      '@ata-validator/native-linux-arm64-gnu': 1.42.0
+      '@ata-validator/native-linux-arm64-musl': 1.42.0
+      '@ata-validator/native-linux-x64-gnu': 1.42.0
+      '@ata-validator/native-linux-x64-musl': 1.42.0
+      '@ata-validator/native-win32-x64': 1.42.0
       yaml: 2.9.1
 
   atomically@2.1.1:
@@ -15030,7 +15030,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect@4.0.0: {}
+  effect@4.0.1: {}
 
   ejs@3.1.10:
     dependencies:
