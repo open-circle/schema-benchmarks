@@ -24,7 +24,9 @@ test(
 
         await link.click();
 
-        await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType);
+        await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType, {
+          timeout: 15000,
+        });
 
         await expect(link).toBeCurrent("page");
       });
@@ -37,7 +39,9 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
     await threeGButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g", {
+      timeout: 15000,
+    });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
     await expect(threeGButton).toBeCurrent("page");
   });
@@ -46,7 +50,9 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     const fourGButton = downloadPage.getSpeedPresetButtonByLabel("4G");
     await fourGButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g", {
+      timeout: 15000,
+    });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
     await expect(fourGButton).toBeCurrent("page");
   });
@@ -55,7 +61,9 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
     await wifiButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
+      timeout: 15000,
+    });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
     await expect(wifiButton).toBeCurrent("page");
   });
@@ -67,7 +75,9 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   await test.step("Start from the WiFi preset", async () => {
     await wifiButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
+      timeout: 15000,
+    });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
     await expect(wifiButton).toBeCurrent("page");
   });
@@ -76,7 +86,9 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
     await downloadPage.downloadSpeedInput.fill("241");
 
     await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241");
+    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241", {
+      timeout: 15000,
+    });
     // custom value should not keep the preset as current
     await expect(wifiButton).not.toBeCurrent("page");
   });

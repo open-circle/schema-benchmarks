@@ -89,6 +89,7 @@
     "@vitest/pretty-format": "catalog:",
     "ansi-regex": "^6.4.0",
     "ansi-styles": "^7.0.0",
+    "eslint": "^10.12.0",
     "esquery": "^1.7.0",
     "jiti": "^2.7.0",
     "mix-n-matchers": "catalog:",

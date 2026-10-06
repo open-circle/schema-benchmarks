@@ -37,8 +37,6 @@ catalog:
   vite: npm:@voidzero-dev/vite-plus-core@1.0.0
   vitest: 5.0.1
   vite-plus: 1.0.0
-minimumReleaseAgeExclude:
-  - effect@4.0.0
 minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1

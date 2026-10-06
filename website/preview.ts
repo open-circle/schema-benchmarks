@@ -1,10 +1,10 @@
 import { serve } from "srvx";
 import { staticMiddleware } from "srvx/static";
 
-// @ts-expect-error untyped
 import tanstackHandler from "./dist/server/server.js";
 
 const server = serve({
+  // oxlint-disable-next-line typescript/unbound-method
   fetch: tanstackHandler.fetch,
   middleware: [staticMiddleware({ dir: "./dist/client" })],
 });

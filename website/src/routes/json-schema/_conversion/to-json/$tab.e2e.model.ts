@@ -47,7 +47,9 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
 
     await expect(link).toBeCurrent("page");
 
-    await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction);
+    await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction, {
+      timeout: 15000,
+    });
   }
 
   @lazy

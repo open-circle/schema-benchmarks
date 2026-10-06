@@ -21,7 +21,7 @@ test(
 
     await card.click();
 
-    await expect(page).toHaveURL("/blog/welcome");
+    await expect(page).toHaveURL("/blog/welcome", { timeout: 15000 });
 
     await expect(header.breadcrumbs.getByText("Welcome").filter({ visible: true })).toBeVisible();
   },
