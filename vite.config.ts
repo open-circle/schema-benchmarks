@@ -83,7 +83,13 @@ export default defineConfig({
         ],
         rules: {
           ...playwright.configs["flat/recommended"].rules,
-          "website-lint/require-to-have-url-timeout": "error",
+          "website-lint/require-navigation-assertion-timeout": [
+            "error",
+            [
+              { name: "toHaveURL", index: 1, timeout: 15_000 },
+              { name: "toBeCurrent", index: 1, timeout: 15_000 },
+            ],
+          ],
           "playwright/no-skipped-test": ["warn", { allowConditional: true }],
           "playwright/expect-expect": ["error", { assertFunctionPatterns: ["^expect.*"] }],
           "playwright/require-to-pass-timeout": "error",

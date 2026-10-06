@@ -22,7 +22,7 @@ export async function expectDataTypeToggle(
         timeout: 15000,
       });
 
-      await expect(dataTypeLink).toBeCurrent("page");
+      await expect(dataTypeLink).toBeCurrent("page", { timeout: 15000 });
     });
   }
 }

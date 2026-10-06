@@ -3,6 +3,7 @@ import eslintPluginRouter from "@tanstack/eslint-plugin-router";
 import type { OxlintOverride, OxlintConfig } from "vite-plus/lint";
 
 import { baseJsPlugins } from "../lint.common.ts";
+import "./lint/oxlint";
 
 const linkComponents = ["ExternalLinkButton", "ExternalLinkToggleButton", "ListItemExternalLink"];
 

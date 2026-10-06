@@ -35,7 +35,7 @@ export abstract class RuntimePage extends PageObjectModel {
       timeout: 15000,
     });
 
-    await expect(link).toBeCurrent("page");
+    await expect(link).toBeCurrent("page", { timeout: 15000 });
   }
 
   @lazy
@@ -110,7 +110,7 @@ export function withErrorTypeFilter<
         timeout: 15000,
       });
 
-      await expect(link).toBeCurrent("page");
+      await expect(link).toBeCurrent("page", { timeout: 15000 });
     }
   }
   return ErrorTypeFilterMixin;

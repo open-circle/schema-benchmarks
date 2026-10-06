@@ -13,7 +13,7 @@ test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
 test("homepage is selected", { tag: "@smoke" }, async ({ sidebar }) => {
   await sidebar.open();
 
-  await expect(sidebar.getLinkByName("Home")).toBeCurrent("page");
+  await expect(sidebar.getLinkByName("Home")).toBeCurrent("page", { timeout: 15_000 });
 });
 
 test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
@@ -42,7 +42,7 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
 
       await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 15_000 });
 
-      await expect(link).toBeCurrent("page");
+      await expect(link).toBeCurrent("page", { timeout: 15_000 });
     });
   }
 });

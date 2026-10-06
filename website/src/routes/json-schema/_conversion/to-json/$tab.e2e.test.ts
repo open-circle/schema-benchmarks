@@ -23,7 +23,7 @@ test.describe("support matrix tab", () => {
   test.beforeEach("switch to support matrix tab", async ({ page, toJsonPage }) => {
     await toJsonPage.supportMatrix.select();
 
-    await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page");
+    await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page", { timeout: 15_000 });
 
     await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url), {
       timeout: 15000,
@@ -55,7 +55,7 @@ test.describe("benchmarks tab", () => {
   test.beforeEach("switch to benchmarks tab", async ({ page, toJsonPage }) => {
     await toJsonPage.benchmarks.select();
 
-    await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page");
+    await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page", { timeout: 15_000 });
 
     await expect(page).toHaveURL((url) => toJsonPage.benchmarks.matchesUrl(url), {
       timeout: 15000,
