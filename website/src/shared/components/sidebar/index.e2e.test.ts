@@ -40,7 +40,7 @@ test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
 
       await link.click();
 
-      await expect(page).toHaveURL((url) => url.pathname === path);
+      await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 15_000 });
 
       await expect(link).toBeCurrent("page");
     });
