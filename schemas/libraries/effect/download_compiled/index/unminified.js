@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Pipeable.js
 /**
 * The `Pipeable` module defines the shared interface and implementation helpers
 * for values that support Effect-style method chaining with `.pipe(...)`.
@@ -100,7 +100,7 @@ const Class$1 = /*#__PURE__*/ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be called in data-first style or data-last
 * (`pipe`-friendly) style.
@@ -364,7 +364,7 @@ function memoizeIdempotent(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -385,7 +385,7 @@ const byReferenceInstances = /*#__PURE__*/ new WeakSet();
 /** @internal */
 const viewBytes = (view) => new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/hash.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/hash.js
 /**
 * Back-edge count used to avoid caching entry-point-dependent hashes.
 *
@@ -397,7 +397,7 @@ const addBackEdge = () => {
 	backEdges++;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Predicate.js
 /**
 * Defines runtime checks for values.
 *
@@ -619,7 +619,7 @@ function isObjectKeyword(input) {
 */
 const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Hash.js
 /**
 * Computes Effect hash values and defines the interface for objects that want
 * to provide their own hash implementation. Hashes are small numeric
@@ -1004,7 +1004,7 @@ const randomHashCache = /*#__PURE__*/ new WeakMap();
 const hashCache = /*#__PURE__*/ new WeakMap();
 const visitedObjects = /*#__PURE__*/ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Equal.js
 /**
 * Defines the unique string identifier for the `Equal` interface.
 *
@@ -1190,14 +1190,14 @@ const equalEntries = (self, that) => compareBoth(self[0], that[0]) && compareBot
 */
 const isEqual = (u) => hasProperty(u, symbol);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/record.js
 /** @internal */
 function assignProperty(self, key, value) {
 	if (key === "__proto__") Object.defineProperty(self, key, {
@@ -1213,7 +1213,7 @@ function assignProperties(self, source) {
 	for (const key of Reflect.ownKeys(source)) if (Object.prototype.propertyIsEnumerable.call(source, key)) assignProperty(self, key, source[key]);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Redactable.js
 /**
 * Defines the symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1332,7 +1332,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Formatter.js
 /**
 * Formats JavaScript values into readable strings.
 *
@@ -1507,7 +1507,7 @@ function safeGet(input, key) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Inspectable.js
 /**
 * Controls how values appear in logs and debugging output.
 *
@@ -1632,7 +1632,7 @@ const BaseProto = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/stackTraceLimit.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/stackTraceLimit.js
 /**
 * Check if `Error.stackTraceLimit` is writable.
 * Returns `false` if the property is frozen, non-writable, or `Error` is non-extensible.
@@ -1664,7 +1664,7 @@ const setStackTraceLimit = (value) => {
 	if (canWriteStackTraceLimit) Error.stackTraceLimit = value;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Utils.js
 /**
 * Yields its wrapped value exactly once, then completes with the value sent
 * back in.
@@ -1741,7 +1741,7 @@ const pickInternalCall = () => {
 /** @internal */
 const internalCall = /*#__PURE__*/ pickInternalCall();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -1897,6 +1897,26 @@ var Fail = class extends ReasonBase {
 };
 /** @internal */
 const causeFromReasons = (reasons) => new CauseImpl(reasons);
+const dedupeReasons = (self, that) => {
+	const buckets = /* @__PURE__ */ new Map();
+	const out = [];
+	for (const reason of self.concat(that)) {
+		const hash$2 = hash(reason);
+		const bucket = buckets.get(hash$2);
+		if (bucket === void 0) buckets.set(hash$2, [reason]);
+		else if (bucket.some((previous) => equals$1(previous, reason))) continue;
+		else bucket.push(reason);
+		out.push(reason);
+	}
+	return out;
+};
+/** @internal */
+const causeCombine = /*#__PURE__*/ dual(2, (self, that) => {
+	if (self.reasons.length === 0) return that;
+	else if (that.reasons.length === 0) return self;
+	const newCause = new CauseImpl(dedupeReasons(self.reasons, that.reasons));
+	return equals$1(self, newCause) ? self : newCause;
+});
 /** @internal */
 const causeFail = (error) => new CauseImpl([new Fail(error)]);
 /** @internal */
@@ -2016,7 +2036,17 @@ const exitFailCause = /*#__PURE__*/ makeExit({
 			annotated = true;
 		}
 		let cont = fiber.getCont(contE);
-		while (fiber.interruptible && fiber._interruptedCause && cont) cont = fiber.getCont(contE);
+		const interruptedCause = fiber._interruptedCause;
+		if (interruptedCause && fiber.interruptible) {
+			let skippedHandler = false;
+			while (cont && fiber.interruptible) {
+				skippedHandler ||= identifier in cont;
+				cont = fiber.getCont(contE);
+			}
+			if (skippedHandler) cause = causeFromReasons(cause.reasons.filter((reason) => reason._tag !== "Fail"));
+			cause = causeCombine(cause, interruptedCause);
+			annotated = true;
+		}
 		return cont ? cont[contE](cause, fiber, annotated ? void 0 : this) : fiber.yieldWith(annotated ? exitFailCause(cause) : this);
 	}
 });
@@ -2075,7 +2105,7 @@ const TaggedError$1 = (tag) => {
 	return Base;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2146,7 +2176,7 @@ SomeImpl.prototype = SomeProto;
 /** @internal */
 const some$1 = (value) => new SomeImpl(value);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/result.js
 const TypeId$10 = "~effect/Result";
 const CommonProto = {
 	[TypeId$10]: {
@@ -2216,7 +2246,7 @@ const SuccessImpl = function(success) {
 };
 SuccessImpl.prototype = SuccessProto;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Order.js
 /**
 * Defines comparison functions for ordered values.
 *
@@ -2394,7 +2424,7 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2454,7 +2484,7 @@ const none = () => none$1;
 */
 const some = some$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Array.js
 /**
 * Exposes the global array constructor.
 *
@@ -2598,7 +2628,7 @@ const empty$1 = () => [];
 */
 const map$2 = /*#__PURE__*/ dual(2, (self, f) => self.map(f));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/BigDecimal.js
 /**
 * Decimal numbers and arithmetic for cases where JavaScript `number` rounding
 * is not precise enough. A `BigDecimal` stores digits as a `bigint` plus a
@@ -2875,7 +2905,7 @@ const toExponential = (n) => {
 */
 const isZero = (n) => n.value === bigint0$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Effectable.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
@@ -2900,7 +2930,7 @@ const Prototype = (options) => makePrimitiveProto({
 	[evaluate]: options.evaluate
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Context.js
 /**
 * Runtime type identifier attached to `Context` service keys and used by
 * `isKey` to recognize them.
@@ -3351,7 +3381,7 @@ const serviceNotFoundError = (service) => {
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Duration.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Duration.js
 const TypeId$7 = "~effect/Duration";
 const bigint0 = /*#__PURE__*/ BigInt(0);
 const bigint1 = /*#__PURE__*/ BigInt(1);
@@ -3795,7 +3825,7 @@ const Equivalence$1 = (self, that) => matchPair(self, that, {
 */
 const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$1(self, that));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Scheduler.js
 /**
 * Controls how runnable Effect fiber tasks are dispatched.
 *
@@ -4064,7 +4094,7 @@ const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventS
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Tracer.js
 /**
 * Defines the string key for the parent-span context service.
 *
@@ -4099,11 +4129,11 @@ const ParentSpanKey = "effect/Tracer/ParentSpan";
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/Metric/FiberRuntimeMetrics";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /*#__PURE__*/ Reference("effect/References/CurrentStackFrame", {
 	fiberCached: true,
@@ -4125,7 +4155,7 @@ const MinimumLogLevel = /*#__PURE__*/ Reference("effect/References/MinimumLogLev
 	defaultValue: () => "Info"
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	constructor(fiberId, annotations = constEmptyAnnotations) {
@@ -4152,26 +4182,6 @@ var Interrupt = class extends ReasonBase {
 const causeInterrupt = (fiberId) => new CauseImpl([new Interrupt(fiberId)]);
 /** @internal */
 const hasInterrupts = (self) => self.reasons.some(isInterruptReason);
-const dedupeReasons = (self, that) => {
-	const buckets = /* @__PURE__ */ new Map();
-	const out = [];
-	for (const reason of self.concat(that)) {
-		const hash$1 = hash(reason);
-		const bucket = buckets.get(hash$1);
-		if (bucket === void 0) buckets.set(hash$1, [reason]);
-		else if (bucket.some((previous) => equals$1(previous, reason))) continue;
-		else bucket.push(reason);
-		out.push(reason);
-	}
-	return out;
-};
-/** @internal */
-const causeCombine = /*#__PURE__*/ dual(2, (self, that) => {
-	if (self.reasons.length === 0) return that;
-	else if (that.reasons.length === 0) return self;
-	const newCause = new CauseImpl(dedupeReasons(self.reasons, that.reasons));
-	return equals$1(self, newCause) ? self : newCause;
-});
 /** @internal */
 const causeMap = /*#__PURE__*/ dual(2, (self, f) => {
 	let hasFail = false;
@@ -4191,6 +4201,14 @@ const fiberVariance = {
 	_E: identity
 };
 const fiberIdStore = { id: 0 };
+const AsyncResource = /*#__PURE__*/ (() => {
+	try {
+		return globalThis.process?.getBuiltinModule?.("node:async_hooks")?.AsyncResource;
+	} catch {
+		return;
+	}
+})();
+const captureAsyncContext = () => AsyncResource === void 0 ? void 0 : new AsyncResource("effect/Fiber");
 /** @internal */
 const getCurrentFiber = () => globalThis[currentFiberTypeId];
 /** @internal */
@@ -4209,6 +4227,7 @@ var FiberImpl = class {
 		this._running = false;
 		this._deferredInterrupt = false;
 		this._parent = void 0;
+		this._asyncContext = void 0;
 		this.cache.runtimeMetrics?.recordFiberStart(this.context);
 	}
 	get [FiberTypeId]() {
@@ -4250,13 +4269,20 @@ var FiberImpl = class {
 	}
 	evaluate(effect) {
 		if (this._exit) return;
-		else if (this._yielded !== void 0) {
+		else if (this._asyncContext !== void 0) {
+			const asyncContext = this._asyncContext;
+			this._asyncContext = void 0;
+			return asyncContext.runInAsyncScope(this.evaluate, this, effect);
+		} else if (this._yielded !== void 0) {
 			const yielded = this._yielded;
 			this._yielded = void 0;
 			yielded();
 		}
 		const exit = this.runLoop(effect);
-		if (exit === Yield) return;
+		if (exit === Yield) {
+			this._asyncContext = captureAsyncContext();
+			return;
+		}
 		const interruptChildren = fiberMiddleware.interruptChildren && fiberMiddleware.interruptChildren(this);
 		if (interruptChildren !== void 0) return this.evaluate(flatMap$1(interruptChildren, () => exit));
 		this._exit = exit;
@@ -4821,7 +4847,10 @@ const forkUnsafe = (parent, effect, immediate = false, daemon = false, uninterru
 	const interruptible = uninterruptible === "inherit" ? parentRuntime.interruptible : !uninterruptible;
 	const child = new FiberImpl(parentRuntime.context, interruptible);
 	if (immediate) child.evaluate(effect);
-	else parentRuntime.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
+	else {
+		child._asyncContext = captureAsyncContext();
+		parentRuntime.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
+	}
 	if (!daemon && !child._exit) {
 		parentRuntime.children().add(child);
 		child._parent = parentRuntime;
@@ -4883,7 +4912,7 @@ const colors = {
 };
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Cause.js
 /**
 * Narrows a `Reason` to `Fail`.
 *
@@ -4966,7 +4995,7 @@ const die$1 = causeDie;
 */
 const map = causeMap;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Exit.js
 /**
 * Creates a successful Exit containing the given value.
 *
@@ -5081,7 +5110,7 @@ const void_ = exitVoid;
 */
 const isSuccess = exitIsSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$6 = "~effect/DateTime";
 /** @internal */
@@ -5637,7 +5666,7 @@ codes[/*#__PURE__*/ "=".charCodeAt(0)] = 0;
 ({ ...BaseProto });
 ({ ...PipeInspectableProto });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5655,7 +5684,7 @@ const getExpected = /*#__PURE__*/ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/parser.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/parser.js
 /** @internal */
 const missing = /*#__PURE__*/ Symbol();
 /** @internal */
@@ -5669,7 +5698,7 @@ const toOption = (value) => value === missing ? none() : some(value);
 /** @internal */
 const fromOptionExit = (option) => option._tag === "None" ? missingExit : succeed(option.value);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaIssue.js
 /**
 * Describes problems found while decoding, encoding, or checking data with
 * schemas.
@@ -6150,7 +6179,7 @@ function findMessage(issue) {
 	if (typeof message === "string") return message;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/cause.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/cause.js
 /** @internal */
 function getSchemaIssue(cause) {
 	let issue;
@@ -6167,7 +6196,7 @@ function getSchemaIssueOrThrow(cause, message) {
 	return issue;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaGetter.js
 const makeGetter = (fields) => Object.assign(Object.create(Prototype$1), fields);
 const passthrough_$1 = /*#__PURE__*/ makeGetter({ _tag: "Passthrough" });
 function passthrough$1() {
@@ -6276,7 +6305,7 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Constructs schema middleware from its decode and encode functions.
 *
@@ -6424,7 +6453,7 @@ function passthrough() {
 */
 const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3(), /*#__PURE__*/ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaAST.js
 /**
 * Represents Effect schemas as runtime trees.
 *
@@ -8110,7 +8139,7 @@ function getConstructorDescriptor(ast) {
 	return isFunction(getDescriptor) ? getDescriptor(ast.typeParameters) : void 0;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/interpreter.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/interpreter.js
 const flatMapTransformation = (result, current, f) => result === sameExit ? f(current) : flatMapEager(result, f);
 function compileTransformation(transformation) {
 	if (transformation._tag === "Middleware") return (result, current, options) => {
@@ -8245,7 +8274,7 @@ function compile(ast, compile, compileField, base, specialize) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/compilerRegistry.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/compilerRegistry.js
 /** @internal */
 const invalid = /*#__PURE__*/ Symbol();
 const cache = /*#__PURE__*/ new WeakMap();
@@ -8276,7 +8305,7 @@ function resolve(ast) {
 	return entry;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaParser.js
 /**
 * Runs schemas against real values.
 *
@@ -8454,7 +8483,7 @@ function makeConstructorSync(ast) {
 const normalCompiler = (ast) => resolve(ast).parser;
 const constructorCompiler = (ast) => resolve(ast).makeEffect;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schema/make.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/make.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const RebuildOptions = /*#__PURE__*/ Symbol();
@@ -8511,7 +8540,7 @@ function make$1(ast, options) {
 	return self;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -8550,13 +8579,13 @@ function make$1(ast, options) {
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/internal/schemaError.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schemaError.js
 const SchemaErrorTypeId = "~effect/Schema/SchemaError";
 function isSchemaError$1(u) {
 	return hasProperty(u, "~effect/Schema/SchemaError") && u["~effect/Schema/SchemaError"] === "~effect/Schema/SchemaError";
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.0/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
