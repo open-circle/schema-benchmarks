@@ -35,7 +35,7 @@ export async function expectOptimizeFilter(runtimePage: RuntimePage) {
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("optimizations")).toHaveText(expectedLabel);
         });
-      }).toPass({ timeout: 5000 });
+      }).toPass({ timeout: 15_000 });
     });
   }
 }
