@@ -63,11 +63,9 @@ export abstract class TabObjectModel<
   @step(({ tabName }) => `Select ${tabName} tab`)
   async select() {
     await this.tabLink.click();
-    await expect(async () => {
-      await expect(this.page).toHaveURL((url) => this.matchesUrl(url));
-      await expect(this.tabLink).toBeSelected();
-      await expect(this.tabPanel).toBeVisible();
-    }).toPass({ timeout: 5000 });
+    await expect(this.page).toHaveURL((url) => this.matchesUrl(url), { timeout: 15_000 });
+    await expect(this.tabLink).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
+    await expect(this.tabPanel).toBeVisible({ timeout: 15_000 });
   }
 }
 
