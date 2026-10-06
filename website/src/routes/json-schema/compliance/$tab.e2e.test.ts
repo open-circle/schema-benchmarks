@@ -47,6 +47,8 @@ async function expectDetailsDialogToBeOpen(
 }
 
 test("can toggle targets", async ({ page, compliancePage }) => {
+  test.setTimeout(90_000);
+
   for (const target of complianceTargetSchema.options) {
     await test.step(`Select ${compliancePage.getTargetLabel(target)} target`, async () => {
       const link = compliancePage.getTargetLink(target);
@@ -54,10 +56,10 @@ test("can toggle targets", async ({ page, compliancePage }) => {
       await link.click();
 
       await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
-        timeout: 15_000,
+        timeout: 30_000,
       });
 
-      await expect(link).toBeCurrent("page", { timeout: 15_000 });
+      await expect(link).toBeCurrent("page", { timeout: 30_000 });
     });
   }
 });

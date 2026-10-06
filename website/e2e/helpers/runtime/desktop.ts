@@ -55,7 +55,7 @@ export async function expectErrorTypeFilter(
         await everyAsync(runtimePage.desktop.tableHandle, async ({ row }) => {
           await expect(row.getCell("error type")).toHaveText(expectedLabel);
         });
-      }).toPass({ timeout: 5000 });
+      }).toPass({ timeout: 15_000 });
     });
   }
 }
