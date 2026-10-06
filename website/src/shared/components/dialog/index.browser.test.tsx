@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { describe, expect, it } from "vite-plus/test";
+import { describe, expect } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";
+
+import { it } from "#test/browser/fixtures";
 
 import { Dialog } from ".";
 
@@ -47,7 +49,7 @@ describe("Dialog", () => {
     await expect.element(dialog).not.toHaveAttribute("open");
   });
 
-  it("closes on Escape before a window handler can prevent it", async ({ signal }) => {
+  it("closes on Escape before a window handler can prevent it", async ({ testSignal }) => {
     await page.render(<DialogFixture />);
     const dialog = page.getByRole("dialog");
 
@@ -56,7 +58,7 @@ describe("Dialog", () => {
       (event) => {
         if (event.key === "Escape") event.preventDefault();
       },
-      { signal },
+      { signal: testSignal },
     );
 
     await page.getByRole("button", { name: "Open dialog" }).click();
