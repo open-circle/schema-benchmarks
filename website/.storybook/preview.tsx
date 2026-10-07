@@ -6,6 +6,7 @@ import addonMsw from "msw-storybook-addon";
 import Prism from "prismjs";
 import { radEventListeners } from "rad-event-listeners";
 import { mocked } from "storybook/test";
+import { network } from "virtual:msw";
 
 import type { RouterContext } from "#src/routes/__root";
 import { getReplacementUrlFn } from "#src/routes/libraries/-query";
@@ -68,7 +69,12 @@ document.addEventListener("click", (event) => {
 });
 
 export default definePreview({
-  addons: [addonMsw()],
+  addons: [
+    addonMsw(async () => {
+      await network.enable();
+      return network;
+    }),
+  ],
   beforeEach: () => {
     queryClient.clear();
     mocked(getHighlightedCodeFn).mockImplementation(async ({ data }) => highlightCode(Prism, data));
