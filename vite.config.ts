@@ -68,15 +68,6 @@ export default defineConfig({
               additionalTestBlockFunctions: ["it", "test"],
             },
           ],
-          // Only `no-standalone-expect` was enforced before the Vite+ migration; the
-          // other `vitest/*` rules below are newly activated by the `correctness`/
-          // `suspicious` category cascade onto the `vitest` plugin and are turned off
-          // here to preserve prior behavior rather than newly enforcing them repo-wide.
-          "vitest/no-conditional-expect": "off",
-          "vitest/no-conditional-tests": "off",
-          "vitest/expect-expect": "off",
-          "vitest/require-to-throw-message": "off",
-          "vitest/require-mock-type-parameters": "off",
         },
       },
       {

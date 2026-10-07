@@ -6,7 +6,7 @@ import { mergeRefs } from "./index.ts";
 describe("mergeRefs", () => {
   it("should call all refs", () => {
     const refObject: RefObject<string | null> = { current: null };
-    const cleanupFn = vi.fn();
+    const cleanupFn = vi.fn<() => void>();
     const refCallback = vi.fn<RefCallback<string>>();
     const refWithCleanup = vi.fn<RefCallback<string>>(() => cleanupFn);
     const merged = mergeRefs(refObject, refCallback, refWithCleanup, null);

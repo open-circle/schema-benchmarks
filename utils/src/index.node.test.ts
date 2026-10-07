@@ -241,7 +241,7 @@ describe("getOrInsert", () => {
       expect(map.get("a")).toBe(1);
     });
     it("should compute, insert and return the new value if not present", () => {
-      const fn = vi.fn(() => 2);
+      const fn = vi.fn<(key: string) => number>(() => 2);
       const map = new Map<string, number>();
       const result = getOrInsertComputed(map, "a", fn);
       expect(result).toBe(2);
@@ -259,7 +259,7 @@ describe("getOrInsert", () => {
       expect(map.get("a")).toBe(1);
     });
     it("should compute, insert and return the new value if not present", async () => {
-      const fn = vi.fn(async () => 2);
+      const fn = vi.fn<(key: string) => Promise<number>>(async () => 2);
       const map = new Map<string, number>();
       const result = await getOrInsertComputedAsync(map, "a", fn);
       expect(result).toBe(2);

@@ -11,10 +11,10 @@ describe("coerceNumber", () => {
     expect(v.parse(vUtils.coerceNumber, "1")).toBe(1);
   });
   it("should throw on a string that can't be coerced to a number", () => {
-    expect(() => v.parse(vUtils.coerceNumber, "a")).toThrow();
+    expect(() => v.parse(vUtils.coerceNumber, "a")).toThrow(v.ValiError);
   });
   it("should throw on non-string, non-number values", () => {
-    expect(() => v.parse(vUtils.coerceNumber, {})).toThrow();
+    expect(() => v.parse(vUtils.coerceNumber, {})).toThrow(v.ValiError);
   });
 });
 
@@ -28,14 +28,14 @@ describe("coerceDate", () => {
     expect(v.parse(vUtils.coerceDate, date.toISOString())).toStrictEqual(date);
   });
   it("should throw on a string that can't be coerced to a date", () => {
-    expect(() => v.parse(vUtils.coerceDate, "a")).toThrow();
+    expect(() => v.parse(vUtils.coerceDate, "a")).toThrow(v.ValiError);
   });
   it("should coerce a number to a date", () => {
     const date = new Date();
     expect(v.parse(vUtils.coerceDate, date.getTime())).toStrictEqual(date);
   });
   it("should throw on non-string, non-number, non-date values", () => {
-    expect(() => v.parse(vUtils.coerceDate, {})).toThrow();
-    expect(() => v.parse(vUtils.coerceDate, Number.NaN)).toThrow();
+    expect(() => v.parse(vUtils.coerceDate, {})).toThrow(v.ValiError);
+    expect(() => v.parse(vUtils.coerceDate, Number.NaN)).toThrow(v.ValiError);
   });
 });

@@ -54,11 +54,6 @@ const tryGenerate = (generate: () => object) => {
   }
 };
 
-const expectUniqueNotes = (configs: ReadonlyArray<{ note?: string }>) => {
-  const notes = configs.map(({ note }) => note);
-  expect(new Set(notes).size).toBe(notes.length);
-};
-
 /** Compiles a generated JSON schema, so it can be checked against the data it describes. */
 const compileJsonSchema = (target: JsonSchemaConversionTarget, jsonSchema: object) => {
   // formats are library specific (e.g. `url` vs `uri`), and OpenAPI keywords aren't JSON Schema
@@ -183,11 +178,12 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
   ] as const;
 
   for (const [name, configs] of configArrays) {
-    if (Array.isArray(configs)) {
-      it(`${name} configs should have unique notes`, () => {
-        expectUniqueNotes(configs);
-      });
-    }
+    const hasConfigs = Array.isArray(configs);
+    const noteConfigs: ReadonlyArray<{ note?: string }> = hasConfigs ? configs : [];
+    it.runIf(hasConfigs)(`${name} configs should have unique notes`, () => {
+      const notes = noteConfigs.map(({ note }) => note);
+      expect(new Set(notes).size).toBe(notes.length);
+    });
   }
 
   describe.runIf(libConfig.initialization)("initialization", () => {
@@ -289,11 +285,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
                 const standardGenerated = tryGenerate(() =>
                   standardJsonSchema.schema["~standard"].jsonSchema[direction]({ target }),
                 );
-                // the library can't support the combination through one API and not the other
-                expect(Boolean(standardGenerated)).toBe(Boolean(generated));
-                if (standardGenerated && generated) {
-                  expect(standardGenerated).toEqual(generated);
-                }
+                expect(standardGenerated).toEqual(generated);
               },
             );
           });

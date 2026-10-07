@@ -28,13 +28,9 @@ describe.each(librariesWithTypes)("%s", (library) => {
     // a library either has something to probe, or a reason it doesn't - never both, never neither
     expect(Boolean(result.inference)).toBe(!result.noInference);
 
-    if (fs.existsSync(path.join(directory, "types", "fromType.ts"))) {
-      expect(result.fromType).toBeDefined();
-      expect(Object.keys(result.fromType!.cases).toSorted()).toEqual(
-        [...fromTypeCaseSchema.options].toSorted(),
-      );
-    } else {
-      expect(result.fromType).toBeUndefined();
-    }
+    const hasFromType = fs.existsSync(path.join(directory, "types", "fromType.ts"));
+    expect(result.fromType && Object.keys(result.fromType.cases).toSorted()).toEqual(
+      hasFromType ? [...fromTypeCaseSchema.options].toSorted() : undefined,
+    );
   });
 });
