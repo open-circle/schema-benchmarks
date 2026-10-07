@@ -9,10 +9,10 @@ interface UtilFixtures {
 }
 
 const baseTest = pwTest.extend<UtilFixtures>({
-  fontsLoaded: async ({ page }, use) => use(() => waitForFontsLoaded(page)),
-  testStack: async ({}, use) => {
+  fontsLoaded: async ({ page }, provide) => provide(() => waitForFontsLoaded(page)),
+  testStack: async ({}, provide) => {
     await using stack = new AsyncDisposableStack();
-    await use(stack);
+    await provide(stack);
   },
 });
 
@@ -34,7 +34,7 @@ export function createTest<Instances extends {}>(objectModels: {
       Object.entries<new (page: Page) => unknown>(objectModels).map(
         ([name, POM]): [string, TestFixture<unknown, PlaywrightTestArgs>] => [
           name,
-          ({ page }, use) => use(new POM(page)),
+          ({ page }, provide) => provide(new POM(page)),
         ],
       ),
     ) as never,

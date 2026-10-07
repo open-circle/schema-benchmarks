@@ -1,4 +1,4 @@
-import { useTable } from "@rickcedwhat/playwright-smart-table";
+import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 import { lazy } from "@schema-benchmarks/utils";
@@ -43,7 +43,7 @@ export abstract class RuntimePage extends PageObjectModel {
     const table = this.main.getByRole("table", { name: "Results" });
     return {
       table,
-      tableHandle: useTable(table, {
+      tableHandle: createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
       }),
     };

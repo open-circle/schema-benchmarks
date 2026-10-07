@@ -68,6 +68,8 @@ export default defineConfig({
               additionalTestBlockFunctions: ["it", "test"],
             },
           ],
+          "vitest/no-focused-tests": "error",
+          "vitest/no-disabled-tests": "warn",
         },
       },
       {

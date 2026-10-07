@@ -47,6 +47,7 @@ export const websiteLint = {
   },
   rules: {
     "react/react-in-jsx-scope": "off",
+    "react/rules-of-hooks": "error",
     ...eslintPluginRouter.configs.recommended.rules,
     ...eslintPluginQuery.configs.recommended.rules,
     "@tanstack/query/exhaustive-deps": "off",

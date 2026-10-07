@@ -25,12 +25,12 @@ interface Fixtures {
 
 export const test = testBase.extend<Fixtures>({
   worker: [
-    async ({}, use) => {
+    async ({}, provide) => {
       // Start the worker before the test.
       await worker.start();
 
       // Expose the worker object on the test's context.
-      await use(worker);
+      await provide(worker);
 
       // Remove any request handlers added in individual test cases.
       // This prevents them from affecting unrelated tests.
@@ -41,13 +41,13 @@ export const test = testBase.extend<Fixtures>({
     },
     { auto: true },
   ],
-  testStack: async ({}, use) => {
+  testStack: async ({}, provide) => {
     await using stack = new AsyncDisposableStack();
-    await use(stack);
+    await provide(stack);
   },
-  testSignal: async ({ testStack, signal }, use) => {
+  testSignal: async ({ testStack, signal }, provide) => {
     const controller = testStack.adopt(new AbortController(), (controller) => controller.abort());
-    await use(AbortSignal.any([controller.signal, signal]));
+    await provide(AbortSignal.any([controller.signal, signal]));
   },
 });
 

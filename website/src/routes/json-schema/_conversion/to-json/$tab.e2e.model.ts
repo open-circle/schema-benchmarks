@@ -1,4 +1,4 @@
-import { useTable } from "@rickcedwhat/playwright-smart-table";
+import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import { lazy } from "@schema-benchmarks/utils";
 
@@ -57,7 +57,7 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     const table = this.page.getByRole("table", { name: "Results" });
     return {
       table,
-      tableHandle: useTable(table, {
+      tableHandle: createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
       }),
     };

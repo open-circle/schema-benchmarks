@@ -1,4 +1,4 @@
-import { useTable } from "@rickcedwhat/playwright-smart-table";
+import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import type { ComplianceTarget } from "@schema-benchmarks/json-schema-tests/types";
 import type { ComplianceType } from "@schema-benchmarks/schemas";
 import { lazy } from "@schema-benchmarks/utils";
@@ -40,7 +40,7 @@ abstract class ComplianceTab extends TabObjectModel<CompliancePage> {
 
     return {
       table,
-      tableHandle: useTable(table, {
+      tableHandle: createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
       }),
     };

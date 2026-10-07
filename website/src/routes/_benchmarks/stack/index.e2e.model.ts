@@ -1,4 +1,4 @@
-import { useTable } from "@rickcedwhat/playwright-smart-table";
+import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import { lazy } from "@schema-benchmarks/utils";
 
 import { PageObjectModel } from "#e2e/fixtures/base";
@@ -13,7 +13,7 @@ export class StackPage extends PageObjectModel {
     const table = this.main.getByRole("table", { name: "Results" });
     return {
       table,
-      tableHandle: useTable(table, {
+      tableHandle: createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
       }),
     };

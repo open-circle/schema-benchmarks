@@ -13,7 +13,7 @@ interface PreProps extends ComponentPropsWithRef<"pre"> {
   showCopy?: boolean;
 }
 
-export function pre({ title, children, className, showCopy = true, ref, ...props }: PreProps) {
+function Pre({ title, children, className, showCopy = true, ref, ...props }: PreProps) {
   const innerRef = useRef<HTMLPreElement>(null);
   return (
     <pre
@@ -50,14 +50,16 @@ export function pre({ title, children, className, showCopy = true, ref, ...props
   );
 }
 
-export const code = classed.code(({ className }) =>
+const Code = classed.code(({ className }) =>
   className?.includes("language-") ? null : "language-text",
 );
 
-export function a({ href, children, ...props }: ComponentPropsWithRef<"a">) {
+function A({ href, children, ...props }: ComponentPropsWithRef<"a">) {
   return (
     <a {...(href?.startsWith("http") ? trackedLinkProps(href) : { href })} {...props}>
       {children}
     </a>
   );
 }
+
+export { A as a, Code as code, Pre as pre };
