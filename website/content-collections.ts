@@ -6,6 +6,7 @@ const blog = defineCollection({
   name: "blog",
   directory: "src/routes/blog/-content",
   include: "*.mdx",
+  parser: "frontmatter-only",
   schema: v.object({
     cover: v.union([
       v.string(),
@@ -28,7 +29,6 @@ const blog = defineCollection({
         v.transform((s) => [s]),
       ),
     ]),
-    content: v.string(),
   }),
   transform: (document) => ({
     ...document,
