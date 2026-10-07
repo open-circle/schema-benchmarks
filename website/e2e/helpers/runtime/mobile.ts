@@ -28,7 +28,7 @@ async function expectFilterItems(runtimePage: RuntimePage, expectedLabel: string
     every(itemTexts, (text) => {
       expect(text).toContain(expectedLabel);
     });
-  }).toPass({ timeout: 5000 });
+  }).toPass({ timeout: 5_000 });
 }
 
 export async function expectOptimizeFilter(runtimePage: RuntimePage) {

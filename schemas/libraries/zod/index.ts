@@ -16,7 +16,7 @@ export function getZodSchema() {
     id: z.number(),
     stars: z.number().min(1).max(5),
     title: z.string().min(1).max(100),
-    text: z.string().min(1).max(1000),
+    text: z.string().min(1).max(1_000),
     images: z.array(imageSchema),
   });
   return z.object({
@@ -25,7 +25,7 @@ export function getZodSchema() {
     title: z.string().min(1).max(100),
     brand: z.string().min(1).max(30),
     description: z.string().min(1).max(500),
-    price: z.number().min(1).max(10000),
+    price: z.number().min(1).max(10_000),
     discount: z.number().min(1).max(100).nullable(),
     quantity: z.number().min(0).max(10),
     tags: z.array(z.string().min(1).max(30)),
@@ -47,7 +47,7 @@ export function getZodFactorySchema() {
     id: z.number(),
     stars: z.number({ checks: [z.gte(1), z.lte(5)] }),
     title: z.string({ checks: [z.minLength(1), z.maxLength(100)] }),
-    text: z.string({ checks: [z.minLength(1), z.maxLength(1000)] }),
+    text: z.string({ checks: [z.minLength(1), z.maxLength(1_000)] }),
     images: z.array(imageSchema),
   });
   return z.object({
@@ -56,7 +56,7 @@ export function getZodFactorySchema() {
     title: z.string({ checks: [z.minLength(1), z.maxLength(100)] }),
     brand: z.string({ checks: [z.minLength(1), z.maxLength(30)] }),
     description: z.string({ checks: [z.minLength(1), z.maxLength(500)] }),
-    price: z.number({ checks: [z.gte(1), z.lte(10000)] }),
+    price: z.number({ checks: [z.gte(1), z.lte(10_000)] }),
     discount: z.number({ checks: [z.gte(1), z.lte(100)] }).nullable(),
     quantity: z.number({ checks: [z.gte(0), z.lte(10)] }),
     tags: z.array(z.string({ checks: [z.minLength(1), z.maxLength(30)] })),

@@ -26,7 +26,7 @@ test.describe("support matrix tab", () => {
     await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page", { timeout: 15_000 });
 
     await expect(page).toHaveURL((url) => toJsonPage.supportMatrix.matchesUrl(url), {
-      timeout: 15000,
+      timeout: 15_000,
     });
   });
 
@@ -58,7 +58,7 @@ test.describe("benchmarks tab", () => {
     await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page", { timeout: 15_000 });
 
     await expect(page).toHaveURL((url) => toJsonPage.benchmarks.matchesUrl(url), {
-      timeout: 15000,
+      timeout: 15_000,
     });
   });
 
@@ -69,7 +69,7 @@ test.describe("benchmarks tab", () => {
       await link.click();
 
       await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
-        timeout: 15000,
+        timeout: 15_000,
       });
     }
   });
@@ -84,7 +84,7 @@ test.describe("benchmarks tab", () => {
           await everyAsync(toJsonPage.benchmarks.desktop.tableHandle, async ({ row }) => {
             await expect(row.getCell("type")).toHaveText(expectedDirection);
           });
-        }).toPass({ timeout: 5000 });
+        }).toPass({ timeout: 5_000 });
       }
     });
   });
@@ -103,7 +103,7 @@ test.describe("benchmarks tab", () => {
           every(labels, (label) => {
             expect(label).toMatch(expectedDirectionRegex);
           });
-        }).toPass({ timeout: 5000 });
+        }).toPass({ timeout: 5_000 });
       }
     });
   });

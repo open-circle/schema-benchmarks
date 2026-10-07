@@ -202,7 +202,7 @@ if (shouldRun("string") && string) {
   }
 }
 if (shouldRun("codec") && codec) {
-  const bigint = 1234567890123456789n;
+  const bigint = 1_234_567_890_123_456_789n;
   const str = bigint.toString();
   for (const benchConfig of ensureArray(codec)) {
     const {

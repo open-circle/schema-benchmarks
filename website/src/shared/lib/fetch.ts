@@ -20,7 +20,7 @@ export const parseRetryAfterMs = (response: Response): number | undefined => {
   if (!value) return undefined;
 
   const asSeconds = Number(value);
-  if (Number.isFinite(asSeconds)) return Math.max(0, Math.ceil(asSeconds * 1000));
+  if (Number.isFinite(asSeconds)) return Math.max(0, Math.ceil(asSeconds * 1_000));
 
   const asDate = Date.parse(value);
   if (Number.isNaN(asDate)) return undefined;

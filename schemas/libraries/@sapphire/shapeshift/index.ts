@@ -18,7 +18,7 @@ export function getShapeshiftSchema() {
     id: s.number(),
     stars: s.number().greaterThanOrEqual(1).lessThanOrEqual(5),
     title: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100),
-    text: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(1000),
+    text: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(1_000),
     images: s.array(imageSchema),
   });
 
@@ -28,7 +28,7 @@ export function getShapeshiftSchema() {
     title: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100),
     brand: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(30),
     description: s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(500),
-    price: s.number().greaterThanOrEqual(1).lessThanOrEqual(10000),
+    price: s.number().greaterThanOrEqual(1).lessThanOrEqual(10_000),
     discount: s.number().greaterThanOrEqual(1).lessThanOrEqual(100).nullable(),
     quantity: s.number().greaterThanOrEqual(0).lessThanOrEqual(10),
     tags: s.array(s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(30)),

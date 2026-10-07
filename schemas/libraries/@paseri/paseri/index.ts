@@ -15,7 +15,7 @@ export function getPaseriSchema(): p.Schema<ProductData> {
     id: p.number(),
     stars: p.number().gte(1).lte(5),
     title: p.string().min(1).max(100),
-    text: p.string().min(1).max(1000),
+    text: p.string().min(1).max(1_000),
     images: p.array(imageSchema),
   });
   return p.object({
@@ -24,7 +24,7 @@ export function getPaseriSchema(): p.Schema<ProductData> {
     title: p.string().min(1).max(100),
     brand: p.string().min(1).max(30),
     description: p.string().min(1).max(500),
-    price: p.number().gte(1).lte(10000),
+    price: p.number().gte(1).lte(10_000),
     discount: p.number().gte(1).lte(100).nullable(),
     quantity: p.number().gte(0).lte(10),
     tags: p.array(p.string().min(1).max(30)),

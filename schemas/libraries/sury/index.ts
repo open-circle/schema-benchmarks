@@ -16,7 +16,7 @@ export function getSurySchema() {
     id: S.number,
     stars: S.number.with(S.gte, 1).with(S.lte, 5),
     title: S.string.with(S.nonEmpty).with(S.maxLength, 100),
-    text: S.string.with(S.nonEmpty).with(S.maxLength, 1000),
+    text: S.string.with(S.nonEmpty).with(S.maxLength, 1_000),
     images: S.array(imageSchema),
   });
   return S.schema({
@@ -25,7 +25,7 @@ export function getSurySchema() {
     title: S.string.with(S.nonEmpty).with(S.maxLength, 100),
     brand: S.string.with(S.nonEmpty).with(S.maxLength, 30),
     description: S.string.with(S.nonEmpty).with(S.maxLength, 500),
-    price: S.number.with(S.gte, 1).with(S.lte, 10000),
+    price: S.number.with(S.gte, 1).with(S.lte, 10_000),
     discount: S.number.with(S.gte, 1).with(S.lte, 100).with(S.nullable),
     quantity: S.number.with(S.gte, 0).with(S.lte, 10),
     tags: S.array(S.string.with(S.nonEmpty).with(S.maxLength, 30)),

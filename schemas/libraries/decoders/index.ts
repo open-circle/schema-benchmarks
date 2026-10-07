@@ -28,7 +28,7 @@ export function getDecoderSchema() {
     id: number,
     stars: between(1, 5),
     title: sized(string, { min: 1, max: 100 }),
-    text: sized(string, { min: 1, max: 1000 }),
+    text: sized(string, { min: 1, max: 1_000 }),
     images: array(imageDecoder),
   });
   return object({
@@ -37,7 +37,7 @@ export function getDecoderSchema() {
     title: sized(string, { min: 1, max: 100 }),
     brand: sized(string, { min: 1, max: 30 }),
     description: sized(string, { min: 1, max: 500 }),
-    price: between(1, 10000),
+    price: between(1, 10_000),
     discount: nullable(between(1, 100)),
     quantity: between(0, 10),
     tags: array(sized(string, { min: 1, max: 30 })),

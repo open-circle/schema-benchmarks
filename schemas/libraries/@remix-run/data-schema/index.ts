@@ -26,7 +26,7 @@ export function getRemixSchema() {
     id: number(),
     stars: number().pipe(min(1), max(5)),
     title: string().pipe(minLength(1), maxLength(100)),
-    text: string().pipe(minLength(1), maxLength(1000)),
+    text: string().pipe(minLength(1), maxLength(1_000)),
     images: array(imageSchema),
   });
   return object({
@@ -35,7 +35,7 @@ export function getRemixSchema() {
     title: string().pipe(minLength(1), maxLength(100)),
     brand: string().pipe(minLength(1), maxLength(30)),
     description: string().pipe(minLength(1), maxLength(500)),
-    price: number().pipe(min(1), max(10000)),
+    price: number().pipe(min(1), max(10_000)),
     discount: nullable(number().pipe(min(1), max(100))),
     quantity: number().pipe(min(0), max(10)),
     tags: array(string().pipe(minLength(1), maxLength(30))),

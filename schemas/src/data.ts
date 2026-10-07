@@ -100,7 +100,7 @@ export const successData: ProductData = {
       created: new Date(),
       title: "Close up of an apple on a tree",
       type: "jpg",
-      size: 92357232,
+      size: 92_357_232,
       url: "https://www.example.com/images/248",
     },
     {
@@ -108,7 +108,7 @@ export const successData: ProductData = {
       created: new Date(),
       title: "Our apples in the final packaging",
       type: "jpg",
-      size: 83247232,
+      size: 83_247_232,
       url: "https://www.example.com/images/295",
     },
     {
@@ -116,7 +116,7 @@ export const successData: ProductData = {
       created: new Date(),
       title: "Our fruit fields at Lake Constance",
       type: "jpg",
-      size: 72356345,
+      size: 72_356_345,
       url: "https://www.example.com/images/723",
     },
   ],
@@ -132,7 +132,7 @@ export const successData: ProductData = {
           created: new Date(),
           title: "The result of our apple pie",
           type: "jpg",
-          size: 8247493,
+          size: 8_247_493,
           url: "https://www.example.com/images/835",
         },
       ],
@@ -148,7 +148,7 @@ export const successData: ProductData = {
           created: new Date(),
           title: "The fruit salad in a bowl",
           type: "jpg",
-          size: 3582543,
+          size: 3_582_543,
           url: "https://www.example.com/images/352",
         },
         {
@@ -156,7 +156,7 @@ export const successData: ProductData = {
           created: new Date(),
           title: "The fruit salad on a plate",
           type: "jpg",
-          size: 9824742,
+          size: 9_824_742,
           url: "https://www.example.com/images/465",
         },
       ],
@@ -172,7 +172,7 @@ export const errorData: unknown = {
   description: "Red apple from Lake Constance",
   price: 0, // 89
   discount: null,
-  quantity: 1000, // 5
+  quantity: 1_000, // 5
   tags: ["fruit", null, "round", undefined, "juicy", "healthy"], // ["fruit", "red", "round", "sweet", "juicy", "healthy"]
   images: [
     {
@@ -180,7 +180,7 @@ export const errorData: unknown = {
       created: null, // new Date()
       title: "Close up of an apple on a tree",
       type: "mp4",
-      size: 92357232,
+      size: 92_357_232,
       url: "https://www.example.com/images/248",
     },
     {
@@ -188,7 +188,7 @@ export const errorData: unknown = {
       created: new Date(),
       title: "Our apples in the final packaging",
       type: "jpg",
-      size: 83247232,
+      size: 83_247_232,
       // url: "https://www.example.com/images/295",
     },
     {
@@ -196,7 +196,7 @@ export const errorData: unknown = {
       created: new Date(),
       title: "Our fruit fields at Lake Constance",
       type: "jpg",
-      size: 72356345,
+      size: 72_356_345,
       url: "https://www.example.com/images/723",
     },
   ],
@@ -213,7 +213,7 @@ export const errorData: unknown = {
           created: new Date(),
           title: "The result of our apple pie",
           type: "jpg",
-          size: 8247493,
+          size: 8_247_493,
           url: "https://www.example.com/images/835",
         },
       ],
@@ -229,7 +229,7 @@ export const errorData: unknown = {
           created: undefined, // new Date()
           title: "The fruit salad in a bowl",
           type: "jpg",
-          size: 3582543,
+          size: 3_582_543,
           url: "INVALID_URL", // "https://www.example.com/images/352"
         },
         {
@@ -344,7 +344,7 @@ export const failureCases = {
     getFirst(data.ratings).text = "";
   }),
   "rating.text: too long": variant((data) => {
-    getFirst(data.ratings).text = "a".repeat(1001);
+    getFirst(data.ratings).text = "a".repeat(1_001);
   }),
   "tags: item too short": variant((data) => {
     data.tags[0] = "";
@@ -364,7 +364,7 @@ export const failureCases = {
     data.price = 0;
   }),
   "price: too big": variant((data) => {
-    data.price = 10001;
+    data.price = 10_001;
   }),
   "discount: too small": variant((data) => {
     data.discount = 0;
@@ -452,7 +452,7 @@ export const successCases = {
     getFirst(data.ratings).text = "a";
   }),
   "ratings: text longest": variant((data) => {
-    getFirst(data.ratings).text = "a".repeat(1000);
+    getFirst(data.ratings).text = "a".repeat(1_000);
   }),
   "image.title: shortest": variant((data) => {
     getFirst(data.images).title = "a";

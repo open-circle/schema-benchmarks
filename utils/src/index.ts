@@ -208,7 +208,7 @@ const units: Array<[threshold: number, Intl.DurationFormatUnit]> = [
   [1_000, "seconds"],
   [1, "milliseconds"],
   [0.001, "microseconds"],
-  [0.000_001, "nanoseconds"],
+  [0.000001, "nanoseconds"],
 ];
 
 export const getDuration = (
@@ -564,19 +564,19 @@ export function identity<T>(value: T): T {
  * @remarks Fast and deterministic. Not suitable for cryptographic purposes.
  */
 export function getCyrb53Hash(str: string, prefix = str.length.toString()): string {
-  let h1 = 0xdeadbeef ^ str.length;
-  let h2 = 0x41c6ce57 ^ str.length;
+  let h1 = 0xde_ad_be_ef ^ str.length;
+  let h2 = 0x41_c6_ce_57 ^ str.length;
 
   for (let i = 0; i < str.length; i++) {
     const ch = str.charCodeAt(i);
-    h1 = Math.imul(h1 ^ ch, 2654435761);
-    h2 = Math.imul(h2 ^ ch, 1597334677);
+    h1 = Math.imul(h1 ^ ch, 2_654_435_761);
+    h2 = Math.imul(h2 ^ ch, 1_597_334_677);
   }
 
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2_246_822_507) ^ Math.imul(h2 ^ (h2 >>> 13), 3_266_489_909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2_246_822_507) ^ Math.imul(h1 ^ (h1 >>> 13), 3_266_489_909);
 
-  const hash53 = 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  const hash53 = 4_294_967_296 * (2_097_151 & h2) + (h1 >>> 0);
 
   return `${prefix}-${hash53.toString(36)}`;
 }

@@ -33,7 +33,7 @@ export function getIotsSchema() {
     id: t.number,
     stars: numberInRange(1, 5),
     title: stringWithLength(1, 100),
-    text: stringWithLength(1, 1000),
+    text: stringWithLength(1, 1_000),
     images: t.array(ImageData),
   });
   return t.type(
@@ -43,7 +43,7 @@ export function getIotsSchema() {
       title: stringWithLength(1, 100),
       brand: stringWithLength(1, 30),
       description: stringWithLength(1, 500),
-      price: numberInRange(1, 10000),
+      price: numberInRange(1, 10_000),
       discount: t.union([numberInRange(1, 100), t.null]),
       quantity: numberInRange(0, 10),
       tags: t.array(stringWithLength(1, 30)),

@@ -17,8 +17,8 @@ export class PrefsDialog extends ComponentObjectModel {
       if (!(await this.dialog.isVisible())) {
         await this.openButton.click();
       }
-      await expect(this.dialog).toBeVisible({ timeout: 5000 });
-    }).toPass({ timeout: 5000 });
+      await expect(this.dialog).toBeVisible({ timeout: 5_000 });
+    }).toPass({ timeout: 5_000 });
   }
 
   @step("Close preferences dialog")

@@ -16,7 +16,7 @@ export function getEffectSchema() {
     id: Schema.Number,
     stars: Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(5)),
     title: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(100)),
-    text: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(1000)),
+    text: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(1_000)),
     images: Schema.mutable(Schema.Array(Image)),
   });
   return Schema.Struct({
@@ -25,7 +25,10 @@ export function getEffectSchema() {
     title: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(100)),
     brand: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(30)),
     description: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(500)),
-    price: Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(10000)),
+    price: Schema.Number.check(
+      Schema.isGreaterThanOrEqualTo(1),
+      Schema.isLessThanOrEqualTo(10_000),
+    ),
     discount: Schema.NullOr(
       Schema.Number.check(Schema.isGreaterThanOrEqualTo(1), Schema.isLessThanOrEqualTo(100)),
     ),

@@ -16,7 +16,7 @@ export function getValibotSchema() {
     id: v.number(),
     stars: v.pipe(v.number(), v.minValue(1), v.maxValue(5)),
     title: v.pipe(v.string(), v.minLength(1), v.maxLength(100)),
-    text: v.pipe(v.string(), v.minLength(1), v.maxLength(1000)),
+    text: v.pipe(v.string(), v.minLength(1), v.maxLength(1_000)),
     images: v.array(imageSchema),
   });
   return v.object({
@@ -25,7 +25,7 @@ export function getValibotSchema() {
     title: v.pipe(v.string(), v.minLength(1), v.maxLength(100)),
     brand: v.pipe(v.string(), v.minLength(1), v.maxLength(30)),
     description: v.pipe(v.string(), v.minLength(1), v.maxLength(500)),
-    price: v.pipe(v.number(), v.minValue(1), v.maxValue(10000)),
+    price: v.pipe(v.number(), v.minValue(1), v.maxValue(10_000)),
     discount: v.nullable(v.pipe(v.number(), v.minValue(1), v.maxValue(100))),
     quantity: v.pipe(v.number(), v.minValue(0), v.maxValue(10)),
     tags: v.array(v.pipe(v.string(), v.minLength(1), v.maxLength(30))),

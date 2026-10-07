@@ -16,7 +16,7 @@ type RatingSchema = {
   id: number;
   stars: number & tags.Minimum<1> & tags.Maximum<5>;
   title: string & tags.MinLength<1> & tags.MaxLength<100>;
-  text: string & tags.MinLength<1> & tags.MaxLength<1000>;
+  text: string & tags.MinLength<1> & tags.MaxLength<1_000>;
   images: Array<ImageSchema>;
 };
 
@@ -27,7 +27,7 @@ export type TypiaSchema = Satisfies<
     title: string & tags.MinLength<1> & tags.MaxLength<100>;
     brand: string & tags.MinLength<1> & tags.MaxLength<30>;
     description: string & tags.MinLength<1> & tags.MaxLength<500>;
-    price: number & tags.Minimum<1> & tags.Maximum<10000>;
+    price: number & tags.Minimum<1> & tags.Maximum<10_000>;
     discount: (number & tags.Minimum<1> & tags.Maximum<100>) | null;
     quantity: number & tags.Minimum<0> & tags.Maximum<10>;
     tags: Array<string & tags.MinLength<1> & tags.MaxLength<30>>;

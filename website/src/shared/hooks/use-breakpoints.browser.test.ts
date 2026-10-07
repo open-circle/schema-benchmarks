@@ -7,54 +7,54 @@ import { useBreakpoints } from "./use-breakpoints";
 
 describe("useBreakpoints", () => {
   it("should match phone breakpoint", async () => {
-    await page.viewport(500, 1000);
+    await page.viewport(500, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["phone"]));
     expect(result.current).toBe(true);
 
-    await page.viewport(600, 1000);
+    await page.viewport(600, 1_000);
     await expect.ref(result).toBe(false);
   });
   it("should match tabletSmall breakpoint", async () => {
-    await page.viewport(600, 1000);
+    await page.viewport(600, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["tabletSmall"]));
     expect(result.current).toBe(true);
 
-    await page.viewport(905, 1000);
+    await page.viewport(905, 1_000);
     await expect.ref(result).toBe(false);
   });
   it("should match tabletLarge breakpoint", async () => {
-    await page.viewport(905, 1000);
+    await page.viewport(905, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["tabletLarge"]));
     expect(result.current).toBe(true);
 
-    await page.viewport(1240, 1000);
+    await page.viewport(1_240, 1_000);
     await expect.ref(result).toBe(false);
   });
   it("should match laptop breakpoint", async () => {
-    await page.viewport(1240, 1000);
+    await page.viewport(1_240, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["laptop"]));
     expect(result.current).toBe(true);
 
-    await page.viewport(1440, 1000);
+    await page.viewport(1_440, 1_000);
     await expect.ref(result).toBe(false);
   });
   it("should match desktop breakpoint", async () => {
-    await page.viewport(1440, 1000);
+    await page.viewport(1_440, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["desktop"]));
     expect(result.current).toBe(true);
 
-    await page.viewport(1439, 1000);
+    await page.viewport(1_439, 1_000);
     await expect.ref(result).toBe(false);
   });
   it("should match multiple breakpoints", async () => {
-    await page.viewport(1440, 1000);
+    await page.viewport(1_440, 1_000);
     const { result } = await page.renderHook(() => useBreakpoints(["tabletSmall", "tabletLarge"]));
     expect(result.current).toBe(false);
 
-    await page.viewport(905, 1000);
+    await page.viewport(905, 1_000);
     await expect.ref(result).toBe(true);
 
-    await page.viewport(600, 1000);
+    await page.viewport(600, 1_000);
     await expect.ref(result).toBe(true);
   });
 });

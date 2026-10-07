@@ -42,8 +42,8 @@ describe("retry status classification", () => {
 
 describe("retry delay", () => {
   it("uses Retry-After seconds when present", () => {
-    expect(parseRetryAfterMs(makeResponse("2.5"))).toBe(2500);
-    expect(getRetryDelay({ attempt: 1, response: makeResponse("2.5") })).toBe(2500);
+    expect(parseRetryAfterMs(makeResponse("2.5"))).toBe(2_500);
+    expect(getRetryDelay({ attempt: 1, response: makeResponse("2.5") })).toBe(2_500);
   });
 
   it("uses HTTP dates and clamps negative delays to zero", () => {
@@ -52,7 +52,7 @@ describe("retry delay", () => {
 
   it("falls back to capped exponential backoff", () => {
     expect(getRetryDelay({ attempt: 1 })).toBe(300);
-    expect(getRetryDelay({ attempt: 3 })).toBe(1200);
+    expect(getRetryDelay({ attempt: 3 })).toBe(1_200);
     expect(getRetryDelay({ attempt: 7 })).toBe(10_000);
     expect(getRetryDelay({ attempt: 1, response: makeResponse("20") })).toBe(10_000);
   });

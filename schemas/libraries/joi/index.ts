@@ -15,7 +15,7 @@ export function getJoiSchema() {
     id: Joi.number().required(),
     stars: Joi.number().min(1).max(5).required(),
     title: Joi.string().min(1).max(100).required(),
-    text: Joi.string().min(1).max(1000).required(),
+    text: Joi.string().min(1).max(1_000).required(),
     images: Joi.array().items(imageSchema).required(),
   });
   return Joi.object({
@@ -24,7 +24,7 @@ export function getJoiSchema() {
     title: Joi.string().min(1).max(100).required(),
     brand: Joi.string().min(1).max(30).required(),
     description: Joi.string().min(1).max(500).required(),
-    price: Joi.number().min(1).max(10000).required(),
+    price: Joi.number().min(1).max(10_000).required(),
     discount: Joi.number().min(1).max(100).allow(null).required(),
     quantity: Joi.number().min(0).max(10).required(),
     tags: Joi.array().items(Joi.string().min(1).max(30)).required(),

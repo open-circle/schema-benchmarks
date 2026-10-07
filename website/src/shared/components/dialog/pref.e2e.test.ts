@@ -103,7 +103,7 @@ test("it can pick npm site options, persisting after refresh", async ({ page, pr
 
       await page.goto("/libraries");
 
-      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1000 });
+      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
 
       await expect(downloadCount).toBeVisible();
 
@@ -117,7 +117,7 @@ test("it can pick npm site options, persisting after refresh", async ({ page, pr
 
       await page.goto("/libraries");
 
-      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1000 });
+      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
 
       await expect(downloadCount).toBeVisible();
 

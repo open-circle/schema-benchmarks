@@ -39,7 +39,7 @@ export function getSuperstructSchema() {
     id: number(),
     stars: max(min(number(), 1), 5),
     title: stringWithLength(1, 100),
-    text: stringWithLength(1, 1000),
+    text: stringWithLength(1, 1_000),
     images: array(imageSchema),
   });
 
@@ -49,7 +49,7 @@ export function getSuperstructSchema() {
     title: stringWithLength(1, 100),
     brand: stringWithLength(1, 30),
     description: stringWithLength(1, 500),
-    price: max(min(number(), 1), 10000),
+    price: max(min(number(), 1), 10_000),
     discount: nullable(max(min(number(), 1), 100)),
     quantity: max(min(number(), 0), 10),
     tags: array(stringWithLength(1, 30)),

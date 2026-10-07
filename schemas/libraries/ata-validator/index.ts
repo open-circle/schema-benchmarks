@@ -20,7 +20,7 @@ export function getAtaValidatorSchema() {
     id: t.number(),
     stars: t.number({ minimum: 1, maximum: 5 }),
     title: t.string({ minLength: 1, maxLength: 100 }),
-    text: t.string({ minLength: 1, maxLength: 1000 }),
+    text: t.string({ minLength: 1, maxLength: 1_000 }),
     images: t.array(imageSchema),
   });
 
@@ -30,7 +30,7 @@ export function getAtaValidatorSchema() {
     title: t.string({ minLength: 1, maxLength: 100 }),
     brand: t.string({ minLength: 1, maxLength: 30 }),
     description: t.string({ minLength: 1, maxLength: 500 }),
-    price: t.number({ minimum: 1, maximum: 10000 }),
+    price: t.number({ minimum: 1, maximum: 10_000 }),
     discount: t.union([t.number({ minimum: 1, maximum: 100 }), t.null()]),
     quantity: t.number({ minimum: 0, maximum: 10 }),
     tags: t.array(t.string({ minLength: 1, maxLength: 30 })),

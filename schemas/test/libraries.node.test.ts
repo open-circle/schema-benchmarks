@@ -364,7 +364,7 @@ describe.each(Object.entries(libraries))("%s", async (_name, getConfig) => {
     describe.each(ensureArray(libConfig.codec ?? []))("config %#", (config) => {
       it("should encode and decode", async () => {
         const { encode, decode } = config;
-        const bigint = 1234567890123456789n;
+        const bigint = 1_234_567_890_123_456_789n;
         const encoded = await encode.run(bigint);
         expect(encoded).toBe("1234567890123456789");
         const decoded = await decode.run(encoded);

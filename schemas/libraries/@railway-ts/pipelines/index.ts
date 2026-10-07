@@ -34,7 +34,7 @@ export function getRailwayTsSchema() {
     id: required(number()),
     stars: required(chain(number(), min(1), max(5))),
     title: required(chain(string(), minLength(1), maxLength(100))),
-    text: required(chain(string(), minLength(1), maxLength(1000))),
+    text: required(chain(string(), minLength(1), maxLength(1_000))),
     images: required(array(imageSchema)),
   });
 
@@ -44,7 +44,7 @@ export function getRailwayTsSchema() {
     title: required(chain(string(), minLength(1), maxLength(100))),
     brand: required(chain(string(), minLength(1), maxLength(30))),
     description: required(chain(string(), minLength(1), maxLength(500))),
-    price: required(chain(number(), min(1), max(10000))),
+    price: required(chain(number(), min(1), max(10_000))),
     discount: union([chain(number(), min(1), max(100)), nullable()]),
     quantity: required(chain(number(), min(0), max(10))),
     tags: required(array(chain(string(), minLength(1), maxLength(30)))),

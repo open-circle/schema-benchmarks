@@ -45,10 +45,10 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
 
     await link.click();
 
-    await expect(link).toBeCurrent("page", { timeout: 15000 });
+    await expect(link).toBeCurrent("page", { timeout: 15_000 });
 
     await expect(this.page).toHaveURL((url) => url.searchParams.get("direction") === direction, {
-      timeout: 15000,
+      timeout: 15_000,
     });
   }
 

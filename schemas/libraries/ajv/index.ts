@@ -35,7 +35,7 @@ export function getAjvSchema(): JSONSchemaType<ProductData> {
       id: { type: "number" },
       stars: { type: "number", minimum: 1, maximum: 5 },
       title: { type: "string", minLength: 1, maxLength: 100 },
-      text: { type: "string", minLength: 1, maxLength: 1000 },
+      text: { type: "string", minLength: 1, maxLength: 1_000 },
       images: { type: "array", items: imageSchema },
     },
     required: ["id", "stars", "title", "text", "images"],
@@ -48,7 +48,7 @@ export function getAjvSchema(): JSONSchemaType<ProductData> {
       title: { type: "string", minLength: 1, maxLength: 100 },
       brand: { type: "string", minLength: 1, maxLength: 30 },
       description: { type: "string", minLength: 1, maxLength: 500 },
-      price: { type: "number", minimum: 1, maximum: 10000 },
+      price: { type: "number", minimum: 1, maximum: 10_000 },
       discount: {
         type: "number",
         minimum: 1,

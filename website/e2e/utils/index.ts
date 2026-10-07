@@ -35,7 +35,7 @@ export async function waitForFontsLoaded(page: Page) {
     .poll(
       () =>
         page.evaluate(() => document.fonts.check('24px "Material Symbols Sharp"', "download_2")),
-      { timeout: 5000 },
+      { timeout: 5_000 },
     )
     .toBe(true);
 }

@@ -40,6 +40,14 @@ export default defineConfig({
       "no-underscore-dangle": "off",
       "oxc/no-this-in-exported-function": "off",
       ...eslintDependConfigs["flat/recommended"].rules,
+      "unicorn/numeric-separators-style": [
+        "error",
+        {
+          number: {
+            minimumDigits: 4,
+          },
+        },
+      ],
     },
     ignorePatterns: [
       "schemas/libraries/**/download_compiled/**",

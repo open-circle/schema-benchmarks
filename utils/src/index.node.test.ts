@@ -27,16 +27,16 @@ import {
 describe("formatBytes", () => {
   it.each([
     [1, "1 byte"],
-    [1024, "1 kB"],
-    [1024 * 1024, "1 MB"],
-    [1024 * 1024 * 1024, "1 GB"],
+    [1_024, "1 kB"],
+    [1_024 * 1_024, "1 MB"],
+    [1_024 * 1_024 * 1_024, "1 GB"],
   ])("should format bytes: %i", (input, expected) => {
     expect(formatBytes(input)).toBe(expected);
   });
   it.each<[number, Intl.NumberFormatOptions, string]>([
-    [1024, { unitDisplay: "narrow" }, "1kB"],
-    [1024 * 1024, { unitDisplay: "long" }, "1 megabyte"],
-    [1800, { maximumFractionDigits: 1 }, "1.8 kB"],
+    [1_024, { unitDisplay: "narrow" }, "1kB"],
+    [1_024 * 1_024, { unitDisplay: "long" }, "1 megabyte"],
+    [1_800, { maximumFractionDigits: 1 }, "1.8 kB"],
     [10, { unit: "megabyte" }, "10 MB"],
   ])("should accept formatting options: %i %o", (bytes, opts, expected) => {
     expect(formatBytes(bytes, opts)).toBe(expected);
@@ -193,7 +193,7 @@ describe("getDuration", () => {
   it("should return the correct duration", () => {
     expect(getDuration(1.5)).toEqual({ milliseconds: 2 });
     expect(getDuration(1.5, 2)).toEqual({ milliseconds: 1, microseconds: 500 });
-    expect(getDuration(1500, 2)).toEqual({ seconds: 1, milliseconds: 500 });
+    expect(getDuration(1_500, 2)).toEqual({ seconds: 1, milliseconds: 500 });
   });
 });
 

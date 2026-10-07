@@ -16,7 +16,7 @@ export function getYupSchema() {
     id: yup.number().required(),
     stars: yup.number().min(1).max(5).required(),
     title: yup.string().min(1).max(100).required(),
-    text: yup.string().min(1).max(1000).required(),
+    text: yup.string().min(1).max(1_000).required(),
     images: yup.array(imageSchema).required(),
   });
   return yup.object({
@@ -25,7 +25,7 @@ export function getYupSchema() {
     title: yup.string().min(1).max(100).required(),
     brand: yup.string().min(1).max(30).required(),
     description: yup.string().min(1).max(500).required(),
-    price: yup.number().min(1).max(10000).required(),
+    price: yup.number().min(1).max(10_000).required(),
     discount: yup.number().min(1).max(100).required().nullable(),
     quantity: yup.number().min(0).max(10).required(),
     tags: yup.array(yup.string().min(1).max(30).required()).required(),

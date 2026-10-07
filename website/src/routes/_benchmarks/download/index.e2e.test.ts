@@ -25,7 +25,7 @@ test(
         await link.click();
 
         await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType, {
-          timeout: 15000,
+          timeout: 15_000,
         });
 
         await expect(link).toBeCurrent("page", { timeout: 15_000 });
@@ -40,7 +40,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     await threeGButton.click();
 
     await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g", {
-      timeout: 15000,
+      timeout: 15_000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
     await expect(threeGButton).toBeCurrent("page", { timeout: 15_000 });
@@ -51,7 +51,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     await fourGButton.click();
 
     await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g", {
-      timeout: 15000,
+      timeout: 15_000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
     await expect(fourGButton).toBeCurrent("page", { timeout: 15_000 });
@@ -62,7 +62,7 @@ test("it can use speed presets", async ({ page, downloadPage }) => {
     await wifiButton.click();
 
     await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
-      timeout: 15000,
+      timeout: 15_000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
     await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
@@ -76,7 +76,7 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
     await wifiButton.click();
 
     await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
-      timeout: 15000,
+      timeout: 15_000,
     });
     await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
     await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
@@ -87,7 +87,7 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
 
     await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
     await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241", {
-      timeout: 15000,
+      timeout: 15_000,
     });
     // custom value should not keep the preset as current
     await expect(wifiButton).not.toBeCurrent("page", { timeout: 15_000 });

@@ -17,7 +17,7 @@ export function getTypeboxSchema() {
     id: Type.Number(),
     stars: Type.Number({ minimum: 1, maximum: 5 }),
     title: Type.String({ minLength: 1, maxLength: 100 }),
-    text: Type.String({ minLength: 1, maxLength: 1000 }),
+    text: Type.String({ minLength: 1, maxLength: 1_000 }),
     images: Type.Array(Image),
   });
   return Type.Object({
@@ -26,7 +26,7 @@ export function getTypeboxSchema() {
     title: Type.String({ minLength: 1, maxLength: 100 }),
     brand: Type.String({ minLength: 1, maxLength: 30 }),
     description: Type.String({ minLength: 1, maxLength: 500 }),
-    price: Type.Number({ minimum: 1, maximum: 10000 }),
+    price: Type.Number({ minimum: 1, maximum: 10_000 }),
     discount: Type.Union([Type.Number({ minimum: 1, maximum: 100 }), Type.Null()]),
     quantity: Type.Number({ minimum: 0, maximum: 10 }),
     tags: Type.Array(Type.String({ minLength: 1, maxLength: 30 })),

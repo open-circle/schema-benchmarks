@@ -20,7 +20,7 @@ test("can toggle between string formats", async ({ page, stringPage }) => {
     await formatLink.click();
 
     await expect(page).toHaveURL((url) => url.searchParams.get("stringFormat") === format, {
-      timeout: 15000,
+      timeout: 15_000,
     });
 
     await expect(formatLink).toBeCurrent("page", { timeout: 15_000 });

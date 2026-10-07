@@ -47,7 +47,7 @@ export function getPackageName(libraryName: string) {
   return libraryName;
 }
 
-const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1_000;
 
 // JSR reports daily, per-channel buckets (npm_tarball + jsr_meta); sum the last week across both.
 const jsrDownloadsSchema = v.pipe(

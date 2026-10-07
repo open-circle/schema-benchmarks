@@ -23,7 +23,7 @@ export function getRuntypesSchema() {
     id: Number,
     stars: NumberInRange(1, 5),
     title: StringWithLength(1, 100),
-    text: StringWithLength(1, 1000),
+    text: StringWithLength(1, 1_000),
     images: Array(Image),
   });
 
@@ -33,7 +33,7 @@ export function getRuntypesSchema() {
     title: StringWithLength(1, 100),
     brand: StringWithLength(1, 30),
     description: StringWithLength(1, 500),
-    price: NumberInRange(1, 10000),
+    price: NumberInRange(1, 10_000),
     discount: NumberInRange(1, 100).nullable(),
     quantity: NumberInRange(0, 10),
     tags: Array(StringWithLength(1, 30)),

@@ -74,7 +74,7 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
 ): (props: Override<ComponentProps<TComp>, TooltipProps>) => JSX.Element;
 export function withTooltip<TComp extends ElementType<TooltipableComponentProps>>(
   Component: TComp,
-  { delay = 1000, ...opts }: TooltipOpts = {},
+  { delay = 1_000, ...opts }: TooltipOpts = {},
 ) {
   return function WithTooltip({
     tooltip,
@@ -129,7 +129,7 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
             if (currentId === id) {
               currentId = "";
             }
-          }, 1000);
+          }, 1_000);
         }
         const unsubTarget = radEventListeners(targetRef, {
           mouseenter(_event, signal) {
