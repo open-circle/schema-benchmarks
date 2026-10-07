@@ -4,12 +4,14 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { parseAnsiSequences } from "ansi-sequence-parser";
 import addonMsw from "msw-storybook-addon";
 import Prism from "prismjs";
+import { radEventListeners } from "rad-event-listeners";
 import { mocked } from "storybook/test";
 
-import "#src/shared/styles/index.css";
 import type { RouterContext } from "#src/routes/__root";
+import { getReplacementUrlFn } from "#src/routes/libraries/-query";
 import { StyleContext, ThemeContext } from "#src/shared/components/prefs/context";
 import { makeQueryClient } from "#src/shared/data/query";
+import { preloadImage } from "#src/shared/lib/fetch.ts";
 import { getHighlightedAnsiFn, getHighlightedCodeFn } from "#src/shared/lib/highlight";
 import { highlightAnsi, highlightCode } from "#src/shared/lib/highlight";
 import {
@@ -18,6 +20,8 @@ import {
   themeLabels,
   themeSchema,
 } from "#src/shared/lib/prefs/constants";
+
+import "#src/shared/styles/index.css";
 
 const dirDecorator: Decorator = (Story, { globals: { dir = "ltr" } }) => {
   document.dir = dir;
@@ -71,6 +75,22 @@ export default definePreview({
     mocked(getHighlightedAnsiFn).mockImplementation(async ({ data }) =>
       highlightAnsi(parseAnsiSequences, data),
     );
+    mocked(getReplacementUrlFn).mockImplementation(async () => null);
+    mocked(preloadImage).mockImplementation(async (src) => {
+      // same as client impl - storybook automocks all server fns and isomorphic fns
+      const { promise, resolve, reject } = Promise.withResolvers<void>();
+      const image = new Image();
+      const unsub = radEventListeners(
+        image,
+        {
+          load: () => resolve(),
+          error: (event) => reject((event as ErrorEvent).error),
+        },
+        { once: true },
+      );
+      image.src = src;
+      return promise.finally(unsub);
+    });
   },
 
   parameters: {
