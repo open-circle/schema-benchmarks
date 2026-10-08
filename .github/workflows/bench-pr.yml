@@ -63,7 +63,7 @@ jobs:
           path: ${{ github.workspace }}/.ttsc-cache
           key: ${{ runner.os }}-ttsc-native-bench-${{ hashFiles('pnpm-lock.yaml', '**/go.mod', '**/go.sum') }}
       - name: Upload schemas
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: schemas-build
           path: |
@@ -72,7 +72,7 @@ jobs:
             schemas/test/accepted-json-schemas.ts
           retention-days: 1
       - name: Upload E2E library versions
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-library-versions
           path: website/e2e/utils/library-versions.gen.ts
@@ -88,7 +88,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -97,7 +97,7 @@ jobs:
       - name: Run stack benchmark
         run: vpr bench:stack
       - name: Upload stack results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: stack-results
           path: bench/stack.json
@@ -112,7 +112,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -130,7 +130,7 @@ jobs:
           path: ${{ github.workspace }}/.ttsc-cache
           key: ${{ runner.os }}-ttsc-native-bench-${{ hashFiles('pnpm-lock.yaml', '**/go.mod', '**/go.sum') }}
       - name: Upload download results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: download-results
           path: |
@@ -151,7 +151,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -160,7 +160,7 @@ jobs:
       - name: Run ${{ matrix.type }} benchmark
         run: vpr --filter @schema-benchmarks/bench bench --type=${{ matrix.type }}
       - name: Upload bench results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: bench-results-${{ matrix.type }}
           path: bench/results/bench-${{ matrix.type }}.json
@@ -179,7 +179,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -188,7 +188,7 @@ jobs:
       - name: Run string benchmark shard
         run: vpr --filter @schema-benchmarks/bench bench --type=string --shard=${{ matrix.shard }}/3
       - name: Upload string benchmark shard
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: bench-results-string-${{ matrix.shard }}
           path: bench/results/bench-string-${{ matrix.shard }}.json
@@ -205,7 +205,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environments
       - name: Download benchmark shards
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           pattern: bench-results-*
           path: bench/results
@@ -213,7 +213,7 @@ jobs:
       - name: Merge benchmark shards
         run: vpr --filter @schema-benchmarks/bench bench:merge
       - name: Upload bench results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: bench-results
           path: bench/bench.json
@@ -228,7 +228,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -237,7 +237,7 @@ jobs:
       - name: Run JSON schema benchmark
         run: vpr bench:json-schema
       - name: Upload JSON schema results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: json-schema-results
           path: bench/json-schema.json
@@ -252,7 +252,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref }}
       - name: Download schemas
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: schemas-build
           path: schemas/
@@ -261,7 +261,7 @@ jobs:
       - name: Run TypeScript inference benchmark
         run: vpr bench:types
       - name: Upload TypeScript inference results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: types-results
           path: bench/types.json
@@ -281,37 +281,37 @@ jobs:
 
       - parallel:
           - name: Download schemas
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: schemas-build
               path: schemas/
           - name: Download bench results
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: bench-results
               path: bench
           - name: Download stack results
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: stack-results
               path: bench
           - name: Download download results
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: download-results
               path: .
           - name: Download JSON schema results
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: json-schema-results
               path: bench
           - name: Download TypeScript inference results
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: types-results
               path: bench
           - name: Download E2E library versions
-            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+            uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
             with:
               name: e2e-library-versions
               path: website/e2e/utils/
