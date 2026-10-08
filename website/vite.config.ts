@@ -66,6 +66,8 @@ const config = defineConfig({
             "prismjs/**",
             "ansi-sequence-parser",
             "oxfmt",
+            "vite-plus",
+            "vite-plus/**",
             "module-replacements",
           ],
         },
