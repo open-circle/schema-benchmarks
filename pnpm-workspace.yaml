@@ -20,7 +20,7 @@ catalog:
   "@types/react-dom": ^19.3.0
   "@vitest/browser-playwright": 5.0.3
   "@vitest/coverage-v8": 5.0.3
-  "@vitest/expect": ^5.0.2
+  "@vitest/expect": 5.0.3
   "@vitest/pretty-format": 5.0.3
   dedent: ^1.7.2
   "mix-n-matchers": "^3.0.0"
@@ -40,7 +40,7 @@ minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
-  rolldown: 1.2.12
+  rolldown: 1.2.11
   vite@*: "catalog:"
   vitest@*: "catalog:"
 update:
