@@ -1,8 +1,11 @@
 import { parseAnsiSequences } from "ansi-sequence-parser";
 import Prism from "prismjs";
+import loadLanguages from "prismjs/components/index";
 import { describe, expect, it } from "vite-plus/test";
 
 import { highlightAnsi, highlightCode } from "./highlight";
+
+loadLanguages("jsdoc");
 
 describe("highlightCode", () => {
   it("adds one line-number span for each source line", () => {
@@ -16,16 +19,22 @@ describe("highlightCode", () => {
     expect(result).toContain('class="line-numbers-rows"');
   });
 
-  it("does not register the documentation comment hook more than once", () => {
-    const before = Prism.hooks.all.wrap?.length ?? 0;
+  it("uses Prism's JSDoc token for documentation comments", () => {
     const first = highlightCode(Prism, { code: "/** docs */", language: "javascript" });
-    const afterFirst = Prism.hooks.all.wrap?.length ?? 0;
-    highlightCode(Prism, { code: "/** more docs */", language: "javascript" });
-    const afterSecond = Prism.hooks.all.wrap?.length ?? 0;
+    const second = highlightCode(Prism, { code: "/** more docs */", language: "javascript" });
 
-    expect(first).toContain("doc-comment");
-    expect(afterFirst).toBeLessThanOrEqual(before + 1);
-    expect(afterSecond).toBe(afterFirst);
+    expect(first).toContain('class="token doc-comment comment"');
+    expect(second).toContain('class="token doc-comment comment"');
+  });
+
+  it("highlights JSDoc tags in TypeScript comments", () => {
+    const result = highlightCode(Prism, {
+      code: "/**\n * @param {string} config The config to merge.\n * @returns {number} The result.\n */",
+      language: "typescript",
+    });
+
+    expect(result).toContain('<span class="token keyword">@param</span>');
+    expect(result).toContain('<span class="token keyword">@returns</span>');
   });
 
   it("wraps the setup block between markers in a dedicated class", () => {

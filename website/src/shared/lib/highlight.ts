@@ -19,28 +19,18 @@ export type HighlightInput = v.InferInput<typeof highlightInput>;
 
 const NEW_LINE_EXP = /\n(?!$)/g;
 
-const DOC_COMMENT_WRAP_HOOK_MARKER = "__schemaBenchmarksDocCommentWrapHook";
-
-type WrapHook = (typeof Prism.hooks)["all"]["wrap"][number];
-
-const docCommentWrapHook: WrapHook & { __schemaBenchmarksDocCommentWrapHook?: true } = (env) => {
-  if (env.type !== "comment" || !env.content?.startsWith("/**") || !env.classes) return;
-  if (!env.classes.includes("doc-comment")) {
-    env.classes.push("doc-comment");
+function ensureDocCommentGrammar(prism: typeof Prism) {
+  const javadoclike = prism.languages.javadoclike as typeof prism.languages.javadoclike & {
+    addSupport?: (language: string, grammar: (typeof prism.languages)[string]) => void;
+  };
+  const jsdoc = prism.languages.jsdoc;
+  if (
+    jsdoc &&
+    prism.languages.typescript &&
+    !Object.hasOwn(prism.languages.typescript, "doc-comment")
+  ) {
+    javadoclike?.addSupport?.("typescript", jsdoc);
   }
-};
-
-docCommentWrapHook[DOC_COMMENT_WRAP_HOOK_MARKER] = true;
-
-function ensureDocCommentWrapHook(prism: typeof Prism) {
-  const wrapHooks = (prism.hooks.all.wrap ?? []) as Array<
-    WrapHook & {
-      __schemaBenchmarksDocCommentWrapHook?: true;
-    }
-  >;
-
-  if (wrapHooks.some((hook) => hook[DOC_COMMENT_WRAP_HOOK_MARKER])) return;
-  prism.hooks.add("wrap", docCommentWrapHook);
 }
 
 function wrapSetupBlock(prism: typeof Prism, code: string, language: string): string {
@@ -78,7 +68,7 @@ export const highlightCode = (
   prism: typeof Prism,
   { code, language = "typescript", lineNumbers }: HighlightInput,
 ) => {
-  ensureDocCommentWrapHook(prism);
+  ensureDocCommentGrammar(prism);
 
   let lineNumbersWrapper = "";
   if (lineNumbers) {
@@ -100,6 +90,7 @@ export const getHighlightedCodeFn = createServerFn({ method: "POST" })
   .validator(highlightInput)
   .handler(({ data, data: { language } }) => {
     if (!Prism.languages[language]) loadLanguages(language);
+    if (!Prism.languages.jsdoc) loadLanguages("jsdoc");
     return highlightCode(Prism, data);
   });
 
