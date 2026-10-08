@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.45.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.46.1_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -537,14 +537,14 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -666,7 +666,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
 	function isDraft7(schema) {
@@ -872,7 +872,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -1289,7 +1289,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	]) };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
 	let KEYWORDS_BY_VOCABULARY = null;
@@ -1393,7 +1393,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -1473,7 +1473,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -1493,7 +1493,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -1600,7 +1600,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -1808,7 +1808,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function buildDefaultsApplier(schema) {
 		if (typeof schema !== "object" || schema === null) return null;
@@ -1860,7 +1860,7 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -2015,7 +2015,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -2048,7 +2048,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -2362,7 +2362,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -2409,7 +2409,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -2454,7 +2454,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -2590,7 +2590,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -2832,7 +2832,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -2937,7 +2937,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
 var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { ordinalFor: schemaOrdinal, rankFor: schemaRank } = require_schema_order();
 	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
@@ -3246,7 +3246,7 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -3443,7 +3443,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { checkSchemaStrict };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -3599,7 +3599,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -3976,7 +3976,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap, buildTargetedPositionMap } = require_data_positions();
 	/**
@@ -4063,7 +4063,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -4148,11 +4148,13 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		collapseBranches,
 		scoreBranch: __ataScore,
 		SEVERITY: __ATA_SEVERITY,
-		embedSource
+		embedSource,
+		_collapse: __ataCollapse,
+		_multi: __ataMulti
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataSafeRegex() {
 		const WS = [
@@ -4847,7 +4849,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports.engineSource = () => __ataSafeRegex.toString();
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
 var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _deq(a, b) {
 		if (a === b) return true;
@@ -5012,7 +5014,7 @@ var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -5609,7 +5611,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
@@ -6639,7 +6641,7 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const { compileSafe } = require_safe_regex();
@@ -7871,6 +7873,8 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		value: {
 			indexSchemas,
 			resolveRef,
+			splitFragment,
+			resolveUri,
 			FALLBACK_BASE
 		},
 		enumerable: false
@@ -7897,7 +7901,7 @@ var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -7955,7 +7959,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -7965,7 +7969,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -8016,12 +8020,12 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.45.0";
+	module.exports = "1.46.1";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
 var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _nativeMod;
 	function getNative() {
@@ -8511,6 +8515,14 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				}
 			}
 			this._richErrors = options && options.richErrors === false ? false : true;
+			this._onePass = void 0;
+			this._tierOnePass = void 0;
+			this._skipNativeFast = false;
+			this._scanner = void 0;
+			this._lastParsed = void 0;
+			this._twin = void 0;
+			this._coldCalls = void 0;
+			this._posCache = void 0;
 			this._source = options && options.source && typeof options.source === "object" ? {
 				path: String(options.source.path || ""),
 				content: String(options.source.content || "")
@@ -8873,9 +8885,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				let _errorsNow = _buildErrors;
 				let _onePass = null;
 				let _richLater = _plain !== null && _oneShotRich !== null && _richBuilder !== null && !_extra ? 1 : 0;
-				const _errorsOf = (data) => {
-					if (_richLater !== 0 && ++_richLater > 2) {
-						_richLater = 0;
+				const _switchOnePass = () => {
+					if (_richLater === 0) return _onePass;
+					_richLater = 0;
+					{
 						const combRich = _oneShotRich();
 						if (combRich) {
 							const clean = !this._richErrors && _isCleanShape !== null && _isCleanShape(combRich);
@@ -8885,9 +8898,15 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 							if (onePass) {
 								_onePass = onePass;
 								self.validate = onePass;
+								self._onePass = onePass;
 							}
 						}
 					}
+					return _onePass;
+				};
+				if (_richLater !== 0) this._tierOnePass = _switchOnePass;
+				const _errorsOf = (data) => {
+					if (_richLater !== 0 && ++_richLater > 2) _switchOnePass();
 					return _errorsNow(data);
 				};
 				_errorsOf.final = false;
@@ -9659,7 +9678,147 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
+var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function apState() {
+		return {
+			mo: true,
+			lo: -1,
+			on: 0,
+			os: []
+		};
+	}
+	function multiBranch(x) {
+		for (let b = x.branchErrors; b !== void 0; b = b[0].branchErrors) {
+			if (b.length > 1) return true;
+			if (b.length === 0) return false;
+		}
+		return false;
+	}
+	function ap(S, e, x, o) {
+		if (o < 0) {
+			if (o === -1) S.mo = false;
+			else {
+				const k = -o - 2;
+				if (k < S.lo || k === S.lo && (e === void 0 || x.schemaPath !== e[e.length - 1].schemaPath)) S.mo = false;
+				else S.lo = k;
+			}
+		} else if (o < S.lo) S.mo = false;
+		else S.lo = o;
+		if (x.branchErrors !== void 0 && multiBranch(x)) S.mo = false;
+		S.os[S.on++] = o;
+		if (e === void 0) return [x];
+		e.push(x);
+		return e;
+	}
+	function sr(S, e, srt) {
+		const n = e.length;
+		const os = S.os;
+		if (n > 16 || n !== S.on) return srt(e);
+		let coarse = 0;
+		for (let i = 0; i < n; i++) {
+			let k = os[i];
+			if (k < 0) {
+				if (k === -1) return srt(e);
+				k = -k - 2;
+				os[i] = k;
+				coarse |= 1 << i;
+			}
+			if (e[i].branchErrors !== void 0 && multiBranch(e[i])) return srt(e);
+		}
+		if (coarse !== 0) {
+			for (let i = 1; i < n; i++) for (let j = 0; j < i; j++) if (os[j] === os[i] && (coarse >> i | coarse >> j) & 1 && e[j].schemaPath !== e[i].schemaPath) return srt(e);
+		}
+		for (let i = 1; i < n; i++) {
+			const k = os[i];
+			const x = e[i];
+			let j = i - 1;
+			while (j >= 0 && os[j] > k) {
+				os[j + 1] = os[j];
+				e[j + 1] = e[j];
+				j--;
+			}
+			os[j + 1] = k;
+			e[j + 1] = x;
+		}
+		return e;
+	}
+	function srX(S, e, srt) {
+		const c = e.slice();
+		const k = S.os.slice(0, S.on);
+		const a = sr(S, e, srt);
+		const b = srt(c);
+		if (a.length !== b.length || a.some((x, i) => x.schemaPath !== b[i].schemaPath || x.instancePath !== b[i].instancePath)) throw new Error("ata: local error sort disagrees with the reader " + JSON.stringify(a.map((x) => x.schemaPath)) + " vs " + JSON.stringify(b.map((x) => x.schemaPath)) + " keys " + JSON.stringify(k));
+		return a;
+	}
+	const _PN = {}.__proto__ === Object.prototype;
+	const _OP = Object.prototype;
+	const _gp = Object.getPrototypeOf;
+	const _hop = Object.prototype.hasOwnProperty;
+	function _h(o, k) {
+		return _hop.call(o, k);
+	}
+	function _ok(o, k) {
+		return (_PN ? o.__proto__ : _gp(o)) === _OP || _hop.call(o, k);
+	}
+	function _hall(o, ks) {
+		for (let i = 0; i < ks.length; i++) if (!_hop.call(o, ks[i])) return false;
+		return true;
+	}
+	function _pe(s) {
+		for (let i = 0; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 126 || c === 47) return s.replace(/~/g, "~0").replace(/\//g, "~1");
+		}
+		return s;
+	}
+	function _anT() {
+		return true;
+	}
+	function _anF() {
+		return false;
+	}
+	function _rb(S, m) {
+		if (S.length !== m) S.length = m;
+	}
+	module.exports = {
+		apState,
+		ap,
+		sr,
+		srX,
+		_PN,
+		_OP,
+		_gp,
+		_hop,
+		_h,
+		_ok,
+		_hall,
+		_pe,
+		_anT,
+		_anF,
+		_rb
+	};
+	Object.defineProperty(module.exports, "_deq", {
+		enumerable: true,
+		get() {
+			return require_unique_items()._deq;
+		}
+	});
+	Object.defineProperty(module.exports, "__ataCollapse", {
+		enumerable: true,
+		get() {
+			return require_branch_collapse()._collapse;
+		}
+	});
+	Object.defineProperty(module.exports, "__ataMulti", {
+		enumerable: true,
+		get() {
+			return require_branch_collapse()._multi;
+		}
+	});
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
 var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { parse } = require_safe_regex();
 	const NATIVE_ESCAPES = /* @__PURE__ */ new Set([
@@ -9712,37 +9871,65 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		} catch {
 			return false;
 		}
-		let unbounded = 0;
-		let bounded = 0;
-		let ok = true;
 		const atom = (n) => n.t === "char" || n.t === "class" || n.t === "any";
-		const walk = (n) => {
-			if (!ok) return;
+		const info = (n) => {
 			switch (n.t) {
 				case "star":
-				case "plus":
-					if (!atom(n.child)) ok = false;
-					unbounded++;
-					break;
-				case "quest":
-					if (!atom(n.child)) ok = false;
-					bounded += 1;
-					break;
-				case "repeat":
-					if (!atom(n.child)) ok = false;
-					if (n.max === Infinity) unbounded++;
-					else bounded += n.max - n.min;
-					break;
-				case "group":
-					walk(n.child);
-					break;
+				case "plus": return atom(n.child) ? {
+					u: 1,
+					b: 0
+				} : null;
+				case "quest": {
+					if (atom(n.child)) return {
+						u: 0,
+						b: 1
+					};
+					const c = info(n.child);
+					return c === null || c.u > 0 ? null : {
+						u: 0,
+						b: 1 + c.b
+					};
+				}
+				case "repeat": {
+					if (atom(n.child)) return n.max === Infinity ? {
+						u: 1,
+						b: 0
+					} : {
+						u: 0,
+						b: n.max - n.min
+					};
+					if (n.max === Infinity) return null;
+					const c = info(n.child);
+					return c === null || c.u > 0 ? null : {
+						u: 0,
+						b: n.max - n.min + n.max * c.b
+					};
+				}
+				case "group": return info(n.child);
 				case "concat":
-					n.parts.forEach(walk);
-					break;
-				case "alt": n.opts.forEach(walk);
+				case "alt": {
+					let u = 0, b = 0;
+					for (const part of n.t === "concat" ? n.parts : n.opts) {
+						const c = info(part);
+						if (c === null) return null;
+						u += c.u;
+						b += c.b;
+					}
+					return {
+						u,
+						b
+					};
+				}
+				default: return {
+					u: 0,
+					b: 0
+				};
 			}
 		};
-		walk(ast);
+		const r = info(ast);
+		const ok = r !== null;
+		const unbounded = ok ? r.u : 0;
+		const bounded = ok ? r.b : 0;
 		if (!ok || unbounded > 1 || bounded > 64) return false;
 		if (unbounded === 1) {
 			let top = ast;
@@ -9762,7 +9949,7 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { nativeIsLinear };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
 var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { DURATION_RE, URI_TEMPLATE_EXPR, URI_FAST } = require_formats();
 	const uriCharsSource = (v, from) => `for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc<33||_rc>126||_rc===34||_rc===60||_rc===62||_rc===92||_rc===94||_rc===96||_rc===123||_rc===124||_rc===125)return false;if(_rc===37){const _h1=${v}.charCodeAt(_ri+1),_h2=${v}.charCodeAt(_ri+2);if(!((_h1>=48&&_h1<=57)||(_h1>=97&&_h1<=102)||(_h1>=65&&_h1<=70))||!((_h2>=48&&_h2<=57)||(_h2>=97&&_h2<=102)||(_h2>=65&&_h2<=70)))return false;_ri+=2}}`;
@@ -9859,7 +10046,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
 var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -9915,7 +10102,7 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	let _uqSources = null;
@@ -9930,9 +10117,37 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return _uqSources;
 	}
+	const SHARED_RT = {
+		_deqHoisted: ["_deq"],
+		_peHoisted: ["_pe"],
+		_own_PN: [
+			"_PN",
+			"_OP",
+			"_gp"
+		],
+		_own_hop: ["_hop"],
+		_own_h: ["_h"],
+		_own_ok: ["_ok"],
+		_own_hall: ["_hall"]
+	};
+	let _rt = null;
+	function sharedRt() {
+		return _rt || (_rt = require_combined_runtime());
+	}
+	function bindRt(ctx, names) {
+		const rt = sharedRt();
+		for (const n of names) {
+			ctx.closureVars.push(n);
+			ctx.closureVals.push(rt[n]);
+		}
+	}
 	function hoistOnce(ctx, key, code) {
 		if (ctx[key]) return;
 		ctx[key] = true;
+		if (ctx.sharedRuntime && SHARED_RT[key] !== void 0) {
+			bindRt(ctx, SHARED_RT[key]);
+			return;
+		}
 		if (ctx.shared) ctx.shared.push(code);
 		if (ctx.preamble) ctx.preamble.push(code);
 		else if (ctx.helperCode) ctx.helperCode.push(code);
@@ -10008,7 +10223,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return parts.filter(Boolean).join("||") || "false";
 	}
 	const { codeFor } = require_error_codes();
-	const { ordinalFor } = require_schema_order();
+	const { ordinalFor, rankFor } = require_schema_order();
 	const { compileSafe, patternIsSafe } = require_safe_regex();
 	let _nativeIsLinear = null;
 	const PROP_ESCAPE = /\\[pP]\{/;
@@ -10606,6 +10821,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function withPlain(schema, v, lines, ctx, run) {
 		if (typeof schema !== "object" || schema === null || !(schema.required || schema.properties || schema.dependentRequired || schema.dependentSchemas)) return run();
 		if (!ctx.plainOf) ctx.plainOf = /* @__PURE__ */ new Map();
+		if (ctx.plainReuse === v && ctx.plainOf.get(v) !== void 0) return run();
 		const name = "_pk" + ctx.varCounter++;
 		const at = lines.length;
 		const decl = `const ${name}=typeof ${v}==='object'&&${v}!==null&&${protoIs(ctx, v)}`;
@@ -11580,12 +11796,194 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return true;
 	}
 	const _refFreeLength = /* @__PURE__ */ new WeakMap();
+	const DYN_DROP = /* @__PURE__ */ new Set([
+		"$id",
+		"$anchor",
+		"$dynamicAnchor",
+		"$defs",
+		"definitions"
+	]);
+	const BOOL_TRUE = { bool: true };
+	const BOOL_FALSE = { bool: false };
+	function expandDynamicScopes(root, schemaMap) {
+		if (root === null || typeof root !== "object" || Array.isArray(root)) return null;
+		const { indexSchemas, resolveRef, splitFragment, resolveUri } = require_interpreter()._refInternals;
+		let state;
+		try {
+			state = indexSchemas(root, schemaMap && schemaMap.size ? schemaMap : null);
+		} catch {
+			return null;
+		}
+		const anchorNames = [];
+		for (const m of state.dynamicAnchors.values()) for (const name of m.keys()) if (!anchorNames.includes(name)) anchorNames.push(name);
+		anchorNames.sort();
+		const signature = (chain) => {
+			let sig = "";
+			for (const name of anchorNames) {
+				let hit = "";
+				for (let i = 0; i < chain.length; i++) {
+					const dyn = state.dynamicAnchors.get(chain[i]);
+					if (dyn && dyn.has(name)) {
+						hit = chain[i];
+						break;
+					}
+				}
+				sig += name + "=" + hit + ";";
+			}
+			return sig;
+		};
+		const resolveDynamic = (ref, base, chain) => {
+			let { node, base: refBase } = resolveRef(ref, base, state);
+			const [, fragment] = splitFragment(resolveUri(base, ref));
+			if (fragment && !fragment.startsWith("/")) {
+				const initialDyn = state.dynamicAnchors.get(refBase);
+				if (node !== void 0 && initialDyn !== void 0 && initialDyn.get(fragment) === node) for (let i = 0; i < chain.length; i++) {
+					const dyn = state.dynamicAnchors.get(chain[i]);
+					if (dyn && dyn.has(fragment)) {
+						node = dyn.get(fragment);
+						refBase = chain[i];
+						break;
+					}
+				}
+			}
+			return {
+				node,
+				base: refBase
+			};
+		};
+		const copies = /* @__PURE__ */ new Map();
+		const order = [];
+		let fail = false;
+		const entryFor = (node, base, chain) => {
+			if (node === true || node === false) {
+				const key = node ? BOOL_TRUE : BOOL_FALSE;
+				let bySig = copies.get(key);
+				if (bySig === void 0) {
+					bySig = /* @__PURE__ */ new Map();
+					copies.set(key, bySig);
+				}
+				let e = bySig.get("");
+				if (e === void 0) {
+					e = {
+						copy: node,
+						sig: "",
+						name: null,
+						referenced: false
+					};
+					bySig.set("", e);
+					order.push(e);
+				}
+				return e;
+			}
+			if (node === null || typeof node !== "object") {
+				fail = true;
+				return {
+					copy: node,
+					sig: "",
+					name: null
+				};
+			}
+			if (state.nodeBase.has(node) && state.nodeBase.get(node) !== base) base = state.nodeBase.get(node);
+			if (!chain.includes(base)) chain = chain.concat(base);
+			const sig = signature(chain);
+			let bySig = copies.get(node);
+			if (bySig === void 0) {
+				bySig = /* @__PURE__ */ new Map();
+				copies.set(node, bySig);
+			}
+			const hit = bySig.get(sig);
+			if (hit !== void 0) return hit;
+			const e = {
+				copy: Array.isArray(node) ? [] : {},
+				sig,
+				name: null,
+				referenced: false
+			};
+			bySig.set(sig, e);
+			order.push(e);
+			if (Array.isArray(node)) {
+				for (const x of node) e.copy.push(copyValue(x, base, chain));
+				return e;
+			}
+			const out = e.copy;
+			const isSchema = state.nodeBase.has(node);
+			for (const k of Object.keys(node)) {
+				if (fail) return e;
+				const v = node[k];
+				if (isSchema && (k === "$ref" || k === "$dynamicRef")) {
+					if (typeof v !== "string") {
+						fail = true;
+						return e;
+					}
+					const t = k === "$ref" ? resolveRef(v, base, state) : resolveDynamic(v, base, chain);
+					if (t.node === void 0 || t.node === null || typeof t.node !== "object" && typeof t.node !== "boolean" || Array.isArray(t.node)) {
+						fail = true;
+						return e;
+					}
+					const target = entryFor(t.node, t.base, chain);
+					target.referenced = true;
+					out.$ref = target;
+					continue;
+				}
+				if (isSchema && DYN_DROP.has(k) && !(k === "$id" && node === root)) continue;
+				setOwn(out, k, SKIP_VALUE_KEYS.has(k) ? v : copyValue(v, base, chain));
+			}
+			return e;
+		};
+		const copyValue = (v, base, chain) => v !== null && typeof v === "object" || typeof v === "boolean" ? entryFor(v, base, chain).copy : v;
+		const rootBase = state.nodeBase.get(root);
+		const rootEntry = entryFor(root, rootBase, [rootBase]);
+		if (fail) return null;
+		const rootCopy = rootEntry.copy;
+		const defsKey = root.$defs && typeof root.$defs === "object" ? "$defs" : root.definitions && typeof root.definitions === "object" ? "definitions" : "$defs";
+		const existing = {};
+		let n = 0;
+		for (const e of order) {
+			if (e === rootEntry) {
+				e.name = "#";
+				continue;
+			}
+			if (!e.referenced) continue;
+			let name;
+			do
+				name = "__ata_dyn_" + n++;
+			while (Object.prototype.hasOwnProperty.call(existing, name));
+			e.name = name;
+		}
+		const seen = /* @__PURE__ */ new Set();
+		const fix = (o) => {
+			if (o === null || typeof o !== "object" || seen.has(o)) return;
+			seen.add(o);
+			if (Array.isArray(o)) {
+				for (const x of o) fix(x);
+				return;
+			}
+			for (const k of Object.keys(o)) {
+				const v = o[k];
+				if (k === "$ref" && v !== null && typeof v === "object" && !Array.isArray(v) && typeof v.sig === "string") {
+					o.$ref = v.name === "#" ? "#" : "#/" + defsKey + "/" + v.name;
+					continue;
+				}
+				if (!SKIP_VALUE_KEYS.has(k)) fix(v);
+			}
+		};
+		fix(rootCopy);
+		const defs = {};
+		for (const e of order) {
+			if (e === rootEntry || !e.referenced) continue;
+			if (typeof e.copy === "object") fix(e.copy);
+			defs[e.name] = e.copy;
+		}
+		rootCopy[defsKey] = defs;
+		return rootCopy;
+	}
 	function normalizeRefsWalk(root, schemaMap) {
 		const text = JSON.stringify(root);
 		const hasRef = text.includes("\"$ref\"");
 		_refFreeLength.set(root, hasRef ? -1 : text.length);
+		if (/"\$(?:recursiveRef|recursiveAnchor)"/.test(text)) return null;
+		if (/"\$(?:dynamicRef|dynamicAnchor)"/.test(text)) return expandDynamicScopes(root, schemaMap);
 		if (!hasRef) return root;
-		if (/"\$(?:dynamicRef|recursiveRef|dynamicAnchor|recursiveAnchor)"/.test(text)) return null;
 		if (refsAllPlainLocal(root, text)) return root;
 		const { indexSchemas, resolveRef } = require_interpreter()._refInternals;
 		const state = indexSchemas(root, schemaMap && schemaMap.size ? schemaMap : null);
@@ -11594,6 +11992,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const refTarget = /* @__PURE__ */ new Map();
 		const visited = /* @__PURE__ */ new Set();
 		let fail = false;
+		let dynamic = false;
 		const visit = (node) => {
 			if (fail || node === null || typeof node !== "object" || visited.has(node)) return;
 			visited.add(node);
@@ -11605,8 +12004,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				fail = true;
 				return;
 			}
-			if (node.$dynamicRef !== void 0 || node.$dynamicAnchor !== void 0 || node.$recursiveRef !== void 0 || node.$recursiveAnchor !== void 0) {
+			if (node.$recursiveRef !== void 0 || node.$recursiveAnchor !== void 0) {
 				fail = true;
+				return;
+			}
+			if (node.$dynamicRef !== void 0 || node.$dynamicAnchor !== void 0) {
+				dynamic = true;
 				return;
 			}
 			if (typeof node.$ref === "string" && state.nodeBase.has(node)) {
@@ -11630,6 +12033,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 		visit(root);
 		if (fail) return null;
+		if (dynamic) return expandDynamicScopes(root, schemaMap);
 		if (refTarget.size === 0) return root;
 		const defsKey = root.$defs && typeof root.$defs === "object" ? "$defs" : root.definitions && typeof root.definitions === "object" ? "definitions" : "$defs";
 		const existing = root[defsKey] && typeof root[defsKey] === "object" ? root[defsKey] : {};
@@ -12077,7 +12481,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return null;
 	}
 	function _deferOrInline(ctx, lines, v, check) {
-		if (v === "d" && !ctx.condDepth) {
+		if (v === "d" && !ctx.condDepth && !ctx.nestedBoolean) {
 			if (!ctx.deferredChecks) ctx.deferredChecks = [];
 			ctx.deferredChecks.push(check);
 		} else lines.push(check);
@@ -12424,11 +12828,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.prefixItems) genPrefixItemsNode(schema, v, lines, ctx, knownType, isArr);
 		if (schema.contains !== void 0) genContainsNode(schema, v, lines, ctx, knownType, isArr);
 		if (schema.allOf) for (const sub of schema.allOf) genCode(sub, v, lines, ctx, effectiveType);
-		if (schema.anyOf && !unevalChecksAnyOf(schema, ctx)) genAnyOfNode(schema, v, lines, ctx, knownType);
-		if (schema.oneOf) genOneOfNode(schema, v, lines, ctx, knownType);
+		const nonObjApplicators = schema.unevaluatedProperties !== void 0 && schema.additionalProperties === void 0 && (Array.isArray(schema.anyOf) || Array.isArray(schema.oneOf)) && unevalBuiltAtRuntime(schema, ctx) ? [] : null;
+		const applicatorLines = nonObjApplicators || lines;
+		if (schema.anyOf && !unevalChecksAnyOf(schema, ctx)) genAnyOfNode(schema, v, applicatorLines, ctx, knownType);
+		if (schema.oneOf) genOneOfNode(schema, v, applicatorLines, ctx, knownType);
 		if (schema.not !== void 0) genNotNode(schema, v, lines, ctx, knownType);
 		if (schema.if !== void 0) genIfNode(schema, v, lines, ctx, knownType);
-		if (schema.unevaluatedProperties !== void 0) genUnevaluatedPropertiesNode(schema, v, lines, ctx, knownType, isObj, hoisted, earlyKeyCount);
+		if (schema.unevaluatedProperties !== void 0) genUnevaluatedPropertiesNode(schema, v, lines, ctx, knownType, isObj, hoisted, earlyKeyCount, nonObjApplicators);
 		if (schema.unevaluatedItems !== void 0) genUnevaluatedItemsNode(schema, v, lines, ctx, knownType, isArr);
 	}
 	function genDynamicRefNode(schema, v, lines, ctx, knownType) {
@@ -12684,7 +13090,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					const bodyLines = [];
 					const outerDeferred = ctx.deferredChecks;
 					ctx.deferredChecks = null;
-					genCode(ctx.rootDefs[defName], "d", bodyLines, ctx);
+					const outerReuse = ctx.plainReuse;
+					ctx.plainReuse = void 0;
+					try {
+						genCode(ctx.rootDefs[defName], "d", bodyLines, ctx);
+					} finally {
+						ctx.plainReuse = outerReuse;
+					}
 					if (ctx.deferredChecks) for (const dc of ctx.deferredChecks) bodyLines.push(dc);
 					ctx.deferredChecks = outerDeferred;
 					if (bodyLines.some((l) => /\b_validate\b/.test(l))) throw DECLINE;
@@ -12702,10 +13114,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					const outerDeferred = ctx.deferredChecks;
 					ctx.deferredChecks = null;
 					ctx.refStack.add(schema.$ref);
+					const outerReuse = ctx.plainReuse;
+					ctx.plainReuse = void 0;
 					try {
 						genCode(ctx.rootDefs[defName], "d", bodyLines, ctx);
 					} finally {
 						ctx.refStack.delete(schema.$ref);
+						ctx.plainReuse = outerReuse;
 					}
 					if (ctx.deferredChecks) for (const dc of ctx.deferredChecks) bodyLines.push(dc);
 					ctx.deferredChecks = outerDeferred;
@@ -12869,12 +13284,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (r === void 0) r = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
 		return r.dynamic && (r.allProps || !unevalPropsModeled(schema, ctx.schemaMap));
 	}
-	function genUnevaluatedPropertiesNode(schema, v, lines, ctx, knownType, isObj, hoisted, earlyKeyCount) {
+	function genUnevaluatedPropertiesNode(schema, v, lines, ctx, knownType, isObj, hoisted, earlyKeyCount, nonObjApplicators) {
 		const evalResult = collectEvaluated(schema, ctx.schemaMap, ctx.rootDefs);
 		if (unevalBuiltAtRuntime(schema, ctx, evalResult)) {
-			genUnevalDynamicVerdict(schema, v, lines, ctx, isObj);
+			genUnevalDynamicVerdict(schema, v, lines, ctx, isObj, nonObjApplicators);
 			return;
 		}
+		if (nonObjApplicators !== null && nonObjApplicators !== void 0) throw DECLINE;
 		if (evalResult.allProps || schema.unevaluatedProperties === true) {} else if (!evalResult.dynamic) {
 			const knownKeys = evalResult.props;
 			const propCount = knownKeys.length;
@@ -13548,6 +13964,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			refStack: /* @__PURE__ */ new Set(),
 			schemaMap: schemaMap || null,
 			anchors: eAnchors,
+			rootE: schema,
 			rootSchema: inputSchema,
 			userFormats: userFormats || null,
 			closureVars: [],
@@ -13686,6 +14103,246 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		for (const k of Object.keys(node)) if (holdsRef(node[k], seen)) return true;
 		return false;
 	}
+	const BRANCH_SCOPE_KEYS = /* @__PURE__ */ new Set([
+		"$id",
+		"$anchor",
+		"$dynamicAnchor",
+		"$dynamicRef",
+		"$defs",
+		"definitions",
+		"$schema"
+	]);
+	function branchRefsLocal(node, defsKey, seen) {
+		if (node === null || typeof node !== "object") return true;
+		if (seen.has(node)) return true;
+		seen.add(node);
+		if (Array.isArray(node)) {
+			for (const x of node) if (!branchRefsLocal(x, defsKey, seen)) return false;
+			return true;
+		}
+		for (const k of Object.keys(node)) {
+			if (SKIP_VALUE_KEYS.has(k)) continue;
+			if (BRANCH_SCOPE_KEYS.has(k)) return false;
+			const v = node[k];
+			if (k === "$ref") {
+				if (typeof v !== "string" || !v.startsWith("#/" + defsKey + "/")) return false;
+				continue;
+			}
+			if (!branchRefsLocal(v, defsKey, seen)) return false;
+		}
+		return true;
+	}
+	const _defsLocal = /* @__PURE__ */ new WeakMap();
+	function compileBranchVerdicts(branches, ctx) {
+		const root = ctx.rootC;
+		if (root === null || typeof root !== "object") return null;
+		const defsKey = root.$defs && typeof root.$defs === "object" ? "$defs" : root.definitions && typeof root.definitions === "object" ? "definitions" : null;
+		if (defsKey !== null) {
+			let ok = _defsLocal.get(root);
+			if (ok === void 0) {
+				ok = branchRefsLocal(root[defsKey], defsKey, /* @__PURE__ */ new Set());
+				_defsLocal.set(root, ok);
+			}
+			if (!ok) return null;
+		}
+		const out = [];
+		for (const sub of branches) {
+			if (sub === true) {
+				out.push(() => true);
+				continue;
+			}
+			if (sub === false) {
+				out.push(() => false);
+				continue;
+			}
+			if (sub === null || typeof sub !== "object" || Array.isArray(sub)) return null;
+			if (!branchRefsLocal(sub, defsKey === null ? "$defs" : defsKey, /* @__PURE__ */ new Set())) return null;
+			const wrapped = Object.assign({}, sub);
+			if (defsKey !== null) wrapped[defsKey] = root[defsKey];
+			if (typeof ctx.rootSchema === "object" && ctx.rootSchema !== null && typeof ctx.rootSchema.$schema === "string") wrapped.$schema = ctx.rootSchema.$schema;
+			let fn = null;
+			try {
+				fn = compileToJSCodegen(wrapped, ctx.schemaMap, ctx.userFormats);
+			} catch (e) {
+				if (e !== DECLINE) throw e;
+			}
+			if (typeof fn !== "function") return null;
+			out.push(fn);
+		}
+		return out;
+	}
+	const GUARD_KEYS = [
+		"oneOf",
+		"anyOf",
+		"allOf",
+		"$ref",
+		"items",
+		"prefixItems",
+		"properties",
+		"patternProperties",
+		"additionalProperties",
+		"not",
+		"if",
+		"contains",
+		"dependentSchemas",
+		"dependencies",
+		"propertyNames",
+		"unevaluatedProperties",
+		"unevaluatedItems"
+	];
+	const GUARD_MAX = 16384;
+	const GUARD_BUDGET = 524288;
+	const weighty = (n) => n !== null && typeof n === "object" && !Array.isArray(n) && GUARD_KEYS.some((k) => n[k] !== void 0);
+	function childrenWeighty(sub) {
+		if (weighty(sub.items)) return true;
+		if (Array.isArray(sub.prefixItems) && sub.prefixItems.some(weighty)) return true;
+		if (weighty(sub.additionalProperties)) return true;
+		if (sub.properties && typeof sub.properties === "object") {
+			for (const k of Object.keys(sub.properties)) if (weighty(sub.properties[k])) return true;
+		}
+		if (sub.patternProperties && typeof sub.patternProperties === "object") {
+			for (const k of Object.keys(sub.patternProperties)) if (weighty(sub.patternProperties[k])) return true;
+		}
+		return false;
+	}
+	const GUARD_INLINE_MAX = 2048;
+	function subtreeGuard(sub, ctx, gv) {
+		if (!ctx.inCombined || !weighty(sub) || childrenWeighty(sub)) return null;
+		if ((ctx.guardChars || 0) >= GUARD_BUDGET) return null;
+		if (!ctx.guardDefFns) ctx.guardDefFns = /* @__PURE__ */ new Map();
+		const saved = snapshotCtx(ctx);
+		const outerDefFns = ctx.defFns;
+		const outerShare = ctx.shareDefs;
+		ctx.defFns = ctx.guardDefFns;
+		ctx.shareDefs = true;
+		try {
+			const bl = [];
+			try {
+				nestedGenCode(sub, gv, bl, ctx);
+			} finally {
+				ctx.defFns = outerDefFns;
+				ctx.shareDefs = outerShare;
+			}
+			if (bl.length === 0) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			const body = bl.join(";");
+			const added = ctx.preamble.slice(saved.get("preamble").n).join(";");
+			if (body.length > GUARD_MAX || body.includes(SP_PLACEHOLDER) || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(body + added)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			ctx.guardChars = (ctx.guardChars || 0) + body.length;
+			if (body.length <= GUARD_INLINE_MAX) return { body };
+			const name = `_vg${ctx.varCounter++}`;
+			ctx.helperCode.push(`const ${name}=function(${gv}){${body};return true}`);
+			return { name };
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
+	}
+	function genGuardedC(sub, v, pathExpr, lines, ctx, schemaPrefix) {
+		const gi = ctx.varCounter++;
+		const gv = `_gv${gi}`;
+		const g = subtreeGuard(sub, ctx, gv);
+		if (g === null) {
+			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
+			return;
+		}
+		if (g.name !== void 0) lines.push(`if(!${g.name}(${v})){`);
+		else lines.push(`{const ${gv}=${v};let _g${gi}=1;g${gi}:{${replaceTopLevel(g.body, `{_g${gi}=0;break g${gi}}`, `break g${gi}`)};_g${gi}=0}if(_g${gi}){`);
+		ctx.guardDepth = (ctx.guardDepth || 0) + 1;
+		try {
+			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
+		} finally {
+			ctx.guardDepth--;
+		}
+		lines.push(g.name !== void 0 ? "}" : "}}");
+	}
+	function countingBody(body) {
+		while (true) {
+			const b1 = body.indexOf("/*CB*/"), b2 = body.indexOf("/*CU*/");
+			const b = b1 < 0 ? b2 : b2 < 0 ? b1 : Math.min(b1, b2);
+			if (b < 0) break;
+			const unknown = b === b2;
+			let depth = 1;
+			let j = b + 6;
+			while (j < body.length && depth > 0) {
+				if (body.startsWith("/*CB*/", j) || body.startsWith("/*CU*/", j)) {
+					depth++;
+					j += 6;
+					continue;
+				}
+				if (body.startsWith("/*CE*/", j)) {
+					depth--;
+					j += 6;
+					continue;
+				}
+				j++;
+			}
+			if (depth !== 0) return null;
+			body = body.slice(0, b) + (unknown ? "return -1" : "(_n++,_s+=4)") + body.slice(j);
+		}
+		if (/\b(?:_defE\d|__ataCollapse|__ataMulti|_brf\d|_bsf\d)/.test(body)) return null;
+		const SEV = require_branch_collapse().SEVERITY;
+		let out = "";
+		let i = 0;
+		if (!body.startsWith("const _e=[];")) return null;
+		out += "let _n=0,_s=0;";
+		i = 12;
+		while (i < body.length) {
+			const ch = body[i];
+			if (ch === "\"" || ch === "'" || ch === "`") {
+				const j = skipString(body, i);
+				out += body.slice(i, j);
+				i = j;
+				continue;
+			}
+			if (body.startsWith("_e.push(", i)) {
+				let j = i + 8;
+				let depth = 1;
+				while (j < body.length && depth > 0) {
+					const c = body[j];
+					if (c === "\"" || c === "'" || c === "`") {
+						j = skipString(body, j);
+						continue;
+					}
+					if (c === "(" || c === "{" || c === "[") depth++;
+					else if (c === ")" || c === "}" || c === "]") depth--;
+					j++;
+				}
+				if (depth !== 0) return null;
+				const arg = body.slice(i + 8, j - 1);
+				const m = /^\{(?:code:'ATA\d{4}',)?keyword:'([A-Za-z$][\w$]*)',/.exec(arg);
+				if (m === null) return null;
+				out += `(_n++,_s+=${SEV[m[1]] || 4})`;
+				i = j;
+				continue;
+			}
+			if (body.startsWith("return{valid:false,errors:_e}", i)) {
+				out += "return _n*100+_s";
+				i += 29;
+				continue;
+			}
+			if (body.startsWith("return{valid:_e.length===0,errors:_e}", i)) {
+				out += "return _n*100+_s";
+				i += 37;
+				continue;
+			}
+			if (body.startsWith("_e.length", i)) {
+				out += "_n";
+				i += 9;
+				continue;
+			}
+			out += ch;
+			i++;
+		}
+		if (/\b_e\b/.test(out.replace(/'[^']*'|"[^"]*"/g, ""))) return null;
+		return out;
+	}
 	function emitBranchCollapse(branches, keyword, v, pathExpr, lines, ctx, schemaPrefix) {
 		ctx.usesBranchCollapse = true;
 		const fi = ctx.varCounter++;
@@ -13728,16 +14385,33 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
 			return o === null ? "null" : o;
 		})();
-		const report = ctx.inCombined && !ctx.inBranchFn ? `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed})(_e=_ap(_e,${collapsed}))` : `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}`;
-		const counted = ctx.inCombined && !ctx.inBranchFn && ctx.branchCounts ? ctx.branchCounts.get(branches) : void 0;
+		const report = ctx.inCombined && !ctx.inBranchFn ? `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed})(_e=_ap(_A,_e,${collapsed},${apOrd(ctx, branchSp)}))` : `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}`;
+		let noneReport = null;
+		if (ctx.inCombined && (ctx.noOrdinal ? "null" : "") === "null") {
+			const cbs = fns.map((b) => b === "" ? "return 0" : countingBody(b));
+			if (!cbs.some((c) => c === null)) {
+				const sfx = usesSp ? ",_sp" : "";
+				const lit = `{code: '${branchKw === "oneOf" ? "ATA4001" : "ATA4003"}',keyword:'${branchKw}',instancePath:_pp${fi}||'',path:_pp${fi}||'',schemaPath:'${branchSp}',message:'value matched 0 of ${branches.length} ${branchKw} variants',params:{variants:${branches.length},closest:_bi${fi},closestName:_bt${fi}[_bi${fi}]||('variant '+(_bi${fi}+1))},branchErrors:_br${fi}.errors}`;
+				const push = ctx.inBranchFn ? `_e.push(${lit});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${lit},${apOrd(ctx, branchSp)}))`;
+				if (cbs.length === 1) noneReport = `{let _bi${fi}=0;const _br${fi}=${fnArr}[0](${v},_pp${fi},_all${sfx});${push}}`;
+				else {
+					ctx.helperCode.push(cbs.map((b, i) => `const _bsf${fi}_${i}=function(${params}){${b}}`).join(";"));
+					noneReport = `{let _bi${fi}=0,_bs${fi}=Infinity,_ng${fi}=0;${cbs.map((_, i) => `{const _s=_bsf${fi}_${i}(${v},_pp${fi},_all${sfx});if(_s<0)_ng${fi}=1;else if(_s<_bs${fi}){_bs${fi}=_s;_bi${fi}=${i}}}`).join("")}if(_ng${fi}){${branchKw === "anyOf" ? `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}` : `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++)${resArr}.push(${call});${report}`}}else{const _br${fi}=${fnArr}[_bi${fi}](${v},_pp${fi},_all${sfx});${push}}}`;
+				}
+			}
+		}
+		const countedRaw = ctx.inCombined && ctx.branchCounts ? ctx.branchCounts.get(branches) : void 0;
+		const counted = countedRaw !== void 0 && (!ctx.inBranchFn || countedRaw.factory) ? countedRaw : void 0;
 		const same = counted !== void 0 ? `${v}!==null&&typeof ${v}==='object'&&${counted.of}===${v}` : "";
 		let guard = counted !== void 0 ? keyword === "anyOf" ? `if(!(${same}&&${counted.count}>=1))` : `if(!(${same}&&${counted.count}===1))` : "";
-		if (guard !== "" && keyword === "oneOf" && counted.mask && ctx.inCombined && !ctx.inBranchFn) {
+		if (guard !== "" && keyword === "oneOf" && counted.mask && ctx.inCombined) {
 			const ord0 = ctx.noOrdinal ? "null" : (() => {
 				const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
 				return o === null ? "null" : o;
 			})();
-			guard = `if(${same}&&${counted.count}>1){const _pi${fi}=[];for(let _k=0;_k<${branches.length};_k++)if((${counted.mask}>>_k)&1)_pi${fi}.push(_k);(_e=_ap(_e,__ataMulti(_pi${fi},${branches.length},${pp},'${branchSp}',${ord0})))}else if(!(${same}&&${counted.count}===1))`;
+			const multiC = `__ataMulti(_pi${fi},${branches.length},${pp},'${branchSp}',${ord0})`;
+			const pushC = ctx.inBranchFn ? `_e.push(${multiC});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${multiC},${apOrd(ctx, branchSp)}))`;
+			guard = `if(${same}&&${counted.count}>1){/*CB*/const _pi${fi}=[];for(let _k=0;_k<${branches.length};_k++)if((${counted.mask}>>_k)&1)_pi${fi}.push(_k);${pushC}/*CE*/}else if(!(${same}&&${counted.count}===1))`;
 		}
 		let vfArr = null;
 		if (guard === "" && !branches.some((b) => holdsRef(b))) {
@@ -13759,27 +14433,48 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				restoreCtx(ctx, saved);
 			}
 		}
+		if (vfArr === null && guard === "" && ctx.inCombined) {
+			const compiled = compileBranchVerdicts(branches, ctx);
+			if (compiled !== null) {
+				vfArr = `_bvf${fi}`;
+				for (let i = 0; i < compiled.length; i++) {
+					ctx.closureVars.push(`${vfArr}_${i}`);
+					ctx.closureVals.push(compiled[i]);
+				}
+			}
+		}
 		if (vfArr !== null) {
 			const L = branches.length;
 			const top = ctx.inCombined && !ctx.inBranchFn;
-			if (top) ctx.unguardedCollapse = true;
+			if (top && !ctx.guardDepth) ctx.unguardedCollapse = true;
 			const tests = branches.map((_, i) => `${vfArr}_${i}(${v})`);
-			if (keyword === "anyOf") lines.push(`{const _pp${fi}=${pp};if(!(${tests.join("||")})){if(_all===0){_e.push(null);return{valid:false,errors:_e}}const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}}}`);
-			else {
+			if (keyword === "anyOf") {
+				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
+				lines.push(`{const _pp${fi}=${pp};if(!(${tests.join("||")})){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}${top ? "" : "/*CE*/"}}}`);
+			} else {
 				const mk = L <= 30;
 				const collect = mk ? `const _pi${fi}=[];for(let _k=0;_k<${L};_k++)if((_m${fi}>>_k)&1)_pi${fi}.push(_k);` : "";
 				const multi = `__ataMulti(_pi${fi},${L},_pp${fi},'${branchSp}',${ord})`;
-				const pushMulti = top ? `(_e=_ap(_e,${multi}))` : `_e.push(${multi});if(!_all)return{valid:false,errors:_e}`;
+				const pushMulti = top ? `(_e=_ap(_A,_e,${multi},${apOrd(ctx, branchSp)}))` : `_e.push(${multi});if(!_all)return{valid:false,errors:_e}`;
 				const count = tests.map((t, i) => `if(${t}){_n${fi}++;${mk ? `_m${fi}|=${1 << i}` : `_pi${fi}.push(${i})`}}`).join("");
-				lines.push(`{const _pp${fi}=${pp};let _n${fi}=0${mk ? `,_m${fi}=0` : `,_pi${fi}=[]`};${count}if(_n${fi}!==1){if(_all===0){_e.push(null);return{valid:false,errors:_e}}if(_n${fi}>1){${collect}${pushMulti}}else{const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++)${resArr}.push(${call});${report}}}}`);
+				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++)${resArr}.push(${call});${report}`;
+				lines.push(`{const _pp${fi}=${pp};let _n${fi}=0${mk ? `,_m${fi}=0` : `,_pi${fi}=[]`};${count}if(_n${fi}!==1){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}if(_n${fi}>1){${collect}${pushMulti}}else{${none}}${top ? "" : "/*CE*/"}}}`);
 			}
 			return;
 		}
-		if (guard === "" && ctx.inCombined && !ctx.inBranchFn) ctx.unguardedCollapse = true;
+		if (guard === "" && ctx.inCombined && !ctx.inBranchFn && !ctx.guardDepth) ctx.unguardedCollapse = true;
 		if (keyword === "anyOf") {
 			const probe = `${fnArr}[_bi](${v},_pp${fi},0${usesSp ? ",_sp" : ""})`;
-			lines.push(`${guard}{const _pp${fi}=${pp};let _bp${fi}=false;for(let _bi=0;_bi<${fnArr}.length;_bi++){if(${probe}.valid){_bp${fi}=true;break}}if(!_bp${fi}){if(_all===0){_e.push(null);return{valid:false,errors:_e}}const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}}}`);
-		} else lines.push(`${guard}{const _pp${fi}=${pp};const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});if(_all===0){let _n=0;for(const _r of ${resArr})if(_r.valid)_n++;if(_n!==1){_e.push(null);return{valid:false,errors:_e}}}else{${report}}}`);
+			const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
+			const probeOld = `let _bp${fi}=false;for(let _bi=0;_bi<${fnArr}.length;_bi++){if(${probe}.valid){_bp${fi}=true;break}}if(!_bp${fi}){if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}}`;
+			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}/*CE*/}else{/*CU*/${probeOld}/*CE*/}}`);
+			else lines.push(`${guard}{const _pp${fi}=${pp};${probeOld}}`);
+		} else {
+			const oldO = `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});if(_all===0){let _n=0;for(const _r of ${resArr})if(_r.valid)_n++;if(_n!==1){_e.push(null);return{valid:false,errors:_e}}}else{${report}}`;
+			const noneO = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});${report}`;
+			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${noneO}/*CE*/}else{/*CU*/${oldO}/*CE*/}}`);
+			else lines.push(`${guard}{const _pp${fi}=${pp};${oldO}}`);
+		}
 	}
 	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
 		return withPlain(schema, v, lines, ctx, () => genCodeENode(schema, v, pathExpr, lines, ctx, schemaPrefix));
@@ -13793,9 +14488,37 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema === true) return;
 		if (typeof schema !== "object" || schema === null) return;
 		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
-		if (schema.$ref) {
-			for (const k of Object.keys(schema)) if (!REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-")) throw DECLINE;
-			if (schema.$ref === "#") throw DECLINE;
+		if (schema.$ref && !schema[REF_DONE]) {
+			if (Object.keys(schema).some((k) => !REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-"))) {
+				genCodeENode({ $ref: schema.$ref }, v, pathExpr, lines, ctx, schemaPrefix);
+				const rest = { ...schema };
+				Object.defineProperty(rest, REF_DONE, { value: true });
+				genCodeENode(rest, v, pathExpr, lines, ctx, schemaPrefix);
+				return;
+			}
+			if (schema.$ref === "#") {
+				if (!ctx.rootE || typeof ctx.rootE !== "object") throw DECLINE;
+				if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
+				let fnName = ctx.defFns.get("#");
+				if (!fnName) {
+					fnName = "_defE" + ctx.defFns.size + "_root";
+					ctx.defFns.set("#", fnName);
+					const bodyLines = [];
+					const outerStack = ctx.refStack;
+					ctx.refStack = /* @__PURE__ */ new Set();
+					try {
+						genCodeE(ctx.rootE, "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+					} finally {
+						ctx.refStack = outerStack;
+					}
+					let body = bodyLines.join("\n  ");
+					body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
+					if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
+					ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e,_sp){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e,_sp);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e,_sp)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e,_sp)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e,_sp){${body}}`);
+				}
+				lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
+				return;
+			}
 			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
 			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
 				const defName = m[1];
@@ -13817,7 +14540,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
 					return;
 				}
-				if (ctx.refStack.has(schema.$ref)) return;
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
 				ctx.refStack.add(schema.$ref);
 				genCodeE(ctx.rootDefs[defName], v, pathExpr, lines, ctx, schemaPrefix);
 				ctx.refStack.delete(schema.$ref);
@@ -13827,7 +14550,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
 				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
 				if (anchorTarget) {
-					if (ctx.refStack.has(schema.$ref)) return;
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
 					ctx.refStack.add(schema.$ref);
 					genCodeE(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
 					ctx.refStack.delete(schema.$ref);
@@ -13835,7 +14558,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 			}
 			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
-				if (ctx.refStack.has(schema.$ref)) return;
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
 				ctx.refStack.add(schema.$ref);
 				genCodeE(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
 				ctx.refStack.delete(schema.$ref);
@@ -13844,13 +14567,14 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
 				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
 				if (r) {
-					if (ctx.refStack.has(schema.$ref)) return;
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
 					ctx.refStack.add(schema.$ref);
 					genCodeE(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
 					ctx.refStack.delete(schema.$ref);
 					return;
 				}
 			}
+			throw DECLINE;
 		}
 		if (schema.$dynamicRef) genDynamicRefE(schema, v, pathExpr, lines, ctx, schemaPrefix);
 		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
@@ -14280,8 +15004,49 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return Object.freeze(lit);
 	}
+	function apOrd(ctx, sp, coarse) {
+		if (typeof sp === "string" && sp.includes(SP_PLACEHOLDER) && ctx && ctx.inDefC) return "_so";
+		if (typeof sp !== "string" || sp.includes(SP_PLACEHOLDER) || sp.includes("+")) return -1;
+		if (!ctx || !ctx.rootSchema) return -1;
+		const path = unescapeSp(sp);
+		const o = ordinalFor(ctx.rootSchema, path);
+		if (typeof o !== "number") return -1;
+		if (!ctx.ordSites) ctx.ordSites = /* @__PURE__ */ new Map();
+		let site = ctx.ordSites.get(path);
+		if (site === void 0) {
+			site = {
+				i: ctx.ordSites.size,
+				o,
+				r: rankFor(ctx.rootSchema, path),
+				key: -1
+			};
+			ctx.ordSites.set(path, site);
+		}
+		return coarse ? `@@C${site.i}@@` : `@@O${site.i}@@`;
+	}
+	function assignOrdKeys(ctx, src) {
+		if (!ctx.ordSites || ctx.ordSites.size === 0) return src;
+		const sites = [...ctx.ordSites.values()];
+		const cmp = (a, b) => {
+			if (a.o !== b.o) return a.o - b.o;
+			const m = Math.min(a.r.length, b.r.length);
+			for (let k = 0; k < m; k++) if (a.r[k] !== b.r[k]) return a.r[k] - b.r[k];
+			return a.r.length - b.r.length;
+		};
+		const ranked = sites.filter((x) => x.r !== null).sort(cmp);
+		let key = 0;
+		for (let i = 0; i < ranked.length; i++) {
+			if (i > 0 && cmp(ranked[i - 1], ranked[i]) !== 0) key++;
+			ranked[i].key = key;
+		}
+		return src.replace(/@@([OC])(\d+)@@/g, (_, t, i) => {
+			const k = sites[+i].key;
+			return String(t === "O" || k < 0 ? k : -(k + 2));
+		});
+	}
+	const AP_RESET = "_A.mo=true;_A.lo=-1;_A.on=0;";
 	function errPushC(ctx, keyword, sp, pathExpr, paramsCode, msgCode, valueExpr, lean, paramsShared) {
-		if (!ctx.rich) return `(_e=_ap(_e,${lean}))`;
+		if (!ctx.rich) return `(_e=_ap(_A,_e,${lean},${apOrd(ctx, sp)}))`;
 		if (!ctx.richMk) {
 			ctx.richMk = true;
 			const { makeRich } = require_enrich_site();
@@ -14300,7 +15065,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		ctx.closureVars.push(siteVar);
 		const rel = sp.startsWith(SP_PLACEHOLDER);
 		ctx.closureVals.push(errorSite(keyword, unescapeSp(rel ? sp.slice(10) : sp), paramsVal, fmt));
-		return `(_e=_ap(_e,_mk(${siteVar},${pathExpr || "\"\""},${paramsShared || paramsCode},${msgCode},${valueExpr},d${rel ? ",_sp" : ""})))`;
+		return `(_e=_ap(_A,_e,_mk(${siteVar},${pathExpr || "\"\""},${paramsShared || paramsCode},${msgCode},${valueExpr},d${rel ? ",_sp" : ""}),-1))`;
 	}
 	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats, opts) {
 		const inputSchema = schema;
@@ -14357,10 +15122,24 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			hoisted: [],
 			rootC: schema,
 			varCounter: 0,
-			helperCode: ["function _ap(e,x){if(e===undefined)return[x];e.push(x);return e}"],
+			preamble: [],
+			helperCode: [],
 			shared: [],
-			closureVars: ["_cpLen"],
-			closureVals: [_cpLen],
+			closureVars: [
+				"_cpLen",
+				"_A",
+				"_ap",
+				"_sr",
+				"_srX"
+			],
+			closureVals: [
+				_cpLen,
+				sharedRt().apState(),
+				sharedRt().ap,
+				sharedRt().sr,
+				sharedRt().srX
+			],
+			sharedRuntime: true,
 			rootDefs: cRootDefs,
 			refStack: /* @__PURE__ */ new Set(),
 			schemaMap: schemaMap || null,
@@ -14380,13 +15159,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			ctx.closureVars.push("_ER", "_EE", "_SRT", "_FB", "_VF");
 			ctx.closureVals.push(opts.resultShape.Rejection, opts.resultShape.empty, opts.resultShape.sort, opts.resultShape.fallback, opts.resultShape.verdict || null);
 		}
+		if (ctx.usesBranchCollapse) bindRt(ctx, ["__ataCollapse", "__ataMulti"]);
 		const closureNames = ctx.usesSafeRe ? [...ctx.closureVars, "__ataSafeRe"] : ctx.closureVars;
 		const closureArgs = ctx.usesSafeRe ? [...ctx.closureVals, compileSafe] : ctx.closureVals;
 		const closureParams = closureNames.join(",");
 		const guardList = [...ctx.defFns ? ctx.defFns.values() : [], ...ctx.cycFnsC || []];
 		const guardDefs = guardList.length ? guardList : null;
 		if (guardDefs) ctx.helperCode.unshift(emitGuardState());
-		if (ctx.usesBranchCollapse) ctx.helperCode.push(require_branch_collapse().embedSource());
 		if (ctx.usesBranchCollapse && opts && opts.runtimeShape) {
 			const shape = (src) => src.replace(/code:'ATA\d{4}',/g, "").replace(/,docUrl:'https:\/\/ata-validator\.com\/e\/ATA\d{4}'/g, "");
 			for (let i = 0; i < ctx.helperCode.length; i++) ctx.helperCode[i] = shape(ctx.helperCode[i]);
@@ -14401,13 +15180,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			ctx.helperCode.push(`function _bodyC(d){${hoistDecl}${allDecl}let _e;\n  ${checks}\n  return _e}`);
 			hoistDecl = "";
 			allDecl = "";
-			checks = `_sd=0;try{_e=_bodyC(d)}catch(_err){if(_err!==_CYC)throw _err;_sg=true;${clears};try{_e=_bodyC(d)}finally{_sg=false}}`;
+			checks = `_sd=0;try{_e=_bodyC(d)}catch(_err){if(_err!==_CYC)throw _err;_sg=true;${clears};${AP_RESET}try{_e=_bodyC(d)}finally{_sg=false}}`;
 		}
-		const inner = rs ? `try{${hoistDecl}${ctx.usesBranchCollapse && ctx.unguardedCollapse ? "if(_VF!==null&&_VF(d))return{valid:true,data:d,errors:_EE};" : ""}${allDecl}let _e;\n  ` + checks + `\n  return _e?new _ER(${ctx.usesBranchCollapse ? "_SRT(_e)" : "_e.length>1?_SRT(_e):_e"}):{valid:true,data:d,errors:_EE}}catch(_x){return _FB(d)}` : hoistDecl + allDecl + `let _e;\n  ` + checks + `\n  return _e?{valid:false,errors:_e}:R`;
-		const helpers = ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "";
+		const inner = rs ? `try{${hoistDecl}${ctx.usesBranchCollapse && ctx.unguardedCollapse ? "if(_VF!==null&&_VF(d))return{valid:true,data:d,errors:_EE};" : ""}${allDecl}let _e;${AP_RESET}\n  ` + checks + `\n  return _e?new _ER(_A.mo?_e:${process.env.ATA_CHECK_SORT ? "_srX(_A,_e,_SRT)" : "_sr(_A,_e,_SRT)"}):{valid:true,data:d,errors:_EE}}catch(_x){return _FB(d)}` : hoistDecl + allDecl + `let _e;${AP_RESET}\n  ` + checks + `\n  return _e?{valid:false,errors:_e}:R`;
+		const helpers = (ctx.preamble.length ? ctx.preamble.join("\n  ") + "\n  " : "") + (ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "");
 		try {
 			if (typeof process !== "undefined" && process.env && process.env.ATA_DUMP_CODEGEN) console.log("=== COMBINED CODEGEN ===\n" + helpers + inner + "\n=== CLOSURE VARS: " + ctx.closureVars.length + " ===");
-			return new Function("R" + (closureParams ? "," + closureParams : ""), `${helpers}return function(d){${inner}}`)(VALID_RESULT, ...closureArgs);
+			return new Function("R" + (closureParams ? "," + closureParams : ""), assignOrdKeys(ctx, `${helpers}return function _vC(d){${inner}}`))(VALID_RESULT, ...closureArgs);
 		} catch (e) {
 			if (typeof process !== "undefined" && process.env && process.env.ATA_DEBUG) console.error("compileToJSCombined error:", e.message, "\n", inner.slice(0, 500));
 			return null;
@@ -14492,11 +15271,38 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function genCodeC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
 		return withPlain(schema, v, lines, ctx, () => genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix));
 	}
+	const COMBINED_DEF_FN_MIN = 160;
+	const _defOwnChars = /* @__PURE__ */ new WeakMap();
+	function defOwnChars(def) {
+		if (def === null || typeof def !== "object") return 0;
+		let n = _defOwnChars.get(def);
+		if (n === void 0) {
+			n = 0;
+			const walk = (x) => {
+				if (x === null || typeof x !== "object") {
+					n += 6;
+					return;
+				}
+				if (Array.isArray(x)) {
+					for (const y of x) walk(y);
+					return;
+				}
+				for (const k of Object.keys(x)) {
+					if (SIZE_SKIPS.has(k)) continue;
+					n += k.length + 4;
+					walk(x[k]);
+				}
+			};
+			walk(def);
+			_defOwnChars.set(def, n);
+		}
+		return n;
+	}
 	function emitSharedDefC(defName, v, pathExpr, lines, ctx, schemaPrefix) {
 		if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
 		if (!ctx.sharedDefs) ctx.sharedDefs = sharedDefNames(ctx.rootSchema, ctx.rootDefs);
 		const cyclic = ctx.cyclicDefs.has(defName);
-		if (!cyclic && !ctx.sharedDefs.has(defName)) return false;
+		if (!cyclic && !ctx.sharedDefs.has(defName) && !(ctx.inCombined && defOwnChars(ctx.rootDefs[defName]) >= COMBINED_DEF_FN_MIN)) return false;
 		emitDefFnC(defName, ctx.rootDefs[defName], cyclic, v, pathExpr, lines, ctx, schemaPrefix);
 		return true;
 	}
@@ -14513,8 +15319,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const bodyLines = [];
 			let hoisted;
 			try {
+				ctx.inDefC = (ctx.inDefC || 0) + 1;
 				genCodeC(target, "_dv", "_p", bodyLines, ctx, SP_PLACEHOLDER);
 			} finally {
+				ctx.inDefC--;
 				hoisted = ctx.hoisted;
 				ctx.hoisted = outerHoisted;
 				ctx.refStack = outerRefs;
@@ -14523,14 +15331,14 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
 			if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
 			const decl = hoisted.length ? `let ${hoisted.map((n) => n + "=null").join(",")};` : "";
-			const fn = `function ${cyclic ? fnName + "_b" : fnName}(_dv,_p,_sp,d){const _all=true;${decl}let _e;\n  ${body}\n  return _e}`;
+			const fn = `function ${cyclic ? fnName + "_b" : fnName}(_dv,_p,_sp,d,_so){const _all=true;${decl}let _e;\n  ${body}\n  return _e}`;
 			if (cyclic) {
 				if (!ctx.cycFnsC) ctx.cycFnsC = [];
 				ctx.cycFnsC.push(fnName);
-				ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(_dv,_p,_sp,d){\n  if(_sg){if(typeof _dv!=='object'||_dv===null)return ${fnName}_b(_dv,_p,_sp,d);if(${fnName}_s.has(_dv))return;${fnName}_s.add(_dv);try{return ${fnName}_b(_dv,_p,_sp,d)}finally{${fnName}_s.delete(_dv)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(_dv,_p,_sp,d)\n  _sd--\n  return _r\n  }\n  ` + fn);
+				ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(_dv,_p,_sp,d,_so){\n  if(_sg){if(typeof _dv!=='object'||_dv===null)return ${fnName}_b(_dv,_p,_sp,d,_so);if(${fnName}_s.has(_dv))return;${fnName}_s.add(_dv);try{return ${fnName}_b(_dv,_p,_sp,d,_so)}finally{${fnName}_s.delete(_dv)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(_dv,_p,_sp,d,_so)\n  _sd--\n  return _r\n  }\n  ` + fn);
 			} else ctx.helperCode.push(fn);
 		}
-		lines.push(`{const _r=${fnName}(${v},${pathExpr || "\"\""},'${schemaPrefix}',d);if(_r!==undefined){if(_e===undefined)_e=_r;else for(let _i=0;_i<_r.length;_i++)_e.push(_r[_i])}}`);
+		lines.push(`{const _r=${fnName}(${v},${pathExpr || "\"\""},'${schemaPrefix}',d,${apOrd(ctx, `${schemaPrefix}/$ref`, true)});if(_r!==undefined){if(_e===undefined)_e=_r;else for(let _i=0;_i<_r.length;_i++)_e.push(_r[_i])}}`);
 	}
 	const REF_DONE = Symbol("ata.refDone");
 	function genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix) {
@@ -14646,11 +15454,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						};
 						if (o !== null) lit._o = o;
 						ctx.closureVals.push(sharedErr(lit, ctx.rootSchema));
-						return `(_e=_ap(_e,${errVar}))`;
+						return `(_e=_ap(_A,_e,${errVar},${apOrd(ctx, sp)}))`;
 					}
 				}
 			}
-			return `(_e=_ap(_e,{keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}}))`;
+			return `(_e=_ap(_A,_e,{keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}},${apOrd(ctx, sp)}))`;
 		};
 		const emitEnumConst = () => {
 			if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
@@ -14714,7 +15522,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						params: Object.freeze({ missingProperty: key }),
 						message: `must have required property '${key}'`
 					}, ctx.rootSchema));
-					lines.push(`if(${check}){(_e=_ap(_e,${errVar}))}`);
+					lines.push(`if(${check}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
 				} else lines.push(`if(${check}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
 			}
 		} else if (schema.required) for (const key of schema.required) if ((!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) && !ctx.rich && !ctx.noOrdinal) {
@@ -14728,7 +15536,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				params: Object.freeze({ missingProperty: key }),
 				message: `must have required property '${key}'`
 			}, ctx.rootSchema));
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){(_e=_ap(_e,${errVar}))}`);
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
 		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
 		if (schema.minimum !== void 0) {
 			const c = isNum ? `${v}<${schema.minimum}` : `typeof ${v}==='number'&&${v}<${schema.minimum}`;
@@ -14809,7 +15617,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const detail = (test) => `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++)if(${test}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}`;
 			let body;
 			if (propKeys.length <= 8) body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(${propKeys.map((k) => `_f${ci}!==${JSON.stringify(k)}`).join("&&") || "true"}){_x${ci}=1;break}}if(_x${ci}){${detail(propKeys.map((k) => `_k${ci}[_i]!==${JSON.stringify(k)}`).join("&&") || "true")}}`;
-			else body = `const _a${ci}=new Set([${propKeys.map((k) => JSON.stringify(k)).join(",")}]);let _x${ci}=0;for(const _f${ci} in ${v}){if(!_a${ci}.has(_f${ci})){_x${ci}=1;break}}if(_x${ci}){${detail(`!_a${ci}.has(_k${ci}[_i])`)}}`;
+			else {
+				ctx.closureVars.push(`_a${ci}`);
+				ctx.closureVals.push(new Set(propKeys));
+				body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(!_a${ci}.has(_f${ci})){_x${ci}=1;break}}if(_x${ci}){${detail(`!_a${ci}.has(_k${ci}[_i])`)}}`;
+			}
 			const req = new Set(Array.isArray(schema.required) ? schema.required : []);
 			if (propKeys.length > 0 && propKeys.every((k) => req.has(k) && !PROTO_NAMES.has(k))) {
 				const present = propKeys.map((k) => `${JSON.stringify(k)} in ${v}`).join("&&");
@@ -14837,23 +15649,23 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				params: Object.freeze({ missingProperty: dep }),
 				message: `must have required property '${dep}'`
 			}, ctx.rootSchema));
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){(_e=_ap(_e,${errVar}))}`);
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){(_e=_ap(_A,_e,${errVar},-1))}`);
 		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){${errPushC(ctx, "required", `${schemaPrefix}/dependentRequired`, pathExpr, `{missingProperty:'${esc(dep)}'}`, `"must have required property '${esc(dep)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired'${ordinalField(ctx, `${schemaPrefix}/dependentRequired`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"}`)}}`);
 		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
 			const pv = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
 			const childPath = childPathExpr(pathExpr, ptrSeg(key));
 			if (requiredSet.has(key) && isObj) {
 				lines.push(`if(${pv}!==undefined${hoisted[key] ? "" : "&&" + ownGuard(ctx, v, key)}){`);
-				genCodeC(prop, pv, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				genGuardedC(prop, pv, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
 				lines.push(`}`);
 			} else if (isObj) {
 				const oi = ctx.varCounter++;
 				lines.push(`{const _o${oi}=${v}[${JSON.stringify(key)}];if(_o${oi}!==undefined&&${ownGuard(ctx, v, key)}){`);
-				genCodeC(prop, `_o${oi}`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				genGuardedC(prop, `_o${oi}`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
 				lines.push(`}}`);
 			} else {
 				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
-				genCodeC(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
+				genGuardedC(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
 				lines.push(`}`);
 			}
 		}
@@ -14870,7 +15682,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			ctx.varCounter++;
 			const childPath = childPathDynExpr(pathExpr, idx);
 			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
-			genCodeC(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
+			genGuardedC(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
 			lines.push(`}}`);
 		}
 		if (schema.prefixItems) genPrefixItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix);
@@ -14910,13 +15722,28 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const inner = `const _j${si}=${emitUqp(ctx)}(${v});if(_j${si}>=0){const _i${si}=_uqpI;${failExpr("_i" + si, "_j" + si)}}`;
 		lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
 	}
-	function genUnevalDynamicVerdict(schema, v, lines, ctx, isObj) {
-		if (schema.additionalProperties !== void 0) return;
+	function genUnevalDynamicVerdict(schema, v, lines, ctx, isObj, nonObjApplicators) {
+		if (schema.additionalProperties !== void 0) {
+			if (nonObjApplicators) throw DECLINE;
+			return;
+		}
 		const ui = ctx.varCounter++;
 		const S = `_ev${ui}`;
 		const body = [`const ${S}=[]`];
 		addLocalAnnotations(schema, v, S, body, ctx);
-		addTopApplicatorAnnotations(schema, v, S, body, ctx);
+		const counts = nonObjApplicators ? {
+			anyOf: `_ac${ui}`,
+			oneOf: `_oc${ui}`,
+			oneOfMask: null,
+			of: null,
+			verdict: true
+		} : null;
+		if (counts) body.push(`let ${counts.anyOf}=0,${counts.oneOf}=0`);
+		addTopApplicatorAnnotations(schema, v, S, body, ctx, counts);
+		if (counts) {
+			if (Array.isArray(schema.anyOf)) body.push(`if(${counts.anyOf}<1)return false`);
+			if (Array.isArray(schema.oneOf)) body.push(`if(${counts.oneOf}!==1)return false`);
+		}
 		const kVar = `_uk${ui}`;
 		const up = schema.unevaluatedProperties;
 		if (up === false) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar}))return false`);
@@ -14925,7 +15752,295 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			genCode(up, `${v}[${kVar}]`, sub, ctx);
 			if (sub.length) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar})){${sub.join("\n  ")}\n  }`);
 		} else throw DECLINE;
-		lines.push(isObj ? `{${body.join(";")}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body.join(";")}}`);
+		const other = nonObjApplicators && nonObjApplicators.length && !isObj ? `else{${nonObjApplicators.join("\n  ")}}` : "";
+		lines.push(isObj ? `{${body.join(";")}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body.join(";")}}${other}`);
+	}
+	const ANNOT_INLINE_MAX = 8192;
+	const ANNOT_NAME_MAX = 30;
+	const ANNOT_BLOCKERS = [
+		"unevaluatedItems",
+		"$dynamicRef",
+		"$recursiveRef",
+		"dependencies"
+	];
+	const ALL_BIT_KEY = "\0all";
+	function annotSubs(node, ctx) {
+		const subs = [];
+		for (const b of node.allOf || []) subs.push(b);
+		for (const b of node.anyOf || []) subs.push(b);
+		for (const b of node.oneOf || []) subs.push(b);
+		if (node.if !== void 0) subs.push(node.if);
+		if (node.then !== void 0) subs.push(node.then);
+		if (node.else !== void 0) subs.push(node.else);
+		if (node.dependentSchemas && typeof node.dependentSchemas === "object") for (const ds of Object.values(node.dependentSchemas)) subs.push(ds);
+		if (typeof node.$ref === "string") subs.push(refTargetFor(node.$ref, ctx));
+		return subs;
+	}
+	function annotNames(node, ctx, names, seen, top) {
+		if (node === true || node === false) return true;
+		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		try {
+			for (const k of ANNOT_BLOCKERS) if (node[k] !== void 0) return false;
+			if (!top && node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
+			const add = (key) => {
+				if (!names.has(key)) {
+					if (names.size >= ANNOT_NAME_MAX) return false;
+					names.set(key, names.size);
+				}
+				return true;
+			};
+			if (node.properties && typeof node.properties === "object") {
+				for (const k of Object.keys(node.properties)) if (!add(k)) return false;
+			}
+			if (node.patternProperties && typeof node.patternProperties === "object") {
+				for (const pat of Object.keys(node.patternProperties)) if (!add("/" + pat)) return false;
+			}
+			if (!top && node.additionalProperties !== void 0 || !top && node.unevaluatedProperties === true) {
+				if (!add(ALL_BIT_KEY)) return false;
+			}
+			let subs;
+			try {
+				subs = annotSubs(node, ctx);
+			} catch {
+				return false;
+			}
+			for (const b of subs) if (!annotNames(b, ctx, names, seen, false)) return false;
+			return true;
+		} finally {
+			seen.delete(node);
+		}
+	}
+	function ownBits(sub, v, names, ctx, t, top) {
+		const out = [];
+		for (const k of Object.keys(sub.properties || {})) out.push(`if(${ownKeyExpr(ctx, v, k)})${t}|=${1 << names.get(k)}`);
+		let fixed = 0;
+		for (const pat of Object.keys(sub.patternProperties || {})) fixed |= 1 << names.get("/" + pat);
+		if (!top && (sub.additionalProperties !== void 0 || sub.unevaluatedProperties === true)) fixed |= 1 << names.get(ALL_BIT_KEY);
+		if (fixed !== 0) out.push(`${t}|=${fixed}`);
+		return out;
+	}
+	function patternKeyTest(ctx, pat, kv) {
+		const fast = fastPrefixCheck(pat, kv);
+		if (fast) return fast;
+		const ri = ctx.varCounter++;
+		ctx.closureVars.push(`_re${ri}`);
+		ctx.closureVals.push(safeReClosure(ctx, pat));
+		return `_re${ri}.test(${kv})`;
+	}
+	function factoryCount(ctx, arr, withMask) {
+		if (!ctx.inCombined) return null;
+		if (!ctx.branchCounts) ctx.branchCounts = /* @__PURE__ */ new Map();
+		const hit = ctx.branchCounts.get(arr);
+		if (hit !== void 0) return hit.factory ? hit : null;
+		const id = ctx.varCounter++;
+		const fc = {
+			of: `_fa${id}`,
+			count: `_fn${id}`,
+			mask: withMask ? `_fm${id}` : null,
+			factory: true
+		};
+		ctx.helperCode.push(`let ${fc.of}=null,${fc.count}=0${withMask ? `,${fc.mask}=0` : ""}`);
+		ctx.branchCounts.set(arr, fc);
+		return fc;
+	}
+	function emitAnnotInline(sub, v, names, ctx, out, ok, tv) {
+		if (sub === true) {
+			out.push(`${ok}=1`);
+			return;
+		}
+		if (sub === false) {
+			out.push(`${ok}=0`);
+			return;
+		}
+		const id = ctx.varCounter++;
+		const t = `_t${id}`;
+		const local = {};
+		for (const k of Object.keys(sub)) if (!ANNOT_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
+		const vl = [];
+		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
+		try {
+			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "object" ? "object" : void 0);
+		} finally {
+			ctx.nestedBoolean--;
+		}
+		out.push(`let ${t}=0;${ok}=1`);
+		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
+		if (sub.not !== void 0) {
+			const nl = [];
+			nestedGenCode(sub.not, v, nl, ctx);
+			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
+			else out.push(`${ok}=0`);
+		}
+		const own = ownBits(sub, v, names, ctx, t, false);
+		if (own.length) out.push(`if(${ok}){${own.join(";")}}`);
+		let bi = 0;
+		const child = (b) => {
+			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+			bi++;
+			out.push(`let ${o}=1,${tb}=0`);
+			emitAnnotInline(b, v, names, ctx, out, o, tb);
+			return [o, tb];
+		};
+		for (const b of sub.allOf || []) {
+			const [o, tb] = child(b);
+			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
+		}
+		if (Array.isArray(sub.anyOf)) {
+			const na = `_na${id}`;
+			const fc = factoryCount(ctx, sub.anyOf, false);
+			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
+			for (const b of sub.anyOf) {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${na}++;${t}|=${tb}${fc ? `;${fc.count}++` : ""}}`);
+			}
+			out.push(`if(${na}===0)${ok}=0`);
+		}
+		if (Array.isArray(sub.oneOf)) {
+			const nc = `_nc${id}`, tc = `_tc${id}`;
+			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
+			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+			sub.oneOf.forEach((b, i) => {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+			});
+			out.push(`if(${nc}===1)${t}|=${tc};else ${ok}=0`);
+		}
+		if (sub.if !== void 0) {
+			const [oi, ti] = child(sub.if);
+			const thenPart = [];
+			if (sub.then !== void 0) {
+				const saved = out.length;
+				const [ot, tt] = child(sub.then);
+				thenPart.push(...out.splice(saved));
+				thenPart.push(`if(!${ot})${ok}=0;else ${t}|=${tt}`);
+			}
+			const elsePart = [];
+			if (sub.else !== void 0) {
+				const saved = out.length;
+				const [oe, te] = child(sub.else);
+				elsePart.push(...out.splice(saved));
+				elsePart.push(`if(!${oe})${ok}=0;else ${t}|=${te}`);
+			}
+			out.push(`if(${oi}){${t}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+		}
+		if (sub.dependentSchemas && typeof sub.dependentSchemas === "object") for (const [k, ds] of Object.entries(sub.dependentSchemas)) {
+			const saved = out.length;
+			const [o, tb] = child(ds);
+			const body = out.splice(saved);
+			out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(!${o})${ok}=0;else ${t}|=${tb}}`);
+		}
+		if (typeof sub.$ref === "string") {
+			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
+			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
+		}
+		out.push(`if(${ok})${tv}|=${t}`);
+	}
+	function inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts) {
+		const names = /* @__PURE__ */ new Map();
+		if (!annotNames(schema, ctx, names, /* @__PURE__ */ new Set(), true)) return null;
+		const saved = snapshotCtx(ctx);
+		try {
+			const id = ctx.varCounter++;
+			const m = `_m${id}`;
+			const out = [`let ${m}=0`];
+			if (!ctx.plainOf) ctx.plainOf = /* @__PURE__ */ new Map();
+			const prevPk = ctx.plainOf.get(v);
+			const pk = prevPk !== void 0 ? prevPk : `_pk${id}`;
+			const prevReuse = ctx.plainReuse;
+			if (prevPk === void 0) {
+				out.push(`const ${pk}=${protoIs(ctx, v)}`);
+				ctx.plainOf.set(v, pk);
+				(ctx.plainUsed || (ctx.plainUsed = /* @__PURE__ */ new Set())).add(pk);
+			}
+			ctx.plainReuse = v;
+			out.push(...ownBits(schema, v, names, ctx, m, true));
+			let bi = 0;
+			const child = (b) => {
+				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+				bi++;
+				out.push(`let ${o}=1,${tb}=0`);
+				emitAnnotInline(b, v, names, ctx, out, o, tb);
+				return [o, tb];
+			};
+			for (const b of schema.allOf || []) {
+				const [, tb] = child(b);
+				out.push(`${m}|=${tb}`);
+			}
+			if (Array.isArray(schema.anyOf)) {
+				const na = counts ? counts.anyOf : `_na${id}`;
+				out.push(counts ? `${na}=0` : `let ${na}=0`);
+				for (const b of schema.anyOf) {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${na}++;${m}|=${tb}}`);
+				}
+			}
+			if (Array.isArray(schema.oneOf)) {
+				const nc = counts ? counts.oneOf : `_nc${id}`, tc = `_tc${id}`;
+				out.push(counts ? `${nc}=0;let ${tc}=0` : `let ${nc}=0,${tc}=0`);
+				schema.oneOf.forEach((b, i) => {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${nc}++;${tc}=${tb};${counts && counts.oneOfMask && schema.oneOf.length <= 30 ? `${counts.oneOfMask}|=${1 << i};` : ""}}`);
+				});
+				out.push(`if(${nc}===1)${m}|=${tc}`);
+			}
+			if (schema.if !== void 0) {
+				const [oi, ti] = child(schema.if);
+				const thenPart = [];
+				if (schema.then !== void 0) {
+					const sv = out.length;
+					const [ot, tt] = child(schema.then);
+					thenPart.push(...out.splice(sv));
+					thenPart.push(`if(${ot})${m}|=${tt}`);
+				}
+				const elsePart = [];
+				if (schema.else !== void 0) {
+					const sv = out.length;
+					const [oe, te] = child(schema.else);
+					elsePart.push(...out.splice(sv));
+					elsePart.push(`if(${oe})${m}|=${te}`);
+				}
+				out.push(`if(${oi}){${m}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+			}
+			if (schema.dependentSchemas && typeof schema.dependentSchemas === "object") for (const [k, ds] of Object.entries(schema.dependentSchemas)) {
+				const sv = out.length;
+				const [o, tb] = child(ds);
+				const body = out.splice(sv);
+				out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(${o})${m}|=${tb}}`);
+			}
+			if (typeof schema.$ref === "string") {
+				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
+				out.push(`if(${o})${m}|=${tb}`);
+			}
+			const kVar = `_uk${id}`;
+			const cases = [...names].filter(([k]) => k !== ALL_BIT_KEY && k[0] !== "/").map(([k, i]) => `case ${JSON.stringify(k)}:_ub${id}=${1 << i};break`).join(";");
+			const allBit = names.has(ALL_BIT_KEY) ? `if((${m}&${1 << names.get(ALL_BIT_KEY)})!==0)continue;` : "";
+			const patBits = [...names].filter(([k]) => k[0] === "/").map(([k, i]) => `if((${m}&${1 << i})!==0&&${patternKeyTest(ctx, k.slice(1), `_uk${id}`)})continue;`).join("");
+			const up = schema.unevaluatedProperties;
+			let body;
+			if (up === false) body = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:${kVar}}`, "'must NOT have unevaluated properties'");
+			else if (typeof up === "object" && up !== null) {
+				const pe = emitPtrEsc(ctx);
+				const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
+				const sub = [];
+				genCodeC(up, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/unevaluatedProperties");
+				body = sub.join("\n  ");
+			} else throw DECLINE;
+			if (body) out.push(`for(const ${kVar} in ${v}){if(!${ownKeyExpr(ctx, v, kVar).split(JSON.stringify(kVar)).join(kVar)})continue;let _ub${id}=0;switch(${kVar}){${cases}}if(_ub${id}!==0&&(${m}&_ub${id})!==0)continue;${allBit}${patBits}${body}}`);
+			const text = out.join(";");
+			ctx.plainReuse = prevReuse;
+			if (prevPk === void 0) ctx.plainOf.delete(v);
+			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			return text;
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
 	}
 	function genUnevaluatedDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
 		if (schema.additionalProperties !== void 0) return;
@@ -14954,6 +16069,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				count: counts.oneOf,
 				mask: schema.oneOf.length <= 30 ? counts.oneOfMask : null
 			});
+		}
+		const inline = inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts);
+		if (inline !== null) {
+			const pre = share ? `${counts.of}=${v};${counts.oneOfMask}=0;` : "";
+			lines.push(isObj ? `{${pre}${inline}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${pre}${inline}}`);
+			return;
 		}
 		addTopApplicatorAnnotations(schema, v, S, body, ctx, counts);
 		const kVar = `_uk${ui}`;
@@ -15002,7 +16123,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (Array.isArray(node.oneOf)) {
 			const t = counts ? counts.oneOf : `_oc${ctx.varCounter++}`;
 			const mask = counts && node.oneOf.length <= 30 ? counts.oneOfMask : null;
-			out.push(`{const ${t}m=${S}.length;${counts ? "" : "let "}${t}=0;${node.oneOf.map((b, i) => `if(${emitAnnot(b, ctx)}(${v},${S})){${t}++;${mask ? `${mask}|=${1 << i};` : ""}}`).join("")}if(${t}!==1)_rb(${S},${t}m)}`);
+			const over = counts && counts.verdict ? `if(${t}>1)return false;` : "";
+			out.push(`{const ${t}m=${S}.length;${counts ? "" : "let "}${t}=0;${node.oneOf.map((b, i) => `if(${emitAnnot(b, ctx)}(${v},${S})){${t}++;${over}${mask ? `${mask}|=${1 << i};` : ""}}`).join("")}if(${t}!==1)_rb(${S},${t}m)}`);
 		}
 		if (node.if !== void 0) {
 			const thenCall = node.then !== void 0 ? `${emitAnnot(node.then, ctx)}(${v},${S})` : "";
@@ -15036,7 +16158,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (sub === null || typeof sub !== "object") throw DECLINE;
 		if (!ctx.annFns) {
 			ctx.annFns = /* @__PURE__ */ new Map();
-			(ctx.preamble || ctx.helperCode).push("function _anT(){return true}function _anF(){return false}function _rb(S,m){if(S.length!==m)S.length=m}");
+			if (ctx.sharedRuntime) bindRt(ctx, [
+				"_anT",
+				"_anF",
+				"_rb"
+			]);
+			else (ctx.preamble || ctx.helperCode).push("function _anT(){return true}function _anF(){return false}function _rb(S,m){if(S.length!==m)S.length=m}");
 		}
 		const hit = ctx.annFns.get(sub);
 		if (hit !== void 0) {
@@ -15066,7 +16193,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const failOut = "{_rb(S,_m);return false}";
 		for (const b of sub.allOf || []) body.push(`if(!${emitAnnot(b, ctx)}(d,S))${failOut}`);
 		if (Array.isArray(sub.anyOf)) body.push(`{let _a=false;${sub.anyOf.map((b) => `if(${emitAnnot(b, ctx)}(d,S))_a=true;`).join("")}if(!_a)${failOut}}`);
-		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnot(b, ctx)}(d,S))_c++;`).join("")}if(_c!==1)${failOut}}`);
+		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnot(b, ctx)}(d,S)&&++_c>1)${failOut}`).join("")}if(_c!==1)${failOut}}`);
 		if (sub.if !== void 0) {
 			const thenCheck = sub.then !== void 0 ? `if(!${emitAnnot(sub.then, ctx)}(d,S))${failOut}` : "";
 			const elseCheck = sub.else !== void 0 ? `if(!${emitAnnot(sub.else, ctx)}(d,S))${failOut}` : "";
@@ -15090,9 +16217,219 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		ctx.annFns.set(sub, name);
 		return name;
 	}
+	const ANNOT_I_BLOCKERS = [
+		"contains",
+		"additionalItems",
+		"$dynamicRef",
+		"$recursiveRef",
+		"dependencies"
+	];
+	function annotItemsFit(node, ctx, seen, top) {
+		if (node === true || node === false) return true;
+		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		try {
+			for (const k of ANNOT_I_BLOCKERS) if (node[k] !== void 0) return false;
+			if (Array.isArray(node.items)) return false;
+			if (!top && node.unevaluatedItems !== void 0 && node.unevaluatedItems !== true) return false;
+			if (node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
+			let subs;
+			try {
+				subs = annotSubs(node, ctx);
+			} catch {
+				return false;
+			}
+			for (const b of subs) if (!annotItemsFit(b, ctx, seen, false)) return false;
+			return true;
+		} finally {
+			seen.delete(node);
+		}
+	}
+	function ownPrefix(node, len, top) {
+		if (node.items !== void 0) return len;
+		if (!top && node.unevaluatedItems === true) return len;
+		if (Array.isArray(node.prefixItems) && node.prefixItems.length) return `(${len}<${node.prefixItems.length}?${len}:${node.prefixItems.length})`;
+		return null;
+	}
+	function emitAnnotInlineI(sub, v, len, ctx, out, ok, tn) {
+		if (sub === true) {
+			out.push(`${ok}=1`);
+			return;
+		}
+		if (sub === false) {
+			out.push(`${ok}=0`);
+			return;
+		}
+		const id = ctx.varCounter++;
+		const t = `_t${id}`;
+		const local = {};
+		for (const k of Object.keys(sub)) if (!ANNOT_ITEM_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
+		const vl = [];
+		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
+		try {
+			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "array" ? "array" : void 0);
+		} finally {
+			ctx.nestedBoolean--;
+		}
+		out.push(`let ${t}=0;${ok}=1`);
+		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
+		if (sub.not !== void 0) {
+			const nl = [];
+			nestedGenCode(sub.not, v, nl, ctx);
+			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
+			else out.push(`${ok}=0`);
+		}
+		const own = ownPrefix(sub, len, false);
+		if (own !== null) out.push(`if(${ok})${t}=${own}`);
+		let bi = 0;
+		const child = (b) => {
+			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+			bi++;
+			out.push(`let ${o}=1,${tb}=0`);
+			emitAnnotInlineI(b, v, len, ctx, out, o, tb);
+			return [o, tb];
+		};
+		const raise = (tb) => `if(${tb}>${t})${t}=${tb}`;
+		for (const b of sub.allOf || []) {
+			const [o, tb] = child(b);
+			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
+		}
+		if (Array.isArray(sub.anyOf)) {
+			const na = `_na${id}`;
+			const fc = factoryCount(ctx, sub.anyOf, false);
+			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
+			for (const b of sub.anyOf) {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${na}++;${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
+			}
+			out.push(`if(${na}===0)${ok}=0`);
+		}
+		if (Array.isArray(sub.oneOf)) {
+			const nc = `_nc${id}`, tc = `_tc${id}`;
+			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
+			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+			sub.oneOf.forEach((b, i) => {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+			});
+			out.push(`if(${nc}===1){${raise(tc)}}else ${ok}=0`);
+		}
+		if (sub.if !== void 0) {
+			const [oi, ti] = child(sub.if);
+			const thenPart = [];
+			if (sub.then !== void 0) {
+				const sv = out.length;
+				const [ot, tt] = child(sub.then);
+				thenPart.push(...out.splice(sv));
+				thenPart.push(`if(!${ot})${ok}=0;else ${raise(tt)}`);
+			}
+			const elsePart = [];
+			if (sub.else !== void 0) {
+				const sv = out.length;
+				const [oe, te] = child(sub.else);
+				elsePart.push(...out.splice(sv));
+				elsePart.push(`if(!${oe})${ok}=0;else ${raise(te)}`);
+			}
+			out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+		}
+		if (typeof sub.$ref === "string") {
+			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
+			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
+		}
+		out.push(`if(${ok}&&${t}>${tn})${tn}=${t}`);
+	}
+	function inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail) {
+		if (!ctx.inCombined || !annotItemsFit(schema, ctx, /* @__PURE__ */ new Set(), true)) return null;
+		const saved = snapshotCtx(ctx);
+		try {
+			const id = ctx.varCounter++;
+			const n = `_un${id}`, len = `_ul${id}`;
+			const out = [`const ${len}=${v}.length;let ${n}=0`];
+			const own = ownPrefix(schema, len, true);
+			if (own !== null) out.push(`${n}=${own}`);
+			let bi = 0;
+			const child = (b) => {
+				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+				bi++;
+				out.push(`let ${o}=1,${tb}=0`);
+				emitAnnotInlineI(b, v, len, ctx, out, o, tb);
+				return [o, tb];
+			};
+			const raise = (tb) => `if(${tb}>${n})${n}=${tb}`;
+			for (const b of schema.allOf || []) {
+				const [, tb] = child(b);
+				out.push(raise(tb));
+			}
+			if (Array.isArray(schema.anyOf)) {
+				const fc = factoryCount(ctx, schema.anyOf, false);
+				if (fc) out.push(`${fc.of}=${v};${fc.count}=0`);
+				for (const b of schema.anyOf) {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
+				}
+			}
+			if (Array.isArray(schema.oneOf)) {
+				const fc = factoryCount(ctx, schema.oneOf, schema.oneOf.length <= 30);
+				const nc = `_nc${id}`, tc = `_tc${id}`;
+				out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+				schema.oneOf.forEach((b, i) => {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+				});
+				out.push(`if(${nc}===1)${raise(tc)}`);
+			}
+			if (schema.if !== void 0) {
+				const [oi, ti] = child(schema.if);
+				const thenPart = [];
+				if (schema.then !== void 0) {
+					const sv = out.length;
+					const [ot, tt] = child(schema.then);
+					thenPart.push(...out.splice(sv));
+					thenPart.push(`if(${ot})${raise(tt)}`);
+				}
+				const elsePart = [];
+				if (schema.else !== void 0) {
+					const sv = out.length;
+					const [oe, te] = child(schema.else);
+					elsePart.push(...out.splice(sv));
+					elsePart.push(`if(${oe})${raise(te)}`);
+				}
+				out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+			}
+			if (typeof schema.$ref === "string") {
+				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
+				out.push(`if(${o})${raise(tb)}`);
+			}
+			const iv = `_ix${id}`;
+			const ui2 = schema.unevaluatedItems;
+			if (ui2 === false) out.push(`if(${n}<${len}){const ${iv}=${n};${fail("unevaluatedItems", "unevaluatedItems", `{limit:${iv}}`, `'must NOT have more than '+${iv}+' items'`)}}`);
+			else if (typeof ui2 === "object" && ui2 !== null) {
+				const pe = pathExpr ? `${pathExpr}+'/'+${iv}` : `'/'+${iv}`;
+				const sub = [];
+				genCodeC(ui2, `${v}[${iv}]`, pe, sub, ctx, schemaPrefix + "/unevaluatedItems");
+				if (sub.length) out.push(`for(let ${iv}=${n};${iv}<${len};${iv}++){${sub.join("\n  ")}\n  }`);
+			} else throw DECLINE;
+			const text = out.join(";");
+			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			return text;
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
+	}
 	function genUnevaluatedItemsDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
 		if (schema.$dynamicRef !== void 0 || schema.$recursiveRef !== void 0) throw DECLINE;
 		if (Array.isArray(schema.items) || schema.additionalItems !== void 0) throw DECLINE;
+		const inline = inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail);
+		if (inline !== null) {
+			lines.push(`if(Array.isArray(${v})){${inline}}`);
+			return;
+		}
 		annItemHelpers(ctx);
 		const ui = ctx.varCounter++;
 		const S = `_es${ui}`;
@@ -15186,7 +16523,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (locals.length) body.push(`if(Array.isArray(d)){${locals.join(";")}}`);
 		for (const b of sub.allOf || []) body.push(`if(!${emitAnnotI(b, ctx)}(d,${R}))${failOut}`);
 		if (Array.isArray(sub.anyOf)) body.push(`{let _a=false;${sub.anyOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R}))_a=true;`).join("")}if(!_a)${failOut}}`);
-		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R}))_c++;`).join("")}if(_c!==1)${failOut}}`);
+		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R})&&++_c>1)${failOut}`).join("")}if(_c!==1)${failOut}}`);
 		if (sub.if !== void 0) {
 			const thenCheck = sub.then !== void 0 ? `if(!${emitAnnotI(sub.then, ctx)}(d,${R}))${failOut}` : "";
 			const elseCheck = sub.else !== void 0 ? `if(!${emitAnnotI(sub.else, ctx)}(d,${R}))${failOut}` : "";
@@ -15217,7 +16554,11 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		let innerU;
 		if (propKeysU.length === 0) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){${failU}}`;
 		else if (propKeysU.length <= 8) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(${propKeysU.map((k) => `_k${ui}[_i]!==${JSON.stringify(k)}`).join("&&")}){${failU}}`;
-		else innerU = `const _k${ui}=Object.keys(${v});const _a${ui}=new Set([${propKeysU.map((k) => JSON.stringify(k)).join(",")}]);for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
+		else {
+			ctx.closureVars.push(`_a${ui}`);
+			ctx.closureVals.push(new Set(propKeysU));
+			innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
+		}
 		lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
 	}
 	function genUnevaluatedItemsFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
@@ -15556,6 +16897,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		AJV_MESSAGES,
 		_setCodeBudget
 	};
+	Object.defineProperty(module.exports, "_expandDynamicScopes", {
+		value: expandDynamicScopes,
+		enumerable: false
+	});
 	Object.defineProperty(module.exports, "_kwTypeBits", {
 		value: {
 			kwTypeBit,
@@ -15566,7 +16911,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -15724,7 +17069,7 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen } = require_js_compiler();
 	const VALID = 1;
@@ -16658,7 +18003,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
 var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen, unevalContributions } = require_js_compiler();
 	function resolveLocalPointer(root, ref) {
@@ -16879,7 +18224,7 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
 var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NATIVE_MIN = 32768;
 	let _native;
@@ -16995,7 +18340,7 @@ var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	module.exports = { nativeTargeted };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -17018,7 +18363,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/ts-gen.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/ts-gen.js
 var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ATA_VERSION = require_version();
 	function renderValueType(schema, defs, depth = 0) {
@@ -17190,7 +18535,7 @@ export default _default;
 	module.exports = { toTypeScript };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/render-shared.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-shared.js
 var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const ANSI = {
 		reset: "\x1B[0m",
@@ -17249,7 +18594,7 @@ var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnose.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnose.js
 var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { correlateTypos } = require_correlate();
 	const { buildDataPositionMap } = require_data_positions();
@@ -17521,7 +18866,7 @@ var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { toDiagnostics };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/render-pretty.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-pretty.js
 var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -17630,7 +18975,7 @@ var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { renderPretty };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/render-compact.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-compact.js
 var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
 	const { toDiagnostics } = require_diagnose();
@@ -17670,7 +19015,7 @@ var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = { renderCompact };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/output-format.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/output-format.js
 var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METADATA_KEYWORDS = [
 		"title",
@@ -17766,7 +19111,7 @@ var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/retry-message.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/retry-message.js
 var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function phrase(error) {
 		const p = error.params || {};
@@ -17800,7 +19145,7 @@ var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { toRetryMessage };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/describe-schema.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/describe-schema.js
 var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const MAX_DEPTH = 12;
 	function lit(v) {
@@ -17931,7 +19276,7 @@ var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	module.exports = { describeSchema };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/render-json.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-json.js
 var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function renderJSON(errors, opts) {
 		opts = opts || {};
@@ -17947,7 +19292,7 @@ var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { renderJSON };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/index.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/index.js
 var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_validator_core();
 	const jsCompiler = require_js_compiler();
@@ -18107,13 +19452,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				preprocess(data);
 				return _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
 			} : (data) => _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
-		} else if (hasDynRef && _isCodegen && jsFn) {
-			const _fn = jsFn, _efn = errOnly, _R = VALID_RESULT;
-			this.validate = preprocess ? (data) => {
-				preprocess(data);
-				return _fn(data) ? _R : _efn(data);
-			} : (data) => _fn(data) ? _R : _efn(data);
-		} else if (hasDynRef) {
+		} else if (hasDynRef && !(_isCodegen && jsFn)) {
 			if (!_interp) {
 				const { createInterpreter } = require_interpreter();
 				_interp = createInterpreter(schemaObj, {
@@ -18304,7 +19643,8 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		}
 	};
 	installCodegenPaths.installScanner = function installScanner(schemaObj, options) {
-		const { ABORT_EARLY_RESULT, VALID_RESULT, _bindEntry } = core._internals;
+		const { ABORT_EARLY_RESULT, VALID_RESULT, _bindEntry, _jsonSyntaxRejection } = core._internals;
+		let textRejects = 0;
 		const self = this;
 		const SCAN_AFTER = 64;
 		let calls = 0;
@@ -18350,19 +19690,59 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		{
 			const validateByParsing = this.validateJSON;
 			const abortEarly = !!options.abortEarly;
+			const onePassText = (text) => {
+				let op = self._onePass;
+				if (op === void 0 && self._tierOnePass !== void 0 && ++textRejects >= 2) {
+					op = self._tierOnePass() || void 0;
+					if (op === void 0) self._tierOnePass = void 0;
+				}
+				if (op === void 0) return void 0;
+				let obj;
+				try {
+					obj = JSON.parse(text);
+				} catch (e) {
+					if (!(e instanceof SyntaxError)) throw e;
+					return _jsonSyntaxRejection(e);
+				}
+				return op(obj);
+			};
 			this.validateJSON = (jsonStr) => {
 				const scan = self._ensureScanner();
 				if (scan === void 0) return validateByParsing(jsonStr);
 				if (scan === null) {
-					_bindEntry(self, "validateJSON", validateByParsing);
-					return validateByParsing(jsonStr);
+					_bindEntry(self, "validateJSON", self._richErrors ? validateByParsing : (text) => {
+						if (typeof text === "string") {
+							const o = onePassText(text);
+							if (o !== void 0) return o;
+						}
+						return validateByParsing(text);
+					});
+					return self.validateJSON(jsonStr);
 				}
+				let bias = 0;
 				_bindEntry(self, "validateJSON", (text) => {
 					if (typeof text === "string") {
+						if (bias > 16 && !self._richErrors && self._onePass !== void 0) {
+							const r = onePassText(text);
+							if (r !== void 0) {
+								if (r.valid) {
+									if (--bias < -32) bias = -32;
+								} else if (bias < 64) bias++;
+								return r;
+							}
+						}
 						const r = scan(text);
-						if (r === 1) return VALID_RESULT;
+						if (r === 1) {
+							if (--bias < -32) bias = -32;
+							return VALID_RESULT;
+						}
 						if (r === 0) {
+							if (bias < 64) bias++;
 							if (abortEarly) return ABORT_EARLY_RESULT;
+							if (!self._richErrors) {
+								const o = onePassText(text);
+								if (o !== void 0) return o;
+							}
 							self._skipNativeFast = true;
 							try {
 								return validateByParsing(text);
@@ -18370,6 +19750,10 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 								self._skipNativeFast = false;
 							}
 						}
+					}
+					if (!self._richErrors && typeof text === "string") {
+						const o = onePassText(text);
+						if (o !== void 0) return o;
 					}
 					return validateByParsing(text);
 				});
@@ -18550,7 +19934,29 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				} catch {
 					target = data;
 				}
-				e.errors = self.validate(target).errors;
+				const rejection = self.validate(target);
+				Object.defineProperty(e, "errors", {
+					configurable: true,
+					enumerable: true,
+					get() {
+						const errors = rejection.errors;
+						Object.defineProperty(e, "errors", {
+							value: errors,
+							writable: true,
+							configurable: true,
+							enumerable: true
+						});
+						return errors;
+					},
+					set(v) {
+						Object.defineProperty(e, "errors", {
+							value: v,
+							writable: true,
+							configurable: true,
+							enumerable: true
+						});
+					}
+				});
 				throw e;
 			}
 			return copy(data);
@@ -18666,11 +20072,11 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, toTypeScript, defineSchema, renderPretty, renderCompact, toOutput, toRetryMessage, describeSchema, renderJSON } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.45.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
