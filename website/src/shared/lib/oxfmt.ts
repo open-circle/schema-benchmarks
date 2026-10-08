@@ -3,7 +3,7 @@ import * as url from "node:url";
 import { getOrInsertComputed, partition } from "@schema-benchmarks/utils";
 
 // oxlint-disable-next-line typescript/consistent-type-imports
-type OxfmtMod = typeof import("oxfmt");
+type OxfmtMod = typeof import("vite-plus/fmt");
 
 let oxfmtPromise: Promise<OxfmtMod> | null = null;
 
@@ -23,7 +23,7 @@ export async function getOxfmt(): Promise<OxfmtMod> {
       );
     }
 
-    oxfmtPromise = import("oxfmt");
+    oxfmtPromise = import("vite-plus/fmt");
   }
 
   return oxfmtPromise;
