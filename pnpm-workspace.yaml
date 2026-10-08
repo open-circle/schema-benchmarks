@@ -53,3 +53,5 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+patchedDependencies:
+  "@vitest/mocker": patches/@vitest__mocker.patch

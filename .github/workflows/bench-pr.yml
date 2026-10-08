@@ -4,6 +4,7 @@ permissions:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     branches: ["main"]
     paths:
       - "bench/**"
@@ -13,10 +14,13 @@ on:
 
 concurrency:
   group: bench-pr-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event.action != 'labeled' || github.event.label.name == 'no-bench' }}
 
 jobs:
   gate:
+    if: >-
+      github.event.action != 'labeled' &&
+      !contains(github.event.pull_request.labels.*.name, 'no-bench')
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.check_author.outputs.should_run }}
