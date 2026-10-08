@@ -13,6 +13,11 @@ const file = "pnpm-workspace.yaml";
 const workspace = parseDocument(fs.readFileSync(file, "utf8"));
 if (workspace.errors.length)
   throw new AggregateError(workspace.errors, "Failed to parse pnpm-workspace.yaml");
+const vitestVersion = workspace.getIn(["catalog", "vitest"]);
+if (typeof vitestVersion !== "string")
+  throw new Error("Could not determine the Vitest catalog version");
 workspace.setIn(["overrides", "rolldown"], version);
+workspace.setIn(["catalog", "@vitest/expect"], vitestVersion);
 fs.writeFileSync(file, workspace.toString());
 process.stdout.write(`Aligned Rolldown override with Vite+: ${version}\n`);
+process.stdout.write(`Aligned @vitest/expect with Vitest: ${vitestVersion}\n`);
