@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Pipeable.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Pipeable.js
 /**
 * The `Pipeable` module defines the shared interface and implementation helpers
 * for values that support Effect-style method chaining with `.pipe(...)`.
@@ -9,6 +9,7 @@
 * to compose transformations, validations, and effectful operations while
 * keeping the original value as the starting point of the pipeline.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -46,6 +47,7 @@
 * result // => 21
 * ```
 *
+* @stability stable
 * @category combinators
 * @since 2.0.0
 */
@@ -76,6 +78,7 @@ const pipeArguments = (self, args) => {
 * Use when classes or object prototypes can reuse this value when they need the
 * standard pipe implementation backed by `pipeArguments`.
 *
+* @stability stable
 * @category prototypes
 * @since 3.15.0
 */
@@ -91,6 +94,7 @@ const Prototype$1 = { pipe() {
 * Use when you need to define a class that supports Effect-style method
 * chaining through `.pipe(...)`.
 *
+* @stability stable
 * @category constructors
 * @since 3.15.0
 */
@@ -100,7 +104,7 @@ const Class$1 = /*#__PURE__*/ function() {
 	return PipeableBase;
 }();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Function.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be called in data-first style or data-last
 * (`pipe`-friendly) style.
@@ -161,6 +165,7 @@ const Class$1 = /*#__PURE__*/ function() {
 * pipe(2, sum(3)) // => 5
 * ```
 *
+* @stability stable
 * @category combinators
 * @since 2.0.0
 */
@@ -207,6 +212,7 @@ const dual = function(arity, body) {
 * identity(5) // => 5
 * ```
 *
+* @stability stable
 * @category combinators
 * @since 2.0.0
 */
@@ -230,6 +236,7 @@ const identity = (a) => a;
 * constNull() // => null
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -249,6 +256,7 @@ const constant = (value) => () => value;
 * Function.constTrue() // => true
 * ```
 *
+* @stability stable
 * @category constants
 * @since 2.0.0
 */
@@ -268,6 +276,7 @@ const constTrue = /*#__PURE__*/ constant(true);
 * Function.constUndefined() // => undefined
 * ```
 *
+* @stability stable
 * @category constants
 * @since 2.0.0
 */
@@ -288,6 +297,7 @@ const constUndefined = /*#__PURE__*/ constant(void 0);
 * Function.constVoid() // => undefined
 * ```
 *
+* @stability stable
 * @category constants
 * @since 2.0.0
 */
@@ -314,6 +324,7 @@ const constVoid = constUndefined;
 * mutated after its first call, later calls still return the cached result for
 * that reference.
 *
+* @stability stable
 * @category caching
 * @since 4.0.0
 */
@@ -349,6 +360,7 @@ function memoize(f) {
 * different value, this memoization changes that behavior.
 *
 * @see {@link memoize} for memoizing functions without an idempotence requirement
+* @stability stable
 * @category caching
 * @since 4.0.0
 */
@@ -364,7 +376,7 @@ function memoizeIdempotent(f) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/equal.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/equal.js
 /** @internal */
 const getAllObjectKeys = (obj) => {
 	const keys = new Set(Reflect.ownKeys(obj));
@@ -385,7 +397,7 @@ const byReferenceInstances = /*#__PURE__*/ new WeakSet();
 /** @internal */
 const viewBytes = (view) => new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/hash.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/hash.js
 /**
 * Back-edge count used to avoid caching entry-point-dependent hashes.
 *
@@ -397,7 +409,7 @@ const addBackEdge = () => {
 	backEdges++;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Predicate.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Predicate.js
 /**
 * Defines runtime checks for values.
 *
@@ -407,6 +419,7 @@ const addBackEdge = () => {
 * property and tag checks, tuple and struct checks, boolean combinators, and
 * helpers for composing predicates and refinements.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -436,6 +449,7 @@ const addBackEdge = () => {
 * @see {@link isNumber}
 * @see {@link isBoolean}
 * @see {@link Refinement}
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -468,6 +482,7 @@ function isString(input) {
 *
 * @see {@link isBigInt}
 * @see {@link isString}
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -499,6 +514,7 @@ function isNumber(input) {
 * ```
 *
 * @see {@link isObjectKeyword}
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -529,6 +545,7 @@ function isFunction(input) {
 * @see {@link isNullish}
 * @see {@link isNotNull}
 * @see {@link isNotUndefined}
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -551,6 +568,7 @@ function isNotNullish(input) {
 * ```
 *
 * @see {@link isNever}
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -580,6 +598,7 @@ function isUnknown(_) {
 *
 * @see {@link isObject}
 * @see {@link isObjectOrArray}
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -614,12 +633,13 @@ function isObjectKeyword(input) {
 *
 * @see {@link isTagged}
 * @see {@link isObjectKeyword}
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
 const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(self) && property in self);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Hash.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Hash.js
 /**
 * Computes Effect hash values and defines the interface for objects that want
 * to provide their own hash implementation. Hashes are small numeric
@@ -629,6 +649,7 @@ const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(se
 * reference-based hashes, plus functions for combining and optimizing numeric
 * hash values.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -643,6 +664,7 @@ const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(se
 * @see {@link isHash} for checking whether a value implements `Hash`
 * @see {@link hash} for computing hash values
 *
+* @stability stable
 * @category symbols
 * @since 2.0.0
 */
@@ -679,6 +701,7 @@ const symbol$1 = "~effect/Hash";
 * Hash.hash([1, 2, 3]) === Hash.hash([1, 2, 3]) // => true
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -747,6 +770,7 @@ const hash = (self) => {
 * typeof Hash.random(obj2) // => "number"
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -788,6 +812,7 @@ const mix = (h) => {
 * @see {@link hash} for computing hash values from arbitrary inputs
 * @see {@link structureKeys} for hashing selected object fields without manual combination
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -812,6 +837,7 @@ const combine = /*#__PURE__*/ dual(2, (self, b) => mix(Math.imul(self, 265443576
 * Hash.optimize(1234567890) // => 160826066
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -841,6 +867,7 @@ const float64 = /*#__PURE__*/ new DataView(/*#__PURE__*/ new ArrayBuffer(8));
 * Hash.number(100) === Hash.number(100) // => true
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -875,6 +902,7 @@ const number$1 = (n) => {
 * Hash.string("test") === Hash.string("test") // => true
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -914,6 +942,7 @@ const string$1 = (str) => {
 * hash1 === hash3 // => true
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -949,6 +978,7 @@ const structureKeys = (o, keys) => {
 * Hash.structure(obj1) === Hash.structure(obj3) // => true
 * ```
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -989,6 +1019,7 @@ const unordered = (seed, f) => (iter) => {
 *
 * @see {@link hash} for the general-purpose hash dispatcher
 *
+* @stability stable
 * @category hashing
 * @since 2.0.0
 */
@@ -1004,7 +1035,7 @@ const randomHashCache = /*#__PURE__*/ new WeakMap();
 const hashCache = /*#__PURE__*/ new WeakMap();
 const visitedObjects = /*#__PURE__*/ new WeakSet();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Equal.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Equal.js
 /**
 * Defines the unique string identifier for the `Equal` interface.
 *
@@ -1040,6 +1071,7 @@ const visitedObjects = /*#__PURE__*/ new WeakSet();
 *
 * @see {@link Equal} — the interface that uses this symbol
 * @see {@link isEqual} — type guard for `Equal` implementors
+* @stability stable
 * @category symbols
 * @since 2.0.0
 */
@@ -1127,11 +1159,13 @@ function compareRecords(self, that) {
 }
 function compareHashed(self, that, hashOf, equivalent) {
 	const groups = /* @__PURE__ */ new Map();
+	let remaining = 0;
 	for (const item of that) {
 		const h = hashOf(item);
 		const group = groups.get(h);
 		if (group) group.push(item);
 		else groups.set(h, [item]);
+		remaining++;
 	}
 	outer: for (const item of self) {
 		const group = groups.get(hashOf(item));
@@ -1139,12 +1173,13 @@ function compareHashed(self, that, hashOf, equivalent) {
 			for (let i = 0; i < group.length; i++) if (equivalent(item, group[i])) {
 				group[i] = group[group.length - 1];
 				group.pop();
+				remaining--;
 				continue outer;
 			}
 		}
 		return false;
 	}
-	return true;
+	return remaining === 0;
 }
 const entryHash = (entry) => hash(entry[0]);
 const equalEntries = (self, that) => compareBoth(self[0], that[0]) && compareBoth(self[1], that[1]);
@@ -1185,19 +1220,20 @@ const equalEntries = (self, that) => compareBoth(self[0], that[0]) && compareBot
 *
 * @see {@link Equal} — the interface being checked
 * @see {@link symbol} — the property key that signals `Equal` support
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
 const isEqual = (u) => hasProperty(u, symbol);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/array.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/record.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/record.js
 /** @internal */
 function assignProperty(self, key, value) {
 	if (key === "__proto__") Object.defineProperty(self, key, {
@@ -1213,7 +1249,7 @@ function assignProperties(self, source) {
 	for (const key of Reflect.ownKeys(source)) if (Object.prototype.propertyIsEnumerable.call(source, key)) assignProperty(self, key, source[key]);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Redactable.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Redactable.js
 /**
 * Defines the symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1247,6 +1283,7 @@ function assignProperties(self, source) {
 *
 * @see {@link Redactable} for the interface this symbol belongs to
 * @see {@link isRedactable} to check whether a value has this symbol
+* @stability stable
 * @category symbols
 * @since 3.10.0
 */
@@ -1261,6 +1298,7 @@ const symbolRedactable = /*#__PURE__*/ Symbol.for("~effect/Redactable");
 *
 * @see {@link Redactable} for the interface being checked
 * @see {@link redact} to apply redaction if the value is redactable
+* @stability stable
 * @category guards
 * @since 3.10.0
 */
@@ -1286,6 +1324,7 @@ const isRedactable = (u) => hasProperty(u, symbolRedactable);
 *
 * @see {@link isRedactable} to check before redacting
 * @see {@link getRedacted} for the lower-level variant for known redactables
+* @stability stable
 * @category destructors
 * @since 3.10.0
 */
@@ -1313,6 +1352,7 @@ function redact(u) {
 *
 * @see {@link redact} for the higher-level variant that handles non-redactable values
 * @see {@link isRedactable} for the type guard to verify before calling this
+* @stability stable
 * @category destructors
 * @since 4.0.0
 */
@@ -1332,7 +1372,7 @@ const emptyContext$1 = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Formatter.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Formatter.js
 /**
 * Formats JavaScript values into readable strings.
 *
@@ -1342,6 +1382,7 @@ const emptyContext$1 = {
 * wraps JSON formatting with redaction and circular-reference handling, and the
 * module also includes helpers for property keys, paths, and dates.
 *
+* @stability stable
 * @since 4.0.0
 */
 /**
@@ -1404,6 +1445,7 @@ const emptyContext$1 = {
 *
 * @see {@link formatJson}
 * @see {@link Formatter}
+* @stability stable
 * @category formatting
 * @since 2.0.0
 */
@@ -1507,7 +1549,7 @@ function safeGet(input, key) {
 	}
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Inspectable.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Inspectable.js
 /**
 * Controls how values appear in logs and debugging output.
 *
@@ -1517,6 +1559,7 @@ function safeGet(input, key) {
 * the `Inspectable` interface, safe conversion helpers, and shared prototype or
 * class implementations for custom values.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -1549,6 +1592,7 @@ function safeGet(input, key) {
 * obj[Inspectable.NodeInspectSymbol]() // => "CustomObject(hello)"
 * ```
 *
+* @stability stable
 * @category symbols
 * @since 2.0.0
 */
@@ -1571,6 +1615,7 @@ const NodeInspectSymbol = /*#__PURE__*/ Symbol.for("nodejs.util.inspect.custom")
 *
 * @see {@link toStringUnknown} for converting unknown values to strings
 *
+* @stability stable
 * @category converting
 * @since 4.0.0
 */
@@ -1617,6 +1662,7 @@ const toJson = (input) => {
 * MyClass.prototype.constructor = MyClass
 * ```
 *
+* @stability stable
 * @category prototypes
 * @since 2.0.0
 */
@@ -1632,7 +1678,7 @@ const BaseProto = {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/stackTraceLimit.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/stackTraceLimit.js
 /**
 * Check if `Error.stackTraceLimit` is writable.
 * Returns `false` if the property is frozen, non-writable, or `Error` is non-extensible.
@@ -1664,7 +1710,7 @@ const setStackTraceLimit = (value) => {
 	if (canWriteStackTraceLimit) Error.stackTraceLimit = value;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Utils.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Utils.js
 /**
 * Yields its wrapped value exactly once, then completes with the value sent
 * back in.
@@ -1696,6 +1742,7 @@ const setStackTraceLimit = (value) => {
 * ```
 *
 * @see {@link Gen} for the type-level signature that relies on `SingleShotGen`
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -1741,7 +1788,7 @@ const pickInternalCall = () => {
 /** @internal */
 const internalCall = /*#__PURE__*/ pickInternalCall();
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/core.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2105,7 +2152,7 @@ const TaggedError$1 = (tag) => {
 	return Base;
 };
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/option.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2176,7 +2223,7 @@ SomeImpl.prototype = SomeProto;
 /** @internal */
 const some$1 = (value) => new SomeImpl(value);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/result.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/result.js
 const TypeId$10 = "~effect/Result";
 const CommonProto = {
 	[TypeId$10]: {
@@ -2246,7 +2293,7 @@ const SuccessImpl = function(success) {
 };
 SuccessImpl.prototype = SuccessProto;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Order.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Order.js
 /**
 * Defines comparison functions for ordered values.
 *
@@ -2257,6 +2304,7 @@ SuccessImpl.prototype = SuccessProto;
 * orders, tools for reversing and combining comparisons, tuple and struct
 * helpers, comparison predicates, clamping, and reducer support.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -2291,6 +2339,7 @@ SuccessImpl.prototype = SuccessProto;
 *
 * @see {@link mapInput} to transform an order by mapping the input type
 * @see {@link combine} to combine multiple orders
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -2321,6 +2370,7 @@ function make$9(compare) {
 *
 * @see {@link mapInput} to compare objects by a string property
 * @see {@link Struct} to combine with other orders for struct comparison
+* @stability stable
 * @category instances
 * @since 4.0.0
 */
@@ -2353,6 +2403,7 @@ const String$4 = /*#__PURE__*/ make$9((self, that) => self < that ? -1 : 1);
 *
 * @see {@link mapInput} to compare objects by a number property
 * @see {@link BigInt} for bigint comparisons
+* @stability stable
 * @category instances
 * @since 4.0.0
 */
@@ -2388,6 +2439,7 @@ const Number$4 = /*#__PURE__*/ make$9((self, that) => {
 *
 * @see {@link isLessThan} for strict less than
 * @see {@link isGreaterThan} for strict greater than
+* @stability stable
 * @category predicates
 * @since 4.0.0
 */
@@ -2419,12 +2471,13 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 *
 * @see {@link isGreaterThan} for strict greater than
 * @see {@link isLessThanOrEqualTo} for less than or equal
+* @stability stable
 * @category predicates
 * @since 4.0.0
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Option.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2450,6 +2503,7 @@ const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !=
 *
 * @see {@link some} for the opposite operation.
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -2479,12 +2533,13 @@ const none = () => none$1;
 *
 * @see {@link none} for the opposite operation.
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
 const some = some$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Array.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Array.js
 /**
 * Exposes the global array constructor.
 *
@@ -2501,6 +2556,7 @@ const some = some$1;
 * Array.Array === globalThis.Array // => true
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -2524,6 +2580,7 @@ const Array$1 = globalThis.Array;
 * @see {@link prepend} — add to the front
 * @see {@link appendAll} — append multiple elements
 *
+* @stability stable
 * @category combining
 * @since 2.0.0
 */
@@ -2550,6 +2607,7 @@ Array$1.isArray;
 * @see {@link isReadonlyArrayNonEmpty} — readonly variant
 * @see {@link isArrayEmpty} — opposite check
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -2575,6 +2633,7 @@ const isArrayNonEmpty = isArrayNonEmpty$1;
 * @see {@link isArrayNonEmpty} — mutable variant
 * @see {@link isReadonlyArrayEmpty} — opposite check
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -2597,6 +2656,7 @@ const isReadonlyArrayNonEmpty = isArrayNonEmpty$1;
 * @see {@link of} — create a single-element array
 * @see {@link make} — create from multiple values
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -2623,12 +2683,13 @@ const empty$1 = () => [];
 *
 * @see {@link flatMap} — map and flatten
 *
+* @stability stable
 * @category mapping
 * @since 2.0.0
 */
 const map$2 = /*#__PURE__*/ dual(2, (self, f) => self.map(f));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/BigDecimal.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/BigDecimal.js
 /**
 * Decimal numbers and arithmetic for cases where JavaScript `number` rounding
 * is not precise enough. A `BigDecimal` stores digits as a `bigint` plus a
@@ -2636,6 +2697,7 @@ const map$2 = /*#__PURE__*/ dual(2, (self, f) => self.map(f));
 * divide, round, and format decimal values such as money, quantities, and
 * measurements.
 *
+* @stability stable
 * @since 2.0.0
 */
 const TypeId$9 = "~effect/BigDecimal";
@@ -2684,6 +2746,7 @@ const BigDecimalProto = {
 * BigDecimal.isBigDecimal("123.45") // => false
 * ```
 *
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -2716,6 +2779,7 @@ const isBigDecimal = (u) => hasProperty(u, TypeId$9);
 *
 * @see {@link fromBigInt} for constructing an integer decimal from a `bigint`
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -2757,6 +2821,7 @@ const zero$1 = /*#__PURE__*/ makeNormalized(bigint0$1, 0);
 *
 * @see {@link format} for rendering normalized decimals as strings
 *
+* @stability stable
 * @category scaling
 * @since 2.0.0
 */
@@ -2812,6 +2877,7 @@ const compare = (self, that) => {
 * BigDecimal.sign(BigDecimal.fromStringUnsafe("5")) // => 1
 * ```
 *
+* @stability stable
 * @category math
 * @since 2.0.0
 */
@@ -2841,6 +2907,7 @@ const sign = (n) => n.value === bigint0$1 ? 0 : n.value < bigint0$1 ? -1 : 1;
 *
 * @see {@link toExponential} for always rendering scientific notation
 *
+* @stability stable
 * @category converting
 * @since 2.0.0
 */
@@ -2871,6 +2938,7 @@ const format = (n) => {
 *
 * @see {@link format} for plain decimal formatting when possible
 *
+* @stability stable
 * @category converting
 * @since 3.11.0
 */
@@ -2900,12 +2968,13 @@ const toExponential = (n) => {
 * BigDecimal.isZero(BigDecimal.fromStringUnsafe("1")) // => false
 * ```
 *
+* @stability stable
 * @category predicates
 * @since 2.0.0
 */
 const isZero = (n) => n.value === bigint0$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Effectable.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
@@ -2922,6 +2991,7 @@ const isZero = (n) => n.value === bigint0$1;
 * @see {@link Class} for a class-based approach to defining custom Effect values
 * @see {@link Mixin} for wrapping an existing class constructor
 *
+* @stability stable
 * @category prototypes
 * @since 4.0.0
 */
@@ -2930,11 +3000,12 @@ const Prototype = (options) => makePrimitiveProto({
 	[evaluate]: options.evaluate
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Context.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Context.js
 /**
 * Runtime type identifier attached to `Context` service keys and used by
 * `isKey` to recognize them.
 *
+* @stability stable
 * @category type IDs
 * @since 4.0.0
 */
@@ -2986,6 +3057,7 @@ const ServiceTypeId = "~effect/Context/Service";
 *
 * @see {@link Reference} for service keys with default values
 *
+* @stability stable
 * @category services
 * @since 4.0.0
 */
@@ -3100,6 +3172,7 @@ const lookup = (self, key) => {
 * context.mapUnsafe.size // => 1
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -3161,6 +3234,7 @@ const hasSameCache = (self, that) => self.cacheRoot === that.cacheRoot;
 * @see {@link isKey} for checking service keys
 * @see {@link isReference} for checking references with defaults
 *
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -3181,6 +3255,7 @@ const isContext = (u) => hasProperty(u, TypeId$8);
 * Context.isReference(Context.Service("Key")) // => false
 * ```
 *
+* @stability stable
 * @category guards
 * @since 3.11.0
 */
@@ -3195,6 +3270,7 @@ const isReference = (u) => !!u[ReferenceTypeId];
 * Context.empty().mapUnsafe.size // => 0
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3215,6 +3291,7 @@ const emptyContext = /*#__PURE__*/ makeUnsafe$2(/*#__PURE__*/ new Map());
 * Context.get(context, Port).PORT // => 8080
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3252,6 +3329,7 @@ const make$7 = (key, service) => makeUnsafe$2(/* @__PURE__ */ new Map([[key.key,
 *
 * @see {@link addOrOmit} for adding or removing a service from an `Option`
 *
+* @stability stable
 * @category combining
 * @since 2.0.0
 */
@@ -3259,6 +3337,7 @@ const add = /*#__PURE__*/ dual(3, (self, key, service) => addUnsafe(self, key.ke
 /**
 * Adds a service by key to a given `Context` using a string key.
 *
+* @stability stable
 * @category combining
 * @since 4.0.0
 */
@@ -3308,6 +3387,7 @@ const getOrUndefinedUnsafe = (self, key) => {
 * @see {@link getOption} for optional service access
 * @see {@link getOrElse} for fallback values
 *
+* @stability stable
 * @category getters
 * @since 2.0.0
 */
@@ -3376,12 +3456,13 @@ const serviceNotFoundError = (service) => {
 *
 * @see {@link Service} for required services without default values
 *
+* @stability stable
 * @category services
 * @since 3.11.0
 */
 const Reference = Service;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Duration.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Duration.js
 const TypeId$7 = "~effect/Duration";
 const bigint0 = /*#__PURE__*/ BigInt(0);
 const bigint1 = /*#__PURE__*/ BigInt(1);
@@ -3424,6 +3505,7 @@ const DURATION_REGEXP = /^(-?\d+(?:\.\d+)?)\s+(nanos?|micros?|millis?|seconds?|m
 * Duration.fromInputUnsafe([2, 500_000_000]) // => Duration.nanos(2_500_000_000n)
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -3573,6 +3655,7 @@ const make$6 = (input) => {
 * Duration.isDuration(1000) // => false
 * ```
 *
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
@@ -3588,6 +3671,7 @@ const isDuration = (u) => hasProperty(u, TypeId$7);
 * Duration.toMillis(Duration.zero) // => 0
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3603,6 +3687,7 @@ const zero = /*#__PURE__*/ make$6(0);
 * Duration.toMillis(Duration.infinity) // => Infinity
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3618,6 +3703,7 @@ const infinity = /*#__PURE__*/ make$6(Infinity);
 * Duration.toMillis(Duration.negativeInfinity) // => -Infinity
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -3633,6 +3719,7 @@ const negativeInfinity = /*#__PURE__*/ make$6(-Infinity);
 * Duration.nanos(500_000_000n) // => Duration.nanos(500_000_000n)
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3648,6 +3735,7 @@ const nanos = (nanos) => make$6(nanos);
 * Duration.toMillis(Duration.millis(1000)) // => 1000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3663,6 +3751,7 @@ const millis = (millis) => make$6(millis);
 * Duration.toMillis(Duration.seconds(30)) // => 30_000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3678,6 +3767,7 @@ const seconds = (seconds) => make$6(seconds * 1e3);
 * Duration.toMillis(Duration.minutes(5)) // => 300_000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3693,6 +3783,7 @@ const minutes = (minutes) => make$6(minutes * 6e4);
 * Duration.toMillis(Duration.hours(2)) // => 7_200_000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3708,6 +3799,7 @@ const hours = (hours) => make$6(hours * 36e5);
 * Duration.toMillis(Duration.days(1)) // => 86_400_000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3723,6 +3815,7 @@ const days = (days) => make$6(days * 864e5);
 * Duration.toMillis(Duration.weeks(1)) // => 604_800_000
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -3755,6 +3848,7 @@ const weeks = (weeks) => make$6(weeks * 6048e5);
 * // throws Error: "Cannot convert infinite duration to nanos"
 * ```
 *
+* @stability stable
 * @category getters
 * @since 4.0.0
 */
@@ -3782,6 +3876,7 @@ const toNanosUnsafe = (input) => {
 * }) // => 5000
 * ```
 *
+* @stability stable
 * @category pattern matching
 * @since 4.0.0
 */
@@ -3801,6 +3896,7 @@ const matchPair = /*#__PURE__*/ dual(3, (self, that, options) => {
 * Duration.Equivalence(Duration.seconds(5), Duration.millis(5000)) // => true
 * ```
 *
+* @stability stable
 * @category instances
 * @since 2.0.0
 */
@@ -3820,12 +3916,13 @@ const Equivalence$1 = (self, that) => matchPair(self, that, {
 * Duration.equals(Duration.seconds(5), Duration.millis(5000)) // => true
 * ```
 *
+* @stability stable
 * @category predicates
 * @since 2.0.0
 */
 const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$1(self, that));
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Scheduler.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Scheduler.js
 /**
 * Controls how runnable Effect fiber tasks are dispatched.
 *
@@ -3835,6 +3932,7 @@ const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$1(self, that));
 * for queued tasks, and references for tuning or disabling automatic scheduler
 * yields.
 *
+* @stability stable
 * @since 2.0.0
 */
 /**
@@ -3850,6 +3948,7 @@ const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$1(self, that));
 * The default value creates a `MixedScheduler`. Provide this service to
 * customize execution mode, task dispatching, or yield behavior.
 *
+* @stability stable
 * @category services
 * @since 2.0.0
 */
@@ -3917,6 +4016,7 @@ var PriorityBuckets = class {
 * operation counts to decide when fibers should yield, and is the default
 * scheduler implementation.
 *
+* @stability stable
 * @category models
 * @since 2.0.0
 */
@@ -4015,6 +4115,7 @@ var MixedSchedulerDispatcher = class {
 *
 * @see {@link PreventSchedulerYield} for bypassing scheduler yield checks entirely rather than tuning the operation budget
 *
+* @stability stable
 * @category services
 * @since 4.0.0
 */
@@ -4040,6 +4141,7 @@ const MaxOpsBeforeYield = /*#__PURE__*/ Reference("effect/Scheduler/MaxOpsBefore
 * @see {@link MaxOpsBeforeYield} for tuning yield frequency without disabling yield checks
 * @see {@link Scheduler} for providing custom scheduler yield behavior
 *
+* @stability stable
 * @category services
 * @since 4.0.0
 */
@@ -4089,12 +4191,13 @@ const PreventSchedulerYield = /*#__PURE__*/ Reference("effect/Scheduler/PreventS
 * @see {@link Error} — without a `_tag`
 * @see {@link TaggedClass} — tagged class that is not an error
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
 const TaggedError = TaggedError$1;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Tracer.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Tracer.js
 /**
 * Defines the string key for the parent-span context service.
 *
@@ -4112,6 +4215,7 @@ const TaggedError = TaggedError$1;
 * Tracer.ParentSpanKey // => "effect/Tracer/ParentSpan"
 * ```
 *
+* @stability stable
 * @category constants
 * @since 4.0.0
 */
@@ -4124,16 +4228,17 @@ const ParentSpanKey = "effect/Tracer/ParentSpan";
 * Use when you need the raw context key for active tracer lookup in lower-level
 * tracing code.
 *
+* @stability stable
 * @category constants
 * @since 4.0.0
 */
 const TracerKey = "effect/Tracer";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/metric.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/Metric/FiberRuntimeMetrics";
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/references.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /*#__PURE__*/ Reference("effect/References/CurrentStackFrame", {
 	fiberCached: true,
@@ -4155,7 +4260,7 @@ const MinimumLogLevel = /*#__PURE__*/ Reference("effect/References/MinimumLogLev
 	defaultValue: () => "Info"
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/effect.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	constructor(fiberId, annotations = constEmptyAnnotations) {
@@ -4309,7 +4414,7 @@ var FiberImpl = class {
 		let current = effect;
 		this.currentOpCount = 0;
 		try {
-			while (true) {
+			while (true) try {
 				if (this._deferredInterrupt) {
 					this._deferredInterrupt = false;
 					current = failCause$1(this._interruptedCause);
@@ -4335,10 +4440,10 @@ var FiberImpl = class {
 					}
 					return Yield;
 				}
+			} catch (error) {
+				if (!hasProperty(current, evaluate)) return exitDie(`Fiber.runLoop: Not a valid effect: ${String(current)}`);
+				current = exitDie(error);
 			}
-		} catch (error) {
-			if (!hasProperty(current, evaluate)) return exitDie(`Fiber.runLoop: Not a valid effect: ${String(current)}`);
-			return this.runLoop(exitDie(error));
 		} finally {
 			this._running = prevRunning;
 			globalThis[currentFiberTypeId] = prevFiber;
@@ -4846,14 +4951,14 @@ const forkUnsafe = (parent, effect, immediate = false, daemon = false, uninterru
 	const parentRuntime = parent;
 	const interruptible = uninterruptible === "inherit" ? parentRuntime.interruptible : !uninterruptible;
 	const child = new FiberImpl(parentRuntime.context, interruptible);
+	if (!daemon) {
+		parentRuntime.children().add(child);
+		child._parent = parentRuntime;
+	}
 	if (immediate) child.evaluate(effect);
 	else {
 		child._asyncContext = captureAsyncContext();
 		parentRuntime.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
-	}
-	if (!daemon && !child._exit) {
-		parentRuntime.children().add(child);
-		child._parent = parentRuntime;
 	}
 	return child;
 };
@@ -4912,7 +5017,7 @@ const colors = {
 };
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Cause.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Cause.js
 /**
 * Narrows a `Reason` to `Fail`.
 *
@@ -4934,6 +5039,7 @@ colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrig
 * @see {@link isDieReason} — narrow to `Die`
 * @see {@link isInterruptReason} — narrow to `Interrupt`
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -4957,6 +5063,7 @@ const isFailReason = isFailReason$1;
 * @see {@link fail} — for typed errors
 * @see {@link interrupt} — for fiber interruptions
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -4990,12 +5097,13 @@ const die$1 = causeDie;
 * }
 * ```
 *
+* @stability stable
 * @category mapping
 * @since 2.0.0
 */
 const map = causeMap;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Exit.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Exit.js
 /**
 * Creates a successful Exit containing the given value.
 *
@@ -5019,6 +5127,7 @@ const map = causeMap;
 * @see {@link fail} to create a failed Exit
 * @see {@link void_ void} for a pre-allocated success with no value
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5048,6 +5157,7 @@ const succeed$2 = exitSucceed;
 * @see {@link fail} to create a Failure from a plain error value
 * @see {@link die} to create a Failure from a defect
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5077,6 +5187,7 @@ const failCause = exitFailCause;
 * @see {@link die} to create a Failure from an unexpected defect
 * @see {@link failCause} to create a Failure from a full Cause
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5105,12 +5216,13 @@ const void_ = exitVoid;
 * @see {@link isFailure} for the opposite check
 * @see {@link match} for exhaustive pattern matching
 *
+* @stability stable
 * @category guards
 * @since 2.0.0
 */
 const isSuccess = exitIsSuccess;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/dateTime.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$6 = "~effect/DateTime";
 /** @internal */
@@ -5161,6 +5273,7 @@ const toDateUtc$1 = (self) => new Date(self.epochMilliseconds);
 * ```
 *
 * @see {@link fail} to create an effect that represents a failure.
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5251,6 +5364,7 @@ const succeed$1 = succeed$3;
 * Effect.runSync(withSuspend(6, 2)) // => 3
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5283,6 +5397,7 @@ const suspend = suspend$1;
 * ```
 *
 * @see {@link succeed} to create an effect that represents a successful value.
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5310,6 +5425,7 @@ const fail$1 = fail$3;
 * Effect.runSync(Effect.flip(program)) // => "Error computed at runtime"
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5349,6 +5465,7 @@ const failCauseSync = failCauseSync$1;
 * Effect.runSyncExit(program) // => Exit.die(defect)
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 2.0.0
 */
@@ -5423,6 +5540,7 @@ const die = die$2;
 * ```
 *
 * @see {@link tap} for a version that ignores the result of the effect.
+* @stability stable
 * @category sequencing
 * @since 2.0.0
 */
@@ -5464,6 +5582,7 @@ const flatMap = flatMap$1;
 * @see {@link option} for a version that uses `Option` instead.
 * @see {@link result} for a version that uses `Result` instead.
 *
+* @stability stable
 * @category error handling
 * @since 2.0.0
 */
@@ -5509,6 +5628,7 @@ const exit = exit$1;
 * output // => ["Caught defect", "Recovered from defect"]
 * ```
 *
+* @stability stable
 * @category error handling
 * @since 4.0.0
 */
@@ -5557,6 +5677,7 @@ const catchCause = catchCause$1;
 *
 * @see {@link runSync} for a version that throws on failure.
 *
+* @stability stable
 * @category running
 * @since 2.0.0
 */
@@ -5590,6 +5711,7 @@ const runSyncExit = runSyncExit$1;
 * await Effect.runPromise(Effect.all([mapped, mappedPending])) // => [10, 10]
 * ```
 *
+* @stability stable
 * @category mapping
 * @since 4.0.0
 */
@@ -5627,6 +5749,7 @@ const mapEager = mapEager$1;
 * await Effect.runPromise(Effect.all([flatMapped, flatMappedPending])) // => [10, 10]
 * ```
 *
+* @stability stable
 * @category sequencing
 * @since 4.0.0
 */
@@ -5654,6 +5777,7 @@ const flatMapEager = flatMapEager$1;
 * Effect.runSync(effect) // => "computed eagerly"
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5666,7 +5790,7 @@ codes[/*#__PURE__*/ "=".charCodeAt(0)] = 0;
 ({ ...BaseProto });
 ({ ...PipeInspectableProto });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/annotations.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -5684,7 +5808,7 @@ const getExpected = /*#__PURE__*/ memoize((ast) => {
 	return ast.getExpected(getExpected);
 });
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/parser.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/parser.js
 /** @internal */
 const missing = /*#__PURE__*/ Symbol();
 /** @internal */
@@ -5698,7 +5822,7 @@ const toOption = (value) => value === missing ? none() : some(value);
 /** @internal */
 const fromOptionExit = (option) => option._tag === "None" ? missingExit : succeed(option.value);
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaIssue.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/SchemaIssue.js
 /**
 * Describes problems found while decoding, encoding, or checking data with
 * schemas.
@@ -5708,6 +5832,7 @@ const fromOptionExit = (option) => option._tag === "None" ? missingExit : succee
 * keys, invalid types, invalid values, failed filters, failed transformations,
 * and alternatives that did not match. This module also formats issues.
 *
+* @stability stable
 * @since 4.0.0
 */
 const TypeId$3 = "~effect/SchemaIssue/Issue";
@@ -5736,6 +5861,7 @@ const TypeId$3 = "~effect/SchemaIssue/Issue";
 *
 * @see {@link Issue}
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -5768,6 +5894,7 @@ function isIssue(u) {
 *
 * @see {@link Issue} for the complete issue model
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -5783,6 +5910,7 @@ var IssueNodeImpl = class {
 /**
 * Constructs a schema issue for a failed refinement check.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5805,6 +5933,7 @@ const Filter$1 = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for a failed transformation.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5827,6 +5956,7 @@ const Encoding = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue that points to a nested location.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5849,6 +5979,7 @@ const Pointer = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for a missing key or tuple index.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5866,6 +5997,7 @@ const MissingKey = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for an unexpected key or tuple index.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5883,6 +6015,7 @@ const UnexpectedKey = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue that groups multiple child issues.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5905,6 +6038,7 @@ const Composite = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for an input with an invalid runtime type.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5922,6 +6056,7 @@ const InvalidType = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for a value that violates a constraint.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5939,6 +6074,7 @@ const InvalidValue = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for a value that matches no union member.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -5961,6 +6097,7 @@ const AnyOf = class extends IssueNodeImpl {
 /**
 * Constructs a schema issue for a value that matches multiple union members.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6037,6 +6174,7 @@ function normalizeFilterOutput(ast, out, input, options) {
 * @see {@link LeafHook}
 * @see {@link makeFormatterStandardSchemaV1}
 *
+* @stability stable
 * @category formatting
 * @since 4.0.0
 */
@@ -6081,6 +6219,7 @@ const defaultLeafHook = (issue) => {
 * @see {@link CheckHook}
 * @see {@link makeFormatterStandardSchemaV1}
 *
+* @stability stable
 * @category formatting
 * @since 4.0.0
 */
@@ -6140,6 +6279,7 @@ function formatCheck(check) {
 * @see {@link makeFormatterStandardSchemaV1} — produces Standard Schema V1 format instead
 * @see {@link Formatter}
 *
+* @stability stable
 * @category formatting
 * @since 4.0.0
 */
@@ -6179,7 +6319,7 @@ function findMessage(issue) {
 	if (typeof message === "string") return message;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/cause.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/cause.js
 /** @internal */
 function getSchemaIssue(cause) {
 	let issue;
@@ -6196,7 +6336,7 @@ function getSchemaIssueOrThrow(cause, message) {
 	return issue;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaGetter.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/SchemaGetter.js
 const makeGetter = (fields) => Object.assign(Object.create(Prototype$1), fields);
 const passthrough_$1 = /*#__PURE__*/ makeGetter({ _tag: "Passthrough" });
 function passthrough$1() {
@@ -6236,6 +6376,7 @@ function passthrough$1() {
 * @see {@link transformOptional} when you need to handle `None` inputs
 * @see {@link passthrough} when no transformation is needed
 *
+* @stability stable
 * @category transforming
 * @since 4.0.0
 */
@@ -6268,6 +6409,7 @@ function transform$1(f) {
 *
 * @see {@link transform} for custom string conversions
 *
+* @stability stable
 * @category converting
 * @since 4.0.0
 */
@@ -6298,6 +6440,7 @@ function String$3() {
 *
 * @see {@link transformEffect} for effectful or validated number parsing
 *
+* @stability stable
 * @category converting
 * @since 4.0.0
 */
@@ -6305,10 +6448,11 @@ function Number$3() {
 	return transform$1(globalThis.Number);
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaTransformation.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Constructs schema middleware from its decode and encode functions.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6329,6 +6473,7 @@ const TypeId$2 = "~effect/SchemaTransformation/Transformation";
 /**
 * Constructs a bidirectional schema transformation from its decode and encode getters.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6371,6 +6516,7 @@ const Transformation = class extends Class$1 {
 * @see {@link Transformation}
 * @see {@link makeTransformation}
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -6407,6 +6553,7 @@ function isTransformation(u) {
 * @see {@link transformEffect} — constructor from effectful functions
 * @see {@link Transformation}
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -6448,12 +6595,13 @@ function passthrough() {
 * @see {@link bigintFromString}
 * @see {@link transform}
 *
+* @stability stable
 * @category converting
 * @since 4.0.0
 */
 const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3(), /*#__PURE__*/ String$3());
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaAST.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/SchemaAST.js
 /**
 * Represents Effect schemas as runtime trees.
 *
@@ -6464,6 +6612,7 @@ const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3
 * ASTs programmatically, change encoded or decoded views, collect issues, or
 * run low-level schema checks.
 *
+* @stability stable
 * @since 4.0.0
 */
 function makeGuard(tag) {
@@ -6479,6 +6628,7 @@ function makeGuard(tag) {
 *
 * @see {@link Declaration} for the AST node type narrowed by this guard
 *
+* @stability stable
 * @category guards
 * @since 3.10.0
 */
@@ -6494,6 +6644,7 @@ const isDeclaration = /*#__PURE__*/ makeGuard("Declaration");
 * @see {@link Never} for the AST node type narrowed by this guard
 * @see {@link never} for the singleton `Never` AST instance
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -6508,6 +6659,7 @@ const isNever = /*#__PURE__*/ makeGuard("Never");
 * @see {@link Literal} for the AST node type narrowed by this guard
 * @see {@link LiteralValue} for the values stored by literal nodes
 *
+* @stability stable
 * @category guards
 * @since 3.10.0
 */
@@ -6515,6 +6667,7 @@ const isLiteral = /*#__PURE__*/ makeGuard("Literal");
 /**
 * Narrows an {@link AST} to {@link UniqueSymbol}.
 *
+* @stability stable
 * @category guards
 * @since 3.10.0
 */
@@ -6529,6 +6682,7 @@ const isUniqueSymbol = /*#__PURE__*/ makeGuard("UniqueSymbol");
 *
 * @see {@link Arrays} for the AST node type narrowed by this guard
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -6536,6 +6690,7 @@ const isArrays = /*#__PURE__*/ makeGuard("Arrays");
 /**
 * Narrows an {@link AST} to {@link Objects}.
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -6543,6 +6698,7 @@ const isObjects = /*#__PURE__*/ makeGuard("Objects");
 /**
 * Narrows an {@link AST} to {@link Suspend}.
 *
+* @stability stable
 * @category guards
 * @since 3.10.0
 */
@@ -6550,6 +6706,7 @@ const isSuspend = /*#__PURE__*/ makeGuard("Suspend");
 /**
 * Constructs a {@link Link}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6566,6 +6723,7 @@ const defaultParseOptions = {};
 /**
 * Constructs a {@link Context}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6602,6 +6760,7 @@ var ASTNodeImpl = class {
 /**
 * Constructs a {@link Declaration}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6652,6 +6811,7 @@ const Declaration = class extends ASTNodeImpl {
 /**
 * Constructs a {@link Null}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6670,6 +6830,7 @@ const null_ = /*#__PURE__*/ new Null$1();
 /**
 * Constructs a {@link Unknown}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6694,6 +6855,7 @@ const Unknown = class extends ASTNodeImpl {
 *
 * @see {@link any} for the singleton that accepts every value as `any`
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6701,6 +6863,7 @@ const unknown = /*#__PURE__*/ new Unknown();
 /**
 * Constructs a {@link Literal}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6740,6 +6903,7 @@ function literalToString(ast) {
 /**
 * Constructs a {@link String}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6769,6 +6933,7 @@ const String$2 = class extends ASTNodeImpl {
 * @see {@link String} for the AST node class
 * @see {@link isString} for narrowing an AST to a string node
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6776,6 +6941,7 @@ const string = /*#__PURE__*/ new String$2();
 /**
 * Constructs a {@link Number}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6828,6 +6994,7 @@ function hasCheck(checks, id) {
 * @see {@link Number} for the AST node class and serialization behavior
 * @see {@link Literal} for exact finite numeric literal AST nodes
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -6835,6 +7002,7 @@ const number = /*#__PURE__*/ new Number$2();
 /**
 * Constructs a {@link Arrays}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7008,6 +7176,7 @@ function getIndexSignatureKeys(input, parameter, options = defaultParseOptions) 
 /**
 * Constructs a {@link PropertySignature}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7046,6 +7215,7 @@ function isIndexSignatureParameter(ast) {
 /**
 * Constructs a {@link IndexSignature}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7062,6 +7232,7 @@ const IndexSignature = class {
 /**
 * Constructs a {@link Objects}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7527,6 +7698,7 @@ function getCandidateIndex(types) {
 /**
 * Constructs a {@link Union}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7626,7 +7798,13 @@ function parseUnionCandidates(ast, parser, candidates, input, options) {
 		if (state.out) return state.out;
 		return fail$1(new AnyOf(ast, state.issues ?? [], input, options));
 	}
-	return resumeUnion(eff, state);
+	if (effectIsExit(eff)) return resumeUnion(eff, state);
+	let first = true;
+	return suspend(() => {
+		if (!first) return parseUnionCandidates(ast, parser, candidates, input, options);
+		first = false;
+		return resumeUnion(eff, state);
+	});
 }
 function resumeUnion(eff, state) {
 	return flatMapEager(eff, (_) => {
@@ -7670,6 +7848,7 @@ function formatIsOptional(isOptional) {
 /**
 * Constructs a {@link Filter}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7703,6 +7882,7 @@ const Filter = class extends Class$1 {
 /**
 * Constructs a {@link FilterGroup}.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7781,6 +7961,7 @@ const numberToJson = /*#__PURE__*/ new Link(/*#__PURE__*/ new Union$1([/* @__PUR
 * ```
 *
 * @see {@link Filter}
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -7916,6 +8097,7 @@ function annotateKey(ast, annotations) {
 * @see {@link Link}
 * @see {@link Encoding}
 * @see {@link flip}
+* @stability stable
 * @category transforming
 * @since 4.0.0
 */
@@ -7932,6 +8114,7 @@ function decodeTo$1(from, to, transformation) {
 *
 * @see `Schema.optionalKey`
 * @see {@link Context}
+* @stability stable
 * @category predicates
 * @since 4.0.0
 */
@@ -7981,6 +8164,7 @@ function canPreserveEncodingChecks(ast) {
 *
 * @see {@link toEncoded}
 * @see {@link flip}
+* @stability stable
 * @category transforming
 * @since 4.0.0
 */
@@ -8023,6 +8207,7 @@ const toType = /*#__PURE__*/ memoizeIdempotent((ast) => {
 *
 * @see {@link toType}
 * @see {@link flip}
+* @stability stable
 * @category transforming
 * @since 4.0.0
 */
@@ -8053,6 +8238,7 @@ function flipEncoding(ast, encoding) {
 *
 * @see {@link toType}
 * @see {@link toEncoded}
+* @stability stable
 * @category transforming
 * @since 4.0.0
 */
@@ -8074,10 +8260,10 @@ function containsUndefined(ast) {
 	}
 }
 function fromConst(ast, value) {
-	const succeed$7 = value === 0 ? sameExit : succeed(value);
+	const succeed$6 = value === 0 ? sameExit : succeed(value);
 	return (input, options) => {
 		if (input === missing) return missingExit;
-		if (input === value) return succeed$7;
+		if (input === value) return succeed$6;
 		return fail$1(new InvalidType(ast, input, options));
 	};
 }
@@ -8139,7 +8325,7 @@ function getConstructorDescriptor(ast) {
 	return isFunction(getDescriptor) ? getDescriptor(ast.typeParameters) : void 0;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/interpreter.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/interpreter.js
 const flatMapTransformation = (result, current, f) => result === sameExit ? f(current) : flatMapEager(result, f);
 function compileTransformation(transformation) {
 	if (transformation._tag === "Middleware") return (result, current, options) => {
@@ -8274,7 +8460,7 @@ function compile(ast, compile, compileField, base, specialize) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/compilerRegistry.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/compilerRegistry.js
 /** @internal */
 const invalid = /*#__PURE__*/ Symbol();
 const cache = /*#__PURE__*/ new WeakMap();
@@ -8305,7 +8491,7 @@ function resolve(ast) {
 	return entry;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/SchemaParser.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/SchemaParser.js
 /**
 * Runs schemas against real values.
 *
@@ -8316,6 +8502,7 @@ function resolve(ast) {
 * synchronous functions that throw. It also contains the lower-level runner that
 * walks a schema AST and reports schema failures as `SchemaIssue.Issue` values.
 *
+* @stability stable
 * @since 4.0.0
 */
 /**
@@ -8332,6 +8519,7 @@ function resolve(ast) {
 * runs type-side validation unless checks are disabled, and fails with a
 * `SchemaIssue.Issue` when construction fails.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -8360,6 +8548,7 @@ function makeEffect(schema) {
 * Causes that contain defects, interruptions, or asynchronous work at this
 * synchronous boundary throw an `Error` whose cause is the underlying `Cause`.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -8394,6 +8583,7 @@ function makeOption(schema) {
 * synchronous boundary throw an `Error` whose cause is the underlying `Cause`,
 * instead of being converted to a schema validation error.
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -8418,6 +8608,7 @@ function make$2(schema) {
 *
 * @see {@link decodeEffect} for input already typed as the schema's `Encoded` type
 *
+* @stability stable
 * @category decoding
 * @since 4.0.0
 */
@@ -8483,7 +8674,7 @@ function makeConstructorSync(ast) {
 const normalCompiler = (ast) => resolve(ast).parser;
 const constructorCompiler = (ast) => resolve(ast).makeEffect;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schema/make.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schema/make.js
 /** @internal */
 const TypeId = "~effect/Schema/Schema";
 const RebuildOptions = /*#__PURE__*/ Symbol();
@@ -8540,7 +8731,7 @@ function make$1(ast, options) {
 	return self;
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Struct.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -8574,18 +8765,19 @@ function make$1(ast, options) {
 *
 * @see {@link Lambda} – the type-level interface
 * @see {@link map} – apply a lambda to all struct values
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
 const lambda = (f) => f;
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/internal/schemaError.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/internal/schemaError.js
 const SchemaErrorTypeId = "~effect/Schema/SchemaError";
 function isSchemaError$1(u) {
 	return hasProperty(u, "~effect/Schema/SchemaError") && u["~effect/Schema/SchemaError"] === "~effect/Schema/SchemaError";
 }
 //#endregion
-//#region ../node_modules/.pnpm/effect@4.0.1/node_modules/effect/dist/Schema.js
+//#region ../node_modules/.pnpm/effect@4.0.2/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
@@ -8638,6 +8830,7 @@ function isSchemaError$1(u) {
 * Effect.runSync(Schema.decodeUnknownEffect(schema)({ value: 1 })) // => { value: 1 }
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -8675,6 +8868,7 @@ function declareConstructor() {
 *
 * @see {@link declareConstructor} for creating schemas for parametric types.
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -8708,6 +8902,7 @@ function declare(is, annotations) {
 * ```
 *
 * @see {@link isSchemaError} for narrowing unknown values
+* @stability stable
 * @category errors
 * @since 4.0.0
 */
@@ -8746,6 +8941,7 @@ var SchemaError = class extends (/*#__PURE__*/ TaggedError("SchemaError")) {
 * Schema.isSchemaError(error) // => true
 * ```
 *
+* @stability stable
 * @category guards
 * @since 4.0.0
 */
@@ -8791,6 +8987,7 @@ function runSchemaErrorSync(self) {
 *
 * @see {@link SchemaParser.decodeUnknownEffect} for the adapter that fails with `SchemaIssue.Issue` directly
 *
+* @stability stable
 * @category decoding
 * @since 4.0.0
 */
@@ -8834,6 +9031,7 @@ function decodeUnknownEffect(schema, options) {
 *
 * @see {@link SchemaParser.decodeUnknownSync} for the adapter that throws an `Error` whose cause is `SchemaIssue.Issue`
 *
+* @stability stable
 * @category decoding
 * @since 4.0.0
 */
@@ -8857,6 +9055,7 @@ function decodeUnknownSync(schema, options) {
 * the bridge between the untyped AST representation and the strongly-typed
 * schema.
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -8877,6 +9076,7 @@ const make = make$1;
 * @see {@link Literals} for a schema that represents a union of literals.
 * @see {@link tag} for a schema that represents a literal value that can be
 * used as a discriminator field in tagged unions and has a constructor default.
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -8896,6 +9096,7 @@ function Literal(literal) {
 * Schema for the `null` literal. Validates that the input is strictly `null`.
 *
 * @see {@link NullOr} for a union with another schema.
+* @stability stable
 * @category schemas
 * @since 3.10.0
 */
@@ -8903,6 +9104,7 @@ const Null = /*#__PURE__*/ make(null_);
 /**
 * Schema for `string` values. Validates that the input is `typeof` `"string"`.
 *
+* @stability stable
 * @category schemas
 * @since 4.0.0
 */
@@ -8918,6 +9120,7 @@ const String$1 = /*#__PURE__*/ make(string);
 * - Non-finite values are serialized as strings (`"NaN"`, `"Infinity"`, `"-Infinity"`).
 *
 * @see {@link Finite} for a schema that excludes non-finite values.
+* @stability stable
 * @category schemas
 * @since 4.0.0
 */
@@ -8962,6 +9165,7 @@ function makeStruct(ast, fields) {
 * Schema.decodeUnknownSync(Person)({ name: "Alice", age: 30 }) // => { name: "Alice", age: 30 }
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -8996,6 +9200,7 @@ const ArraySchema = /*#__PURE__*/ lambda((schema) => make(new Arrays(false, [], 
 * value // => [1, 2, 3]
 * ```
 *
+* @stability stable
 * @category transforming
 * @since 3.10.0
 */
@@ -9030,6 +9235,7 @@ function makeUnion(ast, members) {
 * Schema.decodeUnknownSync(schema)(42) // => 42
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -9049,6 +9255,7 @@ function Union(members, options) {
 * ```
 *
 * @see {@link Literal} for a schema that represents a single literal.
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -9071,6 +9278,7 @@ function Literals(literals) {
 /**
 * Creates a union schema of `S | null`.
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -9098,6 +9306,7 @@ function decodeTo(to, transformation) {
 * decoded.toISOString() // => "2024-01-01T00:00:00.000Z"
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 3.10.0
 */
@@ -9159,6 +9368,7 @@ function instanceOf(constructor, annotations) {
 * }
 * ```
 *
+* @stability stable
 * @category constructors
 * @since 4.0.0
 */
@@ -9167,6 +9377,7 @@ const makeFilter = makeFilter$1;
 * Creates a greater-than-or-equal-to (`>=`) check for any ordered type from an
 * `Order.Order` instance.
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
@@ -9189,6 +9400,7 @@ function makeIsGreaterThanOrEqualTo(options) {
 * Creates a less-than-or-equal-to (`<=`) check for any ordered type from an
 * `Order.Order` instance.
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
@@ -9226,6 +9438,7 @@ function encodeNumberPayload(number) {
 * During arbitrary generation, this applies a `minimum` constraint
 * to ensure generated numbers are greater than or equal to the specified value.
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
@@ -9255,6 +9468,7 @@ const isGreaterThanOrEqualTo = /*#__PURE__*/ makeIsGreaterThanOrEqualTo({
 * During arbitrary generation, this applies a `maximum` constraint
 * to ensure generated numbers are less than or equal to the specified value.
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
@@ -9300,6 +9514,7 @@ const isLessThanOrEqualTo = /*#__PURE__*/ makeIsLessThanOrEqualTo({
 * Schema.is(NonEmptyArraySchema)([1]) // => true
 * ```
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
@@ -9343,6 +9558,7 @@ function makeIsMinLength(minLength, minCodePoints, annotations) {
 * constraint to ensure generated strings or arrays have at most the required
 * length.
 *
+* @stability stable
 * @category validation
 * @since 4.0.0
 */
